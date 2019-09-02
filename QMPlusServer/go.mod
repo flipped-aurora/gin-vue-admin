@@ -3,6 +3,7 @@ module main
 go 1.12
 
 require (
+	github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.7
@@ -17,5 +18,6 @@ require (
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/viper v1.4.0
 	github.com/swaggo/gin-swagger v1.2.0
+	github.com/swaggo/swag v1.5.1
 	github.com/tebeka/strftime v0.1.3 // indirect
 )

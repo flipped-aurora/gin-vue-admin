@@ -1,8 +1,9 @@
-package model
+package dbModel
 
 import (
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"main/init/mysql"
 )
 
 type User struct {
@@ -19,3 +20,7 @@ type User struct {
 //type Propertie struct {
 //	gorm.Model
 //}
+func (u *User) Create() (err error, user interface{}) {
+	err = mysql.DEFAULTDB.Create(u).Error
+	return err, user
+}

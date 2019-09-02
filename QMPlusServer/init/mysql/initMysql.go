@@ -1,4 +1,4 @@
-package init
+package mysql
 
 import (
 	"github.com/jinzhu/gorm"
@@ -9,13 +9,13 @@ import (
 
 var DEFAULTDB *gorm.DB
 
-func InitMysql(admin config.Admin) {
+func InitMysql(admin config.Admin) *gorm.DB {
 	if db, err := gorm.Open("mysql", admin.UserName+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname+"?"+admin.Config); err != nil {
 		log.Printf("DEFAULTDB数据库启动异常%S", err)
 	} else {
 		DEFAULTDB = db
 		DEFAULTDB.DB().SetMaxIdleConns(10)
 		DEFAULTDB.DB().SetMaxIdleConns(100)
-		DEFAULTDB.AutoMigrate()
 	}
+	return DEFAULTDB
 }

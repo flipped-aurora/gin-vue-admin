@@ -1,0 +1,31 @@
+definitions:
+  api.RegistStuct:
+    properties:
+      passWord:
+        type: string
+      userName:
+        type: string
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /user/regist:
+    post:
+      parameters:
+      - description: 用户注册接口
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.RegistStuct'
+          type: object
+      produces:
+      - application/x-www-form-urlencoded
+      responses:
+        "200":
+          description: '{"code":200,"data":{},"msg":"ok"}'
+          schema:
+            type: string
+      summary: 创建用户
+swagger: "2.0"

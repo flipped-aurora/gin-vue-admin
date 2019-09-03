@@ -2,9 +2,10 @@ package dbModel
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
 	"main/init/mysql"
-	"main/model/modelInterface"
+	"main/tools"
 )
 
 type User struct {
@@ -21,26 +22,43 @@ type User struct {
 //type Propertie struct {
 //	gorm.Model
 //}
-func NewUser(user User) *User {
-	return &User{UserName: user.UserName, PassWord: user.PassWord, NickName: user.NickName, HeaderImg: user.HeaderImg}
+
+//注册接口model方法
+func (u *User) Regist() (err error, userInter *User) {
+	var user User
+	//判断用户名是否注册
+	findErr := mysql.DEFAULTDB.Where("user_name = ?", u.UserName).First(&user).Error
+	//err为nil表明读取到了 不能注册
+	if findErr == nil {
+		return errors.New("用户名已注册"), nil
+	} else {
+		// 否则 附加uuid 密码md5简单加密 注册
+		u.PassWord = tools.MD5V(u.PassWord)
+		u.UUID = uuid.NewV4()
+		err = mysql.DEFAULTDB.Create(u).Error
+	}
+	return err, u
 }
 
-func (u *User) Create() (err error, user modelInterface.CURD) {
+//修改用户密码
+func (u *User) ChangePassWord(newPassWord string) (err error, userInter *User) {
+	var user User
+	//后期修改jwt+password模式
+	u.PassWord = tools.MD5V(u.PassWord)
+	err = mysql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).First(&user).Update("pass_word", tools.MD5V(newPassWord)).Error
+	return err, u
+}
+
+//用户更新接口
+func (u *User) UpdataUser() (err error, userInter *User) {
 	err = mysql.DEFAULTDB.Create(u).Error
 	return err, u
 }
 
-func (u *User) Delete() (err error, user modelInterface.CURD) {
-	err = mysql.DEFAULTDB.Create(u).Error
-	return err, u
-}
-
-func (u *User) Updata() (err error, user modelInterface.CURD) {
-	err = mysql.DEFAULTDB.Create(u).Error
-	return err, u
-}
-
-func (u *User) Read() (err error, user modelInterface.CURD) {
-	err = mysql.DEFAULTDB.Create(u).Error
-	return err, u
+//用户登录
+func (u *User) Login() (err error, userInter *User) {
+	var user User
+	u.PassWord = tools.MD5V(u.PassWord)
+	err = mysql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).First(&user).Error
+	return err, &user
 }

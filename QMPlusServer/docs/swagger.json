@@ -5,12 +5,77 @@
         "license": {}
     },
     "paths": {
+        "/user/changePassWord": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "用户修改密码",
+                "parameters": [
+                    {
+                        "description": "用户修改密码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.ChangePassWordStutrc"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/login": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "用户登录接口",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.RegistAndLoginStuct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"登陆成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/regist": {
             "post": {
                 "produces": [
-                    "application/x-www-form-urlencoded"
+                    "application/json"
                 ],
-                "summary": "创建用户",
+                "tags": [
+                    "User"
+                ],
+                "summary": "用户注册账号",
                 "parameters": [
                     {
                         "description": "用户注册接口",
@@ -19,13 +84,13 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegistStuct"
+                            "$ref": "#/definitions/api.RegistAndLoginStuct"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"code\":200,\"data\":{},\"msg\":\"ok\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -35,7 +100,21 @@
         }
     },
     "definitions": {
-        "api.RegistStuct": {
+        "api.ChangePassWordStutrc": {
+            "type": "object",
+            "properties": {
+                "newPassWord": {
+                    "type": "string"
+                },
+                "passWord": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.RegistAndLoginStuct": {
             "type": "object",
             "properties": {
                 "passWord": {

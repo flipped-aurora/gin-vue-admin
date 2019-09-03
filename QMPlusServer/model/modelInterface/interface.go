@@ -1,6 +1,7 @@
 package modelInterface
 
-// 因为我也不确定项目要不要多人维护 所以定义了CURD接口 凡是对数据库进行简单CURD操作 请实现此接口 默认首位返回 error
+// 因为我也不确定项目要不要多人维护 所以定义了CURD接口 作为接口参考
+// 由于很多接口使用Restful模式 暂时不用泛型 有需要可以iss提供示例
 type CURD interface {
 	Create() (error, CURD)
 	Updata() (error, CURD)

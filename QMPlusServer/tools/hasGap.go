@@ -10,18 +10,22 @@ import (
 
 func HasGap(input interface{}) error {
 	getType := reflect.TypeOf(input)
-	fmt.Println("获取类型 :", getType.Name())
-
 	getValue := reflect.ValueOf(input)
-	fmt.Println("所有字段", getValue)
-
 	// 获取方法字段
 	for i := 0; i < getType.NumField(); i++ {
 		field := getType.Field(i)
 		value := getValue.Field(i).Interface()
-		fmt.Printf("%s: %v = %v\n", field.Name, field.Type, value)
-		if value == "" {
-			return errors.New(fmt.Sprintf("%s为空", field.Name))
+		switch value.(type) {
+		case string:
+			if value == "" {
+				fmt.Printf("%s为空", field.Name)
+				return errors.New(fmt.Sprintf("%s为空", field.Name))
+			}
+		default:
+			if value == nil {
+				fmt.Printf("%s为空", field.Name)
+				return errors.New(fmt.Sprintf("%s为空", field.Name))
+			}
 		}
 	}
 	// 获取方法

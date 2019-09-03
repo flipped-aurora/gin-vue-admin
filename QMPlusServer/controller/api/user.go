@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"main/model/dbModel"
+	"main/model/modelInterface"
 )
 
 type RegistStuct struct {
@@ -17,10 +18,11 @@ type RegistStuct struct {
 // @Success 200 {string} json "{"code":200,"data":{},"msg":"ok"}"
 // @Router /user/regist [post]
 func Regist(c *gin.Context) {
-
-	var U dbModel.User
-	_ = c.BindJSON(&U)
-	fmt.Println(U)
-	err, user := U.Create()
+	var R RegistStuct
+	_ = c.BindJSON(&R)
+	U := dbModel.NewUser(dbModel.User{UserName: R.UserName, PassWord: R.PassWord})
+	var curd modelInterface.CURD
+	curd = U
+	err, user := curd.Create()
 	fmt.Println(err, user)
 }

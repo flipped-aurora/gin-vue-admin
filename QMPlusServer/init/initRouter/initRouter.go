@@ -8,6 +8,7 @@ import (
 	"main/router"
 )
 
+//初始化总路由
 func InitRouter() *gin.Engine {
 	var Router = gin.Default()
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

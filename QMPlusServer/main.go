@@ -3,17 +3,19 @@ package main
 import (
 	"main/config"
 	"main/init/initRouter"
-	"main/init/mysql"
+	"main/init/qmlog"
+	"main/init/qmsql"
 	"main/init/registTable"
 	"net/http"
 	"time"
 )
 
 func main() {
-
-	registTable.RegistTable(mysql.InitMysql(config.Dbconfig.Admin))
-	defer mysql.DEFAULTDB.Close()
+	qmlog.InitLog()
+	registTable.RegistTable(qmsql.InitMysql(config.Dbconfig.Admin))
+	defer qmsql.DEFAULTDB.Close()
 	Router := initRouter.InitRouter()
+	//qmlog.QMLog.Info("服务器开启") // 日志测试代码
 	s := &http.Server{
 		Addr:           ":8888",
 		Handler:        Router,

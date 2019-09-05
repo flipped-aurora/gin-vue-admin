@@ -62,3 +62,10 @@ func (u *User) Login() (err error, userInter *User) {
 	err = qmsql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).First(&user).Error
 	return err, &user
 }
+
+// 用户头像上传更新地址
+func (u *User) UploadHeaderImg(userName string, filePath string) (err error, userInter *User) {
+	var user User
+	err = qmsql.DEFAULTDB.Where("user_name = ?", userName).First(&user).Update("header_img", filePath).First(&user).Error
+	return err, &user
+}

@@ -3,7 +3,14 @@ package api
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"main/controller/support"
 	"main/model/dbModel"
+	"mime/multipart"
+)
+
+var (
+	USER_HEADER_IMG_PATH string = "http://qmplusimg.henrongyi.top"
+	USER_HEADER_BUCKET   string = "qm-plus-img"
 )
 
 type RegistAndLoginStuct struct {
@@ -24,20 +31,12 @@ func Regist(c *gin.Context) {
 	U := &dbModel.User{UserName: R.UserName, PassWord: R.PassWord}
 	err, user := U.Regist()
 	if err != nil {
-		c.JSON(200, gin.H{
-			"success": false,
-			"msg":     fmt.Sprintf("%v", err),
-			"data": gin.H{
-				"user": user,
-			},
+		ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{
+			"user": user,
 		})
 	} else {
-		c.JSON(200, gin.H{
-			"success": true,
-			"msg":     "创建成功",
-			"data": gin.H{
-				"user": user,
-			},
+		ReportFormat(c, false, "创建成功", gin.H{
+			"user": user,
 		})
 	}
 }
@@ -53,21 +52,9 @@ func Login(c *gin.Context) {
 	_ = c.BindJSON(&L)
 	U := &dbModel.User{UserName: L.UserName, PassWord: L.PassWord}
 	if err, user := U.Login(); err != nil {
-		c.JSON(200, gin.H{
-			"success": false,
-			"msg":     "用户名密码错误",
-			"data": gin.H{
-				"user": user,
-			},
-		})
+		ReportFormat(c, false, "用户名密码错误", gin.H{"user": user})
 	} else {
-		c.JSON(200, gin.H{
-			"success": true,
-			"msg":     "登录成功",
-			"data": gin.H{
-				"user": user,
-			},
-		})
+		ReportFormat(c, true, "登录成功", gin.H{"user": user})
 	}
 }
 
@@ -88,16 +75,45 @@ func ChangePassWord(c *gin.Context) {
 	_ = c.BindJSON(&params)
 	U := &dbModel.User{UserName: params.UserName, PassWord: params.PassWord}
 	if err, _ := U.ChangePassWord(params.NewPassWord); err != nil {
-		c.JSON(200, gin.H{
-			"success": false,
-			"msg":     "修改失败，请检查用户名密码",
-			"data":    gin.H{},
-		})
+		ReportFormat(c, false, "修改失败，请检查用户名密码", gin.H{})
 	} else {
-		c.JSON(200, gin.H{
-			"success": true,
-			"msg":     "修改成功",
-			"data":    gin.H{},
-		})
+		ReportFormat(c, true, "修改成功", gin.H{})
+	}
+}
+
+type UserHeaderImg struct {
+	HeaderImg multipart.File `json:"headerImg"`
+}
+
+// @Tags User
+// @Summary 用户上传头像
+// @accept multipart/form-data
+// @Produce  application/json
+// @Param headerImg formData file true "用户上传头像"
+// @Param userName formData string true "用户上传头像"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"上传成功"}"
+// @Router /user/uploadHeaderImg [post]
+func UploadHeaderImg(c *gin.Context) {
+	//获取头像文件
+	_, header, err := c.Request.FormFile("headerImg")
+	//便于找到用户 以后从jwt中取
+	userName := c.PostForm("userName")
+	if err != nil {
+		ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
+	} else {
+		//文件上传后拿到文件路径
+		err, filePath := support.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
+		if err != nil {
+			ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
+		} else {
+			//修改数据库后得到修改后的user并且返回供前端使用
+			err, user := new(dbModel.User).UploadHeaderImg(userName, filePath)
+
+			if err != nil {
+				ReportFormat(c, false, fmt.Sprintf("修改数据库链接失败，%v", err), gin.H{})
+			} else {
+				ReportFormat(c, true, "上传成功", gin.H{"user": user})
+			}
+		}
 	}
 }

@@ -11,5 +11,6 @@ func InitUserRouter(Router *gin.Engine) {
 		UserRouter.POST("regist", api.Regist)
 		UserRouter.POST("login", api.Login)
 		UserRouter.POST("changePassWord", api.ChangePassWord)
+		UserRouter.POST("uploadHeaderImg", api.UploadHeaderImg)
 	}
 }

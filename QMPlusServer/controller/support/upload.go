@@ -1,17 +1,19 @@
 package support
 
 import (
-	"bytes"
+	"context"
+	"fmt"
 	"github.com/qiniu/api.v7/auth/qbox"
 	"github.com/qiniu/api.v7/storage"
 	"mime/multipart"
+	"time"
 )
 
 var accessKey string = "25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ" // 你在七牛云的accessKey
 var secretKey string = "pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY" // 你在七牛云的secretKey
-var bucket string = "a303176530"                                  // 你七牛云标准空间的名字
-func Upload(file multipart.File) (err error, path string) {
 
+// 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字
+func Upload(file *multipart.FileHeader, bucket string, urlPath string) (err error, path string) {
 	putPolicy := storage.PutPolicy{
 		Scope: bucket,
 	}
@@ -31,12 +33,18 @@ func Upload(file multipart.File) (err error, path string) {
 			"x:name": "github logo",
 		},
 	}
-	data := []byte("hello, this is qiniu cloud")
-	dataLen := int64(len(data))
-	err := formUploader.Put(context.Background(), &ret, upToken, key, bytes.NewReader(data), dataLen, &putExtra)
+	f, e := file.Open()
+	if e != nil {
+		fmt.Println(e)
+		return e, ""
+	}
+	dataLen := file.Size
+	fileKey := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename) // 文件名格式 自己可以改 建议保证唯一性
+	err = formUploader.Put(context.Background(), &ret, upToken, fileKey, f, dataLen, &putExtra)
 	if err != nil {
 		fmt.Println(err)
-		return
+		//qmlog.QMLog.Info(err)
+		return err, ""
 	}
-	fmt.Println(ret.Key, ret.Hash)
+	return err, urlPath + "/" + ret.Key
 }

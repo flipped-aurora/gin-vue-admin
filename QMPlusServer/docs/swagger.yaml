@@ -79,4 +79,29 @@ paths:
       summary: 用户注册账号
       tags:
       - User
+  /user/uploadHeaderImg:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 用户上传头像
+        in: formData
+        name: headerImg
+        required: true
+        type: file
+      - description: 用户上传头像
+        in: formData
+        name: userName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"上传成功"}'
+          schema:
+            type: string
+      summary: 用户上传头像
+      tags:
+      - User
 swagger: "2.0"

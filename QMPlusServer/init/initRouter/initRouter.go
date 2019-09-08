@@ -14,5 +14,7 @@ func InitRouter() *gin.Engine {
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	//Router.Use(middleware.Logger())
 	router.InitUserRouter(Router)
+	router.InitBaseRouter(Router)
+	router.InitMenuRouter(Router)
 	return Router
 }

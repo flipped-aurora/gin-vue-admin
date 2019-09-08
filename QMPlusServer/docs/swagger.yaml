@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   api.ChangePassWordStutrc:
     properties:
@@ -15,31 +16,21 @@ definitions:
       userName:
         type: string
     type: object
+  modelInterface.PageInfo:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    type: object
 info:
   contact: {}
+  description: This is a sample Server pets
   license: {}
+  title: Swagger Example API
+  version: 0.0.1
 paths:
-  /user/changePassWord:
-    post:
-      parameters:
-      - description: 用户修改密码
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/api.ChangePassWordStutrc'
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"修改成功"}'
-          schema:
-            type: string
-      summary: 用户修改密码
-      tags:
-      - User
-  /user/login:
+  /base/login:
     post:
       parameters:
       - description: 用户登录接口
@@ -58,8 +49,8 @@ paths:
             type: string
       summary: 用户登录
       tags:
-      - User
-  /user/regist:
+      - Base
+  /base/regist:
     post:
       parameters:
       - description: 用户注册接口
@@ -77,6 +68,74 @@ paths:
           schema:
             type: string
       summary: 用户注册账号
+      tags:
+      - Base
+  /menu/getMenu:
+    post:
+      parameters:
+      - description: 可以什么都不填
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.RegistAndLoginStuct'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户动态路由
+      tags:
+      - Menu
+  /user/changePassWord:
+    post:
+      parameters:
+      - description: 用户修改密码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.ChangePassWordStutrc'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用户修改密码
+      tags:
+      - User
+  /user/getInfoList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取用户列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取用户列表
       tags:
       - User
   /user/uploadHeaderImg:
@@ -101,7 +160,14 @@ paths:
           description: '{"success":true,"data":{},"msg":"上传成功"}'
           schema:
             type: string
+      security:
+      - ApiKeyAuth: []
       summary: 用户上传头像
       tags:
       - User
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-token
+    type: apiKey
 swagger: "2.0"

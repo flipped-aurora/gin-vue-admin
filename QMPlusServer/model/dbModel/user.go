@@ -4,17 +4,21 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
+	"main/controller/servers"
 	"main/init/qmsql"
+	"main/model/modelInterface"
 	"main/tools"
 )
 
 type User struct {
-	gorm.Model `json:"-"`
-	UUID       uuid.UUID `json:"uuid"`
-	UserName   string    `json:"userName"`
-	PassWord   string    `json:"passWord"`
-	NickName   string    `json:"nickName" gorm:"default:'QMPlusUser'"`
-	HeaderImg  string    `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
+	gorm.Model  `json:"-"`
+	UUID        uuid.UUID `json:"uuid"`
+	UserName    string    `json:"userName"`
+	PassWord    string    `json:"passWord"`
+	NickName    string    `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg   string    `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
+	Authority   Authority `json:"authority" form:"ForeignKey:AuthorityId;AssociationForeignKey:AuthorityId"`
+	AuthorityId float64   `json:"authorityId" gorm:"default:888"`
 	//Propertie                //	多余属性自行添加
 	//PropertieId uint  // 自动关联 Propertie 的Id 附加属性过多 建议创建一对一关系
 }
@@ -60,6 +64,7 @@ func (u *User) Login() (err error, userInter *User) {
 	var user User
 	u.PassWord = tools.MD5V(u.PassWord)
 	err = qmsql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).First(&user).Error
+	err = qmsql.DEFAULTDB.Model(&user).Related(&user.Authority).Error
 	return err, &user
 }
 
@@ -68,4 +73,17 @@ func (u *User) UploadHeaderImg(userName string, filePath string) (err error, use
 	var user User
 	err = qmsql.DEFAULTDB.Where("user_name = ?", userName).First(&user).Update("header_img", filePath).First(&user).Error
 	return err, &user
+}
+
+// 分页获取数据  需要分页实现这个接口即可
+func (u *User) GetInfoList(info modelInterface.PageInfo) (err error, list interface{}, total int) {
+	// 封装分页方法 调用即可 传入 当前的结构体和分页信息
+	err, db, total := servers.PagingServer(u, info)
+	if err != nil {
+		return
+	} else {
+		var userList []User
+		err = db.Find(&userList).Error
+		return err, userList, total
+	}
 }

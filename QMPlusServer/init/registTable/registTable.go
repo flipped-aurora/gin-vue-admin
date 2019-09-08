@@ -7,5 +7,5 @@ import (
 
 //注册数据库表专用
 func RegistTable(db *gorm.DB) {
-	db.AutoMigrate(dbModel.User{})
+	db.AutoMigrate(dbModel.User{}, dbModel.Authority{}, dbModel.Menu{})
 }

@@ -23,6 +23,7 @@ type Meta struct {
 	Icon  string `json:"icon"`
 }
 
+//获取动态路由树
 func (m *Menu) GetMenuTree(authorityId float64) (err error, menus []Menu) {
 	err = qmsql.DEFAULTDB.Where("authority_id = ? AND parent_id = ?", authorityId, 0).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {

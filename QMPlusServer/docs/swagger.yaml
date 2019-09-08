@@ -9,6 +9,27 @@ definitions:
       userName:
         type: string
     type: object
+  api.CreateApiParams:
+    properties:
+      description:
+        type: string
+      path:
+        type: string
+    type: object
+  api.CreateAuthorityPatams:
+    properties:
+      authorityId:
+        type: integer
+      authorityName:
+        type: string
+    type: object
+  api.DeleteApiParams:
+    type: object
+  api.DeleteAuthorityPatams:
+    properties:
+      authorityId:
+        type: integer
+    type: object
   api.RegistAndLoginStuct:
     properties:
       passWord:
@@ -30,6 +51,102 @@ info:
   title: Swagger Example API
   version: 0.0.1
 paths:
+  /api/createApi:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建api
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateApiParams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 为指定角色创建api
+      tags:
+      - Api
+  /api/deleteApi:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除api
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.DeleteApiParams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除指定角色api
+      tags:
+      - Api
+  /authority/createAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建角色
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateAuthorityPatams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建角色
+      tags:
+      - authority
+  /authority/deleteAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除角色
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.DeleteAuthorityPatams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除角色
+      tags:
+      - authority
   /base/login:
     post:
       parameters:
@@ -70,28 +187,6 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
-  /menu/getMenu:
-    post:
-      parameters:
-      - description: 可以什么都不填
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/api.RegistAndLoginStuct'
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"返回成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 获取用户动态路由
-      tags:
-      - Menu
   /user/changePassWord:
     post:
       parameters:

@@ -15,6 +15,7 @@ import (
 // @Param data body api.RegistAndLoginStuct true "可以什么都不填"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getMenu [post]
+
 func GetMenu(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*middleware.CustomClaims)

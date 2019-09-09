@@ -10,8 +10,17 @@
 </template>
 
 <script>
+import {mapState, mapGetters, mapActions , mapMutations} from 'vuex'
 export default {
     name:"Login",
+    computed:{
+    ...mapGetters("User",["userName"]),
+    ...mapState("User",["userName"])
+    },
+    methods: {
+        ...mapActions("User",["AsyncSetUserName"]),
+        ...mapMutations("User",["setUserName"])
+    },
 }
 </script>
 

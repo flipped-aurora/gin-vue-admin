@@ -56,7 +56,7 @@ func Login(c *gin.Context) {
 	_ = c.BindJSON(&L)
 	U := &dbModel.User{UserName: L.UserName, PassWord: L.PassWord}
 	if err, user := U.Login(); err != nil {
-		servers.ReportFormat(c, false, "用户名密码错误", gin.H{"user": user})
+		servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{"user": user})
 	} else {
 		tokenNext(c, *user)
 	}

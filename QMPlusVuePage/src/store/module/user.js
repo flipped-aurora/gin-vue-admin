@@ -1,17 +1,25 @@
-export const User = {
+export const user = {
     namespaced: true,
-    state: { userName: "QM" },
+    state: {
+        userInfo: {
+            uuid: "",
+            nickName: ""
+        },
+        token: ""
+    },
     mutations: {
-        setUserName(state, name) {
+        setUserInfo(state, userInfo) {
             // 这里的 `state` 对象是模块的局部状态
-            state.userName = name
+            state.userInfo = userInfo
+        },
+        setToken(state, token) {
+            // 这里的 `state` 对象是模块的局部状态
+            state.token = token
         }
     },
     actions: {
-        AsyncSetUserName({ commit }, name) {
-            setTimeout(() => {
-                commit("setUserName", name)
-            }, 2000);
+        AsyncSetUserInfo({ commit }, loginInfo) {
+
         }
     },
     getters: {

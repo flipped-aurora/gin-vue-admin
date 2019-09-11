@@ -18,9 +18,9 @@ export const user = {
         }
     },
     actions: {
-        AsyncSetUserInfo({ commit }, loginInfo) {
+        // AsyncSetUserInfo({ commit }, loginInfo) {
 
-        }
+        // }
     },
     getters: {
         userName(state) {

@@ -17,8 +17,8 @@ type User struct {
 	PassWord    string    `json:"passWord"`
 	NickName    string    `json:"nickName" gorm:"default:'QMPlusUser'"`
 	HeaderImg   string    `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
-	Authority   Authority `json:"authority" form:"ForeignKey:AuthorityId;AssociationForeignKey:AuthorityId"`
-	AuthorityId float64   `json:"authorityId" gorm:"default:888"`
+	Authority   Authority `json:"authority" form:"ForeignKey:authority_id;AssociationForeignKey:authority_id"`
+	AuthorityId float64   `json:"-" gorm:"default:888"`
 	//Propertie                //	多余属性自行添加
 	//PropertieId uint  // 自动关联 Propertie 的Id 附加属性过多 建议创建一对一关系
 }
@@ -64,7 +64,7 @@ func (u *User) Login() (err error, userInter *User) {
 	var user User
 	u.PassWord = tools.MD5V(u.PassWord)
 	err = qmsql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.UserName, u.PassWord).First(&user).Error
-	err = qmsql.DEFAULTDB.Model(&user).Related(&user.Authority).Error
+	err = qmsql.DEFAULTDB.Where("authority_id = ?", user.AuthorityId).First(&user.Authority).Error
 	return err, &user
 }
 

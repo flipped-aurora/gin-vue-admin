@@ -1,12 +1,12 @@
 basePath: /
 definitions:
-  api.ChangePassWordStutrc:
+  api.ChangePasswordStutrc:
     properties:
-      newPassWord:
+      newPassword:
         type: string
-      passWord:
+      password:
         type: string
-      userName:
+      username:
         type: string
     type: object
   api.CreateApiParams:
@@ -32,9 +32,9 @@ definitions:
     type: object
   api.RegistAndLoginStuct:
     properties:
-      passWord:
+      password:
         type: string
-      userName:
+      username:
         type: string
     type: object
   modelInterface.PageInfo:
@@ -187,7 +187,7 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
-  /user/changePassWord:
+  /user/changePassword:
     post:
       parameters:
       - description: 用户修改密码
@@ -195,7 +195,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.ChangePassWordStutrc'
+          $ref: '#/definitions/api.ChangePasswordStutrc'
           type: object
       produces:
       - application/json
@@ -245,7 +245,7 @@ paths:
         type: file
       - description: 用户上传头像
         in: formData
-        name: userName
+        name: username
         required: true
         type: string
       produces:

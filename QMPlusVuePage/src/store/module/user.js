@@ -1,9 +1,13 @@
+import { login } from '@/api/user'
+
 export const user = {
     namespaced: true,
     state: {
         userInfo: {
             uuid: "",
-            nickName: ""
+            nickName: "",
+            headerImg: "",
+            authority: "",
         },
         token: ""
     },
@@ -18,13 +22,20 @@ export const user = {
         }
     },
     actions: {
-        // AsyncSetUserInfo({ commit }, loginInfo) {
-
-        // }
+        LoginIn({ commit }, loginInfo) {
+            login(loginInfo).then(res => {
+                commit('setUserInfo', res.data.user)
+                commit('setToken', res.data.token)
+                return res
+            }).catch(err => {
+                console.error(err)
+                return Promise.reject(err)
+            })
+        }
     },
     getters: {
-        userName(state) {
-            return state.userName
+        userInfo(state) {
+            return state.userInfo
         }
     }
 }

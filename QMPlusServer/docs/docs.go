@@ -244,7 +244,7 @@ var doc = `{
                 }
             }
         },
-        "/user/changePassWord": {
+        "/user/changePassword": {
             "post": {
                 "security": [
                     {
@@ -266,7 +266,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.ChangePassWordStutrc"
+                            "$ref": "#/definitions/api.ChangePasswordStutrc"
                         }
                     }
                 ],
@@ -347,7 +347,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "用户上传头像",
-                        "name": "userName",
+                        "name": "username",
                         "in": "formData",
                         "required": true
                     }
@@ -364,16 +364,16 @@ var doc = `{
         }
     },
     "definitions": {
-        "api.ChangePassWordStutrc": {
+        "api.ChangePasswordStutrc": {
             "type": "object",
             "properties": {
-                "newPassWord": {
+                "newPassword": {
                     "type": "string"
                 },
-                "passWord": {
+                "password": {
                     "type": "string"
                 },
-                "userName": {
+                "username": {
                     "type": "string"
                 }
             }
@@ -414,10 +414,10 @@ var doc = `{
         "api.RegistAndLoginStuct": {
             "type": "object",
             "properties": {
-                "passWord": {
+                "password": {
                     "type": "string"
                 },
-                "userName": {
+                "username": {
                     "type": "string"
                 }
             }

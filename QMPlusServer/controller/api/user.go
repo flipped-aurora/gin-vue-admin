@@ -18,8 +18,8 @@ var (
 )
 
 type RegistAndLoginStuct struct {
-	UserName string `json:"userName"`
-	PassWord string `json:"passWord"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 // @Tags Base
@@ -32,7 +32,7 @@ func Regist(c *gin.Context) {
 	var R RegistAndLoginStuct
 	_ = c.BindJSON(&R)
 
-	U := &dbModel.User{UserName: R.UserName, PassWord: R.PassWord}
+	U := &dbModel.User{Username: R.Username, Password: R.Password}
 	err, user := U.Regist()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{
@@ -54,9 +54,9 @@ func Regist(c *gin.Context) {
 func Login(c *gin.Context) {
 	var L RegistAndLoginStuct
 	_ = c.BindJSON(&L)
-	U := &dbModel.User{UserName: L.UserName, PassWord: L.PassWord}
+	U := &dbModel.User{Username: L.Username, Password: L.Password}
 	if err, user := U.Login(); err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{"user": user})
+		servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{})
 	} else {
 		tokenNext(c, *user)
 	}
@@ -86,24 +86,24 @@ func tokenNext(c *gin.Context, user dbModel.User) {
 	}
 }
 
-type ChangePassWordStutrc struct {
-	UserName    string `json:"userName"`
-	PassWord    string `json:"passWord"`
-	NewPassWord string `json:"newPassWord"`
+type ChangePasswordStutrc struct {
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	NewPassword string `json:"newPassword"`
 }
 
 // @Tags User
 // @Summary 用户修改密码
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.ChangePassWordStutrc true "用户修改密码"
+// @Param data body api.ChangePasswordStutrc true "用户修改密码"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
-// @Router /user/changePassWord [post]
-func ChangePassWord(c *gin.Context) {
-	var params ChangePassWordStutrc
+// @Router /user/changePassword [post]
+func ChangePassword(c *gin.Context) {
+	var params ChangePasswordStutrc
 	_ = c.BindJSON(&params)
-	U := &dbModel.User{UserName: params.UserName, PassWord: params.PassWord}
-	if err, _ := U.ChangePassWord(params.NewPassWord); err != nil {
+	U := &dbModel.User{Username: params.Username, Password: params.Password}
+	if err, _ := U.ChangePassword(params.NewPassword); err != nil {
 		servers.ReportFormat(c, false, "修改失败，请检查用户名密码", gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "修改成功", gin.H{})
@@ -120,7 +120,7 @@ type UserHeaderImg struct {
 // @accept multipart/form-data
 // @Produce  application/json
 // @Param headerImg formData file true "用户上传头像"
-// @Param userName formData string true "用户上传头像"
+// @Param username formData string true "用户上传头像"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /user/uploadHeaderImg [post]
 func UploadHeaderImg(c *gin.Context) {
@@ -131,7 +131,7 @@ func UploadHeaderImg(c *gin.Context) {
 	fmt.Println(waitUse.NickName)
 	_, header, err := c.Request.FormFile("headerImg")
 	//便于找到用户 以后从jwt中取
-	userName := c.PostForm("userName")
+	username := c.PostForm("username")
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
 	} else {
@@ -141,7 +141,7 @@ func UploadHeaderImg(c *gin.Context) {
 			servers.ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
 		} else {
 			//修改数据库后得到修改后的user并且返回供前端使用
-			err, user := new(dbModel.User).UploadHeaderImg(userName, filePath)
+			err, user := new(dbModel.User).UploadHeaderImg(username, filePath)
 
 			if err != nil {
 				servers.ReportFormat(c, false, fmt.Sprintf("修改数据库链接失败，%v", err), gin.H{})

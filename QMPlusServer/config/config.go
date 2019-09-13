@@ -10,7 +10,7 @@ type Config struct {
 	Admin Admin
 }
 type Admin struct {
-	UserName string
+	Username string
 	Password string
 	Path     string
 	Dbname   string

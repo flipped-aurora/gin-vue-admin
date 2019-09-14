@@ -20,15 +20,10 @@ const baseRouters = [{
             import ('@/view/login/regist.vue')
     },
     {
-        path: "/error",
-        name: "error",
+        path: "/404",
+        name: "404",
         component: () =>
             import ('@/view/error/index.vue')
-    },
-    {
-        path: '*',
-        redirect: '/error'
-
     }
 ]
 

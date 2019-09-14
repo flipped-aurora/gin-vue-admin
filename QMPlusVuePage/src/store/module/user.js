@@ -1,5 +1,6 @@
 import { login } from '@/api/user'
-
+import router from '@/router/index'
+import { Message } from 'element-ui'
 export const user = {
     namespaced: true,
     state: {
@@ -9,7 +10,8 @@ export const user = {
             headerImg: "",
             authority: "",
         },
-        token: ""
+        token: "",
+        expiresAt: ""
     },
     mutations: {
         setUserInfo(state, userInfo) {
@@ -19,23 +21,43 @@ export const user = {
         setToken(state, token) {
             // 这里的 `state` 对象是模块的局部状态
             state.token = token
+        },
+        setExpiresAt(state, expiresAt) {
+            // 这里的 `state` 对象是模块的局部状态
+            state.expiresAt = expiresAt
         }
     },
     actions: {
-        LoginIn({ commit }, loginInfo) {
-            login(loginInfo).then(res => {
+        async LoginIn({ commit }, loginInfo) {
+            try {
+                const res = await login(loginInfo)
                 commit('setUserInfo', res.data.user)
                 commit('setToken', res.data.token)
-                return res
-            }).catch(err => {
-                console.error(err)
+                commit('setExpiresAt', res.data.expiresAt)
+                if (res.success) {
+                    const redirect = router.history.current.query.redirect
+                    if (redirect) {
+                        router.push({ path: redirect })
+                    } else {
+                        router.push({ path: '/layout/dashboard' })
+                    }
+                }
+            } catch (err) {
+                Message({
+                    type: 'error',
+                    message: err,
+                    showClose: true
+                })
                 return Promise.reject(err)
-            })
+            }
         }
     },
     getters: {
         userInfo(state) {
             return state.userInfo
+        },
+        token(state) {
+            return state.token
         }
     }
 }

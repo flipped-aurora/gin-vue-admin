@@ -1,26 +1,40 @@
 import router from './router'
-import { asyncRouterHandle } from '@/utils/asyncRouter';
+import { store } from '@/store/index'
 
-router.beforeEach((to, from, next) => {
-    next()
-        // asyncRouterHandle(asyncRouter)   // 等待动态使用 VUEX持久化 会将其放入 vuex并且动态生成左侧列表
-        // router.addRoutes(asyncRouter)
+let asyncRouterFlag = 0
+
+const whiteList = ['login', 'regist']
+router.beforeEach(async(to, from, next) => {
+    const token = store.getters['user/token']
+        // 在白名单中的判断情况
+    if (whiteList.indexOf(to.name) > -1) {
+        if (token) {
+            next({ name: 'dashbord' })
+        } else {
+            next()
+        }
+    } else {
+        // 不在白名单中并且已经登陆的时候
+        if (token) {
+            // 添加flag防止多次获取动态路由和栈溢出
+            if (!asyncRouterFlag) {
+                asyncRouterFlag++
+                await store.dispatch('router/SetAsyncRouter')
+                const asyncRouters = store.getters['router/asyncRouters']
+                router.addRoutes(asyncRouters)
+                next({...to, replace: true })
+            } else {
+                next()
+            }
+        }
+        // 不在白名单中并且未登陆的时候
+        if (!token) {
+            next({
+                name: "login",
+                query: {
+                    redirect: document.location.hash
+                }
+            })
+        }
+    }
 })
-
-const asyncRouter = [{
-    path: '/layout',
-    name: 'layout',
-    component: 'view/layout/index.vue',
-    meta: {
-        title: '首页',
-    },
-    children: [{
-        path: 'dashbord',
-        name: 'dashbord',
-        component: 'view/dashbord/index.vue'
-    }, {
-        path: "test",
-        name: "test",
-        component: "view/test/index.vue"
-    }]
-}]

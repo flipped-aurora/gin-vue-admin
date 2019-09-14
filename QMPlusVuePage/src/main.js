@@ -6,7 +6,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 // 引入封装的router
 import router from '@/router/index'
-
+import '@/permission'
 import { store } from '@/store/index'
 Vue.config.productionTip = false
 

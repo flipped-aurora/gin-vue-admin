@@ -31,7 +31,7 @@ type User struct {
 func (u *User) Regist() (err error, userInter *User) {
 	var user User
 	//判断用户名是否注册
-	findErr := qmsql.DEFAULTDB.Where("user_name = ?", u.Username).First(&user).Error
+	findErr := qmsql.DEFAULTDB.Where("username = ?", u.Username).First(&user).Error
 	//err为nil表明读取到了 不能注册
 	if findErr == nil {
 		return errors.New("用户名已注册"), nil
@@ -49,7 +49,7 @@ func (u *User) ChangePassword(newPassword string) (err error, userInter *User) {
 	var user User
 	//后期修改jwt+password模式
 	u.Password = tools.MD5V(u.Password)
-	err = qmsql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.Username, u.Password).First(&user).Update("pass_word", tools.MD5V(newPassword)).Error
+	err = qmsql.DEFAULTDB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Update("password", tools.MD5V(newPassword)).Error
 	return err, u
 }
 
@@ -63,7 +63,7 @@ func (u *User) UpdataUser() (err error, userInter *User) {
 func (u *User) Login() (err error, userInter *User) {
 	var user User
 	u.Password = tools.MD5V(u.Password)
-	err = qmsql.DEFAULTDB.Where("user_name = ? AND pass_word = ?", u.Username, u.Password).First(&user).Error
+	err = qmsql.DEFAULTDB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Error
 	err = qmsql.DEFAULTDB.Where("authority_id = ?", user.AuthorityId).First(&user.Authority).Error
 	return err, &user
 }
@@ -71,7 +71,7 @@ func (u *User) Login() (err error, userInter *User) {
 // 用户头像上传更新地址
 func (u *User) UploadHeaderImg(username string, filePath string) (err error, userInter *User) {
 	var user User
-	err = qmsql.DEFAULTDB.Where("user_name = ?", username).First(&user).Update("header_img", filePath).First(&user).Error
+	err = qmsql.DEFAULTDB.Where("username = ?", username).First(&user).Update("header_img", filePath).First(&user).Error
 	return err, &user
 }
 

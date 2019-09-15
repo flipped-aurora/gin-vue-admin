@@ -35,6 +35,10 @@ $mainHight: calc(100vh - 52px);
   .main-cont {
     .el-menu-vertical {
       min-height: $mainHight !important;
+    &.noCollapse{
+      min-height: $mainHight !important;
+      width: 250px;
+    }
     }
     &::-webkit-scrollbar {
       display: none;

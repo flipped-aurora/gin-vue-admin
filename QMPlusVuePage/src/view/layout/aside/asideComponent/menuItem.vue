@@ -1,5 +1,8 @@
 <template>
-    <el-menu-item :index="routerInfo.name">{{routerInfo.meta.title}}</el-menu-item>
+  <el-menu-item :index="routerInfo.name">
+    <i class="el-icon-document"></i>
+    <span slot="title">{{routerInfo.meta.title}}</span>
+  </el-menu-item>
 </template>
 
 <script>
@@ -12,7 +15,7 @@ export default {
       },
       type: Object
     }
-  },
+  }
 }
 </script>
 <style lang="scss">

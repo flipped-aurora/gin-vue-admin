@@ -8,14 +8,14 @@
 
 <script>
 import MenuItem from './menuItem'
-import SubMenu from './submenu'
+import AsyncSubmenu from './asyncSubmenu'
 
 export default {
   name: 'AsideComponent',
   computed:{
       menuComponent(){
           if(this.routerInfo.children.length){
-              return 'SubMenu'
+              return 'AsyncSubmenu'
           }else{
               return 'MenuItem'
           }
@@ -31,7 +31,7 @@ export default {
   },
   components: {
     MenuItem,
-    SubMenu
+    AsyncSubmenu
   }
 }
 </script>

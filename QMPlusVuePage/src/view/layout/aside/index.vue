@@ -6,7 +6,7 @@
     @select="selectMenuItem"
     unique-opened
   >
-    <AsideComponent :key="item.name" :routerInfo="item" v-for="item in asyncRouters[0].children" />
+    <aside-component :key="item.name" :routerInfo="item" v-for="item in asyncRouters[0].children" />
   </el-menu>
 </template>
 
@@ -18,7 +18,7 @@ export default {
   data() {
     return {
       active: '',
-      isCollapse: true
+      isCollapse: false
     }
   },
   methods: {

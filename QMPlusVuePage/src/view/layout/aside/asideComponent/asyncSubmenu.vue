@@ -1,5 +1,5 @@
 <template>
-  <el-submenu :index="routerInfo.name">
+  <el-submenu ref="subMenu" :index="routerInfo.name">
     <template slot="title">
       <i class="el-icon-location"></i>
       <span slot="title">{{routerInfo.meta.title}}</span>
@@ -10,7 +10,7 @@
 
 <script>
 export default {
-  name: 'SubMenu',
+  name: 'AsyncSubmenu',
   props: {
     routerInfo: {
       default: function() {

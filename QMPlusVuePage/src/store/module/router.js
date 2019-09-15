@@ -23,7 +23,7 @@ export const router = {
                 redirect: '/404'
 
             })
-            asyncRouterHandle(asyncRouter) // 等待动态使用 VUEX持久化 会将其放入 vuex并且动态生成左侧列表
+            asyncRouterHandle(asyncRouter)
             commit('setAsyncRouter', asyncRouter)
         }
     },

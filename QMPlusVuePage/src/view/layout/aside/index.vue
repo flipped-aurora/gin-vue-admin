@@ -1,17 +1,17 @@
 <template>
   <el-menu
-  mode="vertical"
+    :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
     :collapse="isCollapse"
     :default-active="active"
     @select="selectMenuItem"
-    :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
+    unique-opened
   >
-  <AsideComponent :routerInfo="asyncRouters[0]"/>
+    <AsideComponent :key="item.name" :routerInfo="item" v-for="item in asyncRouters[0].children" />
   </el-menu>
 </template>
 
 <script>
-import {mapGetters} from 'vuex'
+import { mapGetters } from 'vuex'
 import AsideComponent from '@/view/layout/aside/asideComponent'
 export default {
   name: 'Aside',
@@ -23,11 +23,12 @@ export default {
   },
   methods: {
     selectMenuItem(index) {
-      this.$router.push({name:index})
+      if (index === this.$route.name) return
+      this.$router.push({ name: index })
     }
   },
-  computed:{
-    ...mapGetters('router',['asyncRouters'])
+  computed: {
+    ...mapGetters('router', ['asyncRouters'])
   },
   components: {
     AsideComponent

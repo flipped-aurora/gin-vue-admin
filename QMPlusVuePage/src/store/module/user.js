@@ -25,7 +25,13 @@ export const user = {
         setExpiresAt(state, expiresAt) {
             // 这里的 `state` 对象是模块的局部状态
             state.expiresAt = expiresAt
+        },
+        clearAll(state) {
+            state.userInfo = {}
+            state.token = ""
+            state.expiresAt = ""
         }
+
     },
     actions: {
         async LoginIn({ commit }, loginInfo) {
@@ -58,6 +64,9 @@ export const user = {
         },
         token(state) {
             return state.token
+        },
+        expiresAt(state) {
+            return state.expiresAt
         }
     }
 }

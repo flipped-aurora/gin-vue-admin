@@ -17,7 +17,7 @@ export default {
           if(this.routerInfo.children.length){
               return 'SubMenu'
           }else{
-              return 'menuItem'
+              return 'MenuItem'
           }
       }
   },

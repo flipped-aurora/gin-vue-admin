@@ -1,6 +1,8 @@
 <template>
-  <el-container class="login-box">
-    <el-main>
+  <el-container class="login-regist-box">
+       <vue-particle-line>
+  </vue-particle-line>
+    <el-main class="login-box">
       <el-form :model="registForm" :rules="rules" label-width="100px" ref="registForm" status-icon>
         <el-form-item label="用户名" prop="username">
           <el-input v-model="registForm.username"></el-input>
@@ -16,7 +18,7 @@
           </el-input>
         </el-form-item>
       </el-form>
-      <el-button @click="submitForm">注册</el-button>
+      <el-button style="float:right;width:calc(100% - 100px)" @click="submitForm">注册</el-button>
     </el-main>
   </el-container>
 </template>
@@ -94,8 +96,16 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-.login-box {
+<style lang="scss">
+.login-regist-box {
   background: #409eff;
-}
+  height: 100vh;
+  .login-box{
+    width: 40vw;
+    position: absolute;
+    left: 50%;
+    margin-left: -22vw;
+    top:25vh;
+  }
+}  
 </style>

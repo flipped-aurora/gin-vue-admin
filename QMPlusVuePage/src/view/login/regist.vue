@@ -18,7 +18,7 @@
           </el-input>
         </el-form-item>
       </el-form>
-      <el-button style="float:right;width:calc(100% - 100px)" @click="submitForm">注册</el-button>
+      <el-button style="float:right;width:calc(100% - 100px)" @click="submitForm">注 册</el-button>
     </el-main>
   </el-container>
 </template>
@@ -96,7 +96,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .login-regist-box {
   background: #409eff;
   height: 100vh;

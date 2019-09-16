@@ -1,5 +1,4 @@
 <template>
-
   <el-container class="login-regist-box">
     <vue-particle-line>
   </vue-particle-line>

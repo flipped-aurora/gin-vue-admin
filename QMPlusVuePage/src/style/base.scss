@@ -1,0 +1,35 @@
+.clearflex {
+    *zoom: 1;
+}
+
+.clearflex:after {
+    content: '';
+    display: block;
+    height: 0;
+    visibility: hidden;
+    clear: both;
+}
+
+.fl-left {
+    float: left;
+}
+
+.fl-right {
+    float: right;
+}
+
+.left-mg-xs {
+    margin-left: 6px;
+}
+
+.left-mg-sm {
+    margin-left: 10px;
+}
+
+.left-mg-md {
+    margin-left: 14px;
+}
+
+.left-mg-lg {
+    margin-left: 18px;
+}

@@ -5,10 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"main/controller/servers"
 	"main/model/dbModel"
+	"main/model/modelInterface"
 )
 
 type CreateAuthorityPatams struct {
-	AuthorityId   uint   `json:"authorityId"`
+	AuthorityId   string   `json:"authorityId"`
 	AuthorityName string `json:"authorityName"`
 }
 
@@ -22,7 +23,7 @@ type CreateAuthorityPatams struct {
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
 	var auth dbModel.Authority
-	_ = c.BindJSON(&auth)
+	_ = c.ShouldBind(&auth)
 	err, authBack := auth.CreateAuthority()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{
@@ -56,5 +57,29 @@ func DeleteAuthority(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "删除成功", gin.H{})
+	}
+}
+
+// @Tags authority
+// @Summary 分页获取角色列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body modelInterface.PageInfo true "分页获取用户列表"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /authority/getAuthorityList [post]
+func GetAuthorityList(c *gin.Context){
+	var pageInfo modelInterface.PageInfo
+	_ = c.BindJSON(&pageInfo)
+	err, list, total := new(dbModel.Authority).GetInfoList(pageInfo)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取数据成功", gin.H{
+			"authList": list,
+			"total":    total,
+			"page":     pageInfo.Page,
+			"pageSize": pageInfo.PageSize,
+		})
 	}
 }

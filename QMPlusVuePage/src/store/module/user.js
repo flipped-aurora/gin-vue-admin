@@ -45,7 +45,7 @@ export const user = {
                     if (redirect) {
                         router.push({ path: redirect })
                     } else {
-                        router.push({ path: '/layout/dashboard' })
+                        router.push({ name: 'dashboard' })
                     }
                 }
             } catch (err) {

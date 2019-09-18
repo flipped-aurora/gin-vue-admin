@@ -11,5 +11,6 @@ func InitAuthorityRouter(Router *gin.Engine) {
 	{
 		AuthorityRouter.POST("createAuthority", api.CreateAuthority)
 		AuthorityRouter.POST("deleteAuthority", api.DeleteAuthority)
+		AuthorityRouter.POST("getAuthorityList",api.GetAuthorityList)
 	}
 }

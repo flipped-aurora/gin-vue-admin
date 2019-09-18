@@ -18,6 +18,9 @@ export default {
 
 <style lang="scss">
 // 引入初始化样式
-  @import '@/style/main.scss'
-
+  @import '@/style/main.scss';
+  @import '@/style/base.scss';
+  #app{
+    background: #eee;
+  }
 </style>

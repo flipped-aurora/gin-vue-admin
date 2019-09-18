@@ -16,6 +16,9 @@ import '@/permission'
 import { store } from '@/store/index'
 Vue.config.productionTip = false
 
+
+import Bus from '@/utils/bus.js'
+Vue.use(Bus)
 new Vue({
     render: h => h(App),
     router,

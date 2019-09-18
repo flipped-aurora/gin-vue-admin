@@ -1,7 +1,7 @@
 <template>
   <el-submenu ref="subMenu" :index="routerInfo.name">
     <template slot="title">
-      <i class="el-icon-location"></i>
+      <i :class="'el-icon-'+routerInfo.meta.icon"></i>
       <span slot="title">{{routerInfo.meta.title}}</span>
     </template>
     <slot></slot>

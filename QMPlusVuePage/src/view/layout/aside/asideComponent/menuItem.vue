@@ -1,6 +1,6 @@
 <template>
   <el-menu-item :index="routerInfo.name">
-    <i class="el-icon-document"></i>
+    <i :class="'el-icon-'+routerInfo.meta.icon"></i>
     <span slot="title">{{routerInfo.meta.title}}</span>
   </el-menu-item>
 </template>

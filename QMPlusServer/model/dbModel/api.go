@@ -9,23 +9,27 @@ import (
 
 type Api struct {
 	gorm.Model  `json:"-"`
-	AuthorityId uint   `json:"-"`
 	Path        string `json:"path"`
 	Description string `json:"description"`
 }
 
 func (a *Api) CreateApi() (err error) {
-	err = qmsql.DEFAULTDB.Create(a).Error
+	findOne := qmsql.DEFAULTDB.Where("path = ?", a.Path).Find(&Menu{}).Error
+	if findOne != nil {
+
+	} else {
+		err = qmsql.DEFAULTDB.Create(a).Error
+	}
 	return err
 }
 
 func (a *Api) DeleteApi() (err error) {
-	err = qmsql.DEFAULTDB.Where("id = ?", a.AuthorityId).Delete(a).Error
+	err = qmsql.DEFAULTDB.Where("path = ?", a.Path).Delete(a).Delete(&ApiAuthority{}).Error
 	return err
 }
 
 func (a *Api) EditApi() (err error) {
-	err = qmsql.DEFAULTDB.Update(a).Error
+	err = qmsql.DEFAULTDB.Update(a).Update(&Authority{}).Error
 	return err
 }
 

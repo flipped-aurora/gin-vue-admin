@@ -1,8 +1,6 @@
 <template>
   <el-container class="layout-cont">
-    <el-header class="header-cont">
-   
-    </el-header>
+    <el-header class="header-cont"></el-header>
     <el-container>
       <el-aside class="main-cont main-left">
         <Aside class="aside" />
@@ -12,7 +10,11 @@
         <el-main class="main-cont main-right">
           <!-- 当前面包屑用路由自动生成可根据需求修改 -->
           <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item v-for="item in matched.slice(1,matched.length)" :key="item.path" :to="{ path: item.path }">{{item.meta.title}}</el-breadcrumb-item>
+            <el-breadcrumb-item
+              :key="item.path"
+              :to="{ path: item.path }"
+              v-for="item in matched.slice(1,matched.length)"
+            >{{item.meta.title}}</el-breadcrumb-item>
           </el-breadcrumb>
           <transition mode="out-in" name="el-fade-in-linear">
             <router-view></router-view>
@@ -38,16 +40,13 @@ export default {
       this.$bus.emit('totalCollapse')
     }
   },
-  computed:{
-    title(){
-      return this.$route.meta.title||'当前页面'
+  computed: {
+    title() {
+      return this.$route.meta.title || '当前页面'
     },
-    matched(){
+    matched() {
       return this.$route.matched
     }
-  },
-  created(){
-    console.log(this.$route.matched)
   }
 }
 </script>
@@ -68,13 +67,13 @@ $mainHight: calc(100vh - 52px);
     background: palevioletred;
   }
   .main-cont {
-    .breadcrumb{
+    .breadcrumb {
       line-height: 24px;
       padding: 6px;
       border-bottom: 1px solid #eee;
       margin-bottom: 6px;
     }
-    &.el-main{
+    &.el-main {
       padding: 0px 10px;
       margin: 0px 0px 0px 12px;
       background: #fff;

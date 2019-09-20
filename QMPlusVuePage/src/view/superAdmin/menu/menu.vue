@@ -80,7 +80,6 @@
 
 <script>
 import { getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
-import { mapActions } from 'vuex'
 export default {
   name: 'Menus',
   data() {
@@ -104,7 +103,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('router',['SetAsyncRouter']),
     handleSizeChange(val) {
       this.pageSize = val
       this.getMenuList()
@@ -121,12 +119,13 @@ export default {
       })
         .then(async () => {
           const res = await deleteBaseMenu({ ID })
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-          this.getMenuList()
-          this.SetAsyncRouter()
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getMenuList()
+          }
         })
         .catch(() => {
           this.$message({

@@ -67,7 +67,6 @@ import {
   createAuthority
 } from '@/api/authority'
 import { getBaseMenuTree, addMenuAuthority, getMenuAuthority } from '@/api/menu'
-import { mapActions } from 'vuex'
 export default {
   name: 'Authority',
   data() {
@@ -92,8 +91,6 @@ export default {
     }
   },
   methods: {
-    ...mapActions('router', ['SetAsyncRouter']),
-
     // 条数
     handleSizeChange(val) {
       this.pageSize = val
@@ -113,11 +110,13 @@ export default {
       })
         .then(async () => {
           const res = await deleteAuthority({ authorityId: row.authorityId })
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          })
-          this.getAuthList()
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getAuthList()
+          }
         })
         .catch(() => {
           this.$message({
@@ -189,7 +188,6 @@ export default {
           type: 'success',
           message: '添加成功!'
         })
-        this.SetAsyncRouter()
       }
       this.closeDialog()
     }

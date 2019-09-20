@@ -4,24 +4,29 @@
       <el-button @click="addMenu('0')" type="primary">新增根菜单</el-button>
     </div>
     <el-table :data="tableData" border stripe>
-      <el-table-column label="ID" min-width="80" prop="ID"></el-table-column>
-      <el-table-column label="路径" min-width="180" prop="path"></el-table-column>
-      <el-table-column label="名称" min-width="180" prop="name"></el-table-column>
-      <el-table-column label="是否隐藏" min-width="180" prop="hidden"></el-table-column>
-      <el-table-column label="父节点Id" min-width="180" prop="parentId"></el-table-column>
-      <el-table-column label="文件路径" min-width="180" prop="component"></el-table-column>
-      <el-table-column label="展示名称" min-width="180" prop="authorityName">
+      <el-table-column label="ID" min-width="40" prop="ID"></el-table-column>
+      <el-table-column label="路径" min-width="100" prop="path"></el-table-column>
+      <el-table-column label="名称" min-width="100" prop="name"></el-table-column>
+      <el-table-column label="是否隐藏" min-width="80" prop="hidden">
+        <template slot-scope="scope">
+          <span>{{scope.row.hidden?"隐藏":"显示"}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="父节点Id" min-width="70" prop="parentId"></el-table-column>
+      <el-table-column label="文件路径" min-width="250" prop="component"></el-table-column>
+      <el-table-column label="展示名称" min-width="80" prop="authorityName">
         <template slot-scope="scope">
           <span>{{scope.row.meta.title}}</span>
         </template>
       </el-table-column>
-       <el-table-column label="图标" min-width="180" prop="authorityName">
+      <el-table-column label="图标" min-width="180" prop="authorityName">
         <template slot-scope="scope">
           <span>{{scope.row.meta.icon}}</span>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="操作" width="100">
+      <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
+          <el-button @click="deleteMenu(scope.row.ID)" size="small" type="text">删除菜单</el-button>
           <el-button @click="addMenu(scope.row.ID)" size="small" type="text">添加子菜单</el-button>
         </template>
       </el-table-column>
@@ -74,7 +79,8 @@
 </template>
 
 <script>
-import { getMenuList, addBaseMenu } from '@/api/menu'
+import { getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
+import { mapActions } from 'vuex'
 export default {
   name: 'Menus',
   data() {
@@ -98,6 +104,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions('router',['SetAsyncRouter']),
     handleSizeChange(val) {
       this.pageSize = val
       this.getMenuList()
@@ -106,26 +113,20 @@ export default {
       this.page = val
       this.getMenuList()
     },
-    deleteAuth(row) {
+    deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(async () => {
-          try {
-            const res = await deleteAuthority({ authorityId: row.authorityId })
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getAuthList()
-          } catch (err) {
-            this.$message({
-              type: 'error',
-              message: '删除失败!' + err
-            })
-          }
+          const res = await deleteBaseMenu({ ID })
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getMenuList()
+          this.SetAsyncRouter()
         })
         .catch(() => {
           this.$message({
@@ -175,8 +176,8 @@ export default {
       this.dialogFormVisible = true
     },
     async getMenuList(page = this.page, pageSize = this.pageSize) {
-        const table = await getMenuList({ page, pageSize })
-        this.tableData = table.data.menuList
+      const table = await getMenuList({ page, pageSize })
+      this.tableData = table.data.menuList
     }
   },
   created() {

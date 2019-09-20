@@ -44,11 +44,11 @@
     <el-dialog :visible.sync="menuDialogFlag" title="关联菜单">
       <el-tree
         :data="treeData"
+        :default-checked-keys="treeIds"
         :props="defaultProps"
         default-expand-all
         highlight-current
         node-key="ID"
-        :default-checked-keys="treeIds"
         ref="tree"
         show-checkbox
       ></el-tree>
@@ -67,6 +67,7 @@ import {
   createAuthority
 } from '@/api/authority'
 import { getBaseMenuTree, addMenuAuthority, getMenuAuthority } from '@/api/menu'
+import { mapActions } from 'vuex'
 export default {
   name: 'Authority',
   data() {
@@ -77,7 +78,7 @@ export default {
       pageSize: 10,
       tableData: [],
       treeData: [],
-      treeIds:[],
+      treeIds: [],
       defaultProps: {
         children: 'children',
         label: 'nickName'
@@ -91,6 +92,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions('router', ['SetAsyncRouter']),
+
     // 条数
     handleSizeChange(val) {
       this.pageSize = val
@@ -109,19 +112,12 @@ export default {
         type: 'warning'
       })
         .then(async () => {
-          try {
-            const res = await deleteAuthority({ authorityId: row.authorityId })
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getAuthList()
-          } catch (err) {
-            this.$message({
-              type: 'error',
-              message: '删除失败!' + err
-            })
-          }
+          const res = await deleteAuthority({ authorityId: row.authorityId })
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+          this.getAuthList()
         })
         .catch(() => {
           this.$message({
@@ -152,12 +148,6 @@ export default {
         })
         this.getAuthList()
         this.closeDialog()
-      } else {
-        this.$message({
-          type: 'error',
-          message: '添加失败!'
-        })
-        this.closeDialog()
       }
       this.initForm()
       this.dialogFormVisible = false
@@ -168,26 +158,24 @@ export default {
     },
     // 获取用户列表
     async getAuthList(page = this.page, pageSize = this.pageSize) {
-      try {
-        const table = await getAuthorityList({ page, pageSize })
-        this.tableData = table.data.authList
-      } catch (err) {
-        console.log(err)
-      }
+      const table = await getAuthorityList({ page, pageSize })
+      this.tableData = table.data.authList
     },
+    // 关联用户列表关系
     async addAuthMenu(row) {
-      const res1 = await getMenuAuthority({authorityId:row.authorityId})
+      const res1 = await getMenuAuthority({ authorityId: row.authorityId })
       const menus = res1.data.menus
       const arr = []
-      menus.map(item=>{arr.push(Number(item.menuId))})
+      menus.map(item => {
+        arr.push(Number(item.menuId))
+      })
       this.treeIds = arr
       const res2 = await getBaseMenuTree()
       this.treeData = res2.data.menus
-      console.log(this.treeData)
       this.activeUserId = row.authorityId
       this.menuDialogFlag = true
     },
-    // 关联树
+    // 关联树 确认方法
     async relation() {
       const checkArr = this.$refs.tree
         .getCheckedNodes()
@@ -201,6 +189,7 @@ export default {
           type: 'success',
           message: '添加成功!'
         })
+        this.SetAsyncRouter()
       }
       this.closeDialog()
     }
@@ -208,7 +197,6 @@ export default {
   },
   created() {
     this.getAuthList()
-    
   }
 }
 </script>

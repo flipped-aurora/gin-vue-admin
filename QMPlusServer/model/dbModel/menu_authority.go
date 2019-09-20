@@ -56,20 +56,3 @@ func getChildrenList(menu *Menu) (err error) {
 	}
 	return err
 }
-
-//获取基础路由树
-func (m *BaseMenu) GetBaseMenuTree() (err error, menus []BaseMenu) {
-	err = qmsql.DEFAULTDB.Where(" parent_id = ?", 0).Find(&menus).Error
-	for i := 0; i < len(menus); i++ {
-		err = getBaseChildrenList(&menus[i])
-	}
-	return err, menus
-}
-
-func getBaseChildrenList(menu *BaseMenu) (err error) {
-	err = qmsql.DEFAULTDB.Where("parent_id = ?", menu.ID).Find(&menu.Children).Error
-	for i := 0; i < len(menu.Children); i++ {
-		err = getBaseChildrenList(&menu.Children[i])
-	}
-	return err
-}

@@ -32,8 +32,14 @@ func (b *BaseMenu) AddBaseMenu() (err error) {
 	return err
 }
 
-func (b *BaseMenu) DeleteBaseMenu(name string) (err error) {
-	err = qmsql.DEFAULTDB.Where("name = ?", name).Delete(&b).Delete(&Menu{}).Error
+func (b *BaseMenu) DeleteBaseMenu(id float64) (err error) {
+	err = qmsql.DEFAULTDB.Where("parent_id = ?",id).First(&BaseMenu{}).Error
+	if(err!=nil){
+		err = qmsql.DEFAULTDB.Where("id = ?", id).Delete(&b).Error
+		err = qmsql.DEFAULTDB.Where("menu_id = ?", id).Delete(&Menu{}).Error
+	}else{
+		return errors.New("此菜单存在子菜单不可删除")
+	}
 	return err
 }
 

@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"main/controller/servers"
 	"main/model/dbModel"
+	"main/model/modelInterface"
 )
 
 type CreateApiParams struct {
@@ -52,5 +53,53 @@ func DeleteApi(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "删除成功", gin.H{})
+	}
+}
+
+type AuthAndPathIn struct {
+	AuthorityId string `json:"authorityId"`
+	Apis []dbModel.Api `json:"apis"`
+}
+// @Tags Api
+// @Summary 创建api和角色关系
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.AuthAndPathIn true "创建api和角色关系"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /api/setAuthAndPath [post]
+func SetAuthAndPath(c *gin.Context){
+	var authAndPathIn AuthAndPathIn
+	_ = c.BindJSON(&authAndPathIn)
+	err:=new(dbModel.ApiAuthority).SetAuthAndPath(authAndPathIn.AuthorityId,authAndPathIn.Apis)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("添加失败：%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "添加成功", gin.H{})
+	}
+}
+
+// @Tags api
+// @Summary 分页获取角色列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body modelInterface.PageInfo true "分页获取用户列表"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /api/getApiList [post]
+func GetApiList(c *gin.Context) {
+	var pageInfo modelInterface.PageInfo
+	_ = c.BindJSON(&pageInfo)
+	err, list, total := new(dbModel.Api).GetInfoList(pageInfo)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取数据成功", gin.H{
+			"list":  list,
+			"total":    total,
+			"page":     pageInfo.Page,
+			"pageSize": pageInfo.PageSize,
+		})
+
 	}
 }

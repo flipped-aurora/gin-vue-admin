@@ -80,14 +80,14 @@
 
 <script>
 import { getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
+import infoList from '@/view/superAdmin/mixins/infoList'
 export default {
   name: 'Menus',
+  mixins:[infoList],
   data() {
     return {
-      page: 1,
-      total: 10,
-      pageSize: 10,
-      tableData: [],
+      listApi:getMenuList,
+      listKey:'list',
       dialogFormVisible: false,
       form: {
         path: '',
@@ -103,14 +103,6 @@ export default {
     }
   },
   methods: {
-    handleSizeChange(val) {
-      this.pageSize = val
-      this.getMenuList()
-    },
-    handleCurrentChange(val) {
-      this.page = val
-      this.getMenuList()
-    },
     deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -124,7 +116,7 @@ export default {
               type: 'success',
               message: '删除成功!'
             })
-            this.getMenuList()
+            this.getTableData()
           }
         })
         .catch(() => {
@@ -158,7 +150,7 @@ export default {
           type: 'success',
           message: '添加成功!'
         })
-        this.getAuthList()
+        this.getTableData()
         this.closeDialog()
       } else {
         this.$message({
@@ -174,17 +166,11 @@ export default {
       this.form.parentId = String(id)
       this.dialogFormVisible = true
     },
-    async getMenuList(page = this.page, pageSize = this.pageSize) {
-      const table = await getMenuList({ page, pageSize })
-      this.tableData = table.data.menuList
-    }
-  },
-  created() {
-    this.getMenuList()
+
   }
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .button-box {
   padding: 10px 20px;
   .el-button {

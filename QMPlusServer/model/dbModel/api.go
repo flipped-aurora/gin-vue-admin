@@ -2,13 +2,14 @@ package dbModel
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/pkg/errors"
 	"main/controller/servers"
 	"main/init/qmsql"
 	"main/model/modelInterface"
 )
 
 type Api struct {
-	gorm.Model  `json:"-"`
+	gorm.Model
 	Path        string `json:"path"`
 	Description string `json:"description"`
 }
@@ -16,7 +17,7 @@ type Api struct {
 func (a *Api) CreateApi() (err error) {
 	findOne := qmsql.DEFAULTDB.Where("path = ?", a.Path).Find(&Menu{}).Error
 	if findOne != nil {
-
+		return errors.New("存在相同api")
 	} else {
 		err = qmsql.DEFAULTDB.Create(a).Error
 	}
@@ -29,7 +30,8 @@ func (a *Api) DeleteApi() (err error) {
 }
 
 func (a *Api) EditApi() (err error) {
-	err = qmsql.DEFAULTDB.Update(a).Update(&Authority{}).Error
+	err = qmsql.DEFAULTDB.Update(a).Error
+	err = qmsql.DEFAULTDB.Where("path = ?",a.Path).Update("path",a.Path).Error
 	return err
 }
 

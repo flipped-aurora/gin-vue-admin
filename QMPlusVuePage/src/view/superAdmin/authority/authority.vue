@@ -67,15 +67,15 @@ import {
   createAuthority
 } from '@/api/authority'
 import { getBaseMenuTree, addMenuAuthority, getMenuAuthority } from '@/api/menu'
+import infoList from '@/view/superAdmin/mixins/infoList'
 export default {
   name: 'Authority',
+  mixins:[infoList],
   data() {
     return {
+      listApi: getAuthorityList,
+      listKey:'list',
       activeUserId: 0,
-      page: 1,
-      total: 10,
-      pageSize: 10,
-      tableData: [],
       treeData: [],
       treeIds: [],
       defaultProps: {
@@ -91,16 +91,6 @@ export default {
     }
   },
   methods: {
-    // 条数
-    handleSizeChange(val) {
-      this.pageSize = val
-      this.getAuthList()
-    },
-    // 页码
-    handleCurrentChange(val) {
-      this.page = val
-      this.getAuthList()
-    },
     // 删除角色
     deleteAuth(row) {
       this.$confirm('此操作将永久删除该角色, 是否继续?', '提示', {
@@ -115,7 +105,7 @@ export default {
               type: 'success',
               message: '删除成功!'
             })
-            this.getAuthList()
+            this.getTableData()
           }
         })
         .catch(() => {
@@ -145,7 +135,7 @@ export default {
           type: 'success',
           message: '添加成功!'
         })
-        this.getAuthList()
+        this.getTableData()
         this.closeDialog()
       }
       this.initForm()
@@ -155,11 +145,7 @@ export default {
     addAuthority() {
       this.dialogFormVisible = true
     },
-    // 获取用户列表
-    async getAuthList(page = this.page, pageSize = this.pageSize) {
-      const table = await getAuthorityList({ page, pageSize })
-      this.tableData = table.data.authList
-    },
+    
     // 关联用户列表关系
     async addAuthMenu(row) {
       const res1 = await getMenuAuthority({ authorityId: row.authorityId })
@@ -194,11 +180,11 @@ export default {
     // 获取基础menu树
   },
   created() {
-    this.getAuthList()
+    this.getTableData()
   }
 }
 </script>
-<style lang="scss">
+<style scoped lang="scss">
 .button-box {
   padding: 10px 20px;
   .el-button {

@@ -7,9 +7,11 @@ import (
 )
 
 func InitApiRouter(Router *gin.Engine) {
-	UserRouter := Router.Group("api").Use(middleware.JWTAuth())
+	ApiRouter := Router.Group("api").Use(middleware.JWTAuth())
 	{
-		UserRouter.POST("createApi", api.CreateApi)
-		UserRouter.POST("deleteApi", api.DeleteApi)
+		ApiRouter.POST("createApi", api.CreateApi)
+		ApiRouter.POST("deleteApi", api.DeleteApi)
+		ApiRouter.POST("setAuthAndPath",api.SetAuthAndPath)
+		ApiRouter.POST("getApiList",api.GetApiList)
 	}
 }

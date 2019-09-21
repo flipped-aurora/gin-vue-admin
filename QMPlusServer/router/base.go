@@ -6,9 +6,9 @@ import (
 )
 
 func InitBaseRouter(Router *gin.Engine) {
-	UserRouter := Router.Group("base")
+	BaseRouter := Router.Group("base")
 	{
-		UserRouter.POST("regist", api.Regist)
-		UserRouter.POST("login", api.Login)
+		BaseRouter.POST("regist", api.Regist)
+		BaseRouter.POST("login", api.Login)
 	}
 }

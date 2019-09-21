@@ -79,6 +79,8 @@
 </template>
 
 <script>
+// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
+
 import { getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
 import infoList from '@/view/superAdmin/mixins/infoList'
 export default {

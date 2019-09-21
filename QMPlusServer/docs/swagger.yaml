@@ -1,5 +1,28 @@
 basePath: /
 definitions:
+  api.AddMenuAuthorityInfo:
+    properties:
+      authorityId:
+        type: string
+      menus:
+        items:
+          $ref: '#/definitions/dbModel.BaseMenu'
+        type: array
+    type: object
+  api.AuthAndPathIn:
+    properties:
+      apis:
+        items:
+          $ref: '#/definitions/dbModel.Api'
+        type: array
+      authorityId:
+        type: string
+    type: object
+  api.AuthorityIdInfo:
+    properties:
+      authorityId:
+        type: string
+    type: object
   api.ChangePasswordStutrc:
     properties:
       newPassword:
@@ -19,7 +42,7 @@ definitions:
   api.CreateAuthorityPatams:
     properties:
       authorityId:
-        type: integer
+        type: string
       authorityName:
         type: string
     type: object
@@ -30,11 +53,46 @@ definitions:
       authorityId:
         type: integer
     type: object
+  api.IdInfo:
+    properties:
+      id:
+        type: number
+    type: object
   api.RegistAndLoginStuct:
     properties:
       password:
         type: string
       username:
+        type: string
+    type: object
+  dbModel.Api:
+    properties:
+      description:
+        type: string
+      path:
+        type: string
+    type: object
+  dbModel.BaseMenu:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/dbModel.BaseMenu'
+        type: array
+      component:
+        type: string
+      hidden:
+        type: boolean
+      icon:
+        type: string
+      name:
+        type: string
+      nickName:
+        type: string
+      parentId:
+        type: string
+      path:
+        type: string
+      title:
         type: string
     type: object
   modelInterface.PageInfo:
@@ -99,6 +157,54 @@ paths:
       summary: 删除指定角色api
       tags:
       - Api
+  /api/getApiList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取用户列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取角色列表
+      tags:
+      - api
+  /api/setAuthAndPath:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建api和角色关系
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.AuthAndPathIn'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建api和角色关系
+      tags:
+      - Api
   /authority/createAuthority:
     post:
       consumes:
@@ -147,6 +253,30 @@ paths:
       summary: 删除角色
       tags:
       - authority
+  /authority/getAuthorityList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取用户列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取角色列表
+      tags:
+      - authority
   /base/login:
     post:
       parameters:
@@ -187,6 +317,146 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
+  /menu/addBaseMenu:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取基础menu列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取基础menu列表
+      tags:
+      - menu
+  /menu/addMenuAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 增加menu和角色关联关系
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.AuthorityIdInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定角色menu
+      tags:
+      - authorityAndMenu
+  /menu/deleteBaseMenu:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除菜单
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.IdInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定角色menu
+      tags:
+      - menu
+  /menu/getBaseMenuTree:
+    post:
+      parameters:
+      - description: 可以什么都不填
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.RegistAndLoginStuct'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户动态路由
+      tags:
+      - authorityAndMenu
+  /menu/getMenu:
+    post:
+      parameters:
+      - description: 可以什么都不填
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.RegistAndLoginStuct'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户动态路由
+      tags:
+      - authorityAndMenu
+  /menu/getMenuList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取基础menu列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取基础menu列表
+      tags:
+      - menu
   /user/changePassword:
     post:
       parameters:

@@ -43,7 +43,7 @@ func GetMenuList(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"list": menuList,
+			"list":     menuList,
 			"total":    total,
 			"page":     pageInfo.Page,
 			"pageSize": pageInfo.PageSize,
@@ -96,7 +96,7 @@ type AddMenuAuthorityInfo struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body modelInterface.AddMenuAuthorityInfo true "增加menu和角色关联关系"
+// @Param data body api.AddMenuAuthorityInfo true "增加menu和角色关联关系"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/addMenuAuthority [post]
 func AddMenuAuthority(c *gin.Context) {
@@ -119,7 +119,7 @@ type AuthorityIdInfo struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body modelInterface.AuthorityIdInfo true "增加menu和角色关联关系"
+// @Param data body api.AuthorityIdInfo true "增加menu和角色关联关系"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/addMenuAuthority [post]
 func GetMenuAuthority(c *gin.Context) {
@@ -133,22 +133,22 @@ func GetMenuAuthority(c *gin.Context) {
 	}
 }
 
-
 type IdInfo struct {
 	Id float64
 }
+
 // @Tags menu
 // @Summary 获取指定角色menu
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body modelInterface.IdInfo true "删除菜单"
+// @Param data body api.IdInfo true "删除菜单"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/deleteBaseMenu [post]
 func DeleteBaseMenu(c *gin.Context) {
 	var idInfo IdInfo
 	_ = c.BindJSON(&idInfo)
-	err :=new(dbModel.BaseMenu).DeleteBaseMenu(idInfo.Id)
+	err := new(dbModel.BaseMenu).DeleteBaseMenu(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
 	} else {

@@ -180,7 +180,7 @@ paths:
       - ApiKeyAuth: []
       summary: 分页获取角色列表
       tags:
-      - api
+      - Api
   /api/setAuthAndPath:
     post:
       consumes:

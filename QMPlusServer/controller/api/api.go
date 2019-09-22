@@ -57,9 +57,10 @@ func DeleteApi(c *gin.Context) {
 }
 
 type AuthAndPathIn struct {
-	AuthorityId string `json:"authorityId"`
-	Apis []dbModel.Api `json:"apis"`
+	AuthorityId string        `json:"authorityId"`
+	Apis        []dbModel.Api `json:"apis"`
 }
+
 // @Tags Api
 // @Summary 创建api和角色关系
 // @Security ApiKeyAuth
@@ -68,10 +69,10 @@ type AuthAndPathIn struct {
 // @Param data body api.AuthAndPathIn true "创建api和角色关系"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/setAuthAndPath [post]
-func SetAuthAndPath(c *gin.Context){
+func SetAuthAndPath(c *gin.Context) {
 	var authAndPathIn AuthAndPathIn
 	_ = c.BindJSON(&authAndPathIn)
-	err:=new(dbModel.ApiAuthority).SetAuthAndPath(authAndPathIn.AuthorityId,authAndPathIn.Apis)
+	err := new(dbModel.ApiAuthority).SetAuthAndPath(authAndPathIn.AuthorityId, authAndPathIn.Apis)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败：%v", err), gin.H{})
 	} else {
@@ -79,7 +80,7 @@ func SetAuthAndPath(c *gin.Context){
 	}
 }
 
-// @Tags api
+// @Tags Api
 // @Summary 分页获取角色列表
 // @Security ApiKeyAuth
 // @accept application/json
@@ -95,7 +96,7 @@ func GetApiList(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"list":  list,
+			"list":     list,
 			"total":    total,
 			"page":     pageInfo.Page,
 			"pageSize": pageInfo.PageSize,

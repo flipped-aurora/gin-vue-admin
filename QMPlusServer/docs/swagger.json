@@ -101,7 +101,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "api"
+                    "Api"
                 ],
                 "summary": "分页获取角色列表",
                 "parameters": [

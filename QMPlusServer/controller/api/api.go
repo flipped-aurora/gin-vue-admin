@@ -9,17 +9,16 @@ import (
 )
 
 type CreateApiParams struct {
-	AuthorityId uint   `json:"-"`
 	Path        string `json:"path"`
 	Description string `json:"description"`
 }
 
 type DeleteApiParams struct {
-	AuthorityId uint `json:"-"`
+	Path uint `json:"path"`
 }
 
 // @Tags Api
-// @Summary 为指定角色创建api
+// @Summary 创建基础api
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
@@ -38,7 +37,7 @@ func CreateApi(c *gin.Context) {
 }
 
 // @Tags Api
-// @Summary 删除指定角色api
+// @Summary 删除指定api
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json

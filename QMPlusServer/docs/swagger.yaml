@@ -47,6 +47,9 @@ definitions:
         type: string
     type: object
   api.DeleteApiParams:
+    properties:
+      path:
+        type: integer
     type: object
   api.DeleteAuthorityPatams:
     properties:
@@ -130,7 +133,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 为指定角色创建api
+      summary: 创建基础api
       tags:
       - Api
   /api/deleteApi:
@@ -154,7 +157,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 删除指定角色api
+      summary: 删除指定api
       tags:
       - Api
   /api/getApiList:

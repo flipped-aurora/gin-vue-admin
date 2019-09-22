@@ -154,7 +154,10 @@ export default {
       const menus = res1.data.menus
       const arr = []
       menus.map(item => {
-        arr.push(Number(item.menuId))
+        // 防止直接选中父级造成全选
+        if(!menus.some(same=>same.parentId === item.menuId)){
+          arr.push(Number(item.menuId))
+        }
       })
       this.treeIds = arr
       const res2 = await getBaseMenuTree()

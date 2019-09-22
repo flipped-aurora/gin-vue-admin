@@ -25,7 +25,7 @@
                 "tags": [
                     "Api"
                 ],
-                "summary": "为指定角色创建api",
+                "summary": "创建基础api",
                 "parameters": [
                     {
                         "description": "创建api",
@@ -64,7 +64,7 @@
                 "tags": [
                     "Api"
                 ],
-                "summary": "删除指定角色api",
+                "summary": "删除指定api",
                 "parameters": [
                     {
                         "description": "删除api",
@@ -765,7 +765,12 @@
             }
         },
         "api.DeleteApiParams": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "integer"
+                }
+            }
         },
         "api.DeleteAuthorityPatams": {
             "type": "object",

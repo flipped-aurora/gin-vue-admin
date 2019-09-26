@@ -31,7 +31,6 @@ func (a *Api) DeleteApi() (err error) {
 
 func (a *Api) EditApi() (err error) {
 	err = qmsql.DEFAULTDB.Update(a).Error
-	err = qmsql.DEFAULTDB.Where("path = ?",a.Path).Update("path",a.Path).Error
 	return err
 }
 

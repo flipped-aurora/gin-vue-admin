@@ -27,6 +27,7 @@
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="deleteMenu(scope.row.ID)" size="small" type="text">删除菜单</el-button>
+          <el-button @click="editMenu(scope.row)" size="small" type="text">编辑菜单</el-button>
           <el-button @click="addMenu(scope.row.ID)" size="small" type="text">添加子菜单</el-button>
         </template>
       </el-table-column>
@@ -81,7 +82,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 
-import { getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
+import { updataBaseMenu ,getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
 import infoList from '@/view/superAdmin/mixins/infoList'
 export default {
   name: 'Menus',
@@ -105,6 +106,7 @@ export default {
     }
   },
   methods: {
+    // 删除菜单 
     deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -128,6 +130,7 @@ export default {
           })
         })
     },
+    // 初始化弹窗内表格方法
     initForm() {
       this.form = {
         path: '',
@@ -141,10 +144,12 @@ export default {
         }
       }
     },
+    // 关闭弹窗
     closeDialog() {
       this.initForm()
       this.dialogFormVisible = false
     },
+    // 添加menu
     async enterDialog() {
       const res = await addBaseMenu(this.form)
       if (res.success) {
@@ -164,11 +169,19 @@ export default {
       this.initForm()
       this.dialogFormVisible = false
     },
+    // 添加菜单方法，id为 0则为添加根菜单
     addMenu(id) {
       this.form.parentId = String(id)
       this.dialogFormVisible = true
     },
-
+    // 修改菜单方法
+    async editMenu(row){
+      row.name = "修改测试"
+      row.meta.title="修改测试"
+      row.meta.icon = "share"
+      const res = await updataBaseMenu(row)
+      console.log(res)
+   }
   }
 }
 </script>

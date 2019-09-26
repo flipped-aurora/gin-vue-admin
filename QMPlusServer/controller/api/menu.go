@@ -52,11 +52,11 @@ func GetMenuList(c *gin.Context) {
 }
 
 // @Tags menu
-// @Summary 分页获取基础menu列表
+// @Summary 新增菜单
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body modelInterface.PageInfo true "分页获取基础menu列表"
+// @Param data body dbModel.BaseMenu true "新增菜单"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/addBaseMenu [post]
 func AddBaseMenu(c *gin.Context) {
@@ -153,5 +153,24 @@ func DeleteBaseMenu(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "删除成功", gin.H{})
+	}
+}
+
+// @Tags menu
+// @Summary 新增菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body dbModel.BaseMenu true "新增菜单"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /menu/updataBaseMen [post]
+func UpdataBaseMenu(c *gin.Context) {
+	var menu dbModel.BaseMenu
+	_ = c.BindJSON(&menu)
+	err := menu.UpdataBaseMenu()
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("修改失败：%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "修改成功", gin.H{})
 	}
 }

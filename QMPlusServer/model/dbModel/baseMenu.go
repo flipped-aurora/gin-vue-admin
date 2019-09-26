@@ -1,6 +1,7 @@
 package dbModel
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	"main/controller/servers"
@@ -33,18 +34,28 @@ func (b *BaseMenu) AddBaseMenu() (err error) {
 }
 
 func (b *BaseMenu) DeleteBaseMenu(id float64) (err error) {
-	err = qmsql.DEFAULTDB.Where("parent_id = ?",id).First(&BaseMenu{}).Error
-	if(err!=nil){
+	err = qmsql.DEFAULTDB.Where("parent_id = ?", id).First(&BaseMenu{}).Error
+	if err != nil {
 		err = qmsql.DEFAULTDB.Where("id = ?", id).Delete(&b).Error
-		err = qmsql.DEFAULTDB.Where("menu_id = ?", id).Delete(&Menu{}).Error
-	}else{
+		err = qmsql.DEFAULTDB.Where("menu_id = ?", id).Unscoped().Delete(&Menu{}).Error
+	} else {
 		return errors.New("此菜单存在子菜单不可删除")
 	}
 	return err
 }
 
-func (b *BaseMenu) UpdataBaseMenu(name string) (err error) {
-	err = qmsql.DEFAULTDB.Where("name = ?", name).Update(&b).Update(&Menu{}).Error
+func (b *BaseMenu) UpdataBaseMenu() (err error) {
+	upDataMap := make(map[string]interface{})
+	upDataMap["parentId"] = b.ParentId
+	upDataMap["path"] = b.Path
+	upDataMap["name"] = b.Name
+	upDataMap["hidden"] = b.Hidden
+	upDataMap["component"] = b.Component
+	upDataMap["title"] = b.Title
+	upDataMap["icon"] = b.Icon
+	err = qmsql.DEFAULTDB.Where("id = ?", b.ID).Find(&BaseMenu{}).Updates(upDataMap).Error
+	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&Menu{}).Updates(upDataMap).Error
+	fmt.Printf("菜单修改时候，关联菜单err:%v", err1)
 	return err
 }
 

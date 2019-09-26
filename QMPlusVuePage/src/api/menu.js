@@ -1,6 +1,6 @@
 import service from '@/utils/request'
 
-// @Summary 用户登录
+// @Summary 用户登录 获取动态路由
 // @Produce  application/json
 // @Param 可以什么都不填 调一下即可
 // @Router /menu/getMenu [post]
@@ -27,7 +27,7 @@ export const getMenuList = (data) => {
 }
 
 
-// @Summary 获取menu列表
+// @Summary 新增基础menu
 // @Produce  application/json
 // @Param menu Object
 // @Router /menu/getMenuList [post]
@@ -81,6 +81,19 @@ export const getMenuAuthority = (data) => {
 export const deleteBaseMenu = (data) => {
     return service({
         url: "/menu/deleteBaseMenu",
+        method: 'post',
+        data
+    })
+}
+
+
+// @Summary 修改menu列表
+// @Produce  application/json
+// @Param menu Object
+// @Router /menu/updataBaseMenu [post]
+export const updataBaseMenu = (data) => {
+    return service({
+        url: "/menu/updataBaseMenu",
         method: 'post',
         data
     })

@@ -46,7 +46,7 @@ func (b *BaseMenu) DeleteBaseMenu(id float64) (err error) {
 
 func (b *BaseMenu) UpdataBaseMenu() (err error) {
 	upDataMap := make(map[string]interface{})
-	upDataMap["parentId"] = b.ParentId
+	upDataMap["parent_id"] = b.ParentId
 	upDataMap["path"] = b.Path
 	upDataMap["name"] = b.Name
 	upDataMap["hidden"] = b.Hidden
@@ -54,9 +54,14 @@ func (b *BaseMenu) UpdataBaseMenu() (err error) {
 	upDataMap["title"] = b.Title
 	upDataMap["icon"] = b.Icon
 	err = qmsql.DEFAULTDB.Where("id = ?", b.ID).Find(&BaseMenu{}).Updates(upDataMap).Error
-	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&Menu{}).Updates(upDataMap).Error
+	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&[]Menu{}).Updates(upDataMap).Error
 	fmt.Printf("菜单修改时候，关联菜单err:%v", err1)
 	return err
+}
+
+func (b *BaseMenu) GetBaseMenuById(id float64) (err error, menu BaseMenu) {
+	err = qmsql.DEFAULTDB.Where("id = ?", id).First(&menu).Error
+	return
 }
 
 func (b *BaseMenu) GetInfoList(info modelInterface.PageInfo) (err error, list interface{}, total int) {

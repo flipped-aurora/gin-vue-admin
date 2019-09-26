@@ -17,5 +17,6 @@ func InitMenuRouter(Router *gin.Engine) {
 		MenuRouter.POST("getMenuAuthority", api.GetMenuAuthority)
 		MenuRouter.POST("deleteBaseMenu", api.DeleteBaseMenu)
 		MenuRouter.POST("updataBaseMenu", api.UpdataBaseMenu)
+		MenuRouter.POST("getBaseMenuById", api.GetBaseMenuById)
 	}
 }

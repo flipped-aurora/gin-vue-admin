@@ -174,3 +174,26 @@ func UpdataBaseMenu(c *gin.Context) {
 		servers.ReportFormat(c, true, "修改成功", gin.H{})
 	}
 }
+
+type GetById struct {
+	Id float64 `json:"id"`
+}
+
+// @Tags menu
+// @Summary 根据id获取菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.GetById true "根据id获取菜单"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /menu/getBaseMenuById [post]
+func GetBaseMenuById(c *gin.Context) {
+	var idInfo GetById
+	_ = c.BindJSON(&idInfo)
+	err, menu := new(dbModel.BaseMenu).GetBaseMenuById(idInfo.Id)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("查询失败：%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "查询成功", gin.H{"menu": menu})
+	}
+}

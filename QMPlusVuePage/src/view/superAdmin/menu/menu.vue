@@ -27,7 +27,7 @@
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="deleteMenu(scope.row.ID)" size="small" type="text">删除菜单</el-button>
-          <el-button @click="editMenu(scope.row)" size="small" type="text">编辑菜单</el-button>
+          <el-button @click="editMenu(scope.row.ID)" size="small" type="text">编辑菜单</el-button>
           <el-button @click="addMenu(scope.row.ID)" size="small" type="text">添加子菜单</el-button>
         </template>
       </el-table-column>
@@ -82,7 +82,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 
-import { updataBaseMenu ,getMenuList, addBaseMenu, deleteBaseMenu } from '@/api/menu'
+import { updataBaseMenu ,getMenuList, addBaseMenu, deleteBaseMenu, getBaseMenuById } from '@/api/menu'
 import infoList from '@/view/superAdmin/mixins/infoList'
 export default {
   name: 'Menus',
@@ -93,6 +93,7 @@ export default {
       listKey:'list',
       dialogFormVisible: false,
       form: {
+        ID:0,
         path: '',
         name: '',
         hidden: '',
@@ -102,7 +103,8 @@ export default {
           title: '',
           icon: ''
         }
-      }
+      },
+      isEdit:false
     }
   },
   methods: {
@@ -151,7 +153,12 @@ export default {
     },
     // 添加menu
     async enterDialog() {
-      const res = await addBaseMenu(this.form)
+      let res
+      if(this.isEdit){
+        res = await updataBaseMenu(this.form)
+      }else{
+        res = await addBaseMenu(this.form)
+      }
       if (res.success) {
         this.$message({
           type: 'success',
@@ -172,15 +179,15 @@ export default {
     // 添加菜单方法，id为 0则为添加根菜单
     addMenu(id) {
       this.form.parentId = String(id)
+      this.isEdit = false
       this.dialogFormVisible = true
     },
     // 修改菜单方法
-    async editMenu(row){
-      row.name = "修改测试"
-      row.meta.title="修改测试"
-      row.meta.icon = "share"
-      const res = await updataBaseMenu(row)
-      console.log(res)
+    async editMenu(id){
+      const res = await getBaseMenuById({id})
+      this.form = res.data.menu
+      this.dialogFormVisible = true
+      this.isEdit = true
    }
   }
 }

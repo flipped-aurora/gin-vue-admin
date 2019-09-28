@@ -9,7 +9,7 @@ import (
 )
 
 type Authority struct {
-	gorm.Model    `json:"-"`
+	gorm.Model
 	AuthorityId   string   `json:"authorityId" gorm:"not null;unique"`
 	AuthorityName string `json:"authorityName"`
 }

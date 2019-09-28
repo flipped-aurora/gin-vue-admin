@@ -16,7 +16,7 @@ type Api struct {
 
 func (a *Api) CreateApi() (err error) {
 	findOne := qmsql.DEFAULTDB.Where("path = ?", a.Path).Find(&Menu{}).Error
-	if findOne != nil {
+	if findOne == nil {
 		return errors.New("存在相同api")
 	} else {
 		err = qmsql.DEFAULTDB.Create(a).Error
@@ -29,9 +29,14 @@ func (a *Api) DeleteApi() (err error) {
 	return err
 }
 
-func (a *Api) EditApi() (err error) {
-	err = qmsql.DEFAULTDB.Update(a).Error
+func (a *Api) UpdataApi() (err error) {
+	err = qmsql.DEFAULTDB.Save(a).Error
 	return err
+}
+
+func (a *Api) GetApiById(id float64)(err error,api Api){
+	err = qmsql.DEFAULTDB.Where("id = ?",id).First(&api).Error
+	return
 }
 
 // 分页获取数据  需要分页实现这个接口即可

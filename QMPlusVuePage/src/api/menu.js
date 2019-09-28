@@ -98,3 +98,20 @@ export const updataBaseMenu = (data) => {
         data
     })
 }
+
+
+// @Tags menu
+// @Summary 根据id获取菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.GetById true "根据id获取菜单"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /menu/getBaseMenuById [post]
+export const getBaseMenuById = (data) => {
+    return service({
+        url: "/menu/getBaseMenuById",
+        method: 'post',
+        data
+    })
+}

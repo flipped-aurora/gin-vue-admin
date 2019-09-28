@@ -4,11 +4,13 @@
       <el-button @click="addAuthority" type="primary">新增角色</el-button>
     </div>
     <el-table :data="tableData" border stripe>
+      <el-table-column label="id" min-width="180" prop="ID"></el-table-column>      
       <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
       <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
       <el-table-column fixed="right" label="操作" width="500">
         <template slot-scope="scope">
-          <el-button @click="addAuthMenu(scope.row)" size="small" type="text">增加角色菜单</el-button>
+          <el-button @click="addAuthMenu(scope.row)" size="small" type="text">变更角色菜单</el-button>
+          <el-button @click="addAuthApi(scope.row)" size="small" type="text">变更角色Api</el-button>
           <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
         </template>
       </el-table-column>

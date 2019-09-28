@@ -18,3 +18,72 @@ export const getApiList = (data) => {
         data
     })
 }
+
+
+// @Tags Api
+// @Summary 创建基础api
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.CreateApiParams true "创建api"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /api/createApi [post]
+export const createApi = (data) => {
+    return service({
+        url: "/api/createApi",
+        method: 'post',
+        data
+    })
+}
+
+// @Tags menu
+// @Summary 根据id获取菜单
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.GetById true "根据id获取菜单"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /menu/getApiById [post]
+export const getApiById = (data) => {
+    return service({
+        url: "/api/getApiById",
+        method: 'post',
+        data
+    })
+}
+
+
+
+// @Tags Api
+// @Summary 更新api
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.CreateApiParams true "更新api"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /api/updataApi [post]
+export const updataApi = (data) => {
+    return service({
+        url: "/api/updataApi",
+        method: 'post',
+        data
+    })
+}
+
+
+
+// @Tags Api
+// @Summary 更新api
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.CreateApiParams true "更新api"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /api/setAuthApi [post]
+export const setAuthApi = (data) => {
+    return service({
+        url: "/api/setAuthApi",
+        method: 'post',
+        data
+    })
+}

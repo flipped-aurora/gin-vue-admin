@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="button-box clearflex">
-      <el-button @click="addApi" type="primary">新增api</el-button>
+      <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
     </div>
     <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
-      <el-table-column label="api路径" min-width="180" prop="path"></el-table-column>
-      <el-table-column label="api简介" min-width="180" prop="description"></el-table-column>
+      <el-table-column label="id" min-width="60" prop="ID"></el-table-column>
+      <el-table-column label="api路径" min-width="150" prop="path"></el-table-column>
+      <el-table-column label="api简介" min-width="150" prop="description"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="text">编辑</el-button>
@@ -25,6 +25,21 @@
       hide-on-single-page
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
+
+    <el-dialog :visible.sync="dialogFormVisible" title="新增Api">
+      <el-form :inline="true" :model="form" label-width="80px">
+        <el-form-item label="路径">
+          <el-input autocomplete="off" v-model="form.path"></el-input>
+        </el-form-item>
+        <el-form-item label="说明">
+          <el-input autocomplete="off" v-model="form.description"></el-input>
+        </el-form-item>
+      </el-form>
+      <div class="dialog-footer" slot="footer">
+        <el-button @click="closeDialog">取 消</el-button>
+        <el-button @click="enterDialog" type="primary">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -32,23 +47,90 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 
-import { getApiList } from '@/api/api'
+import { getApiById, getApiList, createApi, updataApi } from '@/api/api'
 import infoList from '@/view/superAdmin/mixins/infoList'
 
 export default {
   name: 'Api',
-  mixins:[infoList],
+  mixins: [infoList],
   data() {
     return {
       listApi: getApiList,
-      listKey:'list'
+      listKey: 'list',
+      dialogFormVisible: false,
+      form: {
+        path: '',
+        description: ''
+      },
+      type: ''
     }
   },
   methods: {
+    initForm() {
+      this.form = {
+        path: '',
+        description: ''
+      }
+    },
+    closeDialog() {
+      this.initForm()
+      this.dialogFormVisible = false
+    },
+    openDialog(type) {
+      this.type = type
+      this.dialogFormVisible = true
+    },
+    addApi() {
+      createApi()
+    },
+    async editApi(row) {
+      const res = await getApiById({ id: row.ID })
+      this.form = res.data.api
+      this.openDialog('edit')
+    },
+    deleteApi() {},
+    async enterDialog() {
+      switch (this.type) {
+        case 'addApi':
+          {
+            const res = await createApi(this.form)
+            if (res.success) {
+              this.$message({
+                type: 'success',
+                message: '添加成功',
+                showClose: true
+              })
+            }
+            this.getTableData()
+            this.closeDialog()
+          }
 
-    addApi() {},
-    editApi() {},
-    deleteApi() {}
+          break
+        case 'edit':
+          {
+            const res = await updataApi(this.form)
+            if (res.success) {
+              this.$message({
+                type: 'success',
+                message: '添加成功',
+                showClose: true
+              })
+            }
+            this.getTableData()
+            this.closeDialog()
+          }
+          break
+        default:
+          {
+            this.$message({
+              type: 'error',
+              message: '未知操作',
+              showClose: true
+            })
+          }
+          break
+      }
+    }
   },
   created() {
     this.getTableData()

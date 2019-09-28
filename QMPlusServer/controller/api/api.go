@@ -57,7 +57,7 @@ func DeleteApi(c *gin.Context) {
 
 type AuthAndPathIn struct {
 	AuthorityId string        `json:"authorityId"`
-	Apis        []dbModel.Api `json:"apis"`
+	Apis        []dbModel.Api     `json:"apis"`
 }
 
 // @Tags Api
@@ -67,11 +67,11 @@ type AuthAndPathIn struct {
 // @Produce application/json
 // @Param data body api.AuthAndPathIn true "创建api和角色关系"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /api/setAuthAndPath [post]
-func SetAuthAndPath(c *gin.Context) {
+// @Router /api/setAuthAndApi [post]
+func SetAuthAndApi(c *gin.Context) {
 	var authAndPathIn AuthAndPathIn
 	_ = c.BindJSON(&authAndPathIn)
-	err := new(dbModel.ApiAuthority).SetAuthAndPath(authAndPathIn.AuthorityId, authAndPathIn.Apis)
+	err := new(dbModel.ApiAuthority).SetAuthAndApi(authAndPathIn.AuthorityId, authAndPathIn.Apis)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败：%v", err), gin.H{})
 	} else {
@@ -80,11 +80,11 @@ func SetAuthAndPath(c *gin.Context) {
 }
 
 // @Tags Api
-// @Summary 分页获取角色列表
+// @Summary 分页获取API列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body modelInterface.PageInfo true "分页获取用户列表"
+// @Param data body modelInterface.PageInfo true "分页获取API列表"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiList [post]
 func GetApiList(c *gin.Context) {
@@ -103,3 +103,47 @@ func GetApiList(c *gin.Context) {
 
 	}
 }
+
+// @Tags Api
+// @Summary 根据id获取api
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body modelInterface.PageInfo true "分页获取用户列表"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /api/getApiById [post]
+func GetApiById(c *gin.Context) {
+	var idInfo GetById
+	_ = c.BindJSON(&idInfo)
+	err, api := new(dbModel.Api).GetApiById(idInfo.Id)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取数据成功", gin.H{
+			"api":     api,
+		})
+
+	}
+}
+
+
+
+// @Tags Api
+// @Summary 创建基础api
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.CreateApiParams true "创建api"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /api/updataApi [post]
+
+ func UpdataApi(c *gin.Context) {
+	 var api dbModel.Api
+	 _ = c.BindJSON(&api)
+	 err := api.UpdataApi()
+	 if err != nil {
+		 servers.ReportFormat(c, false, fmt.Sprintf("修改数据失败，%v", err), gin.H{})
+	 } else {
+		 servers.ReportFormat(c, true, "修改数据成功", gin.H{})
+	 }
+ }

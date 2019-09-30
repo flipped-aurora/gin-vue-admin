@@ -12,6 +12,7 @@ type Api struct {
 	gorm.Model
 	Path        string `json:"path"`
 	Description string `json:"description"`
+	Group       string `json:"group"`
 }
 
 func (a *Api) CreateApi() (err error) {
@@ -38,6 +39,12 @@ func (a *Api) GetApiById(id float64)(err error,api Api){
 	err = qmsql.DEFAULTDB.Where("id = ?",id).First(&api).Error
 	return
 }
+// 获取所有api信息
+func (a *Api)GetAllApis()(err error,apis []Api){
+	err = qmsql.DEFAULTDB.Find(&apis).Error
+	return
+}
+
 
 // 分页获取数据  需要分页实现这个接口即可
 func (a *Api) GetInfoList(info modelInterface.PageInfo) (err error, list interface{}, total int) {
@@ -47,7 +54,7 @@ func (a *Api) GetInfoList(info modelInterface.PageInfo) (err error, list interfa
 		return
 	} else {
 		var apiList []Api
-		err = db.Find(&apiList).Error
+		err = db.Order("group").Find(&apiList).Error
 		return err, apiList, total
 	}
 }

@@ -14,13 +14,23 @@ type ApiAuthority struct {
 }
 
 //创建角色api关联关系
-func (a *ApiAuthority) SetAuthAndApi(authId string, apis []Api) (err error) {
-	err = qmsql.DEFAULTDB.Where("authority_id = ?", authId).Delete(&ApiAuthority{}).Error
-	for _, v := range apis {
-		err = qmsql.DEFAULTDB.Create(&ApiAuthority{AuthorityId: authId, ApiId: v.ID}).Error
+func (a *ApiAuthority) SetAuthAndApi(authId string, apisid []uint) (err error) {
+	err = qmsql.DEFAULTDB.Where("authority_id = ?", authId).Unscoped().Delete(&ApiAuthority{}).Error
+	for _, v := range apisid {
+		err = qmsql.DEFAULTDB.Create(&ApiAuthority{AuthorityId: authId, ApiId: v}).Error
 		if err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+// 获取角色api关联关系
+func (a *ApiAuthority) GetAuthAndApi(authId string) (err error,apiIds []uint) {
+	var apis []ApiAuthority
+	err = qmsql.DEFAULTDB.Where("authority_id = ?", authId).Find(&apis).Error
+	for _, v := range apis {
+		apiIds = append(apiIds,v.ApiId)
+	}
+	return nil,apiIds
 }

@@ -6,13 +6,7 @@ function resolve(dir) {
     return path.join(__dirname, dir)
 }
 module.exports = {
-    /**
-     * You will need to set publicPath if you plan to deploy your site under a sub path,
-     * for example GitHub Pages. If you plan to deploy your site to https://foo.github.io/bar/,
-     * then publicPath should be set to "/bar/".
-     * In most cases please use '/' !!!
-     * Detail: https://cli.vuejs.org/config/#publicpath
-     */
+    // 基础配置 详情看文档
     publicPath: '/',
     outputDir: 'dist',
     assetsDir: 'static',
@@ -26,20 +20,19 @@ module.exports = {
             errors: true
         },
         proxy: {
-            // change xxx-api/login => mock/login
+            // 把key的路径代理到target位置
             // detail: https://cli.vuejs.org/config/#devserver-proxy
-            [process.env.VUE_APP_BASE_API]: {
-                target: `http://127.0.0.1:8888`,
+            [process.env.VUE_APP_BASE_API]: { //需要代理的路径   例如 '/api'
+                target: `http://127.0.0.1:8888`, //代理到 目标路径
                 changeOrigin: true,
-                pathRewrite: {
-                    ['^' + process.env.VUE_APP_BASE_API]: ''
+                pathRewrite: { // 修改路径数据
+                    ['^' + process.env.VUE_APP_BASE_API]: '' // 举例 '^/api:""' 把路径中的/api字符串删除
                 }
             }
         },
     },
     configureWebpack: {
-        // provide the app's title in webpack's name field, so that
-        // it can be accessed in index.html to inject the correct title.
+        //    @路径走src文件夹
         resolve: {
             alias: {
                 '@': resolve('src')

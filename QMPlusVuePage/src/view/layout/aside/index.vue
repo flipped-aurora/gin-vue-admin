@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="menu-total">
-        <i class="el-icon-arrow-right"></i>
+      <i class="el-icon-arrow-right"></i>
     </div>
     <vue-scroll :ops="ops">
       <el-menu
@@ -31,14 +31,14 @@ export default {
   data() {
     return {
       active: '',
-      isCollapse: true,
+      isCollapse: false,
       ops: {
-        bar: {disable:true}
+        bar: { disable: true }
       }
     }
   },
   methods: {
-    selectMenuItem(index,indexList) {
+    selectMenuItem(index) {
       if (index === this.$route.name) return
       this.$router.push({ name: index })
     }

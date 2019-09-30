@@ -11,9 +11,11 @@ func InitApiRouter(Router *gin.Engine) {
 	{
 		ApiRouter.POST("createApi", api.CreateApi)  //创建Api
 		ApiRouter.POST("deleteApi", api.DeleteApi)  //删除Api
-		ApiRouter.POST("setAuthAndPath",api.SetAuthAndApi) // 设置api和角色关系
+		ApiRouter.POST("setAuthAndApi",api.SetAuthAndApi) // 设置api和角色关系
 		ApiRouter.POST("getApiList",api.GetApiList)  //获取Api列表
 		ApiRouter.POST("getApiById",api.GetApiById)  //获取单条Api消息
 		ApiRouter.POST("updataApi",api.UpdataApi)   //更新api
+		ApiRouter.POST("getAllApis",api.GetAllApis) // 获取所有api
+		ApiRouter.POST("getAuthAndApi",api.GetAuthAndApi) // 获取api和auth关系
 	}
 }

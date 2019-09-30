@@ -4,8 +4,8 @@
       <i class="el-icon-arrow-right" v-if="isCollapse"></i>
       <i class="el-icon-arrow-left" v-else></i>
     </div>
-    <transition name="el-zoom-in-top">
       <el-scrollbar style="height:calc(100vh - 53px)">
+    <transition name="el-zoom-in-top">
       <el-menu
         :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
         :collapse="isCollapse"
@@ -19,8 +19,8 @@
           v-for="item in asyncRouters[0].children"
         />
       </el-menu>
-      </el-scrollbar>
     </transition>
+      </el-scrollbar>
   </div>
 </template>
 

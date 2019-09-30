@@ -138,7 +138,7 @@ type IdInfo struct {
 }
 
 // @Tags menu
-// @Summary 获取指定角色menu
+// @Summary 删除菜单
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
@@ -157,11 +157,11 @@ func DeleteBaseMenu(c *gin.Context) {
 }
 
 // @Tags menu
-// @Summary 新增菜单
+// @Summary 更新菜单
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.BaseMenu true "新增菜单"
+// @Param data body dbModel.BaseMenu true "更新菜单"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/updataBaseMen [post]
 func UpdataBaseMenu(c *gin.Context) {

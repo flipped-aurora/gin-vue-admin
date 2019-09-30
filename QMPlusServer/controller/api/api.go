@@ -57,7 +57,7 @@ func DeleteApi(c *gin.Context) {
 
 type AuthAndPathIn struct {
 	AuthorityId string        `json:"authorityId"`
-	Apis        []dbModel.Api     `json:"apis"`
+	ApiIds        []uint     `json:"apiIds"`
 }
 
 // @Tags Api
@@ -71,7 +71,7 @@ type AuthAndPathIn struct {
 func SetAuthAndApi(c *gin.Context) {
 	var authAndPathIn AuthAndPathIn
 	_ = c.BindJSON(&authAndPathIn)
-	err := new(dbModel.ApiAuthority).SetAuthAndApi(authAndPathIn.AuthorityId, authAndPathIn.Apis)
+	err := new(dbModel.ApiAuthority).SetAuthAndApi(authAndPathIn.AuthorityId, authAndPathIn.ApiIds)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败：%v", err), gin.H{})
 	} else {
@@ -136,7 +136,6 @@ func GetApiById(c *gin.Context) {
 // @Param data body api.CreateApiParams true "创建api"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/updataApi [post]
-
  func UpdataApi(c *gin.Context) {
 	 var api dbModel.Api
 	 _ = c.BindJSON(&api)
@@ -147,3 +146,21 @@ func GetApiById(c *gin.Context) {
 		 servers.ReportFormat(c, true, "修改数据成功", gin.H{})
 	 }
  }
+
+// @Tags Api
+// @Summary 获取所有的Api 不分页
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /api/getAllApis [post]
+func GetAllApis(c *gin.Context){
+	err,apis := new(dbModel.Api).GetAllApis()
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取数据成功", gin.H{
+			"apis":     apis,
+		})
+	}
+}

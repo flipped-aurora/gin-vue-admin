@@ -6,6 +6,7 @@
     <el-table :data="tableData" border stripe>
       <el-table-column label="id" min-width="60" prop="ID"></el-table-column>
       <el-table-column label="api路径" min-width="150" prop="path"></el-table-column>
+      <el-table-column label="api分组" min-width="150" prop="group"></el-table-column>
       <el-table-column label="api简介" min-width="150" prop="description"></el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
@@ -29,9 +30,12 @@
     <el-dialog :visible.sync="dialogFormVisible" title="新增Api">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="路径">
-          <el-input autocomplete="off" v-model="form.path"></el-input>
+          <el-input autocomplete="off" @blur="autoGroup" v-model="form.path"></el-input>
         </el-form-item>
-        <el-form-item label="说明">
+        <el-form-item label="api分组">
+          <el-input autocomplete="off" v-model="form.group"></el-input>
+        </el-form-item>
+        <el-form-item label="api简介">
           <el-input autocomplete="off" v-model="form.description"></el-input>
         </el-form-item>
       </el-form>
@@ -60,15 +64,21 @@ export default {
       dialogFormVisible: false,
       form: {
         path: '',
+        group: '',
         description: ''
       },
       type: ''
     }
   },
   methods: {
+    // 自动设置api分组
+    autoGroup(){
+      this.form.group = this.form.path.split('/')[1]
+    },
     initForm() {
       this.form = {
         path: '',
+        group: '',
         description: ''
       }
     },

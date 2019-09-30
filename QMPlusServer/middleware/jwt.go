@@ -2,12 +2,21 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
 	"main/controller/servers"
+	"main/init/qmsql"
 	"time"
 )
+
+type SqlRes struct {
+	Path string
+	AuthorityId string
+	ApiId  uint
+	Id    uint
+}
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -28,6 +37,14 @@ func JWTAuth() gin.HandlerFunc {
 				return
 			}
 			servers.ReportFormat(c, false, err.Error(), gin.H{})
+			c.Abort()
+			return
+		}
+		var sqlRes SqlRes
+		 row:=qmsql.DEFAULTDB.Raw("SELECT apis.path,api_authorities.authority_id,api_authorities.api_id,apis.id FROM apis INNER JOIN api_authorities ON api_authorities.api_id = apis.id 	WHERE apis.path = ? AND	api_authorities.authority_id = ?",c.Request.RequestURI,claims.AuthorityId)
+		err=row.Scan(&sqlRes).Error
+		if(fmt.Sprintf("%v",err) == "record not found"){
+			servers.ReportFormat(c, false, "没有Api操作权限", gin.H{})
 			c.Abort()
 			return
 		}

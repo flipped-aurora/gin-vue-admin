@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div class="menu-total">
-      <i class="el-icon-arrow-right"></i>
+    <div class="menu-total"  @click="isCollapse=!isCollapse">
+      <i class="el-icon-arrow-right" v-if="isCollapse"></i>
+      <i class="el-icon-arrow-left" v-else></i>
     </div>
-    <vue-scroll :ops="ops">
+    <transition name="el-zoom-in-top">
+      <el-scrollbar style="height:calc(100vh - 53px)">
       <el-menu
         :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
         :collapse="isCollapse"
@@ -17,24 +19,20 @@
           v-for="item in asyncRouters[0].children"
         />
       </el-menu>
-    </vue-scroll>
+      </el-scrollbar>
+    </transition>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import AsideComponent from '@/view/layout/aside/asideComponent'
-import vueScroll from 'vuescroll'
-import 'vuescroll/dist/vuescroll.css'
 export default {
   name: 'Aside',
   data() {
     return {
       active: '',
       isCollapse: false,
-      ops: {
-        bar: { disable: true }
-      }
     }
   },
   methods: {
@@ -47,7 +45,6 @@ export default {
     ...mapGetters('router', ['asyncRouters'])
   },
   components: {
-    vueScroll,
     AsideComponent
   },
   created() {

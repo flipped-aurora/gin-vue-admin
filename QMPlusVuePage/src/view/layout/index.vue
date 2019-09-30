@@ -1,39 +1,38 @@
 <template>
   <el-container class="layout-cont">
-    <el-header class="header-cont"></el-header>
+    <el-header class="header-cont">
+      <h1>
+        QMPlus gin-vue-admin
+      </h1>
+    </el-header>
     <el-container>
       <el-aside class="main-cont main-left">
         <Aside class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
-      <vue-scroll>
-        <el-main class="main-cont main-right">
-          <!-- 当前面包屑用路由自动生成可根据需求修改 -->
-          <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item
-              :key="item.path"
-              :to="{ path: item.path }"
-              v-for="item in matched.slice(1,matched.length)"
-            >{{item.meta.title}}</el-breadcrumb-item>
-          </el-breadcrumb>
-          <transition mode="out-in" name="el-fade-in-linear">
-            <router-view></router-view>
-          </transition>
-        </el-main>
-      </vue-scroll>
+      <el-main class="main-cont main-right">
+        <!-- 当前面包屑用路由自动生成可根据需求修改 -->
+        <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item
+            :key="item.path"
+            :to="{ path: item.path }"
+            v-for="item in matched.slice(1,matched.length)"
+          >{{item.meta.title}}</el-breadcrumb-item>
+        </el-breadcrumb>
+        <transition mode="out-in" name="el-fade-in-linear">
+          <router-view></router-view>
+        </transition>
+      </el-main>
     </el-container>
   </el-container>
 </template>
 
 <script>
 import Aside from '@/view/layout/aside'
-import vueScroll from 'vuescroll'
-import 'vuescroll/dist/vuescroll.css'
 export default {
   name: 'Layout',
   components: {
-    Aside,
-    vueScroll
+    Aside
   },
   methods: {
     totalCollapse() {
@@ -52,8 +51,12 @@ export default {
 </script>
 
 <style lang="scss">
+
 $headerHigh: 52px;
 $mainHight: calc(100vh - 52px);
+.el-scrollbar__wrap{
+  padding-bottom: 17px;
+}
 .layout-cont {
   .menu-contorl {
     line-height: 52px;
@@ -64,7 +67,9 @@ $mainHight: calc(100vh - 52px);
   }
   .header-cont {
     height: $headerHigh !important;
-    background: palevioletred;
+    background: #fff;
+    border-bottom:1px solid #ccc; 
+    line-height: $headerHigh;
   }
   .main-cont {
     .breadcrumb {
@@ -74,6 +79,7 @@ $mainHight: calc(100vh - 52px);
       margin-bottom: 6px;
     }
     &.el-main {
+      overflow: auto;
       padding: 0px 10px;
       margin: 0px 0px 0px 12px;
       background: #fff;
@@ -94,8 +100,13 @@ $mainHight: calc(100vh - 52px);
       background: #fff;
     }
     .aside {
+      overflow: auto;
       background: #fff;
+      &::-webkit-scrollbar {
+      display: none;
     }
+    }
+    
     .el-menu-vertical {
       height: $mainHight !important;
       visibility: auto;

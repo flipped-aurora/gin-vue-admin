@@ -4,10 +4,12 @@
     <el-table :data="tableData" border stripe>
       <el-table-column label="头像" min-width="50">
         <template slot-scope="scope">
-          <img :src="scope.row.headerImg" width="50" height="50" />
+          <div :style="{'textAlign':'center'}">
+            <img :src="scope.row.headerImg" height="50" width="50" />
+          </div>
         </template>
       </el-table-column>
-      <el-table-column label="id" min-width="60" prop="ID"></el-table-column>
+      <el-table-column label="uuid" min-width="250" prop="uuid"></el-table-column>
       <el-table-column label="用户名" min-width="150" prop="userName"></el-table-column>
       <el-table-column label="昵称" min-width="150" prop="nickName"></el-table-column>
       <el-table-column label="用户级别" min-width="150">
@@ -17,8 +19,7 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button @click="editApi(scope.row)" size="small" type="text">编辑</el-button>
-          <el-button @click="deleteApi(scope.row)" size="small" type="text">删除</el-button>
+          <el-button @click="changeAuth(scope.row)" size="small" type="text">修改权限</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,7 +40,7 @@
 
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
-import { getUserList } from '@/api/user'
+import { getUserList, setUserAuthority } from '@/api/user'
 import infoList from '@/view/superAdmin/mixins/infoList'
 
 export default {
@@ -60,6 +61,31 @@ export default {
         group: '',
         description: ''
       }
+    },
+    changeAuth(row) {
+      this.$prompt('请输入级别ID', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+        .then(async ({ value }) => {
+          const res = await setUserAuthority({
+            uuid: row.uuid,
+            authorityId: value
+          })
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '设置成功'
+            })
+            this.getTableData()
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          })
+        })
     }
   }
 }

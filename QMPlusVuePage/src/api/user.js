@@ -39,3 +39,20 @@ export const getUserList = (data) => {
         data: data
     })
 }
+
+
+// @Tags User
+// @Summary 设置用户权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.SetUserAuth true "设置用户权限"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserAuthority [post]
+export const setUserAuthority = (data) => {
+    return service({
+        url: "/user/setUserAuthority",
+        method: 'post',
+        data: data
+    })
+}

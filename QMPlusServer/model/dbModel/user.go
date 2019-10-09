@@ -54,9 +54,9 @@ func (u *User) ChangePassword(newPassword string) (err error, userInter *User) {
 }
 
 //用户更新接口
-func (u *User) UpdataUser() (err error, userInter *User) {
-	err = qmsql.DEFAULTDB.Create(u).Error
-	return err, u
+func (u *User) SetUserAuthority(uuid uuid.UUID, AuthorityId string) (err error) {
+	err = qmsql.DEFAULTDB.Where("uuid = ?", uuid).First(&User{}).Update("authority_id", AuthorityId).Error
+	return err
 }
 
 //用户登录

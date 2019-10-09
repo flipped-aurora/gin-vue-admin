@@ -30,7 +30,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="新增Api">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="路径">
-          <el-input autocomplete="off" @blur="autoGroup" v-model="form.path"></el-input>
+          <el-input @blur="autoGroup" autocomplete="off" v-model="form.path"></el-input>
         </el-form-item>
         <el-form-item label="api分组">
           <el-input autocomplete="off" v-model="form.group"></el-input>
@@ -51,7 +51,13 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 
-import { getApiById, getApiList, createApi, updataApi } from '@/api/api'
+import {
+  getApiById,
+  getApiList,
+  createApi,
+  updataApi,
+  deleteApi
+} from '@/api/api'
 import infoList from '@/view/superAdmin/mixins/infoList'
 
 export default {
@@ -72,7 +78,7 @@ export default {
   },
   methods: {
     // 自动设置api分组
-    autoGroup(){
+    autoGroup() {
       this.form.group = this.form.path.split('/')[1]
     },
     initForm() {
@@ -90,15 +96,34 @@ export default {
       this.type = type
       this.dialogFormVisible = true
     },
-    addApi() {
-      createApi()
-    },
     async editApi(row) {
       const res = await getApiById({ id: row.ID })
       this.form = res.data.api
       this.openDialog('edit')
     },
-    deleteApi() {},
+    async deleteApi(row) {
+      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          const res = await deleteApi(row)
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getTableData()
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
     async enterDialog() {
       switch (this.type) {
         case 'addApi':
@@ -141,9 +166,6 @@ export default {
           break
       }
     }
-  },
-  created() {
-    this.getTableData()
   }
 }
 </script>

@@ -82,18 +82,24 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 
-import { updataBaseMenu ,getMenuList, addBaseMenu, deleteBaseMenu, getBaseMenuById } from '@/api/menu'
+import {
+  updataBaseMenu,
+  getMenuList,
+  addBaseMenu,
+  deleteBaseMenu,
+  getBaseMenuById
+} from '@/api/menu'
 import infoList from '@/view/superAdmin/mixins/infoList'
 export default {
   name: 'Menus',
-  mixins:[infoList],
+  mixins: [infoList],
   data() {
     return {
-      listApi:getMenuList,
-      listKey:'list',
+      listApi: getMenuList,
+      listKey: 'list',
       dialogFormVisible: false,
       form: {
-        ID:0,
+        ID: 0,
         path: '',
         name: '',
         hidden: '',
@@ -104,11 +110,11 @@ export default {
           icon: ''
         }
       },
-      isEdit:false
+      isEdit: false
     }
   },
   methods: {
-    // 删除菜单 
+    // 删除菜单
     deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
         confirmButtonText: '确定',
@@ -154,9 +160,9 @@ export default {
     // 添加menu
     async enterDialog() {
       let res
-      if(this.isEdit){
+      if (this.isEdit) {
         res = await updataBaseMenu(this.form)
-      }else{
+      } else {
         res = await addBaseMenu(this.form)
       }
       if (res.success) {
@@ -183,12 +189,12 @@ export default {
       this.dialogFormVisible = true
     },
     // 修改菜单方法
-    async editMenu(id){
-      const res = await getBaseMenuById({id})
+    async editMenu(id) {
+      const res = await getBaseMenuById({ id })
       this.form = res.data.menu
       this.dialogFormVisible = true
       this.isEdit = true
-   }
+    }
   }
 }
 </script>

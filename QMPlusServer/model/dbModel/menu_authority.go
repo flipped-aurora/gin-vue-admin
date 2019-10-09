@@ -42,7 +42,7 @@ func (m *Menu) GetMenuAuthority(authorityId string) (err error, menus []Menu) {
 }
 
 //获取动态路由树
-func (m *Menu) GetMenuTree(authorityId float64) (err error, menus []Menu) {
+func (m *Menu) GetMenuTree(authorityId string) (err error, menus []Menu) {
 	err = qmsql.DEFAULTDB.Where("authority_id = ? AND parent_id = ?", authorityId, 0).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {
 		err = getChildrenList(&menus[i])

@@ -14,7 +14,7 @@ type CreateApiParams struct {
 }
 
 type DeleteApiParams struct {
-	Path uint `json:"path"`
+	ID uint `json:"id"`
 }
 
 // @Tags Api
@@ -41,7 +41,7 @@ func CreateApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.DeleteApiParams true "删除api"
+// @Param data body dbModel.Api true "删除api"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/deleteApi [post]
 func DeleteApi(c *gin.Context) {
@@ -56,8 +56,8 @@ func DeleteApi(c *gin.Context) {
 }
 
 type AuthAndPathIn struct {
-	AuthorityId string        `json:"authorityId"`
-	ApiIds        []uint     `json:"apiIds"`
+	AuthorityId string `json:"authorityId"`
+	ApiIds      []uint `json:"apiIds"`
 }
 
 // @Tags Api
@@ -120,13 +120,11 @@ func GetApiById(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"api":     api,
+			"api": api,
 		})
 
 	}
 }
-
-
 
 // @Tags Api
 // @Summary 创建基础api
@@ -136,16 +134,16 @@ func GetApiById(c *gin.Context) {
 // @Param data body api.CreateApiParams true "创建api"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/updataApi [post]
- func UpdataApi(c *gin.Context) {
-	 var api dbModel.Api
-	 _ = c.BindJSON(&api)
-	 err := api.UpdataApi()
-	 if err != nil {
-		 servers.ReportFormat(c, false, fmt.Sprintf("修改数据失败，%v", err), gin.H{})
-	 } else {
-		 servers.ReportFormat(c, true, "修改数据成功", gin.H{})
-	 }
- }
+func UpdataApi(c *gin.Context) {
+	var api dbModel.Api
+	_ = c.BindJSON(&api)
+	err := api.UpdataApi()
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("修改数据失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "修改数据成功", gin.H{})
+	}
+}
 
 // @Tags Api
 // @Summary 获取所有的Api 不分页
@@ -154,13 +152,13 @@ func GetApiById(c *gin.Context) {
 // @Produce application/json
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getAllApis [post]
-func GetAllApis(c *gin.Context){
-	err,apis := new(dbModel.Api).GetAllApis()
+func GetAllApis(c *gin.Context) {
+	err, apis := new(dbModel.Api).GetAllApis()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"apis":     apis,
+			"apis": apis,
 		})
 	}
 }

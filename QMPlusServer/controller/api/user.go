@@ -159,8 +159,8 @@ func UploadHeaderImg(c *gin.Context) {
 // @Produce application/json
 // @Param data body modelInterface.PageInfo true "分页获取用户列表"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /user/getInfoList [post]
-func GetInfoList(c *gin.Context) {
+// @Router /user/getUserList [post]
+func GetUserList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
 	_ = c.BindJSON(&pageInfo)
 	err, list, total := new(dbModel.User).GetInfoList(pageInfo)

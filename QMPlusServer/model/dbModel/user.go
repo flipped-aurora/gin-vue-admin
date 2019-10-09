@@ -13,12 +13,12 @@ import (
 type User struct {
 	gorm.Model  `json:"-"`
 	UUID        uuid.UUID `json:"uuid"`
-	Username    string    `json:"-"`
+	Username    string    `json:"userName"`
 	Password    string    `json:"-"`
 	NickName    string    `json:"nickName" gorm:"default:'QMPlusUser'"`
 	HeaderImg   string    `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
-	Authority   Authority `json:"authority" form:"ForeignKey:authority_id;AssociationForeignKey:authority_id"`
-	AuthorityId float64   `json:"-" gorm:"default:888"`
+	Authority   Authority `json:"authority" gorm:"ForeignKey:AuthorityId;AssociationForeignKey:AuthorityId"`
+	AuthorityId string    `json:"-" gorm:"default:888"`
 	//Propertie                //	多余属性自行添加
 	//PropertieId uint  // 自动关联 Propertie 的Id 附加属性过多 建议创建一对一关系
 }
@@ -83,7 +83,7 @@ func (u *User) GetInfoList(info modelInterface.PageInfo) (err error, list interf
 		return
 	} else {
 		var userList []User
-		err = db.Find(&userList).Error
+		err = db.Preload("Authority").Find(&userList).Error
 		return err, userList, total
 	}
 }

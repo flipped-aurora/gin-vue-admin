@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 	"main/controller/servers"
 	"main/middleware"
 	"main/model/dbModel"
@@ -173,5 +174,29 @@ func GetUserList(c *gin.Context) {
 			"page":     pageInfo.Page,
 			"pageSize": pageInfo.PageSize,
 		})
+	}
+}
+
+type SetUserAuth struct {
+	UUID        uuid.UUID `json:"uuid"`
+	AuthorityId string    `json:"authorityId"`
+}
+
+// @Tags User
+// @Summary 设置用户权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.SetUserAuth true "设置用户权限"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserAuthority [post]
+func SetUserAuthority(c *gin.Context) {
+	var sua SetUserAuth
+	_ = c.BindJSON(&sua)
+	err := new(dbModel.User).SetUserAuthority(sua.UUID, sua.AuthorityId)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("修改失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "修改成功", gin.H{})
 	}
 }

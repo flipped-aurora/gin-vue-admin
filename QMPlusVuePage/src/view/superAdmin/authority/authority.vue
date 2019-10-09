@@ -4,7 +4,7 @@
       <el-button @click="addAuthority" type="primary">新增角色</el-button>
     </div>
     <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="180" prop="ID"></el-table-column>      
+      <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
       <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
       <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
       <el-table-column fixed="right" label="操作" width="500">
@@ -45,7 +45,6 @@
     <!-- 关联menu弹窗 -->
     <el-dialog :visible.sync="menuDialogFlag" title="关联菜单">
       <el-tree
-        v-if="menuDialogFlag"
         :data="menuTreeData"
         :default-checked-keys="menuTreeIds"
         :props="menuDefaultProps"
@@ -54,6 +53,7 @@
         node-key="ID"
         ref="menuTree"
         show-checkbox
+        v-if="menuDialogFlag"
       ></el-tree>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -61,12 +61,9 @@
       </div>
     </el-dialog>
 
-
-    
     <!-- 关联api弹窗 -->
     <el-dialog :visible.sync="apiDialogFlag" title="关联api">
       <el-tree
-        v-if="apiDialogFlag"
         :data="apiTreeData"
         :default-checked-keys="apiTreeIds"
         :props="apiDefaultProps"
@@ -75,6 +72,7 @@
         node-key="ID"
         ref="apiTree"
         show-checkbox
+        v-if="apiDialogFlag"
       ></el-tree>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -93,19 +91,15 @@ import {
   createAuthority
 } from '@/api/authority'
 import { getBaseMenuTree, addMenuAuthority, getMenuAuthority } from '@/api/menu'
-import {
-  getAllApis,
-  getAuthAndApi,
-  setAuthAndApi
-} from '@/api/api'
+import { getAllApis, getAuthAndApi, setAuthAndApi } from '@/api/api'
 import infoList from '@/view/superAdmin/mixins/infoList'
 export default {
   name: 'Authority',
-  mixins:[infoList],
+  mixins: [infoList],
   data() {
     return {
       listApi: getAuthorityList,
-      listKey:'list',
+      listKey: 'list',
       activeUserId: 0,
       menuTreeData: [],
       menuTreeIds: [],
@@ -186,7 +180,7 @@ export default {
     addAuthority() {
       this.dialogFormVisible = true
     },
-    
+
     // 关联用户列表关系
     async addAuthMenu(row) {
       const res1 = await getMenuAuthority({ authorityId: row.authorityId })
@@ -194,7 +188,7 @@ export default {
       const arr = []
       menus.map(item => {
         // 防止直接选中父级造成全选
-        if(!menus.some(same=>same.parentId === item.menuId)){
+        if (!menus.some(same => same.parentId === item.menuId)) {
           arr.push(Number(item.menuId))
         }
       })
@@ -204,8 +198,7 @@ export default {
     },
     // 关联树 确认方法
     async relation() {
-      const checkArr = this.$refs.menuTree
-        .getCheckedNodes(false,true)
+      const checkArr = this.$refs.menuTree.getCheckedNodes(false, true)
       const res = await addMenuAuthority({
         menus: checkArr,
         authorityId: this.activeUserId
@@ -219,36 +212,40 @@ export default {
       this.closeDialog()
     },
     // 创建api树方法
-    buildApiTree(apis){
-      const apiObj = new Object
-      apis&&apis.map(item=>{
-        if(apiObj.hasOwnProperty(item.group)){
-          apiObj[item.group].push(item)
-        }else{
-          Object.assign(apiObj,{[item.group]:[item]})
-        }
-      })
+    buildApiTree(apis) {
+      const apiObj = new Object()
+      apis &&
+        apis.map(item => {
+          if (apiObj.hasOwnProperty(item.group)) {
+            apiObj[item.group].push(item)
+          } else {
+            Object.assign(apiObj, { [item.group]: [item] })
+          }
+        })
       const apiTree = []
-      for(const key in apiObj){
+      for (const key in apiObj) {
         const treeNode = {
-          ID:key,
-          description:key+"组",
-          children:apiObj[key]
+          ID: key,
+          description: key + '组',
+          children: apiObj[key]
         }
         apiTree.push(treeNode)
       }
       return apiTree
     },
     // 关联用户api关系
-    async addAuthApi(row){
-      const res = await getAuthAndApi({authorityId:row.authorityId})
+    async addAuthApi(row) {
+      const res = await getAuthAndApi({ authorityId: row.authorityId })
       this.activeUserId = row.authorityId
-      this.apiTreeIds = res.data.apis||[]
+      this.apiTreeIds = res.data.apis || []
       this.apiDialogFlag = true
     },
-    async authApiEnter(){
+    async authApiEnter() {
       const checkArr = this.$refs.apiTree.getCheckedKeys(true)
-       const res = await setAuthAndApi({authorityId:this.activeUserId,apiIds:checkArr})
+      const res = await setAuthAndApi({
+        authorityId: this.activeUserId,
+        apiIds: checkArr
+      })
       if (res.success) {
         this.$message({
           type: 'success',
@@ -259,7 +256,6 @@ export default {
     }
   },
   async created() {
-    this.getTableData()
     // 获取所有菜单树
     const res = await getBaseMenuTree()
     this.menuTreeData = res.data.menus

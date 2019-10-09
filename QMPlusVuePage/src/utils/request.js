@@ -40,6 +40,9 @@ service.interceptors.response.use(
                 message: response.data.msg,
                 type: 'error'
             })
+            if (response.data.data && response.data.data.reload) {
+                store.commit('user/LoginOut')
+            }
             return Promise.reject(response.data.msg)
         }
     },

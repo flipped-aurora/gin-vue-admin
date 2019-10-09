@@ -11,7 +11,7 @@ import (
 )
 
 type User struct {
-	gorm.Model  `json:"-"`
+	gorm.Model
 	UUID        uuid.UUID `json:"uuid"`
 	Username    string    `json:"userName"`
 	Password    string    `json:"-"`

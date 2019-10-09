@@ -26,10 +26,11 @@ export const user = {
             // 这里的 `state` 对象是模块的局部状态
             state.expiresAt = expiresAt
         },
-        clearAll(state) {
+        LoginOut(state) {
             state.userInfo = {}
             state.token = ""
             state.expiresAt = ""
+            router.push({ name: 'login' })
         }
 
     },
@@ -43,9 +44,9 @@ export const user = {
                 if (res.success) {
                     const redirect = router.history.current.query.redirect
                     if (redirect) {
-                        router.push({ path: redirect })
+                        router.push({ path: redirect, replace: true })
                     } else {
-                        router.push({ name: 'dashboard' })
+                        router.push({ name: 'dashboard', replace: true })
                     }
                 }
             } catch (err) {

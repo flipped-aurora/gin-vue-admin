@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 30/09/2019 15:46:49
+ Date: 09/10/2019 18:28:48
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `api_authorities`  (
   `api_id` int(10) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_api_authorities_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 159 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 185 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of api_authorities
@@ -44,33 +44,31 @@ INSERT INTO `api_authorities` VALUES (77, '2019-09-30 15:34:19', '2019-09-30 15:
 INSERT INTO `api_authorities` VALUES (78, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 17);
 INSERT INTO `api_authorities` VALUES (79, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 23);
 INSERT INTO `api_authorities` VALUES (80, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 24);
-INSERT INTO `api_authorities` VALUES (81, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 25);
-INSERT INTO `api_authorities` VALUES (133, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 1);
-INSERT INTO `api_authorities` VALUES (134, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 2);
-INSERT INTO `api_authorities` VALUES (135, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 3);
-INSERT INTO `api_authorities` VALUES (136, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 4);
-INSERT INTO `api_authorities` VALUES (137, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 5);
-INSERT INTO `api_authorities` VALUES (138, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 6);
-INSERT INTO `api_authorities` VALUES (139, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 7);
-INSERT INTO `api_authorities` VALUES (140, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 8);
-INSERT INTO `api_authorities` VALUES (141, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 9);
-INSERT INTO `api_authorities` VALUES (142, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 10);
-INSERT INTO `api_authorities` VALUES (143, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 11);
-INSERT INTO `api_authorities` VALUES (144, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 12);
-INSERT INTO `api_authorities` VALUES (145, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 13);
-INSERT INTO `api_authorities` VALUES (146, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 14);
-INSERT INTO `api_authorities` VALUES (147, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 15);
-INSERT INTO `api_authorities` VALUES (148, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 16);
-INSERT INTO `api_authorities` VALUES (149, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 17);
-INSERT INTO `api_authorities` VALUES (150, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 18);
-INSERT INTO `api_authorities` VALUES (151, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 19);
-INSERT INTO `api_authorities` VALUES (152, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 20);
-INSERT INTO `api_authorities` VALUES (153, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 21);
-INSERT INTO `api_authorities` VALUES (154, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 22);
-INSERT INTO `api_authorities` VALUES (155, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 26);
-INSERT INTO `api_authorities` VALUES (156, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 23);
-INSERT INTO `api_authorities` VALUES (157, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 24);
-INSERT INTO `api_authorities` VALUES (158, '2019-09-30 15:40:45', '2019-09-30 15:40:45', NULL, 888, 25);
+INSERT INTO `api_authorities` VALUES (159, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 1);
+INSERT INTO `api_authorities` VALUES (160, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 2);
+INSERT INTO `api_authorities` VALUES (161, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 3);
+INSERT INTO `api_authorities` VALUES (162, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 4);
+INSERT INTO `api_authorities` VALUES (163, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 5);
+INSERT INTO `api_authorities` VALUES (164, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 6);
+INSERT INTO `api_authorities` VALUES (165, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 7);
+INSERT INTO `api_authorities` VALUES (166, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 8);
+INSERT INTO `api_authorities` VALUES (167, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 9);
+INSERT INTO `api_authorities` VALUES (168, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 10);
+INSERT INTO `api_authorities` VALUES (169, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 28);
+INSERT INTO `api_authorities` VALUES (170, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 11);
+INSERT INTO `api_authorities` VALUES (171, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 12);
+INSERT INTO `api_authorities` VALUES (172, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 13);
+INSERT INTO `api_authorities` VALUES (173, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 14);
+INSERT INTO `api_authorities` VALUES (174, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 15);
+INSERT INTO `api_authorities` VALUES (175, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 16);
+INSERT INTO `api_authorities` VALUES (176, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 17);
+INSERT INTO `api_authorities` VALUES (177, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 18);
+INSERT INTO `api_authorities` VALUES (178, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 19);
+INSERT INTO `api_authorities` VALUES (179, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 20);
+INSERT INTO `api_authorities` VALUES (180, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 21);
+INSERT INTO `api_authorities` VALUES (181, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 22);
+INSERT INTO `api_authorities` VALUES (182, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 23);
+INSERT INTO `api_authorities` VALUES (183, '2019-10-09 15:15:27', '2019-10-09 15:15:27', NULL, 888, 24);
 
 -- ----------------------------
 -- Table structure for apis
@@ -87,7 +85,7 @@ CREATE TABLE `apis`  (
   `group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 29 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of apis
@@ -116,7 +114,8 @@ INSERT INTO `apis` VALUES (21, '2019-09-30 15:28:05', '2019-09-30 15:28:05', NUL
 INSERT INTO `apis` VALUES (22, '2019-09-30 15:28:21', '2019-09-30 15:28:21', NULL, NULL, '/menu/getBaseMenuById', '根据id获取菜单', 'menu');
 INSERT INTO `apis` VALUES (23, '2019-09-30 15:29:19', '2019-09-30 15:29:19', NULL, NULL, '/user/changePassword', '修改密码', 'user');
 INSERT INTO `apis` VALUES (24, '2019-09-30 15:29:33', '2019-09-30 15:29:33', NULL, NULL, '/user/uploadHeaderImg', '上传头像', 'user');
-INSERT INTO `apis` VALUES (25, '2019-09-30 15:30:00', '2019-09-30 15:30:00', NULL, NULL, '/user/getInfoList', '分页获取用户列表', 'user');
+INSERT INTO `apis` VALUES (25, '2019-09-30 15:30:00', '2019-09-30 15:30:00', '2019-10-09 15:26:37', NULL, '/user/getInfoList', '分页获取用户列表', 'user');
+INSERT INTO `apis` VALUES (28, '2019-10-09 15:15:17', '2019-10-09 15:17:07', NULL, NULL, '/user/getUserList', '获取用户列表', 'user');
 
 -- ----------------------------
 -- Table structure for authorities
@@ -164,7 +163,7 @@ CREATE TABLE `base_menus`  (
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of base_menus
@@ -177,6 +176,15 @@ INSERT INTO `base_menus` VALUES (5, '2019-09-19 22:13:18', '2019-09-19 22:13:18'
 INSERT INTO `base_menus` VALUES (6, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理');
 INSERT INTO `base_menus` VALUES (7, '2019-09-22 17:17:15', '2019-09-26 13:09:57', '2019-09-26 13:10:14', 0, 0, 'tttt22', '修改测试', 0, '', '修改测试', 'share', 'api管理');
 INSERT INTO `base_menus` VALUES (8, '2019-09-26 17:17:48', '2019-09-26 17:18:46', '2019-09-26 17:19:23', 0, 0, 'ASDASDASD', 'tttTTT', 0, 'TTTT', 'TTT', 'TTT', 'TTT');
+INSERT INTO `base_menus` VALUES (9, '2019-09-30 18:23:01', '2019-09-30 18:23:01', '2019-09-30 18:25:07', 0, 0, 't\'t', 'tttt', 0, 'tt', 'tt', 'tt', 'tt');
+INSERT INTO `base_menus` VALUES (10, '2019-09-30 18:23:29', '2019-09-30 18:23:29', '2019-09-30 18:25:05', 0, 0, 'ttt', 'ttt', 0, 'ttt', 'ttt', 'ttt', 'ttt');
+INSERT INTO `base_menus` VALUES (11, '2019-09-30 18:23:59', '2019-09-30 18:23:59', '2019-09-30 18:25:04', 0, 0, '11111111', '11111111111111', 0, '111111111', '1111111111', '11111111', '1111111111');
+INSERT INTO `base_menus` VALUES (12, '2019-09-30 18:24:03', '2019-09-30 18:24:03', '2019-09-30 18:25:02', 0, 0, '22222', '11111111111111222222222222222222', 0, '11111111222222221', '1111111111222222222222222', '1111112222222211', '1111111111222222222222222');
+INSERT INTO `base_menus` VALUES (13, '2019-09-30 18:24:11', '2019-09-30 18:24:11', '2019-09-30 18:25:13', 0, 0, '11114', '124124', 0, '1241', '124124', '214124', '124124');
+INSERT INTO `base_menus` VALUES (14, '2019-09-30 18:24:19', '2019-09-30 18:24:19', '2019-09-30 18:25:12', 0, 0, '22222', '222', 0, '2222', '22', '222', '22');
+INSERT INTO `base_menus` VALUES (15, '2019-09-30 18:24:22', '2019-09-30 18:24:22', '2019-09-30 18:25:10', 0, 0, '2222211', '22211', 0, '22221', '2211', '2221', '2211');
+INSERT INTO `base_menus` VALUES (16, '2019-09-30 18:24:29', '2019-09-30 18:24:29', '2019-09-30 18:25:09', 0, 0, '3223123', '123123', 0, '123123', '123123', '21312323', '123123');
+INSERT INTO `base_menus` VALUES (17, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理');
 
 -- ----------------------------
 -- Table structure for menus
@@ -200,7 +208,7 @@ CREATE TABLE `menus`  (
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 210 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 231 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of menus
@@ -210,12 +218,13 @@ INSERT INTO `menus` VALUES (196, '2019-09-19 22:06:17', '2019-09-30 15:44:50', N
 INSERT INTO `menus` VALUES (197, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
 INSERT INTO `menus` VALUES (198, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
 INSERT INTO `menus` VALUES (199, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
-INSERT INTO `menus` VALUES (204, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
-INSERT INTO `menus` VALUES (205, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
-INSERT INTO `menus` VALUES (206, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
-INSERT INTO `menus` VALUES (207, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
-INSERT INTO `menus` VALUES (208, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
-INSERT INTO `menus` VALUES (209, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理');
+INSERT INTO `menus` VALUES (224, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
+INSERT INTO `menus` VALUES (225, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
+INSERT INTO `menus` VALUES (226, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
+INSERT INTO `menus` VALUES (227, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
+INSERT INTO `menus` VALUES (228, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
+INSERT INTO `menus` VALUES (229, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理');
+INSERT INTO `menus` VALUES (230, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理');
 
 -- ----------------------------
 -- Table structure for users

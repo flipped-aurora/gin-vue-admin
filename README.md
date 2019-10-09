@@ -14,6 +14,11 @@
     5.使用fsnotify和viper实现json格式配置文件
     6.使用logrus实现日志记录
     7.使用gorm实现对数据库的基本操作
+
+## 项目说明
+    golang项目存放于QMPlusServer文件夹下，内部config存放mysql相关配置。可以根据自己的mysql数据库名 用户名 密码修改对应配置
+    vue项目存放于QMPlusVuePage文件夹下
+    开源不易，感谢各位支持，错误指出即刻改正，改写纠错，感谢star支持
 ## TODO
     1.基本用户注册登录 √
     2.用户等基础数据CURD √

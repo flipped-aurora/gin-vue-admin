@@ -12,10 +12,10 @@ import (
 )
 
 type SqlRes struct {
-	Path string
+	Path        string
 	AuthorityId string
-	ApiId  uint
-	Id    uint
+	ApiId       uint
+	Id          uint
 }
 
 func JWTAuth() gin.HandlerFunc {
@@ -32,7 +32,9 @@ func JWTAuth() gin.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if err == TokenExpired {
-				servers.ReportFormat(c, false, "授权已过期", gin.H{})
+				servers.ReportFormat(c, false, "授权已过期", gin.H{
+					"reload": true,
+				})
 				c.Abort()
 				return
 			}
@@ -41,9 +43,9 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 		var sqlRes SqlRes
-		 row:=qmsql.DEFAULTDB.Raw("SELECT apis.path,api_authorities.authority_id,api_authorities.api_id,apis.id FROM apis INNER JOIN api_authorities ON api_authorities.api_id = apis.id 	WHERE apis.path = ? AND	api_authorities.authority_id = ?",c.Request.RequestURI,claims.AuthorityId)
-		err=row.Scan(&sqlRes).Error
-		if(fmt.Sprintf("%v",err) == "record not found"){
+		row := qmsql.DEFAULTDB.Raw("SELECT apis.path,api_authorities.authority_id,api_authorities.api_id,apis.id FROM apis INNER JOIN api_authorities ON api_authorities.api_id = apis.id 	WHERE apis.path = ? AND	api_authorities.authority_id = ?", c.Request.RequestURI, claims.AuthorityId)
+		err = row.Scan(&sqlRes).Error
+		if fmt.Sprintf("%v", err) == "record not found" {
 			servers.ReportFormat(c, false, "没有Api操作权限", gin.H{})
 			c.Abort()
 			return
@@ -68,7 +70,7 @@ type CustomClaims struct {
 	UUID        uuid.UUID
 	ID          uint
 	NickName    string
-	AuthorityId float64
+	AuthorityId string
 	jwt.StandardClaims
 }
 

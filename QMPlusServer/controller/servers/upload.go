@@ -9,8 +9,8 @@ import (
 	"time"
 )
 
-var accessKey string = "25j8dYBZ2wui***************62b8xiFguwxzZ" // 你在七牛云的accessKey
-var secretKey string = "pgdbqEsf7ooZ***************_VecFXPDeG5JY" // 你在七牛云的secretKey
+var accessKey string = "25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ" // 你在七牛云的accessKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
+var secretKey string = "pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY" // 你在七牛云的secretKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
 
 // 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字
 func Upload(file *multipart.FileHeader, bucket string, urlPath string) (err error, path string) {

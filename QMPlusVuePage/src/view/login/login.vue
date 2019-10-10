@@ -1,22 +1,28 @@
 <template>
   <el-container class="login-regist-box">
-    <vue-particle-line>
-  </vue-particle-line>
+    <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
-      <el-form :model="loginForm" :rules="rules" label-width="100px" ref="loginForm" status-icon>
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="loginForm.username"></el-input>
+      <h1 class="title-1">GIN-VUE-ADMIN</h1>
+      <el-form :model="loginForm" :rules="rules" ref="loginForm" status-icon>
+        <el-form-item prop="username">
+          <el-input placeholder="请输入用户名" v-model="loginForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input :type="lock==='lock'?'password':'text'" v-model="loginForm.password">
+        <el-form-item prop="password">
+          <el-input
+            :type="lock==='lock'?'password':'text'"
+            placeholder="请输入密码"
+            v-model="loginForm.password"
+          >
             <i :class="'el-input__icon el-icon-' + lock" @click="changeLock" slot="suffix"></i>
           </el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button @click="submitForm" style="width:100%">登 录</el-button>
+        </el-form-item>
       </el-form>
-      <el-button @click="submitForm" style="float:right;width:calc(100% - 100px)">登 录</el-button>
+      <h3 class="title-3 fl-right">测试用户:admin 密码:123456</h3>
     </el-main>
   </el-container>
-
 </template>
 
 <script>
@@ -25,7 +31,7 @@ export default {
   name: 'Login',
   data() {
     const checkUsername = (rule, value, callback) => {
-      if (value.length < 6 || value.length > 12) {
+      if (value.length < 5 || value.length > 12) {
         return callback(new Error('请输入正确的用户名'))
       } else {
         callback()
@@ -79,14 +85,14 @@ export default {
 
 <style scoped lang="scss">
 .login-regist-box {
-  background: #409eff;
+  background: #fff;
   height: 100vh;
-  .login-box{
+  .login-box {
     width: 40vw;
     position: absolute;
     left: 50%;
     margin-left: -22vw;
-    top:25vh;
+    top: 25vh;
   }
 }
 </style>

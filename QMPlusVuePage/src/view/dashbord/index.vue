@@ -10,7 +10,7 @@
       <div class="fl-left left-mg-lg">
         <div>用户ID：{{userInfo.uuid}}</div>
         <div>用户昵称：{{userInfo.nickName}}</div>
-        <div>用户组：{{userInfo.authority.authorityName}}</div>
+        <div>用户组：{{userInfo.authority&&userInfo.authority.authorityName}}</div>
       </div>
     </el-row>
   </el-card>

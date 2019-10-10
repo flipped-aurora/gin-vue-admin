@@ -30,7 +30,7 @@ export const user = {
             state.userInfo = {}
             state.token = ""
             state.expiresAt = ""
-            router.push({ name: 'login' })
+            router.push({ name: 'login', replace: true })
         }
 
     },
@@ -46,7 +46,7 @@ export const user = {
                     if (redirect) {
                         router.push({ path: redirect, replace: true })
                     } else {
-                        router.push({ name: 'dashboard', replace: true })
+                        router.push({ path: '/layout/dashbord', replace: true })
                     }
                 }
             } catch (err) {

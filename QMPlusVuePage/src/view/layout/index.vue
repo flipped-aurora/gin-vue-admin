@@ -10,8 +10,12 @@
             <i class="el-icon-arrow-down"></i>
           </span>
           <el-dropdown-menu class="dropdown-group" slot="dropdown">
-            <el-dropdown-item>更多信息</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-table-lamp" @click.native="LoginOut"> 登出</el-dropdown-item>
+            <el-dropdown-item>
+              <span>更多信息
+                <el-badge is-dot />
+              </span>
+            </el-dropdown-item>
+            <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp">登出</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -40,14 +44,14 @@
 
 <script>
 import Aside from '@/view/layout/aside'
-import { mapGetters,mapMutations } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Layout',
   components: {
     Aside
   },
   methods: {
-    ...mapMutations("user",['LoginOut']),
+    ...mapMutations('user', ['LoginOut']),
     totalCollapse() {
       this.$bus.emit('totalCollapse')
     }
@@ -68,11 +72,11 @@ export default {
 $headerHigh: 52px;
 $mainHight: calc(100vh - 52px);
 .el-dropdown-link {
-    cursor: pointer;
-  }
- .dropdown-group{
-   min-width: 100px;
- }
+  cursor: pointer;
+}
+.dropdown-group {
+  min-width: 100px;
+}
 .el-scrollbar__wrap {
   padding-bottom: 17px;
 }
@@ -82,7 +86,7 @@ $mainHight: calc(100vh - 52px);
     vertical-align: middle;
     img {
       vertical-align: middle;
-      border:1px solid #ccc;
+      border: 1px solid #ccc;
       border-radius: 6px;
     }
   }

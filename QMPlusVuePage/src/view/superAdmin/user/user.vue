@@ -31,7 +31,6 @@
       :total="total"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
-      hide-on-single-page
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
   </div>

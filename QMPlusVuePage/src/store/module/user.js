@@ -1,6 +1,5 @@
 import { login } from '@/api/user'
 import router from '@/router/index'
-import { Message } from 'element-ui'
 export const user = {
     namespaced: true,
     state: {
@@ -36,26 +35,17 @@ export const user = {
     },
     actions: {
         async LoginIn({ commit }, loginInfo) {
-            try {
-                const res = await login(loginInfo)
-                commit('setUserInfo', res.data.user)
-                commit('setToken', res.data.token)
-                commit('setExpiresAt', res.data.expiresAt)
-                if (res.success) {
-                    const redirect = router.history.current.query.redirect
-                    if (redirect) {
-                        router.push({ path: redirect, replace: true })
-                    } else {
-                        router.push({ path: '/layout/dashbord', replace: true })
-                    }
+            const res = await login(loginInfo)
+            commit('setUserInfo', res.data.user)
+            commit('setToken', res.data.token)
+            commit('setExpiresAt', res.data.expiresAt)
+            if (res.success) {
+                const redirect = router.history.current.query.redirect
+                if (redirect) {
+                    router.push({ path: redirect, replace: true })
+                } else {
+                    router.push({ path: '/layout/dashbord', replace: true })
                 }
-            } catch (err) {
-                Message({
-                    type: 'error',
-                    message: err,
-                    showClose: true
-                })
-                return Promise.reject(err)
             }
         }
     },

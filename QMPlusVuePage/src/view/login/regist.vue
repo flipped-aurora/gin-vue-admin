@@ -1,14 +1,18 @@
 <template>
   <el-container class="login-regist-box">
-       <vue-particle-line>
-  </vue-particle-line>
+    <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
-      <el-form :model="registForm" :rules="rules" label-width="100px" ref="registForm" status-icon>
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="registForm.username"></el-input>
+      <h1 class="title-1">GIN-VUE-ADMIN</h1>by 奇淼
+      <el-form :model="registForm" :rules="rules" ref="registForm" status-icon>
+        <el-form-item prop="username">
+          <el-input placeholder="请输入用户名" v-model="registForm.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input :type="lock==='lock'?'password':'text'" v-model="registForm.password">
+        <el-form-item prop="password">
+          <el-input
+            :type="lock==='lock'?'password':'text'"
+            placeholder="请输入密码"
+            v-model="registForm.password"
+          >
             <i :class="'el-input__icon el-icon-' + lock" @click="changeLock" slot="suffix"></i>
           </el-input>
         </el-form-item>
@@ -17,8 +21,10 @@
             <i :class="'el-input__icon el-icon-' + lock" @click="changeLock" slot="suffix"></i>
           </el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button @click="submitForm" style="width:100%">注 册</el-button>
+        </el-form-item>
       </el-form>
-      <el-button style="float:right;width:calc(100% - 100px)" @click="submitForm">注 册</el-button>
     </el-main>
   </el-container>
 </template>
@@ -37,7 +43,7 @@ export default {
       }
     }
     const checkUsername = (rule, value, callback) => {
-      if (value.length < 6 || value.length > 12) {
+      if (value.length < 5 || value.length > 12) {
         return callback(new Error('请输入正确的用户名'))
       } else {
         callback()
@@ -98,14 +104,14 @@ export default {
 
 <style scoped lang="scss">
 .login-regist-box {
-  background: #409eff;
+  background: #fff;
   height: 100vh;
-  .login-box{
+  .login-box {
     width: 40vw;
     position: absolute;
     left: 50%;
     margin-left: -22vw;
-    top:25vh;
+    top: 25vh;
   }
-}  
+}
 </style>

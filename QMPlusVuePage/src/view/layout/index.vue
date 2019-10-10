@@ -1,9 +1,20 @@
 <template>
   <el-container class="layout-cont">
     <el-header class="header-cont">
-      <h1>
-        QMPlus gin-vue-admin
-      </h1>
+      <h1 class="fl-left">QMPlus gin-vue-admin</h1>
+      <div class="fl-right right-box">
+        <el-dropdown>
+          <span class="el-dropdown-link">
+            <img :src="userInfo.headerImg" height="30" width="30" />
+            {{userInfo.nickName}}
+            <i class="el-icon-arrow-down"></i>
+          </span>
+          <el-dropdown-menu class="dropdown-group" slot="dropdown">
+            <el-dropdown-item>更多信息</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-table-lamp" @click.native="LoginOut"> 登出</el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </el-header>
     <el-container>
       <el-aside class="main-cont main-left">
@@ -29,17 +40,20 @@
 
 <script>
 import Aside from '@/view/layout/aside'
+import { mapGetters,mapMutations } from 'vuex'
 export default {
   name: 'Layout',
   components: {
     Aside
   },
   methods: {
+    ...mapMutations("user",['LoginOut']),
     totalCollapse() {
       this.$bus.emit('totalCollapse')
     }
   },
   computed: {
+    ...mapGetters('user', ['userInfo']),
     title() {
       return this.$route.meta.title || '当前页面'
     },
@@ -51,13 +65,27 @@ export default {
 </script>
 
 <style lang="scss">
-
 $headerHigh: 52px;
 $mainHight: calc(100vh - 52px);
-.el-scrollbar__wrap{
+.el-dropdown-link {
+    cursor: pointer;
+  }
+ .dropdown-group{
+   min-width: 100px;
+ }
+.el-scrollbar__wrap {
   padding-bottom: 17px;
 }
 .layout-cont {
+  .right-box {
+    text-align: center;
+    vertical-align: middle;
+    img {
+      vertical-align: middle;
+      border:1px solid #ccc;
+      border-radius: 6px;
+    }
+  }
   .menu-contorl {
     line-height: 52px;
     font-size: 20px;
@@ -68,7 +96,7 @@ $mainHight: calc(100vh - 52px);
   .header-cont {
     height: $headerHigh !important;
     background: #fff;
-    border-bottom:1px solid #ccc; 
+    border-bottom: 1px solid #ccc;
     line-height: $headerHigh;
   }
   .main-cont {
@@ -103,10 +131,10 @@ $mainHight: calc(100vh - 52px);
       overflow: auto;
       background: #fff;
       &::-webkit-scrollbar {
-      display: none;
+        display: none;
+      }
     }
-    }
-    
+
     .el-menu-vertical {
       height: calc(100vh - 67px) !important;
       visibility: auto;

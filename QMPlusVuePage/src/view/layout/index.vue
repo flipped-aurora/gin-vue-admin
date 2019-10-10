@@ -15,7 +15,7 @@
                 <el-badge is-dot />
               </span>
             </el-dropdown-item>
-            <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp">登出</el-dropdown-item>
+            <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp"> 登 出 </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>

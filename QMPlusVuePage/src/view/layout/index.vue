@@ -140,7 +140,7 @@ $mainHight: calc(100vh - 52px);
     }
 
     .el-menu-vertical {
-      height: calc(100vh - 67px) !important;
+      height: calc(100vh - 69px) !important;
       visibility: auto;
       &.noCollapse {
         width: 250px;

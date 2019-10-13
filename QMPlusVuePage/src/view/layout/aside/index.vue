@@ -4,7 +4,7 @@
       <i class="el-icon-arrow-right" v-if="isCollapse"></i>
       <i class="el-icon-arrow-left" v-else></i>
     </div>
-      <el-scrollbar style="height:calc(100vh - 53px)">
+      <el-scrollbar style="height:calc(100vh - 52px)">
     <transition name="el-zoom-in-top">
       <el-menu
         :class="['el-menu-vertical',!isCollapse&&'noCollapse']"

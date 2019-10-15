@@ -69,9 +69,9 @@ func (u *User) Login() (err error, userInter *User) {
 }
 
 // 用户头像上传更新地址
-func (u *User) UploadHeaderImg(username string, filePath string) (err error, userInter *User) {
+func (u *User) UploadHeaderImg(uuid uuid.UUID, filePath string) (err error, userInter *User) {
 	var user User
-	err = qmsql.DEFAULTDB.Where("username = ?", username).First(&user).Update("header_img", filePath).First(&user).Error
+	err = qmsql.DEFAULTDB.Where("uuid = ?", uuid).First(&user).Update("header_img", filePath).First(&user).Error
 	return err, &user
 }
 

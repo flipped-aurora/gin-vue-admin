@@ -1,26 +1,24 @@
 <template>
   <div>
-    <div class="menu-total"  @click="isCollapse=!isCollapse">
+    <div @click="isCollapse=!isCollapse" class="menu-total">
       <i class="el-icon-arrow-right" v-if="isCollapse"></i>
       <i class="el-icon-arrow-left" v-else></i>
     </div>
-      <el-scrollbar style="height:calc(100vh - 52px)">
-    <transition name="el-zoom-in-top">
-      <el-menu
-        :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
-        :collapse="isCollapse"
-        :default-active="active"
-        @select="selectMenuItem"
-        unique-opened
-      >
-        <aside-component
-          :key="item.name"
-          :routerInfo="item"
-          v-for="item in asyncRouters[0].children"
-        />
-      </el-menu>
-    </transition>
-      </el-scrollbar>
+    <el-scrollbar style="height:calc(100vh - 52px)">
+      <transition name="el-zoom-in-top">
+        <el-menu
+          :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
+          :collapse="isCollapse"
+          :default-active="active"
+          @select="selectMenuItem"
+          unique-opened
+        >
+          <template v-for="item in asyncRouters[0].children">
+            <aside-component :key="item.name" :routerInfo="item" v-if="!item.hidden" />
+          </template>
+        </el-menu>
+      </transition>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -32,7 +30,7 @@ export default {
   data() {
     return {
       active: '',
-      isCollapse: false,
+      isCollapse: false
     }
   },
   methods: {

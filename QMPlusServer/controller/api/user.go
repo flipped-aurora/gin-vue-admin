@@ -129,10 +129,9 @@ func UploadHeaderImg(c *gin.Context) {
 	//获取头像文件
 	// 这里我们通过断言获取 claims内的所有内容
 	waitUse := claims.(*middleware.CustomClaims)
-	fmt.Println(waitUse.NickName)
+	uuid := waitUse.UUID
 	_, header, err := c.Request.FormFile("headerImg")
 	//便于找到用户 以后从jwt中取
-	username := c.PostForm("username")
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
 	} else {
@@ -142,8 +141,7 @@ func UploadHeaderImg(c *gin.Context) {
 			servers.ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
 		} else {
 			//修改数据库后得到修改后的user并且返回供前端使用
-			err, user := new(dbModel.User).UploadHeaderImg(username, filePath)
-
+			err, user := new(dbModel.User).UploadHeaderImg(uuid, filePath)
 			if err != nil {
 				servers.ReportFormat(c, false, fmt.Sprintf("修改数据库链接失败，%v", err), gin.H{})
 			} else {

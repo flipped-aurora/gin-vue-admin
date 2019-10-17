@@ -23,15 +23,16 @@
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Person',
   computed: {
     ...mapGetters('user', ['userInfo', 'token'])
   },
   methods:{
-      handleAvatarSuccess(){
-        //   上传完成后更新用户头像 今晚太困了 明天更新 今晚暂时调通更新功能
+    ...mapMutations('user',['ResetUserInfo']),
+      handleAvatarSuccess(res){
+        this.ResetUserInfo({headerImg:res.data.user.headerImg})
       }
   }
 }

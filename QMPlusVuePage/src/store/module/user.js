@@ -30,8 +30,12 @@ export const user = {
             state.token = ""
             state.expiresAt = ""
             router.push({ name: 'login', replace: true })
+        },
+        ResetUserInfo(state, userInfo = {}) {
+            state.userInfo = {...state.userInfo,
+                ...userInfo
+            }
         }
-
     },
     actions: {
         async LoginIn({ commit }, loginInfo) {

@@ -20,9 +20,13 @@
     强烈希望在各位的帮助下，此项目可以用于企业级项目的开发
 ## 环境搭建教学视频
 
+<iframe frameborder="0" src="https://v.qq.com/txp/iframe/player.html?vid=c3008y2ukba" allowFullScreen="true"></iframe>
+
 腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html
     
 ## 模板使用教学及展示视频
+
+<iframe frameborder="0" src="https://v.qq.com/txp/iframe/player.html?vid=c3008y2ukba" allowFullScreen="true"></iframe>
 
 腾讯视频：https://v.qq.com/x/page/c3008y2ukba.html
 

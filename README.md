@@ -1,13 +1,15 @@
 ﻿
-<div style="text-align:center">
+<div align=center>
 <img src="http://qmplusimg.henrongyi.top/logo.png" width=300" height="300" />
 </div>
+<div align=center>
+<img src="https://img.shields.io/badge/vue-2.6.10-brightgreen"/>
+<img src="https://img.shields.io/badge/element--ui-2.12.0-green"/>
+<img src="https://img.shields.io/badge/golang-1.12-blue"/>
+<img src="https://img.shields.io/badge/gin-1.4.0-lightBlue"/>
+<img src="https://img.shields.io/badge/gorm-1.9.10-red"/>
+</div>
 
-i[](https://img.shields.io/badge/vue-2.6.10-brightgreen)
-i[](https://img.shields.io/badge/element--ui-2.12.0-green)
-i[](https://img.shields.io/badge/golang-1.12-blue)
-i[](https://img.shields.io/badge/gin-1.4.0-lightBlue)
-i[](https://img.shields.io/badge/gorm-1.9.10-red)
 
 # QMPlus gin+vue开源快速项目模板
 

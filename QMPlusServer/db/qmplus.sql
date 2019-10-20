@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 13/10/2019 19:51:33
+ Date: 20/10/2019 11:43:19
 */
 
 SET NAMES utf8mb4;
@@ -168,7 +168,7 @@ CREATE TABLE `base_menus`  (
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of base_menus
@@ -179,17 +179,15 @@ INSERT INTO `base_menus` VALUES (3, '2019-09-19 22:06:38', '2019-09-19 22:06:38'
 INSERT INTO `base_menus` VALUES (4, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理');
 INSERT INTO `base_menus` VALUES (5, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理');
 INSERT INTO `base_menus` VALUES (6, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理');
-INSERT INTO `base_menus` VALUES (7, '2019-09-22 17:17:15', '2019-09-26 13:09:57', '2019-09-26 13:10:14', 0, 0, 'tttt22', '修改测试', 0, '', '修改测试', 'share', 'api管理');
-INSERT INTO `base_menus` VALUES (8, '2019-09-26 17:17:48', '2019-09-26 17:18:46', '2019-09-26 17:19:23', 0, 0, 'ASDASDASD', 'tttTTT', 0, 'TTTT', 'TTT', 'TTT', 'TTT');
-INSERT INTO `base_menus` VALUES (9, '2019-09-30 18:23:01', '2019-09-30 18:23:01', '2019-09-30 18:25:07', 0, 0, 't\'t', 'tttt', 0, 'tt', 'tt', 'tt', 'tt');
-INSERT INTO `base_menus` VALUES (10, '2019-09-30 18:23:29', '2019-09-30 18:23:29', '2019-09-30 18:25:05', 0, 0, 'ttt', 'ttt', 0, 'ttt', 'ttt', 'ttt', 'ttt');
-INSERT INTO `base_menus` VALUES (11, '2019-09-30 18:23:59', '2019-09-30 18:23:59', '2019-09-30 18:25:04', 0, 0, '11111111', '11111111111111', 0, '111111111', '1111111111', '11111111', '1111111111');
-INSERT INTO `base_menus` VALUES (12, '2019-09-30 18:24:03', '2019-09-30 18:24:03', '2019-09-30 18:25:02', 0, 0, '22222', '11111111111111222222222222222222', 0, '11111111222222221', '1111111111222222222222222', '1111112222222211', '1111111111222222222222222');
-INSERT INTO `base_menus` VALUES (13, '2019-09-30 18:24:11', '2019-09-30 18:24:11', '2019-09-30 18:25:13', 0, 0, '11114', '124124', 0, '1241', '124124', '214124', '124124');
-INSERT INTO `base_menus` VALUES (14, '2019-09-30 18:24:19', '2019-09-30 18:24:19', '2019-09-30 18:25:12', 0, 0, '22222', '222', 0, '2222', '22', '222', '22');
-INSERT INTO `base_menus` VALUES (15, '2019-09-30 18:24:22', '2019-09-30 18:24:22', '2019-09-30 18:25:10', 0, 0, '2222211', '22211', 0, '22221', '2211', '2221', '2211');
-INSERT INTO `base_menus` VALUES (16, '2019-09-30 18:24:29', '2019-09-30 18:24:29', '2019-09-30 18:25:09', 0, 0, '3223123', '123123', 0, '123123', '123123', '21312323', '123123');
 INSERT INTO `base_menus` VALUES (17, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理');
+INSERT INTO `base_menus` VALUES (18, '2019-10-15 22:27:22', '2019-10-15 22:27:22', NULL, 0, 0, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', '个人信息');
+INSERT INTO `base_menus` VALUES (19, '2019-10-20 11:14:42', '2019-10-20 11:16:57', NULL, 0, 0, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', '示例文件');
+INSERT INTO `base_menus` VALUES (20, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 19, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', '表格示例');
+INSERT INTO `base_menus` VALUES (21, '2019-10-20 11:19:52', '2019-10-20 11:19:52', NULL, 0, 19, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', '表单示例');
+INSERT INTO `base_menus` VALUES (22, '2019-10-20 11:22:19', '2019-10-20 11:28:12', NULL, 0, 19, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', '富文本编辑器');
+INSERT INTO `base_menus` VALUES (23, '2019-10-20 11:23:39', '2019-10-20 11:23:39', NULL, 0, 19, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 'excel导入导出');
+INSERT INTO `base_menus` VALUES (25, '2019-10-20 11:26:12', '2019-10-20 11:26:12', '2019-10-20 11:26:19', 0, 23, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载');
+INSERT INTO `base_menus` VALUES (26, '2019-10-20 11:27:02', '2019-10-20 11:27:02', NULL, 0, 19, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载');
 
 -- ----------------------------
 -- Table structure for menus
@@ -213,25 +211,39 @@ CREATE TABLE `menus`  (
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 233 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 273 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of menus
 -- ----------------------------
-INSERT INTO `menus` VALUES (195, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
-INSERT INTO `menus` VALUES (196, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
-INSERT INTO `menus` VALUES (197, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
-INSERT INTO `menus` VALUES (198, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
-INSERT INTO `menus` VALUES (199, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
-INSERT INTO `menus` VALUES (224, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
-INSERT INTO `menus` VALUES (225, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
-INSERT INTO `menus` VALUES (226, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
-INSERT INTO `menus` VALUES (227, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
-INSERT INTO `menus` VALUES (228, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
-INSERT INTO `menus` VALUES (229, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理');
-INSERT INTO `menus` VALUES (230, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理');
 INSERT INTO `menus` VALUES (231, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 999, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
 INSERT INTO `menus` VALUES (232, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 999, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
+INSERT INTO `menus` VALUES (247, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
+INSERT INTO `menus` VALUES (248, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
+INSERT INTO `menus` VALUES (249, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
+INSERT INTO `menus` VALUES (250, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
+INSERT INTO `menus` VALUES (251, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
+INSERT INTO `menus` VALUES (252, '2019-10-15 22:27:22', '2019-10-15 22:27:22', NULL, 0, 9528, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息');
+INSERT INTO `menus` VALUES (253, '2019-10-20 11:14:42', '2019-10-20 11:16:57', NULL, 0, 9528, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件');
+INSERT INTO `menus` VALUES (254, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 9528, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例');
+INSERT INTO `menus` VALUES (255, '2019-10-20 11:19:52', '2019-10-20 11:19:52', NULL, 0, 9528, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例');
+INSERT INTO `menus` VALUES (256, '2019-10-20 11:22:19', '2019-10-20 11:28:12', NULL, 0, 9528, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器');
+INSERT INTO `menus` VALUES (257, '2019-10-20 11:23:39', '2019-10-20 11:23:39', NULL, 0, 9528, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出');
+INSERT INTO `menus` VALUES (258, '2019-10-20 11:27:02', '2019-10-20 11:27:02', NULL, 0, 9528, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载');
+INSERT INTO `menus` VALUES (259, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
+INSERT INTO `menus` VALUES (260, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
+INSERT INTO `menus` VALUES (261, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
+INSERT INTO `menus` VALUES (262, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
+INSERT INTO `menus` VALUES (263, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
+INSERT INTO `menus` VALUES (264, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理');
+INSERT INTO `menus` VALUES (265, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理');
+INSERT INTO `menus` VALUES (266, '2019-10-15 22:27:22', '2019-10-15 22:27:22', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息');
+INSERT INTO `menus` VALUES (267, '2019-10-20 11:14:42', '2019-10-20 11:16:57', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件');
+INSERT INTO `menus` VALUES (268, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例');
+INSERT INTO `menus` VALUES (269, '2019-10-20 11:19:52', '2019-10-20 11:19:52', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例');
+INSERT INTO `menus` VALUES (270, '2019-10-20 11:22:19', '2019-10-20 11:28:12', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器');
+INSERT INTO `menus` VALUES (271, '2019-10-20 11:23:39', '2019-10-20 11:23:39', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出');
+INSERT INTO `menus` VALUES (272, '2019-10-20 11:27:02', '2019-10-20 11:27:02', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载');
 
 -- ----------------------------
 -- Table structure for users
@@ -258,7 +270,7 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (10, '2019-09-13 17:23:46', '2019-09-13 17:23:46', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e');
+INSERT INTO `users` VALUES (10, '2019-09-13 17:23:46', '2019-10-17 22:14:49', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571321688timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e');
 INSERT INTO `users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d');
 INSERT INTO `users` VALUES (12, '2019-09-13 17:28:56', '2019-09-13 17:28:56', NULL, 0x65373939636563362D346337662D343338632D383634372D376435633333393734353165, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');
 INSERT INTO `users` VALUES (13, '2019-09-13 17:29:26', '2019-09-13 17:29:26', NULL, 0x65653764353932322D323333312D343162632D393363322D613665366461306465343230, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');

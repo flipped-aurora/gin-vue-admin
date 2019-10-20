@@ -4,7 +4,7 @@
 
 <script>
 export default {
-    name:"SuperAdmin",
+    name:"Example",
 }
 </script>
 <style lang="scss">

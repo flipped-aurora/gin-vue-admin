@@ -1,4 +1,15 @@
-﻿# QMPlus gin+vue开源快速项目模板
+﻿
+<div style="text-align:center">
+<img src="http://qmplusimg.henrongyi.top/logo.png" width=300" height="300" />
+</div>
+
+i[](https://img.shields.io/badge/vue-2.6.10-brightgreen)
+i[](https://img.shields.io/badge/element--ui-2.12.0-green)
+i[](https://img.shields.io/badge/golang-1.12-blue)
+i[](https://img.shields.io/badge/gin-1.4.0-lightBlue)
+i[](https://img.shields.io/badge/gorm-1.9.10-red)
+
+# QMPlus gin+vue开源快速项目模板
 
 ## 写在前面
     本项目主要是小弟在接各种私活的时候发现频繁得书写CURD、权限管理、用户管理、列表、分页、上传下载、日志包封装、文档自动化等等功能

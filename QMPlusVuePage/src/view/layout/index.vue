@@ -1,7 +1,9 @@
 <template>
   <el-container class="layout-cont">
     <el-header class="header-cont">
-      <h1 class="fl-left">QMPlus gin-vue-admin</h1>
+      <h1 class="fl-left left-box">
+        <img :src="require('@/assets/logo.png')" height="40" width="40">
+        Gin-Vue-Admin</h1>
       <div class="fl-right right-box">
         <el-dropdown>
           <span class="el-dropdown-link">
@@ -52,6 +54,7 @@ export default {
     Aside
   },
   methods: {
+    
     ...mapMutations('user', ['LoginOut']),
     totalCollapse() {
       this.$bus.emit('totalCollapse')
@@ -85,6 +88,12 @@ $mainHight: calc(100vh - 52px);
   padding-bottom: 17px;
 }
 .layout-cont {
+  .left-box{
+    vertical-align: middle;
+    img{
+      vertical-align: middle;
+    }
+  }
   .right-box {
     text-align: center;
     vertical-align: middle;

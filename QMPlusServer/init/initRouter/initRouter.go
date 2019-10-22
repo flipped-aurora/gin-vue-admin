@@ -18,5 +18,6 @@ func InitRouter() *gin.Engine {
 	router.InitMenuRouter(Router)      // 注册menu路由
 	router.InitAuthorityRouter(Router) // 注册角色路由
 	router.InitApiRouter(Router)       // 注册功能api路由
+
 	return Router
 }

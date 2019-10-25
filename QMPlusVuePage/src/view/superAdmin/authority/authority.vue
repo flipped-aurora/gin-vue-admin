@@ -91,7 +91,7 @@ import {
 } from '@/api/authority'
 import { getBaseMenuTree, addMenuAuthority, getMenuAuthority } from '@/api/menu'
 import { getAllApis, getAuthAndApi, setAuthAndApi } from '@/api/api'
-import infoList from '@/view/superAdmin/mixins/infoList'
+import infoList from '@/components/mixins/infoList'
 export default {
   name: 'Authority',
   mixins: [infoList],

@@ -88,7 +88,7 @@ import {
   deleteBaseMenu,
   getBaseMenuById
 } from '@/api/menu'
-import infoList from '@/view/superAdmin/mixins/infoList'
+import infoList from '@/components/mixins/infoList'
 export default {
   name: 'Menus',
   mixins: [infoList],

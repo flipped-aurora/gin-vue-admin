@@ -18,12 +18,12 @@
       <el-table-column label="年龄" prop="age" width="120"></el-table-column>
       <el-table-column label="住址" prop="address" show-overflow-tooltip></el-table-column>
       <el-table-column label="是否禁用" prop="switch">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-switch active-text="开启" inactive-text="禁用" v-model="scope.row.switch"></el-switch>
         </template>
       </el-table-column>
       <el-table-column label="按钮组">
-        <template scope="scope">
+        <template slot-scope="scope">
             <el-button type="text" size="small" @click="toggleSelection([scope.row])">按钮1</el-button>
             <el-button type="text" size="small" @click="toggleSelection([scope.row])">按钮2</el-button>
             <el-button type="text" size="small" @click="toggleSelection([scope.row])">按钮3</el-button>

@@ -40,7 +40,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 import { getUserList, setUserAuthority } from '@/api/user'
-import infoList from '@/view/superAdmin/mixins/infoList'
+import infoList from '@/components/mixins/infoList'
 
 export default {
   name: 'Api',

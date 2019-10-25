@@ -57,7 +57,7 @@ import {
   updataApi,
   deleteApi
 } from '@/api/api'
-import infoList from '@/view/superAdmin/mixins/infoList'
+import infoList from '@/components/mixins/infoList'
 
 export default {
   name: 'Api',

@@ -73,7 +73,73 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.DeleteApiParams"
+                            "$ref": "#/definitions/dbModel.Api"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/getAllApis": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Api"
+                ],
+                "summary": "获取所有的Api 不分页",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/getApiById": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Api"
+                ],
+                "summary": "根据id获取api",
+                "parameters": [
+                    {
+                        "description": "分页获取用户列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/modelInterface.PageInfo"
                         }
                     }
                 ],
@@ -103,10 +169,10 @@
                 "tags": [
                     "Api"
                 ],
-                "summary": "分页获取角色列表",
+                "summary": "分页获取API列表",
                 "parameters": [
                     {
-                        "description": "分页获取用户列表",
+                        "description": "分页获取API列表",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -126,7 +192,7 @@
                 }
             }
         },
-        "/api/setAuthAndPath": {
+        "/api/setAuthAndApi": {
             "post": {
                 "security": [
                     {
@@ -152,6 +218,45 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/api.AuthAndPathIn"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/updataApi": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Api"
+                ],
+                "summary": "创建基础api",
+                "parameters": [
+                    {
+                        "description": "创建api",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.CreateApiParams"
                         }
                     }
                 ],
@@ -230,6 +335,45 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/api.DeleteAuthorityPatams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/authority/getAuthAndApi": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authority"
+                ],
+                "summary": "获取本角色所有有权限的apiId",
+                "parameters": [
+                    {
+                        "description": "获取本角色所有有权限的apiId",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.GetAuthorityId"
                         }
                     }
                 ],
@@ -344,6 +488,81 @@
                 }
             }
         },
+        "/fileUploadAndDownload/getFileList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FileUploadAndDownload"
+                ],
+                "summary": "分页文件列表",
+                "parameters": [
+                    {
+                        "description": "分页获取文件户列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/modelInterface.PageInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/fileUploadAndDownload/upload": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FileUploadAndDownload"
+                ],
+                "summary": "上传文件示例",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "上传文件示例",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"上传成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/menu/addBaseMenu": {
             "post": {
                 "security": [
@@ -360,16 +579,16 @@
                 "tags": [
                     "menu"
                 ],
-                "summary": "分页获取基础menu列表",
+                "summary": "新增菜单",
                 "parameters": [
                     {
-                        "description": "分页获取基础menu列表",
+                        "description": "新增菜单",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/modelInterface.PageInfo"
+                            "$ref": "#/definitions/dbModel.BaseMenu"
                         }
                     }
                 ],
@@ -438,7 +657,7 @@
                 "tags": [
                     "menu"
                 ],
-                "summary": "获取指定角色menu",
+                "summary": "删除菜单",
                 "parameters": [
                     {
                         "description": "删除菜单",
@@ -448,6 +667,45 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/api.IdInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/menu/getBaseMenuById": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "根据id获取菜单",
+                "parameters": [
+                    {
+                        "description": "根据id获取菜单",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.GetById"
                         }
                     }
                 ],
@@ -572,6 +830,45 @@
                 }
             }
         },
+        "/menu/updataBaseMen": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "menu"
+                ],
+                "summary": "更新菜单",
+                "parameters": [
+                    {
+                        "description": "更新菜单",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/dbModel.BaseMenu"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/changePassword": {
             "post": {
                 "security": [
@@ -608,7 +905,7 @@
                 }
             }
         },
-        "/user/getInfoList": {
+        "/user/getUserList": {
             "post": {
                 "security": [
                     {
@@ -640,6 +937,45 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/setUserAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "设置用户权限",
+                "parameters": [
+                    {
+                        "description": "设置用户权限",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.SetUserAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -709,10 +1045,10 @@
         "api.AuthAndPathIn": {
             "type": "object",
             "properties": {
-                "apis": {
+                "apiIds": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dbModel.Api"
+                        "type": "integer"
                     }
                 },
                 "authorityId": {
@@ -764,19 +1100,27 @@
                 }
             }
         },
-        "api.DeleteApiParams": {
-            "type": "object",
-            "properties": {
-                "path": {
-                    "type": "integer"
-                }
-            }
-        },
         "api.DeleteAuthorityPatams": {
             "type": "object",
             "properties": {
                 "authorityId": {
                     "type": "integer"
+                }
+            }
+        },
+        "api.GetAuthorityId": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.GetById": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number"
                 }
             }
         },
@@ -799,10 +1143,24 @@
                 }
             }
         },
+        "api.SetUserAuth": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
         "dbModel.Api": {
             "type": "object",
             "properties": {
                 "description": {
+                    "type": "string"
+                },
+                "group": {
                     "type": "string"
                 },
                 "path": {

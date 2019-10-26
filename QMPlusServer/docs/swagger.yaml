@@ -11,9 +11,9 @@ definitions:
     type: object
   api.AuthAndPathIn:
     properties:
-      apis:
+      apiIds:
         items:
-          $ref: '#/definitions/dbModel.Api'
+          type: integer
         type: array
       authorityId:
         type: string
@@ -46,15 +46,20 @@ definitions:
       authorityName:
         type: string
     type: object
-  api.DeleteApiParams:
-    properties:
-      path:
-        type: integer
-    type: object
   api.DeleteAuthorityPatams:
     properties:
       authorityId:
         type: integer
+    type: object
+  api.GetAuthorityId:
+    properties:
+      authorityId:
+        type: string
+    type: object
+  api.GetById:
+    properties:
+      id:
+        type: number
     type: object
   api.IdInfo:
     properties:
@@ -68,9 +73,18 @@ definitions:
       username:
         type: string
     type: object
+  api.SetUserAuth:
+    properties:
+      authorityId:
+        type: string
+      uuid:
+        type: string
+    type: object
   dbModel.Api:
     properties:
       description:
+        type: string
+      group:
         type: string
       path:
         type: string
@@ -146,7 +160,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.DeleteApiParams'
+          $ref: '#/definitions/dbModel.Api'
           type: object
       produces:
       - application/json
@@ -160,7 +174,23 @@ paths:
       summary: 删除指定api
       tags:
       - Api
-  /api/getApiList:
+  /api/getAllApis:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取所有的Api 不分页
+      tags:
+      - Api
+  /api/getApiById:
     post:
       consumes:
       - application/json
@@ -181,10 +211,34 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 分页获取角色列表
+      summary: 根据id获取api
       tags:
       - Api
-  /api/setAuthAndPath:
+  /api/getApiList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 分页获取API列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取API列表
+      tags:
+      - Api
+  /api/setAuthAndApi:
     post:
       consumes:
       - application/json
@@ -206,6 +260,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 创建api和角色关系
+      tags:
+      - Api
+  /api/updataApi:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建api
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateApiParams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建基础api
       tags:
       - Api
   /authority/createAuthority:
@@ -254,6 +332,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除角色
+      tags:
+      - authority
+  /authority/getAuthAndApi:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取本角色所有有权限的apiId
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.GetAuthorityId'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取本角色所有有权限的apiId
       tags:
       - authority
   /authority/getAuthorityList:
@@ -320,12 +422,12 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
-  /menu/addBaseMenu:
+  /fileUploadAndDownload/getFileList:
     post:
       consumes:
       - application/json
       parameters:
-      - description: 分页获取基础menu列表
+      - description: 分页获取文件户列表
         in: body
         name: data
         required: true
@@ -341,7 +443,53 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 分页获取基础menu列表
+      summary: 分页文件列表
+      tags:
+      - FileUploadAndDownload
+  /fileUploadAndDownload/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 上传文件示例
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"上传成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 上传文件示例
+      tags:
+      - FileUploadAndDownload
+  /menu/addBaseMenu:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 新增菜单
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.BaseMenu'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 新增菜单
       tags:
       - menu
   /menu/addMenuAuthority:
@@ -389,7 +537,31 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 获取指定角色menu
+      summary: 删除菜单
+      tags:
+      - menu
+  /menu/getBaseMenuById:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 根据id获取菜单
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.GetById'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 根据id获取菜单
       tags:
       - menu
   /menu/getBaseMenuTree:
@@ -460,6 +632,30 @@ paths:
       summary: 分页获取基础menu列表
       tags:
       - menu
+  /menu/updataBaseMen:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新菜单
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.BaseMenu'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新菜单
+      tags:
+      - menu
   /user/changePassword:
     post:
       parameters:
@@ -482,7 +678,7 @@ paths:
       summary: 用户修改密码
       tags:
       - User
-  /user/getInfoList:
+  /user/getUserList:
     post:
       consumes:
       - application/json
@@ -504,6 +700,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 分页获取用户列表
+      tags:
+      - User
+  /user/setUserAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 设置用户权限
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.SetUserAuth'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户权限
       tags:
       - User
   /user/uploadHeaderImg:

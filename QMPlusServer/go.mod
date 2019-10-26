@@ -18,6 +18,8 @@ require (
 	github.com/qiniu/x v7.0.8+incompatible // indirect
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/satori/go.uuid v1.2.0
+	github.com/shamsher31/goimgext v1.0.0 // indirect
+	github.com/shamsher31/goimgtype v1.0.0
 	github.com/sirupsen/logrus v1.2.0
 	github.com/spf13/viper v1.4.0
 	github.com/swaggo/gin-swagger v1.2.0

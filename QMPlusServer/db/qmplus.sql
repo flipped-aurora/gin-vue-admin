@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 20/10/2019 11:43:19
+ Date: 26/10/2019 23:23:45
 */
 
 SET NAMES utf8mb4;
@@ -30,7 +30,7 @@ CREATE TABLE `api_authorities`  (
   `api_id` int(10) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_api_authorities_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 212 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 240 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of api_authorities
@@ -44,34 +44,36 @@ INSERT INTO `api_authorities` VALUES (77, '2019-09-30 15:34:19', '2019-09-30 15:
 INSERT INTO `api_authorities` VALUES (78, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 17);
 INSERT INTO `api_authorities` VALUES (79, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 23);
 INSERT INTO `api_authorities` VALUES (80, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 24);
-INSERT INTO `api_authorities` VALUES (184, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 1);
-INSERT INTO `api_authorities` VALUES (185, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 2);
-INSERT INTO `api_authorities` VALUES (186, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 3);
-INSERT INTO `api_authorities` VALUES (187, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 4);
-INSERT INTO `api_authorities` VALUES (188, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 5);
-INSERT INTO `api_authorities` VALUES (189, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 6);
-INSERT INTO `api_authorities` VALUES (190, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 7);
-INSERT INTO `api_authorities` VALUES (191, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 8);
-INSERT INTO `api_authorities` VALUES (192, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 9);
-INSERT INTO `api_authorities` VALUES (193, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 10);
-INSERT INTO `api_authorities` VALUES (194, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 11);
-INSERT INTO `api_authorities` VALUES (195, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 12);
-INSERT INTO `api_authorities` VALUES (196, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 13);
-INSERT INTO `api_authorities` VALUES (197, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 14);
-INSERT INTO `api_authorities` VALUES (198, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 15);
-INSERT INTO `api_authorities` VALUES (199, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 16);
-INSERT INTO `api_authorities` VALUES (200, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 17);
-INSERT INTO `api_authorities` VALUES (201, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 18);
-INSERT INTO `api_authorities` VALUES (202, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 19);
-INSERT INTO `api_authorities` VALUES (203, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 20);
-INSERT INTO `api_authorities` VALUES (204, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 21);
-INSERT INTO `api_authorities` VALUES (205, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 22);
-INSERT INTO `api_authorities` VALUES (206, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 23);
-INSERT INTO `api_authorities` VALUES (207, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 24);
-INSERT INTO `api_authorities` VALUES (208, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 28);
-INSERT INTO `api_authorities` VALUES (209, '2019-10-09 23:01:52', '2019-10-09 23:01:52', NULL, 888, 29);
 INSERT INTO `api_authorities` VALUES (210, '2019-10-09 23:04:56', '2019-10-09 23:04:56', NULL, 999, 1);
 INSERT INTO `api_authorities` VALUES (211, '2019-10-09 23:04:56', '2019-10-09 23:04:56', NULL, 999, 2);
+INSERT INTO `api_authorities` VALUES (212, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 1);
+INSERT INTO `api_authorities` VALUES (213, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 2);
+INSERT INTO `api_authorities` VALUES (214, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 3);
+INSERT INTO `api_authorities` VALUES (215, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 4);
+INSERT INTO `api_authorities` VALUES (216, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 5);
+INSERT INTO `api_authorities` VALUES (217, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 6);
+INSERT INTO `api_authorities` VALUES (218, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 7);
+INSERT INTO `api_authorities` VALUES (219, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 8);
+INSERT INTO `api_authorities` VALUES (220, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 9);
+INSERT INTO `api_authorities` VALUES (221, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 10);
+INSERT INTO `api_authorities` VALUES (222, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 11);
+INSERT INTO `api_authorities` VALUES (223, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 12);
+INSERT INTO `api_authorities` VALUES (224, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 13);
+INSERT INTO `api_authorities` VALUES (225, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 14);
+INSERT INTO `api_authorities` VALUES (226, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 15);
+INSERT INTO `api_authorities` VALUES (227, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 16);
+INSERT INTO `api_authorities` VALUES (228, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 17);
+INSERT INTO `api_authorities` VALUES (229, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 18);
+INSERT INTO `api_authorities` VALUES (230, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 19);
+INSERT INTO `api_authorities` VALUES (231, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 20);
+INSERT INTO `api_authorities` VALUES (232, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 21);
+INSERT INTO `api_authorities` VALUES (233, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 22);
+INSERT INTO `api_authorities` VALUES (234, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 23);
+INSERT INTO `api_authorities` VALUES (235, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 24);
+INSERT INTO `api_authorities` VALUES (236, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 28);
+INSERT INTO `api_authorities` VALUES (237, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 29);
+INSERT INTO `api_authorities` VALUES (238, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 30);
+INSERT INTO `api_authorities` VALUES (239, '2019-10-26 20:15:17', '2019-10-26 20:15:17', NULL, 888, 31);
 
 -- ----------------------------
 -- Table structure for apis
@@ -88,7 +90,7 @@ CREATE TABLE `apis`  (
   `group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 30 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of apis
@@ -120,6 +122,8 @@ INSERT INTO `apis` VALUES (24, '2019-09-30 15:29:33', '2019-09-30 15:29:33', NUL
 INSERT INTO `apis` VALUES (25, '2019-09-30 15:30:00', '2019-09-30 15:30:00', '2019-10-09 15:26:37', NULL, '/user/getInfoList', '分页获取用户列表', 'user');
 INSERT INTO `apis` VALUES (28, '2019-10-09 15:15:17', '2019-10-09 15:17:07', NULL, NULL, '/user/getUserList', '获取用户列表', 'user');
 INSERT INTO `apis` VALUES (29, '2019-10-09 23:01:40', '2019-10-09 23:01:40', NULL, NULL, '/user/setUserAuthority', '修改用户角色', 'user');
+INSERT INTO `apis` VALUES (30, '2019-10-26 20:14:38', '2019-10-26 20:14:38', NULL, NULL, '/fileUploadAndDownload/upload', '文件上传示例', 'fileUploadAndDownload');
+INSERT INTO `apis` VALUES (31, '2019-10-26 20:14:59', '2019-10-26 20:14:59', NULL, NULL, '/fileUploadAndDownload/getFileList', '获取上传文件列表', 'fileUploadAndDownload');
 
 -- ----------------------------
 -- Table structure for authorities
@@ -188,6 +192,39 @@ INSERT INTO `base_menus` VALUES (22, '2019-10-20 11:22:19', '2019-10-20 11:28:12
 INSERT INTO `base_menus` VALUES (23, '2019-10-20 11:23:39', '2019-10-20 11:23:39', NULL, 0, 19, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 'excel导入导出');
 INSERT INTO `base_menus` VALUES (25, '2019-10-20 11:26:12', '2019-10-20 11:26:12', '2019-10-20 11:26:19', 0, 23, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载');
 INSERT INTO `base_menus` VALUES (26, '2019-10-20 11:27:02', '2019-10-20 11:27:02', NULL, 0, 19, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载');
+
+-- ----------------------------
+-- Table structure for file_upload_and_downloads
+-- ----------------------------
+DROP TABLE IF EXISTS `file_upload_and_downloads`;
+CREATE TABLE `file_upload_and_downloads`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `tag` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of file_upload_and_downloads
+-- ----------------------------
+INSERT INTO `file_upload_and_downloads` VALUES (1, '2019-10-26 15:49:50', '2019-10-26 15:49:50', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572076189logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (2, '2019-10-26 15:49:50', '2019-10-26 15:49:50', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572076189logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (3, '2019-10-26 20:08:44', '2019-10-26 20:08:44', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572091723logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (4, '2019-10-26 20:08:50', '2019-10-26 20:08:50', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572091727logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (5, '2019-10-26 20:08:50', '2019-10-26 20:08:50', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572091727logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (6, '2019-10-26 22:46:17', '2019-10-26 22:46:17', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572101174logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (7, '2019-10-26 22:46:32', '2019-10-26 22:46:32', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572101191logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (8, '2019-10-26 23:07:54', '2019-10-26 23:07:54', NULL, 'timg.jpg', 'http://qmplusimg.henrongyi.top/1572102473timg.jpg', 'jpg');
+INSERT INTO `file_upload_and_downloads` VALUES (9, '2019-10-26 23:08:58', '2019-10-26 23:08:58', NULL, 'timg.jpg', 'http://qmplusimg.henrongyi.top/1572102537timg.jpg', 'jpg');
+INSERT INTO `file_upload_and_downloads` VALUES (10, '2019-10-26 23:10:44', '2019-10-26 23:10:44', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572102643logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (11, '2019-10-26 23:12:05', '2019-10-26 23:12:05', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572102723logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (12, '2019-10-26 23:14:08', '2019-10-26 23:14:08', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572102846logo.png', 'png');
+INSERT INTO `file_upload_and_downloads` VALUES (13, '2019-10-26 23:18:17', '2019-10-26 23:18:17', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572103096logo.png', 'png');
 
 -- ----------------------------
 -- Table structure for menus
@@ -270,7 +307,7 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (10, '2019-09-13 17:23:46', '2019-10-17 22:14:49', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571321688timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e');
+INSERT INTO `users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e');
 INSERT INTO `users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d');
 INSERT INTO `users` VALUES (12, '2019-09-13 17:28:56', '2019-09-13 17:28:56', NULL, 0x65373939636563362D346337662D343338632D383634372D376435633333393734353165, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');
 INSERT INTO `users` VALUES (13, '2019-09-13 17:29:26', '2019-09-13 17:29:26', NULL, 0x65653764353932322D323333312D343162632D393363322D613665366461306465343230, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');

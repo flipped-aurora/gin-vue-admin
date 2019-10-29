@@ -18,7 +18,7 @@ router.beforeEach(async(to, from, next) => {
         // 在白名单中的判断情况
     if (whiteList.indexOf(to.name) > -1) {
         if (token) {
-            next({ name: 'dashbord' })
+            next({ path: '/layout/dashbord' })
         } else {
             next()
         }

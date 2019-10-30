@@ -3,7 +3,7 @@
     "username": "root",
     "password": "Aa@6447985",
     "path": "127.0.0.1:3306",
-    "dbname": "QMPlus",
+    "dbname": "yx",
     "config": "charset=utf8&parseTime=True&loc=Local"
   }
 }

@@ -91,15 +91,16 @@ export default {
       }
       return (isPng || isJPG) && isLt2M
     },
-    uploadSuccess(res, file) {
-      console.log(res, file)
+    uploadSuccess(res) {
       this.$message({
         type: 'success',
         message: '上传成功'
       })
-      this.getTableData()
+      if(res.success){
+        this.getTableData()
+      }
     },
-    uploadError(err) {
+    uploadError() {
       this.$message({
         type: 'error',
         message: '上传失败'

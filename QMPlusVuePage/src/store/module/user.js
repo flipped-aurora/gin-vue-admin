@@ -38,12 +38,13 @@ export const user = {
         }
     },
     actions: {
-        async LoginIn({ commit }, loginInfo) {
+        async LoginIn({ commit, dispatch }, loginInfo) {
             const res = await login(loginInfo)
             commit('setUserInfo', res.data.user)
             commit('setToken', res.data.token)
             commit('setExpiresAt', res.data.expiresAt)
             if (res.success) {
+                await dispatch("SetAsyncRouter")
                 const redirect = router.history.current.query.redirect
                 if (redirect) {
                     router.push({ path: redirect, replace: true })

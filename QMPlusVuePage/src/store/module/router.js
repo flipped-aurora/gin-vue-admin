@@ -35,6 +35,7 @@ export const router = {
             })
             asyncRouterHandle(baseRouter)
             commit('setAsyncRouter', baseRouter)
+            return true
         }
     },
     getters: {

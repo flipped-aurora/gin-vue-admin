@@ -5,6 +5,7 @@ export default {
             total: 10,
             pageSize: 10,
             tableData: [],
+            searchInfo: {}
         }
     },
     methods: {
@@ -17,7 +18,7 @@ export default {
             this.getTableData()
         },
         async getTableData(page = this.page, pageSize = this.pageSize) {
-            const table = await this.listApi({ page, pageSize })
+            const table = await this.listApi({ page, pageSize, ...this.searchInfo })
             this.tableData = table.data[this.listKey]
             this.total = table.data.total
             this.page = table.data.page

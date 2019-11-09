@@ -55,7 +55,7 @@ func (a *Api) GetInfoList(info modelInterface.PageInfo) (err error, list interfa
 		return
 	} else {
 		var apiList []Api
-		err = db.Order("group", true).Find(&apiList).Error
+		err = db.Order("group", true).Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Error
 		return err, apiList, total
 	}
 }

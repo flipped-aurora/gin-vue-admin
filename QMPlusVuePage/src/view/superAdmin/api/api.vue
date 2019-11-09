@@ -3,6 +3,17 @@
     <div class="button-box clearflex">
       <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
     </div>
+        <div class="search-term">
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
+  <el-form-item label="路径">
+    <el-input v-model="searchInfo.path" placeholder="路径"></el-input>
+  </el-form-item>
+ 
+  <el-form-item>
+    <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+</el-form>
+  </div>
     <el-table :data="tableData" border stripe>
       <el-table-column label="id" min-width="60" prop="ID"></el-table-column>
       <el-table-column label="api路径" min-width="150" prop="path"></el-table-column>
@@ -48,7 +59,7 @@
 
 
 <script>
-// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
+// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
 
 import {
   getApiById,
@@ -76,6 +87,12 @@ export default {
     }
   },
   methods: {
+    //条件搜索前端看此方法
+    onSubmit(){
+      this.page = 1 
+      this.pageSize = 10
+      this.getTableData()
+    },
     // 自动设置api分组
     autoGroup() {
       this.form.group = this.form.path.split('/')[1]

@@ -79,6 +79,8 @@ func SetAuthAndApi(c *gin.Context) {
 	}
 }
 
+//条件搜索后端看此api
+
 // @Tags Api
 // @Summary 分页获取API列表
 // @Security ApiKeyAuth
@@ -88,17 +90,22 @@ func SetAuthAndApi(c *gin.Context) {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiList [post]
 func GetApiList(c *gin.Context) {
-	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
-	err, list, total := new(dbModel.Api).GetInfoList(pageInfo)
+	// 此结构体仅本方法使用
+	type searchParams struct {
+		dbModel.Api
+		modelInterface.PageInfo
+	}
+	var sp searchParams
+	_ = c.ShouldBindJSON(&sp)
+	err, list, total := sp.Api.GetInfoList(sp.PageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取数据成功", gin.H{
 			"list":     list,
 			"total":    total,
-			"page":     pageInfo.Page,
-			"pageSize": pageInfo.PageSize,
+			"page":     sp.PageInfo.Page,
+			"pageSize": sp.PageInfo.PageSize,
 		})
 
 	}

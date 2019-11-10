@@ -1,14 +1,20 @@
 <template>
-  <div class="edit_container">
-    <quill-editor
-      :options="editorOption"
-      @blur="onEditorBlur($event)"
-      @change="onEditorChange($event)"
-      @focus="onEditorFocus($event)"
-      ref="myQuillEditor"
-      v-model="content"
-    ></quill-editor>
-    <button v-on:click="saveHtml">保存</button>
+  <div>
+    <div class="edit_container">
+      <quill-editor
+              :options="editorOption"
+              @blur="onEditorBlur($event)"
+              @change="onEditorChange($event)"
+              @focus="onEditorFocus($event)"
+              ref="myQuillEditor"
+              v-model="content"
+      ></quill-editor>
+      <el-button  plain @click="saveHtml">保存</el-button>
+    </div>
+    <div>
+      <mavon-editor v-model="model.content"></mavon-editor>
+      <el-button type="primary" size="small" @click="submit">发表</el-button>
+    </div>
   </div>
 </template>
 
@@ -18,7 +24,10 @@ export default {
   data() {
     return {
       content: `<p>hello world</p>`,
-      editorOption: {}
+      editorOption: {},
+      model:{
+        content:''
+      }
     }
   },
   computed: {
@@ -33,7 +42,8 @@ export default {
     onEditorBlur() {}, // 失去焦点事件
     onEditorFocus() {}, // 获得焦点事件
     onEditorChange() {}, // 内容改变事件
-    saveHtml() {} // 保存方法
+    saveHtml() {}, // 保存方法
+    submit(){}
   }
 }
 </script>

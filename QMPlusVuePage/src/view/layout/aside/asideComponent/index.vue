@@ -1,5 +1,5 @@
 <template>
-  <component :is="menuComponent" :routerInfo="routerInfo">
+  <component :is="menuComponent" :routerInfo="routerInfo" v-if="!routerInfo.hidden">
     <template v-if="routerInfo.children.length">
       <AsideComponent :key="item.name" :routerInfo="item" v-for="item in routerInfo.children" />
     </template>

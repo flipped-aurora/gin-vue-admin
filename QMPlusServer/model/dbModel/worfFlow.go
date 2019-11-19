@@ -19,8 +19,7 @@ type Application struct {
 // 流转表
 type ApplicationWorkFlowProcess struct {
 	gorm.Model
-	ApplicationId  uint // 当前工作流所属申请的ID
-	WorkflowID     uint
+	ApplicationID  uint   // 当前工作流所属申请的ID
 	CurrentNode    string // 当前进度节点
 	HistoricalNode string //上一个进度节点
 	CurrentUser    string // 当前进度操作人
@@ -44,6 +43,6 @@ type WorkflowStepInfo struct {
 	IsStrat         bool    // 是否是开始流节点
 	StepName        string  // 工作流名称
 	StepNo          float64 // 步骤id （第几步）
-	StepAuthorityId string  // 操作者级别id
+	StepAuthorityID string  // 操作者级别id
 	IsEnd           bool    // 是否是完结流节点
 }

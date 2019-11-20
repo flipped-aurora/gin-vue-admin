@@ -23,7 +23,7 @@ func UploadFile(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
 	} else {
 		//文件上传后拿到文件路径
-		err, filePath := servers.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
+		err, filePath, key := servers.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
 		if err != nil {
 			servers.ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
 		} else {
@@ -33,6 +33,7 @@ func UploadFile(c *gin.Context) {
 			file.Name = header.Filename
 			s := strings.Split(file.Name, ".")
 			file.Tag = s[len(s)-1]
+			file.Key = key
 			err := file.Upload()
 			if err != nil {
 				servers.ReportFormat(c, false, fmt.Sprintf("修改数据库链接失败，%v", err), gin.H{})
@@ -41,6 +42,35 @@ func UploadFile(c *gin.Context) {
 			}
 		}
 	}
+}
+
+// @Tags FileUploadAndDownload
+// @Summary 删除文件
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Param data body dbModel.FileUploadAndDownload true "传入文件里面id即可"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"返回成功"}"
+// @Router /fileUploadAndDownload/deleteFile [post]
+func DeleteFile(c *gin.Context) {
+	var file dbModel.FileUploadAndDownload
+	_ = c.ShouldBind(&file)
+	err, f := file.FindFile()
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
+	} else {
+		err = servers.DeleteFile(USER_HEADER_BUCKET, f.Key)
+		if err != nil {
+			servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
+		} else {
+			err = file.DeleteFile()
+			if err != nil {
+				servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
+			} else {
+				servers.ReportFormat(c, true, fmt.Sprintf("删除成功，%v", err), gin.H{})
+			}
+		}
+	}
+
 }
 
 // @Tags FileUploadAndDownload

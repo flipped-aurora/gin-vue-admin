@@ -12,11 +12,23 @@ type FileUploadAndDownload struct {
 	Name string `json:"name"`
 	Url  string `json:"url"`
 	Tag  string `json:"tag"`
+	Key  string `json:"key"`
 }
 
 func (f *FileUploadAndDownload) Upload() error {
 	err := qmsql.DEFAULTDB.Create(f).Error
 	return err
+}
+
+func (f *FileUploadAndDownload) DeleteFile() error {
+	err := qmsql.DEFAULTDB.Where("id = ?", f.ID).Delete(f).Error
+	return err
+}
+
+func (f *FileUploadAndDownload) FindFile() (error, FileUploadAndDownload) {
+	var file FileUploadAndDownload
+	err := qmsql.DEFAULTDB.Where("id = ?", f.ID).First(&file).Error
+	return err, file
 }
 
 // 分页获取数据  需要分页实现这个接口即可

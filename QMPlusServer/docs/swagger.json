@@ -488,6 +488,42 @@
                 }
             }
         },
+        "/fileUploadAndDownload/deleteFile": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "FileUploadAndDownload"
+                ],
+                "summary": "删除文件",
+                "parameters": [
+                    {
+                        "description": "传入文件里面id即可",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/dbModel.FileUploadAndDownload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"返回成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/getFileList": {
             "post": {
                 "security": [
@@ -1234,6 +1270,20 @@
                 }
             }
         },
+        "dbModel.FileUploadAndDownload": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
         "dbModel.Workflow": {
             "type": "object",
             "properties": {
@@ -1280,10 +1330,6 @@
                 "stepNo": {
                     "description": "步骤id （第几步）",
                     "type": "number"
-                },
-                "workflowID": {
-                    "description": "所属工作流ID",
-                    "type": "integer"
                 }
             }
         },

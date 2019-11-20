@@ -112,6 +112,15 @@ definitions:
       title:
         type: string
     type: object
+  dbModel.FileUploadAndDownload:
+    properties:
+      name:
+        type: string
+      tag:
+        type: string
+      url:
+        type: string
+    type: object
   dbModel.Workflow:
     properties:
       workflowDescription:
@@ -146,9 +155,6 @@ definitions:
       stepNo:
         description: 步骤id （第几步）
         type: number
-      workflowID:
-        description: 所属工作流ID
-        type: integer
     type: object
   modelInterface.PageInfo:
     properties:
@@ -460,6 +466,28 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
+  /fileUploadAndDownload/deleteFile:
+    post:
+      parameters:
+      - description: 传入文件里面id即可
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.FileUploadAndDownload'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除文件
+      tags:
+      - FileUploadAndDownload
   /fileUploadAndDownload/getFileList:
     post:
       consumes:

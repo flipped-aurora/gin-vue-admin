@@ -112,6 +112,44 @@ definitions:
       title:
         type: string
     type: object
+  dbModel.Workflow:
+    properties:
+      workflowDescription:
+        description: 工作流描述
+        type: string
+      workflowName:
+        description: 工作流英文id
+        type: string
+      workflowNickName:
+        description: 工作流名称
+        type: string
+      workflowStep:
+        description: 工作流步骤
+        items:
+          $ref: '#/definitions/dbModel.WorkflowStepInfo'
+        type: array
+    type: object
+  dbModel.WorkflowStepInfo:
+    properties:
+      isEnd:
+        description: 是否是完结流节点
+        type: boolean
+      isStrat:
+        description: 是否是开始流节点
+        type: boolean
+      stepAuthorityID:
+        description: 操作者级别id
+        type: string
+      stepName:
+        description: 工作流名称
+        type: string
+      stepNo:
+        description: 步骤id （第几步）
+        type: number
+      workflowID:
+        description: 所属工作流ID
+        type: integer
+    type: object
   modelInterface.PageInfo:
     properties:
       page:
@@ -753,6 +791,26 @@ paths:
       summary: 用户上传头像
       tags:
       - User
+  /workflow/createWorkFlow:
+    post:
+      parameters:
+      - description: 注册工作流接口
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.Workflow'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"注册成功"}'
+          schema:
+            type: string
+      summary: 注册工作流
+      tags:
+      - workflow
 securityDefinitions:
   ApiKeyAuth:
     in: header

@@ -21,5 +21,6 @@ func InitRouter() *gin.Engine {
 	router.InitAuthorityRouter(Router)             // 注册角色路由
 	router.InitApiRouter(Router)                   // 注册功能api路由
 	router.InitFileUploadAndDownloadRouter(Router) // 文件上传下载功能路由
+	router.InitWorkflowRouter(Router)              // 工作流相关路由
 	return Router
 }

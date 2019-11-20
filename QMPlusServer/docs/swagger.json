@@ -1025,6 +1025,37 @@
                     }
                 }
             }
+        },
+        "/workflow/createWorkFlow": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "workflow"
+                ],
+                "summary": "注册工作流",
+                "parameters": [
+                    {
+                        "description": "注册工作流接口",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/dbModel.Workflow"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -1200,6 +1231,59 @@
                 },
                 "title": {
                     "type": "string"
+                }
+            }
+        },
+        "dbModel.Workflow": {
+            "type": "object",
+            "properties": {
+                "workflowDescription": {
+                    "description": "工作流描述",
+                    "type": "string"
+                },
+                "workflowName": {
+                    "description": "工作流英文id",
+                    "type": "string"
+                },
+                "workflowNickName": {
+                    "description": "工作流名称",
+                    "type": "string"
+                },
+                "workflowStep": {
+                    "description": "工作流步骤",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbModel.WorkflowStepInfo"
+                    }
+                }
+            }
+        },
+        "dbModel.WorkflowStepInfo": {
+            "type": "object",
+            "properties": {
+                "isEnd": {
+                    "description": "是否是完结流节点",
+                    "type": "boolean"
+                },
+                "isStrat": {
+                    "description": "是否是开始流节点",
+                    "type": "boolean"
+                },
+                "stepAuthorityID": {
+                    "description": "操作者级别id",
+                    "type": "string"
+                },
+                "stepName": {
+                    "description": "工作流名称",
+                    "type": "string"
+                },
+                "stepNo": {
+                    "description": "步骤id （第几步）",
+                    "type": "number"
+                },
+                "workflowID": {
+                    "description": "所属工作流ID",
+                    "type": "integer"
                 }
             }
         },

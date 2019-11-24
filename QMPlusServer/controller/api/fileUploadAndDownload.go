@@ -70,7 +70,6 @@ func DeleteFile(c *gin.Context) {
 			}
 		}
 	}
-
 }
 
 // @Tags FileUploadAndDownload

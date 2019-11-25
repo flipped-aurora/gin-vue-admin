@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-upload
-      :headers="{'x-token':token}"
-      :show-file-list="false"
       :before-upload="checkFile"
+      :headers="{'x-token':token}"
       :on-error="uploadError"
       :on-success="uploadSuccess"
+      :show-file-list="false"
       action="/api/fileUploadAndDownload/upload"
     >
       <el-button size="small" type="primary">点击上传</el-button>
@@ -17,7 +17,13 @@
           <img :alt="scope.row.alt" :src="scope.row.url" height="80" width="80" />
         </template>
       </el-table-column>
-      <el-table-column label="日期" prop="UpdatedAt" width="180"></el-table-column>
+      <el-table-column label="日期" prop="UpdatedAt" width="180">
+        <template slot-scope="scope">
+          <div>
+            {{scope.row.UpdatedAt|formatDate}}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="文件名" prop="name" width="180"></el-table-column>
       <el-table-column label="链接" prop="url"></el-table-column>
       <el-table-column label="标签" prop="tag" width="100">
@@ -31,6 +37,7 @@
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <el-button @click="downloadFile(scope.row)" size="small" type="text">下载</el-button>
+          <el-button @click="deleteFile(scope.row)" size="small" type="text">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -50,8 +57,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import infoList from '@/components/mixins/infoList'
-import { getFileList } from '@/api/fileUploadAndDownload'
+import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
+import { formatTimeToStr } from '@/utils/data'
 export default {
   name: 'Upload',
   mixins: [infoList],
@@ -78,12 +86,45 @@ export default {
   computed: {
     ...mapGetters('user', ['userInfo', 'token'])
   },
+  filters: {
+    formatDate: function(time) {
+      if (time != null && time != '') {
+        var date = new Date(time)
+        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
+      } else {
+        return ''
+      }
+    }
+  },
   methods: {
+    async deleteFile(row) {
+      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async () => {
+          const res = await deleteFile(row)
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getTableData()
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
+    },
     checkFile(file) {
       const isJPG = file.type === 'image/jpeg'
       const isPng = file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isJPG&&!isPng) {
+      if (!isJPG && !isPng) {
         this.$message.error('上传头像图片只能是 JPG或png 格式!')
       }
       if (!isLt2M) {
@@ -96,7 +137,7 @@ export default {
         type: 'success',
         message: '上传成功'
       })
-      if(res.success){
+      if (res.success) {
         this.getTableData()
       }
     },

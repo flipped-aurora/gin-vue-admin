@@ -114,6 +114,8 @@ definitions:
     type: object
   dbModel.FileUploadAndDownload:
     properties:
+      key:
+        type: string
       name:
         type: string
       tag:

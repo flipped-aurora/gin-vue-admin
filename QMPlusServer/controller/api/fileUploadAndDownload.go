@@ -62,7 +62,7 @@ func DeleteFile(c *gin.Context) {
 		if err != nil {
 			servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
 		} else {
-			err = file.DeleteFile()
+			err = f.DeleteFile()
 			if err != nil {
 				servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
 			} else {
@@ -70,7 +70,6 @@ func DeleteFile(c *gin.Context) {
 			}
 		}
 	}
-
 }
 
 // @Tags FileUploadAndDownload

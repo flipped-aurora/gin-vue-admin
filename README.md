@@ -108,11 +108,11 @@ swag init
     感谢krank666协同开发
     可使用的初始mysql脚本正在制作中...
 ## 联系方式
-<div align=center>
+<div align=center style="float: left">
 <img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/>
 <H3>krank666微信</H3>
 </div>
-<div align=center>
+<div align=center style="float: left">
 <img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>
 <H3>Mr.奇淼</H3>
 </div>

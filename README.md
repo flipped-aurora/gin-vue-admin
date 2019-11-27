@@ -107,3 +107,12 @@ swag init
     正在研发前端独立版本分支...可以不依赖go服务进行使用的后台模板
     感谢krank666协同开发
     可使用的初始mysql脚本正在制作中...
+## 联系方式
+<div align=center>
+<img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/>
+<H3>krank666微信</H3>
+</div>
+<div align=center>
+<img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>
+<H3>Mr.奇淼</H3>
+</div>

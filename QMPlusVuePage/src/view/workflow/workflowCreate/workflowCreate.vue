@@ -69,8 +69,8 @@ export default {
         workflowNickName: '',
         workflowStep: [
           {
-            isEnd: '',
-            isStrat: '',
+            isEnd: false,
+            isStrat: true,
             stepAuthorityID: '',
             stepName: '',
             stepNo: ''
@@ -92,8 +92,8 @@ export default {
   methods: {
     createWorkflowStep() {
       this.form.workflowStep.push({
-        isEnd: '',
-        isStrat: '',
+        isEnd: false,
+        isStrat: false,
         stepAuthorityID: '',
         stepName: '',
         stepNo: ''

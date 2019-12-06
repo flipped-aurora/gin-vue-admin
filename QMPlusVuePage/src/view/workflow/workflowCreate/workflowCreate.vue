@@ -11,9 +11,10 @@
         <el-input type="text" v-model="form.workflowDescription"></el-input>
       </el-form-item>
     </el-form>
-    <el-table :data="tableData" border style="width: 100%">
+    <el-button @click="createWorkflowStep" class="fl-right mg" type="primary">新增</el-button>
+    <el-table :data="form.workflowStep" border style="width: 100%">
       <el-table-column label="是否是完结流节点" prop="isEnd">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-select placeholder="请选择" v-model="scope.row.isEnd">
             <el-option
               :key="key"
@@ -25,7 +26,7 @@
         </template>
       </el-table-column>
       <el-table-column label="是否是开始流节点" prop="isStrat">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-select placeholder="请选择" v-model="scope.row.isStrat">
             <el-option
               :key="key"
@@ -37,45 +38,45 @@
         </template>
       </el-table-column>
       <el-table-column label="操作者级别id" prop="stepAuthorityID">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-input placeholder="请输入" type="text" v-model="scope.row.stepAuthorityID"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="工作流名称" prop="stepName">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-input placeholder="请输入" type="text" v-model="scope.row.stepName"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="步骤id" prop="stepNo">
-        <template scope="scope">
+        <template slot-scope="scope">
           <el-input placeholder="请输入" type="text" v-model="scope.row.stepNo"></el-input>
         </template>
       </el-table-column>
     </el-table>
-    <el-button @click="submit" type="primary">提交</el-button>
+    <el-button @click="submit" type="primary" class="fl-right mg">提交</el-button>
   </div>
 </template>
 
 <script>
 import { createWorkFlow } from '@/api/workflow'
 export default {
-  name: 'workflow',
+  name: 'Workflow',
   data() {
     return {
       form: {
         workflowName: '',
         workflowDescription: '',
-        workflowNickName: ''
+        workflowNickName: '',
+        workflowStep: [
+          {
+            isEnd: false,
+            isStrat: true,
+            stepAuthorityID: '',
+            stepName: '',
+            stepNo: ''
+          }
+        ]
       },
-      tableData: [
-        {
-          isEnd: '',
-          isStrat: '',
-          stepAuthorityID: '',
-          stepName: '',
-          stepNo: ''
-        }
-      ],
       options: [
         {
           name: '是',
@@ -88,28 +89,27 @@ export default {
       ]
     }
   },
-  component: {},
   methods: {
+    createWorkflowStep() {
+      this.form.workflowStep.push({
+        isEnd: false,
+        isStrat: false,
+        stepAuthorityID: '',
+        stepName: '',
+        stepNo: ''
+      })
+    },
     async submit() {
-      let params = {
-        workflowDescription: this.form.workflowDescription,
-        workflowName: this.form.workflowName,
-        workflowNickName: this.form.workflowNickName,
-        workflowStep: [
-          {
-            isEnd: this.tableData[0].isEnd,
-            isStrat: this.tableData[0].isStrat,
-            stepAuthorityID: this.tableData[0].stepAuthorityID,
-            stepName: this.tableData[0].stepName,
-            stepNo: this.tableData[0].stepNo
-          }
-        ]
+      const res = await createWorkFlow(this.form)
+      if(res.success){
+          this.$message({
+              message:"创建成功",
+              type:"success"
+          })
       }
-      const res = await createWorkFlow(params)
-      console.log(res)
     }
   }
 }
 </script>
-<style scoped>
+<style>
 </style>

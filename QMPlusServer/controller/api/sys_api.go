@@ -60,25 +60,6 @@ type AuthAndPathIn struct {
 	ApiIds      []uint `json:"apiIds"`
 }
 
-// @Tags SysApi
-// @Summary 创建api和角色关系
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.AuthAndPathIn true "创建api和角色关系"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /api/setAuthAndApi [post]
-func SetAuthAndApi(c *gin.Context) {
-	var authAndPathIn AuthAndPathIn
-	_ = c.BindJSON(&authAndPathIn)
-	err := new(sysModel.SysApiAuthority).SetAuthAndApi(authAndPathIn.AuthorityId, authAndPathIn.ApiIds)
-	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("添加失败：%v", err), gin.H{})
-	} else {
-		servers.ReportFormat(c, true, "添加成功", gin.H{})
-	}
-}
-
 //条件搜索后端看此api
 
 // @Tags SysApi

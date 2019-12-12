@@ -120,3 +120,8 @@ swag init
 <img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/>
 <H3>krank666微信</H3>
 </div>
+
+<div align=center>
+<h3>qq交流群:622360840</h3>
+<h3>微信交流群可以添加任意一位开发者备注"加入gin-vue-admin交流群"</h3>
+</div>

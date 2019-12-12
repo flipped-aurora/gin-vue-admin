@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 style="text-align:center">gin-vue-admin by 奇淼 And krank666</h2>
-    <h2 style="text-align:center">点击动画获取联系方式</h2>
+    <h2 style="text-align:center;margin:15px">点击动画获取联系方式</h2>
 
     <el-drawer
       :visible.sync="drawer"
@@ -19,6 +19,9 @@
     <div @click="drawer = true">
       <Animition />
     </div>
+    <h2 style="text-align:right;margin:40px;">
+      当前版本号：v0.1.0
+    </h2>
   </div>
 </template>
 

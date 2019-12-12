@@ -17,6 +17,7 @@ type SysBaseMenu struct {
 	Name      string `json:"name"`
 	Hidden    bool   `json:"hidden"`
 	Component string `json:"component"`
+	Sort      string `json:"sort"`
 	Meta      `json:"meta"`
 	NickName  string        `json:"nickName"`
 	Children  []SysBaseMenu `json:"children"`
@@ -53,9 +54,10 @@ func (b *SysBaseMenu) UpdataBaseMenu() (err error) {
 	upDataMap["component"] = b.Component
 	upDataMap["title"] = b.Title
 	upDataMap["icon"] = b.Icon
+	upDataMap["sort"] = b.Sort
 	err = qmsql.DEFAULTDB.Where("id = ?", b.ID).Find(&SysBaseMenu{}).Updates(upDataMap).Error
 	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&[]SysMenu{}).Updates(upDataMap).Error
-	fmt.Printf("菜单修改时候，关联菜单err:%v", err1)
+	fmt.Printf("菜单修改时候，关联菜单err1:%v,err:%v", err1, err)
 	return err
 }
 
@@ -71,14 +73,17 @@ func (b *SysBaseMenu) GetInfoList(info modelInterface.PageInfo) (err error, list
 		return
 	} else {
 		var menuList []SysBaseMenu
-		err = db.Find(&menuList).Error
+		err = db.Where("parent_id = 0").Order("sort", true).Find(&menuList).Error
+		for i := 0; i < len(menuList); i++ {
+			err = getBaseChildrenList(&menuList[i])
+		}
 		return err, menuList, total
 	}
 }
 
 //获取基础路由树
 func (m *SysBaseMenu) GetBaseMenuTree() (err error, menus []SysBaseMenu) {
-	err = qmsql.DEFAULTDB.Where(" parent_id = ?", 0).Find(&menus).Error
+	err = qmsql.DEFAULTDB.Where(" parent_id = ?", 0).Order("sort", true).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {
 		err = getBaseChildrenList(&menus[i])
 	}
@@ -86,7 +91,7 @@ func (m *SysBaseMenu) GetBaseMenuTree() (err error, menus []SysBaseMenu) {
 }
 
 func getBaseChildrenList(menu *SysBaseMenu) (err error) {
-	err = qmsql.DEFAULTDB.Where("parent_id = ?", menu.ID).Find(&menu.Children).Error
+	err = qmsql.DEFAULTDB.Where("parent_id = ?", menu.ID).Order("sort", true).Find(&menu.Children).Error
 	for i := 0; i < len(menu.Children); i++ {
 		err = getBaseChildrenList(&menu.Children[i])
 	}

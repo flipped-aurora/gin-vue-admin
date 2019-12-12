@@ -5,22 +5,18 @@
 </template>
 
 <script>
-
 export default {
   name: 'app',
-  components: {
-    
-  },
+  components: {}
 }
-
-
 </script>
 
 <style lang="scss">
 // 引入初始化样式
-  @import '@/style/main.scss';
-  @import '@/style/base.scss';
-  #app{
-    background: #eee;
-  }
+@import '@/style/main.scss';
+@import '@/style/base.scss';
+#app {
+  background: #eee;
+  height: 100vh;
+}
 </style>

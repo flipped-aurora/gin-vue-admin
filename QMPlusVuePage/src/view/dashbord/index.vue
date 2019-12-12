@@ -4,8 +4,6 @@
     <h2 style="text-align:center">点击动画获取联系方式</h2>
 
     <el-drawer
-      :before-close="handleClose"
-      :direction="direction"
       :visible.sync="drawer"
       title="联系方式"
     >

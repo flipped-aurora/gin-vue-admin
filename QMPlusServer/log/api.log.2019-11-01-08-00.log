@@ -1,6 +1,0 @@
-{"level":"info","msg":"| 200 |       960.2µs |             ::1 | GET  /swagger/index.html ||","time":"2019-11-01T14:04:16+08:00"}
-{"level":"info","msg":"| 304 |            0s |             ::1 | GET  /swagger/swagger-ui.css ||","time":"2019-11-01T14:04:16+08:00"}
-{"level":"info","msg":"| 304 |            0s |             ::1 | GET  /swagger/swagger-ui-bundle.js ||","time":"2019-11-01T14:04:16+08:00"}
-{"level":"info","msg":"| 304 |            0s |             ::1 | GET  /swagger/swagger-ui-standalone-preset.js ||","time":"2019-11-01T14:04:16+08:00"}
-{"level":"info","msg":"| 200 |       998.3µs |             ::1 | GET  /swagger/doc.json ||","time":"2019-11-01T14:04:17+08:00"}
-{"level":"info","msg":"| 200 |            0s |             ::1 | GET  /swagger/favicon-32x32.png ||","time":"2019-11-01T14:04:17+08:00"}

@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-// @Tags FileUploadAndDownload
+// @Tags ExaFileUploadAndDownload
 // @Summary 上传文件示例
 // @Security ApiKeyAuth
 // @accept multipart/form-data
@@ -28,7 +28,7 @@ func UploadFile(c *gin.Context) {
 			servers.ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
 		} else {
 			//修改数据库后得到修改后的user并且返回供前端使用
-			var file dbModel.FileUploadAndDownload
+			var file dbModel.ExaFileUploadAndDownload
 			file.Url = filePath
 			file.Name = header.Filename
 			s := strings.Split(file.Name, ".")
@@ -44,15 +44,15 @@ func UploadFile(c *gin.Context) {
 	}
 }
 
-// @Tags FileUploadAndDownload
+// @Tags ExaFileUploadAndDownload
 // @Summary 删除文件
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body dbModel.FileUploadAndDownload true "传入文件里面id即可"
+// @Param data body dbModel.ExaFileUploadAndDownload true "传入文件里面id即可"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /fileUploadAndDownload/deleteFile [post]
 func DeleteFile(c *gin.Context) {
-	var file dbModel.FileUploadAndDownload
+	var file dbModel.ExaFileUploadAndDownload
 	_ = c.ShouldBind(&file)
 	err, f := file.FindFile()
 	if err != nil {
@@ -72,7 +72,7 @@ func DeleteFile(c *gin.Context) {
 	}
 }
 
-// @Tags FileUploadAndDownload
+// @Tags ExaFileUploadAndDownload
 // @Summary 分页文件列表
 // @Security ApiKeyAuth
 // @accept application/json
@@ -83,7 +83,7 @@ func DeleteFile(c *gin.Context) {
 func GetFileList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
 	_ = c.BindJSON(&pageInfo)
-	err, list, total := new(dbModel.FileUploadAndDownload).GetInfoList(pageInfo)
+	err, list, total := new(dbModel.ExaFileUploadAndDownload).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {

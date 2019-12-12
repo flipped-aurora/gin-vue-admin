@@ -68,7 +68,7 @@
         :props="apiDefaultProps"
         default-expand-all
         highlight-current
-        node-key="ID"
+        node-key="path"
         ref="apiTree"
         show-checkbox
         v-if="apiDialogFlag"
@@ -91,6 +91,7 @@ import {
 } from '@/api/authority'
 import { getBaseMenuTree, addMenuAuthority, getMenuAuthority } from '@/api/menu'
 import { getAllApis, getAuthAndApi, setAuthAndApi } from '@/api/api'
+import { casbinPUpdata,getPolicyPathByAuthorityId } from '@/api/casbin'
 import infoList from '@/components/mixins/infoList'
 export default {
   name: 'Authority',
@@ -234,24 +235,19 @@ export default {
     },
     // 关联用户api关系
     async addAuthApi(row) {
-      const res = await getAuthAndApi({ authorityId: row.authorityId })
+      const res = await  getPolicyPathByAuthorityId({ authorityId: row.authorityId })
       this.activeUserId = row.authorityId
-      this.apiTreeIds = res.data.apis || []
+      this.apiTreeIds = res.data.paths || []
       this.apiDialogFlag = true
     },
+    // 关联关系确定
     async authApiEnter() {
       const checkArr = this.$refs.apiTree.getCheckedKeys(true)
-      const res = await setAuthAndApi({
-        authorityId: this.activeUserId,
-        apiIds: checkArr
-      })
-      if (res.success) {
-        this.$message({
-          type: 'success',
-          message: '添加成功!'
-        })
+      const res = await casbinPUpdata({ authorityId: this.activeUserId,paths:checkArr})
+      if(res.success){
+        this.$message({type:"success",message:res.msg})
+        this.closeDialog()
       }
-      this.closeDialog()
     }
   },
   async created() {

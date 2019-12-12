@@ -6,8 +6,8 @@ import (
 	"main/middleware"
 )
 
-func InitMenuRouter(Router *gin.Engine) {
-	MenuRouter := Router.Group("menu").Use(middleware.JWTAuth())
+func InitMenuRouter(Router *gin.Engine)(R gin.IRoutes)  {
+	MenuRouter := Router.Group("menu").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
 		MenuRouter.POST("getMenu", api.GetMenu) //获取菜单树
 		MenuRouter.POST("getMenuList", api.GetMenuList) // 分页获取基础menu列表
@@ -19,4 +19,5 @@ func InitMenuRouter(Router *gin.Engine) {
 		MenuRouter.POST("updataBaseMenu", api.UpdataBaseMenu) // 更新菜单
 		MenuRouter.POST("getBaseMenuById", api.GetBaseMenuById) //根据id获取菜单
 	}
+	return MenuRouter
 }

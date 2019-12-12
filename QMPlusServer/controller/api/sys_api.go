@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"main/controller/servers"
-	"main/model/dbModel"
 	"main/model/modelInterface"
+	"main/model/sysModel"
 )
 
 type CreateApiParams struct {
@@ -17,7 +17,7 @@ type DeleteApiParams struct {
 	ID uint `json:"id"`
 }
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 创建基础api
 // @Security ApiKeyAuth
 // @accept application/json
@@ -26,7 +26,7 @@ type DeleteApiParams struct {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/createApi [post]
 func CreateApi(c *gin.Context) {
-	var api dbModel.Api
+	var api sysModel.SysApi
 	_ = c.BindJSON(&api)
 	err := api.CreateApi()
 	if err != nil {
@@ -36,16 +36,16 @@ func CreateApi(c *gin.Context) {
 	}
 }
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 删除指定api
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.Api true "删除api"
+// @Param data body sysModel.SysApi true "删除api"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/deleteApi [post]
 func DeleteApi(c *gin.Context) {
-	var a dbModel.Api
+	var a sysModel.SysApi
 	_ = c.BindJSON(&a)
 	err := a.DeleteApi()
 	if err != nil {
@@ -60,7 +60,7 @@ type AuthAndPathIn struct {
 	ApiIds      []uint `json:"apiIds"`
 }
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 创建api和角色关系
 // @Security ApiKeyAuth
 // @accept application/json
@@ -71,7 +71,7 @@ type AuthAndPathIn struct {
 func SetAuthAndApi(c *gin.Context) {
 	var authAndPathIn AuthAndPathIn
 	_ = c.BindJSON(&authAndPathIn)
-	err := new(dbModel.ApiAuthority).SetAuthAndApi(authAndPathIn.AuthorityId, authAndPathIn.ApiIds)
+	err := new(sysModel.SysApiAuthority).SetAuthAndApi(authAndPathIn.AuthorityId, authAndPathIn.ApiIds)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败：%v", err), gin.H{})
 	} else {
@@ -81,7 +81,7 @@ func SetAuthAndApi(c *gin.Context) {
 
 //条件搜索后端看此api
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 分页获取API列表
 // @Security ApiKeyAuth
 // @accept application/json
@@ -92,12 +92,12 @@ func SetAuthAndApi(c *gin.Context) {
 func GetApiList(c *gin.Context) {
 	// 此结构体仅本方法使用
 	type searchParams struct {
-		dbModel.Api
+		sysModel.SysApi
 		modelInterface.PageInfo
 	}
 	var sp searchParams
 	_ = c.ShouldBindJSON(&sp)
-	err, list, total := sp.Api.GetInfoList(sp.PageInfo)
+	err, list, total := sp.SysApi.GetInfoList(sp.PageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
@@ -111,7 +111,7 @@ func GetApiList(c *gin.Context) {
 	}
 }
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 根据id获取api
 // @Security ApiKeyAuth
 // @accept application/json
@@ -122,7 +122,7 @@ func GetApiList(c *gin.Context) {
 func GetApiById(c *gin.Context) {
 	var idInfo GetById
 	_ = c.BindJSON(&idInfo)
-	err, api := new(dbModel.Api).GetApiById(idInfo.Id)
+	err, api := new(sysModel.SysApi).GetApiById(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
@@ -133,7 +133,7 @@ func GetApiById(c *gin.Context) {
 	}
 }
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 创建基础api
 // @Security ApiKeyAuth
 // @accept application/json
@@ -142,7 +142,7 @@ func GetApiById(c *gin.Context) {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/updataApi [post]
 func UpdataApi(c *gin.Context) {
-	var api dbModel.Api
+	var api sysModel.SysApi
 	_ = c.BindJSON(&api)
 	err := api.UpdataApi()
 	if err != nil {
@@ -152,7 +152,7 @@ func UpdataApi(c *gin.Context) {
 	}
 }
 
-// @Tags Api
+// @Tags SysApi
 // @Summary 获取所有的Api 不分页
 // @Security ApiKeyAuth
 // @accept application/json
@@ -160,7 +160,7 @@ func UpdataApi(c *gin.Context) {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getAllApis [post]
 func GetAllApis(c *gin.Context) {
-	err, apis := new(dbModel.Api).GetAllApis()
+	err, apis := new(sysModel.SysApi).GetAllApis()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {

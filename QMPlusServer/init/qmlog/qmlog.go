@@ -11,9 +11,8 @@ import (
 )
 
 var QMLog = logrus.New()
-
 //禁止logrus的输出
-func InitLog() {
+func InitLog() *logrus.Logger{
 	src, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		fmt.Println("err", err)
@@ -33,4 +32,5 @@ func InitLog() {
 	}
 	lfHook := lfshook.NewHook(writeMap, &logrus.JSONFormatter{})
 	QMLog.AddHook(lfHook)
+	return QMLog
 }

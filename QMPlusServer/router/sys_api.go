@@ -6,8 +6,8 @@ import (
 	"main/middleware"
 )
 
-func InitApiRouter(Router *gin.Engine) {
-	ApiRouter := Router.Group("api").Use(middleware.JWTAuth())
+func InitApiRouter(Router *gin.Engine)(R gin.IRoutes) {
+	ApiRouter := Router.Group("api").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
 		ApiRouter.POST("createApi", api.CreateApi)  //创建Api
 		ApiRouter.POST("deleteApi", api.DeleteApi)  //删除Api
@@ -18,4 +18,5 @@ func InitApiRouter(Router *gin.Engine) {
 		ApiRouter.POST("getAllApis",api.GetAllApis) // 获取所有api
 		ApiRouter.POST("getAuthAndApi",api.GetAuthAndApi) // 获取api和auth关系
 	}
+	return ApiRouter
 }

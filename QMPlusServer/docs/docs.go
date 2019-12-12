@@ -40,7 +40,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "创建基础api",
                 "parameters": [
@@ -79,7 +79,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "删除指定api",
                 "parameters": [
@@ -90,7 +90,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.Api"
+                            "$ref": "#/definitions/dbModel.SysApi"
                         }
                     }
                 ],
@@ -118,7 +118,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "获取所有的Api 不分页",
                 "responses": {
@@ -145,7 +145,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "根据id获取api",
                 "parameters": [
@@ -184,7 +184,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "分页获取API列表",
                 "parameters": [
@@ -223,7 +223,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "创建api和角色关系",
                 "parameters": [
@@ -262,7 +262,7 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "创建基础api",
                 "parameters": [
@@ -641,7 +641,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.BaseMenu"
+                            "$ref": "#/definitions/dbModel.SysBaseMenu"
                         }
                     }
                 ],
@@ -908,7 +908,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.BaseMenu"
+                            "$ref": "#/definitions/dbModel.SysBaseMenu"
                         }
                     }
                 ],
@@ -1121,7 +1121,7 @@ var doc = `{
                 "menus": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dbModel.BaseMenu"
+                        "$ref": "#/definitions/dbModel.SysBaseMenu"
                     }
                 }
             }
@@ -1238,7 +1238,7 @@ var doc = `{
                 }
             }
         },
-        "dbModel.Api": {
+        "dbModel.SysApi": {
             "type": "object",
             "properties": {
                 "description": {
@@ -1252,13 +1252,13 @@ var doc = `{
                 }
             }
         },
-        "dbModel.BaseMenu": {
+        "dbModel.SysBaseMenu": {
             "type": "object",
             "properties": {
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dbModel.BaseMenu"
+                        "$ref": "#/definitions/dbModel.SysBaseMenu"
                     }
                 },
                 "component": {

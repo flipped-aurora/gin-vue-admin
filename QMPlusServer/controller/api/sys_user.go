@@ -7,7 +7,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"main/controller/servers"
 	"main/middleware"
-	"main/model/dbModel"
+	"main/model/sysModel"
 	"main/model/modelInterface"
 	"mime/multipart"
 	"time"
@@ -33,7 +33,7 @@ func Regist(c *gin.Context) {
 	var R RegistAndLoginStuct
 	_ = c.BindJSON(&R)
 
-	U := &dbModel.User{Username: R.Username, Password: R.Password}
+	U := &sysModel.SysUser{Username: R.Username, Password: R.Password}
 	err, user := U.Regist()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{
@@ -55,7 +55,7 @@ func Regist(c *gin.Context) {
 func Login(c *gin.Context) {
 	var L RegistAndLoginStuct
 	_ = c.BindJSON(&L)
-	U := &dbModel.User{Username: L.Username, Password: L.Password}
+	U := &sysModel.SysUser{Username: L.Username, Password: L.Password}
 	if err, user := U.Login(); err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{})
 	} else {
@@ -64,7 +64,7 @@ func Login(c *gin.Context) {
 }
 
 //登录以后签发jwt
-func tokenNext(c *gin.Context, user dbModel.User) {
+func tokenNext(c *gin.Context, user sysModel.SysUser) {
 	j := &middleware.JWT{
 		[]byte("qmPlus"), // 唯一签名
 	}
@@ -93,7 +93,7 @@ type ChangePasswordStutrc struct {
 	NewPassword string `json:"newPassword"`
 }
 
-// @Tags User
+// @Tags SysUser
 // @Summary 用户修改密码
 // @Security ApiKeyAuth
 // @Produce  application/json
@@ -103,7 +103,7 @@ type ChangePasswordStutrc struct {
 func ChangePassword(c *gin.Context) {
 	var params ChangePasswordStutrc
 	_ = c.BindJSON(&params)
-	U := &dbModel.User{Username: params.Username, Password: params.Password}
+	U := &sysModel.SysUser{Username: params.Username, Password: params.Password}
 	if err, _ := U.ChangePassword(params.NewPassword); err != nil {
 		servers.ReportFormat(c, false, "修改失败，请检查用户名密码", gin.H{})
 	} else {
@@ -115,7 +115,7 @@ type UserHeaderImg struct {
 	HeaderImg multipart.File `json:"headerImg"`
 }
 
-// @Tags User
+// @Tags SysUser
 // @Summary 用户上传头像
 // @Security ApiKeyAuth
 // @accept multipart/form-data
@@ -141,7 +141,7 @@ func UploadHeaderImg(c *gin.Context) {
 			servers.ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
 		} else {
 			//修改数据库后得到修改后的user并且返回供前端使用
-			err, user := new(dbModel.User).UploadHeaderImg(uuid, filePath)
+			err, user := new(sysModel.SysUser).UploadHeaderImg(uuid, filePath)
 			if err != nil {
 				servers.ReportFormat(c, false, fmt.Sprintf("修改数据库链接失败，%v", err), gin.H{})
 			} else {
@@ -151,7 +151,7 @@ func UploadHeaderImg(c *gin.Context) {
 	}
 }
 
-// @Tags User
+// @Tags SysUser
 // @Summary 分页获取用户列表
 // @Security ApiKeyAuth
 // @accept application/json
@@ -162,7 +162,7 @@ func UploadHeaderImg(c *gin.Context) {
 func GetUserList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
 	_ = c.BindJSON(&pageInfo)
-	err, list, total := new(dbModel.User).GetInfoList(pageInfo)
+	err, list, total := new(sysModel.SysUser).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
@@ -180,7 +180,7 @@ type SetUserAuth struct {
 	AuthorityId string    `json:"authorityId"`
 }
 
-// @Tags User
+// @Tags SysUser
 // @Summary 设置用户权限
 // @Security ApiKeyAuth
 // @accept application/json
@@ -191,7 +191,7 @@ type SetUserAuth struct {
 func SetUserAuthority(c *gin.Context) {
 	var sua SetUserAuth
 	_ = c.BindJSON(&sua)
-	err := new(dbModel.User).SetUserAuthority(sua.UUID, sua.AuthorityId)
+	err := new(sysModel.SysUser).SetUserAuthority(sua.UUID, sua.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("修改失败，%v", err), gin.H{})
 	} else {

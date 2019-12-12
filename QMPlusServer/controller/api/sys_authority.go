@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"main/controller/servers"
-	"main/model/dbModel"
 	"main/model/modelInterface"
+	"main/model/sysModel"
 )
 
 type CreateAuthorityPatams struct {
@@ -22,7 +22,7 @@ type CreateAuthorityPatams struct {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
-	var auth dbModel.Authority
+	var auth sysModel.SysAuthority
 	_ = c.ShouldBind(&auth)
 	err, authBack := auth.CreateAuthority()
 	if err != nil {
@@ -49,7 +49,7 @@ type DeleteAuthorityPatams struct {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {
-	var a dbModel.Authority
+	var a sysModel.SysAuthority
 	_ = c.BindJSON(&a)
 	//删除角色之前需要判断是否有用户正在使用此角色
 	err := a.DeleteAuthority()
@@ -71,7 +71,7 @@ func DeleteAuthority(c *gin.Context) {
 func GetAuthorityList(c *gin.Context){
 	var pageInfo modelInterface.PageInfo
 	_ = c.BindJSON(&pageInfo)
-	err, list, total := new(dbModel.Authority).GetInfoList(pageInfo)
+	err, list, total := new(sysModel.SysAuthority).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
@@ -100,7 +100,7 @@ type GetAuthorityId struct {
 func GetAuthAndApi(c *gin.Context){
 	var idInfo GetAuthorityId
 	_ = c.BindJSON(&idInfo)
-	err,apis := new(dbModel.ApiAuthority).GetAuthAndApi(idInfo.AuthorityId)
+	err,apis := new(sysModel.SysApiAuthority).GetAuthAndApi(idInfo.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {

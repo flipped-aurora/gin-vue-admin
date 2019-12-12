@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"main/controller/servers"
 	"main/middleware"
-	"main/model/dbModel"
+	"main/model/sysModel"
 	"main/model/modelInterface"
 )
 
@@ -19,7 +19,7 @@ import (
 func GetMenu(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*middleware.CustomClaims)
-	err, menus := new(dbModel.Menu).GetMenuTree(waitUse.AuthorityId)
+	err, menus := new(sysModel.SysMenu).GetMenuTree(waitUse.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
 	} else {
@@ -38,7 +38,7 @@ func GetMenu(c *gin.Context) {
 func GetMenuList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
 	_ = c.BindJSON(&pageInfo)
-	err, menuList, total := new(dbModel.BaseMenu).GetInfoList(pageInfo)
+	err, menuList, total := new(sysModel.SysBaseMenu).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
@@ -56,11 +56,11 @@ func GetMenuList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.BaseMenu true "新增菜单"
+// @Param data body sysModel.SysBaseMenu true "新增菜单"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/addBaseMenu [post]
 func AddBaseMenu(c *gin.Context) {
-	var addMenu dbModel.BaseMenu
+	var addMenu sysModel.SysBaseMenu
 	_ = c.BindJSON(&addMenu)
 	err := addMenu.AddBaseMenu()
 	if err != nil {
@@ -78,7 +78,7 @@ func AddBaseMenu(c *gin.Context) {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getBaseMenuTree [post]
 func GetBaseMenuTree(c *gin.Context) {
-	err, menus := new(dbModel.BaseMenu).GetBaseMenuTree()
+	err, menus := new(sysModel.SysBaseMenu).GetBaseMenuTree()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
 	} else {
@@ -87,7 +87,7 @@ func GetBaseMenuTree(c *gin.Context) {
 }
 
 type AddMenuAuthorityInfo struct {
-	Menus       []dbModel.BaseMenu
+	Menus       []sysModel.SysBaseMenu
 	AuthorityId string
 }
 
@@ -102,7 +102,7 @@ type AddMenuAuthorityInfo struct {
 func AddMenuAuthority(c *gin.Context) {
 	var addMenuAuthorityInfo AddMenuAuthorityInfo
 	_ = c.BindJSON(&addMenuAuthorityInfo)
-	err := new(dbModel.Menu).AddMenuAuthority(addMenuAuthorityInfo.Menus, addMenuAuthorityInfo.AuthorityId)
+	err := new(sysModel.SysMenu).AddMenuAuthority(addMenuAuthorityInfo.Menus, addMenuAuthorityInfo.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败，%v", err), gin.H{})
 	} else {
@@ -125,7 +125,7 @@ type AuthorityIdInfo struct {
 func GetMenuAuthority(c *gin.Context) {
 	var authorityIdInfo AuthorityIdInfo
 	_ = c.BindJSON(&authorityIdInfo)
-	err, menus := new(dbModel.Menu).GetMenuAuthority(authorityIdInfo.AuthorityId)
+	err, menus := new(sysModel.SysMenu).GetMenuAuthority(authorityIdInfo.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
 	} else {
@@ -148,7 +148,7 @@ type IdInfo struct {
 func DeleteBaseMenu(c *gin.Context) {
 	var idInfo IdInfo
 	_ = c.BindJSON(&idInfo)
-	err := new(dbModel.BaseMenu).DeleteBaseMenu(idInfo.Id)
+	err := new(sysModel.SysBaseMenu).DeleteBaseMenu(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
 	} else {
@@ -161,11 +161,11 @@ func DeleteBaseMenu(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.BaseMenu true "更新菜单"
+// @Param data body sysModel.SysBaseMenu true "更新菜单"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/updataBaseMen [post]
 func UpdataBaseMenu(c *gin.Context) {
-	var menu dbModel.BaseMenu
+	var menu sysModel.SysBaseMenu
 	_ = c.BindJSON(&menu)
 	err := menu.UpdataBaseMenu()
 	if err != nil {
@@ -190,7 +190,7 @@ type GetById struct {
 func GetBaseMenuById(c *gin.Context) {
 	var idInfo GetById
 	_ = c.BindJSON(&idInfo)
-	err, menu := new(dbModel.BaseMenu).GetBaseMenuById(idInfo.Id)
+	err, menu := new(sysModel.SysBaseMenu).GetBaseMenuById(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("查询失败：%v", err), gin.H{})
 	} else {

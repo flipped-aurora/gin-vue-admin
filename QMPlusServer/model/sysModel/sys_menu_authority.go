@@ -43,7 +43,7 @@ func (m *SysMenu) GetMenuAuthority(authorityId string) (err error, menus []SysMe
 
 //获取动态路由树
 func (m *SysMenu) GetMenuTree(authorityId string) (err error, menus []SysMenu) {
-	err = qmsql.DEFAULTDB.Where("authority_id = ? AND parent_id = ?", authorityId, 0).Find(&menus).Error
+	err = qmsql.DEFAULTDB.Where("authority_id = ? AND parent_id = ?", authorityId, 0).Order("sort", true).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {
 		err = getChildrenList(&menus[i])
 	}
@@ -51,7 +51,7 @@ func (m *SysMenu) GetMenuTree(authorityId string) (err error, menus []SysMenu) {
 }
 
 func getChildrenList(menu *SysMenu) (err error) {
-	err = qmsql.DEFAULTDB.Where("authority_id = ? AND parent_id = ?", menu.AuthorityId, menu.MenuId).Find(&menu.Children).Error
+	err = qmsql.DEFAULTDB.Where("authority_id = ? AND parent_id = ?", menu.AuthorityId, menu.MenuId).Order("sort", true).Find(&menu.Children).Error
 	for i := 0; i < len(menu.Children); i++ {
 		err = getChildrenList(&menu.Children[i])
 	}

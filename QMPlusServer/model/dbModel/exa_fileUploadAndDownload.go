@@ -21,7 +21,7 @@ func (f *ExaFileUploadAndDownload) Upload() error {
 }
 
 func (f *ExaFileUploadAndDownload) DeleteFile() error {
-	err := qmsql.DEFAULTDB.Where("id = ?", f.ID).Delete(f).Error
+	err := qmsql.DEFAULTDB.Where("id = ?", f.ID).Unscoped().Delete(f).Error
 	return err
 }
 

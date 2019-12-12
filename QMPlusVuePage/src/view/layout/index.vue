@@ -1,34 +1,36 @@
 <template>
   <el-container class="layout-cont">
-    <el-header class="header-cont">
-      <h1 class="fl-left left-box">
-        <img :src="require('@/assets/logo.png')" height="40" width="40">
-        Gin-Vue-Admin</h1>
-      <div class="fl-right right-box">
-        <el-dropdown>
-          <span class="el-dropdown-link">
-            <img :src="userInfo.headerImg" height="30" width="30" />
-            {{userInfo.nickName}}
-            <i class="el-icon-arrow-down"></i>
-          </span>
-          <el-dropdown-menu class="dropdown-group" slot="dropdown">
-            <el-dropdown-item>
-              <span>更多信息
-                <el-badge is-dot />
-              </span>
-            </el-dropdown-item>
-            <el-dropdown-item @click.native="toPerson" icon="el-icon-s-custom">个人信息</el-dropdown-item>            
-            <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp"> 登 出 </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
-      </div>
-    </el-header>
     <el-container>
       <el-aside class="main-cont main-left">
+        <h1 class="admin-title" :class="isCollapse&&'collapse'">
+          <img :src="require('@/assets/logo.png')" height="40" width="40" />
+          Gin-Vue-Admin
+        </h1>
         <Aside class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
       <el-main class="main-cont main-right">
+        <el-header class="header-cont">
+          <div class="fl-right right-box">
+            <el-dropdown>
+              <span class="el-dropdown-link">
+                <img :src="userInfo.headerImg" height="30" width="30" />
+                {{userInfo.nickName}}
+                <i class="el-icon-arrow-down"></i>
+              </span>
+              <el-dropdown-menu class="dropdown-group" slot="dropdown">
+                <el-dropdown-item>
+                  <span>
+                    更多信息
+                    <el-badge is-dot />
+                  </span>
+                </el-dropdown-item>
+                <el-dropdown-item @click.native="toPerson" icon="el-icon-s-custom">个人信息</el-dropdown-item>
+                <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp">登 出</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </el-header>
         <!-- 当前面包屑用路由自动生成可根据需求修改 -->
         <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
           <el-breadcrumb-item
@@ -50,17 +52,21 @@ import Aside from '@/view/layout/aside'
 import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'Layout',
+  data(){
+    return{
+      isCollapse:false
+    }
+  },
   components: {
     Aside
   },
   methods: {
-    
     ...mapMutations('user', ['LoginOut']),
     totalCollapse() {
       this.$bus.emit('totalCollapse')
     },
-    toPerson(){
-      this.$router.push({name:"person"})
+    toPerson() {
+      this.$router.push({ name: 'person' })
     }
   },
   computed: {
@@ -71,6 +77,15 @@ export default {
     matched() {
       return this.$route.matched
     }
+  },
+  created(){
+    this.$bus.on('totalCollapse', () => {
+      this.isCollapse = !this.isCollapse
+      console.log(this.isCollapse)
+    })
+  },
+  beforeDestroy() {
+    this.$bus.off('totalCollapse')
   }
 }
 </script>
@@ -88,12 +103,6 @@ $mainHight: calc(100vh - 52px);
   padding-bottom: 17px;
 }
 .layout-cont {
-  .left-box{
-    vertical-align: middle;
-    img{
-      vertical-align: middle;
-    }
-  }
   .right-box {
     text-align: center;
     vertical-align: middle;
@@ -126,7 +135,6 @@ $mainHight: calc(100vh - 52px);
     &.el-main {
       overflow: auto;
       padding: 0px 10px;
-      margin: 0px 0px 0px 12px;
       background: #fff;
     }
     height: $mainHight !important;
@@ -153,19 +161,35 @@ $mainHight: calc(100vh - 52px);
     }
 
     .el-menu-vertical {
-      height: calc(100vh - 69px) !important;
+      height: calc(100vh - 60px) !important;
       visibility: auto;
-      &.noCollapse {
+      &:not(.el-menu--collapse) {
         width: 250px;
       }
     }
+
     &::-webkit-scrollbar {
       display: none;
     }
     &.main-left {
       width: auto !important;
+      .admin-title {
+        padding-left: 10px;
+        font-size: 18px;
+        vertical-align: middle;
+        width: 240px;
+        background:#0F3D5F;
+        color: #fff;
+        img {
+          vertical-align: middle;
+        }
+        height: 60px;
+        line-height: 60px;
+        &.collapse{
+          width: 53px;
+        }
+      }
     }
-    background: blueviolet;
   }
 }
 </style>

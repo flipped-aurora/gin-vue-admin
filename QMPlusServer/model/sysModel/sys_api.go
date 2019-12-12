@@ -27,7 +27,7 @@ func (a *SysApi) CreateApi() (err error) {
 
 func (a *SysApi) DeleteApi() (err error) {
 	err = qmsql.DEFAULTDB.Delete(a).Error
-	err = qmsql.DEFAULTDB.Where("api_id = ?", a.ID).Unscoped().Delete(&SysApiAuthority{}).Error
+	new(CasbinModel).clearCasbin(1,a.Path)
 	return err
 }
 

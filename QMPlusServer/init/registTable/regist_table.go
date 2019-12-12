@@ -12,7 +12,6 @@ func RegistTable(db *gorm.DB) {
 		sysModel.SysAuthority{},
 		sysModel.SysMenu{},
 		sysModel.SysApi{},
-		sysModel.SysApiAuthority{},
 		sysModel.SysBaseMenu{},
 		dbModel.ExaFileUploadAndDownload{},
 		sysModel.SysWorkflow{},

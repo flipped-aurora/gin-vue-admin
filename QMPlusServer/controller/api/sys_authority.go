@@ -89,23 +89,3 @@ type GetAuthorityId struct {
 	AuthorityId string `json:"authorityId"`
 }
 
-// @Tags authority
-// @Summary 获取本角色所有有权限的apiId
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.GetAuthorityId true "获取本角色所有有权限的apiId"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /authority/getAuthAndApi [post]
-func GetAuthAndApi(c *gin.Context){
-	var idInfo GetAuthorityId
-	_ = c.BindJSON(&idInfo)
-	err,apis := new(sysModel.SysApiAuthority).GetAuthAndApi(idInfo.AuthorityId)
-	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
-	} else {
-		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"apis": apis,
-		})
-	}
-}

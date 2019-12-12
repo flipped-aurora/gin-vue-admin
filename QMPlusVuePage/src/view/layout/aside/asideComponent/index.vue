@@ -12,14 +12,14 @@ import AsyncSubmenu from './asyncSubmenu'
 
 export default {
   name: 'AsideComponent',
-  computed:{
-      menuComponent(){
-          if(this.routerInfo.children.length){
-              return 'AsyncSubmenu'
-          }else{
-              return 'MenuItem'
-          }
+  computed: {
+    menuComponent() {
+      if (this.routerInfo.children.length) {
+        return 'AsyncSubmenu'
+      } else {
+        return 'MenuItem'
       }
+    }
   },
   props: {
     routerInfo: {

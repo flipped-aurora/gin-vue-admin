@@ -19,9 +19,7 @@
       </el-table-column>
       <el-table-column label="日期" prop="UpdatedAt" width="180">
         <template slot-scope="scope">
-          <div>
-            {{scope.row.UpdatedAt|formatDate}}
-          </div>
+          <div>{{scope.row.UpdatedAt|formatDate}}</div>
         </template>
       </el-table-column>
       <el-table-column label="文件名" prop="name" width="180"></el-table-column>

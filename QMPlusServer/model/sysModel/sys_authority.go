@@ -10,7 +10,7 @@ import (
 
 type SysAuthority struct {
 	gorm.Model
-	AuthorityId   string   `json:"authorityId" gorm:"not null;unique"`
+	AuthorityId   string `json:"authorityId" gorm:"not null;unique"`
 	AuthorityName string `json:"authorityName"`
 }
 
@@ -24,15 +24,13 @@ func (a *SysAuthority) CreateAuthority() (err error, authority *SysAuthority) {
 func (a *SysAuthority) DeleteAuthority() (err error) {
 	err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).Find(&SysUser{}).Error
 	if err != nil {
-		err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).First(a).Delete(a).Error
-		new(CasbinModel).clearCasbin(0,a.AuthorityId)
+		err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Error
+		new(CasbinModel).clearCasbin(0, a.AuthorityId)
 	} else {
 		err = errors.New("此角色有用户正在使用禁止删除")
 	}
 	return err
 }
-
-
 
 // 分页获取数据  需要分页实现这个接口即可
 func (a *SysAuthority) GetInfoList(info modelInterface.PageInfo) (err error, list interface{}, total int) {

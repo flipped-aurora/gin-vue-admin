@@ -3,23 +3,23 @@
     <div class="button-box clearflex">
       <el-button @click="addMenu('0')" type="primary">新增根菜单</el-button>
     </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column label="ID" min-width="40" prop="ID"></el-table-column>
-      <el-table-column label="路径" min-width="100" prop="path"></el-table-column>
-      <el-table-column label="名称" min-width="100" prop="name"></el-table-column>
+    <el-table :data="tableData" border stripe row-key="ID">
+      <el-table-column label="ID" min-width="100" prop="ID"></el-table-column>
+      <el-table-column label="路由Name" min-width="160" prop="name"></el-table-column>
       <el-table-column label="是否隐藏" min-width="80" prop="hidden">
         <template slot-scope="scope">
           <span>{{scope.row.hidden?"隐藏":"显示"}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="父节点Id" min-width="70" prop="parentId"></el-table-column>
-      <el-table-column label="文件路径" min-width="250" prop="component"></el-table-column>
-      <el-table-column label="展示名称" min-width="80" prop="authorityName">
+      <el-table-column label="父节点" min-width="70" prop="parentId"></el-table-column>
+      <el-table-column label="排序" min-width="70" prop="sort"></el-table-column>
+      <el-table-column label="文件路径" min-width="400" prop="component"></el-table-column>
+      <el-table-column label="展示名称" min-width="120" prop="authorityName">
         <template slot-scope="scope">
           <span>{{scope.row.meta.title}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="图标" min-width="180" prop="authorityName">
+      <el-table-column label="图标" min-width="140" prop="authorityName">
         <template slot-scope="scope">
           <span>{{scope.row.meta.icon}}</span>
         </template>
@@ -43,7 +43,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :visible.sync="dialogFormVisible" title="新增角色">
+    <el-dialog :visible.sync="dialogFormVisible" title="新增菜单">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="路径">
           <el-input autocomplete="off" v-model="form.path"></el-input>
@@ -68,6 +68,9 @@
         </el-form-item>
         <el-form-item label="图标">
           <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
+        </el-form-item>
+        <el-form-item label="排序标记">
+          <el-input autocomplete="off" v-model="form.sort"></el-input>
         </el-form-item>
       </el-form>
       <div class="dialog-footer" slot="footer">
@@ -113,6 +116,22 @@ export default {
     }
   },
   methods: {
+    // 懒加载子菜单
+    load(tree, treeNode, resolve) {
+          resolve([
+            {
+              id: 31,
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1519 弄'
+            }, {
+              id: 32,
+              date: '2016-05-01',
+              name: '王小虎',
+              address: '上海市普陀区金沙江路 1519 弄'
+            }
+          ])
+      },
     // 删除菜单
     deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {

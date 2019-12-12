@@ -101,39 +101,6 @@ export const getAllApis = (data) => {
     })
 }
 
-// @Tags authority
-// @Summary 获取本角色所有有权限的apiId
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.GetAuthorityId true "获取本角色所有有权限的apiId"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /authority/getAuthAndApi [post]
-export const getAuthAndApi = (data) => {
-    return service({
-        url: "/api/getAuthAndApi",
-        method: 'post',
-        data
-    })
-}
-
-
-// @Tags Api
-// @Summary 创建api和角色关系
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body api.AuthAndPathIn true "创建api和角色关系"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /api/setAuthAndApi [post]
-export const setAuthAndApi = (data) => {
-    return service({
-        url: "/api/setAuthAndApi",
-        method: 'post',
-        data
-    })
-}
-
 // @Tags Api
 // @Summary 删除指定api
 // @Security ApiKeyAuth

@@ -1,16 +1,17 @@
 <template>
   <div>
     <div class="button-box clearflex">
-      <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
     </div>
         <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
   <el-form-item label="路径">
     <el-input v-model="searchInfo.path" placeholder="路径"></el-input>
   </el-form-item>
- 
   <el-form-item>
     <el-button type="primary" @click="onSubmit">查询</el-button>
+  </el-form-item>
+   <el-form-item >
+      <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
   </el-form-item>
 </el-form>
   </div>

@@ -43,7 +43,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :visible.sync="dialogFormVisible" title="新增菜单">
+    <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" title="新增菜单">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="路径">
           <el-input autocomplete="off" v-model="form.path"></el-input>
@@ -116,6 +116,10 @@ export default {
     }
   },
   methods: {
+    handleClose(done){
+      this.initForm()
+      done()
+    },
     // 懒加载子菜单
     load(tree, treeNode, resolve) {
           resolve([
@@ -172,7 +176,6 @@ export default {
     },
     // 关闭弹窗
     closeDialog() {
-      this.initForm()
       this.dialogFormVisible = false
     },
     // 添加menu
@@ -189,15 +192,12 @@ export default {
           message: '添加成功!'
         })
         this.getTableData()
-        this.closeDialog()
       } else {
         this.$message({
           type: 'error',
           message: '添加失败!'
         })
-        this.closeDialog()
       }
-      this.initForm()
       this.dialogFormVisible = false
     },
     // 添加菜单方法，id为 0则为添加根菜单

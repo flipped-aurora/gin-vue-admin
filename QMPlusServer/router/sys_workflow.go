@@ -6,10 +6,9 @@ import (
 	"main/middleware"
 )
 
-func InitWorkflowRouter(Router *gin.Engine)(R gin.IRoutes)  {
+func InitWorkflowRouter(Router *gin.RouterGroup) {
 	WorkflowRouter := Router.Group("workflow").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
 		WorkflowRouter.POST("createWorkFlow", api.CreateWorkFlow) // 创建工作流
 	}
-	return WorkflowRouter
 }

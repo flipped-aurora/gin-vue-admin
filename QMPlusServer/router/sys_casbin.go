@@ -6,13 +6,11 @@ import (
 	"main/middleware"
 )
 
-func InitCasbinRouter(Router *gin.Engine)(R gin.IRoutes) {
+func InitCasbinRouter(Router *gin.RouterGroup) {
 	BaseRouter := Router.Group("casbin").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
 		BaseRouter.POST("casbinPUpdata", api.CasbinPUpdata)
 		BaseRouter.POST("getPolicyPathByAuthorityId", api.GetPolicyPathByAuthorityId)
 
-
 	}
-	return BaseRouter
 }

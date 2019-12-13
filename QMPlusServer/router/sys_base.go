@@ -5,7 +5,7 @@ import (
 	"main/controller/api"
 )
 
-func InitBaseRouter(Router *gin.Engine)(R gin.IRoutes) {
+func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	BaseRouter := Router.Group("base")
 	{
 		BaseRouter.POST("regist", api.Regist)

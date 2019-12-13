@@ -6,7 +6,7 @@ import (
 	"main/middleware"
 )
 
-func InitUserRouter(Router *gin.Engine) {
+func InitUserRouter(Router *gin.RouterGroup) {
 	UserRouter := Router.Group("user").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
 		UserRouter.POST("changePassword", api.ChangePassword)     // 修改密码

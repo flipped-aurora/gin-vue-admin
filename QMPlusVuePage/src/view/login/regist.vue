@@ -3,7 +3,7 @@
     <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
       <h1 class="title-1">GIN-VUE-ADMIN</h1>by 奇淼
-      <el-form :model="registForm" :rules="rules" ref="registForm" status-icon>
+      <el-form :model="registForm" :rules="rules" ref="registForm">
         <el-form-item prop="username">
           <el-input placeholder="请输入用户名" v-model="registForm.username"></el-input>
         </el-form-item>

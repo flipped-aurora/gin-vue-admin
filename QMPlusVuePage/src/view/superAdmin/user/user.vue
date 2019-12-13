@@ -12,14 +12,20 @@
       <el-table-column label="uuid" min-width="250" prop="uuid"></el-table-column>
       <el-table-column label="用户名" min-width="150" prop="userName"></el-table-column>
       <el-table-column label="昵称" min-width="150" prop="nickName"></el-table-column>
-      <el-table-column label="用户级别" min-width="150">
+      <el-table-column label="用户角色" min-width="150">
         <template slot-scope="scope">
-          <div>{{scope.row.authority.authorityName}}</div>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button @click="changeAuth(scope.row)" size="small" type="text">修改权限</el-button>
+          <el-select
+            @change="changeAuthority(scope.row)"
+            placeholder="请选择"
+            v-model="scope.row.authority.authorityId"
+          >
+            <el-option
+              :key="item.authorityId"
+              :label="item.authorityName"
+              :value="item.authorityId"
+              v-for="item in authOptions"
+            ></el-option>
+          </el-select>
         </template>
       </el-table-column>
     </el-table>
@@ -40,6 +46,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 import { getUserList, setUserAuthority } from '@/api/user'
+import { getAuthorityList } from '@/api/authority'
 import infoList from '@/components/mixins/infoList'
 
 export default {
@@ -49,43 +56,23 @@ export default {
     return {
       listApi: getUserList,
       listKey: 'userList',
-      dialogFormVisible: false,
-      type: ''
+      authOptions: []
     }
   },
   methods: {
-    initForm() {
-      this.form = {
-        path: '',
-        group: '',
-        description: ''
-      }
-    },
-    changeAuth(row) {
-      this.$prompt('请输入级别ID', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消'
+    async changeAuthority(row) {
+      const res = await setUserAuthority({
+        uuid: row.uuid,
+        authorityId: row.authority.authorityId
       })
-        .then(async ({ value }) => {
-          const res = await setUserAuthority({
-            uuid: row.uuid,
-            authorityId: value
-          })
-          if (res.success) {
-            this.$message({
-              type: 'success',
-              message: '设置成功'
-            })
-            this.getTableData()
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          })
-        })
+      if (res.success) {
+        this.$message({ type: 'success', message: '角色设置成功' })
+      }
     }
+  },
+  async created() {
+    const res = await getAuthorityList({ page: 1, pageSize: 999 })
+    this.authOptions = res.data.list
   }
 }
 </script>

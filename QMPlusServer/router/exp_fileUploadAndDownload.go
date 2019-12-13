@@ -6,7 +6,7 @@ import (
 	"main/middleware"
 )
 
-func InitFileUploadAndDownloadRouter(Router *gin.Engine)(R gin.IRoutes)  {
+func InitFileUploadAndDownloadRouter(Router *gin.RouterGroup) {
 	FileUploadAndDownloadGroup := Router.Group("fileUploadAndDownload").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	//.Use(middleware.JWTAuth())
 	{
@@ -14,5 +14,4 @@ func InitFileUploadAndDownloadRouter(Router *gin.Engine)(R gin.IRoutes)  {
 		FileUploadAndDownloadGroup.POST("/getFileList", api.GetFileList) // 获取上传文件列表
 		FileUploadAndDownloadGroup.POST("/deleteFile", api.DeleteFile)   // 删除指定文件
 	}
-	return FileUploadAndDownloadGroup
 }

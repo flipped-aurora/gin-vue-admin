@@ -9,7 +9,7 @@ import (
 )
 
 type CreateAuthorityPatams struct {
-	AuthorityId   string   `json:"authorityId"`
+	AuthorityId   string `json:"authorityId"`
 	AuthorityName string `json:"authorityName"`
 }
 
@@ -19,7 +19,7 @@ type CreateAuthorityPatams struct {
 // @accept application/json
 // @Produce application/json
 // @Param data body api.CreateAuthorityPatams true "创建角色"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
 	var auth sysModel.SysAuthority
@@ -46,7 +46,7 @@ type DeleteAuthorityPatams struct {
 // @accept application/json
 // @Produce application/json
 // @Param data body api.DeleteAuthorityPatams true "删除角色"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {
 	var a sysModel.SysAuthority
@@ -66,9 +66,9 @@ func DeleteAuthority(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body modelInterface.PageInfo true "分页获取用户列表"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/getAuthorityList [post]
-func GetAuthorityList(c *gin.Context){
+func GetAuthorityList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
 	_ = c.BindJSON(&pageInfo)
 	err, list, total := new(sysModel.SysAuthority).GetInfoList(pageInfo)
@@ -76,7 +76,7 @@ func GetAuthorityList(c *gin.Context){
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"list": list,
+			"list":     list,
 			"total":    total,
 			"page":     pageInfo.Page,
 			"pageSize": pageInfo.PageSize,
@@ -84,8 +84,6 @@ func GetAuthorityList(c *gin.Context){
 	}
 }
 
-
 type GetAuthorityId struct {
 	AuthorityId string `json:"authorityId"`
 }
-

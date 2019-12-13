@@ -27,6 +27,9 @@
     各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址，
     替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
     
+## 测试环境地址
+http://qmplus.henrongyi.top/
+
 ## 环境搭建教学视频
 
 腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html

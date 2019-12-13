@@ -23,7 +23,7 @@ type DeleteApiParams struct {
 // @accept application/json
 // @Produce application/json
 // @Param data body api.CreateApiParams true "创建api"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/createApi [post]
 func CreateApi(c *gin.Context) {
 	var api sysModel.SysApi
@@ -42,7 +42,7 @@ func CreateApi(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body sysModel.SysApi true "删除api"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/deleteApi [post]
 func DeleteApi(c *gin.Context) {
 	var a sysModel.SysApi
@@ -68,7 +68,7 @@ type AuthAndPathIn struct {
 // @accept application/json
 // @Produce application/json
 // @Param data body modelInterface.PageInfo true "分页获取API列表"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiList [post]
 func GetApiList(c *gin.Context) {
 	// 此结构体仅本方法使用
@@ -98,7 +98,7 @@ func GetApiList(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body modelInterface.PageInfo true "分页获取用户列表"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiById [post]
 func GetApiById(c *gin.Context) {
 	var idInfo GetById
@@ -120,7 +120,7 @@ func GetApiById(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body api.CreateApiParams true "创建api"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/updataApi [post]
 func UpdataApi(c *gin.Context) {
 	var api sysModel.SysApi
@@ -138,7 +138,7 @@ func UpdataApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getAllApis [post]
 func GetAllApis(c *gin.Context) {
 	err, apis := new(sysModel.SysApi).GetAllApis()

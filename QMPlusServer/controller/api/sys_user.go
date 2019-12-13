@@ -7,8 +7,8 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"main/controller/servers"
 	"main/middleware"
-	"main/model/sysModel"
 	"main/model/modelInterface"
+	"main/model/sysModel"
 	"mime/multipart"
 	"time"
 )
@@ -27,7 +27,7 @@ type RegistAndLoginStuct struct {
 // @Summary 用户注册账号
 // @Produce  application/json
 // @Param data body api.RegistAndLoginStuct true "用户注册接口"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"注册成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /base/regist [post]
 func Regist(c *gin.Context) {
 	var R RegistAndLoginStuct
@@ -50,7 +50,7 @@ func Regist(c *gin.Context) {
 // @Summary 用户登录
 // @Produce  application/json
 // @Param data body api.RegistAndLoginStuct true "用户登录接口"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"登陆成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
 	var L RegistAndLoginStuct
@@ -98,7 +98,7 @@ type ChangePasswordStutrc struct {
 // @Security ApiKeyAuth
 // @Produce  application/json
 // @Param data body api.ChangePasswordStutrc true "用户修改密码"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/changePassword [post]
 func ChangePassword(c *gin.Context) {
 	var params ChangePasswordStutrc
@@ -122,7 +122,7 @@ type UserHeaderImg struct {
 // @Produce  application/json
 // @Param headerImg formData file true "用户上传头像"
 // @Param username formData string true "用户上传头像"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"上传成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /user/uploadHeaderImg [post]
 func UploadHeaderImg(c *gin.Context) {
 	claims, _ := c.Get("claims")
@@ -157,7 +157,7 @@ func UploadHeaderImg(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body modelInterface.PageInfo true "分页获取用户列表"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserList [post]
 func GetUserList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
@@ -186,7 +186,7 @@ type SetUserAuth struct {
 // @accept application/json
 // @Produce application/json
 // @Param data body api.SetUserAuth true "设置用户权限"
-// @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthority [post]
 func SetUserAuthority(c *gin.Context) {
 	var sua SetUserAuth

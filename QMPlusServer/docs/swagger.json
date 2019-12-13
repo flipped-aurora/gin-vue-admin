@@ -23,7 +23,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "创建基础api",
                 "parameters": [
@@ -62,7 +62,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "删除指定api",
                 "parameters": [
@@ -73,7 +73,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.Api"
+                            "$ref": "#/definitions/sysModel.SysApi"
                         }
                     }
                 ],
@@ -101,7 +101,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "获取所有的Api 不分页",
                 "responses": {
@@ -128,7 +128,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "根据id获取api",
                 "parameters": [
@@ -167,7 +167,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "分页获取API列表",
                 "parameters": [
@@ -179,45 +179,6 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/modelInterface.PageInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/setAuthAndApi": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Api"
-                ],
-                "summary": "创建api和角色关系",
-                "parameters": [
-                    {
-                        "description": "创建api和角色关系",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.AuthAndPathIn"
                         }
                     }
                 ],
@@ -245,7 +206,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Api"
+                    "SysApi"
                 ],
                 "summary": "创建基础api",
                 "parameters": [
@@ -335,45 +296,6 @@
                         "schema": {
                             "type": "object",
                             "$ref": "#/definitions/api.DeleteAuthorityPatams"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/authority/getAuthAndApi": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "authority"
-                ],
-                "summary": "获取本角色所有有权限的apiId",
-                "parameters": [
-                    {
-                        "description": "获取本角色所有有权限的apiId",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.GetAuthorityId"
                         }
                     }
                 ],
@@ -488,6 +410,84 @@
                 }
             }
         },
+        "/casbin/casbinPUpdata": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "casbin"
+                ],
+                "summary": "更改角色api权限",
+                "parameters": [
+                    {
+                        "description": "更改角色api权限",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.CreateAuthorityPatams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/casbin/getPolicyPathByAuthorityId": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "casbin"
+                ],
+                "summary": "获取权限列表",
+                "parameters": [
+                    {
+                        "description": "获取权限列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/api.CreateAuthorityPatams"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/fileUploadAndDownload/deleteFile": {
             "post": {
                 "security": [
@@ -499,7 +499,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "FileUploadAndDownload"
+                    "ExaFileUploadAndDownload"
                 ],
                 "summary": "删除文件",
                 "parameters": [
@@ -510,7 +510,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.FileUploadAndDownload"
+                            "$ref": "#/definitions/dbModel.ExaFileUploadAndDownload"
                         }
                     }
                 ],
@@ -538,7 +538,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "FileUploadAndDownload"
+                    "ExaFileUploadAndDownload"
                 ],
                 "summary": "分页文件列表",
                 "parameters": [
@@ -577,7 +577,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "FileUploadAndDownload"
+                    "ExaFileUploadAndDownload"
                 ],
                 "summary": "上传文件示例",
                 "parameters": [
@@ -624,7 +624,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.BaseMenu"
+                            "$ref": "#/definitions/sysModel.SysBaseMenu"
                         }
                     }
                 ],
@@ -891,7 +891,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.BaseMenu"
+                            "$ref": "#/definitions/sysModel.SysBaseMenu"
                         }
                     }
                 ],
@@ -916,7 +916,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "SysUser"
                 ],
                 "summary": "用户修改密码",
                 "parameters": [
@@ -955,7 +955,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "SysUser"
                 ],
                 "summary": "分页获取用户列表",
                 "parameters": [
@@ -994,7 +994,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "SysUser"
                 ],
                 "summary": "设置用户权限",
                 "parameters": [
@@ -1033,7 +1033,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "User"
+                    "SysUser"
                 ],
                 "summary": "用户上传头像",
                 "parameters": [
@@ -1079,7 +1079,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.Workflow"
+                            "$ref": "#/definitions/sysModel.SysWorkflow"
                         }
                     }
                 ],
@@ -1104,22 +1104,8 @@
                 "menus": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dbModel.BaseMenu"
+                        "$ref": "#/definitions/sysModel.SysBaseMenu"
                     }
-                }
-            }
-        },
-        "api.AuthAndPathIn": {
-            "type": "object",
-            "properties": {
-                "apiIds": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "authorityId": {
-                    "type": "string"
                 }
             }
         },
@@ -1175,14 +1161,6 @@
                 }
             }
         },
-        "api.GetAuthorityId": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                }
-            }
-        },
         "api.GetById": {
             "type": "object",
             "properties": {
@@ -1221,7 +1199,35 @@
                 }
             }
         },
-        "dbModel.Api": {
+        "dbModel.ExaFileUploadAndDownload": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "tag": {
+                    "type": "string"
+                },
+                "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "modelInterface.PageInfo": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                }
+            }
+        },
+        "sysModel.SysApi": {
             "type": "object",
             "properties": {
                 "description": {
@@ -1235,13 +1241,13 @@
                 }
             }
         },
-        "dbModel.BaseMenu": {
+        "sysModel.SysBaseMenu": {
             "type": "object",
             "properties": {
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dbModel.BaseMenu"
+                        "$ref": "#/definitions/sysModel.SysBaseMenu"
                     }
                 },
                 "component": {
@@ -1265,29 +1271,15 @@
                 "path": {
                     "type": "string"
                 },
+                "sort": {
+                    "type": "string"
+                },
                 "title": {
                     "type": "string"
                 }
             }
         },
-        "dbModel.FileUploadAndDownload": {
-            "type": "object",
-            "properties": {
-                "key": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "tag": {
-                    "type": "string"
-                },
-                "url": {
-                    "type": "string"
-                }
-            }
-        },
-        "dbModel.Workflow": {
+        "sysModel.SysWorkflow": {
             "type": "object",
             "properties": {
                 "workflowDescription": {
@@ -1306,12 +1298,12 @@
                     "description": "工作流步骤",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/dbModel.WorkflowStepInfo"
+                        "$ref": "#/definitions/sysModel.SysWorkflowStepInfo"
                     }
                 }
             }
         },
-        "dbModel.WorkflowStepInfo": {
+        "sysModel.SysWorkflowStepInfo": {
             "type": "object",
             "properties": {
                 "isEnd": {
@@ -1333,16 +1325,9 @@
                 "stepNo": {
                     "description": "步骤id （第几步）",
                     "type": "number"
-                }
-            }
-        },
-        "modelInterface.PageInfo": {
-            "type": "object",
-            "properties": {
-                "page": {
-                    "type": "integer"
                 },
-                "pageSize": {
+                "workflowID": {
+                    "description": "所属工作流ID",
                     "type": "integer"
                 }
             }

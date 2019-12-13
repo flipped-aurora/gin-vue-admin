@@ -6,17 +6,8 @@ definitions:
         type: string
       menus:
         items:
-          $ref: '#/definitions/dbModel.BaseMenu'
+          $ref: '#/definitions/sysModel.SysBaseMenu'
         type: array
-    type: object
-  api.AuthAndPathIn:
-    properties:
-      apiIds:
-        items:
-          type: integer
-        type: array
-      authorityId:
-        type: string
     type: object
   api.AuthorityIdInfo:
     properties:
@@ -51,11 +42,6 @@ definitions:
       authorityId:
         type: integer
     type: object
-  api.GetAuthorityId:
-    properties:
-      authorityId:
-        type: string
-    type: object
   api.GetById:
     properties:
       id:
@@ -80,7 +66,25 @@ definitions:
       uuid:
         type: string
     type: object
-  dbModel.Api:
+  dbModel.ExaFileUploadAndDownload:
+    properties:
+      key:
+        type: string
+      name:
+        type: string
+      tag:
+        type: string
+      url:
+        type: string
+    type: object
+  modelInterface.PageInfo:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    type: object
+  sysModel.SysApi:
     properties:
       description:
         type: string
@@ -89,11 +93,11 @@ definitions:
       path:
         type: string
     type: object
-  dbModel.BaseMenu:
+  sysModel.SysBaseMenu:
     properties:
       children:
         items:
-          $ref: '#/definitions/dbModel.BaseMenu'
+          $ref: '#/definitions/sysModel.SysBaseMenu'
         type: array
       component:
         type: string
@@ -109,21 +113,12 @@ definitions:
         type: string
       path:
         type: string
+      sort:
+        type: string
       title:
         type: string
     type: object
-  dbModel.FileUploadAndDownload:
-    properties:
-      key:
-        type: string
-      name:
-        type: string
-      tag:
-        type: string
-      url:
-        type: string
-    type: object
-  dbModel.Workflow:
+  sysModel.SysWorkflow:
     properties:
       workflowDescription:
         description: 工作流描述
@@ -137,10 +132,10 @@ definitions:
       workflowStep:
         description: 工作流步骤
         items:
-          $ref: '#/definitions/dbModel.WorkflowStepInfo'
+          $ref: '#/definitions/sysModel.SysWorkflowStepInfo'
         type: array
     type: object
-  dbModel.WorkflowStepInfo:
+  sysModel.SysWorkflowStepInfo:
     properties:
       isEnd:
         description: 是否是完结流节点
@@ -157,12 +152,8 @@ definitions:
       stepNo:
         description: 步骤id （第几步）
         type: number
-    type: object
-  modelInterface.PageInfo:
-    properties:
-      page:
-        type: integer
-      pageSize:
+      workflowID:
+        description: 所属工作流ID
         type: integer
     type: object
 info:
@@ -195,7 +186,7 @@ paths:
       - ApiKeyAuth: []
       summary: 创建基础api
       tags:
-      - Api
+      - SysApi
   /api/deleteApi:
     post:
       consumes:
@@ -206,7 +197,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.Api'
+          $ref: '#/definitions/sysModel.SysApi'
           type: object
       produces:
       - application/json
@@ -219,7 +210,7 @@ paths:
       - ApiKeyAuth: []
       summary: 删除指定api
       tags:
-      - Api
+      - SysApi
   /api/getAllApis:
     post:
       consumes:
@@ -235,7 +226,7 @@ paths:
       - ApiKeyAuth: []
       summary: 获取所有的Api 不分页
       tags:
-      - Api
+      - SysApi
   /api/getApiById:
     post:
       consumes:
@@ -259,7 +250,7 @@ paths:
       - ApiKeyAuth: []
       summary: 根据id获取api
       tags:
-      - Api
+      - SysApi
   /api/getApiList:
     post:
       consumes:
@@ -283,31 +274,7 @@ paths:
       - ApiKeyAuth: []
       summary: 分页获取API列表
       tags:
-      - Api
-  /api/setAuthAndApi:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建api和角色关系
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/api.AuthAndPathIn'
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建api和角色关系
-      tags:
-      - Api
+      - SysApi
   /api/updataApi:
     post:
       consumes:
@@ -331,7 +298,7 @@ paths:
       - ApiKeyAuth: []
       summary: 创建基础api
       tags:
-      - Api
+      - SysApi
   /authority/createAuthority:
     post:
       consumes:
@@ -378,30 +345,6 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除角色
-      tags:
-      - authority
-  /authority/getAuthAndApi:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 获取本角色所有有权限的apiId
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/api.GetAuthorityId'
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 获取本角色所有有权限的apiId
       tags:
       - authority
   /authority/getAuthorityList:
@@ -468,6 +411,54 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
+  /casbin/casbinPUpdata:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更改角色api权限
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateAuthorityPatams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更改角色api权限
+      tags:
+      - casbin
+  /casbin/getPolicyPathByAuthorityId:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取权限列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateAuthorityPatams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取权限列表
+      tags:
+      - casbin
   /fileUploadAndDownload/deleteFile:
     post:
       parameters:
@@ -476,7 +467,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.FileUploadAndDownload'
+          $ref: '#/definitions/dbModel.ExaFileUploadAndDownload'
           type: object
       produces:
       - application/json
@@ -489,7 +480,7 @@ paths:
       - ApiKeyAuth: []
       summary: 删除文件
       tags:
-      - FileUploadAndDownload
+      - ExaFileUploadAndDownload
   /fileUploadAndDownload/getFileList:
     post:
       consumes:
@@ -513,7 +504,7 @@ paths:
       - ApiKeyAuth: []
       summary: 分页文件列表
       tags:
-      - FileUploadAndDownload
+      - ExaFileUploadAndDownload
   /fileUploadAndDownload/upload:
     post:
       consumes:
@@ -535,7 +526,7 @@ paths:
       - ApiKeyAuth: []
       summary: 上传文件示例
       tags:
-      - FileUploadAndDownload
+      - ExaFileUploadAndDownload
   /menu/addBaseMenu:
     post:
       consumes:
@@ -546,7 +537,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.BaseMenu'
+          $ref: '#/definitions/sysModel.SysBaseMenu'
           type: object
       produces:
       - application/json
@@ -710,7 +701,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.BaseMenu'
+          $ref: '#/definitions/sysModel.SysBaseMenu'
           type: object
       produces:
       - application/json
@@ -745,7 +736,7 @@ paths:
       - ApiKeyAuth: []
       summary: 用户修改密码
       tags:
-      - User
+      - SysUser
   /user/getUserList:
     post:
       consumes:
@@ -769,7 +760,7 @@ paths:
       - ApiKeyAuth: []
       summary: 分页获取用户列表
       tags:
-      - User
+      - SysUser
   /user/setUserAuthority:
     post:
       consumes:
@@ -793,7 +784,7 @@ paths:
       - ApiKeyAuth: []
       summary: 设置用户权限
       tags:
-      - User
+      - SysUser
   /user/uploadHeaderImg:
     post:
       consumes:
@@ -820,7 +811,7 @@ paths:
       - ApiKeyAuth: []
       summary: 用户上传头像
       tags:
-      - User
+      - SysUser
   /workflow/createWorkFlow:
     post:
       parameters:
@@ -829,7 +820,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.Workflow'
+          $ref: '#/definitions/sysModel.SysWorkflow'
           type: object
       produces:
       - application/json

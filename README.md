@@ -74,7 +74,7 @@
     3.go server建议使用goland运行 减少出错可能性
     4.前端项目node建议高于V8.6.0
     5.到前端项目目录下运行 npm i 安装所需依赖
-    6.依赖安装完成直接运行 npm run dev即可启动项目
+    6.依赖安装完成直接运行 npm run serve即可启动项目
     7.如果要使用swagger自动化文档 首先需要安装 swagger
 ````
 go get -u github.com/swaggo/swag/cmd/swag

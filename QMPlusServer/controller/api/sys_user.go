@@ -26,15 +26,13 @@ type RegistAndLoginStuct struct {
 // @Tags Base
 // @Summary 用户注册账号
 // @Produce  application/json
-// @Param data body api.RegistAndLoginStuct true "用户注册接口"
+// @Param data body sysModel.SysUser true "用户注册接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /base/regist [post]
 func Regist(c *gin.Context) {
-	var R RegistAndLoginStuct
+	var R sysModel.SysUser
 	_ = c.BindJSON(&R)
-
-	U := &sysModel.SysUser{Username: R.Username, Password: R.Password}
-	err, user := U.Regist()
+	err, user := R.Regist()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{
 			"user": user,

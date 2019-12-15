@@ -30,6 +30,7 @@ export const user = {
             state.token = ""
             state.expiresAt = ""
             router.push({ name: 'login', replace: true })
+            window.location.reload()
         },
         ResetUserInfo(state, userInfo = {}) {
             state.userInfo = {...state.userInfo,

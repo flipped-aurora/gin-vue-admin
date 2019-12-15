@@ -5,7 +5,7 @@
         :headers="{'x-token':token}"
         :on-success="handleAvatarSuccess"
         :show-file-list="false"
-        action="api/user/uploadHeaderImg"
+        :action="`${path}/user/uploadHeaderImg`"
         class="avatar-uploader"
         name="headerImg"
       >
@@ -24,8 +24,14 @@
 </template>
 <script>
 import { mapGetters, mapMutations } from 'vuex'
+const path = process.env.VUE_APP_BASE_API
 export default {
   name: 'Person',
+  data(){
+    return {
+      path:path
+    }
+  },
   computed: {
     ...mapGetters('user', ['userInfo', 'token'])
   },

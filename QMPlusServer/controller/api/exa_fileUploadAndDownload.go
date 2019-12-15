@@ -18,6 +18,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /fileUploadAndDownload/upload [post]
 func UploadFile(c *gin.Context) {
+	noSave := c.DefaultQuery("noSave","0")
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
@@ -34,7 +35,9 @@ func UploadFile(c *gin.Context) {
 			s := strings.Split(file.Name, ".")
 			file.Tag = s[len(s)-1]
 			file.Key = key
-			err := file.Upload()
+			if(noSave=="0"){
+				err = file.Upload()
+			}
 			if err != nil {
 				servers.ReportFormat(c, false, fmt.Sprintf("修改数据库链接失败，%v", err), gin.H{})
 			} else {

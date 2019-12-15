@@ -23,6 +23,14 @@ type RegistAndLoginStuct struct {
 	Password string `json:"password"`
 }
 
+type RegestStuct struct {
+	Username    string       `json:"userName"`
+	Password    string       `json:"passWord"`
+	NickName    string       `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg   string       `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
+	AuthorityId string       `json:"authorityId" gorm:"default:888"`
+}
+
 // @Tags Base
 // @Summary 用户注册账号
 // @Produce  application/json
@@ -30,9 +38,10 @@ type RegistAndLoginStuct struct {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /base/regist [post]
 func Regist(c *gin.Context) {
-	var R sysModel.SysUser
+	var R RegestStuct
 	_ = c.BindJSON(&R)
-	err, user := R.Regist()
+	user := &sysModel.SysUser{Username:R.Username,NickName:R.NickName,Password:R.Password,HeaderImg:R.HeaderImg,AuthorityId:R.AuthorityId}
+	err, user := user.Regist()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{
 			"user": user,

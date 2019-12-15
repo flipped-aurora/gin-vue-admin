@@ -1,12 +1,12 @@
 <template>
   <div>
     <el-upload
+      :action="`${path}/fileUploadAndDownload/upload`"
       :before-upload="checkFile"
       :headers="{'x-token':token}"
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="false"
-      action="/api/fileUploadAndDownload/upload"
     >
       <el-button size="small" type="primary">点击上传</el-button>
       <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
@@ -53,6 +53,7 @@
 </template>
    
 <script>
+const path = process.env.VUE_APP_BASE_API
 import { mapGetters } from 'vuex'
 import infoList from '@/components/mixins/infoList'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
@@ -65,6 +66,7 @@ export default {
     return {
       listApi: getFileList,
       listKey: 'list',
+      path: path,
       tableData: [
         {
           UpdatedAt: '2019-10-25',
@@ -96,7 +98,7 @@ export default {
   },
   methods: {
     async deleteFile(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+      this.$confirm('此操作将永久文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

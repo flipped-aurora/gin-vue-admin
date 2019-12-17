@@ -38,7 +38,7 @@
     <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" title="新增菜单">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="路由name">
-          <el-input autocomplete="off" v-model="form.path"></el-input>
+          <el-input autocomplete="off" placeholder="唯一英文字符串" v-model="form.path"></el-input>
         </el-form-item>
         <el-form-item label="是否隐藏">
           <el-select placeholder="是否在列表隐藏" v-model="form.hidden">

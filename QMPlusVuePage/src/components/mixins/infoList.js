@@ -25,7 +25,7 @@ export default {
             this.pageSize = table.data.pageSize
         }
     },
-    created() {
+    mounted() {
         this.getTableData()
     }
 

@@ -3,6 +3,8 @@
     <div class="button-box clearflex">
       <el-button @click="addMenu('0')" type="primary">新增根菜单</el-button>
     </div>
+
+    <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
     <el-table :data="tableData" border stripe row-key="ID">
       <el-table-column label="ID" min-width="100" prop="ID"></el-table-column>
       <el-table-column label="路由Name" min-width="160" prop="name"></el-table-column>
@@ -32,24 +34,11 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-      layout="total, sizes, prev, pager, next, jumper"
-    ></el-pagination>
 
     <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" title="新增菜单">
       <el-form :inline="true" :model="form" label-width="80px">
-        <el-form-item label="路径">
+        <el-form-item label="路由name">
           <el-input autocomplete="off" v-model="form.path"></el-input>
-        </el-form-item>
-        <el-form-item label="名称">
-          <el-input autocomplete="off" v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="是否隐藏">
           <el-select placeholder="是否在列表隐藏" v-model="form.hidden">
@@ -181,6 +170,7 @@ export default {
     // 添加menu
     async enterDialog() {
       let res
+      this.form.name = this.form.path
       if (this.isEdit) {
         res = await updataBaseMenu(this.form)
       } else {
@@ -213,6 +203,9 @@ export default {
       this.dialogFormVisible = true
       this.isEdit = true
     }
+  },
+  created(){
+    this.pageSize = 999
   }
 }
 </script>

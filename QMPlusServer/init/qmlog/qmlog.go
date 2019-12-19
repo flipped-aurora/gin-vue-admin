@@ -6,6 +6,7 @@ import (
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
+	"main/tools"
 	"os"
 	"time"
 )
@@ -19,6 +20,11 @@ func InitLog() *logrus.Logger{
 	}
 	QMLog.Out = src
 	QMLog.SetLevel(logrus.DebugLevel)
+	if ok, _ := tools.PathExists("./log"); !ok {
+		// Directory not exist
+		fmt.Println("Create log.")
+		os.Mkdir("log", os.ModePerm)
+	}
 	apiLogPath := "./log/api.log"
 	logWriter, err := rotatelogs.New(
 		apiLogPath+".%Y-%m-%d-%H-%M.log",

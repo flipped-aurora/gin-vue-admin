@@ -2,13 +2,13 @@ package api
 
 import (
 	"fmt"
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/middleware"
+	"gin-vue-admin/model/modelInterface"
+	"gin-vue-admin/model/sysModel"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
-	"main/controller/servers"
-	"main/middleware"
-	"main/model/modelInterface"
-	"main/model/sysModel"
 	"mime/multipart"
 	"time"
 )
@@ -24,11 +24,11 @@ type RegistAndLoginStuct struct {
 }
 
 type RegestStuct struct {
-	Username    string       `json:"userName"`
-	Password    string       `json:"passWord"`
-	NickName    string       `json:"nickName" gorm:"default:'QMPlusUser'"`
-	HeaderImg   string       `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
-	AuthorityId string       `json:"authorityId" gorm:"default:888"`
+	Username    string `json:"userName"`
+	Password    string `json:"passWord"`
+	NickName    string `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg   string `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
+	AuthorityId string `json:"authorityId" gorm:"default:888"`
 }
 
 // @Tags Base
@@ -40,7 +40,7 @@ type RegestStuct struct {
 func Regist(c *gin.Context) {
 	var R RegestStuct
 	_ = c.BindJSON(&R)
-	user := &sysModel.SysUser{Username:R.Username,NickName:R.NickName,Password:R.Password,HeaderImg:R.HeaderImg,AuthorityId:R.AuthorityId}
+	user := &sysModel.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
 	err, user := user.Regist()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{

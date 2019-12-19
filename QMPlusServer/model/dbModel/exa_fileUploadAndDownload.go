@@ -1,10 +1,10 @@
 package dbModel
 
 import (
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/init/qmsql"
+	"gin-vue-admin/model/modelInterface"
 	"github.com/jinzhu/gorm"
-	"main/controller/servers"
-	"main/init/qmsql"
-	"main/model/modelInterface"
 )
 
 type ExaFileUploadAndDownload struct {

@@ -3,17 +3,18 @@ package qmlog
 // 日志初始化包  调用qmlog.QMLog.Info 记录日志 24小时切割 日志保存7天 可自行设置
 import (
 	"fmt"
+	"gin-vue-admin/tools"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
-	"main/tools"
 	"os"
 	"time"
 )
 
 var QMLog = logrus.New()
+
 //禁止logrus的输出
-func InitLog() *logrus.Logger{
+func InitLog() *logrus.Logger {
 	src, err := os.OpenFile(os.DevNull, os.O_APPEND|os.O_WRONLY, os.ModeAppend)
 	if err != nil {
 		fmt.Println("err", err)

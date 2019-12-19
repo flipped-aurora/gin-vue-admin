@@ -1,9 +1,9 @@
 package registTable
 
 import (
+	"gin-vue-admin/model/dbModel"
+	"gin-vue-admin/model/sysModel"
 	"github.com/jinzhu/gorm"
-	"main/model/dbModel"
-	"main/model/sysModel"
 )
 
 //注册数据库表专用

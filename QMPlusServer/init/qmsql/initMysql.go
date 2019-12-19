@@ -1,10 +1,10 @@
 package qmsql
 
 import (
+	"gin-vue-admin/config"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
-	"main/config"
 )
 
 var DEFAULTDB *gorm.DB

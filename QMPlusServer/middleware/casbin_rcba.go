@@ -2,9 +2,9 @@ package middleware
 
 import (
 	"fmt"
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/model/sysModel"
 	"github.com/gin-gonic/gin"
-	"main/controller/servers"
-	"main/model/sysModel"
 )
 
 //拦截器
@@ -18,7 +18,7 @@ func CasbinHandler() gin.HandlerFunc {
 		act := c.Request.Method
 		//获取用户的角色
 		sub := waitUse.AuthorityId
-		e:=sysModel.Casbin()
+		e := sysModel.Casbin()
 		//判断策略中是否存在
 		if e.Enforce(sub, obj, act) {
 			c.Next()

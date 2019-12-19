@@ -1,8 +1,8 @@
 package sysModel
 
 import (
+	"gin-vue-admin/init/qmsql"
 	"github.com/jinzhu/gorm"
-	"main/init/qmsql"
 )
 
 //工作流属性表
@@ -11,13 +11,13 @@ type SysWorkflow struct {
 	WorkflowNickName    string                `json:"workflowNickName"`    // 工作流名称
 	WorkflowName        string                `json:"workflowName"`        // 工作流英文id
 	WorkflowDescription string                `json:"workflowDescription"` // 工作流描述
-	WorkflowStepInfo []SysWorkflowStepInfo `json:"workflowStep"`        // 工作流步骤
+	WorkflowStepInfo    []SysWorkflowStepInfo `json:"workflowStep"`        // 工作流步骤
 }
 
 // 工作流状态表
 type SysWorkflowStepInfo struct {
 	gorm.Model
-	SysWorkflowID      uint    `json:"workflowID"`      // 所属工作流ID
+	SysWorkflowID   uint    `json:"workflowID"`      // 所属工作流ID
 	IsStrat         bool    `json:"isStrat"`         // 是否是开始流节点
 	StepName        string  `json:"stepName"`        // 工作流名称
 	StepNo          float64 `json:"stepNo"`          // 步骤id （第几步）

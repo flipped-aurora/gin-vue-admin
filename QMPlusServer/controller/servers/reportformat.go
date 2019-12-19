@@ -1,8 +1,8 @@
 package servers
 
 import (
+	"gin-vue-admin/init/qmlog"
 	"github.com/gin-gonic/gin"
-	"main/init/qmlog"
 	"net/http"
 	"time"
 )

@@ -2,10 +2,10 @@ package api
 
 import (
 	"fmt"
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/model/modelInterface"
+	"gin-vue-admin/model/sysModel"
 	"github.com/gin-gonic/gin"
-	"main/controller/servers"
-	"main/model/modelInterface"
-	"main/model/sysModel"
 )
 
 type CreateAuthorityPatams struct {

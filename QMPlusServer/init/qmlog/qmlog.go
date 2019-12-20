@@ -24,7 +24,7 @@ func InitLog() *logrus.Logger {
 	if ok, _ := tools.PathExists("./log"); !ok {
 		// Directory not exist
 		fmt.Println("Create log.")
-		os.Mkdir("log", os.ModePerm)
+		_ = os.Mkdir("log", os.ModePerm)
 	}
 	apiLogPath := "./log/api.log"
 	logWriter, err := rotatelogs.New(

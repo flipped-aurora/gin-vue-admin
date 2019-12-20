@@ -17,7 +17,7 @@ type CasbinInReceive struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityPatams true "更改角色api权限"
+// @Param data body api.CreateAuthorityParams true "更改角色api权限"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/casbinPUpdata [post]
 func CasbinPUpdata(c *gin.Context) {
@@ -36,7 +36,7 @@ func CasbinPUpdata(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityPatams true "获取权限列表"
+// @Param data body api.CreateAuthorityParams true "获取权限列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 func GetPolicyPathByAuthorityId(c *gin.Context) {

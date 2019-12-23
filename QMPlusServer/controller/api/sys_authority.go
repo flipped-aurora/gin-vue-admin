@@ -2,13 +2,13 @@ package api
 
 import (
 	"fmt"
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/model/modelInterface"
+	"gin-vue-admin/model/sysModel"
 	"github.com/gin-gonic/gin"
-	"main/controller/servers"
-	"main/model/modelInterface"
-	"main/model/sysModel"
 )
 
-type CreateAuthorityPatams struct {
+type CreateAuthorityParams struct {
 	AuthorityId   string `json:"authorityId"`
 	AuthorityName string `json:"authorityName"`
 }
@@ -18,7 +18,7 @@ type CreateAuthorityPatams struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityPatams true "创建角色"
+// @Param data body api.CreateAuthorityParams true "创建角色"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {

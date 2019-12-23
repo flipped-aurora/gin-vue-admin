@@ -2,10 +2,10 @@ package api
 
 import (
 	"fmt"
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/model/dbModel"
+	"gin-vue-admin/model/modelInterface"
 	"github.com/gin-gonic/gin"
-	"main/controller/servers"
-	"main/model/dbModel"
-	"main/model/modelInterface"
 	"strings"
 )
 
@@ -18,7 +18,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /fileUploadAndDownload/upload [post]
 func UploadFile(c *gin.Context) {
-	noSave := c.DefaultQuery("noSave","0")
+	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
@@ -35,7 +35,7 @@ func UploadFile(c *gin.Context) {
 			s := strings.Split(file.Name, ".")
 			file.Tag = s[len(s)-1]
 			file.Key = key
-			if(noSave=="0"){
+			if noSave == "0" {
 				err = file.Upload()
 			}
 			if err != nil {

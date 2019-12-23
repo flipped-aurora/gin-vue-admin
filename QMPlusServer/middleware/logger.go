@@ -1,8 +1,8 @@
 package middleware
 
 import (
+	"gin-vue-admin/init/qmlog"
 	"github.com/gin-gonic/gin"
-	"main/init/qmlog"
 	"time"
 )
 

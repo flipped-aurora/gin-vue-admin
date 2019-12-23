@@ -256,7 +256,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityPatams"
+                            "$ref": "#/definitions/api.CreateAuthorityParams"
                         }
                     }
                 ],
@@ -396,7 +396,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegistAndLoginStuct"
+                            "$ref": "#/definitions/sysModel.SysUser"
                         }
                     }
                 ],
@@ -435,7 +435,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityPatams"
+                            "$ref": "#/definitions/api.CreateAuthorityParams"
                         }
                     }
                 ],
@@ -474,7 +474,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityPatams"
+                            "$ref": "#/definitions/api.CreateAuthorityParams"
                         }
                     }
                 ],
@@ -1142,7 +1142,7 @@
                 }
             }
         },
-        "api.CreateAuthorityPatams": {
+        "api.CreateAuthorityParams": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -1241,6 +1241,17 @@
                 }
             }
         },
+        "sysModel.SysAuthority": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "authorityName": {
+                    "type": "string"
+                }
+            }
+        },
         "sysModel.SysBaseMenu": {
             "type": "object",
             "properties": {
@@ -1275,6 +1286,30 @@
                     "type": "string"
                 },
                 "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "sysModel.SysUser": {
+            "type": "object",
+            "properties": {
+                "authority": {
+                    "type": "object",
+                    "$ref": "#/definitions/sysModel.SysAuthority"
+                },
+                "authorityId": {
+                    "type": "string"
+                },
+                "headerImg": {
+                    "type": "string"
+                },
+                "nickName": {
+                    "type": "string"
+                },
+                "userName": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }

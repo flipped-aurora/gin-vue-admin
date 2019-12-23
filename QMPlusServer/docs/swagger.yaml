@@ -30,7 +30,7 @@ definitions:
       path:
         type: string
     type: object
-  api.CreateAuthorityPatams:
+  api.CreateAuthorityParams:
     properties:
       authorityId:
         type: string
@@ -93,6 +93,13 @@ definitions:
       path:
         type: string
     type: object
+  sysModel.SysAuthority:
+    properties:
+      authorityId:
+        type: string
+      authorityName:
+        type: string
+    type: object
   sysModel.SysBaseMenu:
     properties:
       children:
@@ -116,6 +123,22 @@ definitions:
       sort:
         type: string
       title:
+        type: string
+    type: object
+  sysModel.SysUser:
+    properties:
+      authority:
+        $ref: '#/definitions/sysModel.SysAuthority'
+        type: object
+      authorityId:
+        type: string
+      headerImg:
+        type: string
+      nickName:
+        type: string
+      userName:
+        type: string
+      uuid:
         type: string
     type: object
   sysModel.SysWorkflow:
@@ -309,7 +332,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityPatams'
+          $ref: '#/definitions/api.CreateAuthorityParams'
           type: object
       produces:
       - application/json
@@ -399,7 +422,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegistAndLoginStuct'
+          $ref: '#/definitions/sysModel.SysUser'
           type: object
       produces:
       - application/json
@@ -421,7 +444,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityPatams'
+          $ref: '#/definitions/api.CreateAuthorityParams'
           type: object
       produces:
       - application/json
@@ -445,7 +468,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityPatams'
+          $ref: '#/definitions/api.CreateAuthorityParams'
           type: object
       produces:
       - application/json

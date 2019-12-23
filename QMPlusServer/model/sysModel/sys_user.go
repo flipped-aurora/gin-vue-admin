@@ -1,13 +1,13 @@
 package sysModel
 
 import (
+	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/init/qmsql"
+	"gin-vue-admin/model/modelInterface"
+	"gin-vue-admin/tools"
 	"github.com/jinzhu/gorm"
 	"github.com/pkg/errors"
 	uuid "github.com/satori/go.uuid"
-	"main/controller/servers"
-	"main/init/qmsql"
-	"main/model/modelInterface"
-	"main/tools"
 )
 
 type SysUser struct {
@@ -62,8 +62,8 @@ func (u *SysUser) Login() (err error, userInter *SysUser) {
 	var user SysUser
 	u.Password = tools.MD5V(u.Password)
 	err = qmsql.DEFAULTDB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Error
-	if(err!=nil){
-		return err,&user
+	if err != nil {
+		return err, &user
 	}
 	err = qmsql.DEFAULTDB.Where("authority_id = ?", user.AuthorityId).First(&user.Authority).Error
 	return err, &user

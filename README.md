@@ -108,8 +108,8 @@ swag init
 项目文件夹下面会有 doc文件夹出现
 这时候登录 localhost:8888/swagger/index.html
 就可以看到 swagger文档啦
-## 个人博客
-    http://www.henrongyi.top，内有前端框架教学视频，GOLANG基础入门视频正在筹备中。
+## 团队博客
+    https://blog.henrongyi.top，内有前端框架教学视频，GOLANG基础入门视频正在筹备中。
     如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994,欢迎您提出宝贵的需求。
  
 ## 最后

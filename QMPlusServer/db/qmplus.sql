@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 12/12/2019 17:35:13
+ Date: 26/12/2019 13:22:40
 */
 
 SET NAMES utf8mb4;
@@ -34,15 +34,6 @@ CREATE TABLE `casbin_rule`  (
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiById', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/deleteApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/updataApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getAllApis', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/createAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/deleteAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/getAuthorityList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/login', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/regist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/createApi', 'POST', '', '', '');
@@ -73,6 +64,36 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/getFileLis
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinPUpdata', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/login', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/regist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiById', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/deleteApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/updataApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getAllApis', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/createAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/deleteAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/getAuthorityList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenuList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/addBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuTree', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/addMenuAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenuAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/deleteBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/updataBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuById', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/changePassword', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/uploadHeaderImg', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getInfoList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getUserList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/setUserAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/upload', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/casbinPUpdata', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
 
 -- ----------------------------
 -- Table structure for ch_cities
@@ -3709,7 +3730,7 @@ CREATE TABLE `exa_file_upload_and_downloads`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_exa_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of exa_file_upload_and_downloads
@@ -3718,6 +3739,10 @@ INSERT INTO `exa_file_upload_and_downloads` VALUES (7, '2019-10-26 22:46:32', '2
 INSERT INTO `exa_file_upload_and_downloads` VALUES (10, '2019-10-26 23:10:44', '2019-10-26 23:10:44', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572102643logo.png', 'png', '1572102643logo.png');
 INSERT INTO `exa_file_upload_and_downloads` VALUES (12, '2019-10-26 23:14:08', '2019-10-26 23:14:08', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572102846logo.png', 'png', '1572102846logo.png');
 INSERT INTO `exa_file_upload_and_downloads` VALUES (13, '2019-10-26 23:18:17', '2019-10-26 23:18:17', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572103096logo.png', 'png', '1572103096logo.png');
+INSERT INTO `exa_file_upload_and_downloads` VALUES (15, '2019-12-15 14:31:00', '2019-12-15 14:31:00', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1576391451logo.png', 'png', '1576391451logo.png');
+INSERT INTO `exa_file_upload_and_downloads` VALUES (16, '2019-12-15 14:45:57', '2019-12-15 14:45:57', NULL, 'cjkz.png', 'http://qmplusimg.henrongyi.top/1576392350cjkz.png', 'png', '1576392350cjkz.png');
+INSERT INTO `exa_file_upload_and_downloads` VALUES (17, '2019-12-15 14:46:56', '2019-12-15 14:46:56', NULL, 'cjkz.png', 'http://qmplusimg.henrongyi.top/1576392408cjkz.png', 'png', '1576392408cjkz.png');
+INSERT INTO `exa_file_upload_and_downloads` VALUES (18, '2019-12-15 14:52:40', '2019-12-15 14:52:40', NULL, 'BasicsBg.png', 'http://qmplusimg.henrongyi.top/1576392751BasicsBg.png', 'png', '1576392751BasicsBg.png');
 
 -- ----------------------------
 -- Table structure for sys_apis
@@ -3782,17 +3807,18 @@ CREATE TABLE `sys_authorities`  (
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
   `authority_id` int(10) UNSIGNED NOT NULL,
   `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `parent_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `authority_id`(`authority_id`) USING BTREE,
   INDEX `idx_authorities_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_authorities_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_authorities
 -- ----------------------------
-INSERT INTO `sys_authorities` VALUES (2, '2019-09-08 16:18:45', '2019-09-08 16:18:45', NULL, 888, '普通用户');
-INSERT INTO `sys_authorities` VALUES (6, '2019-09-18 22:23:33', '2019-09-18 22:23:33', NULL, 9528, '测试角色');
+INSERT INTO `sys_authorities` VALUES (2, '2019-09-08 16:18:45', '2019-09-08 16:18:45', NULL, 888, '普通用户', '0');
+INSERT INTO `sys_authorities` VALUES (6, '2019-09-18 22:23:33', '2019-09-18 22:23:33', NULL, 9528, '测试角色', '0');
 
 -- ----------------------------
 -- Table structure for sys_base_menus
@@ -3816,7 +3842,7 @@ CREATE TABLE `sys_base_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_base_menus
@@ -3837,6 +3863,7 @@ INSERT INTO `sys_base_menus` VALUES (23, '2019-10-20 11:23:39', '2019-12-12 16:5
 INSERT INTO `sys_base_menus` VALUES (26, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 19, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载', '5');
 INSERT INTO `sys_base_menus` VALUES (29, '2019-12-04 10:05:57', '2019-12-12 16:51:39', '2019-12-12 17:00:50', 0, 0, 'workflow', 'workflow', 0, 'view/workflow/index.vue', '工作流', 'share', '工作流', '6');
 INSERT INTO `sys_base_menus` VALUES (30, '2019-12-04 10:06:36', '2019-12-04 10:06:36', '2019-12-12 17:00:48', 0, 29, 'workflowCreate', 'workflowCreate', 0, 'view/workflow/workflowCreate/workflowCreate', '创建工作流', '', '创建工作流', '1');
+INSERT INTO `sys_base_menus` VALUES (31, '2019-12-17 10:08:02', '2019-12-17 10:08:58', '2019-12-17 10:09:27', 0, 0, 'testtest', 'testtest', 0, 'view/test/index.vue', '测试menu', '', '测试menu', '8');
 
 -- ----------------------------
 -- Table structure for sys_menus
@@ -3862,39 +3889,39 @@ CREATE TABLE `sys_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 350 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 390 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_menus
 -- ----------------------------
 INSERT INTO `sys_menus` VALUES (231, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 999, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
 INSERT INTO `sys_menus` VALUES (232, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 999, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
-INSERT INTO `sys_menus` VALUES (247, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
-INSERT INTO `sys_menus` VALUES (248, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
-INSERT INTO `sys_menus` VALUES (249, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
-INSERT INTO `sys_menus` VALUES (250, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', NULL);
-INSERT INTO `sys_menus` VALUES (251, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
-INSERT INTO `sys_menus` VALUES (252, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 9528, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
-INSERT INTO `sys_menus` VALUES (253, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 9528, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
-INSERT INTO `sys_menus` VALUES (254, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 9528, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', NULL);
-INSERT INTO `sys_menus` VALUES (255, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 9528, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
-INSERT INTO `sys_menus` VALUES (256, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 9528, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
-INSERT INTO `sys_menus` VALUES (257, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 9528, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
-INSERT INTO `sys_menus` VALUES (258, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 9528, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
-INSERT INTO `sys_menus` VALUES (334, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
-INSERT INTO `sys_menus` VALUES (335, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
-INSERT INTO `sys_menus` VALUES (336, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
-INSERT INTO `sys_menus` VALUES (337, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', NULL);
-INSERT INTO `sys_menus` VALUES (338, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
-INSERT INTO `sys_menus` VALUES (339, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
-INSERT INTO `sys_menus` VALUES (340, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
-INSERT INTO `sys_menus` VALUES (341, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
-INSERT INTO `sys_menus` VALUES (342, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
-INSERT INTO `sys_menus` VALUES (343, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', NULL);
-INSERT INTO `sys_menus` VALUES (344, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
-INSERT INTO `sys_menus` VALUES (345, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
-INSERT INTO `sys_menus` VALUES (346, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
-INSERT INTO `sys_menus` VALUES (347, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
+INSERT INTO `sys_menus` VALUES (364, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
+INSERT INTO `sys_menus` VALUES (365, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (366, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
+INSERT INTO `sys_menus` VALUES (367, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
+INSERT INTO `sys_menus` VALUES (368, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 9528, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
+INSERT INTO `sys_menus` VALUES (369, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 9528, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
+INSERT INTO `sys_menus` VALUES (370, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 9528, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
+INSERT INTO `sys_menus` VALUES (371, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 9528, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
+INSERT INTO `sys_menus` VALUES (372, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 9528, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
+INSERT INTO `sys_menus` VALUES (373, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 9528, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
+INSERT INTO `sys_menus` VALUES (374, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 9528, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
+INSERT INTO `sys_menus` VALUES (375, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 9528, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
+INSERT INTO `sys_menus` VALUES (376, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
+INSERT INTO `sys_menus` VALUES (377, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (378, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
+INSERT INTO `sys_menus` VALUES (379, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
+INSERT INTO `sys_menus` VALUES (380, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
+INSERT INTO `sys_menus` VALUES (381, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
+INSERT INTO `sys_menus` VALUES (382, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
+INSERT INTO `sys_menus` VALUES (383, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
+INSERT INTO `sys_menus` VALUES (384, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
+INSERT INTO `sys_menus` VALUES (385, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
+INSERT INTO `sys_menus` VALUES (386, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
+INSERT INTO `sys_menus` VALUES (387, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
+INSERT INTO `sys_menus` VALUES (388, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
+INSERT INTO `sys_menus` VALUES (389, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
 
 -- ----------------------------
 -- Table structure for sys_users
@@ -3919,7 +3946,7 @@ CREATE TABLE `sys_users`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_users_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_users_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_users
@@ -3928,8 +3955,13 @@ INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03'
 INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
 INSERT INTO `sys_users` VALUES (12, '2019-09-13 17:28:56', '2019-09-13 17:28:56', NULL, 0x65373939636563362D346337662D343338632D383634372D376435633333393734353165, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
 INSERT INTO `sys_users` VALUES (13, '2019-09-13 17:29:26', '2019-09-13 17:29:26', NULL, 0x65653764353932322D323333312D343162632D393363322D613665366461306465343230, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
-INSERT INTO `sys_users` VALUES (14, '2019-09-13 17:29:28', '2019-09-13 17:29:28', NULL, 0x35623464333461322D343266352D343763352D613932642D613637616536643461643334, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
-INSERT INTO `sys_users` VALUES (15, '2019-09-13 17:31:16', '2019-12-11 17:16:19', NULL, 0x34306437393436612D363732382D346536662D396434302D313432356566653831363032, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a303146523', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (14, '2019-09-13 17:29:28', '2019-12-13 11:32:33', NULL, 0x35623464333461322D343266352D343763352D613932642D613637616536643461643334, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
+INSERT INTO `sys_users` VALUES (15, '2019-09-13 17:31:16', '2019-12-13 11:32:34', NULL, 0x34306437393436612D363732382D346536662D396434302D313432356566653831363032, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a303146523', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (16, '2019-12-15 14:52:43', '2019-12-15 14:52:43', NULL, 0x36633836363430392D343533612D343138342D613365322D343432373832323262323531, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'test123', '733d7be2196ff70efaf6913fc8bdcabf', NULL, NULL);
+INSERT INTO `sys_users` VALUES (17, '2019-12-15 14:56:10', '2019-12-15 14:56:10', NULL, 0x62396464313431382D643032372D346138652D623032382D313534336663313363316465, NULL, NULL, '测试测试', 'http://qmplusimg.henrongyi.top/1576392856logo.png', 888, NULL, 'test1232', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (18, '2019-12-15 14:56:40', '2019-12-15 14:56:40', NULL, 0x35653134386637642D646366342D343830362D383164392D316531363666356262373030, NULL, NULL, '测试一号', 'http://qmplusimg.henrongyi.top/1576392993avatar.png', 888, NULL, 'test1236544', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (19, '2019-12-15 14:57:41', '2019-12-15 14:57:41', NULL, 0x31363037636364322D326436342D343638642D616464352D653762363933646131353838, NULL, NULL, '测试用户100号', 'http://qmplusimg.henrongyi.top/1576393049deleteImg.png', 888, NULL, 'test11111', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (20, '2019-12-15 14:59:00', '2019-12-15 14:59:00', NULL, 0x31316236393437662D393361342D343066312D613061632D353838323634353337326635, NULL, NULL, '再注册一个就结束', 'http://qmplusimg.henrongyi.top/1576393127soucang.png', 9528, NULL, 'admin111', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_workflow_step_infos

@@ -1,0 +1,16 @@
+{
+  "mysqlAdmin": {
+    "username": "root",
+    "password": "Aa@6447985",
+    "path": "127.0.0.1:3306",
+    "dbname": "qmplus",
+    "config": "charset=utf8&parseTime=True&loc=Local"
+  },
+  "qiniu": {
+    "accessKey":"25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ",
+    "secretKey": "pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY"
+  },
+  "casbinConfig":{
+    "modelPath":"./static/rbacmodel/rbac_model.conf"
+  }
+}

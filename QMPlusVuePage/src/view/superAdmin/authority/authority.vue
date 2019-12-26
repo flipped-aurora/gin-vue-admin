@@ -1,7 +1,7 @@
 <template>
   <div class="authority">
     <div class="button-box clearflex">
-      <el-button @click="addAuthority" type="primary">新增角色</el-button>
+      <el-button @click="addAuthority('0')" type="primary">新增角色</el-button>
     </div>
     <el-table :data="tableData" border stripe>
       <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
@@ -11,23 +11,17 @@
         <template slot-scope="scope">
           <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
           <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
+          <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-      layout="total, sizes, prev, pager, next, jumper"
-    ></el-pagination>
 
     <!-- 新增角色弹窗 -->
     <el-dialog :visible.sync="dialogFormVisible" title="新增角色">
       <el-form :model="form">
+         <el-form-item label="父级角色ID">
+          <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
+        </el-form-item>
         <el-form-item label="角色ID">
           <el-input autocomplete="off" v-model="form.authorityId"></el-input>
         </el-form-item>
@@ -81,7 +75,8 @@ export default {
       apiDialogFlag: false,
       form: {
         authorityId: '',
-        authorityName: ''
+        authorityName: '',
+        parentId:'0'
       }
     }
   },
@@ -146,9 +141,13 @@ export default {
       this.dialogFormVisible = false
     },
     // 增加角色
-    addAuthority() {
+    addAuthority(parentId) {
+      this.form.parentId = parentId
       this.dialogFormVisible = true
     }
+  },
+  created(){
+    this.pageSize = 999
   }
 }
 </script>

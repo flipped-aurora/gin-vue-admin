@@ -3,17 +3,23 @@
     <div class="button-box clearflex">
       <el-button @click="addAuthority('0')" type="primary">新增角色</el-button>
     </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
-      <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
-      <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="500">
-        <template slot-scope="scope">
-          <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
-          <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
-          <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
-        </template>
-      </el-table-column>
+    <el-table
+            :data="tableData"
+            style="width: 100%"
+            row-key="ID"
+            border
+            stripe
+            :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+        <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
+        <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
+        <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
+        <el-table-column fixed="right" label="操作" width="500">
+            <template slot-scope="scope">
+                <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
+                <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
+                <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
+            </template>
+        </el-table-column>
     </el-table>
 
     <!-- 新增角色弹窗 -->

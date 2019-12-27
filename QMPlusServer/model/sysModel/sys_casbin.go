@@ -2,6 +2,7 @@ package sysModel
 
 import (
 	"errors"
+	"gin-vue-admin/config"
 	"gin-vue-admin/init/qmsql"
 	"github.com/casbin/casbin"
 	gormadapter "github.com/casbin/gorm-adapter"
@@ -83,7 +84,7 @@ func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 //持久化到数据库  引入自定义规则
 func Casbin() *casbin.Enforcer {
 	a := gormadapter.NewAdapterByDB(qmsql.DEFAULTDB)
-	e := casbin.NewEnforcer("./static/rbacmodel/rbac_model.conf", a)
+	e := casbin.NewEnforcer(config.GinVueAdminconfig.CasbinConfig.ModelPath, a)
 	e.AddFunction("ParamsMatch", ParamsMatchFunc)
 	e.LoadPolicy()
 	return e

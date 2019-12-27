@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="fullscreenLoading">
     <el-upload
       :action="`${path}/fileUploadAndDownload/upload`"
       :before-upload="checkFile"
@@ -64,6 +64,7 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      fullscreenLoading:false,
       listApi: getFileList,
       listKey: 'list',
       path: path,
@@ -121,14 +122,17 @@ export default {
         })
     },
     checkFile(file) {
+      this.fullscreenLoading = true
       const isJPG = file.type === 'image/jpeg'
       const isPng = file.type === 'image/png'
       const isLt2M = file.size / 1024 / 1024 < 2
       if (!isJPG && !isPng) {
         this.$message.error('上传头像图片只能是 JPG或png 格式!')
+        this.fullscreenLoading = false
       }
       if (!isLt2M) {
         this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.fullscreenLoading = false
       }
       return (isPng || isJPG) && isLt2M
     },
@@ -140,12 +144,15 @@ export default {
       if (res.success) {
         this.getTableData()
       }
+        this.fullscreenLoading = false
     },
     uploadError() {
       this.$message({
         type: 'error',
         message: '上传失败'
       })
+        this.fullscreenLoading = false
+
     },
     downloadFile(row) {
       downloadImage(row.url, row.name)

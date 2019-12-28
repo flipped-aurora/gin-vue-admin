@@ -20,12 +20,12 @@ import (
 // @BasePath /
 
 func main() {
-	qmlog.InitLog()                              // 初始化日志
-	db := qmsql.InitMysql(config.Dbconfig.Admin) // 链接初始化数据库
-	registTable.RegistTable(db)                  //注册数据库表
-	defer qmsql.DEFAULTDB.Close()                // 程序结束前关闭数据库链接
-	Router := initRouter.InitRouter()            //注册路由
-	qmlog.QMLog.Info("服务器开启")                    // 日志测试代码
+	qmlog.InitLog()                                            // 初始化日志
+	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin) // 链接初始化数据库
+	registTable.RegistTable(db)                                //注册数据库表
+	defer qmsql.DEFAULTDB.Close()                              // 程序结束前关闭数据库链接
+	Router := initRouter.InitRouter()                          //注册路由
+	qmlog.QMLog.Info("服务器开启")                                  // 日志测试代码
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	s := &http.Server{
 		Addr:           ":8888",

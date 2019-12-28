@@ -29,9 +29,9 @@ type SysUser struct {
 func (u *SysUser) Regist() (err error, userInter *SysUser) {
 	var user SysUser
 	//判断用户名是否注册
-	findErr := qmsql.DEFAULTDB.Where("username = ?", u.Username).First(&user).Error
-	//err为nil表明读取到了 不能注册
-	if findErr == nil {
+	notResigt := qmsql.DEFAULTDB.Where("username = ?", u.Username).First(&user).RecordNotFound()
+	//notResigt为false表明读取到了 不能注册
+	if !notResigt {
 		return errors.New("用户名已注册"), nil
 	} else {
 		// 否则 附加uuid 密码md5简单加密 注册

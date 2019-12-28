@@ -3,6 +3,7 @@ package middleware
 import (
 	"errors"
 	"gin-vue-admin/controller/servers"
+	"gin-vue-admin/model/sysModel"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
@@ -13,8 +14,18 @@ func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localSstorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
 		token := c.Request.Header.Get("x-token")
+		ModelToken := sysModel.JwtBlacklist{
+			Jwt:token,
+		}
 		if token == "" {
 			servers.ReportFormat(c, false, "未登录或非法访问", gin.H{
+				"reload": true,
+			})
+			c.Abort()
+			return
+		}
+		if ModelToken.IsBlacklist(token){
+			servers.ReportFormat(c, false, "授权已失效", gin.H{
 				"reload": true,
 			})
 			c.Abort()
@@ -135,3 +146,4 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	}
 	return "", TokenInvalid
 }
+

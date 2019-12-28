@@ -10,8 +10,10 @@ import (
 
 type SysAuthority struct {
 	gorm.Model
-	AuthorityId   string `json:"authorityId" gorm:"not null;unique"`
-	AuthorityName string `json:"authorityName"`
+	AuthorityId   string         `json:"authorityId" gorm:"not null;unique"`
+	AuthorityName string         `json:"authorityName"`
+	ParentId      string         `json:"parentId"`
+	Children      []SysAuthority `json:"children"`
 }
 
 // 创建角色
@@ -24,8 +26,13 @@ func (a *SysAuthority) CreateAuthority() (err error, authority *SysAuthority) {
 func (a *SysAuthority) DeleteAuthority() (err error) {
 	err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).Find(&SysUser{}).Error
 	if err != nil {
-		err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Error
-		new(CasbinModel).clearCasbin(0, a.AuthorityId)
+		err = qmsql.DEFAULTDB.Where("parentId = ?", a.AuthorityId).Find(&SysAuthority{}).Error
+		if err != nil {
+			err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Error
+			new(CasbinModel).clearCasbin(0, a.AuthorityId)
+		} else {
+			err = errors.New("此角色存在子角色不允许删除")
+		}
 	} else {
 		err = errors.New("此角色有用户正在使用禁止删除")
 	}
@@ -40,7 +47,22 @@ func (a *SysAuthority) GetInfoList(info modelInterface.PageInfo) (err error, lis
 		return
 	} else {
 		var authority []SysAuthority
-		err = db.Find(&authority).Error
+		err = db.Where("parent_id = 0").Find(&authority).Error
+		if len(authority) > 0 {
+			for k, _ := range authority {
+				err = findChildrenAuthority(&authority[k])
+			}
+		}
 		return err, authority, total
 	}
+}
+
+func findChildrenAuthority(authority *SysAuthority) (err error) {
+	err = qmsql.DEFAULTDB.Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
+	if len(authority.Children) > 0 {
+		for k, _ := range authority.Children {
+			err = findChildrenAuthority(&authority.Children[k])
+		}
+	}
+	return err
 }

@@ -2,27 +2,35 @@ package middleware
 
 import (
 	"bytes"
+	"gin-vue-admin/init/qmlog"
 	"net/http/httputil"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"qiniupkg.com/x/log.v7"
 )
 
 func Logger() gin.HandlerFunc {
+	log := qmlog.QMLog
 	return func(c *gin.Context) {
 		// request time
 		start := time.Now()
 		// request path
 		path := c.Request.URL.Path
+		logFlag := true
+		if strings.Contains(path, "swagger") {
+			logFlag = false
+		}
 		// request ip
 		clientIP := c.ClientIP()
 		// method
 		method := c.Request.Method
 		// copy request content
 		req, _ := httputil.DumpRequest(c.Request, true)
-		log.Infof(`| %s | %s | %s | %5s | %s\n`,
-			`Request :`, method, clientIP, path, string(req))
+		if logFlag {
+			log.Infof(`| %s | %s | %s | %5s | %s\n`,
+				`Request :`, method, clientIP, path, string(req))
+		}
 		// replace writer
 		cusWriter := &responseBodyWriter{
 			ResponseWriter: c.Writer,
@@ -36,12 +44,13 @@ func Logger() gin.HandlerFunc {
 		//execute time
 		latency := end.Sub(start)
 		statusCode := c.Writer.Status()
-
-		log.Infof(`| %s | %3d | %13v | %s \n`,
-			`Response:`,
-			statusCode,
-			latency,
-			cusWriter.body.String())
+		if logFlag {
+			log.Infof(`| %s | %3d | %13v | %s \n`,
+				`Response:`,
+				statusCode,
+				latency,
+				cusWriter.body.String())
+		}
 	}
 }
 

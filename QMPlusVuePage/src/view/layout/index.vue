@@ -51,7 +51,7 @@
 
 <script>
 import Aside from '@/view/layout/aside'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Layout',
   data() {
@@ -63,7 +63,7 @@ export default {
     Aside
   },
   methods: {
-    ...mapMutations('user', ['LoginOut']),
+    ...mapActions('user', ['LoginOut']),
     totalCollapse() {
       this.isCollapse = !this.isCollapse
       this.$bus.emit('totalCollapse')

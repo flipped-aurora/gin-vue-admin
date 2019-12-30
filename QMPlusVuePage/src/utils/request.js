@@ -61,11 +61,13 @@ service.interceptors.response.use(
             Message({
                 showClose: true,
                 message: response.data.msg,
-                type: 'error'
+                type: 'error',
+                onClose: () => {
+                    if (response.data.data && response.data.data.reload) {
+                        store.commit('user/LoginOut')
+                    }
+                }
             })
-            if (response.data.data && response.data.data.reload) {
-                store.commit('user/LoginOut')
-            }
             return Promise.reject(response.data.msg)
         }
     },

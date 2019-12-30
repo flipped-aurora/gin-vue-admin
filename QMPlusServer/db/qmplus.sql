@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : qmplus
+ Source Server         : zhongrongze
  Source Server Type    : MySQL
  Source Server Version : 50644
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 26/12/2019 13:22:40
+ Date: 28/12/2019 18:34:34
 */
 
 SET NAMES utf8mb4;
@@ -34,36 +34,6 @@ CREATE TABLE `casbin_rule`  (
 -- ----------------------------
 -- Records of casbin_rule
 -- ----------------------------
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/login', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/regist', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/createApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getApiList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getApiById', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/deleteApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/updataApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getAllApis', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/authority/createAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/authority/deleteAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/authority/getAuthorityList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getMenuList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/addBaseMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getBaseMenuTree', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/addMenuAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getMenuAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/deleteBaseMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/updataBaseMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getBaseMenuById', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/changePassword', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/uploadHeaderImg', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/getInfoList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/getUserList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/setUserAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/upload', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinPUpdata', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/login', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/regist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
@@ -94,6 +64,38 @@ INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/getFileLi
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/casbinPUpdata', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/jwt/jsonInBlacklist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/login', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/regist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/createApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getApiList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getApiById', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/deleteApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/updataApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getAllApis', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/authority/createAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/authority/deleteAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/authority/getAuthorityList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getMenuList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/addBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getBaseMenuTree', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/addMenuAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getMenuAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/deleteBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/updataBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getBaseMenuById', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/changePassword', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/uploadHeaderImg', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/getInfoList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/getUserList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/setUserAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/upload', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinPUpdata', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 
 -- ----------------------------
 -- Table structure for ch_cities
@@ -3730,7 +3732,7 @@ CREATE TABLE `exa_file_upload_and_downloads`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_exa_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of exa_file_upload_and_downloads
@@ -3740,9 +3742,27 @@ INSERT INTO `exa_file_upload_and_downloads` VALUES (10, '2019-10-26 23:10:44', '
 INSERT INTO `exa_file_upload_and_downloads` VALUES (12, '2019-10-26 23:14:08', '2019-10-26 23:14:08', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572102846logo.png', 'png', '1572102846logo.png');
 INSERT INTO `exa_file_upload_and_downloads` VALUES (13, '2019-10-26 23:18:17', '2019-10-26 23:18:17', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1572103096logo.png', 'png', '1572103096logo.png');
 INSERT INTO `exa_file_upload_and_downloads` VALUES (15, '2019-12-15 14:31:00', '2019-12-15 14:31:00', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1576391451logo.png', 'png', '1576391451logo.png');
-INSERT INTO `exa_file_upload_and_downloads` VALUES (16, '2019-12-15 14:45:57', '2019-12-15 14:45:57', NULL, 'cjkz.png', 'http://qmplusimg.henrongyi.top/1576392350cjkz.png', 'png', '1576392350cjkz.png');
-INSERT INTO `exa_file_upload_and_downloads` VALUES (17, '2019-12-15 14:46:56', '2019-12-15 14:46:56', NULL, 'cjkz.png', 'http://qmplusimg.henrongyi.top/1576392408cjkz.png', 'png', '1576392408cjkz.png');
-INSERT INTO `exa_file_upload_and_downloads` VALUES (18, '2019-12-15 14:52:40', '2019-12-15 14:52:40', NULL, 'BasicsBg.png', 'http://qmplusimg.henrongyi.top/1576392751BasicsBg.png', 'png', '1576392751BasicsBg.png');
+
+-- ----------------------------
+-- Table structure for jwt_blacklists
+-- ----------------------------
+DROP TABLE IF EXISTS `jwt_blacklists`;
+CREATE TABLE `jwt_blacklists`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `jwt` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_jwt_blacklists_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of jwt_blacklists
+-- ----------------------------
+INSERT INTO `jwt_blacklists` VALUES (3, '2019-12-28 18:29:05', '2019-12-28 18:29:05', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4MTMzNzM2LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1Nzc1Mjc5MzZ9.T7ikGw-lgAAQlfMne7zPIF-PlfQMg37uBCYJ24Y_B38');
+INSERT INTO `jwt_blacklists` VALUES (4, '2019-12-28 18:31:02', '2019-12-28 18:31:02', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4MTMzODUzLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1Nzc1MjgwNTN9.tDzUm4KNFeJCErNfZGfuF2tcuolga2f_2dE0nTl_UZU');
+INSERT INTO `jwt_blacklists` VALUES (5, '2019-12-28 18:31:25', '2019-12-28 18:31:25', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4MTMzODcwLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1Nzc1MjgwNzB9.mspXy9sqQO_5PusPReLalodo_ybWRKxb3Ownf2r2HxE');
 
 -- ----------------------------
 -- Table structure for sys_apis
@@ -3760,7 +3780,7 @@ CREATE TABLE `sys_apis`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 36 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_apis
@@ -3795,6 +3815,7 @@ INSERT INTO `sys_apis` VALUES (31, '2019-10-26 20:14:59', '2019-10-26 20:14:59',
 INSERT INTO `sys_apis` VALUES (32, '2019-12-12 13:28:47', '2019-12-12 13:28:47', NULL, NULL, '/casbin/casbinPUpdata', '更改角色api权限', 'casbin');
 INSERT INTO `sys_apis` VALUES (33, '2019-12-12 13:28:59', '2019-12-12 13:28:59', NULL, NULL, '/casbin/getPolicyPathByAuthorityId', '获取权限列表', 'casbin');
 INSERT INTO `sys_apis` VALUES (34, '2019-12-12 17:02:15', '2019-12-12 17:02:15', NULL, NULL, '/fileUploadAndDownload/deleteFile', '删除文件', 'fileUploadAndDownload');
+INSERT INTO `sys_apis` VALUES (35, '2019-12-28 18:18:07', '2019-12-28 18:18:07', NULL, NULL, '/jwt/jsonInBlacklist', 'jwt加入黑名单', 'jwt');
 
 -- ----------------------------
 -- Table structure for sys_authorities
@@ -3812,13 +3833,14 @@ CREATE TABLE `sys_authorities`  (
   UNIQUE INDEX `authority_id`(`authority_id`) USING BTREE,
   INDEX `idx_authorities_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_authorities_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_authorities
 -- ----------------------------
 INSERT INTO `sys_authorities` VALUES (2, '2019-09-08 16:18:45', '2019-09-08 16:18:45', NULL, 888, '普通用户', '0');
 INSERT INTO `sys_authorities` VALUES (6, '2019-09-18 22:23:33', '2019-09-18 22:23:33', NULL, 9528, '测试角色', '0');
+INSERT INTO `sys_authorities` VALUES (8, '2019-12-28 18:19:13', '2019-12-28 18:19:13', NULL, 8881, '普通用户子角色', '888');
 
 -- ----------------------------
 -- Table structure for sys_base_menus
@@ -3952,16 +3974,7 @@ CREATE TABLE `sys_users`  (
 -- Records of sys_users
 -- ----------------------------
 INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
-INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
-INSERT INTO `sys_users` VALUES (12, '2019-09-13 17:28:56', '2019-09-13 17:28:56', NULL, 0x65373939636563362D346337662D343338632D383634372D376435633333393734353165, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
-INSERT INTO `sys_users` VALUES (13, '2019-09-13 17:29:26', '2019-09-13 17:29:26', NULL, 0x65653764353932322D323333312D343162632D393363322D613665366461306465343230, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
-INSERT INTO `sys_users` VALUES (14, '2019-09-13 17:29:28', '2019-12-13 11:32:33', NULL, 0x35623464333461322D343266352D343763352D613932642D613637616536643461643334, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
-INSERT INTO `sys_users` VALUES (15, '2019-09-13 17:31:16', '2019-12-13 11:32:34', NULL, 0x34306437393436612D363732382D346536662D396434302D313432356566653831363032, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 888, NULL, 'a303146523', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
-INSERT INTO `sys_users` VALUES (16, '2019-12-15 14:52:43', '2019-12-15 14:52:43', NULL, 0x36633836363430392D343533612D343138342D613365322D343432373832323262323531, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'test123', '733d7be2196ff70efaf6913fc8bdcabf', NULL, NULL);
-INSERT INTO `sys_users` VALUES (17, '2019-12-15 14:56:10', '2019-12-15 14:56:10', NULL, 0x62396464313431382D643032372D346138652D623032382D313534336663313363316465, NULL, NULL, '测试测试', 'http://qmplusimg.henrongyi.top/1576392856logo.png', 888, NULL, 'test1232', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
-INSERT INTO `sys_users` VALUES (18, '2019-12-15 14:56:40', '2019-12-15 14:56:40', NULL, 0x35653134386637642D646366342D343830362D383164392D316531363666356262373030, NULL, NULL, '测试一号', 'http://qmplusimg.henrongyi.top/1576392993avatar.png', 888, NULL, 'test1236544', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
-INSERT INTO `sys_users` VALUES (19, '2019-12-15 14:57:41', '2019-12-15 14:57:41', NULL, 0x31363037636364322D326436342D343638642D616464352D653762363933646131353838, NULL, NULL, '测试用户100号', 'http://qmplusimg.henrongyi.top/1576393049deleteImg.png', 888, NULL, 'test11111', 'd41d8cd98f00b204e9800998ecf8427e', NULL, NULL);
-INSERT INTO `sys_users` VALUES (20, '2019-12-15 14:59:00', '2019-12-15 14:59:00', NULL, 0x31316236393437662D393361342D343066312D613061632D353838323634353337326635, NULL, NULL, '再注册一个就结束', 'http://qmplusimg.henrongyi.top/1576393127soucang.png', 9528, NULL, 'admin111', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 9528, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_workflow_step_infos

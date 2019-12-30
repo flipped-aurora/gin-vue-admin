@@ -1,4 +1,5 @@
 import { login } from '@/api/user'
+import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 export const user = {
     namespaced: true,
@@ -51,6 +52,12 @@ export const user = {
                 } else {
                     router.push({ path: '/layout/dashbord' })
                 }
+            }
+        },
+        async LoginOut({ commit }) {
+            const res = await jsonInBlacklist()
+            if (res.success) {
+                commit("LoginOut")
             }
         }
     },

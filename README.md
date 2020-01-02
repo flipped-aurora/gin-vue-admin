@@ -63,8 +63,9 @@ http://qmplus.henrongyi.top/
     7.前端分页mixin封装 分页方法调用mixins即可 √
     8.图片上传前端下载功能 √ <后端下载功能开发中>
     9.增加条件搜索示例 前端文件参考src\view\superAdmin\api\api.vue 后台文件参考 model\dnModel\api.go √
-    10...看项目进度想到什么做什么,主要目的是方便各位快速接私活，完成项目基础功能
-    11.各位开发者可以在issues提出自己工作中遇到的重复性大或者实现复杂的需求，我尽可能提供示例代码。
+    10.增加了多点登录限制 体验需要再 static\config中 把 system中的useMultipoint 修改为 true(需要自行配置redis和config中的redis参数)(测试阶段，有bug请及时反馈)
+    11...看项目进度想到什么做什么,主要目的是方便各位快速接私活，完成项目基础功能
+    12.各位开发者可以在issues提出自己工作中遇到的重复性大或者实现复杂的需求，我尽可能提供示例代码。
 ## 计划任务
     1.富文本编辑器，MarkDown编辑器功能嵌入
     2.导入，导出Excel
@@ -111,7 +112,28 @@ swag init
 ## 团队博客
     https://blog.henrongyi.top，内有前端框架教学视频，GOLANG基础入门视频正在筹备中。
     如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994,欢迎您提出宝贵的需求。
- 
+## docker镜像
+   感谢 [@chenlinzhong](https://github.com/chenlinzhong)提供docker镜像
+   
+      #启动容器
+      docker run -itd --net=host --name=go_container shareclz/go_node /bin/bash;
+      
+      #进入容器
+      docker exec -it go_container /bin/bash;
+      git clone https://github.com/piexlmax/gin-vue-admin.git /data1/www/htdocs/go/admin;
+      
+      #启动前端
+      cd /data1/www/htdocs/go/admin/QMPlusVuePage;
+      cnpm i ;
+      npm run serve;
+      
+      #修改数据库配置
+      vi /data1/www/htdocs/go/admin/QMPlusServer/static/dbconfig/config.json;
+      
+      #启动后端
+      cd /data1/www/htdocs/go/admin/QMPlusServer;
+      go run main.go;
+
 ## 最后
     正在研发前端独立版本分支...可以不依赖go服务进行使用的后台模板
     感谢krank666协同开发

@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"gin-vue-admin/config"
 	"gin-vue-admin/controller/servers"
 	"gin-vue-admin/model/sysModel"
 	"github.com/dgrijalva/jwt-go"
@@ -15,7 +16,7 @@ func JWTAuth() gin.HandlerFunc {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localSstorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
 		token := c.Request.Header.Get("x-token")
 		ModelToken := sysModel.JwtBlacklist{
-			Jwt:token,
+			Jwt: token,
 		}
 		if token == "" {
 			servers.ReportFormat(c, false, "未登录或非法访问", gin.H{
@@ -24,7 +25,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if ModelToken.IsBlacklist(token){
+		if ModelToken.IsBlacklist(token) {
 			servers.ReportFormat(c, false, "授权已失效", gin.H{
 				"reload": true,
 			})
@@ -58,11 +59,10 @@ type JWT struct {
 }
 
 var (
-	TokenExpired     error  = errors.New("Token is expired")
-	TokenNotValidYet error  = errors.New("Token not active yet")
-	TokenMalformed   error  = errors.New("That's not even a token")
-	TokenInvalid     error  = errors.New("Couldn't handle this token:")
-	SignKey          string = "qmPlus"
+	TokenExpired     error = errors.New("Token is expired")
+	TokenNotValidYet error = errors.New("Token not active yet")
+	TokenMalformed   error = errors.New("That's not even a token")
+	TokenInvalid     error = errors.New("Couldn't handle this token:")
 )
 
 type CustomClaims struct {
@@ -75,19 +75,8 @@ type CustomClaims struct {
 
 func NewJWT() *JWT {
 	return &JWT{
-		[]byte(GetSignKey()),
+		[]byte(config.GinVueAdminconfig.JWT.SigningKey),
 	}
-}
-
-//获取token
-func GetSignKey() string {
-	return SignKey
-}
-
-// 这是SignKey
-func SetSignKey(key string) string {
-	SignKey = key
-	return SignKey
 }
 
 //创建一个token
@@ -146,4 +135,3 @@ func (j *JWT) RefreshToken(tokenString string) (string, error) {
 	}
 	return "", TokenInvalid
 }
-

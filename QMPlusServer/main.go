@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gin-vue-admin/config"
+	"gin-vue-admin/init/initRedis"
 	"gin-vue-admin/init/initRouter"
 	"gin-vue-admin/init/qmlog"
 	"gin-vue-admin/init/qmsql"
@@ -22,10 +23,13 @@ import (
 func main() {
 	qmlog.InitLog()                                            // 初始化日志
 	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin) // 链接初始化数据库
-	registTable.RegistTable(db)                                //注册数据库表
-	defer qmsql.DEFAULTDB.Close()                              // 程序结束前关闭数据库链接
-	Router := initRouter.InitRouter()                          //注册路由
-	qmlog.QMLog.Info("服务器开启")                                  // 日志测试代码
+	if config.GinVueAdminconfig.System.UseMultipoint {
+		_ = initRedis.InitRedis() // 初始化redis服务
+	}
+	registTable.RegistTable(db)       //注册数据库表
+	defer qmsql.DEFAULTDB.Close()     // 程序结束前关闭数据库链接
+	Router := initRouter.InitRouter() //注册路由
+	qmlog.QMLog.Info("服务器开启")         // 日志测试代码
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	s := &http.Server{
 		Addr:           ":8888",

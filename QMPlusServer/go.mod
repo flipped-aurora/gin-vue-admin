@@ -10,6 +10,7 @@ require (
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.7
 	github.com/gin-gonic/gin v1.4.0
+	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jinzhu/gorm v1.9.10
 	github.com/lestrrat/go-envload v0.0.0-20180220120943-6ed08b54a570 // indirect

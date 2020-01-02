@@ -10,7 +10,20 @@ type Config struct {
 	MysqlAdmin   MysqlAdmin
 	Qiniu        Qiniu
 	CasbinConfig CasbinConfig
+	RedisAdmin   RedisAdmin
+	System       System
+	JWT          JWT
 }
+
+type System struct {
+	UseMultipoint bool
+	Env           string
+}
+
+type JWT struct {
+	SigningKey string
+}
+
 type CasbinConfig struct {
 	ModelPath string // casbin model地址配置
 }
@@ -23,6 +36,11 @@ type MysqlAdmin struct { // mysql admin 数据库配置
 	Config   string
 }
 
+type RedisAdmin struct { // Redis admin 数据库配置
+	Addr     string
+	Password string
+	DB       int
+}
 type Qiniu struct { // 七牛 密钥配置
 	AccessKey string
 	SecretKey string

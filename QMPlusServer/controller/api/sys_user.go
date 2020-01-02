@@ -2,12 +2,14 @@ package api
 
 import (
 	"fmt"
+	"gin-vue-admin/config"
 	"gin-vue-admin/controller/servers"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/model/modelInterface"
 	"gin-vue-admin/model/sysModel"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis"
 	uuid "github.com/satori/go.uuid"
 	"mime/multipart"
 	"time"
@@ -73,7 +75,7 @@ func Login(c *gin.Context) {
 //登录以后签发jwt
 func tokenNext(c *gin.Context, user sysModel.SysUser) {
 	j := &middleware.JWT{
-		[]byte("qmPlus"), // 唯一签名
+		[]byte(config.GinVueAdminconfig.JWT.SigningKey), // 唯一签名
 	}
 	clams := middleware.CustomClaims{
 		UUID:        user.UUID,
@@ -90,7 +92,37 @@ func tokenNext(c *gin.Context, user sysModel.SysUser) {
 	if err != nil {
 		servers.ReportFormat(c, false, "获取token失败", gin.H{})
 	} else {
-		servers.ReportFormat(c, true, "登录成功", gin.H{"user": user, "token": token, "expiresAt": clams.StandardClaims.ExpiresAt * 1000})
+		if config.GinVueAdminconfig.System.UseMultipoint {
+			var loginJwt sysModel.JwtBlacklist
+			loginJwt.Jwt = token
+			err, jwtStr := loginJwt.GetRedisJWT(user.Username)
+			if err == redis.Nil {
+				err2 := loginJwt.SetRedisJWT(user.Username)
+				if err2 != nil {
+					servers.ReportFormat(c, false, "设置登录状态失败", gin.H{})
+				} else {
+					servers.ReportFormat(c, true, "登录成功", gin.H{"user": user, "token": token, "expiresAt": clams.StandardClaims.ExpiresAt * 1000})
+				}
+			} else if err != nil {
+				servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{})
+			} else {
+				var blackjWT sysModel.JwtBlacklist
+				blackjWT.Jwt = jwtStr
+				err3 := blackjWT.JsonInBlacklist()
+				if err3 != nil {
+					servers.ReportFormat(c, false, "jwt作废失败", gin.H{})
+				} else {
+					err2 := loginJwt.SetRedisJWT(user.Username)
+					if err2 != nil {
+						servers.ReportFormat(c, false, "设置登录状态失败", gin.H{})
+					} else {
+						servers.ReportFormat(c, true, "登录成功", gin.H{"user": user, "token": token, "expiresAt": clams.StandardClaims.ExpiresAt * 1000})
+					}
+				}
+			}
+		} else {
+			servers.ReportFormat(c, true, "登录成功", gin.H{"user": user, "token": token, "expiresAt": clams.StandardClaims.ExpiresAt * 1000})
+		}
 	}
 }
 

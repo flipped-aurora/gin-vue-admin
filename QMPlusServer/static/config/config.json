@@ -1,10 +1,22 @@
 {
+  "system": {
+    "useMultipoint": false,
+    "env": "develop"
+  },
+  "jwt": {
+    "signingKey":"qmPlus"
+  },
   "mysqlAdmin": {
     "username": "root",
     "password": "Aa@6447985",
     "path": "127.0.0.1:3306",
     "dbname": "qmplus",
     "config": "charset=utf8&parseTime=True&loc=Local"
+  },
+  "redisAdmin": {
+    "addr":     "127.0.0.1:6379",
+    "password": "",
+    "DB":0
   },
   "qiniu": {
     "accessKey":"25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ",

@@ -38,14 +38,18 @@ export default {
   methods:{
       all(){
          this.dataAuthorityId = [...this.authoritys]
+         this.row.dataAuthorityId = this.dataAuthorityId
+
       },
       self(){
           this.dataAuthorityId = this.authoritys.filter(item=>item.ID===this.row.ID)
+          this.row.dataAuthorityId = this.dataAuthorityId
       },
       selfAndChildren(){
          const arrBox = []
          this.getChildrenId(this.row,arrBox)
          this.dataAuthorityId = this.authoritys.filter(item=>arrBox.indexOf(item.ID)>-1)
+         this.row.dataAuthorityId = this.dataAuthorityId
       },
       getChildrenId(row,arrBox){
           arrBox.push(row.ID)

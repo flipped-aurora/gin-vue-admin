@@ -1,7 +1,10 @@
 <template>
   <div>
-      <div class="clearflex">
+      <div class="clearflex" style="margin:18px">
       <el-button @click="authDataEnter" class="fl-right" size="small" type="primary">确 定</el-button>
+      <el-button @click="all" class="fl-left" size="small" type="primary">全选</el-button>
+      <el-button @click="self" class="fl-left" size="small" type="primary">本部门</el-button>
+      <el-button @click="selfAndChildren" class="fl-left" size="small" type="primary">部门及以下</el-button>
     </div>
      <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
         <el-checkbox v-for="(item,key) in authoritys" :label="item" :key="key">{{item.authorityName}}</el-checkbox>
@@ -33,6 +36,23 @@ export default {
     }
   },
   methods:{
+      all(){
+         this.dataAuthorityId = [...this.authoritys]
+      },
+      self(){
+          this.dataAuthorityId = this.authoritys.filter(item=>item.ID===this.row.ID)
+      },
+      selfAndChildren(){
+         const arrBox = []
+         this.getChildrenId(this.row,arrBox)
+         this.dataAuthorityId = this.authoritys.filter(item=>arrBox.indexOf(item.ID)>-1)
+      },
+      getChildrenId(row,arrBox){
+          arrBox.push(row.ID)
+          row.children&&row.children.map(item=>{
+              this.getChildrenId(item,arrBox)
+          })
+      },
     // 提交
       async authDataEnter(){
           const res = await setDataAuthority(this.row)

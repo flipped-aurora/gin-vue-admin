@@ -41,7 +41,7 @@
     <el-dialog :visible.sync="dialogFormVisible" title="新增Api">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="路径">
-          <el-input @blur="autoGroup" autocomplete="off" v-model="form.path"></el-input>
+          <el-input autocomplete="off" v-model="form.path"></el-input>
         </el-form-item>
         <el-form-item label="api分组">
           <el-input autocomplete="off" v-model="form.group"></el-input>
@@ -93,10 +93,6 @@ export default {
       this.page = 1 
       this.pageSize = 10
       this.getTableData()
-    },
-    // 自动设置api分组
-    autoGroup() {
-      this.form.group = this.form.path.split('/')[1]
     },
     initForm() {
       this.form = {

@@ -49,6 +49,9 @@
         <el-tab-pane label="角色api">
           <apis :row="activeRow" />
         </el-tab-pane>
+         <el-tab-pane label="资源权限">
+          <Datas :row="activeRow" :authority="tableData" />
+        </el-tab-pane>
       </el-tabs>
     </el-drawer>
   </div>
@@ -65,6 +68,7 @@ import {
 
 import Menus from '@/view/superAdmin/authority/components/menus'
 import Apis from '@/view/superAdmin/authority/components/apis'
+import Datas from '@/view/superAdmin/authority/components/datas'
 
 import infoList from '@/components/mixins/infoList'
 export default {
@@ -88,7 +92,8 @@ export default {
   },
   components: {
     Menus,
-    Apis
+    Apis,
+    Datas
   },
   methods: {
     opdendrawer(row) {

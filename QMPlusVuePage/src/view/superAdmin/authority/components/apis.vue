@@ -61,14 +61,6 @@ export default {
       }
       return apiTree
     },
-    // 关联用户api关系
-    async addAuthApi(row) {
-      const res = await getPolicyPathByAuthorityId({
-        authorityId: this.row.authorityId
-      })
-      this.activeUserId = this.row.authorityId
-      this.apiTreeIds = res.data.paths || []
-    },
     // 关联关系确定
     async authApiEnter() {
       const checkArr = this.$refs.apiTree.getCheckedKeys(true)

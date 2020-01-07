@@ -84,6 +84,21 @@ func GetAuthorityList(c *gin.Context) {
 	}
 }
 
-type GetAuthorityId struct {
-	AuthorityId string `json:"authorityId"`
+// @Tags authority
+// @Summary 设置角色资源权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body sysModel.SysAuthority true "设置角色资源权限"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
+// @Router /authority/setDataAuthority [post]
+func SetDataAuthority(c *gin.Context) {
+	var auth sysModel.SysAuthority
+	_ = c.ShouldBind(&auth)
+	err := auth.SetDataAuthority()
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("设置关联失败，%v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "设置关联成功", gin.H{})
+	}
 }

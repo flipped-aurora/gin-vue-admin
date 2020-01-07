@@ -99,6 +99,16 @@ definitions:
         type: string
       authorityName:
         type: string
+      children:
+        items:
+          $ref: '#/definitions/sysModel.SysAuthority'
+        type: array
+      dataAuthorityId:
+        items:
+          $ref: '#/definitions/sysModel.SysAuthority'
+        type: array
+      parentId:
+        type: string
     type: object
   sysModel.SysBaseMenu:
     properties:
@@ -394,6 +404,30 @@ paths:
       summary: 分页获取角色列表
       tags:
       - authority
+  /authority/setDataAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 设置角色资源权限
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/sysModel.SysAuthority'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"设置成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置角色资源权限
+      tags:
+      - authority
   /base/login:
     post:
       parameters:
@@ -550,6 +584,22 @@ paths:
       summary: 上传文件示例
       tags:
       - ExaFileUploadAndDownload
+  /jwt/jsonInBlacklist:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"拉黑成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: jwt加入黑名单
+      tags:
+      - jwt
   /menu/addBaseMenu:
     post:
       consumes:

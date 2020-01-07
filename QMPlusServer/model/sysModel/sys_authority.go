@@ -10,10 +10,11 @@ import (
 
 type SysAuthority struct {
 	gorm.Model
-	AuthorityId   string         `json:"authorityId" gorm:"not null;unique"`
-	AuthorityName string         `json:"authorityName"`
-	ParentId      string         `json:"parentId"`
-	Children      []SysAuthority `json:"children"`
+	AuthorityId     string         `json:"authorityId" gorm:"not null;unique"`
+	AuthorityName   string         `json:"authorityName"`
+	ParentId        string         `json:"parentId"`
+	DataAuthorityId []SysAuthority `json:"dataAuthorityId" gorm:"many2many:sys_data_authority_id;association_jointable_foreignkey:data_id"`
+	Children        []SysAuthority `json:"children"`
 }
 
 // 创建角色
@@ -47,7 +48,7 @@ func (a *SysAuthority) GetInfoList(info modelInterface.PageInfo) (err error, lis
 		return
 	} else {
 		var authority []SysAuthority
-		err = db.Where("parent_id = 0").Find(&authority).Error
+		err = db.Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
 		if len(authority) > 0 {
 			for k, _ := range authority {
 				err = findChildrenAuthority(&authority[k])
@@ -58,11 +59,18 @@ func (a *SysAuthority) GetInfoList(info modelInterface.PageInfo) (err error, lis
 }
 
 func findChildrenAuthority(authority *SysAuthority) (err error) {
-	err = qmsql.DEFAULTDB.Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
+	err = qmsql.DEFAULTDB.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
 	if len(authority.Children) > 0 {
 		for k, _ := range authority.Children {
 			err = findChildrenAuthority(&authority.Children[k])
 		}
 	}
+	return err
+}
+
+func (a *SysAuthority) SetDataAuthority() error {
+	var s SysAuthority
+	qmsql.DEFAULTDB.Preload("DataAuthorityId").First(&s, "id = ?", a.ID)
+	err := qmsql.DEFAULTDB.Model(&s).Association("DataAuthorityId").Replace(&a.DataAuthorityId).Error
 	return err
 }

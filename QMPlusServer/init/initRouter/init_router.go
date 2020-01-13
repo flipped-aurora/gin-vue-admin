@@ -26,5 +26,6 @@ func InitRouter() *gin.Engine {
 	router.InitWorkflowRouter(ApiGroup)              // 工作流相关路由
 	router.InitCasbinRouter(ApiGroup)                // 权限相关路由
 	router.InitJwtRouter(ApiGroup)                   // jwt相关路由
+	router.InitSystemRouter(ApiGroup)				// system相关路由
 	return Router
 }

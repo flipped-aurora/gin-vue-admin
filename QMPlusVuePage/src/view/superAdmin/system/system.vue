@@ -87,6 +87,10 @@ export default {
     async update() {
       const res = await setSystemConfig({ config: this.config })
       if (res.success) {
+        this.$message({
+          type:"success",
+          message:"配置文件设置成功"
+        })
           await this.initForm()
       }
     }

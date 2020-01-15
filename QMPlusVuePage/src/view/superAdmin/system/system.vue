@@ -8,6 +8,9 @@
       <el-form-item label="环境值">
         <el-input v-model="config.system.env"></el-input>
       </el-form-item>
+      <el-form-item label="端口值">
+        <el-input v-model="config.system.addr"></el-input>
+      </el-form-item>
       <h2>jwt签名</h2>
       <el-form-item label="jwt签名">
         <el-input v-model="config.jwt.signingKey"></el-input>
@@ -74,7 +77,7 @@ export default {
     }
   },
   async created() {
-      await this.initForm()
+    await this.initForm()
   },
   methods: {
     async initForm() {
@@ -88,10 +91,10 @@ export default {
       const res = await setSystemConfig({ config: this.config })
       if (res.success) {
         this.$message({
-          type:"success",
-          message:"配置文件设置成功"
+          type: 'success',
+          message: '配置文件设置成功'
         })
-          await this.initForm()
+        await this.initForm()
       }
     }
   }

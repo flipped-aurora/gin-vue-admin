@@ -23,6 +23,7 @@
   },
   "system": {
     "useMultipoint": false,
-    "env": "develop"
+    "env": "develop",
+    "addr": 8888
   }
 }

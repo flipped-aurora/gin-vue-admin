@@ -7,43 +7,44 @@ import (
 )
 
 type Config struct {
-	MysqlAdmin   MysqlAdmin `json:"mysqlAdmin"`
-	Qiniu        Qiniu      `json:"qiniu"`
-	CasbinConfig CasbinConfig  `json:"casbinConfig"`
-	RedisAdmin   RedisAdmin  `json:"redisAdmin"`
-	System       System  `json:"system"`
-	JWT          JWT  `json:"jwt"`
+	MysqlAdmin   MysqlAdmin   `json:"mysqlAdmin"`
+	Qiniu        Qiniu        `json:"qiniu"`
+	CasbinConfig CasbinConfig `json:"casbinConfig"`
+	RedisAdmin   RedisAdmin   `json:"redisAdmin"`
+	System       System       `json:"system"`
+	JWT          JWT          `json:"jwt"`
 }
 
-type System struct {    // 系统配置
+type System struct { // 系统配置
 	UseMultipoint bool   `json:"useMultipoint"`
-	Env           string  `json:"env"`
+	Env           string `json:"env"`
+	Addr          int    `json:"addr"`
 }
 
-type JWT struct {   // jwt签名
-	SigningKey string  `json:"signingKey"`
+type JWT struct { // jwt签名
+	SigningKey string `json:"signingKey"`
 }
 
-type CasbinConfig struct {  //casbin配置
-	ModelPath string  `json:"modelPath"` // casbin model地址配置
+type CasbinConfig struct { //casbin配置
+	ModelPath string `json:"modelPath"` // casbin model地址配置
 }
 
 type MysqlAdmin struct { // mysql admin 数据库配置
-	Username string    `json:"username"`
-	Password string    `json:"password"`
-	Path     string    `json:"path"`
-	Dbname   string    `json:"dbname"`
-	Config   string    `json:"config"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	Path     string `json:"path"`
+	Dbname   string `json:"dbname"`
+	Config   string `json:"config"`
 }
 
 type RedisAdmin struct { // Redis admin 数据库配置
-	Addr     string     `json:"addr"`
-	Password string     `json:"password"`
-	DB       int        `json:"db"`
+	Addr     string `json:"addr"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
 }
 type Qiniu struct { // 七牛 密钥配置
-	AccessKey string    `json:"accessKey"`
-	SecretKey string    `json:"secretKey"`
+	AccessKey string `json:"accessKey"`
+	SecretKey string `json:"secretKey"`
 }
 
 var GinVueAdminconfig Config

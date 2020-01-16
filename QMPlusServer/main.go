@@ -32,9 +32,10 @@ func main() {
 	qmlog.QMLog.Info("服务器开启")         // 日志测试代码
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	sysType := runtime.GOOS
+
 	if sysType == "linux" {
 		// LINUX系统
-		cmd.RunLinuxServer(Router)
+		//	借助endless开发无感知重启后台 以及前端接口重启后台功能
 	}
 	if sysType == "windows" {
 		// WIN系统

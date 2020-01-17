@@ -8,7 +8,7 @@ import (
 	"gin-vue-admin/init/qmlog"
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/init/registTable"
-	"runtime"
+	//"runtime"
 )
 
 // @title Swagger Example API
@@ -31,14 +31,14 @@ func main() {
 	Router := initRouter.InitRouter() // 注册路由
 	qmlog.QMLog.Info("服务器开启")         // 日志测试代码
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
-	sysType := runtime.GOOS
-
-	if sysType == "linux" {
-		// LINUX系统
-		//	借助endless开发无感知重启后台 以及前端接口重启后台功能
-	}
-	if sysType == "windows" {
-		// WIN系统
-		cmd.RunWindowsServer(Router)
-	}
+	//sysType := runtime.GOOS
+	//
+	//if sysType == "linux" {
+	//	// LINUX系统
+	//	//	借助endless开发无感知重启后台 以及前端接口重启后台功能
+	//}
+	//if sysType == "windows" {
+	// WIN系统
+	cmd.RunWindowsServer(Router)
+	//}
 }

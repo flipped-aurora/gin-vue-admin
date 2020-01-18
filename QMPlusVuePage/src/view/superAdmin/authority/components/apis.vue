@@ -63,10 +63,18 @@ export default {
     },
     // 关联关系确定
     async authApiEnter() {
-      const checkArr = this.$refs.apiTree.getCheckedKeys(true)
+      const checkArr = this.$refs.apiTree.getCheckedNodes(true)
+      var casbinInfos = []
+      checkArr&&checkArr.map(item=>{
+        var casbinInfo = {
+          path:item.path,
+          method:item.method
+        }
+        casbinInfos.push(casbinInfo)
+      })
       const res = await casbinPUpdata({
         authorityId: this.activeUserId,
-        paths: checkArr
+        casbinInfos
       })
       if (res.success) {
         this.$message({ type: 'success', message: res.msg })

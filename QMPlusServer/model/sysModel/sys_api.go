@@ -13,6 +13,7 @@ type SysApi struct {
 	Path        string `json:"path"`
 	Description string `json:"description"`
 	Group       string `json:"group"`
+	Method      string `json:"method" gorm:"default:'POST'"`
 }
 
 func (a *SysApi) CreateApi() (err error) {

@@ -17,16 +17,28 @@ type CasbinModel struct {
 	Method      string `json:"method" gorm:"column:v2"`
 }
 
+// 供入参使用
+type CasbinInfo struct {
+	Path   string `json:"path"`
+	Method string `json:"method"`
+}
+
+// 供入参使用
+type CasbinInReceive struct {
+	AuthorityId string       `json:"authorityId"`
+	CasbinInfos []CasbinInfo `json:"casbinInfos"`
+}
+
 // 更新权限
-func (c *CasbinModel) CasbinPUpdata(AuthorityId string, Paths []string) error {
+func (c *CasbinModel) CasbinPUpdata(AuthorityId string, casbinInfos []CasbinInfo) error {
 	c.clearCasbin(0, AuthorityId)
-	for _, v := range Paths {
+	for _, v := range casbinInfos {
 		cm := CasbinModel{
 			ID:          0,
 			Ptype:       "p",
 			AuthorityId: AuthorityId,
-			Path:        v,
-			Method:      "POST",
+			Path:        v.Path,
+			Method:      v.Method,
 		}
 		addflag := c.AddCasbin(cm)
 		if addflag == false {

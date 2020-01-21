@@ -14,6 +14,7 @@ func InitRouter() *gin.Engine {
 	var Router = gin.Default()
 	//Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	Router.Use(middleware.Logger()) // 如果不需要日志 请关闭这里
+	Router.Use(middleware.Cors())   // 跨域
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	ApiGroup := Router.Group("") // 方便统一添加路由组前缀 多服务器上线使用
 	//Router.Use(middleware.Logger())
@@ -26,6 +27,6 @@ func InitRouter() *gin.Engine {
 	router.InitWorkflowRouter(ApiGroup)              // 工作流相关路由
 	router.InitCasbinRouter(ApiGroup)                // 权限相关路由
 	router.InitJwtRouter(ApiGroup)                   // jwt相关路由
-	router.InitSystemRouter(ApiGroup)				// system相关路由
+	router.InitSystemRouter(ApiGroup)                // system相关路由
 	return Router
 }

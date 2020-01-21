@@ -14,8 +14,10 @@ func RegistTable(db *gorm.DB) {
 		sysModel.SysApi{},
 		sysModel.SysBaseMenu{},
 		sysModel.JwtBlacklist{},
-		dbModel.ExaFileUploadAndDownload{},
 		sysModel.SysWorkflow{},
 		sysModel.SysWorkflowStepInfo{},
+		dbModel.ExaFileUploadAndDownload{},
+		dbModel.ExaFile{},
+		dbModel.ExaFileChunk{},
 	)
 }

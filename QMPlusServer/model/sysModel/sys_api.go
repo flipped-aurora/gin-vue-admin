@@ -67,7 +67,7 @@ func (a *SysApi) GetInfoList(info modelInterface.PageInfo) (err error, list inte
 		return
 	} else {
 		var apiList []SysApi
-		err = db.Order("group", true).Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Error
+		err = db.Order("group", true).Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Count(&total).Error
 		return err, apiList, total
 	}
 }

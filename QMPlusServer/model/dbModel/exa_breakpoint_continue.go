@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+//文件结构体
 type ExaFile struct {
 	gorm.Model
 	FileName     string
@@ -15,6 +16,7 @@ type ExaFile struct {
 	IsFinish     bool
 }
 
+//切片结构体
 type ExaFileChunk struct {
 	gorm.Model
 	ExaFileId       uint
@@ -22,6 +24,7 @@ type ExaFileChunk struct {
 	FileChunkPath   string
 }
 
+//文件合成完成
 func (f *ExaFile) FileCreateComplete(FileMd5 string, FileName string, FilePath string) error {
 	var file ExaFile
 	upDateFile := make(map[string]interface{})
@@ -31,6 +34,7 @@ func (f *ExaFile) FileCreateComplete(FileMd5 string, FileName string, FilePath s
 	return err
 }
 
+//第一次上传或者断点续传时候检测当前文件属性，没有则创建，有则返回文件的当前切片
 func (f *ExaFile) FindOrCreateFile(FileMd5 string, FileName string, ChunkTotal int) (err error, file ExaFile) {
 	var cfile ExaFile
 	cfile.FileMd5 = FileMd5

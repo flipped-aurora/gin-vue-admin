@@ -122,14 +122,14 @@ $mainHight: 100vh;
   .main-cont {
     .breadcrumb {
       line-height: 24px;
-      padding: 6px;
-      border-bottom: 1px solid #eee;
+      // padding: 6px;
+      // border-bottom: 1px solid #eee;
       margin-bottom: 6px;
     }
     &.el-main {
       overflow: auto;
-      padding: 0px 10px;
-      background: #fff;
+      // padding: 0px 10px;
+      // background: #fff;
     }
     height: $mainHight !important;
     overflow: visible;

@@ -1,5 +1,6 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
+    <div class="upload">
     <el-upload
       :action="`${path}/fileUploadAndDownload/upload`"
       :before-upload="checkFile"
@@ -49,6 +50,7 @@
       @size-change="handleSizeChange"
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
+    </div>
   </div>
 </template>
    

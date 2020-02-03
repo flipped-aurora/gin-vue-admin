@@ -11,9 +11,10 @@
             stripe
             :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
         <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
+        
         <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
         <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
-        <el-table-column fixed="right" label="操作" width="500">
+        <el-table-column fixed="right" label="操作" width="500" :style="{ background:red , color:red}" >
             <template slot-scope="scope">
                 <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
                 <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>

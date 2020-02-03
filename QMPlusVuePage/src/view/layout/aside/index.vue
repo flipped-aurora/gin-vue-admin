@@ -8,7 +8,6 @@
         :default-active="active"
         @select="selectMenuItem"
         active-text-color="#fff"
-        background-color="#0F3D5F"
         text-color="rgb(191, 203, 217)"
         unique-opened
       >

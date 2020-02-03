@@ -11,7 +11,7 @@
       ></quill-editor>
       <el-button  plain @click="saveHtml">保存</el-button>
     </div>
-    <div>
+    <div class="edit">
       <mavon-editor v-model="model.content"></mavon-editor>
       <el-button type="primary" size="small" @click="submit">发表</el-button>
     </div>
@@ -47,7 +47,3 @@ export default {
   }
 }
 </script>
-
-<style>
-
-</style>

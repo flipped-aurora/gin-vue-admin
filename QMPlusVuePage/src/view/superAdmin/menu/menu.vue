@@ -8,14 +8,14 @@
     <el-table :data="tableData" border stripe row-key="ID">
       <el-table-column label="ID" min-width="100" prop="ID"></el-table-column>
       <el-table-column label="路由Name" min-width="160" prop="name"></el-table-column>
-      <el-table-column label="是否隐藏" min-width="80" prop="hidden">
+      <el-table-column label="是否隐藏" min-width="100" prop="hidden">
         <template slot-scope="scope">
           <span>{{scope.row.hidden?"隐藏":"显示"}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="父节点" min-width="70" prop="parentId"></el-table-column>
+      <el-table-column label="父节点" min-width="90" prop="parentId"></el-table-column>
       <el-table-column label="排序" min-width="70" prop="sort"></el-table-column>
-      <el-table-column label="文件路径" min-width="400" prop="component"></el-table-column>
+      <el-table-column label="文件路径" min-width="360" prop="component"></el-table-column>
       <el-table-column label="展示名称" min-width="120" prop="authorityName">
         <template slot-scope="scope">
           <span>{{scope.row.meta.title}}</span>

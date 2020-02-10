@@ -103,8 +103,8 @@ export default {
 <style lang="scss">
 h2 {
   padding: 10px;
-  border-bottom: 1px dashed #ccc;
   margin: 10px 0;
   font-size: 16px;
+  box-shadow:-4px 1px 3px 0px #e7e8e8
 }
 </style>

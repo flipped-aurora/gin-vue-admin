@@ -618,7 +618,6 @@ li {
 // table
 .has-gutter{
     tr{
-        
         th{
             background-color: #fafafa;
         }
@@ -819,4 +818,20 @@ li {
     }
     
 }
+.el-menu--vertical{
+    .el-menu{
+        margin-left: -8px;
+        background-color:rgb(48,65,86);
+        .el-menu-item{
+            background-color:rgb(48,65,86);
+        }
+        .el-menu-item:focus, 
+        .el-menu-item:hover{
+            background-color: #263445;
+            color: #fff;
+        }
+    }
+}
 // 导航*****
+
+

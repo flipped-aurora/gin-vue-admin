@@ -38,18 +38,28 @@ export default {
   },
   computed: {
     ...mapGetters('router', ['asyncRouters'])
+
   },
   components: {
     AsideComponent
   },
   created() {
     this.active = this.$route.name
+    let screenWidth = document.body.clientWidth
+     if(screenWidth<1000){
+       this.isCollapse = !this.isCollapse
+      }
     this.$bus.on('totalCollapse', () => {
       this.isCollapse = !this.isCollapse
     })
+     this.$bus.on('collapse', (item) => {
+      this.isCollapse = item
+    })
+
   },
   beforeDestroy() {
     this.$bus.off('totalCollapse')
+    this.$bus.off('collapse')
   }
 }
 </script>

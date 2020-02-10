@@ -574,6 +574,7 @@ li {
 //   layout
     .layout-cont{
         .main-cont{
+            position: relative;
             &.el-main {
                 background-color: #ecf0f5;
                 padding: 0;
@@ -714,3 +715,108 @@ li {
         width: 80%;
     }
 }
+
+// 导航
+#app {
+    .el-container{
+        position: relative;
+        height: 100%;
+        width: 100%;
+       
+    }
+    .el-container.mobile.openside {
+        position: fixed;
+        top: 0;
+    }
+    .hideside{
+        .aside{
+            width: 54px!important;
+        }
+    }
+    .el-aside{
+        -webkit-transition: width .2s;
+        transition: width .2s;
+        width: 220px;
+        background-color: #304156;
+        height: 100%;
+        position: fixed;
+        font-size: 0;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1001;
+        overflow: hidden;
+    }
+
+    .mobile.hideside{
+        .el-aside{
+            // pointer-events: none;
+            -webkit-transition-duration: .2s;
+            transition-duration: .2s;
+            -webkit-transform: translate3d(-210px,0,0);
+            transform: translate3d(-220px,0,0);
+        }
+      
+    }
+ 
+    .mobile{
+        .el-aside{
+            -webkit-transition: -webkit-transform .28s;
+            transition: -webkit-transform .28s;
+            transition: transform .28s;
+            transition: transform .28s,-webkit-transform .28s;
+            width: 210px!important
+        }
+    }
+    
+   
+    .el-container{
+        position: relative;
+        height: 100%;
+        width: 100%;
+        .el-aside{
+            // transition: none;
+          .aside {
+                background: #000;
+                .el-menu{
+                    border-right: none;
+                }
+            }
+        }
+    }
+  
+    .main-cont.el-main{
+        min-height: 100%;
+        -webkit-transition: margin-left .28s;
+        transition: margin-left .28s;
+        margin-left: 220px;
+        position: relative;
+    }
+   
+
+    .hideside{
+        .main-cont.el-main{
+            margin-left: 54px;
+        }
+    }
+  .mobile {
+        .main-cont.el-main{
+            margin-left: 0px;
+        }
+       
+    }
+    .openside.mobile{
+        .shadowBg{
+            background: #000;
+            opacity: .3;
+            width: 100%;
+            top: 0;
+            height: 100%;
+            position: absolute;
+            z-index: 999;
+            left: 0;
+        }
+    }
+    
+}
+// 导航*****

@@ -20,7 +20,6 @@ import (
 // @BasePath /
 
 func main() {
-
 	qmlog.InitLog()                                            // 初始化日志
 	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin) // 链接初始化数据库
 	if config.GinVueAdminconfig.System.UseMultipoint {

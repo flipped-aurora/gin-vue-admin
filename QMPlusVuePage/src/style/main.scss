@@ -530,6 +530,17 @@ ol,
 li {
     list-style-type: none;
 }
+.el-table__body-wrapper{
+    tr{
+        td{
+            .cell{
+                .el-button+.el-button{
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
 
 
 // navbar

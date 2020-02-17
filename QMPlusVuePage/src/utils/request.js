@@ -32,9 +32,9 @@ service.interceptors.request.use(
     config => {
         showLoading()
         const token = store.getters['user/token']
-        config.data = JSON.stringify(config.data);
+        config.data = config.headers['Content-Type'] == 'application/json' ? config.data : JSON.stringify(config.data);
         config.headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': config.headers['Content-Type'] || 'application/json',
             'x-token': token
         }
         return config;

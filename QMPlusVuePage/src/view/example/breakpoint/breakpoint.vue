@@ -3,7 +3,7 @@
     <form id="fromCont" method="post">
       <input @change="choseFile" id="file" multiple="multiple" type="file" />
     </form>
-    <el-button @click="getFile">按钮</el-button>
+    <el-button @click="getFile">上传</el-button>
     <span
       v-if="this.file"
     >{{Math.floor(((this.formDataList.length-this.waitNum)/this.formDataList.length)*100)}}%</span>

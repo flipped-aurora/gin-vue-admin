@@ -16,6 +16,7 @@ type SysApi struct {
 	Method      string `json:"method" gorm:"default:'POST'"`
 }
 
+//新增基础api
 func (a *SysApi) CreateApi() (err error) {
 	findOne := qmsql.DEFAULTDB.Where("path = ?", a.Path).Find(&SysMenu{}).Error
 	if findOne == nil {
@@ -26,12 +27,14 @@ func (a *SysApi) CreateApi() (err error) {
 	return err
 }
 
+//删除基础api
 func (a *SysApi) DeleteApi() (err error) {
 	err = qmsql.DEFAULTDB.Delete(a).Error
 	new(CasbinModel).clearCasbin(1, a.Path)
 	return err
 }
 
+//更新api
 func (a *SysApi) UpdataApi() (err error) {
 	var oldA SysApi
 	err = qmsql.DEFAULTDB.Where("id = ?", a.ID).First(&oldA).Error
@@ -48,6 +51,7 @@ func (a *SysApi) UpdataApi() (err error) {
 	return err
 }
 
+//获取选中角色所拥有的api
 func (a *SysApi) GetApiById(id float64) (err error, api SysApi) {
 	err = qmsql.DEFAULTDB.Where("id = ?", id).First(&api).Error
 	return

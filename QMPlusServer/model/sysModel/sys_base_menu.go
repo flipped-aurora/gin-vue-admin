@@ -23,6 +23,7 @@ type SysBaseMenu struct {
 	Children  []SysBaseMenu `json:"children"`
 }
 
+//增加基础路由
 func (b *SysBaseMenu) AddBaseMenu() (err error) {
 	findOne := qmsql.DEFAULTDB.Where("name = ?", b.Name).Find(&SysBaseMenu{}).Error
 	if findOne != nil {
@@ -34,6 +35,7 @@ func (b *SysBaseMenu) AddBaseMenu() (err error) {
 	return err
 }
 
+//删除基础路由
 func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 	err = qmsql.DEFAULTDB.Where("parent_id = ?", id).First(&SysBaseMenu{}).Error
 	if err != nil {
@@ -45,6 +47,7 @@ func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 	return err
 }
 
+//更新路由
 func (b *SysBaseMenu) UpdataBaseMenu() (err error) {
 	upDataMap := make(map[string]interface{})
 	upDataMap["parent_id"] = b.ParentId
@@ -61,11 +64,13 @@ func (b *SysBaseMenu) UpdataBaseMenu() (err error) {
 	return err
 }
 
+//当前选中角色所拥有的路由
 func (b *SysBaseMenu) GetBaseMenuById(id float64) (err error, menu SysBaseMenu) {
 	err = qmsql.DEFAULTDB.Where("id = ?", id).First(&menu).Error
 	return
 }
 
+//获取路由分页
 func (b *SysBaseMenu) GetInfoList(info modelInterface.PageInfo) (err error, list interface{}, total int) {
 	// 封装分页方法 调用即可 传入 当前的结构体和分页信息
 	err, db, total := servers.PagingServer(b, info)

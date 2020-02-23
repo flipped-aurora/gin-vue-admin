@@ -79,6 +79,7 @@ http://qmplus.henrongyi.top/
     4.工作流，任务交接功能开发
     5.结构体前端直接录入生成对应结构体及自动建表
     6.单独前端使用模式以及数据模拟
+    7.前端定制化生成form，table代码以及对应的后端结构体
 ## 使用说明
     1.golang api server 基于go.mod 如果golang版本低于1.11 请自行升级golang版本
     2.支持go.mod的golang版本在运行go list 和 编译之前都会自动下载所需要的依赖包

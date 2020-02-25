@@ -74,3 +74,8 @@ func (a *SysAuthority) SetDataAuthority() error {
 	err := qmsql.DEFAULTDB.Model(&s).Association("DataAuthorityId").Replace(&a.DataAuthorityId).Error
 	return err
 }
+
+func (a *SysAuthority) GetAuthorityInfo() (err error,sa SysAuthority) {
+	err = qmsql.DEFAULTDB.Preload("DataAuthorityId").Where("authority_id = ?",a.AuthorityId).First(&sa).Error
+	return err,sa
+}

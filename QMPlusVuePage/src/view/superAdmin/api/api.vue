@@ -1,6 +1,5 @@
 <template>
   <div>
-    <div class="button-box clearflex"></div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="路径">

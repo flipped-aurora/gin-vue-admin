@@ -19,5 +19,6 @@ func RegistTable(db *gorm.DB) {
 		dbModel.ExaFileUploadAndDownload{},
 		dbModel.ExaFile{},
 		dbModel.ExaFileChunk{},
+		dbModel.ExaCustomer{},
 	)
 }

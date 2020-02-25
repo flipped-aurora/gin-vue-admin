@@ -71,7 +71,12 @@ func (a *SysApi) GetInfoList(info modelInterface.PageInfo) (err error, list inte
 		return
 	} else {
 		var apiList []SysApi
-		err = db.Order("group", true).Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Count(&total).Error
+		err = qmsql.DEFAULTDB.Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Count(&total).Error
+		if err!=nil{
+			return err, apiList, total
+		}else{
+			err = db.Order("group", true).Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Error
+		}
 		return err, apiList, total
 	}
 }

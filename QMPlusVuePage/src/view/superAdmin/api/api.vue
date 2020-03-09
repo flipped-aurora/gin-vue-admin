@@ -87,7 +87,7 @@ import {
 } from '@/api/api'
 import infoList from '@/components/mixins/infoList'
 
-const methodOptions =[
+const methodOptions = [
         {
           value: 'POST',
           label: '创建'
@@ -220,7 +220,7 @@ export default {
   filters:{
     methodFiletr(value){
       const target = methodOptions.filter(item=>item.value === value)[0]
-      return `${target.label}(${target.value})`
+      return target && `${target.label}(${target.value})`
     }
   }
 }

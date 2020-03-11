@@ -11,10 +11,10 @@
 </div>
 
 # 开发者(贡献者)列表
-    [@piexlmax](https://github.com/piexlmax) 项目发起者 蒋*兆
-    [@krank666](https://github.com/krank666) 前端示例作者 尹*
-    [@1319612909](https://github.com/1319612909) 前端css优化 杜*兰
-    [@granty1](https://github.com/granty1) 代码积极贡献者  印*林
+   [@piexlmax](https://github.com/piexlmax) 项目发起者 蒋*兆
+   [@krank666](https://github.com/krank666) 前端示例作者 尹*
+   [@1319612909](https://github.com/1319612909) 前端css优化 杜*兰
+   [@granty1](https://github.com/granty1) 代码积极贡献者  印*林
     
 # gin-vue-admin gin+vue开源快速项目模板
     更新代码后如果遇到前端报错请执行 npm i  前端开发会不定期增加新的依赖 请注意更新

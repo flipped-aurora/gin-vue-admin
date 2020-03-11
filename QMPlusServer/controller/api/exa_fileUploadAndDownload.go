@@ -56,7 +56,7 @@ func UploadFile(c *gin.Context) {
 // @Router /fileUploadAndDownload/deleteFile [post]
 func DeleteFile(c *gin.Context) {
 	var file dbModel.ExaFileUploadAndDownload
-	_ = c.ShouldBind(&file)
+	_ = c.ShouldBindJSON(&file)
 	err, f := file.FindFile()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})

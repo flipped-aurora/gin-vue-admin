@@ -15,7 +15,7 @@ import (
 // @Router /workflow/createWorkFlow [post]
 func CreateWorkFlow(c *gin.Context) {
 	var wk sysModel.SysWorkflow
-	_ = c.ShouldBind(&wk)
+	_ = c.ShouldBindJSON(&wk)
 	err := wk.Create()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{})

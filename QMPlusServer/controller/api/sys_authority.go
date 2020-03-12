@@ -23,7 +23,7 @@ type CreateAuthorityParams struct {
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
 	var auth sysModel.SysAuthority
-	_ = c.ShouldBind(&auth)
+	_ = c.ShouldBindJSON(&auth)
 	err, authBack := auth.CreateAuthority()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{
@@ -94,7 +94,7 @@ func GetAuthorityList(c *gin.Context) {
 // @Router /authority/setDataAuthority [post]
 func SetDataAuthority(c *gin.Context) {
 	var auth sysModel.SysAuthority
-	_ = c.ShouldBind(&auth)
+	_ = c.ShouldBindJSON(&auth)
 	err := auth.SetDataAuthority()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("设置关联失败，%v", err), gin.H{})

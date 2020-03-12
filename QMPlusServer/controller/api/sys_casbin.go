@@ -17,7 +17,7 @@ import (
 // @Router /casbin/casbinPUpdata [post]
 func CasbinPUpdata(c *gin.Context) {
 	var cmr sysModel.CasbinInReceive
-	_ = c.ShouldBind(&cmr)
+	_ = c.ShouldBindJSON(&cmr)
 	err := new(sysModel.CasbinModel).CasbinPUpdata(cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加规则失败，%v", err), gin.H{})
@@ -36,7 +36,7 @@ func CasbinPUpdata(c *gin.Context) {
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 func GetPolicyPathByAuthorityId(c *gin.Context) {
 	var cmr sysModel.CasbinInReceive
-	_ = c.ShouldBind(&cmr)
+	_ = c.ShouldBindJSON(&cmr)
 	paths := new(sysModel.CasbinModel).GetPolicyPathByAuthorityId(cmr.AuthorityId)
 	servers.ReportFormat(c, true, "获取规则成功", gin.H{"paths": paths})
 }

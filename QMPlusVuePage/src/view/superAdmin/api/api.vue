@@ -66,6 +66,9 @@
           <el-input autocomplete="off" v-model="form.description"></el-input>
         </el-form-item>
       </el-form>
+      <div class="warning">
+          新增Api需要在角色管理内配置权限才可使用
+      </div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -231,5 +234,8 @@ export default {
   .el-button {
     float: right;
   }
+}
+.warning {
+    color: #DC143C;
 }
 </style>

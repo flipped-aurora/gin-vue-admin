@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/config"
 	"gin-vue-admin/init/qmsql"
 	"github.com/casbin/casbin"
+	"github.com/casbin/casbin/util"
 	gormadapter "github.com/casbin/gorm-adapter"
 	"strings"
 )
@@ -80,9 +81,10 @@ func (c *CasbinModel) clearCasbin(v int, p string) bool {
 }
 
 // 自定义规则函数
-func ParamsMatch(key1 string, key2 string) bool {
-	k1arr := strings.Split(key1, "?")
-	return k1arr[0] == key2
+func ParamsMatch(fullNameKey1 string, key2 string) bool {
+	key1 := strings.Split(fullNameKey1, "?")[0]
+	//剥离路径后再使用casbin的keyMatch2
+	return util.KeyMatch2(key1, key2)
 }
 
 // 自定义规则函数

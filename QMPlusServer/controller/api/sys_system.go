@@ -31,7 +31,7 @@ func GetSystemConfig(c *gin.Context) {
 // @Router /system/setSystemConfig [post]
 func SetSystemConfig(c *gin.Context) {
 	var sys sysModel.System
-	_ = c.ShouldBind(&sys)
+	_ = c.ShouldBindJSON(&sys)
 	err := sys.SetSystemConfig()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("设置失败：%v", err), gin.H{})
@@ -49,7 +49,7 @@ func SetSystemConfig(c *gin.Context) {
 // @Router /system/ReloadSystem [post]
 func ReloadSystem(c *gin.Context) {
 	var sys sysModel.System
-	_ = c.ShouldBind(&sys)
+	_ = c.ShouldBindJSON(&sys)
 	err := sys.SetSystemConfig()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("设置失败：%v", err), gin.H{})

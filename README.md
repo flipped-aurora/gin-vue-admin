@@ -178,3 +178,20 @@ swag init
 
 ## golang基础教学视频录制中...
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
+
+
+## 捐赠
+如果你想请团队喝可乐
+
+|  支付宝   | 微信  |
+|  :---:  | :---: |
+| ![markdown](http://qmplusimg.henrongyi.top/zfb.png "支付宝") |  ![markdown](http://qmplusimg.henrongyi.top/wxzf.png "微信") |
+
+
+## 捐赠列表
+
+|  捐赠者   | 金额  |
+|  :---:  | :---: |
+| 老**途 |  100￥ |
+| y*g |  10￥ |
+| *波 |  50￥ |

@@ -1,7 +1,7 @@
 <template>
-  <el-container class="layout-cont" >
+  <el-container class="layout-cont">
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
-      <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()"></el-row>  
+      <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()"></el-row>
       <el-aside class="main-cont main-left">
         <Aside class="aside" />
       </el-aside>
@@ -27,10 +27,33 @@
                     <el-badge is-dot />
                   </span>
                 </el-dropdown-item>
+                <el-dropdown-item @click.native="showPassword=true" icon="el-icon-s-custom">修改密码</el-dropdown-item>
                 <el-dropdown-item @click.native="toPerson" icon="el-icon-s-custom">个人信息</el-dropdown-item>
                 <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp">登 出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
+            <el-dialog
+              title="修改密码"
+              :visible.sync="showPassword"
+              @close="clearPassword"
+              width="360px"
+            >
+              <el-form ref="modifyPwdForm" :model="pwdModify" :rules="rules" label-width="80px">
+                <el-form-item prop="password" :minlength="6" label="原密码">
+                  <el-input v-model="pwdModify.password" show-password></el-input>
+                </el-form-item>
+                <el-form-item prop="newPassword" :minlength="6" label="新密码">
+                  <el-input v-model="pwdModify.newPassword" show-password></el-input>
+                </el-form-item>
+                <el-form-item prop="confirmPassword" :minlength="6" label="确认密码">
+                  <el-input v-model="pwdModify.confirmPassword" show-password></el-input>
+                </el-form-item>
+              </el-form>
+              <div slot="footer" class="dialog-footer">
+                <el-button @click="showPassword=false">取 消</el-button>
+                <el-button type="primary" @click="savePassword">确 定</el-button>
+              </div>
+            </el-dialog>
           </div>
         </el-header>
         <!-- 当前面包屑用路由自动生成可根据需求修改 -->
@@ -53,6 +76,7 @@
 <script>
 import Aside from '@/view/layout/aside'
 import { mapGetters, mapActions } from 'vuex'
+import { changePassword } from '@/api/user'
 export default {
   name: 'Layout',
   data() {
@@ -60,39 +84,88 @@ export default {
       isCollapse: false,
       isSider: true,
       isMobile: false,
-      isShadowBg: false
+      isShadowBg: false,
+      showPassword: false,
+      pwdModify: {},
+      rules: {
+        password: [
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
+        ],
+        newPassword: [
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
+        ],
+        confirmPassword: [
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' },
+          {
+            validator: (rule, value, callback) => {
+              if (value !== this.pwdModify.newPassword) {
+                callback(new Error('两次密码不一致'))
+              } else {
+                callback()
+              }
+            },
+            trigger: 'blur'
+          }
+        ]
+      }
     }
   },
   components: {
     Aside
   },
-  created(){
-     let screenWidth = document.body.clientWidth
-     if(screenWidth<1000){
-        this.isMobile = true
-        this.isSider = false
-        this.isCollapse = !this.isCollapse
-      }else{
-        this.isMobile = false
-      }
+  created() {
+    let screenWidth = document.body.clientWidth
+    if (screenWidth < 1000) {
+      this.isMobile = true
+      this.isSider = false
+      this.isCollapse = !this.isCollapse
+    } else {
+      this.isMobile = false
+    }
   },
   methods: {
     ...mapActions('user', ['LoginOut']),
     totalCollapse() {
-       this.isCollapse = !this.isCollapse
-       this.isSider = !this.isCollapse
-       this.isShadowBg = !this.isCollapse
-       this.$bus.emit('totalCollapse')
+      this.isCollapse = !this.isCollapse
+      this.isSider = !this.isCollapse
+      this.isShadowBg = !this.isCollapse
+      this.$bus.emit('totalCollapse')
     },
     toPerson() {
       this.$router.push({ name: 'person' })
     },
-    changeShadow(){
+    changeShadow() {
       this.isShadowBg = !this.isShadowBg
       this.isSider = !!this.isCollapse
       this.totalCollapse()
+    },
+    savePassword() {
+      this.$refs.modifyPwdForm.validate(valid => {
+        if (valid) {
+          changePassword({
+            username: this.userInfo.userName,
+            password: this.pwdModify.password,
+            newPassword: this.pwdModify.newPassword
+          }).then(() => {
+            this.$message.success('修改密码成功！')
+            this.showPassword = false
+          })
+        } else {
+          return false
+        }
+      })
+    },
+    clearPassword() {
+      this.pwdModify = {
+        password: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
+      this.$refs.modifyPwdForm.clearValidate()
     }
-   
   },
   computed: {
     ...mapGetters('user', ['userInfo']),
@@ -104,27 +177,27 @@ export default {
     }
   },
   mounted() {
-     window.onresize = () => {
-          return (() => {
-             let screenWidth = document.body.clientWidth
-            if(!this.screenWidth && this.isSider){
-                 if(screenWidth < 1000){
-                   this.isMobile = true
-                   this.isSider = false
-                   this.isCollapse = true
-                   this.$bus.emit('collapse',this.isCollapse)
-                 }
-            }else {
-                if(screenWidth < 1000){
-                this.isMobile = true
-                this.isSider = false
-                this.isCollapse = true
-              } else {
-                this.isMobile = false
-              }
-            }
-          })()
-      }
+    window.onresize = () => {
+      return (() => {
+        let screenWidth = document.body.clientWidth
+        if (!this.screenWidth && this.isSider) {
+          if (screenWidth < 1000) {
+            this.isMobile = true
+            this.isSider = false
+            this.isCollapse = true
+            this.$bus.emit('collapse', this.isCollapse)
+          }
+        } else {
+          if (screenWidth < 1000) {
+            this.isMobile = true
+            this.isSider = false
+            this.isCollapse = true
+          } else {
+            this.isMobile = false
+          }
+        }
+      })()
+    }
   }
 }
 </script>

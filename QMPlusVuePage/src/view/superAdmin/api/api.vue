@@ -21,7 +21,15 @@
       <el-table-column label="请求" min-width="150" prop="method">
         <template slot-scope="scope">
           <div>
-            {{scope.row.method|methodFiletr}}
+            {{scope.row.method}}
+            <el-tag
+              :key="scope.row.methodFiletr"
+              :type="scope.row.method|tagTypeFiletr"
+               size="mini"
+              effect="dark">
+              {{scope.row.method|methodFiletr}}
+            </el-tag>
+            <!-- {{scope.row.method|methodFiletr}} -->
           </div>
         </template>
       </el-table-column>
@@ -93,19 +101,23 @@ import infoList from '@/components/mixins/infoList'
 const methodOptions = [
         {
           value: 'POST',
-          label: '创建'
+          label: '创建',
+          type:'success'
         },
         {
           value: 'GET',
-          label: '查看'
+          label: '查看',
+          type:''
         },
         {
           value: 'PUT',
-          label: '更新'
+          label: '更新',
+          type:'warning'
         },
         {
           value: 'DELETE',
-          label: '删除'
+          label: '删除',
+          type:'danger'
         }
       ]
 
@@ -223,7 +235,12 @@ export default {
   filters:{
     methodFiletr(value){
       const target = methodOptions.filter(item=>item.value === value)[0]
-      return target && `${target.label}(${target.value})`
+      // return target && `${target.label}(${target.value})`
+      return target && `${target.label}`
+    },
+    tagTypeFiletr(value){
+      const target = methodOptions.filter(item=>item.value === value)[0]
+      return target && `${target.type}`
     }
   }
 }
@@ -234,6 +251,9 @@ export default {
   .el-button {
     float: right;
   }
+}
+.el-tag--mini{
+  margin-left: 5px;
 }
 .warning {
     color: #DC143C;

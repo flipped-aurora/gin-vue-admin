@@ -17,6 +17,14 @@
           </el-input>
         </el-form-item>
         <el-form-item>
+          <el-input
+            v-model="loginForm.captcha"
+            name="logVerify"
+            maxlength="10"
+          />
+          <img :src="path + picPath" alt="请输入验证码" @click="loginVefify()" class="vPic">
+        </el-form-item>
+        <el-form-item>
           <el-button @click="submitForm" style="width:100%">登 录</el-button>
         </el-form-item>
       </el-form>
@@ -27,6 +35,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { captcha } from '@/api/user'
+const path = process.env.VUE_APP_BASE_API
 export default {
   name: 'Login',
   data() {
@@ -49,13 +59,21 @@ export default {
       lock: 'lock',
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        captcha:'',
+        captchaId: '',
       },
       rules: {
         username: [{ validator: checkUsername, trigger: 'blur' }],
         password: [{ validator: checkPassword, trigger: 'blur' }]
-      }
+      },
+      path:path,
+      logVerify:'',
+      picPath:''
     }
+  },
+  created() {
+    this.loginVefify()
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
@@ -78,6 +96,13 @@ export default {
     },
     changeLock() {
       this.lock === 'lock' ? (this.lock = 'unlock') : (this.lock = 'lock')
+    },
+    loginVefify() {
+      console.log(this.logVerify)
+      captcha({}).then(ele=>{
+        this.picPath = ele.data.picPath
+        this.loginForm.captchaId = ele.data.captchaId
+      })
     }
   }
 }
@@ -93,6 +118,10 @@ export default {
     left: 50%;
     margin-left: -22vw;
     top: 25vh;
+  }
+  .vPic{
+    position: absolute;
+    right: 10px;
   }
 }
 </style>

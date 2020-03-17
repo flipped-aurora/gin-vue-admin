@@ -78,3 +78,19 @@ export const setUserAuthority = (data) => {
         data: data
     })
 }
+
+// @Tags User
+// @Summary 验证码
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.SetUserAuth true "设置用户权限"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserAuthority [post]
+export const captcha = (data) => {
+    return service({
+        url: "/base/captcha",
+        method: 'post',
+        data: data
+    })
+}

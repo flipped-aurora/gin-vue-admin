@@ -404,18 +404,6 @@
                     "base"
                 ],
                 "summary": "生成验证码",
-                "parameters": [
-                    {
-                        "description": "生成验证码",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/modelInterface.PageInfo"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
@@ -443,18 +431,6 @@
                     "base"
                 ],
                 "summary": "生成验证码图片路径",
-                "parameters": [
-                    {
-                        "description": "生成验证码图片路径",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/modelInterface.PageInfo"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",

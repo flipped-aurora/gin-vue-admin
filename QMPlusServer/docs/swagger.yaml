@@ -544,14 +544,6 @@ paths:
     post:
       consumes:
       - application/json
-      parameters:
-      - description: 生成验证码
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/modelInterface.PageInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -568,14 +560,6 @@ paths:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: 生成验证码图片路径
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/modelInterface.PageInfo'
-          type: object
       produces:
       - application/json
       responses:

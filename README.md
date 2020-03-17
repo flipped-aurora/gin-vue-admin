@@ -155,14 +155,10 @@ swag init
     感谢krank666协同开发
     可使用的初始mysql脚本正在制作中...
 ## 联系方式
-<div align=center style="float: left">
-<img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>
-<H3>Mr.奇淼</H3>
-</div>
-<div align=center style="float: left">
-<img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/>
-<H3>krank666微信</H3>
-</div>
+
+|  奇淼   | krank666  |
+|  :---:  |  :---: |
+|  <img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>  |  <img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/> |
 
 <div align=center>
 <h3>qq交流群:622360840</h3>
@@ -172,9 +168,12 @@ swag init
 
 ## 更新日志
 
-2020/01/07 角色增加数据资源功能 增加数据资源关联返回 演示环境代码已同步 开启了多点登录拦截 可能会被其他人挤掉
-2020/01/13 增加了配置管理功能 此功能不发表至测试环境 待保护机制以及服务重启机制发开完成后才会发表值测试环境 请自行clone且导入sql体验
-2020/03/21 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式
+|  日期   | 日志  |
+|  :---:  | --- |
+|2020/01/07| 角色增加数据资源功能 增加数据资源关联返回 演示环境代码已同步 开启了多点登录拦截 可能会被其他人挤掉 |
+|2020/01/13| 增加了配置管理功能 此功能不发表至测试环境 待保护机制以及服务重启机制发开完成后才会发表值测试环境 请自行clone且导入sql体验 |
+|2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
+|2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
 
 ## golang基础教学视频录制中...
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884

@@ -98,7 +98,6 @@ export default {
       this.lock === 'lock' ? (this.lock = 'unlock') : (this.lock = 'lock')
     },
     loginVefify() {
-      console.log(this.logVerify)
       captcha({}).then(ele=>{
         this.picPath = ele.data.picPath
         this.loginForm.captchaId = ele.data.captchaId

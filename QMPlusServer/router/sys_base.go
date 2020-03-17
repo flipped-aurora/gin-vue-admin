@@ -10,6 +10,8 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	{
 		BaseRouter.POST("regist", api.Regist)
 		BaseRouter.POST("login", api.Login)
+		BaseRouter.GET("captcha",api.Captcha)
+		BaseRouter.GET("/captcha/:id",api.CaptchaImg)
 	}
 	return BaseRouter
 }

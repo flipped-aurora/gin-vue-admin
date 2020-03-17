@@ -25,7 +25,7 @@ func GinCapthcaServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	lang := strings.ToLower(r.FormValue("lang"))
 	download := path.Base(dir) == "download"
-	if Serve(w, r, id, ext, lang, download, captcha.StdWidth, captcha.StdHeight) == captcha.ErrNotFound {
+	if Serve(w, r, id, ext, lang, download, 120, 40) == captcha.ErrNotFound {
 		http.NotFound(w, r)
 	}
 }

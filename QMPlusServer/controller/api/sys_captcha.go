@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"gin-vue-admin/controller/servers"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
@@ -16,12 +17,16 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /base/captcha [post]
 func Captcha(c *gin.Context) {
-	id := captcha.NewLen(6)
-	captcha.Server(captcha.StdWidth,captcha.StdHeight)
-	servers.ReportFormat(c,true,"test",gin.H{
-		"id":id,
-		"picPath":"/base/captcha/"+id+".png",
-	})
+	captchaId := captcha.NewLen(6)
+	if err:= captcha.Server(captcha.StdWidth,captcha.StdHeight);err != nil{
+		servers.ReportFormat(c,true,fmt.Sprintf("验证码获取失败:%v",err),gin.H{})
+	}else{
+		servers.ReportFormat(c,true,"验证码获取成功",gin.H{
+			"captchaId":captchaId,
+			"picPath":"/base/captcha/"+captchaId+".png",
+		})
+	}
+
 }
 
 // @Tags base
@@ -31,7 +36,7 @@ func Captcha(c *gin.Context) {
 // @Produce application/json
 // @Param data body modelInterface.PageInfo true "生成验证码图片路径"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /base/captcha/:id [get]
+// @Router /base/captcha/:captchaId [get]
 func CaptchaImg(c *gin.Context) {
 	servers.GinCapthcaServeHTTP(c.Writer, c.Request)
 }

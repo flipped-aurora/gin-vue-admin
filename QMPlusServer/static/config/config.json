@@ -25,5 +25,10 @@
         "useMultipoint": false,
         "env": "develop",
         "addr": 8888
+    },
+    "captcha": {
+        "keyLong": 6,
+        "imgWidth": 120,
+        "imgHeight": 40
     }
 }

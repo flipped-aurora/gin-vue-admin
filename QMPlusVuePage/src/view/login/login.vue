@@ -16,10 +16,11 @@
             <i :class="'el-input__icon el-icon-' + lock" @click="changeLock" slot="suffix"></i>
           </el-input>
         </el-form-item>
-        <el-form-item>
+        <el-form-item style="position:relative">
           <el-input
             v-model="loginForm.captcha"
             name="logVerify"
+            placeholder="请输入验证码"
             maxlength="10"
           />
           <img :src="path + picPath" alt="请输入验证码" @click="loginVefify()" class="vPic">
@@ -121,6 +122,7 @@ export default {
   .vPic{
     position: absolute;
     right: 10px;
+    bottom: 0px;   // 适配ie
   }
 }
 </style>

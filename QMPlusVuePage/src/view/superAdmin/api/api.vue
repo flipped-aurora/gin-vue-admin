@@ -25,15 +25,14 @@
             <el-tag
               :key="scope.row.methodFiletr"
               :type="scope.row.method|tagTypeFiletr"
-               size="mini"
-              effect="dark">
-              {{scope.row.method|methodFiletr}}
-            </el-tag>
+              effect="dark"
+              size="mini"
+            >{{scope.row.method|methodFiletr}}</el-tag>
             <!-- {{scope.row.method|methodFiletr}} -->
           </div>
         </template>
       </el-table-column>
-      
+
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="text">编辑</el-button>

@@ -43,14 +43,14 @@
     ></el-pagination>
 
     <el-dialog :visible.sync="addUserDialog" custom-class="user-dialog" title="新增用户">
-      <el-form :model="userInfo">
-        <el-form-item label="用户名" label-width="80px">
+      <el-form :rules="rules" ref="userForm" :model="userInfo" >
+        <el-form-item label="用户名" label-width="80px" prop="username">
           <el-input v-model="userInfo.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" label-width="80px">
+        <el-form-item label="密码" label-width="80px" prop="password">
           <el-input v-model="userInfo.password"></el-input>
         </el-form-item>
-        <el-form-item label="别名" label-width="80px">
+        <el-form-item label="别名" label-width="80px" prop="nickName">
           <el-input v-model="userInfo.nickName"></el-input>
         </el-form-item>
         <el-form-item label="头像" label-width="80px">
@@ -66,7 +66,7 @@
             <i class="el-icon-plus avatar-uploader-icon" v-else></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="用户角色" label-width="80px">
+        <el-form-item label="用户角色" label-width="80px" prop="authorityId">
           <el-select placeholder="请选择" v-model="userInfo.authorityId">
             <el-option
               :key="item.authorityId"
@@ -109,7 +109,19 @@ export default {
         nickName: '',
         headerImg: '',
         authorityId: ''
-      }
+      },
+      rules: {
+        username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+        password: [
+          { required: true, message: '请输入用户密码', trigger: 'blur' }
+        ],
+        nickName: [
+          { required: true, message: '请输入用户昵称', trigger: 'blur' }
+        ],
+        authorityId: [
+          { required: true, message: '请选择用户角色', trigger: 'blur' }
+        ]
+      },
     }
   },
   computed: {
@@ -117,12 +129,16 @@ export default {
   },
   methods: {
     async enterAddUserDialog() {
-      const res = await regist(this.userInfo)
-      if (res.success) {
-        this.$message({ type: 'success', message: '创建成功' })
-      }
-      await this.getTableData()
-      this.closeAddUserDialog()
+      this.$refs.userForm.validate(async valid => {
+        if (valid) {
+          const res = await regist(this.userInfo)
+          if (res.success) {
+            this.$message({ type: 'success', message: '创建成功' })
+          }
+          await this.getTableData()
+          this.closeAddUserDialog()
+        }
+      })
     },
     closeAddUserDialog() {
       this.userInfo = {

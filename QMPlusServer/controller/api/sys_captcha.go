@@ -1,6 +1,7 @@
 package api
 
 import (
+	"gin-vue-admin/config"
 	"gin-vue-admin/controller/servers"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
@@ -15,11 +16,11 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /base/captcha [post]
 func Captcha(c *gin.Context) {
-	captchaId := captcha.NewLen(6)
-		servers.ReportFormat(c,true,"验证码获取成功",gin.H{
-			"captchaId":captchaId,
-			"picPath":"/base/captcha/"+captchaId+".png",
-		})
+	captchaId := captcha.NewLen(config.GinVueAdminconfig.Captcha.KeyLong)
+	servers.ReportFormat(c, true, "验证码获取成功", gin.H{
+		"captchaId": captchaId,
+		"picPath":   "/base/captcha/" + captchaId + ".png",
+	})
 }
 
 // @Tags base
@@ -32,10 +33,3 @@ func Captcha(c *gin.Context) {
 func CaptchaImg(c *gin.Context) {
 	servers.GinCapthcaServeHTTP(c.Writer, c.Request)
 }
-
-
-
-
-
-
-

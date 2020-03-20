@@ -3,6 +3,7 @@ package servers
 import (
 	"bytes"
 	"fmt"
+	"gin-vue-admin/config"
 	"github.com/dchest/captcha"
 	"net/http"
 	"path"
@@ -25,7 +26,7 @@ func GinCapthcaServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	lang := strings.ToLower(r.FormValue("lang"))
 	download := path.Base(dir) == "download"
-	if Serve(w, r, id, ext, lang, download, 120, 40) == captcha.ErrNotFound {
+	if Serve(w, r, id, ext, lang, download, config.GinVueAdminconfig.Captcha.ImgWidth, config.GinVueAdminconfig.Captcha.ImgHeight) == captcha.ErrNotFound {
 		http.NotFound(w, r)
 	}
 }
@@ -52,4 +53,3 @@ func Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, downloa
 	http.ServeContent(w, r, id+ext, time.Time{}, bytes.NewReader(content.Bytes()))
 	return nil
 }
-

@@ -4,35 +4,35 @@
       <el-button @click="addAuthority('0')" type="primary">新增角色</el-button>
     </div>
     <el-table
-            :data="tableData"
-            style="width: 100%"
-            row-key="ID"
-            border
-            stripe
-            :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-        <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
-        
-        <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
-        <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
-        <el-table-column fixed="right" label="操作" min-width="300">
-            <template slot-scope="scope">
-                <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
-                <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
-                <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
-            </template>
-        </el-table-column>
-    </el-table>
+      :data="tableData"
+      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+      border
+      row-key="ID"
+      stripe
+      style="width: 100%"
+    >
+      <el-table-column label="id" min-width="180" prop="ID"></el-table-column>
 
+      <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
+      <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
+      <el-table-column fixed="right" label="操作" min-width="300">
+        <template slot-scope="scope">
+          <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
+          <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
+          <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- 新增角色弹窗 -->
     <el-dialog :visible.sync="dialogFormVisible" title="新增角色">
-      <el-form :model="form">
-         <el-form-item label="父级角色ID">
+      <el-form :model="form" :rules="rules" ref="authorityForm">
+        <el-form-item label="父级角色ID" prop="parentId">
           <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
         </el-form-item>
-        <el-form-item label="角色ID">
+        <el-form-item label="角色ID" prop="authorityId">
           <el-input autocomplete="off" v-model="form.authorityId"></el-input>
         </el-form-item>
-        <el-form-item label="角色姓名">
+        <el-form-item label="角色姓名" prop="authorityName">
           <el-input autocomplete="off" v-model="form.authorityName"></el-input>
         </el-form-item>
       </el-form>
@@ -42,7 +42,7 @@
       </div>
     </el-dialog>
 
-    <el-drawer :visible.sync="drawer" v-if="drawer" :with-header="false" size="40%" title="角色配置">
+    <el-drawer :visible.sync="drawer" :with-header="false" size="40%" title="角色配置" v-if="drawer">
       <el-tabs class="role-box" type="border-card">
         <el-tab-pane label="角色菜单">
           <Menus :row="activeRow" />
@@ -50,8 +50,8 @@
         <el-tab-pane label="角色api">
           <apis :row="activeRow" />
         </el-tab-pane>
-         <el-tab-pane label="资源权限">
-          <Datas :row="activeRow" :authority="tableData" />
+        <el-tab-pane label="资源权限">
+          <Datas :authority="tableData" :row="activeRow" />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -87,7 +87,18 @@ export default {
       form: {
         authorityId: '',
         authorityName: '',
-        parentId:'0'
+        parentId: '0'
+      },
+      rules: {
+        authorityId: [
+          { required: true, message: '请输入角色ID', trigger: 'blur' }
+        ],
+        authorityName: [
+          { required: true, message: '请输入角色名', trigger: 'blur' }
+        ],
+        parentId: [
+          { required: true, message: '请选择请求方式', trigger: 'blur' }
+        ]
       }
     }
   },
@@ -140,17 +151,28 @@ export default {
     // 确定弹窗
 
     async enterDialog() {
-      const res = await createAuthority(this.form)
-      if (res.success) {
+      if (this.form.authorityId == '0') {
         this.$message({
-          type: 'success',
-          message: '添加成功!'
+          type: 'error',
+          message: '角色id不能为0'
         })
-        this.getTableData()
-        this.closeDialog()
+        return false
       }
-      this.initForm()
-      this.dialogFormVisible = false
+      this.$refs.authorityForm.validate(async valid => {
+        if (valid) {
+          const res = await createAuthority(this.form)
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '添加成功!'
+            })
+            this.getTableData()
+            this.closeDialog()
+          }
+          this.initForm()
+          this.dialogFormVisible = false
+        }
+      })
     },
     // 增加角色
     addAuthority(parentId) {
@@ -158,7 +180,7 @@ export default {
       this.dialogFormVisible = true
     }
   },
-  created(){
+  created() {
     this.pageSize = 999
   }
 }
@@ -173,9 +195,9 @@ export default {
   }
 }
 .role-box {
-    .el-tabs__content {
-      height: calc(100vh - 150px);
-      overflow: auto;
-    }
+  .el-tabs__content {
+    height: calc(100vh - 150px);
+    overflow: auto;
   }
+}
 </style>

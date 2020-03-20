@@ -5,7 +5,7 @@
     </div>
 
     <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
-    <el-table :data="tableData" border stripe row-key="ID">
+    <el-table :data="tableData" border row-key="ID" stripe>
       <el-table-column label="ID" min-width="100" prop="ID"></el-table-column>
       <el-table-column label="路由Name" min-width="160" prop="name"></el-table-column>
       <el-table-column label="是否隐藏" min-width="100" prop="hidden">
@@ -36,8 +36,8 @@
     </el-table>
 
     <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" title="新增菜单">
-      <el-form :inline="true" :model="form" label-width="80px">
-        <el-form-item label="路由name">
+      <el-form :inline="true" :model="form" :rules="rules" label-width="85px" ref="menuForm">
+        <el-form-item label="路由name" prop="path">
           <el-input autocomplete="off" placeholder="唯一英文字符串" v-model="form.path"></el-input>
         </el-form-item>
         <el-form-item label="是否隐藏">
@@ -49,10 +49,10 @@
         <el-form-item label="父节点Id">
           <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
         </el-form-item>
-        <el-form-item label="文件路径">
+        <el-form-item label="文件路径" prop="component">
           <el-input autocomplete="off" v-model="form.component"></el-input>
         </el-form-item>
-        <el-form-item label="展示名称">
+        <el-form-item label="展示名称" prop="meta.title">
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标">
@@ -62,9 +62,7 @@
           <el-input autocomplete="off" v-model="form.sort"></el-input>
         </el-form-item>
       </el-form>
-        <div class="warning">
-            新增菜单需要在角色管理内配置权限才可使用
-        </div>
+      <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -104,30 +102,40 @@ export default {
           icon: ''
         }
       },
+      rules: {
+        path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
+        component: [
+          { required: true, message: '请输入文件路径', trigger: 'blur' }
+        ],
+        'meta.title': [
+          { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
+        ]
+      },
       isEdit: false
     }
   },
   methods: {
-    handleClose(done){
+    handleClose(done) {
       this.initForm()
       done()
     },
     // 懒加载子菜单
     load(tree, treeNode, resolve) {
-          resolve([
-            {
-              id: 31,
-              date: '2016-05-01',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1519 弄'
-            }, {
-              id: 32,
-              date: '2016-05-01',
-              name: '王小虎',
-              address: '上海市普陀区金沙江路 1519 弄'
-            }
-          ])
-      },
+      resolve([
+        {
+          id: 31,
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        },
+        {
+          id: 32,
+          date: '2016-05-01',
+          name: '王小虎',
+          address: '上海市普陀区金沙江路 1519 弄'
+        }
+      ])
+    },
     // 删除菜单
     deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
@@ -172,26 +180,30 @@ export default {
     },
     // 添加menu
     async enterDialog() {
-      let res
-      this.form.name = this.form.path
-      if (this.isEdit) {
-        res = await updataBaseMenu(this.form)
-      } else {
-        res = await addBaseMenu(this.form)
-      }
-      if (res.success) {
-        this.$message({
-          type: 'success',
-          message: '添加成功!'
-        })
-        this.getTableData()
-      } else {
-        this.$message({
-          type: 'error',
-          message: '添加失败!'
-        })
-      }
-      this.dialogFormVisible = false
+      this.$refs.menuForm.validate(async valid => {
+        if (valid) {
+          let res
+          this.form.name = this.form.path
+          if (this.isEdit) {
+            res = await updataBaseMenu(this.form)
+          } else {
+            res = await addBaseMenu(this.form)
+          }
+          if (res.success) {
+            this.$message({
+              type: 'success',
+              message: '添加成功!'
+            })
+            this.getTableData()
+          } else {
+            this.$message({
+              type: 'error',
+              message: '添加失败!'
+            })
+          }
+          this.dialogFormVisible = false
+        }
+      })
     },
     // 添加菜单方法，id为 0则为添加根菜单
     addMenu(id) {
@@ -207,7 +219,7 @@ export default {
       this.isEdit = true
     }
   },
-  created(){
+  created() {
     this.pageSize = 999
   }
 }
@@ -220,6 +232,6 @@ export default {
   }
 }
 .warning {
-  color: #DC143C;
+  color: #dc143c;
 }
 </style>

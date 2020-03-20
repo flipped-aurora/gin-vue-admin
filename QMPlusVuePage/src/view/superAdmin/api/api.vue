@@ -25,15 +25,14 @@
             <el-tag
               :key="scope.row.methodFiletr"
               :type="scope.row.method|tagTypeFiletr"
-               size="mini"
-              effect="dark">
-              {{scope.row.method|methodFiletr}}
-            </el-tag>
+              effect="dark"
+              size="mini"
+            >{{scope.row.method|methodFiletr}}</el-tag>
             <!-- {{scope.row.method|methodFiletr}} -->
           </div>
         </template>
       </el-table-column>
-      
+
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="text">编辑</el-button>
@@ -53,11 +52,11 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="新增Api">
-      <el-form :inline="true" :model="form" label-width="80px">
-        <el-form-item label="路径">
+      <el-form :inline="true" :model="form" :rules="rules" label-width="80px" ref="apiForm">
+        <el-form-item label="路径" prop="path">
           <el-input autocomplete="off" v-model="form.path"></el-input>
         </el-form-item>
-        <el-form-item label="请求">
+        <el-form-item label="请求" prop="method">
           <el-select placeholder="请选择" v-model="form.method">
             <el-option
               :key="item.value"
@@ -67,16 +66,14 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="api分组">
+        <el-form-item label="api分组" prop="group">
           <el-input autocomplete="off" v-model="form.group"></el-input>
         </el-form-item>
-        <el-form-item label="api简介">
+        <el-form-item label="api简介" prop="description">
           <el-input autocomplete="off" v-model="form.description"></el-input>
         </el-form-item>
       </el-form>
-      <div class="warning">
-          新增Api需要在角色管理内配置权限才可使用
-      </div>
+      <div class="warning">新增Api需要在角色管理内配置权限才可使用</div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -99,27 +96,27 @@ import {
 import infoList from '@/components/mixins/infoList'
 
 const methodOptions = [
-        {
-          value: 'POST',
-          label: '创建',
-          type:'success'
-        },
-        {
-          value: 'GET',
-          label: '查看',
-          type:''
-        },
-        {
-          value: 'PUT',
-          label: '更新',
-          type:'warning'
-        },
-        {
-          value: 'DELETE',
-          label: '删除',
-          type:'danger'
-        }
-      ]
+  {
+    value: 'POST',
+    label: '创建',
+    type: 'success'
+  },
+  {
+    value: 'GET',
+    label: '查看',
+    type: ''
+  },
+  {
+    value: 'PUT',
+    label: '更新',
+    type: 'warning'
+  },
+  {
+    value: 'DELETE',
+    label: '删除',
+    type: 'danger'
+  }
+]
 
 export default {
   name: 'Api',
@@ -132,10 +129,21 @@ export default {
       form: {
         path: '',
         group: '',
+        method: '',
         description: ''
       },
       methodOptions: methodOptions,
-      type: ''
+      type: '',
+      rules: {
+        path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
+        group: [{ required: true, message: '请输入组名称', trigger: 'blur' }],
+        method: [
+          { required: true, message: '请选择请求方式', trigger: 'blur' }
+        ],
+        description: [
+          { required: true, message: '请输入api介绍', trigger: 'blur' }
+        ]
+      }
     }
   },
   methods: {
@@ -150,7 +158,7 @@ export default {
         path: '',
         group: '',
         description: '',
-        method:''
+        method: ''
       }
     },
     closeDialog() {
@@ -190,56 +198,60 @@ export default {
         })
     },
     async enterDialog() {
-      switch (this.type) {
-        case 'addApi':
-          {
-            const res = await createApi(this.form)
-            if (res.success) {
-              this.$message({
-                type: 'success',
-                message: '添加成功',
-                showClose: true
-              })
-            }
-            this.getTableData()
-            this.closeDialog()
-          }
+      this.$refs.apiForm.validate(async valid => {
+        if (valid) {
+          switch (this.type) {
+            case 'addApi':
+              {
+                const res = await createApi(this.form)
+                if (res.success) {
+                  this.$message({
+                    type: 'success',
+                    message: '添加成功',
+                    showClose: true
+                  })
+                }
+                this.getTableData()
+                this.closeDialog()
+              }
 
-          break
-        case 'edit':
-          {
-            const res = await updataApi(this.form)
-            if (res.success) {
-              this.$message({
-                type: 'success',
-                message: '添加成功',
-                showClose: true
-              })
-            }
-            this.getTableData()
-            this.closeDialog()
+              break
+            case 'edit':
+              {
+                const res = await updataApi(this.form)
+                if (res.success) {
+                  this.$message({
+                    type: 'success',
+                    message: '添加成功',
+                    showClose: true
+                  })
+                }
+                this.getTableData()
+                this.closeDialog()
+              }
+              break
+            default:
+              {
+                this.$message({
+                  type: 'error',
+                  message: '未知操作',
+                  showClose: true
+                })
+              }
+              break
           }
-          break
-        default:
-          {
-            this.$message({
-              type: 'error',
-              message: '未知操作',
-              showClose: true
-            })
-          }
-          break
-      }
+        }
+      })
     }
   },
-  filters:{
-    methodFiletr(value){
-      const target = methodOptions.filter(item=>item.value === value)[0]
+  filters: {
+    methodFiletr(value) {
+      const target = methodOptions.filter(item => item.value === value)[0]
       // return target && `${target.label}(${target.value})`
       return target && `${target.label}`
     },
-    tagTypeFiletr(value){
-      const target = methodOptions.filter(item=>item.value === value)[0]
+    tagTypeFiletr(value) {
+      const target = methodOptions.filter(item => item.value === value)[0]
       return target && `${target.type}`
     }
   }
@@ -252,10 +264,10 @@ export default {
     float: right;
   }
 }
-.el-tag--mini{
+.el-tag--mini {
   margin-left: 5px;
 }
 .warning {
-    color: #DC143C;
+  color: #dc143c;
 }
 </style>

@@ -19,7 +19,7 @@ import (
 // @Router /customer/createExaCustomer [post]
 func CreateExaCustomer(c *gin.Context) {
 	var cu dbModel.ExaCustomer
-	_ = c.BindJSON(&cu)
+	_ = c.ShouldBindJSON(&cu)
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*middleware.CustomClaims)
 	cu.SysUserID = waitUse.ID
@@ -42,7 +42,7 @@ func CreateExaCustomer(c *gin.Context) {
 // @Router /customer/deleteExaCustomer [post]
 func DeleteExaCustomer(c *gin.Context) {
 	var cu dbModel.ExaCustomer
-	_ = c.BindJSON(&cu)
+	_ = c.ShouldBindJSON(&cu)
 	err := cu.DeleteExaCustomer()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
@@ -61,7 +61,7 @@ func DeleteExaCustomer(c *gin.Context) {
 // @Router /customer/updataExaCustomer [post]
 func UpdataExaCustomer(c *gin.Context) {
 	var cu dbModel.ExaCustomer
-	_ = c.BindJSON(&cu)
+	_ = c.ShouldBindJSON(&cu)
 	err := cu.UpdataExaCustomer()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
@@ -80,13 +80,13 @@ func UpdataExaCustomer(c *gin.Context) {
 // @Router /customer/getExaCustomer [post]
 func GetExaCustomer(c *gin.Context) {
 	var cu dbModel.ExaCustomer
-	_ = c.BindJSON(&cu)
-	err,customer := cu.GetExaCustomer()
+	_ = c.ShouldBindJSON(&cu)
+	err, customer := cu.GetExaCustomer()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "创建成功", gin.H{
-			"customer":customer,
+			"customer": customer,
 		})
 	}
 }
@@ -105,13 +105,13 @@ func GetExaCustomerList(c *gin.Context) {
 	var cu dbModel.ExaCustomer
 	cu.SysUserAuthorityID = waitUse.AuthorityId
 	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
+	_ = c.ShouldBindJSON(&pageInfo)
 	err, customerList, total := cu.GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "创建成功", gin.H{
-			"customer":customerList,
+			"customer": customerList,
 			"total":    total,
 			"page":     pageInfo.Page,
 			"pageSize": pageInfo.PageSize,

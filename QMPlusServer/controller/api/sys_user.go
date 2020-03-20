@@ -22,10 +22,10 @@ var (
 )
 
 type RegistAndLoginStuct struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Captcha  string `json:"captcha"`
-	CaptchaId  string `json:"captchaId"`
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Captcha   string `json:"captcha"`
+	CaptchaId string `json:"captchaId"`
 }
 
 type RegestStuct struct {
@@ -44,7 +44,7 @@ type RegestStuct struct {
 // @Router /base/regist [post]
 func Regist(c *gin.Context) {
 	var R RegestStuct
-	_ = c.BindJSON(&R)
+	_ = c.ShouldBindJSON(&R)
 	user := &sysModel.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
 	err, user := user.Regist()
 	if err != nil {
@@ -66,15 +66,15 @@ func Regist(c *gin.Context) {
 // @Router /base/login [post]
 func Login(c *gin.Context) {
 	var L RegistAndLoginStuct
-	_ = c.BindJSON(&L)
-	if captcha.VerifyString(L.CaptchaId,L.Captcha) {
+	_ = c.ShouldBindJSON(&L)
+	if captcha.VerifyString(L.CaptchaId, L.Captcha) {
 		U := &sysModel.SysUser{Username: L.Username, Password: L.Password}
 		if err, user := U.Login(); err != nil {
 			servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{})
 		} else {
 			tokenNext(c, *user)
 		}
-	}else{
+	} else {
 		servers.ReportFormat(c, false, "验证码错误", gin.H{})
 	}
 
@@ -149,7 +149,7 @@ type ChangePasswordStutrc struct {
 // @Router /user/changePassword [post]
 func ChangePassword(c *gin.Context) {
 	var params ChangePasswordStutrc
-	_ = c.BindJSON(&params)
+	_ = c.ShouldBindJSON(&params)
 	U := &sysModel.SysUser{Username: params.Username, Password: params.Password}
 	if err, _ := U.ChangePassword(params.NewPassword); err != nil {
 		servers.ReportFormat(c, false, "修改失败，请检查用户名密码", gin.H{})
@@ -208,7 +208,7 @@ func UploadHeaderImg(c *gin.Context) {
 // @Router /user/getUserList [post]
 func GetUserList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
+	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := new(sysModel.SysUser).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
@@ -237,7 +237,7 @@ type SetUserAuth struct {
 // @Router /user/setUserAuthority [post]
 func SetUserAuthority(c *gin.Context) {
 	var sua SetUserAuth
-	_ = c.BindJSON(&sua)
+	_ = c.ShouldBindJSON(&sua)
 	err := new(sysModel.SysUser).SetUserAuthority(sua.UUID, sua.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("修改失败，%v", err), gin.H{})

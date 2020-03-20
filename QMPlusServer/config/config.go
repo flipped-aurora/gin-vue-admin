@@ -13,6 +13,7 @@ type Config struct {
 	RedisAdmin   RedisAdmin   `json:"redisAdmin"`
 	System       System       `json:"system"`
 	JWT          JWT          `json:"jwt"`
+	Captcha      Captcha      `json:"captcha"`
 }
 
 type System struct { // 系统配置
@@ -45,6 +46,12 @@ type RedisAdmin struct { // Redis admin 数据库配置
 type Qiniu struct { // 七牛 密钥配置
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
+}
+
+type Captcha struct { // 验证码配置
+	KeyLong   int `json:"keyLong"`
+	ImgWidth  int `json:"imgWidth"`
+	ImgHeight int `json:"imgHeight"`
 }
 
 var GinVueAdminconfig Config

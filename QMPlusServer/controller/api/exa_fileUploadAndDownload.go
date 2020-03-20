@@ -85,7 +85,7 @@ func DeleteFile(c *gin.Context) {
 // @Router /fileUploadAndDownload/getFileList [post]
 func GetFileList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
+	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := new(dbModel.ExaFileUploadAndDownload).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})

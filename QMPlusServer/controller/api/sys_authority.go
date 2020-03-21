@@ -50,7 +50,7 @@ type DeleteAuthorityPatams struct {
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {
 	var a sysModel.SysAuthority
-	_ = c.BindJSON(&a)
+	_ = c.ShouldBindJSON(&a)
 	//删除角色之前需要判断是否有用户正在使用此角色
 	err := a.DeleteAuthority()
 	if err != nil {
@@ -70,7 +70,7 @@ func DeleteAuthority(c *gin.Context) {
 // @Router /authority/getAuthorityList [post]
 func GetAuthorityList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
+	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := new(sysModel.SysAuthority).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})

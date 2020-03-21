@@ -37,7 +37,7 @@ func GetMenu(c *gin.Context) {
 // @Router /menu/getMenuList [post]
 func GetMenuList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
+	_ = c.ShouldBindJSON(&pageInfo)
 	err, menuList, total := new(sysModel.SysBaseMenu).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
@@ -61,7 +61,7 @@ func GetMenuList(c *gin.Context) {
 // @Router /menu/addBaseMenu [post]
 func AddBaseMenu(c *gin.Context) {
 	var addMenu sysModel.SysBaseMenu
-	_ = c.BindJSON(&addMenu)
+	_ = c.ShouldBindJSON(&addMenu)
 	err := addMenu.AddBaseMenu()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败，%v", err), gin.H{})
@@ -101,7 +101,7 @@ type AddMenuAuthorityInfo struct {
 // @Router /menu/addMenuAuthority [post]
 func AddMenuAuthority(c *gin.Context) {
 	var addMenuAuthorityInfo AddMenuAuthorityInfo
-	_ = c.BindJSON(&addMenuAuthorityInfo)
+	_ = c.ShouldBindJSON(&addMenuAuthorityInfo)
 	err := new(sysModel.SysMenu).AddMenuAuthority(addMenuAuthorityInfo.Menus, addMenuAuthorityInfo.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败，%v", err), gin.H{})
@@ -124,7 +124,7 @@ type AuthorityIdInfo struct {
 // @Router /menu/addMenuAuthority [post]
 func GetMenuAuthority(c *gin.Context) {
 	var authorityIdInfo AuthorityIdInfo
-	_ = c.BindJSON(&authorityIdInfo)
+	_ = c.ShouldBindJSON(&authorityIdInfo)
 	err, menus := new(sysModel.SysMenu).GetMenuAuthority(authorityIdInfo.AuthorityId)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
@@ -147,7 +147,7 @@ type IdInfo struct {
 // @Router /menu/deleteBaseMenu [post]
 func DeleteBaseMenu(c *gin.Context) {
 	var idInfo IdInfo
-	_ = c.BindJSON(&idInfo)
+	_ = c.ShouldBindJSON(&idInfo)
 	err := new(sysModel.SysBaseMenu).DeleteBaseMenu(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
@@ -166,7 +166,7 @@ func DeleteBaseMenu(c *gin.Context) {
 // @Router /menu/updataBaseMen [post]
 func UpdataBaseMenu(c *gin.Context) {
 	var menu sysModel.SysBaseMenu
-	_ = c.BindJSON(&menu)
+	_ = c.ShouldBindJSON(&menu)
 	err := menu.UpdataBaseMenu()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("修改失败：%v", err), gin.H{})
@@ -189,7 +189,7 @@ type GetById struct {
 // @Router /menu/getBaseMenuById [post]
 func GetBaseMenuById(c *gin.Context) {
 	var idInfo GetById
-	_ = c.BindJSON(&idInfo)
+	_ = c.ShouldBindJSON(&idInfo)
 	err, menu := new(sysModel.SysBaseMenu).GetBaseMenuById(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("查询失败：%v", err), gin.H{})

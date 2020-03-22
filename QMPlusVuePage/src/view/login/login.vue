@@ -20,7 +20,7 @@
           <el-input
             v-model="loginForm.captcha"
             name="logVerify"
-            placeholder="请输入验证码(测试环境有问题可不输入 本地搭建环境可用)"
+            placeholder="请输入验证码"
             maxlength="10"
           />
           <img :src="path + picPath" alt="请输入验证码" @click="loginVefify()" class="vPic">

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"gin-vue-admin/cmd"
 	"gin-vue-admin/config"
 	"gin-vue-admin/init/initRedis"
@@ -19,9 +21,26 @@ import (
 // @name x-token
 // @BasePath /
 
+var (
+	mysqlHost = os.Getenv("MYSQLHOST")
+	mysqlPort = os.Getenv("MYSQLPORT")
+)
+
 func main() {
-	qmlog.InitLog()                                            // 初始化日志
-	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin) // 链接初始化数据库
+	qmlog.InitLog() // 初始化日志
+
+	// 可以通过环境变量来覆盖默认值
+	// 未设定有效的环境变量时，使用默认值
+	mysqlConfig := config.GinVueAdminconfig.MysqlAdmin
+	if mysqlHost == "" {
+		mysqlHost = "localhost"
+	}
+	if mysqlPort == "" {
+		mysqlPort = "3306"
+	}
+	mysqlConfig.Path = mysqlHost + ":" + mysqlPort
+
+	db := qmsql.InitMysql(mysqlConfig) // 链接初始化数据库
 	if config.GinVueAdminconfig.System.UseMultipoint {
 		_ = initRedis.InitRedis() // 初始化redis服务
 	}

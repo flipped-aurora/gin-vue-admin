@@ -15,8 +15,9 @@ func InitMysql(admin config.MysqlAdmin) *gorm.DB {
 		log.L.Error("DEFAULTDB数据库启动异常",err)
 	} else {
 		DEFAULTDB = db
-		DEFAULTDB.DB().SetMaxIdleConns(10)
-		DEFAULTDB.DB().SetMaxOpenConns(100)
+		DEFAULTDB.DB().SetMaxIdleConns(admin.MaxIdleConns)
+		DEFAULTDB.DB().SetMaxOpenConns(admin.MaxOpenConns)
+		DEFAULTDB.LogMode(admin.LogMode)
 	}
 	return DEFAULTDB
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"os"
+
 	"fmt"
 	"gin-vue-admin/cmd"
 	"gin-vue-admin/config"
@@ -20,12 +22,23 @@ import (
 // @name x-token
 // @BasePath /
 
+var (
+	mysqlHost = os.Getenv("MYSQLHOST")
+	mysqlPort = os.Getenv("MYSQLPORT")
+)
+
 func main() {
 	if err:= qmlog.NewLogger(); err != nil {
 		fmt.Println(err)
 	}
+	// 可以通过环境变量来覆盖配置值
+	// 未设定有效的环境变量时，使用配置值
+	mysqlConfig := config.GinVueAdminconfig.MysqlAdmin
+	if mysqlHost != "" && mysqlPort != "" {
+		mysqlConfig.Path = mysqlHost + ":" + mysqlPort
+	}
 	// 链接初始化数据库
-	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin)
+	db := qmsql.InitMysql(mysqlConfig) // 链接初始化数据库
 	if config.GinVueAdminconfig.System.UseMultipoint {
 		// 初始化redis服务
 		_ = initRedis.InitRedis()

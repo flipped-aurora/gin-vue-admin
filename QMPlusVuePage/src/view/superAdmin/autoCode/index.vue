@@ -4,10 +4,10 @@
         <!-- 此版本为简单版 -->
         <!-- 结构体基础配置 -->
         <el-form ref="form" :model="form" label-width="100px" :inline="true">
-            <el-form-item label="结构名称" :span="8">
+            <el-form-item label="Struct名称" :span="8">
                 <el-input v-model="form.structName"></el-input>
             </el-form-item>
-            <el-form-item label="结构类型" :span="8">
+            <!-- <el-form-item label="结构类型" :span="8">
                <el-select v-model="form.structType" multiple placeholder="请选择结构类型(多选)">
                     <el-option
                     v-for="item in options"
@@ -16,11 +16,11 @@
                     :value="item.value">
                     </el-option>
                 </el-select>
-            </el-form-item>
+            </el-form-item> -->
         </el-form>
         <!-- 组件列表 -->
         <div class="button-box clearflex">
-            <el-button @click="editAndAddComponent()" type="primary">新增组件</el-button>
+            <el-button @click="editAndAddComponent()" type="primary">新增Field</el-button>
         </div>
          <el-table
             :data="form.components"
@@ -32,17 +32,17 @@
             </el-table-column>
             <el-table-column
                 prop="componentName"
-                label="组件名"
+                label="Field名"
                 width="180">
             </el-table-column>
             <el-table-column
                 prop="componentType"
-                label="组件数据类型"
+                label="Field数据类型"
                 width="180">
             </el-table-column>
             <el-table-column
                 prop="componentShowType"
-                label="组件展示类型">
+                label="Field展示类型">
             </el-table-column>
             <el-table-column
                 prop="dictionaryName"

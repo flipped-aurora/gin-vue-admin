@@ -3,7 +3,6 @@ package autoCodeModel
 //开发中功能，若您发现这块代码可以研究，可以无视
 type AutoCodeStruct struct {
 	StructName string      `json:"structName"`
-	StructType []string    `json:"structType"`
 	Components []Component `json:"components"`
 }
 

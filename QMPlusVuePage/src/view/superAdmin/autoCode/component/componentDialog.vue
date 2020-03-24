@@ -47,7 +47,7 @@
             </div>
         </el-form>
         <div class="button-box clearflex">
-            <el-button @click="addDictionary" type="primary">新增组件</el-button>
+            <el-button @click="addDictionary" type="primary">新增字典</el-button>
         </div>
          <el-table
             :data="dialogMiddle.componentDictionary"

@@ -7,10 +7,13 @@
     },
     "mysqladmin": {
         "username": "root",
-        "password": "Aa@6447985",
+        "password": "123456",
         "path": "127.0.0.1:3306",
         "dbname": "qmPlus",
-        "config": "charset=utf8\u0026parseTime=True\u0026loc=Local"
+        "config": "charset=utf8\u0026parseTime=True\u0026loc=Local",
+        "maxIdleConns": 10,
+        "maxOpenConns": 100,
+        "logMode": true
     },
     "qiniu": {
         "accessKey": "25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ",

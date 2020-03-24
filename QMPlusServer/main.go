@@ -1,11 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"gin-vue-admin/cmd"
 	"gin-vue-admin/config"
 	"gin-vue-admin/init/initRedis"
 	"gin-vue-admin/init/initRouter"
-	"gin-vue-admin/init/qmlog"
+	"gin-vue-admin/init/log/qmlog"
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/init/registTable"
 	//"runtime"
@@ -20,15 +21,23 @@ import (
 // @BasePath /
 
 func main() {
-	qmlog.InitLog()                                            // 初始化日志
-	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin) // 链接初始化数据库
-	if config.GinVueAdminconfig.System.UseMultipoint {
-		_ = initRedis.InitRedis() // 初始化redis服务
+	var err error
+	logger, err := qmlog.NewLogger()
+	if err != nil {
+		fmt.Println(err)
 	}
-	registTable.RegistTable(db)       // 注册数据库表
-	defer qmsql.DEFAULTDB.Close()     // 程序结束前关闭数据库链接
-	Router := initRouter.InitRouter() // 注册路由
-	qmlog.QMLog.Info("服务器开启")         // 日志测试代码
+	// 链接初始化数据库
+	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin, logger)
+	if config.GinVueAdminconfig.System.UseMultipoint {
+		// 初始化redis服务
+		_ = initRedis.InitRedis(logger)
+	}
+	// 注册数据库表
+	registTable.RegistTable(db, logger)
+	// 程序结束前关闭数据库链接
+	defer qmsql.DEFAULTDB.Close()
+	// 注册路由
+	Router := initRouter.InitRouter(logger)
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	//sysType := runtime.GOOS
 	//
@@ -38,6 +47,6 @@ func main() {
 	//}
 	//if sysType == "windows" {
 	// WIN系统
-	cmd.RunWindowsServer(Router)
+	cmd.RunWindowsServer(Router, logger)
 	//}
 }

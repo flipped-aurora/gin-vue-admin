@@ -14,6 +14,7 @@ type Config struct {
 	System       System       `json:"system"`
 	JWT          JWT          `json:"jwt"`
 	Captcha      Captcha      `json:"captcha"`
+	Log          Log          `json:"log"`
 }
 
 type System struct { // 系统配置
@@ -54,6 +55,27 @@ type Captcha struct { // 验证码配置
 	ImgHeight int `json:"imgHeight"`
 }
 
+/**
+Log Config
+
+"CRITICAL"
+"ERROR"
+"WARNING"
+"NOTICE"
+"INFO"
+"DEBUG"
+*/
+type Log struct {
+	// log 打印的前缀
+	Prefix  string   `json:"prefix"`
+	// 是否显示打印log的文件具体路径
+	LogFile bool     `json:"logFile"`
+	// 在控制台打印log的级别， []默认不打印
+	Stdout  []string `json:"stdout"`
+	// 在文件中打印log的级别   []默认不打印
+	File    []string `json:"file"`
+}
+
 var GinVueAdminconfig Config
 var VTool *viper.Viper
 
@@ -68,7 +90,7 @@ func init() {
 	}
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("Config file changed:", e.Name)
+		fmt.Println("config file changed:", e.Name)
 		if err := v.Unmarshal(&GinVueAdminconfig); err != nil {
 			fmt.Println(err)
 		}

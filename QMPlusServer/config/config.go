@@ -31,11 +31,14 @@ type CasbinConfig struct { //casbin配置
 }
 
 type MysqlAdmin struct { // mysql admin 数据库配置
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Path     string `json:"path"`
-	Dbname   string `json:"dbname"`
-	Config   string `json:"config"`
+	Username     string `json:"username"`
+	Password     string `json:"password"`
+	Path         string `json:"path"`
+	Dbname       string `json:"dbname"`
+	Config       string `json:"config"`
+	MaxIdleConns int    `json:"maxIdleConns"`
+	MaxOpenConns int    `json:"maxOpenConns"`
+	LogMode      bool   `json:"maxOpenConns"`
 }
 
 type RedisAdmin struct { // Redis admin 数据库配置

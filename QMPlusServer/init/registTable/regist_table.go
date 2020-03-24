@@ -8,7 +8,7 @@ import (
 )
 
 //注册数据库表专用
-func RegistTable(db *gorm.DB, logger log.Logger) {
+func RegistTable(db *gorm.DB) {
 	db.AutoMigrate(sysModel.SysUser{},
 		sysModel.SysAuthority{},
 		sysModel.SysMenu{},
@@ -22,5 +22,5 @@ func RegistTable(db *gorm.DB, logger log.Logger) {
 		dbModel.ExaFileChunk{},
 		dbModel.ExaCustomer{},
 	)
-	logger.Debug("register table success")
+	log.L.Debug("register table success")
 }

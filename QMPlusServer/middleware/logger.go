@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func LoggerMiddlewareFactory(logger log.Logger) gin.HandlerFunc {
+func Logger() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// request time
 		start := time.Now()
@@ -27,7 +27,7 @@ func LoggerMiddlewareFactory(logger log.Logger) gin.HandlerFunc {
 		// copy request content
 		req, _ := httputil.DumpRequest(c.Request, true)
 		if logFlag {
-			logger.Debug(
+			log.L.Debug(
 				"Request:", method, clientIP, path, string(req))
 		}
 		// replace writer
@@ -44,7 +44,7 @@ func LoggerMiddlewareFactory(logger log.Logger) gin.HandlerFunc {
 		latency := end.Sub(start)
 		statusCode := c.Writer.Status()
 		if logFlag {
-			logger.Debug(
+			log.L.Debug(
 				"Response:",
 				statusCode,
 				latency,

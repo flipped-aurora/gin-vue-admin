@@ -21,23 +21,21 @@ import (
 // @BasePath /
 
 func main() {
-	var err error
-	logger, err := qmlog.NewLogger()
-	if err != nil {
+	if err:= qmlog.NewLogger(); err != nil {
 		fmt.Println(err)
 	}
 	// 链接初始化数据库
-	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin, logger)
+	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin)
 	if config.GinVueAdminconfig.System.UseMultipoint {
 		// 初始化redis服务
-		_ = initRedis.InitRedis(logger)
+		_ = initRedis.InitRedis()
 	}
 	// 注册数据库表
-	registTable.RegistTable(db, logger)
+	registTable.RegistTable(db)
 	// 程序结束前关闭数据库链接
 	defer qmsql.DEFAULTDB.Close()
 	// 注册路由
-	Router := initRouter.InitRouter(logger)
+	Router := initRouter.InitRouter()
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	//sysType := runtime.GOOS
 	//
@@ -47,6 +45,6 @@ func main() {
 	//}
 	//if sysType == "windows" {
 	// WIN系统
-	cmd.RunWindowsServer(Router, logger)
+	cmd.RunWindowsServer(Router)
 	//}
 }

@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func RunWindowsServer(Router *gin.Engine, logger log.Logger) {
+func RunWindowsServer(Router *gin.Engine) {
 	address := fmt.Sprintf(":%d", config.GinVueAdminconfig.System.Addr)
 	s := &http.Server{
 		Addr:           address,
@@ -19,7 +19,7 @@ func RunWindowsServer(Router *gin.Engine, logger log.Logger) {
 		MaxHeaderBytes: 1 << 20,
 	}
 	time.Sleep(10 * time.Microsecond)
-	logger.Debug("server run success on ", address)
+	log.L.Debug("server run success on ", address)
 
 	fmt.Printf(`欢迎使用 Gin-Vue-Admin
 	作者：奇淼 And Spike666

@@ -30,11 +30,5 @@
         "keyLong": 6,
         "imgWidth": 120,
         "imgHeight": 40
-    },
-    "log": {
-        "prefix": "[GIN-VUE-ADMIN]",
-        "logFile": false,
-        "stdout": ["DEBUG"],
-        "file": ["WARNING"]
     }
 }

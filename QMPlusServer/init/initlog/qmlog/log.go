@@ -22,7 +22,7 @@ const (
 )
 
 var (
-	configNotFound = errors.New("logger config not found")
+	configNotFound = errors.New("logger prefix not found")
 
 	defaultFormatter = `%{time:2006/01/02 - 15:04:05.000} %{longfile} %{color:bold}▶ [%{level:.6s}] %{message}%{color:reset}`
 )
@@ -31,8 +31,11 @@ type Logger struct{
 	logger *oplogging.Logger
 }
 
-func NewLogger() (log.Logger, error) {
+func NewLogger() error {
 	c := config.GinVueAdminconfig.Log
+	if c.Prefix == "" {
+		return configNotFound
+	}
 	logger := oplogging.MustGetLogger(module)
 	var backends []oplogging.Backend
 	backends = registerStdout(c, backends)
@@ -40,7 +43,7 @@ func NewLogger() (log.Logger, error) {
 
 	oplogging.SetBackend(backends...)
 	log.SetLogger(logger)
-	return logger, nil
+	return nil
 }
 
 func registerStdout(c config.Log, backends []oplogging.Backend) []oplogging.Backend {

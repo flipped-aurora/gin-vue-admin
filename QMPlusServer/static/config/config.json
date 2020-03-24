@@ -7,7 +7,7 @@
     },
     "mysqladmin": {
         "username": "root",
-        "password": "YINGL19980716.",
+        "password": "Aa@6447985",
         "path": "127.0.0.1:3306",
         "dbname": "qmPlus",
         "config": "charset=utf8\u0026parseTime=True\u0026loc=Local",
@@ -33,5 +33,11 @@
         "keyLong": 6,
         "imgWidth": 120,
         "imgHeight": 40
+    },
+    "log": {
+        "prefix": "[GIN-VUE-ADMIN]",
+        "logFile": false,
+        "stdout": ["DEBUG"],
+        "file": ["WARNING"]
     }
 }

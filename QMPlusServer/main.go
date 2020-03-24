@@ -1,9 +1,6 @@
 package main
 
 import (
-	"os"
-
-	"fmt"
 	"gin-vue-admin/cmd"
 	"gin-vue-admin/config"
 	"gin-vue-admin/init/initRedis"
@@ -11,6 +8,7 @@ import (
 	"gin-vue-admin/init/initlog/qmlog"
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/init/registTable"
+	"os"
 	//"runtime"
 )
 
@@ -28,8 +26,8 @@ var (
 )
 
 func main() {
-	if err:= qmlog.NewLogger(); err != nil {
-		fmt.Println(err)
+	if err := qmlog.NewLogger(); err != nil {
+		panic(err)
 	}
 	// 可以通过环境变量来覆盖配置值
 	// 未设定有效的环境变量时，使用配置值

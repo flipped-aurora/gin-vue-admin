@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- 开发中功能，若您发现这块代码可以研究，可以无视 -->
         <!-- 此版本为简单版 -->
         <!-- 结构体基础配置 -->
         <el-form ref="form" :model="form" label-width="100px" :inline="true">
@@ -143,6 +144,7 @@ export default {
             this.form.components.splice(index,1)
         },
         enterForm(){
+            console.log(this.form)
         }
     }
 }

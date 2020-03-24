@@ -16,3 +16,14 @@ services:
       MYSQL_ROOT_PASSWORD: Aa@6447985
       MYSQL_DATABASE: qmPlus
     user: root
+  server:
+    build: ./QMPlusServer
+    ports:
+      - 8080:8080
+      - 8888:8888
+    environment:
+      MYSQLHOST: database
+    working_dir: /go/src/gin-vue-admin
+    restart: always
+    depends_on:
+      - database

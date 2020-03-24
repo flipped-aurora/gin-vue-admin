@@ -29,17 +29,12 @@ var (
 func main() {
 	qmlog.InitLog() // 初始化日志
 
-	// 可以通过环境变量来覆盖默认值
-	// 未设定有效的环境变量时，使用默认值
+	// 可以通过环境变量来覆盖配置值
+	// 未设定有效的环境变量时，使用配置值
 	mysqlConfig := config.GinVueAdminconfig.MysqlAdmin
-	if mysqlHost == "" {
-		mysqlHost = "localhost"
+	if mysqlHost != "" && mysqlPort != "" {
+		mysqlConfig.Path = mysqlHost + ":" + mysqlPort
 	}
-	if mysqlPort == "" {
-		mysqlPort = "3306"
-	}
-	mysqlConfig.Path = mysqlHost + ":" + mysqlPort
-
 	db := qmsql.InitMysql(mysqlConfig) // 链接初始化数据库
 	if config.GinVueAdminconfig.System.UseMultipoint {
 		_ = initRedis.InitRedis() // 初始化redis服务

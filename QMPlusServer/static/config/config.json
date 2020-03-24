@@ -7,7 +7,7 @@
     },
     "mysqladmin": {
         "username": "root",
-        "password": "123456",
+        "password": "Aa@6447985",
         "path": "127.0.0.1:3306",
         "dbname": "qmPlus",
         "config": "charset=utf8\u0026parseTime=True\u0026loc=Local",

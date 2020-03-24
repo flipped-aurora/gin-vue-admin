@@ -8,7 +8,7 @@ import (
 
 var DEFAULTREDIS *redis.Client
 
-func InitRedis(logger log.Logger) (client *redis.Client) {
+func InitRedis() (client *redis.Client) {
 	client = redis.NewClient(&redis.Options{
 		Addr:     config.GinVueAdminconfig.RedisAdmin.Addr,
 		Password: config.GinVueAdminconfig.RedisAdmin.Password, // no password set
@@ -16,9 +16,9 @@ func InitRedis(logger log.Logger) (client *redis.Client) {
 	})
 	pong, err := client.Ping().Result()
 	if err != nil {
-		logger.Error(err)
+		log.L.Error(err)
 	} else {
-		logger.Info("redis connect ping response:", pong)
+		log.L.Info("redis connect ping response:", pong)
 		DEFAULTREDIS = client
 	}
 	return client

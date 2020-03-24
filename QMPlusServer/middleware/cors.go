@@ -6,7 +6,7 @@ import (
 )
 
 // 处理跨域请求,支持options访问
-func CorsMiddlewareFactory() gin.HandlerFunc {
+func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		method := c.Request.Method
 		c.Header("Access-Control-Allow-Origin", "*")

@@ -11,18 +11,18 @@ import (
 )
 
 //初始化总路由
-func InitRouter(logger log.Logger) *gin.Engine {
+func InitRouter() *gin.Engine {
 	var Router = gin.Default()
 
 	//Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	// 如果不需要日志 请关闭这里
-	Router.Use(middleware.LoggerMiddlewareFactory(logger))
-	logger.Debug("use middleware logger")
+	Router.Use(middleware.Logger())
+	log.L.Debug("use middleware logger")
 	// 跨域
-	Router.Use(middleware.CorsMiddlewareFactory())
-	logger.Debug("use middleware cors")
+	Router.Use(middleware.Cors())
+	log.L.Debug("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	logger.Debug("register swagger handler")
+	log.L.Debug("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 	ApiGroup := Router.Group("")
 	router.InitUserRouter(ApiGroup)                  // 注册用户路由
@@ -36,6 +36,6 @@ func InitRouter(logger log.Logger) *gin.Engine {
 	router.InitJwtRouter(ApiGroup)                   // jwt相关路由
 	router.InitSystemRouter(ApiGroup)                // system相关路由
 	router.InitCustomerRouter(ApiGroup)             // 客户路由
-	logger.Info("router register success")
+	log.L.Info("router register success")
 	return Router
 }

@@ -6,7 +6,7 @@ import (
 	"gin-vue-admin/config"
 	"gin-vue-admin/init/initRedis"
 	"gin-vue-admin/init/initRouter"
-	"gin-vue-admin/init/log/qmlog"
+	"gin-vue-admin/init/initlog/qmlog"
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/init/registTable"
 	//"runtime"

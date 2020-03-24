@@ -1,7 +1,7 @@
 package registTable
 
 import (
-	"gin-vue-admin/init/log"
+	"gin-vue-admin/init/initlog"
 	"gin-vue-admin/model/dbModel"
 	"gin-vue-admin/model/sysModel"
 	"github.com/jinzhu/gorm"

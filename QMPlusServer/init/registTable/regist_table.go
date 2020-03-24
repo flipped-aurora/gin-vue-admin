@@ -1,13 +1,14 @@
 package registTable
 
 import (
+	"gin-vue-admin/init/log"
 	"gin-vue-admin/model/dbModel"
 	"gin-vue-admin/model/sysModel"
 	"github.com/jinzhu/gorm"
 )
 
 //注册数据库表专用
-func RegistTable(db *gorm.DB) {
+func RegistTable(db *gorm.DB, logger log.Logger) {
 	db.AutoMigrate(sysModel.SysUser{},
 		sysModel.SysAuthority{},
 		sysModel.SysMenu{},
@@ -21,4 +22,5 @@ func RegistTable(db *gorm.DB) {
 		dbModel.ExaFileChunk{},
 		dbModel.ExaCustomer{},
 	)
+	logger.Debug("register table success")
 }

@@ -1,14 +1,14 @@
 package initRedis
 
 import (
-	"fmt"
 	"gin-vue-admin/config"
+	"gin-vue-admin/init/log"
 	"github.com/go-redis/redis"
 )
 
 var DEFAULTREDIS *redis.Client
 
-func InitRedis() (client *redis.Client) {
+func InitRedis(logger log.Logger) (client *redis.Client) {
 	client = redis.NewClient(&redis.Options{
 		Addr:     config.GinVueAdminconfig.RedisAdmin.Addr,
 		Password: config.GinVueAdminconfig.RedisAdmin.Password, // no password set
@@ -16,9 +16,9 @@ func InitRedis() (client *redis.Client) {
 	})
 	pong, err := client.Ping().Result()
 	if err != nil {
-		fmt.Println(pong, err)
+		logger.Error(err)
 	} else {
-		fmt.Println(pong, err)
+		logger.Info("redis connect ping response:", pong)
 		DEFAULTREDIS = client
 	}
 	return client

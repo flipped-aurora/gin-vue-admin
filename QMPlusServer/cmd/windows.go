@@ -3,7 +3,7 @@ package cmd
 import (
 	"fmt"
 	"gin-vue-admin/config"
-	"gin-vue-admin/init/log"
+	"gin-vue-admin/init/initlog"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"

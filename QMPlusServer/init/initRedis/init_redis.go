@@ -2,7 +2,7 @@ package initRedis
 
 import (
 	"gin-vue-admin/config"
-	"gin-vue-admin/init/log"
+	"gin-vue-admin/init/initlog"
 	"github.com/go-redis/redis"
 )
 

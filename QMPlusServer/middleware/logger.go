@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"bytes"
-	"gin-vue-admin/init/log"
+	"gin-vue-admin/init/initlog"
 	"net/http/httputil"
 	"strings"
 	"time"

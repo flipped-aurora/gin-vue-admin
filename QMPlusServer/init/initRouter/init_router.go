@@ -2,7 +2,7 @@ package initRouter
 
 import (
 	_ "gin-vue-admin/docs"
-	"gin-vue-admin/init/log"
+	"gin-vue-admin/init/initlog"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/router"
 	"github.com/gin-gonic/gin"

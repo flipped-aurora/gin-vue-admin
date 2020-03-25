@@ -2,6 +2,7 @@
 # https://docs.docker.com/compose/compose-file/
 
 version: "3.5"
+
 services:
   # 数据库的各种配置参数，请参考以下链接：
   # https://github.com/piexlmax/gin-vue-admin/blob/master/QMPlusServer/db/qmplus.sql#L4-L8
@@ -15,14 +16,16 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: Aa@6447985
       MYSQL_DATABASE: qmPlus
-    user: root
+
   server:
     build: ./QMPlusServer
     ports:
-      - 8080:8080
       - 8888:8888
     environment:
-      MYSQLHOST: database
+      MYSQL_HOST: database
+      MYSQL_PORT: 3306
+      MYSQL_RETRY_COUNT: 3
+      MYSQL_RETRY_WAIT: 10 # second
     working_dir: /go/src/gin-vue-admin
     restart: always
     depends_on:

@@ -3,11 +3,11 @@ package qmsql
 import (
 	"log"
 
+	"gin-vue-admin/config"
+
 	"github.com/cenkalti/backoff/v4"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
-
-	"gin-vue-admin/config"
 )
 
 var DEFAULTDB *gorm.DB
@@ -32,7 +32,8 @@ func InitMysql(admin config.MysqlAdmin) *gorm.DB {
 		log.Fatalf("DEFAULTDB数据库启动异常: %s", err)
 	}
 
-	DEFAULTDB.DB().SetMaxIdleConns(10)
-	DEFAULTDB.DB().SetMaxOpenConns(100)
+	DEFAULTDB.DB().SetMaxIdleConns(admin.MaxIdleConns)
+	DEFAULTDB.DB().SetMaxOpenConns(admin.MaxOpenConns)
+	DEFAULTDB.LogMode(admin.LogMode)
 	return DEFAULTDB
 }

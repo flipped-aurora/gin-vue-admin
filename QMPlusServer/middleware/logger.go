@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"bytes"
-	"gin-vue-admin/init/qmlog"
+	"gin-vue-admin/init/initlog"
 	"net/http/httputil"
 	"strings"
 	"time"
@@ -11,7 +11,6 @@ import (
 )
 
 func Logger() gin.HandlerFunc {
-	log := qmlog.QMLog
 	return func(c *gin.Context) {
 		// request time
 		start := time.Now()
@@ -28,8 +27,8 @@ func Logger() gin.HandlerFunc {
 		// copy request content
 		req, _ := httputil.DumpRequest(c.Request, true)
 		if logFlag {
-			log.Infof(`| %s | %s | %s | %5s | %s\n`,
-				`Request :`, method, clientIP, path, string(req))
+			log.L.Debug(
+				"Request:", method, clientIP, path, string(req))
 		}
 		// replace writer
 		cusWriter := &responseBodyWriter{
@@ -45,8 +44,8 @@ func Logger() gin.HandlerFunc {
 		latency := end.Sub(start)
 		statusCode := c.Writer.Status()
 		if logFlag {
-			log.Infof(`| %s | %3d | %13v | %s \n`,
-				`Response:`,
+			log.L.Debug(
+				"Response:",
 				statusCode,
 				latency,
 				cusWriter.body.String())

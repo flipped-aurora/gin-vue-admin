@@ -2,6 +2,10 @@ package config
 
 import (
 	"fmt"
+	"log"
+	"strconv"
+	"time"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -36,6 +40,12 @@ type MysqlAdmin struct { // mysql admin 数据库配置
 	Path     string `json:"path"`
 	Dbname   string `json:"dbname"`
 	Config   string `json:"config"`
+	Retry    Retry
+}
+
+type Retry struct {
+	Count int
+	Wait  time.Duration
 }
 
 type RedisAdmin struct { // Redis admin 数据库配置
@@ -77,4 +87,32 @@ func init() {
 		fmt.Println(err)
 	}
 	VTool = v
+}
+
+// SetPath ...
+func (config *MysqlAdmin) SetPath(host, port string) {
+
+	if host == "" {
+		host = "localhost"
+	}
+	if port == "" {
+		port = "3306"
+	}
+	config.Path = host + ":" + port
+}
+
+// SetRetry ...
+func (config *MysqlAdmin) SetRetry(count, delay string) {
+
+	cnt, err := strconv.Atoi(count)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	config.Retry.Count = cnt
+
+	wait, err := strconv.Atoi(delay)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	config.Retry.Wait = time.Duration(wait) * time.Second
 }

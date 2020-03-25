@@ -4,6 +4,9 @@
             <el-form-item label="组件名称" label-width="80" :span="8">
                 <el-input v-model="dialogMiddle.componentName" autocomplete="off"></el-input>
             </el-form-item>
+            <el-form-item label="组件JSON" label-width="80" :span="8">
+                <el-input v-model="dialogMiddle.componentJson" autocomplete="off"></el-input>
+            </el-form-item>
             <el-form-item label="数据类型" label-width="80" :span="8">
             <el-select v-model="dialogMiddle.componentType" placeholder="请选择活动区域">
                 <el-option

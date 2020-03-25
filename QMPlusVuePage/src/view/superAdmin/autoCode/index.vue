@@ -7,6 +7,9 @@
             <el-form-item label="Struct名称" :span="8">
                 <el-input v-model="form.structName"></el-input>
             </el-form-item>
+            <el-form-item label="Package名称" :span="8">
+                <el-input v-model="form.packageName"></el-input>
+            </el-form-item>
             <!-- <el-form-item label="结构类型" :span="8">
                <el-select v-model="form.structType" multiple placeholder="请选择结构类型(多选)">
                     <el-option
@@ -101,7 +104,8 @@ export default {
             addFlag:"",
             form:{
                 structName:"",
-                structType:[],
+                packageName:"",
+                
                 components:[]
             },
             options:[

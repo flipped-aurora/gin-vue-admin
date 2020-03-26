@@ -30,3 +30,15 @@ services:
     restart: always
     depends_on:
       - database
+
+  vuepage:
+    build: ./QMPlusVuePage
+    ports:
+      - 8080:8080
+    environment:
+      BACKENDHOST: server
+    working_dir: /app
+    restart: always
+    depends_on:
+      - database
+      - server

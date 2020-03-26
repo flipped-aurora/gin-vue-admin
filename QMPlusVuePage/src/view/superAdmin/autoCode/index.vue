@@ -7,6 +7,9 @@
             <el-form-item label="Struct名称" :span="8">
                 <el-input v-model="form.structName"></el-input>
             </el-form-item>
+            <el-form-item label="Struct简称" :span="8">
+                <el-input v-model="form.structName"></el-input>
+            </el-form-item>
             <el-form-item label="Package名称" :span="8">
                 <el-input v-model="form.packageName"></el-input>
             </el-form-item>

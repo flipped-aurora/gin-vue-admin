@@ -2,7 +2,6 @@ package autoCodeModel
 
 import (
 	"fmt"
-	log "gin-vue-admin/init/initlog"
 	"html/template"
 	"os"
 )
@@ -55,27 +54,28 @@ func Temp() {
 		ComponentDictionary: nil,
 	}
 	a := AutoCodeStruct{
-		StructName:  "Test",
-		PackageName: "autocode",
-		Components:  []Component{a1, a2},
+		StructName:   "Test",
+		PackageName:  "autocode",
+		Abbreviation: "t",
+		Components:   []Component{a1, a2},
 	}
 
 	_dir := "../" + a.PackageName
 	exist, err := pathExists(_dir)
 	if err != nil {
-		log.L.Info("get dir error![%v]\n", err)
+		//log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))
 		return
 	}
 	if exist {
-		log.L.Info("has dir![%v]\n", _dir)
+		//log.L.Info(fmt.Sprintf("has dir![%v]\n"+_dir))
 	} else {
-		log.L.Info("no dir![%v]\n", _dir)
+		//log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
 		// 创建文件夹
 		err := os.Mkdir(_dir, os.ModePerm)
 		if err != nil {
-			log.L.Error("mkdir failed![%v]\n", err)
+			//log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
 		} else {
-			log.L.Info("mkdir success!\n")
+			//log.L.Info("mkdir success!\n")
 		}
 	}
 	file, err := os.OpenFile("../"+a.PackageName+"/struct.go", os.O_CREATE|os.O_WRONLY, 0755)

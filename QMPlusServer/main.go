@@ -21,20 +21,24 @@ import (
 // @BasePath /
 
 var (
-	mysqlHost = os.Getenv("MYSQLHOST")
-	mysqlPort = os.Getenv("MYSQLPORT")
+	mysqlHost       = os.Getenv("MYSQL_HOST")
+	mysqlPort       = os.Getenv("MYSQL_PORT")
+	mysqlRetryCount = os.Getenv("MYSQL_RETRY_COUNT")
+	mysqlRetryWait  = os.Getenv("MYSQL_RETRY_WAIT")
 )
 
 func main() {
+
 	if err := qmlog.NewLogger(); err != nil {
 		panic(err)
 	}
+
 	// 可以通过环境变量来覆盖配置值
 	// 未设定有效的环境变量时，使用配置值
 	mysqlConfig := config.GinVueAdminconfig.MysqlAdmin
-	if mysqlHost != "" && mysqlPort != "" {
-		mysqlConfig.Path = mysqlHost + ":" + mysqlPort
-	}
+	mysqlConfig.SetPath(mysqlHost, mysqlPort)
+	mysqlConfig.SetRetry(mysqlRetryCount, mysqlRetryWait)
+
 	// 链接初始化数据库
 	db := qmsql.InitMysql(mysqlConfig) // 链接初始化数据库
 	if config.GinVueAdminconfig.System.UseMultipoint {

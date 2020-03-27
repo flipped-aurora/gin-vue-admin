@@ -2,6 +2,10 @@ package config
 
 import (
 	"fmt"
+	"log"
+	"strconv"
+	"time"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -40,6 +44,12 @@ type MysqlAdmin struct { // mysql admin 数据库配置
 	MaxIdleConns int    `json:"maxIdleConns"`
 	MaxOpenConns int    `json:"maxOpenConns"`
 	LogMode      bool   `json:"maxOpenConns"`
+	Retry        Retry
+}
+
+type Retry struct {
+	Count int
+	Wait  time.Duration
 }
 
 type RedisAdmin struct { // Redis admin 数据库配置
@@ -70,13 +80,13 @@ Log Config
 */
 type Log struct {
 	// log 打印的前缀
-	Prefix  string   `json:"prefix"`
+	Prefix string `json:"prefix"`
 	// 是否显示打印log的文件具体路径
-	LogFile bool     `json:"logFile"`
+	LogFile bool `json:"logFile"`
 	// 在控制台打印log的级别， []默认不打印
-	Stdout  []string `json:"stdout"`
+	Stdout []string `json:"stdout"`
 	// 在文件中打印log的级别   []默认不打印
-	File    []string `json:"file"`
+	File []string `json:"file"`
 }
 
 var GinVueAdminconfig Config
@@ -102,4 +112,32 @@ func init() {
 		fmt.Println(err)
 	}
 	VTool = v
+}
+
+// SetPath ...
+func (config *MysqlAdmin) SetPath(host, port string) {
+
+	if host == "" {
+		host = "localhost"
+	}
+	if port == "" {
+		port = "3306"
+	}
+	config.Path = host + ":" + port
+}
+
+// SetRetry ...
+func (config *MysqlAdmin) SetRetry(count, delay string) {
+
+	cnt, err := strconv.Atoi(count)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	config.Retry.Count = cnt
+
+	wait, err := strconv.Atoi(delay)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	config.Retry.Wait = time.Duration(wait) * time.Second
 }

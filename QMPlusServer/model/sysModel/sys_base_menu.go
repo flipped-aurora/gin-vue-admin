@@ -58,6 +58,7 @@ func (b *SysBaseMenu) UpdataBaseMenu() (err error) {
 	upDataMap["title"] = b.Title
 	upDataMap["icon"] = b.Icon
 	upDataMap["sort"] = b.Sort
+	upDataMap["nick_name"] = b.Title
 	err = qmsql.DEFAULTDB.Where("id = ?", b.ID).Find(&SysBaseMenu{}).Updates(upDataMap).Error
 	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&[]SysMenu{}).Updates(upDataMap).Error
 	fmt.Printf("菜单修改时候，关联菜单err1:%v,err:%v", err1, err)

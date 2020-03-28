@@ -36,7 +36,7 @@ services:
     ports:
       - 8080:8080
     environment:
-      BACKENDHOST: server
+      BACKEND_HOST: server
     working_dir: /app
     restart: always
     depends_on:

@@ -2,12 +2,13 @@ package config
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
+
+	"gin-vue-admin/init/initlog"
 )
 
 type Config struct {
@@ -114,7 +115,7 @@ func init() {
 	VTool = v
 }
 
-// SetPath ...
+// SetPath 设置MySQL数据库的URL，默认设置为“localhost:3306”。
 func (config *MysqlAdmin) SetPath(host, port string) {
 
 	if host == "" {
@@ -126,18 +127,24 @@ func (config *MysqlAdmin) SetPath(host, port string) {
 	config.Path = host + ":" + port
 }
 
-// SetRetry ...
+// SetRetry 设置重试的次数和间隔，默认设置为不进行重试。
 func (config *MysqlAdmin) SetRetry(count, delay string) {
+
+	if count == "" || delay == "" {
+		config.Retry.Count = 0
+		config.Retry.Wait = 0 * time.Second
+		return
+	}
 
 	cnt, err := strconv.Atoi(count)
 	if err != nil {
-		log.Fatalln(err)
+		log.L.Fatal(err.Error())
 	}
 	config.Retry.Count = cnt
 
 	wait, err := strconv.Atoi(delay)
 	if err != nil {
-		log.Fatalln(err)
+		log.L.Fatal(err.Error())
 	}
 	config.Retry.Wait = time.Duration(wait) * time.Second
 }

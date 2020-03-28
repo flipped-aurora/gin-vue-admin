@@ -1,9 +1,8 @@
 package qmsql
 
 import (
-	"log"
-
 	"gin-vue-admin/config"
+	"gin-vue-admin/init/initlog"
 
 	"github.com/cenkalti/backoff/v4"
 	"github.com/jinzhu/gorm"
@@ -29,7 +28,7 @@ func InitMysql(admin config.MysqlAdmin) *gorm.DB {
 	err = backoff.Retry(openDB, policy)
 	if err != nil {
 		// Retry之后仍然无法连接，数据库初始化失败，直接退出程序
-		log.Fatalf("DEFAULTDB数据库启动异常: %s", err)
+		log.L.Fatal("DEFAULTDB数据库启动异常:", err.Error())
 	}
 
 	DEFAULTDB.DB().SetMaxIdleConns(admin.MaxIdleConns)

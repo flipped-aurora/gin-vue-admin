@@ -1,16 +1,11 @@
-FROM golang:1.12 AS build
+FROM golang:1.12-alpine
 
 WORKDIR /go/src/gin-vue-admin
 COPY . .
 
-ENV GO111MODULE=on
-ENV GOPROXY=https://goproxy.cn
-RUN go get ./... \
-    && go build -o gin-vue-admin
+ENV GO111MODULE=on \
+    GOPROXY=https://goproxy.cn
+RUN go mod download
 
-FROM golang:1.12 AS serve
-
-COPY --from=build /go/src/gin-vue-admin /go/src/gin-vue-admin
-
-EXPOSE 8080
+RUN go build -ldflags="-s -w" -o gin-vue-admin
 ENTRYPOINT [ "./gin-vue-admin" ]

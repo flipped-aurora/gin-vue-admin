@@ -2,6 +2,7 @@ package autoCodeModel
 
 import (
 	"fmt"
+	"gin-vue-admin/tools"
 	"html/template"
 	"os"
 )
@@ -31,8 +32,13 @@ type Dictionary struct {
 }
 
 func Temp() {
-	tmpl, err := template.ParseFiles("../../tpl/te/struct.go.tpl")
-	fmt.Println(tmpl, err)
+	modelTmpl, modelTplErr := template.ParseFiles("../../tpl/te/model.go.tpl")
+	apiTmpl, apiTplErr := template.ParseFiles("../../tpl/te/api.go.tpl")
+	routerTmpl, routerTplErr := template.ParseFiles("../../tpl/te/router.go.tpl")
+	feapiTmpl, feapiTplErr := template.ParseFiles("../../tpl/fe/api.js.tpl")
+
+	fmt.Println(modelTplErr,apiTplErr,routerTplErr,feapiTplErr)
+
 	a1 := Component{
 		ComponentName:       "TestComponent",
 		ComponentType:       "string",
@@ -59,37 +65,51 @@ func Temp() {
 		Abbreviation: "t",
 		Components:   []Component{a1, a2},
 	}
+	_autoCode := "../../autoCode/"
+	_te := "../../autoCode/te/"
+	_dir := "../../autoCode/te/" + a.PackageName
+	_modeldir := "../../autoCode/te/" + a.PackageName+"/model"
+	_apidir := "../../autoCode/te/" + a.PackageName+"/api"
+	_routerdir := "../../autoCode/te/" + a.PackageName+"/router"
+	_fe := "../../autoCode/fe/"
+	_fe_dir:="../../autoCode/fe/" + a.PackageName
+	_fe_apidir:="../../autoCode/fe/" + a.PackageName+"/api"
+	mkerr := createDir(_autoCode,_te,_dir,_modeldir,_apidir,_routerdir,_fe,_fe_dir,_fe_apidir)
+	fmt.Print(mkerr)
+	model, _ := os.OpenFile("../../autoCode/te/"+a.PackageName+"/model/model.go", os.O_CREATE|os.O_WRONLY, 0755)
+	api, _ := os.OpenFile("../../autoCode/te/"+a.PackageName+"/api/api.go", os.O_CREATE|os.O_WRONLY, 0755)
+	router, _ := os.OpenFile("../../autoCode/te/"+a.PackageName+"/router/router.go", os.O_CREATE|os.O_WRONLY, 0755)
+	feapi ,_ := os.OpenFile("../../autoCode/fe/"+a.PackageName+"/api/api.js", os.O_CREATE|os.O_WRONLY, 0755)
+	modelErr := modelTmpl.Execute(model, a)
+	apiErr := apiTmpl.Execute(api, a)
+	routerErr := routerTmpl.Execute(router, a)
+	feapiErr := feapiTmpl.Execute(feapi, a)
 
-	_dir := "../" + a.PackageName
-	exist, err := pathExists(_dir)
-	if err != nil {
-		//log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))
-		return
-	}
-	if exist {
-		//log.L.Info(fmt.Sprintf("has dir![%v]\n"+_dir))
-	} else {
-		//log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
-		// 创建文件夹
-		err := os.Mkdir(_dir, os.ModePerm)
-		if err != nil {
-			//log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
-		} else {
-			//log.L.Info("mkdir success!\n")
-		}
-	}
-	file, err := os.OpenFile("../"+a.PackageName+"/struct.go", os.O_CREATE|os.O_WRONLY, 0755)
-	err = tmpl.Execute(file, a)
+	fmt.Println(modelErr,apiErr,routerErr,feapiErr)
 }
 
-// 判断文件夹是否存在
-func pathExists(path string) (bool, error) {
-	_, err := os.Stat(path)
-	if err == nil {
-		return true, nil
+
+
+//批量创建文件夹
+func createDir(dirs ...string)(err error){
+	for _,v:=range dirs{
+		exist, err := tools.PathExists(v)
+		if err != nil {
+			//log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))
+			return err
+		}
+		if exist {
+			//log.L.Info(fmt.Sprintf("has dir![%v]\n"+_dir))
+		} else {
+			//log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
+			// 创建文件夹
+			err = os.Mkdir(v, os.ModePerm)
+			if err != nil {
+				//log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
+			} else {
+				//log.L.Info("mkdir success!\n")
+			}
+		}
 	}
-	if os.IsNotExist(err) {
-		return false, nil
-	}
-	return false, err
+	return err
 }

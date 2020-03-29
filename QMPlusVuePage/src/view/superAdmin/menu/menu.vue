@@ -201,6 +201,7 @@ export default {
               message: '添加失败!'
             })
           }
+          this.initForm()
           this.dialogFormVisible = false
         }
       })

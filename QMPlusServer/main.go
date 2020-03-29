@@ -47,6 +47,8 @@ func main() {
 	defer qmsql.DEFAULTDB.Close()
 	// 注册路由
 	Router := initRouter.InitRouter()
+
+	Router.Static("/form-generator", "./static/form-generator")
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	//sysType := runtime.GOOS
 	//

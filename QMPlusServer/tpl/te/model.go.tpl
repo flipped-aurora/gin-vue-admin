@@ -9,8 +9,8 @@ import (
 )
 
 type {{.StructName}} struct {
-      gorm.Model {{range .Components}}
-      {{.ComponentName}}  {{.ComponentType}} `json:"{{.ComponentJson}}"`    {{ end }}
+      gorm.Model {{range .Fields}}
+      {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}"{{if .ColumnName}} gorm:"column:{{.ColumnName}}"{{end}}`{{ end }}
 }
 
 // 创建{{.StructName}}

@@ -1,7 +1,6 @@
 package autoCodeModel
 
 import (
-	"fmt"
 	"gin-vue-admin/tools"
 	"html/template"
 	"os"
@@ -9,21 +8,17 @@ import (
 
 //开发中功能，若您发现这块代码可以研究，可以无视
 type AutoCodeStruct struct {
-	StructName   string      `json:"structName"`
-	PackageName  string      `json:"packageName"`
-	Abbreviation string      `json:"abbreviation"`
-	Components   []Component `json:"components"`
+	StructName   string  `json:"structName"`
+	PackageName  string  `json:"packageName"`
+	Abbreviation string  `json:"abbreviation"`
+	Fields       []Field `json:"fields"`
 }
 
-type Component struct {
-	ComponentName       string       `json:"componentName"`
-	ComponentType       string       `json:"componentType"`
-	ComponentJson       string       `json:"componentJson"`
-	Ismultiple          bool         `json:"isMultiple"`
-	ComponentShowType   string       `json:"componentShowType"`
-	NideDictionary      bool         `json:"nideDictionary"`
-	DictionaryName      string       `json:"dictionaryName"`
-	ComponentDictionary []Dictionary `json:"dictionary"`
+type Field struct {
+	FieldName  string `json:"fieldName"`
+	FieldType  string `json:"fieldType"`
+	FieldJson  string `json:"fieldJson"`
+	ColumnName string `json:"columnName"`
 }
 
 type Dictionary struct {
@@ -31,68 +26,113 @@ type Dictionary struct {
 	Value string `json:"value"`
 }
 
-func Temp() {
-	modelTmpl, modelTplErr := template.ParseFiles("../../tpl/te/model.go.tpl")
-	apiTmpl, apiTplErr := template.ParseFiles("../../tpl/te/api.go.tpl")
-	routerTmpl, routerTplErr := template.ParseFiles("../../tpl/te/router.go.tpl")
-	feapiTmpl, feapiTplErr := template.ParseFiles("../../tpl/fe/api.js.tpl")
-
-	fmt.Println(modelTplErr,apiTplErr,routerTplErr,feapiTplErr)
-
-	a1 := Component{
-		ComponentName:       "TestComponent",
-		ComponentType:       "string",
-		ComponentJson:       "testComponent",
-		Ismultiple:          false,
-		ComponentShowType:   "",
-		NideDictionary:      false,
-		DictionaryName:      "",
-		ComponentDictionary: nil,
+func (a *AutoCodeStruct) CreateTemp() (err error) {
+	basePath := "./tpl"
+	modelTmpl, err := template.ParseFiles(basePath + "/te/model.go.tpl")
+	if err != nil {
+		return err
 	}
-	a2 := Component{
-		ComponentName:       "TestBigComponent",
-		ComponentType:       "int",
-		ComponentJson:       "testBigComponent",
-		Ismultiple:          false,
-		ComponentShowType:   "",
-		NideDictionary:      false,
-		DictionaryName:      "",
-		ComponentDictionary: nil,
+	apiTmpl, err := template.ParseFiles(basePath + "/te/api.go.tpl")
+	if err != nil {
+		return err
 	}
-	a := AutoCodeStruct{
-		StructName:   "Test",
-		PackageName:  "autocode",
-		Abbreviation: "t",
-		Components:   []Component{a1, a2},
+	routerTmpl, err := template.ParseFiles(basePath + "/te/router.go.tpl")
+	if err != nil {
+		return err
 	}
-	_autoCode := "../../autoCode/"
-	_te := "../../autoCode/te/"
-	_dir := "../../autoCode/te/" + a.PackageName
-	_modeldir := "../../autoCode/te/" + a.PackageName+"/model"
-	_apidir := "../../autoCode/te/" + a.PackageName+"/api"
-	_routerdir := "../../autoCode/te/" + a.PackageName+"/router"
-	_fe := "../../autoCode/fe/"
-	_fe_dir:="../../autoCode/fe/" + a.PackageName
-	_fe_apidir:="../../autoCode/fe/" + a.PackageName+"/api"
-	mkerr := createDir(_autoCode,_te,_dir,_modeldir,_apidir,_routerdir,_fe,_fe_dir,_fe_apidir)
-	fmt.Print(mkerr)
-	model, _ := os.OpenFile("../../autoCode/te/"+a.PackageName+"/model/model.go", os.O_CREATE|os.O_WRONLY, 0755)
-	api, _ := os.OpenFile("../../autoCode/te/"+a.PackageName+"/api/api.go", os.O_CREATE|os.O_WRONLY, 0755)
-	router, _ := os.OpenFile("../../autoCode/te/"+a.PackageName+"/router/router.go", os.O_CREATE|os.O_WRONLY, 0755)
-	feapi ,_ := os.OpenFile("../../autoCode/fe/"+a.PackageName+"/api/api.js", os.O_CREATE|os.O_WRONLY, 0755)
-	modelErr := modelTmpl.Execute(model, a)
-	apiErr := apiTmpl.Execute(api, a)
-	routerErr := routerTmpl.Execute(router, a)
-	feapiErr := feapiTmpl.Execute(feapi, a)
-
-	fmt.Println(modelErr,apiErr,routerErr,feapiErr)
+	feapiTmpl, err := template.ParseFiles(basePath + "/fe/api.js.tpl")
+	if err != nil {
+		return err
+	}
+	readmeTmpl, err := template.ParseFiles(basePath + "/readme.txt.tpl")
+	if err != nil {
+		return err
+	}
+	//自动化总目录
+	_autoCode := "./autoCode/"
+	//自动化后台代码目录
+	_te := "./autoCode/te/"
+	_dir := _te + a.PackageName
+	_modeldir := _te + a.PackageName + "/model"
+	_apidir := _te + a.PackageName + "/api"
+	_routerdir := _te + a.PackageName + "/router"
+	//自动化前台代码目录
+	_fe := "./autoCode/fe/"
+	_fe_dir := _fe + a.PackageName
+	_fe_apidir := _fe + a.PackageName + "/api"
+	err = createDir(_autoCode, _te, _dir, _modeldir, _apidir, _routerdir, _fe, _fe_dir, _fe_apidir)
+	if err != nil {
+		return err
+	}
+	model, err := os.OpenFile(_te+a.PackageName+"/model/model.go", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+	api, err := os.OpenFile(_te+a.PackageName+"/api/api.go", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+	router, err := os.OpenFile(_te+a.PackageName+"/router/router.go", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+	feapi, err := os.OpenFile(_fe+a.PackageName+"/api/api.js", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+	readme, err := os.OpenFile(_autoCode+"readme.txt", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+	// 生成代码
+	{
+		err = modelTmpl.Execute(model, a)
+		if err != nil {
+			return err
+		}
+		err = apiTmpl.Execute(api, a)
+		if err != nil {
+			return err
+		}
+		err = routerTmpl.Execute(router, a)
+		if err != nil {
+			return err
+		}
+		err = feapiTmpl.Execute(feapi, a)
+		if err != nil {
+			return err
+		}
+		err = readmeTmpl.Execute(readme, a)
+		if err != nil {
+			return err
+		}
+	}
+	model.Close()
+	api.Close()
+	router.Close()
+	feapi.Close()
+	readme.Close()
+	fileList := []string{
+		_te + a.PackageName + "/model/model.go",
+		_te + a.PackageName + "/api/api.go",
+		_te + a.PackageName + "/router/router.go",
+		_fe + a.PackageName + "/api/api.js",
+		_autoCode + "readme.txt",
+	}
+	err = tools.ZipFiles("./ginvueadmin.zip", fileList, ".", ".")
+	if err != nil {
+		return err
+	}
+	err = os.RemoveAll(_autoCode)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-
-
 //批量创建文件夹
-func createDir(dirs ...string)(err error){
-	for _,v:=range dirs{
+func createDir(dirs ...string) (err error) {
+	for _, v := range dirs {
 		exist, err := tools.PathExists(v)
 		if err != nil {
 			//log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))

@@ -8,17 +8,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateAuthorityParams struct {
-	AuthorityId   string `json:"authorityId"`
-	AuthorityName string `json:"authorityName"`
-}
-
 // @Tags authority
 // @Summary 创建角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityParams true "创建角色"
+// @Param data body sysModel.SysAuthority true "创建角色"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
@@ -36,16 +31,12 @@ func CreateAuthority(c *gin.Context) {
 	}
 }
 
-type DeleteAuthorityPatams struct {
-	AuthorityId uint `json:"authorityId"`
-}
-
 // @Tags authority
 // @Summary 删除角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.DeleteAuthorityPatams true "删除角色"
+// @Param data body sysModel.SysAuthority true "删除角色"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {

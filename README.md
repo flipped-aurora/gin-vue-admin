@@ -174,6 +174,7 @@ swag init
 |2020/01/13| 增加了配置管理功能 此功能不发表至测试环境 待保护机制以及服务重启机制发开完成后才会发表值测试环境 请自行clone且导入sql体验 |
 |2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
 |2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
+|2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
 
 ## golang基础教学视频录制中...
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
@@ -194,3 +195,4 @@ swag init
 | 老**途 |  100￥ |
 | y*g |  10￥ |
 | *波 |  50￥ |
+| *雄 |  15￥ |

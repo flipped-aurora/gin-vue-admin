@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-//开发中功能，若您发现这块代码可以研究，可以无视
+// 初始版本自动化代码工具
 type AutoCodeStruct struct {
 	StructName   string  `json:"structName"`
 	PackageName  string  `json:"packageName"`
@@ -19,11 +19,6 @@ type Field struct {
 	FieldType  string `json:"fieldType"`
 	FieldJson  string `json:"fieldJson"`
 	ColumnName string `json:"columnName"`
-}
-
-type Dictionary struct {
-	Label string `json:"label"`
-	Value string `json:"value"`
 }
 
 func (a *AutoCodeStruct) CreateTemp() (err error) {
@@ -107,11 +102,11 @@ func (a *AutoCodeStruct) CreateTemp() (err error) {
 			return err
 		}
 	}
-	model.Close()
-	api.Close()
-	router.Close()
-	feapi.Close()
-	readme.Close()
+	_ = model.Close()
+	_ = api.Close()
+	_ = router.Close()
+	_ = feapi.Close()
+	_ = readme.Close()
 	fileList := []string{
 		_te + a.PackageName + "/model/model.go",
 		_te + a.PackageName + "/api/api.go",

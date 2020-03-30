@@ -142,6 +142,13 @@ export default {
             this.form.fields.splice(index,1)
         },
         async enterForm(){
+            if(this.form.fields.length<=0){
+                this.$message({
+                    type:"error",
+                    message:"请填写至少一个field"
+                })
+                return false
+            }
             this.$refs.autoCodeForm.validate(async (valid) => {
           if (valid) {
             this.form.structName = toUpperCase(this.form.structName)

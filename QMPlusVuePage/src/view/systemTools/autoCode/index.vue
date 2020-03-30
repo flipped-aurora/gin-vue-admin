@@ -1,9 +1,6 @@
 <template>
     <div>
-        <!-- 开发中功能，若您发现这块代码可以研究，可以无视 -->
-        <!-- 此版本为简单版 -->
-        <!-- 结构体基础配置 -->
-        <!-- develop分支中开发此功能 -->
+        <!-- 初始版本自动化代码工具 -->
         <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
             <el-form-item label="Struct名称" prop="structName">
                 <el-input v-model="form.structName" placeholder="首字母自动转换大写"></el-input>

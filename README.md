@@ -80,6 +80,8 @@
     11.增加了多点登录限制 体验需要再 static\config中 把 system中的useMultipoint 修改为 true(需要自行配置redis和config中的redis参数)(测试阶段，有bug请及时反馈)√
     12.增加了配置文件管理功能 √
     13.大文件分片上传功能示例 √
+    14.表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator) √
+    15.后台基础逻辑以及简单curd的代码生成器 √
     14...看项目进度想到什么做什么,主要目的是方便各位快速接私活，完成项目基础功能
     15.各位开发者可以在issues提出自己工作中遇到的重复性大或者实现复杂的需求，我尽可能提供示例代码。
 ## 计划任务
@@ -87,9 +89,7 @@
     2.Echart图表支持
     3.object模式树
     4.工作流，任务交接功能开发
-    5.结构体前端直接录入生成对应结构体及自动建表
-    6.单独前端使用模式以及数据模拟
-    7.前端定制化生成form，table代码以及对应的后端结构体
+    5.单独前端使用模式以及数据模拟
 ## 使用说明
     1.golang api server 基于go.mod 如果golang版本低于1.11 请自行升级golang版本
     2.支持go.mod的golang版本在运行go list 和 编译之前都会自动下载所需要的依赖包

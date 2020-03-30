@@ -146,8 +146,7 @@ export default {
           if (valid) {
             this.form.structName = toUpperCase(this.form.structName)
             const data = await createTemp(this.form)
-            const blob = new Blob([data],{type: 'application/json'})
-            debugger
+            const blob = new Blob([data])
             const fileName = 'ginvueadmin.zip'
             if ('download' in document.createElement('a')) { // 不是IE浏览器
                 let url = window.URL.createObjectURL(blob)

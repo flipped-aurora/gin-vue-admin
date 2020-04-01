@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters,mapMutations } from 'vuex'
 import AsideComponent from '@/view/layout/aside/asideComponent'
 export default {
   name: 'Aside',
@@ -31,6 +31,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations("history",["addHistory"]),
     selectMenuItem(index) {
       if (index === this.$route.name) return
       this.$router.push({ name: index })
@@ -44,7 +45,6 @@ export default {
     AsideComponent
   },
   created() {
-    this.active = this.$route.name
     let screenWidth = document.body.clientWidth
      if(screenWidth<1000){
        this.isCollapse = !this.isCollapse
@@ -56,6 +56,11 @@ export default {
       this.isCollapse = item
     })
 
+  },
+  watch:{
+    $route(){
+      this.active = this.$route.name
+    }
   },
   beforeDestroy() {
     this.$bus.off('totalCollapse')

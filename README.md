@@ -175,6 +175,7 @@ swag init
 |2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
 |2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
 |2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
+|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色 如不需要此功能可以在 view\/layout\/index\/   屏蔽HistoryComponent 背景色调 为本页260行 &.el-main 的background |
 
 ## golang基础教学视频录制中...
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884

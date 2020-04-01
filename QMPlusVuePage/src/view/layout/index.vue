@@ -162,9 +162,6 @@ export default {
         }
       })
     },
-     removeTab(targetName) {
-        console.log(targetName)
-     },
     clearPassword() {
       this.pwdModify = {
         password: '',

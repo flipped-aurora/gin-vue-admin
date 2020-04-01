@@ -2,7 +2,9 @@
   <el-container class="login-regist-box">
     <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
-      <h1 class="title-1">GIN-VUE-ADMIN</h1>
+      <h1 class="title-1">
+        <img class="logo" :src="require('@/assets/logo.png')" alt="" srcset="">
+      </h1>
       <el-form :model="loginForm" :rules="rules" ref="loginForm">
         <el-form-item prop="username">
           <el-input placeholder="请输入用户名" v-model="loginForm.username"></el-input>
@@ -117,7 +119,11 @@ export default {
     position: absolute;
     left: 50%;
     margin-left: -22vw;
-    top: 25vh;
+    top:5vh;
+    .logo{
+      height: 35vh;
+      width: 35vh;
+    }
   }
   .vPic{
     position: absolute;

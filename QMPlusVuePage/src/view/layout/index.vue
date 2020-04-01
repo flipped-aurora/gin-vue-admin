@@ -12,7 +12,12 @@
             <i class="el-icon-s-unfold" v-if="isCollapse"></i>
             <i class="el-icon-s-fold" v-else></i>
           </div>
-          <h1 class="admin-title">Gin-Vue-Admin</h1>
+          <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item
+            :key="item.path"
+            v-for="item in matched.slice(1,matched.length)"
+          >{{item.meta.title}}</el-breadcrumb-item>
+        </el-breadcrumb>
           <div class="fl-right right-box">
             <el-dropdown>
               <span class="el-dropdown-link">
@@ -55,16 +60,12 @@
               </div>
             </el-dialog>
           </div>
+      
         </el-header>
         <!-- 当前面包屑用路由自动生成可根据需求修改 -->
         <!-- 
         :to="{ path: item.path }" 暂时注释不用-->
-        <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item
-            :key="item.path"
-            v-for="item in matched.slice(1,matched.length)"
-          >{{item.meta.title}}</el-breadcrumb-item>
-        </el-breadcrumb>
+        <HistoryComponent />
         <transition mode="out-in" name="el-fade-in-linear">
           <router-view class="admin-box"></router-view>
         </transition>
@@ -75,6 +76,8 @@
 
 <script>
 import Aside from '@/view/layout/aside'
+import HistoryComponent from '@/view/layout/aside/historyComponent/history'
+
 import { mapGetters, mapActions } from 'vuex'
 import { changePassword } from '@/api/user'
 export default {
@@ -110,11 +113,12 @@ export default {
             trigger: 'blur'
           }
         ]
-      }
+      },
+      
     }
   },
   components: {
-    Aside
+    Aside,HistoryComponent
   },
   created() {
     let screenWidth = document.body.clientWidth
@@ -158,6 +162,9 @@ export default {
         }
       })
     },
+     removeTab(targetName) {
+        console.log(targetName)
+     },
     clearPassword() {
       this.pwdModify = {
         password: '',
@@ -169,6 +176,7 @@ export default {
   },
   computed: {
     ...mapGetters('user', ['userInfo']),
+    ...mapGetters('history', ['historys','activeValue']),
     title() {
       return this.$route.meta.title || '当前页面'
     },
@@ -239,13 +247,20 @@ $mainHight: 100vh;
   }
   .main-cont {
     .breadcrumb {
-      line-height: 24px;
+      line-height: 48px;
+      display: inline-block;
+      padding: 0 24px;
       // padding: 6px;
       // border-bottom: 1px solid #eee;
-      margin-bottom: 6px;
+    }
+    .router-history{
+      background: #fff;
+      margin-top: 1px;
+      padding: 0 6px;
     }
     &.el-main {
       overflow: auto;
+      background: #fff;
       // padding: 0px 10px;
       // background: #fff;
     }

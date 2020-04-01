@@ -2,6 +2,16 @@ import { asyncRouterHandle } from '@/utils/asyncRouter';
 
 import { asyncMenu } from '@/api/menu'
 
+
+const formatRouter = (routes) => {
+    routes && routes.map(item => {
+        item.meta.hidden = item.hidden
+        if (item.children.length > 0) {
+            formatRouter(item.children)
+        }
+    })
+}
+
 export const router = {
     namespaced: true,
     state: {
@@ -27,6 +37,7 @@ export const router = {
             }]
             const asyncRouterRes = await asyncMenu()
             const asyncRouter = asyncRouterRes.data.menus
+            formatRouter(asyncRouter)
             baseRouter[0].children = asyncRouter
             baseRouter.push({
                 path: '*',

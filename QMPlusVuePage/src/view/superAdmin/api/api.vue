@@ -5,6 +5,19 @@
         <el-form-item label="路径">
           <el-input placeholder="路径" v-model="searchInfo.path"></el-input>
         </el-form-item>
+        <el-form-item label="描述">
+          <el-input placeholder="描述" v-model="searchInfo.description"></el-input>
+        </el-form-item>
+         <el-form-item label="请求">
+               <el-select placeholder="请选择" clear v-model="searchInfo.method">
+            <el-option
+              :key="item.value"
+              :label="`${item.label}(${item.value})`"
+              :value="item.value"
+              v-for="item in methodOptions"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>

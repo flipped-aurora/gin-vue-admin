@@ -45,6 +45,7 @@ export default {
     AsideComponent
   },
   created() {
+    this.active = this.$route.name
     let screenWidth = document.body.clientWidth
      if(screenWidth<1000){
        this.isCollapse = !this.isCollapse

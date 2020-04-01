@@ -9,7 +9,7 @@
           <el-input placeholder="描述" v-model="searchInfo.description"></el-input>
         </el-form-item>
          <el-form-item label="请求">
-               <el-select placeholder="请选择" clear v-model="searchInfo.method">
+               <el-select placeholder="请选择" clearable v-model="searchInfo.method">
             <el-option
               :key="item.value"
               :label="`${item.label}(${item.value})`"

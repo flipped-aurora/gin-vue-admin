@@ -90,10 +90,10 @@ export const deleteBaseMenu = (data) => {
 // @Summary 修改menu列表
 // @Produce  application/json
 // @Param menu Object
-// @Router /menu/updataBaseMenu [post]
-export const updataBaseMenu = (data) => {
+// @Router /menu/updateBaseMenu [post]
+export const updateBaseMenu = (data) => {
     return service({
-        url: "/menu/updataBaseMenu",
+        url: "/menu/updateBaseMenu",
         method: 'post',
         data
     })

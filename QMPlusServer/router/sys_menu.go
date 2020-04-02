@@ -16,7 +16,7 @@ func InitMenuRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		MenuRouter.POST("addMenuAuthority", api.AddMenuAuthority) //	增加menu和角色关联关系
 		MenuRouter.POST("getMenuAuthority", api.GetMenuAuthority) // 获取指定角色menu
 		MenuRouter.POST("deleteBaseMenu", api.DeleteBaseMenu)     // 删除菜单
-		MenuRouter.POST("updataBaseMenu", api.UpdataBaseMenu)     // 更新菜单
+		MenuRouter.POST("updateBaseMenu", api.UpdateBaseMenu)     // 更新菜单
 		MenuRouter.POST("getBaseMenuById", api.GetBaseMenuById)   //根据id获取菜单
 	}
 	return MenuRouter

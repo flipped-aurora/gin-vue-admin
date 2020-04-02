@@ -25,10 +25,10 @@ export const createExaCustomer = (data) => {
 // @Produce application/json
 // @Param data body dbModel.ExaCustomer true "更新客户信息"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/updataExaCustomer [post]
-export const updataExaCustomer = (data) => {
+// @Router /customer/updateExaCustomer [post]
+export const updateExaCustomer = (data) => {
     return service({
-        url: "/customer/updataExaCustomer",
+        url: "/customer/updateExaCustomer",
         method: 'post',
         data
     })

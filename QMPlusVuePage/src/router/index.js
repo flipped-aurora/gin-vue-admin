@@ -14,10 +14,10 @@ const baseRouters = [{
             import ('@/view/login/login.vue')
     },
     {
-        path: '/regist',
-        name: 'regist',
+        path: '/register',
+        name: 'register',
         component: () =>
-            import ('@/view/login/regist.vue')
+            import ('@/view/login/register.vue')
     },
     {
         path: "/404",

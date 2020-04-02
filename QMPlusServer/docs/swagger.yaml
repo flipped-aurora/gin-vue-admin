@@ -52,7 +52,7 @@ definitions:
       id:
         type: number
     type: object
-  api.RegistAndLoginStuct:
+  api.RegisterAndLoginStuct:
     properties:
       captcha:
         type: string
@@ -580,7 +580,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegistAndLoginStuct'
+          $ref: '#/definitions/api.RegisterAndLoginStuct'
           type: object
       produces:
       - application/json
@@ -592,7 +592,7 @@ paths:
       summary: 用户登录
       tags:
       - Base
-  /base/regist:
+  /base/register:
     post:
       parameters:
       - description: 用户注册接口
@@ -1058,7 +1058,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegistAndLoginStuct'
+          $ref: '#/definitions/api.RegisterAndLoginStuct'
           type: object
       produces:
       - application/json
@@ -1080,7 +1080,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegistAndLoginStuct'
+          $ref: '#/definitions/api.RegisterAndLoginStuct'
           type: object
       produces:
       - application/json

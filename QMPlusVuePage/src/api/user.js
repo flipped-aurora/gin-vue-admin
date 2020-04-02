@@ -28,9 +28,9 @@ export const captcha = (data) => {
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}
 // @Router /base/resige [post]
-export const regist = (data) => {
+export const register = (data) => {
         return service({
-            url: "/base/regist",
+            url: "/base/register",
             method: 'post',
             data: data
         })

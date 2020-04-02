@@ -7,7 +7,7 @@ import (
 	"gin-vue-admin/init/initRouter"
 	"gin-vue-admin/init/initlog/qmlog"
 	"gin-vue-admin/init/qmsql"
-	"gin-vue-admin/init/registTable"
+	"gin-vue-admin/init/registTerable"
 	"os"
 	//"runtime"
 )
@@ -42,7 +42,7 @@ func main() {
 		_ = initRedis.InitRedis()
 	}
 	// 注册数据库表
-	registTable.RegistTable(db)
+	registerTable.RegisterTable(db)
 	// 程序结束前关闭数据库链接
 	defer qmsql.DEFAULTDB.Close()
 	// 注册路由

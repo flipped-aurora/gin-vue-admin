@@ -8,10 +8,10 @@ import (
 func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	BaseRouter := Router.Group("base")
 	{
-		BaseRouter.POST("regist", api.Regist)
+		BaseRouter.POST("register", api.Register)
 		BaseRouter.POST("login", api.Login)
-		BaseRouter.POST("captcha",api.Captcha)
-		BaseRouter.GET("captcha/:captchaId",api.CaptchaImg)
+		BaseRouter.POST("captcha", api.Captcha)
+		BaseRouter.GET("captcha/:captchaId", api.CaptchaImg)
 	}
 	return BaseRouter
 }

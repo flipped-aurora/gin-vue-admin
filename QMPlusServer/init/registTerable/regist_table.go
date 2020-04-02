@@ -1,4 +1,4 @@
-package registTable
+package registerTable
 
 import (
 	"gin-vue-admin/init/initlog"
@@ -8,7 +8,7 @@ import (
 )
 
 //注册数据库表专用
-func RegistTable(db *gorm.DB) {
+func RegisterTable(db *gorm.DB) {
 	db.AutoMigrate(sysModel.SysUser{},
 		sysModel.SysAuthority{},
 		sysModel.SysMenu{},

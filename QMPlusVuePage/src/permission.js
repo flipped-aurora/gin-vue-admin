@@ -6,6 +6,9 @@ let asyncRouterFlag = 0
 const whiteList = ['login', 'regist']
 
 router.beforeEach(async(to, from, next) => {
+    if(to.meta.title) {
+        document.title = to.meta.title + '-' + '行星咖啡'
+      }  
     const token = store.getters['user/token']
         // if (token) {
         //     const expiresAt = store.getters['user/expiresAt']

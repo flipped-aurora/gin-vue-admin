@@ -36,7 +36,10 @@ func InitRouter() *gin.Engine {
 	router.InitJwtRouter(ApiGroup)                   // jwt相关路由
 	router.InitSystemRouter(ApiGroup)                // system相关路由
 	router.InitCustomerRouter(ApiGroup)              // 客户路由
-	router.InitAutoCodeRouter(ApiGroup)              // 创建自动化代码
+	router.InitMyCustomerRouter(ApiGroup)
+	router.InitAutoCodeRouter(ApiGroup) // 创建自动化代码
+	router.InitCoffeeRouter(ApiGroup)
+	router.InitSysAddressRouter(ApiGroup)
 	log.L.Info("router register success")
 	return Router
 }

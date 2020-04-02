@@ -58,7 +58,6 @@ export default {
     // 获取所有菜单树
     const res = await getBaseMenuTree()
     this.menuTreeData = res.data.menus
-
     const res1 = await getMenuAuthority({ authorityId: this.row.authorityId })
     const menus = res1.data.menus
     const arr = []

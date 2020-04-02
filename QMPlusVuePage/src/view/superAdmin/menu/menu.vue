@@ -176,6 +176,7 @@ export default {
     },
     // 关闭弹窗
     closeDialog() {
+      this.initForm()
       this.dialogFormVisible = false
     },
     // 添加menu

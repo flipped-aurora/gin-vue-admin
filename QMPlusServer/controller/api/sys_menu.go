@@ -13,7 +13,7 @@ import (
 // @Summary 获取用户动态路由
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.RegistAndLoginStuct true "可以什么都不填"
+// @Param data body api.RegisterAndLoginStuct true "可以什么都不填"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getMenu [post]
 func GetMenu(c *gin.Context) {
@@ -74,7 +74,7 @@ func AddBaseMenu(c *gin.Context) {
 // @Summary 获取用户动态路由
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.RegistAndLoginStuct true "可以什么都不填"
+// @Param data body api.RegisterAndLoginStuct true "可以什么都不填"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getBaseMenuTree [post]
 func GetBaseMenuTree(c *gin.Context) {

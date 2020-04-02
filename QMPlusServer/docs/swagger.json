@@ -458,7 +458,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegistAndLoginStuct"
+                            "$ref": "#/definitions/api.RegisterAndLoginStuct"
                         }
                     }
                 ],
@@ -472,7 +472,7 @@
                 }
             }
         },
-        "/base/regist": {
+        "/base/register": {
             "post": {
                 "produces": [
                     "application/json"
@@ -1239,7 +1239,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegistAndLoginStuct"
+                            "$ref": "#/definitions/api.RegisterAndLoginStuct"
                         }
                     }
                 ],
@@ -1275,7 +1275,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegistAndLoginStuct"
+                            "$ref": "#/definitions/api.RegisterAndLoginStuct"
                         }
                     }
                 ],
@@ -1735,7 +1735,7 @@
                 }
             }
         },
-        "api.RegistAndLoginStuct": {
+        "api.RegisterAndLoginStuct": {
             "type": "object",
             "properties": {
                 "captcha": {

@@ -21,7 +21,7 @@ var (
 	USER_HEADER_BUCKET   string = "qm-plus-img"
 )
 
-type RegistAndLoginStuct struct {
+type RegisterAndLoginStuct struct {
 	Username  string `json:"username"`
 	Password  string `json:"password"`
 	Captcha   string `json:"captcha"`
@@ -41,12 +41,12 @@ type RegestStuct struct {
 // @Produce  application/json
 // @Param data body sysModel.SysUser true "用户注册接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
-// @Router /base/regist [post]
-func Regist(c *gin.Context) {
+// @Router /base/register [post]
+func Register(c *gin.Context) {
 	var R RegestStuct
 	_ = c.ShouldBindJSON(&R)
 	user := &sysModel.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
-	err, user := user.Regist()
+	err, user := user.Register()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("%v", err), gin.H{
 			"user": user,
@@ -61,11 +61,11 @@ func Regist(c *gin.Context) {
 // @Tags Base
 // @Summary 用户登录
 // @Produce  application/json
-// @Param data body api.RegistAndLoginStuct true "用户登录接口"
+// @Param data body api.RegisterAndLoginStuct true "用户登录接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
-	var L RegistAndLoginStuct
+	var L RegisterAndLoginStuct
 	_ = c.ShouldBindJSON(&L)
 	if captcha.VerifyString(L.CaptchaId, L.Captcha) {
 		U := &sysModel.SysUser{Username: L.Username, Password: L.Password}

@@ -89,7 +89,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 const path = process.env.VUE_APP_BASE_API
-import { getUserList, setUserAuthority, regist } from '@/api/user'
+import { getUserList, setUserAuthority, register } from '@/api/user'
 import { getAuthorityList } from '@/api/authority'
 import infoList from '@/components/mixins/infoList'
 import { mapGetters } from 'vuex'
@@ -131,7 +131,7 @@ export default {
     async enterAddUserDialog() {
       this.$refs.userForm.validate(async valid => {
         if (valid) {
-          const res = await regist(this.userInfo)
+          const res = await register(this.userInfo)
           if (res.success) {
             this.$message({ type: 'success', message: '创建成功' })
           }

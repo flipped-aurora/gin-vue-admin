@@ -1,5 +1,5 @@
 <template>
-  <el-container class="login-regist-box">
+  <el-container class="login-register-box">
     <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
       <h1 class="title-1">
@@ -111,7 +111,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.login-regist-box {
+.login-register-box {
   background: #fff;
   height: 100vh;
   .login-box {

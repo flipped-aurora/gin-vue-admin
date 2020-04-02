@@ -26,7 +26,7 @@ type SysUser struct {
 //}
 
 //注册接口model方法
-func (u *SysUser) Regist() (err error, userInter *SysUser) {
+func (u *SysUser) Register() (err error, userInter *SysUser) {
 	var user SysUser
 	//判断用户名是否注册
 	notResigt := qmsql.DEFAULTDB.Where("username = ?", u.Username).First(&user).RecordNotFound()

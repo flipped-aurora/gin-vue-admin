@@ -95,7 +95,7 @@ CREATE TABLE `apis`  (
 -- Records of apis
 -- ----------------------------
 INSERT INTO `apis` VALUES (1, '2019-09-28 11:23:49', '2019-09-28 17:06:16', NULL, NULL, '/base/login', '用户登录', 'base');
-INSERT INTO `apis` VALUES (2, '2019-09-28 11:32:46', '2019-09-28 17:06:11', NULL, NULL, '/base/regist', '用户注册', 'base');
+INSERT INTO `apis` VALUES (2, '2019-09-28 11:32:46', '2019-09-28 17:06:11', NULL, NULL, '/base/register', '用户注册', 'base');
 INSERT INTO `apis` VALUES (3, '2019-09-28 11:33:41', '2019-09-28 17:06:04', NULL, NULL, '/api/createApi', '创建api', 'api');
 INSERT INTO `apis` VALUES (4, '2019-09-28 14:09:04', '2019-09-28 17:05:59', NULL, NULL, '/api/getApiList', '获取api列表', 'api');
 INSERT INTO `apis` VALUES (5, '2019-09-28 14:15:50', '2019-09-28 17:05:53', NULL, NULL, '/api/getApiById', '获取api详细信息', 'api');
@@ -212,7 +212,7 @@ CREATE TABLE `casbin_rule`  (
 -- Records of casbin_rule
 -- ----------------------------
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/base/login', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/base/regist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/base/register', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/api/createApi', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/api/getApiList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/api/getApiById', 'POST', '', '', '');
@@ -251,7 +251,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/deleteExaCustomer', 'P
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/getExaCustomer', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/getExaCustomerList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/login', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/regist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/register', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiById', 'POST', '', '', '');
@@ -291,7 +291,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getExaCustomer', 'POST
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getExaCustomerList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/autoCode/createTemp', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/login', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/regist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/register', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/createApi', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getApiList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/getApiById', 'POST', '', '', '');
@@ -4154,7 +4154,7 @@ CREATE TABLE `sys_apis`  (
 -- Records of sys_apis
 -- ----------------------------
 INSERT INTO `sys_apis` VALUES (1, '2019-09-28 11:23:49', '2019-09-28 17:06:16', NULL, NULL, '/base/login', '用户登录', 'base', 'POST');
-INSERT INTO `sys_apis` VALUES (2, '2019-09-28 11:32:46', '2019-09-28 17:06:11', NULL, NULL, '/base/regist', '用户注册', 'base', 'POST');
+INSERT INTO `sys_apis` VALUES (2, '2019-09-28 11:32:46', '2019-09-28 17:06:11', NULL, NULL, '/base/register', '用户注册', 'base', 'POST');
 INSERT INTO `sys_apis` VALUES (3, '2019-09-28 11:33:41', '2019-12-11 16:51:41', NULL, NULL, '/api/createApi', '创建api', 'api', 'POST');
 INSERT INTO `sys_apis` VALUES (4, '2019-09-28 14:09:04', '2019-09-28 17:05:59', NULL, NULL, '/api/getApiList', '获取api列表', 'api', 'POST');
 INSERT INTO `sys_apis` VALUES (5, '2019-09-28 14:15:50', '2019-09-28 17:05:53', NULL, NULL, '/api/getApiById', '获取api详细信息', 'api', 'POST');

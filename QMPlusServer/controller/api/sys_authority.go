@@ -8,22 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateAuthorityParams struct {
-	AuthorityId   string `json:"authorityId"`
-	AuthorityName string `json:"authorityName"`
-}
-
 // @Tags authority
 // @Summary 创建角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityParams true "创建角色"
+// @Param data body sysModel.SysAuthority true "创建角色"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
 	var auth sysModel.SysAuthority
-	_ = c.ShouldBind(&auth)
+	_ = c.ShouldBindJSON(&auth)
 	err, authBack := auth.CreateAuthority()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{
@@ -36,21 +31,17 @@ func CreateAuthority(c *gin.Context) {
 	}
 }
 
-type DeleteAuthorityPatams struct {
-	AuthorityId uint `json:"authorityId"`
-}
-
 // @Tags authority
 // @Summary 删除角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.DeleteAuthorityPatams true "删除角色"
+// @Param data body sysModel.SysAuthority true "删除角色"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {
 	var a sysModel.SysAuthority
-	_ = c.BindJSON(&a)
+	_ = c.ShouldBindJSON(&a)
 	//删除角色之前需要判断是否有用户正在使用此角色
 	err := a.DeleteAuthority()
 	if err != nil {
@@ -70,7 +61,7 @@ func DeleteAuthority(c *gin.Context) {
 // @Router /authority/getAuthorityList [post]
 func GetAuthorityList(c *gin.Context) {
 	var pageInfo modelInterface.PageInfo
-	_ = c.BindJSON(&pageInfo)
+	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := new(sysModel.SysAuthority).GetInfoList(pageInfo)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
@@ -94,7 +85,7 @@ func GetAuthorityList(c *gin.Context) {
 // @Router /authority/setDataAuthority [post]
 func SetDataAuthority(c *gin.Context) {
 	var auth sysModel.SysAuthority
-	_ = c.ShouldBind(&auth)
+	_ = c.ShouldBindJSON(&auth)
 	err := auth.SetDataAuthority()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("设置关联失败，%v", err), gin.H{})

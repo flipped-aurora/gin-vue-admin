@@ -13,6 +13,8 @@ type Config struct {
 	RedisAdmin   RedisAdmin   `json:"redisAdmin"`
 	System       System       `json:"system"`
 	JWT          JWT          `json:"jwt"`
+	Captcha      Captcha      `json:"captcha"`
+	Log          Log          `json:"log"`
 }
 
 type System struct { // 系统配置
@@ -30,11 +32,14 @@ type CasbinConfig struct { //casbin配置
 }
 
 type MysqlAdmin struct { // mysql admin 数据库配置
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Path     string `json:"path"`
-	Dbname   string `json:"dbname"`
-	Config   string `json:"config"`
+	Username     string `json:"username"`
+	Password     string `json:"password"`
+	Path         string `json:"path"`
+	Dbname       string `json:"dbname"`
+	Config       string `json:"config"`
+	MaxIdleConns int    `json:"maxIdleConns"`
+	MaxOpenConns int    `json:"maxOpenConns"`
+	LogMode      bool   `json:"maxOpenConns"`
 }
 
 type RedisAdmin struct { // Redis admin 数据库配置
@@ -45,6 +50,33 @@ type RedisAdmin struct { // Redis admin 数据库配置
 type Qiniu struct { // 七牛 密钥配置
 	AccessKey string `json:"accessKey"`
 	SecretKey string `json:"secretKey"`
+}
+
+type Captcha struct { // 验证码配置
+	KeyLong   int `json:"keyLong"`
+	ImgWidth  int `json:"imgWidth"`
+	ImgHeight int `json:"imgHeight"`
+}
+
+/**
+Log Config
+
+"CRITICAL"
+"ERROR"
+"WARNING"
+"NOTICE"
+"INFO"
+"DEBUG"
+*/
+type Log struct {
+	// log 打印的前缀
+	Prefix  string   `json:"prefix"`
+	// 是否显示打印log的文件具体路径
+	LogFile bool     `json:"logFile"`
+	// 在控制台打印log的级别， []默认不打印
+	Stdout  []string `json:"stdout"`
+	// 在文件中打印log的级别   []默认不打印
+	File    []string `json:"file"`
 }
 
 var GinVueAdminconfig Config
@@ -61,7 +93,7 @@ func init() {
 	}
 	v.WatchConfig()
 	v.OnConfigChange(func(e fsnotify.Event) {
-		fmt.Println("Config file changed:", e.Name)
+		fmt.Println("config file changed:", e.Name)
 		if err := v.Unmarshal(&GinVueAdminconfig); err != nil {
 			fmt.Println(err)
 		}

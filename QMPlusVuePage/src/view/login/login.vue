@@ -2,7 +2,9 @@
   <el-container class="login-regist-box">
     <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
-      <h1 class="title-1">GIN-VUE-ADMIN</h1>
+      <h1 class="title-1">
+        <img class="logo" :src="require('@/assets/logo.png')" alt="" srcset="">
+      </h1>
       <el-form :model="loginForm" :rules="rules" ref="loginForm">
         <el-form-item prop="username">
           <el-input placeholder="请输入用户名" v-model="loginForm.username"></el-input>
@@ -16,6 +18,15 @@
             <i :class="'el-input__icon el-icon-' + lock" @click="changeLock" slot="suffix"></i>
           </el-input>
         </el-form-item>
+        <el-form-item style="position:relative">
+          <el-input
+            v-model="loginForm.captcha"
+            name="logVerify"
+            placeholder="请输入验证码"
+            maxlength="10"
+          />
+          <img :src="path + picPath" alt="请输入验证码" @click="loginVefify()" class="vPic">
+        </el-form-item>
         <el-form-item>
           <el-button @click="submitForm" style="width:100%">登 录</el-button>
         </el-form-item>
@@ -27,6 +38,8 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { captcha } from '@/api/user'
+const path = process.env.VUE_APP_BASE_API
 export default {
   name: 'Login',
   data() {
@@ -49,13 +62,21 @@ export default {
       lock: 'lock',
       loginForm: {
         username: '',
-        password: ''
+        password: '',
+        captcha:'',
+        captchaId: '',
       },
       rules: {
         username: [{ validator: checkUsername, trigger: 'blur' }],
         password: [{ validator: checkPassword, trigger: 'blur' }]
-      }
+      },
+      path:path,
+      logVerify:'',
+      picPath:''
     }
+  },
+  created() {
+    this.loginVefify()
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
@@ -78,6 +99,12 @@ export default {
     },
     changeLock() {
       this.lock === 'lock' ? (this.lock = 'unlock') : (this.lock = 'lock')
+    },
+    loginVefify() {
+      captcha({}).then(ele=>{
+        this.picPath = ele.data.picPath
+        this.loginForm.captchaId = ele.data.captchaId
+      })
     }
   }
 }
@@ -92,7 +119,16 @@ export default {
     position: absolute;
     left: 50%;
     margin-left: -22vw;
-    top: 25vh;
+    top:5vh;
+    .logo{
+      height: 35vh;
+      width: 35vh;
+    }
+  }
+  .vPic{
+    position: absolute;
+    right: 10px;
+    bottom: 0px;   // 适配ie
   }
 }
 </style>

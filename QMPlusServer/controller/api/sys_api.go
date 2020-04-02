@@ -27,7 +27,7 @@ type DeleteApiParams struct {
 // @Router /api/createApi [post]
 func CreateApi(c *gin.Context) {
 	var api sysModel.SysApi
-	_ = c.BindJSON(&api)
+	_ = c.ShouldBindJSON(&api)
 	err := api.CreateApi()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
@@ -46,7 +46,7 @@ func CreateApi(c *gin.Context) {
 // @Router /api/deleteApi [post]
 func DeleteApi(c *gin.Context) {
 	var a sysModel.SysApi
-	_ = c.BindJSON(&a)
+	_ = c.ShouldBindJSON(&a)
 	err := a.DeleteApi()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
@@ -102,7 +102,7 @@ func GetApiList(c *gin.Context) {
 // @Router /api/getApiById [post]
 func GetApiById(c *gin.Context) {
 	var idInfo GetById
-	_ = c.BindJSON(&idInfo)
+	_ = c.ShouldBindJSON(&idInfo)
 	err, api := new(sysModel.SysApi).GetApiById(idInfo.Id)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
@@ -124,7 +124,7 @@ func GetApiById(c *gin.Context) {
 // @Router /api/updataApi [post]
 func UpdataApi(c *gin.Context) {
 	var api sysModel.SysApi
-	_ = c.BindJSON(&api)
+	_ = c.ShouldBindJSON(&api)
 	err := api.UpdataApi()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("修改数据失败，%v", err), gin.H{})

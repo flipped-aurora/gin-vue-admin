@@ -5,9 +5,10 @@ import (
 	"gin-vue-admin/config"
 	"gin-vue-admin/init/initRedis"
 	"gin-vue-admin/init/initRouter"
-	"gin-vue-admin/init/qmlog"
+	"gin-vue-admin/init/initlog/qmlog"
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/init/registTable"
+	"os"
 	//"runtime"
 )
 
@@ -19,17 +20,35 @@ import (
 // @name x-token
 // @BasePath /
 
-func main() {
+var (
+	mysqlHost = os.Getenv("MYSQLHOST")
+	mysqlPort = os.Getenv("MYSQLPORT")
+)
 
-	qmlog.InitLog()                                            // 初始化日志
-	db := qmsql.InitMysql(config.GinVueAdminconfig.MysqlAdmin) // 链接初始化数据库
-	if config.GinVueAdminconfig.System.UseMultipoint {
-		_ = initRedis.InitRedis() // 初始化redis服务
+func main() {
+	if err := qmlog.NewLogger(); err != nil {
+		panic(err)
 	}
-	registTable.RegistTable(db)       // 注册数据库表
-	defer qmsql.DEFAULTDB.Close()     // 程序结束前关闭数据库链接
-	Router := initRouter.InitRouter() // 注册路由
-	qmlog.QMLog.Info("服务器开启")         // 日志测试代码
+	// 可以通过环境变量来覆盖配置值
+	// 未设定有效的环境变量时，使用配置值
+	mysqlConfig := config.GinVueAdminconfig.MysqlAdmin
+	if mysqlHost != "" && mysqlPort != "" {
+		mysqlConfig.Path = mysqlHost + ":" + mysqlPort
+	}
+	// 链接初始化数据库
+	db := qmsql.InitMysql(mysqlConfig) // 链接初始化数据库
+	if config.GinVueAdminconfig.System.UseMultipoint {
+		// 初始化redis服务
+		_ = initRedis.InitRedis()
+	}
+	// 注册数据库表
+	registTable.RegistTable(db)
+	// 程序结束前关闭数据库链接
+	defer qmsql.DEFAULTDB.Close()
+	// 注册路由
+	Router := initRouter.InitRouter()
+
+	Router.Static("/form-generator", "./static/form-generator")
 	//Router.RunTLS(":443","ssl.pem", "ssl.key")  // https支持 需要添加中间件
 	//sysType := runtime.GOOS
 	//

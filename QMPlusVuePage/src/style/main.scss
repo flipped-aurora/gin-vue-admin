@@ -530,3 +530,321 @@ ol,
 li {
     list-style-type: none;
 }
+.el-table__body-wrapper{
+    tr{
+        td{
+            .cell{
+                .el-button+.el-button{
+                    margin-left: 0;
+                }
+            }
+        }
+    }
+}
+
+
+// navbar
+.aside{
+.el-scrollbar {
+    .el-scrollbar__view {
+      .el-menu-vertical{
+    background-color: #001529;
+      }
+      .el-menu-item:hover i,
+      .el-menu-item:hover span{
+        color:#fff;
+      }
+      li{
+         background-color: #001529;
+        
+        ul{
+          .el-menu-item{
+             background-color: #000408;
+             height: 44px;
+             line-height: 44px;
+          }
+         
+          .is-active{
+           background-color:#1890ff;
+         }
+        }
+      }
+      .el-submenu__title:hover{
+         background-color: #001529;
+      }
+      .el-submenu__title:hover i,
+      .el-submenu__title:hover span{
+        color:#fff;
+      }
+
+      .el-menu--inline{
+          border-left: 5px solid #2c3b41;
+      }
+    }
+  }
+}
+
+//   layout
+    .layout-cont{
+        .main-cont{
+            position: relative;
+            &.el-main {
+                background-color: #ecf0f5;
+                padding: 0;
+            }
+            .breadcrumb{
+                background-color: #fff;
+                padding: 0 0 15px 15px;
+            }
+        }
+    }
+
+    .admin-box {
+        padding: 15px 20px;
+        .el-button{
+            padding: 7px 10px;
+        }
+        .el-input__inner{
+            height: 30px;
+            line-height: 30px;
+        }
+        .el-input__icon{
+            line-height: 30px;
+        }
+    }
+    .button-box{
+        background: #fff;
+        border: 1px solid #ebeef5;
+        border-bottom: none;
+
+    }
+    
+    .search-term{
+        background: #fff;
+        padding: 0 15px;
+        border-left: 1px solid #ebeef5;
+        border-right: 1px solid #ebeef5;
+    }
+       
+
+
+// table
+.has-gutter{
+    tr{
+        th{
+            background-color: #fafafa;
+        }
+    }
+}
+.el-table--striped{
+    .el-table__body{
+        tr.el-table__row--striped{
+            td{
+                background: #fff!important;
+            }
+        }
+    }
+}  
+.el-table th, .el-table tr{
+    background-color: #fafafa;
+}
+.el-pagination{
+    .btn-prev,
+    .btn-next{
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .el-pager{
+        
+        
+        li{
+            color: #666;
+            font-size: 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    } 
+}
+
+
+
+// el-form
+.el-form{
+    background-color: #fff;
+    padding: 10px 0;
+}
+.el-row{
+    padding: 10px 0;
+    .el-col>label{
+       
+            line-height: 30px;
+            text-align: right;
+            width: 80%;
+            padding-right: 15px;
+            display: inline-block;
+       
+    }
+    
+    .line{
+        line-height: 30px;
+        text-align: center;
+    }
+}
+// edit_container
+.edit_container{
+    background-color: #fff;
+    padding: 15px;
+    .el-button {
+        margin: 15px 0;
+    }
+}
+.edit{
+    background-color: #fff;
+    padding: 15px; 
+    .el-button {
+        margin: 15px 0;
+    }
+}
+// upload-demo
+.upload-demo,
+.upload{
+    background-color: #fff;
+    padding: 15px; 
+    .el-upload-list__item-status-label{
+        right: 0;
+        left: 120px;
+    }
+    .el-upload__tip{
+        margin: 10px 0;
+       }
+}
+
+// system
+.system{
+    padding: 15px;
+    .el-input__inner{
+        width: 80%;
+    }
+}
+
+// 导航
+#app {
+    .el-container{
+        position: relative;
+        height: 100%;
+        width: 100%;
+       
+    }
+    .el-container.mobile.openside {
+        position: fixed;
+        top: 0;
+    }
+    .hideside{
+        .aside{
+            width: 54px!important;
+        }
+    }
+    .el-aside{
+        -webkit-transition: width .2s;
+        transition: width .2s;
+        width: 220px;
+        background-color: #304156;
+        height: 100%;
+        position: fixed;
+        font-size: 0;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1001;
+        overflow: hidden;
+    }
+
+    .mobile.hideside{
+        .el-aside{
+            // pointer-events: none;
+            -webkit-transition-duration: .2s;
+            transition-duration: .2s;
+            -webkit-transform: translate3d(-210px,0,0);
+            transform: translate3d(-220px,0,0);
+        }
+      
+    }
+ 
+    .mobile{
+        .el-aside{
+            -webkit-transition: -webkit-transform .28s;
+            transition: -webkit-transform .28s;
+            transition: transform .28s;
+            transition: transform .28s,-webkit-transform .28s;
+            width: 210px!important
+        }
+    }
+    
+   
+    .el-container{
+        position: relative;
+        height: 100%;
+        width: 100%;
+        .el-aside{
+            // transition: none;
+          .aside {
+                background: #000;
+                .el-menu{
+                    border-right: none;
+                }
+            }
+        }
+    }
+  
+    .main-cont.el-main{
+        min-height: 100%;
+        -webkit-transition: margin-left .28s;
+        transition: margin-left .28s;
+        margin-left: 220px;
+        position: relative;
+    }
+   
+
+    .hideside{
+        .main-cont.el-main{
+            margin-left: 54px;
+        }
+    }
+  .mobile {
+        .main-cont.el-main{
+            margin-left: 0px;
+        }
+       
+    }
+    .openside.mobile{
+        .shadowBg{
+            background: #000;
+            opacity: .3;
+            width: 100%;
+            top: 0;
+            height: 100%;
+            position: absolute;
+            z-index: 999;
+            left: 0;
+        }
+    }
+    
+}
+.el-menu--vertical{
+    .el-menu{
+        margin-left: -8px;
+        background-color:rgb(48,65,86);
+        .el-menu-item{
+            background-color:rgb(48,65,86);
+        }
+        .el-menu-item:focus, 
+        .el-menu-item:hover{
+            background-color: #263445;
+            color: #fff;
+        }
+    }
+}
+// 导航*****
+
+

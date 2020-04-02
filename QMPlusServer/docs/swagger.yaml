@@ -54,6 +54,10 @@ definitions:
     type: object
   api.RegistAndLoginStuct:
     properties:
+      captcha:
+        type: string
+      captchaId:
+        type: string
       password:
         type: string
       username:
@@ -65,6 +69,90 @@ definitions:
         type: string
       uuid:
         type: string
+    type: object
+  config.CasbinConfig:
+    properties:
+      modelPath:
+        description: casbin model地址配置
+        type: string
+    type: object
+  config.Config:
+    properties:
+      casbinConfig:
+        $ref: '#/definitions/config.CasbinConfig'
+        type: object
+      jwt:
+        $ref: '#/definitions/config.JWT'
+        type: object
+      mysqlAdmin:
+        $ref: '#/definitions/config.MysqlAdmin'
+        type: object
+      qiniu:
+        $ref: '#/definitions/config.Qiniu'
+        type: object
+      redisAdmin:
+        $ref: '#/definitions/config.RedisAdmin'
+        type: object
+      system:
+        $ref: '#/definitions/config.System'
+        type: object
+    type: object
+  config.JWT:
+    properties:
+      signingKey:
+        type: string
+    type: object
+  config.MysqlAdmin:
+    properties:
+      config:
+        type: string
+      dbname:
+        type: string
+      password:
+        type: string
+      path:
+        type: string
+      username:
+        type: string
+    type: object
+  config.Qiniu:
+    properties:
+      accessKey:
+        type: string
+      secretKey:
+        type: string
+    type: object
+  config.RedisAdmin:
+    properties:
+      addr:
+        type: string
+      db:
+        type: integer
+      password:
+        type: string
+    type: object
+  config.System:
+    properties:
+      addr:
+        type: integer
+      env:
+        type: string
+      useMultipoint:
+        type: boolean
+    type: object
+  dbModel.ExaCustomer:
+    properties:
+      customerName:
+        type: string
+      customerPhoneData:
+        type: string
+      sysUser:
+        $ref: '#/definitions/sysModel.SysUser'
+        type: object
+      sysUserAuthorityID:
+        type: string
+      sysUserId:
+        type: integer
     type: object
   dbModel.ExaFileUploadAndDownload:
     properties:
@@ -84,11 +172,29 @@ definitions:
       pageSize:
         type: integer
     type: object
+  sysModel.CasbinInReceive:
+    properties:
+      authorityId:
+        type: string
+      casbinInfos:
+        items:
+          $ref: '#/definitions/sysModel.CasbinInfo'
+        type: array
+    type: object
+  sysModel.CasbinInfo:
+    properties:
+      method:
+        type: string
+      path:
+        type: string
+    type: object
   sysModel.SysApi:
     properties:
       description:
         type: string
       group:
+        type: string
+      method:
         type: string
       path:
         type: string
@@ -188,6 +294,12 @@ definitions:
       workflowID:
         description: 所属工作流ID
         type: integer
+    type: object
+  sysModel.System:
+    properties:
+      config:
+        $ref: '#/definitions/config.Config'
+        type: object
     type: object
 info:
   contact: {}
@@ -428,6 +540,38 @@ paths:
       summary: 设置角色资源权限
       tags:
       - authority
+  /base/captcha:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 生成验证码
+      tags:
+      - base
+  /base/captcha/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 生成验证码图片路径
+      tags:
+      - base
   /base/login:
     post:
       parameters:
@@ -468,6 +612,30 @@ paths:
       summary: 用户注册账号
       tags:
       - Base
+  /casbin/CasbinTest:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取权限列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateAuthorityParams'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: casb RBAC RESTFUL测试路由
+      tags:
+      - casbin
   /casbin/casbinPUpdata:
     post:
       consumes:
@@ -478,7 +646,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityParams'
+          $ref: '#/definitions/sysModel.CasbinInReceive'
           type: object
       produces:
       - application/json
@@ -516,6 +684,148 @@ paths:
       summary: 获取权限列表
       tags:
       - casbin
+  /customer/createExaCustomer:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建客户
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.ExaCustomer'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建客户
+      tags:
+      - SysApi
+  /customer/deleteExaCustomer:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除客户
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.ExaCustomer'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除客户
+      tags:
+      - SysApi
+  /customer/getExaCustomer:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取单一客户信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.ExaCustomer'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取单一客户信息
+      tags:
+      - SysApi
+  /customer/getExaCustomerList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取权限客户列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/modelInterface.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取权限客户列表
+      tags:
+      - SysApi
+  /customer/updataExaCustomer:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建客户
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbModel.ExaCustomer'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新客户信息
+      tags:
+      - SysApi
+  /fileUploadAndDownload/breakpointContinue:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 断点续传示例
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"上传成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 断点续传到服务器
+      tags:
+      - ExaFileUploadAndDownload
   /fileUploadAndDownload/deleteFile:
     post:
       parameters:
@@ -536,6 +846,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除文件
+      tags:
+      - ExaFileUploadAndDownload
+  /fileUploadAndDownload/findFile:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 查找文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查找成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 查找文件
       tags:
       - ExaFileUploadAndDownload
   /fileUploadAndDownload/getFileList:
@@ -560,6 +892,28 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 分页文件列表
+      tags:
+      - ExaFileUploadAndDownload
+  /fileUploadAndDownload/removeChunk:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 查找文件
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查找成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除切片
       tags:
       - ExaFileUploadAndDownload
   /fileUploadAndDownload/upload:
@@ -788,6 +1142,64 @@ paths:
       summary: 更新菜单
       tags:
       - menu
+  /system/ReloadSystem:
+    post:
+      parameters:
+      - description: 设置配置文件内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/sysModel.System'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置配置文件内容
+      tags:
+      - system
+  /system/getSystemConfig:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取配置文件内容
+      tags:
+      - system
+  /system/setSystemConfig:
+    post:
+      parameters:
+      - description: 设置配置文件内容
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/sysModel.System'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置配置文件内容
+      tags:
+      - system
   /user/changePassword:
     post:
       parameters:

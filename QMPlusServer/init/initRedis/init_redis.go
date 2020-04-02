@@ -1,8 +1,8 @@
 package initRedis
 
 import (
-	"fmt"
 	"gin-vue-admin/config"
+	"gin-vue-admin/init/initlog"
 	"github.com/go-redis/redis"
 )
 
@@ -16,9 +16,9 @@ func InitRedis() (client *redis.Client) {
 	})
 	pong, err := client.Ping().Result()
 	if err != nil {
-		fmt.Println(pong, err)
+		log.L.Error(err)
 	} else {
-		fmt.Println(pong, err)
+		log.L.Info("redis connect ping response:", pong)
 		DEFAULTREDIS = client
 	}
 	return client

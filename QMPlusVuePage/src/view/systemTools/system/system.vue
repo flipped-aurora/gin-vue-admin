@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form :model="config" label-width="100px" ref="form">
+    <el-form :model="config" label-width="100px" ref="form" class="system">
       <h2>系统配置</h2>
       <el-form-item label="多点登录拦截">
         <el-checkbox v-model="config.system.useMultipoint">开启</el-checkbox>
@@ -103,8 +103,8 @@ export default {
 <style lang="scss">
 h2 {
   padding: 10px;
-  border-bottom: 1px dashed #ccc;
   margin: 10px 0;
   font-size: 16px;
+  box-shadow:-4px 1px 3px 0px #e7e8e8
 }
 </style>

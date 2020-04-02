@@ -16,6 +16,7 @@ type SysApi struct {
 	Method      string `json:"method" gorm:"default:'POST'"`
 }
 
+//新增基础api
 func (a *SysApi) CreateApi() (err error) {
 	findOne := qmsql.DEFAULTDB.Where("path = ?", a.Path).Find(&SysMenu{}).Error
 	if findOne == nil {
@@ -26,12 +27,14 @@ func (a *SysApi) CreateApi() (err error) {
 	return err
 }
 
+//删除基础api
 func (a *SysApi) DeleteApi() (err error) {
 	err = qmsql.DEFAULTDB.Delete(a).Error
 	new(CasbinModel).clearCasbin(1, a.Path)
 	return err
 }
 
+//更新api
 func (a *SysApi) UpdataApi() (err error) {
 	var oldA SysApi
 	err = qmsql.DEFAULTDB.Where("id = ?", a.ID).First(&oldA).Error
@@ -48,6 +51,7 @@ func (a *SysApi) UpdataApi() (err error) {
 	return err
 }
 
+//获取选中角色所拥有的api
 func (a *SysApi) GetApiById(id float64) (err error, api SysApi) {
 	err = qmsql.DEFAULTDB.Where("id = ?", id).First(&api).Error
 	return
@@ -67,7 +71,27 @@ func (a *SysApi) GetInfoList(info modelInterface.PageInfo) (err error, list inte
 		return
 	} else {
 		var apiList []SysApi
-		err = db.Order("group", true).Where("path LIKE ?", "%"+a.Path+"%").Find(&apiList).Error
+		model := qmsql.DEFAULTDB.Model(info)
+		if a.Path != "" {
+			model = model.Where("path LIKE ?", "%"+a.Path+"%")
+			db = db.Where("path LIKE ?", "%"+a.Path+"%")
+		}
+
+		if a.Description != "" {
+			model = model.Where("description LIKE ?", "%"+a.Description+"%")
+			db = db.Where("description LIKE ?", "%"+a.Description+"%")
+		}
+
+		if a.Method != "" {
+			model = model.Where("method = ?", a.Method)
+			db = db.Where("method = ?", a.Method)
+		}
+		err = model.Find(&apiList).Count(&total).Error
+		if err != nil {
+			return err, apiList, total
+		} else {
+			err = db.Order("group", true).Find(&apiList).Error
+		}
 		return err, apiList, total
 	}
 }

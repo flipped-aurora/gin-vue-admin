@@ -35,7 +35,7 @@ func (u *SysUser) Regist() (err error, userInter *SysUser) {
 		return errors.New("用户名已注册"), nil
 	} else {
 		// 否则 附加uuid 密码md5简单加密 注册
-		u.Password = tools.MD5V(u.Password)
+		u.Password = tools.MD5V([]byte(u.Password))
 		u.UUID = uuid.NewV4()
 		err = qmsql.DEFAULTDB.Create(u).Error
 	}
@@ -46,8 +46,8 @@ func (u *SysUser) Regist() (err error, userInter *SysUser) {
 func (u *SysUser) ChangePassword(newPassword string) (err error, userInter *SysUser) {
 	var user SysUser
 	//后期修改jwt+password模式
-	u.Password = tools.MD5V(u.Password)
-	err = qmsql.DEFAULTDB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Update("password", tools.MD5V(newPassword)).Error
+	u.Password = tools.MD5V([]byte(u.Password))
+	err = qmsql.DEFAULTDB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Update("password", tools.MD5V([]byte(newPassword))).Error
 	return err, u
 }
 
@@ -60,7 +60,7 @@ func (u *SysUser) SetUserAuthority(uuid uuid.UUID, AuthorityId string) (err erro
 //用户登录
 func (u *SysUser) Login() (err error, userInter *SysUser) {
 	var user SysUser
-	u.Password = tools.MD5V(u.Password)
+	u.Password = tools.MD5V([]byte(u.Password))
 	err = qmsql.DEFAULTDB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Error
 	if err != nil {
 		return err, &user

@@ -1,6 +1,7 @@
 package registTable
 
 import (
+	"gin-vue-admin/init/initlog"
 	"gin-vue-admin/model/dbModel"
 	"gin-vue-admin/model/sysModel"
 	"github.com/jinzhu/gorm"
@@ -14,8 +15,12 @@ func RegistTable(db *gorm.DB) {
 		sysModel.SysApi{},
 		sysModel.SysBaseMenu{},
 		sysModel.JwtBlacklist{},
-		dbModel.ExaFileUploadAndDownload{},
 		sysModel.SysWorkflow{},
 		sysModel.SysWorkflowStepInfo{},
+		dbModel.ExaFileUploadAndDownload{},
+		dbModel.ExaFile{},
+		dbModel.ExaFileChunk{},
+		dbModel.ExaCustomer{},
 	)
+	log.L.Debug("register table success")
 }

@@ -27,7 +27,7 @@ func (a *SysAuthority) CreateAuthority() (err error, authority *SysAuthority) {
 func (a *SysAuthority) DeleteAuthority() (err error) {
 	err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).Find(&SysUser{}).Error
 	if err != nil {
-		err = qmsql.DEFAULTDB.Where("parentId = ?", a.AuthorityId).Find(&SysAuthority{}).Error
+		err = qmsql.DEFAULTDB.Where("parent_id = ?", a.AuthorityId).Find(&SysAuthority{}).Error
 		if err != nil {
 			err = qmsql.DEFAULTDB.Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Error
 			new(CasbinModel).clearCasbin(0, a.AuthorityId)
@@ -73,4 +73,9 @@ func (a *SysAuthority) SetDataAuthority() error {
 	qmsql.DEFAULTDB.Preload("DataAuthorityId").First(&s, "id = ?", a.ID)
 	err := qmsql.DEFAULTDB.Model(&s).Association("DataAuthorityId").Replace(&a.DataAuthorityId).Error
 	return err
+}
+
+func (a *SysAuthority) GetAuthorityInfo() (err error, sa SysAuthority) {
+	err = qmsql.DEFAULTDB.Preload("DataAuthorityId").Where("authority_id = ?", a.AuthorityId).First(&sa).Error
+	return err, sa
 }

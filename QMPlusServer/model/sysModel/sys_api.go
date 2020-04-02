@@ -37,6 +37,10 @@ func (a *SysApi) DeleteApi() (err error) {
 //更新api
 func (a *SysApi) UpdataApi() (err error) {
 	var oldA SysApi
+	flag := qmsql.DEFAULTDB.Where("path = ?", a.Path).RecordNotFound()
+	if !flag {
+		return errors.New("存在相同api路径")
+	}
 	err = qmsql.DEFAULTDB.Where("id = ?", a.ID).First(&oldA).Error
 	if err != nil {
 		return err

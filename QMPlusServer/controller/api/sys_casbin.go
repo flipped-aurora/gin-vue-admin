@@ -31,7 +31,7 @@ func CasbinPUpdata(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityParams true "获取权限列表"
+// @Param data body sysModel.CasbinInReceive true "获取权限列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 func GetPolicyPathByAuthorityId(c *gin.Context) {
@@ -46,7 +46,7 @@ func GetPolicyPathByAuthorityId(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateAuthorityParams true "获取权限列表"
+// @Param data body sysModel.CasbinInReceive true "获取权限列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/CasbinTest [get]
 func CasbinTest(c *gin.Context) {

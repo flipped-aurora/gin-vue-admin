@@ -55,7 +55,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         closeLoading()
-        if (response.data.success || response.headers.success==="true") {
+        if (response.data.success || response.headers.success === "true") {
             return response.data
         } else {
             Message({

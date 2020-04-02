@@ -192,7 +192,7 @@
                 }
             }
         },
-        "/api/updataApi": {
+        "/api/updateApi": {
             "post": {
                 "security": [
                     {
@@ -542,7 +542,7 @@
                 }
             }
         },
-        "/casbin/casbinPUpdata": {
+        "/casbin/casbinPUpdate": {
             "post": {
                 "security": [
                     {
@@ -776,7 +776,7 @@
                 }
             }
         },
-        "/customer/updataExaCustomer": {
+        "/customer/updateExaCustomer": {
             "post": {
                 "security": [
                     {
@@ -1328,7 +1328,7 @@
                 }
             }
         },
-        "/menu/updataBaseMen": {
+        "/menu/updateBaseMen": {
             "post": {
                 "security": [
                     {

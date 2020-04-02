@@ -48,7 +48,7 @@ func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 }
 
 //更新路由
-func (b *SysBaseMenu) UpdataBaseMenu() (err error) {
+func (b *SysBaseMenu) UpdateBaseMenu() (err error) {
 	upDataMap := make(map[string]interface{})
 	upDataMap["parent_id"] = b.ParentId
 	upDataMap["path"] = b.Path

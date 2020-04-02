@@ -163,11 +163,11 @@ func DeleteBaseMenu(c *gin.Context) {
 // @Produce application/json
 // @Param data body sysModel.SysBaseMenu true "更新菜单"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /menu/updataBaseMen [post]
-func UpdataBaseMenu(c *gin.Context) {
+// @Router /menu/updateBaseMen [post]
+func UpdateBaseMenu(c *gin.Context) {
 	var menu sysModel.SysBaseMenu
 	_ = c.ShouldBindJSON(&menu)
-	err := menu.UpdataBaseMenu()
+	err := menu.UpdateBaseMenu()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("修改失败：%v", err), gin.H{})
 	} else {

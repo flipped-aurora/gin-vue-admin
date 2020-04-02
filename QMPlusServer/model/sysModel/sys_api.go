@@ -35,7 +35,7 @@ func (a *SysApi) DeleteApi() (err error) {
 }
 
 //更新api
-func (a *SysApi) UpdataApi() (err error) {
+func (a *SysApi) UpdateApi() (err error) {
 	var oldA SysApi
 	flag := qmsql.DEFAULTDB.Where("path = ?", a.Path).RecordNotFound()
 	if !flag {
@@ -45,7 +45,7 @@ func (a *SysApi) UpdataApi() (err error) {
 	if err != nil {
 		return err
 	} else {
-		err = new(CasbinModel).CasbinApiUpdata(oldA.Path, a.Path)
+		err = new(CasbinModel).CasbinApiUpdate(oldA.Path, a.Path)
 		if err != nil {
 			return err
 		} else {

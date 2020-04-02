@@ -49,18 +49,18 @@ func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 
 //更新路由
 func (b *SysBaseMenu) UpdateBaseMenu() (err error) {
-	upDataMap := make(map[string]interface{})
-	upDataMap["parent_id"] = b.ParentId
-	upDataMap["path"] = b.Path
-	upDataMap["name"] = b.Name
-	upDataMap["hidden"] = b.Hidden
-	upDataMap["component"] = b.Component
-	upDataMap["title"] = b.Title
-	upDataMap["icon"] = b.Icon
-	upDataMap["sort"] = b.Sort
-	upDataMap["nick_name"] = b.Title
-	err = qmsql.DEFAULTDB.Where("id = ?", b.ID).Find(&SysBaseMenu{}).Updates(upDataMap).Error
-	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&[]SysMenu{}).Updates(upDataMap).Error
+	upDateMap := make(map[string]interface{})
+	upDateMap["parent_id"] = b.ParentId
+	upDateMap["path"] = b.Path
+	upDateMap["name"] = b.Name
+	upDateMap["hidden"] = b.Hidden
+	upDateMap["component"] = b.Component
+	upDateMap["title"] = b.Title
+	upDateMap["icon"] = b.Icon
+	upDateMap["sort"] = b.Sort
+	upDateMap["nick_name"] = b.Title
+	err = qmsql.DEFAULTDB.Where("id = ?", b.ID).Find(&SysBaseMenu{}).Updates(upDateMap).Error
+	err1 := qmsql.DEFAULTDB.Where("menu_id = ?", b.ID).Find(&[]SysMenu{}).Updates(upDateMap).Error
 	fmt.Printf("菜单修改时候，关联菜单err1:%v,err:%v", err1, err)
 	return err
 }

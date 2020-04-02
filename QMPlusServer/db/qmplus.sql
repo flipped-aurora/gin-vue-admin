@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : pandora
+ Source Server         : qmplus
  Source Server Type    : MySQL
- Source Server Version : 50640
+ Source Server Version : 50644
  Source Host           : localhost:3306
  Source Schema         : qmplus
 
  Target Server Type    : MySQL
- Target Server Version : 50640
+ Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 30/03/2020 12:05:22
+ Date: 02/04/2020 14:33:38
 */
 
 SET NAMES utf8mb4;
@@ -4046,7 +4046,7 @@ CREATE TABLE `jwt_blacklists`  (
   `jwt` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_jwt_blacklists_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 39 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of jwt_blacklists
@@ -4085,6 +4085,8 @@ INSERT INTO `jwt_blacklists` VALUES (33, '2020-01-06 16:57:28', '2020-01-06 16:5
 INSERT INTO `jwt_blacklists` VALUES (34, '2020-01-06 16:59:02', '2020-01-06 16:59:02', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4OTA1ODU1LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1NzgzMDAwNTV9.G0q9X7Ld3cN_BO-K219b7tFAHgtpiAwqLPoxVNKsEl8');
 INSERT INTO `jwt_blacklists` VALUES (35, '2020-01-06 16:59:26', '2020-01-06 16:59:26', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4OTA1OTQ2LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1NzgzMDAxNDZ9.cmBgWiztsnh7zF3OUNIDQKv8wzGJF7fllUv-4LlYxu8');
 INSERT INTO `jwt_blacklists` VALUES (36, '2020-03-21 14:46:14', '2020-03-21 14:46:14', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg1Mzc3ODY3LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODQ3NzIwNjd9.DLhWhD1FdcWLyFLcXQynKJnenbVHrSiKhlDGFRzgo5k');
+INSERT INTO `jwt_blacklists` VALUES (37, '2020-03-31 14:24:35', '2020-03-31 14:24:35', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg2MTM4MTA4LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODU1MzIzMDh9.Ro2F2dZLfOk2Z_OPRbweOuCpchr6HlHfQIF5qjfc8y4');
+INSERT INTO `jwt_blacklists` VALUES (38, '2020-04-01 16:07:57', '2020-04-01 16:07:57', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg2MjQwNzQyLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODU2MzQ5NDJ9.9qaOFu7D5cq4vxTfLi4pyO_JGcKjVAEJIcoStJWJlYg');
 
 -- ----------------------------
 -- Table structure for menus
@@ -4240,7 +4242,7 @@ CREATE TABLE `sys_base_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_base_menus
@@ -4269,9 +4271,10 @@ INSERT INTO `sys_base_menus` VALUES (35, '2020-03-22 17:13:38', '2020-03-22 17:1
 INSERT INTO `sys_base_menus` VALUES (36, '2020-03-22 17:14:24', '2020-03-22 17:15:23', '2020-03-29 21:31:18', 0, 3, 'autoCode', 'autoCode', 0, 'view/superAdmin/autoCode/index.vue', '自动化代码', 'cpu', '自动化代码', '6');
 INSERT INTO `sys_base_menus` VALUES (37, '2020-03-28 23:43:39', '2020-03-28 23:43:39', '2020-03-29 21:31:15', 0, 3, 'formCreate', 'formCreate', 0, 'view/superAdmin/formCreate/index.vue', '表单生成器', 'setting', '表单生成器', '8');
 INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-03-29 21:31:03', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', '系统工具', '5');
-INSERT INTO `sys_base_menus` VALUES (39, '2020-03-29 21:34:06', '2020-03-29 21:37:37', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '配置文件', 's-order', '配置文件', '0');
+INSERT INTO `sys_base_menus` VALUES (39, '2020-03-29 21:34:06', '2020-03-30 13:56:24', '2020-03-30 15:58:32', 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-order', '系统配置', '0');
 INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-03-29 21:35:10', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', '1');
 INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-03-29 21:36:26', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', '2');
+INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-02 14:20:16', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', '3');
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id
@@ -4319,7 +4322,7 @@ CREATE TABLE `sys_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 560 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 580 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_menus
@@ -4357,26 +4360,26 @@ INSERT INTO `sys_menus` VALUES (517, '2019-10-20 11:23:39', '2019-12-12 16:58:23
 INSERT INTO `sys_menus` VALUES (518, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 9528, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
 INSERT INTO `sys_menus` VALUES (519, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 9528, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
 INSERT INTO `sys_menus` VALUES (520, '2020-02-24 19:48:37', '2020-03-27 20:05:38', NULL, 0, 9528, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', 19, '34', '客户列表（资源示例）', '7');
-INSERT INTO `sys_menus` VALUES (540, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
-INSERT INTO `sys_menus` VALUES (541, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
-INSERT INTO `sys_menus` VALUES (542, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
-INSERT INTO `sys_menus` VALUES (543, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
-INSERT INTO `sys_menus` VALUES (544, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
-INSERT INTO `sys_menus` VALUES (545, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
-INSERT INTO `sys_menus` VALUES (546, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
-INSERT INTO `sys_menus` VALUES (547, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
-INSERT INTO `sys_menus` VALUES (548, '2019-10-20 11:14:42', '2020-03-29 21:39:18', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '6');
-INSERT INTO `sys_menus` VALUES (549, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
-INSERT INTO `sys_menus` VALUES (550, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
-INSERT INTO `sys_menus` VALUES (551, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
-INSERT INTO `sys_menus` VALUES (552, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
-INSERT INTO `sys_menus` VALUES (553, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
-INSERT INTO `sys_menus` VALUES (554, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 888, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
-INSERT INTO `sys_menus` VALUES (555, '2020-02-24 19:48:37', '2020-03-27 20:10:02', NULL, 0, 888, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', 19, '34', '客户列表（资源示例）', '7');
-INSERT INTO `sys_menus` VALUES (556, '2020-03-29 21:31:03', '2020-03-29 21:31:03', NULL, 0, 888, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', 0, '38', '系统工具', '5');
-INSERT INTO `sys_menus` VALUES (557, '2020-03-29 21:34:06', '2020-03-29 21:37:37', NULL, 0, 888, 'system', 'system', 0, 'view/systemTools/system/system.vue', '配置文件', 's-order', 38, '39', '配置文件', '0');
-INSERT INTO `sys_menus` VALUES (558, '2020-03-29 21:35:10', '2020-03-29 21:35:10', NULL, 0, 888, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', 38, '40', '代码生成器', '1');
-INSERT INTO `sys_menus` VALUES (559, '2020-03-29 21:36:26', '2020-03-29 21:36:26', NULL, 0, 888, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', 38, '41', '表单生成器', '2');
+INSERT INTO `sys_menus` VALUES (560, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
+INSERT INTO `sys_menus` VALUES (561, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (562, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
+INSERT INTO `sys_menus` VALUES (563, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
+INSERT INTO `sys_menus` VALUES (564, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
+INSERT INTO `sys_menus` VALUES (565, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
+INSERT INTO `sys_menus` VALUES (566, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
+INSERT INTO `sys_menus` VALUES (567, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
+INSERT INTO `sys_menus` VALUES (568, '2020-03-29 21:31:03', '2020-03-29 21:31:03', NULL, 0, 888, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', 0, '38', '系统工具', '5');
+INSERT INTO `sys_menus` VALUES (569, '2020-03-29 21:35:10', '2020-03-29 21:35:10', NULL, 0, 888, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', 38, '40', '代码生成器', '1');
+INSERT INTO `sys_menus` VALUES (570, '2020-03-29 21:36:26', '2020-03-29 21:36:26', NULL, 0, 888, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', 38, '41', '表单生成器', '2');
+INSERT INTO `sys_menus` VALUES (571, '2020-04-02 14:19:36', '2020-04-02 14:20:16', NULL, 0, 888, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', 38, '42', '系统配置', '3');
+INSERT INTO `sys_menus` VALUES (572, '2019-10-20 11:14:42', '2020-03-29 21:39:18', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '6');
+INSERT INTO `sys_menus` VALUES (573, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
+INSERT INTO `sys_menus` VALUES (574, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
+INSERT INTO `sys_menus` VALUES (575, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
+INSERT INTO `sys_menus` VALUES (576, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
+INSERT INTO `sys_menus` VALUES (577, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
+INSERT INTO `sys_menus` VALUES (578, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 888, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
+INSERT INTO `sys_menus` VALUES (579, '2020-02-24 19:48:37', '2020-03-27 20:10:02', NULL, 0, 888, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', 19, '34', '客户列表（资源示例）', '7');
 
 -- ----------------------------
 -- Table structure for sys_users

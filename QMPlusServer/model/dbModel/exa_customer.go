@@ -30,7 +30,7 @@ func (e *ExaCustomer)DeleteExaCustomer()(err error){
 }
 
 //更新用户
-func (e *ExaCustomer)UpdataExaCustomer()(err error){
+func (e *ExaCustomer)UpdateExaCustomer()(err error){
 	err = qmsql.DEFAULTDB.Save(e).Error
 	return err
 }

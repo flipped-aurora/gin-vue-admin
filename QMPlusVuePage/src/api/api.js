@@ -61,10 +61,10 @@ export const getApiById = (data) => {
 // @Produce application/json
 // @Param data body api.CreateApiParams true "更新api"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /api/updataApi [post]
-export const updataApi = (data) => {
+// @Router /api/updateApi [post]
+export const updateApi = (data) => {
     return service({
-        url: "/api/updataApi",
+        url: "/api/updateApi",
         method: 'post',
         data
     })

@@ -58,11 +58,11 @@ func DeleteExaCustomer(c *gin.Context) {
 // @Produce application/json
 // @Param data body dbModel.ExaCustomer true "创建客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/updataExaCustomer [post]
-func UpdataExaCustomer(c *gin.Context) {
+// @Router /customer/updateExaCustomer [post]
+func UpdateExaCustomer(c *gin.Context) {
 	var cu dbModel.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
-	err := cu.UpdataExaCustomer()
+	err := cu.UpdateExaCustomer()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
 	} else {

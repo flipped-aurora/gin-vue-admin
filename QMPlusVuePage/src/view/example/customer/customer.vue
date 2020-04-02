@@ -25,7 +25,7 @@
       <el-table-column label="接入人ID" prop="sysUserId" width="120"></el-table-column>
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button @click="updataCustomer(scope.row)" size="small" type="text">变更</el-button>
+          <el-button @click="updateCustomer(scope.row)" size="small" type="text">变更</el-button>
           <el-popover
           placement="top"
           width="160"
@@ -74,7 +74,7 @@
 
 import {
   createExaCustomer,
-  updataExaCustomer,
+  updateExaCustomer,
   deleteExaCustomer,
   getExaCustomer,
   getExaCustomerList
@@ -113,7 +113,7 @@ export default {
     }
   },
   methods:{
-    async updataCustomer(row){
+    async updateCustomer(row){
       const res = await getExaCustomer(row)
       this.type = "update"
       if(res.success){
@@ -138,7 +138,7 @@ export default {
           res =await createExaCustomer(this.form)
              break;
         case "update":
-           res =await updataExaCustomer(this.form)
+           res =await updateExaCustomer(this.form)
               break;
         default:
           res =await createExaCustomer(this.form)

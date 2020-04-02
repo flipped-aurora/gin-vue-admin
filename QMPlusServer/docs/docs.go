@@ -209,7 +209,7 @@ var doc = `{
                 }
             }
         },
-        "/api/updataApi": {
+        "/api/updateApi": {
             "post": {
                 "security": [
                     {
@@ -559,7 +559,7 @@ var doc = `{
                 }
             }
         },
-        "/casbin/casbinPUpdata": {
+        "/casbin/casbinPUpdate": {
             "post": {
                 "security": [
                     {
@@ -793,7 +793,7 @@ var doc = `{
                 }
             }
         },
-        "/customer/updataExaCustomer": {
+        "/customer/updateExaCustomer": {
             "post": {
                 "security": [
                     {
@@ -1345,7 +1345,7 @@ var doc = `{
                 }
             }
         },
-        "/menu/updataBaseMen": {
+        "/menu/updateBaseMen": {
             "post": {
                 "security": [
                     {

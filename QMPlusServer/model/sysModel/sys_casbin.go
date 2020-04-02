@@ -31,7 +31,7 @@ type CasbinInReceive struct {
 }
 
 // 更新权限
-func (c *CasbinModel) CasbinPUpdata(AuthorityId string, casbinInfos []CasbinInfo) error {
+func (c *CasbinModel) CasbinPUpdate(AuthorityId string, casbinInfos []CasbinInfo) error {
 	c.clearCasbin(0, AuthorityId)
 	for _, v := range casbinInfos {
 		cm := CasbinModel{
@@ -50,7 +50,7 @@ func (c *CasbinModel) CasbinPUpdata(AuthorityId string, casbinInfos []CasbinInfo
 }
 
 // API更新随动
-func (c *CasbinModel) CasbinApiUpdata(oldPath string, newPath string) error {
+func (c *CasbinModel) CasbinApiUpdate(oldPath string, newPath string) error {
 	var cs []CasbinModel
 	err := qmsql.DEFAULTDB.Table("casbin_rule").Where("v1 = ?", oldPath).Find(&cs).Update("v1", newPath).Error
 	return err

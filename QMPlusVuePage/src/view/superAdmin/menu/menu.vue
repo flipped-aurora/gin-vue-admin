@@ -75,7 +75,7 @@
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 
 import {
-  updataBaseMenu,
+  updateBaseMenu,
   getMenuList,
   addBaseMenu,
   deleteBaseMenu,
@@ -186,7 +186,7 @@ export default {
           let res
           this.form.name = this.form.path
           if (this.isEdit) {
-            res = await updataBaseMenu(this.form)
+            res = await updateBaseMenu(this.form)
           } else {
             res = await addBaseMenu(this.form)
           }

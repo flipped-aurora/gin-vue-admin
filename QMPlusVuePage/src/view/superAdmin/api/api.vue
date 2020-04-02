@@ -103,7 +103,7 @@ import {
   getApiById,
   getApiList,
   createApi,
-  updataApi,
+  updateApi,
   deleteApi
 } from '@/api/api'
 import infoList from '@/components/mixins/infoList'
@@ -231,7 +231,7 @@ export default {
               break
             case 'edit':
               {
-                const res = await updataApi(this.form)
+                const res = await updateApi(this.form)
                 if (res.success) {
                   this.$message({
                     type: 'success',

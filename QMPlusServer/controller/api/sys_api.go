@@ -121,11 +121,11 @@ func GetApiById(c *gin.Context) {
 // @Produce application/json
 // @Param data body api.CreateApiParams true "创建api"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /api/updataApi [post]
-func UpdataApi(c *gin.Context) {
+// @Router /api/updateApi [post]
+func UpdateApi(c *gin.Context) {
 	var api sysModel.SysApi
 	_ = c.ShouldBindJSON(&api)
-	err := api.UpdataApi()
+	err := api.UpdateApi()
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("修改数据失败，%v", err), gin.H{})
 	} else {

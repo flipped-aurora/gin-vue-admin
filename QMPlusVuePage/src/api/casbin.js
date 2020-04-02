@@ -7,11 +7,11 @@ import service from '@/utils/request'
 // @Produce application/json
 // @Param data body api.CreateAuthorityPatams true "更改角色api权限"
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /casbin/casbinPUpdata [post]
+// @Router /casbin/casbinPUpdate [post]
 
-export const casbinPUpdata = (data) => {
+export const casbinPUpdate = (data) => {
     return service({
-        url: "/casbin/casbinPUpdata",
+        url: "/casbin/casbinPUpdate",
         method: 'post',
         data
     })

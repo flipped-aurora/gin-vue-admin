@@ -420,7 +420,7 @@ paths:
       summary: 分页获取API列表
       tags:
       - SysApi
-  /api/updataApi:
+  /api/updateApi:
     post:
       consumes:
       - application/json
@@ -636,7 +636,7 @@ paths:
       summary: casb RBAC RESTFUL测试路由
       tags:
       - casbin
-  /casbin/casbinPUpdata:
+  /casbin/casbinPUpdate:
     post:
       consumes:
       - application/json
@@ -780,7 +780,7 @@ paths:
       summary: 获取权限客户列表
       tags:
       - SysApi
-  /customer/updataExaCustomer:
+  /customer/updateExaCustomer:
     post:
       consumes:
       - application/json
@@ -1118,7 +1118,7 @@ paths:
       summary: 分页获取基础menu列表
       tags:
       - menu
-  /menu/updataBaseMen:
+  /menu/updateBaseMen:
     post:
       consumes:
       - application/json

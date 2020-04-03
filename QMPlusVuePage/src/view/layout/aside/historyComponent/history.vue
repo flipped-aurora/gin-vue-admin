@@ -16,18 +16,32 @@ export default {
     name:"HistoryComponent",
     data(){
         return{
-            historys:[
+            historys:[],
+            activeValue:"dashbord"
+        }
+    },
+    created(){
+        const initHistorys = [
                 {
                 name:"dashbord",
                 meta:{
                     title:"仪表盘"
                 }
                 }
-            ],
-            activeValue:"dashbord"
-        }
+            ]
+        this.historys = JSON.parse(sessionStorage.getItem("historys")) || initHistorys
+        this.setTab(this.$route)
     },
     methods:{
+        setTab(route){
+        if(!this.historys.some(item=>item.name==route.name)){
+           const obj = {}
+           obj.name = route.name
+           obj.meta = route.meta
+        this.historys.push(obj)
+       }
+           this.activeValue = this.$route.name
+        },
         changeTab(tab){
             this.$router.push({name:tab.name})
         },
@@ -50,11 +64,10 @@ export default {
     watch:{
      $route( to ){
        this.historys = this.historys.filter(item=>!item.meta.hidden)
-       if(!this.historys.some(item=>item.name==to.name)){
-        this.historys.push(to)
-       }
-       this.activeValue = to.name
+       this.setTab(to)
+       sessionStorage.setItem("historys",JSON.stringify(this.historys))
      }
+     
     }
 }
 </script>

@@ -31,6 +31,7 @@ export const user = {
             state.token = ""
             state.expiresAt = ""
             router.push({ name: 'login', replace: true })
+            sessionStorage.clear()
             window.location.reload()
         },
         ResetUserInfo(state, userInfo = {}) {

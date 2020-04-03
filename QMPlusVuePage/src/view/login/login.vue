@@ -86,7 +86,8 @@ export default {
     async submitForm() {
       this.$refs.loginForm.validate(async v => {
         if (v) {
-          await this.login()
+          this.login()
+          this.loginVefify()
         } else {
           this.$message({
             type: 'error',

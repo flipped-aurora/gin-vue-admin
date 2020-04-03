@@ -5,7 +5,6 @@ import (
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/model/modelInterface"
 	"github.com/jinzhu/gorm"
-	"github.com/pkg/errors"
 )
 
 type SysApi struct {
@@ -18,12 +17,7 @@ type SysApi struct {
 
 //新增基础api
 func (a *SysApi) CreateApi() (err error) {
-	findOne := qmsql.DEFAULTDB.Where("path = ?", a.Path).Find(&SysMenu{}).Error
-	if findOne == nil {
-		return errors.New("存在相同api")
-	} else {
-		err = qmsql.DEFAULTDB.Create(a).Error
-	}
+	err = qmsql.DEFAULTDB.Create(a).Error
 	return err
 }
 
@@ -41,7 +35,7 @@ func (a *SysApi) UpdataApi() (err error) {
 	if err != nil {
 		return err
 	} else {
-		err = new(CasbinModel).CasbinApiUpdata(oldA.Path, a.Path)
+		err = new(CasbinModel).CasbinApiUpdata(oldA, *a)
 		if err != nil {
 			return err
 		} else {

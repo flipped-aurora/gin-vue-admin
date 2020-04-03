@@ -50,9 +50,9 @@ func (c *CasbinModel) CasbinPUpdata(AuthorityId string, casbinInfos []CasbinInfo
 }
 
 // API更新随动
-func (c *CasbinModel) CasbinApiUpdata(oldPath string, newPath string) error {
-	var cs []CasbinModel
-	err := qmsql.DEFAULTDB.Table("casbin_rule").Where("v1 = ?", oldPath).Find(&cs).Update("v1", newPath).Error
+func (c *CasbinModel) CasbinApiUpdata(old SysApi, new SysApi) error {
+	var cs CasbinModel
+	err := qmsql.DEFAULTDB.Table("casbin_rule").Where("v1 = ?", old.Path).Where("v2 = ?", old.Method).Find(&cs).Update(&cs).Error
 	return err
 }
 

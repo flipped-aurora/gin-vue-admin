@@ -2,6 +2,7 @@ package registTable
 
 import (
 	"gin-vue-admin/init/initlog"
+	"gin-vue-admin/model/customerModel"
 	"gin-vue-admin/model/dbModel"
 	"gin-vue-admin/model/sysModel"
 	"github.com/jinzhu/gorm"
@@ -21,6 +22,7 @@ func RegistTable(db *gorm.DB) {
 		dbModel.ExaFile{},
 		dbModel.ExaFileChunk{},
 		dbModel.ExaCustomer{},
+		customerModel.CustomerOrder{},
 	)
 	log.L.Debug("register table success")
 }

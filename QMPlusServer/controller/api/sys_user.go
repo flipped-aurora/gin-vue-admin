@@ -7,7 +7,6 @@ import (
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/model/modelInterface"
 	"gin-vue-admin/model/sysModel"
-	"github.com/dchest/captcha"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
@@ -67,17 +66,12 @@ func Regist(c *gin.Context) {
 func Login(c *gin.Context) {
 	var L RegistAndLoginStuct
 	_ = c.ShouldBindJSON(&L)
-	if captcha.VerifyString(L.CaptchaId, L.Captcha) {
-		U := &sysModel.SysUser{Username: L.Username, Password: L.Password}
-		if err, user := U.Login(); err != nil {
-			servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{})
-		} else {
-			tokenNext(c, *user)
-		}
+	U := &sysModel.SysUser{Username: L.Username, Password: L.Password}
+	if err, user := U.Login(); err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("用户名密码错误或%v", err), gin.H{})
 	} else {
-		servers.ReportFormat(c, false, "验证码错误", gin.H{})
+		tokenNext(c, *user)
 	}
-
 }
 
 //登录以后签发jwt

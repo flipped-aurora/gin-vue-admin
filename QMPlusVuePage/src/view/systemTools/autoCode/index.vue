@@ -169,7 +169,7 @@ export default {
                 window.navigator.msSaveBlob(blob, fileName)
             }
           } else {
-            return false;
+            return false
           }
         });
         }

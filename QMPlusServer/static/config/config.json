@@ -7,8 +7,8 @@
     },
     "mysqladmin": {
         "username": "root",
-        "password": "Aa@6447985",
-        "path": "127.0.0.1:3306",
+        "password": "366c7675c3",
+        "path": "47.240.167.171:3306",
         "dbname": "qmPlus",
         "config": "charset=utf8\u0026parseTime=True\u0026loc=Local",
         "maxIdleConns": 10,
@@ -20,8 +20,8 @@
         "secretKey": "pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY"
     },
     "redisadmin": {
-        "addr": "127.0.0.1:6379",
-        "password": "",
+        "addr": "47.240.167.171:6379",
+        "password": "foobared",
         "db": 0
     },
     "system": {

@@ -1,17 +1,17 @@
-package servers
+package utils
 
 import (
 	"context"
 	"fmt"
-	"gin-vue-admin/config"
+	"gin-vue-admin/global"
 	"github.com/qiniu/api.v7/auth/qbox"
 	"github.com/qiniu/api.v7/storage"
 	"mime/multipart"
 	"time"
 )
 
-var accessKey string = config.GinVueAdminconfig.Qiniu.AccessKey // 你在七牛云的accessKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
-var secretKey string = config.GinVueAdminconfig.Qiniu.SecretKey // 你在七牛云的secretKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
+var accessKey string = global.GVA_CONFIG.Qiniu.AccessKey // 你在七牛云的accessKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
+var secretKey string = global.GVA_CONFIG.Qiniu.SecretKey // 你在七牛云的secretKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
 
 // 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字
 func Upload(file *multipart.FileHeader, bucket string, urlPath string) (err error, path string, key string) {

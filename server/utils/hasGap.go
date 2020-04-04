@@ -1,6 +1,6 @@
 // 空值校验工具 仅用于检验空字符串 其余类型请勿使用
 
-package tools
+package utils
 
 import (
 	"errors"

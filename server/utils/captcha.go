@@ -1,9 +1,9 @@
-package servers
+package utils
 
 import (
 	"bytes"
 	"fmt"
-	"gin-vue-admin/config"
+	"gin-vue-admin/global"
 	"github.com/dchest/captcha"
 	"net/http"
 	"path"
@@ -12,7 +12,7 @@ import (
 )
 
 // 这里需要自行实现captcha 的gin模式
-func GinCapthcaServeHTTP(w http.ResponseWriter, r *http.Request) {
+func GinCaptchaServeHTTP(w http.ResponseWriter, r *http.Request) {
 	dir, file := path.Split(r.URL.Path)
 	ext := path.Ext(file)
 	id := file[:len(file)-len(ext)]
@@ -26,7 +26,7 @@ func GinCapthcaServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 	lang := strings.ToLower(r.FormValue("lang"))
 	download := path.Base(dir) == "download"
-	if Serve(w, r, id, ext, lang, download, config.GinVueAdminconfig.Captcha.ImgWidth, config.GinVueAdminconfig.Captcha.ImgHeight) == captcha.ErrNotFound {
+	if Serve(w, r, id, ext, lang, download, global.GVA_CONFIG.Captcha.ImgWidth, global.GVA_CONFIG.Captcha.ImgHeight) == captcha.ErrNotFound {
 		http.NotFound(w, r)
 	}
 }
@@ -39,10 +39,10 @@ func Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, downloa
 	switch ext {
 	case ".png":
 		w.Header().Set("Content-Type", "image/png")
-		captcha.WriteImage(&content, id, width, height)
+		_ = captcha.WriteImage(&content, id, width, height)
 	case ".wav":
 		w.Header().Set("Content-Type", "audio/x-wav")
-		captcha.WriteAudio(&content, id, lang)
+		_ = captcha.WriteAudio(&content, id, lang)
 	default:
 		return captcha.ErrNotFound
 	}

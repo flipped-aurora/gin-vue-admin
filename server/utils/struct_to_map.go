@@ -1,9 +1,9 @@
-package tools
+package utils
 
 import "reflect"
 
 // 利用反射将结构体转化为map
-func StructToMap(obj interface{}) map[string]interface{}{
+func StructToMap(obj interface{}) map[string]interface{} {
 	obj1 := reflect.TypeOf(obj)
 	obj2 := reflect.ValueOf(obj)
 

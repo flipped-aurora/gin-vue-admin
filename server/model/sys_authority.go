@@ -30,7 +30,7 @@ func (a *SysAuthority) DeleteAuthority() (err error) {
 	if err != nil {
 		err = global.GVA_DB.Where("parent_id = ?", a.AuthorityId).Find(&SysAuthority{}).Error
 		if err != nil {
-			err = global.GVA_DB.Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Error
+			err = global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Association("SysBaseMenus").Delete(a.SysBaseMenus).Error
 			new(CasbinModel).clearCasbin(0, a.AuthorityId)
 		} else {
 			err = errors.New("此角色存在子角色不允许删除")

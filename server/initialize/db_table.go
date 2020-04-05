@@ -10,7 +10,6 @@ func DBTables() {
 	db := global.GVA_DB
 	db.AutoMigrate(model.SysUser{},
 		model.SysAuthority{},
-		model.SysMenu{},
 		model.SysApi{},
 		model.SysBaseMenu{},
 		model.JwtBlacklist{},

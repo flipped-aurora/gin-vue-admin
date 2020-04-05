@@ -116,7 +116,7 @@ export default {
     async updateCustomer(row){
       const res = await getExaCustomer(row)
       this.type = "update"
-      if(res.success){
+      if(res.code == 0){
         this.form = res.data.customer        
         this.dialogFormVisible = true
       }
@@ -127,7 +127,7 @@ export default {
     async deleteCustomer(row){
       this.visible = false
       const res = await deleteExaCustomer(row)
-      if (res.success){
+      if (res.code == 0){
          this.getTableData()
       }
     },
@@ -146,7 +146,7 @@ export default {
 
       }
      
-      if(res.success){
+      if(res.code == 0){
         this.dialogFormVisible = false
         this.getTableData()
       }

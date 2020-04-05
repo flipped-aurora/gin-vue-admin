@@ -132,7 +132,7 @@ export default {
       this.$refs.userForm.validate(async valid => {
         if (valid) {
           const res = await register(this.userInfo)
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({ type: 'success', message: '创建成功' })
           }
           await this.getTableData()
@@ -161,7 +161,7 @@ export default {
         uuid: row.uuid,
         authorityId: row.authority.authorityId
       })
-      if (res.success) {
+      if (res.code == 0) {
         this.$message({ type: 'success', message: '角色设置成功' })
       }
     }

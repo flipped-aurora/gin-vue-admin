@@ -46,7 +46,7 @@ export default {
         menus: checkArr,
         authorityId: this.row.authorityId
       })
-      if (res.success) {
+      if (res.code == 0) {
         this.$message({
           type: 'success',
           message: '添加成功!'

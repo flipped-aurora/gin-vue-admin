@@ -119,7 +119,7 @@ export default {
           fileMd5: this.fileMd5
         }
         const res = await breakpointContinueFinish(params)
-        if (res.success) {
+        if (res.code == 0) {
           // 合成文件过后 删除缓存切片
           const params = {
             fileName: this.file.name,

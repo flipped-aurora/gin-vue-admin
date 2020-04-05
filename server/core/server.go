@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 	"gin-vue-admin/global"
-	"gin-vue-admin/init"
+	"gin-vue-admin/initialize"
 	"net/http"
 	"time"
 )
@@ -11,9 +11,9 @@ import (
 func RunWindowsServer() {
 	if global.GVA_CONFIG.System.UseMultipoint {
 		// 初始化redis服务
-		init.Redis()
+		initialize.Redis()
 	}
-	Router := init.Routers()
+	Router := initialize.Routers()
 	Router.Static("/form-generator", "./resource/page")
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
 	s := &http.Server{

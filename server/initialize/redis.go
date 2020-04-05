@@ -1,4 +1,4 @@
-package init
+package initialize
 
 import (
 	"gin-vue-admin/global"
@@ -6,7 +6,7 @@ import (
 )
 
 func Redis() {
-	redisCfg := global.GVA_CONFIG.RedisAdmin
+	redisCfg := global.GVA_CONFIG.Redis
 	client := redis.NewClient(&redis.Options{
 		Addr:     redisCfg.Addr,
 		Password: redisCfg.Password, // no password set

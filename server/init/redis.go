@@ -5,17 +5,18 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func RegisterRedis() {
+func Redis() {
+	redisCfg := global.GVA_CONFIG.RedisAdmin
 	client := redis.NewClient(&redis.Options{
-		Addr:     GinVueAdminconfig.RedisAdmin.Addr,
-		Password: GinVueAdminconfig.RedisAdmin.Password, // no password set
-		DB:       GinVueAdminconfig.RedisAdmin.DB,       // use default DB
+		Addr:     redisCfg.Addr,
+		Password: redisCfg.Password, // no password set
+		DB:       redisCfg.DB,       // use default DB
 	})
 	pong, err := client.Ping().Result()
 	if err != nil {
-		L.Error(err)
+		global.GVA_LOG.Error(err)
 	} else {
-		L.Info("redis connect ping response:", pong)
+		global.GVA_LOG.Info("redis connect ping response:", pong)
 		global.GVA_REDIS = client
 	}
 }

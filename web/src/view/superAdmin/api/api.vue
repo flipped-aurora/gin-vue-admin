@@ -167,12 +167,7 @@ export default {
       this.getTableData()
     },
     initForm() {
-      this.form = {
-        path: '',
-        apiGroup: '',
-        description: '',
-        method: ''
-      }
+      this.$refs.apiForm.resetFields()
     },
     closeDialog() {
       this.initForm()

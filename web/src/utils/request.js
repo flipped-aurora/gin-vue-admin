@@ -21,13 +21,13 @@ const showLoading = () => {
 }
 
 const closeLoading = () => {
-        acitveAxios--
-        if (acitveAxios <= 0) {
-            clearTimeout(timer)
-            loadingInstance && loadingInstance.close()
-        }
+    acitveAxios--
+    if (acitveAxios <= 0) {
+        clearTimeout(timer)
+        loadingInstance && loadingInstance.close()
     }
-    //http request 拦截器
+}
+//http request 拦截器
 service.interceptors.request.use(
     config => {
         showLoading()
@@ -55,7 +55,7 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         closeLoading()
-        if (response.data.success || response.headers.success === "true") {
+        if (response.data.code == 0 || response.headers.success === "true") {
             return response.data
         } else {
             Message({

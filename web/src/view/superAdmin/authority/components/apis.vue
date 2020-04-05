@@ -76,7 +76,7 @@ export default {
         authorityId: this.activeUserId,
         casbinInfos
       })
-      if (res.success) {
+      if (res.code == 0) {
         this.$message({ type: 'success', message: res.msg })
       }
     }

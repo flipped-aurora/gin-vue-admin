@@ -101,7 +101,7 @@ export default {
     },
     async submit() {
       const res = await createWorkFlow(this.form)
-      if(res.success){
+      if(res.code == 0){
           this.$message({
               message:"创建成功",
               type:"success"

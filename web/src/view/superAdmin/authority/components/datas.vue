@@ -60,7 +60,7 @@ export default {
     // 提交
       async authDataEnter(){
           const res = await setDataAuthority(this.row)
-          if(res.success){
+          if(res.code == 0){
               this.$message({ type: 'success', message: res.msg })
           }
       },

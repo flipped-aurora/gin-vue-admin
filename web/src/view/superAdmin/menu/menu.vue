@@ -145,7 +145,7 @@ export default {
       })
         .then(async () => {
           const res = await deleteBaseMenu({ ID })
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -190,7 +190,7 @@ export default {
           } else {
             res = await addBaseMenu(this.form)
           }
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '添加成功!'

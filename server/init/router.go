@@ -2,6 +2,7 @@ package init
 
 import (
 	_ "gin-vue-admin/docs"
+	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/router"
 	"github.com/gin-gonic/gin"
@@ -10,18 +11,16 @@ import (
 )
 
 //初始化总路由
-func RegisterRouter() *gin.Engine {
+func Routers() *gin.Engine {
 	var Router = gin.Default()
 
 	//Router.Use(middleware.LoadTls())  // 打开就能玩https了
-	// 如果不需要日志 请关闭这里
-	Router.Use(middleware.Logger())
-	L.Debug("use middleware logger")
+	global.GVA_LOG.Debug("use middleware logger")
 	// 跨域
 	Router.Use(middleware.Cors())
-	L.Debug("use middleware cors")
+	global.GVA_LOG.Debug("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	L.Debug("register swagger handler")
+	global.GVA_LOG.Debug("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用
 	ApiGroup := Router.Group("")
 	router.InitUserRouter(ApiGroup)                  // 注册用户路由

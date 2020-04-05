@@ -1,18 +1,18 @@
 package model
 
 import (
+	"gin-vue-admin/config"
 	"gin-vue-admin/global"
-	"gin-vue-admin/init"
 	"gin-vue-admin/utils"
 )
 
 //配置文件结构体
 type System struct {
-	Config init.Config
+	Config config.Server
 }
 
 //读取配置文件
-func (s *System) GetSystemConfig() (err error, conf init.Config) {
+func (s *System) GetSystemConfig() (err error, conf config.Server) {
 	return nil, global.GVA_CONFIG
 }
 

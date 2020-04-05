@@ -37,7 +37,7 @@
     "log": {
         "prefix": "[GIN-VUE-ADMIN]",
         "logFile": false,
-        "stdout": ["DEBUG"],
-        "file": ["WARNING"]
+        "stdout": "DEBUG",
+        "file": "WARNING"
     }
 }

@@ -1,4 +1,4 @@
-package init
+package initialize
 
 import (
 	"gin-vue-admin/global"
@@ -8,7 +8,7 @@ import (
 
 //初始化数据库并产生数据库全局变量
 func Mysql() {
-	admin := global.GVA_CONFIG.MysqlAdmin
+	admin := global.GVA_CONFIG.Mysql
 	if db, err := gorm.Open("mysql", admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname+"?"+admin.Config); err != nil {
 		global.GVA_LOG.Error("DEFAULTDB数据库启动异常", err)
 	} else {

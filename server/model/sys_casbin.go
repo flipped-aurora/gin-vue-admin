@@ -97,8 +97,8 @@ func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 //持久化到数据库  引入自定义规则
 func Casbin() *casbin.Enforcer {
 	a := gormadapter.NewAdapterByDB(global.GVA_DB)
-	e := casbin.NewEnforcer(global.GVA_CONFIG.CasbinConfig.ModelPath, a)
+	e := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
 	e.AddFunction("ParamsMatch", ParamsMatchFunc)
-	e.LoadPolicy()
+	_ = e.LoadPolicy()
 	return e
 }

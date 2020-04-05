@@ -1,4 +1,4 @@
-package init
+package initialize
 
 import (
 	_ "gin-vue-admin/docs"
@@ -35,6 +35,6 @@ func Routers() *gin.Engine {
 	router.InitSystemRouter(ApiGroup)                // system相关路由
 	router.InitCustomerRouter(ApiGroup)              // 客户路由
 	router.InitAutoCodeRouter(ApiGroup)              // 创建自动化代码
-	L.Info("router register success")
+	global.GVA_LOG.Info("router register success")
 	return Router
 }

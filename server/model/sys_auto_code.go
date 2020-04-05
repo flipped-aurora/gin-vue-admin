@@ -24,7 +24,6 @@ type Field struct {
 // @title    CreateTemp
 // @description   函数的详细描述
 // @auth                     （2020/04/05  20:22 ）
-// @param     newPassword     string
 // @return    err             error
 func (a *AutoCodeStruct) CreateTemp() (err error) {
 	basePath := "./template"
@@ -133,7 +132,7 @@ func (a *AutoCodeStruct) CreateTemp() (err error) {
 // @title    createDir
 // @description   批量创建文件夹
 // @auth                     （2020/04/05  20:22 ）
-// @param     newPassword     string
+// @param     dirs            string
 // @return    err             error
 func createDir(dirs ...string) (err error) {
 	for _, v := range dirs {

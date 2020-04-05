@@ -122,7 +122,7 @@ type AuthorityIdInfo struct {
 // @Produce application/json
 // @Param data body api.AuthorityIdInfo true "增加menu和角色关联关系"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /menu/addMenuAuthority [post]
+// @Router /menu/GetMenuAuthority [post]
 func GetMenuAuthority(c *gin.Context) {
 	var authorityIdInfo AuthorityIdInfo
 	_ = c.ShouldBindJSON(&authorityIdInfo)

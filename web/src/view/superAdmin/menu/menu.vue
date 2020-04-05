@@ -162,17 +162,7 @@ export default {
     },
     // 初始化弹窗内表格方法
     initForm() {
-      this.form = {
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
-        meta: {
-          title: '',
-          icon: ''
-        }
-      }
+      this.$refs.menuForm.resetFields()
     },
     // 关闭弹窗
     closeDialog() {

@@ -72,9 +72,9 @@ func (u *SysUser) ChangePassword(newPassword string) (err error, userInter *SysU
 // @title    SetUserAuthority
 // @description   set the authority of a certain user, 设置一个用户的权限
 // @auth                     （2020/04/05  20:22 ）
-// @param     uuid             UUID
-// @param     authorityId      string
-// @return    err              error
+// @param     uuid            UUID
+// @param     authorityId     string
+// @return    err             error
 func (u *SysUser) SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
 	err = global.GVA_DB.Where("uuid = ?", uuid).First(&SysUser{}).Update("authority_id", authorityId).Error
 	return err

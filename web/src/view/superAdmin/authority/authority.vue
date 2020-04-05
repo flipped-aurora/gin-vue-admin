@@ -136,9 +136,7 @@ export default {
     },
     // 初始化表单
     initForm() {
-      for (const key in this.form) {
-        this.form[key] = ''
-      }
+      this.$refs.authorityForm.resetFields()
     },
     // 关闭窗口
     closeDialog() {

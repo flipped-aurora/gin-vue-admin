@@ -22,7 +22,7 @@
             <el-dropdown>
               <span class="el-dropdown-link">
                 <img :src="userInfo.headerImg" height="30" width="30" />
-                {{userInfo.nickName}}
+                {{userInfo.title}}
                 <i class="el-icon-arrow-down"></i>
               </span>
               <el-dropdown-menu class="dropdown-group" slot="dropdown">

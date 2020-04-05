@@ -28,7 +28,7 @@ type SysWorkflowStepInfo struct {
 // @title    Create
 // @description   create a workflow, 创建工作流
 // @auth                     （2020/04/05  20:22 ）
-// @return                     error
+// @return                    error
 func (wk *SysWorkflow) Create() error {
 	err := global.GVA_DB.Create(&wk).Error
 	return err

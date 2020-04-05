@@ -18,12 +18,25 @@ type SysAuthority struct {
 	SysBaseMenus    []SysBaseMenu  `json:"menus" gorm:"many2many:sys_authority_menus;"`
 }
 
-// 创建角色
+// @title    CreateAuthority
+// @description   create authority, 创建一个权限
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysAuthority) CreateAuthority() (err error, authority *SysAuthority) {
 	err = global.GVA_DB.Create(a).Error
 	return err, a
 }
 
+// @title    DeleteAuthority
+// @description   删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 // 删除角色
 func (a *SysAuthority) DeleteAuthority() (err error) {
 	err = global.GVA_DB.Where("authority_id = ?", a.AuthorityId).Find(&SysUser{}).Error
@@ -31,7 +44,7 @@ func (a *SysAuthority) DeleteAuthority() (err error) {
 		err = global.GVA_DB.Where("parent_id = ?", a.AuthorityId).Find(&SysAuthority{}).Error
 		if err != nil {
 			err = global.GVA_DB.Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Error
-			new(CasbinModel).clearCasbin(0, a.AuthorityId)
+			new(CasbinModel).ClearCasbin(0, a.AuthorityId)
 		} else {
 			err = errors.New("此角色存在子角色不允许删除")
 		}
@@ -41,6 +54,13 @@ func (a *SysAuthority) DeleteAuthority() (err error) {
 	return err
 }
 
+// @title    GetInfoList
+// @description   删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 // 分页获取数据
 func (a *SysAuthority) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
@@ -60,6 +80,13 @@ func (a *SysAuthority) GetInfoList(info PageInfo) (err error, list interface{}, 
 	}
 }
 
+// @title    findChildrenAuthority
+// @description   删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func findChildrenAuthority(authority *SysAuthority) (err error) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
 	if len(authority.Children) > 0 {
@@ -70,6 +97,13 @@ func findChildrenAuthority(authority *SysAuthority) (err error) {
 	return err
 }
 
+// @title    SetDataAuthority
+// @description   删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysAuthority) SetDataAuthority() error {
 	var s SysAuthority
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", a.AuthorityId)
@@ -77,6 +111,13 @@ func (a *SysAuthority) SetDataAuthority() error {
 	return err
 }
 
+// @title    SetMuneAuthority
+// @description   删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysAuthority) SetMuneAuthority() error {
 	var s SysAuthority
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", a.AuthorityId)
@@ -84,6 +125,13 @@ func (a *SysAuthority) SetMuneAuthority() error {
 	return err
 }
 
+// @title    GetAuthorityInfo
+// @description   删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysAuthority) GetAuthorityInfo() (err error, sa SysAuthority) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", a.AuthorityId).First(&sa).Error
 	return err, sa

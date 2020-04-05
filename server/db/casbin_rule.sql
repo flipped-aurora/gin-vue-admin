@@ -27,7 +27,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/setUserAuthority', 'POST',
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/fileUploadAndDownload/upload', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/casbin/casbinPUpdate', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/casbin/UpdateCasbin', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/system/getSystemConfig', 'POST', '', '', '');
@@ -66,7 +66,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/setUserAuthority', 'POST',
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/upload', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/casbinPUpdate', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/UpdateCasbin', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/getSystemConfig', 'POST', '', '', '');
@@ -106,7 +106,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/setUserAuthority', 'POST', 
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/upload', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinPUpdate', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/UpdateCasbin', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinTest/:pathParam', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/jwt/jsonInBlacklist', 'POST', '', '', '');

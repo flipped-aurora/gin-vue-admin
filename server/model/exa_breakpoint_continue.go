@@ -5,7 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//文件结构体
+// file struct, 文件结构体
 type ExaFile struct {
 	gorm.Model
 	FileName     string
@@ -16,7 +16,7 @@ type ExaFile struct {
 	IsFinish     bool
 }
 
-//切片结构体
+// file chunk struct, 切片结构体
 type ExaFileChunk struct {
 	gorm.Model
 	ExaFileId       uint
@@ -24,7 +24,13 @@ type ExaFileChunk struct {
 	FileChunkPath   string
 }
 
-//文件合成完成
+// @title         FileCreateComplete
+// @description   file creation, 文件合成完成
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (f *ExaFile) FileCreateComplete(FileMd5 string, FileName string, FilePath string) error {
 	var file ExaFile
 	upDateFile := make(map[string]interface{})
@@ -34,7 +40,15 @@ func (f *ExaFile) FileCreateComplete(FileMd5 string, FileName string, FilePath s
 	return err
 }
 
-//第一次上传或者断点续传时候检测当前文件属性，没有则创建，有则返回文件的当前切片
+// @title         FindOrCreateFile
+// @description   Check your file if it does not exist, or return current slice of the file
+// 上传文件时检测当前文件属性，如果没有文件则创建，有则返回文件的当前切片
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     ChunkTotal      int
+// @return    err             error
+// @return    file            ExaFile
 func (f *ExaFile) FindOrCreateFile(FileMd5 string, FileName string, ChunkTotal int) (err error, file ExaFile) {
 	var cfile ExaFile
 	cfile.FileMd5 = FileMd5
@@ -52,7 +66,12 @@ func (f *ExaFile) FindOrCreateFile(FileMd5 string, FileName string, ChunkTotal i
 	}
 }
 
-// 创建文件切片记录
+// @title    CreateFileChunk
+// @description   create a chunk of the file, 创建文件切片记录
+// @auth                       （2020/04/05  20:22 ）
+// @param     FileChunkPath     string
+// @param     FileChunkNumber   int
+// @return                      error
 func (f *ExaFile) CreateFileChunk(FileChunkPath string, FileChunkNumber int) error {
 	var chunk ExaFileChunk
 	chunk.FileChunkPath = FileChunkPath
@@ -62,7 +81,13 @@ func (f *ExaFile) CreateFileChunk(FileChunkPath string, FileChunkNumber int) err
 	return err
 }
 
-// 删除文件切片记录
+// @title    DeleteFileChunk
+// @description   delete a chuck of the file, 删除文件切片记录
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (f *ExaFile) DeleteFileChunk(fileMd5 string, fileName string, filePath string) error {
 	var chunks []ExaFileChunk
 	var file ExaFile

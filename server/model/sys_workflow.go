@@ -25,7 +25,10 @@ type SysWorkflowStepInfo struct {
 	IsEnd           bool    `json:"isEnd"`           // 是否是完结流节点
 }
 
-//创建工作流
+// @title    Create
+// @description   create a workflow, 创建工作流
+// @auth                     （2020/04/05  20:22 ）
+// @return                     error
 func (wk *SysWorkflow) Create() error {
 	err := global.GVA_DB.Create(&wk).Error
 	return err

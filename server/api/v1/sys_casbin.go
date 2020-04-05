@@ -14,11 +14,11 @@ import (
 // @Produce application/json
 // @Param data body sysModel.CasbinInReceive true "更改角色api权限"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /casbin/casbinPUpdate [post]
-func CasbinPUpdate(c *gin.Context) {
+// @Router /casbin/UpdateCasbin [post]
+func UpdateCasbin(c *gin.Context) {
 	var cmr model.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
-	err := new(model.CasbinModel).CasbinPUpdate(cmr.AuthorityId, cmr.CasbinInfos)
+	err := new(model.CasbinModel).UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加规则失败，%v", err), c)
 	} else {

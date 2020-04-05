@@ -17,7 +17,7 @@
 </template>
 <script>
 import { getAllApis } from '@/api/api'
-import { casbinPUpdate, getPolicyPathByAuthorityId } from '@/api/casbin'
+import { UpdateCasbin, getPolicyPathByAuthorityId } from '@/api/casbin'
 export default {
   name: 'Apis',
   props: {
@@ -72,7 +72,7 @@ export default {
         }
         casbinInfos.push(casbinInfo)
       })
-      const res = await casbinPUpdate({
+      const res = await UpdateCasbin({
         authorityId: this.activeUserId,
         casbinInfos
       })

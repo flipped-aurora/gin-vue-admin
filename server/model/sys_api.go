@@ -14,7 +14,22 @@ type SysApi struct {
 	Method      string `json:"method" gorm:"default:'POST'"`
 }
 
-//新增基础api
+type CreateApiParams struct {
+	Path        string `json:"path"`
+	Description string `json:"description"`
+}
+
+type DeleteApiParams struct {
+	ID uint `json:"id"`
+}
+
+// @title    CreateApi
+// @description   create base apis, 新增基础api
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysApi) CreateApi() (err error) {
 	findOne := global.GVA_DB.Where("path = ?", a.Path).Find(&SysApi{}).Error
 	if findOne == nil {
@@ -25,14 +40,26 @@ func (a *SysApi) CreateApi() (err error) {
 	return err
 }
 
-//删除基础api
+// @title    DeleteApi
+// @description   delete base apis, 删除基础api
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysApi) DeleteApi() (err error) {
 	err = global.GVA_DB.Delete(a).Error
-	new(CasbinModel).clearCasbin(1, a.Path)
+	new(CasbinModel).ClearCasbin(1, a.Path)
 	return err
 }
 
-//更新api
+// @title    UpdateApi
+// @description   update a base api, update api
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysApi) UpdateApi() (err error) {
 	var oldA SysApi
 	flag := global.GVA_DB.Where("path = ?", a.Path).Find(&SysApi{}).RecordNotFound()
@@ -43,7 +70,7 @@ func (a *SysApi) UpdateApi() (err error) {
 	if err != nil {
 		return err
 	} else {
-		err = new(CasbinModel).CasbinApiUpdate(oldA.Path, a.Path)
+		err = new(CasbinModel).UpdateCasbinApi(oldA.Path, a.Path)
 		if err != nil {
 			return err
 		} else {
@@ -53,19 +80,37 @@ func (a *SysApi) UpdateApi() (err error) {
 	return err
 }
 
-//获取选中角色所拥有的api
+// @title    GetApiById
+// @description   get the apis of the selected user, 获取选中角色所拥有的api
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysApi) GetApiById(id float64) (err error, api SysApi) {
 	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
 	return
 }
 
-// 获取所有api信息
+// @title    GetAllApis
+// @description   get all apis, 获取所有的api
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysApi) GetAllApis() (err error, apis []SysApi) {
 	err = global.GVA_DB.Find(&apis).Error
 	return
 }
 
-// 分页获取数据
+// @title    GetInfoList
+// @description   get apis by pagination, 分页获取数据
+// @auth                     （2020/04/05  20:22 ）
+// @param     FileMd5         string
+// @param     FileName        string
+// @param     FilePath        string
+// @return                    error
 func (a *SysApi) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

@@ -16,26 +16,10 @@ import (
 	"time"
 )
 
-var (
+const (
 	USER_HEADER_IMG_PATH string = "http://qmplusimg.henrongyi.top"
 	USER_HEADER_BUCKET   string = "qm-plus-img"
 )
-
-type RegisterAndLoginStuct struct {
-	Username  string `json:"username"`
-	Password  string `json:"password"`
-	Captcha   string `json:"captcha"`
-	CaptchaId string `json:"captchaId"`
-}
-
-type RegestStuct struct {
-	Username    string `json:"userName"`
-	Password    string `json:"passWord"`
-	NickName    string `json:"nickName" gorm:"default:'QMPlusUser'"`
-	HeaderImg   string `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
-	AuthorityId string `json:"authorityId" gorm:"default:888"`
-}
-
 // @Tags Base
 // @Summary 用户注册账号
 // @Produce  application/json
@@ -43,7 +27,7 @@ type RegestStuct struct {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /base/register [post]
 func Register(c *gin.Context) {
-	var R RegestStuct
+	var R model.RegisterStruct
 	_ = c.ShouldBindJSON(&R)
 	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
 	err, user := user.Register()
@@ -61,11 +45,11 @@ func Register(c *gin.Context) {
 // @Tags Base
 // @Summary 用户登录
 // @Produce  application/json
-// @Param data body api.RegisterAndLoginStuct true "用户登录接口"
+// @Param data body api.RegisterAndLoginStruct true "用户登录接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
-	var L RegisterAndLoginStuct
+	var L model.RegisterAndLoginStruct
 	_ = c.ShouldBindJSON(&L)
 	if captcha.VerifyString(L.CaptchaId, L.Captcha) {
 		U := &model.SysUser{Username: L.Username, Password: L.Password}

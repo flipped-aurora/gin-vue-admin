@@ -214,10 +214,12 @@ swag init
 
 |  开发者   | 功能  | 姓名  |
 |  ----  | ----  | ----  |
-| [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋\*兆 |
-| [@krank666](https://github.com/krank666)  | 前端联合作者 | 尹\* |
-| [@1319612909](https://github.com/1319612909)  | 前端css优化 |  杜\*兰 |
-| [@granty1](https://github.com/granty1)  | 代码积极贡献者 | 印\*林 |
+| [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
+| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
+| [@1319612909](https://github.com/1319612909)  | 前端开发 |  杜 |
+| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
+| [@granty1](https://github.com/Ruio9244)  | 全栈开发 | 严 |
+| [@granty1](https://github.com/chen-chen-up)  | 新手 | 宋 |
 
 ## 更新日志
 
@@ -228,7 +230,7 @@ swag init
 |2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
 |2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
 |2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
-|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色 如不需要此功能可以在 view\/layout\/index\/   屏蔽HistoryComponent 背景色调 为本页260行 &.el-main 的background |
+|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色 如不需要此功能可以在 view\/layout\/index\/   屏蔽HistoryComponent 背景色调 为本页 &.el-main 的background |
 
 ## golang基础教学视频录制中...
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
@@ -241,12 +243,3 @@ swag init
 |  :---:  | :---: |
 | ![markdown](http://qmplusimg.henrongyi.top/zfb.png "支付宝") |  ![markdown](http://qmplusimg.henrongyi.top/wxzf.png "微信") |
 
-
-## 捐赠列表
-
-|  捐赠者   | 金额  |
-|  :---:  | :---: |
-| 老**途 |  100￥ |
-| y*g |  10￥ |
-| *波 |  50￥ |
-| *雄 |  15￥ |

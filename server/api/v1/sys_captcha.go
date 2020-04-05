@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// 获取图片验证码id
 // @Tags base
 // @Summary 生成验证码
 // @Security ApiKeyAuth

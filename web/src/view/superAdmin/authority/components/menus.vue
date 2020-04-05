@@ -34,7 +34,9 @@ export default {
       menuTreeIds: [],
       menuDefaultProps: {
         children: 'children',
-        label: 'nickName'
+        label: function(data){
+          return data.meta.title
+        }
       }
     }
   },
@@ -64,8 +66,8 @@ export default {
     const arr = []
     menus.map(item => {
       // 防止直接选中父级造成全选
-      if (!menus.some(same => same.parentId === item.menuId)) {
-        arr.push(Number(item.menuId))
+      if (!menus.some(same => same.parentId === item.ID)) {
+        arr.push(Number(item.ID))
       }
     })
     this.menuTreeIds = arr

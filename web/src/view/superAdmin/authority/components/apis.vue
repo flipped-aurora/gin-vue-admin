@@ -44,10 +44,10 @@ export default {
       const apiObj = new Object()
       apis &&
         apis.map(item => {
-          if (apiObj.hasOwnProperty(item.group)) {
-            apiObj[item.group].push(item)
+          if (apiObj.hasOwnProperty(item.apiGroup)) {
+            apiObj[item.apiGroup].push(item)
           } else {
-            Object.assign(apiObj, { [item.group]: [item] })
+            Object.assign(apiObj, { [item.apiGroup]: [item] })
           }
         })
       const apiTree = []

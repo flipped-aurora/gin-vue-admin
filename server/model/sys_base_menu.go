@@ -17,7 +17,6 @@ type SysBaseMenu struct {
 	Component     string `json:"component"`
 	Sort          string `json:"sort"`
 	Meta          `json:"meta"`
-	NickName      string         `json:"nickName"`
 	SysAuthoritys []SysAuthority `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
 	Children      []SysBaseMenu  `json:"children"`
 }
@@ -36,7 +35,6 @@ type Meta struct {
 func (b *SysBaseMenu) AddBaseMenu() (err error) {
 	findOne := global.GVA_DB.Where("name = ?", b.Name).Find(&SysBaseMenu{}).Error
 	if findOne != nil {
-		b.NickName = b.Title
 		err = global.GVA_DB.Create(b).Error
 	} else {
 		err = errors.New("存在重复name，请修改name")
@@ -52,8 +50,7 @@ func (b *SysBaseMenu) AddBaseMenu() (err error) {
 func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", id).First(&SysBaseMenu{}).Error
 	if err != nil {
-		err = global.GVA_DB.Where("id = ?", id).Delete(&b).Error
-		err = global.GVA_DB.Where("menu_id = ?", id).Unscoped().Delete(&SysMenu{}).Error
+		err = global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).Delete(&b).Association("SysAuthoritys").Delete(b.SysAuthoritys).Error
 	} else {
 		return errors.New("此菜单存在子菜单不可删除")
 	}
@@ -75,7 +72,6 @@ func (b *SysBaseMenu) UpdateBaseMenu() (err error) {
 	upDateMap["title"] = b.Title
 	upDateMap["icon"] = b.Icon
 	upDateMap["sort"] = b.Sort
-	upDateMap["nick_name"] = b.Title
 	err = global.GVA_DB.Where("id = ?", b.ID).Find(&SysBaseMenu{}).Updates(upDateMap).Error
 	err1 := global.GVA_DB.Where("menu_id = ?", b.ID).Find(&[]SysMenu{}).Updates(upDateMap).Error
 	fmt.Printf("菜单修改时候，关联菜单err1:%v,err:%v", err1, err)
@@ -83,7 +79,7 @@ func (b *SysBaseMenu) UpdateBaseMenu() (err error) {
 }
 
 // @title    GetBaseMenuById
-// @description   当前选中角色所拥有的路由
+// @description   get current menus, 返回当前选中menu
 // @auth                     （2020/04/05  20:22 ）
 // @param     newPassword     string
 // @return    err             error

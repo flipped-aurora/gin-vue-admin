@@ -141,13 +141,7 @@ export default {
       })
     },
     closeAddUserDialog() {
-      this.userInfo = {
-        username: '',
-        password: '',
-        nickName: '',
-        headerImg: '',
-        authorityId: ''
-      }
+      this.$refs.userForm.resetFields()
       this.addUserDialog = false
     },
     handleAvatarSuccess(res) {

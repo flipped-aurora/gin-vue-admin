@@ -43,9 +43,6 @@ func (a *SysApi) CreateApi() (err error) {
 // @title    DeleteApi
 // @description   delete base apis, 删除基础api
 // @auth                     （2020/04/05  20:22 ）
-// @param     FileMd5         string
-// @param     FileName        string
-// @param     FilePath        string
 // @return                    error
 func (a *SysApi) DeleteApi() (err error) {
 	err = global.GVA_DB.Delete(a).Error
@@ -56,9 +53,6 @@ func (a *SysApi) DeleteApi() (err error) {
 // @title    UpdateApi
 // @description   update a base api, update api
 // @auth                     （2020/04/05  20:22 ）
-// @param     FileMd5         string
-// @param     FileName        string
-// @param     FilePath        string
 // @return                    error
 func (a *SysApi) UpdateApi() (err error) {
 	var oldA SysApi
@@ -83,9 +77,7 @@ func (a *SysApi) UpdateApi() (err error) {
 // @title    GetApiById
 // @description   get the apis of the selected user, 获取选中角色所拥有的api
 // @auth                     （2020/04/05  20:22 ）
-// @param     FileMd5         string
-// @param     FileName        string
-// @param     FilePath        string
+// @param     id              float64
 // @return                    error
 func (a *SysApi) GetApiById(id float64) (err error, api SysApi) {
 	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
@@ -95,10 +87,8 @@ func (a *SysApi) GetApiById(id float64) (err error, api SysApi) {
 // @title    GetAllApis
 // @description   get all apis, 获取所有的api
 // @auth                     （2020/04/05  20:22 ）
-// @param     FileMd5         string
-// @param     FileName        string
-// @param     FilePath        string
-// @return                    error
+// @return       err          error
+// @return       apis         []SysApi
 func (a *SysApi) GetAllApis() (err error, apis []SysApi) {
 	err = global.GVA_DB.Find(&apis).Error
 	return
@@ -107,10 +97,10 @@ func (a *SysApi) GetAllApis() (err error, apis []SysApi) {
 // @title    GetInfoList
 // @description   get apis by pagination, 分页获取数据
 // @auth                     （2020/04/05  20:22 ）
-// @param     FileMd5         string
-// @param     FileName        string
-// @param     FilePath        string
-// @return                    error
+// @param     info            PageInfo
+// @return    err             error
+// @return    list            interface{}
+// @return    total           int
 func (a *SysApi) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

@@ -13,7 +13,7 @@ type JwtBlacklist struct {
 // @title    JsonInBlacklist
 // @description   create jwt blacklist
 // @auth                     （2020/04/05  20:22 ）
-// @return    err              error
+// @return    err             error
 func (j *JwtBlacklist) JsonInBlacklist() (err error) {
 	err = global.GVA_DB.Create(j).Error
 	return
@@ -42,8 +42,8 @@ func (j *JwtBlacklist) GetRedisJWT(userName string) (err error, RedisJWT string)
 // @title    SetRedisJWT
 // @description   set jwt into the Redis
 // @auth                     （2020/04/05  20:22 ）
-// @param     userName         string
-// @return    err              error
+// @param     userName        string
+// @return    err             error
 func (j *JwtBlacklist) SetRedisJWT(userName string) (err error) {
 	err = global.GVA_REDIS.Set(userName, j.Jwt, 1000*1000*1000*60*60*24*7).Err()
 	return err

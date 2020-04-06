@@ -2,7 +2,8 @@ package api
 
 import (
 	"fmt"
-	// 请自行引入model路径
+	"gin-vue-admin/global/response"
+    "gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,7 +13,7 @@ import (
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.PackageName}}.{{.StructName}} true "创建{{.StructName}}"
+// @Param data body model.{{.StructName}} true "创建{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func Create{{.StructName}}(c *gin.Context) {
@@ -20,9 +21,9 @@ func Create{{.StructName}}(c *gin.Context) {
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	err := {{.Abbreviation}}.Create{{.StructName}}()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("创建失败：%v", err), gin.H{})
+	    response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "创建成功", gin.H{})
+		response.Result(response.SUCCESS, gin.H{}, "创建成功", c)
 	}
 }
 
@@ -32,7 +33,7 @@ func Create{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.PackageName}}.{{.StructName}} true "删除{{.StructName}}"
+// @Param data body model.{{.StructName}} true "删除{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [post]
 func Delete{{.StructName}}(c *gin.Context) {
@@ -40,9 +41,9 @@ func Delete{{.StructName}}(c *gin.Context) {
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	err := {{.Abbreviation}}.Delete{{.StructName}}()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "创建成功", gin.H{})
+		response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
 	}
 }
 
@@ -52,7 +53,7 @@ func Delete{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.PackageName}}.{{.StructName}} true "更新{{.StructName}}"
+// @Param data body model.{{.StructName}} true "更新{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /{{.Abbreviation}}/update{{.StructName}} [post]
 func Update{{.StructName}}(c *gin.Context) {
@@ -60,11 +61,11 @@ func Update{{.StructName}}(c *gin.Context) {
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	err,re{{.Abbreviation}} := {{.Abbreviation}}.Update{{.StructName}}()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("更新失败：%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("更新失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "更新成功", gin.H{
-		    "re{{.Abbreviation}}":re{{.Abbreviation}},
-		})
+		response.Result(response.SUCCESS, gin.H{
+            "re{{.Abbreviation}}":re{{.Abbreviation}},
+        }, "更新成功", c)
 	}
 }
 
@@ -74,7 +75,7 @@ func Update{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.PackageName}}.{{.StructName}} true "用id查询{{.StructName}}"
+// @Param data body model.{{.StructName}} true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [post]
 func Find{{.StructName}}(c *gin.Context) {
@@ -82,11 +83,11 @@ func Find{{.StructName}}(c *gin.Context) {
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	err,re{{.Abbreviation}} := {{.Abbreviation}}.FindById()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("查询失败：%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("查询失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "查询成功", gin.H{
-		    "re{{.Abbreviation}}":re{{.Abbreviation}},
-		})
+		response.Result(response.SUCCESS, gin.H{
+             "re{{.Abbreviation}}":re{{.Abbreviation}},
+        }, "查询成功", c)
 	}
 }
 
@@ -104,13 +105,13 @@ func Get{{.StructName}}List(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := new({{.PackageName}}.{{.StructName}}).GetInfoList(pageInfo)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "获取数据成功", gin.H{
-			"{{.PackageName}}List": list,
-			"total":    total,
-			"page":     pageInfo.Page,
-			"pageSize": pageInfo.PageSize,
-		})
+	    response.Result(response.SUCCESS, gin.H{
+            "{{.PackageName}}List": list,
+            "total":    total,
+            "page":     pageInfo.Page,
+            "pageSize": pageInfo.PageSize,
+        }, "获取数据成功", c)
 	}
 }

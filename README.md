@@ -218,8 +218,8 @@ swag init
 | [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
 | [@1319612909](https://github.com/1319612909)  | 前端开发 |  杜 |
 | [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
-| [@granty1](https://github.com/Ruio9244)  | 全栈开发 | 严 |
-| [@granty1](https://github.com/chen-chen-up)  | 新手 | 宋 |
+| [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
+| [@chen-chen-up](https://github.com/chen-chen-up)  | 新手 | 宋 |
 
 ## 更新日志
 

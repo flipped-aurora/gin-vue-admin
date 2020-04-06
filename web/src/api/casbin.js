@@ -11,7 +11,7 @@ import service from '@/utils/request'
 
 export const UpdateCasbin = (data) => {
     return service({
-        url: "/casbin/UpdateCasbin",
+        url: "/casbin/updateCasbin",
         method: 'post',
         data
     })

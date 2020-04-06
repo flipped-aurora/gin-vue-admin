@@ -17,39 +17,39 @@
       </el-form-item>
       <h2>casbin配置</h2>
       <el-form-item label="模型地址">
-        <el-input v-model="config.casbinConfig.modelPath"></el-input>
+        <el-input v-model="config.casbin.modelPath"></el-input>
       </el-form-item>
       <h2>mysql admin数据库配置</h2>
       <el-form-item label="username">
-        <el-input v-model="config.mysqlAdmin.username"></el-input>
+        <el-input v-model="config.mysql.username"></el-input>
       </el-form-item>
       <el-form-item label="password">
-        <el-input v-model="config.mysqlAdmin.password"></el-input>
+        <el-input v-model="config.mysql.password"></el-input>
       </el-form-item>
       <el-form-item label="path">
-        <el-input v-model="config.mysqlAdmin.path"></el-input>
+        <el-input v-model="config.mysql.path"></el-input>
       </el-form-item>
       <el-form-item label="dbname">
-        <el-input v-model="config.mysqlAdmin.dbname"></el-input>
+        <el-input v-model="config.mysql.dbname"></el-input>
       </el-form-item>
-      <el-form-item label="config">
-        <el-input v-model.number="config.mysqlAdmin.maxIdleConns"></el-input>
+      <el-form-item label="maxIdleConns">
+        <el-input v-model.number="config.mysql.maxIdleConns"></el-input>
       </el-form-item>
-      <el-form-item label="config">
-        <el-input v-model.number="config.mysqlAdmin.maxOpenConns"></el-input>
+      <el-form-item label="maxOpenConns">
+        <el-input v-model.number="config.mysql.maxOpenConns"></el-input>
       </el-form-item>
-      <el-form-item label="config">
-        <el-input v-model="config.mysqlAdmin.logMode"></el-input>
+      <el-form-item label="logMode">
+        <el-checkbox v-model="config.log.logMode"></el-checkbox>
       </el-form-item>
       <h2>Redis admin数据库配置</h2>
       <el-form-item label="addr">
-        <el-input v-model="config.redisAdmin.addr"></el-input>
+        <el-input v-model="config.redis.addr"></el-input>
       </el-form-item>
       <el-form-item label="password">
-        <el-input v-model="config.redisAdmin.password"></el-input>
+        <el-input v-model="config.redis.password"></el-input>
       </el-form-item>
       <el-form-item label="db">
-        <el-input v-model="config.redisAdmin.db"></el-input>
+        <el-input v-model="config.redis.db"></el-input>
       </el-form-item>
       <h2>七牛密钥配置</h2>
       <el-form-item label="accessKey">
@@ -102,10 +102,12 @@ export default {
       config: {
         system: {},
         jwt: {},
-        casbinConfig: {},
-        mysqlAdmin: {},
-        redisAdmin: {},
-        qiniu: {}
+        casbin: {},
+        mysql: {},
+        redis: {},
+        qiniu: {},
+        captcha:{},
+        log:{}
       }
     }
   },

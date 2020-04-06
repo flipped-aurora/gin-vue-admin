@@ -167,12 +167,7 @@ export default {
       this.getTableData()
     },
     initForm() {
-      this.form = {
-        path: '',
-        apiGroup: '',
-        description: '',
-        method: ''
-      }
+      this.$refs.apiForm.resetFields()
     },
     closeDialog() {
       this.initForm()
@@ -195,7 +190,7 @@ export default {
       })
         .then(async () => {
           const res = await deleteApi(row)
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -217,7 +212,7 @@ export default {
             case 'addApi':
               {
                 const res = await createApi(this.form)
-                if (res.success) {
+                if (res.code == 0) {
                   this.$message({
                     type: 'success',
                     message: '添加成功',
@@ -232,7 +227,7 @@ export default {
             case 'edit':
               {
                 const res = await updateApi(this.form)
-                if (res.success) {
+                if (res.code == 0) {
                   this.$message({
                     type: 'success',
                     message: '添加成功',

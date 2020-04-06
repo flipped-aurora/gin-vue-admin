@@ -119,7 +119,7 @@ export default {
       })
         .then(async () => {
           const res = await deleteAuthority({ authorityId: row.authorityId })
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -136,9 +136,7 @@ export default {
     },
     // 初始化表单
     initForm() {
-      for (const key in this.form) {
-        this.form[key] = ''
-      }
+      this.$refs.authorityForm.resetFields()
     },
     // 关闭窗口
     closeDialog() {
@@ -159,7 +157,7 @@ export default {
       this.$refs.authorityForm.validate(async valid => {
         if (valid) {
           const res = await createAuthority(this.form)
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '添加成功!'

@@ -2,8 +2,9 @@
 package {{.PackageName}}
 
 import (
-	"gin-vue-admin/init/qmsql"
-	"github.com/jinzhu/gorm"
+	"gin-vue-admin/global"
+    "github.com/jinzhu/gorm"
+    "github.com/pkg/errors"
 )
 
 type {{.StructName}} struct {
@@ -13,25 +14,25 @@ type {{.StructName}} struct {
 
 // 创建{{.StructName}}
 func ({{.Abbreviation}} *{{.StructName}})Create{{.StructName}}()(err error){
-        err = qmsql.DEFAULTDB.Create({{.Abbreviation}}).Error
+        err = global.GVA_DB.Create({{.Abbreviation}}).Error
         return err
 }
 
 // 删除{{.StructName}}
 func ({{.Abbreviation}} *{{.StructName}})Delete{{.StructName}}()(err error){
-        err = qmsql.DEFAULTDB.Delete({{.Abbreviation}}).Error
+        err = global.GVA_DB.Delete({{.Abbreviation}}).Error
         return err
 }
 
 // 更新{{.StructName}}
 func ({{.Abbreviation}} *{{.StructName}})Update{{.StructName}}()(err error, re{{.Abbreviation}} {{.StructName}}){
-        err = qmsql.DEFAULTDB.Save({{.Abbreviation}}).Error
+        err = global.GVA_DB.Save({{.Abbreviation}}).Error
         return err, *{{.Abbreviation}}
 }
 
 // 根据ID查看单条{{.StructName}}
 func ({{.Abbreviation}} *{{.StructName}})FindById()(err error,re{{.Abbreviation}} {{.StructName}}){
-    err = qmsql.DEFAULTDB.Where("id = ?",{{.Abbreviation}}.ID).First(&re{{.Abbreviation}}).Error
+    err = global.GVA_DB.Where("id = ?",{{.Abbreviation}}.ID).First(&re{{.Abbreviation}}).Error
     return err,re{{.Abbreviation}}
 }
 
@@ -39,7 +40,7 @@ func ({{.Abbreviation}} *{{.StructName}})FindById()(err error,re{{.Abbreviation}
 func ({{.Abbreviation}} *{{.StructName}})GetInfoList(info PageInfo)(err error, list interface{}, total int){
     	limit := info.PageSize
         offset := info.PageSize * (info.Page - 1)
-        db:=qmsql.DEFAULTDB
+        db:=global.GVA_DB
     	if err != nil {
     		return
     	} else {

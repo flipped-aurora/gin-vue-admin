@@ -14,32 +14,48 @@ type ExaCustomer struct {
 	SysUser            SysUser `json:"sysUser"`
 }
 
-//创建用户
+// @title    CreateExaCustomer
+// @description   create a customer, 创建用户
+// @auth                     （2020/04/05  20:22 ）
+// @return    err             error
 func (e *ExaCustomer) CreateExaCustomer() (err error) {
 	err = global.GVA_DB.Create(e).Error
 	return err
 }
 
-//删除用户
+// @title    DeleteFileChunk
+// @description   delete a customer, 删除用户
+// @auth                     （2020/04/05  20:22 ）
+// @return                    error
 func (e *ExaCustomer) DeleteExaCustomer() (err error) {
 	err = global.GVA_DB.Delete(e).Error
 	return err
 }
 
-//更新用户
+// @title    UpdateExaCustomer
+// @description   update a customer, 更新用户
+// @auth                     （2020/04/05  20:22 ）
+// @return                    error
 func (e *ExaCustomer) UpdateExaCustomer() (err error) {
 	err = global.GVA_DB.Save(e).Error
 	return err
 }
 
-//获取用户信息
+// @title    GetExaCustomer
+// @description   get the info of a costumer , 获取用户信息
+// @auth                     （2020/04/05  20:22 ）
+// @return                    error
+// @return    customer        ExaCustomer
 func (e *ExaCustomer) GetExaCustomer() (err error, customer ExaCustomer) {
 	err = global.GVA_DB.Where("id = ?", e.ID).First(&customer).Error
 	return
 }
 
-//获取用户列表
-// 分页获取数据
+// @title    GetInfoList
+// @description   get customer list by pagination, 分页获取用户列表
+// @auth                     （2020/04/05  20:22 ）
+// @param     info            PageInfo
+// @return                    error
 func (e *ExaCustomer) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

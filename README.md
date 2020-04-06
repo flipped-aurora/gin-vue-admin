@@ -38,31 +38,30 @@
 ## 3. 项目目录
 
 ```
-    ├─QMPlusServer  	（后端文件夹）
-    │  ├─cmd     	（启动文件）
-    │  ├─config    	（配置包）
-    │  ├─controller  	（api和servers存放位置）
-    │  ├─db       	（数据库脚本）
-    │  ├─docs  	（swagger文档目录）
-    │  ├─init      	（初始化路由 数据库 日志等）
-    │  ├─log     	（日志存放地址）
-    │  ├─middleware   	（中间件）
-    │  ├─model            	（结构体层）
-    │  ├─router          	（路层）
-    │  ├─static	（静态文件--配置文件 casbin模型等）
-    │  ├─tools  (后端工具包)
-    │  └─tpl		（自动化代码模板）
-    └─QMPlusVuePage	（前端文件）
-        ├─public	（发布模板）
-        └─src
-            ├─api	（向后台发送ajax的封装层）
+    ├─erver  	    （后端文件夹）
+    │  ├─api            （API）
+    │  ├─config         （配置包）
+    │  ├─core  	        （內核）
+    │  ├─db             （数据库脚本）
+    │  ├─docs  	        （swagger文档目录）
+    │  ├─global         （全局对象）
+    │  ├─initialiaze    （初始化）
+    │  ├─middleware     （中间件）
+    │  ├─model          （结构体层）
+    │  ├─resource       （资源）
+    │  ├─router         （路层）
+    │  └─urtils		    （公共功能）
+    └─web	         （前端文件）
+        ├─public	    （发布模板）
+        └─src           （源码包）
+            ├─api	    （向后台发送ajax的封装层）
             ├─assets	（静态文件）
             ├─components（组件）
             ├─router	（前端路由）
-            ├─store	（vuex 状态管理仓）
-            ├─style	（通用样式文件）
-            ├─utils	（前端工具库）
-            └─view	（前端页面）
+            ├─store	    （vuex 状态管理仓）
+            ├─style	    （通用样式文件）
+            ├─utils	    （前端工具库）
+            └─view	    （前端页面）
 
 ```
 

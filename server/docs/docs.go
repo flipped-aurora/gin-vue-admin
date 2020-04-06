@@ -475,7 +475,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStuct"
+                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -559,7 +559,7 @@ var doc = `{
                 }
             }
         },
-        "/casbin/casbinPUpdate": {
+        "/casbin/UpdateCasbin": {
             "post": {
                 "security": [
                     {
@@ -1256,7 +1256,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStuct"
+                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -1292,7 +1292,7 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStuct"
+                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -1752,7 +1752,7 @@ var doc = `{
                 }
             }
         },
-        "api.RegisterAndLoginStuct": {
+        "api.RegisterAndLoginStruct": {
             "type": "object",
             "properties": {
                 "captcha": {

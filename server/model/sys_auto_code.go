@@ -21,6 +21,10 @@ type Field struct {
 	ColumnName string `json:"columnName"`
 }
 
+// @title    CreateTemp
+// @description   函数的详细描述
+// @auth                     （2020/04/05  20:22 ）
+// @return    err             error
 func (a *AutoCodeStruct) CreateTemp() (err error) {
 	basePath := "./template"
 	modelTmpl, err := template.ParseFiles(basePath + "/te/model.go.tpl")
@@ -125,7 +129,11 @@ func (a *AutoCodeStruct) CreateTemp() (err error) {
 	return nil
 }
 
-//批量创建文件夹
+// @title    createDir
+// @description   批量创建文件夹
+// @auth                     （2020/04/05  20:22 ）
+// @param     dirs            string
+// @return    err             error
 func createDir(dirs ...string) (err error) {
 	for _, v := range dirs {
 		exist, err := utils.PathExists(v)

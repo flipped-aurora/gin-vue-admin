@@ -7,15 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateApiParams struct {
-	Path        string `json:"path"`
-	Description string `json:"description"`
-}
-
-type DeleteApiParams struct {
-	ID uint `json:"id"`
-}
-
 // @Tags SysApi
 // @Summary 创建基础api
 // @Security ApiKeyAuth

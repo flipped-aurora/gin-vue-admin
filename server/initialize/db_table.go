@@ -1,15 +1,15 @@
-package init
+package initialize
 
 import (
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
-	"github.com/jinzhu/gorm"
 )
 
 //注册数据库表专用
-func RegisterTable(db *gorm.DB) {
+func DBTables() {
+	db := global.GVA_DB
 	db.AutoMigrate(model.SysUser{},
 		model.SysAuthority{},
-		model.SysMenu{},
 		model.SysApi{},
 		model.SysBaseMenu{},
 		model.JwtBlacklist{},
@@ -20,5 +20,5 @@ func RegisterTable(db *gorm.DB) {
 		model.ExaFileChunk{},
 		model.ExaCustomer{},
 	)
-	L.Debug("register table success")
+	global.GVA_LOG.Debug("register table success")
 }

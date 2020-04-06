@@ -52,7 +52,7 @@ definitions:
       id:
         type: number
     type: object
-  api.RegisterAndLoginStuct:
+  api.RegisterAndLoginStruct:
     properties:
       captcha:
         type: string
@@ -580,7 +580,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegisterAndLoginStuct'
+          $ref: '#/definitions/api.RegisterAndLoginStruct'
           type: object
       produces:
       - application/json
@@ -636,7 +636,7 @@ paths:
       summary: casb RBAC RESTFUL测试路由
       tags:
       - casbin
-  /casbin/casbinPUpdate:
+  /casbin/UpdateCasbin:
     post:
       consumes:
       - application/json
@@ -1058,7 +1058,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegisterAndLoginStuct'
+          $ref: '#/definitions/api.RegisterAndLoginStruct'
           type: object
       produces:
       - application/json
@@ -1080,7 +1080,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegisterAndLoginStuct'
+          $ref: '#/definitions/api.RegisterAndLoginStruct'
           type: object
       produces:
       - application/json

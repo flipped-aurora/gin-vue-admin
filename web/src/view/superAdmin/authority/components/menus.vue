@@ -34,7 +34,9 @@ export default {
       menuTreeIds: [],
       menuDefaultProps: {
         children: 'children',
-        label: 'nickName'
+        label: function(data){
+          return data.meta.title
+        }
       }
     }
   },
@@ -46,7 +48,7 @@ export default {
         menus: checkArr,
         authorityId: this.row.authorityId
       })
-      if (res.success) {
+      if (res.code == 0) {
         this.$message({
           type: 'success',
           message: '添加成功!'
@@ -64,8 +66,8 @@ export default {
     const arr = []
     menus.map(item => {
       // 防止直接选中父级造成全选
-      if (!menus.some(same => same.parentId === item.menuId)) {
-        arr.push(Number(item.menuId))
+      if (!menus.some(same => same.parentId === item.ID)) {
+        arr.push(Number(item.ID))
       }
     })
     this.menuTreeIds = arr

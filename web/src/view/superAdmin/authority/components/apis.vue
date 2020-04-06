@@ -17,7 +17,7 @@
 </template>
 <script>
 import { getAllApis } from '@/api/api'
-import { casbinPUpdate, getPolicyPathByAuthorityId } from '@/api/casbin'
+import { UpdateCasbin, getPolicyPathByAuthorityId } from '@/api/casbin'
 export default {
   name: 'Apis',
   props: {
@@ -44,10 +44,10 @@ export default {
       const apiObj = new Object()
       apis &&
         apis.map(item => {
-          if (apiObj.hasOwnProperty(item.group)) {
-            apiObj[item.group].push(item)
+          if (apiObj.hasOwnProperty(item.apiGroup)) {
+            apiObj[item.apiGroup].push(item)
           } else {
-            Object.assign(apiObj, { [item.group]: [item] })
+            Object.assign(apiObj, { [item.apiGroup]: [item] })
           }
         })
       const apiTree = []
@@ -72,11 +72,11 @@ export default {
         }
         casbinInfos.push(casbinInfo)
       })
-      const res = await casbinPUpdate({
+      const res = await UpdateCasbin({
         authorityId: this.activeUserId,
         casbinInfos
       })
-      if (res.success) {
+      if (res.code == 0) {
         this.$message({ type: 'success', message: res.msg })
       }
     }

@@ -19,11 +19,26 @@ type SysUser struct {
 	AuthorityId string       `json:"authorityId" gorm:"default:888"`
 }
 
-//type Propertie struct {
-//	gorm.Model
-//}
+type RegisterAndLoginStruct struct {
+	Username  string `json:"username"`
+	Password  string `json:"password"`
+	Captcha   string `json:"captcha"`
+	CaptchaId string `json:"captchaId"`
+}
 
-//注册接口model方法
+type RegisterStruct struct {
+	Username    string `json:"userName"`
+	Password    string `json:"passWord"`
+	NickName    string `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg   string `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
+	AuthorityId string `json:"authorityId" gorm:"default:888"`
+}
+
+// @title    Register
+// @description   register, 用户注册
+// @auth                     （2020/04/05  20:22 ）
+// @return    err             error
+// @return    userInter       *SysUser
 func (u *SysUser) Register() (err error, userInter *SysUser) {
 	var user SysUser
 	//判断用户名是否注册
@@ -40,7 +55,12 @@ func (u *SysUser) Register() (err error, userInter *SysUser) {
 	return err, u
 }
 
-//修改用户密码
+// @title    ChangePassword
+// @description   change the password of a certain user, 修改用户密码
+// @auth                     （2020/04/05  20:22 ）
+// @param     newPassword     string
+// @return    err             error
+// @return    userInter       *SysUser
 func (u *SysUser) ChangePassword(newPassword string) (err error, userInter *SysUser) {
 	var user SysUser
 	//后期修改jwt+password模式
@@ -49,13 +69,22 @@ func (u *SysUser) ChangePassword(newPassword string) (err error, userInter *SysU
 	return err, u
 }
 
-//用户更新接口
-func (u *SysUser) SetUserAuthority(uuid uuid.UUID, AuthorityId string) (err error) {
-	err = global.GVA_DB.Where("uuid = ?", uuid).First(&SysUser{}).Update("authority_id", AuthorityId).Error
+// @title    SetUserAuthority
+// @description   set the authority of a certain user, 设置一个用户的权限
+// @auth                     （2020/04/05  20:22 ）
+// @param     uuid            UUID
+// @param     authorityId     string
+// @return    err             error
+func (u *SysUser) SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
+	err = global.GVA_DB.Where("uuid = ?", uuid).First(&SysUser{}).Update("authority_id", authorityId).Error
 	return err
 }
 
-//用户登录
+// @title    Login
+// @description   login, 用户登录
+// @auth                     （2020/04/05  20:22 ）
+// @return    err             error
+// @return    userInter       *SysUser
 func (u *SysUser) Login() (err error, userInter *SysUser) {
 	var user SysUser
 	u.Password = utils.MD5V([]byte(u.Password))
@@ -67,14 +96,26 @@ func (u *SysUser) Login() (err error, userInter *SysUser) {
 	return err, &user
 }
 
-// 用户头像上传更新地址
+// @title    UploadHeaderImg
+// @description   upload avatar, 用户头像上传更新地址
+// @auth                     （2020/04/05  20:22 ）
+// @param     uuid            UUID
+// @param     filePath        string
+// @return    err             error
+// @return    userInter       *SysUser
 func (u *SysUser) UploadHeaderImg(uuid uuid.UUID, filePath string) (err error, userInter *SysUser) {
 	var user SysUser
 	err = global.GVA_DB.Where("uuid = ?", uuid).First(&user).Update("header_img", filePath).First(&user).Error
 	return err, &user
 }
 
-// 分页获取数据
+// @title    GetInfoList
+// @description   get user list by pagination, 分页获取数据
+// @auth                      （2020/04/05  20:22 ）
+// @param     PageInfo         int
+// @return    err              error
+// @return    list             interface{}
+// @return    total            int
 func (u *SysUser) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

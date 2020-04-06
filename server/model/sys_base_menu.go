@@ -17,7 +17,6 @@ type SysBaseMenu struct {
 	Component     string `json:"component"`
 	Sort          string `json:"sort"`
 	Meta          `json:"meta"`
-	NickName      string         `json:"nickName"`
 	SysAuthoritys []SysAuthority `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
 	Children      []SysBaseMenu  `json:"children"`
 }
@@ -27,11 +26,15 @@ type Meta struct {
 	Icon  string `json:"icon"`
 }
 
+// @title    AddBaseMenu
+// @description   函数的详细描述
+// @auth                     （2020/04/05  20:22 ）
+// @param     newPassword     string
+// @return    err             error
 //增加基础路由
 func (b *SysBaseMenu) AddBaseMenu() (err error) {
 	findOne := global.GVA_DB.Where("name = ?", b.Name).Find(&SysBaseMenu{}).Error
 	if findOne != nil {
-		b.NickName = b.Title
 		err = global.GVA_DB.Create(b).Error
 	} else {
 		err = errors.New("存在重复name，请修改name")
@@ -39,19 +42,26 @@ func (b *SysBaseMenu) AddBaseMenu() (err error) {
 	return err
 }
 
-//删除基础路由
+// @title    DeleteBaseMenu
+// @description   删除基础路由
+// @auth                     （2020/04/05  20:22 ）
+// @param     newPassword     string
+// @return    err             error
 func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", id).First(&SysBaseMenu{}).Error
 	if err != nil {
-		err = global.GVA_DB.Where("id = ?", id).Delete(&b).Error
-		err = global.GVA_DB.Where("menu_id = ?", id).Unscoped().Delete(&SysMenu{}).Error
+		err = global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).Delete(&b).Association("SysAuthoritys").Delete(b.SysAuthoritys).Error
 	} else {
 		return errors.New("此菜单存在子菜单不可删除")
 	}
 	return err
 }
 
-//更新路由
+// @title    UpdateBaseMenu
+// @description   更新路由
+// @auth                     （2020/04/05  20:22 ）
+// @param     newPassword     string
+// @return    err             error
 func (b *SysBaseMenu) UpdateBaseMenu() (err error) {
 	upDateMap := make(map[string]interface{})
 	upDateMap["parent_id"] = b.ParentId
@@ -62,20 +72,27 @@ func (b *SysBaseMenu) UpdateBaseMenu() (err error) {
 	upDateMap["title"] = b.Title
 	upDateMap["icon"] = b.Icon
 	upDateMap["sort"] = b.Sort
-	upDateMap["nick_name"] = b.Title
 	err = global.GVA_DB.Where("id = ?", b.ID).Find(&SysBaseMenu{}).Updates(upDateMap).Error
 	err1 := global.GVA_DB.Where("menu_id = ?", b.ID).Find(&[]SysMenu{}).Updates(upDateMap).Error
 	fmt.Printf("菜单修改时候，关联菜单err1:%v,err:%v", err1, err)
 	return err
 }
 
-//当前选中角色所拥有的路由
+// @title    GetBaseMenuById
+// @description   get current menus, 返回当前选中menu
+// @auth                     （2020/04/05  20:22 ）
+// @param     newPassword     string
+// @return    err             error
 func (b *SysBaseMenu) GetBaseMenuById(id float64) (err error, menu SysBaseMenu) {
 	err = global.GVA_DB.Where("id = ?", id).First(&menu).Error
 	return
 }
 
-//获取路由分页
+// @title    GetInfoList
+// @description   获取路由分页
+// @auth                     （2020/04/05  20:22 ）
+// @param     newPassword     string
+// @return    err             error
 func (b *SysBaseMenu) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -92,7 +109,11 @@ func (b *SysBaseMenu) GetInfoList(info PageInfo) (err error, list interface{}, t
 	}
 }
 
-//获取基础路由树
+// @title    GetBaseMenuTree
+// @description   获取基础路由树
+// @auth                     （2020/04/05  20:22 ）
+// @return    err              error
+// @return    menus            []SysBaseMenu
 func (m *SysBaseMenu) GetBaseMenuTree() (err error, menus []SysBaseMenu) {
 	err = global.GVA_DB.Where(" parent_id = ?", 0).Order("sort", true).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {
@@ -101,6 +122,11 @@ func (m *SysBaseMenu) GetBaseMenuTree() (err error, menus []SysBaseMenu) {
 	return err, menus
 }
 
+// @title    getBaseChildrenList
+// @description   get children of menu, 获取菜单的子菜单
+// @auth                     （2020/04/05  20:22 ）
+// @param     menu            *SysBaseMenu
+// @return    err             error
 func getBaseChildrenList(menu *SysBaseMenu) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", menu.ID).Order("sort", true).Find(&menu.Children).Error
 	for i := 0; i < len(menu.Children); i++ {

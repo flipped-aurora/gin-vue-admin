@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"gin-vue-admin/global/response"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
 	"github.com/gin-gonic/gin"
@@ -11,7 +12,7 @@ import (
 // @Summary 获取用户动态路由
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.RegisterAndLoginStuct true "可以什么都不填"
+// @Param data body api.RegisterAndLoginStruct true "可以什么都不填"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getMenu [post]
 func GetMenu(c *gin.Context) {
@@ -19,9 +20,9 @@ func GetMenu(c *gin.Context) {
 	waitUse := claims.(*middleware.CustomClaims)
 	err, menus := new(model.SysMenu).GetMenuTree(waitUse.AuthorityId)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "获取成功", gin.H{"menus": menus})
+		response.Result(response.SUCCESS, gin.H{"menus": menus}, "获取成功", c)
 	}
 }
 
@@ -38,14 +39,14 @@ func GetMenuList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, menuList, total := new(model.SysBaseMenu).GetInfoList(pageInfo)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "获取数据成功", gin.H{
+		response.Result(response.SUCCESS, gin.H{
 			"list":     menuList,
 			"total":    total,
 			"page":     pageInfo.Page,
 			"pageSize": pageInfo.PageSize,
-		})
+		}, "获取数据成功", c)
 	}
 }
 
@@ -62,9 +63,9 @@ func AddBaseMenu(c *gin.Context) {
 	_ = c.ShouldBindJSON(&addMenu)
 	err := addMenu.AddBaseMenu()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("添加失败，%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, fmt.Sprintf("添加成功，%v", err), gin.H{})
+		response.Result(response.SUCCESS, gin.H{}, "添加成功", c)
 	}
 }
 
@@ -72,15 +73,16 @@ func AddBaseMenu(c *gin.Context) {
 // @Summary 获取用户动态路由
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.RegisterAndLoginStuct true "可以什么都不填"
+// @Param data body api.RegisterAndLoginStruct true "可以什么都不填"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getBaseMenuTree [post]
 func GetBaseMenuTree(c *gin.Context) {
 	err, menus := new(model.SysBaseMenu).GetBaseMenuTree()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
+		response.Result(response.ERROR, gin.H{"menus": menus}, fmt.Sprintf("获取失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "获取成功", gin.H{"menus": menus})
+		response.Result(response.SUCCESS, gin.H{"menus": menus}, "获取成功", c)
+
 	}
 }
 
@@ -103,9 +105,9 @@ func AddMenuAuthority(c *gin.Context) {
 
 	err := new(model.SysMenu).AddMenuAuthority(addMenuAuthorityInfo.Menus, addMenuAuthorityInfo.AuthorityId)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("添加失败，%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, fmt.Sprintf("添加成功，%v", err), gin.H{})
+		response.Result(response.SUCCESS, gin.H{}, "添加成功", c)
 	}
 }
 
@@ -120,15 +122,15 @@ type AuthorityIdInfo struct {
 // @Produce application/json
 // @Param data body api.AuthorityIdInfo true "增加menu和角色关联关系"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /menu/addMenuAuthority [post]
+// @Router /menu/GetMenuAuthority [post]
 func GetMenuAuthority(c *gin.Context) {
 	var authorityIdInfo AuthorityIdInfo
 	_ = c.ShouldBindJSON(&authorityIdInfo)
 	err, menus := new(model.SysMenu).GetMenuAuthority(authorityIdInfo.AuthorityId)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("获取失败：%v", err), gin.H{"menus": menus})
+		response.Result(response.ERROR, gin.H{"menus": menus}, fmt.Sprintf("添加失败，%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "获取成功", gin.H{"menus": menus})
+		response.Result(response.SUCCESS, gin.H{"menus": menus}, "获取成功", c)
 	}
 }
 
@@ -149,9 +151,10 @@ func DeleteBaseMenu(c *gin.Context) {
 	_ = c.ShouldBindJSON(&idInfo)
 	err := new(model.SysBaseMenu).DeleteBaseMenu(idInfo.Id)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("删除失败：%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败：%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "删除成功", gin.H{})
+		response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
+
 	}
 }
 
@@ -168,9 +171,9 @@ func UpdateBaseMenu(c *gin.Context) {
 	_ = c.ShouldBindJSON(&menu)
 	err := menu.UpdateBaseMenu()
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("修改失败：%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改失败：%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "修改成功", gin.H{})
+		response.Result(response.SUCCESS, gin.H{}, "修改成功", c)
 	}
 }
 
@@ -191,8 +194,8 @@ func GetBaseMenuById(c *gin.Context) {
 	_ = c.ShouldBindJSON(&idInfo)
 	err, menu := new(model.SysBaseMenu).GetBaseMenuById(idInfo.Id)
 	if err != nil {
-		servers.ReportFormat(c, false, fmt.Sprintf("查询失败：%v", err), gin.H{})
+		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("查询失败：%v", err), c)
 	} else {
-		servers.ReportFormat(c, true, "查询成功", gin.H{"menu": menu})
+		response.Result(response.SUCCESS, gin.H{"menu": menu}, "查询成功", c)
 	}
 }

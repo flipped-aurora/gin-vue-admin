@@ -19,8 +19,19 @@
 - 后台框架：[gin](https://github.com/gin-gonic/gin) 
 
 ## 1. 基本介绍
+
+### 1.1 项目介绍
+
 [在线预览](http://qmplus.henrongyi.top/)
-> Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
+> Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
+
+### 1.2 版本列表
+
+master：2.0开发版代码
+
+[gin-vue-adminv 1.0稳定版](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0保持更新和维护）
+
+[gin-vue-adminv 2.0开发版](https://github.com/piexlmax/gin-vue-admin) （v2.0不再兼容v1.0）
 
 ## 2. 使用说明
 

@@ -88,13 +88,13 @@
 
 ```
 前端文件参考: src\view\superAdmin\api\api.vue 
-后台文件参考: model\dnModel\api.go 
+后台文件参考: model\sys_api.go 
 ```
 
 - 多点登录限制：
-体验需要再 static\config中 把 system中的useMultipoint 修改为 true(需要自行配置redis和config中的redis参数)(测试阶段，有bug请及时反馈)
+体验需要在 config中 把 system中的useMultipoint 修改为 true(需要自行配置redis和config中的redis参数)(测试阶段，有bug请及时反馈)
 
-- 分片长传：提供文件分片上传和大文件分片上传功能示例 
+- 分片上传：提供文件分片上传和大文件分片上传功能示例 
 
 - 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator)
 

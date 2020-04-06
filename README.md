@@ -11,9 +11,18 @@
 </div>
 
 # 开发文档
-[在线文档](http://doc.henrongyi.top/) [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
+[在线文档](http://doc.henrongyi.top/) 
 
 本模板使用前端ui框架为 element-ui https://element.eleme.cn/#/zh-CN 前端组件可查看elementUi文档使用
+
+## 版本列表
+master为2.0测试版代码
+
+[gin-vue-adminv 1.0稳定版](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable)
+
+[gin-vue-adminv 2.0测试版](https://github.com/piexlmax/gin-vue-admin)
+
+
 
 ## 1. 基本介绍
 >GIN-VUE-ADMIN是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
@@ -199,11 +208,11 @@ swag init
 
 ## 11. 环境搭建教学视频
 
-腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html    (等待最新视频录制)
+bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/   (v1.0版本视频，v2.0操作相同目录不同)
     
 ## 12. 模板使用教学及展示视频
 
-腾讯视频：https://v.qq.com/x/page/c3008y2ukba.html    (等待最新视频录制)
+bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/    (v1.0版本视频，v2.0操作相同目录不同)
 
 ## 13. 联系方式
 
@@ -244,7 +253,7 @@ swag init
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 
-## 17. 捐赠
+## 17. 捐赠 :tropical_drink:
 如果您想请团队喝可乐
 
 |  支付宝   | 微信  |

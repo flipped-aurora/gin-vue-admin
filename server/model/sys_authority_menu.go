@@ -6,7 +6,7 @@ import (
 
 type SysMenu struct {
 	SysBaseMenu
-	MenuId      string    `json:"MenuId"`
+	MenuId      string    `json:"menuId"`
 	AuthorityId string    `json:"-"`
 	Children    []SysMenu `json:"children"`
 }
@@ -31,10 +31,10 @@ func (m *SysMenu) AddMenuAuthority(menus []SysBaseMenu, authorityId string) (err
 // @param     authorityId     string
 // @return    err             error
 // @return    menus           []SysBaseMenu
-func (m *SysMenu) GetMenuAuthority(authorityId string) (err error, menus []SysBaseMenu) {
-	var a SysAuthority
-	err = global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", authorityId).First(&a).Error
-	return err, a.SysBaseMenus
+func (m *SysMenu) GetMenuAuthority(authorityId string) (err error, menus []SysMenu) {
+	SQLstatement := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ?"
+	err = global.GVA_DB.Raw(SQLstatement, authorityId).Scan(&menus).Error
+	return err, menus
 }
 
 // @title    GetMenuTree

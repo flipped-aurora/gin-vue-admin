@@ -13,7 +13,22 @@
 ## 开发文档
 [在线文档](http://doc.henrongyi.top/) [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
 
+## 版本列表
+master为1.0版代码
+
+[gin-vue-adminv 1.0稳定版](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) v1.0保持更新和维护
+
+[gin-vue-adminv 2.0测试版](https://github.com/piexlmax/gin-vue-admin) v2.0不再兼容v1.0
+
 本模板使用前端ui框架为 element-ui https://element.eleme.cn/#/zh-CN 前端组件可查看elementUi文档使用
+
+## 环境搭建教学视频
+
+bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/   (v1.0版本视频，v2.0操作相同目录不同)
+    
+## 使用教学及展示视频
+
+bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/    (v1.0版本视频，v2.0操作相同目录不同)
 
 ## 基本介绍
 >GIN-VUE-ADMIN是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供了多种示例文件，让大家把更多时间专注在业务开发上。
@@ -191,14 +206,6 @@ swag init
 测试环境:[http://qmplus.henrongyi.top/](http://qmplus.henrongyi.top/)
  
 账号/密码: admin/123456
-
-## 环境搭建教学视频
-
-腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html    (等待最新视频录制)
-    
-## 模板使用教学及展示视频
-
-腾讯视频：https://v.qq.com/x/page/c3008y2ukba.html    (等待最新视频录制)
 
 ## 联系方式
 

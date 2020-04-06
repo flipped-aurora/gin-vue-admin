@@ -19,9 +19,20 @@ Online Documentation [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 
 ## 1. Basic Introduction
+
+### 1.1 Project Introduction
+
 [Online Demo](http://qmplus.henrongyi.top/)
 > Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
 > It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
+
+### 1.2 Version list
+
+master: 2.0 dev code
+
+[gin-vue-adminv 1.0 stable](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 is kept up to date and maintained）
+
+[gin-vue-adminv 2.0 dev](https://github.com/piexlmax/gin-vue-admin) （v2.0 is no longer compatible with v1.0）
 
 ## 2. Getting started
 ```

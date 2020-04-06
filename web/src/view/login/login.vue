@@ -94,6 +94,7 @@ export default {
             message: '请正确填写登录信息',
             showClose: true
           })
+          this.loginVefify()
           return false
         }
       })

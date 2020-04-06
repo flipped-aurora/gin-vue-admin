@@ -15,7 +15,7 @@ import (
 
 const (
 	logDir      = "log"
-	logSoftLink = "api.log"
+	logSoftLink = "latest_log"
 	module      = "gin-vue-admin"
 )
 
@@ -56,11 +56,11 @@ func registerFile(c config.Log, backends []oplogging.Backend) []oplogging.Backen
 			fmt.Println("create log directory")
 			_ = os.Mkdir(logDir, os.ModePerm)
 		}
-		apiLogPath := logDir + string(os.PathSeparator) + logSoftLink
+		//apiLogPath := logSoftLink
 		fileWriter, err := rotatelogs.New(
-			apiLogPath+".%Y-%m-%d-%H-%M.log",
+			logDir+string(os.PathSeparator)+"%Y-%m-%d-%H-%M.log",
 			// generate soft link, point to latest log file
-			rotatelogs.WithLinkName(apiLogPath),
+			rotatelogs.WithLinkName(logSoftLink),
 			// maximum time to save log files
 			rotatelogs.WithMaxAge(7*24*time.Hour),
 			// time period of log file switching

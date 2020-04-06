@@ -47,4 +47,4 @@ log:
     prefix: '[GIN-VUE-ADMIN]'
     log-file: true
     stdout: 'DEBUG'
-    file: 'WARNING'
+    file: 'DEBUG'

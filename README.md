@@ -10,32 +10,32 @@
 <img src="https://img.shields.io/badge/gorm-1.9.10-red"/>
 </div>
 
-## 开发文档
+# 开发文档
 [在线文档](http://doc.henrongyi.top/) [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
 
 本模板使用前端ui框架为 element-ui https://element.eleme.cn/#/zh-CN 前端组件可查看elementUi文档使用
 
-## 基本介绍
->GIN-VUE-ADMIN是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供了多种示例文件，让大家把更多时间专注在业务开发上。
+## 1. 基本介绍
+>GIN-VUE-ADMIN是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
 
-## 技术选型
-1. 后端采用golang框架gin，快速搭建基础restful风格API
+## 2. 技术选型
+- 后端采用golang框架gin，快速搭建基础restful风格API
 
-2. 前端项目采用VUE框架，构建基础页面
+- 前端项目采用VUE框架，构建基础页面
 
-3. 数据库采用Mysql(5.6.44)版本不同可能会导致SQL导入失败
+- 数据库采用Mysql(5.6.44)版本不同可能会导致SQL导入失败
 
-4. 使用redis实现记录当前活跃用户的jwt令牌并实现多点登录限制
+- 使用redis实现记录当前活跃用户的jwt令牌并实现多点登录限制
 
-5. 使用swagger构建自动化文档
+- 使用swagger构建自动化文档
 
-6. 使用fsnotify和viper实现json格式配置文件
+- 使用fsnotify和viper实现json格式配置文件
 
-7. 使用logrus实现日志记录
+- 使用logrus实现日志记录
 
-8. 使用gorm实现对数据库的基本操作
+- 使用gorm实现对数据库的基本操作
 
-## 项目目录
+## 3. 项目目录
 
 ```
     ├─erver  	    （后端文件夹）
@@ -65,101 +65,107 @@
 
 ```
 
-## 主要功能
-1. 权限管理：基于jwt和casbin实现的权限管理 
+## 4. 主要功能
+- 权限管理：基于jwt和casbin实现的权限管理 
 
-2. 文件上传下载：实现基于七牛云的文件上传操作（需提前注册七牛云账号） （为了方便大家测试，我公开了自己的七牛测试号的各种重要token，恳请大家不要乱传东西）
+- 文件上传下载：实现基于七牛云的文件上传操作（需提前注册七牛云账号） （为了方便大家测试，我公开了自己的七牛测试号的各种重要token，恳请大家不要乱传东西）
 
-3. 分页封装：等装了分页方法，实现分页接口并且复制粘贴就可使用分页，前端分页mixin封装 分页方法调用mixins即可 
+- 分页封装：等装了分页方法，实现分页接口并且复制粘贴就可使用分页，前端分页mixin封装 分页方法调用mixins即可 
 
-4. 用户管理：系统管理员分配用户角色和角色权限。
+- 用户管理：系统管理员分配用户角色和角色权限。
 
-5. 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
+- 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
 
-6. 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
+- 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
 
-7. api管理：不同用户可调用的api接口的权限不同。
+- api管理：不同用户可调用的api接口的权限不同。
 
-8. 配置管理：配置文件可前台修改（测试环境不开放此功能）
+- 配置管理：配置文件可前台修改（测试环境不开放此功能）
 
-9. 富文本编辑器：富文本编辑器，MarkDown编辑器功能嵌入 
+- 富文本编辑器：富文本编辑器，MarkDown编辑器功能嵌入 
 
-10. 条件搜索：增加条件搜索示例 前端文件参考src\view\superAdmin\api\api.vue 后台文件参考 model\dnModel\api.go √
+- 条件搜索：增加条件搜索示例 
 
-11. 多点登录限制：体验需要再 static\config中 把 system中的useMultipoint 修改为 true(需要自行配置redis和config中的redis参数)(测试阶段，有bug请及时反馈)
+```
+前端文件参考: src\view\superAdmin\api\api.vue 
+后台文件参考: model\dnModel\api.go 
+```
 
-12. 分片长传：提供文件分片上传和大文件分片上传功能示例 
+- 多点登录限制：
+体验需要再 static\config中 把 system中的useMultipoint 修改为 true(需要自行配置redis和config中的redis参数)(测试阶段，有bug请及时反馈)
 
-13. 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator)
+- 分片长传：提供文件分片上传和大文件分片上传功能示例 
 
-14. 代码生成器：后台基础逻辑以及简单curd的代码生成器 
+- 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator)
 
-## 计划任务
-1. 导入，导出Excel
+- 代码生成器：后台基础逻辑以及简单curd的代码生成器 
 
-2. Echart图表支持
+## 5.  计划任务
+-  导入，导出Excel
 
-3. 工作流，任务交接功能开发
+-  Echart图表支持
 
-4. 单独前端使用模式以及数据模拟
-## 使用说明
-1. golang api server 基于go.mod 如果golang版本低于1.11 请自行升级golang版本
+- 工作流，任务交接功能开发
 
-2. 支持go.mod的golang版本在运行go list 和 编译之前都会自动下载所需要的依赖包
+- 单独前端使用模式以及数据模拟
+## 6. 使用说明
+- golang api server 基于go.mod 如果golang版本低于1.11 请自行升级golang版本
 
-3. go server建议使用goland运行 减少出错可能性
+- 支持go.mod的golang版本在运行go list 和 编译之前都会自动下载所需要的依赖包
 
-4. 前端项目node建议高于V8.6.0
+- go server建议使用goland运行 减少出错可能性
 
-5. 到前端项目目录下运行 npm i 安装所需依赖
+- 前端项目node建议高于V8.6.0
 
-6. 依赖安装完成直接运行 npm run serve即可启动项目
+- 到前端项目目录下运行 npm i 安装所需依赖
 
-7. 如果要使用swagger自动化文档 首先需要安装 swagger
+- 依赖安装完成直接运行 npm run serve即可启动项目
+
+### 6.1 生成swagger自动化API文档
+
+#### 6.1.1 安装 swagger
+
+- （1）可以翻墙
 
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
+- （2）无法翻墙
 
-由于国内没法安装到X包下面的东西 如果可以翻墙 上面的命令就可以让你安心使用swagger了
-如果没有翻墙的办法那就先装一下 gopm
+由于国内没法安装 go.org/x 包下面的东西，需要先安装gopm
 
 ````
 go get -v -u github.com/gpmgo/gopm
 ````
 
-此时你就可以使用 gopm了
-这时候执行
+- 再执行
 
 ````
 gopm get -g -v github.com/swaggo/swag/cmd/swag
 ````
 
-等待安装完成以后
-到我们GOPATH下面的/src/github.com/swaggo/swag/cmd/swag路径
+- 到我们GOPATH下的/src/github.com/swaggo/swag/cmd/swag路径
 执行
 
 ````
 go install
 ````
 
-安装完成过后在项目目录下运行
+#### 6.1.2 生成API文档
+- 安装完成过后在项目目录下运行
 
 ````
 swag init
 ````
 
-项目文件夹下面会有 doc文件夹出现
-
-这时候登录 localhost:8888/swagger/index.html
-
+- 项目文件夹下面会有 doc文件夹出现，这时候登录 localhost:8888/swagger/index.html
 就可以看到 swagger文档啦
 
-## 团队博客
-    https://blog.henrongyi.top，内有前端框架教学视频，GOLANG基础入门视频正在筹备中。
+## 7. 团队博客
+    https://blog.henrongyi.top，内有前端框架教学视频，GoLang基础入门视频正在筹备中。
     如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994,欢迎您提出宝贵的需求。
     
-## docker镜像
+## 8. docker镜像
    感谢 [@chenlinzhong](https://github.com/chenlinzhong)提供docker镜像
    
       #启动容器
@@ -181,25 +187,25 @@ swag init
       cd /data1/www/htdocs/go/admin/QMPlusServer;
       go run main.go;
       
-## 一点建议
+## 9. 一点建议
     各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址，
     替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
     
-## 测试环境地址
+## 10. 测试环境地址
 
 测试环境:[http://qmplus.henrongyi.top/](http://qmplus.henrongyi.top/)
  
 账号/密码: admin/123456
 
-## 环境搭建教学视频
+## 11. 环境搭建教学视频
 
 腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html    (等待最新视频录制)
     
-## 模板使用教学及展示视频
+## 12. 模板使用教学及展示视频
 
 腾讯视频：https://v.qq.com/x/page/c3008y2ukba.html    (等待最新视频录制)
 
-## 联系方式
+## 13. 联系方式
 
 |  奇淼   | krank666  |qq群|
 |  :---:  |  :---: | :---: |
@@ -210,18 +216,18 @@ swag init
 <h3>微信交流群可以添加任意一位开发者备注"加入gin-vue-admin交流群"</h3>
 </div>
 
-## 开发者(贡献者)列表
+## 14. 开发者(贡献者)列表
 
 |  开发者   | 功能  | 姓名  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
 | [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
-| [@1319612909](https://github.com/1319612909)  | 前端开发 |  杜 |
+| [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
 | [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
-| [@granty1](https://github.com/Ruio9244)  | 全栈开发 | 严 |
-| [@granty1](https://github.com/chen-chen-up)  | 新手 | 宋 |
+| [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
+| [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
 
-## 更新日志
+## 15. 更新日志
 
 |  日期   | 日志  |
 |  :---:  | --- |
@@ -230,16 +236,17 @@ swag init
 |2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
 |2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
 |2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
-|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色 如不需要此功能可以在 view\/layout\/index\/   屏蔽HistoryComponent 背景色调 为本页 &.el-main 的background |
+|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色 如不需要此功能可以在 view\/layout\/index\/   屏蔽HistoryComponent 背景色调 为本页260行 &.el-main 的background |
+|2020/04/04| 启动2.x版本，项目文档规范化，日志功能改造，方法增加英文注释|
 
-## golang基础教学视频录制中...
+## 16. golang基础教学视频录制中...
+---
 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 
-## 捐赠
-如果你想请团队喝可乐
+## 17. 捐赠
+如果您想请团队喝可乐
 
 |  支付宝   | 微信  |
 |  :---:  | :---: |
 | ![markdown](http://qmplusimg.henrongyi.top/zfb.png "支付宝") |  ![markdown](http://qmplusimg.henrongyi.top/wxzf.png "微信") |
-

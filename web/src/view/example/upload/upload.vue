@@ -108,7 +108,7 @@ export default {
       })
         .then(async () => {
           const res = await deleteFile(row)
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -143,7 +143,7 @@ export default {
         type: 'success',
         message: '上传成功'
       })
-      if (res.success) {
+      if (res.code == 0) {
         this.getTableData()
       }
         this.fullscreenLoading = false

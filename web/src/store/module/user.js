@@ -31,6 +31,7 @@ export const user = {
             state.token = ""
             state.expiresAt = ""
             router.push({ name: 'login', replace: true })
+            sessionStorage.clear()
             window.location.reload()
         },
         ResetUserInfo(state, userInfo = {}) {
@@ -45,7 +46,7 @@ export const user = {
             commit('setUserInfo', res.data.user)
             commit('setToken', res.data.token)
             commit('setExpiresAt', res.data.expiresAt)
-            if (res.success) {
+            if (res.code == 0) {
                 const redirect = router.history.current.query.redirect
                 if (redirect) {
                     router.push({ path: redirect })
@@ -56,7 +57,7 @@ export const user = {
         },
         async LoginOut({ commit }) {
             const res = await jsonInBlacklist()
-            if (res.success) {
+            if (res.code == 0) {
                 commit("LoginOut")
             }
         }

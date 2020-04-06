@@ -29,14 +29,19 @@ type CasbinInReceive struct {
 	CasbinInfos []CasbinInfo `json:"casbinInfos"`
 }
 
-// 更新权限
-func (c *CasbinModel) CasbinPUpdate(AuthorityId string, casbinInfos []CasbinInfo) error {
-	c.clearCasbin(0, AuthorityId)
+// @title    UpdateCasbin
+// @description   update casbin authority, 更新casbin权限
+// @auth                     （2020/04/05  20:22 ）
+// @param     authorityId      string
+// @param     casbinInfos      []CasbinInfo
+// @return                     error
+func (c *CasbinModel) UpdateCasbin(authorityId string, casbinInfos []CasbinInfo) error {
+	c.ClearCasbin(0, authorityId)
 	for _, v := range casbinInfos {
 		cm := CasbinModel{
 			ID:          0,
 			Ptype:       "p",
-			AuthorityId: AuthorityId,
+			AuthorityId: authorityId,
 			Path:        v.Path,
 			Method:      v.Method,
 		}
@@ -48,45 +53,73 @@ func (c *CasbinModel) CasbinPUpdate(AuthorityId string, casbinInfos []CasbinInfo
 	return nil
 }
 
-// API更新随动
-func (c *CasbinModel) CasbinApiUpdate(oldPath string, newPath string) error {
+// @title    UpdateCasbinApi
+// @description   update casbin apis, API更新随动
+// @auth                     （2020/04/05  20:22 ）
+// @param     oldPath          string
+// @param     newPath          string
+// @return                     error
+func (c *CasbinModel) UpdateCasbinApi(oldPath string, newPath string) error {
 	var cs []CasbinModel
 	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ?", oldPath).Find(&cs).Update("v1", newPath).Error
 	return err
 }
 
-//添加权限
+// @title    AddCasbin
+// @description   add casbin authority, 添加权限
+// @auth                     （2020/04/05  20:22 ）
+// @param     cm              CasbinModel
+// @return                    bool
 func (c *CasbinModel) AddCasbin(cm CasbinModel) bool {
 	e := Casbin()
 	return e.AddPolicy(cm.AuthorityId, cm.Path, cm.Method)
 }
 
-//获取权限列表
-func (c *CasbinModel) GetPolicyPathByAuthorityId(AuthorityId string) []string {
+// @title    GetPolicyPathByAuthorityId
+// @description   get policy path by authorityId, 获取权限列表
+// @auth                     （2020/04/05  20:22 ）
+// @param     authorityId     string
+// @return                    []string
+func (c *CasbinModel) GetPolicyPathByAuthorityId(authorityId string) []string {
 	e := Casbin()
 	var pathList []string
-	list := e.GetFilteredPolicy(0, AuthorityId)
+	list := e.GetFilteredPolicy(0, authorityId)
 	for _, v := range list {
 		pathList = append(pathList, v[1])
 	}
 	return pathList
 }
 
-//清除匹配的权限
-func (c *CasbinModel) clearCasbin(v int, p string) bool {
+// @title    ClearCasbin
+// @description   清除匹配的权限
+// @auth                     （2020/04/05  20:22 ）
+// @param     v               int
+// @param     p               string
+// @return                    bool
+func (c *CasbinModel) ClearCasbin(v int, p string) bool {
 	e := Casbin()
 	return e.RemoveFilteredPolicy(v, p)
 
 }
 
-// 自定义规则函数
+// @title    ParamsMatch
+// @description   customized rule, 自定义规则函数
+// @auth                     （2020/04/05  20:22 ）
+// @param     fullNameKey1    string
+// @param     key2            string
+// @return                    bool
 func ParamsMatch(fullNameKey1 string, key2 string) bool {
 	key1 := strings.Split(fullNameKey1, "?")[0]
 	//剥离路径后再使用casbin的keyMatch2
 	return util.KeyMatch2(key1, key2)
 }
 
-// 自定义规则函数
+// @title    ParamsMatchFunc
+// @description   customized function, 自定义规则函数
+// @auth                     （2020/04/05  20:22 ）
+// @param     args            ...interface{}
+// @return                    interface{}
+// @return                    error
 func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 	name1 := args[0].(string)
 	name2 := args[1].(string)
@@ -94,11 +127,13 @@ func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 	return (bool)(ParamsMatch(name1, name2)), nil
 }
 
-//持久化到数据库  引入自定义规则
+// @title    Casbin
+// @description   store to DB, 持久化到数据库  引入自定义规则
+// @auth                     （2020/04/05  20:22 ）
 func Casbin() *casbin.Enforcer {
 	a := gormadapter.NewAdapterByDB(global.GVA_DB)
-	e := casbin.NewEnforcer(global.GVA_CONFIG.CasbinConfig.ModelPath, a)
+	e := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
 	e.AddFunction("ParamsMatch", ParamsMatchFunc)
-	e.LoadPolicy()
+	_ = e.LoadPolicy()
 	return e
 }

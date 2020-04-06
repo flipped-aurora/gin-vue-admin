@@ -15,7 +15,7 @@ import (
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
-// @Param file formData file true "断点续传示例"
+// @Param file formData file true "an example for breakpoint resume, 断点续传示例"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /fileUploadAndDownload/breakpointContinue [post]
 func BreakpointContinue(c *gin.Context) {
@@ -62,7 +62,7 @@ func BreakpointContinue(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
-// @Param file formData file true "查找文件"
+// @Param file formData file true "Find the file, 查找文件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查找成功"}"
 // @Router /fileUploadAndDownload/findFile [post]
 func FindFile(c *gin.Context) {
@@ -82,8 +82,8 @@ func FindFile(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
-// @Param file formData file true "查找文件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查找成功"}"
+// @Param file formData file true "上传文件完成"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"file uploaded, 文件创建成功"}"
 // @Router /fileUploadAndDownload/findFile [post]
 func BreakpointContinueFinish(c *gin.Context) {
 	fileMd5 := c.Query("fileMd5")
@@ -101,7 +101,7 @@ func BreakpointContinueFinish(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
-// @Param file formData file true "查找文件"
+// @Param file formData file true "删除缓存切片"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查找成功"}"
 // @Router /fileUploadAndDownload/removeChunk [post]
 func RemoveChunk(c *gin.Context) {

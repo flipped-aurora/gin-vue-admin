@@ -83,7 +83,7 @@ export default {
       this.$refs.registerForm.validate(async v => {
         if (v) {
           const res = await register(this.registerForm)
-          if (res.success) {
+          if (res.code == 0) {
             this.$message({
               type: 'success',
               message: '注册成功',

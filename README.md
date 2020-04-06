@@ -32,7 +32,7 @@ Online Documentation [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
 - We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
 ```
 
-### 2.1 web
+### 2.1 Web
 
 ```bash
 # clone the project
@@ -48,7 +48,7 @@ npm install
 npm run dev
 ```
 
-### 2.2 server
+### 2.2 Server
 
 ```bash
 # using go.mod
@@ -64,13 +64,13 @@ go build
 
 #### 2.3.1 swagger installation
 
-（1）using VPN or outside Mainland China
+(1) Using VPN or outside Mainland China
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
-（2）In mainland China 
-In mainland China, access to go.org/x is prohibited，we recommend `gopm`
 
+(2) In mainland China 
+In mainland China, access to go.org/x is prohibited，we recommend `gopm`
 ````bash
 # install gopm
 go get -v -u github.com/gpmgo/gopm
@@ -90,7 +90,7 @@ swag init
 ````
 After executing the above command，`docs` will show in `server/`，then open your browser, jump into `http://localhost:8888/swagger/index.html` to see the swagger APIs.
 
-### 2.4 docker image
+### 2.4 Docker image
 
 Thanks [@chenlinzhong](https://github.com/chenlinzhong) for providing docker image.
 ```  
@@ -113,9 +113,8 @@ vi /data1/www/htdocs/go/admin/QMPlusServer/static/dbconfig/config.json;
 cd /data1/www/htdocs/go/admin/QMPlusServer;z
 go run main.go;
 ```
-  
 
-## 3. technical selection
+## 3. Technical selection
 
 - Frontend: using `Element-UI` based on vue，to code the page.
 - Backend: using `Gin` to quickly build basic RESTful API. `Gin` is a web framework written in Go (Golang).
@@ -125,7 +124,7 @@ go run main.go;
 - Config: using `fsnotify` and `viper` to implement `yaml` config file。
 - Log: using `logrus` record logs。
 
-## 4. project layout
+## 4. Project layout
 
 ```
     ├─erver  	    （backend）

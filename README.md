@@ -13,15 +13,26 @@
 English | [简体中文](./README-zh_CN.md)
 
 # Project Guidelines
-Online Documentation [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
+[Online Documentation](http://doc.henrongyi.top/)
 
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
-- Server Franmework：[gin](https://github.com/gin-gonic/gin) 
+- Server Framework：[gin](https://github.com/gin-gonic/gin) 
 
 ## 1. Basic Introduction
+
+### 1.1 Project Introduction
+
 [Online Demo](http://qmplus.henrongyi.top/)
 > Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
 > It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
+
+### 1.2 Version list
+
+master: 2.0 dev code
+
+[gin-vue-adminv 1.0 stable](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 is kept up to date and maintained）
+
+[gin-vue-adminv 2.0 dev](https://github.com/piexlmax/gin-vue-admin) （v2.0 is no longer compatible with v1.0）
 
 ## 2. Getting started
 ```
@@ -213,7 +224,7 @@ There are video courses about frontend framework in our blo. If you think the pr
 
 ### 9.3 Golang basic course (coming soon)
 
-> url: https://space.bilibili.com/322210472/channel/detail?cid=108884
+> URL: https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 ## 10. Contacts
 
@@ -234,7 +245,7 @@ There are video courses about frontend framework in our blo. If you think the pr
 | [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
-| [@granty1](https://github.com/granty1)  | Backend developer | in |
+| [@granty1](https://github.com/granty1)  | Backend developer | Yin |
 | [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
 

@@ -26,7 +26,7 @@ type Field struct {
 // @auth                     （2020/04/05  20:22 ）
 // @return    err             error
 func (a *AutoCodeStruct) CreateTemp() (err error) {
-	basePath := "./template"
+	basePath := "./resource/template"
 	modelTmpl, err := template.ParseFiles(basePath + "/te/model.go.tpl")
 	if err != nil {
 		return err

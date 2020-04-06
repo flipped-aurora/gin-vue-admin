@@ -1,60 +1,60 @@
 package config
 
 type Server struct {
-	Mysql   `mapstructure:"mysql"`
-	Qiniu   `mapstructure:"qiniu"`
-	Casbin  `mapstructure:"casbin"`
-	Redis   `mapstructure:"redis"`
-	System  `mapstructure:"system"`
-	JWT     `mapstructure:"jwt"`
-	Captcha `mapstructure:"captcha"`
-	Log     `mapstructure:"log"`
+	Mysql   Mysql   `mapstructure:"mysql" json:"mysql"`
+	Qiniu   Qiniu   `mapstructure:"qiniu" json:"qiniu"`
+	Casbin  Casbin  `mapstructure:"casbin" json:"casbin"`
+	Redis   Redis   `mapstructure:"redis" json:"redis"`
+	System  System  `mapstructure:"system" json:"system"`
+	JWT     JWT     `mapstructure:"jwt" json:"jwt"`
+	Captcha Captcha `mapstructure:"captcha" json:"captcha"`
+	Log     Log     `mapstructure:"log" json:"log"`
 }
 
 type System struct {
-	UseMultipoint bool   `mapstructure:"use-multipoint"`
-	Env           string `mapstructure:"env"`
-	Addr          int    `mapstructure:"addr"`
+	UseMultipoint bool   `mapstructure:"use-multipoint" json:"useMultipoint"`
+	Env           string `mapstructure:"env" json:"env"`
+	Addr          int    `mapstructure:"addr" json:"addr"`
 }
 
 type JWT struct {
-	SigningKey string `mapstructure:"signing-key"`
+	SigningKey string `mapstructure:"signing-key" json:"signingKey"`
 }
 
 type Casbin struct {
-	ModelPath string `mapstructure:"model-path"`
+	ModelPath string `mapstructure:"model-path" json:"modelPath"`
 }
 
 type Mysql struct {
-	Username     string `mapstructure:"username"`
-	Password     string `mapstructure:"password"`
-	Path         string `mapstructure:"path"`
-	Dbname       string `mapstructure:"db-name"`
-	Config       string `mapstructure:"config"`
-	MaxIdleConns int    `mapstructure:"max-idle-conns"`
-	MaxOpenConns int    `mapstructure:"max-open-conns"`
-	LogMode      bool   `mapstructure:"log-mode"`
+	Username     string `mapstructure:"username" json:"username"`
+	Password     string `mapstructure:"password" json:"password"`
+	Path         string `mapstructure:"path" json:"path"`
+	Dbname       string `mapstructure:"db-name" json:"dbname"`
+	Config       string `mapstructure:"config" json:"config"`
+	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"maxIdleConns"`
+	MaxOpenConns int    `mapstructure:"max-open-conns" json:"maxOpenConns"`
+	LogMode      bool   `mapstructure:"log-mode" json:"logMode"`
 }
 
 type Redis struct {
-	Addr     string `mapstructure:"addr"`
-	Password string `mapstructure:"password"`
-	DB       int    `mapstructure:"db"`
+	Addr     string `mapstructure:"addr" json:"addr"`
+	Password string `mapstructure:"password" json:"password"`
+	DB       int    `mapstructure:"db" json:"db"`
 }
 type Qiniu struct {
-	AccessKey string `mapstructure:"access-key"`
-	SecretKey string `mapstructure:"secret-key"`
+	AccessKey string `mapstructure:"access-key" json:"accessKey"`
+	SecretKey string `mapstructure:"secret-key" json:"secretKey"`
 }
 
 type Captcha struct {
-	KeyLong   int `mapstructure:"key-long"`
-	ImgWidth  int `mapstructure:"img-width"`
-	ImgHeight int `mapstructure:"img-height"`
+	KeyLong   int `mapstructure:"key-long" json:"keyLong"`
+	ImgWidth  int `mapstructure:"img-width" json:"imgWidth"`
+	ImgHeight int `mapstructure:"img-height" json:"imgHeight"`
 }
 
 type Log struct {
-	Prefix  string `mapstructure:"prefix"`
-	LogFile bool   `mapstructure:"log-file"`
-	Stdout  string `mapstructure:"stdout"`
-	File    string `mapstructure:"file"`
+	Prefix  string `mapstructure:"prefix" json:"prefix"`
+	LogFile bool   `mapstructure:"log-file" json:"logFile"`
+	Stdout  string `mapstructure:"stdout" json:"stdout"`
+	File    string `mapstructure:"file" json:"file"`
 }

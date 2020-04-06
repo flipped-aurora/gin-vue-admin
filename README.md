@@ -18,7 +18,7 @@ master为1.0版代码
 
 [gin-vue-adminv 1.0稳定版](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) v1.0保持更新和维护
 
-[gin-vue-adminv 2.0测试版](https://github.com/piexlmax/gin-vue-admin) v2.0不再兼容v1.0
+[gin-vue-adminv 2.0测试版](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v2_dev) v2.0不再兼容v1.0
 
 本模板使用前端ui框架为 element-ui https://element.eleme.cn/#/zh-CN 前端组件可查看elementUi文档使用
 

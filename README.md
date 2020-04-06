@@ -210,7 +210,7 @@ swag init
 
 bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/   (v1.0版本视频，v2.0操作相同目录不同)
     
-## 12. 模板使用教学及展示视频
+## 12. 使用教学及展示视频
 
 bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/    (v1.0版本视频，v2.0操作相同目录不同)
 

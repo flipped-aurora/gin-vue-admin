@@ -40,17 +40,22 @@ func (a *SysAuthority) CreateAuthority() (err error, authority *SysAuthority) {
 // 删除角色
 func (a *SysAuthority) DeleteAuthority() (err error) {
 	err = global.GVA_DB.Where("authority_id = ?", a.AuthorityId).Find(&SysUser{}).Error
-	if err != nil {
-		err = global.GVA_DB.Where("parent_id = ?", a.AuthorityId).Find(&SysAuthority{}).Error
-		if err != nil {
-			err = global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a).Association("SysBaseMenus").Delete(a.SysBaseMenus).Error
-			new(CasbinModel).ClearCasbin(0, a.AuthorityId)
-		} else {
-			err = errors.New("此角色存在子角色不允许删除")
-		}
-	} else {
+	if err == nil {
 		err = errors.New("此角色有用户正在使用禁止删除")
+		return
 	}
+	err = global.GVA_DB.Where("parent_id = ?", a.AuthorityId).Find(&SysAuthority{}).Error
+	if err == nil {
+		err = errors.New("此角色存在子角色不允许删除")
+		return
+	}
+	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", a.AuthorityId).First(a).Unscoped().Delete(a)
+	if len(a.SysBaseMenus) > 0 {
+		err = db.Association("SysBaseMenus").Delete(a.SysBaseMenus).Error
+	} else {
+		err = db.Error
+	}
+	new(CasbinModel).ClearCasbin(0, a.AuthorityId)
 	return err
 }
 

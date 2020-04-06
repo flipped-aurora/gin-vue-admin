@@ -59,7 +59,7 @@
           <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
         </el-form-item>
         <el-form-item label="排序标记">
-          <el-input autocomplete="off" v-model="form.sort"></el-input>
+          <el-input autocomplete="off" v-model.number="form.sort"></el-input>
         </el-form-item>
       </el-form>
       <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>

@@ -15,7 +15,7 @@ type SysBaseMenu struct {
 	Name          string `json:"name"`
 	Hidden        bool   `json:"hidden"`
 	Component     string `json:"component"`
-	Sort          string `json:"sort"`
+	Sort          int    `json:"sort"`
 	Meta          `json:"meta"`
 	SysAuthoritys []SysAuthority `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
 	Children      []SysBaseMenu  `json:"children"`
@@ -50,7 +50,12 @@ func (b *SysBaseMenu) AddBaseMenu() (err error) {
 func (b *SysBaseMenu) DeleteBaseMenu(id float64) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", id).First(&SysBaseMenu{}).Error
 	if err != nil {
-		err = global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).Delete(&b).Association("SysAuthoritys").Delete(b.SysAuthoritys).Error
+		db := global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&b).Delete(&b)
+		if len(b.SysAuthoritys) > 0 {
+			err = db.Association("SysAuthoritys").Delete(b.SysAuthoritys).Error
+		} else {
+			err = db.Error
+		}
 	} else {
 		return errors.New("此菜单存在子菜单不可删除")
 	}

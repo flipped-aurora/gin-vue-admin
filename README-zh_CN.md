@@ -13,7 +13,7 @@
 [English](./README.md) | 简体中文
 
 # 项目文档
-在线文档 [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
+[在线文档](http://doc.henrongyi.top/)
 
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
 - 后台框架：[gin](https://github.com/gin-gonic/gin) 
@@ -21,8 +21,6 @@
 ## 1. 基本介绍
 [在线预览](http://qmplus.henrongyi.top/)
 > Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
-
-
 
 ## 2. 使用说明
 
@@ -66,11 +64,11 @@ go build
 
 #### 2.3.1 安装 swagger
 
-- （1）可以翻墙
+##### （1）可以翻墙
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
-- （2）无法翻墙
+#####（2）无法翻墙
 由于国内没法安装 go.org/x 包下面的东西，需要先安装`gopm`
 
 ```bash
@@ -208,15 +206,15 @@ go run main.go;
 
 ### 9.1 环境搭建
 
-> bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
+> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
     
 ### 9.2 模板使用
 
->bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
+> Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
 ### 9.3 golang基础教学视频录制中...
 
-> 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
+> 地址：https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 ## 10. 联系方式
 

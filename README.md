@@ -16,7 +16,7 @@ English | [简体中文](./README-zh_CN.md)
 Online Documentation [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
 
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
-- Server Franmework：[gin](https://github.com/gin-gonic/gin) 
+- Server Framework：[gin](https://github.com/gin-gonic/gin) 
 
 ## 1. Basic Introduction
 [Online Demo](http://qmplus.henrongyi.top/)
@@ -213,7 +213,7 @@ There are video courses about frontend framework in our blo. If you think the pr
 
 ### 9.3 Golang basic course (coming soon)
 
-> url: https://space.bilibili.com/322210472/channel/detail?cid=108884
+> URL: https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 ## 10. Contacts
 

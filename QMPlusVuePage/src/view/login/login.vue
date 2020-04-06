@@ -86,13 +86,15 @@ export default {
     async submitForm() {
       this.$refs.loginForm.validate(async v => {
         if (v) {
-          await this.login()
+          this.login()
+          this.loginVefify()
         } else {
           this.$message({
             type: 'error',
             message: '请正确填写登录信息',
             showClose: true
           })
+          this.loginVefify()
           return false
         }
       })

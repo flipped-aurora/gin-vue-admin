@@ -205,11 +205,11 @@ There are video courses about frontend framework in our blo. If you think the pr
 
 ### 9.1 Development environment course
 
-> Tencent video：https://v.qq.com/x/page/e3008xjxqtu.html    (coming soon)
+> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/    (coming soon)
     
 ### 9.2 Template course
 
-> Tencent video：https://v.qq.com/x/page/c3008y2ukba.html    (coming soon)
+> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/    (coming soon)
 
 ### 9.3 Golang basic course (coming soon)
 

@@ -56,7 +56,6 @@ func registerFile(c config.Log, backends []oplogging.Backend) []oplogging.Backen
 			fmt.Println("create log directory")
 			_ = os.Mkdir(logDir, os.ModePerm)
 		}
-		//apiLogPath := logSoftLink
 		fileWriter, err := rotatelogs.New(
 			logDir+string(os.PathSeparator)+"%Y-%m-%d-%H-%M.log",
 			// generate soft link, point to latest log file

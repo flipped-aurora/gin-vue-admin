@@ -1,0 +1,246 @@
+
+<div align=center>
+<img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width=300" height="300" />
+</div>
+<div align=center>
+<img src="https://img.shields.io/badge/golang-1.12-blue"/>
+<img src="https://img.shields.io/badge/gin-1.4.0-lightBlue"/>
+<img src="https://img.shields.io/badge/vue-2.6.10-brightgreen"/>
+<img src="https://img.shields.io/badge/element--ui-2.12.0-green"/>
+<img src="https://img.shields.io/badge/gorm-1.9.10-red"/>
+</div>
+
+[English](./README.md) | 简体中文
+
+# 项目文档
+在线文档 [http://doc.henrongyi.top/](http://doc.henrongyi.top/)
+
+- 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
+- 后台框架：[gin](https://github.com/gin-gonic/gin) 
+
+## 1. 基本介绍
+[在线预览](http://qmplus.henrongyi.top/)
+> Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，拥有jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
+
+
+
+## 2. 使用说明
+
+```
+- node版本 > v8.6.0
+- golang版本 >= v1.11
+- IDE推荐：Golang
+- 各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址。
+- 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
+```
+
+### 2.1 web端
+
+```bash
+# clone the project
+git clone https://github.com/piexlmax/gin-vue-admin.git
+
+# enter the project directory
+cd web
+
+# install dependency
+npm install
+
+# develop
+npm run dev
+```
+
+### 2.2 server端
+
+```bash
+# 使用 go.mod
+
+# 安装go依赖包
+go list (go mod tidy)
+
+# 编译
+go build
+```
+
+### 2.3 生成swagger自动化API文档
+
+#### 2.3.1 安装 swagger
+
+- （1）可以翻墙
+````
+go get -u github.com/swaggo/swag/cmd/swag
+````
+- （2）无法翻墙
+由于国内没法安装 go.org/x 包下面的东西，需要先安装`gopm`
+
+```bash
+# 下载gopm包
+go get -v -u github.com/gpmgo/gopm
+
+# 执行
+gopm get -g -v github.com/swaggo/swag/cmd/swag
+
+# 到GOPATH的/src/github.com/swaggo/swag/cmd/swag路径下执行
+go install
+```
+
+#### 2.3.2 生成API文档
+
+````
+cd server
+swag init
+````
+执行上面的命令后，server目录下会出现docs文件夹，登录http://localhost:8888/swagger/index.html，即可查看swagger文档
+
+### 2.4 docker镜像
+
+感谢 [@chenlinzhong](https://github.com/chenlinzhong)提供的docker镜像.
+```  
+# 启动容器
+docker run -itd --net=host --name=go_container shareclz/go_node /bin/bash;
+
+# 进入容器
+docker exec -it go_container /bin/bash;
+git clone https://github.com/piexlmax/gin-vue-admin.git /data1/www/htdocs/go/admin;
+
+# 启动前端
+cd /data1/www/htdocs/go/admin/QMPlusVuePage;
+cnpm i ;
+npm run serve;
+
+# 修改数据库配置
+vi /data1/www/htdocs/go/admin/QMPlusServer/static/dbconfig/config.json;
+
+# 启动后端
+cd /data1/www/htdocs/go/admin/QMPlusServer;z
+go run main.go;
+```
+  
+
+## 3. 技术选型
+
+- 前端：用基于`vue`的`Element-UI`构建基础页面。
+- 后端：用`Gin`快速搭建基础restful风格API，`Gin`是一个go语言编写的Web框架。
+- 数据库：采用`MySql`(5.6.44)版本，使用`gorm`实现对数据库的基本操作。
+- 缓存：使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
+- API文档：使用`Swagger`构建自动化文档。
+- 配置文件：使用`fsnotify`和`viper`实现`yaml`格式的配置文件。
+- 日志：使用`logrus`实现日志记录。
+
+
+## 4. 项目目录
+
+```
+    ├─erver  	    （后端文件夹）
+    │  ├─api            （API）
+    │  ├─config         （配置包）
+    │  ├─core  	        （內核）
+    │  ├─db             （数据库脚本）
+    │  ├─docs  	        （swagger文档目录）
+    │  ├─global         （全局对象）
+    │  ├─initialiaze    （初始化）
+    │  ├─middleware     （中间件）
+    │  ├─model          （结构体层）
+    │  ├─resource       （资源）
+    │  ├─router         （路由）
+    │  └─urtils	        （公共功能）
+    └─web            （前端文件）
+        ├─public        （发布模板）
+        └─src           （源码包）
+            ├─api       （向后台发送ajax的封装层）
+            ├─assets	（静态文件）
+            ├─components（组件）
+            ├─router	（前端路由）
+            ├─store     （vuex 状态管理仓）
+            ├─style     （通用样式文件）
+            ├─utils     （前端工具库）
+            └─view      （前端页面）
+
+```
+
+## 5. 主要功能
+
+- 权限管理：基于`jwt`和`casbin`实现的权限管理 
+- 文件上传下载：实现基于七牛云的文件上传操作（为了方便大家测试，我公开了自己的七牛测试号的各种重要token，恳请大家不要乱传东西）
+- 分页封装：前端使用mixins封装分页，分页方法调用mixins即可 
+- 用户管理：系统管理员分配用户角色和角色权限。
+- 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
+- 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
+- api管理：不同用户可调用的api接口的权限不同。
+- 配置管理：配置文件可前台修改（测试环境不开放此功能）。
+- 富文本编辑器：MarkDown编辑器功能嵌入。
+- 条件搜索：增加条件搜索示例。 
+```
+前端文件参考: src\view\superAdmin\api\api.vue 
+后台文件参考: model\dnModel\api.go 
+```
+- 多点登录限制：需要在`config.yaml`中把`system`中的`useMultipoint`修改为true(需要自行配置Redis和Config中的Redis参数，测试阶段，有bug请及时反馈)。
+- 分片长传：提供文件分片上传和大文件分片上传功能示例。
+- 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator)。
+- 代码生成器：后台基础逻辑以及简单curd的代码生成器。 
+
+## 6. 计划任务
+
+- [ ] 导入，导出Excel
+- [ ] Echart图表支持
+- [ ] 工作流，任务交接功能开发
+- [ ] 单独前端使用模式以及数据模拟
+
+## 7. 更新日志
+
+|  日期   | 日志  |
+|  :---:  | --- |
+|2020/01/07| 角色增加数据资源功能 增加数据资源关联返回 演示环境代码已同步 开启了多点登录拦截 可能会被其他人挤掉 |
+|2020/01/13| 增加了配置管理功能 此功能不发表至测试环境 待保护机制以及服务重启机制发开完成后才会发表值测试环境 请自行clone且导入sql体验 |
+|2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
+|2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
+|2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
+|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色。（如不需要此功能可以在`web/src/view/layout/index.vue`中屏蔽`HistoryComponent`背景色调，为本页260行&.el-main中的`background`属性） |
+|2020/04/04| 启动2.x版本，项目文档规范化，日志功能改造，方法增加英文注释 |
+
+## 8. 团队博客
+
+> https://blog.henrongyi.top
+>
+>内有前端框架教学视频。如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994，欢迎您提出宝贵的需求。
+
+## 9. 教学视频
+
+### 9.1 环境搭建
+
+> 腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html    (等待最新视频录制)
+    
+### 9.2 模板使用
+
+>腾讯视频：https://v.qq.com/x/page/c3008y2ukba.html    (等待最新视频录制)
+
+### 9.3 golang基础教学视频录制中...
+
+> 地址:https://space.bilibili.com/322210472/channel/detail?cid=108884
+
+## 10. 联系方式
+
+|  奇淼   | krank666  |QQ群|
+|  :---:  |  :---: | :---: |
+|  <img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>  |  <img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/> | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+
+### - QQ交流群：622360840
+### - 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
+
+
+## 11. 开发者列表
+
+|  昵称   | 项目职务  | 姓  |
+|  ----  | ----  | ----  |
+| [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
+| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
+| [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
+| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
+| [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
+| [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
+
+## 12. 捐赠
+
+|  支付宝   | 微信  |
+|  :---:  | :---: |
+| ![markdown](http://qmplusimg.henrongyi.top/zfb.png "支付宝") |  ![markdown](http://qmplusimg.henrongyi.top/wxzf.png "微信") |

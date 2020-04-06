@@ -62,14 +62,14 @@ go build
 
 ### 2.3 API docs auto-generation using swagger
 
-#### 2.3.1 swagger installation
+#### 2.3.1 install swagger 
 
-(1) Using VPN or outside Mainland China
+##### (1) Using VPN or outside mainland China
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-(2) In mainland China 
+##### (2) In mainland China 
 In mainland China, access to go.org/x is prohibited，we recommend `gopm`
 ````bash
 # install gopm
@@ -234,7 +234,7 @@ There are video courses about frontend framework in our blo. If you think the pr
 | [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
-| [@granty1](https://github.com/granty1)  | Backend developer | yin |
+| [@granty1](https://github.com/granty1)  | Backend developer | in |
 | [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
 

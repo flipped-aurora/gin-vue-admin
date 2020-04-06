@@ -208,11 +208,11 @@ go run main.go;
 
 ### 9.1 环境搭建
 
-> 腾讯视频：https://v.qq.com/x/page/e3008xjxqtu.html    (等待最新视频录制)
+> bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
     
 ### 9.2 模板使用
 
->腾讯视频：https://v.qq.com/x/page/c3008y2ukba.html    (等待最新视频录制)
+>bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
 ### 9.3 golang基础教学视频录制中...
 

@@ -88,7 +88,7 @@
 
 ```
 前端文件参考: src\view\superAdmin\api\api.vue 
-后台文件参考: model\dnModel\api.go 
+后台文件参考: model\sys_api.go 
 ```
 
 - 多点登录限制：

@@ -247,10 +247,10 @@ There are video courses about frontend framework in our blo. If you think the pr
 |  Nick name   | Project position  | First name  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
-| [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
+| [@granty1](https://github.com/granty1)  | Frontend developer | Yin |
 | [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
-| [@granty1](https://github.com/granty1)  | Backend developer | Yin |
+| [@krank666](https://github.com/krank666)  | Backend developer | Yin |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
 
 ## 12. Donate

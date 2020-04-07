@@ -80,7 +80,7 @@ go build
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-#####（2）无法翻墙
+##### （2）无法翻墙
 由于国内没法安装 go.org/x 包下面的东西，需要先安装`gopm`
 
 ```bash

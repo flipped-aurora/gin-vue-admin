@@ -11,7 +11,7 @@
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 07/04/2020 00:13:04
+ Date: 07/04/2020 21:55:13
 */
 
 SET NAMES utf8mb4;
@@ -4087,7 +4087,7 @@ CREATE TABLE `sys_base_menus`  (
 -- ----------------------------
 -- Records of sys_base_menus
 -- ----------------------------
-INSERT INTO `sys_base_menus` VALUES (1, '2019-09-19 22:05:18', '2020-04-02 22:33:49', NULL, 0, 0, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', '仪表盘', 1);
+INSERT INTO `sys_base_menus` VALUES (1, '2019-09-19 22:05:18', '2020-04-07 21:48:04', NULL, 0, 0, 'dashboard', 'dashboard', 0, 'view/dashboard/index.vue', '仪表盘', 'setting', '仪表盘', 1);
 INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 0, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', '测试菜单', 2);
 INSERT INTO `sys_base_menus` VALUES (3, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 0, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', '超级管理员', 3);
 INSERT INTO `sys_base_menus` VALUES (4, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理', 1);
@@ -4101,22 +4101,12 @@ INSERT INTO `sys_base_menus` VALUES (21, '2019-10-20 11:19:52', '2019-12-12 16:5
 INSERT INTO `sys_base_menus` VALUES (22, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 19, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', '富文本编辑器', 3);
 INSERT INTO `sys_base_menus` VALUES (23, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 19, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 'excel导入导出', 4);
 INSERT INTO `sys_base_menus` VALUES (26, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 19, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载', 5);
-INSERT INTO `sys_base_menus` VALUES (29, '2019-12-04 10:05:57', '2019-12-12 16:51:39', '2019-12-12 17:00:50', 0, 0, 'workflow', 'workflow', 0, 'view/workflow/index.vue', '工作流', 'share', '工作流', 6);
-INSERT INTO `sys_base_menus` VALUES (30, '2019-12-04 10:06:36', '2019-12-04 10:06:36', '2019-12-12 17:00:48', 0, 29, 'workflowCreate', 'workflowCreate', 0, 'view/workflow/workflowCreate/workflowCreate', '创建工作流', '', '创建工作流', 1);
-INSERT INTO `sys_base_menus` VALUES (31, '2019-12-17 10:08:02', '2019-12-17 10:08:58', '2019-12-17 10:09:27', 0, 0, 'testtest', 'testtest', 0, 'view/test/index.vue', '测试menu', '', '测试menu', 8);
-INSERT INTO `sys_base_menus` VALUES (32, '2020-01-13 14:03:21', '2020-01-13 14:05:19', '2020-03-29 21:31:23', 0, 3, 'system', 'system', 0, 'view/superAdmin/system/system.vue', '配置管理', 'setting', '配置管理', 5);
 INSERT INTO `sys_base_menus` VALUES (33, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 19, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', '断点续传', 6);
 INSERT INTO `sys_base_menus` VALUES (34, '2020-02-24 19:48:37', '2020-03-27 20:10:02', NULL, 0, 19, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', '客户列表（资源示例）', 7);
-INSERT INTO `sys_base_menus` VALUES (35, '2020-03-22 17:13:38', '2020-03-22 17:13:38', '2020-03-22 17:13:49', 0, 0, 'autoCode', 'autoCode', 0, 'view/superAdmin/autoCode/index.vue', '代码构建工具', 's-platform', '代码构建工具', 6);
-INSERT INTO `sys_base_menus` VALUES (36, '2020-03-22 17:14:24', '2020-03-22 17:15:23', '2020-03-29 21:31:18', 0, 3, 'autoCode', 'autoCode', 0, 'view/superAdmin/autoCode/index.vue', '自动化代码', 'cpu', '自动化代码', 6);
-INSERT INTO `sys_base_menus` VALUES (37, '2020-03-28 23:43:39', '2020-03-28 23:43:39', '2020-03-29 21:31:15', 0, 3, 'formCreate', 'formCreate', 0, 'view/superAdmin/formCreate/index.vue', '表单生成器', 'setting', '表单生成器', 8);
 INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-03-29 21:31:03', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', '系统工具', 5);
-INSERT INTO `sys_base_menus` VALUES (39, '2020-03-29 21:34:06', '2020-03-30 13:56:24', '2020-03-30 15:58:32', 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-order', '系统配置', 0);
 INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-03-29 21:35:10', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', 1);
 INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-03-29 21:36:26', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', 2);
 INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-02 14:20:16', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', 3);
-INSERT INTO `sys_base_menus` VALUES (43, '2020-04-07 00:09:56', '2020-04-07 00:09:56', '2020-04-07 00:10:06', 0, 0, '12312', '12312', 1, '3123', '21312', '3123', NULL, 12321321);
-INSERT INTO `sys_base_menus` VALUES (44, '2020-04-07 00:10:12', '2020-04-07 00:10:12', '2020-04-07 00:11:12', 0, 0, '123', '123', 0, '213123', '213123', '213213', NULL, 123123);
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id

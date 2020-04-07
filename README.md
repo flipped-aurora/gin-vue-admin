@@ -228,9 +228,14 @@ There are video courses about frontend framework in our blo. If you think the pr
 
 ## 10. Contacts
 
-|  奇淼   | krank666  |qq group|
-|  :---:  |  :---: | :---: |
-|  <img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>  |  <img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/> | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+| QQ group |  
+|  :---:  |
+| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+
+
+| Jiang | Yin | Yan | Du | Yin | Song |
+|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
+| <src img=""> | <src img=""> | <img src=""> | <src img=""> | <src img=""> | <src img=""> |
 
 
 ### QQ group: 622360840
@@ -244,15 +249,12 @@ There are video courses about frontend framework in our blo. If you think the pr
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
+| [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
 | [@granty1](https://github.com/granty1)  | Backend developer | Yin |
-| [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
 
 ## 12. Donate
 
 If you find this project useful, you can buy author a glass of juice :tropical_drink:
 
-|  Ali pay   | Wechat pay  |
-|  :---:  | :---: |
-| ![markdown](http://qmplusimg.henrongyi.top/zfb.png "支付宝") |  ![markdown](http://qmplusimg.henrongyi.top/wxzf.png "微信") |

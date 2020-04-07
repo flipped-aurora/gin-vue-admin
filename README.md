@@ -133,7 +133,7 @@ go run main.go;
 - Cache: using `Redis` to implement the recording of the JWT token of the currently active user and implement the multi-login restriction.
 - API: using Swagger to auto generate APIs docs。
 - Config: using `fsnotify` and `viper` to implement `yaml` config file。
-- Log: using `logrus` record logs。
+- Log: using `go-logging` record logs。
 
 ## 4. Project layout
 

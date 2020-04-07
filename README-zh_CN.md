@@ -134,7 +134,7 @@ go run main.go;
 - 缓存：使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
 - API文档：使用`Swagger`构建自动化文档。
 - 配置文件：使用`fsnotify`和`viper`实现`yaml`格式的配置文件。
-- 日志：使用`logrus`实现日志记录。
+- 日志：使用`go-logging`实现日志记录。
 
 
 ## 4. 项目目录

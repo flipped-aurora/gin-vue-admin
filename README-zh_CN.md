@@ -230,9 +230,13 @@ go run main.go;
 
 ## 10. 联系方式
 
-|  奇淼   | krank666  |QQ群|
-|  :---:  |  :---: | :---: |
-|  <img src="http://qmplusimg.henrongyi.top/jjz.jpg" width="180"/>  |  <img src="http://qmplusimg.henrongyi.top/yx.jpg" width="180"/> | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+| QQ群 |  
+|  :---:  |
+| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+
+| 蒋 | 杜 | 严 | 杜 | 尹 | 宋 |
+|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
+| <src img=""> | <src img=""> | <img src=""> | <src img=""> | <src img=""> | <src img=""> |
 
 ### - QQ交流群：622360840
 ### - 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
@@ -243,14 +247,12 @@ go run main.go;
 |  昵称   | 项目职务  | 姓  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
-| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
-| [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
-| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
+| [@krank666](https://github.com/krank666)  | 前端开发 | 印 |
 | [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
+| [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
+| [@granty1](https://github.com/granty1)  | 后台开发 | 尹 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
 
 ## 12. 捐赠
 
-|  支付宝   | 微信  |
-|  :---:  | :---: |
-| ![markdown](http://qmplusimg.henrongyi.top/zfb.png "支付宝") |  ![markdown](http://qmplusimg.henrongyi.top/wxzf.png "微信") |
+如果你觉得这个项目对你有帮助，你可以加我们人一个开发者，请喝饮料 :tropical_drink:

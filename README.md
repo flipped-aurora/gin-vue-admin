@@ -138,7 +138,7 @@ go run main.go;
 ## 4. Project layout
 
 ```
-    ├─server  	    （backend）
+    ├─server  	     （backend）
     │  ├─api            （API entrance）
     │  ├─config         （config file）
     │  ├─core  	        （core code）
@@ -151,7 +151,7 @@ go run main.go;
     │  ├─resource       （resources, such as static pages, templates）
     │  ├─router         （routers）
     │  └─utils	        （common utilities）
-    └─web           （frontend）
+    └─web            （frontend）
         ├─public        （deploy templates）
         └─src           （source code）
             ├─api       （frontend APIs）

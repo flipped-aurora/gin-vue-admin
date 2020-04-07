@@ -13,7 +13,7 @@ import (
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.ExaCustomer true "创建客户"
+// @Param data body model.ExaCustomer true "创建客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/createExaCustomer [post]
 func CreateExaCustomer(c *gin.Context) {
@@ -36,7 +36,7 @@ func CreateExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.ExaCustomer true "删除客户"
+// @Param data body model.ExaCustomer true "删除客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/deleteExaCustomer [post]
 func DeleteExaCustomer(c *gin.Context) {
@@ -55,7 +55,7 @@ func DeleteExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.ExaCustomer true "创建客户"
+// @Param data body model.ExaCustomer true "创建客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/updateExaCustomer [post]
 func UpdateExaCustomer(c *gin.Context) {
@@ -74,7 +74,7 @@ func UpdateExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body dbModel.ExaCustomer true "获取单一客户信息"
+// @Param data body model.ExaCustomer true "获取单一客户信息"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/getExaCustomer [post]
 func GetExaCustomer(c *gin.Context) {

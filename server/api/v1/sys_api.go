@@ -12,7 +12,7 @@ import (
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateApiParams true "创建api"
+// @Param data body model.SysApi true "创建api"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/createApi [post]
 func CreateApi(c *gin.Context) {
@@ -31,7 +31,7 @@ func CreateApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body sysModel.SysApi true "删除api"
+// @Param data body model.SysApi true "删除api"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/deleteApi [post]
 func DeleteApi(c *gin.Context) {
@@ -52,18 +52,12 @@ func DeleteApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取API列表"
+// @Param data body model.SearchApiParams true "分页获取API列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiList [post]
 func GetApiList(c *gin.Context) {
 	// 此结构体仅本方法使用
-	type searchParams struct {
-		model.SysApi
-		model.PageInfo
-		OrderKey string `json:"orderKey"`
-		Desc     bool   `json:"desc"`
-	}
-	var sp searchParams
+	var sp model.SearchApiParams
 	_ = c.ShouldBindJSON(&sp)
 	err, list, total := sp.SysApi.GetInfoList(sp.PageInfo, sp.OrderKey, sp.Desc)
 	if err != nil {
@@ -83,11 +77,11 @@ func GetApiList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取用户列表"
+// @Param data body model.GetById true "根据id获取api"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiById [post]
 func GetApiById(c *gin.Context) {
-	var idInfo GetById
+	var idInfo model.GetById
 	_ = c.ShouldBindJSON(&idInfo)
 	err, api := new(model.SysApi).GetApiById(idInfo.Id)
 	if err != nil {
@@ -105,7 +99,7 @@ func GetApiById(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.CreateApiParams true "创建api"
+// @Param data body model.SysApi true "创建api"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/updateApi [post]
 func UpdateApi(c *gin.Context) {

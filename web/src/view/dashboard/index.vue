@@ -29,7 +29,7 @@
 import { mapGetters } from 'vuex'
 import Animition from '@/view/dashboard/component/animition.vue'
 export default {
-  name: 'Dashbord',
+  name: 'Dashboard',
   data() {
     return {
       drawer: false

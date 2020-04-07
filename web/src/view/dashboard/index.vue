@@ -27,7 +27,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import Animition from '@/view/dashbord/component/animition.vue'
+import Animition from '@/view/dashboard/component/animition.vue'
 export default {
   name: 'Dashbord',
   data() {

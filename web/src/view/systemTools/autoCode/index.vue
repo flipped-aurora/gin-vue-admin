@@ -80,7 +80,7 @@ const fieldTemplate={
         }
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue"
-import {toUpperCase} from "@/utils/toUpperCase.js"
+import {toUpperCase} from "@/utils/stringFun.js"
 import {createTemp} from "@/api/autoCode.js"
 export default {
     name:"autoCode",

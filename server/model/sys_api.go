@@ -130,7 +130,13 @@ func (a *SysApi) GetInfoList(info PageInfo, Order string, Desc bool) (err error,
 		} else {
 			db = db.Limit(limit).Offset(offset)
 			if Order != "" {
-				err = db.Order(Order+" desc", true).Find(&apiList).Error
+				var OrderStr string
+				if Desc {
+					OrderStr = Order + " desc"
+				} else {
+					OrderStr = Order
+				}
+				err = db.Order(OrderStr, true).Find(&apiList).Error
 			} else {
 				err = db.Order("api_group", true).Find(&apiList).Error
 			}

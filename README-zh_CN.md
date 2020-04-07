@@ -79,6 +79,7 @@ go build
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
+
 #####（2）无法翻墙
 由于国内没法安装 go.org/x 包下面的东西，需要先安装`gopm`
 
@@ -140,7 +141,7 @@ go run main.go;
 ## 4. 项目目录
 
 ```
-    ├─erver  	    （后端文件夹）
+    ├─server  	     （后端文件夹）
     │  ├─api            （API）
     │  ├─config         （配置包）
     │  ├─core  	        （內核）
@@ -152,7 +153,7 @@ go run main.go;
     │  ├─model          （结构体层）
     │  ├─resource       （资源）
     │  ├─router         （路由）
-    │  └─urtils	        （公共功能）
+    │  └─utils	        （公共功能）
     └─web            （前端文件）
         ├─public        （发布模板）
         └─src           （源码包）

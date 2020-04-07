@@ -101,7 +101,7 @@ func (a *SysApi) GetAllApis() (err error, apis []SysApi) {
 // @return    err             error
 // @return    list            interface{}
 // @return    total           int
-func (a *SysApi) GetInfoList(info PageInfo) (err error, list interface{}, total int) {
+func (a *SysApi) GetInfoList(info PageInfo, Order string, Desc bool) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
@@ -128,7 +128,12 @@ func (a *SysApi) GetInfoList(info PageInfo) (err error, list interface{}, total 
 		if err != nil {
 			return err, apiList, total
 		} else {
-			err = db.Limit(limit).Offset(offset).Order("api_group", true).Find(&apiList).Error
+			db = db.Limit(limit).Offset(offset)
+			if Order != "" {
+				err = db.Order(Order+" desc", true).Find(&apiList).Error
+			} else {
+				err = db.Order("api_group", true).Find(&apiList).Error
+			}
 		}
 		return err, apiList, total
 	}

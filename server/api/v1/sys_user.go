@@ -11,7 +11,6 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
-	uuid "github.com/satori/go.uuid"
 	"mime/multipart"
 	"time"
 )
@@ -20,10 +19,11 @@ const (
 	USER_HEADER_IMG_PATH string = "http://qmplusimg.henrongyi.top"
 	USER_HEADER_BUCKET   string = "qm-plus-img"
 )
+
 // @Tags Base
 // @Summary 用户注册账号
 // @Produce  application/json
-// @Param data body sysModel.SysUser true "用户注册接口"
+// @Param data body model.SysUser true "用户注册接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /base/register [post]
 func Register(c *gin.Context) {
@@ -45,7 +45,7 @@ func Register(c *gin.Context) {
 // @Tags Base
 // @Summary 用户登录
 // @Produce  application/json
-// @Param data body api.RegisterAndLoginStruct true "用户登录接口"
+// @Param data body model.RegisterAndLoginStruct true "用户登录接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
@@ -118,21 +118,15 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 	}
 }
 
-type ChangePasswordStutrc struct {
-	Username    string `json:"username"`
-	Password    string `json:"password"`
-	NewPassword string `json:"newPassword"`
-}
-
 // @Tags SysUser
 // @Summary 用户修改密码
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.ChangePasswordStutrc true "用户修改密码"
+// @Param data body model.ChangePasswordStutrc true "用户修改密码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/changePassword [put]
 func ChangePassword(c *gin.Context) {
-	var params ChangePasswordStutrc
+	var params model.ChangePasswordStutrc
 	_ = c.ShouldBindJSON(&params)
 	U := &model.SysUser{Username: params.Username, Password: params.Password}
 	if err, _ := U.ChangePassword(params.NewPassword); err != nil {
@@ -206,21 +200,16 @@ func GetUserList(c *gin.Context) {
 	}
 }
 
-type SetUserAuth struct {
-	UUID        uuid.UUID `json:"uuid"`
-	AuthorityId string    `json:"authorityId"`
-}
-
 // @Tags SysUser
 // @Summary 设置用户权限
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body api.SetUserAuth true "设置用户权限"
+// @Param data body model.SetUserAuth true "设置用户权限"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthority [post]
 func SetUserAuthority(c *gin.Context) {
-	var sua SetUserAuth
+	var sua model.SetUserAuth
 	_ = c.ShouldBindJSON(&sua)
 	err := new(model.SysUser).SetUserAuthority(sua.UUID, sua.AuthorityId)
 	if err != nil {

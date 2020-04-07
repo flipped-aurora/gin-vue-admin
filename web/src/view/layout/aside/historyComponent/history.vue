@@ -1,6 +1,6 @@
 <template>
           <div class="router-history">
-            <el-tabs v-model="activeValue" type="card" :closable="!(historys.length==1&&this.$route.name=='dashbord')" @tab-click="changeTab" @tab-remove="removeTab">
+            <el-tabs v-model="activeValue" type="card" :closable="!(historys.length==1&&this.$route.name=='dashboard')" @tab-click="changeTab" @tab-remove="removeTab">
               <el-tab-pane
                 v-for="item in historys"
                 :key="item.name"
@@ -17,13 +17,13 @@ export default {
     data(){
         return{
             historys:[],
-            activeValue:"dashbord"
+            activeValue:"dashboard"
         }
     },
     created(){
         const initHistorys = [
                 {
-                name:"dashbord",
+                name:"dashboard",
                 meta:{
                     title:"仪表盘"
                 }
@@ -49,7 +49,7 @@ export default {
            const index = this.historys.findIndex(item=>item.name == tab)
            if(this.$route.name == tab){
                if(this.historys.length==1){
-                   this.$router.push({name:"dashbord"})
+                   this.$router.push({name:"dashboard"})
                }else{
                     if(index<this.historys.length-1){
                         this.$router.push({name:this.historys[index+1].name})

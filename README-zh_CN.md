@@ -234,9 +234,9 @@ go run main.go;
 |  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
-| 蒋 | 杜 | 严 | 杜 | 尹 | 宋 |
+| 蒋 | 尹 | 严 | 杜 | 印 | 宋 |
 |  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <src img=""> | <src img=""> | <img src=""> | <src img=""> | <src img=""> | <src img=""> |
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
 
 ### - QQ交流群：622360840
 ### - 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
@@ -247,10 +247,10 @@ go run main.go;
 |  昵称   | 项目职务  | 姓  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
-| [@krank666](https://github.com/krank666)  | 前端开发 | 印 |
+| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
 | [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
 | [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
-| [@granty1](https://github.com/granty1)  | 后台开发 | 尹 |
+| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
 
 ## 12. 捐赠

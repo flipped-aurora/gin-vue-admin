@@ -247,10 +247,10 @@ go run main.go;
 |  昵称   | 项目职务  | 姓  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
-| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
+| [@granty1](https://github.com/granty1)  | 前端开发 | 尹 |
 | [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
 | [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
-| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
+| [@krank666](https://github.com/krank666)  | 后台开发 | 印 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
 
 ## 12. 捐赠

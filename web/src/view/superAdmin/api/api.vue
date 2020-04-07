@@ -26,12 +26,12 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="60" prop="ID"></el-table-column>
-      <el-table-column label="api路径" min-width="150" prop="path"></el-table-column>
-      <el-table-column label="api分组" min-width="150" prop="apiGroup"></el-table-column>
-      <el-table-column label="api简介" min-width="150" prop="description"></el-table-column>
-      <el-table-column label="请求" min-width="150" prop="method">
+    <el-table @sort-change="sortChange" :data="tableData" border stripe>
+      <el-table-column sortable="custom" label="id" min-width="60" prop="ID"></el-table-column>
+      <el-table-column sortable="custom" label="api路径" min-width="150" prop="path"></el-table-column>
+      <el-table-column sortable="custom" label="api分组" min-width="150" prop="apiGroup"></el-table-column>
+      <el-table-column sortable="custom" label="api简介" min-width="150" prop="description"></el-table-column>
+      <el-table-column sortable="custom" label="请求" min-width="150" prop="method">
         <template slot-scope="scope">
           <div>
             {{scope.row.method}}
@@ -107,7 +107,7 @@ import {
   deleteApi
 } from '@/api/api'
 import infoList from '@/components/mixins/infoList'
-
+import {toSQLLine} from '@/utils/stringFun'
 const methodOptions = [
   {
     value: 'POST',
@@ -160,6 +160,14 @@ export default {
     }
   },
   methods: {
+    // 排序
+    sortChange({prop,order}){
+      if(prop){
+        this.searchInfo.orderKey = toSQLLine(prop)
+        this.searchInfo.desc = order=="descending"
+      }
+     this.getTableData()
+    },
     //条件搜索前端看此方法
     onSubmit() {
       this.page = 1

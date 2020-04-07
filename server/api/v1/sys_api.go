@@ -45,11 +45,6 @@ func DeleteApi(c *gin.Context) {
 	}
 }
 
-type AuthAndPathIn struct {
-	AuthorityId string `json:"authorityId"`
-	ApiIds      []uint `json:"apiIds"`
-}
-
 //条件搜索后端看此api
 
 // @Tags SysApi
@@ -65,10 +60,12 @@ func GetApiList(c *gin.Context) {
 	type searchParams struct {
 		model.SysApi
 		model.PageInfo
+		OrderKey string `json:"orderKey"`
+		Desc     bool   `json:"desc"`
 	}
 	var sp searchParams
 	_ = c.ShouldBindJSON(&sp)
-	err, list, total := sp.SysApi.GetInfoList(sp.PageInfo)
+	err, list, total := sp.SysApi.GetInfoList(sp.PageInfo, sp.OrderKey, sp.Desc)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {

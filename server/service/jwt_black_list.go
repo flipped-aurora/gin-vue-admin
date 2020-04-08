@@ -19,7 +19,7 @@ func JsonInBlacklist(j *model.JwtBlacklist) (err error) {
 // @auth                     （2020/04/05  20:22 ）
 // @param     newPassword     string
 // @return    err             error
-func IsBlacklist(Jwt string, j model.JwtBlacklist) bool {
+func IsBlacklist(Jwt string, j *model.JwtBlacklist) bool {
 	isNotFound := global.GVA_DB.Where("jwt = ?", Jwt).First(j).RecordNotFound()
 	return !isNotFound
 }
@@ -43,4 +43,3 @@ func SetRedisJWT(j model.JwtBlacklist, userName string) (err error) {
 	err = global.GVA_REDIS.Set(userName, j.Jwt, 1000*1000*1000*60*60*24*7).Err()
 	return err
 }
-

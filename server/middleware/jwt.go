@@ -26,7 +26,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if service.IsBlacklist(token,modelToken) {
+		if service.IsBlacklist(token, &modelToken) {
 			response.Result(response.ERROR, gin.H{
 				"reload": true,
 			}, "您的帐户异地登陆或令牌失效", c)
@@ -66,8 +66,6 @@ var (
 	TokenInvalid     error = errors.New("Couldn't handle this token:")
 )
 
-
-
 func NewJWT() *JWT {
 	return &JWT{
 		[]byte(global.GVA_CONFIG.JWT.SigningKey),
@@ -75,7 +73,7 @@ func NewJWT() *JWT {
 }
 
 //创建一个token
-func (j *JWT) CreateToken(claims request. CustomClaims) (string, error) {
+func (j *JWT) CreateToken(claims request.CustomClaims) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString(j.SigningKey)
 }

@@ -19,8 +19,8 @@ func CreateWorkFlow(c *gin.Context) {
 	_ = c.ShouldBindJSON(&wk)
 	err := service.Create(wk)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "获取成功", c)
+		response.OkWithMessage("获取成功", c)
 	}
 }

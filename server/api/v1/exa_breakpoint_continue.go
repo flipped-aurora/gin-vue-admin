@@ -3,6 +3,8 @@ package v1
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
+	_ "gin-vue-admin/model/response"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
@@ -26,28 +28,28 @@ func BreakpointContinue(c *gin.Context) {
 	chunkTotal, _ := strconv.Atoi(c.Request.FormValue("chunkTotal"))
 	_, FileHeader, err := c.Request.FormFile("file")
 	if err != nil {
-		response.Result(response.SUCCESS, nil, fmt.Sprintf("%v", err), c)
+		response.FailWithMessage(err.Error(), c)
 	} else {
 		f, err := FileHeader.Open()
 		if err != nil {
-			response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
+			response.FailWithMessage(err.Error(), c)
 		} else {
 			cen, _ := ioutil.ReadAll(f)
 			defer f.Close()
 			if flag := utils.CheckMd5(cen, chunkMd5); flag {
 				err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 				if err != nil {
-					response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
+					response.FailWithMessage(err.Error(), c)
 				} else {
 					err, pathc := utils.BreakPointContinue(cen, fileName, chunkNumber, chunkTotal, fileMd5)
 					if err != nil {
-						response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
+						response.FailWithMessage(err.Error(), c)
 					} else {
 						err = service.CreateFileChunk(file.ID, pathc, chunkNumber)
 						if err != nil {
-							response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
+							response.FailWithMessage(err.Error(), c)
 						} else {
-							response.Result(response.SUCCESS, nil, "切片创建成功", c)
+							response.OkWithMessage("切片创建成功", c)
 						}
 					}
 				}
@@ -71,9 +73,9 @@ func FindFile(c *gin.Context) {
 	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal"))
 	err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 	if err != nil {
-		response.Result(response.ERROR, nil, fmt.Sprintf("查找失败：%v", err), c)
+		response.FailWithMessage("查找失败", c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"file": file}, "查找成功", c)
+		response.OkWithData(resp.FileResponse{File: file}, c)
 	}
 }
 
@@ -90,9 +92,9 @@ func BreakpointContinueFinish(c *gin.Context) {
 	fileName := c.Query("fileName")
 	err, filePath := utils.MakeFile(fileName, fileMd5)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{"filePath": filePath}, fmt.Sprintf("文件创建失败：%v", err), c)
+		response.FailWithDetailed(response.ERROR, resp.FilePathResponse{FilePath: filePath}, fmt.Sprintf("文件创建失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"filePath": filePath}, "文件创建成功", c)
+		response.OkDetailed(resp.FilePathResponse{FilePath: filePath}, "文件创建成功", c)
 	}
 }
 
@@ -111,8 +113,8 @@ func RemoveChunk(c *gin.Context) {
 	err := utils.RemoveChunk(fileMd5)
 	err = service.DeleteFileChunk(fileMd5, fileName, filePath)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{"filePath": filePath}, fmt.Sprintf("缓存切片删除失败：%v", err), c)
+		response.FailWithDetailed(response.ERROR, resp.FilePathResponse{FilePath: filePath}, fmt.Sprintf("缓存切片删除失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"filePath": filePath}, "缓存切片删除成功", c)
+		response.OkDetailed(resp.FilePathResponse{FilePath: filePath}, "缓存切片删除成功", c)
 	}
 }

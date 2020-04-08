@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -21,9 +22,9 @@ func GetMenu(c *gin.Context) {
 	waitUse := claims.(*request.CustomClaims)
 	err, menus := service.GetMenuTree(waitUse.AuthorityId)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"menus": menus}, "获取成功", c)
+		response.OkWithData(resp.SysMenusResponse{Menus: menus}, c)
 	}
 }
 
@@ -40,9 +41,9 @@ func GetMenuList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, menuList, total := service.GetInfoList(pageInfo)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
+		response.OkDetailed(gin.H{
 			"list":     menuList,
 			"total":    total,
 			"page":     pageInfo.Page,
@@ -64,9 +65,9 @@ func AddBaseMenu(c *gin.Context) {
 	_ = c.ShouldBindJSON(&menu)
 	err := service.AddBaseMenu(menu)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("添加失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "添加成功", c)
+		response.OkWithMessage("添加成功", c)
 	}
 }
 
@@ -80,9 +81,9 @@ func AddBaseMenu(c *gin.Context) {
 func GetBaseMenuTree(c *gin.Context) {
 	err, menus := service.GetBaseMenuTree()
 	if err != nil {
-		response.Result(response.ERROR, gin.H{"menus": menus}, fmt.Sprintf("获取失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"menus": menus}, "获取成功", c)
+		response.OkWithData(resp.SysBaseMenusResponse{Menus: menus}, c)
 
 	}
 }
@@ -101,9 +102,9 @@ func AddMenuAuthority(c *gin.Context) {
 
 	err := service.AddMenuAuthority(addMenuAuthorityInfo.Menus, addMenuAuthorityInfo.AuthorityId)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("添加失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "添加成功", c)
+		response.OkWithMessage("添加成功", c)
 	}
 }
 
@@ -120,7 +121,7 @@ func GetMenuAuthority(c *gin.Context) {
 	_ = c.ShouldBindJSON(&authorityIdInfo)
 	err, menus := service.GetMenuAuthority(authorityIdInfo.AuthorityId)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{"menus": menus}, fmt.Sprintf("添加失败，%v", err), c)
+		response.FailWithDetailed(response.ERROR, resp.SysMenusResponse{Menus: menus}, fmt.Sprintf("添加失败，%v", err), c)
 	} else {
 		response.Result(response.SUCCESS, gin.H{"menus": menus}, "获取成功", c)
 	}
@@ -139,9 +140,9 @@ func DeleteBaseMenu(c *gin.Context) {
 	_ = c.ShouldBindJSON(&idInfo)
 	err := service.DeleteBaseMenu(idInfo.Id)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
+		response.OkWithMessage("删除成功", c)
 
 	}
 }
@@ -159,9 +160,9 @@ func UpdateBaseMenu(c *gin.Context) {
 	_ = c.ShouldBindJSON(&menu)
 	err := service.UpdateBaseMenu(menu)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("修改失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "修改成功", c)
+		response.OkWithMessage("修改成功", c)
 	}
 }
 
@@ -178,8 +179,8 @@ func GetBaseMenuById(c *gin.Context) {
 	_ = c.ShouldBindJSON(&idInfo)
 	err, menu := service.GetBaseMenuById(idInfo.Id)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("查询失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("查询失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"menu": menu}, "查询成功", c)
+		response.OkWithData(resp.SysBaseMenuResponse{Menu: menu}, c)
 	}
 }

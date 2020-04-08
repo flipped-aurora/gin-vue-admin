@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -26,9 +27,9 @@ func CreateExaCustomer(c *gin.Context) {
 	cu.SysUserAuthorityID = waitUse.AuthorityId
 	err := service.CreateExaCustomer(cu)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "创建成功", c)
+		response.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -45,9 +46,9 @@ func DeleteExaCustomer(c *gin.Context) {
 	_ = c.ShouldBindJSON(&cu)
 	err := service.DeleteExaCustomer(cu)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
+		response.OkWithMessage("删除成功", c)
 	}
 }
 
@@ -64,9 +65,9 @@ func UpdateExaCustomer(c *gin.Context) {
 	_ = c.ShouldBindJSON(&cu)
 	err := service.UpdateExaCustomer(&cu)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("更新失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("更新失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "更新成功", c)
+		response.OkWithMessage("更新成功", c)
 	}
 }
 
@@ -83,11 +84,9 @@ func GetExaCustomer(c *gin.Context) {
 	_ = c.ShouldBindJSON(&cu)
 	err, customer := service.GetExaCustomer(cu.ID)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-			"customer": customer,
-		}, "创建", c)
+		response.OkWithData( resp.ExaCustomerResponse{Customer: customer}, c)
 	}
 }
 
@@ -106,7 +105,7 @@ func GetExaCustomerList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, customerList, total := service.GetCustomerInfoList(waitUse.AuthorityId, pageInfo)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("创建失败：%v", err), c)
 	} else {
 		response.Result(response.SUCCESS, gin.H{
 			"customer": customerList,

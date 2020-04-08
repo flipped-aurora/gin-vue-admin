@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -22,9 +23,9 @@ func CreateApi(c *gin.Context) {
 	_ = c.ShouldBindJSON(&api)
 	err := service.CreateApi(api)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "创建成功", c)
+		response.OkWithMessage("创建成功", c)
 	}
 }
 
@@ -41,9 +42,9 @@ func DeleteApi(c *gin.Context) {
 	_ = c.ShouldBindJSON(&a)
 	err := service.DeleteApi(a)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
+		response.OkWithMessage("删除成功", c)
 	}
 }
 
@@ -63,9 +64,9 @@ func GetApiList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&sp)
 	err, list, total := service.GetAPIInfoList(sp.SysApi, sp.PageInfo, sp.OrderKey, sp.Desc)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
+		response.OkDetailed(gin.H{
 			"list":     list,
 			"total":    total,
 			"page":     sp.PageInfo.Page,
@@ -87,12 +88,9 @@ func GetApiById(c *gin.Context) {
 	_ = c.ShouldBindJSON(&idInfo)
 	err, api := service.GetApiById(idInfo.Id)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-			"api": api,
-		}, "获取数据成功", c)
-
+		response.OkWithData(resp.SysAPIResponse{Api: api}, c)
 	}
 }
 
@@ -109,9 +107,9 @@ func UpdateApi(c *gin.Context) {
 	_ = c.ShouldBindJSON(&api)
 	err := service.UpdateApi(api)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("修改数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "修改数据成功", c)
+		response.OkWithMessage("修改数据成功", c)
 	}
 }
 
@@ -125,10 +123,8 @@ func UpdateApi(c *gin.Context) {
 func GetAllApis(c *gin.Context) {
 	err, apis := service.GetAllApis()
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-			"apis": apis,
-		}, "获取数据成功", c)
+		response.OkWithData(resp.SysAPIListResponse{Apis: apis}, c)
 	}
 }

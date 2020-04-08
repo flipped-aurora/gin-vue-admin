@@ -22,7 +22,7 @@ func CreateTemp(c *gin.Context) {
 	_ = c.ShouldBindJSON(&a)
 	err := service.CreateTemp(a)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 		os.Remove("./ginvueadmin.zip")
 	} else {
 		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) //fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名

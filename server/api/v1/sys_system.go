@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -17,9 +18,9 @@ import (
 func GetSystemConfig(c *gin.Context) {
 	err, config := service.GetSystemConfig()
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"config": config}, "获取成功", c)
+		response.OkWithData(resp.SysConfigResponse{Config: config}, c)
 	}
 }
 
@@ -35,9 +36,9 @@ func SetSystemConfig(c *gin.Context) {
 	_ = c.ShouldBindJSON(&sys)
 	err := service.SetSystemConfig(sys)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("设置失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("设置失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "设置成功", c)
+		response.OkWithData("设置成功", c)
 	}
 }
 
@@ -54,8 +55,8 @@ func ReloadSystem(c *gin.Context) {
 	_ = c.ShouldBindJSON(&sys)
 	err := service.SetSystemConfig(sys)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("设置失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("设置失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "设置成功", c)
+		response.OkWithMessage("设置成功", c)
 	}
 }

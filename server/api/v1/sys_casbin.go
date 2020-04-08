@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -21,9 +22,9 @@ func UpdateCasbin(c *gin.Context) {
 	_ = c.ShouldBindJSON(&cmr)
 	err := service.UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加规则失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("添加规则失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "添加规则成功", c)
+		response.OkWithMessage("添加规则成功", c)
 	}
 }
 
@@ -39,7 +40,7 @@ func GetPolicyPathByAuthorityId(c *gin.Context) {
 	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
 	paths := service.GetPolicyPathByAuthorityId(cmr.AuthorityId)
-	response.Result(response.SUCCESS, gin.H{"paths": paths}, "获取规则成功", c)
+	response.OkWithData(resp.PolicyPathResponse{Paths: paths}, c)
 }
 
 // @Tags casbin
@@ -54,5 +55,5 @@ func CasbinTest(c *gin.Context) {
 	// 测试restful以及占位符代码  随意书写
 	pathParam := c.Param("pathParam")
 	query := c.Query("query")
-	response.Result(response.SUCCESS, gin.H{"pathParam": pathParam, "query": query}, "获取规则成功", c)
+	response.OkDetailed(gin.H{"pathParam": pathParam, "query": query}, "获取规则成功", c)
 }

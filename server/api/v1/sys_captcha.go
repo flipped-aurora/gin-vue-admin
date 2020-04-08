@@ -3,6 +3,7 @@ package v1
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/utils"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
@@ -17,9 +18,9 @@ import (
 // @Router /base/captcha [post]
 func Captcha(c *gin.Context) {
 	captchaId := captcha.NewLen(global.GVA_CONFIG.Captcha.KeyLong)
-	response.Result(response.SUCCESS, gin.H{
-		"captchaId": captchaId,
-		"picPath":   "/base/captcha/" + captchaId + ".png",
+	response.OkDetailed(resp.SysCaptchaResponse{
+		CaptchaId: captchaId,
+		PicPath:   "/base/captcha/" + captchaId + ".png",
 	}, "验证码获取成功", c)
 }
 

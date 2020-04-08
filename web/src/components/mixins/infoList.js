@@ -19,7 +19,7 @@ export default {
         },
         async getTableData(page = this.page, pageSize = this.pageSize) {
             const table = await this.listApi({ page, pageSize, ...this.searchInfo })
-            this.tableData = table.data[this.listKey]
+            this.tableData = table.data.list
             this.total = table.data.total
             this.page = table.data.page
             this.pageSize = table.data.pageSize

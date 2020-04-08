@@ -88,7 +88,6 @@ export default {
   data() {
     return {
       listApi: getMenuList,
-      listKey: 'list',
       dialogFormVisible: false,
       form: {
         ID: 0,

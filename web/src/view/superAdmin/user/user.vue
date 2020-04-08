@@ -99,7 +99,6 @@ export default {
   data() {
     return {
       listApi: getUserList,
-      listKey: 'userList',
       path:path,
       authOptions: [],
       addUserDialog: false,

@@ -3,7 +3,7 @@ package v1
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
-	"gin-vue-admin/model"
+	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -35,7 +35,7 @@ func BreakpointContinue(c *gin.Context) {
 			cen, _ := ioutil.ReadAll(f)
 			defer f.Close()
 			if flag := utils.CheckMd5(cen, chunkMd5); flag {
-				err, file := new(model.ExaFile).FindOrCreateFile(fileMd5, fileName, chunkTotal)
+				err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 				if err != nil {
 					response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
 				} else {
@@ -43,7 +43,7 @@ func BreakpointContinue(c *gin.Context) {
 					if err != nil {
 						response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
 					} else {
-						err = file.CreateFileChunk(pathc, chunkNumber)
+						err = service.CreateFileChunk(file.ID, pathc, chunkNumber)
 						if err != nil {
 							response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
 						} else {
@@ -69,7 +69,7 @@ func FindFile(c *gin.Context) {
 	fileMd5 := c.Query("fileMd5")
 	fileName := c.Query("fileName")
 	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal"))
-	err, file := new(model.ExaFile).FindOrCreateFile(fileMd5, fileName, chunkTotal)
+	err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 	if err != nil {
 		response.Result(response.ERROR, nil, fmt.Sprintf("查找失败：%v", err), c)
 	} else {
@@ -109,7 +109,7 @@ func RemoveChunk(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath := c.Query("filePath")
 	err := utils.RemoveChunk(fileMd5)
-	err = new(model.ExaFile).DeleteFileChunk(fileMd5, fileName, filePath)
+	err = service.DeleteFileChunk(fileMd5, fileName, filePath)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{"filePath": filePath}, fmt.Sprintf("缓存切片删除失败：%v", err), c)
 	} else {

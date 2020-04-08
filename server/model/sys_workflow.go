@@ -1,7 +1,6 @@
 package model
 
 import (
-	"gin-vue-admin/global"
 	"github.com/jinzhu/gorm"
 )
 
@@ -23,13 +22,4 @@ type SysWorkflowStepInfo struct {
 	StepNo          float64 `json:"stepNo"`          // 步骤id （第几步）
 	StepAuthorityID string  `json:"stepAuthorityID"` // 操作者级别id
 	IsEnd           bool    `json:"isEnd"`           // 是否是完结流节点
-}
-
-// @title    Create
-// @description   create a workflow, 创建工作流
-// @auth                     （2020/04/05  20:22 ）
-// @return                    error
-func (wk *SysWorkflow) Create() error {
-	err := global.GVA_DB.Create(&wk).Error
-	return err
 }

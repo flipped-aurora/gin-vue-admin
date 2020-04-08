@@ -3,7 +3,8 @@ package v1
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,9 +17,9 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/UpdateCasbin [post]
 func UpdateCasbin(c *gin.Context) {
-	var cmr model.CasbinInReceive
+	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
-	err := new(model.CasbinModel).UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
+	err := service.UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("添加规则失败，%v", err), c)
 	} else {
@@ -35,9 +36,9 @@ func UpdateCasbin(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 func GetPolicyPathByAuthorityId(c *gin.Context) {
-	var cmr model.CasbinInReceive
+	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
-	paths := new(model.CasbinModel).GetPolicyPathByAuthorityId(cmr.AuthorityId)
+	paths := service.GetPolicyPathByAuthorityId(cmr.AuthorityId)
 	response.Result(response.SUCCESS, gin.H{"paths": paths}, "获取规则成功", c)
 }
 

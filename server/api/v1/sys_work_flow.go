@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +17,7 @@ import (
 func CreateWorkFlow(c *gin.Context) {
 	var wk model.SysWorkflow
 	_ = c.ShouldBindJSON(&wk)
-	err := wk.Create()
+	err := service.Create(wk)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败：%v", err), c)
 	} else {

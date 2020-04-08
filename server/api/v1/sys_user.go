@@ -6,6 +6,8 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/dchest/captcha"
 	"github.com/dgrijalva/jwt-go"
@@ -27,10 +29,10 @@ const (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /base/register [post]
 func Register(c *gin.Context) {
-	var R model.RegisterStruct
+	var R request.RegisterStruct
 	_ = c.ShouldBindJSON(&R)
 	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
-	err, user := user.Register()
+	err, user := service.Register(user)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{
 			"user": user,
@@ -49,11 +51,11 @@ func Register(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
-	var L model.RegisterAndLoginStruct
+	var L request.RegisterAndLoginStruct
 	_ = c.ShouldBindJSON(&L)
 	if captcha.VerifyString(L.CaptchaId, L.Captcha) {
 		U := &model.SysUser{Username: L.Username, Password: L.Password}
-		if err, user := U.Login(); err != nil {
+		if err, user := service.Login(U); err != nil {
 			response.Result(response.ERROR, gin.H{}, fmt.Sprintf("用户名密码错误或%v", err), c)
 		} else {
 			tokenNext(c, *user)
@@ -69,7 +71,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 	j := &middleware.JWT{
 		[]byte(global.GVA_CONFIG.JWT.SigningKey), // 唯一签名
 	}
-	clams := middleware.CustomClaims{
+	clams := request.CustomClaims{
 		UUID:        user.UUID,
 		ID:          user.ID,
 		NickName:    user.NickName,
@@ -87,9 +89,9 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		if global.GVA_CONFIG.System.UseMultipoint {
 			var loginJwt model.JwtBlacklist
 			loginJwt.Jwt = token
-			err, jwtStr := loginJwt.GetRedisJWT(user.Username)
+			err, jwtStr := service.GetRedisJWT(user.Username)
 			if err == redis.Nil {
-				err2 := loginJwt.SetRedisJWT(user.Username)
+				err2 := service.SetRedisJWT(loginJwt, user.Username)
 				if err2 != nil {
 					response.Result(response.ERROR, gin.H{}, "设置登录状态失败", c)
 				} else {
@@ -98,13 +100,13 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			} else if err != nil {
 				response.Result(response.ERROR, gin.H{}, fmt.Sprintf("%v", err), c)
 			} else {
-				var blackjWT model.JwtBlacklist
-				blackjWT.Jwt = jwtStr
-				err3 := blackjWT.JsonInBlacklist()
+				var blackJWT model.JwtBlacklist
+				blackJWT.Jwt = jwtStr
+				err3 := service.JsonInBlacklist(blackJWT)
 				if err3 != nil {
 					response.Result(response.ERROR, gin.H{}, "jwt作废失败", c)
 				} else {
-					err2 := loginJwt.SetRedisJWT(user.Username)
+					err2 := service.SetRedisJWT(loginJwt, user.Username)
 					if err2 != nil {
 						response.Result(response.ERROR, gin.H{}, "设置登录状态失败", c)
 					} else {
@@ -126,10 +128,10 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/changePassword [put]
 func ChangePassword(c *gin.Context) {
-	var params model.ChangePasswordStutrc
+	var params request.ChangePasswordStruct
 	_ = c.ShouldBindJSON(&params)
 	U := &model.SysUser{Username: params.Username, Password: params.Password}
-	if err, _ := U.ChangePassword(params.NewPassword); err != nil {
+	if err, _ := service.ChangePassword(U, params.NewPassword); err != nil {
 		response.Result(response.ERROR, gin.H{}, "修改失败，请检查用户名密码", c)
 	} else {
 		response.Result(response.SUCCESS, gin.H{}, "修改成功", c)
@@ -153,7 +155,7 @@ func UploadHeaderImg(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	//获取头像文件
 	// 这里我们通过断言获取 claims内的所有内容
-	waitUse := claims.(*middleware.CustomClaims)
+	waitUse := claims.(*request.CustomClaims)
 	uuid := waitUse.UUID
 	_, header, err := c.Request.FormFile("headerImg")
 	//便于找到用户 以后从jwt中取
@@ -166,7 +168,7 @@ func UploadHeaderImg(c *gin.Context) {
 			response.Result(response.ERROR, gin.H{}, fmt.Sprintf("接收返回值失败，%v", err), c)
 		} else {
 			//修改数据库后得到修改后的user并且返回供前端使用
-			err, user := new(model.SysUser).UploadHeaderImg(uuid, filePath)
+			err, user := service.UploadHeaderImg(uuid, filePath)
 			if err != nil {
 				response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改数据库链接失败，%v", err), c)
 			} else {
@@ -185,9 +187,9 @@ func UploadHeaderImg(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserList [post]
 func GetUserList(c *gin.Context) {
-	var pageInfo model.PageInfo
+	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	err, list, total := new(model.SysUser).GetInfoList(pageInfo)
+	err, list, total := service.GetUserInfoList(pageInfo)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -209,9 +211,9 @@ func GetUserList(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthority [post]
 func SetUserAuthority(c *gin.Context) {
-	var sua model.SetUserAuth
+	var sua request.SetUserAuth
 	_ = c.ShouldBindJSON(&sua)
-	err := new(model.SysUser).SetUserAuthority(sua.UUID, sua.AuthorityId)
+	err := service.SetUserAuthority(sua.UUID, sua.AuthorityId)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改失败，%v", err), c)
 	} else {

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -18,7 +20,7 @@ import (
 func CreateApi(c *gin.Context) {
 	var api model.SysApi
 	_ = c.ShouldBindJSON(&api)
-	err := api.CreateApi()
+	err := service.CreateApi(api)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
 	} else {
@@ -37,7 +39,7 @@ func CreateApi(c *gin.Context) {
 func DeleteApi(c *gin.Context) {
 	var a model.SysApi
 	_ = c.ShouldBindJSON(&a)
-	err := a.DeleteApi()
+	err := service.DeleteApi(a)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
 	} else {
@@ -57,9 +59,9 @@ func DeleteApi(c *gin.Context) {
 // @Router /api/getApiList [post]
 func GetApiList(c *gin.Context) {
 	// 此结构体仅本方法使用
-	var sp model.SearchApiParams
+	var sp request.SearchApiParams
 	_ = c.ShouldBindJSON(&sp)
-	err, list, total := sp.SysApi.GetInfoList(sp.PageInfo, sp.OrderKey, sp.Desc)
+	err, list, total := service.GetAPIInfoList(sp.SysApi, sp.PageInfo, sp.OrderKey, sp.Desc)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -81,9 +83,9 @@ func GetApiList(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiById [post]
 func GetApiById(c *gin.Context) {
-	var idInfo model.GetById
+	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
-	err, api := new(model.SysApi).GetApiById(idInfo.Id)
+	err, api := service.GetApiById(idInfo.Id)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
@@ -105,7 +107,7 @@ func GetApiById(c *gin.Context) {
 func UpdateApi(c *gin.Context) {
 	var api model.SysApi
 	_ = c.ShouldBindJSON(&api)
-	err := api.UpdateApi()
+	err := service.UpdateApi(api)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改数据失败，%v", err), c)
 	} else {
@@ -121,7 +123,7 @@ func UpdateApi(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getAllApis [post]
 func GetAllApis(c *gin.Context) {
-	err, apis := new(model.SysApi).GetAllApis()
+	err, apis := service.GetAllApis()
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {

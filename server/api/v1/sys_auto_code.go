@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 	"os"
 )
@@ -19,7 +20,7 @@ import (
 func CreateTemp(c *gin.Context) {
 	var a model.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
-	err := a.CreateTemp()
+	err := service.CreateTemp(a)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
 		os.Remove("./ginvueadmin.zip")

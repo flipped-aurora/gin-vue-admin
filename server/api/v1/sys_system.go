@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,7 +15,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /system/getSystemConfig [post]
 func GetSystemConfig(c *gin.Context) {
-	err, config := new(model.System).GetSystemConfig()
+	err, config := service.GetSystemConfig()
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败，%v", err), c)
 	} else {
@@ -32,7 +33,7 @@ func GetSystemConfig(c *gin.Context) {
 func SetSystemConfig(c *gin.Context) {
 	var sys model.System
 	_ = c.ShouldBindJSON(&sys)
-	err := sys.SetSystemConfig()
+	err := service.SetSystemConfig(sys)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("设置失败，%v", err), c)
 	} else {
@@ -51,7 +52,7 @@ func SetSystemConfig(c *gin.Context) {
 func ReloadSystem(c *gin.Context) {
 	var sys model.System
 	_ = c.ShouldBindJSON(&sys)
-	err := sys.SetSystemConfig()
+	err := service.SetSystemConfig(sys)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("设置失败，%v", err), c)
 	} else {

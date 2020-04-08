@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,10 +17,10 @@ import (
 // @Router /jwt/jsonInBlacklist [post]
 func JsonInBlacklist(c *gin.Context) {
 	token := c.Request.Header.Get("x-token")
-	ModelJwt := model.JwtBlacklist{
+	modelJwt := model.JwtBlacklist{
 		Jwt: token,
 	}
-	err := ModelJwt.JsonInBlacklist()
+	err := service.JsonInBlacklist(modelJwt)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("jwt作废失败，%v", err), c)
 	} else {

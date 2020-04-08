@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 	"strings"
@@ -36,7 +38,7 @@ func UploadFile(c *gin.Context) {
 			file.Tag = s[len(s)-1]
 			file.Key = key
 			if noSave == "0" {
-				err = file.Upload()
+				err = service.Upload(file)
 			}
 			if err != nil {
 				response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改数据库链接失败，%v", err), c)
@@ -58,7 +60,7 @@ func UploadFile(c *gin.Context) {
 func DeleteFile(c *gin.Context) {
 	var file model.ExaFileUploadAndDownload
 	_ = c.ShouldBindJSON(&file)
-	err, f := file.FindFile()
+	err, f := service.FindFile(file.ID)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
 	} else {
@@ -67,7 +69,7 @@ func DeleteFile(c *gin.Context) {
 			response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
 
 		} else {
-			err = f.DeleteFile()
+			err = service.DeleteFile(f)
 			if err != nil {
 				response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
 			} else {
@@ -86,9 +88,9 @@ func DeleteFile(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /fileUploadAndDownload/getFileList [post]
 func GetFileList(c *gin.Context) {
-	var pageInfo model.PageInfo
+	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	err, list, total := new(model.ExaFileUploadAndDownload).GetInfoList(pageInfo)
+	err, list, total := service.GetFileRecordInfoList(pageInfo)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {

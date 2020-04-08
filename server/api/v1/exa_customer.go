@@ -3,8 +3,9 @@ package v1
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
-	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,10 +21,10 @@ func CreateExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
 	claims, _ := c.Get("claims")
-	waitUse := claims.(*middleware.CustomClaims)
+	waitUse := claims.(*request.CustomClaims)
 	cu.SysUserID = waitUse.ID
 	cu.SysUserAuthorityID = waitUse.AuthorityId
-	err := cu.CreateExaCustomer()
+	err := service.CreateExaCustomer(cu)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败：%v", err), c)
 	} else {
@@ -42,7 +43,7 @@ func CreateExaCustomer(c *gin.Context) {
 func DeleteExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
-	err := cu.DeleteExaCustomer()
+	err := service.DeleteExaCustomer(cu)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败：%v", err), c)
 	} else {
@@ -61,7 +62,7 @@ func DeleteExaCustomer(c *gin.Context) {
 func UpdateExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
-	err := cu.UpdateExaCustomer()
+	err := service.UpdateExaCustomer(&cu)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("更新失败：%v", err), c)
 	} else {
@@ -80,7 +81,7 @@ func UpdateExaCustomer(c *gin.Context) {
 func GetExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
-	err, customer := cu.GetExaCustomer()
+	err, customer := service.GetExaCustomer(cu.ID)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取失败：%v", err), c)
 	} else {
@@ -100,12 +101,10 @@ func GetExaCustomer(c *gin.Context) {
 // @Router /customer/getExaCustomerList [post]
 func GetExaCustomerList(c *gin.Context) {
 	claims, _ := c.Get("claims")
-	waitUse := claims.(*middleware.CustomClaims)
-	var cu model.ExaCustomer
-	cu.SysUserAuthorityID = waitUse.AuthorityId
-	var pageInfo model.PageInfo
+	waitUse := claims.(*request.CustomClaims)
+	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	err, customerList, total := cu.GetInfoList(pageInfo)
+	err, customerList, total := service.GetCustomerInfoList(waitUse.AuthorityId, pageInfo)
 	if err != nil {
 		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败：%v", err), c)
 	} else {

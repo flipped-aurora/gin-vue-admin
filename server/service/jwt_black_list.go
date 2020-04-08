@@ -9,7 +9,7 @@ import (
 // @description   create jwt blacklist
 // @auth                     （2020/04/05  20:22 ）
 // @return    err             error
-func JsonInBlacklist(j model.JwtBlacklist) (err error) {
+func JsonInBlacklist(j *model.JwtBlacklist) (err error) {
 	err = global.GVA_DB.Create(j).Error
 	return
 }

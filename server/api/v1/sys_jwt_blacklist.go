@@ -20,7 +20,7 @@ func JsonInBlacklist(c *gin.Context) {
 	modelJwt := model.JwtBlacklist{
 		Jwt: token,
 	}
-	err := service.JsonInBlacklist(modelJwt)
+	err := service.JsonInBlacklist(&modelJwt)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("jwt作废失败，%v", err), c)
 	} else {

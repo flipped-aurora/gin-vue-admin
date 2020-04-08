@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -22,11 +23,9 @@ func CreateAuthority(c *gin.Context) {
 	_ = c.ShouldBindJSON(&auth)
 	err, authBack := service.CreateAuthority(&auth)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-			"authority": authBack,
-		}, fmt.Sprintf("创建成功，%v", err), c)
+		response.OkWithData(resp.SysAuthorityResponse{Authority: *authBack}, c)
 	}
 }
 
@@ -44,9 +43,9 @@ func DeleteAuthority(c *gin.Context) {
 	//删除角色之前需要判断是否有用户正在使用此角色
 	err := service.DeleteAuthority(a)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "删除失败", c)
+		response.OkWithMessage("删除成功", c)
 	}
 }
 
@@ -63,9 +62,9 @@ func GetAuthorityList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := service.GetAuthorityInfoList(pageInfo)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
+		response.OkDetailed(gin.H{
 			"list":     list,
 			"total":    total,
 			"page":     pageInfo.Page,
@@ -87,8 +86,8 @@ func SetDataAuthority(c *gin.Context) {
 	_ = c.ShouldBindJSON(&auth)
 	err := service.SetDataAuthority(auth)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("设置关联失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("设置关联失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "获取数据成功", c)
+		response.Ok(c)
 	}
 }

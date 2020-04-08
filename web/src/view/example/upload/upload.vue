@@ -68,22 +68,8 @@ export default {
     return {
       fullscreenLoading:false,
       listApi: getFileList,
-      listKey: 'list',
       path: path,
-      tableData: [
-        {
-          UpdatedAt: '2019-10-25',
-          name: '文件名.jpg',
-          url: 'http://qmplusimg.henrongyi.top/1571321688timg.jpg',
-          tag: 'jpg'
-        },
-        {
-          UpdatedAt: '2019-10-25',
-          name: '文件名.jpg',
-          url: 'http://qmplusimg.henrongyi.top/157162774820191015140921496.gif',
-          tag: 'gif'
-        }
-      ]
+      tableData: []
     }
   },
   computed: {

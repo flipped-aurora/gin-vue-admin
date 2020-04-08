@@ -76,7 +76,6 @@ export default {
   data() {
     return {
       listApi: getAuthorityList,
-      listKey: 'list',
       drawer: false,
       activeRow: {},
       activeUserId: 0,

@@ -89,7 +89,6 @@ export default {
   data(){
     return{
       listApi: getExaCustomerList,
-      listKey: 'customer',
       dialogFormVisible:false,
       visible:false,
       type:"",

@@ -66,12 +66,12 @@ func GetApiList(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.OkDetailed(gin.H{
-			"list":     list,
-			"total":    total,
-			"page":     sp.PageInfo.Page,
-			"pageSize": sp.PageInfo.PageSize,
-		}, "删除成功", c)
+		response.OkWithData(resp.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     sp.PageInfo.Page,
+			PageSize: sp.PageInfo.PageSize,
+		}, c)
 	}
 }
 

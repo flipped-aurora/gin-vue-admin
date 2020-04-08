@@ -86,7 +86,7 @@ func GetExaCustomer(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
 	} else {
-		response.OkWithData( resp.ExaCustomerResponse{Customer: customer}, c)
+		response.OkWithData(resp.ExaCustomerResponse{Customer: customer}, c)
 	}
 }
 
@@ -107,11 +107,11 @@ func GetExaCustomerList(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-			"customer": customerList,
-			"total":    total,
-			"page":     pageInfo.Page,
-			"pageSize": pageInfo.PageSize,
-		}, "创建成功", c)
+		response.OkWithData(resp.PageResult{
+			List:     customerList,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, c)
 	}
 }

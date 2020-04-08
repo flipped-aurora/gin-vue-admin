@@ -95,11 +95,11 @@ func GetFileList(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.OkDetailed(gin.H{
-			"list":     list,
-			"total":    total,
-			"page":     pageInfo.Page,
-			"pageSize": pageInfo.PageSize,
-		}, "获取数据成功", c)
+		response.OkWithData(resp.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, c)
 	}
 }

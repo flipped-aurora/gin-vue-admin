@@ -137,7 +137,6 @@ export default {
   data() {
     return {
       listApi: getApiList,
-      listKey: 'list',
       dialogFormVisible: false,
       form: {
         path: '',

@@ -1,4 +1,4 @@
-name: Go
+name: gin-vue-admin ci&cd
 
 on:
   push:
@@ -10,6 +10,11 @@ jobs:
     name: Build
     runs-on: [ self-hosted ]
     steps:
+
+    - name: Check out the repository
+      uses: actions/checkout@v2
+      run: ls -la
+
     - name: Get dependencies
       run: |
         go get -v -t -d ./...
@@ -17,10 +22,7 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-    - name: Check dir
-      run : |
-        pwd
-        ls -la
+        
     - name: Build
       run: |
         cd server

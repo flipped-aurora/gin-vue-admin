@@ -30,6 +30,7 @@ jobs:
 
     - name: Build
       run: |
+        su root -p $ROOT_PASS
         go build -o /usr/local/projects/gin-vue/run -v
       working-directory: ./server
 
@@ -44,6 +45,7 @@ jobs:
 
     - name: Move config file 
       run: | 
+        su root -p $ROOT_PASS
         mv ./config.yaml /usr/local/projects/gin-vue/config.yaml
       working-directory: ./server
 

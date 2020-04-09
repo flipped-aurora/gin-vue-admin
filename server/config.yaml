@@ -10,9 +10,9 @@ jwt:
 
 # mysql connect configuration
 mysql:
-    username: root
-    password: 'Aa@6447985'
-    path: '127.0.0.1:3306'
+    username: %{username}
+    password: %{password}
+    path: %{address}
     db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10

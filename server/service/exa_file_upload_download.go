@@ -45,11 +45,7 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
-	if err != nil {
-		return
-	} else {
-		var fileLists []model.ExaFileUploadAndDownload
-		err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
-		return err, fileLists, total
-	}
+	var fileLists []model.ExaFileUploadAndDownload
+	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
+	return err, fileLists, total
 }

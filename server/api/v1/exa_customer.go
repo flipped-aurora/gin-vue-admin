@@ -105,7 +105,7 @@ func GetExaCustomerList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, customerList, total := service.GetCustomerInfoList(waitUse.AuthorityId, pageInfo)
 	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败：%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
 	} else {
 		response.OkWithData(resp.PageResult{
 			List:     customerList,

@@ -30,7 +30,7 @@ func CreateApi(a model.SysApi) (err error) {
 // @return                    error
 func DeleteApi(a model.SysApi) (err error) {
 	err = global.GVA_DB.Delete(a).Error
-	ClearCasbin(1, a.Path,a.Method)
+	ClearCasbin(1, a.Path, a.Method)
 	return err
 }
 
@@ -45,44 +45,39 @@ func GetAPIInfoList(a model.SysApi, info request.PageInfo, Order string, Desc bo
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
+	var apiList []model.SysApi
+
+	if a.Path != "" {
+		db = db.Where("path LIKE ?", "%"+a.Path+"%")
+	}
+
+	if a.Description != "" {
+		db = db.Where("description LIKE ?", "%"+a.Description+"%")
+	}
+
+	if a.Method != "" {
+		db = db.Where("method = ?", a.Method)
+	}
+
+	err = db.Find(&apiList).Count(&total).Error
 
 	if err != nil {
-		return
-	} else {
-		var apiList []model.SysApi
-
-		if a.Path != "" {
-			db = db.Where("path LIKE ?", "%"+a.Path+"%")
-		}
-
-		if a.Description != "" {
-			db = db.Where("description LIKE ?", "%"+a.Description+"%")
-		}
-
-		if a.Method != "" {
-			db = db.Where("method = ?", a.Method)
-		}
-
-		err = db.Find(&apiList).Count(&total).Error
-
-		if err != nil {
-			return err, apiList, total
-		} else {
-			db = db.Limit(limit).Offset(offset)
-			if Order != "" {
-				var OrderStr string
-				if Desc {
-					OrderStr = Order + " desc"
-				} else {
-					OrderStr = Order
-				}
-				err = db.Order(OrderStr, true).Find(&apiList).Error
-			} else {
-				err = db.Order("api_group", true).Find(&apiList).Error
-			}
-		}
 		return err, apiList, total
+	} else {
+		db = db.Limit(limit).Offset(offset)
+		if Order != "" {
+			var OrderStr string
+			if Desc {
+				OrderStr = Order + " desc"
+			} else {
+				OrderStr = Order
+			}
+			err = db.Order(OrderStr, true).Find(&apiList).Error
+		} else {
+			err = db.Order("api_group", true).Find(&apiList).Error
+		}
 	}
+	return err, apiList, total
 }
 
 // @title    GetAllApis
@@ -114,7 +109,7 @@ func UpdateApi(a model.SysApi) (err error) {
 
 	err = global.GVA_DB.Where("id = ?", a.ID).First(&oldA).Error
 
-	if oldA.Path != a.Path || oldA.Method != a.Method{
+	if oldA.Path != a.Path || oldA.Method != a.Method {
 		flag := global.GVA_DB.Where("path = ? AND method = ?", a.Path, a.Method).Find(&model.SysApi{}).RecordNotFound()
 		if !flag {
 			return errors.New("存在相同api路径")
@@ -123,7 +118,7 @@ func UpdateApi(a model.SysApi) (err error) {
 	if err != nil {
 		return err
 	} else {
-		err = UpdateCasbinApi(oldA.Path, a.Path,oldA.Method,a.Method)
+		err = UpdateCasbinApi(oldA.Path, a.Path, oldA.Method, a.Method)
 		if err != nil {
 			return err
 		} else {

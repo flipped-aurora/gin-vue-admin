@@ -52,23 +52,19 @@ func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
-	if err != nil {
-		return
-	} else {
-		var a model.SysAuthority
-		a.AuthorityId = sysUserAuthorityID
-		err, auth := GetAuthorityInfo(a)
-		var dataId []string
-		for _, v := range auth.DataAuthorityId {
-			dataId = append(dataId, v.AuthorityId)
-		}
-		var CustomerList []model.ExaCustomer
-		err = db.Where("sys_user_authority_id in (?)", dataId).Find(&CustomerList).Count(&total).Error
-		if err != nil {
-			return err, CustomerList, total
-		} else {
-			err = db.Limit(limit).Offset(offset).Preload("SysUser").Where("sys_user_authority_id in (?)", dataId).Find(&CustomerList).Error
-		}
-		return err, CustomerList, total
+	var a model.SysAuthority
+	a.AuthorityId = sysUserAuthorityID
+	err, auth := GetAuthorityInfo(a)
+	var dataId []string
+	for _, v := range auth.DataAuthorityId {
+		dataId = append(dataId, v.AuthorityId)
 	}
+	var CustomerList []model.ExaCustomer
+	err = db.Where("sys_user_authority_id in (?)", dataId).Find(&CustomerList).Count(&total).Error
+	if err != nil {
+		return err, CustomerList, total
+	} else {
+		err = db.Limit(limit).Offset(offset).Preload("SysUser").Where("sys_user_authority_id in (?)", dataId).Find(&CustomerList).Error
+	}
+	return err, CustomerList, total
 }

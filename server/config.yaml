@@ -33,7 +33,7 @@ redis:
 # system configuration
 system:
     use-multipoint: false
-    env: 'develop'
+    env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
 
 # captcha configuration

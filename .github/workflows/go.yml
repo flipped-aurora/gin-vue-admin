@@ -30,7 +30,7 @@ jobs:
 
     - name: Build
       run: |
-        go build -v . 
+        go build -o /usr/local/projects/gin-vue/run -v
       working-directory: ./server
 
     - name: Modify config params
@@ -42,8 +42,8 @@ jobs:
         sed -i 's/%{redis_password}/'$REDIS_PASSWORD'/' config.yaml
       working-directory: ./server
 
-    - name: Run 
+    - name: Move config file 
       run: | 
-        nohup ./gin-vue-admin &
+        mv ./config.yaml /usr/local/projects/gin-vue/config.yaml
       working-directory: ./server
 

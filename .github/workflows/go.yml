@@ -19,14 +19,20 @@ jobs:
 
     - name: Get dependencies
       run: |
-        cd server
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
+      working-directory: ./server
 
     - name: Build
       run: |
-        go build -v .
+        go build -v . 
+      working-directory: ./server
+
+    - name: Run 
+      run: | 
+        nohup ./gin-vue-admin &
+      working-directory: ./server
 

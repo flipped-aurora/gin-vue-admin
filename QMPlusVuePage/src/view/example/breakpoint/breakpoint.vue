@@ -10,7 +10,7 @@
     <div>请上传不超过5MB的文件</div>
     <div class="list">
       <transition-group name="list" tag="p">
-        <div class="list-item" v-for="(item,i) in uploadList" v-bind:key="i" >
+        <div class="list-item" v-for="item in uploadList" :key="item" >
           <i class="el-icon-document"></i>
           <span>{{ item.name }}</span>
           <span v-if="file" class="percentage" >{{percentage}}%</span>
@@ -126,7 +126,6 @@ export default {
       this.sliceFile() // 上传切片
       if(this.percentage == 100){
         this.uploadList.push(this.file)
-        console.log(this.uploadList)
       }
 
     },

@@ -33,9 +33,9 @@ jobs:
     - name: Modify config params
       run: |
         echo $LANG
-        sed -i 's/%{address}/$MYSQL_ADDR/' config.yaml
-        sed -i 's/%{username}/$MYSQL_USERNAME/' config.yaml
-        sed -i 's/%{password}/$MSQL_PASSWORD/' config.yaml
+        sed -i 's/%{address}/'$MYSQL_ADDR'/' config.yaml
+        sed -i 's/%{username}/'$MYSQL_USERNAME'/' config.yaml
+        sed -i 's/%{password}/'$MSQL_PASSWORD'/' config.yaml
         cat config.yaml
       working-directory: ./server
     - name: Run 

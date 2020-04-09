@@ -26,7 +26,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if service.IsBlacklist(token, &modelToken) {
+		if service.IsBlacklist(token, modelToken) {
 			response.Result(response.ERROR, gin.H{
 				"reload": true,
 			}, "您的帐户异地登陆或令牌失效", c)

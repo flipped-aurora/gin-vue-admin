@@ -14,18 +14,18 @@ import (
 // @auth                     （2020/04/05  20:22 ）
 // @return    err             error
 // @return    userInter       *SysUser
-func  Register(u *model.SysUser) (err error, userInter *model.SysUser) {
+func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	var user model.SysUser
 	//判断用户名是否注册
 	notRegister := global.GVA_DB.Where("username = ?", u.Username).First(&user).RecordNotFound()
 	//notRegister为false表明读取到了 不能注册
 	if !notRegister {
-		return errors.New("用户名已注册"), nil
+		return errors.New("用户名已注册"), userInter
 	} else {
 		// 否则 附加uuid 密码md5简单加密 注册
 		u.Password = utils.MD5V([]byte(u.Password))
 		u.UUID = uuid.NewV4()
-		err = global.GVA_DB.Create(u).Error
+		err = global.GVA_DB.Create(&u).Error
 	}
 	return err, u
 }
@@ -52,7 +52,7 @@ func Login(u *model.SysUser) (err error, userInter *model.SysUser) {
 // @param     newPassword     string
 // @return    err             error
 // @return    userInter       *SysUser
-func  ChangePassword(u *model.SysUser, newPassword string) (err error, userInter *model.SysUser) {
+func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter *model.SysUser) {
 	var user model.SysUser
 	//后期修改jwt+password模式
 	u.Password = utils.MD5V([]byte(u.Password))
@@ -86,7 +86,7 @@ func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total 
 // @param     uuid            UUID
 // @param     authorityId     string
 // @return    err             error
-func  SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
+func SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
 	err = global.GVA_DB.Where("uuid = ?", uuid).First(&model.SysUser{}).Update("authority_id", authorityId).Error
 	return err
 }
@@ -103,4 +103,3 @@ func UploadHeaderImg(uuid uuid.UUID, filePath string) (err error, userInter *mod
 	err = global.GVA_DB.Where("uuid = ?", uuid).First(&user).Update("header_img", filePath).First(&user).Error
 	return err, &user
 }
-

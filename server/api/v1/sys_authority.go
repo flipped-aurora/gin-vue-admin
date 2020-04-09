@@ -21,11 +21,11 @@ import (
 func CreateAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
-	err, authBack := service.CreateAuthority(&auth)
+	err, authBack := service.CreateAuthority(auth)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
-		response.OkWithData(resp.SysAuthorityResponse{Authority: *authBack}, c)
+		response.OkWithData(resp.SysAuthorityResponse{Authority: authBack}, c)
 	}
 }
 

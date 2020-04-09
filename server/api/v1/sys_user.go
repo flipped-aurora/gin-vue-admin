@@ -33,11 +33,11 @@ func Register(c *gin.Context) {
 	var R request.RegisterStruct
 	_ = c.ShouldBindJSON(&R)
 	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
-	err, user := service.Register(user)
+	err, userReturn := service.Register(*user)
 	if err != nil {
-		response.FailWithDetailed(response.ERROR, resp.SysUserResponse{User: *user}, fmt.Sprintf("%v", err), c)
+		response.FailWithDetailed(response.ERROR, resp.SysUserResponse{User: userReturn}, fmt.Sprintf("%v", err), c)
 	} else {
-		response.OkDetailed(resp.SysUserResponse{User: *user}, "注册成功", c)
+		response.OkDetailed(resp.SysUserResponse{User: userReturn}, "注册成功", c)
 	}
 }
 
@@ -103,7 +103,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			} else {
 				var blackJWT model.JwtBlacklist
 				blackJWT.Jwt = jwtStr
-				err3 := service.JsonInBlacklist(&blackJWT)
+				err3 := service.JsonInBlacklist(blackJWT)
 				if err3 != nil {
 					response.FailWithMessage("jwt作废失败", c)
 				} else {

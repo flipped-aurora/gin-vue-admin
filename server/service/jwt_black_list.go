@@ -9,8 +9,8 @@ import (
 // @description   create jwt blacklist
 // @auth                     （2020/04/05  20:22 ）
 // @return    err             error
-func JsonInBlacklist(j *model.JwtBlacklist) (err error) {
-	err = global.GVA_DB.Create(j).Error
+func JsonInBlacklist(j model.JwtBlacklist) (err error) {
+	err = global.GVA_DB.Create(&j).Error
 	return
 }
 
@@ -19,8 +19,8 @@ func JsonInBlacklist(j *model.JwtBlacklist) (err error) {
 // @auth                     （2020/04/05  20:22 ）
 // @param     newPassword     string
 // @return    err             error
-func IsBlacklist(Jwt string, j *model.JwtBlacklist) bool {
-	isNotFound := global.GVA_DB.Where("jwt = ?", Jwt).First(j).RecordNotFound()
+func IsBlacklist(Jwt string, j model.JwtBlacklist) bool {
+	isNotFound := global.GVA_DB.Where("jwt = ?", Jwt).First(&j).RecordNotFound()
 	return !isNotFound
 }
 

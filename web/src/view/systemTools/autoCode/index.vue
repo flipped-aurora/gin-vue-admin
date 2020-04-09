@@ -6,7 +6,7 @@
                 <el-input v-model="form.structName" placeholder="首字母自动转换大写"></el-input>
             </el-form-item>
             <el-form-item label="Struct简称" prop="abbreviation">
-                <el-input v-model="form.abbreviation"></el-input>
+                <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group"></el-input>
             </el-form-item>
             <el-form-item label="Package名称" prop="packageName">
                 <el-input v-model="form.packageName"></el-input>
@@ -152,6 +152,13 @@ export default {
             this.$refs.autoCodeForm.validate(async (valid) => {
           if (valid) {
             this.form.structName = toUpperCase(this.form.structName)
+            if(this.form.structName == this.form.abbreviation){
+                this.$message({
+                    type:"error",
+                    message:"structName和struct简称不能相同"
+                })
+                return false
+            }
             const data = await createTemp(this.form)
             const blob = new Blob([data])
             const fileName = 'ginvueadmin.zip'

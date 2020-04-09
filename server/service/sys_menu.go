@@ -77,23 +77,22 @@ func getBaseChildrenList(menu *model.SysBaseMenu) (err error) {
 // @param     newPassword     string
 // @return    err             error
 //增加基础路由
-func  AddBaseMenu(menu model.SysBaseMenu) (err error) {
+func AddBaseMenu(menu model.SysBaseMenu) (err error) {
 	findOne := global.GVA_DB.Where("name = ?", menu.Name).Find(&model.SysBaseMenu{}).Error
 	if findOne != nil {
-		err = global.GVA_DB.Create(menu).Error
+		err = global.GVA_DB.Create(&menu).Error
 	} else {
 		err = errors.New("存在重复name，请修改name")
 	}
 	return err
 }
 
-
 // @title    GetBaseMenuTree
 // @description   获取基础路由树
 // @auth                     （2020/04/05  20:22 ）
 // @return    err              error
 // @return    menus            []SysBaseMenu
-func  GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
+func GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
 	err = global.GVA_DB.Where(" parent_id = ?", 0).Order("sort", true).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {
 		err = getBaseChildrenList(&menus[i])
@@ -107,7 +106,7 @@ func  GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
 // @param     menus           []SysBaseMenu
 // @param     authorityId     string
 // @return                    error
-func  AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error) {
+func AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error) {
 	var auth model.SysAuthority
 	auth.AuthorityId = authorityId
 	auth.SysBaseMenus = menus
@@ -115,14 +114,13 @@ func  AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error
 	return err
 }
 
-
 // @title    GetMenuAuthority
 // @description   查看当前角色树
 // @auth                     （2020/04/05  20:22 ）
 // @param     authorityId     string
 // @return    err             error
 // @return    menus           []SysBaseMenu
-func  GetMenuAuthority(authorityId string) (err error, menus []model.SysMenu) {
+func GetMenuAuthority(authorityId string) (err error, menus []model.SysMenu) {
 	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ?"
 	err = global.GVA_DB.Raw(sql, authorityId).Scan(&menus).Error
 	return err, menus

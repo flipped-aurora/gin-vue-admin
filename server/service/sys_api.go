@@ -15,11 +15,11 @@ import (
 // @param     FilePath        string
 // @return                    error
 func CreateApi(a model.SysApi) (err error) {
-	findOne := global.GVA_DB.Where("path = ?", a.Path).Find(&model.SysApi{}).Error
+	findOne := global.GVA_DB.Where("path = ? AND method = ?", a.Path, a.Method).Find(&model.SysApi{}).Error
 	if findOne == nil {
 		return errors.New("存在相同api")
 	} else {
-		err = global.GVA_DB.Create(a).Error
+		err = global.GVA_DB.Create(&a).Error
 	}
 	return err
 }
@@ -109,9 +109,9 @@ func GetApiById(id float64) (err error, api model.SysApi) {
 // @description   update a base api, update api
 // @auth                     （2020/04/05  20:22 ）
 // @return                    error
-func  UpdateApi(a model.SysApi) (err error) {
+func UpdateApi(a model.SysApi) (err error) {
 	var oldA model.SysApi
-	flag := global.GVA_DB.Where("path = ?", a.Path).Find(&model.SysApi{}).RecordNotFound()
+	flag := global.GVA_DB.Where("path = ? AND method = ?", a.Path, a.Method).Find(&model.SysApi{}).RecordNotFound()
 	if !flag {
 		return errors.New("存在相同api路径")
 	}

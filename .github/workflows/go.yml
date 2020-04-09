@@ -3,21 +3,13 @@ name: Go
 on:
   push:
     branches: [ action-ci ]
+
 jobs:
+
   build:
     name: Build
-    runs-on: VM_0_11_centos
+    runs-on: [ VM_0_11_centos ]
     steps:
-
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
-      with:
-        go-version: 1.13
-      id: go
-
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
-
     - name: Get dependencies
       run: |
         go get -v -t -d ./...

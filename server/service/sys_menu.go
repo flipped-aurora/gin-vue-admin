@@ -46,16 +46,12 @@ func GetInfoList(info request.PageInfo) (err error, list interface{}, total int)
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
-	if err != nil {
-		return
-	} else {
-		var menuList []model.SysBaseMenu
-		err = db.Limit(limit).Offset(offset).Where("parent_id = 0").Order("sort", true).Find(&menuList).Error
-		for i := 0; i < len(menuList); i++ {
-			err = getBaseChildrenList(&menuList[i])
-		}
-		return err, menuList, total
+	var menuList []model.SysBaseMenu
+	err = db.Limit(limit).Offset(offset).Where("parent_id = 0").Order("sort", true).Find(&menuList).Error
+	for i := 0; i < len(menuList); i++ {
+		err = getBaseChildrenList(&menuList[i])
 	}
+	return err, menuList, total
 }
 
 // @title    getBaseChildrenList

@@ -60,18 +60,14 @@ func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, t
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
-	if err != nil {
-		return
-	} else {
-		var authority []model.SysAuthority
-		err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
-		if len(authority) > 0 {
-			for k, _ := range authority {
-				err = findChildrenAuthority(&authority[k])
-			}
+	var authority []model.SysAuthority
+	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
+	if len(authority) > 0 {
+		for k, _ := range authority {
+			err = findChildrenAuthority(&authority[k])
 		}
-		return err, authority, total
 	}
+	return err, authority, total
 }
 
 // @title    GetAuthorityInfo

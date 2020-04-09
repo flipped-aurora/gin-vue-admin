@@ -13,6 +13,8 @@ jobs:
 
     - name: Check out the repository
       uses: actions/checkout@v2
+
+    - name: Show files
       run: ls -la
 
     - name: Get dependencies
@@ -22,7 +24,7 @@ jobs:
             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
             dep ensure
         fi
-        
+
     - name: Build
       run: |
         cd server

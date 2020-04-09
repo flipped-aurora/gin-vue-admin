@@ -10,9 +10,9 @@ jwt:
 
 # mysql connect configuration
 mysql:
-    username: %{username}
-    password: %{password}
-    path: %{address}
+    username: %{mysql_username}
+    password: %{mysql_password}
+    path: %{mysql_address}
     db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
@@ -26,8 +26,8 @@ qiniu:
 
 # redis configuration
 redis:
-    addr: '127.0.0.1:6379'
-    passwprd: ''
+    addr: %{redis_address}
+    passwprd: %{redis_password}
     db: 0
 
 # system configuration

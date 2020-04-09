@@ -22,7 +22,7 @@
       </el-table-column>
     </el-table>
     <!-- 新增角色弹窗 -->
-    <el-dialog :visible.sync="dialogFormVisible" title="新增角色">
+    <el-dialog :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="form" :rules="rules" ref="authorityForm">
         <el-form-item label="父级角色ID" prop="parentId">
           <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
@@ -79,6 +79,7 @@ export default {
       drawer: false,
       activeRow: {},
       activeUserId: 0,
+      dialogTitle:"新增角色",
       dialogFormVisible: false,
       apiDialogFlag: false,
       form: {

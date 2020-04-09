@@ -51,9 +51,9 @@ func  AddCasbin(cm model.CasbinModel) bool {
 // @param     oldPath          string
 // @param     newPath          string
 // @return                     error
-func  UpdateCasbinApi(oldPath string, newPath string) error {
+func  UpdateCasbinApi(oldPath string, newPath string,oldMethod string, newMethod string) error {
 	var cs []model.CasbinModel
-	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ?", oldPath).Find(&cs).Update("v1", newPath).Error
+	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath,oldMethod).Find(&cs).Update("v1", newPath).Update("v2", newMethod).Error
 	return err
 }
 
@@ -78,9 +78,9 @@ func  GetPolicyPathByAuthorityId(authorityId string) []string {
 // @param     v               int
 // @param     p               string
 // @return                    bool
-func  ClearCasbin(v int, p string) bool {
+func  ClearCasbin(v int, p ...string) bool {
 	e := Casbin()
-	return e.RemoveFilteredPolicy(v, p)
+	return e.RemoveFilteredPolicy(v, p...)
 
 }
 

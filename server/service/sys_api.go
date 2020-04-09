@@ -30,7 +30,7 @@ func CreateApi(a model.SysApi) (err error) {
 // @return                    error
 func DeleteApi(a model.SysApi) (err error) {
 	err = global.GVA_DB.Delete(a).Error
-	ClearCasbin(1, a.Path)
+	ClearCasbin(1, a.Path,a.Method)
 	return err
 }
 
@@ -111,15 +111,19 @@ func GetApiById(id float64) (err error, api model.SysApi) {
 // @return                    error
 func UpdateApi(a model.SysApi) (err error) {
 	var oldA model.SysApi
-	flag := global.GVA_DB.Where("path = ? AND method = ?", a.Path, a.Method).Find(&model.SysApi{}).RecordNotFound()
-	if !flag {
-		return errors.New("存在相同api路径")
-	}
+
 	err = global.GVA_DB.Where("id = ?", a.ID).First(&oldA).Error
+
+	if oldA.Path != a.Path || oldA.Method != a.Method{
+		flag := global.GVA_DB.Where("path = ? AND method = ?", a.Path, a.Method).Find(&model.SysApi{}).RecordNotFound()
+		if !flag {
+			return errors.New("存在相同api路径")
+		}
+	}
 	if err != nil {
 		return err
 	} else {
-		err = UpdateCasbinApi(oldA.Path, a.Path)
+		err = UpdateCasbinApi(oldA.Path, a.Path,oldA.Method,a.Method)
 		if err != nil {
 			return err
 		} else {

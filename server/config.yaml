@@ -38,7 +38,7 @@ system:
 
 # captcha configuration
 captcha:
-    key-long: 6
+    key-long: 4
     img-width: 120
     img-height: 40
 

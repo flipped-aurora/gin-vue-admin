@@ -35,7 +35,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" title="新增菜单">
+    <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :inline="true" :model="form" :rules="rules" label-width="85px" ref="menuForm">
         <el-form-item label="路由name" prop="path">
           <el-input autocomplete="off" placeholder="唯一英文字符串" v-model="form.path"></el-input>
@@ -89,6 +89,7 @@ export default {
     return {
       listApi: getMenuList,
       dialogFormVisible: false,
+      dialogTitle:"新增菜单",
       form: {
         ID: 0,
         path: '',
@@ -198,12 +199,14 @@ export default {
     },
     // 添加菜单方法，id为 0则为添加根菜单
     addMenu(id) {
+      this.dialogTitle = "新增菜单"
       this.form.parentId = String(id)
       this.isEdit = false
       this.dialogFormVisible = true
     },
     // 修改菜单方法
     async editMenu(id) {
+      this.dialogTitle = "编辑菜单"
       const res = await getBaseMenuById({ id })
       this.form = res.data.menu
       this.dialogFormVisible = true

@@ -11,7 +11,7 @@ import (
 // @auth                     （2020/04/05  20:22 ）
 // @return    err             error
 func CreateExaCustomer(e model.ExaCustomer) (err error) {
-	err = global.GVA_DB.Create(e).Error
+	err = global.GVA_DB.Create(&e).Error
 	return err
 }
 
@@ -19,7 +19,7 @@ func CreateExaCustomer(e model.ExaCustomer) (err error) {
 // @description   delete a customer, 删除用户
 // @auth                     （2020/04/05  20:22 ）
 // @return                    error
-func  DeleteExaCustomer(e model.ExaCustomer) (err error) {
+func DeleteExaCustomer(e model.ExaCustomer) (err error) {
 	err = global.GVA_DB.Delete(e).Error
 	return err
 }
@@ -39,7 +39,7 @@ func UpdateExaCustomer(e *model.ExaCustomer) (err error) {
 // @return                    error
 // @return    customer        ExaCustomer
 func GetExaCustomer(id uint) (err error, customer model.ExaCustomer) {
-	err = global.GVA_DB.Where("id = ?",id).First(&customer).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&customer).Error
 	return
 }
 
@@ -48,7 +48,7 @@ func GetExaCustomer(id uint) (err error, customer model.ExaCustomer) {
 // @auth                     （2020/04/05  20:22 ）
 // @param     info            PageInfo
 // @return                    error
-func  GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err error, list interface{}, total int) {
+func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
@@ -57,7 +57,7 @@ func  GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err
 	} else {
 		var a model.SysAuthority
 		a.AuthorityId = sysUserAuthorityID
-		err, auth :=GetAuthorityInfo(a)
+		err, auth := GetAuthorityInfo(a)
 		var dataId []string
 		for _, v := range auth.DataAuthorityId {
 			dataId = append(dataId, v.AuthorityId)

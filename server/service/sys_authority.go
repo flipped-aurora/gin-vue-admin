@@ -14,8 +14,8 @@ import (
 // @param     FileName        string
 // @param     FilePath        string
 // @return                    error
-func CreateAuthority(a *model.SysAuthority) (err error, authority *model.SysAuthority) {
-	err = global.GVA_DB.Create(a).Error
+func CreateAuthority(a model.SysAuthority) (err error, authority model.SysAuthority) {
+	err = global.GVA_DB.Create(&a).Error
 	return err, a
 }
 
@@ -81,11 +81,10 @@ func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, t
 // @param     FileName        string
 // @param     FilePath        string
 // @return                    error
-func  GetAuthorityInfo(a model.SysAuthority) (err error, sa model.SysAuthority) {
+func GetAuthorityInfo(a model.SysAuthority) (err error, sa model.SysAuthority) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", a.AuthorityId).First(&sa).Error
 	return err, sa
 }
-
 
 // @title    SetDataAuthority
 // @description   设置角色资源权限
@@ -108,7 +107,7 @@ func SetDataAuthority(a model.SysAuthority) error {
 // @param     FileName        string
 // @param     FilePath        string
 // @return                    error
-func  SetMenuAuthority(a *model.SysAuthority) error {
+func SetMenuAuthority(a *model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", a.AuthorityId)
 	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&a.SysBaseMenus).Error

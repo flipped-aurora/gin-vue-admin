@@ -1,8 +1,21 @@
-name: gin-vue-admin-backend ci&cd
+name: gin-vue-admin backend deploy
 
 on:
   push:
-    branches: [ action-ci ]
+    branches: 
+      - master
+      - action-ci
+    paths:
+      - './server/**'
+    paths-ignore:
+      - './db/**'
+  pull_request:
+    branches: 
+      - master
+    paths:
+      - './server/**'
+    paths-ignore:
+      - './db/**'
 
 jobs:
 
@@ -30,8 +43,7 @@ jobs:
 
     - name: Build
       run: |
-        su root -p $ROOT_PASS
-        go build -o /usr/local/projects/gin-vue/run -v
+        go build -o run -v
       working-directory: ./server
 
     - name: Modify config params
@@ -43,9 +55,10 @@ jobs:
         sed -i 's/%{redis_password}/'$REDIS_PASSWORD'/' config.yaml
       working-directory: ./server
 
-    - name: Move config file 
-      run: | 
-        su root -p $ROOT_PASS
-        mv ./config.yaml /usr/local/projects/gin-vue/config.yaml
+  deploy:
+    - name: Run Dockerfile
+      run: |
+        echo 'There is nothing for the time being' 
       working-directory: ./server
+    
 

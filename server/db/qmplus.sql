@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 09/04/2020 11:11:20
+ Date: 10/04/2020 13:48:22
 */
 
 SET NAMES utf8mb4;
@@ -68,11 +68,11 @@ INSERT INTO `casbin_rule` VALUES ('p', '8881', '/casbin/getPolicyPathByAuthority
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/system/getSystemConfig', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/system/setSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/createExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/updateExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/deleteExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/getExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/getExaCustomerList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/customer', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/customer', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/customer', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/customer', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/customerList', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/login', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/register', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
@@ -107,11 +107,11 @@ INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/getPolicyPathByAuthority
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/getSystemConfig', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/setSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/createExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/updateExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/deleteExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getExaCustomerList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/customer', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/customer', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/customer', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/customer', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/customerList', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/autoCode/createTemp', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/login', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/register', 'POST', '', '', '');
@@ -148,11 +148,11 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinTest/:pathParam', '
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/system/getSystemConfig', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/system/setSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/createExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/updateExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/deleteExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/getExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/getExaCustomerList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customerList', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/createTemp', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', 'asdasd', '/base/login', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', 'asdasd', '/base/register', 'POST', '', '', '');
@@ -3811,12 +3811,15 @@ CREATE TABLE `exa_customers`  (
   `sys_user_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_customers_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of exa_customers
 -- ----------------------------
-INSERT INTO `exa_customers` VALUES (1, '2020-02-25 18:01:48', '2020-02-25 18:01:48', NULL, '测试客户123', '1761111111', 10, '888');
+INSERT INTO `exa_customers` VALUES (1, '2020-02-25 18:01:48', '2020-04-10 12:29:29', NULL, '测试客户', '1761111111', 10, '888');
+INSERT INTO `exa_customers` VALUES (2, '2020-04-10 12:25:53', '2020-04-10 12:25:53', '2020-04-10 13:43:56', 'test', '123123123', 10, '888');
+INSERT INTO `exa_customers` VALUES (3, '2020-04-10 13:44:12', '2020-04-10 13:44:12', '2020-04-10 13:44:13', '123123', '123123', 10, '888');
+INSERT INTO `exa_customers` VALUES (4, '2020-04-10 13:47:10', '2020-04-10 13:47:10', '2020-04-10 13:47:12', '22222222', '222222222222222', 10, '888');
 
 -- ----------------------------
 -- Table structure for exa_file_chunks
@@ -3989,11 +3992,11 @@ INSERT INTO `sys_apis` VALUES (35, '2019-12-28 18:18:07', '2019-12-28 18:18:07',
 INSERT INTO `sys_apis` VALUES (36, '2020-01-06 17:56:36', '2020-01-06 17:56:36', NULL, NULL, '/authority/setDataAuthority', '设置角色资源权限', 'authority', 'POST');
 INSERT INTO `sys_apis` VALUES (37, '2020-01-13 14:04:05', '2020-01-13 14:04:05', NULL, NULL, '/system/getSystemConfig', '获取配置文件内容', 'system', 'POST');
 INSERT INTO `sys_apis` VALUES (38, '2020-01-13 15:02:06', '2020-01-13 15:02:06', NULL, NULL, '/system/setSystemConfig', '设置配置文件内容', 'system', 'POST');
-INSERT INTO `sys_apis` VALUES (39, '2020-02-25 15:32:39', '2020-02-25 15:32:39', NULL, NULL, '/customer/createExaCustomer', '创建客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (40, '2020-02-25 15:32:51', '2020-02-25 15:34:56', NULL, NULL, '/customer/updateExaCustomer', '更新客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (41, '2020-02-25 15:33:57', '2020-02-25 15:33:57', NULL, NULL, '/customer/deleteExaCustomer', '删除客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (42, '2020-02-25 15:36:48', '2020-02-25 15:37:16', NULL, NULL, '/customer/getExaCustomer', '获取单一客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (43, '2020-02-25 15:37:06', '2020-02-25 15:37:06', NULL, NULL, '/customer/getExaCustomerList', '获取客户列表', 'customer', 'POST');
+INSERT INTO `sys_apis` VALUES (39, '2020-02-25 15:32:39', '2020-02-25 15:32:39', NULL, NULL, '/customer/customer', '创建客户', 'customer', 'POST');
+INSERT INTO `sys_apis` VALUES (40, '2020-02-25 15:32:51', '2020-02-25 15:34:56', NULL, NULL, '/customer/customer', '更新客户', 'customer', 'PUT');
+INSERT INTO `sys_apis` VALUES (41, '2020-02-25 15:33:57', '2020-02-25 15:33:57', NULL, NULL, '/customer/customer', '删除客户', 'customer', 'DELETE');
+INSERT INTO `sys_apis` VALUES (42, '2020-02-25 15:36:48', '2020-02-25 15:37:16', NULL, NULL, '/customer/customer', '获取单一客户', 'customer', 'GET');
+INSERT INTO `sys_apis` VALUES (43, '2020-02-25 15:37:06', '2020-02-25 15:37:06', NULL, NULL, '/customer/customerList', '获取客户列表', 'customer', 'GET');
 INSERT INTO `sys_apis` VALUES (44, '2020-03-12 14:36:54', '2020-03-12 14:56:50', NULL, NULL, '/casbin/casbinTest/:pathParam', 'RESTFUL模式测试', 'casbin', 'GET');
 INSERT INTO `sys_apis` VALUES (45, '2020-03-29 23:01:28', '2020-03-29 23:01:28', NULL, NULL, '/autoCode/createTemp', '自动化代码', 'autoCode', 'POST');
 

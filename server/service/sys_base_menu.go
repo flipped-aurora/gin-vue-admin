@@ -8,8 +8,8 @@ import (
 
 // @title    DeleteBaseMenu
 // @description   删除基础路由
-// @auth                     （2020/04/05  20:22 ）
-// @param     newPassword     string
+// @auth                     （2020/04/05  20:22）
+// @param     id              float64
 // @return    err             error
 func  DeleteBaseMenu(id float64) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", id).First(&model.SysBaseMenu{}).Error
@@ -29,8 +29,8 @@ func  DeleteBaseMenu(id float64) (err error) {
 
 // @title    UpdateBaseMenu
 // @description   更新路由
-// @auth                     （2020/04/05  20:22 ）
-// @param     newPassword     string
+// @auth                     （2020/04/05  20:22）
+// @param     menu            model.SysBaseMenu
 // @return    err             error
 func  UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	upDateMap := make(map[string]interface{})
@@ -49,8 +49,8 @@ func  UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 
 // @title    GetBaseMenuById
 // @description   get current menus, 返回当前选中menu
-// @auth                     （2020/04/05  20:22 ）
-// @param     newPassword     string
+// @auth                     （2020/04/05  20:22）
+// @param     id              float64
 // @return    err             error
 func GetBaseMenuById(id float64) (err error, menu model.SysBaseMenu) {
 	err = global.GVA_DB.Where("id = ?", id).First(&menu).Error

@@ -13,7 +13,7 @@ import (
 
 // @title    UpdateCasbin
 // @description   update casbin authority, 更新casbin权限
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     authorityId      string
 // @param     casbinInfos      []CasbinInfo
 // @return                     error
@@ -37,8 +37,8 @@ func  UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 
 // @title    AddCasbin
 // @description   add casbin authority, 添加权限
-// @auth                     （2020/04/05  20:22 ）
-// @param     cm              CasbinModel
+// @auth                     （2020/04/05  20:22）
+// @param     cm              model.CasbinModel
 // @return                    bool
 func  AddCasbin(cm model.CasbinModel) bool {
 	e := Casbin()
@@ -47,11 +47,13 @@ func  AddCasbin(cm model.CasbinModel) bool {
 
 // @title    UpdateCasbinApi
 // @description   update casbin apis, API更新随动
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     oldPath          string
 // @param     newPath          string
+// @param     oldMethod        string
+// @param     newMethod        string
 // @return                     error
-func  UpdateCasbinApi(oldPath string, newPath string,oldMethod string, newMethod string) error {
+func  UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
 	var cs []model.CasbinModel
 	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath,oldMethod).Find(&cs).Update("v1", newPath).Update("v2", newMethod).Error
 	return err
@@ -59,7 +61,7 @@ func  UpdateCasbinApi(oldPath string, newPath string,oldMethod string, newMethod
 
 // @title    GetPolicyPathByAuthorityId
 // @description   get policy path by authorityId, 获取权限列表
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     authorityId     string
 // @return                    []string
 func  GetPolicyPathByAuthorityId(authorityId string) []string {
@@ -74,7 +76,7 @@ func  GetPolicyPathByAuthorityId(authorityId string) []string {
 
 // @title    ClearCasbin
 // @description   清除匹配的权限
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     v               int
 // @param     p               string
 // @return                    bool
@@ -86,7 +88,7 @@ func  ClearCasbin(v int, p ...string) bool {
 
 // @title    Casbin
 // @description   store to DB, 持久化到数据库  引入自定义规则
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 func Casbin() *casbin.Enforcer {
 	a := gormadapter.NewAdapterByDB(global.GVA_DB)
 	e := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
@@ -97,7 +99,7 @@ func Casbin() *casbin.Enforcer {
 
 // @title    ParamsMatch
 // @description   customized rule, 自定义规则函数
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     fullNameKey1    string
 // @param     key2            string
 // @return                    bool
@@ -109,7 +111,7 @@ func ParamsMatch(fullNameKey1 string, key2 string) bool {
 
 // @title    ParamsMatchFunc
 // @description   customized function, 自定义规则函数
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     args            ...interface{}
 // @return                    interface{}
 // @return                    error

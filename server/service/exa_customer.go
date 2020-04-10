@@ -8,7 +8,8 @@ import (
 
 // @title    CreateExaCustomer
 // @description   create a customer, 创建用户
-// @auth                     （2020/04/05  20:22 ）
+// @param     e               model.ExaCustomer
+// @auth                     （2020/04/05  20:22）
 // @return    err             error
 func CreateExaCustomer(e model.ExaCustomer) (err error) {
 	err = global.GVA_DB.Create(&e).Error
@@ -17,7 +18,8 @@ func CreateExaCustomer(e model.ExaCustomer) (err error) {
 
 // @title    DeleteFileChunk
 // @description   delete a customer, 删除用户
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     e               *model.ExaCustomer
 // @return                    error
 func DeleteExaCustomer(e model.ExaCustomer) (err error) {
 	err = global.GVA_DB.Delete(e).Error
@@ -26,7 +28,8 @@ func DeleteExaCustomer(e model.ExaCustomer) (err error) {
 
 // @title    UpdateExaCustomer
 // @description   update a customer, 更新用户
-// @auth                     （2020/04/05  20:22 ）
+// @param     e               *model.ExaCustomer
+// @auth                     （2020/04/05  20:22）
 // @return                    error
 func UpdateExaCustomer(e *model.ExaCustomer) (err error) {
 	err = global.GVA_DB.Save(e).Error
@@ -35,7 +38,8 @@ func UpdateExaCustomer(e *model.ExaCustomer) (err error) {
 
 // @title    GetExaCustomer
 // @description   get the info of a costumer , 获取用户信息
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     id              uint
 // @return                    error
 // @return    customer        ExaCustomer
 func GetExaCustomer(id uint) (err error, customer model.ExaCustomer) {
@@ -45,7 +49,8 @@ func GetExaCustomer(id uint) (err error, customer model.ExaCustomer) {
 
 // @title    GetCustomerInfoList
 // @description   get customer list by pagination, 分页获取用户列表
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     sysUserAuthorityID              string
 // @param     info            PageInfo
 // @return                    error
 func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err error, list interface{}, total int) {

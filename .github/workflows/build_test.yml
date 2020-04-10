@@ -33,9 +33,6 @@ jobs:
           npm install
           npm run build
       working-directory: ./web
-        env:
-          CI: true
-      
     
   backend:
     name: Backend build

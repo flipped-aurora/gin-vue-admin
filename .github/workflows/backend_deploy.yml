@@ -10,8 +10,8 @@ on:
 
 jobs:
 
-  build:
-    name: Build
+  deploy:
+    name: Backend deploy
     runs-on: [ self-hosted ]
     steps:
 
@@ -45,11 +45,11 @@ jobs:
         sed -i 's/%{redis_address}/'$REDIS_ADDR'/' config.yaml
         sed -i 's/%{redis_password}/'$REDIS_PASSWORD'/' config.yaml
       working-directory: ./server
-
-  deploy:
+    
     - name: Run Dockerfile
       run: |
         echo 'There is nothing for the time being' 
       working-directory: ./server
+      
     
 

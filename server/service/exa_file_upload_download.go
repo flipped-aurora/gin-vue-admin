@@ -8,16 +8,18 @@ import (
 
 // @title    Upload
 // @description   创建文件上传记录
-// @auth                     （2020/04/05  20:22 ）
+// @param     file            model.ExaFileUploadAndDownload
+// @auth                     （2020/04/05  20:22）
 // @return                    error
-func Upload(f model.ExaFileUploadAndDownload) error {
-	err := global.GVA_DB.Create(&f).Error
+func Upload(file model.ExaFileUploadAndDownload) error {
+	err := global.GVA_DB.Create(&file).Error
 	return err
 }
 
 // @title    FindFile
 // @description   删除文件切片记录
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     id              uint
 // @return                    error
 func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 	var file model.ExaFileUploadAndDownload
@@ -27,16 +29,17 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 
 // @title    DeleteFile
 // @description   删除文件记录
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     file            model.ExaFileUploadAndDownload
 // @return                    error
-func DeleteFile(f model.ExaFileUploadAndDownload) error {
-	err := global.GVA_DB.Where("id = ?", f.ID).Unscoped().Delete(f).Error
+func DeleteFile(file model.ExaFileUploadAndDownload) error {
+	err := global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(file).Error
 	return err
 }
 
 // @title    GetFileRecordInfoList
 // @description   分页获取数据
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     info            PageInfo
 // @return    err             error
 // @return    list            error

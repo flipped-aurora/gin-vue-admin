@@ -11,7 +11,8 @@ import (
 
 // @title    Register
 // @description   register, 用户注册
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     u               model.SysUser
 // @return    err             error
 // @return    userInter       *SysUser
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
@@ -32,7 +33,8 @@ func Register(u model.SysUser) (err error, userInter model.SysUser) {
 
 // @title    Login
 // @description   login, 用户登录
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     u               *model.SysUser
 // @return    err             error
 // @return    userInter       *SysUser
 func Login(u *model.SysUser) (err error, userInter *model.SysUser) {
@@ -48,7 +50,8 @@ func Login(u *model.SysUser) (err error, userInter *model.SysUser) {
 
 // @title    ChangePassword
 // @description   change the password of a certain user, 修改用户密码
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
+// @param     u               *model.SysUser
 // @param     newPassword     string
 // @return    err             error
 // @return    userInter       *SysUser
@@ -62,8 +65,8 @@ func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter 
 
 // @title    GetInfoList
 // @description   get user list by pagination, 分页获取数据
-// @auth                      （2020/04/05  20:22 ）
-// @param     PageInfo         int
+// @auth                      （2020/04/05  20:22）
+// @param     info             request.PageInfo
 // @return    err              error
 // @return    list             interface{}
 // @return    total            int
@@ -78,7 +81,7 @@ func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total 
 
 // @title    SetUserAuthority
 // @description   set the authority of a certain user, 设置一个用户的权限
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     uuid            UUID
 // @param     authorityId     string
 // @return    err             error
@@ -89,7 +92,7 @@ func SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
 
 // @title    UploadHeaderImg
 // @description   upload avatar, 用户头像上传更新地址
-// @auth                     （2020/04/05  20:22 ）
+// @auth                     （2020/04/05  20:22）
 // @param     uuid            UUID
 // @param     filePath        string
 // @return    err             error

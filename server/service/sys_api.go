@@ -61,6 +61,10 @@ func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc 
 		db = db.Where("method = ?", api.Method)
 	}
 
+	if api.ApiGroup != "" {
+		db = db.Where("api_group = ?", api.ApiGroup)
+	}
+
 	err = db.Find(&apiList).Count(&total).Error
 
 	if err != nil {

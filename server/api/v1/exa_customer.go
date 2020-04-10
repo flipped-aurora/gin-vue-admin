@@ -17,7 +17,7 @@ import (
 // @Produce application/json
 // @Param data body model.ExaCustomer true "创建客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/createExaCustomer [post]
+// @Router /customer/customer [post]
 func CreateExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
@@ -40,7 +40,7 @@ func CreateExaCustomer(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.ExaCustomer true "删除客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/deleteExaCustomer [post]
+// @Router /customer/customer [delete]
 func DeleteExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
@@ -59,7 +59,7 @@ func DeleteExaCustomer(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.ExaCustomer true "创建客户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/updateExaCustomer [post]
+// @Router /customer/customer [put]
 func UpdateExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
@@ -78,10 +78,10 @@ func UpdateExaCustomer(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.ExaCustomer true "获取单一客户信息"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/getExaCustomer [post]
+// @Router /customer/customer [get]
 func GetExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
-	_ = c.ShouldBindJSON(&cu)
+	_ = c.ShouldBindQuery(&cu)
 	err, customer := service.GetExaCustomer(cu.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
@@ -97,12 +97,12 @@ func GetExaCustomer(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.PageInfo true "获取权限客户列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /customer/getExaCustomerList [post]
+// @Router /customer/customerList [get]
 func GetExaCustomerList(c *gin.Context) {
 	claims, _ := c.Get("claims")
 	waitUse := claims.(*request.CustomClaims)
 	var pageInfo request.PageInfo
-	_ = c.ShouldBindJSON(&pageInfo)
+	_ = c.ShouldBindQuery(&pageInfo)
 	err, customerList, total := service.GetCustomerInfoList(waitUse.AuthorityId, pageInfo)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)

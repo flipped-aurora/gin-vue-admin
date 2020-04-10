@@ -55,7 +55,10 @@ func  AddCasbin(cm model.CasbinModel) bool {
 // @return                     error
 func  UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
 	var cs []model.CasbinModel
-	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath,oldMethod).Find(&cs).Update("v1", newPath).Update("v2", newMethod).Error
+	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath,oldMethod).Find(&cs).Updates(map[string]string{
+		"v1": newPath,
+		"v2": newMethod,
+	}).Error
 	return err
 }
 

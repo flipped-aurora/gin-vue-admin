@@ -163,6 +163,8 @@ export default {
     const res = await getAuthorityList({ page: 1, pageSize: 999 })
     this.authOptions = res.data.list
   }
+
+  
 }
 </script>
 <style scoped lang="scss">

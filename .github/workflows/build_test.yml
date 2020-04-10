@@ -20,19 +20,19 @@ jobs:
     strategy:
       matrix:
         node-version: [12.x]
-      steps:
-        
-      - name: Check out branch
-        uses: actions/checkout@v2
+    steps:
+      
+    - name: Check out branch
+      uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: |
-          npm install
-          npm run build
-      working-directory: ./web
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: |
+        npm install
+        npm run build
+    working-directory: ./web
     
   backend:
     name: Backend build

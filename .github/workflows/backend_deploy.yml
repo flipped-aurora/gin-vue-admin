@@ -7,15 +7,6 @@ on:
       - action-ci
     paths:
       - './server/**'
-    paths-ignore:
-      - './db/**'
-  pull_request:
-    branches: 
-      - master
-    paths:
-      - './server/**'
-    paths-ignore:
-      - './db/**'
 
 jobs:
 

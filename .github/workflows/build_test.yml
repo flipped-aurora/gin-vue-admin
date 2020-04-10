@@ -6,6 +6,7 @@ on:
         - '*'
       paths-ignore:
         - './db/**'
+        - '**.md'
     pull_request:
       branches: 
         - '*'
@@ -29,7 +30,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-        
+
     - name: Build test 
       run: |
         npm install

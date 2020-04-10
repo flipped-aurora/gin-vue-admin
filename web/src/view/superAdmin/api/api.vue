@@ -8,6 +8,9 @@
         <el-form-item label="描述">
           <el-input placeholder="描述" v-model="searchInfo.description"></el-input>
         </el-form-item>
+        <el-form-item label="api组">
+          <el-input placeholder="api组" v-model="searchInfo.apiGroup"></el-input>
+        </el-form-item>
         <el-form-item label="请求">
           <el-select clearable placeholder="请选择" v-model="searchInfo.method">
             <el-option

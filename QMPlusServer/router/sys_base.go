@@ -14,6 +14,8 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.GET("captcha/:captchaId", api.CaptchaImg)
 		BaseRouter.POST("coffee", api.GetCoffeeList)
 		BaseRouter.POST("coffeetype", api.GetCoffeeTypeList)
+		BaseRouter.POST("cuslogin", api.CusLogin)
+		BaseRouter.POST("coffeebycode", api.GetCoffeeListByCode)
 	}
 	return BaseRouter
 }

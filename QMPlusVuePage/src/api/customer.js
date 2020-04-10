@@ -11,7 +11,7 @@ export const getCustomerList = (data) => {
 
 export const addCustomer = (data) => {
     return service({
-        url: "/customer",
+        url: "/customer/add",
         method: 'post',
         data: data
     })
@@ -19,7 +19,7 @@ export const addCustomer = (data) => {
 
 export const updateCustomer = (data) => {
     return service({
-        url: "/customer",
+        url: "/customer/update",
         method: 'patch',
         data: data
     })
@@ -27,7 +27,7 @@ export const updateCustomer = (data) => {
 
 export const delCustomer = (data) => {
     return service({
-        url: `/customer`,
+        url: `/customer/delete`,
         method: 'delete',
         data: data
     })
@@ -43,7 +43,7 @@ export const getCustomerAddressList = (data) => {
 
 export const addCustomerAddress = (data) => {
     return service({
-        url: "/customerAddress",
+        url: "/customerAddress/add",
         method: 'post',
         data
     })
@@ -51,7 +51,7 @@ export const addCustomerAddress = (data) => {
 
 export const updateCustomerAddress = (data) => {
     return service({
-        url: "/customerAddress",
+        url: "/customerAddress/update",
         method: 'patch',
         data
     })
@@ -59,7 +59,7 @@ export const updateCustomerAddress = (data) => {
 
 export const delCustomerAddress = (data) => {
     return service({
-        url: `/customerAddress`,
+        url: `/customerAddress/delete`,
         method: 'delete',
         data: data
     })

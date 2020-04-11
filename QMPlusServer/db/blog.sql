@@ -1,198 +1,44 @@
 /*
- Navicat Premium Data Transfer
+ Navicat MySQL Data Transfer
 
- Source Server         : pandora
+ Source Server         : localhost_3306
  Source Server Type    : MySQL
- Source Server Version : 50640
+ Source Server Version : 50720
  Source Host           : localhost:3306
- Source Schema         : qmplus
+ Source Schema         : blog
 
  Target Server Type    : MySQL
- Target Server Version : 50640
+ Target Server Version : 50720
  File Encoding         : 65001
 
- Date: 30/03/2020 12:05:22
+ Date: 11/04/2020 10:55:24
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for api_authorities
+-- Table structure for addresses
 -- ----------------------------
-DROP TABLE IF EXISTS `api_authorities`;
-CREATE TABLE `api_authorities`  (
+DROP TABLE IF EXISTS `addresses`;
+CREATE TABLE `addresses`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `authority_id` int(10) UNSIGNED NULL DEFAULT NULL,
-  `api_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  `user_id` varbinary(255) NULL DEFAULT NULL,
+  `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `town` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `spec_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_api_authorities_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 292 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+  INDEX `idx_addresses_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Records of api_authorities
+-- Records of addresses
 -- ----------------------------
-INSERT INTO `api_authorities` VALUES (72, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 1);
-INSERT INTO `api_authorities` VALUES (73, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 4);
-INSERT INTO `api_authorities` VALUES (74, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 5);
-INSERT INTO `api_authorities` VALUES (75, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 6);
-INSERT INTO `api_authorities` VALUES (76, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 14);
-INSERT INTO `api_authorities` VALUES (77, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 15);
-INSERT INTO `api_authorities` VALUES (78, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 17);
-INSERT INTO `api_authorities` VALUES (79, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 23);
-INSERT INTO `api_authorities` VALUES (80, '2019-09-30 15:34:19', '2019-09-30 15:34:19', NULL, 9528, 24);
-INSERT INTO `api_authorities` VALUES (210, '2019-10-09 23:04:56', '2019-10-09 23:04:56', NULL, 999, 1);
-INSERT INTO `api_authorities` VALUES (211, '2019-10-09 23:04:56', '2019-10-09 23:04:56', NULL, 999, 2);
-INSERT INTO `api_authorities` VALUES (265, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 1);
-INSERT INTO `api_authorities` VALUES (266, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 2);
-INSERT INTO `api_authorities` VALUES (267, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 3);
-INSERT INTO `api_authorities` VALUES (268, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 4);
-INSERT INTO `api_authorities` VALUES (269, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 5);
-INSERT INTO `api_authorities` VALUES (270, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 6);
-INSERT INTO `api_authorities` VALUES (271, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 7);
-INSERT INTO `api_authorities` VALUES (272, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 8);
-INSERT INTO `api_authorities` VALUES (273, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 9);
-INSERT INTO `api_authorities` VALUES (274, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 10);
-INSERT INTO `api_authorities` VALUES (275, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 11);
-INSERT INTO `api_authorities` VALUES (276, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 12);
-INSERT INTO `api_authorities` VALUES (277, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 13);
-INSERT INTO `api_authorities` VALUES (278, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 14);
-INSERT INTO `api_authorities` VALUES (279, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 15);
-INSERT INTO `api_authorities` VALUES (280, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 16);
-INSERT INTO `api_authorities` VALUES (281, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 17);
-INSERT INTO `api_authorities` VALUES (282, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 18);
-INSERT INTO `api_authorities` VALUES (283, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 19);
-INSERT INTO `api_authorities` VALUES (284, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 20);
-INSERT INTO `api_authorities` VALUES (285, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 21);
-INSERT INTO `api_authorities` VALUES (286, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 22);
-INSERT INTO `api_authorities` VALUES (287, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 23);
-INSERT INTO `api_authorities` VALUES (288, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 24);
-INSERT INTO `api_authorities` VALUES (289, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 28);
-INSERT INTO `api_authorities` VALUES (290, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 29);
-INSERT INTO `api_authorities` VALUES (291, '2019-10-13 17:06:10', '2019-10-13 17:06:10', NULL, 888, 30);
-
--- ----------------------------
--- Table structure for apis
--- ----------------------------
-DROP TABLE IF EXISTS `apis`;
-CREATE TABLE `apis`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `authority_id` int(10) UNSIGNED NULL DEFAULT NULL,
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of apis
--- ----------------------------
-INSERT INTO `apis` VALUES (1, '2019-09-28 11:23:49', '2019-09-28 17:06:16', NULL, NULL, '/base/login', '用户登录', 'base');
-INSERT INTO `apis` VALUES (2, '2019-09-28 11:32:46', '2019-09-28 17:06:11', NULL, NULL, '/base/regist', '用户注册', 'base');
-INSERT INTO `apis` VALUES (3, '2019-09-28 11:33:41', '2019-09-28 17:06:04', NULL, NULL, '/api/createApi', '创建api', 'api');
-INSERT INTO `apis` VALUES (4, '2019-09-28 14:09:04', '2019-09-28 17:05:59', NULL, NULL, '/api/getApiList', '获取api列表', 'api');
-INSERT INTO `apis` VALUES (5, '2019-09-28 14:15:50', '2019-09-28 17:05:53', NULL, NULL, '/api/getApiById', '获取api详细信息', 'api');
-INSERT INTO `apis` VALUES (6, '2019-09-28 14:19:08', '2019-09-28 17:05:48', NULL, NULL, '/api/setAuthAndApi', '设置api和角色关系', 'api');
-INSERT INTO `apis` VALUES (7, '2019-09-28 14:19:26', '2019-09-28 17:05:44', NULL, NULL, '/api/deleteApi', '删除Api', 'api');
-INSERT INTO `apis` VALUES (8, '2019-09-28 14:19:48', '2019-09-28 17:05:39', NULL, NULL, '/api/updataApi', '更新Api', 'api');
-INSERT INTO `apis` VALUES (9, '2019-09-30 15:04:55', '2019-09-30 15:04:55', NULL, NULL, '/api/getAuthAndApi', '获取api和角色关系', 'api');
-INSERT INTO `apis` VALUES (10, '2019-09-30 15:05:38', '2019-09-30 15:05:38', NULL, NULL, '/api/getAllApis', '获取所有api', 'api');
-INSERT INTO `apis` VALUES (11, '2019-09-30 15:23:09', '2019-09-30 15:23:09', NULL, NULL, '/authority/createAuthority', '创建角色', 'authority');
-INSERT INTO `apis` VALUES (12, '2019-09-30 15:23:33', '2019-09-30 15:23:33', NULL, NULL, '/authority/deleteAuthority', '删除角色', 'authority');
-INSERT INTO `apis` VALUES (13, '2019-09-30 15:23:57', '2019-09-30 15:23:57', NULL, NULL, '/authority/getAuthorityList', '获取角色列表', 'authority');
-INSERT INTO `apis` VALUES (14, '2019-09-30 15:24:20', '2019-09-30 15:24:20', NULL, NULL, '/menu/getMenu', '获取菜单树', 'menu');
-INSERT INTO `apis` VALUES (15, '2019-09-30 15:24:50', '2019-09-30 15:24:50', NULL, NULL, '/menu/getMenuList', '分页获取基础menu列表', 'menu');
-INSERT INTO `apis` VALUES (16, '2019-09-30 15:25:07', '2019-09-30 15:25:07', NULL, NULL, '/menu/addBaseMenu', '新增菜单', 'menu');
-INSERT INTO `apis` VALUES (17, '2019-09-30 15:25:25', '2019-09-30 15:25:25', NULL, NULL, '/menu/getBaseMenuTree', '获取用户动态路由', 'menu');
-INSERT INTO `apis` VALUES (18, '2019-09-30 15:25:53', '2019-09-30 15:25:53', NULL, NULL, '/menu/addMenuAuthority', '增加menu和角色关联关系', 'menu');
-INSERT INTO `apis` VALUES (19, '2019-09-30 15:26:20', '2019-09-30 15:26:20', NULL, NULL, '/menu/getMenuAuthority', '获取指定角色menu', 'menu');
-INSERT INTO `apis` VALUES (20, '2019-09-30 15:26:43', '2019-09-30 15:26:43', NULL, NULL, '/menu/deleteBaseMenu', '删除菜单', 'menu');
-INSERT INTO `apis` VALUES (21, '2019-09-30 15:28:05', '2019-09-30 15:28:05', NULL, NULL, '/menu/updataBaseMenu', '更新菜单', 'menu');
-INSERT INTO `apis` VALUES (22, '2019-09-30 15:28:21', '2019-09-30 15:28:21', NULL, NULL, '/menu/getBaseMenuById', '根据id获取菜单', 'menu');
-INSERT INTO `apis` VALUES (23, '2019-09-30 15:29:19', '2019-09-30 15:29:19', NULL, NULL, '/user/changePassword', '修改密码', 'user');
-INSERT INTO `apis` VALUES (24, '2019-09-30 15:29:33', '2019-09-30 15:29:33', NULL, NULL, '/user/uploadHeaderImg', '上传头像', 'user');
-INSERT INTO `apis` VALUES (25, '2019-09-30 15:30:00', '2019-09-30 15:30:00', '2019-10-09 15:26:37', NULL, '/user/getInfoList', '分页获取用户列表', 'user');
-INSERT INTO `apis` VALUES (28, '2019-10-09 15:15:17', '2019-10-09 15:17:07', NULL, NULL, '/user/getUserList', '获取用户列表', 'user');
-INSERT INTO `apis` VALUES (29, '2019-10-09 23:01:40', '2019-10-09 23:01:40', NULL, NULL, '/user/setUserAuthority', '修改用户角色', 'user');
-INSERT INTO `apis` VALUES (30, '2019-10-13 17:01:24', '2019-10-13 17:01:24', NULL, NULL, '/user/deleteUser', '删除用户', 'user');
-
--- ----------------------------
--- Table structure for authorities
--- ----------------------------
-DROP TABLE IF EXISTS `authorities`;
-CREATE TABLE `authorities`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `authority_id` int(10) UNSIGNED NOT NULL,
-  `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `authority_id`(`authority_id`) USING BTREE,
-  INDEX `idx_authorities_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of authorities
--- ----------------------------
-INSERT INTO `authorities` VALUES (1, '2019-09-08 16:18:31', '2019-09-08 16:18:31', '2019-09-18 22:10:26', 9527, '超超超级管理员');
-INSERT INTO `authorities` VALUES (2, '2019-09-08 16:18:45', '2019-09-08 16:18:45', NULL, 888, '普通用户');
-INSERT INTO `authorities` VALUES (3, '2019-09-18 22:20:28', '2019-09-18 22:20:28', '2019-09-18 22:25:22', 0, '测试角色');
-INSERT INTO `authorities` VALUES (6, '2019-09-18 22:23:33', '2019-09-18 22:23:33', NULL, 9528, '测试角色');
-INSERT INTO `authorities` VALUES (7, '2019-09-18 22:24:39', '2019-09-18 22:24:39', '2019-09-18 22:25:19', 9529, '测试角色');
-INSERT INTO `authorities` VALUES (8, '2019-09-18 22:25:13', '2019-09-18 22:25:13', '2019-09-18 22:25:17', 9522, '测试角色');
-INSERT INTO `authorities` VALUES (12, '2019-10-09 23:04:18', '2019-10-09 23:04:18', NULL, 999, '封禁');
-
--- ----------------------------
--- Table structure for base_menus
--- ----------------------------
-DROP TABLE IF EXISTS `base_menus`;
-CREATE TABLE `base_menus`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `menu_level` int(10) UNSIGNED NULL DEFAULT NULL,
-  `parent_id` int(10) UNSIGNED NULL DEFAULT NULL,
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `hidden` tinyint(1) NULL DEFAULT NULL,
-  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of base_menus
--- ----------------------------
-INSERT INTO `base_menus` VALUES (1, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 0, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', '仪表盘');
-INSERT INTO `base_menus` VALUES (2, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 0, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', '测试菜单');
-INSERT INTO `base_menus` VALUES (3, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 0, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', '超级管理员');
-INSERT INTO `base_menus` VALUES (4, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理');
-INSERT INTO `base_menus` VALUES (5, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理');
-INSERT INTO `base_menus` VALUES (6, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理');
-INSERT INTO `base_menus` VALUES (7, '2019-09-22 17:17:15', '2019-09-26 13:09:57', '2019-09-26 13:10:14', 0, 0, 'tttt22', '修改测试', 0, '', '修改测试', 'share', 'api管理');
-INSERT INTO `base_menus` VALUES (8, '2019-09-26 17:17:48', '2019-09-26 17:18:46', '2019-09-26 17:19:23', 0, 0, 'ASDASDASD', 'tttTTT', 0, 'TTTT', 'TTT', 'TTT', 'TTT');
-INSERT INTO `base_menus` VALUES (9, '2019-09-30 18:23:01', '2019-09-30 18:23:01', '2019-09-30 18:25:07', 0, 0, 't\'t', 'tttt', 0, 'tt', 'tt', 'tt', 'tt');
-INSERT INTO `base_menus` VALUES (10, '2019-09-30 18:23:29', '2019-09-30 18:23:29', '2019-09-30 18:25:05', 0, 0, 'ttt', 'ttt', 0, 'ttt', 'ttt', 'ttt', 'ttt');
-INSERT INTO `base_menus` VALUES (11, '2019-09-30 18:23:59', '2019-09-30 18:23:59', '2019-09-30 18:25:04', 0, 0, '11111111', '11111111111111', 0, '111111111', '1111111111', '11111111', '1111111111');
-INSERT INTO `base_menus` VALUES (12, '2019-09-30 18:24:03', '2019-09-30 18:24:03', '2019-09-30 18:25:02', 0, 0, '22222', '11111111111111222222222222222222', 0, '11111111222222221', '1111111111222222222222222', '1111112222222211', '1111111111222222222222222');
-INSERT INTO `base_menus` VALUES (13, '2019-09-30 18:24:11', '2019-09-30 18:24:11', '2019-09-30 18:25:13', 0, 0, '11114', '124124', 0, '1241', '124124', '214124', '124124');
-INSERT INTO `base_menus` VALUES (14, '2019-09-30 18:24:19', '2019-09-30 18:24:19', '2019-09-30 18:25:12', 0, 0, '22222', '222', 0, '2222', '22', '222', '22');
-INSERT INTO `base_menus` VALUES (15, '2019-09-30 18:24:22', '2019-09-30 18:24:22', '2019-09-30 18:25:10', 0, 0, '2222211', '22211', 0, '22221', '2211', '2221', '2211');
-INSERT INTO `base_menus` VALUES (16, '2019-09-30 18:24:29', '2019-09-30 18:24:29', '2019-09-30 18:25:09', 0, 0, '3223123', '123123', 0, '123123', '123123', '21312323', '123123');
-INSERT INTO `base_menus` VALUES (17, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理');
-INSERT INTO `base_menus` VALUES (18, '2019-10-13 17:04:24', '2019-10-13 17:04:24', NULL, 0, 0, 'showTest', 'showTest', 0, 'view/showTest/showTest.vue', '展示用vue文件', 'setting', '展示用vue文件');
+INSERT INTO `addresses` VALUES (3, '2020-04-01 15:48:43', '2020-04-01 15:48:43', NULL, 0x39306266383866372D656364372D346465662D393737322D303139303334333635313536, '北京市', '市辖区', '朝阳区', '');
 
 -- ----------------------------
 -- Table structure for casbin_rule
@@ -245,51 +91,6 @@ INSERT INTO `casbin_rule` VALUES ('p', '8881', '/casbin/getPolicyPathByAuthority
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/system/getSystemConfig', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/system/setSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/createExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/updataExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/deleteExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/getExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/customer/getExaCustomerList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/login', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/regist', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiById', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/deleteApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/updataApi', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getAllApis', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/createAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/deleteAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/getAuthorityList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/setDataAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenuList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/addBaseMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuTree', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/addMenuAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenuAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/deleteBaseMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/updataBaseMenu', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuById', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/changePassword', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/uploadHeaderImg', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getInfoList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getUserList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/setUserAuthority', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/upload', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/casbinPUpdata', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/jwt/jsonInBlacklist', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/getSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/setSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/createExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/updataExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/deleteExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getExaCustomerList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/autoCode/createTemp', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/login', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/base/regist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/api/createApi', 'POST', '', '', '');
@@ -325,12 +126,61 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/casbin/casbinTest/:pathParam', '
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/jwt/jsonInBlacklist', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/system/getSystemConfig', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/system/setSystemConfig', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/createExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/updataExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/deleteExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/getExaCustomer', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/getExaCustomerList', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/createTemp', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '952', '/base/coffee', 'GET', NULL, NULL, NULL);
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/login', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/regist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/createApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getApiById', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/deleteApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/updataApi', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/api/getAllApis', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/createAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/deleteAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/getAuthorityList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/authority/setDataAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenuList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/addBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuTree', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/addMenuAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getMenuAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/deleteBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/updataBaseMenu', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuById', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/changePassword', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/uploadHeaderImg', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getInfoList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getUserList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/setUserAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/upload', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/casbinPUpdata', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/casbin/getPolicyPathByAuthorityId', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/jwt/jsonInBlacklist', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/getSystemConfig', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/system/setSystemConfig', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/autoCode', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffee/add', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffee/update', 'PATCH', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffee/delete', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/coffee', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffee/getbyid', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffee/type', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/base/coffeetype', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffeetype/add', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffeetype/update', 'PATCH', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffeetype', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/coffeetype/getbycode', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/list', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/add', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/update', 'PATCH', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/delete', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customerAddress/add', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customerAddress/update', 'PATCH', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customerAddress/delete', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/customer/getbyid', 'POST', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for ch_cities
@@ -340,337 +190,341 @@ CREATE TABLE `ch_cities`  (
   `id` int(5) NULL DEFAULT NULL,
   `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `city` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `code` int(12) NULL DEFAULT NULL
+  `code` int(12) NULL DEFAULT NULL,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  INDEX `idx_ch_cities_deleted_at`(`deleted_at`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of ch_cities
 -- ----------------------------
-INSERT INTO `ch_cities` VALUES (1, '北京市', '北京市', 110100);
-INSERT INTO `ch_cities` VALUES (2, '天津市', '天津市', 120100);
-INSERT INTO `ch_cities` VALUES (3, '河北省', '石家庄市', 130100);
-INSERT INTO `ch_cities` VALUES (4, '河北省', '唐山市', 130200);
-INSERT INTO `ch_cities` VALUES (5, '河北省', '秦皇岛市', 130300);
-INSERT INTO `ch_cities` VALUES (6, '河北省', '邯郸市', 130400);
-INSERT INTO `ch_cities` VALUES (7, '河北省', '邢台市', 130500);
-INSERT INTO `ch_cities` VALUES (8, '河北省', '保定市', 130600);
-INSERT INTO `ch_cities` VALUES (9, '河北省', '张家口市', 130700);
-INSERT INTO `ch_cities` VALUES (10, '河北省', '承德市', 130800);
-INSERT INTO `ch_cities` VALUES (11, '河北省', '沧州市', 130900);
-INSERT INTO `ch_cities` VALUES (12, '河北省', '廊坊市', 131000);
-INSERT INTO `ch_cities` VALUES (13, '河北省', '衡水市', 131100);
-INSERT INTO `ch_cities` VALUES (14, '山西省', '太原市', 140100);
-INSERT INTO `ch_cities` VALUES (15, '山西省', '大同市', 140200);
-INSERT INTO `ch_cities` VALUES (16, '山西省', '阳泉市', 140300);
-INSERT INTO `ch_cities` VALUES (17, '山西省', '长治市', 140400);
-INSERT INTO `ch_cities` VALUES (18, '山西省', '晋城市', 140500);
-INSERT INTO `ch_cities` VALUES (19, '山西省', '朔州市', 140600);
-INSERT INTO `ch_cities` VALUES (20, '山西省', '晋中市', 140700);
-INSERT INTO `ch_cities` VALUES (21, '山西省', '运城市', 140800);
-INSERT INTO `ch_cities` VALUES (22, '山西省', '忻州市', 140900);
-INSERT INTO `ch_cities` VALUES (23, '山西省', '临汾市', 141000);
-INSERT INTO `ch_cities` VALUES (24, '山西省', '吕梁市', 141100);
-INSERT INTO `ch_cities` VALUES (25, '内蒙古自治区', '呼和浩特市', 150100);
-INSERT INTO `ch_cities` VALUES (26, '内蒙古自治区', '包头市', 150200);
-INSERT INTO `ch_cities` VALUES (27, '内蒙古自治区', '乌海市', 150300);
-INSERT INTO `ch_cities` VALUES (28, '内蒙古自治区', '赤峰市', 150400);
-INSERT INTO `ch_cities` VALUES (29, '内蒙古自治区', '通辽市', 150500);
-INSERT INTO `ch_cities` VALUES (30, '内蒙古自治区', '鄂尔多斯市', 150600);
-INSERT INTO `ch_cities` VALUES (31, '内蒙古自治区', '呼伦贝尔市', 150700);
-INSERT INTO `ch_cities` VALUES (32, '内蒙古自治区', '巴彦淖尔市', 150800);
-INSERT INTO `ch_cities` VALUES (33, '内蒙古自治区', '乌兰察布市', 150900);
-INSERT INTO `ch_cities` VALUES (34, '内蒙古自治区', '兴安盟', 152200);
-INSERT INTO `ch_cities` VALUES (35, '内蒙古自治区', '锡林郭勒盟', 152500);
-INSERT INTO `ch_cities` VALUES (36, '内蒙古自治区', '二连浩特市', 152501);
-INSERT INTO `ch_cities` VALUES (37, '内蒙古自治区', '锡林浩特市', 152502);
-INSERT INTO `ch_cities` VALUES (38, '内蒙古自治区', '阿拉善盟', 152900);
-INSERT INTO `ch_cities` VALUES (39, '辽宁省', '沈阳市', 210100);
-INSERT INTO `ch_cities` VALUES (40, '辽宁省', '大连市', 210200);
-INSERT INTO `ch_cities` VALUES (41, '辽宁省', '鞍山市', 210300);
-INSERT INTO `ch_cities` VALUES (42, '辽宁省', '抚顺市', 210400);
-INSERT INTO `ch_cities` VALUES (43, '辽宁省', '本溪市', 210500);
-INSERT INTO `ch_cities` VALUES (44, '辽宁省', '丹东市', 210600);
-INSERT INTO `ch_cities` VALUES (45, '辽宁省', '锦州市', 210700);
-INSERT INTO `ch_cities` VALUES (46, '辽宁省', '营口市', 210800);
-INSERT INTO `ch_cities` VALUES (47, '辽宁省', '阜新市', 210900);
-INSERT INTO `ch_cities` VALUES (48, '辽宁省', '辽阳市', 211000);
-INSERT INTO `ch_cities` VALUES (49, '辽宁省', '盘锦市', 211100);
-INSERT INTO `ch_cities` VALUES (50, '辽宁省', '铁岭市', 211200);
-INSERT INTO `ch_cities` VALUES (51, '辽宁省', '朝阳市', 211300);
-INSERT INTO `ch_cities` VALUES (52, '辽宁省', '葫芦岛市', 211400);
-INSERT INTO `ch_cities` VALUES (53, '吉林省', '长春市', 220100);
-INSERT INTO `ch_cities` VALUES (54, '吉林省', '吉林市', 220200);
-INSERT INTO `ch_cities` VALUES (55, '吉林省', '四平市', 220300);
-INSERT INTO `ch_cities` VALUES (56, '吉林省', '辽源市', 220400);
-INSERT INTO `ch_cities` VALUES (57, '吉林省', '通化市', 220500);
-INSERT INTO `ch_cities` VALUES (58, '吉林省', '白山市', 220600);
-INSERT INTO `ch_cities` VALUES (59, '吉林省', '松原市', 220700);
-INSERT INTO `ch_cities` VALUES (60, '吉林省', '白城市', 220800);
-INSERT INTO `ch_cities` VALUES (61, '吉林省', '延边朝鲜族自治州', 222400);
-INSERT INTO `ch_cities` VALUES (62, '黑龙江省', '哈尔滨市', 230100);
-INSERT INTO `ch_cities` VALUES (63, '黑龙江省', '齐齐哈尔市', 230200);
-INSERT INTO `ch_cities` VALUES (64, '黑龙江省', '鸡西市', 230300);
-INSERT INTO `ch_cities` VALUES (65, '黑龙江省', '鹤岗市', 230400);
-INSERT INTO `ch_cities` VALUES (66, '黑龙江省', '双鸭山市', 230500);
-INSERT INTO `ch_cities` VALUES (67, '黑龙江省', '大庆市', 230600);
-INSERT INTO `ch_cities` VALUES (68, '黑龙江省', '伊春市', 230700);
-INSERT INTO `ch_cities` VALUES (69, '黑龙江省', '佳木斯市', 230800);
-INSERT INTO `ch_cities` VALUES (70, '黑龙江省', '七台河市', 230900);
-INSERT INTO `ch_cities` VALUES (71, '黑龙江省', '牡丹江市', 231000);
-INSERT INTO `ch_cities` VALUES (72, '黑龙江省', '黑河市', 231100);
-INSERT INTO `ch_cities` VALUES (73, '黑龙江省', '绥化市', 231200);
-INSERT INTO `ch_cities` VALUES (74, '黑龙江省', '大兴安岭地区', 232700);
-INSERT INTO `ch_cities` VALUES (75, '上海市', '上海市', 310100);
-INSERT INTO `ch_cities` VALUES (76, '江苏省', '南京市', 320100);
-INSERT INTO `ch_cities` VALUES (77, '江苏省', '无锡市', 320200);
-INSERT INTO `ch_cities` VALUES (78, '江苏省', '徐州市', 320300);
-INSERT INTO `ch_cities` VALUES (79, '江苏省', '常州市', 320400);
-INSERT INTO `ch_cities` VALUES (80, '江苏省', '苏州市', 320500);
-INSERT INTO `ch_cities` VALUES (81, '江苏省', '昆山市', 320583);
-INSERT INTO `ch_cities` VALUES (82, '江苏省', '南通市', 320600);
-INSERT INTO `ch_cities` VALUES (83, '江苏省', '连云港市', 320700);
-INSERT INTO `ch_cities` VALUES (84, '江苏省', '淮安市', 320800);
-INSERT INTO `ch_cities` VALUES (85, '江苏省', '盐城市', 320900);
-INSERT INTO `ch_cities` VALUES (86, '江苏省', '扬州市', 321000);
-INSERT INTO `ch_cities` VALUES (87, '江苏省', '镇江市', 321100);
-INSERT INTO `ch_cities` VALUES (88, '江苏省', '泰州市', 321200);
-INSERT INTO `ch_cities` VALUES (89, '江苏省', '宿迁市', 321300);
-INSERT INTO `ch_cities` VALUES (90, '浙江省', '杭州市', 330100);
-INSERT INTO `ch_cities` VALUES (91, '浙江省', '宁波市', 330200);
-INSERT INTO `ch_cities` VALUES (92, '浙江省', '温州市', 330300);
-INSERT INTO `ch_cities` VALUES (93, '浙江省', '嘉兴市', 330400);
-INSERT INTO `ch_cities` VALUES (94, '浙江省', '湖州市', 330500);
-INSERT INTO `ch_cities` VALUES (95, '浙江省', '绍兴市', 330600);
-INSERT INTO `ch_cities` VALUES (96, '浙江省', '金华市', 330700);
-INSERT INTO `ch_cities` VALUES (97, '浙江省', '衢州市', 330800);
-INSERT INTO `ch_cities` VALUES (98, '浙江省', '舟山市', 330900);
-INSERT INTO `ch_cities` VALUES (99, '浙江省', '台州市', 331000);
-INSERT INTO `ch_cities` VALUES (100, '浙江省', '丽水市', 331100);
-INSERT INTO `ch_cities` VALUES (101, '安徽省', '合肥市', 340100);
-INSERT INTO `ch_cities` VALUES (102, '安徽省', '芜湖市', 340200);
-INSERT INTO `ch_cities` VALUES (103, '安徽省', '蚌埠市', 340300);
-INSERT INTO `ch_cities` VALUES (104, '安徽省', '淮南市', 340400);
-INSERT INTO `ch_cities` VALUES (105, '安徽省', '马鞍山市', 340500);
-INSERT INTO `ch_cities` VALUES (106, '安徽省', '淮北市', 340600);
-INSERT INTO `ch_cities` VALUES (107, '安徽省', '铜陵市', 340700);
-INSERT INTO `ch_cities` VALUES (108, '安徽省', '安庆市', 340800);
-INSERT INTO `ch_cities` VALUES (109, '安徽省', '黄山市', 341000);
-INSERT INTO `ch_cities` VALUES (110, '安徽省', '滁州市', 341100);
-INSERT INTO `ch_cities` VALUES (111, '安徽省', '阜阳市', 341200);
-INSERT INTO `ch_cities` VALUES (112, '安徽省', '宿州市', 341300);
-INSERT INTO `ch_cities` VALUES (113, '安徽省', '六安市', 341500);
-INSERT INTO `ch_cities` VALUES (114, '安徽省', '亳州市', 341600);
-INSERT INTO `ch_cities` VALUES (115, '安徽省', '池州市', 341700);
-INSERT INTO `ch_cities` VALUES (116, '安徽省', '宣城市', 341800);
-INSERT INTO `ch_cities` VALUES (117, '福建省', '福州市', 350100);
-INSERT INTO `ch_cities` VALUES (118, '福建省', '厦门市', 350200);
-INSERT INTO `ch_cities` VALUES (119, '福建省', '莆田市', 350300);
-INSERT INTO `ch_cities` VALUES (120, '福建省', '三明市', 350400);
-INSERT INTO `ch_cities` VALUES (121, '福建省', '泉州市', 350500);
-INSERT INTO `ch_cities` VALUES (122, '福建省', '漳州市', 350600);
-INSERT INTO `ch_cities` VALUES (123, '福建省', '南平市', 350700);
-INSERT INTO `ch_cities` VALUES (124, '福建省', '龙岩市', 350800);
-INSERT INTO `ch_cities` VALUES (125, '福建省', '宁德市', 350900);
-INSERT INTO `ch_cities` VALUES (126, '江西省', '南昌市', 360100);
-INSERT INTO `ch_cities` VALUES (127, '江西省', '景德镇市', 360200);
-INSERT INTO `ch_cities` VALUES (128, '江西省', '萍乡市', 360300);
-INSERT INTO `ch_cities` VALUES (129, '江西省', '九江市', 360400);
-INSERT INTO `ch_cities` VALUES (130, '江西省', '新余市', 360500);
-INSERT INTO `ch_cities` VALUES (131, '江西省', '鹰潭市', 360600);
-INSERT INTO `ch_cities` VALUES (132, '江西省', '赣州市', 360700);
-INSERT INTO `ch_cities` VALUES (133, '江西省', '吉安市', 360800);
-INSERT INTO `ch_cities` VALUES (134, '江西省', '宜春市', 360900);
-INSERT INTO `ch_cities` VALUES (135, '江西省', '抚州市', 361000);
-INSERT INTO `ch_cities` VALUES (136, '江西省', '上饶市', 361100);
-INSERT INTO `ch_cities` VALUES (137, '山东省', '济南市', 370100);
-INSERT INTO `ch_cities` VALUES (138, '山东省', '青岛市', 370200);
-INSERT INTO `ch_cities` VALUES (139, '山东省', '淄博市', 370300);
-INSERT INTO `ch_cities` VALUES (140, '山东省', '枣庄市', 370400);
-INSERT INTO `ch_cities` VALUES (141, '山东省', '滕州市', 370481);
-INSERT INTO `ch_cities` VALUES (142, '山东省', '东营市', 370500);
-INSERT INTO `ch_cities` VALUES (143, '山东省', '烟台市', 370600);
-INSERT INTO `ch_cities` VALUES (144, '山东省', '潍坊市', 370700);
-INSERT INTO `ch_cities` VALUES (145, '山东省', '济宁市', 370800);
-INSERT INTO `ch_cities` VALUES (146, '山东省', '泰安市', 370900);
-INSERT INTO `ch_cities` VALUES (147, '山东省', '威海市', 371000);
-INSERT INTO `ch_cities` VALUES (148, '山东省', '日照市', 371100);
-INSERT INTO `ch_cities` VALUES (149, '山东省', '莱芜市', 371200);
-INSERT INTO `ch_cities` VALUES (150, '山东省', '临沂市', 371300);
-INSERT INTO `ch_cities` VALUES (151, '山东省', '德州市', 371400);
-INSERT INTO `ch_cities` VALUES (152, '山东省', '聊城市', 371500);
-INSERT INTO `ch_cities` VALUES (153, '山东省', '滨州市', 371600);
-INSERT INTO `ch_cities` VALUES (154, '山东省', '菏泽市', 371700);
-INSERT INTO `ch_cities` VALUES (155, '河南省', '郑州市', 410100);
-INSERT INTO `ch_cities` VALUES (156, '河南省', '开封市', 410200);
-INSERT INTO `ch_cities` VALUES (157, '河南省', '洛阳市', 410300);
-INSERT INTO `ch_cities` VALUES (158, '河南省', '平顶山市', 410400);
-INSERT INTO `ch_cities` VALUES (159, '河南省', '安阳市', 410500);
-INSERT INTO `ch_cities` VALUES (160, '河南省', '鹤壁市', 410600);
-INSERT INTO `ch_cities` VALUES (161, '河南省', '新乡市', 410700);
-INSERT INTO `ch_cities` VALUES (162, '河南省', '焦作市', 410800);
-INSERT INTO `ch_cities` VALUES (163, '河南省', '濮阳市', 410900);
-INSERT INTO `ch_cities` VALUES (164, '河南省', '许昌市', 411000);
-INSERT INTO `ch_cities` VALUES (165, '河南省', '漯河市', 411100);
-INSERT INTO `ch_cities` VALUES (166, '河南省', '三门峡市', 411200);
-INSERT INTO `ch_cities` VALUES (167, '河南省', '南阳市', 411300);
-INSERT INTO `ch_cities` VALUES (168, '河南省', '商丘市', 411400);
-INSERT INTO `ch_cities` VALUES (169, '河南省', '信阳市', 411500);
-INSERT INTO `ch_cities` VALUES (170, '河南省', '周口市', 411600);
-INSERT INTO `ch_cities` VALUES (171, '河南省', '驻马店市', 411700);
-INSERT INTO `ch_cities` VALUES (172, '河南省', '济源市', 419001);
-INSERT INTO `ch_cities` VALUES (173, '湖北省', '武汉市', 420100);
-INSERT INTO `ch_cities` VALUES (174, '湖北省', '黄石市', 420200);
-INSERT INTO `ch_cities` VALUES (175, '湖北省', '十堰市', 420300);
-INSERT INTO `ch_cities` VALUES (176, '湖北省', '宜昌市', 420500);
-INSERT INTO `ch_cities` VALUES (177, '湖北省', '襄阳市', 420600);
-INSERT INTO `ch_cities` VALUES (178, '湖北省', '鄂州市', 420700);
-INSERT INTO `ch_cities` VALUES (179, '湖北省', '荆门市', 420800);
-INSERT INTO `ch_cities` VALUES (180, '湖北省', '孝感市', 420900);
-INSERT INTO `ch_cities` VALUES (181, '湖北省', '荆州市', 421000);
-INSERT INTO `ch_cities` VALUES (182, '湖北省', '黄冈市', 421100);
-INSERT INTO `ch_cities` VALUES (183, '湖北省', '咸宁市', 421200);
-INSERT INTO `ch_cities` VALUES (184, '湖北省', '随州市', 421300);
-INSERT INTO `ch_cities` VALUES (185, '湖北省', '恩施土家族苗族自治州', 422800);
-INSERT INTO `ch_cities` VALUES (186, '湖北省', '潜江市', 429005);
-INSERT INTO `ch_cities` VALUES (187, '湖南省', '长沙市', 430100);
-INSERT INTO `ch_cities` VALUES (188, '湖南省', '株洲市', 430200);
-INSERT INTO `ch_cities` VALUES (189, '湖南省', '湘潭市', 430300);
-INSERT INTO `ch_cities` VALUES (190, '湖南省', '衡阳市', 430400);
-INSERT INTO `ch_cities` VALUES (191, '湖南省', '邵阳市', 430500);
-INSERT INTO `ch_cities` VALUES (192, '湖南省', '岳阳市', 430600);
-INSERT INTO `ch_cities` VALUES (193, '湖南省', '常德市', 430700);
-INSERT INTO `ch_cities` VALUES (194, '湖南省', '张家界市', 430800);
-INSERT INTO `ch_cities` VALUES (195, '湖南省', '益阳市', 430900);
-INSERT INTO `ch_cities` VALUES (196, '湖南省', '郴州市', 431000);
-INSERT INTO `ch_cities` VALUES (197, '湖南省', '永州市', 431100);
-INSERT INTO `ch_cities` VALUES (198, '湖南省', '怀化市', 431200);
-INSERT INTO `ch_cities` VALUES (199, '湖南省', '娄底市', 431300);
-INSERT INTO `ch_cities` VALUES (200, '湖南省', '湘西土家族苗族自治州', 433100);
-INSERT INTO `ch_cities` VALUES (201, '广东省', '广州市', 440100);
-INSERT INTO `ch_cities` VALUES (202, '广东省', '韶关市', 440200);
-INSERT INTO `ch_cities` VALUES (203, '广东省', '深圳市', 440300);
-INSERT INTO `ch_cities` VALUES (204, '广东省', '珠海市', 440400);
-INSERT INTO `ch_cities` VALUES (205, '广东省', '汕头市', 440500);
-INSERT INTO `ch_cities` VALUES (206, '广东省', '佛山市', 440600);
-INSERT INTO `ch_cities` VALUES (207, '广东省', '江门市', 440700);
-INSERT INTO `ch_cities` VALUES (208, '广东省', '湛江市', 440800);
-INSERT INTO `ch_cities` VALUES (209, '广东省', '茂名市', 440900);
-INSERT INTO `ch_cities` VALUES (210, '广东省', '肇庆市', 441200);
-INSERT INTO `ch_cities` VALUES (211, '广东省', '惠州市', 441300);
-INSERT INTO `ch_cities` VALUES (212, '广东省', '梅州市', 441400);
-INSERT INTO `ch_cities` VALUES (213, '广东省', '汕尾市', 441500);
-INSERT INTO `ch_cities` VALUES (214, '广东省', '河源市', 441600);
-INSERT INTO `ch_cities` VALUES (215, '广东省', '阳江市', 441700);
-INSERT INTO `ch_cities` VALUES (216, '广东省', '清远市', 441800);
-INSERT INTO `ch_cities` VALUES (217, '广东省', '东莞市', 441900);
-INSERT INTO `ch_cities` VALUES (218, '广东省', '中山市', 442000);
-INSERT INTO `ch_cities` VALUES (219, '广东省', '潮州市', 445100);
-INSERT INTO `ch_cities` VALUES (220, '广东省', '揭阳市', 445200);
-INSERT INTO `ch_cities` VALUES (221, '广东省', '云浮市', 445300);
-INSERT INTO `ch_cities` VALUES (222, '广西壮族自治区', '南宁市', 450100);
-INSERT INTO `ch_cities` VALUES (223, '广西壮族自治区', '柳州市', 450200);
-INSERT INTO `ch_cities` VALUES (224, '广西壮族自治区', '桂林市', 450300);
-INSERT INTO `ch_cities` VALUES (225, '广西壮族自治区', '梧州市', 450400);
-INSERT INTO `ch_cities` VALUES (226, '广西壮族自治区', '北海市', 450500);
-INSERT INTO `ch_cities` VALUES (227, '广西壮族自治区', '防城港市', 450600);
-INSERT INTO `ch_cities` VALUES (228, '广西壮族自治区', '钦州市', 450700);
-INSERT INTO `ch_cities` VALUES (229, '广西壮族自治区', '贵港市', 450800);
-INSERT INTO `ch_cities` VALUES (230, '广西壮族自治区', '玉林市', 450900);
-INSERT INTO `ch_cities` VALUES (231, '广西壮族自治区', '百色市', 451000);
-INSERT INTO `ch_cities` VALUES (232, '广西壮族自治区', '贺州市', 451100);
-INSERT INTO `ch_cities` VALUES (233, '广西壮族自治区', '河池市', 451200);
-INSERT INTO `ch_cities` VALUES (234, '广西壮族自治区', '来宾市', 451300);
-INSERT INTO `ch_cities` VALUES (235, '广西壮族自治区', '崇左市', 451400);
-INSERT INTO `ch_cities` VALUES (236, '海南省', '海口市', 460100);
-INSERT INTO `ch_cities` VALUES (237, '海南省', '三亚市', 460200);
-INSERT INTO `ch_cities` VALUES (238, '海南省', '儋州市', 460400);
-INSERT INTO `ch_cities` VALUES (239, '重庆市', '重庆市', 500100);
-INSERT INTO `ch_cities` VALUES (240, '四川省', '成都市', 510100);
-INSERT INTO `ch_cities` VALUES (241, '四川省', '自贡市', 510300);
-INSERT INTO `ch_cities` VALUES (242, '四川省', '攀枝花市', 510400);
-INSERT INTO `ch_cities` VALUES (243, '四川省', '泸州市', 510500);
-INSERT INTO `ch_cities` VALUES (244, '四川省', '德阳市', 510600);
-INSERT INTO `ch_cities` VALUES (245, '四川省', '绵阳市', 510700);
-INSERT INTO `ch_cities` VALUES (246, '四川省', '广元市', 510800);
-INSERT INTO `ch_cities` VALUES (247, '四川省', '遂宁市', 510900);
-INSERT INTO `ch_cities` VALUES (248, '四川省', '内江市', 511000);
-INSERT INTO `ch_cities` VALUES (249, '四川省', '乐山市', 511100);
-INSERT INTO `ch_cities` VALUES (250, '四川省', '南充市', 511300);
-INSERT INTO `ch_cities` VALUES (251, '四川省', '眉山市', 511400);
-INSERT INTO `ch_cities` VALUES (252, '四川省', '宜宾市', 511500);
-INSERT INTO `ch_cities` VALUES (253, '四川省', '广安市', 511600);
-INSERT INTO `ch_cities` VALUES (254, '四川省', '达州市', 511700);
-INSERT INTO `ch_cities` VALUES (255, '四川省', '雅安市', 511800);
-INSERT INTO `ch_cities` VALUES (256, '四川省', '巴中市', 511900);
-INSERT INTO `ch_cities` VALUES (257, '四川省', '资阳市', 512000);
-INSERT INTO `ch_cities` VALUES (258, '四川省', '阿坝藏族羌族自治州', 513200);
-INSERT INTO `ch_cities` VALUES (259, '四川省', '甘孜藏族自治州', 513300);
-INSERT INTO `ch_cities` VALUES (260, '四川省', '凉山彝族自治州', 513400);
-INSERT INTO `ch_cities` VALUES (261, '贵州省', '贵阳市', 520100);
-INSERT INTO `ch_cities` VALUES (262, '贵州省', '六盘水市', 520200);
-INSERT INTO `ch_cities` VALUES (263, '贵州省', '遵义市', 520300);
-INSERT INTO `ch_cities` VALUES (264, '贵州省', '安顺市', 520400);
-INSERT INTO `ch_cities` VALUES (265, '贵州省', '毕节市', 520500);
-INSERT INTO `ch_cities` VALUES (266, '贵州省', '铜仁市', 520600);
-INSERT INTO `ch_cities` VALUES (267, '贵州省', '黔西南布依族苗族自治州', 522300);
-INSERT INTO `ch_cities` VALUES (268, '贵州省', '黔东南苗族侗族自治州', 522600);
-INSERT INTO `ch_cities` VALUES (269, '贵州省', '黔南布依族苗族自治州', 522700);
-INSERT INTO `ch_cities` VALUES (270, '云南省', '昆明市', 530100);
-INSERT INTO `ch_cities` VALUES (271, '云南省', '曲靖市', 530300);
-INSERT INTO `ch_cities` VALUES (272, '云南省', '玉溪市', 530400);
-INSERT INTO `ch_cities` VALUES (273, '云南省', '保山市', 530500);
-INSERT INTO `ch_cities` VALUES (274, '云南省', '昭通市', 530600);
-INSERT INTO `ch_cities` VALUES (275, '云南省', '丽江市', 530700);
-INSERT INTO `ch_cities` VALUES (276, '云南省', '普洱市', 530800);
-INSERT INTO `ch_cities` VALUES (277, '云南省', '临沧市', 530900);
-INSERT INTO `ch_cities` VALUES (278, '云南省', '楚雄彝族自治州', 532300);
-INSERT INTO `ch_cities` VALUES (279, '云南省', '红河哈尼族彝族自治州', 532500);
-INSERT INTO `ch_cities` VALUES (280, '云南省', '文山壮族苗族自治州', 532600);
-INSERT INTO `ch_cities` VALUES (281, '云南省', '西双版纳傣族自治州', 532800);
-INSERT INTO `ch_cities` VALUES (282, '云南省', '大理白族自治州', 532900);
-INSERT INTO `ch_cities` VALUES (283, '云南省', '德宏傣族景颇族自治州', 533100);
-INSERT INTO `ch_cities` VALUES (284, '云南省', '怒江傈僳族自治州', 533300);
-INSERT INTO `ch_cities` VALUES (285, '云南省', '迪庆藏族自治州', 533400);
-INSERT INTO `ch_cities` VALUES (286, '西藏自治区', '拉萨市', 540100);
-INSERT INTO `ch_cities` VALUES (287, '西藏自治区', '日喀则市', 540200);
-INSERT INTO `ch_cities` VALUES (288, '陕西省', '西安市', 610100);
-INSERT INTO `ch_cities` VALUES (289, '陕西省', '铜川市', 610200);
-INSERT INTO `ch_cities` VALUES (290, '陕西省', '宝鸡市', 610300);
-INSERT INTO `ch_cities` VALUES (291, '陕西省', '咸阳市', 610400);
-INSERT INTO `ch_cities` VALUES (292, '陕西省', '渭南市', 610500);
-INSERT INTO `ch_cities` VALUES (293, '陕西省', '延安市', 610600);
-INSERT INTO `ch_cities` VALUES (294, '陕西省', '汉中市', 610700);
-INSERT INTO `ch_cities` VALUES (295, '陕西省', '榆林市', 610800);
-INSERT INTO `ch_cities` VALUES (296, '陕西省', '安康市', 610900);
-INSERT INTO `ch_cities` VALUES (297, '陕西省', '商洛市', 611000);
-INSERT INTO `ch_cities` VALUES (298, '甘肃省', '兰州市', 620100);
-INSERT INTO `ch_cities` VALUES (299, '甘肃省', '嘉峪关市', 620200);
-INSERT INTO `ch_cities` VALUES (300, '甘肃省', '金昌市', 620300);
-INSERT INTO `ch_cities` VALUES (301, '甘肃省', '白银市', 620400);
-INSERT INTO `ch_cities` VALUES (302, '甘肃省', '天水市', 620500);
-INSERT INTO `ch_cities` VALUES (303, '甘肃省', '武威市', 620600);
-INSERT INTO `ch_cities` VALUES (304, '甘肃省', '张掖市', 620700);
-INSERT INTO `ch_cities` VALUES (305, '甘肃省', '平凉市', 620800);
-INSERT INTO `ch_cities` VALUES (306, '甘肃省', '酒泉市', 620900);
-INSERT INTO `ch_cities` VALUES (307, '甘肃省', '庆阳市', 621000);
-INSERT INTO `ch_cities` VALUES (308, '甘肃省', '定西市', 621100);
-INSERT INTO `ch_cities` VALUES (309, '甘肃省', '陇南市', 621200);
-INSERT INTO `ch_cities` VALUES (310, '甘肃省', '临夏回族自治州', 622900);
-INSERT INTO `ch_cities` VALUES (311, '甘肃省', '甘南藏族自治州', 623000);
-INSERT INTO `ch_cities` VALUES (312, '青海省', '西宁市', 630100);
-INSERT INTO `ch_cities` VALUES (313, '青海省', '海东市', 630200);
-INSERT INTO `ch_cities` VALUES (314, '青海省', '海西蒙古族藏族自治州', 632800);
-INSERT INTO `ch_cities` VALUES (315, '宁夏回族自治区', '银川市', 640100);
-INSERT INTO `ch_cities` VALUES (316, '宁夏回族自治区', '石嘴山市', 640200);
-INSERT INTO `ch_cities` VALUES (317, '宁夏回族自治区', '吴忠市', 640300);
-INSERT INTO `ch_cities` VALUES (318, '新疆维吾尔自治区', '乌鲁木齐市', 650100);
-INSERT INTO `ch_cities` VALUES (319, '新疆维吾尔自治区', '克拉玛依市', 650200);
-INSERT INTO `ch_cities` VALUES (320, '新疆维吾尔自治区', '哈密市', 650500);
-INSERT INTO `ch_cities` VALUES (321, '新疆维吾尔自治区', '昌吉回族自治州', 652300);
-INSERT INTO `ch_cities` VALUES (322, '新疆维吾尔自治区', '巴音郭楞蒙古自治州', 652800);
-INSERT INTO `ch_cities` VALUES (323, '新疆维吾尔自治区', '阿克苏地区', 652900);
-INSERT INTO `ch_cities` VALUES (324, '新疆维吾尔自治区', '喀什地区', 653100);
-INSERT INTO `ch_cities` VALUES (325, '新疆维吾尔自治区', '伊犁哈萨克自治州', 654000);
+INSERT INTO `ch_cities` VALUES (1, '北京市', '北京市', 110100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (2, '天津市', '天津市', 120100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (3, '河北省', '石家庄市', 130100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (4, '河北省', '唐山市', 130200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (5, '河北省', '秦皇岛市', 130300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (6, '河北省', '邯郸市', 130400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (7, '河北省', '邢台市', 130500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (8, '河北省', '保定市', 130600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (9, '河北省', '张家口市', 130700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (10, '河北省', '承德市', 130800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (11, '河北省', '沧州市', 130900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (12, '河北省', '廊坊市', 131000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (13, '河北省', '衡水市', 131100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (14, '山西省', '太原市', 140100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (15, '山西省', '大同市', 140200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (16, '山西省', '阳泉市', 140300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (17, '山西省', '长治市', 140400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (18, '山西省', '晋城市', 140500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (19, '山西省', '朔州市', 140600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (20, '山西省', '晋中市', 140700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (21, '山西省', '运城市', 140800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (22, '山西省', '忻州市', 140900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (23, '山西省', '临汾市', 141000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (24, '山西省', '吕梁市', 141100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (25, '内蒙古自治区', '呼和浩特市', 150100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (26, '内蒙古自治区', '包头市', 150200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (27, '内蒙古自治区', '乌海市', 150300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (28, '内蒙古自治区', '赤峰市', 150400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (29, '内蒙古自治区', '通辽市', 150500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (30, '内蒙古自治区', '鄂尔多斯市', 150600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (31, '内蒙古自治区', '呼伦贝尔市', 150700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (32, '内蒙古自治区', '巴彦淖尔市', 150800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (33, '内蒙古自治区', '乌兰察布市', 150900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (34, '内蒙古自治区', '兴安盟', 152200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (35, '内蒙古自治区', '锡林郭勒盟', 152500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (36, '内蒙古自治区', '二连浩特市', 152501, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (37, '内蒙古自治区', '锡林浩特市', 152502, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (38, '内蒙古自治区', '阿拉善盟', 152900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (39, '辽宁省', '沈阳市', 210100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (40, '辽宁省', '大连市', 210200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (41, '辽宁省', '鞍山市', 210300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (42, '辽宁省', '抚顺市', 210400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (43, '辽宁省', '本溪市', 210500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (44, '辽宁省', '丹东市', 210600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (45, '辽宁省', '锦州市', 210700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (46, '辽宁省', '营口市', 210800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (47, '辽宁省', '阜新市', 210900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (48, '辽宁省', '辽阳市', 211000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (49, '辽宁省', '盘锦市', 211100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (50, '辽宁省', '铁岭市', 211200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (51, '辽宁省', '朝阳市', 211300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (52, '辽宁省', '葫芦岛市', 211400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (53, '吉林省', '长春市', 220100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (54, '吉林省', '吉林市', 220200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (55, '吉林省', '四平市', 220300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (56, '吉林省', '辽源市', 220400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (57, '吉林省', '通化市', 220500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (58, '吉林省', '白山市', 220600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (59, '吉林省', '松原市', 220700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (60, '吉林省', '白城市', 220800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (61, '吉林省', '延边朝鲜族自治州', 222400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (62, '黑龙江省', '哈尔滨市', 230100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (63, '黑龙江省', '齐齐哈尔市', 230200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (64, '黑龙江省', '鸡西市', 230300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (65, '黑龙江省', '鹤岗市', 230400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (66, '黑龙江省', '双鸭山市', 230500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (67, '黑龙江省', '大庆市', 230600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (68, '黑龙江省', '伊春市', 230700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (69, '黑龙江省', '佳木斯市', 230800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (70, '黑龙江省', '七台河市', 230900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (71, '黑龙江省', '牡丹江市', 231000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (72, '黑龙江省', '黑河市', 231100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (73, '黑龙江省', '绥化市', 231200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (74, '黑龙江省', '大兴安岭地区', 232700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (75, '上海市', '上海市', 310100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (76, '江苏省', '南京市', 320100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (77, '江苏省', '无锡市', 320200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (78, '江苏省', '徐州市', 320300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (79, '江苏省', '常州市', 320400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (80, '江苏省', '苏州市', 320500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (81, '江苏省', '昆山市', 320583, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (82, '江苏省', '南通市', 320600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (83, '江苏省', '连云港市', 320700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (84, '江苏省', '淮安市', 320800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (85, '江苏省', '盐城市', 320900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (86, '江苏省', '扬州市', 321000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (87, '江苏省', '镇江市', 321100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (88, '江苏省', '泰州市', 321200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (89, '江苏省', '宿迁市', 321300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (90, '浙江省', '杭州市', 330100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (91, '浙江省', '宁波市', 330200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (92, '浙江省', '温州市', 330300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (93, '浙江省', '嘉兴市', 330400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (94, '浙江省', '湖州市', 330500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (95, '浙江省', '绍兴市', 330600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (96, '浙江省', '金华市', 330700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (97, '浙江省', '衢州市', 330800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (98, '浙江省', '舟山市', 330900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (99, '浙江省', '台州市', 331000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (100, '浙江省', '丽水市', 331100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (101, '安徽省', '合肥市', 340100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (102, '安徽省', '芜湖市', 340200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (103, '安徽省', '蚌埠市', 340300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (104, '安徽省', '淮南市', 340400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (105, '安徽省', '马鞍山市', 340500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (106, '安徽省', '淮北市', 340600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (107, '安徽省', '铜陵市', 340700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (108, '安徽省', '安庆市', 340800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (109, '安徽省', '黄山市', 341000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (110, '安徽省', '滁州市', 341100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (111, '安徽省', '阜阳市', 341200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (112, '安徽省', '宿州市', 341300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (113, '安徽省', '六安市', 341500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (114, '安徽省', '亳州市', 341600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (115, '安徽省', '池州市', 341700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (116, '安徽省', '宣城市', 341800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (117, '福建省', '福州市', 350100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (118, '福建省', '厦门市', 350200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (119, '福建省', '莆田市', 350300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (120, '福建省', '三明市', 350400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (121, '福建省', '泉州市', 350500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (122, '福建省', '漳州市', 350600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (123, '福建省', '南平市', 350700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (124, '福建省', '龙岩市', 350800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (125, '福建省', '宁德市', 350900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (126, '江西省', '南昌市', 360100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (127, '江西省', '景德镇市', 360200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (128, '江西省', '萍乡市', 360300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (129, '江西省', '九江市', 360400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (130, '江西省', '新余市', 360500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (131, '江西省', '鹰潭市', 360600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (132, '江西省', '赣州市', 360700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (133, '江西省', '吉安市', 360800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (134, '江西省', '宜春市', 360900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (135, '江西省', '抚州市', 361000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (136, '江西省', '上饶市', 361100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (137, '山东省', '济南市', 370100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (138, '山东省', '青岛市', 370200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (139, '山东省', '淄博市', 370300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (140, '山东省', '枣庄市', 370400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (141, '山东省', '滕州市', 370481, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (142, '山东省', '东营市', 370500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (143, '山东省', '烟台市', 370600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (144, '山东省', '潍坊市', 370700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (145, '山东省', '济宁市', 370800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (146, '山东省', '泰安市', 370900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (147, '山东省', '威海市', 371000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (148, '山东省', '日照市', 371100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (149, '山东省', '莱芜市', 371200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (150, '山东省', '临沂市', 371300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (151, '山东省', '德州市', 371400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (152, '山东省', '聊城市', 371500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (153, '山东省', '滨州市', 371600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (154, '山东省', '菏泽市', 371700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (155, '河南省', '郑州市', 410100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (156, '河南省', '开封市', 410200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (157, '河南省', '洛阳市', 410300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (158, '河南省', '平顶山市', 410400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (159, '河南省', '安阳市', 410500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (160, '河南省', '鹤壁市', 410600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (161, '河南省', '新乡市', 410700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (162, '河南省', '焦作市', 410800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (163, '河南省', '濮阳市', 410900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (164, '河南省', '许昌市', 411000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (165, '河南省', '漯河市', 411100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (166, '河南省', '三门峡市', 411200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (167, '河南省', '南阳市', 411300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (168, '河南省', '商丘市', 411400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (169, '河南省', '信阳市', 411500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (170, '河南省', '周口市', 411600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (171, '河南省', '驻马店市', 411700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (172, '河南省', '济源市', 419001, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (173, '湖北省', '武汉市', 420100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (174, '湖北省', '黄石市', 420200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (175, '湖北省', '十堰市', 420300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (176, '湖北省', '宜昌市', 420500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (177, '湖北省', '襄阳市', 420600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (178, '湖北省', '鄂州市', 420700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (179, '湖北省', '荆门市', 420800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (180, '湖北省', '孝感市', 420900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (181, '湖北省', '荆州市', 421000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (182, '湖北省', '黄冈市', 421100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (183, '湖北省', '咸宁市', 421200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (184, '湖北省', '随州市', 421300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (185, '湖北省', '恩施土家族苗族自治州', 422800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (186, '湖北省', '潜江市', 429005, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (187, '湖南省', '长沙市', 430100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (188, '湖南省', '株洲市', 430200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (189, '湖南省', '湘潭市', 430300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (190, '湖南省', '衡阳市', 430400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (191, '湖南省', '邵阳市', 430500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (192, '湖南省', '岳阳市', 430600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (193, '湖南省', '常德市', 430700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (194, '湖南省', '张家界市', 430800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (195, '湖南省', '益阳市', 430900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (196, '湖南省', '郴州市', 431000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (197, '湖南省', '永州市', 431100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (198, '湖南省', '怀化市', 431200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (199, '湖南省', '娄底市', 431300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (200, '湖南省', '湘西土家族苗族自治州', 433100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (201, '广东省', '广州市', 440100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (202, '广东省', '韶关市', 440200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (203, '广东省', '深圳市', 440300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (204, '广东省', '珠海市', 440400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (205, '广东省', '汕头市', 440500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (206, '广东省', '佛山市', 440600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (207, '广东省', '江门市', 440700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (208, '广东省', '湛江市', 440800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (209, '广东省', '茂名市', 440900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (210, '广东省', '肇庆市', 441200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (211, '广东省', '惠州市', 441300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (212, '广东省', '梅州市', 441400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (213, '广东省', '汕尾市', 441500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (214, '广东省', '河源市', 441600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (215, '广东省', '阳江市', 441700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (216, '广东省', '清远市', 441800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (217, '广东省', '东莞市', 441900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (218, '广东省', '中山市', 442000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (219, '广东省', '潮州市', 445100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (220, '广东省', '揭阳市', 445200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (221, '广东省', '云浮市', 445300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (222, '广西壮族自治区', '南宁市', 450100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (223, '广西壮族自治区', '柳州市', 450200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (224, '广西壮族自治区', '桂林市', 450300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (225, '广西壮族自治区', '梧州市', 450400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (226, '广西壮族自治区', '北海市', 450500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (227, '广西壮族自治区', '防城港市', 450600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (228, '广西壮族自治区', '钦州市', 450700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (229, '广西壮族自治区', '贵港市', 450800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (230, '广西壮族自治区', '玉林市', 450900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (231, '广西壮族自治区', '百色市', 451000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (232, '广西壮族自治区', '贺州市', 451100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (233, '广西壮族自治区', '河池市', 451200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (234, '广西壮族自治区', '来宾市', 451300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (235, '广西壮族自治区', '崇左市', 451400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (236, '海南省', '海口市', 460100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (237, '海南省', '三亚市', 460200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (238, '海南省', '儋州市', 460400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (239, '重庆市', '重庆市', 500100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (240, '四川省', '成都市', 510100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (241, '四川省', '自贡市', 510300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (242, '四川省', '攀枝花市', 510400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (243, '四川省', '泸州市', 510500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (244, '四川省', '德阳市', 510600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (245, '四川省', '绵阳市', 510700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (246, '四川省', '广元市', 510800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (247, '四川省', '遂宁市', 510900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (248, '四川省', '内江市', 511000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (249, '四川省', '乐山市', 511100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (250, '四川省', '南充市', 511300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (251, '四川省', '眉山市', 511400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (252, '四川省', '宜宾市', 511500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (253, '四川省', '广安市', 511600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (254, '四川省', '达州市', 511700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (255, '四川省', '雅安市', 511800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (256, '四川省', '巴中市', 511900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (257, '四川省', '资阳市', 512000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (258, '四川省', '阿坝藏族羌族自治州', 513200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (259, '四川省', '甘孜藏族自治州', 513300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (260, '四川省', '凉山彝族自治州', 513400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (261, '贵州省', '贵阳市', 520100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (262, '贵州省', '六盘水市', 520200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (263, '贵州省', '遵义市', 520300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (264, '贵州省', '安顺市', 520400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (265, '贵州省', '毕节市', 520500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (266, '贵州省', '铜仁市', 520600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (267, '贵州省', '黔西南布依族苗族自治州', 522300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (268, '贵州省', '黔东南苗族侗族自治州', 522600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (269, '贵州省', '黔南布依族苗族自治州', 522700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (270, '云南省', '昆明市', 530100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (271, '云南省', '曲靖市', 530300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (272, '云南省', '玉溪市', 530400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (273, '云南省', '保山市', 530500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (274, '云南省', '昭通市', 530600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (275, '云南省', '丽江市', 530700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (276, '云南省', '普洱市', 530800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (277, '云南省', '临沧市', 530900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (278, '云南省', '楚雄彝族自治州', 532300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (279, '云南省', '红河哈尼族彝族自治州', 532500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (280, '云南省', '文山壮族苗族自治州', 532600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (281, '云南省', '西双版纳傣族自治州', 532800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (282, '云南省', '大理白族自治州', 532900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (283, '云南省', '德宏傣族景颇族自治州', 533100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (284, '云南省', '怒江傈僳族自治州', 533300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (285, '云南省', '迪庆藏族自治州', 533400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (286, '西藏自治区', '拉萨市', 540100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (287, '西藏自治区', '日喀则市', 540200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (288, '陕西省', '西安市', 610100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (289, '陕西省', '铜川市', 610200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (290, '陕西省', '宝鸡市', 610300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (291, '陕西省', '咸阳市', 610400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (292, '陕西省', '渭南市', 610500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (293, '陕西省', '延安市', 610600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (294, '陕西省', '汉中市', 610700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (295, '陕西省', '榆林市', 610800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (296, '陕西省', '安康市', 610900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (297, '陕西省', '商洛市', 611000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (298, '甘肃省', '兰州市', 620100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (299, '甘肃省', '嘉峪关市', 620200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (300, '甘肃省', '金昌市', 620300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (301, '甘肃省', '白银市', 620400, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (302, '甘肃省', '天水市', 620500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (303, '甘肃省', '武威市', 620600, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (304, '甘肃省', '张掖市', 620700, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (305, '甘肃省', '平凉市', 620800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (306, '甘肃省', '酒泉市', 620900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (307, '甘肃省', '庆阳市', 621000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (308, '甘肃省', '定西市', 621100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (309, '甘肃省', '陇南市', 621200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (310, '甘肃省', '临夏回族自治州', 622900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (311, '甘肃省', '甘南藏族自治州', 623000, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (312, '青海省', '西宁市', 630100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (313, '青海省', '海东市', 630200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (314, '青海省', '海西蒙古族藏族自治州', 632800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (315, '宁夏回族自治区', '银川市', 640100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (316, '宁夏回族自治区', '石嘴山市', 640200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (317, '宁夏回族自治区', '吴忠市', 640300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (318, '新疆维吾尔自治区', '乌鲁木齐市', 650100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (319, '新疆维吾尔自治区', '克拉玛依市', 650200, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (320, '新疆维吾尔自治区', '哈密市', 650500, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (321, '新疆维吾尔自治区', '昌吉回族自治州', 652300, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (322, '新疆维吾尔自治区', '巴音郭楞蒙古自治州', 652800, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (323, '新疆维吾尔自治区', '阿克苏地区', 652900, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (324, '新疆维吾尔自治区', '喀什地区', 653100, NULL, NULL, NULL);
+INSERT INTO `ch_cities` VALUES (325, '新疆维吾尔自治区', '伊犁哈萨克自治州', 654000, NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for ch_provinces
@@ -678,43 +532,47 @@ INSERT INTO `ch_cities` VALUES (325, '新疆维吾尔自治区', '伊犁哈萨�
 DROP TABLE IF EXISTS `ch_provinces`;
 CREATE TABLE `ch_provinces`  (
   `id` int(255) NULL DEFAULT NULL,
-  `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL
+  `province` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  INDEX `idx_ch_provinces_deleted_at`(`deleted_at`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of ch_provinces
 -- ----------------------------
-INSERT INTO `ch_provinces` VALUES (1, '北京市');
-INSERT INTO `ch_provinces` VALUES (2, '天津市');
-INSERT INTO `ch_provinces` VALUES (3, '河北省');
-INSERT INTO `ch_provinces` VALUES (4, '山西省');
-INSERT INTO `ch_provinces` VALUES (5, '内蒙古自治区');
-INSERT INTO `ch_provinces` VALUES (6, '辽宁省');
-INSERT INTO `ch_provinces` VALUES (7, '吉林省');
-INSERT INTO `ch_provinces` VALUES (8, '黑龙江省');
-INSERT INTO `ch_provinces` VALUES (9, '上海市');
-INSERT INTO `ch_provinces` VALUES (10, '江苏省');
-INSERT INTO `ch_provinces` VALUES (11, '浙江省');
-INSERT INTO `ch_provinces` VALUES (12, '安徽省');
-INSERT INTO `ch_provinces` VALUES (13, '福建省');
-INSERT INTO `ch_provinces` VALUES (14, '江西省');
-INSERT INTO `ch_provinces` VALUES (15, '山东省');
-INSERT INTO `ch_provinces` VALUES (16, '河南省');
-INSERT INTO `ch_provinces` VALUES (17, '湖北省');
-INSERT INTO `ch_provinces` VALUES (18, '湖南省');
-INSERT INTO `ch_provinces` VALUES (19, '广东省');
-INSERT INTO `ch_provinces` VALUES (20, '广西壮族自治区');
-INSERT INTO `ch_provinces` VALUES (21, '海南省');
-INSERT INTO `ch_provinces` VALUES (22, '重庆市');
-INSERT INTO `ch_provinces` VALUES (23, '四川省');
-INSERT INTO `ch_provinces` VALUES (24, '贵州省');
-INSERT INTO `ch_provinces` VALUES (25, '云南省');
-INSERT INTO `ch_provinces` VALUES (26, '西藏自治区');
-INSERT INTO `ch_provinces` VALUES (27, '陕西省');
-INSERT INTO `ch_provinces` VALUES (28, '甘肃省');
-INSERT INTO `ch_provinces` VALUES (29, '青海省');
-INSERT INTO `ch_provinces` VALUES (30, '宁夏回族自治区');
-INSERT INTO `ch_provinces` VALUES (31, '新疆维吾尔自治区');
+INSERT INTO `ch_provinces` VALUES (1, '北京市', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (2, '天津市', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (3, '河北省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (4, '山西省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (5, '内蒙古自治区', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (6, '辽宁省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (7, '吉林省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (8, '黑龙江省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (9, '上海市', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (10, '江苏省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (11, '浙江省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (12, '安徽省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (13, '福建省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (14, '江西省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (15, '山东省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (16, '河南省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (17, '湖北省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (18, '湖南省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (19, '广东省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (20, '广西壮族自治区', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (21, '海南省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (22, '重庆市', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (23, '四川省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (24, '贵州省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (25, '云南省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (26, '西藏自治区', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (27, '陕西省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (28, '甘肃省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (29, '青海省', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (30, '宁夏回族自治区', NULL, NULL, NULL);
+INSERT INTO `ch_provinces` VALUES (31, '新疆维吾尔自治区', NULL, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for ch_t_d_areainfo
@@ -3952,6 +3810,138 @@ INSERT INTO `ch_t_d_areainfo` VALUES (810000, '香港特别行政区', 1, NULL);
 INSERT INTO `ch_t_d_areainfo` VALUES (820000, '澳门特别行政区', 1, NULL);
 
 -- ----------------------------
+-- Table structure for coffee_specs
+-- ----------------------------
+DROP TABLE IF EXISTS `coffee_specs`;
+CREATE TABLE `coffee_specs`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `coffee_id` varbinary(255) NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `sort` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_coffee_specs_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of coffee_specs
+-- ----------------------------
+INSERT INTO `coffee_specs` VALUES (1, NULL, NULL, NULL, 0x64313233616166332D613231382D343031322D393264322D313637613261623661626464, '小', '1');
+INSERT INTO `coffee_specs` VALUES (2, NULL, NULL, NULL, 0x64313233616166332D613231382D343031322D393264322D313637613261623661626464, '大', '2');
+
+-- ----------------------------
+-- Table structure for coffee_types
+-- ----------------------------
+DROP TABLE IF EXISTS `coffee_types`;
+CREATE TABLE `coffee_types`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `code`(`code`) USING BTREE,
+  INDEX `idx_coffee_types_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of coffee_types
+-- ----------------------------
+INSERT INTO `coffee_types` VALUES (2, '2020-03-19 17:19:07', '2020-03-19 17:19:07', NULL, 'a002', '卡布基诺', 'http://q8g3778mf.bkt.clouddn.com/imagekabujinuo.jpg');
+INSERT INTO `coffee_types` VALUES (3, '2020-03-19 17:20:55', '2020-03-19 17:20:55', NULL, 'a001', '拿铁', 'http://q8g3778mf.bkt.clouddn.com/imagenatie.jpg');
+INSERT INTO `coffee_types` VALUES (4, '2020-04-08 16:58:47', '2020-04-08 16:58:50', NULL, 'a003', '摩卡', 'http://q8g3778mf.bkt.clouddn.com/moka.jpg');
+INSERT INTO `coffee_types` VALUES (5, '2020-04-08 21:43:05', '2020-04-08 21:43:09', NULL, 'a004', '美式', 'http://q8g3778mf.bkt.clouddn.com/meishi.jpg');
+INSERT INTO `coffee_types` VALUES (6, '2020-04-08 21:44:58', '2020-04-08 21:45:01', NULL, 'a005', '速溶', 'http://q8g3778mf.bkt.clouddn.com/surong.jpg');
+
+-- ----------------------------
+-- Table structure for coffees
+-- ----------------------------
+DROP TABLE IF EXISTS `coffees`;
+CREATE TABLE `coffees`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `uuid` varbinary(255) NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `value` double NULL DEFAULT NULL,
+  `des` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `code` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_coffees_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of coffees
+-- ----------------------------
+INSERT INTO `coffees` VALUES (1, '2020-03-19 17:24:48', '2020-03-25 17:02:56', NULL, 0x64313233616166332D613231382D343031322D393264322D313637613261623661626464, '焦糖拿铁', 0, '焦糖拿铁是拿铁咖啡的一种，指加入了焦糖以提高咖啡甜度的拿铁咖啡。焦糖是一种在食品中应用范围十分广泛的天然着色剂、是食品添加剂中的重要一员。焦糖是以食品级糖类为原料提炼出来的一种浓糖。一般用做布丁的时候才使用。颜色近乎咖啡色。', 'http://q79nl9nka.bkt.clouddn.com/u%3D1778675169%2C345964970%26fm%3D26%26gp%3D0.jpg', 'a001');
+INSERT INTO `coffees` VALUES (2, '2020-03-25 15:47:50', '2020-03-25 17:05:57', '2020-03-25 17:15:51', 0x34393236643533642D343631632D343838372D383735662D376166336630626530626136, '焦糖卡布基诺', 2, '好喝的焦糖卡布基诺', 'http://q79nl9nka.bkt.clouddn.com/158512621566393546_p0.jpg', 'a002');
+INSERT INTO `coffees` VALUES (4, '2020-03-25 16:00:26', '2020-03-25 16:00:26', NULL, 0x33363637643964652D306462372D346232622D383331652D396631346138646536636662, '焦糖玛奇朵', 0, '焦糖玛奇朵（英文：Caramel Macchiato）是在香浓热牛奶上加入浓缩咖啡、香草，再淋上纯正焦糖而制成的饮品，融合三种不同口味。Macchiato意大利文，意思是“烙印”和“印染”，中文音译“玛奇朵”。“Caramel”意思是焦糖。焦糖玛琪朵，寓意“甜蜜的印记”。', 'http://q79nl9nka.bkt.clouddn.com/1585123211tumblr_phzlyg6L6a1qbznxho1_1280.jpg', 'a001');
+
+-- ----------------------------
+-- Table structure for customer_orders
+-- ----------------------------
+DROP TABLE IF EXISTS `customer_orders`;
+CREATE TABLE `customer_orders`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `deleted_at` datetime(0) NULL DEFAULT NULL,
+  `user_id` varbinary(255) NULL DEFAULT NULL,
+  `coffee_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `coffee_spec` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `value` double NULL DEFAULT NULL,
+  `spec_address` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_customer_orders_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for customers
+-- ----------------------------
+DROP TABLE IF EXISTS `customers`;
+CREATE TABLE `customers`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `deleted_at` timestamp(0) NULL DEFAULT NULL,
+  `uuid` varbinary(255) NULL DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `nickname` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `phone` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `image` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_customers_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of customers
+-- ----------------------------
+INSERT INTO `customers` VALUES (1, '2020-03-30 16:09:40', '2020-04-09 21:07:21', NULL, 0x37336162666162342D613963662D343734392D393336372D303639666331343137366433, '13353305122', 'e10adc3949ba59abbe56e057f20f883e', 'awdad', '417350372@qq.com', '13353305122', 'http://q8g3778mf.bkt.clouddn.com/1586437640C96C0322BD381707E3EC1D8ADBC32B1F.jpg');
+INSERT INTO `customers` VALUES (2, '2020-03-30 16:18:40', '2020-03-30 16:18:40', '2020-03-30 16:24:49', 0x39383862613566342D666235352D346232372D393563382D353661643262396264343435, 'admin', '123456', '', 'q13', '', '');
+INSERT INTO `customers` VALUES (3, '2020-03-30 16:28:57', '2020-03-30 16:28:57', '2020-03-30 16:28:59', 0x39303064643839632D353232382D343436352D393461332D386365333565636138643530, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (4, '2020-03-30 16:30:48', '2020-03-30 16:30:48', '2020-03-30 16:30:52', 0x38346231633466662D623036632D346664342D626331332D333431306532323662656263, '', '', '', '', '', '');
+INSERT INTO `customers` VALUES (5, '2020-03-30 16:34:02', '2020-03-30 16:34:02', '2020-03-30 16:34:07', 0x35343766363864632D343864652D343662372D383234612D346466333465653766376266, 'admin', '123456', 'asdasd', '', '', '');
+INSERT INTO `customers` VALUES (6, '2020-03-30 16:36:18', '2020-03-30 16:36:18', '2020-03-30 16:36:20', 0x33376165303266352D363861642D343363642D383763362D333839303564386631323137, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (7, '2020-03-30 16:36:33', '2020-03-30 16:36:33', '2020-03-30 16:36:35', 0x64653030396233352D373435342D346463372D386261662D316161323531333464646434, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (8, '2020-03-30 16:38:36', '2020-03-30 16:38:36', '2020-03-30 16:38:38', 0x62343462373361302D396262392D346465392D626438612D353736656631396138303032, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (9, '2020-03-30 16:39:40', '2020-03-30 16:39:40', '2020-03-30 16:39:42', 0x63666363663731302D636634332D343832362D393266392D393864396531666637616132, '', '', '', '', '', '');
+INSERT INTO `customers` VALUES (10, '2020-03-30 16:40:14', '2020-03-30 16:40:14', '2020-03-30 16:40:15', 0x63303039656334382D383061322D343161312D396266632D653738363166323238386263, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (11, '2020-03-30 16:42:05', '2020-03-30 16:42:05', '2020-03-30 16:42:06', 0x65653864633838622D306433632D346139642D386230622D353761356366353935656136, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (12, '2020-03-30 16:43:30', '2020-03-30 16:43:30', '2020-03-30 16:43:33', 0x66663736336665382D643331392D343935342D383763612D353035393635663766346664, 'admin', '123456', '', '', '', '');
+INSERT INTO `customers` VALUES (13, '2020-03-30 16:44:45', '2020-03-30 16:44:45', '2020-03-30 16:44:47', 0x39316431333435332D326239352D343333352D623566332D383565636232326137303338, '', '', '', '', '', '');
+INSERT INTO `customers` VALUES (14, '2020-03-30 16:47:37', '2020-03-30 16:47:37', '2020-03-30 16:47:39', 0x33356538666534652D626663302D343039632D386632372D646532363734386538343361, '', '', '', '', '', '');
+INSERT INTO `customers` VALUES (15, '2020-03-30 16:47:46', '2020-03-30 16:47:46', '2020-03-30 16:47:48', 0x34663362336464302D383435332D346437612D613636642D303936323130393765623333, '', '', '', '', '', '');
+INSERT INTO `customers` VALUES (16, '2020-03-30 16:54:19', '2020-03-30 16:56:44', NULL, 0x39306266383866372D656364372D346465662D393737322D303139303334333635313536, 'admin', '123456', '12', '1231@qq.com', '13532141321', 'http://q79nl9nka.bkt.clouddn.com/1585558433140-160Z21JJ0.jpg');
+
+-- ----------------------------
 -- Table structure for exa_customers
 -- ----------------------------
 DROP TABLE IF EXISTS `exa_customers`;
@@ -4046,7 +4036,7 @@ CREATE TABLE `jwt_blacklists`  (
   `jwt` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_jwt_blacklists_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 40 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of jwt_blacklists
@@ -4084,50 +4074,10 @@ INSERT INTO `jwt_blacklists` VALUES (32, '2020-01-06 16:55:40', '2020-01-06 16:5
 INSERT INTO `jwt_blacklists` VALUES (33, '2020-01-06 16:57:28', '2020-01-06 16:57:28', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4OTA1NzU4LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1NzgyOTk5NTh9.6y12UkOeW7vz7gGTcYaN3Y-2Ut2QmjgU9WEuy_pneGM');
 INSERT INTO `jwt_blacklists` VALUES (34, '2020-01-06 16:59:02', '2020-01-06 16:59:02', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4OTA1ODU1LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1NzgzMDAwNTV9.G0q9X7Ld3cN_BO-K219b7tFAHgtpiAwqLPoxVNKsEl8');
 INSERT INTO `jwt_blacklists` VALUES (35, '2020-01-06 16:59:26', '2020-01-06 16:59:26', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTc4OTA1OTQ2LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1NzgzMDAxNDZ9.cmBgWiztsnh7zF3OUNIDQKv8wzGJF7fllUv-4LlYxu8');
-INSERT INTO `jwt_blacklists` VALUES (36, '2020-03-21 14:46:14', '2020-03-21 14:46:14', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg1Mzc3ODY3LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODQ3NzIwNjd9.DLhWhD1FdcWLyFLcXQynKJnenbVHrSiKhlDGFRzgo5k');
-
--- ----------------------------
--- Table structure for menus
--- ----------------------------
-DROP TABLE IF EXISTS `menus`;
-CREATE TABLE `menus`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `menu_level` int(10) UNSIGNED NULL DEFAULT NULL,
-  `authority_id` int(10) UNSIGNED NULL DEFAULT NULL,
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `hidden` tinyint(1) NULL DEFAULT NULL,
-  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `parent_id` int(10) UNSIGNED NULL DEFAULT NULL,
-  `menu_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 241 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of menus
--- ----------------------------
-INSERT INTO `menus` VALUES (195, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
-INSERT INTO `menus` VALUES (196, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
-INSERT INTO `menus` VALUES (197, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
-INSERT INTO `menus` VALUES (198, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
-INSERT INTO `menus` VALUES (199, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
-INSERT INTO `menus` VALUES (231, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 999, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
-INSERT INTO `menus` VALUES (232, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 999, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
-INSERT INTO `menus` VALUES (233, '2019-09-19 22:05:18', '2019-09-19 22:05:18', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘');
-INSERT INTO `menus` VALUES (234, '2019-09-19 22:06:17', '2019-09-30 15:44:50', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单');
-INSERT INTO `menus` VALUES (235, '2019-09-19 22:06:38', '2019-09-19 22:06:38', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员');
-INSERT INTO `menus` VALUES (236, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理');
-INSERT INTO `menus` VALUES (237, '2019-09-19 22:13:18', '2019-09-19 22:13:18', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理');
-INSERT INTO `menus` VALUES (238, '2019-09-19 22:13:36', '2019-09-19 22:13:36', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理');
-INSERT INTO `menus` VALUES (239, '2019-10-09 15:12:29', '2019-10-09 15:14:44', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理');
-INSERT INTO `menus` VALUES (240, '2019-10-13 17:04:24', '2019-10-13 17:04:24', NULL, 0, 888, 'showTest', 'showTest', 0, 'view/showTest/showTest.vue', '展示用vue文件', 'setting', 0, '18', '展示用vue文件');
+INSERT INTO `jwt_blacklists` VALUES (36, '2020-03-23 15:13:27', '2020-03-23 15:13:27', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiOTUyOCIsImV4cCI6MTU4NTU0MzkwMywiaXNzIjoicW1QbHVzIiwibmJmIjoxNTg0OTM4MTAzfQ.iJ4ayk-EGmGvfFbA2zsixrzzLUmmuw9dwlfV0V6R_10');
+INSERT INTO `jwt_blacklists` VALUES (37, '2020-03-24 16:37:00', '2020-03-24 16:37:00', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg1NTU1MDE2LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODQ5NDkyMTZ9.R9OyKf84IO6bddoOyOmdCu28KKALVxa1Rytb6V4Eo14');
+INSERT INTO `jwt_blacklists` VALUES (38, '2020-03-24 16:40:03', '2020-03-24 16:40:03', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg1NjQzODI0LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODUwMzgwMjR9.8HMiX6xUZyKEDujFjXP2l6uc-9jObKGZs0kVyDktryY');
+INSERT INTO `jwt_blacklists` VALUES (39, '2020-03-26 16:15:27', '2020-03-26 16:15:27', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiOTUyOCIsImV4cCI6MTU4NTY0NDAwNSwiaXNzIjoicW1QbHVzIiwibmJmIjoxNTg1MDM4MjA1fQ.kUqb7ajWNg1g-zPqKe_4IGBwegoyh7S-AlXv16ePFDQ');
 
 -- ----------------------------
 -- Table structure for sys_apis
@@ -4146,7 +4096,7 @@ CREATE TABLE `sys_apis`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 86 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_apis
@@ -4185,13 +4135,27 @@ INSERT INTO `sys_apis` VALUES (35, '2019-12-28 18:18:07', '2019-12-28 18:18:07',
 INSERT INTO `sys_apis` VALUES (36, '2020-01-06 17:56:36', '2020-01-06 17:56:36', NULL, NULL, '/authority/setDataAuthority', '设置角色资源权限', 'authority', 'POST');
 INSERT INTO `sys_apis` VALUES (37, '2020-01-13 14:04:05', '2020-01-13 14:04:05', NULL, NULL, '/system/getSystemConfig', '获取配置文件内容', 'system', 'POST');
 INSERT INTO `sys_apis` VALUES (38, '2020-01-13 15:02:06', '2020-01-13 15:02:06', NULL, NULL, '/system/setSystemConfig', '设置配置文件内容', 'system', 'POST');
-INSERT INTO `sys_apis` VALUES (39, '2020-02-25 15:32:39', '2020-02-25 15:32:39', NULL, NULL, '/customer/createExaCustomer', '创建客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (40, '2020-02-25 15:32:51', '2020-02-25 15:34:56', NULL, NULL, '/customer/updataExaCustomer', '更新客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (41, '2020-02-25 15:33:57', '2020-02-25 15:33:57', NULL, NULL, '/customer/deleteExaCustomer', '删除客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (42, '2020-02-25 15:36:48', '2020-02-25 15:37:16', NULL, NULL, '/customer/getExaCustomer', '获取单一客户', 'customer', 'POST');
-INSERT INTO `sys_apis` VALUES (43, '2020-02-25 15:37:06', '2020-02-25 15:37:06', NULL, NULL, '/customer/getExaCustomerList', '获取客户列表', 'customer', 'POST');
 INSERT INTO `sys_apis` VALUES (44, '2020-03-12 14:36:54', '2020-03-12 14:56:50', NULL, NULL, '/casbin/casbinTest/:pathParam', 'RESTFUL模式测试', 'casbin', 'GET');
-INSERT INTO `sys_apis` VALUES (45, '2020-03-29 23:01:28', '2020-03-29 23:01:28', NULL, NULL, '/autoCode/createTemp', '自动化代码', 'autoCode', 'POST');
+INSERT INTO `sys_apis` VALUES (66, '2020-04-02 16:25:21', '2020-04-02 16:25:21', NULL, NULL, '/autoCode', '自动生成代码', 'autoCode', 'POST');
+INSERT INTO `sys_apis` VALUES (67, '2020-04-03 15:49:40', '2020-04-03 15:49:40', NULL, NULL, '/coffee/add', '添加咖啡', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (68, '2020-04-03 15:50:11', '2020-04-03 15:50:11', NULL, NULL, '/coffee/update', '更新咖啡', 'coffee', 'PATCH');
+INSERT INTO `sys_apis` VALUES (69, '2020-04-03 15:50:43', '2020-04-03 15:50:43', NULL, NULL, '/coffee/delete', '咖啡删除', 'coffee', 'DELETE');
+INSERT INTO `sys_apis` VALUES (70, '2020-04-03 15:54:06', '2020-04-03 15:54:06', '2020-04-03 15:54:12', NULL, '/coffee/delete', '删除咖啡', 'coffee', 'DELETE');
+INSERT INTO `sys_apis` VALUES (71, '2020-04-03 15:55:06', '2020-04-03 15:55:06', NULL, NULL, '/base/coffee', '获取咖啡', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (72, '2020-04-03 15:56:12', '2020-04-03 15:56:12', NULL, NULL, '/coffee/getbyid', '根据uuid获取咖啡', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (73, '2020-04-03 15:56:57', '2020-04-03 15:56:57', NULL, NULL, '/coffee/type', '改变咖啡类型', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (74, '2020-04-03 15:57:31', '2020-04-03 15:57:31', NULL, NULL, '/base/coffeetype', '获取所有咖啡类型', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (75, '2020-04-03 15:58:00', '2020-04-03 15:58:00', NULL, NULL, '/coffeetype/add', '增加咖啡类型', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (76, '2020-04-03 15:58:29', '2020-04-03 15:58:29', NULL, NULL, '/coffeetype/update', '更新咖啡类型', 'coffee', 'PATCH');
+INSERT INTO `sys_apis` VALUES (77, '2020-04-03 15:58:56', '2020-04-03 15:58:56', NULL, NULL, '/coffeetype', '删除咖啡类型', 'coffee', 'DELETE');
+INSERT INTO `sys_apis` VALUES (78, '2020-04-03 16:00:00', '2020-04-03 16:00:00', NULL, NULL, '/coffeetype/getbycode', '根据code获取咖啡类型', 'coffee', 'POST');
+INSERT INTO `sys_apis` VALUES (79, '2020-04-03 16:02:43', '2020-04-03 16:02:43', NULL, NULL, '/customer/list', '获取所有客户', 'customer', 'POST');
+INSERT INTO `sys_apis` VALUES (80, '2020-04-03 16:08:35', '2020-04-03 16:08:35', NULL, NULL, '/customer/add', '增加客户', 'customer', 'POST');
+INSERT INTO `sys_apis` VALUES (81, '2020-04-03 16:09:01', '2020-04-03 16:09:01', NULL, NULL, '/customer/update', '更新客户', 'customer', 'PATCH');
+INSERT INTO `sys_apis` VALUES (82, '2020-04-03 16:09:38', '2020-04-03 16:09:38', NULL, NULL, '/customer/delete', '删除客户', 'customer', 'DELETE');
+INSERT INTO `sys_apis` VALUES (83, '2020-04-03 16:12:05', '2020-04-03 16:12:05', NULL, NULL, '/customerAddress/add', '增加客户地址', 'customer', 'POST');
+INSERT INTO `sys_apis` VALUES (84, '2020-04-03 16:12:50', '2020-04-03 16:12:50', NULL, NULL, '/customerAddress/update', '更新客户', 'customer', 'PATCH');
+INSERT INTO `sys_apis` VALUES (85, '2020-04-03 16:13:29', '2020-04-03 16:13:29', NULL, NULL, '/customerAddress/delete', '删除客户地址', 'customer', 'DELETE');
 
 -- ----------------------------
 -- Table structure for sys_authorities
@@ -4240,20 +4204,20 @@ CREATE TABLE `sys_base_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 42 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 44 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_base_menus
 -- ----------------------------
 INSERT INTO `sys_base_menus` VALUES (1, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 0, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', '仪表盘', '1');
-INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 0, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', '测试菜单', '2');
+INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 0, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', '测试菜单', '2');
 INSERT INTO `sys_base_menus` VALUES (3, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 0, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', '超级管理员', '3');
 INSERT INTO `sys_base_menus` VALUES (4, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理', '1');
 INSERT INTO `sys_base_menus` VALUES (5, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理', '2');
 INSERT INTO `sys_base_menus` VALUES (6, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理', '3');
 INSERT INTO `sys_base_menus` VALUES (17, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理', '4');
 INSERT INTO `sys_base_menus` VALUES (18, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 0, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', '个人信息', '4');
-INSERT INTO `sys_base_menus` VALUES (19, '2019-10-20 11:14:42', '2020-03-29 21:39:18', NULL, 0, 0, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', '示例文件', '6');
+INSERT INTO `sys_base_menus` VALUES (19, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 0, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', '示例文件', '5');
 INSERT INTO `sys_base_menus` VALUES (20, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 19, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', '表格示例', '1');
 INSERT INTO `sys_base_menus` VALUES (21, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 19, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', '表单示例', '2');
 INSERT INTO `sys_base_menus` VALUES (22, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 19, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', '富文本编辑器', '3');
@@ -4262,16 +4226,17 @@ INSERT INTO `sys_base_menus` VALUES (26, '2019-10-20 11:27:02', '2019-12-12 16:5
 INSERT INTO `sys_base_menus` VALUES (29, '2019-12-04 10:05:57', '2019-12-12 16:51:39', '2019-12-12 17:00:50', 0, 0, 'workflow', 'workflow', 0, 'view/workflow/index.vue', '工作流', 'share', '工作流', '6');
 INSERT INTO `sys_base_menus` VALUES (30, '2019-12-04 10:06:36', '2019-12-04 10:06:36', '2019-12-12 17:00:48', 0, 29, 'workflowCreate', 'workflowCreate', 0, 'view/workflow/workflowCreate/workflowCreate', '创建工作流', '', '创建工作流', '1');
 INSERT INTO `sys_base_menus` VALUES (31, '2019-12-17 10:08:02', '2019-12-17 10:08:58', '2019-12-17 10:09:27', 0, 0, 'testtest', 'testtest', 0, 'view/test/index.vue', '测试menu', '', '测试menu', '8');
-INSERT INTO `sys_base_menus` VALUES (32, '2020-01-13 14:03:21', '2020-01-13 14:05:19', '2020-03-29 21:31:23', 0, 3, 'system', 'system', 0, 'view/superAdmin/system/system.vue', '配置管理', 'setting', '配置管理', '5');
+INSERT INTO `sys_base_menus` VALUES (32, '2020-01-13 14:03:21', '2020-01-13 14:05:19', NULL, 0, 3, 'system', 'system', 0, 'view/superAdmin/system/system.vue', '配置管理', 'setting', '配置管理', '5');
 INSERT INTO `sys_base_menus` VALUES (33, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 19, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', '断点续传', '6');
-INSERT INTO `sys_base_menus` VALUES (34, '2020-02-24 19:48:37', '2020-03-27 20:10:02', NULL, 0, 19, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', '客户列表（资源示例）', '7');
-INSERT INTO `sys_base_menus` VALUES (35, '2020-03-22 17:13:38', '2020-03-22 17:13:38', '2020-03-22 17:13:49', 0, 0, 'autoCode', 'autoCode', 0, 'view/superAdmin/autoCode/index.vue', '代码构建工具', 's-platform', '代码构建工具', '6');
-INSERT INTO `sys_base_menus` VALUES (36, '2020-03-22 17:14:24', '2020-03-22 17:15:23', '2020-03-29 21:31:18', 0, 3, 'autoCode', 'autoCode', 0, 'view/superAdmin/autoCode/index.vue', '自动化代码', 'cpu', '自动化代码', '6');
-INSERT INTO `sys_base_menus` VALUES (37, '2020-03-28 23:43:39', '2020-03-28 23:43:39', '2020-03-29 21:31:15', 0, 3, 'formCreate', 'formCreate', 0, 'view/superAdmin/formCreate/index.vue', '表单生成器', 'setting', '表单生成器', '8');
-INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-03-29 21:31:03', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', '系统工具', '5');
-INSERT INTO `sys_base_menus` VALUES (39, '2020-03-29 21:34:06', '2020-03-29 21:37:37', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '配置文件', 's-order', '配置文件', '0');
-INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-03-29 21:35:10', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', '1');
-INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-03-29 21:36:26', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', '2');
+INSERT INTO `sys_base_menus` VALUES (34, '2020-02-24 19:48:37', '2020-02-24 20:12:40', '2020-03-27 16:19:19', 0, 19, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', '客户列表（资源示例）', '7');
+INSERT INTO `sys_base_menus` VALUES (35, '2020-03-24 16:06:47', '2020-03-24 16:47:26', NULL, 0, 3, 'coffee', 'coffee', 0, 'view/superAdmin/coffee/coffee.vue', '咖啡列表', 'coffee-cup', '咖啡列表', '2');
+INSERT INTO `sys_base_menus` VALUES (37, '2020-03-26 15:36:43', '2020-03-26 15:38:28', NULL, 0, 3, 'coffeetype', 'coffeetype', 0, 'view/superAdmin/coffee/type.vue', '咖啡类型', 'menu', '咖啡类型', '5');
+INSERT INTO `sys_base_menus` VALUES (38, '2020-03-27 16:20:05', '2020-03-27 16:20:05', NULL, 0, 3, 'customer', 'customer', 0, 'view/superAdmin/customer/customer.vue', '客户列表', 's-custom', '客户列表', '5');
+INSERT INTO `sys_base_menus` VALUES (39, '2020-04-01 15:52:24', '2020-04-01 15:52:24', NULL, 0, 3, 'address', 'address', 0, 'view/superAdmin/address/address.vue', '客户地址', 'place', '客户地址', '8');
+INSERT INTO `sys_base_menus` VALUES (40, '2020-04-02 15:36:46', '2020-04-02 15:36:46', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', '系统工具', '5');
+INSERT INTO `sys_base_menus` VALUES (41, NULL, NULL, NULL, 0, 40, 'system', 'system', 0, 'view/systemTools/system/system.vue', '配置文件', 's-order', '配置文件', '0');
+INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 15:40:46', '2020-04-02 15:40:46', NULL, 0, 40, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', '1');
+INSERT INTO `sys_base_menus` VALUES (43, NULL, NULL, NULL, 0, 40, 'fromCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', '2');
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id
@@ -4319,64 +4284,67 @@ CREATE TABLE `sys_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 560 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 562 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_menus
 -- ----------------------------
 INSERT INTO `sys_menus` VALUES (231, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 999, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
-INSERT INTO `sys_menus` VALUES (232, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 999, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (232, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 999, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (434, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
+INSERT INTO `sys_menus` VALUES (435, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (436, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
+INSERT INTO `sys_menus` VALUES (437, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
+INSERT INTO `sys_menus` VALUES (438, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
+INSERT INTO `sys_menus` VALUES (439, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
+INSERT INTO `sys_menus` VALUES (440, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
+INSERT INTO `sys_menus` VALUES (441, '2020-01-13 14:03:21', '2020-01-13 14:05:19', NULL, 0, 888, 'system', 'system', 0, 'view/superAdmin/system/system.vue', '配置管理', 'setting', 3, '32', '配置管理', '5');
+INSERT INTO `sys_menus` VALUES (442, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
+INSERT INTO `sys_menus` VALUES (443, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
+INSERT INTO `sys_menus` VALUES (444, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
+INSERT INTO `sys_menus` VALUES (445, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
+INSERT INTO `sys_menus` VALUES (446, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
+INSERT INTO `sys_menus` VALUES (447, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
+INSERT INTO `sys_menus` VALUES (448, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
+INSERT INTO `sys_menus` VALUES (449, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 888, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
 INSERT INTO `sys_menus` VALUES (451, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 8881, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
 INSERT INTO `sys_menus` VALUES (452, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 8881, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
 INSERT INTO `sys_menus` VALUES (453, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 8881, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
 INSERT INTO `sys_menus` VALUES (454, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 8881, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
 INSERT INTO `sys_menus` VALUES (455, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 8881, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
 INSERT INTO `sys_menus` VALUES (456, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 8881, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
+INSERT INTO `sys_menus` VALUES (457, '2020-01-13 14:03:21', '2020-01-13 14:05:19', NULL, 0, 8881, 'system', 'system', 0, 'view/superAdmin/system/system.vue', '配置管理', 'setting', 3, '32', '配置管理', '5');
 INSERT INTO `sys_menus` VALUES (458, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 8881, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
-INSERT INTO `sys_menus` VALUES (459, '2019-10-20 11:14:42', '2020-03-29 21:39:18', NULL, 0, 8881, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '6');
+INSERT INTO `sys_menus` VALUES (459, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 8881, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
 INSERT INTO `sys_menus` VALUES (460, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 8881, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
 INSERT INTO `sys_menus` VALUES (461, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 8881, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
 INSERT INTO `sys_menus` VALUES (462, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 8881, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
 INSERT INTO `sys_menus` VALUES (463, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 8881, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
 INSERT INTO `sys_menus` VALUES (464, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 8881, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
 INSERT INTO `sys_menus` VALUES (465, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 8881, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
-INSERT INTO `sys_menus` VALUES (466, '2020-02-24 19:48:37', '2020-03-27 20:05:39', NULL, 0, 8881, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', 19, '34', '客户列表（资源示例）', '7');
-INSERT INTO `sys_menus` VALUES (503, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
-INSERT INTO `sys_menus` VALUES (504, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
-INSERT INTO `sys_menus` VALUES (505, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
-INSERT INTO `sys_menus` VALUES (506, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
-INSERT INTO `sys_menus` VALUES (507, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
-INSERT INTO `sys_menus` VALUES (508, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 9528, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
-INSERT INTO `sys_menus` VALUES (509, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 9528, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
-INSERT INTO `sys_menus` VALUES (512, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 9528, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
-INSERT INTO `sys_menus` VALUES (513, '2019-10-20 11:14:42', '2020-03-29 21:39:18', NULL, 0, 9528, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '6');
-INSERT INTO `sys_menus` VALUES (514, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 9528, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
-INSERT INTO `sys_menus` VALUES (515, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 9528, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
-INSERT INTO `sys_menus` VALUES (516, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 9528, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
-INSERT INTO `sys_menus` VALUES (517, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 9528, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
-INSERT INTO `sys_menus` VALUES (518, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 9528, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
-INSERT INTO `sys_menus` VALUES (519, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 9528, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
-INSERT INTO `sys_menus` VALUES (520, '2020-02-24 19:48:37', '2020-03-27 20:05:38', NULL, 0, 9528, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', 19, '34', '客户列表（资源示例）', '7');
-INSERT INTO `sys_menus` VALUES (540, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 888, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
-INSERT INTO `sys_menus` VALUES (541, '2019-09-19 22:06:17', '2020-03-27 20:33:58', NULL, 0, 888, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
-INSERT INTO `sys_menus` VALUES (542, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 888, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
-INSERT INTO `sys_menus` VALUES (543, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 888, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
-INSERT INTO `sys_menus` VALUES (544, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 888, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
-INSERT INTO `sys_menus` VALUES (545, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 888, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
-INSERT INTO `sys_menus` VALUES (546, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 888, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
-INSERT INTO `sys_menus` VALUES (547, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 888, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
-INSERT INTO `sys_menus` VALUES (548, '2019-10-20 11:14:42', '2020-03-29 21:39:18', NULL, 0, 888, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '6');
-INSERT INTO `sys_menus` VALUES (549, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 888, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
-INSERT INTO `sys_menus` VALUES (550, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 888, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
-INSERT INTO `sys_menus` VALUES (551, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 888, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
-INSERT INTO `sys_menus` VALUES (552, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 888, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
-INSERT INTO `sys_menus` VALUES (553, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 888, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
-INSERT INTO `sys_menus` VALUES (554, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 888, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
-INSERT INTO `sys_menus` VALUES (555, '2020-02-24 19:48:37', '2020-03-27 20:10:02', NULL, 0, 888, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', 19, '34', '客户列表（资源示例）', '7');
-INSERT INTO `sys_menus` VALUES (556, '2020-03-29 21:31:03', '2020-03-29 21:31:03', NULL, 0, 888, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', 0, '38', '系统工具', '5');
-INSERT INTO `sys_menus` VALUES (557, '2020-03-29 21:34:06', '2020-03-29 21:37:37', NULL, 0, 888, 'system', 'system', 0, 'view/systemTools/system/system.vue', '配置文件', 's-order', 38, '39', '配置文件', '0');
-INSERT INTO `sys_menus` VALUES (558, '2020-03-29 21:35:10', '2020-03-29 21:35:10', NULL, 0, 888, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', 38, '40', '代码生成器', '1');
-INSERT INTO `sys_menus` VALUES (559, '2020-03-29 21:36:26', '2020-03-29 21:36:26', NULL, 0, 888, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', 38, '41', '表单生成器', '2');
+INSERT INTO `sys_menus` VALUES (539, '2019-09-19 22:05:18', '2019-12-12 16:51:25', NULL, 0, 9528, 'dashbord', 'dashbord', 0, 'view/dashbord/index.vue', '仪表盘', 'setting', 0, '1', '仪表盘', '1');
+INSERT INTO `sys_menus` VALUES (540, '2019-09-19 22:06:17', '2019-12-12 16:51:28', NULL, 0, 9528, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', 0, '2', '测试菜单', '2');
+INSERT INTO `sys_menus` VALUES (541, '2019-09-19 22:06:38', '2019-12-12 16:51:31', NULL, 0, 9528, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', 0, '3', '超级管理员', '3');
+INSERT INTO `sys_menus` VALUES (542, '2019-09-19 22:11:53', '2019-09-19 22:11:53', NULL, 0, 9528, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', 3, '4', '角色管理', '1');
+INSERT INTO `sys_menus` VALUES (543, '2019-09-19 22:13:18', '2019-12-12 16:57:20', NULL, 0, 9528, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', 3, '5', '菜单管理', '2');
+INSERT INTO `sys_menus` VALUES (544, '2020-03-24 16:06:47', '2020-03-24 16:47:26', NULL, 0, 9528, 'coffee', 'coffee', 0, 'view/superAdmin/coffee/coffee.vue', '咖啡列表', 'coffee-cup', 3, '35', '咖啡列表', '2');
+INSERT INTO `sys_menus` VALUES (545, '2019-09-19 22:13:36', '2019-12-12 16:57:30', NULL, 0, 9528, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 3, '6', 'api管理', '3');
+INSERT INTO `sys_menus` VALUES (546, '2019-10-09 15:12:29', '2019-12-12 16:57:25', NULL, 0, 9528, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', 3, '17', '用户管理', '4');
+INSERT INTO `sys_menus` VALUES (547, '2020-03-26 15:36:43', '2020-03-26 15:38:28', NULL, 0, 9528, 'coffeetype', 'coffeetype', 0, 'view/superAdmin/coffee/type.vue', '咖啡类型', 'menu', 3, '37', '咖啡类型', '5');
+INSERT INTO `sys_menus` VALUES (548, '2020-03-27 16:20:05', '2020-03-27 16:20:05', NULL, 0, 9528, 'customer', 'customer', 0, 'view/superAdmin/customer/customer.vue', '客户列表', 's-custom', 3, '38', '客户列表', '5');
+INSERT INTO `sys_menus` VALUES (549, '2020-04-01 15:52:24', '2020-04-01 15:52:24', NULL, 0, 9528, 'address', 'address', 0, 'view/superAdmin/address/address.vue', '客户地址', 'place', 3, '39', '客户地址', '8');
+INSERT INTO `sys_menus` VALUES (550, '2019-10-15 22:27:22', '2019-12-12 16:51:33', NULL, 0, 9528, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', 0, '18', '个人信息', '4');
+INSERT INTO `sys_menus` VALUES (551, '2019-10-20 11:14:42', '2019-12-12 16:51:37', NULL, 0, 9528, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', 0, '19', '示例文件', '5');
+INSERT INTO `sys_menus` VALUES (552, '2019-10-20 11:18:11', '2019-10-20 11:18:11', NULL, 0, 9528, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', 19, '20', '表格示例', '1');
+INSERT INTO `sys_menus` VALUES (553, '2019-10-20 11:19:52', '2019-12-12 16:58:15', NULL, 0, 9528, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', 19, '21', '表单示例', '2');
+INSERT INTO `sys_menus` VALUES (554, '2019-10-20 11:22:19', '2019-12-12 16:58:20', NULL, 0, 9528, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', 19, '22', '富文本编辑器', '3');
+INSERT INTO `sys_menus` VALUES (555, '2019-10-20 11:23:39', '2019-12-12 16:58:23', NULL, 0, 9528, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 19, '23', 'excel导入导出', '4');
+INSERT INTO `sys_menus` VALUES (556, '2019-10-20 11:27:02', '2019-12-12 16:58:27', NULL, 0, 9528, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', 19, '26', '上传下载', '5');
+INSERT INTO `sys_menus` VALUES (557, '2020-02-17 16:20:47', '2020-02-24 19:45:40', NULL, 0, 9528, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', 19, '33', '断点续传', '6');
+INSERT INTO `sys_menus` VALUES (558, '2020-04-02 15:36:46', '2020-04-02 15:36:46', NULL, 0, 9528, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', 0, '40', '系统工具', '5');
+INSERT INTO `sys_menus` VALUES (559, '2020-04-02 15:44:43', '2020-04-02 15:44:43', NULL, 0, 9528, 'system', 'system', 0, 'view/systemTools/system/system.vue', '配置文件', 's-order', 40, '41', '配置文件', '0');
+INSERT INTO `sys_menus` VALUES (560, '2020-04-02 15:40:46', '2020-04-02 15:40:46', NULL, 0, 9528, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', 40, '42', '代码生成器', '1');
+INSERT INTO `sys_menus` VALUES (561, '2020-04-02 15:44:43', '2020-04-02 15:44:43', NULL, 0, 9528, 'fromCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', 40, '43', '表单生成器', '2');
 
 -- ----------------------------
 -- Table structure for sys_users
@@ -4406,7 +4374,7 @@ CREATE TABLE `sys_users`  (
 -- ----------------------------
 -- Records of sys_users
 -- ----------------------------
-INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 9528, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
 INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 9528, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
 
 -- ----------------------------
@@ -4451,37 +4419,5 @@ CREATE TABLE `sys_workflows`  (
 -- Records of sys_workflows
 -- ----------------------------
 INSERT INTO `sys_workflows` VALUES (8, '2019-12-09 15:20:21', '2019-12-09 15:20:21', NULL, '测试改版1', 'test', '123123');
-
--- ----------------------------
--- Table structure for users
--- ----------------------------
-DROP TABLE IF EXISTS `users`;
-CREATE TABLE `users`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `uuid` varbinary(255) NULL DEFAULT NULL,
-  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pass_word` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'QMPlusUser',
-  `header_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'http://www.henrongyi.top/avatar/lufu.jpg',
-  `authority_id` double NULL DEFAULT 888,
-  `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  INDEX `idx_users_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of users
--- ----------------------------
-INSERT INTO `users` VALUES (10, '2019-09-13 17:23:46', '2019-09-13 17:23:46', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, '303176530', '3ec063004a6f31642261936a379fde3d');
-INSERT INTO `users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d');
-INSERT INTO `users` VALUES (12, '2019-09-13 17:28:56', '2019-09-13 17:28:56', NULL, 0x65373939636563362D346337662D343338632D383634372D376435633333393734353165, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');
-INSERT INTO `users` VALUES (13, '2019-09-13 17:29:26', '2019-09-13 17:29:26', NULL, 0x65653764353932322D323333312D343162632D393363322D613665366461306465343230, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');
-INSERT INTO `users` VALUES (14, '2019-09-13 17:29:28', '2019-09-13 17:29:28', NULL, 0x35623464333461322D343266352D343763352D613932642D613637616536643461643334, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 888, NULL, 'a30317465', '3ec063004a6f31642261936a379fde3d');
-INSERT INTO `users` VALUES (15, '2019-09-13 17:31:16', '2019-10-09 23:04:28', NULL, 0x34306437393436612D363732382D346536662D396434302D313432356566653831363032, NULL, NULL, 'QMPlusUser', 'http://www.henrongyi.top/avatar/lufu.jpg', 999, NULL, 'a303146523', 'e10adc3949ba59abbe56e057f20f883e');
 
 SET FOREIGN_KEY_CHECKS = 1;

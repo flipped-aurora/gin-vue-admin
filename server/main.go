@@ -8,7 +8,12 @@ import (
 )
 
 func main() {
-	initialize.Mysql()
+	switch global.GVA_CONFIG.System.Db  {
+	case "mysql":
+		initialize.Mysql()
+	case "sqlite":
+		initialize.Sqlite()
+	}
 	initialize.DBTables()
 	// 程序结束前关闭数据库链接
 	defer global.GVA_DB.Close()

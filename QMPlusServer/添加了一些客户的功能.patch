@@ -1,0 +1,77 @@
+Index: QMPlusServer/router/sys_base.go
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- QMPlusServer/router/sys_base.go	(revision 7f91711eafe8389a714ae3724c3f959c34452ca1)
++++ QMPlusServer/router/sys_base.go	(date 1586499734538)
+@@ -14,6 +14,8 @@
+ 		BaseRouter.GET("captcha/:captchaId", api.CaptchaImg)
+ 		BaseRouter.POST("coffee", api.GetCoffeeList)
+ 		BaseRouter.POST("coffeetype", api.GetCoffeeTypeList)
++		BaseRouter.POST("cuslogin",api.CusLogin)
++		BaseRouter.POST("coffeebycode",api.GetCoffeeListByCode)
+ 	}
+ 	return BaseRouter
+ }
+Index: QMPlusVuePage/src/api/customer.js
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- QMPlusVuePage/src/api/customer.js	(revision 7f91711eafe8389a714ae3724c3f959c34452ca1)
++++ QMPlusVuePage/src/api/customer.js	(date 1585900030935)
+@@ -11,7 +11,7 @@
+ 
+ export const addCustomer = (data) => {
+     return service({
+-        url: "/customer",
++        url: "/customer/add",
+         method: 'post',
+         data: data
+     })
+@@ -19,7 +19,7 @@
+ 
+ export const updateCustomer = (data) => {
+     return service({
+-        url: "/customer",
++        url: "/customer/update",
+         method: 'patch',
+         data: data
+     })
+@@ -27,7 +27,7 @@
+ 
+ export const delCustomer = (data) => {
+     return service({
+-        url: `/customer`,
++        url: `/customer/delete`,
+         method: 'delete',
+         data: data
+     })
+@@ -43,7 +43,7 @@
+ 
+ export const addCustomerAddress = (data) => {
+     return service({
+-        url: "/customerAddress",
++        url: "/customerAddress/add",
+         method: 'post',
+         data
+     })
+@@ -51,7 +51,7 @@
+ 
+ export const updateCustomerAddress = (data) => {
+     return service({
+-        url: "/customerAddress",
++        url: "/customerAddress/update",
+         method: 'patch',
+         data
+     })
+@@ -59,7 +59,7 @@
+ 
+ export const delCustomerAddress = (data) => {
+     return service({
+-        url: `/customerAddress`,
++        url: `/customerAddress/delete`,
+         method: 'delete',
+         data: data
+     })

@@ -131,7 +131,7 @@ go run main.go;
 
 - 前端：用基于`vue`的`Element-UI`构建基础页面。
 - 后端：用`Gin`快速搭建基础restful风格API，`Gin`是一个go语言编写的Web框架。
-- 数据库：采用`MySql`(5.6.44)版本，使用`gorm`实现对数据库的基本操作。
+- 数据库：采用`MySql`(5.6.44)版本，使用`gorm`实现对数据库的基本操作,已添加对sqlite数据库的支持。
 - 缓存：使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
 - API文档：使用`Swagger`构建自动化文档。
 - 配置文件：使用`fsnotify`和`viper`实现`yaml`格式的配置文件。

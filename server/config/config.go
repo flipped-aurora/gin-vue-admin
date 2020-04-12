@@ -16,7 +16,7 @@ type System struct {
 	UseMultipoint bool   `mapstructure:"use-multipoint" json:"useMultipoint"`
 	Env           string `mapstructure:"env" json:"env"`
 	Addr          int    `mapstructure:"addr" json:"addr"`
-	Db            string    `mapstructure:"db" json:"db"`
+	DbType            string    `mapstructure:"db-type" json:"dbType"`
 }
 
 type JWT struct {

@@ -2,7 +2,7 @@ package config
 
 type Server struct {
 	Mysql   Mysql   `mapstructure:"mysql" json:"mysql"`
-	Sqlite   Sqlite   `mapstructure:"sqlite" json:"sqlite"`
+	Sqlite  Sqlite  `mapstructure:"sqlite" json:"sqlite"`
 	Qiniu   Qiniu   `mapstructure:"qiniu" json:"qiniu"`
 	Casbin  Casbin  `mapstructure:"casbin" json:"casbin"`
 	Redis   Redis   `mapstructure:"redis" json:"redis"`
@@ -16,7 +16,7 @@ type System struct {
 	UseMultipoint bool   `mapstructure:"use-multipoint" json:"useMultipoint"`
 	Env           string `mapstructure:"env" json:"env"`
 	Addr          int    `mapstructure:"addr" json:"addr"`
-	DbType            string    `mapstructure:"db-type" json:"dbType"`
+	DbType        string `mapstructure:"db-type" json:"dbType"`
 }
 
 type JWT struct {
@@ -62,9 +62,9 @@ type Log struct {
 }
 
 type Sqlite struct {
-	Username     string `mapstructure:"username" json:"username"`
-	Password     string `mapstructure:"password" json:"password"`
-	Path         string `mapstructure:"path" json:"path"`
-	Config       string `mapstructure:"config" json:"config"`
-	LogMode      bool   `mapstructure:"log-mode" json:"logMode"`
+	Username string `mapstructure:"username" json:"username"`
+	Password string `mapstructure:"password" json:"password"`
+	Path     string `mapstructure:"path" json:"path"`
+	Config   string `mapstructure:"config" json:"config"`
+	LogMode  bool   `mapstructure:"log-mode" json:"logMode"`
 }

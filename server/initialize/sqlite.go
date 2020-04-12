@@ -11,7 +11,7 @@ import (
 func Sqlite() {
 	admin := global.GVA_CONFIG.Sqlite
 	if db, err := gorm.Open("sqlite3", fmt.Sprintf("%s?%s", admin.Path,admin.Config)); err != nil {
-		global.GVA_LOG.Error("DEFAULTDB数据库启动异常", err)
+		global.GVA_LOG.Error("DEFAULT DB数据库启动异常", err)
 	} else {
 		global.GVA_DB = db
 		global.GVA_DB.LogMode(admin.LogMode)

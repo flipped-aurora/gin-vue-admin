@@ -56,7 +56,7 @@ cd web
 npm install
 
 # develop
-npm run dev
+npm run serve
 ```
 
 ### 2.2 server端

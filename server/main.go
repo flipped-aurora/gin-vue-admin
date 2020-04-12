@@ -8,11 +8,13 @@ import (
 )
 
 func main() {
-	switch global.GVA_CONFIG.System.DbType  {
+	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
 		initialize.Mysql()
 	case "sqlite":
 		initialize.Sqlite()
+	default:
+		initialize.Mysql()
 	}
 	initialize.DBTables()
 	// 程序结束前关闭数据库链接

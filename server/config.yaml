@@ -18,7 +18,11 @@ mysql:
     max-idle-conns: 10
     max-open-conns: 10
     log-mode: true
-
+#sqlite 配置
+sqlite:
+    path: db/db.db
+    log-mode: true
+    config: 'loc=Asia/Shanghai'
 # oss configuration
 qiniu:
     access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
@@ -35,6 +39,7 @@ system:
     use-multipoint: false
     env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
+    db: sqlite
 
 # captcha configuration
 captcha:

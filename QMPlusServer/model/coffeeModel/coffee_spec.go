@@ -11,9 +11,9 @@ import (
 
 type CoffeeSpec struct {
 	gorm.Model
-	CoffeeId uuid.UUID
-	Name     string `json:"name"`
-	Sort     string `json:"sort"`
+	CoffeeId uuid.UUID `json:"uuid" gorm:"not null;unique"`
+	Name     string    `json:"name"`
+	Sort     string    `json:"sort"`
 }
 
 func (c *CoffeeSpec) GetInfoList(info modelInterface.PageInfo) (err error, list interface{}, total int) {
@@ -63,7 +63,7 @@ func (c *CoffeeSpec) GetCoffeeById(id int64) (err error) {
 }
 
 func (c *CoffeeSpec) GetCoffeeSpecByCoffeeId(coffeeId uuid.UUID) (list []CoffeeSpec, err error) {
-
 	err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Find(&list).Error
+
 	return
 }

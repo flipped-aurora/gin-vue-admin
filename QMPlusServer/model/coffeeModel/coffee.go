@@ -74,6 +74,7 @@ func (c *Coffee) DeleteCoffee(id uuid.UUID) (err error) {
 }
 
 func (c *Coffee) GetCoffeeByUUID(uuid uuid.UUID) (err error) {
-	err = qmsql.DEFAULTDB.Where("uuid = ?", uuid).Find(&c).Error
+	err = qmsql.DEFAULTDB.Preload("Coffeetype").Where("uuid = ?", uuid).Find(&c).Error
+	c.CoffeeSpec, err = new(CoffeeSpec).GetCoffeeSpecByCoffeeId(c.UUID)
 	return
 }

@@ -28,5 +28,10 @@ func InitMyCustomerRouter(Router *gin.RouterGroup) {
 	customerBusinessRouter := Router.Group("/cus").Use(middleware.JWTAuth())
 	{
 		customerBusinessRouter.POST("/upload", api.UploadCusHeaderImg)
+		customerBusinessRouter.POST("/cart", api.GetCartList)
+		customerBusinessRouter.POST("/addcart", api.AddCart)
+		customerBusinessRouter.POST("/reduceCart", api.ReduceCart)
+		customerBusinessRouter.POST("/delcart", api.DelCart)
+		customerBusinessRouter.POST("/checkStatus", api.CheckStatus)
 	}
 }

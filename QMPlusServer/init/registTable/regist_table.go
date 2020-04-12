@@ -23,6 +23,7 @@ func RegistTable(db *gorm.DB) {
 		dbModel.ExaFileChunk{},
 		dbModel.ExaCustomer{},
 		customerModel.CustomerOrder{},
+		customerModel.Cart{},
 	)
 	log.L.Debug("register table success")
 }

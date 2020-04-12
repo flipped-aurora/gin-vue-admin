@@ -1,6 +1,9 @@
 package utils
 
-import "os"
+import (
+	"os"
+	"path/filepath"
+)
 
 // @title    PathExists
 // @description   文件目录是否存在
@@ -44,4 +47,14 @@ func CreateDir(dirs ...string) (err error) {
 		}
 	}
 	return err
+}
+// @title cwd
+// @description 获取当前工作目录
+// @return string
+func CWD() string {
+	path, err := os.Executable()
+	if err != nil {
+		return ""
+	}
+	return filepath.Dir(path)
 }

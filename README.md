@@ -129,7 +129,7 @@ go run main.go;
 
 - Frontend: using `Element-UI` based on vue，to code the page.
 - Backend: using `Gin` to quickly build basic RESTful API. `Gin` is a web framework written in Go (Golang).
-- DB: `MySql`(5.6.44)，using `gorm` to implement data manipulation.
+- DB: `MySql`(5.6.44)，using `gorm` to implement data manipulation, added support for SQLite databases.
 - Cache: using `Redis` to implement the recording of the JWT token of the currently active user and implement the multi-login restriction.
 - API: using Swagger to auto generate APIs docs。
 - Config: using `fsnotify` and `viper` to implement `yaml` config file。

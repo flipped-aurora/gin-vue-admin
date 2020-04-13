@@ -27,3 +27,4 @@ go.sum
 /server/latest_log
 
 *.iml
+/server/config-dev.yaml

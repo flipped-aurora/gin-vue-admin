@@ -1,5 +1,5 @@
 package response
 
 type PolicyPathResponse struct {
-	Paths []string `json:"paths"`
+	Paths []map[string]string `json:"paths"`
 }

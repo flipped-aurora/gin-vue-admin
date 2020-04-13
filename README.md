@@ -32,7 +32,7 @@ Gin-vue-admin is a full-stack (frontend and backend separation) framework for de
 
 We are excited that you are interested in contributing to gin-vue-admin. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
-## 1.2 Contributing Guide
+### 1.2 Contributing Guide
 #### 1.2.1 Issue Guidelines
 
 - Issues are exclusively for bug reports, feature requests and design-related topics. Other questions may be closed directly. If any questions come up when you are using Element, please hit [Gitter](https://gitter.im/element-en/Lobby) for help.

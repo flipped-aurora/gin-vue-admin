@@ -177,7 +177,7 @@ go run main.go;
 - Configuration management: The configuration file can be modified in the web page (the test environment does not provide this function).
 - Rich text editor: Embed MarkDown editor function.
 - Conditional search: Add an example of conditional search.
-- Restful example: refer to customer management function and apidcustomer group.
+- Restful example: You can see sample APIs in user management module.
 
 ```
 fontend code file: src\view\superAdmin\api\api.vue 

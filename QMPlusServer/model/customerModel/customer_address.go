@@ -11,10 +11,13 @@ import (
 type Address struct {
 	gorm.Model
 	UserId      uuid.UUID `json:"userId"`
+	Consignee   string    `json:"consignee"`
 	Province    string    `json:"province"`
 	City        string    `json:"city"`
 	Town        string    `json:"town"`
 	SpecAddress string    `json:"specAddress"`
+	Phone       string    `json:"phone"`
+	IsDefault   int       `json:"isDefault"`
 }
 
 func (a *Address) GetInfoList(info modelInterface.PageInfo) (error, interface{}, int) {
@@ -29,6 +32,17 @@ func (a *Address) GetInfoList(info modelInterface.PageInfo) (error, interface{},
 	}
 }
 
+func (a *Address) GetInfoListByUserId(info modelInterface.PageInfo, userId uuid.UUID) (error, interface{}, int) {
+	err, db, total := servers.PagingServer(a, info)
+	if err == nil {
+		var addressList []Address
+		err = db.Where("user_id = ?", userId).Find(&addressList).Error
+		return err, addressList, total
+	} else {
+		return err, nil, 0
+	}
+}
+
 func (a *Address) AddAddress() (err error) {
 	err = qmsql.DEFAULTDB.Create(&a).Error
 	return
@@ -36,10 +50,12 @@ func (a *Address) AddAddress() (err error) {
 
 func (a *Address) UpdateAddress() (err error) {
 	updataMap := make(map[string]interface{})
+	updataMap["consignee"] = a.Consignee
 	updataMap["province"] = a.Province
 	updataMap["city"] = a.City
 	updataMap["spec_address"] = a.SpecAddress
-
+	updataMap["Phone"] = a.Phone
+	updataMap["isDefault"] = a.IsDefault
 	err = qmsql.DEFAULTDB.Where("user_id = ?", a.UserId).Updates(&updataMap).Error
 
 	return

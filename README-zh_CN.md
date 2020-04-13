@@ -180,7 +180,7 @@ go run main.go;
 - 配置管理：配置文件可前台修改（测试环境不开放此功能）。
 - 富文本编辑器：MarkDown编辑器功能嵌入。
 - 条件搜索：增加条件搜索示例。
-- restful示例：参考客户管理功能，customer组api。 
+- restful示例：可以参考用户管理模块中的示例API。 
 ```
 前端文件参考: src\view\superAdmin\api\api.vue 
 后台文件参考: model\dnModel\api.go 

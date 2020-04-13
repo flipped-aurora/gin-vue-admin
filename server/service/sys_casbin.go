@@ -17,7 +17,7 @@ import (
 // @param     authorityId      string
 // @param     casbinInfos      []CasbinInfo
 // @return                     error
-func  UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
+func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
 	for _, v := range casbinInfos {
 		cm := model.CasbinModel{
@@ -40,7 +40,7 @@ func  UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 // @auth                     （2020/04/05  20:22）
 // @param     cm              model.CasbinModel
 // @return                    bool
-func  AddCasbin(cm model.CasbinModel) bool {
+func AddCasbin(cm model.CasbinModel) bool {
 	e := Casbin()
 	return e.AddPolicy(cm.AuthorityId, cm.Path, cm.Method)
 }
@@ -53,9 +53,9 @@ func  AddCasbin(cm model.CasbinModel) bool {
 // @param     oldMethod        string
 // @param     newMethod        string
 // @return                     error
-func  UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
+func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
 	var cs []model.CasbinModel
-	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath,oldMethod).Find(&cs).Updates(map[string]string{
+	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Find(&cs).Updates(map[string]string{
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
@@ -67,14 +67,16 @@ func  UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMetho
 // @auth                     （2020/04/05  20:22）
 // @param     authorityId     string
 // @return                    []string
-func  GetPolicyPathByAuthorityId(authorityId string) []string {
+func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []map[string]string) {
 	e := Casbin()
-	var pathList []string
 	list := e.GetFilteredPolicy(0, authorityId)
 	for _, v := range list {
-		pathList = append(pathList, v[1])
+		pathMaps = append(pathMaps, map[string]string{
+			"path":   v[1],
+			"method": v[2],
+		})
 	}
-	return pathList
+	return pathMaps
 }
 
 // @title    ClearCasbin
@@ -83,7 +85,7 @@ func  GetPolicyPathByAuthorityId(authorityId string) []string {
 // @param     v               int
 // @param     p               string
 // @return                    bool
-func  ClearCasbin(v int, p ...string) bool {
+func ClearCasbin(v int, p ...string) bool {
 	e := Casbin()
 	return e.RemoveFilteredPolicy(v, p...)
 

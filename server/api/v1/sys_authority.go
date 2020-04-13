@@ -41,7 +41,7 @@ func DeleteAuthority(c *gin.Context) {
 	var a model.SysAuthority
 	_ = c.ShouldBindJSON(&a)
 	//删除角色之前需要判断是否有用户正在使用此角色
-	err := service.DeleteAuthority(a)
+	err := service.DeleteAuthority(&a)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {

@@ -20,7 +20,7 @@ mysql:
     log-mode: true
 #sqlite 配置
 sqlite:
-    path: db/db.db
+    path: db.db
     log-mode: true
     config: 'loc=Asia/Shanghai'
 # oss configuration
@@ -39,7 +39,7 @@ system:
     use-multipoint: false
     env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
-    db-type: "mysql"
+    db-type: "mysql"  # support mysql/sqlite
 
 # captcha configuration
 captcha:

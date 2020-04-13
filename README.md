@@ -26,13 +26,43 @@ English | [简体中文](./README-zh_CN.md)
 > Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
 > It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
 
-### 1.2 Version list
+Hi! Thank you for choosing gin-vue-admin.
 
-master: 2.0 dev code
+Gin-vue-admin is a full-stack (frontend and backend separation) framework for developers, designers and product managers.
 
-[gin-vue-adminv 1.0 stable](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 is kept up to date and maintained）
+We are excited that you are interested in contributing to gin-vue-admin. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
-[gin-vue-adminv 2.0 dev](https://github.com/piexlmax/gin-vue-admin) （v2.0 is no longer compatible with v1.0）
+### 1.2 Contributing Guide
+#### 1.2.1 Issue Guidelines
+
+- Issues are exclusively for bug reports, feature requests and design-related topics. Other questions may be closed directly. If any questions come up when you are using Element, please hit [Gitter](https://gitter.im/element-en/Lobby) for help.
+
+- Before submitting an issue, please check if similar problems have already been issued.
+
+#### 1.2.2 Pull Request Guidelines
+
+- Fork this repository to your own account. Do not create branches here.
+
+- Commit info should be formatted as `[File Name]: Info about commit.` (e.g. `README.md: Fix xxx bug`)
+
+- <font color=red>Make sure PRs are created to `develop` branch instead of `master` branch.</font>
+
+- If your PR fixes a bug, please provide a description about the related bug.
+
+- Merging a PR takes two maintainers: one approves the changes after reviewing, and then the other reviews and merges.
+
+### 1.3 Version list
+
+- master: 2.0 开发版代码，生产环境
+
+- develop: 2.0 开发版代码，测试环境
+
+- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 is no longer compatible with v1.0）
+
+- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 is kept up to date and maintained）
+
+- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0 is kept up to date and maintained）
+
 
 ## 2. Getting started
 ```

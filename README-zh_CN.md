@@ -25,13 +25,43 @@
 [在线预览](http://qmplus.henrongyi.top/)
 > Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
 
-### 1.2 版本列表
+### 1.2 贡献指南
+Hi! 首先感谢你使用 gin-vue-admin。
 
-master：2.0开发版代码
+Gin-vue-admin 是一套为后台管理平台准备的一整套前后端分离架构式的开源框架，旨在快速搭建后台管理系统。
 
-[gin-vue-adminv 1.0稳定版](https://github.com/piexlmax/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0保持更新和维护）
+Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-admin 贡献代码或提供建议，请阅读以下内容。
 
-[gin-vue-adminv 2.0开发版](https://github.com/piexlmax/gin-vue-admin) （v2.0不再兼容v1.0）
+#### 1.2.1 Issue 规范
+- issue 仅用于提交 Bug 或 Feature 以及设计相关的内容，其它内容可能会被直接关闭。如果你在使用时产生了疑问，请到 Slack 或 [Gitter](https://gitter.im/ElemeFE/element) 里咨询。
+
+- 在提交 issue 之前，请搜索相关内容是否已被提出。
+
+#### 1.2.2 Pull Request 规范
+- 请先 fork 一份到自己的项目下，不要直接在仓库下建分支。
+
+- commit 信息要以`[文件名]: 描述信息` 的形式填写，例如 `README.md: fix xxx bug`。
+
+- <font color=red>确保 PR 是提交到 `develop` 分支，而不是 `master` 分支。</font>
+
+- 如果是修复 bug，请在 PR 中给出描述信息。
+
+- 合并代码需要两名维护人员参与：一人进行 review 后 approve，另一人再次 review，通过后即可合并。
+
+### 1.3 版本列表
+
+- master: 2.0 dev code, for prod
+
+- develop: 2.0 dev code, for test
+
+- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
+
+- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 稳定版，会持续更新和维护）
+
+- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0 稳定版，会持续更新和维护）
+
+
+
 
 ## 2. 使用说明
 

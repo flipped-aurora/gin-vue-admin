@@ -39,7 +39,7 @@ system:
     use-multipoint: false
     env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
-    db-type: "sqlite"  # support mysql/sqlite
+    db-type: "mysql"  # support mysql/sqlite
 
 # captcha configuration
 captcha:

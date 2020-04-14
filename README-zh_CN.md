@@ -50,9 +50,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ### 1.3 版本列表
 
-- master: 2.0 开发版代码，生产环境
+- master: 2.0 dev code, for prod
 
-- develop: 2.0 开发版代码，测试环境
+- develop: 2.0 dev code, for test
 
 - [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
 

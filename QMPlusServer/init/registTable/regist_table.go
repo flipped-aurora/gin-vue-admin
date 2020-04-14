@@ -25,6 +25,9 @@ func RegistTable(db *gorm.DB) {
 		customerModel.CustomerOrder{},
 		customerModel.Cart{},
 		customerModel.Address{},
+		customerModel.CustomerOrder{},
+		customerModel.OrderDetail{},
+		customerModel.Customers{},
 	)
 	log.L.Debug("register table success")
 }

@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model/customerModel"
 	"gin-vue-admin/model/modelInterface"
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 )
 
 func GetOrderList(c *gin.Context) {
@@ -24,38 +25,54 @@ func GetOrderList(c *gin.Context) {
 	}
 }
 
-func AddOrder(c *gin.Context) {
-	var order customerModel.CustomerOrder
+type Order struct {
+	PageInfo  modelInterface.PageInfo `json:",inline"`
+	OrderType int                     `json:"orderType"`
+	UserId    uuid.UUID               `json:"userId"`
+}
+
+func GetOrderListByOrderType(c *gin.Context) {
+	var order Order
 	_ = c.ShouldBindJSON(&order)
-	err := order.AddOrder()
+	err, list, total := new(customerModel.CustomerOrder).GetInfoListByOrderType(order.PageInfo, order.OrderType, order.UserId)
 	if err != nil {
-		servers.ReportFormat(c, false, "添加失败", gin.H{})
+		servers.ReportFormat(c, false, fmt.Sprintf("获取数据失败，%v", err), gin.H{})
 	} else {
-		servers.ReportFormat(c, true, "添加成功", gin.H{})
+		servers.ReportFormat(c, true, "获取数据成功", gin.H{
+			"orderList": list,
+			"total":     total,
+			"page":      order.PageInfo.Page,
+			"pageSize":  order.PageInfo.PageSize,
+		})
 	}
 }
 
-func UpdateOrder(c *gin.Context) {
+type CartList struct {
+	CartList []customerModel.Cart `json:"cartList"`
+}
+
+func AddOrder(c *gin.Context) {
+	var cartList CartList
 	var order customerModel.CustomerOrder
-	err := order.UpdateOrder()
+	_ = c.ShouldBindJSON(&cartList)
+	err := order.AddOrder(cartList.CartList)
 	if err != nil {
-		servers.ReportFormat(c, false, "修改失败", gin.H{})
+		servers.ReportFormat(c, false, fmt.Sprintf("添加失败, %v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "添加成功", gin.H{})
 	}
 }
 
 type OrderId struct {
-	Id int64
+	OrderId uuid.UUID `json:"orderId"`
 }
 
 func DeleteOrder(c *gin.Context) {
-	var order customerModel.CustomerOrder
 	var orderId OrderId
 	_ = c.ShouldBindJSON(&orderId)
-	err := order.DeleteOrder(orderId.Id)
+	err := new(customerModel.CustomerOrder).DeleteOrder(orderId.OrderId)
 	if err != nil {
-		servers.ReportFormat(c, false, "删除失败", gin.H{})
+		servers.ReportFormat(c, false, fmt.Sprintf("删除失败, %v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "删除成功", gin.H{})
 	}

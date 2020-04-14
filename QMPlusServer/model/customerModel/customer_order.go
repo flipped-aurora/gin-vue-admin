@@ -10,11 +10,12 @@ import (
 
 type CustomerOrder struct {
 	gorm.Model
-	UserId      uuid.UUID `json:"userId"`
-	CoffeeName  string    `json:"coffee_name"`
-	CoffeeSpec  string    `json:"coffee_spec"`
-	Value       float32   `json:"value"`
-	SpecAddress string    `json:"spec_address"`
+	OrderDetail []OrderDetail `json:"orderDetail"`
+	OrderId     uuid.UUID     `json:"orderId" gorm:"ForeignKey:OrderId;AssociationForeignKey:OrderId"` // 订单号
+	UserId      uuid.UUID     `json:"userId"`                                                          // 用户id
+	Value       float64       `json:"value"`                                                           // 价格
+	SpecAddress string        `json:"spec_address"`                                                    // 详细地址
+	OrderType   int           `json:"orderType"`                                                       // 订单类型
 }
 
 func (co *CustomerOrder) GetInfoList(info modelInterface.PageInfo) (error, interface{}, int) {
@@ -28,24 +29,44 @@ func (co *CustomerOrder) GetInfoList(info modelInterface.PageInfo) (error, inter
 		return err, orderList, total
 	}
 }
-
-func (co *CustomerOrder) AddOrder() (err error) {
+func (co *CustomerOrder) GetInfoListByOrderType(info modelInterface.PageInfo, orderType int, userId uuid.UUID) (error, interface{}, int) {
+	err, db, total := servers.PagingServer(co, info)
+	if err != nil {
+		return err, nil, 0
+	} else {
+		var orderList []CustomerOrder
+		err = db.Preload("OrderDetail").Where("user_id = ?", userId).Where("order_type = ?", orderType).Find(&orderList).Error
+		return err, orderList, total
+	}
+}
+func (co *CustomerOrder) AddOrder(cartList []Cart) (err error) {
+	co.OrderId = uuid.NewV4()
 	err = qmsql.DEFAULTDB.Create(&co).Error
+	if err != nil {
+		return
+	}
+	// 将购物车添加到订单
+	for i := 0; i < len(cartList); i++ {
+		if cartList[i].IsCheck == 1 {
+			co.OrderDetail = append(co.OrderDetail, OrderDetail{
+				Model:   gorm.Model{},
+				OrderId: co.OrderId,
+				Coffee:  cartList[i].Coffee,
+				Count:   cartList[i].Count,
+				Value:   cartList[i].Value,
+			})
+			err = qmsql.DEFAULTDB.Create(&co.OrderDetail).Error
+		}
+	}
 	return
 }
 
-func (co *CustomerOrder) UpdateOrder() (err error) {
-	updataMap := make(map[string]interface{})
-	updataMap["coffee_name"] = co.CoffeeName
-	updataMap["coffee_spec"] = co.CoffeeSpec
-	updataMap["spec_address"] = co.SpecAddress
-
-	err = qmsql.DEFAULTDB.Where("user_id = ?", co.UserId).Updates(&updataMap).Error
-
-	return
-}
-
-func (co *CustomerOrder) DeleteOrder(id int64) (err error) {
-	err = qmsql.DEFAULTDB.Where("id = ?", id).Delete(&co).Error
+func (co *CustomerOrder) DeleteOrder(orderId uuid.UUID) (err error) {
+	var orderList []OrderDetail
+	err = qmsql.DEFAULTDB.Where("order_id = ?", orderId).Delete(&orderList).Error
+	if err != nil {
+		return
+	}
+	err = qmsql.DEFAULTDB.Where("order_id = ?", orderId).Delete(&co).Error
 	return
 }

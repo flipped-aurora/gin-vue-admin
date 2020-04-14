@@ -24,7 +24,7 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 // @param     auth            model.SysAuthority
 // @return                    error
 // 删除角色
-func DeleteAuthority(auth model.SysAuthority) (err error) {
+func DeleteAuthority(auth *model.SysAuthority) (err error) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&model.SysUser{}).Error
 	if err == nil {
 		err = errors.New("此角色有用户正在使用禁止删除")

@@ -32,7 +32,7 @@ func DeleteBaseMenu(id float64) (err error) {
 // @description   更新路由
 // @auth                     （2020/04/05  20:22）
 // @param     menu            model.SysBaseMenu
-// @return    err             error
+// @return    err             errorgetMenu
 
 func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	upDateMap := make(map[string]interface{})

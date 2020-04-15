@@ -15,7 +15,7 @@ import (
 // @return    menus           []model.SysMenu
 
 func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
-	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? AND authority_menu.parent_id = ?"
+	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? AND authority_menu.parent_id = ? ORDER BY authority_menu.sort ASC"
 
 	err = global.GVA_DB.Raw(sql, authorityId, 0).Scan(&menus).Error
 	for i := 0; i < len(menus); i++ {
@@ -127,7 +127,7 @@ func AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error)
 // @return    menus           []SysBaseMenu
 
 func GetMenuAuthority(authorityId string) (err error, menus []model.SysMenu) {
-	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ?"
+	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? ORDER BY authority_menu.sort ASC"
 	err = global.GVA_DB.Raw(sql, authorityId).Scan(&menus).Error
 	return err, menus
 }

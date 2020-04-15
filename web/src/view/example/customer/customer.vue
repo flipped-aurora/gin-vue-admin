@@ -157,6 +157,9 @@ export default {
       this.type = "create"
       this.dialogFormVisible = true
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

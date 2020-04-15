@@ -12,6 +12,7 @@ import (
 // @auth                     （2020/04/05  20:22）
 // @param     autoCode        model.AutoCodeStruct
 // @return    err             error
+
 func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	basePath := "./resource/template"
 	modelTmpl, err := template.ParseFiles(basePath + "/te/model.go.tpl")

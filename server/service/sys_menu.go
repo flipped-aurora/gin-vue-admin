@@ -13,6 +13,7 @@ import (
 // @param     authorityId     string
 // @return    err             error
 // @return    menus           []model.SysMenu
+
 func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
 	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? AND authority_menu.parent_id = ?"
 
@@ -29,6 +30,7 @@ func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
 // @param     menu            *model.SysMenu
 // @param     sql             string
 // @return    err             error
+
 func getChildrenList(menu *model.SysMenu, sql string) (err error) {
 	err = global.GVA_DB.Raw(sql, menu.AuthorityId, menu.MenuId).Scan(&menu.Children).Error
 	for i := 0; i < len(menu.Children); i++ {
@@ -44,6 +46,7 @@ func getChildrenList(menu *model.SysMenu, sql string) (err error) {
 // @return    err             error
 // @return    list            interface{}
 // @return    total           int
+
 func GetInfoList(info request.PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -61,6 +64,7 @@ func GetInfoList(info request.PageInfo) (err error, list interface{}, total int)
 // @auth                     （2020/04/05  20:22）
 // @param     menu            *model.SysBaseMenu
 // @return    err             error
+
 func getBaseChildrenList(menu *model.SysBaseMenu) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", menu.ID).Order("sort", true).Find(&menu.Children).Error
 	for i := 0; i < len(menu.Children); i++ {
@@ -75,6 +79,7 @@ func getBaseChildrenList(menu *model.SysBaseMenu) (err error) {
 // @param     menu            *model.SysBaseMenu
 // @return    err             error
 //增加基础路由
+
 func AddBaseMenu(menu model.SysBaseMenu) (err error) {
 	findOne := global.GVA_DB.Where("name = ?", menu.Name).Find(&model.SysBaseMenu{}).Error
 	if findOne != nil {
@@ -90,6 +95,7 @@ func AddBaseMenu(menu model.SysBaseMenu) (err error) {
 // @auth                     （2020/04/05  20:22）
 // @return    err              error
 // @return    menus            []SysBaseMenu
+
 func GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
 	err = global.GVA_DB.Where(" parent_id = ?", 0).Order("sort", true).Find(&menus).Error
 	for i := 0; i < len(menus); i++ {
@@ -104,6 +110,7 @@ func GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
 // @param     menus           []model.SysBaseMenu
 // @param     authorityId     string
 // @return                    error
+
 func AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error) {
 	var auth model.SysAuthority
 	auth.AuthorityId = authorityId
@@ -118,6 +125,7 @@ func AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error)
 // @param     authorityId     string
 // @return    err             error
 // @return    menus           []SysBaseMenu
+
 func GetMenuAuthority(authorityId string) (err error, menus []model.SysMenu) {
 	sql := "SELECT authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ?"
 	err = global.GVA_DB.Raw(sql, authorityId).Scan(&menus).Error

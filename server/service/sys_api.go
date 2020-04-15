@@ -12,6 +12,7 @@ import (
 // @auth                     （2020/04/05  20:22）
 // @param     api             model.SysApi
 // @return                    error
+
 func CreateApi(api model.SysApi) (err error) {
 	findOne := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).Find(&model.SysApi{}).Error
 	if findOne == nil {
@@ -27,6 +28,7 @@ func CreateApi(api model.SysApi) (err error) {
 // @param     api             model.SysApi
 // @auth                     （2020/04/05  20:22）
 // @return                    error
+
 func DeleteApi(api model.SysApi) (err error) {
 	err = global.GVA_DB.Delete(api).Error
 	ClearCasbin(1, api.Path, api.Method)
@@ -43,6 +45,7 @@ func DeleteApi(api model.SysApi) (err error) {
 // @return    err             error
 // @return    list            interface{}
 // @return    total           int
+
 func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -91,6 +94,7 @@ func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc 
 // @auth                     （2020/04/05  20:22）
 // @return       err          error
 // @return       apis         []SysApi
+
 func GetAllApis() (err error, apis []model.SysApi) {
 	err = global.GVA_DB.Find(&apis).Error
 	return
@@ -102,6 +106,7 @@ func GetAllApis() (err error, apis []model.SysApi) {
 // @param     api             model.SysApi
 // @param     id              float64
 // @return                    error
+
 func GetApiById(id float64) (err error, api model.SysApi) {
 	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
 	return
@@ -112,6 +117,7 @@ func GetApiById(id float64) (err error, api model.SysApi) {
 // @auth                     （2020/04/05  20:22）
 // @param     api             model.SysApi
 // @return                    error
+
 func UpdateApi(api model.SysApi) (err error) {
 	var oldA model.SysApi
 

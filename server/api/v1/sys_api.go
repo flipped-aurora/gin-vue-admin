@@ -55,7 +55,7 @@ func DeleteApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SearchApiParams true "分页获取API列表"
+// @Param data body request.SearchApiParams true "分页获取API列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiList [post]
 func GetApiList(c *gin.Context) {
@@ -80,7 +80,7 @@ func GetApiList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.GetById true "根据id获取api"
+// @Param data body request.GetById true "根据id获取api"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getApiById [post]
 func GetApiById(c *gin.Context) {

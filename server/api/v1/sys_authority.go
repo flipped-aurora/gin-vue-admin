@@ -54,7 +54,7 @@ func DeleteAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取用户列表"
+// @Param data body request.PageInfo true "分页获取用户列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/getAuthorityList [post]
 func GetAuthorityList(c *gin.Context) {

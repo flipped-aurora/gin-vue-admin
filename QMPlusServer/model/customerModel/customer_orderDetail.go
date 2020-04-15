@@ -10,10 +10,11 @@ import (
 
 type OrderDetail struct {
 	gorm.Model
-	OrderId uuid.UUID          `json:"orderId"`
-	Coffee  coffeeModel.Coffee `json:"coffee"`
-	Count   int                `json:"count"`
-	Value   float64            `json:"value"`
+	OrderId  uuid.UUID          `json:"orderId"`
+	Coffee   coffeeModel.Coffee `json:"coffee"`
+	CoffeeId uuid.UUID          `json:"coffee_id"`
+	Count    int                `json:"count"`
+	Value    float64            `json:"value"`
 }
 
 func (co *OrderDetail) GetInfoList(info modelInterface.PageInfo) (error, interface{}, int) {

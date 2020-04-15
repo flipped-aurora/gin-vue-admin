@@ -37,5 +37,6 @@ func InitMyCustomerRouter(Router *gin.RouterGroup) {
 		customerBusinessRouter.POST("/getOrder", api.GetOrderListByOrderType)
 		customerBusinessRouter.POST("/addOrder", api.AddOrder)
 		customerBusinessRouter.POST("/delOrder", api.DeleteOrder)
+		customerBusinessRouter.POST("/orderDetail", api.GetOrderByOrderId)
 	}
 }

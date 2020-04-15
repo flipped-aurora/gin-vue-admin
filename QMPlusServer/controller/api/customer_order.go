@@ -48,13 +48,23 @@ func GetOrderListByOrderType(c *gin.Context) {
 }
 
 type CartList struct {
-	CartList []customerModel.Cart `json:"cartList"`
+	CartList    []customerModel.Cart `json:"cartList"`
+	UserId      uuid.UUID            `json:"userId"`
+	Consignee   string               `json:"consignee"`
+	SpecAddress string               `json:"spec_address"` // 详细地址
+	OrderType   int                  `json:"orderType"`    // 用户id
+	Phone       string               `json:"phone"`
 }
 
 func AddOrder(c *gin.Context) {
 	var cartList CartList
 	var order customerModel.CustomerOrder
 	_ = c.ShouldBindJSON(&cartList)
+	order.UserId = cartList.UserId
+	order.SpecAddress = cartList.SpecAddress
+	order.OrderType = cartList.OrderType
+	order.Consignee = cartList.Consignee
+	order.Phone = cartList.Phone
 	err := order.AddOrder(cartList.CartList)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败, %v", err), gin.H{})
@@ -64,7 +74,8 @@ func AddOrder(c *gin.Context) {
 }
 
 type OrderId struct {
-	OrderId uuid.UUID `json:"orderId"`
+	OrderId   uuid.UUID `json:"orderId"`
+	OrderType int       `json:"orderType"`
 }
 
 func DeleteOrder(c *gin.Context) {
@@ -75,5 +86,17 @@ func DeleteOrder(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败, %v", err), gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "删除成功", gin.H{})
+	}
+}
+
+func GetOrderByOrderId(c *gin.Context) {
+	var orderId OrderId
+	var order customerModel.CustomerOrder
+	_ = c.ShouldBindJSON(&orderId)
+	err := order.GetOrderDetail(orderId.OrderId)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("读取失败, %v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "读取成功", gin.H{"orderList": order})
 	}
 }

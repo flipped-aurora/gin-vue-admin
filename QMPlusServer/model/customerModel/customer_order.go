@@ -3,6 +3,7 @@ package customerModel
 import (
 	"gin-vue-admin/controller/servers"
 	"gin-vue-admin/init/qmsql"
+	"gin-vue-admin/model/coffeeModel"
 	"gin-vue-admin/model/modelInterface"
 	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
@@ -10,12 +11,14 @@ import (
 
 type CustomerOrder struct {
 	gorm.Model
-	OrderDetail []OrderDetail `json:"orderDetail"`
-	OrderId     uuid.UUID     `json:"orderId" gorm:"ForeignKey:OrderId;AssociationForeignKey:OrderId"` // 订单号
-	UserId      uuid.UUID     `json:"userId"`                                                          // 用户id
-	Value       float64       `json:"value"`                                                           // 价格
-	SpecAddress string        `json:"spec_address"`                                                    // 详细地址
-	OrderType   int           `json:"orderType"`                                                       // 订单类型
+	OrderDetail []OrderDetail `json:"orderDetail" gorm:"ForeignKey:OrderId;AssociationForeignKey:OrderId"`
+	OrderId     uuid.UUID     `json:"orderId"`      // 订单号
+	Consignee   string        `json:"consignee"`    // 收货人
+	UserId      uuid.UUID     `json:"userId"`       // 用户id
+	Value       float64       `json:"value"`        // 价格
+	SpecAddress string        `json:"spec_address"` // 详细地址
+	Phone       string        `json:"phone"`
+	OrderType   int           `json:"orderType"` // 订单类型
 }
 
 func (co *CustomerOrder) GetInfoList(info modelInterface.PageInfo) (error, interface{}, int) {
@@ -31,33 +34,52 @@ func (co *CustomerOrder) GetInfoList(info modelInterface.PageInfo) (error, inter
 }
 func (co *CustomerOrder) GetInfoListByOrderType(info modelInterface.PageInfo, orderType int, userId uuid.UUID) (error, interface{}, int) {
 	err, db, total := servers.PagingServer(co, info)
+	var orderList []CustomerOrder
 	if err != nil {
 		return err, nil, 0
 	} else {
-		var orderList []CustomerOrder
-		err = db.Preload("OrderDetail").Where("user_id = ?", userId).Where("order_type = ?", orderType).Find(&orderList).Error
+		if orderType != 0 {
+			err = db.Preload("OrderDetail").Where("user_id = ?", userId).Where("order_type = ?", orderType).Find(&orderList).Error
+			for i := 0; i < len(orderList); i++ {
+				for j := 0; j < len(orderList[i].OrderDetail); j++ {
+					var coffee coffeeModel.Coffee
+					coffee.GetCoffeeByUUID(orderList[i].OrderDetail[j].CoffeeId)
+					orderList[i].OrderDetail[j].Coffee = coffee
+				}
+			}
+		} else {
+			err = db.Preload("OrderDetail").Where("user_id = ?", userId).Find(&orderList).Error
+			for i := 0; i < len(orderList); i++ {
+				for j := 0; j < len(orderList[i].OrderDetail); j++ {
+					var coffee coffeeModel.Coffee
+					coffee.GetCoffeeByUUID(orderList[i].OrderDetail[j].CoffeeId)
+					orderList[i].OrderDetail[j].Coffee = coffee
+				}
+			}
+		}
+
 		return err, orderList, total
 	}
 }
 func (co *CustomerOrder) AddOrder(cartList []Cart) (err error) {
 	co.OrderId = uuid.NewV4()
-	err = qmsql.DEFAULTDB.Create(&co).Error
-	if err != nil {
-		return
-	}
+	co.Value = 0
 	// 将购物车添加到订单
 	for i := 0; i < len(cartList); i++ {
 		if cartList[i].IsCheck == 1 {
-			co.OrderDetail = append(co.OrderDetail, OrderDetail{
-				Model:   gorm.Model{},
-				OrderId: co.OrderId,
-				Coffee:  cartList[i].Coffee,
-				Count:   cartList[i].Count,
-				Value:   cartList[i].Value,
-			})
-			err = qmsql.DEFAULTDB.Create(&co.OrderDetail).Error
+			orderDetail := OrderDetail{
+				Model:    gorm.Model{},
+				OrderId:  co.OrderId,
+				CoffeeId: cartList[i].CoffeeId,
+				Count:    cartList[i].Count,
+				Value:    cartList[i].Value,
+			}
+			co.Value += orderDetail.Value
+			co.OrderDetail = append(co.OrderDetail, orderDetail)
+			err = qmsql.DEFAULTDB.Create(&orderDetail).Error
 		}
 	}
+	err = qmsql.DEFAULTDB.Create(&co).Error
 	return
 }
 
@@ -68,5 +90,17 @@ func (co *CustomerOrder) DeleteOrder(orderId uuid.UUID) (err error) {
 		return
 	}
 	err = qmsql.DEFAULTDB.Where("order_id = ?", orderId).Delete(&co).Error
+	return
+}
+
+func (co *CustomerOrder) GetOrderDetail(orderId uuid.UUID) (err error) {
+	err = qmsql.DEFAULTDB.Preload("OrderDetail").Where("order_id = ?", orderId).Find(&co).Error
+	var coffee coffeeModel.Coffee
+	for i := 0; i < len(co.OrderDetail); i++ {
+		err = coffee.GetCoffeeByUUID(co.OrderDetail[i].CoffeeId)
+		if err == nil {
+			co.OrderDetail[i].Coffee = coffee
+		}
+	}
 	return
 }

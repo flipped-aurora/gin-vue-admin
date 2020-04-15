@@ -11,7 +11,8 @@ import (
 // @auth                     （2020/04/05  20:22）
 // @param     id              float64
 // @return    err             error
-func  DeleteBaseMenu(id float64) (err error) {
+
+func DeleteBaseMenu(id float64) (err error) {
 	err = global.GVA_DB.Where("parent_id = ?", id).First(&model.SysBaseMenu{}).Error
 	if err != nil {
 		var menu model.SysBaseMenu
@@ -32,7 +33,8 @@ func  DeleteBaseMenu(id float64) (err error) {
 // @auth                     （2020/04/05  20:22）
 // @param     menu            model.SysBaseMenu
 // @return    err             error
-func  UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
+
+func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	upDateMap := make(map[string]interface{})
 	upDateMap["parent_id"] = menu.ParentId
 	upDateMap["path"] = menu.Path
@@ -52,6 +54,7 @@ func  UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 // @auth                     （2020/04/05  20:22）
 // @param     id              float64
 // @return    err             error
+
 func GetBaseMenuById(id float64) (err error, menu model.SysBaseMenu) {
 	err = global.GVA_DB.Where("id = ?", id).First(&menu).Error
 	return

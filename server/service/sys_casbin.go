@@ -17,6 +17,7 @@ import (
 // @param     authorityId      string
 // @param     casbinInfos      []CasbinInfo
 // @return                     error
+
 func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
 	for _, v := range casbinInfos {
@@ -40,6 +41,7 @@ func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 // @auth                     （2020/04/05  20:22）
 // @param     cm              model.CasbinModel
 // @return                    bool
+
 func AddCasbin(cm model.CasbinModel) bool {
 	e := Casbin()
 	return e.AddPolicy(cm.AuthorityId, cm.Path, cm.Method)
@@ -53,6 +55,7 @@ func AddCasbin(cm model.CasbinModel) bool {
 // @param     oldMethod        string
 // @param     newMethod        string
 // @return                     error
+
 func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
 	var cs []model.CasbinModel
 	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Find(&cs).Updates(map[string]string{
@@ -67,6 +70,7 @@ func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod
 // @auth                     （2020/04/05  20:22）
 // @param     authorityId     string
 // @return                    []string
+
 func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []map[string]string) {
 	e := Casbin()
 	list := e.GetFilteredPolicy(0, authorityId)
@@ -85,6 +89,7 @@ func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []map[string]strin
 // @param     v               int
 // @param     p               string
 // @return                    bool
+
 func ClearCasbin(v int, p ...string) bool {
 	e := Casbin()
 	return e.RemoveFilteredPolicy(v, p...)
@@ -94,6 +99,7 @@ func ClearCasbin(v int, p ...string) bool {
 // @title    Casbin
 // @description   store to DB, 持久化到数据库  引入自定义规则
 // @auth                     （2020/04/05  20:22）
+
 func Casbin() *casbin.Enforcer {
 	a := gormadapter.NewAdapterByDB(global.GVA_DB)
 	e := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
@@ -108,6 +114,7 @@ func Casbin() *casbin.Enforcer {
 // @param     fullNameKey1    string
 // @param     key2            string
 // @return                    bool
+
 func ParamsMatch(fullNameKey1 string, key2 string) bool {
 	key1 := strings.Split(fullNameKey1, "?")[0]
 	//剥离路径后再使用casbin的keyMatch2
@@ -120,6 +127,7 @@ func ParamsMatch(fullNameKey1 string, key2 string) bool {
 // @param     args            ...interface{}
 // @return                    interface{}
 // @return                    error
+
 func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 	name1 := args[0].(string)
 	name2 := args[1].(string)

@@ -1,13 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample Server pets",
-        "title": "Swagger Example API",
         "contact": {},
-        "license": {},
-        "version": "0.0.1"
+        "license": {}
     },
-    "basePath": "/",
     "paths": {
         "/api/createApi": {
             "post": {
@@ -34,7 +30,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateApiParams"
+                            "$ref": "#/definitions/model.SysApi"
                         }
                     }
                 ],
@@ -73,7 +69,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.SysApi"
+                            "$ref": "#/definitions/model.SysApi"
                         }
                     }
                 ],
@@ -133,13 +129,13 @@
                 "summary": "根据id获取api",
                 "parameters": [
                     {
-                        "description": "分页获取用户列表",
+                        "description": "根据id获取api",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -178,7 +174,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.SearchApiParams"
                         }
                     }
                 ],
@@ -217,7 +213,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateApiParams"
+                            "$ref": "#/definitions/model.SysApi"
                         }
                     }
                 ],
@@ -256,7 +252,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityParams"
+                            "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
                 ],
@@ -295,7 +291,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.DeleteAuthorityPatams"
+                            "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
                 ],
@@ -334,7 +330,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -373,13 +369,52 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.SysAuthority"
+                            "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"设置成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/createTemp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "自动代码模板",
+                "parameters": [
+                    {
+                        "description": "创建自动代码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.AutoCodeStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -458,7 +493,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
+                            "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -489,7 +524,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.SysUser"
+                            "$ref": "#/definitions/model.SysUser"
                         }
                     }
                 ],
@@ -528,7 +563,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityParams"
+                            "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
                 ],
@@ -567,7 +602,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.CasbinInReceive"
+                            "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
                 ],
@@ -606,7 +641,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityParams"
+                            "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
                 ],
@@ -620,7 +655,81 @@
                 }
             }
         },
-        "/customer/createExaCustomer": {
+        "/customer/customer": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "获取单一客户信息",
+                "parameters": [
+                    {
+                        "description": "获取单一客户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ExaCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "更新客户信息",
+                "parameters": [
+                    {
+                        "description": "创建客户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/model.ExaCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -645,7 +754,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
+                            "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
                 ],
@@ -657,10 +766,8 @@
                         }
                     }
                 }
-            }
-        },
-        "/customer/deleteExaCustomer": {
-            "post": {
+            },
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -684,7 +791,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
+                            "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
                 ],
@@ -698,47 +805,8 @@
                 }
             }
         },
-        "/customer/getExaCustomer": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysApi"
-                ],
-                "summary": "获取单一客户信息",
-                "parameters": [
-                    {
-                        "description": "获取单一客户信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/customer/getExaCustomerList": {
-            "post": {
+        "/customer/customerList": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -762,46 +830,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/customer/updateExaCustomer": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysApi"
-                ],
-                "summary": "更新客户信息",
-                "parameters": [
-                    {
-                        "description": "创建客户",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -835,7 +864,7 @@
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "断点续传示例",
+                        "description": "an example for breakpoint resume, 断点续传示例",
                         "name": "file",
                         "in": "formData",
                         "required": true
@@ -873,7 +902,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaFileUploadAndDownload"
+                            "$ref": "#/definitions/model.ExaFileUploadAndDownload"
                         }
                     }
                 ],
@@ -907,7 +936,7 @@
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "查找文件",
+                        "description": "上传文件完成",
                         "name": "file",
                         "in": "formData",
                         "required": true
@@ -915,7 +944,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查找成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"file uploaded, 文件创建成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -948,7 +977,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -982,7 +1011,7 @@
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "查找文件",
+                        "description": "删除缓存切片",
                         "name": "file",
                         "in": "formData",
                         "required": true
@@ -1061,6 +1090,45 @@
                 }
             }
         },
+        "/menu/GetMenuAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authorityAndMenu"
+                ],
+                "summary": "获取指定角色menu",
+                "parameters": [
+                    {
+                        "description": "增加menu和角色关联关系",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object",
+                            "$ref": "#/definitions/request.AuthorityIdInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/menu/addBaseMenu": {
             "post": {
                 "security": [
@@ -1086,7 +1154,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.SysBaseMenu"
+                            "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
                 ],
@@ -1116,7 +1184,7 @@
                 "tags": [
                     "authorityAndMenu"
                 ],
-                "summary": "获取指定角色menu",
+                "summary": "增加menu和角色关联关系",
                 "parameters": [
                     {
                         "description": "增加menu和角色关联关系",
@@ -1125,7 +1193,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.AuthorityIdInfo"
+                            "$ref": "#/definitions/request.AddMenuAuthorityInfo"
                         }
                     }
                 ],
@@ -1164,7 +1232,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.IdInfo"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -1203,7 +1271,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.GetById"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -1239,7 +1307,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
+                            "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -1275,7 +1343,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
+                            "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -1314,7 +1382,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -1328,7 +1396,7 @@
                 }
             }
         },
-        "/menu/updateBaseMen": {
+        "/menu/updateBaseMenu": {
             "post": {
                 "security": [
                     {
@@ -1353,7 +1421,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.SysBaseMenu"
+                            "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
                 ],
@@ -1389,7 +1457,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.System"
+                            "$ref": "#/definitions/model.System"
                         }
                     }
                 ],
@@ -1449,7 +1517,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.System"
+                            "$ref": "#/definitions/model.System"
                         }
                     }
                 ],
@@ -1464,7 +1532,7 @@
             }
         },
         "/user/changePassword": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1485,7 +1553,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.ChangePasswordStutrc"
+                            "$ref": "#/definitions/request.ChangePasswordStruct"
                         }
                     }
                 ],
@@ -1524,7 +1592,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -1563,7 +1631,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/api.SetUserAuth"
+                            "$ref": "#/definitions/request.SetUserAuth"
                         }
                     }
                 ],
@@ -1637,7 +1705,7 @@
                         "required": true,
                         "schema": {
                             "type": "object",
-                            "$ref": "#/definitions/sysModel.SysWorkflow"
+                            "$ref": "#/definitions/model.SysWorkflow"
                         }
                     }
                 ],
@@ -1653,151 +1721,25 @@
         }
     },
     "definitions": {
-        "api.AddMenuAuthorityInfo": {
+        "config.Captcha": {
             "type": "object",
             "properties": {
-                "authorityId": {
-                    "type": "string"
+                "imgHeight": {
+                    "type": "integer"
                 },
-                "menus": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/sysModel.SysBaseMenu"
-                    }
-                }
-            }
-        },
-        "api.AuthorityIdInfo": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.ChangePasswordStutrc": {
-            "type": "object",
-            "properties": {
-                "newPassword": {
-                    "type": "string"
+                "imgWidth": {
+                    "type": "integer"
                 },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.CreateApiParams": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.CreateAuthorityParams": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                },
-                "authorityName": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.DeleteAuthorityPatams": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
+                "keyLong": {
                     "type": "integer"
                 }
             }
         },
-        "api.GetById": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "number"
-                }
-            }
-        },
-        "api.IdInfo": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "number"
-                }
-            }
-        },
-        "api.RegisterAndLoginStruct": {
-            "type": "object",
-            "properties": {
-                "captcha": {
-                    "type": "string"
-                },
-                "captchaId": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.SetUserAuth": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "string"
-                }
-            }
-        },
-        "config.CasbinConfig": {
+        "config.Casbin": {
             "type": "object",
             "properties": {
                 "modelPath": {
-                    "description": "casbin model地址配置",
                     "type": "string"
-                }
-            }
-        },
-        "config.Config": {
-            "type": "object",
-            "properties": {
-                "casbinConfig": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.CasbinConfig"
-                },
-                "jwt": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.JWT"
-                },
-                "mysqlAdmin": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.MysqlAdmin"
-                },
-                "qiniu": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.Qiniu"
-                },
-                "redisAdmin": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.RedisAdmin"
-                },
-                "system": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.System"
                 }
             }
         },
@@ -1809,7 +1751,24 @@
                 }
             }
         },
-        "config.MysqlAdmin": {
+        "config.Log": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "logFile": {
+                    "type": "boolean"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "stdout": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.Mysql": {
             "type": "object",
             "properties": {
                 "config": {
@@ -1817,6 +1776,15 @@
                 },
                 "dbname": {
                     "type": "string"
+                },
+                "logMode": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
                 },
                 "password": {
                     "type": "string"
@@ -1840,7 +1808,7 @@
                 }
             }
         },
-        "config.RedisAdmin": {
+        "config.Redis": {
             "type": "object",
             "properties": {
                 "addr": {
@@ -1854,11 +1822,75 @@
                 }
             }
         },
+        "config.Server": {
+            "type": "object",
+            "properties": {
+                "captcha": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Captcha"
+                },
+                "casbin": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Casbin"
+                },
+                "jwt": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.JWT"
+                },
+                "log": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Log"
+                },
+                "mysql": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Mysql"
+                },
+                "qiniu": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Qiniu"
+                },
+                "redis": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Redis"
+                },
+                "sqlite": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Sqlite"
+                },
+                "system": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.System"
+                }
+            }
+        },
+        "config.Sqlite": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "string"
+                },
+                "logMode": {
+                    "type": "boolean"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "config.System": {
             "type": "object",
             "properties": {
                 "addr": {
                     "type": "integer"
+                },
+                "dbType": {
+                    "type": "string"
                 },
                 "env": {
                     "type": "string"
@@ -1868,7 +1900,27 @@
                 }
             }
         },
-        "dbModel.ExaCustomer": {
+        "model.AutoCodeStruct": {
+            "type": "object",
+            "properties": {
+                "abbreviation": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Field"
+                    }
+                },
+                "packageName": {
+                    "type": "string"
+                },
+                "structName": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ExaCustomer": {
             "type": "object",
             "properties": {
                 "customerName": {
@@ -1879,7 +1931,7 @@
                 },
                 "sysUser": {
                     "type": "object",
-                    "$ref": "#/definitions/sysModel.SysUser"
+                    "$ref": "#/definitions/model.SysUser"
                 },
                 "sysUserAuthorityID": {
                     "type": "string"
@@ -1889,7 +1941,7 @@
                 }
             }
         },
-        "dbModel.ExaFileUploadAndDownload": {
+        "model.ExaFileUploadAndDownload": {
             "type": "object",
             "properties": {
                 "key": {
@@ -1906,51 +1958,32 @@
                 }
             }
         },
-        "model.PageInfo": {
+        "model.Field": {
             "type": "object",
             "properties": {
-                "page": {
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "type": "integer"
-                }
-            }
-        },
-        "sysModel.CasbinInReceive": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
+                "columnName": {
                     "type": "string"
                 },
-                "casbinInfos": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/sysModel.CasbinInfo"
-                    }
-                }
-            }
-        },
-        "sysModel.CasbinInfo": {
-            "type": "object",
-            "properties": {
-                "method": {
+                "fieldJson": {
                     "type": "string"
                 },
-                "path": {
+                "fieldName": {
+                    "type": "string"
+                },
+                "fieldType": {
                     "type": "string"
                 }
             }
         },
-        "sysModel.SysApi": {
+        "model.SysApi": {
             "type": "object",
             "properties": {
+                "apiGroup": {
+                    "type": "string"
+                },
                 "description": {
                     "type": "string"
                 },
-                "group": {
-                    "type": "string"
-                },
                 "method": {
                     "type": "string"
                 },
@@ -1959,7 +1992,7 @@
                 }
             }
         },
-        "sysModel.SysAuthority": {
+        "model.SysAuthority": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -1971,27 +2004,48 @@
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysAuthority"
+                        "$ref": "#/definitions/model.SysAuthority"
                     }
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "dataAuthorityId": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysAuthority"
+                        "$ref": "#/definitions/model.SysAuthority"
+                    }
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysBaseMenu"
                     }
                 },
                 "parentId": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
-        "sysModel.SysBaseMenu": {
+        "model.SysBaseMenu": {
             "type": "object",
             "properties": {
+                "authoritys": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysAuthority"
+                    }
+                },
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysBaseMenu"
+                        "$ref": "#/definitions/model.SysBaseMenu"
                     }
                 },
                 "component": {
@@ -2006,9 +2060,6 @@
                 "name": {
                     "type": "string"
                 },
-                "nickName": {
-                    "type": "string"
-                },
                 "parentId": {
                     "type": "string"
                 },
@@ -2016,19 +2067,19 @@
                     "type": "string"
                 },
                 "sort": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"
                 }
             }
         },
-        "sysModel.SysUser": {
+        "model.SysUser": {
             "type": "object",
             "properties": {
                 "authority": {
                     "type": "object",
-                    "$ref": "#/definitions/sysModel.SysAuthority"
+                    "$ref": "#/definitions/model.SysAuthority"
                 },
                 "authorityId": {
                     "type": "string"
@@ -2047,7 +2098,7 @@
                 }
             }
         },
-        "sysModel.SysWorkflow": {
+        "model.SysWorkflow": {
             "type": "object",
             "properties": {
                 "workflowDescription": {
@@ -2066,12 +2117,12 @@
                     "description": "工作流步骤",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysWorkflowStepInfo"
+                        "$ref": "#/definitions/model.SysWorkflowStepInfo"
                     }
                 }
             }
         },
-        "sysModel.SysWorkflowStepInfo": {
+        "model.SysWorkflowStepInfo": {
             "type": "object",
             "properties": {
                 "isEnd": {
@@ -2100,21 +2151,151 @@
                 }
             }
         },
-        "sysModel.System": {
+        "model.System": {
             "type": "object",
             "properties": {
                 "config": {
                     "type": "object",
-                    "$ref": "#/definitions/config.Config"
+                    "$ref": "#/definitions/config.Server"
                 }
             }
-        }
-    },
-    "securityDefinitions": {
-        "ApiKeyAuth": {
-            "type": "apiKey",
-            "name": "x-token",
-            "in": "header"
+        },
+        "request.AddMenuAuthorityInfo": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysBaseMenu"
+                    }
+                }
+            }
+        },
+        "request.AuthorityIdInfo": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CasbinInReceive": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "casbinInfos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.CasbinInfo"
+                    }
+                }
+            }
+        },
+        "request.CasbinInfo": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.ChangePasswordStruct": {
+            "type": "object",
+            "properties": {
+                "newPassword": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.GetById": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number"
+                }
+            }
+        },
+        "request.PageInfo": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.RegisterAndLoginStruct": {
+            "type": "object",
+            "properties": {
+                "captcha": {
+                    "type": "string"
+                },
+                "captchaId": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SearchApiParams": {
+            "type": "object",
+            "properties": {
+                "apiGroup": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "orderKey": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SetUserAuth": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
         }
     }
 }

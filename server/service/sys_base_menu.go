@@ -36,6 +36,8 @@ func DeleteBaseMenu(id float64) (err error) {
 
 func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	upDateMap := make(map[string]interface{})
+	upDateMap["keep_alive"] = menu.KeepAlive
+	upDateMap["default_menu"] = menu.DefaultMenu
 	upDateMap["parent_id"] = menu.ParentId
 	upDateMap["path"] = menu.Path
 	upDateMap["name"] = menu.Name

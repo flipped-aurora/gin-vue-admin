@@ -69,11 +69,17 @@
         <el-form-item label="展示名称" prop="meta.title">
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
-        <el-form-item label="图标">
+        <el-form-item label="图标" prop="meta.icon">
           <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
         </el-form-item>
-        <el-form-item label="排序标记">
+        <el-form-item label="排序标记" prop="sort">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
+        </el-form-item>
+        <el-form-item label="keepAlive" prop="meta.keepAlive">
+          <el-select placeholder="是否keepAlive缓存页面" v-model="form.meta.keepAlive">
+            <el-option :value="false" label="否"></el-option>
+            <el-option :value="true" label="是"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>
@@ -119,7 +125,9 @@ export default {
         component: '',
         meta: {
           title: '',
-          icon: ''
+          icon: '',
+          defaultMenu:false,
+          keepAlive:false
         }
       },
       rules: {

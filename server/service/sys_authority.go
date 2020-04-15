@@ -13,6 +13,7 @@ import (
 // @param     auth            model.SysAuthority
 // @return                    error
 // @return    authority       model.SysAuthority
+
 func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	err = global.GVA_DB.Create(&auth).Error
 	return err, auth
@@ -24,6 +25,7 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 // @param     auth            model.SysAuthority
 // @return                    error
 // 删除角色
+
 func DeleteAuthority(auth *model.SysAuthority) (err error) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&model.SysUser{}).Error
 	if err == nil {
@@ -51,6 +53,7 @@ func DeleteAuthority(auth *model.SysAuthority) (err error) {
 // @param     info            request.PaveInfo
 // @return                    error
 // 分页获取数据
+
 func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -71,6 +74,7 @@ func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, t
 // @param     auth            model.SysAuthority
 // @return                    error
 // @param     authority       model.SysAuthority
+
 func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
 	return err, sa
@@ -81,6 +85,7 @@ func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority
 // @auth                     （2020/04/05  20:22）
 // @param     auth            model.SysAuthority
 // @return                    error
+
 func SetDataAuthority(auth model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
@@ -93,6 +98,7 @@ func SetDataAuthority(auth model.SysAuthority) error {
 // @auth                     （2020/04/05  20:22）
 // @param     auth            *model.SysAuthority
 // @return                    error
+
 func SetMenuAuthority(auth *model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", auth.AuthorityId)
@@ -105,6 +111,7 @@ func SetMenuAuthority(auth *model.SysAuthority) error {
 // @auth                     （2020/04/05  20:22）
 // @param     auth            *model.SysAuthority
 // @return                    error
+
 func findChildrenAuthority(authority *model.SysAuthority) (err error) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
 	if len(authority.Children) > 0 {

@@ -1,113 +1,46 @@
-basePath: /
 definitions:
-  api.AddMenuAuthorityInfo:
+  config.Captcha:
     properties:
-      authorityId:
-        type: string
-      menus:
-        items:
-          $ref: '#/definitions/sysModel.SysBaseMenu'
-        type: array
-    type: object
-  api.AuthorityIdInfo:
-    properties:
-      authorityId:
-        type: string
-    type: object
-  api.ChangePasswordStutrc:
-    properties:
-      newPassword:
-        type: string
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  api.CreateApiParams:
-    properties:
-      description:
-        type: string
-      path:
-        type: string
-    type: object
-  api.CreateAuthorityParams:
-    properties:
-      authorityId:
-        type: string
-      authorityName:
-        type: string
-    type: object
-  api.DeleteAuthorityPatams:
-    properties:
-      authorityId:
+      imgHeight:
+        type: integer
+      imgWidth:
+        type: integer
+      keyLong:
         type: integer
     type: object
-  api.GetById:
-    properties:
-      id:
-        type: number
-    type: object
-  api.IdInfo:
-    properties:
-      id:
-        type: number
-    type: object
-  api.RegisterAndLoginStruct:
-    properties:
-      captcha:
-        type: string
-      captchaId:
-        type: string
-      password:
-        type: string
-      username:
-        type: string
-    type: object
-  api.SetUserAuth:
-    properties:
-      authorityId:
-        type: string
-      uuid:
-        type: string
-    type: object
-  config.CasbinConfig:
+  config.Casbin:
     properties:
       modelPath:
-        description: casbin model地址配置
         type: string
-    type: object
-  config.Config:
-    properties:
-      casbinConfig:
-        $ref: '#/definitions/config.CasbinConfig'
-        type: object
-      jwt:
-        $ref: '#/definitions/config.JWT'
-        type: object
-      mysqlAdmin:
-        $ref: '#/definitions/config.MysqlAdmin'
-        type: object
-      qiniu:
-        $ref: '#/definitions/config.Qiniu'
-        type: object
-      redisAdmin:
-        $ref: '#/definitions/config.RedisAdmin'
-        type: object
-      system:
-        $ref: '#/definitions/config.System'
-        type: object
     type: object
   config.JWT:
     properties:
       signingKey:
         type: string
     type: object
-  config.MysqlAdmin:
+  config.Log:
+    properties:
+      file:
+        type: string
+      logFile:
+        type: boolean
+      prefix:
+        type: string
+      stdout:
+        type: string
+    type: object
+  config.Mysql:
     properties:
       config:
         type: string
       dbname:
         type: string
+      logMode:
+        type: boolean
+      maxIdleConns:
+        type: integer
+      maxOpenConns:
+        type: integer
       password:
         type: string
       path:
@@ -122,7 +55,7 @@ definitions:
       secretKey:
         type: string
     type: object
-  config.RedisAdmin:
+  config.Redis:
     properties:
       addr:
         type: string
@@ -131,30 +64,88 @@ definitions:
       password:
         type: string
     type: object
+  config.Server:
+    properties:
+      captcha:
+        $ref: '#/definitions/config.Captcha'
+        type: object
+      casbin:
+        $ref: '#/definitions/config.Casbin'
+        type: object
+      jwt:
+        $ref: '#/definitions/config.JWT'
+        type: object
+      log:
+        $ref: '#/definitions/config.Log'
+        type: object
+      mysql:
+        $ref: '#/definitions/config.Mysql'
+        type: object
+      qiniu:
+        $ref: '#/definitions/config.Qiniu'
+        type: object
+      redis:
+        $ref: '#/definitions/config.Redis'
+        type: object
+      sqlite:
+        $ref: '#/definitions/config.Sqlite'
+        type: object
+      system:
+        $ref: '#/definitions/config.System'
+        type: object
+    type: object
+  config.Sqlite:
+    properties:
+      config:
+        type: string
+      logMode:
+        type: boolean
+      password:
+        type: string
+      path:
+        type: string
+      username:
+        type: string
+    type: object
   config.System:
     properties:
       addr:
         type: integer
+      dbType:
+        type: string
       env:
         type: string
       useMultipoint:
         type: boolean
     type: object
-  dbModel.ExaCustomer:
+  model.AutoCodeStruct:
+    properties:
+      abbreviation:
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/model.Field'
+        type: array
+      packageName:
+        type: string
+      structName:
+        type: string
+    type: object
+  model.ExaCustomer:
     properties:
       customerName:
         type: string
       customerPhoneData:
         type: string
       sysUser:
-        $ref: '#/definitions/sysModel.SysUser'
+        $ref: '#/definitions/model.SysUser'
         type: object
       sysUserAuthorityID:
         type: string
       sysUserId:
         type: integer
     type: object
-  dbModel.ExaFileUploadAndDownload:
+  model.ExaFileUploadAndDownload:
     properties:
       key:
         type: string
@@ -165,41 +156,29 @@ definitions:
       url:
         type: string
     type: object
-  model.PageInfo:
+  model.Field:
     properties:
-      page:
-        type: integer
-      pageSize:
-        type: integer
-    type: object
-  sysModel.CasbinInReceive:
-    properties:
-      authorityId:
+      columnName:
         type: string
-      casbinInfos:
-        items:
-          $ref: '#/definitions/sysModel.CasbinInfo'
-        type: array
-    type: object
-  sysModel.CasbinInfo:
-    properties:
-      method:
+      fieldJson:
         type: string
-      path:
+      fieldName:
+        type: string
+      fieldType:
         type: string
     type: object
-  sysModel.SysApi:
+  model.SysApi:
     properties:
+      apiGroup:
+        type: string
       description:
         type: string
-      group:
-        type: string
       method:
         type: string
       path:
         type: string
     type: object
-  sysModel.SysAuthority:
+  model.SysAuthority:
     properties:
       authorityId:
         type: string
@@ -207,20 +186,34 @@ definitions:
         type: string
       children:
         items:
-          $ref: '#/definitions/sysModel.SysAuthority'
+          $ref: '#/definitions/model.SysAuthority'
         type: array
+      createdAt:
+        type: string
       dataAuthorityId:
         items:
-          $ref: '#/definitions/sysModel.SysAuthority'
+          $ref: '#/definitions/model.SysAuthority'
+        type: array
+      deletedAt:
+        type: string
+      menus:
+        items:
+          $ref: '#/definitions/model.SysBaseMenu'
         type: array
       parentId:
         type: string
+      updatedAt:
+        type: string
     type: object
-  sysModel.SysBaseMenu:
+  model.SysBaseMenu:
     properties:
+      authoritys:
+        items:
+          $ref: '#/definitions/model.SysAuthority'
+        type: array
       children:
         items:
-          $ref: '#/definitions/sysModel.SysBaseMenu'
+          $ref: '#/definitions/model.SysBaseMenu'
         type: array
       component:
         type: string
@@ -230,21 +223,19 @@ definitions:
         type: string
       name:
         type: string
-      nickName:
-        type: string
       parentId:
         type: string
       path:
         type: string
       sort:
-        type: string
+        type: integer
       title:
         type: string
     type: object
-  sysModel.SysUser:
+  model.SysUser:
     properties:
       authority:
-        $ref: '#/definitions/sysModel.SysAuthority'
+        $ref: '#/definitions/model.SysAuthority'
         type: object
       authorityId:
         type: string
@@ -257,7 +248,7 @@ definitions:
       uuid:
         type: string
     type: object
-  sysModel.SysWorkflow:
+  model.SysWorkflow:
     properties:
       workflowDescription:
         description: 工作流描述
@@ -271,10 +262,10 @@ definitions:
       workflowStep:
         description: 工作流步骤
         items:
-          $ref: '#/definitions/sysModel.SysWorkflowStepInfo'
+          $ref: '#/definitions/model.SysWorkflowStepInfo'
         type: array
     type: object
-  sysModel.SysWorkflowStepInfo:
+  model.SysWorkflowStepInfo:
     properties:
       isEnd:
         description: 是否是完结流节点
@@ -295,18 +286,103 @@ definitions:
         description: 所属工作流ID
         type: integer
     type: object
-  sysModel.System:
+  model.System:
     properties:
       config:
-        $ref: '#/definitions/config.Config'
+        $ref: '#/definitions/config.Server'
         type: object
+    type: object
+  request.AddMenuAuthorityInfo:
+    properties:
+      authorityId:
+        type: string
+      menus:
+        items:
+          $ref: '#/definitions/model.SysBaseMenu'
+        type: array
+    type: object
+  request.AuthorityIdInfo:
+    properties:
+      authorityId:
+        type: string
+    type: object
+  request.CasbinInReceive:
+    properties:
+      authorityId:
+        type: string
+      casbinInfos:
+        items:
+          $ref: '#/definitions/request.CasbinInfo'
+        type: array
+    type: object
+  request.CasbinInfo:
+    properties:
+      method:
+        type: string
+      path:
+        type: string
+    type: object
+  request.ChangePasswordStruct:
+    properties:
+      newPassword:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.GetById:
+    properties:
+      id:
+        type: number
+    type: object
+  request.PageInfo:
+    properties:
+      page:
+        type: integer
+      pageSize:
+        type: integer
+    type: object
+  request.RegisterAndLoginStruct:
+    properties:
+      captcha:
+        type: string
+      captchaId:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  request.SearchApiParams:
+    properties:
+      apiGroup:
+        type: string
+      desc:
+        type: boolean
+      description:
+        type: string
+      method:
+        type: string
+      orderKey:
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      path:
+        type: string
+    type: object
+  request.SetUserAuth:
+    properties:
+      authorityId:
+        type: string
+      uuid:
+        type: string
     type: object
 info:
   contact: {}
-  description: This is a sample Server pets
   license: {}
-  title: Swagger Example API
-  version: 0.0.1
 paths:
   /api/createApi:
     post:
@@ -318,7 +394,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateApiParams'
+          $ref: '#/definitions/model.SysApi'
           type: object
       produces:
       - application/json
@@ -342,7 +418,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.SysApi'
+          $ref: '#/definitions/model.SysApi'
           type: object
       produces:
       - application/json
@@ -377,12 +453,12 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 分页获取用户列表
+      - description: 根据id获取api
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/request.GetById'
           type: object
       produces:
       - application/json
@@ -406,7 +482,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/request.SearchApiParams'
           type: object
       produces:
       - application/json
@@ -430,7 +506,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateApiParams'
+          $ref: '#/definitions/model.SysApi'
           type: object
       produces:
       - application/json
@@ -454,7 +530,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityParams'
+          $ref: '#/definitions/model.SysAuthority'
           type: object
       produces:
       - application/json
@@ -478,7 +554,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.DeleteAuthorityPatams'
+          $ref: '#/definitions/model.SysAuthority'
           type: object
       produces:
       - application/json
@@ -502,7 +578,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/request.PageInfo'
           type: object
       produces:
       - application/json
@@ -526,7 +602,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.SysAuthority'
+          $ref: '#/definitions/model.SysAuthority'
           type: object
       produces:
       - application/json
@@ -540,6 +616,30 @@ paths:
       summary: 设置角色资源权限
       tags:
       - authority
+  /autoCode/createTemp:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建自动代码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AutoCodeStruct'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 自动代码模板
+      tags:
+      - SysApi
   /base/captcha:
     post:
       consumes:
@@ -580,7 +680,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegisterAndLoginStruct'
+          $ref: '#/definitions/request.RegisterAndLoginStruct'
           type: object
       produces:
       - application/json
@@ -600,7 +700,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.SysUser'
+          $ref: '#/definitions/model.SysUser'
           type: object
       produces:
       - application/json
@@ -622,7 +722,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityParams'
+          $ref: '#/definitions/request.CasbinInReceive'
           type: object
       produces:
       - application/json
@@ -646,7 +746,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.CasbinInReceive'
+          $ref: '#/definitions/request.CasbinInReceive'
           type: object
       produces:
       - application/json
@@ -670,7 +770,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.CreateAuthorityParams'
+          $ref: '#/definitions/request.CasbinInReceive'
           type: object
       produces:
       - application/json
@@ -684,32 +784,8 @@ paths:
       summary: 获取权限列表
       tags:
       - casbin
-  /customer/createExaCustomer:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建客户
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/dbModel.ExaCustomer'
-          type: object
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建客户
-      tags:
-      - SysApi
-  /customer/deleteExaCustomer:
-    post:
+  /customer/customer:
+    delete:
       consumes:
       - application/json
       parameters:
@@ -718,7 +794,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.ExaCustomer'
+          $ref: '#/definitions/model.ExaCustomer'
           type: object
       produces:
       - application/json
@@ -732,8 +808,7 @@ paths:
       summary: 删除客户
       tags:
       - SysApi
-  /customer/getExaCustomer:
-    post:
+    get:
       consumes:
       - application/json
       parameters:
@@ -742,7 +817,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.ExaCustomer'
+          $ref: '#/definitions/model.ExaCustomer'
           type: object
       produces:
       - application/json
@@ -756,17 +831,16 @@ paths:
       summary: 获取单一客户信息
       tags:
       - SysApi
-  /customer/getExaCustomerList:
     post:
       consumes:
       - application/json
       parameters:
-      - description: 获取权限客户列表
+      - description: 创建客户
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/model.ExaCustomer'
           type: object
       produces:
       - application/json
@@ -777,11 +851,10 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 获取权限客户列表
+      summary: 创建客户
       tags:
       - SysApi
-  /customer/updateExaCustomer:
-    post:
+    put:
       consumes:
       - application/json
       parameters:
@@ -790,7 +863,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.ExaCustomer'
+          $ref: '#/definitions/model.ExaCustomer'
           type: object
       produces:
       - application/json
@@ -804,12 +877,36 @@ paths:
       summary: 更新客户信息
       tags:
       - SysApi
+  /customer/customerList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取权限客户列表
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.PageInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取权限客户列表
+      tags:
+      - SysApi
   /fileUploadAndDownload/breakpointContinue:
     post:
       consumes:
       - multipart/form-data
       parameters:
-      - description: 断点续传示例
+      - description: an example for breakpoint resume, 断点续传示例
         in: formData
         name: file
         required: true
@@ -834,7 +931,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbModel.ExaFileUploadAndDownload'
+          $ref: '#/definitions/model.ExaFileUploadAndDownload'
           type: object
       produces:
       - application/json
@@ -853,7 +950,7 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - description: 查找文件
+      - description: 上传文件完成
         in: formData
         name: file
         required: true
@@ -862,7 +959,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"查找成功"}'
+          description: '{"success":true,"data":{},"msg":"file uploaded, 文件创建成功"}'
           schema:
             type: string
       security:
@@ -880,7 +977,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/request.PageInfo'
           type: object
       produces:
       - application/json
@@ -899,7 +996,7 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - description: 查找文件
+      - description: 删除缓存切片
         in: formData
         name: file
         required: true
@@ -954,6 +1051,30 @@ paths:
       summary: jwt加入黑名单
       tags:
       - jwt
+  /menu/GetMenuAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 增加menu和角色关联关系
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AuthorityIdInfo'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定角色menu
+      tags:
+      - authorityAndMenu
   /menu/addBaseMenu:
     post:
       consumes:
@@ -964,7 +1085,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.SysBaseMenu'
+          $ref: '#/definitions/model.SysBaseMenu'
           type: object
       produces:
       - application/json
@@ -988,7 +1109,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.AuthorityIdInfo'
+          $ref: '#/definitions/request.AddMenuAuthorityInfo'
           type: object
       produces:
       - application/json
@@ -999,7 +1120,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 获取指定角色menu
+      summary: 增加menu和角色关联关系
       tags:
       - authorityAndMenu
   /menu/deleteBaseMenu:
@@ -1012,7 +1133,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.IdInfo'
+          $ref: '#/definitions/request.GetById'
           type: object
       produces:
       - application/json
@@ -1036,7 +1157,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.GetById'
+          $ref: '#/definitions/request.GetById'
           type: object
       produces:
       - application/json
@@ -1058,7 +1179,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegisterAndLoginStruct'
+          $ref: '#/definitions/request.RegisterAndLoginStruct'
           type: object
       produces:
       - application/json
@@ -1080,7 +1201,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.RegisterAndLoginStruct'
+          $ref: '#/definitions/request.RegisterAndLoginStruct'
           type: object
       produces:
       - application/json
@@ -1104,7 +1225,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/request.PageInfo'
           type: object
       produces:
       - application/json
@@ -1118,7 +1239,7 @@ paths:
       summary: 分页获取基础menu列表
       tags:
       - menu
-  /menu/updateBaseMen:
+  /menu/updateBaseMenu:
     post:
       consumes:
       - application/json
@@ -1128,7 +1249,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.SysBaseMenu'
+          $ref: '#/definitions/model.SysBaseMenu'
           type: object
       produces:
       - application/json
@@ -1150,7 +1271,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.System'
+          $ref: '#/definitions/model.System'
           type: object
       produces:
       - application/json
@@ -1186,7 +1307,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.System'
+          $ref: '#/definitions/model.System'
           type: object
       produces:
       - application/json
@@ -1201,14 +1322,14 @@ paths:
       tags:
       - system
   /user/changePassword:
-    post:
+    put:
       parameters:
       - description: 用户修改密码
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.ChangePasswordStutrc'
+          $ref: '#/definitions/request.ChangePasswordStruct'
           type: object
       produces:
       - application/json
@@ -1232,7 +1353,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.PageInfo'
+          $ref: '#/definitions/request.PageInfo'
           type: object
       produces:
       - application/json
@@ -1256,7 +1377,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/api.SetUserAuth'
+          $ref: '#/definitions/request.SetUserAuth'
           type: object
       produces:
       - application/json
@@ -1305,7 +1426,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/sysModel.SysWorkflow'
+          $ref: '#/definitions/model.SysWorkflow'
           type: object
       produces:
       - application/json
@@ -1317,9 +1438,4 @@ paths:
       summary: 注册工作流
       tags:
       - workflow
-securityDefinitions:
-  ApiKeyAuth:
-    in: header
-    name: x-token
-    type: apiKey
 swagger: "2.0"

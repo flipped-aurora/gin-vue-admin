@@ -14,7 +14,7 @@ import (
 // @Summary 获取用户动态路由
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.RegisterAndLoginStruct true "可以什么都不填"
+// @Param data body request.RegisterAndLoginStruct true "可以什么都不填"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getMenu [post]
 func GetMenu(c *gin.Context) {
@@ -33,7 +33,7 @@ func GetMenu(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取基础menu列表"
+// @Param data body request.PageInfo true "分页获取基础menu列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/getMenuList [post]
 func GetMenuList(c *gin.Context) {
@@ -75,7 +75,7 @@ func AddBaseMenu(c *gin.Context) {
 // @Summary 获取用户动态路由
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body api.RegisterAndLoginStruct true "可以什么都不填"
+// @Param data body request.RegisterAndLoginStruct true "可以什么都不填"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /menu/getBaseMenuTree [post]
 func GetBaseMenuTree(c *gin.Context) {
@@ -93,7 +93,7 @@ func GetBaseMenuTree(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.AddMenuAuthorityInfo true "增加menu和角色关联关系"
+// @Param data body request.AddMenuAuthorityInfo true "增加menu和角色关联关系"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/addMenuAuthority [post]
 func AddMenuAuthority(c *gin.Context) {
@@ -113,7 +113,7 @@ func AddMenuAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.AuthorityIdInfo true "增加menu和角色关联关系"
+// @Param data body request.AuthorityIdInfo true "增加menu和角色关联关系"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/GetMenuAuthority [post]
 func GetMenuAuthority(c *gin.Context) {
@@ -132,7 +132,7 @@ func GetMenuAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.GetById true "删除菜单"
+// @Param data body request.GetById true "删除菜单"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/deleteBaseMenu [post]
 func DeleteBaseMenu(c *gin.Context) {
@@ -171,7 +171,7 @@ func UpdateBaseMenu(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.GetById true "根据id获取菜单"
+// @Param data body request.GetById true "根据id获取菜单"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/getBaseMenuById [post]
 func GetBaseMenuById(c *gin.Context) {

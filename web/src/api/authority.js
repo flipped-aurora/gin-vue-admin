@@ -60,3 +60,18 @@ export const setDataAuthority = (data) => {
         data
     })
 }
+
+// @Summary 修改角色
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.SysAuthority true "修改角色"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
+// @Router /authority/setDataAuthority [post]
+export const updateAuthority = (data) => {
+    return service({
+        url: "/authority/updateAuthority",
+        method: 'put',
+        data
+    })
+}

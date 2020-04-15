@@ -127,6 +127,17 @@ export default {
     ...mapGetters('user', ['token'])
   },
   methods: {
+     getAuthorityList(AuthorityData){
+      AuthorityData.map(item=>{
+        this.authOptions.push({
+          authorityId:item.authorityId,
+          authorityName:item.authorityName
+        })
+        if(item.children){
+          this.getAuthorityList(item.children)
+        }
+      })
+    },
     async enterAddUserDialog() {
       this.$refs.userForm.validate(async valid => {
         if (valid) {
@@ -160,8 +171,10 @@ export default {
     }
   },
   async created() {
+    this.getTableData()
     const res = await getAuthorityList({ page: 1, pageSize: 999 })
     this.authOptions = res.data.list
+    
   }
 
   

@@ -19,6 +19,8 @@ type SysBaseMenu struct {
 }
 
 type Meta struct {
-	Title string `json:"title"`
-	Icon  string `json:"icon"`
+	KeepAlive   bool   `json:"keepAlive"`
+	DefaultMenu bool   `json:"defaultMenu"`
+	Title       string `json:"title"`
+	Icon        string `json:"icon"`
 }

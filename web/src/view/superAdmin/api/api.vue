@@ -285,6 +285,9 @@ export default {
       const target = methodOptions.filter(item => item.value === value)[0]
       return target && `${target.type}`
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

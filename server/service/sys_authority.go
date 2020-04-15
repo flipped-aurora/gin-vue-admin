@@ -19,6 +19,18 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 	return err, auth
 }
 
+// @title    UpdateAuthority
+// @description   更改一个角色
+// @auth                     （2020/04/05  20:22）
+// @param     auth            model.SysAuthority
+// @return                    error
+// @return    authority       model.SysAuthority
+
+func UpdateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
+	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysAuthority{}).Updates(&auth).Error
+	return err, auth
+}
+
 // @title    DeleteAuthority
 // @description   删除角色
 // @auth                     （2020/04/05  20:22）

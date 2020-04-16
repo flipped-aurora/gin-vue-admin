@@ -73,6 +73,7 @@ func (co *CustomerOrder) AddOrder(cartList []Cart) (err error) {
 				CoffeeId: cartList[i].CoffeeId,
 				Count:    cartList[i].Count,
 				Value:    cartList[i].Value,
+				Spec:     cartList[i].Spec,
 			}
 			co.Value += orderDetail.Value
 			co.OrderDetail = append(co.OrderDetail, orderDetail)

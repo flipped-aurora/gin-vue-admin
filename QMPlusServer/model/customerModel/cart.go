@@ -14,6 +14,7 @@ type Cart struct {
 	gorm.Model
 	Coffee   coffeeModel.Coffee `json:"coffee" gorm:"ForeignKey:CoffeeId;AssociationForeignKey:CoffeeId"`
 	CoffeeId uuid.UUID          `json:"coffee_id"`
+	Spec     string             `json:"spec"`
 	Value    float64            `json:"value"`
 	Count    int                `json:"count"`
 	Customer Customers          `json:"customer" gorm:"ForeignKey:UserId;AssociationForeignKey:UserId"`
@@ -50,7 +51,7 @@ func (c *Cart) GetInfoListByUserId(info modelInterface.PageInfo, userId uuid.UUI
 	}
 }
 
-func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID) (err error) {
+func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID, spec string) (err error) {
 	findOne := qmsql.DEFAULTDB.Where("user_id = ?", userId).Where("coffee_id = ?", coffeeId).Find(&c)
 	var coffee coffeeModel.Coffee
 	err = coffee.GetCoffeeByUUID(coffeeId)
@@ -59,6 +60,7 @@ func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID) (err error) {
 	c.Coffee = coffee
 	c.Customer = customer
 	if findOne == nil {
+		c.Spec = spec
 		c.Value = coffee.Value
 		c.Count = 1
 		c.IsCheck = 1
@@ -68,6 +70,7 @@ func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID) (err error) {
 		upDataMap["value"] = c.Value + coffee.Value
 		upDataMap["count"] = c.Count + 1
 		upDataMap["isCheck"] = c.IsCheck
+		upDataMap["spec"] = c.Spec
 		err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Where("user_id = ?", userId).Find(&c).Updates(upDataMap).Error
 	}
 	return

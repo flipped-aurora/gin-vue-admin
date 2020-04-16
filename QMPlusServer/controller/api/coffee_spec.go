@@ -15,12 +15,17 @@ type CoffeeId struct {
 type ID struct {
 	Id int64
 }
+type CoffeeSpecDetail struct {
+	Name             string                         `json:"name"`
+	CoffeeSpecDetail []coffeeModel.CoffeeSpecDetail `json:"coffee_spec_detail"`
+}
 
 func AddCoffeeSpec(c *gin.Context) {
 	var coffeeSpec coffeeModel.CoffeeSpec
-	_ = c.ShouldBindJSON(&coffeeSpec)
+	var detail CoffeeSpecDetail
+	_ = c.ShouldBindJSON(&detail)
 
-	err := coffeeSpec.AddCoffeeSpec()
+	err := coffeeSpec.AddCoffeeSpec(detail.Name, detail.CoffeeSpecDetail)
 	if err != nil {
 		servers.ReportFormat(c, false, "新增失败", gin.H{})
 	} else {
@@ -84,13 +89,5 @@ func GetCoffeeSpecById(c *gin.Context) {
 }
 
 func GetCoffeeSpecByCoffeeId(c *gin.Context) {
-	var coffeeId CoffeeId
-	var coffeeSpec coffeeModel.CoffeeSpec
-	_ = c.ShouldBindJSON(&coffeeId)
-	list, err := coffeeSpec.GetCoffeeSpecByCoffeeId(coffeeId.UUID)
-	if err != nil {
-		servers.ReportFormat(c, false, "获取失败", gin.H{})
-	} else {
-		servers.ReportFormat(c, true, "获取成功", gin.H{"speclist": list})
-	}
+
 }

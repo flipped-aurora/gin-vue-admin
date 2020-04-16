@@ -13,6 +13,7 @@ type OrderDetail struct {
 	OrderId  uuid.UUID          `json:"orderId"`
 	Coffee   coffeeModel.Coffee `json:"coffee"`
 	CoffeeId uuid.UUID          `json:"coffee_id"`
+	Spec     string             `json:"spec"`
 	Count    int                `json:"count"`
 	Value    float64            `json:"value"`
 }

@@ -7,24 +7,32 @@ import (
 )
 
 func InitMyCustomerRouter(Router *gin.RouterGroup) {
-
-	// 客户操作
-	customerAddressRouter := Router.Group("/customerAddress").Use(middleware.JWTAuth())
+	// 管理员操作
+	customerAddressRouter := Router.Group("/customerAddress").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
+		customerAddressRouter.POST("/address", api.GetAddressList)
 		customerAddressRouter.POST("/add", api.AddAddress)
 		customerAddressRouter.PATCH("/update", api.UpdateAddress)
 		customerAddressRouter.DELETE("/delete", api.DeleteAddress)
 	}
-	// 管理员操作
+
 	customerRouter := Router.Group("/customer").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		customerAddressRouter.GET("/address", api.GetAddressList)
 		customerRouter.POST("list", api.GetCustomerList)
 		customerRouter.PATCH("/update", api.UpdateCustomer)
 		customerRouter.DELETE("/delete", api.DeleteCustomer)
 		customerRouter.POST("/getbyid", api.GetCustomerById)
 		customerRouter.POST("/add", api.AddCustomer)
 	}
+
+	customerOrderRouter := Router.Group("/customerOrder").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	{
+		customerOrderRouter.POST("/order", api.GetOrderList)
+		customerOrderRouter.DELETE("/delOrder", api.DeleteOrder)
+		customerOrderRouter.POST("/getbyid", api.GetOrderByOrderId)
+
+	}
+	// 客户操作
 	customerBusinessRouter := Router.Group("/cus").Use(middleware.JWTAuth())
 	{
 		customerBusinessRouter.POST("/upload", api.UploadCusHeaderImg)

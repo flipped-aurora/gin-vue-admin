@@ -84,6 +84,12 @@ func (c *CoffeeSpec) GetCoffeeSpecByCoffeeId(coffeeId uuid.UUID) (list []CoffeeS
 	}
 	return list, nil
 }
+func (c *CoffeeSpec) GetCoffeeSpecDetail(specId uuid.UUID) (err error) {
+	c.SpecId = specId
+	err = qmsql.DEFAULTDB.Where("spec_id = ?", c.SpecId).Find(&c.CoffeeSpecDetail).Error
+	return
+}
+
 func RemoveRepByLoop(slc []CoffeeSpecDetail) []CoffeeSpecDetail {
 	result := []CoffeeSpecDetail{} // 存放结果
 	for i := range slc {

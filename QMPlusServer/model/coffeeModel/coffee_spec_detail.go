@@ -7,8 +7,8 @@ import (
 
 type CoffeeSpecDetail struct {
 	gorm.Model
-	SpecId   uuid.UUID `json:"spec_id"`
-	CoffeeId uuid.UUID `json:"coffee_id"`
-	Value    string    `json:"value"`
-	Price    float64   `json:"price"`
+	SpecId     uuid.UUID `json:"spec_id"`
+	CoffeeId   uuid.UUID `json:"coffee_id"`
+	Value      string    `json:"value"`
+	PriceIncre float64   `json:"price"`
 }

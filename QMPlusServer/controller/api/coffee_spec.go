@@ -89,5 +89,28 @@ func GetCoffeeSpecById(c *gin.Context) {
 }
 
 func GetCoffeeSpecByCoffeeId(c *gin.Context) {
+	var coffeeId CoffeeId
+	_ = c.ShouldBindJSON(&coffeeId)
+	list, err := new(coffeeModel.CoffeeSpec).GetCoffeeSpecByCoffeeId(coffeeId.UUID)
+	if err != nil {
+		servers.ReportFormat(c, false, "获得失败", gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取成功", gin.H{"coffeeSpec": list})
+	}
+}
 
+type SpecId struct {
+	SpecId uuid.UUID `json:"spec_id"`
+}
+
+func GetCoffeeSpecDetail(c *gin.Context) {
+	var specId SpecId
+	var spec coffeeModel.CoffeeSpec
+	_ = c.ShouldBindJSON(&specId)
+	err := spec.GetCoffeeSpecDetail(specId.SpecId)
+	if err != nil {
+		servers.ReportFormat(c, false, "获得失败", gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取成功", gin.H{"coffeeSpecDetail": spec.CoffeeSpecDetail})
+	}
 }

@@ -259,7 +259,7 @@ export default {
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',
-                    message: '添加成功',
+                    message: '编辑成功',
                     showClose: true
                   })
                 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="250" prop="id"></el-table-column>        
+      <el-table-column label="id" min-width="250" prop="ID"></el-table-column>        
       <el-table-column label="useId" min-width="250" prop="userId"></el-table-column>
       <el-table-column label="省" min-width="150" prop="province"></el-table-column>
       <el-table-column label="市" min-width="150" prop="city"></el-table-column>
@@ -57,7 +57,7 @@ export default {
     }
   },
   methods: {
-    async enterAddCoffeeDialog() {
+    async enterAddAddressDialog() {
       // eslint-disable-next-line no-console
       //console.log(this.coffeeInfo)
       const res = await updateCustomerAddress(this.addressInfo)
@@ -84,11 +84,23 @@ export default {
 
     },
     async deleteAddress(row) {
-      const res = await delCustomerAddress({ id: row.id })
-      if (res.success) {
-        this.$message({ type: "success", message: "删除咖啡成功" })
-      }
-      await this.getTableData()
+      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async ()=> {
+        const res = await delCustomerAddress({ id: row.id })
+        if (res.success) {
+          this.$message({ type: "success", message: "删除地址成功" })
+        }
+        await this.getTableData()
+      }).catch(() => {
+           this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })       
+      })
+
     }
   },
   async created() {

@@ -11,10 +11,9 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="uuid" min-width="250" prop="uuid"></el-table-column>
+      <el-table-column label="咖啡编号" min-width="250" prop="uuid"></el-table-column>
       <el-table-column label="咖啡名称" min-width="150" prop="name"></el-table-column>
       <el-table-column label="价格" min-width="150" prop="value"></el-table-column>
-      <el-table-column label="描述" min-width="150" prop="des"></el-table-column>
       <el-table-column label="咖啡类型" min-width="150">
         <template slot-scope="scope">
           <el-select
@@ -51,15 +50,21 @@
     ></el-pagination>
 
     <el-dialog :visible.sync="addCoffeeDialog" custom-class="user-dialog" :title="titleMap[dialogTitle]">
-      <el-form :model="coffeeInfo">
-        <el-form-item label="咖啡名称" label-width="80px">
+      <el-form :model="coffeeInfo" :rules="rules" ref="coffeeInfo">
+        <el-form-item label="咖啡名称" label-width="80px" required prop="name">
           <el-input v-model="coffeeInfo.name"></el-input>
         </el-form-item>
-        <el-form-item label="价格" label-width="80px">
+        <el-form-item label="价格" label-width="80px" required prop="value">
           <el-input v-model="coffeeInfo.value"></el-input>
         </el-form-item>
-        <el-form-item label="描述" label-width="80px">
-          <el-input v-model="coffeeInfo.des"></el-input>
+        <el-form-item label="描述" label-width="80px" required prop="des">
+        <quill-editor 
+            v-model="coffeeInfo.des" 
+            ref="myQuillEditor" 
+            :options="editorOption" 
+            @blur="onEditorBlur($event)" @focus="onEditorFocus($event)"
+            @change="onEditorChange($event)">
+        </quill-editor>
         </el-form-item>
         <el-form-item label="图片" label-width="80px">
           <el-upload
@@ -73,7 +78,7 @@
             <i class="el-icon-plus avatar-uploader-icon" v-else></i>
           </el-upload>
         </el-form-item>
-        <el-form-item label="咖啡类型" label-width="80px">
+        <el-form-item label="咖啡类型" label-width="80px" required prop="code">
           <el-select placeholder="请选择" v-model="coffeeInfo.code">
             <el-option
               :key="item.code"
@@ -86,15 +91,37 @@
       </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeAddCoffeeDialog">取 消</el-button>
-        <el-button @click="enterAddCoffeeDialog" type="primary">确 定</el-button>
+        <el-button @click="enterAddCoffeeDialog('coffeeInfo')" type="primary">确 定</el-button>
       </div>
     </el-dialog>
 
     <el-dialog title="规格" :visible.sync="coffeeSpecDialog" custom-class="user-dialog">
-      <el-table :data="Spec" style="width: 100%">
+      <el-table :data="Spec" size="mini">
+        <el-table-column prop="spec_id" label="规格编号" width="180"></el-table-column>
         <el-table-column prop="name" label="规格名称" width="180"></el-table-column>
+        <el-table-column fixed="right" label="操作" width="300">
+        <template slot-scope="scope">
+          <el-button @click="enterCoffeeSpecDetailDialog(scope.row)" size="small" type="text">查看详细信息</el-button>
+        </template>
+      </el-table-column>
       </el-table>
     </el-dialog>
+
+  <el-dialog
+  title="咖啡规格详细信息"
+  :visible.sync="coffeeSpecDetailDialog"
+  width="30%"
+  :before-close="CloseSpecDetailDialog">
+      <el-table :data="specDetail" size="mini">
+        <el-table-column prop="coffee_id" label="咖啡编号" width="180"></el-table-column>
+        <el-table-column prop="value" label="规格名称" width="180"></el-table-column>
+        <el-table-column prop="price_incre" label="价格增加" width="180"></el-table-column>
+  <span slot="footer" class="dialog-footer">
+    <el-button @click="dialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+  </span>
+        </el-table>
+  </el-dialog>
   </div>
 </template>
 
@@ -110,19 +137,54 @@ import {
   updateCoffee,
   delCoffee,
   getCoffeeById,
-  getCoffeeSpecByCoffeeId
+  getCoffeeSpecByCoffeeId,
+  getCoffeeSpecDetail
 } from "@/api/coffee";
 import infoList from "@/components/mixins/infoList";
+import { quillEditor } from "vue-quill-editor"; //调用编辑器
+import 'quill/dist/quill.core.css';
+import 'quill/dist/quill.snow.css';
+import 'quill/dist/quill.bubble.css';
 export default {
   name: "coffee",
   mixins: [infoList],
   data() {
+    const checkname = (rule, value, callback) => {
+      if(!value) {
+        return callback(new Error('咖啡名不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const checkvalue = (rule, value, callback) => {
+      if(!value) {
+        return callback(new Error('咖啡价格不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const checkdes = (rule, value, callback) => {
+      if(!value) {
+        return callback(new Error('咖啡描述不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const checkcode = (rule, value, callback) => {
+      if(!value) {
+        return callback(new Error('咖啡类型编号不能为空'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       listApi: getCoffeeList,
       listKey: "coffeeList",
       path: path,
       addCoffeeDialog: false,
       coffeeSpecDialog: false,
+      coffeeSpecDetailDialog: false,
       dialogTitle: '',
       titleMap : {
         addData : "添加咖啡",
@@ -136,27 +198,46 @@ export default {
         img: "",
         code: ""
       },
+      rules: {
+        name: [{required: true, validator: checkname, trigger: 'blur' }],
+        value: [{required: true, validator: checkvalue, trigger: 'blur' }],
+        des:  [{required: true, validator: checkdes, trigger: 'blur' }],
+        code:  [{required: true, validator: checkcode, trigger: 'blur' }]
+      },
       typeOptions: [],
-      Spec: []
+      Spec: [],
+      specDetail: [],
+      editorOption: {}
     };
   },
   methods: {
-    async enterAddCoffeeDialog() {
+    async enterAddCoffeeDialog(formName) {
       // eslint-disable-next-line no-console
       //console.log(this.coffeeInfo)
-      this.coffeeInfo.value = Number(this.coffeeInfo.value);
-      let res;
-      if (this.isEdit) {
-        res = await updateCoffee(this.coffeeInfo);
-      } else {
-        res = await addCoffee(this.coffeeInfo);
-      }
+      this.$refs[formName].validate(async v => {
+      if(v) {
+        this.coffeeInfo.value = Number(this.coffeeInfo.value);
+        let res;
+        if (this.isEdit) {
+          res = await updateCoffee(this.coffeeInfo);
+        } else {
+          res = await addCoffee(this.coffeeInfo);
+        }
 
-      if (res.success) {
-        this.$message({ type: "success", message: "创建成功" });
+        if (res.success) {
+          this.$message({ type: "success", message: "创建成功" });
+        }
+        await this.getTableData();
+        this.closeAddCoffeeDialog();
+      }else {
+          this.$message({
+            type: 'error',
+            message: '请正确填写信息',
+            showClose: true
+          })
+          return false
       }
-      await this.getTableData();
-      this.closeAddCoffeeDialog();
+    })
     },
     closeAddCoffeeDialog() {
       this.coffeeInfo = {
@@ -174,7 +255,10 @@ export default {
     addCoffee() {
       this.coffeeInfo = {
         name: "",
-        code: ""
+        value: 0.0,
+        code: "",
+        des: "",
+        img: ""
       };
       this.dialogTitle = "addData";
       this.isEdit = false;
@@ -198,28 +282,53 @@ export default {
 
     },
     async deleteCoffee(row) {
-      const res = await delCoffee({ uuid: row.uuid });
-      if (res.success) {
-        this.$message({ type: "success", message: "删除咖啡成功" });
-      }
-      await this.getTableData();
+      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async ()=> {
+          const res = await delCoffee({ uuid: row.uuid });
+          if (res.success) {
+            this.$message({ type: "success", message: "删除咖啡成功" });
+          }
+          await this.getTableData();    
+      }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+      })
+
     },
     async getCoffeeSpec(row) {
       const res = await getCoffeeSpecByCoffeeId({ uuid: row.uuid });
       if (res.success) {
         this.$message({ type: "success", message: "获取成功" });
       }
-      this.Spec = res.data.speclist;
+      this.Spec = res.data.coffeeSpec;
+      
       this.coffeeSpecDialog = true
+    },
+    async enterCoffeeSpecDetailDialog(row) {
+      const res = await getCoffeeSpecDetail({spec_id : row.spec_id})
+      this.specDetail = res.data.coffeeSpecDetail
+      this.coffeeSpecDetailDialog = true
+    },
+    CloseSpecDetailDialog() {
+      this.specDetail = []
+      this.coffeeSpecDetailDialog = false
+    },
+    onEditorChange({ editor, html, text }) {
+      this.coffeeInfo.des = html;
     }
   },
   async created() {
     this.page = 1;
     this.pageSize = 999;
     const res = await getCoffeeTypeList({ page: 1, pageSize: 999 });
-    this.typeOptions = res.data.userList;
-  }
-};
+    this.typeOptions = res.data.coffeetype;
+  },
+}
 </script>
 <style scoped lang="scss">
 .button-box {

@@ -35,7 +35,7 @@ export const delCustomer = (data) => {
 
 export const getCustomerAddressList = (data) => {
     return service({
-        url: "/customer/address",
+        url: "/customerAddress/address",
         method: 'post',
         data
     })
@@ -76,6 +76,30 @@ export const getCustomerById = (data) => {
 export const getAddressById = (data) => {
     return service({
         url: "/customer/getbyid",
+        method: 'post',
+        data: data
+    })
+}
+
+export const getCustomerOrderList = (data) => {
+    return service({
+        url: "/customerOrder/order",
+        method: 'post',
+        data: data
+    })
+}
+
+export const deleteCustomerOrder = (data) => {
+    return service({
+        url: "/customerOrder/delOrder",
+        method: 'delete',
+        data: data
+    })
+}
+
+export const getCustomerOrderByOrderId = (data) => {
+    return service({
+        url: "/customerOrder/getbyid",
         method: 'post',
         data: data
     })

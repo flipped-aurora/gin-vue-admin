@@ -12,7 +12,8 @@
         </template>
       </el-table-column>
       <el-table-column label="uuid" min-width="250" prop="uuid"></el-table-column>
-      <el-table-column label="客户名称" min-width="150" prop="username"></el-table-column>
+      <el-table-column label="客户名称" min-width="150" prop="username">
+      </el-table-column>
       <el-table-column label="密码" min-width="150" prop="password"></el-table-column>
       <el-table-column label="别名" min-width="150" prop="nickname"></el-table-column>
       <el-table-column label="邮箱" min-width="150" prop="email"></el-table-column>
@@ -21,7 +22,7 @@
         <template slot-scope="scope">
           <el-button @click="deleteCustomer(scope.row)" size="small" type="text">删除客户</el-button>
           <el-button @click="editCustomer(scope.row)" size="small" type="text">编辑客户</el-button>
-          <el-button @click="editAddress(scope.row)" size="small" type="text">添加地址</el-button>
+          <el-button @click="addAddress(scope.row)" size="small" type="text">添加地址</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -71,7 +72,7 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="editAddressDialog" custom-class="user-dialog" title="添加地址">
+    <el-dialog :visible.sync="addAddressDialog" custom-class="user-dialog" title="添加地址">
       <el-form :model="addressInfo">
         <el-form-item>
           <el-cascader
@@ -187,7 +188,7 @@ export default {
         email:  [{required: true, validator: checkEmail, trigger: 'blur' }],
         phone: [{required: true, validator: checkPhone, trigger: 'blur'}]
       },
-      editAddressDialog: false,
+      addAddressDialog: false,
       addressInfo: {
         options: regionData,
         selectedOptions: [],
@@ -262,16 +263,27 @@ export default {
 
     },
     async deleteCustomer(row) {
-      const res = await delCustomer({ uuid: row.uuid });
-      if (res.success) {
-        this.$message({ type: "success", message: "删除客户成功" });
-      }
-      await this.getTableData();
+      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const res = await delCustomer({ uuid: row.uuid });
+        if (res.success) {
+          this.$message({ type: "success", message: "删除客户成功" });
+        }
+        await this.getTableData();
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
-    editAddress(row) {
+    addAddress(row) {
       //alert(row.uuid)
       this.uuid = row.uuid
-      this.editAddressDialog = true
+      this.addAddressDialog = true
     },
     changeAddress(value) {
       this.province =value[0]
@@ -284,7 +296,7 @@ export default {
         selectedOptions: [],
         specAddress: ''       
       }
-      this.editAddressDialog = false
+      this.addAddressDialog = false
     },
     async AddAddressDialog() {
       if(this.province && this.city && this.region) {

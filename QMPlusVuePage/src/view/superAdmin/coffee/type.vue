@@ -4,6 +4,13 @@
       <el-button @click="addCoffeeType" type="primary">新增咖啡类型</el-button>
     </div>
     <el-table :data="tableData" border stripe>
+      <el-table-column label="图片" min-width="50">
+        <template slot-scope="scope">
+          <div :style="{'textAlign':'center'}">
+            <img :src="scope.row.image" height="50" width="50" />
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="咖啡类型名称" min-width="150" prop="name"></el-table-column>
       <el-table-column label="咖啡类型代码" min-width="150" prop="code"></el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
@@ -32,10 +39,22 @@
         <el-form-item label="类型代码" label-width="80px">
           <el-input v-model="coffeeTypeInfo.code" :disabled = dis></el-input>
         </el-form-item>
+        <el-form-item label="图片" label-width="80px">
+          <el-upload
+            :on-success="handleAvatarSuccess"
+            :show-file-list="false"
+            :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
+            class="avatar-uploader"
+            name="file"
+          >
+            <img :src="coffeeTypeInfo.image" class="avatar" v-if="coffeeTypeInfo.image" />
+            <i class="el-icon-plus avatar-uploader-icon" v-else></i>
+          </el-upload>
+        </el-form-item>
       </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeAddCoffeeTypeDialog">取 消</el-button>
-        <el-button @click="enterAddCoffeeTypeDialog" type="primary">确 定</el-button>
+        <el-button @click="enterAddCoffeeTypeDialog('coffeeTypeInfo')" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -58,6 +77,20 @@ export default {
   name: "coffeetype",
   mixins: [infoList],
   data() {
+    const checkname = (rule, value, callback) => {
+      if(!value) {
+        return callback(new Error('咖啡类型名不能为空'))
+      } else {
+        callback()
+      }
+    }
+    const checkcode = (rule, value, callback) => {
+      if(!value) {
+        return callback(new Error('咖啡类型编号不能为空'))
+      } else {
+        callback()
+      }
+    }       
     return {
       listApi: getCoffeeTypeList,
       listKey: "coffeetype",
@@ -66,14 +99,16 @@ export default {
       isEdit: false,
       coffeeTypeInfo: {
         code: "",
-        name: ""
+        name: "",
+        image: ""
       }
     }
   },
   methods: {
-    async enterAddCoffeeTypeDialog() {
+    async enterAddCoffeeTypeDialog(formName) {
       // eslint-disable-next-line no-console
       //console.log(this.coffeeInfo)
+    this.$refs[formName].validate(async v => {
       let res
       if(this.isEdit) {
         res = await updateCoffeeType(this.coffeeTypeInfo)
@@ -86,18 +121,21 @@ export default {
       }
       await this.getTableData()
       this.closeAddCoffeeDialog()
-    },
+    })
+  },
     closeAddCoffeeTypeDialog() {
       this.coffeeTypeInfo = {
         name: "",
-        code: ""
+        code: "",
+        image: ""
       }
       this.addCoffeeTypeDialog = false
     },
     addCoffeeType() {
       this.coffeeTypeInfo = {
         name: "",
-        code: ""
+        code: "",
+        image: ""
       }
       this.isEdit = false
       this.dis = false

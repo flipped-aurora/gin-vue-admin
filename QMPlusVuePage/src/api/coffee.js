@@ -96,3 +96,11 @@ export const getCoffeeSpecByCoffeeId = (data) => {
         data: data
     })
 }
+
+export const getCoffeeSpecDetail = (data) => {
+    return service({
+        url: "/coffeespec/detail",
+        method: 'post',
+        data: data
+    })
+}

@@ -229,3 +229,22 @@ func SetUserAuthority(c *gin.Context) {
 		response.OkWithMessage("修改成功", c)
 	}
 }
+
+// @Tags SysUser
+// @Summary 删除用户
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.SetUserAuth true "删除用户"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/deleteUser [delete]
+func DeleteUser(c *gin.Context) {
+	var reqId request.GetById
+	_ = c.ShouldBindJSON(&reqId)
+	err := service.DeleteUser(reqId.Id)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}

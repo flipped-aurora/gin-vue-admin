@@ -35,6 +35,7 @@ func DeleteBaseMenu(id float64) (err error) {
 // @return    err             errorgetMenu
 
 func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
+	var oldMenu model.SysBaseMenu
 	upDateMap := make(map[string]interface{})
 	upDateMap["keep_alive"] = menu.KeepAlive
 	upDateMap["default_menu"] = menu.DefaultMenu
@@ -46,7 +47,15 @@ func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	upDateMap["title"] = menu.Title
 	upDateMap["icon"] = menu.Icon
 	upDateMap["sort"] = menu.Sort
-	err = global.GVA_DB.Where("id = ?", menu.ID).Find(&model.SysBaseMenu{}).Updates(upDateMap).Error
+	db := global.GVA_DB.Where("id = ?", menu.ID).Find(&oldMenu)
+	if oldMenu.Name != menu.Name {
+		notSame := global.GVA_DB.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&model.SysBaseMenu{}).RecordNotFound()
+		if !notSame {
+			global.GVA_LOG.Debug("存在相同name修改失败")
+			return errors.New("存在相同name修改失败")
+		}
+	}
+	err = db.Updates(upDateMap).Error
 	global.GVA_LOG.Debug("菜单修改时候，关联菜单err:%v", err)
 	return err
 }

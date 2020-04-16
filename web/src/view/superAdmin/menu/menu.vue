@@ -225,14 +225,9 @@ export default {
           if (res.code == 0) {
             this.$message({
               type: 'success',
-              message: '添加成功!'
+              message: this.isEdit?'编辑成功':'添加成功!'
             })
             this.getTableData()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '添加失败!'
-            })
           }
           this.initForm()
           this.dialogFormVisible = false

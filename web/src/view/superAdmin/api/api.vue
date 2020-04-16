@@ -181,6 +181,12 @@ export default {
     },
     initForm() {
       this.$refs.apiForm.resetFields()
+      this.form= {
+        path: '',
+        apiGroup: '',
+        method: '',
+        description: ''
+      }
     },
     closeDialog() {
       this.initForm()

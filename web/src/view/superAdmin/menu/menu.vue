@@ -191,6 +191,20 @@ export default {
     // 初始化弹窗内表格方法
     initForm() {
       this.$refs.menuForm.resetFields()
+      this.form = {
+        ID: 0,
+        path: '',
+        name: '',
+        hidden: '',
+        parentId: '',
+        component: '',
+        meta: {
+          title: '',
+          icon: '',
+          defaultMenu:false,
+          keepAlive:""
+        }
+      }
     },
     // 关闭弹窗
     closeDialog() {

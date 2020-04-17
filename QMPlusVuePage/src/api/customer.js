@@ -75,7 +75,7 @@ export const getCustomerById = (data) => {
 
 export const getAddressById = (data) => {
     return service({
-        url: "/customer/getbyid",
+        url: "/customerAddress/getbyid",
         method: 'post',
         data: data
     })

@@ -381,7 +381,7 @@ export default {
       const res = await getCustomerAddressByUserId({pageInfo: {page:1,pageSize: 999},user_id: this.uuid})
       if(res.success) {
         this.userAddress = res.data.addressList
-        console.log(res.data.addressList)
+        //console.log(res.data.addressList)
         for (let i = 0; i < res.data.addressList.length; i++) {
             if(res.data.addressList[i].isDefault == 1) {
               this.selectedAddress = "("+res.data.addressList[i].specAddress +")";

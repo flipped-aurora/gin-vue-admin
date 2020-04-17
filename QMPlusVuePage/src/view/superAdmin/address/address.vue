@@ -1,15 +1,17 @@
 <template>
   <div>
     <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="250" prop="ID"></el-table-column>        
+      <el-table-column label="id" min-width="50" prop="ID"></el-table-column>        
       <el-table-column label="useId" min-width="250" prop="userId"></el-table-column>
       <el-table-column label="省" min-width="150" prop="province"></el-table-column>
       <el-table-column label="市" min-width="150" prop="city"></el-table-column>
       <el-table-column label="区/镇/村" min-width="150" prop="town"></el-table-column>
-      <el-table-column label="具体地址" min-width="150" prop="specAddress"></el-table-column>      
+      <el-table-column label="具体地址" min-width="150" prop="specAddress"></el-table-column>
+      <el-table-column label="收货人" min-width="150" prop="consignee"></el-table-column>        
+      <el-table-column label="电话" min-width="150" prop="phone"></el-table-column>           
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
-          <el-button @click="deleteAddress(scope.row)" size="small" type="text">编辑地址</el-button>
+          <el-button @click="editAddress(scope.row)" size="small" type="text">编辑地址</el-button>
           <el-button @click="deleteAddress(scope.row)" size="small" type="text">删除地址</el-button>
         </template>
       </el-table-column>
@@ -25,17 +27,27 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
   <el-dialog title="编辑地址" :visible.sync="editAddressDialog">
-  <el-form :model="form">
-    <el-form-item label="活动名称" :label-width="formLabelWidth">
-      <el-input v-model="form.name" autocomplete="off"></el-input>
-    </el-form-item>
-    <el-form-item label="活动区域" :label-width="formLabelWidth">
-      <el-select v-model="form.region" placeholder="请选择活动区域">
-        <el-option label="区域一" value="shanghai"></el-option>
-        <el-option label="区域二" value="beijing"></el-option>
-      </el-select>
-    </el-form-item>
-  </el-form>
+      <el-form :model="addressInfo" size="mini">
+        <span>请选择地址</span>
+        <el-form-item>
+          <el-cascader
+          :options="addressInfo.options"
+          v-model="addressInfo.selectedOptions"
+          @change="changeAddress">
+          </el-cascader>            
+        </el-form-item>
+        <el-form-item label="具体地址" label-width="80px">
+          <el-input v-model="addressInfo.specAddress" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" label-width="80px">
+          <el-input v-model="addressInfo.phone" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="收货人" label-width="80px">
+          <el-input v-model="addressInfo.consignee" size="mini"></el-input>
+        </el-form-item>
+      </el-form>
+      <el-button @click="closeAddressDialog">取消</el-button>
+      <el-button @click="AddAddressDialog" type="primary">确定</el-button>
   <div slot="footer" class="dialog-footer">
     <el-button @click="dialogFormVisible = false">取 消</el-button>
     <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
@@ -48,6 +60,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 const path = process.env.VUE_APP_BASE_API;
+
 import {
   getCustomerAddressList,
   updateCustomerAddress,
@@ -55,6 +68,7 @@ import {
   delCustomerAddress
 } from "@/api/customer";
 import infoList from "@/components/mixins/infoList";
+import { regionData,TextToCode } from 'element-china-area-data'
 export default {
   name: "addressList",
   mixins: [infoList],
@@ -63,15 +77,18 @@ export default {
       listApi: getCustomerAddressList,
       listKey: "addressList",
       path: path,
-      addAddressDialog: false,
       addressInfo: {
-        userId: "",
-        province: 0.0,
-        city: "",
-        town: "",
-        specAddress: ""
+        options: regionData,
+        selectedOptions: [],
+        specAddress: '',
+        phone: '',
+        consignee: '',
+        isDefault: false
       },
-      editAddressDialog: false
+      editAddressDialog: false,
+      province: "",
+      city: "",
+      region: ""
     }
   },
   methods: {
@@ -87,18 +104,25 @@ export default {
     },
     closeAddAddressDialog() {
       this.addressInfo = {
-        userId: "",
-        province: 0.0,
-        city: "",
-        town: "",
-        specAddress: ""
-      }
-      this.addAddressDialog = false
+        options: regionData,
+        selectedOptions: [],
+        province: '',
+        city: '',
+        town: '',
+        specAddress: '',
+        phone: '',
+        consignee: '',
+        isDefault: false
+      },
+      this.editAddressDialog = false
     },
     async editAddress(row) {
-      const res = await getAddressById({ uuid: row.uuid })
+      const res = await getAddressById({ id: row.ID })
       this.addressInfo = res.data.address
-      this.addAddressDialog = true
+      console.log(this.addressInfo)
+      this.addressInfo.selectedOptions = [TextToCode[this.addressInfo.province].code,TextToCode[this.addressInfo.province][this.addressInfo.city].code,TextToCode[this.addressInfo.province][this.addressInfo.city][this.addressInfo.town].code]
+      this.addressInfo.options = regionData
+      this.editAddressDialog = true
 
     },
     async deleteAddress(row) {
@@ -119,8 +143,21 @@ export default {
           })       
       })
     },
-    async editAddress(row) {
-
+    changeAddress(value) {
+      this.province =CodeToText[value[0]]
+      this.city = CodeToText[value[1]]
+      this.region = CodeToText[value[2]]
+    },
+    closeAddressDialog() {
+      this.addressInfo = {
+        options: regionData,
+        selectedOptions: [],
+        specAddress: ''       
+      }
+      this.editAddressDialog = false
+    },
+    async AddAddressDialog() {
+      this.editAddressDialog = false
     }
   },
   async created() {

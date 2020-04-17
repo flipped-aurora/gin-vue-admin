@@ -27,20 +27,14 @@
     <el-dialog :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="form" :rules="rules" ref="authorityForm">
         <el-form-item label="父级角色"  prop="parentId">
-           <el-select
-           :disabled="dialogType=='add'"
-            placeholder="请选择"
-            v-model="form.parentId"
-            filterable
-          >
-            <el-option
-              :disabled="canSelect(item)"
-              :key="item.authorityId"
-              :label="item.authorityName"
-              :value="item.authorityId"
-              v-for="item in AuthorityOption"
-            ></el-option>
-          </el-select>
+           <el-cascader
+              :disabled="dialogType=='add'"
+              v-model="form.parentId"
+              :options="AuthorityOption"
+              :show-all-levels="false"
+              :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              filterable>
+              </el-cascader>
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
           <el-input autocomplete="off" :disabled="dialogType=='edit'" v-model="form.authorityId"></el-input>
@@ -218,60 +212,58 @@ export default {
         }
       })
     },
-    getAuthorityList(AuthorityData){
-      AuthorityData.map(item=>{
-        this.AuthorityOption.push({
-          authorityId:item.authorityId,
-          authorityName:item.authorityName
-        })
-        if(item.children){
-          this.getAuthorityList(item.children)
+    setOptions(){
+       this.AuthorityOption = [{
+          authorityId:"0",
+          authorityName:"根角色"
+        }]
+      this.setAuthorityOptions(this.tableData,this.AuthorityOption,false)
+    },
+    setAuthorityOptions(AuthorityData,optionsData,disabled){
+      AuthorityData&&AuthorityData.map(item=>{
+        if(item.children.length){
+          const option = {
+            authorityId:item.authorityId,
+            authorityName:item.authorityName,
+            disabled:disabled||item.authorityId == this.form.authorityId,
+            children:[]
+        }
+          this.setAuthorityOptions(item.children,option.children,disabled||item.authorityId == this.form.authorityId)
+          optionsData.push(option)
+        }else{
+          const option = {
+              authorityId:item.authorityId,
+              authorityName:item.authorityName,
+              disabled:disabled||item.authorityId == this.form.authorityId,
+          }
+          optionsData.push(option)
         }
       })
-    },
-    findAuthoritySelf(authority,authData,outData){
-      authData.some(item=>{
-        if(item.authorityId == authority.authorityId){
-          outData.push(item)
-          return true
-        }
-        this.findAuthoritySelf(authority,item.children,outData)
-      })
-    },
-    findAllChild(authority,array){
-      authority&&authority.map(item=>{
-        array.push(item.authorityId)
-        this.findAllChild(item.children,array)
-      })
-    },
-    canSelect(authority){
-      const array = []
-      const arrayIds = []
-      this.findAuthoritySelf({authorityId:this.form.authorityId},this.tableData,array)
-      this.findAllChild(array,arrayIds)
-      return arrayIds.indexOf(authority.authorityId)>-1
     },
     // 增加角色
     addAuthority(parentId) {
-      this. dialogTitle = "新增角色"
+      this.dialogTitle = "新增角色"
       this.dialogType = "add"
       this.form.parentId = parentId
+      this.setOptions()
       this.dialogFormVisible = true
+      
     },
-    // 增加角色
+    // 编辑角色
     editAuthority(row) {
-      this. dialogTitle = "编辑角色"
+      this.setOptions()
+      this.dialogTitle = "编辑角色"
       this.dialogType = "edit"
       for(let key in this.form){
         this.form[key] = row[key]
       }
+      this.setOptions()
       this.dialogFormVisible = true
     }
   },
   async created() {
     this.pageSize = 999
     await this.getTableData()
-    this.getAuthorityList(this.tableData)
   }
 }
 </script>

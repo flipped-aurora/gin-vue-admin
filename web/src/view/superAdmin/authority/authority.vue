@@ -16,19 +16,28 @@
       <el-table-column fixed="right" label="操作" min-width="300">
         <template slot-scope="scope">
           <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
-          <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
           <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
+          <el-button @click="editAuthority(scope.row)" size="small" type="text">编辑角色</el-button>
+          <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
+
         </template>
       </el-table-column>
     </el-table>
     <!-- 新增角色弹窗 -->
     <el-dialog :visible.sync="dialogFormVisible" :title="dialogTitle">
       <el-form :model="form" :rules="rules" ref="authorityForm">
-        <el-form-item label="父级角色ID" prop="parentId">
-          <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
+        <el-form-item label="父级角色"  prop="parentId">
+           <el-cascader
+              :disabled="dialogType=='add'"
+              v-model="form.parentId"
+              :options="AuthorityOption"
+              :show-all-levels="false"
+              :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              filterable>
+              </el-cascader>
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
-          <el-input autocomplete="off" v-model="form.authorityId"></el-input>
+          <el-input autocomplete="off" :disabled="dialogType=='edit'" v-model="form.authorityId"></el-input>
         </el-form-item>
         <el-form-item label="角色姓名" prop="authorityName">
           <el-input autocomplete="off" v-model="form.authorityName"></el-input>
@@ -62,7 +71,8 @@
 import {
   getAuthorityList,
   deleteAuthority,
-  createAuthority
+  createAuthority,
+  updateAuthority 
 } from '@/api/authority'
 
 import Menus from '@/view/superAdmin/authority/components/menus'
@@ -75,8 +85,13 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      AuthorityOption:[{
+          authorityId:"0",
+          authorityName:"根角色"
+        }],
       listApi: getAuthorityList,
       drawer: false,
+      dialogType:"add",
       activeRow: {},
       activeUserId: 0,
       dialogTitle:"新增角色",
@@ -137,6 +152,11 @@ export default {
     // 初始化表单
     initForm() {
       this.$refs.authorityForm.resetFields()
+      this.form =  {
+        authorityId: '',
+        authorityName: '',
+        parentId: '0'
+      }
     },
     // 关闭窗口
     closeDialog() {
@@ -156,28 +176,94 @@ export default {
       }
       this.$refs.authorityForm.validate(async valid => {
         if (valid) {
-          const res = await createAuthority(this.form)
-          if (res.code == 0) {
-            this.$message({
-              type: 'success',
-              message: '添加成功!'
-            })
-            this.getTableData()
-            this.closeDialog()
+          switch (this.dialogType) {
+            case 'add':
+              {
+                const res = await createAuthority(this.form)
+                if (res.code == 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '添加成功!'
+                  })
+                  this.getTableData()
+                  this.closeDialog()
+                }
+              }
+              break;
+            case 'edit':
+              {
+                const res = await updateAuthority(this.form)
+                if (res.code == 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '添加成功!'
+                  })
+                  this.getTableData()
+                  this.closeDialog()
+                }
+              }
+              break;
+            default:
+              break;
           }
+          
           this.initForm()
           this.dialogFormVisible = false
         }
       })
     },
+    setOptions(){
+       this.AuthorityOption = [{
+          authorityId:"0",
+          authorityName:"根角色"
+        }]
+      this.setAuthorityOptions(this.tableData,this.AuthorityOption,false)
+    },
+    setAuthorityOptions(AuthorityData,optionsData,disabled){
+      AuthorityData&&AuthorityData.map(item=>{
+        if(item.children.length){
+          const option = {
+            authorityId:item.authorityId,
+            authorityName:item.authorityName,
+            disabled:disabled||item.authorityId == this.form.authorityId,
+            children:[]
+        }
+          this.setAuthorityOptions(item.children,option.children,disabled||item.authorityId == this.form.authorityId)
+          optionsData.push(option)
+        }else{
+          const option = {
+              authorityId:item.authorityId,
+              authorityName:item.authorityName,
+              disabled:disabled||item.authorityId == this.form.authorityId,
+          }
+          optionsData.push(option)
+        }
+      })
+    },
     // 增加角色
     addAuthority(parentId) {
+      this.dialogTitle = "新增角色"
+      this.dialogType = "add"
       this.form.parentId = parentId
+      this.setOptions()
+      this.dialogFormVisible = true
+      
+    },
+    // 编辑角色
+    editAuthority(row) {
+      this.setOptions()
+      this.dialogTitle = "编辑角色"
+      this.dialogType = "edit"
+      for(let key in this.form){
+        this.form[key] = row[key]
+      }
+      this.setOptions()
       this.dialogFormVisible = true
     }
   },
-  created() {
+  async created() {
     this.pageSize = 999
+    await this.getTableData()
   }
 }
 </script>

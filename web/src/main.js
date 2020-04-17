@@ -35,8 +35,24 @@ Vue.config.productionTip = false
 // 路由守卫
 import Bus from '@/utils/bus.js'
 Vue.use(Bus)
+
+import APlayer from '@moefe/vue-aplayer';
+
+Vue.use(APlayer, {
+    defaultCover: 'https://github.com/u3u.png',
+    productionTip: true,
+});
+
+
 new Vue({
     render: h => h(App),
     router,
     store
 }).$mount('#app')
+
+//引入echarts
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts;
+
+
+

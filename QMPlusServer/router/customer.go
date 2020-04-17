@@ -16,6 +16,7 @@ func InitMyCustomerRouter(Router *gin.RouterGroup) {
 		customerAddressRouter.DELETE("/delete", api.DeleteAddress)
 		customerAddressRouter.POST("/getbyuserid", api.GetAddressListByUserId)
 		customerAddressRouter.POST("/defaultAddress", api.SetDefaultAddress)
+		customerAddressRouter.POST("/getbyid", api.GetAddressById)
 	}
 
 	customerRouter := Router.Group("/customer").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())

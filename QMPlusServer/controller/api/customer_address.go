@@ -90,3 +90,14 @@ func SetDefaultAddress(c *gin.Context) {
 		servers.ReportFormat(c, true, "设置成功", gin.H{})
 	}
 }
+
+func GetAddressById(c *gin.Context) {
+	var userAddress customerModel.Address
+	_ = c.ShouldBindJSON(&userAddress)
+	err := userAddress.GetAddressById()
+	if err != nil {
+		servers.ReportFormat(c, false, err.Error(), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "获取成功", gin.H{"address": userAddress})
+	}
+}

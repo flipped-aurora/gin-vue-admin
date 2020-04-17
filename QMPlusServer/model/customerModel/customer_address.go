@@ -81,3 +81,8 @@ func (a *Address) DeleteAddress(id int64) (err error) {
 	err = qmsql.DEFAULTDB.Where("id = ?", id).Delete(&a).Error
 	return
 }
+
+func (a *Address) GetAddressById() (err error) {
+	err = qmsql.DEFAULTDB.Where("id = ?", a.ID).Find(&a).Error
+	return
+}

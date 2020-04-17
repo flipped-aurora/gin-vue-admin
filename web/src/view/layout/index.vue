@@ -222,7 +222,7 @@ $mainHight: 100vh;
   min-width: 100px;
 }
 .admin-box{
-  background-color: rgb(243,243,243);
+  background-color: rgb(255,255,255);
 }
 .el-scrollbar__wrap {
   padding-bottom: 17px;

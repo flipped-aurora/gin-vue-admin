@@ -63,9 +63,9 @@ export default {
       fileR.readAsArrayBuffer(file) // 把文件读成ArrayBuffer  主要为了保持跟后端的流一致
       fileR.onload = async e => {
         // 读成arrayBuffer的回调 e 为方法自带参数 相当于 dom的e 流存在e.target.result 中
-        const bolb = e.target.result
+        const blob = e.target.result
         let spark = new SparkMD5.ArrayBuffer() // 创建md5制造工具 （md5用于检测文件一致性 这里不懂就打电话问我）
-        spark.append(bolb) // 文件流丢进工具
+        spark.append(blob) // 文件流丢进工具
         this.fileMd5 = spark.end() // 工具结束 产生一个a 总文件的md5
         const FileSliceCap = 1 * 1024 * 1024 // 分片字节数
         let start = 0 // 定义分片开始切的地方

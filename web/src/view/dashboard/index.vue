@@ -22,7 +22,7 @@
      <div class="top">
          <div id="main" class="chart-container"></div>
      </div>
-     <div class="bottom">
+     <!-- <div class="bottom">
          <el-row :gutter="32">
              <el-col :xs="24" :sm="24" :lg="12">
                  <div class="chart-player">
@@ -34,7 +34,7 @@
                  </div>
              </el-col>
          </el-row>
-     </div>
+     </div> -->
  </div>
 
 </template>
@@ -45,7 +45,7 @@ require('echarts/theme/macarons') // echarts theme
 import RaddarChart from "./component/RaddarChart"
 import stackMap from "./component/stackMap"
 import Sunburst from "./component/Sunburst"
-import musicPlayer from "./component/musicPlayer"
+// import musicPlayer from "./component/musicPlayer"
 export default {
   name: 'Dashboard',
   data() {
@@ -57,7 +57,7 @@ export default {
         RaddarChart, //雷达图
         stackMap, //堆叠图
         Sunburst, //旭日图
-        musicPlayer  //音乐播放器
+        // musicPlayer  //音乐播放器
     },
   mounted() {
       let myChart = echarts.init(document.getElementById('main'),'macarons');
@@ -165,6 +165,7 @@ export default {
 <style lang="scss" scoped>
     .big{
         width: 100%;
+        background-color: rgb(243,243,243);;
         .top{
             width: 98%;
             height: 360px;

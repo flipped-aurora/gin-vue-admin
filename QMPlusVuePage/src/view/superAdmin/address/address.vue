@@ -9,6 +9,7 @@
       <el-table-column label="具体地址" min-width="150" prop="specAddress"></el-table-column>      
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
+          <el-button @click="deleteAddress(scope.row)" size="small" type="text">编辑地址</el-button>
           <el-button @click="deleteAddress(scope.row)" size="small" type="text">删除地址</el-button>
         </template>
       </el-table-column>
@@ -23,7 +24,23 @@
       @size-change="handleSizeChange"
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
-
+  <el-dialog title="编辑地址" :visible.sync="editAddressDialog">
+  <el-form :model="form">
+    <el-form-item label="活动名称" :label-width="formLabelWidth">
+      <el-input v-model="form.name" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="活动区域" :label-width="formLabelWidth">
+      <el-select v-model="form.region" placeholder="请选择活动区域">
+        <el-option label="区域一" value="shanghai"></el-option>
+        <el-option label="区域二" value="beijing"></el-option>
+      </el-select>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+  </div>
+</el-dialog>
   </div>
 </template>
 
@@ -53,7 +70,8 @@ export default {
         city: "",
         town: "",
         specAddress: ""
-      }
+      },
+      editAddressDialog: false
     }
   },
   methods: {
@@ -84,7 +102,7 @@ export default {
 
     },
     async deleteAddress(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该客户下的地址, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -100,6 +118,8 @@ export default {
             message: '已取消删除'
           })       
       })
+    },
+    async editAddress(row) {
 
     }
   },

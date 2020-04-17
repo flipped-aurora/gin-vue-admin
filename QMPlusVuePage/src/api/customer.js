@@ -104,3 +104,19 @@ export const getCustomerOrderByOrderId = (data) => {
         data: data
     })
 }
+
+export const getCustomerAddressByUserId = (data) => {
+    return service({
+        url: "/customerAddress/getbyuserid",
+        method: 'post',
+        data: data
+    })
+}
+
+export const setCustomerDefaultAdress = (data) => {
+    return service({
+        url: "/customerAddress/defaultAddress",
+        method: 'post',
+        data: data
+    })
+}

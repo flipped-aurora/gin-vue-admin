@@ -23,6 +23,7 @@
           <el-button @click="deleteCustomer(scope.row)" size="small" type="text">删除客户</el-button>
           <el-button @click="editCustomer(scope.row)" size="small" type="text">编辑客户</el-button>
           <el-button @click="addAddress(scope.row)" size="small" type="text">添加地址</el-button>
+          <el-button @click="editAddress(scope.row)" size="mini" type="text">选择地址作为默认地址</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,22 +73,59 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog :visible.sync="addAddressDialog" custom-class="user-dialog" title="添加地址">
-      <el-form :model="addressInfo">
+    <el-dialog :visible.sync="addAddressDialog" custom-class="user-dialog" :title="addressTitleMap[addressDialogTitle]">
+      <el-form :model="addressInfo" size="mini">
         <el-form-item>
           <el-cascader
-          size="larget"
           :options="addressInfo.options"
           v-model="addressInfo.selectedOptions"
           @change="changeAddress">
           </el-cascader>            
         </el-form-item>
         <el-form-item label="具体地址" label-width="80px">
-          <el-input v-model="addressInfo.specAddress"></el-input>
+          <el-input v-model="addressInfo.specAddress" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="手机号" label-width="80px">
+          <el-input v-model="addressInfo.phone" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="收货人" label-width="80px">
+          <el-input v-model="addressInfo.consignee" size="mini"></el-input>
+        </el-form-item>
+        <el-form-item label="是否默认?" label-width="80px">
+          <el-checkbox v-model="addressInfo.isDefault"></el-checkbox>
         </el-form-item>
       </el-form>
       <el-button @click="closeAddressDialog">取消</el-button>
       <el-button @click="AddAddressDialog" type="primary">确定</el-button>
+    </el-dialog>
+    <el-dialog
+    title="设置默认地址"
+    :visible.sync="defaultAdressDialog"
+    width="30%"
+    center
+    >
+<el-dropdown trigger="click" ref="ddlAddress">
+  <span class="el-dropdown-link">
+    选择地址<span v-html="selectedAddress"></span><i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-table
+      size="mini"
+      stripe
+      :data="userAddress"
+      style="width: 100%"
+      @row-click="handleRowClicked">
+      <el-table-column prop="ID" label="id" width="50"></el-table-column>
+      <el-table-column prop="consignee" label="收货人" width="80"></el-table-column>
+      <el-table-column prop="userId" label="客户Id" width="280"></el-table-column> 
+      <el-table-column prop="specAddress" label="详细地址" width="280"></el-table-column>    
+    </el-table>
+  </el-dropdown-menu>
+</el-dropdown>
+<div slot="footer" class="dialog-footer">
+    <el-button @click="cloesDefaultAddressDialog">取 消</el-button>
+    <el-button type="primary" @click="setDefaultAddress">确 定</el-button>
+  </div>
     </el-dialog>
   </div>
 </template>
@@ -102,10 +140,12 @@ import {
   updateCustomer,
   delCustomer,
   getCustomerById,
-  addCustomerAddress
+  addCustomerAddress,
+  getCustomerAddressByUserId,
+  setCustomerDefaultAdress
 } from "@/api/customer"
 import infoList from "@/components/mixins/infoList"
-import { regionData  } from 'element-china-area-data'
+import { regionData,CodeToText  } from 'element-china-area-data'
 export default {
   name: "customer",
   mixins: [infoList],
@@ -172,6 +212,11 @@ export default {
         addData : "添加客户",
         updateData : "修改客户"
       },
+      addressDialogTitle: "",
+      addressTitleMap: {
+        addData: "添加地址",
+        updateData: "修改地址"
+      },
       isEdit: false,
       customerInfo: {
         username: "",
@@ -192,11 +237,18 @@ export default {
       addressInfo: {
         options: regionData,
         selectedOptions: [],
-        specAddress: ''
+        specAddress: '',
+        phone: '',
+        consignee: '',
+        isDefault: false
       },
       province: '',
       city: '',
-      region: ''
+      region: '',
+      defaultAdressDialog: false,
+      userAddress: [],
+      selectedAddress: "",
+      addressId: 0
     };
   },
   methods: {
@@ -263,7 +315,7 @@ export default {
 
     },
     async deleteCustomer(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除该客户, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -284,11 +336,12 @@ export default {
       //alert(row.uuid)
       this.uuid = row.uuid
       this.addAddressDialog = true
+      this.addressDialogTitle = "addData"
     },
     changeAddress(value) {
-      this.province =value[0]
-      this.city = value[1]
-      this.region = value[2]
+      this.province =CodeToText[value[0]]
+      this.city = CodeToText[value[1]]
+      this.region = CodeToText[value[2]]
     },
     closeAddressDialog() {
       this.addressInfo = {
@@ -301,7 +354,13 @@ export default {
     async AddAddressDialog() {
       if(this.province && this.city && this.region) {
         //alert(this.uuid)
-        const res = await addCustomerAddress({userId: this.uuid,province: this.province, city: this.city,town: this.region, specAddress: this.addressInfo.specAddress})
+        var isDefault
+        if(this.addressInfo.isDefault == true) {
+          isDefault = 1
+        } else {
+          isDefault = 0
+        }
+        const res = await addCustomerAddress({userId: this.uuid,province: this.province, city: this.city,town: this.region, specAddress: this.province + this.city + this.region + this.addressInfo.specAddress,phone: this.addressInfo.phone,consignee: this.addressInfo.consignee,isDefault: isDefault})
         if(res.success) {
           this.$message({ type: "success", message: "添加地址成功" })
         }
@@ -309,7 +368,41 @@ export default {
         this.$message.Error("请选择省市区")
       }
 
-      this.editAddressDialog = false
+      this.addAddressDialog = false
+    },
+    handleRowClicked(row, column, event){
+      this.selectedAddress = "("+row.specAddress +")";
+      this.addressId = row.ID
+      this.uuid = row.userId
+      this.$refs.ddlAddress.hide();
+    },
+    async editAddress(row) {
+      this.uuid = row.uuid
+      const res = await getCustomerAddressByUserId({pageInfo: {page:1,pageSize: 999},user_id: this.uuid})
+      if(res.success) {
+        this.userAddress = res.data.addressList
+        console.log(res.data.addressList)
+        for (let i = 0; i < res.data.addressList.length; i++) {
+            if(res.data.addressList[i].isDefault == 1) {
+              this.selectedAddress = "("+res.data.addressList[i].specAddress +")";
+            }
+        }
+      }
+      this.defaultAdressDialog = true
+    },
+    cloesDefaultAddressDialog() {
+      this.selectedAddress = ""
+      this.defaultAdressDialog = false
+    },
+    async setDefaultAddress() {
+      const res = await setCustomerDefaultAdress({userId: this.uuid,id: this.addressId})
+      console.log(res)
+      if(res.success) {
+        this.$message({ type: "success", message: "设置成功" })
+      } else {
+        this.$message.Error("设置失败")
+      }
+      this.defaultAdressDialog = false
     }
   },
   async created() {
@@ -344,6 +437,9 @@ export default {
     width: 178px;
     height: 178px;
     display: block;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
   }
 }
 </style>

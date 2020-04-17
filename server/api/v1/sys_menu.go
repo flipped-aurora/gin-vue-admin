@@ -84,7 +84,6 @@ func GetBaseMenuTree(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("获取失败，%v", err), c)
 	} else {
 		response.OkWithData(resp.SysBaseMenusResponse{Menus: menus}, c)
-
 	}
 }
 

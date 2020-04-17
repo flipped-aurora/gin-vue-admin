@@ -95,6 +95,19 @@ func SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
 	return err
 }
 
+// @title    SetUserAuthority
+// @description   set the authority of a certain user, 设置一个用户的权限
+// @auth                     （2020/04/05  20:22）
+// @param     uuid            UUID
+// @param     authorityId     string
+// @return    err             error
+
+func DeleteUser(id float64) (err error) {
+	var user model.SysUser
+	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
+	return err
+}
+
 // @title    UploadHeaderImg
 // @description   upload avatar, 用户头像上传更新地址
 // @auth                     （2020/04/05  20:22）

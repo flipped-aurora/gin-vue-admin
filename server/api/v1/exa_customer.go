@@ -95,7 +95,7 @@ func GetExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "获取权限客户列表"
+// @Param data body request.PageInfo true "获取权限客户列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customerList [get]
 func GetExaCustomerList(c *gin.Context) {

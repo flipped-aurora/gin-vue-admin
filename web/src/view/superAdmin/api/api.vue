@@ -181,6 +181,12 @@ export default {
     },
     initForm() {
       this.$refs.apiForm.resetFields()
+      this.form= {
+        path: '',
+        apiGroup: '',
+        method: '',
+        description: ''
+      }
     },
     closeDialog() {
       this.initForm()
@@ -253,7 +259,7 @@ export default {
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',
-                    message: '添加成功',
+                    message: '编辑成功',
                     showClose: true
                   })
                 }
@@ -285,6 +291,9 @@ export default {
       const target = methodOptions.filter(item => item.value === value)[0]
       return target && `${target.type}`
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

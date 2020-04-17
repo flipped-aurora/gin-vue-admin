@@ -47,7 +47,21 @@
           </el-select>
         </el-form-item>
         <el-form-item label="父节点Id">
-          <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
+           <el-select
+            placeholder="请选择"
+            v-model="form.parentId"
+            :disabled="!this.isEdit"
+            filterable 
+          >
+            <el-option
+              :disabled="canSelect(item)"
+              :key="item.ID"
+              :label="item.title"
+              :value="item.ID"
+              v-for="item in menuOption"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="文件路径" prop="component">
           <el-input autocomplete="off" v-model="form.component"></el-input>
@@ -55,11 +69,17 @@
         <el-form-item label="展示名称" prop="meta.title">
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
-        <el-form-item label="图标">
+        <el-form-item label="图标" prop="meta.icon">
           <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
         </el-form-item>
-        <el-form-item label="排序标记">
+        <el-form-item label="排序标记" prop="sort">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
+        </el-form-item>
+        <el-form-item label="keepAlive" prop="meta.keepAlive">
+          <el-select placeholder="是否keepAlive缓存页面" v-model="form.meta.keepAlive">
+            <el-option :value="false" label="否"></el-option>
+            <el-option :value="true" label="是"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>
@@ -90,6 +110,12 @@ export default {
       listApi: getMenuList,
       dialogFormVisible: false,
       dialogTitle:"新增菜单",
+      menuOption:[
+        {
+          ID:"0",
+          title:"根菜单"
+        }
+      ],
       form: {
         ID: 0,
         path: '',
@@ -99,7 +125,9 @@ export default {
         component: '',
         meta: {
           title: '',
-          icon: ''
+          icon: '',
+          defaultMenu:false,
+          keepAlive:false
         }
       },
       rules: {
@@ -163,6 +191,20 @@ export default {
     // 初始化弹窗内表格方法
     initForm() {
       this.$refs.menuForm.resetFields()
+      this.form = {
+        ID: 0,
+        path: '',
+        name: '',
+        hidden: '',
+        parentId: '',
+        component: '',
+        meta: {
+          title: '',
+          icon: '',
+          defaultMenu:false,
+          keepAlive:""
+        }
+      }
     },
     // 关闭弹窗
     closeDialog() {
@@ -183,14 +225,9 @@ export default {
           if (res.code == 0) {
             this.$message({
               type: 'success',
-              message: '添加成功!'
+              message: this.isEdit?'编辑成功':'添加成功!'
             })
             this.getTableData()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '添加失败!'
-            })
           }
           this.initForm()
           this.dialogFormVisible = false
@@ -211,10 +248,45 @@ export default {
       this.form = res.data.menu
       this.dialogFormVisible = true
       this.isEdit = true
-    }
+    },
+    getMenuList(MenuData){
+      MenuData.map(item=>{
+        this.menuOption.push({
+          ID:String(item.ID),
+          title:item.meta.title
+        })
+        if(item.children){
+          this.getMenuList(item.children)
+        }
+      })
+    },
+    findAuthoritySelf(mune,muneData,outData){
+      muneData&&muneData.some(item=>{
+        if(item.ID == mune.ID){
+          outData.push(item)
+          return true
+        }
+        this.findAuthoritySelf(mune,item.children,outData)
+      })
+    },
+    findAllChild(menu,array){
+      menu&&menu.map(item=>{
+        array.push(String(item.ID))
+        this.findAllChild(item.children,array)
+      })
+    },
+    canSelect(authority){
+      const array = []
+      const arrayIds = []
+      this.findAuthoritySelf({ID:this.form.ID},this.tableData,array)
+      this.findAllChild(array,arrayIds)
+      return arrayIds.indexOf(authority.ID)>-1
+    },
   },
-  created() {
+   async created() {
     this.pageSize = 999
+    await this.getTableData()
+    await this.getMenuList(this.tableData)
   }
 }
 </script>

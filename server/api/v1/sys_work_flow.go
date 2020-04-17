@@ -11,7 +11,7 @@ import (
 // @Tags workflow
 // @Summary 注册工作流
 // @Produce  application/json
-// @Param data body sysModel.SysWorkflow true "注册工作流接口"
+// @Param data body model.SysWorkflow true "注册工作流接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /workflow/createWorkFlow [post]
 func CreateWorkFlow(c *gin.Context) {

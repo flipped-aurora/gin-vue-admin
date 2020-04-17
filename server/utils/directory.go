@@ -10,6 +10,7 @@ import (
 // @auth                     （2020/04/05  20:22）
 // @param     path            string
 // @return    err             error
+
 func PathExists(path string) (bool, error) {
 	_, err := os.Stat(path)
 	if err == nil {
@@ -26,6 +27,7 @@ func PathExists(path string) (bool, error) {
 // @auth                     （2020/04/05  20:22）
 // @param     dirs            string
 // @return    err             error
+
 func CreateDir(dirs ...string) (err error) {
 	for _, v := range dirs {
 		exist, err := PathExists(v)
@@ -48,9 +50,11 @@ func CreateDir(dirs ...string) (err error) {
 	}
 	return err
 }
+
 // @title cwd
 // @description 获取当前工作目录
 // @return string
+
 func CWD() string {
 	path, err := os.Executable()
 	if err != nil {

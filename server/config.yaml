@@ -13,7 +13,7 @@ mysql:
     username: root
     password: 'Aa@6447985'
     path: '127.0.0.1:3306'
-    db-name: 'yx'
+    db-name: 'qmplus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10

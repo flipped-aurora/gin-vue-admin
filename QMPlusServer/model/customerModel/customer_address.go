@@ -17,7 +17,7 @@ type Address struct {
 	Town        string    `json:"town"`
 	SpecAddress string    `json:"specAddress"`
 	Phone       string    `json:"phone"`
-	IsDefault   int       `json:"isDefault"`
+	IsDefault   int       `json:"isDefault" gorm:"force"`
 }
 
 func (a *Address) GetInfoList(info modelInterface.PageInfo) (error, interface{}, int) {
@@ -44,7 +44,23 @@ func (a *Address) GetInfoListByUserId(info modelInterface.PageInfo, userId uuid.
 }
 
 func (a *Address) AddAddress() (err error) {
+	var temp Address
+	if a.IsDefault == 1 {
+		findOne := qmsql.DEFAULTDB.Where("is_default = ?", 1).Where("user_id = ?", a.UserId).Find(&temp).Error
+		if findOne == nil {
+			err = qmsql.DEFAULTDB.Model(&temp).Select("is_default").Update("is_default", gorm.Expr("is_default - 1")).Error
+		}
+	}
 	err = qmsql.DEFAULTDB.Create(&a).Error
+	return
+}
+func (a *Address) SetDefaultAddress() (err error) {
+	var temp Address
+	findOne := qmsql.DEFAULTDB.Where("is_default = ?", 1).Where("user_id = ?", a.UserId).Find(&temp).Error
+	if findOne == nil {
+		err = qmsql.DEFAULTDB.Model(&temp).Select("is_default").Update("is_default", gorm.Expr("is_default - 1")).Error
+	}
+	err = qmsql.DEFAULTDB.Model(&a).Select("is_default").Update("is_default", 1).Error
 	return
 }
 

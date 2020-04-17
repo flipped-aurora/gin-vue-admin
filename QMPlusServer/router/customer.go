@@ -14,6 +14,8 @@ func InitMyCustomerRouter(Router *gin.RouterGroup) {
 		customerAddressRouter.POST("/add", api.AddAddress)
 		customerAddressRouter.PATCH("/update", api.UpdateAddress)
 		customerAddressRouter.DELETE("/delete", api.DeleteAddress)
+		customerAddressRouter.POST("/getbyuserid", api.GetAddressListByUserId)
+		customerAddressRouter.POST("/defaultAddress", api.SetDefaultAddress)
 	}
 
 	customerRouter := Router.Group("/customer").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
@@ -46,5 +48,6 @@ func InitMyCustomerRouter(Router *gin.RouterGroup) {
 		customerBusinessRouter.POST("/addOrder", api.AddOrder)
 		customerBusinessRouter.POST("/delOrder", api.DeleteOrder)
 		customerBusinessRouter.POST("/orderDetail", api.GetOrderByOrderId)
+		customerBusinessRouter.POST("/defaultAddress", api.SetDefaultAddress)
 	}
 }

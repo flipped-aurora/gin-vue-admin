@@ -79,3 +79,14 @@ func GetAddressListByUserId(c *gin.Context) {
 		})
 	}
 }
+
+func SetDefaultAddress(c *gin.Context) {
+	var userAddress customerModel.Address
+	_ = c.ShouldBindJSON(&userAddress)
+	err := userAddress.SetDefaultAddress()
+	if err != nil {
+		servers.ReportFormat(c, false, err.Error(), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "设置成功", gin.H{})
+	}
+}

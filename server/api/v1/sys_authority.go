@@ -50,11 +50,30 @@ func DeleteAuthority(c *gin.Context) {
 }
 
 // @Tags authority
+// @Summary 设置角色资源权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.SysAuthority true "设置角色资源权限"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
+// @Router /authority/updateAuthority [post]
+func UpdateAuthority(c *gin.Context) {
+	var auth model.SysAuthority
+	_ = c.ShouldBindJSON(&auth)
+	err, authority := service.UpdateAuthority(auth)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
+	} else {
+		response.OkWithData(resp.SysAuthorityResponse{authority}, c)
+	}
+}
+
+// @Tags authority
 // @Summary 分页获取角色列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取用户列表"
+// @Param data body request.PageInfo true "分页获取用户列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/getAuthorityList [post]
 func GetAuthorityList(c *gin.Context) {

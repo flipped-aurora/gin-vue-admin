@@ -44,7 +44,7 @@ func Register(c *gin.Context) {
 // @Tags Base
 // @Summary 用户登录
 // @Produce  application/json
-// @Param data body model.RegisterAndLoginStruct true "用户登录接口"
+// @Param data body request.RegisterAndLoginStruct true "用户登录接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
@@ -133,7 +133,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 // @Summary 用户修改密码
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body model.ChangePasswordStutrc true "用户修改密码"
+// @Param data body request.ChangePasswordStruct true "用户修改密码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/changePassword [put]
 func ChangePassword(c *gin.Context) {
@@ -192,7 +192,7 @@ func UploadHeaderImg(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取用户列表"
+// @Param data body request.PageInfo true "分页获取用户列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserList [post]
 func GetUserList(c *gin.Context) {
@@ -216,7 +216,7 @@ func GetUserList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SetUserAuth true "设置用户权限"
+// @Param data body request.SetUserAuth true "设置用户权限"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthority [post]
 func SetUserAuthority(c *gin.Context) {
@@ -227,5 +227,24 @@ func SetUserAuthority(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("修改失败，%v", err), c)
 	} else {
 		response.OkWithMessage("修改成功", c)
+	}
+}
+
+// @Tags SysUser
+// @Summary 删除用户
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.SetUserAuth true "删除用户"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/deleteUser [delete]
+func DeleteUser(c *gin.Context) {
+	var reqId request.GetById
+	_ = c.ShouldBindJSON(&reqId)
+	err := service.DeleteUser(reqId.Id)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
 	}
 }

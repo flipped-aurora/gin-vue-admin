@@ -30,6 +30,21 @@
           </el-select>
         </template>
       </el-table-column>
+      <el-table-column label="操作" min-width="150">
+        <template slot-scope="scope">
+          <el-popover
+          placement="top"
+          width="160"
+          v-model="scope.row.visible">
+          <p>确定要删除此用户吗</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+            <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
+          </div>
+           <el-button type="text" size="small" slot="reference">删除</el-button>
+        </el-popover>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       :current-page="page"
@@ -89,7 +104,7 @@
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
 const path = process.env.VUE_APP_BASE_API
-import { getUserList, setUserAuthority, register } from '@/api/user'
+import { getUserList, setUserAuthority, register, deleteUser } from '@/api/user'
 import { getAuthorityList } from '@/api/authority'
 import infoList from '@/components/mixins/infoList'
 import { mapGetters } from 'vuex'
@@ -127,6 +142,24 @@ export default {
     ...mapGetters('user', ['token'])
   },
   methods: {
+    async deleteUser(row){
+      const res = await deleteUser({id:row.ID})
+      if(res.code == 0){
+        this.getTableData()
+        row.visible = false
+      }
+    },
+     getAuthorityList(AuthorityData){
+      AuthorityData.map(item=>{
+        this.authOptions.push({
+          authorityId:item.authorityId,
+          authorityName:item.authorityName
+        })
+        if(item.children){
+          this.getAuthorityList(item.children)
+        }
+      })
+    },
     async enterAddUserDialog() {
       this.$refs.userForm.validate(async valid => {
         if (valid) {
@@ -160,8 +193,10 @@ export default {
     }
   },
   async created() {
+    this.getTableData()
     const res = await getAuthorityList({ page: 1, pageSize: 999 })
     this.authOptions = res.data.list
+    
   }
 
   

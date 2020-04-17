@@ -14,7 +14,7 @@ import (
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.CasbinInReceive true "更改角色api权限"
+// @Param data body request.CasbinInReceive true "更改角色api权限"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/UpdateCasbin [post]
 func UpdateCasbin(c *gin.Context) {
@@ -33,7 +33,7 @@ func UpdateCasbin(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.CasbinInReceive true "获取权限列表"
+// @Param data body request.CasbinInReceive true "获取权限列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 func GetPolicyPathByAuthorityId(c *gin.Context) {
@@ -48,7 +48,7 @@ func GetPolicyPathByAuthorityId(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.CasbinInReceive true "获取权限列表"
+// @Param data body request.CasbinInReceive true "获取权限列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/CasbinTest [get]
 func CasbinTest(c *gin.Context) {

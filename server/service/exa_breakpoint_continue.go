@@ -14,7 +14,8 @@ import (
 // @param     chunkTotal      int
 // @return    err             error
 // @return    file            ExaFile
-func  FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err error, file model.ExaFile) {
+
+func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err error, file model.ExaFile) {
 	var cfile model.ExaFile
 	cfile.FileMd5 = fileMd5
 	cfile.FileName = fileName
@@ -31,7 +32,6 @@ func  FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err err
 	}
 }
 
-
 // @title    CreateFileChunk
 // @description   create a chunk of the file, 创建文件切片记录
 // @auth                       （2020/04/05  20:22）
@@ -39,6 +39,7 @@ func  FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err err
 // @param     fileChunkPath     string
 // @param     fileChunkNumber   int
 // @return                      error
+
 func CreateFileChunk(id uint, fileChunkPath string, fileChunkNumber int) error {
 	var chunk model.ExaFileChunk
 	chunk.FileChunkPath = fileChunkPath
@@ -55,6 +56,7 @@ func CreateFileChunk(id uint, fileChunkPath string, fileChunkNumber int) error {
 // @param     fileName        string
 // @param     filePath        string
 // @return                    error
+
 func FileCreateComplete(fileMd5 string, fileName string, filePath string) error {
 	var file model.ExaFile
 	upDateFile := make(map[string]interface{})
@@ -71,6 +73,7 @@ func FileCreateComplete(fileMd5 string, fileName string, filePath string) error 
 // @param     FileName        string
 // @param     FilePath        string
 // @return                    error
+
 func DeleteFileChunk(fileMd5 string, fileName string, filePath string) error {
 	var chunks []model.ExaFileChunk
 	var file model.ExaFile

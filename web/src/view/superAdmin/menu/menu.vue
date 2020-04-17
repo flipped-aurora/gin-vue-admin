@@ -47,7 +47,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="父节点Id">
-          <el-input autocomplete="off" disabled v-model="form.parentId"></el-input>
+           <el-cascader
+              :disabled="!this.isEdit"
+              v-model="form.parentId"
+              :options="menuOption"
+              :show-all-levels="false"
+              :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
+              filterable>
+              </el-cascader>
         </el-form-item>
         <el-form-item label="文件路径" prop="component">
           <el-input autocomplete="off" v-model="form.component"></el-input>
@@ -55,11 +62,17 @@
         <el-form-item label="展示名称" prop="meta.title">
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
-        <el-form-item label="图标">
+        <el-form-item label="图标" prop="meta.icon">
           <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
         </el-form-item>
-        <el-form-item label="排序标记">
+        <el-form-item label="排序标记" prop="sort">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
+        </el-form-item>
+        <el-form-item label="keepAlive" prop="meta.keepAlive">
+          <el-select placeholder="是否keepAlive缓存页面" v-model="form.meta.keepAlive">
+            <el-option :value="false" label="否"></el-option>
+            <el-option :value="true" label="是"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>
@@ -90,6 +103,12 @@ export default {
       listApi: getMenuList,
       dialogFormVisible: false,
       dialogTitle:"新增菜单",
+      menuOption:[
+        {
+          ID:"0",
+          title:"根菜单"
+        }
+      ],
       form: {
         ID: 0,
         path: '',
@@ -99,7 +118,9 @@ export default {
         component: '',
         meta: {
           title: '',
-          icon: ''
+          icon: '',
+          defaultMenu:false,
+          keepAlive:false
         }
       },
       rules: {
@@ -115,6 +136,34 @@ export default {
     }
   },
   methods: {
+    setOptions(){
+       this.menuOption = [{
+          ID:"0",
+          title:"根目录"
+        }]
+      this.setMenuOptions(this.tableData,this.menuOption,false)
+    },
+    setMenuOptions(menuData,optionsData,disabled){
+      menuData&&menuData.map(item=>{
+        if(item.children.length){
+          const option = {
+            title:item.meta.title,
+            ID:String(item.ID),
+            disabled:disabled||item.ID == this.form.ID,
+            children:[]
+        }
+          this.setMenuOptions(item.children,option.children,disabled||item.ID == this.form.ID)
+          optionsData.push(option)
+        }else{
+          const option = {
+              title:item.meta.title,
+              ID:String(item.ID),
+              disabled:disabled||item.ID == this.form.ID,
+          }
+          optionsData.push(option)
+        }
+      })
+    },
     handleClose(done) {
       this.initForm()
       done()
@@ -163,6 +212,20 @@ export default {
     // 初始化弹窗内表格方法
     initForm() {
       this.$refs.menuForm.resetFields()
+      this.form = {
+        ID: 0,
+        path: '',
+        name: '',
+        hidden: '',
+        parentId: '',
+        component: '',
+        meta: {
+          title: '',
+          icon: '',
+          defaultMenu:false,
+          keepAlive:""
+        }
+      }
     },
     // 关闭弹窗
     closeDialog() {
@@ -183,14 +246,9 @@ export default {
           if (res.code == 0) {
             this.$message({
               type: 'success',
-              message: '添加成功!'
+              message: this.isEdit?'编辑成功':'添加成功!'
             })
             this.getTableData()
-          } else {
-            this.$message({
-              type: 'error',
-              message: '添加失败!'
-            })
           }
           this.initForm()
           this.dialogFormVisible = false
@@ -202,6 +260,7 @@ export default {
       this.dialogTitle = "新增菜单"
       this.form.parentId = String(id)
       this.isEdit = false
+      this.setOptions()
       this.dialogFormVisible = true
     },
     // 修改菜单方法
@@ -209,12 +268,15 @@ export default {
       this.dialogTitle = "编辑菜单"
       const res = await getBaseMenuById({ id })
       this.form = res.data.menu
-      this.dialogFormVisible = true
       this.isEdit = true
-    }
+      this.setOptions()
+      this.dialogFormVisible = true
+    },
   },
-  created() {
+   async created() {
     this.pageSize = 999
+    await this.getTableData()
+    await this.getMenuList(this.tableData)
   }
 }
 </script>

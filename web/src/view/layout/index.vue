@@ -67,7 +67,12 @@
         :to="{ path: item.path }" 暂时注释不用-->
         <HistoryComponent />
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view class="admin-box"></router-view>
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive" class="admin-box"></router-view>
+          </keep-alive>
+        </transition>
+        <transition mode="out-in" name="el-fade-in-linear">
+            <router-view v-if="!$route.meta.keepAlive" class="admin-box"></router-view>
         </transition>
       </el-main>
     </el-container>

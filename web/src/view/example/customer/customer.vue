@@ -121,6 +121,10 @@ export default {
     },
     closeDialog(){
       this.dialogFormVisible = false
+      this.form = {
+        customerName:"",
+        customerPhoneData:""
+      }
     },
     async deleteCustomer(row){
       this.visible = false
@@ -149,7 +153,7 @@ export default {
       }
      
       if(res.code == 0){
-        this.dialogFormVisible = false
+        this.closeDialog()
         this.getTableData()
       }
     },
@@ -157,6 +161,9 @@ export default {
       this.type = "create"
       this.dialogFormVisible = true
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

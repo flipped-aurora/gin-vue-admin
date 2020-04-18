@@ -276,7 +276,6 @@ export default {
    async created() {
     this.pageSize = 999
     await this.getTableData()
-    await this.getMenuList(this.tableData)
   }
 }
 </script>

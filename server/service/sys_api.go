@@ -136,7 +136,7 @@ func UpdateApi(api model.SysApi) (err error) {
 		if err != nil {
 			return err
 		} else {
-			err = global.GVA_DB.Save(api).Error
+			err = global.GVA_DB.Save(&api).Error
 		}
 	}
 	return err

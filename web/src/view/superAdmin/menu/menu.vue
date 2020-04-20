@@ -47,21 +47,14 @@
           </el-select>
         </el-form-item>
         <el-form-item label="父节点Id">
-           <el-select
-            placeholder="请选择"
-            v-model="form.parentId"
-            :disabled="!this.isEdit"
-            filterable 
-          >
-            <el-option
-              :disabled="canSelect(item)"
-              :key="item.ID"
-              :label="item.title"
-              :value="item.ID"
-              v-for="item in menuOption"
-            >
-            </el-option>
-          </el-select>
+           <el-cascader
+              :disabled="!this.isEdit"
+              v-model="form.parentId"
+              :options="menuOption"
+              :show-all-levels="false"
+              :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
+              filterable>
+              </el-cascader>
         </el-form-item>
         <el-form-item label="文件路径" prop="component">
           <el-input autocomplete="off" v-model="form.component"></el-input>
@@ -143,6 +136,34 @@ export default {
     }
   },
   methods: {
+    setOptions(){
+       this.menuOption = [{
+          ID:"0",
+          title:"根目录"
+        }]
+      this.setMenuOptions(this.tableData,this.menuOption,false)
+    },
+    setMenuOptions(menuData,optionsData,disabled){
+      menuData&&menuData.map(item=>{
+        if(item.children.length){
+          const option = {
+            title:item.meta.title,
+            ID:String(item.ID),
+            disabled:disabled||item.ID == this.form.ID,
+            children:[]
+        }
+          this.setMenuOptions(item.children,option.children,disabled||item.ID == this.form.ID)
+          optionsData.push(option)
+        }else{
+          const option = {
+              title:item.meta.title,
+              ID:String(item.ID),
+              disabled:disabled||item.ID == this.form.ID,
+          }
+          optionsData.push(option)
+        }
+      })
+    },
     handleClose(done) {
       this.initForm()
       done()
@@ -239,6 +260,7 @@ export default {
       this.dialogTitle = "新增菜单"
       this.form.parentId = String(id)
       this.isEdit = false
+      this.setOptions()
       this.dialogFormVisible = true
     },
     // 修改菜单方法
@@ -246,47 +268,14 @@ export default {
       this.dialogTitle = "编辑菜单"
       const res = await getBaseMenuById({ id })
       this.form = res.data.menu
-      this.dialogFormVisible = true
       this.isEdit = true
-    },
-    getMenuList(MenuData){
-      MenuData.map(item=>{
-        this.menuOption.push({
-          ID:String(item.ID),
-          title:item.meta.title
-        })
-        if(item.children){
-          this.getMenuList(item.children)
-        }
-      })
-    },
-    findAuthoritySelf(mune,muneData,outData){
-      muneData&&muneData.some(item=>{
-        if(item.ID == mune.ID){
-          outData.push(item)
-          return true
-        }
-        this.findAuthoritySelf(mune,item.children,outData)
-      })
-    },
-    findAllChild(menu,array){
-      menu&&menu.map(item=>{
-        array.push(String(item.ID))
-        this.findAllChild(item.children,array)
-      })
-    },
-    canSelect(authority){
-      const array = []
-      const arrayIds = []
-      this.findAuthoritySelf({ID:this.form.ID},this.tableData,array)
-      this.findAllChild(array,arrayIds)
-      return arrayIds.indexOf(authority.ID)>-1
+      this.setOptions()
+      this.dialogFormVisible = true
     },
   },
    async created() {
     this.pageSize = 999
     await this.getTableData()
-    await this.getMenuList(this.tableData)
   }
 }
 </script>

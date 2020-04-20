@@ -180,6 +180,7 @@ go run main.go;
     │  ├─model          （model and services）
     │  ├─resource       （resources, such as static pages, templates）
     │  ├─router         （routers）
+    │  ├─service         (services)
     │  └─utils	        （common utilities）
     └─web            （frontend）
         ├─public        （deploy templates）

@@ -183,6 +183,7 @@ go run main.go;
     │  ├─model          （结构体层）
     │  ├─resource       （资源）
     │  ├─router         （路由）
+    │  ├─service         (服务)
     │  └─utils	        （公共功能）
     └─web            （前端文件）
         ├─public        （发布模板）

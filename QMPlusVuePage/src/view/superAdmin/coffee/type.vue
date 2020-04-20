@@ -31,15 +31,15 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :visible.sync="addCoffeeTypeDialog" custom-class="user-dialog" title="新增咖啡类型">
-      <el-form :model="coffeeTypeInfo">
-        <el-form-item label="类型名称" label-width="80px">
+    <el-dialog :visible.sync="addCoffeeTypeDialog" custom-class="user-dialog" :title="titleMap[dialogTitle]">
+      <el-form :model="coffeeTypeInfo" :rules="rules" ref="coffeeTypeInfo">
+        <el-form-item label="类型名称" label-width="80px" required>
           <el-input v-model="coffeeTypeInfo.name"></el-input>
         </el-form-item>
-        <el-form-item label="类型代码" label-width="80px">
+        <el-form-item label="类型代码" label-width="80px" required>
           <el-input v-model="coffeeTypeInfo.code" :disabled = dis></el-input>
         </el-form-item>
-        <el-form-item label="图片" label-width="80px">
+        <el-form-item label="图片" label-width="80px" required>
           <el-upload
             :on-success="handleAvatarSuccess"
             :show-file-list="false"
@@ -101,7 +101,16 @@ export default {
         code: "",
         name: "",
         image: ""
-      }
+      },
+      dialogTitle: '',
+      titleMap : {
+        addData : "添加咖啡",
+        updateData : "修改咖啡"
+      },
+      rules: {
+        name: [{required: true, validator: checkname, trigger: 'blur' }],
+        code:  [{required: true, validator: checkcode, trigger: 'blur' }]
+      },
     }
   },
   methods: {
@@ -139,6 +148,7 @@ export default {
       }
       this.isEdit = false
       this.dis = false
+      this.dialogTitle = 'addData'
       this.addCoffeeTypeDialog = true
     },
     async editCoffeeType(row) {
@@ -148,6 +158,7 @@ export default {
         }
         this.isEdit = true
         this.dis = true
+        this.dialogTitle = 'updateData'
         this.addCoffeeTypeDialog = true
     },
     async deleteCoffeeType(row) {

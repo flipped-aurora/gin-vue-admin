@@ -11,7 +11,7 @@
             <i class="el-icon-s-unfold" v-if="isCollapse"></i>
             <i class="el-icon-s-fold" v-else></i>
           </div>
-          <h1 class="admin-title">Gin-Vue-Admin</h1>
+          <h1 class="admin-title">行星咖啡App</h1>
           <div class="fl-right right-box">
             <el-dropdown>
               <span class="el-dropdown-link">

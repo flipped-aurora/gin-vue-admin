@@ -14,20 +14,9 @@
       <el-table-column label="咖啡编号" min-width="250" prop="uuid"></el-table-column>
       <el-table-column label="咖啡名称" min-width="150" prop="name"></el-table-column>
       <el-table-column label="价格" min-width="150" prop="value"></el-table-column>
-      <el-table-column label="咖啡类型" min-width="150">
+      <el-table-column label="咖啡类型" min-width="150" prop="code">
         <template slot-scope="scope">
-          <el-select
-            @change="changeCoffeeType(scope.row)"
-            placeholder="请选择"
-            v-model="scope.row.type.code"
-          >
-            <el-option
-              :key="item.code"
-              :label="item.name"
-              :value="item.code"
-              v-for="item in typeOptions"
-            ></el-option>
-          </el-select>
+            {{type[scope.row.code]}}
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
@@ -207,7 +196,8 @@ export default {
       typeOptions: [],
       Spec: [],
       specDetail: [],
-      editorOption: {}
+      editorOption: {},
+      type: {}
     };
   },
   methods: {
@@ -312,6 +302,7 @@ export default {
     async enterCoffeeSpecDetailDialog(row) {
       const res = await getCoffeeSpecDetail({spec_id : row.spec_id})
       this.specDetail = res.data.coffeeSpecDetail
+      console.log(this.specDetail)
       this.coffeeSpecDetailDialog = true
     },
     CloseSpecDetailDialog() {
@@ -327,6 +318,11 @@ export default {
     this.pageSize = 999;
     const res = await getCoffeeTypeList({ page: 1, pageSize: 999 });
     this.typeOptions = res.data.coffeetype;
+    this.typeOptions.forEach((item) => {
+      this.type[item.code] = item.name
+    })
+    // console.log(this.type)
+    // console.log(this.typeOptions)
   },
 }
 </script>

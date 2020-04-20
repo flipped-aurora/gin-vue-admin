@@ -60,10 +60,10 @@
               </div>
             </el-dialog>
           </div>
-      
+
         </el-header>
         <!-- 当前面包屑用路由自动生成可根据需求修改 -->
-        <!-- 
+        <!--
         :to="{ path: item.path }" 暂时注释不用-->
         <HistoryComponent />
         <transition mode="out-in" name="el-fade-in-linear">
@@ -119,7 +119,7 @@ export default {
           }
         ]
       },
-      
+
     }
   },
   components: {
@@ -220,6 +220,9 @@ $mainHight: 100vh;
 }
 .dropdown-group {
   min-width: 100px;
+}
+.admin-box{
+  background-color: rgb(255,255,255);
 }
 .el-scrollbar__wrap {
   padding-bottom: 17px;

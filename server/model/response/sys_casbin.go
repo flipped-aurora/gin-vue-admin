@@ -1,5 +1,7 @@
 package response
 
+import "gin-vue-admin/model/request"
+
 type PolicyPathResponse struct {
-	Paths []map[string]string `json:"paths"`
+	Paths []request.CasbinInfo `json:"paths"`
 }

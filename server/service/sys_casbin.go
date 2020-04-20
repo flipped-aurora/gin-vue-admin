@@ -71,13 +71,13 @@ func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod
 // @param     authorityId     string
 // @return                    []string
 
-func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []map[string]string) {
+func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []request.CasbinInfo) {
 	e := Casbin()
 	list := e.GetFilteredPolicy(0, authorityId)
 	for _, v := range list {
-		pathMaps = append(pathMaps, map[string]string{
-			"path":   v[1],
-			"method": v[2],
+		pathMaps = append(pathMaps, request.CasbinInfo{
+			Path:   v[1],
+			Method: v[2],
 		})
 	}
 	return pathMaps

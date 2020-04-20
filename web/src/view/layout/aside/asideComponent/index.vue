@@ -14,7 +14,7 @@ export default {
   name: 'AsideComponent',
   computed: {
     menuComponent() {
-      if (this.routerInfo.children.length) {
+      if (this.routerInfo.children.filter(item=>!item.hidden).length) {
         return 'AsyncSubmenu'
       } else {
         return 'MenuItem'

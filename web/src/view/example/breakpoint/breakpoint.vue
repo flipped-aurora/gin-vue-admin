@@ -10,7 +10,7 @@
     <div class="el-upload__tip">请上传不超过5MB的文件</div>
     <div class="list">
       <transition-group name="list" tag="p">
-        <div class="list-item" v-for="(item,i) in uploadList" :key="i" >
+        <div class="list-item" v-for="item in uploadList" :key="item.name" >
           <i class="el-icon-document"></i>
           <span>{{ item.name }}</span>
           <span v-if="file" class="percentage" >{{percentage}}%</span>

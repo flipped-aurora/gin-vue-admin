@@ -78,11 +78,6 @@
       <el-form-item label="secretKey">
         <el-input v-model="config.qiniu.secretKey"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button @click="update" type="primary">立即更新</el-button>
-        <el-button @click="reload" type="primary">重启服务（开发中）</el-button>
-      </el-form-item>
-
       <h2>验证码配置</h2>
       <el-form-item label="keyLong">
         <el-input v-model.number="config.captcha.keyLong"></el-input>
@@ -93,11 +88,6 @@
       <el-form-item label="imgHeight">
         <el-input v-model.number="config.captcha.imgHeight"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-button @click="update" type="primary">立即更新</el-button>
-        <el-button @click="reload" type="primary">重启服务（开发中）</el-button>
-      </el-form-item>
-
        <h2>日志配置</h2>
       <el-form-item label="prefix">
         <el-input v-model.number="config.log.prefix"></el-input>

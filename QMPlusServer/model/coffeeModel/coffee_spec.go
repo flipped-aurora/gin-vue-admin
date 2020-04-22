@@ -85,7 +85,7 @@ func (c *CoffeeSpec) GetCoffeeSpecDetail(specId uuid.UUID) (err error) {
 
 func (c *CoffeeSpec) GetCoffeeSpecValue(id []int64, coffeeId uuid.UUID) (price float64, err error) {
 	var coffee Coffee
-	err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Find(&coffee).Error
+	err = qmsql.DEFAULTDB.Where("uuid = ?", coffeeId).Find(&coffee).Error
 	if err != nil {
 		return 0, err
 	}

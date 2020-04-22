@@ -51,23 +51,25 @@ func (c *Cart) GetInfoListByUserId(info modelInterface.PageInfo, userId uuid.UUI
 	}
 }
 
-func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID, spec string) (err error) {
-	findOne := qmsql.DEFAULTDB.Where("user_id = ?", userId).Where("coffee_id = ?", coffeeId).Find(&c)
+func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID, spec string, value float64) (err error) {
+	findOne := qmsql.DEFAULTDB.Where("user_id = ?", userId).Where("coffee_id = ?", coffeeId).Where("spec = ?", spec).Find(&c).Error
 	var coffee coffeeModel.Coffee
 	err = coffee.GetCoffeeByUUID(coffeeId)
 	var customer Customers
 	err = customer.GetCustomerById(userId)
 	c.Coffee = coffee
 	c.Customer = customer
-	if findOne == nil {
+	if findOne != nil {
 		c.Spec = spec
-		c.Value = coffee.Value
+		c.Value = value
 		c.Count = 1
 		c.IsCheck = 1
+		c.CoffeeId = coffeeId
+		c.UserId = customer.UUID
 		err = qmsql.DEFAULTDB.Create(&c).Error
 	} else {
 		upDataMap := make(map[string]interface{})
-		upDataMap["value"] = c.Value + coffee.Value
+		upDataMap["value"] = c.Value + value
 		upDataMap["count"] = c.Count + 1
 		upDataMap["isCheck"] = c.IsCheck
 		upDataMap["spec"] = c.Spec
@@ -76,25 +78,26 @@ func (c *Cart) AddCart(userId uuid.UUID, coffeeId uuid.UUID, spec string) (err e
 	return
 }
 
-func (c *Cart) ReduceCart(userId uuid.UUID, coffeeId uuid.UUID) (err error) {
-	findOne := qmsql.DEFAULTDB.Where("user_id = ?", userId).Where("coffee_id = ?", coffeeId).Find(&c)
+func (c *Cart) ReduceCart(userId uuid.UUID, coffeeId uuid.UUID, spec string) (err error) {
+	findOne := qmsql.DEFAULTDB.Where("user_id = ?", userId).Where("coffee_id = ?", coffeeId).Where("spec = ?", spec).Find(&c).Error
 	var coffee coffeeModel.Coffee
 	err = coffee.GetCoffeeByUUID(coffeeId)
 	var customer Customers
 	err = customer.GetCustomerById(userId)
 	c.Coffee = coffee
 	c.Customer = customer
-	if findOne == nil {
+	if findOne != nil {
 		return errors.New("没有该咖啡")
 	} else {
 		upDataMap := make(map[string]interface{})
 		upDataMap["value"] = c.Value - coffee.Value
 		upDataMap["count"] = c.Count - 1
 		upDataMap["isCheck"] = c.IsCheck
+		upDataMap["spec"] = c.Spec
 		if c.Count-1 == 0 || c.Value-coffee.Value <= 0 {
-			err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Where("user_id = ?", userId).Delete(&c).Error
+			err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Where("user_id = ?", userId).Where("spec = ?", spec).Delete(&c).Error
 		} else {
-			err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Where("user_id = ?", userId).Find(&c).Updates(upDataMap).Error
+			err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Where("user_id = ?", userId).Where("spec = ?", spec).Find(&c).Updates(upDataMap).Error
 		}
 	}
 	return

@@ -53,11 +53,16 @@ func (c *CoffeeType) UpdateCoffeeType() (err error) {
 
 func (c *CoffeeType) DeleteCoffeeType(code string) (err error) {
 	coffees := []Coffee{}
-	err = qmsql.DEFAULTDB.Where("code = ?", code).Find(&coffees).Error
-	for _, co := range coffees {
-		err = qmsql.DEFAULTDB.Delete(&co).Error
+	find := qmsql.DEFAULTDB.Where("code = ?", code).Find(&coffees).Error
+	if find != nil {
+		err = qmsql.DEFAULTDB.Where("code = ?", code).Delete(&c).Error
+	} else {
+		for _, co := range coffees {
+			err = qmsql.DEFAULTDB.Delete(&co).Error
+		}
+		err = qmsql.DEFAULTDB.Where("code = ?", code).Delete(&c).Error
 	}
-	err = qmsql.DEFAULTDB.Where("code = ?", code).Delete(&c).Error
+
 	return
 }
 

@@ -15,6 +15,7 @@ type Config struct {
 	JWT          JWT          `json:"jwt"`
 	Captcha      Captcha      `json:"captcha"`
 	Log          Log          `json:"log"`
+	SMSConfig    SMSConfig    `json:"smsConfig"`
 }
 
 type System struct { // 系统配置
@@ -58,6 +59,12 @@ type Captcha struct { // 验证码配置
 	ImgHeight int `json:"imgHeight"`
 }
 
+type SMSConfig struct { // 手机验证码配置
+	AppId    string `json:"appid"`
+	AppKey   string `json:"appkey"`
+	SignType string `json:"signType"`
+}
+
 /**
 Log Config
 
@@ -70,13 +77,13 @@ Log Config
 */
 type Log struct {
 	// log 打印的前缀
-	Prefix  string   `json:"prefix"`
+	Prefix string `json:"prefix"`
 	// 是否显示打印log的文件具体路径
-	LogFile bool     `json:"logFile"`
+	LogFile bool `json:"logFile"`
 	// 在控制台打印log的级别， []默认不打印
-	Stdout  []string `json:"stdout"`
+	Stdout []string `json:"stdout"`
 	// 在文件中打印log的级别   []默认不打印
-	File    []string `json:"file"`
+	File []string `json:"file"`
 }
 
 var GinVueAdminconfig Config

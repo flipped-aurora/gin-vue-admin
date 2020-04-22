@@ -24,7 +24,7 @@ func UploadFile(c *gin.Context) {
 		servers.ReportFormat(c, false, fmt.Sprintf("上传文件失败，%v", err), gin.H{})
 	} else {
 		//文件上传后拿到文件路径
-		err, filePath, key := servers.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
+		err, filePath, key := servers.Upload(header, CUS_HEADER_BUCKET, CUS_HEADER_IMG_PATH)
 		if err != nil {
 			servers.ReportFormat(c, false, fmt.Sprintf("接收返回值失败，%v", err), gin.H{})
 		} else {
@@ -61,7 +61,7 @@ func DeleteFile(c *gin.Context) {
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
 	} else {
-		err = servers.DeleteFile(USER_HEADER_BUCKET, f.Key)
+		err = servers.DeleteFile(CUS_HEADER_IMG_PATH, f.Key)
 		if err != nil {
 			servers.ReportFormat(c, false, fmt.Sprintf("删除失败，%v", err), gin.H{})
 		} else {

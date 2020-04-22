@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"gin-vue-admin/controller/servers"
 	"gin-vue-admin/model/coffeeModel"
 	"gin-vue-admin/model/modelInterface"
@@ -127,7 +128,7 @@ func GetCoffeeSpecValue(c *gin.Context) {
 	} else {
 		price, err := new(coffeeModel.CoffeeSpec).GetCoffeeSpecValue(id.Id, id.CoffeeId)
 		if err != nil {
-			servers.ReportFormat(c, false, "获得失败", gin.H{})
+			servers.ReportFormat(c, false, fmt.Sprintf("获得失败: %v", err), gin.H{})
 		} else {
 			servers.ReportFormat(c, true, "获取成功", gin.H{"price": price})
 		}

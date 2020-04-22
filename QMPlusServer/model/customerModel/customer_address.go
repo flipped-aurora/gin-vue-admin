@@ -46,13 +46,13 @@ func (a *Address) GetInfoListByUserId(info modelInterface.PageInfo, userId uuid.
 
 func (a *Address) AddAddress() (err error) {
 	var temp Address
-	findOne := qmsql.DEFAULTDB.Where("user_id = ?", a.UserId).Find(&a).Error
+	findOne := qmsql.DEFAULTDB.Where("user_id = ?", a.UserId).Find(&temp).Error
 	if findOne != nil {
 		a.IsDefault = 1
 	} else if a.IsDefault == 1 {
 		findOne := qmsql.DEFAULTDB.Where("is_default = ?", 1).Where("user_id = ?", a.UserId).Find(&temp).Error
 		if findOne == nil {
-			err = qmsql.DEFAULTDB.Model(&temp).Select("is_default").Update("is_default", gorm.Expr("is_default - 1")).Error
+			err = qmsql.DEFAULTDB.Model(&temp).Update("is_default", gorm.Expr("is_default - 1")).Error
 		}
 	}
 	err = qmsql.DEFAULTDB.Create(&a).Error

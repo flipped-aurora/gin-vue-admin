@@ -36,5 +36,10 @@
     "logFile": false,
     "stdout": ["DEBUG"],
     "file": ["WARNING"]
+  },
+  "smsConfig": {
+    "appid": "43354",
+    "appkey": "2011cdde1108c65e5fc044e76816ef17",
+    "signType": "normal"
   }
 }

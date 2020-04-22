@@ -33,6 +33,7 @@ func UpdateCoffeeType(c *gin.Context) {
 func DeleteCoffeeType(c *gin.Context) {
 	var coffeeType coffeeModel.CoffeeType
 	var coffeeTypeCode CoffeeTypeCode
+	_ = c.ShouldBindJSON(&coffeeTypeCode)
 	err := coffeeType.DeleteCoffeeType(coffeeTypeCode.Code)
 	if err != nil {
 		servers.ReportFormat(c, false, err.Error(), gin.H{})
@@ -58,7 +59,7 @@ func GetCoffeeTypeList(c *gin.Context) {
 }
 
 type CoffeeTypeCode struct {
-	Code string
+	Code string `json:"code"`
 }
 
 func GetCoffeeByCode(c *gin.Context) {

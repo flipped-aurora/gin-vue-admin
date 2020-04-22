@@ -8,6 +8,7 @@ import (
 	"gin-vue-admin/model/customerModel"
 	"gin-vue-admin/model/modelInterface"
 	"gin-vue-admin/model/sysModel"
+	"gin-vue-admin/tools"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
@@ -212,4 +213,15 @@ func GetCustomerById(c *gin.Context) {
 	} else {
 		servers.ReportFormat(c, true, "获取成功", gin.H{"customer": cus})
 	}
+}
+
+type Phone struct {
+	Phone string `json:"phone"`
+}
+
+func SendPhoneCaptcha(c *gin.Context) {
+	var phone Phone
+	_ = c.ShouldBindJSON(&phone)
+	code := tools.SMSSend(phone.Phone)
+	servers.ReportFormat(c, true, "发送成功", gin.H{"captcha": code})
 }

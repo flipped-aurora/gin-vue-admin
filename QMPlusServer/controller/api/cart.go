@@ -35,13 +35,15 @@ type CusCart struct {
 	UserId   uuid.UUID `json:"user_id"`
 	CoffeeId uuid.UUID `json:"coffee_id"`
 	Spec     string    `json:"spec"`
+	Value    float64   `json:"value"`
 }
 
 func AddCart(c *gin.Context) {
 	var cusCart CusCart
 	var cart customerModel.Cart
 	_ = c.ShouldBindJSON(&cusCart)
-	err := cart.AddCart(cusCart.UserId, cusCart.CoffeeId, cusCart.Spec)
+	fmt.Println(cusCart)
+	err := cart.AddCart(cusCart.UserId, cusCart.CoffeeId, cusCart.Spec, cusCart.Value)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败 %v", err), gin.H{})
 	} else {
@@ -54,7 +56,7 @@ func ReduceCart(c *gin.Context) {
 	var cusCart CusCart
 	var cart customerModel.Cart
 	_ = c.ShouldBindJSON(&cusCart)
-	err := cart.ReduceCart(cusCart.UserId, cusCart.CoffeeId)
+	err := cart.ReduceCart(cusCart.UserId, cusCart.CoffeeId, cusCart.Spec)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("减少失败 %v", err), gin.H{})
 	} else {

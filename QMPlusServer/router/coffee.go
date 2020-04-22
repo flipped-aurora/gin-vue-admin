@@ -32,5 +32,6 @@ func InitCoffeeRouter(Router *gin.RouterGroup) {
 		coffeeSpecRouter.DELETE("/delete", api.DeleteCoffeeSpec)
 		coffeeSpecRouter.POST("/getbyid", api.GetCoffeeSpecById)
 		coffeeSpecRouter.POST("/detail", api.GetCoffeeSpecDetail)
+		coffeeSpecRouter.POST("/addDetail", api.AddCoffeeSpecDetail)
 	}
 }

@@ -65,11 +65,11 @@ func AddOrder(c *gin.Context) {
 	order.OrderType = cartList.OrderType
 	order.Consignee = cartList.Consignee
 	order.Phone = cartList.Phone
-	err := order.AddOrder(cartList.CartList)
+	orderId, err := order.AddOrder(cartList.CartList)
 	if err != nil {
 		servers.ReportFormat(c, false, fmt.Sprintf("添加失败, %v", err), gin.H{})
 	} else {
-		servers.ReportFormat(c, true, "添加成功", gin.H{})
+		servers.ReportFormat(c, true, "添加成功", gin.H{"order_id": orderId})
 	}
 }
 

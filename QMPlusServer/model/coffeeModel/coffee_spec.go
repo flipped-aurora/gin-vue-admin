@@ -28,20 +28,12 @@ func (c *CoffeeSpec) GetInfoList(info modelInterface.PageInfo) (err error, list 
 	}
 }
 
-func (c *CoffeeSpec) AddCoffeeSpec(name string, detail []CoffeeSpecDetail) (err error) {
+func (c *CoffeeSpec) AddCoffeeSpec(name string) (err error) {
 	findOne := qmsql.DEFAULTDB.Where("name = ?", name).Find(&CoffeeSpec{}).Error
 	if findOne != nil {
 		c.SpecId = uuid.NewV4()
 		c.Name = name
 		err = qmsql.DEFAULTDB.Create(&c).Error
-		if err != nil {
-			return
-		}
-		c.CoffeeSpecDetail = detail
-		for i := 0; i < len(c.CoffeeSpecDetail); i++ {
-			c.CoffeeSpecDetail[i].SpecId = c.SpecId
-			err = qmsql.DEFAULTDB.Create(&c.CoffeeSpecDetail[i]).Error
-		}
 	} else {
 		err = errors.New("存在重复名称，请修改名称")
 	}
@@ -87,6 +79,24 @@ func (c *CoffeeSpec) GetCoffeeSpecByCoffeeId(coffeeId uuid.UUID) (list []CoffeeS
 func (c *CoffeeSpec) GetCoffeeSpecDetail(specId uuid.UUID) (err error) {
 	c.SpecId = specId
 	err = qmsql.DEFAULTDB.Where("spec_id = ?", c.SpecId).Find(&c.CoffeeSpecDetail).Error
+	return
+}
+
+func (c *CoffeeSpec) GetCoffeeSpecValue(id []int64, coffeeId uuid.UUID) (price float64, err error) {
+	var coffee Coffee
+	err = qmsql.DEFAULTDB.Where("coffee_id = ?", coffeeId).Find(&coffee).Error
+	if err != nil {
+		return 0, err
+	}
+	price = coffee.Value
+	for i := 0; i < len(id); i++ {
+		var csd CoffeeSpecDetail
+		err = qmsql.DEFAULTDB.Where("id = ?", id).Find(&csd).Error
+		if err != nil {
+			return 0, err
+		}
+		price += csd.PriceIncre
+	}
 	return
 }
 

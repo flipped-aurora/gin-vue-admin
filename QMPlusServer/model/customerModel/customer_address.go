@@ -1,6 +1,7 @@
 package customerModel
 
 import (
+	"errors"
 	"gin-vue-admin/controller/servers"
 	"gin-vue-admin/init/qmsql"
 	"gin-vue-admin/model/modelInterface"
@@ -45,7 +46,10 @@ func (a *Address) GetInfoListByUserId(info modelInterface.PageInfo, userId uuid.
 
 func (a *Address) AddAddress() (err error) {
 	var temp Address
-	if a.IsDefault == 1 {
+	findOne := qmsql.DEFAULTDB.Where("user_id = ?", a.UserId).Find(&a).Error
+	if findOne != nil {
+		a.IsDefault = 1
+	} else if a.IsDefault == 1 {
 		findOne := qmsql.DEFAULTDB.Where("is_default = ?", 1).Where("user_id = ?", a.UserId).Find(&temp).Error
 		if findOne == nil {
 			err = qmsql.DEFAULTDB.Model(&temp).Select("is_default").Update("is_default", gorm.Expr("is_default - 1")).Error
@@ -62,6 +66,14 @@ func (a *Address) SetDefaultAddress() (err error) {
 	}
 	err = qmsql.DEFAULTDB.Model(&a).Select("is_default").Update("is_default", 1).Error
 	return
+}
+
+func (a *Address) GetDefaultAddress() (err error) {
+	finOne := qmsql.DEFAULTDB.Where("is_default = ?", 1).Where("user_id = ?", a.UserId).Find(&a).Error
+	if finOne != nil {
+		return errors.New("没有默认地址")
+	}
+	return nil
 }
 
 func (a *Address) UpdateAddress() (err error) {

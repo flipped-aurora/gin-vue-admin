@@ -16,8 +16,7 @@ type ID struct {
 	Id int64
 }
 type CoffeeSpecDetail struct {
-	Name             string                         `json:"name"`
-	CoffeeSpecDetail []coffeeModel.CoffeeSpecDetail `json:"coffee_spec_detail"`
+	Name string `json:"name"`
 }
 
 func AddCoffeeSpec(c *gin.Context) {
@@ -25,7 +24,7 @@ func AddCoffeeSpec(c *gin.Context) {
 	var detail CoffeeSpecDetail
 	_ = c.ShouldBindJSON(&detail)
 
-	err := coffeeSpec.AddCoffeeSpec(detail.Name, detail.CoffeeSpecDetail)
+	err := coffeeSpec.AddCoffeeSpec(detail.Name)
 	if err != nil {
 		servers.ReportFormat(c, false, "新增失败", gin.H{})
 	} else {
@@ -112,5 +111,38 @@ func GetCoffeeSpecDetail(c *gin.Context) {
 		servers.ReportFormat(c, false, "获得失败", gin.H{})
 	} else {
 		servers.ReportFormat(c, true, "获取成功", gin.H{"coffeeSpecDetail": spec.CoffeeSpecDetail})
+	}
+}
+
+type Id struct {
+	Id       []int64   `json:"id"`
+	CoffeeId uuid.UUID `json:"coffeeId"`
+}
+
+func GetCoffeeSpecValue(c *gin.Context) {
+	var id Id
+	_ = c.ShouldBindJSON(&id)
+	if len(id.Id) == 0 {
+		servers.ReportFormat(c, true, "获取成功", gin.H{"price": 0})
+	} else {
+		price, err := new(coffeeModel.CoffeeSpec).GetCoffeeSpecValue(id.Id, id.CoffeeId)
+		if err != nil {
+			servers.ReportFormat(c, false, "获得失败", gin.H{})
+		} else {
+			servers.ReportFormat(c, true, "获取成功", gin.H{"price": price})
+		}
+	}
+
+}
+
+func AddCoffeeSpecDetail(c *gin.Context) {
+	var coffeeSpecDetail coffeeModel.CoffeeSpecDetail
+	_ = c.ShouldBindJSON(&coffeeSpecDetail)
+
+	err := coffeeSpecDetail.AddCoffeeSpecDetail()
+	if err != nil {
+		servers.ReportFormat(c, false, "添加失败", gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "添加成功", gin.H{})
 	}
 }

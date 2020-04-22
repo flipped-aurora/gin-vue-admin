@@ -61,7 +61,7 @@ func (co *CustomerOrder) GetInfoListByOrderType(info modelInterface.PageInfo, or
 		return err, orderList, total
 	}
 }
-func (co *CustomerOrder) AddOrder(cartList []Cart) (err error) {
+func (co *CustomerOrder) AddOrder(cartList []Cart) (orderId uuid.UUID, err error) {
 	co.OrderId = uuid.NewV4()
 	co.Value = 0
 	// 将购物车添加到订单
@@ -78,10 +78,11 @@ func (co *CustomerOrder) AddOrder(cartList []Cart) (err error) {
 			co.Value += orderDetail.Value
 			co.OrderDetail = append(co.OrderDetail, orderDetail)
 			err = qmsql.DEFAULTDB.Create(&orderDetail).Error
+			err = qmsql.DEFAULTDB.Where("id = ?", cartList[i].ID).Delete(cartList[i]).Error
 		}
 	}
 	err = qmsql.DEFAULTDB.Create(&co).Error
-	return
+	return co.OrderId, err
 }
 
 func (co *CustomerOrder) DeleteOrder(orderId uuid.UUID) (err error) {
@@ -104,4 +105,7 @@ func (co *CustomerOrder) GetOrderDetail(orderId uuid.UUID) (err error) {
 		}
 	}
 	return
+}
+func (co *CustomerOrder) FinishOrder(orderId uuid.UUID) {
+
 }

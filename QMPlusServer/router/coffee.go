@@ -33,5 +33,6 @@ func InitCoffeeRouter(Router *gin.RouterGroup) {
 		coffeeSpecRouter.POST("/getbyid", api.GetCoffeeSpecById)
 		coffeeSpecRouter.POST("/detail", api.GetCoffeeSpecDetail)
 		coffeeSpecRouter.POST("/addDetail", api.AddCoffeeSpecDetail)
+		coffeeSpecRouter.POST("/list", api.GetCoffeeSpecList)
 	}
 }

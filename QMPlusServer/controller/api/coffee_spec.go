@@ -13,7 +13,7 @@ type CoffeeId struct {
 }
 
 type ID struct {
-	Id int64
+	Id int64 `json:"id"`
 }
 type CoffeeSpecDetail struct {
 	Name string `json:"name"`

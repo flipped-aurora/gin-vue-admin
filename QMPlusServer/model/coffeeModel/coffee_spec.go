@@ -51,7 +51,8 @@ func (c *CoffeeSpec) DeleteCoffeeSpec(id int64) (err error) {
 }
 
 func (c *CoffeeSpec) GetCoffeeById(id int64) (err error) {
-	return nil
+	err = qmsql.DEFAULTDB.Where("id = ?", id).Find(&c).Error
+	return
 }
 
 func (c *CoffeeSpec) GetCoffeeSpecByCoffeeId(coffeeId uuid.UUID) (list []CoffeeSpec, err error) {

@@ -104,8 +104,8 @@ export default {
       },
       dialogTitle: '',
       titleMap : {
-        addData : "添加咖啡",
-        updateData : "修改咖啡"
+        addData : "添加咖啡类型",
+        updateData : "修改咖啡类型"
       },
       rules: {
         name: [{required: true, validator: checkname, trigger: 'blur' }],

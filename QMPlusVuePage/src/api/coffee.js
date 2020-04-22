@@ -104,3 +104,50 @@ export const getCoffeeSpecDetail = (data) => {
         data: data
     })
 }
+
+export const addCoffeeSpecFuc = (data) => {
+    return service({
+        url: "/coffeespec/add",
+        method: "post",
+        data: data
+    })
+}
+
+export const addCoffeeSpecDetailFunc = (data) => {
+    return service({
+        url: "/coffeespec/addDetail",
+        method: "post",
+        data: data
+    })
+}
+
+export const getCoffeeSpecListFunc = (data) => {
+    return service({
+        url: "/coffeespec/list",
+        method: "post",
+        data: data
+    }) 
+}
+
+export const updateCoffeeSpecFunc = (data) => {
+    return service({
+        url: "/coffeespec/update",
+        method: "post",
+        data: data
+    }) 
+}
+
+export const getCoffeeSpecByIdFunc = (data) => {
+    return service({
+        url: "/coffeespec/getbyid",
+        method: "post",
+        data: data
+    }) 
+}
+export const delCoffeeSpecFunc = (data) => {
+    return service({
+        url: "/coffeespec/delete",
+        method: "post",
+        data: data
+    }) 
+}

@@ -2,7 +2,7 @@
   <el-container class="login-regist-box">
     <vue-particle-line></vue-particle-line>
     <el-main class="login-box">
-      <h1 class="title-1">GIN-VUE-ADMIN</h1>
+      <h1 class="title-1">行星咖啡</h1>
       <el-form :model="loginForm" :rules="rules" ref="loginForm">
         <el-form-item prop="username">
           <el-input placeholder="请输入用户名" v-model="loginForm.username"></el-input>

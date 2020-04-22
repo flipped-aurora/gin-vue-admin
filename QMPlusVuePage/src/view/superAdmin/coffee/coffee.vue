@@ -91,7 +91,6 @@
         <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
           <el-button @click="enterCoffeeSpecDetailDialog(scope.row)" size="small" type="text">查看详细信息</el-button>
-          <el-button @click="enterCoffeeSpecDetailDialog(scope.row)" size="small" type="text">添加咖啡规格</el-button>
         </template>
       </el-table-column>
       </el-table>
@@ -128,7 +127,9 @@ import {
   delCoffee,
   getCoffeeById,
   getCoffeeSpecByCoffeeId,
-  getCoffeeSpecDetail
+  getCoffeeSpecDetail,
+  addCoffeeSpecFunc,
+  addCoffeeSpecDetailFunc
 } from "@/api/coffee";
 import infoList from "@/components/mixins/infoList";
 import { quillEditor } from "vue-quill-editor"; //调用编辑器

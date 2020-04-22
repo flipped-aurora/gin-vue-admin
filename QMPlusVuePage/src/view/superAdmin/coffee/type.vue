@@ -151,6 +151,9 @@ export default {
       this.dialogTitle = 'addData'
       this.addCoffeeTypeDialog = true
     },
+    handleAvatarSuccess(res) {
+      this.coffeeTypeInfo.image = res.data.file.url;
+    },
     async editCoffeeType(row) {
         const res = await getCoffeeTypeById({code: row.code})
         if(res.success){

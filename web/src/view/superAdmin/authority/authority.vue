@@ -17,6 +17,7 @@
         <template slot-scope="scope">
           <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
           <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
+          <el-button @click="copyAuthority(scope.row)" size="small" type="text">拷贝角色</el-button>
           <el-button @click="editAuthority(scope.row)" size="small" type="text">编辑角色</el-button>
           <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
 
@@ -72,7 +73,8 @@ import {
   getAuthorityList,
   deleteAuthority,
   createAuthority,
-  updateAuthority 
+  updateAuthority,
+  copyAuthority 
 } from '@/api/authority'
 
 import Menus from '@/view/superAdmin/authority/components/menus'
@@ -121,6 +123,17 @@ export default {
     Datas
   },
   methods: {
+    // 拷贝角色
+    copyAuthority(row) {
+      this.setOptions()
+      this.dialogTitle = "拷贝角色"
+      this.dialogType = "copy"
+      for(let k in this.form) {
+        this.form[key] = row[key]
+      }
+      this.copyForm = row
+      this.dialogFormVisible = true;
+    }
     opdendrawer(row) {
       this.drawer = true
       this.activeRow = row
@@ -203,8 +216,30 @@ export default {
                 }
               }
               break;
-            default:
-              break;
+              case 'copy': {
+                const data = {
+                  "authority": {
+                      "authorityId": "string",
+                      "authorityName": "string",
+                      "datauthorityId": [],
+                      "parentId": "string",
+                  },
+                      "oldAuthorityId": 0
+                }
+                data.authority.authorityId = this.form.authorityId
+                data.authority.authorityName = this.form.authorityName
+                data.authority.parentId = this.form.parentId
+                data.authority.dataAuthorityId = this. copyForm.dataAuthorityId
+                data.oldAuthorityId = this.copyForm.authorityId
+                const res = await copyAuthority(data)
+                if(res.code == 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '复制成功！'
+                  })
+                  this.getTableData()
+                }
+              }
           }
           
           this.initForm()

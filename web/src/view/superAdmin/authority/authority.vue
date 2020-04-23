@@ -99,6 +99,7 @@ export default {
       dialogTitle:"新增角色",
       dialogFormVisible: false,
       apiDialogFlag: false,
+      copyForm: {},
       form: {
         authorityId: '',
         authorityName: '',

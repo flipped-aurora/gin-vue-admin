@@ -1,3 +1,4 @@
+basePath: /
 definitions:
   config.Captcha:
     properties:
@@ -217,10 +218,14 @@ definitions:
         type: array
       component:
         type: string
+      defaultMenu:
+        type: boolean
       hidden:
         type: boolean
       icon:
         type: string
+      keepAlive:
+        type: boolean
       name:
         type: string
       parentId:
@@ -380,9 +385,20 @@ definitions:
       uuid:
         type: string
     type: object
+  response.SysAuthorityCopyResponse:
+    properties:
+      authority:
+        $ref: '#/definitions/model.SysAuthority'
+        type: object
+      oldAuthorityId:
+        type: integer
+    type: object
 info:
   contact: {}
+  description: This is a sample Server pets
   license: {}
+  title: Swagger Example API
+  version: 0.0.1
 paths:
   /api/createApi:
     post:
@@ -520,6 +536,30 @@ paths:
       summary: 创建基础api
       tags:
       - SysApi
+  /authority/copyAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 拷贝角色
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/response.SysAuthorityCopyResponse'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"拷贝成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 拷贝角色
+      tags:
+      - authority
   /authority/createAuthority:
     post:
       consumes:
@@ -593,6 +633,30 @@ paths:
       tags:
       - authority
   /authority/setDataAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 设置角色资源权限
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.SysAuthority'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"设置成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置角色资源权限
+      tags:
+      - authority
+  /authority/updateAuthority:
     post:
       consumes:
       - application/json
@@ -1343,6 +1407,30 @@ paths:
       summary: 用户修改密码
       tags:
       - SysUser
+  /user/deleteUser:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除用户
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserAuth'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
+      tags:
+      - SysUser
   /user/getUserList:
     post:
       consumes:
@@ -1438,4 +1526,9 @@ paths:
       summary: 注册工作流
       tags:
       - workflow
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: x-token
+    type: apiKey
 swagger: "2.0"

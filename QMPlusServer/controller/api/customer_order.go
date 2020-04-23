@@ -100,3 +100,15 @@ func GetOrderByOrderId(c *gin.Context) {
 		servers.ReportFormat(c, true, "读取成功", gin.H{"orderList": order})
 	}
 }
+
+func SetOrderType(c *gin.Context) {
+	var orderId OrderId
+	var order customerModel.CustomerOrder
+	_ = c.ShouldBindJSON(&order)
+	err := order.SetOrderType(orderId.OrderId, orderId.OrderType)
+	if err != nil {
+		servers.ReportFormat(c, false, fmt.Sprintf("设置失败, %v", err), gin.H{})
+	} else {
+		servers.ReportFormat(c, true, "设置成功", gin.H{})
+	}
+}

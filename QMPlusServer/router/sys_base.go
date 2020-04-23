@@ -19,6 +19,7 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.POST("/getcoffeetype", api.GetCoffeeByCode)
 		BaseRouter.POST("getcoffeebyid", api.GetCoffeeByUUID)
 		BaseRouter.POST("/phone", api.SendPhoneCaptcha)
+		BaseRouter.POST("/cusRegister", api.CusRegist)
 	}
 	return BaseRouter
 }

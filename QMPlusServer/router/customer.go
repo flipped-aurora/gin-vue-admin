@@ -52,5 +52,6 @@ func InitMyCustomerRouter(Router *gin.RouterGroup) {
 		customerBusinessRouter.POST("/delOrder", api.DeleteOrder)
 		customerBusinessRouter.POST("/orderDetail", api.GetOrderByOrderId)
 		customerBusinessRouter.POST("/defaultAddress", api.SetDefaultAddress)
+		customerBusinessRouter.POST("/orderSet", api.SetOrderType)
 	}
 }

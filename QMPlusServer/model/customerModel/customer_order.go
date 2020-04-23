@@ -106,6 +106,7 @@ func (co *CustomerOrder) GetOrderDetail(orderId uuid.UUID) (err error) {
 	}
 	return
 }
-func (co *CustomerOrder) FinishOrder(orderId uuid.UUID) {
-
+func (co *CustomerOrder) SetOrderType(orderId uuid.UUID, orderType int) (err error) {
+	err = qmsql.DEFAULTDB.Where("order_id = ?", orderId).Find(&co).Update("order_type", orderType).Error
+	return
 }

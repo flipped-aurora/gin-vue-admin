@@ -1,40 +1,55 @@
-captcha:
-  key-long: 4
-  img-width: 120
-  img-height: 40
+# Gin-Vue-Admin Global Configuration
+
+# casbin configuration
 casbin:
-  model-path: ./resource/rbac_model.conf
+    model-path: './resource/rbac_model.conf'
+
+# jwt configuration
 jwt:
-  signing-key: qmPlus
-log:
-  prefix: '[GIN-VUE-ADMIN]'
-  log-file: true
-  stdout: DEBUG
-  file: DEBUG
+    signing-key: 'qmPlus'
+
+# mysql connect configuration
 mysql:
-  username: root
-  password: Aa@6447985
-  path: 127.0.0.1:3306
-  db-name: qmplus
-  config: charset=utf8&parseTime=True&loc=Local
-  max-idle-conns: 10
-  max-open-conns: 10
-  log-mode: true
-qiniu:
-  access-key: 25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ
-  secret-key: pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY
-redis:
-  addr: 127.0.0.1:6379
-  password: ""
-  db: 0
+    username: root
+    password: 'Aa@6447985'
+    path: '127.0.0.1:3306'
+    db-name: 'qmPlus'
+    config: 'charset=utf8&parseTime=True&loc=Local'
+    max-idle-conns: 10
+    max-open-conns: 10
+    log-mode: true
+#sqlite 配置
 sqlite:
-  username: ""
-  password: ""
-  path: db/db.db
-  config: loc=Asia/Shanghai
-  log-mode: true
+    path: db/db.db
+    log-mode: true
+    config: 'loc=Asia/Shanghai'
+# oss configuration
+qiniu:
+    access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
+    secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
+
+# redis configuration
+redis:
+    addr: '127.0.0.1:6379'
+    passwprd: ''
+    db: 0
+
+# system configuration
 system:
-  use-multipoint: false
-  env: public
-  addr: 8888
-  db-type: mysql
+    use-multipoint: false
+    env: 'public'  # Change to "develop" to skip authentication for development mode
+    addr: 8888
+    db-type: "mysql"  # support mysql/sqlite
+
+# captcha configuration
+captcha:
+    key-long: 4
+    img-width: 120
+    img-height: 40
+
+# logger configuration
+log:
+    prefix: '[GIN-VUE-ADMIN]'
+    log-file: true
+    stdout: 'DEBUG'
+    file: 'DEBUG'

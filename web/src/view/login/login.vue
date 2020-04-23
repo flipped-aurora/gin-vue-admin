@@ -25,7 +25,7 @@
             placeholder="请输入验证码"
             maxlength="10"
           />
-          <img :src="path + picPath" alt="请输入验证码" @click="loginVefify()" class="vPic">
+          <img v-if="picPath" :src="path + picPath" alt="请输入验证码" @click="loginVefify()" class="vPic">
         </el-form-item>
         <el-form-item>
           <el-button @click="submitForm" style="width:100%">登 录</el-button>

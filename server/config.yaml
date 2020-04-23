@@ -13,14 +13,14 @@ mysql:
     username: root
     password: 'Aa@6447985'
     path: '127.0.0.1:3306'
-    db-name: 'qmplus'
+    db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
     log-mode: true
 #sqlite 配置
 sqlite:
-    path: db/db.db
+    path: db.db
     log-mode: true
     config: 'loc=Asia/Shanghai'
 # oss configuration
@@ -31,7 +31,7 @@ qiniu:
 # redis configuration
 redis:
     addr: '127.0.0.1:6379'
-    passwprd: ''
+    password: ''
     db: 0
 
 # system configuration
@@ -39,7 +39,7 @@ system:
     use-multipoint: false
     env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
-    db-type: "mysql"
+    db-type: "mysql"  # support mysql/sqlite
 
 # captcha configuration
 captcha:

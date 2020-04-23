@@ -20,7 +20,7 @@ mysql:
     log-mode: true
 #sqlite 配置
 sqlite:
-    path: db/db.db
+    path: db.db
     log-mode: true
     config: 'loc=Asia/Shanghai'
 # oss configuration
@@ -31,7 +31,7 @@ qiniu:
 # redis configuration
 redis:
     addr: '127.0.0.1:6379'
-    passwprd: ''
+    password: ''
     db: 0
 
 # system configuration

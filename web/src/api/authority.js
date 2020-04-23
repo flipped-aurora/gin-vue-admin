@@ -46,6 +46,22 @@ export const createAuthority = (data) => {
     })
 }
 
+// @Tags authority
+// @Summary 拷贝角色
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.CreateAuthorityPatams true "拷贝角色"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"拷贝成功"}"
+// @Router /authority/copyAuthority [post]
+export const copyAuthority = (data) => {
+    return service({
+        url: "/authority/copyAuthority",
+        method: 'post',
+        data
+    })
+}
+
 // @Summary 设置角色资源权限
 // @Security ApiKeyAuth
 // @accept application/json

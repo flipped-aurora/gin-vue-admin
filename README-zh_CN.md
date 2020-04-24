@@ -239,6 +239,7 @@ go run main.go;
 |2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
 |2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色。（如不需要此功能可以在`web/src/view/layout/index.vue`中屏蔽`HistoryComponent`背景色调，为本页260行&.el-main中的`background`属性） |
 |2020/04/04| 启动2.x版本，项目文档规范化，日志功能改造，方法增加英文注释 |
+|2020/04/24|1增加了角色拷贝功能（目前只支持单角色拷贝）,2增加了首页音频播放器示例 增加了 dotolist工具,3增加了docker支持,4修复了部分total返回0的bug,5修复了首页会发送一次无用404请求的bug,6修复了swagger不能携带token的bug,7修复菜单展示下级只有一个隐藏菜单时候的交互错误,8修复了config从前端控制变化时候导致yaml内部的key名称错误的bug,9数据库添加拷贝角色相关api和权限|
 
 ## 8. 团队博客
 

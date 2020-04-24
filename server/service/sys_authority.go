@@ -17,6 +17,11 @@ import (
 // @return    authority       model.SysAuthority
 
 func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
+	var authorityBox model.SysAuthority
+	notHas := global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&authorityBox).RecordNotFound()
+	if !notHas {
+		return errors.New("存在相同角色id"), auth
+	}
 	err = global.GVA_DB.Create(&auth).Error
 	return err, auth
 }
@@ -29,6 +34,11 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 // @return    authority       model.SysAuthority
 
 func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
+	var authorityBox model.SysAuthority
+	notHas := global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).Find(&authorityBox).RecordNotFound()
+	if !notHas {
+		return errors.New("存在相同角色id"), authority
+	}
 	copyInfo.Authority.Children = []model.SysAuthority{}
 	err, menus := GetMenuAuthority(copyInfo.OldAuthorityId)
 	var baseMenu []model.SysBaseMenu

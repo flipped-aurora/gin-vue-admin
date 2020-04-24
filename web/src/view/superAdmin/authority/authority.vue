@@ -130,11 +130,11 @@ export default {
       this.dialogTitle = "拷贝角色"
       this.dialogType = "copy"
       for(let k in this.form) {
-        this.form[key] = row[key]
+        this.form[k] = row[k]
       }
       this.copyForm = row
       this.dialogFormVisible = true;
-    }
+    },
     opdendrawer(row) {
       this.drawer = true
       this.activeRow = row

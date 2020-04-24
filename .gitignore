@@ -1,5 +1,6 @@
 .idea/
 /web/node_modules
+/web/dist
 
 .DS_Store
 
@@ -24,3 +25,5 @@ yarn-error.log*
 go.sum
 /server/log/
 /server/latest_log
+
+*.iml

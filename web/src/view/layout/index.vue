@@ -60,14 +60,19 @@
               </div>
             </el-dialog>
           </div>
-      
+
         </el-header>
         <!-- 当前面包屑用路由自动生成可根据需求修改 -->
-        <!-- 
+        <!--
         :to="{ path: item.path }" 暂时注释不用-->
         <HistoryComponent />
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view class="admin-box"></router-view>
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive" class="admin-box"></router-view>
+          </keep-alive>
+        </transition>
+        <transition mode="out-in" name="el-fade-in-linear">
+            <router-view v-if="!$route.meta.keepAlive" class="admin-box"></router-view>
         </transition>
       </el-main>
     </el-container>
@@ -114,7 +119,7 @@ export default {
           }
         ]
       },
-      
+
     }
   },
   components: {
@@ -215,6 +220,9 @@ $mainHight: 100vh;
 }
 .dropdown-group {
   min-width: 100px;
+}
+.admin-box{
+  background-color: rgb(255,255,255);
 }
 .el-scrollbar__wrap {
   padding-bottom: 17px;

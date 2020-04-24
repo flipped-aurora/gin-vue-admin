@@ -9,7 +9,7 @@
       :props="apiDefaultProps"
       default-expand-all
       highlight-current
-      node-key="path"
+      node-key="onlyId"
       ref="apiTree"
       show-checkbox
     ></el-tree>
@@ -44,6 +44,7 @@ export default {
       const apiObj = new Object()
       apis &&
         apis.map(item => {
+        item.onlyId = "p:"+item.path+"m:"+item.method
           if (apiObj.hasOwnProperty(item.apiGroup)) {
             apiObj[item.apiGroup].push(item)
           } else {
@@ -85,13 +86,16 @@ export default {
     // 获取api并整理成树结构
     const res2 = await getAllApis()
     const apis = res2.data.apis
+   
     this.apiTreeData = this.buildApiTree(apis)
-
     const res = await getPolicyPathByAuthorityId({
       authorityId: this.row.authorityId
     })
     this.activeUserId = this.row.authorityId
-    this.apiTreeIds = res.data.paths || []
+    this.apiTreeIds = []
+    res.data.paths&&res.data.paths.map(item=>{
+      this.apiTreeIds.push("p:"+item.path+"m:"+item.method)
+    })
   }
 }
 </script>

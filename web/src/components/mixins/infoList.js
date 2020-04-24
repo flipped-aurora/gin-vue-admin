@@ -24,9 +24,5 @@ export default {
             this.page = table.data.page
             this.pageSize = table.data.pageSize
         }
-    },
-    mounted() {
-        this.getTableData()
     }
-
 }

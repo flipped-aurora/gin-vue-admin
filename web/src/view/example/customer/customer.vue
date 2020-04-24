@@ -9,7 +9,6 @@
     </div>
     <el-table
       :data="tableData"
-      @selection-change="handleSelectionChange"
       border
       ref="multipleTable"
       stripe
@@ -29,10 +28,10 @@
           <el-popover
           placement="top"
           width="160"
-          v-model="visible">
+          v-model="scope.row.visible">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+            <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
             <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
           </div>
           <el-button type="text" size="mini" slot="reference">删除</el-button>
@@ -113,7 +112,7 @@ export default {
   },
   methods:{
     async updateCustomer(row){
-      const res = await getExaCustomer(row)
+      const res = await getExaCustomer({ID:row.ID})
       this.type = "update"
       if(res.code == 0){
         this.form = res.data.customer        
@@ -122,11 +121,19 @@ export default {
     },
     closeDialog(){
       this.dialogFormVisible = false
+      this.form = {
+        customerName:"",
+        customerPhoneData:""
+      }
     },
     async deleteCustomer(row){
       this.visible = false
-      const res = await deleteExaCustomer(row)
+      const res = await deleteExaCustomer({ID:row.ID})
       if (res.code == 0){
+        this.$message({
+          type:"success",
+          message:"删除成功"
+        })
          this.getTableData()
       }
     },
@@ -146,7 +153,7 @@ export default {
       }
      
       if(res.code == 0){
-        this.dialogFormVisible = false
+        this.closeDialog()
         this.getTableData()
       }
     },
@@ -154,6 +161,9 @@ export default {
       this.type = "create"
       this.dialogFormVisible = true
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

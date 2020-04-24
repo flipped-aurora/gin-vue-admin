@@ -145,6 +145,9 @@ export default {
     downloadFile(row) {
       downloadImage(row.url, row.name)
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

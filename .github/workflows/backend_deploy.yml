@@ -4,7 +4,6 @@ on:
   push:
     branches: 
       - master
-      - action-ci
     paths:
       - './server/**'
 

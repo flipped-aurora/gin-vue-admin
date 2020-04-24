@@ -8,8 +8,10 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
+        "@moefe/vue-aplayer": "^2.0.0-beta.5",
         "axios": "^0.19.0",
         "core-js": "^2.6.5",
+        "echarts": "^4.7.0",
         "element-ui": "^2.12.0",
         "mavon-editor": "^2.7.7",
         "node-sass": "^4.12.0",

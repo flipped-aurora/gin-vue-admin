@@ -1,17 +1,31 @@
 <template>
   <div class="hello">
-    <form id="fromCont" method="post">
-      <input @change="choseFile" id="file" multiple="multiple" type="file" />
+     <el-divider content-position="left">大文件上传</el-divider>
+    <form id="fromCont" method="post" >
+      <div class="fileUpload">
+        选择文件<input @change="choseFile" id="file" multiple="multiple" type="file"  />
+      </div>
     </form>
-    <el-button @click="getFile">上传</el-button>
-    <span
+     <el-button @click="getFile" :disabled="limitFileSize" type="primary" size="medium" class="uploadBtn">上传文件</el-button>
+    <div class="el-upload__tip">请上传不超过5MB的文件</div>
+    <div class="list">
+      <transition-group name="list" tag="p">
+        <div class="list-item" v-for="item in uploadList" :key="item.name" >
+          <i class="el-icon-document"></i>
+          <span>{{ item.name }}</span>
+          <span v-if="file" class="percentage" >{{percentage}}%</span>
+          <el-progress  :show-text='false' :text-inside="false" :stroke-width="2" :percentage="percentage"></el-progress>
+        </div> 
+      </transition-group>
+   </div>
+    
+    <!-- <span
       v-if="this.file"
-    >{{Math.floor(((this.formDataList.length-this.waitNum)/this.formDataList.length)*100)}}%</span>
-    <h2>此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹</h2>
+    >{{Math.floor(((this.formDataList.length-this.waitNum)/this.formDataList.length)*100)}}%</span> -->
+    <h2 class="tips">此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹</h2>
   </div>
 </template>
 <script>
-
 import SparkMD5 from 'spark-md5'
 import axios from 'axios'
 import {
@@ -27,21 +41,31 @@ export default {
       fileMd5: '',
       formDataList: [],
       waitUpLoad: [],
-      waitNum: 0
+      waitNum: 0,
+      limitFileSize: false,
+      percentage:0,
+      percentageFlage: true,
+      customColor: '#409eff',
+      uploadList:[]
     }
+  },
+  created(){
+   
   },
   methods: {
     // 选中文件的函数
     async choseFile(e) {
       const fileR = new FileReader() // 创建一个reader用来读取文件流
       const file = e.target.files[0] // 获取当前文件
+      const maxSize = 5*1024*1024
       this.file = file // file 丢全局方便后面用 可以改进为func传参形式
+    if(file.size<maxSize){
       fileR.readAsArrayBuffer(file) // 把文件读成ArrayBuffer  主要为了保持跟后端的流一致
       fileR.onload = async e => {
         // 读成arrayBuffer的回调 e 为方法自带参数 相当于 dom的e 流存在e.target.result 中
-        const bolb = e.target.result
+        const blob = e.target.result
         let spark = new SparkMD5.ArrayBuffer() // 创建md5制造工具 （md5用于检测文件一致性 这里不懂就打电话问我）
-        spark.append(bolb) // 文件流丢进工具
+        spark.append(blob) // 文件流丢进工具
         this.fileMd5 = spark.end() // 工具结束 产生一个a 总文件的md5
         const FileSliceCap = 1 * 1024 * 1024 // 分片字节数
         let start = 0 // 定义分片开始切的地方
@@ -83,6 +107,10 @@ export default {
         }
         this.waitNum = this.waitUpLoad.length // 记录长度用于百分比展示
       }
+      } else {
+         this.limitFileSize = true
+         this.$message('请上传小于5M文件')
+      }
     },
     getFile() {
       // 确定按钮
@@ -90,7 +118,14 @@ export default {
         this.$message('请先上传文件')
         return
       }
+      this.percentage = Math.floor(((this.formDataList.length-this.waitNum)/this.formDataList.length)*100)
+      if(this.percentage == 100){
+        this.percentageFlage = false
+      }
       this.sliceFile() // 上传切片
+      if(this.percentage == 100){
+        this.uploadList.push(this.file)
+      }
     },
     sliceFile() {
       this.waitUpLoad &&
@@ -119,7 +154,7 @@ export default {
           fileMd5: this.fileMd5
         }
         const res = await breakpointContinueFinish(params)
-        if (res.code == 0) {
+        if (res.success) {
           // 合成文件过后 删除缓存切片
           const params = {
             fileName: this.file.name,
@@ -134,7 +169,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 h3 {
   margin: 40px 0 0;
 }
@@ -148,5 +183,71 @@ li {
 }
 a {
   color: #42b983;
+}
+#fromCont{
+  display: inline-block;
+}
+.fileUpload{
+    padding: 4px 10px;
+    height: 20px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #000;
+    border: 1px solid #c1c1c1;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+  input{
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+ 
+}
+ .fileName{
+    display: inline-block;
+    vertical-align: top;
+    margin: 6px 15px 0 15px;
+  }
+  .uploadBtn{
+    position: relative;
+    top: -10px;
+    margin-left: 15px;
+  }
+  .tips{
+    margin-top: 30px;
+    font-size: 14px;
+    font-weight: 400;
+    color: #606266;
+  }
+  .el-divider{
+    margin: 0 0 30px 0;
+  }
+ 
+ .list{
+   margin-top:15px;
+ }
+ .list-item {
+  display: block;
+  margin-right: 10px;
+  color: #606266;
+  line-height: 25px;
+  margin-bottom: 5px;
+  width: 40%;
+   .percentage{
+          float: right;
+        }
+}
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to
+/* .list-leave-active for below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(-30px);
 }
 </style>

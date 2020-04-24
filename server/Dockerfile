@@ -19,7 +19,7 @@ RUN yum install -y wget && \
 WORKDIR $GOPATH
 COPY . gin-vue
 
-RUN cd server && go build -o app;
+RUN cd gin-vue && go build -o app;
 
 EXPOSE 8888
 

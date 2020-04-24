@@ -42,7 +42,7 @@ func CopyAuthority(c *gin.Context) {
 	_ = c.ShouldBindJSON(&copyInfo)
 	err, authBack := service.CopyAuthority(copyInfo)
 	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("拷贝失败，%v", err), c)
 	} else {
 		response.OkWithData(resp.SysAuthorityResponse{Authority: authBack}, c)
 	}

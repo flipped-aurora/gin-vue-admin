@@ -18,11 +18,6 @@ import (
 	"time"
 )
 
-const (
-	USER_HEADER_IMG_PATH string = "http://qmplusimg.henrongyi.top"
-	USER_HEADER_BUCKET   string = "qm-plus-img"
-)
-
 // @Tags Base
 // @Summary 用户注册账号
 // @Produce  application/json
@@ -172,7 +167,7 @@ func UploadHeaderImg(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
 	} else {
 		//文件上传后拿到文件路径
-		err, filePath, _ := utils.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
+		err, filePath, _ := utils.Upload(header)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
 		} else {

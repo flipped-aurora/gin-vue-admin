@@ -10,15 +10,12 @@ import (
 	"time"
 )
 
-var accessKey string = global.GVA_CONFIG.Qiniu.AccessKey // 你在七牛云的accessKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
-var secretKey string = global.GVA_CONFIG.Qiniu.SecretKey // 你在七牛云的secretKey  这里是我个人测试号的key 仅供测试使用 恳请大家不要乱传东西
-
 // 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字
 func Upload(file *multipart.FileHeader) (err error, path string, key string) {
 	putPolicy := storage.PutPolicy{
 		Scope: global.GVA_CONFIG.Qiniu.Bucket,
 	}
-	mac := qbox.NewMac(accessKey, secretKey)
+	mac := qbox.NewMac(global.GVA_CONFIG.Qiniu.AccessKey, global.GVA_CONFIG.Qiniu.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
 	cfg := storage.Config{}
 	// 空间对应的机房
@@ -51,7 +48,7 @@ func Upload(file *multipart.FileHeader) (err error, path string, key string) {
 
 func DeleteFile(key string) error {
 
-	mac := qbox.NewMac(accessKey, secretKey)
+	mac := qbox.NewMac(global.GVA_CONFIG.Qiniu.AccessKey, global.GVA_CONFIG.Qiniu.SecretKey)
 	cfg := storage.Config{
 		// 是否使用https域名进行资源管理
 		UseHTTPS: false,

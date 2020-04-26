@@ -46,6 +46,8 @@ type Redis struct {
 type Qiniu struct {
 	AccessKey string `mapstructure:"access-key" json:"accessKey" yaml:"access-key"`
 	SecretKey string `mapstructure:"secret-key" json:"secretKey" yaml:"secret-key"`
+	Bucket string `mapstructure:"bucket" json:"bucket" yaml:"bucket"`
+	ImgPath string `mapstructure:"img-path" json:"imgPath" yaml:"img-path"`
 }
 
 type Captcha struct {

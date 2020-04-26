@@ -17,17 +17,20 @@ mysql:
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
-    log-mode: true
+    log-mode: false
+
 #sqlite 配置
 sqlite:
     path: db.db
     log-mode: true
     config: 'loc=Asia/Shanghai'
+
 # oss configuration
 qiniu:
     access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
     secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
-
+    bucket: 'qm-plus-img'
+    img-path: 'http://qmplusimg.henrongyi.top'
 # redis configuration
 redis:
     addr: '127.0.0.1:6379'

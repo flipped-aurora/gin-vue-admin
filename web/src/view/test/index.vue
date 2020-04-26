@@ -50,7 +50,7 @@
               <el-col :span="8" :offset="8">
                 <a href="https://github.com/flipped-aurora">
                   <img
-                    class="org-img"
+                    class="org-img dom-center"
                     src="@/assets/flipped-aurora.png"
                     alt="flipped-aurora"
                   />

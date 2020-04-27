@@ -2,7 +2,7 @@
   <div>
     <el-scrollbar style="height:calc(100vh)">
       <el-menu
-        :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
+        class="el-menu-vertical"
         :collapse="isCollapse"
         :collapse-transition="true"
         :default-active="active"

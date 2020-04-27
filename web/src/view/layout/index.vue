@@ -7,6 +7,8 @@
       </el-aside>
       <!-- 分块滑动功能 -->
       <el-main class="main-cont main-right">
+        <transition mode="out-in" name="el-fade-in-linear">
+          <div class="topfix" :style="{width: `calc(100% - ${isCollapse?'54px':'220px'})`}">
         <el-header class="header-cont">
           <div @click="totalCollapse" class="menu-total">
             <i class="el-icon-s-unfold" v-if="isCollapse"></i>
@@ -37,7 +39,26 @@
                 <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp">登 出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
-            <el-dialog
+ 
+          </div>
+        </el-header>
+        <!-- 当前面包屑用路由自动生成可根据需求修改 -->
+        <!--
+        :to="{ path: item.path }" 暂时注释不用-->
+        <HistoryComponent />
+        </div>
+        </transition>
+        <transition mode="out-in" name="el-fade-in-linear">
+          <keep-alive>
+            <router-view v-if="$route.meta.keepAlive" class="admin-box"></router-view>
+          </keep-alive>
+        </transition>
+        <transition mode="out-in" name="el-fade-in-linear">
+            <router-view v-if="!$route.meta.keepAlive" class="admin-box"></router-view>
+        </transition>
+      </el-main>
+    </el-container>
+               <el-dialog
               title="修改密码"
               :visible.sync="showPassword"
               @close="clearPassword"
@@ -59,23 +80,6 @@
                 <el-button type="primary" @click="savePassword">确 定</el-button>
               </div>
             </el-dialog>
-          </div>
-
-        </el-header>
-        <!-- 当前面包屑用路由自动生成可根据需求修改 -->
-        <!--
-        :to="{ path: item.path }" 暂时注释不用-->
-        <HistoryComponent />
-        <transition mode="out-in" name="el-fade-in-linear">
-          <keep-alive>
-            <router-view v-if="$route.meta.keepAlive" class="admin-box"></router-view>
-          </keep-alive>
-        </transition>
-        <transition mode="out-in" name="el-fade-in-linear">
-            <router-view v-if="!$route.meta.keepAlive" class="admin-box"></router-view>
-        </transition>
-      </el-main>
-    </el-container>
   </el-container>
 </template>
 
@@ -221,8 +225,15 @@ $mainHight: 100vh;
 .dropdown-group {
   min-width: 100px;
 }
+.topfix{
+  position:fixed;
+  top:0;
+  box-sizing: border-box;
+  z-index: 999;
+}
 .admin-box{
   background-color: rgb(255,255,255);
+  margin-top: 100px;
 }
 .el-scrollbar__wrap {
   padding-bottom: 17px;
@@ -260,7 +271,6 @@ $mainHight: 100vh;
     }
     .router-history{
       background: #fff;
-      margin-top: 1px;
       padding: 0 6px;
     }
     &.el-main {

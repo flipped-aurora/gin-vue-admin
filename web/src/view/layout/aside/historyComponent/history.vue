@@ -38,7 +38,7 @@ export default {
            const obj = {}
            obj.name = route.name
            obj.meta = route.meta
-        this.historys.push(obj)
+           this.historys.push(obj)
        }
            this.activeValue = this.$route.name
         },

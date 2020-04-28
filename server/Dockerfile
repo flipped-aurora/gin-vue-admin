@@ -1,26 +1,19 @@
-FROM centos:7.6.1810
+FROM golang:alpine as builder
 
 # 设置go mod proxy 国内代理
 # 设置golang path
-ENV GOPROXY=https://goproxy.io GOPATH=/gopath PATH="${PATH}:/usr/local/go/bin"
-# 定义使用的Golang 版本
-ARG GO_VERSION=1.13.3
-
-# 安装 golang 1.13.3
-RUN yum install -y wget && \
-    wget "https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz" && \
-    rm -rf /usr/local/go && \
-    tar -C /usr/local -xzf "go$GO_VERSION.linux-amd64.tar.gz" && \
-    rm -rf *.tar.gz && \
-    go version && go env;
-
-WORKDIR $GOPATH
-COPY . ginvue
-
-RUN cd ginvue && go build -o app;
-
-COPY ./config.yaml $GOPATH/ginvue/
+ENV GOPROXY=https://goproxy.cn,https://goproxy.io,direct \
+    GO111MODULE=on \
+    CGO_ENABLED=1
+WORKDIR /ginvue
+RUN go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
+COPY . .
+RUN go env && go list && go build -o app main.go
 
 EXPOSE 8888
+ENTRYPOINT /ginvue/app
 
-CMD ["ginvue/app"]
+# 根据Dockerfile生成Docker镜像
+# dcoker build -t ginvue .
+# 根据Docker镜像启动Docker容器
+# docker run -itd -p 8888:8888 --name ginvue ginvue

@@ -14,6 +14,6 @@ EXPOSE 8888
 ENTRYPOINT /ginvue/app
 
 # 根据Dockerfile生成Docker镜像
-# dcoker build -t ginvue .
+# docker build -t ginvue .
 # 根据Docker镜像启动Docker容器
 # docker run -itd -p 8888:8888 --name ginvue ginvue

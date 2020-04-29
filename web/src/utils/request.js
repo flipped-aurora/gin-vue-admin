@@ -21,13 +21,13 @@ const showLoading = () => {
 }
 
 const closeLoading = () => {
-    acitveAxios--
-    if (acitveAxios <= 0) {
-        clearTimeout(timer)
-        loadingInstance && loadingInstance.close()
+        acitveAxios--
+        if (acitveAxios <= 0) {
+            clearTimeout(timer)
+            loadingInstance && loadingInstance.close()
+        }
     }
-}
-//http request 拦截器
+    //http request 拦截器
 service.interceptors.request.use(
     config => {
         showLoading()

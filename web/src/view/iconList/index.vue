@@ -1404,9 +1404,15 @@
 </template>
 
 <script>
+    import iconList from "./component/iconList"
     export default {
-        name: "index",
-
+        name: 'IconList',
+        data() {
+            return {}
+        },
+        components: {
+            iconList
+        }
     }
 </script>
 

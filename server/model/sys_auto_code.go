@@ -10,6 +10,7 @@ type AutoCodeStruct struct {
 
 type Field struct {
 	FieldName  string `json:"fieldName"`
+	FieldDesc  string `json:"fieldDesc"`
 	FieldType  string `json:"fieldType"`
 	FieldJson  string `json:"fieldJson"`
 	ColumnName string `json:"columnName"`

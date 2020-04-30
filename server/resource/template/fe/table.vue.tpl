@@ -61,10 +61,10 @@
 
 <script>
 import {
-    create{{.StructName}}
-    delete{{.StructName}}
-    update{{.StructName}}
-    find{{.StructName}}
+    create{{.StructName}},
+    delete{{.StructName}},
+    update{{.StructName}},
+    find{{.StructName}},
     get{{.StructName}}List
 } from "@/api/{{.StructName}}";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/data";
@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     async update{{.StructName}}(row) {
-      const res = await get{{.StructName}}({ ID: row.ID });
+      const res = await find{{.StructName}}({ ID: row.ID });
       this.type = "update";
       if (res.code == 0) {
         this.form = res.data.re{{.Abbreviation}};

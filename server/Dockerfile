@@ -1,21 +1,26 @@
-FROM golang:alpine as builder
-RUN apk add --update --no-cache yarn make g++
+FROM centos:7.6.1810
 
-ENV GOPROXY=https://goproxy.cn,https://goproxy.io,direct \
-    GO111MODULE=on \
-    CGO_ENABLED=1
-WORKDIR /go/src/gin-vue-admin
-RUN go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
-COPY . .
-RUN go env && go list && go build -v -a -ldflags "-extldflags \"-static\" " -o gvadmin .
+# 设置go mod proxy 国内代理
+# 设置golang path
+ENV GOPROXY=https://goproxy.io GOPATH=/gopath PATH="${PATH}:/usr/local/go/bin"
+# 定义使用的Golang 版本
+ARG GO_VERSION=1.13.3
 
-WORKDIR /app
-COPY --from=builder /go/src/gin-vue-admin/gvadmin .
-COPY --from=builder /go/src/gin-vue-admin/db.db .
-COPY --from=builder /go/src/gin-vue-admin/config.yaml .
-COPY --from=builder /go/src/gin-vue-admin/resource ./resource
+# 安装 golang 1.13.3
+RUN yum install -y wget && \
+    wget "https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz" && \
+    rm -rf /usr/local/go && \
+    tar -C /usr/local -xzf "go$GO_VERSION.linux-amd64.tar.gz" && \
+    rm -rf *.tar.gz && \
+    go version && go env;
+
+WORKDIR $GOPATH
+COPY . ginvue
+
+RUN cd ginvue && go build -o app;
+
+COPY ./config.yaml $GOPATH/ginvue/
 
 EXPOSE 8888
 
-CMD ["gvadmin/app"]
-
+CMD ["ginvue/app"]

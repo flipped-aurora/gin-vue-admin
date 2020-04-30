@@ -14,6 +14,9 @@ import vueParticleLine from 'vue-particle-line'
 import 'vue-particle-line/dist/vue-particle-line.css'
 Vue.use(vueParticleLine)
 
+// time line css
+import '../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
+
 // 富文本插件
 import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'

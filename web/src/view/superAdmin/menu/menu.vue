@@ -63,7 +63,9 @@
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon">
-          <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
+          <el-input autocomplete="off" v-model="form.meta.icon">
+            <template slot="prepend">el-icon-</template>
+          </el-input>
         </el-form-item>
         <el-form-item label="排序标记" prop="sort">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>

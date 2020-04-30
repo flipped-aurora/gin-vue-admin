@@ -39,7 +39,7 @@
                 <el-dropdown-item @click.native="LoginOut" icon="el-icon-table-lamp">登 出</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
- 
+
           </div>
         </el-header>
         <!-- 当前面包屑用路由自动生成可根据需求修改 -->
@@ -272,6 +272,7 @@ $mainHight: 100vh;
     .router-history{
       background: #fff;
       padding: 0 6px;
+      border-top: 1px solid #DCDCDC;
     }
     &.el-main {
       overflow: auto;

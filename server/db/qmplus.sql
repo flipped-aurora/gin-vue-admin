@@ -11,7 +11,7 @@
  Target Server Version : 50644
  File Encoding         : 65001
 
- Date: 24/04/2020 10:28:38
+ Date: 30/04/2020 20:47:13
 */
 
 SET NAMES utf8mb4;
@@ -3833,7 +3833,13 @@ CREATE TABLE `exa_file_upload_and_downloads`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_exa_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 16 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of exa_file_upload_and_downloads
+-- ----------------------------
+INSERT INTO `exa_file_upload_and_downloads` VALUES (17, '2020-04-26 11:51:39', '2020-04-26 11:51:39', NULL, '10.png', 'http://qmplusimg.henrongyi.top/158787308910.png', 'png', '158787308910.png');
+INSERT INTO `exa_file_upload_and_downloads` VALUES (19, '2020-04-27 15:48:38', '2020-04-27 15:48:38', NULL, 'logo.png', 'http://qmplusimg.henrongyi.top/1587973709logo.png', 'png', '1587973709logo.png');
 
 -- ----------------------------
 -- Table structure for exa_files
@@ -4040,6 +4046,7 @@ INSERT INTO `sys_authority_menus` VALUES ('888', 38);
 INSERT INTO `sys_authority_menus` VALUES ('888', 40);
 INSERT INTO `sys_authority_menus` VALUES ('888', 41);
 INSERT INTO `sys_authority_menus` VALUES ('888', 42);
+INSERT INTO `sys_authority_menus` VALUES ('888', 45);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 1);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 2);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 18);
@@ -4092,16 +4099,16 @@ CREATE TABLE `sys_base_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 46 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_base_menus
 -- ----------------------------
 INSERT INTO `sys_base_menus` VALUES (1, '2019-09-19 22:05:18', '2020-04-24 10:16:42', NULL, 0, 0, 'dashboard', 'dashboard', 0, 'view/dashboard/index.vue', '仪表盘', 'setting', '仪表盘', 1, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2020-04-24 10:16:43', NULL, 0, 0, 'test', 'test', 0, 'view/test/index.vue', '测试菜单', 'info', '测试菜单', 2, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2020-04-30 17:50:34', NULL, 0, 0, 'about', 'about', 0, 'view/about/index.vue', '关于我们', 'info', '测试菜单', 7, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (3, '2019-09-19 22:06:38', '2020-04-24 10:16:43', NULL, 0, 0, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', '超级管理员', 3, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (4, '2019-09-19 22:11:53', '2020-04-24 10:16:42', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理', 1, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (5, '2019-09-19 22:13:18', '2020-04-24 10:16:43', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理', 2, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (5, '2019-09-19 22:13:18', '2020-04-30 17:45:27', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理', 2, 1, 0);
 INSERT INTO `sys_base_menus` VALUES (6, '2019-09-19 22:13:36', '2020-04-24 10:16:43', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理', 3, 1, 0);
 INSERT INTO `sys_base_menus` VALUES (17, '2019-10-09 15:12:29', '2020-04-24 10:16:43', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理', 4, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (18, '2019-10-15 22:27:22', '2020-04-24 10:16:43', NULL, 0, 0, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', '个人信息', 4, 0, 0);
@@ -4117,6 +4124,7 @@ INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-04-24 10:1
 INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-04-24 10:16:43', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', 1, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-04-24 10:16:43', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', 2, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-24 10:16:43', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', 3, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-04-30 17:44:44', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id

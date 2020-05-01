@@ -41,6 +41,12 @@ export default {
     }
   },
   created() {
+    this.$bus.on('mobile',(isMobile)=>{
+      this.isMobile = isMobile
+    })
+    this.$bus.on('collapse',(isCollapse)=>{
+      this.isCollapse = isCollapse
+    })
     const initHistorys = [
       {
         name: 'dashboard',
@@ -53,16 +59,10 @@ export default {
       JSON.parse(sessionStorage.getItem('historys')) || initHistorys
     this.setTab(this.$route)
   },
-  mounted() {
-    this.$bus.on('collapse',(isCollapse)=>{
-      this.isCollapse = isCollapse
-    })
-    this.$bus.on('mobile'),(isMobile)=>{
-      this.isMobile = isMobile
-    }
-  },
+
   beforeDestroy(){
     this.$bus.off('collapse')
+    this.$bus.off('mobile')
   },
   methods: {
     openContextMenu(e) {

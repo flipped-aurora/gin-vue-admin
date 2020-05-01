@@ -36,6 +36,7 @@ export default {
       left: 0,
       top: 0,
       isCollapse: false,
+      isMobile:false,
       rightActive: ''
     }
   },
@@ -53,9 +54,15 @@ export default {
     this.setTab(this.$route)
   },
   mounted() {
-    this.$bus.on('totalCollapse', () => {
-      this.isCollapse = !this.isCollapse
+    this.$bus.on('collapse',(isCollapse)=>{
+      this.isCollapse = isCollapse
     })
+    this.$bus.on('mobile'),(isMobile)=>{
+      this.isMobile = isMobile
+    }
+  },
+  beforeDestroy(){
+    this.$bus.off('collapse')
   },
   methods: {
     openContextMenu(e) {
@@ -66,9 +73,12 @@ export default {
         this.contextMenuVisible = true
         let width
         if (this.isCollapse) {
-          width = 60
+          width = 54
         } else {
           width = 220
+        }
+        if(this.isMobile){
+          width = 0
         }
         this.left = e.clientX - width
         this.top = e.clientY + 10

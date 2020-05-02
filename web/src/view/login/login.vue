@@ -204,7 +204,7 @@ export default {
 
 #userLayout.user-layout-wrapper {
   height: 100%;
-
+  position: relative;
   &.mobile {
     .container {
       .main {
@@ -220,15 +220,12 @@ export default {
     background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
     background-size: 100%;
     padding: 110px 0 144px;
-    position: relative;
-
     a {
       text-decoration: none;
     }
 
     .top {
       text-align: center;
-
       .header {
         height: 44px;
         line-height: 44px;
@@ -278,7 +275,7 @@ export default {
       padding: 0 16px;
       margin: 120px 0 24px;
       text-align: center;
-
+      bottom: 100px;
       .links {
         margin-bottom: 8px;
         font-size: 14px;

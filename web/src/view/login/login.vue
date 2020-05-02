@@ -279,17 +279,20 @@ export default {
       .links {
         margin-bottom: 8px;
         font-size: 14px;
+        width: 330px;
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-right: 40px;
         a {
           color: rgba(0, 0, 0, 0.45);
           transition: all 0.3s;
-          &:not(:last-child) {
-            margin-right: 80px;
-          }
         }
       }
       .copyright {
         color: rgba(0, 0, 0, 0.45);
         font-size: 14px;
+        padding-right: 40px;
       }
     }
   }

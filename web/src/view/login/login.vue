@@ -23,7 +23,11 @@
             <el-input
               placeholder="请输入用户名"
               v-model="loginForm.username"
-            ></el-input>
+            >
+            <i
+                class="el-input__icon el-icon-user"
+                slot="suffix"
+              ></i></el-input>
           </el-form-item>
           <el-form-item prop="password">
             <el-input
@@ -78,7 +82,7 @@
           /></a>
         </div>
         <div class="copyright">
-          Copyright &copy; 2020 💖Flipped-Aurora
+          Copyright &copy; 2020 💖flipped-aurora
         </div>
       </div>
     </div>
@@ -126,11 +130,6 @@ export default {
   },
   created() {
     this.loginVefify();
-    this.$notify({
-      title: "🙂🙂",
-      message: "账号:admin/123456",
-      duration: 0,
-    });
   },
   methods: {
     ...mapActions("user", ["LoginIn"]),

@@ -2,7 +2,7 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-      <!-- 此处可使用表单生成器生成搜索条件 -->
+        此处可使用表单生成器生成搜索条件
         <el-form-item>
           <el-button @click="openDialog" type="primary">新增</el-button>
         </el-form-item>
@@ -50,7 +50,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <!-- 此处请使用表单生成器生成form填充  -->
+      此处请使用表单生成器生成form填充
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>

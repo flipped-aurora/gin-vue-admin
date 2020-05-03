@@ -192,6 +192,7 @@ export default {
   width: 33%;
   height: 38px;
   float: right !important;
+  background: #ccc;
   img {
     cursor: pointer;
     vertical-align: middle;

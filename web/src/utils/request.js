@@ -60,7 +60,7 @@ service.interceptors.response.use(
         } else {
             Message({
                 showClose: true,
-                message: response.data.msg,
+                message: response.data.msg||decodeURI(response.headers.msg),
                 type: 'error',
                 onClose: () => {
                     if (response.data.data && response.data.data.reload) {

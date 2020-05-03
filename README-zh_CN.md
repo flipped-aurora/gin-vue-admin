@@ -219,7 +219,10 @@ swag init
 （2）模板使用
 > Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
-（3）golang基础教学视频录制中...
+（3）2.0目录以及开发体验
+> Bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
+
+（4）golang基础教学视频录制中...
 > https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 ## 8. 联系方式

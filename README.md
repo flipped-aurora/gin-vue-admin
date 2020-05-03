@@ -216,12 +216,15 @@ backend code file: model\dnModel\api.go
 ### 7.2 Video courses
 
 (1) Development environment course
-> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/    (coming soon)
+> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/
     
 (2) Template course
-> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/    (coming soon)
+> Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/
 
-(3) Golang basic course (coming soon)
+（3）2.0 version introduction and development experience
+> Bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
+
+(4) Golang basic course (coming soon)
 
 > https://space.bilibili.com/322210472/channel/detail?cid=108884
 

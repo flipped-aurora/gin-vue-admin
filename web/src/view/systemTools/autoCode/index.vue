@@ -8,7 +8,7 @@
             <el-form-item label="Struct简称" prop="abbreviation">
                 <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group"></el-input>
             </el-form-item>
-            <el-form-item label="Package名称" prop="packageName">
+            <el-form-item label="文件名称" prop="packageName">
                 <el-input v-model="form.packageName"></el-input>
             </el-form-item>
         </el-form>
@@ -27,6 +27,11 @@
             <el-table-column
                 prop="fieldName"
                 label="Field名"
+                width="280">
+            </el-table-column>
+             <el-table-column
+                type="fieldDesc"
+                label="中文名"
                 width="280">
             </el-table-column>
             <el-table-column
@@ -74,6 +79,7 @@
 <script>
 const fieldTemplate={
             fieldName:"",
+            fieldDesc:"",
             fieldType:"",
             fieldJson:"",
             columnName:"",

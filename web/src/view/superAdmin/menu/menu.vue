@@ -36,39 +36,48 @@
     </el-table>
 
     <el-dialog :before-close="handleClose" :visible.sync="dialogFormVisible" :title="dialogTitle">
-      <el-form :inline="true" :model="form" :rules="rules" label-width="85px" ref="menuForm">
-        <el-form-item label="路由name" prop="path">
+      <el-form
+        :inline="true"
+        :model="form"
+        :rules="rules"
+        label-width="85px"
+        ref="menuForm"
+        label-position="top"
+      >
+        <el-form-item label="路由name" prop="path" style="width:30%">
           <el-input autocomplete="off" placeholder="唯一英文字符串" v-model="form.path"></el-input>
         </el-form-item>
-        <el-form-item label="是否隐藏">
+        <el-form-item label="是否隐藏" style="width:30%">
           <el-select placeholder="是否在列表隐藏" v-model="form.hidden">
             <el-option :value="false" label="否"></el-option>
             <el-option :value="true" label="是"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="父节点Id">
-           <el-cascader
-              :disabled="!this.isEdit"
-              v-model="form.parentId"
-              :options="menuOption"
-              :show-all-levels="false"
-              :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
-              filterable>
-              </el-cascader>
+        <el-form-item label="父节点Id" style="width:30%">
+          <el-cascader
+            :disabled="!this.isEdit"
+            v-model="form.parentId"
+            :options="menuOption"
+            :show-all-levels="false"
+            :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
+            filterable
+          ></el-cascader>
         </el-form-item>
-        <el-form-item label="文件路径" prop="component">
+        <el-form-item label="文件路径" prop="component" style="width:30%">
           <el-input autocomplete="off" v-model="form.component"></el-input>
         </el-form-item>
-        <el-form-item label="展示名称" prop="meta.title">
+        <el-form-item label="展示名称" prop="meta.title" style="width:30%">
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
-        <el-form-item label="图标" prop="meta.icon">
-          <el-input autocomplete="off" v-model="form.meta.icon"></el-input>
+        <el-form-item label="图标" prop="meta.icon" style="width:30%">
+          <el-input autocomplete="off" v-model="form.meta.icon">
+            <template slot="prepend">el-icon-</template>
+          </el-input>
         </el-form-item>
-        <el-form-item label="排序标记" prop="sort">
+        <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
         </el-form-item>
-        <el-form-item label="keepAlive" prop="meta.keepAlive">
+        <el-form-item label="keepAlive" prop="meta.keepAlive" style="width:30%">
           <el-select placeholder="是否keepAlive缓存页面" v-model="form.meta.keepAlive">
             <el-option :value="false" label="否"></el-option>
             <el-option :value="true" label="是"></el-option>
@@ -93,191 +102,198 @@ import {
   addBaseMenu,
   deleteBaseMenu,
   getBaseMenuById
-} from '@/api/menu'
-import infoList from '@/components/mixins/infoList'
+} from "@/api/menu";
+import infoList from "@/components/mixins/infoList";
 export default {
-  name: 'Menus',
+  name: "Menus",
   mixins: [infoList],
   data() {
     return {
       listApi: getMenuList,
       dialogFormVisible: false,
-      dialogTitle:"新增菜单",
-      menuOption:[
+      dialogTitle: "新增菜单",
+      menuOption: [
         {
-          ID:"0",
-          title:"根菜单"
+          ID: "0",
+          title: "根菜单"
         }
       ],
       form: {
         ID: 0,
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
+        path: "",
+        name: "",
+        hidden: "",
+        parentId: "",
+        component: "",
         meta: {
-          title: '',
-          icon: '',
-          defaultMenu:false,
-          keepAlive:false
+          title: "",
+          icon: "",
+          defaultMenu: false,
+          keepAlive: false
         }
       },
       rules: {
-        path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
+        path: [{ required: true, message: "请输入菜单name", trigger: "blur" }],
         component: [
-          { required: true, message: '请输入文件路径', trigger: 'blur' }
+          { required: true, message: "请输入文件路径", trigger: "blur" }
         ],
-        'meta.title': [
-          { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
+        "meta.title": [
+          { required: true, message: "请输入菜单展示名称", trigger: "blur" }
         ]
       },
       isEdit: false
-    }
+    };
   },
   methods: {
-    setOptions(){
-       this.menuOption = [{
-          ID:"0",
-          title:"根目录"
-        }]
-      this.setMenuOptions(this.tableData,this.menuOption,false)
+    setOptions() {
+      this.menuOption = [
+        {
+          ID: "0",
+          title: "根目录"
+        }
+      ];
+      this.setMenuOptions(this.tableData, this.menuOption, false);
     },
-    setMenuOptions(menuData,optionsData,disabled){
-      menuData&&menuData.map(item=>{
-        if(item.children.length){
-          const option = {
-            title:item.meta.title,
-            ID:String(item.ID),
-            disabled:disabled||item.ID == this.form.ID,
-            children:[]
-        }
-          this.setMenuOptions(item.children,option.children,disabled||item.ID == this.form.ID)
-          optionsData.push(option)
-        }else{
-          const option = {
-              title:item.meta.title,
-              ID:String(item.ID),
-              disabled:disabled||item.ID == this.form.ID,
+    setMenuOptions(menuData, optionsData, disabled) {
+      menuData &&
+        menuData.map(item => {
+          if (item.children.length) {
+            const option = {
+              title: item.meta.title,
+              ID: String(item.ID),
+              disabled: disabled || item.ID == this.form.ID,
+              children: []
+            };
+            this.setMenuOptions(
+              item.children,
+              option.children,
+              disabled || item.ID == this.form.ID
+            );
+            optionsData.push(option);
+          } else {
+            const option = {
+              title: item.meta.title,
+              ID: String(item.ID),
+              disabled: disabled || item.ID == this.form.ID
+            };
+            optionsData.push(option);
           }
-          optionsData.push(option)
-        }
-      })
+        });
     },
     handleClose(done) {
-      this.initForm()
-      done()
+      this.initForm();
+      done();
     },
     // 懒加载子菜单
     load(tree, treeNode, resolve) {
       resolve([
         {
           id: 31,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄"
         },
         {
           id: 32,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄"
         }
-      ])
+      ]);
     },
     // 删除菜单
     deleteMenu(ID) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("此操作将永久删除所有角色下该菜单, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(async () => {
-          const res = await deleteBaseMenu({ ID })
+          const res = await deleteBaseMenu({ ID });
           if (res.code == 0) {
             this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getTableData()
+              type: "success",
+              message: "删除成功!"
+            });
+            this.getTableData();
           }
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     // 初始化弹窗内表格方法
     initForm() {
-      this.$refs.menuForm.resetFields()
+      this.$refs.menuForm.resetFields();
       this.form = {
         ID: 0,
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
+        path: "",
+        name: "",
+        hidden: "",
+        parentId: "",
+        component: "",
         meta: {
-          title: '',
-          icon: '',
-          defaultMenu:false,
-          keepAlive:""
+          title: "",
+          icon: "",
+          defaultMenu: false,
+          keepAlive: ""
         }
-      }
+      };
     },
     // 关闭弹窗
     closeDialog() {
-      this.initForm()
-      this.dialogFormVisible = false
+      this.initForm();
+      this.dialogFormVisible = false;
     },
     // 添加menu
     async enterDialog() {
       this.$refs.menuForm.validate(async valid => {
         if (valid) {
-          let res
-          this.form.name = this.form.path
+          let res;
+          this.form.name = this.form.path;
           if (this.isEdit) {
-            res = await updateBaseMenu(this.form)
+            res = await updateBaseMenu(this.form);
           } else {
-            res = await addBaseMenu(this.form)
+            res = await addBaseMenu(this.form);
           }
           if (res.code == 0) {
             this.$message({
-              type: 'success',
-              message: this.isEdit?'编辑成功':'添加成功!'
-            })
-            this.getTableData()
+              type: "success",
+              message: this.isEdit ? "编辑成功" : "添加成功!"
+            });
+            this.getTableData();
           }
-          this.initForm()
-          this.dialogFormVisible = false
+          this.initForm();
+          this.dialogFormVisible = false;
         }
-      })
+      });
     },
     // 添加菜单方法，id为 0则为添加根菜单
     addMenu(id) {
-      this.dialogTitle = "新增菜单"
-      this.form.parentId = String(id)
-      this.isEdit = false
-      this.setOptions()
-      this.dialogFormVisible = true
+      this.dialogTitle = "新增菜单";
+      this.form.parentId = String(id);
+      this.isEdit = false;
+      this.setOptions();
+      this.dialogFormVisible = true;
     },
     // 修改菜单方法
     async editMenu(id) {
-      this.dialogTitle = "编辑菜单"
-      const res = await getBaseMenuById({ id })
-      this.form = res.data.menu
-      this.isEdit = true
-      this.setOptions()
-      this.dialogFormVisible = true
-    },
+      this.dialogTitle = "编辑菜单";
+      const res = await getBaseMenuById({ id });
+      this.form = res.data.menu;
+      this.isEdit = true;
+      this.setOptions();
+      this.dialogFormVisible = true;
+    }
   },
-   async created() {
-    this.pageSize = 999
-    await this.getTableData()
+  async created() {
+    this.pageSize = 999;
+    await this.getTableData();
   }
-}
+};
 </script>
 <style scoped lang="scss">
 .button-box {

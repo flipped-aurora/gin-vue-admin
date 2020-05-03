@@ -7,6 +7,7 @@
       :data="apiTreeData"
       :default-checked-keys="apiTreeIds"
       :props="apiDefaultProps"
+      @check="nodeChange"
       default-expand-all
       highlight-current
       node-key="onlyId"
@@ -32,6 +33,7 @@ export default {
     return {
       apiTreeData: [],
       apiTreeIds: [],
+      needConfirm:false,
       apiDefaultProps: {
         children: 'children',
         label: 'description'
@@ -39,6 +41,13 @@ export default {
     }
   },
   methods: {
+    nodeChange(){
+      this.needConfirm = true
+    },
+    // 暴露给外层使用的切换拦截统一方法
+    enterAndNext(){
+      this.authApiEnter()
+    },
     // 创建api树方法
     buildApiTree(apis) {
       const apiObj = new Object()
@@ -78,7 +87,7 @@ export default {
         casbinInfos
       })
       if (res.code == 0) {
-        this.$message({ type: 'success', message: res.msg })
+        this.$message({ type: 'success', message: "api设置成功" })
       }
     }
   },

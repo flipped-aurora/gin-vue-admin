@@ -7,6 +7,7 @@
       :data="menuTreeData"
       :default-checked-keys="menuTreeIds"
       :props="menuDefaultProps"
+      @check="nodeChange"
       default-expand-all
       highlight-current
       node-key="ID"
@@ -32,6 +33,7 @@ export default {
     return {
       menuTreeData: [],
       menuTreeIds: [],
+      needConfirm:false,
       menuDefaultProps: {
         children: 'children',
         label: function(data){
@@ -41,6 +43,13 @@ export default {
     }
   },
   methods: {
+    nodeChange(){
+      this.needConfirm = true
+    },
+    // 暴露给外层使用的切换拦截统一方法
+    enterAndNext(){
+      this.relation()
+    },
     // 关联树 确认方法
     async relation() {
       const checkArr = this.$refs.menuTree.getCheckedNodes(false, true)
@@ -51,7 +60,7 @@ export default {
       if (res.code == 0) {
         this.$message({
           type: 'success',
-          message: '添加成功!'
+          message: '菜单设置成功!'
         })
       }
     }

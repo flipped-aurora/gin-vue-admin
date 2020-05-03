@@ -66,7 +66,7 @@ import {
     update{{.StructName}},
     find{{.StructName}},
     get{{.StructName}}List
-} from "@/api/{{.StructName}}";  //  此处请自行替换地址
+} from "@/api/{{.PackageName}}";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/data";
 import infoList from "@/components/mixins/infoList";
 

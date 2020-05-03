@@ -21,7 +21,6 @@ import (
 func CreateTemp(c *gin.Context) {
 	var a model.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
-	err := service.CreateTemp(a)
 	if a.AutoCreateApiToSql {
 		apiList := [5]model.SysApi{
 			{
@@ -64,7 +63,7 @@ func CreateTemp(c *gin.Context) {
 			}
 		}
 	}
-
+	err := service.CreateTemp(a)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 		os.Remove("./ginvueadmin.zip")

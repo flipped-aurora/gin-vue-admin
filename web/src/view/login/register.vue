@@ -217,6 +217,7 @@ export default {
 
     .top {
       text-align: center;
+      margin-top: -50px;
       .header {
         height: 44px;
         line-height: 44px;
@@ -261,12 +262,10 @@ export default {
     }
 
     .footer {
-      position: absolute;
+      position: relative;
       width: 100%;
-      padding: 0 16px;
-      margin: 120px 0 24px;
+      margin: 40px 0 0 0;
       text-align: center;
-      bottom: 100px;
       .links {
         margin-bottom: 8px;
         font-size: 14px;

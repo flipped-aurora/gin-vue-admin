@@ -82,7 +82,7 @@
           /></a>
         </div>
         <div class="copyright">
-          Copyright &copy; 2020 💖flipped-aurora
+          Copyright &copy; {{ curYear }} 💖flipped-aurora
         </div>
       </div>
     </div>
@@ -110,8 +110,8 @@ export default {
         callback();
       }
     };
-
     return {
+      curYear: 0,
       lock: "lock",
       loginForm: {
         username: "admin",
@@ -130,6 +130,7 @@ export default {
   },
   created() {
     this.loginVefify();
+    this.curYear = new Date().getFullYear();
   },
   methods: {
     ...mapActions("user", ["LoginIn"]),
@@ -216,17 +217,20 @@ export default {
   }
 
   .container {
+    position: relative;
+    overflow: auto;
     width: 100%;
     min-height: 100%;
     background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
     background-size: 100%;
-    padding: 110px 0 144px;
+    padding: 60px 0 100px;
     a {
       text-decoration: none;
     }
 
     .top {
       text-align: center;
+      margin-top: -50px;
       .header {
         height: 44px;
         line-height: 44px;
@@ -271,12 +275,11 @@ export default {
     }
 
     .footer {
-      position: absolute;
+      position: relative;
       width: 100%;
-      padding: 0 16px;
-      margin: 120px 0 24px;
+      padding: 0 20px;
+      margin: 40px 0 10px;
       text-align: center;
-      bottom: 100px;
       .links {
         margin-bottom: 8px;
         font-size: 14px;

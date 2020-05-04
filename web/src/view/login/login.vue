@@ -223,14 +223,14 @@ export default {
     min-height: 100%;
     background: #f0f2f5 url(~@/assets/background.svg) no-repeat 50%;
     background-size: 100%;
-    padding: 60px 0 100px;
+    padding: 110px 0 144px;
     a {
       text-decoration: none;
     }
 
     .top {
       text-align: center;
-      margin-top: -50px;
+      margin-top: 20px;
       .header {
         height: 44px;
         line-height: 44px;

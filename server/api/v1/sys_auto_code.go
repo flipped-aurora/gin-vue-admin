@@ -50,7 +50,7 @@ func CreateTemp(c *gin.Context) {
 			{
 				Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
 				Description: "获取" + a.StructName + "列表",
-				ApiGroup:    a.StructName,
+				ApiGroup:    a.Abbreviation,
 				Method:      "GET",
 			},
 		}

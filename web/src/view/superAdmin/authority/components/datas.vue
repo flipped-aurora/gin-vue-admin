@@ -78,7 +78,7 @@ export default {
               obj.authorityId = item.authorityId
               obj.authorityName = item.authorityName
               this.authoritys.push(obj)
-              if(item.children.length){
+              if(item.children&&item.children.length){
                   this.roundAuthority(item.children)
               }
           })

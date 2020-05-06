@@ -13,6 +13,8 @@ import (
 //初始化总路由
 
 func Routers() *gin.Engine {
+	setGinLogMode()
+
 	var Router = gin.Default()
 
 	//Router.Use(middleware.LoadTls())  // 打开就能玩https了
@@ -38,4 +40,11 @@ func Routers() *gin.Engine {
 	router.InitAutoCodeRouter(ApiGroup)              // 创建自动化代码
 	global.GVA_LOG.Info("router register success")
 	return Router
+}
+
+// 设置gin内部的日志模式
+func setGinLogMode() {
+	if global.GVA_CONFIG.System.Env == "public" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 }

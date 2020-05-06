@@ -3,8 +3,8 @@
       <div class="clearflex" style="margin:18px">
       <el-button @click="authDataEnter" class="fl-right" size="small" type="primary">确 定</el-button>
       <el-button @click="all" class="fl-left" size="small" type="primary">全选</el-button>
-      <el-button @click="self" class="fl-left" size="small" type="primary">本部门</el-button>
-      <el-button @click="selfAndChildren" class="fl-left" size="small" type="primary">部门及以下</el-button>
+      <el-button @click="self" class="fl-left" size="small" type="primary">本角色</el-button>
+      <el-button @click="selfAndChildren" class="fl-left" size="small" type="primary">本角色及子角色</el-button>
     </div>
      <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
         <el-checkbox v-for="(item,key) in authoritys" :label="item" :key="key">{{item.authorityName}}</el-checkbox>
@@ -18,7 +18,8 @@ export default {
   data() {
     return {
         authoritys:[],
-        dataAuthorityId:[]
+        dataAuthorityId:[],
+        needConfirm:false
     }
   },
   props: {
@@ -36,20 +37,26 @@ export default {
     }
   },
   methods:{
+    // 暴露给外层使用的切换拦截统一方法
+      enterAndNext(){
+        this.authDataEnter()
+      },
       all(){
          this.dataAuthorityId = [...this.authoritys]
          this.row.dataAuthorityId = this.dataAuthorityId
-
+         this.needConfirm = true
       },
       self(){
           this.dataAuthorityId = this.authoritys.filter(item=>item.authorityId===this.row.authorityId)
           this.row.dataAuthorityId = this.dataAuthorityId
+          this.needConfirm = true
       },
       selfAndChildren(){
          const arrBox = []
          this.getChildrenId(this.row,arrBox)
          this.dataAuthorityId = this.authoritys.filter(item=>arrBox.indexOf(item.authorityId)>-1)
          this.row.dataAuthorityId = this.dataAuthorityId
+         this.needConfirm = true
       },
       getChildrenId(row,arrBox){
           arrBox.push(row.authorityId)
@@ -61,7 +68,7 @@ export default {
       async authDataEnter(){
           const res = await setDataAuthority(this.row)
           if(res.code == 0){
-              this.$message({ type: 'success', message: res.msg })
+              this.$message({ type: 'success', message: "资源设置成功" })
           }
       },
     //   平铺角色
@@ -79,6 +86,7 @@ export default {
     //   选择
       selectAuthority(){
           this.row.dataAuthorityId = this.dataAuthorityId
+          this.needConfirm = true
       }
   },
   created() {

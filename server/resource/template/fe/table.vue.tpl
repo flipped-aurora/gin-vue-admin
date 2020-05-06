@@ -2,7 +2,7 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-      <!-- 此处可使用表单生成器生成搜索条件 -->
+            此处请使用表单生成器生成form填充 表单默认绑定 formData 如手动修改过请自行修改key
         <el-form-item>
           <el-button @click="openDialog" type="primary">新增</el-button>
         </el-form-item>
@@ -50,7 +50,7 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      <!-- 此处请使用表单生成器生成form填充  -->
+      此处请使用表单生成器生成form填充 表单默认绑定 formData 如手动修改过请自行修改key
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -66,7 +66,7 @@ import {
     update{{.StructName}},
     find{{.StructName}},
     get{{.StructName}}List
-} from "@/api/{{.StructName}}";  //  此处请自行替换地址
+} from "@/api/{{.PackageName}}";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/data";
 import infoList from "@/components/mixins/infoList";
 
@@ -79,7 +79,7 @@ export default {
       dialogFormVisible: false,
       visible: false,
       type: "",
-      form: {
+      formData: {
         {{range .Fields}}{{.FieldJson}}:null,{{ end }}
       }
     };
@@ -99,13 +99,13 @@ export default {
       const res = await find{{.StructName}}({ ID: row.ID });
       this.type = "update";
       if (res.code == 0) {
-        this.form = res.data.re{{.Abbreviation}};
+        this.formData = res.data.re{{.Abbreviation}};
         this.dialogFormVisible = true;
       }
     },
     closeDialog() {
       this.dialogFormVisible = false;
-      this.form = {
+      this.formData = {
         {{range .Fields}}
           {{.FieldJson}}:null,{{ end }}
       };
@@ -125,13 +125,13 @@ export default {
       let res;
       switch (this.type) {
         case "create":
-          res = await create{{.StructName}}(this.form);
+          res = await create{{.StructName}}(this.formData);
           break;
         case "update":
-          res = await update{{.StructName}}(this.form);
+          res = await update{{.StructName}}(this.formData);
           break;
         default:
-          res = await create{{.StructName}}(this.form);
+          res = await create{{.StructName}}(this.formData);
           break;
       }
 

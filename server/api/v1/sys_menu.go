@@ -39,7 +39,7 @@ func GetMenu(c *gin.Context) {
 func GetMenuList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	err, menuList, total := service.GetInfoList(pageInfo)
+	err, menuList, total := service.GetInfoList()
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {

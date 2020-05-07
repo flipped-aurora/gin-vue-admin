@@ -50,9 +50,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ### 1.3 版本列表
 
-- master: 2.0 dev code, for prod
+- master: 2.0, 用于生产环境
 
-- develop: 2.0 dev code, for test
+- develop: 2.0, 用于测试环境
 
 - [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
 
@@ -61,14 +61,12 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 - [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0 稳定版，会持续更新和维护）
 
 
-
-
 ## 2. 使用说明
 
 ```
 - node版本 > v8.6.0
 - golang版本 >= v1.11
-- IDE推荐：Golang
+- IDE推荐：Goland
 - 各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址。
 - 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
@@ -101,7 +99,7 @@ go list (go mod tidy)
 go build
 ```
 
-### 2.3 生成swagger自动化API文档
+### 2.3 swagger自动化API文档
 
 #### 2.3.1 安装 swagger
 
@@ -132,30 +130,6 @@ swag init
 ````
 执行上面的命令后，server目录下会出现docs文件夹，登录http://localhost:8888/swagger/index.html，即可查看swagger文档
 
-### 2.4 docker镜像
-
-感谢 [@chenlinzhong](https://github.com/chenlinzhong)提供的docker镜像.
-```  
-# 启动容器
-docker run -itd --net=host --name=go_container shareclz/go_node /bin/bash;
-
-# 进入容器
-docker exec -it go_container /bin/bash;
-git clone https://github.com/piexlmax/gin-vue-admin.git /data1/www/htdocs/go/admin;
-
-# 启动前端
-cd /data1/www/htdocs/go/admin/QMPlusVuePage;
-cnpm i ;
-npm run serve;
-
-# 修改数据库配置
-vi /data1/www/htdocs/go/admin/QMPlusServer/static/dbconfig/config.json;
-
-# 启动后端
-cd /data1/www/htdocs/go/admin/QMPlusServer;z
-go run main.go;
-```
-  
 
 ## 3. 技术选型
 
@@ -168,7 +142,9 @@ go run main.go;
 - 日志：使用`go-logging`实现日志记录。
 
 
-## 4. 项目目录
+## 4. 项目架构
+
+![架构图](./docs/gin-vue-admin.png)
 
 ```
     ├─server  	     （后端文件夹）
@@ -228,53 +204,40 @@ go run main.go;
 - [ ] 工作流，任务交接功能开发
 - [ ] 单独前端使用模式以及数据模拟
 
-## 7. 更新日志
+## 7. 知识库 
+## 7.1 团队博客
 
-|  日期   | 日志  |
-|  :---:  | --- |
-|2020/01/07| 角色增加数据资源功能 增加数据资源关联返回 演示环境代码已同步 开启了多点登录拦截 可能会被其他人挤掉 |
-|2020/01/13| 增加了配置管理功能 此功能不发表至测试环境 待保护机制以及服务重启机制发开完成后才会发表值测试环境 请自行clone且导入sql体验 |
-|2020/02/21| 修改了casbin的自定义鉴权方法，使其完全支持RESTFUL的/:params以及?query= 的接口模式 |
-|2020/03/17| 增加了验证码功能 使用了 [@dchest/captcha](https://github.com/dchest/captcha)库 |
-|2020/03/30| 代码生成器开发完成 表单生成器开发完成 使用了[@form-generator](https://github.com/JakHuang/form-generator) 库 |
-|2020/04/01| 增加前端历史页签功能，增加（修改）条件查询示例，前端背景色调修改为白色。（如不需要此功能可以在`web/src/view/layout/index.vue`中屏蔽`HistoryComponent`背景色调，为本页260行&.el-main中的`background`属性） |
-|2020/04/04| 启动2.x版本，项目文档规范化，日志功能改造，方法增加英文注释 |
-
-## 8. 团队博客
-
-> https://blog.henrongyi.top
+> https://www.yuque.com/flipped-aurora
 >
 >内有前端框架教学视频。如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994，欢迎您提出宝贵的需求。
 
-## 9. 教学视频
+## 7.2 教学视频
 
-### 9.1 环境搭建
-
+（1）环境搭建
 > Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
     
-### 9.2 模板使用
-
+（2）模板使用
 > Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
-### 9.3 golang基础教学视频录制中...
+（3）2.0目录以及开发体验
+> Bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
 
-> 地址：https://space.bilibili.com/322210472/channel/detail?cid=108884
+（4）golang基础教学视频录制中...
+> https://space.bilibili.com/322210472/channel/detail?cid=108884
 
-## 10. 联系方式
-
+## 8. 联系方式
+### 8.1 技术群
 | QQ群 |  
 |  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
+### QQ交流群：622360840
+### 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
+
+### 8.2 项目组成员
 | 蒋 | 尹 | 严 | 杜 | 印 | 宋 |
 |  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
-
-### - QQ交流群：622360840
-### - 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
-
-
-## 11. 开发者列表
 
 |  昵称   | 项目职务  | 姓  |
 |  ----  | ----  | ----  |
@@ -285,6 +248,6 @@ go run main.go;
 | [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
 
-## 12. 捐赠
+## 9. 捐赠
 
 如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink:

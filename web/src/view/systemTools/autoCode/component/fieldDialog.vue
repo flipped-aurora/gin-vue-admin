@@ -6,6 +6,11 @@
                 <el-input v-model="dialogMiddle.fieldName" autocomplete="off"></el-input>
                 </el-col>
             </el-form-item>
+            <el-form-item label="Field中文名" prop="fieldDesc">
+                <el-col :span="6">
+                <el-input v-model="dialogMiddle.fieldDesc" autocomplete="off"></el-input>
+                </el-col>
+            </el-form-item>
             <el-form-item label="FieldJSON" prop="fieldJson">
                 <el-col :span="6">
                 <el-input v-model="dialogMiddle.fieldJson" autocomplete="off"></el-input>
@@ -69,6 +74,7 @@ export default {
             ],
             rules:{
                 fieldName:[ { required: true, message: '请输入field英文名', trigger: 'blur' }],
+                fieldDesc:[ { required: true, message: '请输入field中文名', trigger: 'blur' }],
                 fieldJson:[ { required: true, message: '请输入field格式化json', trigger: 'blur' }],
                 fieldType:[ { required: true, message: '请选择field数据类型', trigger: 'blur' }]
             }

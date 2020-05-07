@@ -30,6 +30,25 @@ func CreateAuthority(c *gin.Context) {
 }
 
 // @Tags authority
+// @Summary 拷贝角色
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body response.SysAuthorityCopyResponse true "拷贝角色"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"拷贝成功"}"
+// @Router /authority/copyAuthority [post]
+func CopyAuthority(c *gin.Context) {
+	var copyInfo resp.SysAuthorityCopyResponse
+	_ = c.ShouldBindJSON(&copyInfo)
+	err, authBack := service.CopyAuthority(copyInfo)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("拷贝失败，%v", err), c)
+	} else {
+		response.OkWithData(resp.SysAuthorityResponse{Authority: authBack}, c)
+	}
+}
+
+// @Tags authority
 // @Summary 删除角色
 // @Security ApiKeyAuth
 // @accept application/json

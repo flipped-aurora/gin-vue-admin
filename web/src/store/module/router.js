@@ -6,7 +6,7 @@ import { asyncMenu } from '@/api/menu'
 const formatRouter = (routes) => {
     routes && routes.map(item => {
         item.meta.hidden = item.hidden
-        if (item.children.length > 0) {
+        if (item.children && item.children.length > 0) {
             formatRouter(item.children)
         }
     })

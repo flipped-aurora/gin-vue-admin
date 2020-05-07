@@ -3,8 +3,8 @@ package service
 import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils"
-	"html/template"
 	"os"
+	"text/template"
 )
 
 // @title    CreateTemp
@@ -27,7 +27,15 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	if err != nil {
 		return err
 	}
+	serviceTmpl, err := template.ParseFiles(basePath + "/te/service.go.tpl")
+	if err != nil {
+		return err
+	}
 	feapiTmpl, err := template.ParseFiles(basePath + "/fe/api.js.tpl")
+	if err != nil {
+		return err
+	}
+	feTableTmpl, err := template.ParseFiles(basePath + "/fe/table.vue.tpl")
 	if err != nil {
 		return err
 	}
@@ -43,30 +51,41 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	_modeldir := _te + autoCode.PackageName + "/model"
 	_apidir := _te + autoCode.PackageName + "/api"
 	_routerdir := _te + autoCode.PackageName + "/router"
+	_servicedir := _te + autoCode.PackageName + "/service"
 	//自动化前台代码目录
 	_fe := "./autoCode/fe/"
 	_fe_dir := _fe + autoCode.PackageName
 	_fe_apidir := _fe + autoCode.PackageName + "/api"
-	err = utils.CreateDir(_autoCode, _te, _dir, _modeldir, _apidir, _routerdir, _fe, _fe_dir, _fe_apidir)
+	_fe_tabledir := _fe + autoCode.PackageName + "/table"
+	err = utils.CreateDir(_autoCode, _te, _dir, _modeldir, _apidir, _routerdir, _servicedir, _fe, _fe_dir, _fe_apidir, _fe_tabledir)
 	if err != nil {
 		return err
 	}
-	model, err := os.OpenFile(_te+autoCode.PackageName+"/model/model.go", os.O_CREATE|os.O_WRONLY, 0755)
+	model, err := os.OpenFile(_te+autoCode.PackageName+"/model/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		return err
 	}
-	api, err := os.OpenFile(_te+autoCode.PackageName+"/api/api.go", os.O_CREATE|os.O_WRONLY, 0755)
+	api, err := os.OpenFile(_te+autoCode.PackageName+"/api/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		return err
 	}
-	router, err := os.OpenFile(_te+autoCode.PackageName+"/router/router.go", os.O_CREATE|os.O_WRONLY, 0755)
+	router, err := os.OpenFile(_te+autoCode.PackageName+"/router/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		return err
 	}
-	feapi, err := os.OpenFile(_fe+autoCode.PackageName+"/api/api.js", os.O_CREATE|os.O_WRONLY, 0755)
+	service, err := os.OpenFile(_te+autoCode.PackageName+"/service/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		return err
 	}
+	feapi, err := os.OpenFile(_fe+autoCode.PackageName+"/api/"+autoCode.PackageName+".js", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+	fetable, err := os.OpenFile(_fe+autoCode.PackageName+"/table/"+autoCode.PackageName+".vue", os.O_CREATE|os.O_WRONLY, 0755)
+	if err != nil {
+		return err
+	}
+
 	readme, err := os.OpenFile(_autoCode+"readme.txt", os.O_CREATE|os.O_WRONLY, 0755)
 	if err != nil {
 		return err
@@ -85,7 +104,15 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		if err != nil {
 			return err
 		}
+		err = serviceTmpl.Execute(service, autoCode)
+		if err != nil {
+			return err
+		}
 		err = feapiTmpl.Execute(feapi, autoCode)
+		if err != nil {
+			return err
+		}
+		err = feTableTmpl.Execute(fetable, autoCode)
 		if err != nil {
 			return err
 		}
@@ -97,13 +124,18 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	_ = model.Close()
 	_ = api.Close()
 	_ = router.Close()
+	_ = service.Close()
 	_ = feapi.Close()
+	_ = fetable.Close()
 	_ = readme.Close()
 	fileList := []string{
-		_te + autoCode.PackageName + "/model/model.go",
-		_te + autoCode.PackageName + "/api/api.go",
-		_te + autoCode.PackageName + "/router/router.go",
-		_fe + autoCode.PackageName + "/api/api.js",
+		_te + autoCode.PackageName + "/model/" + autoCode.PackageName + ".go",
+		_te + autoCode.PackageName + "/api/" + autoCode.PackageName + ".go",
+		_te + autoCode.PackageName + "/router/" + autoCode.PackageName + ".go",
+		_te + autoCode.PackageName + "/service/" + autoCode.PackageName + ".go",
+		_fe + autoCode.PackageName + "/api/" + autoCode.PackageName + ".js",
+		_fe + autoCode.PackageName + "/table/" + autoCode.PackageName + ".vue",
+
 		_autoCode + "readme.txt",
 	}
 	err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", ".")

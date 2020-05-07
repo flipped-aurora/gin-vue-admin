@@ -17,6 +17,7 @@
         <template slot-scope="scope">
           <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
           <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>
+          <el-button @click="copyAuthority(scope.row)" size="small" type="text">拷贝角色</el-button>
           <el-button @click="editAuthority(scope.row)" size="small" type="text">编辑角色</el-button>
           <el-button @click="deleteAuth(scope.row)" size="small" type="text">删除角色</el-button>
 
@@ -50,15 +51,15 @@
     </el-dialog>
 
     <el-drawer :visible.sync="drawer" :with-header="false" size="40%" title="角色配置" v-if="drawer">
-      <el-tabs class="role-box" type="border-card">
+      <el-tabs class="role-box" type="border-card" :before-leave="autoEnter">
         <el-tab-pane label="角色菜单">
-          <Menus :row="activeRow" />
+          <Menus :row="activeRow" ref="menus"/>
         </el-tab-pane>
         <el-tab-pane label="角色api">
-          <apis :row="activeRow" />
+          <apis :row="activeRow"  ref="apis"/>
         </el-tab-pane>
         <el-tab-pane label="资源权限">
-          <Datas :authority="tableData" :row="activeRow" />
+          <Datas :authority="tableData" :row="activeRow"  ref="datas"/>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -72,7 +73,8 @@ import {
   getAuthorityList,
   deleteAuthority,
   createAuthority,
-  updateAuthority 
+  updateAuthority,
+  copyAuthority 
 } from '@/api/authority'
 
 import Menus from '@/view/superAdmin/authority/components/menus'
@@ -97,6 +99,7 @@ export default {
       dialogTitle:"新增角色",
       dialogFormVisible: false,
       apiDialogFlag: false,
+      copyForm: {},
       form: {
         authorityId: '',
         authorityName: '',
@@ -121,6 +124,26 @@ export default {
     Datas
   },
   methods: {
+    autoEnter(activeName, oldActiveName){
+      const paneArr = ["menus","apis","datas"]
+      if(oldActiveName){
+        if(this.$refs[paneArr[oldActiveName]].needConfirm){
+          this.$refs[paneArr[oldActiveName]].enterAndNext()
+          this.$refs[paneArr[oldActiveName]].needConfirm = false
+        }
+      }
+    },
+    // 拷贝角色
+    copyAuthority(row) {
+      this.setOptions()
+      this.dialogTitle = "拷贝角色"
+      this.dialogType = "copy"
+      for(let k in this.form) {
+        this.form[k] = row[k]
+      }
+      this.copyForm = row
+      this.dialogFormVisible = true;
+    },
     opdendrawer(row) {
       this.drawer = true
       this.activeRow = row
@@ -203,8 +226,30 @@ export default {
                 }
               }
               break;
-            default:
-              break;
+              case 'copy': {
+                const data = {
+                  "authority": {
+                      "authorityId": "string",
+                      "authorityName": "string",
+                      "datauthorityId": [],
+                      "parentId": "string",
+                  },
+                      "oldAuthorityId": 0
+                }
+                data.authority.authorityId = this.form.authorityId
+                data.authority.authorityName = this.form.authorityName
+                data.authority.parentId = this.form.parentId
+                data.authority.dataAuthorityId = this. copyForm.dataAuthorityId
+                data.oldAuthorityId = this.copyForm.authorityId
+                const res = await copyAuthority(data)
+                if(res.code == 0) {
+                  this.$message({
+                    type: 'success',
+                    message: '复制成功！'
+                  })
+                  this.getTableData()
+                }
+              }
           }
           
           this.initForm()
@@ -221,7 +266,7 @@ export default {
     },
     setAuthorityOptions(AuthorityData,optionsData,disabled){
       AuthorityData&&AuthorityData.map(item=>{
-        if(item.children.length){
+        if(item.children&&item.children.length){
           const option = {
             authorityId:item.authorityId,
             authorityName:item.authorityName,

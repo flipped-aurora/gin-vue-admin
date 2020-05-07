@@ -2,7 +2,7 @@
   <div>
     <el-scrollbar style="height:calc(100vh)">
       <el-menu
-        :class="['el-menu-vertical',!isCollapse&&'noCollapse']"
+        class="el-menu-vertical"
         :collapse="isCollapse"
         :collapse-transition="true"
         :default-active="active"
@@ -50,9 +50,7 @@ export default {
      if(screenWidth<1000){
        this.isCollapse = !this.isCollapse
       }
-    this.$bus.on('totalCollapse', () => {
-      this.isCollapse = !this.isCollapse
-    })
+
      this.$bus.on('collapse', (item) => {
       this.isCollapse = item
     })
@@ -64,7 +62,6 @@ export default {
     }
   },
   beforeDestroy() {
-    this.$bus.off('totalCollapse')
     this.$bus.off('collapse')
   }
 }

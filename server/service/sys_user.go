@@ -79,6 +79,7 @@ func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total 
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
 	var userList []model.SysUser
+	err = db.Find(&userList).Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Preload("Authority").Find(&userList).Error
 	return err, userList, total
 }

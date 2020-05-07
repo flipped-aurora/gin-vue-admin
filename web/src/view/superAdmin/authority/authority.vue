@@ -266,7 +266,7 @@ export default {
     },
     setAuthorityOptions(AuthorityData,optionsData,disabled){
       AuthorityData&&AuthorityData.map(item=>{
-        if(item.children.length){
+        if(item.children&&item.children.length){
           const option = {
             authorityId:item.authorityId,
             authorityName:item.authorityName,

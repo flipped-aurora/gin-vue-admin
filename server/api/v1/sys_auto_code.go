@@ -39,7 +39,7 @@ func CreateTemp(c *gin.Context) {
 				Path:        "/" + a.Abbreviation + "/" + "update" + a.StructName,
 				Description: "更新" + a.StructName,
 				ApiGroup:    a.Abbreviation,
-				Method:      "POST",
+				Method:      "PUT",
 			},
 			{
 				Path:        "/" + a.Abbreviation + "/" + "find" + a.StructName,

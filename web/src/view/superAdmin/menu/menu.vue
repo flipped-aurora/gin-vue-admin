@@ -157,7 +157,7 @@ export default {
     setMenuOptions(menuData, optionsData, disabled) {
       menuData &&
         menuData.map(item => {
-          if (item.children.length) {
+          if (item.children&&item.children.length) {
             const option = {
               title: item.meta.title,
               ID: String(item.ID),

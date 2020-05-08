@@ -146,6 +146,14 @@ swag init
 
 ![架构图](./docs/gin-vue-admin.png)
 
+<p style="text-align: center">架构图</p>
+
+
+
+![前端架构图](http://qmplusimg.henrongyi.top/naotu.png)
+
+<a style="text-align: center">前端结构图 提供者:<a href="https://github.com/baobeisuper">baobeisuper</a></p>
+
 ```
     ├─server  	     （后端文件夹）
     │  ├─api            （API）

@@ -143,16 +143,14 @@ swag init
 
 
 ## 4. 项目架构
+### 4.1 系统架构图
 
-![架构图](./docs/gin-vue-admin.png)
+![系统架构图](./docs/gin-vue-admin.png)
 
-<p style="text-align: center">架构图</p>
+### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
 
+![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
 
-
-![前端架构图](http://qmplusimg.henrongyi.top/naotu.png)
-
-<a style="text-align: center">前端结构图 提供者:<a href="https://github.com/baobeisuper">baobeisuper</a></p>
 
 ```
     ├─server  	     （后端文件夹）

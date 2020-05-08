@@ -40,11 +40,6 @@ func GetMenu(c *gin.Context) {
 func GetMenuList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	verifyMap := make(map[string][]string)
-	verifyMap["PageSize"] = []string{"lt=333"}
-	verifyMap["Page"] = []string{"isBlank"}
-	vErr := utils.Verify(pageInfo, verifyMap)
-	fmt.Println(vErr)
 	err, menuList, total := service.GetInfoList()
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
@@ -69,6 +64,26 @@ func GetMenuList(c *gin.Context) {
 func AddBaseMenu(c *gin.Context) {
 	var menu model.SysBaseMenu
 	_ = c.ShouldBindJSON(&menu)
+	MenuVerify := utils.Rules{
+		"Path":      {utils.NotEmpty()},
+		"ParentId":  {utils.NotEmpty()},
+		"Name":      {utils.NotEmpty()},
+		"Component": {utils.NotEmpty()},
+		"Sort":      {utils.Ge("0")},
+	}
+	MenuVerifyErr := utils.Verify(menu, MenuVerify)
+	if MenuVerifyErr != nil {
+		response.FailWithMessage(MenuVerifyErr.Error(), c)
+		return
+	}
+	MetaVerify := utils.Rules{
+		"Title": {utils.NotEmpty()},
+	}
+	MetaVerifyErr := utils.Verify(menu.Meta, MetaVerify)
+	if MetaVerifyErr != nil {
+		response.FailWithMessage(MetaVerifyErr.Error(), c)
+		return
+	}
 	err := service.AddBaseMenu(menu)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("添加失败，%v", err), c)

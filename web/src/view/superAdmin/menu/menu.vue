@@ -70,9 +70,11 @@
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <el-input autocomplete="off" v-model="form.meta.icon">
-            <template slot="prepend">el-icon-</template>
-          </el-input>
+          <!--<el-input autocomplete="off" v-model="form.meta.icon">
+
+          </el-input>-->
+          <template slot="prepend">el-icon-</template>
+          <icon></icon>
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
@@ -104,6 +106,7 @@ import {
   getBaseMenuById
 } from "@/api/menu";
 import infoList from "@/components/mixins/infoList";
+import icon from '@/view/superAdmin/menu/icon';
 export default {
   name: "Menus",
   mixins: [infoList],
@@ -143,6 +146,9 @@ export default {
       },
       isEdit: false
     };
+  },
+  components:{
+    icon
   },
   methods: {
     setOptions() {

@@ -146,6 +146,13 @@ After executing the above command，`docs` will show in `server/`，then open yo
 
 ![Architecture diagram](./docs/gin-vue-admin.png)
 
+<p style="text-align: center">Architecture diagram</p>
+
+
+![Front-end Architecture diagram](http://qmplusimg.henrongyi.top/naotu.png)
+
+<a style="text-align: center">Front-end Architecture diagram Provider:<a href="https://github.com/baobeisuper">baobeisuper</a></p>
+
 ```
     ├─server  	     （backend）
     │  ├─api            （API entrance）

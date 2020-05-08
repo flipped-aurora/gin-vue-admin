@@ -152,6 +152,7 @@ After executing the above command，`docs` will show in `server/`，then open yo
 
 ![Front-end Detailed Design Diagram](http://qmplusimg.henrongyi.top/naotu.png)
 
+### 4.3 Project Layout
 
 ```
     ├─server  	     （backend）

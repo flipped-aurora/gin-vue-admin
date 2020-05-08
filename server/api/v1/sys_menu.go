@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -39,6 +40,11 @@ func GetMenu(c *gin.Context) {
 func GetMenuList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
+	verifyMap := make(map[string][]string)
+	verifyMap["PageSize"] = []string{"lt=333"}
+	verifyMap["Page"] = []string{"isBlank"}
+	vErr := utils.Verify(pageInfo, verifyMap)
+	fmt.Println(vErr)
 	err, menuList, total := service.GetInfoList()
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)

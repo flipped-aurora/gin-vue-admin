@@ -24,12 +24,10 @@ func CreateExaCustomer(c *gin.Context) {
 	_ = c.ShouldBindJSON(&cu)
 	CustomerVerify := utils.Rules{
 		"CustomerName":      {utils.NotEmpty()},
-		"CustomerPhoneData":      {utils.NotEmpty()},
-		"SysUserID":      {utils.NotEmpty()},
-		"SysUserAuthorityID":      {utils.NotEmpty()},
+		"CustomerPhoneData": {utils.NotEmpty()},
 	}
 	CustomerVerifyErr := utils.Verify(cu, CustomerVerify)
-	if CustomerVerifyErr!=nil {
+	if CustomerVerifyErr != nil {
 		response.FailWithMessage(CustomerVerifyErr.Error(), c)
 		return
 	}
@@ -57,10 +55,10 @@ func DeleteExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
 	CustomerVerify := utils.Rules{
-		"ID":      {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	CustomerVerifyErr := utils.Verify(cu.Model, CustomerVerify)
-	if CustomerVerifyErr!=nil {
+	if CustomerVerifyErr != nil {
 		response.FailWithMessage(CustomerVerifyErr.Error(), c)
 		return
 	}
@@ -84,21 +82,19 @@ func UpdateExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindJSON(&cu)
 	IdCustomerVerify := utils.Rules{
-		"ID":      {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	IdCustomerVerifyErr := utils.Verify(cu.Model, IdCustomerVerify)
-	if IdCustomerVerifyErr!=nil {
+	if IdCustomerVerifyErr != nil {
 		response.FailWithMessage(IdCustomerVerifyErr.Error(), c)
 		return
 	}
 	CustomerVerify := utils.Rules{
 		"CustomerName":      {utils.NotEmpty()},
-		"CustomerPhoneData":      {utils.NotEmpty()},
-		"SysUserID":      {utils.NotEmpty()},
-		"SysUserAuthorityID":      {utils.NotEmpty()},
+		"CustomerPhoneData": {utils.NotEmpty()},
 	}
 	CustomerVerifyErr := utils.Verify(cu, CustomerVerify)
-	if CustomerVerifyErr!=nil {
+	if CustomerVerifyErr != nil {
 		response.FailWithMessage(CustomerVerifyErr.Error(), c)
 		return
 	}
@@ -122,10 +118,10 @@ func GetExaCustomer(c *gin.Context) {
 	var cu model.ExaCustomer
 	_ = c.ShouldBindQuery(&cu)
 	IdCustomerVerify := utils.Rules{
-		"ID":      {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	IdCustomerVerifyErr := utils.Verify(cu.Model, IdCustomerVerify)
-	if IdCustomerVerifyErr!=nil {
+	if IdCustomerVerifyErr != nil {
 		response.FailWithMessage(IdCustomerVerifyErr.Error(), c)
 		return
 	}
@@ -151,11 +147,11 @@ func GetExaCustomerList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindQuery(&pageInfo)
 	CustomerVerify := utils.Rules{
-		"Page": {utils.NotEmpty()},
+		"Page":     {utils.NotEmpty()},
 		"PageSize": {utils.NotEmpty()},
 	}
 	CustomerVerifyErr := utils.Verify(pageInfo, CustomerVerify)
-	if CustomerVerifyErr!=nil {
+	if CustomerVerifyErr != nil {
 		response.FailWithMessage(CustomerVerifyErr.Error(), c)
 		return
 	}

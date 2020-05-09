@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
 	resp "gin-vue-admin/model/response"
@@ -18,7 +17,6 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /base/captcha [post]
 func Captcha(c *gin.Context) {
-	fmt.Println(11111111)
 	captchaId := captcha.NewLen(global.GVA_CONFIG.Captcha.KeyLong)
 	response.OkDetailed(resp.SysCaptchaResponse{
 		CaptchaId: captchaId,

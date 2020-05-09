@@ -138,7 +138,6 @@ export default {
     },
     async submitForm() {
       this.$refs.loginForm.validate(async (v) => {
-        return false;
         if (v) {
           this.login();
           this.loginVefify();

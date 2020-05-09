@@ -12,12 +12,23 @@
                 <!--<el-input autocomplete="off" v-model="form.meta.icon">
                   <template slot="prepend">el-icon-</template>
                 </el-input>-->
-                <el-select v-model="value" filterable placeholder="请选择">
+                <!--<el-select v-model="value" filterable placeholder="请选择">
                     <el-option
                             v-for="item in options"
                             :key="item.value"
                             :label="item.label"
                             :value="item.value">
+                    </el-option>
+                </el-select>-->
+                <el-select v-model="value" placeholder="请选择">
+                    <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        <span class="icon" :class="item.label"></span>
+                        <span style="float: left">{{ item.label }}</span>
+
                     </el-option>
                 </el-select>
             </el-form-item>
@@ -54,5 +65,11 @@
 </script>
 
 <style scoped>
-
+    .icon{
+        float: left;
+        color: rgb(132, 146, 166);
+        font-size: 13px;
+        line-height: 34px;
+        margin-right: 10px;
+    }
 </style>

@@ -144,14 +144,15 @@ After executing the above command，`docs` will show in `server/`，then open yo
 
 ## 4. Project Architecture
 
+### 4.1 Architecture Diagram
+
 ![Architecture diagram](./docs/gin-vue-admin.png)
 
-<p style="text-align: center">Architecture diagram</p>
+### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
 
+![Front-end Detailed Design Diagram](http://qmplusimg.henrongyi.top/naotu.png)
 
-![Front-end Architecture diagram](http://qmplusimg.henrongyi.top/naotu.png)
-
-<a style="text-align: center">Front-end Architecture diagram Provider:<a href="https://github.com/baobeisuper">baobeisuper</a></p>
+### 4.3 Project Layout
 
 ```
     ├─server  	     （backend）

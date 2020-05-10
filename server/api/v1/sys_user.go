@@ -276,7 +276,7 @@ func SetUserAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SetUserAuth true "删除用户"
+// @Param data body request.GetById true "删除用户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/deleteUser [delete]
 func DeleteUser(c *gin.Context) {

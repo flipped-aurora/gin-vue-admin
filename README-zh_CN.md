@@ -7,7 +7,7 @@
 <img src="https://img.shields.io/badge/gin-1.4.0-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen"/>
 <img src="https://img.shields.io/badge/element--ui-2.12.0-green"/>
-<img src="https://img.shields.io/badge/gorm-1.9.10-red"/>
+<img src="https://img.shields.io/badge/gorm-1.9.12-red"/>
 </div>
 
 [English](./README.md) | 简体中文
@@ -143,8 +143,15 @@ swag init
 
 
 ## 4. 项目架构
+### 4.1 系统架构图
 
-![架构图](./docs/gin-vue-admin.png)
+![系统架构图](./docs/gin-vue-admin.png)
+
+### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
+
+![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
+
+### 4.3 目录结构
 
 ```
     ├─server  	     （后端文件夹）
@@ -219,7 +226,10 @@ swag init
 （2）模板使用
 > Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
-（3）golang基础教学视频录制中...
+（3）2.0目录以及开发体验
+> Bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
+
+（4）golang基础教学视频录制中...
 > https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 ## 8. 联系方式

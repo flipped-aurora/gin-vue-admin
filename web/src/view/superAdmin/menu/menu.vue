@@ -70,11 +70,9 @@
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <!--<el-input autocomplete="off" v-model="form.meta.icon">
-
-          </el-input>-->
-          <template slot="prepend">el-icon-</template>
-          <icon></icon>
+          <icon :getIcon="getIcon">
+            <template slot="prepend" >el-icon-</template>
+          </icon>
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
@@ -150,7 +148,13 @@ export default {
   components:{
     icon
   },
+  props:[
+      'getIcon'
+  ],
   methods: {
+    getIcon(icon){
+      this.form.meta.icon = icon
+    },
     setOptions() {
       this.menuOption = [
         {

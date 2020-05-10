@@ -178,12 +178,9 @@ func GetMenuAuthority(c *gin.Context) {
 func DeleteBaseMenu(c *gin.Context) {
 	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
-	MenuVerify := utils.Rules{
-		"Id": {"notEmpty"},
-	}
-	MenuVerifyErr := utils.Verify(idInfo, MenuVerify)
-	if MenuVerifyErr != nil {
-		response.FailWithMessage(MenuVerifyErr.Error(), c)
+	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
+	if IdVerifyErr != nil {
+		response.FailWithMessage(IdVerifyErr.Error(), c)
 		return
 	}
 	err := service.DeleteBaseMenu(idInfo.Id)

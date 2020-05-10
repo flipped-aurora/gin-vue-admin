@@ -88,12 +88,9 @@ func CopyAuthority(c *gin.Context) {
 func DeleteAuthority(c *gin.Context) {
 	var a model.SysAuthority
 	_ = c.ShouldBindJSON(&a)
-	AuthorityVerify := utils.Rules{
-		"AuthorityId": {utils.NotEmpty()},
-	}
-	AuthorityVerifyErr := utils.Verify(a, AuthorityVerify)
-	if AuthorityVerifyErr != nil {
-		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+	AuthorityIdVerifyErr := utils.Verify(a, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
 		return
 	}
 	//删除角色之前需要判断是否有用户正在使用此角色
@@ -174,12 +171,9 @@ func GetAuthorityList(c *gin.Context) {
 func SetDataAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
-	AuthorityVerify := utils.Rules{
-		"AuthorityId": {utils.NotEmpty()},
-	}
-	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
-	if AuthorityVerifyErr != nil {
-		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+	AuthorityIdVerifyErr := utils.Verify(auth, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
 		return
 	}
 	err := service.SetDataAuthority(auth)

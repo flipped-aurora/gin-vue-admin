@@ -9,4 +9,14 @@ func init() {
 			"PageSize": {utils.NotEmpty()},
 		},
 	)
+	_ = utils.RegisterRule("IdVerify",
+		utils.Rules{
+			"Id": {utils.NotEmpty()},
+		},
+	)
+	_ = utils.RegisterRule("AuthorityIdVerify",
+		utils.Rules{
+			"AuthorityId": {utils.NotEmpty()},
+		},
+	)
 }

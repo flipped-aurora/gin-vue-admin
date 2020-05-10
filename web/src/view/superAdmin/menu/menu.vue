@@ -71,7 +71,7 @@
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <icon :icon="icon">
+          <icon :meta="form.meta">
             <template slot="prepend" >el-icon-</template>
           </icon>
         </el-form-item>
@@ -290,7 +290,6 @@ export default {
       this.dialogTitle = "编辑菜单";
       const res = await getBaseMenuById({ id });
       this.form = res.data.menu;
-      this.icon = this.form.meta;
       this.isEdit = true;
       this.setOptions();
       this.dialogFormVisible = true;

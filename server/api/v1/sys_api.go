@@ -23,13 +23,13 @@ func CreateApi(c *gin.Context) {
 	var api model.SysApi
 	_ = c.ShouldBindJSON(&api)
 	ApiVerify := utils.Rules{
-		"Path":      {utils.NotEmpty()},
-		"Description":      {utils.NotEmpty()},
-		"ApiGroup":      {utils.NotEmpty()},
+		"Path":        {utils.NotEmpty()},
+		"Description": {utils.NotEmpty()},
+		"ApiGroup":    {utils.NotEmpty()},
 		"Method":      {utils.NotEmpty()},
 	}
 	ApiVerifyErr := utils.Verify(api, ApiVerify)
-	if ApiVerifyErr!=nil {
+	if ApiVerifyErr != nil {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
@@ -53,10 +53,10 @@ func DeleteApi(c *gin.Context) {
 	var a model.SysApi
 	_ = c.ShouldBindJSON(&a)
 	ApiVerify := utils.Rules{
-		"ID":      {utils.NotEmpty()},
+		"ID": {utils.NotEmpty()},
 	}
 	ApiVerifyErr := utils.Verify(a.Model, ApiVerify)
-	if ApiVerifyErr!=nil {
+	if ApiVerifyErr != nil {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
@@ -82,13 +82,9 @@ func GetApiList(c *gin.Context) {
 	// 此结构体仅本方法使用
 	var sp request.SearchApiParams
 	_ = c.ShouldBindJSON(&sp)
-	ApiVerify := utils.Rules{
-		"Page": {utils.NotEmpty()},
-		"PageSize": {utils.NotEmpty()},
-	}
-	ApiVerifyErr := utils.Verify(sp.PageInfo, ApiVerify)
-	if ApiVerifyErr!=nil {
-		response.FailWithMessage(ApiVerifyErr.Error(), c)
+	PageVerifyErr := utils.Verify(sp.PageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
 	err, list, total := service.GetAPIInfoList(sp.SysApi, sp.PageInfo, sp.OrderKey, sp.Desc)
@@ -119,7 +115,7 @@ func GetApiById(c *gin.Context) {
 		"Id": {utils.NotEmpty()},
 	}
 	ApiVerifyErr := utils.Verify(idInfo, ApiVerify)
-	if ApiVerifyErr!=nil {
+	if ApiVerifyErr != nil {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}
@@ -143,13 +139,13 @@ func UpdateApi(c *gin.Context) {
 	var api model.SysApi
 	_ = c.ShouldBindJSON(&api)
 	ApiVerify := utils.Rules{
-		"Path":      {utils.NotEmpty()},
-		"Description":      {utils.NotEmpty()},
-		"ApiGroup":      {utils.NotEmpty()},
+		"Path":        {utils.NotEmpty()},
+		"Description": {utils.NotEmpty()},
+		"ApiGroup":    {utils.NotEmpty()},
 		"Method":      {utils.NotEmpty()},
 	}
 	ApiVerifyErr := utils.Verify(api, ApiVerify)
-	if ApiVerifyErr!=nil {
+	if ApiVerifyErr != nil {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return
 	}

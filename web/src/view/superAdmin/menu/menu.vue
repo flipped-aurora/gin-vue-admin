@@ -23,6 +23,7 @@
       </el-table-column>
       <el-table-column label="图标" min-width="140" prop="authorityName">
         <template slot-scope="scope">
+          <i :class="`icon el-icon-${scope.row.meta.icon}`"></i>
           <span>{{scope.row.meta.icon}}</span>
         </template>
       </el-table-column>

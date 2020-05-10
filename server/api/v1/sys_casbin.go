@@ -21,12 +21,9 @@ import (
 func UpdateCasbin(c *gin.Context) {
 	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
-	CasbinVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
-	}
-	WKVerifyErr := utils.Verify(cmr, CasbinVerify)
-	if WKVerifyErr!=nil {
-		response.FailWithMessage(WKVerifyErr.Error(), c)
+	AuthorityIdVerifyErr := utils.Verify(cmr, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
 		return
 	}
 	err := service.UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
@@ -48,12 +45,9 @@ func UpdateCasbin(c *gin.Context) {
 func GetPolicyPathByAuthorityId(c *gin.Context) {
 	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
-	CasbinVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
-	}
-	WKVerifyErr := utils.Verify(cmr, CasbinVerify)
-	if WKVerifyErr!=nil {
-		response.FailWithMessage(WKVerifyErr.Error(), c)
+	AuthorityIdVerifyErr := utils.Verify(cmr, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
 		return
 	}
 	paths := service.GetPolicyPathByAuthorityId(cmr.AuthorityId)

@@ -111,12 +111,9 @@ func GetApiList(c *gin.Context) {
 func GetApiById(c *gin.Context) {
 	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
-	ApiVerify := utils.Rules{
-		"Id": {utils.NotEmpty()},
-	}
-	ApiVerifyErr := utils.Verify(idInfo, ApiVerify)
-	if ApiVerifyErr != nil {
-		response.FailWithMessage(ApiVerifyErr.Error(), c)
+	IdVerifyErr := utils.Verify(idInfo, utils.CustomizeMap["IdVerify"])
+	if IdVerifyErr != nil {
+		response.FailWithMessage(IdVerifyErr.Error(), c)
 		return
 	}
 	err, api := service.GetApiById(idInfo.Id)

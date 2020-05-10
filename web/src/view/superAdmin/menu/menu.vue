@@ -70,7 +70,7 @@
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <icon :getIcon="getIcon">
+          <icon :icon="icon">
             <template slot="prepend" >el-icon-</template>
           </icon>
         </el-form-item>
@@ -142,19 +142,14 @@ export default {
           { required: true, message: "请输入菜单展示名称", trigger: "blur" }
         ]
       },
-      isEdit: false
+      isEdit: false,
+      test:''
     };
   },
   components:{
     icon
   },
-  props:[
-      'getIcon'
-  ],
   methods: {
-    getIcon(icon){
-      this.form.meta.icon = icon
-    },
     setOptions() {
       this.menuOption = [
         {
@@ -294,6 +289,7 @@ export default {
       this.dialogTitle = "编辑菜单";
       const res = await getBaseMenuById({ id });
       this.form = res.data.menu;
+      this.icon = this.form.meta;
       this.isEdit = true;
       this.setOptions();
       this.dialogFormVisible = true;

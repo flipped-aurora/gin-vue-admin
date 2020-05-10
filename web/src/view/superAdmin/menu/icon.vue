@@ -317,17 +317,17 @@
           }
         },
         props:{
-            getIcon:{
+            icon:{
                     default: function() {
                         return {}
                     },
-                    type: Function
-            }
+                    type: Object
+            },
+        },
+        created() {
+            this.value = this.icon.icon
         },
         methods:{
-            propIcon(icon){
-                this.getIcon(icon)
-            }
         }
     }
 </script>

@@ -146,13 +146,9 @@ func GetExaCustomerList(c *gin.Context) {
 	waitUse := claims.(*request.CustomClaims)
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindQuery(&pageInfo)
-	CustomerVerify := utils.Rules{
-		"Page":     {utils.NotEmpty()},
-		"PageSize": {utils.NotEmpty()},
-	}
-	CustomerVerifyErr := utils.Verify(pageInfo, CustomerVerify)
-	if CustomerVerifyErr != nil {
-		response.FailWithMessage(CustomerVerifyErr.Error(), c)
+	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
 	err, customerList, total := service.GetCustomerInfoList(waitUse.AuthorityId, pageInfo)

@@ -40,12 +40,8 @@ func GetMenu(c *gin.Context) {
 func GetMenuList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	PageVerify := utils.Rules{
-		"Page": {utils.NotEmpty()},
-		"PageSize": {utils.NotEmpty()},
-	}
-	PageVerifyErr := utils.Verify(pageInfo, PageVerify)
-	if PageVerifyErr!=nil{
+	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
 		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
@@ -78,7 +74,7 @@ func AddBaseMenu(c *gin.Context) {
 		"ParentId":  {utils.NotEmpty()},
 		"Name":      {utils.NotEmpty()},
 		"Component": {utils.NotEmpty()},
-		"Sort":      {utils.Ge("0"),"ge=0"},
+		"Sort":      {utils.Ge("0"), "ge=0"},
 	}
 	MenuVerifyErr := utils.Verify(menu, MenuVerify)
 	if MenuVerifyErr != nil {
@@ -129,7 +125,7 @@ func AddMenuAuthority(c *gin.Context) {
 	var addMenuAuthorityInfo request.AddMenuAuthorityInfo
 	_ = c.ShouldBindJSON(&addMenuAuthorityInfo)
 	MenuVerify := utils.Rules{
-		"AuthorityId":      {"notEmpty"},
+		"AuthorityId": {"notEmpty"},
 	}
 	MenuVerifyErr := utils.Verify(addMenuAuthorityInfo, MenuVerify)
 	if MenuVerifyErr != nil {
@@ -156,7 +152,7 @@ func GetMenuAuthority(c *gin.Context) {
 	var authorityIdInfo request.AuthorityIdInfo
 	_ = c.ShouldBindJSON(&authorityIdInfo)
 	MenuVerify := utils.Rules{
-		"AuthorityId":      {"notEmpty"},
+		"AuthorityId": {"notEmpty"},
 	}
 	MenuVerifyErr := utils.Verify(authorityIdInfo, MenuVerify)
 	if MenuVerifyErr != nil {
@@ -183,7 +179,7 @@ func DeleteBaseMenu(c *gin.Context) {
 	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
 	MenuVerify := utils.Rules{
-		"Id":      {"notEmpty"},
+		"Id": {"notEmpty"},
 	}
 	MenuVerifyErr := utils.Verify(idInfo, MenuVerify)
 	if MenuVerifyErr != nil {
@@ -215,7 +211,7 @@ func UpdateBaseMenu(c *gin.Context) {
 		"ParentId":  {utils.NotEmpty()},
 		"Name":      {utils.NotEmpty()},
 		"Component": {utils.NotEmpty()},
-		"Sort":      {utils.Ge("0"),"ge=0"},
+		"Sort":      {utils.Ge("0"), "ge=0"},
 	}
 	MenuVerifyErr := utils.Verify(menu, MenuVerify)
 	if MenuVerifyErr != nil {
@@ -250,7 +246,7 @@ func GetBaseMenuById(c *gin.Context) {
 	var idInfo request.GetById
 	_ = c.ShouldBindJSON(&idInfo)
 	MenuVerify := utils.Rules{
-		"Id":      {"notEmpty"},
+		"Id": {"notEmpty"},
 	}
 	MenuVerifyErr := utils.Verify(idInfo, MenuVerify)
 	if MenuVerifyErr != nil {

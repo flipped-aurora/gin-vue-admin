@@ -28,13 +28,13 @@ func Register(c *gin.Context) {
 	var R request.RegisterStruct
 	_ = c.ShouldBindJSON(&R)
 	UserVerify := utils.Rules{
-		"Username":      {utils.NotEmpty()},
-		"NickName":  {utils.NotEmpty()},
-		"Password":      {utils.NotEmpty()},
-		"AuthorityId":      {utils.NotEmpty()},
+		"Username":    {utils.NotEmpty()},
+		"NickName":    {utils.NotEmpty()},
+		"Password":    {utils.NotEmpty()},
+		"AuthorityId": {utils.NotEmpty()},
 	}
 	UserVerifyErr := utils.Verify(R, UserVerify)
-	if UserVerifyErr!=nil {
+	if UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -57,13 +57,13 @@ func Login(c *gin.Context) {
 	var L request.RegisterAndLoginStruct
 	_ = c.ShouldBindJSON(&L)
 	UserVerify := utils.Rules{
-		"CaptchaId":      {utils.NotEmpty()},
-		"Captcha":  {utils.NotEmpty()},
-		"Username":      {utils.NotEmpty()},
-		"Password":      {utils.NotEmpty()},
+		"CaptchaId": {utils.NotEmpty()},
+		"Captcha":   {utils.NotEmpty()},
+		"Username":  {utils.NotEmpty()},
+		"Password":  {utils.NotEmpty()},
 	}
 	UserVerifyErr := utils.Verify(L, UserVerify)
-	if UserVerifyErr!=nil {
+	if UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -157,12 +157,12 @@ func ChangePassword(c *gin.Context) {
 	var params request.ChangePasswordStruct
 	_ = c.ShouldBindJSON(&params)
 	UserVerify := utils.Rules{
-		"Username":      {utils.NotEmpty()},
-		"Password":      {utils.NotEmpty()},
-		"NewPassword":   {utils.NotEmpty()},
+		"Username":    {utils.NotEmpty()},
+		"Password":    {utils.NotEmpty()},
+		"NewPassword": {utils.NotEmpty()},
 	}
 	UserVerifyErr := utils.Verify(params, UserVerify)
-	if UserVerifyErr!=nil {
+	if UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -225,13 +225,9 @@ func UploadHeaderImg(c *gin.Context) {
 func GetUserList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	UserVerify := utils.Rules{
-		"Page": {utils.NotEmpty()},
-		"PageSize": {utils.NotEmpty()},
-	}
-	UserVerifyErr := utils.Verify(pageInfo, UserVerify)
-	if UserVerifyErr!=nil {
-		response.FailWithMessage(UserVerifyErr.Error(), c)
+	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
 	err, list, total := service.GetUserInfoList(pageInfo)
@@ -259,11 +255,11 @@ func SetUserAuthority(c *gin.Context) {
 	var sua request.SetUserAuth
 	_ = c.ShouldBindJSON(&sua)
 	UserVerify := utils.Rules{
-		"UUID": {utils.NotEmpty()},
+		"UUID":        {utils.NotEmpty()},
 		"AuthorityId": {utils.NotEmpty()},
 	}
 	UserVerifyErr := utils.Verify(sua, UserVerify)
-	if UserVerifyErr!=nil {
+	if UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -290,7 +286,7 @@ func DeleteUser(c *gin.Context) {
 		"Id": {utils.NotEmpty()},
 	}
 	UserVerifyErr := utils.Verify(reqId, UserVerify)
-	if UserVerifyErr!=nil {
+	if UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}

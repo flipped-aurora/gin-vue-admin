@@ -23,12 +23,12 @@ func CreateAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
 	AuthorityVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
-		"AuthorityName":      {utils.NotEmpty()},
+		"AuthorityId":   {utils.NotEmpty()},
+		"AuthorityName": {utils.NotEmpty()},
 		"ParentId":      {utils.NotEmpty()},
 	}
 	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
-	if AuthorityVerifyErr!=nil {
+	if AuthorityVerifyErr != nil {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}
@@ -52,20 +52,20 @@ func CopyAuthority(c *gin.Context) {
 	var copyInfo resp.SysAuthorityCopyResponse
 	_ = c.ShouldBindJSON(&copyInfo)
 	OldAuthorityVerify := utils.Rules{
-		"OldAuthorityId":      {utils.NotEmpty()},
+		"OldAuthorityId": {utils.NotEmpty()},
 	}
 	OldAuthorityVerifyErr := utils.Verify(copyInfo, OldAuthorityVerify)
-	if OldAuthorityVerifyErr!=nil {
+	if OldAuthorityVerifyErr != nil {
 		response.FailWithMessage(OldAuthorityVerifyErr.Error(), c)
 		return
 	}
 	AuthorityVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
-		"AuthorityName":      {utils.NotEmpty()},
+		"AuthorityId":   {utils.NotEmpty()},
+		"AuthorityName": {utils.NotEmpty()},
 		"ParentId":      {utils.NotEmpty()},
 	}
 	AuthorityVerifyErr := utils.Verify(copyInfo.Authority, AuthorityVerify)
-	if AuthorityVerifyErr!=nil {
+	if AuthorityVerifyErr != nil {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}
@@ -89,10 +89,10 @@ func DeleteAuthority(c *gin.Context) {
 	var a model.SysAuthority
 	_ = c.ShouldBindJSON(&a)
 	AuthorityVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
+		"AuthorityId": {utils.NotEmpty()},
 	}
 	AuthorityVerifyErr := utils.Verify(a, AuthorityVerify)
-	if AuthorityVerifyErr!=nil {
+	if AuthorityVerifyErr != nil {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}
@@ -117,12 +117,12 @@ func UpdateAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
 	AuthorityVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
-		"AuthorityName":      {utils.NotEmpty()},
+		"AuthorityId":   {utils.NotEmpty()},
+		"AuthorityName": {utils.NotEmpty()},
 		"ParentId":      {utils.NotEmpty()},
 	}
 	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
-	if AuthorityVerifyErr!=nil {
+	if AuthorityVerifyErr != nil {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}
@@ -145,13 +145,9 @@ func UpdateAuthority(c *gin.Context) {
 func GetAuthorityList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	AuthorityVerify := utils.Rules{
-		"Page": {utils.NotEmpty()},
-		"PageSize": {utils.NotEmpty()},
-	}
-	AuthorityVerifyErr := utils.Verify(pageInfo, AuthorityVerify)
-	if AuthorityVerifyErr!=nil {
-		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
 	err, list, total := service.GetAuthorityInfoList(pageInfo)
@@ -179,10 +175,10 @@ func SetDataAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
 	AuthorityVerify := utils.Rules{
-		"AuthorityId":      {utils.NotEmpty()},
+		"AuthorityId": {utils.NotEmpty()},
 	}
 	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
-	if AuthorityVerifyErr!=nil {
+	if AuthorityVerifyErr != nil {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}

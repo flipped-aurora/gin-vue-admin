@@ -66,7 +66,7 @@ func Update{{.StructName}}(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage("更新成功", c)
 	}
 }
 

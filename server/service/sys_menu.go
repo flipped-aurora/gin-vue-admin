@@ -4,8 +4,25 @@ import (
 	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"strconv"
 )
+
+// @title   getMenuTreeMap
+// @description    获取路由总树map
+// @auth       qm      (2020/05/06 10:26)
+// @return     err             error
+// @return    menusMsp            map{string}[]SysBaseMenu
+
+func getMenuTreeMap(authorityId string)(err error,treeMap map[string][]model.SysMenu){
+	var allMenus []model.SysMenu
+	treeMap = make(map[string][]model.SysMenu)
+	sql := "SELECT authority_menu.keep_alive,authority_menu.default_menu,authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? ORDER BY authority_menu.sort ASC"
+	err = global.GVA_DB.Raw(sql,authorityId).Scan(&allMenus).Error
+	for _,v := range allMenus{
+		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
+	}
+	return err,treeMap
+}
 
 // @title    GetMenuTree
 // @description   获取动态菜单树
@@ -15,10 +32,10 @@ import (
 // @return    menus           []model.SysMenu
 
 func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
-	sql := "SELECT authority_menu.keep_alive,authority_menu.default_menu,authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? AND authority_menu.parent_id = ? ORDER BY authority_menu.sort ASC"
-	err = global.GVA_DB.Raw(sql, authorityId, 0).Scan(&menus).Error
+	err,menuTree := getMenuTreeMap(authorityId)
+	menus = menuTree["0"]
 	for i := 0; i < len(menus); i++ {
-		err = getChildrenList(&menus[i], sql)
+		err = getChildrenList(&menus[i], menuTree)
 	}
 	return err, menus
 }
@@ -30,10 +47,10 @@ func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
 // @param     sql             string
 // @return    err             error
 
-func getChildrenList(menu *model.SysMenu, sql string) (err error) {
-	err = global.GVA_DB.Raw(sql, menu.AuthorityId, menu.MenuId).Scan(&menu.Children).Error
+func getChildrenList(menu *model.SysMenu,treeMap map[string][]model.SysMenu) (err error) {
+	menu.Children = treeMap[menu.MenuId]
 	for i := 0; i < len(menu.Children); i++ {
-		err = getChildrenList(&menu.Children[i], sql)
+		err = getChildrenList(&menu.Children[i], treeMap)
 	}
 	return err
 }
@@ -46,14 +63,12 @@ func getChildrenList(menu *model.SysMenu, sql string) (err error) {
 // @return    list            interface{}
 // @return    total           int
 
-func GetInfoList(info request.PageInfo) (err error, list interface{}, total int) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+func GetInfoList() (err error, list interface{}, total int) {
 	var menuList []model.SysBaseMenu
-	err = db.Limit(limit).Offset(offset).Where("parent_id = 0").Order("sort", true).Find(&menuList).Error
+	err,treeMap := getBaseMenuTreeMap()
+	menuList = treeMap["0"]
 	for i := 0; i < len(menuList); i++ {
-		err = getBaseChildrenList(&menuList[i])
+		err = getBaseChildrenList(&menuList[i],treeMap)
 	}
 	return err, menuList, total
 }
@@ -64,10 +79,10 @@ func GetInfoList(info request.PageInfo) (err error, list interface{}, total int)
 // @param     menu            *model.SysBaseMenu
 // @return    err             error
 
-func getBaseChildrenList(menu *model.SysBaseMenu) (err error) {
-	err = global.GVA_DB.Where("parent_id = ?", menu.ID).Order("sort", true).Find(&menu.Children).Error
+func getBaseChildrenList(menu *model.SysBaseMenu ,treeMap map[string][]model.SysBaseMenu) (err error) {
+	menu.Children = treeMap[strconv.Itoa(int(menu.ID))]
 	for i := 0; i < len(menu.Children); i++ {
-		err = getBaseChildrenList(&menu.Children[i])
+		err = getBaseChildrenList(&menu.Children[i],treeMap)
 	}
 	return err
 }
@@ -89,6 +104,22 @@ func AddBaseMenu(menu model.SysBaseMenu) (err error) {
 	return err
 }
 
+// @title   getBaseMenuTreeMap
+// @description    获取路由总树map
+// @auth       qm      (2020/05/06 10:26)
+// @return     err             error
+// @return    menusMsp            map{string}[]SysBaseMenu
+
+func getBaseMenuTreeMap()(err error,treeMap map[string][]model.SysBaseMenu){
+	var allMenus []model.SysBaseMenu
+	treeMap = make(map[string][]model.SysBaseMenu)
+	err = global.GVA_DB.Order("sort", true).Find(&allMenus).Error
+	for _,v := range allMenus{
+		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
+	}
+	return err,treeMap
+}
+
 // @title    GetBaseMenuTree
 // @description   获取基础路由树
 // @auth                     （2020/04/05  20:22）
@@ -96,9 +127,10 @@ func AddBaseMenu(menu model.SysBaseMenu) (err error) {
 // @return    menus            []SysBaseMenu
 
 func GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
-	err = global.GVA_DB.Where(" parent_id = ?", 0).Order("sort", true).Find(&menus).Error
+	err,treeMap := getBaseMenuTreeMap()
+	menus = treeMap["0"]
 	for i := 0; i < len(menus); i++ {
-		err = getBaseChildrenList(&menus[i])
+		err = getBaseChildrenList(&menus[i],treeMap)
 	}
 	return err, menus
 }

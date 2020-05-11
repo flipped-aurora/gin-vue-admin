@@ -168,7 +168,6 @@ export default {
 
 <style lang="scss" scoped>
     .big{
-        width: 100%;
         background-color: rgb(243,243,243);;
         .top{
             width: 98%;

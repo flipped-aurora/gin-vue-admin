@@ -18,11 +18,6 @@ import (
 	"time"
 )
 
-const (
-	USER_HEADER_IMG_PATH string = "http://qmplusimg.henrongyi.top"
-	USER_HEADER_BUCKET   string = "qm-plus-img"
-)
-
 // @Tags Base
 // @Summary 用户注册账号
 // @Produce  application/json
@@ -32,6 +27,17 @@ const (
 func Register(c *gin.Context) {
 	var R request.RegisterStruct
 	_ = c.ShouldBindJSON(&R)
+	UserVerify := utils.Rules{
+		"Username":    {utils.NotEmpty()},
+		"NickName":    {utils.NotEmpty()},
+		"Password":    {utils.NotEmpty()},
+		"AuthorityId": {utils.NotEmpty()},
+	}
+	UserVerifyErr := utils.Verify(R, UserVerify)
+	if UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
 	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
 	err, userReturn := service.Register(*user)
 	if err != nil {
@@ -50,6 +56,17 @@ func Register(c *gin.Context) {
 func Login(c *gin.Context) {
 	var L request.RegisterAndLoginStruct
 	_ = c.ShouldBindJSON(&L)
+	UserVerify := utils.Rules{
+		"CaptchaId": {utils.NotEmpty()},
+		"Captcha":   {utils.NotEmpty()},
+		"Username":  {utils.NotEmpty()},
+		"Password":  {utils.NotEmpty()},
+	}
+	UserVerifyErr := utils.Verify(L, UserVerify)
+	if UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
 	if captcha.VerifyString(L.CaptchaId, L.Captcha) {
 		U := &model.SysUser{Username: L.Username, Password: L.Password}
 		if err, user := service.Login(U); err != nil {
@@ -139,6 +156,16 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 func ChangePassword(c *gin.Context) {
 	var params request.ChangePasswordStruct
 	_ = c.ShouldBindJSON(&params)
+	UserVerify := utils.Rules{
+		"Username":    {utils.NotEmpty()},
+		"Password":    {utils.NotEmpty()},
+		"NewPassword": {utils.NotEmpty()},
+	}
+	UserVerifyErr := utils.Verify(params, UserVerify)
+	if UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
 	U := &model.SysUser{Username: params.Username, Password: params.Password}
 	if err, _ := service.ChangePassword(U, params.NewPassword); err != nil {
 		response.FailWithMessage("修改失败，请检查用户名密码", c)
@@ -172,7 +199,7 @@ func UploadHeaderImg(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
 	} else {
 		//文件上传后拿到文件路径
-		err, filePath, _ := utils.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
+		err, filePath, _ := utils.Upload(header)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
 		} else {
@@ -198,6 +225,11 @@ func UploadHeaderImg(c *gin.Context) {
 func GetUserList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
+	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
+		return
+	}
 	err, list, total := service.GetUserInfoList(pageInfo)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
@@ -222,6 +254,15 @@ func GetUserList(c *gin.Context) {
 func SetUserAuthority(c *gin.Context) {
 	var sua request.SetUserAuth
 	_ = c.ShouldBindJSON(&sua)
+	UserVerify := utils.Rules{
+		"UUID":        {utils.NotEmpty()},
+		"AuthorityId": {utils.NotEmpty()},
+	}
+	UserVerifyErr := utils.Verify(sua, UserVerify)
+	if UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
 	err := service.SetUserAuthority(sua.UUID, sua.AuthorityId)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("修改失败，%v", err), c)
@@ -235,12 +276,17 @@ func SetUserAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SetUserAuth true "删除用户"
+// @Param data body request.GetById true "删除用户"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/deleteUser [delete]
 func DeleteUser(c *gin.Context) {
 	var reqId request.GetById
 	_ = c.ShouldBindJSON(&reqId)
+	IdVerifyErr := utils.Verify(reqId, utils.CustomizeMap["IdVerify"])
+	if IdVerifyErr != nil {
+		response.FailWithMessage(IdVerifyErr.Error(), c)
+		return
+	}
 	err := service.DeleteUser(reqId.Id)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)

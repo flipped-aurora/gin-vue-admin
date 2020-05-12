@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 	"net/url"
 	"os"
@@ -21,6 +22,17 @@ import (
 func CreateTemp(c *gin.Context) {
 	var a model.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
+	AutoCodeVerify := utils.Rules{
+		"Abbreviation":      {utils.NotEmpty()},
+		"StructName":      {utils.NotEmpty()},
+		"PackageName":      {utils.NotEmpty()},
+		"Fields":      {utils.NotEmpty()},
+	}
+	WKVerifyErr := utils.Verify(a, AutoCodeVerify)
+	if WKVerifyErr!=nil {
+		response.FailWithMessage(WKVerifyErr.Error(), c)
+		return
+	}
 	if a.AutoCreateApiToSql {
 		apiList := [5]model.SysApi{
 			{
@@ -39,7 +51,7 @@ func CreateTemp(c *gin.Context) {
 				Path:        "/" + a.Abbreviation + "/" + "update" + a.StructName,
 				Description: "更新" + a.StructName,
 				ApiGroup:    a.Abbreviation,
-				Method:      "POST",
+				Method:      "PUT",
 			},
 			{
 				Path:        "/" + a.Abbreviation + "/" + "find" + a.StructName,

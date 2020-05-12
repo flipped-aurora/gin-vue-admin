@@ -7,7 +7,7 @@
 <img src="https://img.shields.io/badge/gin-1.4.0-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen"/>
 <img src="https://img.shields.io/badge/element--ui-2.12.0-green"/>
-<img src="https://img.shields.io/badge/gorm-1.9.10-red"/>
+<img src="https://img.shields.io/badge/gorm-1.9.12-red"/>
 </div>
 
 [English](./README.md) | 简体中文
@@ -143,8 +143,15 @@ swag init
 
 
 ## 4. 项目架构
+### 4.1 系统架构图
 
-![架构图](./docs/gin-vue-admin.png)
+![系统架构图](./docs/gin-vue-admin.png)
+
+### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
+
+![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
+
+### 4.3 目录结构
 
 ```
     ├─server  	     （后端文件夹）

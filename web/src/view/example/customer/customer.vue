@@ -48,7 +48,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="新增Api">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="客户">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="客户名">
           <el-input autocomplete="off" v-model="form.customerName"></el-input>

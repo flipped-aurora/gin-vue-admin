@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +22,16 @@ import (
 func CreateAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
+	AuthorityVerify := utils.Rules{
+		"AuthorityId":   {utils.NotEmpty()},
+		"AuthorityName": {utils.NotEmpty()},
+		"ParentId":      {utils.NotEmpty()},
+	}
+	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
+	if AuthorityVerifyErr != nil {
+		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+		return
+	}
 	err, authBack := service.CreateAuthority(auth)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
@@ -40,6 +51,24 @@ func CreateAuthority(c *gin.Context) {
 func CopyAuthority(c *gin.Context) {
 	var copyInfo resp.SysAuthorityCopyResponse
 	_ = c.ShouldBindJSON(&copyInfo)
+	OldAuthorityVerify := utils.Rules{
+		"OldAuthorityId": {utils.NotEmpty()},
+	}
+	OldAuthorityVerifyErr := utils.Verify(copyInfo, OldAuthorityVerify)
+	if OldAuthorityVerifyErr != nil {
+		response.FailWithMessage(OldAuthorityVerifyErr.Error(), c)
+		return
+	}
+	AuthorityVerify := utils.Rules{
+		"AuthorityId":   {utils.NotEmpty()},
+		"AuthorityName": {utils.NotEmpty()},
+		"ParentId":      {utils.NotEmpty()},
+	}
+	AuthorityVerifyErr := utils.Verify(copyInfo.Authority, AuthorityVerify)
+	if AuthorityVerifyErr != nil {
+		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+		return
+	}
 	err, authBack := service.CopyAuthority(copyInfo)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("拷贝失败，%v", err), c)
@@ -59,6 +88,11 @@ func CopyAuthority(c *gin.Context) {
 func DeleteAuthority(c *gin.Context) {
 	var a model.SysAuthority
 	_ = c.ShouldBindJSON(&a)
+	AuthorityIdVerifyErr := utils.Verify(a, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
+		return
+	}
 	//删除角色之前需要判断是否有用户正在使用此角色
 	err := service.DeleteAuthority(&a)
 	if err != nil {
@@ -79,6 +113,16 @@ func DeleteAuthority(c *gin.Context) {
 func UpdateAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
+	AuthorityVerify := utils.Rules{
+		"AuthorityId":   {utils.NotEmpty()},
+		"AuthorityName": {utils.NotEmpty()},
+		"ParentId":      {utils.NotEmpty()},
+	}
+	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
+	if AuthorityVerifyErr != nil {
+		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+		return
+	}
 	err, authority := service.UpdateAuthority(auth)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
@@ -98,6 +142,11 @@ func UpdateAuthority(c *gin.Context) {
 func GetAuthorityList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
+	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
+	if PageVerifyErr != nil {
+		response.FailWithMessage(PageVerifyErr.Error(), c)
+		return
+	}
 	err, list, total := service.GetAuthorityInfoList(pageInfo)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
@@ -122,6 +171,11 @@ func GetAuthorityList(c *gin.Context) {
 func SetDataAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
+	AuthorityIdVerifyErr := utils.Verify(auth, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
+		return
+	}
 	err := service.SetDataAuthority(auth)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("设置关联失败，%v", err), c)

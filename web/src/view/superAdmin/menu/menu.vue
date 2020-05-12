@@ -23,6 +23,7 @@
       </el-table-column>
       <el-table-column label="图标" min-width="140" prop="authorityName">
         <template slot-scope="scope">
+          <i :class="`el-icon-${scope.row.meta.icon}`"></i>
           <span>{{scope.row.meta.icon}}</span>
         </template>
       </el-table-column>
@@ -70,9 +71,9 @@
           <el-input autocomplete="off" v-model="form.meta.title"></el-input>
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <el-input autocomplete="off" v-model="form.meta.icon">
-            <template slot="prepend">el-icon-</template>
-          </el-input>
+          <icon :meta="form.meta">
+            <template slot="prepend" >el-icon-</template>
+          </icon>
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input autocomplete="off" v-model.number="form.sort"></el-input>
@@ -104,6 +105,7 @@ import {
   getBaseMenuById
 } from "@/api/menu";
 import infoList from "@/components/mixins/infoList";
+import icon from '@/view/superAdmin/menu/icon';
 export default {
   name: "Menus",
   mixins: [infoList],
@@ -141,8 +143,12 @@ export default {
           { required: true, message: "请输入菜单展示名称", trigger: "blur" }
         ]
       },
-      isEdit: false
+      isEdit: false,
+      test:''
     };
+  },
+  components:{
+    icon
   },
   methods: {
     setOptions() {

@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,6 +21,11 @@ import (
 func UpdateCasbin(c *gin.Context) {
 	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
+	AuthorityIdVerifyErr := utils.Verify(cmr, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
+		return
+	}
 	err := service.UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("添加规则失败，%v", err), c)
@@ -39,6 +45,11 @@ func UpdateCasbin(c *gin.Context) {
 func GetPolicyPathByAuthorityId(c *gin.Context) {
 	var cmr request.CasbinInReceive
 	_ = c.ShouldBindJSON(&cmr)
+	AuthorityIdVerifyErr := utils.Verify(cmr, utils.CustomizeMap["AuthorityIdVerify"])
+	if AuthorityIdVerifyErr != nil {
+		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
+		return
+	}
 	paths := service.GetPolicyPathByAuthorityId(cmr.AuthorityId)
 	response.OkWithData(resp.PolicyPathResponse{Paths: paths}, c)
 }

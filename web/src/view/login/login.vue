@@ -207,7 +207,7 @@
 
       .top {
         text-align: center;
-        margin-top: 20px;
+        margin-top: -40px;
 
         .header {
           height: 44px;

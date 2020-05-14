@@ -12,7 +12,7 @@ jwt:
 mysql:
     username: root
     #password: 'Aa@6447985'
-    password: 'c8e772bb8a4ef9e0'
+    password: '123456'
     path: '127.0.0.1:3306'
     db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'

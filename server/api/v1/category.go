@@ -11,18 +11,18 @@ import (
 )
 
 
-// @Tags TestTest
-// @Summary 创建TestTest
+// @Tags Category
+// @Summary 创建Category
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.TestTest true "创建TestTest"
+// @Param data body model.Category true "创建Category"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /t/createTestTest [post]
-func CreateTestTest(c *gin.Context) {
-	var t model.TestTest
-	_ = c.ShouldBindJSON(&t)
-	err := service.CreateTestTest(t)
+// @Router /cate/createCategory [post]
+func CreateCategory(c *gin.Context) {
+	var cate model.Category
+	_ = c.ShouldBindJSON(&cate)
+	err := service.CreateCategory(cate)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
@@ -31,18 +31,18 @@ func CreateTestTest(c *gin.Context) {
 }
 
 
-// @Tags TestTest
-// @Summary 删除TestTest
+// @Tags Category
+// @Summary 删除Category
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.TestTest true "删除TestTest"
+// @Param data body model.Category true "删除Category"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /t/deleteTestTest [delete]
-func DeleteTestTest(c *gin.Context) {
-	var t model.TestTest
-	_ = c.ShouldBindJSON(&t)
-	err := service.DeleteTestTest(t)
+// @Router /cate/deleteCategory [delete]
+func DeleteCategory(c *gin.Context) {
+	var cate model.Category
+	_ = c.ShouldBindJSON(&cate)
+	err := service.DeleteCategory(cate)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
@@ -51,58 +51,58 @@ func DeleteTestTest(c *gin.Context) {
 }
 
 
-// @Tags TestTest
-// @Summary 更新TestTest
+// @Tags Category
+// @Summary 更新Category
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.TestTest true "更新TestTest"
+// @Param data body model.Category true "更新Category"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /t/updateTestTest [put]
-func UpdateTestTest(c *gin.Context) {
-	var t model.TestTest
-	_ = c.ShouldBindJSON(&t)
-	err := service.UpdateTestTest(&t)
+// @Router /cate/updateCategory [put]
+func UpdateCategory(c *gin.Context) {
+	var cate model.Category
+	_ = c.ShouldBindJSON(&cate)
+	err := service.UpdateCategory(&cate)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage("更新成功", c)
 	}
 }
 
 
-// @Tags TestTest
-// @Summary 用id查询TestTest
+// @Tags Category
+// @Summary 用id查询Category
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.TestTest true "用id查询TestTest"
+// @Param data body model.Category true "用id查询Category"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /t/findTestTest [get]
-func FindTestTest(c *gin.Context) {
-	var t model.TestTest
-	_ = c.ShouldBindQuery(&t)
-	err,ret := service.GetTestTest(t.ID)
+// @Router /cate/findCategory [get]
+func FindCategory(c *gin.Context) {
+	var cate model.Category
+	_ = c.ShouldBindQuery(&cate)
+	err,recate := service.GetCategory(cate.ID)
 	if err != nil {
 	response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {
-		response.OkWithData( gin.H{"ret":ret,}, c)
+		response.OkWithData( gin.H{"recate":recate,}, c)
 	}
 }
 
 
-// @Tags TestTest
-// @Summary 分页获取TestTest列表
+// @Tags Category
+// @Summary 分页获取Category列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "分页获取TestTest列表"
+// @Param data body request.PageInfo true "分页获取Category列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /t/getTestTestList [get]
-func GetTestTestList(c *gin.Context) {
+// @Router /cate/getCategoryList [get]
+func GetCategoryList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindQuery(&pageInfo)
-	err, list, total := service.GetTestTestInfoList(pageInfo)
+	err, list, total := service.GetCategoryInfoList(pageInfo)
 	if err != nil {
 	    response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {

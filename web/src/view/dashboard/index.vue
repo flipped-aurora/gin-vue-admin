@@ -168,6 +168,8 @@ export default {
 
 <style lang="scss" scoped>
     .big{
+        margin:100px 0 0 0;
+        padding-top: 0;
         background-color: rgb(243,243,243);;
         .top{
             width: 98%;

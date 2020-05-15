@@ -7,7 +7,7 @@
       </el-aside>
       <!-- 分块滑动功能 -->
       <el-main class="main-cont main-right">
-        <transition mode="out-in" name="el-fade-in-linear">
+        <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
           <div
             class="topfix"
             :style="{width: `calc(100% - ${isMobile?'0px':isCollapse?'54px':'220px'})`}"

@@ -1016,3 +1016,27 @@ li {
     display: block;
     clear: both;
 }
+
+.el-table--striped .el-table__body tr.el-table__row--level-1 td:first-child {
+    .cell {
+        .el-table__indent {
+            border-right: 1.5px solid #ccc;
+            margin-left: 6px;
+        }
+        .el-table__placeholder {
+            width: 10px;
+        }
+    }
+}
+
+.el-table--striped .el-table__body tr.el-table__row--level-2 td:first-child {
+    .cell {
+        .el-table__indent {
+            border-right: 1.5px solid #ccc;
+            margin-left: 6px;
+        }
+        .el-table__placeholder {
+            width: 10px;
+        }
+    }
+}

@@ -11,7 +11,7 @@
             <el-form-item label="文件名称" prop="packageName">
                 <el-input v-model="form.packageName"></el-input>
             </el-form-item>
-            <el-form-item label="自行创建api入库">
+            <el-form-item>
                 <el-checkbox v-model="form.autoCreateApiToSql">自动创建api</el-checkbox>
             </el-form-item>
         </el-form>

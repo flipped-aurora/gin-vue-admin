@@ -1,4 +1,5 @@
 FROM golang:alpine as builder
+RUN echo 'http://mirrors.aliyun.com/alpine/v3.6/community/'>/etc/apk/repositories && echo 'http://mirrors.aliyun.com/alpine/v3.6/main/'>>/etc/apk/repositories 
 RUN  apk add --update --no-cache yarn make g++
 RUN yarn global add cross-env node-sass
 

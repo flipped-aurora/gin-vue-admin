@@ -172,7 +172,7 @@ export default {
         padding-top: 0;
         background-color: rgb(243,243,243);;
         .top{
-            width: 98%;
+            width: 100%;
             height: 360px;
             margin-top: 20px;
             overflow: hidden;
@@ -185,7 +185,7 @@ export default {
             }
         }
         .mid{
-            width: 98%;
+            width: 100%;
             height: 380px;
             .chart-wrapper {
                 height: 340px;
@@ -195,9 +195,12 @@ export default {
             }
         }
         .bottom{
-            width: 97%;
+            width: 100%;
             height: 300px;
             margin: 20px 0;
+            .el-row{
+                margin-right: 4px !important;
+            }
             .chart-player{
                 width: 100%;
                 height: 270px;

@@ -1040,3 +1040,32 @@ li {
         }
     }
 }
+@media screen and (max-width: 1080px) {
+    .admin-box{
+            tr{
+                td{
+                    .el-button{
+                        padding: 7px 5px;
+                    }
+                }
+            }
+    }
+}
+@media screen and (max-width: 885px) {
+    .admin-box{
+        .el-table__fixed-right{
+            tr{
+                td{
+                    .el-button{
+                        padding: 7px 0px;
+                    }
+                }
+            }
+        }
+        .el-table__row{
+            .el-button.el-button--text.el-button--small::after{
+                margin-left: 8px;
+            }
+        } 
+    }
+}

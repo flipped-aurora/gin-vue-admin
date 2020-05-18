@@ -37,11 +37,20 @@ export const router = {
             }]
             const asyncRouterRes = await asyncMenu()
             const asyncRouter = asyncRouterRes.data.menus
+            asyncRouter.push({
+                path: "404",
+                name: "404",
+                hidden: true,
+                meta: {
+                    title: "迷路了*。*",
+                },
+                component: 'view/error/index.vue'
+            })
             formatRouter(asyncRouter)
             baseRouter[0].children = asyncRouter
             baseRouter.push({
                 path: '*',
-                redirect: '/404'
+                redirect: '/layout/404'
 
             })
             asyncRouterHandle(baseRouter)

@@ -13,15 +13,15 @@ import (
 // @return     err             error
 // @return    menusMsp            map{string}[]SysBaseMenu
 
-func getMenuTreeMap(authorityId string)(err error,treeMap map[string][]model.SysMenu){
+func getMenuTreeMap(authorityId string) (err error, treeMap map[string][]model.SysMenu) {
 	var allMenus []model.SysMenu
 	treeMap = make(map[string][]model.SysMenu)
 	sql := "SELECT authority_menu.keep_alive,authority_menu.default_menu,authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? ORDER BY authority_menu.sort ASC"
-	err = global.GVA_DB.Raw(sql,authorityId).Scan(&allMenus).Error
-	for _,v := range allMenus{
+	err = global.GVA_DB.Raw(sql, authorityId).Scan(&allMenus).Error
+	for _, v := range allMenus {
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
-	return err,treeMap
+	return err, treeMap
 }
 
 // @title    GetMenuTree
@@ -32,7 +32,7 @@ func getMenuTreeMap(authorityId string)(err error,treeMap map[string][]model.Sys
 // @return    menus           []model.SysMenu
 
 func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
-	err,menuTree := getMenuTreeMap(authorityId)
+	err, menuTree := getMenuTreeMap(authorityId)
 	menus = menuTree["0"]
 	for i := 0; i < len(menus); i++ {
 		err = getChildrenList(&menus[i], menuTree)
@@ -47,7 +47,7 @@ func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
 // @param     sql             string
 // @return    err             error
 
-func getChildrenList(menu *model.SysMenu,treeMap map[string][]model.SysMenu) (err error) {
+func getChildrenList(menu *model.SysMenu, treeMap map[string][]model.SysMenu) (err error) {
 	menu.Children = treeMap[menu.MenuId]
 	for i := 0; i < len(menu.Children); i++ {
 		err = getChildrenList(&menu.Children[i], treeMap)
@@ -65,10 +65,10 @@ func getChildrenList(menu *model.SysMenu,treeMap map[string][]model.SysMenu) (er
 
 func GetInfoList() (err error, list interface{}, total int) {
 	var menuList []model.SysBaseMenu
-	err,treeMap := getBaseMenuTreeMap()
+	err, treeMap := getBaseMenuTreeMap()
 	menuList = treeMap["0"]
 	for i := 0; i < len(menuList); i++ {
-		err = getBaseChildrenList(&menuList[i],treeMap)
+		err = getBaseChildrenList(&menuList[i], treeMap)
 	}
 	return err, menuList, total
 }
@@ -79,10 +79,10 @@ func GetInfoList() (err error, list interface{}, total int) {
 // @param     menu            *model.SysBaseMenu
 // @return    err             error
 
-func getBaseChildrenList(menu *model.SysBaseMenu ,treeMap map[string][]model.SysBaseMenu) (err error) {
+func getBaseChildrenList(menu *model.SysBaseMenu, treeMap map[string][]model.SysBaseMenu) (err error) {
 	menu.Children = treeMap[strconv.Itoa(int(menu.ID))]
 	for i := 0; i < len(menu.Children); i++ {
-		err = getBaseChildrenList(&menu.Children[i],treeMap)
+		err = getBaseChildrenList(&menu.Children[i], treeMap)
 	}
 	return err
 }
@@ -110,14 +110,14 @@ func AddBaseMenu(menu model.SysBaseMenu) (err error) {
 // @return     err             error
 // @return    menusMsp            map{string}[]SysBaseMenu
 
-func getBaseMenuTreeMap()(err error,treeMap map[string][]model.SysBaseMenu){
+func getBaseMenuTreeMap() (err error, treeMap map[string][]model.SysBaseMenu) {
 	var allMenus []model.SysBaseMenu
 	treeMap = make(map[string][]model.SysBaseMenu)
 	err = global.GVA_DB.Order("sort", true).Find(&allMenus).Error
-	for _,v := range allMenus{
+	for _, v := range allMenus {
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
-	return err,treeMap
+	return err, treeMap
 }
 
 // @title    GetBaseMenuTree
@@ -127,10 +127,10 @@ func getBaseMenuTreeMap()(err error,treeMap map[string][]model.SysBaseMenu){
 // @return    menus            []SysBaseMenu
 
 func GetBaseMenuTree() (err error, menus []model.SysBaseMenu) {
-	err,treeMap := getBaseMenuTreeMap()
+	err, treeMap := getBaseMenuTreeMap()
 	menus = treeMap["0"]
 	for i := 0; i < len(menus); i++ {
-		err = getBaseChildrenList(&menus[i],treeMap)
+		err = getBaseChildrenList(&menus[i], treeMap)
 	}
 	return err, menus
 }

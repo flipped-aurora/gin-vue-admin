@@ -50,5 +50,5 @@ func FailWithMessage(message string, c *gin.Context) {
 }
 
 func FailWithDetailed(code int, data interface{}, message string, c *gin.Context) {
-	Result(code, data, message, c )
+	Result(code, data, message, c)
 }

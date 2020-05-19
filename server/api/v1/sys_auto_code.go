@@ -80,7 +80,7 @@ func CreateTemp(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 		os.Remove("./ginvueadmin.zip")
 	} else {
-		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) //fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
+		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
 		c.Writer.Header().Add("Content-Type", "application/json")
 		c.Writer.Header().Add("success", "true")
 		c.File("./ginvueadmin.zip")

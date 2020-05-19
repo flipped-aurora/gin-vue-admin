@@ -32,19 +32,19 @@ func CreateDir(dirs ...string) (err error) {
 	for _, v := range dirs {
 		exist, err := PathExists(v)
 		if err != nil {
-			//log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))
+			// log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))
 			return err
 		}
 		if exist {
-			//log.L.Info(fmt.Sprintf("has dir![%v]\n"+_dir))
+			// log.L.Info(fmt.Sprintf("has dir![%v]\n"+_dir))
 		} else {
-			//log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
+			// log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
 			// 创建文件夹
 			err = os.Mkdir(v, os.ModePerm)
 			if err != nil {
-				//log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
+				// log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
 			} else {
-				//log.L.Info("mkdir success!\n")
+				// log.L.Info("mkdir success!\n")
 			}
 		}
 	}

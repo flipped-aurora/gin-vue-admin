@@ -93,7 +93,7 @@ func DeleteAuthority(c *gin.Context) {
 		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
 		return
 	}
-	//删除角色之前需要判断是否有用户正在使用此角色
+	// 删除角色之前需要判断是否有用户正在使用此角色
 	err := service.DeleteAuthority(&a)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
@@ -127,7 +127,7 @@ func UpdateAuthority(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
 	} else {
-		response.OkWithData(resp.SysAuthorityResponse{authority}, c)
+		response.OkWithData(resp.SysAuthorityResponse{Authority: authority}, c)
 	}
 }
 

@@ -23,13 +23,13 @@ func CreateTemp(c *gin.Context) {
 	var a model.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
 	AutoCodeVerify := utils.Rules{
-		"Abbreviation":      {utils.NotEmpty()},
-		"StructName":      {utils.NotEmpty()},
-		"PackageName":      {utils.NotEmpty()},
-		"Fields":      {utils.NotEmpty()},
+		"Abbreviation": {utils.NotEmpty()},
+		"StructName":   {utils.NotEmpty()},
+		"PackageName":  {utils.NotEmpty()},
+		"Fields":       {utils.NotEmpty()},
 	}
 	WKVerifyErr := utils.Verify(a, AutoCodeVerify)
-	if WKVerifyErr!=nil {
+	if WKVerifyErr != nil {
 		response.FailWithMessage(WKVerifyErr.Error(), c)
 		return
 	}

@@ -7,7 +7,7 @@
       <el-table-column label="头像" min-width="50">
         <template slot-scope="scope">
           <div :style="{'textAlign':'center'}">
-            <img :src="scope.row.headerImg" height="50" width="50" />
+            <img :src="scope.row.headerImg" height="35" width="35" />
           </div>
         </template>
       </el-table-column>

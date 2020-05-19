@@ -60,14 +60,12 @@ service.interceptors.response.use(
         } else {
             Message({
                 showClose: true,
-                message: response.data.msg||decodeURI(response.headers.msg),
+                message: response.data.msg || decodeURI(response.headers.msg),
                 type: 'error',
-                onClose: () => {
-                    if (response.data.data && response.data.data.reload) {
-                        store.commit('user/LoginOut')
-                    }
-                }
             })
+            if (response.data.data && response.data.data.reload) {
+                store.commit('user/LoginOut')
+            }
             return Promise.reject(response.data.msg)
         }
     },

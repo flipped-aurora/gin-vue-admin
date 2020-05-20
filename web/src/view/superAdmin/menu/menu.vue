@@ -8,6 +8,7 @@
     <el-table :data="tableData" border row-key="ID" stripe>
       <el-table-column label="ID" min-width="100" prop="ID"></el-table-column>
       <el-table-column label="路由Name" min-width="160" prop="name"></el-table-column>
+      <el-table-column label="路由Path" min-width="160" prop="path"></el-table-column>
       <el-table-column label="是否隐藏" min-width="100" prop="hidden">
         <template slot-scope="scope">
           <span>{{scope.row.hidden?"隐藏":"显示"}}</span>
@@ -46,7 +47,10 @@
         label-position="top"
       >
         <el-form-item label="路由name" prop="path" style="width:30%">
-          <el-input autocomplete="off" placeholder="唯一英文字符串" v-model="form.path"></el-input>
+          <el-input autocomplete="off" placeholder="唯一英文字符串" @change="changeName" v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="路由path" prop="path" style="width:30%">
+          <el-input autocomplete="off" placeholder="建议只在后方拼接参数" v-model="form.path"></el-input>
         </el-form-item>
         <el-form-item label="是否隐藏" style="width:30%">
           <el-select placeholder="是否在列表隐藏" v-model="form.hidden">
@@ -151,6 +155,9 @@ export default {
     icon
   },
   methods: {
+    changeName(){
+      this.form.path = this.form.name
+    },
     setOptions() {
       this.menuOption = [
         {
@@ -259,7 +266,6 @@ export default {
       this.$refs.menuForm.validate(async valid => {
         if (valid) {
           let res;
-          this.form.name = this.form.path;
           if (this.isEdit) {
             res = await updateBaseMenu(this.form);
           } else {

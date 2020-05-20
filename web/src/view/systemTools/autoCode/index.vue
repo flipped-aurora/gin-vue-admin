@@ -28,6 +28,7 @@
                 width="280">
             </el-table-column>
             <el-table-column
+                v-test
                 prop="fieldName"
                 label="Field名"
                 width="280">
@@ -116,7 +117,13 @@ export default {
     components:{
         FieldDialog
     },
-    methods:{
+    directives:{
+        'test':function(el,binding,vnode){
+            /** el可以获取当前dom节点，并且进行编译，也可以操作事件 **/
+            /** binding指的是一个对象，一般不用 **/    /** vnode 是 Vue 编译生成的虚拟节点 **/
+            console.log(el.click());  //获取v-model的值
+        }},
+        methods:{
         editAndAddField(item){
             this.dialogFlag = true
             if(item){
@@ -129,6 +136,8 @@ export default {
             }
         },
         enterDialog(){
+            console.log(this.dialogMiddle.fieldName.replace(/\s*/g,""))
+
             this.$refs.fieldDialog.$refs.fieldDialogFrom.validate((valid) => {
           if (valid) {
             this.dialogMiddle.fieldName = toUpperCase(this.dialogMiddle.fieldName)
@@ -140,7 +149,7 @@ export default {
             return false;
           }
         });
-            
+
         },
         closeDialog(){
             if(this.addFlag=="edit"){

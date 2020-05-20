@@ -28,32 +28,32 @@ func NotEmpty() string {
 	return "notEmpty"
 }
 
-//小于入参(<) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+// 小于入参(<) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
 func Lt(mark string) string {
 	return "lt=" + mark
 }
 
-//小于等于入参(<=) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+// 小于等于入参(<=) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
 func Le(mark string) string {
 	return "le=" + mark
 }
 
-//等于入参(==) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+// 等于入参(==) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
 func Eq(mark string) string {
 	return "eq=" + mark
 }
 
-//不等于入参(!=)  如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+// 不等于入参(!=)  如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
 func Ne(mark string) string {
 	return "ne=" + mark
 }
 
-//大于等于入参(>=) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+// 大于等于入参(>=) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
 func Ge(mark string) string {
 	return "ge=" + mark
 }
 
-//大于入参(>) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
+// 大于入参(>) 如果为string array Slice则为长度比较 如果是 int uint float 则为数值比较
 func Gt(mark string) string {
 	return "gt=" + mark
 }
@@ -70,14 +70,14 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 	}
 
 	typ := reflect.TypeOf(st)
-	val := reflect.ValueOf(st) //获取reflect.Type类型
+	val := reflect.ValueOf(st) // 获取reflect.Type类型
 
-	kd := val.Kind() //获取到st对应的类别
+	kd := val.Kind() // 获取到st对应的类别
 	if kd != reflect.Struct {
 		return errors.New("expect struct")
 	}
 	num := val.NumField()
-	//遍历结构体的所有字段
+	// 遍历结构体的所有字段
 	for i := 0; i < num; i++ {
 		tagVal := typ.Field(i)
 		val := val.Field(i)

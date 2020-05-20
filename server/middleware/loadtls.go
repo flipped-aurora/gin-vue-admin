@@ -16,7 +16,7 @@ func LoadTls() gin.HandlerFunc {
 		})
 		err := middleware.Process(c.Writer, c.Request)
 		if err != nil {
-			//如果出现错误，请不要继续。
+			// 如果出现错误，请不要继续
 			fmt.Println(err)
 			return
 		}

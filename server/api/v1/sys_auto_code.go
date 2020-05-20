@@ -23,13 +23,13 @@ func CreateTemp(c *gin.Context) {
 	var a model.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
 	AutoCodeVerify := utils.Rules{
-		"Abbreviation":      {utils.NotEmpty()},
-		"StructName":      {utils.NotEmpty()},
-		"PackageName":      {utils.NotEmpty()},
-		"Fields":      {utils.NotEmpty()},
+		"Abbreviation": {utils.NotEmpty()},
+		"StructName":   {utils.NotEmpty()},
+		"PackageName":  {utils.NotEmpty()},
+		"Fields":       {utils.NotEmpty()},
 	}
 	WKVerifyErr := utils.Verify(a, AutoCodeVerify)
-	if WKVerifyErr!=nil {
+	if WKVerifyErr != nil {
 		response.FailWithMessage(WKVerifyErr.Error(), c)
 		return
 	}
@@ -80,7 +80,7 @@ func CreateTemp(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 		os.Remove("./ginvueadmin.zip")
 	} else {
-		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) //fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
+		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
 		c.Writer.Header().Add("Content-Type", "application/json")
 		c.Writer.Header().Add("success", "true")
 		c.File("./ginvueadmin.zip")

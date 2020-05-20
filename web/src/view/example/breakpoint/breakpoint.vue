@@ -2,24 +2,24 @@
   <div class="hello">
      <el-divider content-position="left">大文件上传</el-divider>
     <form id="fromCont" method="post" >
-      <div class="fileUpload">
-        选择文件<input @change="choseFile" id="file" multiple="multiple" type="file"  />
+      <div class="fileUpload" @click="inputChange">
+        选择文件
+        <input v-show="false"  @change="choseFile" id="file" multiple="multiple" type="file" ref="Input"  />
       </div>
     </form>
      <el-button @click="getFile" :disabled="limitFileSize" type="primary" size="medium" class="uploadBtn">上传文件</el-button>
     <div class="el-upload__tip">请上传不超过5MB的文件</div>
     <div class="list">
-      <transition-group name="list" tag="p">
-        <div class="list-item" v-for="item in uploadList" :key="item.name" >
+      <transition  name="list" tag="p">
+        <div class="list-item" v-if="file" >
           <i class="el-icon-document"></i>
-          <span>{{ item.name }}</span>
-          <span v-if="file" class="percentage" >{{percentage}}%</span>
+          <span>{{ file.name }}</span>
+          <span class="percentage" >{{percentage}}%</span>
           <el-progress  :show-text='false' :text-inside="false" :stroke-width="2" :percentage="percentage"></el-progress>
         </div> 
-      </transition-group>
+      </transition>
    </div>
-    
-    <!-- <span
+     <!-- <span
       v-if="this.file"
     >{{Math.floor(((this.formDataList.length-this.waitNum)/this.formDataList.length)*100)}}%</span> -->
     <div class="tips">此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹</div>
@@ -45,8 +45,7 @@ export default {
       limitFileSize: false,
       percentage:0,
       percentageFlage: true,
-      customColor: '#409eff',
-      uploadList:[]
+      customColor: '#409eff'
     }
   },
   created(){
@@ -59,6 +58,7 @@ export default {
       const file = e.target.files[0] // 获取当前文件
       const maxSize = 5*1024*1024
       this.file = file // file 丢全局方便后面用 可以改进为func传参形式
+      this.percentage = 0
     if(file.size<maxSize){
       fileR.readAsArrayBuffer(file) // 把文件读成ArrayBuffer  主要为了保持跟后端的流一致
       fileR.onload = async e => {
@@ -123,9 +123,6 @@ export default {
         this.percentageFlage = false
       }
       this.sliceFile() // 上传切片
-      if(this.percentage == 100){
-        this.uploadList.push(this.file)
-      }
     },
     sliceFile() {
       this.waitUpLoad &&
@@ -164,6 +161,9 @@ export default {
           await removeChunk(params)
         }
       }
+    },
+    inputChange(){
+      this.$refs.Input.dispatchEvent(new MouseEvent('click'))
     }
   }
 }
@@ -198,15 +198,14 @@ a {
     border-radius: 4px;
     overflow: hidden;
     display: inline-block;
-  input{
-    position: absolute;
-    font-size: 100px;
-    right: 0;
-    top: 0;
-    opacity: 0;
-    cursor: pointer;
-  }
- 
+    input{
+      position: absolute;
+      font-size: 100px;
+      right: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
 }
  .fileName{
     display: inline-block;

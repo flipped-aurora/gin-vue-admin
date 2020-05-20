@@ -13,7 +13,7 @@
     >
       <el-table-column label="角色id" min-width="180" prop="authorityId"></el-table-column>
       <el-table-column label="角色名称" min-width="180" prop="authorityName"></el-table-column>
-      <el-table-column fixed="right" label="操作" min-width="300">
+      <el-table-column fixed="right" label="操作" width="460">
         <template slot-scope="scope">
           <el-button @click="opdendrawer(scope.row)" size="small" type="text">设置权限</el-button>
           <el-button @click="addAuthority(scope.row.authorityId)" size="small" type="text">新增子角色</el-button>

@@ -42,7 +42,7 @@ func SetSystemConfig(c *gin.Context) {
 	}
 }
 
-//本方法开发中 开发者windows系统 缺少linux系统所需的包 因此搁置
+// 本方法开发中 开发者windows系统 缺少linux系统所需的包 因此搁置
 // @Tags system
 // @Summary 设置配置文件内容
 // @Security ApiKeyAuth

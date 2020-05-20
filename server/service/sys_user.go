@@ -18,9 +18,9 @@ import (
 
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	var user model.SysUser
-	//判断用户名是否注册
+	// 判断用户名是否注册
 	notRegister := global.GVA_DB.Where("username = ?", u.Username).First(&user).RecordNotFound()
-	//notRegister为false表明读取到了 不能注册
+	// notRegister为false表明读取到了 不能注册
 	if !notRegister {
 		return errors.New("用户名已注册"), userInter
 	} else {
@@ -60,7 +60,7 @@ func Login(u *model.SysUser) (err error, userInter *model.SysUser) {
 
 func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter *model.SysUser) {
 	var user model.SysUser
-	//后期修改jwt+password模式
+	// TODO:后期修改jwt+password模式
 	u.Password = utils.MD5V([]byte(u.Password))
 	err = global.GVA_DB.Where("username = ? AND password = ?", u.Username, u.Password).First(&user).Update("password", utils.MD5V([]byte(newPassword))).Error
 	return err, u

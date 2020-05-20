@@ -19,13 +19,13 @@ func CreateWorkFlow(c *gin.Context) {
 	var wk model.SysWorkflow
 	_ = c.ShouldBindJSON(&wk)
 	WKVerify := utils.Rules{
-		"WorkflowNickName":      {utils.NotEmpty()},
-		"WorkflowName":  {utils.NotEmpty()},
-		"WorkflowDescription":      {utils.NotEmpty()},
-		"WorkflowStepInfo":      {utils.NotEmpty()},
+		"WorkflowNickName":    {utils.NotEmpty()},
+		"WorkflowName":        {utils.NotEmpty()},
+		"WorkflowDescription": {utils.NotEmpty()},
+		"WorkflowStepInfo":    {utils.NotEmpty()},
 	}
 	WKVerifyErr := utils.Verify(wk, WKVerify)
-	if WKVerifyErr!=nil {
+	if WKVerifyErr != nil {
 		response.FailWithMessage(WKVerifyErr.Error(), c)
 		return
 	}

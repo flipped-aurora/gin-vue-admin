@@ -3,7 +3,6 @@ package v1
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
-	_ "gin-vue-admin/model/response"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
@@ -29,34 +28,34 @@ func BreakpointContinue(c *gin.Context) {
 	_, FileHeader, err := c.Request.FormFile("file")
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
-	} else {
-		f, err := FileHeader.Open()
-		if err != nil {
-			response.FailWithMessage(err.Error(), c)
-		} else {
-			cen, _ := ioutil.ReadAll(f)
-			defer f.Close()
-			if flag := utils.CheckMd5(cen, chunkMd5); flag {
-				err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
-				if err != nil {
-					response.FailWithMessage(err.Error(), c)
-				} else {
-					err, pathc := utils.BreakPointContinue(cen, fileName, chunkNumber, chunkTotal, fileMd5)
-					if err != nil {
-						response.FailWithMessage(err.Error(), c)
-					} else {
-						err = service.CreateFileChunk(file.ID, pathc, chunkNumber)
-						if err != nil {
-							response.FailWithMessage(err.Error(), c)
-						} else {
-							response.OkWithMessage("切片创建成功", c)
-						}
-					}
-				}
-			} else {
-			}
-		}
+		return
 	}
+	f, err := FileHeader.Open()
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	defer f.Close()
+	cen, _ := ioutil.ReadAll(f)
+	if flag := utils.CheckMd5(cen, chunkMd5); !flag {
+		return
+	}
+	err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err, pathc := utils.BreakPointContinue(cen, fileName, chunkNumber, chunkTotal, fileMd5)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if err = service.CreateFileChunk(file.ID, pathc, chunkNumber); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("切片创建成功", c)
 }
 
 // @Tags ExaFileUploadAndDownload

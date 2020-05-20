@@ -70,7 +70,7 @@ func AddBaseMenu(c *gin.Context) {
 	var menu model.SysBaseMenu
 	_ = c.ShouldBindJSON(&menu)
 	MenuVerify := utils.Rules{
-		"Path":      {"notEmpty"},
+		"Path":      {utils.NotEmpty()},
 		"ParentId":  {utils.NotEmpty()},
 		"Name":      {utils.NotEmpty()},
 		"Component": {utils.NotEmpty()},

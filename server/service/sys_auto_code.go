@@ -43,16 +43,16 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	if err != nil {
 		return err
 	}
-	//自动化总目录
+	// 自动化总目录
 	_autoCode := "./autoCode/"
-	//自动化后台代码目录
+	// 自动化后台代码目录
 	_te := "./autoCode/te/"
 	_dir := _te + autoCode.PackageName
 	_modeldir := _te + autoCode.PackageName + "/model"
 	_apidir := _te + autoCode.PackageName + "/api"
 	_routerdir := _te + autoCode.PackageName + "/router"
 	_servicedir := _te + autoCode.PackageName + "/service"
-	//自动化前台代码目录
+	// 自动化前台代码目录
 	_fe := "./autoCode/fe/"
 	_fe_dir := _fe + autoCode.PackageName
 	_fe_apidir := _fe + autoCode.PackageName + "/api"

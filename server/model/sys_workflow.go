@@ -4,7 +4,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-//工作流属性表
+// 工作流属性表
 type SysWorkflow struct {
 	gorm.Model
 	WorkflowNickName    string                `json:"workflowNickName"`    // 工作流名称

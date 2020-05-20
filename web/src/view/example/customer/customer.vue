@@ -22,7 +22,7 @@
       <el-table-column label="姓名" prop="customerName" width="120"></el-table-column>
       <el-table-column label="电话" prop="customerPhoneData" width="120"></el-table-column>
       <el-table-column label="接入人ID" prop="sysUserId" width="120"></el-table-column>
-      <el-table-column label="按钮组">
+      <el-table-column label="按钮组" min-width="160">
         <template slot-scope="scope">
           <el-button @click="updateCustomer(scope.row)" size="small" type="text">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">

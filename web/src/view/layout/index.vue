@@ -319,8 +319,15 @@ $mainHight: 100vh;
       &:not(.el-menu--collapse) {
         width: 220px;
       }
+      
     }
-
+.el-menu--collapse{
+        li{
+          .el-tooltip,.el-submenu__title{
+            padding:0px 15px !important;
+          }
+        }
+      }
     &::-webkit-scrollbar {
       display: none;
     }

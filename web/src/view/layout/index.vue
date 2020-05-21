@@ -3,6 +3,10 @@
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()"></el-row>
       <el-aside class="main-cont main-left">
+           <div class="tilte">
+              <img src="~@/assets/nav_logo.png" alt=""  class="logoimg">
+              <h2 v-if="isSider" class="tit-text">Gin-Vue-Admin</h2>
+            </div>
         <Aside class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
@@ -337,6 +341,28 @@ $mainHight: 100vh;
         }
       }
     }
+  }
+}
+.tilte{
+  background: #001529;
+  min-height: 64px;
+  line-height: 64px;
+  background: #002140;
+  text-align: center;
+  .logoimg{
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    background: #fff;
+    border-radius: 50%;
+    padding: 3px;
+  }
+  .tit-text{
+    display: inline-block;
+    color: #fff;
+    font-weight: 600;
+    font-size: 20px;
+    vertical-align: middle;
   }
 }
 </style>

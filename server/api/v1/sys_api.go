@@ -68,7 +68,7 @@ func DeleteApi(c *gin.Context) {
 	}
 }
 
-//条件搜索后端看此api
+// 条件搜索后端看此api
 
 // @Tags SysApi
 // @Summary 分页获取API列表

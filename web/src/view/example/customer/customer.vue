@@ -22,7 +22,7 @@
       <el-table-column label="姓名" prop="customerName" width="120"></el-table-column>
       <el-table-column label="电话" prop="customerPhoneData" width="120"></el-table-column>
       <el-table-column label="接入人ID" prop="sysUserId" width="120"></el-table-column>
-      <el-table-column label="按钮组">
+      <el-table-column label="按钮组" min-width="160">
         <template slot-scope="scope">
           <el-button @click="updateCustomer(scope.row)" size="small" type="text">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
@@ -61,7 +61,8 @@
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
       </div>
-    </el-dialog>在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示
+    </el-dialog>
+    <div class="tips"> 在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
   </div>
 </template>
 

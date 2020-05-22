@@ -35,7 +35,7 @@
           prop="name"
           width="180"
         ></el-table-column>
-        <el-table-column label="链接" prop="url"></el-table-column>
+        <el-table-column label="链接" prop="url" min-width="300"></el-table-column>
         <el-table-column label="标签" prop="tag" width="100">
           <template slot-scope="scope">
             <el-tag
@@ -45,7 +45,7 @@
             >
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="100">
+        <el-table-column label="操作" width="160">
           <template slot-scope="scope">
             <el-button @click="downloadFile(scope.row)" size="small" type="text"
               >下载</el-button

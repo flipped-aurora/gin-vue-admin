@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="system">
     <el-form :model="config" label-width="100px" ref="form" class="system">
       <h2>系统配置</h2>
       <el-form-item label="多点登录拦截">
@@ -88,7 +88,7 @@
       <el-form-item label="imgHeight">
         <el-input v-model.number="config.captcha.imgHeight"></el-input>
       </el-form-item>
-       <h2>日志配置</h2>
+      <h2>日志配置</h2>
       <el-form-item label="prefix">
         <el-input v-model.number="config.log.prefix"></el-input>
       </el-form-item>
@@ -104,9 +104,9 @@
 </template>
 
 <script>
-import { getSystemConfig, setSystemConfig } from '@/api/system'
+import { getSystemConfig, setSystemConfig } from "@/api/system";
 export default {
-  name: 'Config',
+  name: "Config",
   data() {
     return {
       config: {
@@ -117,40 +117,42 @@ export default {
         sqlite: {},
         redis: {},
         qiniu: {},
-        captcha:{},
-        log:{}
+        captcha: {},
+        log: {}
       }
-    }
+    };
   },
   async created() {
-    await this.initForm()
+    await this.initForm();
   },
   methods: {
     async initForm() {
-      const res = await getSystemConfig()
+      const res = await getSystemConfig();
       if (res.code == 0) {
-        this.config = res.data.config
+        this.config = res.data.config;
       }
     },
     reload() {},
     async update() {
-      const res = await setSystemConfig({ config: this.config })
+      const res = await setSystemConfig({ config: this.config });
       if (res.code == 0) {
         this.$message({
-          type: 'success',
-          message: '配置文件设置成功'
-        })
-        await this.initForm()
+          type: "success",
+          message: "配置文件设置成功"
+        });
+        await this.initForm();
       }
     }
   }
-}
+};
 </script>
 <style lang="scss">
-h2 {
-  padding: 10px;
-  margin: 10px 0;
-  font-size: 16px;
-  box-shadow:-4px 1px 3px 0px #e7e8e8
+.system {
+  h2 {
+    padding: 10px;
+    margin: 10px 0;
+    font-size: 16px;
+    box-shadow: -4px 1px 3px 0px #e7e8e8;
+  }
 }
 </style>

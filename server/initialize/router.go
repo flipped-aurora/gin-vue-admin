@@ -36,7 +36,6 @@ func Routers() *gin.Engine {
 	router.InitCustomerRouter(ApiGroup)              // 客户路由
 	router.InitAutoCodeRouter(ApiGroup)              // 创建自动化代码
 
-	router.InitCategoryRouter(ApiGroup)				//分类
 	global.GVA_LOG.Info("router register success")
 	return Router
 }

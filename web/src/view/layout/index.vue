@@ -28,6 +28,7 @@
                 >{{item.meta.title}}</el-breadcrumb-item>
               </el-breadcrumb>
               <div class="fl-right right-box">
+                <Screenfull class="screenfull"></Screenfull>
                 <el-dropdown>
                   <span class="el-dropdown-link">
                     <img :src="userInfo.headerImg" height="30" width="30" />
@@ -87,7 +88,7 @@
 <script>
 import Aside from "@/view/layout/aside";
 import HistoryComponent from "@/view/layout/aside/historyComponent/history";
-
+import Screenfull from "@/view/layout/screenfull";
 import { mapGetters, mapActions } from "vuex";
 import { changePassword } from "@/api/user";
 export default {
@@ -128,7 +129,8 @@ export default {
   },
   components: {
     Aside,
-    HistoryComponent
+    HistoryComponent,
+    Screenfull
   },
   methods: {
     ...mapActions("user", ["LoginOut"]),
@@ -371,5 +373,9 @@ $mainHight: 100vh;
     font-size: 20px;
     vertical-align: middle;
   }
+}
+.screenfull{
+  display: inline-block;
+ 
 }
 </style>

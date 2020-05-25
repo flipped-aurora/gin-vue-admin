@@ -28,6 +28,19 @@
                 >{{item.meta.title}}</el-breadcrumb-item>
               </el-breadcrumb>
               <div class="fl-right right-box">
+                <transition name="el-fade-in-linear">
+                  <div v-show="show" class="transition-box" style="display: inline-block; ">
+                     <el-select v-model="value" filterable placeholder="请选择" @blur="test()">
+                      <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </div>
+                </transition>
+                <i class="el-icon-search" style="font-size: 20px; display: inline-block; " @click="show = !show"></i>
                 <Screenfull class="screenfull"></Screenfull>
                 <el-dropdown>
                   <span class="el-dropdown-link">
@@ -95,6 +108,7 @@ export default {
   name: "Layout",
   data() {
     return {
+      show:false,
       isCollapse: false,
       isSider: true,
       isMobile: false,
@@ -124,7 +138,24 @@ export default {
             trigger: "blur"
           }
         ]
-      }
+      },
+      options: [{
+        value: '选项1',
+        label: '黄金糕'
+      }, {
+        value: '选项2',
+        label: '双皮奶'
+      }, {
+        value: '选项3',
+        label: '蚵仔煎'
+      }, {
+        value: '选项4',
+        label: '龙须面'
+      }, {
+        value: '选项5',
+        label: '北京烤鸭'
+      }],
+      value:''
     };
   },
   components: {
@@ -133,6 +164,9 @@ export default {
     Screenfull
   },
   methods: {
+    test(){
+      this.show = false
+    },
     ...mapActions("user", ["LoginOut"]),
     totalCollapse() {
       this.isCollapse = !this.isCollapse;
@@ -321,7 +355,7 @@ $mainHight: 100vh;
       &:not(.el-menu--collapse) {
         width: 220px;
       }
-      
+
     }
 .el-menu--collapse{
         li{
@@ -374,8 +408,12 @@ $mainHight: 100vh;
     vertical-align: middle;
   }
 }
+.el-input__inner{
+  border: none;
+  border-bottom: 1px solid #606266;
+}
 .screenfull{
   display: inline-block;
- 
+
 }
 </style>

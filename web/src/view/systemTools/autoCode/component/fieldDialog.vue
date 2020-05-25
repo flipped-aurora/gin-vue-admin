@@ -78,11 +78,11 @@ export default {
                 fieldJson:[ { required: true, message: '请输入field格式化json', trigger: 'blur' }],
                 fieldType:[ { required: true, message: '请选择field数据类型', trigger: 'blur' }]
             }
-            
+
         }
-    }
+    },
 }
 </script>
 <style lang="scss">
-    
+
 </style>

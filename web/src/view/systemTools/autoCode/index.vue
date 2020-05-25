@@ -28,7 +28,6 @@
                 width="280">
             </el-table-column>
             <el-table-column
-                v-test
                 prop="fieldName"
                 label="Field名"
                 width="280">
@@ -117,12 +116,6 @@ export default {
     components:{
         FieldDialog
     },
-    directives:{
-        'test':function(el,binding,vnode){
-            /** el可以获取当前dom节点，并且进行编译，也可以操作事件 **/
-            /** binding指的是一个对象，一般不用 **/    /** vnode 是 Vue 编译生成的虚拟节点 **/
-            console.log(el.click());  //获取v-model的值
-        }},
         methods:{
         editAndAddField(item){
             this.dialogFlag = true
@@ -135,9 +128,14 @@ export default {
                 this.dialogMiddle = JSON.parse(JSON.stringify(fieldTemplate))
             }
         },
+        regExp(ele){
+            return ele.replace(/\s*/g,"")
+        },
         enterDialog(){
-            console.log(this.dialogMiddle.fieldName.replace(/\s*/g,""))
-
+            this.dialogMiddle.fieldName = this.regExp(this.dialogMiddle.fieldName)
+            this.dialogMiddle.fieldDesc = this.regExp(this.dialogMiddle.fieldDesc)
+            this.dialogMiddle.fieldJson = this.regExp(this.dialogMiddle.fieldJson)
+            this.dialogMiddle.columnName = this.regExp(this.dialogMiddle.columnName)
             this.$refs.fieldDialog.$refs.fieldDialogFrom.validate((valid) => {
           if (valid) {
             this.dialogMiddle.fieldName = toUpperCase(this.dialogMiddle.fieldName)
@@ -170,7 +168,11 @@ export default {
             }
             this.$refs.autoCodeForm.validate(async (valid) => {
           if (valid) {
-            this.form.structName = toUpperCase(this.form.structName)
+              this.form.structName = this.regExp(this.form.structName)
+              this.form.structName = toUpperCase(this.form.structName)
+              this.form.abbreviation = this.regExp(this.form.abbreviation)
+              this.form.packageName = this.regExp(this.form.packageName)
+
             if(this.form.structName == this.form.abbreviation){
                 this.$message({
                     type:"error",

@@ -51,15 +51,15 @@
     </el-dialog>
 
     <el-drawer :visible.sync="drawer" :with-header="false" size="40%" title="角色配置" v-if="drawer">
-      <el-tabs class="role-box" type="border-card">
+      <el-tabs class="role-box" type="border-card" :before-leave="autoEnter">
         <el-tab-pane label="角色菜单">
-          <Menus :row="activeRow" />
+          <Menus :row="activeRow" ref="menus"/>
         </el-tab-pane>
         <el-tab-pane label="角色api">
-          <apis :row="activeRow" />
+          <apis :row="activeRow"  ref="apis"/>
         </el-tab-pane>
         <el-tab-pane label="资源权限">
-          <Datas :authority="tableData" :row="activeRow" />
+          <Datas :authority="tableData" :row="activeRow"  ref="datas"/>
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -124,6 +124,15 @@ export default {
     Datas
   },
   methods: {
+    autoEnter(activeName, oldActiveName){
+      const paneArr = ["menus","apis","datas"]
+      if(oldActiveName){
+        if(this.$refs[paneArr[oldActiveName]].needConfirm){
+          this.$refs[paneArr[oldActiveName]].enterAndNext()
+          this.$refs[paneArr[oldActiveName]].needConfirm = false
+        }
+      }
+    },
     // 拷贝角色
     copyAuthority(row) {
       this.setOptions()
@@ -257,7 +266,7 @@ export default {
     },
     setAuthorityOptions(AuthorityData,optionsData,disabled){
       AuthorityData&&AuthorityData.map(item=>{
-        if(item.children.length){
+        if(item.children&&item.children.length){
           const option = {
             authorityId:item.authorityId,
             authorityName:item.authorityName,

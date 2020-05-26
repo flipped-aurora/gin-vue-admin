@@ -21,13 +21,13 @@ const showLoading = () => {
 }
 
 const closeLoading = () => {
-    acitveAxios--
-    if (acitveAxios <= 0) {
-        clearTimeout(timer)
-        loadingInstance && loadingInstance.close()
+        acitveAxios--
+        if (acitveAxios <= 0) {
+            clearTimeout(timer)
+            loadingInstance && loadingInstance.close()
+        }
     }
-}
-//http request 拦截器
+    //http request 拦截器
 service.interceptors.request.use(
     config => {
         showLoading()
@@ -60,14 +60,12 @@ service.interceptors.response.use(
         } else {
             Message({
                 showClose: true,
-                message: response.data.msg,
+                message: response.data.msg || decodeURI(response.headers.msg),
                 type: 'error',
-                onClose: () => {
-                    if (response.data.data && response.data.data.reload) {
-                        store.commit('user/LoginOut')
-                    }
-                }
             })
+            if (response.data.data && response.data.data.reload) {
+                store.commit('user/LoginOut')
+            }
             return Promise.reject(response.data.msg)
         }
     },

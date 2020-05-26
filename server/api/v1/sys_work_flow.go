@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -17,6 +18,17 @@ import (
 func CreateWorkFlow(c *gin.Context) {
 	var wk model.SysWorkflow
 	_ = c.ShouldBindJSON(&wk)
+	WKVerify := utils.Rules{
+		"WorkflowNickName":      {utils.NotEmpty()},
+		"WorkflowName":  {utils.NotEmpty()},
+		"WorkflowDescription":      {utils.NotEmpty()},
+		"WorkflowStepInfo":      {utils.NotEmpty()},
+	}
+	WKVerifyErr := utils.Verify(wk, WKVerify)
+	if WKVerifyErr!=nil {
+		response.FailWithMessage(WKVerifyErr.Error(), c)
+		return
+	}
 	err := service.Create(wk)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)

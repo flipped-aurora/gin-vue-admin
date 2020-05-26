@@ -7,7 +7,7 @@
 <img src="https://img.shields.io/badge/gin-1.4.0-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-2.6.10-brightgreen"/>
 <img src="https://img.shields.io/badge/element--ui-2.12.0-green"/>
-<img src="https://img.shields.io/badge/gorm-1.9.10-red"/>
+<img src="https://img.shields.io/badge/gorm-1.9.12-red"/>
 </div>
 
 English | [简体中文](./README-zh_CN.md)
@@ -53,9 +53,9 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 ### 1.3 Version list
 
-- master: 2.0 开发版代码，生产环境
+- master: 2.0 dev code, for prod
 
-- develop: 2.0 开发版代码，测试环境
+- develop: 2.0 dev code, for test
 
 - [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 is no longer compatible with v1.0）
 
@@ -131,29 +131,6 @@ swag init
 ````
 After executing the above command，`docs` will show in `server/`，then open your browser, jump into `http://localhost:8888/swagger/index.html` to see the swagger APIs.
 
-### 2.4 Docker image
-
-Thanks [@chenlinzhong](https://github.com/chenlinzhong) for providing docker image.
-```  
-# start docker
-docker run -itd --net=host --name=go_container shareclz/go_node /bin/bash;
-
-# come into docker 
-docker exec -it go_container /bin/bash;
-git clone https://github.com/piexlmax/gin-vue-admin.git /data1/www/htdocs/go/admin;
-
-# run web
-cd /data1/www/htdocs/go/admin/QMPlusVuePage;
-cnpm i ;
-npm run serve;
-
-# update db config
-vi /data1/www/htdocs/go/admin/QMPlusServer/static/dbconfig/config.json;
-
-# run server
-cd /data1/www/htdocs/go/admin/QMPlusServer;z
-go run main.go;
-```
 
 ## 3. Technical selection
 
@@ -165,7 +142,17 @@ go run main.go;
 - Config: using `fsnotify` and `viper` to implement `yaml` config file。
 - Log: using `go-logging` record logs。
 
-## 4. Project layout
+## 4. Project Architecture
+
+### 4.1 Architecture Diagram
+
+![Architecture diagram](./docs/gin-vue-admin.png)
+
+### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
+
+![Front-end Detailed Design Diagram](http://qmplusimg.henrongyi.top/naotu.png)
+
+### 4.3 Project Layout
 
 ```
     ├─server  	     （backend）
@@ -226,56 +213,42 @@ backend code file: model\dnModel\api.go
 - [ ] workflow, task transfer function
 - [ ] frontend independent mode, mock
 
-## 7. Changelog
+## 7. Knowledge base
 
-|  Date   | Log  |
-|  :---:  | --- |
-|2020/01/07| Added data resource function to Role, added the return of data resource association, the demo code was synchronized, and the multi-point login interception has been turned on, which may prevent being crowded out by others |
-|2020/01/13| Added configuration management function. This function is not published to the test environment. The test environment will not be published until the protection mechanism and the service restart mechanism are released. Please clone and import the sql scripts into your own database |
-|2020/02/21| Modified `casbin` custom authentication method to fully support `/:params and?Query=` interface modes in RESTful API |
-|2020/03/17| Added verification code function with [@dchest/captcha](https://github.com/dchest/captcha) |
-|2020/03/30| Code generator implementation, form generator implementation with[@form-generator](https://github.com/JakHuang/form-generator)  |
-|2020/04/01| Add frontend history tab function, add (modify) condition query example, and change the frontend background to white. (If you don't need this feature, you can change `background` in `&.el-main` to shield background color of `HistoryComponent`, which is located at line 260 of the code `web/src/view/layout/index.vue`) |
-|2020/04/04| Starting version 2.x, standardize the project documentation, reconstructing the log function, and adding English comments to all methods |
+### 7.1 Team blog
 
-## 8. Team blog
-
-> https://blog.henrongyi.top
+> https://www.yuque.com/flipped-aurora
 >
->
-There are video courses about frontend framework in our blo. If you think the project is helpful to you, you can add my personal WeChat:shouzi_1994，your comments is welcomed。
+>There are video courses about frontend framework in our blo. If you think the project is helpful to you, you can add my personal WeChat:shouzi_1994，your comments is welcomed。
 
-## 9. Video courses
+### 7.2 Video courses
 
-### 9.1 Development environment course
-
-> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/    (coming soon)
+(1) Development environment course
+> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/
     
-### 9.2 Template course
+(2) Template course
+> Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/
 
-> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/    (coming soon)
+（3）2.0 version introduction and development experience
+> Bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
 
-### 9.3 Golang basic course (coming soon)
+(4) Golang basic course (coming soon)
 
-> URL: https://space.bilibili.com/322210472/channel/detail?cid=108884
+> https://space.bilibili.com/322210472/channel/detail?cid=108884
 
-## 10. Contacts
-
+## 8. Contacts
+### 8.1 Groups
 | QQ group |  
 |  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
-
-
-| Jiang | Yin | Yan | Du | Yin | Song |
-|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
-
 ### QQ group: 622360840
 
 ### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
 
-
-## 11. Developers
+### 8.2 Team members
+| Jiang | Yin | Yan | Du | Yin | Song |
+|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
 
 |  Nick name   | Project position  | First name  |
 |  ----  | ----  | ----  |
@@ -286,7 +259,7 @@ There are video courses about frontend framework in our blo. If you think the pr
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
 
-## 12. Donate
+## 9. Donate
 
 If you find this project useful, you can buy author a glass of juice :tropical_drink:
 

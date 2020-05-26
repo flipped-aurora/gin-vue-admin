@@ -20,7 +20,7 @@ func CreateExaCustomer(e model.ExaCustomer) (err error) {
 // @title    DeleteFileChunk
 // @description   delete a customer, 删除用户
 // @auth                     （2020/04/05  20:22）
-// @param     e               *model.ExaCustomer
+// @param     e               model.ExaCustomer
 // @return                    error
 
 func DeleteExaCustomer(e model.ExaCustomer) (err error) {

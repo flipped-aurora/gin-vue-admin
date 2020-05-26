@@ -1,6 +1,6 @@
 <template>
   <div>
-      <div class="search-term">
+    <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item>
           <el-button @click="openDialog" type="primary">新增客户</el-button>
@@ -25,22 +25,19 @@
       <el-table-column label="按钮组">
         <template slot-scope="scope">
           <el-button @click="updateCustomer(scope.row)" size="small" type="text">变更</el-button>
-          <el-popover
-          placement="top"
-          width="160"
-          v-model="scope.row.visible">
-          <p>确定要删除吗？</p>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-            <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
-          </div>
-          <el-button type="text" size="mini" slot="reference">删除</el-button>
-        </el-popover>
+          <el-popover placement="top" width="160" v-model="scope.row.visible">
+            <p>确定要删除吗？</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+              <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
+            </div>
+            <el-button type="text" size="mini" slot="reference">删除</el-button>
+          </el-popover>
         </template>
       </el-table-column>
     </el-table>
 
-      <el-pagination
+    <el-pagination
       :current-page="page"
       :page-size="pageSize"
       :page-sizes="[10, 30, 50, 100]"
@@ -51,7 +48,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="新增Api">
+    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="客户">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="客户名">
           <el-input autocomplete="off" v-model="form.customerName"></el-input>
@@ -65,107 +62,101 @@
         <el-button @click="enterDialog" type="primary">确 定</el-button>
       </div>
     </el-dialog>
-    在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示
+    <div class="tips"> 在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
   </div>
 </template>
 
 <script>
-
 import {
   createExaCustomer,
   updateExaCustomer,
   deleteExaCustomer,
   getExaCustomer,
   getExaCustomerList
-} from '@/api/customer'
-import { formatTimeToStr } from '@/utils/data'
-import infoList from '@/components/mixins/infoList'
-import { mapGetters } from 'vuex'
+} from "@/api/customer";
+import { formatTimeToStr } from "@/utils/data";
+import infoList from "@/components/mixins/infoList";
 
 export default {
-  name: 'Customer',
-   mixins: [infoList],
-  data(){
-    return{
+  name: "Customer",
+  mixins: [infoList],
+  data() {
+    return {
       listApi: getExaCustomerList,
-      dialogFormVisible:false,
-      visible:false,
-      type:"",
-      form:{
-        customerName:"",
-        customerPhoneData:""
+      dialogFormVisible: false,
+      visible: false,
+      type: "",
+      form: {
+        customerName: "",
+        customerPhoneData: ""
       }
-    }
+    };
   },
-  computed:{
-    ...mapGetters('user', ['token'])
-  },
-   filters: {
+  filters: {
     formatDate: function(time) {
-      if (time != null && time != '') {
-        var date = new Date(time)
-        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
+      if (time != null && time != "") {
+        var date = new Date(time);
+        return formatTimeToStr(date, "yyyy-MM-dd hh:mm:ss");
       } else {
-        return ''
+        return "";
       }
     }
   },
-  methods:{
-    async updateCustomer(row){
-      const res = await getExaCustomer({ID:row.ID})
-      this.type = "update"
-      if(res.code == 0){
-        this.form = res.data.customer        
-        this.dialogFormVisible = true
+  methods: {
+    async updateCustomer(row) {
+      const res = await getExaCustomer({ ID: row.ID });
+      this.type = "update";
+      if (res.code == 0) {
+        this.form = res.data.customer;
+        this.dialogFormVisible = true;
       }
     },
-    closeDialog(){
-      this.dialogFormVisible = false
+    closeDialog() {
+      this.dialogFormVisible = false;
       this.form = {
-        customerName:"",
-        customerPhoneData:""
-      }
+        customerName: "",
+        customerPhoneData: ""
+      };
     },
-    async deleteCustomer(row){
-      this.visible = false
-      const res = await deleteExaCustomer({ID:row.ID})
-      if (res.code == 0){
+    async deleteCustomer(row) {
+      this.visible = false;
+      const res = await deleteExaCustomer({ ID: row.ID });
+      if (res.code == 0) {
         this.$message({
-          type:"success",
-          message:"删除成功"
-        })
-         this.getTableData()
+          type: "success",
+          message: "删除成功"
+        });
+        this.getTableData();
       }
     },
-    async enterDialog(){
-      let res 
+    async enterDialog() {
+      let res;
       switch (this.type) {
         case "create":
-          res =await createExaCustomer(this.form)
-             break;
+          res = await createExaCustomer(this.form);
+          break;
         case "update":
-           res =await updateExaCustomer(this.form)
-              break;
+          res = await updateExaCustomer(this.form);
+          break;
         default:
-          res =await createExaCustomer(this.form)
-             break;
-
+          res = await createExaCustomer(this.form);
+          break;
       }
-     
-      if(res.code == 0){
-        this.closeDialog()
-        this.getTableData()
+
+      if (res.code == 0) {
+        this.closeDialog();
+        this.getTableData();
       }
     },
-     openDialog() {
-      this.type = "create"
-      this.dialogFormVisible = true
+    openDialog() {
+      this.type = "create";
+      this.dialogFormVisible = true;
     }
   },
-  created(){
-    this.getTableData()
+  created() {
+    this.getTableData();
   }
-}
+};
 </script>
 
 <style>

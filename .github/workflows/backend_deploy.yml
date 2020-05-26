@@ -1,54 +1,54 @@
-name: gin-vue-admin backend deploy
+# name: gin-vue-admin backend deploy
 
-on:
-  push:
-    branches: 
-      - master
-    paths:
-      - './server/**'
+# on:
+#   push:
+#     branches: 
+#       - master
+#     paths:
+#       - './server/**'
 
-jobs:
+# jobs:
 
-  deploy:
-    name: Backend deploy
-    runs-on: [ self-hosted ]
-    steps:
+#   deploy:
+#     name: Backend deploy
+#     runs-on: [ self-hosted ]
+#     steps:
 
-    - name: Check out the repository
-      uses: actions/checkout@master
+#     - name: Check out the repository
+#       uses: actions/checkout@master
 
-    - name: Show files
-      run: |
-        pwd
-        ls -la
+#     - name: Show files
+#       run: |
+#         pwd
+#         ls -la
 
-    - name: Get dependencies
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
-      working-directory: ./server
+#     - name: Get dependencies
+#       run: |
+#         go get -v -t -d ./...
+#         if [ -f Gopkg.toml ]; then
+#             curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+#             dep ensure
+#         fi
+#       working-directory: ./server
 
-    - name: Build
-      run: |
-        go build -o run -v
-      working-directory: ./server
+#     - name: Build
+#       run: |
+#         go build -o run -v
+#       working-directory: ./server
 
-    - name: Modify config params
-      run: |
-        sed -i 's/%{mysql_address}/'$MYSQL_ADDR'/' config.yaml
-        sed -i 's/%{mysql_username}/'$MYSQL_USERNAME'/' config.yaml
-        sed -i 's/%{mysql_password}/'$MSQL_PASSWORD'/' config.yaml
-        sed -i 's/%{redis_address}/'$REDIS_ADDR'/' config.yaml
-        sed -i 's/%{redis_password}/'$REDIS_PASSWORD'/' config.yaml
-      working-directory: ./server
+#     - name: Modify config params
+#       run: |
+#         sed -i 's/%{mysql_address}/'$MYSQL_ADDR'/' config.yaml
+#         sed -i 's/%{mysql_username}/'$MYSQL_USERNAME'/' config.yaml
+#         sed -i 's/%{mysql_password}/'$MSQL_PASSWORD'/' config.yaml
+#         sed -i 's/%{redis_address}/'$REDIS_ADDR'/' config.yaml
+#         sed -i 's/%{redis_password}/'$REDIS_PASSWORD'/' config.yaml
+#       working-directory: ./server
     
-    - name: Run Dockerfile
-      run: |
-        echo 'There is nothing for the time being' 
-      working-directory: ./server
+#     - name: Run Dockerfile
+#       run: |
+#         echo 'There is nothing for the time being' 
+#       working-directory: ./server
       
     
 

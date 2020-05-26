@@ -27,7 +27,7 @@ func UploadFile(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
 	} else {
 		//文件上传后拿到文件路径
-		err, filePath, key := utils.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
+		err, filePath, key := utils.Upload(header)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
 		} else {
@@ -45,7 +45,6 @@ func UploadFile(c *gin.Context) {
 				response.FailWithMessage(fmt.Sprintf("修改数据库链接失败，%v", err), c)
 			} else {
 				response.OkDetailed(resp.ExaFileResponse{File: file}, "上传成功", c)
-
 			}
 		}
 	}
@@ -65,7 +64,7 @@ func DeleteFile(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		err = utils.DeleteFile(USER_HEADER_BUCKET, f.Key)
+		err = utils.DeleteFile(f.Key)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 

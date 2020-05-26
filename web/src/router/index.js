@@ -18,12 +18,6 @@ const baseRouters = [{
         name: 'register',
         component: () =>
             import ('@/view/login/register.vue')
-    },
-    {
-        path: "/404",
-        name: "404",
-        component: () =>
-            import ('@/view/error/index.vue')
     }
 ]
 

@@ -6,7 +6,7 @@ import { asyncMenu } from '@/api/menu'
 const formatRouter = (routes) => {
     routes && routes.map(item => {
         item.meta.hidden = item.hidden
-        if (item.children.length > 0) {
+        if (item.children && item.children.length > 0) {
             formatRouter(item.children)
         }
     })
@@ -37,11 +37,20 @@ export const router = {
             }]
             const asyncRouterRes = await asyncMenu()
             const asyncRouter = asyncRouterRes.data.menus
+            asyncRouter.push({
+                path: "404",
+                name: "404",
+                hidden: true,
+                meta: {
+                    title: "迷路了*。*",
+                },
+                component: 'view/error/index.vue'
+            })
             formatRouter(asyncRouter)
             baseRouter[0].children = asyncRouter
             baseRouter.push({
                 path: '*',
-                redirect: '/404'
+                redirect: '/layout/404'
 
             })
             asyncRouterHandle(baseRouter)

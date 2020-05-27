@@ -19,8 +19,8 @@
     <!--自定义右键菜单html代码-->
     <ul :style="{left:left+'px',top:top+'px'}" class="contextmenu" v-show="contextMenuVisible">
       <li @click="closeAll">关闭所有</li>
-      <li @click="closeLeft">关闭左边</li>
-      <li @click="closeRight">关闭右边</li>
+      <li @click="closeLeft">关闭左侧</li>
+      <li @click="closeRight">关闭右侧</li>
       <li @click="closeOther">关闭其他</li>
     </ul>
   </div>
@@ -118,7 +118,7 @@ export default {
       const activeIndex = this.historys.findIndex(
         item => item.name == this.activeValue
       )
-      this.historys.splice(leftIndex, this.historys.length)
+      this.historys.splice(leftIndex+1, this.historys.length)
       if (leftIndex < activeIndex) {
         this.$router.push({ name: this.rightActive })
       }

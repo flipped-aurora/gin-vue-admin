@@ -2,14 +2,13 @@ package v1
 
 import (
 	"fmt"
-    "gin-vue-admin/global/response"
-    "gin-vue-admin/model"
-    "gin-vue-admin/model/request"
-    resp "gin-vue-admin/model/response"
-    "gin-vue-admin/service"
-    "github.com/gin-gonic/gin"
+	"gin-vue-admin/global/response"
+	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/service"
+	"github.com/gin-gonic/gin"
 )
-
 
 // @Tags {{.StructName}}
 // @Summary 创建{{.StructName}}
@@ -30,7 +29,6 @@ func Create{{.StructName}}(c *gin.Context) {
 	}
 }
 
-
 // @Tags {{.StructName}}
 // @Summary 删除{{.StructName}}
 // @Security ApiKeyAuth
@@ -49,7 +47,6 @@ func Delete{{.StructName}}(c *gin.Context) {
 		response.OkWithMessage("删除成功", c)
 	}
 }
-
 
 // @Tags {{.StructName}}
 // @Summary 更新{{.StructName}}
@@ -70,7 +67,6 @@ func Update{{.StructName}}(c *gin.Context) {
 	}
 }
 
-
 // @Tags {{.StructName}}
 // @Summary 用id查询{{.StructName}}
 // @Security ApiKeyAuth
@@ -82,14 +78,13 @@ func Update{{.StructName}}(c *gin.Context) {
 func Find{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} model.{{.StructName}}
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
-	err,re{{.Abbreviation}} := service.Get{{.StructName}}({{.Abbreviation}}.ID)
+	err, re{{.Abbreviation}} := service.Get{{.StructName}}({{.Abbreviation}}.ID)
 	if err != nil {
-	response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {
-		response.OkWithData( gin.H{"re{{.Abbreviation}}":re{{.Abbreviation}},}, c)
+		response.OkWithData(gin.H{"re{{.Abbreviation}}": re{{.Abbreviation}}}, c)
 	}
 }
-
 
 // @Tags {{.StructName}}
 // @Summary 分页获取{{.StructName}}列表
@@ -104,13 +99,13 @@ func Get{{.StructName}}List(c *gin.Context) {
 	_ = c.ShouldBindQuery(&pageInfo)
 	err, list, total := service.Get{{.StructName}}InfoList(pageInfo)
 	if err != nil {
-	    response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-        response.OkWithData(resp.PageResult{
-                    List:     list,
-                    Total:    total,
-                    Page:     pageInfo.Page,
-                    PageSize: pageInfo.PageSize,
-                }, c)
+		response.OkWithData(resp.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, c)
 	}
 }

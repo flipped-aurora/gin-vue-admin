@@ -2,10 +2,10 @@
 package model
 
 import (
-    "github.com/jinzhu/gorm"
+	"github.com/jinzhu/gorm"
 )
 
 type {{.StructName}} struct {
-      gorm.Model {{range .Fields}}
-      {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}"{{if .ColumnName}} gorm:"column:{{.ColumnName}}"{{end}}`{{ end }}
+	gorm.Model{{range .Fields}}
+	{{.FieldName}} {{.FieldType}} `json:"{{.FieldJson}}"{{if .ColumnName}} gorm:"column:{{.ColumnName}}"{{end}}`{{ end }}
 }

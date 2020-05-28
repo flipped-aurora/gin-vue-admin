@@ -19,6 +19,16 @@ mysql:
     max-open-conns: 10
     log-mode: false
 
+postgres:
+    username: postgres
+    password: '123456'
+    path: '127.0.0.1:5432'
+    db-name: 'gin_vue_admin_postgres'
+    config: 'sslmode=disable'
+    max-idle-conns: 10
+    max-open-conns: 10
+    log-mode: true
+
 #sqlite 配置
 sqlite:
     path: db.db
@@ -42,7 +52,7 @@ system:
     use-multipoint: false
     env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
-    db-type: "mysql"  # support mysql/sqlite
+    db-type: "postgres"  # support mysql/sqlite/postgres
 
 # captcha configuration
 captcha:

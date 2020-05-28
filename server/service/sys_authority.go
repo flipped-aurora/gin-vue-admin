@@ -110,9 +110,13 @@ func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, t
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
 	var authority []model.SysAuthority
-	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
+	if global.GVA_CONFIG.System.DbType == "mysql" {
+		err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
+	} else {
+		err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = '0'").Find(&authority).Error
+	}
 	if len(authority) > 0 {
-		for k := range authority {
+		for k, _ := range authority {
 			err = findChildrenAuthority(&authority[k])
 		}
 	}
@@ -166,7 +170,7 @@ func SetMenuAuthority(auth *model.SysAuthority) error {
 func findChildrenAuthority(authority *model.SysAuthority) (err error) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
 	if len(authority.Children) > 0 {
-		for k := range authority.Children {
+		for k, _ := range authority.Children {
 			err = findChildrenAuthority(&authority.Children[k])
 		}
 	}

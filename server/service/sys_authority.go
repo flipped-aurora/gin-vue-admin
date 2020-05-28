@@ -110,11 +110,7 @@ func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, t
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
 	var authority []model.SysAuthority
-	if global.GVA_CONFIG.System.DbType == "mysql" {
-		err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
-	} else {
-		err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = '0'").Find(&authority).Error
-	}
+	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = '0'").Find(&authority).Error
 	if len(authority) > 0 {
 		for k, _ := range authority {
 			err = findChildrenAuthority(&authority[k])

@@ -231,12 +231,6 @@ export default {
 <style lang="scss">
 $headerHigh: 52px;
 $mainHight: 100vh;
-.el-dropdown-link {
-  cursor: pointer;
-}
-.search-icon{
-  font-size: 20px;margin-right:14px; display: inline-block;vertical-align: middle;box-sizing:border-box;color:#606266
-}
 .dropdown-group {
   min-width: 100px;
 }
@@ -371,10 +365,7 @@ $mainHight: 100vh;
     vertical-align: middle;
   }
 }
-.el-input__inner {
-  border: none;
-  border-bottom: 1px solid #606266;
-}
+
 .screenfull {
   display: inline-block;
 }

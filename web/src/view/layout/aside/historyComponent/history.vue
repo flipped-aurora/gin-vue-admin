@@ -207,4 +207,5 @@ export default {
   padding: 0 6px;
   border-top: 1px solid #dcdcdc;
 }
+
 </style>

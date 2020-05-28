@@ -36,15 +36,15 @@ export default {
       left: 0,
       top: 0,
       isCollapse: false,
-      isMobile:false,
+      isMobile: false,
       rightActive: ''
     }
   },
   created() {
-    this.$bus.on('mobile',(isMobile)=>{
+    this.$bus.on('mobile', isMobile => {
       this.isMobile = isMobile
     })
-    this.$bus.on('collapse',(isCollapse)=>{
+    this.$bus.on('collapse', isCollapse => {
       this.isCollapse = isCollapse
     })
     const initHistorys = [
@@ -60,7 +60,7 @@ export default {
     this.setTab(this.$route)
   },
 
-  beforeDestroy(){
+  beforeDestroy() {
     this.$bus.off('collapse')
     this.$bus.off('mobile')
   },
@@ -77,7 +77,7 @@ export default {
         } else {
           width = 220
         }
-        if(this.isMobile){
+        if (this.isMobile) {
           width = 0
         }
         this.left = e.clientX - width
@@ -118,7 +118,7 @@ export default {
       const activeIndex = this.historys.findIndex(
         item => item.name == this.activeValue
       )
-      this.historys.splice(leftIndex+1, this.historys.length)
+      this.historys.splice(leftIndex + 1, this.historys.length)
       if (leftIndex < activeIndex) {
         this.$router.push({ name: this.rightActive })
       }
@@ -201,5 +201,10 @@ export default {
 .contextmenu li:hover {
   background: #f2f2f2;
   cursor: pointer;
+}
+.router-history {
+  background: #fff;
+  padding: 0 6px;
+  border-top: 1px solid #dcdcdc;
 }
 </style>

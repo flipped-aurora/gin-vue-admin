@@ -14,7 +14,7 @@
       <el-form-item label="数据库类型">
         <el-select v-model="config.system.dbType">
           <el-option value="sqlite"></el-option>
-          <el-option value="mysql"></el-option>
+          <el-option value="postgres"></el-option>
         </el-select>
       </el-form-item>
       <h2>jwt签名</h2>
@@ -25,25 +25,25 @@
       <el-form-item label="模型地址">
         <el-input v-model="config.casbin.modelPath"></el-input>
       </el-form-item>
-      <template v-show="config.system.dbType == 'mysql'">
-        <h2>mysql admin数据库配置</h2>
+      <template v-show="config.system.dbType == 'postgres'">
+        <h2>postgresql admin数据库配置</h2>
         <el-form-item label="username">
-          <el-input v-model="config.mysql.username"></el-input>
+          <el-input v-model="config.postgres.username"></el-input>
         </el-form-item>
         <el-form-item label="password">
-          <el-input v-model="config.mysql.password"></el-input>
+          <el-input v-model="config.postgres.password"></el-input>
         </el-form-item>
         <el-form-item label="path">
-          <el-input v-model="config.mysql.path"></el-input>
+          <el-input v-model="config.postgres.path"></el-input>
         </el-form-item>
         <el-form-item label="dbname">
-          <el-input v-model="config.mysql.dbname"></el-input>
+          <el-input v-model="config.postgres.dbname"></el-input>
         </el-form-item>
         <el-form-item label="maxIdleConns">
-          <el-input v-model.number="config.mysql.maxIdleConns"></el-input>
+          <el-input v-model.number="config.postgres.maxIdleConns"></el-input>
         </el-form-item>
         <el-form-item label="maxOpenConns">
-          <el-input v-model.number="config.mysql.maxOpenConns"></el-input>
+          <el-input v-model.number="config.postgres.maxOpenConns"></el-input>
         </el-form-item>
         <el-form-item label="logMode">
           <el-checkbox v-model="config.log.logMode"></el-checkbox>

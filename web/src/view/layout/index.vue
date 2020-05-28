@@ -3,18 +3,18 @@
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()"></el-row>
       <el-aside class="main-cont main-left">
-           <div class="tilte">
-              <img src="~@/assets/nav_logo.png" alt=""  class="logoimg">
-              <h2 v-if="isSider" class="tit-text">Gin-Vue-Admin</h2>
-            </div>
+        <div class="tilte">
+          <img alt class="logoimg" src="~@/assets/nav_logo.png" />
+          <h2 class="tit-text" v-if="isSider">Gin-Vue-Admin</h2>
+        </div>
         <Aside class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
       <el-main class="main-cont main-right">
         <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
           <div
-            class="topfix"
             :style="{width: `calc(100% - ${isMobile?'0px':isCollapse?'54px':'220px'})`}"
+            class="topfix"
           >
             <el-header class="header-cont">
               <div @click="totalCollapse" class="menu-total">
@@ -28,19 +28,7 @@
                 >{{item.meta.title}}</el-breadcrumb-item>
               </el-breadcrumb>
               <div class="fl-right right-box">
-                <transition name="el-fade-in-linear">
-                  <div v-show="show" class="transition-box" style="display: inline-block; ">
-                     <el-select v-model="value" filterable placeholder="请选择" @blur="test()">
-                      <el-option
-                              v-for="item in options"
-                              :key="item.value"
-                              :label="item.label"
-                              :value="item.value">
-                      </el-option>
-                    </el-select>
-                  </div>
-                </transition>
-                <i class="el-icon-search" style="font-size: 20px; display: inline-block; " @click="show = !show"></i>
+                <Search />
                 <Screenfull class="screenfull"></Screenfull>
                 <el-dropdown>
                   <span class="el-dropdown-link">
@@ -70,45 +58,46 @@
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
           <keep-alive>
-            <router-view v-if="$route.meta.keepAlive" class="admin-box"></router-view>
+            <router-view class="admin-box" v-if="$route.meta.keepAlive"></router-view>
           </keep-alive>
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view v-if="!$route.meta.keepAlive" class="admin-box"></router-view>
+          <router-view class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
         </transition>
       </el-main>
     </el-container>
-    <el-dialog title="修改密码" :visible.sync="showPassword" @close="clearPassword" width="360px">
-      <el-form ref="modifyPwdForm" :model="pwdModify" :rules="rules" label-width="80px">
-        <el-form-item prop="password" :minlength="6" label="原密码">
-          <el-input v-model="pwdModify.password" show-password></el-input>
+    <el-dialog :visible.sync="showPassword" @close="clearPassword" title="修改密码" width="360px">
+      <el-form :model="pwdModify" :rules="rules" label-width="80px" ref="modifyPwdForm">
+        <el-form-item :minlength="6" label="原密码" prop="password">
+          <el-input show-password v-model="pwdModify.password"></el-input>
         </el-form-item>
-        <el-form-item prop="newPassword" :minlength="6" label="新密码">
-          <el-input v-model="pwdModify.newPassword" show-password></el-input>
+        <el-form-item :minlength="6" label="新密码" prop="newPassword">
+          <el-input show-password v-model="pwdModify.newPassword"></el-input>
         </el-form-item>
-        <el-form-item prop="confirmPassword" :minlength="6" label="确认密码">
-          <el-input v-model="pwdModify.confirmPassword" show-password></el-input>
+        <el-form-item :minlength="6" label="确认密码" prop="confirmPassword">
+          <el-input show-password v-model="pwdModify.confirmPassword"></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
+      <div class="dialog-footer" slot="footer">
         <el-button @click="showPassword=false">取 消</el-button>
-        <el-button type="primary" @click="savePassword">确 定</el-button>
+        <el-button @click="savePassword" type="primary">确 定</el-button>
       </div>
     </el-dialog>
   </el-container>
 </template>
 
 <script>
-import Aside from "@/view/layout/aside";
-import HistoryComponent from "@/view/layout/aside/historyComponent/history";
-import Screenfull from "@/view/layout/screenfull";
-import { mapGetters, mapActions } from "vuex";
-import { changePassword } from "@/api/user";
+import Aside from '@/view/layout/aside'
+import HistoryComponent from '@/view/layout/aside/historyComponent/history'
+import Screenfull from '@/view/layout/screenfull'
+import Search from '@/view/layout/search/search'
+import { mapGetters, mapActions } from 'vuex'
+import { changePassword } from '@/api/user'
 export default {
-  name: "Layout",
+  name: 'Layout',
   data() {
     return {
-      show:false,
+      show: false,
       isCollapse: false,
       isSider: true,
       isMobile: false,
@@ -117,70 +106,52 @@ export default {
       pwdModify: {},
       rules: {
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, message: "最少6个字符", trigger: "blur" }
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
         ],
         newPassword: [
-          { required: true, message: "请输入新密码", trigger: "blur" },
-          { min: 6, message: "最少6个字符", trigger: "blur" }
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
         ],
         confirmPassword: [
-          { required: true, message: "请输入确认密码", trigger: "blur" },
-          { min: 6, message: "最少6个字符", trigger: "blur" },
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' },
           {
             validator: (rule, value, callback) => {
               if (value !== this.pwdModify.newPassword) {
-                callback(new Error("两次密码不一致"));
+                callback(new Error('两次密码不一致'))
               } else {
-                callback();
+                callback()
               }
             },
-            trigger: "blur"
+            trigger: 'blur'
           }
         ]
       },
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }],
-      value:''
-    };
+      value: ''
+    }
   },
   components: {
     Aside,
     HistoryComponent,
-    Screenfull
+    Screenfull,
+    Search
   },
   methods: {
-    test(){
-      this.show = false
-    },
-    ...mapActions("user", ["LoginOut"]),
+    ...mapActions('user', ['LoginOut']),
     totalCollapse() {
-      this.isCollapse = !this.isCollapse;
-      this.isSider = !this.isCollapse;
-      this.isShadowBg = !this.isCollapse;
-      this.$bus.emit("collapse", this.isCollapse);
+      this.isCollapse = !this.isCollapse
+      this.isSider = !this.isCollapse
+      this.isShadowBg = !this.isCollapse
+      this.$bus.emit('collapse', this.isCollapse)
     },
     toPerson() {
-      this.$router.push({ name: "person" });
+      this.$router.push({ name: 'person' })
     },
     changeShadow() {
-      this.isShadowBg = !this.isShadowBg;
-      this.isSider = !!this.isCollapse;
-      this.totalCollapse();
+      this.isShadowBg = !this.isShadowBg
+      this.isSider = !!this.isCollapse
+      this.totalCollapse()
     },
     savePassword() {
       this.$refs.modifyPwdForm.validate(valid => {
@@ -190,72 +161,71 @@ export default {
             password: this.pwdModify.password,
             newPassword: this.pwdModify.newPassword
           }).then(() => {
-            this.$message.success("修改密码成功！");
-            this.showPassword = false;
-          });
+            this.$message.success('修改密码成功！')
+            this.showPassword = false
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     clearPassword() {
       this.pwdModify = {
-        password: "",
-        newPassword: "",
-        confirmPassword: ""
-      };
-      this.$refs.modifyPwdForm.clearValidate();
+        password: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
+      this.$refs.modifyPwdForm.clearValidate()
     }
   },
   computed: {
-    ...mapGetters("user", ["userInfo"]),
-    ...mapGetters("history", ["historys", "activeValue"]),
+    ...mapGetters('user', ['userInfo']),
     title() {
-      return this.$route.meta.title || "当前页面";
+      return this.$route.meta.title || '当前页面'
     },
     matched() {
-      return this.$route.matched;
+      return this.$route.matched
     }
   },
   mounted() {
-    let screenWidth = document.body.clientWidth;
+    let screenWidth = document.body.clientWidth
     if (screenWidth < 1000) {
-      this.isMobile = true;
-      this.isSider = false;
-      this.isCollapse = true;
+      this.isMobile = true
+      this.isSider = false
+      this.isCollapse = true
     } else if (screenWidth >= 1000 && screenWidth < 1200) {
-      this.isMobile = false;
-      this.isSider = false;
-      this.isCollapse = true;
+      this.isMobile = false
+      this.isSider = false
+      this.isCollapse = true
     } else {
-      this.isMobile = false;
-      this.isSider = true;
-      this.isCollapse = false;
+      this.isMobile = false
+      this.isSider = true
+      this.isCollapse = false
     }
-    this.$bus.emit("collapse", this.isCollapse);
-    this.$bus.emit("mobile", this.isMobile);
+    this.$bus.emit('collapse', this.isCollapse)
+    this.$bus.emit('mobile', this.isMobile)
     window.onresize = () => {
       return (() => {
-        let screenWidth = document.body.clientWidth;
+        let screenWidth = document.body.clientWidth
         if (screenWidth < 1000) {
-          this.isMobile = true;
-          this.isSider = false;
-          this.isCollapse = true;
+          this.isMobile = true
+          this.isSider = false
+          this.isCollapse = true
         } else if (screenWidth >= 1000 && screenWidth < 1200) {
-          this.isMobile = false;
-          this.isSider = false;
-          this.isCollapse = true;
+          this.isMobile = false
+          this.isSider = false
+          this.isCollapse = true
         } else {
-          this.isMobile = false;
-          this.isSider = true;
-          this.isCollapse = false;
+          this.isMobile = false
+          this.isSider = true
+          this.isCollapse = false
         }
-        this.$bus.emit("collapse", this.isCollapse);
-        this.$bus.emit("mobile", this.isMobile);
-      })();
-    };
+        this.$bus.emit('collapse', this.isCollapse)
+        this.$bus.emit('mobile', this.isMobile)
+      })()
+    }
   }
-};
+}
 </script>
 
 <style lang="scss">
@@ -263,6 +233,9 @@ $headerHigh: 52px;
 $mainHight: 100vh;
 .el-dropdown-link {
   cursor: pointer;
+}
+.search-icon{
+  font-size: 20px;margin-right:14px; display: inline-block;vertical-align: middle;box-sizing:border-box;color:#606266
 }
 .dropdown-group {
   min-width: 100px;
@@ -290,13 +263,7 @@ $mainHight: 100vh;
       border-radius: 6px;
     }
   }
-  .menu-contorl {
-    line-height: 52px;
-    font-size: 20px;
-    color: #eee;
-    display: table-cell;
-    vertical-align: middle;
-  }
+
   .header-cont {
     height: $headerHigh !important;
     background: #fff;
@@ -311,11 +278,7 @@ $mainHight: 100vh;
       // padding: 6px;
       // border-bottom: 1px solid #eee;
     }
-    .router-history {
-      background: #fff;
-      padding: 0 6px;
-      border-top: 1px solid #dcdcdc;
-    }
+   
     &.el-main {
       overflow: auto;
       background: #fff;
@@ -348,22 +311,22 @@ $mainHight: 100vh;
         display: none;
       }
     }
-
     .el-menu-vertical {
-      height: 100vh !important;
+      height: calc(100vh - 64px) !important;
       visibility: auto;
       &:not(.el-menu--collapse) {
         width: 220px;
       }
-
     }
-.el-menu--collapse{
-        li{
-          .el-tooltip,.el-submenu__title{
-            padding:0px 15px !important;
-          }
+    .el-menu--collapse {
+      width: 54px;
+      li {
+        .el-tooltip,
+        .el-submenu__title {
+          padding: 0px 15px !important;
         }
       }
+    }
     &::-webkit-scrollbar {
       display: none;
     }
@@ -386,13 +349,13 @@ $mainHight: 100vh;
     }
   }
 }
-.tilte{
+.tilte {
   background: #001529;
   min-height: 64px;
   line-height: 64px;
   background: #002140;
   text-align: center;
-  .logoimg{
+  .logoimg {
     width: 30px;
     height: 30px;
     vertical-align: middle;
@@ -400,7 +363,7 @@ $mainHight: 100vh;
     border-radius: 50%;
     padding: 3px;
   }
-  .tit-text{
+  .tit-text {
     display: inline-block;
     color: #fff;
     font-weight: 600;
@@ -408,12 +371,11 @@ $mainHight: 100vh;
     vertical-align: middle;
   }
 }
-.el-input__inner{
+.el-input__inner {
   border: none;
   border-bottom: 1px solid #606266;
 }
-.screenfull{
+.screenfull {
   display: inline-block;
-
 }
 </style>

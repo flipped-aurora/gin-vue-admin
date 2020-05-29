@@ -60,7 +60,6 @@
             路由path
             <el-checkbox style="float:right;margin-left:20px;" v-model="checkFlag">添加参数</el-checkbox>
           </div>
-          
           <el-input
             :disabled="!checkFlag"
             autocomplete="off"

@@ -40,7 +40,7 @@ func CreateDir(dirs ...string) (err error) {
 		} else {
 			// log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
 			// 创建文件夹
-			err = os.Mkdir(v, os.ModePerm)
+			err = os.MkdirAll(v, os.ModePerm)
 			if err != nil {
 				// log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
 			} else {

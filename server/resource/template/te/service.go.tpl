@@ -59,10 +59,10 @@ func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructNa
 
 func Get{{.StructName}}InfoList(info request.PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
-    	offset := info.PageSize * (info.Page - 1)
-    	db := global.GVA_DB
-    	var {{.Abbreviation}}s []model.{{.StructName}}
-    	err = db.Find(&{{.Abbreviation}}s).Count(&total).Error
-    	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
-    	return err,{{.Abbreviation}}s, total
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB
+	var {{.Abbreviation}}s []model.{{.StructName}}
+	err = db.Find(&{{.Abbreviation}}s).Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
+	return err, {{.Abbreviation}}s, total
 }

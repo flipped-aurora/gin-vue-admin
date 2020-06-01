@@ -2,8 +2,6 @@
   <div>
     <el-form
       :inline="true"
-      :model="form"
-      :rules="rules"
       label-width="85px"
       ref="menuForm"
       label-position="top"

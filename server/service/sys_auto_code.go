@@ -3,9 +3,17 @@ package service
 import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils"
+	"io/ioutil"
 	"os"
+	"strings"
 	"text/template"
 )
+
+type tplData struct {
+	template     *template.Template
+	locationPath string
+	autoCodePath string
+}
 
 // @title    CreateTemp
 // @description   函数的详细描述
@@ -14,137 +22,96 @@ import (
 // @return    err             error
 
 func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
-	basePath := "./resource/template"
-	modelTmpl, err := template.ParseFiles(basePath + "/te/model.go.tpl")
+	basePath := "resource/template"
+	// 获取 basePath 文件夹下所有tpl文件
+	tplFileList, err := GetAllTplFile(basePath, nil)
 	if err != nil {
 		return err
 	}
-	apiTmpl, err := template.ParseFiles(basePath + "/te/api.go.tpl")
-	if err != nil {
-		return err
+	dataList := make([]tplData, 0, len(tplFileList))
+	fileList := make([]string, 0, len(tplFileList))
+	needMkdir := make([]string, 0, len(tplFileList)) // 当文件夹下存在多个tpl文件时，改为map更合理
+	// 根据文件路径生成 tplData 结构体，待填充数据
+	for _, value := range tplFileList {
+		dataList = append(dataList, tplData{locationPath: value})
 	}
-	routerTmpl, err := template.ParseFiles(basePath + "/te/router.go.tpl")
-	if err != nil {
-		return err
+	// 生成 *Template, 填充 template 字段
+	for index, value := range dataList {
+		dataList[index].template, err = template.ParseFiles(value.locationPath)
+		if err != nil {
+			return err
+		}
 	}
-	serviceTmpl, err := template.ParseFiles(basePath + "/te/service.go.tpl")
-	if err != nil {
-		return err
+
+	// 生成文件路径，填充 autoCodePath 字段，readme.txt.tpl不符合规则，需要特殊处理
+	// resource/template/fe/api.js.tpl -> autoCode/fe/autoCode.PackageName/api/autoCode.PackageName.js
+	// resource/template/readme.txt.tpl -> autoCode/readme.txt
+	autoPath := "autoCode/"
+	for index, value := range dataList {
+		trimBase := strings.TrimPrefix(value.locationPath, basePath+"/")
+		if trimBase == "readme.txt.tpl" {
+			dataList[index].autoCodePath = autoPath + "readme.txt"
+			continue
+		}
+
+		if lastSeparator := strings.LastIndex(trimBase, "/"); lastSeparator != -1 {
+			origFileName := strings.TrimSuffix(trimBase[lastSeparator+1:], ".tpl")
+			firstDot := strings.Index(origFileName, ".")
+			if firstDot != -1 {
+				dataList[index].autoCodePath = autoPath + trimBase[:lastSeparator] + "/" + autoCode.PackageName + "/" +
+					origFileName[:firstDot] + "/" + autoCode.PackageName + origFileName[firstDot:]
+			}
+		}
+
+		if lastSeparator := strings.LastIndex(dataList[index].autoCodePath, "/"); lastSeparator != -1 {
+			needMkdir = append(needMkdir, dataList[index].autoCodePath[:lastSeparator])
+		}
 	}
-	feapiTmpl, err := template.ParseFiles(basePath + "/fe/api.js.tpl")
-	if err != nil {
-		return err
-	}
-	feTableTmpl, err := template.ParseFiles(basePath + "/fe/table.vue.tpl")
-	if err != nil {
-		return err
-	}
-	readmeTmpl, err := template.ParseFiles(basePath + "/readme.txt.tpl")
-	if err != nil {
-		return err
-	}
-	// 自动化总目录
-	_autoCode := "./autoCode/"
-	// 自动化后台代码目录
-	_te := "./autoCode/te/"
-	_dir := _te + autoCode.PackageName
-	_modeldir := _te + autoCode.PackageName + "/model"
-	_apidir := _te + autoCode.PackageName + "/api"
-	_routerdir := _te + autoCode.PackageName + "/router"
-	_servicedir := _te + autoCode.PackageName + "/service"
-	// 自动化前台代码目录
-	_fe := "./autoCode/fe/"
-	_fe_dir := _fe + autoCode.PackageName
-	_fe_apidir := _fe + autoCode.PackageName + "/api"
-	_fe_tabledir := _fe + autoCode.PackageName + "/table"
-	err = utils.CreateDir(_autoCode, _te, _dir, _modeldir, _apidir, _routerdir, _servicedir, _fe, _fe_dir, _fe_apidir, _fe_tabledir)
-	if err != nil {
-		return err
-	}
-	model, err := os.OpenFile(_te+autoCode.PackageName+"/model/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
-	}
-	api, err := os.OpenFile(_te+autoCode.PackageName+"/api/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
-	}
-	router, err := os.OpenFile(_te+autoCode.PackageName+"/router/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
-	}
-	service, err := os.OpenFile(_te+autoCode.PackageName+"/service/"+autoCode.PackageName+".go", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
-	}
-	feapi, err := os.OpenFile(_fe+autoCode.PackageName+"/api/"+autoCode.PackageName+".js", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
-	}
-	fetable, err := os.OpenFile(_fe+autoCode.PackageName+"/table/"+autoCode.PackageName+".vue", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
+
+	// 写入文件前，先创建文件夹
+	if err = utils.CreateDir(needMkdir...); err != nil {
 		return err
 	}
 
-	readme, err := os.OpenFile(_autoCode+"readme.txt", os.O_CREATE|os.O_WRONLY, 0755)
-	if err != nil {
-		return err
+	// 生成文件
+	for _, value := range dataList {
+		fileList = append(fileList, value.autoCodePath)
+		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0755)
+		if err != nil {
+			return err
+		}
+		if err = value.template.Execute(f, autoCode); err != nil {
+			return err
+		}
+		_ = f.Close()
 	}
-	// 生成代码
-	{
-		err = modelTmpl.Execute(model, autoCode)
-		if err != nil {
-			return err
-		}
-		err = apiTmpl.Execute(api, autoCode)
-		if err != nil {
-			return err
-		}
-		err = routerTmpl.Execute(router, autoCode)
-		if err != nil {
-			return err
-		}
-		err = serviceTmpl.Execute(service, autoCode)
-		if err != nil {
-			return err
-		}
-		err = feapiTmpl.Execute(feapi, autoCode)
-		if err != nil {
-			return err
-		}
-		err = feTableTmpl.Execute(fetable, autoCode)
-		if err != nil {
-			return err
-		}
-		err = readmeTmpl.Execute(readme, autoCode)
-		if err != nil {
-			return err
-		}
-	}
-	_ = model.Close()
-	_ = api.Close()
-	_ = router.Close()
-	_ = service.Close()
-	_ = feapi.Close()
-	_ = fetable.Close()
-	_ = readme.Close()
-	fileList := []string{
-		_te + autoCode.PackageName + "/model/" + autoCode.PackageName + ".go",
-		_te + autoCode.PackageName + "/api/" + autoCode.PackageName + ".go",
-		_te + autoCode.PackageName + "/router/" + autoCode.PackageName + ".go",
-		_te + autoCode.PackageName + "/service/" + autoCode.PackageName + ".go",
-		_fe + autoCode.PackageName + "/api/" + autoCode.PackageName + ".js",
-		_fe + autoCode.PackageName + "/table/" + autoCode.PackageName + ".vue",
 
-		_autoCode + "readme.txt",
-	}
-	err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", ".")
-	if err != nil {
+	// 生成压缩包
+	if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 		return err
 	}
-	err = os.RemoveAll(_autoCode)
-	if err != nil {
+
+	// 移除中间文件
+	if err := os.RemoveAll(autoPath); err != nil {
 		return err
 	}
 	return nil
+}
+
+// GetAllTplFile 用来获取 pathName 文件夹下所有 tpl 文件
+func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
+	files, err := ioutil.ReadDir(pathName)
+	for _, fi := range files {
+		if fi.IsDir() {
+			fileList, err = GetAllTplFile(pathName+"/"+fi.Name(), fileList)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			if strings.HasSuffix(fi.Name(), ".tpl") {
+				fileList = append(fileList, pathName+"/"+fi.Name())
+			}
+		}
+	}
+	return fileList, err
 }

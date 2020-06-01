@@ -263,3 +263,6 @@ backend code file: model\dnModel\api.go
 
 If you find this project useful, you can buy author a glass of juice :tropical_drink:
 
+## 10. Commercial considerations
+
+If you use this project for commercial purposes, please comply with the apatch2.0 agreement and retain the author's technical support statement.

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/initialize"
+	"github.com/piexlmax/gvaplug"
 	"net/http"
 	"time"
 )
@@ -15,6 +16,11 @@ func RunWindowsServer() {
 	}
 	Router := initialize.Routers()
 	Router.Static("/form-generator", "./resource/page")
+	err := initialize.InstallPlug(global.GVA_DB, Router, gvaplug.GvaPlug{})
+	if err != nil {
+		panic(fmt.Sprintf("插件安装失败： %v", err))
+	}
+
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
 	s := &http.Server{
 		Addr:           address,

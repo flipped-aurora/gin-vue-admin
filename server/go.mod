@@ -10,7 +10,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
-	github.com/gin-gonic/gin v1.6.1
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-openapi/spec v0.19.7 // indirect
 	github.com/go-openapi/swag v0.19.8 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
@@ -28,6 +28,7 @@ require (
 	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/pelletier/go-toml v1.6.0 // indirect
+	github.com/piexlmax/gvaplug v0.0.5
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/qiniu/api.v7 v7.2.5+incompatible
 	github.com/qiniu/x v7.0.8+incompatible // indirect

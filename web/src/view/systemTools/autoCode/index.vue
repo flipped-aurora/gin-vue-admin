@@ -8,11 +8,14 @@
       <el-form-item label="Struct简称" prop="abbreviation">
         <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group"></el-input>
       </el-form-item>
+      <el-form-item label="Struct中文名称" prop="description">
+        <el-input v-model="form.description" placeholder="中文描述作为自动api描述"></el-input>
+      </el-form-item>
       <el-form-item label="文件名称" prop="packageName">
         <el-input v-model="form.packageName"></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-checkbox v-model="form.autoCreateApiToSql">自动创建api</el-checkbox>
+      <el-form-item label="自动创建api">
+        <el-checkbox v-model="form.autoCreateApiToSql"></el-checkbox>
       </el-form-item>
     </el-form>
     <!-- 组件列表 -->
@@ -29,6 +32,12 @@
       <el-table-column prop="fieldJson" label="FieldJson">
       </el-table-column>
       <el-table-column prop="fieldType" label="Field数据类型" width="130">
+      </el-table-column>
+      <el-table-column prop="columnName" label="数据库字段" width="130">
+      </el-table-column>
+      <el-table-column prop="comment" label="数据库字段描述" width="130">
+      </el-table-column>
+      <el-table-column prop="fieldSearchType" label="搜索条件" width="130">
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
@@ -67,6 +76,8 @@ const fieldTemplate = {
   fieldType: '',
   fieldJson: '',
   columnName: '',
+  comment:'',
+  fieldSearchType:''
 }
 
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
@@ -81,12 +92,14 @@ export default {
         structName: '',
         packageName: '',
         abbreviation: '',
+        description:'',
         autoCreateApiToSql: false,
         fields: [],
       },
       rules: {
         structName: [{ required: true, message: '请输入结构体名称', trigger: 'blur' }],
         abbreviation: [{ required: true, message: '请输入结构体简称', trigger: 'blur' }],
+        description: [{ required: true, message: '请输入结构体描述', trigger: 'blur' }],
         packageName: [{ required: true, message: '请输入包名称', trigger: 'blur' }],
       },
       dialogMiddle: {},
@@ -153,6 +166,13 @@ export default {
         this.$message({
           type: 'error',
           message: '请填写至少一个field',
+        })
+        return false
+      }
+      if(this.form.fields.some(item=>item.fieldName == this.form.structName)){
+        this.$message({
+          type: 'error',
+          message: '存在与结构体同名的字段',
         })
         return false
       }

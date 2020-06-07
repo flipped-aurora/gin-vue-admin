@@ -39,7 +39,7 @@
       </el-table-column>
       <el-table-column prop="fieldSearchType" label="搜索条件" width="130">
       </el-table-column>
-      <el-table-column label="操作" width="250">
+      <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button size="mini" type="primary" icon="el-icon-edit" @click="editAndAddField(scope.row)">编辑</el-button>
           <el-button size="mini" type="text" :disabled="scope.$index == 0" @click="moveUpField(scope.$index)">上移</el-button>

@@ -91,11 +91,11 @@ func Find{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "分页获取{{.StructName}}列表"
+// @Param data body request.{{.StructName}}Search true "分页获取{{.StructName}}列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func Get{{.StructName}}List(c *gin.Context) {
-	var pageInfo request.PageInfo
+	var pageInfo request.{{.StructName}}Search
 	_ = c.ShouldBindQuery(&pageInfo)
 	err, list, total := service.Get{{.StructName}}InfoList(pageInfo)
 	if err != nil {

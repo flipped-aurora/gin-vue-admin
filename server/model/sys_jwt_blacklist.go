@@ -6,5 +6,5 @@ import (
 
 type JwtBlacklist struct {
 	gorm.Model
-	Jwt string `gorm:"type:text"`
+	Jwt string `gorm:"type:text;comment:'jwt'"`
 }

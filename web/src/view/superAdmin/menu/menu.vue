@@ -30,9 +30,9 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
-          <el-button @click="deleteMenu(scope.row.ID)" size="small" type="text">删除菜单</el-button>
-          <el-button @click="editMenu(scope.row.ID)" size="small" type="text">编辑菜单</el-button>
-          <el-button @click="addMenu(scope.row.ID)" size="small" type="text">添加子菜单</el-button>
+          <el-button @click="addMenu(scope.row.ID)" size="small" type="primary" icon="el-icon-edit">添加子菜单</el-button>
+          <el-button @click="editMenu(scope.row.ID)" size="small" type="primary" icon="el-icon-edit" >编辑</el-button>
+          <el-button @click="deleteMenu(scope.row.ID)" size="small" type="danger" icon="el-icon-delete" >删除</el-button>
         </template>
       </el-table-column>
     </el-table>

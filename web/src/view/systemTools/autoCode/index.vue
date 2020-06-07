@@ -41,7 +41,7 @@
       </el-table-column>
       <el-table-column label="操作" width="250">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="editAndAddField(scope.row)">编辑</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-edit" @click="editAndAddField(scope.row)">编辑</el-button>
           <el-button size="mini" type="text" :disabled="scope.$index == 0" @click="moveUpField(scope.$index)">上移</el-button>
           <el-button size="mini" type="text" :disabled="(scope.$index + 1) == form.fields.length" @click="moveDownField(scope.$index)">下移</el-button>
           <el-popover placement="top" v-model="scope.row.visible">
@@ -50,7 +50,7 @@
               <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
             </div>
-            <el-button size="mini" type="text" slot="reference">删除</el-button>
+            <el-button size="mini" type="danger" icon="el-icon-delete" slot="reference">删除</el-button>
           </el-popover>
         </template>
       </el-table-column>

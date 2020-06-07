@@ -57,11 +57,38 @@ func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructNa
 // @param     info            PageInfo
 // @return                    error
 
-func Get{{.StructName}}InfoList(info request.PageInfo) (err error, list interface{}, total int) {
+func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
+    // 创建db
 	db := global.GVA_DB
-	var {{.Abbreviation}}s []model.{{.StructName}}
+    var {{.Abbreviation}}s []model.{{.StructName}}
+    // 如果有条件搜索 下方会自动创建搜索语句
+        {{- range .Fields}}
+            {{- if .FieldSearchType}}
+                {{- if eq .FieldType "string" }}
+    if info.{{.FieldName}} != "" {
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    }
+                {{- else if eq .FieldType "bool" }}
+    if info.{{.FieldName}} != 0 {
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    }
+                {{- else if eq .FieldType "int" }}
+    if info.{{.FieldName}} != 0 {
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    }
+                {{- else if eq .FieldType "float64" }}
+    if info.{{.FieldName}} != 0 {
+        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    }
+                {{- else if eq .FieldType "time.Time" }}
+    if !info.{{.FieldName}}.IsZero() {
+         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+    }
+                {{- end }}
+        {{- end }}
+    {{- end }}
 	err = db.Find(&{{.Abbreviation}}s).Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
 	return err, {{.Abbreviation}}s, total

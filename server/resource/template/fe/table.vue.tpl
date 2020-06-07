@@ -2,9 +2,18 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-            此处请使用表单生成器生成form填充 表单默认绑定 formData 如手动修改过请自行修改key
+           {{- range .Fields}}
+              {{- if .FieldSearchType}}
+        <el-form-item label="{{.FieldDesc}}">
+          <el-input placeholder="搜索条件" v-model="searchInfo.{{.FieldJson}}"></el-input>
+        </el-form-item>
+              {{ end }}
+           {{ end }}
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增</el-button>
+          <el-button @click="onSubmit" type="primary">查询</el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click="openDialog" type="primary">新增api</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -95,6 +104,12 @@ export default {
     }
   },
   methods: {
+      //条件搜索前端看此方法
+      onSubmit() {
+        this.page = 1
+        this.pageSize = 10
+        this.getTableData()
+      },
     async update{{.StructName}}(row) {
       const res = await find{{.StructName}}({ ID: row.ID });
       this.type = "update";

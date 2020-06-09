@@ -287,6 +287,7 @@ export default {
     },
     // 增加角色
     addAuthority(parentId) {
+      this.initForm()
       this.dialogTitle = "新增角色"
       this.dialogType = "add"
       this.form.parentId = parentId

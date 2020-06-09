@@ -1,6 +1,6 @@
 <template>
-    <div  @click="click">
-        <!-- <svg
+  <div @click="click">
+    <!-- <svg
             t="1508738709248"
             class="screenfull-svg"
             viewBox="0 0 1024 1024"
@@ -25,90 +25,89 @@
                     d="M333.590658 594.033341 167.8171 759.804852 64.218604 655.67219 64.218604 958.270996 366.342596 958.502263 262.234493 855.071589 428.421466 688.86108Z"
                     p-id="2073"/>
         </svg> -->
-        <svg 
-        t="1590133227479" 
-        class="screenfull-svg"
-        viewBox="0 0 1024 1024" 
-        version="1.1" 
-        width="20" 
-        height="20" 
-        xmlns="http://www.w3.org/2000/svg"  
-        v-if="isShow"
-        >
-                <path id="svg_1" d="m928.512,959.744a32,32 0 0 1 -32,-32l0,-256a32,32 0 0 1 64,0l0,256a32,32 0 0 1 -32,32z"/>
-                <path id="svg_2" d="m960.512,927.744a32,32 0 0 1 -32,32l-256,0a32,32 0 0 1 0,-64l256,0a32,32 0 0 1 32,32zm-864.768,-863.488a32,32 0 0 1 32,32l0,256a32,32 0 0 1 -64,0l0,-256a32,32 0 0 1 32,-32z"/>
-                <path id="svg_3" d="m63.744,96.256a32,32 0 0 1 32,-32l256,0a32,32 0 0 1 0,64l-256,0a32,32 0 0 1 -32,-32z"/>
-                <path id="svg_4" d="m958.030718,91.777575a32,32 0 0 1 -32,32l-256,0a32,32 0 0 1 0,-64l256,0a32,32 0 0 1 32,32z"/>
-                <path id="svg_5" d="m926.030718,59.777575a32,32 0 0 1 32,32l0,256a32,32 0 0 1 -64,0l0,-256a32,32 0 0 1 32,-32z"/>
-                <path id="svg_6" d="m940.622718,69.250038a32,32 0 0 1 0,45.248l-247.936,247.936a32,32 0 0 1 -45.248,-45.248l247.936,-247.936a31.936,31.936 0 0 1 45.248,0z"/>
-                <path id="svg_7" d="m61.649508,930.478492a32,32 0 0 1 32,-32l256,0a32,32 0 0 1 0,64l-256,0a32,32 0 0 1 -32,-32z"/>
-                <path id="svg_8" d="m93.649508,962.478492a32,32 0 0 1 -32,-32l0,-256a32,32 0 0 1 64,0l0,256a32,32 0 0 1 -32,32z"/>
-                <path id="svg_9" d="m79.121508,945.070492a32,32 0 0 1 0,-45.248l247.936,-247.936a32,32 0 0 1 45.248,45.248l-247.936,247.936a32,32 0 0 1 -45.248,0z"/>
-        </svg>
-        <svg 
-            t="1590133734869"  
-            class="screenfull-svg" 
-            viewBox="0 0 1024 1024"
-            version="1.1" 
-            xmlns="http://www.w3.org/2000/svg" 
-            p-id="1862" 
-            xmlns:xlink="http://www.w3.org/1999/xlink" 
-            width="20" 
-            height="20" 
-            v-else
-            >
-                <path d="M928.512 959.744a32 32 0 0 1-32-32v-256a32 32 0 0 1 64 0v256a32 32 0 0 1-32 32z" fill="" p-id="1863"></path>
-                <path d="M960.512 927.744a32 32 0 0 1-32 32h-256a32 32 0 0 1 0-64h256a32 32 0 0 1 32 32zM95.744 64.256a32 32 0 0 1 32 32v256a32 32 0 0 1-64 0v-256a32 32 0 0 1 32-32z" fill="" p-id="1864"></path>
-                <path d="M63.744 96.256a32 32 0 0 1 32-32h256a32 32 0 0 1 0 64h-256a32 32 0 0 1-32-32z" fill="" p-id="1865"></path>
-                <path d="M384.064 671.744a32 32 0 0 1-32 32h-256a32 32 0 0 1 0-64h256a32 32 0 0 1 32 32z" fill="" p-id="1866"></path>
-                <path d="M352.064 639.744a32 32 0 0 1 32 32v256a32 32 0 0 1-64 0v-256a32 32 0 0 1 32-32z" fill="" p-id="1867"></path>
-                <path d="M366.656 657.216a32 32 0 0 1 0 45.248L118.72 950.4a32 32 0 0 1-45.248-45.248l247.936-247.936a31.936 31.936 0 0 1 45.248 0z" fill="" p-id="1868"></path>
-                <path d="M639.616 352.512a32 32 0 0 1 32-32h256a32 32 0 0 1 0 64h-256a32 32 0 0 1-32-32z" fill="" p-id="1869"></path>
-                <path d="M671.616 384.512a32 32 0 0 1-32-32v-256a32 32 0 0 1 64 0v256a32 32 0 0 1-32 32z" fill="" p-id="1870"></path>
-                <path d="M657.088 367.104a32 32 0 0 1 0-45.248l247.936-247.936a32 32 0 0 1 45.248 45.248l-247.936 247.936a32 32 0 0 1-45.248 0z" fill="" p-id="1871"></path>
-        </svg>
-    </div>
+    <svg t="1590133227479" class="screenfull-svg" viewBox="0 0 1024 1024" version="1.1" width="20" height="20" xmlns="http://www.w3.org/2000/svg"
+      v-if="isShow">
+      <path id="svg_1" d="m928.512,959.744a32,32 0 0 1 -32,-32l0,-256a32,32 0 0 1 64,0l0,256a32,32 0 0 1 -32,32z" />
+      <path id="svg_2"
+        d="m960.512,927.744a32,32 0 0 1 -32,32l-256,0a32,32 0 0 1 0,-64l256,0a32,32 0 0 1 32,32zm-864.768,-863.488a32,32 0 0 1 32,32l0,256a32,32 0 0 1 -64,0l0,-256a32,32 0 0 1 32,-32z" />
+      <path id="svg_3" d="m63.744,96.256a32,32 0 0 1 32,-32l256,0a32,32 0 0 1 0,64l-256,0a32,32 0 0 1 -32,-32z" />
+      <path id="svg_4" d="m958.030718,91.777575a32,32 0 0 1 -32,32l-256,0a32,32 0 0 1 0,-64l256,0a32,32 0 0 1 32,32z" />
+      <path id="svg_5" d="m926.030718,59.777575a32,32 0 0 1 32,32l0,256a32,32 0 0 1 -64,0l0,-256a32,32 0 0 1 32,-32z" />
+      <path id="svg_6"
+        d="m940.622718,69.250038a32,32 0 0 1 0,45.248l-247.936,247.936a32,32 0 0 1 -45.248,-45.248l247.936,-247.936a31.936,31.936 0 0 1 45.248,0z" />
+      <path id="svg_7" d="m61.649508,930.478492a32,32 0 0 1 32,-32l256,0a32,32 0 0 1 0,64l-256,0a32,32 0 0 1 -32,-32z" />
+      <path id="svg_8" d="m93.649508,962.478492a32,32 0 0 1 -32,-32l0,-256a32,32 0 0 1 64,0l0,256a32,32 0 0 1 -32,32z" />
+      <path id="svg_9"
+        d="m79.121508,945.070492a32,32 0 0 1 0,-45.248l247.936,-247.936a32,32 0 0 1 45.248,45.248l-247.936,247.936a32,32 0 0 1 -45.248,0z" />
+    </svg>
+    <svg t="1590133734869" class="screenfull-svg" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1862"
+      xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20" v-else>
+      <path d="M928.512 959.744a32 32 0 0 1-32-32v-256a32 32 0 0 1 64 0v256a32 32 0 0 1-32 32z" fill="" p-id="1863"></path>
+      <path
+        d="M960.512 927.744a32 32 0 0 1-32 32h-256a32 32 0 0 1 0-64h256a32 32 0 0 1 32 32zM95.744 64.256a32 32 0 0 1 32 32v256a32 32 0 0 1-64 0v-256a32 32 0 0 1 32-32z"
+        fill="" p-id="1864"></path>
+      <path d="M63.744 96.256a32 32 0 0 1 32-32h256a32 32 0 0 1 0 64h-256a32 32 0 0 1-32-32z" fill="" p-id="1865"></path>
+      <path d="M384.064 671.744a32 32 0 0 1-32 32h-256a32 32 0 0 1 0-64h256a32 32 0 0 1 32 32z" fill="" p-id="1866"></path>
+      <path d="M352.064 639.744a32 32 0 0 1 32 32v256a32 32 0 0 1-64 0v-256a32 32 0 0 1 32-32z" fill="" p-id="1867"></path>
+      <path d="M366.656 657.216a32 32 0 0 1 0 45.248L118.72 950.4a32 32 0 0 1-45.248-45.248l247.936-247.936a31.936 31.936 0 0 1 45.248 0z" fill=""
+        p-id="1868"></path>
+      <path d="M639.616 352.512a32 32 0 0 1 32-32h256a32 32 0 0 1 0 64h-256a32 32 0 0 1-32-32z" fill="" p-id="1869"></path>
+      <path d="M671.616 384.512a32 32 0 0 1-32-32v-256a32 32 0 0 1 64 0v256a32 32 0 0 1-32 32z" fill="" p-id="1870"></path>
+      <path d="M657.088 367.104a32 32 0 0 1 0-45.248l247.936-247.936a32 32 0 0 1 45.248 45.248l-247.936 247.936a32 32 0 0 1-45.248 0z" fill=""
+        p-id="1871"></path>
+    </svg>
+  </div>
 </template>
 <script>
-import screenfull from 'screenfull'  //引入screenfull
+import screenfull from 'screenfull' //引入screenfull
 export default {
-    name: 'Screenfull',
-    props: {
-        width: {
-            type: Number,
-            default: 22
-        },
-        height: {
-            type: Number,
-            default: 22
-        },
-        fill: {
-            type: String,
-            default: '#48576a'
-        }
+  name: 'Screenfull',
+  props: {
+    width: {
+      type: Number,
+      default: 22,
     },
-    data(){
-        return {
-            isShow:true
-        }
+    height: {
+      type: Number,
+      default: 22,
     },
-    methods: {
-        click () {
-            if (screenfull.isEnabled) {
-                this.isShow  = !this.isShow
-                screenfull.toggle()
-            }
-        }
+    fill: {
+      type: String,
+      default: '#48576a',
+    },
+  },
+  data() {
+    return {
+      isShow: true,
     }
+  },
+  mounted() {
+    if (screenfull.isEnabled) {
+      screenfull.on('change', this.changeFullShow)
+    }
+  },
+  methods: {
+    click() {
+      if (screenfull.isEnabled) {
+        screenfull.toggle()
+      }
+    },
+    changeFullShow() {
+      this.isShow = !screenfull.isFullscreen
+    },
+  },
+  destroyed() {
+    screenfull.off('change', this.changeFullShow)
+  },
 }
 </script>
 <style scoped>
 .screenfull-svg {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    fill: #606266;
-    vertical-align: middle;
-    margin-right: 15px;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  fill: #606266;
+  vertical-align: middle;
+  margin-right: 15px;
 }
 </style>

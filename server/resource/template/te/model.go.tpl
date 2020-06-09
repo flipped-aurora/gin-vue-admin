@@ -5,7 +5,8 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// 如果含有time.Time 请自行import time包
 type {{.StructName}} struct {
       gorm.Model {{range .Fields}}
-      {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" {{if .ColumnName}} gorm:"column:{{.ColumnName}}"{{end}}`{{ end }}
+      {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:'{{.Comment}}'"`{{ end }}
 }

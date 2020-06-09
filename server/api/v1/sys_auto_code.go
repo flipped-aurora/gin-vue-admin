@@ -37,31 +37,31 @@ func CreateTemp(c *gin.Context) {
 		apiList := [5]model.SysApi{
 			{
 				Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
-				Description: "新增" + a.StructName,
+				Description: "新增" + a.Description,
 				ApiGroup:    a.Abbreviation,
 				Method:      "POST",
 			},
 			{
 				Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName,
-				Description: "删除" + a.StructName,
+				Description: "删除" + a.Description,
 				ApiGroup:    a.Abbreviation,
 				Method:      "DELETE",
 			},
 			{
 				Path:        "/" + a.Abbreviation + "/" + "update" + a.StructName,
-				Description: "更新" + a.StructName,
+				Description: "更新" + a.Description,
 				ApiGroup:    a.Abbreviation,
 				Method:      "PUT",
 			},
 			{
 				Path:        "/" + a.Abbreviation + "/" + "find" + a.StructName,
-				Description: "根据ID获取" + a.StructName,
+				Description: "根据ID获取" + a.Description,
 				ApiGroup:    a.Abbreviation,
 				Method:      "GET",
 			},
 			{
 				Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
-				Description: "获取" + a.StructName + "列表",
+				Description: "获取" + a.Description + "列表",
 				ApiGroup:    a.Abbreviation,
 				Method:      "GET",
 			},

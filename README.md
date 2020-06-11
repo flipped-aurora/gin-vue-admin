@@ -266,4 +266,4 @@ If you find this project useful, you can buy author a glass of juice :tropical_d
 
 ## 10. Commercial considerations
 
-If you use this project for commercial purposes, please comply with the apatch2.0 agreement and retain the author's technical support statement.
+If you use this project for commercial purposes, please comply with the Apache2.0 agreement and retain the author's technical support statement.

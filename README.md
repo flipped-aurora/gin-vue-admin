@@ -258,6 +258,7 @@ backend code file: model\dnModel\api.go
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
+| [@SliverHorn](https://github.com/SliverHorn)  | Community Administrator | Lai |
 
 ## 9. Donate
 

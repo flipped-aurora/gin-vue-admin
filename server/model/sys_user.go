@@ -15,4 +15,3 @@ type SysUser struct {
 	Authority   SysAuthority `json:"authority" gorm:"ForeignKey:AuthorityId;AssociationForeignKey:AuthorityId;comment:'用户角色'"`
 	AuthorityId string       `json:"authorityId" gorm:"default:888;comment:'用户角色ID'"`
 }
-

@@ -254,6 +254,7 @@ swag init
 | [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
 | [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
+| [@SliverHorn](https://github.com/SliverHorn)  | 社区管理员 | 赖 |
 
 ## 9. 捐赠
 

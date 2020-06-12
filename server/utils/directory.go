@@ -1,8 +1,8 @@
 package utils
 
 import (
+	"gin-vue-admin/global"
 	"os"
-	"path/filepath"
 )
 
 // @title    PathExists
@@ -32,33 +32,15 @@ func CreateDir(dirs ...string) (err error) {
 	for _, v := range dirs {
 		exist, err := PathExists(v)
 		if err != nil {
-			// log.L.Info(fmt.Sprintf("get dir error![%v]\n", err))
 			return err
 		}
-		if exist {
-			// log.L.Info(fmt.Sprintf("has dir![%v]\n"+_dir))
-		} else {
-			// log.L.Info(fmt.Sprintf("no dir![%v]\n"+_dir))
-			// 创建文件夹
+		if !exist {
+			global.GVA_LOG.Debug("create directory ", v)
 			err = os.MkdirAll(v, os.ModePerm)
 			if err != nil {
-				// log.L.Error(fmt.Sprintf("mkdir error![%v]\n",err))
-			} else {
-				// log.L.Info("mkdir success!\n")
+				global.GVA_LOG.Error("create directory", v, " error:", err)
 			}
 		}
 	}
 	return err
-}
-
-// @title cwd
-// @description 获取当前工作目录
-// @return string
-
-func CWD() string {
-	path, err := os.Executable()
-	if err != nil {
-		return ""
-	}
-	return filepath.Dir(path)
 }

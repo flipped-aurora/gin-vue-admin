@@ -16,7 +16,7 @@ func RunWindowsServer() {
 	Router := initialize.Routers()
 	Router.Static("/form-generator", "./resource/page")
 
-	InstallPlugs(Router)
+	//InstallPlugs(Router)
 	// end 插件描述
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)

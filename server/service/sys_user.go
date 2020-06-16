@@ -73,9 +73,9 @@ func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter 
 func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&model.SysUser{})
 	var userList []model.SysUser
-	err = db.Find(&userList).Count(&total).Error
+	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Preload("Authority").Find(&userList).Error
 	return err, userList, total
 }

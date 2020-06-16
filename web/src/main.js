@@ -57,5 +57,11 @@ new Vue({
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
 
-
-
+import Router from 'vue-router'
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location, onResolve, onReject) {
+    if (onResolve || onReject) return originalPush.call(this, location, onResolve, onReject)
+    return originalPush.call(this, location).catch(err => {
+        console.error('vue router push exception: ' + err);
+    })
+}

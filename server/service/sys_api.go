@@ -49,7 +49,7 @@ func DeleteApi(api model.SysApi) (err error) {
 func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&model.SysApi{})
 	var apiList []model.SysApi
 
 	if api.Path != "" {
@@ -68,7 +68,7 @@ func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc 
 		db = db.Where("api_group = ?", api.ApiGroup)
 	}
 
-	err = db.Find(&apiList).Count(&total).Error
+	err = db.Count(&total).Error
 
 	if err != nil {
 		return err, apiList, total

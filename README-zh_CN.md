@@ -56,9 +56,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 - [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
 
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 稳定版，会持续更新和维护）
+- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0停止维护）
 
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0 稳定版，会持续更新和维护）
+- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0停止维护）
 
 
 ## 2. 使用说明
@@ -254,6 +254,7 @@ swag init
 | [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
 | [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
+| [@SliverHorn](https://github.com/SliverHorn)  | 社区管理员 | 赖 |
 
 ## 9. 捐赠
 
@@ -261,4 +262,4 @@ swag init
 
 ## 10. 商用注意事项
 
-如果您将此项目用于商业用途，请遵守apatch2.0协议并保留作者技术支持声明。
+如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

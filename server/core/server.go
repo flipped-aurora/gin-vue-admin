@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/initialize"
-	"github.com/piexlmax/gvaplug"
 	"net/http"
 	"time"
 )
@@ -17,11 +16,7 @@ func RunWindowsServer() {
 	Router := initialize.Routers()
 	Router.Static("/form-generator", "./resource/page")
 
-	// 插件安装 暂时只是后台功能 添加model 添加路由 添加对数据库的操作  详细插件测试模板可看https://github.com/piexlmax/gvaplug  此处不建议投入生产
-	err := initialize.InstallPlug(global.GVA_DB, Router, gvaplug.GvaPlug{})
-	if err != nil {
-		panic(fmt.Sprintf("插件安装失败： %v", err))
-	}
+	//InstallPlugs(Router)
 	// end 插件描述
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)

@@ -61,7 +61,7 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&model.{{.StructName}}{})
     var {{.Abbreviation}}s []model.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
         {{- range .Fields}}
@@ -89,7 +89,7 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
                 {{- end }}
         {{- end }}
     {{- end }}
-	err = db.Find(&{{.Abbreviation}}s).Count(&total).Error
+	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
 	return err, {{.Abbreviation}}s, total
 }

@@ -53,15 +53,15 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 ### 1.3 Version list
 
-- master: 2.0 dev code, for prod
+- master: 2.0 code, for prod
 
 - develop: 2.0 dev code, for test
 
 - [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 is no longer compatible with v1.0）
 
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0 is kept up to date and maintained）
+- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （stop maintenance）
 
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0 is kept up to date and maintained）
+- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （stop maintenance）
 
 
 ## 2. Getting started
@@ -258,6 +258,7 @@ backend code file: model\dnModel\api.go
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
+| [@SliverHorn](https://github.com/SliverHorn)  | Community Administrator | Lai |
 
 ## 9. Donate
 
@@ -265,4 +266,4 @@ If you find this project useful, you can buy author a glass of juice :tropical_d
 
 ## 10. Commercial considerations
 
-If you use this project for commercial purposes, please comply with the apatch2.0 agreement and retain the author's technical support statement.
+If you use this project for commercial purposes, please comply with the Apache2.0 agreement and retain the author's technical support statement.

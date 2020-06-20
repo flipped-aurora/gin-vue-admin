@@ -1,13 +1,14 @@
 package v1
 
 import (
-	"gin-vue-admin/global"
+	"fmt"
 	"gin-vue-admin/global/response"
 	resp "gin-vue-admin/model/response"
-	"gin-vue-admin/utils"
-	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
+	"github.com/mojocn/base64Captcha"
 )
+
+var store = base64Captcha.DefaultMemStore
 
 // @Tags base
 // @Summary 生成验证码
@@ -17,20 +18,17 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /base/captcha [post]
 func Captcha(c *gin.Context) {
-	captchaId := captcha.NewLen(global.GVA_CONFIG.Captcha.KeyLong)
-	response.OkDetailed(resp.SysCaptchaResponse{
-		CaptchaId: captchaId,
-		PicPath:   "/base/captcha/" + captchaId + ".png",
-	}, "验证码获取成功", c)
-}
-
-// @Tags base
-// @Summary 生成验证码图片路径
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /base/captcha/:captchaId [get]
-func CaptchaImg(c *gin.Context) {
-	utils.GinCaptchaServeHTTP(c.Writer, c.Request)
+	//字符,公式,验证码配置
+	// 生成默认数字的driver
+	driver := base64Captcha.NewDriverDigit(80, 240, 5, 0.7, 80)
+	cp := base64Captcha.NewCaptcha(driver, store)
+	id, b64s, err := cp.Generate()
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	} else {
+		response.OkDetailed(resp.SysCaptchaResponse{
+			CaptchaId: id,
+			PicPath:   b64s,
+		}, "验证码获取成功", c)
+	}
 }

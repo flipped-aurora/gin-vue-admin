@@ -4,9 +4,32 @@
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
            {{- range .Fields}}
               {{- if .FieldSearchType}}
+                {{- if eq .FieldType "bool" }}
+            <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+                <el-col :span="8">
+            <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择">
+                <el-option
+                    key="true"
+                    label="是"
+                    value="true">
+                </el-option>
+                <el-option
+                    key="false"
+                    label="否"
+                    value="false">
+                </el-option>
+                <el-option
+                    label=""
+                    value="">
+                </el-option>
+            </el-select>
+                </el-col>
+            </el-form-item>
+                  {{- else }}
         <el-form-item label="{{.FieldDesc}}">
           <el-input placeholder="搜索条件" v-model="searchInfo.{{.FieldJson}}"></el-input>
         </el-form-item>
+                  {{ end }}
               {{ end }}
            {{ end }}
         <el-form-item>
@@ -108,6 +131,10 @@ export default {
       onSubmit() {
         this.page = 1
         this.pageSize = 10
+        {{- range .Fields}} {{- if eq .FieldType "bool" }}      
+        if (this.searchInfo.{{.FieldJson}}==""){
+          this.searchInfo.{{.FieldJson}}=null
+        } {{ end }} {{ end }}    
         this.getTableData()
       },
     async update{{.StructName}}(row) {

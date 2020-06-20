@@ -71,7 +71,7 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "bool" }}
-    if info.{{.FieldName}} != 0 {
+    if info.{{.FieldName}} != nil {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "int" }}

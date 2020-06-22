@@ -2,9 +2,7 @@
   <div>
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-           {{- range .Fields}}
-              {{- if .FieldSearchType}}
-                {{- if eq .FieldType "bool" }}
+           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
                 <el-col :span="8">
             <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择">
@@ -28,10 +26,7 @@
                   {{- else }}
         <el-form-item label="{{.FieldDesc}}">
           <el-input placeholder="搜索条件" v-model="searchInfo.{{.FieldJson}}"></el-input>
-        </el-form-item>
-                  {{ end }}
-              {{ end }}
-           {{ end }}
+        </el-form-item> {{ end }} {{ end }}  {{ end }}
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
@@ -52,8 +47,11 @@
     <el-table-column label="日期" width="180">
          <template slot-scope="scope">{{ "{{scope.row.CreatedAt|formatDate}}" }}</template>
     </el-table-column>
-    {{range .Fields}}
-     <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120"></el-table-column>
+    {{range .Fields}}  {{- if eq .FieldType "bool" }}
+    <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+         <template slot-scope="scope">{{ "{{scope.row."}}{{.FieldJson}}{{"|formatBoolean}}" }}</template>
+    </el-table-column> {{- else }}
+    <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120"></el-table-column> {{ end }}
     {{ end }}
       <el-table-column label="按钮组">
         <template slot-scope="scope">
@@ -121,6 +119,13 @@ export default {
       if (time != null && time != "") {
         var date = new Date(time);
         return formatTimeToStr(date, "yyyy-MM-dd hh:mm:ss");
+      } else {
+        return "";
+      }
+    },
+    formatBoolean: function(bool) {
+      if (bool != null) {
+        return bool ? "是" :"否";
       } else {
         return "";
       }

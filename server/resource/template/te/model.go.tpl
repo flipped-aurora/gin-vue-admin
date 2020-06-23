@@ -14,4 +14,3 @@ type {{.StructName}} struct {
       {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:'{{.Comment}}'"`
             {{- end }}  {{- end }} 
 }
-}

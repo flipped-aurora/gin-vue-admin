@@ -24,7 +24,7 @@ func CreateSysDictionary(sysDictionary model.SysDictionary) (err error) {
 // @return                    error
 
 func DeleteSysDictionary(sysDictionary model.SysDictionary) (err error) {
-	err = global.GVA_DB.Delete(sysDictionary).Error
+	err = global.GVA_DB.Delete(sysDictionary).Related(&sysDictionary.SysDictionaryDetails).Delete(&sysDictionary.SysDictionaryDetails).Error
 	return err
 }
 
@@ -35,7 +35,14 @@ func DeleteSysDictionary(sysDictionary model.SysDictionary) (err error) {
 // @return                    error
 
 func UpdateSysDictionary(sysDictionary *model.SysDictionary) (err error) {
-	err = global.GVA_DB.Save(sysDictionary).Error
+	var dict model.SysDictionary
+	sysDictionaryMap := map[string]interface{}{
+		"Name":   sysDictionary.Name,
+		"Type":   sysDictionary.Type,
+		"Status": sysDictionary.Status,
+		"Desc":   sysDictionary.Desc,
+	}
+	err = global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict).Updates(sysDictionaryMap).Error
 	return err
 }
 
@@ -47,7 +54,7 @@ func UpdateSysDictionary(sysDictionary *model.SysDictionary) (err error) {
 // @return    SysDictionary        SysDictionary
 
 func GetSysDictionary(id uint) (err error, sysDictionary model.SysDictionary) {
-	err = global.GVA_DB.Where("id = ?", id).First(&sysDictionary).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("SysDictionaryDetails").First(&sysDictionary).Error
 	return
 }
 
@@ -60,22 +67,22 @@ func GetSysDictionary(id uint) (err error, sysDictionary model.SysDictionary) {
 func GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-    // 创建db
+	// 创建db
 	db := global.GVA_DB.Model(&model.SysDictionary{})
-    var sysDictionarys []model.SysDictionary
-    // 如果有条件搜索 下方会自动创建搜索语句
-    if info.Name != "" {
-        db = db.Where("name LIKE ?","%"+ info.Name+"%")
-    }
-    if info.Type != "" {
-        db = db.Where("type LIKE ?","%"+ info.Type+"%")
-    }
-    if info.Status != nil {
-        db = db.Where("status = ?",info.Status)
-    }
-    if info.Desc != "" {
-        db = db.Where("desc LIKE ?","%"+ info.Desc+"%")
-    }
+	var sysDictionarys []model.SysDictionary
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.Name != "" {
+		db = db.Where("name LIKE ?", "%"+info.Name+"%")
+	}
+	if info.Type != "" {
+		db = db.Where("type LIKE ?", "%"+info.Type+"%")
+	}
+	if info.Status != nil {
+		db = db.Where("status = ?", info.Status)
+	}
+	if info.Desc != "" {
+		db = db.Where("desc LIKE ?", "%"+info.Desc+"%")
+	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionarys).Error
 	return err, sysDictionarys, total

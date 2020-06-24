@@ -15,6 +15,8 @@ func DBTables() {
 		model.JwtBlacklist{},
 		model.SysWorkflow{},
 		model.SysWorkflowStepInfo{},
+		model.SysDictionary{},
+		model.SysDictionaryDetail{},
 		model.ExaFileUploadAndDownload{},
 		model.ExaFile{},
 		model.ExaFileChunk{},

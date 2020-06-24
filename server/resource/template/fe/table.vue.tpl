@@ -4,8 +4,7 @@
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-                <el-col :span="8">
-            <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clear placeholder="请选择">
                 <el-option
                     key="true"
                     label="是"
@@ -16,12 +15,7 @@
                     label="否"
                     value="false">
                 </el-option>
-                <el-option
-                    label=""
-                    value="">
-                </el-option>
             </el-select>
-                </el-col>
             </el-form-item>
                   {{- else }}
         <el-form-item label="{{.FieldDesc}}">
@@ -31,7 +25,7 @@
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
-          <el-button @click="openDialog" type="primary">新增api</el-button>
+          <el-button @click="openDialog" type="primary">新增{{.Description}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -181,8 +175,11 @@ export default {
           res = await create{{.StructName}}(this.formData);
           break;
       }
-
       if (res.code == 0) {
+        this.$message({
+          type:"success",
+          message:"创建/更改成功"
+        })
         this.closeDialog();
         this.getTableData();
       }

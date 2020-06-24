@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : qmplus
+ Source Server         : pandora
  Source Server Type    : MySQL
- Source Server Version : 50644
+ Source Server Version : 50640
  Source Host           : localhost:3306
  Source Schema         : qmplus
 
  Target Server Type    : MySQL
- Target Server Version : 50644
+ Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 11/06/2020 09:29:47
+ Date: 24/06/2020 21:52:45
 */
 
 SET NAMES utf8mb4;
@@ -57,7 +57,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '8881', '/menu/updateBaseMenu', 'POST', '
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/menu/getBaseMenuById', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/changePassword', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/uploadHeaderImg', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/deleteUser', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/getInfoList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/getUserList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/user/setUserAuthority', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '8881', '/fileUploadAndDownload/upload', 'POST', '', '', '');
@@ -96,7 +96,7 @@ INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/updateBaseMenu', 'POST', '
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/menu/getBaseMenuById', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/changePassword', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/uploadHeaderImg', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/deleteUser', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getInfoList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/getUserList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/user/setUserAuthority', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '9528', '/fileUploadAndDownload/upload', 'POST', '', '', '');
@@ -138,9 +138,10 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/updateBaseMenu', 'POST', ''
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/menu/getBaseMenuById', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/changePassword', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/uploadHeaderImg', 'POST', '', '', '');
-INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/deleteUser', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/getInfoList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/getUserList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/setUserAuthority', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/user/deleteUser', 'DELETE', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/upload', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/getFileList', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/fileUploadAndDownload/deleteFile', 'POST', '', '', '');
@@ -156,6 +157,16 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'DELETE', ''
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customerList', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/createTemp', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/createSysDictionaryDetail', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/deleteSysDictionaryDetail', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/updateSysDictionaryDetail', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/findSysDictionaryDetail', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/getSysDictionaryDetailList', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/createSysDictionary', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/deleteSysDictionary', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/updateSysDictionary', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/findSysDictionary', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/getSysDictionaryList', 'GET', '', '', '');
 
 -- ----------------------------
 -- Table structure for exa_customers
@@ -166,10 +177,10 @@ CREATE TABLE `exa_customers`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `customer_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '客户名',
-  `customer_phone_data` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '客户手机号',
-  `sys_user_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '管理ID',
-  `sys_user_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '管理角色ID',
+  `customer_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `customer_phone_data` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `sys_user_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  `sys_user_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_customers_deleted_at`(`deleted_at`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
@@ -207,10 +218,10 @@ CREATE TABLE `exa_file_upload_and_downloads`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件名',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件地址\r\n',
-  `tag` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '文件标签\r\n',
-  `key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '编号',
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `tag` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `key` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_exa_file_upload_and_downloads_deleted_at`(`deleted_at`) USING BTREE
@@ -252,7 +263,7 @@ CREATE TABLE `jwt_blacklists`  (
   `jwt` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_jwt_blacklists_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 57 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of jwt_blacklists
@@ -303,6 +314,14 @@ INSERT INTO `jwt_blacklists` VALUES (45, '2020-04-15 17:12:54', '2020-04-15 17:1
 INSERT INTO `jwt_blacklists` VALUES (46, '2020-04-15 17:14:47', '2020-04-15 17:14:47', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg3NTQ2Nzg5LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODY5NDA5ODl9.3jbdl1N0KA8ExFMWXHi3ha4aESKq8yDKDgpSH4Xdsnk');
 INSERT INTO `jwt_blacklists` VALUES (47, '2020-04-22 12:04:20', '2020-04-22 12:04:20', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg3NjE2MTYwLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODcwMTAzNjB9.jRHlnfXuJhp4hBE-QqCZ-lodzwK67IBkDI2xteB0OQw');
 INSERT INTO `jwt_blacklists` VALUES (48, '2020-04-22 12:12:17', '2020-04-22 12:12:17', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg4MTMzMjQyLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODc1Mjc0NDJ9.WJ59uRUxXJ7-rUH07mE6jCfnwgfvQnpPaLU5vJ_VhWM');
+INSERT INTO `jwt_blacklists` VALUES (49, '2020-05-01 18:24:31', '2020-05-01 18:24:31', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg4Nzc5MjE3LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODgxNzM0MTd9.MqUeI_nKeeUnr6gz_bks9uNAvqFp47NGhWN09q7H1RQ');
+INSERT INTO `jwt_blacklists` VALUES (50, '2020-05-02 16:11:54', '2020-05-02 16:11:54', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg4OTQ5MDk1LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODgzNDMyOTV9.jpNnlgm4vVjJnzvsx-GReNnB8NS_OoDwfrr7DF1pwFs');
+INSERT INTO `jwt_blacklists` VALUES (51, '2020-05-02 17:51:18', '2020-05-02 17:51:18', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg4NjAxOTM2LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODc5OTYxMzZ9.S12wm9EcRCENpibLyj5ypStwmhdvP_Bn2MxQtC24j-I');
+INSERT INTO `jwt_blacklists` VALUES (52, '2020-05-02 17:52:30', '2020-05-02 17:52:30', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg5MDE0MzQ4LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODg0MDg1NDh9.cCjvifp3vJDy5Zt8BB4uVn8M-eue8k5LY7CxlIu7ADM');
+INSERT INTO `jwt_blacklists` VALUES (53, '2020-05-03 15:49:31', '2020-05-03 15:49:31', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg5MDk2ODcwLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODg0OTEwNzB9.jzBjLNWINbqSubgzmnl1_y1ye2ue0s-mnveD2vvf_io');
+INSERT INTO `jwt_blacklists` VALUES (54, '2020-05-05 16:44:02', '2020-05-05 16:44:02', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTg5MDk5NTkzLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1ODg0OTM3OTN9.tk0lb9HIoK_Nbr46Ehm8fvdYlMxwKWmYwocWDzxQaMw');
+INSERT INTO `jwt_blacklists` VALUES (55, '2020-06-13 17:11:30', '2020-06-13 17:11:30', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTkyNjQwMzQyLCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1OTIwMzQ1NDJ9.ONYE91vxO-Tv_UREbxuGM5KLznLECdiUUzj0gAC0kXE');
+INSERT INTO `jwt_blacklists` VALUES (56, '2020-06-13 17:11:44', '2020-06-13 17:11:44', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiY2UwZDY2ODUtYzE1Zi00MTI2LWE1YjQtODkwYmM5ZDIzNTZkIiwiSUQiOjEwLCJOaWNrTmFtZSI6Iui2hee6p-euoeeQhuWRmCIsIkF1dGhvcml0eUlkIjoiODg4IiwiZXhwIjoxNTkyNjQ0Mjk0LCJpc3MiOiJxbVBsdXMiLCJuYmYiOjE1OTIwMzg0OTR9.v15wZOvA0QMH2wloucwmROhoztWHtlD3-lTqTx6_ZQg');
 
 -- ----------------------------
 -- Table structure for sys_apis
@@ -314,21 +333,21 @@ CREATE TABLE `sys_apis`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
   `authority_id` int(10) UNSIGNED NULL DEFAULT NULL,
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'api路径',
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'api中文描述',
-  `api_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'api组',
-  `method` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'POST' COMMENT '方法',
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `api_group` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `method` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'POST',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_apis
 -- ----------------------------
 INSERT INTO `sys_apis` VALUES (1, '2019-09-28 11:23:49', '2019-09-28 17:06:16', NULL, NULL, '/base/login', '用户登录', 'base', 'POST');
 INSERT INTO `sys_apis` VALUES (2, '2019-09-28 11:32:46', '2019-09-28 17:06:11', NULL, NULL, '/base/register', '用户注册', 'base', 'POST');
-INSERT INTO `sys_apis` VALUES (3, '2019-09-28 11:33:41', '2020-05-09 17:43:15', NULL, NULL, '/api/createApi', '创建api', 'api', 'POST');
+INSERT INTO `sys_apis` VALUES (3, '2019-09-28 11:33:41', '2020-05-10 16:33:48', NULL, NULL, '/api/createApi', '创建api', 'api', 'POST');
 INSERT INTO `sys_apis` VALUES (4, '2019-09-28 14:09:04', '2019-09-28 17:05:59', NULL, NULL, '/api/getApiList', '获取api列表', 'api', 'POST');
 INSERT INTO `sys_apis` VALUES (5, '2019-09-28 14:15:50', '2019-09-28 17:05:53', NULL, NULL, '/api/getApiById', '获取api详细信息', 'api', 'POST');
 INSERT INTO `sys_apis` VALUES (7, '2019-09-28 14:19:26', '2019-09-28 17:05:44', NULL, NULL, '/api/deleteApi', '删除Api', 'api', 'POST');
@@ -348,7 +367,7 @@ INSERT INTO `sys_apis` VALUES (21, '2019-09-30 15:28:05', '2019-09-30 15:28:05',
 INSERT INTO `sys_apis` VALUES (22, '2019-09-30 15:28:21', '2019-09-30 15:28:21', NULL, NULL, '/menu/getBaseMenuById', '根据id获取菜单', 'menu', 'POST');
 INSERT INTO `sys_apis` VALUES (23, '2019-09-30 15:29:19', '2019-09-30 15:29:19', NULL, NULL, '/user/changePassword', '修改密码', 'user', 'POST');
 INSERT INTO `sys_apis` VALUES (24, '2019-09-30 15:29:33', '2019-09-30 15:29:33', NULL, NULL, '/user/uploadHeaderImg', '上传头像', 'user', 'POST');
-INSERT INTO `sys_apis` VALUES (25, '2019-09-30 15:30:00', '2020-05-06 16:03:47', NULL, NULL, '/user/deleteUser', '删除用户', 'user', 'DELETE');
+INSERT INTO `sys_apis` VALUES (25, '2019-09-30 15:30:00', '2019-09-30 15:30:00', NULL, NULL, '/user/getInfoList', '分页获取用户列表', 'user', 'POST');
 INSERT INTO `sys_apis` VALUES (28, '2019-10-09 15:15:17', '2019-10-09 15:17:07', NULL, NULL, '/user/getUserList', '获取用户列表', 'user', 'POST');
 INSERT INTO `sys_apis` VALUES (29, '2019-10-09 23:01:40', '2019-10-09 23:01:40', NULL, NULL, '/user/setUserAuthority', '修改用户角色', 'user', 'POST');
 INSERT INTO `sys_apis` VALUES (30, '2019-10-26 20:14:38', '2019-10-26 20:14:38', NULL, NULL, '/fileUploadAndDownload/upload', '文件上传示例', 'fileUploadAndDownload', 'POST');
@@ -369,15 +388,42 @@ INSERT INTO `sys_apis` VALUES (44, '2020-03-12 14:36:54', '2020-03-12 14:56:50',
 INSERT INTO `sys_apis` VALUES (45, '2020-03-29 23:01:28', '2020-03-29 23:01:28', NULL, NULL, '/autoCode/createTemp', '自动化代码', 'autoCode', 'POST');
 INSERT INTO `sys_apis` VALUES (46, '2020-04-15 12:46:58', '2020-04-15 12:46:58', NULL, NULL, '/authority/updateAuthority', '更新角色信息', 'authority', 'PUT');
 INSERT INTO `sys_apis` VALUES (47, '2020-04-20 15:14:25', '2020-04-20 15:14:25', NULL, NULL, '/authority/copyAuthority', '拷贝角色', 'authority', 'POST');
+INSERT INTO `sys_apis` VALUES (64, '2020-05-10 16:44:25', '2020-05-10 16:44:25', NULL, NULL, '/user/deleteUser', '删除用户', 'user', 'DELETE');
+INSERT INTO `sys_apis` VALUES (65, '2020-06-08 21:50:43', '2020-06-08 21:50:43', '2020-06-13 16:14:02', NULL, '/test/createTest', '新增测试', 'test', 'POST');
+INSERT INTO `sys_apis` VALUES (66, '2020-06-08 21:50:43', '2020-06-08 21:50:43', '2020-06-13 16:14:00', NULL, '/test/deleteTest', '删除测试', 'test', 'DELETE');
+INSERT INTO `sys_apis` VALUES (67, '2020-06-08 21:50:43', '2020-06-08 21:50:43', '2020-06-13 16:13:59', NULL, '/test/updateTest', '更新测试', 'test', 'PUT');
+INSERT INTO `sys_apis` VALUES (68, '2020-06-08 21:50:43', '2020-06-08 21:50:43', '2020-06-13 16:13:57', NULL, '/test/findTest', '根据ID获取测试', 'test', 'GET');
+INSERT INTO `sys_apis` VALUES (69, '2020-06-08 21:50:43', '2020-06-08 21:50:43', '2020-06-13 16:13:56', NULL, '/test/getTestList', '获取测试列表', 'test', 'GET');
+INSERT INTO `sys_apis` VALUES (70, '2020-06-11 23:51:05', '2020-06-11 23:51:05', '2020-06-23 18:53:19', NULL, '/gvaPlug/testGvaPlug', '测试插件路由注册', 'gvaPlug', 'GET');
+INSERT INTO `sys_apis` VALUES (71, '2020-06-13 16:15:31', '2020-06-13 16:15:31', '2020-06-13 16:23:53', NULL, '/test/createTest', '新增测试数据', 'test', 'POST');
+INSERT INTO `sys_apis` VALUES (72, '2020-06-13 16:15:31', '2020-06-13 16:15:31', '2020-06-13 16:23:52', NULL, '/test/deleteTest', '删除测试数据', 'test', 'DELETE');
+INSERT INTO `sys_apis` VALUES (73, '2020-06-13 16:15:31', '2020-06-13 16:15:31', '2020-06-13 16:23:50', NULL, '/test/updateTest', '更新测试数据', 'test', 'PUT');
+INSERT INTO `sys_apis` VALUES (74, '2020-06-13 16:15:31', '2020-06-13 16:15:31', '2020-06-13 16:23:49', NULL, '/test/findTest', '根据ID获取测试数据', 'test', 'GET');
+INSERT INTO `sys_apis` VALUES (75, '2020-06-13 16:15:31', '2020-06-13 16:15:31', '2020-06-13 16:23:47', NULL, '/test/getTestList', '获取测试数据列表', 'test', 'GET');
+INSERT INTO `sys_apis` VALUES (76, '2020-06-23 18:33:27', '2020-06-23 18:33:27', '2020-06-23 18:52:46', NULL, '/dictionary/createDictionary', '新增字典', 'dictionary', 'POST');
+INSERT INTO `sys_apis` VALUES (77, '2020-06-23 18:33:27', '2020-06-23 18:33:27', '2020-06-23 18:52:47', NULL, '/dictionary/deleteDictionary', '删除字典', 'dictionary', 'DELETE');
+INSERT INTO `sys_apis` VALUES (78, '2020-06-23 18:33:27', '2020-06-23 18:33:27', '2020-06-23 18:52:49', NULL, '/dictionary/updateDictionary', '更新字典', 'dictionary', 'PUT');
+INSERT INTO `sys_apis` VALUES (79, '2020-06-23 18:33:27', '2020-06-23 18:33:27', '2020-06-23 18:52:50', NULL, '/dictionary/findDictionary', '根据ID获取字典', 'dictionary', 'GET');
+INSERT INTO `sys_apis` VALUES (80, '2020-06-23 18:33:27', '2020-06-23 18:33:27', '2020-06-23 18:52:52', NULL, '/dictionary/getDictionaryList', '获取字典列表', 'dictionary', 'GET');
+INSERT INTO `sys_apis` VALUES (81, '2020-06-23 18:40:50', '2020-06-23 18:40:50', NULL, NULL, '/sysDictionaryDetail/createSysDictionaryDetail', '新增字典内容', 'sysDictionaryDetail', 'POST');
+INSERT INTO `sys_apis` VALUES (82, '2020-06-23 18:40:50', '2020-06-23 18:40:50', NULL, NULL, '/sysDictionaryDetail/deleteSysDictionaryDetail', '删除字典内容', 'sysDictionaryDetail', 'DELETE');
+INSERT INTO `sys_apis` VALUES (83, '2020-06-23 18:40:50', '2020-06-23 18:40:50', NULL, NULL, '/sysDictionaryDetail/updateSysDictionaryDetail', '更新字典内容', 'sysDictionaryDetail', 'PUT');
+INSERT INTO `sys_apis` VALUES (84, '2020-06-23 18:40:50', '2020-06-23 18:40:50', NULL, NULL, '/sysDictionaryDetail/findSysDictionaryDetail', '根据ID获取字典内容', 'sysDictionaryDetail', 'GET');
+INSERT INTO `sys_apis` VALUES (85, '2020-06-23 18:40:50', '2020-06-23 18:40:50', NULL, NULL, '/sysDictionaryDetail/getSysDictionaryDetailList', '获取字典内容列表', 'sysDictionaryDetail', 'GET');
+INSERT INTO `sys_apis` VALUES (86, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/createSysDictionary', '新增字典', 'sysDictionary', 'POST');
+INSERT INTO `sys_apis` VALUES (87, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/deleteSysDictionary', '删除字典', 'sysDictionary', 'DELETE');
+INSERT INTO `sys_apis` VALUES (88, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/updateSysDictionary', '更新字典', 'sysDictionary', 'PUT');
+INSERT INTO `sys_apis` VALUES (89, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/findSysDictionary', '根据ID获取字典', 'sysDictionary', 'GET');
+INSERT INTO `sys_apis` VALUES (90, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/getSysDictionaryList', '获取字典列表', 'sysDictionary', 'GET');
 
 -- ----------------------------
 -- Table structure for sys_authorities
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_authorities`;
 CREATE TABLE `sys_authorities`  (
-  `authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色ID',
-  `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '角色名',
-  `parent_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '父角色ID',
+  `authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `parent_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `created_at` datetime(0) NULL DEFAULT NULL,
   `updated_at` datetime(0) NULL DEFAULT NULL,
   `deleted_at` datetime(0) NULL DEFAULT NULL,
@@ -389,17 +435,17 @@ CREATE TABLE `sys_authorities`  (
 -- ----------------------------
 -- Records of sys_authorities
 -- ----------------------------
-INSERT INTO `sys_authorities` VALUES ('888', '普通用户', '0', '2020-04-04 11:44:56', '2020-05-09 17:41:29', NULL);
-INSERT INTO `sys_authorities` VALUES ('8881', '普通用户子角色', '888', '2020-04-04 11:44:56', '2020-05-09 17:41:29', NULL);
-INSERT INTO `sys_authorities` VALUES ('9528', '测试角色', '0', '2020-04-04 11:44:56', '2020-05-09 17:41:29', NULL);
+INSERT INTO `sys_authorities` VALUES ('888', '普通用户', '0', '2020-04-04 11:44:56', '2020-06-13 16:07:37', NULL);
+INSERT INTO `sys_authorities` VALUES ('8881', '普通用户子角色', '888', '2020-04-04 11:44:56', '2020-04-24 10:16:42', NULL);
+INSERT INTO `sys_authorities` VALUES ('9528', '测试角色', '0', '2020-04-04 11:44:56', '2020-04-24 10:16:42', NULL);
 
 -- ----------------------------
 -- Table structure for sys_authority_menus
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_authority_menus`;
 CREATE TABLE `sys_authority_menus`  (
-  `sys_authority_authority_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '角色ID',
-  `sys_base_menu_id` int(10) UNSIGNED NOT NULL DEFAULT 0 COMMENT '菜单ID',
+  `sys_authority_authority_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `sys_base_menu_id` int(10) UNSIGNED NOT NULL DEFAULT 0,
   PRIMARY KEY (`sys_authority_authority_id`, `sys_base_menu_id`) USING BTREE,
   INDEX `sys_authority_authority_id`(`sys_authority_authority_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
@@ -427,7 +473,8 @@ INSERT INTO `sys_authority_menus` VALUES ('888', 38);
 INSERT INTO `sys_authority_menus` VALUES ('888', 40);
 INSERT INTO `sys_authority_menus` VALUES ('888', 41);
 INSERT INTO `sys_authority_menus` VALUES ('888', 42);
-INSERT INTO `sys_authority_menus` VALUES ('888', 45);
+INSERT INTO `sys_authority_menus` VALUES ('888', 50);
+INSERT INTO `sys_authority_menus` VALUES ('888', 51);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 1);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 2);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 18);
@@ -466,55 +513,60 @@ CREATE TABLE `sys_base_menus`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
   `menu_level` int(10) UNSIGNED NULL DEFAULT NULL,
-  `parent_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '父菜单ID',
-  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '路由path',
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '路由name',
-  `hidden` tinyint(1) NULL DEFAULT NULL COMMENT '是否在列表隐藏',
-  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '对应前端文件路径',
-  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单名',
-  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '菜单图标',
+  `parent_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  `path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `hidden` tinyint(1) NULL DEFAULT NULL,
+  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `icon` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `sort` int(255) NULL DEFAULT NULL COMMENT '排序标记',
-  `keep_alive` tinyint(1) NULL DEFAULT NULL COMMENT '是否缓存',
-  `default_menu` tinyint(1) NULL DEFAULT NULL COMMENT '是否是基础路由（开发中）',
+  `sort` int(255) NULL DEFAULT NULL,
+  `keep_alive` tinyint(1) NULL DEFAULT NULL,
+  `default_menu` tinyint(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_base_menus
 -- ----------------------------
-INSERT INTO `sys_base_menus` VALUES (1, '2019-09-19 22:05:18', '2020-05-09 17:41:51', NULL, 0, 0, 'dashboard', 'dashboard', 0, 'view/dashboard/index.vue', '仪表盘', 'setting', '仪表盘', 1, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2020-05-09 17:41:29', NULL, 0, 0, 'about', 'about', 0, 'view/about/index.vue', '关于我们', 'info', '测试菜单', 7, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (3, '2019-09-19 22:06:38', '2020-05-09 17:41:29', NULL, 0, 0, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', '超级管理员', 3, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (4, '2019-09-19 22:11:53', '2020-05-09 17:41:29', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理', 1, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (5, '2019-09-19 22:13:18', '2020-05-09 17:41:29', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理', 2, 1, 0);
-INSERT INTO `sys_base_menus` VALUES (6, '2019-09-19 22:13:36', '2020-05-09 17:41:29', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理', 3, 1, 0);
-INSERT INTO `sys_base_menus` VALUES (17, '2019-10-09 15:12:29', '2020-05-09 17:41:29', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理', 4, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (18, '2019-10-15 22:27:22', '2020-05-09 17:41:29', NULL, 0, 0, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'user-solid', '个人信息', 4, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (19, '2019-10-20 11:14:42', '2020-05-09 17:41:29', NULL, 0, 0, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', '示例文件', 6, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (20, '2019-10-20 11:18:11', '2020-05-09 17:41:29', NULL, 0, 19, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', '表格示例', 1, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (21, '2019-10-20 11:19:52', '2020-05-09 17:41:29', NULL, 0, 19, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', '表单示例', 2, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (22, '2019-10-20 11:22:19', '2020-05-09 17:41:29', NULL, 0, 19, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', '富文本编辑器', 3, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (23, '2019-10-20 11:23:39', '2020-05-09 17:41:29', NULL, 0, 19, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 'excel导入导出', 4, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (26, '2019-10-20 11:27:02', '2020-05-09 17:41:29', NULL, 0, 19, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载', 5, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (33, '2020-02-17 16:20:47', '2020-05-09 17:41:29', NULL, 0, 19, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', '断点续传', 6, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (34, '2020-02-24 19:48:37', '2020-05-09 17:41:29', NULL, 0, 19, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', '客户列表（资源示例）', 7, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-05-09 17:41:29', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', '系统工具', 5, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-05-09 17:41:29', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', 1, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-05-09 17:41:29', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', 2, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-05-09 17:41:29', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', 3, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-05-09 17:42:23', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (47, '2020-05-20 16:01:08', '2020-05-20 16:01:08', '2020-05-20 16:01:20', 0, 0, 'testtest/:id', 'testtest', 0, '阿瑟东', 'a\'s\'d', 'user-solid', NULL, 123, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (1, '2019-09-19 22:05:18', '2020-05-30 15:43:06', NULL, 0, 0, 'dashboard', 'dashboard', 0, 'view/dashboard/index.vue', '仪表盘', 'setting', '仪表盘', 1, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (2, '2019-09-19 22:06:17', '2020-05-10 21:31:50', NULL, 0, 0, 'about', 'about', 0, 'view/about/index.vue', '关于我们', 'info', '测试菜单', 7, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (3, '2019-09-19 22:06:38', '2020-04-24 10:16:43', NULL, 0, 0, 'admin', 'superAdmin', 0, 'view/superAdmin/index.vue', '超级管理员', 'user-solid', '超级管理员', 3, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (4, '2019-09-19 22:11:53', '2020-05-30 15:43:25', NULL, 0, 3, 'authority', 'authority', 0, 'view/superAdmin/authority/authority.vue', '角色管理', 's-custom', '角色管理', 1, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (5, '2019-09-19 22:13:18', '2020-04-30 17:45:27', NULL, 0, 3, 'menu', 'menu', 0, 'view/superAdmin/menu/menu.vue', '菜单管理', 's-order', '菜单管理', 2, 1, 0);
+INSERT INTO `sys_base_menus` VALUES (6, '2019-09-19 22:13:36', '2020-04-24 10:16:43', NULL, 0, 3, 'api', 'api', 0, 'view/superAdmin/api/api.vue', 'api管理', 's-platform', 'api管理', 3, 1, 0);
+INSERT INTO `sys_base_menus` VALUES (17, '2019-10-09 15:12:29', '2020-04-24 10:16:43', NULL, 0, 3, 'user', 'user', 0, 'view/superAdmin/user/user.vue', '用户管理', 'coordinate', '用户管理', 4, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (18, '2019-10-15 22:27:22', '2020-05-10 21:31:36', NULL, 0, 0, 'person', 'person', 1, 'view/person/person.vue', '个人信息', 'message-solid', '个人信息', 4, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (19, '2019-10-20 11:14:42', '2020-04-24 10:16:43', NULL, 0, 0, 'example', 'example', 0, 'view/example/index.vue', '示例文件', 's-management', '示例文件', 6, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (20, '2019-10-20 11:18:11', '2020-04-24 10:16:42', NULL, 0, 19, 'table', 'table', 0, 'view/example/table/table.vue', '表格示例', 's-order', '表格示例', 1, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (21, '2019-10-20 11:19:52', '2020-04-24 10:16:43', NULL, 0, 19, 'form', 'form', 0, 'view/example/form/form.vue', '表单示例', 'document', '表单示例', 2, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (22, '2019-10-20 11:22:19', '2020-04-24 10:16:43', NULL, 0, 19, 'rte', 'rte', 0, 'view/example/rte/rte.vue', '富文本编辑器', 'reading', '富文本编辑器', 3, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (23, '2019-10-20 11:23:39', '2020-04-24 10:16:43', NULL, 0, 19, 'excel', 'excel', 0, 'view/example/excel/excel.vue', 'excel导入导出', 's-marketing', 'excel导入导出', 4, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (26, '2019-10-20 11:27:02', '2020-04-24 10:16:43', NULL, 0, 19, 'upload', 'upload', 0, 'view/example/upload/upload.vue', '上传下载', 'upload', '上传下载', 5, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (33, '2020-02-17 16:20:47', '2020-04-24 10:16:43', NULL, 0, 19, 'breakpoint', 'breakpoint', 0, 'view/example/breakpoint/breakpoint.vue', '断点续传', 'upload', '断点续传', 6, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (34, '2020-02-24 19:48:37', '2020-04-24 10:16:43', NULL, 0, 19, 'customer', 'customer', 0, 'view/example/customer/customer.vue', '客户列表（资源示例）', 's-custom', '客户列表（资源示例）', 7, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-04-24 10:16:43', NULL, 0, 0, 'systemTools', 'systemTools', 0, 'view/systemTools/index.vue', '系统工具', 's-cooperation', '系统工具', 5, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-05-03 21:38:49', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', 1, 1, 0);
+INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-05-03 21:38:43', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', 2, 1, 0);
+INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-24 10:16:43', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', 3, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-04-30 17:44:44', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (46, '2020-05-03 16:39:57', '2020-05-03 16:39:57', '2020-05-03 21:34:51', 0, 0, 'student', 'student', 0, 'view/student/student.vue', '学生列表', '', NULL, 11, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (47, '2020-05-05 16:36:47', '2020-05-05 16:36:47', '2020-05-07 22:13:51', 0, 0, 'student', 'student', 0, 'view/student/index.vue', '学生列表', '', NULL, 11, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (48, '2020-05-29 20:54:58', '2020-05-29 20:54:58', '2020-05-29 20:55:04', 0, 0, 'test', 'test', 0, 'test', 'test', 'platform-eleme', NULL, 0, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (49, '2020-06-13 16:19:05', '2020-06-13 16:19:05', '2020-06-13 16:23:39', 0, 0, 'test', 'test', 0, 'view/test/test.vue', '演示菜单', 'upload2', NULL, 10, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (50, '2020-06-24 19:49:54', '2020-06-24 19:49:54', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sys_dictionary.vue', '字典管理', 'notebook-2', NULL, 5, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (51, '2020-06-24 19:51:33', '2020-06-24 19:51:33', NULL, 0, 3, 'dictionaryDetail/:id', 'dictionaryDetail', 1, 'view/superAdmin/dictionary/sys_dictionary_detail.vue', '字典详情', 's-order', NULL, 1, 0, 0);
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_data_authority_id`;
 CREATE TABLE `sys_data_authority_id`  (
-  `sys_authority_authority_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '角色ID',
-  `data_authority_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL COMMENT '资源角色ID',
+  `sys_authority_authority_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
+  `data_authority_id` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   PRIMARY KEY (`sys_authority_authority_id`, `data_authority_id`) USING BTREE,
   INDEX `sys_authority_authority_id`(`sys_authority_authority_id`) USING BTREE,
   INDEX `data_authority_id`(`data_authority_id`) USING BTREE
@@ -526,9 +578,6 @@ CREATE TABLE `sys_data_authority_id`  (
 INSERT INTO `sys_data_authority_id` VALUES ('888', '888');
 INSERT INTO `sys_data_authority_id` VALUES ('888', '8881');
 INSERT INTO `sys_data_authority_id` VALUES ('888', '9528');
-INSERT INTO `sys_data_authority_id` VALUES ('88822', '888');
-INSERT INTO `sys_data_authority_id` VALUES ('88822', '8881');
-INSERT INTO `sys_data_authority_id` VALUES ('88822', '9528');
 INSERT INTO `sys_data_authority_id` VALUES ('888222', '888');
 INSERT INTO `sys_data_authority_id` VALUES ('888222', '8881');
 INSERT INTO `sys_data_authority_id` VALUES ('888222', '9528');
@@ -539,6 +588,52 @@ INSERT INTO `sys_data_authority_id` VALUES ('9528', '8881');
 INSERT INTO `sys_data_authority_id` VALUES ('9528', '9528');
 
 -- ----------------------------
+-- Table structure for sys_dictionaries
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dictionaries`;
+CREATE TABLE `sys_dictionaries`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `deleted_at` datetime(0) NULL DEFAULT NULL,
+  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字典名（中）',
+  `type` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '字典名（英）',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '状态',
+  `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_sys_dictionaries_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sys_dictionaries
+-- ----------------------------
+INSERT INTO `sys_dictionaries` VALUES (2, '2020-06-24 20:44:00', '2020-06-24 20:44:00', NULL, '性别', 'sex', 1, '性别字典');
+
+-- ----------------------------
+-- Table structure for sys_dictionary_details
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dictionary_details`;
+CREATE TABLE `sys_dictionary_details`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `deleted_at` datetime(0) NULL DEFAULT NULL,
+  `label` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '展示值',
+  `value` int(11) NULL DEFAULT NULL COMMENT '字典值',
+  `status` tinyint(1) NULL DEFAULT NULL COMMENT '启用状态',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序标记',
+  `sys_dictionary_id` int(11) NULL DEFAULT NULL COMMENT '关联标记',
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_sys_dictionary_details_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sys_dictionary_details
+-- ----------------------------
+INSERT INTO `sys_dictionary_details` VALUES (9, '2020-06-24 20:44:11', '2020-06-24 20:44:11', NULL, '男', 1, 1, 0, 2);
+INSERT INTO `sys_dictionary_details` VALUES (10, '2020-06-24 20:44:20', '2020-06-24 20:52:30', NULL, '女', 0, 1, 1, 2);
+
+-- ----------------------------
 -- Table structure for sys_users
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_users`;
@@ -547,12 +642,17 @@ CREATE TABLE `sys_users`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `uuid` varbinary(255) NULL DEFAULT NULL COMMENT '用户UUID',
-  `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'QMPlusUser' COMMENT '用户昵称',
-  `header_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'http://www.henrongyi.top/avatar/lufu.jpg' COMMENT '用户头像',
-  `authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '888' COMMENT '用户角色ID',
-  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户登录名',
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '用户登录密码',
+  `uuid` varbinary(255) NULL DEFAULT NULL,
+  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `pass_word` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'QMPlusUser',
+  `header_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'http://www.henrongyi.top/avatar/lufu.jpg',
+  `authority_id` double NULL DEFAULT 888,
+  `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `phone_data` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `manager` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_users_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_users_deleted_at`(`deleted_at`) USING BTREE
@@ -561,8 +661,8 @@ CREATE TABLE `sys_users`  (
 -- ----------------------------
 -- Records of sys_users
 -- ----------------------------
-INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2020-05-06 16:09:15', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, '超级管理员', 'http://qmplusimg.henrongyi.top/15887525450B978439-F04A-4a09-A8D3-DE7DE2677142.png', '888', 'admin', 'e10adc3949ba59abbe56e057f20f883e');
-INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2020-05-09 17:43:44', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', '9528', 'a303176530', '3ec063004a6f31642261936a379fde3d');
+INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
+INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 9528, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
 
 -- ----------------------------
 -- Table structure for sys_workflow_step_infos
@@ -573,12 +673,12 @@ CREATE TABLE `sys_workflow_step_infos`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `workflow_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '所属工作流ID',
-  `is_strat` tinyint(1) NULL DEFAULT NULL COMMENT '是否是开始流节点',
-  `step_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工作流节点名称',
-  `step_no` double NULL DEFAULT NULL COMMENT '步骤id （第几步）',
-  `step_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '操作者级别id',
-  `is_end` tinyint(1) NULL DEFAULT NULL COMMENT '是否是完结流节点',
+  `workflow_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  `is_strat` tinyint(1) NULL DEFAULT NULL,
+  `step_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `step_no` double NULL DEFAULT NULL,
+  `step_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `is_end` tinyint(1) NULL DEFAULT NULL,
   `sys_workflow_id` int(10) UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_workflow_step_infos_deleted_at`(`deleted_at`) USING BTREE,
@@ -594,9 +694,9 @@ CREATE TABLE `sys_workflows`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `workflow_nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工作流中文名称',
-  `workflow_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工作流英文名称',
-  `workflow_description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '工作流描述',
+  `workflow_nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `workflow_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `workflow_description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_workflows_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_workflows_deleted_at`(`deleted_at`) USING BTREE
@@ -611,6 +711,6 @@ INSERT INTO `sys_workflows` VALUES (8, '2019-12-09 15:20:21', '2019-12-09 15:20:
 -- View structure for authority_menu
 -- ----------------------------
 DROP VIEW IF EXISTS `authority_menu`;
-CREATE ALGORITHM = UNDEFINED DEFINER = `root`@`localhost` SQL SECURITY DEFINER VIEW `authority_menu` AS select `sys_base_menus`.`id` AS `id`,`sys_base_menus`.`created_at` AS `created_at`,`sys_base_menus`.`updated_at` AS `updated_at`,`sys_base_menus`.`deleted_at` AS `deleted_at`,`sys_base_menus`.`menu_level` AS `menu_level`,`sys_base_menus`.`parent_id` AS `parent_id`,`sys_base_menus`.`path` AS `path`,`sys_base_menus`.`name` AS `name`,`sys_base_menus`.`hidden` AS `hidden`,`sys_base_menus`.`component` AS `component`,`sys_base_menus`.`title` AS `title`,`sys_base_menus`.`icon` AS `icon`,`sys_base_menus`.`nick_name` AS `nick_name`,`sys_base_menus`.`sort` AS `sort`,`sys_authority_menus`.`sys_authority_authority_id` AS `authority_id`,`sys_authority_menus`.`sys_base_menu_id` AS `menu_id`,`sys_base_menus`.`keep_alive` AS `keep_alive`,`sys_base_menus`.`default_menu` AS `default_menu` from (`sys_authority_menus` join `sys_base_menus` on((`sys_authority_menus`.`sys_base_menu_id` = `sys_base_menus`.`id`)));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `authority_menu` AS select `sys_base_menus`.`id` AS `id`,`sys_base_menus`.`created_at` AS `created_at`,`sys_base_menus`.`updated_at` AS `updated_at`,`sys_base_menus`.`deleted_at` AS `deleted_at`,`sys_base_menus`.`menu_level` AS `menu_level`,`sys_base_menus`.`parent_id` AS `parent_id`,`sys_base_menus`.`path` AS `path`,`sys_base_menus`.`name` AS `name`,`sys_base_menus`.`hidden` AS `hidden`,`sys_base_menus`.`component` AS `component`,`sys_base_menus`.`title` AS `title`,`sys_base_menus`.`icon` AS `icon`,`sys_base_menus`.`nick_name` AS `nick_name`,`sys_base_menus`.`sort` AS `sort`,`sys_authority_menus`.`sys_authority_authority_id` AS `authority_id`,`sys_authority_menus`.`sys_base_menu_id` AS `menu_id`,`sys_base_menus`.`keep_alive` AS `keep_alive`,`sys_base_menus`.`default_menu` AS `default_menu` from (`sys_authority_menus` join `sys_base_menus` on((`sys_authority_menus`.`sys_base_menu_id` = `sys_base_menus`.`id`)));
 
 SET FOREIGN_KEY_CHECKS = 1;

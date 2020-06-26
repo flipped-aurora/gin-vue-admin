@@ -61,7 +61,7 @@ func GetExaCustomer(id uint) (err error, customer model.ExaCustomer) {
 func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err error, list interface{}, total int) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB.Model(&model.SysAuthority{})
+	db := global.GVA_DB.Model(&model.ExaCustomer{})
 	var a model.SysAuthority
 	a.AuthorityId = sysUserAuthorityID
 	err, auth := GetAuthorityInfo(a)

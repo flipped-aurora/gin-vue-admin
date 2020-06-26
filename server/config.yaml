@@ -46,9 +46,9 @@ system:
 
 # captcha configuration
 captcha:
-    key-long: 4
-    img-width: 120
-    img-height: 40
+    key-long: 6
+    img-width: 240
+    img-height: 80
 
 # logger configuration
 log:

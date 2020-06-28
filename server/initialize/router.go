@@ -14,6 +14,8 @@ import (
 
 func Routers() *gin.Engine {
 	var Router = gin.Default()
+	// 操作记录
+	Router.Use(middleware.RecordRequestBody(), middleware.OperationRecord())
 	// Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	global.GVA_LOG.Debug("use middleware logger")
 	// 跨域

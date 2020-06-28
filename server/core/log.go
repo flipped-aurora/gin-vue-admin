@@ -30,26 +30,24 @@ func init() {
 	}
 	logger := oplogging.MustGetLogger(module)
 	var backends []oplogging.Backend
-	backends = registerStdout(c, backends)
-	backends = registerFile(c, backends)
+	registerStdout(c, &backends)
+	registerFile(c, &backends)
 
 	oplogging.SetBackend(backends...)
 	global.GVA_LOG = logger
 }
 
-func registerStdout(c config.Log, backends []oplogging.Backend) []oplogging.Backend {
+func registerStdout(c config.Log, backends *[]oplogging.Backend) {
 	if c.Stdout != "" {
 		level, err := oplogging.LogLevel(c.Stdout)
 		if err != nil {
 			fmt.Println(err)
 		}
-		backends = append(backends, createBackend(os.Stdout, c, level))
+		*backends = append(*backends, createBackend(os.Stdout, c, level))
 	}
-
-	return backends
 }
 
-func registerFile(c config.Log, backends []oplogging.Backend) []oplogging.Backend {
+func registerFile(c config.Log, backends *[]oplogging.Backend) {
 	if c.File != "" {
 		if ok, _ := utils.PathExists(logDir); !ok {
 			// directory not exist
@@ -67,16 +65,13 @@ func registerFile(c config.Log, backends []oplogging.Backend) []oplogging.Backen
 		)
 		if err != nil {
 			fmt.Println(err)
-			return backends
 		}
 		level, err := oplogging.LogLevel(c.File)
 		if err != nil {
 			fmt.Println(err)
 		}
-		backends = append(backends, createBackend(fileWriter, c, level))
+		*backends = append(*backends, createBackend(fileWriter, c, level))
 	}
-
-	return backends
 }
 
 func createBackend(w io.Writer, c config.Log, level oplogging.Level) oplogging.Backend {

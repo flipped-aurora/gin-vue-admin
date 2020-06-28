@@ -11,8 +11,8 @@ jwt:
 # mysql connect configuration
 mysql:
     username: root
-    password: 'Aa@6447985'
-    path: '127.0.0.1:3306'
+    password: 'xxxxx'
+    path: 'xxxxxx:3306'
     db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
@@ -31,6 +31,7 @@ qiniu:
     secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
     bucket: 'qm-plus-img'
     img-path: 'http://qmplusimg.henrongyi.top'
+
 # redis configuration
 redis:
     addr: '127.0.0.1:6379'
@@ -56,3 +57,9 @@ log:
     log-file: true
     stdout: 'DEBUG'
     file: 'DEBUG'
+
+# operation configuration
+operation:
+    skip_paths:
+        - '/base/login'
+        - '/base/register'

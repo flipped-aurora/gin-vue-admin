@@ -1,15 +1,16 @@
 package config
 
 type Server struct {
-	Mysql   Mysql   `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
-	Sqlite  Sqlite  `mapstructure:"sqlite" json:"sqlite" yaml:"sqlite"`
-	Qiniu   Qiniu   `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
-	Casbin  Casbin  `mapstructure:"casbin" json:"casbin" yaml:"casbin"`
-	Redis   Redis   `mapstructure:"redis" json:"redis" yaml:"redis"`
-	System  System  `mapstructure:"system" json:"system" yaml:"system"`
-	JWT     JWT     `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
-	Captcha Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
-	Log     Log     `mapstructure:"log" json:"log" yaml:"log"`
+	Mysql     Mysql     `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Sqlite    Sqlite    `mapstructure:"sqlite" json:"sqlite" yaml:"sqlite"`
+	Qiniu     Qiniu     `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
+	Casbin    Casbin    `mapstructure:"casbin" json:"casbin" yaml:"casbin"`
+	Redis     Redis     `mapstructure:"redis" json:"redis" yaml:"redis"`
+	System    System    `mapstructure:"system" json:"system" yaml:"system"`
+	JWT       JWT       `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
+	Captcha   Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
+	Log       Log       `mapstructure:"log" json:"log" yaml:"log"`
+	Operation Operation `mapstructure:"operation" json:"operation" yaml:"operation"`
 }
 
 type System struct {
@@ -69,4 +70,8 @@ type Sqlite struct {
 	Path     string `mapstructure:"path" json:"path" yaml:"path"`
 	Config   string `mapstructure:"config" json:"config" yaml:"config"`
 	LogMode  bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
+}
+
+type Operation struct {
+	SkipPaths []string `mapstructure: "skip_paths" json:"skip_paths" yaml: "username"`
 }

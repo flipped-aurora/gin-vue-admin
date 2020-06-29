@@ -4,13 +4,16 @@ import (
 	"bytes"
 	"fmt"
 	"gin-vue-admin/global"
+	"gin-vue-admin/model"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
-	"time"
+	"strings"
 )
 
 var body []byte
+var userId uint
 
 func RecordRequestBody() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -20,30 +23,39 @@ func RecordRequestBody() gin.HandlerFunc {
 			if err != nil {
 				global.GVA_LOG.Error(err)
 			}
-
 			c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 		} else {
 			body = nil
 		}
+
+		//TODO parse token , userId <-
 	}
 }
 
 func OperationRecord() gin.HandlerFunc {
 	return gin.LoggerWithConfig(gin.LoggerConfig{
 		Formatter: func(param gin.LogFormatterParams) string {
-
-			return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" \"%s\" %s\"\n",
-				param.ClientIP,
-				param.TimeStamp.Format(time.RFC1123),
-				param.Method,
-				param.Path,
-				param.Request.Proto,
-				param.StatusCode,
-				param.Latency,
-				param.Request.UserAgent(),
-				string(body),
-				param.ErrorMessage,
-			)
+			fmt.Println(global.GVA_CONFIG.Operation.SkipPaths)
+			for _, v := range global.GVA_CONFIG.Operation.SkipPaths {
+				if strings.Contains(param.Path, v) {
+					fmt.Println(param.Path)
+					return ""
+				}
+			}
+			err := service.CreateSysOperationRecord(model.SysOperationRecord{
+				Ip:           param.ClientIP,
+				Method:       param.Method,
+				Path:         param.Path,
+				Status:       param.StatusCode,
+				Latency:      param.Latency,
+				Agent:        param.Request.UserAgent(),
+				ErrorMessage: string(body),
+				UserId:       int(userId),
+			})
+			if err != nil {
+				global.GVA_LOG.Error(err)
+			}
+			return ""
 		},
 		// 暂时没考虑好
 		Output:    nil,

@@ -14,10 +14,9 @@ import (
 
 func Routers() *gin.Engine {
 	var Router = gin.Default()
-	// 操作记录
-	Router.Use(middleware.RecordRequestBody(), middleware.OperationRecord())
 	// Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	global.GVA_LOG.Debug("use middleware logger")
+	Router.Use(middleware.RecordRequestBody(), middleware.OperationRecord())
 	// 跨域
 	Router.Use(middleware.Cors())
 	global.GVA_LOG.Debug("use middleware cors")
@@ -39,6 +38,7 @@ func Routers() *gin.Engine {
 	router.InitAutoCodeRouter(ApiGroup)              // 创建自动化代码
 	router.InitSysDictionaryDetailRouter(ApiGroup)   // 字典详情管理
 	router.InitSysDictionaryRouter(ApiGroup)         // 字典管理
+	router.InitSysOperationRecordRouter(ApiGroup)
 	global.GVA_LOG.Info("router register success")
 	return Router
 }

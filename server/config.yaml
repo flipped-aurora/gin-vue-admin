@@ -63,3 +63,4 @@ operation:
     skip_paths:
         - '/base/login'
         - '/base/register'
+        - '/sysOperationRecord/getSysOperationRecordList'

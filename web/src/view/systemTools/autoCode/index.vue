@@ -100,7 +100,7 @@ export default {
         structName: [{ required: true, message: '请输入结构体名称', trigger: 'blur' }],
         abbreviation: [{ required: true, message: '请输入结构体简称', trigger: 'blur' }],
         description: [{ required: true, message: '请输入结构体描述', trigger: 'blur' }],
-        packageName: [{ required: true, message: '请输入包名称', trigger: 'blur' }],
+        packageName: [{ required: true, message: '文件名称：sys_xxxx_xxxx', trigger: 'blur' }],
       },
       dialogMiddle: {},
       bk: {},

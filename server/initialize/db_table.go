@@ -21,6 +21,7 @@ func DBTables() {
 		model.ExaFile{},
 		model.ExaFileChunk{},
 		model.ExaCustomer{},
+		model.SysOperationRecord{},
 	)
 	global.GVA_LOG.Debug("register table success")
 }

@@ -73,5 +73,5 @@ type Sqlite struct {
 }
 
 type Operation struct {
-	SkipPaths []string `mapstructure: "skip_paths" json:"skip_paths" yaml: "username"`
+	SkipPaths []string `mapstructure:"skip-paths" json:"skipPaths" yaml:"skip-paths"`
 }

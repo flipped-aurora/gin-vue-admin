@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"bytes"
-	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/service"
@@ -35,10 +34,9 @@ func RecordRequestBody() gin.HandlerFunc {
 func OperationRecord() gin.HandlerFunc {
 	return gin.LoggerWithConfig(gin.LoggerConfig{
 		Formatter: func(param gin.LogFormatterParams) string {
-			fmt.Println(global.GVA_CONFIG.Operation.SkipPaths)
+			// 防止加载查询参数，再次过滤
 			for _, v := range global.GVA_CONFIG.Operation.SkipPaths {
 				if strings.Contains(param.Path, v) {
-					fmt.Println(param.Path)
 					return ""
 				}
 			}
@@ -49,7 +47,8 @@ func OperationRecord() gin.HandlerFunc {
 				Status:       param.StatusCode,
 				Latency:      param.Latency,
 				Agent:        param.Request.UserAgent(),
-				ErrorMessage: string(body),
+				ErrorMessage: param.ErrorMessage,
+				Body:         string(body),
 				UserId:       int(userId),
 			})
 			if err != nil {
@@ -57,7 +56,6 @@ func OperationRecord() gin.HandlerFunc {
 			}
 			return ""
 		},
-		// 暂时没考虑好
 		Output:    nil,
 		SkipPaths: global.GVA_CONFIG.Operation.SkipPaths,
 	})

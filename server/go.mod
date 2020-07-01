@@ -33,8 +33,8 @@ require (
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/piexlmax/gvaplug v0.0.8
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/qiniu/api.v7 v7.2.5+incompatible
-	github.com/qiniu/x v7.0.8+incompatible // indirect
+	github.com/qiniu/x v1.10.5
+	github.com/qiniu/api.v7/v7 v7.4.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/afero v1.2.2 // indirect
 	github.com/spf13/cast v1.3.1 // indirect
@@ -52,5 +52,4 @@ require (
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
-	qiniupkg.com/x v7.0.8+incompatible // indirect
 )

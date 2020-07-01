@@ -26,11 +26,13 @@ sqlite:
     config: 'loc=Asia/Shanghai'
 
 # oss configuration
+
+# 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址
 qiniu:
-    access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
-    secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
-    bucket: 'qm-plus-img'
-    img-path: 'http://qmplusimg.henrongyi.top'
+    access-key: '25j8dYB****************guwxzZ'
+    secret-key: 'pgdbqE****************VecFXPDeG5JY'
+    bucket: '*******'
+    img-path: '*******'
 # redis configuration
 redis:
     addr: '127.0.0.1:6379'

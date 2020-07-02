@@ -146,7 +146,7 @@ After executing the above command，`docs` will show in `server/`，then open yo
 
 ### 4.1 Architecture Diagram
 
-![Architecture diagram](./docs/gin-vue-admin.png)
+![Architecture diagram](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
 ### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
 

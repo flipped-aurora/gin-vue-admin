@@ -78,7 +78,7 @@ func UpdateSysDictionary(c *gin.Context) {
 func FindSysDictionary(c *gin.Context) {
 	var sysDictionary model.SysDictionary
 	_ = c.ShouldBindQuery(&sysDictionary)
-	err, resysDictionary := service.GetSysDictionary(sysDictionary.ID)
+	err, resysDictionary := service.GetSysDictionary(sysDictionary.Type, sysDictionary.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {

@@ -11,7 +11,7 @@
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 24/06/2020 21:52:45
+ Date: 28/06/2020 21:23:47
 */
 
 SET NAMES utf8mb4;
@@ -553,12 +553,8 @@ INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-05-03 21:3
 INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-05-03 21:38:43', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', 2, 1, 0);
 INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-24 10:16:43', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', 3, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-04-30 17:44:44', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (46, '2020-05-03 16:39:57', '2020-05-03 16:39:57', '2020-05-03 21:34:51', 0, 0, 'student', 'student', 0, 'view/student/student.vue', '学生列表', '', NULL, 11, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (47, '2020-05-05 16:36:47', '2020-05-05 16:36:47', '2020-05-07 22:13:51', 0, 0, 'student', 'student', 0, 'view/student/index.vue', '学生列表', '', NULL, 11, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (48, '2020-05-29 20:54:58', '2020-05-29 20:54:58', '2020-05-29 20:55:04', 0, 0, 'test', 'test', 0, 'test', 'test', 'platform-eleme', NULL, 0, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (49, '2020-06-13 16:19:05', '2020-06-13 16:19:05', '2020-06-13 16:23:39', 0, 0, 'test', 'test', 0, 'view/test/test.vue', '演示菜单', 'upload2', NULL, 10, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (50, '2020-06-24 19:49:54', '2020-06-24 19:49:54', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sys_dictionary.vue', '字典管理', 'notebook-2', NULL, 5, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (51, '2020-06-24 19:51:33', '2020-06-24 19:51:33', NULL, 0, 3, 'dictionaryDetail/:id', 'dictionaryDetail', 1, 'view/superAdmin/dictionary/sys_dictionary_detail.vue', '字典详情', 's-order', NULL, 1, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (50, '2020-06-24 19:49:54', '2020-06-28 20:34:47', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sysDictionary.vue', '字典管理', 'notebook-2', NULL, 5, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (51, '2020-06-24 19:51:33', '2020-06-28 20:35:04', NULL, 0, 3, 'dictionaryDetail/:id', 'dictionaryDetail', 1, 'view/superAdmin/dictionary/sysDictionaryDetail.vue', '字典详情', 's-order', NULL, 1, 0, 0);
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id
@@ -602,7 +598,7 @@ CREATE TABLE `sys_dictionaries`  (
   `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionaries_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_dictionaries
@@ -630,8 +626,8 @@ CREATE TABLE `sys_dictionary_details`  (
 -- ----------------------------
 -- Records of sys_dictionary_details
 -- ----------------------------
-INSERT INTO `sys_dictionary_details` VALUES (9, '2020-06-24 20:44:11', '2020-06-24 20:44:11', NULL, '男', 1, 1, 0, 2);
-INSERT INTO `sys_dictionary_details` VALUES (10, '2020-06-24 20:44:20', '2020-06-24 20:52:30', NULL, '女', 0, 1, 1, 2);
+INSERT INTO `sys_dictionary_details` VALUES (9, '2020-06-24 20:44:11', '2020-06-24 20:44:11', '2020-06-28 21:23:18', '男', 1, 1, 0, 2);
+INSERT INTO `sys_dictionary_details` VALUES (10, '2020-06-24 20:44:20', '2020-06-24 20:52:30', '2020-06-28 21:23:18', '女', 0, 1, 1, 2);
 
 -- ----------------------------
 -- Table structure for sys_users
@@ -643,16 +639,11 @@ CREATE TABLE `sys_users`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
   `uuid` varbinary(255) NULL DEFAULT NULL,
-  `user_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `pass_word` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `nick_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'QMPlusUser',
   `header_img` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'http://www.henrongyi.top/avatar/lufu.jpg',
   `authority_id` double NULL DEFAULT 888,
-  `authority_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `phone_data` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `manager` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_users_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_users_deleted_at`(`deleted_at`) USING BTREE
@@ -661,8 +652,8 @@ CREATE TABLE `sys_users`  (
 -- ----------------------------
 -- Records of sys_users
 -- ----------------------------
-INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2019-10-21 11:16:03', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, NULL, NULL, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 888, NULL, 'admin', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL);
-INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, NULL, NULL, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 9528, NULL, 'a303176530', '3ec063004a6f31642261936a379fde3d', NULL, NULL);
+INSERT INTO `sys_users` VALUES (10, '2019-09-13 17:23:46', '2020-06-26 21:17:50', NULL, 0x63653064363638352D633135662D343132362D613562342D383930626339643233353664, '超级管理员', 'http://qmplusimg.henrongyi.top/1571627762timg.jpg', 888, 'admin', 'e10adc3949ba59abbe56e057f20f883e');
+INSERT INTO `sys_users` VALUES (11, '2019-09-13 17:27:29', '2019-09-13 17:27:29', NULL, 0x66643665663739622D393434632D343838382D383337372D616265326432363038383538, 'QMPlusUser', 'http://qmplusimg.henrongyi.top/1572075907logo.png', 9528, 'a303176530', '3ec063004a6f31642261936a379fde3d');
 
 -- ----------------------------
 -- Table structure for sys_workflow_step_infos

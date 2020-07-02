@@ -57,13 +57,7 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
-          <el-input-number
-            :disabled="dialogType=='edit'"
-            step-strictly
-            :step="1"
-            autocomplete="off"
-            v-model="form.authorityId"
-          ></el-input-number>
+          <el-input :disabled="dialogType=='edit'" autocomplete="off" v-model="form.authorityId"></el-input>
         </el-form-item>
         <el-form-item label="角色姓名" prop="authorityName">
           <el-input autocomplete="off" v-model="form.authorityName"></el-input>
@@ -111,6 +105,13 @@ export default {
   name: "Authority",
   mixins: [infoList],
   data() {
+    var mustUint = (rule, value, callback) => {
+      if (!(/^[0-9]*[1-9][0-9]*$/).test(value)){
+       return  callback(new Error("请输入正整数"));
+      } 
+      return  callback()
+    };
+
     return {
       AuthorityOption: [
         {
@@ -134,7 +135,8 @@ export default {
       },
       rules: {
         authorityId: [
-          { required: true, message: "请输入角色ID", trigger: "blur" }
+          { required: true, message: "请输入角色ID", trigger: "blur" },
+          {validator: mustUint, trigger: 'blur'  }
         ],
         authorityName: [
           { required: true, message: "请输入角色名", trigger: "blur" }
@@ -296,6 +298,7 @@ export default {
       this.setAuthorityOptions(this.tableData, this.AuthorityOption, false);
     },
     setAuthorityOptions(AuthorityData, optionsData, disabled) {
+      this.form.authorityId = String(this.form.authorityId);
       AuthorityData &&
         AuthorityData.map(item => {
           if (item.children && item.children.length) {
@@ -350,9 +353,9 @@ export default {
 </script>
 <style lang="scss">
 .authority {
-  .el-input-number{
+  .el-input-number {
     margin-left: 15px;
-    span{
+    span {
       display: none;
     }
   }

@@ -11,8 +11,8 @@ jwt:
 # mysql connect configuration
 mysql:
     username: root
-    password: 'xxxxx'
-    path: 'xxxxxx:3306'
+    password: 'Aa@6447985'
+    path: '127.0.0.1:3306'
     db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
@@ -26,6 +26,8 @@ sqlite:
     config: 'loc=Asia/Shanghai'
 
 # oss configuration
+
+# 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址
 qiniu:
     access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
     secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'

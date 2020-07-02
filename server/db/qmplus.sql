@@ -11,7 +11,7 @@
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 28/06/2020 21:23:47
+ Date: 02/07/2020 14:59:22
 */
 
 SET NAMES utf8mb4;
@@ -167,6 +167,11 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/deleteSysDictionar
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/updateSysDictionary', 'PUT', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/findSysDictionary', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionary/getSysDictionaryList', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysOperationRecord/createSysOperationRecord', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysOperationRecord/deleteSysOperationRecord', 'DELETE', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysOperationRecord/updateSysOperationRecord', 'PUT', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysOperationRecord/findSysOperationRecord', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysOperationRecord/getSysOperationRecordList', 'GET', '', '', '');
 
 -- ----------------------------
 -- Table structure for exa_customers
@@ -177,21 +182,18 @@ CREATE TABLE `exa_customers`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
-  `customer_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `customer_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `customer_phone_data` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   `sys_user_id` int(10) UNSIGNED NULL DEFAULT NULL,
   `sys_user_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_customers_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of exa_customers
 -- ----------------------------
 INSERT INTO `exa_customers` VALUES (1, '2020-02-25 18:01:48', '2020-04-10 12:29:29', NULL, '测试客户', '1761111111', 10, '888');
-INSERT INTO `exa_customers` VALUES (2, '2020-04-10 12:25:53', '2020-04-10 12:25:53', '2020-04-10 13:43:56', 'test', '123123123', 10, '888');
-INSERT INTO `exa_customers` VALUES (3, '2020-04-10 13:44:12', '2020-04-10 13:44:12', '2020-04-10 13:44:13', '123123', '123123', 10, '888');
-INSERT INTO `exa_customers` VALUES (4, '2020-04-10 13:47:10', '2020-04-10 13:47:10', '2020-04-10 13:47:12', '22222222', '222222222222222', 10, '888');
 
 -- ----------------------------
 -- Table structure for exa_file_chunks
@@ -340,7 +342,7 @@ CREATE TABLE `sys_apis`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 96 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_apis
@@ -415,6 +417,11 @@ INSERT INTO `sys_apis` VALUES (87, '2020-06-23 18:48:13', '2020-06-23 18:48:13',
 INSERT INTO `sys_apis` VALUES (88, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/updateSysDictionary', '更新字典', 'sysDictionary', 'PUT');
 INSERT INTO `sys_apis` VALUES (89, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/findSysDictionary', '根据ID获取字典', 'sysDictionary', 'GET');
 INSERT INTO `sys_apis` VALUES (90, '2020-06-23 18:48:13', '2020-06-23 18:48:13', NULL, NULL, '/sysDictionary/getSysDictionaryList', '获取字典列表', 'sysDictionary', 'GET');
+INSERT INTO `sys_apis` VALUES (91, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/createSysOperationRecord', '新增操作记录', 'sysOperationRecord', 'POST');
+INSERT INTO `sys_apis` VALUES (92, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/deleteSysOperationRecord', '删除操作记录', 'sysOperationRecord', 'DELETE');
+INSERT INTO `sys_apis` VALUES (93, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/updateSysOperationRecord', '更新操作记录', 'sysOperationRecord', 'PUT');
+INSERT INTO `sys_apis` VALUES (94, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/findSysOperationRecord', '根据ID获取操作记录', 'sysOperationRecord', 'GET');
+INSERT INTO `sys_apis` VALUES (95, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/getSysOperationRecordList', '获取操作记录列表', 'sysOperationRecord', 'GET');
 
 -- ----------------------------
 -- Table structure for sys_authorities
@@ -475,6 +482,7 @@ INSERT INTO `sys_authority_menus` VALUES ('888', 41);
 INSERT INTO `sys_authority_menus` VALUES ('888', 42);
 INSERT INTO `sys_authority_menus` VALUES ('888', 50);
 INSERT INTO `sys_authority_menus` VALUES ('888', 51);
+INSERT INTO `sys_authority_menus` VALUES ('888', 52);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 1);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 2);
 INSERT INTO `sys_authority_menus` VALUES ('8881', 18);
@@ -527,7 +535,7 @@ CREATE TABLE `sys_base_menus`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_base_menus_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 53 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_base_menus
@@ -555,6 +563,7 @@ INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-24 10:1
 INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-04-30 17:44:44', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (50, '2020-06-24 19:49:54', '2020-06-28 20:34:47', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sysDictionary.vue', '字典管理', 'notebook-2', NULL, 5, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (51, '2020-06-24 19:51:33', '2020-06-28 20:35:04', NULL, 0, 3, 'dictionaryDetail/:id', 'dictionaryDetail', 1, 'view/superAdmin/dictionary/sysDictionaryDetail.vue', '字典详情', 's-order', NULL, 1, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (52, '2020-06-29 13:31:17', '2020-07-02 14:31:40', NULL, 0, 3, 'operation', 'operation', 0, 'view/superAdmin/operation/sysOperationRecord.vue', '操作历史', 'time', NULL, 6, 1, 0);
 
 -- ----------------------------
 -- Table structure for sys_data_authority_id
@@ -598,7 +607,7 @@ CREATE TABLE `sys_dictionaries`  (
   `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionaries_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_dictionaries
@@ -628,6 +637,49 @@ CREATE TABLE `sys_dictionary_details`  (
 -- ----------------------------
 INSERT INTO `sys_dictionary_details` VALUES (9, '2020-06-24 20:44:11', '2020-06-24 20:44:11', '2020-06-28 21:23:18', '男', 1, 1, 0, 2);
 INSERT INTO `sys_dictionary_details` VALUES (10, '2020-06-24 20:44:20', '2020-06-24 20:52:30', '2020-06-28 21:23:18', '女', 0, 1, 1, 2);
+
+-- ----------------------------
+-- Table structure for sys_operation_records
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_operation_records`;
+CREATE TABLE `sys_operation_records`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `deleted_at` datetime(0) NULL DEFAULT NULL,
+  `ip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '请求ip',
+  `method` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `status` int(11) NULL DEFAULT NULL,
+  `latency` bigint(20) NULL DEFAULT NULL,
+  `agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `body` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '请求Body',
+  `user_id` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_sys_operation_records_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sys_operation_records
+-- ----------------------------
+INSERT INTO `sys_operation_records` VALUES (1, '2020-07-02 14:26:18', '2020-07-02 14:26:18', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 15621200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (2, '2020-07-02 14:26:18', '2020-07-02 14:26:18', NULL, '127.0.0.1', 'POST', '/authority/getAuthorityList', 200, 13668800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
+INSERT INTO `sys_operation_records` VALUES (3, '2020-07-02 14:30:20', '2020-07-02 14:30:20', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 19526100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (4, '2020-07-02 14:31:18', '2020-07-02 14:31:18', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 21476700, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (5, '2020-07-02 14:31:20', '2020-07-02 14:31:20', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 15621000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (6, '2020-07-02 14:31:23', '2020-07-02 14:31:23', NULL, '127.0.0.1', 'POST', '/menu/getMenuList', 200, 12692200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
+INSERT INTO `sys_operation_records` VALUES (7, '2020-07-02 14:31:29', '2020-07-02 14:31:29', NULL, '127.0.0.1', 'POST', '/menu/getBaseMenuById', 200, 15621600, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"id\":52}', 0);
+INSERT INTO `sys_operation_records` VALUES (8, '2020-07-02 14:31:40', '2020-07-02 14:31:40', NULL, '127.0.0.1', 'POST', '/menu/getMenuList', 200, 10743400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
+INSERT INTO `sys_operation_records` VALUES (9, '2020-07-02 14:31:43', '2020-07-02 14:31:43', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 14646100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (10, '2020-07-02 14:31:43', '2020-07-02 14:31:43', NULL, '127.0.0.1', 'POST', '/menu/getMenuList', 200, 14645000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
+INSERT INTO `sys_operation_records` VALUES (11, '2020-07-02 14:33:41', '2020-07-02 14:33:41', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 19525200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (12, '2020-07-02 14:33:41', '2020-07-02 14:33:41', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 28313500, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (13, '2020-07-02 14:34:40', '2020-07-02 14:34:40', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 14646300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (14, '2020-07-02 14:34:41', '2020-07-02 14:34:41', NULL, '127.0.0.1', 'GET', '/sysDictionary/getSysDictionaryList?page=1&pageSize=10', 200, 11715200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (15, '2020-07-02 14:51:13', '2020-07-02 14:51:13', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 26360200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (16, '2020-07-02 14:51:57', '2020-07-02 14:51:57', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 18549000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
+INSERT INTO `sys_operation_records` VALUES (17, '2020-07-02 14:52:31', '2020-07-02 14:52:31', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 14646500, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
 
 -- ----------------------------
 -- Table structure for sys_users

@@ -104,6 +104,8 @@
         <el-button @click="enterDialog" type="primary">确 定</el-button>
       </div>
     </el-dialog>
+
+    <div style="margin-top:40px;color:red">获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释</div>
   </div>
 </template>
 
@@ -114,10 +116,9 @@ import {
     updateSysDictionary,
     findSysDictionary,
     getSysDictionaryList
-} from "@/api/sys_dictionary";  //  此处请自行替换地址
+} from "@/api/sysDictionary";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/data";
 import infoList from "@/components/mixins/infoList";
-
 export default {
   name: "SysDictionary",
   mixins: [infoList],
@@ -239,7 +240,7 @@ export default {
       this.dialogFormVisible = true;
     }
   },
-  created() {
+  async created() {
     this.getTableData();
   }
 };

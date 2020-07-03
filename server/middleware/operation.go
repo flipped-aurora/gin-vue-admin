@@ -8,11 +8,11 @@ import (
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 var body []byte
-var userId uint
 
 func RecordRequestBody() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -26,8 +26,6 @@ func RecordRequestBody() gin.HandlerFunc {
 		} else {
 			body = nil
 		}
-
-		//TODO parse token , userId <-
 	}
 }
 
@@ -40,7 +38,11 @@ func OperationRecord() gin.HandlerFunc {
 					return ""
 				}
 			}
-			err := service.CreateSysOperationRecord(model.SysOperationRecord{
+			userId, err := strconv.Atoi(param.Request.Header.Get("x-user-id"))
+			if err != nil {
+				userId = 0
+			}
+			err = service.CreateSysOperationRecord(model.SysOperationRecord{
 				Ip:           param.ClientIP,
 				Method:       param.Method,
 				Path:         param.Path,
@@ -49,7 +51,7 @@ func OperationRecord() gin.HandlerFunc {
 				Agent:        param.Request.UserAgent(),
 				ErrorMessage: param.ErrorMessage,
 				Body:         string(body),
-				UserId:       int(userId),
+				UserId:       userId,
 			})
 			if err != nil {
 				global.GVA_LOG.Error(err)

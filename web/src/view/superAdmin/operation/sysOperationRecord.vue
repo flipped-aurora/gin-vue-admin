@@ -48,6 +48,9 @@
             <el-form-item label="agent">
               <span>{{ props.row.agent }}</span>
             </el-form-item>
+            <el-form-item label="body">
+              <span>{{ props.row.body||'无入参' }}</span>
+            </el-form-item>
             <el-form-item label="error_message">
               <span>{{ props.row.error_message }}</span>
             </el-form-item>

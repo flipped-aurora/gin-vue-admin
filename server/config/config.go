@@ -10,7 +10,6 @@ type Server struct {
 	JWT       JWT       `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	Captcha   Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	Log       Log       `mapstructure:"log" json:"log" yaml:"log"`
-	Operation Operation `mapstructure:"operation" json:"operation" yaml:"operation"`
 }
 
 type System struct {
@@ -70,8 +69,4 @@ type Sqlite struct {
 	Path     string `mapstructure:"path" json:"path" yaml:"path"`
 	Config   string `mapstructure:"config" json:"config" yaml:"config"`
 	LogMode  bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
-}
-
-type Operation struct {
-	SkipPaths []string `mapstructure:"skip-paths" json:"skipPaths" yaml:"skip-paths"`
 }

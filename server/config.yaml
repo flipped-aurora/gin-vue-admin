@@ -59,11 +59,3 @@ log:
     log-file: true
     stdout: 'DEBUG'
     file: 'DEBUG'
-
-# operation record configuration
-operation:
-    skip-paths:
-        - '/base/login'
-        - '/base/register'
-        - '/sysOperationRecord/getSysOperationRecordList'
-        - '/sysOperationRecord/deleteSysOperationRecord'

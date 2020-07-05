@@ -129,6 +129,6 @@ func GetDB() (err error, DBNames []request.DBReq) {
 }
 
 func GetColume(tableName string, dbName string) (err error, Columes []request.ColumeReq) {
-	err = global.GVA_DB.Raw("select COLUMN_NAME as 'colume_name', DATA_TYPE  as 'data_type', COLUMN_COMMENT  as 'colume_comment' from information_schema.COLUMNS where table_name = ? and table_schema = ?", tableName, dbName).Scan(&Columes).Error
+	err = global.GVA_DB.Raw("SELECT COLUMN_NAME colume_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT colume_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columes).Error
 	return err, Columes
 }

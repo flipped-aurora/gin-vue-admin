@@ -1,12 +1,12 @@
 <template>
   <div>
     <!-- 从数据库直接获取字段 -->
-    <el-collapse v-model="activeNames" @change="handleChange">
+    <el-collapse v-model="activeNames">
       <el-collapse-item name="1">
         <template slot="title">
           <div :style="{fontSize:'16px',paddingLeft:'20px'}">
             点这里从现有数据库创建代码
-            <i class="header-icon el-icon-info"></i>
+            <i class="header-icon el-icon-thumb"></i>
           </div>
         </template>
         <el-form ref="getTableForm" :inline="true" :model="dbform" label-width="120px">
@@ -48,6 +48,9 @@
       <el-form-item label="Struct名称" prop="structName">
         <el-input v-model="form.structName" placeholder="首字母自动转换大写"></el-input>
       </el-form-item>
+      <el-form-item label="tableName" prop="tableName">
+        <el-input v-model="form.tableName" placeholder="指定表名（非必填）"></el-input>
+      </el-form-item>
       <el-form-item label="Struct简称" prop="abbreviation">
         <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group"></el-input>
       </el-form-item>
@@ -71,7 +74,8 @@
       <el-table-column prop="fieldDesc" label="中文名"></el-table-column>
       <el-table-column prop="fieldJson" label="FieldJson"></el-table-column>
       <el-table-column prop="fieldType" label="Field数据类型" width="130"></el-table-column>
-      <el-table-column prop="dbFieldType" label="数据库字段类型" width="130"></el-table-column>
+      <el-table-column prop="dataType" label="数据库字段类型" width="130"></el-table-column>
+      <el-table-column prop="dataTypeLong" label="数据库字段长度" width="130"></el-table-column>
       <el-table-column prop="columnName" label="数据库字段" width="130"></el-table-column>
       <el-table-column prop="comment" label="数据库字段描述" width="130"></el-table-column>
       <el-table-column prop="fieldSearchType" label="搜索条件" width="130"></el-table-column>
@@ -106,13 +110,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-tag type="danger">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
       <el-button @click="enterForm" type="primary">生成代码包</el-button>
     </div>
     <!-- 组件弹窗 -->
     <el-dialog title="组件内容" :visible.sync="dialogFlag">
-      <FieldDialog :dialogMiddle="dialogMiddle" ref="fieldDialog" />
+      <FieldDialog v-if="dialogFlag" :dialogMiddle="dialogMiddle" ref="fieldDialog" />
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="enterDialog">确 定</el-button>
@@ -125,15 +130,16 @@ const fieldTemplate = {
   fieldName: "",
   fieldDesc: "",
   fieldType: "",
-  dbFieldType: "",
+  dataType: "",
   fieldJson: "",
   columnName: "",
+  dataTypeLong: "",
   comment: "",
   fieldSearchType: ""
 };
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
-import { toUpperCase } from "@/utils/stringFun.js";
+import { toUpperCase, toHump } from "@/utils/stringFun.js";
 import { createTemp, getDB, getTable, getColume } from "@/api/autoCode.js";
 import { getDict } from "@/utils/dictionary";
 
@@ -152,6 +158,7 @@ export default {
       fdMap: {},
       form: {
         structName: "",
+        tableName: "",
         packageName: "",
         abbreviation: "",
         description: "",
@@ -301,7 +308,35 @@ export default {
       this.dbform.tableName = "";
     },
     async getColume() {
-      await getColume(this.dbform);
+      const gormModelList = ["id", "created_at", "updated_at", "deleted_at"];
+      const res = await getColume(this.dbform);
+      if (res.code == 0) {
+        const tbHump = toHump(this.dbform.tableName);
+        this.form.structName = toUpperCase(tbHump);
+        this.form.tableName = this.dbform.tableName;
+        this.form.packageName = tbHump;
+        this.form.abbreviation = tbHump;
+        this.form.description = tbHump + "表";
+        this.form.autoCreateApiToSql = true;
+        this.form.fields = [];
+        res.data.columes &&
+          res.data.columes.map(item => {
+            if (!gormModelList.some(gormfd => gormfd == item.columeName)) {
+              const fbHump = toHump(item.columeName);
+              this.form.fields.push({
+                fieldName: toUpperCase(fbHump),
+                fieldDesc: item.columeComment || fbHump + "字段",
+                fieldType: this.fdMap[item.dataType],
+                dataType: item.dataType,
+                fieldJson: fbHump,
+                dataTypeLong: item.dataTypeLong,
+                columnName: item.columeName,
+                comment: item.columeComment,
+                fieldSearchType: ""
+              });
+            }
+          });
+      }
     },
     async setFdMap() {
       const fdTpyes = ["string", "int", "bool", "float64", "time.Time"];

@@ -7,7 +7,10 @@ import (
 )
 
 func InitUserRouter(Router *gin.RouterGroup) {
-	UserRouter := Router.Group("user").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	UserRouter := Router.Group("user").
+		Use(middleware.JWTAuth()).
+		Use(middleware.CasbinHandler()).
+		Use(middleware.OperationRecord())
 	{
 		UserRouter.POST("changePassword", v1.ChangePassword)     // 修改密码
 		UserRouter.POST("uploadHeaderImg", v1.UploadHeaderImg)   // 上传头像

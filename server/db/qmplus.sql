@@ -11,7 +11,7 @@
  Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 02/07/2020 14:59:22
+ Date: 05/07/2020 16:47:22
 */
 
 SET NAMES utf8mb4;
@@ -157,6 +157,9 @@ INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'DELETE', ''
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customer', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/customer/customerList', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/createTemp', 'POST', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/getTables', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/getDB', 'GET', '', '', '');
+INSERT INTO `casbin_rule` VALUES ('p', '888', '/autoCode/getColume', 'GET', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/createSysDictionaryDetail', 'POST', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/deleteSysDictionaryDetail', 'DELETE', '', '', '');
 INSERT INTO `casbin_rule` VALUES ('p', '888', '/sysDictionaryDetail/updateSysDictionaryDetail', 'PUT', '', '', '');
@@ -188,7 +191,7 @@ CREATE TABLE `exa_customers`  (
   `sys_user_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_customers_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of exa_customers
@@ -342,7 +345,7 @@ CREATE TABLE `sys_apis`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_apis_deleted_at`(`deleted_at`) USING BTREE,
   INDEX `idx_sys_apis_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 96 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 99 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_apis
@@ -422,6 +425,9 @@ INSERT INTO `sys_apis` VALUES (92, '2020-06-29 13:21:35', '2020-06-29 13:21:35',
 INSERT INTO `sys_apis` VALUES (93, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/updateSysOperationRecord', '更新操作记录', 'sysOperationRecord', 'PUT');
 INSERT INTO `sys_apis` VALUES (94, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/findSysOperationRecord', '根据ID获取操作记录', 'sysOperationRecord', 'GET');
 INSERT INTO `sys_apis` VALUES (95, '2020-06-29 13:21:35', '2020-06-29 13:21:35', NULL, NULL, '/sysOperationRecord/getSysOperationRecordList', '获取操作记录列表', 'sysOperationRecord', 'GET');
+INSERT INTO `sys_apis` VALUES (96, '2020-07-05 14:34:20', '2020-07-05 14:34:20', NULL, NULL, '/autoCode/getTables', '获取数据库表', 'autoCode', 'GET');
+INSERT INTO `sys_apis` VALUES (97, '2020-07-05 15:02:07', '2020-07-05 15:02:07', NULL, NULL, '/autoCode/getDB', '获取所有数据库', 'autoCode', 'GET');
+INSERT INTO `sys_apis` VALUES (98, '2020-07-05 16:32:08', '2020-07-05 16:32:08', NULL, NULL, '/autoCode/getColume', '获取所选table的所有字段', 'autoCode', 'GET');
 
 -- ----------------------------
 -- Table structure for sys_authorities
@@ -560,7 +566,7 @@ INSERT INTO `sys_base_menus` VALUES (38, '2020-03-29 21:31:03', '2020-04-24 10:1
 INSERT INTO `sys_base_menus` VALUES (40, '2020-03-29 21:35:10', '2020-05-03 21:38:49', NULL, 0, 38, 'autoCode', 'autoCode', 0, 'view/systemTools/autoCode/index.vue', '代码生成器', 'cpu', '代码生成器', 1, 1, 0);
 INSERT INTO `sys_base_menus` VALUES (41, '2020-03-29 21:36:26', '2020-05-03 21:38:43', NULL, 0, 38, 'formCreate', 'formCreate', 0, 'view/systemTools/formCreate/index.vue', '表单生成器', 'magic-stick', '表单生成器', 2, 1, 0);
 INSERT INTO `sys_base_menus` VALUES (42, '2020-04-02 14:19:36', '2020-04-24 10:16:43', NULL, 0, 38, 'system', 'system', 0, 'view/systemTools/system/system.vue', '系统配置', 's-operation', '系统配置', 3, 0, 0);
-INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-04-30 17:44:44', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
+INSERT INTO `sys_base_menus` VALUES (45, '2020-04-29 17:19:34', '2020-07-04 18:27:22', NULL, 0, 0, 'iconList', 'iconList', 0, 'view/iconList/index.vue', '图标集合', 'star-on', NULL, 2, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (50, '2020-06-24 19:49:54', '2020-06-28 20:34:47', NULL, 0, 3, 'dictionary', 'dictionary', 0, 'view/superAdmin/dictionary/sysDictionary.vue', '字典管理', 'notebook-2', NULL, 5, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (51, '2020-06-24 19:51:33', '2020-06-28 20:35:04', NULL, 0, 3, 'dictionaryDetail/:id', 'dictionaryDetail', 1, 'view/superAdmin/dictionary/sysDictionaryDetail.vue', '字典详情', 's-order', NULL, 1, 0, 0);
 INSERT INTO `sys_base_menus` VALUES (52, '2020-06-29 13:31:17', '2020-07-02 14:31:40', NULL, 0, 3, 'operation', 'operation', 0, 'view/superAdmin/operation/sysOperationRecord.vue', '操作历史', 'time', NULL, 6, 1, 0);
@@ -607,12 +613,17 @@ CREATE TABLE `sys_dictionaries`  (
   `desc` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionaries_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_dictionaries
 -- ----------------------------
 INSERT INTO `sys_dictionaries` VALUES (2, '2020-06-24 20:44:00', '2020-06-24 20:44:00', NULL, '性别', 'sex', 1, '性别字典');
+INSERT INTO `sys_dictionaries` VALUES (3, '2020-07-05 15:27:31', '2020-07-05 15:27:31', NULL, '数据库int类型', 'int', 1, 'int类型对应的数据库类型');
+INSERT INTO `sys_dictionaries` VALUES (4, '2020-07-05 15:33:07', '2020-07-05 16:07:18', NULL, '数据库时间日期类型', 'time.Time', 1, '数据库时间日期类型');
+INSERT INTO `sys_dictionaries` VALUES (5, '2020-07-05 15:34:23', '2020-07-05 15:52:45', NULL, '数据库浮点型', 'float64', 1, '数据库浮点型');
+INSERT INTO `sys_dictionaries` VALUES (6, '2020-07-05 15:35:05', '2020-07-05 15:35:05', NULL, '数据库字符串', 'string', 1, '数据库字符串');
+INSERT INTO `sys_dictionaries` VALUES (7, '2020-07-05 15:36:48', '2020-07-05 15:36:48', NULL, '数据库bool类型', 'bool', 1, '数据库bool类型');
 
 -- ----------------------------
 -- Table structure for sys_dictionary_details
@@ -630,13 +641,34 @@ CREATE TABLE `sys_dictionary_details`  (
   `sys_dictionary_id` int(11) NULL DEFAULT NULL COMMENT '关联标记',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionary_details_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Records of sys_dictionary_details
 -- ----------------------------
-INSERT INTO `sys_dictionary_details` VALUES (9, '2020-06-24 20:44:11', '2020-06-24 20:44:11', '2020-06-28 21:23:18', '男', 1, 1, 0, 2);
-INSERT INTO `sys_dictionary_details` VALUES (10, '2020-06-24 20:44:20', '2020-06-24 20:52:30', '2020-06-28 21:23:18', '女', 0, 1, 1, 2);
+INSERT INTO `sys_dictionary_details` VALUES (12, '2020-07-05 15:31:41', '2020-07-05 15:31:41', NULL, 'smallint', 1, 1, 1, 3);
+INSERT INTO `sys_dictionary_details` VALUES (13, '2020-07-05 15:31:52', '2020-07-05 15:31:52', NULL, 'mediumint', 2, 1, 2, 3);
+INSERT INTO `sys_dictionary_details` VALUES (14, '2020-07-05 15:32:04', '2020-07-05 15:32:04', NULL, 'int', 3, 1, 3, 3);
+INSERT INTO `sys_dictionary_details` VALUES (15, '2020-07-05 15:32:11', '2020-07-05 15:32:11', NULL, 'bigint', 4, 1, 4, 3);
+INSERT INTO `sys_dictionary_details` VALUES (19, '2020-07-05 15:33:16', '2020-07-05 15:33:16', NULL, 'data', 0, 1, 0, 4);
+INSERT INTO `sys_dictionary_details` VALUES (20, '2020-07-05 15:33:21', '2020-07-05 15:33:21', NULL, 'time', 1, 1, 1, 4);
+INSERT INTO `sys_dictionary_details` VALUES (21, '2020-07-05 15:33:25', '2020-07-05 15:33:25', NULL, 'year', 2, 1, 2, 4);
+INSERT INTO `sys_dictionary_details` VALUES (22, '2020-07-05 15:33:35', '2020-07-05 15:33:35', NULL, 'datetime', 3, 1, 3, 4);
+INSERT INTO `sys_dictionary_details` VALUES (23, '2020-07-05 15:33:42', '2020-07-05 15:33:42', NULL, 'timestamp', 5, 1, 5, 4);
+INSERT INTO `sys_dictionary_details` VALUES (24, '2020-07-05 15:34:30', '2020-07-05 15:34:30', NULL, 'float', 0, 1, 0, 5);
+INSERT INTO `sys_dictionary_details` VALUES (25, '2020-07-05 15:34:35', '2020-07-05 15:34:35', NULL, 'double', 1, 1, 1, 5);
+INSERT INTO `sys_dictionary_details` VALUES (26, '2020-07-05 15:34:41', '2020-07-05 15:34:41', NULL, 'decimal', 2, 1, 2, 5);
+INSERT INTO `sys_dictionary_details` VALUES (27, '2020-07-05 15:37:45', '2020-07-05 15:37:45', NULL, 'tinyint', 0, 1, 0, 7);
+INSERT INTO `sys_dictionary_details` VALUES (28, '2020-07-05 15:53:25', '2020-07-05 15:53:25', NULL, 'char', 0, 1, 0, 6);
+INSERT INTO `sys_dictionary_details` VALUES (29, '2020-07-05 15:53:29', '2020-07-05 15:53:29', NULL, 'varchar', 1, 1, 1, 6);
+INSERT INTO `sys_dictionary_details` VALUES (30, '2020-07-05 15:53:35', '2020-07-05 15:53:35', NULL, 'tinyblob', 2, 1, 2, 6);
+INSERT INTO `sys_dictionary_details` VALUES (31, '2020-07-05 15:53:40', '2020-07-05 15:53:40', NULL, 'tinytext', 3, 1, 3, 6);
+INSERT INTO `sys_dictionary_details` VALUES (32, '2020-07-05 15:53:48', '2020-07-05 15:53:48', NULL, 'text', 4, 1, 4, 6);
+INSERT INTO `sys_dictionary_details` VALUES (33, '2020-07-05 15:53:55', '2020-07-05 15:53:55', NULL, 'blob', 5, 1, 5, 6);
+INSERT INTO `sys_dictionary_details` VALUES (34, '2020-07-05 15:54:02', '2020-07-05 15:54:02', NULL, 'mediumblob', 6, 1, 6, 6);
+INSERT INTO `sys_dictionary_details` VALUES (35, '2020-07-05 15:54:09', '2020-07-05 15:54:09', NULL, 'mediumtext', 7, 1, 7, 6);
+INSERT INTO `sys_dictionary_details` VALUES (36, '2020-07-05 15:54:16', '2020-07-05 15:54:16', NULL, 'longblob', 8, 1, 8, 6);
+INSERT INTO `sys_dictionary_details` VALUES (37, '2020-07-05 15:54:24', '2020-07-05 15:54:24', NULL, 'longtext', 9, 1, 9, 6);
 
 -- ----------------------------
 -- Table structure for sys_operation_records
@@ -654,12 +686,12 @@ CREATE TABLE `sys_operation_records`  (
   `latency` bigint(20) NULL DEFAULT NULL,
   `agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `body` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '请求Body',
-  `resp` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '响应Body',
+  `body` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '请求Body',
   `user_id` int(11) NULL DEFAULT NULL,
+  `resp` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '响应Body',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_operation_records_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 289 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for sys_users

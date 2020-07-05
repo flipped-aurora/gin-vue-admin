@@ -1,40 +1,47 @@
 <template>
   <div>
     <!-- 从数据库直接获取字段 -->
+    <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse-item name="1">
+        <template slot="title">
+          <div :style="{fontSize:'16px',paddingLeft:'20px'}">
+            点这里从现有数据库创建代码
+            <i class="header-icon el-icon-info"></i>
+          </div>
+        </template>
+        <el-form ref="getTableForm" :inline="true" :model="dbform" label-width="120px">
+          <el-form-item label="数据库名" prop="structName">
+            <el-select @change="getTable" v-model="dbform.dbName" filterable placeholder="请选择数据库">
+              <el-option
+                v-for="item in dbOptions"
+                :key="item.database"
+                :label="item.database"
+                :value="item.database"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="表名" prop="structName">
+            <el-select
+              v-model="dbform.tableName"
+              :disabled="!dbform.dbName"
+              filterable
+              placeholder="请选择表"
+            >
+              <el-option
+                v-for="item in tableOptions"
+                :key="item.tableName"
+                :label="item.tableName"
+                :value="item.tableName"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click="getColume" type="primary">使用此表创建</el-button>
+          </el-form-item>
+        </el-form>
+      </el-collapse-item>
+    </el-collapse>
 
-    <el-form ref="getTableForm" :inline="true" :model="dbform" label-width="120px">
-      <el-form-item label="数据库名" prop="structName">
-        <el-select @change="getTable" v-model="dbform.dbName" filterable placeholder="请选择数据库">
-          <el-option
-            v-for="item in dbOptions"
-            :key="item.database"
-            :label="item.database"
-            :value="item.database"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="表名" prop="structName">
-        <el-select
-          v-model="dbform.tableName"
-          :disabled="!dbform.dbName"
-          filterable
-          placeholder="请选择表"
-        >
-          <el-option
-            v-for="item in tableOptions"
-            :key="item.tableName"
-            :label="item.tableName"
-            :value="item.tableName"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click="getColume" type="primary">使用此表创建</el-button>
-      </el-form-item>
-      <el-form-item>
-        <span style="color:red">可以在此处选择数据库表直接根据表结构创建</span>
-      </el-form-item>
-    </el-form>
     <el-divider></el-divider>
     <!-- 初始版本自动化代码工具 -->
     <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
@@ -127,13 +134,14 @@ const fieldTemplate = {
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
 import { toUpperCase } from "@/utils/stringFun.js";
-import { createTemp, getDB, getTable,getColume } from "@/api/autoCode.js";
-import {getDict} from '@/utils/dictionary'
+import { createTemp, getDB, getTable, getColume } from "@/api/autoCode.js";
+import { getDict } from "@/utils/dictionary";
 
 export default {
   name: "autoCode",
   data() {
     return {
+      activeNames: [""],
       dbform: {
         dbName: "",
         tableName: ""
@@ -290,23 +298,24 @@ export default {
       if (res.code == 0) {
         this.tableOptions = res.data.tables;
       }
+      this.dbform.tableName = "";
     },
     async getColume() {
-      await getColume(this.dbform)
+      await getColume(this.dbform);
     },
     async setFdMap() {
       const fdTpyes = ["string", "int", "bool", "float64", "time.Time"];
-      fdTpyes.map(async fdtype=>{
-         const res = await getDict(fdtype)
-         res.map(item=>{
-           this.fdMap[item.label] = fdtype
-         })
-      })
+      fdTpyes.map(async fdtype => {
+        const res = await getDict(fdtype);
+        res.map(item => {
+          this.fdMap[item.label] = fdtype;
+        });
+      });
     }
   },
   created() {
     this.getDb();
-    this.setFdMap()
+    this.setFdMap();
   }
 };
 </script>

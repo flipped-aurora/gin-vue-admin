@@ -1,7 +1,9 @@
 package service
 
 import (
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
 	"io/ioutil"
 	"os"
@@ -114,4 +116,19 @@ func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 		}
 	}
 	return fileList, err
+}
+
+func GetTables(dbName string) (err error, TableNames []request.TableReq) {
+	err = global.GVA_DB.Raw("select table_name from information_schema.tables where table_schema= ? and table_type= ? ", dbName, "base table").Scan(&TableNames).Error
+	return err, TableNames
+}
+
+func GetDB() (err error, DBNames []request.DBReq) {
+	err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+	return err, DBNames
+}
+
+func GetColume(tableName string, dbName string) (err error, Columes []request.ColumeReq) {
+	err = global.GVA_DB.Raw("select COLUMN_NAME as 'colume_name', DATA_TYPE  as 'data_type', COLUMN_COMMENT  as 'colume_comment' from information_schema.COLUMNS where table_name = ? and table_schema = ?", tableName, dbName).Scan(&Columes).Error
+	return err, Columes
 }

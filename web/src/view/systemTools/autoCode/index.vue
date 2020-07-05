@@ -1,5 +1,41 @@
 <template>
   <div>
+    <!-- 从数据库直接获取字段 -->
+
+    <el-form ref="getTableForm" :inline="true" :model="dbform" label-width="120px">
+      <el-form-item label="数据库名" prop="structName">
+        <el-select @change="getTable" v-model="dbform.dbName" filterable placeholder="请选择数据库">
+          <el-option
+            v-for="item in dbOptions"
+            :key="item.database"
+            :label="item.database"
+            :value="item.database"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="表名" prop="structName">
+        <el-select
+          v-model="dbform.tableName"
+          :disabled="!dbform.dbName"
+          filterable
+          placeholder="请选择表"
+        >
+          <el-option
+            v-for="item in tableOptions"
+            :key="item.tableName"
+            :label="item.tableName"
+            :value="item.tableName"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click="getColume" type="primary">使用此表创建</el-button>
+      </el-form-item>
+      <el-form-item>
+        <span style="color:red">可以在此处选择数据库表直接根据表结构创建</span>
+      </el-form-item>
+    </el-form>
+    <el-divider></el-divider>
     <!-- 初始版本自动化代码工具 -->
     <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
       <el-form-item label="Struct名称" prop="structName">
@@ -23,27 +59,35 @@
       <el-button @click="editAndAddField()" type="primary">新增Field</el-button>
     </div>
     <el-table :data="form.fields" border stripe>
-      <el-table-column type="index" label="序列" width="100">
-      </el-table-column>
-      <el-table-column prop="fieldName" label="Field名">
-      </el-table-column>
-      <el-table-column prop="fieldDesc" label="中文名">
-      </el-table-column>
-      <el-table-column prop="fieldJson" label="FieldJson">
-      </el-table-column>
-      <el-table-column prop="fieldType" label="Field数据类型" width="130">
-      </el-table-column>
-      <el-table-column prop="columnName" label="数据库字段" width="130">
-      </el-table-column>
-      <el-table-column prop="comment" label="数据库字段描述" width="130">
-      </el-table-column>
-      <el-table-column prop="fieldSearchType" label="搜索条件" width="130">
-      </el-table-column>
+      <el-table-column type="index" label="序列" width="100"></el-table-column>
+      <el-table-column prop="fieldName" label="Field名"></el-table-column>
+      <el-table-column prop="fieldDesc" label="中文名"></el-table-column>
+      <el-table-column prop="fieldJson" label="FieldJson"></el-table-column>
+      <el-table-column prop="fieldType" label="Field数据类型" width="130"></el-table-column>
+      <el-table-column prop="dbFieldType" label="数据库字段类型" width="130"></el-table-column>
+      <el-table-column prop="columnName" label="数据库字段" width="130"></el-table-column>
+      <el-table-column prop="comment" label="数据库字段描述" width="130"></el-table-column>
+      <el-table-column prop="fieldSearchType" label="搜索条件" width="130"></el-table-column>
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" icon="el-icon-edit" @click="editAndAddField(scope.row)">编辑</el-button>
-          <el-button size="mini" type="text" :disabled="scope.$index == 0" @click="moveUpField(scope.$index)">上移</el-button>
-          <el-button size="mini" type="text" :disabled="(scope.$index + 1) == form.fields.length" @click="moveDownField(scope.$index)">下移</el-button>
+          <el-button
+            size="mini"
+            type="primary"
+            icon="el-icon-edit"
+            @click="editAndAddField(scope.row)"
+          >编辑</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            :disabled="scope.$index == 0"
+            @click="moveUpField(scope.$index)"
+          >上移</el-button>
+          <el-button
+            size="mini"
+            type="text"
+            :disabled="(scope.$index + 1) == form.fields.length"
+            @click="moveDownField(scope.$index)"
+          >下移</el-button>
           <el-popover placement="top" v-model="scope.row.visible">
             <p>确定删除吗？</p>
             <div style="text-align: right; margin: 0">
@@ -71,146 +115,200 @@
 </template>
 <script>
 const fieldTemplate = {
-  fieldName: '',
-  fieldDesc: '',
-  fieldType: '',
-  fieldJson: '',
-  columnName: '',
-  comment:'',
-  fieldSearchType:''
-}
+  fieldName: "",
+  fieldDesc: "",
+  fieldType: "",
+  dbFieldType: "",
+  fieldJson: "",
+  columnName: "",
+  comment: "",
+  fieldSearchType: ""
+};
 
-import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import { toUpperCase } from '@/utils/stringFun.js'
-import { createTemp } from '@/api/autoCode.js'
+import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
+import { toUpperCase } from "@/utils/stringFun.js";
+import { createTemp, getDB, getTable,getColume } from "@/api/autoCode.js";
+import {getDict} from '@/utils/dictionary'
+
 export default {
-  name: 'autoCode',
+  name: "autoCode",
   data() {
     return {
-      addFlag: '',
+      dbform: {
+        dbName: "",
+        tableName: ""
+      },
+      dbOptions: [],
+      tableOptions: [],
+      addFlag: "",
+      fdMap: {},
       form: {
-        structName: '',
-        packageName: '',
-        abbreviation: '',
-        description:'',
+        structName: "",
+        packageName: "",
+        abbreviation: "",
+        description: "",
         autoCreateApiToSql: false,
-        fields: [],
+        fields: []
       },
       rules: {
-        structName: [{ required: true, message: '请输入结构体名称', trigger: 'blur' }],
-        abbreviation: [{ required: true, message: '请输入结构体简称', trigger: 'blur' }],
-        description: [{ required: true, message: '请输入结构体描述', trigger: 'blur' }],
-        packageName: [{ required: true, message: '文件名称：sys_xxxx_xxxx', trigger: 'blur' }],
+        structName: [
+          { required: true, message: "请输入结构体名称", trigger: "blur" }
+        ],
+        abbreviation: [
+          { required: true, message: "请输入结构体简称", trigger: "blur" }
+        ],
+        description: [
+          { required: true, message: "请输入结构体描述", trigger: "blur" }
+        ],
+        packageName: [
+          {
+            required: true,
+            message: "文件名称：sys_xxxx_xxxx",
+            trigger: "blur"
+          }
+        ]
       },
       dialogMiddle: {},
       bk: {},
-      dialogFlag: false,
-    }
+      dialogFlag: false
+    };
   },
   components: {
-    FieldDialog,
+    FieldDialog
   },
   methods: {
     editAndAddField(item) {
-      this.dialogFlag = true
+      this.dialogFlag = true;
       if (item) {
-        this.addFlag = 'edit'
-        this.bk = JSON.parse(JSON.stringify(item))
-        this.dialogMiddle = item
+        this.addFlag = "edit";
+        this.bk = JSON.parse(JSON.stringify(item));
+        this.dialogMiddle = item;
       } else {
-        this.addFlag = 'add'
-        this.dialogMiddle = JSON.parse(JSON.stringify(fieldTemplate))
+        this.addFlag = "add";
+        this.dialogMiddle = JSON.parse(JSON.stringify(fieldTemplate));
       }
     },
     moveUpField(index) {
       if (index == 0) {
-        return
+        return;
       }
-      const oldUpField = this.form.fields[index - 1]
-      this.form.fields.splice(index - 1, 1)
-      this.form.fields.splice(index, 0, oldUpField)
+      const oldUpField = this.form.fields[index - 1];
+      this.form.fields.splice(index - 1, 1);
+      this.form.fields.splice(index, 0, oldUpField);
     },
     moveDownField(index) {
-      const fCount = this.form.fields.length
+      const fCount = this.form.fields.length;
       if (index == fCount - 1) {
-        return
+        return;
       }
-      const oldDownField = this.form.fields[index + 1]
-      this.form.fields.splice(index + 1, 1)
-      this.form.fields.splice(index, 0, oldDownField)
+      const oldDownField = this.form.fields[index + 1];
+      this.form.fields.splice(index + 1, 1);
+      this.form.fields.splice(index, 0, oldDownField);
     },
     enterDialog() {
-      this.$refs.fieldDialog.$refs.fieldDialogFrom.validate((valid) => {
+      this.$refs.fieldDialog.$refs.fieldDialogFrom.validate(valid => {
         if (valid) {
-          this.dialogMiddle.fieldName = toUpperCase(this.dialogMiddle.fieldName)
-          if (this.addFlag == 'add') {
-            this.form.fields.push(this.dialogMiddle)
+          this.dialogMiddle.fieldName = toUpperCase(
+            this.dialogMiddle.fieldName
+          );
+          if (this.addFlag == "add") {
+            this.form.fields.push(this.dialogMiddle);
           }
-          this.dialogFlag = false
+          this.dialogFlag = false;
         } else {
-          return false
+          return false;
         }
-      })
+      });
     },
     closeDialog() {
-      if (this.addFlag == 'edit') {
-        this.dialogMiddle = this.bk
+      if (this.addFlag == "edit") {
+        this.dialogMiddle = this.bk;
       }
-      this.dialogFlag = false
+      this.dialogFlag = false;
     },
     deleteField(index) {
-      this.form.fields.splice(index, 1)
+      this.form.fields.splice(index, 1);
     },
     async enterForm() {
       if (this.form.fields.length <= 0) {
         this.$message({
-          type: 'error',
-          message: '请填写至少一个field',
-        })
-        return false
+          type: "error",
+          message: "请填写至少一个field"
+        });
+        return false;
       }
-      if(this.form.fields.some(item=>item.fieldName == this.form.structName)){
+      if (
+        this.form.fields.some(item => item.fieldName == this.form.structName)
+      ) {
         this.$message({
-          type: 'error',
-          message: '存在与结构体同名的字段',
-        })
-        return false
+          type: "error",
+          message: "存在与结构体同名的字段"
+        });
+        return false;
       }
-      this.$refs.autoCodeForm.validate(async (valid) => {
+      this.$refs.autoCodeForm.validate(async valid => {
         if (valid) {
-          this.form.structName = toUpperCase(this.form.structName)
+          this.form.structName = toUpperCase(this.form.structName);
           if (this.form.structName == this.form.abbreviation) {
             this.$message({
-              type: 'error',
-              message: 'structName和struct简称不能相同',
-            })
-            return false
+              type: "error",
+              message: "structName和struct简称不能相同"
+            });
+            return false;
           }
-          const data = await createTemp(this.form)
-          const blob = new Blob([data])
-          const fileName = 'ginvueadmin.zip'
-          if ('download' in document.createElement('a')) {
+          const data = await createTemp(this.form);
+          const blob = new Blob([data]);
+          const fileName = "ginvueadmin.zip";
+          if ("download" in document.createElement("a")) {
             // 不是IE浏览器
-            let url = window.URL.createObjectURL(blob)
-            let link = document.createElement('a')
-            link.style.display = 'none'
-            link.href = url
-            link.setAttribute('download', fileName)
-            document.body.appendChild(link)
-            link.click()
-            document.body.removeChild(link) // 下载完成移除元素
-            window.URL.revokeObjectURL(url) // 释放掉blob对象
+            let url = window.URL.createObjectURL(blob);
+            let link = document.createElement("a");
+            link.style.display = "none";
+            link.href = url;
+            link.setAttribute("download", fileName);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link); // 下载完成移除元素
+            window.URL.revokeObjectURL(url); // 释放掉blob对象
           } else {
             // IE 10+
-            window.navigator.msSaveBlob(blob, fileName)
+            window.navigator.msSaveBlob(blob, fileName);
           }
         } else {
-          return false
+          return false;
         }
-      })
+      });
     },
+    async getDb() {
+      const res = await getDB();
+      if (res.code == 0) {
+        this.dbOptions = res.data.dbs;
+      }
+    },
+    async getTable() {
+      const res = await getTable({ dbName: this.dbform.dbName });
+      if (res.code == 0) {
+        this.tableOptions = res.data.tables;
+      }
+    },
+    async getColume() {
+      await getColume(this.dbform)
+    },
+    async setFdMap() {
+      const fdTpyes = ["string", "int", "bool", "float64", "time.Time"];
+      fdTpyes.map(async fdtype=>{
+         const res = await getDict(fdtype)
+         res.map(item=>{
+           this.fdMap[item.label] = fdtype
+         })
+      })
+    }
   },
-}
+  created() {
+    this.getDb();
+    this.setFdMap()
+  }
+};
 </script>
 <style scope lang="scss">
 .button-box {

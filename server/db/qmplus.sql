@@ -654,32 +654,12 @@ CREATE TABLE `sys_operation_records`  (
   `latency` bigint(20) NULL DEFAULT NULL,
   `agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `error_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `body` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '请求Body',
+  `body` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '请求Body',
+  `resp` varchar(4096) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '响应Body',
   `user_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_operation_records_deleted_at`(`deleted_at`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
-
--- ----------------------------
--- Records of sys_operation_records
--- ----------------------------
-INSERT INTO `sys_operation_records` VALUES (1, '2020-07-02 14:26:18', '2020-07-02 14:26:18', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 15621200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (2, '2020-07-02 14:26:18', '2020-07-02 14:26:18', NULL, '127.0.0.1', 'POST', '/authority/getAuthorityList', 200, 13668800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
-INSERT INTO `sys_operation_records` VALUES (3, '2020-07-02 14:30:20', '2020-07-02 14:30:20', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 19526100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (4, '2020-07-02 14:31:18', '2020-07-02 14:31:18', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 21476700, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (5, '2020-07-02 14:31:20', '2020-07-02 14:31:20', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 15621000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (6, '2020-07-02 14:31:23', '2020-07-02 14:31:23', NULL, '127.0.0.1', 'POST', '/menu/getMenuList', 200, 12692200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
-INSERT INTO `sys_operation_records` VALUES (7, '2020-07-02 14:31:29', '2020-07-02 14:31:29', NULL, '127.0.0.1', 'POST', '/menu/getBaseMenuById', 200, 15621600, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"id\":52}', 0);
-INSERT INTO `sys_operation_records` VALUES (8, '2020-07-02 14:31:40', '2020-07-02 14:31:40', NULL, '127.0.0.1', 'POST', '/menu/getMenuList', 200, 10743400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
-INSERT INTO `sys_operation_records` VALUES (9, '2020-07-02 14:31:43', '2020-07-02 14:31:43', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 14646100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (10, '2020-07-02 14:31:43', '2020-07-02 14:31:43', NULL, '127.0.0.1', 'POST', '/menu/getMenuList', 200, 14645000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 0);
-INSERT INTO `sys_operation_records` VALUES (11, '2020-07-02 14:33:41', '2020-07-02 14:33:41', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 19525200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (12, '2020-07-02 14:33:41', '2020-07-02 14:33:41', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 28313500, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (13, '2020-07-02 14:34:40', '2020-07-02 14:34:40', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 14646300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (14, '2020-07-02 14:34:41', '2020-07-02 14:34:41', NULL, '127.0.0.1', 'GET', '/sysDictionary/getSysDictionaryList?page=1&pageSize=10', 200, 11715200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (15, '2020-07-02 14:51:13', '2020-07-02 14:51:13', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 26360200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (16, '2020-07-02 14:51:57', '2020-07-02 14:51:57', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 18549000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
-INSERT INTO `sys_operation_records` VALUES (17, '2020-07-02 14:52:31', '2020-07-02 14:52:31', NULL, '127.0.0.1', 'POST', '/menu/getMenu', 200, 14646500, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '', 0);
 
 -- ----------------------------
 -- Table structure for sys_users

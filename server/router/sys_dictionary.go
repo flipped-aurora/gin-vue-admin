@@ -7,7 +7,10 @@ import (
 )
 
 func InitSysDictionaryRouter(Router *gin.RouterGroup) {
-	SysDictionaryRouter := Router.Group("sysDictionary").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	SysDictionaryRouter := Router.Group("sysDictionary").
+		Use(middleware.JWTAuth()).
+		Use(middleware.CasbinHandler()).
+		Use(middleware.OperationRecord())
 	{
 		SysDictionaryRouter.POST("createSysDictionary", v1.CreateSysDictionary)   // 新建SysDictionary
 		SysDictionaryRouter.DELETE("deleteSysDictionary", v1.DeleteSysDictionary) // 删除SysDictionary

@@ -101,7 +101,7 @@ export default {
                     showClose: true,
                   })
                 }
-                this.$refs.table.getTableData()
+                this.$emit('success')
                 this.closeDialog()
               }
 
@@ -116,7 +116,7 @@ export default {
                     showClose: true,
                   })
                 }
-                this.$refs.table.getTableData()
+                this.$emit('success')
                 this.closeDialog()
               }
               break

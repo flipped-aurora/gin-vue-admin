@@ -33,7 +33,7 @@
       </el-table>
     </pagination-table>
 
-    <Dialog ref="dialog" />
+    <Dialog ref="dialog" @success="$refs.table.getTableData()" />
   </div>
 </template>
 

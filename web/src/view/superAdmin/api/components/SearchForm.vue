@@ -36,7 +36,7 @@ import config from './config'
 export default {
   data() {
     return {
-      methodOptions:config.methodOptions,
+      methodOptions: config.methodOptions,
       searchInfo: {},
     }
   },

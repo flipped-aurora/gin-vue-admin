@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/config"
 	"gin-vue-admin/global"
 	"gin-vue-admin/utils"
+	"github.com/gin-gonic/gin"
 	rotatelogs "github.com/lestrrat/go-file-rotatelogs"
 	oplogging "github.com/op/go-logging"
 	"io"
@@ -31,8 +32,9 @@ func init() {
 	logger := oplogging.MustGetLogger(module)
 	var backends []oplogging.Backend
 	registerStdout(c, &backends)
-	registerFile(c, &backends)
-
+	if fileWriter := registerFile(c, &backends); fileWriter != nil {
+		gin.DefaultWriter = io.MultiWriter(fileWriter, os.Stdout)
+	}
 	oplogging.SetBackend(backends...)
 	global.GVA_LOG = logger
 }
@@ -47,7 +49,7 @@ func registerStdout(c config.Log, backends *[]oplogging.Backend) {
 	}
 }
 
-func registerFile(c config.Log, backends *[]oplogging.Backend) {
+func registerFile(c config.Log, backends *[]oplogging.Backend) io.Writer {
 	if c.File != "" {
 		if ok, _ := utils.PathExists(logDir); !ok {
 			// directory not exist
@@ -71,7 +73,10 @@ func registerFile(c config.Log, backends *[]oplogging.Backend) {
 			fmt.Println(err)
 		}
 		*backends = append(*backends, createBackend(fileWriter, c, level))
+
+		return fileWriter
 	}
+	return nil
 }
 
 func createBackend(w io.Writer, c config.Log, level oplogging.Level) oplogging.Backend {

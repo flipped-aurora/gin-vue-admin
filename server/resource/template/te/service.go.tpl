@@ -28,6 +28,17 @@ func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) 
 	return err
 }
 
+// @title    Delete{{.StructName}}ByIds
+// @description   delete {{.StructName}}s
+// @auth                     （2020/04/05  20:22）
+// @param     {{.Abbreviation}}               model.{{.StructName}}
+// @return                    error
+
+func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
+	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in (?)",ids.Ids).Error
+	return err
+}
+
 // @title    Update{{.StructName}}
 // @description   update a {{.StructName}}
 // @param     {{.Abbreviation}}          *model.{{.StructName}}

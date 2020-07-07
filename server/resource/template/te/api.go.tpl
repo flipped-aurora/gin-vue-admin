@@ -49,6 +49,25 @@ func Delete{{.StructName}}(c *gin.Context) {
 }
 
 // @Tags {{.StructName}}
+// @Summary 批量删除{{.StructName}}
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.IdsReq true "批量删除{{.StructName}}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /{{.Abbreviation}}/delete{{.StructName}}ByIds [delete]
+func Delete{{.StructName}}ByIds(c *gin.Context) {
+	var IDS request.IdsReq
+    _ = c.ShouldBindJSON(&IDS)
+	err := service.Delete{{.StructName}}ByIds(IDS)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}
+
+// @Tags {{.StructName}}
 // @Summary 更新{{.StructName}}
 // @Security ApiKeyAuth
 // @accept application/json

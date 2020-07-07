@@ -49,6 +49,25 @@ func DeleteSysOperationRecord(c *gin.Context) {
 }
 
 // @Tags SysOperationRecord
+// @Summary 批量删除SysOperationRecord
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.IdsReq true "批量删除SysOperationRecord"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /sysOperationRecord/deleteSysOperationRecordByIds [delete]
+func DeleteSysOperationRecordByIds(c *gin.Context) {
+	var IDS request.IdsReq
+	_ = c.ShouldBindJSON(&IDS)
+	err := service.DeleteSysOperationRecordByIds(IDS)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}
+
+// @Tags SysOperationRecord
 // @Summary 更新SysOperationRecord
 // @Security ApiKeyAuth
 // @accept application/json

@@ -44,6 +44,13 @@
       <el-table-column label="日期" width="180">
         <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
       </el-table-column>
+      <el-table-column label="状态码" prop="status" width="120">
+        <template slot-scope="scope">
+          <div>
+            <el-tag type="success">{{ scope.row.status }}</el-tag>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column label="请求ip" prop="ip" width="120"></el-table-column>
       <el-table-column label="请求方法" prop="method" width="120"></el-table-column>
       <el-table-column label="请求路径" prop="path" width="240"></el-table-column>
@@ -74,7 +81,6 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="error_message" prop="error_message" width="120"></el-table-column>
       <el-table-column label="按钮组">
         <template slot-scope="scope">
           <el-popover placement="top" v-model="scope.row.visible" width="160">

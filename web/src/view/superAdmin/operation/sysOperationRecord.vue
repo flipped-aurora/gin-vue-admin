@@ -14,10 +14,21 @@
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-popover placement="top" v-model="deleteVisible" width="160">
+            <p>确定要删除吗？</p>
+            <div style="text-align: right; margin: 0">
+              <el-button @click="deleteVisible = false" size="mini" type="text">取消</el-button>
+              <el-button @click="onDelete" size="mini" type="primary">确定</el-button>
+            </div>
+            <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
+          </el-popover>
+        </el-form-item>
       </el-form>
     </div>
     <el-table
       :data="tableData"
+      @selection-change="handleSelectionChange"
       border
       ref="multipleTable"
       stripe
@@ -27,9 +38,7 @@
       <el-table-column type="selection" width="55"></el-table-column>
       <el-table-column label="操作人" width="140">
         <template slot-scope="scope">
-          <div>
-            {{scope.row.user.userName}}({{scope.row.user.nickName}})
-          </div>
+          <div>{{scope.row.user.userName}}({{scope.row.user.nickName}})</div>
         </template>
       </el-table-column>
       <el-table-column label="日期" width="180">
@@ -95,7 +104,8 @@
 <script>
 import {
   deleteSysOperationRecord,
-  getSysOperationRecordList
+  getSysOperationRecordList,
+  deleteSysOperationRecordByIds
 } from '@/api/sysOperationRecord' //  此处请自行替换地址
 import { formatTimeToStr } from '@/utils/data'
 import infoList from '@/components/mixins/infoList'
@@ -109,6 +119,8 @@ export default {
       dialogFormVisible: false,
       visible: false,
       type: '',
+      deleteVisible: false,
+      multipleSelection: [],
       formData: {
         ip: null,
         method: null,
@@ -145,6 +157,25 @@ export default {
       this.pageSize = 10
       this.getTableData()
     },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    async onDelete() {
+      const ids = []
+      this.multipleSelection &&
+        this.multipleSelection.map(item => {
+          ids.push(item.ID)
+        })
+      const res = await deleteSysOperationRecordByIds({ ids })
+      if (res.code == 0) {
+        this.$message({
+          type: 'success',
+          message: '删除成功'
+        })
+        this.deleteVisible = false
+        this.getTableData()
+      }
+    },
     async deleteSysOperationRecord(row) {
       this.visible = false
       const res = await deleteSysOperationRecord({ ID: row.ID })
@@ -177,13 +208,12 @@ export default {
     }
   }
 }
-.popover-box{
-  background:#112435;
-  color:#f08047;
-  height:600px;
-  width:420px;
-  overflow:auto;
-
+.popover-box {
+  background: #112435;
+  color: #f08047;
+  height: 600px;
+  width: 420px;
+  overflow: auto;
 }
 .popover-box::-webkit-scrollbar {
   display: none; /* Chrome Safari */

@@ -35,7 +35,7 @@ func CreateTemp(c *gin.Context) {
 		return
 	}
 	if a.AutoCreateApiToSql {
-		apiList := [5]model.SysApi{
+		apiList := [6]model.SysApi{
 			{
 				Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
 				Description: "新增" + a.Description,
@@ -45,6 +45,12 @@ func CreateTemp(c *gin.Context) {
 			{
 				Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName,
 				Description: "删除" + a.Description,
+				ApiGroup:    a.Abbreviation,
+				Method:      "DELETE",
+			},
+			{
+				Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName+"ByIds",
+				Description: "批量删除" + a.Description,
 				ApiGroup:    a.Abbreviation,
 				Method:      "DELETE",
 			},

@@ -119,7 +119,7 @@ func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 }
 
 func GetTables(dbName string) (err error, TableNames []request.TableReq) {
-	err = global.GVA_DB.Raw("select table_name from information_schema.tables where table_schema= ? and table_type= ? ", dbName, "base table").Scan(&TableNames).Error
+	err = global.GVA_DB.Raw("select table_name as table_name from information_schema.tables where table_schema = ?", dbName).Scan(&TableNames).Error
 	return err, TableNames
 }
 

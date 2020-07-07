@@ -18,6 +18,17 @@ func CreateSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err 
 }
 
 // @title    DeleteSysOperationRecord
+// @description   delete SysOperationRecords
+// @auth                     （2020/04/05  20:22）
+// @param     sysOperationRecord               request.IdsReq
+// @return                    error
+
+func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
+	err = global.GVA_DB.Delete(&[]model.SysOperationRecord{},"id in (?)",ids.Ids).Error
+	return err
+}
+
+// @title    DeleteSysOperationRecord
 // @description   delete a SysOperationRecord
 // @auth                     （2020/04/05  20:22）
 // @param     sysOperationRecord               model.SysOperationRecord

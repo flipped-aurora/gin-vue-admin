@@ -37,7 +37,7 @@ func Routers() *gin.Engine {
 	router.InitAutoCodeRouter(ApiGroup)              // 创建自动化代码
 	router.InitSysDictionaryDetailRouter(ApiGroup)   // 字典详情管理
 	router.InitSysDictionaryRouter(ApiGroup)         // 字典管理
-	router.InitSysOperationRecordRouter(ApiGroup)
+	router.InitSysOperationRecordRouter(ApiGroup)    // 操作记录
 	global.GVA_LOG.Info("router register success")
 	return Router
 }

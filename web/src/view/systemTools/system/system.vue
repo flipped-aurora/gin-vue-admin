@@ -8,8 +8,8 @@
       <el-form-item label="环境值">
         <el-input v-model="config.system.env"></el-input>
       </el-form-item>
-      <el-form-item label.number="端口值">
-        <el-input v-model="config.system.addr"></el-input>
+      <el-form-item label="端口值">
+        <el-input v-model.number="config.system.addr"></el-input>
       </el-form-item>
       <el-form-item label="数据库类型">
         <el-select v-model="config.system.dbType">

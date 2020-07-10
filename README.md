@@ -262,7 +262,7 @@ backend code file: model\dnModel\api.go
 
 ## 9. Donate
 
-If you find this project useful, you can buy author a glass of juice :tropical_drink:
+If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](http://doc.henrongyi.top/more/coffee.html)
 
 ## 10. Commercial considerations
 

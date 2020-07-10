@@ -74,7 +74,7 @@ func AddBaseMenu(c *gin.Context) {
 		"ParentId":  {utils.NotEmpty()},
 		"Name":      {utils.NotEmpty()},
 		"Component": {utils.NotEmpty()},
-		"Sort":      {utils.Ge("0"), "ge=0"},
+		"Sort":      {utils.Ge("0")},
 	}
 	MenuVerifyErr := utils.Verify(menu, MenuVerify)
 	if MenuVerifyErr != nil {
@@ -208,7 +208,7 @@ func UpdateBaseMenu(c *gin.Context) {
 		"ParentId":  {utils.NotEmpty()},
 		"Name":      {utils.NotEmpty()},
 		"Component": {utils.NotEmpty()},
-		"Sort":      {utils.Ge("0"), "ge=0"},
+		"Sort":      {utils.Ge("0")},
 	}
 	MenuVerifyErr := utils.Verify(menu, MenuVerify)
 	if MenuVerifyErr != nil {

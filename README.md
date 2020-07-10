@@ -22,7 +22,12 @@ English | [简体中文](./README-zh_CN.md)
 
 ### 1.1 Project Introduction
 
-[Online Demo](http://qmplus.henrongyi.top/)
+[Online Demo](http://demo.gin-vue-admin.com/)
+
+username：admin
+
+password：123456
+
 > Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
 > It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
 

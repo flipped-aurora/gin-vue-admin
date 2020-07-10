@@ -145,7 +145,7 @@ swag init
 ## 4. 项目架构
 ### 4.1 系统架构图
 
-![系统架构图](./docs/gin-vue-admin.png)
+![系统架构图](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
 ### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
 

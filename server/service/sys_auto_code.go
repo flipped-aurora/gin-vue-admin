@@ -1,7 +1,9 @@
 package service
 
 import (
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
 	"io/ioutil"
 	"os"
@@ -114,4 +116,19 @@ func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 		}
 	}
 	return fileList, err
+}
+
+func GetTables(dbName string) (err error, TableNames []request.TableReq) {
+	err = global.GVA_DB.Raw("select table_name as table_name from information_schema.tables where table_schema = ?", dbName).Scan(&TableNames).Error
+	return err, TableNames
+}
+
+func GetDB() (err error, DBNames []request.DBReq) {
+	err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+	return err, DBNames
+}
+
+func GetColume(tableName string, dbName string) (err error, Columes []request.ColumeReq) {
+	err = global.GVA_DB.Raw("SELECT COLUMN_NAME colume_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT colume_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columes).Error
+	return err, Columes
 }

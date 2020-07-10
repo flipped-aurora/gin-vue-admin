@@ -29,7 +29,7 @@
             </el-form-item>
             <el-form-item label="Field数据类型" prop="fieldType">
                 <el-col :span="8">
-            <el-select v-model="dialogMiddle.fieldType" placeholder="请选择field数据类型">
+            <el-select v-model="dialogMiddle.fieldType" placeholder="请选择field数据类型" @change="getDbfdOptions" clearable >
                 <el-option
                     v-for="item in typeOptions"
                     :key="item.value"
@@ -39,9 +39,27 @@
             </el-select>
                 </el-col>
             </el-form-item>
+
+            <el-form-item label="数据库字段类型" prop="dataType">
+                <el-col :span="8">
+            <el-select :disabled="!dialogMiddle.fieldType" v-model="dialogMiddle.dataType" placeholder="请选择数据库字段类型" clearable >
+                <el-option
+                    v-for="item in dbfdOptions"
+                    :key="item.label"
+                    :label="item.label"
+                    :value="item.label">
+                </el-option>
+            </el-select>
+                </el-col>
+            </el-form-item>
+            <el-form-item label="数据库字段长度" prop="dataTypeLong">
+                <el-col :span="6">
+                <el-input :disabled="!dialogMiddle.dataType" v-model="dialogMiddle.dataTypeLong"></el-input>
+                </el-col>
+            </el-form-item>
             <el-form-item label="Field查询条件" prop="fieldSearchType">
                 <el-col :span="8">
-            <el-select v-model="dialogMiddle.fieldSearchType" placeholder="请选择field数据类型">
+            <el-select v-model="dialogMiddle.fieldSearchType" placeholder="请选择Field查询条件" clearable >
                 <el-option
                     v-for="item in typeSearchOptions"
                     :key="item.value"
@@ -55,6 +73,7 @@
     </div>
 </template>
 <script>
+import {getDict} from '@/utils/dictionary'
 export default {
     name:"FieldDialog",
     props:{
@@ -67,6 +86,7 @@ export default {
     },
     data(){
         return{
+            dbfdOptions:[],
             visible:false,
             typeSearchOptions:[
                 {
@@ -121,6 +141,17 @@ export default {
             }
 
         }
+    },
+    methods: {
+        async getDbfdOptions(){
+            if(this.dialogMiddle.fieldType){
+                 const res = await getDict(this.dialogMiddle.fieldType)
+                 this.dbfdOptions = res
+            }
+        }
+    },
+    created() {
+        this.getDbfdOptions()
     },
 }
 </script>

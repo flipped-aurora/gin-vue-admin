@@ -11,7 +11,6 @@ func InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 		BaseRouter.POST("register", v1.Register)
 		BaseRouter.POST("login", v1.Login)
 		BaseRouter.POST("captcha", v1.Captcha)
-		BaseRouter.GET("captcha/:captchaId", v1.CaptchaImg)
 	}
 	return BaseRouter
 }

@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/service"
@@ -34,7 +35,7 @@ func CreateTemp(c *gin.Context) {
 		return
 	}
 	if a.AutoCreateApiToSql {
-		apiList := [5]model.SysApi{
+		apiList := [6]model.SysApi{
 			{
 				Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
 				Description: "新增" + a.Description,
@@ -44,6 +45,12 @@ func CreateTemp(c *gin.Context) {
 			{
 				Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName,
 				Description: "删除" + a.Description,
+				ApiGroup:    a.Abbreviation,
+				Method:      "DELETE",
+			},
+			{
+				Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName+"ByIds",
+				Description: "批量删除" + a.Description,
 				ApiGroup:    a.Abbreviation,
 				Method:      "DELETE",
 			},
@@ -85,5 +92,63 @@ func CreateTemp(c *gin.Context) {
 		c.Writer.Header().Add("success", "true")
 		c.File("./ginvueadmin.zip")
 		os.Remove("./ginvueadmin.zip")
+	}
+}
+
+// @Tags SysApi
+// @Summary 获取当前数据库所有表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router /autoCode/getTables [get]
+
+func GetTables(c *gin.Context) {
+	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	err, tables := service.GetTables(dbName)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("查询table失败，%v", err), c)
+	} else {
+		response.OkWithData(gin.H{
+			"tables": tables,
+		}, c)
+	}
+}
+
+// @Tags SysApi
+// @Summary 获取当前所有数据库
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router /autoCode/getDatabase [get]
+func GetDB(c *gin.Context) {
+	err, dbs := service.GetDB()
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("查询table失败，%v", err), c)
+	} else {
+		response.OkWithData(gin.H{
+			"dbs": dbs,
+		}, c)
+	}
+}
+
+// @Tags SysApi
+// @Summary 获取当前表所有字段
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router /autoCode/getDatabase [get]
+func GetColume(c *gin.Context) {
+	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	tableName := c.Query("tableName")
+	err, columes := service.GetColume(tableName, dbName)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("查询table失败，%v", err), c)
+	} else {
+		response.OkWithData(gin.H{
+			"columes": columes,
+		}, c)
 	}
 }

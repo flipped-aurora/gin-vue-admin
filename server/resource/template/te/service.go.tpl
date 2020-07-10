@@ -28,6 +28,17 @@ func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) 
 	return err
 }
 
+// @title    Delete{{.StructName}}ByIds
+// @description   delete {{.StructName}}s
+// @auth                     （2020/04/05  20:22）
+// @param     {{.Abbreviation}}               model.{{.StructName}}
+// @return                    error
+
+func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
+	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in (?)",ids.Ids).Error
+	return err
+}
+
 // @title    Update{{.StructName}}
 // @description   update a {{.StructName}}
 // @param     {{.Abbreviation}}          *model.{{.StructName}}
@@ -61,7 +72,7 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&model.{{.StructName}}{})
     var {{.Abbreviation}}s []model.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
         {{- range .Fields}}
@@ -71,7 +82,7 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "bool" }}
-    if info.{{.FieldName}} != 0 {
+    if info.{{.FieldName}} != nil {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "int" }}
@@ -89,7 +100,7 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
                 {{- end }}
         {{- end }}
     {{- end }}
-	err = db.Find(&{{.Abbreviation}}s).Count(&total).Error
+	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
 	return err, {{.Abbreviation}}s, total
 }

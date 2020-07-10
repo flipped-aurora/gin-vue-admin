@@ -52,7 +52,9 @@
             <div class="vPic">
               <img
                 v-if="picPath"
-                :src="path + picPath"
+                :src="picPath"
+                width="100%"
+                height="100%"
                 alt="请输入验证码"
                 @click="loginVefify()"
               />
@@ -92,7 +94,6 @@
 <script>
 import { mapActions } from "vuex";
 import { captcha } from "@/api/user";
-const path = process.env.VUE_APP_BASE_API;
 export default {
   name: "Login",
   data() {
@@ -123,7 +124,6 @@ export default {
         username: [{ validator: checkUsername, trigger: "blur" }],
         password: [{ validator: checkPassword, trigger: "blur" }],
       },
-      path: path,
       logVerify: "",
       picPath: "",
     };

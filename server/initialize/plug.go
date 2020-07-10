@@ -6,20 +6,18 @@ import (
 )
 
 type Plug interface {
-	InitRouter(*gin.Engine) error
+	InitRouter([2]*gin.RouterGroup) error
 	InitModel(*gorm.DB) error
 }
 
-func InstallPlug(db *gorm.DB, router *gin.Engine, p ...Plug) (err error) {
-	for _, v := range p {
-		err = v.InitModel(db)
-		if err != nil {
-			return err
-		}
-		err = v.InitRouter(router)
-		if err != nil {
-			return err
-		}
+func InstallPlug(db *gorm.DB, router [2]*gin.RouterGroup, p Plug) (err error) {
+	err = p.InitModel(db)
+	if err != nil {
+		return err
+	}
+	err = p.InitRouter(router)
+	if err != nil {
+		return err
 	}
 	return nil
 }

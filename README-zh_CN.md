@@ -258,7 +258,7 @@ swag init
 
 ## 9. 捐赠
 
-如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink:
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](http://doc.henrongyi.top/more/coffee.html)
 
 ## 10. 商用注意事项
 

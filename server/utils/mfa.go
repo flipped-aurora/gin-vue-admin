@@ -5,7 +5,6 @@ import (
 	"crypto/rand"
 	"encoding/base32"
 	"encoding/base64"
-	"gin-vue-admin/model"
 	"github.com/dgryski/dgoogauth"
 	"github.com/skip2/go-qrcode"
 	"image/png"
@@ -15,15 +14,14 @@ import (
 /*
   generate base32 secret string
 */
-func GenerateSecret(user model.SysUser) (usersecret model.SysUser, err error) {
+func GenerateSecret() (usersecret string, err error) {
 	secret := make([]byte, 10)
 	_, errs := rand.Read(secret)
 	if errs != nil {
 		return usersecret, errs
 	}
 	secretBase32 := base32.StdEncoding.EncodeToString(secret)
-	user.Secret = secretBase32
-	return user, nil
+	return secretBase32, nil
 }
 
 /*

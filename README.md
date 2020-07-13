@@ -22,7 +22,12 @@ English | [简体中文](./README-zh_CN.md)
 
 ### 1.1 Project Introduction
 
-[Online Demo](http://qmplus.henrongyi.top/)
+[Online Demo](http://demo.gin-vue-admin.com/)
+
+username：admin
+
+password：123456
+
 > Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
 > It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
 
@@ -146,7 +151,7 @@ After executing the above command，`docs` will show in `server/`，then open yo
 
 ### 4.1 Architecture Diagram
 
-![Architecture diagram](./docs/gin-vue-admin.png)
+![Architecture diagram](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
 ### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
 
@@ -262,7 +267,7 @@ backend code file: model\dnModel\api.go
 
 ## 9. Donate
 
-If you find this project useful, you can buy author a glass of juice :tropical_drink:
+If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](http://doc.henrongyi.top/more/coffee.html)
 
 ## 10. Commercial considerations
 

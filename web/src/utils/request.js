@@ -21,21 +21,23 @@ const showLoading = () => {
 }
 
 const closeLoading = () => {
-        acitveAxios--
-        if (acitveAxios <= 0) {
-            clearTimeout(timer)
-            loadingInstance && loadingInstance.close()
-        }
+    acitveAxios--
+    if (acitveAxios <= 0) {
+        clearTimeout(timer)
+        loadingInstance && loadingInstance.close()
     }
-    //http request 拦截器
+}
+//http request 拦截器
 service.interceptors.request.use(
     config => {
         showLoading()
         const token = store.getters['user/token']
+        const user = store.getters['user/userInfo']
         config.data = JSON.stringify(config.data);
         config.headers = {
             'Content-Type': 'application/json',
-            'x-token': token
+            'x-token': token,
+            'x-user-id':user.ID
         }
         return config;
     },

@@ -27,10 +27,21 @@
         <el-form-item>
           <el-button @click="openDialog" type="primary">新增{{.Description}}</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-popover placement="top" v-model="deleteVisible" width="160">
+            <p>确定要删除吗？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button @click="deleteVisible = false" size="mini" type="text">取消</el-button>
+                <el-button @click="onDelete" size="mini" type="primary">确定</el-button>
+              </div>
+            <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
+          </el-popover>
+        </el-form-item>
       </el-form>
     </div>
     <el-table
       :data="tableData"
+      @selection-change="handleSelectionChange"
       border
       ref="multipleTable"
       stripe
@@ -87,6 +98,7 @@
 import {
     create{{.StructName}},
     delete{{.StructName}},
+    delete{{.StructName}}ByIds,
     update{{.StructName}},
     find{{.StructName}},
     get{{.StructName}}List
@@ -103,6 +115,8 @@ export default {
       dialogFormVisible: false,
       visible: false,
       type: "",
+      deleteVisible: false,
+      multipleSelection: [],
       formData: {
         {{range .Fields}}{{.FieldJson}}:null,{{ end }}
       }
@@ -135,6 +149,25 @@ export default {
           this.searchInfo.{{.FieldJson}}=null
         } {{ end }} {{ end }}    
         this.getTableData()
+      },
+      handleSelectionChange(val) {
+        this.multipleSelection = val
+      },
+      async onDelete() {
+        const ids = []
+        this.multipleSelection &&
+          this.multipleSelection.map(item => {
+            ids.push(item.ID)
+          })
+        const res = await delete{{.StructName}}ByIds({ ids })
+        if (res.code == 0) {
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
+          this.deleteVisible = false
+          this.getTableData()
+        }
       },
     async update{{.StructName}}(row) {
       const res = await find{{.StructName}}({ ID: row.ID });

@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/service"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +22,8 @@ func CasbinHandler() gin.HandlerFunc {
 		sub := waitUse.AuthorityId
 		e := service.Casbin()
 		// 判断策略中是否存在
-		if global.GVA_CONFIG.System.Env == "develop" || e.Enforce(sub, obj, act) {
+		matchRes, _ := e.Enforce(sub, obj, act)
+		if global.GVA_CONFIG.System.Env == "develop" || matchRes {
 			c.Next()
 		} else {
 			response.Result(response.ERROR, gin.H{}, "权限不足", c)

@@ -59,7 +59,7 @@
           <div>
             <el-popover placement="top-start" trigger="hover" v-if="scope.row.body">
               <div class="popover-box">
-                <pre>{{JSON.parse(scope.row.body)}}</pre>
+                <pre>{{fmtBody(scope.row.body)}}</pre>
               </div>
               <i class="el-icon-view" slot="reference"></i>
             </el-popover>
@@ -73,7 +73,7 @@
           <div>
             <el-popover placement="top-start" trigger="hover" v-if="scope.row.resp">
               <div class="popover-box">
-                <pre>{{JSON.parse(scope.row.resp)}}</pre>
+                <pre>{{fmtBody(scope.row.resp)}}</pre>
               </div>
               <i class="el-icon-view" slot="reference"></i>
             </el-popover>
@@ -191,6 +191,13 @@ export default {
           message: '删除成功'
         })
         this.getTableData()
+      }
+    },
+    fmtBody(value){
+      try{
+        return JSON.parse(value)
+      }catch (err){
+        return  value
       }
     }
   },

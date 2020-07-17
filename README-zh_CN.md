@@ -15,7 +15,7 @@
 # 项目文档
 [在线文档](http://doc.henrongyi.top/)
 
-[开发教学](http://doc.henrongyi.top/help/)
+[开发教学](http://doc.henrongyi.top/help/) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
 - 后台框架：[gin](https://github.com/gin-gonic/gin) 
 

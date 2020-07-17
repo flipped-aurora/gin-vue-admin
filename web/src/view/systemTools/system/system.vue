@@ -46,7 +46,7 @@
           <el-input v-model.number="config.mysql.maxOpenConns"></el-input>
         </el-form-item>
         <el-form-item label="logMode">
-          <el-checkbox v-model="config.log.logMode"></el-checkbox>
+          <el-checkbox v-model="config.mysql.logMode"></el-checkbox>
         </el-form-item>
       </template>
       <template v-show="config.system.dbType == 'sqlite'">

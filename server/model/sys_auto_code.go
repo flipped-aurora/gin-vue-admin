@@ -21,4 +21,5 @@ type Field struct {
 	Comment         string `json:"comment"`
 	ColumnName      string `json:"columnName"`
 	FieldSearchType string `json:"fieldSearchType"`
+	DictType        string `json:"dictType"`
 }

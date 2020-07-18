@@ -79,6 +79,7 @@
       <el-table-column prop="columnName" label="数据库字段" width="130"></el-table-column>
       <el-table-column prop="comment" label="数据库字段描述" width="130"></el-table-column>
       <el-table-column prop="fieldSearchType" label="搜索条件" width="130"></el-table-column>
+      <el-table-column prop="dictType" label="字典" width="130"></el-table-column>
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
           <el-button
@@ -135,7 +136,8 @@ const fieldTemplate = {
   columnName: "",
   dataTypeLong: "",
   comment: "",
-  fieldSearchType: ""
+  fieldSearchType: "",
+  dictType:""
 };
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
@@ -332,7 +334,8 @@ export default {
                 dataTypeLong: item.dataTypeLong,
                 columnName: item.columeName,
                 comment: item.columeComment,
-                fieldSearchType: ""
+                fieldSearchType: "",
+                dictType:""
               });
             }
           });

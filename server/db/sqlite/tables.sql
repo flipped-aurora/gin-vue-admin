@@ -230,7 +230,7 @@ CREATE TABLE sys_workflow_step_infos(
                                         updated_at TIMESTAMP,
                                         deleted_at TIMESTAMP,
                                         workflow_id int,
-                                        is_strat tinyint,
+                                        is_start tinyint,
                                         step_name varchar(255),
                                         step_no double,
                                         step_authority_id varchar(255),

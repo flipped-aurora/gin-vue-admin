@@ -657,7 +657,7 @@ CREATE TABLE `sys_workflow_step_infos`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `deleted_at` timestamp(0) NULL DEFAULT NULL,
   `workflow_id` int(10) UNSIGNED NULL DEFAULT NULL COMMENT '节点id',
-  `is_strat` tinyint(1) NULL DEFAULT NULL COMMENT '是否是开始节点',
+  `is_start` tinyint(1) NULL DEFAULT NULL COMMENT '是否是开始节点',
   `step_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '步骤name',
   `step_no` double NULL DEFAULT NULL COMMENT '第几步',
   `step_authority_id` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '可操作者角色',

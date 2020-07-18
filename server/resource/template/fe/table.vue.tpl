@@ -52,7 +52,14 @@
     <el-table-column label="日期" width="180">
          <template slot-scope="scope">{{ "{{scope.row.CreatedAt|formatDate}}" }}</template>
     </el-table-column>
-    {{range .Fields}}  {{- if eq .FieldType "bool" }}
+    {{range .Fields}}
+    {{- if .DictType}}
+      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <template slot-scope="scope">
+          {{"{{"}}filterDict(scope.row.{{.FieldJson}},"{{.DictType}}"){{"}}"}}
+        </template>
+      </el-table-column>
+    {{- else if eq .FieldType "bool" }}
     <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
          <template slot-scope="scope">{{ "{{scope.row."}}{{.FieldJson}}{{"|formatBoolean}}" }}</template>
     </el-table-column> {{- else }}
@@ -117,6 +124,11 @@ export default {
       type: "",
       deleteVisible: false,
       multipleSelection: [],
+      {{- range .Fields}}
+          {{- if .DictType }}
+            {{.DictType}}Options:[],
+          {{ end -}}
+      {{end -}}
       formData: {
         {{range .Fields}}{{.FieldJson}}:null,{{ end }}
       }
@@ -222,9 +234,14 @@ export default {
       this.dialogFormVisible = true;
     }
   },
-  created() {
-    this.getTableData();
-  }
+  async created() {
+    await this.getTableData();
+  {{- range .Fields -}}
+    {{- if .DictType -}}
+      await this.getDict("{{.DictType}}")
+    {{- end -}}
+  {{- end -}}
+}
 };
 </script>
 

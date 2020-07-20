@@ -85,16 +85,16 @@ func GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list
 	var sysDictionarys []model.SysDictionary
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Name != "" {
-		db = db.Where("name LIKE ?", "%"+info.Name+"%")
+		db = db.Where("`name` LIKE ?", "%"+info.Name+"%")
 	}
 	if info.Type != "" {
-		db = db.Where("type LIKE ?", "%"+info.Type+"%")
+		db = db.Where("`type` LIKE ?", "%"+info.Type+"%")
 	}
 	if info.Status != nil {
-		db = db.Where("status = ?", info.Status)
+		db = db.Where("`status` = ?", info.Status)
 	}
 	if info.Desc != "" {
-		db = db.Where("desc LIKE ?", "%"+info.Desc+"%")
+		db = db.Where("`desc` LIKE ?", "%"+info.Desc+"%")
 	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionarys).Error

@@ -64,6 +64,7 @@
         <transition mode="out-in" name="el-fade-in-linear">
           <router-view class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
         </transition>
+       <BottomInfo />
       </el-main>
     </el-container>
     <el-dialog :visible.sync="showPassword" @close="clearPassword" title="修改密码" width="360px">
@@ -91,6 +92,7 @@ import Aside from '@/view/layout/aside'
 import HistoryComponent from '@/view/layout/aside/historyComponent/history'
 import Screenfull from '@/view/layout/screenfull'
 import Search from '@/view/layout/search/search'
+import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
 import { mapGetters, mapActions } from 'vuex'
 import { changePassword } from '@/api/user'
 export default {
@@ -135,7 +137,8 @@ export default {
     Aside,
     HistoryComponent,
     Screenfull,
-    Search
+    Search,
+    BottomInfo
   },
   methods: {
     ...mapActions('user', ['LoginOut']),
@@ -241,6 +244,7 @@ $mainHight: 100vh;
   z-index: 999;
 }
 .admin-box {
+  min-height: calc(100vh - 240px);
   background-color: rgb(255, 255, 255);
   margin-top: 100px;
 }
@@ -272,7 +276,7 @@ $mainHight: 100vh;
       // padding: 6px;
       // border-bottom: 1px solid #eee;
     }
-   
+
     &.el-main {
       overflow: auto;
       background: #fff;
@@ -365,6 +369,7 @@ $mainHight: 100vh;
     vertical-align: middle;
   }
 }
+
 
 .screenfull {
   display: inline-block;

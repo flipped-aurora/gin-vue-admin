@@ -122,9 +122,6 @@ go get -u github.com/swaggo/swag/cmd/swag
 go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.cn,direct
 
-# get swag
-go get -g -v github.com/swaggo/swag/cmd/swag
-
 # 执行
 go get -g -v github.com/swaggo/swag/cmd/swag
 

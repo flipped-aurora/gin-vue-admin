@@ -115,14 +115,18 @@ go get -u github.com/swaggo/swag/cmd/swag
 ````
 
 ##### （2）无法翻墙
-由于国内没法安装 go.org/x 包下面的东西，需要先安装`gopm`
+由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.cn](https://goproxy.cn/)
 
 ```bash
-# 下载gopm包
-go get -v -u github.com/gpmgo/gopm
+# 配置GOPROXY
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
+
+# get swag
+go get -g -v github.com/swaggo/swag/cmd/swag
 
 # 执行
-gopm get -g -v github.com/swaggo/swag/cmd/swag
+go get -g -v github.com/swaggo/swag/cmd/swag
 
 # 到GOPATH的/src/github.com/swaggo/swag/cmd/swag路径下执行
 go install

@@ -117,13 +117,14 @@ go get -u github.com/swaggo/swag/cmd/swag
 ````
 
 ##### (2) In mainland China 
-In mainland China, access to go.org/x is prohibited，we recommend `gopm`
+In mainland China, access to go.org/x is prohibited，we recommend [goproxy.cn](https://goproxy.cn/)
 ````bash
-# install gopm
-go get -v -u github.com/gpmgo/gopm
+# config GOPROXY
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.cn,direct
 
 # get swag
-gopm get -g -v github.com/swaggo/swag/cmd/swag
+go get -g -v github.com/swaggo/swag/cmd/swag
 
 # cd GOPATH/src/github.com/swaggo/swag/cmd/swag
 go install

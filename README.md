@@ -244,10 +244,8 @@ backend code file: model\dnModel\api.go
 
 ## 8. Contacts
 ### 8.1 Groups
-| QQ group |  
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
-### QQ group: 622360840
+### QQ group: 622360840（full）
+### QQ group2: 101809076
 
 ### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
 

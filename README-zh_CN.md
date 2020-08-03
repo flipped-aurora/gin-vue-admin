@@ -240,11 +240,13 @@ swag init
 
 ## 8. 联系方式
 ### 8.1 技术群
-| QQ群 |  
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
-### QQ交流群：622360840
+| QQ 群(满) | QQ 2群 |  
+|  :---:  |   :---:  |
+| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |<img src="http://qmplusimg.henrongyi.top/qq2.png" width="180"/> |
+
+### QQ交流群：622360840（满）
+### QQ交流2群：101809076
 ### 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
 
 ### 8.2 项目组成员

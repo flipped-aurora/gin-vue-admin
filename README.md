@@ -263,7 +263,7 @@ backend code file: model\dnModel\api.go
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
 | [@granty1](https://github.com/granty1)  | Backend developer | Yin |
-| [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
+| [@Ruio9244](https://github.com/Ruio9244)  | Architect | Yan |
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |

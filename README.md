@@ -71,6 +71,42 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 
 ## 2. Getting started
+
+> Use docker-compose to experience this project
+- Installation docker-compose [Official document](https://docs.docker.com/compose/install/)
+    - ```shell script
+       # Install on Linux
+       # 1.1 Run this command to download the current stable version of Docker Compose
+       sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+       # 1.2 Apply executable permissions to binary files
+       sudo chmod +x /usr/local/bin/docker-compose 
+      ```
+    - ```shell script
+       # Use Python's pip installation
+       pip3 install docker-compose -i https://pypi.tuna.tsinghua.edu.cn/simple
+      ```
+    - Use Docker Desktop 
+        - Windows: https://hub.docker.com/editions/community/docker-ce-desktop-windows
+        - Mac: https://hub.docker.com/editions/community/docker-ce-desktop-mac/
+
+- Use git to clone this project
+    - ```git
+        git clone https://github.com/flipped-aurora/gin-vue-admin.git
+      ```
+- Use docker-compose up to start the startup project with one click
+    - ```shell script
+      # Use docker-compose to start four containers
+      docker-compose up
+      # If you modify some configuration options, you can use this command to repackage the image
+      docker-compose up --build
+      # Use docker-compose to start in the background
+      docker-compose up -d
+      ```
+
+    - Web project preview [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
+
+    - swagger APIs [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
+
 ```
 - node version > v8.6.0
 - golang version >= v1.11

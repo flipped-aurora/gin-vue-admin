@@ -289,23 +289,25 @@ backend code file: model\dnModel\api.go
 
 ## 8. Contacts
 ### 8.1 Groups
-| QQ group |  
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
-### QQ group: 622360840
+#### QQ group: 622360840
 
-### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
+| QQ group | 
+|  :---:  |  
+| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+
+
+#### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
 
 ### 8.2 Team members
-| Jiang | Yin | Yan | Du | Yin | Song |
+| Jiang | Yan | Yin | Du | Yin | Song |
 |  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
 
 |  Nick name   | Project position  | First name  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
+| [@Ruio9244](https://github.com/Ruio9244)  | Architect | Yan |
 | [@granty1](https://github.com/granty1)  | Backend developer | Yin |
-| [@Ruio9244](https://github.com/Ruio9244)  | Full-stack developer | Yan |
 | [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
 | [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |

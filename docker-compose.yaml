@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: ./
+      dockerfile: ./dockerfile_server
+    container_name: gva-server # 容器名
+    restart: always
+    ports:
+      - '8888:8888'
+    depends_on:
+      - mysql
+      - redis
+
+  mysql:
+    image: registry.cn-shanghai.aliyuncs.com/gva/gva-mysql:1.1
+    container_name: gva-mysql
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
+    restart: always
+    ports:
+      - "3306:3306"  # host物理直接映射端口为6606
+    environment:
+      MYSQL_ROOT_PASSWORD: "Aa@6447985" # root管理员用户密码
+
+  redis:
+    image: redis:6.0.6
+    container_name: gva-redis # 容器名
+    restart: always
+    ports:
+      - '6379:6379'

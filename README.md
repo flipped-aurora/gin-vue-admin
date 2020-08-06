@@ -116,14 +116,23 @@ go build
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-##### (2) In mainland China 
-In mainland China, access to go.org/x is prohibited，we recommend `gopm`
+##### (2) In mainland China
+ 
+In mainland China, access to go.org/x is prohibited，we recommend [goproxy.io](https://goproxy.io/zh/)
+
 ````bash
-# install gopm
-go get -v -u github.com/gpmgo/gopm
+
+If you are using Go version 1.13 and above (recommended)
+# Enable Go Modules function
+go env -w GO111MODULE=on 
+# Configure GOPROXY environment variables
+go env -w GOPROXY=https://goproxy.io,direct
+If you are using Go version 1.12 and below
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.io
 
 # get swag
-gopm get -g -v github.com/swaggo/swag/cmd/swag
+go get -g -v github.com/swaggo/swag/cmd/swag
 
 # cd GOPATH/src/github.com/swaggo/swag/cmd/swag
 go install

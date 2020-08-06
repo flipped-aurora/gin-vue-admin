@@ -71,6 +71,43 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 
 ## 2. Getting started
+
+> Use docker-compose to experience this project
+
+- Installation docker-compose [Official document](https://docs.docker.com/compose/install/)
+    - ```shell script
+       # Install on Linux
+       # 1.1 Run this command to download the current stable version of Docker Compose
+       sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+       # 1.2 Apply executable permissions to binary files
+       sudo chmod +x /usr/local/bin/docker-compose 
+      ```
+    - ```shell script
+       # Use Python's pip installation
+       pip3 install docker-compose -i https://pypi.tuna.tsinghua.edu.cn/simple
+      ```
+    - Use Docker Desktop 
+        - Windows: https://hub.docker.com/editions/community/docker-ce-desktop-windows
+        - Mac: https://hub.docker.com/editions/community/docker-ce-desktop-mac/
+
+- Use git to clone this project
+    - ```git
+        git clone https://github.com/flipped-aurora/gin-vue-admin.git
+      ```
+- Use docker-compose up to start the startup project with one click
+    - ```shell script
+      # Use docker-compose to start four containers
+      docker-compose up
+      # If you modify some configuration options, you can use this command to repackage the image
+      docker-compose up --build
+      # Use docker-compose to start in the background
+      docker-compose up -d
+      ```
+      
+    - Web project preview [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
+    
+    - swagger APIs [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
+
 ```
 - node version > v8.6.0
 - golang version >= v1.11
@@ -117,13 +154,22 @@ go get -u github.com/swaggo/swag/cmd/swag
 ````
 
 ##### (2) In mainland China 
-In mainland China, access to go.org/x is prohibited，we recommend `gopm`
+
+In mainland China, access to go.org/x is prohibited，we recommend [goproxy.io](https://goproxy.io/zh/)
+
 ````bash
-# install gopm
-go get -v -u github.com/gpmgo/gopm
+If you are using Go version 1.13 and above (recommended)
+# Enable Go Modules function
+go env -w GO111MODULE=on 
+# Configure GOPROXY environment variables
+go env -w GOPROXY=https://goproxy.io,direct
+
+If you are using Go version 1.12 and below
+go env -w GO111MODULE=on
+go env -w GOPROXY=https://goproxy.io
 
 # get swag
-gopm get -g -v github.com/swaggo/swag/cmd/swag
+go get -g -v github.com/swaggo/swag/cmd/swag
 
 # cd GOPATH/src/github.com/swaggo/swag/cmd/swag
 go install

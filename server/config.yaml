@@ -12,7 +12,7 @@ jwt:
 mysql:
     username: root
     password: 'Aa@6447985'
-    path: '127.0.0.1:3306'
+    path: mysql
     db-name: 'qmPlus'
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
@@ -36,13 +36,13 @@ qiniu:
 
 # redis configuration
 redis:
-    addr: '127.0.0.1:6379'
+    addr: redis:6379
     password: ''
     db: 0
 
 # system configuration
 system:
-    use-multipoint: false
+    use-multipoint: true
     env: 'public'  # Change to "develop" to skip authentication for development mode
     addr: 8888
     db-type: "mysql"  # support mysql/sqlite

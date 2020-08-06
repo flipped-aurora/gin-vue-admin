@@ -69,6 +69,41 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ## 2. 使用说明
 
+> 使用docker-compose体验本项目
+- 安装 docker-compose [官方文档](https://docs.docker.com/compose/install/)
+    - ```shell script
+       # 在Linux安装
+       # 1.1 运行此命令以下载Docker Compose的当前稳定版本
+       sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+       # 1.2 将可执行权限应用于二进制文件
+       sudo chmod +x /usr/local/bin/docker-compose 
+      ```
+    - ```shell script
+       # 使用Python的pip安装 
+       pip3 install docker-compose -i https://pypi.tuna.tsinghua.edu.cn/simple
+      ```
+    - 使用 Docker Desktop 
+        - Windows: https://hub.docker.com/editions/community/docker-ce-desktop-windows
+        - Mac: https://hub.docker.com/editions/community/docker-ce-desktop-mac/
+
+- 使用git克隆本项目
+    - ```git
+        git clone https://github.com/flipped-aurora/gin-vue-admin.git
+      ```
+- 使用docker-compose up一键启动启动项目
+    - ```shell script
+      # 使用docker-compose启动四个容器
+      docker-compose up
+      # 如果您修改了某些配置选项,可以使用此命令重新打包镜像
+      docker-compose up --build
+      # 使用docker-compose 后台启动
+      docker-compose up -d
+      ```
+
+    - web项目预览 [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
+
+    - swagger文档 [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
+
 ```
 - node版本 > v8.6.0
 - golang版本 >= v1.11

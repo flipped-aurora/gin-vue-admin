@@ -251,7 +251,7 @@ swag init
 可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
 
 ### 8.2 项目组成员
-| 蒋 | 尹 | 严 | 杜 | 印 | 宋 |
+| 蒋 | 严 | 尹 | 杜 | 印 | 宋 |
 |  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
 

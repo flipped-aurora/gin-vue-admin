@@ -19,7 +19,7 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
     restart: always
     ports:
-      - "3306:3306"  # host物理直接映射端口为6606
+      - "13306:3306"  # host物理直接映射端口为6606
     environment:
       MYSQL_ROOT_PASSWORD: "Aa@6447985" # root管理员用户密码
 

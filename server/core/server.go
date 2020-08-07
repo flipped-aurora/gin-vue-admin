@@ -18,7 +18,6 @@ func RunWindowsServer() {
 	}
 	Router := initialize.Routers()
 	Router.Static("/form-generator", "./resource/page")
-	Router.Static("/admin", "./resource/dist")
 
 	//InstallPlugs(Router)
 	// end 插件描述

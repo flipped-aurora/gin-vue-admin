@@ -2,6 +2,13 @@ FROM node:12.16.1 as gva-web
 
 WORKDIR /gva_web/
 COPY web/ .
+
+RUN cat .env.production
+COPY docker/web-handle.sh .
+RUN sh ./web-handle.sh
+RUN cat .env.production
+RUN rm -f web-handle.sh
+
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
 RUN cnpm install || npm install
 RUN npm run build
@@ -12,6 +19,15 @@ ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.io,direct
 WORKDIR /go/src/gin-vue-admin
 COPY server/ ./
+
+RUN cat ./core/server.go
+RUN cat ./config.yaml
+COPY docker/server-handle.sh .
+RUN sh ./server-handle.sh
+RUN rm -f server-handle.sh
+RUN cat ./core/server.go
+RUN cat ./config.yaml
+
 RUN go env && go list && go build -o gva-server .
 
 

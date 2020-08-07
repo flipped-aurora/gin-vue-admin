@@ -278,24 +278,27 @@ swag init
 > https://space.bilibili.com/322210472/channel/detail?cid=108884
 
 ## 8. 联系方式
+
 ### 8.1 技术群
-| QQ群 |  
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 ### QQ交流群：622360840
-### 微信交流群：可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
+| QQ 群(满) |
+|  :---:  |   
+| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+
+### 微信交流群
+可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
 
 ### 8.2 项目组成员
-| 蒋 | 尹 | 严 | 杜 | 印 | 宋 |
+| 蒋 | 严 | 尹 | 杜 | 印 | 宋 |
 |  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
 
 |  昵称   | 项目职务  | 姓  |
 |  ----  | ----  | ----  |
 | [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
+| [@Ruio9244](https://github.com/Ruio9244)  | 架构师 | 严 |
 | [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
-| [@Ruio9244](https://github.com/Ruio9244)  | 全栈开发 | 严 |
 | [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
 | [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
 | [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |

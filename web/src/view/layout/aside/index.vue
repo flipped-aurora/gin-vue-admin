@@ -22,49 +22,60 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
-import AsideComponent from '@/view/layout/aside/asideComponent'
+import { mapGetters, mapMutations } from "vuex";
+import AsideComponent from "@/view/layout/aside/asideComponent";
 export default {
-  name: 'Aside',
+  name: "Aside",
   data() {
     return {
-      active: '',
+      active: "",
       isCollapse: false
-    }
+    };
   },
   methods: {
-    ...mapMutations('history', ['addHistory']),
-    selectMenuItem(index) {
-      if (index === this.$route.name) return
-      this.$router.push({ name: index })
+    ...mapMutations("history", ["addHistory"]),
+    selectMenuItem(index, _, ele) {
+      const query = {};
+      const params = {};
+      ele.route.parameters &&
+        ele.route.parameters.map(item => {
+          if (item.type == "query") {
+            query[item.key] = item.value;
+          } else {
+            params[item.key] = item.value;
+          }
+        });
+      console.log(query, params);
+      if (index === this.$route.name) return;
+      this.$router.push({ name: index, query, params });
     }
   },
   computed: {
-    ...mapGetters('router', ['asyncRouters'])
+    ...mapGetters("router", ["asyncRouters"])
   },
   components: {
     AsideComponent
   },
   created() {
-    this.active = this.$route.name
-    let screenWidth = document.body.clientWidth
+    this.active = this.$route.name;
+    let screenWidth = document.body.clientWidth;
     if (screenWidth < 1000) {
-      this.isCollapse = !this.isCollapse
+      this.isCollapse = !this.isCollapse;
     }
 
-    this.$bus.on('collapse', item => {
-      this.isCollapse = item
-    })
+    this.$bus.on("collapse", item => {
+      this.isCollapse = item;
+    });
   },
   watch: {
     $route() {
-      this.active = this.$route.name
+      this.active = this.$route.name;
     }
   },
   beforeDestroy() {
-    this.$bus.off('collapse')
+    this.$bus.off("collapse");
   }
-}
+};
 </script>
 
 <style lang="scss">

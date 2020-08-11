@@ -30,15 +30,29 @@
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
         <template slot-scope="scope">
-          <el-button @click="addMenu(scope.row.ID)" size="small" type="primary" icon="el-icon-edit">添加子菜单</el-button>
-          <el-button @click="editMenu(scope.row.ID)" size="small" type="primary" icon="el-icon-edit" >编辑</el-button>
-          <el-button @click="deleteMenu(scope.row.ID)" size="small" type="danger" icon="el-icon-delete" >删除</el-button>
+          <el-button
+            @click="addMenu(scope.row.ID)"
+            size="small"
+            type="primary"
+            icon="el-icon-edit"
+          >添加子菜单</el-button>
+          <el-button
+            @click="editMenu(scope.row.ID)"
+            size="small"
+            type="primary"
+            icon="el-icon-edit"
+          >编辑</el-button>
+          <el-button
+            @click="deleteMenu(scope.row.ID)"
+            size="small"
+            type="danger"
+            icon="el-icon-delete"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
     <el-dialog :before-close="handleClose" :title="dialogTitle" :visible.sync="dialogFormVisible">
-      
       <el-form
         :inline="true"
         :model="form"
@@ -105,6 +119,50 @@
         </el-form-item>
       </el-form>
       <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>
+      <div>
+        <el-button
+          size="small"
+          type="primary"
+          icon="el-icon-edit"
+          @click="addParameter(form.parameters)"
+        >新增菜单参数</el-button>
+        <el-table :data="form.parameters" stripe style="width: 100%">
+          <el-table-column prop="type" label="参数类型" width="180">
+            <template slot-scope="scope">
+              <el-select v-model="scope.row.type" placeholder="请选择">
+                <el-option key="query" value="query" label="query"></el-option>
+                <el-option key="params" value="params" label="params"></el-option>
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column prop="key" label="参数key" width="180">
+            <template slot-scope="scope">
+              <div>
+                <el-input v-model="scope.row.key"></el-input>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column prop="value" label="参数值">
+            <template slot-scope="scope">
+              <div>
+                <el-input v-model="scope.row.value"></el-input>
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot-scope="scope">
+              <div>
+                <el-button
+                  type="danger"
+                  size="small"
+                  icon="el-icon-delete"
+                  @click="deleteParameter(form.parameters,scope.$index)"
+                >删除</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -122,66 +180,77 @@ import {
   addBaseMenu,
   deleteBaseMenu,
   getBaseMenuById
-} from '@/api/menu'
-import infoList from '@/components/mixins/infoList'
-import icon from '@/view/superAdmin/menu/icon'
+} from "@/api/menu";
+import infoList from "@/components/mixins/infoList";
+import icon from "@/view/superAdmin/menu/icon";
 export default {
-  name: 'Menus',
+  name: "Menus",
   mixins: [infoList],
   data() {
     return {
       checkFlag: false,
       listApi: getMenuList,
       dialogFormVisible: false,
-      dialogTitle: '新增菜单',
+      dialogTitle: "新增菜单",
       menuOption: [
         {
-          ID: '0',
-          title: '根菜单'
+          ID: "0",
+          title: "根菜单"
         }
       ],
       form: {
         ID: 0,
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
+        path: "",
+        name: "",
+        hidden: "",
+        parentId: "",
+        component: "",
         meta: {
-          title: '',
-          icon: '',
+          title: "",
+          icon: "",
           defaultMenu: false,
           keepAlive: false
-        }
+        },
+        parameters: []
       },
       rules: {
-        path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
+        path: [{ required: true, message: "请输入菜单name", trigger: "blur" }],
         component: [
-          { required: true, message: '请输入文件路径', trigger: 'blur' }
+          { required: true, message: "请输入文件路径", trigger: "blur" }
         ],
-        'meta.title': [
-          { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
+        "meta.title": [
+          { required: true, message: "请输入菜单展示名称", trigger: "blur" }
         ]
       },
       isEdit: false,
-      test: ''
-    }
+      test: ""
+    };
   },
   components: {
     icon
   },
   methods: {
+    addParameter(parameters) {
+      parameters.push({
+        type: "query",
+        key: "",
+        value: ""
+      });
+    },
+    deleteParameter(parameters, index) {
+      parameters.splice(index, 1);
+    },
     changeName() {
-      this.form.path = this.form.name
+      this.form.path = this.form.name;
     },
     setOptions() {
       this.menuOption = [
         {
-          ID: '0',
-          title: '根目录'
+          ID: "0",
+          title: "根目录"
         }
-      ]
-      this.setMenuOptions(this.tableData, this.menuOption, false)
+      ];
+      this.setMenuOptions(this.tableData, this.menuOption, false);
     },
     setMenuOptions(menuData, optionsData, disabled) {
       menuData &&
@@ -192,137 +261,137 @@ export default {
               ID: String(item.ID),
               disabled: disabled || item.ID == this.form.ID,
               children: []
-            }
+            };
             this.setMenuOptions(
               item.children,
               option.children,
               disabled || item.ID == this.form.ID
-            )
-            optionsData.push(option)
+            );
+            optionsData.push(option);
           } else {
             const option = {
               title: item.meta.title,
               ID: String(item.ID),
               disabled: disabled || item.ID == this.form.ID
-            }
-            optionsData.push(option)
+            };
+            optionsData.push(option);
           }
-        })
+        });
     },
     handleClose(done) {
-      this.initForm()
-      done()
+      this.initForm();
+      done();
     },
     // 懒加载子菜单
     load(tree, treeNode, resolve) {
       resolve([
         {
           id: 31,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄"
         },
         {
           id: 32,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄"
         }
-      ])
+      ]);
     },
     // 删除菜单
     deleteMenu(ID) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("此操作将永久删除所有角色下该菜单, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(async () => {
-          const res = await deleteBaseMenu({ ID })
+          const res = await deleteBaseMenu({ ID });
           if (res.code == 0) {
             this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getTableData()
+              type: "success",
+              message: "删除成功!"
+            });
+            this.getTableData();
           }
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     // 初始化弹窗内表格方法
     initForm() {
-      this.checkFlag = false
-      this.$refs.menuForm.resetFields()
+      this.checkFlag = false;
+      this.$refs.menuForm.resetFields();
       this.form = {
         ID: 0,
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
+        path: "",
+        name: "",
+        hidden: "",
+        parentId: "",
+        component: "",
         meta: {
-          title: '',
-          icon: '',
+          title: "",
+          icon: "",
           defaultMenu: false,
-          keepAlive: ''
+          keepAlive: ""
         }
-      }
+      };
     },
     // 关闭弹窗
     closeDialog() {
-      this.initForm()
-      this.dialogFormVisible = false
+      this.initForm();
+      this.dialogFormVisible = false;
     },
     // 添加menu
     async enterDialog() {
       this.$refs.menuForm.validate(async valid => {
         if (valid) {
-          let res
+          let res;
           if (this.isEdit) {
-            res = await updateBaseMenu(this.form)
+            res = await updateBaseMenu(this.form);
           } else {
-            res = await addBaseMenu(this.form)
+            res = await addBaseMenu(this.form);
           }
           if (res.code == 0) {
             this.$message({
-              type: 'success',
-              message: this.isEdit ? '编辑成功' : '添加成功!'
-            })
-            this.getTableData()
+              type: "success",
+              message: this.isEdit ? "编辑成功" : "添加成功!"
+            });
+            this.getTableData();
           }
-          this.initForm()
-          this.dialogFormVisible = false
+          this.initForm();
+          this.dialogFormVisible = false;
         }
-      })
+      });
     },
     // 添加菜单方法，id为 0则为添加根菜单
     addMenu(id) {
-      this.dialogTitle = '新增菜单'
-      this.form.parentId = String(id)
-      this.isEdit = false
-      this.setOptions()
-      this.dialogFormVisible = true
+      this.dialogTitle = "新增菜单";
+      this.form.parentId = String(id);
+      this.isEdit = false;
+      this.setOptions();
+      this.dialogFormVisible = true;
     },
     // 修改菜单方法
     async editMenu(id) {
-      this.dialogTitle = '编辑菜单'
-      const res = await getBaseMenuById({ id })
-      this.form = res.data.menu
-      this.isEdit = true
-      this.setOptions()
-      this.dialogFormVisible = true
+      this.dialogTitle = "编辑菜单";
+      const res = await getBaseMenuById({ id });
+      this.form = res.data.menu;
+      this.isEdit = true;
+      this.setOptions();
+      this.dialogFormVisible = true;
     }
   },
   async created() {
-    this.pageSize = 999
-    await this.getTableData()
+    this.pageSize = 999;
+    await this.getTableData();
   }
-}
+};
 </script>
 <style scoped lang="scss">
 .button-box {

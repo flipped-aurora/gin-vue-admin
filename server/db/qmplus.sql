@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : qmplus
+ Source Server         : pandora
  Source Server Type    : MySQL
- Source Server Version : 50644
+ Source Server Version : 50640
  Source Host           : localhost:3306
  Source Schema         : qmplus
 
  Target Server Type    : MySQL
- Target Server Version : 50644
+ Target Server Version : 50640
  File Encoding         : 65001
 
- Date: 08/07/2020 10:08:22
+ Date: 11/08/2020 23:22:30
 */
 
 SET NAMES utf8mb4;
@@ -446,6 +446,23 @@ INSERT INTO `sys_authority_menus` VALUES ('9528', 41);
 INSERT INTO `sys_authority_menus` VALUES ('9528', 42);
 
 -- ----------------------------
+-- Table structure for sys_base_menu_parameters
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_base_menu_parameters`;
+CREATE TABLE `sys_base_menu_parameters`  (
+  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `deleted_at` datetime(0) NULL DEFAULT NULL,
+  `sys_base_menu_id` int(10) UNSIGNED NULL DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `value` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_sys_base_menu_parameters_deleted_at`(`deleted_at`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
 -- Table structure for sys_base_menus
 -- ----------------------------
 DROP TABLE IF EXISTS `sys_base_menus`;
@@ -619,7 +636,12 @@ CREATE TABLE `sys_operation_records`  (
   `resp` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL COMMENT '响应Body',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_operation_records_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 342 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 343 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sys_operation_records
+-- ----------------------------
+INSERT INTO `sys_operation_records` VALUES (342, '2020-08-11 23:21:30', '2020-08-11 23:21:30', NULL, '127.0.0.1', 'POST', '/authority/getAuthorityList', 200, 3906600, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36', '', '{\"page\":1,\"pageSize\":999}', 10, '{\"code\":0,\"data\":{\"list\":[{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-06-13T16:07:37+08:00\",\"DeletedAt\":null,\"authorityId\":\"888\",\"authorityName\":\"普通用户\",\"parentId\":\"0\",\"dataAuthorityId\":[{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-06-13T16:07:37+08:00\",\"DeletedAt\":null,\"authorityId\":\"888\",\"authorityName\":\"普通用户\",\"parentId\":\"0\",\"dataAuthorityId\":null,\"children\":null,\"menus\":null},{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-04-24T10:16:42+08:00\",\"DeletedAt\":null,\"authorityId\":\"8881\",\"authorityName\":\"普通用户子角色\",\"parentId\":\"888\",\"dataAuthorityId\":null,\"children\":null,\"menus\":null},{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-04-24T10:16:42+08:00\",\"DeletedAt\":null,\"authorityId\":\"9528\",\"authorityName\":\"测试角色\",\"parentId\":\"0\",\"dataAuthorityId\":null,\"children\":null,\"menus\":null}],\"children\":[{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-04-24T10:16:42+08:00\",\"DeletedAt\":null,\"authorityId\":\"8881\",\"authorityName\":\"普通用户子角色\",\"parentId\":\"888\",\"dataAuthorityId\":[],\"children\":[],\"menus\":null}],\"menus\":null},{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-04-24T10:16:42+08:00\",\"DeletedAt\":null,\"authorityId\":\"9528\",\"authorityName\":\"测试角色\",\"parentId\":\"0\",\"dataAuthorityId\":[{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-04-24T10:16:42+08:00\",\"DeletedAt\":null,\"authorityId\":\"8881\",\"authorityName\":\"普通用户子角色\",\"parentId\":\"888\",\"dataAuthorityId\":null,\"children\":null,\"menus\":null},{\"CreatedAt\":\"2020-04-04T11:44:56+08:00\",\"UpdatedAt\":\"2020-04-24T10:16:42+08:00\",\"DeletedAt\":null,\"authorityId\":\"9528\",\"authorityName\":\"测试角色\",\"parentId\":\"0\",\"dataAuthorityId\":null,\"children\":null,\"menus\":null}],\"children\":[],\"menus\":null}],\"total\":0,\"page\":1,\"pageSize\":999},\"msg\":\"操作成功\"}');
 
 -- ----------------------------
 -- Table structure for sys_users
@@ -688,6 +710,6 @@ CREATE TABLE `sys_workflows`  (
 -- View structure for authority_menu
 -- ----------------------------
 DROP VIEW IF EXISTS `authority_menu`;
-CREATE ALGORITHM = UNDEFINED DEFINER = `root`@`localhost` SQL SECURITY DEFINER VIEW `authority_menu` AS select `sys_base_menus`.`id` AS `id`,`sys_base_menus`.`created_at` AS `created_at`,`sys_base_menus`.`updated_at` AS `updated_at`,`sys_base_menus`.`deleted_at` AS `deleted_at`,`sys_base_menus`.`menu_level` AS `menu_level`,`sys_base_menus`.`parent_id` AS `parent_id`,`sys_base_menus`.`path` AS `path`,`sys_base_menus`.`name` AS `name`,`sys_base_menus`.`hidden` AS `hidden`,`sys_base_menus`.`component` AS `component`,`sys_base_menus`.`title` AS `title`,`sys_base_menus`.`icon` AS `icon`,`sys_base_menus`.`nick_name` AS `nick_name`,`sys_base_menus`.`sort` AS `sort`,`sys_authority_menus`.`sys_authority_authority_id` AS `authority_id`,`sys_authority_menus`.`sys_base_menu_id` AS `menu_id`,`sys_base_menus`.`keep_alive` AS `keep_alive`,`sys_base_menus`.`default_menu` AS `default_menu` from (`sys_authority_menus` join `sys_base_menus` on((`sys_authority_menus`.`sys_base_menu_id` = `sys_base_menus`.`id`)));
+CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `authority_menu` AS select `sys_base_menus`.`id` AS `id`,`sys_base_menus`.`created_at` AS `created_at`,`sys_base_menus`.`updated_at` AS `updated_at`,`sys_base_menus`.`deleted_at` AS `deleted_at`,`sys_base_menus`.`menu_level` AS `menu_level`,`sys_base_menus`.`parent_id` AS `parent_id`,`sys_base_menus`.`path` AS `path`,`sys_base_menus`.`name` AS `name`,`sys_base_menus`.`hidden` AS `hidden`,`sys_base_menus`.`component` AS `component`,`sys_base_menus`.`title` AS `title`,`sys_base_menus`.`icon` AS `icon`,`sys_base_menus`.`nick_name` AS `nick_name`,`sys_base_menus`.`sort` AS `sort`,`sys_authority_menus`.`sys_authority_authority_id` AS `authority_id`,`sys_authority_menus`.`sys_base_menu_id` AS `menu_id`,`sys_base_menus`.`keep_alive` AS `keep_alive`,`sys_base_menus`.`default_menu` AS `default_menu` from (`sys_authority_menus` join `sys_base_menus` on((`sys_authority_menus`.`sys_base_menu_id` = `sys_base_menus`.`id`)));
 
 SET FOREIGN_KEY_CHECKS = 1;

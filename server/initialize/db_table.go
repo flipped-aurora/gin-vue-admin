@@ -12,6 +12,7 @@ func DBTables() {
 		model.SysAuthority{},
 		model.SysApi{},
 		model.SysBaseMenu{},
+		model.SysBaseMenuParameter{},
 		model.JwtBlacklist{},
 		model.SysWorkflow{},
 		model.SysWorkflowStepInfo{},

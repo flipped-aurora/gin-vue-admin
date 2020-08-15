@@ -29,6 +29,7 @@ func Routers() *gin.Engine {
 	router.InitAuthorityRouter(ApiGroup)             // 注册角色路由
 	router.InitApiRouter(ApiGroup)                   // 注册功能api路由
 	router.InitFileUploadAndDownloadRouter(ApiGroup) // 文件上传下载功能路由
+	router.InitSimpleUploaderRouter(ApiGroup)        // 断点续传（插件版）
 	router.InitWorkflowRouter(ApiGroup)              // 工作流相关路由
 	router.InitCasbinRouter(ApiGroup)                // 权限相关路由
 	router.InitJwtRouter(ApiGroup)                   // jwt相关路由
@@ -38,6 +39,7 @@ func Routers() *gin.Engine {
 	router.InitSysDictionaryDetailRouter(ApiGroup)   // 字典详情管理
 	router.InitSysDictionaryRouter(ApiGroup)         // 字典管理
 	router.InitSysOperationRecordRouter(ApiGroup)    // 操作记录
+
 	global.GVA_LOG.Info("router register success")
 	return Router
 }

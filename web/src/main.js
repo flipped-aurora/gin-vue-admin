@@ -51,6 +51,8 @@ import {auth} from '@/directive/auth'
 // 按钮权限指令
 auth(Vue)
 
+import uploader from 'vue-simple-uploader'
+Vue.use(uploader)
 
 new Vue({
     render: h => h(App),

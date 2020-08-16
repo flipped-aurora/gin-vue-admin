@@ -12,6 +12,7 @@
         :key="item.name"
         :label="item.meta.title"
         :name="item.name"
+        :tab="item"
         v-for="item in historys"
       ></el-tab-pane>
     </el-tabs>
@@ -136,12 +137,15 @@ export default {
         const obj = {}
         obj.name = route.name
         obj.meta = route.meta
+        obj.query = route.query
+        obj.params = route.params
         this.historys.push(obj)
       }
       this.activeValue = this.$route.name
     },
-    changeTab(tab) {
-      this.$router.push({ name: tab.name })
+    changeTab(component) {
+      const tab = component.$attrs.tab
+      this.$router.push({ name: tab.name,query:tab.query,params:tab.params })
     },
     removeTab(tab) {
       const index = this.historys.findIndex(item => item.name == tab)

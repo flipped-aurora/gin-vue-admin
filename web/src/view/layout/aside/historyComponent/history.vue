@@ -100,36 +100,55 @@ export default {
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     closeLeft() {
+      let right
       const rightIndex = this.historys.findIndex(
-        item => item.name == this.rightActive
+        item => {
+          if(item.name == this.rightActive){
+            right = item
+          }
+          return item.name == this.rightActive
+        }
       )
       const activeIndex = this.historys.findIndex(
         item => item.name == this.activeValue
       )
       this.historys.splice(0, rightIndex)
       if (rightIndex > activeIndex) {
-        this.$router.push({ name: this.rightActive })
+        this.$router.push(right)
       }
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     closeRight() {
+      let right
       const leftIndex = this.historys.findIndex(
-        item => item.name == this.rightActive
+        item => {
+          if(item.name == this.rightActive){
+            right = item
+          }
+          return item.name == this.rightActive
+        }
       )
       const activeIndex = this.historys.findIndex(
         item => item.name == this.activeValue
       )
       this.historys.splice(leftIndex + 1, this.historys.length)
       if (leftIndex < activeIndex) {
-        this.$router.push({ name: this.rightActive })
+        this.$router.push(right)
       }
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     closeOther() {
+      let right
       this.historys = this.historys.filter(
-        item => item.name == this.rightActive
+        item => {
+          if(item.name == this.rightActive){
+            right = item
+          }
+          return item.name == this.rightActive
+        }
       )
-      this.$router.push({ name: this.rightActive })
+      console.log(right)
+      this.$router.push(right)
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     setTab(route) {
@@ -154,9 +173,9 @@ export default {
           this.$router.push({ name: 'dashboard' })
         } else {
           if (index < this.historys.length - 1) {
-            this.$router.push({ name: this.historys[index + 1].name })
+            this.$router.push({ name: this.historys[index + 1].name,query:this.historys[index + 1].query,params:this.historys[index + 1].params })
           } else {
-            this.$router.push({ name: this.historys[index - 1].name })
+            this.$router.push({ name: this.historys[index - 1].name,query:this.historys[index - 1].query,params:this.historys[index - 1].params })
           }
         }
       }

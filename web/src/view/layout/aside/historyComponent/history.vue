@@ -147,7 +147,6 @@ export default {
           return item.name == this.rightActive
         }
       )
-      console.log(right)
       this.$router.push(right)
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },

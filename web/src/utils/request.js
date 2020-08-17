@@ -21,13 +21,13 @@ const showLoading = () => {
 }
 
 const closeLoading = () => {
-    acitveAxios--
-    if (acitveAxios <= 0) {
-        clearTimeout(timer)
-        loadingInstance && loadingInstance.close()
+        acitveAxios--
+        if (acitveAxios <= 0) {
+            clearTimeout(timer)
+            loadingInstance && loadingInstance.close()
+        }
     }
-}
-//http request 拦截器
+    //http request 拦截器
 service.interceptors.request.use(
     config => {
         showLoading()
@@ -37,7 +37,7 @@ service.interceptors.request.use(
         config.headers = {
             'Content-Type': 'application/json',
             'x-token': token,
-            'x-user-id':user.ID
+            'x-user-id': user.ID
         }
         return config;
     },
@@ -57,6 +57,9 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         closeLoading()
+        if (response.headers["new-token"]) {
+            store.commit('user/setToken', response.headers["new-token"])
+        }
         if (response.data.code == 0 || response.headers.success === "true") {
             return response.data
         } else {

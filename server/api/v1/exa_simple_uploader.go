@@ -52,7 +52,7 @@ func SimpleUploaderUpload(c *gin.Context) {
 // @Security ApiKeyAuth
 
 // @Produce  application/json
-// @Param params md5 get "测试文件是否已经存在和判断已经上传过的切片"
+// @Param md5 query string true "测试文件是否已经存在和判断已经上传过的切片"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /simpleUploader/checkFileMd5 [get]
 func CheckFileMd5(c *gin.Context) {
@@ -72,7 +72,7 @@ func CheckFileMd5(c *gin.Context) {
 // @Summary 合并文件
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param params md5 get "合并文件"
+// @Param md5 query string true "合并文件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"合并成功"}"
 // @Router /simpleUploader/mergeFileMd5 [get]
 func MergeFileMd5(c *gin.Context) {

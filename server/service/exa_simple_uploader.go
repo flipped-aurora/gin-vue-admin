@@ -55,6 +55,10 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 	//删除切片信息
 	err = tx.Delete(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, false).Error
 	// 添加文件信息
+	if err != nil {
+		fmt.Println(err)
+		tx.Rollback()
+	}
 	err = tx.Create(&model.ExaSimpleUploader{
 		Identifier: md5,
 		IsDone:     true,

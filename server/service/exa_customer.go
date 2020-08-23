@@ -58,7 +58,7 @@ func GetExaCustomer(id uint) (err error, customer model.ExaCustomer) {
 // @param     info            PageInfo
 // @return                    error
 
-func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err error, list interface{}, total int) {
+func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.ExaCustomer{})

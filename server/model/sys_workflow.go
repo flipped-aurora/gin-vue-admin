@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // 工作流属性表

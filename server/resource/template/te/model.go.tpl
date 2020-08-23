@@ -2,7 +2,7 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // 如果含有time.Time 请自行import time包

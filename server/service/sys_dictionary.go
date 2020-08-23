@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gorm.io/gorm"
 )
 
 // @title    CreateSysDictionary
@@ -14,7 +15,7 @@ import (
 // @return    err             error
 
 func CreateSysDictionary(sysDictionary model.SysDictionary) (err error) {
-	if (!global.GVA_DB.First(&model.SysDictionary{}, "type = ?", sysDictionary.Type).RecordNotFound()) {
+	if (!errors.Is(global.GVA_DB.First(&model.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
 		return errors.New("存在相同的type，不允许创建")
 	}
 	err = global.GVA_DB.Create(&sysDictionary).Error
@@ -28,7 +29,7 @@ func CreateSysDictionary(sysDictionary model.SysDictionary) (err error) {
 // @return                    error
 
 func DeleteSysDictionary(sysDictionary model.SysDictionary) (err error) {
-	err = global.GVA_DB.Delete(sysDictionary).Related(&sysDictionary.SysDictionaryDetails).Delete(&sysDictionary.SysDictionaryDetails).Error
+	err = global.GVA_DB.Delete(sysDictionary).Delete(&sysDictionary.SysDictionaryDetails).Error
 	return err
 }
 
@@ -50,7 +51,7 @@ func UpdateSysDictionary(sysDictionary *model.SysDictionary) (err error) {
 	if dict.Type == sysDictionary.Type {
 		err = db.Updates(sysDictionaryMap).Error
 	} else {
-		if (!global.GVA_DB.First(&model.SysDictionary{}, "type = ?", sysDictionary.Type).RecordNotFound()) {
+		if (!errors.Is(global.GVA_DB.First(&model.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
 			return errors.New("存在相同的type，不允许创建")
 		} else {
 			err = db.Updates(sysDictionaryMap).Error
@@ -77,7 +78,7 @@ func GetSysDictionary(Type string, Id uint) (err error, sysDictionary model.SysD
 // @param     info            PageInfo
 // @return                    error
 
-func GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list interface{}, total int) {
+func GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

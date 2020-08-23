@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 type SysBaseMenu struct {
@@ -15,7 +15,7 @@ type SysBaseMenu struct {
 	Sort          int    `json:"sort" gorm:"comment:'排序标记'"`
 	Meta          `json:"meta" gorm:"comment:'附加属性'"`
 	SysAuthoritys []SysAuthority         `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
-	Children      []SysBaseMenu          `json:"children"`
+	Children      []SysBaseMenu          `json:"children" gorm:"-"`
 	Parameters    []SysBaseMenuParameter `json:"parameters"`
 }
 
@@ -28,7 +28,7 @@ type Meta struct {
 
 type SysBaseMenuParameter struct {
 	gorm.Model
-	SysBaseMenuId uint
+	SysBaseMenuID uint
 	Type          string `json:"type" gorm:"commit:'地址栏携带参数为params还是query'"`
 	Key           string `json:"key" gorm:"commit:'地址栏携带参数的key'"`
 	Value         string `json:"value" gorm:"commit:'地址栏携带参数的值'"`

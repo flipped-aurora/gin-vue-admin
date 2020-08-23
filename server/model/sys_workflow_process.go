@@ -1,6 +1,6 @@
 package model
 
-import "github.com/jinzhu/gorm"
+import "gorm.io/gorm"
 
 // 工作流流转表
 type SysWorkFlowProcess struct {

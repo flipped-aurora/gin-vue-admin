@@ -68,7 +68,7 @@ func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructNa
 // @param     info            PageInfo
 // @return                    error
 
-func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int) {
+func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db

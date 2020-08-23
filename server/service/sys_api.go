@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gorm.io/gorm"
 )
 
 // @title    CreateApi
@@ -46,7 +47,7 @@ func DeleteApi(api model.SysApi) (err error) {
 // @return    list            interface{}
 // @return    total           int
 
-func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int) {
+func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.SysApi{})
@@ -81,9 +82,9 @@ func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc 
 			} else {
 				OrderStr = order
 			}
-			err = db.Order(OrderStr, true).Find(&apiList).Error
+			err = db.Order(OrderStr).Find(&apiList).Error
 		} else {
-			err = db.Order("api_group", true).Find(&apiList).Error
+			err = db.Order("api_group").Find(&apiList).Error
 		}
 	}
 	return err, apiList, total
@@ -124,7 +125,7 @@ func UpdateApi(api model.SysApi) (err error) {
 	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
 
 	if oldA.Path != api.Path || oldA.Method != api.Method {
-		flag := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).Find(&model.SysApi{}).RecordNotFound()
+		flag := errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).Find(&model.SysApi{}).Error, gorm.ErrRecordNotFound)
 		if !flag {
 			return errors.New("存在相同api路径")
 		}

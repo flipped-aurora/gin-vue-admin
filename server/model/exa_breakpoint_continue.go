@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // file struct, 文件结构体

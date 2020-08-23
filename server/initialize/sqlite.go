@@ -7,7 +7,7 @@ package initialize
 // import (
 // 	"fmt"
 // 	"gin-vue-admin/global"
-// 	"github.com/jinzhu/gorm"
+// 	"gorm.io/gorm"
 // 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 // )
 //

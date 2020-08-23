@@ -24,7 +24,7 @@ func CreateSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err 
 // @return                    error
 
 func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]model.SysOperationRecord{},"id in (?)",ids.Ids).Error
+	err = global.GVA_DB.Delete(&[]model.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }
 
@@ -68,7 +68,7 @@ func GetSysOperationRecord(id uint) (err error, sysOperationRecord model.SysOper
 // @param     info            PageInfo
 // @return                    error
 
-func GetSysOperationRecordInfoList(info request.SysOperationRecordSearch) (err error, list interface{}, total int) {
+func GetSysOperationRecordInfoList(info request.SysOperationRecordSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

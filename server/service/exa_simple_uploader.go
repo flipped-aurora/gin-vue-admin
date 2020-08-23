@@ -1,9 +1,11 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -17,7 +19,7 @@ func SaveChunk(uploader model.ExaSimpleUploader) (err error) {
 // 检查文件是否已经上传过
 func CheckFileMd5(md5 string) (err error, uploads []model.ExaSimpleUploader, isDone bool) {
 	err = global.GVA_DB.Find(&uploads, "identifier = ? AND is_done = ?", md5, false).Error
-	isDone = global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).RecordNotFound()
+	isDone = errors.Is(global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound)
 	return err, uploads, !isDone
 }
 
@@ -26,7 +28,7 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 	finishDir := "./finish/"
 	dir := "./chunk/" + md5
 	//如果文件上传成功 不做后续操作 通知成功即可
-	notFinish := global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).RecordNotFound()
+	notFinish := errors.Is(global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound)
 	if !notFinish {
 		return nil
 	}

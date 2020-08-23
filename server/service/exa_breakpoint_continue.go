@@ -1,8 +1,10 @@
 package service
 
 import (
+	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gorm.io/gorm"
 )
 
 // @title         FindOrCreateFile
@@ -20,7 +22,7 @@ func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err erro
 	cfile.FileMd5 = fileMd5
 	cfile.FileName = fileName
 	cfile.ChunkTotal = chunkTotal
-	notHaveSameMd5Finish := global.GVA_DB.Where("file_md5 = ? AND is_finish = ?", fileMd5, true).First(&file).RecordNotFound()
+	notHaveSameMd5Finish := errors.Is(global.GVA_DB.Where("file_md5 = ? AND is_finish = ?", fileMd5, true).First(&file).Error, gorm.ErrRecordNotFound)
 	if notHaveSameMd5Finish {
 		err = global.GVA_DB.Where("file_md5 = ? AND file_name = ?", fileMd5, fileName).Preload("ExaFileChunk").FirstOrCreate(&file, cfile).Error
 		return err, file

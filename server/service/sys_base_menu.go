@@ -60,7 +60,6 @@ func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	}
 	err = global.GVA_DB.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
 	err = db.Updates(upDateMap).Association("Parameters").Replace(menu.Parameters)
-	global.GVA_LOG.Debug("菜单修改时候，关联菜单err:%v", err)
 	return err
 }
 

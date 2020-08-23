@@ -34,7 +34,7 @@ func OperationRecord() gin.HandlerFunc {
 			Path:   c.Request.URL.Path,
 			Agent:  c.Request.UserAgent(),
 			Body:   string(body),
-			UserId: userId,
+			UserID: userId,
 		}
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,

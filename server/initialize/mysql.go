@@ -25,7 +25,9 @@ func Mysql() {
 			Logger: logger.Default.LogMode(logger.Info),
 		}
 	} else {
-		gormConfig = &gorm.Config{}
+		gormConfig = &gorm.Config{
+			Logger: logger.Default.LogMode(logger.Silent),
+		}
 	}
 
 	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig); err != nil {

@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
+	"gorm.io/gorm"
 	"strconv"
 )
 
@@ -18,7 +19,7 @@ import (
 
 func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
-	notHas := global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&authorityBox).RecordNotFound()
+	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&authorityBox).Error, gorm.ErrRecordNotFound)
 	if !notHas {
 		return errors.New("存在相同角色id"), auth
 	}
@@ -35,7 +36,7 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 
 func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
-	notHas := global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).Find(&authorityBox).RecordNotFound()
+	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).Find(&authorityBox).Error, gorm.ErrRecordNotFound)
 	if !notHas {
 		return errors.New("存在相同角色id"), authority
 	}
@@ -90,7 +91,7 @@ func DeleteAuthority(auth *model.SysAuthority) (err error) {
 	}
 	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth)
 	if len(auth.SysBaseMenus) > 0 {
-		err = db.Association("SysBaseMenus").Delete(auth.SysBaseMenus).Error
+		err = db.Association("SysBaseMenus").Delete(auth.SysBaseMenus)
 	} else {
 		err = db.Error
 	}
@@ -105,7 +106,7 @@ func DeleteAuthority(auth *model.SysAuthority) (err error) {
 // @return                    error
 // 分页获取数据
 
-func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int) {
+func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
@@ -140,7 +141,7 @@ func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority
 func SetDataAuthority(auth model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
-	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId).Error
+	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
 	return err
 }
 
@@ -153,7 +154,7 @@ func SetDataAuthority(auth model.SysAuthority) error {
 func SetMenuAuthority(auth *model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", auth.AuthorityId)
-	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus).Error
+	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus)
 	return err
 }
 

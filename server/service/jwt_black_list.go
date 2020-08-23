@@ -1,8 +1,10 @@
 package service
 
 import (
+	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -25,7 +27,7 @@ func JsonInBlacklist(jwtList model.JwtBlacklist) (err error) {
 // @return    err             error
 
 func IsBlacklist(jwt string) bool {
-	isNotFound := global.GVA_DB.Where("jwt = ?", jwt).First(&model.JwtBlacklist{}).RecordNotFound()
+	isNotFound := errors.Is(global.GVA_DB.Where("jwt = ?", jwt).First(&model.JwtBlacklist{}).Error, gorm.ErrRecordNotFound)
 	return !isNotFound
 }
 
@@ -50,7 +52,7 @@ func GetRedisJWT(userName string) (err error, redisJWT string) {
 
 func SetRedisJWT(jwt string, userName string) (err error) {
 	// 此处过期时间等于jwt过期时间
-	timer := 60*60*24*7*time.Second
+	timer := 60 * 60 * 24 * 7 * time.Second
 	err = global.GVA_REDIS.Set(userName, jwt, timer).Err()
 	return err
 }

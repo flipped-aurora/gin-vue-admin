@@ -17,7 +17,7 @@ mysql:
     config: 'charset=utf8&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
-    log-mode: false
+    log-mode: true
 
 #sqlite 配置
 sqlite:

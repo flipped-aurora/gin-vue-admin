@@ -48,7 +48,7 @@ func DeleteFile(file model.ExaFileUploadAndDownload) error {
 // @return    list            error
 // @return    total           error
 
-func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int) {
+func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB

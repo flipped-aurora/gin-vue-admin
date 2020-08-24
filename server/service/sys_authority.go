@@ -19,7 +19,7 @@ import (
 
 func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
-	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&authorityBox).Error, gorm.ErrRecordNotFound)
+	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound)
 	if !notHas {
 		return errors.New("存在相同角色id"), auth
 	}
@@ -36,7 +36,7 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 
 func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
-	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).Find(&authorityBox).Error, gorm.ErrRecordNotFound)
+	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound)
 	if !notHas {
 		return errors.New("存在相同角色id"), authority
 	}
@@ -79,15 +79,13 @@ func UpdateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 // 删除角色
 
 func DeleteAuthority(auth *model.SysAuthority) (err error) {
-	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&model.SysUser{}).Error
-	if err == nil {
-		err = errors.New("此角色有用户正在使用禁止删除")
-		return
+	notHas := errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysUser{}).Error, gorm.ErrRecordNotFound)
+	if !notHas {
+		return errors.New("此角色有用户正在使用禁止删除")
 	}
-	err = global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).Find(&model.SysAuthority{}).Error
-	if err == nil {
-		err = errors.New("此角色存在子角色不允许删除")
-		return
+	notHas = errors.Is(global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).First(&model.SysAuthority{}).Error, gorm.ErrRecordNotFound)
+	if !notHas {
+		return errors.New("此角色存在子角色不允许删除")
 	}
 	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth)
 	if len(auth.SysBaseMenus) > 0 {

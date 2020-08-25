@@ -18,7 +18,7 @@ type ExaFile struct {
 // file chunk struct, 切片结构体
 type ExaFileChunk struct {
 	gorm.Model
-	ExaFileId       uint
+	ExaFileID       uint
 	FileChunkNumber int
 	FileChunkPath   string
 }

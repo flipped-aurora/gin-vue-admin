@@ -24,6 +24,7 @@ func main() {
 		initialize.Mysql()
 	}
 	initialize.DBTables()
+	//initialize.Data()
 	// 程序结束前关闭数据库链接
 	db, _ := global.GVA_DB.DB()
 	defer db.Close()

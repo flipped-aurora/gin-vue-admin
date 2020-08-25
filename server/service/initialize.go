@@ -3,6 +3,7 @@ package service
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 )
 
 type SysAuthorityMenus struct {
@@ -12,7 +13,7 @@ type SysAuthorityMenus struct {
 
 type SysDataAuthorityId struct {
 	SysAuthorityAuthorityId string
-	DataAuthorityId         string
+	SysBaseMenuId         string
 }
 
 func InitSysApi() (err error) {
@@ -44,13 +45,13 @@ func InitExaCustomer() (err error) {
 
 func InitCasbinModel() (err error) {
 	if !global.GVA_DB.Migrator().HasTable("casbin_rule"){
-		if err = global.GVA_DB.Exec("DROP TABLE IF EXISTS `casbin_rule`;\nCREATE TABLE `casbin_rule`  (\n  `p_type` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,\n  `v0` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,\n  `v1` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,\n  `v2` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,\n  `v3` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,\n  `v4` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,\n  `v5` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL\n) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin  ROW_FORMAT = Compact;\n").Error; err != nil{
+		if err := global.GVA_DB.Migrator().CreateTable(&gormadapter.CasbinRule{}); err != nil{
 			return err
 		}
 	}
 	tx := global.GVA_DB.Begin() // 开始事务
 	insert := model.CasbinModelData()
-	if tx.Create(&insert).Error != nil { // 遇到错误时回滚事务
+	if tx.Table("casbin_rule").Create(&insert).Error != nil { // 遇到错误时回滚事务
 		tx.Rollback()
 	}
 	return tx.Commit().Error
@@ -75,7 +76,7 @@ func InitSysBaseMenus() (err error) {
 }
 
 func InitAuthorityMenu() (err error) {
-	return global.GVA_DB.Exec("DROP VIEW IF EXISTS `authority_menu`;\nCREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `authority_menu` AS select `sys_base_menus`.`id` AS `id`,`sys_base_menus`.`created_at` AS `created_at`,`sys_base_menus`.`updated_at` AS `updated_at`,`sys_base_menus`.`deleted_at` AS `deleted_at`,`sys_base_menus`.`menu_level` AS `menu_level`,`sys_base_menus`.`parent_id` AS `parent_id`,`sys_base_menus`.`path` AS `path`,`sys_base_menus`.`name` AS `name`,`sys_base_menus`.`hidden` AS `hidden`,`sys_base_menus`.`component` AS `component`,`sys_base_menus`.`title` AS `title`,`sys_base_menus`.`icon` AS `icon`,`sys_base_menus`.`nick_name` AS `nick_name`,`sys_base_menus`.`sort` AS `sort`,`sys_authority_menus`.`sys_authority_authority_id` AS `authority_id`,`sys_authority_menus`.`sys_base_menu_id` AS `menu_id`,`sys_base_menus`.`keep_alive` AS `keep_alive`,`sys_base_menus`.`default_menu` AS `default_menu` from (`sys_authority_menus` join `sys_base_menus` on((`sys_authority_menus`.`sys_base_menu_id` = `sys_base_menus`.`id`)));\n").Error
+	return global.GVA_DB.Exec("DROP VIEW IF EXISTS `authority_menu`;\nCREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `authority_menu` AS\nselect `sys_base_menus`.`id`                              AS `id`,\n       `sys_base_menus`.`created_at`                      AS `created_at`,\n       `sys_base_menus`.`updated_at`                      AS `updated_at`,\n       `sys_base_menus`.`deleted_at`                      AS `deleted_at`,\n       `sys_base_menus`.`menu_level`                      AS `menu_level`,\n       `sys_base_menus`.`parent_id`                       AS `parent_id`,\n       `sys_base_menus`.`path`                            AS `path`,\n       `sys_base_menus`.`name`                            AS `name`,\n       `sys_base_menus`.`hidden`                          AS `hidden`,\n       `sys_base_menus`.`component`                       AS `component`,\n       `sys_base_menus`.`title`                           AS `title`,\n       `sys_base_menus`.`icon`                            AS `icon`,\n       `sys_base_menus`.`sort`                            AS `sort`,\n       `sys_authority_menus`.`sys_authority_authority_id` AS `authority_id`,\n       `sys_authority_menus`.`sys_base_menu_id`           AS `menu_id`,\n       `sys_base_menus`.`keep_alive`                      AS `keep_alive`,\n       `sys_base_menus`.`default_menu`                    AS `default_menu`\nfrom (`sys_authority_menus`\n         join `sys_base_menus` on ((`sys_authority_menus`.`sys_base_menu_id` = `sys_base_menus`.`id`)));").Error
 }
 
 func InitSysDictionary() (err error) {

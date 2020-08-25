@@ -23,6 +23,7 @@ func Mysql() {
 	if admin.LogMode { //根据配置决定是否开启日志
 		gormConfig = &gorm.Config{
 			Logger: logger.Default.LogMode(logger.Info),
+			DisableForeignKeyConstraintWhenMigrating: true,
 		}
 	} else {
 		gormConfig = &gorm.Config{

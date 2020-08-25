@@ -20,7 +20,7 @@ func DeleteBaseMenu(id float64) (err error) {
 		db := global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)
 		err = global.GVA_DB.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
 		if len(menu.SysAuthoritys) > 0 {
-			err = db.Association("SysAuthoritys").Delete(menu.SysAuthoritys)
+			err = global.GVA_DB.Model(&menu).Association("SysAuthoritys").Delete(&menu.SysAuthoritys)
 		} else {
 			err = db.Error
 		}
@@ -59,7 +59,7 @@ func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 		}
 	}
 	err = global.GVA_DB.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
-	err = db.Updates(upDateMap).Association("Parameters").Replace(menu.Parameters)
+	err = db.Updates(upDateMap).Error
 	return err
 }
 

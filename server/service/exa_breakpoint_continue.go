@@ -45,7 +45,7 @@ func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err erro
 func CreateFileChunk(id uint, fileChunkPath string, fileChunkNumber int) error {
 	var chunk model.ExaFileChunk
 	chunk.FileChunkPath = fileChunkPath
-	chunk.ExaFileId = id
+	chunk.ExaFileID = id
 	chunk.FileChunkNumber = fileChunkNumber
 	err := global.GVA_DB.Create(&chunk).Error
 	return err

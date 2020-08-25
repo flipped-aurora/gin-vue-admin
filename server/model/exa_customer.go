@@ -2,6 +2,7 @@ package model
 
 import (
 	"gorm.io/gorm"
+	"time"
 )
 
 type ExaCustomer struct {
@@ -11,4 +12,10 @@ type ExaCustomer struct {
 	SysUserID          uint    `json:"sysUserId" form:"sysUserId" gorm:"comment:'管理ID'"`
 	SysUserAuthorityID string  `json:"sysUserAuthorityID" form:"sysUserAuthorityID" gorm:"comment:'管理角色ID'"`
 	SysUser            SysUser `json:"sysUser" form:"sysUser" gorm:"comment:'管理详情'"`
+}
+
+func ExaCustomerData() []ExaCustomer {
+	return []ExaCustomer{
+		{Model: gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, CustomerName: "测试客户", CustomerPhoneData: "1761111111", SysUserID: 10, SysUserAuthorityID: "888"},
+	}
 }

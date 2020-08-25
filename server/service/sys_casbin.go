@@ -23,7 +23,6 @@ func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
 	for _, v := range casbinInfos {
 		cm := model.CasbinModel{
-			ID:          0,
 			Ptype:       "p",
 			AuthorityId: authorityId,
 			Path:        v.Path,

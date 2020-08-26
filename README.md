@@ -13,9 +13,9 @@
 English | [简体中文](./README-zh_CN.md)
 
 # Project Guidelines
-[Online Documentation](http://doc.henrongyi.top/)
+[Online Documentation](https://www.gin-vue-admin.com/)
 
-[Development Steps](http://doc.henrongyi.top/help/) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[Development Steps](https://www.gin-vue-admin.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 
@@ -315,7 +315,7 @@ backend code file: model\dnModel\api.go
 
 ## 9. Donate
 
-If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](http://doc.henrongyi.top/more/coffee.html)
+If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.gin-vue-admin.com/docs/coffee)
 
 ## 10. Commercial considerations
 

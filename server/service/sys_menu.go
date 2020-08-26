@@ -158,7 +158,7 @@ func AddMenuAuthority(menus []model.SysBaseMenu, authorityId string) (err error)
 
 func GetMenuAuthority(authorityId string) (err error, menus []model.SysMenu) {
 	//sql := "SELECT authority_menu.keep_alive,authority_menu.default_menu,authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? ORDER BY authority_menu.sort ASC"
-	err = global.GVA_DB.Order("sort", true).Find(&menus).Error
+	err = global.GVA_DB.Where("authority_id = ? ", authorityId).Order("sort", true).Find(&menus).Error
 	//err = global.GVA_DB.Raw(sql, authorityId).Scan(&menus).Error
 	return err, menus
 }

@@ -177,6 +177,8 @@ definitions:
         type: string
       dataTypeLong:
         type: string
+      dictType:
+        type: string
       fieldDesc:
         type: string
       fieldJson:
@@ -248,6 +250,10 @@ definitions:
         type: boolean
       name:
         type: string
+      parameters:
+        items:
+          $ref: '#/definitions/model.SysBaseMenuParameter'
+        type: array
       parentId:
         type: string
       path:
@@ -255,6 +261,17 @@ definitions:
       sort:
         type: integer
       title:
+        type: string
+    type: object
+  model.SysBaseMenuParameter:
+    properties:
+      key:
+        type: string
+      sysBaseMenuId:
+        type: integer
+      type:
+        type: string
+      value:
         type: string
     type: object
   model.SysDictionary:
@@ -414,6 +431,13 @@ definitions:
     properties:
       id:
         type: number
+    type: object
+  request.IdsReq:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
     type: object
   request.PageInfo:
     properties:
@@ -1467,6 +1491,63 @@ paths:
       summary: 更新菜单
       tags:
       - menu
+  /simpleUploader/checkFileMd5:
+    get:
+      parameters:
+      - description: 测试文件是否已经存在和判断已经上传过的切片
+        in: query
+        name: md5
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+  /simpleUploader/mergeFileMd5:
+    get:
+      parameters:
+      - description: 合并文件
+        in: query
+        name: md5
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"合并成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 合并文件
+      tags:
+      - SimpleUploader
+  /simpleUploader/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 断点续传插件版示例
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"上传成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 断点续传插件版示例
+      tags:
+      - SimpleUploader
   /sysDictionary/createSysDictionary:
     post:
       consumes:
@@ -1753,6 +1834,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除SysOperationRecord
+      tags:
+      - SysOperationRecord
+  /sysOperationRecord/deleteSysOperationRecordByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除SysOperationRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除SysOperationRecord
       tags:
       - SysOperationRecord
   /sysOperationRecord/findSysOperationRecord:

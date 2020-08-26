@@ -15,13 +15,10 @@ import (
 // @return                    error
 
 func CreateApi(api model.SysApi) (err error) {
-	findOne := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).Find(&model.SysApi{}).Error
-	if findOne == nil {
+	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&model.SysApi{}).Error, gorm.ErrRecordNotFound){
 		return errors.New("存在相同api")
-	} else {
-		err = global.GVA_DB.Create(&api).Error
 	}
-	return err
+	return global.GVA_DB.Create(&api).Error
 }
 
 // @title    DeleteApi
@@ -125,8 +122,7 @@ func UpdateApi(api model.SysApi) (err error) {
 	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
 
 	if oldA.Path != api.Path || oldA.Method != api.Method {
-		flag := errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).Find(&model.SysApi{}).Error, gorm.ErrRecordNotFound)
-		if !flag {
+		if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&model.SysApi{}).Error, gorm.ErrRecordNotFound) {
 			return errors.New("存在相同api路径")
 		}
 	}

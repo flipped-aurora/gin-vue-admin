@@ -12,8 +12,8 @@ type SysAuthorityMenus struct {
 }
 
 type SysDataAuthorityId struct {
-	SysAuthorityAuthorityId string
-	SysBaseMenuId         string
+	SysAuthorityAuthorityId    string
+	DataAuthorityIdAuthorityId string
 }
 
 func InitSysApi() (err error) {
@@ -44,8 +44,8 @@ func InitExaCustomer() (err error) {
 }
 
 func InitCasbinModel() (err error) {
-	if !global.GVA_DB.Migrator().HasTable("casbin_rule"){
-		if err := global.GVA_DB.Migrator().CreateTable(&gormadapter.CasbinRule{}); err != nil{
+	if !global.GVA_DB.Migrator().HasTable("casbin_rule") {
+		if err := global.GVA_DB.Migrator().CreateTable(&gormadapter.CasbinRule{}); err != nil {
 			return err
 		}
 	}
@@ -162,16 +162,10 @@ func InitSysDataAuthorityId() (err error) {
 		{"888", "888"},
 		{"888", "8881"},
 		{"888", "9528"},
-		{"888222", "888"},
-		{"888222", "8881"},
-		{"888222", "9528"},
-		{"8883", "888"},
-		{"8883", "8881"},
-		{"8883", "9528"},
 		{"9528", "8881"},
 		{"9528", "9528"},
 	}
-	if tx.Table("sys_authority_menus").Create(&insert).Error != nil { // 遇到错误时回滚事务
+	if tx.Table("sys_data_authority_ids").Create(&insert).Error != nil { // 遇到错误时回滚事务
 		tx.Rollback()
 	}
 	return tx.Commit().Error

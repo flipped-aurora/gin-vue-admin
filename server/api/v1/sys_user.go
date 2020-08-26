@@ -88,10 +88,12 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		UUID:        user.UUID,
 		ID:          user.ID,
 		NickName:    user.NickName,
+		Username:    user.Username,
 		AuthorityId: user.AuthorityId,
+		BufferTime:  60*60*24, // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,       // 签名生效时间
-			ExpiresAt: time.Now().Unix() + 60*60*24*7, // 过期时间 一周
+			ExpiresAt: time.Now().Unix() + 60*60*24*7, // 过期时间 7天
 			Issuer:    "qmPlus",                       // 签名的发行者
 		},
 	}
@@ -108,11 +110,9 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		}, c)
 		return
 	}
-	var loginJwt model.JwtBlacklist
-	loginJwt.Jwt = token
 	err, jwtStr := service.GetRedisJWT(user.Username)
 	if err == redis.Nil {
-		if err := service.SetRedisJWT(loginJwt, user.Username); err != nil {
+		if err := service.SetRedisJWT(token, user.Username); err != nil {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
@@ -130,7 +130,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			response.FailWithMessage("jwt作废失败", c)
 			return
 		}
-		if err := service.SetRedisJWT(loginJwt, user.Username); err != nil {
+		if err := service.SetRedisJWT(jwtStr, user.Username); err != nil {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
@@ -195,8 +195,16 @@ func UploadHeaderImg(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
 	} else {
 		// 文件上传后拿到文件路径
-		err, filePath, _ := utils.Upload(header)
-		if err != nil {
+		var uploadErr error
+		var filePath string
+		if global.GVA_CONFIG.LocalUpload.Local {
+			// 本地上传
+			uploadErr, filePath, _ = utils.UploadAvatarLocal(header)
+		} else {
+			// 七牛云上传
+			uploadErr, filePath, _ = utils.UploadRemote(header)
+		}
+		if uploadErr != nil {
 			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
 		} else {
 			// 修改数据库后得到修改后的user并且返回供前端使用

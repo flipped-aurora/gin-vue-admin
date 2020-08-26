@@ -17,12 +17,7 @@
       <el-table :data="tableData" border stripe>
         <el-table-column label="预览" width="100">
           <template slot-scope="scope">
-            <img
-              :alt="scope.row.alt"
-              :src="scope.row.url"
-              height="80"
-              width="80"
-            />
+            <CustomPic picType="file" :picSrc="scope.row.url"/>
           </template>
         </el-table-column>
         <el-table-column label="日期" prop="UpdatedAt" width="180">
@@ -77,9 +72,13 @@ import infoList from "@/components/mixins/infoList";
 import { getFileList, deleteFile } from "@/api/fileUploadAndDownload";
 import { downloadImage } from "@/utils/downloadImg";
 import { formatTimeToStr } from "@/utils/data";
+import CustomPic from '@/components/customPic'
 export default {
   name: "Upload",
   mixins: [infoList],
+  components: {
+		CustomPic
+	},
   data() {
     return {
       fullscreenLoading: false,

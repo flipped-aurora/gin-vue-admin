@@ -16,6 +16,6 @@ type ExaCustomer struct {
 
 func ExaCustomerData() []ExaCustomer {
 	return []ExaCustomer{
-		{Model: gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, CustomerName: "测试客户", CustomerPhoneData: "1761111111", SysUserID: 10, SysUserAuthorityID: "888"},
+		{Model: gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, CustomerName: "测试客户", CustomerPhoneData: "1761111111", SysUserID: 1, SysUserAuthorityID: "888"},
 	}
 }

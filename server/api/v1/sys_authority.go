@@ -2,13 +2,16 @@ package v1
 
 import (
 	"fmt"
+	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
+	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
+	//"github.com/jinzhu/gorm"
 )
 
 // @Tags authority
@@ -123,13 +126,49 @@ func UpdateAuthority(c *gin.Context) {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}
-	err, authority := service.UpdateAuthority(auth)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
-	} else {
-		response.OkWithData(resp.SysAuthorityResponse{Authority: authority}, c)
+	//获取用户的ID
+	token := c.Request.Header.Get("x-token")
+	j := middleware.NewJWT()
+	claims, _ := j.ParseToken(token)// parseToken 解析token包含的信息
+	uuid_data := global.GVA_DB.Where("uuid = ?", claims.UUID).First(&model.SysUser{})//UUID := claims.UUID//获取用户的UUID
+	user_AuthorityId := uuid_data.Value.(*model.SysUser).AuthorityId//断言 获取角色ID
+	fmt.Println("user_AuthorityId",user_AuthorityId)
+	if user_AuthorityId != "0"{
+		var data_aggregate []model.SysAuthority
+		global.GVA_DB.Find(&data_aggregate)
+		blid := auth.ParentId
+		for{
+			bool := true
+			for _,k := range data_aggregate {
+				if blid == user_AuthorityId{//判断提交的父角色ID是否与当前ID相同
+
+					bool = false
+					break
+				}
+				if blid == k.AuthorityId{
+					blid = k.ParentId
+					break
+				}
+				if blid == "0"{
+					response.FailWithMessage(fmt.Sprintf("更新失败，权限不足"), c)
+					return
+				}
+				fmt.Println("blid,user_AuthorityId",blid,user_AuthorityId)
+
+			}
+			if bool == false{
+				break
+			}
+		}
 	}
-}
+
+	err, authority := service.UpdateAuthority(auth)
+		if err != nil {
+			response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
+		} else {
+			response.OkWithData(resp.SysAuthorityResponse{Authority: authority}, c)
+		}
+	}
 
 // @Tags authority
 // @Summary 分页获取角色列表
@@ -182,4 +221,27 @@ func SetDataAuthority(c *gin.Context) {
 	} else {
 		response.Ok(c)
 	}
+}
+
+
+func loop(user_Authority_Id string,data_tes *[]string)[]model.SysAuthority{
+	data_aggregates := *data_tes
+	var authority []model.SysAuthority
+	global.GVA_DB.Where("parent_id = ?", user_Authority_Id).Find(&authority)
+	//return authority
+
+	var data_aggregate []model.SysAuthority
+	//data_aggregates := make([]string,1)
+	data_aggregate = loop(user_Authority_Id,&data_aggregates)
+	data_aggregates = append(data_aggregates, user_Authority_Id)
+
+	for _, l := range data_aggregate {
+		if l.AuthorityId == "" {
+			break
+		}
+		data_aggregates = append(data_aggregates, l.AuthorityId) //添加父级ID到切片中
+		data_aggregate = loop(l.AuthorityId,&data_aggregates)
+		loop(l.AuthorityId,&data_aggregates)
+	}
+	return data_aggregate
 }

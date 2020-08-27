@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
-	"gin-vue-admin/middleware"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	resp "gin-vue-admin/model/response"
@@ -126,22 +125,17 @@ func UpdateAuthority(c *gin.Context) {
 		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
 		return
 	}
-	//获取用户的ID
-	token := c.Request.Header.Get("x-token")
-	j := middleware.NewJWT()
-	claims, _ := j.ParseToken(token)// parseToken 解析token包含的信息
-	uuid_data := global.GVA_DB.Where("uuid = ?", claims.UUID).First(&model.SysUser{})//UUID := claims.UUID//获取用户的UUID
-	user_AuthorityId := uuid_data.Value.(*model.SysUser).AuthorityId//断言 获取角色ID
-	fmt.Println("user_AuthorityId",user_AuthorityId)
-	if user_AuthorityId != "0"{
+
+	claims, _ := c.Get("claims")
+	waitUse := claims.(*request.CustomClaims)
+	if waitUse.AuthorityId != "0"{
 		var data_aggregate []model.SysAuthority
 		global.GVA_DB.Find(&data_aggregate)
 		blid := auth.ParentId
 		for{
 			bool := true
 			for _,k := range data_aggregate {
-				if blid == user_AuthorityId{//判断提交的父角色ID是否与当前ID相同
-
+				if blid == waitUse.AuthorityId{//判断提交的父角色ID是否与当前ID相同
 					bool = false
 					break
 				}

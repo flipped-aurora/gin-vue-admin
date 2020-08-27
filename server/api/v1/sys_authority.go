@@ -153,8 +153,6 @@ func UpdateAuthority(c *gin.Context) {
 					response.FailWithMessage(fmt.Sprintf("更新失败，权限不足"), c)
 					return
 				}
-				fmt.Println("blid,user_AuthorityId",blid,user_AuthorityId)
-
 			}
 			if bool == false{
 				break

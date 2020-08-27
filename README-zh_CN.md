@@ -13,9 +13,9 @@
 [English](./README.md) | 简体中文
 
 # 项目文档
-[在线文档](http://doc.henrongyi.top/)
+[在线文档](https://www.gin-vue-admin.com/)
 
-[开发教学](http://doc.henrongyi.top/help/) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
 - 后台框架：[gin](https://github.com/gin-gonic/gin) 
 
@@ -306,7 +306,7 @@ swag init
 
 ## 9. 捐赠
 
-如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](http://doc.henrongyi.top/more/coffee.html)
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
 
 ## 10. 商用注意事项
 

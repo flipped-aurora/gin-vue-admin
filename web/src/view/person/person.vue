@@ -9,8 +9,7 @@
         class="avatar-uploader"
         name="headerImg"
       >
-        <img :src="userInfo.headerImg" class="avatar" v-if="userInfo.headerImg" />
-        <i class="el-icon-plus avatar-uploader-icon" v-else></i>
+        <CustomPic picType="img"/>
       </el-upload>
 
       <!-- <el-avatar :size="120" :src="userInfo.headerImg" shape="square"></el-avatar> -->
@@ -23,6 +22,7 @@
   </div>
 </template>
 <script>
+import CustomPic from '@/components/customPic'
 import { mapGetters, mapMutations } from 'vuex'
 const path = process.env.VUE_APP_BASE_API
 export default {
@@ -32,6 +32,9 @@ export default {
       path:path
     }
   },
+  components: {
+		CustomPic
+	},
   computed: {
     ...mapGetters('user', ['userInfo', 'token'])
   },

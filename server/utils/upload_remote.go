@@ -11,7 +11,7 @@ import (
 )
 
 // 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字
-func Upload(file *multipart.FileHeader) (err error, path string, key string) {
+func UploadRemote(file *multipart.FileHeader) (err error, path string, key string) {
 	putPolicy := storage.PutPolicy{
 		Scope: global.GVA_CONFIG.Qiniu.Bucket,
 	}

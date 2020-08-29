@@ -10,6 +10,7 @@ type Server struct {
 	JWT       JWT       `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	Captcha   Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	Log       Log       `mapstructure:"log" json:"log" yaml:"log"`
+	LocalUpload LocalUpload `mapstructure:"localUpload" json:"localUpload" yaml:"localUpload"`
 }
 
 type System struct {
@@ -43,6 +44,13 @@ type Redis struct {
 	Password string `mapstructure:"password" json:"password" yaml:"password"`
 	DB       int    `mapstructure:"db" json:"db" yaml:"db"`
 }
+
+type LocalUpload struct {
+	Local bool `mapstructure:"local" json:"local" yaml:"local"`
+	AvatarPath string `mapstructure:"avatar-path" json:"avatarPath" yaml:"avatar-path"`
+	FilePath string `mapstructure:"file-path" json:"filePath" yaml:"file-path"`
+}
+
 type Qiniu struct {
 	AccessKey string `mapstructure:"access-key" json:"accessKey" yaml:"access-key"`
 	SecretKey string `mapstructure:"secret-key" json:"secretKey" yaml:"secret-key"`

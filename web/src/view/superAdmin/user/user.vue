@@ -7,7 +7,7 @@
       <el-table-column label="头像" min-width="50">
         <template slot-scope="scope">
           <div :style="{'textAlign':'center'}">
-            <img :src="scope.row.headerImg" height="35" width="35" />
+            <CustomPic :picSrc="scope.row.headerImg"/>
           </div>
         </template>
       </el-table-column>
@@ -106,9 +106,13 @@ import {
 import { getAuthorityList } from "@/api/authority";
 import infoList from "@/components/mixins/infoList";
 import { mapGetters } from "vuex";
+import CustomPic from '@/components/customPic'
 export default {
   name: "Api",
   mixins: [infoList],
+  components: {
+		CustomPic
+	},
   data() {
     return {
       listApi: getUserList,

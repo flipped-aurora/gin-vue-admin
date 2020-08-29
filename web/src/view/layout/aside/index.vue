@@ -45,7 +45,6 @@ export default {
             params[item.key] = item.value;
           }
         });
-      console.log(query, params);
       if (index === this.$route.name) return;
       this.$router.push({ name: index, query, params });
     }

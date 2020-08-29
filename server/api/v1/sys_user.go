@@ -195,8 +195,16 @@ func UploadHeaderImg(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
 	} else {
 		// 文件上传后拿到文件路径
-		err, filePath, _ := utils.Upload(header)
-		if err != nil {
+		var uploadErr error
+		var filePath string
+		if global.GVA_CONFIG.LocalUpload.Local {
+			// 本地上传
+			uploadErr, filePath, _ = utils.UploadAvatarLocal(header)
+		} else {
+			// 七牛云上传
+			uploadErr, filePath, _ = utils.UploadRemote(header)
+		}
+		if uploadErr != nil {
 			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
 		} else {
 			// 修改数据库后得到修改后的user并且返回供前端使用

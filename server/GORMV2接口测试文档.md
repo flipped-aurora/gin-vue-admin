@@ -21,7 +21,6 @@
 | /menu/updateBaseMenu                              | 更新菜单                |    √     | SliverHorn |
 | /menu/getBaseMenuById                             | 根据id获取菜单          |    √     | SliverHorn |
 | /user/changePassword                              | 修改密码                |    √     | SliverHorn |
-| /user/uploadHeaderImg                             | 上传头像                |    √     | SliverHorn |
 | /user/getUserList                                 | 获取用户列表            |    √     | SliverHorn |
 | /user/setUserAuthority                            | 修改用户角色            |    √     | SliverHorn |
 | /fileUploadAndDownload/upload                     | 文件上传示例            |    √     | SliverHorn |

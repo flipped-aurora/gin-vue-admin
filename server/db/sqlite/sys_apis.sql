@@ -41,8 +41,6 @@ INSERT INTO sys_apis (id,created_at,updated_at,deleted_at,authority_id,"path",de
 INSERT INTO sys_apis (id,created_at,updated_at,deleted_at,authority_id,"path",description,api_group,"method") VALUES (
 23,1569828559000,1569828559000,NULL,NULL,'/user/changePassword','修改密码','user','POST');
 INSERT INTO sys_apis (id,created_at,updated_at,deleted_at,authority_id,"path",description,api_group,"method") VALUES (
-24,1569828573000,1569828573000,NULL,NULL,'/user/uploadHeaderImg','上传头像','user','POST');
-INSERT INTO sys_apis (id,created_at,updated_at,deleted_at,authority_id,"path",description,api_group,"method") VALUES (
 25,1569828600000,1569828600000,NULL,NULL,'/user/getInfoList','分页获取用户列表','user','POST');
 INSERT INTO sys_apis (id,created_at,updated_at,deleted_at,authority_id,"path",description,api_group,"method") VALUES (
 28,1570605317000,1570605427000,NULL,NULL,'/user/getUserList','获取用户列表','user','POST');

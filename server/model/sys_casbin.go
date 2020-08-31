@@ -70,6 +70,7 @@ func CasbinModelData() []CasbinModel {
 		{"p", "888", "/sysOperationRecord/findSysOperationRecord", "GET"},
 		{"p", "888", "/sysOperationRecord/getSysOperationRecordList", "GET"},
 		{"p", "888", "/sysOperationRecord/deleteSysOperationRecordByIds", "DELETE"},
+		{"p", "888", "/user/setUserInfo", "PUT"},
 		{"p", "8881", "/base/login", "POST"},
 		{"p", "8881", "/base/register", "POST"},
 		{"p", "8881", "/api/createApi", "POST"},

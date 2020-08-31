@@ -39,17 +39,6 @@ func DeleteSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err 
 	return err
 }
 
-// @title    UpdateSysOperationRecord
-// @description   update a SysOperationRecord
-// @param     sysOperationRecord          *model.SysOperationRecord
-// @auth                     （2020/04/05  20:22）
-// @return                    error
-
-func UpdateSysOperationRecord(sysOperationRecord *model.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Save(sysOperationRecord).Error
-	return err
-}
-
 // @title    GetSysOperationRecord
 // @description   get the info of a SysOperationRecord
 // @auth                     （2020/04/05  20:22）

@@ -53,9 +53,9 @@ func UpdateSysDictionary(sysDictionary *model.SysDictionary) (err error) {
 	} else {
 		if (!errors.Is(global.GVA_DB.First(&model.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
 			return errors.New("存在相同的type，不允许创建")
-		} else {
-			err = db.Updates(sysDictionaryMap).Error
 		}
+		err = db.Updates(sysDictionaryMap).Error
+
 	}
 	return err
 }

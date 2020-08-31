@@ -95,3 +95,19 @@ export const deleteUser = (data) => {
         data: data
     })
 }
+
+// @Tags SysUser
+// @Summary 设置用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.SysUser true "设置用户信息"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserInfo [put]
+export const setUserInfo = (data) => {
+    return service({
+        url: "/user/setUserInfo",
+        method: 'put',
+        data: data
+    })
+}

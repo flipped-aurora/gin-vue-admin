@@ -22,16 +22,15 @@ func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err erro
 	cfile.FileMd5 = fileMd5
 	cfile.FileName = fileName
 	cfile.ChunkTotal = chunkTotal
-	notHaveSameMd5Finish := errors.Is(global.GVA_DB.Where("file_md5 = ? AND is_finish = ?", fileMd5, true).First(&file).Error, gorm.ErrRecordNotFound)
-	if notHaveSameMd5Finish {
+
+	if errors.Is(global.GVA_DB.Where("file_md5 = ? AND is_finish = ?", fileMd5, true).First(&file).Error, gorm.ErrRecordNotFound) {
 		err = global.GVA_DB.Where("file_md5 = ? AND file_name = ?", fileMd5, fileName).Preload("ExaFileChunk").FirstOrCreate(&file, cfile).Error
 		return err, file
-	} else {
-		cfile.IsFinish = true
-		cfile.FilePath = file.FilePath
-		err = global.GVA_DB.Create(&cfile).Error
-		return err, cfile
 	}
+	cfile.IsFinish = true
+	cfile.FilePath = file.FilePath
+	err = global.GVA_DB.Create(&cfile).Error
+	return err, cfile
 }
 
 // @title    CreateFileChunk

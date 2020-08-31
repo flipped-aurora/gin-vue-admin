@@ -38,7 +38,6 @@
 | /customer/customer                                | 删除客户                |    √     | SliverHorn |
 | /customer/customer                                | 获取单一客户            |    √     | SliverHorn |
 | /customer/customerList                            | 获取客户列表            |    √     | SliverHorn |
-| /casbin/casbinTest/:pathParam                     | RESTFUL模式测试         |          |            |
 | /autoCode/createTemp                              | 自动化代码              |    √     | SliverHorn |
 | /authority/updateAuthority                        | 更新角色信息            |    √     | SliverHorn |
 | /authority/copyAuthority                          | 拷贝角色                |    √     | SliverHorn |
@@ -55,7 +54,6 @@
 | /sysDictionary/getSysDictionaryList               | 获取字典列表            |    √     | SliverHorn |
 | /sysOperationRecord/createSysOperationRecord      | 新增操作记录            |    √     | SliverHorn |
 | /sysOperationRecord/deleteSysOperationRecord      | 删除操作记录            |    √     | SliverHorn |
-| /sysOperationRecord/updateSysOperationRecord      | 更新操作记录            |          |            |
 | /sysOperationRecord/findSysOperationRecord        | 根据ID获取操作记录      |    √     | SliverHorn |
 | /sysOperationRecord/getSysOperationRecordList     | 获取操作记录列表        |    √     | SliverHorn |
 | /autoCode/getTables                               | 获取数据库表            |    √     | SliverHorn |
@@ -85,7 +83,7 @@ db.Where("name IN (?)", []string{"jinzhu", "jinzhu 2"}).Find(&users)
 ```go
 // V2版本代码(https://github.com/flipped-aurora/gin-vue-admin/blob/gva_gormv2_dev/server/service/sys_user.go)
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
-	var user model.SysUser
+    var user model.SysUser
     if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound){ // 判断用户名是否注册
         return errors.New("用户名已注册"), userInter
     }
@@ -95,6 +93,7 @@ func Register(u model.SysUser) (err error, userInter model.SysUser) {
     err = global.GVA_DB.Create(&u).Error
 	return err, u
 }
+
 // V1版本Register(https://github.com/flipped-aurora/gin-vue-admin/blob/master/server/service/sys_user.go)
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	var user model.SysUser

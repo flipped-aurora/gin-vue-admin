@@ -43,8 +43,6 @@ INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','8881','/user/changePassword','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
-'p','8881','/user/uploadHeaderImg','POST','','','');
-INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','8881','/user/getInfoList','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','8881','/user/getUserList','POST','','','');
@@ -120,8 +118,6 @@ INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','9528','/menu/getBaseMenuById','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','9528','/user/changePassword','POST','','','');
-INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
-'p','9528','/user/uploadHeaderImg','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','9528','/user/getInfoList','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
@@ -200,8 +196,6 @@ INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','888','/menu/getBaseMenuById','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','888','/user/changePassword','POST','','','');
-INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
-'p','888','/user/uploadHeaderImg','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (
 'p','888','/user/getInfoList','POST','','','');
 INSERT INTO casbin_rule (p_type,v0,v1,v2,v3,v4,v5) VALUES (

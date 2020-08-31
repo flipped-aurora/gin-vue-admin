@@ -90,7 +90,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		NickName:    user.NickName,
 		Username:    user.Username,
 		AuthorityId: user.AuthorityId,
-		BufferTime:  60*60*24, // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
+		BufferTime:  60 * 60 * 24, // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,       // 签名生效时间
 			ExpiresAt: time.Now().Unix() + 60*60*24*7, // 过期时间 7天
@@ -175,50 +175,6 @@ type UserHeaderImg struct {
 }
 
 // @Tags SysUser
-// @Summary 用户上传头像
-// @Security ApiKeyAuth
-// @accept multipart/form-data
-// @Produce  application/json
-// @Param headerImg formData file true "用户上传头像"
-// @Param username formData string true "用户上传头像"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
-// @Router /user/uploadHeaderImg [post]
-func UploadHeaderImg(c *gin.Context) {
-	claims, _ := c.Get("claims")
-	// 获取头像文件
-	// 这里我们通过断言获取 claims内的所有内容
-	waitUse := claims.(*request.CustomClaims)
-	uuid := waitUse.UUID
-	_, header, err := c.Request.FormFile("headerImg")
-	// 便于找到用户 以后从jwt中取
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
-	} else {
-		// 文件上传后拿到文件路径
-		var uploadErr error
-		var filePath string
-		if global.GVA_CONFIG.LocalUpload.Local {
-			// 本地上传
-			uploadErr, filePath, _ = utils.UploadAvatarLocal(header)
-		} else {
-			// 七牛云上传
-			uploadErr, filePath, _ = utils.UploadRemote(header)
-		}
-		if uploadErr != nil {
-			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
-		} else {
-			// 修改数据库后得到修改后的user并且返回供前端使用
-			err, user := service.UploadHeaderImg(uuid, filePath)
-			if err != nil {
-				response.FailWithMessage(fmt.Sprintf("修改数据库链接失败，%v", err), c)
-			} else {
-				response.OkWithData(resp.SysUserResponse{User: *user}, c)
-			}
-		}
-	}
-}
-
-// @Tags SysUser
 // @Summary 分页获取用户列表
 // @Security ApiKeyAuth
 // @accept application/json
@@ -296,5 +252,26 @@ func DeleteUser(c *gin.Context) {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
 		response.OkWithMessage("删除成功", c)
+	}
+}
+
+// @Tags SysUser
+// @Summary 删除用户
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.SysUser true "删除用户"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserInfo [put]
+func SetUserInfo(c *gin.Context) {
+	var user model.SysUser
+	c.ShouldBindJSON(&user)
+	err, ReqUser := service.SetUserInfo(user)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
+	} else {
+		response.OkWithData(gin.H{
+			"userInfo": ReqUser,
+		}, c)
 	}
 }

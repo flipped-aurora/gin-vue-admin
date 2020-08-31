@@ -69,6 +69,15 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ## 2. 使用说明
 
+```
+- node版本 > v8.6.0
+- golang版本 >= v1.11
+- IDE推荐：Goland
+- 各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址。
+- gormv2版本初始化数据库可以利用批量创建功能，这里已经写好初始化代码，需要在main.go内打开 initialize.Data() 的注释即可
+- 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
+```
+
 > 使用docker-compose体验本项目
 - 安装 docker-compose [官方文档](https://docs.docker.com/compose/install/)
     - ```shell script
@@ -104,13 +113,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
     - swagger文档 [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
-```
-- node版本 > v8.6.0
-- golang版本 >= v1.11
-- IDE推荐：Goland
-- 各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址。
-- 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
-```
+
 
 ### 2.1 web端
 

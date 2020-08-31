@@ -15,7 +15,7 @@ type ExaFileUploadAndDownload struct {
 
 func ExaFileUploadAndDownloadData() []ExaFileUploadAndDownload {
 	return []ExaFileUploadAndDownload{
-		{gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "10.png", "http://qmplusimg.henrongyi.top/158787308910.png", "png", "158787308910.png"},
-		{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "logo.png", "http://qmplusimg.henrongyi.top/1587973709logo.png", "png", "1587973709logo.png"},
+		{gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "10.png", "http://qmplusimg.henrongyi.top/gvalogo.png", "png", "158787308910.png"},
+		{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "logo.png", "http://qmplusimg.henrongyi.top/1576554439myAvatar.png", "png", "1587973709logo.png"},
 	}
 }

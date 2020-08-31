@@ -7,7 +7,7 @@
       <el-table-column label="头像" min-width="50">
         <template slot-scope="scope">
           <div :style="{'textAlign':'center'}">
-            <CustomPic :picSrc="scope.row.headerImg"/>
+            <CustomPic :picSrc="scope.row.headerImg" />
           </div>
         </template>
       </el-table-column>
@@ -62,17 +62,10 @@
           <el-input v-model="userInfo.nickName"></el-input>
         </el-form-item>
         <el-form-item label="头像" label-width="80px">
-          <el-upload
-            :headers="{'x-token':token}"
-            :on-success="handleAvatarSuccess"
-            :show-file-list="false"
-            :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
-            class="avatar-uploader"
-            name="file"
-          >
-            <img :src="userInfo.headerImg" class="avatar" v-if="userInfo.headerImg" />
-            <i class="el-icon-plus avatar-uploader-icon" v-else></i>
-          </el-upload>
+          <div style="display:inline-block" @click="openHeaderChange">
+            <img class="header-img-box" v-if="userInfo.headerImg" :src="userInfo.headerImg" />
+            <div v-else class="header-img-box">从媒体库选择</div>
+          </div>
         </el-form-item>
         <el-form-item label="用户角色" label-width="80px" prop="authorityId">
           <el-cascader
@@ -90,6 +83,7 @@
         <el-button @click="enterAddUserDialog" type="primary">确 定</el-button>
       </div>
     </el-dialog>
+    <ChooseImg ref="chooseImg" :target="userInfo" :targetKey="`headerImg`"/>
   </div>
 </template>
 
@@ -106,13 +100,12 @@ import {
 import { getAuthorityList } from "@/api/authority";
 import infoList from "@/components/mixins/infoList";
 import { mapGetters } from "vuex";
-import CustomPic from '@/components/customPic'
+import CustomPic from "@/components/customPic";
+import ChooseImg from "@/components/chooseImg";
 export default {
   name: "Api",
   mixins: [infoList],
-  components: {
-		CustomPic
-	},
+  components: { CustomPic,ChooseImg },
   data() {
     return {
       listApi: getUserList,
@@ -129,11 +122,11 @@ export default {
       rules: {
         username: [
           { required: true, message: "请输入用户名", trigger: "blur" },
-          { min: 6, message: "最低6位字符", trigger: "blur"}
+          { min: 6, message: "最低6位字符", trigger: "blur" }
         ],
         password: [
           { required: true, message: "请输入用户密码", trigger: "blur" },
-          { min: 6, message: "最低6位字符", trigger: "blur"}
+          { min: 6, message: "最低6位字符", trigger: "blur" }
         ],
         nickName: [
           { required: true, message: "请输入用户昵称", trigger: "blur" }
@@ -148,6 +141,9 @@ export default {
     ...mapGetters("user", ["token"])
   },
   methods: {
+    openHeaderChange(){
+      this.$refs.chooseImg.open()
+    },
     setOptions(authData) {
       this.authOptions = [];
       this.setAuthorityOptions(authData, this.authOptions);
@@ -155,7 +151,7 @@ export default {
     setAuthorityOptions(AuthorityData, optionsData) {
       AuthorityData &&
         AuthorityData.map(item => {
-          if (item.children&&item.children.length) {
+          if (item.children && item.children.length) {
             const option = {
               authorityId: item.authorityId,
               authorityName: item.authorityName,
@@ -218,7 +214,8 @@ export default {
   }
 };
 </script>
-<style scoped lang="scss">
+<style lang="scss">
+
 .button-box {
   padding: 10px 20px;
   .el-button {
@@ -227,6 +224,15 @@ export default {
 }
 
 .user-dialog {
+  .header-img-box {
+  width: 200px;
+  height: 200px;
+  border: 1px dashed #ccc;
+  border-radius: 20px;
+  text-align: center;
+  line-height: 200px;
+  cursor: pointer;
+}
   .avatar-uploader .el-upload:hover {
     border-color: #409eff;
   }

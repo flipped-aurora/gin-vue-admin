@@ -50,23 +50,6 @@ func CreateFileChunk(id uint, fileChunkPath string, fileChunkNumber int) error {
 	return err
 }
 
-// @title         FileCreateComplete
-// @description   file creation, 文件合成完成
-// @auth                     （2020/04/05  20:22）
-// @param     fileMd5         string
-// @param     fileName        string
-// @param     filePath        string
-// @return                    error
-
-func FileCreateComplete(fileMd5 string, fileName string, filePath string) error {
-	var file model.ExaFile
-	upDateFile := make(map[string]interface{})
-	upDateFile["FilePath"] = filePath
-	upDateFile["IsFinish"] = true
-	err := global.GVA_DB.Where("file_md5 = ? AND file_name = ?", fileMd5, fileName).First(&file).Updates(upDateFile).Error
-	return err
-}
-
 // @title    DeleteFileChunk
 // @description   delete a chuck of the file, 删除文件切片记录
 // @auth                     （2020/04/05  20:22）

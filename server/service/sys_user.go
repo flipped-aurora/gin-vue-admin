@@ -19,7 +19,7 @@ import (
 
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	var user model.SysUser
-	if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound){ // 判断用户名是否注册
+	if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return errors.New("用户名已注册"), userInter
 	}
 	// 否则 附加uuid 密码md5简单加密 注册
@@ -101,16 +101,14 @@ func DeleteUser(id float64) (err error) {
 	return err
 }
 
-// @title    UploadHeaderImg
-// @description   upload avatar, 用户头像上传更新地址
+// @title    SetUserInfo
+// @description   set the authority of a certain user, 设置用户信息
 // @auth                     （2020/04/05  20:22）
 // @param     uuid            UUID
-// @param     filePath        string
+// @param     authorityId     string
 // @return    err             error
-// @return    userInter       *SysUser
 
-func UploadHeaderImg(uuid uuid.UUID, filePath string) (err error, userInter *model.SysUser) {
-	var user model.SysUser
-	err = global.GVA_DB.Where("uuid = ?", uuid).First(&user).Update("header_img", filePath).First(&user).Error
-	return err, &user
+func SetUserInfo(reqUser model.SysUser) (err error, user model.SysUser) {
+	err = global.GVA_DB.Updates(&reqUser).Error
+	return err, reqUser
 }

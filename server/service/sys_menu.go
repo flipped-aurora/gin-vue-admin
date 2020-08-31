@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gorm.io/gorm"
 	"strconv"
 )
 
@@ -94,12 +95,10 @@ func getBaseChildrenList(menu *model.SysBaseMenu, treeMap map[string][]model.Sys
 // 增加基础路由
 
 func AddBaseMenu(menu model.SysBaseMenu) (err error) {
-	findOne := global.GVA_DB.Where("name = ?", menu.Name).Find(&model.SysBaseMenu{}).Error
-	if findOne != nil {
-		err = global.GVA_DB.Create(&menu).Error
-	} else {
+	if !errors.Is(global.GVA_DB.Where("name = ?", menu.Name).First(&model.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 		err = errors.New("存在重复name，请修改name")
 	}
+	err = global.GVA_DB.Create(&menu).Error
 	return err
 }
 

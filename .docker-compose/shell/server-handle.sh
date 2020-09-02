@@ -63,7 +63,7 @@ mysql:
     password: 'Aa@6447985'
     path: mysql
     db-name: 'qmPlus'
-    config: 'charset=utf8&parseTime=True&loc=Local'
+    config: 'charset=utf8mb4&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
     log-mode: true
@@ -75,6 +75,12 @@ sqlite:
     config: 'loc=Asia/Shanghai'
 
 # oss configuration
+
+# 切换本地与七牛云上传，分配头像和文件路径
+localupload:
+  local: false
+  avatar-path: uploads/avatar
+  file-path: uploads/file
 
 # 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址
 qiniu:

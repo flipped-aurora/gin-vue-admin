@@ -10,6 +10,7 @@ type Server struct {
 	JWT       JWT       `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	Captcha   Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	Log       Log       `mapstructure:"log" json:"log" yaml:"log"`
+	Zap    	  Zap       `mapstructure:"zap" json:"zap" yaml:"zap"`
 	LocalUpload LocalUpload `mapstructure:"localUpload" json:"localUpload" yaml:"localUpload"`
 }
 
@@ -77,4 +78,12 @@ type Sqlite struct {
 	Path     string `mapstructure:"path" json:"path" yaml:"path"`
 	Config   string `mapstructure:"config" json:"config" yaml:"config"`
 	LogMode  bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
+}
+
+type Zap struct {
+	Level      string `json:"level"`
+	File   	   string `json:"file"`
+	MaxSize    int    `json:"maxsize"`
+	MaxAge     int    `json:"max_age"`
+	MaxBackups int    `json:"max_backups"`
 }

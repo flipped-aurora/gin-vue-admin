@@ -65,3 +65,11 @@ log:
   log-file: true
   stdout: 'DEBUG'
   file: 'DEBUG'
+
+# zap logger configuration
+zap:
+  level: "debug"
+  file: "DEBUG"
+  max_size: 200
+  max_age: 30
+  max_backups: 7

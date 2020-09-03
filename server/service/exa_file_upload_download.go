@@ -36,7 +36,7 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 // @return                    error
 
 func DeleteFile(file model.ExaFileUploadAndDownload) error {
-	err := global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(file).Error
+	err := global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(&file).Error
 	return err
 }
 

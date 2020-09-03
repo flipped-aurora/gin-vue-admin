@@ -68,8 +68,12 @@ log:
 
 # zap logger configuration
 zap:
-  level: "debug"
-  file: "DEBUG"
-  max_size: 200
-  max_age: 30
-  max_backups: 7
+  # 可使用 "debug", "info", "warn", "error", "dpanic", "panic", "fatal",
+  level: 'debug'
+  # console: 控制台, json: json格式输出
+  format: 'console'
+  prefix: '[GIN-VUE-ADMIN]'
+  director: 'logs'
+  link_name: 'ZapLatestLog'
+  show_line: true
+  log_in_console: true

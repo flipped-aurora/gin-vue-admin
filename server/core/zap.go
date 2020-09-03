@@ -11,57 +11,94 @@ import (
 	"time"
 )
 
-const (
-	zapLogDir      = "log"
-	zapLogSoftLink = "latest_log"
-	zapModule      = "gin-vue-admin"
+var (
+	err    error
+	level zapcore.Level
+	writer zapcore.WriteSyncer
 )
 
 func init() {
-	if global.GVA_CONFIG.Zap.File == "" {
-		global.GVA_CONFIG.Zap.File = "DEBUG"
+	if ok, _ := utils.PathExists(global.GVA_CONFIG.Zap.Director); !ok { // 判断是否有logs文件夹
+		fmt.Println("create logs directory") // directory not exist
+		_ = os.Mkdir(global.GVA_CONFIG.Zap.Director, os.ModePerm)
 	}
-	if ok, _ := utils.PathExists(zapLogDir); !ok {
-		// directory not exist
-		fmt.Println("create log directory")
-		_ = os.Mkdir(zapLogDir, os.ModePerm)
+
+	switch global.GVA_CONFIG.Zap.Level {// 初始化配置文件的Level
+	case "debug":
+		level = zap.DebugLevel
+	case "info":
+		level = zap.InfoLevel
+	case "warn":
+		level = zap.WarnLevel
+	case "error":
+		level = zap.ErrorLevel
+	default:
+		level = zap.InfoLevel
 	}
-	var l = new(zapcore.Level)
-	writeSyncer, err := getWriteSyncer()
+
+	writer, err = getWriteSyncer() // 使用file-rotatelogs进行日志分割
 	if err != nil {
 		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
 		return
 	}
-	encoder := getEncoderConfig()
-	if err := l.UnmarshalText([]byte(global.GVA_CONFIG.Zap.Level)); err != nil {
-		fmt.Printf("Unmarshal Level Failed err:%v", err.Error())
+
+	if level == zap.DebugLevel || level == zap.ErrorLevel {
+		global.GVA_ZAP = zap.New(getEncoderCore(), zap.AddStacktrace(level))
+		if global.GVA_CONFIG.Zap.ShowLine {
+			global.GVA_ZAP.WithOptions(zap.AddCaller())
+		}
 		return
 	}
-	core := zapcore.NewCore(encoder, writeSyncer, l)
-	global.GVA_ZAP = zap.New(core, zap.AddCaller())
+	global.GVA_ZAP = zap.New(getEncoderCore())
+	if global.GVA_CONFIG.Zap.ShowLine {
+		global.GVA_ZAP.WithOptions(zap.AddCaller())
+	}
+
 }
 
 // getWriteSyncer zap logger中加入file-rotatelogs
 func getWriteSyncer() (zapcore.WriteSyncer, error) {
 	fileWriter, err := zaprotatelogs.New(
-		zapLogDir + string(os.PathSeparator) + "%Y-%m-%d-%H-%M.log",
-		zaprotatelogs.WithLinkName(zapLogSoftLink),
+		global.GVA_CONFIG.Zap.Director+string(os.PathSeparator)+"%Y-%m-%d-%H-%M.log",
+		zaprotatelogs.WithLinkName(global.GVA_CONFIG.Zap.LinkName),
 		zaprotatelogs.WithMaxAge(7*24*time.Hour),
 		zaprotatelogs.WithRotationTime(24*time.Hour),
 	)
+	if global.GVA_CONFIG.Zap.LogInConsole {
+		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(fileWriter)), err
+	}
 	return zapcore.AddSync(fileWriter), err
 }
 
-// getEncoderConfig 获取zapcore.Encoder
-func getEncoderConfig() zapcore.Encoder {
-	encoderConfig := zap.NewProductionEncoderConfig()
-	encoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-	encoderConfig.TimeKey = "time"
-	encoderConfig.EncodeLevel = zapcore.CapitalLevelEncoder
-	encoderConfig.EncodeDuration = zapcore.SecondsDurationEncoder
-	encoderConfig.EncodeCaller = zapcore.ShortCallerEncoder
-	return zapcore.NewConsoleEncoder(encoderConfig)
+// getEncoderConfig 获取zapcore.EncoderConfig
+func getEncoderConfig() (config zapcore.EncoderConfig) {
+	config = zapcore.EncoderConfig{
+		MessageKey:     "message",
+		LevelKey:       "level",
+		TimeKey:        "time",
+		NameKey:        "logger",
+		CallerKey:      "caller",
+		StacktraceKey:  "stacktrace",
+		LineEnding:     zapcore.DefaultLineEnding,
+		EncodeLevel:    zapcore.CapitalColorLevelEncoder,
+		EncodeTime:     CustomTimeEncoder,
+		EncodeDuration: zapcore.SecondsDurationEncoder,
+		EncodeCaller:   zapcore.FullCallerEncoder,
+	}
+	return config
 }
 
+// getEncoder 获取zapcore.Encoder
+func getEncoder() zapcore.Encoder {
+	return zapcore.NewConsoleEncoder(getEncoderConfig())
+}
 
+// getEncoderCore 获取Encoder的zapcore.Core
+func getEncoderCore() (core zapcore.Core) {
+	return zapcore.NewCore(getEncoder(), writer, level)
+}
 
+// 自定义日志输出时间格式
+func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
+	enc.AppendString(t.Format(global.GVA_CONFIG.Zap.Prefix+"2006/01/02 - 15:04:05.000"))
+}

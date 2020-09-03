@@ -81,9 +81,11 @@ type Sqlite struct {
 }
 
 type Zap struct {
-	Level      string `json:"level"`
-	File   	   string `json:"file"`
-	MaxSize    int    `json:"maxsize"`
-	MaxAge     int    `json:"max_age"`
-	MaxBackups int    `json:"max_backups"`
+	Level        string `mapstructure:"level" json:"level" yaml:"level"`
+	Format       string `mapstructure:"format" json:"format" yaml:"format"`
+	Prefix       string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`
+	Director     string `mapstructure:"director" json:"director"  yaml:"director"`
+	LinkName     string `mapstructure:"link_name" json:"linkName" yaml:"link_name"`
+	ShowLine     bool   `mapstructure:"show_line" json:"show_line" yaml:"show_line"`
+	LogInConsole bool   `mapstructure:"log_in_console" json:"logInConsole" yaml:"log_in_console"`
 }

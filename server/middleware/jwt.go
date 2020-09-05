@@ -9,6 +9,7 @@ import (
 	"gin-vue-admin/service"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"strconv"
 	"time"
 )
@@ -57,7 +58,7 @@ func JWTAuth() gin.HandlerFunc {
 			if global.GVA_CONFIG.System.UseMultipoint {
 				err,RedisJwtToken := service.GetRedisJWT(newClaims.Username)
 				if err!=nil {
-					global.GVA_LOG.Error(err)
+					global.GVA_LOG.Error("get redis jwt failed",  zap.Any("err", err))
 				}else{
 					service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
 					//当之前的取成功时才进行拉黑操作

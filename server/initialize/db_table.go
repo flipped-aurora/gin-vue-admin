@@ -3,6 +3,7 @@ package initialize
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -28,7 +29,7 @@ func DBTables() {
 		model.SysOperationRecord{},
 	)
 	if err != nil {
-		global.GVA_LOG.Error("register table failed", err)
+		global.GVA_LOG.Error("register table failed", zap.Any("err", err))
 		os.Exit(0)
 	}
 	global.GVA_LOG.Debug("register table success")

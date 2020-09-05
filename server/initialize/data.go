@@ -3,6 +3,7 @@ package initialize
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/service"
+	"go.uber.org/zap"
 )
 
 func Data() {
@@ -20,7 +21,7 @@ func Data() {
 	err = service.InitSysDictionaryDetail()
 	err = service.InitExaFileUploadAndDownload()
 	if err != nil {
-		global.GVA_LOG.Error("initialize data failed", err)
+		global.GVA_LOG.Error("initialize data failed", zap.Any("err", err))
 	}
 	global.GVA_LOG.Debug("initialize data success")
 }

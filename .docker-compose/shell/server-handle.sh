@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/initialize"
+	"go.uber.org/zap"
 	"time"
 )
 
@@ -35,10 +36,10 @@ func RunWindowsServer() {
 	// 保证文本顺序输出
 	// In order to ensure that the text order output can be deleted
 	time.Sleep(10 * time.Microsecond)
-	global.GVA_LOG.Debug("server run success on ", address)
+	global.GVA_LOG.Debug("server run success on ", zap.String("address", address))
 
 	fmt.Printf("欢迎使用 Gin-Vue-Admin默认自动化文档地址:http://127.0.0.1%s/swagger/index.html\n 默认前端文件运行地址:http://127.0.0.1:8888/admin\n", address)
-	global.GVA_LOG.Error(s.ListenAndServe())
+	global.GVA_LOG.Error(s.ListenAndServe().Error())
 }
 EOF
 
@@ -63,7 +64,7 @@ mysql:
     password: 'Aa@6447985'
     path: mysql
     db-name: 'qmPlus'
-    config: 'charset=utf8&parseTime=True&loc=Local'
+    config: 'charset=utf8mb4&parseTime=True&loc=Local'
     max-idle-conns: 10
     max-open-conns: 10
     log-mode: true
@@ -75,6 +76,12 @@ sqlite:
     config: 'loc=Asia/Shanghai'
 
 # oss configuration
+
+# 切换本地与七牛云上传，分配头像和文件路径
+localupload:
+  local: false
+  avatar-path: uploads/avatar
+  file-path: uploads/file
 
 # 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址
 qiniu:
@@ -102,11 +109,19 @@ captcha:
     img-width: 240
     img-height: 80
 
-# logger configuration
-log:
-    prefix: '[GIN-VUE-ADMIN]'
-    log-file: true
-    stdout: 'DEBUG'
-    file: 'DEBUG'
+# zap logger configuration
+zap:
+  # 可使用 "debug", "info", "warn", "error", "dpanic", "panic", "fatal",
+  level: 'debug'
+  # console: 控制台, json: json格式输出
+  format: 'console'
+  prefix: '[GIN-VUE-ADMIN]'
+  director: 'log'
+  link_name: 'latest_log'
+  show_line: true
+  # LowercaseLevelEncoder:小写, LowercaseColorLevelEncoder:小写带颜色,CapitalLevelEncoder: 大写, CapitalColorLevelEncoder: 大写带颜色,
+  encode_level: 'LowercaseColorLevelEncoder'
+  stacktrace_key: 'stacktrace'
+  log_in_console: true
 EOF
 

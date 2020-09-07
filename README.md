@@ -13,7 +13,9 @@
 English | [简体中文](./README-zh_CN.md)
 
 # Project Guidelines
-[Online Documentation](https://www.gin-vue-admin.com/)
+[Online Documentation](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
+
+
 
 [Development Steps](https://www.gin-vue-admin.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  

@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/satori/go.uuid"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"time"
 )
@@ -309,6 +310,7 @@ func InitSysBaseMenus() (err error) {
 		{Model: gorm.Model{ID: 23, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, Hidden: true, ParentId: "3", Path: "dictionaryDetail/:id", Name: "dictionaryDetail", Component: "view/superAdmin/dictionary/sysDictionaryDetail.vue", Sort: 1, Meta: model.Meta{Title: "字典详情", Icon: "s-order"}},
 		{Model: gorm.Model{ID: 24, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, Hidden: false, ParentId: "3", Path: "operation", Name: "operation", Component: "view/superAdmin/operation/sysOperationRecord.vue", Sort: 6, Meta: model.Meta{Title: "操作历史", Icon: "time"}},
 		{Model: gorm.Model{ID: 25, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, Hidden: false, ParentId: "9", Path: "simpleUploader", Name: "simpleUploader", Component: "view/example/simpleUploader/simpleUploader", Sort: 6, Meta: model.Meta{Title: "断点续传（插件版）", Icon: "upload"}},
+		{Model: gorm.Model{ID: 26, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, ParentId: "0", Path: "https://www.gin-vue-admin.com", Name: "https://www.gin-vue-admin.com", Hidden: false, Component: "/", Sort: 0, Meta: model.Meta{Title: "官方网站", Icon: "s-home"}},
 	}
 	if tx.Create(&insert).Error != nil { // 遇到错误时回滚事务
 		tx.Rollback()
@@ -366,6 +368,7 @@ func InitSysAuthorityMenus() (err error) {
 		{"888", 23},
 		{"888", 24},
 		{"888", 25},
+		{"888", 26},
 		{"8881", 1},
 		{"8881", 2},
 		{"8881", 8},
@@ -476,7 +479,7 @@ func InitData() {
 	err = InitSysDictionaryDetail()
 	err = InitExaFileUploadAndDownload()
 	if err != nil {
-		global.GVA_LOG.Error("initialize data failed", err)
+		global.GVA_LOG.Error("initialize data failed", zap.Any("err", err))
 	}
 	global.GVA_LOG.Debug("initialize data success")
 }

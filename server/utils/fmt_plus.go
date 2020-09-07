@@ -1,6 +1,10 @@
 package utils
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+	"strings"
+)
 
 // 利用反射将结构体转化为map
 func StructToMap(obj interface{}) map[string]interface{} {
@@ -12,4 +16,9 @@ func StructToMap(obj interface{}) map[string]interface{} {
 		data[obj1.Field(i).Name] = obj2.Field(i).Interface()
 	}
 	return data
+}
+
+//将数组格式化为字符串
+func ArrayToString(array []interface{}) string {
+	return strings.Replace(strings.Trim(fmt.Sprint(array), "[]"), " ", ",", -1)
 }

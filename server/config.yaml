@@ -52,6 +52,7 @@ system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
   db-type: "mysql"  # support mysql/sqlite
+  need-init-data: false
 
 # captcha configuration
 captcha:

@@ -2,7 +2,9 @@ package config
 
 type Server struct {
 	Mysql       Mysql       `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Postgresql  Postgresql  `mapstructure:"postgresql" json:"postgresql" yaml:"postgresql"`
 	Sqlite      Sqlite      `mapstructure:"sqlite" json:"sqlite" yaml:"sqlite"`
+	Sqlserver   Sqlserver   `mapstructure:"sqlserver" json:"sqlserver" yaml:"sqlserver"`
 	Qiniu       Qiniu       `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
 	Casbin      Casbin      `mapstructure:"casbin" json:"casbin" yaml:"casbin"`
 	Redis       Redis       `mapstructure:"redis" json:"redis" yaml:"redis"`
@@ -40,6 +42,35 @@ type Mysql struct {
 	LogMode      bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
 }
 
+type Postgresql struct {
+	Username             string `mapstructure:"username" json:"username" yaml:"username"`
+	Password             string `mapstructure:"password" json:"password" yaml:"password"`
+	Dbname               string `mapstructure:"db-name" json:"dbname" yaml:"db-name"`
+	Port                 string `mapstructure:"port" json:"port" yaml:"port"`
+	Config               string `mapstructure:"config" json:"config" yaml:"config"`
+	MaxIdleConns         int    `mapstructure:"max-idle-conns" json:"maxIdleConns" yaml:"max-idle-conns"`
+	MaxOpenConns         int    `mapstructure:"max-open-conns" json:"maxOpenConns" yaml:"max-open-conns"`
+	Logger               bool   `mapstructure:"logger" json:"logger" yaml:"logger"`
+	PreferSimpleProtocol bool   `mapstructure:"prefer-simple-protocol" json:"preferSimpleProtocol" yaml:"prefer-simple-protocol"`
+}
+
+type Sqlite struct {
+	Path         string `mapstructure:"path" json:"path" yaml:"path"`
+	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"maxIdleConns" yaml:"max-idle-conns"`
+	MaxOpenConns int    `mapstructure:"max-open-conns" json:"maxOpenConns" yaml:"max-open-conns"`
+	Logger       bool   `mapstructure:"logger" json:"logger" yaml:"logger"`
+}
+
+type Sqlserver struct {
+	Username     string `mapstructure:"username" json:"username" yaml:"username"`
+	Password     string `mapstructure:"password" json:"password" yaml:"password"`
+	Path         string `mapstructure:"path" json:"path" yaml:"path"`
+	Dbname       string `mapstructure:"db-name" json:"dbname" yaml:"db-name"`
+	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"maxIdleConns" yaml:"max-idle-conns"`
+	MaxOpenConns int    `mapstructure:"max-open-conns" json:"maxOpenConns" yaml:"max-open-conns"`
+	Logger       bool   `mapstructure:"logger" json:"logger" yaml:"logger"`
+}
+
 type Redis struct {
 	Addr     string `mapstructure:"addr" json:"addr" yaml:"addr"`
 	Password string `mapstructure:"password" json:"password" yaml:"password"`
@@ -63,14 +94,6 @@ type Captcha struct {
 	KeyLong   int `mapstructure:"key-long" json:"keyLong" yaml:"key-long"`
 	ImgWidth  int `mapstructure:"img-width" json:"imgWidth" yaml:"img-width"`
 	ImgHeight int `mapstructure:"img-height" json:"imgHeight" yaml:"img-height"`
-}
-
-type Sqlite struct {
-	Username string `mapstructure:"username" json:"username" yaml:"username"`
-	Password string `mapstructure:"password" json:"password" yaml:"password"`
-	Path     string `mapstructure:"path" json:"path" yaml:"path"`
-	Config   string `mapstructure:"config" json:"config" yaml:"config"`
-	LogMode  bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
 }
 
 type Zap struct {

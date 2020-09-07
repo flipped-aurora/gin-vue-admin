@@ -15,14 +15,7 @@ import (
 // @name x-token
 // @BasePath /
 func main() {
-	switch global.GVA_CONFIG.System.DbType {
-	case "mysql":
-		initialize.Mysql()
-	// case "sqlite":
-	//	initialize.Sqlite()  // sqlite需要gcc支持 windows用户需要自行安装gcc 如需使用打开注释即可
-	default:
-		initialize.Mysql()
-	}
+	initialize.Gorm()
 	initialize.DBTables()
 	if global.GVA_CONFIG.System.NeedInitData {
 		init_data.InitData() // 通过配置文件初始化数据 默认为 false 首次运行需要将 ./config.yaml中 system下的 need-init-data 修改为true

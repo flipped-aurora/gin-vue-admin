@@ -19,11 +19,36 @@ mysql:
   max-open-conns: 10
   log-mode: false
 
-#sqlite 配置
+# Postgresql connect configuration
+postgresql:
+  username: 'gorm'
+  password: 'gorm'
+  db-name: 'gorm'
+  port: '9920'
+  config: 'sslmode=disable TimeZone=Asia/Shanghai'
+  max-idle-conns: 10
+  max-open-conns: 10
+  logger: false
+  prefer-simple-protocol: true
+
+# sqlite connect configuration
+# sqlite需要gcc支持 windows用户需要自行安装gcc
 sqlite:
-  path: db.db
-  log-mode: true
-  config: 'loc=Asia/Shanghai'
+  # path: 'file::memory:?cache=shared' # 内存模式
+  path: 'db.db'
+  max-idle-conns: 10
+  max-open-conns: 10
+  logger: true
+
+# Sqlserver connect configuration
+sqlserver:
+  username: 'gorm'
+  password: 'LoremIpsum86'
+  db-name: 'gorm'
+  path: 'localhost:9930'
+  max-idle-conns: 10
+  max-open-conns: 10
+  logger: true
 
 # oss configuration
 
@@ -51,7 +76,7 @@ system:
   use-multipoint: false
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
-  db-type: "mysql"  # support mysql/sqlite
+  db-type: "mysql"  # support mysql/postgresql/sqlite/sqlserver
   need-init-data: false
 
 # captcha configuration

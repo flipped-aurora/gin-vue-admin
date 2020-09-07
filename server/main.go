@@ -3,6 +3,7 @@ package main
 import (
 	"gin-vue-admin/core"
 	"gin-vue-admin/global"
+	"gin-vue-admin/gva/init_data"
 	"gin-vue-admin/initialize"
 	//"runtime"
 )
@@ -24,7 +25,7 @@ func main() {
 		initialize.Mysql()
 	}
 	initialize.DBTables()
-	//initialize.Data() // 打开注释即可初始化数据
+	init_data.InitData() // 打开注释即可初始化数据
 	// 程序结束前关闭数据库链接
 	db, _ := global.GVA_DB.DB()
 	defer db.Close()

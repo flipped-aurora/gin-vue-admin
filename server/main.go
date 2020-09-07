@@ -3,6 +3,8 @@ package main
 import (
 	"gin-vue-admin/core"
 	"gin-vue-admin/global"
+	"gin-vue-admin/gva/init_data"
+
 	//"gin-vue-admin/gva/init_data"
 	"gin-vue-admin/initialize"
 	//"runtime"
@@ -25,7 +27,9 @@ func main() {
 		initialize.Mysql()
 	}
 	initialize.DBTables()
-	//init_data.InitData() // 打开注释即可初始化数据  使用过后一定要再次注释或删除
+	if global.GVA_CONFIG.System.NeedInitData {
+		init_data.InitData() // 通过配置文件初始化数据 默认为 false 首次运行需要将 ./config.yaml中 system下的 need-init-data 修改为true
+	}
 	// 程序结束前关闭数据库链接
 	db, _ := global.GVA_DB.DB()
 	defer db.Close()

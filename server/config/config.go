@@ -18,6 +18,7 @@ type System struct {
 	Env           string `mapstructure:"env" json:"env" yaml:"env"`
 	Addr          int    `mapstructure:"addr" json:"addr" yaml:"addr"`
 	DbType        string `mapstructure:"db-type" json:"dbType" yaml:"db-type"`
+	NeedInitData  bool   `mapstructure:"need-init-data" json:"needInitData" yaml:"need-init-data"`
 }
 
 type JWT struct {

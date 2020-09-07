@@ -4,7 +4,8 @@ WORKDIR /gva_web/
 COPY web/ .
 
 RUN cat .env.production
-COPY docker/web-handle.sh .
+COPY .docker-compose/shell/web-handle.sh .
+RUN ls -al
 RUN sh ./web-handle.sh
 RUN cat .env.production
 RUN rm -f web-handle.sh
@@ -22,7 +23,8 @@ COPY server/ ./
 
 RUN cat ./core/server.go
 RUN cat ./config.yaml
-COPY docker/server-handle.sh .
+COPY .docker-compose/shell/server-handle.sh .
+RUN ls -al
 RUN sh ./server-handle.sh
 RUN rm -f server-handle.sh
 RUN cat ./core/server.go

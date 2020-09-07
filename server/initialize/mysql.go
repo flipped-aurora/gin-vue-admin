@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"gin-vue-admin/global"
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -33,7 +34,7 @@ func Mysql() {
 	}
 
 	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig); err != nil {
-		global.GVA_LOG.Error("MySQL启动异常", err)
+		global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
 		os.Exit(0)
 	} else {
 		global.GVA_DB = db

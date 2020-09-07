@@ -2,7 +2,6 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
 )
 
 type ExaFileUploadAndDownload struct {
@@ -11,11 +10,4 @@ type ExaFileUploadAndDownload struct {
 	Url  string `json:"url" gorm:"comment:'文件地址'"`
 	Tag  string `json:"tag" gorm:"comment:'文件标签'"`
 	Key  string `json:"key" gorm:"comment:'编号'"`
-}
-
-func ExaFileUploadAndDownloadData() []ExaFileUploadAndDownload {
-	return []ExaFileUploadAndDownload{
-		{gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "10.png", "http://qmplusimg.henrongyi.top/gvalogo.png", "png", "158787308910.png"},
-		{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "logo.png", "http://qmplusimg.henrongyi.top/1576554439myAvatar.png", "png", "1587973709logo.png"},
-	}
 }

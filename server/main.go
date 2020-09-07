@@ -4,10 +4,7 @@ import (
 	"gin-vue-admin/core"
 	"gin-vue-admin/global"
 	"gin-vue-admin/gva/init_data"
-
-	//"gin-vue-admin/gva/init_data"
 	"gin-vue-admin/initialize"
-	//"runtime"
 )
 
 // @title Swagger Example API

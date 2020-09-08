@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"fmt"
-	"strings"
-	"net/smtp"
 	"crypto/tls"
+	"fmt"
+	"net/smtp"
+	"strings"
 
 	"gin-vue-admin/global"
 
@@ -31,9 +31,9 @@ func send(to []string, subject string, body string) error {
 
 	auth := smtp.PlainAuth("", from, secret, host)
 	e := email.NewEmail()
-	if nickName == "" {
+	if nickName != "" {
 		e.From = fmt.Sprintf("%s <%s>", nickName, from)
-	}else{
+	} else {
 		e.From = from
 	}
 	e.To = to
@@ -43,7 +43,7 @@ func send(to []string, subject string, body string) error {
 	hostAddr := fmt.Sprintf("%s:%d", host, port)
 	if isSSL {
 		err = e.SendWithTLS(hostAddr, auth, &tls.Config{ServerName: host})
-	}else{
+	} else {
 		err = e.Send(hostAddr, auth)
 	}
 	return err

@@ -11,7 +11,7 @@ jwt:
 # mysql connect configuration
 mysql:
   username: root
-  password: 'root'
+  password: 'Aa@6447985'
   path: '127.0.0.1:3306'
   db-name: 'qmPlus'
   config: 'charset=utf8mb4&parseTime=True&loc=Local'

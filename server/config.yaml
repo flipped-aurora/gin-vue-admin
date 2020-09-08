@@ -11,7 +11,7 @@ jwt:
 # mysql connect configuration
 mysql:
   username: root
-  password: 'Aa@6447985'
+  password: 'root'
   path: '127.0.0.1:3306'
   db-name: 'qmPlus'
   config: 'charset=utf8mb4&parseTime=True&loc=Local'
@@ -81,3 +81,12 @@ zap:
   encode_level: 'LowercaseColorLevelEncoder'
   stacktrace_key: 'stacktrace'
   log_in_console: true
+
+email:
+  email_from: 'xxx@163.com'
+  email_nick_name: 'test'
+  email_secret: 'xxx'
+  email_to: 'xxx@qq.com'
+  email_host: 'smtp.163.com'
+  email_port: 465
+  email_isSSL: true

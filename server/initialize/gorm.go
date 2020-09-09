@@ -56,7 +56,7 @@ func GormDBTables(db *gorm.DB) {
 }
 
 // GormMysql 初始化Mysql数据库
-func GormMysql()  {
+func GormMysql() {
 	m := global.GVA_CONFIG.Mysql
 	dsn := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
 	mysqlConfig := mysql.Config{
@@ -114,7 +114,7 @@ func GormPostgreSql() {
 //	}
 //}
 
-// GormSqlite 初始化Sqlite数据库
+// GormSqlServer 初始化SqlServer数据库
 func GormSqlServer() {
 	ss := global.GVA_CONFIG.Sqlserver
 	dsn := "sqlserver://" + ss.Username + ":" + ss.Password + "@" + ss.Path + "?database=gorm"

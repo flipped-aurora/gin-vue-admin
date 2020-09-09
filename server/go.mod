@@ -41,6 +41,7 @@ require (
 	github.com/tebeka/strftime v0.1.3 // indirect
 	github.com/unrolled/secure v1.0.7
 	go.uber.org/zap v1.10.0
+	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e // indirect
 	golang.org/x/sys v0.0.0-20200610111108-226ff32320da // indirect
 	golang.org/x/tools v0.0.0-20200324003944-a576cf524670 // indirect
 	google.golang.org/protobuf v1.24.0 // indirect
@@ -50,5 +51,5 @@ require (
 	gorm.io/driver/postgres v0.2.6
 	gorm.io/driver/sqlite v1.1.1
 	gorm.io/driver/sqlserver v0.2.4
-	gorm.io/gorm v0.2.35
+	gorm.io/gorm v1.20.0
 )

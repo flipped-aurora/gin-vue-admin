@@ -1,4 +1,4 @@
-﻿
+
 <div align=center>
 <img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width=300" height="300" />
 </div>
@@ -10,114 +10,112 @@
 <img src="https://img.shields.io/badge/gorm-1.9.12-red"/>
 </div>
 
-English | [简体中文](./README-zh_CN.md)
+[English](./README-en.md) | 简体中文
 
-# Project Guidelines
-[Online Documentation](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
+# 项目文档
+[在线文档](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
 
+[开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+- 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
+- 后台框架：[gin](https://github.com/gin-gonic/gin) 
 
+## 1. 基本介绍
 
-[Development Steps](https://www.gin-vue-admin.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
-- Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
-- Server Framework：[gin](https://github.com/gin-gonic/gin) 
+### 1.1 项目介绍
 
-## 1. Basic Introduction
+[在线预览](http://demo.gin-vue-admin.com/)
 
-### 1.1 Project Introduction
+测试用户名：admin
 
-[Online Demo](http://demo.gin-vue-admin.com/)
+测试密码：123456
 
-username：admin
+> Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
 
-password：123456
+### 1.2 贡献指南
+Hi! 首先感谢你使用 gin-vue-admin。
 
-> Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
-> It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
+Gin-vue-admin 是一套为后台管理平台准备的一整套前后端分离架构式的开源框架，旨在快速搭建后台管理系统。
 
-Hi! Thank you for choosing gin-vue-admin.
+Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-admin 贡献代码或提供建议，请阅读以下内容。
 
-Gin-vue-admin is a full-stack (frontend and backend separation) framework for developers, designers and product managers.
+#### 1.2.1 Issue 规范
+- issue 仅用于提交 Bug 或 Feature 以及设计相关的内容，其它内容可能会被直接关闭。如果你在使用时产生了疑问，请到 Slack 或 [Gitter](https://gitter.im/ElemeFE/element) 里咨询。
 
-We are excited that you are interested in contributing to gin-vue-admin. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
+- 在提交 issue 之前，请搜索相关内容是否已被提出。
 
-### 1.2 Contributing Guide
-#### 1.2.1 Issue Guidelines
+#### 1.2.2 Pull Request 规范
+- 请先 fork 一份到自己的项目下，不要直接在仓库下建分支。
 
-- Issues are exclusively for bug reports, feature requests and design-related topics. Other questions may be closed directly. If any questions come up when you are using Element, please hit [Gitter](https://gitter.im/element-en/Lobby) for help.
+- commit 信息要以`[文件名]: 描述信息` 的形式填写，例如 `README.md: fix xxx bug`。
 
-- Before submitting an issue, please check if similar problems have already been issued.
+- <font color=red>确保 PR 是提交到 `develop` 分支，而不是 `master` 分支。</font>
 
-#### 1.2.2 Pull Request Guidelines
+- 如果是修复 bug，请在 PR 中给出描述信息。
 
-- Fork this repository to your own account. Do not create branches here.
+- 合并代码需要两名维护人员参与：一人进行 review 后 approve，另一人再次 review，通过后即可合并。
 
-- Commit info should be formatted as `[File Name]: Info about commit.` (e.g. `README.md: Fix xxx bug`)
+### 1.3 版本列表
 
-- <font color=red>Make sure PRs are created to `develop` branch instead of `master` branch.</font>
+- master: 2.0, 用于生产环境
 
-- If your PR fixes a bug, please provide a description about the related bug.
+- develop: 2.0, 用于测试环境
 
-- Merging a PR takes two maintainers: one approves the changes after reviewing, and then the other reviews and merges.
+- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
 
-### 1.3 Version list
+- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0停止维护）
 
-- master: 2.0 code, for prod
-
-- develop: 2.0 dev code, for test
-
-- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 is no longer compatible with v1.0）
-
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （stop maintenance）
-
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （stop maintenance）
+- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0停止维护）
 
 
-## 2. Getting started
+## 2. 使用说明
 
-> Use docker-compose to experience this project
-- Installation docker-compose [Official document](https://docs.docker.com/compose/install/)
+```
+- node版本 > v8.6.0
+- golang版本 >= v1.11
+- IDE推荐：Goland
+- 各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址。
+- gormv2版本初始化数据库可以利用批量创建功能，这里已经写好初始化代码，需要在main.go内打开 initialize.Data() 的注释即可
+- 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
+```
+
+> 使用docker-compose体验本项目
+- 安装 docker-compose [官方文档](https://docs.docker.com/compose/install/)
     - ```shell script
-       # Install on Linux
-       # 1.1 Run this command to download the current stable version of Docker Compose
+       # 在Linux安装
+       # 1.1 运行此命令以下载Docker Compose的当前稳定版本
        sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-       # 1.2 Apply executable permissions to binary files
+       # 1.2 将可执行权限应用于二进制文件
        sudo chmod +x /usr/local/bin/docker-compose 
       ```
     - ```shell script
-       # Use Python's pip installation
+       # 使用Python的pip安装 
        pip3 install docker-compose -i https://pypi.tuna.tsinghua.edu.cn/simple
       ```
-    - Use Docker Desktop 
+    - 使用 Docker Desktop 
         - Windows: https://hub.docker.com/editions/community/docker-ce-desktop-windows
         - Mac: https://hub.docker.com/editions/community/docker-ce-desktop-mac/
 
-- Use git to clone this project
+- 使用git克隆本项目
     - ```git
         git clone https://github.com/flipped-aurora/gin-vue-admin.git
       ```
-- Use docker-compose up to start the startup project with one click
+- 使用docker-compose up一键启动启动项目
     - ```shell script
-      # Use docker-compose to start four containers
+      # 使用docker-compose启动四个容器
       docker-compose up
-      # If you modify some configuration options, you can use this command to repackage the image
+      # 如果您修改了某些配置选项,可以使用此命令重新打包镜像
       docker-compose up --build
-      # Use docker-compose to start in the background
+      # 使用docker-compose 后台启动
       docker-compose up -d
       ```
 
-    - Web project preview [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
+    - web项目预览 [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
 
-    - swagger APIs [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
+    - swagger文档 [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
-```
-- node version > v8.6.0
-- golang version >= v1.11
-- IDE recommendation: Goland
-- After you clone the project, use the scripts in directory db to create your own database.
-- We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
-```
 
-### 2.1 Web
+
+### 2.1 web端
 
 ```bash
 # clone the project
@@ -133,192 +131,186 @@ npm install
 npm run serve
 ```
 
-### 2.2 Server
+### 2.2 server端
 
 ```bash
-# using go.mod
+# 使用 go.mod
 
-# install go modules
+# 安装go依赖包
 go list (go mod tidy)
 
-# build the server
+# 编译
 go build
 ```
 
-### 2.3 API docs auto-generation using swagger
+### 2.3 swagger自动化API文档
 
-#### 2.3.1 install swagger 
+#### 2.3.1 安装 swagger
 
-##### (1) Using VPN or outside mainland China
+##### （1）可以翻墙
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-##### (2) In mainland China
- 
-In mainland China, access to go.org/x is prohibited，we recommend [goproxy.io](https://goproxy.io/zh/)
+##### （2）无法翻墙
 
-````bash
+由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.io](https://goproxy.io/zh/)
 
-If you are using Go version 1.13 and above (recommended)
-# Enable Go Modules function
+```bash
+如果您使用的 Go 版本是 1.13 及以上(推荐)
+# 启用 Go Modules 功能
 go env -w GO111MODULE=on 
-# Configure GOPROXY environment variables
+# 配置 GOPROXY 环境变量
 go env -w GOPROXY=https://goproxy.io,direct
-If you are using Go version 1.12 and below
-go env -w GO111MODULE=on
-go env -w GOPROXY=https://goproxy.io
 
-# get swag
+# 执行
 go get -g -v github.com/swaggo/swag/cmd/swag
 
-# cd GOPATH/src/github.com/swaggo/swag/cmd/swag
+# 到GOPATH的/src/github.com/swaggo/swag/cmd/swag路径下执行
 go install
-````
+```
 
-#### 2.3.2 API docs generation
+#### 2.3.2 生成API文档
 
 ````
 cd server
 swag init
 ````
-After executing the above command，`docs` will show in `server/`，then open your browser, jump into `http://localhost:8888/swagger/index.html` to see the swagger APIs.
+执行上面的命令后，server目录下会出现docs文件夹，登录http://localhost:8888/swagger/index.html，即可查看swagger文档
 
 
-## 3. Technical selection
+## 3. 技术选型
 
-- Frontend: using `Element-UI` based on vue，to code the page.
-- Backend: using `Gin` to quickly build basic RESTful API. `Gin` is a web framework written in Go (Golang).
-- DB: `MySql`(5.6.44)，using `gorm` to implement data manipulation, added support for SQLite databases.
-- Cache: using `Redis` to implement the recording of the JWT token of the currently active user and implement the multi-login restriction.
-- API: using Swagger to auto generate APIs docs。
-- Config: using `fsnotify` and `viper` to implement `yaml` config file。
-- Log: using `go-logging` record logs。
+- 前端：用基于`vue`的`Element-UI`构建基础页面。
+- 后端：用`Gin`快速搭建基础restful风格API，`Gin`是一个go语言编写的Web框架。
+- 数据库：采用`MySql`(5.6.44)版本，使用`gorm`实现对数据库的基本操作,已添加对sqlite数据库的支持。
+- 缓存：使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
+- API文档：使用`Swagger`构建自动化文档。
+- 配置文件：使用`fsnotify`和`viper`实现`yaml`格式的配置文件。
+- 日志：使用`go-logging`实现日志记录。
 
-## 4. Project Architecture
 
-### 4.1 Architecture Diagram
+## 4. 项目架构
+### 4.1 系统架构图
 
-![Architecture diagram](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
+![系统架构图](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
-### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
+### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
 
-![Front-end Detailed Design Diagram](http://qmplusimg.henrongyi.top/naotu.png)
+![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
 
-### 4.3 Project Layout
-
-```
-    ├─server  	     （backend）
-    │  ├─api            （API entrance）
-    │  ├─config         （config file）
-    │  ├─core  	        （core code）
-    │  ├─db             （db scripts）
-    │  ├─docs  	        （swagger APIs docs）
-    │  ├─global         （global objet）
-    │  ├─initialiaze    （initialiazation）
-    │  ├─middleware     （middle ware）
-    │  ├─model          （model and services）
-    │  ├─resource       （resources, such as static pages, templates）
-    │  ├─router         （routers）
-    │  ├─service         (services)
-    │  └─utils	        （common utilities）
-    └─web            （frontend）
-        ├─public        （deploy templates）
-        └─src           （source code）
-            ├─api       （frontend APIs）
-            ├─assets	（static files）
-            ├─components（components）
-            ├─router	（frontend routers）
-            ├─store     （vuex state management）
-            ├─style     （common styles）
-            ├─utils     （frontend common utilitie）
-            └─view      （pages）
+### 4.3 目录结构
 
 ```
-
-## 5. Features
-
-- Authority management: Authority management based on `jwt` and `casbin`. 
-- File upload & download: File upload operation based on Qiniu Cloud (In order to make it easier for everyone to test, I have provided various important tokens of my Qiniu test number, and I urge you not to make things a mess).
-- Pagination Encapsulation：The frontend uses mixins to encapsulate paging, and the paging method can call mixins
-- User management: The system administrator assigns user roles and role permissions.
-- Role management: Create the main object of permission control, and then assign different API permissions and menu permissions to the role.
-- Menu management: User dynamic menu configuration implementation, assigning different menus to different roles.
-- API management: Different users can call different API permissions.
-- Configuration management: The configuration file can be modified in the web page (the test environment does not provide this function).
-- Rich text editor: Embed MarkDown editor function.
-- Conditional search: Add an example of conditional search.
-- Restful example: You can see sample APIs in user management module.
+    ├─server  	     （后端文件夹）
+    │  ├─api            （API）
+    │  ├─config         （配置包）
+    │  ├─core  	        （內核）
+    │  ├─db             （数据库脚本）
+    │  ├─docs  	        （swagger文档目录）
+    │  ├─global         （全局对象）
+    │  ├─initialiaze    （初始化）
+    │  ├─middleware     （中间件）
+    │  ├─model          （结构体层）
+    │  ├─resource       （资源）
+    │  ├─router         （路由）
+    │  ├─service         (服务)
+    │  └─utils	        （公共功能）
+    └─web            （前端文件）
+        ├─public        （发布模板）
+        └─src           （源码包）
+            ├─api       （向后台发送ajax的封装层）
+            ├─assets	（静态文件）
+            ├─components（组件）
+            ├─router	（前端路由）
+            ├─store     （vuex 状态管理仓）
+            ├─style     （通用样式文件）
+            ├─utils     （前端工具库）
+            └─view      （前端页面）
 
 ```
-fontend code file: src\view\superAdmin\api\api.vue 
-backend code file: model\dnModel\api.go 
+
+## 5. 主要功能
+
+- 权限管理：基于`jwt`和`casbin`实现的权限管理 
+- 文件上传下载：实现基于七牛云的文件上传操作（为了方便大家测试，我公开了自己的七牛测试号的各种重要token，恳请大家不要乱传东西）
+- 分页封装：前端使用mixins封装分页，分页方法调用mixins即可 
+- 用户管理：系统管理员分配用户角色和角色权限。
+- 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
+- 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
+- api管理：不同用户可调用的api接口的权限不同。
+- 配置管理：配置文件可前台修改（测试环境不开放此功能）。
+- 富文本编辑器：MarkDown编辑器功能嵌入。
+- 条件搜索：增加条件搜索示例。
+- restful示例：可以参考用户管理模块中的示例API。 
 ```
-- Multi-login restriction: Change `userMultipoint` to true in `system` in `config.yaml` (You need to configure redis and redis parameters yourself. During the test period, please report in time if there is a bug).
-- Upload file by chunk：Provides examples of file upload and large file upload by chunk.
-- Form Builder：With the help of [@form-generator](https://github.com/JakHuang/form-generator).
-- Code generator: Providing backend with basic logic and simple curd code generator.
+前端文件参考: src\view\superAdmin\api\api.vue 
+后台文件参考: model\dnModel\api.go 
+```
+- 多点登录限制：需要在`config.yaml`中把`system`中的`useMultipoint`修改为true(需要自行配置Redis和Config中的Redis参数，测试阶段，有bug请及时反馈)。
+- 分片长传：提供文件分片上传和大文件分片上传功能示例。
+- 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator)。
+- 代码生成器：后台基础逻辑以及简单curd的代码生成器。 
 
-## 6. To-do list
+## 6. 计划任务
 
-- [ ] upload & export Excel
-- [ ] e-chart
-- [ ] workflow, task transfer function
-- [ ] frontend independent mode, mock
+- [ ] 导入，导出Excel
+- [ ] Echart图表支持
+- [ ] 工作流，任务交接功能开发
+- [ ] 单独前端使用模式以及数据模拟
 
-## 7. Knowledge base
-
-### 7.1 Team blog
+## 7. 知识库 
+## 7.1 团队博客
 
 > https://www.yuque.com/flipped-aurora
 >
->There are video courses about frontend framework in our blo. If you think the project is helpful to you, you can add my personal WeChat:shouzi_1994，your comments is welcomed。
+>内有前端框架教学视频。如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994，欢迎您提出宝贵的需求。
 
-### 7.2 Video courses
+## 7.2 教学视频
 
-(1) Development environment course
-> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/
+（1）环境搭建
+> Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
     
-(2) Template course
-> Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/
+（2）模板使用
+> Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
-（3）2.0 version introduction and development experience
+（3）2.0目录以及开发体验
 > Bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
 
-(4) Golang basic course (coming soon)
-
+（4）golang基础教学视频录制中...
 > https://space.bilibili.com/322210472/channel/detail?cid=108884
 
-## 8. Contacts
-### 8.1 Groups
-#### QQ group: 622360840
+## 8. 联系方式
 
-| QQ group | 
-|  :---:  |  
+### 8.1 技术群
+
+### QQ交流群：622360840
+| QQ 群(满) |
+|  :---:  |   
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
+### 微信交流群
+可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
 
-#### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
-
-### 8.2 Team members
-| Jiang | Yan | Yin | Du | Yin | Song |
+### 8.2 项目组成员
+| 蒋 | 严 | 尹 | 杜 | 印 | 宋 |
 |  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
 
-|  Nick name   | Project position  | First name  |
+|  昵称   | 项目职务  | 姓  |
 |  ----  | ----  | ----  |
-| [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
-| [@Ruio9244](https://github.com/Ruio9244)  | Architect | Yan |
-| [@granty1](https://github.com/granty1)  | Backend developer | Yin |
-| [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
-| [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
-| [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
-| [@SliverHorn](https://github.com/SliverHorn)  | Community Administrator | Lai |
+| [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
+| [@Ruio9244](https://github.com/Ruio9244)  | 架构师 | 严 |
+| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
+| [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
+| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
+| [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
+| [@SliverHorn](https://github.com/SliverHorn)  | 社区管理员 | 赖 |
 
-## 9. Donate
+## 9. 捐赠
 
-If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.gin-vue-admin.com/docs/coffee)
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
 
-## 10. Commercial considerations
+## 10. 商用注意事项
 
-If you use this project for commercial purposes, please comply with the Apache2.0 agreement and retain the author's technical support statement.
+如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

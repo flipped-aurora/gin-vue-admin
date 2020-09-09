@@ -17,7 +17,7 @@ type SysWorkflow struct {
 type SysWorkflowStepInfo struct {
 	gorm.Model
 	SysWorkflowID   uint    `json:"workflowID" gorm:"comment:'所属工作流ID'"`      // 所属工作流ID
-	IsStrat         bool    `json:"isStrat" gorm:"comment:'是否是开始流节点'"`        // 是否是开始流节点
+	IsStart         bool    `json:"isStart" gorm:"comment:'是否是开始流节点'"`        // 是否是开始流节点
 	StepName        string  `json:"stepName" gorm:"comment:'工作流节点名称'"`        // 工作流名称
 	StepNo          float64 `json:"stepNo" gorm:"comment:'步骤id （第几步）'"`       // 步骤id （第几步）
 	StepAuthorityID string  `json:"stepAuthorityID" gorm:"comment:'操作者级别id'"` // 操作者级别id

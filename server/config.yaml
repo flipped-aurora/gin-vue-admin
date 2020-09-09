@@ -55,7 +55,6 @@ sqlserver:
 # 切换本地与七牛云上传，分配头像和文件路径
 localupload:
   local: false
-  avatar-path: uploads/avatar
   file-path: uploads/file
 
 # 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址
@@ -106,3 +105,12 @@ zap:
   encode_level: 'LowercaseColorLevelEncoder'
   stacktrace_key: 'stacktrace'
   log_in_console: true
+
+email:
+  email_from: 'xxx@163.com'
+  email_nick_name: 'test'
+  email_secret: 'xxx'
+  email_to: 'xxx@qq.com'
+  email_host: 'smtp.163.com'
+  email_port: 465
+  email_isSSL: true

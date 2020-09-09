@@ -49,7 +49,6 @@ type Redis struct {
 
 type LocalUpload struct {
 	Local      bool   `mapstructure:"local" json:"local" yaml:"local"`
-	AvatarPath string `mapstructure:"avatar-path" json:"avatarPath" yaml:"avatar-path"`
 	FilePath   string `mapstructure:"file-path" json:"filePath" yaml:"file-path"`
 }
 

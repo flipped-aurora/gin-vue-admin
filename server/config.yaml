@@ -30,7 +30,6 @@ sqlite:
 # 切换本地与七牛云上传，分配头像和文件路径
 localupload:
   local: false
-  avatar-path: uploads/avatar
   file-path: uploads/file
 
 # 请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址

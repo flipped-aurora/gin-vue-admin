@@ -75,9 +75,6 @@
 				<el-form-item label="本地或七牛云">
 					<el-checkbox v-model="config.localUpload.local">本地</el-checkbox>
 				</el-form-item>
-				<el-form-item label="本地头像路径">
-					<el-input v-model="config.localUpload.avatarPath"></el-input>
-				</el-form-item>
 				<el-form-item label="本地文件路径">
 					<el-input v-model="config.localUpload.filePath"></el-input>
 				</el-form-item>

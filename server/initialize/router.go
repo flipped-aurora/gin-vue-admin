@@ -16,7 +16,6 @@ import (
 func Routers() *gin.Engine {
 	var Router = gin.Default()
 	// 为用户头像和文件提供静态地址
-	Router.StaticFS(global.GVA_CONFIG.LocalUpload.AvatarPath, http.Dir(global.GVA_CONFIG.LocalUpload.AvatarPath))
 	Router.StaticFS(global.GVA_CONFIG.LocalUpload.FilePath, http.Dir(global.GVA_CONFIG.LocalUpload.FilePath))
 	// Router.Use(middleware.LoadTls())  // 打开就能玩https了
 	global.GVA_LOG.Debug("use middleware logger")

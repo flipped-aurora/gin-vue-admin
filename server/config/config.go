@@ -13,6 +13,7 @@ type Server struct {
 	Captcha     Captcha     `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	Zap         Zap         `mapstructure:"zap" json:"zap" yaml:"zap"`
 	LocalUpload LocalUpload `mapstructure:"localUpload" json:"localUpload" yaml:"localUpload"`
+	Email       Email       `mapstructure:"email" json:"email" yaml:"email"`
 }
 
 type System struct {
@@ -79,7 +80,6 @@ type Redis struct {
 
 type LocalUpload struct {
 	Local      bool   `mapstructure:"local" json:"local" yaml:"local"`
-	AvatarPath string `mapstructure:"avatar-path" json:"avatarPath" yaml:"avatar-path"`
 	FilePath   string `mapstructure:"file-path" json:"filePath" yaml:"file-path"`
 }
 
@@ -106,4 +106,14 @@ type Zap struct {
 	EncodeLevel   string `mapstructure:"encode_level" json:"encodeLevel" yaml:"encode_level"`
 	StacktraceKey string `mapstructure:"stacktrace_key" json:"stacktraceKey" yaml:"stacktrace_key"`
 	LogInConsole  bool   `mapstructure:"log_in_console" json:"logInConsole" yaml:"log_in_console"`
+}
+
+type Email struct {
+	EmailFrom         string `mapstructure:"email_from" json:"emailFrom" yaml:"email_from"`
+	EmailNickName         string `mapstructure:"email_nick_name" json:"emailNickName" yaml:"email_nick_name"`
+	EmailSecret         string `mapstructure:"email_secret" json:"emailSecret" yaml:"email_secret"`
+	EmailTo         string `mapstructure:"email_to" json:"emailTo" yaml:"email_to"`
+	EmailHost         string `mapstructure:"email_host" json:"emailHost" yaml:"email_host"`
+	EmailPort         int `mapstructure:"email_port" json:"emailPort" yaml:"email_port"`
+	EmailIsSSL         bool `mapstructure:"email_isSSL" json:"emailIsSSL" yaml:"email_isSSL"`
 }

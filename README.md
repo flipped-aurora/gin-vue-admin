@@ -113,12 +113,11 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
     - swagger文档 [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
-- 打开http://127.0.0.1:8000,验证码无法显示的话
+- 打开http://127.0.0.1:8000,验证码无法显示或者padding的话, 请尝试以下方法
 
 	- ```shell
 		# 终端输入以下命令查找
 		docker network inspect gin-vue-admin_default
-		
 		[
 		    {
 		        "Name": "gin-vue-admin_default",
@@ -182,10 +181,8 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 		        }
 		    }
 		]
-		# Name为"gva-server"的IPv4Address,把172.29.0.3放到.docker-compose/nginx/conf.d/my.conf的第20行
+		# .docker-compose/nginx/conf.d/my.conf的第20行的ip替换为Name为"gva-server"的IPv4Address的ip
 		```
-
-	- 
 
 ### 2.1 web端
 

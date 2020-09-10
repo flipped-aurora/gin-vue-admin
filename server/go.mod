@@ -51,5 +51,5 @@ require (
 	gorm.io/driver/mysql v0.3.1
 	gorm.io/driver/postgres v0.2.6
 	gorm.io/driver/sqlserver v0.2.4
-	gorm.io/gorm v1.20.0
+	gorm.io/gorm v0.2.35
 )

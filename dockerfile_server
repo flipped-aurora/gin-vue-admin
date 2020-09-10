@@ -1,20 +1,4 @@
-FROM node:12.16.1 as gva-web
-
-WORKDIR /gva_web/
-COPY web/ .
-
-RUN cat .env.production
-COPY .docker-compose/shell/web-handle.sh .
-RUN ls -al
-RUN sh ./web-handle.sh
-RUN cat .env.production
-RUN rm -f web-handle.sh
-
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-RUN cnpm install || npm install
-RUN npm run build
-
-FROM golang:alpine as gva-server
+FROM golang:alpine
 
 ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.io,direct
@@ -30,25 +14,19 @@ RUN rm -f server-handle.sh
 RUN cat ./core/server.go
 RUN cat ./config.yaml
 
-RUN go env && go list && go build -o gva-server .
+RUN go env && go build -o server .
 
 
-FROM nginx:alpine
-LABEL MAINTAINER="SliverHorn"
+FROM alpine:latest
+LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
 
-WORKDIR gva/
+WORKDIR /go/src/gin-vue-admin
 
-# copy web
-COPY --from=gva-web /gva_web/dist ./resource/dist
-# copy server
-COPY --from=gva-server /go/src/gin-vue-admin/gva-server ./
-COPY --from=gva-server /go/src/gin-vue-admin/config.yaml ./
-COPY --from=gva-server /go/src/gin-vue-admin/resource ./resource
+COPY --from=0 /go/src/gin-vue-admin/server ./
+COPY --from=0 /go/src/gin-vue-admin/config.yaml ./
+COPY --from=0 /go/src/gin-vue-admin/resource ./resource
 
-
-EXPOSE 8888
-
-ENTRYPOINT ./gva-server
+ENTRYPOINT ./server
 
 # 根据Dockerfile生成Docker镜像
 

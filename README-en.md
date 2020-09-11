@@ -62,14 +62,9 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 ### 1.3 Version list
 
 - master: 2.0 code, for prod
-
 - develop: 2.0 dev code, for test
-
-- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 is no longer compatible with v1.0）
-
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （stop maintenance）
-
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （stop maintenance）
+- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1](https://v1.gorm.io) Stable branch)
+- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2](https://v2.gorm.io) Development branch)
 
 ## 2. Getting started
 

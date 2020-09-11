@@ -1,4 +1,4 @@
-﻿
+
 <div align=center>
 <img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width=300" height="300" />
 </div>
@@ -62,17 +62,19 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 ### 1.3 Version list
 
 - master: 2.0 code, for prod
-
 - develop: 2.0 dev code, for test
-
-- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 is no longer compatible with v1.0）
-
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （stop maintenance）
-
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （stop maintenance）
-
+- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1](https://v1.gorm.io) Stable branch)
+- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2](https://v2.gorm.io) Development branch)
 
 ## 2. Getting started
+
+```
+- node version > v8.6.0
+- golang version >= v1.11
+- IDE recommendation: Goland
+- After you clone the project, use the scripts in directory db to create your own database.
+- We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
+```
 
 > Use docker-compose to experience this project
 - Installation docker-compose [Official document](https://docs.docker.com/compose/install/)
@@ -95,6 +97,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
     - ```git
         git clone https://github.com/flipped-aurora/gin-vue-admin.git
       ```
+    
 - Use docker-compose up to start the startup project with one click
     - ```shell script
       # Use docker-compose to start four containers
@@ -105,17 +108,31 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
       docker-compose up -d
       ```
 
-    - Web project preview [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
+    - Web project preview [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
     - swagger APIs [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
-```
-- node version > v8.6.0
-- golang version >= v1.11
-- IDE recommendation: Goland
-- After you clone the project, use the scripts in directory db to create your own database.
-- We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
-```
+- If the internal ip of the server's 177.7.0.12 container is occupied, the place to be modified is
+
+  - Replace 177.7.0.12 on line 39 of [docker-compose.yaml](./docker-compose.yaml) with the ip you want
+  - Replace 177.7.0.12 in line 20 of [.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf) with the ip you want
+
+- docker-compose uses a custom docker network
+
+    - ```dockerfile
+        networks:
+          network:
+            ipam:
+              driver: default
+              config:
+                - subnet: '177.7.0.0/16' 
+        ```
+
+    - Subnet address, the default gateway is 177.7.0.1 (docker-compose V2 needs to write, V3 does not need),For specific information, see the [official document](https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address)
+
+    - The default network name is gin-vue-admin_network, and the default is bridge mode
+
+    - If the subnet is modified, the ipv4_address of each service needs to be modified, and the ip of the server on line 20 of [.docker-compose/nginx/conf.d/my.conf](.docker-compose/nginx/conf.d/my.conf) also needs to be modified
 
 ### 2.1 Web
 
@@ -155,7 +172,7 @@ go get -u github.com/swaggo/swag/cmd/swag
 ````
 
 ##### (2) In mainland China
- 
+
 In mainland China, access to go.org/x is prohibited，we recommend [goproxy.io](https://goproxy.io/zh/)
 
 ````bash
@@ -278,7 +295,7 @@ backend code file: model\dnModel\api.go
 
 (1) Development environment course
 > Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/
-    
+
 (2) Template course
 > Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/
 
@@ -293,8 +310,8 @@ backend code file: model\dnModel\api.go
 ### 8.1 Groups
 #### QQ group: 622360840
 
-| QQ group | 
-|  :---:  |  
+| QQ group |
+|  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 

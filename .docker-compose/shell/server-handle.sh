@@ -1,48 +1,5 @@
 #! /bin/bash
 
-rm -f ./core/server.go
-# 生成server.go文件, 添加Router.Static("/admin", "./resource/dist")这个代码
-touch ./core/server.go
-filename="./core/server.go"
-cat>"${filename}"<<EOF
-package core
-
-import (
-	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/initialize"
-	"go.uber.org/zap"
-	"time"
-)
-
-type server interface {
-	ListenAndServe() error
-}
-
-func RunWindowsServer() {
-	if global.GVA_CONFIG.System.UseMultipoint {
-		// 初始化redis服务
-		initialize.Redis()
-	}
-	Router := initialize.Routers()
-	Router.Static("/form-generator", "./resource/page")
-	Router.Static("/admin", "./resource/dist")
-
-	//InstallPlugs(Router)
-	// end 插件描述
-
-	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
-	s := initServer(address, Router)
-	// 保证文本顺序输出
-	// In order to ensure that the text order output can be deleted
-	time.Sleep(10 * time.Microsecond)
-	global.GVA_LOG.Debug("server run success on ", zap.String("address", address))
-
-	fmt.Printf("欢迎使用 Gin-Vue-Admin默认自动化文档地址:http://127.0.0.1%s/swagger/index.html\n 默认前端文件运行地址:http://127.0.0.1:8888/admin\n", address)
-	global.GVA_LOG.Error(s.ListenAndServe().Error())
-}
-EOF
-
 rm -f ./config.yaml
 # 生成config.yaml文件, 用于docker-compose的使用
 touch ./config.yaml
@@ -123,5 +80,14 @@ zap:
   encode_level: 'LowercaseColorLevelEncoder'
   stacktrace_key: 'stacktrace'
   log_in_console: true
+
+email:
+  email_from: 'xxx@163.com'
+  email_nick_name: 'test'
+  email_secret: 'xxx'
+  email_to: 'xxx@qq.com'
+  email_host: 'smtp.163.com'
+  email_port: 465
+  email_isSSL: true
 EOF
 

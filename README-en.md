@@ -71,8 +71,15 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 - [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （stop maintenance）
 
-
 ## 2. Getting started
+
+```
+- node version > v8.6.0
+- golang version >= v1.11
+- IDE recommendation: Goland
+- After you clone the project, use the scripts in directory db to create your own database.
+- We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
+```
 
 > Use docker-compose to experience this project
 - Installation docker-compose [Official document](https://docs.docker.com/compose/install/)
@@ -95,6 +102,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
     - ```git
         git clone https://github.com/flipped-aurora/gin-vue-admin.git
       ```
+    
 - Use docker-compose up to start the startup project with one click
     - ```shell script
       # Use docker-compose to start four containers
@@ -109,86 +117,27 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
     - swagger APIs [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
-- Openhttp://127.0.0.1:8000, if the verification code cannot be displayed or padding,Please try the following
+- If the internal ip of the server's 177.7.0.12 container is occupied, the place to be modified is
 
-	- ```shell
-		# Enter the following command in the terminal to find
-		docker network inspect gin-vue-admin_default
-		[
-		    {
-		        "Name": "gin-vue-admin_default",
-		        "Id": "dd65598bd3fcce9916a88161f26268f4e08a6d5bd1c619d07e69abc93c69bba3",
-		        "Created": "2020-09-10T10:36:37.868984015Z",
-		        "Scope": "local",
-		        "Driver": "bridge",
-		        "EnableIPv6": false,
-		        "IPAM": {
-		            "Driver": "default",
-		            "Options": null,
-		            "Config": [
-		                {
-		                    "Subnet": "172.29.0.0/16",
-		                    "Gateway": "172.29.0.1"
-		                }
-		            ]
-		        },
-		        "Internal": false,
-		        "Attachable": true,
-		        "Ingress": false,
-		        "ConfigFrom": {
-		            "Network": ""
-		        },
-		        "ConfigOnly": false,
-		        "Containers": {
-		            "1e246725c7ab689608c9f451c57a892e070fd63ec971d1749ede8dfbdaf704e1": {
-		                "Name": "gva-redis",
-		                "EndpointID": "d457e4babd5676e289bdf4f4c5ef0ce30c2acd87d437bfd7ea8809467a9304ef",
-		                "MacAddress": "02:42:ac:1d:00:02",
-		                "IPv4Address": "172.29.0.2/16",
-		                "IPv6Address": ""
-		            },
-		            "7228d1c37654173e78a5ae82047b3a3b771feeea855dcc1e88e8e29e262bf789": {
-		                "Name": "gva-web",
-		                "EndpointID": "ffc9c29b9aa1e4c7a56b9e8060fff455295813298df585df51b802548c477969",
-		                "MacAddress": "02:42:ac:1d:00:05",
-		                "IPv4Address": "172.29.0.5/16",
-		                "IPv6Address": ""
-		            },
-		            "99b6063801049d659a329cada5ad0d418c02a9956794b9bcbc07327fff3a1e58": {
-		                "Name": "gva-server",
-		                "EndpointID": "9a04629997d8b9aa6d75cc396d5dbb54bc5d239017a1010bacb53f73e2d46199",
-		                "MacAddress": "02:42:ac:1d:00:04",
-		                "IPv4Address": "172.29.0.4/16",
-		                "IPv6Address": ""
-		            },
-		            "af60bee9ddca855beaf6bd6c6612516970f1336215af622d560f982276d9e4c6": {
-		                "Name": "gva-mysql",
-		                "EndpointID": "998a67b2b2ca9a12c916e97bf30f6b5879ee610c52d5ab329253192acd686cd8",
-		                "MacAddress": "02:42:ac:1d:00:03",
-		                "IPv4Address": "172.29.0.3/16",
-		                "IPv6Address": ""
-		            }
-		        },
-		        "Options": {},
-		        "Labels": {
-		            "com.docker.compose.network": "default",
-		            "com.docker.compose.project": "gin-vue-admin",
-		            "com.docker.compose.version": "1.26.2"
-		        }
-		    }
-		]
-		# Replace the ip on line 20 of .docker-compose/nginx/conf.d/my.conf with the ip of IPv4Address whose Name is "gva-server"
-		```
+  - Replace 177.7.0.12 on line 39 of [docker-compose.yaml](./docker-compose.yaml) with the ip you want
+  - Replace 177.7.0.12 in line 20 of [.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf) with the ip you want
 
-		
+- docker-compose uses a custom docker network
 
-```
-- node version > v8.6.0
-- golang version >= v1.11
-- IDE recommendation: Goland
-- After you clone the project, use the scripts in directory db to create your own database.
-- We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
-```
+    - ```dockerfile
+        networks:
+          network:
+            ipam:
+              driver: default
+              config:
+                - subnet: '177.7.0.0/16' 
+        ```
+
+    - Subnet address, the default gateway is 177.7.0.1 (docker-compose V2 needs to write, V3 does not need),For specific information, see the [official document](https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address)
+
+    - The default network name is gin-vue-admin_network, and the default is bridge mode
+
+    - If the subnet is modified, the ipv4_address of each service needs to be modified, and the ip of the server on line 20 of [.docker-compose/nginx/conf.d/my.conf](.docker-compose/nginx/conf.d/my.conf) also needs to be modified
 
 ### 2.1 Web
 

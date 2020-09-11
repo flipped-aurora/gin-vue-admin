@@ -57,15 +57,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ### 1.3 版本列表
 
 - master: 2.0, 用于生产环境
-
 - develop: 2.0, 用于测试环境
-
-- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
-
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0停止维护）
-
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0停止维护）
-
+- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1版本](https://v1.gorm.io)稳定分支)
+- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2版本](https://v2.gorm.io)开发分支)
 
 ## 2. 使用说明
 
@@ -99,6 +93,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
     - ```git
         git clone https://github.com/flipped-aurora/gin-vue-admin.git
       ```
+    
 - 使用docker-compose up一键启动启动项目
     - ```shell script
       # 使用docker-compose启动四个容器
@@ -109,11 +104,31 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
       docker-compose up -d
       ```
 
-    - web项目预览 [http://127.0.0.1:8888/admin](http://127.0.0.1:8888/admin)
+    - web项目预览 [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
     - swagger文档 [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
+- 如果server的177.7.0.12这个容器内部ip被占用了,需要修改地方为
 
+	- [docker-compose.yaml](./docker-compose.yaml)的第39行的177.7.0.12更换为你想要的ip
+	- [.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf)的第20行的177.7.0.12更换为你想要的ip
+
+- docker-compose使用自定义的一个docker网络
+
+	- ```dockerfile
+		networks:
+		  network:
+		    ipam:
+		      driver: default
+		      config:
+		        - subnet: '177.7.0.0/16' 
+		```
+
+	- 子网地址, 默认网关是177.7.0.1(docker-compose V2需要写,V3则不需要),具体信息看[官方文档](https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address)
+
+	- 默认的network名为gin-vue-admin_network,默认是bridge模式
+
+	- 如果修改了子网,对应的每个service的ipv4_address都需要修改,还有[.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf)的第20行的server的ip也需要修改
 
 ### 2.1 web端
 
@@ -270,7 +285,7 @@ swag init
 
 （1）环境搭建
 > Bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
-    
+
 （2）模板使用
 > Bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
 
@@ -286,7 +301,7 @@ swag init
 
 ### QQ交流群：622360840
 | QQ 群(满) |
-|  :---:  |   
+|  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 ### 微信交流群

@@ -16,5 +16,3 @@ RUN cat /etc/nginx/nginx.conf
 RUN cat /etc/nginx/conf.d/my.conf
 RUN ls -al /usr/share/nginx/html
 CMD ls -al /usr/share/nginx/html
-
-CMD ['nginx-debug', '-g', 'daemon off;']

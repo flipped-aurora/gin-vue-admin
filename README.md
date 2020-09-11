@@ -57,15 +57,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ### 1.3 版本列表
 
 - master: 2.0, 用于生产环境
-
 - develop: 2.0, 用于测试环境
-
-- [gin-vue-admin_v2.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) （v2.0 不再兼容 v1.0）
-
-- [gin-vue-admin_v1.0_stable](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_stable) （v1.0停止维护）
-
-- [gin-vue-admin_v1.0_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v1_dev) （v1.0停止维护）
-
+- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1版本](https://v1.gorm.io)稳定分支)
+- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2版本](https://v2.gorm.io)开发分支)
 
 ## 2. 使用说明
 
@@ -116,8 +110,8 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 - 如果server的177.7.0.12这个容器内部ip被占用了,需要修改地方为
 
-	- docker-compose.yaml的第39行的177.7.0.12更换为你想要的ip
-	- .docker-compose/nginx/conf.d/my.conf的第20行的177.7.0.12更换为你想要的ip
+	- [docker-compose.yaml](./docker-compose.yaml)的第39行的177.7.0.12更换为你想要的ip
+	- [.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf)的第20行的177.7.0.12更换为你想要的ip
 
 - docker-compose使用自定义的一个docker网络
 
@@ -134,7 +128,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 	- 默认的network名为gin-vue-admin_network,默认是bridge模式
 
-	- 如果修改了子网,对应的每个service的ipv4_address都需要修改,还有.docker-compose/nginx/conf.d/my.conf的第20行的server的ip也需要修改
+	- 如果修改了子网,对应的每个service的ipv4_address都需要修改,还有[.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf)的第20行的server的ip也需要修改
 
 ### 2.1 web端
 

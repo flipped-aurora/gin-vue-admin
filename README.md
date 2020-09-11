@@ -99,6 +99,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
     - ```git
         git clone https://github.com/flipped-aurora/gin-vue-admin.git
       ```
+    
 - 使用docker-compose up一键启动启动项目
     - ```shell script
       # 使用docker-compose启动四个容器
@@ -113,76 +114,27 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
     - swagger文档 [http://127.0.0.1:8888/swagger/index.html](http://127.0.0.1:8888/swagger/index.html)
 
-- 打开http://127.0.0.1:8000,验证码无法显示或者padding的话, 请尝试以下方法
+- 如果server的177.7.0.12这个容器内部ip被占用了,需要修改地方为
 
-	- ```shell
-		# 终端输入以下命令查找
-		docker network inspect gin-vue-admin_default
-		[
-		    {
-		        "Name": "gin-vue-admin_default",
-		        "Id": "dd65598bd3fcce9916a88161f26268f4e08a6d5bd1c619d07e69abc93c69bba3",
-		        "Created": "2020-09-10T10:36:37.868984015Z",
-		        "Scope": "local",
-		        "Driver": "bridge",
-		        "EnableIPv6": false,
-		        "IPAM": {
-		            "Driver": "default",
-		            "Options": null,
-		            "Config": [
-		                {
-		                    "Subnet": "172.29.0.0/16",
-		                    "Gateway": "172.29.0.1"
-		                }
-		            ]
-		        },
-		        "Internal": false,
-		        "Attachable": true,
-		        "Ingress": false,
-		        "ConfigFrom": {
-		            "Network": ""
-		        },
-		        "ConfigOnly": false,
-		        "Containers": {
-		            "1e246725c7ab689608c9f451c57a892e070fd63ec971d1749ede8dfbdaf704e1": {
-		                "Name": "gva-redis",
-		                "EndpointID": "d457e4babd5676e289bdf4f4c5ef0ce30c2acd87d437bfd7ea8809467a9304ef",
-		                "MacAddress": "02:42:ac:1d:00:02",
-		                "IPv4Address": "172.29.0.2/16",
-		                "IPv6Address": ""
-		            },
-		            "7228d1c37654173e78a5ae82047b3a3b771feeea855dcc1e88e8e29e262bf789": {
-		                "Name": "gva-web",
-		                "EndpointID": "ffc9c29b9aa1e4c7a56b9e8060fff455295813298df585df51b802548c477969",
-		                "MacAddress": "02:42:ac:1d:00:05",
-		                "IPv4Address": "172.29.0.5/16",
-		                "IPv6Address": ""
-		            },
-		            "99b6063801049d659a329cada5ad0d418c02a9956794b9bcbc07327fff3a1e58": {
-		                "Name": "gva-server",
-		                "EndpointID": "9a04629997d8b9aa6d75cc396d5dbb54bc5d239017a1010bacb53f73e2d46199",
-		                "MacAddress": "02:42:ac:1d:00:04",
-		                "IPv4Address": "172.29.0.4/16",
-		                "IPv6Address": ""
-		            },
-		            "af60bee9ddca855beaf6bd6c6612516970f1336215af622d560f982276d9e4c6": {
-		                "Name": "gva-mysql",
-		                "EndpointID": "998a67b2b2ca9a12c916e97bf30f6b5879ee610c52d5ab329253192acd686cd8",
-		                "MacAddress": "02:42:ac:1d:00:03",
-		                "IPv4Address": "172.29.0.3/16",
-		                "IPv6Address": ""
-		            }
-		        },
-		        "Options": {},
-		        "Labels": {
-		            "com.docker.compose.network": "default",
-		            "com.docker.compose.project": "gin-vue-admin",
-		            "com.docker.compose.version": "1.26.2"
-		        }
-		    }
-		]
-		# .docker-compose/nginx/conf.d/my.conf的第20行的ip替换为Name为"gva-server"的IPv4Address的ip
+	- docker-compose.yaml的第39行的177.7.0.12更换为你想要的ip
+	- .docker-compose/nginx/conf.d/my.conf的第20行的177.7.0.12更换为你想要的ip
+
+- docker-compose使用自定义的一个docker网络
+
+	- ```dockerfile
+		networks:
+		  network:
+		    ipam:
+		      driver: default
+		      config:
+		        - subnet: '177.7.0.0/16' 
 		```
+
+	- 子网地址, 默认网关是177.7.0.1(docker-compose V2需要写,V3则不需要),具体信息看[官方文档](https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address)
+
+	- 默认的network名为gin-vue-admin_network,默认是bridge模式
+
+	- 如果修改了子网,对应的每个service的ipv4_address都需要修改,还有.docker-compose/nginx/conf.d/my.conf的第20行的server的ip也需要修改
 
 ### 2.1 web端
 

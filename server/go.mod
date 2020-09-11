@@ -48,8 +48,8 @@ require (
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
-	gorm.io/driver/mysql v0.3.1
+	gorm.io/driver/mysql v0.3.0
 	gorm.io/driver/postgres v0.2.6
 	gorm.io/driver/sqlserver v0.2.4
-	gorm.io/gorm v0.2.35
+	gorm.io/gorm v1.20.1
 )

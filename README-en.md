@@ -317,20 +317,11 @@ backend code file: model\dnModel\api.go
 
 #### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
 
-### 8.2 Team members
-| Jiang | Yan | Yin | Du | Yin | Song |
-|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
+| Wechat |
+|  :---:  | 
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-|  Nick name   | Project position  | First name  |
-|  ----  | ----  | ----  |
-| [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
-| [@Ruio9244](https://github.com/Ruio9244)  | Architect | Yan |
-| [@granty1](https://github.com/granty1)  | Backend developer | Yin |
-| [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
-| [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
-| [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
-| [@SliverHorn](https://github.com/SliverHorn)  | Community Administrator | Lai |
+#### [About Us](https://www.gin-vue-admin.com/about/)
 
 ## 9. Donate
 

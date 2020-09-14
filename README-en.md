@@ -315,7 +315,7 @@ backend code file: model\dnModel\api.go
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 
-#### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
+#### Wechat group: comment "加入gin-vue-admin交流群"
 
 | Wechat |
 |  :---:  | 

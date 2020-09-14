@@ -309,7 +309,7 @@ swag init
 |  :---:  | 
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
+添加微信，备注"加入gin-vue-admin交流群"
 
 ### [关于我们](https://www.gin-vue-admin.com/about/)
 

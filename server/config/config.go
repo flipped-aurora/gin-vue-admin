@@ -79,8 +79,8 @@ type Redis struct {
 }
 
 type LocalUpload struct {
-	Local      bool   `mapstructure:"local" json:"local" yaml:"local"`
-	FilePath   string `mapstructure:"file-path" json:"filePath" yaml:"file-path"`
+	Local    bool   `mapstructure:"local" json:"local" yaml:"local"`
+	FilePath string `mapstructure:"file-path" json:"filePath" yaml:"file-path"`
 }
 
 type Qiniu struct {
@@ -101,19 +101,19 @@ type Zap struct {
 	Format        string `mapstructure:"format" json:"format" yaml:"format"`
 	Prefix        string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`
 	Director      string `mapstructure:"director" json:"director"  yaml:"director"`
-	LinkName      string `mapstructure:"link_name" json:"linkName" yaml:"link_name"`
-	ShowLine      bool   `mapstructure:"show_line" json:"showLine" yaml:"showLine"`
-	EncodeLevel   string `mapstructure:"encode_level" json:"encodeLevel" yaml:"encode_level"`
-	StacktraceKey string `mapstructure:"stacktrace_key" json:"stacktraceKey" yaml:"stacktrace_key"`
-	LogInConsole  bool   `mapstructure:"log_in_console" json:"logInConsole" yaml:"log_in_console"`
+	LinkName      string `mapstructure:"link-name" json:"linkName" yaml:"link-name"`
+	ShowLine      bool   `mapstructure:"show-line" json:"showLine" yaml:"showLine"`
+	EncodeLevel   string `mapstructure:"encode-level" json:"encodeLevel" yaml:"encode-level"`
+	StacktraceKey string `mapstructure:"stacktrace-key" json:"stacktraceKey" yaml:"stacktrace-key"`
+	LogInConsole  bool   `mapstructure:"log-in-console" json:"logInConsole" yaml:"log-in-console"`
 }
 
 type Email struct {
-	EmailFrom         string `mapstructure:"email_from" json:"emailFrom" yaml:"email_from"`
-	EmailNickName         string `mapstructure:"email_nick_name" json:"emailNickName" yaml:"email_nick_name"`
-	EmailSecret         string `mapstructure:"email_secret" json:"emailSecret" yaml:"email_secret"`
-	EmailTo         string `mapstructure:"email_to" json:"emailTo" yaml:"email_to"`
-	EmailHost         string `mapstructure:"email_host" json:"emailHost" yaml:"email_host"`
-	EmailPort         int `mapstructure:"email_port" json:"emailPort" yaml:"email_port"`
-	EmailIsSSL         bool `mapstructure:"email_isSSL" json:"emailIsSSL" yaml:"email_isSSL"`
+	EmailFrom     string `mapstructure:"email-from" json:"emailFrom" yaml:"email-from"`
+	EmailNickname string `mapstructure:"email-nickname" json:"emailNickname" yaml:"email-nickname"`
+	EmailSecret   string `mapstructure:"email-secret" json:"emailSecret" yaml:"email-secret"`
+	EmailTo       string `mapstructure:"email-to" json:"emailTo" yaml:"email-to"`
+	EmailHost     string `mapstructure:"email-host" json:"emailHost" yaml:"email-host"`
+	EmailPort     int    `mapstructure:"email-port" json:"emailPort" yaml:"email-port"`
+	EmailIsSSL    bool   `mapstructure:"email-is-ssl" json:"emailIsSSL" yaml:"email-is-ssl"`
 }

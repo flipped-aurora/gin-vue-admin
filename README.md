@@ -67,7 +67,6 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 - node版本 > v8.6.0
 - golang版本 >= v1.11
 - IDE推荐：Goland
-- 各位在clone项目以后，把db文件导入自己创建的库后，最好前往七牛云申请自己的空间地址。
 - gormv2版本初始化数据库可以利用批量创建功能，这里已经写好初始化代码，需要在main.go内打开 initialize.Data() 的注释即可
 - 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
@@ -267,7 +266,6 @@ swag init
     │  ├─api            （API）
     │  ├─config         （配置包）
     │  ├─core  	        （內核）
-    │  ├─db             （数据库脚本）
     │  ├─docs  	        （swagger文档目录）
     │  ├─global         （全局对象）
     │  ├─initialiaze    （初始化）
@@ -346,27 +344,18 @@ swag init
 ### 8.1 技术群
 
 ### QQ交流群：622360840
-| QQ 群(满) |
+| QQ 群 |
 |  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 ### 微信交流群
-可以添加上面任意一位开发者，备注"加入gin-vue-admin交流群"
+| 微信 |
+|  :---:  | 
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-### 8.2 项目组成员
-| 蒋 | 严 | 尹 | 杜 | 印 | 宋 |
-|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
+添加微信，备注"加入gin-vue-admin交流群"
 
-|  昵称   | 项目职务  | 姓  |
-|  ----  | ----  | ----  |
-| [@piexlmax](https://github.com/piexlmax)  | 项目发起者 | 蒋 |
-| [@Ruio9244](https://github.com/Ruio9244)  | 架构师 | 严 |
-| [@granty1](https://github.com/granty1)  | 后台开发 | 印 |
-| [@1319612909](https://github.com/1319612909)  | 前端UI开发 |  杜 |
-| [@krank666](https://github.com/krank666)  | 前端开发 | 尹 |
-| [@chen-chen-up](https://github.com/chen-chen-up)  | 新手开发 | 宋 |
-| [@SliverHorn](https://github.com/SliverHorn)  | 社区管理员 | 赖 |
+### [关于我们](https://www.gin-vue-admin.com/about/)
 
 ## 9. 捐赠
 

@@ -29,7 +29,7 @@ CREATE TABLE `casbin_rule` (
   `v3` varchar(100) DEFAULT NULL,
   `v4` varchar(100) DEFAULT NULL,
   `v5` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of casbin_rule
@@ -189,7 +189,7 @@ CREATE TABLE `exa_customers` (
   `sys_user_authority_id` varchar(191) DEFAULT NULL COMMENT '''管理角色ID''',
   PRIMARY KEY (`id`),
   KEY `idx_exa_customers_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of exa_customers
@@ -212,7 +212,7 @@ CREATE TABLE `exa_file_chunks` (
   `file_chunk_path` varchar(191) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_exa_file_chunks_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for exa_file_upload_and_downloads
@@ -229,7 +229,7 @@ CREATE TABLE `exa_file_upload_and_downloads` (
   `key` varchar(191) DEFAULT NULL COMMENT '''编号''',
   PRIMARY KEY (`id`),
   KEY `idx_exa_file_upload_and_downloads_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of exa_file_upload_and_downloads
@@ -255,7 +255,7 @@ CREATE TABLE `exa_files` (
   `is_finish` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_exa_files_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for exa_simple_uploaders
@@ -271,7 +271,7 @@ CREATE TABLE `exa_simple_uploaders` (
   `total_chunks` varchar(191) DEFAULT NULL COMMENT '''切片总数''',
   `is_done` tinyint(1) DEFAULT NULL COMMENT '''是否上传完成''',
   `file_path` varchar(191) DEFAULT NULL COMMENT '''文件本地路径'''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for jwt_blacklists
@@ -285,7 +285,7 @@ CREATE TABLE `jwt_blacklists` (
   `jwt` text COMMENT '''jwt''',
   PRIMARY KEY (`id`),
   KEY `idx_jwt_blacklists_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sys_apis
@@ -302,7 +302,7 @@ CREATE TABLE `sys_apis` (
   `method` varchar(191) DEFAULT 'POST',
   PRIMARY KEY (`id`),
   KEY `idx_sys_apis_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_apis
@@ -387,7 +387,7 @@ CREATE TABLE `sys_authorities` (
   `parent_id` varchar(191) DEFAULT NULL COMMENT '''父角色ID''',
   PRIMARY KEY (`authority_id`),
   UNIQUE KEY `authority_id` (`authority_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_authorities
@@ -406,7 +406,7 @@ CREATE TABLE `sys_authority_menus` (
   `sys_base_menu_id` bigint unsigned NOT NULL,
   `sys_authority_authority_id` varchar(90) NOT NULL COMMENT '''角色ID''',
   PRIMARY KEY (`sys_base_menu_id`,`sys_authority_authority_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_authority_menus
@@ -481,7 +481,7 @@ CREATE TABLE `sys_base_menu_parameters` (
   `value` varchar(191) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_sys_base_menu_parameters_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sys_base_menus
@@ -505,7 +505,7 @@ CREATE TABLE `sys_base_menus` (
   `icon` varchar(191) DEFAULT NULL COMMENT '''附加属性''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_base_menus_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_base_menus
@@ -547,7 +547,7 @@ CREATE TABLE `sys_data_authority_ids` (
   `sys_authority_authority_id` varchar(90) NOT NULL COMMENT '''角色ID''',
   `data_authority_id_authority_id` varchar(90) NOT NULL COMMENT '''角色ID''',
   PRIMARY KEY (`sys_authority_authority_id`,`data_authority_id_authority_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_data_authority_ids
@@ -575,7 +575,7 @@ CREATE TABLE `sys_dictionaries` (
   `desc` varchar(191) DEFAULT NULL COMMENT '''描述''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_dictionaries_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_dictionaries
@@ -605,7 +605,7 @@ CREATE TABLE `sys_dictionary_details` (
   `sys_dictionary_id` bigint unsigned DEFAULT NULL COMMENT '''关联标记''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_dictionary_details_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_dictionary_details
@@ -657,7 +657,7 @@ CREATE TABLE `sys_operation_records` (
   `user_id` bigint unsigned DEFAULT NULL COMMENT '''''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_operation_records_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sys_users
@@ -676,7 +676,7 @@ CREATE TABLE `sys_users` (
   `authority_id` varchar(191) DEFAULT '888' COMMENT '''用户角色ID''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_users_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of sys_users
@@ -703,7 +703,7 @@ CREATE TABLE `sys_workflow_step_infos` (
   `is_end` tinyint(1) DEFAULT NULL COMMENT '''是否是完结流节点''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_workflow_step_infos_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Table structure for sys_workflows
@@ -719,7 +719,7 @@ CREATE TABLE `sys_workflows` (
   `workflow_description` varchar(191) DEFAULT NULL COMMENT '''工作流描述''',
   PRIMARY KEY (`id`),
   KEY `idx_sys_workflows_deleted_at` (`deleted_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- View structure for authority_menu

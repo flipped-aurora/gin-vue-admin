@@ -72,7 +72,6 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 - node version > v8.6.0
 - golang version >= v1.11
 - IDE recommendation: Goland
-- After you clone the project, use the scripts in directory db to create your own database.
 - We recommend you to apply for your own cloud service in QINIU. Replace the public key, private key, warehouse name and default url address with your own, so as not to mess up the test database.
 ```
 
@@ -274,7 +273,6 @@ After executing the above command，`docs` will show in `server/`，then open yo
     │  ├─api            （API entrance）
     │  ├─config         （config file）
     │  ├─core  	        （core code）
-    │  ├─db             （db scripts）
     │  ├─docs  	        （swagger APIs docs）
     │  ├─global         （global objet）
     │  ├─initialiaze    （initialiazation）
@@ -355,27 +353,18 @@ backend code file: model\dnModel\api.go
 ### 8.1 Groups
 #### QQ group: 622360840
 
-| QQ group |
+| QQ group |d
 |  :---:  |
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 
-#### Wechat group: add anyone above, comment "加入gin-vue-admin交流群"
+#### Wechat group: comment "加入gin-vue-admin交流群"
 
-### 8.2 Team members
-| Jiang | Yan | Yin | Du | Yin | Song |
-|  :---:  |  :---: | :---: | :---:  |  :---: | :---: |
-| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryr.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qryx.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrdjl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrygl.png"> | <img width="150" src="http://qmplusimg.henrongyi.top/qrsong.png"> |
+| Wechat |
+|  :---:  | 
+| <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-|  Nick name   | Project position  | First name  |
-|  ----  | ----  | ----  |
-| [@piexlmax](https://github.com/piexlmax)  | Project sponsor | Jiang |
-| [@Ruio9244](https://github.com/Ruio9244)  | Architect | Yan |
-| [@granty1](https://github.com/granty1)  | Backend developer | Yin |
-| [@1319612909](https://github.com/1319612909)  | UI developer |  Du |
-| [@krank666](https://github.com/krank666)  | Frontend developer | Yin |
-| [@chen-chen-up](https://github.com/chen-chen-up)  | Novice developer | Song |
-| [@SliverHorn](https://github.com/SliverHorn)  | Community Administrator | Lai |
+#### [About Us](https://www.gin-vue-admin.com/about/)
 
 ## 9. Donate
 

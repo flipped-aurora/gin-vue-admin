@@ -130,6 +130,14 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 	- 如果修改了子网,对应的每个service的ipv4_address都需要修改,还有[.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf)的第20行的server的ip也需要修改
 
+> <font color=red>**使用docker-compose进行部署本项目需注意的问题**</font>
+
+- mysql数据库请使用装在服务器磁盘的本地数据库.
+	- 避免使用docker容器内的mysql,可能会出现写入的问题, io比宿主机低  docker的持久化机制问题
+- [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)是给docker-compose进行<font color=red>体验本项目</font>的, 禁止[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)使用进行项目数据的初始化, 数据库初始化[请使用此方法](https://www.gin-vue-admin.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
+	- 使用[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)进行初始化出现的所有问题,请自行承担,与本项目无关
+- 使用本项目的docker-compose进行部署时,请修改[docker-compose.yaml](./docker-compose.yaml)对应的[nginx配置](.docker-compose/nginx/conf.d/my.conf),mysql配置,networks配置,redis配置,按需自行更改.
+
 ### 2.1 web端
 
 ```bash
@@ -158,6 +166,47 @@ go list (go mod tidy)
 go build
 ```
 
+> Zap日志库使用指南&&配置指南
+
+Zap日志库的配置选择在[config.yaml](./server/config.yaml)下的zap
+
+```yaml
+# zap logger configuration
+zap:
+  level: 'debug'
+  format: 'console'
+  prefix: '[GIN-VUE-ADMIN]'
+  director: 'log'
+  link_name: 'latest_log'
+  show_line: true
+  encode_level: 'LowercaseColorLevelEncoder'
+  stacktrace_key: 'stacktrace'
+  log_in_console: true
+```
+
+| 配置名         | 配置的类型 | 说明                                                         |
+| -------------- | ---------- | ------------------------------------------------------------ |
+| level          | string     | level的模式的详细说明,请看[zap官方文档](https://pkg.go.dev/go.uber.org/zap?tab=doc#pkg-constants) <br />info: info模式,无错误的堆栈信息,只输出信息<br />debug:debug模式,有错误的堆栈详细信息<br />warn:warn模式<br />error: error模式,有错误的堆栈详细信息<br />dpanic: dpanic模式<br />panic: panic模式<br />fatal: fatal模式<br /> |
+| format         | string     | console: 控制台形式输出日志<br />json: json格式输出日志      |
+| prefix         | string     | 日志的前缀                                                   |
+| director       | string     | 存放日志的文件夹,修改即可,不需要手动创建                     |
+| link_name      | string     | 在server目录下会生成一个link_name的[软连接文件](https://baike.baidu.com/item/%E8%BD%AF%E9%93%BE%E6%8E%A5),链接的是director配置项的最新日志文件 |
+| show_line      | bool       | 显示行号, 默认为true,不建议修改                              |
+| encode_level   | string     | LowercaseLevelEncoder:小写<br /> LowercaseColorLevelEncoder:小写带颜色<br />CapitalLevelEncoder: 大写<br />CapitalColorLevelEncoder: 大写带颜色 |
+| stacktrace_key | string     | 堆栈的名称,即在json格式输出日志时的josn的key                 |
+| log_in_console | bool       | 是否输出到控制台,默认为true                                  |
+
+- 开发环境 || 调试环境配置建议
+	- `level:debug`
+	- `format:console`
+	- `encode_level:LowercaseColorLevelEncoder`或者`encode_leve:CapitalColorLevelEncoder`
+- 部署环境配置建议
+	- `level:error`
+	- `format:json` 
+	- `encode_level: LowercaseLevelEncoder `或者 `encode_level:CapitalLevelEncoder`
+	- `log_in_console: false` 
+- <font color=red>建议只是建议,按照自己的需求进行即可,给出建议仅供参考</font>
+
 ### 2.3 swagger自动化API文档
 
 #### 2.3.1 安装 swagger
@@ -178,11 +227,8 @@ go env -w GO111MODULE=on
 # 配置 GOPROXY 环境变量
 go env -w GOPROXY=https://goproxy.io,direct
 
-# 执行
-go get -g -v github.com/swaggo/swag/cmd/swag
-
-# 到GOPATH的/src/github.com/swaggo/swag/cmd/swag路径下执行
-go install
+# 使用如下命令下载swag
+go get -u github.com/swaggo/swag/cmd/swag
 ```
 
 #### 2.3.2 生成API文档

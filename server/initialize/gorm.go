@@ -52,7 +52,7 @@ func GormDBTables(db *gorm.DB) {
 		global.GVA_LOG.Error("register table failed", zap.Any("err", err))
 		os.Exit(0)
 	}
-	global.GVA_LOG.Debug("register table success")
+	global.GVA_LOG.Info("register table success")
 }
 
 // GormMysql 初始化Mysql数据库

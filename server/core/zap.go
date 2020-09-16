@@ -82,30 +82,20 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		CallerKey:      "caller",
 		StacktraceKey:  global.GVA_CONFIG.Zap.StacktraceKey,
 		LineEnding:     zapcore.DefaultLineEnding,
-		EncodeLevel:    zapcore.CapitalLevelEncoder,
+		EncodeLevel:    zapcore.LowercaseLevelEncoder,
 		EncodeTime:     CustomTimeEncoder,
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.FullCallerEncoder,
 	}
 	switch  {
-	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseLevelEncoder" && global.GVA_CONFIG.Zap.Format == "console" : // console小写编码器
+	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
 		config.EncodeLevel = zapcore.LowercaseLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseLevelEncoder" && global.GVA_CONFIG.Zap.Format == "json" : // json小写编码器
-		config.EncodeLevel = zapcore.LowercaseLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseColorLevelEncoder" && global.GVA_CONFIG.Zap.Format == "console": // console小写编码器带颜色
+	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
 		config.EncodeLevel = zapcore.LowercaseColorLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseColorLevelEncoder" && global.GVA_CONFIG.Zap.Format == "json": // json小写编码器带颜色
-		config.EncodeLevel = zapcore.LowercaseColorLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalLevelEncoder" && global.GVA_CONFIG.Zap.Format == "console": // console大写编码器
+	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
 		config.EncodeLevel = zapcore.CapitalLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalLevelEncoder" && global.GVA_CONFIG.Zap.Format == "json": // json大写编码器
-		config.EncodeLevel = zapcore.CapitalLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalColorLevelEncoder" && global.GVA_CONFIG.Zap.Format == "console": // console 大写编码器带颜色
+	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
 		config.EncodeLevel = zapcore.CapitalColorLevelEncoder
-	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalColorLevelEncoder" && global.GVA_CONFIG.Zap.Format == "json": // json 大写编码器带颜色
-		config.EncodeLevel = zapcore.CapitalColorLevelEncoder
-	default:
-		config.EncodeLevel = zapcore.LowercaseLevelEncoder
 	}
 	return config
 }

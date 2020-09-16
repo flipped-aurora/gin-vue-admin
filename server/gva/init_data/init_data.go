@@ -119,6 +119,7 @@ func InitExaCustomer() (err error) {
 
 func InitCasbinModel() (err error) {
 	if !global.GVA_DB.Migrator().HasTable("casbin_rule") {
+		global.GVA_LOG.Info(" InitCasbinModel() casbin_rule do not find!)")
 		if err := global.GVA_DB.Migrator().CreateTable(&gormadapter.CasbinRule{}); err != nil {
 			return err
 		}

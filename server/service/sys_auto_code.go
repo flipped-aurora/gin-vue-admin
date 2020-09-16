@@ -119,16 +119,34 @@ func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 }
 
 func GetTables(dbName string) (err error, TableNames []request.TableReq) {
-	err = global.GVA_DB.Raw("select table_name as table_name from information_schema.tables where table_schema = ?", dbName).Scan(&TableNames).Error
+	//SELECT   tablename   FROM   pg_tables;
+	//err = global.GVA_DB.Raw("select table_name as table_name from information_schema.tables where table_schema = ?", dbName).Scan(&TableNames).Error
+
+	err = global.GVA_DB.Raw("SELECT   tablename  as table_name  FROM   pg_tables WHERE   tablename   NOT   LIKE   'pg%' AND tablename NOT LIKE 'sql_%' ;").Scan(&TableNames).Error
+	if err!=nil{
+		global.GVA_LOG.Info("GetTables()")
+		global.GVA_LOG.Error(err.Error())
+	}
 	return err, TableNames
 }
 
 func GetDB() (err error, DBNames []request.DBReq) {
-	err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+
+	//err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+	err = global.GVA_DB.Raw("SELECT datname as database FROM pg_database;").Scan(&DBNames).Error
+	if err!=nil{
+		global.GVA_LOG.Info("GetDB()")
+		global.GVA_LOG.Error(err.Error())
+	}
 	return err, DBNames
 }
 
 func GetColume(tableName string, dbName string) (err error, Columes []request.ColumeReq) {
-	err = global.GVA_DB.Raw("SELECT COLUMN_NAME colume_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT colume_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columes).Error
+	//err = global.GVA_DB.Raw("SELECT COLUMN_NAME colume_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT colume_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columes).Error
+	err = global.GVA_DB.Raw("SELECT A.attname AS colume_name,A.attnotnull AS NOTNULL,format_type ( A.atttypid, A.atttypmod ) AS data_type,col_description ( A.attrelid, A.attnum ) AS colume_comment FROM pg_class AS C,pg_attribute AS A WHERE C.relname = ? AND A.attrelid = C.oid AND A.attnum > 0", tableName).Scan(&Columes).Error
+	if err!=nil{
+		global.GVA_LOG.Info("GetColume")
+		global.GVA_LOG.Error(err.Error())
+	}
 	return err, Columes
 }

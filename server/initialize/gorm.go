@@ -13,13 +13,13 @@ import (
 )
 
 var err error
-
+//支持POSTGRESQL
 // Gorm 初始化数据库并产生数据库全局变量
 func Gorm() {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
 		GormMysql()
-	case "postgresql":
+	case "postgres":
 		GormPostgreSql()
 	//case "sqlite": // sqlite需要gcc支持 windows用户需要自行安装gcc 如需使用打开注释即可
 	//	GormSqlite()

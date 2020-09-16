@@ -21,10 +21,11 @@ mysql:
 
 # Postgresql connect configuration
 postgresql:
-  username: 'gorm'
-  password: 'gorm'
-  db-name: 'gorm'
-  port: '9920'
+  host: '127.0.0.1'
+  username: 'gleke'
+  password: 'gleke'
+  db-name: 'gleke'
+  port: '5432'
   config: 'sslmode=disable TimeZone=Asia/Shanghai'
   max-idle-conns: 10
   max-open-conns: 10
@@ -75,7 +76,7 @@ system:
   use-multipoint: false
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
-  db-type: "mysql"  # support mysql/postgresql/sqlite/sqlserver
+  db-type: "postgres"  # support mysql/postgresql/sqlite/sqlserver
   need-init-data: false
 
 # captcha configuration

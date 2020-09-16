@@ -5,7 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	"github.com/casbin/casbin/util"
+	"github.com/casbin/casbin/v2/util"
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	_ "github.com/go-sql-driver/mysql"
@@ -102,11 +102,25 @@ func ClearCasbin(v int, p ...string) bool {
 // @auth                     （2020/04/05  20:22）
 
 func Casbin() *casbin.Enforcer {
-	admin := global.GVA_CONFIG.Mysql
-	a, _ := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
-	e, _ := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+	//admin := global.GVA_CONFIG.Mysql
+	global.GVA_LOG.Info("Casbin() ...start...............")
+	//a, err := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
+	admin := global.GVA_CONFIG.Postgresql
+	//global.GVA_LOG.Info("host=127.0.0.1 user="+admin.Username+" password="+admin.Password+" dbname="+admin.Dbname+" port= "+admin.Port)
+	a, err := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, "host=127.0.0.1  sslmode=disable user="+admin.Username+" password="+admin.Password+" dbname="+admin.Dbname+" port= "+admin.Port, true)
+
+	if err!=nil {
+		global.GVA_LOG.Error(err.Error())
+	}
+
+	e, err := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+	if err!=nil {
+		global.GVA_LOG.Error(err.Error())
+	}
+
 	e.AddFunction("ParamsMatch", ParamsMatchFunc)
 	_ = e.LoadPolicy()
+
 	return e
 }
 

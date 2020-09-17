@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
 	uuid "github.com/satori/go.uuid"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -73,6 +74,9 @@ func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total 
 	var userList []model.SysUser
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Preload("Authority").Find(&userList).Error
+	if err != nil {
+		global.GVA_LOG.Error("GetUserInfoList() failed", zap.Any("err", err))
+	}
 	return err, userList, total
 }
 

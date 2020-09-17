@@ -45,7 +45,7 @@ func UpdateSysDictionary(sysDictionary *model.SysDictionary) (err error) {
 		"Name":   sysDictionary.Name,
 		"Type":   sysDictionary.Type,
 		"Status": sysDictionary.Status,
-		"Desc":   sysDictionary.Desc,
+		"Description":   sysDictionary.Description,
 	}
 	db := global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict)
 	if dict.Type == sysDictionary.Type {
@@ -94,8 +94,8 @@ func GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list
 	if info.Status != nil {
 		db = db.Where("`status` = ?", info.Status)
 	}
-	if info.Desc != "" {
-		db = db.Where("`desc` LIKE ?", "%"+info.Desc+"%")
+	if info.Description != "" {
+		db = db.Where("`desc` LIKE ?", "%"+info.Description+"%")
 	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionarys).Error

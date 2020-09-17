@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 	"strconv"
 )
@@ -17,10 +18,15 @@ import (
 func getMenuTreeMap(authorityId string) (err error, treeMap map[string][]model.SysMenu) {
 	var allMenus []model.SysMenu
 	treeMap = make(map[string][]model.SysMenu)
+
 	err = global.GVA_DB.Where("authority_id = ?", authorityId).Order("sort").Preload("Parameters").Find(&allMenus).Error
+	if err != nil {
+		global.GVA_LOG.Error("getMenuTreeMap() failed", zap.Any("err", err))
+	}
 	for _, v := range allMenus {
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
+
 	return err, treeMap
 }
 
@@ -32,7 +38,12 @@ func getMenuTreeMap(authorityId string) (err error, treeMap map[string][]model.S
 // @return    menus           []model.SysMenu
 
 func GetMenuTree(authorityId string) (err error, menus []model.SysMenu) {
+
 	err, menuTree := getMenuTreeMap(authorityId)
+	if err != nil {
+		global.GVA_LOG.Error("GetMenuTree() failed", zap.Any("err", err))
+	}
+
 	menus = menuTree["0"]
 	for i := 0; i < len(menus); i++ {
 		err = getChildrenList(&menus[i], menuTree)

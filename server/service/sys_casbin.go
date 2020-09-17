@@ -103,7 +103,7 @@ func ClearCasbin(v int, p ...string) bool {
 
 func Casbin() *casbin.Enforcer {
 	//admin := global.GVA_CONFIG.Mysql
-	global.GVA_LOG.Info("Casbin() ...start...............")
+	//global.GVA_LOG.Info("Casbin() ...start...............")
 	//a, err := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
 	admin := global.GVA_CONFIG.Postgresql
 	//global.GVA_LOG.Info("host=127.0.0.1 user="+admin.Username+" password="+admin.Password+" dbname="+admin.Dbname+" port= "+admin.Port)

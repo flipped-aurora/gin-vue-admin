@@ -24,7 +24,7 @@ postgresql:
   host: '127.0.0.1'
   username: 'gleke'
   password: 'gleke'
-  db-name: 'gleke'
+  db-name: 'jimai'
   port: '5432'
   config: 'sslmode=disable TimeZone=Asia/Shanghai'
   max-idle-conns: 10

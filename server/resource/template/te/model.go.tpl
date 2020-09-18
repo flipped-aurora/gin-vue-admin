@@ -9,9 +9,9 @@ import (
 type {{.StructName}} struct {
       gorm.Model {{- range .Fields}}
             {{- if eq .FieldType "bool" }}
-      {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:'{{.Comment}}'{{- if .DataType -}};type:{{.DataType}}{{- if .DataTypeLong -}}({{.DataTypeLong}}){{- end -}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}{{- end -}}"`
+      {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}}{{- if .DataType -}};type:{{.DataType}}{{- if .DataTypeLong -}}({{.DataTypeLong}}){{- end -}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}{{- end -}}"`
             {{- else }}
-      {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:'{{.Comment}}'{{- if .DataType -}};type:{{.DataType}}{{- if .DataTypeLong -}}({{.DataTypeLong}}){{- end -}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}{{- end -}}"`
+      {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}}{{- if .DataType -}};type:{{.DataType}}{{- if .DataTypeLong -}}({{.DataTypeLong}}){{- end -}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}{{- end -}}"`
             {{- end }}  {{- end }} 
 }
 

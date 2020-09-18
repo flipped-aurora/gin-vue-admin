@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -87,7 +88,13 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		}
 		_ = f.Close()
 	}
-
+	if true {
+		err := AutoMoveFile(autoPath,dataList)
+		if err != nil {
+			panic(err)
+		}
+		return errors.New("生成成功")
+	}
 	// 生成压缩包
 	if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 		return err
@@ -131,4 +138,39 @@ func GetDB() (err error, DBNames []request.DBReq) {
 func GetColume(tableName string, dbName string) (err error, Columes []request.ColumeReq) {
 	err = global.GVA_DB.Raw("SELECT COLUMN_NAME colume_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT colume_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columes).Error
 	return err, Columes
+}
+
+func AutoMoveFile(autoPath string, dataList []tplData) (err error) {
+	for _, v := range dataList {
+		oldPath := v.autoCodePath
+		newPath := strings.Split(v.autoCodePath, autoPath)[1]
+		if strings.Contains(newPath, "fe") {
+			if strings.Contains(newPath, "js") {
+				api := strings.Split(newPath, "/")
+				err = os.Rename(oldPath, "../web/src/api/"+api[3])
+			}else {
+				var workdir string
+				view := strings.Split(newPath, "/")
+				workdir, err = os.Getwd()
+				dir := strings.Split(workdir, "server")[0]+"web/src/view/"+strings.Split(view[3], ".")[0]
+				err = os.MkdirAll(dir,os.ModePerm)
+				err = os.Rename(oldPath, dir+"/"+view[3])
+			}
+		} else if strings.Contains(newPath, "te") {
+			filename := strings.Split(newPath, "/")
+			if strings.Contains(newPath, "api") {
+				err = os.Rename(oldPath, "./api/v1/"+filename[len(filename)-1])
+			} else if strings.Contains(newPath, "model") {
+				err = os.Rename(oldPath, "./model/"+filename[len(filename)-1])
+			} else if strings.Contains(newPath, "request") {
+				err = os.Rename(oldPath, "./model/request/"+filename[len(filename)-1])
+			} else if strings.Contains(newPath, "router") {
+				err = os.Rename(oldPath, "./router/"+filename[len(filename)-1])
+			} else if strings.Contains(newPath, "service") {
+				err = os.Rename(oldPath, "./service/"+filename[len(filename)-1])
+			}
+		}
+	}
+	err = os.RemoveAll(autoPath)
+	return err
 }

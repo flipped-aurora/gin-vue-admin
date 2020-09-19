@@ -75,9 +75,6 @@
 				<el-form-item label="本地或七牛云">
 					<el-checkbox v-model="config.localUpload.local">本地</el-checkbox>
 				</el-form-item>
-				<el-form-item label="本地头像路径">
-					<el-input v-model="config.localUpload.avatarPath"></el-input>
-				</el-form-item>
 				<el-form-item label="本地文件路径">
 					<el-input v-model="config.localUpload.filePath"></el-input>
 				</el-form-item>
@@ -105,6 +102,31 @@
 			<el-form-item label="logFile">
 				<el-checkbox v-model="config.log.logFile"></el-checkbox>
 			</el-form-item>
+			<h2>邮箱配置</h2>
+			<el-form-item label="emailFrom">
+				<el-input v-model="config.email.emailFrom"></el-input>
+			</el-form-item>
+			<el-form-item label="emailNickName">
+				<el-input v-model="config.email.emailNickName"></el-input>
+			</el-form-item>
+			<el-form-item label="emailSecret">
+				<el-input v-model="config.email.emailSecret"></el-input>
+			</el-form-item>
+			<el-form-item label="emailTo">
+				<el-input v-model="config.email.emailTo" placeholder="可多个，以逗号分隔"></el-input>
+			</el-form-item>
+			<el-form-item label="emailHost">
+				<el-input v-model="config.email.emailHost"></el-input>
+			</el-form-item>
+			<el-form-item label="emailPort">
+				<el-input v-model.number="config.email.emailPort"></el-input>
+			</el-form-item>
+			<el-form-item label="emailIsSSL">
+				<el-checkbox v-model="config.email.emailIsSSL"></el-checkbox>
+			</el-form-item>
+			<el-form-item label="测试邮件">
+				<el-button @click="email">测试邮件</el-button>
+			</el-form-item>
 			<el-form-item>
 				<el-button @click="update" type="primary">立即更新</el-button>
 				<el-button @click="reload" type="primary">重启服务（开发中）</el-button>
@@ -115,6 +137,7 @@
 
 <script>
 import { getSystemConfig, setSystemConfig } from "@/api/system";
+import { emailTest } from "@/api/email";
 export default {
   name: "Config",
   data() {
@@ -129,7 +152,8 @@ export default {
         qiniu: {},
         captcha: {},
 		log: {},
-		localUpload: {}
+		localUpload: {},
+		email: {},
       }
     };
   },
@@ -153,6 +177,21 @@ export default {
         });
         await this.initForm();
       }
+    },
+    async email() {
+      const res = await emailTest();
+      if (res.code == 0) {
+        this.$message({
+          type: "success",
+          message: "邮件发送成功"
+        });
+        await this.initForm();
+      } else {
+		this.$message({
+          type: "error",
+          message: "邮件发送失败"
+        });
+	  }
     }
   }
 };

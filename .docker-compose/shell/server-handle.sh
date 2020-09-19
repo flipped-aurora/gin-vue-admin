@@ -69,25 +69,25 @@ captcha:
 # zap logger configuration
 zap:
   # 可使用 "debug", "info", "warn", "error", "dpanic", "panic", "fatal",
-  level: 'debug'
+  level: 'info'
   # console: 控制台, json: json格式输出
   format: 'console'
   prefix: '[GIN-VUE-ADMIN]'
   director: 'log'
-  link_name: 'latest_log'
-  show_line: true
+  link-name: 'latest_log'
+  show-line: true
   # LowercaseLevelEncoder:小写, LowercaseColorLevelEncoder:小写带颜色,CapitalLevelEncoder: 大写, CapitalColorLevelEncoder: 大写带颜色,
-  encode_level: 'LowercaseColorLevelEncoder'
-  stacktrace_key: 'stacktrace'
-  log_in_console: true
+  encode-level: 'LowercaseColorLevelEncoder'
+  stacktrace-key: 'stacktrace'
+  log-in-console: true
 
 email:
-  email_from: 'xxx@163.com'
-  email_nick_name: 'test'
-  email_secret: 'xxx'
-  email_to: 'xxx@qq.com'
-  email_host: 'smtp.163.com'
-  email_port: 465
-  email_isSSL: true
+  email-from: 'xxx@163.com'
+  email-nickname: 'test'
+  email-secret: 'xxx'
+  email-to: 'xxx@qq.com'
+  email-host: 'smtp.163.com'
+  email-port: 465
+  email-isSSL: true
 EOF
 

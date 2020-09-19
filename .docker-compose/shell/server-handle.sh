@@ -1,47 +1,5 @@
 #! /bin/bash
 
-rm -f ./core/server.go
-# 生成server.go文件, 添加Router.Static("/admin", "./resource/dist")这个代码
-touch ./core/server.go
-filename="./core/server.go"
-cat>"${filename}"<<EOF
-package core
-
-import (
-	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/initialize"
-	"time"
-)
-
-type server interface {
-	ListenAndServe() error
-}
-
-func RunWindowsServer() {
-	if global.GVA_CONFIG.System.UseMultipoint {
-		// 初始化redis服务
-		initialize.Redis()
-	}
-	Router := initialize.Routers()
-	Router.Static("/form-generator", "./resource/page")
-	Router.Static("/admin", "./resource/dist")
-
-	//InstallPlugs(Router)
-	// end 插件描述
-
-	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
-	s := initServer(address, Router)
-	// 保证文本顺序输出
-	// In order to ensure that the text order output can be deleted
-	time.Sleep(10 * time.Microsecond)
-	global.GVA_LOG.Debug("server run success on ", address)
-
-	fmt.Printf("欢迎使用 Gin-Vue-Admin默认自动化文档地址:http://127.0.0.1%s/swagger/index.html\n 默认前端文件运行地址:http://127.0.0.1:8888/admin\n", address)
-	global.GVA_LOG.Error(s.ListenAndServe())
-}
-EOF
-
 rm -f ./config.yaml
 # 生成config.yaml文件, 用于docker-compose的使用
 touch ./config.yaml
@@ -108,11 +66,28 @@ captcha:
     img-width: 240
     img-height: 80
 
-# logger configuration
-log:
-    prefix: '[GIN-VUE-ADMIN]'
-    log-file: true
-    stdout: 'DEBUG'
-    file: 'DEBUG'
+# zap logger configuration
+zap:
+  # 可使用 "debug", "info", "warn", "error", "dpanic", "panic", "fatal",
+  level: 'info'
+  # console: 控制台, json: json格式输出
+  format: 'console'
+  prefix: '[GIN-VUE-ADMIN]'
+  director: 'log'
+  link-name: 'latest_log'
+  show-line: true
+  # LowercaseLevelEncoder:小写, LowercaseColorLevelEncoder:小写带颜色,CapitalLevelEncoder: 大写, CapitalColorLevelEncoder: 大写带颜色,
+  encode-level: 'LowercaseColorLevelEncoder'
+  stacktrace-key: 'stacktrace'
+  log-in-console: true
+
+email:
+  email-from: 'xxx@163.com'
+  email-nickname: 'test'
+  email-secret: 'xxx'
+  email-to: 'xxx@qq.com'
+  email-host: 'smtp.163.com'
+  email-port: 465
+  email-isSSL: true
 EOF
 

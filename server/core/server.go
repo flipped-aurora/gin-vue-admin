@@ -25,11 +25,11 @@ func RunWindowsServer() {
 	// 保证文本顺序输出
 	// In order to ensure that the text order output can be deleted
 	time.Sleep(10 * time.Microsecond)
-	global.GVA_LOG.Debug("server run success on ", zap.String("address", address))
+	global.GVA_LOG.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`欢迎使用 Gin-Vue-Admin
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
-	默认前端文件运行地址:http://127.0.0.1:8080
+	默认前端文件运行地址:http://127.0.0.1:8000
 `, address)
 	global.GVA_LOG.Error(s.ListenAndServe().Error())
 }

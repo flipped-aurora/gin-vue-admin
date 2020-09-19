@@ -43,20 +43,6 @@ func OkDetailed(data interface{}, message string, c *gin.Context) {
 	Result(SUCCESS, data, message, c)
 }
 
-func OkWithXlsx(list []interface{}, title []string, fileName string, c *gin.Context) {
-	file := excelize.NewFile()
-	file.SetSheetRow("Sheet1", "A1", &title)
-	for i, v := range list {
-		// 第一行被title占用
-		lint := strconv.Itoa(i + 2)
-		file.SetSheetRow("Sheet1", "A"+lint, v)
-	}
-	c.Header("Content-Type", "application/octet-stream")
-	c.Header("Content-Disposition", "attachment; filename="+fileName)
-	c.Header("Content-Transfer-Encoding", "binary")
-	_ = file.Write(c.Writer)
-}
-
 func Fail(c *gin.Context) {
 	Result(ERROR, map[string]interface{}{}, "操作失败", c)
 }

@@ -104,7 +104,7 @@ func CreateTemp(c *gin.Context) {
 // @Router /autoCode/getTables [get]
 
 func GetTables(c *gin.Context) {
-	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Postgresql.Dbname)
 	err, tables := service.GetTables(dbName)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("查询table失败，%v", err), c)
@@ -141,7 +141,7 @@ func GetDB(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/getDatabase [get]
 func GetColume(c *gin.Context) {
-	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Postgresql.Dbname)
 	tableName := c.Query("tableName")
 	err, columes := service.GetColume(tableName, dbName)
 	if err != nil {

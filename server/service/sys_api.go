@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
 
@@ -15,10 +16,24 @@ import (
 // @return                    error
 
 func CreateApi(api model.SysApi) (err error) {
+	global.GVA_LOG.Info("CreateApi()")
+	global.GVA_LOG.Info(api.Path)
+	global.GVA_LOG.Info(api.Method)
+	global.GVA_LOG.Info(api.Description)
+	global.GVA_LOG.Info(api.ApiGroup)
+
+	global.GVA_LOG.Info( "api.ID:",zap.Any("id:", api.ID))
+
+	global.GVA_LOG.Info( "api.CreatedAt:",zap.Any("CreatedAt:", api.CreatedAt))
 	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&model.SysApi{}).Error, gorm.ErrRecordNotFound){
+		global.GVA_LOG.Info("存在相同api")
 		return errors.New("存在相同api")
 	}
-	return global.GVA_DB.Create(&api).Error
+	//global.GVA_LOG.Info("redis connect ping response:", zap)
+	err=global.GVA_DB.Create(&api).Error
+	global.GVA_LOG.Error("CreateApi()异常", zap.Any("err", err))
+
+	return err
 }
 
 // @title    DeleteApi

@@ -28,6 +28,8 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	// 获取 basePath 文件夹下所有tpl文件
 	tplFileList, err := GetAllTplFile(basePath, nil)
 	if err != nil {
+		global.GVA_LOG.Info("GetAllTplFile()")
+		global.GVA_LOG.Error(err.Error())
 		return err
 	}
 	dataList := make([]tplData, 0, len(tplFileList))
@@ -41,6 +43,8 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	for index, value := range dataList {
 		dataList[index].template, err = template.ParseFiles(value.locationPath)
 		if err != nil {
+			global.GVA_LOG.Info("utils.CreateDir()")
+			global.GVA_LOG.Error(err.Error())
 			return err
 		}
 	}
@@ -72,6 +76,8 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 
 	// 写入文件前，先创建文件夹
 	if err = utils.CreateDir(needMkdir...); err != nil {
+		global.GVA_LOG.Info("utils.CreateDir()")
+		global.GVA_LOG.Error(err.Error())
 		return err
 	}
 
@@ -80,6 +86,8 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		fileList = append(fileList, value.autoCodePath)
 		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0755)
 		if err != nil {
+			global.GVA_LOG.Info("os.OpenFile()")
+			global.GVA_LOG.Error(err.Error())
 			return err
 		}
 		if err = value.template.Execute(f, autoCode); err != nil {
@@ -97,6 +105,7 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	if err := os.RemoveAll(autoPath); err != nil {
 		return err
 	}
+
 	return nil
 }
 
@@ -143,7 +152,7 @@ func GetDB() (err error, DBNames []request.DBReq) {
 
 func GetColume(tableName string, dbName string) (err error, Columes []request.ColumeReq) {
 	//err = global.GVA_DB.Raw("SELECT COLUMN_NAME colume_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT colume_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columes).Error
-	err = global.GVA_DB.Raw("SELECT A.attname AS colume_name,A.attnotnull AS NOTNULL,format_type ( A.atttypid, A.atttypmod ) AS data_type,col_description ( A.attrelid, A.attnum ) AS colume_comment FROM pg_class AS C,pg_attribute AS A WHERE C.relname = ? AND A.attrelid = C.oid AND A.attnum > 0", tableName).Scan(&Columes).Error
+	err = global.GVA_DB.Raw("SELECT A.attname AS colume_name,A.attnotnull AS NOTNULL,format_type ( A.atttypid, A.atttypmod ) AS data_type, col_description ( A.attrelid, A.attnum ) AS colume_comment FROM pg_class AS C,pg_attribute AS A WHERE C.relname = ? AND A.attrelid = C.oid AND A.attnum > 0", tableName).Scan(&Columes).Error
 	if err!=nil{
 		global.GVA_LOG.Info("GetColume")
 		global.GVA_LOG.Error(err.Error())

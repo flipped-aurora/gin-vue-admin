@@ -15,6 +15,8 @@
         <el-select v-model="config.system.dbType">
           <el-option value="sqlite"></el-option>
           <el-option value="mysql"></el-option>
+          <el-option value="postgresql"></el-option>
+          <el-option value="sqlserver"></el-option>
         </el-select>
       </el-form-item>
       <h2>jwt签名</h2>
@@ -25,7 +27,7 @@
       <el-form-item label="模型地址">
         <el-input v-model="config.casbin.modelPath"></el-input>
       </el-form-item>
-      <template v-show="config.system.dbType == 'mysql'">
+      <template v-if="config.system.dbType == 'mysql'">
         <h2>mysql admin数据库配置</h2>
         <el-form-item label="username">
           <el-input v-model="config.mysql.username"></el-input>
@@ -49,16 +51,73 @@
           <el-checkbox v-model="config.mysql.logMode"></el-checkbox>
         </el-form-item>
       </template>
-      <template v-show="config.system.dbType == 'sqlite'">
-        <h2>sqlite admin数据库配置</h2>
-        <el-form-item label="path">
-          <el-input v-model="config.sqlite.path"></el-input>
+      <template v-if="config.system.dbType == 'postgresql'">
+        <h2>postgresql admin数据库配置</h2>
+        <el-form-item label="username">
+          <el-input v-model="config.mysql.username"></el-input>
+        </el-form-item>
+        <el-form-item label="password">
+          <el-input v-model="config.mysql.password"></el-input>
+        </el-form-item>
+        <el-form-item label="dbName">
+          <el-input v-model="config.mysql.dbName"></el-input>
+        </el-form-item>
+        <el-form-item label="port">
+          <el-input v-model="config.mysql.port"></el-input>
         </el-form-item>
         <el-form-item label="config">
-          <el-input v-model="config.sqlite.config"></el-input>
+          <el-input v-model="config.mysql.config"></el-input>
         </el-form-item>
-        <el-form-item label="logMode">
-          <el-checkbox v-model="config.sqlite.logMode"></el-checkbox>
+        <el-form-item label="maxIdleConns">
+          <el-input v-model.number="config.mysql.maxIdleConns"></el-input>
+        </el-form-item>
+        <el-form-item label="maxOpenConns">
+          <el-input v-model.number="config.mysql.maxOpenConns"></el-input>
+        </el-form-item>
+        <el-form-item label="logger">
+          <el-checkbox v-model="config.mysql.logger"></el-checkbox>
+        </el-form-item>
+        <el-form-item label="prefer-simple-protocol">
+          <el-checkbox v-model="config.mysql.preferSimpleProtocol"></el-checkbox>
+        </el-form-item>
+      </template>
+      <template v-if="config.system.dbType == 'sqlite'">
+        <h2>sqlite admin数据库配置</h2>
+        <el-form-item label="path">
+          <el-input v-model="config.mysql.path"></el-input>
+        </el-form-item>
+        <el-form-item label="maxIdleConns">
+          <el-input v-model.number="config.mysql.maxIdleConns"></el-input>
+        </el-form-item>
+        <el-form-item label="maxOpenConns">
+          <el-input v-model.number="config.mysql.maxOpenConns"></el-input>
+        </el-form-item>
+        <el-form-item label="logger">
+          <el-checkbox v-model="config.mysql.logger"></el-checkbox>
+        </el-form-item>
+      </template>
+      <template v-if="config.system.dbType == 'sqlserver'">
+        <h2>sqlserver admin数据库配置</h2>
+        <el-form-item label="username">
+          <el-input v-model="config.sqlserver.username"></el-input>
+        </el-form-item>
+        <el-form-item label="password">
+          <el-input v-model="config.sqlserver.password"></el-input>
+        </el-form-item>
+        <el-form-item label="path">
+          <el-input v-model="config.sqlserver.path"></el-input>
+        </el-form-item>
+        <el-form-item label="dbname">
+          <el-input v-model="config.sqlserver.dbname"></el-input>
+        </el-form-item>
+        <el-form-item label="maxIdleConns">
+          <el-input v-model.number="config.sqlserver.maxIdleConns"></el-input>
+        </el-form-item>
+        <el-form-item label="maxOpenConns">
+          <el-input v-model.number="config.sqlserver.maxOpenConns"></el-input>
+        </el-form-item>
+        <el-form-item label="logger">
+          <el-checkbox v-model="config.sqlserver.logger"></el-checkbox>
         </el-form-item>
       </template>
       <h2>Redis admin数据库配置</h2>
@@ -70,6 +129,13 @@
       </el-form-item>
       <el-form-item label="db">
         <el-input v-model="config.redis.db"></el-input>
+      </el-form-item>
+      <h2>上传配置</h2>
+      <el-form-item label="本地或七牛云">
+        <el-checkbox v-model="config.localUpload.local">本地</el-checkbox>
+      </el-form-item>
+      <el-form-item label="本地文件路径">
+        <el-input v-model="config.localUpload.filePath"></el-input>
       </el-form-item>
       <h2>七牛密钥配置</h2>
       <el-form-item label="accessKey">
@@ -89,11 +155,57 @@
         <el-input v-model.number="config.captcha.imgHeight"></el-input>
       </el-form-item>
       <h2>日志配置</h2>
-      <el-form-item label="prefix">
-        <el-input v-model.number="config.log.prefix"></el-input>
+      <el-form-item label="level">
+        <el-input v-model.number="config.zap.level"></el-input>
       </el-form-item>
-      <el-form-item label="logFile">
-        <el-checkbox v-model="config.log.logFile"></el-checkbox>
+      <el-form-item label="format">
+        <el-input v-model="config.zap.format"></el-input>
+      </el-form-item>
+      <el-form-item label="prefix">
+        <el-input v-model="config.zap.prefix"></el-input>
+      </el-form-item>
+      <el-form-item label="director">
+        <el-input v-model="config.zap.director"></el-input>
+      </el-form-item>
+      <el-form-item label="link-name">
+        <el-input v-model="config.zap.linkName"></el-input>
+      </el-form-item>
+      <el-form-item label="encode-level">
+        <el-input v-model="config.zap.encodeLevel"></el-input>
+      </el-form-item>
+      <el-form-item label="stacktrace-key">
+        <el-input v-model="config.zap.stacktraceKey"></el-input>
+      </el-form-item>
+      <el-form-item label="show-line">
+        <el-checkbox v-model="config.zap.showLine"></el-checkbox>
+      </el-form-item>
+      <el-form-item label="log-in-console">
+        <el-checkbox v-model="config.zap.logInConsole"></el-checkbox>
+      </el-form-item>
+      <h2>邮箱配置</h2>
+      <el-form-item label="emailFrom">
+        <el-input v-model="config.email.emailFrom"></el-input>
+      </el-form-item>
+      <el-form-item label="emailNickName">
+        <el-input v-model="config.email.emailNickName"></el-input>
+      </el-form-item>
+      <el-form-item label="emailSecret">
+        <el-input v-model="config.email.emailSecret"></el-input>
+      </el-form-item>
+      <el-form-item label="emailTo">
+        <el-input v-model="config.email.emailTo" placeholder="可多个，以逗号分隔"></el-input>
+      </el-form-item>
+      <el-form-item label="emailHost">
+        <el-input v-model="config.email.emailHost"></el-input>
+      </el-form-item>
+      <el-form-item label="emailPort">
+        <el-input v-model.number="config.email.emailPort"></el-input>
+      </el-form-item>
+      <el-form-item label="emailIsSSL">
+        <el-checkbox v-model="config.email.emailIsSSL"></el-checkbox>
+      </el-form-item>
+      <el-form-item label="测试邮件">
+        <el-button @click="email">测试邮件</el-button>
       </el-form-item>
       <el-form-item>
         <el-button @click="update" type="primary">立即更新</el-button>
@@ -105,6 +217,7 @@
 
 <script>
 import { getSystemConfig, setSystemConfig } from "@/api/system";
+import { emailTest } from "@/api/email";
 export default {
   name: "Config",
   data() {
@@ -118,7 +231,9 @@ export default {
         redis: {},
         qiniu: {},
         captcha: {},
-        log: {}
+        log: {},
+        localUpload: {},
+        email: {}
       }
     };
   },
@@ -141,6 +256,21 @@ export default {
           message: "配置文件设置成功"
         });
         await this.initForm();
+      }
+    },
+    async email() {
+      const res = await emailTest();
+      if (res.code == 0) {
+        this.$message({
+          type: "success",
+          message: "邮件发送成功"
+        });
+        await this.initForm();
+      } else {
+        this.$message({
+          type: "error",
+          message: "邮件发送失败"
+        });
       }
     }
   }

@@ -31,9 +31,9 @@
                 <Search />
                 <Screenfull class="screenfull"></Screenfull>
                 <el-dropdown>
-                  <span class="el-dropdown-link">
-                    <img :src="userInfo.headerImg" height="30" width="30" />
-                    {{userInfo.title}}
+                  <span class="header-avatar">
+                    欢迎您，<CustomPic/>
+                    <span style="margin-left: 5px">{{userInfo.nickName}}</span>
                     <i class="el-icon-arrow-down"></i>
                   </span>
                   <el-dropdown-menu class="dropdown-group" slot="dropdown">
@@ -95,6 +95,7 @@ import Search from '@/view/layout/search/search'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
 import { mapGetters, mapActions } from 'vuex'
 import { changePassword } from '@/api/user'
+import CustomPic from '@/components/customPic'
 export default {
   name: 'Layout',
   data() {
@@ -138,7 +139,8 @@ export default {
     HistoryComponent,
     Screenfull,
     Search,
-    BottomInfo
+    BottomInfo,
+    CustomPic
   },
   methods: {
     ...mapActions('user', ['LoginOut']),
@@ -373,5 +375,10 @@ $mainHight: 100vh;
 
 .screenfull {
   display: inline-block;
+}
+.header-avatar{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 </style>

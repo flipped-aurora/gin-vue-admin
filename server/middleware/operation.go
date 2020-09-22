@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -19,7 +20,7 @@ func OperationRecord() gin.HandlerFunc {
 			var err error
 			body, err = ioutil.ReadAll(c.Request.Body)
 			if err != nil {
-				global.GVA_LOG.Error("read body from request error:", err)
+				global.GVA_LOG.Error("read body from request error:", zap.Any("err", err))
 			} else {
 				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 			}
@@ -34,7 +35,7 @@ func OperationRecord() gin.HandlerFunc {
 			Path:   c.Request.URL.Path,
 			Agent:  c.Request.UserAgent(),
 			Body:   string(body),
-			UserId: userId,
+			UserID: userId,
 		}
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,
@@ -52,7 +53,7 @@ func OperationRecord() gin.HandlerFunc {
 		record.Resp = writer.body.String()
 
 		if err := service.CreateSysOperationRecord(record); err != nil {
-			global.GVA_LOG.Error("create operation record error:", err)
+			global.GVA_LOG.Error("create operation record error:", zap.Any("err", err))
 		}
 	}
 }

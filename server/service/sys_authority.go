@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
+	"gorm.io/gorm"
 	"strconv"
 )
 
@@ -18,8 +19,7 @@ import (
 
 func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
-	notHas := global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&authorityBox).RecordNotFound()
-	if !notHas {
+	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同角色id"), auth
 	}
 	err = global.GVA_DB.Create(&auth).Error
@@ -35,8 +35,7 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 
 func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
-	notHas := global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).Find(&authorityBox).RecordNotFound()
-	if !notHas {
+	if !errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同角色id"), authority
 	}
 	copyInfo.Authority.Children = []model.SysAuthority{}
@@ -78,19 +77,17 @@ func UpdateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 // 删除角色
 
 func DeleteAuthority(auth *model.SysAuthority) (err error) {
-	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).Find(&model.SysUser{}).Error
-	if err == nil {
-		err = errors.New("此角色有用户正在使用禁止删除")
-		return
+	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysUser{}).Error, gorm.ErrRecordNotFound) {
+		return errors.New("此角色有用户正在使用禁止删除")
 	}
-	err = global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).Find(&model.SysAuthority{}).Error
-	if err == nil {
-		err = errors.New("此角色存在子角色不允许删除")
-		return
+	if !errors.Is(global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).First(&model.SysAuthority{}).Error, gorm.ErrRecordNotFound) {
+		return errors.New("此角色存在子角色不允许删除")
 	}
-	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth)
+	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth)
+	err = db.Unscoped().Delete(auth).Error
 	if len(auth.SysBaseMenus) > 0 {
-		err = db.Association("SysBaseMenus").Delete(auth.SysBaseMenus).Error
+		err = global.GVA_DB.Model(auth).Association("SysBaseMenus").Delete(auth.SysBaseMenus)
+		//err = db.Association("SysBaseMenus").Delete(&auth)
 	} else {
 		err = db.Error
 	}
@@ -105,7 +102,7 @@ func DeleteAuthority(auth *model.SysAuthority) (err error) {
 // @return                    error
 // 分页获取数据
 
-func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int) {
+func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
@@ -140,7 +137,7 @@ func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority
 func SetDataAuthority(auth model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
-	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId).Error
+	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
 	return err
 }
 
@@ -153,7 +150,7 @@ func SetDataAuthority(auth model.SysAuthority) error {
 func SetMenuAuthority(auth *model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", auth.AuthorityId)
-	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus).Error
+	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus)
 	return err
 }
 

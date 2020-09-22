@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 // @title    Register
@@ -18,17 +19,13 @@ import (
 
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	var user model.SysUser
-	// 判断用户名是否注册
-	notRegister := global.GVA_DB.Where("username = ?", u.Username).First(&user).RecordNotFound()
-	// notRegister为false表明读取到了 不能注册
-	if !notRegister {
+	if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return errors.New("用户名已注册"), userInter
-	} else {
-		// 否则 附加uuid 密码md5简单加密 注册
-		u.Password = utils.MD5V([]byte(u.Password))
-		u.UUID = uuid.NewV4()
-		err = global.GVA_DB.Create(&u).Error
 	}
+	// 否则 附加uuid 密码md5简单加密 注册
+	u.Password = utils.MD5V([]byte(u.Password))
+	u.UUID = uuid.NewV4()
+	err = global.GVA_DB.Create(&u).Error
 	return err, u
 }
 
@@ -69,7 +66,7 @@ func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter 
 // @return    list             interface{}
 // @return    total            int
 
-func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total int) {
+func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.SysUser{})
@@ -104,16 +101,14 @@ func DeleteUser(id float64) (err error) {
 	return err
 }
 
-// @title    UploadHeaderImg
-// @description   upload avatar, 用户头像上传更新地址
+// @title    SetUserInfo
+// @description   set the authority of a certain user, 设置用户信息
 // @auth                     （2020/04/05  20:22）
 // @param     uuid            UUID
-// @param     filePath        string
+// @param     authorityId     string
 // @return    err             error
-// @return    userInter       *SysUser
 
-func UploadHeaderImg(uuid uuid.UUID, filePath string) (err error, userInter *model.SysUser) {
-	var user model.SysUser
-	err = global.GVA_DB.Where("uuid = ?", uuid).First(&user).Update("header_img", filePath).First(&user).Error
-	return err, &user
+func SetUserInfo(reqUser model.SysUser) (err error, user model.SysUser) {
+	err = global.GVA_DB.Updates(&reqUser).Error
+	return err, reqUser
 }

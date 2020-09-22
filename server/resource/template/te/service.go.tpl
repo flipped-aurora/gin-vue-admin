@@ -35,7 +35,7 @@ func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) 
 // @return                    error
 
 func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in (?)",ids.Ids).Error
+	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in ?",ids.Ids).Error
 	return err
 }
 
@@ -68,7 +68,7 @@ func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructNa
 // @param     info            PageInfo
 // @return                    error
 
-func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int) {
+func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db

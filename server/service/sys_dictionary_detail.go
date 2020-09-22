@@ -57,7 +57,7 @@ func GetSysDictionaryDetail(id uint) (err error, sysDictionaryDetail model.SysDi
 // @param     info            PageInfo
 // @return                    error
 
-func GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (err error, list interface{}, total int) {
+func GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

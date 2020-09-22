@@ -44,6 +44,7 @@ type Mysql struct {
 }
 
 type Postgresql struct {
+	Host                 string `mapstructure:"host" json:"host" yaml:"host"`
 	Username             string `mapstructure:"username" json:"username" yaml:"username"`
 	Password             string `mapstructure:"password" json:"password" yaml:"password"`
 	Dbname               string `mapstructure:"db-name" json:"dbname" yaml:"db-name"`

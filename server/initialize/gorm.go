@@ -82,7 +82,7 @@ func GormMysql() {
 // GormPostgreSql 初始化PostgreSql数据库
 func GormPostgreSql() {
 	p := global.GVA_CONFIG.Postgresql
-	dsn := "user=" + p.Username + " password=" + p.Password + " dbname=" + p.Dbname + " port=" + p.Port + " " + p.Config
+	dsn := "host="+ p.Host + " user=" + p.Username + " password=" + p.Password + " dbname=" + p.Dbname + " port=" + p.Port + " " + p.Config
 	postgresConfig := postgres.Config{
 		DSN:                  dsn,                    // DSN data source name
 		PreferSimpleProtocol: p.PreferSimpleProtocol, // 禁用隐式 prepared statement

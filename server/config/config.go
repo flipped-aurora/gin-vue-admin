@@ -22,6 +22,7 @@ type System struct {
 	Addr          int    `mapstructure:"addr" json:"addr" yaml:"addr"`
 	DbType        string `mapstructure:"db-type" json:"dbType" yaml:"db-type"`
 	NeedInitData  bool   `mapstructure:"need-init-data" json:"needInitData" yaml:"need-init-data"`
+	ErrorToEmail bool `mapstructure:"error-to-email" json:"errorToEmail" yaml:"error-to-email"`
 }
 
 type JWT struct {

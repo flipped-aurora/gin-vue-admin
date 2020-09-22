@@ -16,6 +16,15 @@ func Email(subject string, body string) error {
 	return send(to, subject, body)
 }
 
+// ErrorToEmail Error 发送邮件
+func ErrorToEmail(subject string, body string) error {
+	to := strings.Split(global.GVA_CONFIG.Email.EmailTo, ",")
+	if to[len(to)-1] == "" { // 判断切片的最后一个元素是否为空,为空则移除
+		to = to[:len(to)-1]
+	}
+	return send(to, subject, body)
+}
+
 func EmailTest(subject string, body string) error {
 	to := []string{global.GVA_CONFIG.Email.EmailFrom}
 	return send(to, subject, body)

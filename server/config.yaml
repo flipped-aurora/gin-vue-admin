@@ -78,6 +78,7 @@ system:
   db-type: "mysql"  # support mysql/postgresql/sqlite/sqlserver
   need-init-data: false
   error-to-email: false
+  config-env: "GVA_CONFIG"
 
 # captcha configuration
 captcha:

@@ -23,7 +23,7 @@ func EmailTest(subject string, body string) error {
 
 func send(to []string, subject string, body string) error {
 	from := global.GVA_CONFIG.Email.EmailFrom
-	nickName := global.GVA_CONFIG.Email.EmailNickName
+	nickname := global.GVA_CONFIG.Email.EmailNickname
 	secret := global.GVA_CONFIG.Email.EmailSecret
 	host := global.GVA_CONFIG.Email.EmailHost
 	port := global.GVA_CONFIG.Email.EmailPort
@@ -31,8 +31,8 @@ func send(to []string, subject string, body string) error {
 
 	auth := smtp.PlainAuth("", from, secret, host)
 	e := email.NewEmail()
-	if nickName != "" {
-		e.From = fmt.Sprintf("%s <%s>", nickName, from)
+	if nickname != "" {
+		e.From = fmt.Sprintf("%s <%s>", nickname, from)
 	} else {
 		e.From = from
 	}

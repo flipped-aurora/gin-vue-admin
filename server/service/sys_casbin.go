@@ -21,6 +21,7 @@ import (
 
 func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
+	rules := [][]string{}
 	for _, v := range casbinInfos {
 		cm := model.CasbinModel{
 			Ptype:       "p",
@@ -28,24 +29,14 @@ func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 			Path:        v.Path,
 			Method:      v.Method,
 		}
-		addflag := AddCasbin(cm)
-		if addflag == false {
-			return errors.New("存在相同api,添加失败,请联系管理员")
-		}
+		rules = append(rules, []string{cm.AuthorityId, cm.Path, cm.Method})
+	}
+	e := Casbin()
+	success, _ := e.AddPolicies(rules)
+	if success == false {
+		return errors.New("存在相同api,添加失败,请联系管理员")
 	}
 	return nil
-}
-
-// @title    AddCasbin
-// @description   add casbin authority, 添加权限
-// @auth                     （2020/04/05  20:22）
-// @param     cm              model.CasbinModel
-// @return                    bool
-
-func AddCasbin(cm model.CasbinModel) bool {
-	e := Casbin()
-	success, _ := e.AddPolicy(cm.AuthorityId, cm.Path, cm.Method)
-	return success
 }
 
 // @title    UpdateCasbinApi

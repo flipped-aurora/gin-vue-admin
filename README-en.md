@@ -133,6 +133,14 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
     - If the subnet is modified, the ipv4_address of each service needs to be modified, and the ip of the server on line 20 of [.docker-compose/nginx/conf.d/my.conf](.docker-compose/nginx/conf.d/my.conf) also needs to be modified
 
+> <font color=red>**Use docker-compose to deploy this project need attention**</font>
+
+- For mysql database, please use a local database installed on the server disk.
+	- Avoid using mysql in the docker container, there may be write problems, io is lower than the host machine, docker's persistence mechanism problem
+- [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) is for docker-compose ==experience this project==, prohibit the use of [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) to initialize project data, Database initialization[Please use this method](https://www.gin-vue-admin.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
+	- Use [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) to initialize all problems, please bear it yourself, and have nothing to do with this project
+- When deploying using docker-compose of this project,Please modify the [nginx configuration](.docker-compose/nginx/conf.d/my.conf), mysql configuration, networks configuration, redis configuration corresponding to [docker-compose.yaml](./docker-compose.yaml), and make changes as needed.
+
 ### 2.1 Web
 
 ```bash
@@ -161,6 +169,47 @@ go list (go mod tidy)
 go build
 ```
 
+> Zap log library usage guide && configuration guide
+
+The configuration of the Zap log library selects zap under [config.yaml](./server/config.yaml)
+
+```yaml
+# zap logger configuration
+zap:
+  level: 'debug'
+  format: 'console'
+  prefix: '[GIN-VUE-ADMIN]'
+  director: 'log'
+  link_name: 'latest_log'
+  show_line: true
+  encode_level: 'LowercaseColorLevelEncoder'
+  stacktrace_key: 'stacktrace'
+  log_in_console: true
+```
+
+| Configuration Name | Type Of Configuration | Description                                                  |
+| ------------------ | --------------------- | ------------------------------------------------------------ |
+| level              | string                | For a detailed description of the level mode, please see the official [zap documentation](https://pkg.go.dev/go.uber.org/zap?tab=doc#pkg-constants) <br />info: info mode, stack information without errors, only output information<br />debug: debug mode, stack details with errors<br />warn:warn mode<br />error: error mode, stack details with error<br />dpanic: dpanic mode<br />panic: panic mode<br />fatal: fatal mode<br /> |
+| format             | string                | console: Output log in console format<br />json: json format output log |
+| prefix             | string                | Log prefix                                                   |
+| director           | string                | The folder to store the log can be modified, no need to create it manually |
+| link_name          | string                | [A soft connection file](https://baike.baidu.com/item/%E8%BD%AF%E9%93%BE%E6%8E%A5) of link_name will be generated in the server directory, and the link is the latest log file of the director configuration item |
+| show_line          | bool                  | Display the line number, the default is true, it is not recommended to modify |
+| encode_level       | string                | LowercaseLevelEncoder: lowercase<br /> LowercaseColorLevelEncoder: lowercase with color<br />CapitalLevelEncoder: uppercase<br />CapitalColorLevelEncoder: uppercase with color |
+| stacktrace_key     | string                | The name of the stack, that is, the key of josn when outputting the log in json format |
+| log_in_console     | bool                  | Whether to output to the console, the default is true        |
+
+- Development environment || Debug environment configuration recommendations
+	- `level:debug`
+	- `format:console`
+	- `encode_level:LowercaseColorLevelEncoder`或者`encode_leve:CapitalColorLevelEncoder`
+- Deployment environment configuration recommendations
+	- `level:error`
+	- `format:json` 
+	- `encode_level: LowercaseLevelEncoder `或者 `encode_level:CapitalLevelEncoder`
+	- `log_in_console: false` 
+- <font color=red>Suggestions are only suggestions, you can proceed according to your own needs, and suggestions are for reference only</font>
+
 ### 2.3 API docs auto-generation using swagger
 
 #### 2.3.1 install swagger 
@@ -175,7 +224,6 @@ go get -u github.com/swaggo/swag/cmd/swag
 In mainland China, access to go.org/x is prohibited，we recommend [goproxy.io](https://goproxy.io/zh/)
 
 ````bash
-
 If you are using Go version 1.13 and above (recommended)
 # Enable Go Modules function
 go env -w GO111MODULE=on 
@@ -185,11 +233,8 @@ If you are using Go version 1.12 and below
 go env -w GO111MODULE=on
 go env -w GOPROXY=https://goproxy.io
 
-# get swag
-go get -g -v github.com/swaggo/swag/cmd/swag
-
-# cd GOPATH/src/github.com/swaggo/swag/cmd/swag
-go install
+# Use the following command to download swag
+go get -u github.com/swaggo/swag/cmd/swag
 ````
 
 #### 2.3.2 API docs generation

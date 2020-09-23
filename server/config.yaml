@@ -77,7 +77,7 @@ system:
   addr: 8888
   db-type: "mysql"  # support mysql/postgresql/sqlite/sqlserver
   need-init-data: false
-  error-to-email: true
+  error-to-email: false
 
 # captcha configuration
 captcha:

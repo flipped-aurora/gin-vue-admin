@@ -364,3 +364,7 @@ swag init
 ## 10. 商用注意事项
 
 如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。
+
+## 11. 友情推荐
+
+内置强大代码生成器的高性能微服务框架 [go-zero](https://github.com/tal-tech/go-zero)

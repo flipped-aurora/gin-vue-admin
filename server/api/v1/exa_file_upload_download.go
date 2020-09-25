@@ -9,8 +9,10 @@ import (
 	resp "gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
-	"github.com/gin-gonic/gin"
+	"gin-vue-admin/utils/upload"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 // @Tags ExaFileUploadAndDownload
@@ -36,7 +38,7 @@ func UploadFile(c *gin.Context) {
 			uploadErr, filePath, key = utils.UploadFileLocal(header)
 		} else {
 			// 七牛云上传
-			uploadErr, filePath, key = utils.UploadRemote(header)
+			uploadErr, filePath, key = upload.UploadUtils.Upload(header)
 		}
 		if uploadErr != nil {
 			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
@@ -74,7 +76,12 @@ func DeleteFile(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		err = utils.DeleteFile(f.Key)
+		if global.GVA_CONFIG.System.OssType == upload.LOCAL {
+			// remove local
+			return
+		}
+		// err = utils.DeleteFile(f.Key)
+		err = upload.UploadUtils.DeleteFile(f.Key)
 		if err != nil {
 			response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 

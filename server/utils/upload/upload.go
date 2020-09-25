@@ -1,7 +1,6 @@
 package upload
 
 import (
-	"gin-vue-admin/global"
 	"mime/multipart"
 )
 
@@ -19,13 +18,13 @@ type Uploader interface {
 
 var UploadUtils Uploader
 
-func init() {
-	if global.GVA_CONFIG.System.OssType == LOCAL {
+func New(ossType int) {
+	if ossType == LOCAL {
 		// TODO
-	} else if global.GVA_CONFIG.System.OssType == QINIU {
-		// TODO
-	} else if global.GVA_CONFIG.System.OssType == MINIO {
-		Uploader = &Minio{}
+	} else if ossType == QINIU {
+		UploadUtils = &Qiniu{}
+	} else if ossType == MINIO {
+		UploadUtils = &Minio{}
 	} else {
 		// TODO ?local?
 	}

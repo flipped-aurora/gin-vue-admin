@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/initialize"
-	"go.uber.org/zap"
+	"gin-vue-admin/utils/upload"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type server interface {
@@ -17,6 +19,11 @@ func RunWindowsServer() {
 		// 初始化redis服务
 		initialize.Redis()
 	}
+
+	if global.GVA_CONFIG.System.OssType != upload.LOCAL {
+		upload.New(global.GVA_CONFIG.System.OssType)
+	}
+
 	Router := initialize.Routers()
 	Router.Static("/form-generator", "./resource/page")
 

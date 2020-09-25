@@ -7,18 +7,10 @@ const whiteList = ['login', 'register']
 
 router.beforeEach(async(to, from, next) => {
     const token = store.getters['user/token']
-        // if (token) {
-        //     const expiresAt = store.getters['user/expiresAt']
-        //     const nowUnix = new Date().getTime()
-        //     const hasExpires = (expiresAt - nowUnix) < 0
-        //     if (hasExpires) {
-        //         store.dispatch['user/claerAll']
-        //     }
-        // }
         // 在白名单中的判断情况
     if (whiteList.indexOf(to.name) > -1) {
         if (token) {
-            next({ path: '/layout/dashbord' })
+            next({ path: '/layout/dashboard' })
         } else {
             next()
         }

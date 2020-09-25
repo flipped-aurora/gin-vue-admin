@@ -21,21 +21,23 @@ const showLoading = () => {
 }
 
 const closeLoading = () => {
-    acitveAxios--
-    if (acitveAxios <= 0) {
-        clearTimeout(timer)
-        loadingInstance && loadingInstance.close()
+        acitveAxios--
+        if (acitveAxios <= 0) {
+            clearTimeout(timer)
+            loadingInstance && loadingInstance.close()
+        }
     }
-}
-//http request 拦截器
+    //http request 拦截器
 service.interceptors.request.use(
     config => {
         showLoading()
         const token = store.getters['user/token']
+        const user = store.getters['user/userInfo']
         config.data = JSON.stringify(config.data);
         config.headers = {
             'Content-Type': 'application/json',
-            'x-token': token
+            'x-token': token,
+            'x-user-id': user.ID
         }
         return config;
     },
@@ -55,19 +57,20 @@ service.interceptors.request.use(
 service.interceptors.response.use(
     response => {
         closeLoading()
+        if (response.headers["new-token"]) {
+            store.commit('user/setToken', response.headers["new-token"])
+        }
         if (response.data.code == 0 || response.headers.success === "true") {
             return response.data
         } else {
             Message({
                 showClose: true,
-                message: response.data.msg,
+                message: response.data.msg || decodeURI(response.headers.msg),
                 type: 'error',
-                onClose: () => {
-                    if (response.data.data && response.data.data.reload) {
-                        store.commit('user/LoginOut')
-                    }
-                }
             })
+            if (response.data.data && response.data.data.reload) {
+                store.commit('user/LoginOut')
+            }
             return Promise.reject(response.data.msg)
         }
     },

@@ -2,8 +2,12 @@ package v1
 
 import (
 	"fmt"
+	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 	"strings"
@@ -21,14 +25,23 @@ func UploadFile(c *gin.Context) {
 	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("上传文件失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("上传文件失败，%v", err), c)
 	} else {
-		//文件上传后拿到文件路径
-		err, filePath, key := utils.Upload(header, USER_HEADER_BUCKET, USER_HEADER_IMG_PATH)
-		if err != nil {
-			response.Result(response.ERROR, gin.H{}, fmt.Sprintf("接收返回值失败，%v", err), c)
+		// 文件上传后拿到文件路径
+		var uploadErr error
+		var filePath string
+		var key string
+		if global.GVA_CONFIG.LocalUpload.Local {
+			// 本地上传
+			uploadErr, filePath, key = utils.UploadFileLocal(header)
 		} else {
-			//修改数据库后得到修改后的user并且返回供前端使用
+			// 七牛云上传
+			uploadErr, filePath, key = utils.UploadRemote(header)
+		}
+		if uploadErr != nil {
+			response.FailWithMessage(fmt.Sprintf("接收返回值失败，%v", err), c)
+		} else {
+			// 修改数据库后得到修改后的user并且返回供前端使用
 			var file model.ExaFileUploadAndDownload
 			file.Url = filePath
 			file.Name = header.Filename
@@ -36,13 +49,12 @@ func UploadFile(c *gin.Context) {
 			file.Tag = s[len(s)-1]
 			file.Key = key
 			if noSave == "0" {
-				err = file.Upload()
+				err = service.Upload(file)
 			}
 			if err != nil {
-				response.Result(response.ERROR, gin.H{}, fmt.Sprintf("修改数据库链接失败，%v", err), c)
+				response.FailWithMessage(fmt.Sprintf("修改数据库链接失败，%v", err), c)
 			} else {
-				response.Result(response.SUCCESS, gin.H{"file": file}, "上传成功", c)
-
+				response.OkDetailed(resp.ExaFileResponse{File: file}, "上传成功", c)
 			}
 		}
 	}
@@ -52,26 +64,26 @@ func UploadFile(c *gin.Context) {
 // @Summary 删除文件
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body dbModel.ExaFileUploadAndDownload true "传入文件里面id即可"
+// @Param data body model.ExaFileUploadAndDownload true "传入文件里面id即可"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /fileUploadAndDownload/deleteFile [post]
 func DeleteFile(c *gin.Context) {
 	var file model.ExaFileUploadAndDownload
 	_ = c.ShouldBindJSON(&file)
-	err, f := file.FindFile()
+	err, f := service.FindFile(file.ID)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		err = utils.DeleteFile(USER_HEADER_BUCKET, f.Key)
+		err = utils.DeleteFile(f.Key)
 		if err != nil {
-			response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
+			response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 
 		} else {
-			err = f.DeleteFile()
+			err = service.DeleteFile(f)
 			if err != nil {
-				response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
+				response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 			} else {
-				response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
+				response.OkWithMessage("删除成功", c)
 			}
 		}
 	}
@@ -82,21 +94,21 @@ func DeleteFile(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取文件户列表"
+// @Param data body request.PageInfo true "分页获取文件户列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /fileUploadAndDownload/getFileList [post]
 func GetFileList(c *gin.Context) {
-	var pageInfo model.PageInfo
+	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	err, list, total := new(model.ExaFileUploadAndDownload).GetInfoList(pageInfo)
+	err, list, total := service.GetFileRecordInfoList(pageInfo)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-			"list":     list,
-			"total":    total,
-			"page":     pageInfo.Page,
-			"pageSize": pageInfo.PageSize,
-		}, "获取数据成功", c)
+		response.OkWithData(resp.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, c)
 	}
 }

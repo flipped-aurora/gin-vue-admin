@@ -3,7 +3,8 @@ package v1
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
-	"gin-vue-admin/model"
+	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 	"io/ioutil"
@@ -26,35 +27,35 @@ func BreakpointContinue(c *gin.Context) {
 	chunkTotal, _ := strconv.Atoi(c.Request.FormValue("chunkTotal"))
 	_, FileHeader, err := c.Request.FormFile("file")
 	if err != nil {
-		response.Result(response.SUCCESS, nil, fmt.Sprintf("%v", err), c)
-	} else {
-		f, err := FileHeader.Open()
-		if err != nil {
-			response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
-		} else {
-			cen, _ := ioutil.ReadAll(f)
-			defer f.Close()
-			if flag := utils.CheckMd5(cen, chunkMd5); flag {
-				err, file := new(model.ExaFile).FindOrCreateFile(fileMd5, fileName, chunkTotal)
-				if err != nil {
-					response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
-				} else {
-					err, pathc := utils.BreakPointContinue(cen, fileName, chunkNumber, chunkTotal, fileMd5)
-					if err != nil {
-						response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
-					} else {
-						err = file.CreateFileChunk(pathc, chunkNumber)
-						if err != nil {
-							response.Result(response.ERROR, nil, fmt.Sprintf("%v", err), c)
-						} else {
-							response.Result(response.SUCCESS, nil, "切片创建成功", c)
-						}
-					}
-				}
-			} else {
-			}
-		}
+		response.FailWithMessage(err.Error(), c)
+		return
 	}
+	f, err := FileHeader.Open()
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	defer f.Close()
+	cen, _ := ioutil.ReadAll(f)
+	if flag := utils.CheckMd5(cen, chunkMd5); !flag {
+		return
+	}
+	err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err, pathc := utils.BreakPointContinue(cen, fileName, chunkNumber, chunkTotal, fileMd5)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if err = service.CreateFileChunk(file.ID, pathc, chunkNumber); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("切片创建成功", c)
 }
 
 // @Tags ExaFileUploadAndDownload
@@ -69,11 +70,11 @@ func FindFile(c *gin.Context) {
 	fileMd5 := c.Query("fileMd5")
 	fileName := c.Query("fileName")
 	chunkTotal, _ := strconv.Atoi(c.Query("chunkTotal"))
-	err, file := new(model.ExaFile).FindOrCreateFile(fileMd5, fileName, chunkTotal)
+	err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)
 	if err != nil {
-		response.Result(response.ERROR, nil, fmt.Sprintf("查找失败：%v", err), c)
+		response.FailWithMessage("查找失败", c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"file": file}, "查找成功", c)
+		response.OkWithData(resp.FileResponse{File: file}, c)
 	}
 }
 
@@ -90,9 +91,9 @@ func BreakpointContinueFinish(c *gin.Context) {
 	fileName := c.Query("fileName")
 	err, filePath := utils.MakeFile(fileName, fileMd5)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{"filePath": filePath}, fmt.Sprintf("文件创建失败：%v", err), c)
+		response.FailWithDetailed(response.ERROR, resp.FilePathResponse{FilePath: filePath}, fmt.Sprintf("文件创建失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"filePath": filePath}, "文件创建成功", c)
+		response.OkDetailed(resp.FilePathResponse{FilePath: filePath}, "文件创建成功", c)
 	}
 }
 
@@ -109,10 +110,10 @@ func RemoveChunk(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath := c.Query("filePath")
 	err := utils.RemoveChunk(fileMd5)
-	err = new(model.ExaFile).DeleteFileChunk(fileMd5, fileName, filePath)
+	err = service.DeleteFileChunk(fileMd5, fileName, filePath)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{"filePath": filePath}, fmt.Sprintf("缓存切片删除失败：%v", err), c)
+		response.FailWithDetailed(response.ERROR, resp.FilePathResponse{FilePath: filePath}, fmt.Sprintf("缓存切片删除失败：%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{"filePath": filePath}, "缓存切片删除成功", c)
+		response.OkDetailed(resp.FilePathResponse{FilePath: filePath}, "缓存切片删除成功", c)
 	}
 }

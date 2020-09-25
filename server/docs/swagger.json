@@ -33,8 +33,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.CreateApiParams"
+                            "$ref": "#/definitions/model.SysApi"
                         }
                     }
                 ],
@@ -72,8 +71,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.SysApi"
+                            "$ref": "#/definitions/model.SysApi"
                         }
                     }
                 ],
@@ -133,13 +131,12 @@
                 "summary": "根据id获取api",
                 "parameters": [
                     {
-                        "description": "分页获取用户列表",
+                        "description": "根据id获取api",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -177,8 +174,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.SearchApiParams"
                         }
                     }
                 ],
@@ -216,14 +212,51 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.CreateApiParams"
+                            "$ref": "#/definitions/model.SysApi"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/authority/copyAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authority"
+                ],
+                "summary": "拷贝角色",
+                "parameters": [
+                    {
+                        "description": "拷贝角色",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/response.SysAuthorityCopyResponse"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"拷贝成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -255,8 +288,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityParams"
+                            "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
                 ],
@@ -294,8 +326,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.DeleteAuthorityPatams"
+                            "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
                 ],
@@ -333,8 +364,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -372,14 +402,116 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.SysAuthority"
+                            "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"设置成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/authority/updateAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authority"
+                ],
+                "summary": "设置角色资源权限",
+                "parameters": [
+                    {
+                        "description": "设置角色资源权限",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysAuthority"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"设置成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/createTemp": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "自动代码模板",
+                "parameters": [
+                    {
+                        "description": "创建自动代码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AutoCodeStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/getDatabase": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "获取当前表所有字段",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -414,33 +546,6 @@
                 }
             }
         },
-        "/base/captcha/": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "base"
-                ],
-                "summary": "生成验证码图片路径",
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/base/login": {
             "post": {
                 "produces": [
@@ -457,8 +562,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
+                            "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -488,53 +592,13 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.SysUser"
+                            "$ref": "#/definitions/model.SysUser"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/casbin/CasbinTest": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "casbin"
-                ],
-                "summary": "casb RBAC RESTFUL测试路由",
-                "parameters": [
-                    {
-                        "description": "获取权限列表",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityParams"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -566,8 +630,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.CasbinInReceive"
+                            "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
                 ],
@@ -605,8 +668,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.CreateAuthorityParams"
+                            "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
                 ],
@@ -620,7 +682,79 @@
                 }
             }
         },
-        "/customer/createExaCustomer": {
+        "/customer/customer": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "获取单一客户信息",
+                "parameters": [
+                    {
+                        "description": "获取单一客户信息",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ExaCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysApi"
+                ],
+                "summary": "更新客户信息",
+                "parameters": [
+                    {
+                        "description": "创建客户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.ExaCustomer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
             "post": {
                 "security": [
                     {
@@ -644,8 +778,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
+                            "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
                 ],
@@ -657,10 +790,8 @@
                         }
                     }
                 }
-            }
-        },
-        "/customer/deleteExaCustomer": {
-            "post": {
+            },
+            "delete": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -683,8 +814,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
+                            "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
                 ],
@@ -698,47 +828,8 @@
                 }
             }
         },
-        "/customer/getExaCustomer": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysApi"
-                ],
-                "summary": "获取单一客户信息",
-                "parameters": [
-                    {
-                        "description": "获取单一客户信息",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/customer/getExaCustomerList": {
-            "post": {
+        "/customer/customerList": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -761,47 +852,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/customer/updateExaCustomer": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysApi"
-                ],
-                "summary": "更新客户信息",
-                "parameters": [
-                    {
-                        "description": "创建客户",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaCustomer"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -835,7 +886,7 @@
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "断点续传示例",
+                        "description": "an example for breakpoint resume, 断点续传示例",
                         "name": "file",
                         "in": "formData",
                         "required": true
@@ -872,8 +923,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/dbModel.ExaFileUploadAndDownload"
+                            "$ref": "#/definitions/model.ExaFileUploadAndDownload"
                         }
                     }
                 ],
@@ -907,7 +957,7 @@
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "查找文件",
+                        "description": "上传文件完成",
                         "name": "file",
                         "in": "formData",
                         "required": true
@@ -915,7 +965,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查找成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"file uploaded, 文件创建成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -947,8 +997,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -982,7 +1031,7 @@
                 "parameters": [
                     {
                         "type": "file",
-                        "description": "查找文件",
+                        "description": "删除缓存切片",
                         "name": "file",
                         "in": "formData",
                         "required": true
@@ -1061,6 +1110,44 @@
                 }
             }
         },
+        "/menu/GetMenuAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "authorityAndMenu"
+                ],
+                "summary": "获取指定角色menu",
+                "parameters": [
+                    {
+                        "description": "增加menu和角色关联关系",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AuthorityIdInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/menu/addBaseMenu": {
             "post": {
                 "security": [
@@ -1085,8 +1172,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.SysBaseMenu"
+                            "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
                 ],
@@ -1116,7 +1202,7 @@
                 "tags": [
                     "authorityAndMenu"
                 ],
-                "summary": "获取指定角色menu",
+                "summary": "增加menu和角色关联关系",
                 "parameters": [
                     {
                         "description": "增加menu和角色关联关系",
@@ -1124,8 +1210,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.AuthorityIdInfo"
+                            "$ref": "#/definitions/request.AddMenuAuthorityInfo"
                         }
                     }
                 ],
@@ -1163,8 +1248,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.IdInfo"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -1202,8 +1286,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.GetById"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -1238,8 +1321,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
+                            "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -1274,8 +1356,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.RegisterAndLoginStruct"
+                            "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
                 ],
@@ -1313,8 +1394,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -1328,7 +1408,7 @@
                 }
             }
         },
-        "/menu/updateBaseMen": {
+        "/menu/updateBaseMenu": {
             "post": {
                 "security": [
                     {
@@ -1352,8 +1432,670 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.SysBaseMenu"
+                            "$ref": "#/definitions/model.SysBaseMenu"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/simpleUploader/checkFileMd5": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "测试文件是否已经存在和判断已经上传过的切片",
+                        "name": "md5",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/simpleUploader/mergeFileMd5": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SimpleUploader"
+                ],
+                "summary": "合并文件",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "合并文件",
+                        "name": "md5",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"合并成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/simpleUploader/upload": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SimpleUploader"
+                ],
+                "summary": "断点续传插件版示例",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "断点续传插件版示例",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"上传成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionary/createSysDictionary": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "创建SysDictionary",
+                "parameters": [
+                    {
+                        "description": "创建SysDictionary",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionary/deleteSysDictionary": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "删除SysDictionary",
+                "parameters": [
+                    {
+                        "description": "删除SysDictionary",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionary/findSysDictionary": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "用id查询SysDictionary",
+                "parameters": [
+                    {
+                        "description": "用id查询SysDictionary",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionary/getSysDictionaryList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "分页获取SysDictionary列表",
+                "parameters": [
+                    {
+                        "description": "分页获取SysDictionary列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysDictionarySearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionary/updateSysDictionary": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionary"
+                ],
+                "summary": "更新SysDictionary",
+                "parameters": [
+                    {
+                        "description": "更新SysDictionary",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionary"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/createSysDictionaryDetail": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "创建SysDictionaryDetail",
+                "parameters": [
+                    {
+                        "description": "创建SysDictionaryDetail",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionaryDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/deleteSysDictionaryDetail": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "删除SysDictionaryDetail",
+                "parameters": [
+                    {
+                        "description": "删除SysDictionaryDetail",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionaryDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/findSysDictionaryDetail": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "用id查询SysDictionaryDetail",
+                "parameters": [
+                    {
+                        "description": "用id查询SysDictionaryDetail",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionaryDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/getSysDictionaryDetailList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "分页获取SysDictionaryDetail列表",
+                "parameters": [
+                    {
+                        "description": "分页获取SysDictionaryDetail列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysDictionaryDetailSearch"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysDictionaryDetail/updateSysDictionaryDetail": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysDictionaryDetail"
+                ],
+                "summary": "更新SysDictionaryDetail",
+                "parameters": [
+                    {
+                        "description": "更新SysDictionaryDetail",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysDictionaryDetail"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysOperationRecord/createSysOperationRecord": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysOperationRecord"
+                ],
+                "summary": "创建SysOperationRecord",
+                "parameters": [
+                    {
+                        "description": "创建SysOperationRecord",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysOperationRecord"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysOperationRecord/deleteSysOperationRecord": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysOperationRecord"
+                ],
+                "summary": "删除SysOperationRecord",
+                "parameters": [
+                    {
+                        "description": "删除SysOperationRecord",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysOperationRecord"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysOperationRecord/deleteSysOperationRecordByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysOperationRecord"
+                ],
+                "summary": "批量删除SysOperationRecord",
+                "parameters": [
+                    {
+                        "description": "批量删除SysOperationRecord",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysOperationRecord/findSysOperationRecord": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysOperationRecord"
+                ],
+                "summary": "用id查询SysOperationRecord",
+                "parameters": [
+                    {
+                        "description": "用id查询SysOperationRecord",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysOperationRecord"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysOperationRecord/getSysOperationRecordList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysOperationRecord"
+                ],
+                "summary": "分页获取SysOperationRecord列表",
+                "parameters": [
+                    {
+                        "description": "分页获取SysOperationRecord列表",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SysOperationRecordSearch"
                         }
                     }
                 ],
@@ -1388,8 +2130,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.System"
+                            "$ref": "#/definitions/model.System"
                         }
                     }
                 ],
@@ -1448,8 +2189,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.System"
+                            "$ref": "#/definitions/model.System"
                         }
                     }
                 ],
@@ -1464,7 +2204,7 @@
             }
         },
         "/user/changePassword": {
-            "post": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -1484,8 +2224,45 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.ChangePasswordStutrc"
+                            "$ref": "#/definitions/request.ChangePasswordStruct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/deleteUser": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "description": "删除用户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
@@ -1523,8 +2300,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.PageInfo"
+                            "$ref": "#/definitions/request.PageInfo"
                         }
                     }
                 ],
@@ -1562,57 +2338,13 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/api.SetUserAuth"
+                            "$ref": "#/definitions/request.SetUserAuth"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/uploadHeaderImg": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysUser"
-                ],
-                "summary": "用户上传头像",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "用户上传头像",
-                        "name": "headerImg",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户上传头像",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"上传成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -1636,8 +2368,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/sysModel.SysWorkflow"
+                            "$ref": "#/definitions/model.SysWorkflow"
                         }
                     }
                 ],
@@ -1653,151 +2384,25 @@
         }
     },
     "definitions": {
-        "api.AddMenuAuthorityInfo": {
+        "config.Captcha": {
             "type": "object",
             "properties": {
-                "authorityId": {
-                    "type": "string"
+                "imgHeight": {
+                    "type": "integer"
                 },
-                "menus": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/sysModel.SysBaseMenu"
-                    }
-                }
-            }
-        },
-        "api.AuthorityIdInfo": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.ChangePasswordStutrc": {
-            "type": "object",
-            "properties": {
-                "newPassword": {
-                    "type": "string"
+                "imgWidth": {
+                    "type": "integer"
                 },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.CreateApiParams": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.CreateAuthorityParams": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                },
-                "authorityName": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.DeleteAuthorityPatams": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
+                "keyLong": {
                     "type": "integer"
                 }
             }
         },
-        "api.GetById": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "number"
-                }
-            }
-        },
-        "api.IdInfo": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "number"
-                }
-            }
-        },
-        "api.RegisterAndLoginStruct": {
-            "type": "object",
-            "properties": {
-                "captcha": {
-                    "type": "string"
-                },
-                "captchaId": {
-                    "type": "string"
-                },
-                "password": {
-                    "type": "string"
-                },
-                "username": {
-                    "type": "string"
-                }
-            }
-        },
-        "api.SetUserAuth": {
-            "type": "object",
-            "properties": {
-                "authorityId": {
-                    "type": "string"
-                },
-                "uuid": {
-                    "type": "string"
-                }
-            }
-        },
-        "config.CasbinConfig": {
+        "config.Casbin": {
             "type": "object",
             "properties": {
                 "modelPath": {
-                    "description": "casbin model地址配置",
                     "type": "string"
-                }
-            }
-        },
-        "config.Config": {
-            "type": "object",
-            "properties": {
-                "casbinConfig": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.CasbinConfig"
-                },
-                "jwt": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.JWT"
-                },
-                "mysqlAdmin": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.MysqlAdmin"
-                },
-                "qiniu": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.Qiniu"
-                },
-                "redisAdmin": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.RedisAdmin"
-                },
-                "system": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.System"
                 }
             }
         },
@@ -1809,7 +2414,38 @@
                 }
             }
         },
-        "config.MysqlAdmin": {
+        "config.LocalUpload": {
+            "type": "object",
+            "properties": {
+                "avatarPath": {
+                    "type": "string"
+                },
+                "filePath": {
+                    "type": "string"
+                },
+                "local": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "config.Log": {
+            "type": "object",
+            "properties": {
+                "file": {
+                    "type": "string"
+                },
+                "logFile": {
+                    "type": "boolean"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "stdout": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.Mysql": {
             "type": "object",
             "properties": {
                 "config": {
@@ -1817,6 +2453,15 @@
                 },
                 "dbname": {
                     "type": "string"
+                },
+                "logMode": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
                 },
                 "password": {
                     "type": "string"
@@ -1835,12 +2480,18 @@
                 "accessKey": {
                     "type": "string"
                 },
+                "bucket": {
+                    "type": "string"
+                },
+                "imgPath": {
+                    "type": "string"
+                },
                 "secretKey": {
                     "type": "string"
                 }
             }
         },
-        "config.RedisAdmin": {
+        "config.Redis": {
             "type": "object",
             "properties": {
                 "addr": {
@@ -1854,11 +2505,79 @@
                 }
             }
         },
+        "config.Server": {
+            "type": "object",
+            "properties": {
+                "captcha": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Captcha"
+                },
+                "casbin": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Casbin"
+                },
+                "jwt": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.JWT"
+                },
+                "localUpload": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.LocalUpload"
+                },
+                "log": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Log"
+                },
+                "mysql": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Mysql"
+                },
+                "qiniu": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Qiniu"
+                },
+                "redis": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Redis"
+                },
+                "sqlite": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Sqlite"
+                },
+                "system": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.System"
+                }
+            }
+        },
+        "config.Sqlite": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "string"
+                },
+                "logMode": {
+                    "type": "boolean"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "config.System": {
             "type": "object",
             "properties": {
                 "addr": {
                     "type": "integer"
+                },
+                "dbType": {
+                    "type": "string"
                 },
                 "env": {
                     "type": "string"
@@ -1868,7 +2587,36 @@
                 }
             }
         },
-        "dbModel.ExaCustomer": {
+        "model.AutoCodeStruct": {
+            "type": "object",
+            "properties": {
+                "abbreviation": {
+                    "type": "string"
+                },
+                "autoCreateApiToSql": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Field"
+                    }
+                },
+                "packageName": {
+                    "type": "string"
+                },
+                "structName": {
+                    "type": "string"
+                },
+                "tableName": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.ExaCustomer": {
             "type": "object",
             "properties": {
                 "customerName": {
@@ -1879,7 +2627,7 @@
                 },
                 "sysUser": {
                     "type": "object",
-                    "$ref": "#/definitions/sysModel.SysUser"
+                    "$ref": "#/definitions/model.SysUser"
                 },
                 "sysUserAuthorityID": {
                     "type": "string"
@@ -1889,7 +2637,7 @@
                 }
             }
         },
-        "dbModel.ExaFileUploadAndDownload": {
+        "model.ExaFileUploadAndDownload": {
             "type": "object",
             "properties": {
                 "key": {
@@ -1906,51 +2654,50 @@
                 }
             }
         },
-        "model.PageInfo": {
+        "model.Field": {
             "type": "object",
             "properties": {
-                "page": {
-                    "type": "integer"
+                "columnName": {
+                    "type": "string"
                 },
-                "pageSize": {
-                    "type": "integer"
+                "comment": {
+                    "type": "string"
+                },
+                "dataType": {
+                    "type": "string"
+                },
+                "dataTypeLong": {
+                    "type": "string"
+                },
+                "dictType": {
+                    "type": "string"
+                },
+                "fieldDesc": {
+                    "type": "string"
+                },
+                "fieldJson": {
+                    "type": "string"
+                },
+                "fieldName": {
+                    "type": "string"
+                },
+                "fieldSearchType": {
+                    "type": "string"
+                },
+                "fieldType": {
+                    "type": "string"
                 }
             }
         },
-        "sysModel.CasbinInReceive": {
+        "model.SysApi": {
             "type": "object",
             "properties": {
-                "authorityId": {
+                "apiGroup": {
                     "type": "string"
                 },
-                "casbinInfos": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/sysModel.CasbinInfo"
-                    }
-                }
-            }
-        },
-        "sysModel.CasbinInfo": {
-            "type": "object",
-            "properties": {
-                "method": {
-                    "type": "string"
-                },
-                "path": {
-                    "type": "string"
-                }
-            }
-        },
-        "sysModel.SysApi": {
-            "type": "object",
-            "properties": {
                 "description": {
                     "type": "string"
                 },
-                "group": {
-                    "type": "string"
-                },
                 "method": {
                     "type": "string"
                 },
@@ -1959,7 +2706,7 @@
                 }
             }
         },
-        "sysModel.SysAuthority": {
+        "model.SysAuthority": {
             "type": "object",
             "properties": {
                 "authorityId": {
@@ -1971,31 +2718,55 @@
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysAuthority"
+                        "$ref": "#/definitions/model.SysAuthority"
                     }
+                },
+                "createdAt": {
+                    "type": "string"
                 },
                 "dataAuthorityId": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysAuthority"
+                        "$ref": "#/definitions/model.SysAuthority"
+                    }
+                },
+                "deletedAt": {
+                    "type": "string"
+                },
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysBaseMenu"
                     }
                 },
                 "parentId": {
                     "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },
-        "sysModel.SysBaseMenu": {
+        "model.SysBaseMenu": {
             "type": "object",
             "properties": {
+                "authoritys": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysAuthority"
+                    }
+                },
                 "children": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysBaseMenu"
+                        "$ref": "#/definitions/model.SysBaseMenu"
                     }
                 },
                 "component": {
                     "type": "string"
+                },
+                "defaultMenu": {
+                    "type": "boolean"
                 },
                 "hidden": {
                     "type": "boolean"
@@ -2003,11 +2774,17 @@
                 "icon": {
                     "type": "string"
                 },
+                "keepAlive": {
+                    "type": "boolean"
+                },
                 "name": {
                     "type": "string"
                 },
-                "nickName": {
-                    "type": "string"
+                "parameters": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysBaseMenuParameter"
+                    }
                 },
                 "parentId": {
                     "type": "string"
@@ -2016,19 +2793,118 @@
                     "type": "string"
                 },
                 "sort": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "title": {
                     "type": "string"
                 }
             }
         },
-        "sysModel.SysUser": {
+        "model.SysBaseMenuParameter": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string"
+                },
+                "sysBaseMenuID": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SysDictionary": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "sysDictionaryDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysDictionaryDetail"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.SysDictionaryDetail": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "sysDictionaryID": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SysOperationRecord": {
+            "type": "object",
+            "properties": {
+                "agent": {
+                    "type": "string"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "error_message": {
+                    "type": "string"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "latency": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "resp": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.SysUser"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "model.SysUser": {
             "type": "object",
             "properties": {
                 "authority": {
                     "type": "object",
-                    "$ref": "#/definitions/sysModel.SysAuthority"
+                    "$ref": "#/definitions/model.SysAuthority"
                 },
                 "authorityId": {
                     "type": "string"
@@ -2047,7 +2923,7 @@
                 }
             }
         },
-        "sysModel.SysWorkflow": {
+        "model.SysWorkflow": {
             "type": "object",
             "properties": {
                 "workflowDescription": {
@@ -2066,12 +2942,12 @@
                     "description": "工作流步骤",
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/sysModel.SysWorkflowStepInfo"
+                        "$ref": "#/definitions/model.SysWorkflowStepInfo"
                     }
                 }
             }
         },
-        "sysModel.SysWorkflowStepInfo": {
+        "model.SysWorkflowStepInfo": {
             "type": "object",
             "properties": {
                 "isEnd": {
@@ -2100,12 +2976,272 @@
                 }
             }
         },
-        "sysModel.System": {
+        "model.System": {
             "type": "object",
             "properties": {
                 "config": {
                     "type": "object",
-                    "$ref": "#/definitions/config.Config"
+                    "$ref": "#/definitions/config.Server"
+                }
+            }
+        },
+        "request.AddMenuAuthorityInfo": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysBaseMenu"
+                    }
+                }
+            }
+        },
+        "request.AuthorityIdInfo": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.CasbinInReceive": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "casbinInfos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.CasbinInfo"
+                    }
+                }
+            }
+        },
+        "request.CasbinInfo": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.ChangePasswordStruct": {
+            "type": "object",
+            "properties": {
+                "newPassword": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.GetById": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "number"
+                }
+            }
+        },
+        "request.IdsReq": {
+            "type": "object",
+            "properties": {
+                "ids": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "request.PageInfo": {
+            "type": "object",
+            "properties": {
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.RegisterAndLoginStruct": {
+            "type": "object",
+            "properties": {
+                "captcha": {
+                    "type": "string"
+                },
+                "captchaId": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SearchApiParams": {
+            "type": "object",
+            "properties": {
+                "apiGroup": {
+                    "type": "string"
+                },
+                "desc": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "orderKey": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SetUserAuth": {
+            "type": "object",
+            "properties": {
+                "authorityId": {
+                    "type": "string"
+                },
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SysDictionaryDetailSearch": {
+            "type": "object",
+            "properties": {
+                "label": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "sort": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "sysDictionaryID": {
+                    "type": "integer"
+                },
+                "value": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.SysDictionarySearch": {
+            "type": "object",
+            "properties": {
+                "desc": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "boolean"
+                },
+                "sysDictionaryDetails": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.SysDictionaryDetail"
+                    }
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SysOperationRecordSearch": {
+            "type": "object",
+            "properties": {
+                "agent": {
+                    "type": "string"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "error_message": {
+                    "type": "string"
+                },
+                "ip": {
+                    "type": "string"
+                },
+                "latency": {
+                    "type": "string"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "resp": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "integer"
+                },
+                "user": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.SysUser"
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "response.SysAuthorityCopyResponse": {
+            "type": "object",
+            "properties": {
+                "authority": {
+                    "type": "object",
+                    "$ref": "#/definitions/model.SysAuthority"
+                },
+                "oldAuthorityId": {
+                    "type": "string"
                 }
             }
         }

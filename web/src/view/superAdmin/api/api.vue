@@ -8,8 +8,11 @@
         <el-form-item label="描述">
           <el-input placeholder="描述" v-model="searchInfo.description"></el-input>
         </el-form-item>
-         <el-form-item label="请求">
-               <el-select placeholder="请选择" clearable v-model="searchInfo.method">
+        <el-form-item label="api组">
+          <el-input placeholder="api组" v-model="searchInfo.apiGroup"></el-input>
+        </el-form-item>
+        <el-form-item label="请求">
+          <el-select clearable placeholder="请选择" v-model="searchInfo.method">
             <el-option
               :key="item.value"
               :label="`${item.label}(${item.value})`"
@@ -26,12 +29,12 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column label="id" min-width="60" prop="ID"></el-table-column>
-      <el-table-column label="api路径" min-width="150" prop="path"></el-table-column>
-      <el-table-column label="api分组" min-width="150" prop="apiGroup"></el-table-column>
-      <el-table-column label="api简介" min-width="150" prop="description"></el-table-column>
-      <el-table-column label="请求" min-width="150" prop="method">
+    <el-table :data="tableData" @sort-change="sortChange" border stripe>
+      <el-table-column label="id" min-width="60" prop="ID" sortable="custom"></el-table-column>
+      <el-table-column label="api路径" min-width="150" prop="path" sortable="custom"></el-table-column>
+      <el-table-column label="api分组" min-width="150" prop="apiGroup" sortable="custom"></el-table-column>
+      <el-table-column label="api简介" min-width="150" prop="description" sortable="custom"></el-table-column>
+      <el-table-column label="请求" min-width="150" prop="method" sortable="custom">
         <template slot-scope="scope">
           <div>
             {{scope.row.method}}
@@ -48,8 +51,8 @@
 
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
-          <el-button @click="editApi(scope.row)" size="small" type="text">编辑</el-button>
-          <el-button @click="deleteApi(scope.row)" size="small" type="text">删除</el-button>
+          <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
+          <el-button @click="deleteApi(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,7 +67,7 @@
       layout="total, sizes, prev, pager, next, jumper"
     ></el-pagination>
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="新增Api">
+    <el-dialog :before-close="closeDialog" :title="dialogTitle" :visible.sync="dialogFormVisible">
       <el-form :inline="true" :model="form" :rules="rules" label-width="80px" ref="apiForm">
         <el-form-item label="路径" prop="path">
           <el-input autocomplete="off" v-model="form.path"></el-input>
@@ -107,7 +110,7 @@ import {
   deleteApi
 } from '@/api/api'
 import infoList from '@/components/mixins/infoList'
-
+import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [
   {
     value: 'POST',
@@ -137,8 +140,8 @@ export default {
   data() {
     return {
       listApi: getApiList,
-      listKey: 'list',
       dialogFormVisible: false,
+      dialogTitle: '新增Api',
       form: {
         path: '',
         apiGroup: '',
@@ -149,7 +152,9 @@ export default {
       type: '',
       rules: {
         path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
-        apiGroup: [{ required: true, message: '请输入组名称', trigger: 'blur' }],
+        apiGroup: [
+          { required: true, message: '请输入组名称', trigger: 'blur' }
+        ],
         method: [
           { required: true, message: '请选择请求方式', trigger: 'blur' }
         ],
@@ -160,6 +165,14 @@ export default {
     }
   },
   methods: {
+    // 排序
+    sortChange({ prop, order }) {
+      if (prop) {
+        this.searchInfo.orderKey = toSQLLine(prop)
+        this.searchInfo.desc = order == 'descending'
+      }
+      this.getTableData()
+    },
     //条件搜索前端看此方法
     onSubmit() {
       this.page = 1
@@ -168,12 +181,28 @@ export default {
     },
     initForm() {
       this.$refs.apiForm.resetFields()
+      this.form= {
+        path: '',
+        apiGroup: '',
+        method: '',
+        description: ''
+      }
     },
     closeDialog() {
       this.initForm()
       this.dialogFormVisible = false
     },
     openDialog(type) {
+      switch (type) {
+        case 'addApi':
+          this.dialogTitlethis = '新增Api'
+          break
+        case 'edit':
+          this.dialogTitlethis = '编辑Api'
+          break
+        default:
+          break
+      }
       this.type = type
       this.dialogFormVisible = true
     },
@@ -230,7 +259,7 @@ export default {
                 if (res.code == 0) {
                   this.$message({
                     type: 'success',
-                    message: '添加成功',
+                    message: '编辑成功',
                     showClose: true
                   })
                 }
@@ -262,6 +291,9 @@ export default {
       const target = methodOptions.filter(item => item.value === value)[0]
       return target && `${target.type}`
     }
+  },
+  created(){
+    this.getTableData()
   }
 }
 </script>

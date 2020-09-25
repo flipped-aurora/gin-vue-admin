@@ -1,12 +1,14 @@
-package api
+package v1
 
 import (
 	"fmt"
 	"gin-vue-admin/global/response"
-    "gin-vue-admin/model"
+	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
+	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
-
 
 // @Tags {{.StructName}}
 // @Summary 创建{{.StructName}}
@@ -17,16 +19,15 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func Create{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} {{.PackageName}}.{{.StructName}}
+	var {{.Abbreviation}} model.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
-	err := {{.Abbreviation}}.Create{{.StructName}}()
+	err := service.Create{{.StructName}}({{.Abbreviation}})
 	if err != nil {
-	    response.Result(response.ERROR, gin.H{}, fmt.Sprintf("创建失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "创建成功", c)
+		response.OkWithMessage("创建成功", c)
 	}
 }
-
 
 // @Tags {{.StructName}}
 // @Summary 删除{{.StructName}}
@@ -35,18 +36,36 @@ func Create{{.StructName}}(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "删除{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /{{.Abbreviation}}/delete{{.StructName}} [post]
+// @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func Delete{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} {{.PackageName}}.{{.StructName}}
+	var {{.Abbreviation}} model.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
-	err := {{.Abbreviation}}.Delete{{.StructName}}()
+	err := service.Delete{{.StructName}}({{.Abbreviation}})
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("删除失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{}, "删除成功", c)
+		response.OkWithMessage("删除成功", c)
 	}
 }
 
+// @Tags {{.StructName}}
+// @Summary 批量删除{{.StructName}}
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.IdsReq true "批量删除{{.StructName}}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /{{.Abbreviation}}/delete{{.StructName}}ByIds [delete]
+func Delete{{.StructName}}ByIds(c *gin.Context) {
+	var IDS request.IdsReq
+    _ = c.ShouldBindJSON(&IDS)
+	err := service.Delete{{.StructName}}ByIds(IDS)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	} else {
+		response.OkWithMessage("删除成功", c)
+	}
+}
 
 // @Tags {{.StructName}}
 // @Summary 更新{{.StructName}}
@@ -55,20 +74,17 @@ func Delete{{.StructName}}(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "更新{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /{{.Abbreviation}}/update{{.StructName}} [post]
+// @Router /{{.Abbreviation}}/update{{.StructName}} [put]
 func Update{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} {{.PackageName}}.{{.StructName}}
+	var {{.Abbreviation}} model.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
-	err,re{{.Abbreviation}} := {{.Abbreviation}}.Update{{.StructName}}()
+	err := service.Update{{.StructName}}(&{{.Abbreviation}})
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("更新失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-            "re{{.Abbreviation}}":re{{.Abbreviation}},
-        }, "更新成功", c)
+		response.OkWithMessage("更新成功", c)
 	}
 }
-
 
 // @Tags {{.StructName}}
 // @Summary 用id查询{{.StructName}}
@@ -77,41 +93,38 @@ func Update{{.StructName}}(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /{{.Abbreviation}}/find{{.StructName}} [post]
+// @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func Find{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} {{.PackageName}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
-	err,re{{.Abbreviation}} := {{.Abbreviation}}.FindById()
+	var {{.Abbreviation}} model.{{.StructName}}
+	_ = c.ShouldBindQuery(&{{.Abbreviation}})
+	err, re{{.Abbreviation}} := service.Get{{.StructName}}({{.Abbreviation}}.ID)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("查询失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {
-		response.Result(response.SUCCESS, gin.H{
-             "re{{.Abbreviation}}":re{{.Abbreviation}},
-        }, "查询成功", c)
+		response.OkWithData(gin.H{"re{{.Abbreviation}}": re{{.Abbreviation}}}, c)
 	}
 }
-
 
 // @Tags {{.StructName}}
 // @Summary 分页获取{{.StructName}}列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.PageInfo true "分页获取{{.StructName}}列表"
+// @Param data body request.{{.StructName}}Search true "分页获取{{.StructName}}列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /{{.Abbreviation}}/get{{.StructName}}List [post]
+// @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func Get{{.StructName}}List(c *gin.Context) {
-	var pageInfo model.PageInfo
-	_ = c.ShouldBindJSON(&pageInfo)
-	err, list, total := new({{.PackageName}}.{{.StructName}}).GetInfoList(pageInfo)
+	var pageInfo request.{{.StructName}}Search
+	_ = c.ShouldBindQuery(&pageInfo)
+	err, list, total := service.Get{{.StructName}}InfoList(pageInfo)
 	if err != nil {
-		response.Result(response.ERROR, gin.H{}, fmt.Sprintf("获取数据失败，%v", err), c)
+		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-	    response.Result(response.SUCCESS, gin.H{
-            "{{.PackageName}}List": list,
-            "total":    total,
-            "page":     pageInfo.Page,
-            "pageSize": pageInfo.PageSize,
-        }, "获取数据成功", c)
+		response.OkWithData(resp.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, c)
 	}
 }

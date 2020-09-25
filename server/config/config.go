@@ -14,6 +14,7 @@ type Server struct {
 	Zap         Zap         `mapstructure:"zap" json:"zap" yaml:"zap"`
 	LocalUpload LocalUpload `mapstructure:"localUpload" json:"localUpload" yaml:"localUpload"`
 	Email       Email       `mapstructure:"email" json:"email" yaml:"email"`
+	Minio       Minio       `mapstructure:"minio" json:"minio" yaml:"minio"`
 }
 
 type System struct {
@@ -22,6 +23,7 @@ type System struct {
 	Addr          int    `mapstructure:"addr" json:"addr" yaml:"addr"`
 	DbType        string `mapstructure:"db-type" json:"dbType" yaml:"db-type"`
 	NeedInitData  bool   `mapstructure:"need-init-data" json:"needInitData" yaml:"need-init-data"`
+	OssType       int    `mapstructure:"oss-type" json:"ossType" yaml:"oss-type" `
 }
 
 type JWT struct {

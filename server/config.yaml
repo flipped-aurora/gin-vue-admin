@@ -77,6 +77,7 @@ system:
   addr: 8888
   db-type: "mysql"  # support mysql/postgresql/sqlite/sqlserver
   need-init-data: false
+  oss-type: 1   # 0 LOCAL; 1 七牛云 2 MINIO
 
 # captcha configuration
 captcha:
@@ -107,3 +108,11 @@ email:
   email-host: 'smtp.163.com'
   email-port: 465
   email-isSSL: true
+# minio 文件存储
+minio:
+  endpoint: "localhost:9000"
+  bucket: public
+  access-key-id: minio
+  secret-access-key: minio1234
+  use-ssl: false
+  path: http://localhost:9000

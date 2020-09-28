@@ -1,7 +1,7 @@
 package config
 
-// 文件上传服务器minio配置
-type Minio struct {
+// OSS 文件上传服务器OSS(minio,阿里云)配置
+type OSS struct {
 	Endpoint        string `mapstructure:"endpoint" json:"endpoint" yaml:"endpoint"`
 	AccessKeyID     string `mapstructure:"access-key-id" json:"accessKeyID" yaml:"access-key-id"`
 	SecretAccessKey string `mapstructure:"secret-access-key" json:"secretAccessKey" yaml:"secret-access-key"`

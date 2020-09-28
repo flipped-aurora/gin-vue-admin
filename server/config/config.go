@@ -14,7 +14,7 @@ type Server struct {
 	Zap         Zap         `mapstructure:"zap" json:"zap" yaml:"zap"`
 	LocalUpload LocalUpload `mapstructure:"localUpload" json:"localUpload" yaml:"localUpload"`
 	Email       Email       `mapstructure:"email" json:"email" yaml:"email"`
-	Minio       Minio       `mapstructure:"minio" json:"minio" yaml:"minio"`
+	OSS         OSS         `mapstructure:"oss" json:"oss" yaml:"oss"`
 }
 
 type System struct {

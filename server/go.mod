@@ -3,6 +3,7 @@ module gin-vue-admin
 go 1.12
 
 require (
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/casbin/casbin v1.9.1
 	github.com/casbin/casbin/v2 v2.11.0
@@ -12,6 +13,7 @@ require (
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-openapi/spec v0.19.7 // indirect
 	github.com/go-openapi/swag v0.19.8 // indirect
 	github.com/go-playground/validator/v10 v10.3.0 // indirect

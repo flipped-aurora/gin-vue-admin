@@ -652,7 +652,7 @@ CREATE TABLE `sys_operation_records` (
   `latency` bigint DEFAULT NULL COMMENT '''''',
   `agent` varchar(191) DEFAULT NULL COMMENT '''''',
   `error_message` varchar(191) DEFAULT NULL COMMENT '''''',
-  `body` varchar(191) DEFAULT NULL COMMENT '''请求Body''',
+  `body` longtext COMMENT '''请求Body''',
   `resp` longtext COMMENT '''响应Body''',
   `user_id` bigint unsigned DEFAULT NULL COMMENT '''''',
   PRIMARY KEY (`id`),

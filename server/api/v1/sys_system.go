@@ -60,3 +60,19 @@ func ReloadSystem(c *gin.Context) {
 		response.OkWithMessage("设置成功", c)
 	}
 }
+
+// @Tags system
+// @Summary 获取服务器信息
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /system/getServerInfo [post]
+func GetServerInfo(c *gin.Context) {
+	server, err := service.GetServerInfo()
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("获取失败，%v", err), c)
+		return
+	}
+	response.OkDetailed(gin.H{"server":server}, "获取成功",c)
+
+}

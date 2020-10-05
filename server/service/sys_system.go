@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/utils"
+	"go.uber.org/zap"
 )
 
 // @title    GetSystemConfig
@@ -31,3 +32,30 @@ func SetSystemConfig(system model.System) (err error) {
 	err = global.GVA_VP.WriteConfig()
 	return err
 }
+
+
+// @title    GetServerInfo
+// @description   get server info , 获取服务器信息
+// @auth                    （2020/04/05  20:22）
+// @return    server         *utils.Server
+// @return    err            error
+
+func GetServerInfo() (server *utils.Server, err error) {
+	var s utils.Server
+	s.Os = utils.InitOS()
+	if s.Cpu, err = utils.InitCPU(); err != nil{
+		global.GVA_LOG.Error("func utils.InitCPU() Failed!", zap.String("err", err.Error()))
+		return &s, err
+	}
+	if s.Rrm, err = utils.InitRAM(); err != nil{
+		global.GVA_LOG.Error("func utils.InitRAM() Failed!", zap.String("err", err.Error()))
+		return &s, err
+	}
+	if s.Disk, err = utils.InitDisk(); err != nil{
+		global.GVA_LOG.Error("func utils.InitDisk() Failed!", zap.String("err", err.Error()))
+		return &s, err
+	}
+
+	return &s, nil
+}
+

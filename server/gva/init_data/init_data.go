@@ -87,6 +87,7 @@ func InitSysApi() (err error) {
 		{gorm.Model{ID: 63, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/simpleUploader/checkFileMd5", "文件完整度验证", "simpleUploader", "GET"},
 		{gorm.Model{ID: 64, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/simpleUploader/mergeFileMd5", "上传完成合并文件", "simpleUploader", "GET"},
 		{gorm.Model{ID: 65, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/setUserInfo", "设置用户信息", "user", "PUT"},
+		{gorm.Model{ID: 66, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/system/getServerInfo", "获取服务器信息", "system", "POST"},
 	}
 	if tx.Create(&insert).Error != nil { // 遇到错误时回滚事务
 		tx.Rollback()
@@ -161,6 +162,7 @@ func InitCasbinModel() (err error) {
 		{"p", "888", "/jwt/jsonInBlacklist", "POST"},
 		{"p", "888", "/system/getSystemConfig", "POST"},
 		{"p", "888", "/system/setSystemConfig", "POST"},
+		{"p", "888", "/system/getServerInfo", "POST"},
 		{"p", "888", "/customer/customer", "POST"},
 		{"p", "888", "/customer/customer", "PUT"},
 		{"p", "888", "/customer/customer", "DELETE"},

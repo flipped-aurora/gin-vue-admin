@@ -26,7 +26,7 @@ zap:
 # redis configuration
 redis:
   db: 0
-  addr: 'redis:6379'
+  addr: '177.7.0.14:6379'
   password: ''
 
 # email configuration
@@ -48,9 +48,9 @@ system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
   db-type: 'mysql'
-  oss-type: 'qiniu'
+  oss-type: 'local'
   config-env: 'GVA_CONFIG'
-  need-init-data: false
+  need-init-data: true
   use-multipoint: false
 
 # captcha configuration
@@ -61,11 +61,11 @@ captcha:
 
 # mysql connect configuration
 mysql:
-  path: mysql
+  path: '177.7.0.13:3306'
   config: 'charset=utf8mb4&parseTime=True&loc=Local'
   db-name: 'qmPlus'
   username: 'root'
-  password: 'gdkid,,..'
+  password: 'Aa@6447985'
   max-idle-conns: 10
   max-open-conns: 10
   log-mode: false

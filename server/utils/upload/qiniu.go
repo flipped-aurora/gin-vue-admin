@@ -14,8 +14,8 @@ import (
 
 type Qiniu struct{}
 
-// 接收两个参数 一个文件流 一个 bucket 你的七牛云标准空间的名字
-func (*Qiniu) Upload(file *multipart.FileHeader) (string, string, error) {
+// Upload 上传文件
+func (*Qiniu) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	putPolicy := storage.PutPolicy{Scope: global.GVA_CONFIG.Qiniu.Bucket}
 	mac := qbox.NewMac(global.GVA_CONFIG.Qiniu.AccessKey, global.GVA_CONFIG.Qiniu.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
@@ -39,6 +39,7 @@ func (*Qiniu) Upload(file *multipart.FileHeader) (string, string, error) {
 	return global.GVA_CONFIG.Qiniu.ImgPath + "/" + ret.Key, ret.Key, nil
 }
 
+// DeleteFile 删除文件
 func (*Qiniu) DeleteFile(key string) error {
 	mac := qbox.NewMac(global.GVA_CONFIG.Qiniu.AccessKey, global.GVA_CONFIG.Qiniu.SecretKey)
 	cfg := qiniuConfig()

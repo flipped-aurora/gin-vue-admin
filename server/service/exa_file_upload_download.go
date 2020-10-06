@@ -76,7 +76,7 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 // @return    file            file model.ExaFileUploadAndDownload
 
 func UploadFile(header *multipart.FileHeader, noSave string) (err error, file model.ExaFileUploadAndDownload) {
-	filePath, key, uploadErr := upload.Oss.Upload(header)
+	filePath, key, uploadErr := upload.Oss.UploadFile(header)
 	if uploadErr != nil {
 		panic(err)
 	}

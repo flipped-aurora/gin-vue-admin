@@ -14,7 +14,8 @@ import (
 
 type Local struct{}
 
-func (l Local) Upload(file *multipart.FileHeader) (string, string, error) {
+// UploadFile 上传文件
+func (l Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	// 读取文件后缀
 	ext := path.Ext(file.Filename)
 	// 读取文件名并加密
@@ -54,6 +55,7 @@ func (l Local) Upload(file *multipart.FileHeader) (string, string, error) {
 	return p, filename, nil
 }
 
+// DeleteFile 删除文件
 func (l Local) DeleteFile(key string) error {
 	p := global.GVA_CONFIG.Local.Path + "/" + key
 	if strings.Contains(p, global.GVA_CONFIG.Local.Path) {

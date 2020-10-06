@@ -5,9 +5,8 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	"gin-vue-admin/utils"
+	"gin-vue-admin/utils/upload"
 	"mime/multipart"
-	"os"
 	"strings"
 )
 
@@ -43,19 +42,8 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
 	var fileFromDb model.ExaFileUploadAndDownload
 	err, fileFromDb = FindFile(file.ID)
-	if err != nil {
-		return errors.New("文件不存在")
-	}
-	if global.GVA_CONFIG.LocalUpload.Local { // 删除本地文件
-		if strings.Contains(fileFromDb.Url, global.GVA_CONFIG.LocalUpload.FilePath) {
-			if err = os.Remove(fileFromDb.Url); err != nil {
-				err = errors.New("本地文件删除失败, err:" + err.Error())
-			}
-		}
-	} else {
-		if err = utils.DeleteFile(file.Key); err != nil { // 删除七牛云文件
-			err = errors.New("七牛云文件删除失败, err:" + err.Error())
-		}
+	if err = upload.Oss.DeleteFile(fileFromDb.Key); err != nil{
+		return errors.New("文件删除失败")
 	}
 	err = global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(file).Error
 	return err
@@ -88,19 +76,18 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 // @return    file            file model.ExaFileUploadAndDownload
 
 func UploadFile(header *multipart.FileHeader, noSave string) (err error, file model.ExaFileUploadAndDownload) {
-	var filePath, key string
-	var f model.ExaFileUploadAndDownload
-	if global.GVA_CONFIG.LocalUpload.Local { // 本地上传
-		err, filePath, key = utils.UploadFileLocal(header)
-	} else { // 七牛云上传
-		err, filePath, key = utils.UploadRemote(header)
+	filePath, key, uploadErr := upload.Oss.Upload(header)
+	if uploadErr != nil {
+		panic(err)
 	}
 	if noSave == "0" {
-		f.Url = filePath
-		f.Name = header.Filename
-		s := strings.Split(f.Name, ".")
-		f.Tag = s[len(s)-1]
-		f.Key = key
+		s := strings.Split(header.Filename, ".")
+		f := model.ExaFileUploadAndDownload{
+			Url:  filePath,
+			Name: header.Filename,
+			Tag:  s[len(s)-1],
+			Key:  key,
+		}
 		return Upload(f), f
 	}
 	return

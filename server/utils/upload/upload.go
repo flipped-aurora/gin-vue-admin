@@ -12,13 +12,13 @@ type OSS interface {
 	DeleteFile(key string) error
 }
 
-func InitOss() {
+func NewOss() OSS {
 	switch global.GVA_CONFIG.System.OssType {
 	case "local":
-		Oss = &Local{}
+		return &Local{}
 	case "qiniu":
-		Oss = &Qiniu{}
+		return &Qiniu{}
 	default:
-		Oss = &Local{}
+		return &Local{}
 	}
 }

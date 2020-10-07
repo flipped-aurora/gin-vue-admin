@@ -42,7 +42,8 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
 	var fileFromDb model.ExaFileUploadAndDownload
 	err, fileFromDb = FindFile(file.ID)
-	if err = upload.Oss.DeleteFile(fileFromDb.Key); err != nil{
+	oss := upload.NewOss()
+	if err = oss.DeleteFile(fileFromDb.Key); err != nil{
 		return errors.New("文件删除失败")
 	}
 	err = global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(file).Error
@@ -76,7 +77,8 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 // @return    file            file model.ExaFileUploadAndDownload
 
 func UploadFile(header *multipart.FileHeader, noSave string) (err error, file model.ExaFileUploadAndDownload) {
-	filePath, key, uploadErr := upload.Oss.UploadFile(header)
+	oss := upload.NewOss()
+	filePath, key, uploadErr := oss.UploadFile(header)
 	if uploadErr != nil {
 		panic(err)
 	}

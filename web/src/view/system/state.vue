@@ -146,8 +146,11 @@ export default {
       ],
     };
   },
-  created() {
+  created() { 
     this.reload();
+    setInterval(() => {
+      this.reload();
+    }, 1000*10);
   },
   methods: {
     async reload() {

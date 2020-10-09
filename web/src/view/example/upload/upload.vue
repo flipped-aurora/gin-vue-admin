@@ -1,23 +1,33 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="upload">
-      <el-upload
-        :action="`${path}/fileUploadAndDownload/upload`"
-        :before-upload="checkFile"
-        :headers="{ 'x-token': token }"
-        :on-error="uploadError"
-        :on-success="uploadSuccess"
-        :show-file-list="false"
-      >
-        <el-button size="small" type="primary">点击上传</el-button>
-        <div class="el-upload__tip" slot="tip">
-          只能上传jpg/png文件，且不超过500kb
-        </div>
-      </el-upload>
+      <el-row>
+        <el-col :span="12">
+          <el-upload
+            :action="`${path}/fileUploadAndDownload/upload`"
+            :before-upload="checkFile"
+            :headers="{ 'x-token': token }"
+            :on-error="uploadError"
+            :on-success="uploadSuccess"
+            :show-file-list="false"
+          >
+            <el-button size="small" type="primary">点击上传</el-button>
+            <div class="el-upload__tip" slot="tip">
+              只能上传jpg/png文件，且不超过500kb
+            </div>
+          </el-upload>
+        </el-col>
+        <el-col :span="12">
+          带压缩的上传, (512(k)为压缩限制)
+          <upload-image v-model="imageUrl" :fileSize="512" :maxWH="1080" />
+          已上传文件 {{ imageUrl }}
+        </el-col>
+      </el-row>
+
       <el-table :data="tableData" border stripe>
         <el-table-column label="预览" width="100">
           <template slot-scope="scope">
-            <CustomPic picType="file" :picSrc="scope.row.url"/>
+            <CustomPic picType="file" :picSrc="scope.row.url" />
           </template>
         </el-table-column>
         <el-table-column label="日期" prop="UpdatedAt" width="180">
@@ -30,7 +40,11 @@
           prop="name"
           width="180"
         ></el-table-column>
-        <el-table-column label="链接" prop="url" min-width="300"></el-table-column>
+        <el-table-column
+          label="链接"
+          prop="url"
+          min-width="300"
+        ></el-table-column>
         <el-table-column label="标签" prop="tag" width="100">
           <template slot-scope="scope">
             <el-tag
@@ -72,26 +86,29 @@ import infoList from "@/components/mixins/infoList";
 import { getFileList, deleteFile } from "@/api/fileUploadAndDownload";
 import { downloadImage } from "@/utils/downloadImg";
 import { formatTimeToStr } from "@/utils/data";
-import CustomPic from '@/components/customPic'
+import CustomPic from "@/components/customPic";
+import UploadImage from "@/components/upload/image.vue";
 export default {
   name: "Upload",
   mixins: [infoList],
   components: {
-		CustomPic
-	},
+    CustomPic,
+    UploadImage,
+  },
   data() {
     return {
       fullscreenLoading: false,
       listApi: getFileList,
       path: path,
       tableData: [],
+      imageUrl: "",
     };
   },
   computed: {
     ...mapGetters("user", ["userInfo", "token"]),
   },
   filters: {
-    formatDate: function(time) {
+    formatDate: function (time) {
       if (time != null && time != "") {
         var date = new Date(time);
         return formatTimeToStr(date, "yyyy-MM-dd hh:mm:ss");

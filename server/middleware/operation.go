@@ -47,7 +47,7 @@ func OperationRecord() gin.HandlerFunc {
 			UserID: userId,
 		}
 		values := c.Request.Header.Values("content-type")
-		if strings.Contains(values[0], "boundary"){
+		if len(values) >0 && strings.Contains(values[0], "boundary") {
 			record.Body = "file"
 		}
 		writer := responseBodyWriter{

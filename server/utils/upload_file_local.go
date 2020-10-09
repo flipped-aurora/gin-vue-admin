@@ -20,7 +20,7 @@ func UploadFileLocal(file *multipart.FileHeader) (err error, localPath string, k
 	// 拼接新文件名
 	lastName := fileName + "_" + time.Now().Format("20060102150405") + ext
 	// 读取全局变量的定义路径
-	savePath := global.GVA_CONFIG.LocalUpload.FilePath
+	savePath := global.GVA_CONFIG.Local.Path
 	// 尝试创建此路径
 	err = os.MkdirAll(savePath, os.ModePerm)
 	if err != nil {

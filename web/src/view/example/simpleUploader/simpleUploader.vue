@@ -94,7 +94,7 @@ export default {
           return false;
         }
         md5 = SparkMD5.ArrayBuffer.hash(e.target.result, false);
-        
+
         file.uniqueIdentifier = md5;
         if (md5 != "") {
           const res = await checkFileMd5({ md5: md5 });

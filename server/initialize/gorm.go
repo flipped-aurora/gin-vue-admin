@@ -25,6 +25,8 @@ func Gorm() {
 	//	GormSqlite()
 	case "sqlserver":
 		GormSqlServer()
+	default:
+		GormMysql()
 	}
 }
 

@@ -1,14 +1,13 @@
 package utils
 
 import (
-	"fmt"
 	"github.com/shirou/gopsutil/cpu"
 	"github.com/shirou/gopsutil/disk"
-	"github.com/shirou/gopsutil/load"
 	"github.com/shirou/gopsutil/mem"
 	"runtime"
 	"time"
 )
+
 const (
 	B  = 1
 	KB = 1024 * B
@@ -16,47 +15,88 @@ const (
 	GB = 1024 * MB
 )
 
-//服务器硬盘使用量
-func DiskCheck() {
-	u, _ := disk.Usage("/")
-	usedMB := int(u.Used) / MB
-	usedGB := int(u.Used) / GB
-	totalMB := int(u.Total) / MB
-	totalGB := int(u.Total) / GB
-	usedPercent := int(u.UsedPercent)
-	fmt.Printf("Free space: %dMB (%dGB) / %dMB (%dGB) | Used: %d%%\n", usedMB, usedGB, totalMB, totalGB, usedPercent)
+type Server struct {
+	Os   Os   `json:"os"`
+	Cpu  Cpu  `json:"cpu"`
+	Rrm  Rrm  `json:"ram"`
+	Disk Disk `json:"disk"`
 }
 
-//OS
-func OSCheck() {
-	fmt.Printf("goOs:%s,compiler:%s,numCpu:%d,version:%s,numGoroutine:%d\n", runtime.GOOS, runtime.Compiler, runtime.NumCPU(), runtime.Version(), runtime.NumGoroutine())
+type Os struct {
+	GOOS         string `json:"goos"`
+	NumCPU       int    `json:"numCpu"`
+	Compiler     string `json:"compiler"`
+	GoVersion    string `json:"goVersion"`
+	NumGoroutine int    `json:"numGoroutine"`
 }
 
-//CPU 使用量
-func CPUCheck() {
-	cores, _ := cpu.Counts(false)
+type Cpu struct {
+	Cpus  []float64 `json:"cpus"`
+	Cores int       `json:"cores"`
+}
 
-	cpus, err := cpu.Percent(time.Duration(200)*time.Millisecond, true)
-	if err == nil {
-		for i, c := range cpus {
-			fmt.Printf("cpu%d : %f%%\n", i, c)
-		}
+
+type Rrm struct {
+	UsedMB      int `json:"usedMb"`
+	TotalMB     int `json:"totalMb"`
+	UsedPercent int `json:"usedPercent"`
+}
+
+type Disk struct {
+	UsedMB      int `json:"usedMb"`
+	UsedGB      int `json:"usedGb"`
+	TotalMB     int `json:"totalMb"`
+	TotalGB     int `json:"totalGb"`
+	UsedPercent int `json:"usedPercent"`
+}
+
+// InitOS OS信息
+func InitOS() (o Os) {
+	o.GOOS = runtime.GOOS
+	o.NumCPU = runtime.NumCPU()
+	o.Compiler = runtime.Compiler
+	o.GoVersion = runtime.Version()
+	o.NumGoroutine = runtime.NumGoroutine()
+	return o
+}
+
+// InitCPU CPU信息
+func InitCPU() (c Cpu, err error) {
+	if cores, err := cpu.Counts(false); err != nil {
+		return c, err
+	} else {
+		c.Cores = cores
 	}
-	a, _ := load.Avg()
-	l1 := a.Load1
-	l5 := a.Load5
-	l15 := a.Load15
-	fmt.Println(l1)
-	fmt.Println(l5)
-	fmt.Println(l15)
-	fmt.Println(cores)
+	if cpus, err := cpu.Percent(time.Duration(200)*time.Millisecond, true); err != nil {
+		return c, err
+	} else {
+		c.Cpus = cpus
+	}
+	return c, nil
 }
 
-//内存使用量
-func RAMCheck() {
-	u, _ := mem.VirtualMemory()
-	usedMB := int(u.Used) / MB
-	totalMB := int(u.Total) / MB
-	usedPercent := int(u.UsedPercent)
-	fmt.Printf("usedMB:%d,totalMB:%d,usedPercent:%d", usedMB, totalMB, usedPercent)
+// InitRAM ARM信息
+func InitRAM() (r Rrm, err error) {
+	if u, err := mem.VirtualMemory(); err != nil{
+		return r, err
+	}else {
+		r.UsedMB = int(u.Used) / MB
+		r.TotalMB = int(u.Total) / MB
+		r.UsedPercent = int(u.UsedPercent)
+	}
+	return r, nil
+}
+
+// InitDisk 硬盘信息
+func InitDisk() (d Disk, err error) {
+	if u, err := disk.Usage("/"); err != nil{
+		return d, err
+	} else {
+		d.UsedMB = int(u.Used) / MB
+		d.UsedGB = int(u.Used) / GB
+		d.TotalMB = int(u.Total) / MB
+		d.TotalGB = int(u.Total) / GB
+		d.UsedPercent = int(u.UsedPercent)
+	}
+	return d, nil
 }

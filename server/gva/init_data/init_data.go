@@ -87,6 +87,8 @@ func InitSysApi() (err error) {
 		{gorm.Model{ID: 63, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/simpleUploader/checkFileMd5", "文件完整度验证", "simpleUploader", "GET"},
 		{gorm.Model{ID: 64, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/simpleUploader/mergeFileMd5", "上传完成合并文件", "simpleUploader", "GET"},
 		{gorm.Model{ID: 65, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/setUserInfo", "设置用户信息", "user", "PUT"},
+		{gorm.Model{ID: 66, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/system/getServerInfo", "获取服务器信息", "system", "POST"},
+		{gorm.Model{ID: 67, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/email/emailTest", "发送测试邮件", "email", "POST"},
 	}
 	if tx.Create(&insert).Error != nil { // 遇到错误时回滚事务
 		tx.Rollback()
@@ -161,6 +163,7 @@ func InitCasbinModel() (err error) {
 		{"p", "888", "/jwt/jsonInBlacklist", "POST"},
 		{"p", "888", "/system/getSystemConfig", "POST"},
 		{"p", "888", "/system/setSystemConfig", "POST"},
+		{"p", "888", "/system/getServerInfo", "POST"},
 		{"p", "888", "/customer/customer", "POST"},
 		{"p", "888", "/customer/customer", "PUT"},
 		{"p", "888", "/customer/customer", "DELETE"},
@@ -187,6 +190,7 @@ func InitCasbinModel() (err error) {
 		{"p", "888", "/sysOperationRecord/getSysOperationRecordList", "GET"},
 		{"p", "888", "/sysOperationRecord/deleteSysOperationRecordByIds", "DELETE"},
 		{"p", "888", "/user/setUserInfo", "PUT"},
+		{"p", "888", "/email/emailTest", "POST"},
 		{"p", "8881", "/base/login", "POST"},
 		{"p", "8881", "/base/register", "POST"},
 		{"p", "8881", "/api/createApi", "POST"},
@@ -311,6 +315,7 @@ func InitSysBaseMenus() (err error) {
 		{Model: gorm.Model{ID: 24, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, Hidden: false, ParentId: "3", Path: "operation", Name: "operation", Component: "view/superAdmin/operation/sysOperationRecord.vue", Sort: 6, Meta: model.Meta{Title: "操作历史", Icon: "time"}},
 		{Model: gorm.Model{ID: 25, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, Hidden: false, ParentId: "9", Path: "simpleUploader", Name: "simpleUploader", Component: "view/example/simpleUploader/simpleUploader", Sort: 6, Meta: model.Meta{Title: "断点续传（插件版）", Icon: "upload"}},
 		{Model: gorm.Model{ID: 26, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, ParentId: "0", Path: "https://www.gin-vue-admin.com", Name: "https://www.gin-vue-admin.com", Hidden: false, Component: "/", Sort: 0, Meta: model.Meta{Title: "官方网站", Icon: "s-home"}},
+		{Model: gorm.Model{ID: 27, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, ParentId: "0", Path: "state", Name: "state", Hidden: false, Component: "view/system/state.vue", Sort: 6, Meta: model.Meta{Title: "服务器状态", Icon: "cloudy"}},
 	}
 	if tx.Create(&insert).Error != nil { // 遇到错误时回滚事务
 		tx.Rollback()
@@ -369,6 +374,7 @@ func InitSysAuthorityMenus() (err error) {
 		{"888", 24},
 		{"888", 25},
 		{"888", 26},
+		{"888", 27},
 		{"8881", 1},
 		{"8881", 2},
 		{"8881", 8},

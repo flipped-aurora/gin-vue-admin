@@ -49,6 +49,12 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
+		if err, _ = service.FindUserByUuid(claims.UUID.String()); err != nil{
+			response.Result(response.ERROR, gin.H{
+				"reload": true,
+			}, err.Error(), c)
+			c.Abort()
+		}
 		if claims.ExpiresAt - time.Now().Unix()<claims.BufferTime {
 			claims.ExpiresAt = time.Now().Unix() + 60*60*24*7
 			newToken,_ := j.CreateToken(*claims)

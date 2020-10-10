@@ -31,7 +31,7 @@
         "vuescroll": "^4.14.4",
         "vuex": "^3.1.1",
         "vuex-persist": "^2.1.0",
-        "wfd-gva": "^1.0.3"
+        "wfd-gva": "^1.0.4"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^4.5.6",

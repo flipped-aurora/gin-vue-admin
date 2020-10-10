@@ -9,7 +9,7 @@ export default class ImageCompress {
         // 压缩
         const fileType = this.file.type
         const fileSize = this.file.size / 1024
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.readAsDataURL(this.file);
             reader.onload = () => {

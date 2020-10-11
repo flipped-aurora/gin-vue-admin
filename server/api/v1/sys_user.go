@@ -130,7 +130,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			response.FailWithMessage("jwt作废失败", c)
 			return
 		}
-		if err := service.SetRedisJWT(jwtStr, user.Username); err != nil {
+		if err := service.SetRedisJWT(token, user.Username); err != nil {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}

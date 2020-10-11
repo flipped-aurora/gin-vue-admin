@@ -61,9 +61,9 @@ export default {
       }
       return isRightSize;
     },
-    handleImageSuccess(res, file) {
+    handleImageSuccess(res) {
       // this.imageUrl = URL.createObjectURL(file.raw);
-      const { code, msg, data } = res;
+      const {  data } = res;
       if (data.file) {
         this.$emit("change", data.file.url);
       }

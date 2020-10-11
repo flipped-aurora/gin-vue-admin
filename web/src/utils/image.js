@@ -33,7 +33,6 @@ export default class ImageCompress {
 
                     if (newImgSize > this.fileSize) {
                         console.log('图片尺寸太大!' + fileSize + " >> " + newImgSize)
-                        reject(`图片尺寸太大!`)
                     }
 
                     let blob = this.dataURLtoBlob(newImgData, fileType)
@@ -70,8 +69,6 @@ export default class ImageCompress {
     }
 
     fileSizeKB(dataURL) {
-        let self = this
-
         let sizeKB = 0
         sizeKB = Math.round((dataURL.split(',')[1].length * 3 / 4) / 1024)
         return sizeKB
@@ -81,8 +78,6 @@ export default class ImageCompress {
      * 转为Blob
      * */
     dataURLtoBlob(dataURL, fileType) {
-        let self = this
-
         let byteString = atob(dataURL.split(',')[1])
         let mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0]
         let ab = new ArrayBuffer(byteString.length)

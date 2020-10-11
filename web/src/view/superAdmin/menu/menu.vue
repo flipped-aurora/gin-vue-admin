@@ -232,7 +232,7 @@ export default {
   methods: {
     addParameter(form) {
       if (!form.parameters){
-        form.parameters = []
+        this.$set(form,"parameters",[])
       }
       form.parameters.push({
         type: "query",

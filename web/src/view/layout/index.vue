@@ -58,11 +58,11 @@
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
           <keep-alive>
-            <router-view class="admin-box" v-if="$route.meta.keepAlive"></router-view>
+            <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="$route.meta.keepAlive"></router-view>
           </keep-alive>
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
+          <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
         </transition>
        <BottomInfo />
       </el-main>
@@ -106,6 +106,7 @@ export default {
       isMobile: false,
       isShadowBg: false,
       showPassword: false,
+      loadingFlag:false,
       pwdModify: {},
       rules: {
         password: [
@@ -209,6 +210,12 @@ export default {
     }
     this.$bus.emit('collapse', this.isCollapse)
     this.$bus.emit('mobile', this.isMobile)
+    this.$bus.on("showLoading",()=>{
+      this.loadingFlag = true
+    })
+    this.$bus.on("closeLoading",()=>{
+      this.loadingFlag = false
+    })
     window.onresize = () => {
       return (() => {
         let screenWidth = document.body.clientWidth

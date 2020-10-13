@@ -119,7 +119,7 @@ func GormPostgreSql() {
 // GormSqlServer 初始化SqlServer数据库
 func GormSqlServer() {
 	ss := global.GVA_CONFIG.Sqlserver
-	dsn := "sqlserver://" + ss.Username + ":" + ss.Password + "@" + ss.Path + "?database=gorm"
+	dsn := "sqlserver://" + ss.Username + ":" + ss.Password + "@" + ss.Path + "?database=" + ss.Dbname
 	if global.GVA_DB, err = gorm.Open(sqlserver.Open(dsn), &gorm.Config{}); err != nil {
 		global.GVA_LOG.Error("SqlServer启动异常", zap.Any("err", err))
 		os.Exit(0)

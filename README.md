@@ -65,7 +65,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ```
 - node版本 > v8.6.0
-- golang版本 >= v1.11
+- golang版本 >= v1.14
 - IDE推荐：Goland
 - gormv2版本初始化数据库可以利用批量创建功能，这里已经写好初始化代码，需要在main.go内打开 initialize.Data() 的注释即可
 - 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱

@@ -15,3 +15,5 @@ type CustomClaims struct {
 	BufferTime  int64
 	jwt.StandardClaims
 }
+
+type StandardClaims = jwt.StandardClaims

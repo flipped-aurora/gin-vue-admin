@@ -42,7 +42,6 @@ system:
   addr: 8888
   db-type: 'mysql'
   oss-type: 'local'
-  config-env: 'GVA_CONFIG'
   need-init-data: false
   use-multipoint: false
 

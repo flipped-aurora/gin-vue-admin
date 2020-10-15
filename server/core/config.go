@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	_ "gin-vue-admin/packfile"
+	"gin-vue-admin/utils"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 	"os"
@@ -12,15 +13,13 @@ import (
 
 var config string
 
-const defaultConfigFile = "config.yaml"
-
 func init() {
 	flag.StringVar(&config, "c", "", "choose config file.")
 	flag.Parse()
 	if config == "" { // 优先级: 命令行 > 环境变量 > 默认值
-		if configEnv := os.Getenv(global.GVA_CONFIG.System.ConfigEnv); configEnv == "" {
-			config = defaultConfigFile
-			fmt.Printf("您正在使用config的默认值,config的路径为%v\n", defaultConfigFile)
+		if configEnv := os.Getenv(utils.ConfigEnv); configEnv == "" {
+			config = utils.ConfigFile
+			fmt.Printf("您正在使用config的默认值,config的路径为%v\n", utils.ConfigFile)
 		} else {
 			config = configEnv
 			fmt.Printf("您正在使用GVA_CONFIG环境变量,config的路径为%v\n", config)

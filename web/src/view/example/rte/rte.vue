@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h1>富文本编辑器</h1>
     <div class="edit_container">
       <quill-editor
               :options="editorOption"
@@ -11,6 +12,7 @@
       ></quill-editor>
       <el-button  plain @click="saveHtml">保存</el-button>
     </div>
+    <h1>markdown编辑器</h1>
     <div class="edit">
       <mavon-editor v-model="model.content"></mavon-editor>
       <el-button type="primary" size="small" @click="submit">发表</el-button>
@@ -42,7 +44,9 @@ export default {
     onEditorBlur() {}, // 失去焦点事件
     onEditorFocus() {}, // 获得焦点事件
     onEditorChange() {}, // 内容改变事件
-    saveHtml() {}, // 保存方法
+    saveHtml() {
+      console.log(this.content)
+    }, // 保存方法
     submit(){}
   }
 }

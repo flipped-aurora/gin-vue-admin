@@ -14,29 +14,31 @@ definitions:
       modelPath:
         type: string
     type: object
+  config.Email:
+    properties:
+      from:
+        type: string
+      host:
+        type: string
+      isSSL:
+        type: boolean
+      nickname:
+        type: string
+      port:
+        type: integer
+      secret:
+        type: string
+      to:
+        type: string
+    type: object
   config.JWT:
     properties:
       signingKey:
         type: string
     type: object
-  config.LocalUpload:
+  config.Local:
     properties:
-      avatarPath:
-        type: string
-      filePath:
-        type: string
-      local:
-        type: boolean
-    type: object
-  config.Log:
-    properties:
-      file:
-        type: string
-      logFile:
-        type: boolean
-      prefix:
-        type: string
-      stdout:
+      path:
         type: string
     type: object
   config.Mysql:
@@ -58,6 +60,29 @@ definitions:
       username:
         type: string
     type: object
+  config.Postgresql:
+    properties:
+      config:
+        type: string
+      dbname:
+        type: string
+      host:
+        type: string
+      logger:
+        type: boolean
+      maxIdleConns:
+        type: integer
+      maxOpenConns:
+        type: integer
+      password:
+        type: string
+      port:
+        type: string
+      preferSimpleProtocol:
+        type: boolean
+      username:
+        type: string
+    type: object
   config.Qiniu:
     properties:
       accessKey:
@@ -67,6 +92,12 @@ definitions:
       imgPath:
         type: string
       secretKey:
+        type: string
+      useCdnDomains:
+        type: boolean
+      useHttps:
+        type: boolean
+      zone:
         type: string
     type: object
   config.Redis:
@@ -86,17 +117,22 @@ definitions:
       casbin:
         $ref: '#/definitions/config.Casbin'
         type: object
+      email:
+        $ref: '#/definitions/config.Email'
+        type: object
       jwt:
         $ref: '#/definitions/config.JWT'
         type: object
-      localUpload:
-        $ref: '#/definitions/config.LocalUpload'
-        type: object
-      log:
-        $ref: '#/definitions/config.Log'
+      local:
+        $ref: '#/definitions/config.Local'
+        description: oss
         type: object
       mysql:
         $ref: '#/definitions/config.Mysql'
+        description: gorm
+        type: object
+      postgresql:
+        $ref: '#/definitions/config.Postgresql'
         type: object
       qiniu:
         $ref: '#/definitions/config.Qiniu'
@@ -107,16 +143,37 @@ definitions:
       sqlite:
         $ref: '#/definitions/config.Sqlite'
         type: object
+      sqlserver:
+        $ref: '#/definitions/config.Sqlserver'
+        type: object
       system:
         $ref: '#/definitions/config.System'
+        type: object
+      zap:
+        $ref: '#/definitions/config.Zap'
         type: object
     type: object
   config.Sqlite:
     properties:
-      config:
-        type: string
-      logMode:
+      logger:
         type: boolean
+      maxIdleConns:
+        type: integer
+      maxOpenConns:
+        type: integer
+      path:
+        type: string
+    type: object
+  config.Sqlserver:
+    properties:
+      dbname:
+        type: string
+      logger:
+        type: boolean
+      maxIdleConns:
+        type: integer
+      maxOpenConns:
+        type: integer
       password:
         type: string
       path:
@@ -132,8 +189,33 @@ definitions:
         type: string
       env:
         type: string
+      needInitData:
+        type: boolean
+      ossType:
+        type: string
       useMultipoint:
         type: boolean
+    type: object
+  config.Zap:
+    properties:
+      director:
+        type: string
+      encodeLevel:
+        type: string
+      format:
+        type: string
+      level:
+        type: string
+      linkName:
+        type: string
+      logInConsole:
+        type: boolean
+      prefix:
+        type: string
+      showLine:
+        type: boolean
+      stacktraceKey:
+        type: string
     type: object
   model.AutoCodeStruct:
     properties:
@@ -378,7 +460,7 @@ definitions:
       isEnd:
         description: 是否是完结流节点
         type: boolean
-      isStrat:
+      isStart:
         description: 是否是开始流节点
         type: boolean
       stepAuthorityID:
@@ -919,25 +1001,6 @@ paths:
       summary: 用户登录
       tags:
       - Base
-  /base/register:
-    post:
-      parameters:
-      - description: 用户注册接口
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.SysUser'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"注册成功"}'
-          schema:
-            type: string
-      summary: 用户注册账号
-      tags:
-      - Base
   /casbin/UpdateCasbin:
     post:
       consumes:
@@ -1096,6 +1159,20 @@ paths:
       summary: 获取权限客户列表
       tags:
       - SysApi
+  /email/emailTest:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"返回成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 发送测试邮件
+      tags:
+      - system
   /fileUploadAndDownload/breakpointContinue:
     post:
       consumes:
@@ -1870,6 +1947,20 @@ paths:
       summary: 设置配置文件内容
       tags:
       - system
+  /system/getServerInfo:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取服务器信息
+      tags:
+      - system
   /system/getSystemConfig:
     post:
       produces:
@@ -1972,6 +2063,25 @@ paths:
       summary: 分页获取用户列表
       tags:
       - SysUser
+  /user/register:
+    post:
+      parameters:
+      - description: 用户注册接口
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"注册成功"}'
+          schema:
+            type: string
+      summary: 用户注册账号
+      tags:
+      - Base
   /user/setUserAuthority:
     post:
       consumes:
@@ -1993,6 +2103,29 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 设置用户权限
+      tags:
+      - SysUser
+  /user/setUserInfo:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除用户
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除用户
       tags:
       - SysUser
   /workflow/createWorkFlow:

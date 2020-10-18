@@ -24,7 +24,7 @@ func InitSysApi() (err error) {
 	tx := global.GVA_DB.Begin() // 开始事务
 	insert := []model.SysApi{
 		{gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/base/login", "用户登录", "base", "POST"},
-		{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/base/register", "用户注册", "base", "POST"},
+		{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/register", "用户注册", "user", "POST"},
 		{gorm.Model{ID: 3, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/createApi", "创建api", "api", "POST"},
 		{gorm.Model{ID: 4, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/getApiList", "获取api列表", "api", "POST"},
 		{gorm.Model{ID: 5, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/getApiById", "获取api详细信息", "api", "POST"},
@@ -128,7 +128,7 @@ func InitCasbinModel() (err error) {
 	tx := global.GVA_DB.Begin() // 开始事务
 	insert := []model.CasbinModel{
 		{"p", "888", "/base/login", "POST"},
-		{"p", "888", "/base/register", "POST"},
+		{"p", "888", "/user/register", "POST"},
 		{"p", "888", "/api/createApi", "POST"},
 		{"p", "888", "/api/getApiList", "POST"},
 		{"p", "888", "/api/getApiById", "POST"},
@@ -192,7 +192,7 @@ func InitCasbinModel() (err error) {
 		{"p", "888", "/user/setUserInfo", "PUT"},
 		{"p", "888", "/email/emailTest", "POST"},
 		{"p", "8881", "/base/login", "POST"},
-		{"p", "8881", "/base/register", "POST"},
+		{"p", "8881", "/user/register", "POST"},
 		{"p", "8881", "/api/createApi", "POST"},
 		{"p", "8881", "/api/getApiList", "POST"},
 		{"p", "8881", "/api/getApiById", "POST"},
@@ -229,7 +229,7 @@ func InitCasbinModel() (err error) {
 		{"p", "8881", "/customer/customer", "GET"},
 		{"p", "8881", "/customer/customerList", "GET"},
 		{"p", "9528", "/base/login", "POST"},
-		{"p", "9528", "/base/register", "POST"},
+		{"p", "9528", "/user/register", "POST"},
 		{"p", "9528", "/api/createApi", "POST"},
 		{"p", "9528", "/api/getApiList", "POST"},
 		{"p", "9528", "/api/getApiById", "POST"},

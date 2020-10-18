@@ -22,7 +22,7 @@ import (
 // @Produce  application/json
 // @Param data body model.SysUser true "用户注册接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
-// @Router /base/register [post]
+// @Router /user/register [post]
 func Register(c *gin.Context) {
 	var R request.RegisterStruct
 	_ = c.ShouldBindJSON(&R)

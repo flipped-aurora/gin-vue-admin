@@ -3,7 +3,6 @@ package main
 import (
 	"gin-vue-admin/core"
 	"gin-vue-admin/global"
-	"gin-vue-admin/gva/init_data"
 	"gin-vue-admin/initialize"
 )
 
@@ -15,10 +14,10 @@ import (
 // @name x-token
 // @BasePath /
 func main() {
-	initialize.Gorm()
-	if global.GVA_CONFIG.System.NeedInitData {
-		init_data.InitData() // 通过配置文件初始化数据 默认为 false 首次运行需要将 ./config.yaml中 system下的 need-init-data 修改为true
-	}
+	global.GVA_VP = core.Viper()          // 初始化Viper
+	global.GVA_LOG = core.Zap()           // 初始化zap日志库
+	global.GVA_DB = initialize.Gorm()     // gorm连接数据库
+	initialize.MysqlTables(global.GVA_DB) // 初始化表
 	// 程序结束前关闭数据库链接
 	db, _ := global.GVA_DB.DB()
 	defer db.Close()

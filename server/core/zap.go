@@ -8,14 +8,11 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
+	"path"
 	"time"
 )
 
-var (
-	err    error
-	level  zapcore.Level
-	writer zapcore.WriteSyncer
-)
+var level  zapcore.Level
 
 func Zap() (logger *zap.Logger) {
 	if ok, _ := utils.PathExists(global.GVA_CONFIG.Zap.Director); !ok { // 判断是否有Director文件夹
@@ -42,12 +39,6 @@ func Zap() (logger *zap.Logger) {
 		level = zap.InfoLevel
 	}
 
-	writer, err = getWriteSyncer() // 使用file-rotatelogs进行日志分割
-	if err != nil {
-		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
-		return
-	}
-
 	if level == zap.DebugLevel || level == zap.ErrorLevel {
 		logger = zap.New(getEncoderCore(), zap.AddStacktrace(level))
 	} else {
@@ -62,7 +53,7 @@ func Zap() (logger *zap.Logger) {
 // getWriteSyncer zap logger中加入file-rotatelogs
 func getWriteSyncer() (zapcore.WriteSyncer, error) {
 	fileWriter, err := zaprotatelogs.New(
-		global.GVA_CONFIG.Zap.Director+string(os.PathSeparator)+"%Y-%m-%d.log",
+		path.Join(global.GVA_CONFIG.Zap.Director, "%Y-%m-%d.log"),
 		zaprotatelogs.WithLinkName(global.GVA_CONFIG.Zap.LinkName),
 		zaprotatelogs.WithMaxAge(7*24*time.Hour),
 		zaprotatelogs.WithRotationTime(24*time.Hour),
@@ -97,6 +88,8 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		config.EncodeLevel = zapcore.CapitalLevelEncoder
 	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
 		config.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	default:
+		config.EncodeLevel = zapcore.LowercaseLevelEncoder
 	}
 	return config
 }
@@ -111,6 +104,11 @@ func getEncoder() zapcore.Encoder {
 
 // getEncoderCore 获取Encoder的zapcore.Core
 func getEncoderCore() (core zapcore.Core) {
+	writer, err := getWriteSyncer() // 使用file-rotatelogs进行日志分割
+	if err != nil {
+		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
+		return
+	}
 	return zapcore.NewCore(getEncoder(), writer, level)
 }
 

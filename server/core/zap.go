@@ -17,7 +17,7 @@ var (
 	writer zapcore.WriteSyncer
 )
 
-func init() {
+func Zap() (logger *zap.Logger) {
 	if ok, _ := utils.PathExists(global.GVA_CONFIG.Zap.Director); !ok { // 判断是否有Director文件夹
 		fmt.Printf("create %v directory\n", global.GVA_CONFIG.Zap.Director)
 		_ = os.Mkdir(global.GVA_CONFIG.Zap.Director, os.ModePerm)
@@ -49,13 +49,14 @@ func init() {
 	}
 
 	if level == zap.DebugLevel || level == zap.ErrorLevel {
-		global.GVA_LOG = zap.New(getEncoderCore(), zap.AddStacktrace(level))
+		logger = zap.New(getEncoderCore(), zap.AddStacktrace(level))
 	} else {
-		global.GVA_LOG = zap.New(getEncoderCore())
+		logger = zap.New(getEncoderCore())
 	}
 	if global.GVA_CONFIG.Zap.ShowLine {
-		global.GVA_LOG.WithOptions(zap.AddCaller())
+		logger.WithOptions(zap.AddCaller())
 	}
+	return logger
 }
 
 // getWriteSyncer zap logger中加入file-rotatelogs
@@ -87,7 +88,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.FullCallerEncoder,
 	}
-	switch  {
+	switch {
 	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
 		config.EncodeLevel = zapcore.LowercaseLevelEncoder
 	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色

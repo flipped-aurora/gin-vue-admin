@@ -18,7 +18,7 @@ var DataAuthorityId = []SysDataAuthorityId{
 }
 
 func InitSysDataAuthorityId(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+	return db.Table("sys_data_authority_id").Transaction(func(tx *gorm.DB) error {
 		if tx.Create(&DataAuthorityId).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

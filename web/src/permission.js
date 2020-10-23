@@ -3,7 +3,7 @@ import { store } from '@/store/index'
 
 let asyncRouterFlag = 0
 
-const whiteList = ['login', 'register']
+const whiteList = ['login']
 
 router.beforeEach(async(to, from, next) => {
     const token = store.getters['user/token']

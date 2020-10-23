@@ -12,12 +12,6 @@ const baseRouters = [{
         name: 'login',
         component: () =>
             import ('@/view/login/login.vue')
-    },
-    {
-        path: '/register',
-        name: 'register',
-        component: () =>
-            import ('@/view/login/register.vue')
     }
 ]
 

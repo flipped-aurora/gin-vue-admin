@@ -24,6 +24,7 @@ yarn-error.log*
 
 go.sum
 /server/log/
+/server/gva
 /server/latest_log
 
 *.iml

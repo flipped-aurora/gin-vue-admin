@@ -54,7 +54,7 @@ auth(Vue)
 import uploader from 'vue-simple-uploader'
 Vue.use(uploader)
 
-new Vue({
+export default new Vue({
     render: h => h(App),
     router,
     store

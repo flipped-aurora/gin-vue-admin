@@ -16,7 +16,7 @@ type SysOperationRecord struct {
 	Latency      time.Duration `json:"latency" form:"latency" gorm:"column:latency;comment:延迟"`
 	Agent        string        `json:"agent" form:"agent" gorm:"column:agent;comment:代理"`
 	ErrorMessage string        `json:"error_message" form:"error_message" gorm:"column:error_message;comment:错误信息"`
-	Body         string        `json:"body" form:"body" gorm:"column:body;comment:请求Body"`
+	Body         string        `json:"body" form:"body" gorm:"type:longtext;column:body;comment:请求Body"`
 	Resp         string        `json:"resp" form:"resp" gorm:"type:longtext;column:resp;comment:响应Body"`
 	UserID       int           `json:"user_id" form:"user_id" gorm:"column:user_id;comment:用户id"`
 	User         SysUser       `json:"user"`

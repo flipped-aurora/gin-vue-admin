@@ -4,15 +4,13 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/utils"
-	zaprotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
-	"path"
 	"time"
 )
 
-var level  zapcore.Level
+var level zapcore.Level
 
 func Zap() (logger *zap.Logger) {
 	if ok, _ := utils.PathExists(global.GVA_CONFIG.Zap.Director); !ok { // 判断是否有Director文件夹
@@ -48,20 +46,6 @@ func Zap() (logger *zap.Logger) {
 		logger.WithOptions(zap.AddCaller())
 	}
 	return logger
-}
-
-// getWriteSyncer zap logger中加入file-rotatelogs
-func getWriteSyncer() (zapcore.WriteSyncer, error) {
-	fileWriter, err := zaprotatelogs.New(
-		path.Join(global.GVA_CONFIG.Zap.Director, "%Y-%m-%d.log"),
-		zaprotatelogs.WithLinkName(global.GVA_CONFIG.Zap.LinkName),
-		zaprotatelogs.WithMaxAge(7*24*time.Hour),
-		zaprotatelogs.WithRotationTime(24*time.Hour),
-	)
-	if global.GVA_CONFIG.Zap.LogInConsole {
-		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(fileWriter)), err
-	}
-	return zapcore.AddSync(fileWriter), err
 }
 
 // getEncoderConfig 获取zapcore.EncoderConfig
@@ -104,7 +88,7 @@ func getEncoder() zapcore.Encoder {
 
 // getEncoderCore 获取Encoder的zapcore.Core
 func getEncoderCore() (core zapcore.Core) {
-	writer, err := getWriteSyncer() // 使用file-rotatelogs进行日志分割
+	writer, err := utils.GetWriteSyncer() // 使用file-rotatelogs进行日志分割
 	if err != nil {
 		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
 		return

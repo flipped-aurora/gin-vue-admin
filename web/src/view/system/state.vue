@@ -138,6 +138,7 @@ export default {
   name: "State",
   data() {
     return {
+      timer:null,
       state: {},
       colors: [
         { color: "#5cb87a", percentage: 20 },
@@ -148,9 +149,13 @@ export default {
   },
   created() { 
     this.reload();
-    setInterval(() => {
+    this.timer = setInterval(() => {
       this.reload();
     }, 1000*10);
+  },
+  beforeDestroy(){
+    clearInterval(this.timer)
+    this.timer = null
   },
   methods: {
     async reload() {

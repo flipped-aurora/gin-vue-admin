@@ -32,7 +32,7 @@ clean:
 	@if [ -f ${GVA} ] ; then rm ${GVA} ; fi
 
 help:
-	@echo "make - 格式化 Go 代码, 并编译生成二进制文件"
+	@echo "make - 生成gva终端工具,初始化数据后删除gva终端工具"
 	@echo "make linux-build - 编译 Go 代码, 生成Linux系统的二进制文件"
 	@echo "make windows-build - 编译 Go 代码, 生成Windows系统的exe文件"
 	@echo "make mac-build - 编译 Go 代码, 生成Mac系统的二进制文件"

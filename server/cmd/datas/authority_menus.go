@@ -66,7 +66,7 @@ var AuthorityMenus = []SysAuthorityMenus{
 }
 
 func InitSysAuthorityMenus(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+	return db.Table("sys_authority_menus").Transaction(func(tx *gorm.DB) error {
 		if tx.Create(&AuthorityMenus).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

@@ -39,7 +39,8 @@ var initdbCmd = &cobra.Command{
 4. sqlserver未适配`,
 	Run: func(cmd *cobra.Command, args []string) {
 		path, _ := cmd.Flags().GetString("path")
-		core.Viper(path)
+		global.GVA_VP = core.Viper(path)
+		global.GVA_LOG = core.Zap()           // 初始化zap日志库
 		db := initialize.GormMysql()
 		switch global.GVA_CONFIG.System.DbType {
 		case "mysql":

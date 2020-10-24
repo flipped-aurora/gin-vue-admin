@@ -31,7 +31,11 @@
         "vuescroll": "^4.14.4",
         "vuex": "^3.1.1",
         "vuex-persist": "^2.1.0",
-        "wfd-gva": "^1.0.4"
+        "@antv/dom-util": "2.0.2",
+        "@antv/matrix-util": "2.0.7",
+        "@antv/g-canvas": "^0.4.12",
+        "@antv/g6": "3.5.2",
+        "@antv/util": "~2.0.9"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^4.5.6",
@@ -40,7 +44,12 @@
         "babel-eslint": "^10.1.0",
         "eslint": "^6.7.2",
         "eslint-plugin-vue": "^6.2.2",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "^2.6.10",
+        "core-js": "^3.3.2",
+        "node-sass": "^4.12.0",
+        "numericjs": "^1.2.6",
+        "raw-loader": "^3.1.0",
+        "sass-loader": "^8.0.0"
     },
     "eslintConfig": {
         "root": true,

@@ -3,25 +3,28 @@
     <el-button size="small" style="float:right;margin-top:6px;margin-right:6px;" @click="saveXML">导出XML</el-button>
     <el-button size="small" style="float:right;margin-top:6px;margin-right:6px;" @click="saveImg">导出图片</el-button>
     <el-button size="small" style="float:right;margin-top:6px;margin-right:6px;" @click="save">保存流程</el-button>
-    <wfd-gva ref="wfd" :data="demoData" :height="600" :users="users" :groups="groups" :categorys="categorys" :lang="lang" />
+    <gva-wfd ref="wfd" :data="demoData" :height="600" :users="users" :authorities="authorities" :groups="groups" :categorys="categorys" :lang="lang" />
   </div>
 </template>
 <script>
 
 
-import wfdGva from 'wfd-gva'
+import gvaWfd from '@/components/gva-wfd'
+import   {getUserList}     from '@/api/user'
+import   {getAuthorityList}     from '@/api/authority'
 export default {
   name: 'Workflow',
   components:{
-    wfdGva
+    gvaWfd
   },
   data () {
     return {
       lang: "zh",
       demoData: {},
-      users: [{id:'1',name:'审批人1'},{id:'2',name:'审批人2'},{id:'3',name:'审批人3'}],
+      users: [],
+      authorities:[],
       groups: [{id:'1',name:'组1'},{id:'2',name:'组2'},{id:'3',name:'组3'}],
-      categorys:[{id:'1',name:'分类1'},{id:'2',name:'分类2'},{id:'3',name:'分类3'}]
+      categorys:[{id:'1',name:'分类1'},{id:'2',name:'分类2'},{id:'3',name:'分类3'},{id:'4',分组:'分组4'}]
     }
   },
   methods:{
@@ -34,6 +37,20 @@ export default {
     saveImg(){
       console.log(this.$refs['wfd'].graph.saveImg())
     }
-  }
+  },
+  async created(){
+   const userRes = await getUserList({page:1,pageSize:9999999})
+   if(userRes.code == 0){
+     userRes.data.list.map(item=>{
+       this.users.push({id:item.ID,name:item.nickName})
+     })
+   }
+   const authorityRes = await getAuthorityList({page:1,pageSize:9999999})
+   if(authorityRes.code == 0){
+     authorityRes.data.list.map(item=>{
+       this.authorities.push({id:item.authorityId,name:item.authorityName})
+     })
+   }
+  },
 }
 </script>

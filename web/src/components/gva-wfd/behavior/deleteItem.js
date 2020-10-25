@@ -1,3 +1,4 @@
+/* eslint-disable */
 export default function(G6){
   G6.registerBehavior('deleteItem', {
     getEvents() {

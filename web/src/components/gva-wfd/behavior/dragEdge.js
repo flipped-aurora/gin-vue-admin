@@ -1,3 +1,4 @@
+/* eslint-disable */
 import editorStyle from "../util/defaultStyle";
 import { Marker } from '@antv/g-canvas/lib/shape';
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { deepMix, each } from '@antv/util';
 import { createDom } from '@antv/dom-util';
 

@@ -1,3 +1,4 @@
+/* eslint-disable */
 import editorStyle from "../util/defaultStyle";
 
 const taskDefaultOptions = {

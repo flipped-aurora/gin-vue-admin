@@ -1,3 +1,4 @@
+/* eslint-disable */
 import editorStyle from '../util/defaultStyle';
 import { getShapeName } from '../util/clazz';
 import ControlPoint from '../item/controlPoint';

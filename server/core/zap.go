@@ -4,20 +4,15 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/utils"
-	zaprotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"
 	"time"
 )
 
-var (
-	err    error
-	level  zapcore.Level
-	writer zapcore.WriteSyncer
-)
+var level zapcore.Level
 
-func init() {
+func Zap() (logger *zap.Logger) {
 	if ok, _ := utils.PathExists(global.GVA_CONFIG.Zap.Director); !ok { // 判断是否有Director文件夹
 		fmt.Printf("create %v directory\n", global.GVA_CONFIG.Zap.Director)
 		_ = os.Mkdir(global.GVA_CONFIG.Zap.Director, os.ModePerm)
@@ -42,34 +37,15 @@ func init() {
 		level = zap.InfoLevel
 	}
 
-	writer, err = getWriteSyncer() // 使用file-rotatelogs进行日志分割
-	if err != nil {
-		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
-		return
-	}
-
 	if level == zap.DebugLevel || level == zap.ErrorLevel {
-		global.GVA_LOG = zap.New(getEncoderCore(), zap.AddStacktrace(level))
+		logger = zap.New(getEncoderCore(), zap.AddStacktrace(level))
 	} else {
-		global.GVA_LOG = zap.New(getEncoderCore())
+		logger = zap.New(getEncoderCore())
 	}
 	if global.GVA_CONFIG.Zap.ShowLine {
-		global.GVA_LOG.WithOptions(zap.AddCaller())
+		logger.WithOptions(zap.AddCaller())
 	}
-}
-
-// getWriteSyncer zap logger中加入file-rotatelogs
-func getWriteSyncer() (zapcore.WriteSyncer, error) {
-	fileWriter, err := zaprotatelogs.New(
-		global.GVA_CONFIG.Zap.Director+string(os.PathSeparator)+"%Y-%m-%d.log",
-		zaprotatelogs.WithLinkName(global.GVA_CONFIG.Zap.LinkName),
-		zaprotatelogs.WithMaxAge(7*24*time.Hour),
-		zaprotatelogs.WithRotationTime(24*time.Hour),
-	)
-	if global.GVA_CONFIG.Zap.LogInConsole {
-		return zapcore.NewMultiWriteSyncer(zapcore.AddSync(os.Stdout), zapcore.AddSync(fileWriter)), err
-	}
-	return zapcore.AddSync(fileWriter), err
+	return logger
 }
 
 // getEncoderConfig 获取zapcore.EncoderConfig
@@ -87,7 +63,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		EncodeDuration: zapcore.SecondsDurationEncoder,
 		EncodeCaller:   zapcore.FullCallerEncoder,
 	}
-	switch  {
+	switch {
 	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
 		config.EncodeLevel = zapcore.LowercaseLevelEncoder
 	case global.GVA_CONFIG.Zap.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
@@ -96,6 +72,8 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 		config.EncodeLevel = zapcore.CapitalLevelEncoder
 	case global.GVA_CONFIG.Zap.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
 		config.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	default:
+		config.EncodeLevel = zapcore.LowercaseLevelEncoder
 	}
 	return config
 }
@@ -110,6 +88,11 @@ func getEncoder() zapcore.Encoder {
 
 // getEncoderCore 获取Encoder的zapcore.Core
 func getEncoderCore() (core zapcore.Core) {
+	writer, err := utils.GetWriteSyncer() // 使用file-rotatelogs进行日志分割
+	if err != nil {
+		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
+		return
+	}
 	return zapcore.NewCore(getEncoder(), writer, level)
 }
 

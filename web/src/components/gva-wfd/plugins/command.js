@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { mix, clone, isString } from '@antv/util';
 
 class Command{

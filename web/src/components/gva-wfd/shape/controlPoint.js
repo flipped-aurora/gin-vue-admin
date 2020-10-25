@@ -1,3 +1,4 @@
+/* eslint-disable */
 import editorStyle from "../util/defaultStyle";
 import { shapeBase } from '@antv/g6/lib/shape/shapeBase';
 import Shape from '@antv/g6/lib/shape/shape';

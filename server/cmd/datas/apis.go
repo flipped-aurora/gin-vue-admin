@@ -2,6 +2,7 @@ package datas
 
 import (
 	"gin-vue-admin/model"
+	"github.com/gookit/color"
 	"time"
 
 	"gorm.io/gorm"
@@ -78,6 +79,10 @@ var Apis = []model.SysApi{
 
 func InitSysApi(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
+		if tx.Where("id IN ?", []int{1, 67}).Find(&[]model.SysApi{}).RowsAffected == 2 {
+			color.Danger.Println("sys_apis表的初始数据已存在!")
+			return nil
+		}
 		if tx.Create(&Apis).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

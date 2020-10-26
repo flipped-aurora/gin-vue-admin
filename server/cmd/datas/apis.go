@@ -9,7 +9,7 @@ import (
 
 var Apis = []model.SysApi{
 	{gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/base/login", "用户登录", "base", "POST"},
-	{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/base/register", "用户注册", "base", "POST"},
+	{gorm.Model{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/register", "用户注册", "user", "POST"},
 	{gorm.Model{ID: 3, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/createApi", "创建api", "api", "POST"},
 	{gorm.Model{ID: 4, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/getApiList", "获取api列表", "api", "POST"},
 	{gorm.Model{ID: 5, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/getApiById", "获取api详细信息", "api", "POST"},

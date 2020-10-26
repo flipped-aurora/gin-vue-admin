@@ -1,19 +1,20 @@
-FROM golang:alpine as builder
+FROM golang:alpine
 
-# 设置go mod proxy 国内代理
-# 设置golang path
-ENV GOPROXY=https://goproxy.cn,https://goproxy.io,direct \
-    GO111MODULE=on \
-    CGO_ENABLED=1
-WORKDIR /ginvue
-RUN go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
+ENV GO111MODULE=on
+ENV GOPROXY=https://goproxy.io,direct
+
+WORKDIR /go/src/gin-vue-admin
 COPY . .
-RUN go env && go list && go build -o app main.go
+RUN go env && go build -o server .
+
+FROM alpine:latest
+LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
+
+WORKDIR /go/src/gin-vue-admin
+COPY --from=0 /go/src/gin-vue-admin/server ./
+COPY --from=0 /go/src/gin-vue-admin/config.yaml ./
+COPY --from=0 /go/src/gin-vue-admin/resource ./resource
 
 EXPOSE 8888
-ENTRYPOINT /ginvue/app
 
-# 根据Dockerfile生成Docker镜像
-# docker build -t ginvue .
-# 根据Docker镜像启动Docker容器
-# docker run -itd -p 8888:8888 --name ginvue ginvue
+ENTRYPOINT ./server

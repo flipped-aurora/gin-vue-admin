@@ -85,7 +85,7 @@ import { mapGetters } from "vuex";
 import infoList from "@/components/mixins/infoList";
 import { getFileList, deleteFile } from "@/api/fileUploadAndDownload";
 import { downloadImage } from "@/utils/downloadImg";
-import { formatTimeToStr } from "@/utils/data";
+import { formatTimeToStr } from "@/utils/date";
 import CustomPic from "@/components/customPic";
 import UploadImage from "@/components/upload/image.vue";
 export default {

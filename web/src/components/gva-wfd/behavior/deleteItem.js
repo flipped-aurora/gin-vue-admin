@@ -20,6 +20,20 @@ export default function(G6) {
                 this.graph.set('selectedItems', []);
                 this.graph.emit('afteritemselected', []);
             }
+            if (e.ctrlKey == true && e.keyCode == 90) { //Ctrl+z
+                e.returnvalue = false;
+                if (this.graph.executeCommand) {
+                    this.graph.executeCommand('undo', {});
+                }
+            }
+            if (e.ctrlKey == true && e.keyCode == 89) { //Ctrl+y
+                e.returnvalue = false;
+                if (this.graph.executeCommand) {
+                    this.graph.executeCommand('redo', {});
+                }
+
+            }
+
         },
         onCanvasLeave(e) {
             this.graph.set('focusGraphWrapper', false);

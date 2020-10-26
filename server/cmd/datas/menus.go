@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"github.com/gookit/color"
 	"time"
 
 	"gin-vue-admin/model"
@@ -39,6 +40,10 @@ var BaseMenus = []model.SysBaseMenu{
 
 func InitSysBaseMenus(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
+		if tx.Where("id IN ?", []int{1, 27}).Find(&[]model.SysBaseMenu{}).RowsAffected == 2 {
+			color.Danger.Println("sys_base_menus表的初始数据已存在!")
+			return nil
+		}
 		if tx.Create(&BaseMenus).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

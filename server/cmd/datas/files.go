@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"github.com/gookit/color"
 	"time"
 
 	"gin-vue-admin/model"
@@ -14,6 +15,10 @@ var Files = []model.ExaFileUploadAndDownload{
 
 func InitExaFileUploadAndDownload(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
+		if tx.Where("id IN ?", []int{1, 2}).Find(&[]model.ExaFileUploadAndDownload{}).RowsAffected == 2 {
+			color.Danger.Println("exa_file_upload_and_downloads表的初始数据已存在!")
+			return nil
+		}
 		if tx.Create(&Files).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

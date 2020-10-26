@@ -7,7 +7,7 @@ import (
 
 var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/base/login", V2: "POST"},
-	{PType: "p", V0: "888", V1: "/base/register", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/api/createApi", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/api/getApiList", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/api/getApiById", V2: "POST"},
@@ -74,7 +74,7 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/simpleUploader/checkFileMd5", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/simpleUploader/mergeFileMd5", V2: "GET"},
 	{PType: "p", V0: "8881", V1: "/base/login", V2: "POST"},
-	{PType: "p", V0: "8881", V1: "/base/register", V2: "POST"},
+	{PType: "p", V0: "8881", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/api/getApiList", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/api/getApiById", V2: "POST"},
@@ -111,7 +111,7 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "8881", V1: "/customer/customer", V2: "GET"},
 	{PType: "p", V0: "8881", V1: "/customer/customerList", V2: "GET"},
 	{PType: "p", V0: "9528", V1: "/base/login", V2: "POST"},
-	{PType: "p", V0: "9528", V1: "/base/register", V2: "POST"},
+	{PType: "p", V0: "9528", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "9528", V1: "/api/createApi", V2: "POST"},
 	{PType: "p", V0: "9528", V1: "/api/getApiList", V2: "POST"},
 	{PType: "p", V0: "9528", V1: "/api/getApiById", V2: "POST"},

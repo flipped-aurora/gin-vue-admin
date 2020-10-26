@@ -54,5 +54,5 @@ require (
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gorm.io/driver/mysql v0.3.0
-	gorm.io/gorm v1.20.1
+	gorm.io/gorm v1.20.5
 )

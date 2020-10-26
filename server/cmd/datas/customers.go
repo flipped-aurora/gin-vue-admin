@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"github.com/gookit/color"
 	"time"
 
 	"gin-vue-admin/model"
@@ -13,6 +14,10 @@ var Customers = []model.ExaCustomer{
 
 func InitExaCustomer(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
+		if tx.Where("id IN ? ", []int{1}).Find(&[]model.ExaCustomer{}).RowsAffected == 1 {
+			color.Danger.Println("exa_customers表的初始数据已存在!")
+			return nil
+		}
 		if tx.Create(&Customers).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

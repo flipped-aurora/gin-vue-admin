@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"github.com/gookit/color"
 	"time"
 
 	"gin-vue-admin/model"
@@ -15,6 +16,10 @@ var Users = []model.SysUser{
 
 func InitSysUser(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
+		if tx.Where("id IN ?", []int{1, 2}).Find(&[]model.SysUser{}).RowsAffected == 2 {
+			color.Danger.Println("sys_users表的初始数据已存在!")
+			return nil
+		}
 		if tx.Create(&Users).Error != nil { // 遇到错误时回滚事务
 			return err
 		}

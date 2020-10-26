@@ -15,7 +15,6 @@ type WorkflowNode struct {
 	ID                string  `json:"id" gorm:"comment:节点id;primaryKey"`
 	WorkflowProcessID string  `json:"-" gorm:"comment:流程标识"`
 	Clazz             string  `json:"clazz" gorm:"comment:节点类型"`
-	Size              [2]int  `json:"size" gorm:"comment:节点大小"`
 	Label             string  `json:"label" gorm:"comment:节点名称"`
 	Type              string  `json:"type" gorm:"comment:图标类型"`
 	Shape             string  `json:"shape" gorm:"comment:形状"`

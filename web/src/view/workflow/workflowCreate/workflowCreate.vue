@@ -30,6 +30,7 @@ export default {
   methods:{
     save(){
       console.log(this.$refs['wfd'].graph.save())
+      console.log(this.$refs['wfd'].processModel)
     },
     saveXML(){
       console.log(this.$refs['wfd'].graph.saveXML())

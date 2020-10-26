@@ -74,7 +74,7 @@ import {
   getExaCustomer,
   getExaCustomerList
 } from "@/api/customer";
-import { formatTimeToStr } from "@/utils/data";
+import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/components/mixins/infoList";
 
 export default {

@@ -12,6 +12,7 @@ RUN sh ./server-handle.sh
 RUN rm -f server-handle.sh
 RUN cat ./config.yaml
 
+RUN go build -o gva cmd/main.go
 RUN go env && go build -o server .
 
 
@@ -20,24 +21,11 @@ LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
 
 WORKDIR /go/src/gin-vue-admin
 
+COPY --from=0 /go/src/gin-vue-admin/gva ./
 COPY --from=0 /go/src/gin-vue-admin/server ./
 COPY --from=0 /go/src/gin-vue-admin/config.yaml ./
 COPY --from=0 /go/src/gin-vue-admin/resource ./resource
 
 EXPOSE 8888
 
-ENTRYPOINT ./server
-
-# 根据Dockerfile生成Docker镜像
-
-# docker build -t gva-server:1.0 .
-
-#- 根据Docker镜像启动Docker容器
-#    - 后台运行
-#    - ```
-#    docker run -d -p 8888:8888 --name gva-server-v1 gva-server:1.0
-#      ```
-#    - 以可交互模式运行, Ctrl + p + q
-#    - ```
-#    docker run -it -p 8888:8888 --name gva-server-v1 gva-server:1.0
-#      ```
+ENTRYPOINT ./gva initdb && ./server

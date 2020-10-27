@@ -12,7 +12,8 @@
 
 [English](./README-en.md) | 简体中文
 
-[国内仓库地址](https://gitee.com/FLIPPED-AURORA/gin-vue-admin)
+[gitee地址](https://gitee.com/pixelmax/gin-vue-admin)
+[github地址](https://github.com/flipped-aurora/gin-vue-admin)
 
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/

@@ -11,6 +11,7 @@ export default function(G6) {
         onKeydown(e) {
             const items = this.graph.get('selectedItems');
             const focus = this.graph.get('focusGraphWrapper');
+            console.log(e.keyCode)
             if (e.keyCode === 46 && items && items.length > 0 && focus) {
                 if (this.graph.executeCommand) {
                     this.graph.executeCommand('delete', {});
@@ -31,9 +32,19 @@ export default function(G6) {
                 if (this.graph.executeCommand) {
                     this.graph.executeCommand('redo', {});
                 }
-
             }
-
+            if (e.ctrlKey == true && e.keyCode == 67) { //Ctrl+c
+                e.returnvalue = false;
+                if (this.graph.executeCommand) {
+                    this.graph.executeCommand('copy', {});
+                }
+            }
+            if (e.ctrlKey == true && e.keyCode == 86) { //Ctrl+v
+                e.returnvalue = false;
+                if (this.graph.executeCommand) {
+                    this.graph.executeCommand('paste', {});
+                }
+            }
         },
         onCanvasLeave(e) {
             this.graph.set('focusGraphWrapper', false);

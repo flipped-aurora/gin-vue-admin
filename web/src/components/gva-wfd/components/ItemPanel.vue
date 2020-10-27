@@ -8,12 +8,12 @@
                 <img data-item="{clazz:'timerStart',size:'50*50',label:''}"
                      :src="require('../assets/flow/timer-start.svg')" style="width:42px;height:42px" />
                 <div>{{i18n['timerEvent']}}</div>
-                <img data-item="{clazz:'messageStart',size:'50*50',label:''}"
+                <!-- <img data-item="{clazz:'messageStart',size:'50*50',label:''}"
                      :src="require('../assets/flow/message-start.svg')" style="width:42px;height:42px" />
                 <div>{{i18n['messageEvent']}}</div>
                 <img data-item="{clazz:'signalStart',size:'50*50',label:''}"
                      :src="require('../assets/flow/signal-start.svg')" style="width:42px;height:42px" />
-                <div>{{i18n['signalEvent']}}</div>
+                <div>{{i18n['signalEvent']}}</div> -->
             </el-collapse-item>
             <el-collapse-item :title="i18n['task']" name="2">
                 <img :data-item="userTaskData"
@@ -22,9 +22,9 @@
                 <img :data-item="scriptTaskData"
                      :src="require('../assets/flow/script-task.svg')" style="width:80px;height:44px" />
                 <div>{{i18n['scriptTask']}}</div>
-                <img :data-item="javaTaskData"
+                <!-- <img :data-item="javaTaskData"
                      :src="require('../assets/flow/java-task.svg')" style="width:80px;height:44px" />
-                <div>{{i18n['javaTask']}}</div>
+                <div>{{i18n['javaTask']}}</div> -->
                 <img :data-item="mailTaskData"
                      :src="require('../assets/flow/mail-task.svg')" style="width:80px;height:44px" />
                 <div>{{i18n['mailTask']}}</div>
@@ -47,12 +47,12 @@
                 <img data-item="{clazz:'timerCatch',size:'60*35',label:''}"
                      :src="require('../assets/flow/timer-catch.svg')" style="width:58px;height:38px" />
                 <div>{{i18n['timerEvent']}}</div>
-                <img data-item="{clazz:'messageCatch',size:'60*35',label:''}"
+                <!-- <img data-item="{clazz:'messageCatch',size:'60*35',label:''}"
                      :src="require('../assets/flow/message-catch.svg')" style="width:58px;height:38px" />
                 <div>{{i18n['messageEvent']}}</div>
                 <img data-item="{clazz:'signalCatch',size:'60*35',label:''}"
                      :src="require('../assets/flow/signal-catch.svg')" style="width:58px;height:38px" />
-                <div>{{i18n['signalEvent']}}</div>
+                <div>{{i18n['signalEvent']}}</div> -->
             </el-collapse-item>
             <el-collapse-item :title="i18n['end']" name="5">
                 <img data-item="{clazz:'end',size:'50*50',label:''}"
@@ -76,7 +76,7 @@
         activeNames: [],
         userTaskData: "{clazz:'userTask',size:'80*44',label:'"+this.i18n['userTask']+"'}",
         scriptTaskData: "{clazz:'scriptTask',size:'80*44',label:'"+this.i18n['scriptTask']+"'}",
-        javaTaskData: "{clazz:'javaTask',size:'80*44',label:'"+this.i18n['javaTask']+"'}",
+        // javaTaskData: "{clazz:'javaTask',size:'80*44',label:'"+this.i18n['javaTask']+"'}",
         mailTaskData: "{clazz:'mailTask',size:'80*44',label:'"+this.i18n['mailTask']+"'}",
         receiveTaskData: "{clazz:'receiveTask',size:'80*44',label:'"+this.i18n['receiveTask']+"'}",
       };

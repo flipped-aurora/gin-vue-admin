@@ -2,11 +2,11 @@
     <div class="detailPanel" :style="{'height':height+'px'}">
         <UserTaskDetail v-if="model.clazz === 'userTask'" :model="model" :onChange="onChange" :readOnly="readOnly" :users="users" :authorities="authorities" :groups="groups" />
         <ScriptTaskDetail v-else-if="model.clazz === 'scriptTask'" :model="model" :onChange="onChange" :readOnly="readOnly" />
-        <JavaTaskDetail v-else-if="model.clazz === 'javaTask'" :model="model" :onChange="onChange" :readOnly="readOnly" />
+        <!-- <JavaTaskDetail v-else-if="model.clazz === 'javaTask'" :model="model" :onChange="onChange" :readOnly="readOnly" /> -->
         <ReceiveTaskDetail v-else-if="model.clazz === 'receiveTask'" :model="model" :onChange="onChange" :readOnly="readOnly" />
         <MailTaskDetail v-else-if="model.clazz === 'mailTask'" :model="model" :onChange="onChange" :readOnly="readOnly" />
         <TimerEventDetail v-else-if="model.clazz === 'timerStart' || model.clazz === 'timerCatch'" :model="model" :onChange="onChange" :readOnly="readOnly" />
-        <SignalEventDetail v-else-if="model.clazz === 'signalStart' || model.clazz === 'signalCatch'" :model="model" :onChange="onChange" :readOnly="readOnly" :signalDefs="signalDefs" />
+        <!-- <SignalEventDetail v-else-if="model.clazz === 'signalStart' || model.clazz === 'signalCatch'" :model="model" :onChange="onChange" :readOnly="readOnly" :signalDefs="signalDefs" /> -->
         <MessageEventDetail v-else-if="model.clazz === 'messageStart' || model.clazz === 'messageCatch'" :model="model" :onChange="onChange" :readOnly="readOnly" :messageDefs="messageDefs" />
         <GatewayDetail v-else-if="model.clazz === 'gateway' || model.clazz === 'exclusiveGateway' || model.clazz === 'parallelGateway' || model.clazz === 'inclusiveGateway'" :model="model" :onChange="onChange" :readOnly="readOnly" />
         <FlowDetail v-else-if="model.clazz === 'flow'" :model="model" :onChange="onChange" :readOnly="readOnly" />
@@ -17,13 +17,13 @@
 </template>
 <script>
   import UserTaskDetail from "./UserTaskDetail"
-  import JavaTaskDetail from "./JavaTaskDetail"
+  // import JavaTaskDetail from "./JavaTaskDetail"
   import ScriptTaskDetail from "./ScriptTaskDetail"
   import ReceiveTaskDetail from "./ReceiveTaskDetail"
   import MailTaskDetail from "./MailTaskDetail"
   import TimerEventDetail from "./TimerEventDetail"
-  import SignalEventDetail from "./SignalEventDetail"
-  import MessageEventDetail from "./MessageEventDetail"
+  // import SignalEventDetail from "./SignalEventDetail"
+  // import MessageEventDetail from "./MessageEventDetail"
   import GatewayDetail from "./GatewayDetail"
   import FlowDetail from "./FlowDetail"
   import StartEventDetail from "./StartEventDetail"
@@ -34,12 +34,12 @@
     components:{
       UserTaskDetail,
       ScriptTaskDetail,
-      JavaTaskDetail,
+      // JavaTaskDetail,
       ReceiveTaskDetail,
       MailTaskDetail,
       TimerEventDetail,
-      SignalEventDetail,
-      MessageEventDetail,
+      // SignalEventDetail,
+      // MessageEventDetail,
       GatewayDetail,
       FlowDetail,
       StartEventDetail,

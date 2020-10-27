@@ -57,6 +57,14 @@
                              :disabled="readOnly"
                              :value="!!model.isSequential">{{i18n['userTask.counterSign']}}</el-checkbox>
             </div>
+            <div class="panelRow">
+                <div>详情说明：</div>
+                <el-input style="width:90%; font-size:12px"
+                          :disabled="readOnly"
+                          type="textarea"
+                          :value="model.description"
+                          @input="(value) => {onChange('description', value)}" />
+            </div>
         </div>
     </div>
 </template>

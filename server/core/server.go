@@ -29,7 +29,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	欢迎使用 Gin-Vue-Admin
-	当前版本:V2.3.3
+	当前版本:V2.3.4
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
 	默认前端文件运行地址:http://127.0.0.1:8080
 `, address)

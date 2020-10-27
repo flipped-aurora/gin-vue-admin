@@ -66,7 +66,7 @@ func JWTAuth() gin.HandlerFunc {
 				if err!=nil {
 					global.GVA_LOG.Error("get redis jwt failed",  zap.Any("err", err))
 				}else{
-					service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
+					_ = service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
 					//当之前的取成功时才进行拉黑操作
 				}
 				// 无论如何都要记录当前的活跃状态

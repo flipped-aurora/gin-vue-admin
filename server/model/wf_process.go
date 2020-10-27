@@ -7,6 +7,7 @@ type WorkflowProcess struct {
 	Clazz    string         `json:"clazz" gorm:"comment:类型"`
 	Label    string         `json:"label" gorm:"comment:流程标题"`
 	HideIcon bool           `json:"hideIcon" gorm:"comment:是否隐藏图标"`
+	Description bool           `json:"description" gorm:"comment:详细介绍"`
 	Nodes    []WorkflowNode `json:"nodes"` // 流程节点数据
 	Edges    []WorkflowEdge `json:"edges"` // 流程链接数据
 }
@@ -18,6 +19,7 @@ type WorkflowNode struct {
 	Label             string  `json:"label" gorm:"comment:节点名称"`
 	Type              string  `json:"type" gorm:"comment:图标类型"`
 	Shape             string  `json:"shape" gorm:"comment:形状"`
+	Description bool           `json:"description" gorm:"comment:详细介绍"`
 	X                 float64 `json:"y" gorm:"comment:x位置"`
 	Y                 float64 `json:"x" gorm:"comment:y位置"`
 	WaitState         string  `json:"waitState" gorm:"comment:等待属性"`

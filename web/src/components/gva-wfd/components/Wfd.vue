@@ -83,13 +83,10 @@
       categorys: {
         type: Array,
         default: () => ([])
-      }
-    },
-    data() {
-      return {
-        resizeFunc: ()=>{},
-        selectedModel: {},
-        processModel: {
+      },
+      processModel:{
+         type: Object,
+        default: () => ({
           id: '',
           name: '',
           category: '',
@@ -97,7 +94,13 @@
           dataObjs: [],
           signalDefs: [],
           messageDefs: [],
-        },
+        })
+      }
+    },
+    data() {
+      return {
+        resizeFunc: ()=>{},
+        selectedModel: {},
         graph:null,
         cmdPlugin: null,
       };

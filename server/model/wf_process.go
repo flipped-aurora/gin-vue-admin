@@ -1,7 +1,7 @@
 package model
 
 type WorkflowProcess struct {
-	ID          string         `json:"id" gorm:"comment:流程标识;primaryKey"`
+	ID          string         `json:"id" form:"id" gorm:"comment:流程标识;primaryKey"`
 	Name        string         `json:"name" gorm:"comment:流程名称"`
 	Category    string         `json:"category" gorm:"comment:分类"`
 	Clazz       string         `json:"clazz" gorm:"comment:类型"`
@@ -9,11 +9,11 @@ type WorkflowProcess struct {
 	HideIcon    bool           `json:"hideIcon" gorm:"comment:是否隐藏图标"`
 	Description string         `json:"description" gorm:"comment:详细介绍"`
 	Nodes       []WorkflowNode `json:"nodes"` // 流程节点数据
-	Edges       []WorkflowEdge `json:"edges"` // 流程链接数据
+
 }
 
 type WorkflowNode struct {
-	ID                string  `json:"id" gorm:"comment:节点id;primaryKey"`
+	ID                string  `json:"id" form:"id" gorm:"comment:节点id;primaryKey"`
 	WorkflowProcessID string  `json:"-" gorm:"comment:流程标识"`
 	Clazz             string  `json:"clazz" gorm:"comment:节点类型"`
 	Label             string  `json:"label" gorm:"comment:节点名称"`
@@ -30,11 +30,12 @@ type WorkflowNode struct {
 	Cycle             string  `json:"cycle" gorm:"comment:循环时间"`
 	Duration          string  `json:"duration" gorm:"comment:持续时间"`
 	HideIcon          bool    `json:"hideIcon" gorm:"comment:是否隐藏图标"`
+	Edges       []WorkflowEdge `json:"edges"` // 流程链接数据
 }
 
 type WorkflowEdge struct {
-	ID                  string        `json:"id" gorm:"comment:唯一标识;primaryKey"`
-	WorkflowProcessID   string        `json:"-" gorm:"comment:流程标识"`
+	ID                  string        `json:"id" form:"id" gorm:"comment:唯一标识;primaryKey"`
+	WorkflowNodeID   string        		`json:"-" gorm:"comment:节点标识"`
 	Clazz               string        `json:"clazz" gorm:"comment:类型（线）"`
 	Source              string        `json:"source" gorm:"comment:起点节点"`
 	Target              string        `json:"target" gorm:"comment:目标节点"`

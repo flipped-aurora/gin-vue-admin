@@ -33,9 +33,6 @@
       tooltip-effect="dark"
     >
     <el-table-column type="selection" width="55"></el-table-column>
-    <el-table-column label="日期" width="180">
-         <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
-    </el-table-column>
     
     <el-table-column label="流程名称" prop="name" width="120"></el-table-column> 
     
@@ -136,7 +133,7 @@ export default {
         const ids = []
         this.multipleSelection &&
           this.multipleSelection.map(item => {
-            ids.push(item.ID)
+            ids.push(item.id)
           })
         const res = await deleteWorkflowProcessByIds({ ids })
         if (res.code == 0) {
@@ -149,8 +146,8 @@ export default {
         }
       },
     async updateWorkflowProcess(row) {
-      this.$router.push({name:"workflowCreate",params:{
-        ID:row.ID,
+      this.$router.push({name:"workflowCreate",query:{
+        id:row.id,
         type:'edit'
       }})
     },
@@ -168,7 +165,7 @@ export default {
     },
     async deleteWorkflowProcess(row) {
       this.visible = false;
-      const res = await deleteWorkflowProcess({ ID: row.ID });
+      const res = await deleteWorkflowProcess({ id: row.id });
       if (res.code == 0) {
         this.$message({
           type: "success",

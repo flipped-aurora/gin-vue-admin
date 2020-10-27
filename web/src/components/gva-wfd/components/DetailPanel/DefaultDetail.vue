@@ -5,6 +5,7 @@
             <el-input style="width:90%; font-size:12px"
                       :disabled="readOnly"
                       :value="model.label"
+                       placeholder="请输入标题"
                       @input="(value) => {onChange('label', value)}" />
         </div>
         <div class="panelRow">

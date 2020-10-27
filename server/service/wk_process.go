@@ -58,7 +58,7 @@ func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
 // @return    WorkflowProcess        WorkflowProcess
 
 func GetWorkflowProcess(id string) (err error, workflowProcess model.WorkflowProcess) {
-	err = global.GVA_DB.Where("id = ?", id).First(&workflowProcess).Error
+	err = global.GVA_DB.Preload("Nodes").Preload("Nodes.Edges").Where("id = ?", id).First(&workflowProcess).Error
 	return
 }
 

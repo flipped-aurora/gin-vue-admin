@@ -74,6 +74,12 @@ var Apis = []model.SysApi{
 	{gorm.Model{ID: 65, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/setUserInfo", "设置用户信息", "user", "PUT"},
 	{gorm.Model{ID: 66, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/system/getServerInfo", "获取服务器信息", "system", "POST"},
 	{gorm.Model{ID: 67, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/email/emailTest", "发送测试邮件", "email", "POST"},
+	{gorm.Model{ID: 68, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/createWorkflowProcess", "新建工作流", "workflowProcess", "POST"},
+	{gorm.Model{ID: 69, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/deleteWorkflowProcess", "删除工作流", "workflowProcess", "DELETE"},
+	{gorm.Model{ID: 70, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/deleteWorkflowProcessByIds", "批量删除工作流", "workflowProcess", "DELETE"},
+	{gorm.Model{ID: 71, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/updateWorkflowProcess", "更新工作流", "workflowProcess", "PUT"},
+	{gorm.Model{ID: 72, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/findWorkflowProcess", "根据ID获取工作流", "workflowProcess", "GET"},
+	{gorm.Model{ID: 73, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getWorkflowProcessList", "获取工作流", "workflowProcess", "GET"},
 }
 
 func InitSysApi(db *gorm.DB) (err error) {

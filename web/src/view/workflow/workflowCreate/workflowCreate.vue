@@ -32,6 +32,9 @@
   </div>
 </template>
 <script>
+import {
+    findWorkflowProcess
+} from "@/api/workflowProcess";  //  此处请自行替换地址
 import gvaWfd from "@/components/gva-wfd";
 import { getUserList } from "@/api/user";
 import { getAuthorityList } from "@/api/authority";
@@ -260,6 +263,10 @@ export default {
           name: item.authorityName
         });
       });
+    }
+    if(this.$route.params.ID){
+      const res = await findWorkflowProcess({ ID: this.$route.params.ID });
+      console.log(res.data)
     }
   }
 };

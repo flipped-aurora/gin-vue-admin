@@ -9,7 +9,7 @@ zap:
   level: 'info'
   format: 'console'
   prefix: '[GIN-VUE-ADMIN]'
-  director: 'log'
+  director: 'log
   link-name: 'latest_log'
   show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
@@ -56,7 +56,7 @@ mysql:
   config: 'charset=utf8mb4&parseTime=True&loc=Local'
   db-name: 'qmPlus'
   username: 'root'
-  password: 'Aa@6447985'
+  password: '123456'
   max-idle-conns: 10
   max-open-conns: 10
   log-mode: false

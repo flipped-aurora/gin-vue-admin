@@ -112,3 +112,31 @@ func SetUserInfo(reqUser model.SysUser) (err error, user model.SysUser) {
 	err = global.GVA_DB.Updates(&reqUser).Error
 	return err, reqUser
 }
+
+// @title    FindUserById
+// @description   Get user information by id, 通过id获取用户信息
+// @auth                     （2020/04/05  20:22）
+// @param     id              int
+// @return    err             error
+// @return    user            *model.SysUser
+
+func FindUserById(id int) (err error, user *model.SysUser) {
+	var u model.SysUser
+	err = global.GVA_DB.Where("`id` = ?", id).First(&u).Error
+	return err, &u
+}
+
+// @title    FindUserByUuid
+// @description   Get user information by uuid, 通过uuid获取用户信息
+// @auth                     （2020/04/05  20:22）
+// @param     uuid            string
+// @return    err             error
+// @return    user            *model.SysUser
+
+func FindUserByUuid(uuid string) (err error, user *model.SysUser) {
+	var u model.SysUser
+	if err = global.GVA_DB.Where("`uuid` = ?", uuid).First(&u).Error; err != nil{
+		return errors.New("用户不存在"), &u
+	}
+	return nil, &u
+}

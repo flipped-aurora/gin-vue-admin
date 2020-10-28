@@ -22,7 +22,7 @@ import (
 // @Produce  application/json
 // @Param data body model.SysUser true "用户注册接口"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
-// @Router /base/register [post]
+// @Router /user/register [post]
 func Register(c *gin.Context) {
 	var R request.RegisterStruct
 	_ = c.ShouldBindJSON(&R)
@@ -130,7 +130,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			response.FailWithMessage("jwt作废失败", c)
 			return
 		}
-		if err := service.SetRedisJWT(jwtStr, user.Username); err != nil {
+		if err := service.SetRedisJWT(token, user.Username); err != nil {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}

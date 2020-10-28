@@ -576,36 +576,6 @@
                 }
             }
         },
-        "/base/register": {
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Base"
-                ],
-                "summary": "用户注册账号",
-                "parameters": [
-                    {
-                        "description": "用户注册接口",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/model.SysUser"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/casbin/UpdateCasbin": {
             "post": {
                 "security": [
@@ -859,6 +829,30 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/email/emailTest": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system"
+                ],
+                "summary": "发送测试邮件",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"返回成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -2144,6 +2138,30 @@
                 }
             }
         },
+        "/system/getServerInfo": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system"
+                ],
+                "summary": "获取服务器信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/system/getSystemConfig": {
             "post": {
                 "security": [
@@ -2314,6 +2332,36 @@
                 }
             }
         },
+        "/user/register": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Base"
+                ],
+                "summary": "用户注册账号",
+                "parameters": [
+                    {
+                        "description": "用户注册接口",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/setUserAuthority": {
             "post": {
                 "security": [
@@ -2339,6 +2387,44 @@
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/request.SetUserAuth"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/setUserInfo": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "删除用户",
+                "parameters": [
+                    {
+                        "description": "删除用户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysUser"
                         }
                     }
                 ],
@@ -2406,6 +2492,32 @@
                 }
             }
         },
+        "config.Email": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "isSSL": {
+                    "type": "boolean"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "secret": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
         "config.JWT": {
             "type": "object",
             "properties": {
@@ -2414,33 +2526,10 @@
                 }
             }
         },
-        "config.LocalUpload": {
+        "config.Local": {
             "type": "object",
             "properties": {
-                "avatarPath": {
-                    "type": "string"
-                },
-                "filePath": {
-                    "type": "string"
-                },
-                "local": {
-                    "type": "boolean"
-                }
-            }
-        },
-        "config.Log": {
-            "type": "object",
-            "properties": {
-                "file": {
-                    "type": "string"
-                },
-                "logFile": {
-                    "type": "boolean"
-                },
-                "prefix": {
-                    "type": "string"
-                },
-                "stdout": {
+                "path": {
                     "type": "string"
                 }
             }
@@ -2474,6 +2563,41 @@
                 }
             }
         },
+        "config.Postgresql": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "string"
+                },
+                "dbname": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "logger": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "preferSimpleProtocol": {
+                    "type": "boolean"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "config.Qiniu": {
             "type": "object",
             "properties": {
@@ -2487,6 +2611,15 @@
                     "type": "string"
                 },
                 "secretKey": {
+                    "type": "string"
+                },
+                "useCdnDomains": {
+                    "type": "boolean"
+                },
+                "useHttps": {
+                    "type": "boolean"
+                },
+                "zone": {
                     "type": "string"
                 }
             }
@@ -2516,21 +2649,27 @@
                     "type": "object",
                     "$ref": "#/definitions/config.Casbin"
                 },
+                "email": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Email"
+                },
                 "jwt": {
                     "type": "object",
                     "$ref": "#/definitions/config.JWT"
                 },
-                "localUpload": {
+                "local": {
+                    "description": "oss",
                     "type": "object",
-                    "$ref": "#/definitions/config.LocalUpload"
-                },
-                "log": {
-                    "type": "object",
-                    "$ref": "#/definitions/config.Log"
+                    "$ref": "#/definitions/config.Local"
                 },
                 "mysql": {
+                    "description": "gorm",
                     "type": "object",
                     "$ref": "#/definitions/config.Mysql"
+                },
+                "postgresql": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Postgresql"
                 },
                 "qiniu": {
                     "type": "object",
@@ -2544,20 +2683,51 @@
                     "type": "object",
                     "$ref": "#/definitions/config.Sqlite"
                 },
+                "sqlserver": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Sqlserver"
+                },
                 "system": {
                     "type": "object",
                     "$ref": "#/definitions/config.System"
+                },
+                "zap": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Zap"
                 }
             }
         },
         "config.Sqlite": {
             "type": "object",
             "properties": {
-                "config": {
+                "logger": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.Sqlserver": {
+            "type": "object",
+            "properties": {
+                "dbname": {
                     "type": "string"
                 },
-                "logMode": {
+                "logger": {
                     "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
                 },
                 "password": {
                     "type": "string"
@@ -2582,8 +2752,46 @@
                 "env": {
                     "type": "string"
                 },
+                "needInitData": {
+                    "type": "boolean"
+                },
+                "ossType": {
+                    "type": "string"
+                },
                 "useMultipoint": {
                     "type": "boolean"
+                }
+            }
+        },
+        "config.Zap": {
+            "type": "object",
+            "properties": {
+                "director": {
+                    "type": "string"
+                },
+                "encodeLevel": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "linkName": {
+                    "type": "string"
+                },
+                "logInConsole": {
+                    "type": "boolean"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "showLine": {
+                    "type": "boolean"
+                },
+                "stacktraceKey": {
+                    "type": "string"
                 }
             }
         },
@@ -2954,7 +3162,7 @@
                     "description": "是否是完结流节点",
                     "type": "boolean"
                 },
-                "isStrat": {
+                "isStart": {
                     "description": "是否是开始流节点",
                     "type": "boolean"
                 },

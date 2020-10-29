@@ -55,7 +55,7 @@ func DeleteApi(c *gin.Context) {
 	ApiVerify := utils.Rules{
 		"ID": {utils.NotEmpty()},
 	}
-	ApiVerifyErr := utils.Verify(a.Model, ApiVerify)
+	ApiVerifyErr := utils.Verify(a.GVA_MODEL, ApiVerify)
 	if ApiVerifyErr != nil {
 		response.FailWithMessage(ApiVerifyErr.Error(), c)
 		return

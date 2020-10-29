@@ -147,10 +147,9 @@ export default {
         delete res.data.reworkflowProcess.nodes
         this.demoData = {edges,nodes}
         this.processModel = res.data.reworkflowProcess
-        this.done = true
       }
-      console.log(this.demoData)
     }
+        this.done = true
   }
 };
 </script>

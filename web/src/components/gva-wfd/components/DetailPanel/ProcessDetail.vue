@@ -5,7 +5,7 @@
             <div class="panelRow">
                 <div>{{i18n['process.id']}}：</div>
                 <el-input style="width:90%; font-size:12px"
-                          :disabled="readOnly"
+                          :disabled="readOnly || this.$route.query.type!='create'"
                           placeholder="必填（唯一标识）"
                           :value="model.id"
                           @input="(value) => {onChange('id', value)}" />

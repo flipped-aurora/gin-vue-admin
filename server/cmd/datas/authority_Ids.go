@@ -24,7 +24,7 @@ func InitSysDataAuthorityId(db *gorm.DB) (err error) {
 			color.Danger.Println("sys_data_authority_id表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&DataAuthorityId).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&DataAuthorityId).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

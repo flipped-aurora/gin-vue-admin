@@ -20,7 +20,7 @@ func InitSysAuthority(db *gorm.DB) (err error) {
 			color.Danger.Println("sys_authorities表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&Authorities).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&Authorities).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

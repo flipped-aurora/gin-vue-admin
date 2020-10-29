@@ -1,11 +1,11 @@
 package model
 
 import (
-	"gorm.io/gorm"
+	"gin-vue-admin/global"
 )
 
 type ExaFileUploadAndDownload struct {
-	gorm.Model
+	global.GVA_MODEL
 	Name string `json:"name" gorm:"comment:文件名"`
 	Url  string `json:"url" gorm:"comment:文件地址"`
 	Tag  string `json:"tag" gorm:"comment:文件标签"`

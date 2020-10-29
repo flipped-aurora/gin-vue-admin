@@ -49,8 +49,6 @@ system:
   addr: 8888
   db-type: 'mysql'
   oss-type: 'local'
-  config-env: 'GVA_CONFIG'
-  need-init-data: true
   use-multipoint: false
 
 # captcha configuration
@@ -69,36 +67,6 @@ mysql:
   max-idle-conns: 10
   max-open-conns: 10
   log-mode: false
-
-# sqlite connect configuration (sqlite需要gcc支持 windows用户需要自行安装gcc)
-sqlite:
-  path: 'db.db'
-  max-idle-conns: 10
-  max-open-conns: 10
-  logger: true
-
-# Sqlserver connect configuration
-sqlserver:
-  path: 'localhost:9930'
-  db-name: 'gorm'
-  username: 'gorm'
-  password: 'LoremIpsum86'
-  max-idle-conns: 10
-  max-open-conns: 10
-  logger: true
-
-# Postgresql connect configuration
-postgresql:
-  host: '127.0.0.1'
-  port: '9920'
-  config: 'sslmode=disable TimeZone=Asia/Shanghai'
-  db-name: 'gorm'
-  username: 'gorm'
-  password: 'gorm'
-  max-idle-conns: 10
-  max-open-conns: 10
-  prefer-simple-protocol: true
-  logger: false
 
 # local configuration
 local:

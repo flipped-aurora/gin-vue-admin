@@ -38,6 +38,7 @@ func BreakpointContinue(c *gin.Context) {
 	defer f.Close()
 	cen, _ := ioutil.ReadAll(f)
 	if flag := utils.CheckMd5(cen, chunkMd5); !flag {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	err, file := service.FindOrCreateFile(fileMd5, fileName, chunkTotal)

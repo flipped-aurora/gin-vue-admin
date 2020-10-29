@@ -8,7 +8,7 @@
                    v-if="!isView"
                    :height="height"
                    :model="selectedModel"
-                   :readOnly="mode !== 'edit'"
+                   :readOnly="$route.query.type == 'view'"
                    :users="users"
                    :authorities="authorities"
                    :groups="groups"
@@ -84,9 +84,9 @@
         type: Array,
         default: () => ([])
       },
-      processModel:{
+      propProcessModel:{
          type: Object,
-        default: () => ({
+          default: () => ({
           id: '',
           name: '',
           category: '',
@@ -99,6 +99,7 @@
     },
     data() {
       return {
+        processModel:{},
         resizeFunc: ()=>{},
         selectedModel: {},
         graph:null,
@@ -245,7 +246,10 @@
         this.graph.fitView(5)
       }
       this.initEvents();
-    }
+    },
+    created() {
+      this.processModel = this.propProcessModel
+    },
   };
 </script>
 <style lang="scss" scoped>

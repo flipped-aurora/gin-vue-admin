@@ -42,7 +42,7 @@ func InitSysDictionaryDetail(db *gorm.DB) (err error) {
 			color.Danger.Println("sys_dictionary_details表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&DictionaryDetail).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&DictionaryDetail).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

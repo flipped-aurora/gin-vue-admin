@@ -20,7 +20,7 @@ func InitExaFileUploadAndDownload(db *gorm.DB) (err error) {
 			color.Danger.Println("exa_file_upload_and_downloads表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&Files).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&Files).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

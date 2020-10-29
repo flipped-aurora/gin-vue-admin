@@ -109,7 +109,7 @@ import {
   updateApi,
   deleteApi
 } from '@/api/api'
-import infoList from '@/components/mixins/infoList'
+import infoList from '@/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 const methodOptions = [
   {

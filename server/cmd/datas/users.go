@@ -21,7 +21,7 @@ func InitSysUser(db *gorm.DB) (err error) {
 			color.Danger.Println("sys_users表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&Users).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&Users).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

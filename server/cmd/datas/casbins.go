@@ -159,16 +159,11 @@ var Carbines = []gormadapter.CasbinRule{
 
 func InitCasbinModel(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
-		if !tx.Migrator().HasTable("casbin_rule") {
-			if err := tx.Migrator().CreateTable(&gormadapter.CasbinRule{}); err != nil {
-				return err
-			}
-		}
 		if tx.Where("p_type = ? AND v0 IN ?", "p", []string{"888", "8881", "9528"}).Find(&[]gormadapter.CasbinRule{}).RowsAffected == 142 {
 			color.Danger.Println("casbin_rule表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&Carbines).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&Carbines).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

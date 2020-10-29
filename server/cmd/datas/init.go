@@ -31,6 +31,9 @@ func InitMysqlData(db *gorm.DB) {
 
 func InitMysqlTables(db *gorm.DB) {
 	var err error
+	if !db.Migrator().HasTable("casbin_rule") {
+		err = db.Migrator().CreateTable(&gormadapter.CasbinRule{})
+	}
 	err = db.AutoMigrate(
 		model.SysApi{},
 		model.SysUser{},

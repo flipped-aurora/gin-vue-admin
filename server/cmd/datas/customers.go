@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"gin-vue-admin/global"
 	"github.com/gookit/color"
 	"time"
 
@@ -9,7 +10,7 @@ import (
 )
 
 var Customers = []model.ExaCustomer{
-	{Model: gorm.Model{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, CustomerName: "测试客户", CustomerPhoneData: "1761111111", SysUserID: 1, SysUserAuthorityID: "888"},
+	{GVA_MODEL: global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, CustomerName: "测试客户", CustomerPhoneData: "1761111111", SysUserID: 1, SysUserAuthorityID: "888"},
 }
 
 func InitExaCustomer(db *gorm.DB) (err error) {

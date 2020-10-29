@@ -90,7 +90,7 @@ func InitSysApi(db *gorm.DB) (err error) {
 			color.Danger.Println("sys_apis表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&Apis).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&Apis).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

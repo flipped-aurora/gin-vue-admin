@@ -19,7 +19,7 @@ func InitExaCustomer(db *gorm.DB) (err error) {
 			color.Danger.Println("exa_customers表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&Customers).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&Customers).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

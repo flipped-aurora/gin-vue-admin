@@ -75,7 +75,7 @@ func InitSysAuthorityMenus(db *gorm.DB) (err error) {
 			color.Danger.Println("sys_authority_menus表的初始数据已存在!")
 			return nil
 		}
-		if tx.Create(&AuthorityMenus).Error != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&AuthorityMenus).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

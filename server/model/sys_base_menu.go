@@ -1,11 +1,11 @@
 package model
 
 import (
-	"gorm.io/gorm"
+	"gin-vue-admin/global"
 )
 
 type SysBaseMenu struct {
-	gorm.Model
+	global.GVA_MODEL
 	MenuLevel     uint   `json:"-"`
 	ParentId      string `json:"parentId" gorm:"comment:父菜单ID"`
 	Path          string `json:"path" gorm:"comment:路由path"`
@@ -27,7 +27,7 @@ type Meta struct {
 }
 
 type SysBaseMenuParameter struct {
-	gorm.Model
+	global.GVA_MODEL
 	SysBaseMenuID uint
 	Type          string `json:"type" gorm:"commit:'地址栏携带参数为params还是query'"`
 	Key           string `json:"key" gorm:"commit:'地址栏携带参数的key'"`

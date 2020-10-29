@@ -1,12 +1,12 @@
 package model
 
 import (
-	"gorm.io/gorm"
+	"gin-vue-admin/global"
 )
 
 // 工作流属性表
 type SysWorkflow struct {
-	gorm.Model
+	global.GVA_MODEL
 	WorkflowNickName    string                `json:"workflowNickName" gorm:"comment:工作流中文名称"`  // 工作流名称
 	WorkflowName        string                `json:"workflowName" gorm:"comment:工作流英文名称"`      // 工作流英文id
 	WorkflowDescription string                `json:"workflowDescription" gorm:"comment:工作流描述"` // 工作流描述
@@ -15,7 +15,7 @@ type SysWorkflow struct {
 
 // 工作流状态表
 type SysWorkflowStepInfo struct {
-	gorm.Model
+	global.GVA_MODEL
 	SysWorkflowID   uint    `json:"workflowID" gorm:"comment:所属工作流ID"`      // 所属工作流ID
 	IsStart         bool    `json:"isStart" gorm:"comment:是否是开始流节点"`        // 是否是开始流节点
 	StepName        string  `json:"stepName" gorm:"comment:工作流节点名称"`        // 工作流名称

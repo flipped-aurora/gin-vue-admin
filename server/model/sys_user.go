@@ -1,12 +1,12 @@
 package model
 
 import (
+	"gin-vue-admin/global"
 	"github.com/satori/go.uuid"
-	"gorm.io/gorm"
 )
 
 type SysUser struct {
-	gorm.Model
+	global.GVA_MODEL
 	UUID        uuid.UUID    `json:"uuid" gorm:"comment:用户UUID"`
 	Username    string       `json:"userName" gorm:"comment:用户登录名"`
 	Password    string       `json:"-"  gorm:"comment:用户登录密码"`

@@ -1,10 +1,10 @@
 package model
 
 import (
-	"gorm.io/gorm"
+	"gin-vue-admin/global"
 )
 
 type JwtBlacklist struct {
-	gorm.Model
+	global.GVA_MODEL
 	Jwt string `gorm:"type:text;comment:jwt"`
 }

@@ -4,21 +4,34 @@
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="流程名称">
           <el-input placeholder="搜索条件" v-model="searchInfo.name"></el-input>
-        </el-form-item>        
+        </el-form-item>
         <el-form-item label="流程标题">
-          <el-input placeholder="搜索条件" v-model="searchInfo.label"></el-input>
-        </el-form-item>        
+          <el-input
+            placeholder="搜索条件"
+            v-model="searchInfo.label"
+          ></el-input>
+        </el-form-item>
         <el-form-item>
           <el-button @click="onSubmit" type="primary">查询</el-button>
         </el-form-item>
         <el-form-item>
           <el-popover placement="top" v-model="deleteVisible" width="160">
             <p>确定要删除吗？</p>
-              <div style="text-align: right; margin: 0">
-                <el-button @click="deleteVisible = false" size="mini" type="text">取消</el-button>
-                <el-button @click="onDelete" size="mini" type="primary">确定</el-button>
-              </div>
-            <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
+            <div style="text-align: right; margin: 0">
+              <el-button @click="deleteVisible = false" size="mini" type="text"
+                >取消</el-button
+              >
+              <el-button @click="onDelete" size="mini" type="primary"
+                >确定</el-button
+              >
+            </div>
+            <el-button
+              icon="el-icon-delete"
+              size="mini"
+              slot="reference"
+              type="danger"
+              >批量删除</el-button
+            >
           </el-popover>
         </el-form-item>
       </el-form>
@@ -32,32 +45,73 @@
       style="width: 100%"
       tooltip-effect="dark"
     >
-    <el-table-column type="selection" width="55"></el-table-column>
-    
-    <el-table-column label="流程名称" prop="name" width="120"></el-table-column> 
-    
-    <el-table-column label="分类" prop="category" width="120"></el-table-column> 
-    
-    <el-table-column label="类型" prop="clazz" width="120"></el-table-column> 
-    
-    <el-table-column label="流程标题" prop="label" width="120"></el-table-column> 
-    
-    <el-table-column label="是否隐藏图标" prop="hideIcon" width="120">
-         <template slot-scope="scope">{{scope.row.hideIcon|formatBoolean}}</template>
-    </el-table-column>
-    
-    <el-table-column label="详细介绍" prop="description" width="120"></el-table-column> 
-    
+      <el-table-column type="selection" width="55"></el-table-column>
+  <el-table-column label="日期" width="180">
+        <template slot-scope="scope">{{scope.row.CreatedAt|formatDate}}</template>
+      </el-table-column>
+      <el-table-column
+        label="流程名称"
+        prop="name"
+        width="120"
+      ></el-table-column>
+
+      <el-table-column
+        label="分类"
+        prop="category"
+        width="120"
+      ></el-table-column>
+
+      <el-table-column label="类型" prop="clazz" width="120"></el-table-column>
+
+      <el-table-column
+        label="流程标题"
+        prop="label"
+        width="120"
+      ></el-table-column>
+
+      <el-table-column label="是否隐藏图标" prop="hideIcon" width="120">
+        <template slot-scope="scope">{{
+          scope.row.hideIcon | formatBoolean
+        }}</template>
+      </el-table-column>
+
+      <el-table-column
+        label="详细介绍"
+        prop="description"
+        width="120"
+      ></el-table-column>
+
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button @click="updateWorkflowProcess(scope.row)" size="small" type="primary">变更</el-button>
+          <el-button
+            @click="updateWorkflowProcess(scope.row)"
+            size="small"
+            type="primary"
+            >变更</el-button
+          >
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="deleteWorkflowProcess(scope.row)">确定</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                @click="scope.row.visible = false"
+                >取消</el-button
+              >
+              <el-button
+                type="primary"
+                size="mini"
+                @click="deleteWorkflowProcess(scope.row)"
+                >确定</el-button
+              >
             </div>
-            <el-button type="danger" icon="el-icon-delete" size="mini" slot="reference">删除</el-button>
+            <el-button
+              type="danger"
+              icon="el-icon-delete"
+              size="mini"
+              slot="reference"
+              >删除</el-button
+            >
           </el-popover>
         </template>
       </el-table-column>
@@ -67,7 +121,7 @@
       :current-page="page"
       :page-size="pageSize"
       :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
+      :style="{ float: 'right', padding: '20px' }"
       :total="total"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
@@ -82,7 +136,7 @@ import {
     deleteWorkflowProcessByIds,
     getWorkflowProcessList
 } from "@/api/workflowProcess";  //  此处请自行替换地址
-import { formatTimeToStr } from "@/utils/data";
+import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/components/mixins/infoList";
 
 export default {
@@ -94,9 +148,7 @@ export default {
       dialogFormVisible: false,
       visible: false,
       deleteVisible: false,
-      multipleSelection: [],formData: {
-        name:null,category:null,clazz:null,label:null,hideIcon:null,description:null,
-      }
+      multipleSelection: [],
     };
   },
   filters: {
@@ -150,18 +202,6 @@ export default {
         id:row.id,
         type:'edit'
       }})
-    },
-    closeDialog() {
-      this.dialogFormVisible = false;
-      this.formData = {
-        
-          name:null,
-          category:null,
-          clazz:null,
-          label:null,
-          hideIcon:null,
-          description:null,
-      };
     },
     async deleteWorkflowProcess(row) {
       this.visible = false;

@@ -98,7 +98,7 @@ import {
   deleteUser
 } from "@/api/user";
 import { getAuthorityList } from "@/api/authority";
-import infoList from "@/components/mixins/infoList";
+import infoList from "@/mixins/infoList";
 import { mapGetters } from "vuex";
 import CustomPic from "@/components/customPic";
 import ChooseImg from "@/components/chooseImg";

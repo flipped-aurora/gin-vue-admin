@@ -47,8 +47,7 @@ var initdbCmd = &cobra.Command{
 			datas.InitMysqlTables(db)
 			datas.InitMysqlData(db)
 		case "postgresql":
-			datas.InitPostgresqlTables(db)
-			datas.InitPostgresqlData(db)
+			color.Info.Println("postgresql功能开发中")
 		case "sqlite":
 			color.Info.Println("sqlite功能开发中")
 		case "sqlserver":
@@ -56,7 +55,6 @@ var initdbCmd = &cobra.Command{
 		default:
 			datas.InitMysqlTables(db)
 			datas.InitMysqlData(db)
-			color.Info.Println("sqlserver功能开发中")
 		}
 		frame, _ := cmd.Flags().GetString("frame")
 		if frame == "gf" {

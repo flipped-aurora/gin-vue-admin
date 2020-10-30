@@ -1,12 +1,12 @@
 package model
 
 import (
-	"gorm.io/gorm"
+	"gin-vue-admin/global"
 )
 
 // file struct, 文件结构体
 type ExaFile struct {
-	gorm.Model
+	global.GVA_MODEL
 	FileName     string
 	FileMd5      string
 	FilePath     string
@@ -17,7 +17,7 @@ type ExaFile struct {
 
 // file chunk struct, 切片结构体
 type ExaFileChunk struct {
-	gorm.Model
+	global.GVA_MODEL
 	ExaFileID       uint
 	FileChunkNumber int
 	FileChunkPath   string

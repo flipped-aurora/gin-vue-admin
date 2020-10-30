@@ -4,6 +4,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gorm.io/gorm"
 )
 
 // @title    CreateWorkflowProcess
@@ -24,7 +25,27 @@ func CreateWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 // @return                    error
 
 func DeleteWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
-	err = global.GVA_DB.Delete(workflowProcess).Error
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		txErr = tx.Delete(workflowProcess).Error
+		if txErr != nil {
+			return txErr
+		}
+		var edges []model.WorkflowEdge
+		txErr = tx.Delete(model.WorkflowNode{}, "workflow_process_id = ?", workflowProcess.ID).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Find(&edges, "workflow_process_id = ?", workflowProcess.ID).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Select("StartPoint", "EndPoint").Delete(&edges).Error
+		if txErr != nil {
+			return txErr
+		}
+		return nil
+	})
 	return err
 }
 
@@ -46,8 +67,43 @@ func DeleteWorkflowProcessByIds(ids request.IdsReq) (err error) {
 // @return                    error
 
 func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
-	err = global.GVA_DB.Save(workflowProcess).Error
-	return err
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		var edges []model.WorkflowEdge
+		var edgesIds []string
+		txErr = tx.Unscoped().Delete(workflowProcess).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Unscoped().Delete(model.WorkflowNode{}, "workflow_process_id = ?", workflowProcess.ID).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Unscoped().Find(&edges, "workflow_process_id = ?", workflowProcess.ID).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Unscoped().Delete(&edges).Error
+		if txErr != nil {
+			return txErr
+		}
+		for _, v := range edges {
+			edgesIds = append(edgesIds, v.ID)
+		}
+		txErr = tx.Unscoped().Delete(model.WorkflowStartPoint{}, "workflow_edge_id in ?", edgesIds).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Unscoped().Delete(model.WorkflowEndPoint{}, "workflow_edge_id in ?", edgesIds).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Create(&workflowProcess).Error
+		if txErr != nil {
+			return txErr
+		}
+		return nil
+	})
 }
 
 // @title    GetWorkflowProcess

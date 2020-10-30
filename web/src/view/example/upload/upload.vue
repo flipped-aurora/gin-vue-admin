@@ -82,10 +82,10 @@
 <script>
 const path = process.env.VUE_APP_BASE_API;
 import { mapGetters } from "vuex";
-import infoList from "@/components/mixins/infoList";
+import infoList from "@/mixins/infoList";
 import { getFileList, deleteFile } from "@/api/fileUploadAndDownload";
 import { downloadImage } from "@/utils/downloadImg";
-import { formatTimeToStr } from "@/utils/data";
+import { formatTimeToStr } from "@/utils/date";
 import CustomPic from "@/components/customPic";
 import UploadImage from "@/components/upload/image.vue";
 export default {

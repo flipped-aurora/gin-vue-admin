@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"github.com/gookit/color"
 	"time"
 
 	"gin-vue-admin/model"
@@ -15,7 +16,11 @@ var Authorities = []model.SysAuthority{
 
 func InitSysAuthority(db *gorm.DB) (err error) {
 	return db.Transaction(func(tx *gorm.DB) error {
-		if tx.Create(&Authorities).Error != nil { // 遇到错误时回滚事务
+		if tx.Where("authority_id IN ? ", []string{"888", "9528"}).Find(&[]model.SysAuthority{}).RowsAffected == 2 {
+			color.Danger.Println("sys_authorities表的初始数据已存在!")
+			return nil
+		}
+		if err := tx.Create(&Authorities).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

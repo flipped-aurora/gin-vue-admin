@@ -57,7 +57,7 @@ func DeleteExaCustomer(c *gin.Context) {
 	CustomerVerify := utils.Rules{
 		"ID": {utils.NotEmpty()},
 	}
-	CustomerVerifyErr := utils.Verify(cu.Model, CustomerVerify)
+	CustomerVerifyErr := utils.Verify(cu.GVA_MODEL, CustomerVerify)
 	if CustomerVerifyErr != nil {
 		response.FailWithMessage(CustomerVerifyErr.Error(), c)
 		return
@@ -84,7 +84,7 @@ func UpdateExaCustomer(c *gin.Context) {
 	IdCustomerVerify := utils.Rules{
 		"ID": {utils.NotEmpty()},
 	}
-	IdCustomerVerifyErr := utils.Verify(cu.Model, IdCustomerVerify)
+	IdCustomerVerifyErr := utils.Verify(cu.GVA_MODEL, IdCustomerVerify)
 	if IdCustomerVerifyErr != nil {
 		response.FailWithMessage(IdCustomerVerifyErr.Error(), c)
 		return
@@ -120,7 +120,7 @@ func GetExaCustomer(c *gin.Context) {
 	IdCustomerVerify := utils.Rules{
 		"ID": {utils.NotEmpty()},
 	}
-	IdCustomerVerifyErr := utils.Verify(cu.Model, IdCustomerVerify)
+	IdCustomerVerifyErr := utils.Verify(cu.GVA_MODEL, IdCustomerVerify)
 	if IdCustomerVerifyErr != nil {
 		response.FailWithMessage(IdCustomerVerifyErr.Error(), c)
 		return

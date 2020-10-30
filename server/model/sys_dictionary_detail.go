@@ -2,12 +2,12 @@
 package model
 
 import (
-	"gorm.io/gorm"
+	"gin-vue-admin/global"
 )
 
 // 如果含有time.Time 请自行import time包
 type SysDictionaryDetail struct {
-	gorm.Model
+	global.GVA_MODEL
 	Label           string `json:"label" form:"label" gorm:"column:label;comment:展示值"`
 	Value           int    `json:"value" form:"value" gorm:"column:value;comment:字典值"`
 	Status          *bool  `json:"status" form:"status" gorm:"column:status;comment:启用状态"`

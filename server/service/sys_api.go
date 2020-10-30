@@ -15,7 +15,8 @@ import (
 // @return                    error
 
 func CreateApi(api model.SysApi) (err error) {
-	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&model.SysApi{}).Error, gorm.ErrRecordNotFound){
+
+	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&model.SysApi{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同api")
 	}
 	return global.GVA_DB.Create(&api).Error

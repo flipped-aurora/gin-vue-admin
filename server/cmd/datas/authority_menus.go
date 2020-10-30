@@ -1,6 +1,7 @@
 package datas
 
 import (
+	"github.com/gookit/color"
 	"gorm.io/gorm"
 )
 
@@ -67,7 +68,11 @@ var AuthorityMenus = []SysAuthorityMenus{
 
 func InitSysAuthorityMenus(db *gorm.DB) (err error) {
 	return db.Table("sys_authority_menus").Transaction(func(tx *gorm.DB) error {
-		if tx.Create(&AuthorityMenus).Error != nil { // 遇到错误时回滚事务
+		if tx.Where("sys_authority_authority_id IN ?", []string{"888", "8881", "9528"}).Find(&[]SysAuthorityMenus{}).RowsAffected == 53 {
+			color.Danger.Println("sys_authority_menus表的初始数据已存在!")
+			return nil
+		}
+		if err := tx.Create(&AuthorityMenus).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
 		return nil

@@ -114,8 +114,8 @@ import {
   findSysDictionaryDetail,
   getSysDictionaryDetailList
 } from "@/api/sysDictionaryDetail"; //  此处请自行替换地址
-import { formatTimeToStr } from "@/utils/data";
-import infoList from "@/components/mixins/infoList";
+import { formatTimeToStr } from "@/utils/date";
+import infoList from "@/mixins/infoList";
 
 export default {
   name: "SysDictionaryDetail",

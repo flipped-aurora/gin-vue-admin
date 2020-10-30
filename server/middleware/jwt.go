@@ -16,7 +16,7 @@ import (
 
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localSstorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
+		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
 		token := c.Request.Header.Get("x-token")
 		if token == "" {
 			response.Result(response.ERROR, gin.H{
@@ -66,7 +66,7 @@ func JWTAuth() gin.HandlerFunc {
 				if err!=nil {
 					global.GVA_LOG.Error("get redis jwt failed",  zap.Any("err", err))
 				}else{
-					service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
+					_ = service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
 					//当之前的取成功时才进行拉黑操作
 				}
 				// 无论如何都要记录当前的活跃状态

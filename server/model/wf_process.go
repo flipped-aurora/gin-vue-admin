@@ -10,7 +10,7 @@ type WorkflowProcess struct {
 	ID          string `json:"id" form:"id" gorm:"comment:流程标识;primaryKey;unique;not null"`
 	CreatedAt   time.Time
 	UpdatedAt   time.Time
-	DeletedAt   gorm.DeletedAt `gorm:"index"`
+	DeletedAt   gorm.DeletedAt `json:"-" gorm:"index"`
 	Name        string         `json:"name" gorm:"comment:流程名称"`
 	Category    string         `json:"category" gorm:"comment:分类"`
 	Clazz       string         `json:"clazz" gorm:"comment:类型"`
@@ -25,7 +25,7 @@ type WorkflowNode struct {
 	ID                string `json:"id" form:"id" gorm:"comment:节点id;primaryKey;unique;not null"`
 	CreatedAt         time.Time
 	UpdatedAt         time.Time
-	DeletedAt         gorm.DeletedAt `gorm:"index"`
+	DeletedAt         gorm.DeletedAt `json:"-" gorm:"index"`
 	WorkflowProcessID string         `json:"-" gorm:"comment:流程标识"`
 	Clazz             string         `json:"clazz" gorm:"comment:节点类型"`
 	Label             string         `json:"label" gorm:"comment:节点名称"`
@@ -48,7 +48,7 @@ type WorkflowEdge struct {
 	ID                  string `json:"id" form:"id" gorm:"comment:唯一标识;primaryKey;unique;not null"`
 	CreatedAt           time.Time
 	UpdatedAt           time.Time
-	DeletedAt           gorm.DeletedAt     `gorm:"index"`
+	DeletedAt           gorm.DeletedAt     `json:"-" gorm:"index"`
 	WorkflowProcessID   string             `json:"-" gorm:"comment:流程标识"`
 	Clazz               string             `json:"clazz" gorm:"comment:类型（线）"`
 	Source              string             `json:"source" gorm:"comment:起点节点"`

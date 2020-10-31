@@ -98,7 +98,7 @@ export default {
             y: 84,
             id: "userTask1603681299962",
             style: {},
-            assignValue: 1,
+            assignValue: [1],
             assignType: "user"
           },
           {
@@ -110,7 +110,7 @@ export default {
             y: 321,
             id: "userTask1603681302372",
             style: {},
-            assignValue: 2,
+            assignValue: [2],
             assignType: "user"
           },
           {
@@ -268,7 +268,12 @@ export default {
       const obj = this.$refs["wfd"].graph.save()
       const processModel = this.$refs["wfd"].processModel
       processModel.edges = obj.edges
-      processModel.nodes = obj.nodes
+      processModel.nodes = JSON.parse(JSON.stringify(obj.nodes))
+      processModel.nodes.map(item=>{
+        if(item.assignValue){
+          item.assignValue = String(item.assignValue)
+        }
+      })
       if(!processModel.id){
         this.$message({
           type:"error",
@@ -321,6 +326,11 @@ export default {
       const res = await findWorkflowProcess({ id: this.$route.query.id });
       this.disabled = this.$route.query.type == "view"
       if(res.code == 0){
+         res.data.reworkflowProcess.nodes.map(item=>{
+           if(item.assignValue){
+             item.assignValue = item.assignValue.split(",")
+           }
+         })
         this.demoData.nodes = res.data.reworkflowProcess.nodes
         delete res.data.reworkflowProcess.nodes
         this.demoData.edges = res.data.reworkflowProcess.edges

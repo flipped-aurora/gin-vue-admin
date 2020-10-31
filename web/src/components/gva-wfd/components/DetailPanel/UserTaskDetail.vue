@@ -21,7 +21,7 @@
                            :disabled="readOnly"
                            :value="model.assignValue"
                            clearable
-                           allow-create
+                           multiple
                            :filterable="true"
                            :filter-method="filterUsers"
                            @change="(e) => onChange('assignValue', e)">
@@ -33,11 +33,11 @@
                 <el-select style="width:90%; font-size:12px"
                            :placeholder="'请选择角色'"
                            :disabled="readOnly"
+                           multiple
                            :value="model.assignValue"
-                           allow-create
                            clearable
                            :filterable="true"
-                           :filter-method="authorities"
+                           :filter-method="filterAuthorities"
                            @change="(e) => onChange('assignValue', e)">
                     <el-option v-for="authority in authoritiesCopy" :key="authority.id" :label="authority.name" :value="authority.id" />
                 </el-select>
@@ -49,13 +49,20 @@
                                 :placeholder="i18n['userTask.dueDate.placeholder']"
                                 :disabled="readOnly"
                                 :value="model.dueDate"
-                                value-format="yyyy-MM-dd HH:mm:ss"
                                 @input="(value) => onChange('dueDate', value)" />
             </div>
             <div class="panelRow">
                 <el-checkbox @change="(value) => onChange('isSequential', value)"
                              :disabled="readOnly"
                              :value="!!model.isSequential">{{i18n['userTask.counterSign']}}</el-checkbox>
+            </div>
+            <div class="panelRow">
+                <div>视图路径（以view开头）</div>
+                <el-input style="width:90%; font-size:12px"
+                          :disabled="readOnly"
+                          type="view"
+                          :value="model.view"
+                          @input="(value) => {onChange('view', value)}" />
             </div>
             <div class="panelRow">
                 <div>详情说明：</div>
@@ -116,7 +123,7 @@
       filterUsers(input) {
         if (input) {
           this.usersCopy = this.users.filter((item) => {
-            if (!!~item.name.indexOf(input) || !!~item.name.toLowerCase().indexOf(input.toLowerCase())) {
+            if (item.name.indexOf(input) >-1 ) {
               return true
             }
           })
@@ -127,7 +134,8 @@
       filterAuthorities(input) {
         if (input) {
           this.authoritiesCopy = this.authorities.filter((item) => {
-            if (!!~item.name.indexOf(input) || !!~item.name.toLowerCase().indexOf(input.toLowerCase())) {
+            console.log(item)
+            if (item.name.indexOf(input) >-1 ) {
               return true
             }
           })

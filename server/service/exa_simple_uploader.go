@@ -51,27 +51,26 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 	if err != nil {
 		return err
 	}
-	//创建事务
-	tx := global.GVA_DB.Begin()
-	//删除切片信息
-	err = tx.Delete(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, false).Error
-	// 添加文件信息
-	if err != nil {
-		fmt.Println(err)
-		tx.Rollback()
-	}
-	err = tx.Create(&model.ExaSimpleUploader{
-		Identifier: md5,
-		IsDone:     true,
-		FilePath:   finishDir + fileName,
-		Filename:   fileName,
-	}).Error
-	if err != nil {
-		fmt.Println(err)
-		tx.Rollback()
-	}
-	tx.Commit()
-	//清除切片
-	err = os.RemoveAll(dir)
-	return
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		//删除切片信息
+		if err = tx.Delete(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, false).Error; err != nil {
+			fmt.Println(err)
+			return err
+		}
+		data := model.ExaSimpleUploader{
+			Identifier: md5,
+			IsDone:     true,
+			FilePath:   finishDir + fileName,
+			Filename:   fileName,
+		}
+		// 添加文件信息
+		if err = tx.Create(&data).Error; err != nil {
+			fmt.Println(err)
+			return err
+		}
+		return nil
+	})
+
+	err = os.RemoveAll(dir) //清除切片
+	return err
 }

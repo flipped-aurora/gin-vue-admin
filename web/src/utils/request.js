@@ -73,7 +73,7 @@ service.interceptors.response.use(
             if (response.data.data && response.data.data.reload) {
                 store.commit('user/LoginOut')
             }
-            return response.data.msg
+            return response.data.msg ? response.data : response
         }
     },
     error => {

@@ -67,7 +67,7 @@
     {{ end }}
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button @click="update{{.StructName}}(scope.row)" size="small" type="primary">变更</el-button>
+          <el-button class="table-button" @click="update{{.StructName}}(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
@@ -136,7 +136,7 @@ import {
     find{{.StructName}},
     get{{.StructName}}List
 } from "@/api/{{.PackageName}}";  //  此处请自行替换地址
-import { formatTimeToStr } from "@/utils/data";
+import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
   name: "{{.StructName}}",

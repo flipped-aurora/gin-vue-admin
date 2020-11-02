@@ -50,7 +50,7 @@ service.interceptors.request.use(
             message: error,
             type: 'error'
         })
-        return Promise.reject(error);
+        return error;
     }
 );
 
@@ -73,7 +73,7 @@ service.interceptors.response.use(
             if (response.data.data && response.data.data.reload) {
                 store.commit('user/LoginOut')
             }
-            return Promise.reject(response.data.msg)
+            return response.data.msg ? response.data : response
         }
     },
     error => {
@@ -83,7 +83,7 @@ service.interceptors.response.use(
             message: error,
             type: 'error'
         })
-        return Promise.reject(error)
+        return error
     }
 )
 

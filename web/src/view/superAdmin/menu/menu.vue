@@ -181,7 +181,7 @@ import {
   deleteBaseMenu,
   getBaseMenuById
 } from "@/api/menu";
-import infoList from "@/components/mixins/infoList";
+import infoList from "@/mixins/infoList";
 import icon from "@/view/superAdmin/menu/icon";
 export default {
   name: "Menus",

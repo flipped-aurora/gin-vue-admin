@@ -274,6 +274,9 @@ export default {
             return false;
           }
           const data = await createTemp(this.form);
+          if(data.headers?.success == "false"){
+            return
+          }
           const blob = new Blob([data]);
           const fileName = "ginvueadmin.zip";
           if ("download" in document.createElement("a")) {

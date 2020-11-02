@@ -12,11 +12,13 @@
 
 [English](./README-en.md) | 简体中文
 
-[gitee地址](https://gitee.com/pixelmax/gin-vue-admin)
+[gitee地址](https://gitee.com/pixelmax/gin-vue-admin)|
 [github地址](https://github.com/flipped-aurora/gin-vue-admin)
 
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
+
+[从环境到部署教学视频](https://www.bilibili.com/video/BV1fV411y7dT)
 
 [开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 

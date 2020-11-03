@@ -31,9 +31,9 @@
                 <Search />
                 <Screenfull class="screenfull"></Screenfull>
                 <el-dropdown>
-                  <span class="el-dropdown-link">
-                    <img :src="userInfo.headerImg" height="30" width="30" />
-                    {{userInfo.title}}
+                  <span class="header-avatar">
+                    欢迎您，<CustomPic/>
+                    <span style="margin-left: 5px">{{userInfo.nickName}}</span>
                     <i class="el-icon-arrow-down"></i>
                   </span>
                   <el-dropdown-menu class="dropdown-group" slot="dropdown">
@@ -58,11 +58,11 @@
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
           <keep-alive>
-            <router-view class="admin-box" v-if="$route.meta.keepAlive"></router-view>
+            <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="$route.meta.keepAlive"></router-view>
           </keep-alive>
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
+          <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
         </transition>
        <BottomInfo />
       </el-main>
@@ -95,6 +95,7 @@ import Search from '@/view/layout/search/search'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
 import { mapGetters, mapActions } from 'vuex'
 import { changePassword } from '@/api/user'
+import CustomPic from '@/components/customPic'
 export default {
   name: 'Layout',
   data() {
@@ -105,6 +106,7 @@ export default {
       isMobile: false,
       isShadowBg: false,
       showPassword: false,
+      loadingFlag:false,
       pwdModify: {},
       rules: {
         password: [
@@ -138,7 +140,8 @@ export default {
     HistoryComponent,
     Screenfull,
     Search,
-    BottomInfo
+    BottomInfo,
+    CustomPic
   },
   methods: {
     ...mapActions('user', ['LoginOut']),
@@ -207,6 +210,12 @@ export default {
     }
     this.$bus.emit('collapse', this.isCollapse)
     this.$bus.emit('mobile', this.isMobile)
+    this.$bus.on("showLoading",()=>{
+      this.loadingFlag = true
+    })
+    this.$bus.on("closeLoading",()=>{
+      this.loadingFlag = false
+    })
     window.onresize = () => {
       return (() => {
         let screenWidth = document.body.clientWidth
@@ -373,5 +382,10 @@ $mainHight: 100vh;
 
 .screenfull {
   display: inline-block;
+}
+.header-avatar{
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 </style>

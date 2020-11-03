@@ -124,7 +124,7 @@
           size="small"
           type="primary"
           icon="el-icon-edit"
-          @click="addParameter(form.parameters)"
+          @click="addParameter(form)"
         >新增菜单参数</el-button>
         <el-table :data="form.parameters" stripe style="width: 100%">
           <el-table-column prop="type" label="参数类型" width="180">
@@ -181,7 +181,7 @@ import {
   deleteBaseMenu,
   getBaseMenuById
 } from "@/api/menu";
-import infoList from "@/components/mixins/infoList";
+import infoList from "@/mixins/infoList";
 import icon from "@/view/superAdmin/menu/icon";
 export default {
   name: "Menus",
@@ -230,8 +230,11 @@ export default {
     icon
   },
   methods: {
-    addParameter(parameters) {
-      parameters.push({
+    addParameter(form) {
+      if (!form.parameters){
+        this.$set(form,"parameters",[])
+      }
+      form.parameters.push({
         type: "query",
         key: "",
         value: ""

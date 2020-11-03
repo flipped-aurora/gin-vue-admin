@@ -47,14 +47,14 @@ Vue.use(APlayer, {
 });
 
 
-import {auth} from '@/directive/auth'
+import { auth } from '@/directive/auth'
 // 按钮权限指令
 auth(Vue)
 
 import uploader from 'vue-simple-uploader'
 Vue.use(uploader)
 
-new Vue({
+export default new Vue({
     render: h => h(App),
     router,
     store
@@ -63,3 +63,10 @@ new Vue({
 //引入echarts
 import echarts from 'echarts'
 Vue.prototype.$echarts = echarts;
+
+console.log(`
+       欢迎使用 Gin-Vue-Admin
+       当前版本:V2.3.4
+       默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
+       默认前端文件运行地址:http://127.0.0.1:8080
+`)

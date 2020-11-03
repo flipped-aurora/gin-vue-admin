@@ -68,25 +68,6 @@ func DeleteSysOperationRecordByIds(c *gin.Context) {
 }
 
 // @Tags SysOperationRecord
-// @Summary 更新SysOperationRecord
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body model.SysOperationRecord true "更新SysOperationRecord"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /sysOperationRecord/updateSysOperationRecord [put]
-func UpdateSysOperationRecord(c *gin.Context) {
-	var sysOperationRecord model.SysOperationRecord
-	_ = c.ShouldBindJSON(&sysOperationRecord)
-	err := service.UpdateSysOperationRecord(&sysOperationRecord)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
-	} else {
-		response.OkWithMessage("更新成功", c)
-	}
-}
-
-// @Tags SysOperationRecord
 // @Summary 用id查询SysOperationRecord
 // @Security ApiKeyAuth
 // @accept application/json

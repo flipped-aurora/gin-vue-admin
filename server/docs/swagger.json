@@ -33,7 +33,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysApi"
                         }
                     }
@@ -72,7 +71,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysApi"
                         }
                     }
@@ -138,7 +136,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -177,7 +174,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SearchApiParams"
                         }
                     }
@@ -216,7 +212,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysApi"
                         }
                     }
@@ -255,7 +250,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/response.SysAuthorityCopyResponse"
                         }
                     }
@@ -294,7 +288,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -333,7 +326,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -372,7 +364,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -411,7 +402,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -450,7 +440,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -489,7 +478,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.AutoCodeStruct"
                         }
                     }
@@ -574,7 +562,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
@@ -582,76 +569,6 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"登陆成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/base/register": {
-            "post": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Base"
-                ],
-                "summary": "用户注册账号",
-                "parameters": [
-                    {
-                        "description": "用户注册接口",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.SysUser"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/casbin/CasbinTest": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "casbin"
-                ],
-                "summary": "casb RBAC RESTFUL测试路由",
-                "parameters": [
-                    {
-                        "description": "获取权限列表",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/request.CasbinInReceive"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -683,7 +600,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
@@ -722,7 +638,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
@@ -761,7 +676,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -798,7 +712,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -835,7 +748,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -872,7 +784,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -911,7 +822,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -919,6 +829,30 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/email/emailTest": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system"
+                ],
+                "summary": "发送测试邮件",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"返回成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -983,7 +917,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaFileUploadAndDownload"
                         }
                     }
@@ -1058,7 +991,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -1196,7 +1128,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.AuthorityIdInfo"
                         }
                     }
@@ -1235,7 +1166,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
@@ -1274,7 +1204,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.AddMenuAuthorityInfo"
                         }
                     }
@@ -1313,7 +1242,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -1352,7 +1280,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -1388,7 +1315,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
@@ -1424,7 +1350,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.RegisterAndLoginStruct"
                         }
                     }
@@ -1463,7 +1388,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -1502,7 +1426,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
@@ -1634,7 +1557,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -1673,7 +1595,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -1712,7 +1633,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -1751,7 +1671,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SysDictionarySearch"
                         }
                     }
@@ -1790,7 +1709,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -1829,7 +1747,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -1868,7 +1785,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -1907,7 +1823,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -1946,7 +1861,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SysDictionaryDetailSearch"
                         }
                     }
@@ -1985,7 +1899,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -2024,7 +1937,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysOperationRecord"
                         }
                     }
@@ -2063,7 +1975,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysOperationRecord"
                         }
                     }
@@ -2102,7 +2013,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.IdsReq"
                         }
                     }
@@ -2141,7 +2051,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysOperationRecord"
                         }
                     }
@@ -2180,7 +2089,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SysOperationRecordSearch"
                         }
                     }
@@ -2188,45 +2096,6 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/sysOperationRecord/updateSysOperationRecord": {
-            "put": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SysOperationRecord"
-                ],
-                "summary": "更新SysOperationRecord",
-                "parameters": [
-                    {
-                        "description": "更新SysOperationRecord",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "$ref": "#/definitions/model.SysOperationRecord"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -2255,7 +2124,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2263,6 +2131,30 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"返回成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/system/getServerInfo": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "system"
+                ],
+                "summary": "获取服务器信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -2315,7 +2207,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2351,7 +2242,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.ChangePasswordStruct"
                         }
                     }
@@ -2390,7 +2280,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -2429,7 +2318,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -2437,6 +2325,36 @@
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Base"
+                ],
+                "summary": "用户注册账号",
+                "parameters": [
+                    {
+                        "description": "用户注册接口",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -2468,7 +2386,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SetUserAuth"
                         }
                     }
@@ -2483,15 +2400,15 @@
                 }
             }
         },
-        "/user/uploadHeaderImg": {
-            "post": {
+        "/user/setUserInfo": {
+            "put": {
                 "security": [
                     {
                         "ApiKeyAuth": []
                     }
                 ],
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -2499,26 +2416,21 @@
                 "tags": [
                     "SysUser"
                 ],
-                "summary": "用户上传头像",
+                "summary": "删除用户",
                 "parameters": [
                     {
-                        "type": "file",
-                        "description": "用户上传头像",
-                        "name": "headerImg",
-                        "in": "formData",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "用户上传头像",
-                        "name": "username",
-                        "in": "formData",
-                        "required": true
+                        "description": "删除用户",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.SysUser"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"上传成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -2542,7 +2454,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysWorkflow"
                         }
                     }
@@ -2581,6 +2492,32 @@
                 }
             }
         },
+        "config.Email": {
+            "type": "object",
+            "properties": {
+                "from": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "isSSL": {
+                    "type": "boolean"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "integer"
+                },
+                "secret": {
+                    "type": "string"
+                },
+                "to": {
+                    "type": "string"
+                }
+            }
+        },
         "config.JWT": {
             "type": "object",
             "properties": {
@@ -2589,19 +2526,10 @@
                 }
             }
         },
-        "config.Log": {
+        "config.Local": {
             "type": "object",
             "properties": {
-                "file": {
-                    "type": "string"
-                },
-                "logFile": {
-                    "type": "boolean"
-                },
-                "prefix": {
-                    "type": "string"
-                },
-                "stdout": {
+                "path": {
                     "type": "string"
                 }
             }
@@ -2635,6 +2563,41 @@
                 }
             }
         },
+        "config.Postgresql": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "type": "string"
+                },
+                "dbname": {
+                    "type": "string"
+                },
+                "host": {
+                    "type": "string"
+                },
+                "logger": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "preferSimpleProtocol": {
+                    "type": "boolean"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "config.Qiniu": {
             "type": "object",
             "properties": {
@@ -2648,6 +2611,15 @@
                     "type": "string"
                 },
                 "secretKey": {
+                    "type": "string"
+                },
+                "useCdnDomains": {
+                    "type": "boolean"
+                },
+                "useHttps": {
+                    "type": "boolean"
+                },
+                "zone": {
                     "type": "string"
                 }
             }
@@ -2677,17 +2649,27 @@
                     "type": "object",
                     "$ref": "#/definitions/config.Casbin"
                 },
+                "email": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Email"
+                },
                 "jwt": {
                     "type": "object",
                     "$ref": "#/definitions/config.JWT"
                 },
-                "log": {
+                "local": {
+                    "description": "oss",
                     "type": "object",
-                    "$ref": "#/definitions/config.Log"
+                    "$ref": "#/definitions/config.Local"
                 },
                 "mysql": {
+                    "description": "gorm",
                     "type": "object",
                     "$ref": "#/definitions/config.Mysql"
+                },
+                "postgresql": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Postgresql"
                 },
                 "qiniu": {
                     "type": "object",
@@ -2701,20 +2683,51 @@
                     "type": "object",
                     "$ref": "#/definitions/config.Sqlite"
                 },
+                "sqlserver": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Sqlserver"
+                },
                 "system": {
                     "type": "object",
                     "$ref": "#/definitions/config.System"
+                },
+                "zap": {
+                    "type": "object",
+                    "$ref": "#/definitions/config.Zap"
                 }
             }
         },
         "config.Sqlite": {
             "type": "object",
             "properties": {
-                "config": {
+                "logger": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.Sqlserver": {
+            "type": "object",
+            "properties": {
+                "dbname": {
                     "type": "string"
                 },
-                "logMode": {
+                "logger": {
                     "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "type": "integer"
                 },
                 "password": {
                     "type": "string"
@@ -2739,8 +2752,46 @@
                 "env": {
                     "type": "string"
                 },
+                "needInitData": {
+                    "type": "boolean"
+                },
+                "ossType": {
+                    "type": "string"
+                },
                 "useMultipoint": {
                     "type": "boolean"
+                }
+            }
+        },
+        "config.Zap": {
+            "type": "object",
+            "properties": {
+                "director": {
+                    "type": "string"
+                },
+                "encodeLevel": {
+                    "type": "string"
+                },
+                "format": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "linkName": {
+                    "type": "string"
+                },
+                "logInConsole": {
+                    "type": "boolean"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "showLine": {
+                    "type": "boolean"
+                },
+                "stacktraceKey": {
+                    "type": "string"
                 }
             }
         },
@@ -2963,7 +3014,7 @@
                 "key": {
                     "type": "string"
                 },
-                "sysBaseMenuId": {
+                "sysBaseMenuID": {
                     "type": "integer"
                 },
                 "type": {
@@ -3111,7 +3162,7 @@
                     "description": "是否是完结流节点",
                     "type": "boolean"
                 },
-                "isStrat": {
+                "isStart": {
                     "description": "是否是开始流节点",
                     "type": "boolean"
                 },

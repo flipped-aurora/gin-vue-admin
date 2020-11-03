@@ -5,9 +5,10 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	"github.com/casbin/casbin"
 	"github.com/casbin/casbin/util"
-	gormadapter "github.com/casbin/gorm-adapter"
+	"github.com/casbin/casbin/v2"
+	gormadapter "github.com/casbin/gorm-adapter/v3"
+	_ "github.com/go-sql-driver/mysql"
 	"strings"
 )
 
@@ -20,31 +21,22 @@ import (
 
 func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
+	rules := [][]string{}
 	for _, v := range casbinInfos {
 		cm := model.CasbinModel{
-			ID:          0,
 			Ptype:       "p",
 			AuthorityId: authorityId,
 			Path:        v.Path,
 			Method:      v.Method,
 		}
-		addflag := AddCasbin(cm)
-		if addflag == false {
-			return errors.New("存在相同api,添加失败,请联系管理员")
-		}
+		rules = append(rules, []string{cm.AuthorityId, cm.Path, cm.Method})
+	}
+	e := Casbin()
+	success, _ := e.AddPolicies(rules)
+	if success == false {
+		return errors.New("存在相同api,添加失败,请联系管理员")
 	}
 	return nil
-}
-
-// @title    AddCasbin
-// @description   add casbin authority, 添加权限
-// @auth                     （2020/04/05  20:22）
-// @param     cm              model.CasbinModel
-// @return                    bool
-
-func AddCasbin(cm model.CasbinModel) bool {
-	e := Casbin()
-	return e.AddPolicy(cm.AuthorityId, cm.Path, cm.Method)
 }
 
 // @title    UpdateCasbinApi
@@ -57,8 +49,7 @@ func AddCasbin(cm model.CasbinModel) bool {
 // @return                     error
 
 func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
-	var cs []model.CasbinModel
-	err := global.GVA_DB.Table("casbin_rule").Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Find(&cs).Updates(map[string]string{
+	err := global.GVA_DB.Table("casbin_rule").Model(&model.CasbinModel{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
@@ -92,7 +83,8 @@ func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []request.CasbinIn
 
 func ClearCasbin(v int, p ...string) bool {
 	e := Casbin()
-	return e.RemoveFilteredPolicy(v, p...)
+	success, _ := e.RemoveFilteredPolicy(v, p...)
+	return success
 
 }
 
@@ -101,8 +93,9 @@ func ClearCasbin(v int, p ...string) bool {
 // @auth                     （2020/04/05  20:22）
 
 func Casbin() *casbin.Enforcer {
-	a := gormadapter.NewAdapterByDB(global.GVA_DB)
-	e := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+	admin := global.GVA_CONFIG.Mysql
+	a, _ := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
+	e, _ := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
 	e.AddFunction("ParamsMatch", ParamsMatchFunc)
 	_ = e.LoadPolicy()
 	return e

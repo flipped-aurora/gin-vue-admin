@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gorm.io/gorm"
 )
 
 // @title    DeleteBaseMenu
@@ -19,7 +20,7 @@ func DeleteBaseMenu(id float64) (err error) {
 		db := global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)
 		err = global.GVA_DB.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
 		if len(menu.SysAuthoritys) > 0 {
-			err = db.Association("SysAuthoritys").Delete(menu.SysAuthoritys).Error
+			err = global.GVA_DB.Model(&menu).Association("SysAuthoritys").Delete(&menu.SysAuthoritys)
 		} else {
 			err = db.Error
 		}
@@ -51,14 +52,13 @@ func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 
 	db := global.GVA_DB.Where("id = ?", menu.ID).Find(&oldMenu)
 	if oldMenu.Name != menu.Name {
-		notSame := global.GVA_DB.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&model.SysBaseMenu{}).RecordNotFound()
-		if !notSame {
+		if !errors.Is(global.GVA_DB.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&model.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 			global.GVA_LOG.Debug("存在相同name修改失败")
 			return errors.New("存在相同name修改失败")
 		}
 	}
-	err = db.Updates(upDateMap).Association("Parameters").Replace(menu.Parameters).Error
-	global.GVA_LOG.Debug("菜单修改时候，关联菜单err:%v", err)
+	err = global.GVA_DB.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
+	err = db.Updates(upDateMap).Error
 	return err
 }
 

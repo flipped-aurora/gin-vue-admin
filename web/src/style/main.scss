@@ -1013,3 +1013,22 @@ li {
         }
     }
 }
+
+.el-input-number__decrease, .el-input-number__increase{
+    position: absolute;
+    z-index: 1;
+    top: 6px !important;
+    width: 42px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    background: #F5F7FA;
+    color: #606266;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+
+.table-button{
+    margin-right:8px !important;
+}

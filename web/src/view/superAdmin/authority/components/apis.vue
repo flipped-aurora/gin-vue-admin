@@ -54,7 +54,7 @@ export default {
       apis &&
         apis.map(item => {
         item.onlyId = "p:"+item.path+"m:"+item.method
-          if (apiObj.hasOwnProperty(item.apiGroup)) {
+          if (Object.prototype.hasOwnProperty.call(apiObj,item.apiGroup)) {
             apiObj[item.apiGroup].push(item)
           } else {
             Object.assign(apiObj, { [item.apiGroup]: [item] })

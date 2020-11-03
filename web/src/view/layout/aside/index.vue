@@ -45,9 +45,12 @@ export default {
             params[item.key] = item.value;
           }
         });
-      console.log(query, params);
       if (index === this.$route.name) return;
-      this.$router.push({ name: index, query, params });
+      if (index.indexOf("http://") > -1 || index.indexOf("https://") > -1) {
+        window.open(index);
+      } else {
+        this.$router.push({ name: index, query, params });
+      }
     }
   },
   computed: {

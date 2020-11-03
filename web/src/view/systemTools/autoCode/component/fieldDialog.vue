@@ -69,8 +69,8 @@
         </el-col>
       </el-form-item>
       <el-form-item label="数据库字段长度" prop="dataTypeLong">
-        <el-col :span="6">
-          <el-input :disabled="!dialogMiddle.dataType" v-model="dialogMiddle.dataTypeLong"></el-input>
+        <el-col :span="8">
+          <el-input placeholder="自定义类型必须指定长度" :disabled="!dialogMiddle.dataType" v-model="dialogMiddle.dataTypeLong"></el-input>
         </el-col>
       </el-form-item>
       <el-form-item label="Field查询条件" prop="fieldSearchType">
@@ -195,7 +195,6 @@ export default {
     }
   },
   async created() {
-    this.getDbfdOptions();
     const dictRes = await getSysDictionaryList({
       page: 1,
       pageSize: 999999

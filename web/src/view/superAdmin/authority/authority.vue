@@ -100,7 +100,7 @@ import Menus from "@/view/superAdmin/authority/components/menus";
 import Apis from "@/view/superAdmin/authority/components/apis";
 import Datas from "@/view/superAdmin/authority/components/datas";
 
-import infoList from "@/components/mixins/infoList";
+import infoList from "@/mixins/infoList";
 export default {
   name: "Authority",
   mixins: [infoList],

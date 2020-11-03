@@ -67,7 +67,7 @@
     {{ end }}
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button @click="update{{.StructName}}(scope.row)" size="small" type="primary">变更</el-button>
+          <el-button class="table-button" @click="update{{.StructName}}(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
@@ -92,7 +92,33 @@
     ></el-pagination>
 
     <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
-      此处请使用表单生成器生成form填充 表单默认绑定 formData 如手动修改过请自行修改key
+      <el-form :model="formData" label-position="right" label-width="80px">
+    {{- range .Fields}}
+         <el-form-item label="{{.FieldDesc}}:">
+      {{- if eq .FieldType "bool" }}
+            <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.{{.FieldJson}}" clearable ></el-switch>
+      {{ end -}}
+      {{- if eq .FieldType "string" }}
+            <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" ></el-input>
+      {{ end -}}
+      {{- if eq .FieldType "int" }}
+      {{- if .DictType}}
+             <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
+                 <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value"></el-option>
+             </el-select>
+      {{ else -}}
+             <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入"></el-input>
+      {{ end -}}
+      {{ end -}}
+      {{- if eq .FieldType "time.Time" }}
+              <el-date-picker type="date" placeholder="选择日期" v-model="formData.{{ .FieldJson }}" clearable></el-date-picker>
+       {{ end -}}
+       {{- if eq .FieldType "float64" }}
+              <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
+       {{ end -}}
+          </el-form-item>
+       {{ end -}}
+      </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button @click="enterDialog" type="primary">确 定</el-button>
@@ -110,15 +136,14 @@ import {
     find{{.StructName}},
     get{{.StructName}}List
 } from "@/api/{{.PackageName}}";  //  此处请自行替换地址
-import { formatTimeToStr } from "@/utils/data";
-import infoList from "@/components/mixins/infoList";
-
+import { formatTimeToStr } from "@/utils/date";
+import infoList from "@/mixins/infoList";
 export default {
   name: "{{.StructName}}",
   mixins: [infoList],
   data() {
     return {
-      listApi: get{{.StructName}}List,
+      listApi: get{{ .StructName }}List,
       dialogFormVisible: false,
       visible: false,
       type: "",
@@ -126,11 +151,27 @@ export default {
       multipleSelection: [],
       {{- range .Fields}}
           {{- if .DictType }}
-            {{.DictType}}Options:[],
+      {{ .DictType }}Options:[],
           {{ end -}}
       {{end -}}
       formData: {
-        {{range .Fields}}{{.FieldJson}}:null,{{ end }}
+            {{range .Fields}}
+            {{- if eq .FieldType "bool" -}}
+               {{.FieldJson}}:false,
+            {{ end -}}
+            {{- if eq .FieldType "string" -}}
+               {{.FieldJson}}:"",
+            {{ end -}}
+            {{- if eq .FieldType "int" -}}
+               {{.FieldJson}}:0,
+            {{ end -}}
+            {{- if eq .FieldType "time.Time" -}}
+               {{.FieldJson}}:new Date(),
+            {{ end -}}
+            {{- if eq .FieldType "float64" -}}
+               {{.FieldJson}}:0,
+            {{ end -}}
+            {{ end }}
       }
     };
   },
@@ -192,8 +233,23 @@ export default {
     closeDialog() {
       this.dialogFormVisible = false;
       this.formData = {
-        {{range .Fields}}
-          {{.FieldJson}}:null,{{ end }}
+          {{range .Fields}}
+          {{- if eq .FieldType "bool" -}}
+             {{.FieldJson}}:false,
+          {{ end -}}
+          {{- if eq .FieldType "string" -}}
+             {{.FieldJson}}:"",
+          {{ end -}}
+          {{- if eq .FieldType "int" -}}
+             {{.FieldJson}}:0,
+          {{ end -}}
+          {{- if eq .FieldType "time.Time" -}}
+             {{.FieldJson}}:new Date(),
+          {{ end -}}
+          {{- if eq .FieldType "float64" -}}
+             {{.FieldJson}}:0,
+          {{ end -}}
+          {{ end }}
       };
     },
     async delete{{.StructName}}(row) {
@@ -236,11 +292,11 @@ export default {
   },
   async created() {
     await this.getTableData();
-  {{- range .Fields -}}
-    {{- if .DictType -}}
-      await this.getDict("{{.DictType}}")
-    {{- end -}}
-  {{- end -}}
+  {{ range .Fields -}}
+    {{- if .DictType }}
+    await this.getDict("{{.DictType}}");
+    {{ end -}}
+  {{- end }}
 }
 };
 </script>

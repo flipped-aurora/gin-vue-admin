@@ -1,12 +1,12 @@
 import axios from 'axios'; // 引入axios
-import { Message, Loading } from 'element-ui';
+import { Message } from 'element-ui';
 import { store } from '@/store/index'
+import context from '@/main.js'
 const service = axios.create({
     baseURL: process.env.VUE_APP_BASE_API,
     timeout: 99999
 })
 let acitveAxios = 0
-let loadingInstance
 let timer
 const showLoading = () => {
     acitveAxios++
@@ -15,7 +15,7 @@ const showLoading = () => {
     }
     timer = setTimeout(() => {
         if (acitveAxios > 0) {
-            loadingInstance = Loading.service({ fullscreen: true })
+            context.$bus.emit("showLoading")
         }
     }, 400);
 }
@@ -24,13 +24,15 @@ const closeLoading = () => {
         acitveAxios--
         if (acitveAxios <= 0) {
             clearTimeout(timer)
-            loadingInstance && loadingInstance.close()
+            context.$bus.emit("closeLoading")
         }
     }
     //http request 拦截器
 service.interceptors.request.use(
     config => {
-        showLoading()
+        if (!config.donNotShowLoading) {
+            showLoading()
+        }
         const token = store.getters['user/token']
         const user = store.getters['user/userInfo']
         config.data = JSON.stringify(config.data);
@@ -48,7 +50,7 @@ service.interceptors.request.use(
             message: error,
             type: 'error'
         })
-        return Promise.reject(error);
+        return error;
     }
 );
 
@@ -71,7 +73,7 @@ service.interceptors.response.use(
             if (response.data.data && response.data.data.reload) {
                 store.commit('user/LoginOut')
             }
-            return Promise.reject(response.data.msg)
+            return response.data.msg ? response.data : response
         }
     },
     error => {
@@ -81,7 +83,7 @@ service.interceptors.response.use(
             message: error,
             type: 'error'
         })
-        return Promise.reject(error)
+        return error
     }
 )
 

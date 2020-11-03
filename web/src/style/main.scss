@@ -1231,3 +1231,118 @@ $mainHight: 100vh;
     overflow: hidden;
     height: 60px;
   }
+  .card{
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      overflow: hidden;
+      .car-left{
+          height: 68px;
+          width: 70%;
+          float: left;
+      }
+     .car-right{
+        height: 68px;
+        width: 29%;
+        float: left;
+        .flow,
+        .user-number,
+       .feedback{
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            border-radius: 50%;
+            line-height: 24px;
+            text-align: center;
+            font-size: 13px;
+            margin-right: 5px;
+        }
+        .flow{
+            background-color: #fff7e8;
+            border-color: #feefd0;
+            color: #faad14;
+        }
+        .user-number{
+            background-color: #ecf5ff;
+            border-color: #d9ecff;
+            color: #409eff;
+        }
+        .feedback{
+            background-color: #eef9e8;
+            border-color: #dcf3d1;
+            color:#52c41a;
+        }
+        .car-item{
+            text-align: right;
+            b{
+                display: block;
+            }
+        }
+       
+     }
+     
+      .card-img{
+        width: 68px;
+        height: 68px;
+        display: inline-block;
+        float: left;
+        overflow: hidden;
+        img{
+            width: 100%;
+           height: 100%;
+            border-radius: 50%;
+        }
+    }
+    .text{
+        height: 68px;
+        margin-left: 10px;
+        float: left;
+        margin-top: 14px;
+        h4{
+            font-size: 20px;
+            color: #262626;
+            font-weight: 500;
+            white-space: nowrap;
+         word-break: break-all;
+         text-overflow: ellipsis;
+         }
+         .tips-text{
+            color: #8c8c8c;
+            margin-top: 8px;
+         }
+    }
+   
+    
+  }
+  .shadow{
+      margin: 5px 0;
+      .grid-content{
+        background-color: #fff;
+        border-radius: 4px;
+        text-align: center;
+        padding: 15px 0;
+        cursor: pointer;
+        .el-icon{
+            width: 30px;
+            height: 30px;
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+        .el-icon-user{
+            color:  #ff9c6e;
+        }
+        .el-icon-setting{
+            color: #69c0ff;
+        }
+        .el-icon-menu{
+                color: #b37feb;
+        }
+        .el-icon-cpu{
+            color:#ffd666;
+        }
+        .el-icon-document-checked{
+            color:#ff85c0;
+        }
+      }
+     
+  }

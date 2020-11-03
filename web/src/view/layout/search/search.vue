@@ -49,25 +49,5 @@ export default {
 }
 </script>
 <style lang="scss">
-.search-component {
-  display: inline-block;
-  .el-input__inner {
-    border: none;
-    border-bottom: 1px solid #606266;
-  }
-  .el-dropdown-link {
-    cursor: pointer;
-  }
-  .search-icon {
-    font-size: 20px;
-    margin-right: 14px;
-    display: inline-block;
-    vertical-align: middle;
-    box-sizing: border-box;
-    color: #606266;
-  }
-  .dropdown-group {
-    min-width: 100px;
-  }
-}
+
 </style>

@@ -847,7 +847,7 @@ li {
 .el-container {
     .admin-box {
         padding:15px;
-        margin: 115px 15px;
+        margin: 115px 15px 20px;
         border-radius: 2px;
         .button-box {
             border: none;
@@ -857,12 +857,11 @@ li {
             border-radius: 4px;
             margin-bottom: 15px;
         }
-        .el-table--border {
-            th {
-                border-left: 1px solid #e8e8e8;
-            }
-        }
+      
         .el-table {
+            thead{
+                color: $color-table-thead;
+            }
             th {
                 padding: 5px 0;
                 .cell {
@@ -1050,7 +1049,7 @@ $mainHight: 100vh;
   z-index: 999;
 }
 .admin-box {
-  min-height: calc(100vh - 240px);
+  min-height: calc(100vh - 200px);
   background-color: rgb(255, 255, 255);
   margin-top: 100px;
 }

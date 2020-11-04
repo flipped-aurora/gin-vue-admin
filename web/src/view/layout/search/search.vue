@@ -18,7 +18,7 @@
         </el-select>
       </div>
     </transition>
-    <div :style="{display:'inline-block'}">
+    <div :style="{display:'inline-block'}" class="user-box">
       <i @click="show = !show" class="el-icon-search search-icon"></i>
     </div>
   </div>

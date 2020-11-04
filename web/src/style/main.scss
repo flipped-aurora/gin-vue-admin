@@ -549,7 +549,7 @@ li {
     .el-scrollbar {
         .el-scrollbar__view {
             .el-menu-vertical {
-                background-color: #001529;
+                background-color: $bg-aside;
             }
             .el-menu-item:hover i,
             .el-menu-item:hover span {
@@ -927,7 +927,8 @@ li {
     //     line-height: 40px !important;
     // }
     .main-cont.el-main {
-        background-color: #f0f2f5;
+        background-color:$bg-main;
+      
         .menu-total {
             font-size: 22px;
             color: #838383;

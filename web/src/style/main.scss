@@ -1060,6 +1060,7 @@ $mainHight: 100vh;
   .right-box {
     text-align: center;
     vertical-align: middle;
+    margin-right: 40px;
     img {
       vertical-align: middle;
       border: 1px solid #ccc;
@@ -1087,27 +1088,17 @@ $mainHight: 100vh;
     &.el-main {
       overflow: auto;
       background: #fff;
-      // padding: 0px 10px;
-      // background: #fff;
     }
     height: $mainHight !important;
     overflow: visible;
     position: relative;
     .menu-total {
-      // z-index: 5;
-      // position: absolute;
-      // top: 10px;
-      // right: -35px;
-      margin-left: -10px;
       float: left;
       margin-top: 10px;
       width: 30px;
       height: 30px;
       line-height: 30px;
       font-size: 30px;
-      // border: 0 solid #ffffff;
-      // border-radius: 50%;
-      // background: #fff;
     }
     .aside {
       overflow: auto;
@@ -1189,6 +1180,10 @@ $mainHight: 100vh;
 
 .search-component {
     display: inline-block;
+    overflow: hidden;
+    height: 60px;
+    width: 40px;
+    text-align: center;
     .el-input__inner {
       border: none;
       border-bottom: 1px solid #606266;
@@ -1207,4 +1202,18 @@ $mainHight: 100vh;
     .dropdown-group {
       min-width: 100px;
     }
+  }
+  .transition-box{
+      overflow: hidden;
+      width: 40px;
+      text-align: center;
+  }
+  .screenfull{
+    overflow: hidden;
+    width: 40px;
+    text-align: center;
+  }
+  .el-dropdown{
+    overflow: hidden;
+    height: 60px;
   }

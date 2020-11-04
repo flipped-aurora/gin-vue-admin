@@ -32,7 +32,7 @@
                 <Screenfull class="screenfull"></Screenfull>
                 <el-dropdown>
                   <span class="header-avatar">
-                    欢迎您，<CustomPic/>
+                   <CustomPic/>
                     <span style="margin-left: 5px">{{userInfo.nickName}}</span>
                     <i class="el-icon-arrow-down"></i>
                   </span>

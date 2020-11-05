@@ -1,4 +1,3 @@
-
 /* Document
    ========================================================================== */
 
@@ -7,6 +6,7 @@
  * 1. Correct the line height in all browsers.
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
+
 @import '@/style/basics.scss';
 html {
     line-height: 1.15;
@@ -543,7 +543,6 @@ li {
 //         }
 //     }
 // }
-
 // navbar
 .aside {
     .el-scrollbar {
@@ -590,7 +589,6 @@ li {
             background-color: #ecf0f5;
             padding: 0;
         }
-       
     }
 }
 
@@ -737,18 +735,18 @@ li {
         }
     }
     .el-aside {
-            -webkit-transition: width .2s;
-            transition: width .2s;
-            width: 220px;
-            background-color: $bg-aside;
-            height: 100%;
-            position: fixed;
-            font-size: 0;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            z-index: 1001;
-            overflow: hidden;
+        -webkit-transition: width .2s;
+        transition: width .2s;
+        width: 220px;
+        background-color: $bg-aside;
+        height: 100%;
+        position: fixed;
+        font-size: 0;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1001;
+        overflow: hidden;
     }
     .mobile.hideside {
         .el-aside {
@@ -816,16 +814,12 @@ li {
 // .el-menu .el-menu--inline {
 //     background: #2c3b41;
 // }
-
 // .el-submenu .el-submenu {
 //     background-color: #000408 !important;
 // }
-
 .aside .el-scrollbar .el-scrollbar__view .el-submenu__title:hover {
     background-color: $bg-aside !important;
 }
-
-
 
 .el-menu--vertical {
     .el-menu {
@@ -846,7 +840,7 @@ li {
 // add 5.13
 .el-container {
     .admin-box {
-        padding:15px;
+        padding: 15px;
         margin: 115px 15px 20px;
         border-radius: 2px;
         .button-box {
@@ -857,9 +851,8 @@ li {
             border-radius: 4px;
             margin-bottom: 15px;
         }
-      
         .el-table {
-            thead{
+            thead {
                 color: $color-table-thead;
             }
             th {
@@ -926,8 +919,7 @@ li {
     //     line-height: 40px !important;
     // }
     .main-cont.el-main {
-        background-color:$bg-main;
-      
+        background-color: $bg-main;
         .menu-total {
             font-size: 22px;
             color: #838383;
@@ -944,7 +936,7 @@ li {
             background: #fff;
             padding: 0 6px;
             border-top: 1px solid $border-color;
-           padding: 0;
+            padding: 0;
             .el-tabs__header {
                 margin: 0px 0 0 0;
                 .el-tabs__item {
@@ -953,7 +945,7 @@ li {
                     border: none;
                     border-left: 1px solid $border-color;
                 }
-                .el-tabs__item::before{
+                .el-tabs__item::before {
                     content: "";
                     width: 9px;
                     height: 9px;
@@ -963,16 +955,15 @@ li {
                     border-radius: 50%;
                     transition: background-color .2s;
                 }
-                .el-tabs__item.is-active::before{
+                .el-tabs__item.is-active::before {
                     background-color: #409eff;
                 }
-                .el-tabs__item.is-active{
-                    background-color: rgba(64,158,255,.08);
+                .el-tabs__item.is-active {
+                    background-color: rgba(64, 158, 255, .08);
                 }
-                .el-tabs__nav{
+                .el-tabs__nav {
                     border: none;
                 }
-               
             }
         }
     }
@@ -1031,7 +1022,8 @@ li {
     }
 }
 
-.el-input-number__decrease, .el-input-number__increase{
+.el-input-number__decrease,
+.el-input-number__increase {
     position: absolute;
     z-index: 1;
     top: 6px !important;
@@ -1045,151 +1037,152 @@ li {
     font-size: 13px;
 }
 
-
-.table-button{
-    margin-right:8px !important;
+.table-button {
+    margin-right: 8px !important;
 }
-
 
 $headerHigh: 52px;
 $mainHight: 100vh;
 .dropdown-group {
-  min-width: 100px;
+    min-width: 100px;
 }
+
 .topfix {
-  position: fixed;
-  top: 0;
-  box-sizing: border-box;
-  z-index: 999;
+    position: fixed;
+    top: 0;
+    box-sizing: border-box;
+    z-index: 999;
 }
+
 .admin-box {
-  min-height: calc(100vh - 200px);
-  background-color: rgb(255, 255, 255);
-  margin-top: 100px;
+    min-height: calc(100vh - 200px);
+    background-color: rgb(255, 255, 255);
+    margin-top: 100px;
 }
+
 .el-scrollbar__wrap {
-  padding-bottom: 17px;
+    padding-bottom: 17px;
 }
+
 .layout-cont {
-  .right-box {
-    text-align: center;
-    vertical-align: middle;
-    margin-right: 40px;
-    img {
-      vertical-align: middle;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-  }
-
-  .header-cont {
-    height: $height-header;
-    background: #fff;
-  }
-  .main-cont {
-    .breadcrumb {
-      height: $height-header;
-      line-height: $height-header;
-      display: inline-block;
-      background-color: #fff;
-      padding: 0 24px;
-    }
-    .fl-right{
-        height: $height-header;
-        line-height: $height-header;
-    }
-
-    &.el-main {
-      overflow: auto;
-      background: #fff;
-    }
-    height: $mainHight !important;
-    overflow: visible;
-    position: relative;
-    .menu-total {
-      float: left;
-      margin-top: 10px;
-      width: 30px;
-      height: 30px;
-      line-height: 30px;
-      font-size: 30px;
-    }
-    .aside {
-      overflow: auto;
-      // background: #fff;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-    }
-    .el-menu-vertical {
-      height: calc(100vh - 64px) !important;
-      visibility: auto;
-      &:not(.el-menu--collapse) {
-        width: 220px;
-      }
-    }
-    .el-menu--collapse {
-      width: 54px;
-      li {
-        .el-tooltip,
-        .el-submenu__title {
-          padding: 0px 15px !important;
-        }
-      }
-    }
-    &::-webkit-scrollbar {
-      display: none;
-    }
-    &.main-left {
-      width: auto !important;
-    }
-    &.main-right {
-      .admin-title {
-        float: left;
-        font-size: 16px;
+    .right-box {
+        text-align: center;
         vertical-align: middle;
-        margin-left: 20px;
+        margin-right: 40px;
         img {
-          vertical-align: middle;
+            vertical-align: middle;
+            border: 1px solid #ccc;
+            border-radius: 6px;
         }
-        &.collapse {
-          width: 53px;
-        }
-      }
     }
-  }
-}
-.tilte {
-  min-height: 64px;
-  line-height: 64px;
-  background: $bg-aside;
-  text-align: center;
-  .logoimg {
-    width: 30px;
-    height: 30px;
-    vertical-align: middle;
-    background: #fff;
-    border-radius: 50%;
-    padding: 3px;
-  }
-  .tit-text {
-    display: inline-block;
-    color: #fff;
-    font-weight: 600;
-    font-size: 20px;
-    vertical-align: middle;
-    padding-left: 10px;
-  }
+    .header-cont {
+        height: $height-header;
+        background: #fff;
+    }
+    .main-cont {
+        .breadcrumb {
+            height: $height-header;
+            line-height: $height-header;
+            display: inline-block;
+            background-color: #fff;
+            padding: 0 24px;
+        }
+        .fl-right {
+            height: $height-header;
+            line-height: $height-header;
+        }
+        &.el-main {
+            overflow: auto;
+            background: #fff;
+        }
+        height: $mainHight !important;
+        overflow: visible;
+        position: relative;
+        .menu-total {
+            float: left;
+            margin-top: 10px;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            font-size: 30px;
+        }
+        .aside {
+            overflow: auto;
+            // background: #fff;
+            &::-webkit-scrollbar {
+                display: none;
+            }
+        }
+        .el-menu-vertical {
+            height: calc(100vh - 64px) !important;
+            visibility: auto;
+            &:not(.el-menu--collapse) {
+                width: 220px;
+            }
+        }
+        .el-menu--collapse {
+            width: 54px;
+            li {
+                .el-tooltip,
+                .el-submenu__title {
+                    padding: 0px 15px !important;
+                }
+            }
+        }
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        &.main-left {
+            width: auto !important;
+        }
+        &.main-right {
+            .admin-title {
+                float: left;
+                font-size: 16px;
+                vertical-align: middle;
+                margin-left: 20px;
+                img {
+                    vertical-align: middle;
+                }
+                &.collapse {
+                    width: 53px;
+                }
+            }
+        }
+    }
 }
 
+.tilte {
+    min-height: 64px;
+    line-height: 64px;
+    background: $bg-aside;
+    text-align: center;
+    .logoimg {
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
+        background: #fff;
+        border-radius: 50%;
+        padding: 3px;
+    }
+    .tit-text {
+        display: inline-block;
+        color: #fff;
+        font-weight: 600;
+        font-size: 20px;
+        vertical-align: middle;
+        padding-left: 10px;
+    }
+}
 
 .screenfull {
-  display: inline-block;
+    display: inline-block;
 }
-.header-avatar{
-	display: flex;
-	justify-content: center;
-	align-items: center;
+
+.header-avatar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .search-component {
@@ -1199,55 +1192,59 @@ $mainHight: 100vh;
     width: 40px;
     text-align: center;
     .el-input__inner {
-      border: none;
-      border-bottom: 1px solid #606266;
+        border: none;
+        border-bottom: 1px solid #606266;
     }
     .el-dropdown-link {
-      cursor: pointer;
+        cursor: pointer;
     }
     .search-icon {
-      font-size: $icon-size;
-      margin-right: 14px;
-      display: inline-block;
-      vertical-align: middle;
-      box-sizing: border-box;
-      color: #606266;
+        font-size: $icon-size;
+        margin-right: 14px;
+        display: inline-block;
+        vertical-align: middle;
+        box-sizing: border-box;
+        color: #606266;
     }
     .dropdown-group {
-      min-width: 100px;
+        min-width: 100px;
     }
-  }
-  .transition-box{
-      overflow: hidden;
-      width: 40px;
-      text-align: center;
-  }
-  .screenfull{
+}
+
+.transition-box {
     overflow: hidden;
     width: 40px;
     text-align: center;
-  }
-  .el-dropdown{
+}
+
+.screenfull {
+    overflow: hidden;
+    width: 40px;
+    text-align: center;
+}
+
+.el-dropdown {
     overflow: hidden;
     height: 60px;
-  }
-  .card{
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 4px;
-      overflow: hidden;
-      .car-left{
-          height: 68px;
-          width: 70%;
-          float: left;
-      }
-     .car-right{
+}
+
+.card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    .car-left {
+        height: 68px;
+        width: 70%;
+        float: left;
+    }
+    .car-right {
         height: 68px;
         width: 29%;
         float: left;
         .flow,
         .user-number,
-       .feedback{
+        .feedback {
             width: 24px;
             height: 24px;
             display: inline-block;
@@ -1257,92 +1254,88 @@ $mainHight: 100vh;
             font-size: 13px;
             margin-right: 5px;
         }
-        .flow{
+        .flow {
             background-color: #fff7e8;
             border-color: #feefd0;
             color: #faad14;
         }
-        .user-number{
+        .user-number {
             background-color: #ecf5ff;
             border-color: #d9ecff;
             color: #409eff;
         }
-        .feedback{
+        .feedback {
             background-color: #eef9e8;
             border-color: #dcf3d1;
-            color:#52c41a;
+            color: #52c41a;
         }
-        .car-item{
+        .car-item {
             text-align: right;
-            b{
+            b {
                 display: block;
             }
         }
-       
-     }
-     
-      .card-img{
+    }
+    .card-img {
         width: 68px;
         height: 68px;
         display: inline-block;
         float: left;
         overflow: hidden;
-        img{
+        img {
             width: 100%;
-           height: 100%;
+            height: 100%;
             border-radius: 50%;
         }
     }
-    .text{
+    .text {
         height: 68px;
         margin-left: 10px;
         float: left;
         margin-top: 14px;
-        h4{
+        h4 {
             font-size: 20px;
             color: #262626;
             font-weight: 500;
             white-space: nowrap;
-         word-break: break-all;
-         text-overflow: ellipsis;
-         }
-         .tips-text{
+            word-break: break-all;
+            text-overflow: ellipsis;
+        }
+        .tips-text {
             color: #8c8c8c;
             margin-top: 8px;
-         }
+        }
     }
-   
-    
-  }
-  .shadow{
-      margin: 5px 0;
-      .grid-content{
+}
+
+.shadow {
+    margin: 5px 0;
+    .grid-content {
         background-color: #fff;
         border-radius: 4px;
         text-align: center;
-        padding: 15px 0;
+        padding: 10px 0;
         cursor: pointer;
-        .el-icon{
+        .el-icon {
             width: 30px;
             height: 30px;
             font-size: 30px;
             margin-bottom: 8px;
         }
-        .el-icon-user{
-            color:  #ff9c6e;
+        .el-icon-user {
+            color: #ff9c6e;
         }
-        .el-icon-setting{
+        .el-icon-setting {
             color: #69c0ff;
         }
-        .el-icon-menu{
-                color: #b37feb;
+        .el-icon-menu {
+            color: #b37feb;
         }
-        .el-icon-cpu{
-            color:#ffd666;
+        .el-icon-cpu {
+            color: #ffd666;
         }
-        .el-icon-document-checked{
-            color:#ff85c0;
+        .el-icon-document-checked {
+            color: #ff85c0;
         }
-      }
-     
-  }
+    }
+}

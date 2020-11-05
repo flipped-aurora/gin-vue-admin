@@ -61,10 +61,10 @@
          <div class="shadow">
              <el-row :gutter="20">
                  <el-col :span="4" v-for="(card,key) in toolCards" :key="key" @click.native="toTarget(card.name)">
-                      <div class="grid-content">
+                      <el-card shadow="hover" class="grid-content">
                         <i :class="card.icon"></i>
                         <p>{{card.label}}</p>  
-                    </div>  
+                    </el-card>  
                  </el-col>
             </el-row>
          </div>
@@ -149,106 +149,6 @@ export default {
           this.$router.push({name})
       }
     },
-//   mounted() {
-//       let myChart = echarts.init(document.getElementById('main'),'macarons');
-//       // let stackMap = echarts.init(document.getElementById('stackMap'));
-//       let  option = {
-//           legend: {},
-//           tooltip: {
-//               trigger: 'axis',
-//               showContent: false
-//           },
-//           dataset: {
-//               source: [
-//                   ['product', '2012', '2013', '2014', '2015', '2016', '2017','2018','2019','2020'],
-//                   ['Matcha Latte', 41.1, 30.4, 65.1, 53.3, 83.8, 70.0,6.4, 65.2, 82.5],
-//                   ['Milk Tea', 86.5, 92.1, 85.7, 83.1, 73.4, 55.1,2, 67.1, 69.2],
-//                   ['Cheese Cocoa', 24.1, 67.2, 79.5, 86.4, 65.2, 82.5,65.1, 53.3, 83.8],
-//                   ['Walnut Brownie', 55.2, 67.1, 69.2, 72.4, 53.9, 39.1,86.5, 92.1, 85.7]
-//               ]
-//           },
-//           xAxis: {
-//               type: 'category',
-//               axisLabel: {
-//                   show: true,
-//                   textStyle: {
-//                       color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
-//                       fontSize : 14    //更改坐标轴文字大小
-//                   }
-//               },
-//               axisTick: {
-//                   show: false
-//               },
-//               axisLine:{
-//                   lineStyle:{
-//                       color:'rgb(192,192,192)' //更改坐标轴颜色
-//                   }
-//               },
-//           },
-//           yAxis: {
-//               gridIndex:0,
-//               axisLabel: {
-//                   show: true,
-//                   textStyle: {
-//                       color: 'rgb(192,192,192)',  //更改坐标轴文字颜色
-//                       fontSize: 14    //更改坐标轴文字大小
-//                   }
-//               },
-//               axisTick: {
-//                   show: false
-//               },
-//               axisLine: {
-//                   lineStyle: {
-//                       color: 'rgb(192,192,192)' //更改坐标轴颜色
-//                   }
-//               }
-//           },
-//           grid: {top: '55%'},
-//           series: [
-//               {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-//               {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-//               {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-//               {type: 'line', smooth: true, seriesLayoutBy: 'row'},
-//               {
-//                   type: 'pie',
-//                   id: 'pie',
-//                   radius: '30%',
-//                   center: ['50%', '25%'],
-//                   label: {
-//                       formatter: '{b}: {@2012} ({d}%)'
-//                   },
-//                   encode: {
-//                       itemName: 'product',
-//                       value: '2012',
-//                       tooltip: '2012'
-//                   }
-//               }
-//           ]
-//       };
-//       //点记标记点时的动效
-//       myChart.on('updateAxisPointer', function (event) {
-//           var xAxisInfo = event.axesInfo[0];
-//           if (xAxisInfo) {
-//               var dimension = xAxisInfo.value + 1;
-//               myChart.setOption({
-//                   series: {
-//                       id: 'pie',
-//                       label: {
-//                           formatter: '{b}: {@[' + dimension + ']} ({d}%)'
-//                       },
-//                       encode: {
-//                           value: dimension,
-//                           tooltip: dimension
-//                       }
-//                   }
-//               });
-//           }
-//       });
-
-//       window.addEventListener('resize',function() {myChart.resize()});
-//       myChart.setOption(option);
-
-//   }
 }
 </script>
 

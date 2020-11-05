@@ -953,12 +953,26 @@ li {
                     border: none;
                     border-left: 1px solid $border-color;
                 }
+                .el-tabs__item::before{
+                    content: "";
+                    width: 9px;
+                    height: 9px;
+                    margin-right: 8px;
+                    display: inline-block;
+                    background-color: #ddd;
+                    border-radius: 50%;
+                    transition: background-color .2s;
+                }
+                .el-tabs__item.is-active::before{
+                    background-color: #409eff;
+                }
                 .el-tabs__item.is-active{
                     background-color: rgba(64,158,255,.08);
                 }
                 .el-tabs__nav{
                     border: none;
                 }
+               
             }
         }
     }

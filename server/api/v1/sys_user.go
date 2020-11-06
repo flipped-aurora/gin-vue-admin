@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
@@ -45,13 +46,12 @@ func Login(c *gin.Context) {
 	} else {
 		response.FailWithMessage("验证码错误", c)
 	}
-
 }
 
 // 登录以后签发jwt
 func tokenNext(c *gin.Context, user model.SysUser) {
 	j := &middleware.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
-	clams := request.CustomClaims{
+	claims := request.CustomClaims{
 		UUID:        user.UUID,
 		ID:          user.ID,
 		NickName:    user.NickName,
@@ -64,7 +64,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			Issuer:    "qmPlus",                       // 签名的发行者
 		},
 	}
-	token, err := j.CreateToken(clams)
+	token, err := j.CreateToken(claims)
 	if err != nil {
 		response.FailWithMessage("获取token失败", c)
 		return
@@ -73,7 +73,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		response.OkWithData(resp.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: clams.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, c)
 		return
 	}
@@ -86,7 +86,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		response.OkWithData(resp.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: clams.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, c)
 	} else if err != nil {
 		response.FailWithMessage(fmt.Sprintf("%v", err), c)
@@ -104,7 +104,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		response.OkWithData(resp.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: clams.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, c)
 	}
 }
@@ -270,5 +270,38 @@ func SetUserInfo(c *gin.Context) {
 		response.OkWithData(gin.H{
 			"userInfo": ReqUser,
 		}, c)
+	}
+}
+
+// 从Gin的Context中获取从jwt解析出来的用户ID
+func getUserID(c *gin.Context) (uint, error) {
+	if claims, exists := c.Get("claims"); !exists {
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户ID失败, 请检查路由是否使用jwt中间件")
+		return 0, errors.New("解析失败")
+	} else {
+		waitUse := claims.(*request.CustomClaims)
+		return waitUse.ID, nil
+	}
+}
+
+// 从Gin的Context中获取从jwt解析出来的用户UUID
+func getUserUuid(c *gin.Context) (string, error) {
+	if claims, exists := c.Get("claims"); !exists {
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件")
+		return "", errors.New("解析失败")
+	} else {
+		waitUse := claims.(*request.CustomClaims)
+		return waitUse.UUID.String(), nil
+	}
+}
+
+// 从Gin的Context中获取从jwt解析出来的用户角色id
+func getUserAuthorityId(c *gin.Context) (string, error) {
+	if claims, exists := c.Get("claims"); !exists {
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件")
+		return "", errors.New("解析失败")
+	} else {
+		waitUse := claims.(*request.CustomClaims)
+		return waitUse.AuthorityId, nil
 	}
 }

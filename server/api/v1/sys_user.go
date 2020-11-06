@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/global/response"
@@ -169,7 +168,7 @@ func ChangePassword(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "页码, 页大小"
+// @Param data body request.PageInfo true "页码, 每页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserList [post]
 func GetUserList(c *gin.Context) {
@@ -274,34 +273,34 @@ func SetUserInfo(c *gin.Context) {
 }
 
 // 从Gin的Context中获取从jwt解析出来的用户ID
-func getUserID(c *gin.Context) (uint, error) {
+func getUserID(c *gin.Context) uint {
 	if claims, exists := c.Get("claims"); !exists {
 		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户ID失败, 请检查路由是否使用jwt中间件")
-		return 0, errors.New("解析失败")
+		return 0
 	} else {
 		waitUse := claims.(*request.CustomClaims)
-		return waitUse.ID, nil
+		return waitUse.ID
 	}
 }
 
 // 从Gin的Context中获取从jwt解析出来的用户UUID
-func getUserUuid(c *gin.Context) (string, error) {
+func getUserUuid(c *gin.Context) string {
 	if claims, exists := c.Get("claims"); !exists {
 		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件")
-		return "", errors.New("解析失败")
+		return ""
 	} else {
 		waitUse := claims.(*request.CustomClaims)
-		return waitUse.UUID.String(), nil
+		return waitUse.UUID.String()
 	}
 }
 
 // 从Gin的Context中获取从jwt解析出来的用户角色id
-func getUserAuthorityId(c *gin.Context) (string, error) {
+func getUserAuthorityId(c *gin.Context) string {
 	if claims, exists := c.Get("claims"); !exists {
 		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件")
-		return "", errors.New("解析失败")
+		return ""
 	} else {
 		waitUse := claims.(*request.CustomClaims)
-		return waitUse.AuthorityId, nil
+		return waitUse.AuthorityId
 	}
 }

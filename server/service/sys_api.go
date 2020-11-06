@@ -34,6 +34,28 @@ func DeleteApi(api model.SysApi) (err error) {
 	return err
 }
 
+// @title    AutoCreateApi
+// @description   delete a base api by path and method, 删除基础api
+// @param     api             model.SysApi
+// @auth                     （2020/04/05  20:22）
+// @return                    error
+
+func AutoCreateApi(api model.SysApi) (err error) {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var fApi model.SysApi
+		var txErr error
+		fxErr := tx.Where("path = ? AND method = ?", api.Path, api.Method).First(&fApi).Error
+		if errors.Is(fxErr, gorm.ErrRecordNotFound) {
+			txErr = tx.Create(&api).Error
+			if txErr != nil{
+				return txErr
+			}
+		}
+		return nil
+	})
+	return err
+}
+
 // @title    GetInfoList
 // @description   get apis by pagination, 分页获取数据
 // @auth                     （2020/04/05  20:22）

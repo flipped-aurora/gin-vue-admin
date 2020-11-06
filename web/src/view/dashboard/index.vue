@@ -29,7 +29,7 @@
                     <div class="text"><h4>早安，管理员， 请开始您一天的工作吧！</h4>
                         <p class="tips-text">
                             <i class="el-icon-sunny"></i>
-                            <span>今日晴，18℃ - 28℃，出门记得防晒哦。</span>
+                            <span>今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</span>
                         </p>
                     </div>
                  </div>
@@ -62,7 +62,7 @@
              <el-row :gutter="20">
                  <el-col :span="4" v-for="(card,key) in toolCards" :key="key" @click.native="toTarget(card.name)">
                       <el-card shadow="hover" class="grid-content">
-                        <i :class="card.icon"></i>
+                        <i :class="card.icon" :style="{color:card.color}"></i>
                         <p>{{card.label}}</p>  
                     </el-card>  
                  </el-col>
@@ -102,33 +102,39 @@ export default {
         toolCards:[
             {
                 label:"用户管理",
-                icon:"el-icon el-icon-user",
-                name:"user"
+                icon:"el-icon el-icon-monitor",
+                name:"user",
+                color:"#ff9c6e"
             },
             {
                 label:"角色管理",
                 icon:"el-icon el-icon-setting",
-                name:"authority"
+                name:"authority",
+                color:"#69c0ff"
             },
             {
                 label:"菜单管理",
                 icon:"el-icon el-icon-menu",
-                name:"menu"
+                name:"menu",
+                color:"#b37feb"
             },
             {
                 label:"代码生成器",
                 icon:"el-icon el-icon-cpu",
-                name:"autoCode"
+                name:"autoCode",
+                color:"#ffd666"
             },
             {
                 label:"表单生成器",
                 icon:"el-icon el-icon-document-checked",
-                name:"formCreate"
+                name:"formCreate",
+                color:"#ff85c0"
             },
             {
                 label:"关于我们",
                 icon:"el-icon el-icon-user",
-                name:"about"
+                name:"about",
+                color:"#5cdbd3"
             }
 
         ]

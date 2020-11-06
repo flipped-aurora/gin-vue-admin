@@ -74,7 +74,7 @@ func CreateTemp(c *gin.Context) {
 			},
 		}
 		for _, v := range apiList {
-			errC := service.CreateApi(v)
+			errC := service.AutoCreateApi(v)
 			if errC != nil {
 				c.Writer.Header().Add("success", "false")
 				c.Writer.Header().Add("msg", url.QueryEscape(fmt.Sprintf("自动化创建失败，%v，请自行清空垃圾数据", errC)))

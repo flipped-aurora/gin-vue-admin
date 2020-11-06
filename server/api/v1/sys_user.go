@@ -13,43 +13,13 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
-	"mime/multipart"
 	"time"
 )
 
 // @Tags Base
-// @Summary 用户注册账号
-// @Produce  application/json
-// @Param data body model.SysUser true "用户注册接口"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
-// @Router /user/register [post]
-func Register(c *gin.Context) {
-	var R request.RegisterStruct
-	_ = c.ShouldBindJSON(&R)
-	UserVerify := utils.Rules{
-		"Username":    {utils.NotEmpty()},
-		"NickName":    {utils.NotEmpty()},
-		"Password":    {utils.NotEmpty()},
-		"AuthorityId": {utils.NotEmpty()},
-	}
-	UserVerifyErr := utils.Verify(R, UserVerify)
-	if UserVerifyErr != nil {
-		response.FailWithMessage(UserVerifyErr.Error(), c)
-		return
-	}
-	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
-	err, userReturn := service.Register(*user)
-	if err != nil {
-		response.FailWithDetailed(response.ERROR, resp.SysUserResponse{User: userReturn}, fmt.Sprintf("%v", err), c)
-	} else {
-		response.OkDetailed(resp.SysUserResponse{User: userReturn}, "注册成功", c)
-	}
-}
-
-// @Tags Base
 // @Summary 用户登录
 // @Produce  application/json
-// @Param data body request.RegisterAndLoginStruct true "用户登录接口"
+// @Param data body request.RegisterAndLoginStruct true "用户名, 密码, 验证码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
@@ -61,8 +31,7 @@ func Login(c *gin.Context) {
 		"Username":  {utils.NotEmpty()},
 		"Password":  {utils.NotEmpty()},
 	}
-	UserVerifyErr := utils.Verify(L, UserVerify)
-	if UserVerifyErr != nil {
+	if UserVerifyErr := utils.Verify(L, UserVerify); UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -81,9 +50,7 @@ func Login(c *gin.Context) {
 
 // 登录以后签发jwt
 func tokenNext(c *gin.Context, user model.SysUser) {
-	j := &middleware.JWT{
-		SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey), // 唯一签名
-	}
+	j := &middleware.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	clams := request.CustomClaims{
 		UUID:        user.UUID,
 		ID:          user.ID,
@@ -143,10 +110,38 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 }
 
 // @Tags SysUser
+// @Summary 用户注册账号
+// @Produce  application/json
+// @Param data body model.SysUser true "用户名, 昵称, 密码, 角色ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
+// @Router /user/register [post]
+func Register(c *gin.Context) {
+	var R request.RegisterStruct
+	_ = c.ShouldBindJSON(&R)
+	UserVerify := utils.Rules{
+		"Username":    {utils.NotEmpty()},
+		"NickName":    {utils.NotEmpty()},
+		"Password":    {utils.NotEmpty()},
+		"AuthorityId": {utils.NotEmpty()},
+	}
+	if UserVerifyErr := utils.Verify(R, UserVerify); UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
+	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
+	err, userReturn := service.Register(*user)
+	if err != nil {
+		response.FailWithDetailed(response.ERROR, resp.SysUserResponse{User: userReturn}, fmt.Sprintf("%v", err), c)
+	} else {
+		response.OkDetailed(resp.SysUserResponse{User: userReturn}, "注册成功", c)
+	}
+}
+
+// @Tags SysUser
 // @Summary 用户修改密码
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body request.ChangePasswordStruct true "用户修改密码"
+// @Param data body request.ChangePasswordStruct true "用户名, 原密码, 新密码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/changePassword [put]
 func ChangePassword(c *gin.Context) {
@@ -157,8 +152,7 @@ func ChangePassword(c *gin.Context) {
 		"Password":    {utils.NotEmpty()},
 		"NewPassword": {utils.NotEmpty()},
 	}
-	UserVerifyErr := utils.Verify(params, UserVerify)
-	if UserVerifyErr != nil {
+	if UserVerifyErr := utils.Verify(params, UserVerify); UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -170,23 +164,18 @@ func ChangePassword(c *gin.Context) {
 	}
 }
 
-type UserHeaderImg struct {
-	HeaderImg multipart.File `json:"headerImg"`
-}
-
 // @Tags SysUser
 // @Summary 分页获取用户列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "分页获取用户列表"
+// @Param data body request.PageInfo true "页码, 页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserList [post]
 func GetUserList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
-	if PageVerifyErr != nil {
+	if PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"]); PageVerifyErr != nil {
 		response.FailWithMessage(PageVerifyErr.Error(), c)
 		return
 	}
@@ -208,7 +197,7 @@ func GetUserList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SetUserAuth true "设置用户权限"
+// @Param data body request.SetUserAuth true "用户UUID, 角色ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthority [post]
 func SetUserAuthority(c *gin.Context) {
@@ -218,8 +207,7 @@ func SetUserAuthority(c *gin.Context) {
 		"UUID":        {utils.NotEmpty()},
 		"AuthorityId": {utils.NotEmpty()},
 	}
-	UserVerifyErr := utils.Verify(sua, UserVerify)
-	if UserVerifyErr != nil {
+	if UserVerifyErr := utils.Verify(sua, UserVerify); UserVerifyErr != nil {
 		response.FailWithMessage(UserVerifyErr.Error(), c)
 		return
 	}
@@ -236,14 +224,13 @@ func SetUserAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.GetById true "删除用户"
+// @Param data body request.GetById true "用户ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/deleteUser [delete]
 func DeleteUser(c *gin.Context) {
 	var reqId request.GetById
 	_ = c.ShouldBindJSON(&reqId)
-	IdVerifyErr := utils.Verify(reqId, utils.CustomizeMap["IdVerify"])
-	if IdVerifyErr != nil {
+	if IdVerifyErr := utils.Verify(reqId, utils.CustomizeMap["IdVerify"]); IdVerifyErr != nil {
 		response.FailWithMessage(IdVerifyErr.Error(), c)
 		return
 	}
@@ -256,16 +243,26 @@ func DeleteUser(c *gin.Context) {
 }
 
 // @Tags SysUser
-// @Summary 删除用户
+// @Summary 设置用户信息
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysUser true "删除用户"
+// @Param data body model.SysUser true "ID, 用户名, 昵称, 头像链接"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserInfo [put]
 func SetUserInfo(c *gin.Context) {
 	var user model.SysUser
-	c.ShouldBindJSON(&user)
+	UserVerify := utils.Rules{
+		"ID":        {utils.NotEmpty()},
+		"Username":  {utils.NotEmpty()},
+		"NickName":  {utils.NotEmpty()},
+		"HeaderImg": {utils.NotEmpty()},
+	}
+	if UserVerifyErr := utils.Verify(user, UserVerify); UserVerifyErr != nil {
+		response.FailWithMessage(UserVerifyErr.Error(), c)
+		return
+	}
+	_ = c.ShouldBindJSON(&user)
 	err, ReqUser := service.SetUserInfo(user)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)

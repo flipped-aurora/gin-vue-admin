@@ -46,7 +46,7 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	}
 
 	// 生成文件路径，填充 autoCodePath 字段，readme.txt.tpl不符合规则，需要特殊处理
-	// resource/template/fe/api.js.tpl -> autoCode/fe/autoCode.PackageName/api/autoCode.PackageName.js
+	// resource/template/web/api.js.tpl -> autoCode/web/autoCode.PackageName/api/autoCode.PackageName.js
 	// resource/template/readme.txt.tpl -> autoCode/readme.txt
 	autoPath := "autoCode/"
 	for index, value := range dataList {

@@ -1066,6 +1066,8 @@ $mainHight: 100vh;
 
 .layout-cont {
     .right-box {
+        height: $height-header;
+        line-height: $height-header;
         text-align: center;
         vertical-align: middle;
         margin-right: 40px;
@@ -1088,8 +1090,8 @@ $mainHight: 100vh;
             padding: 0 24px;
         }
         .fl-right {
-            height: $height-header;
-            line-height: $height-header;
+            // height: $height-header;
+            // line-height: $height-header;
         }
         &.el-main {
             overflow: auto;

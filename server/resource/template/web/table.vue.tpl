@@ -149,11 +149,13 @@ export default {
       type: "",
       deleteVisible: false,
       multipleSelection: [],
+
       {{- range .Fields}}
           {{- if .DictType }}
       {{ .DictType }}Options:[],
           {{ end -}}
       {{end -}}
+
       formData: {
             {{range .Fields}}
             {{- if eq .FieldType "bool" -}}

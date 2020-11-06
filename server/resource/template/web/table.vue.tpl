@@ -210,6 +210,13 @@ export default {
       },
       async onDelete() {
         const ids = []
+        if(this.multipleSelection.length == 0){
+          this.$message({
+            type: 'warning',
+            message: '请选择要删除的数据'
+          })
+          return
+        }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
             ids.push(item.ID)

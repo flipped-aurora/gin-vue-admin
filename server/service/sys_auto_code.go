@@ -149,34 +149,60 @@ func GetColumn(tableName string, dbName string) (err error, Columns []request.Co
 	return err, Columns
 }
 
+//func addAutoMoveFile(data *tplData) {
+//	if strings.Contains(data.autoCodePath, "server") {
+//		if strings.Contains(data.autoCodePath, "router") {
+//			apiList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], apiList[len(apiList)-1])
+//		} else if strings.Contains(data.autoCodePath, "api") {
+//			apiList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], "v1", apiList[len(apiList)-1])
+//		} else if strings.Contains(data.autoCodePath, "service") {
+//			serviceList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join(serviceList[len(serviceList)-2], serviceList[len(serviceList)-1])
+//		} else if strings.Contains(data.autoCodePath, "model") {
+//			modelList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join(modelList[len(modelList)-2], modelList[len(modelList)-1])
+//		} else if strings.Contains(data.autoCodePath, "request") {
+//			requestList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join("model", requestList[len(requestList)-2], requestList[len(requestList)-1])
+//		}
+//	} else if strings.Contains(data.autoCodePath, "web") {
+//		if strings.Contains(data.autoCodePath, "js") {
+//			jsList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join("../", "web", "src", jsList[len(jsList)-2], jsList[len(jsList)-1])
+//		} else if strings.Contains(data.autoCodePath, "form") {
+//			formList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
+//		} else if strings.Contains(data.autoCodePath, "table") {
+//			vueList := strings.Split(data.autoCodePath, "/")
+//			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
+//		}
+//	}
+//}
+
 func addAutoMoveFile(data *tplData) {
+	dir := filepath.Dir(data.autoCodePath)
+	base := filepath.Base(data.autoCodePath)
 	if strings.Contains(data.autoCodePath, "server") {
 		if strings.Contains(data.autoCodePath, "router") {
-			apiList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], apiList[len(apiList)-1])
+			data.autoMoveFilePath = filepath.Join(dir, base)
 		} else if strings.Contains(data.autoCodePath, "api") {
-			apiList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], "v1", apiList[len(apiList)-1])
+			data.autoMoveFilePath = filepath.Join(dir, "v1", base)
 		} else if strings.Contains(data.autoCodePath, "service") {
-			serviceList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join(serviceList[len(serviceList)-2], serviceList[len(serviceList)-1])
+			data.autoMoveFilePath = filepath.Join(dir, base)
 		} else if strings.Contains(data.autoCodePath, "model") {
-			modelList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join(modelList[len(modelList)-2], modelList[len(modelList)-1])
+			data.autoMoveFilePath = filepath.Join(dir, base)
 		} else if strings.Contains(data.autoCodePath, "request") {
-			requestList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join("model", requestList[len(requestList)-2], requestList[len(requestList)-1])
+			data.autoMoveFilePath = filepath.Join("model", dir, base)
 		}
 	} else if strings.Contains(data.autoCodePath, "web") {
 		if strings.Contains(data.autoCodePath, "js") {
-			jsList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", jsList[len(jsList)-2], jsList[len(jsList)-1])
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", dir, base)
 		} else if strings.Contains(data.autoCodePath, "form") {
-			formList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Dir(dir), strings.TrimSuffix(base, filepath.Ext(base))+"From.vue")
 		} else if strings.Contains(data.autoCodePath, "table") {
-			vueList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Dir(dir), base)
 		}
 	}
 }

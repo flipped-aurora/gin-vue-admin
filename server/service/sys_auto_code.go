@@ -88,14 +88,26 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		_ = f.Close()
 	}
 
-	// 生成压缩包
-	if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
-		return err
-	}
-
-	// 移除中间文件
-	if err := os.RemoveAll(autoPath); err != nil {
-		return err
+	defer func() {
+		// 移除中间文件
+		if err := os.RemoveAll(autoPath); err != nil {
+			return
+		}
+	}()
+	if autoCode.AutoMoveFile {
+		// 判断是否需要自动转移
+		for _, value := range dataList {
+			// 转移
+			err := utils.FileMove(value.locationPath, value.autoCodePath)
+			if err != nil {
+				return err
+			}
+		}
+	} else {
+		// 打包
+		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
+			return err
+		}
 	}
 	return nil
 }

@@ -139,16 +139,16 @@ func GetDB(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /autoCode/getDatabase [get]
-func GetColume(c *gin.Context) {
+// @Router /autoCode/getColumn [get]
+func GetColumn(c *gin.Context) {
 	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
 	tableName := c.Query("tableName")
-	err, columes := service.GetColume(tableName, dbName)
+	err, columns := service.GetColumn(tableName, dbName)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("查询table失败，%v", err), c)
 	} else {
 		response.OkWithData(gin.H{
-			"columes": columes,
+			"columns": columns,
 		}, c)
 	}
 }

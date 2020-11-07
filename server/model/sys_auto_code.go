@@ -8,6 +8,7 @@ type AutoCodeStruct struct {
 	Abbreviation       string  `json:"abbreviation"`
 	Description        string  `json:"description"`
 	AutoCreateApiToSql bool    `json:"autoCreateApiToSql"`
+	AutoMoveFile       bool    `json:"autoMoveFile"`
 	Fields             []Field `json:"fields"`
 }
 

@@ -52,7 +52,7 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/autoCode/createTemp", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/autoCode/getTables", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/autoCode/getDB", V2: "GET"},
-	{PType: "p", V0: "888", V1: "/autoCode/getColume", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/autoCode/getColumn", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/sysDictionaryDetail/createSysDictionaryDetail", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/sysDictionaryDetail/deleteSysDictionaryDetail", V2: "DELETE"},
 	{PType: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},

@@ -39,7 +39,7 @@ func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, autho
 		return errors.New("存在相同角色id"), authority
 	}
 	copyInfo.Authority.Children = []model.SysAuthority{}
-	err, menus := GetMenuAuthority(copyInfo.OldAuthorityId)
+	err, menus := GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
 	var baseMenu []model.SysBaseMenu
 	for _, v := range menus {
 		intNum, _ := strconv.Atoi(v.MenuId)

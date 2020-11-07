@@ -12,9 +12,10 @@ import (
 )
 
 type tplData struct {
-	template     *template.Template
-	locationPath string
-	autoCodePath string
+	template         *template.Template
+	locationPath     string
+	autoCodePath     string
+	autoMoveFilePath string
 }
 
 // @title    CreateTemp

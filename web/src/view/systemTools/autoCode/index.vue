@@ -63,6 +63,9 @@
       <el-form-item label="自动创建api">
         <el-checkbox v-model="form.autoCreateApiToSql"></el-checkbox>
       </el-form-item>
+      <el-form-item label="自动移动文件">
+        <el-checkbox v-model="form.autoMoveFile"></el-checkbox>
+      </el-form-item>
     </el-form>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
@@ -165,6 +168,7 @@ export default {
         abbreviation: "",
         description: "",
         autoCreateApiToSql: false,
+        autoMoveFile: false,
         fields: []
       },
       rules: {

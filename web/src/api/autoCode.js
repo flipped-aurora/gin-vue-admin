@@ -59,9 +59,9 @@ export const getTable = (params) => {
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/getColume [get]
-export const getColume = (params) => {
+export const getColumn = (params) => {
     return service({
-        url: "/autoCode/getColume",
+        url: "/autoCode/getColumn",
         method: 'get',
         params,
     })

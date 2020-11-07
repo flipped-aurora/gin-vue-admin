@@ -102,8 +102,8 @@ func GetApiById(c *gin.Context) {
 	}
 	err, api := service.GetApiById(idInfo.Id)
 	if err != nil {
-		global.GVA_LOG.Error("获取数据失败!", zap.Any("err", err))
-		response.FailWithMessage("获取数据失败", c)
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithData(response.SysAPIResponse{Api: api}, c)
 	}

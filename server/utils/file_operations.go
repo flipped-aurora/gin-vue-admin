@@ -56,7 +56,11 @@ func FileMove(src string, dst string) error {
 	//		return err
 	//	}
 	//}
-	err = fileMove(src, filepath.Join(dst, filepath.Base(dst)))
+	nDst := filepath.Join(dst, filepath.Base(dst))
+	if src == nDst {
+		return nil
+	}
+	err = fileMove(src, nDst)
 	if err != nil {
 		return err
 	}

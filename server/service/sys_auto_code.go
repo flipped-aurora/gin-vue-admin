@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
@@ -101,13 +102,12 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 			addAutoMoveFile(&dataList[index])
 		}
 		for _, value := range dataList { // 移动文件
-			err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath)
-			if err != nil {
+			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
 				fmt.Println(err)
 				return err
 			}
 		}
-		return
+		return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
 		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
@@ -174,7 +174,7 @@ func addAutoMoveFile(data *tplData) {
 		} else if strings.Contains(data.autoCodePath, "form") {
 			formList := strings.Split(data.autoCodePath, "/")
 			data.autoMoveFilePath = filepath.Join("../", "web", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
-		} else if strings.Contains(data.autoCodePath, "form") {
+		} else if strings.Contains(data.autoCodePath, "table") {
 			vueList := strings.Split(data.autoCodePath, "/")
 			data.autoMoveFilePath = filepath.Join("../", "web", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
 		}

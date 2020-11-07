@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// @Tags authority
+// @Tags Authority
 // @Summary 创建角色
 // @Security ApiKeyAuth
 // @accept application/json
@@ -34,7 +34,7 @@ func CreateAuthority(c *gin.Context) {
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 拷贝角色
 // @Security ApiKeyAuth
 // @accept application/json
@@ -61,7 +61,7 @@ func CopyAuthority(c *gin.Context) {
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 删除角色
 // @Security ApiKeyAuth
 // @accept application/json
@@ -84,7 +84,7 @@ func DeleteAuthority(c *gin.Context) {
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 更新角色信息
 // @Security ApiKeyAuth
 // @accept application/json
@@ -107,7 +107,7 @@ func UpdateAuthority(c *gin.Context) {
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 分页获取角色列表
 // @Security ApiKeyAuth
 // @accept application/json
@@ -135,7 +135,7 @@ func GetAuthorityList(c *gin.Context) {
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 设置角色资源权限
 // @Security ApiKeyAuth
 // @accept application/json

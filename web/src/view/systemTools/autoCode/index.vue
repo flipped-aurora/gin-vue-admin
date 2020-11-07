@@ -36,7 +36,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getColume" type="primary">使用此表创建</el-button>
+            <el-button @click="getColumn" type="primary">使用此表创建</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -145,7 +145,7 @@ const fieldTemplate = {
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
 import { toUpperCase, toHump } from "@/utils/stringFun.js";
-import { createTemp, getDB, getTable, getColume } from "@/api/autoCode.js";
+import { createTemp, getDB, getTable, getColumn } from "@/api/autoCode.js";
 import { getDict } from "@/utils/dictionary";
 
 export default {
@@ -316,9 +316,9 @@ export default {
       }
       this.dbform.tableName = "";
     },
-    async getColume() {
+    async getColumn() {
       const gormModelList = ["id", "created_at", "updated_at", "deleted_at"];
-      const res = await getColume(this.dbform);
+      const res = await getColumn(this.dbform);
       if (res.code == 0) {
         const tbHump = toHump(this.dbform.tableName);
         this.form.structName = toUpperCase(tbHump);
@@ -328,19 +328,19 @@ export default {
         this.form.description = tbHump + "表";
         this.form.autoCreateApiToSql = true;
         this.form.fields = [];
-        res.data.columes &&
-          res.data.columes.map(item => {
-            if (!gormModelList.some(gormfd => gormfd == item.columeName)) {
-              const fbHump = toHump(item.columeName);
+        res.data.columns &&
+          res.data.columns.map(item => {
+            if (!gormModelList.some(gormfd => gormfd == item.columnName)) {
+              const fbHump = toHump(item.columnName);
               this.form.fields.push({
                 fieldName: toUpperCase(fbHump),
-                fieldDesc: item.columeComment || fbHump + "字段",
+                fieldDesc: item.columnComment || fbHump + "字段",
                 fieldType: this.fdMap[item.dataType],
                 dataType: item.dataType,
                 fieldJson: fbHump,
                 dataTypeLong: item.dataTypeLong,
-                columnName: item.columeName,
-                comment: item.columeComment,
+                columnName: item.columnName,
+                comment: item.columnComment,
                 fieldSearchType: "",
                 dictType:""
               });

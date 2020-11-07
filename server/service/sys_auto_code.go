@@ -173,10 +173,10 @@ func addAutoMoveFile(data *tplData) {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", jsList[len(jsList)-2], jsList[len(jsList)-1])
 		} else if strings.Contains(data.autoCodePath, "form") {
 			formList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join("../", "web", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
 		} else if strings.Contains(data.autoCodePath, "table") {
 			vueList := strings.Split(data.autoCodePath, "/")
-			data.autoMoveFilePath = filepath.Join("../", "web", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 )
@@ -21,9 +20,18 @@ func FileMove(src string, dst string) (err error) {
 	if err != nil {
 		return err
 	}
-	if !filepath.IsAbs(dst) && !filepath.IsAbs(src) {
-		return errors.New(dst + " or " + src + " path is not abs")
+	var revoke = false
+Redirect:
+	_, err = os.Stat(filepath.Dir(dst))
+	if err != nil {
+		err = os.MkdirAll(filepath.Dir(dst), 0755)
+		if err != nil {
+			return err
+		}
+		if !revoke {
+			revoke = true
+			goto Redirect
+		}
 	}
-	// TODO 判断文件夹是否存在,不存在mkdir
 	return os.Rename(src, dst)
 }

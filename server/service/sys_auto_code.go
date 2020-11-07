@@ -12,10 +12,9 @@ import (
 )
 
 type tplData struct {
-	template         *template.Template
-	locationPath     string
-	autoCodePath     string
-	autoMoveFilePath string
+	template     *template.Template
+	locationPath string
+	autoCodePath string
 }
 
 // @title    CreateTemp
@@ -99,7 +98,7 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		// 判断是否需要自动转移
 		for _, value := range dataList {
 			// 转移
-			err := utils.FileMove(value.locationPath, value.autoCodePath)
+			err := utils.FileMove(value.autoCodePath, utils.GetAutoPath(value.autoCodePath))
 			if err != nil {
 				return err
 			}

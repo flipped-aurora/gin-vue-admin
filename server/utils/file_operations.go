@@ -8,8 +8,6 @@ import (
 	"path/filepath"
 )
 
-// package fileOperations use File Operations
-
 // fileMove: 文件移动
 // src: 源位置 需要传入绝对路径
 // dst: 目标位置 需要传入绝对路径

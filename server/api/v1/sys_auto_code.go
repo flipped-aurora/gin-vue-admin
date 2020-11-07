@@ -84,14 +84,15 @@ func CreateTemp(c *gin.Context) {
 	}
 	err := service.CreateTemp(a)
 	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
-		os.Remove("./ginvueadmin.zip")
+		c.Writer.Header().Add("success", "false")
+		c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
+		_ = os.Remove("./ginvueadmin.zip")
 	} else {
 		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
 		c.Writer.Header().Add("Content-Type", "application/json")
 		c.Writer.Header().Add("success", "true")
 		c.File("./ginvueadmin.zip")
-		os.Remove("./ginvueadmin.zip")
+		_ = os.Remove("./ginvueadmin.zip")
 	}
 }
 

@@ -59,3 +59,8 @@ func FileMove(src string, dst string) error {
 	}
 	return err
 }
+
+// GetAutoPath 根据生成路径生成移动路径
+func GetAutoPath(path string) string {
+	return filepath.Base(filepath.Dir(path))
+}

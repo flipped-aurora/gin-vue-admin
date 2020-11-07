@@ -2,8 +2,8 @@ package middleware
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/global/response"
 	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -25,7 +25,7 @@ func CasbinHandler() gin.HandlerFunc {
 		if global.GVA_CONFIG.System.Env == "develop" || success {
 			c.Next()
 		} else {
-			response.Result(response.ERROR, gin.H{}, "权限不足", c)
+			response.FailWithDetailed(gin.H{}, "权限不足", c)
 			c.Abort()
 			return
 		}

@@ -3,7 +3,6 @@ package utils
 import (
 	"errors"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -37,8 +36,8 @@ func FileMove(src string, dst string) error {
 	if err != nil {
 		return err
 	}
-	if !oSrc.IsDir() {
-		return errors.New(fmt.Sprintf("%s is not Dir", src))
+	if oSrc.IsDir() {
+		return errors.New(fmt.Sprintf("%s is Dir", src))
 	}
 	oDst, err := os.Stat(dst)
 	if err != nil {
@@ -47,15 +46,19 @@ func FileMove(src string, dst string) error {
 	if !oDst.IsDir() {
 		return errors.New(fmt.Sprintf("%s is not Dir", dst))
 	}
-	// 遍历指定目录下所有文件
-	f, err := ioutil.ReadDir(src)
-	for _, file := range f {
-		nDst := filepath.Join(dst, file.Name())
-		nSrc := filepath.Join(src, file.Name())
-		err = fileMove(nSrc, nDst)
-		if err != nil {
-			return err
-		}
+	//// 遍历指定目录下所有文件
+	//f, err := ioutil.ReadDir(src)
+	//for _, file := range f {
+	//	nDst := filepath.Join(dst, file.Name())
+	//	nSrc := filepath.Join(src, file.Name())
+	//	err = fileMove(nSrc, nDst)
+	//	if err != nil {
+	//		return err
+	//	}
+	//}
+	err = fileMove(src, filepath.Join(dst, filepath.Base(dst)))
+	if err != nil {
+		return err
 	}
 	return err
 }

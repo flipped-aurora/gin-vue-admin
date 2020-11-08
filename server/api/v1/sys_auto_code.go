@@ -80,7 +80,9 @@ func CreateTemp(c *gin.Context) {
 	err := service.CreateTemp(a)
 	if err != nil {
 		if errors.Is(err, model.AutoMoveErr) {
-			response.Ok(c)
+			c.Writer.Header().Add("success", "false")
+			c.Writer.Header().Add("msgtype", "success")
+			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
 		} else {
 			c.Writer.Header().Add("success", "false")
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))

@@ -11,19 +11,34 @@ import (
 	"strconv"
 )
 
-// 保存文件切片路径
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SaveChunk
+//@description: 保存文件切片路径
+//@param: uploader model.ExaSimpleUploader
+//@return: err error
+
 func SaveChunk(uploader model.ExaSimpleUploader) (err error) {
 	return global.GVA_DB.Create(uploader).Error
 }
 
-// 检查文件是否已经上传过
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CheckFileMd5
+//@description: 检查文件是否已经上传过
+//@param: md5 string
+//@return: err error, uploads []model.ExaSimpleUploader, isDone bool
+
 func CheckFileMd5(md5 string) (err error, uploads []model.ExaSimpleUploader, isDone bool) {
 	err = global.GVA_DB.Find(&uploads, "identifier = ? AND is_done = ?", md5, false).Error
 	isDone = errors.Is(global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound)
 	return err, uploads, !isDone
 }
 
-// 合并文件
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: MergeFileMd5
+//@description: 合并文件
+//@param: md5 string, fileName string
+//@return: err error
+
 func MergeFileMd5(md5 string, fileName string) (err error) {
 	finishDir := "./finish/"
 	dir := "./chunk/" + md5

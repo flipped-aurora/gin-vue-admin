@@ -21,11 +21,11 @@ type tplData struct {
 	autoMoveFilePath string
 }
 
-// @title    CreateTemp
-// @description   函数的详细描述
-// @auth                     （2020/04/05  20:22）
-// @param     autoCode        model.AutoCodeStruct
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CreateTemp
+//@description: 创建代码
+//@param: model.AutoCodeStruct
+//@return: error
 
 func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	basePath := "resource/template"
@@ -116,7 +116,12 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	return nil
 }
 
-// GetAllTplFile 用来获取 pathName 文件夹下所有 tpl 文件
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetAllTplFile
+//@description: 获取 pathName 文件夹下所有 tpl 文件
+//@param: pathName string, fileList []string
+//@return: []string, error
+
 func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 	files, err := ioutil.ReadDir(pathName)
 	for _, fi := range files {
@@ -134,52 +139,48 @@ func GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 	return fileList, err
 }
 
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetTables
+//@description: 获取数据库的所有表名
+//@param: pathName string
+//@param: fileList []string
+//@return: []string, error
+
 func GetTables(dbName string) (err error, TableNames []request.TableReq) {
 	err = global.GVA_DB.Raw("select table_name as table_name from information_schema.tables where table_schema = ?", dbName).Scan(&TableNames).Error
 	return err, TableNames
 }
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetDB
+//@description: 获取数据库的所有数据库名
+//@param: pathName string
+//@param: fileList []string
+//@return: []string, error
 
 func GetDB() (err error, DBNames []request.DBReq) {
 	err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
 	return err, DBNames
 }
 
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetDB
+//@description: 获取指定数据库和指定数据表的所有字段名,类型值等
+//@param: pathName string
+//@param: fileList []string
+//@return: []string, error
+
 func GetColumn(tableName string, dbName string) (err error, Columns []request.ColumnReq) {
 	err = global.GVA_DB.Raw("SELECT COLUMN_NAME column_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT column_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columns).Error
 	return err, Columns
 }
 
-//func addAutoMoveFile(data *tplData) {
-//	if strings.Contains(data.autoCodePath, "server") {
-//		if strings.Contains(data.autoCodePath, "router") {
-//			apiList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], apiList[len(apiList)-1])
-//		} else if strings.Contains(data.autoCodePath, "api") {
-//			apiList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], "v1", apiList[len(apiList)-1])
-//		} else if strings.Contains(data.autoCodePath, "service") {
-//			serviceList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(serviceList[len(serviceList)-2], serviceList[len(serviceList)-1])
-//		} else if strings.Contains(data.autoCodePath, "model") {
-//			modelList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(modelList[len(modelList)-2], modelList[len(modelList)-1])
-//		} else if strings.Contains(data.autoCodePath, "request") {
-//			requestList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("model", requestList[len(requestList)-2], requestList[len(requestList)-1])
-//		}
-//	} else if strings.Contains(data.autoCodePath, "web") {
-//		if strings.Contains(data.autoCodePath, "js") {
-//			jsList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("../", "web", "src", jsList[len(jsList)-2], jsList[len(jsList)-1])
-//		} else if strings.Contains(data.autoCodePath, "form") {
-//			formList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
-//		} else if strings.Contains(data.autoCodePath, "table") {
-//			vueList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
-//		}
-//	}
-//}
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: addAutoMoveFile
+//@description: 生成对应的迁移文件路径
+//@param: *tplData
+//@return: null
 
 func addAutoMoveFile(data *tplData) {
 	dir := filepath.Base(filepath.Dir(data.autoCodePath))

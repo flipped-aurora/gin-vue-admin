@@ -144,7 +144,7 @@ func ChangePassword(c *gin.Context) {
 	U := &model.SysUser{Username: user.Username, Password: user.Password}
 	if err, _ := service.ChangePassword(U, user.NewPassword); err != nil {
 		global.GVA_LOG.Error("修改失败", zap.Any("err", err))
-		response.FailWithMessage("修改失败，请检查用户名密码", c)
+		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 	} else {
 		response.OkWithMessage("修改成功", c)
 	}

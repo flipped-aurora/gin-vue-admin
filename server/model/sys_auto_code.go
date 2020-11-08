@@ -1,5 +1,7 @@
 package model
 
+import "errors"
+
 // 初始版本自动化代码工具
 type AutoCodeStruct struct {
 	StructName         string  `json:"structName"`
@@ -24,3 +26,5 @@ type Field struct {
 	FieldSearchType string `json:"fieldSearchType"`
 	DictType        string `json:"dictType"`
 }
+
+var AutoMoveErr error = errors.New("创建代码成功并移动文件成功")

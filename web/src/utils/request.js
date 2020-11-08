@@ -68,7 +68,7 @@ service.interceptors.response.use(
             Message({
                 showClose: true,
                 message: response.data.msg || decodeURI(response.headers.msg),
-                type: 'error',
+                type: response.headers.messageType||'error',
             })
             if (response.data.data && response.data.data.reload) {
                 store.commit('user/LoginOut')

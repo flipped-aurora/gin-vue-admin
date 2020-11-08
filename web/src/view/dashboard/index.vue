@@ -1,27 +1,5 @@
 <template>
  <div class="big">
-     <!-- <div class="mid">
-         <el-row :gutter="32">
-             <el-col :xs="24" :sm="24" :lg="8">
-                 <div class="chart-wrapper">
-                     <raddar-chart />
-                 </div>
-             </el-col>
-             <el-col :xs="24" :sm="24" :lg="8">
-                 <div class="chart-wrapper">
-                     <stackMap />
-                 </div>
-             </el-col>
-             <el-col :xs="24" :sm="24" :lg="8">
-                 <div class="chart-wrapper">
-                     <Sunburst/>
-                 </div>
-             </el-col>
-         </el-row>
-     </div> -->
-     <!-- <div class="top">
-         <div id="main" class="chart-container"></div>
-     </div> -->
          <div class="card">
              <div class="car-left">
                  <div>
@@ -87,11 +65,6 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-// require('echarts/theme/macarons') // echarts theme
-// import RaddarChart from "./component/RaddarChart"
-// import stackMap from "./component/stackMap"
-// import Sunburst from "./component/Sunburst"
 import musicPlayer from "./component/musicPlayer"
 import TodoList from "./component/todoList"
 import { mapGetters } from 'vuex'

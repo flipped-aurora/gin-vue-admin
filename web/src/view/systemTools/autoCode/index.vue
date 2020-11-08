@@ -117,7 +117,7 @@
     <el-tag type="danger">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
-      <el-button @click="enterForm" type="primary">生成代码包</el-button>
+      <el-button @click="enterForm" type="primary">生成代码</el-button>
     </div>
     <!-- 组件弹窗 -->
     <el-dialog title="组件内容" :visible.sync="dialogFlag">
@@ -280,6 +280,17 @@ export default {
           const data = await createTemp(this.form);
           if(data.headers?.success == "false"){
             return
+          }else if(data.code == 0){
+            this.$message({
+              type: "success",
+              message: "自动化代码创建成功，并已自动迁移"
+            })
+            return
+          }else{
+             this.$message({
+              type: "success",
+              message: "自动化代码创建成功，正在下载"
+            })
           }
           const blob = new Blob([data]);
           const fileName = "ginvueadmin.zip";

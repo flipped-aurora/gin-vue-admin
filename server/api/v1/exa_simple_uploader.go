@@ -15,7 +15,7 @@ import (
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
-// TODO @Param file formData file true "断点续传插件版示例"
+// @Param file formData file true "断点续传插件版示例"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"切片创建成功"}"
 // @Router /simpleUploader/upload [post]
 func SimpleUploaderUpload(c *gin.Context) {

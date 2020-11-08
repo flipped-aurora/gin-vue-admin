@@ -8,21 +8,21 @@ import (
 	"go.uber.org/zap"
 )
 
-// @title    GetSystemConfig
-// @description   读取配置文件
-// @auth                     （2020/04/05  20:22）
-// @return    err             error
-// @return    conf            Server
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetSystemConfig
+//@description: 读取配置文件
+//@return: err error, conf config.Server
 
 func GetSystemConfig() (err error, conf config.Server) {
 	return nil, global.GVA_CONFIG
 }
 
-// @title    SetSystemConfig
-// @description   set system config, 设置配置文件
-// @auth                    （2020/04/05  20:22）
-// @param     system         model.System
-// @return    err            error
+// @description   set system config,
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetSystemConfig
+//@description: 设置配置文件
+//@param: system model.System
+//@return: err error
 
 func SetSystemConfig(system model.System) (err error) {
 	cs := utils.StructToMap(system.Config)
@@ -33,12 +33,10 @@ func SetSystemConfig(system model.System) (err error) {
 	return err
 }
 
-
-// @title    GetServerInfo
-// @description   get server info , 获取服务器信息
-// @auth                    （2020/04/05  20:22）
-// @return    server         *utils.Server
-// @return    err            error
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@function: GetServerInfo
+//@description: 获取服务器信息
+//@return: server *utils.Server, err error
 
 func GetServerInfo() (server *utils.Server, err error) {
 	var s utils.Server

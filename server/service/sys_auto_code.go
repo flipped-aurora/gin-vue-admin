@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
@@ -107,7 +106,7 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 				return err
 			}
 		}
-		return errors.New("创建代码成功并移动文件成功")
+		return model.AutoMoveErr
 	} else { // 打包
 		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
@@ -148,38 +147,6 @@ func GetColumn(tableName string, dbName string) (err error, Columns []request.Co
 	err = global.GVA_DB.Raw("SELECT COLUMN_NAME column_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT column_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columns).Error
 	return err, Columns
 }
-
-//func addAutoMoveFile(data *tplData) {
-//	if strings.Contains(data.autoCodePath, "server") {
-//		if strings.Contains(data.autoCodePath, "router") {
-//			apiList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], apiList[len(apiList)-1])
-//		} else if strings.Contains(data.autoCodePath, "api") {
-//			apiList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(apiList[len(apiList)-2], "v1", apiList[len(apiList)-1])
-//		} else if strings.Contains(data.autoCodePath, "service") {
-//			serviceList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(serviceList[len(serviceList)-2], serviceList[len(serviceList)-1])
-//		} else if strings.Contains(data.autoCodePath, "model") {
-//			modelList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join(modelList[len(modelList)-2], modelList[len(modelList)-1])
-//		} else if strings.Contains(data.autoCodePath, "request") {
-//			requestList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("model", requestList[len(requestList)-2], requestList[len(requestList)-1])
-//		}
-//	} else if strings.Contains(data.autoCodePath, "web") {
-//		if strings.Contains(data.autoCodePath, "js") {
-//			jsList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("../", "web", "src", jsList[len(jsList)-2], jsList[len(jsList)-1])
-//		} else if strings.Contains(data.autoCodePath, "form") {
-//			formList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", formList[len(formList)-3], strings.Split(formList[len(formList)-1], ".")[0]+"From.vue")
-//		} else if strings.Contains(data.autoCodePath, "table") {
-//			vueList := strings.Split(data.autoCodePath, "/")
-//			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", vueList[len(vueList)-3], vueList[len(vueList)-1])
-//		}
-//	}
-//}
 
 func addAutoMoveFile(data *tplData) {
 	dir := filepath.Base(filepath.Dir(data.autoCodePath))

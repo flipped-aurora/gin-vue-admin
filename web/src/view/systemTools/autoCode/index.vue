@@ -117,7 +117,7 @@
     <el-tag type="danger">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
-      <el-button @click="enterForm" type="primary">生成代码包</el-button>
+      <el-button @click="enterForm" type="primary">生成代码</el-button>
     </div>
     <!-- 组件弹窗 -->
     <el-dialog title="组件内容" :visible.sync="dialogFlag">
@@ -140,7 +140,7 @@ const fieldTemplate = {
   dataTypeLong: "",
   comment: "",
   fieldSearchType: "",
-  dictType:""
+  dictType: ""
 };
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
@@ -278,8 +278,13 @@ export default {
             return false;
           }
           const data = await createTemp(this.form);
-          if(data.headers?.success == "false"){
-            return
+          if (data.headers?.success == "false") {
+            return;
+          } else {
+            this.$message({
+              type: "success",
+              message: "自动化代码创建成功，正在下载"
+            });
           }
           const blob = new Blob([data]);
           const fileName = "ginvueadmin.zip";
@@ -342,14 +347,14 @@ export default {
                 columnName: item.columnName,
                 comment: item.columnComment,
                 fieldSearchType: "",
-                dictType:""
+                dictType: ""
               });
             }
           });
       }
     },
     async setFdMap() {
-      const fdTypes= ["string", "int", "bool", "float64", "time.Time"];
+      const fdTypes = ["string", "int", "bool", "float64", "time.Time"];
       fdTypes.map(async fdtype => {
         const res = await getDict(fdtype);
         res.map(item => {

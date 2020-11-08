@@ -8,6 +8,7 @@ import (
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/pkg/errors"
 	"go.uber.org/zap"
 	"net/url"
 	"os"
@@ -78,9 +79,16 @@ func CreateTemp(c *gin.Context) {
 	}
 	err := service.CreateTemp(a)
 	if err != nil {
-		c.Writer.Header().Add("success", "false")
-		c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
-		_ = os.Remove("./ginvueadmin.zip")
+		if errors.Is(err, model.AutoMoveErr) {
+			c.Writer.Header().Add("success", "false")
+			c.Writer.Header().Add("msgtype", "success")
+			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
+		} else {
+			c.Writer.Header().Add("success", "false")
+			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
+			_ = os.Remove("./ginvueadmin.zip")
+		}
+
 	} else {
 		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
 		c.Writer.Header().Add("Content-Type", "application/json")

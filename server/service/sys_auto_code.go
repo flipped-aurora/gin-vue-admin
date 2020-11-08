@@ -182,7 +182,7 @@ func GetColumn(tableName string, dbName string) (err error, Columns []request.Co
 //}
 
 func addAutoMoveFile(data *tplData) {
-	dir := filepath.Dir(data.autoCodePath)
+	dir := filepath.Base(filepath.Dir(data.autoCodePath))
 	base := filepath.Base(data.autoCodePath)
 	if strings.Contains(data.autoCodePath, "server") {
 		if strings.Contains(data.autoCodePath, "router") {

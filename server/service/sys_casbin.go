@@ -12,12 +12,11 @@ import (
 	"strings"
 )
 
-// @title    UpdateCasbin
-// @description   update casbin authority, 更新casbin权限
-// @auth                     （2020/04/05  20:22）
-// @param     authorityId      string
-// @param     casbinInfos      []CasbinInfo
-// @return                     error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: UpdateCasbin
+//@description: 更新casbin权限
+//@param: authorityId string, casbinInfos []request.CasbinInfo
+//@return: error
 
 func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
@@ -39,14 +38,11 @@ func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	return nil
 }
 
-// @title    UpdateCasbinApi
-// @description   update casbin apis, API更新随动
-// @auth                     （2020/04/05  20:22）
-// @param     oldPath          string
-// @param     newPath          string
-// @param     oldMethod        string
-// @param     newMethod        string
-// @return                     error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: UpdateCasbinApi
+//@description: API更新随动
+//@param: oldPath string, newPath string, oldMethod string, newMethod string
+//@return: error
 
 func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
 	err := global.GVA_DB.Table("casbin_rule").Model(&model.CasbinModel{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
@@ -56,11 +52,12 @@ func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod
 	return err
 }
 
-// @title    GetPolicyPathByAuthorityId
-// @description   get policy path by authorityId, 获取权限列表
-// @auth                     （2020/04/05  20:22）
-// @param     authorityId     string
-// @return                    []string
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetPolicyPathByAuthorityId
+//@description: 获取权限列表
+//@param: authorityId string
+//@return: pathMaps []request.CasbinInfo
+
 
 func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []request.CasbinInfo) {
 	e := Casbin()
@@ -74,12 +71,11 @@ func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []request.CasbinIn
 	return pathMaps
 }
 
-// @title    ClearCasbin
-// @description   清除匹配的权限
-// @auth                     （2020/04/05  20:22）
-// @param     v               int
-// @param     p               string
-// @return                    bool
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: ClearCasbin
+//@description: 清除匹配的权限
+//@param: v int, p ...string
+//@return: bool
 
 func ClearCasbin(v int, p ...string) bool {
 	e := Casbin()
@@ -88,9 +84,10 @@ func ClearCasbin(v int, p ...string) bool {
 
 }
 
-// @title    Casbin
-// @description   store to DB, 持久化到数据库  引入自定义规则
-// @auth                     （2020/04/05  20:22）
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Casbin
+//@description: 持久化到数据库  引入自定义规则
+//@return: *casbin.Enforcer
 
 func Casbin() *casbin.Enforcer {
 	admin := global.GVA_CONFIG.Mysql
@@ -101,12 +98,11 @@ func Casbin() *casbin.Enforcer {
 	return e
 }
 
-// @title    ParamsMatch
-// @description   customized rule, 自定义规则函数
-// @auth                     （2020/04/05  20:22）
-// @param     fullNameKey1    string
-// @param     key2            string
-// @return                    bool
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: ParamsMatch
+//@description: 自定义规则函数
+//@param: fullNameKey1 string, key2 string
+//@return: bool
 
 func ParamsMatch(fullNameKey1 string, key2 string) bool {
 	key1 := strings.Split(fullNameKey1, "?")[0]
@@ -114,12 +110,11 @@ func ParamsMatch(fullNameKey1 string, key2 string) bool {
 	return util.KeyMatch2(key1, key2)
 }
 
-// @title    ParamsMatchFunc
-// @description   customized function, 自定义规则函数
-// @auth                     （2020/04/05  20:22）
-// @param     args            ...interface{}
-// @return                    interface{}
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: ParamsMatchFunc
+//@description: 自定义规则函数
+//@param: args ...interface{}
+//@return: interface{}, error
 
 func ParamsMatchFunc(args ...interface{}) (interface{}, error) {
 	name1 := args[0].(string)

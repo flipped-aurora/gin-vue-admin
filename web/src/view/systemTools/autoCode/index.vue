@@ -140,7 +140,7 @@ const fieldTemplate = {
   dataTypeLong: "",
   comment: "",
   fieldSearchType: "",
-  dictType:""
+  dictType: ""
 };
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
@@ -278,19 +278,13 @@ export default {
             return false;
           }
           const data = await createTemp(this.form);
-          if(data.headers?.success == "false"){
-            return
-          }else if(data.code == 0){
+          if (data.headers?.success == "false") {
+            return;
+          } else {
             this.$message({
               type: "success",
-              message: "自动化代码创建成功，并已自动迁移"
-            })
-            return
-          }else{
-             this.$message({
-              type: "success",
               message: "自动化代码创建成功，正在下载"
-            })
+            });
           }
           const blob = new Blob([data]);
           const fileName = "ginvueadmin.zip";
@@ -353,14 +347,14 @@ export default {
                 columnName: item.columnName,
                 comment: item.columnComment,
                 fieldSearchType: "",
-                dictType:""
+                dictType: ""
               });
             }
           });
       }
     },
     async setFdMap() {
-      const fdTypes= ["string", "int", "bool", "float64", "time.Time"];
+      const fdTypes = ["string", "int", "bool", "float64", "time.Time"];
       fdTypes.map(async fdtype => {
         const res = await getDict(fdtype);
         res.map(item => {

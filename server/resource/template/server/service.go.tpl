@@ -6,67 +6,66 @@ import (
 	"gin-vue-admin/model/request"
 )
 
-// @title    Create{{.StructName}}
-// @description   create a {{.StructName}}
-// @param     {{.Abbreviation}}               model.{{.StructName}}
-// @auth                     （2020/04/05  20:22）
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Create{{.StructName}}
+//@description: 创建{{.StructName}}记录
+//@param: {{.Abbreviation}} model.{{.StructName}}
+//@return: err error
 
 func Create{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Create(&{{.Abbreviation}}).Error
 	return err
 }
 
-// @title    Delete{{.StructName}}
-// @description   delete a {{.StructName}}
-// @auth                     （2020/04/05  20:22）
-// @param     {{.Abbreviation}}               model.{{.StructName}}
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Delete{{.StructName}}
+//@description: 删除{{.StructName}}记录
+//@param: {{.Abbreviation}} model.{{.StructName}}
+//@return: err error
 
 func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Delete({{.Abbreviation}}).Error
 	return err
 }
 
-// @title    Delete{{.StructName}}ByIds
-// @description   delete {{.StructName}}s
-// @auth                     （2020/04/05  20:22）
-// @param     {{.Abbreviation}}               model.{{.StructName}}
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Delete{{.StructName}}ByIds
+//@description: 批量删除{{.StructName}}记录
+//@param: ids request.IdsReq
+//@return: err error
 
 func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in ?",ids.Ids).Error
 	return err
 }
 
-// @title    Update{{.StructName}}
-// @description   update a {{.StructName}}
-// @param     {{.Abbreviation}}          *model.{{.StructName}}
-// @auth                     （2020/04/05  20:22）
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Update{{.StructName}}
+//@description: 更新{{.StructName}}记录
+//@param: {{.Abbreviation}} *model.{{.StructName}}
+//@return: err error
 
 func Update{{.StructName}}({{.Abbreviation}} *model.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Save({{.Abbreviation}}).Error
 	return err
 }
 
-// @title    Get{{.StructName}}
-// @description   get the info of a {{.StructName}}
-// @auth                     （2020/04/05  20:22）
-// @param     id              uint
-// @return                    error
-// @return    {{.StructName}}        {{.StructName}}
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Get{{.StructName}}
+//@description: 根据id获取{{.StructName}}记录
+//@param: id uint
+//@return: err error, {{.Abbreviation}} model.{{.StructName}}
 
 func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructName}}) {
 	err = global.GVA_DB.Where("id = ?", id).First(&{{.Abbreviation}}).Error
 	return
 }
 
-// @title    Get{{.StructName}}InfoList
-// @description   get {{.StructName}} list by pagination, 分页获取{{.StructName}}
-// @auth                     （2020/04/05  20:22）
-// @param     info            PageInfo
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Get{{.StructName}}InfoList
+//@description: 分页获取{{.StructName}}记录
+//@param: info request.{{.StructName}}Search
+//@return: err error, list interface{}, total int64
 
 func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int64) {
 	limit := info.PageSize

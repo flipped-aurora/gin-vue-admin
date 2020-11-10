@@ -328,7 +328,15 @@ export default {
       if(res.code == 0){
          res.data.reworkflowProcess.nodes.map(item=>{
            if(item.assignValue){
-             item.assignValue = item.assignValue.split(",")
+             const watiUseArr = item.assignValue.split(",")
+             if(item.assignType == 'user'){
+               item.assignValue = []
+               watiUseArr.map(i => {
+                 item.assignValue.push(Number(i))
+               })
+             }else{
+                item.assignValue = watiUseArr
+             }
            }
          })
         this.demoData.nodes = res.data.reworkflowProcess.nodes

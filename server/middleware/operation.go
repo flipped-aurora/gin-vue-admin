@@ -6,13 +6,14 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/service"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func OperationRecord() gin.HandlerFunc {
@@ -62,7 +63,7 @@ func OperationRecord() gin.HandlerFunc {
 		latency := time.Now().Sub(now)
 		record.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
 		record.Status = c.Writer.Status()
-		record.Latency = latency
+		record.Latency = int64(latency)
 		record.Resp = writer.body.String()
 
 		if err := service.CreateSysOperationRecord(record); err != nil {

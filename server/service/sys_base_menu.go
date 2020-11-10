@@ -50,15 +50,37 @@ func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	upDateMap["icon"] = menu.Icon
 	upDateMap["sort"] = menu.Sort
 
-	db := global.GVA_DB.Where("id = ?", menu.ID).Find(&oldMenu)
-	if oldMenu.Name != menu.Name {
-		if !errors.Is(global.GVA_DB.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&model.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
-			global.GVA_LOG.Debug("存在相同name修改失败")
-			return errors.New("存在相同name修改失败")
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		db := tx.Where("id = ?", menu.ID).Find(&oldMenu)
+		if oldMenu.Name != menu.Name {
+			if !errors.Is(tx.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&model.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
+				global.GVA_LOG.Debug("存在相同name修改失败")
+				return errors.New("存在相同name修改失败")
+			}
 		}
-	}
-	err = global.GVA_DB.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
-	err = db.Updates(upDateMap).Error
+		err = tx.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
+		if err != nil {
+			global.GVA_LOG.Debug(err.Error())
+			return err
+		}
+		if len(menu.Parameters) > 0 {
+			for k, _ := range menu.Parameters {
+				menu.Parameters[k].SysBaseMenuID = menu.ID
+			}
+			err = tx.Create(&menu.Parameters).Error
+			if err != nil {
+				global.GVA_LOG.Debug(err.Error())
+				return err
+			}
+		}
+
+		err = db.Updates(upDateMap).Error
+		if err != nil {
+			global.GVA_LOG.Debug(err.Error())
+			return err
+		}
+		return nil
+	})
 	return err
 }
 

@@ -19,7 +19,6 @@ var doc = `{
         "description": "{{.Description}}",
         "title": "{{.Title}}",
         "contact": {},
-        "license": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
@@ -487,6 +486,17 @@ var doc = `{
                     "AutoCode"
                 ],
                 "summary": "自动代码模板",
+                "parameters": [
+                    {
+                        "description": "创建自动代码",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.AutoCodeStruct"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
@@ -1582,6 +1592,15 @@ var doc = `{
                     "SimpleUploader"
                 ],
                 "summary": "断点续传插件版示例",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "断点续传插件版示例",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"切片创建成功\"}",
@@ -2666,45 +2685,35 @@ var doc = `{
             "type": "object",
             "properties": {
                 "captcha": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Captcha"
                 },
                 "casbin": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Casbin"
                 },
                 "email": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Email"
                 },
                 "jwt": {
-                    "type": "object",
                     "$ref": "#/definitions/config.JWT"
                 },
                 "local": {
                     "description": "oss",
-                    "type": "object",
                     "$ref": "#/definitions/config.Local"
                 },
                 "mysql": {
                     "description": "gorm",
-                    "type": "object",
                     "$ref": "#/definitions/config.Mysql"
                 },
                 "qiniu": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Qiniu"
                 },
                 "redis": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Redis"
                 },
                 "system": {
-                    "type": "object",
                     "$ref": "#/definitions/config.System"
                 },
                 "zap": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Zap"
                 }
             }
@@ -2761,6 +2770,38 @@ var doc = `{
                 }
             }
         },
+        "model.AutoCodeStruct": {
+            "type": "object",
+            "properties": {
+                "abbreviation": {
+                    "type": "string"
+                },
+                "autoCreateApiToSql": {
+                    "type": "boolean"
+                },
+                "autoMoveFile": {
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/model.Field"
+                    }
+                },
+                "packageName": {
+                    "type": "string"
+                },
+                "structName": {
+                    "type": "string"
+                },
+                "tableName": {
+                    "type": "string"
+                }
+            }
+        },
         "model.ExaCustomer": {
             "type": "object",
             "properties": {
@@ -2777,7 +2818,6 @@ var doc = `{
                     "type": "integer"
                 },
                 "sysUser": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysUser"
                 },
                 "sysUserAuthorityID": {
@@ -2813,6 +2853,41 @@ var doc = `{
                     "type": "string"
                 },
                 "url": {
+                    "type": "string"
+                }
+            }
+        },
+        "model.Field": {
+            "type": "object",
+            "properties": {
+                "columnName": {
+                    "type": "string"
+                },
+                "comment": {
+                    "type": "string"
+                },
+                "dataType": {
+                    "type": "string"
+                },
+                "dataTypeLong": {
+                    "type": "string"
+                },
+                "dictType": {
+                    "type": "string"
+                },
+                "fieldDesc": {
+                    "type": "string"
+                },
+                "fieldJson": {
+                    "type": "string"
+                },
+                "fieldName": {
+                    "type": "string"
+                },
+                "fieldSearchType": {
+                    "type": "string"
+                },
+                "fieldType": {
                     "type": "string"
                 }
             }
@@ -3055,7 +3130,8 @@ var doc = `{
                     "type": "string"
                 },
                 "latency": {
-                    "type": "string"
+                    "description": "原Latency的类型为time.Duration，\n在使用swag init是报错,故修改为int64型",
+                    "type": "integer"
                 },
                 "method": {
                     "type": "string"
@@ -3073,7 +3149,6 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysUser"
                 },
                 "user_id": {
@@ -3085,7 +3160,6 @@ var doc = `{
             "type": "object",
             "properties": {
                 "authority": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysAuthority"
                 },
                 "authorityId": {
@@ -3189,7 +3263,6 @@ var doc = `{
             "type": "object",
             "properties": {
                 "config": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Server"
                 }
             }
@@ -3449,7 +3522,8 @@ var doc = `{
                     "type": "string"
                 },
                 "latency": {
-                    "type": "string"
+                    "description": "原Latency的类型为time.Duration，\n在使用swag init是报错,故修改为int64型",
+                    "type": "integer"
                 },
                 "method": {
                     "type": "string"
@@ -3473,7 +3547,6 @@ var doc = `{
                     "type": "string"
                 },
                 "user": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysUser"
                 },
                 "user_id": {
@@ -3485,7 +3558,6 @@ var doc = `{
             "type": "object",
             "properties": {
                 "authority": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysAuthority"
                 },
                 "oldAuthorityId": {

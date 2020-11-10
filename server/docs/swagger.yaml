@@ -90,36 +90,26 @@ definitions:
     properties:
       captcha:
         $ref: '#/definitions/config.Captcha'
-        type: object
       casbin:
         $ref: '#/definitions/config.Casbin'
-        type: object
       email:
         $ref: '#/definitions/config.Email'
-        type: object
       jwt:
         $ref: '#/definitions/config.JWT'
-        type: object
       local:
         $ref: '#/definitions/config.Local'
         description: oss
-        type: object
       mysql:
         $ref: '#/definitions/config.Mysql'
         description: gorm
-        type: object
       qiniu:
         $ref: '#/definitions/config.Qiniu'
-        type: object
       redis:
         $ref: '#/definitions/config.Redis'
-        type: object
       system:
         $ref: '#/definitions/config.System'
-        type: object
       zap:
         $ref: '#/definitions/config.Zap'
-        type: object
     type: object
   config.System:
     properties:
@@ -155,6 +145,27 @@ definitions:
       stacktraceKey:
         type: string
     type: object
+  model.AutoCodeStruct:
+    properties:
+      abbreviation:
+        type: string
+      autoCreateApiToSql:
+        type: boolean
+      autoMoveFile:
+        type: boolean
+      description:
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/model.Field'
+        type: array
+      packageName:
+        type: string
+      structName:
+        type: string
+      tableName:
+        type: string
+    type: object
   model.ExaCustomer:
     properties:
       createdAt:
@@ -167,7 +178,6 @@ definitions:
         type: integer
       sysUser:
         $ref: '#/definitions/model.SysUser'
-        type: object
       sysUserAuthorityID:
         type: string
       sysUserId:
@@ -190,6 +200,29 @@ definitions:
       updatedAt:
         type: string
       url:
+        type: string
+    type: object
+  model.Field:
+    properties:
+      columnName:
+        type: string
+      comment:
+        type: string
+      dataType:
+        type: string
+      dataTypeLong:
+        type: string
+      dictType:
+        type: string
+      fieldDesc:
+        type: string
+      fieldJson:
+        type: string
+      fieldName:
+        type: string
+      fieldSearchType:
+        type: string
+      fieldType:
         type: string
     type: object
   model.SysApi:
@@ -349,7 +382,10 @@ definitions:
       ip:
         type: string
       latency:
-        type: string
+        description: |-
+          原Latency的类型为time.Duration，
+          在使用swag init是报错,故修改为int64型
+        type: integer
       method:
         type: string
       path:
@@ -362,7 +398,6 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/model.SysUser'
-        type: object
       user_id:
         type: integer
     type: object
@@ -370,7 +405,6 @@ definitions:
     properties:
       authority:
         $ref: '#/definitions/model.SysAuthority'
-        type: object
       authorityId:
         type: string
       createdAt:
@@ -442,7 +476,6 @@ definitions:
     properties:
       config:
         $ref: '#/definitions/config.Server'
-        type: object
     type: object
   request.AddMenuAuthorityInfo:
     properties:
@@ -610,7 +643,10 @@ definitions:
       ip:
         type: string
       latency:
-        type: string
+        description: |-
+          原Latency的类型为time.Duration，
+          在使用swag init是报错,故修改为int64型
+        type: integer
       method:
         type: string
       page:
@@ -627,7 +663,6 @@ definitions:
         type: string
       user:
         $ref: '#/definitions/model.SysUser'
-        type: object
       user_id:
         type: integer
     type: object
@@ -635,14 +670,12 @@ definitions:
     properties:
       authority:
         $ref: '#/definitions/model.SysAuthority'
-        type: object
       oldAuthorityId:
         type: string
     type: object
 info:
   contact: {}
   description: This is a sample Server pets
-  license: {}
   title: Swagger Example API
   version: 0.0.1
 paths:
@@ -919,6 +952,13 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: 创建自动代码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.AutoCodeStruct'
       produces:
       - application/json
       responses:
@@ -1581,6 +1621,12 @@ paths:
     post:
       consumes:
       - multipart/form-data
+      parameters:
+      - description: 断点续传插件版示例
+        in: formData
+        name: file
+        required: true
+        type: file
       produces:
       - application/json
       responses:

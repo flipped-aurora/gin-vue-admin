@@ -7,22 +7,22 @@ import (
 	"gorm.io/gorm"
 )
 
-// @title    CreateWorkflowProcess
-// @description   create a WorkflowProcess
-// @param     workflowProcess               model.WorkflowProcess
-// @auth                     （2020/04/05  20:22）
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CreateWorkflowProcess
+//@description: 创建工作流相关信息
+//@param: workflowProcess model.WorkflowProcess
+//@return: err error
 
 func CreateWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 	err = global.GVA_DB.Create(&workflowProcess).Error
 	return err
 }
 
-// @title    DeleteWorkflowProcess
-// @description   delete a WorkflowProcess
-// @auth                     （2020/04/05  20:22）
-// @param     workflowProcess               model.WorkflowProcess
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: DeleteWorkflowProcess
+//@description: 删除工作流相关信息
+//@param: workflowProcess model.WorkflowProcess
+//@return: err error
 
 func DeleteWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -49,22 +49,22 @@ func DeleteWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 	return err
 }
 
-// @title    DeleteWorkflowProcessByIds
-// @description   delete WorkflowProcesss
-// @auth                     （2020/04/05  20:22）
-// @param     workflowProcess               model.WorkflowProcess
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CreateWorkflowProcess
+//@description: 批量删除工作流信息（暂未启用）
+//@param: ids request.IdsReq
+//@return: err error
 
 func DeleteWorkflowProcessByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.WorkflowProcess{}, "id in ?", ids.Ids).Error
 	return err
 }
 
-// @title    UpdateWorkflowProcess
-// @description   update a WorkflowProcess
-// @param     workflowProcess          *model.WorkflowProcess
-// @auth                     （2020/04/05  20:22）
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: UpdateWorkflowProcess
+//@description: 更新工作流相关信息
+//@param: workflowProcess *model.WorkflowProcess
+//@return: err error
 
 func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
@@ -106,23 +106,22 @@ func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
 	})
 }
 
-// @title    GetWorkflowProcess
-// @description   get the info of a WorkflowProcess
-// @auth                     （2020/04/05  20:22）
-// @param     id              uint
-// @return                    error
-// @return    WorkflowProcess        WorkflowProcess
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetWorkflowProcess
+//@description: 获取工作流相关信息
+//@param: id string
+//@return: err error
 
 func GetWorkflowProcess(id string) (err error, workflowProcess model.WorkflowProcess) {
 	err = global.GVA_DB.Preload("Nodes").Preload("Edges").Where("id = ?", id).First(&workflowProcess).Error
 	return
 }
 
-// @title    GetWorkflowProcessInfoList
-// @description   get WorkflowProcess list by pagination, 分页获取WorkflowProcess
-// @auth                     （2020/04/05  20:22）
-// @param     info            PageInfo
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetWorkflowProcessInfoList
+//@description: 获取工作流列表
+//@param: info request.WorkflowProcessSearch
+//@return: err error, list interface{}, total int64
 
 func GetWorkflowProcessInfoList(info request.WorkflowProcessSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize

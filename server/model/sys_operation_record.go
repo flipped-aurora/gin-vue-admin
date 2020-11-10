@@ -12,6 +12,8 @@ type SysOperationRecord struct {
 	Method       string        `json:"method" form:"method" gorm:"column:method;comment:请求方法"`
 	Path         string        `json:"path" form:"path" gorm:"column:path;comment:请求路径"`
 	Status       int           `json:"status" form:"status" gorm:"column:status;comment:请求状态"`
+	//原Latency的类型为time.Duration，
+	//在使用swag init是报错,故修改为int64型
 	Latency      int64         `json:"latency" form:"latency" gorm:"column:latency;comment:延迟"`
 	Agent        string        `json:"agent" form:"agent" gorm:"column:agent;comment:代理"`
 	ErrorMessage string        `json:"error_message" form:"error_message" gorm:"column:error_message;comment:错误信息"`

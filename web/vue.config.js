@@ -13,7 +13,7 @@ module.exports = {
     lintOnSave: process.env.NODE_ENV === 'development',
     productionSourceMap: false,
     devServer: {
-        disableHostCheck: true,
+        disableHostCheck: true, //解决“Invalid Host header”问题
         port: 8080,
         open: true,
         overlay: {

@@ -110,10 +110,21 @@ func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
 //@function: GetWorkflowProcess
 //@description: 获取工作流相关信息
 //@param: id string
-//@return: err error
+//@return: err error,workflowProcess model.WorkflowProcess
 
 func GetWorkflowProcess(id string) (err error, workflowProcess model.WorkflowProcess) {
 	err = global.GVA_DB.Preload("Nodes").Preload("Edges").Where("id = ?", id).First(&workflowProcess).Error
+	return
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetWorkflowCreateStep
+//@description: 获取工作流步骤信息
+//@param: id string
+//@return: err error, workflowNodes []model.WorkflowNode
+
+func GetWorkflowCreateStep(id string) (err error, workflowNode model.WorkflowProcess) {
+	err = global.GVA_DB.Preload("Nodes", "clazz = ?", model.START).Where("id = ?", id).First(&workflowNode).Error
 	return
 }
 

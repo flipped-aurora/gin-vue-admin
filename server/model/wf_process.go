@@ -6,6 +6,22 @@ import (
 	"time"
 )
 
+//定义clazz常量
+
+const (
+	USER_TASK     string = "userTask"
+	SCRIPT_TASK   string = "scriptTask"
+	RECEIVE_TASK  string = "receiveTask"
+	MAIL_TASK     string = "mailTask"
+	TIMER_START   string = "timerStart"
+	MESSAGE_START string = "messageStart"
+	GATEWAY       string = "gateway"
+	FLOW          string = "flow"
+	START         string = "start"
+	END           string = "end"
+	PROCESS       string = "process"
+)
+
 type WorkflowProcess struct {
 	ID          string `json:"id" form:"id" gorm:"comment:流程标识;primaryKey;unique;not null"`
 	CreatedAt   time.Time
@@ -47,6 +63,7 @@ type WorkflowNode struct {
 	DueDate           time.Time      `json:"dueDate" gorm:"comment:到期时间"`
 	AssignType        string         `json:"assignType" gorm:"comment:审批类型"`
 	AssignValue       string         `json:"assignValue" gorm:"comment:审批类型值"`
+	Success           bool           `json:"success" gorm:"comment:是否成功"`
 }
 
 type WorkflowEdge struct {

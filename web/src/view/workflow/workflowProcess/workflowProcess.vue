@@ -56,6 +56,7 @@
 
       <el-table-column label="按钮组">
         <template slot-scope="scope">
+          <el-button class="table-button" @click="useWorkflowProcess(scope.row)" size="success" >使用</el-button>
           <el-button class="table-button" @click="updateWorkflowProcess(scope.row)" size="small" type="primary">变更</el-button>
           <el-button class="table-button" @click="viewWorkflowProcess(scope.row)" size="small" type="warning">查看</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
@@ -156,6 +157,14 @@ export default {
         query: {
           id: row.id,
           type: "edit"
+        }
+      });
+    },
+    async useWorkflowProcess(row){
+      this.$router.push({
+        name: "workflowUse",
+        query: {
+          id: row.id
         }
       });
     },

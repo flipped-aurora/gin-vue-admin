@@ -98,3 +98,19 @@ export const getWorkflowProcessList = (params) => {
         params
     })
 }
+
+// @Tags WorkflowProcess
+// @Summary 用id查询工作流步骤
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.WorkflowProcess true "用id查询WorkflowProcess"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Router /workflowProcess/findWorkflowCreateStep [get]
+export const findWorkflowCreateStep = (params) => {
+    return service({
+        url: "/workflowProcess/findWorkflowCreateStep",
+        method: 'get',
+        params
+    })
+}

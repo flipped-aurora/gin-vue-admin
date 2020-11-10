@@ -1,17 +1,37 @@
 <template>
-    <div :data-clazz="model.clazz">
-        <div class="panelTitle">{{i18n['javaTask']}}</div>
-        <div class="panelBody">
-            <DefaultDetail :model="model" :onChange="onChange" :readOnly="readOnly" />
-            <div class="panelRow">
-                <div>{{i18n['javaTask.javaClass']}}：</div>
-                <el-input style="width:90%; font-size:12px"
-                          :disabled="readOnly"
-                          :value="model.javaClass"
-                          @input="(value) => {onChange('javaClass', value)}" />
-            </div>
-        </div>
+  <div :data-clazz="model.clazz">
+    <div class="panelTitle">{{ i18n['javaTask'] }}</div>
+    <div class="panelBody">
+      <DefaultDetail :model="model" :onChange="onChange" :readOnly="readOnly" />
+      <div class="panelRow">
+        <div>{{ i18n['javaTask.javaClass'] }}：</div>
+        <el-input
+          style="width: 90%; font-size: 12px"
+          :disabled="readOnly"
+          :value="model.javaClass"
+          @input="
+            (value) => {
+              onChange('javaClass', value)
+            }
+          "
+        />
+      </div>
+      <div class="panelRow">
+        <div>步骤：</div>
+        <el-input
+          style="width: 90%; font-size: 12px"
+          :disabled="readOnly"
+          :value="model.step"
+          placeholder="请输入步骤"
+          @input="
+            (value) => {
+              onChange('step', value)
+            }
+          "
+        />
+      </div>
     </div>
+  </div>
 </template>
 <script>
   import DefaultDetail from "./DefaultDetail";

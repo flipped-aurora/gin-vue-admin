@@ -1,11 +1,18 @@
 <template>
-    <div :data-clazz="model.clazz">
-        <div class="panelTitle">{{model.clazz === 'exclusiveGateway' || model.clazz === 'gateway' ? i18n['exclusiveGateway']
-            : model.clazz === 'parallelGateway' ? i18n['parallelGateway'] : i18n['inclusiveGateway']}}</div>
-        <div class="panelBody">
-            <DefaultDetail :model="model" :onChange="onChange" :readOnly="readOnly" />
-        </div>
+  <div :data-clazz="model.clazz">
+    <div class="panelTitle">
+      {{
+        model.clazz === 'exclusiveGateway' || model.clazz === 'gateway'
+          ? i18n['exclusiveGateway']
+          : model.clazz === 'parallelGateway'
+          ? i18n['parallelGateway']
+          : i18n['inclusiveGateway']
+      }}
     </div>
+    <div class="panelBody">
+      <DefaultDetail :model="model" :onChange="onChange" :readOnly="readOnly" />
+    </div>
+  </div>
 </template>
 <script>
   import DefaultDetail from "./DefaultDetail";

@@ -105,6 +105,25 @@ func FindWorkflowProcess(c *gin.Context) {
 }
 
 // @Tags WorkflowProcess
+// @Summary 用id查询工作流步骤
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.WorkflowProcess true "用id查询WorkflowProcess"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Router /workflowProcess/findWorkflowCreateStep [get]
+func FindWorkflowCreateStep(c *gin.Context) {
+	var workflowProcess model.WorkflowProcess
+	_ = c.ShouldBindQuery(&workflowProcess)
+	err, workflow := service.GetWorkflowCreateStep(workflowProcess.ID)
+	if err != nil {
+		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
+	} else {
+		response.OkWithData(gin.H{"workflow": workflow}, c)
+	}
+}
+
+// @Tags WorkflowProcess
 // @Summary 分页获取WorkflowProcess列表
 // @Security ApiKeyAuth
 // @accept application/json

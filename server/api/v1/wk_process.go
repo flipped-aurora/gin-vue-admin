@@ -2,10 +2,9 @@ package v1
 
 import (
 	"fmt"
-	"gin-vue-admin/global/response"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 )
@@ -120,7 +119,7 @@ func GetWorkflowProcessList(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
 	} else {
-		response.OkWithData(resp.PageResult{
+		response.OkWithData(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,

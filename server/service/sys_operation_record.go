@@ -6,56 +6,57 @@ import (
 	"gin-vue-admin/model/request"
 )
 
-// @title    CreateSysOperationRecord
-// @description   create a SysOperationRecord
-// @param     sysOperationRecord               model.SysOperationRecord
-// @auth                     （2020/04/05  20:22）
-// @return    err             error
+//@author: [granty1](https://github.com/granty1)
+//@function: CreateSysOperationRecord
+//@description: 创建记录
+//@param: sysOperationRecord model.SysOperationRecord
+//@return: err error
 
 func CreateSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Create(&sysOperationRecord).Error
 	return err
 }
 
-// @title    DeleteSysOperationRecord
-// @description   delete SysOperationRecords
-// @auth                     （2020/04/05  20:22）
-// @param     sysOperationRecord               request.IdsReq
-// @return                    error
+//@author: [granty1](https://github.com/granty1)
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: DeleteSysOperationRecordByIds
+//@description: 批量删除记录
+//@param: ids request.IdsReq
+//@return: err error
 
 func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }
 
-// @title    DeleteSysOperationRecord
-// @description   delete a SysOperationRecord
-// @auth                     （2020/04/05  20:22）
-// @param     sysOperationRecord               model.SysOperationRecord
-// @return                    error
+//@author: [granty1](https://github.com/granty1)
+//@function: DeleteSysOperationRecord
+//@description: 删除操作记录
+//@param: sysOperationRecord model.SysOperationRecord
+//@return: err error
 
 func DeleteSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Delete(sysOperationRecord).Error
 	return err
 }
 
-// @title    GetSysOperationRecord
-// @description   get the info of a SysOperationRecord
-// @auth                     （2020/04/05  20:22）
-// @param     id              uint
-// @return                    error
-// @return    SysOperationRecord        SysOperationRecord
+//@author: [granty1](https://github.com/granty1)
+//@function: DeleteSysOperationRecord
+//@description: 根据id获取单条操作记录
+//@param: id uint
+//@return: err error, sysOperationRecord model.SysOperationRecord
 
 func GetSysOperationRecord(id uint) (err error, sysOperationRecord model.SysOperationRecord) {
 	err = global.GVA_DB.Where("id = ?", id).First(&sysOperationRecord).Error
 	return
 }
 
-// @title    GetSysOperationRecordInfoList
-// @description   get SysOperationRecord list by pagination, 分页获取用户列表
-// @auth                     （2020/04/05  20:22）
-// @param     info            PageInfo
-// @return                    error
+//@author: [granty1](https://github.com/granty1)
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetSysOperationRecordInfoList
+//@description: 分页获取操作记录列表
+//@param: info request.SysOperationRecordSearch
+//@return: err error, list interface{}, total int64
 
 func GetSysOperationRecordInfoList(info request.SysOperationRecordSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize

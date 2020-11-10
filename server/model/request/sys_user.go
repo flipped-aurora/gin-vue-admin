@@ -3,7 +3,7 @@ package request
 import uuid "github.com/satori/go.uuid"
 
 // User register structure
-type RegisterStruct struct {
+type Register struct {
 	Username    string `json:"userName"`
 	Password    string `json:"passWord"`
 	NickName    string `json:"nickName" gorm:"default:'QMPlusUser'"`
@@ -12,7 +12,7 @@ type RegisterStruct struct {
 }
 
 // User login structure
-type RegisterAndLoginStruct struct {
+type Login struct {
 	Username  string `json:"username"`
 	Password  string `json:"password"`
 	Captcha   string `json:"captcha"`

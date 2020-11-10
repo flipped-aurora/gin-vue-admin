@@ -136,7 +136,7 @@ import {
     find{{.StructName}},
     get{{.StructName}}List
 } from "@/api/{{.PackageName}}";  //  此处请自行替换地址
-import { formatTimeToStr } from "@/utils/data";
+import { formatTimeToStr } from "@/utils/date";
 import infoList from "@/mixins/infoList";
 export default {
   name: "{{.StructName}}",
@@ -149,11 +149,13 @@ export default {
       type: "",
       deleteVisible: false,
       multipleSelection: [],
+
       {{- range .Fields}}
           {{- if .DictType }}
       {{ .DictType }}Options:[],
           {{ end -}}
       {{end -}}
+
       formData: {
             {{range .Fields}}
             {{- if eq .FieldType "bool" -}}
@@ -208,6 +210,13 @@ export default {
       },
       async onDelete() {
         const ids = []
+        if(this.multipleSelection.length == 0){
+          this.$message({
+            type: 'warning',
+            message: '请选择要删除的数据'
+          })
+          return
+        }
         this.multipleSelection &&
           this.multipleSelection.map(item => {
             ids.push(item.ID)

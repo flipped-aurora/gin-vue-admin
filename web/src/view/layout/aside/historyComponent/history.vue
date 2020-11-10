@@ -224,10 +224,6 @@ export default {
   background: #f2f2f2;
   cursor: pointer;
 }
-.router-history {
-  background: #fff;
-  padding: 0 6px;
-  border-top: 1px solid #dcdcdc;
-}
+
 
 </style>

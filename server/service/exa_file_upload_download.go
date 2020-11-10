@@ -10,22 +10,21 @@ import (
 	"strings"
 )
 
-// @title    Upload
-// @description   创建文件上传记录
-// @param     file            model.ExaFileUploadAndDownload
-// @auth                     （2020/04/05  20:22）
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Upload
+//@description: 创建文件上传记录
+//@param: file model.ExaFileUploadAndDownload
+//@return: error
 
 func Upload(file model.ExaFileUploadAndDownload) error {
-	err := global.GVA_DB.Create(&file).Error
-	return err
+	return global.GVA_DB.Create(&file).Error
 }
 
-// @title    FindFile
-// @description   删除文件切片记录
-// @auth                     （2020/04/05  20:22）
-// @param     id              uint
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: FindFile
+//@description: 删除文件切片记录
+//@param: id uint
+//@return: error, model.ExaFileUploadAndDownload
 
 func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 	var file model.ExaFileUploadAndDownload
@@ -33,11 +32,11 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 	return err, file
 }
 
-// @title    DeleteFile
-// @description   删除文件记录
-// @auth                     （2020/04/05  20:22）
-// @param     file            model.ExaFileUploadAndDownload
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: DeleteFile
+//@description: 删除文件记录
+//@param: file model.ExaFileUploadAndDownload
+//@return: err error
 
 func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
 	var fileFromDb model.ExaFileUploadAndDownload
@@ -50,13 +49,11 @@ func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
 	return err
 }
 
-// @title    GetFileRecordInfoList
-// @description   分页获取数据
-// @auth                     （2020/04/05  20:22）
-// @param     info            PageInfo
-// @return    err             error
-// @return    list            error
-// @return    total           error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetFileRecordInfoList
+//@description: 分页获取数据
+//@param: info request.PageInfo
+//@return: err error, list interface{}, total int64
 
 func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
@@ -68,13 +65,11 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 	return err, fileLists, total
 }
 
-// @title    UploadFile
-// @description   根据配置文件判断是文件上传到本地或者七牛云
-// @auth                     （2020/04/05  20:22）
-// @param     header          *multipart.FileHeader
-// @param     noSave          string
-// @return    err             error
-// @return    file            file model.ExaFileUploadAndDownload
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: UploadFile
+//@description: 根据配置文件判断是文件上传到本地或者七牛云
+//@param: header *multipart.FileHeader, noSave string
+//@return: err error, file model.ExaFileUploadAndDownload
 
 func UploadFile(header *multipart.FileHeader, noSave string) (err error, file model.ExaFileUploadAndDownload) {
 	oss := upload.NewOss()

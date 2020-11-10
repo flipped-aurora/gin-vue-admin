@@ -36,7 +36,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button @click="getColume" type="primary">使用此表创建</el-button>
+            <el-button @click="getColumn" type="primary">使用此表创建</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -62,6 +62,9 @@
       </el-form-item>
       <el-form-item label="自动创建api">
         <el-checkbox v-model="form.autoCreateApiToSql"></el-checkbox>
+      </el-form-item>
+      <el-form-item label="自动移动文件">
+        <el-checkbox v-model="form.autoMoveFile"></el-checkbox>
       </el-form-item>
     </el-form>
     <!-- 组件列表 -->
@@ -114,7 +117,7 @@
     <el-tag type="danger">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
-      <el-button @click="enterForm" type="primary">生成代码包</el-button>
+      <el-button @click="enterForm" type="primary">生成代码</el-button>
     </div>
     <!-- 组件弹窗 -->
     <el-dialog title="组件内容" :visible.sync="dialogFlag">
@@ -137,12 +140,12 @@ const fieldTemplate = {
   dataTypeLong: "",
   comment: "",
   fieldSearchType: "",
-  dictType:""
+  dictType: ""
 };
 
 import FieldDialog from "@/view/systemTools/autoCode/component/fieldDialog.vue";
 import { toUpperCase, toHump } from "@/utils/stringFun.js";
-import { createTemp, getDB, getTable, getColume } from "@/api/autoCode.js";
+import { createTemp, getDB, getTable, getColumn } from "@/api/autoCode.js";
 import { getDict } from "@/utils/dictionary";
 
 export default {
@@ -165,6 +168,7 @@ export default {
         abbreviation: "",
         description: "",
         autoCreateApiToSql: false,
+        autoMoveFile: false,
         fields: []
       },
       rules: {
@@ -274,6 +278,14 @@ export default {
             return false;
           }
           const data = await createTemp(this.form);
+          if (data.headers?.success == "false") {
+            return;
+          } else {
+            this.$message({
+              type: "success",
+              message: "自动化代码创建成功，正在下载"
+            });
+          }
           const blob = new Blob([data]);
           const fileName = "ginvueadmin.zip";
           if ("download" in document.createElement("a")) {
@@ -309,9 +321,9 @@ export default {
       }
       this.dbform.tableName = "";
     },
-    async getColume() {
+    async getColumn() {
       const gormModelList = ["id", "created_at", "updated_at", "deleted_at"];
-      const res = await getColume(this.dbform);
+      const res = await getColumn(this.dbform);
       if (res.code == 0) {
         const tbHump = toHump(this.dbform.tableName);
         this.form.structName = toUpperCase(tbHump);
@@ -321,29 +333,29 @@ export default {
         this.form.description = tbHump + "表";
         this.form.autoCreateApiToSql = true;
         this.form.fields = [];
-        res.data.columes &&
-          res.data.columes.map(item => {
-            if (!gormModelList.some(gormfd => gormfd == item.columeName)) {
-              const fbHump = toHump(item.columeName);
+        res.data.columns &&
+          res.data.columns.map(item => {
+            if (!gormModelList.some(gormfd => gormfd == item.columnName)) {
+              const fbHump = toHump(item.columnName);
               this.form.fields.push({
                 fieldName: toUpperCase(fbHump),
-                fieldDesc: item.columeComment || fbHump + "字段",
+                fieldDesc: item.columnComment || fbHump + "字段",
                 fieldType: this.fdMap[item.dataType],
                 dataType: item.dataType,
                 fieldJson: fbHump,
                 dataTypeLong: item.dataTypeLong,
-                columnName: item.columeName,
-                comment: item.columeComment,
+                columnName: item.columnName,
+                comment: item.columnComment,
                 fieldSearchType: "",
-                dictType:""
+                dictType: ""
               });
             }
           });
       }
     },
     async setFdMap() {
-      const fdTpyes = ["string", "int", "bool", "float64", "time.Time"];
-      fdTpyes.map(async fdtype => {
+      const fdTypes = ["string", "int", "bool", "float64", "time.Time"];
+      fdTypes.map(async fdtype => {
         const res = await getDict(fdtype);
         res.map(item => {
           this.fdMap[item.label] = fdtype;

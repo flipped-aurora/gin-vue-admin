@@ -58,26 +58,26 @@ func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 				return errors.New("存在相同name修改失败")
 			}
 		}
-		err = tx.Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
-		if err != nil {
-			global.GVA_LOG.Debug(err.Error())
-			return err
+		txErr := tx.Unscoped().Delete(&model.SysBaseMenuParameter{}, "sys_base_menu_id = ?", menu.ID).Error
+		if txErr != nil {
+			global.GVA_LOG.Debug(txErr.Error())
+			return txErr
 		}
 		if len(menu.Parameters) > 0 {
 			for k, _ := range menu.Parameters {
 				menu.Parameters[k].SysBaseMenuID = menu.ID
 			}
-			err = tx.Create(&menu.Parameters).Error
-			if err != nil {
-				global.GVA_LOG.Debug(err.Error())
-				return err
+			txErr = tx.Create(&menu.Parameters).Error
+			if txErr != nil {
+				global.GVA_LOG.Debug(txErr.Error())
+				return txErr
 			}
 		}
 
-		err = db.Updates(upDateMap).Error
-		if err != nil {
-			global.GVA_LOG.Debug(err.Error())
-			return err
+		txErr = db.Updates(upDateMap).Error
+		if txErr != nil {
+			global.GVA_LOG.Debug(txErr.Error())
+			return txErr
 		}
 		return nil
 	})

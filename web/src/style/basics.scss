@@ -4,12 +4,20 @@ $icon-size:17px;
 $active-color:#1890ff;
 $bg-main:#f0f2f5;
 $border-color: #f4f4f4;
-
+$white-bg:#fff;
+$el-icon-small:30px;
+$el-icon-mini:24px;
 // aside
+$width-aside:220px; 
+$width-hideside-aside:54px;
+$width-mobile-aside:210px;
 $color-aside:rgba(255, 255, 255,.9);
 $icon-arrow-size-aside:12px;
 $width-submenu-aside:55px;
 $bg-aside:#191a23;
+$height-aside-tilte:64px;
+$height-aside-img:30px;
+$width-aside-img:30px;
 // header
 $height-header: 60px;
 // nav-scroll
@@ -22,3 +30,5 @@ $border-color-table:#ededed;
 $height-table-cell:45px;
 $color-table-tbody:#595959;
 $color-table-thead:#262626;
+// dashboard
+$height-car:68px;

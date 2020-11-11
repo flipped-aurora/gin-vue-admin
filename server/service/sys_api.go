@@ -46,7 +46,7 @@ func AutoCreateApi(api model.SysApi) (err error) {
 		fxErr := tx.Where("path = ? AND method = ?", api.Path, api.Method).First(&fApi).Error
 		if errors.Is(fxErr, gorm.ErrRecordNotFound) {
 			txErr = tx.Create(&api).Error
-			if txErr != nil{
+			if txErr != nil {
 				return txErr
 			}
 		}

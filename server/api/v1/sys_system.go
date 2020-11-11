@@ -72,7 +72,7 @@ func GetServerInfo(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 		return
-	}else {
+	} else {
 		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
 	}
 

@@ -6,7 +6,7 @@
                     <span class="card-img"> <img :src="userInfo.headerImg"  alt="" > </span>   
                     <div class="text"><h4>早安，管理员， 请开始您一天的工作吧！</h4>
                         <p class="tips-text">
-                            <i class="el-icon-sunny"></i>
+                            <i class="el-icon-sunny el-icon"></i>
                             <span>今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</span>
                         </p>
                     </div>

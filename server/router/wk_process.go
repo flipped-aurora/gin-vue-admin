@@ -14,7 +14,7 @@ func InitWorkflowProcessRouter(Router *gin.RouterGroup) {
 		WorkflowProcessRouter.DELETE("deleteWorkflowProcessByIds", v1.DeleteWorkflowProcessByIds) // 批量删除WorkflowProcess
 		WorkflowProcessRouter.PUT("updateWorkflowProcess", v1.UpdateWorkflowProcess)              // 更新WorkflowProcess
 		WorkflowProcessRouter.GET("findWorkflowProcess", v1.FindWorkflowProcess)                  // 根据ID获取WorkflowProcess
-		WorkflowProcessRouter.GET("findWorkflowCreateStep", v1.FindWorkflowCreateStep)            // 根据ID获取工作流开启步骤
+		WorkflowProcessRouter.GET("findWorkflowStep", v1.FindWorkflowStep)            // 根据ID获取工作流步骤
 		WorkflowProcessRouter.GET("getWorkflowProcessList", v1.GetWorkflowProcessList)            // 获取WorkflowProcess列表
 	}
 }

@@ -111,11 +111,11 @@ func FindWorkflowProcess(c *gin.Context) {
 // @Produce application/json
 // @Param data body model.WorkflowProcess true "用id查询WorkflowProcess"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /workflowProcess/findWorkflowCreateStep [get]
-func FindWorkflowCreateStep(c *gin.Context) {
+// @Router /workflowProcess/findWorkflowStep [get]
+func FindWorkflowStep(c *gin.Context) {
 	var workflowProcess model.WorkflowProcess
 	_ = c.ShouldBindQuery(&workflowProcess)
-	err, workflow := service.GetWorkflowCreateStep(workflowProcess.ID)
+	err, workflow := service.FindWorkflowStep(workflowProcess.ID)
 	if err != nil {
 		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
 	} else {

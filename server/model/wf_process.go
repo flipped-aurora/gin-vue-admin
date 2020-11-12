@@ -6,6 +6,24 @@ import (
 	"time"
 )
 
+
+type GVA_Workflow interface {
+	CreateWorkflow(WorkflowNode,GVA_Workflow)
+	GetBusinessType()string
+}
+
+type WorkflowFunc struct {
+	BusinessType string
+}
+
+func(w *WorkflowFunc)CreateWorkflow(node WorkflowNode,businessModel GVA_Workflow){
+
+}
+
+func(w *WorkflowFunc)GetBusinessType()(businessType string){
+	return w.BusinessType
+}
+
 //定义clazz常量
 
 const (
@@ -21,6 +39,25 @@ const (
 	END           string = "end"
 	PROCESS       string = "process"
 )
+
+type  WorkflowMove struct {
+	global.GVA_MODEL
+	WorkflowProcessID string `json:"workflowProcessID" gorm:"comment:工作流模板ID"`
+	BusinessType string `json:"businessType" gorm:"comment:业务标记"`
+	BusinessID uint `json:"businessID" gorm:"comment:业务ID"`
+	WorkflowMoveInfo []WorkflowMoveInfo `json:"workflowMoveInfo" gorm:"comment:当前流转详情"`
+	Promoter uint `json:"Promoter" gorm:"comment:当前流转发起人"`
+}
+
+
+type WorkflowMoveInfo struct {
+	global.GVA_MODEL
+	WorkflowMoveID uint `json:"workflowMoveID" gorm:"comment:关联WorkflowMove"`
+	WorkflowNodeID string `json:"workflowNodeID" gorm:"comment:流程节点ID"`
+	Params   string `json:"params" gorm:"comment:流转参数"`
+	Description string `json:"description" gorm:"comment:流转说明"`
+	Status   int `json:"status" gorm:"comment:流转状态（来自字典 0为进行中）"`
+}
 
 type WorkflowProcess struct {
 	ID          string `json:"id" form:"id" gorm:"comment:流程标识;primaryKey;unique;not null"`

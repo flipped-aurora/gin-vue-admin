@@ -82,7 +82,7 @@ var Apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 71, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/updateWorkflowProcess", "更新工作流", "workflowProcess", "PUT"},
 	{global.GVA_MODEL{ID: 72, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/findWorkflowProcess", "根据ID获取工作流", "workflowProcess", "GET"},
 	{global.GVA_MODEL{ID: 73, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getWorkflowProcessList", "获取工作流", "workflowProcess", "GET"},
-	{global.GVA_MODEL{ID: 74, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/findWorkflowCreateStep", "获取工作流步骤", "workflowProcess", "GET"},
+	{global.GVA_MODEL{ID: 74, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/findWorkflowStep", "获取工作流步骤", "workflowProcess", "GET"},
 }
 
 func InitSysApi(db *gorm.DB) (err error) {

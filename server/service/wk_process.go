@@ -123,7 +123,7 @@ func GetWorkflowProcess(id string) (err error, workflowProcess model.WorkflowPro
 //@param: id string
 //@return: err error, workflowNodes []model.WorkflowNode
 
-func GetWorkflowCreateStep(id string) (err error, workflowNode model.WorkflowProcess) {
+func FindWorkflowStep(id string) (err error, workflowNode model.WorkflowProcess) {
 	err = global.GVA_DB.Preload("Nodes", "clazz = ?", model.START).Where("id = ?", id).First(&workflowNode).Error
 	return
 }

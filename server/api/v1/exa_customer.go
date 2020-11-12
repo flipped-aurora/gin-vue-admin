@@ -2,164 +2,140 @@ package v1
 
 import (
 	"fmt"
-	"gin-vue-admin/global/response"
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// @Tags SysApi
+// @Tags ExaCustomer
 // @Summary 创建客户
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "创建客户"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Param data body model.ExaCustomer true "客户用户名, 客户手机号码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /customer/customer [post]
 func CreateExaCustomer(c *gin.Context) {
-	var cu model.ExaCustomer
-	_ = c.ShouldBindJSON(&cu)
-	CustomerVerify := utils.Rules{
-		"CustomerName":      {utils.NotEmpty()},
-		"CustomerPhoneData": {utils.NotEmpty()},
-	}
-	CustomerVerifyErr := utils.Verify(cu, CustomerVerify)
-	if CustomerVerifyErr != nil {
-		response.FailWithMessage(CustomerVerifyErr.Error(), c)
+	var customer model.ExaCustomer
+	_ = c.ShouldBindJSON(&customer)
+	if err := utils.Verify(customer, utils.CustomerVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	claims, _ := c.Get("claims")
-	waitUse := claims.(*request.CustomClaims)
-	cu.SysUserID = waitUse.ID
-	cu.SysUserAuthorityID = waitUse.AuthorityId
-	err := service.CreateExaCustomer(cu)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("删除失败：%v", err), c)
+	customer.SysUserID = getUserID(c)
+	customer.SysUserAuthorityID = getUserAuthorityId(c)
+	if err := service.CreateExaCustomer(customer); err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
+		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
 	}
 }
 
-// @Tags SysApi
+// @Tags ExaCustomer
 // @Summary 删除客户
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "删除客户"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Param data body model.ExaCustomer true "客户ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /customer/customer [delete]
 func DeleteExaCustomer(c *gin.Context) {
-	var cu model.ExaCustomer
-	_ = c.ShouldBindJSON(&cu)
-	CustomerVerify := utils.Rules{
-		"ID": {utils.NotEmpty()},
-	}
-	CustomerVerifyErr := utils.Verify(cu.GVA_MODEL, CustomerVerify)
-	if CustomerVerifyErr != nil {
-		response.FailWithMessage(CustomerVerifyErr.Error(), c)
+	var customer model.ExaCustomer
+	_ = c.ShouldBindJSON(&customer)
+	if err := utils.Verify(customer.GVA_MODEL, utils.IdVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err := service.DeleteExaCustomer(cu)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("删除失败：%v", err), c)
+	if err := service.DeleteExaCustomer(customer); err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
+		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
 	}
 }
 
-// @Tags SysApi
+// @Tags ExaCustomer
 // @Summary 更新客户信息
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "创建客户"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Param data body model.ExaCustomer true "客户ID, 客户信息"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /customer/customer [put]
 func UpdateExaCustomer(c *gin.Context) {
-	var cu model.ExaCustomer
-	_ = c.ShouldBindJSON(&cu)
-	IdCustomerVerify := utils.Rules{
-		"ID": {utils.NotEmpty()},
-	}
-	IdCustomerVerifyErr := utils.Verify(cu.GVA_MODEL, IdCustomerVerify)
-	if IdCustomerVerifyErr != nil {
-		response.FailWithMessage(IdCustomerVerifyErr.Error(), c)
+	var customer model.ExaCustomer
+	_ = c.ShouldBindJSON(&customer)
+	if err := utils.Verify(customer.GVA_MODEL, utils.IdVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	CustomerVerify := utils.Rules{
-		"CustomerName":      {utils.NotEmpty()},
-		"CustomerPhoneData": {utils.NotEmpty()},
-	}
-	CustomerVerifyErr := utils.Verify(cu, CustomerVerify)
-	if CustomerVerifyErr != nil {
-		response.FailWithMessage(CustomerVerifyErr.Error(), c)
+	if err := utils.Verify(customer, utils.CustomerVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err := service.UpdateExaCustomer(&cu)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("更新失败：%v", err), c)
+	if err := service.UpdateExaCustomer(&customer); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
+		response.FailWithMessage("更新失败!", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
 	}
 }
 
-// @Tags SysApi
+// @Tags ExaCustomer
 // @Summary 获取单一客户信息
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "获取单一客户信息"
+// @Param data body model.ExaCustomer true "客户ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [get]
 func GetExaCustomer(c *gin.Context) {
-	var cu model.ExaCustomer
-	_ = c.ShouldBindQuery(&cu)
-	IdCustomerVerify := utils.Rules{
-		"ID": {utils.NotEmpty()},
-	}
-	IdCustomerVerifyErr := utils.Verify(cu.GVA_MODEL, IdCustomerVerify)
-	if IdCustomerVerifyErr != nil {
-		response.FailWithMessage(IdCustomerVerifyErr.Error(), c)
+	var customer model.ExaCustomer
+	_ = c.ShouldBindQuery(&customer)
+	if err := utils.Verify(customer.GVA_MODEL, utils.IdVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, customer := service.GetExaCustomer(cu.ID)
+	err, data := service.GetExaCustomer(customer.ID)
 	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithData(resp.ExaCustomerResponse{Customer: customer}, c)
+		response.OkWithDetailed(response.ExaCustomerResponse{Customer: data}, "获取成功", c)
 	}
 }
 
-// @Tags SysApi
-// @Summary 获取权限客户列表
+// @Tags ExaCustomer
+// @Summary 分页获取权限客户列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "获取权限客户列表"
+// @Param data body request.PageInfo true "页码, 每页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customerList [get]
 func GetExaCustomerList(c *gin.Context) {
-	claims, _ := c.Get("claims")
-	waitUse := claims.(*request.CustomClaims)
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindQuery(&pageInfo)
-	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
-	if PageVerifyErr != nil {
-		response.FailWithMessage(PageVerifyErr.Error(), c)
+	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, customerList, total := service.GetCustomerInfoList(waitUse.AuthorityId, pageInfo)
+	err, customerList, total := service.GetCustomerInfoList(getUserAuthorityId(c), pageInfo)
 	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
 	} else {
-		response.OkWithData(resp.PageResult{
+		response.OkWithDetailed(response.PageResult{
 			List:     customerList,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, c)
+		}, "获取成功", c)
 	}
 }

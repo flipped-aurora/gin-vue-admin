@@ -106,10 +106,10 @@ export const getWorkflowProcessList = (params) => {
 // @Produce application/json
 // @Param data body model.WorkflowProcess true "用id查询WorkflowProcess"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /workflowProcess/findWorkflowCreateStep [get]
-export const findWorkflowCreateStep = (params) => {
+// @Router /workflowProcess/findWorkflowStep [get]
+export const findWorkflowStep = (params) => {
     return service({
-        url: "/workflowProcess/findWorkflowCreateStep",
+        url: "/workflowProcess/findWorkflowStep",
         method: 'get',
         params
     })

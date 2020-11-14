@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -72,12 +73,33 @@ func (t *T) AddTask() {
 }
 
 func (t *T) RunTask() {
+	// 先run服务
+	err := t.Run()
+	if err != nil {
+		return
+	}
 	for {
 		_, ok := <-t.ch
 		if !ok {
 			return
 		}
 		// todo 执行任务
+		// 先编译新的文件 然后 kill 然后执行
+		fmt.Println(kill(t.Cmd.Process.Pid))
+		err = t.Run()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 
 	}
+}
+
+// kill:
+func kill(pid int) error {
+	p, err := os.FindProcess(pid)
+	if err != nil {
+		return err
+	}
+	return p.Kill()
 }

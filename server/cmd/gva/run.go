@@ -18,6 +18,7 @@ package gva
 import (
 	"gin-vue-admin/utils"
 	"github.com/spf13/cobra"
+	"os"
 )
 
 // runCmd represents the run command
@@ -31,7 +32,8 @@ var runCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		w := utils.NewWatch()
 		t := utils.NewT()
-		go w.Watch("./", t)
+		path, _ := os.Getwd()
+		go w.Watch(path, t)
 		t.RunTask()
 	},
 }

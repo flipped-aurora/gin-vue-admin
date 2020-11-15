@@ -20,7 +20,7 @@ func NewWatch() *Watch {
 }
 
 // Watch: 监控对象
-func (w *Watch) Watch(path string) error {
+func (w *Watch) Watch(path string, t *T) error {
 	// 先转化为绝对路径
 	path, err := filepath.Abs(path)
 	if err != nil {
@@ -62,24 +62,33 @@ func (w *Watch) Watch(path string) error {
 				case even.Op&fsnotify.Create == fsnotify.Create:
 					//这里获取新创建文件的信息，如果是目录，则加入监控中
 					fmt.Println("创建文件 : ", even.Name)
+					//t.AddTask()
 					_ = w.Add(even.Name)
 				case even.Op&fsnotify.Write == fsnotify.Write:
 					fmt.Println("修改 : ", even.Name)
+					fmt.Println(filepath.Ext(even.Name))
+					if filepath.Ext(even.Name) == ".go" {
+						fmt.Println("send addtask:", even.Name)
+						t.AddTask()
+					}
 				case even.Op&fsnotify.Remove == fsnotify.Remove:
 					fmt.Println("删除 : ", even.Name)
+					//t.AddTask()
 					_ = w.Remove(even.Name)
 				case even.Op&fsnotify.Rename == fsnotify.Rename:
 					fmt.Println("重命名 : ", even.Name)
+					//t.AddTask()
 					_ = w.Remove(even.Name)
 				}
 			case err = <-w.Errors:
+				fmt.Println("79", err)
 				c <- err
 				return
 			}
 		}
 	}()
-
 	return <-c
+
 }
 
 // watchDir: 处理监控目录

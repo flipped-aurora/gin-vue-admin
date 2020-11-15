@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 	"os/exec"
-	"strings"
+	"path/filepath"
+	"runtime"
 	"sync"
 )
 
@@ -17,46 +18,31 @@ type RunTask interface {
 type T struct {
 	sync.Mutex
 
-	// ch: 获取时间channel
+	// ch: 获取事件channel
 	ch chan struct{}
 
-	// 记录pid 用于kill
-	pid int
+	closeChan chan struct{}
 
-	// 执行shell命令
-	exec.Cmd
+	// 记录process对象
+	p *os.Process
+
+	// f: 执行任务
+	f func(chan struct{}) error
 }
 
 // NewT: 实例化方法
-func NewT(path string, args []string, environment ...[]string) *T {
-	env := os.Environ()
-	if len(environment) > 0 {
-		for k, v := range environment[0] {
-			env[k] = v
-		}
-	}
+func NewT() *T {
+	return newT(nil)
+}
+func newT(f func(chan struct{}) error) *T {
 	t := &T{
-		Mutex: sync.Mutex{},
-		ch:    make(chan struct{}),
-		Cmd: exec.Cmd{
-			Path:       path,
-			Args:       []string{path},
-			Env:        env,
-			Stdin:      os.Stdin,
-			Stdout:     os.Stdout,
-			Stderr:     os.Stderr,
-			ExtraFiles: make([]*os.File, 0),
-		},
-		pid: os.Getpid(),
+		Mutex:     sync.Mutex{},
+		ch:        make(chan struct{}, 1),
+		closeChan: make(chan struct{}),
+		f:         f,
 	}
-	t.Dir, _ = os.Getwd()
-	if len(args) > 0 {
-		// Exclude of current binary path.
-		start := 0
-		if strings.EqualFold(path, args[0]) {
-			start = 1
-		}
-		t.Args = append(t.Args, args[start:]...)
+	if f == nil {
+		t.f = t.DefaultF
 	}
 	return t
 }
@@ -73,33 +59,82 @@ func (t *T) AddTask() {
 }
 
 func (t *T) RunTask() {
+	fmt.Println("进入")
+	// 这里做的make 是用于关闭上一个执行的任务
+	ch := make(chan struct{})
 	// 先run服务
-	err := t.Run()
-	if err != nil {
-		return
-	}
+	go t.f(ch)
 	for {
 		_, ok := <-t.ch
+		ch <- struct{}{}
 		if !ok {
 			return
 		}
-		// todo 执行任务
-		// 先编译新的文件 然后 kill 然后执行
-		fmt.Println(kill(t.Cmd.Process.Pid))
-		err = t.Run()
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-
+		// 等待上一个关闭
+		<-t.closeChan
+		go t.f(ch)
 	}
+
 }
 
-// kill:
-func kill(pid int) error {
-	p, err := os.FindProcess(pid)
+// DefaultF: 默认的StartFunction
+func (t *T) DefaultF(ch chan struct{}) error {
+
+	var buildCmd *exec.Cmd
+	var cmd *exec.Cmd
+
+	// 判断是否有makefile
+	_, err := os.Stat(filepath.Join("Makefile"))
+	if runtime.GOOS != "windows" && err != nil {
+		_, err := exec.LookPath("make")
+		if err == nil {
+			cmd = exec.Command("makefile")
+			goto makefile
+		}
+	}
+	// 检测系统是否有编译环境
+	_, err = exec.LookPath("go")
 	if err != nil {
 		return err
 	}
-	return p.Kill()
+	// build
+
+	switch runtime.GOOS {
+	case "windows":
+		buildCmd = exec.Command("go", "build", "-o", "gva.exe", "main.go")
+	default:
+		buildCmd = exec.Command("go", "build", "-o", "gva", "main.go")
+	}
+
+	err = buildCmd.Run()
+	fmt.Println("build 执行完成")
+	if err != nil {
+		return err
+	}
+	// 执行
+
+	switch runtime.GOOS {
+	case "windows":
+		cmd = exec.Command("gva.exe")
+	default:
+		cmd = exec.Command("./gva")
+	}
+makefile:
+	// 开始执行任务
+	err = cmd.Start()
+	if err != nil {
+		return err
+	}
+	t.p = cmd.Process
+	fmt.Println("pid", t.p.Pid)
+	go func() {
+		err = cmd.Wait()
+	}()
+	<-ch
+	// 回收资源
+	err = cmd.Process.Kill()
+	fmt.Println("kill err", err)
+	// 发送关闭完成信号
+	t.closeChan <- struct{}{}
+	return err
 }

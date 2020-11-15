@@ -16,6 +16,7 @@ limitations under the License.
 package gva
 
 import (
+	"gin-vue-admin/utils"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +29,10 @@ var runCmd = &cobra.Command{
 	which compiles and runs the go codes asynchronously when codes change.
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		// todo 未实现
+		w := utils.NewWatch()
+		t := utils.NewT()
+		go w.Watch("./", t)
+		t.RunTask()
 	},
 }
 

@@ -90,7 +90,7 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	if runtime.GOOS != "windows" && err == nil {
 		_, err := exec.LookPath("make")
 		if err == nil {
-			cmd = exec.Command("makefile")
+			cmd = exec.Command("make")
 			goto makefile
 		}
 	}

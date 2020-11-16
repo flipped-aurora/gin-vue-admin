@@ -124,12 +124,15 @@ func (w *Watch) watchFile(path string) error {
 
 // chickPower: 判断是否在可控范围内
 func chickPower(name string) bool {
-	return filepath.Ext(name) == ".go" || filepath.Ext(name) == ".yaml"
+	name = filepath.Ext(name)
+	fmt.Println(name)
+	return name == ".go" || name == ".yaml"
 }
 
 // addTask: 偏函数 简化发送任务
 func (w *Watch) addTask(t *T, name string) {
 	if chickPower(name) {
+		fmt.Println("Add Task->>>>>>")
 		t.AddTask()
 	}
 }

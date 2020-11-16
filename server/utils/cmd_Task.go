@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -85,7 +87,7 @@ func (t *T) DefaultF(ch chan struct{}) error {
 
 	// 判断是否有makefile
 	_, err := os.Stat(filepath.Join("Makefile"))
-	if runtime.GOOS != "windows" && err != nil {
+	if runtime.GOOS != "windows" && err == nil {
 		_, err := exec.LookPath("make")
 		if err == nil {
 			cmd = exec.Command("makefile")
@@ -105,12 +107,12 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	default:
 		buildCmd = exec.Command("go", "build", "-o", "gva", "main.go")
 	}
-
 	err = buildCmd.Run()
-	fmt.Println("build 执行完成")
 	if err != nil {
 		return err
 	}
+	fmt.Println("build 执行完成")
+
 	// 执行
 
 	switch runtime.GOOS {
@@ -121,15 +123,7 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	}
 makefile:
 	// 开始执行任务
-	err = cmd.Start()
-	if err != nil {
-		return err
-	}
-	t.p = cmd.Process
-	fmt.Println("pid", t.p.Pid)
-	go func() {
-		err = cmd.Wait()
-	}()
+	t.echo(cmd)
 	<-ch
 	// 回收资源
 	err = cmd.Process.Kill()
@@ -137,4 +131,30 @@ makefile:
 	// 发送关闭完成信号
 	t.closeChan <- struct{}{}
 	return err
+}
+
+// echo: 封装回显
+func (t *T) echo(cmd *exec.Cmd) error {
+	var stdoutBuf bytes.Buffer
+	stdoutIn, _ := cmd.StdoutPipe()
+	var errStdout, errStderr error
+	stdout := io.MultiWriter(os.Stdout, &stdoutBuf)
+	err := cmd.Start()
+	if err != nil {
+		return err
+	}
+	go func() {
+		_, errStdout = io.Copy(stdout, stdoutIn)
+	}()
+	t.p = cmd.Process
+	fmt.Println("pid", t.p.Pid)
+	go func() {
+		_ = cmd.Wait()
+		if errStdout != nil || errStderr != nil {
+			fmt.Printf("failed to capture stdout or stderr\n")
+		}
+		outStr := string(stdoutBuf.Bytes())
+		fmt.Printf("\nout:\n%s\n", outStr)
+	}()
+	return nil
 }

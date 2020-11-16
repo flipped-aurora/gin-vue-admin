@@ -60,6 +60,7 @@ func (t *T) AddTask() {
 		// 直接丢弃这次任务
 		return
 	}
+	fmt.Println("::::发送任务->>>>>>>>")
 	t.ch <- struct{}{}
 }
 

@@ -28,7 +28,7 @@ func CreateAuthority(c *gin.Context) {
 	}
 	if err, authBack := service.CreateAuthority(authority); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
-		response.FailWithMessage("创建失败", c)
+		response.FailWithMessage("创建失败"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
 	}
@@ -55,7 +55,7 @@ func CopyAuthority(c *gin.Context) {
 	}
 	if err, authBack := service.CopyAuthority(copyInfo); err != nil {
 		global.GVA_LOG.Error("拷贝失败!", zap.Any("err", err))
-		response.FailWithMessage("拷贝失败", c)
+		response.FailWithMessage("拷贝失败"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authBack}, "拷贝成功", c)
 	}
@@ -78,7 +78,7 @@ func DeleteAuthority(c *gin.Context) {
 	}
 	if err := service.DeleteAuthority(&authority); err != nil { // 删除角色之前需要判断是否有用户正在使用此角色
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
-		response.FailWithMessage("删除失败", c)
+		response.FailWithMessage("删除失败"+err.Error(), c)
 	} else {
 		response.OkWithMessage("删除成功", c)
 	}
@@ -101,7 +101,7 @@ func UpdateAuthority(c *gin.Context) {
 	}
 	if err, authority := service.UpdateAuthority(auth); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
-		response.FailWithMessage("更新失败", c)
+		response.FailWithMessage("更新失败"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authority}, "更新成功", c)
 	}
@@ -124,7 +124,7 @@ func GetAuthorityList(c *gin.Context) {
 	}
 	if err, list, total := service.GetAuthorityInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
-		response.FailWithMessage("获取失败", c)
+		response.FailWithMessage("获取失败"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
@@ -152,7 +152,7 @@ func SetDataAuthority(c *gin.Context) {
 	}
 	if err := service.SetDataAuthority(auth); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Any("err", err))
-		response.FailWithMessage("设置失败", c)
+		response.FailWithMessage("设置失败"+err.Error(), c)
 	} else {
 		response.OkWithMessage("设置成功", c)
 	}

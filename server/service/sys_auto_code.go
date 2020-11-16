@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -206,4 +207,66 @@ func addAutoMoveFile(data *tplData) {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)
 		}
 	}
+}
+
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@function: CreateApi
+//@description: 自动创建api数据,
+//@param: a *model.AutoCodeStruct
+//@return: error
+
+func AutoCreateApi(a *model.AutoCodeStruct) (err error) {
+	var apiList = []model.SysApi{
+		{
+			Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
+			Description: "新增" + a.Description,
+			ApiGroup:    a.Abbreviation,
+			Method:      "POST",
+		},
+		{
+			Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName,
+			Description: "删除" + a.Description,
+			ApiGroup:    a.Abbreviation,
+			Method:      "DELETE",
+		},
+		{
+			Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName + "ByIds",
+			Description: "批量删除" + a.Description,
+			ApiGroup:    a.Abbreviation,
+			Method:      "DELETE",
+		},
+		{
+			Path:        "/" + a.Abbreviation + "/" + "update" + a.StructName,
+			Description: "更新" + a.Description,
+			ApiGroup:    a.Abbreviation,
+			Method:      "PUT",
+		},
+		{
+			Path:        "/" + a.Abbreviation + "/" + "find" + a.StructName,
+			Description: "根据ID获取" + a.Description,
+			ApiGroup:    a.Abbreviation,
+			Method:      "GET",
+		},
+		{
+			Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
+			Description: "获取" + a.Description + "列表",
+			ApiGroup:    a.Abbreviation,
+			Method:      "GET",
+		},
+	}
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		for _, v := range apiList {
+			var api model.SysApi
+			if err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error; err != nil {
+				return err
+			}
+			if err := tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
+				return err
+			}
+		}
+		return nil
+	})
+	return err
 }

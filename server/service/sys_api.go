@@ -34,28 +34,6 @@ func DeleteApi(api model.SysApi) (err error) {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: CreateApi
-//@description: 自动创建api数据,
-//@param: api model.SysApi
-//@return: err error
-
-func AutoCreateApi(api model.SysApi) (err error) {
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		var fApi model.SysApi
-		var txErr error
-		fxErr := tx.Where("path = ? AND method = ?", api.Path, api.Method).First(&fApi).Error
-		if errors.Is(fxErr, gorm.ErrRecordNotFound) {
-			txErr = tx.Create(&api).Error
-			if txErr != nil{
-				return txErr
-			}
-		}
-		return nil
-	})
-	return err
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetAPIInfoList
 //@description: 分页获取数据,
 //@param: api model.SysApi, info request.PageInfo, order string, desc bool

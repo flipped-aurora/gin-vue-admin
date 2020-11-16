@@ -55,33 +55,24 @@ func (w *Watch) Watch(path string, t *T) error {
 					c <- errors.New("errors close")
 					return
 				}
-				// 判断时间
-				fmt.Println("even", even)
+				// 判断事件
 				switch {
-				// todo 待处理
 				case even.Op&fsnotify.Create == fsnotify.Create:
 					//这里获取新创建文件的信息，如果是目录，则加入监控中
 					fmt.Println("创建文件 : ", even.Name)
 					//t.AddTask()
 					_ = w.Add(even.Name)
+					w.addTask(t, even.Name)
 				case even.Op&fsnotify.Write == fsnotify.Write:
-					fmt.Println("修改 : ", even.Name)
-					fmt.Println(filepath.Ext(even.Name))
-					if filepath.Ext(even.Name) == ".go" {
-						fmt.Println("send addtask:", even.Name)
-						t.AddTask()
-					}
-				case even.Op&fsnotify.Remove == fsnotify.Remove:
-					fmt.Println("删除 : ", even.Name)
-					//t.AddTask()
+					fmt.Println("修改文件 : ", even.Name)
+					w.addTask(t, even.Name)
+				case even.Op&fsnotify.Remove == fsnotify.Remove || even.Op&fsnotify.Rename == fsnotify.Rename:
+					fmt.Println("删除或重命名文件 : ", even.Name)
 					_ = w.Remove(even.Name)
-				case even.Op&fsnotify.Rename == fsnotify.Rename:
-					fmt.Println("重命名 : ", even.Name)
-					//t.AddTask()
-					_ = w.Remove(even.Name)
+					w.addTask(t, even.Name)
 				}
 			case err = <-w.Errors:
-				fmt.Println("79", err)
+				fmt.Println("even Error:", err)
 				c <- err
 				return
 			}
@@ -106,10 +97,12 @@ func (w *Watch) watchDir(path string) error {
 	for _, f := range fileSlice {
 		fPath := filepath.Join(path, f.Name())
 		if !f.IsDir() {
-			// todo 这里加一些条件筛选添加监控的内容
-			err = w.watchFile(fPath)
-			if err != nil {
-				return err
+			// 判断是否可监控的文件
+			if chickPower(fPath) {
+				err = w.watchFile(fPath)
+				if err != nil {
+					return err
+				}
 			}
 		} else {
 			err := w.watchDir(fPath)
@@ -123,5 +116,21 @@ func (w *Watch) watchDir(path string) error {
 
 // watchDir: 处理监控单文件
 func (w *Watch) watchFile(path string) error {
-	return w.Add(path)
+	var err error
+	if chickPower(path) {
+		err = w.Add(path)
+	}
+	return err
+}
+
+// chickPower: 判断是否在可控范围内
+func chickPower(name string) bool {
+	return filepath.Ext(name) == ".go" || filepath.Ext(name) == ".yaml"
+}
+
+// addTask: 偏函数 简化发送任务
+func (w *Watch) addTask(t *T, name string) {
+	if chickPower(name) {
+		t.AddTask()
+	}
 }

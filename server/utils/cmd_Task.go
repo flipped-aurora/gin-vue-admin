@@ -50,6 +50,9 @@ func newT(f func(chan struct{}) error) *T {
 }
 
 func (t *T) AddTask() {
+	if len(t.ch) == 1 {
+		return
+	}
 	t.Lock()
 	defer t.Unlock()
 	if len(t.ch) == 1 {
@@ -90,7 +93,7 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	if runtime.GOOS != "windows" && err == nil {
 		_, err := exec.LookPath("make")
 		if err == nil {
-			cmd = exec.Command("make")
+			cmd = exec.Command("make", "run")
 			goto makefile
 		}
 	}

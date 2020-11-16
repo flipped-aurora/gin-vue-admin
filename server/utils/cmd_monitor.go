@@ -62,7 +62,6 @@ func (w *Watch) Watch(path string, t *T) error {
 					fmt.Println("创建文件 : ", even.Name)
 					//t.AddTask()
 					_ = w.Add(even.Name)
-					w.addTask(t, even.Name)
 				case even.Op&fsnotify.Write == fsnotify.Write:
 					fmt.Println("修改文件 : ", even.Name)
 					w.addTask(t, even.Name)

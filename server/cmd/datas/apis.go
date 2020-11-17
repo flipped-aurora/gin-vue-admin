@@ -4,6 +4,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gookit/color"
+	"os"
 	"time"
 
 	"gorm.io/gorm"
@@ -88,8 +89,8 @@ var Apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 77, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/GetMyNeed", "获取我的待办", "workflowProcess", "GET"},
 }
 
-func InitSysApi(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+func InitSysApi(db *gorm.DB) {
+	if err := db.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("id IN ?", []int{1, 67}).Find(&[]model.SysApi{}).RowsAffected == 2 {
 			color.Danger.Println("sys_apis表的初始数据已存在!")
 			return nil
@@ -98,5 +99,8 @@ func InitSysApi(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> sys_apis 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

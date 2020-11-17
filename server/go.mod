@@ -56,3 +56,5 @@ require (
 	gorm.io/driver/mysql v0.3.0
 	gorm.io/gorm v1.20.5
 )
+
+replace github.com/casbin/gorm-adapter/v3 => github.com/casbin/gorm-adapter/v3 v3.0.2

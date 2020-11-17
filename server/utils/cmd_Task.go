@@ -96,9 +96,9 @@ func (t *T) DefaultF(ch chan struct{}) error {
 
 	switch runtime.GOOS {
 	case "windows":
-		buildCmd = exec.Command("go", "build", "-o", "gva.exe", "main.go")
+		buildCmd = exec.Command("go", "build", "-o", "server.exe", "main.go")
 	default:
-		buildCmd = exec.Command("go", "build", "-o", "gva", "main.go")
+		buildCmd = exec.Command("go", "build", "-o", "server", "main.go")
 	}
 	//cmd = exec.Command("go", "run", "main.go")
 	err = buildCmd.Run()
@@ -109,9 +109,9 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	// 执行
 	switch runtime.GOOS {
 	case "windows":
-		cmd = exec.Command("gva.exe")
+		cmd = exec.Command("server.exe")
 	default:
-		cmd = exec.Command("./gva")
+		cmd = exec.Command("./server")
 	}
 
 	// 开始执行任务
@@ -155,7 +155,7 @@ func (t *T) echo(cmd *exec.Cmd, ctx context.Context) error {
 		fmt.Printf("%s\n", string(stdoutBuf.Bytes()))
 		select {
 		case <-ctx.Done():
-			_ = os.Stdout.Close()
+			//_ = os.Stdout.Close()
 			return
 		default:
 		}

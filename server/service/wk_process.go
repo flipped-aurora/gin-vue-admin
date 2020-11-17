@@ -1,10 +1,12 @@
 package service
 
 import (
+	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -150,4 +152,128 @@ func GetWorkflowProcessInfoList(info request.WorkflowProcessSearch) (err error, 
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&workflowProcesss).Error
 	return err, workflowProcesss, total
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: StartWorkflow
+//@description: 开启一个工作流
+//@param: wfInterface model.GVA_Workflow
+//@return: err error
+
+func StartWorkflow(wfInterface model.GVA_Workflow) (err error) {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		txErr = tx.Table(wfInterface.GetTableName()).Create(wfInterface).Error
+		if txErr != nil {
+			return txErr
+		}
+		wfm := wfInterface.CreateWorkflowMove()
+		txErr = tx.Create(wfm).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = complete(tx, wfm)
+		if txErr != nil {
+			return txErr
+		}
+		return nil
+	})
+	return err
+}
+
+//func CompleteWorkflowNode(wfInterface model.GVA_Workflow)(err error){
+//
+//}
+
+func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
+	var returnWfm model.WorkflowMove
+	var nodeInfo model.WorkflowNode
+	var Edges []model.WorkflowEdge
+	txErr := tx.First(&returnWfm, "business_type = ? and business_id = ? and workflow_process_id = ? and workflow_node_id = ? and is_active = ?", wfm.BusinessType, wfm.BusinessID, wfm.WorkflowProcessID, wfm.WorkflowNodeID, true).Error
+	if txErr != nil {
+		return txErr
+	}
+	txErr = tx.First(&nodeInfo, "ID = ?", wfm.WorkflowNodeID).Error
+	if txErr != nil {
+		return txErr
+	}
+
+	if nodeInfo.Clazz == model.START || nodeInfo.Clazz == model.USER_TASK {
+		txErr = tx.Find(&Edges, "workflow_process_id = ? and source = ?", wfm.WorkflowProcessID, wfm.WorkflowNodeID).Error
+		if txErr != nil {
+			return txErr
+		}
+		if len(Edges) == 0 {
+			return errors.New("不存在当前节点为起点的后续流程")
+		}
+		if len(Edges) == 1 {
+			//当前节点为初始节点时候
+			if nodeInfo.Clazz == model.START {
+				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("is_active", false).Error
+				if txErr != nil {
+					return txErr
+				}
+			}
+			//当前节点为流转节点时候
+			if nodeInfo.Clazz == model.USER_TASK {
+				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("action", "complete").Update("is_active", false).Error
+				if txErr != nil {
+					return txErr
+				}
+			}
+
+			newWfm := createNewWorkflowMove(&returnWfm, Edges[0].Target)
+			txErr = tx.Create(newWfm).Error
+			if txErr != nil {
+				return txErr
+			}
+			//	当target为自动节点时候 需要做一些事情 这里暂时先不处理 后续慢慢完善
+		}
+		if len(Edges) > 1 {
+			var needUseTargetNodeID string
+			txErr = tx.Where("id = ?", returnWfm.ID).Update("is_active", false).Error
+			if txErr != nil {
+				return txErr
+			}
+			for _, v := range Edges {
+				if v.ConditionExpression == wfm.Param {
+					needUseTargetNodeID = v.Target
+					break
+				}
+			}
+			newWfm := createNewWorkflowMove(&returnWfm, needUseTargetNodeID)
+			txErr = tx.Create(newWfm).Error
+			if txErr != nil {
+				return txErr
+			}
+			//	当target为自动节点时候 需要做一些事情 这里暂时先不处理 后续慢慢完善
+		}
+	} else {
+		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
+	}
+	return nil
+}
+
+func createNewWorkflowMove(oldWfm *model.WorkflowMove, targetNodeID string) (newWfm *model.WorkflowMove) {
+	return &model.WorkflowMove{
+		BusinessID:        oldWfm.BusinessID,
+		BusinessType:      oldWfm.BusinessType,
+		PromoterID:        oldWfm.PromoterID,
+		WorkflowNodeID:    targetNodeID,
+		WorkflowProcessID: oldWfm.WorkflowProcessID,
+		Action:            "",
+		IsActive:          true,
+	}
+}
+
+func GetMyStated(userID uint) (err error, wfms []model.WorkflowMove) {
+	err = global.GVA_DB.Find(&wfms, "promoter_id = ? and is_active", userID, true).Error
+	return err, wfms
+}
+
+func GetMyNeed(userID uint, AuthorityID string) (err error, wfms []model.WorkflowMove) {
+	user := "%," + strconv.Itoa(int(userID)) + ",%"
+	auth := "%," + AuthorityID + ",%"
+	err = global.GVA_DB.Joins("INNER JOIN workflow_nodes as node ON workflow_moves.workflow_node_id = node.id").Where("(node.assign_type = ? AND node.assign_value LIKE ? ) OR (node.assign_type = ? AND node.assign_value LIKE ? )", "user", user, "authority", auth).Find(&wfms).Error
+	return err, wfms
 }

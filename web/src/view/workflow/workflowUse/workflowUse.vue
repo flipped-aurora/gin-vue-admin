@@ -1,6 +1,7 @@
 <template>
     <div class="workflow-use">
 
+        <WorkflowInfo v-if="done" :wf="this.node"/>
     </div>
 </template>
 <script>
@@ -9,7 +10,7 @@ export default {
     name:"WorklowUse",
     data(){
         return{
-            
+            done:false
         }
     },
     async created(){
@@ -20,9 +21,13 @@ export default {
             const res = await findWorkflowStep({id:workflowId})
             if(res.code == 0){
                 this.workflow = res.data.workflow
-                this.node = res.data.workflow.node[0]
+                this.node = res.data.workflow.nodes[0]
+                this.done = true
             }
         }
+    },
+    beforeCreate(){
+        this.$options.components.WorkflowInfo = ()=>import("@/"+this.node.view)
     }
 }
 </script>

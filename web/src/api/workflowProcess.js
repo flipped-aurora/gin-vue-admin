@@ -114,3 +114,51 @@ export const findWorkflowStep = (params) => {
         params
     })
 }
+
+
+// @Tags ExaWfLeave
+// @Summary 创建ExaWfLeave
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/startWorkflow [post]
+export const startWorkflow = (data, params = { businessType: data.wf.businessType }) => {
+    return service({
+        url: "/workflowProcess/startWorkflow",
+        method: 'post',
+        data,
+        params
+    })
+}
+
+
+// @Tags WorkflowProcess
+// @Summary 我发起的工作流
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/getMyStated [get]
+export const getMyStated = () => {
+    return service({
+        url: "/workflowProcess/getMyStated",
+        method: 'get',
+    })
+}
+
+
+
+// @Tags WorkflowProcess
+// @Summary 我发起的工作流
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/getMyNeed [get]
+export const getMyNeed = () => {
+    return service({
+        url: "/workflowProcess/getMyNeed",
+        method: 'get',
+    })
+}

@@ -145,16 +145,14 @@ type WorkflowEdge struct {
 
 type WorkflowStartPoint struct {
 	WorkflowEdgeID string
-	WorkflowPoint
+	global.GVA_MODEL
+	X     float64 `json:"x"`
+	Y     float64 `json:"y"`
+	Index int     `json:"index"`
 }
 
 type WorkflowEndPoint struct {
 	WorkflowEdgeID string
-	WorkflowPoint
-}
-
-//
-type WorkflowPoint struct {
 	global.GVA_MODEL
 	X     float64 `json:"x"`
 	Y     float64 `json:"y"`

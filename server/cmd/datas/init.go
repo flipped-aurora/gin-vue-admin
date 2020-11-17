@@ -22,6 +22,7 @@ func InitMysqlData(db *gorm.DB) {
 	err = InitSysDataAuthorityId(db)
 	err = InitSysDictionaryDetail(db)
 	err = InitExaFileUploadAndDownload(db)
+	err = InitWkProcess(db)
 	if err != nil {
 		color.Warn.Printf("[Mysql]-->初始化数据失败,err: %v\n", err)
 		os.Exit(0)

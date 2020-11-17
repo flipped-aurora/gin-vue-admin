@@ -605,6 +605,17 @@ li {
                 }
                 .is-active {    
                     background-color: #1890ff;
+                    // 关闭三级菜单二级菜单样式
+                    ul{
+                        border:none;
+                    }
+                }
+                // 关闭三级菜单二级菜单样式
+                .is-active.is-opened{
+                    background-color: #191a23;
+                    ul{
+                        border:none;
+                    }
                 }
             }
         }

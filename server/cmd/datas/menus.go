@@ -3,6 +3,7 @@ package datas
 import (
 	"gin-vue-admin/global"
 	"github.com/gookit/color"
+	"os"
 	"time"
 
 	"gin-vue-admin/model"
@@ -45,8 +46,8 @@ var BaseMenus = []model.SysBaseMenu{
 	{GVA_MODEL: global.GVA_MODEL{ID: 33, CreatedAt: time.Now(), UpdatedAt: time.Now()}, MenuLevel: 0, ParentId: "28", Path: "need", Name: "need", Hidden: false, Component: "view/workflow/userList/need.vue", Sort: 0, Meta: model.Meta{Title: "我的待办", Icon: "s-platform"}},
 }
 
-func InitSysBaseMenus(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+func InitSysBaseMenus(db *gorm.DB) {
+	if err := db.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("id IN ?", []int{1, 27}).Find(&[]model.SysBaseMenu{}).RowsAffected == 2 {
 			color.Danger.Println("sys_base_menus表的初始数据已存在!")
 			return nil
@@ -55,5 +56,8 @@ func InitSysBaseMenus(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> sys_base_menus 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

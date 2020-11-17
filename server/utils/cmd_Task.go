@@ -2,11 +2,11 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"runtime"
 	"sync"
 )
@@ -60,7 +60,6 @@ func (t *T) AddTask() {
 		// 直接丢弃这次任务
 		return
 	}
-	fmt.Println("::::发送任务->>>>>>>>")
 	t.ch <- struct{}{}
 }
 
@@ -72,10 +71,10 @@ func (t *T) RunTask() {
 	go t.f(ch)
 	for {
 		_, ok := <-t.ch
-		ch <- struct{}{}
 		if !ok {
 			return
 		}
+		ch <- struct{}{}
 		// 等待上一个关闭
 		<-t.closeChan
 		go t.f(ch)
@@ -85,21 +84,11 @@ func (t *T) RunTask() {
 
 // DefaultF: 默认的StartFunction
 func (t *T) DefaultF(ch chan struct{}) error {
-
 	var buildCmd *exec.Cmd
 	var cmd *exec.Cmd
 
-	// 判断是否有makefile
-	_, err := os.Stat(filepath.Join("Makefile"))
-	if runtime.GOOS != "windows" && err == nil {
-		_, err := exec.LookPath("make")
-		if err == nil {
-			cmd = exec.Command("make", "run")
-			goto makefile
-		}
-	}
 	// 检测系统是否有编译环境
-	_, err = exec.LookPath("go")
+	_, err := exec.LookPath("go")
 	if err != nil {
 		return err
 	}
@@ -111,54 +100,65 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	default:
 		buildCmd = exec.Command("go", "build", "-o", "gva", "main.go")
 	}
+	//cmd = exec.Command("go", "run", "main.go")
 	err = buildCmd.Run()
 	if err != nil {
 		return err
 	}
 	fmt.Println("build 执行完成")
-
 	// 执行
-
 	switch runtime.GOOS {
 	case "windows":
 		cmd = exec.Command("gva.exe")
 	default:
 		cmd = exec.Command("./gva")
 	}
-makefile:
+
 	// 开始执行任务
-	t.echo(cmd)
+	ctx, cancel := context.WithCancel(context.Background())
+	err = t.echo(cmd, ctx)
 	<-ch
 	// 回收资源
-	err = cmd.Process.Kill()
-	fmt.Println("kill err", err)
+	fmt.Println("pid:", t.p.Pid, "->Kill")
+	err = t.p.Kill()
+	cancel()
 	// 发送关闭完成信号
 	t.closeChan <- struct{}{}
 	return err
 }
 
 // echo: 封装回显
-func (t *T) echo(cmd *exec.Cmd) error {
+func (t *T) echo(cmd *exec.Cmd, ctx context.Context) error {
 	var stdoutBuf bytes.Buffer
 	stdoutIn, _ := cmd.StdoutPipe()
-	var errStdout, errStderr error
+	var errStdout error
 	stdout := io.MultiWriter(os.Stdout, &stdoutBuf)
 	err := cmd.Start()
 	if err != nil {
 		return err
 	}
-	go func() {
+	go func(ctx context.Context) {
 		_, errStdout = io.Copy(stdout, stdoutIn)
-	}()
+		select {
+		case <-ctx.Done():
+			return
+		default:
+		}
+	}(ctx)
 	t.p = cmd.Process
 	fmt.Println("pid", t.p.Pid)
 	go func() {
 		_ = cmd.Wait()
-		if errStdout != nil || errStderr != nil {
+		if errStdout != nil {
 			fmt.Printf("failed to capture stdout or stderr\n")
 		}
-		outStr := string(stdoutBuf.Bytes())
-		fmt.Printf("\nout:\n%s\n", outStr)
+		fmt.Printf("%s\n", string(stdoutBuf.Bytes()))
+		select {
+		case <-ctx.Done():
+			_ = os.Stdout.Close()
+			return
+		default:
+		}
 	}()
 	return nil
 }

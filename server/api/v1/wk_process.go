@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
@@ -144,5 +145,72 @@ func GetWorkflowProcessList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, c)
+	}
+}
+
+// @Tags WorkflowProcess
+// @Summary 开启工作流
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/startWorkflow [post]
+func StartWorkflow(c *gin.Context) {
+	business := c.Query("businessType")
+	wfInfo := model.WorkflowBusinessStruct[business]()
+	c.ShouldBindJSON(wfInfo)
+	err := service.StartWorkflow(wfInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("启动成功", c)
+}
+
+// @Tags WorkflowProcess
+// @Summary 我发起的工作流
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/getMyStated [get]
+func GetMyStated(c *gin.Context) {
+	if claims, exists := c.Get("claims"); !exists {
+		errStr := "从Gin的Context中获取从jwt解析出来的用户ID失败, 请检查路由是否使用jwt中间件"
+		global.GVA_LOG.Error(errStr)
+		response.FailWithMessage(errStr, c)
+	} else {
+		waitUse := claims.(*request.CustomClaims)
+		err, wfms := service.GetMyStated(waitUse.ID)
+		if err != nil {
+			errStr := err.Error()
+			global.GVA_LOG.Error(errStr)
+			response.FailWithMessage(errStr, c)
+		}
+		response.OkWithData(gin.H{"wfms": wfms}, c)
+	}
+}
+
+// @Tags WorkflowProcess
+// @Summary 我的待办
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/getMyNeed [get]
+func GetMyNeed(c *gin.Context) {
+	if claims, exists := c.Get("claims"); !exists {
+		errStr := "从Gin的Context中获取从jwt解析出来的用户ID失败, 请检查路由是否使用jwt中间件"
+		global.GVA_LOG.Error(errStr)
+		response.FailWithMessage(errStr, c)
+	} else {
+		waitUse := claims.(*request.CustomClaims)
+		err, wfms := service.GetMyNeed(waitUse.ID, waitUse.AuthorityId)
+		if err != nil {
+			errStr := err.Error()
+			global.GVA_LOG.Error(errStr)
+			response.FailWithMessage(errStr, c)
+		}
+		response.OkWithData(gin.H{"wfms": wfms}, c)
 	}
 }

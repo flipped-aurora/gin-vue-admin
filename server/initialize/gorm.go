@@ -42,6 +42,8 @@ func MysqlTables(db *gorm.DB) {
 		model.WorkflowEdge{},
 		model.WorkflowStartPoint{},
 		model.WorkflowEndPoint{},
+		model.WorkflowMove{},
+		model.ExaWfLeave{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Any("err", err))

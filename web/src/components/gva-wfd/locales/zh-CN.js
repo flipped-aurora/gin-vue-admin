@@ -36,7 +36,7 @@ export default {
     'signalEvent': '信号节点',
     'signalEvent.signal': '信号名',
     'sequenceFlow': '连接线',
-    'sequenceFlow.expression': '条件表达式',
+    'sequenceFlow.expression': '条件参数',
     'sequenceFlow.seq': '序号',
     'sequenceFlow.reverse': '反向',
     'startEvent': '开始节点',

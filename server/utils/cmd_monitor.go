@@ -125,7 +125,6 @@ func (w *Watch) watchFile(path string) error {
 // chickPower: 判断是否在可控范围内
 func chickPower(name string) bool {
 	name = filepath.Ext(name)
-	fmt.Println(name)
 	return name == ".go" || name == ".yaml"
 }
 

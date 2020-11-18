@@ -20,6 +20,7 @@ type WorkflowBase struct {
 	BusinessID        uint   `gorm:"<-:false;column:id"` // 业务对应ID（businessID）的返回
 	BusinessType      string `json:"businessType" gorm:"-"`
 	PromoterID        uint   `json:"promoterID" gorm:"-"`
+	OperatorID        uint   `json:"operatorID" gorm:"-"`
 	WorkflowProcessID string `json:"workflowProcessID" gorm:"-"`
 	WorkflowNodeID    string `json:"workflowNodeID" gorm:"-"`
 	Action            string `json:"action" gorm:"-"`
@@ -29,6 +30,7 @@ func (w WorkflowBase) CreateWorkflowMove() (businessModel *WorkflowMove) {
 	return &WorkflowMove{
 		BusinessType:      w.BusinessType,
 		PromoterID:        w.PromoterID,
+		OperatorID:        w.OperatorID,
 		WorkflowProcessID: w.WorkflowProcessID,
 		WorkflowNodeID:    w.WorkflowNodeID,
 		BusinessID:        w.BusinessID,
@@ -52,29 +54,36 @@ func (w WorkflowBase) GetTableName() string {
 //定义clazz常量
 
 const (
-	USER_TASK     string = "userTask"
-	SCRIPT_TASK   string = "scriptTask"
-	RECEIVE_TASK  string = "receiveTask"
-	MAIL_TASK     string = "mailTask"
-	TIMER_START   string = "timerStart"
-	MESSAGE_START string = "messageStart"
-	GATEWAY       string = "gateway"
-	FLOW          string = "flow"
-	START         string = "start"
-	END           string = "end"
-	PROCESS       string = "process"
+	USER_TASK         string = "userTask"
+	SCRIPT_TASK       string = "scriptTask"
+	RECEIVE_TASK      string = "receiveTask"
+	MAIL_TASK         string = "mailTask"
+	TIMER_START       string = "timerStart"
+	MESSAGE_START     string = "messageStart"
+	EXCLUSIVE_GATEWAY string = "exclusiveGateway" // 排他网关
+	INCLUSIVE_GATEWAY string = "inclusiveGateway" // 包容网关
+	PARELLEL_GATEWAY  string = "parallelGateway"  // 并行网关
+	FLOW              string = "flow"
+	START             string = "start"
+	END               string = "end"
+	PROCESS           string = "process"
 )
 
 type WorkflowMove struct {
 	global.GVA_MODEL
-	WorkflowProcessID string `json:"workflowProcessID" gorm:"comment:工作流模板ID"`
-	WorkflowNodeID    string `json:"workflowNodeID" gorm:"comment:工作流节点ID"`
-	BusinessType      string `json:"businessType" gorm:"comment:业务标记"`
-	BusinessID        uint   `json:"businessID" gorm:"comment:业务ID"`
-	PromoterID        uint   `json:"promoterID" gorm:"comment:当前流转发起人"`
-	Action            string `json:"action" gorm:"comment:工作流驱动事件"`
-	Param             string `json:"param" gorm:"comment:工作流驱动参数"`
-	IsActive          bool   `json:"isActive" gorm:"comment:是否是活跃节点 "`
+	WorkflowProcessID string          `json:"workflowProcessID" gorm:"comment:工作流模板ID"`
+	WorkflowProcess   WorkflowProcess `gorm:"<-:false" json:"workflowProcess" gorm:"comment:工作流模板具体信息"`
+	WorkflowNodeID    string          `json:"workflowNodeID" gorm:"comment:工作流节点ID"`
+	WorkflowNode      WorkflowNode    `gorm:"<-:false" json:"workflowNode" gorm:"comment:工作流节点具体信息"`
+	BusinessType      string          `json:"businessType" gorm:"comment:业务标记"`
+	BusinessID        uint            `json:"businessID" gorm:"comment:业务ID"`
+	PromoterID        uint            `json:"promoterID" gorm:"comment:当前流转发起人"`
+	Promoter          SysUser         `gorm:"<-:false" json:"promoter" gorm:"comment:当前流转发起人信息"`
+	OperatorID        uint            `json:"operatorID" gorm:"comment:当前流转操作人"`
+	Operator          SysUser         `gorm:"<-:false" json:"operator" gorm:"comment:当前流转操作人信息"`
+	Action            string          `json:"action" gorm:"comment:工作流驱动事件"`
+	Param             string          `json:"param" gorm:"comment:工作流驱动参数"`
+	IsActive          bool            `json:"isActive" gorm:"comment:是否是活跃节点 "`
 }
 
 type WorkflowProcess struct {

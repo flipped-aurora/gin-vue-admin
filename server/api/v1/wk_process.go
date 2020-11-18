@@ -186,6 +186,7 @@ func GetMyStated(c *gin.Context) {
 			errStr := err.Error()
 			global.GVA_LOG.Error(errStr)
 			response.FailWithMessage(errStr, c)
+			return
 		}
 		response.OkWithData(gin.H{"wfms": wfms}, c)
 	}
@@ -210,7 +211,29 @@ func GetMyNeed(c *gin.Context) {
 			errStr := err.Error()
 			global.GVA_LOG.Error(errStr)
 			response.FailWithMessage(errStr, c)
+			return
 		}
 		response.OkWithData(gin.H{"wfms": wfms}, c)
 	}
+}
+
+// @Tags WorkflowProcess
+// @Summary 根据id获取当前节点详情和历史
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.GetById true "根据id获取当前节点详情和过往"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/getWorkflowMoveByID [get]
+func GetWorkflowMoveByID(c *gin.Context) {
+	var req request.GetById
+	_ = c.ShouldBindQuery(&req)
+	err, move, moves := service.GetWorkflowMoveByID(req.Id)
+	if err != nil {
+		errStr := err.Error()
+		global.GVA_LOG.Error(errStr)
+		response.FailWithMessage(errStr, c)
+		return
+	}
+	response.OkWithData(gin.H{"move": move, "moves": moves}, c)
 }

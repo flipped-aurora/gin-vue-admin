@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -42,7 +43,9 @@ func DeleteWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 		if txErr != nil {
 			return txErr
 		}
-		txErr = tx.Select("StartPoint", "EndPoint").Delete(&edges).Error
+		if len(edges) > 0 {
+			txErr = tx.Select("StartPoint", "EndPoint").Delete(&edges).Error
+		}
 		if txErr != nil {
 			return txErr
 		}
@@ -209,14 +212,14 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 		if len(Edges) == 1 {
 			//当前节点为初始节点时候
 			if nodeInfo.Clazz == model.START {
-				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("is_active", false).Error
+				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("is_active", false).Update("operator_id", wfm.OperatorID).Error
 				if txErr != nil {
 					return txErr
 				}
 			}
 			//当前节点为流转节点时候
 			if nodeInfo.Clazz == model.USER_TASK {
-				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("action", "complete").Update("is_active", false).Error
+				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("action", "complete").Update("is_active", false).Update("operator_id", wfm.OperatorID).Error
 				if txErr != nil {
 					return txErr
 				}
@@ -231,7 +234,7 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 		}
 		if len(Edges) > 1 {
 			var needUseTargetNodeID string
-			txErr = tx.Where("id = ?", returnWfm.ID).Update("is_active", false).Error
+			txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("action", "complete").Update("is_active", false).Update("operator_id", wfm.OperatorID).Error
 			if txErr != nil {
 				return txErr
 			}
@@ -248,6 +251,12 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 			}
 			//	当target为自动节点时候 需要做一些事情 这里暂时先不处理 后续慢慢完善
 		}
+	} else if nodeInfo.Clazz == model.EXCLUSIVE_GATEWAY {
+		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
+	} else if nodeInfo.Clazz == model.INCLUSIVE_GATEWAY {
+		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
+	} else if nodeInfo.Clazz == model.PARELLEL_GATEWAY {
+		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
 	} else {
 		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
 	}
@@ -259,6 +268,7 @@ func createNewWorkflowMove(oldWfm *model.WorkflowMove, targetNodeID string) (new
 		BusinessID:        oldWfm.BusinessID,
 		BusinessType:      oldWfm.BusinessType,
 		PromoterID:        oldWfm.PromoterID,
+		OperatorID:        0,
 		WorkflowNodeID:    targetNodeID,
 		WorkflowProcessID: oldWfm.WorkflowProcessID,
 		Action:            "",
@@ -267,13 +277,30 @@ func createNewWorkflowMove(oldWfm *model.WorkflowMove, targetNodeID string) (new
 }
 
 func GetMyStated(userID uint) (err error, wfms []model.WorkflowMove) {
-	err = global.GVA_DB.Find(&wfms, "promoter_id = ? and is_active", userID, true).Error
+	err = global.GVA_DB.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").Joins("INNER JOIN workflow_nodes as node ON workflow_moves.workflow_node_id = node.id").Find(&wfms, "promoter_id = ? and ( is_active = ? OR node.clazz = ?)", userID, true, "end").Error
 	return err, wfms
 }
 
 func GetMyNeed(userID uint, AuthorityID string) (err error, wfms []model.WorkflowMove) {
 	user := "%," + strconv.Itoa(int(userID)) + ",%"
 	auth := "%," + AuthorityID + ",%"
-	err = global.GVA_DB.Joins("INNER JOIN workflow_nodes as node ON workflow_moves.workflow_node_id = node.id").Where("(node.assign_type = ? AND node.assign_value LIKE ? ) OR (node.assign_type = ? AND node.assign_value LIKE ? )", "user", user, "authority", auth).Find(&wfms).Error
+	err = global.GVA_DB.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").Joins("INNER JOIN workflow_nodes as node ON workflow_moves.workflow_node_id = node.id").Where("is_active = ? AND (node.assign_type = ? AND node.assign_value LIKE ? ) OR (node.assign_type = ? AND node.assign_value LIKE ? )", true, "user", user, "authority", auth).Find(&wfms).Error
 	return err, wfms
+}
+
+func GetWorkflowMoveByID(id float64) (err error, move model.WorkflowMove, moves []model.WorkflowMove) {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		txErr = tx.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").First(&move, "id = ?", id).Error
+		if txErr != nil {
+			return txErr
+		}
+		txErr = tx.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").Find(&moves, "business_id = ? AND business_type = ?", move.BusinessID, move.BusinessType).Error
+		fmt.Println(moves)
+		if txErr != nil {
+			return txErr
+		}
+		return nil
+	})
+	return err, move, moves
 }

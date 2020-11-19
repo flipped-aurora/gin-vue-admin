@@ -228,12 +228,12 @@ func GetMyNeed(c *gin.Context) {
 func GetWorkflowMoveByID(c *gin.Context) {
 	var req request.GetById
 	_ = c.ShouldBindQuery(&req)
-	err, move, moves := service.GetWorkflowMoveByID(req.Id)
+	err, move, moves, business := service.GetWorkflowMoveByID(req.Id)
 	if err != nil {
 		errStr := err.Error()
 		global.GVA_LOG.Error(errStr)
 		response.FailWithMessage(errStr, c)
 		return
 	}
-	response.OkWithData(gin.H{"move": move, "moves": moves}, c)
+	response.OkWithData(gin.H{"move": move, "moves": moves, "business": business}, c)
 }

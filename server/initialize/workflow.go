@@ -10,13 +10,13 @@ func initWkModel() {
 }
 
 func initWkTable() {
-
-	model.WorkflowBusinessTable = make(map[string]string)
-	model.WorkflowBusinessTable["leave"] = "exa_wf_leaves"
+	model.WorkflowBusinessTable = make(map[string]func() interface{})
+	model.WorkflowBusinessTable["leave"] = func() interface{} {
+		return new(model.ExaWfLeave)
+	}
 }
 
 func InitWkMode() {
 	initWkModel()
 	initWkTable()
-
 }

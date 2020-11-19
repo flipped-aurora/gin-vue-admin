@@ -7,8 +7,13 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 	"strconv"
 )
+
+func getTable(businessType string) interface{} {
+	return model.WorkflowBusinessTable[businessType]()
+}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateWorkflowProcess
@@ -166,7 +171,8 @@ func GetWorkflowProcessInfoList(info request.WorkflowProcessSearch) (err error, 
 func StartWorkflow(wfInterface model.GVA_Workflow) (err error) {
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var txErr error
-		txErr = tx.Table(wfInterface.GetTableName()).Create(wfInterface).Error
+		tableName := getTable(wfInterface.GetBusinessType()).(schema.Tabler).TableName()
+		txErr = tx.Table(tableName).Create(wfInterface).Error
 		if txErr != nil {
 			return txErr
 		}
@@ -288,7 +294,8 @@ func GetMyNeed(userID uint, AuthorityID string) (err error, wfms []model.Workflo
 	return err, wfms
 }
 
-func GetWorkflowMoveByID(id float64) (err error, move model.WorkflowMove, moves []model.WorkflowMove) {
+func GetWorkflowMoveByID(id float64) (err error, move model.WorkflowMove, moves []model.WorkflowMove, business interface{}) {
+	var result interface{}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var txErr error
 		txErr = tx.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").First(&move, "id = ?", id).Error
@@ -296,11 +303,16 @@ func GetWorkflowMoveByID(id float64) (err error, move model.WorkflowMove, moves 
 			return txErr
 		}
 		txErr = tx.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").Find(&moves, "business_id = ? AND business_type = ?", move.BusinessID, move.BusinessType).Error
-		fmt.Println(moves)
+		if txErr != nil {
+			return txErr
+		}
+		result = getTable(move.BusinessType)
+		fmt.Println(result)
+		txErr = tx.First(result, "id = ?", move.BusinessID).Error
 		if txErr != nil {
 			return txErr
 		}
 		return nil
 	})
-	return err, move, moves
+	return err, move, moves, result
 }

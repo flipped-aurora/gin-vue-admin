@@ -7,10 +7,9 @@ import (
 )
 
 var WorkflowBusinessStruct map[string]func() GVA_Workflow
-var WorkflowBusinessTable map[string]string
+var WorkflowBusinessTable map[string]func() interface{}
 
 type GVA_Workflow interface {
-	GetTableName() string
 	CreateWorkflowMove() *WorkflowMove
 	GetBusinessType() string
 	GetWorkflowBase() WorkflowBase
@@ -45,10 +44,6 @@ func (w WorkflowBase) GetBusinessType() (businessType string) {
 
 func (w WorkflowBase) GetWorkflowBase() (workflowBase WorkflowBase) {
 	return w
-}
-
-func (w WorkflowBase) GetTableName() string {
-	return WorkflowBusinessTable[w.BusinessType]
 }
 
 //定义clazz常量

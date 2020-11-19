@@ -164,8 +164,7 @@ export default {
       this.$router.push({
         name: "workflowUse",
         query: {
-          workflowId: row.id,
-          activeId:0,
+          workflowId: row.id
         }
       });
     },

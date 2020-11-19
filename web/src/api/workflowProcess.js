@@ -162,3 +162,19 @@ export const getMyNeed = () => {
         method: 'get',
     })
 }
+
+// @Tags WorkflowProcess
+// @Summary 根据id获取当前节点详情和历史
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.GetById true "根据id获取当前节点详情和过往"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/getWorkflowMoveByID [get]
+export const getWorkflowMoveByID = (params) => {
+    return service({
+        url: "/workflowProcess/getWorkflowMoveByID",
+        method: 'get',
+        params
+    })
+}

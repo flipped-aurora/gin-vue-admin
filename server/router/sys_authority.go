@@ -2,15 +2,11 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
-	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitAuthorityRouter(Router *gin.RouterGroup) {
-	AuthorityRouter := Router.Group("authority").
-		Use(middleware.JWTAuth()).
-		Use(middleware.CasbinHandler()).
-		Use(middleware.OperationRecord())
+	AuthorityRouter := Router.Group("authority")
 	{
 		AuthorityRouter.POST("createAuthority", v1.CreateAuthority)   // 创建角色
 		AuthorityRouter.POST("deleteAuthority", v1.DeleteAuthority)   // 删除角色

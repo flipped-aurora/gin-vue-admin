@@ -2,14 +2,11 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
-	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitSysOperationRecordRouter(Router *gin.RouterGroup) {
-	SysOperationRecordRouter := Router.Group("sysOperationRecord").
-		Use(middleware.JWTAuth()).
-		Use(middleware.CasbinHandler())
+	SysOperationRecordRouter := Router.Group("sysOperationRecord")
 	{
 		SysOperationRecordRouter.POST("createSysOperationRecord", v1.CreateSysOperationRecord)   // 新建SysOperationRecord
 		SysOperationRecordRouter.DELETE("deleteSysOperationRecord", v1.DeleteSysOperationRecord) // 删除SysOperationRecord

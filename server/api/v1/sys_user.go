@@ -216,6 +216,11 @@ func DeleteUser(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	jwtId := getUserID(c)
+	if jwtId == uint(reqId.Id) {
+		response.FailWithMessage("删除失败, 自杀失败", c)
+		return
+	}
 	if err := service.DeleteUser(reqId.Id); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)

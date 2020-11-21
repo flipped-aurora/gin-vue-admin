@@ -11,16 +11,23 @@ import (
 	"sync"
 )
 
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@interface_name: RunTask
+//@description: Task接口
+
 type RunTask interface {
 	AddTask()
 	RunTask()
 }
 
-// T: Task任务
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@struct_name: T
+//@description: Task任务
+
 type T struct {
 	sync.Mutex
 
-	// ch: 获取事件channel
+	// 获取事件channel
 	ch chan struct{}
 
 	closeChan chan struct{}
@@ -28,14 +35,25 @@ type T struct {
 	// 记录process对象
 	p *os.Process
 
-	// f: 执行任务
+	// 执行任务
 	f func(chan struct{}) error
 }
 
-// NewT: 实例化方法
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: NewT
+//@description: T的实例化方法
+//@return: *T
+
 func NewT() *T {
 	return newT(nil)
 }
+
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: newT
+//@description:
+//@param: f func(chan struct{}) error
+//@return: *T
+
 func newT(f func(chan struct{}) error) *T {
 	t := &T{
 		Mutex:     sync.Mutex{},
@@ -48,6 +66,11 @@ func newT(f func(chan struct{}) error) *T {
 	}
 	return t
 }
+
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: *T
+//@function: AddTask
+//@description: 添加任务
 
 func (t *T) AddTask() {
 	if len(t.ch) == 1 {
@@ -62,6 +85,11 @@ func (t *T) AddTask() {
 	}
 	t.ch <- struct{}{}
 }
+
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: *T
+//@function: RunTask
+//@description: 启动任务
 
 func (t *T) RunTask() {
 	fmt.Println("进入")
@@ -82,7 +110,13 @@ func (t *T) RunTask() {
 
 }
 
-// DefaultF: 默认的StartFunction
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: t *T
+//@function: DefaultF
+//@description: 默认的StartFunction
+//@param: ch chan struct{}
+//@return: error
+
 func (t *T) DefaultF(ch chan struct{}) error {
 	var buildCmd *exec.Cmd
 	var cmd *exec.Cmd
@@ -127,7 +161,13 @@ func (t *T) DefaultF(ch chan struct{}) error {
 	return err
 }
 
-// echo: 封装回显
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: t *T
+//@function: echo
+//@description: 封装回显
+//@param: cmd *exec.Cmd, ctx context.Context
+//@return: error
+
 func (t *T) echo(cmd *exec.Cmd, ctx context.Context) error {
 	var stdoutBuf bytes.Buffer
 	stdoutIn, _ := cmd.StdoutPipe()

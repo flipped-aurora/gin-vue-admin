@@ -13,7 +13,6 @@ var (
 	AutoCodeVerify         = Rules{"Abbreviation": {NotEmpty()}, "StructName": {NotEmpty()}, "PackageName": {NotEmpty()}, "Fields": {NotEmpty()}}
 	WorkFlowVerify         = Rules{"WorkflowNickName": {NotEmpty()}, "WorkflowName": {NotEmpty()}, "WorkflowDescription": {NotEmpty()}, "WorkflowStepInfo": {NotEmpty()}}
 	AuthorityVerify        = Rules{"AuthorityId": {NotEmpty()}, "AuthorityName": {NotEmpty()}, "ParentId": {NotEmpty()}}
-	DictionaryVerify       = Rules{"Type": {NotEmpty()}, "ID": {NotEmpty()}}
 	AuthorityIdVerify      = Rules{"AuthorityId": {NotEmpty()}}
 	OldAuthorityVerify     = Rules{"OldAuthorityId": {NotEmpty()}}
 	ChangePasswordVerify   = Rules{"Username": {NotEmpty()}, "Password": {NotEmpty()}, "NewPassword": {NotEmpty()}}

@@ -42,7 +42,7 @@ func SimpleUploaderUpload(c *gin.Context) {
 		return
 	}
 	chunk.CurrentChunkPath = chunkPath
-	err = service.SaveChunk(chunk)
+	err = service.SaveChunk(&chunk)
 	if err != nil {
 		global.GVA_LOG.Error("切片创建失败!", zap.Any("err", err))
 		response.FailWithMessage("切片创建失败", c)
@@ -69,7 +69,7 @@ func CheckFileMd5(c *gin.Context) {
 		response.OkWithDetailed(gin.H{
 			"chunks": chunks,
 			"isDone": isDone,
-		},"查询成功", c)
+		}, "查询成功", c)
 	}
 }
 

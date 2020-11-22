@@ -89,11 +89,11 @@ func getBaseChildrenList(menu *model.SysBaseMenu, treeMap map[string][]model.Sys
 //@param: menu model.SysBaseMenu
 //@return: err error
 
-func AddBaseMenu(menu model.SysBaseMenu) (err error) {
+func AddBaseMenu(menu *model.SysBaseMenu) (err error) {
 	if !errors.Is(global.GVA_DB.Where("name = ?", menu.Name).First(&model.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 		err = errors.New("存在重复name，请修改name")
 	}
-	err = global.GVA_DB.Create(&menu).Error
+	err = global.GVA_DB.Create(menu).Error
 	return err
 }
 

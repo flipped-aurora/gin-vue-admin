@@ -31,7 +31,7 @@ func OperationRecord() gin.HandlerFunc {
 		if claims, ok := c.Get("claims"); ok {
 			waitUse := claims.(*request.CustomClaims)
 			userId = int(waitUse.ID)
-		}else {
+		} else {
 			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
 			if err != nil {
 				userId = 0
@@ -47,7 +47,7 @@ func OperationRecord() gin.HandlerFunc {
 			UserID: userId,
 		}
 		values := c.Request.Header.Values("content-type")
-		if len(values) >0 && strings.Contains(values[0], "boundary") {
+		if len(values) > 0 && strings.Contains(values[0], "boundary") {
 			record.Body = "file"
 		}
 		writer := responseBodyWriter{
@@ -65,7 +65,7 @@ func OperationRecord() gin.HandlerFunc {
 		record.Latency = latency
 		record.Resp = writer.body.String()
 
-		if err := service.CreateSysOperationRecord(record); err != nil {
+		if err := service.CreateSysOperationRecord(&record); err != nil {
 			global.GVA_LOG.Error("create operation record error:", zap.Any("err", err))
 		}
 	}

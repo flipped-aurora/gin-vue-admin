@@ -26,7 +26,7 @@ func CreateApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.CreateApi(api); err != nil {
+	if err := service.CreateApi(&api); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -49,7 +49,7 @@ func DeleteApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.DeleteApi(api); err != nil {
+	if err := service.DeleteApi(&api); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 	} else {
@@ -72,7 +72,7 @@ func GetApiList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := service.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc); err != nil {
+	if err, list, total := service.GetAPIInfoList(&pageInfo.SysApi, &pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -124,7 +124,7 @@ func UpdateApi(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.UpdateApi(api); err != nil {
+	if err := service.UpdateApi(&api); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Any("err", err))
 		response.FailWithMessage("修改失败", c)
 	} else {

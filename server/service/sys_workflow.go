@@ -11,7 +11,7 @@ import (
 //@param: wk model.SysWorkflow
 //@return: error
 
-func Create(wk model.SysWorkflow) error {
-	err := global.GVA_DB.Create(&wk).Error
+func Create(wk *model.SysWorkflow) error {
+	err := global.GVA_DB.Create(wk).Error
 	return err
 }

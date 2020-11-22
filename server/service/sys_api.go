@@ -14,11 +14,11 @@ import (
 //@param: api model.SysApi
 //@return: err error
 
-func CreateApi(api model.SysApi) (err error) {
+func CreateApi(api *model.SysApi) (err error) {
 	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&model.SysApi{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同api")
 	}
-	return global.GVA_DB.Create(&api).Error
+	return global.GVA_DB.Create(api).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -27,8 +27,8 @@ func CreateApi(api model.SysApi) (err error) {
 //@param: api model.SysApi
 //@return: err error
 
-func DeleteApi(api model.SysApi) (err error) {
-	err = global.GVA_DB.Delete(api).Error
+func DeleteApi(api *model.SysApi) (err error) {
+	err = global.GVA_DB.Delete(*api).Error
 	ClearCasbin(1, api.Path, api.Method)
 	return err
 }
@@ -39,7 +39,7 @@ func DeleteApi(api model.SysApi) (err error) {
 //@param: api model.SysApi, info request.PageInfo, order string, desc bool
 //@return: err error
 
-func GetAPIInfoList(api model.SysApi, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int64) {
+func GetAPIInfoList(api *model.SysApi, info *request.PageInfo, order string, desc bool) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&model.SysApi{})
@@ -109,7 +109,7 @@ func GetApiById(id float64) (err error, api model.SysApi) {
 //@param: api model.SysApi
 //@return: err error
 
-func UpdateApi(api model.SysApi) (err error) {
+func UpdateApi(api *model.SysApi) (err error) {
 	var oldA model.SysApi
 	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
 	if oldA.Path != api.Path || oldA.Method != api.Method {
@@ -124,7 +124,7 @@ func UpdateApi(api model.SysApi) (err error) {
 		if err != nil {
 			return err
 		} else {
-			err = global.GVA_DB.Save(&api).Error
+			err = global.GVA_DB.Save(api).Error
 		}
 	}
 	return err

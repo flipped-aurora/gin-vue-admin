@@ -17,8 +17,8 @@ import (
 //@param: uploader model.ExaSimpleUploader
 //@return: err error
 
-func SaveChunk(uploader model.ExaSimpleUploader) (err error) {
-	return global.GVA_DB.Create(uploader).Error
+func SaveChunk(uploader *model.ExaSimpleUploader) (err error) {
+	return global.GVA_DB.Create(*uploader).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

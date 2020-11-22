@@ -16,8 +16,8 @@ import (
 //@param: file model.ExaFileUploadAndDownload
 //@return: error
 
-func Upload(file model.ExaFileUploadAndDownload) error {
-	return global.GVA_DB.Create(&file).Error
+func Upload(file *model.ExaFileUploadAndDownload) error {
+	return global.GVA_DB.Create(file).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -38,14 +38,14 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 //@param: file model.ExaFileUploadAndDownload
 //@return: err error
 
-func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
+func DeleteFile(file *model.ExaFileUploadAndDownload) (err error) {
 	var fileFromDb model.ExaFileUploadAndDownload
 	err, fileFromDb = FindFile(file.ID)
 	oss := upload.NewOss()
-	if err = oss.DeleteFile(fileFromDb.Key); err != nil{
+	if err = oss.DeleteFile(fileFromDb.Key); err != nil {
 		return errors.New("文件删除失败")
 	}
-	err = global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(file).Error
+	err = global.GVA_DB.Where("id = ?", file.ID).Unscoped().Delete(*file).Error
 	return err
 }
 
@@ -55,7 +55,7 @@ func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
 //@param: info request.PageInfo
 //@return: err error, list interface{}, total int64
 
-func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
+func GetFileRecordInfoList(info *request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
@@ -85,7 +85,7 @@ func UploadFile(header *multipart.FileHeader, noSave string) (err error, file mo
 			Tag:  s[len(s)-1],
 			Key:  key,
 		}
-		return Upload(f), f
+		return Upload(&f), f
 	}
 	return
 }

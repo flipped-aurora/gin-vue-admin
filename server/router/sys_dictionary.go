@@ -2,11 +2,12 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
+	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitSysDictionaryRouter(Router *gin.RouterGroup) {
-	SysDictionaryRouter := Router.Group("sysDictionary")
+	SysDictionaryRouter := Router.Group("sysDictionary").Use(middleware.OperationRecord())
 	{
 		SysDictionaryRouter.POST("createSysDictionary", v1.CreateSysDictionary)   // 新建SysDictionary
 		SysDictionaryRouter.DELETE("deleteSysDictionary", v1.DeleteSysDictionary) // 删除SysDictionary

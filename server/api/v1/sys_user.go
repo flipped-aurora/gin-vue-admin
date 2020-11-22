@@ -88,7 +88,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 	} else {
 		var blackJWT model.JwtBlacklist
 		blackJWT.Jwt = jwtStr
-		if err := service.JsonInBlacklist(blackJWT); err != nil {
+		if err := service.JsonInBlacklist(&blackJWT); err != nil {
 			response.FailWithMessage("jwt作废失败", c)
 			return
 		}
@@ -118,12 +118,12 @@ func Register(c *gin.Context) {
 		return
 	}
 	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
-	err, userReturn := service.Register(*user)
+	err, userReturn := service.Register(user)
 	if err != nil {
 		global.GVA_LOG.Error("注册失败", zap.Any("err", err))
-		response.FailWithDetailed(response.SysUserResponse{User: userReturn}, "注册失败", c)
+		response.FailWithDetailed(response.SysUserResponse{User: *userReturn}, "注册失败", c)
 	} else {
-		response.OkWithDetailed(response.SysUserResponse{User: userReturn}, "注册成功", c)
+		response.OkWithDetailed(response.SysUserResponse{User: *userReturn}, "注册成功", c)
 	}
 }
 
@@ -165,7 +165,7 @@ func GetUserList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := service.GetUserInfoList(pageInfo); err != nil {
+	if err, list, total := service.GetUserInfoList(&pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -244,7 +244,7 @@ func SetUserInfo(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, ReqUser := service.SetUserInfo(user); err != nil {
+	if err, ReqUser := service.SetUserInfo(&user); err != nil {
 		global.GVA_LOG.Error("设置失败", zap.Any("err", err))
 		response.FailWithMessage("设置失败", c)
 	} else {

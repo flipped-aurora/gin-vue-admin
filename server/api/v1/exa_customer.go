@@ -29,7 +29,7 @@ func CreateExaCustomer(c *gin.Context) {
 	}
 	customer.SysUserID = getUserID(c)
 	customer.SysUserAuthorityID = getUserAuthorityId(c)
-	if err := service.CreateExaCustomer(customer); err != nil {
+	if err := service.CreateExaCustomer(&customer); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -52,7 +52,7 @@ func DeleteExaCustomer(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.DeleteExaCustomer(customer); err != nil {
+	if err := service.DeleteExaCustomer(&customer); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 	} else {

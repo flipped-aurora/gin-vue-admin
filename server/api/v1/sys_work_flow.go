@@ -23,7 +23,7 @@ func CreateWorkFlow(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.Create(wk); err != nil {
+	if err := service.Create(&wk); err != nil {
 		global.GVA_LOG.Error("注册失败!", zap.Any("err", err))
 		response.FailWithMessage("注册失败", c)
 	} else {

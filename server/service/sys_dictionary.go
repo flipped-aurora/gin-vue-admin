@@ -14,11 +14,11 @@ import (
 //@param: sysDictionary model.SysDictionary
 //@return: err error
 
-func CreateSysDictionary(sysDictionary model.SysDictionary) (err error) {
+func CreateSysDictionary(sysDictionary *model.SysDictionary) (err error) {
 	if (!errors.Is(global.GVA_DB.First(&model.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
 		return errors.New("存在相同的type，不允许创建")
 	}
-	err = global.GVA_DB.Create(&sysDictionary).Error
+	err = global.GVA_DB.Create(sysDictionary).Error
 	return err
 }
 
@@ -28,8 +28,8 @@ func CreateSysDictionary(sysDictionary model.SysDictionary) (err error) {
 //@param: sysDictionary model.SysDictionary
 //@return: err error
 
-func DeleteSysDictionary(sysDictionary model.SysDictionary) (err error) {
-	err = global.GVA_DB.Delete(sysDictionary).Delete(&sysDictionary.SysDictionaryDetails).Error
+func DeleteSysDictionary(sysDictionary *model.SysDictionary) (err error) {
+	err = global.GVA_DB.Delete(*sysDictionary).Delete(sysDictionary.SysDictionaryDetails).Error
 	return err
 }
 
@@ -78,7 +78,7 @@ func GetSysDictionary(Type string, Id uint) (err error, sysDictionary model.SysD
 //@param: info request.SysDictionarySearch
 //@return: err error, list interface{}, total int64
 
-func GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list interface{}, total int64) {
+func GetSysDictionaryInfoList(info *request.SysDictionarySearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

@@ -46,7 +46,7 @@ func UploadFile(c *gin.Context) {
 func DeleteFile(c *gin.Context) {
 	var file model.ExaFileUploadAndDownload
 	_ = c.ShouldBindJSON(&file)
-	if err := service.DeleteFile(file); err != nil {
+	if err := service.DeleteFile(&file); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 		return
@@ -65,7 +65,7 @@ func DeleteFile(c *gin.Context) {
 func GetFileList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	err, list, total := service.GetFileRecordInfoList(pageInfo)
+	err, list, total := service.GetFileRecordInfoList(&pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
@@ -75,6 +75,6 @@ func GetFileList(c *gin.Context) {
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		},"获取成功", c)
+		}, "获取成功", c)
 	}
 }

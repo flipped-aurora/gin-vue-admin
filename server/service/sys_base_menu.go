@@ -36,7 +36,7 @@ func DeleteBaseMenu(id float64) (err error) {
 //@param: menu model.SysBaseMenu
 //@return:err error
 
-func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
+func UpdateBaseMenu(menu *model.SysBaseMenu) (err error) {
 	var oldMenu model.SysBaseMenu
 	upDateMap := make(map[string]interface{})
 	upDateMap["keep_alive"] = menu.KeepAlive

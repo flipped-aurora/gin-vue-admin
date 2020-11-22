@@ -34,7 +34,7 @@ func GetSystemConfig(c *gin.Context) {
 func SetSystemConfig(c *gin.Context) {
 	var sys model.System
 	_ = c.ShouldBindJSON(&sys)
-	if err := service.SetSystemConfig(sys); err != nil {
+	if err := service.SetSystemConfig(&sys); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Any("err", err))
 		response.FailWithMessage("设置失败", c)
 	} else {
@@ -53,7 +53,7 @@ func SetSystemConfig(c *gin.Context) {
 func ReloadSystem(c *gin.Context) {
 	var sys model.System
 	_ = c.ShouldBindJSON(&sys)
-	if err := service.SetSystemConfig(sys); err != nil {
+	if err := service.SetSystemConfig(&sys); err != nil {
 		global.GVA_LOG.Error("重启系统失败!", zap.Any("err", err))
 		response.FailWithMessage("重启系统失败", c)
 	} else {

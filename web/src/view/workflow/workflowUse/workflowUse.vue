@@ -1,6 +1,6 @@
 <template>
     <div class="workflow-use">
-        <WorkflowInfo v-if="done" :wf="this.node" :business="business"/>
+        <WorkflowInfo v-if="done" :wf="this.node" :business="business" :workflowMoveID="$route.query.workflowMoveID" />
     </div>
 </template>
 <script>
@@ -16,7 +16,7 @@ export default {
     },
     async created(){
         const workflowId = this.$route.query.workflowId
-        const wfmId = this.$route.query.wfmId
+        const workflowMoveID = this.$route.query.workflowMoveID
         if(workflowId){
             const res = await findWorkflowStep({id:workflowId})
             if(res.code == 0){
@@ -24,8 +24,8 @@ export default {
                 this.node = res.data.workflow.nodes[0]
                 this.done = true
             }
-        }else if(wfmId){
-            const res = await getWorkflowMoveByID({id:wfmId})
+        }else if(workflowMoveID){
+            const res = await getWorkflowMoveByID({id:workflowMoveID})
              if(res.code == 0){
                this.business =  res.data.business
                this.node = res.data.move.workflowNode

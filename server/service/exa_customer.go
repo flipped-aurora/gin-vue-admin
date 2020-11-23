@@ -12,8 +12,8 @@ import (
 //@param: e model.ExaCustomer
 //@return: err error
 
-func CreateExaCustomer(e *model.ExaCustomer) (err error) {
-	err = global.GVA_DB.Create(e).Error
+func CreateExaCustomer(e model.ExaCustomer) (err error) {
+	err = global.GVA_DB.Create(&e).Error
 	return err
 }
 
@@ -23,8 +23,8 @@ func CreateExaCustomer(e *model.ExaCustomer) (err error) {
 //@param: e model.ExaCustomer
 //@return: err error
 
-func DeleteExaCustomer(e *model.ExaCustomer) (err error) {
-	err = global.GVA_DB.Delete(*e).Error
+func DeleteExaCustomer(e model.ExaCustomer) (err error) {
+	err = global.GVA_DB.Delete(e).Error
 	return err
 }
 
@@ -62,7 +62,7 @@ func GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (err 
 	db := global.GVA_DB.Model(&model.ExaCustomer{})
 	var a model.SysAuthority
 	a.AuthorityId = sysUserAuthorityID
-	err, auth := GetAuthorityInfo(&a)
+	err, auth := GetAuthorityInfo(a)
 	var dataId []string
 	for _, v := range auth.DataAuthorityId {
 		dataId = append(dataId, v.AuthorityId)

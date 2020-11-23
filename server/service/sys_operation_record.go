@@ -12,8 +12,8 @@ import (
 //@param: sysOperationRecord model.SysOperationRecord
 //@return: err error
 
-func CreateSysOperationRecord(sysOperationRecord *model.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Create(sysOperationRecord).Error
+func CreateSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
+	err = global.GVA_DB.Create(&sysOperationRecord).Error
 	return err
 }
 
@@ -24,7 +24,7 @@ func CreateSysOperationRecord(sysOperationRecord *model.SysOperationRecord) (err
 //@param: ids request.IdsReq
 //@return: err error
 
-func DeleteSysOperationRecordByIds(ids *request.IdsReq) (err error) {
+func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }
@@ -35,8 +35,8 @@ func DeleteSysOperationRecordByIds(ids *request.IdsReq) (err error) {
 //@param: sysOperationRecord model.SysOperationRecord
 //@return: err error
 
-func DeleteSysOperationRecord(sysOperationRecord *model.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Delete(*sysOperationRecord).Error
+func DeleteSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
+	err = global.GVA_DB.Delete(sysOperationRecord).Error
 	return err
 }
 
@@ -58,7 +58,7 @@ func GetSysOperationRecord(id uint) (err error, sysOperationRecord model.SysOper
 //@param: info request.SysOperationRecordSearch
 //@return: err error, list interface{}, total int64
 
-func GetSysOperationRecordInfoList(info *request.SysOperationRecordSearch) (err error, list interface{}, total int64) {
+func GetSysOperationRecordInfoList(info request.SysOperationRecordSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

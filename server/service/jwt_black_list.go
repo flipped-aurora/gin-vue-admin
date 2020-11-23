@@ -14,8 +14,8 @@ import (
 //@param: jwtList model.JwtBlacklist
 //@return: err error
 
-func JsonInBlacklist(jwtList *model.JwtBlacklist) (err error) {
-	err = global.GVA_DB.Create(jwtList).Error
+func JsonInBlacklist(jwtList model.JwtBlacklist) (err error) {
+	err = global.GVA_DB.Create(&jwtList).Error
 	return
 }
 

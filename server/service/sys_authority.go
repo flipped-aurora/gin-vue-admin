@@ -16,7 +16,7 @@ import (
 //@param: auth model.SysAuthority
 //@return: err error, authority model.SysAuthority
 
-func CreateAuthority(auth *model.SysAuthority) (err error, authority *model.SysAuthority) {
+func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同角色id"), auth
@@ -31,7 +31,7 @@ func CreateAuthority(auth *model.SysAuthority) (err error, authority *model.SysA
 //@param: copyInfo response.SysAuthorityCopyResponse
 //@return: err error, authority model.SysAuthority
 
-func CopyAuthority(copyInfo *response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
+func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同角色id"), authority
@@ -61,7 +61,7 @@ func CopyAuthority(copyInfo *response.SysAuthorityCopyResponse) (err error, auth
 //@param: auth model.SysAuthority
 //@return:err error, authority model.SysAuthority
 
-func UpdateAuthority(auth *model.SysAuthority) (err error, authority *model.SysAuthority) {
+func UpdateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysAuthority{}).Updates(&auth).Error
 	return err, auth
 }
@@ -97,7 +97,7 @@ func DeleteAuthority(auth *model.SysAuthority) (err error) {
 //@param: info request.PageInfo
 //@return: err error, list interface{}, total int64
 
-func GetAuthorityInfoList(info *request.PageInfo) (err error, list interface{}, total int64) {
+func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
@@ -117,7 +117,7 @@ func GetAuthorityInfoList(info *request.PageInfo) (err error, list interface{}, 
 //@param: auth model.SysAuthority
 //@return: err error, sa model.SysAuthority
 
-func GetAuthorityInfo(auth *model.SysAuthority) (err error, sa model.SysAuthority) {
+func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
 	return err, sa
 }
@@ -128,7 +128,7 @@ func GetAuthorityInfo(auth *model.SysAuthority) (err error, sa model.SysAuthorit
 //@param: auth model.SysAuthority
 //@return:error
 
-func SetDataAuthority(auth *model.SysAuthority) error {
+func SetDataAuthority(auth model.SysAuthority) error {
 	var s model.SysAuthority
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
 	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)

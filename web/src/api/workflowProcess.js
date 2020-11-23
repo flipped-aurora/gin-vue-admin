@@ -133,13 +133,28 @@ export const startWorkflow = (data, params = { businessType: data.wf.businessTyp
 }
 
 
-// @Tags WorkflowProcess
-// @Summary 我发起的工作流
+// @Tags ExaWfLeave
+// @Summary 创建ExaWfLeave
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /workflowProcess/getMyStated [get]
+// @Router /workflowProcess/completeWorkflowMove [post]
+export const completeWorkflowMove = (data, params = { businessType: data.wf.businessType }) => {
+        return service({
+            url: "/workflowProcess/completeWorkflowMove",
+            method: 'post',
+            data,
+            params
+        })
+    }
+    // @Tags WorkflowProcess
+    // @Summary 我发起的工作流
+    // @Security ApiKeyAuth
+    // @accept application/json
+    // @Produce application/json
+    // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+    // @Router /workflowProcess/getMyStated [get]
 export const getMyStated = () => {
     return service({
         url: "/workflowProcess/getMyStated",

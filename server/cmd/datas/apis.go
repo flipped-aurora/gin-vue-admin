@@ -88,6 +88,7 @@ var Apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 76, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getMyStated", "获取我发起的工作流", "workflowProcess", "GET"},
 	{global.GVA_MODEL{ID: 77, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getMyNeed", "获取我的待办", "workflowProcess", "GET"},
 	{global.GVA_MODEL{ID: 78, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getWorkflowMoveByID", "根据id获取当前节点详情和历史", "workflowProcess", "GET"},
+	{global.GVA_MODEL{ID: 79, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/completeWorkflowMove", "提交工作流", "workflowProcess", "POST"},
 }
 
 func InitSysApi(db *gorm.DB) {

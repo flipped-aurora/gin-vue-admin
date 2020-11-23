@@ -209,7 +209,6 @@ func addAutoMoveFile(data *tplData) {
 	}
 }
 
-
 //@author: [piexlmax](https://github.com/piexlmax)
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: CreateApi
@@ -259,11 +258,10 @@ func AutoCreateApi(a *model.AutoCodeStruct) (err error) {
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		for _, v := range apiList {
 			var api model.SysApi
-			if err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error; err != nil {
-				return err
-			}
-			if err := tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
-				return err
+			if errors.Is(tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error, gorm.ErrRecordNotFound) {
+				if err := tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
+					return err
+				}
 			}
 		}
 		return nil

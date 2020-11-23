@@ -14,8 +14,16 @@ import (
 
 type Local struct{}
 
-// UploadFile 上传文件
-func (l Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
+//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [ccfish86](https://github.com/ccfish86)
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@object: *Local
+//@function: UploadFile
+//@description: 上传文件
+//@param: file *multipart.FileHeader
+//@return: string, string, error
+
+func (*Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	// 读取文件后缀
 	ext := path.Ext(file.Filename)
 	// 读取文件名并加密
@@ -55,8 +63,16 @@ func (l Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	return p, filename, nil
 }
 
-// DeleteFile 删除文件
-func (l Local) DeleteFile(key string) error {
+//@author: [piexlmax](https://github.com/piexlmax)
+//@author: [ccfish86](https://github.com/ccfish86)
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@object: *Local
+//@function: DeleteFile
+//@description: 删除文件
+//@param: key string
+//@return: error
+
+func (*Local) DeleteFile(key string) error {
 	p := global.GVA_CONFIG.Local.Path + "/" + key
 	if strings.Contains(p, global.GVA_CONFIG.Local.Path) {
 		if err := os.Remove(p); err != nil {

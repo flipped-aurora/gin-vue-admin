@@ -5,9 +5,12 @@ import (
 	"path/filepath"
 )
 
-// FileMove: 文件移动供外部调用
-// src: 源位置 绝对路径相对路径都可以
-// dst: 目标位置 绝对路径相对路径都可以 dst 必须为文件夹
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: FileMove
+//@description: 文件移动供外部调用
+//@param: src string, dst string(src: 源位置,绝对路径or相对路径, dst: 目标位置,绝对路径or相对路径,必须为文件夹)
+//@return: err error
+
 func FileMove(src string, dst string) (err error) {
 	if dst == "" {
 		return nil

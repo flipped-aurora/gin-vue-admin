@@ -9,17 +9,31 @@ import (
 	"path/filepath"
 )
 
-// Watch: 监控对象
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@struct_name: Watch
+//@description: 监控对象
+
 type Watch struct {
 	*fsnotify.Watcher
 }
+
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: NewWatch
+//@description: Watch的实例化方法
+//@return: *Watch
 
 func NewWatch() *Watch {
 	obj, _ := fsnotify.NewWatcher()
 	return &Watch{obj}
 }
 
-// Watch: 监控对象
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: w *Watch
+//@function: Watch
+//@description: 监控对象
+//@param: path string, t *T
+//@return: error
+
 func (w *Watch) Watch(path string, t *T) error {
 	// 先转化为绝对路径
 	path, err := filepath.Abs(path)
@@ -81,7 +95,13 @@ func (w *Watch) Watch(path string, t *T) error {
 
 }
 
-// watchDir: 处理监控目录
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: w *Watch
+//@function: watchDir
+//@description: 处理监控目录
+//@param: path string
+//@return: error
+
 func (w *Watch) watchDir(path string) error {
 	// 先将自己添加到监控
 	err := w.Add(path)
@@ -113,7 +133,13 @@ func (w *Watch) watchDir(path string) error {
 	return err
 }
 
-// watchDir: 处理监控单文件
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: w *Watch
+//@function: watchDir
+//@description: 处理监控单文件
+//@param: path string
+//@return: error
+
 func (w *Watch) watchFile(path string) error {
 	var err error
 	if chickPower(path) {
@@ -122,14 +148,24 @@ func (w *Watch) watchFile(path string) error {
 	return err
 }
 
-// chickPower: 判断是否在可控范围内
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: chickPower
+//@description: 判断是否在可控范围内
+//@param: path string
+//@return: error
+
 func chickPower(name string) bool {
 	name = filepath.Ext(name)
-	fmt.Println(name)
 	return name == ".go" || name == ".yaml"
 }
 
-// addTask: 偏函数 简化发送任务
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@object: w *Watch
+//@function: addTask
+//@description: 偏函数 简化发送任务
+//@param: path string
+//@return: error
+
 func (w *Watch) addTask(t *T, name string) {
 	if chickPower(name) {
 		fmt.Println("Add Task->>>>>>")

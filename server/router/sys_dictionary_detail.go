@@ -7,10 +7,7 @@ import (
 )
 
 func InitSysDictionaryDetailRouter(Router *gin.RouterGroup) {
-	SysDictionaryDetailRouter := Router.Group("sysDictionaryDetail").
-		Use(middleware.JWTAuth()).
-		Use(middleware.CasbinHandler()).
-		Use(middleware.OperationRecord())
+	SysDictionaryDetailRouter := Router.Group("sysDictionaryDetail").Use(middleware.OperationRecord())
 	{
 		SysDictionaryDetailRouter.POST("createSysDictionaryDetail", v1.CreateSysDictionaryDetail)   // 新建SysDictionaryDetail
 		SysDictionaryDetailRouter.DELETE("deleteSysDictionaryDetail", v1.DeleteSysDictionaryDetail) // 删除SysDictionaryDetail

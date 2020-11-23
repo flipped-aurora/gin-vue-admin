@@ -22,7 +22,7 @@ import (
 func CreateSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord model.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
-	if err := service.CreateSysOperationRecord(&sysOperationRecord); err != nil {
+	if err := service.CreateSysOperationRecord(sysOperationRecord); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -41,7 +41,7 @@ func CreateSysOperationRecord(c *gin.Context) {
 func DeleteSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord model.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
-	if err := service.DeleteSysOperationRecord(&sysOperationRecord); err != nil {
+	if err := service.DeleteSysOperationRecord(sysOperationRecord); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 	} else {
@@ -60,7 +60,7 @@ func DeleteSysOperationRecord(c *gin.Context) {
 func DeleteSysOperationRecordByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
-	if err := service.DeleteSysOperationRecordByIds(&IDS); err != nil {
+	if err := service.DeleteSysOperationRecordByIds(IDS); err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Any("err", err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
@@ -102,7 +102,7 @@ func FindSysOperationRecord(c *gin.Context) {
 func GetSysOperationRecordList(c *gin.Context) {
 	var pageInfo request.SysOperationRecordSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if err, list, total := service.GetSysOperationRecordInfoList(&pageInfo); err != nil {
+	if err, list, total := service.GetSysOperationRecordInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {

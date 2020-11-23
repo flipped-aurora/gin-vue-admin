@@ -12,8 +12,8 @@ import (
 //@param: sysDictionaryDetail model.SysDictionaryDetail
 //@return: err error
 
-func CreateSysDictionaryDetail(sysDictionaryDetail *model.SysDictionaryDetail) (err error) {
-	err = global.GVA_DB.Create(sysDictionaryDetail).Error
+func CreateSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (err error) {
+	err = global.GVA_DB.Create(&sysDictionaryDetail).Error
 	return err
 }
 
@@ -23,8 +23,8 @@ func CreateSysDictionaryDetail(sysDictionaryDetail *model.SysDictionaryDetail) (
 //@param: sysDictionaryDetail model.SysDictionaryDetail
 //@return: err error
 
-func DeleteSysDictionaryDetail(sysDictionaryDetail *model.SysDictionaryDetail) (err error) {
-	err = global.GVA_DB.Delete(*sysDictionaryDetail).Error
+func DeleteSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (err error) {
+	err = global.GVA_DB.Delete(sysDictionaryDetail).Error
 	return err
 }
 
@@ -56,7 +56,7 @@ func GetSysDictionaryDetail(id uint) (err error, sysDictionaryDetail model.SysDi
 //@param: info request.SysDictionaryDetailSearch
 //@return: err error
 
-func GetSysDictionaryDetailInfoList(info *request.SysDictionaryDetailSearch) (err error, list interface{}, total int64) {
+func GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

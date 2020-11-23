@@ -108,7 +108,7 @@ func AddBaseMenu(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.AddBaseMenu(&menu); err != nil {
+	if err := service.AddBaseMenu(menu); err != nil {
 		global.GVA_LOG.Error("添加失败!", zap.Any("err", err))
 
 		response.FailWithMessage("添加失败", c)
@@ -159,7 +159,7 @@ func UpdateBaseMenu(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.UpdateBaseMenu(&menu); err != nil {
+	if err := service.UpdateBaseMenu(menu); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
 		response.FailWithMessage("更新失败", c)
 	} else {
@@ -214,6 +214,6 @@ func GetMenuList(c *gin.Context) {
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		},"获取成功", c)
 	}
 }

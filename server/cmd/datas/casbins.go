@@ -4,6 +4,7 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
+	"os"
 )
 
 var Carbines = []gormadapter.CasbinRule{
@@ -151,8 +152,8 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "9528", V1: "/autoCode/createTemp", V2: "POST"},
 }
 
-func InitCasbinModel(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+func InitCasbinModel(db *gorm.DB) {
+	if err := db.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("p_type = ? AND v0 IN ?", "p", []string{"888", "8881", "9528"}).Find(&[]gormadapter.CasbinRule{}).RowsAffected == 142 {
 			color.Danger.Println("casbin_rule表的初始数据已存在!")
 			return nil
@@ -161,5 +162,8 @@ func InitCasbinModel(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> casbin_rule 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

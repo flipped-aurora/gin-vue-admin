@@ -7,7 +7,7 @@ import (
 )
 
 func InitApiRouter(Router *gin.RouterGroup) {
-	ApiRouter := Router.Group("api").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	ApiRouter := Router.Group("api").Use(middleware.OperationRecord())
 	{
 		ApiRouter.POST("createApi", v1.CreateApi)   // 创建Api
 		ApiRouter.POST("deleteApi", v1.DeleteApi)   // 删除Api

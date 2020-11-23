@@ -1,6 +1,6 @@
 module gin-vue-admin
 
-go 1.12
+go 1.14
 
 require (
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
@@ -56,3 +56,5 @@ require (
 	gorm.io/driver/mysql v0.3.0
 	gorm.io/gorm v1.20.5
 )
+
+replace github.com/casbin/gorm-adapter/v3 => github.com/casbin/gorm-adapter/v3 v3.0.2

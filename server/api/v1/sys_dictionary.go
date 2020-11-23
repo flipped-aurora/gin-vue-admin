@@ -22,7 +22,7 @@ import (
 func CreateSysDictionary(c *gin.Context) {
 	var dictionary model.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
-	if err := service.CreateSysDictionary(&dictionary); err != nil {
+	if err := service.CreateSysDictionary(dictionary); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败", c)
 	} else {
@@ -41,7 +41,7 @@ func CreateSysDictionary(c *gin.Context) {
 func DeleteSysDictionary(c *gin.Context) {
 	var dictionary model.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
-	if err := service.DeleteSysDictionary(&dictionary); err != nil {
+	if err := service.DeleteSysDictionary(dictionary); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 	} else {
@@ -102,7 +102,7 @@ func GetSysDictionaryList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := service.GetSysDictionaryInfoList(&pageInfo); err != nil {
+	if err, list, total := service.GetSysDictionaryInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {

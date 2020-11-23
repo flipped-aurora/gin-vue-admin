@@ -37,7 +37,7 @@ func CreateTemp(c *gin.Context) {
 			return
 		}
 	}
-	err := service.CreateTemp(&a)
+	err := service.CreateTemp(a)
 	if err != nil {
 		if errors.Is(err, model.AutoMoveErr) {
 			c.Writer.Header().Add("success", "false")

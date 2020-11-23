@@ -26,11 +26,11 @@ func CreateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authBack := service.CreateAuthority(&authority); err != nil {
+	if err, authBack := service.CreateAuthority(authority); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
 	} else {
-		response.OkWithDetailed(response.SysAuthorityResponse{Authority: *authBack}, "创建成功", c)
+		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
 	}
 }
 
@@ -53,7 +53,7 @@ func CopyAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authBack := service.CopyAuthority(&copyInfo); err != nil {
+	if err, authBack := service.CopyAuthority(copyInfo); err != nil {
 		global.GVA_LOG.Error("拷贝失败!", zap.Any("err", err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
 	} else {
@@ -99,11 +99,11 @@ func UpdateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authority := service.UpdateAuthority(&auth); err != nil {
+	if err, authority := service.UpdateAuthority(auth); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
 		response.FailWithMessage("更新失败"+err.Error(), c)
 	} else {
-		response.OkWithDetailed(response.SysAuthorityResponse{Authority: *authority}, "更新成功", c)
+		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authority}, "更新成功", c)
 	}
 }
 
@@ -122,7 +122,7 @@ func GetAuthorityList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := service.GetAuthorityInfoList(&pageInfo); err != nil {
+	if err, list, total := service.GetAuthorityInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败"+err.Error(), c)
 	} else {
@@ -150,7 +150,7 @@ func SetDataAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := service.SetDataAuthority(&auth); err != nil {
+	if err := service.SetDataAuthority(auth); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Any("err", err))
 		response.FailWithMessage("设置失败"+err.Error(), c)
 	} else {

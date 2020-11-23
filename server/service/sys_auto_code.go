@@ -28,7 +28,7 @@ type tplData struct {
 //@param: model.AutoCodeStruct
 //@return: error
 
-func CreateTemp(autoCode *model.AutoCodeStruct) (err error) {
+func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 	basePath := "resource/template"
 	// 获取 basePath 文件夹下所有tpl文件
 	tplFileList, err := GetAllTplFile(basePath, nil)
@@ -87,7 +87,7 @@ func CreateTemp(autoCode *model.AutoCodeStruct) (err error) {
 		if err != nil {
 			return err
 		}
-		if err = value.template.Execute(f, *autoCode); err != nil {
+		if err = value.template.Execute(f, autoCode); err != nil {
 			return err
 		}
 		_ = f.Close()
@@ -208,6 +208,7 @@ func addAutoMoveFile(data *tplData) {
 		}
 	}
 }
+
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@author: [SliverHorn](https://github.com/SliverHorn)

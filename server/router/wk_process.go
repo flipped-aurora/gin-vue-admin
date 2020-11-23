@@ -7,7 +7,7 @@ import (
 )
 
 func InitWorkflowProcessRouter(Router *gin.RouterGroup) {
-	WorkflowProcessRouter := Router.Group("workflowProcess").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler()).Use(middleware.OperationRecord())
+	WorkflowProcessRouter := Router.Group("workflowProcess").Use(middleware.OperationRecord())
 	{
 		WorkflowProcessRouter.POST("createWorkflowProcess", v1.CreateWorkflowProcess)             // 新建WorkflowProcess
 		WorkflowProcessRouter.DELETE("deleteWorkflowProcess", v1.DeleteWorkflowProcess)           // 删除WorkflowProcess

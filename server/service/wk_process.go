@@ -190,19 +190,33 @@ func StartWorkflow(wfInterface model.GVA_Workflow) (err error) {
 	return err
 }
 
-//func CompleteWorkflowNode(wfInterface model.GVA_Workflow)(err error){
-//
-//}
+func CompleteWorkflowMove(wfInterface model.GVA_Workflow) (err error) {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		tableName := getTable(wfInterface.GetBusinessType()).(schema.Tabler).TableName()
+		txErr = tx.Table(tableName).Where("id = ?", wfInterface.GetBusinessID()).Updates(wfInterface).Error
+		if txErr != nil {
+			return txErr
+		}
+		nowWorkflowMove := wfInterface.CreateWorkflowMove()
+		txErr = complete(tx, nowWorkflowMove)
+		if txErr != nil {
+			return txErr
+		}
+		return nil
+	})
+	return err
+}
 
 func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 	var returnWfm model.WorkflowMove
 	var nodeInfo model.WorkflowNode
 	var Edges []model.WorkflowEdge
-	txErr := tx.First(&returnWfm, "business_type = ? and business_id = ? and workflow_process_id = ? and workflow_node_id = ? and is_active = ?", wfm.BusinessType, wfm.BusinessID, wfm.WorkflowProcessID, wfm.WorkflowNodeID, true).Error
+	txErr := tx.First(&returnWfm, "id = ? AND is_active = ?", wfm.ID, true).Error
 	if txErr != nil {
 		return txErr
 	}
-	txErr = tx.First(&nodeInfo, "ID = ?", wfm.WorkflowNodeID).Error
+	txErr = tx.First(&nodeInfo, "id = ?", wfm.WorkflowNodeID).Error
 	if txErr != nil {
 		return txErr
 	}
@@ -216,20 +230,7 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 			return errors.New("不存在当前节点为起点的后续流程")
 		}
 		if len(Edges) == 1 {
-			//当前节点为初始节点时候
-			if nodeInfo.Clazz == model.START {
-				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("is_active", false).Update("operator_id", wfm.OperatorID).Error
-				if txErr != nil {
-					return txErr
-				}
-			}
-			//当前节点为流转节点时候
-			if nodeInfo.Clazz == model.USER_TASK {
-				txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("action", "complete").Update("is_active", false).Update("operator_id", wfm.OperatorID).Error
-				if txErr != nil {
-					return txErr
-				}
-			}
+			txErr = tx.Model(&returnWfm).Update("param", wfm.Param).Update("is_active", false).Update("action", wfm.Action).Update("operator_id", wfm.OperatorID).Error
 
 			newWfm := createNewWorkflowMove(&returnWfm, Edges[0].Target)
 			txErr = tx.Create(newWfm).Error
@@ -240,15 +241,19 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 		}
 		if len(Edges) > 1 {
 			var needUseTargetNodeID string
-			txErr = tx.Where("id = ?", returnWfm.ID).First(&model.WorkflowMove{}).Update("action", "complete").Update("is_active", false).Update("operator_id", wfm.OperatorID).Error
 			if txErr != nil {
 				return txErr
 			}
+			txErr = tx.Model(&returnWfm).Update("param", wfm.Param).Update("is_active", false).Update("action", wfm.Action).Update("operator_id", wfm.OperatorID).Error
+
 			for _, v := range Edges {
 				if v.ConditionExpression == wfm.Param {
 					needUseTargetNodeID = v.Target
 					break
 				}
+			}
+			if needUseTargetNodeID == "" {
+				return errors.New("未发现流转参数，流转失败")
 			}
 			newWfm := createNewWorkflowMove(&returnWfm, needUseTargetNodeID)
 			txErr = tx.Create(newWfm).Error
@@ -270,6 +275,7 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 }
 
 func createNewWorkflowMove(oldWfm *model.WorkflowMove, targetNodeID string) (newWfm *model.WorkflowMove) {
+
 	return &model.WorkflowMove{
 		BusinessID:        oldWfm.BusinessID,
 		BusinessType:      oldWfm.BusinessType,
@@ -277,6 +283,7 @@ func createNewWorkflowMove(oldWfm *model.WorkflowMove, targetNodeID string) (new
 		OperatorID:        0,
 		WorkflowNodeID:    targetNodeID,
 		WorkflowProcessID: oldWfm.WorkflowProcessID,
+		Param:             "",
 		Action:            "",
 		IsActive:          true,
 	}

@@ -83,6 +83,7 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/workflowProcess/getWorkflowProcessList", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/workflowProcess/findWorkflowStep", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/workflowProcess/startWorkflow", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/completeWorkflowMove", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/workflowProcess/getMyStated", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/workflowProcess/getMyNeed", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/workflowProcess/getWorkflowMoveByID", V2: "GET"},

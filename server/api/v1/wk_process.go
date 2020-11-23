@@ -168,6 +168,25 @@ func StartWorkflow(c *gin.Context) {
 }
 
 // @Tags WorkflowProcess
+// @Summary 提交工作流
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /workflowProcess/completeWorkflowMove [post]
+func CompleteWorkflowMove(c *gin.Context) {
+	business := c.Query("businessType")
+	wfInfo := model.WorkflowBusinessStruct[business]()
+	c.ShouldBindJSON(wfInfo)
+	err := service.CompleteWorkflowMove(wfInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("启动成功", c)
+}
+
+// @Tags WorkflowProcess
 // @Summary 我发起的工作流
 // @Security ApiKeyAuth
 // @accept application/json

@@ -77,7 +77,7 @@ export default {
             this.$router.push({
                     name: "workflowUse",
                     query: {
-                    wfmId: row.ID
+                    workflowMoveID: row.ID
                     }
             })
         }

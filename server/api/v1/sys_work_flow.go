@@ -1,12 +1,13 @@
 package v1
 
 import (
-	"fmt"
-	"gin-vue-admin/global/response"
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // @Tags workflow
@@ -18,21 +19,14 @@ import (
 func CreateWorkFlow(c *gin.Context) {
 	var wk model.SysWorkflow
 	_ = c.ShouldBindJSON(&wk)
-	WKVerify := utils.Rules{
-		"WorkflowNickName":    {utils.NotEmpty()},
-		"WorkflowName":        {utils.NotEmpty()},
-		"WorkflowDescription": {utils.NotEmpty()},
-		"WorkflowStepInfo":    {utils.NotEmpty()},
-	}
-	WKVerifyErr := utils.Verify(wk, WKVerify)
-	if WKVerifyErr != nil {
-		response.FailWithMessage(WKVerifyErr.Error(), c)
+	if err := utils.Verify(wk, utils.WorkFlowVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err := service.Create(wk)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
+	if err := service.Create(wk); err != nil {
+		global.GVA_LOG.Error("注册失败!", zap.Any("err", err))
+		response.FailWithMessage("注册失败", c)
 	} else {
-		response.OkWithMessage("获取成功", c)
+		response.OkWithMessage("注册成功", c)
 	}
 }

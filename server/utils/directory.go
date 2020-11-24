@@ -6,11 +6,11 @@ import (
 	"os"
 )
 
-// @title    PathExists
-// @description   文件目录是否存在
-// @auth                     （2020/04/05  20:22）
-// @param     path            string
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: PathExists
+//@description: 文件目录是否存在
+//@param: path string
+//@return: bool, error
 
 func PathExists(path string) (bool, error) {
 	_, err := os.Stat(path)
@@ -23,11 +23,11 @@ func PathExists(path string) (bool, error) {
 	return false, err
 }
 
-// @title    createDir
-// @description   批量创建文件夹
-// @auth                     （2020/04/05  20:22）
-// @param     dirs            string
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CreateDir
+//@description: 批量创建文件夹
+//@param: dirs ...string
+//@return: err error
 
 func CreateDir(dirs ...string) (err error) {
 	for _, v := range dirs {

@@ -3,13 +3,14 @@ package datas
 import (
 	"gin-vue-admin/global"
 	"github.com/gookit/color"
+	"os"
 	"time"
 
 	"gin-vue-admin/model"
 	"gorm.io/gorm"
 )
 
-func InitSysDictionaryDetail(db *gorm.DB) (err error) {
+func InitSysDictionaryDetail(db *gorm.DB) {
 	status := new(bool)
 	*status = true
 	DictionaryDetail := []model.SysDictionaryDetail{
@@ -37,7 +38,7 @@ func InitSysDictionaryDetail(db *gorm.DB) (err error) {
 		{global.GVA_MODEL{ID: 22, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "longtext", 9, status, 9, 5},
 		{global.GVA_MODEL{ID: 23, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "tinyint", 0, status, 0, 6},
 	}
-	return db.Transaction(func(tx *gorm.DB) error {
+	if err := db.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("id IN ?", []int{1, 23}).Find(&[]model.SysDictionaryDetail{}).RowsAffected == 2 {
 			color.Danger.Println("sys_dictionary_details表的初始数据已存在!")
 			return nil
@@ -46,5 +47,8 @@ func InitSysDictionaryDetail(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> sys_dictionary_details 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

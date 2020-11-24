@@ -25,7 +25,7 @@
                     <i class="el-icon-s-fold" v-else></i>
                   </div>
                 </el-col>
-              <el-col :xs="10" :lg="14" :md='14' :sm="14" :xl="14">
+              <el-col :xs="10" :lg="14" :md='14' :sm="9" :xl="14">
                  <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
                   <el-breadcrumb-item
                     :key="item.path"
@@ -33,7 +33,7 @@
                   >{{item.meta.title}}</el-breadcrumb-item>
                 </el-breadcrumb>
               </el-col>
-               <el-col :xs="12" :lg="9" :md="9" :sm="9" :xl="9">
+               <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
                  <div class="fl-right right-box">
                 <Search />
                 <Screenfull class="screenfull"></Screenfull>

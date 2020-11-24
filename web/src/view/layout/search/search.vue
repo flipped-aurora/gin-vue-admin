@@ -3,6 +3,7 @@
     <transition name="el-fade-in-linear">
       <div class="transition-box" style="display: inline-block; " v-show="show">
         <el-select
+          ref="search-input"
           @blur="hiddenSearch"
           @change="changeRouter"
           filterable
@@ -18,56 +19,41 @@
         </el-select>
       </div>
     </transition>
-    <div :style="{display:'inline-block'}">
-      <i @click="show = !show" class="el-icon-search search-icon"></i>
+    <div :style="{display:'inline-block',float:'right'}" class="user-box">
+      <i @click="showSearch()" class="el-icon-search search-icon"></i>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from "vuex";
 
 export default {
-  name: 'searchComponent',
+  name: "searchComponent",
   data() {
     return {
-      value: '',
+      value: "",
       show: false
-    }
+    };
   },
   computed: {
-    ...mapGetters('router', ['routerList'])
+    ...mapGetters("router", ["routerList"])
   },
   methods: {
     changeRouter() {
-      this.$router.push({ name: this.value })
-      this.value = ''
+      this.$router.push({ name: this.value });
+      this.value = "";
     },
     hiddenSearch() {
-      this.show = false
+      this.show = false;
+    },
+    showSearch() {
+      this.show = true;
+      this.$nextTick(()=>{
+        this.$refs['search-input'].focus()
+      })
     }
   }
-}
+};
 </script>
 <style lang="scss">
-.search-component {
-  display: inline-block;
-  .el-input__inner {
-    border: none;
-    border-bottom: 1px solid #606266;
-  }
-  .el-dropdown-link {
-    cursor: pointer;
-  }
-  .search-icon {
-    font-size: 20px;
-    margin-right: 14px;
-    display: inline-block;
-    vertical-align: middle;
-    box-sizing: border-box;
-    color: #606266;
-  }
-  .dropdown-group {
-    min-width: 100px;
-  }
-}
 </style>

@@ -43,7 +43,7 @@ func Zap() (logger *zap.Logger) {
 		logger = zap.New(getEncoderCore())
 	}
 	if global.GVA_CONFIG.Zap.ShowLine {
-		logger.WithOptions(zap.AddCaller())
+		logger = logger.WithOptions(zap.AddCaller())
 	}
 	return logger
 }

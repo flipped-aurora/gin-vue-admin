@@ -7,10 +7,7 @@ import (
 )
 
 func InitCustomerRouter(Router *gin.RouterGroup) {
-	ApiRouter := Router.Group("customer").
-		Use(middleware.JWTAuth()).
-		Use(middleware.CasbinHandler()).
-		Use(middleware.OperationRecord())
+	ApiRouter := Router.Group("customer").Use(middleware.OperationRecord())
 	{
 		ApiRouter.POST("customer", v1.CreateExaCustomer)     // 创建客户
 		ApiRouter.PUT("customer", v1.UpdateExaCustomer)      // 更新客户

@@ -1,14 +1,15 @@
 package v1
 
 import (
-	"fmt"
-	"gin-vue-admin/global/response"
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// @Tags jwt
+// @Tags Jwt
 // @Summary jwt加入黑名单
 // @Security ApiKeyAuth
 // @accept application/json
@@ -17,12 +18,10 @@ import (
 // @Router /jwt/jsonInBlacklist [post]
 func JsonInBlacklist(c *gin.Context) {
 	token := c.Request.Header.Get("x-token")
-	modelJwt := model.JwtBlacklist{
-		Jwt: token,
-	}
-	err := service.JsonInBlacklist(modelJwt)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("jwt作废失败，%v", err), c)
+	jwt := model.JwtBlacklist{Jwt: token}
+	if err := service.JsonInBlacklist(jwt); err != nil {
+		global.GVA_LOG.Error("jwt作废失败!", zap.Any("err", err))
+		response.FailWithMessage("jwt作废失败", c)
 	} else {
 		response.OkWithMessage("jwt作废成功", c)
 	}

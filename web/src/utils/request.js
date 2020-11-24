@@ -68,12 +68,12 @@ service.interceptors.response.use(
             Message({
                 showClose: true,
                 message: response.data.msg || decodeURI(response.headers.msg),
-                type: 'error',
+                type: response.headers.msgtype||'error',
             })
             if (response.data.data && response.data.data.reload) {
                 store.commit('user/LoginOut')
             }
-            return response.data.msg
+            return response.data.msg ? response.data : response
         }
     },
     error => {

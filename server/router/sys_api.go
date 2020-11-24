@@ -2,11 +2,12 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
+	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitApiRouter(Router *gin.RouterGroup) {
-	ApiRouter := Router.Group("api")
+	ApiRouter := Router.Group("api").Use(middleware.OperationRecord())
 	{
 		ApiRouter.POST("createApi", v1.CreateApi)   // 创建Api
 		ApiRouter.POST("deleteApi", v1.DeleteApi)   // 删除Api

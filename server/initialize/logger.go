@@ -135,12 +135,16 @@ func (g *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 }
 
 func (g *GormLogger) Printf(message string, data ...interface{}) {
-	global.GVA_LOG.Info(
-		"gorm",
-		zap.String("type", "sql"),
-		zap.Any("src", data[0]),
-		zap.Any("duration", data[1]),
-		zap.Any("rows", data[2]),
-		zap.Any("sql", data[3]),
-	)
+	switch len(data) {
+	case 0:
+		global.GVA_LOG.Info(message)
+	case 1:
+		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]))
+	case 2:
+		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]))
+	case 3:
+		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]))
+	case 4:
+		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]), zap.Any("sql", data[3]))
+	}
 }

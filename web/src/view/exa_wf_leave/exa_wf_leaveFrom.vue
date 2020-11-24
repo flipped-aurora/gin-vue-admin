@@ -27,10 +27,7 @@
         ></el-date-picker>
       </el-form-item>
       <el-form-item>
-        <el-button
-          v-if="this.wf.clazz == 'start'"
-          @click="start"
-          type="primary"
+        <el-button v-if="this.wf.clazz == 'start'" @click="start" type="primary"
           >启动</el-button
         >
         <el-button
@@ -45,11 +42,7 @@
           type="primary"
           >拒绝</el-button
         >
-        <el-button
-          @click="back"
-          type="primary"
-          >返回</el-button
-        >
+        <el-button @click="back" type="primary">返回</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -62,7 +55,6 @@ import {
 } from "@/api/workflowProcess"; 
 import infoList from "@/mixins/infoList";
 import { mapGetters } from "vuex";
-import Axios from 'axios';
 export default {
   name: "ExaWfLeave",
   mixins: [infoList],
@@ -82,12 +74,10 @@ export default {
   },
   data() {
     return {
-      type: "",
       formData: {
             cause:"",
             startTime:new Date(),
             endTime:new Date(),
-            
       }
     };
   },
@@ -151,7 +141,7 @@ export default {
      if(res.code == 0){
        this.$message({
           type:"success",
-          message:"提交"
+          message:"提交成功"
        })
        this.back()
      }
@@ -161,12 +151,9 @@ export default {
     }
   },
   async created() {
-      console.log(this.workflowMoveID)
-
-   // 建议通过url传参获取目标数据ID 调用 find方法进行查询数据操作 从而决定本页面是create还是update 以下为id作为url参数示例
-   if(this.business){
+    if(this.business){
      this.formData = this.business
-   }
+    }
 }
 
 };

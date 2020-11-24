@@ -1,0 +1,89 @@
+
+@import '@/style/basics.scss';
+@media screen and (min-width: 320px)and (max-width: 750px){
+        .el-header{
+            padding: 0 $padding-xs;
+        }
+        .layout-cont {
+            .main-cont{
+                .breadcrumb{
+                    padding: 0 $padding-xs;
+                }
+            }
+        } 
+        .layout-cont{
+            .right-box{
+                margin-right: $margin-xs;
+            }
+        } 
+        .search-component{
+            width: 30px;
+        }
+        .screenfull{
+            width: 26px;
+            text-align: center;
+        }
+        .el-main{
+            .admin-box{
+                margin-left: 0;
+                margin-right: 0;
+            }
+            .big.admin-box{
+                padding: 0 0 15px 0;
+            }
+            .big {
+                .bottom {
+                    .chart-player{
+                        height: auto!important;
+                        margin-bottom: 15px;
+                    }
+                    .todoapp{
+                        background-color: #fff;
+                        padding-bottom: 10px;
+                    }
+                }
+            }
+        }
+       
+        .card .car-left,
+        .card .car-right{
+            width: 100%;
+            height: 100%;
+        }
+        .card{
+            padding-left: $padding-xs;
+            padding-right: $padding-xs;
+
+        }
+        .card {
+            .text{
+                width: 100%;
+                h4{
+                    white-space: break-spaces;
+                }
+            }
+        }
+        .shadow{
+            margin-left: 5px;
+            margin-right: 5px;
+            .grid-content{
+                margin-bottom: 10px;
+                padding: 0;
+            }
+        } 
+        .el-dialog{
+            width: 90%;
+        }
+        .el-transfer{
+            .el-transfer-panel{
+                width: 40%;
+                display: inline-block;
+            }
+            .el-transfer__buttons{
+                padding: 0 5px;
+                display: inline-block;
+            }
+           
+        }
+       
+}

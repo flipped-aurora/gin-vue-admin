@@ -1204,6 +1204,14 @@ $mainHight: 100vh;
     top: 0;
     box-sizing: border-box;
     z-index: 999;
+    >.el-row{
+        padding: 0;
+        .el-col-lg-14{
+            height: 60px;
+        }
+    }
+   
+
 }
 
 
@@ -1387,14 +1395,14 @@ $mainHight: 100vh;
 
     .car-left {
         height: $height-car;
-        width: 70%;
-        float: left;
+        // width: 70%;
+        // float: left;
     }
 
     .car-right {
         height: $height-car;
-        width: 29%;
-        float: left;
+        // width: 29%;
+        // float: left;
 
         .flow,
         .user-number,

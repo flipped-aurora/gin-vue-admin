@@ -2,12 +2,12 @@
   <div>
     <el-form :model="form" label-width="80px" ref="form">
       <el-row>
-        <el-col  :span="3"><label for="">活动名称</label></el-col>
-        <el-col  :span="10"><el-input v-model="form.name"></el-input></el-col>
+        <el-col  :span="3" :xs="6"><label for="">活动名称</label></el-col>
+        <el-col  :span="10" :xs="14"><el-input v-model="form.name"></el-input></el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">活动区域</label></el-col>
-        <el-col  :span="10">
+        <el-col  :span="3" :xs="6"><label for="">活动区域</label></el-col>
+        <el-col  :span="10" :xs="14">
            <el-select placeholder="请选择活动区域" v-model="form.region">
             <el-option label="上海" value="shanghai"></el-option>
             <el-option label="北京" value="beijing"></el-option>
@@ -15,8 +15,8 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">活动时间</label></el-col>
-        <el-col  :span="10">
+        <el-col  :span="3" :xs="6"><label for="">活动时间</label></el-col>
+        <el-col  :span="10" :xs="18">
            <el-col :span="11">
           <el-date-picker placeholder="选择日期" style="width: 100%;" type="date" v-model="form.date1"></el-date-picker>
         </el-col>
@@ -27,12 +27,12 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">即时配送</label></el-col>
-        <el-col  :span="10"><el-switch v-model="form.delivery"></el-switch></el-col>
+        <el-col  :span="3" :xs="6"><label for="">即时配送</label></el-col>
+        <el-col  :span="10" :xs="14"><el-switch v-model="form.delivery"></el-switch></el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">活动性质</label></el-col>
-        <el-col  :span="10">
+        <el-col  :span="3" :xs="6"><label for="">活动性质</label></el-col>
+        <el-col  :span="10" :xs="14">
           <el-checkbox-group v-model="form.type">
             <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
             <el-checkbox label="地推活动" name="type"></el-checkbox>
@@ -42,8 +42,8 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">特殊资源</label></el-col>
-        <el-col  :span="10">
+        <el-col  :span="3" :xs="6"><label for="">特殊资源</label></el-col>
+        <el-col  :span="10" :xs="14">
           <el-radio-group v-model="form.resource">
             <el-radio label="线上品牌商赞助"></el-radio>
             <el-radio label="线下场地免费"></el-radio>
@@ -51,12 +51,12 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">活动形式</label></el-col>
-        <el-col  :span="10"><el-input type="textarea" v-model="form.desc"></el-input></el-col>
+        <el-col  :span="3" :xs="6"><label for="">活动形式</label></el-col>
+        <el-col  :span="10" :xs="14"><el-input type="textarea" v-model="form.desc"></el-input></el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">穿梭框</label></el-col>
-        <el-col  :span="20">
+        <el-col  :span="3" :xs="6"><label for="">穿梭框</label></el-col>
+        <el-col  :span="20" :xs="24">
           <el-transfer
             :data="data"
             :filter-method="filterMethod"
@@ -67,7 +67,7 @@
         </el-col>
       </el-row>
       <el-row>
-        <el-col  :span="3"><label for="">活动时间</label></el-col>
+        <el-col  :span="3" :xs="6"><label for="">活动时间</label></el-col>
         <el-col  :span="10"><el-input v-model="form.name"></el-input></el-col>
       </el-row>
       <el-row type="flex" justify="center">

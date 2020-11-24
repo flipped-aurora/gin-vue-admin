@@ -17,7 +17,7 @@
         />
       </div>
       <DefaultDetail :model="model" :onChange="onChange" :readOnly="readOnly" />
-      <div class="panelRow">
+      <!-- <div class="panelRow">
         <div>{{ i18n['process.category'] }}：</div>
         <el-select
           style="width: 90%; font-size: 12px"
@@ -35,7 +35,7 @@
             :value="category.id"
           />
         </el-select>
-      </div>
+      </div> -->
 
       <div class="panelRow">
         <div>{{ i18n['process.name'] }}：</div>

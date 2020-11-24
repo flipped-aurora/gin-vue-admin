@@ -140,6 +140,7 @@ export default {
       });
     }
     const authorityRes = await getAuthorityList({ page: 1, pageSize: 9999999 });
+    console.log(authorityRes)
     if (authorityRes.code == 0) {
       authorityRes.data.list.map(item => {
         this.authorities.push({

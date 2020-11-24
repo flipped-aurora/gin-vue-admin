@@ -20,6 +20,6 @@ type ExaWfLeaveWorkflow struct {
 	ExaWfLeave   `json:"business"`
 }
 
-func (e ExaWfLeave) TableName() string {
+func (ExaWfLeave) TableName() string {
 	return "exa_wf_leaves"
 }

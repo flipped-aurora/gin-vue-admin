@@ -2,11 +2,12 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
+	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitCustomerRouter(Router *gin.RouterGroup) {
-	ApiRouter := Router.Group("customer")
+	ApiRouter := Router.Group("customer").Use(middleware.OperationRecord())
 	{
 		ApiRouter.POST("customer", v1.CreateExaCustomer)     // 创建客户
 		ApiRouter.PUT("customer", v1.UpdateExaCustomer)      // 更新客户

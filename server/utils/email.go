@@ -11,12 +11,23 @@ import (
 	"github.com/jordan-wright/email"
 )
 
+//@author: [maplepie](https://github.com/maplepie)
+//@function: Email
+//@description: Email发送方法
+//@param: subject string, body string
+//@return: error
+
 func Email(subject string, body string) error {
 	to := strings.Split(global.GVA_CONFIG.Email.To, ",")
 	return send(to, subject, body)
 }
 
-// ErrorToEmail Error 发送邮件
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@function: ErrorToEmail
+//@description: 给email中间件错误发送邮件到指定邮箱
+//@param: subject string, body string
+//@return: error
+
 func ErrorToEmail(subject string, body string) error {
 	to := strings.Split(global.GVA_CONFIG.Email.To, ",")
 	if to[len(to)-1] == "" { // 判断切片的最后一个元素是否为空,为空则移除
@@ -25,10 +36,22 @@ func ErrorToEmail(subject string, body string) error {
 	return send(to, subject, body)
 }
 
+//@author: [maplepie](https://github.com/maplepie)
+//@function: EmailTest
+//@description: Email测试方法
+//@param: subject string, body string
+//@return: error
+
 func EmailTest(subject string, body string) error {
 	to := []string{global.GVA_CONFIG.Email.From}
 	return send(to, subject, body)
 }
+
+//@author: [maplepie](https://github.com/maplepie)
+//@function: send
+//@description: Email发送方法
+//@param: subject string, body string
+//@return: error
 
 func send(to []string, subject string, body string) error {
 	from := global.GVA_CONFIG.Email.From

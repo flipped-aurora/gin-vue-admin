@@ -103,8 +103,8 @@ export default {
 </script>
 <style scoped>
 .screenfull-svg {
-  width: 20px;
-  height: 20px;
+  width: 17px;
+  height: 17px;
   cursor: pointer;
   fill: #606266;
   vertical-align: middle;

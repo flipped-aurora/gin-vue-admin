@@ -7,7 +7,7 @@ import (
 )
 
 func InitWorkflowRouter(Router *gin.RouterGroup) {
-	WorkflowRouter := Router.Group("workflow").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	WorkflowRouter := Router.Group("workflow").Use(middleware.OperationRecord())
 	{
 		WorkflowRouter.POST("createWorkFlow", v1.CreateWorkFlow) // 创建工作流
 	}

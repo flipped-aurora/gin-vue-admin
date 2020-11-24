@@ -10,12 +10,12 @@ import (
 	"gorm.io/gorm"
 )
 
-// @title    Register
-// @description   register, 用户注册
-// @auth                     （2020/04/05  20:22）
-// @param     u               model.SysUser
-// @return    err             error
-// @return    userInter       *SysUser
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Register
+//@description: 用户注册
+//@param: u model.SysUser
+//@return: err error, userInter model.SysUser
 
 func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	var user model.SysUser
@@ -29,12 +29,11 @@ func Register(u model.SysUser) (err error, userInter model.SysUser) {
 	return err, u
 }
 
-// @title    Login
-// @description   login, 用户登录
-// @auth                     （2020/04/05  20:22）
-// @param     u               *model.SysUser
-// @return    err             error
-// @return    userInter       *SysUser
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: Login
+//@description: 用户登录
+//@param: u *model.SysUser
+//@return: err error, userInter *model.SysUser
 
 func Login(u *model.SysUser) (err error, userInter *model.SysUser) {
 	var user model.SysUser
@@ -43,13 +42,11 @@ func Login(u *model.SysUser) (err error, userInter *model.SysUser) {
 	return err, &user
 }
 
-// @title    ChangePassword
-// @description   change the password of a certain user, 修改用户密码
-// @auth                     （2020/04/05  20:22）
-// @param     u               *model.SysUser
-// @param     newPassword     string
-// @return    err             error
-// @return    userInter       *SysUser
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: ChangePassword
+//@description: 修改用户密码
+//@param: u *model.SysUser, newPassword string
+//@return: err error, userInter *model.SysUser
 
 func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter *model.SysUser) {
 	var user model.SysUser
@@ -58,13 +55,11 @@ func ChangePassword(u *model.SysUser, newPassword string) (err error, userInter 
 	return err, u
 }
 
-// @title    GetInfoList
-// @description   get user list by pagination, 分页获取数据
-// @auth                      （2020/04/05  20:22）
-// @param     info             request.PageInfo
-// @return    err              error
-// @return    list             interface{}
-// @return    total            int
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetUserInfoList
+//@description: 分页获取数据
+//@param: info request.PageInfo
+//@return: err error, list interface{}, total int64
 
 func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
@@ -76,24 +71,22 @@ func GetUserInfoList(info request.PageInfo) (err error, list interface{}, total 
 	return err, userList, total
 }
 
-// @title    SetUserAuthority
-// @description   set the authority of a certain user, 设置一个用户的权限
-// @auth                     （2020/04/05  20:22）
-// @param     uuid            UUID
-// @param     authorityId     string
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetUserAuthority
+//@description: 设置一个用户的权限
+//@param: uuid uuid.UUID, authorityId string
+//@return: err error
 
 func SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
 	err = global.GVA_DB.Where("uuid = ?", uuid).First(&model.SysUser{}).Update("authority_id", authorityId).Error
 	return err
 }
 
-// @title    SetUserAuthority
-// @description   set the authority of a certain user, 设置一个用户的权限
-// @auth                     （2020/04/05  20:22）
-// @param     uuid            UUID
-// @param     authorityId     string
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: DeleteUser
+//@description: 删除用户
+//@param: id float64
+//@return: err error
 
 func DeleteUser(id float64) (err error) {
 	var user model.SysUser
@@ -101,24 +94,22 @@ func DeleteUser(id float64) (err error) {
 	return err
 }
 
-// @title    SetUserInfo
-// @description   set the authority of a certain user, 设置用户信息
-// @auth                     （2020/04/05  20:22）
-// @param     uuid            UUID
-// @param     authorityId     string
-// @return    err             error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetUserInfo
+//@description: 设置用户信息
+//@param: reqUser model.SysUser
+//@return: err error, user model.SysUser
 
 func SetUserInfo(reqUser model.SysUser) (err error, user model.SysUser) {
 	err = global.GVA_DB.Updates(&reqUser).Error
 	return err, reqUser
 }
 
-// @title    FindUserById
-// @description   Get user information by id, 通过id获取用户信息
-// @auth                     （2020/04/05  20:22）
-// @param     id              int
-// @return    err             error
-// @return    user            *model.SysUser
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@function: FindUserById
+//@description: 通过id获取用户信息
+//@param: id int
+//@return: err error, user *model.SysUser
 
 func FindUserById(id int) (err error, user *model.SysUser) {
 	var u model.SysUser
@@ -126,12 +117,11 @@ func FindUserById(id int) (err error, user *model.SysUser) {
 	return err, &u
 }
 
-// @title    FindUserByUuid
-// @description   Get user information by uuid, 通过uuid获取用户信息
-// @auth                     （2020/04/05  20:22）
-// @param     uuid            string
-// @return    err             error
-// @return    user            *model.SysUser
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@function: FindUserByUuid
+//@description: 通过uuid获取用户信息
+//@param: uuid string
+//@return: err error, user *model.SysUser
 
 func FindUserByUuid(uuid string) (err error, user *model.SysUser) {
 	var u model.SysUser

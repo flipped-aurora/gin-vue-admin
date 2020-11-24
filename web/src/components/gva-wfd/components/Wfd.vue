@@ -249,6 +249,7 @@
     },
     created() {
       this.processModel = this.propProcessModel
+      this.selectedModel = this.processModel
     },
   };
 </script>

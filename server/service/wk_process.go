@@ -3,6 +3,7 @@ package service
 import (
 	"errors"
 	"fmt"
+	"gin-vue-admin/constant"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -134,7 +135,7 @@ func GetWorkflowProcess(id string) (err error, workflowProcess model.WorkflowPro
 //@return: err error, workflowNodes []model.WorkflowNode
 
 func FindWorkflowStep(id string) (err error, workflowNode model.WorkflowProcess) {
-	err = global.GVA_DB.Preload("Nodes", "clazz = ?", model.START).Where("id = ?", id).First(&workflowNode).Error
+	err = global.GVA_DB.Preload("Nodes", "clazz = ?", constant.START).Where("id = ?", id).First(&workflowNode).Error
 	return
 }
 
@@ -221,7 +222,7 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 		return txErr
 	}
 
-	if nodeInfo.Clazz == model.START || nodeInfo.Clazz == model.USER_TASK {
+	if nodeInfo.Clazz == constant.START || nodeInfo.Clazz == constant.USER_TASK {
 		txErr = tx.Find(&Edges, "workflow_process_id = ? and source = ?", wfm.WorkflowProcessID, wfm.WorkflowNodeID).Error
 		if txErr != nil {
 			return txErr
@@ -273,11 +274,11 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 				}
 			}
 		}
-	} else if nodeInfo.Clazz == model.EXCLUSIVE_GATEWAY {
+	} else if nodeInfo.Clazz == constant.EXCLUSIVE_GATEWAY {
 		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
-	} else if nodeInfo.Clazz == model.INCLUSIVE_GATEWAY {
+	} else if nodeInfo.Clazz == constant.INCLUSIVE_GATEWAY {
 		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
-	} else if nodeInfo.Clazz == model.PARELLEL_GATEWAY {
+	} else if nodeInfo.Clazz == constant.PARELLEL_GATEWAY {
 		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
 	} else {
 		return errors.New("目前只支持start节点和userTask功能，其他功能正在开发中")
@@ -296,7 +297,7 @@ func createNewWorkflowMove(tx *gorm.DB, oldWfm *model.WorkflowMove, targetNodeID
 		return txErr, []model.WorkflowMove{}
 	}
 	switch nodeInfo.Clazz {
-	case model.EXCLUSIVE_GATEWAY:
+	case constant.EXCLUSIVE_GATEWAY:
 		// 当为排他网关时候 选择一个参数进行排他线路选择
 		txErr := tx.First(&edge, "workflow_process_id = ? and source = ? and condition_expression = ?", oldWfm.WorkflowProcessID, nodeInfo.ID, oldWfm.Param).Error
 		if txErr != nil {
@@ -313,7 +314,7 @@ func createNewWorkflowMove(tx *gorm.DB, oldWfm *model.WorkflowMove, targetNodeID
 			Action:            "",
 			IsActive:          true})
 		return nil, newWfm
-	case model.INCLUSIVE_GATEWAY:
+	case constant.INCLUSIVE_GATEWAY:
 		// 当为包容网关时，需要等待其他网关执行结束才进行创建
 		txErr := tx.Find(&edges, "workflow_process_id = ? and target = ?", oldWfm.WorkflowProcessID, nodeInfo.ID).Error
 		if txErr != nil {
@@ -361,7 +362,7 @@ func createNewWorkflowMove(tx *gorm.DB, oldWfm *model.WorkflowMove, targetNodeID
 		}
 		return nil, newWfm
 
-	case model.PARELLEL_GATEWAY:
+	case constant.PARELLEL_GATEWAY:
 		// 当为并行网关时候 找出所有线路创建并行节点
 		txErr := tx.Find(&edges, "workflow_process_id = ? and source = ?", oldWfm.WorkflowProcessID, nodeInfo.ID).Error
 		if txErr != nil {

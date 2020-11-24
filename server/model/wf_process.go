@@ -55,24 +55,6 @@ func (w WorkflowBase) GetWorkflowBase() (workflowBase WorkflowBase) {
 	return w
 }
 
-//定义clazz常量
-
-const (
-	USER_TASK         string = "userTask"
-	SCRIPT_TASK       string = "scriptTask"
-	RECEIVE_TASK      string = "receiveTask"
-	MAIL_TASK         string = "mailTask"
-	TIMER_START       string = "timerStart"
-	MESSAGE_START     string = "messageStart"
-	EXCLUSIVE_GATEWAY string = "exclusiveGateway" // 排他网关
-	INCLUSIVE_GATEWAY string = "inclusiveGateway" // 包容网关
-	PARELLEL_GATEWAY  string = "parallelGateway"  // 并行网关
-	FLOW              string = "flow"
-	START             string = "start"
-	END               string = "end"
-	PROCESS           string = "process"
-)
-
 type WorkflowMove struct {
 	global.GVA_MODEL
 	WorkflowProcessID string          `json:"workflowProcessID" gorm:"comment:工作流模板ID"`

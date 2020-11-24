@@ -74,14 +74,14 @@
           @input="(value) => onChange('dueDate', value)"
         />
       </div>
-      <div class="panelRow">
+      <!-- <div class="panelRow">
         <el-checkbox
           @change="(value) => onChange('isSequential', value)"
           :disabled="readOnly"
           :value="!!model.isSequential"
           >{{ i18n['userTask.counterSign'] }}</el-checkbox
         >
-      </div>
+      </div> -->
       
       <div class="panelRow">
         <div>视图文件路径（以view开头）</div>

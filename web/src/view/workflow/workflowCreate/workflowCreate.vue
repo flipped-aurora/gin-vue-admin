@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p style="text-align:center;padding-bottom:4px">当前版本为0.01试用版本，可满足最简单的流程功能，未完成功能，如脚本节点，邮件节点等目前暂时注释入口，期待大家PR</p>
     <el-button
       size="small"
       style="float: right; margin-top: 6px; margin-right: 6px"

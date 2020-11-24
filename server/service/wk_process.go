@@ -234,11 +234,11 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 			if txErr != nil {
 				return txErr
 			}
-			txErr,newWfm := createNewWorkflowMove(tx,&returnWfm, Edges[0].Target)
+			txErr, newWfm := createNewWorkflowMove(tx, &returnWfm, Edges[0].Target)
 			if txErr != nil {
 				return txErr
 			}
-			if len(newWfm)>0{
+			if len(newWfm) > 0 {
 				txErr = tx.Create(&newWfm).Error
 				if txErr != nil {
 					return txErr
@@ -262,11 +262,11 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 			if needUseTargetNodeID == "" {
 				return errors.New("未发现流转参数，流转失败")
 			}
-			txErr,newWfm := createNewWorkflowMove(tx,&returnWfm, needUseTargetNodeID)
+			txErr, newWfm := createNewWorkflowMove(tx, &returnWfm, needUseTargetNodeID)
 			if txErr != nil {
 				return txErr
 			}
-			if len(newWfm)>0{
+			if len(newWfm) > 0 {
 				txErr = tx.Create(&newWfm).Error
 				if txErr != nil {
 					return txErr
@@ -285,61 +285,68 @@ func complete(tx *gorm.DB, wfm *model.WorkflowMove) (err error) {
 	return nil
 }
 
-func createNewWorkflowMove(tx *gorm.DB,oldWfm *model.WorkflowMove, targetNodeID string) (err error,newWfm []model.WorkflowMove) {
+func createNewWorkflowMove(tx *gorm.DB, oldWfm *model.WorkflowMove, targetNodeID string) (err error, newWfm []model.WorkflowMove) {
 	// 以下所有非 default的节点的下一步流转均应该处理为递归形式
-    var nodeInfo model.WorkflowNode
-    var edge model.WorkflowEdge
-    var edges []model.WorkflowEdge
-    var wfms []model.WorkflowMove
-	txErr := tx.First(&nodeInfo,"id = ?",targetNodeID).Error
-	if txErr!=nil{
-		return txErr,[]model.WorkflowMove{}
+	var nodeInfo model.WorkflowNode
+	var edge model.WorkflowEdge
+	var edges []model.WorkflowEdge
+	var wfms []model.WorkflowMove
+	txErr := tx.First(&nodeInfo, "id = ?", targetNodeID).Error
+	if txErr != nil {
+		return txErr, []model.WorkflowMove{}
 	}
-	switch nodeInfo.Clazz{
+	switch nodeInfo.Clazz {
 	case model.EXCLUSIVE_GATEWAY:
 		// 当为排他网关时候 选择一个参数进行排他线路选择
-		txErr := tx.First(&edge, "workflow_process_id = ? and source = ? and condition_expression = ?", oldWfm.WorkflowProcessID, nodeInfo.ID,oldWfm.Param).Error
-		if txErr !=nil{
+		txErr := tx.First(&edge, "workflow_process_id = ? and source = ? and condition_expression = ?", oldWfm.WorkflowProcessID, nodeInfo.ID, oldWfm.Param).Error
+		if txErr != nil {
 			return txErr, []model.WorkflowMove{}
 		}
-			newWfm = append(newWfm, model.WorkflowMove{
-				BusinessID:        oldWfm.BusinessID,
-				BusinessType:      oldWfm.BusinessType,
-				PromoterID:        oldWfm.PromoterID,
-				OperatorID:        0,
-				WorkflowNodeID:    edge.Target,
-				WorkflowProcessID: oldWfm.WorkflowProcessID,
-				Param:             "",
-				Action:            "",
-				IsActive:          true,})
-			return nil,newWfm
+		newWfm = append(newWfm, model.WorkflowMove{
+			BusinessID:        oldWfm.BusinessID,
+			BusinessType:      oldWfm.BusinessType,
+			PromoterID:        oldWfm.PromoterID,
+			OperatorID:        0,
+			WorkflowNodeID:    edge.Target,
+			WorkflowProcessID: oldWfm.WorkflowProcessID,
+			Param:             "",
+			Action:            "",
+			IsActive:          true})
+		return nil, newWfm
 	case model.INCLUSIVE_GATEWAY:
 		// 当为包容网关时，需要等待其他网关执行结束才进行创建
-
 		txErr := tx.Find(&edges, "workflow_process_id = ? and target = ?", oldWfm.WorkflowProcessID, nodeInfo.ID).Error
-		if txErr!=nil{
-			return txErr,[]model.WorkflowMove{}
+		if txErr != nil {
+			return txErr, []model.WorkflowMove{}
 		}
 		var sourceIds []string
-		for _,v := range edges{
+		for _, v := range edges {
 			sourceIds = append(sourceIds, v.Source)
 		}
-		txErr = tx.Find(&wfms,"workflow_process_id = ? and business_id = ? and workflow_node_id in (?) and is_active = ?",oldWfm.WorkflowProcessID,oldWfm.BusinessID,sourceIds,false).Error
-		if txErr!=nil{
-			return txErr,[]model.WorkflowMove{}
+		txErr = tx.Find(&wfms, "workflow_process_id = ? and business_id = ? and workflow_node_id in (?) and is_active = ?", oldWfm.WorkflowProcessID, oldWfm.BusinessID, sourceIds, false).Error
+		if txErr != nil {
+			return txErr, []model.WorkflowMove{}
 		}
-		if len(wfms) != len(edges){
-			return nil,[]model.WorkflowMove{}
+		if len(wfms) != len(edges) {
+			return nil, []model.WorkflowMove{}
 		}
-		if len(wfms) == len(edges){
-			//var params string
-			//for _,v := range wfms{
-			//	params += v.Param
-			//}
-			//参数携带模式暂时未定
-			txErr := tx.First(&edge, "workflow_process_id = ? and source = ?", oldWfm.WorkflowProcessID, nodeInfo.ID).Error
-			if txErr!=nil{
-				return txErr,[]model.WorkflowMove{}
+		if len(wfms) == len(edges) {
+			params := make(map[string]int)
+			var param string
+			var temp int
+			for _, v := range wfms {
+				params[v.Param]++
+			}
+			for k, v := range params {
+				if temp < v {
+					temp = v
+					param = k
+				}
+			}
+			//参数携带模式暂时未定 暂时为少数服从多数原则  后续会增加原则配置 （少数服从多数，仅一关键字即为关键字，所有关键字才为关键字 三种方案）
+			txErr := tx.First(&edge, "workflow_process_id = ? and source = ? and condition_expression = ?", oldWfm.WorkflowProcessID, nodeInfo.ID, param).Error
+			if txErr != nil {
+				return txErr, []model.WorkflowMove{}
 			}
 			newWfm = append(newWfm, model.WorkflowMove{
 				BusinessID:        oldWfm.BusinessID,
@@ -350,17 +357,17 @@ func createNewWorkflowMove(tx *gorm.DB,oldWfm *model.WorkflowMove, targetNodeID 
 				WorkflowProcessID: oldWfm.WorkflowProcessID,
 				Param:             "",
 				Action:            "",
-				IsActive:          true,})
+				IsActive:          true})
 		}
 		return nil, newWfm
 
 	case model.PARELLEL_GATEWAY:
 		// 当为并行网关时候 找出所有线路创建并行节点
 		txErr := tx.Find(&edges, "workflow_process_id = ? and source = ?", oldWfm.WorkflowProcessID, nodeInfo.ID).Error
-		if txErr !=nil{
+		if txErr != nil {
 			return txErr, []model.WorkflowMove{}
 		}
-		for _,v := range edges{
+		for _, v := range edges {
 			newWfm = append(newWfm, model.WorkflowMove{
 				BusinessID:        oldWfm.BusinessID,
 				BusinessType:      oldWfm.BusinessType,
@@ -370,10 +377,10 @@ func createNewWorkflowMove(tx *gorm.DB,oldWfm *model.WorkflowMove, targetNodeID 
 				WorkflowProcessID: oldWfm.WorkflowProcessID,
 				Param:             "",
 				Action:            "",
-				IsActive:          true,})
+				IsActive:          true})
 		}
 
-			return nil,newWfm
+		return nil, newWfm
 
 	default:
 		newWfm = append(newWfm, model.WorkflowMove{
@@ -385,7 +392,7 @@ func createNewWorkflowMove(tx *gorm.DB,oldWfm *model.WorkflowMove, targetNodeID 
 			WorkflowProcessID: oldWfm.WorkflowProcessID,
 			Param:             "",
 			Action:            "",
-			IsActive:          true,})
+			IsActive:          true})
 		return nil, newWfm
 	}
 }

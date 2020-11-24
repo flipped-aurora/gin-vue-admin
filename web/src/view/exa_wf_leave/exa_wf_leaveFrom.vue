@@ -96,6 +96,7 @@ export default {
           return false
         }
       }
+      return true
     },
     ...mapGetters("user", ["userInfo"])
   },

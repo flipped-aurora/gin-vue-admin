@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"gin-vue-admin/constant"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
@@ -423,7 +422,6 @@ func GetWorkflowMoveByID(id float64) (err error, move model.WorkflowMove, moves 
 			return txErr
 		}
 		result = getTable(move.BusinessType)
-		fmt.Println(result)
 		txErr = tx.First(result, "id = ?", move.BusinessID).Error
 		if txErr != nil {
 			return txErr

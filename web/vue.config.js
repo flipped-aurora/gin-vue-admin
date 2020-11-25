@@ -23,7 +23,7 @@ module.exports = {
             // 把key的路径代理到target位置
             // detail: https://cli.vuejs.org/config/#devserver-proxy
             [process.env.VUE_APP_BASE_API]: { //需要代理的路径   例如 '/api'
-                target: `http://127.0.0.1:8888`, //代理到 目标路径
+                target: `http://127.0.0.1:8888/`, //代理到 目标路径
                 changeOrigin: true,
                 pathRewrite: { // 修改路径数据
                     ['^' + process.env.VUE_APP_BASE_API]: '' // 举例 '^/api:""' 把路径中的/api字符串删除
@@ -59,6 +59,17 @@ module.exports = {
         config
             .when(process.env.NODE_ENV !== 'development',
                 config => {
+
+                    // 不打包 begin
+                    // 1.目前已经测试通过[vue,axios,echarts]可以cdn引用，其它组件测试通过后可继续添加
+                    // 2.此处添加不打包后，需在public/index.html head中添加相应cdn资源链接
+                    config.set('externals', {
+                        vue: 'Vue',
+                        axios: 'axios',
+                        echarts: 'echarts'
+                    })
+                    // 不打包 end
+
                     config
                         .plugin('ScriptExtHtmlWebpackPlugin')
                         .after('html')

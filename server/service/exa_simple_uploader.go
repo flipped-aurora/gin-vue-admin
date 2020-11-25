@@ -36,7 +36,12 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 	rd, err := ioutil.ReadDir(dir)
 	_ = os.MkdirAll(finishDir, os.ModePerm)
 	//创建目标文件
-	fd, _ := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	fd, err := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		return
+	}
+	//关闭文件
+	defer fd.Close()
 	//将切片文件按照顺序写入
 	for k := range rd {
 		content, _ := ioutil.ReadFile(dir + "/" + fileName + strconv.Itoa(k+1))
@@ -45,8 +50,6 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 			_ = os.Remove(finishDir + fileName)
 		}
 	}
-	//关闭文件
-	defer fd.Close()
 
 	if err != nil {
 		return err

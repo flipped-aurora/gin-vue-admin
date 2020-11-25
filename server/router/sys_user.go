@@ -2,11 +2,12 @@ package router
 
 import (
 	"gin-vue-admin/api/v1"
+	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 func InitUserRouter(Router *gin.RouterGroup) {
-	UserRouter := Router.Group("user")
+	UserRouter := Router.Group("user").Use(middleware.OperationRecord())
 	{
 		UserRouter.POST("register", v1.Register)
 		UserRouter.POST("changePassword", v1.ChangePassword)     // 修改密码

@@ -4,6 +4,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gookit/color"
+	"os"
 	"time"
 
 	"gorm.io/gorm"
@@ -68,7 +69,7 @@ var Apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 57, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/sysOperationRecord/getSysOperationRecordList", "获取操作记录列表", "sysOperationRecord", "GET"},
 	{global.GVA_MODEL{ID: 58, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/getTables", "获取数据库表", "autoCode", "GET"},
 	{global.GVA_MODEL{ID: 59, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/getDB", "获取所有数据库", "autoCode", "GET"},
-	{global.GVA_MODEL{ID: 60, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/getColume", "获取所选table的所有字段", "autoCode", "GET"},
+	{global.GVA_MODEL{ID: 60, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/getColumn", "获取所选table的所有字段", "autoCode", "GET"},
 	{global.GVA_MODEL{ID: 61, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/sysOperationRecord/deleteSysOperationRecordByIds", "批量删除操作历史", "sysOperationRecord", "DELETE"},
 	{global.GVA_MODEL{ID: 62, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/simpleUploader/upload", "插件版分片上传", "simpleUploader", "POST"},
 	{global.GVA_MODEL{ID: 63, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/simpleUploader/checkFileMd5", "文件完整度验证", "simpleUploader", "GET"},
@@ -78,8 +79,8 @@ var Apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 67, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/email/emailTest", "发送测试邮件", "email", "POST"},
 }
 
-func InitSysApi(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+func InitSysApi(db *gorm.DB) {
+	if err := db.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("id IN ?", []int{1, 67}).Find(&[]model.SysApi{}).RowsAffected == 2 {
 			color.Danger.Println("sys_apis表的初始数据已存在!")
 			return nil
@@ -88,5 +89,8 @@ func InitSysApi(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> sys_apis 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

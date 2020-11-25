@@ -195,7 +195,6 @@ export default {
     }
   },
   async created() {
-    this.getDbfdOptions();
     const dictRes = await getSysDictionaryList({
       page: 1,
       pageSize: 999999

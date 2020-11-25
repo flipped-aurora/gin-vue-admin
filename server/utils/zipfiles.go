@@ -7,26 +7,36 @@ import (
 	"strings"
 )
 
-func ZipFiles(filename string, files []string, oldform, newform string) error {
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: ZipFiles
+//@description: 压缩文件
+//@param: filename string, files []string, oldform, newform string
+//@return: error
+
+func ZipFiles(filename string, files []string, oldForm, newForm string) error {
 
 	newZipFile, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	defer newZipFile.Close()
+	defer func() {
+		_ = newZipFile.Close()
+	}()
 
 	zipWriter := zip.NewWriter(newZipFile)
-	defer zipWriter.Close()
+	defer func() {
+		_ = zipWriter.Close()
+	}()
 
 	// 把files添加到zip中
 	for _, file := range files {
+
 		err = func(file string) error {
 			zipFile, err := os.Open(file)
 			if err != nil {
 				return err
 			}
 			defer zipFile.Close()
-
 			// 获取file的基础信息
 			info, err := zipFile.Stat()
 			if err != nil {

@@ -3,6 +3,7 @@ package datas
 import (
 	"github.com/gookit/color"
 	"gorm.io/gorm"
+	"os"
 )
 
 type SysDataAuthorityId struct {
@@ -18,8 +19,8 @@ var DataAuthorityId = []SysDataAuthorityId{
 	{"9528", "9528"},
 }
 
-func InitSysDataAuthorityId(db *gorm.DB) (err error) {
-	return db.Table("sys_data_authority_id").Transaction(func(tx *gorm.DB) error {
+func InitSysDataAuthorityId(db *gorm.DB) {
+	if err := db.Table("sys_data_authority_id").Transaction(func(tx *gorm.DB) error {
 		if tx.Where("sys_authority_authority_id IN ?", []string{"888", "9528"}).Find(&[]SysDataAuthorityId{}).RowsAffected == 5 {
 			color.Danger.Println("sys_data_authority_id表的初始数据已存在!")
 			return nil
@@ -28,5 +29,8 @@ func InitSysDataAuthorityId(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> sys_data_authority_id 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

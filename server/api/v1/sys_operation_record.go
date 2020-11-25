@@ -1,13 +1,14 @@
 package v1
 
 import (
-	"fmt"
-	"gin-vue-admin/global/response"
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // @Tags SysOperationRecord
@@ -21,9 +22,9 @@ import (
 func CreateSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord model.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
-	err := service.CreateSysOperationRecord(sysOperationRecord)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
+	if err := service.CreateSysOperationRecord(sysOperationRecord); err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
+		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
 	}
@@ -34,15 +35,15 @@ func CreateSysOperationRecord(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysOperationRecord true "删除SysOperationRecord"
+// @Param data body model.SysOperationRecord true "SysOperationRecord模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 func DeleteSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord model.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
-	err := service.DeleteSysOperationRecord(sysOperationRecord)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	if err := service.DeleteSysOperationRecord(sysOperationRecord); err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
+		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
 	}
@@ -54,16 +55,16 @@ func DeleteSysOperationRecord(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除SysOperationRecord"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecordByIds [delete]
 func DeleteSysOperationRecordByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
-	err := service.DeleteSysOperationRecordByIds(IDS)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	if err := service.DeleteSysOperationRecordByIds(IDS); err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Any("err", err))
+		response.FailWithMessage("批量删除失败", c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage("批量删除成功", c)
 	}
 }
 
@@ -72,17 +73,21 @@ func DeleteSysOperationRecordByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysOperationRecord true "用id查询SysOperationRecord"
+// @Param data body model.SysOperationRecord true "Id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysOperationRecord/findSysOperationRecord [get]
 func FindSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord model.SysOperationRecord
 	_ = c.ShouldBindQuery(&sysOperationRecord)
-	err, resysOperationRecord := service.GetSysOperationRecord(sysOperationRecord.ID)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("查询失败，%v", err), c)
+	if err := utils.Verify(sysOperationRecord, utils.IdVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err, resysOperationRecord := service.GetSysOperationRecord(sysOperationRecord.ID); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Any("err", err))
+		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(gin.H{"resysOperationRecord": resysOperationRecord}, c)
+		response.OkWithDetailed(gin.H{"resysOperationRecord": resysOperationRecord}, "查询成功", c)
 	}
 }
 
@@ -91,21 +96,21 @@ func FindSysOperationRecord(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SysOperationRecordSearch true "分页获取SysOperationRecord列表"
+// @Param data body request.SysOperationRecordSearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
 func GetSysOperationRecordList(c *gin.Context) {
 	var pageInfo request.SysOperationRecordSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	err, list, total := service.GetSysOperationRecordInfoList(pageInfo)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	if err, list, total := service.GetSysOperationRecordInfoList(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithData(resp.PageResult{
+		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, c)
+		}, "获取成功", c)
 	}
 }

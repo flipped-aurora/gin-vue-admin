@@ -1,166 +1,141 @@
 package v1
 
 import (
-	"fmt"
-	"gin-vue-admin/global/response"
+	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	resp "gin-vue-admin/model/response"
+	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
-// @Tags authority
+// @Tags Authority
 // @Summary 创建角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysAuthority true "创建角色"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Param data body model.SysAuthority true "权限id, 权限名, 父角色id"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
-	var auth model.SysAuthority
-	_ = c.ShouldBindJSON(&auth)
-	AuthorityVerify := utils.Rules{
-		"AuthorityId":   {utils.NotEmpty()},
-		"AuthorityName": {utils.NotEmpty()},
-		"ParentId":      {utils.NotEmpty()},
-	}
-	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
-	if AuthorityVerifyErr != nil {
-		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+	var authority model.SysAuthority
+	_ = c.ShouldBindJSON(&authority)
+	if err := utils.Verify(authority, utils.AuthorityVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, authBack := service.CreateAuthority(auth)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("创建失败，%v", err), c)
+	if err, authBack := service.CreateAuthority(authority); err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
+		response.FailWithMessage("创建失败"+err.Error(), c)
 	} else {
-		response.OkWithData(resp.SysAuthorityResponse{Authority: authBack}, c)
+		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 拷贝角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body response.SysAuthorityCopyResponse true "拷贝角色"
+// @Param data body response.SysAuthorityCopyResponse true "旧角色id, 新权限id, 新权限名, 新父角色id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"拷贝成功"}"
 // @Router /authority/copyAuthority [post]
 func CopyAuthority(c *gin.Context) {
-	var copyInfo resp.SysAuthorityCopyResponse
+	var copyInfo response.SysAuthorityCopyResponse
 	_ = c.ShouldBindJSON(&copyInfo)
-	OldAuthorityVerify := utils.Rules{
-		"OldAuthorityId": {utils.NotEmpty()},
-	}
-	OldAuthorityVerifyErr := utils.Verify(copyInfo, OldAuthorityVerify)
-	if OldAuthorityVerifyErr != nil {
-		response.FailWithMessage(OldAuthorityVerifyErr.Error(), c)
+	if err := utils.Verify(copyInfo, utils.OldAuthorityVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	AuthorityVerify := utils.Rules{
-		"AuthorityId":   {utils.NotEmpty()},
-		"AuthorityName": {utils.NotEmpty()},
-		"ParentId":      {utils.NotEmpty()},
-	}
-	AuthorityVerifyErr := utils.Verify(copyInfo.Authority, AuthorityVerify)
-	if AuthorityVerifyErr != nil {
-		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+	if err := utils.Verify(copyInfo.Authority, utils.AuthorityVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, authBack := service.CopyAuthority(copyInfo)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("拷贝失败，%v", err), c)
+	if err, authBack := service.CopyAuthority(copyInfo); err != nil {
+		global.GVA_LOG.Error("拷贝失败!", zap.Any("err", err))
+		response.FailWithMessage("拷贝失败"+err.Error(), c)
 	} else {
-		response.OkWithData(resp.SysAuthorityResponse{Authority: authBack}, c)
+		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authBack}, "拷贝成功", c)
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 删除角色
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
 // @Param data body model.SysAuthority true "删除角色"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {
-	var a model.SysAuthority
-	_ = c.ShouldBindJSON(&a)
-	AuthorityIdVerifyErr := utils.Verify(a, utils.CustomizeMap["AuthorityIdVerify"])
-	if AuthorityIdVerifyErr != nil {
-		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
+	var authority model.SysAuthority
+	_ = c.ShouldBindJSON(&authority)
+	if err := utils.Verify(authority, utils.AuthorityIdVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	// 删除角色之前需要判断是否有用户正在使用此角色
-	err := service.DeleteAuthority(&a)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("删除失败，%v", err), c)
+	if err := service.DeleteAuthority(&authority); err != nil { // 删除角色之前需要判断是否有用户正在使用此角色
+		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
+		response.FailWithMessage("删除失败"+err.Error(), c)
 	} else {
 		response.OkWithMessage("删除成功", c)
 	}
 }
 
-// @Tags authority
-// @Summary 设置角色资源权限
+// @Tags Authority
+// @Summary 更新角色信息
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysAuthority true "设置角色资源权限"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
+// @Param data body model.SysAuthority true "权限id, 权限名, 父角色id"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /authority/updateAuthority [post]
 func UpdateAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
-	AuthorityVerify := utils.Rules{
-		"AuthorityId":   {utils.NotEmpty()},
-		"AuthorityName": {utils.NotEmpty()},
-		"ParentId":      {utils.NotEmpty()},
-	}
-	AuthorityVerifyErr := utils.Verify(auth, AuthorityVerify)
-	if AuthorityVerifyErr != nil {
-		response.FailWithMessage(AuthorityVerifyErr.Error(), c)
+	if err := utils.Verify(auth, utils.AuthorityVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, authority := service.UpdateAuthority(auth)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("更新失败，%v", err), c)
+	if err, authority := service.UpdateAuthority(auth); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
+		response.FailWithMessage("更新失败"+err.Error(), c)
 	} else {
-		response.OkWithData(resp.SysAuthorityResponse{Authority: authority}, c)
+		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authority}, "更新成功", c)
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 分页获取角色列表
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "分页获取用户列表"
+// @Param data body request.PageInfo true "页码, 每页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/getAuthorityList [post]
 func GetAuthorityList(c *gin.Context) {
 	var pageInfo request.PageInfo
 	_ = c.ShouldBindJSON(&pageInfo)
-	PageVerifyErr := utils.Verify(pageInfo, utils.CustomizeMap["PageVerify"])
-	if PageVerifyErr != nil {
-		response.FailWithMessage(PageVerifyErr.Error(), c)
+	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, list, total := service.GetAuthorityInfoList(pageInfo)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("获取数据失败，%v", err), c)
+	if err, list, total := service.GetAuthorityInfoList(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败"+err.Error(), c)
 	} else {
-		response.OkWithData(resp.PageResult{
+		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, c)
+		}, "获取成功", c)
 	}
 }
 
-// @Tags authority
+// @Tags Authority
 // @Summary 设置角色资源权限
 // @Security ApiKeyAuth
 // @accept application/json
@@ -171,15 +146,14 @@ func GetAuthorityList(c *gin.Context) {
 func SetDataAuthority(c *gin.Context) {
 	var auth model.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
-	AuthorityIdVerifyErr := utils.Verify(auth, utils.CustomizeMap["AuthorityIdVerify"])
-	if AuthorityIdVerifyErr != nil {
-		response.FailWithMessage(AuthorityIdVerifyErr.Error(), c)
+	if err := utils.Verify(auth, utils.AuthorityIdVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err := service.SetDataAuthority(auth)
-	if err != nil {
-		response.FailWithMessage(fmt.Sprintf("设置关联失败，%v", err), c)
+	if err := service.SetDataAuthority(auth); err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Any("err", err))
+		response.FailWithMessage("设置失败"+err.Error(), c)
 	} else {
-		response.Ok(c)
+		response.OkWithMessage("设置成功", c)
 	}
 }

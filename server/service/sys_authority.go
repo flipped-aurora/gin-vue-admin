@@ -10,12 +10,11 @@ import (
 	"strconv"
 )
 
-// @title    CreateAuthority
-// @description   创建一个角色
-// @auth                     （2020/04/05  20:22）
-// @param     auth            model.SysAuthority
-// @return                    error
-// @return    authority       model.SysAuthority
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CreateAuthority
+//@description: 创建一个角色
+//@param: auth model.SysAuthority
+//@return: err error, authority model.SysAuthority
 
 func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
@@ -26,12 +25,11 @@ func CreateAuthority(auth model.SysAuthority) (err error, authority model.SysAut
 	return err, auth
 }
 
-// @title    CopyAuthority
-// @description   复制一个角色
-// @auth                     （2020/04/05  20:22）
-// @param     copyInfo        response.SysAuthorityCopyResponse
-// @return                    error
-// @return    authority       model.SysAuthority
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: CopyAuthority
+//@description: 复制一个角色
+//@param: copyInfo response.SysAuthorityCopyResponse
+//@return: err error, authority model.SysAuthority
 
 func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority model.SysAuthority) {
 	var authorityBox model.SysAuthority
@@ -39,7 +37,7 @@ func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, autho
 		return errors.New("存在相同角色id"), authority
 	}
 	copyInfo.Authority.Children = []model.SysAuthority{}
-	err, menus := GetMenuAuthority(copyInfo.OldAuthorityId)
+	err, menus := GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
 	var baseMenu []model.SysBaseMenu
 	for _, v := range menus {
 		intNum, _ := strconv.Atoi(v.MenuId)
@@ -57,24 +55,22 @@ func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, autho
 	return err, copyInfo.Authority
 }
 
-// @title    UpdateAuthority
-// @description   更改一个角色
-// @auth                     （2020/04/05  20:22）
-// @param     auth            model.SysAuthority
-// @return                    error
-// @return    authority       model.SysAuthority
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: UpdateAuthority
+//@description: 更改一个角色
+//@param: auth model.SysAuthority
+//@return:err error, authority model.SysAuthority
 
 func UpdateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysAuthority{}).Updates(&auth).Error
 	return err, auth
 }
 
-// @title    DeleteAuthority
-// @description   删除角色
-// @auth                     （2020/04/05  20:22）
-// @param     auth            model.SysAuthority
-// @return                    error
-// 删除角色
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: DeleteAuthority
+//@description: 删除角色
+//@param: auth *model.SysAuthority
+//@return: err error
 
 func DeleteAuthority(auth *model.SysAuthority) (err error) {
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysUser{}).Error, gorm.ErrRecordNotFound) {
@@ -95,12 +91,11 @@ func DeleteAuthority(auth *model.SysAuthority) (err error) {
 	return err
 }
 
-// @title    GetInfoList
-// @description   删除文件切片记录
-// @auth                     （2020/04/05  20:22）
-// @param     info            request.PaveInfo
-// @return                    error
-// 分页获取数据
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetAuthorityInfoList
+//@description: 分页获取数据
+//@param: info request.PageInfo
+//@return: err error, list interface{}, total int64
 
 func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
@@ -116,23 +111,22 @@ func GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, t
 	return err, authority, total
 }
 
-// @title    GetAuthorityInfo
-// @description   获取所有角色信息
-// @auth                     （2020/04/05  20:22）
-// @param     auth            model.SysAuthority
-// @return                    error
-// @param     authority       model.SysAuthority
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetAuthorityInfo
+//@description: 获取所有角色信息
+//@param: auth model.SysAuthority
+//@return: err error, sa model.SysAuthority
 
 func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
 	return err, sa
 }
 
-// @title    SetDataAuthority
-// @description   设置角色资源权限
-// @auth                     （2020/04/05  20:22）
-// @param     auth            model.SysAuthority
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetDataAuthority
+//@description: 设置角色资源权限
+//@param: auth model.SysAuthority
+//@return:error
 
 func SetDataAuthority(auth model.SysAuthority) error {
 	var s model.SysAuthority
@@ -141,11 +135,11 @@ func SetDataAuthority(auth model.SysAuthority) error {
 	return err
 }
 
-// @title    SetMenuAuthority
-// @description   菜单与角色绑定
-// @auth                     （2020/04/05  20:22）
-// @param     auth            *model.SysAuthority
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetMenuAuthority
+//@description: 菜单与角色绑定
+//@param: auth *model.SysAuthority
+//@return: error
 
 func SetMenuAuthority(auth *model.SysAuthority) error {
 	var s model.SysAuthority
@@ -154,11 +148,11 @@ func SetMenuAuthority(auth *model.SysAuthority) error {
 	return err
 }
 
-// @title    findChildrenAuthority
-// @description   查询子角色
-// @auth                     （2020/04/05  20:22）
-// @param     auth            *model.SysAuthority
-// @return                    error
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: findChildrenAuthority
+//@description: 查询子角色
+//@param: authority *model.SysAuthority
+//@return: err error
 
 func findChildrenAuthority(authority *model.SysAuthority) (err error) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error

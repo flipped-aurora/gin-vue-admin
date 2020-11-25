@@ -11,7 +11,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -31,7 +30,7 @@ func OperationRecord() gin.HandlerFunc {
 		if claims, ok := c.Get("claims"); ok {
 			waitUse := claims.(*request.CustomClaims)
 			userId = int(waitUse.ID)
-		}else {
+		} else {
 			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
 			if err != nil {
 				userId = 0
@@ -46,10 +45,11 @@ func OperationRecord() gin.HandlerFunc {
 			Body:   string(body),
 			UserID: userId,
 		}
-		values := c.Request.Header.Values("content-type")
-		if len(values) >0 && strings.Contains(values[0], "boundary") {
-			record.Body = "file"
-		}
+		// 存在某些未知错误 TODO
+		//values := c.Request.Header.Values("content-type")
+		//if len(values) >0 && strings.Contains(values[0], "boundary") {
+		//	record.Body = "file"
+		//}
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,
 			body:           &bytes.Buffer{},

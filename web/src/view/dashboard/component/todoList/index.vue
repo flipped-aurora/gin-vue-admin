@@ -47,9 +47,9 @@
         completed: todos => todos.filter(todo => todo.done)
     }
     const defalutList = [
-        { text: 'star this repository', done: false },
-        { text: 'follow author', done: false },
-        { text: 'vue-element-admin', done: true }
+        { text: '工作流功能绘制工具', done: false },
+        { text: '工作流流转方法', done: false },
+        { text: '自动化代码优化', done: false }
     ]
     export default {
         components: { Todo },

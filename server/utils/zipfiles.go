@@ -31,14 +31,12 @@ func ZipFiles(filename string, files []string, oldForm, newForm string) error {
 	// 把files添加到zip中
 	for _, file := range files {
 
-		zipFile, err := os.Open(file)
-		if err != nil {
-			return err
-		}
-		err = func() error {
-			defer func() {
-				_ = zipFile.Close()
-			}()
+		err = func(file string) error {
+			zipFile, err := os.Open(file)
+			if err != nil {
+				return err
+			}
+			defer zipFile.Close()
 			// 获取file的基础信息
 			info, err := zipFile.Stat()
 			if err != nil {
@@ -50,8 +48,8 @@ func ZipFiles(filename string, files []string, oldForm, newForm string) error {
 				return err
 			}
 
-			// 使用上面的FileInfoHeader() 就可以把文件保存的路径替换成我们自己想要的了，如下面
-			header.Name = strings.Replace(file, oldForm, newForm, -1)
+			// 使用上面的FileInforHeader() 就可以把文件保存的路径替换成我们自己想要的了，如下面
+			header.Name = strings.Replace(file, oldform, newform, -1)
 
 			// 优化压缩
 			// 更多参考see http://golang.org/pkg/archive/zip/#pkg-constants
@@ -65,7 +63,7 @@ func ZipFiles(filename string, files []string, oldForm, newForm string) error {
 				return err
 			}
 			return nil
-		}()
+		}(file)
 		if err != nil {
 			return err
 		}

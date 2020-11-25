@@ -1188,8 +1188,8 @@ li {
     font-size: 13px;
 }
 
-.table-button {
-    margin-right: 8px !important;
+.table-button+span {
+    margin-left: 10px !important;
 }
 
 $headerHigh: 52px;

@@ -8,6 +8,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <title>GIN-VUE-ADMIN</title>
+    <% if(process.env.NODE_ENV!=='development'){ %>
+    <script src="//cdn.staticfile.org/vue/2.6.10/vue.min.js"></script>
+    <script src="//cdn.staticfile.org/axios/0.19.0/axios.min.js"></script>
+    <script src="//cdn.staticfile.org/echarts/4.7.0/echarts.min.js"></script>    
+    <% } %>  
 </head>
 
 <body>

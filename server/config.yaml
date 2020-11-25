@@ -56,10 +56,11 @@ mysql:
   config: 'charset=utf8mb4&parseTime=True&loc=Local'
   db-name: 'qmPlus'
   username: 'root'
-  password: 'root123'
+  password: 'Aa@6447985'
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: false
+  log-zap: false
 
 # local configuration
 local:

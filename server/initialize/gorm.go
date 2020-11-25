@@ -73,6 +73,12 @@ func GormMysql() *gorm.DB {
 
 // gormConfig 根据配置决定是否开启日志
 func gormConfig(mod bool) *gorm.Config {
+	if global.GVA_CONFIG.Mysql.LogZap {
+		return &gorm.Config{
+			Logger:                                   Default.LogMode(logger.Info),
+			DisableForeignKeyConstraintWhenMigrating: true,
+		}
+	}
 	if mod {
 		return &gorm.Config{
 			Logger:                                   logger.Default.LogMode(logger.Info),

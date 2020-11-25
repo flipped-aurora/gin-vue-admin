@@ -37,7 +37,6 @@ func CheckMd5(content []byte, chunkMd5 string) (CanUpload bool) {
 func makeFileContent(content []byte, fileName string, FileDir string, contentNumber int) (error, string) {
 	path := FileDir + fileName + "_" + strconv.Itoa(contentNumber)
 	f, err := os.Create(path)
-	defer f.Close()
 	if err != nil {
 		return err, path
 	} else {
@@ -46,6 +45,7 @@ func makeFileContent(content []byte, fileName string, FileDir string, contentNum
 			return err, path
 		}
 	}
+	defer f.Close()
 	return nil, path
 }
 
@@ -55,7 +55,11 @@ func MakeFile(fileName string, FileMd5 string) (error, string) {
 		return err, finishDir + fileName
 	}
 	_ = os.MkdirAll(finishDir, os.ModePerm)
-	fd, _ := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	fd, err := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		return err, finishDir + fileName
+	}
+	defer fd.Close()
 	for k := range rd {
 		content, _ := ioutil.ReadFile(breakpointDir + FileMd5 + "/" + fileName + "_" + strconv.Itoa(k))
 		_, err = fd.Write(content)
@@ -64,7 +68,7 @@ func MakeFile(fileName string, FileMd5 string) (error, string) {
 			return err, finishDir + fileName
 		}
 	}
-	defer fd.Close()
+
 	return nil, finishDir + fileName
 }
 

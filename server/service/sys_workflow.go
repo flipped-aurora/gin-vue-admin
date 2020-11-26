@@ -129,11 +129,11 @@ func GetWorkflowProcess(id string) (err error, workflowProcess model.WorkflowPro
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetWorkflowCreateStep
-//@description: 获取工作流步骤信息
+//@description: 获取工作流开始步骤信息
 //@param: id string
 //@return: err error, workflowNodes []model.WorkflowNode
 
-func FindWorkflowStep(id string) (err error, workflowNode model.WorkflowProcess) {
+func FindWorkflowStartStep(id string) (err error, workflowNode model.WorkflowProcess) {
 	err = global.GVA_DB.Preload("Nodes", "clazz = ?", constant.START).Where("id = ?", id).First(&workflowNode).Error
 	return
 }

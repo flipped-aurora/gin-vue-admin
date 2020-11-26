@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import {findWorkflowStep,getWorkflowMoveByID} from "@/api/workflowProcess.js"
+import {findWorkflowStartStep,getWorkflowMoveByID} from "@/api/workflowProcess.js"
 export default {
     name:"WorklowUse",
     data(){
@@ -62,7 +62,7 @@ export default {
         const workflowId = this.$route.query.workflowId
         const workflowMoveID = this.$route.query.workflowMoveID
         if(workflowId){
-            const res = await findWorkflowStep({id:workflowId})
+            const res = await findWorkflowStartStep({id:workflowId})
             if(res.code == 0){
                 this.workflow = res.data.workflow
                 this.node = res.data.workflow.nodes[0]

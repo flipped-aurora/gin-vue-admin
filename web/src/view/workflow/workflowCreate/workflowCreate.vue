@@ -130,6 +130,17 @@ export default {
     },
     saveImg() {
       console.log(this.$refs["wfd"].graph.saveImg());
+    },
+    fmtAuthority(authorityList,list){
+      authorityList.map(item => {
+        list.push({
+          id: item.authorityId,
+          name: item.authorityName
+        });
+        if(item.children){
+          this.fmtAuthority(item.children,list)
+        }
+      });
     }
   },
   async created() {
@@ -140,14 +151,8 @@ export default {
       });
     }
     const authorityRes = await getAuthorityList({ page: 1, pageSize: 9999999 });
-    console.log(authorityRes)
     if (authorityRes.code == 0) {
-      authorityRes.data.list.map(item => {
-        this.authorities.push({
-          id: item.authorityId,
-          name: item.authorityName
-        });
-      });
+      this.fmtAuthority(authorityRes.data.list,this.authorities)
     }
     if(this.$route.query.id){
       const res = await findWorkflowProcess({ id: this.$route.query.id });

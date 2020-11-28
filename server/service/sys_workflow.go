@@ -406,7 +406,7 @@ func GetMyStated(userID uint) (err error, wfms []model.WorkflowMove) {
 func GetMyNeed(userID uint, AuthorityID string) (err error, wfms []model.WorkflowMove) {
 	user := "%," + strconv.Itoa(int(userID)) + ",%"
 	auth := "%," + AuthorityID + ",%"
-	err = global.GVA_DB.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").Joins("INNER JOIN workflow_nodes as node ON workflow_moves.workflow_node_id = node.id").Where("is_active = ? AND (node.assign_type = ? AND node.assign_value LIKE ? ) OR (node.assign_type = ? AND node.assign_value LIKE ? )", true, "user", user, "authority", auth).Find(&wfms).Error
+	err = global.GVA_DB.Preload("Promoter").Preload("Operator").Preload("WorkflowNode").Preload("WorkflowProcess").Joins("INNER JOIN workflow_nodes as node ON workflow_moves.workflow_node_id = node.id").Where("is_active = ? AND ((node.assign_type = ? AND node.assign_value LIKE ? ) OR (node.assign_type = ? AND node.assign_value LIKE ? ) OR (node.assign_type = ? AND promoter_id = ? ))", true, "user", user, "authority", auth, "self", userID).Find(&wfms).Error
 	return err, wfms
 }
 

@@ -31,6 +31,7 @@
            <el-button v-if="this.wf.clazz == 'start'" @click="start" type="primary">启动</el-button>
            <!-- complete传入流转参数 决定下一步会流转到什么位置 此处可以设置多个按钮来做不同的流转 -->
            <el-button v-if="canShow" @click="complete('yes')" type="primary">提交</el-button>
+           <el-button v-if="showSelfNode" @click="complete('')" type="primary">确认</el-button>
            <el-button @click="back" type="primary">返回</el-button>
            </el-form-item>
     </el-form>
@@ -56,8 +57,12 @@ export default {
         type:Object,
         default:function(){return{}}
       },
+      move:{
+         type:Object,
+         default:function(){return{}}
+      },
       workflowMoveID:{
-        type:Number,
+        type:[Number,String],
         default:0
       }
    },
@@ -91,6 +96,13 @@ export default {
     };
   },
   computed:{
+      showSelfNode(){
+         if(this.wf.assignType == "self" && this.move.promoterID == this.userInfo.ID){
+             return true
+         }else{
+             return false
+         }
+      },
       canShow(){
          if(this.wf.assignType == "user"){
             if(this.wf.assignValue.indexOf(","+this.userInfo.ID+",")>-1 && this.wf.clazz == 'userTask'){
@@ -105,7 +117,6 @@ export default {
                return false
             }
          }
-         return false
       },
       ...mapGetters("user", ["userInfo"])
   },

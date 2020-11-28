@@ -29,8 +29,6 @@ func MysqlTables(db *gorm.DB) {
 		model.SysBaseMenu{},
 		model.SysBaseMenuParameter{},
 		model.JwtBlacklist{},
-		model.SysWorkflow{},
-		model.SysWorkflowStepInfo{},
 		model.SysDictionary{},
 		model.SysDictionaryDetail{},
 		model.ExaFileUploadAndDownload{},
@@ -39,6 +37,13 @@ func MysqlTables(db *gorm.DB) {
 		model.ExaSimpleUploader{},
 		model.ExaCustomer{},
 		model.SysOperationRecord{},
+		model.WorkflowProcess{},
+		model.WorkflowNode{},
+		model.WorkflowEdge{},
+		model.WorkflowStartPoint{},
+		model.WorkflowEndPoint{},
+		model.WorkflowMove{},
+		model.ExaWfLeave{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Any("err", err))

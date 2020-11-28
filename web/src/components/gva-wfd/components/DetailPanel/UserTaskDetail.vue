@@ -4,7 +4,7 @@
     <div class="panelBody">
       <DefaultDetail :model="model" :onChange="onChange" :readOnly="readOnly" />
       <div class="panelRow">
-        <div>选择角色：</div>
+        <div>选择审批人类别：</div>
         <el-select
           style="width: 90%; font-size: 12px"
           placeholder="请选择角色（与用户互斥）"
@@ -19,6 +19,7 @@
         >
           <el-option key="user" value="user" :label="'用户'" />
           <el-option key="authority" value="authority" :label="'角色'" />
+          <el-option key="self" value="self" :label="'发起人本人'" />
         </el-select>
       </div>
       <div v-if="model.assignType == 'user'" class="panelRow">

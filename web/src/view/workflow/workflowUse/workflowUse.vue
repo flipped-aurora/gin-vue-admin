@@ -14,8 +14,9 @@
       </div>
     <WorkflowInfo
       v-if="done"
-      :wf="this.node"
+      :wf="node"
       :business="business"
+      :move="move"
       :workflowMoveID="$route.query.workflowMoveID"
     />
   </div>
@@ -29,7 +30,8 @@ export default {
             done:false,
             business:null,
             node:null,
-            moves:[]
+            moves:[],
+            move:null
         }
     },
     computed:{
@@ -74,6 +76,7 @@ export default {
                this.business =  res.data.business
                this.workflow = res.data.move.workflowProcess
                this.node = res.data.move.workflowNode
+               this.move = res.data.move
                this.moves = res.data.moves
                this.createDone()
             }

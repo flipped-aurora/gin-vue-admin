@@ -6,7 +6,7 @@
         <div slot="title">{{ item.workflowNode.label }}</div>
         <div slot="description">
           <div>节点说明:{{ item.workflowNode.description }}</div>
-          <div>操作人:{{ item.promoter.nickName }}</div>
+          <div v-if="item.operator.nickName">操作人:{{ item.operator.nickName }}</div>
           <div>操作参数:{{ item.param||'无参数' }}</div>
         </div>
       </el-step>

@@ -29,8 +29,8 @@
 
            <el-form-item>
            <el-button v-if="this.wf.clazz == 'start'" @click="start" type="primary">启动</el-button>
-           // complete传入流转参数 决定下一步会流转到什么位置 此处可以设置多个按钮来做不同的流转
-           <el-button v-if="this.wf.clazz == 'userTask'" @click="complete('yes')" type="primary">提交</el-button>
+           <!-- complete传入流转参数 决定下一步会流转到什么位置 此处可以设置多个按钮来做不同的流转 -->
+           <el-button v-if="canShow" @click="complete('yes')" type="primary">提交</el-button>
            <el-button @click="back" type="primary">返回</el-button>
            </el-form-item>
     </el-form>
@@ -92,19 +92,19 @@ export default {
   },
   computed:{
       canShow(){
-        if(this.wf.assignType == "user"){
-          if(this.wf.assginValue.indexOf(","+this.userInfo.ID+",")>0){
-            return true
-          }else{
-            return false
-          }
-        }else if(this.wf.assign_type == "authority"){
-          if(this.wf.assginValue.indexOf(","+this.userInfo.authorityId+",")>0){
-            return true
-          }else{
-            return false
-          }
-        }
+         if(this.wf.assignType == "user"){
+            if(this.wf.assignValue.indexOf(","+this.userInfo.ID+",")>-1 && this.wf.clazz == 'userTask'){
+               return true
+            }else{
+               return false
+            }
+         }else if(this.wf.assign_type == "authority"){
+            if(this.wf.assignValue.indexOf(","+this.userInfo.authorityId+",")>-1 && this.wf.clazz == 'userTask'){
+               return true
+            }else{
+               return false
+            }
+         }
       },
       ...mapGetters("user", ["userInfo"])
   },

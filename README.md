@@ -18,7 +18,9 @@
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
 
-[从环境到部署教学视频](https://www.bilibili.com/video/BV1fV411y7dT)
+[【gin-vue-admin】从部署到发布：手把手带你使用GIN-VUE-ADMIN《2.3.5版本》（1010工作室出品）](https://www.bilibili.com/video/BV1fV411y7dT)
+
+[【gin-vue-admin】11/28更新：工作流介绍以及简单使用教学（1010工作室出品）](https://www.bilibili.com/video/BV1Ka411F7Ji)
 
 [开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 

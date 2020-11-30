@@ -605,6 +605,17 @@ li {
                 }
                 .is-active {    
                     background-color: #1890ff;
+                    // 关闭三级菜单二级菜单样式
+                    ul{
+                        border:none;
+                    }
+                }
+                // 关闭三级菜单二级菜单样式
+                .is-active.is-opened{
+                    background-color: #191a23;
+                    ul{
+                        border:none;
+                    }
                 }
             }
         }
@@ -1177,8 +1188,8 @@ li {
     font-size: 13px;
 }
 
-.table-button {
-    margin-right: 8px !important;
+.table-button+span {
+    margin-left: 10px !important;
 }
 
 $headerHigh: 52px;
@@ -1193,6 +1204,14 @@ $mainHight: 100vh;
     top: 0;
     box-sizing: border-box;
     z-index: 999;
+    >.el-row{
+        padding: 0;
+        .el-col-lg-14{
+            height: 60px;
+        }
+    }
+   
+
 }
 
 
@@ -1376,14 +1395,14 @@ $mainHight: 100vh;
 
     .car-left {
         height: $height-car;
-        width: 70%;
-        float: left;
+        // width: 70%;
+        // float: left;
     }
 
     .car-right {
         height: $height-car;
-        width: 29%;
-        float: left;
+        // width: 29%;
+        // float: left;
 
         .flow,
         .user-number,

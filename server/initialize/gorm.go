@@ -29,8 +29,6 @@ func MysqlTables(db *gorm.DB) {
 		model.SysBaseMenu{},
 		model.SysBaseMenuParameter{},
 		model.JwtBlacklist{},
-		model.SysWorkflow{},
-		model.SysWorkflowStepInfo{},
 		model.SysDictionary{},
 		model.SysDictionaryDetail{},
 		model.ExaFileUploadAndDownload{},
@@ -39,6 +37,13 @@ func MysqlTables(db *gorm.DB) {
 		model.ExaSimpleUploader{},
 		model.ExaCustomer{},
 		model.SysOperationRecord{},
+		model.WorkflowProcess{},
+		model.WorkflowNode{},
+		model.WorkflowEdge{},
+		model.WorkflowStartPoint{},
+		model.WorkflowEndPoint{},
+		model.WorkflowMove{},
+		model.ExaWfLeave{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Any("err", err))
@@ -73,6 +78,12 @@ func GormMysql() *gorm.DB {
 
 // gormConfig 根据配置决定是否开启日志
 func gormConfig(mod bool) *gorm.Config {
+	if global.GVA_CONFIG.Mysql.LogZap {
+		return &gorm.Config{
+			Logger:                                   Default.LogMode(logger.Info),
+			DisableForeignKeyConstraintWhenMigrating: true,
+		}
+	}
 	if mod {
 		return &gorm.Config{
 			Logger:                                   logger.Default.LogMode(logger.Info),

@@ -9,24 +9,19 @@ import (
 )
 
 func InitMysqlData(db *gorm.DB) {
-	var err error
-	err = InitSysApi(db)
-	err = InitSysUser(db)
-	err = InitExaCustomer(db)
-	err = InitCasbinModel(db)
-	err = InitSysAuthority(db)
-	err = InitSysBaseMenus(db)
-	err = InitAuthorityMenu(db)
-	err = InitSysDictionary(db)
-	err = InitSysAuthorityMenus(db)
-	err = InitSysDataAuthorityId(db)
-	err = InitSysDictionaryDetail(db)
-	err = InitExaFileUploadAndDownload(db)
-	if err != nil {
-		color.Warn.Printf("[Mysql]-->初始化数据失败,err: %v\n", err)
-		os.Exit(0)
-	}
-	color.Info.Println("[Mysql]-->初始化数据成功")
+	InitSysApi(db)
+	InitSysUser(db)
+	InitExaCustomer(db)
+	InitCasbinModel(db)
+	InitSysAuthority(db)
+	InitSysBaseMenus(db)
+	InitAuthorityMenu(db)
+	InitSysDictionary(db)
+	InitSysAuthorityMenus(db)
+	InitSysDataAuthorityId(db)
+	InitSysDictionaryDetail(db)
+	InitExaFileUploadAndDownload(db)
+	InitWkProcess(db)
 }
 
 func InitMysqlTables(db *gorm.DB) {
@@ -40,17 +35,20 @@ func InitMysqlTables(db *gorm.DB) {
 		model.ExaFile{},
 		model.ExaCustomer{},
 		model.SysBaseMenu{},
-		model.SysWorkflow{},
 		model.SysAuthority{},
 		model.JwtBlacklist{},
 		model.ExaFileChunk{},
 		model.SysDictionary{},
 		model.ExaSimpleUploader{},
 		model.SysOperationRecord{},
-		model.SysWorkflowStepInfo{},
 		model.SysDictionaryDetail{},
 		model.SysBaseMenuParameter{},
 		model.ExaFileUploadAndDownload{},
+		model.WorkflowProcess{},
+		model.WorkflowNode{},
+		model.WorkflowEdge{},
+		model.WorkflowStartPoint{},
+		model.WorkflowEndPoint{},
 	)
 	if err != nil {
 		color.Warn.Printf("[Mysql]-->初始化数据表失败,err: %v\n", err)

@@ -81,7 +81,7 @@
           </h2>
           <br>
           <h2>
-            工作流教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
+            审批流教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
           </h2>
           <div></div>
       </el-card>

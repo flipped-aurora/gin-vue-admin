@@ -57,18 +57,7 @@
         </el-col>
       </div>
     </el-row>
-    <el-row>
-      <el-card shadow="hover">
-          <h2>
-            使用教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1fV411y7dT/">https://www.bilibili.com/video/BV1fV411y7dT/</a>
-          </h2>
-          <br>
-          <h2>
-            工作流教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
-          </h2>
-          <div></div>
-      </el-card>
-    </el-row>
+  
     <div class="shadow">
       <el-row :gutter="20">
         <el-col
@@ -85,6 +74,26 @@
         </el-col>
       </el-row>
     </div>
+      <el-row>
+      <el-card shadow="hover">
+          <h2>
+            主干地址<a style="color:#409EFF"  target="view_window" href="https://github.com/flipped-aurora/gin-vue-admin">https://github.com/flipped-aurora/gin-vue-admin</a>
+          </h2>
+          <br>
+          <h2>
+            工作流分支地址：<a style="color:#409EFF"  target="view_window" href="https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow">https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow</a>
+          </h2>
+          <br>
+          <h2>
+            使用教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1fV411y7dT/">https://www.bilibili.com/video/BV1fV411y7dT/</a>
+          </h2>
+          <br>
+          <h2>
+            工作流教学：<a style="color:#409EFF"  target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
+          </h2>
+          <div></div>
+      </el-card>
+    </el-row>
     <div class="bottom">
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="12">

@@ -2524,10 +2524,10 @@ var doc = `{
                 "tags": [
                     "workflow"
                 ],
-                "summary": "注册工作流",
+                "summary": "注册审批流",
                 "parameters": [
                     {
-                        "description": "注册工作流接口",
+                        "description": "注册审批流接口",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -3201,19 +3201,19 @@ var doc = `{
                     "type": "string"
                 },
                 "workflowDescription": {
-                    "description": "工作流描述",
+                    "description": "审批流描述",
                     "type": "string"
                 },
                 "workflowName": {
-                    "description": "工作流英文id",
+                    "description": "审批流英文id",
                     "type": "string"
                 },
                 "workflowNickName": {
-                    "description": "工作流名称",
+                    "description": "审批流名称",
                     "type": "string"
                 },
                 "workflowStep": {
-                    "description": "工作流步骤",
+                    "description": "审批流步骤",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/model.SysWorkflowStepInfo"
@@ -3243,7 +3243,7 @@ var doc = `{
                     "type": "string"
                 },
                 "stepName": {
-                    "description": "工作流名称",
+                    "description": "审批流名称",
                     "type": "string"
                 },
                 "stepNo": {
@@ -3254,7 +3254,7 @@ var doc = `{
                     "type": "string"
                 },
                 "workflowID": {
-                    "description": "所属工作流ID",
+                    "description": "所属审批流ID",
                     "type": "integer"
                 }
             }

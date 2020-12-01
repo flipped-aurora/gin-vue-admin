@@ -431,16 +431,16 @@ definitions:
       updatedAt:
         type: string
       workflowDescription:
-        description: 工作流描述
+        description: 审批流描述
         type: string
       workflowName:
-        description: 工作流英文id
+        description: 审批流英文id
         type: string
       workflowNickName:
-        description: 工作流名称
+        description: 审批流名称
         type: string
       workflowStep:
-        description: 工作流步骤
+        description: 审批流步骤
         items:
           $ref: '#/definitions/model.SysWorkflowStepInfo'
         type: array
@@ -461,7 +461,7 @@ definitions:
         description: 操作者级别id
         type: string
       stepName:
-        description: 工作流名称
+        description: 审批流名称
         type: string
       stepNo:
         description: 步骤id （第几步）
@@ -469,7 +469,7 @@ definitions:
       updatedAt:
         type: string
       workflowID:
-        description: 所属工作流ID
+        description: 所属审批流ID
         type: integer
     type: object
   model.System:
@@ -2189,7 +2189,7 @@ paths:
   /workflow/createWorkFlow:
     post:
       parameters:
-      - description: 注册工作流接口
+      - description: 注册审批流接口
         in: body
         name: data
         required: true
@@ -2202,7 +2202,7 @@ paths:
           description: '{"success":true,"data":{},"msg":"注册成功"}'
           schema:
             type: string
-      summary: 注册工作流
+      summary: 注册审批流
       tags:
       - workflow
 securityDefinitions:

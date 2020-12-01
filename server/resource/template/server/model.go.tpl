@@ -21,9 +21,9 @@ func ({{.StructName}}) TableName() string {
 }
 {{ end }}
 
-// 如果使用工作流功能 需要打开下方注释 并到initialize的workflow中进行注册 且必须指定TableName
+// 如果使用审批流功能 需要打开下方注释 并到initialize的workflow中进行注册 且必须指定TableName
 // type {{.StructName}}Workflow struct {
-// 	// 工作流操作结构体
+// 	// 审批流操作结构体
 // 	WorkflowBase      `json:"wf"`
 // 	{{.StructName}}   `json:"business"`
 // }
@@ -32,7 +32,7 @@ func ({{.StructName}}) TableName() string {
 // 	return "{{.TableName}}"
 // }
 
-// 工作流注册代码
+// 审批流注册代码
 
 // initWorkflowModel内部注册
 // model.WorkflowBusinessStruct["{{.Abbreviation}}"] = func() model.GVA_Workflow {

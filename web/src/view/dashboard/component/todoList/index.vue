@@ -47,8 +47,8 @@
         completed: todos => todos.filter(todo => todo.done)
     }
     const defalutList = [
-        { text: '工作流功能绘制工具', done: false },
-        { text: '工作流流转方法', done: false },
+        { text: '审批流功能绘制工具', done: false },
+        { text: '审批流流转方法', done: false },
         { text: '自动化代码优化', done: false }
     ]
     export default {

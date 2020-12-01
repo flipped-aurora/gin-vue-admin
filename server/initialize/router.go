@@ -38,7 +38,6 @@ func Routers() *gin.Engine {
 		router.InitEmailRouter(PrivateGroup)                 // 邮件相关路由
 		router.InitSystemRouter(PrivateGroup)                // system相关路由
 		router.InitCasbinRouter(PrivateGroup)                // 权限相关路由
-		router.InitWorkflowRouter(PrivateGroup)              // 工作流相关路由
 		router.InitCustomerRouter(PrivateGroup)              // 客户路由
 		router.InitAutoCodeRouter(PrivateGroup)              // 创建自动化代码
 		router.InitAuthorityRouter(PrivateGroup)             // 注册角色路由

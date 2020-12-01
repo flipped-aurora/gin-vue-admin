@@ -45,8 +45,8 @@ func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
 //@param: {{.Abbreviation}} *model.{{.StructName}}
 //@return: err error
 
-func Update{{.StructName}}({{.Abbreviation}} *model.{{.StructName}}) (err error) {
-	err = global.GVA_DB.Save({{.Abbreviation}}).Error
+func Update{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
+	err = global.GVA_DB.Save(&{{.Abbreviation}}).Error
 	return err
 }
 

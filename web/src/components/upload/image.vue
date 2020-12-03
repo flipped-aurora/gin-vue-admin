@@ -13,6 +13,7 @@
     <el-upload
       class="image-uploader"
       :action="`${path}/fileUploadAndDownload/upload`"
+      :headers="{ 'x-token': token }"
       :show-file-list="false"
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"
@@ -25,6 +26,7 @@
 </template>
 <script>
 const path = process.env.VUE_APP_BASE_API;
+import { mapGetters } from "vuex";
 import ImageCompress from "@/utils/image.js";
 export default {
   name: "upload-image",
@@ -51,6 +53,9 @@ export default {
       path: path,
     };
   },
+  computed: {
+    ...mapGetters("user", ["userInfo", "token"]),
+  },
   methods: {
     beforeImageUpload(file) {
       let isRightSize = file.size / 1024 < this.fileSize;
@@ -65,7 +70,7 @@ export default {
       // this.imageUrl = URL.createObjectURL(file.raw);
       const {  data } = res;
       if (data.file) {
-        this.$emit("change", data.file.url);
+        this.$emit("change", this.path + data.file.url);
       }
     },
   },

@@ -19,7 +19,7 @@
       :before-upload="beforeImageUpload"
       :multiple="false"
     >
-      <img v-if="imageUrl" :src="imageUrl" class="image" />
+      <img v-if="imageUrl" :src="path + imageUrl" class="image" />
       <i v-else class="el-icon-plus image-uploader-icon"></i>
     </el-upload>
   </div>
@@ -70,7 +70,7 @@ export default {
       // this.imageUrl = URL.createObjectURL(file.raw);
       const {  data } = res;
       if (data.file) {
-        this.$emit("change", this.path + data.file.url);
+        this.$emit("change", data.file.url);
       }
     },
   },

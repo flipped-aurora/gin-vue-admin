@@ -78,7 +78,7 @@ func Delete{{.StructName}}ByIds(c *gin.Context) {
 func Update{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} model.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
-	if err := service.Update{{.StructName}}(&{{.Abbreviation}}); err != nil {
+	if err := service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
 		response.FailWithMessage("更新失败", c)
 	} else {

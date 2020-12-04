@@ -103,6 +103,7 @@
 </template>
 <script>
 import { getDict } from "@/utils/dictionary";
+import { toSQLLine } from "@/utils/stringFun.js";
 import { getSysDictionaryList } from "@/api/sysDictionary";
 export default {
   name: "FieldDialog",
@@ -201,7 +202,21 @@ export default {
     });
 
     this.dictOptions = dictRes.data.list
-  }
+  },
+  watch: {
+    'dialogMiddle.fieldName': function (val) {
+      if (val.length > 0) {
+        val = val.replace(val[0], val[0].toLowerCase());
+        val = toSQLLine(val)
+      }
+
+      this.dialogMiddle.fieldJson = val;
+      this.dialogMiddle.columnName = val;
+    },
+    'dialogMiddle.fieldDesc': function (val) {
+      this.dialogMiddle.comment = val;
+    }
+  },
 };
 </script>
 <style lang="scss">

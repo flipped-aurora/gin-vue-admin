@@ -7,6 +7,14 @@ export const toUpperCase = (str) => {
     }
 }
 
+export const toLowerCase = (str) => {
+    if (str[0]) {
+        return str.replace(str[0], str[0].toLowerCase())
+    } else {
+        return ""
+    }
+}
+
 // 驼峰转换下划线
 export const toSQLLine = (str) => {
     if (str == "ID") return "ID"

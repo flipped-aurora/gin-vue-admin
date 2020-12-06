@@ -382,7 +382,18 @@ func createNewWorkflowMove(tx *gorm.DB, oldWfm *model.WorkflowMove, targetNodeID
 		}
 
 		return nil, newWfm
-
+	case constant.END:
+		newWfm = append(newWfm, model.WorkflowMove{
+			BusinessID:        oldWfm.BusinessID,
+			BusinessType:      oldWfm.BusinessType,
+			PromoterID:        oldWfm.PromoterID,
+			OperatorID:        oldWfm.OperatorID,
+			WorkflowNodeID:    targetNodeID,
+			WorkflowProcessID: oldWfm.WorkflowProcessID,
+			Param:             "",
+			Action:            "",
+			IsActive:          false})
+		return nil, newWfm
 	default:
 		newWfm = append(newWfm, model.WorkflowMove{
 			BusinessID:        oldWfm.BusinessID,

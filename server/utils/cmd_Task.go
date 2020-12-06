@@ -73,17 +73,12 @@ func newT(f func(chan struct{}) error) *T {
 //@description: 添加任务
 
 func (t *T) AddTask() {
-	if len(t.ch) == 1 {
-		return
-	}
-	t.Lock()
-	defer t.Unlock()
-	if len(t.ch) == 1 {
+	select {
+	case t.ch <- struct{}{}:
+	default:
 		// 代表已经有任务了
 		// 直接丢弃这次任务
-		return
 	}
-	t.ch <- struct{}{}
 }
 
 //@author: [songzhibin97](https://github.com/songzhibin97)

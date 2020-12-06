@@ -13,18 +13,20 @@
     <el-upload
       class="image-uploader"
       :action="`${path}/fileUploadAndDownload/upload`"
+      :headers="{ 'x-token': token }"
       :show-file-list="false"
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"
       :multiple="false"
     >
-      <img v-if="imageUrl" :src="imageUrl" class="image" />
+      <img v-if="imageUrl" :src="path + imageUrl" class="image" />
       <i v-else class="el-icon-plus image-uploader-icon"></i>
     </el-upload>
   </div>
 </template>
 <script>
 const path = process.env.VUE_APP_BASE_API;
+import { mapGetters } from "vuex";
 import ImageCompress from "@/utils/image.js";
 export default {
   name: "upload-image",
@@ -50,6 +52,9 @@ export default {
     return {
       path: path,
     };
+  },
+  computed: {
+    ...mapGetters("user", ["userInfo", "token"]),
   },
   methods: {
     beforeImageUpload(file) {

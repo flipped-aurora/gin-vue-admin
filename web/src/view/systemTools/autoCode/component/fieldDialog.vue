@@ -12,6 +12,9 @@
         <el-col :span="6">
           <el-input v-model="dialogMiddle.fieldName" autocomplete="off"></el-input>
         </el-col>
+        <el-col :offset="1" :span="2">
+          <el-button @click="autoFill">自动填充</el-button>
+        </el-col>
       </el-form-item>
       <el-form-item label="Field中文名" prop="fieldDesc">
         <el-col :span="6">
@@ -103,7 +106,7 @@
 </template>
 <script>
 import { getDict } from "@/utils/dictionary";
-import { toSQLLine } from "@/utils/stringFun.js";
+import { toSQLLine , toLowerCase } from "@/utils/stringFun.js";
 import { getSysDictionaryList } from "@/api/sysDictionary";
 export default {
   name: "FieldDialog",
@@ -184,6 +187,10 @@ export default {
     };
   },
   methods: {
+    autoFill(){
+        this.dialogMiddle.fieldJson = toLowerCase(this.dialogMiddle.fieldName)
+        this.dialogMiddle.columnName = toSQLLine(this.dialogMiddle.fieldJson)
+    },
     async getDbfdOptions() {
         this.dialogMiddle.dataType = ""
         this.dialogMiddle.dataTypeLong = ""
@@ -202,20 +209,6 @@ export default {
     });
 
     this.dictOptions = dictRes.data.list
-  },
-  watch: {
-    'dialogMiddle.fieldName': function (val) {
-      if (val.length > 0) {
-        val = val.replace(val[0], val[0].toLowerCase());
-        val = toSQLLine(val)
-      }
-
-      this.dialogMiddle.fieldJson = val;
-      this.dialogMiddle.columnName = val;
-    },
-    'dialogMiddle.fieldDesc': function (val) {
-      this.dialogMiddle.comment = val;
-    }
   },
 };
 </script>

@@ -240,7 +240,7 @@ func DeleteUser(c *gin.Context) {
 func SetUserInfo(c *gin.Context) {
 	var user model.SysUser
 	_ = c.ShouldBindJSON(&user)
-	if err := utils.Verify(user, utils.SetUserVerify); err != nil {
+	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

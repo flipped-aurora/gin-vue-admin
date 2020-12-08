@@ -1,0 +1,146 @@
+
+@import '@/style/basics.scss';
+    .aside {
+        background-color: $bg-aside !important;
+        .el-menu {
+            border: none;
+            height: 100%;
+            background-color: $bg-aside !important;
+          }
+            .el-menu-item {
+                background-color: $bg-aside !important;
+                color: $aside-title !important;
+              &:hover{
+                background-color: $aside-active !important;
+                }
+                &.is-active{
+                background-color: $aside-active !important;
+                box-shadow: 2px 6px 10px 1px,#EBEEF5;
+                &.is-opend{
+                    ul{
+                    border: none;
+                    }
+                }
+            }
+               
+        }
+            
+            
+    
+    
+    
+          // menu hover
+          .submenu-title-noDropdown,
+          .el-submenu__title {
+            color: $aside-title !important;
+            &:hover {
+              background-color: $aside-hover !important;
+            }
+          }
+      
+          .is-active>.el-submenu__title {
+            color: $aside-title-active !important;
+          }
+      
+          & .nest-menu .el-submenu>.el-submenu__title,
+          & .el-submenu .el-menu-item {
+            color: $aside-title !important;
+            background-color: $bg-aside !important;
+      
+            &:hover {
+              background-color: $aside-hover !important;
+            }
+            &.is-active{
+              background-color:$aside-active !important;
+            }
+          }
+        }
+      
+        .hideSidebar {
+          .sidebar-container {
+            width: 54px !important;
+          }
+      
+          .main-container {
+            margin-left: 54px;
+          }
+      
+          .submenu-title-noDropdown {
+            padding: 0 !important;
+            position: relative;
+      
+            .el-tooltip {
+              padding: 0 !important;
+      
+              .svg-icon {
+                margin-left: 20px;
+              }
+            }
+          }
+      
+          .el-submenu {
+            overflow: hidden;
+      
+            &>.el-submenu__title {
+              padding: 0 !important;
+      
+              .svg-icon {
+                margin-left: 20px;
+              }
+      
+              .el-submenu__icon-arrow {
+                display: none;
+              }
+            }
+          }
+      
+          .el-menu--collapse {
+            .el-submenu {
+              &>.el-submenu__title {
+                &>span {
+                  height: 0;
+                  width: 0;
+                  overflow: hidden;
+                  visibility: hidden;
+                  display: inline-block;
+                }
+              }
+            }
+          }
+        }
+      
+      // when menu collapsed
+      .el-menu--vertical {
+        &>.el-menu {
+          .svg-icon {
+            margin-right: 16px;
+          }
+        }
+      
+        .nest-menu .el-submenu>.el-submenu__title,
+        .el-menu-item {
+          &:hover {
+            // you can use $subMenuHover
+            background-color: #3788ee !important;
+          }
+        }
+      
+        // the scroll bar appears when the subMenu is too long
+        >.el-menu--popup {
+          max-height: 100vh;
+          overflow-y: auto;
+      
+          &::-webkit-scrollbar-track-piece {
+            background: $aside-hover;
+          }
+      
+          &::-webkit-scrollbar {
+            width: 6px;
+          }
+      
+          &::-webkit-scrollbar-thumb {
+            background: #99a9bf;
+          }
+        }
+
+    }

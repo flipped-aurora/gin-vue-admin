@@ -7,7 +7,7 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
-@import '@/style/basics.scss';
+ @import '@/style/basics.scss';
 
 html {
     line-height: 1.15;
@@ -591,54 +591,7 @@ li {
 
     }
 
-    .aside {
-        .el-menu-vertical {
-            background-color: $bg-aside;
-        }
-        .el-submenu {
-            background-color: $bg-aside;
-            .el-menu {
-                .el-menu-item {
-                    background-color: #000408;
-                    height: 44px;
-                    line-height: 44px;
-                }
-                .is-active {    
-                    background-color: #1890ff;
-                    // 关闭三级菜单二级菜单样式
-                    ul{
-                        border:none;
-                    }
-                }
-                // 关闭三级菜单二级菜单样式
-                .is-active.is-opened{
-                    background-color: #191a23;
-                    ul{
-                        border:none;
-                    }
-                }
-            }
-        }
-        .el-menu-item:focus, .el-menu-item:hover{
-            background-color: transparent;
-        }
-        .el-menu-item:hover i,
-        .el-menu-item:hover span {
-            color: #fff;
-        }
 
-        .el-submenu__title:hover {
-            background-color: $bg-aside;
-        }
-
-        .el-submenu__title:hover i,
-        .el-submenu__title:hover span {
-            color: #fff;
-        }
-        .el-menu--inline {
-            border-left: 5px solid #2c3b41;
-        }
-    }
 
     .hideside {
         .aside {

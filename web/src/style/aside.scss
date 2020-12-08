@@ -32,6 +32,7 @@
           // menu hover
           .submenu-title-noDropdown,
           .el-submenu__title {
+            background-color: $bg-aside !important;
             color: $aside-title !important;
             &:hover {
               background-color: $aside-hover !important;

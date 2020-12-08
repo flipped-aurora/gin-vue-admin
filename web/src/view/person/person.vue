@@ -16,7 +16,7 @@
             <div class="user-information">
               <ul>
                 <li>
-                  <i class="el-icon-user"></i>{{userInfo.nickName}}
+                  <i class="el-icon-user"></i>GIN-VUE-ADMIN
                 </li>
                 <li>
                   <i class="el-icon-data-analysis"></i>北京反转极光科技有限公司-技术部-前端事业群

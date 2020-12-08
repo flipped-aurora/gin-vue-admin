@@ -1,5 +1,5 @@
 
-const title = 'We-亳院 后台管理系统'
+const title = 'GIN-VUE-ADMIN'
 
 export default function getPageTitle(pageTitle) {
   if (pageTitle) {

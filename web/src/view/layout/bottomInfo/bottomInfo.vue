@@ -3,12 +3,12 @@
     <div>
       <span>Powered by</span>
       <span>
-      <a href="https://github.com/flipped-aurora/gin-vue-admin">gin-vue-admin</a>
+        We-亳院
       </span>
       <el-divider direction="vertical"></el-divider>
       <span>Copyright</span>
       <span>
-      <a href="https://github.com/flipped-aurora">flipped-aurora团队</a>
+      We-亳院
       </span>
     </div>
   </div>

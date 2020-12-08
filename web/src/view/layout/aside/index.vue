@@ -7,10 +7,11 @@
           :collapse-transition="true"
           :default-active="active"
           @select="selectMenuItem"
-          active-text-color="#fff"
-          class="el-menu-vertical"
-          text-color="rgb(191, 203, 217)"
+          background-color="#fff"
+          active-text-color="#1989fa"
+          text-color="#000"
           unique-opened
+          class="app-slider"
         >
           <template v-for="item in asyncRouters[0].children">
             <aside-component :key="item.name" :routerInfo="item" v-if="!item.hidden" />
@@ -94,5 +95,19 @@ export default {
     display: table-cell;
     vertical-align: middle;
   }
+}
+.app-slider{
+  height: calc(100vh - 64px) !important;
+  visibility: auto;
+
+  &:not(.el-menu--collapse) {
+      width: 220px;
+  }
+  .el-menu-item  .is-active{
+  background-color: burlywood !important;
+   &:hover {
+      background: burlywood;
+    }
+}
 }
 </style>

@@ -7,7 +7,15 @@
 <script>
 export default {
   name: 'app',
-  components: {}
+  components: {},
+  data() {
+   return {
+     
+   }
+ },
+ methods:{
+   
+ }
 }
 </script>
 
@@ -15,7 +23,7 @@ export default {
 // 引入初始化样式
 @import '@/style/main.scss';
 @import '@/style/base.scss';
-@import '@/style/mobile.scss';
+@import '@/style/slider.scss';
 #app {
   background: #eee;
   height: 100vh;

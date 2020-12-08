@@ -19,6 +19,7 @@
 
     <!--自定义右键菜单html代码-->
     <ul :style="{left:left+'px',top:top+'px'}" class="contextmenu" v-show="contextMenuVisible">
+      <li @click="refreshSelectedTag">刷新页面</li>
       <li @click="closeAll">关闭所有</li>
       <li @click="closeLeft">关闭左侧</li>
       <li @click="closeRight">关闭右侧</li>
@@ -28,6 +29,7 @@
 </template>
 <script>
 export default {
+  inject :['reload'],
   name: 'HistoryComponent',
   data() {
     return {
@@ -149,6 +151,9 @@ export default {
       )
       this.$router.push(right)
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
+    },
+    refreshSelectedTag(){
+      this.reload()
     },
     setTab(route) {
       if (!this.historys.some(item => item.name == route.name)) {

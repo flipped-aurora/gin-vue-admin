@@ -1,5 +1,6 @@
 import router from './router'
 import { store } from '@/store/index'
+import getPageTitle from '@/utils/page'
 
 let asyncRouterFlag = 0
 
@@ -8,6 +9,8 @@ const whiteList = ['login']
 router.beforeEach(async(to, from, next) => {
     const token = store.getters['user/token']
         // 在白名单中的判断情况
+        //修改网页标签名称
+    document.title = getPageTitle(to.meta.title)
     if (whiteList.indexOf(to.name) > -1) {
         if (token) {
             next({ path: '/layout/dashboard' })

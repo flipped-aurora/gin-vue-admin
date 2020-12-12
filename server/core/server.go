@@ -1,15 +1,25 @@
 package core
 
 import (
+	"context"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/initialize"
-	"go.uber.org/zap"
+	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
+
+	"go.uber.org/zap"
 )
 
 type server interface {
 	ListenAndServe() error
+}
+
+type mShutdown interface {
+	Shutdown(ctx context.Context) error
 }
 
 func RunWindowsServer() {
@@ -34,5 +44,30 @@ func RunWindowsServer() {
 	默认前端文件运行地址:http://127.0.0.1:8080
 	如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.gin-vue-admin.com/docs/coffee
 `, address)
-	global.GVA_LOG.Error(s.ListenAndServe().Error())
+	//global.GVA_LOG.Error(s.ListenAndServe().Error())
+
+	go func() {
+		// 开启一个goroutine启动服务
+		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			global.GVA_LOG.Error(err.Error())
+		}
+	}()
+	// 新增 优雅关闭
+	exitSignals := []os.Signal{os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT, syscall.SIGINT}
+	sigChan := make(chan os.Signal, 1)
+	// 注册信号
+	signal.Notify(sigChan, exitSignals...)
+	<-sigChan
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	// 5秒内优雅关闭服务（将未处理完的请求处理完再关闭服务），超过5秒就超时退出
+	ns, ok := s.(mShutdown)
+	if !ok {
+		return
+	}
+	if err := ns.Shutdown(ctx); err != nil {
+		global.GVA_LOG.Error("Server Shutdown: " + err.Error())
+		return
+	}
+	global.GVA_LOG.Info("Server Exitz")
 }

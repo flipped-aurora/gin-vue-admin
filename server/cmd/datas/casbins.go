@@ -4,6 +4,7 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
+	"os"
 )
 
 var Carbines = []gormadapter.CasbinRule{
@@ -74,6 +75,18 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/simpleUploader/upload", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/simpleUploader/checkFileMd5", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/simpleUploader/mergeFileMd5", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/createWorkflowProcess", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/deleteWorkflowProcess", V2: "DELETE"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/deleteWorkflowProcessByIds", V2: "DELETE"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/updateWorkflowProcess", V2: "PUT"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/findWorkflowProcess", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/getWorkflowProcessList", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/findWorkflowStep", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/startWorkflow", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/completeWorkflowMove", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/getMyStated", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/getMyNeed", V2: "GET"},
+	{PType: "p", V0: "888", V1: "/workflowProcess/getWorkflowMoveByID", V2: "GET"},
 	{PType: "p", V0: "8881", V1: "/base/login", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},
@@ -151,8 +164,8 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "9528", V1: "/autoCode/createTemp", V2: "POST"},
 }
 
-func InitCasbinModel(db *gorm.DB) (err error) {
-	return db.Transaction(func(tx *gorm.DB) error {
+func InitCasbinModel(db *gorm.DB) {
+	if err := db.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("p_type = ? AND v0 IN ?", "p", []string{"888", "8881", "9528"}).Find(&[]gormadapter.CasbinRule{}).RowsAffected == 142 {
 			color.Danger.Println("casbin_rule表的初始数据已存在!")
 			return nil
@@ -161,5 +174,8 @@ func InitCasbinModel(db *gorm.DB) (err error) {
 			return err
 		}
 		return nil
-	})
+	}); err != nil {
+		color.Warn.Printf("[Mysql]--> casbin_rule 表的初始数据失败,err: %v\n", err)
+		os.Exit(0)
+	}
 }

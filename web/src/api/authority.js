@@ -1,11 +1,6 @@
 import service from '@/utils/request'
 
-// @Summary 用户登录
-// @Produce  application/json
-// @Param {
-//  page     int
-//	pageSize int
-// }
+
 // @Router /authority/getAuthorityList [post]
 export const getAuthorityList = (data) => {
     return service({

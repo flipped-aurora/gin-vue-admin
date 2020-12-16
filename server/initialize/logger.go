@@ -14,8 +14,8 @@ import (
 )
 
 var (
-	Discard = New(log.New(ioutil.Discard, "", log.LstdFlags), GormConfig{})
-	Default = New(log.New(os.Stdout, "\r\n", log.LstdFlags), GormConfig{
+	Discard = New(log.New(ioutil.Discard, "", log.LstdFlags), log.New(ioutil.Discard, "", log.LstdFlags), GormConfig{})
+	Default = New(log.New(os.Stdout, "\r\n", log.LstdFlags), log.New(os.Stdout, "\r\n", log.LstdFlags), GormConfig{
 		SlowThreshold: 200 * time.Millisecond,
 		LogLevel:      logger.Warn,
 		Colorful:      true,
@@ -31,7 +31,7 @@ type traceRecorder struct {
 	Err          error
 }
 
-func New(writer Writer, config GormConfig) logger.Interface {
+func New(writer Writer, gormWriter logger.Writer, config GormConfig) logger.Interface {
 	var (
 		infoStr      = "%s\n[info] "
 		warnStr      = "%s\n[warn] "
@@ -52,6 +52,7 @@ func New(writer Writer, config GormConfig) logger.Interface {
 
 	return &GormLogger{
 		Writer:       writer,
+		gormWriter:   gormWriter,
 		GormConfig:   config,
 		infoStr:      infoStr,
 		warnStr:      warnStr,
@@ -75,6 +76,7 @@ type GormConfig struct {
 
 type GormLogger struct {
 	Writer
+	gormWriter logger.Writer
 	GormConfig
 	infoStr, warnStr, errStr            string
 	traceStr, traceErrStr, traceWarnStr string
@@ -135,16 +137,31 @@ func (g *GormLogger) Trace(ctx context.Context, begin time.Time, fc func() (stri
 }
 
 func (g *GormLogger) Printf(message string, data ...interface{}) {
+	if global.GVA_CONFIG.Mysql.LogZap == "Info" && !global.GVA_CONFIG.Mysql.LogMode {
+		switch len(data) {
+		case 0:
+			global.GVA_LOG.Info(message)
+		case 1:
+			global.GVA_LOG.Info("gorm", zap.Any("src", data[0]))
+		case 2:
+			global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]))
+		case 3:
+			global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]))
+		case 4:
+			global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]), zap.Any("sql", data[3]))
+		}
+		return
+	}
 	switch len(data) {
 	case 0:
-		global.GVA_LOG.Info(message)
+		g.gormWriter.Printf(message, "")
 	case 1:
-		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]))
+		g.gormWriter.Printf(message, data[0].(string))
 	case 2:
-		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]))
+		g.gormWriter.Printf(message, data[0].(string), data[1].(float64))
 	case 3:
-		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]))
+		g.gormWriter.Printf(message, data[0].(string), data[1].(float64), data[2].(string))
 	case 4:
-		global.GVA_LOG.Info("gorm", zap.Any("src", data[0]), zap.Any("duration", data[1]), zap.Any("rows", data[2]), zap.Any("sql", data[3]))
+		g.gormWriter.Printf(message, data[0].(string), data[1].(float64), data[2].(string), data[3].(string))
 	}
 }

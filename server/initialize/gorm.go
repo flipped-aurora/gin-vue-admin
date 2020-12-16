@@ -10,7 +10,11 @@ import (
 	"os"
 )
 
-// Gorm 初始化数据库并产生数据库全局变量
+//@author: SliverHorn
+//@function: Gorm
+//@description: 初始化数据库并产生数据库全局变量
+//@return: *gorm.DB
+
 func Gorm() *gorm.DB {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
@@ -20,7 +24,12 @@ func Gorm() *gorm.DB {
 	}
 }
 
-// MysqlTables 注册数据库表专用
+// MysqlTables
+//@author: SliverHorn
+//@function: MysqlTables
+//@description: 注册数据库表专用
+//@param: db *gorm.DB
+
 func MysqlTables(db *gorm.DB) {
 	err := db.AutoMigrate(
 		model.SysUser{},
@@ -52,7 +61,12 @@ func MysqlTables(db *gorm.DB) {
 	global.GVA_LOG.Info("register table success")
 }
 
-// GormMysql 初始化Mysql数据库
+//
+//@author: SliverHorn
+//@function: GormMysql
+//@description: 初始化Mysql数据库
+//@return: *gorm.DB
+
 func GormMysql() *gorm.DB {
 	m := global.GVA_CONFIG.Mysql
 	dsn := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
@@ -76,23 +90,45 @@ func GormMysql() *gorm.DB {
 	}
 }
 
-// gormConfig 根据配置决定是否开启日志
+//@author: SliverHorn
+//@function: gormConfig
+//@description: 根据配置决定是否开启日志
+//@param: mod bool
+//@return: *gorm.Config
+
 func gormConfig(mod bool) *gorm.Config {
-	if global.GVA_CONFIG.Mysql.LogZap {
+	switch global.GVA_CONFIG.Mysql.LogZap {
+	case "Silent":
+		return &gorm.Config{
+			Logger:                                   Default.LogMode(logger.Silent),
+			DisableForeignKeyConstraintWhenMigrating: true,
+		}
+	case "Error":
+		return &gorm.Config{
+			Logger:                                   Default.LogMode(logger.Error),
+			DisableForeignKeyConstraintWhenMigrating: true,
+		}
+	case "Warn":
+		return &gorm.Config{
+			Logger:                                   Default.LogMode(logger.Warn),
+			DisableForeignKeyConstraintWhenMigrating: true,
+		}
+	case "Info":
 		return &gorm.Config{
 			Logger:                                   Default.LogMode(logger.Info),
 			DisableForeignKeyConstraintWhenMigrating: true,
 		}
-	}
-	if mod {
-		return &gorm.Config{
-			Logger:                                   logger.Default.LogMode(logger.Info),
-			DisableForeignKeyConstraintWhenMigrating: true,
-		}
-	} else {
-		return &gorm.Config{
-			Logger:                                   logger.Default.LogMode(logger.Silent),
-			DisableForeignKeyConstraintWhenMigrating: true,
+	default:
+		if mod {
+			return &gorm.Config{
+				Logger:                                   logger.Default.LogMode(logger.Info),
+				DisableForeignKeyConstraintWhenMigrating: true,
+			}
+		} else {
+			return &gorm.Config{
+				Logger:                                   logger.Default.LogMode(logger.Silent),
+				DisableForeignKeyConstraintWhenMigrating: true,
+			}
 		}
 	}
 }

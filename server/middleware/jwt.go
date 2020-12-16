@@ -47,7 +47,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 		}
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
-			claims.ExpiresAt = time.Now().Unix() + 60*60*24*7
+			claims.ExpiresAt = time.Now().Unix() + global.GVA_CONFIG.JWT.ExpiresTime
 			newToken, _ := j.CreateToken(*claims)
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)

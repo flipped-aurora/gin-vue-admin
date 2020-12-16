@@ -9,5 +9,5 @@ type Mysql struct {
 	MaxIdleConns int    `mapstructure:"max-idle-conns" json:"maxIdleConns" yaml:"max-idle-conns"`
 	MaxOpenConns int    `mapstructure:"max-open-conns" json:"maxOpenConns" yaml:"max-open-conns"`
 	LogMode      bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
-	LogZap       bool   `mapstructure:"log-zap" json:"logZap" yaml:"log-zap"`
+	LogZap       string `mapstructure:"log-zap" json:"logZap" yaml:"log-zap"`
 }

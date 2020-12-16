@@ -4,13 +4,11 @@
       <el-col :span="6">
         <div class="fl-left avatar-box">
           <div class="user-card">
-            <el-avatar
-              class="user-avatar"
-              :size="160"
-              :src="userInfo.headerImg"
-              shape="square"
-              @click.native="openChooseImg"
-            ></el-avatar>
+              <div class="user-headpic-update" :style="{ 'background-image': 'url(' + userInfo.headerImg + ')','background-repeat':'no-repeat','background-size':'cover' }" >
+              <span class="update" @click="openChooseImg">
+                <i class="el-icon-edit"></i>
+                重新上传</span>
+              </div>
             <div class="user-personality">
               <p class="nickname">{{userInfo.nickName}}</p>
               <p class="person-info">这个家伙很懒，什么都没有留下</p>
@@ -18,7 +16,7 @@
             <div class="user-information">
               <ul>
                 <li>
-                  <i class="el-icon-user"></i>资深前端工程师
+                   <i class="el-icon-user"></i>{{userInfo.nickName}}
                 </li>
                 <li>
                   <i class="el-icon-data-analysis"></i>北京反转极光科技有限公司-技术部-前端事业群
@@ -216,9 +214,6 @@ export default {
   box-shadow: -2px 0 20px -16px;
   width: 80%;
   height: 100%;
-  .user-avatar{
-    cursor: pointer;
-  }
   .user-card {
     min-height: calc(90vh - 200px);
     padding: 30px 20px;
@@ -282,4 +277,27 @@ export default {
     }
   }
 }
+.user-headpic-update{
+    width: 120px;
+    height: 120px;
+    line-height: 120px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    border-radius: 20px;
+     &:hover{
+      color: #fff;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
+      background-blend-mode: multiply,multiply;
+      .update{
+        color:#fff ;
+      }
+    }
+    .update{
+      height: 120px;
+      width: 120px;
+      text-align: center;
+      color:transparent;
+    }
+  }
 </style>

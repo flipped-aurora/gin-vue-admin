@@ -14,6 +14,7 @@
 
 [gitee地址](https://gitee.com/pixelmax/gin-vue-admin)|
 [github地址](https://github.com/flipped-aurora/gin-vue-admin)
+[vue3版本分支地址](https://github.com/flipped-aurora/gin-vue-admin/tree/vue3Develop)
 
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/

@@ -3,6 +3,8 @@
 # jwt configuration
 jwt:
   signing-key: 'qmPlus'
+  expires-time: 604800
+  buffer-time: 86400
 
 # zap logger configuration
 zap:

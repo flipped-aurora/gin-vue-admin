@@ -60,7 +60,7 @@ mysql:
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: false
-  log-zap: false
+  log-zap: ""
 
 # local configuration
 local:

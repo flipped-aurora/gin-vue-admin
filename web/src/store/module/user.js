@@ -46,6 +46,7 @@ export const user = {
                 } else {
                     router.push({ path: '/layout/dashboard' })
                 }
+                return true
             }
         },
         async LoginOut({ commit }) {

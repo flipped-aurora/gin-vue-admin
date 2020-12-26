@@ -12,7 +12,7 @@ type GetById struct {
 }
 
 // Find by id structure
-type GetByIdUnit struct {
+type GetByIdUint struct {
 	Id uint `json:"id" form:"id"`
 }
 

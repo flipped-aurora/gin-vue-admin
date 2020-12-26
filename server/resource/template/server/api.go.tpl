@@ -34,7 +34,7 @@ func Create{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.GetByIdUnit true "删除{{.StructName}}"
+// @Param data body request.GetByIdUint true "删除{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func Delete{{.StructName}}(c *gin.Context) {
@@ -99,11 +99,11 @@ func Update{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query request.GetByIdUnit true "用id查询{{.StructName}}"
+// @Param data query request.GetByIdUint true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func Find{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} request.GetByIdUnit
+	var {{.Abbreviation}} request.GetByIdUint
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
 	if err, re{{.Abbreviation}} := service.Get{{.StructName}}({{.Abbreviation}}.Id); err != nil {
         global.GVA_LOG.Error("查询失败!", zap.Any("err", err))

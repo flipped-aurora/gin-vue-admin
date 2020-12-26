@@ -11,6 +11,11 @@ type GetById struct {
 	Id float64 `json:"id" form:"id"`
 }
 
+// Find by id structure
+type GetByIdUnit struct {
+	Id uint `json:"id" form:"id"`
+}
+
 type IdsReq struct {
 	Ids []int `json:"ids" form:"ids"`
 }
@@ -20,4 +25,4 @@ type GetAuthorityId struct {
 	AuthorityId string
 }
 
-type Empty struct {}
+type Empty struct{}

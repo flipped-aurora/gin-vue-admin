@@ -52,7 +52,12 @@
       <el-table-column fixed="right" label="操作" width="200">
         <template slot-scope="scope">
           <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
-          <el-button @click="deleteApi(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
+          <el-button
+            @click="deleteApi(scope.row)"
+            size="small"
+            type="danger"
+            icon="el-icon-delete"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,194 +113,197 @@ import {
   createApi,
   updateApi,
   deleteApi
-} from '@/api/api'
-import infoList from '@/mixins/infoList'
-import { toSQLLine } from '@/utils/stringFun'
+} from "@/api/api";
+import infoList from "@/mixins/infoList";
+import { toSQLLine } from "@/utils/stringFun";
 const methodOptions = [
   {
-    value: 'POST',
-    label: '创建',
-    type: 'success'
+    value: "POST",
+    label: "创建",
+    type: "success"
   },
   {
-    value: 'GET',
-    label: '查看',
-    type: ''
+    value: "GET",
+    label: "查看",
+    type: ""
   },
   {
-    value: 'PUT',
-    label: '更新',
-    type: 'warning'
+    value: "PUT",
+    label: "更新",
+    type: "warning"
   },
   {
-    value: 'DELETE',
-    label: '删除',
-    type: 'danger'
+    value: "DELETE",
+    label: "删除",
+    type: "danger"
   }
-]
+];
 
 export default {
-  name: 'Api',
+  name: "Api",
   mixins: [infoList],
   data() {
     return {
       listApi: getApiList,
       dialogFormVisible: false,
-      dialogTitle: '新增Api',
+      dialogTitle: "新增Api",
       form: {
-        path: '',
-        apiGroup: '',
-        method: '',
-        description: ''
+        path: "",
+        apiGroup: "",
+        method: "",
+        description: ""
       },
       methodOptions: methodOptions,
-      type: '',
+      type: "",
       rules: {
-        path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
+        path: [{ required: true, message: "请输入api路径", trigger: "blur" }],
         apiGroup: [
-          { required: true, message: '请输入组名称', trigger: 'blur' }
+          { required: true, message: "请输入组名称", trigger: "blur" }
         ],
         method: [
-          { required: true, message: '请选择请求方式', trigger: 'blur' }
+          { required: true, message: "请选择请求方式", trigger: "blur" }
         ],
         description: [
-          { required: true, message: '请输入api介绍', trigger: 'blur' }
+          { required: true, message: "请输入api介绍", trigger: "blur" }
         ]
       }
-    }
+    };
   },
   methods: {
     // 排序
     sortChange({ prop, order }) {
       if (prop) {
-        this.searchInfo.orderKey = toSQLLine(prop)
-        this.searchInfo.desc = order == 'descending'
+        this.searchInfo.orderKey = toSQLLine(prop);
+        this.searchInfo.desc = order == "descending";
       }
-      this.getTableData()
+      this.getTableData();
     },
     //条件搜索前端看此方法
     onSubmit() {
-      this.page = 1
-      this.pageSize = 10
-      this.getTableData()
+      this.page = 1;
+      this.pageSize = 10;
+      this.getTableData();
     },
     initForm() {
-      this.$refs.apiForm.resetFields()
-      this.form= {
-        path: '',
-        apiGroup: '',
-        method: '',
-        description: ''
-      }
+      this.$refs.apiForm.resetFields();
+      this.form = {
+        path: "",
+        apiGroup: "",
+        method: "",
+        description: ""
+      };
     },
     closeDialog() {
-      this.initForm()
-      this.dialogFormVisible = false
+      this.initForm();
+      this.dialogFormVisible = false;
     },
     openDialog(type) {
       switch (type) {
-        case 'addApi':
-          this.dialogTitlethis = '新增Api'
-          break
-        case 'edit':
-          this.dialogTitlethis = '编辑Api'
-          break
+        case "addApi":
+          this.dialogTitlethis = "新增Api";
+          break;
+        case "edit":
+          this.dialogTitlethis = "编辑Api";
+          break;
         default:
-          break
+          break;
       }
-      this.type = type
-      this.dialogFormVisible = true
+      this.type = type;
+      this.dialogFormVisible = true;
     },
     async editApi(row) {
-      const res = await getApiById({ id: row.ID })
-      this.form = res.data.api
-      this.openDialog('edit')
+      const res = await getApiById({ id: row.ID });
+      this.form = res.data.api;
+      this.openDialog("edit");
     },
     async deleteApi(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
+      this.$confirm("此操作将永久删除所有角色下该api, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
       })
         .then(async () => {
-          const res = await deleteApi(row)
+          const res = await deleteApi(row);
           if (res.code == 0) {
             this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getTableData()
+              type: "success",
+              message: "删除成功!"
+            });
+            if (this.tableData.length == 1) {
+              this.page--;
+            }
+            this.getTableData();
           }
         })
         .catch(() => {
           this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     async enterDialog() {
       this.$refs.apiForm.validate(async valid => {
         if (valid) {
           switch (this.type) {
-            case 'addApi':
+            case "addApi":
               {
-                const res = await createApi(this.form)
+                const res = await createApi(this.form);
                 if (res.code == 0) {
                   this.$message({
-                    type: 'success',
-                    message: '添加成功',
+                    type: "success",
+                    message: "添加成功",
                     showClose: true
-                  })
+                  });
                 }
-                this.getTableData()
-                this.closeDialog()
+                this.getTableData();
+                this.closeDialog();
               }
 
-              break
-            case 'edit':
+              break;
+            case "edit":
               {
-                const res = await updateApi(this.form)
+                const res = await updateApi(this.form);
                 if (res.code == 0) {
                   this.$message({
-                    type: 'success',
-                    message: '编辑成功',
+                    type: "success",
+                    message: "编辑成功",
                     showClose: true
-                  })
+                  });
                 }
-                this.getTableData()
-                this.closeDialog()
+                this.getTableData();
+                this.closeDialog();
               }
-              break
+              break;
             default:
               {
                 this.$message({
-                  type: 'error',
-                  message: '未知操作',
+                  type: "error",
+                  message: "未知操作",
                   showClose: true
-                })
+                });
               }
-              break
+              break;
           }
         }
-      })
+      });
     }
   },
   filters: {
     methodFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
+      const target = methodOptions.filter(item => item.value === value)[0];
       // return target && `${target.label}(${target.value})`
-      return target && `${target.label}`
+      return target && `${target.label}`;
     },
     tagTypeFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      return target && `${target.type}`
+      const target = methodOptions.filter(item => item.value === value)[0];
+      return target && `${target.type}`;
     }
   },
-  created(){
-    this.getTableData()
+  created() {
+    this.getTableData();
   }
-}
+};
 </script>
 <style scoped lang="scss">
 .button-box {

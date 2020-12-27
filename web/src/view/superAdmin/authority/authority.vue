@@ -106,10 +106,10 @@ export default {
   mixins: [infoList],
   data() {
     var mustUint = (rule, value, callback) => {
-      if (!(/^[0-9]*[1-9][0-9]*$/).test(value)){
-       return  callback(new Error("请输入正整数"));
-      } 
-      return  callback()
+      if (!/^[0-9]*[1-9][0-9]*$/.test(value)) {
+        return callback(new Error("请输入正整数"));
+      }
+      return callback();
     };
 
     return {
@@ -136,7 +136,7 @@ export default {
       rules: {
         authorityId: [
           { required: true, message: "请输入角色ID", trigger: "blur" },
-          {validator: mustUint, trigger: 'blur'  }
+          { validator: mustUint, trigger: "blur" }
         ],
         authorityName: [
           { required: true, message: "请输入角色名", trigger: "blur" }
@@ -191,6 +191,9 @@ export default {
               type: "success",
               message: "删除成功!"
             });
+            if (this.tableData.length == 1) {
+              this.page--;
+            }
             this.getTableData();
           }
         })

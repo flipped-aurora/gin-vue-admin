@@ -7,12 +7,13 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
-	"gorm.io/gorm"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"gorm.io/gorm"
 )
 
 type tplData struct {
@@ -186,29 +187,33 @@ func GetColumn(tableName string, dbName string) (err error, Columns []request.Co
 func addAutoMoveFile(data *tplData) {
 	dir := filepath.Base(filepath.Dir(data.autoCodePath))
 	base := filepath.Base(data.autoCodePath)
-	if strings.Contains(data.autoCodePath, "server") {
-		if strings.Contains(data.autoCodePath, "router") {
+	fileSlice := strings.Split(data.autoCodePath, string(os.PathSeparator))
+	n := len(fileSlice)
+	if n <= 2 {
+		return
+	}
+	if strings.Contains(fileSlice[1], "server") {
+		if strings.Contains(fileSlice[n-2], "router") {
 			data.autoMoveFilePath = filepath.Join(dir, base)
-		} else if strings.Contains(data.autoCodePath, "api") {
+		} else if strings.Contains(fileSlice[n-2], "api") {
 			data.autoMoveFilePath = filepath.Join(dir, "v1", base)
-		} else if strings.Contains(data.autoCodePath, "service") {
+		} else if strings.Contains(fileSlice[n-2], "service") {
 			data.autoMoveFilePath = filepath.Join(dir, base)
-		} else if strings.Contains(data.autoCodePath, "model") {
+		} else if strings.Contains(fileSlice[n-2], "model") {
 			data.autoMoveFilePath = filepath.Join(dir, base)
-		} else if strings.Contains(data.autoCodePath, "request") {
+		} else if strings.Contains(fileSlice[n-2], "request") {
 			data.autoMoveFilePath = filepath.Join("model", dir, base)
 		}
-	} else if strings.Contains(data.autoCodePath, "web") {
-		if strings.Contains(data.autoCodePath, "js") {
+	} else if strings.Contains(fileSlice[1], "web") {
+		if strings.Contains(fileSlice[3], "js") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", dir, base)
-		} else if strings.Contains(data.autoCodePath, "form") {
+		} else if strings.Contains(fileSlice[3], "form") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
-		} else if strings.Contains(data.autoCodePath, "table") {
+		} else if strings.Contains(fileSlice[3], "table") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)
 		}
 	}
 }
-
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@author: [SliverHorn](https://github.com/SliverHorn)

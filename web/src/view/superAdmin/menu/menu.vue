@@ -231,8 +231,8 @@ export default {
   },
   methods: {
     addParameter(form) {
-      if (!form.parameters){
-        this.$set(form,"parameters",[])
+      if (!form.parameters) {
+        this.$set(form, "parameters", []);
       }
       form.parameters.push({
         type: "query",
@@ -316,6 +316,9 @@ export default {
               type: "success",
               message: "删除成功!"
             });
+            if (this.tableData.length == 1) {
+              this.page--;
+            }
             this.getTableData();
           }
         })

@@ -69,7 +69,6 @@
         </el-form-item>
         <el-form-item label="用户角色" label-width="80px" prop="authorityId">
           <el-cascader
-            @change="changeAuthority(scope.row)"
             v-model="userInfo.authorityId"
             :options="authOptions"
             :show-all-levels="false"

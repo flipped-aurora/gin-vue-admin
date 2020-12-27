@@ -7,11 +7,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title>GIN-VUE-ADMIN</title>
+    <title><%=htmlWebpackPlugin.options.title%></title>
     <% if(process.env.NODE_ENV!=='development'){ %>
-    <script src="//cdn.staticfile.org/vue/2.6.10/vue.min.js"></script>
-    <script src="//cdn.staticfile.org/axios/0.19.0/axios.min.js"></script>
-    <script src="//cdn.staticfile.org/echarts/4.7.0/echarts.min.js"></script>    
+      <% htmlWebpackPlugin.options.cdns.forEach(function(item){ if(item.js){ %>
+        <script type="text/javascript" src="<%= item.js %>"></script>
+      <% } }) %>
     <% } %>  
 </head>
 

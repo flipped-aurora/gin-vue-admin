@@ -24,7 +24,7 @@ func CreateExaCustomer(e model.ExaCustomer) (err error) {
 //@return: err error
 
 func DeleteExaCustomer(e model.ExaCustomer) (err error) {
-	err = global.GVA_DB.Delete(e).Error
+	err = global.GVA_DB.Delete(&e).Error
 	return err
 }
 

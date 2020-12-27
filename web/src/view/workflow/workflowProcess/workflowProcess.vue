@@ -56,9 +56,19 @@
 
       <el-table-column label="按钮组">
         <template slot-scope="scope">
-          <el-button class="table-button" @click="useWorkflowProcess(scope.row)" size="success" >启动</el-button>
-          <el-button class="table-button" @click="updateWorkflowProcess(scope.row)" size="small" type="primary">变更</el-button>
-          <el-button class="table-button" @click="viewWorkflowProcess(scope.row)" size="small" type="warning">查看</el-button>
+          <el-button class="table-button" @click="useWorkflowProcess(scope.row)" size="success">启动</el-button>
+          <el-button
+            class="table-button"
+            @click="updateWorkflowProcess(scope.row)"
+            size="small"
+            type="primary"
+          >变更</el-button>
+          <el-button
+            class="table-button"
+            @click="viewWorkflowProcess(scope.row)"
+            size="small"
+            type="warning"
+          >查看</el-button>
           <el-popover placement="top" width="160" v-model="scope.row.visible">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
@@ -147,6 +157,9 @@ export default {
           type: "success",
           message: "删除成功"
         });
+        if (this.tableData.length == ids.length) {
+          this.page--;
+        }
         this.deleteVisible = false;
         this.getTableData();
       }
@@ -160,7 +173,7 @@ export default {
         }
       });
     },
-    async useWorkflowProcess(row){
+    async useWorkflowProcess(row) {
       this.$router.push({
         name: "workflowUse",
         query: {
@@ -185,6 +198,9 @@ export default {
           type: "success",
           message: "删除成功"
         });
+        if (this.tableData.length == 1) {
+          this.page--;
+        }
         this.getTableData();
       }
     },

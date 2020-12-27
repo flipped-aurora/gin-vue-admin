@@ -210,13 +210,16 @@ export default {
           type: "success",
           message: "删除成功"
         });
+        if (this.tableData.length == 1) {
+          this.page--;
+        }
         this.getTableData();
       }
     },
     async enterDialog() {
-    this.formData.sysDictionaryID = Number(this.$route.params.id)
-      this.$refs['elForm'].validate(async valid => {
-        if (!valid) return
+      this.formData.sysDictionaryID = Number(this.$route.params.id);
+      this.$refs["elForm"].validate(async valid => {
+        if (!valid) return;
         let res;
         switch (this.type) {
           case "create":
@@ -231,14 +234,13 @@ export default {
         }
         if (res.code == 0) {
           this.$message({
-            type:"success",
-            message:"创建/更改成功"
-          })
+            type: "success",
+            message: "创建/更改成功"
+          });
           this.closeDialog();
           this.getTableData();
         }
-      })
-      
+      });
     },
     openDialog() {
       this.type = "create";
@@ -246,7 +248,7 @@ export default {
     }
   },
   created() {
-    this.searchInfo.sysDictionaryID = this.$route.params.id
+    this.searchInfo.sysDictionaryID = this.$route.params.id;
     this.getTableData();
   }
 };

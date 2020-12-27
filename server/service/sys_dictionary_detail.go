@@ -24,7 +24,7 @@ func CreateSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (e
 //@return: err error
 
 func DeleteSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (err error) {
-	err = global.GVA_DB.Delete(sysDictionaryDetail).Error
+	err = global.GVA_DB.Delete(&sysDictionaryDetail).Error
 	return err
 }
 

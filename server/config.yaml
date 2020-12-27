@@ -3,6 +3,8 @@
 # jwt configuration
 jwt:
   signing-key: 'qmPlus'
+  expires-time: 604800
+  buffer-time: 86400
 
 # zap logger configuration
 zap:
@@ -60,7 +62,7 @@ mysql:
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: false
-  log-zap: false
+  log-zap: ""
 
 # local configuration
 local:

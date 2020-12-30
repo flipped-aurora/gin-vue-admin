@@ -36,12 +36,12 @@ func CreateWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 func DeleteWorkflowProcess(workflowProcess model.WorkflowProcess) (err error) {
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var txErr error
-		txErr = tx.Delete(workflowProcess).Error
+		txErr = tx.Delete(&workflowProcess).Error
 		if txErr != nil {
 			return txErr
 		}
 		var edges []model.WorkflowEdge
-		txErr = tx.Delete(model.WorkflowNode{}, "workflow_process_id = ?", workflowProcess.ID).Error
+		txErr = tx.Delete(&model.WorkflowNode{}, "workflow_process_id = ?", workflowProcess.ID).Error
 		if txErr != nil {
 			return txErr
 		}
@@ -86,7 +86,7 @@ func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
 		if txErr != nil {
 			return txErr
 		}
-		txErr = tx.Unscoped().Delete(model.WorkflowNode{}, "workflow_process_id = ?", workflowProcess.ID).Error
+		txErr = tx.Unscoped().Delete(&model.WorkflowNode{}, "workflow_process_id = ?", workflowProcess.ID).Error
 		if txErr != nil {
 			return txErr
 		}
@@ -101,11 +101,11 @@ func UpdateWorkflowProcess(workflowProcess *model.WorkflowProcess) (err error) {
 		for _, v := range edges {
 			edgesIds = append(edgesIds, v.ID)
 		}
-		txErr = tx.Unscoped().Delete(model.WorkflowStartPoint{}, "workflow_edge_id in ?", edgesIds).Error
+		txErr = tx.Unscoped().Delete(&model.WorkflowStartPoint{}, "workflow_edge_id in ?", edgesIds).Error
 		if txErr != nil {
 			return txErr
 		}
-		txErr = tx.Unscoped().Delete(model.WorkflowEndPoint{}, "workflow_edge_id in ?", edgesIds).Error
+		txErr = tx.Unscoped().Delete(&model.WorkflowEndPoint{}, "workflow_edge_id in ?", edgesIds).Error
 		if txErr != nil {
 			return txErr
 		}

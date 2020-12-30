@@ -28,7 +28,7 @@ func CreateApi(api model.SysApi) (err error) {
 //@return: err error
 
 func DeleteApi(api model.SysApi) (err error) {
-	err = global.GVA_DB.Delete(api).Error
+	err = global.GVA_DB.Delete(&api).Error
 	ClearCasbin(1, api.Path, api.Method)
 	return err
 }

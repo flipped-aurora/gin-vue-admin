@@ -36,7 +36,7 @@ func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
 //@return: err error
 
 func DeleteSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
-	err = global.GVA_DB.Delete(sysOperationRecord).Error
+	err = global.GVA_DB.Delete(&sysOperationRecord).Error
 	return err
 }
 

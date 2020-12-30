@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"gin-vue-admin/global"
+	"gin-vue-admin/initialize/internal"
 	"gin-vue-admin/model"
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
@@ -97,38 +98,24 @@ func GormMysql() *gorm.DB {
 //@return: *gorm.Config
 
 func gormConfig(mod bool) *gorm.Config {
+	var config = &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
 	switch global.GVA_CONFIG.Mysql.LogZap {
-	case "Silent":
-		return &gorm.Config{
-			Logger:                                   Default.LogMode(logger.Silent),
-			DisableForeignKeyConstraintWhenMigrating: true,
-		}
-	case "Error":
-		return &gorm.Config{
-			Logger:                                   Default.LogMode(logger.Error),
-			DisableForeignKeyConstraintWhenMigrating: true,
-		}
-	case "Warn":
-		return &gorm.Config{
-			Logger:                                   Default.LogMode(logger.Warn),
-			DisableForeignKeyConstraintWhenMigrating: true,
-		}
-	case "Info":
-		return &gorm.Config{
-			Logger:                                   Default.LogMode(logger.Info),
-			DisableForeignKeyConstraintWhenMigrating: true,
-		}
+	case "silent", "Silent":
+		config.Logger = internal.Default.LogMode(logger.Silent)
+	case "error", "Error":
+		config.Logger = internal.Default.LogMode(logger.Error)
+	case "warn", "Warn":
+		config.Logger = internal.Default.LogMode(logger.Warn)
+	case "info", "Info":
+		config.Logger = internal.Default.LogMode(logger.Info)
+	case "zap", "Zap":
+		config.Logger = internal.Default.LogMode(logger.Info)
 	default:
 		if mod {
-			return &gorm.Config{
-				Logger:                                   logger.Default.LogMode(logger.Info),
-				DisableForeignKeyConstraintWhenMigrating: true,
-			}
-		} else {
-			return &gorm.Config{
-				Logger:                                   logger.Default.LogMode(logger.Silent),
-				DisableForeignKeyConstraintWhenMigrating: true,
-			}
+			config.Logger = internal.Default.LogMode(logger.Info)
+			break
 		}
+		config.Logger = internal.Default.LogMode(logger.Silent)
 	}
+	return config
 }

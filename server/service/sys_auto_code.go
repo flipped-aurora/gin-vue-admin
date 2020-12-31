@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -103,12 +102,12 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		for index, _ := range dataList {
 			addAutoMoveFile(&dataList[index])
 		}
-		for _, value := range dataList { // 移动文件
-			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
-				fmt.Println(err)
-				return err
-			}
-		}
+		//for _, value := range dataList { // 移动文件
+		//	if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
+		//		fmt.Println(err)
+		//		return err
+		//	}
+		//}
 		return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
 		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
@@ -210,6 +209,12 @@ func addAutoMoveFile(data *tplData) {
 		} else if strings.Contains(fileSlice[3], "form") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
 		} else if strings.Contains(fileSlice[3], "table") {
+
+		if strings.Contains(fileSlice[n-1], "js") {
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", dir, base)
+		} else if strings.Contains(fileSlice[n-2], "form") {
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
+		} else if strings.Contains(fileSlice[n-2], "table") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)
 		}
 	}

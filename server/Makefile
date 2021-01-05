@@ -7,7 +7,7 @@ all: check gva initdb run
 
 gva:
 	go env -w GO111MODULE=on
-    go env -w GOPROXY=https://goproxy.io,direct
+	go env -w GOPROXY=https://goproxy.io,direct
 	go build -o ${GVA} cmd/main.go
 
 initdb:

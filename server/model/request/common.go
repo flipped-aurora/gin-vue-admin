@@ -20,4 +20,4 @@ type GetAuthorityId struct {
 	AuthorityId string
 }
 
-type Empty struct {}
+type Empty struct{}

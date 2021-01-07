@@ -1,4 +1,4 @@
-.PHONY: all build run gotool clean help
+.PHONY: all build run clean help
 
 BINARY="gin-vue-admin"
 GVA = "gva"

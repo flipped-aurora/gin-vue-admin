@@ -68,7 +68,7 @@
       <el-table-column label="按钮组">
         <template slot-scope="scope">
           <el-button class="table-button" @click="update{{.StructName}}(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="openComfirm(scope.row)">删除</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -138,7 +138,6 @@ export default {
     return {
       listApi: get{{ .StructName }}List,
       dialogFormVisible: false,
-      visible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],
@@ -201,7 +200,7 @@ export default {
       handleSelectionChange(val) {
         this.multipleSelection = val
       },
-      openComfirm(row){
+      deleteRow(row){
         this.$confirm('确定要删除吗?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -267,7 +266,6 @@ export default {
       };
     },
     async delete{{.StructName}}(row) {
-      this.visible = false;
       const res = await delete{{.StructName}}({ ID: row.ID });
       if (res.code == 0) {
         this.$message({

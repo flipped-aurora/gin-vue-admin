@@ -207,7 +207,9 @@ func addAutoMoveFile(data *tplData) {
 	} else if strings.Contains(fileSlice[1], "web") {
 		if strings.Contains(fileSlice[n-1], "js") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", dir, base)
-		} else if strings.Contains(fileSlice[n-2], "form") || strings.Contains(fileSlice[n-2], "workflowForm") {
+		} else if strings.Contains(fileSlice[n-2], "workflowForm") {
+			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"WorkFlowForm.vue")
+		} else if strings.Contains(fileSlice[n-2], "form") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
 		} else if strings.Contains(fileSlice[n-2], "table") {
 			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)

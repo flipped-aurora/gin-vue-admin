@@ -68,14 +68,7 @@
       <el-table-column label="按钮组">
         <template slot-scope="scope">
           <el-button class="table-button" @click="update{{.StructName}}(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
-          <el-popover placement="top" width="160" v-model="scope.row.visible">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="delete{{.StructName}}(scope.row)">确定</el-button>
-            </div>
-            <el-button type="danger" icon="el-icon-delete" size="mini" slot="reference">删除</el-button>
-          </el-popover>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="openComfirm(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -207,6 +200,15 @@ export default {
       },
       handleSelectionChange(val) {
         this.multipleSelection = val
+      },
+      openComfirm(row){
+        this.$confirm('确定要删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+           this.delete{{.StructName}}(row);
+        });
       },
       async onDelete() {
         const ids = []

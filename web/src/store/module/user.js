@@ -35,16 +35,19 @@ export const user = {
         }
     },
     actions: {
-        async LoginIn({ commit }, loginInfo) {
+        async LoginIn({ commit, dispatch, rootGetters, getters }, loginInfo) {
             const res = await login(loginInfo)
             if (res.code == 0) {
                 commit('setUserInfo', res.data.user)
                 commit('setToken', res.data.token)
+                await dispatch('router/SetAsyncRouter', {}, { root: true })
+                const asyncRouters = rootGetters['router/asyncRouters']
+                router.addRoutes(asyncRouters)
                 const redirect = router.history.current.query.redirect
                 if (redirect) {
                     router.push({ path: redirect })
                 } else {
-                    router.push({ path: '/layout/dashboard' })
+                    router.push({ name: getters["userInfo"].authority.defaultRouter })
                 }
                 return true
             }

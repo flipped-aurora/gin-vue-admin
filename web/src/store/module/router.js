@@ -28,7 +28,7 @@ export const router = {
         // 设置动态路由
         setAsyncRouter(state, asyncRouters) {
             state.asyncRouters = asyncRouters
-        }
+        },
     },
     actions: {
         // 从后台获取动态路由
@@ -73,6 +73,9 @@ export const router = {
         },
         routerList(state) {
             return state.routerList
+        },
+        defaultRouter(state) {
+            return state.defaultRouter
         }
     }
 }

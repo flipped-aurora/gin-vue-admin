@@ -121,7 +121,6 @@ export default {
   data() {
     return {
       dbfdOptions: [],
-      visible: false,
       dictOptions: [],
       typeSearchOptions: [
         {

@@ -84,7 +84,6 @@ export default {
     return {
       listApi: getExaCustomerList,
       dialogFormVisible: false,
-      visible: false,
       type: "",
       form: {
         customerName: "",
@@ -119,7 +118,7 @@ export default {
       };
     },
     async deleteCustomer(row) {
-      this.visible = false;
+      row.visible = false;
       const res = await deleteExaCustomer({ ID: row.ID });
       if (res.code == 0) {
         this.$message({

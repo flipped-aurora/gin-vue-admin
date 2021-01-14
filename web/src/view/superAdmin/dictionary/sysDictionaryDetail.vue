@@ -124,7 +124,6 @@ export default {
     return {
       listApi: getSysDictionaryDetailList,
       dialogFormVisible: false,
-      visible: false,
       type: "",
       formData: {
         label: null,
@@ -203,7 +202,7 @@ export default {
       };
     },
     async deleteSysDictionaryDetail(row) {
-      this.visible = false;
+      row.visible = false;
       const res = await deleteSysDictionaryDetail({ ID: row.ID });
       if (res.code == 0) {
         this.$message({

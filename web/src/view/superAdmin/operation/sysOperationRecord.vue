@@ -123,7 +123,6 @@ export default {
     return {
       listApi: getSysOperationRecordList,
       dialogFormVisible: false,
-      visible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],
@@ -186,7 +185,7 @@ export default {
       }
     },
     async deleteSysOperationRecord(row) {
-      this.visible = false;
+      row.visible = false;
       const res = await deleteSysOperationRecord({ ID: row.ID });
       if (res.code == 0) {
         this.$message({

@@ -13,12 +13,28 @@
       node-key="ID"
       ref="menuTree"
       show-checkbox
-    ></el-tree>
+    >
+     <span class="custom-tree-node" slot-scope="{ node , data }">
+        <span>{{ node.label }}</span>
+        <span>
+          <el-button
+            type="text"
+            size="mini"
+            :style="{color:row.defaultRouter == data.name?'#E6A23C':'#85ce61'}"
+            :disabled="!node.checked"
+            @click="() => setDefault(data)">
+            {{row.defaultRouter == data.name?"首页":"设为首页"}}
+          </el-button>
+        </span>
+      </span>
+    </el-tree>
   </div>
 </template>
 <script>
 import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
-
+import {
+  updateAuthority,
+} from "@/api/authority";
 export default {
   name: 'Menus',
   props: {
@@ -43,6 +59,13 @@ export default {
     }
   },
   methods: {
+    async setDefault(data){
+      const res = await updateAuthority({authorityId: this.row.authorityId,AuthorityName: this.row.authorityName,parentId: this.row.parentId,defaultRouter:data.name})
+      if(res.code == 0){
+        this.$message({type:"success",message:"设置成功"})
+        this.row.defaultRouter = res.data.authority.defaultRouter
+      }
+    },
     nodeChange(){
       this.needConfirm = true
     },

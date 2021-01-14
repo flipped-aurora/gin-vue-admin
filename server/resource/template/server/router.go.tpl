@@ -7,7 +7,7 @@ import (
 )
 
 func Init{{.StructName}}Router(Router *gin.RouterGroup) {
-	{{.StructName}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler()).Use(middleware.OperationRecord())
+	{{.StructName}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
 	{
 		{{.StructName}}Router.POST("create{{.StructName}}", v1.Create{{.StructName}})   // 新建{{.StructName}}
 		{{.StructName}}Router.DELETE("delete{{.StructName}}", v1.Delete{{.StructName}}) // 删除{{.StructName}}

@@ -1,7 +1,7 @@
 <template>
   <div class="router-history">
     <el-tabs
-      :closable="!(historys.length==1&&this.$route.name=='dashboard')"
+      :closable="!(historys.length==1&&this.$route.name==defaultRouter)"
       @contextmenu.prevent.native="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
@@ -27,12 +27,14 @@
   </div>
 </template>
 <script>
+import {mapGetters} from "vuex"
+
 export default {
   name: 'HistoryComponent',
   data() {
     return {
       historys: [],
-      activeValue: 'dashboard',
+      activeValue: '',
       contextMenuVisible: false,
       left: 0,
       top: 0,
@@ -41,7 +43,15 @@ export default {
       rightActive: ''
     }
   },
+  
+  computed:{
+    ...mapGetters("user",["userInfo"]),
+    defaultRouter(){
+      return this.userInfo.authority.defaultRouter
+    }
+  },
   created() {
+    this.activeValue = this.defaultRouter
     this.$bus.on('mobile', isMobile => {
       this.isMobile = isMobile
     })
@@ -50,9 +60,9 @@ export default {
     })
     const initHistorys = [
       {
-        name: 'dashboard',
+        name: this.defaultRouter,
         meta: {
-          title: '仪表盘'
+          title: '首页'
         }
       }
     ]
@@ -67,7 +77,7 @@ export default {
   },
   methods: {
     openContextMenu(e) {
-      if (this.historys.length == 1 && this.$route.name == 'dashboard') {
+      if (this.historys.length == 1 && this.$route.name == this.defaultRouter) {
         return false
       }
       if (e.srcElement.id) {
@@ -89,13 +99,13 @@ export default {
     closeAll() {
       this.historys = [
         {
-          name: 'dashboard',
+          name: this.defaultRouter,
           meta: {
-            title: '仪表盘'
+            title: '首页'
           }
         }
       ]
-      this.$router.push({ name: 'dashboard' })
+      this.$router.push({ name: this.defaultRouter })
       this.contextMenuVisible = false
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
@@ -169,7 +179,7 @@ export default {
       const index = this.historys.findIndex(item => item.name == tab)
       if (this.$route.name == tab) {
         if (this.historys.length == 1) {
-          this.$router.push({ name: 'dashboard' })
+          this.$router.push({ name: this.defaultRouter })
         } else {
           if (index < this.historys.length - 1) {
             this.$router.push({ name: this.historys[index + 1].name,query:this.historys[index + 1].query,params:this.historys[index + 1].params })

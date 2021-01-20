@@ -22,12 +22,12 @@ func CreateApi(api model.SysApi) (err error) {
 	err = global.GVA_DB.Create(&api).Error
 	// 如果没有错误则把菜单权限给管理员加上
 	if err == nil {
-		err = AddCasbin("1", request.CasbinInfo{
+		// 这里无视错误信息
+		_ = AddCasbin("1", request.CasbinInfo{
 			Method: api.Method,
 			Path:   api.Path,
 		})
 	}
-	return err
 
 	return global.GVA_DB.Create(&api).Error
 }

@@ -16,10 +16,7 @@ limitations under the License.
 package gva
 
 import (
-	"gin-vue-admin/cmd/datas"
 	"gin-vue-admin/core"
-	"gin-vue-admin/initialize"
-
 	"github.com/gookit/color"
 
 	_ "gin-vue-admin/core"
@@ -38,30 +35,22 @@ var initdbCmd = &cobra.Command{
 3. sqlite未适配,
 4. sqlserver未适配`,
 	Run: func(cmd *cobra.Command, args []string) {
+		frame, _ := cmd.Flags().GetString("frame")
 		path, _ := cmd.Flags().GetString("path")
 		global.GVA_VP = core.Viper(path)
 		global.GVA_LOG = core.Zap()           // 初始化zap日志库
-		db := initialize.GormMysql()
-		switch global.GVA_CONFIG.System.DbType {
-		case "mysql":
-			datas.InitMysqlTables(db)
-			datas.InitMysqlData(db)
-		case "postgresql":
-			color.Info.Println("postgresql功能开发中")
-		case "sqlite":
-			color.Info.Println("sqlite功能开发中")
-		case "sqlserver":
-			color.Info.Println("sqlserver功能开发中")
-		default:
-			datas.InitMysqlTables(db)
-			datas.InitMysqlData(db)
-		}
-		frame, _ := cmd.Flags().GetString("frame")
-		if frame == "gf" {
+		Mysql.CheckDatabase()
+		Mysql.CheckUtf8mb4()
+		Mysql.Info()
+		Mysql.Init()
+		switch frame {
+		case "gin":
+			if global.GVA_CONFIG.System.DbType == "mysql" {
+				Mysql.AutoMigrateTables()
+				Mysql.InitData()
+			}
+		case "gf":
 			color.Info.Println("gf功能开发中")
-			return
-		} else {
-			return
 		}
 	},
 }

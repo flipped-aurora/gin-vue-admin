@@ -11,3 +11,7 @@ type Mysql struct {
 	LogMode      bool   `mapstructure:"log-mode" json:"logMode" yaml:"log-mode"`
 	LogZap       string `mapstructure:"log-zap" json:"logZap" yaml:"log-zap"`
 }
+
+func (m *Mysql) Dsn() string {
+	return m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
+}

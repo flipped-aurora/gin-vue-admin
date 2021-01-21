@@ -1,13 +1,16 @@
-package datas
+package information
 
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
-	"os"
 	"time"
 )
+
+var Workflow = new(workflow)
+
+type workflow struct{}
 
 var WorkflowProcess = []model.WorkflowProcess{
 	{ID: "leaveFlow", CreatedAt: time.Now(), UpdatedAt: time.Now(), Name: "leaveFlow", Clazz: "process", Label: "请假流程（演示）", HideIcon: false, Description: "请假流程演示", View: "view/iconList/index.vue"},
@@ -36,8 +39,10 @@ var WorkflowEndPoint = []model.WorkflowEndPoint{
 	{WorkflowEdgeID: "flow1604985881207", GVA_MODEL: global.GVA_MODEL{ID: 33, CreatedAt: time.Now(), UpdatedAt: time.Now()}, X: 517.5, Y: 302, Index: 2},
 }
 
-func InitWkProcess(db *gorm.DB) {
-	if err := db.Transaction(func(tx *gorm.DB) error {
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@description: 工作流相关 表数据初始化
+func (w *workflow) Init() error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Create(&WorkflowProcess).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
@@ -53,10 +58,7 @@ func InitWkProcess(db *gorm.DB) {
 		if err := tx.Create(&WorkflowEndPoint).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
-
+		color.Info.Println("\n[Mysql] --> 工作流相关 表初始数据成功!")
 		return nil
-	}); err != nil {
-		color.Warn.Printf("[Mysql]-->工作流相关 表的初始数据失败,err: %v\n", err)
-		os.Exit(0)
-	}
+	})
 }

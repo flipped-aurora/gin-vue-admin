@@ -24,8 +24,8 @@ export const user = {
         LoginOut(state) {
             state.userInfo = {}
             state.token = ""
-            router.push({ name: 'login', replace: true })
             sessionStorage.clear()
+            router.push({ name: 'login', replace: true })
             window.location.reload()
         },
         ResetUserInfo(state, userInfo = {}) {
@@ -43,12 +43,13 @@ export const user = {
                 await dispatch('router/SetAsyncRouter', {}, { root: true })
                 const asyncRouters = rootGetters['router/asyncRouters']
                 router.addRoutes(asyncRouters)
-                const redirect = router.history.current.query.redirect
-                if (redirect) {
-                    router.push({ path: redirect })
-                } else {
+                // const redirect = router.history.current.query.redirect
+                // console.log(redirect)
+                // if (redirect) {
+                //     router.push({ path: redirect })
+                // } else {
                     router.push({ name: getters["userInfo"].authority.defaultRouter })
-                }
+                // }
                 return true
             }
         },

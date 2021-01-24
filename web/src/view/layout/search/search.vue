@@ -19,8 +19,14 @@
         </el-select>
       </div>
     </transition>
+    <div
+      :style="{display:'inline-block',float:'right',width:'31px',textAlign:'left',fontSize:'16px',paddingTop:'2px'}"
+      class="user-box"
+    >
+      <i @click="$bus.$emit('reload')" :style="{cursor:'pointer'}" class="el-icon-refresh" />
+    </div>
     <div :style="{display:'inline-block',float:'right'}" class="user-box">
-      <i @click="showSearch()" class="el-icon-search search-icon"></i>
+      <i :style="{cursor:'pointer'}" @click="showSearch()" class="el-icon-search search-icon"></i>
     </div>
   </div>
 </template>
@@ -48,9 +54,9 @@ export default {
     },
     showSearch() {
       this.show = true;
-      this.$nextTick(()=>{
-        this.$refs['search-input'].focus()
-      })
+      this.$nextTick(() => {
+        this.$refs["search-input"].focus();
+      });
     }
   }
 };

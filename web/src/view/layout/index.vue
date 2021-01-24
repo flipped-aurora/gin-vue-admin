@@ -67,11 +67,11 @@
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
           <keep-alive>
-            <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="$route.meta.keepAlive && reloadFlag"></router-view>
+            <router-view :key="$route.fullPath" v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="$route.meta.keepAlive && reloadFlag"></router-view>
           </keep-alive>
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="!$route.meta.keepAlive && reloadFlag"></router-view>
+          <router-view :key="$route.fullPath" v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="!$route.meta.keepAlive && reloadFlag"></router-view>
         </transition>
        <BottomInfo />
       </el-main>

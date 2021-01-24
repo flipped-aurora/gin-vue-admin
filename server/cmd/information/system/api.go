@@ -1,16 +1,19 @@
-package datas
+package information
 
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"github.com/gookit/color"
-	"os"
 	"time"
 
 	"gorm.io/gorm"
 )
 
-var Apis = []model.SysApi{
+var Api = new(api)
+
+type api struct{}
+
+var apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/base/login", "用户登录", "base", "POST"},
 	{global.GVA_MODEL{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/register", "用户注册", "user", "POST"},
 	{global.GVA_MODEL{ID: 3, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/createApi", "创建api", "api", "POST"},
@@ -91,18 +94,18 @@ var Apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 79, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/completeWorkflowMove", "提交工作流", "workflowProcess", "POST"},
 }
 
-func InitSysApi(db *gorm.DB) {
-	if err := db.Transaction(func(tx *gorm.DB) error {
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@description: sys_apis 表数据初始化
+func (a *api) Init() error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("id IN ?", []int{1, 67}).Find(&[]model.SysApi{}).RowsAffected == 2 {
-			color.Danger.Println("sys_apis表的初始数据已存在!")
+			color.Danger.Println("\n[Mysql] --> sys_apis 表的初始数据已存在!")
 			return nil
 		}
-		if err := tx.Create(&Apis).Error; err != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&apis).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
+		color.Info.Println("\n[Mysql] --> sys_apis 表初始数据成功!")
 		return nil
-	}); err != nil {
-		color.Warn.Printf("[Mysql]--> sys_apis 表的初始数据失败,err: %v\n", err)
-		os.Exit(0)
-	}
+	})
 }

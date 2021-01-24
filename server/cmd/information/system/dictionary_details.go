@@ -1,19 +1,22 @@
-package datas
+package information
 
 import (
 	"gin-vue-admin/global"
+	"gin-vue-admin/model"
 	"github.com/gookit/color"
-	"os"
 	"time"
 
-	"gin-vue-admin/model"
 	"gorm.io/gorm"
 )
 
-func InitSysDictionaryDetail(db *gorm.DB) {
-	status := new(bool)
-	*status = true
-	DictionaryDetail := []model.SysDictionaryDetail{
+var DictionaryDetail = new(dictionaryDetail)
+
+type dictionaryDetail struct{}
+
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@description: dictionary_details 表数据初始化
+func (d *dictionaryDetail) Init() error {
+	var details = []model.SysDictionaryDetail{
 		{global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "smallint", 1, status, 1, 2},
 		{global.GVA_MODEL{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "mediumint", 2, status, 2, 2},
 		{global.GVA_MODEL{ID: 3, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "int", 3, status, 3, 2},
@@ -38,17 +41,15 @@ func InitSysDictionaryDetail(db *gorm.DB) {
 		{global.GVA_MODEL{ID: 22, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "longtext", 9, status, 9, 5},
 		{global.GVA_MODEL{ID: 23, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "tinyint", 0, status, 0, 6},
 	}
-	if err := db.Transaction(func(tx *gorm.DB) error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if tx.Where("id IN ?", []int{1, 23}).Find(&[]model.SysDictionaryDetail{}).RowsAffected == 2 {
-			color.Danger.Println("sys_dictionary_details表的初始数据已存在!")
+			color.Danger.Println("\n[Mysql] --> sys_dictionary_details 表的初始数据已存在!")
 			return nil
 		}
-		if err := tx.Create(&DictionaryDetail).Error; err != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&details).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
+		color.Info.Println("\n[Mysql] --> sys_dictionary_details 表初始数据成功!")
 		return nil
-	}); err != nil {
-		color.Warn.Printf("[Mysql]--> sys_dictionary_details 表的初始数据失败,err: %v\n", err)
-		os.Exit(0)
-	}
+	})
 }

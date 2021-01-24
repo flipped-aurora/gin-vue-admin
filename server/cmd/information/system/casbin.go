@@ -1,13 +1,17 @@
-package datas
+package information
 
 import (
+	"gin-vue-admin/global"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
-	"os"
 )
 
-var Carbines = []gormadapter.CasbinRule{
+var Casbin = new(casbin)
+
+type casbin struct{}
+
+var carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/base/login", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/api/createApi", V2: "POST"},
@@ -164,18 +168,18 @@ var Carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "9528", V1: "/autoCode/createTemp", V2: "POST"},
 }
 
-func InitCasbinModel(db *gorm.DB) {
-	if err := db.Transaction(func(tx *gorm.DB) error {
-		if tx.Where("p_type = ? AND v0 IN ?", "p", []string{"888", "8881", "9528"}).Find(&[]gormadapter.CasbinRule{}).RowsAffected == 142 {
-			color.Danger.Println("casbin_rule表的初始数据已存在!")
+//@author: [SliverHorn](https://github.com/SliverHorn)
+//@description: casbin_rule 表数据初始化
+func (c *casbin) Init() error {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if tx.Find(&[]gormadapter.CasbinRule{}).RowsAffected == 154 {
+			color.Danger.Println("\n[Mysql] --> casbin_rule 表的初始数据已存在!")
 			return nil
 		}
-		if err := tx.Create(&Carbines).Error; err != nil { // 遇到错误时回滚事务
+		if err := tx.Create(&carbines).Error; err != nil { // 遇到错误时回滚事务
 			return err
 		}
+		color.Info.Println("\n[Mysql] --> casbin_rule 表初始数据成功!")
 		return nil
-	}); err != nil {
-		color.Warn.Printf("[Mysql]--> casbin_rule 表的初始数据失败,err: %v\n", err)
-		os.Exit(0)
-	}
+	})
 }

@@ -110,7 +110,6 @@ export default {
     return {
       listApi: getWorkflowProcessList,
       dialogFormVisible: false,
-      visible: false,
       deleteVisible: false,
       multipleSelection: []
     };
@@ -191,7 +190,7 @@ export default {
       });
     },
     async deleteWorkflowProcess(row) {
-      this.visible = false;
+      row.visible = false;
       const res = await deleteWorkflowProcess({ id: row.id });
       if (res.code == 0) {
         this.$message({

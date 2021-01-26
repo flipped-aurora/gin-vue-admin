@@ -5,7 +5,6 @@ import getPageTitle from '@/utils/page'
 let asyncRouterFlag = 0
 
 const whiteList = ['login']
-
 router.beforeEach(async(to, from, next) => {
     const token = store.getters['user/token']
         // 在白名单中的判断情况
@@ -13,7 +12,7 @@ router.beforeEach(async(to, from, next) => {
     document.title = getPageTitle(to.meta.title)
     if (whiteList.indexOf(to.name) > -1) {
         if (token) {
-            next({ path: '/layout/dashboard' })
+            next({ name: store.getters["user/userInfo"].authority.defaultRouter })
         } else {
             next()
         }
@@ -21,7 +20,7 @@ router.beforeEach(async(to, from, next) => {
         // 不在白名单中并且已经登陆的时候
         if (token) {
             // 添加flag防止多次获取动态路由和栈溢出
-            if (!asyncRouterFlag) {
+            if (!asyncRouterFlag && store.getters['router/asyncRouters'].length == 0) {
                 asyncRouterFlag++
                 await store.dispatch('router/SetAsyncRouter')
                 const asyncRouters = store.getters['router/asyncRouters']

@@ -3,7 +3,7 @@
     <div style="display:flex;justify-content:space-around;flex-wrap:wrap;padding-top:40px">
       <el-image
         class="header-img-box-list"
-        :src="item.url"
+        :src="(item.url && item.url.slice(0, 4) !== 'http')?path+item.url:item.url"
         v-for="(item,key) in picList"
         :key="key"
         @click.native="chooseImg(item.url,target,targetKey)"
@@ -17,6 +17,7 @@
 </template>
 
 <script>
+const path = process.env.VUE_APP_BASE_API
 import { getFileList } from "@/api/fileUploadAndDownload";
 export default {
   props: {
@@ -26,7 +27,8 @@ export default {
   data() {
     return {
       drawer: false,
-      picList: []
+      picList: [],
+      path:path
     };
   },
   methods: {

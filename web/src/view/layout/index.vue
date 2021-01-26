@@ -36,7 +36,7 @@
                <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
                  <div class="fl-right right-box">
                 <Search />
-                <Screenfull class="screenfull"></Screenfull>
+                <Screenfull class="screenfull" :style="{cursor:'pointer'}"></Screenfull>
                 <el-dropdown>
                   <span class="header-avatar">
                    <CustomPic/>
@@ -67,11 +67,11 @@
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
           <keep-alive>
-            <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="$route.meta.keepAlive"></router-view>
+            <router-view :key="$route.fullPath" v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="$route.meta.keepAlive && reloadFlag"></router-view>
           </keep-alive>
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">
-          <router-view  v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="!$route.meta.keepAlive"></router-view>
+          <router-view :key="$route.fullPath" v-loading="loadingFlag"  element-loading-text="正在加载中" class="admin-box" v-if="!$route.meta.keepAlive && reloadFlag"></router-view>
         </transition>
        <BottomInfo />
       </el-main>
@@ -98,7 +98,7 @@ export default {
       isMobile: false,
       isShadowBg: false,
       loadingFlag:false,
-      
+      reloadFlag:true,
       value: ''
     }
   },
@@ -112,6 +112,12 @@ export default {
   },
   methods: {
     ...mapActions('user', ['LoginOut']),
+    reload(){
+      this.reloadFlag = false
+      this.$nextTick(()=>{
+        this.reloadFlag = true
+      })
+    },
     totalCollapse() {
       this.isCollapse = !this.isCollapse
       this.isSider = !this.isCollapse
@@ -153,6 +159,7 @@ export default {
     }
     this.$bus.emit('collapse', this.isCollapse)
     this.$bus.emit('mobile', this.isMobile)
+    this.$bus.on("reload",this.reload)
     this.$bus.on("showLoading",()=>{
       this.loadingFlag = true
     })

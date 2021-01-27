@@ -77,3 +77,7 @@ qiniu:
   access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
   secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
   use-cdn-domains: false
+
+# excel configuration
+excel:
+  dir: './resource/excel/'

@@ -112,19 +112,18 @@ import {
   deleteSysOperationRecord,
   getSysOperationRecordList,
   deleteSysOperationRecordByIds
-} from '@/api/sysOperationRecord' //  此处请自行替换地址
-import { formatTimeToStr } from '@/utils/date'
-import infoList from '@/mixins/infoList'
+} from "@/api/sysOperationRecord"; //  此处请自行替换地址
+import { formatTimeToStr } from "@/utils/date";
+import infoList from "@/mixins/infoList";
 
 export default {
-  name: 'SysOperationRecord',
+  name: "SysOperationRecord",
   mixins: [infoList],
   data() {
     return {
       listApi: getSysOperationRecordList,
       dialogFormVisible: false,
-      visible: false,
-      type: '',
+      type: "",
       deleteVisible: false,
       multipleSelection: [],
       formData: {
@@ -137,74 +136,80 @@ export default {
         error_message: null,
         user_id: null
       }
-    }
+    };
   },
   filters: {
     formatDate: function(time) {
-      if (time != null && time != '') {
-        var date = new Date(time)
-        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
+      if (time != null && time != "") {
+        var date = new Date(time);
+        return formatTimeToStr(date, "yyyy-MM-dd hh:mm:ss");
       } else {
-        return ''
+        return "";
       }
     },
     formatBoolean: function(bool) {
       if (bool != null) {
-        return bool ? '是' : '否'
+        return bool ? "是" : "否";
       } else {
-        return ''
+        return "";
       }
     }
   },
   methods: {
     //条件搜索前端看此方法
     onSubmit() {
-      this.page = 1
-      this.pageSize = 10
-      this.getTableData()
+      this.page = 1;
+      this.pageSize = 10;
+      this.getTableData();
     },
     handleSelectionChange(val) {
-      this.multipleSelection = val
+      this.multipleSelection = val;
     },
     async onDelete() {
-      const ids = []
+      const ids = [];
       this.multipleSelection &&
         this.multipleSelection.map(item => {
-          ids.push(item.ID)
-        })
-      const res = await deleteSysOperationRecordByIds({ ids })
+          ids.push(item.ID);
+        });
+      const res = await deleteSysOperationRecordByIds({ ids });
       if (res.code == 0) {
         this.$message({
-          type: 'success',
-          message: '删除成功'
-        })
-        this.deleteVisible = false
-        this.getTableData()
+          type: "success",
+          message: "删除成功"
+        });
+        if (this.tableData.length == ids.length) {
+          this.page--;
+        }
+        this.deleteVisible = false;
+        this.getTableData();
       }
     },
     async deleteSysOperationRecord(row) {
-      this.visible = false
-      const res = await deleteSysOperationRecord({ ID: row.ID })
+      row.visible = false;
+      const res = await deleteSysOperationRecord({ ID: row.ID });
       if (res.code == 0) {
         this.$message({
-          type: 'success',
-          message: '删除成功'
-        })
-        this.getTableData()
+          type: "success",
+          message: "删除成功"
+        });
+        if (this.tableData.length == 1) {
+          this.page--;
+        }
+        this.getTableData();
       }
     },
-    fmtBody(value){
-      try{
-        return JSON.parse(value)
-      }catch (err){
-        return  value
+    fmtBody(value) {
+      try {
+        return JSON.parse(value);
+      } catch (err) {
+        return value;
       }
     }
   },
   created() {
-    this.getTableData()
+    this.getTableData();
   }
-}
+};
 </script>
 
 <style lang="scss">

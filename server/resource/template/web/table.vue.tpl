@@ -68,14 +68,7 @@
       <el-table-column label="按钮组">
         <template slot-scope="scope">
           <el-button class="table-button" @click="update{{.StructName}}(scope.row)" size="small" type="primary" icon="el-icon-edit">变更</el-button>
-          <el-popover placement="top" width="160" v-model="scope.row.visible">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="delete{{.StructName}}(scope.row)">确定</el-button>
-            </div>
-            <el-button type="danger" icon="el-icon-delete" size="mini" slot="reference">删除</el-button>
-          </el-popover>
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -145,7 +138,6 @@ export default {
     return {
       listApi: get{{ .StructName }}List,
       dialogFormVisible: false,
-      visible: false,
       type: "",
       deleteVisible: false,
       multipleSelection: [],
@@ -208,6 +200,15 @@ export default {
       handleSelectionChange(val) {
         this.multipleSelection = val
       },
+      deleteRow(row){
+        this.$confirm('确定要删除吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+           this.delete{{.StructName}}(row);
+        });
+      },
       async onDelete() {
         const ids = []
         if(this.multipleSelection.length == 0){
@@ -227,6 +228,9 @@ export default {
             type: 'success',
             message: '删除成功'
           })
+          if (this.tableData.length == ids.length) {
+              this.page--;
+          }
           this.deleteVisible = false
           this.getTableData()
         }
@@ -262,13 +266,15 @@ export default {
       };
     },
     async delete{{.StructName}}(row) {
-      this.visible = false;
       const res = await delete{{.StructName}}({ ID: row.ID });
       if (res.code == 0) {
         this.$message({
           type: "success",
           message: "删除成功"
         });
+        if (this.tableData.length == 1) {
+            this.page--;
+        }
         this.getTableData();
       }
     },

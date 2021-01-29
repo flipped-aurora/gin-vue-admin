@@ -27,7 +27,7 @@ var versionCmd = &cobra.Command{
 	Short: "版本信息",
 	Long:  `版本的长信息`,
 	Run: func(cmd *cobra.Command, args []string) {
-		color.Green.Println("v0.0.3")
+		color.Green.Println("v0.0.4")
 	},
 }
 

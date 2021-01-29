@@ -62,7 +62,7 @@
         <el-button @click="enterDialog" type="primary">确 定</el-button>
       </div>
     </el-dialog>
-    <div class="tips"> 在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
+    <div class="tips">在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
   </div>
 </template>
 
@@ -84,7 +84,6 @@ export default {
     return {
       listApi: getExaCustomerList,
       dialogFormVisible: false,
-      visible: false,
       type: "",
       form: {
         customerName: "",
@@ -119,13 +118,16 @@ export default {
       };
     },
     async deleteCustomer(row) {
-      this.visible = false;
+      row.visible = false;
       const res = await deleteExaCustomer({ ID: row.ID });
       if (res.code == 0) {
         this.$message({
           type: "success",
-          message: "删除成功"
+          message: ""
         });
+        if (this.tableData.length == 1) {
+          this.page--;
+        }
         this.getTableData();
       }
     },

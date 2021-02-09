@@ -357,7 +357,7 @@ export default {
       const fdTypes = ["string", "int", "bool", "float64", "time.Time"];
       fdTypes.map(async fdtype => {
         const res = await getDict(fdtype);
-        res.map(item => {
+        res&&res.map(item => {
           this.fdMap[item.label] = fdtype;
         });
       });

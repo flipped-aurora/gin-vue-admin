@@ -23,6 +23,109 @@ type tplData struct {
 	autoMoveFilePath string
 }
 
+//@author: [songzhibin97](https://github.com/songzhibin97)
+//@function: PreviewTemp
+//@description: 预览创建代码
+//@param: model.AutoCodeStruct
+//@return: map[string]string, error
+
+func PreviewTemp(autoCode model.AutoCodeStruct) (map[string]string, error) {
+	basePath := "resource/template"
+	// 获取 basePath 文件夹下所有tpl文件
+	tplFileList, err := GetAllTplFile(basePath, nil)
+	if err != nil {
+		return nil, err
+	}
+	dataList := make([]tplData, 0, len(tplFileList))
+	fileList := make([]string, 0, len(tplFileList))
+	needMkdir := make([]string, 0, len(tplFileList)) // 当文件夹下存在多个tpl文件时，改为map更合理
+	// 根据文件路径生成 tplData 结构体，待填充数据
+	for _, value := range tplFileList {
+		dataList = append(dataList, tplData{locationPath: value})
+	}
+	// 生成 *Template, 填充 template 字段
+	for index, value := range dataList {
+		dataList[index].template, err = template.ParseFiles(value.locationPath)
+		if err != nil {
+			return nil, err
+		}
+	}
+	// 生成文件路径，填充 autoCodePath 字段，readme.txt.tpl不符合规则，需要特殊处理
+	// resource/template/web/api.js.tpl -> autoCode/web/autoCode.PackageName/api/autoCode.PackageName.js
+	// resource/template/readme.txt.tpl -> autoCode/readme.txt
+	autoPath := "autoCode/"
+	for index, value := range dataList {
+		trimBase := strings.TrimPrefix(value.locationPath, basePath+"/")
+		if trimBase == "readme.txt.tpl" {
+			dataList[index].autoCodePath = autoPath + "readme.txt"
+			continue
+		}
+
+		if lastSeparator := strings.LastIndex(trimBase, "/"); lastSeparator != -1 {
+			origFileName := strings.TrimSuffix(trimBase[lastSeparator+1:], ".tpl")
+			firstDot := strings.Index(origFileName, ".")
+			if firstDot != -1 {
+				dataList[index].autoCodePath = filepath.Join(autoPath, trimBase[:lastSeparator], autoCode.PackageName,
+					origFileName[:firstDot], autoCode.PackageName+origFileName[firstDot:])
+			}
+		}
+
+		if lastSeparator := strings.LastIndex(dataList[index].autoCodePath, string(os.PathSeparator)); lastSeparator != -1 {
+			needMkdir = append(needMkdir, dataList[index].autoCodePath[:lastSeparator])
+		}
+	}
+
+	// 写入文件前，先创建文件夹
+	if err = utils.CreateDir(needMkdir...); err != nil {
+		return nil, err
+	}
+
+	// 创建map
+	ret := make(map[string]string)
+
+	// 生成map
+	for _, value := range dataList {
+		ext := ""
+		if ext = filepath.Ext(value.autoCodePath); ext == ".txt" {
+			continue
+		}
+		fileList = append(fileList, value.autoCodePath)
+		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0755)
+		if err != nil {
+			return nil, err
+		}
+		if err = value.template.Execute(f, autoCode); err != nil {
+			return nil, err
+		}
+		_ = f.Close()
+		f, err = os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_RDONLY, 0755)
+		if err != nil {
+			return nil, err
+		}
+		builder := strings.Builder{}
+		builder.WriteString("```\n")
+		data, err := ioutil.ReadAll(f)
+		if err != nil {
+			return nil, err
+		}
+		builder.Write(data)
+		builder.WriteString("\n```")
+		if ext != "" && strings.Contains(ext, ".") {
+			builder.WriteString(strings.Replace(ext, ".", "", -1))
+		}
+
+		ret[value.autoCodePath] = builder.String()
+		_ = f.Close()
+
+	}
+	defer func() { // 移除中间文件
+		if err := os.RemoveAll(autoPath); err != nil {
+			return
+		}
+	}()
+	return ret, nil
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateTemp
 //@description: 创建代码

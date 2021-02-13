@@ -92,6 +92,7 @@ var apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 77, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getMyNeed", "获取我的待办", "workflowProcess", "GET"},
 	{global.GVA_MODEL{ID: 78, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/getWorkflowMoveByID", "根据id获取当前节点详情和历史", "workflowProcess", "GET"},
 	{global.GVA_MODEL{ID: 79, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/workflowProcess/completeWorkflowMove", "提交工作流", "workflowProcess", "POST"},
+	{global.GVA_MODEL{ID: 80, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/preview", "预览自动化代码", "autoCode", "POST"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

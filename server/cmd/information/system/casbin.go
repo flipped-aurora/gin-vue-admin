@@ -55,6 +55,7 @@ var carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/customer/customer", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/customer/customerList", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/autoCode/createTemp", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/autoCode/preview", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/autoCode/getTables", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/autoCode/getDB", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/autoCode/getColumn", V2: "GET"},

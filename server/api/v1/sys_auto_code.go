@@ -1,18 +1,53 @@
 package v1
 
 import (
+	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
-	"go.uber.org/zap"
 	"net/url"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
+
+// @Tags AutoCode
+// @Summary 预览创建后的代码
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.AutoCodeStruct true "预览创建代码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router /autoCode/preview [post]
+func PreviewTemp(c *gin.Context) {
+	var a model.AutoCodeStruct
+	_ = c.ShouldBindJSON(&a)
+	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if a.AutoCreateApiToSql {
+		if err := service.AutoCreateApi(&a); err != nil {
+			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Any("err", err))
+			c.Writer.Header().Add("success", "false")
+			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
+			return
+		}
+	}
+	m, err := service.PreviewTemp(a)
+	if err != nil {
+		c.Writer.Header().Add("success", "false")
+		c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
+	} else {
+		c.Writer.Header().Add("Content-Type", "application/json")
+		c.Writer.Header().Add("success", "true")
+		c.JSON(200, m)
+	}
+}
 
 // @Tags AutoCode
 // @Summary 自动代码模板

@@ -30,22 +30,12 @@ func PreviewTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if a.AutoCreateApiToSql {
-		if err := service.AutoCreateApi(&a); err != nil {
-			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Any("err", err))
-			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
-			return
-		}
-	}
-	m, err := service.PreviewTemp(a)
+	autoCode, err := service.PreviewTemp(a)
 	if err != nil {
-		c.Writer.Header().Add("success", "false")
-		c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
+		global.GVA_LOG.Error("预览失败!", zap.Any("err", err))
+		response.FailWithMessage("预览失败", c)
 	} else {
-		c.Writer.Header().Add("Content-Type", "application/json")
-		c.Writer.Header().Add("success", "true")
-		c.JSON(200, m)
+		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
 	}
 }
 

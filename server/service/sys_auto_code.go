@@ -67,18 +67,20 @@ func PreviewTemp(autoCode model.AutoCodeStruct) (map[string]string, error) {
 			return nil, err
 		}
 		builder := strings.Builder{}
-		builder.WriteString("```\n")
+		builder.WriteString("```")
+		if ext != "" && strings.Contains(ext, ".") {
+			builder.WriteString(strings.Replace(ext, ".", "", -1))
+		}
+		builder.WriteString("\n\n")
 		data, err := ioutil.ReadAll(f)
 		if err != nil {
 			return nil, err
 		}
 		builder.Write(data)
-		builder.WriteString("\n```")
-		if ext != "" && strings.Contains(ext, ".") {
-			builder.WriteString(strings.Replace(ext, ".", "", -1))
-		}
+		builder.WriteString("\n\n```")
 
-		ret[value.autoCodePath] = builder.String()
+		pathArr := strings.Split(value.autoCodePath,"\\")
+		ret[pathArr[1]+"-"+pathArr[3]] = builder.String()
 		_ = f.Close()
 
 	}

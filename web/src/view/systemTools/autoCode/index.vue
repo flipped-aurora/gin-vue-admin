@@ -118,7 +118,7 @@
     <!-- 组件列表 -->
     <div class="button-box clearflex">
       <el-button @click="enterForm(true)" type="primary">预览代码</el-button>
-      <el-button @click="enterForm" type="primary">生成代码</el-button>
+      <el-button @click="enterForm(false)" type="primary">生成代码</el-button>
     </div>
     <!-- 组件弹窗 -->
     <el-dialog title="组件内容" :visible.sync="dialogFlag">

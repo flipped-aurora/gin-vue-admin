@@ -80,7 +80,7 @@ func PreviewTemp(autoCode model.AutoCodeStruct) (map[string]string, error) {
 		builder.Write(data)
 		builder.WriteString("\n\n```")
 
-		pathArr := strings.Split(value.autoCodePath, "\\")
+		pathArr := strings.Split(value.autoCodePath, string(os.PathSeparator))
 		ret[pathArr[1]+"-"+pathArr[3]] = builder.String()
 		_ = f.Close()
 

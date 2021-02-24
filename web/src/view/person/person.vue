@@ -4,7 +4,7 @@
       <el-col :span="6">
         <div class="fl-left avatar-box">
           <div class="user-card">
-              <div class="user-headpic-update" :style="{ 'background-image': 'url(' + userInfo.headerImg + ')','background-repeat':'no-repeat','background-size':'cover' }" >
+              <div class="user-headpic-update" :style="{ 'background-image': `url(${(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg})`,'background-repeat':'no-repeat','background-size':'cover' }" >
               <span class="update" @click="openChooseImg">
                 <i class="el-icon-edit"></i>
                 重新上传</span>

@@ -121,6 +121,7 @@ export default function(G6){
         //type、shape属性同时存在即兼容之前版本的数据，又兼容g6的升级
         addModel.type = getShapeName(clazz);
         addModel.shape = getShapeName(clazz);
+        addModel.hideIcon = false;
         const timestamp = new Date().getTime();
         const id = clazz + timestamp;
         const x = p.x;

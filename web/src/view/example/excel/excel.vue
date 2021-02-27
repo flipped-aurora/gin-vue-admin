@@ -3,7 +3,7 @@
     <el-row>
       <el-col :span="2">
         <el-upload
-          :action="`${path}/fileUploadAndDownload/importExcel`"
+          :action="`${path}/excel/importExcel`"
           :headers="{'x-token':token}"
           :on-success="loadExcel"
           :show-file-list="false"
@@ -37,7 +37,7 @@
 const path = process.env.VUE_APP_BASE_API;
 import { mapGetters } from 'vuex';
 import infoList from "@/mixins/infoList";
-import { exportExcel, loadExcelData, downloadTemplate } from "@/api/fileUploadAndDownload";
+import { exportExcel, loadExcelData, downloadTemplate } from "@/api/excel";
 import { getMenuList } from "@/api/menu";
 export default {
   name: 'Excel',

@@ -6,7 +6,6 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
-	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -76,89 +75,6 @@ func GetFileList(c *gin.Context) {
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		},"获取成功", c)
+		}, "获取成功", c)
 	}
-}
-
-// @Tags ExaFileUploadAndDownload
-// @Summary 导出Excel
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce  application/octet-stream
-// @Param data body request.ExcelInfo true "导出Excel文件信息"
-// @Success 200
-// @Router /fileUploadAndDownload/exportExcel [post]
-func ExportExcel(c *gin.Context) {
-	var excelInfo request.ExcelInfo
-    c.ShouldBindJSON(&excelInfo)
-	filePath := global.GVA_CONFIG.Excel.Dir+excelInfo.FileName
-	err := service.ParseInfoList2Excel(excelInfo.InfoList, filePath)
-	if err != nil {
-		global.GVA_LOG.Error("转换Excel失败!", zap.Any("err", err))
-		response.FailWithMessage("转换Excel失败", c)
-		return
-	}
-	c.Writer.Header().Add("success", "true")
-	c.File(filePath)
-}
-
-// @Tags ExaFileUploadAndDownload
-// @Summary 导入Excel文件
-// @Security ApiKeyAuth
-// @accept multipart/form-data
-// @Produce  application/json
-// @Param file formData file true "导入Excel文件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"导入成功"}"
-// @Router /fileUploadAndDownload/importExcel [post]
-func ImportExcel(c *gin.Context) {
-	_, header, err := c.Request.FormFile("file")
-	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Any("err", err))
-		response.FailWithMessage("接收文件失败", c)
-		return
-	}
-	c.SaveUploadedFile(header, 	global.GVA_CONFIG.Excel.Dir+"ExcelImport.xlsx")
-	response.OkWithMessage("导入成功", c)
-}
-
-// @Tags ExaFileUploadAndDownload
-// @Summary 加载Excel数据
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"加载数据成功"}"
-// @Router /fileUploadAndDownload/loadExcel [get]
-func LoadExcel(c *gin.Context) {
-	menus, err := service.ParseExcel2InfoList()
-	if err != nil {
-		global.GVA_LOG.Error("加载数据失败", zap.Any("err", err))
-		response.FailWithMessage("加载数据失败", c)
-		return
-	}
-	response.OkWithDetailed(response.PageResult{
-		List: menus,
-		Total: int64(len(menus)),
-		Page: 1,
-		PageSize: 999,
-	},"加载数据成功", c)
-}
-
-// @Tags ExaFileUploadAndDownload
-// @Summary 下载模板
-// @Security ApiKeyAuth
-// @accept multipart/form-data
-// @Produce  application/json
-// @Param fileName query fileName true "模板名称"
-// @Success 200
-// @Router /fileUploadAndDownload/downloadTemplate [get]
-func DownloadTemplate(c *gin.Context) {
-	fileName := c.Query("fileName")
-	filePath := global.GVA_CONFIG.Excel.Dir+fileName
-	ok, err := utils.PathExists(filePath)
-	if !ok || err != nil {
-		global.GVA_LOG.Error("文件不存在", zap.Any("err", err))
-		response.FailWithMessage("文件不存在", c)
-		return
-	}
-	c.Writer.Header().Add("success", "true")
-	c.File(filePath)
 }

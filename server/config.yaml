@@ -78,6 +78,7 @@ qiniu:
   secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
   use-cdn-domains: false
 
+
 # aliyun oss configuration
 aliyun-oss:
   endpoint: 'yourEndpoint'
@@ -85,6 +86,15 @@ aliyun-oss:
   access-key-secret: 'yourAccessKeySecret'
   bucket-name: 'yourBucketName'
   bucket-url: 'yourBucketUrl'
+
+# tencent cos configuration
+tencent-cos:
+  bucket: 'xxxxx-10005608'
+  region: 'ap-shanghai'
+  secret-id: 'xxxxxxxx'
+  secret-key: 'xxxxxxxx'
+  base-url: 'https://gin.vue.admin'
+  path-prefix: 'gin-vue-admin'
 
 # excel configuration
 excel:

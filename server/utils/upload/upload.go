@@ -28,6 +28,8 @@ func NewOss() OSS {
 		return &Local{}
 	case "qiniu":
 		return &Qiniu{}
+	case "tencent-cos":
+		return &TencentCOS{}
 	default:
 		return &Local{}
 	}

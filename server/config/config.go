@@ -14,5 +14,6 @@ type Server struct {
 	Local     Local     `mapstructure:"local" json:"local" yaml:"local"`
 	Qiniu     Qiniu     `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
 	AliyunOSS AliyunOSS `mapstructure:"aliyun-oss" json:"aliyunOSS" yaml:"aliyun-oss"`
-	Excel     Excel     `mapstructure:"excel" json:"excel" yaml:"excel"`
+	TencentCOS TencentCOS `mapstructure:"tencent-cos" json:"tencentCOS" yaml:"tencent-cos"`
+	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 }

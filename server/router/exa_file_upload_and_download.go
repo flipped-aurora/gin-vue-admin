@@ -15,9 +15,5 @@ func InitFileUploadAndDownloadRouter(Router *gin.RouterGroup) {
 		FileUploadAndDownloadGroup.GET("/findFile", v1.FindFile)                                  // 查询当前文件成功的切片
 		FileUploadAndDownloadGroup.POST("/breakpointContinueFinish", v1.BreakpointContinueFinish) // 查询当前文件成功的切片
 		FileUploadAndDownloadGroup.POST("/removeChunk", v1.RemoveChunk)                           // 查询当前文件成功的切片
-		FileUploadAndDownloadGroup.POST("/importExcel", v1.ImportExcel)                          // 导入Excel
-		FileUploadAndDownloadGroup.GET("/loadExcel", v1.LoadExcel)                                // 加载Excel数据
-		FileUploadAndDownloadGroup.POST("/exportExcel", v1.ExportExcel)                           // 导出Excel
-		FileUploadAndDownloadGroup.GET("/downloadTemplate", v1.DownloadTemplate)                  // 下载模板文件
 	}
 }

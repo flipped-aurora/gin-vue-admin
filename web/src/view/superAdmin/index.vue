@@ -1,12 +1,15 @@
 <template>
-    <router-view></router-view>
+  <div>
+    <keep-alive>
+      <router-view v-if="$route.meta.keepAlive"></router-view>
+    </keep-alive>
+    <router-view v-if="!$route.meta.keepAlive"></router-view>
+  </div>
 </template>
 
 <script>
 export default {
-    name:"SuperAdmin",
-}
+  name: "SuperAdmin",
+};
 </script>
-<style lang="scss">
-    
-</style>
+<style lang="scss"></style>

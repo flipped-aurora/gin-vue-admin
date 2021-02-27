@@ -1,18 +1,43 @@
 package v1
 
 import (
+	"errors"
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
-	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
-	"go.uber.org/zap"
 	"net/url"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
+
+// @Tags AutoCode
+// @Summary 预览创建后的代码
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.AutoCodeStruct true "预览创建代码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router /autoCode/preview [post]
+func PreviewTemp(c *gin.Context) {
+	var a model.AutoCodeStruct
+	_ = c.ShouldBindJSON(&a)
+	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	autoCode, err := service.PreviewTemp(a)
+	if err != nil {
+		global.GVA_LOG.Error("预览失败!", zap.Any("err", err))
+		response.FailWithMessage("预览失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
+	}
+}
 
 // @Tags AutoCode
 // @Summary 自动代码模板

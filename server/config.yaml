@@ -78,6 +78,15 @@ qiniu:
   secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
   use-cdn-domains: false
 
+
+# aliyun oss configuration
+aliyun-oss:
+  endpoint: 'yourEndpoint'
+  access-key-id: 'yourAccessKeyId'
+  access-key-secret: 'yourAccessKeySecret'
+  bucket-name: 'yourBucketName'
+  bucket-url: 'yourBucketUrl'
+
 # tencent cos configuration
 tencent-cos:
   bucket: 'xxxxx-10005608'

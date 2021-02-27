@@ -30,7 +30,7 @@ func NewOss() OSS {
 		return &Qiniu{}
 	case "tencent-cos":
 		return &TencentCOS{}
-	case "aliyun-cos":
+	case "aliyun-oss":
 		return &AliyunOSS{}
 	default:
 		return &Local{}

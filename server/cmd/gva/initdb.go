@@ -17,6 +17,8 @@ package gva
 
 import (
 	"gin-vue-admin/core"
+	"gin-vue-admin/utils"
+
 	"github.com/gookit/color"
 
 	_ "gin-vue-admin/core"
@@ -38,16 +40,16 @@ var initdbCmd = &cobra.Command{
 		frame, _ := cmd.Flags().GetString("frame")
 		path, _ := cmd.Flags().GetString("path")
 		global.GVA_VP = core.Viper(path)
-		global.GVA_LOG = core.Zap()           // 初始化zap日志库
-		Mysql.CheckDatabase()
-		Mysql.CheckUtf8mb4()
-		Mysql.Info()
-		Mysql.Init()
+		global.GVA_LOG = core.Zap() // 初始化zap日志库
+		utils.Mysql.CheckDatabase()
+		utils.Mysql.CheckUtf8mb4()
+		utils.Mysql.Info()
+		utils.Mysql.Init()
 		switch frame {
 		case "gin":
 			if global.GVA_CONFIG.System.DbType == "mysql" {
-				Mysql.AutoMigrateTables()
-				Mysql.InitData()
+				utils.Mysql.AutoMigrateTables()
+				utils.Mysql.InitData()
 			}
 		case "gf":
 			color.Info.Println("gf功能开发中")

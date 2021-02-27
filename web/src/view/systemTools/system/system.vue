@@ -21,6 +21,8 @@
         <el-select v-model="config.system.ossType">
           <el-option value="local"></el-option>
           <el-option value="qiniu"></el-option>
+          <el-option value="tencent-cos"></el-option>
+          <el-option value="aliyun-oss"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="配置文件环境变量名">
@@ -257,6 +259,45 @@
           <el-checkbox v-model="config.qiniu.useCdnDomains">开启</el-checkbox>
         </el-form-item>
       </template>
+       <template v-if="config.system.ossType == 'tencent-cos'">
+        <h2>腾讯云COS上传配置</h2>
+        <el-form-item label="bucket">
+          <el-input v-model="config.tencentCOS.bucket"></el-input>
+        </el-form-item>
+        <el-form-item label="region">
+          <el-input v-model="config.tencentCOS.region"></el-input>
+        </el-form-item>
+        <el-form-item label="secretID">
+          <el-input v-model="config.tencentCOS.secretID"></el-input>
+        </el-form-item>
+        <el-form-item label="secretKey">
+          <el-input v-model="config.tencentCOS.secretKey"></el-input>
+        </el-form-item>
+        <el-form-item label="pathPrefix">
+          <el-input v-model="config.tencentCOS.pathPrefix"></el-input>
+        </el-form-item>
+        <el-form-item label="baseURL">
+          <el-input v-model="config.tencentCOS.baseURL"></el-input>
+        </el-form-item>
+      </template>
+       <template v-if="config.system.ossType == 'aliyun-oss'">
+        <h2>阿里云OSS上传配置</h2>
+        <el-form-item label="endpoint">
+          <el-input v-model="config.aliyunOSS.endpoint"></el-input>
+        </el-form-item>
+        <el-form-item label="accessKeyId">
+          <el-input v-model="config.aliyunOSS.accessKeyId"></el-input>
+        </el-form-item>
+        <el-form-item label="accessKeySecret">
+          <el-input v-model="config.aliyunOSS.accessKeySecret"></el-input>
+        </el-form-item>
+        <el-form-item label="bucketName">
+          <el-input v-model="config.aliyunOSS.bucketName"></el-input>
+        </el-form-item>
+        <el-form-item label="bucketUrl">
+          <el-input v-model="config.aliyunOSS.bucketUrl"></el-input>
+        </el-form-item>
+      </template>
       <!--  ossType end  -->
 
       <el-form-item>
@@ -282,6 +323,8 @@ export default {
         sqlite: {},
         redis: {},
         qiniu: {},
+        tencentCOS:{},
+        aliyunOSS:{},
         captcha: {},
         zap: {},
         local: {},

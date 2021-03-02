@@ -2,9 +2,9 @@ package service
 
 import (
 	"fmt"
+	"gin-vue-admin/cmd/source"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model/request"
-	"gin-vue-admin/utils"
 )
 
 //@author: [songzhibin97](https://github.com/songzhibin97)
@@ -23,7 +23,7 @@ func InitDB(conf request.InitDB) error {
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", conf.UserName, conf.Password, conf.Host, conf.Port)
 	fmt.Println(dsn)
 	createSql := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;", conf.DBName)
-	if err := utils.CreateTable(dsn, "mysql", createSql); err != nil {
+	if err := source.CreateTable(dsn, "mysql", createSql); err != nil {
 		return err
 	}
 	setting := map[string]interface{}{
@@ -32,9 +32,9 @@ func InitDB(conf request.InitDB) error {
 		"mysql.username": conf.UserName,
 		"mysql.password": conf.Password,
 	}
-	if err := utils.WriteConfig(global.GVA_VP, setting); err != nil {
+	if err := source.WriteConfig(global.GVA_VP, setting); err != nil {
 		return err
 	}
-	utils.InitDB()
+	source.InitDB()
 	return nil
 }

@@ -51,9 +51,8 @@ func SetSystemConfig(c *gin.Context) {
 // @Summary 重启系统
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body model.System true "重启系统"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"重启系统成功"}"
-// @Router /system/ReloadSystem [post]
+// @Success 200 {string} string "{"code":0,"data":{},"msg":"重启系统成功"}"
+// @Router /system/reloadSystem [post]
 func ReloadSystem(c *gin.Context) {
 	if runtime.GOOS == "windows" {
 		response.FailWithMessage("系统不支持", c)

@@ -1,4 +1,4 @@
-package gva
+package utils
 
 import (
 	"fmt"
@@ -6,13 +6,14 @@ import (
 	data "gin-vue-admin/cmd/information/system"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"os"
+	"strings"
+
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
-	"os"
-	"strings"
 )
 
 type DatabaseInfo struct {

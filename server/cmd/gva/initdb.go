@@ -16,9 +16,8 @@ limitations under the License.
 package gva
 
 import (
+	"gin-vue-admin/cmd/source"
 	"gin-vue-admin/core"
-	"gin-vue-admin/utils"
-
 	"github.com/gookit/color"
 
 	_ "gin-vue-admin/core"
@@ -41,15 +40,16 @@ var initdbCmd = &cobra.Command{
 		path, _ := cmd.Flags().GetString("path")
 		global.GVA_VP = core.Viper(path)
 		global.GVA_LOG = core.Zap() // 初始化zap日志库
-		utils.Mysql.CheckDatabase()
-		utils.Mysql.CheckUtf8mb4()
-		utils.Mysql.Info()
-		utils.Mysql.Init()
+
+		source.Mysql.CheckDatabase()
+		source.Mysql.CheckUtf8mb4()
+		source.Mysql.Info()
+		source.Mysql.Init()
 		switch frame {
 		case "gin":
 			if global.GVA_CONFIG.System.DbType == "mysql" {
-				utils.Mysql.AutoMigrateTables()
-				utils.Mysql.InitData()
+				source.Mysql.AutoMigrateTables()
+				source.Mysql.InitData()
 			}
 		case "gf":
 			color.Info.Println("gf功能开发中")

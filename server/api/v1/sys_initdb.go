@@ -2,7 +2,7 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 
@@ -23,7 +23,7 @@ func InitDB(c *gin.Context) {
 		response.FailWithMessage("非法访问", c)
 		return
 	}
-	var dbInfo model.InitDB
+	var dbInfo request.InitDB
 	if err := c.ShouldBindJSON(&dbInfo); err != nil {
 		global.GVA_LOG.Error("参数校验不通过", zap.Any("err", err))
 		response.FailWithMessage("参数校验不通过", c)

@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
 )
 
@@ -13,7 +13,7 @@ import (
 //@param: authorityId string
 //@return: err error, treeMap map[string][]model.SysMenu
 
-func InitDB(conf model.InitDB) error {
+func InitDB(conf request.InitDB) error {
 	if conf.Host == "" {
 		conf.Host = "127.0.0.1"
 	}

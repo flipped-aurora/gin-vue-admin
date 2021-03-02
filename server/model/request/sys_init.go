@@ -1,4 +1,4 @@
-package model
+package request
 
 type InitDB struct {
 	Host     string `json:"host"`

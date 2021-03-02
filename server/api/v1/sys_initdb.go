@@ -13,11 +13,10 @@ import (
 
 // @Tags InitDB
 // @Summary 初始化用户数据库
-// @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body request.Empty true "空"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /init/db [post]
+// @Param data body request.InitDB true "初始化数据库参数"
+// @Success 200 {string} string "{"code":0,"data":{},"msg":"自动创建数据库成功"}"
+// @Router /initdb [post]
 func InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
 		global.GVA_LOG.Error("非法访问")

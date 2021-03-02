@@ -1,8 +1,7 @@
-package utils
+package source
 
 import (
 	"database/sql"
-
 	"github.com/spf13/viper"
 )
 

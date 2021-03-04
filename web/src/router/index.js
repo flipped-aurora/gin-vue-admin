@@ -7,19 +7,25 @@ Vue.use(Router)
 const originalPush = Router.prototype.push
 //修改原型对象中的push方法
 Router.prototype.push = function push(location) {
-   return originalPush.call(this, location).catch(err => err)
+    return originalPush.call(this, location).catch(err => err)
 }
 
 const baseRouters = [{
-        path: '/',
-        redirect: '/login'
-    },
-    {
-        path: '/login',
-        name: 'login',
-        component: () =>
-            import ('@/view/login/login.vue')
-    }
+    path: '/',
+    redirect: '/login'
+},
+{
+    path: "/init",
+    name: 'init',
+    component: () =>
+        import('@/view/init/init.vue')
+},
+{
+    path: '/login',
+    name: 'login',
+    component: () =>
+        import('@/view/login/login.vue')
+}
 ]
 
 // 需要通过后台数据来生成的组件

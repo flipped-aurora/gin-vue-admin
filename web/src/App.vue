@@ -9,15 +9,7 @@ import { checkDB } from "@/api/initdb"
 export default {
   name: 'app',
   async created(){
-    const res = await checkDB()
-    if(res.code == 0 && res.data.needInit){
-      this.$message({
-        type:"info",
-        message:"您是第一次使用，请初始化"
-      })
-        this.$store.commit("user/NeedInit")
-        this.$router.push({name:"init"})
-    }
+    await checkDB()
   }  
 }
 </script>

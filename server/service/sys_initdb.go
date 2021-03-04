@@ -8,6 +8,8 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/source"
 	"github.com/spf13/viper"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 //@author: [songzhibin97](https://github.com/songzhibin97)
@@ -62,6 +64,7 @@ func InitDB(conf request.InitDB) error {
 	if conf.Host == "" {
 		conf.Host = "127.0.0.1"
 	}
+
 	if conf.Port == "" {
 		conf.Port = "3306"
 	}
@@ -76,11 +79,65 @@ func InitDB(conf request.InitDB) error {
 		"mysql.db-name":  conf.DBName,
 		"mysql.username": conf.UserName,
 		"mysql.password": conf.Password,
+		"mysql.config":   "charset=utf8mb4&parseTime=True&loc=Local",
 	}
 	if err := writeConfig(global.GVA_VP, setting); err != nil {
 		return err
 	}
-	err := initDB(source.Admin,
+	m := global.GVA_CONFIG.Mysql
+	if m.Dbname == "" {
+		return nil
+	}
+
+	linkDns := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
+	mysqlConfig := mysql.Config{
+		DSN:                       linkDns, // DSN data source name
+		DefaultStringSize:         191,     // string 类型字段的默认长度
+		DisableDatetimePrecision:  true,    // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
+		DontSupportRenameIndex:    true,    // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
+		DontSupportRenameColumn:   true,    // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
+		SkipInitializeWithVersion: false,   // 根据版本自动配置
+	}
+	if db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
+		//global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
+		//os.Exit(0)
+		//return nil
+		return nil
+	} else {
+		sqlDB, _ := db.DB()
+		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		global.GVA_DB = db
+	}
+
+	err := global.GVA_DB.AutoMigrate(
+		model.SysUser{},
+		model.SysAuthority{},
+		model.SysApi{},
+		model.SysBaseMenu{},
+		model.SysBaseMenuParameter{},
+		model.JwtBlacklist{},
+		model.SysDictionary{},
+		model.SysDictionaryDetail{},
+		model.ExaFileUploadAndDownload{},
+		model.ExaFile{},
+		model.ExaFileChunk{},
+		model.ExaSimpleUploader{},
+		model.ExaCustomer{},
+		model.SysOperationRecord{},
+		model.WorkflowProcess{},
+		model.WorkflowNode{},
+		model.WorkflowEdge{},
+		model.WorkflowStartPoint{},
+		model.WorkflowEndPoint{},
+		model.WorkflowMove{},
+		model.ExaWfLeave{},
+	)
+	if err != nil {
+		return err
+	}
+	err = initDB(
+		source.Admin,
 		source.Api,
 		source.AuthorityMenu,
 		source.Authority,
@@ -92,7 +149,7 @@ func InitDB(conf request.InitDB) error {
 		source.File,
 		source.BaseMenu,
 		source.Workflow)
-	if err!=nil {
+	if err != nil {
 		return err
 	}
 	return nil

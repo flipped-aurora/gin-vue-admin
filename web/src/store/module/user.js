@@ -21,6 +21,13 @@ export const user = {
             // 这里的 `state` 对象是模块的局部状态
             state.token = token
         },
+        NeedInit(state){
+            state.userInfo = {}
+            state.token = ""
+            sessionStorage.clear()
+            router.push({ name: 'init', replace: true })
+
+        },
         LoginOut(state) {
             state.userInfo = {}
             state.token = ""

@@ -176,6 +176,7 @@ var carbines = []gormadapter.CasbinRule{
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@description: casbin_rule 表数据初始化
 func (c *casbin) Init() error {
+	global.GVA_DB.AutoMigrate(gormadapter.CasbinRule{})
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		if tx.Find(&[]gormadapter.CasbinRule{}).RowsAffected == 154 {
 			color.Danger.Println("\n[Mysql] --> casbin_rule 表的初始数据已存在!")

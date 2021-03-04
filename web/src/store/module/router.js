@@ -42,7 +42,10 @@ export const router = {
                 children: []
             }]
             const asyncRouterRes = await asyncMenu()
-            const asyncRouter = asyncRouterRes.data.menus
+            if(asyncRouterRes.code !=0){
+                return
+            }
+            const asyncRouter = asyncRouterRes.data&&asyncRouterRes.data.menus
             asyncRouter.push({
                 path: "404",
                 name: "404",

@@ -16,7 +16,7 @@ import (
 // @Produce  application/json
 // @Param data body request.InitDB true "初始化数据库参数"
 // @Success 200 {string} string "{"code":0,"data":{},"msg":"自动创建数据库成功"}"
-// @Router /initdb [post]
+// @Router /init/initdb [post]
 func InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
 		global.GVA_LOG.Error("非法访问")
@@ -35,4 +35,25 @@ func InitDB(c *gin.Context) {
 		return
 	}
 	response.OkWithData("自动创建数据库成功", c)
+}
+
+// @Tags CheckDB
+// @Summary 初始化用户数据库
+// @Produce  application/json
+// @Success 200 {string} string "{"code":0,"data":{},"msg":"探测完成"}"
+// @Router /init/checkdb [post]
+func CheckDB(c *gin.Context) {
+	if global.GVA_DB == nil {
+		global.GVA_LOG.Info("数据库无需初始化")
+		response.OkWithDetailed(gin.H{
+			"needInit":false,
+		},"数据库无需初始化", c)
+		return
+	}else{
+		global.GVA_LOG.Info("前往初始化数据库")
+		response.OkWithDetailed(gin.H{
+			"needInit":true,
+		},"前往初始化数据库", c)
+		return
+	}
 }

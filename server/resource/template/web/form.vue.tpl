@@ -107,10 +107,10 @@ export default {
     const res = await find{{.StructName}}({ ID: this.$route.query.id })
     if(res.code == 0){
        this.formData = res.data.re{{.Abbreviation}}
-       this.type == "update"
+       this.type = "update"
      }
     }else{
-     this.type == "create"
+     this.type = "create"
    }
   {{ range .Fields -}}
     {{- if .DictType }}

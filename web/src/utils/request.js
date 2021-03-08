@@ -65,7 +65,7 @@ service.interceptors.response.use(
         if (response.headers["new-token"]) {
             store.commit('user/setToken', response.headers["new-token"])
         }
-        if (response.data.code == 0 || response.headers.success === "true") {
+        if(response.data.code == 0){
             if(response.data.data.needInit){
                 Message({
                     type:"info",
@@ -74,6 +74,8 @@ service.interceptors.response.use(
                     store.commit("user/NeedInit")
                     router.push({name:"init"})
             }
+        }
+        if (response.data.code == 0 || response.headers.success === "true") {
             return response.data
         } else {
             Message({

@@ -82,7 +82,7 @@ func LoadExcel(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept multipart/form-data
 // @Produce  application/json
-// @Param fileName query fileName true "模板名称"
+// @Param fileName query string true "模板名称"
 // @Success 200
 // @Router /excel/downloadTemplate [get]
 func DownloadTemplate(c *gin.Context) {

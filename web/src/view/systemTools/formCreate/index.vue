@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import buildConf from '@/../build.config.js'
 var path = process.env.VUE_APP_BASE_API
 export default {
     name:"FormGenerator",

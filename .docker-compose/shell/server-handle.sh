@@ -61,11 +61,11 @@ captcha:
 
 # mysql connect configuration
 mysql:
-  path: '177.7.0.13:3306'
-  config: 'charset=utf8mb4&parseTime=True&loc=Local'
-  db-name: 'qmPlus'
-  username: 'root'
-  password: 'Aa@6447985'
+  path: ''
+  config: ''
+  db-name: ''
+  username: ''
+  password: ''
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: false

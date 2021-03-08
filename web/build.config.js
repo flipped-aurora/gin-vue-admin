@@ -2,6 +2,8 @@
 
 module.exports = {
     title: 'GIN-VUE-ADMIN1',
+    vueClientPort: 8080,
+    goServerPort: 8888,
     baseCdnUrl: '//cdn.staticfile.org',
     cdns: [
         /**

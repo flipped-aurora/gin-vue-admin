@@ -54,15 +54,30 @@ captcha:
 
 # mysql connect configuration
 mysql:
-  path: ''
-  config: ''
-  db-name: ''
-  username: ''
-  password: ''
-  max-idle-conns: 10
-  max-open-conns: 100
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: gva111
   log-mode: false
   log-zap: ""
+  max-idle-conns: 10
+  max-open-conns: 100
+  password: "123456"
+  path: 10.43.1.71:3306
+  username: root
+
+autoCode:
+  root: ''
+  server: '/server'
+  server-api: '/api/v1'
+  server-model: '/model'
+  server-request: '/model/request/'
+  server-router: '/router'
+  server-service: '/service'
+
+  web: '/web/src'
+  web-api: '/api'
+  web-form: '/view/file1'
+  web-table: '/view/file1'
+  web-flow: '/view/file1'
 
 # local configuration
 local:

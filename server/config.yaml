@@ -54,15 +54,15 @@ captcha:
 
 # mysql connect configuration
 mysql:
-  config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: gva111
-  log-mode: false
-  log-zap: ""
+  path: ''
+  config: ''
+  db-name: ''
+  username: ''
+  password: ''
   max-idle-conns: 10
   max-open-conns: 100
-  password: "123456"
-  path: 10.43.1.71:3306
-  username: root
+  log-mode: false
+  log-zap: ""
 
 autoCode:
   root: ''

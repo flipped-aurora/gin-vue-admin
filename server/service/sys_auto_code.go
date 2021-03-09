@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -132,7 +131,6 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		}
 		for _, value := range dataList { // 移动文件
 			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
-				fmt.Println(err)
 				return err
 			}
 		}
@@ -212,7 +210,6 @@ func GetColumn(tableName string, dbName string) (err error, Columns []request.Co
 //@return: null
 
 func addAutoMoveFile(data *tplData) {
-	dir := filepath.Base(filepath.Dir(data.autoCodePath))
 	base := filepath.Base(data.autoCodePath)
 	fileSlice := strings.Split(data.autoCodePath, string(os.PathSeparator))
 	n := len(fileSlice)
@@ -221,25 +218,34 @@ func addAutoMoveFile(data *tplData) {
 	}
 	if strings.Contains(fileSlice[1], "server") {
 		if strings.Contains(fileSlice[n-2], "router") {
-			data.autoMoveFilePath = filepath.Join(dir, base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server,
+				global.GVA_CONFIG.AutoCode.SRouter, base)
 		} else if strings.Contains(fileSlice[n-2], "api") {
-			data.autoMoveFilePath = filepath.Join(dir, "v1", base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, base)
 		} else if strings.Contains(fileSlice[n-2], "service") {
-			data.autoMoveFilePath = filepath.Join(dir, base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, base)
 		} else if strings.Contains(fileSlice[n-2], "model") {
-			data.autoMoveFilePath = filepath.Join(dir, base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SModel, base)
 		} else if strings.Contains(fileSlice[n-2], "request") {
-			data.autoMoveFilePath = filepath.Join("model", dir, base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRequest, base)
 		}
 	} else if strings.Contains(fileSlice[1], "web") {
 		if strings.Contains(fileSlice[n-1], "js") {
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", dir, base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WApi, base)
 		} else if strings.Contains(fileSlice[n-2], "workflowForm") {
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"WorkflowForm.vue")
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WFlow, strings.TrimSuffix(base, filepath.Ext(base))+"WorkflowForm.vue")
 		} else if strings.Contains(fileSlice[n-2], "form") {
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WForm, strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
 		} else if strings.Contains(fileSlice[n-2], "table") {
-			data.autoMoveFilePath = filepath.Join("../", "web", "src", "view", filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)
+			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WTable, base)
 		}
 	}
 }

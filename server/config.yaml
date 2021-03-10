@@ -75,9 +75,9 @@ autoCode:
 
   web: '/web/src'
   web-api: '/api'
-  web-form: '/view/file1'
-  web-table: '/view/file1'
-  web-flow: '/view/file1'
+  web-form: '/view'
+  web-table: '/view'
+  web-flow: '/view'
 
 # local configuration
 local:

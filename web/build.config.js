@@ -14,7 +14,6 @@ module.exports = {
         { name: 'vue-router', scope: 'VueRouter' },
         { name: 'vuex', scope: 'Vuex' },
         { name: 'axios', scope: 'axios' },
-        { name: 'echarts', scope: 'echarts' },
         { name: 'element-ui', scope: 'ELEMENT',  path: '/element-ui/2.12.0/index.js'},
     ]
 };

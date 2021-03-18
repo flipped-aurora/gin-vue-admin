@@ -61,6 +61,15 @@ func initDB(InitDBFunctions ...model.InitDBFunc) (err error) {
 //@return: err error, treeMap map[string][]model.SysMenu
 
 func InitDB(conf request.InitDB) error {
+
+	baseSetting := map[string]interface{}{
+		"mysql.path":     "",
+		"mysql.db-name":  "",
+		"mysql.username": "",
+		"mysql.password": "",
+		"mysql.config":   "charset=utf8mb4&parseTime=True&loc=Local",
+	}
+
 	if conf.Host == "" {
 		conf.Host = "127.0.0.1"
 	}
@@ -125,13 +134,6 @@ func InitDB(conf request.InitDB) error {
 		model.ExaSimpleUploader{},
 		model.ExaCustomer{},
 		model.SysOperationRecord{},
-		model.WorkflowProcess{},
-		model.WorkflowNode{},
-		model.WorkflowEdge{},
-		model.WorkflowStartPoint{},
-		model.WorkflowEndPoint{},
-		model.WorkflowMove{},
-		model.ExaWfLeave{},
 	)
 	if err != nil {
 		return err
@@ -147,9 +149,9 @@ func InitDB(conf request.InitDB) error {
 		source.Dictionary,
 		source.DictionaryDetail,
 		source.File,
-		source.BaseMenu,
-		source.Workflow)
+		source.BaseMenu)
 	if err != nil {
+		_ = writeConfig(global.GVA_VP, baseSetting)
 		return err
 	}
 	return nil

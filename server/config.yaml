@@ -64,6 +64,21 @@ mysql:
   log-mode: false
   log-zap: ""
 
+autoCode:
+  root: ''
+  server: '/server'
+  server-api: '/api/v1'
+  server-model: '/model'
+  server-request: '/model/request/'
+  server-router: '/router'
+  server-service: '/service'
+
+  web: '/web/src'
+  web-api: '/api'
+  web-form: '/view'
+  web-table: '/view'
+  web-flow: '/view'
+
 # local configuration
 local:
   path: 'uploads/file'

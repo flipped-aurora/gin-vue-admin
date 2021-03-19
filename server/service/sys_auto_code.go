@@ -134,6 +134,18 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 				return err
 			}
 		}
+		initializeGormFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+		initializeRouterFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
+		err = utils.AutoInjectionCode(initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},")
+		if err != nil {
+			return err
+		}
+		err = utils.AutoInjectionCode(initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)")
+		if err != nil {
+			return err
+		}
 		return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
 		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {

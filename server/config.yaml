@@ -68,6 +68,22 @@ mysql:
 local:
   path: 'uploads/file'
 
+# autocode configuration
+autocode:
+  root: ""
+  server: /server
+  server-api: /api/v1
+  server-initialize: /initialize
+  server-model: /model
+  server-request: /model/request/
+  server-router: /router
+  server-service: /service
+  web: /web/src
+  web-api: /api
+  web-flow: /view
+  web-form: /view
+  web-table: /view
+
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket �?域名地址)
 qiniu:
   zone: 'ZoneHuadong'

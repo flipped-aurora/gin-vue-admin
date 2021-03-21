@@ -51,7 +51,8 @@ import {
     InputNumber,
     Steps,
     Upload,
-    Progress
+    Progress,
+    MessageBox
 } from 'element-ui';
 
 Vue.use(Button);
@@ -105,6 +106,7 @@ Vue.use(Loading.directive);
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 Dialog.props.closeOnClickModal.default = false
 
 // 引入封装的router

@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"path/filepath"
 )
 
 //@author: [songzhibin97](https://github.com/songzhibin97)
@@ -154,5 +155,6 @@ func InitDB(conf request.InitDB) error {
 		_ = writeConfig(global.GVA_VP, baseSetting)
 		return err
 	}
+	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
 	return nil
 }

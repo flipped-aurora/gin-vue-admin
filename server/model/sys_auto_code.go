@@ -4,14 +4,14 @@ import "errors"
 
 // 初始版本自动化代码工具
 type AutoCodeStruct struct {
-	StructName         string  `json:"structName"`
-	TableName          string  `json:"tableName"`
-	PackageName        string  `json:"packageName"`
-	Abbreviation       string  `json:"abbreviation"`
-	Description        string  `json:"description"`
-	AutoCreateApiToSql bool    `json:"autoCreateApiToSql"`
-	AutoMoveFile       bool    `json:"autoMoveFile"`
-	Fields             []Field `json:"fields"`
+	StructName         string   `json:"structName"`
+	TableName          string   `json:"tableName"`
+	PackageName        string   `json:"packageName"`
+	Abbreviation       string   `json:"abbreviation"`
+	Description        string   `json:"description"`
+	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"`
+	AutoMoveFile       bool     `json:"autoMoveFile"`
+	Fields             []*Field `json:"fields"`
 }
 
 type Field struct {

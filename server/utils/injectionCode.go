@@ -65,9 +65,9 @@ func AutoInjectionCode(filepath string, funcName string, codeData string) error 
 	}
 
 	// 在指定函数名，且函数中startComment和endComment都存在时，进行区间查重
-	if (codeStartPos != -1 && codeEndPos != srcDataLen) && (startCommentPos != -1 && endCommentPos != srcDataLen) && expectedFunction != nil {
+	if (codeStartPos != -1 && codeEndPos <= srcDataLen) && (startCommentPos != -1 && endCommentPos != srcDataLen) && expectedFunction != nil {
 		if exist := checkExist(&srcData, startCommentPos, endCommentPos, expectedFunction.Body, codeData); exist {
-			fmt.Println("已存在")
+			fmt.Printf("文件 %s 待插入数据 %s 已存在\n", filepath, codeData)
 			return nil // 这里不需要返回错误？
 		}
 	}
@@ -121,6 +121,21 @@ func checkExist(srcData *[]byte, startPos int, endPos int, blockStmt *ast.BlockS
 		case *ast.BlockStmt:
 			if checkExist(srcData, startPos, endPos, stmt, target) {
 				return true
+			}
+		case *ast.AssignStmt:
+			// 为 model 中的代码进行检查
+			if len(stmt.Rhs) > 0 {
+				if callExpr, ok := stmt.Rhs[0].(*ast.CallExpr); ok {
+					for _, arg := range callExpr.Args {
+						if int(arg.Pos()) > startPos && int(arg.End()) < endPos {
+							text := string((*srcData)[int(arg.Pos()-1):int(arg.End())])
+							key := strings.TrimSpace(text)
+							if key == target {
+								return true
+							}
+						}
+					}
+				}
 			}
 		}
 	}

@@ -247,7 +247,7 @@ export default {
     }
   },
   created() {
-    this.searchInfo.sysDictionaryID = this.$route.params.id;
+    this.searchInfo.sysDictionaryID = Number(this.$route.params.id);
     this.getTableData();
   }
 };

@@ -27,9 +27,23 @@
         <el-form-item>
           <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-popover placement="top" v-model="deleteVisible" width="160">
+            <p>确定要删除吗？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button @click="deleteVisible = false" size="mini" type="text">取消</el-button>
+                <el-button @click="onDelete" size="mini" type="primary">确定</el-button>
+              </div>
+            <el-button icon="el-icon-delete" size="mini" slot="reference" type="danger">批量删除</el-button>
+          </el-popover>
+        </el-form-item>
       </el-form>
     </div>
-    <el-table :data="tableData" @sort-change="sortChange" border stripe>
+    <el-table :data="tableData" @sort-change="sortChange" border stripe @selection-change="handleSelectionChange">
+       <el-table-column
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column label="id" min-width="60" prop="ID" sortable="custom"></el-table-column>
       <el-table-column label="api路径" min-width="150" prop="path" sortable="custom"></el-table-column>
       <el-table-column label="api分组" min-width="150" prop="apiGroup" sortable="custom"></el-table-column>
@@ -112,7 +126,8 @@ import {
   getApiList,
   createApi,
   updateApi,
-  deleteApi
+  deleteApi,
+  deleteApisByIds
 } from "@/api/api";
 import infoList from "@/mixins/infoList";
 import { toSQLLine } from "@/utils/stringFun";
@@ -144,9 +159,11 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      deleteVisible:false,
       listApi: getApiList,
       dialogFormVisible: false,
       dialogTitle: "新增Api",
+      apis:[],
       form: {
         path: "",
         apiGroup: "",
@@ -170,6 +187,26 @@ export default {
     };
   },
   methods: {
+    //  选中api
+      handleSelectionChange(val) {
+        this.apis = val;
+      },
+      async onDelete(){
+        const ids = this.apis.map(item=>item.ID)
+        debugger
+        const res = await deleteApisByIds({ids})
+        if(res.code==0){
+          this.$message({
+            type:"success",
+            message:res.msg
+          })
+         if (this.tableData.length == ids.length) {
+              this.page--;
+          }
+          this.deleteVisible = false
+          this.getTableData()
+        }
+      },
     // 排序
     sortChange({ prop, order }) {
       if (prop) {

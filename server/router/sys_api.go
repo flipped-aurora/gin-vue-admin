@@ -15,5 +15,6 @@ func InitApiRouter(Router *gin.RouterGroup) {
 		ApiRouter.POST("getApiById", v1.GetApiById) // 获取单条Api消息
 		ApiRouter.POST("updateApi", v1.UpdateApi)   // 更新api
 		ApiRouter.POST("getAllApis", v1.GetAllApis) // 获取所有api
+		ApiRouter.DELETE("deleteApisByIds", v1.DeleteApisByIds) // 删除选中api
 	}
 }

@@ -58,3 +58,13 @@
 .title-3 {
     text-align: center;
 }
+
+.el-pager li.active{
+    color: #409EFF !important;
+    border: 1px solid #409EFF;
+}
+
+.el-pager li:hover{
+    color: #409EFF !important;
+    border: 1px solid #409EFF;
+}

@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+
 	"gorm.io/gorm"
 )
 
@@ -130,8 +131,6 @@ func UpdateApi(api model.SysApi) (err error) {
 	return err
 }
 
-
-
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteApis
 //@description: 删除选中API
@@ -139,7 +138,6 @@ func UpdateApi(api model.SysApi) (err error) {
 //@return: err error
 
 func DeleteApisByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]model.SysApi{},"id in ?",ids.Ids).Error
+	err = global.GVA_DB.Delete(&[]model.SysApi{}, "id in ?", ids.Ids).Error
 	return err
-	return
 }

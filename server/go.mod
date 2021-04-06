@@ -9,7 +9,7 @@ require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.6+incompatible
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/casbin/casbin/v2 v2.25.6
-	github.com/casbin/gorm-adapter/v3 v3.2.5
+	//github.com/casbin/gorm-adapter/v3 v3.2.5
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
@@ -23,6 +23,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/gookit/color v1.3.1
+	github.com/jackc/pgconn v1.8.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/json-iterator/go v1.1.10 // indirect
@@ -49,11 +50,12 @@ require (
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
 	github.com/unrolled/secure v1.0.7
 	go.uber.org/zap v1.10.0
-	golang.org/x/net v0.0.0-20201224014010-6772e930b67b // indirect
 	golang.org/x/tools v0.0.0-20200324003944-a576cf524670 // indirect
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gorm.io/driver/mysql v1.0.1
-	gorm.io/gorm v1.20.9
+	gorm.io/driver/postgres v1.0.8
+	gorm.io/driver/sqlserver v1.0.7
+	gorm.io/gorm v1.21.4
 )

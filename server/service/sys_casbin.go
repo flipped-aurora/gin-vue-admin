@@ -7,9 +7,9 @@ import (
 	"gin-vue-admin/model/request"
 	"strings"
 
+	"gin-vue-admin/utils/gormadapter"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/util"
-	gormadapter "github.com/casbin/gorm-adapter/v3"
 	_ "github.com/go-sql-driver/mysql"
 )
 

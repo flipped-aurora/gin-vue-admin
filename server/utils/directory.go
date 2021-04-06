@@ -39,7 +39,7 @@ func CreateDir(dirs ...string) (err error) {
 			global.GVA_LOG.Debug("create directory" + v)
 			err = os.MkdirAll(v, os.ModePerm)
 			if err != nil {
-				global.GVA_LOG.Error("create directory"+ v, zap.Any(" error:", err))
+				global.GVA_LOG.Error("create directory"+v, zap.Any(" error:", err))
 			}
 		}
 	}

@@ -148,7 +148,6 @@ func GetAllApis(c *gin.Context) {
 	}
 }
 
-
 // @Tags SysApi
 // @Summary 删除选中Api
 // @Security ApiKeyAuth
@@ -164,6 +163,6 @@ func DeleteApisByIds(c *gin.Context) {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 	} else {
-		response.OkWithMessage("删除成功",c)
+		response.OkWithMessage("删除成功", c)
 	}
 }

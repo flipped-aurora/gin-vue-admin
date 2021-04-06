@@ -13,6 +13,35 @@ definitions:
       endpoint:
         type: string
     type: object
+  config.Autocode:
+    properties:
+      root:
+        type: string
+      server:
+        type: string
+      serverApi:
+        type: string
+      serverInitialize:
+        type: string
+      serverModel:
+        type: string
+      serverRequest:
+        type: string
+      serverRouter:
+        type: string
+      serverService:
+        type: string
+      web:
+        type: string
+      webApi:
+        type: string
+      webFlow:
+        type: string
+      webForm:
+        type: string
+      webTable:
+        type: string
+    type: object
   config.Captcha:
     properties:
       imgHeight:
@@ -114,6 +143,10 @@ definitions:
     properties:
       aliyunOSS:
         $ref: '#/definitions/config.AliyunOSS'
+        type: object
+      autoCode:
+        $ref: '#/definitions/config.Autocode'
+        description: auto
         type: object
       captcha:
         $ref: '#/definitions/config.Captcha'
@@ -499,165 +532,6 @@ definitions:
         $ref: '#/definitions/config.Server'
         type: object
     type: object
-  model.WorkflowEdge:
-    properties:
-      clazz:
-        type: string
-      conditionExpression:
-        type: string
-      createdAt:
-        type: string
-      description:
-        type: string
-      endPoint:
-        $ref: '#/definitions/model.WorkflowEndPoint'
-        description: 终点信息
-        type: object
-      hideIcon:
-        type: boolean
-      id:
-        type: string
-      label:
-        type: string
-      reverse:
-        type: boolean
-      seq:
-        type: string
-      shape:
-        type: string
-      source:
-        type: string
-      sourceAnchor:
-        type: integer
-      startPoint:
-        $ref: '#/definitions/model.WorkflowStartPoint'
-        description: 起点信息
-        type: object
-      target:
-        type: string
-      targetAnchor:
-        type: integer
-      updatedAt:
-        type: string
-    type: object
-  model.WorkflowEndPoint:
-    properties:
-      createdAt:
-        type: string
-      id:
-        type: integer
-      index:
-        type: integer
-      updatedAt:
-        type: string
-      workflowEdgeID:
-        type: string
-      x:
-        type: number
-      "y":
-        type: number
-    type: object
-  model.WorkflowNode:
-    properties:
-      assignType:
-        type: string
-      assignValue:
-        type: string
-      clazz:
-        type: string
-      content:
-        type: string
-      createdAt:
-        type: string
-      cycle:
-        type: string
-      description:
-        type: string
-      dueDate:
-        type: string
-      duration:
-        type: string
-      hideIcon:
-        type: boolean
-      id:
-        type: string
-      label:
-        type: string
-      shape:
-        type: string
-      stateValue:
-        type: string
-      subject:
-        type: string
-      success:
-        type: boolean
-      to:
-        type: string
-      type:
-        type: string
-      updatedAt:
-        type: string
-      view:
-        type: string
-      waitState:
-        type: string
-      workflowProcessID:
-        type: string
-      x:
-        type: number
-      "y":
-        type: number
-    type: object
-  model.WorkflowProcess:
-    properties:
-      category:
-        type: string
-      clazz:
-        type: string
-      createdAt:
-        type: string
-      description:
-        type: string
-      edges:
-        description: 流程链接数据
-        items:
-          $ref: '#/definitions/model.WorkflowEdge'
-        type: array
-      hideIcon:
-        type: boolean
-      id:
-        type: string
-      label:
-        type: string
-      name:
-        type: string
-      nodes:
-        description: 流程节点数据
-        items:
-          $ref: '#/definitions/model.WorkflowNode'
-        type: array
-      updatedAt:
-        type: string
-      view:
-        type: string
-    type: object
-  model.WorkflowStartPoint:
-    properties:
-      createdAt:
-        type: string
-      id:
-        type: integer
-      index:
-        type: integer
-      updatedAt:
-        type: string
-      workflowEdgeID:
-        type: string
-      x:
-        type: number
-      "y":
-        type: number
-    type: object
   request.AddMenuAuthorityInfo:
     properties:
       authorityId:
@@ -861,43 +735,6 @@ definitions:
       user_id:
         type: integer
     type: object
-  request.WorkflowProcessSearch:
-    properties:
-      category:
-        type: string
-      clazz:
-        type: string
-      createdAt:
-        type: string
-      description:
-        type: string
-      edges:
-        description: 流程链接数据
-        items:
-          $ref: '#/definitions/model.WorkflowEdge'
-        type: array
-      hideIcon:
-        type: boolean
-      id:
-        type: string
-      label:
-        type: string
-      name:
-        type: string
-      nodes:
-        description: 流程节点数据
-        items:
-          $ref: '#/definitions/model.WorkflowNode'
-        type: array
-      page:
-        type: integer
-      pageSize:
-        type: integer
-      updatedAt:
-        type: string
-      view:
-        type: string
-    type: object
   response.SysAuthorityCopyResponse:
     properties:
       authority:
@@ -924,6 +761,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysApi'
+          type: object
       produces:
       - application/json
       responses:
@@ -947,6 +785,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysApi'
+          type: object
       produces:
       - application/json
       responses:
@@ -957,6 +796,30 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除api
+      tags:
+      - SysApi
+  /api/deleteApisByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除选中Api
       tags:
       - SysApi
   /api/getAllApis:
@@ -986,6 +849,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
+          type: object
       produces:
       - application/json
       responses:
@@ -1009,6 +873,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SearchApiParams'
+          type: object
       produces:
       - application/json
       responses:
@@ -1032,6 +897,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysApi'
+          type: object
       produces:
       - application/json
       responses:
@@ -1055,6 +921,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/response.SysAuthorityCopyResponse'
+          type: object
       produces:
       - application/json
       responses:
@@ -1078,6 +945,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
+          type: object
       produces:
       - application/json
       responses:
@@ -1101,6 +969,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
+          type: object
       produces:
       - application/json
       responses:
@@ -1124,6 +993,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
+          type: object
       produces:
       - application/json
       responses:
@@ -1147,6 +1017,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
+          type: object
       produces:
       - application/json
       responses:
@@ -1170,6 +1041,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
+          type: object
       produces:
       - application/json
       responses:
@@ -1193,6 +1065,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.AutoCodeStruct'
+          type: object
       produces:
       - application/json
       responses:
@@ -1264,6 +1137,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.AutoCodeStruct'
+          type: object
       produces:
       - application/json
       responses:
@@ -1301,6 +1175,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.Login'
+          type: object
       produces:
       - application/json
       responses:
@@ -1322,6 +1197,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.CasbinInReceive'
+          type: object
       produces:
       - application/json
       responses:
@@ -1345,6 +1221,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.CasbinInReceive'
+          type: object
       produces:
       - application/json
       responses:
@@ -1368,6 +1245,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
+          type: object
       produces:
       - application/json
       responses:
@@ -1390,6 +1268,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
+          type: object
       produces:
       - application/json
       responses:
@@ -1412,6 +1291,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
+          type: object
       produces:
       - application/json
       responses:
@@ -1434,6 +1314,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
+          type: object
       produces:
       - application/json
       responses:
@@ -1457,6 +1338,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
+          type: object
       produces:
       - application/json
       responses:
@@ -1496,8 +1378,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1514,11 +1395,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExcelInfo'
+          type: object
       produces:
       - application/octet-stream
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -1591,6 +1472,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaFileUploadAndDownload'
+          type: object
       produces:
       - application/json
       responses:
@@ -1636,6 +1518,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
+          type: object
       produces:
       - application/json
       responses:
@@ -1713,6 +1596,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.InitDB'
+          type: object
       produces:
       - application/json
       responses:
@@ -1750,6 +1634,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetAuthorityId'
+          type: object
       produces:
       - application/json
       responses:
@@ -1773,6 +1658,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysBaseMenu'
+          type: object
       produces:
       - application/json
       responses:
@@ -1796,6 +1682,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.AddMenuAuthorityInfo'
+          type: object
       produces:
       - application/json
       responses:
@@ -1819,6 +1706,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
+          type: object
       produces:
       - application/json
       responses:
@@ -1842,6 +1730,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
+          type: object
       produces:
       - application/json
       responses:
@@ -1863,6 +1752,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.Empty'
+          type: object
       produces:
       - application/json
       responses:
@@ -1884,6 +1774,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.Empty'
+          type: object
       produces:
       - application/json
       responses:
@@ -1907,6 +1798,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
+          type: object
       produces:
       - application/json
       responses:
@@ -1930,6 +1822,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysBaseMenu'
+          type: object
       produces:
       - application/json
       responses:
@@ -2015,6 +1908,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
+          type: object
       produces:
       - application/json
       responses:
@@ -2038,6 +1932,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
+          type: object
       produces:
       - application/json
       responses:
@@ -2061,6 +1956,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
+          type: object
       produces:
       - application/json
       responses:
@@ -2084,6 +1980,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SysDictionarySearch'
+          type: object
       produces:
       - application/json
       responses:
@@ -2107,6 +2004,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
+          type: object
       produces:
       - application/json
       responses:
@@ -2130,6 +2028,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
+          type: object
       produces:
       - application/json
       responses:
@@ -2153,6 +2052,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
+          type: object
       produces:
       - application/json
       responses:
@@ -2176,6 +2076,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
+          type: object
       produces:
       - application/json
       responses:
@@ -2199,6 +2100,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SysDictionaryDetailSearch'
+          type: object
       produces:
       - application/json
       responses:
@@ -2222,6 +2124,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
+          type: object
       produces:
       - application/json
       responses:
@@ -2245,6 +2148,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysOperationRecord'
+          type: object
       produces:
       - application/json
       responses:
@@ -2268,6 +2172,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysOperationRecord'
+          type: object
       produces:
       - application/json
       responses:
@@ -2291,6 +2196,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.IdsReq'
+          type: object
       produces:
       - application/json
       responses:
@@ -2314,6 +2220,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysOperationRecord'
+          type: object
       produces:
       - application/json
       responses:
@@ -2337,6 +2244,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SysOperationRecordSearch'
+          type: object
       produces:
       - application/json
       responses:
@@ -2400,6 +2308,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.System'
+          type: object
       produces:
       - application/json
       responses:
@@ -2421,6 +2330,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.ChangePasswordStruct'
+          type: object
       produces:
       - application/json
       responses:
@@ -2444,6 +2354,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
+          type: object
       produces:
       - application/json
       responses:
@@ -2467,6 +2378,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
+          type: object
       produces:
       - application/json
       responses:
@@ -2488,6 +2400,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysUser'
+          type: object
       produces:
       - application/json
       responses:
@@ -2509,6 +2422,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SetUserAuth'
+          type: object
       produces:
       - application/json
       responses:
@@ -2532,6 +2446,7 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysUser'
+          type: object
       produces:
       - application/json
       responses:
@@ -2544,254 +2459,6 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
-  /workflowProcess/completeWorkflowMove:
-    post:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 提交工作流
-      tags:
-      - WorkflowProcess
-  /workflowProcess/createWorkflowProcess:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建WorkflowProcess
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.WorkflowProcess'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建WorkflowProcess
-      tags:
-      - WorkflowProcess
-  /workflowProcess/deleteWorkflowProcess:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除WorkflowProcess
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.WorkflowProcess'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除WorkflowProcess
-      tags:
-      - WorkflowProcess
-  /workflowProcess/deleteWorkflowProcessByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除WorkflowProcess
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除WorkflowProcess
-      tags:
-      - WorkflowProcess
-  /workflowProcess/findWorkflowProcess:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 用id查询WorkflowProcess
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.WorkflowProcess'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询WorkflowProcess
-      tags:
-      - WorkflowProcess
-  /workflowProcess/findWorkflowStep:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 用id查询WorkflowProcess
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.WorkflowProcess'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 用id查询工作流步骤
-      tags:
-      - WorkflowProcess
-  /workflowProcess/getMyNeed:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 我的待办
-      tags:
-      - WorkflowProcess
-  /workflowProcess/getMyStated:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 我发起的工作流
-      tags:
-      - WorkflowProcess
-  /workflowProcess/getWorkflowMoveByID:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 根据id获取当前节点详情和过往
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.GetById'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 根据id获取当前节点详情和历史
-      tags:
-      - WorkflowProcess
-  /workflowProcess/getWorkflowProcessList:
-    get:
-      consumes:
-      - application/json
-      parameters:
-      - description: 分页获取WorkflowProcess列表
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.WorkflowProcessSearch'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 分页获取WorkflowProcess列表
-      tags:
-      - WorkflowProcess
-  /workflowProcess/startWorkflow:
-    post:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 开启工作流
-      tags:
-      - WorkflowProcess
-  /workflowProcess/updateWorkflowProcess:
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 更新WorkflowProcess
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.WorkflowProcess'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 更新WorkflowProcess
-      tags:
-      - WorkflowProcess
 securityDefinitions:
   ApiKeyAuth:
     in: header

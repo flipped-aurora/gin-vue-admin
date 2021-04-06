@@ -145,11 +145,11 @@ func DeleteApisByIds(ids request.IdsReq) error {
 
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: AutoRegisterRouter
-//@description: 自动注册api到sys_apis表
+//@description: 自动把路由注册到sys_apis表
 //@param: engine *gin.Engine
 //@return: error
 
-func AutoRegisterRouter(engine *gin.Engine) {
+func AutoRegisterRouter(engine *gin.Engine) error {
 	routes := engine.Routes()
 	for i := 0; i < len(routes); i++ {
 		path := routes[i].Path
@@ -209,7 +209,8 @@ func AutoRegisterRouter(engine *gin.Engine) {
 		}
 		if err := global.GVA_DB.Create(&entity).Error; err != nil { // 创建api记录
 			global.GVA_LOG.Info("插入 sys_apis 表记录失败!", zap.String("Path", path), zap.String("method", method))
-			continue
+			return err
 		}
 	}
+	return nil
 }

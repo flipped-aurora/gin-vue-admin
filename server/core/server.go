@@ -14,8 +14,7 @@ type server interface {
 }
 
 func RunWindowsServer() {
-	if global.GVA_CONFIG.System.UseMultipoint {
-		// 初始化redis服务
+	if global.GVA_CONFIG.System.UseMultipoint { // 初始化redis服务
 		initialize.Redis()
 	}
 	engine := initialize.Routers()
@@ -37,6 +36,10 @@ func RunWindowsServer() {
 	如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.gin-vue-admin.com/docs/coffee
 `, address)
 
-	go service.AutoRegisterRouter(engine)
+	if global.GVA_CONFIG.System.AutoRegisterRouter { // 自动把路由注册到sys_apis表
+		go func() {
+			_ = service.AutoRegisterRouter(engine)
+		}()
+	}
 	global.GVA_LOG.Error(s.ListenAndServe().Error())
 }

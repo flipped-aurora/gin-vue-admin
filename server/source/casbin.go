@@ -3,7 +3,7 @@ package source
 import (
 	"gin-vue-admin/global"
 
-	"gin-vue-admin/utils/gormadapter"
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
 )

@@ -84,14 +84,14 @@ autocode:
   web-form: /view
   web-table: /view
 
-# qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket �?域名地址)
+# qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:
-  zone: 'ZoneHuadong'
-  bucket: 'qm-plus-img'
-  img-path: 'http://qmplusimg.henrongyi.top'
+  zone: 'ZoneHuaDong'
+  bucket: ''
+  img-path: ''
   use-https: false
-  access-key: '25j8dYBZ2wuiy0yhwShytjZDTX662b8xiFguwxzZ'
-  secret-key: 'pgdbqEsf7ooZh7W3xokP833h3dZ_VecFXPDeG5JY'
+  access-key: ''
+  secret-key: ''
   use-cdn-domains: false
 
 

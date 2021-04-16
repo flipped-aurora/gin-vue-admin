@@ -66,7 +66,7 @@ service.interceptors.response.use(
             store.commit('user/setToken', response.headers["new-token"])
         }
         if(response.data.code == 0){
-            if(response.data.data.needInit){
+            if(response.data.data?.needInit){
                 Message({
                     type:"info",
                     message:"您是第一次使用，请初始化"

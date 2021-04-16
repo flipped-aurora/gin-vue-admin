@@ -193,7 +193,6 @@ export default {
       },
       async onDelete(){
         const ids = this.apis.map(item=>item.ID)
-        debugger
         const res = await deleteApisByIds({ids})
         if(res.code==0){
           this.$message({

@@ -141,6 +141,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 > <font color=red>**使用docker-compose进行部署本项目需注意的问题**</font>
 
+- dockerfile_server使用了多阶段构建，这是docker 17.05后引入的，因此安装的docker版本需要高于17.05
 - mysql数据库请使用装在服务器磁盘的本地数据库.
 	- 避免使用docker容器内的mysql,可能会出现写入的问题, io比宿主机低  docker的持久化机制问题
 - [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)是给docker-compose进行<font color=red>体验本项目</font>的, 禁止[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)使用进行项目数据的初始化, 数据库初始化[请使用此方法](https://www.gin-vue-admin.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)

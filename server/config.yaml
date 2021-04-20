@@ -115,3 +115,16 @@ tencent-cos:
 # excel configuration
 excel:
   dir: './resource/excel/'
+
+
+# timer task db clear table
+Timer:
+  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc
+  detail: [
+    # tableName: 需要清理的表名
+    # compareField: 需要比较时间的字段
+    # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
+    # 2160h = 24 * 30 * 3 -> 三个月
+    { tableName: "log" , compareField: "created_at", interval: "2160h" },
+    { tableName: "log2" , compareField: "created_at", interval: "2160h" }
+  ]

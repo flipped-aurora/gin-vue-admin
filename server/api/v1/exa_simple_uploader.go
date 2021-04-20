@@ -69,7 +69,7 @@ func CheckFileMd5(c *gin.Context) {
 		response.OkWithDetailed(gin.H{
 			"chunks": chunks,
 			"isDone": isDone,
-		},"查询成功", c)
+		}, "查询成功", c)
 	}
 }
 

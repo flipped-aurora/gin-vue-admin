@@ -5,11 +5,12 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
-	"github.com/casbin/casbin/util"
+	"strings"
+
 	"github.com/casbin/casbin/v2"
+	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	_ "github.com/go-sql-driver/mysql"
-	"strings"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -57,7 +58,6 @@ func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod
 //@description: 获取权限列表
 //@param: authorityId string
 //@return: pathMaps []request.CasbinInfo
-
 
 func GetPolicyPathByAuthorityId(authorityId string) (pathMaps []request.CasbinInfo) {
 	e := Casbin()

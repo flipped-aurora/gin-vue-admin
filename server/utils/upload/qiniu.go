@@ -60,7 +60,7 @@ func (*Qiniu) DeleteFile(key string) error {
 	mac := qbox.NewMac(global.GVA_CONFIG.Qiniu.AccessKey, global.GVA_CONFIG.Qiniu.SecretKey)
 	cfg := qiniuConfig()
 	bucketManager := storage.NewBucketManager(mac, cfg)
-	if err := bucketManager.Delete(global.GVA_CONFIG.Qiniu.Bucket, key); err != nil{
+	if err := bucketManager.Delete(global.GVA_CONFIG.Qiniu.Bucket, key); err != nil {
 		global.GVA_LOG.Error("function bucketManager.Delete() Filed", zap.Any("err", err.Error()))
 		return errors.New("function bucketManager.Delete() Filed, err:" + err.Error())
 	}
@@ -76,7 +76,7 @@ func (*Qiniu) DeleteFile(key string) error {
 
 func qiniuConfig() *storage.Config {
 	cfg := storage.Config{
-		UseHTTPS: global.GVA_CONFIG.Qiniu.UseHTTPS,
+		UseHTTPS:      global.GVA_CONFIG.Qiniu.UseHTTPS,
 		UseCdnDomains: global.GVA_CONFIG.Qiniu.UseCdnDomains,
 	}
 	switch global.GVA_CONFIG.Qiniu.Zone { // 根据配置文件进行初始化空间对应的机房

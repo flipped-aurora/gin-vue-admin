@@ -51,7 +51,9 @@ import {
     InputNumber,
     Steps,
     Upload,
-    Progress
+    Progress,
+    MessageBox,
+    Image
 } from 'element-ui';
 
 Vue.use(Button);
@@ -102,9 +104,11 @@ Vue.use(Upload);
 Vue.use(Progress);
 Vue.use(Scrollbar);
 Vue.use(Loading.directive);
+Vue.use(Image)
 
 Vue.prototype.$loading = Loading.service;
 Vue.prototype.$message = Message;
+Vue.prototype.$confirm = MessageBox.confirm;
 Dialog.props.closeOnClickModal.default = false
 
 // 引入封装的router
@@ -144,7 +148,7 @@ export default new Vue({
 
 console.log(`
        欢迎使用 Gin-Vue-Admin
-       当前版本:V2.4.0
+       当前版本:V2.4.1
        加群方式:微信：shouzi_1994 QQ群：622360840
        默认自动化文档地址:http://127.0.0.1:` + buildConfig.goServerPort + `/swagger/index.html
        默认前端文件运行地址:http://127.0.0.1:`+ buildConfig.vueClientPort + `

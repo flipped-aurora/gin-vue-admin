@@ -1,4 +1,5 @@
 package upload
+
 import (
 	"errors"
 	"gin-vue-admin/global"

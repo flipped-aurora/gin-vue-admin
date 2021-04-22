@@ -90,8 +90,7 @@ func ClearCasbin(v int, p ...string) bool {
 //@return: *casbin.Enforcer
 
 func Casbin() *casbin.Enforcer {
-	admin := global.GVA_CONFIG.Mysql
-	a, _ := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
+	a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
 	e, _ := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
 	e.AddFunction("ParamsMatch", ParamsMatchFunc)
 	_ = e.LoadPolicy()

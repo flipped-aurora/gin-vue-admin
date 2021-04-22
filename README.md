@@ -166,7 +166,7 @@ npm run serve
 
 ### 2.2 server端
 
-使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin跟目录
+使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin 根目录
 
 ```bash
 # 使用 go.mod
@@ -249,7 +249,7 @@ go get -u github.com/swaggo/swag/cmd/swag
 cd server
 swag init
 ````
-执行上面的命令后，server目录下会出现docs文件夹，登录http://localhost:8888/swagger/index.html，即可查看swagger文档
+执行上面的命令后，server目录下会出现docs文件夹，登录 http://localhost:8888/swagger/index.html ，即可查看swagger文档
 
 
 ## 3. 技术选型

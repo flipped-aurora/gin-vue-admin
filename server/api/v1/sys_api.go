@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -100,7 +101,7 @@ func GetApiById(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, api := service.GetApiById(idInfo.Id)
+	err, api := service.GetApiById(idInfo.ID)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
+import buildConfig from '../build.config';
 
 //  按需引入element
 import {
@@ -145,6 +146,7 @@ export default new Vue({
     router,
     store
 }).$mount('#app')
+
 
 console.log(`
        欢迎使用 Gin-Vue-Admin

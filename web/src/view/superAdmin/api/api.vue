@@ -236,10 +236,10 @@ export default {
     openDialog(type) {
       switch (type) {
         case "addApi":
-          this.dialogTitlethis = "新增Api";
+          this.dialogTitle = "新增Api";
           break;
         case "edit":
-          this.dialogTitlethis = "编辑Api";
+          this.dialogTitle = "编辑Api";
           break;
         default:
           break;

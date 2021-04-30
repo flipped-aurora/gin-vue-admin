@@ -45,32 +45,52 @@ definitions:
   config.Captcha:
     properties:
       imgHeight:
+        description: 图片高度
         type: integer
       imgWidth:
+        description: 图片宽度
         type: integer
       keyLong:
+        description: 验证码长度
         type: integer
     type: object
   config.Casbin:
     properties:
       modelPath:
+        description: Model路径
+        type: string
+    type: object
+  config.Detail:
+    properties:
+      compareField:
+        type: string
+      interval:
+        type: string
+      tableName:
         type: string
     type: object
   config.Email:
     properties:
       from:
+        description: 收件人
         type: string
       host:
+        description: 服务器地址
         type: string
       isSSL:
+        description: 是否SSL
         type: boolean
       nickname:
+        description: 昵称
         type: string
       port:
+        description: 端口
         type: integer
       secret:
+        description: 密钥
         type: string
       to:
+        description: 收件人
         type: string
     type: object
   config.Excel:
@@ -81,15 +101,19 @@ definitions:
   config.JWT:
     properties:
       bufferTime:
+        description: 缓冲时间
         type: integer
       expiresTime:
+        description: 过期时间
         type: integer
       signingKey:
+        description: jwt签名
         type: string
     type: object
   config.Local:
     properties:
       path:
+        description: 本地文件路径
         type: string
     type: object
   config.Mysql:
@@ -97,6 +121,7 @@ definitions:
       config:
         type: string
       dbname:
+        description: 数据库名
         type: string
       logMode:
         type: boolean
@@ -107,97 +132,102 @@ definitions:
       maxOpenConns:
         type: integer
       password:
+        description: 数据库密码
         type: string
       path:
+        description: 服务器地址:端口
         type: string
       username:
+        description: 数据库用户名
         type: string
     type: object
   config.Qiniu:
     properties:
       accessKey:
+        description: accessKey
         type: string
       bucket:
+        description: 空间名称
         type: string
       imgPath:
+        description: CDN加速域名
         type: string
       secretKey:
+        description: secretKey
         type: string
       useCdnDomains:
+        description: 上传是否使用CDN上传加速
         type: boolean
       useHttps:
+        description: 是否使用https
         type: boolean
       zone:
+        description: 存储区域
         type: string
     type: object
   config.Redis:
     properties:
       addr:
+        description: 服务器地址:端口
         type: string
       db:
         type: integer
       password:
+        description: 密码
         type: string
     type: object
   config.Server:
     properties:
       aliyunOSS:
         $ref: '#/definitions/config.AliyunOSS'
-        type: object
       autoCode:
         $ref: '#/definitions/config.Autocode'
         description: auto
-        type: object
       captcha:
         $ref: '#/definitions/config.Captcha'
-        type: object
       casbin:
         $ref: '#/definitions/config.Casbin'
-        type: object
       email:
         $ref: '#/definitions/config.Email'
-        type: object
       excel:
         $ref: '#/definitions/config.Excel'
-        type: object
       jwt:
         $ref: '#/definitions/config.JWT'
-        type: object
       local:
         $ref: '#/definitions/config.Local'
         description: oss
-        type: object
       mysql:
         $ref: '#/definitions/config.Mysql'
         description: gorm
-        type: object
       qiniu:
         $ref: '#/definitions/config.Qiniu'
-        type: object
       redis:
         $ref: '#/definitions/config.Redis'
-        type: object
       system:
         $ref: '#/definitions/config.System'
-        type: object
       tencentCOS:
         $ref: '#/definitions/config.TencentCOS'
-        type: object
+      timer:
+        $ref: '#/definitions/config.Timer'
       zap:
         $ref: '#/definitions/config.Zap'
-        type: object
     type: object
   config.System:
     properties:
       addr:
+        description: 端口值
         type: integer
       dbType:
+        description: 数据库类型:mysql(默认)|sqlite|sqlserver|postgresql
         type: string
       env:
+        description: 环境值
         type: string
       ossType:
+        description: Oss类型
         type: string
       useMultipoint:
+        description: 多点登录拦截
         type: boolean
     type: object
   config.TencentCOS:
@@ -215,88 +245,130 @@ definitions:
       secretKey:
         type: string
     type: object
+  config.Timer:
+    properties:
+      detail:
+        items:
+          $ref: '#/definitions/config.Detail'
+        type: array
+      spec:
+        type: string
+      start:
+        type: boolean
+    type: object
   config.Zap:
     properties:
       director:
+        description: 日志文件夹
         type: string
       encodeLevel:
+        description: 编码级
         type: string
       format:
+        description: 输出
         type: string
       level:
+        description: 级别
         type: string
       linkName:
+        description: 软链接名称
         type: string
       logInConsole:
+        description: 输出控制台
         type: boolean
       prefix:
+        description: 日志前缀
         type: string
       showLine:
+        description: 显示行
         type: boolean
       stacktraceKey:
+        description: 栈名
         type: string
     type: object
   model.AutoCodeStruct:
     properties:
       abbreviation:
+        description: Struct简称
         type: string
       autoCreateApiToSql:
+        description: 是否自动创建api
         type: boolean
       autoMoveFile:
+        description: 是否自动移动文件
         type: boolean
       description:
+        description: Struct中文名称
         type: string
       fields:
         items:
           $ref: '#/definitions/model.Field'
         type: array
       packageName:
+        description: 文件名称
         type: string
       structName:
+        description: Struct名称
         type: string
       tableName:
+        description: 表名
         type: string
     type: object
   model.ExaCustomer:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       customerName:
+        description: 客户名
         type: string
       customerPhoneData:
+        description: 客户手机号
         type: string
       id:
+        description: 主键ID
         type: integer
       sysUser:
         $ref: '#/definitions/model.SysUser'
-        type: object
+        description: 管理详情
       sysUserAuthorityID:
+        description: 管理角色ID
         type: string
       sysUserId:
+        description: 管理ID
         type: integer
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   model.ExaFileUploadAndDownload:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       id:
+        description: 主键ID
         type: integer
       key:
+        description: 编号
         type: string
       name:
+        description: 文件名
         type: string
       tag:
+        description: 文件标签
         type: string
       updatedAt:
+        description: 更新时间
         type: string
       url:
+        description: 文件地址
         type: string
     type: object
   model.ExcelInfo:
     properties:
       fileName:
+        description: 文件名
         type: string
       infoList:
         items:
@@ -306,48 +378,67 @@ definitions:
   model.Field:
     properties:
       columnName:
+        description: 数据库字段
         type: string
       comment:
+        description: 数据库字段描述
         type: string
       dataType:
+        description: 数据库字段类型
         type: string
       dataTypeLong:
+        description: 数据库字段长度
         type: string
       dictType:
+        description: 字典
         type: string
       fieldDesc:
+        description: 中文名
         type: string
       fieldJson:
+        description: FieldJson
         type: string
       fieldName:
+        description: Field名
         type: string
       fieldSearchType:
+        description: 搜索条件
         type: string
       fieldType:
+        description: Field数据类型
         type: string
     type: object
   model.SysApi:
     properties:
       apiGroup:
+        description: api组
         type: string
       createdAt:
+        description: 创建时间
         type: string
       description:
+        description: api中文描述
         type: string
       id:
+        description: 主键ID
         type: integer
       method:
+        description: 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
         type: string
       path:
+        description: api路径
         type: string
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   model.SysAuthority:
     properties:
       authorityId:
+        description: 角色ID
         type: string
       authorityName:
+        description: 角色名
         type: string
       children:
         items:
@@ -360,6 +451,7 @@ definitions:
           $ref: '#/definitions/model.SysAuthority'
         type: array
       defaultRouter:
+        description: 默认菜单(默认dashboard)
         type: string
       deletedAt:
         type: string
@@ -368,6 +460,7 @@ definitions:
           $ref: '#/definitions/model.SysBaseMenu'
         type: array
       parentId:
+        description: 父角色ID
         type: string
       updatedAt:
         type: string
@@ -383,158 +476,212 @@ definitions:
           $ref: '#/definitions/model.SysBaseMenu'
         type: array
       closeTab:
+        description: 自动关闭tab
         type: boolean
       component:
+        description: 对应前端文件路径
         type: string
       createdAt:
+        description: 创建时间
         type: string
       defaultMenu:
+        description: 是否是基础路由（开发中）
         type: boolean
       hidden:
+        description: 是否在列表隐藏
         type: boolean
       icon:
+        description: 菜单图标
         type: string
       id:
+        description: 主键ID
         type: integer
       keepAlive:
+        description: 是否缓存
         type: boolean
       name:
+        description: 路由name
         type: string
       parameters:
         items:
           $ref: '#/definitions/model.SysBaseMenuParameter'
         type: array
       parentId:
+        description: 父菜单ID
         type: string
       path:
+        description: 路由path
         type: string
       sort:
+        description: 排序标记
         type: integer
       title:
+        description: 菜单名
         type: string
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   model.SysBaseMenuParameter:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       id:
+        description: 主键ID
         type: integer
       key:
+        description: 地址栏携带参数的key
         type: string
       sysBaseMenuID:
         type: integer
       type:
+        description: 地址栏携带参数为params还是query
         type: string
       updatedAt:
+        description: 更新时间
         type: string
       value:
+        description: 地址栏携带参数的值
         type: string
     type: object
   model.SysDictionary:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       desc:
+        description: 描述
         type: string
       id:
+        description: 主键ID
         type: integer
       name:
+        description: 字典名（中）
         type: string
       status:
+        description: 状态
         type: boolean
       sysDictionaryDetails:
         items:
           $ref: '#/definitions/model.SysDictionaryDetail'
         type: array
       type:
+        description: 字典名（英）
         type: string
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   model.SysDictionaryDetail:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       id:
+        description: 主键ID
         type: integer
       label:
+        description: 展示值
         type: string
       sort:
+        description: 排序标记
         type: integer
       status:
+        description: 启用状态
         type: boolean
       sysDictionaryID:
+        description: 关联标记
         type: integer
       updatedAt:
+        description: 更新时间
         type: string
       value:
+        description: 字典值
         type: integer
     type: object
   model.SysOperationRecord:
     properties:
       agent:
+        description: 代理
         type: string
       body:
+        description: 请求Body
         type: string
       createdAt:
+        description: 创建时间
         type: string
       error_message:
+        description: 错误信息
         type: string
       id:
+        description: 主键ID
         type: integer
       ip:
+        description: 请求ip
         type: string
       latency:
+        description: 延迟
         type: string
       method:
+        description: 请求方法
         type: string
       path:
+        description: 请求路径
         type: string
       resp:
+        description: 响应Body
         type: string
       status:
+        description: 请求状态
         type: integer
       updatedAt:
+        description: 更新时间
         type: string
       user:
         $ref: '#/definitions/model.SysUser'
-        type: object
       user_id:
+        description: 用户id
         type: integer
     type: object
   model.SysUser:
     properties:
       authority:
         $ref: '#/definitions/model.SysAuthority'
-        type: object
       authorityId:
+        description: 用户角色ID
         type: string
       createdAt:
+        description: 创建时间
         type: string
       headerImg:
+        description: 用户头像
         type: string
       id:
+        description: 主键ID
         type: integer
       nickName:
+        description: 用户昵称"
         type: string
       updatedAt:
+        description: 更新时间
         type: string
       userName:
+        description: 用户登录名
         type: string
       uuid:
+        description: 用户UUID
         type: string
     type: object
   model.System:
     properties:
       config:
         $ref: '#/definitions/config.Server'
-        type: object
     type: object
   request.AddMenuAuthorityInfo:
     properties:
       authorityId:
+        description: 角色ID
         type: string
       menus:
         items:
@@ -544,6 +691,7 @@ definitions:
   request.CasbinInReceive:
     properties:
       authorityId:
+        description: 权限id
         type: string
       casbinInfos:
         items:
@@ -553,17 +701,22 @@ definitions:
   request.CasbinInfo:
     properties:
       method:
+        description: 方法
         type: string
       path:
+        description: 路径
         type: string
     type: object
   request.ChangePasswordStruct:
     properties:
       newPassword:
+        description: 新密码
         type: string
       password:
+        description: 密码
         type: string
       username:
+        description: 用户名
         type: string
     type: object
   request.Empty:
@@ -571,11 +724,13 @@ definitions:
   request.GetAuthorityId:
     properties:
       authorityId:
+        description: 角色ID
         type: string
     type: object
   request.GetById:
     properties:
       id:
+        description: 主键ID
         type: number
     type: object
   request.IdsReq:
@@ -588,14 +743,19 @@ definitions:
   request.InitDB:
     properties:
       dbName:
+        description: 数据库名
         type: string
       host:
+        description: 服务器地址
         type: string
       password:
+        description: 数据库密码
         type: string
       port:
+        description: 数据库连接端口
         type: string
       userName:
+        description: 数据库用户名
         type: string
     required:
     - dbName
@@ -604,149 +764,199 @@ definitions:
   request.Login:
     properties:
       captcha:
+        description: 验证码
         type: string
       captchaId:
+        description: 验证码ID
         type: string
       password:
+        description: 密码
         type: string
       username:
+        description: 用户名
         type: string
     type: object
   request.PageInfo:
     properties:
       page:
+        description: 页码
         type: integer
       pageSize:
+        description: 每页大小
         type: integer
     type: object
   request.SearchApiParams:
     properties:
       apiGroup:
+        description: api组
         type: string
       createdAt:
+        description: 创建时间
         type: string
       desc:
+        description: 排序方式:升序false(默认)|降序true
         type: boolean
       description:
+        description: api中文描述
         type: string
       id:
+        description: 主键ID
         type: integer
       method:
+        description: 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
         type: string
       orderKey:
+        description: 排序
         type: string
       page:
+        description: 页码
         type: integer
       pageSize:
+        description: 每页大小
         type: integer
       path:
+        description: api路径
         type: string
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   request.SetUserAuth:
     properties:
       authorityId:
+        description: 角色ID
         type: string
       uuid:
+        description: 用户UUID
         type: string
     type: object
   request.SysDictionaryDetailSearch:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       id:
+        description: 主键ID
         type: integer
       label:
+        description: 展示值
         type: string
       page:
+        description: 页码
         type: integer
       pageSize:
+        description: 每页大小
         type: integer
       sort:
+        description: 排序标记
         type: integer
       status:
+        description: 启用状态
         type: boolean
       sysDictionaryID:
+        description: 关联标记
         type: integer
       updatedAt:
+        description: 更新时间
         type: string
       value:
+        description: 字典值
         type: integer
     type: object
   request.SysDictionarySearch:
     properties:
       createdAt:
+        description: 创建时间
         type: string
       desc:
+        description: 描述
         type: string
       id:
+        description: 主键ID
         type: integer
       name:
+        description: 字典名（中）
         type: string
       page:
+        description: 页码
         type: integer
       pageSize:
+        description: 每页大小
         type: integer
       status:
+        description: 状态
         type: boolean
       sysDictionaryDetails:
         items:
           $ref: '#/definitions/model.SysDictionaryDetail'
         type: array
       type:
+        description: 字典名（英）
         type: string
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   request.SysOperationRecordSearch:
     properties:
       agent:
+        description: 代理
         type: string
       body:
+        description: 请求Body
         type: string
       createdAt:
+        description: 创建时间
         type: string
       error_message:
+        description: 错误信息
         type: string
       id:
+        description: 主键ID
         type: integer
       ip:
+        description: 请求ip
         type: string
       latency:
+        description: 延迟
         type: string
       method:
+        description: 请求方法
         type: string
       page:
+        description: 页码
         type: integer
       pageSize:
+        description: 每页大小
         type: integer
       path:
+        description: 请求路径
         type: string
       resp:
+        description: 响应Body
         type: string
       status:
+        description: 请求状态
         type: integer
       updatedAt:
+        description: 更新时间
         type: string
       user:
         $ref: '#/definitions/model.SysUser'
-        type: object
       user_id:
+        description: 用户id
         type: integer
     type: object
   response.SysAuthorityCopyResponse:
     properties:
       authority:
         $ref: '#/definitions/model.SysAuthority'
-        type: object
       oldAuthorityId:
         type: string
     type: object
 info:
   contact: {}
   description: This is a sample Server pets
-  license: {}
   title: Swagger Example API
   version: 0.0.1
 paths:
@@ -761,7 +971,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysApi'
-          type: object
       produces:
       - application/json
       responses:
@@ -785,7 +994,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysApi'
-          type: object
       produces:
       - application/json
       responses:
@@ -809,7 +1017,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.IdsReq'
-          type: object
       produces:
       - application/json
       responses:
@@ -849,7 +1056,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
-          type: object
       produces:
       - application/json
       responses:
@@ -873,7 +1079,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SearchApiParams'
-          type: object
       produces:
       - application/json
       responses:
@@ -897,7 +1102,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysApi'
-          type: object
       produces:
       - application/json
       responses:
@@ -921,7 +1125,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/response.SysAuthorityCopyResponse'
-          type: object
       produces:
       - application/json
       responses:
@@ -945,7 +1148,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
-          type: object
       produces:
       - application/json
       responses:
@@ -969,7 +1171,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
-          type: object
       produces:
       - application/json
       responses:
@@ -993,7 +1194,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -1017,7 +1217,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
-          type: object
       produces:
       - application/json
       responses:
@@ -1041,7 +1240,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysAuthority'
-          type: object
       produces:
       - application/json
       responses:
@@ -1065,7 +1263,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.AutoCodeStruct'
-          type: object
       produces:
       - application/json
       responses:
@@ -1137,7 +1334,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.AutoCodeStruct'
-          type: object
       produces:
       - application/json
       responses:
@@ -1175,7 +1371,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.Login'
-          type: object
       produces:
       - application/json
       responses:
@@ -1197,7 +1392,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.CasbinInReceive'
-          type: object
       produces:
       - application/json
       responses:
@@ -1221,7 +1415,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.CasbinInReceive'
-          type: object
       produces:
       - application/json
       responses:
@@ -1245,7 +1438,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
-          type: object
       produces:
       - application/json
       responses:
@@ -1268,7 +1460,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
-          type: object
       produces:
       - application/json
       responses:
@@ -1291,7 +1482,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
-          type: object
       produces:
       - application/json
       responses:
@@ -1314,7 +1504,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaCustomer'
-          type: object
       produces:
       - application/json
       responses:
@@ -1338,7 +1527,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -1378,7 +1566,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: ""
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1395,11 +1584,11 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExcelInfo'
-          type: object
       produces:
       - application/octet-stream
       responses:
-        "200": {}
+        "200":
+          description: ""
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -1472,7 +1661,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.ExaFileUploadAndDownload'
-          type: object
       produces:
       - application/json
       responses:
@@ -1518,7 +1706,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -1596,7 +1783,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.InitDB'
-          type: object
       produces:
       - application/json
       responses:
@@ -1634,7 +1820,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetAuthorityId'
-          type: object
       produces:
       - application/json
       responses:
@@ -1658,7 +1843,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysBaseMenu'
-          type: object
       produces:
       - application/json
       responses:
@@ -1682,7 +1866,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.AddMenuAuthorityInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -1706,7 +1889,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
-          type: object
       produces:
       - application/json
       responses:
@@ -1730,7 +1912,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
-          type: object
       produces:
       - application/json
       responses:
@@ -1752,7 +1933,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.Empty'
-          type: object
       produces:
       - application/json
       responses:
@@ -1774,7 +1954,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.Empty'
-          type: object
       produces:
       - application/json
       responses:
@@ -1798,7 +1977,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -1822,7 +2000,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysBaseMenu'
-          type: object
       produces:
       - application/json
       responses:
@@ -1908,7 +2085,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
-          type: object
       produces:
       - application/json
       responses:
@@ -1932,7 +2108,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
-          type: object
       produces:
       - application/json
       responses:
@@ -1956,7 +2131,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
-          type: object
       produces:
       - application/json
       responses:
@@ -1980,7 +2154,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SysDictionarySearch'
-          type: object
       produces:
       - application/json
       responses:
@@ -2004,7 +2177,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionary'
-          type: object
       produces:
       - application/json
       responses:
@@ -2028,7 +2200,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
-          type: object
       produces:
       - application/json
       responses:
@@ -2052,7 +2223,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
-          type: object
       produces:
       - application/json
       responses:
@@ -2076,7 +2246,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
-          type: object
       produces:
       - application/json
       responses:
@@ -2100,7 +2269,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SysDictionaryDetailSearch'
-          type: object
       produces:
       - application/json
       responses:
@@ -2124,7 +2292,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysDictionaryDetail'
-          type: object
       produces:
       - application/json
       responses:
@@ -2148,7 +2315,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysOperationRecord'
-          type: object
       produces:
       - application/json
       responses:
@@ -2172,7 +2338,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysOperationRecord'
-          type: object
       produces:
       - application/json
       responses:
@@ -2196,7 +2361,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.IdsReq'
-          type: object
       produces:
       - application/json
       responses:
@@ -2220,7 +2384,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysOperationRecord'
-          type: object
       produces:
       - application/json
       responses:
@@ -2244,7 +2407,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SysOperationRecordSearch'
-          type: object
       produces:
       - application/json
       responses:
@@ -2308,7 +2470,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.System'
-          type: object
       produces:
       - application/json
       responses:
@@ -2330,7 +2491,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.ChangePasswordStruct'
-          type: object
       produces:
       - application/json
       responses:
@@ -2354,7 +2514,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.GetById'
-          type: object
       produces:
       - application/json
       responses:
@@ -2378,7 +2537,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.PageInfo'
-          type: object
       produces:
       - application/json
       responses:
@@ -2400,7 +2558,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysUser'
-          type: object
       produces:
       - application/json
       responses:
@@ -2422,7 +2579,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/request.SetUserAuth'
-          type: object
       produces:
       - application/json
       responses:
@@ -2446,7 +2602,6 @@ paths:
         required: true
         schema:
           $ref: '#/definitions/model.SysUser'
-          type: object
       produces:
       - application/json
       responses:

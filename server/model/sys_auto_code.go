@@ -4,27 +4,27 @@ import "errors"
 
 // 初始版本自动化代码工具
 type AutoCodeStruct struct {
-	StructName         string   `json:"structName"`
-	TableName          string   `json:"tableName"`
-	PackageName        string   `json:"packageName"`
-	Abbreviation       string   `json:"abbreviation"`
-	Description        string   `json:"description"`
-	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"`
-	AutoMoveFile       bool     `json:"autoMoveFile"`
+	StructName         string   `json:"structName"`         // Struct名称
+	TableName          string   `json:"tableName"`          // 表名
+	PackageName        string   `json:"packageName"`        // 文件名称
+	Abbreviation       string   `json:"abbreviation"`       // Struct简称
+	Description        string   `json:"description"`        // Struct中文名称
+	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
+	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields"`
 }
 
 type Field struct {
-	FieldName       string `json:"fieldName"`
-	FieldDesc       string `json:"fieldDesc"`
-	FieldType       string `json:"fieldType"`
-	FieldJson       string `json:"fieldJson"`
-	DataType        string `json:"dataType"`
-	DataTypeLong    string `json:"dataTypeLong"`
-	Comment         string `json:"comment"`
-	ColumnName      string `json:"columnName"`
-	FieldSearchType string `json:"fieldSearchType"`
-	DictType        string `json:"dictType"`
+	FieldName       string `json:"fieldName"`       // Field名
+	FieldDesc       string `json:"fieldDesc"`       // 中文名
+	FieldType       string `json:"fieldType"`       // Field数据类型
+	FieldJson       string `json:"fieldJson"`       // FieldJson
+	DataType        string `json:"dataType"`        // 数据库字段类型
+	DataTypeLong    string `json:"dataTypeLong"`    // 数据库字段长度
+	Comment         string `json:"comment"`         // 数据库字段描述
+	ColumnName      string `json:"columnName"`      // 数据库字段
+	FieldSearchType string `json:"fieldSearchType"` // 搜索条件
+	DictType        string `json:"dictType"`        // 字典
 }
 
 var AutoMoveErr error = errors.New("创建代码成功并移动文件成功")

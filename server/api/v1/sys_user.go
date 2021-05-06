@@ -8,11 +8,12 @@ import (
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	"go.uber.org/zap"
-	"time"
 )
 
 // @Tags Base
@@ -217,11 +218,11 @@ func DeleteUser(c *gin.Context) {
 		return
 	}
 	jwtId := getUserID(c)
-	if jwtId == uint(reqId.Id) {
+	if jwtId == uint(reqId.ID) {
 		response.FailWithMessage("删除失败, 自杀失败", c)
 		return
 	}
-	if err := service.DeleteUser(reqId.Id); err != nil {
+	if err := service.DeleteUser(reqId.ID); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
 		response.FailWithMessage("删除失败", c)
 	} else {

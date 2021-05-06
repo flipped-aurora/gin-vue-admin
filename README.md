@@ -166,7 +166,7 @@ npm run serve
 
 ### 2.2 server端
 
-使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin跟目录
+使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin 根目录
 
 ```bash
 # 使用 go.mod
@@ -223,12 +223,12 @@ zap:
 
 #### 2.3.1 安装 swagger
 
-##### （1）可以翻墙
+##### （1）可以科学上网
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-##### （2）无法翻墙
+##### （2）无法科学上网
 
 由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.io](https://goproxy.io/zh/)
 
@@ -249,7 +249,7 @@ go get -u github.com/swaggo/swag/cmd/swag
 cd server
 swag init
 ````
-执行上面的命令后，server目录下会出现docs文件夹，登录http://localhost:8888/swagger/index.html，即可查看swagger文档
+执行上面的命令后，server目录下会出现docs文件夹，登录 http://localhost:8888/swagger/index.html ，即可查看swagger文档
 
 
 ## 3. 技术选型

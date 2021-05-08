@@ -25,4 +25,5 @@ func main() {
 	//core.RunWindowsServer()
 
 	cmd.MainStart(os.Args[1:])
+
 }

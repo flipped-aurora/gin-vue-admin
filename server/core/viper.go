@@ -3,11 +3,11 @@ package core
 import (
 	"fmt"
 	"gin-vue-admin/global"
-	_ "gin-vue-admin/packfile"
 	"gin-vue-admin/utils"
 	"os"
 	"path/filepath"
 
+	_ "gin-vue-admin/packfile"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
 )
@@ -38,6 +38,7 @@ func Viper(path ...string) *viper.Viper {
 				}
 
 				fmt.Printf("您正在使用config的默认值,config的路径为%v\n", config)
+
 			} else {
 				config = configEnv
 				fmt.Printf("您正在使用GVA_CONFIG环境变量,config的路径为%v\n", config)

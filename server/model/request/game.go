@@ -20,5 +20,5 @@ type CloseConnection struct {
 type GameRequest struct {
 	ParamGame
 	model.ConnectionToken
-	Data interface{} `json:"data" binding:"required"`
+	Data []byte `json:"data" binding:"required"`
 }

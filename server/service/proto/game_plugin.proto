@@ -1,0 +1,37 @@
+syntax = "proto3";
+package proto;
+option go_package = "proto/";
+
+message OpenRequest {
+    string host = 1;
+    uint32 port = 2;
+}
+
+message OpenResponse {
+    string token = 1;
+}
+
+message CloseRequest {
+    string token = 1;
+}
+
+message CloseResponse {
+    int32 code = 1;
+    string message = 2;
+}
+
+message GameRequest {
+    string name = 1;
+    bytes data = 2;
+}
+
+message GameResponse {
+    int32 code = 1;
+    bytes data = 2;
+}
+
+service Game {
+    rpc Open(OpenRequest) returns (OpenResponse);
+    rpc Close(CloseRequest) returns (CloseResponse);
+    rpc Request(GameRequest) returns (GameResponse);
+}

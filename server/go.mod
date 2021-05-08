@@ -10,6 +10,7 @@ require (
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/casbin/casbin/v2 v2.25.6
 	github.com/casbin/gorm-adapter/v3 v3.2.6
+	github.com/cornelk/hashmap v1.0.1
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
@@ -22,8 +23,8 @@ require (
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gofrs/uuid v3.2.0+incompatible
-	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/gookit/color v1.3.1
+	github.com/hashicorp/go-plugin v1.4.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/json-iterator/go v1.1.10 // indirect
@@ -52,8 +53,12 @@ require (
 	github.com/unrolled/secure v1.0.7
 	go.uber.org/zap v1.10.0
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
-	golang.org/x/tools v0.0.0-20200324003944-a576cf524670 // indirect
-	google.golang.org/protobuf v1.24.0 // indirect
+	golang.org/x/net v0.0.0-20210508051633-16afe75a6701
+	golang.org/x/sys v0.0.0-20210507161434-a76c4d0a0096 // indirect
+	google.golang.org/genproto v0.0.0-20210506142907-4a47615972c2 // indirect
+	google.golang.org/grpc v1.37.0
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.1.0 // indirect
+	google.golang.org/protobuf v1.26.0
 	gopkg.in/ini.v1 v1.55.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gorm.io/driver/mysql v1.0.1

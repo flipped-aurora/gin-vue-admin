@@ -1,21 +1,35 @@
 package service
 
 import (
+	"os/exec"
+
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gin-vue-admin/service/shared"
 
+	"github.com/cornelk/hashmap"
 	"github.com/gofrs/uuid"
+	"github.com/hashicorp/go-plugin"
 	"github.com/pkg/errors"
 )
 
+var (
+	hm *hashmap.HashMap
+)
+
+func init() {
+	hm = &hashmap.HashMap{}
+}
+
 func OpenConnection(connection request.CreateConnection) (err error, token model.ConnectionToken) {
 	var (
-		ok      bool
-		t       uuid.UUID
-		list    interface{}
-		plugin  *model.ProductPlugin
-		plugins []model.ProductPlugin
-		info    = request.ProductPluginSearch{
+		ok    bool
+		t     string
+		u     uuid.UUID
+		list  interface{}
+		game  *model.ProductPlugin
+		games []model.ProductPlugin
+		info  = request.ProductPluginSearch{
 			PageInfo: request.PageInfo{Page: 1, PageSize: 1000},
 		}
 	)
@@ -29,37 +43,88 @@ func OpenConnection(connection request.CreateConnection) (err error, token model
 		return
 	}
 
-	if plugins, ok = list.([]model.ProductPlugin); !ok {
+	if games, ok = list.([]model.ProductPlugin); !ok {
 		err = errors.New("游戏插件配置错误")
 		return
 	}
 
-	for idx, _ := range plugins {
-		if connection.ID == plugins[idx].ProductID {
-			plugin = &plugins[idx]
+	for idx, _ := range games {
+		if connection.ID == games[idx].ProductID {
+			game = &games[idx]
 			break
 		}
 	}
 
-	if plugin == nil {
+	if game == nil {
 		err = errors.Errorf("游戏插件未配置: %s", connection.ID)
 		return
 	}
 
-	if t, err = uuid.NewV4(); err != nil {
+	if u, err = uuid.NewV4(); err != nil {
 		err = errors.New("生成token失败")
 		return
 	}
 
-	token = model.ConnectionToken{Token: t.String()}
+	client := plugin.NewClient(&plugin.ClientConfig{
+		HandshakeConfig: shared.Handshake,
+		Plugins:         shared.PluginMap,
+		Cmd:             exec.Command("sh", "-c", game.PluginPath),
+		AllowedProtocols: []plugin.Protocol{
+			plugin.ProtocolNetRPC, plugin.ProtocolGRPC},
+	})
+
+	rpcClient, err := client.Client()
+	if err != nil {
+		return
+	}
+
+	raw, err := rpcClient.Dispense("game_grpc")
+	if err != nil {
+		return
+	}
+
+	t = u.String()
+	gameItf := raw.(shared.Game)
+	saveClient(t, client, gameItf)
+	token = model.ConnectionToken{Token: t}
 
 	return
 }
 
 func CloseConnection(connection request.CloseConnection) (err error) {
+	var (
+		c      interface{}
+		client *plugin.Client
+		ok     bool
+		token  = connection.Token
+	)
+
+	if c, ok = hm.Get(token); !ok {
+		err = errors.Errorf("Get client failed with token: %s", token)
+		return
+	}
+
+	if client, ok = c.(*plugin.Client); !ok {
+		err = errors.Errorf("Client: %v can't covert", client)
+		return
+	}
+
+	client.Kill()
+
+	removeClient(token)
 	return
 }
 
 func GameRequest(request request.GameRequest) (err error, data interface{}) {
 	return
+}
+
+func saveClient(token string, client *plugin.Client, game shared.Game) {
+	hm.Set(token+":client", client)
+	hm.Set(token+":gameItf", game)
+}
+
+func removeClient(t string) {
+	hm.Del(t + ":client")
+	hm.Del(t + ":gameItf")
 }

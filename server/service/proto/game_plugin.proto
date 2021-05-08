@@ -7,17 +7,14 @@ message OpenRequest {
     uint32 port = 2;
 }
 
-message OpenResponse {
-    string token = 1;
+message EmptyResponse {
 }
 
-message CloseRequest {
-    string token = 1;
+message EmptyRequest {
 }
 
 message CloseResponse {
-    int32 code = 1;
-    string message = 2;
+    string message = 1;
 }
 
 message GameRequest {
@@ -26,12 +23,11 @@ message GameRequest {
 }
 
 message GameResponse {
-    int32 code = 1;
     bytes data = 2;
 }
 
 service Game {
-    rpc Open(OpenRequest) returns (OpenResponse);
-    rpc Close(CloseRequest) returns (CloseResponse);
+    rpc Open(OpenRequest) returns (EmptyResponse);
+    rpc Close(EmptyRequest) returns (CloseResponse);
     rpc Request(GameRequest) returns (GameResponse);
 }

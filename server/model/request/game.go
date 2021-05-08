@@ -6,19 +6,21 @@ type ParamGame struct {
 	ID string `uri:"id" binding:"required"`
 }
 
-type CreateConnection struct {
+type ParamRequest struct {
 	ParamGame
+	Name string `uri:"request" binding:"required"`
+}
+
+type CreateConnection struct {
 	Host string `json:"host" form:"host" binding:"required"`
-	Port uint   `json:"port" form:"port" binding:"required"`
+	Port uint32 `json:"port" form:"port" binding:"required"`
 }
 
 type CloseConnection struct {
-	ParamGame
 	model.ConnectionToken
 }
 
 type GameRequest struct {
-	ParamGame
 	model.ConnectionToken
-	Data []byte `json:"data" binding:"required"`
+	Data interface{} `json:"data" binding:"required"`
 }

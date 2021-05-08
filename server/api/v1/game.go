@@ -11,10 +11,21 @@ import (
 )
 
 func OpenConnection(c *gin.Context) {
-	var createConnection request.CreateConnection
-	_ = c.ShouldBind(&createConnection)
-	_ = c.ShouldBindUri(&createConnection)
-	if err, token := service.OpenConnection(createConnection); err != nil {
+	var (
+		paramGame        request.ParamGame
+		createConnection request.CreateConnection
+	)
+	if err := c.ShouldBind(&createConnection); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err := c.ShouldBindUri(&paramGame); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err, token := service.OpenConnection(&paramGame, &createConnection); err != nil {
 		global.GVA_LOG.Error("创建连接失败!", zap.Any("err", err))
 		response.FailWithDetailed(err.Error(), "创建连接失败", c)
 	} else {
@@ -23,10 +34,21 @@ func OpenConnection(c *gin.Context) {
 }
 
 func CloseConnection(c *gin.Context) {
-	var closeConnection request.CloseConnection
-	_ = c.ShouldBindJSON(&closeConnection)
-	_ = c.ShouldBindUri(&closeConnection)
-	if err := service.CloseConnection(closeConnection); err != nil {
+	var (
+		paramGame       request.ParamGame
+		closeConnection request.CloseConnection
+	)
+	if err := c.ShouldBindJSON(&closeConnection); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err := c.ShouldBindUri(&paramGame); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err := service.CloseConnection(&paramGame, &closeConnection); err != nil {
 		global.GVA_LOG.Error("关闭连接失败!", zap.Any("err", err))
 		response.FailWithDetailed(err.Error(), "关闭连接失败", c)
 	} else {
@@ -35,9 +57,21 @@ func CloseConnection(c *gin.Context) {
 }
 
 func GameRequest(c *gin.Context) {
-	var gameRequest request.GameRequest
-	_ = c.ShouldBindJSON(&gameRequest)
-	if err, data := service.GameRequest(gameRequest); err != nil {
+	var (
+		paramRequest request.ParamRequest
+		gameRequest  request.GameRequest
+	)
+	if err := c.ShouldBindJSON(&gameRequest); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err := c.ShouldBindUri(&paramRequest); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err, data := service.GameRequest(&paramRequest, &gameRequest); err != nil {
 		global.GVA_LOG.Error("发送请求失败!", zap.Any("err", err))
 		response.FailWithDetailed(err.Error(), "发送请求失败", c)
 	} else {

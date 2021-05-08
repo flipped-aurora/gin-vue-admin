@@ -9,34 +9,32 @@ import (
 // GRPCClient is an implementation of Game that talks over RPC.
 type GRPCClient struct{ client proto.GameClient }
 
-func (m *GRPCClient) Open(host string, port uint32) (string, error) {
-	rsp, err := m.client.Open(context.Background(), &proto.OpenRequest{
+func (m *GRPCClient) Open(host string, port uint32) error {
+	_, err := m.client.Open(context.Background(), &proto.OpenRequest{
 		Host: host,
 		Port: port,
 	})
-	return rsp.Token, err
+	return err
 }
 
-func (m *GRPCClient) Close(token string) (int32, string, error) {
-	rsp, err := m.client.Close(context.Background(), &proto.CloseRequest{
-		Token: token,
-	})
+func (m *GRPCClient) Close(token string) (string, error) {
+	rsp, err := m.client.Close(context.Background(), &proto.EmptyRequest{})
 	if err != nil {
-		return rsp.Code, rsp.Message, err
+		return rsp.Message, err
 	}
 
-	return rsp.Code, rsp.Message, nil
+	return rsp.Message, nil
 }
 
-func (m *GRPCClient) Request(name string, data []byte) (int32, []byte, error) {
+func (m *GRPCClient) Request(name string, data []byte) ([]byte, error) {
 	rsp, err := m.client.Request(context.Background(), &proto.GameRequest{
 		Name: name,
 		Data: data,
 	})
 	if err != nil {
-		return rsp.Code, rsp.Data, err
+		return rsp.Data, err
 	}
-	return rsp.Code, rsp.Data, nil
+	return rsp.Data, nil
 }
 
 // Here is the gRPC server that GRPCClient talks to.
@@ -47,21 +45,21 @@ type GRPCServer struct {
 
 func (m *GRPCServer) Open(
 	ctx context.Context,
-	req *proto.OpenRequest) (*proto.OpenResponse, error) {
-	token, err := m.Impl.Open(req.Host, req.Port)
-	return &proto.OpenResponse{Token: token}, err
+	req *proto.OpenRequest) (*proto.EmptyResponse, error) {
+	err := m.Impl.Open(req.Host, req.Port)
+	return &proto.EmptyResponse{}, err
 }
 
 func (m *GRPCServer) Close(
 	ctx context.Context,
-	req *proto.CloseRequest) (*proto.CloseResponse, error) {
-	code, message, err := m.Impl.Close(req.Token)
-	return &proto.CloseResponse{Code: code, Message: message}, err
+	req *proto.EmptyRequest) (*proto.CloseResponse, error) {
+	message, err := m.Impl.Close()
+	return &proto.CloseResponse{Message: message}, err
 }
 
 func (m *GRPCServer) Request(
 	ctx context.Context,
 	req *proto.GameRequest) (*proto.GameResponse, error) {
-	code, body, err := m.Impl.Request(req.Name, req.Data)
-	return &proto.GameResponse{Code: code, Data: body}, err
+	body, err := m.Impl.Request(req.Name, req.Data)
+	return &proto.GameResponse{Data: body}, err
 }

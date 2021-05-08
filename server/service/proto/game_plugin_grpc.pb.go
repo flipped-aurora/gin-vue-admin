@@ -18,8 +18,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameClient interface {
-	Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*OpenResponse, error)
-	Close(ctx context.Context, in *CloseRequest, opts ...grpc.CallOption) (*CloseResponse, error)
+	Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*EmptyResponse, error)
+	Close(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*CloseResponse, error)
 	Request(ctx context.Context, in *GameRequest, opts ...grpc.CallOption) (*GameResponse, error)
 }
 
@@ -31,8 +31,8 @@ func NewGameClient(cc grpc.ClientConnInterface) GameClient {
 	return &gameClient{cc}
 }
 
-func (c *gameClient) Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*OpenResponse, error) {
-	out := new(OpenResponse)
+func (c *gameClient) Open(ctx context.Context, in *OpenRequest, opts ...grpc.CallOption) (*EmptyResponse, error) {
+	out := new(EmptyResponse)
 	err := c.cc.Invoke(ctx, "/proto.Game/Open", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func (c *gameClient) Open(ctx context.Context, in *OpenRequest, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *gameClient) Close(ctx context.Context, in *CloseRequest, opts ...grpc.CallOption) (*CloseResponse, error) {
+func (c *gameClient) Close(ctx context.Context, in *EmptyRequest, opts ...grpc.CallOption) (*CloseResponse, error) {
 	out := new(CloseResponse)
 	err := c.cc.Invoke(ctx, "/proto.Game/Close", in, out, opts...)
 	if err != nil {
@@ -62,8 +62,8 @@ func (c *gameClient) Request(ctx context.Context, in *GameRequest, opts ...grpc.
 // All implementations should embed UnimplementedGameServer
 // for forward compatibility
 type GameServer interface {
-	Open(context.Context, *OpenRequest) (*OpenResponse, error)
-	Close(context.Context, *CloseRequest) (*CloseResponse, error)
+	Open(context.Context, *OpenRequest) (*EmptyResponse, error)
+	Close(context.Context, *EmptyRequest) (*CloseResponse, error)
 	Request(context.Context, *GameRequest) (*GameResponse, error)
 }
 
@@ -71,10 +71,10 @@ type GameServer interface {
 type UnimplementedGameServer struct {
 }
 
-func (UnimplementedGameServer) Open(context.Context, *OpenRequest) (*OpenResponse, error) {
+func (UnimplementedGameServer) Open(context.Context, *OpenRequest) (*EmptyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Open not implemented")
 }
-func (UnimplementedGameServer) Close(context.Context, *CloseRequest) (*CloseResponse, error) {
+func (UnimplementedGameServer) Close(context.Context, *EmptyRequest) (*CloseResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Close not implemented")
 }
 func (UnimplementedGameServer) Request(context.Context, *GameRequest) (*GameResponse, error) {
@@ -111,7 +111,7 @@ func _Game_Open_Handler(srv interface{}, ctx context.Context, dec func(interface
 }
 
 func _Game_Close_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CloseRequest)
+	in := new(EmptyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -123,7 +123,7 @@ func _Game_Close_Handler(srv interface{}, ctx context.Context, dec func(interfac
 		FullMethod: "/proto.Game/Close",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameServer).Close(ctx, req.(*CloseRequest))
+		return srv.(GameServer).Close(ctx, req.(*EmptyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

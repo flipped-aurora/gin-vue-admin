@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"os/exec"
 
 	"gin-vue-admin/model"
@@ -21,7 +22,7 @@ func init() {
 	hm = &hashmap.HashMap{}
 }
 
-func OpenConnection(connection request.CreateConnection) (err error, token model.ConnectionToken) {
+func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConnection) (err error, token model.ConnectionToken) {
 	var (
 		ok    bool
 		t     string
@@ -49,14 +50,14 @@ func OpenConnection(connection request.CreateConnection) (err error, token model
 	}
 
 	for idx, _ := range games {
-		if connection.ID == games[idx].ProductID {
+		if paramGame.ID == games[idx].ProductID {
 			game = &games[idx]
 			break
 		}
 	}
 
 	if game == nil {
-		err = errors.Errorf("游戏插件未配置: %s", connection.ID)
+		err = errors.Errorf("游戏插件未配置: %s", paramGame.ID)
 		return
 	}
 
@@ -85,27 +86,45 @@ func OpenConnection(connection request.CreateConnection) (err error, token model
 
 	t = u.String()
 	gameItf := raw.(shared.Game)
-	saveClient(t, client, gameItf)
+
+	if err = gameItf.Open(connection.Host, connection.Port); err != nil {
+		err = errors.Wrapf(err, "RPC call Open failed, host: %s, port: %d", connection.Host, connection.Port)
+		return
+	}
+
+	saveClient(t, client, gameItf, paramGame.ID)
 	token = model.ConnectionToken{Token: t}
 
 	return
 }
 
-func CloseConnection(connection request.CloseConnection) (err error) {
+func CloseConnection(paramGame *request.ParamGame, connection *request.CloseConnection) (err error) {
 	var (
-		c      interface{}
 		client *plugin.Client
-		ok     bool
+		rpc    shared.Game
+		id     string
 		token  = connection.Token
 	)
 
-	if c, ok = hm.Get(token); !ok {
-		err = errors.Errorf("Get client failed with token: %s", token)
+	if id, err = gameID(token); err != nil {
 		return
 	}
 
-	if client, ok = c.(*plugin.Client); !ok {
-		err = errors.Errorf("Client: %v can't covert", client)
+	if id != paramGame.ID {
+		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, paramGame.ID)
+		return
+	}
+
+	if rpc, err = gameClient(token); err != nil {
+		return
+	}
+
+	if message, err := rpc.Close(); err != nil {
+		err = errors.Wrapf(err, "rpc close failed, message: %s", message)
+		return err
+	}
+
+	if client, err = rpcClient(token); err != nil {
 		return
 	}
 
@@ -115,16 +134,113 @@ func CloseConnection(connection request.CloseConnection) (err error) {
 	return
 }
 
-func GameRequest(request request.GameRequest) (err error, data interface{}) {
+func GameRequest(paramRequest *request.ParamRequest, request *request.GameRequest) (err error, data interface{}) {
+	var (
+		id    string
+		rpc   shared.Game
+		body  []byte
+		token = request.Token
+	)
+
+	if id, err = gameID(token); err != nil {
+		return
+	}
+	if id != paramRequest.ID {
+		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, paramRequest.ID)
+		return
+	}
+
+	if rpc, err = gameClient(token); err != nil {
+		return
+	}
+
+	if body, err = json.Marshal(request.Data); err != nil {
+		err = errors.Wrapf(err, "Marshal json failed! data: %s", request.Data)
+		return
+	}
+
+	if data, err = rpc.Request(paramRequest.Name, body); err != nil {
+		err = errors.Wrapf(err, "rpc close failed, body: %s", data)
+		return err, nil
+	}
+
 	return
 }
 
-func saveClient(token string, client *plugin.Client, game shared.Game) {
-	hm.Set(token+":client", client)
-	hm.Set(token+":gameItf", game)
+func gameClient(token string) (rpc shared.Game, err error) {
+	var (
+		ok bool
+		c  interface{}
+	)
+	if c, ok = hm.Get(tokenGame(token)); !ok {
+		err = errors.Errorf("Get RPC client failed with token: %s", token)
+		return
+	}
+
+	if rpc, ok = c.(shared.Game); !ok {
+		err = errors.Errorf("RPC: %v can't covert", c)
+		return
+	}
+
+	return
+}
+
+func rpcClient(token string) (client *plugin.Client, err error) {
+	var (
+		ok bool
+		c  interface{}
+	)
+	if c, ok = hm.Get(tokenClient(token)); !ok {
+		err = errors.Errorf("Get client failed with token: %s", token)
+		return
+	}
+
+	if client, ok = c.(*plugin.Client); !ok {
+		err = errors.Errorf("Client: %v can't covert", c)
+		return
+	}
+
+	return
+}
+
+func gameID(token string) (id string, err error) {
+	var (
+		ok bool
+		c  interface{}
+	)
+	if c, ok = hm.Get(tokenGameID(token)); !ok {
+		err = errors.Errorf("Get client failed with token: %s", token)
+		return
+	}
+
+	if id, ok = c.(string); !ok {
+		err = errors.Errorf("Client: %v can't covert", c)
+		return
+	}
+
+	return
+}
+
+func tokenClient(token string) string {
+	return token + ":client"
+}
+
+func tokenGame(token string) string {
+	return token + ":gameItf"
+}
+
+func tokenGameID(token string) string {
+	return token + ":gameID"
+}
+
+func saveClient(token string, client *plugin.Client, game shared.Game, id string) {
+	hm.Set(tokenClient(token), client)
+	hm.Set(tokenGame(token), game)
+	hm.Set(tokenGameID(token), id)
 }
 
 func removeClient(t string) {
-	hm.Del(t + ":client")
-	hm.Del(t + ":gameItf")
+	hm.Del(tokenClient(t))
+	hm.Del(tokenGame(t))
+	hm.Del(tokenGameID(t))
 }

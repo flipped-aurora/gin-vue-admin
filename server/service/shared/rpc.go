@@ -9,19 +9,30 @@ type RPCClient struct{ client *rpc.Client }
 
 func (m *RPCClient) Open(host string, port uint32) error {
 	// We don't expect a response, so we can just use interface{}
-	var resp interface{}
+	var rsp map[string]string
 
 	// The args are just going to be a map. A struct could be better.
-	return m.client.Call("Plugin.Open", map[string]interface{}{
+	err := m.client.Call("Plugin.Open", map[string]interface{}{
 		"host": host,
 		"port": port,
-	}, &resp)
+	}, &rsp)
+
+	return err
 }
 
-func (m *RPCClient) Close(key string) ([]byte, error) {
+func (m *RPCClient) Close() ([]byte, error) {
 	var resp []byte
-	err := m.client.Call("Plugin.Close", key, &resp)
+	err := m.client.Call("Plugin.Close", nil, &resp)
 	return resp, err
+}
+
+func (m *RPCClient) Request(name string, data []byte) ([]byte, error) {
+	var rsp map[string]interface{}
+	err := m.client.Call("Plugin.Request", map[string]interface{}{
+		"name": name,
+		"data": data,
+	}, &rsp)
+	return rsp["data"].([]byte), err
 }
 
 // Here is the RPC server that RPCClient talks to, conforming to
@@ -31,12 +42,19 @@ type RPCServer struct {
 	Impl Game
 }
 
-func (m *RPCServer) Open(args map[string]interface{}, token *interface{}) (err error) {
-	*token, err = m.Impl.Open(args["host"].(string), args["port"].(uint32))
+func (m *RPCServer) Open(args map[string]interface{}, rsp *interface{}) (err error) {
+	err = m.Impl.Open(args["host"].(string), args["port"].(uint32))
 	return
 }
 
-func (m *RPCServer) Close(token string, code *int32, message *string) (err error) {
-	*code, *message, err = m.Impl.Close(token)
+func (m *RPCServer) Close(rsp map[string]interface{}) error {
+	message, err := m.Impl.Close()
+	rsp["message"] = message
+	return err
+}
+
+func (m *RPCServer) Request(args map[string]interface{}, rsp map[string]interface{}) error {
+	data, err := m.Impl.Request(args["name"].(string), args["data"].([]byte))
+	rsp["data"] = data
 	return err
 }

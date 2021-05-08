@@ -27,9 +27,9 @@ var PluginMap = map[string]plugin.Plugin{
 
 // Game is the interface that we're exposing as a plugin.
 type Game interface {
-	Open(host string, port uint32) (string, error)
-	Close(token string) (int32, string, error)
-	Request(name string, data []byte) (int32, []byte, error)
+	Open(host string, port uint32) error
+	Close() (string, error)
+	Request(name string, data []byte) ([]byte, error)
 }
 
 // This is the implementation of plugin.Plugin so we can serve/consume this.

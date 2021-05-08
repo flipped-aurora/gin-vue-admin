@@ -21,6 +21,7 @@ require (
 	github.com/go-playground/validator/v10 v10.3.0 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/gookit/color v1.3.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
@@ -34,7 +35,7 @@ require (
 	github.com/onsi/ginkgo v1.7.0 // indirect
 	github.com/onsi/gomega v1.4.3 // indirect
 	github.com/pelletier/go-toml v1.6.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/qiniu/api.v7/v7 v7.4.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/satori/go.uuid v1.2.0

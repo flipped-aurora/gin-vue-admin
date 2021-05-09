@@ -7,7 +7,6 @@
         </div>
         <div class="header">
           <a href="/">
-            <!-- <img src="~@/assets/logo.png" class="logo" alt="logo" /> -->
             <span class="title">Gin-Vue-Admin</span>
           </a>
         </div>
@@ -91,14 +90,14 @@ export default {
   name: "Login",
   data() {
     const checkUsername = (rule, value, callback) => {
-      if (value.length < 5 || value.length > 12) {
+      if (value.length < 5) {
         return callback(new Error("请输入正确的用户名"));
       } else {
         callback();
       }
     };
     const checkPassword = (rule, value, callback) => {
-      if (value.length < 6 || value.length > 12) {
+      if (value.length < 6) {
         return callback(new Error("请输入正确的密码"));
       } else {
         callback();

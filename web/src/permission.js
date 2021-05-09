@@ -4,11 +4,11 @@ import getPageTitle from '@/utils/page'
 
 let asyncRouterFlag = 0
 
-const whiteList = ['login','init']
-router.beforeEach(async(to, from, next) => {
+const whiteList = ['login', 'init']
+router.beforeEach(async (to, from, next) => {
     const token = store.getters['user/token']
-        // 在白名单中的判断情况
-        //修改网页标签名称
+    // 在白名单中的判断情况
+    //修改网页标签名称
     document.title = getPageTitle(to.meta.title)
     if (whiteList.indexOf(to.name) > -1) {
         if (token) {
@@ -24,10 +24,16 @@ router.beforeEach(async(to, from, next) => {
                 asyncRouterFlag++
                 await store.dispatch('router/SetAsyncRouter')
                 const asyncRouters = store.getters['router/asyncRouters']
-                router.addRoutes(asyncRouters)
-                next({...to, replace: true })
+                asyncRouters.forEach(item => {
+                    router.addRoute(item)
+                })
+                next({ ...to, replace: true })
             } else {
-                next()
+                if (to.matched.length) {
+                    next()
+                } else {
+                    next({ path: "/layout/404" })
+                }
             }
         }
         // 不在白名单中并且未登陆的时候

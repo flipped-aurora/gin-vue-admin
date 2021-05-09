@@ -141,6 +141,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 > <font color=red>**使用docker-compose进行部署本项目需注意的问题**</font>
 
+- dockerfile_server使用了多阶段构建，这是docker 17.05后引入的，因此安装的docker版本需要高于17.05
 - mysql数据库请使用装在服务器磁盘的本地数据库.
 	- 避免使用docker容器内的mysql,可能会出现写入的问题, io比宿主机低  docker的持久化机制问题
 - [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)是给docker-compose进行<font color=red>体验本项目</font>的, 禁止[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)使用进行项目数据的初始化, 数据库初始化[请使用此方法](https://www.gin-vue-admin.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
@@ -165,7 +166,7 @@ npm run serve
 
 ### 2.2 server端
 
-使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin跟目录
+使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin 根目录
 
 ```bash
 # 使用 go.mod
@@ -222,12 +223,12 @@ zap:
 
 #### 2.3.1 安装 swagger
 
-##### （1）可以翻墙
+##### （1）可以科学上网
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-##### （2）无法翻墙
+##### （2）无法科学上网
 
 由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.io](https://goproxy.io/zh/)
 
@@ -248,7 +249,7 @@ go get -u github.com/swaggo/swag/cmd/swag
 cd server
 swag init
 ````
-执行上面的命令后，server目录下会出现docs文件夹，登录http://localhost:8888/swagger/index.html，即可查看swagger文档
+执行上面的命令后，server目录下会出现docs文件夹，登录 http://localhost:8888/swagger/index.html ，即可查看swagger文档
 
 
 ## 3. 技术选型

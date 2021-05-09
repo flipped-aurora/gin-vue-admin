@@ -3,10 +3,12 @@ package service
 import (
 	"database/sql"
 	"fmt"
+	"gin-vue-admin/config"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/source"
+	"gin-vue-admin/utils"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -19,8 +21,10 @@ import (
 //@param:
 //@return: error
 
-func writeConfig(viper *viper.Viper, conf map[string]interface{}) error {
-	for k, v := range conf {
+func writeConfig(viper *viper.Viper, mysql config.Mysql) error {
+	global.GVA_CONFIG.Mysql = mysql
+	cs := utils.StructToMap(global.GVA_CONFIG)
+	for k, v := range cs {
 		viper.Set(k, v)
 	}
 	return viper.WriteConfig()
@@ -37,7 +41,12 @@ func createTable(dsn string, driver string, createSql string) error {
 	if err != nil {
 		return err
 	}
-	defer db.Close()
+	defer func(db *sql.DB) {
+		err := db.Close()
+		if err != nil {
+
+		}
+	}(db)
 	if err = db.Ping(); err != nil {
 		return err
 	}
@@ -62,13 +71,12 @@ func initDB(InitDBFunctions ...model.InitDBFunc) (err error) {
 //@return: err error, treeMap map[string][]model.SysMenu
 
 func InitDB(conf request.InitDB) error {
-
-	baseSetting := map[string]interface{}{
-		"mysql.path":     "",
-		"mysql.db-name":  "",
-		"mysql.username": "",
-		"mysql.password": "",
-		"mysql.config":   "charset=utf8mb4&parseTime=True&loc=Local",
+	BaseMysql := config.Mysql{
+		Path:     "",
+		Dbname:   "",
+		Username: "",
+		Password: "",
+		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
 	}
 
 	if conf.Host == "" {
@@ -79,19 +87,20 @@ func InitDB(conf request.InitDB) error {
 		conf.Port = "3306"
 	}
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", conf.UserName, conf.Password, conf.Host, conf.Port)
-	fmt.Println(dsn)
 	createSql := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;", conf.DBName)
 	if err := createTable(dsn, "mysql", createSql); err != nil {
 		return err
 	}
-	setting := map[string]interface{}{
-		"mysql.path":     fmt.Sprintf("%s:%s", conf.Host, conf.Port),
-		"mysql.db-name":  conf.DBName,
-		"mysql.username": conf.UserName,
-		"mysql.password": conf.Password,
-		"mysql.config":   "charset=utf8mb4&parseTime=True&loc=Local",
+
+	MysqlConfig := config.Mysql{
+		Path:     fmt.Sprintf("%s:%s", conf.Host, conf.Port),
+		Dbname:   conf.DBName,
+		Username: conf.UserName,
+		Password: conf.Password,
+		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
 	}
-	if err := writeConfig(global.GVA_VP, setting); err != nil {
+
+	if err := writeConfig(global.GVA_VP, MysqlConfig); err != nil {
 		return err
 	}
 	m := global.GVA_CONFIG.Mysql
@@ -112,6 +121,7 @@ func InitDB(conf request.InitDB) error {
 		//global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
 		//os.Exit(0)
 		//return nil
+		_ = writeConfig(global.GVA_VP, BaseMysql)
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
@@ -137,6 +147,7 @@ func InitDB(conf request.InitDB) error {
 		model.SysOperationRecord{},
 	)
 	if err != nil {
+		_ = writeConfig(global.GVA_VP, BaseMysql)
 		return err
 	}
 	err = initDB(
@@ -152,7 +163,7 @@ func InitDB(conf request.InitDB) error {
 		source.File,
 		source.BaseMenu)
 	if err != nil {
-		_ = writeConfig(global.GVA_VP, baseSetting)
+		_ = writeConfig(global.GVA_VP, BaseMysql)
 		return err
 	}
 	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")

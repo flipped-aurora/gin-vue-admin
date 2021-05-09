@@ -247,7 +247,7 @@
           <el-input v-model="config.qiniu.imgPath"></el-input>
         </el-form-item>
         <el-form-item label="是否使用https">
-          <el-checkbox v-model="config.qiniu.imgPath">开启</el-checkbox>
+          <el-checkbox v-model="config.qiniu.useHttps">开启</el-checkbox>
         </el-form-item>
         <el-form-item label="accessKey">
           <el-input v-model="config.qiniu.accessKey"></el-input>

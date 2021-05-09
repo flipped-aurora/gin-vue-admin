@@ -51,4 +51,3 @@ func GetPolicyPathByAuthorityId(c *gin.Context) {
 	paths := service.GetPolicyPathByAuthorityId(casbin.AuthorityId)
 	response.OkWithDetailed(response.PolicyPathResponse{Paths: paths}, "获取成功", c)
 }
-

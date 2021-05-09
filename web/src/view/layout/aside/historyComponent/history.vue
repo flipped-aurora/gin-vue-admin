@@ -28,7 +28,11 @@
 </template>
 <script>
 import { mapGetters } from "vuex";
-
+ const getFmtString = (item)=>{
+         return item.name +
+            JSON.stringify(item.query) +
+            JSON.stringify(item.params)
+    }
 export default {
   name: "HistoryComponent",
   data() {
@@ -69,7 +73,7 @@ export default {
     this.historys =
       JSON.parse(sessionStorage.getItem("historys")) || initHistorys;
       if(!window.sessionStorage.getItem("activeValue")){
-        this.activeValue = this.$route.name + JSON.stringify(this.$route.query)+JSON.stringify(this.$route.params)
+        this.activeValue = getFmtString(this.$route)
       }else{
         this.activeValue = window.sessionStorage.getItem("activeValue");
       }
@@ -81,6 +85,7 @@ export default {
     this.$bus.off("mobile");
   },
   methods: {
+   
     openContextMenu(e) {
       if (this.historys.length == 1 && this.$route.name == this.defaultRouter) {
         return false;
@@ -119,27 +124,15 @@ export default {
     closeLeft() {
       let right;
       const rightIndex = this.historys.findIndex(item => {
-        if (
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.rightActive
-        ) {
+        if (getFmtString(item) == this.rightActive) {
           right = item;
         }
         return (
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.rightActive
+          getFmtString(item) == this.rightActive
         );
       });
       const activeIndex = this.historys.findIndex(
-        item =>
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.activeValue
+        item => getFmtString(item) == this.activeValue
       );
       this.historys.splice(0, rightIndex);
       if (rightIndex > activeIndex) {
@@ -150,27 +143,13 @@ export default {
     closeRight() {
       let right;
       const leftIndex = this.historys.findIndex(item => {
-        if (
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.rightActive
-        ) {
+        if ( getFmtString(item) ==  this.rightActive ) {
           right = item;
         }
-        return (
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.rightActive
-        );
+        return ( getFmtString(item) == this.rightActive );
       });
       const activeIndex = this.historys.findIndex(
-        item =>
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.activeValue
+        item => getFmtString(item) == this.activeValue
       );
       this.historys.splice(leftIndex + 1, this.historys.length);
       if (leftIndex < activeIndex) {
@@ -181,19 +160,11 @@ export default {
     closeOther() {
       let right;
       this.historys = this.historys.filter(item => {
-        if (
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.rightActive
+        if ( getFmtString(item) == this.rightActive
         ) {
           right = item;
         }
-        return (
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          this.rightActive
+        return ( getFmtString(item) == this.rightActive
         );
       });
       this.$router.push(right);
@@ -226,9 +197,7 @@ export default {
       }
       window.sessionStorage.setItem(
         "activeValue",
-        this.$route.name +
-          JSON.stringify(this.$route.query) +
-          JSON.stringify(this.$route.params)
+        getFmtString(this.$route)
       );
     },
     changeTab(component) {
@@ -241,17 +210,10 @@ export default {
     },
     removeTab(tab) {
       const index = this.historys.findIndex(
-        item =>
-          item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params) ==
-          tab
+        item => getFmtString(item) ==  tab
       );
       if (
-        this.$route.name +
-          JSON.stringify(this.$route.query) +
-          JSON.stringify(this.$route.params) ==
-        tab
+        getFmtString(this.$route) == tab
       ) {
         if (this.historys.length == 1) {
           this.$router.push({ name: this.defaultRouter });

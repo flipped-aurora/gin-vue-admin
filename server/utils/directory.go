@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/global"
 	"go.uber.org/zap"
 	"os"
 )

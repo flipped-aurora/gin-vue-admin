@@ -1,6 +1,6 @@
 package response
 
-import "github.com/eyotang/gin-vue-admin/server/config"
+import "github.com/eyotang/game-api-admin/server/config"
 
 type SysConfigResponse struct {
 	Config config.Server `json:"config"`

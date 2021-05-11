@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/api/v1"
+	"github.com/eyotang/game-api-admin/server/api/v1"
 
 	"github.com/gin-gonic/gin"
 )

@@ -2,8 +2,8 @@ package upload
 
 import (
 	"errors"
-	"github.com/eyotang/gin-vue-admin/server/global"
-	"github.com/eyotang/gin-vue-admin/server/utils"
+	"github.com/eyotang/game-api-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/utils"
 	"go.uber.org/zap"
 	"io"
 	"mime/multipart"

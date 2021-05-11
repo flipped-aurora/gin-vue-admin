@@ -3,7 +3,7 @@ package internal
 import (
 	"context"
 	"fmt"
-	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/global"
 	"go.uber.org/zap"
 	"gorm.io/gorm/logger"
 	"gorm.io/gorm/utils"

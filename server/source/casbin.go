@@ -1,7 +1,7 @@
 package source
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/global"
 
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"

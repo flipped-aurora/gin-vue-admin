@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/global"
-	"github.com/eyotang/gin-vue-admin/server/model/response"
-	"github.com/eyotang/gin-vue-admin/server/service"
+	"github.com/eyotang/game-api-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/model/response"
+	"github.com/eyotang/game-api-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

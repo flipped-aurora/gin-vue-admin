@@ -1,6 +1,6 @@
 package request
 
-import "github.com/eyotang/gin-vue-admin/server/model"
+import "github.com/eyotang/game-api-admin/server/model"
 
 type SysDictionarySearch struct {
 	model.SysDictionary

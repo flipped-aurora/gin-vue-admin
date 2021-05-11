@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/utils"
+	"github.com/eyotang/game-api-admin/server/utils"
 )
 
 //@author: [maplepie](https://github.com/maplepie)

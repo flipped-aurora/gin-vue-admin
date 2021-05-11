@@ -2,7 +2,7 @@ package upload
 
 import (
 	"errors"
-	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/global"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"go.uber.org/zap"
 	"mime/multipart"

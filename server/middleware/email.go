@@ -1,11 +1,11 @@
 package middleware
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/global"
-	"github.com/eyotang/gin-vue-admin/server/model"
-	"github.com/eyotang/gin-vue-admin/server/model/request"
-	"github.com/eyotang/gin-vue-admin/server/service"
-	"github.com/eyotang/gin-vue-admin/server/utils"
+	"github.com/eyotang/game-api-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/model"
+	"github.com/eyotang/game-api-admin/server/model/request"
+	"github.com/eyotang/game-api-admin/server/service"
+	"github.com/eyotang/game-api-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"io/ioutil"

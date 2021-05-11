@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"os/exec"
 
-	"github.com/eyotang/gin-vue-admin/server/model"
-	"github.com/eyotang/gin-vue-admin/server/model/request"
-	"github.com/eyotang/gin-vue-admin/server/service/shared"
+	"github.com/eyotang/game-api-admin/server/model"
+	"github.com/eyotang/game-api-admin/server/model/request"
+	"github.com/eyotang/game-api-admin/server/service/shared"
 
 	"github.com/cornelk/hashmap"
 	"github.com/gofrs/uuid"

@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/global"
 	"mime/multipart"
 	"net/http"
 	"net/url"

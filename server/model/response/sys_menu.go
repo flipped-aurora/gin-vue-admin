@@ -1,6 +1,6 @@
 package response
 
-import "github.com/eyotang/gin-vue-admin/server/model"
+import "github.com/eyotang/game-api-admin/server/model"
 
 type SysMenusResponse struct {
 	Menus []model.SysMenu `json:"menus"`

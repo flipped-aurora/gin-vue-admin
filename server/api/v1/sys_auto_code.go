@@ -3,11 +3,11 @@ package v1
 import (
 	"errors"
 	"fmt"
-	"github.com/eyotang/gin-vue-admin/server/global"
-	"github.com/eyotang/gin-vue-admin/server/model"
-	"github.com/eyotang/gin-vue-admin/server/model/response"
-	"github.com/eyotang/gin-vue-admin/server/service"
-	"github.com/eyotang/gin-vue-admin/server/utils"
+	"github.com/eyotang/game-api-admin/server/global"
+	"github.com/eyotang/game-api-admin/server/model"
+	"github.com/eyotang/game-api-admin/server/model/response"
+	"github.com/eyotang/game-api-admin/server/service"
+	"github.com/eyotang/game-api-admin/server/utils"
 	"net/url"
 	"os"
 

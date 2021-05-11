@@ -1,11 +1,11 @@
 package global
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/utils/timer"
+	"github.com/eyotang/game-api-admin/server/utils/timer"
 
 	"go.uber.org/zap"
 
-	"github.com/eyotang/gin-vue-admin/server/config"
+	"github.com/eyotang/game-api-admin/server/config"
 
 	"github.com/go-redis/redis"
 	"github.com/spf13/viper"

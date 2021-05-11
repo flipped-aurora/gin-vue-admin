@@ -3,9 +3,9 @@ package core
 import (
 	"flag"
 	"fmt"
-	"github.com/eyotang/gin-vue-admin/server/global"
-	_ "github.com/eyotang/gin-vue-admin/server/packfile"
-	"github.com/eyotang/gin-vue-admin/server/utils"
+	"github.com/eyotang/game-api-admin/server/global"
+	_ "github.com/eyotang/game-api-admin/server/packfile"
+	"github.com/eyotang/game-api-admin/server/utils"
 	"os"
 	"path/filepath"
 

@@ -1,7 +1,7 @@
 package shared
 
 import (
-	"github.com/eyotang/gin-vue-admin/server/service/proto"
+	"github.com/eyotang/game-api-admin/server/service/proto"
 
 	"golang.org/x/net/context"
 )

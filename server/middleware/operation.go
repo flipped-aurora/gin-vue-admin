@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"bytes"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/service"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/model"
+	"github.com/eyotang/gin-vue-admin/server/model/request"
+	"github.com/eyotang/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"io/ioutil"

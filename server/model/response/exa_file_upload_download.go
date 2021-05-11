@@ -1,6 +1,6 @@
 package response
 
-import "gin-vue-admin/model"
+import "github.com/eyotang/gin-vue-admin/server/model"
 
 type ExaFileResponse struct {
 	File model.ExaFileUploadAndDownload `json:"file"`

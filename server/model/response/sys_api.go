@@ -1,6 +1,6 @@
 package response
 
-import "gin-vue-admin/model"
+import "github.com/eyotang/gin-vue-admin/server/model"
 
 type SysAPIResponse struct {
 	Api model.SysApi `json:"api"`

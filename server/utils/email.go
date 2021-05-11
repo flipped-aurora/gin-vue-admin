@@ -6,7 +6,7 @@ import (
 	"net/smtp"
 	"strings"
 
-	"gin-vue-admin/global"
+	"github.com/eyotang/gin-vue-admin/server/global"
 
 	"github.com/jordan-wright/email"
 )

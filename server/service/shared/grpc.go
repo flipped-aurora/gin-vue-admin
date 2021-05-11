@@ -1,7 +1,7 @@
 package shared
 
 import (
-	"gin-vue-admin/service/proto"
+	"github.com/eyotang/gin-vue-admin/server/service/proto"
 
 	"golang.org/x/net/context"
 )

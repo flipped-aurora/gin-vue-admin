@@ -1,9 +1,9 @@
 package main
 
 import (
-	"gin-vue-admin/core"
-	"gin-vue-admin/global"
-	"gin-vue-admin/initialize"
+	"github.com/eyotang/gin-vue-admin/server/core"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/initialize"
 )
 
 // @title Swagger Example API

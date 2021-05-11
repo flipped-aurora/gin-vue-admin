@@ -3,7 +3,7 @@
 package utils
 
 import (
-	"gin-vue-admin/global"
+	"github.com/eyotang/gin-vue-admin/server/global"
 	zaprotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"go.uber.org/zap/zapcore"
 	"os"

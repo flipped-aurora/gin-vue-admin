@@ -1,7 +1,7 @@
 package response
 
 import (
-	"gin-vue-admin/model"
+	"github.com/eyotang/gin-vue-admin/server/model"
 )
 
 type SysUserResponse struct {

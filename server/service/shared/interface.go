@@ -5,7 +5,7 @@ import (
 	"context"
 	"net/rpc"
 
-	"gin-vue-admin/service/proto"
+	"github.com/eyotang/gin-vue-admin/server/service/proto"
 
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"

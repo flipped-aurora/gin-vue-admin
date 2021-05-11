@@ -2,9 +2,9 @@ package initialize
 
 import (
 	"fmt"
-	"gin-vue-admin/config"
-	"gin-vue-admin/global"
-	"gin-vue-admin/utils"
+	"github.com/eyotang/gin-vue-admin/server/config"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/utils"
 )
 
 func Timer() {

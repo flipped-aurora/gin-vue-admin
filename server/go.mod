@@ -1,4 +1,4 @@
-module gin-vue-admin
+module github.com/eyotang/gin-vue-admin/server
 
 go 1.14
 

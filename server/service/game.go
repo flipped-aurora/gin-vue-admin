@@ -98,12 +98,12 @@ func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConn
 	return
 }
 
-func CloseConnection(paramGame *request.ParamGame, connection *request.CloseConnection) (err error) {
+func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest) (err error) {
 	var (
 		client *plugin.Client
 		rpc    shared.Game
 		id     string
-		token  = connection.Token
+		token  = header.Token
 	)
 
 	if id, err = gameID(token); err != nil {
@@ -134,12 +134,12 @@ func CloseConnection(paramGame *request.ParamGame, connection *request.CloseConn
 	return
 }
 
-func GameRequest(paramRequest *request.ParamRequest, request *request.GameRequest) (err error, data interface{}) {
+func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamRequest, request *request.GameRequest) (err error, data interface{}) {
 	var (
 		id    string
 		rpc   shared.Game
 		body  []byte
-		token = request.Token
+		token = header.Token
 	)
 
 	if id, err = gameID(token); err != nil {

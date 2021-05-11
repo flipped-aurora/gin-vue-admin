@@ -1,6 +1,6 @@
 package request
 
-import "gin-vue-admin/model"
+import "github.com/eyotang/game-api-admin/server/model"
 
 type {{.StructName}}Search struct{
     model.{{.StructName}}

@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
-	"gin-vue-admin/service"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/model/request"
+	"github.com/eyotang/gin-vue-admin/server/model/response"
+	"github.com/eyotang/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 )
 

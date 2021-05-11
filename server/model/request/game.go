@@ -1,6 +1,6 @@
 package request
 
-import "gin-vue-admin/model"
+import "github.com/eyotang/gin-vue-admin/server/model"
 
 type ParamGame struct {
 	ID string `uri:"id" binding:"required"`

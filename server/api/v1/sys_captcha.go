@@ -1,8 +1,8 @@
 package v1
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/response"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/model/response"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"

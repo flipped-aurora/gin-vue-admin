@@ -1,10 +1,10 @@
 package service
 
 import (
-	"gin-vue-admin/config"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/utils"
+	"github.com/eyotang/gin-vue-admin/server/config"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/model"
+	"github.com/eyotang/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
 )
 

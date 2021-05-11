@@ -1,7 +1,7 @@
 package model
 
 import (
-	"gin-vue-admin/config"
+	"github.com/eyotang/gin-vue-admin/server/config"
 )
 
 // 配置文件结构体

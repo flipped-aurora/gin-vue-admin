@@ -3,9 +3,9 @@ package core
 import (
 	"flag"
 	"fmt"
-	"gin-vue-admin/global"
-	_ "gin-vue-admin/packfile"
-	"gin-vue-admin/utils"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	_ "github.com/eyotang/gin-vue-admin/server/packfile"
+	"github.com/eyotang/gin-vue-admin/server/utils"
 	"os"
 	"path/filepath"
 

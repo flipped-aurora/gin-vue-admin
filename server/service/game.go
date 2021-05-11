@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"os/exec"
 
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/service/shared"
+	"github.com/eyotang/gin-vue-admin/server/model"
+	"github.com/eyotang/gin-vue-admin/server/model/request"
+	"github.com/eyotang/gin-vue-admin/server/service/shared"
 
 	"github.com/cornelk/hashmap"
 	"github.com/gofrs/uuid"

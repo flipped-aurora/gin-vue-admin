@@ -1,8 +1,8 @@
 package source
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"github.com/eyotang/gin-vue-admin/server/global"
+	"github.com/eyotang/gin-vue-admin/server/model"
 	"github.com/gookit/color"
 )
 

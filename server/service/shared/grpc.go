@@ -17,7 +17,7 @@ func (m *GRPCClient) Open(host string, port uint32) error {
 	return err
 }
 
-func (m *GRPCClient) Close(token string) (string, error) {
+func (m *GRPCClient) Close() (string, error) {
 	rsp, err := m.client.Close(context.Background(), &proto.EmptyRequest{})
 	if err != nil {
 		return rsp.Message, err

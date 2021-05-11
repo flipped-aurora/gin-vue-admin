@@ -76,11 +76,13 @@ func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConn
 
 	rpcClient, err := client.Client()
 	if err != nil {
+		err = errors.Wrap(err, "New rpcClient failed!")
 		return
 	}
 
 	raw, err := rpcClient.Dispense("game_grpc")
 	if err != nil {
+		err = errors.Wrapf(err, "rpcClient Dispense '%s' failed!", "game_grpc")
 		return
 	}
 

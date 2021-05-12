@@ -70,6 +70,7 @@ local:
 
 # autocode configuration
 autocode:
+  transfer-restart: true
   root: ""
   server: /server
   server-api: /api/v1

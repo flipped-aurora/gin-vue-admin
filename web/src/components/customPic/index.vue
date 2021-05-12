@@ -33,7 +33,7 @@ export default {
     },
     data(){
         return{
-            path: path,
+            path: path + '/',
         }
     },
     computed:{

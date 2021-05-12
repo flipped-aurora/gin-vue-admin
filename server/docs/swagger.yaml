@@ -445,6 +445,7 @@ definitions:
           $ref: '#/definitions/model.SysAuthority'
         type: array
       createdAt:
+        description: 创建时间
         type: string
       dataAuthorityId:
         items:
@@ -463,6 +464,7 @@ definitions:
         description: 父角色ID
         type: string
       updatedAt:
+        description: 更新时间
         type: string
     type: object
   model.SysBaseMenu:
@@ -661,7 +663,7 @@ definitions:
         description: 主键ID
         type: integer
       nickName:
-        description: 用户昵称"
+        description: 用户昵称
         type: string
       updatedAt:
         description: 更新时间
@@ -952,6 +954,7 @@ definitions:
       authority:
         $ref: '#/definitions/model.SysAuthority'
       oldAuthorityId:
+        description: 旧角色ID
         type: string
     type: object
 info:

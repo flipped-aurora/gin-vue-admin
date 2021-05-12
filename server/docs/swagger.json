@@ -3379,6 +3379,7 @@
                     }
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "dataAuthorityId": {
@@ -3405,6 +3406,7 @@
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3679,7 +3681,7 @@
                     "type": "integer"
                 },
                 "nickName": {
-                    "description": "用户昵称\"",
+                    "description": "用户昵称",
                     "type": "string"
                 },
                 "updatedAt": {
@@ -4088,6 +4090,7 @@
                     "$ref": "#/definitions/model.SysAuthority"
                 },
                 "oldAuthorityId": {
+                    "description": "旧角色ID",
                     "type": "string"
                 }
             }

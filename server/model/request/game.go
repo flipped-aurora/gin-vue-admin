@@ -19,8 +19,3 @@ type CreateConnection struct {
 	Host string `json:"host" form:"host" binding:"required"`
 	Port uint32 `json:"port" form:"port" binding:"required"`
 }
-
-type GameResponse struct {
-	Name string      `json:"name"`
-	Data interface{} `json:"data"`
-}

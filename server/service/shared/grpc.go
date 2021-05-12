@@ -52,7 +52,7 @@ func (m *GRPCClient) Request(name string, data []byte) ([]byte, error) {
 		Data: data,
 	})
 	if err != nil {
-		return rsp.Data, err
+		return nil, err
 	}
 	return rsp.Data, nil
 }

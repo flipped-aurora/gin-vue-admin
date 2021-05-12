@@ -98,7 +98,7 @@ timer:
 zap:
   level: info
   format: console
-  prefix: '[GIN-VUE-ADMIN]'
+  prefix: '[GAME-API-ADMIN]'
   director: log
   link-name: latest_log
   showLine: true

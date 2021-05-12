@@ -1,10 +1,30 @@
 package shared
 
 import (
-	"github.com/eyotang/game-api-admin/server/service/proto"
+	"context"
 
-	"golang.org/x/net/context"
+	"github.com/eyotang/game-api-admin/server/service/proto"
+	"github.com/hashicorp/go-plugin"
+	"google.golang.org/grpc"
 )
+
+// This is the implementation of plugin.GRPCPlugin so we can serve/consume this.
+type GameGRPCPlugin struct {
+	// GRPCPlugin must still implement the Plugin interface
+	plugin.Plugin
+	// Concrete implementation, written in Go. This is only used for plugins
+	// that are written in Go.
+	Impl Game
+}
+
+func (p *GameGRPCPlugin) GRPCServer(broker *plugin.GRPCBroker, s *grpc.Server) error {
+	proto.RegisterGameServer(s, &GRPCServer{Impl: p.Impl})
+	return nil
+}
+
+func (p *GameGRPCPlugin) GRPCClient(ctx context.Context, broker *plugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
+	return &GRPCClient{client: proto.NewGameClient(c)}, nil
+}
 
 // GRPCClient is an implementation of Game that talks over RPC.
 type GRPCClient struct{ client proto.GameClient }

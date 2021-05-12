@@ -23,3 +23,8 @@ type CreateConnection struct {
 type GameRequest struct {
 	Data interface{} `json:"data" binding:"required"`
 }
+
+type GameResponse struct {
+	Name string      `json:"name"`
+	Data interface{} `json:"data"`
+}

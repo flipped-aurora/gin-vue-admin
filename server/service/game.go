@@ -67,11 +67,10 @@ func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConn
 	}
 
 	client := plugin.NewClient(&plugin.ClientConfig{
-		HandshakeConfig: shared.Handshake,
-		Plugins:         shared.PluginMap,
-		Cmd:             exec.Command("sh", "-c", game.PluginPath),
-		AllowedProtocols: []plugin.Protocol{
-			plugin.ProtocolNetRPC, plugin.ProtocolGRPC},
+		HandshakeConfig:  shared.Handshake,
+		Plugins:          shared.PluginMap,
+		Cmd:              exec.Command("sh", "-c", game.PluginPath),
+		AllowedProtocols: []plugin.Protocol{plugin.ProtocolGRPC},
 	})
 
 	rpcClient, err := client.Client()
@@ -136,11 +135,12 @@ func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest
 	return
 }
 
-func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamRequest, request *request.GameRequest) (err error, data interface{}) {
+func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamRequest, req *request.GameRequest) (err error, rsp *request.GameResponse) {
 	var (
 		id    string
 		rpc   shared.Game
 		body  []byte
+		data  []byte
 		token = header.Token
 	)
 
@@ -156,14 +156,19 @@ func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamReque
 		return
 	}
 
-	if body, err = json.Marshal(request.Data); err != nil {
-		err = errors.Wrapf(err, "Marshal json failed! data: %s", request.Data)
+	if body, err = json.Marshal(req); err != nil {
+		err = errors.Wrapf(err, "Marshal json failed! req: %s", req)
 		return
 	}
 
 	if data, err = rpc.Request(paramRequest.Name, body); err != nil {
 		err = errors.Wrapf(err, "rpc close failed, body: %s", data)
 		return err, nil
+	}
+
+	rsp = &request.GameResponse{}
+	if err = json.Unmarshal(data, rsp); err != nil {
+		return
 	}
 
 	return

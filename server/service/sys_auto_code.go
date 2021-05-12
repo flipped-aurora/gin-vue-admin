@@ -146,6 +146,11 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		if err != nil {
 			return err
 		}
+		if global.GVA_CONFIG.AutoCode.TransferRestart {
+			go func() {
+				_ = utils.Reload()
+			}()
+		}
 		return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
 		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {

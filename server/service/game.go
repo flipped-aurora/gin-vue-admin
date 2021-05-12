@@ -135,7 +135,7 @@ func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest
 	return
 }
 
-func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamRequest, req *request.GameRequest) (err error, rsp *request.GameResponse) {
+func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req *request.GameRequest) (err error, rsp *request.GameResponse) {
 	var (
 		id    string
 		rpc   shared.Game
@@ -147,8 +147,8 @@ func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamReque
 	if id, err = gameID(token); err != nil {
 		return
 	}
-	if id != paramRequest.ID {
-		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, paramRequest.ID)
+	if id != param.ID {
+		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, param.ID)
 		return
 	}
 
@@ -161,7 +161,7 @@ func GameRequest(header *request.HeaderRequest, paramRequest *request.ParamReque
 		return
 	}
 
-	if data, err = rpc.Request(paramRequest.Name, body); err != nil {
+	if data, err = rpc.Request(param.Name, body); err != nil {
 		err = errors.Wrapf(err, "rpc close failed, body: %s", data)
 		return err, nil
 	}

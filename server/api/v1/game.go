@@ -77,6 +77,7 @@ func GameRequest(c *gin.Context) {
 		response.FailWithDetailed(err.Error(), "头部校验错误", c)
 		return
 	}
+
 	if err, data := service.GameRequest(&header, &param, &body); err != nil {
 		global.GVA_LOG.Error("发送请求失败!", zap.Any("err", err))
 		response.FailWithDetailed(err.Error(), "发送请求失败", c)

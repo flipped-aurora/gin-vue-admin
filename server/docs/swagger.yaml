@@ -45,10 +45,10 @@ definitions:
   config.Captcha:
     properties:
       imgHeight:
-        description: 图片高度
+        description: 验证码高度
         type: integer
       imgWidth:
-        description: 图片宽度
+        description: 验证码宽度
         type: integer
       keyLong:
         description: 验证码长度
@@ -57,16 +57,19 @@ definitions:
   config.Casbin:
     properties:
       modelPath:
-        description: Model路径
+        description: 存放casbin模型的相对路径
         type: string
     type: object
   config.Detail:
     properties:
       compareField:
+        description: 需要比较时间的字段
         type: string
       interval:
+        description: 时间间隔
         type: string
       tableName:
+        description: 需要清理的表名
         type: string
     type: object
   config.Email:
@@ -90,7 +93,7 @@ definitions:
         description: 密钥
         type: string
       to:
-        description: 收件人
+        description: 收件人:多个以英文逗号分隔
         type: string
     type: object
   config.Excel:
@@ -119,17 +122,21 @@ definitions:
   config.Mysql:
     properties:
       config:
+        description: 高级配置
         type: string
       dbname:
         description: 数据库名
         type: string
       logMode:
+        description: 是否开启Gorm全局日志
         type: boolean
       logZap:
         type: string
       maxIdleConns:
+        description: 空闲中的最大连接数
         type: integer
       maxOpenConns:
+        description: 打开到数据库的最大连接数
         type: integer
       password:
         description: 数据库密码
@@ -144,7 +151,7 @@ definitions:
   config.Qiniu:
     properties:
       accessKey:
-        description: accessKey
+        description: 秘钥AK
         type: string
       bucket:
         description: 空间名称
@@ -153,7 +160,7 @@ definitions:
         description: CDN加速域名
         type: string
       secretKey:
-        description: secretKey
+        description: 秘钥SK
         type: string
       useCdnDomains:
         description: 上传是否使用CDN上传加速
@@ -171,6 +178,7 @@ definitions:
         description: 服务器地址:端口
         type: string
       db:
+        description: redis的哪个数据库
         type: integer
       password:
         description: 密码
@@ -252,8 +260,10 @@ definitions:
           $ref: '#/definitions/config.Detail'
         type: array
       spec:
+        description: CRON表达式
         type: string
       start:
+        description: 是否启用
         type: boolean
     type: object
   config.Zap:

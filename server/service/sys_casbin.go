@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"strings"
+	"sync"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/util"
@@ -89,11 +90,18 @@ func ClearCasbin(v int, p ...string) bool {
 //@description: 持久化到数据库  引入自定义规则
 //@return: *casbin.Enforcer
 
+var (
+	e    *casbin.Enforcer
+	once sync.Once
+)
+
 func Casbin() *casbin.Enforcer {
-	admin := global.GVA_CONFIG.Mysql
-	a, _ := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
-	e, _ := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
-	e.AddFunction("ParamsMatch", ParamsMatchFunc)
+	once.Do(func() {
+		admin := global.GVA_CONFIG.Mysql
+		a, _ := gormadapter.NewAdapter(global.GVA_CONFIG.System.DbType, admin.Username+":"+admin.Password+"@("+admin.Path+")/"+admin.Dbname, true)
+		e, _ = casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+		e.AddFunction("ParamsMatch", ParamsMatchFunc)
+	})
 	_ = e.LoadPolicy()
 	return e
 }

@@ -177,7 +177,7 @@ export default {
           type: "success",
           message: "删除成功"
         });
-        if (this.tableData.length == ids.length) {
+        if (this.tableData.length == ids.length && this.page > 1) {
           this.page--;
         }
         this.deleteVisible = false;
@@ -192,7 +192,7 @@ export default {
           type: "success",
           message: "删除成功"
         });
-        if (this.tableData.length == 1) {
+        if (this.tableData.length == 1 && this.page > 1 ) {
           this.page--;
         }
         this.getTableData();

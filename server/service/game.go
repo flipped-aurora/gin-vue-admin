@@ -137,11 +137,12 @@ func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest
 	return
 }
 
-func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, body []byte) (err error, rsp *shared.GameResponse) {
+func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req *shared.GameRequest) (err error, rsp *shared.GameResponse) {
 	var (
 		id    string
 		rpc   shared.Game
 		data  []byte
+		body  []byte
 		token = header.Token
 	)
 
@@ -157,6 +158,9 @@ func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, bod
 		return
 	}
 
+	if body, err = json.Marshal(req); err != nil {
+		return
+	}
 	global.GVA_LOG.Info("请求消息", zap.ByteString("req", body))
 
 	if data, err = rpc.Request(param.Name, body); err != nil {

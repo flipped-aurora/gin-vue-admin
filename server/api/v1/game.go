@@ -1,12 +1,11 @@
 package v1
 
 import (
-	"io/ioutil"
-
 	"github.com/eyotang/game-api-admin/server/global"
 	"github.com/eyotang/game-api-admin/server/model/request"
 	"github.com/eyotang/game-api-admin/server/model/response"
 	"github.com/eyotang/game-api-admin/server/service"
+	"github.com/eyotang/game-api-admin/server/service/shared"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -60,10 +59,10 @@ func CloseConnection(c *gin.Context) {
 
 func GameRequest(c *gin.Context) {
 	var (
-		err    error
-		param  request.ParamRequest
-		body   []byte
-		header request.HeaderRequest
+		err     error
+		param   request.ParamRequest
+		header  request.HeaderRequest
+		request shared.GameRequest
 	)
 
 	if err = c.ShouldBindUri(&param); err != nil {
@@ -76,14 +75,13 @@ func GameRequest(c *gin.Context) {
 		response.FailWithDetailed(err.Error(), "头部校验错误", c)
 		return
 	}
-
-	if body, err = ioutil.ReadAll(c.Request.Body); err != nil {
-		global.GVA_LOG.Error("包体读取错误！", zap.String("err", err.Error()))
-		response.FailWithDetailed(err.Error(), "包体读取错误", c)
+	if err = c.ShouldBindJSON(&request); err != nil {
+		global.GVA_LOG.Error("Body校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "Body校验错误", c)
 		return
 	}
 
-	if err, data := service.GameRequest(&header, &param, body); err != nil {
+	if err, data := service.GameRequest(&header, &param, &request); err != nil {
 		global.GVA_LOG.Error("发送请求失败!", zap.Any("err", err))
 		response.FailWithDetailed(err.Error(), "发送请求失败", c)
 	} else {

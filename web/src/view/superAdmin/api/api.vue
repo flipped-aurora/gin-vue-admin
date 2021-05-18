@@ -199,7 +199,7 @@ export default {
             type:"success",
             message:res.msg
           })
-         if (this.tableData.length == ids.length) {
+         if (this.tableData.length == ids.length && this.page > 1) {
               this.page--;
           }
           this.deleteVisible = false
@@ -236,10 +236,10 @@ export default {
     openDialog(type) {
       switch (type) {
         case "addApi":
-          this.dialogTitlethis = "新增Api";
+          this.dialogTitle = "新增Api";
           break;
         case "edit":
-          this.dialogTitlethis = "编辑Api";
+          this.dialogTitle = "编辑Api";
           break;
         default:
           break;
@@ -265,7 +265,7 @@ export default {
               type: "success",
               message: "删除成功!"
             });
-            if (this.tableData.length == 1) {
+            if (this.tableData.length == 1 && this.page > 1 ) {
               this.page--;
             }
             this.getTableData();

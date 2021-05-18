@@ -5,10 +5,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
-	"os"
-	"os/exec"
-	"runtime"
-	"strconv"
+	"gin-vue-admin/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -54,13 +51,7 @@ func SetSystemConfig(c *gin.Context) {
 // @Success 200 {string} string "{"code":0,"data":{},"msg":"重启系统成功"}"
 // @Router /system/reloadSystem [post]
 func ReloadSystem(c *gin.Context) {
-	if runtime.GOOS == "windows" {
-		response.FailWithMessage("系统不支持", c)
-		return
-	}
-	pid := os.Getpid()
-	cmd := exec.Command("kill", "-1", strconv.Itoa(pid))
-	err := cmd.Run()
+	err := utils.Reload()
 	if err != nil {
 		global.GVA_LOG.Error("重启系统失败!", zap.Any("err", err))
 		response.FailWithMessage("重启系统失败", c)

@@ -175,6 +175,8 @@ func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req
 		return
 	}
 
+	global.GVA_LOG.Info("json.Unmarshal result", zap.Reflect("response", rsp))
+
 	return
 }
 

@@ -6,6 +6,7 @@ import (
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
 	"strings"
+	"sync"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/util"
@@ -89,10 +90,17 @@ func ClearCasbin(v int, p ...string) bool {
 //@description: 持久化到数据库  引入自定义规则
 //@return: *casbin.Enforcer
 
+var (
+	e    *casbin.Enforcer
+	once sync.Once
+)
+
 func Casbin() *casbin.Enforcer {
-	a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
-	e, _ := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
-	e.AddFunction("ParamsMatch", ParamsMatchFunc)
+	once.Do(func() {
+		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
+		e, _ = casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+		e.AddFunction("ParamsMatch", ParamsMatchFunc)
+	})
 	_ = e.LoadPolicy()
 	return e
 }

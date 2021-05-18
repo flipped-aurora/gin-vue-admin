@@ -1,6 +1,6 @@
 <template>
   <el-drawer title="媒体库" :visible.sync="drawer">
-    <div style="display:flex;justify-content:space-around;flex-wrap:wrap;padding-top:40px">
+    <div class="media">
       <el-image
         class="header-img-box-list"
         :src="(item.url && item.url.slice(0, 4) !== 'http')?path+item.url:item.url"
@@ -49,13 +49,20 @@ export default {
 </script>
 
 <style lang="scss">
-.header-img-box-list {
-  width: 180px;
-  height: 180px;
-  border: 1px dashed #ccc;
-  border-radius: 20px;
-  text-align: center;
-  line-height: 180px;
-  cursor: pointer;
+.media{
+  display:flex;
+  flex-wrap:wrap;
+  .header-img-box-list {
+    margin-top: 20px;
+    width: 120px;
+    margin-left: 20px;
+    height: 120px;
+    border: 1px dashed #ccc;
+    border-radius: 20px;
+    text-align: center;
+    line-height: 180px;
+    cursor: pointer;
 }
+}
+
 </style>

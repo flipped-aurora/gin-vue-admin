@@ -4,7 +4,6 @@
         "description": "This is a sample Server pets",
         "title": "Swagger Example API",
         "contact": {},
-        "license": {},
         "version": "0.0.1"
     },
     "basePath": "/",
@@ -33,7 +32,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysApi"
                         }
                     }
@@ -72,7 +70,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysApi"
                         }
                     }
@@ -111,7 +108,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.IdsReq"
                         }
                     }
@@ -177,7 +173,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -216,7 +211,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SearchApiParams"
                         }
                     }
@@ -255,7 +249,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysApi"
                         }
                     }
@@ -294,7 +287,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/response.SysAuthorityCopyResponse"
                         }
                     }
@@ -333,7 +325,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -372,7 +363,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -411,7 +401,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -450,7 +439,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -489,7 +477,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysAuthority"
                         }
                     }
@@ -528,7 +515,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.AutoCodeStruct"
                         }
                     }
@@ -648,7 +634,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.AutoCodeStruct"
                         }
                     }
@@ -706,7 +691,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.Login"
                         }
                     }
@@ -745,7 +729,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
@@ -784,7 +767,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.CasbinInReceive"
                         }
                     }
@@ -823,7 +805,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -860,7 +841,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -897,7 +877,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -934,7 +913,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaCustomer"
                         }
                     }
@@ -973,7 +951,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -1039,7 +1016,9 @@
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1067,13 +1046,14 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExcelInfo"
                         }
                     }
                 ],
                 "responses": {
-                    "200": {}
+                    "200": {
+                        "description": ""
+                    }
                 }
             }
         },
@@ -1194,7 +1174,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.ExaFileUploadAndDownload"
                         }
                     }
@@ -1269,7 +1248,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -1391,7 +1369,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.InitDB"
                         }
                     }
@@ -1457,7 +1434,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetAuthorityId"
                         }
                     }
@@ -1496,7 +1472,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
@@ -1535,7 +1510,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.AddMenuAuthorityInfo"
                         }
                     }
@@ -1574,7 +1548,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -1613,7 +1586,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -1649,7 +1621,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.Empty"
                         }
                     }
@@ -1685,7 +1656,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.Empty"
                         }
                     }
@@ -1724,7 +1694,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -1763,7 +1732,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysBaseMenu"
                         }
                     }
@@ -1904,7 +1872,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -1943,7 +1910,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -1982,7 +1948,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -2021,7 +1986,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SysDictionarySearch"
                         }
                     }
@@ -2060,7 +2024,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionary"
                         }
                     }
@@ -2099,7 +2062,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -2138,7 +2100,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -2177,7 +2138,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -2216,7 +2176,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SysDictionaryDetailSearch"
                         }
                     }
@@ -2255,7 +2214,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysDictionaryDetail"
                         }
                     }
@@ -2294,7 +2252,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysOperationRecord"
                         }
                     }
@@ -2333,7 +2290,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysOperationRecord"
                         }
                     }
@@ -2372,7 +2328,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.IdsReq"
                         }
                     }
@@ -2411,7 +2366,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysOperationRecord"
                         }
                     }
@@ -2450,7 +2404,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SysOperationRecordSearch"
                         }
                     }
@@ -2558,7 +2511,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.System"
                         }
                     }
@@ -2594,7 +2546,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.ChangePasswordStruct"
                         }
                     }
@@ -2633,7 +2584,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.GetById"
                         }
                     }
@@ -2672,7 +2622,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.PageInfo"
                         }
                     }
@@ -2703,7 +2652,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysUser"
                         }
                     }
@@ -2742,7 +2690,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/request.SetUserAuth"
                         }
                     }
@@ -2781,7 +2728,6 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object",
                             "$ref": "#/definitions/model.SysUser"
                         }
                     }
@@ -2866,12 +2812,15 @@
             "type": "object",
             "properties": {
                 "imgHeight": {
+                    "description": "验证码高度",
                     "type": "integer"
                 },
                 "imgWidth": {
+                    "description": "验证码宽度",
                     "type": "integer"
                 },
                 "keyLong": {
+                    "description": "验证码长度",
                     "type": "integer"
                 }
             }
@@ -2880,6 +2829,24 @@
             "type": "object",
             "properties": {
                 "modelPath": {
+                    "description": "存放casbin模型的相对路径",
+                    "type": "string"
+                }
+            }
+        },
+        "config.Detail": {
+            "type": "object",
+            "properties": {
+                "compareField": {
+                    "description": "需要比较时间的字段",
+                    "type": "string"
+                },
+                "interval": {
+                    "description": "时间间隔",
+                    "type": "string"
+                },
+                "tableName": {
+                    "description": "需要清理的表名",
                     "type": "string"
                 }
             }
@@ -2888,24 +2855,31 @@
             "type": "object",
             "properties": {
                 "from": {
+                    "description": "收件人",
                     "type": "string"
                 },
                 "host": {
+                    "description": "服务器地址",
                     "type": "string"
                 },
                 "isSSL": {
+                    "description": "是否SSL",
                     "type": "boolean"
                 },
                 "nickname": {
+                    "description": "昵称",
                     "type": "string"
                 },
                 "port": {
+                    "description": "端口",
                     "type": "integer"
                 },
                 "secret": {
+                    "description": "密钥",
                     "type": "string"
                 },
                 "to": {
+                    "description": "收件人:多个以英文逗号分隔",
                     "type": "string"
                 }
             }
@@ -2922,12 +2896,15 @@
             "type": "object",
             "properties": {
                 "bufferTime": {
+                    "description": "缓冲时间",
                     "type": "integer"
                 },
                 "expiresTime": {
+                    "description": "过期时间",
                     "type": "integer"
                 },
                 "signingKey": {
+                    "description": "jwt签名",
                     "type": "string"
                 }
             }
@@ -2936,6 +2913,7 @@
             "type": "object",
             "properties": {
                 "path": {
+                    "description": "本地文件路径",
                     "type": "string"
                 }
             }
@@ -2944,30 +2922,38 @@
             "type": "object",
             "properties": {
                 "config": {
+                    "description": "高级配置",
                     "type": "string"
                 },
                 "dbname": {
+                    "description": "数据库名",
                     "type": "string"
                 },
                 "logMode": {
+                    "description": "是否开启Gorm全局日志",
                     "type": "boolean"
                 },
                 "logZap": {
                     "type": "string"
                 },
                 "maxIdleConns": {
+                    "description": "空闲中的最大连接数",
                     "type": "integer"
                 },
                 "maxOpenConns": {
+                    "description": "打开到数据库的最大连接数",
                     "type": "integer"
                 },
                 "password": {
+                    "description": "数据库密码",
                     "type": "string"
                 },
                 "path": {
+                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "username": {
+                    "description": "数据库用户名",
                     "type": "string"
                 }
             }
@@ -2976,24 +2962,31 @@
             "type": "object",
             "properties": {
                 "accessKey": {
+                    "description": "秘钥AK",
                     "type": "string"
                 },
                 "bucket": {
+                    "description": "空间名称",
                     "type": "string"
                 },
                 "imgPath": {
+                    "description": "CDN加速域名",
                     "type": "string"
                 },
                 "secretKey": {
+                    "description": "秘钥SK",
                     "type": "string"
                 },
                 "useCdnDomains": {
+                    "description": "上传是否使用CDN上传加速",
                     "type": "boolean"
                 },
                 "useHttps": {
+                    "description": "是否使用https",
                     "type": "boolean"
                 },
                 "zone": {
+                    "description": "存储区域",
                     "type": "string"
                 }
             }
@@ -3002,12 +2995,15 @@
             "type": "object",
             "properties": {
                 "addr": {
+                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "db": {
+                    "description": "redis的哪个数据库",
                     "type": "integer"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 }
             }
@@ -3016,62 +3012,51 @@
             "type": "object",
             "properties": {
                 "aliyunOSS": {
-                    "type": "object",
                     "$ref": "#/definitions/config.AliyunOSS"
                 },
                 "autoCode": {
                     "description": "auto",
-                    "type": "object",
                     "$ref": "#/definitions/config.Autocode"
                 },
                 "captcha": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Captcha"
                 },
                 "casbin": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Casbin"
                 },
                 "email": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Email"
                 },
                 "excel": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Excel"
                 },
                 "jwt": {
-                    "type": "object",
                     "$ref": "#/definitions/config.JWT"
                 },
                 "local": {
                     "description": "oss",
-                    "type": "object",
                     "$ref": "#/definitions/config.Local"
                 },
                 "mysql": {
                     "description": "gorm",
-                    "type": "object",
                     "$ref": "#/definitions/config.Mysql"
                 },
                 "qiniu": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Qiniu"
                 },
                 "redis": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Redis"
                 },
                 "system": {
-                    "type": "object",
                     "$ref": "#/definitions/config.System"
                 },
                 "tencentCOS": {
-                    "type": "object",
                     "$ref": "#/definitions/config.TencentCOS"
                 },
+                "timer": {
+                    "$ref": "#/definitions/config.Timer"
+                },
                 "zap": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Zap"
                 }
             }
@@ -3080,18 +3065,23 @@
             "type": "object",
             "properties": {
                 "addr": {
+                    "description": "端口值",
                     "type": "integer"
                 },
                 "dbType": {
+                    "description": "数据库类型:mysql(默认)|sqlite|sqlserver|postgresql",
                     "type": "string"
                 },
                 "env": {
+                    "description": "环境值",
                     "type": "string"
                 },
                 "ossType": {
+                    "description": "Oss类型",
                     "type": "string"
                 },
                 "useMultipoint": {
+                    "description": "多点登录拦截",
                     "type": "boolean"
                 }
             }
@@ -3119,34 +3109,62 @@
                 }
             }
         },
+        "config.Timer": {
+            "type": "object",
+            "properties": {
+                "detail": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.Detail"
+                    }
+                },
+                "spec": {
+                    "description": "CRON表达式",
+                    "type": "string"
+                },
+                "start": {
+                    "description": "是否启用",
+                    "type": "boolean"
+                }
+            }
+        },
         "config.Zap": {
             "type": "object",
             "properties": {
                 "director": {
+                    "description": "日志文件夹",
                     "type": "string"
                 },
                 "encodeLevel": {
+                    "description": "编码级",
                     "type": "string"
                 },
                 "format": {
+                    "description": "输出",
                     "type": "string"
                 },
                 "level": {
+                    "description": "级别",
                     "type": "string"
                 },
                 "linkName": {
+                    "description": "软链接名称",
                     "type": "string"
                 },
                 "logInConsole": {
+                    "description": "输出控制台",
                     "type": "boolean"
                 },
                 "prefix": {
+                    "description": "日志前缀",
                     "type": "string"
                 },
                 "showLine": {
+                    "description": "显示行",
                     "type": "boolean"
                 },
                 "stacktraceKey": {
+                    "description": "栈名",
                     "type": "string"
                 }
             }
@@ -3155,15 +3173,19 @@
             "type": "object",
             "properties": {
                 "abbreviation": {
+                    "description": "Struct简称",
                     "type": "string"
                 },
                 "autoCreateApiToSql": {
+                    "description": "是否自动创建api",
                     "type": "boolean"
                 },
                 "autoMoveFile": {
+                    "description": "是否自动移动文件",
                     "type": "boolean"
                 },
                 "description": {
+                    "description": "Struct中文名称",
                     "type": "string"
                 },
                 "fields": {
@@ -3173,12 +3195,15 @@
                     }
                 },
                 "packageName": {
+                    "description": "文件名称",
                     "type": "string"
                 },
                 "structName": {
+                    "description": "Struct名称",
                     "type": "string"
                 },
                 "tableName": {
+                    "description": "表名",
                     "type": "string"
                 }
             }
@@ -3187,28 +3212,35 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "customerName": {
+                    "description": "客户名",
                     "type": "string"
                 },
                 "customerPhoneData": {
+                    "description": "客户手机号",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "sysUser": {
-                    "type": "object",
+                    "description": "管理详情",
                     "$ref": "#/definitions/model.SysUser"
                 },
                 "sysUserAuthorityID": {
+                    "description": "管理角色ID",
                     "type": "string"
                 },
                 "sysUserId": {
+                    "description": "管理ID",
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3217,24 +3249,31 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "key": {
+                    "description": "编号",
                     "type": "string"
                 },
                 "name": {
+                    "description": "文件名",
                     "type": "string"
                 },
                 "tag": {
+                    "description": "文件标签",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "url": {
+                    "description": "文件地址",
                     "type": "string"
                 }
             }
@@ -3243,6 +3282,7 @@
             "type": "object",
             "properties": {
                 "fileName": {
+                    "description": "文件名",
                     "type": "string"
                 },
                 "infoList": {
@@ -3257,33 +3297,43 @@
             "type": "object",
             "properties": {
                 "columnName": {
+                    "description": "数据库字段",
                     "type": "string"
                 },
                 "comment": {
+                    "description": "数据库字段描述",
                     "type": "string"
                 },
                 "dataType": {
+                    "description": "数据库字段类型",
                     "type": "string"
                 },
                 "dataTypeLong": {
+                    "description": "数据库字段长度",
                     "type": "string"
                 },
                 "dictType": {
+                    "description": "字典",
                     "type": "string"
                 },
                 "fieldDesc": {
+                    "description": "中文名",
                     "type": "string"
                 },
                 "fieldJson": {
+                    "description": "FieldJson",
                     "type": "string"
                 },
                 "fieldName": {
+                    "description": "Field名",
                     "type": "string"
                 },
                 "fieldSearchType": {
+                    "description": "搜索条件",
                     "type": "string"
                 },
                 "fieldType": {
+                    "description": "Field数据类型",
                     "type": "string"
                 }
             }
@@ -3292,24 +3342,31 @@
             "type": "object",
             "properties": {
                 "apiGroup": {
+                    "description": "api组",
                     "type": "string"
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "description": {
+                    "description": "api中文描述",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "method": {
+                    "description": "方法:创建POST(默认)|查看GET|更新PUT|删除DELETE",
                     "type": "string"
                 },
                 "path": {
+                    "description": "api路径",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3318,9 +3375,11 @@
             "type": "object",
             "properties": {
                 "authorityId": {
+                    "description": "角色ID",
                     "type": "string"
                 },
                 "authorityName": {
+                    "description": "角色名",
                     "type": "string"
                 },
                 "children": {
@@ -3330,6 +3389,7 @@
                     }
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "dataAuthorityId": {
@@ -3339,6 +3399,7 @@
                     }
                 },
                 "defaultRouter": {
+                    "description": "默认菜单(默认dashboard)",
                     "type": "string"
                 },
                 "deletedAt": {
@@ -3351,9 +3412,11 @@
                     }
                 },
                 "parentId": {
+                    "description": "父角色ID",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3374,30 +3437,39 @@
                     }
                 },
                 "closeTab": {
+                    "description": "自动关闭tab",
                     "type": "boolean"
                 },
                 "component": {
+                    "description": "对应前端文件路径",
                     "type": "string"
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "defaultMenu": {
+                    "description": "是否是基础路由（开发中）",
                     "type": "boolean"
                 },
                 "hidden": {
+                    "description": "是否在列表隐藏",
                     "type": "boolean"
                 },
                 "icon": {
+                    "description": "菜单图标",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "keepAlive": {
+                    "description": "是否缓存",
                     "type": "boolean"
                 },
                 "name": {
+                    "description": "路由name",
                     "type": "string"
                 },
                 "parameters": {
@@ -3407,18 +3479,23 @@
                     }
                 },
                 "parentId": {
+                    "description": "父菜单ID",
                     "type": "string"
                 },
                 "path": {
+                    "description": "路由path",
                     "type": "string"
                 },
                 "sort": {
+                    "description": "排序标记",
                     "type": "integer"
                 },
                 "title": {
+                    "description": "菜单名",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3427,24 +3504,30 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "key": {
+                    "description": "地址栏携带参数的key",
                     "type": "string"
                 },
                 "sysBaseMenuID": {
                     "type": "integer"
                 },
                 "type": {
+                    "description": "地址栏携带参数为params还是query",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "value": {
+                    "description": "地址栏携带参数的值",
                     "type": "string"
                 }
             }
@@ -3453,18 +3536,23 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "desc": {
+                    "description": "描述",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "name": {
+                    "description": "字典名（中）",
                     "type": "string"
                 },
                 "status": {
+                    "description": "状态",
                     "type": "boolean"
                 },
                 "sysDictionaryDetails": {
@@ -3474,9 +3562,11 @@
                     }
                 },
                 "type": {
+                    "description": "字典名（英）",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3485,27 +3575,35 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "label": {
+                    "description": "展示值",
                     "type": "string"
                 },
                 "sort": {
+                    "description": "排序标记",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "启用状态",
                     "type": "boolean"
                 },
                 "sysDictionaryID": {
+                    "description": "关联标记",
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "value": {
+                    "description": "字典值",
                     "type": "integer"
                 }
             }
@@ -3514,46 +3612,58 @@
             "type": "object",
             "properties": {
                 "agent": {
+                    "description": "代理",
                     "type": "string"
                 },
                 "body": {
+                    "description": "请求Body",
                     "type": "string"
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "error_message": {
+                    "description": "错误信息",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "ip": {
+                    "description": "请求ip",
                     "type": "string"
                 },
                 "latency": {
+                    "description": "延迟",
                     "type": "string"
                 },
                 "method": {
+                    "description": "请求方法",
                     "type": "string"
                 },
                 "path": {
+                    "description": "请求路径",
                     "type": "string"
                 },
                 "resp": {
+                    "description": "响应Body",
                     "type": "string"
                 },
                 "status": {
+                    "description": "请求状态",
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "user": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysUser"
                 },
                 "user_id": {
+                    "description": "用户id",
                     "type": "integer"
                 }
             }
@@ -3562,31 +3672,38 @@
             "type": "object",
             "properties": {
                 "authority": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysAuthority"
                 },
                 "authorityId": {
+                    "description": "用户角色ID",
                     "type": "string"
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "headerImg": {
+                    "description": "用户头像",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "nickName": {
+                    "description": "用户昵称",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "userName": {
+                    "description": "用户登录名",
                     "type": "string"
                 },
                 "uuid": {
+                    "description": "用户UUID",
                     "type": "string"
                 }
             }
@@ -3595,7 +3712,6 @@
             "type": "object",
             "properties": {
                 "config": {
-                    "type": "object",
                     "$ref": "#/definitions/config.Server"
                 }
             }
@@ -3604,6 +3720,7 @@
             "type": "object",
             "properties": {
                 "authorityId": {
+                    "description": "角色ID",
                     "type": "string"
                 },
                 "menus": {
@@ -3618,6 +3735,7 @@
             "type": "object",
             "properties": {
                 "authorityId": {
+                    "description": "权限id",
                     "type": "string"
                 },
                 "casbinInfos": {
@@ -3632,9 +3750,11 @@
             "type": "object",
             "properties": {
                 "method": {
+                    "description": "方法",
                     "type": "string"
                 },
                 "path": {
+                    "description": "路径",
                     "type": "string"
                 }
             }
@@ -3643,12 +3763,15 @@
             "type": "object",
             "properties": {
                 "newPassword": {
+                    "description": "新密码",
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
@@ -3660,6 +3783,7 @@
             "type": "object",
             "properties": {
                 "authorityId": {
+                    "description": "角色ID",
                     "type": "string"
                 }
             }
@@ -3668,6 +3792,7 @@
             "type": "object",
             "properties": {
                 "id": {
+                    "description": "主键ID",
                     "type": "number"
                 }
             }
@@ -3691,18 +3816,23 @@
             ],
             "properties": {
                 "dbName": {
+                    "description": "数据库名",
                     "type": "string"
                 },
                 "host": {
+                    "description": "服务器地址",
                     "type": "string"
                 },
                 "password": {
+                    "description": "数据库密码",
                     "type": "string"
                 },
                 "port": {
+                    "description": "数据库连接端口",
                     "type": "string"
                 },
                 "userName": {
+                    "description": "数据库用户名",
                     "type": "string"
                 }
             }
@@ -3711,15 +3841,19 @@
             "type": "object",
             "properties": {
                 "captcha": {
+                    "description": "验证码",
                     "type": "string"
                 },
                 "captchaId": {
+                    "description": "验证码ID",
                     "type": "string"
                 },
                 "password": {
+                    "description": "密码",
                     "type": "string"
                 },
                 "username": {
+                    "description": "用户名",
                     "type": "string"
                 }
             }
@@ -3728,9 +3862,11 @@
             "type": "object",
             "properties": {
                 "page": {
+                    "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "每页大小",
                     "type": "integer"
                 }
             }
@@ -3739,36 +3875,47 @@
             "type": "object",
             "properties": {
                 "apiGroup": {
+                    "description": "api组",
                     "type": "string"
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "desc": {
+                    "description": "排序方式:升序false(默认)|降序true",
                     "type": "boolean"
                 },
                 "description": {
+                    "description": "api中文描述",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "method": {
+                    "description": "方法:创建POST(默认)|查看GET|更新PUT|删除DELETE",
                     "type": "string"
                 },
                 "orderKey": {
+                    "description": "排序",
                     "type": "string"
                 },
                 "page": {
+                    "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "每页大小",
                     "type": "integer"
                 },
                 "path": {
+                    "description": "api路径",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3777,9 +3924,11 @@
             "type": "object",
             "properties": {
                 "authorityId": {
+                    "description": "角色ID",
                     "type": "string"
                 },
                 "uuid": {
+                    "description": "用户UUID",
                     "type": "string"
                 }
             }
@@ -3788,33 +3937,43 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "label": {
+                    "description": "展示值",
                     "type": "string"
                 },
                 "page": {
+                    "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "每页大小",
                     "type": "integer"
                 },
                 "sort": {
+                    "description": "排序标记",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "启用状态",
                     "type": "boolean"
                 },
                 "sysDictionaryID": {
+                    "description": "关联标记",
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "value": {
+                    "description": "字典值",
                     "type": "integer"
                 }
             }
@@ -3823,24 +3982,31 @@
             "type": "object",
             "properties": {
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "desc": {
+                    "description": "描述",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "name": {
+                    "description": "字典名（中）",
                     "type": "string"
                 },
                 "page": {
+                    "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "每页大小",
                     "type": "integer"
                 },
                 "status": {
+                    "description": "状态",
                     "type": "boolean"
                 },
                 "sysDictionaryDetails": {
@@ -3850,9 +4016,11 @@
                     }
                 },
                 "type": {
+                    "description": "字典名（英）",
                     "type": "string"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 }
             }
@@ -3861,52 +4029,66 @@
             "type": "object",
             "properties": {
                 "agent": {
+                    "description": "代理",
                     "type": "string"
                 },
                 "body": {
+                    "description": "请求Body",
                     "type": "string"
                 },
                 "createdAt": {
+                    "description": "创建时间",
                     "type": "string"
                 },
                 "error_message": {
+                    "description": "错误信息",
                     "type": "string"
                 },
                 "id": {
+                    "description": "主键ID",
                     "type": "integer"
                 },
                 "ip": {
+                    "description": "请求ip",
                     "type": "string"
                 },
                 "latency": {
+                    "description": "延迟",
                     "type": "string"
                 },
                 "method": {
+                    "description": "请求方法",
                     "type": "string"
                 },
                 "page": {
+                    "description": "页码",
                     "type": "integer"
                 },
                 "pageSize": {
+                    "description": "每页大小",
                     "type": "integer"
                 },
                 "path": {
+                    "description": "请求路径",
                     "type": "string"
                 },
                 "resp": {
+                    "description": "响应Body",
                     "type": "string"
                 },
                 "status": {
+                    "description": "请求状态",
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "description": "更新时间",
                     "type": "string"
                 },
                 "user": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysUser"
                 },
                 "user_id": {
+                    "description": "用户id",
                     "type": "integer"
                 }
             }
@@ -3915,10 +4097,10 @@
             "type": "object",
             "properties": {
                 "authority": {
-                    "type": "object",
                     "$ref": "#/definitions/model.SysAuthority"
                 },
                 "oldAuthorityId": {
+                    "description": "旧角色ID",
                     "type": "string"
                 }
             }

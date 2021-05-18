@@ -2812,11 +2812,11 @@
             "type": "object",
             "properties": {
                 "imgHeight": {
-                    "description": "图片高度",
+                    "description": "验证码高度",
                     "type": "integer"
                 },
                 "imgWidth": {
-                    "description": "图片宽度",
+                    "description": "验证码宽度",
                     "type": "integer"
                 },
                 "keyLong": {
@@ -2829,7 +2829,7 @@
             "type": "object",
             "properties": {
                 "modelPath": {
-                    "description": "Model路径",
+                    "description": "存放casbin模型的相对路径",
                     "type": "string"
                 }
             }
@@ -2838,12 +2838,15 @@
             "type": "object",
             "properties": {
                 "compareField": {
+                    "description": "需要比较时间的字段",
                     "type": "string"
                 },
                 "interval": {
+                    "description": "时间间隔",
                     "type": "string"
                 },
                 "tableName": {
+                    "description": "需要清理的表名",
                     "type": "string"
                 }
             }
@@ -2876,7 +2879,7 @@
                     "type": "string"
                 },
                 "to": {
-                    "description": "收件人",
+                    "description": "收件人:多个以英文逗号分隔",
                     "type": "string"
                 }
             }
@@ -2919,6 +2922,7 @@
             "type": "object",
             "properties": {
                 "config": {
+                    "description": "高级配置",
                     "type": "string"
                 },
                 "dbname": {
@@ -2926,15 +2930,18 @@
                     "type": "string"
                 },
                 "logMode": {
+                    "description": "是否开启Gorm全局日志",
                     "type": "boolean"
                 },
                 "logZap": {
                     "type": "string"
                 },
                 "maxIdleConns": {
+                    "description": "空闲中的最大连接数",
                     "type": "integer"
                 },
                 "maxOpenConns": {
+                    "description": "打开到数据库的最大连接数",
                     "type": "integer"
                 },
                 "password": {
@@ -2955,7 +2962,7 @@
             "type": "object",
             "properties": {
                 "accessKey": {
-                    "description": "accessKey",
+                    "description": "秘钥AK",
                     "type": "string"
                 },
                 "bucket": {
@@ -2967,7 +2974,7 @@
                     "type": "string"
                 },
                 "secretKey": {
-                    "description": "secretKey",
+                    "description": "秘钥SK",
                     "type": "string"
                 },
                 "useCdnDomains": {
@@ -2992,6 +2999,7 @@
                     "type": "string"
                 },
                 "db": {
+                    "description": "redis的哪个数据库",
                     "type": "integer"
                 },
                 "password": {
@@ -3111,9 +3119,11 @@
                     }
                 },
                 "spec": {
+                    "description": "CRON表达式",
                     "type": "string"
                 },
                 "start": {
+                    "description": "是否启用",
                     "type": "boolean"
                 }
             }

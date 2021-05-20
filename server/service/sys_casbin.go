@@ -91,9 +91,8 @@ func ClearCasbin(v int, p ...string) bool {
 //@return: *casbin.Enforcer
 
 var (
-	e     *casbin.Enforcer
-	once  sync.Once
-	eLock sync.Mutex
+	e    *casbin.Enforcer
+	once sync.Once
 )
 
 func Casbin() *casbin.Enforcer {

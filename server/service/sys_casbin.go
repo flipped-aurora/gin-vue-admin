@@ -91,8 +91,9 @@ func ClearCasbin(v int, p ...string) bool {
 //@return: *casbin.Enforcer
 
 var (
-	e    *casbin.Enforcer
-	once sync.Once
+	e     *casbin.Enforcer
+	once  sync.Once
+	eLock sync.Mutex
 )
 
 func Casbin() *casbin.Enforcer {
@@ -101,7 +102,9 @@ func Casbin() *casbin.Enforcer {
 		e, _ = casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
 		e.AddFunction("ParamsMatch", ParamsMatchFunc)
 	})
+	eLock.Lock()
 	_ = e.LoadPolicy()
+	eLock.Unlock()
 	return e
 }
 

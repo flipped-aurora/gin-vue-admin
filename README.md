@@ -223,12 +223,12 @@ zap:
 
 #### 2.3.1 安装 swagger
 
-##### （1）可以科学上网
+##### （1）可以访问外国网站
 ````
 go get -u github.com/swaggo/swag/cmd/swag
 ````
 
-##### （2）无法科学上网
+##### （2）无法访问外国网站
 
 由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.io](https://goproxy.io/zh/)
 

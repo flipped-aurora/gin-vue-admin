@@ -10,6 +10,7 @@ import (
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	_ "github.com/go-sql-driver/mysql"
 	"strings"
+	"sync"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -88,12 +89,19 @@ func ClearCasbin(v int, p ...string) bool {
 //@description: 持久化到数据库  引入自定义规则
 //@return: *casbin.Enforcer
 
-func Casbin() *casbin.Enforcer {
-	a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
-	e, _ := casbin.NewEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
-	e.AddFunction("ParamsMatch", ParamsMatchFunc)
-	_ = e.LoadPolicy()
-	return e
+var (
+	syncedEnforcer *casbin.SyncedEnforcer
+	once           sync.Once
+)
+
+func Casbin() *casbin.SyncedEnforcer {
+	once.Do(func() {
+		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
+		syncedEnforcer, _ = casbin.NewSyncedEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+		syncedEnforcer.AddFunction("ParamsMatch", ParamsMatchFunc)
+	})
+	_ = syncedEnforcer.LoadPolicy()
+	return syncedEnforcer
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

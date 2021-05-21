@@ -7,22 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-//func (sa *SysApi) AfterCreate(tx *gorm.DB) (err error) {
-//	cr:=gormadapter.CasbinRule{
-//		PType:       "p",
-//		V0: "888",
-//		V1:          sa.Path,
-//		V2:          sa.Method,
-//	}
-//	fmt.Println(cr)
-//	err=tx.FirstOrCreate(&cr,&cr).Error
-//	if err != nil {
-//		global.GVA_LOG.Error("新建API，自动授权失败", zap.Any("erro", err))
-//	} else {
-//		global.GVA_LOG.Info("新建API，自动授权成功")
-//	}
-//	return nil
-//}
+
 func (sa *SysApi) AfterCreate(tx *gorm.DB) (err error) {
 		cr:=gormadapter.CasbinRule{
 			PType:       "p",
@@ -31,7 +16,7 @@ func (sa *SysApi) AfterCreate(tx *gorm.DB) (err error) {
 			V2:          sa.Method,
 		}
 	gva := global.GVA_CONFIG.Mysql.Dbname
-	if tx.Model(gormadapter.CasbinRule{}).Debug().Where(cr).First(&gormadapter.CasbinRule{}).RowsAffected > 0 {
+	if tx.Model(gormadapter.CasbinRule{}).Where(cr).First(&gormadapter.CasbinRule{}).RowsAffected > 0 {
 		//global.GVA_LOG.Info("casbin already exist")
 		return nil
 	}

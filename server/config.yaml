@@ -120,7 +120,8 @@ excel:
 
 # timer task db clear table
 Timer:
-  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron?utm_source=godoc
+  start: true
+  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
   detail: [
     # tableName: 需要清理的表名
     # compareField: 需要比较时间的字段

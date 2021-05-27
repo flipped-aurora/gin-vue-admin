@@ -1,6 +1,7 @@
 package service
 
 import (
+	"bytes"
 	"encoding/json"
 	"os/exec"
 
@@ -171,11 +172,13 @@ func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req
 	global.GVA_LOG.Info("响应消息", zap.ByteString("rsp", data))
 
 	rsp = &shared.GameResponse{}
-	if err = json.Unmarshal(data, rsp); err != nil {
+	d := json.NewDecoder(bytes.NewReader(data))
+	d.UseNumber()
+	if err = d.Decode(rsp); err != nil {
 		return
 	}
 
-	global.GVA_LOG.Info("json.Unmarshal result", zap.Reflect("response", rsp))
+	global.GVA_LOG.Info("解码消息", zap.Any("response", rsp))
 
 	return
 }

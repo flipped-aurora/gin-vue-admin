@@ -14,6 +14,7 @@
       class="image-uploader"
       :action="`${path}/fileUploadAndDownload/upload`"
       :headers="{ 'x-token': token }"
+      :data="{'path':path}"
       :show-file-list="false"
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"

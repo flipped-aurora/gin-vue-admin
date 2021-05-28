@@ -3,7 +3,7 @@
     <div class="media">
       <el-image
         class="header-img-box-list"
-        :src="(item.url && item.url.slice(0, 4) !== 'http')?path+item.url:item.url"
+        :src="item.url"
         v-for="(item,key) in picList"
         :key="key"
         @click.native="chooseImg(item.url,target,targetKey)"

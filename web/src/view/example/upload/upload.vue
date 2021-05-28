@@ -7,6 +7,7 @@
             :action="`${path}/fileUploadAndDownload/upload`"
             :before-upload="checkFile"
             :headers="{ 'x-token': token }"
+            :data="{'path':path}"
             :on-error="uploadError"
             :on-success="uploadSuccess"
             :show-file-list="false"
@@ -90,7 +91,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters("user", ["userInfo", "token"])
+    ...mapGetters("user", ["token"])
   },
   filters: {
     formatDate: function(time) {

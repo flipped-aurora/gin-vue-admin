@@ -71,11 +71,14 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 //@param: header *multipart.FileHeader, noSave string
 //@return: err error, file model.ExaFileUploadAndDownload
 
-func UploadFile(header *multipart.FileHeader, noSave string) (err error, file model.ExaFileUploadAndDownload) {
+func UploadFile(header *multipart.FileHeader, noSave, path string) (err error, file model.ExaFileUploadAndDownload) {
 	oss := upload.NewOss()
 	filePath, key, uploadErr := oss.UploadFile(header)
 	if uploadErr != nil {
 		panic(err)
+	}
+	if path != "" {
+		filePath = path + filePath
 	}
 	if noSave == "0" {
 		s := strings.Split(header.Filename, ".")

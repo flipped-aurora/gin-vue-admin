@@ -6,9 +6,9 @@ import (
 )
 
 func InitInitRouter(Router *gin.RouterGroup) {
-	ApiRouter := Router.Group("init")
+	InitRouter := Router.Group("init")
 	{
-		ApiRouter.POST("initdb", v1.InitDB)   // 创建Api
-		ApiRouter.POST("checkdb", v1.CheckDB) // 创建Api
+		InitRouter.POST("initdb", v1.InitDB)   // 创建Api
+		InitRouter.POST("checkdb", v1.CheckDB) // 创建Api
 	}
 }

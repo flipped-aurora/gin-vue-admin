@@ -32,7 +32,7 @@ func Login(c *gin.Context) {
 	if store.Verify(L.CaptchaId, L.Captcha, true) {
 		U := &model.SysUser{Username: L.Username, Password: L.Password}
 		if err, user := service.Login(U); err != nil {
-			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误", zap.Any("err", err))
+			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
 		} else {
 			tokenNext(c, *user)
@@ -60,7 +60,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 	}
 	token, err := j.CreateToken(claims)
 	if err != nil {
-		global.GVA_LOG.Error("获取token失败", zap.Any("err", err))
+		global.GVA_LOG.Error("获取token失败!", zap.Any("err", err))
 		response.FailWithMessage("获取token失败", c)
 		return
 	}
@@ -74,7 +74,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 	}
 	if err, jwtStr := service.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := service.SetRedisJWT(token, user.Username); err != nil {
-			global.GVA_LOG.Error("设置登录状态失败", zap.Any("err", err))
+			global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
@@ -84,7 +84,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
 		}, "登录成功", c)
 	} else if err != nil {
-		global.GVA_LOG.Error("设置登录状态失败", zap.Any("err", err))
+		global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
 		response.FailWithMessage("设置登录状态失败", c)
 	} else {
 		var blackJWT model.JwtBlacklist
@@ -121,7 +121,7 @@ func Register(c *gin.Context) {
 	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
 	err, userReturn := service.Register(*user)
 	if err != nil {
-		global.GVA_LOG.Error("注册失败", zap.Any("err", err))
+		global.GVA_LOG.Error("注册失败!", zap.Any("err", err))
 		response.FailWithDetailed(response.SysUserResponse{User: userReturn}, "注册失败", c)
 	} else {
 		response.OkWithDetailed(response.SysUserResponse{User: userReturn}, "注册成功", c)
@@ -144,7 +144,7 @@ func ChangePassword(c *gin.Context) {
 	}
 	U := &model.SysUser{Username: user.Username, Password: user.Password}
 	if err, _ := service.ChangePassword(U, user.NewPassword); err != nil {
-		global.GVA_LOG.Error("修改失败", zap.Any("err", err))
+		global.GVA_LOG.Error("修改失败!", zap.Any("err", err))
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 	} else {
 		response.OkWithMessage("修改成功", c)
@@ -167,7 +167,7 @@ func GetUserList(c *gin.Context) {
 		return
 	}
 	if err, list, total := service.GetUserInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败", zap.Any("err", err))
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
@@ -195,7 +195,7 @@ func SetUserAuthority(c *gin.Context) {
 		return
 	}
 	if err := service.SetUserAuthority(sua.UUID, sua.AuthorityId); err != nil {
-		global.GVA_LOG.Error("修改失败", zap.Any("err", err))
+		global.GVA_LOG.Error("修改失败!", zap.Any("err", err))
 		response.FailWithMessage("修改失败", c)
 	} else {
 		response.OkWithMessage("修改成功", c)
@@ -246,7 +246,7 @@ func SetUserInfo(c *gin.Context) {
 		return
 	}
 	if err, ReqUser := service.SetUserInfo(user); err != nil {
-		global.GVA_LOG.Error("设置失败", zap.Any("err", err))
+		global.GVA_LOG.Error("设置失败!", zap.Any("err", err))
 		response.FailWithMessage("设置失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "设置成功", c)
@@ -256,7 +256,7 @@ func SetUserInfo(c *gin.Context) {
 // 从Gin的Context中获取从jwt解析出来的用户ID
 func getUserID(c *gin.Context) uint {
 	if claims, exists := c.Get("claims"); !exists {
-		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户ID失败, 请检查路由是否使用jwt中间件")
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户ID失败, 请检查路由是否使用jwt中间件!")
 		return 0
 	} else {
 		waitUse := claims.(*request.CustomClaims)
@@ -267,7 +267,7 @@ func getUserID(c *gin.Context) uint {
 // 从Gin的Context中获取从jwt解析出来的用户UUID
 func getUserUuid(c *gin.Context) string {
 	if claims, exists := c.Get("claims"); !exists {
-		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件")
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件!")
 		return ""
 	} else {
 		waitUse := claims.(*request.CustomClaims)
@@ -278,7 +278,7 @@ func getUserUuid(c *gin.Context) string {
 // 从Gin的Context中获取从jwt解析出来的用户角色id
 func getUserAuthorityId(c *gin.Context) string {
 	if claims, exists := c.Get("claims"); !exists {
-		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件")
+		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件!")
 		return ""
 	} else {
 		waitUse := claims.(*request.CustomClaims)

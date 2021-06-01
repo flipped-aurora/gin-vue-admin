@@ -42,22 +42,22 @@ func CheckFileMd5(md5 string) (err error, uploads []model.ExaSimpleUploader, isD
 func MergeFileMd5(md5 string, fileName string) (err error) {
 	finishDir := "./finish/"
 	dir := "./chunk/" + md5
-	//如果文件上传成功 不做后续操作 通知成功即可
+	// 如果文件上传成功 不做后续操作 通知成功即可
 	if !errors.Is(global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
 
-	//打开切片文件夹
+	// 打开切片文件夹
 	rd, err := ioutil.ReadDir(dir)
 	_ = os.MkdirAll(finishDir, os.ModePerm)
-	//创建目标文件
+	// 创建目标文件
 	fd, err := os.OpenFile(finishDir+fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		return
 	}
-	//关闭文件
+	// 关闭文件
 	defer fd.Close()
-	//将切片文件按照顺序写入
+	// 将切片文件按照顺序写入
 	for k := range rd {
 		content, _ := ioutil.ReadFile(dir + "/" + fileName + strconv.Itoa(k+1))
 		_, err = fd.Write(content)
@@ -70,7 +70,7 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 		return err
 	}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		//删除切片信息
+		// 删除切片信息
 		if err = tx.Delete(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, false).Error; err != nil {
 			fmt.Println(err)
 			return err
@@ -89,6 +89,6 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 		return nil
 	})
 
-	err = os.RemoveAll(dir) //清除切片
+	err = os.RemoveAll(dir) // 清除切片
 	return err
 }

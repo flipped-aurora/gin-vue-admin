@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -81,7 +80,7 @@ func UpdateExaCustomer(c *gin.Context) {
 	}
 	if err := service.UpdateExaCustomer(&customer); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
-		response.FailWithMessage("更新失败!", c)
+		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
 	}
@@ -129,7 +128,7 @@ func GetExaCustomerList(c *gin.Context) {
 	err, customerList, total := service.GetCustomerInfoList(getUserAuthorityId(c), pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
-		response.FailWithMessage(fmt.Sprintf("获取失败：%v", err), c)
+		response.FailWithMessage("获取失败"+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     customerList,

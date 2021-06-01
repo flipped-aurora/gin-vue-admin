@@ -26,7 +26,7 @@ func (*AliyunOSS) UploadFile(file *multipart.FileHeader) (string, string, error)
 		return "", "", errors.New("function file.Open() Failed, err:" + openError.Error())
 	}
 
-	//上传阿里云路径 文件名格式 自己可以改 建议保证唯一性
+	// 上传阿里云路径 文件名格式 自己可以改 建议保证唯一性
 	yunFileTmpPath := filepath.Join("uploads", time.Now().Format("2006-01-02")) + "/" + file.Filename
 
 	// 上传文件流。

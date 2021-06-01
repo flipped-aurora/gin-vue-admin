@@ -71,8 +71,7 @@ func (*Qiniu) DeleteFile(key string) error {
 //@object: *Qiniu
 //@function: qiniuConfig
 //@description: 根据配置文件进行返回七牛云的配置
-//@param: key string
-//@return: error
+//@return: *storage.Config
 
 func qiniuConfig() *storage.Config {
 	cfg := storage.Config{

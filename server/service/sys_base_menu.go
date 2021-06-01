@@ -34,7 +34,7 @@ func DeleteBaseMenu(id float64) (err error) {
 //@function: UpdateBaseMenu
 //@description: 更新路由
 //@param: menu model.SysBaseMenu
-//@return:err error
+//@return: err error
 
 func UpdateBaseMenu(menu model.SysBaseMenu) (err error) {
 	var oldMenu model.SysBaseMenu

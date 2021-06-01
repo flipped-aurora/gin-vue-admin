@@ -58,6 +58,8 @@ var authorityMenus = []AuthorityMenus{
 	{"9528", 15},
 	{"9528", 16},
 	{"9528", 17},
+	// 自定义角色菜单
+	{"888", 24},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

@@ -161,6 +161,14 @@ var carbines = []gormadapter.CasbinRule{
 	{Ptype: "p", V0: "9528", V1: "/customer/customer", V2: "GET"},
 	{Ptype: "p", V0: "9528", V1: "/customer/customerList", V2: "GET"},
 	{Ptype: "p", V0: "9528", V1: "/autoCode/createTemp", V2: "POST"},
+
+	// 权限管理
+	{Ptype: "p", V0: "888", V1: "/productPlugin/createProductPlugin", V2: "POST"},
+	{Ptype: "p", V0: "888", V1: "/productPlugin/deleteProductPlugin", V2: "DELETE"},
+	{Ptype: "p", V0: "888", V1: "/productPlugin/deleteProductPluginByIds", V2: "DELETE"},
+	{Ptype: "p", V0: "888", V1: "/productPlugin/findProductPlugin", V2: "GET"},
+	{Ptype: "p", V0: "888", V1: "/productPlugin/getProductPluginList", V2: "GET"},
+	{Ptype: "p", V0: "888", V1: "/productPlugin/updateProductPlugin", V2: "PUT"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

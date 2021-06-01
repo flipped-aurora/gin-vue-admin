@@ -145,6 +145,9 @@ func InitDB(conf request.InitDB) error {
 		model.ExaSimpleUploader{},
 		model.ExaCustomer{},
 		model.SysOperationRecord{},
+
+		// 自定义表
+		model.ProductPlugin{},
 	)
 	if err != nil {
 		_ = writeConfig(global.GVA_VP, BaseMysql)

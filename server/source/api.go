@@ -86,6 +86,15 @@ var apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 83, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/excel/exportExcel", "导出excel", "excel", "POST"},
 	{global.GVA_MODEL{ID: 84, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/excel/downloadTemplate", "下载excel模板", "excel", "GET"},
 	{global.GVA_MODEL{ID: 85, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/deleteApisByIds", "批量删除api", "api", "DELETE"},
+
+	// 自定义前端路由
+	// 游戏产品插件
+	{global.GVA_MODEL{ID: 86, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/productPlugin/createProductPlugin", "新增产品插件", "productPlugin", "POST"},
+	{global.GVA_MODEL{ID: 87, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/productPlugin/deleteProductPlugin", "删除产品插件", "productPlugin", "DELETE"},
+	{global.GVA_MODEL{ID: 88, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/productPlugin/deleteProductPluginByIds", "批量删除产品插件", "productPlugin", "DELETE"},
+	{global.GVA_MODEL{ID: 89, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/productPlugin/updateProductPlugin", "更新产品插件", "productPlugin", "PUT"},
+	{global.GVA_MODEL{ID: 90, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/productPlugin/findProductPlugin", "根据ID获取产品插件", "productPlugin", "GET"},
+	{global.GVA_MODEL{ID: 91, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/productPlugin/getProductPluginList", "获取产品插件列表", "productPlugin", "GET"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

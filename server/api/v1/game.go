@@ -75,6 +75,7 @@ func GameRequest(c *gin.Context) {
 		response.FailWithDetailed(err.Error(), "头部校验错误", c)
 		return
 	}
+
 	if err = c.ShouldBindJSON(&request); err != nil {
 		global.GVA_LOG.Error("Body校验错误！", zap.String("err", err.Error()))
 		response.FailWithDetailed(err.Error(), "Body校验错误", c)

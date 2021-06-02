@@ -159,17 +159,15 @@ func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req
 		return
 	}
 
+	global.GVA_LOG.Info("请求消息", zap.Any("request", req))
 	if body, err = json.Marshal(req); err != nil {
 		return
 	}
-	global.GVA_LOG.Info("请求消息", zap.ByteString("req", body))
 
 	if data, err = rpc.Request(param.Name, body); err != nil {
 		err = errors.Wrapf(err, "rpc request failed, name: %s", param.Name)
 		return err, nil
 	}
-
-	global.GVA_LOG.Info("响应消息", zap.ByteString("rsp", data))
 
 	rsp = &shared.GameResponse{}
 	d := json.NewDecoder(bytes.NewReader(data))
@@ -178,7 +176,7 @@ func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req
 		return
 	}
 
-	global.GVA_LOG.Info("解码消息", zap.Any("response", rsp))
+	global.GVA_LOG.Info("响应消息", zap.Any("response", rsp))
 
 	return
 }

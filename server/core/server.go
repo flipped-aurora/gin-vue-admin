@@ -2,10 +2,13 @@ package core
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/eyotang/game-api-admin/server/global"
 	"github.com/eyotang/game-api-admin/server/initialize"
+
+	"github.com/gin-gonic/gin/binding"
 	"go.uber.org/zap"
-	"time"
 )
 
 type server interface {
@@ -22,6 +25,7 @@ func RunWindowsServer() {
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
 	s := initServer(address, Router)
+	binding.EnableDecoderUseNumber = true
 	// 保证文本顺序输出
 	// In order to ensure that the text order output can be deleted
 	time.Sleep(10 * time.Microsecond)

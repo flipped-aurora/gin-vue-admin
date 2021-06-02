@@ -1,40 +1,42 @@
 <template>
   <div>
     <div class="clearflex">
-      <el-button @click="relation" class="fl-right" size="small" type="primary">确 定</el-button>
+      <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
     <el-tree
+      ref="menuTree"
       :data="menuTreeData"
       :default-checked-keys="menuTreeIds"
       :props="menuDefaultProps"
-      @check="nodeChange"
       default-expand-all
       highlight-current
       node-key="ID"
-      ref="menuTree"
       show-checkbox
+      @check="nodeChange"
     >
-     <span class="custom-tree-node" slot-scope="{ node , data }">
+      <span slot-scope="{ node , data }" class="custom-tree-node">
         <span>{{ node.label }}</span>
         <span>
           <el-button
             type="text"
             size="mini"
-            :style="{color:row.defaultRouter == data.name?'#E6A23C':'#85ce61'}"
+            :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
             :disabled="!node.checked"
-            @click="() => setDefault(data)">
-            {{row.defaultRouter == data.name?"首页":"设为首页"}}
+            @click="() => setDefault(data)"
+          >
+            {{ row.defaultRouter === data.name?"首页":"设为首页" }}
           </el-button>
         </span>
       </span>
     </el-tree>
   </div>
 </template>
+
 <script>
 import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
 import {
-  updateAuthority,
-} from "@/api/authority";
+  updateAuthority
+} from '@/api/authority'
 export default {
   name: 'Menus',
   props: {
@@ -49,42 +51,12 @@ export default {
     return {
       menuTreeData: [],
       menuTreeIds: [],
-      needConfirm:false,
+      needConfirm: false,
       menuDefaultProps: {
         children: 'children',
-        label: function(data){
+        label: function(data) {
           return data.meta.title
         }
-      }
-    }
-  },
-  methods: {
-    async setDefault(data){
-      const res = await updateAuthority({authorityId: this.row.authorityId,AuthorityName: this.row.authorityName,parentId: this.row.parentId,defaultRouter:data.name})
-      if(res.code == 0){
-        this.$message({type:"success",message:"设置成功"})
-        this.row.defaultRouter = res.data.authority.defaultRouter
-      }
-    },
-    nodeChange(){
-      this.needConfirm = true
-    },
-    // 暴露给外层使用的切换拦截统一方法
-    enterAndNext(){
-      this.relation()
-    },
-    // 关联树 确认方法
-    async relation() {
-      const checkArr = this.$refs.menuTree.getCheckedNodes(false, true)
-      const res = await addMenuAuthority({
-        menus: checkArr,
-        authorityId: this.row.authorityId
-      })
-      if (res.code == 0) {
-        this.$message({
-          type: 'success',
-          message: '菜单设置成功!'
-        })
       }
     }
   },
@@ -103,8 +75,36 @@ export default {
       }
     })
     this.menuTreeIds = arr
+  },
+  methods: {
+    async setDefault(data) {
+      const res = await updateAuthority({ authorityId: this.row.authorityId, AuthorityName: this.row.authorityName, parentId: this.row.parentId, defaultRouter: data.name })
+      if (res.code === 0) {
+        this.$message({ type: 'success', message: '设置成功' })
+        this.row.defaultRouter = res.data.authority.defaultRouter
+      }
+    },
+    nodeChange() {
+      this.needConfirm = true
+    },
+    // 暴露给外层使用的切换拦截统一方法
+    enterAndNext() {
+      this.relation()
+    },
+    // 关联树 确认方法
+    async relation() {
+      const checkArr = this.$refs.menuTree.getCheckedNodes(false, true)
+      const res = await addMenuAuthority({
+        menus: checkArr,
+        authorityId: this.row.authorityId
+      })
+      if (res.code === 0) {
+        this.$message({
+          type: 'success',
+          message: '菜单设置成功!'
+        })
+      }
+    }
   }
 }
 </script>
-<style lang="scss">
-</style>

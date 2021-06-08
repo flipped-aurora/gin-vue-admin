@@ -1,3 +1,3 @@
 module.exports = file => () => {
-    return import ('@/' + file)
+  return import ('@/' + file)
 }

@@ -117,7 +117,7 @@ func Get{{.StructName}}List(c *gin.Context) {
 	var pageInfo request.{{.StructName}}Search
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := service.Get{{.StructName}}InfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败", zap.Any("err", err))
+	    global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
         response.FailWithMessage("获取失败", c)
     } else {
         response.OkWithDetailed(response.PageResult{

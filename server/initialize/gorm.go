@@ -59,7 +59,6 @@ func MysqlTables(db *gorm.DB) {
 	global.GVA_LOG.Info("register table success")
 }
 
-//
 //@author: SliverHorn
 //@function: GormMysql
 //@description: 初始化Mysql数据库

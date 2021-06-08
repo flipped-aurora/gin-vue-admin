@@ -44,8 +44,8 @@ func GetRedisJWT(userName string) (err error, redisJWT string) {
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: SetRedisJWT
 //@description: jwt存入redis并设置过期时间
-//@param: userName string
-//@return: err error, redisJWT string
+//@param: jwt string, userName string
+//@return: err error
 
 func SetRedisJWT(jwt string, userName string) (err error) {
 	// 此处过期时间等于jwt过期时间

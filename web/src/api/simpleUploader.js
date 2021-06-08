@@ -1,5 +1,4 @@
 
-
 import service from '@/utils/request'
 
 // @Tags SimpleUploader
@@ -11,13 +10,12 @@ import service from '@/utils/request'
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /simpleUploader/checkFileMd5 [get]
 export const checkFileMd5 = (params) => {
-    return service({
-        url: "/simpleUploader/checkFileMd5",
-        method: 'get',
-        params
-    })
+  return service({
+    url: '/simpleUploader/checkFileMd5',
+    method: 'get',
+    params
+  })
 }
-
 
 // @Tags SimpleUploader
 // @Summary 合并文件
@@ -27,10 +25,10 @@ export const checkFileMd5 = (params) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"合并成功"}"
 // @Router /simpleUploader/mergeFileMd5 [get]
 export const mergeFileMd5 = (params) => {
-    return service({
-        url: "/simpleUploader/mergeFileMd5",
-        method: 'get',
-        params
-    })
+  return service({
+    url: '/simpleUploader/mergeFileMd5',
+    method: 'get',
+    params
+  })
 }
 

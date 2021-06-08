@@ -55,10 +55,9 @@ func ReloadSystem(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("重启系统失败!", zap.Any("err", err))
 		response.FailWithMessage("重启系统失败", c)
-		return
+	} else {
+		response.OkWithMessage("重启系统成功", c)
 	}
-	response.OkWithMessage("重启系统成功", c)
-	return
 }
 
 // @Tags System
@@ -71,9 +70,7 @@ func GetServerInfo(c *gin.Context) {
 	if server, err := service.GetServerInfo(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
-		return
 	} else {
 		response.OkWithDetailed(gin.H{"server": server}, "获取成功", c)
 	}
-
 }

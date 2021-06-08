@@ -59,7 +59,7 @@ func CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, autho
 //@function: UpdateAuthority
 //@description: 更改一个角色
 //@param: auth model.SysAuthority
-//@return:err error, authority model.SysAuthority
+//@return: err error, authority model.SysAuthority
 
 func UpdateAuthority(auth model.SysAuthority) (err error, authority model.SysAuthority) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&model.SysAuthority{}).Updates(&auth).Error
@@ -126,7 +126,7 @@ func GetAuthorityInfo(auth model.SysAuthority) (err error, sa model.SysAuthority
 //@function: SetDataAuthority
 //@description: 设置角色资源权限
 //@param: auth model.SysAuthority
-//@return:error
+//@return: error
 
 func SetDataAuthority(auth model.SysAuthority) error {
 	var s model.SysAuthority

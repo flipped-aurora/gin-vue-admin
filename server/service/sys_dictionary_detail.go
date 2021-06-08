@@ -54,7 +54,7 @@ func GetSysDictionaryDetail(id uint) (err error, sysDictionaryDetail model.SysDi
 //@function: GetSysDictionaryDetailInfoList
 //@description: 分页获取字典详情列表
 //@param: info request.SysDictionaryDetailSearch
-//@return: err error
+//@return: err error, list interface{}, total int64
 
 func GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize

@@ -18,7 +18,7 @@ import (
 //@author: [songzhibin97](https://github.com/songzhibin97)
 //@function: writeConfig
 //@description: 回写配置
-//@param:
+//@param: viper *viper.Viper, mysql config.Mysql
 //@return: error
 
 func writeConfig(viper *viper.Viper, mysql config.Mysql) error {
@@ -67,8 +67,8 @@ func initDB(InitDBFunctions ...model.InitDBFunc) (err error) {
 //@author: [songzhibin97](https://github.com/songzhibin97)
 //@function: InitDB
 //@description: 创建数据库并初始化
-//@param: authorityId string
-//@return: err error, treeMap map[string][]model.SysMenu
+//@param: conf request.InitDB
+//@return: error
 
 func InitDB(conf request.InitDB) error {
 	BaseMysql := config.Mysql{
@@ -118,7 +118,7 @@ func InitDB(conf request.InitDB) error {
 		SkipInitializeWithVersion: false,   // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
-		//global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
+		//global.GVA_LOG.Error("MySQL启动异常!", zap.Any("err", err))
 		//os.Exit(0)
 		//return nil
 		_ = writeConfig(global.GVA_VP, BaseMysql)

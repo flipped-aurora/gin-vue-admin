@@ -87,7 +87,7 @@ func getBaseChildrenList(menu *model.SysBaseMenu, treeMap map[string][]model.Sys
 //@function: AddBaseMenu
 //@description: 添加基础路由
 //@param: menu model.SysBaseMenu
-//@return: err error
+//@return: error
 
 func AddBaseMenu(menu model.SysBaseMenu) error {
 	if !errors.Is(global.GVA_DB.Where("name = ?", menu.Name).First(&model.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {

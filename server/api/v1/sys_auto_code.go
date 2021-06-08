@@ -73,7 +73,6 @@ func CreateTemp(c *gin.Context) {
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
 			_ = os.Remove("./ginvueadmin.zip")
 		}
-
 	} else {
 		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
 		c.Writer.Header().Add("Content-Type", "application/json")

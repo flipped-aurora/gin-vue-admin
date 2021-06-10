@@ -42,7 +42,7 @@ casbin:
 system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
-  db-type: 'mysql'
+  db-type: 'mysql'     # mysql, sqlite
   oss-type: 'local'    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
   use-multipoint: false
 
@@ -63,6 +63,12 @@ mysql:
   max-open-conns: 100
   log-mode: false
   log-zap: ""
+
+# sqlite connect configuration
+sqlite:
+  path:''
+  config:''
+  db-name:''
 
 # local configuration
 local:

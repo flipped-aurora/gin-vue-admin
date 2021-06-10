@@ -5,24 +5,28 @@
     <div class="form-card in-three a-fadeinB">
       <el-form ref="form" :model="form" label-width="100px">
         <el-form-item label="数据库类型">
-          <el-select v-model="form.sqlType" disabled placeholder="请选择">
-            <el-option key="mysql" label="mysql(目前只支持mysql)" value="mysql" />
+          <el-select v-model="form.sqlType" placeholder="请选择">
+            <el-option key="mysql" label="mysql" value="mysql" />
+            <el-option key="sqlite" label="Sqlite" value="sqlite" />
           </el-select>
         </el-form-item>
-        <el-form-item label="host">
+        <el-form-item label="host" v-if="form.sqlType=='mysql'">
           <el-input v-model="form.host" placeholder="请输入数据库链接" />
         </el-form-item>
-        <el-form-item label="port">
+        <el-form-item label="port" v-if="form.sqlType=='mysql'">
           <el-input v-model="form.port" placeholder="请输入数据库端口" />
         </el-form-item>
-        <el-form-item label="userName">
+        <el-form-item label="userName" v-if="form.sqlType=='mysql'">
           <el-input v-model="form.userName" placeholder="请输入数据库用户名" />
         </el-form-item>
-        <el-form-item label="password">
+        <el-form-item label="password" v-if="form.sqlType=='mysql'">
           <el-input
             v-model="form.password"
             placeholder="请输入数据库密码（没有则为空）"
           />
+        </el-form-item>
+        <el-form-item label="dbPath" v-if="form.sqlType=='sqlite'">
+          <el-input v-model="form.path" placeholder="请输入数据库路径" />
         </el-form-item>
         <el-form-item label="dbName">
           <el-input v-model="form.dbName" placeholder="请输入数据库名称" />
@@ -44,6 +48,7 @@ export default {
   data() {
     return {
       form: {
+        path:'',
         sqlType: 'mysql',
         host: '127.0.0.1',
         port: '3306',

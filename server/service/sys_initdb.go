@@ -9,10 +9,12 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/source"
 	"gin-vue-admin/utils"
+	"path/filepath"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
-	"path/filepath"
 )
 
 //@author: [songzhibin97](https://github.com/songzhibin97)
@@ -23,6 +25,15 @@ import (
 
 func writeConfig(viper *viper.Viper, mysql config.Mysql) error {
 	global.GVA_CONFIG.Mysql = mysql
+	cs := utils.StructToMap(global.GVA_CONFIG)
+	for k, v := range cs {
+		viper.Set(k, v)
+	}
+	return viper.WriteConfig()
+}
+
+func writeSqliteConfig(viper *viper.Viper, sqlite config.Sqlite) error {
+	global.GVA_CONFIG.Sqlite = sqlite
 	cs := utils.StructToMap(global.GVA_CONFIG)
 	for k, v := range cs {
 		viper.Set(k, v)
@@ -79,55 +90,90 @@ func InitDB(conf request.InitDB) error {
 		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
 	}
 
-	if conf.Host == "" {
-		conf.Host = "127.0.0.1"
+	BaseSqlite := config.Sqlite{
+		Path:   "",
+		Dbname: "",
+		Config: "",
 	}
 
-	if conf.Port == "" {
-		conf.Port = "3306"
-	}
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", conf.UserName, conf.Password, conf.Host, conf.Port)
-	createSql := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;", conf.DBName)
-	if err := createTable(dsn, "mysql", createSql); err != nil {
-		return err
-	}
+	if conf.SqlType == "mysql" {
 
-	MysqlConfig := config.Mysql{
-		Path:     fmt.Sprintf("%s:%s", conf.Host, conf.Port),
-		Dbname:   conf.DBName,
-		Username: conf.UserName,
-		Password: conf.Password,
-		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
-	}
+		if conf.Host == "" {
+			conf.Host = "127.0.0.1"
+		}
 
-	if err := writeConfig(global.GVA_VP, MysqlConfig); err != nil {
-		return err
-	}
-	m := global.GVA_CONFIG.Mysql
-	if m.Dbname == "" {
-		return nil
-	}
+		if conf.Port == "" {
+			conf.Port = "3306"
+		}
+		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", conf.UserName, conf.Password, conf.Host, conf.Port)
+		createSql := fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %s DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;", conf.DBName)
+		if err := createTable(dsn, "mysql", createSql); err != nil {
+			return err
+		}
 
-	linkDns := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
-	mysqlConfig := mysql.Config{
-		DSN:                       linkDns, // DSN data source name
-		DefaultStringSize:         191,     // string 类型字段的默认长度
-		DisableDatetimePrecision:  true,    // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
-		DontSupportRenameIndex:    true,    // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
-		DontSupportRenameColumn:   true,    // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
-		SkipInitializeWithVersion: false,   // 根据版本自动配置
-	}
-	if db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
-		//global.GVA_LOG.Error("MySQL启动异常!", zap.Any("err", err))
-		//os.Exit(0)
-		//return nil
-		_ = writeConfig(global.GVA_VP, BaseMysql)
-		return nil
-	} else {
-		sqlDB, _ := db.DB()
-		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
-		global.GVA_DB = db
+		MysqlConfig := config.Mysql{
+			Path:     fmt.Sprintf("%s:%s", conf.Host, conf.Port),
+			Dbname:   conf.DBName,
+			Username: conf.UserName,
+			Password: conf.Password,
+			Config:   "charset=utf8mb4&parseTime=True&loc=Local",
+		}
+
+		if err := writeConfig(global.GVA_VP, MysqlConfig); err != nil {
+			return err
+		}
+		m := global.GVA_CONFIG.Mysql
+		if m.Dbname == "" {
+			return nil
+		}
+
+		linkDns := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
+		mysqlConfig := mysql.Config{
+			DSN:                       linkDns, // DSN data source name
+			DefaultStringSize:         191,     // string 类型字段的默认长度
+			DisableDatetimePrecision:  true,    // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
+			DontSupportRenameIndex:    true,    // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
+			DontSupportRenameColumn:   true,    // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
+			SkipInitializeWithVersion: false,   // 根据版本自动配置
+		}
+		if db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
+			//global.GVA_LOG.Error("MySQL启动异常!", zap.Any("err", err))
+			//os.Exit(0)
+			//return nil
+			_ = writeConfig(global.GVA_VP, BaseMysql)
+			return nil
+		} else {
+			sqlDB, _ := db.DB()
+			sqlDB.SetMaxIdleConns(m.MaxIdleConns)
+			sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+			global.GVA_DB = db
+		}
+	} else if conf.SqlType == "sqlite" {
+		sqliteConfig := config.Sqlite{
+			Path:   conf.Path,
+			Dbname: conf.DBName,
+			Config: "",
+		}
+
+		if err := writeSqliteConfig(global.GVA_VP, sqliteConfig); err != nil {
+			return err
+		}
+		m := global.GVA_CONFIG.Sqlite
+		if m.Dbname == "" {
+			return nil
+		}
+
+		dbpath := conf.DBName
+		if len(conf.Path) > 0 {
+			dbpath = fmt.Sprintf("%s/%s", conf.Path, conf.DBName)
+		}
+
+		if db, err := gorm.Open(sqlite.Open(dbpath), &gorm.Config{}); err != nil {
+			_ = writeSqliteConfig(global.GVA_VP, BaseSqlite)
+			return nil
+		} else {
+			global.GVA_DB = db
+		}
 	}
 
 	err := global.GVA_DB.AutoMigrate(
@@ -147,7 +193,11 @@ func InitDB(conf request.InitDB) error {
 		model.SysOperationRecord{},
 	)
 	if err != nil {
-		_ = writeConfig(global.GVA_VP, BaseMysql)
+		if conf.SqlType == "sqlite" {
+			_ = writeSqliteConfig(global.GVA_VP, BaseSqlite)
+		} else {
+			_ = writeConfig(global.GVA_VP, BaseMysql)
+		}
 		return err
 	}
 	err = initDB(
@@ -163,7 +213,11 @@ func InitDB(conf request.InitDB) error {
 		source.File,
 		source.BaseMenu)
 	if err != nil {
-		_ = writeConfig(global.GVA_VP, BaseMysql)
+		if conf.SqlType == "sqlite" {
+			_ = writeSqliteConfig(global.GVA_VP, BaseSqlite)
+		} else {
+			_ = writeConfig(global.GVA_VP, BaseMysql)
+		}
 		return err
 	}
 	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")

@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/initialize/internal"
 	"gin-vue-admin/model"
@@ -8,6 +9,7 @@ import (
 
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
@@ -21,6 +23,8 @@ func Gorm() *gorm.DB {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
 		return GormMysql()
+	case "sqlite":
+		return GormSqlite()
 	default:
 		return GormMysql()
 	}
@@ -87,6 +91,28 @@ func GormMysql() *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		return db
+	}
+}
+
+//@author: arthur-jx
+//@function: GormSqlite
+//@description: 初始化Sqlite数据库
+//@return: *gorm.DB
+
+func GormSqlite() *gorm.DB {
+	m := global.GVA_CONFIG.Sqlite
+	if m.Dbname == "" {
+		return nil
+	}
+	dbpath := m.Dbname
+	if len(m.Path) > 0 {
+		dbpath = fmt.Sprintf("%s/%s", m.Path, m.Dbname)
+	}
+
+	if db, err := gorm.Open(sqlite.Open(dbpath), &gorm.Config{}); err != nil {
+		return nil
+	} else {
 		return db
 	}
 }

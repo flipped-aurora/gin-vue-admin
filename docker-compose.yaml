@@ -10,8 +10,8 @@ networks:
 services:
   web:
     build:
-      context: ./
-      dockerfile: ./dockerfile_web
+      context: ./web
+      dockerfile: ./Dockerfile
     container_name: gva-web
     restart: always
     ports:
@@ -25,8 +25,8 @@ services:
 
   server:
     build:
-      context: ./
-      dockerfile: ./dockerfile_server
+      context: ./server
+      dockerfile: ./Dockerfile
     container_name: gva-server
     restart: always
     ports:

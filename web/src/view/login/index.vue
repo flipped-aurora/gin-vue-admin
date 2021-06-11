@@ -2,7 +2,9 @@
   <div id="userLayout">
     <div class="login_panle">
       <div class="login_panle_form">
-        <div class="login_panle_form_title">GIN-VUE-ADMIN</div>
+        <div class="login_panle_form_title">
+          <img class="login_panle_form_title_logo" src="@/assets/logo_login.png" alt=""><p class="login_panle_form_title_p">GIN-VUE-ADMIN</p>
+        </div>
         <el-form
           ref="loginForm"
           :model="loginForm"

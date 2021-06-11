@@ -18,7 +18,7 @@ const baseRouters = [
   {
     path: '/init',
     name: 'Init',
-    component: () => import('@/view/init/init')
+    component: () => import('@/view/init/index')
   },
   {
     path: '/login',

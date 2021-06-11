@@ -32,10 +32,20 @@
       border-radius: 10px;
       box-shadow: 2px 3px 7px  rgba(0,0,0,.2);
       .login_panle_form_title{
+
+        display: flex;
+        align-items: center;
         margin: 30px 0;
-        padding-left: 20px ;
-        font-size: 40px;
-        border-left: 4px solid #409EFF ;
+
+        .login_panle_form_title_logo{
+          width: 90px;
+          height: 72px;
+        }
+        .login_panle_form_title_p{
+          font-size: 40px;
+
+          padding-left: 20px ;
+        }
       }
       .vPic {
         width: 33%;

@@ -42,8 +42,8 @@ casbin:
 system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
-  db-type: 'mysql'     # mysql, sqlite
-  oss-type: 'local'    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  db-type: 'mysql'
+  oss-type: 'local'    # 控制oss选择走本期还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
   use-multipoint: false
 
 # captcha configuration
@@ -63,12 +63,6 @@ mysql:
   max-open-conns: 100
   log-mode: false
   log-zap: ""
-
-# sqlite connect configuration
-sqlite:
-  path:''
-  config:''
-  db-name:''
 
 # local configuration
 local:
@@ -91,7 +85,7 @@ autocode:
   web-form: /view
   web-table: /view
 
-# qiniu configuration (请自行申请七牛对应的 公钥 私钥 bucket 和 域名地址)
+# qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:
   zone: 'ZoneHuaDong'
   bucket: ''

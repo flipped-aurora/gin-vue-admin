@@ -7,7 +7,7 @@ import './element_lazy'
 import uploader from 'vue-simple-uploader'
 import APlayer from '@moefe/vue-aplayer'
 // time line css
-import '../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
+import '../../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
 // 路由守卫
 import Bus from '@/utils/bus'
 Vue.use(Bus)

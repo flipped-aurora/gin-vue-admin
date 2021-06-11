@@ -23,7 +23,7 @@ const baseRouters = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/view/login/login')
+    component: () => import('@/view/login/index')
   }
 ]
 

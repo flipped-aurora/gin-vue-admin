@@ -18,12 +18,12 @@ const baseRouters = [
   {
     path: '/init',
     name: 'Init',
-    component: () => import('@/view/init/init')
+    component: () => import('@/view/init/index')
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/view/login/login')
+    component: () => import('@/view/login/index')
   }
 ]
 

@@ -238,4 +238,11 @@ export default {
     opacity: 1;
   }
 }
+@media (max-width: 750px) {
+  .form{
+    width: 94vw !important;
+    padding: 0;
+  }
+}
+
 </style>

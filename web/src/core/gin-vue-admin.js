@@ -3,7 +3,7 @@
 *
 * */
 import Vue from 'vue'
-import './element_lazy'
+import './element_lazy' // 按需加载element
 import uploader from 'vue-simple-uploader'
 import APlayer from '@moefe/vue-aplayer'
 // time line css
@@ -12,8 +12,8 @@ import '../../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
 import Bus from '@/utils/bus'
 Vue.use(Bus)
 Vue.use(APlayer, {
-    defaultCover: 'https://github.com/u3u.png',
-    productionTip: true
+  defaultCover: 'https://github.com/u3u.png',
+  productionTip: true
 })
 Vue.use(uploader)
 

@@ -4,8 +4,8 @@
       <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()" />
       <el-aside class="main-cont main-left">
         <div class="tilte">
-          <img alt class="logoimg" src="~@/assets/nav_logo.png">
-          <h2 v-if="isSider" class="tit-text">Gin-Vue-Admin</h2>
+          <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
+          <h2 v-if="isSider" class="tit-text">{{ $GIN_VUE_ADMIN.appName }}</h2>
         </div>
         <Aside class="aside" />
       </el-aside>
@@ -38,7 +38,7 @@
                     <Search />
                     <Screenfull class="screenfull" :style="{cursor:'pointer'}" />
                     <el-dropdown>
-                      <span class="header-avatar">
+                      <span class="header-avatar" style="cursor: pointer">
                         <CustomPic />
                         <span style="margin-left: 5px">{{ userInfo.nickName }}</span>
                         <i class="el-icon-arrow-down" />

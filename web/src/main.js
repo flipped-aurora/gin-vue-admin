@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-// 引入gin-vue-admin前端组件
+// 引入gin-vue-admin前端初始化相关内容
 import './core/gin-vue-admin'
 // 引入封装的router
 import router from '@/router/index'

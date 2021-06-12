@@ -4,6 +4,7 @@ import { store } from '@/store'
 import context from '@/main'
 import router from '@/router/index'
 
+console.log(process.env.VUE_APP_BASE_PATH)
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 99999

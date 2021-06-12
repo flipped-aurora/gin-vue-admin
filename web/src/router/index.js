@@ -1,44 +1,44 @@
-import Vue from "vue";
-import Router from "vue-router";
+import Vue from 'vue'
+import Router from 'vue-router'
 
-Vue.use(Router);
+Vue.use(Router)
 
 // 获取原型对象上的push函数
-const originalPush = Router.prototype.push;
+const originalPush = Router.prototype.push
 // 修改原型对象中的push方法
 Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err);
-};
+  return originalPush.call(this, location).catch((err) => err)
+}
 
 const baseRouters = [
   {
-    path: "/",
-    redirect: "/login",
+    path: '/',
+    redirect: '/login'
   },
   {
-    path: "/init",
-    name: "Init",
-    component: () => import("@/view/init/init"),
+    path: '/init',
+    name: 'Init',
+    component: () => import('@/view/init/init')
   },
   {
-    path: "/login",
-    name: "Login",
-    component: () => import("@/view/login/login"),
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/view/login/login')
   },
   {
-    path: "/register",
-    name: "Register",
-    component: () => import("@/view/register/register"),
-  },
-];
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/view/register/register')
+  }
+]
 
 // 需要通过后台数据来生成的组件
 
 const createRouter = () =>
   new Router({
-    routes: baseRouters,
-  });
+    routes: baseRouters
+  })
 
-const router = createRouter();
+const router = createRouter()
 
-export default router;
+export default router

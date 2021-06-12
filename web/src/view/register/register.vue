@@ -104,15 +104,15 @@ export default {
   methods: {
     ...mapActions('user', ['Register']),
     async register() {
-      const {username, password} = this.registerForm
+      const { username, password } = this.registerForm
       return await this.Register({
         username,
         password
       })
     },
-    
-    checkPassword () {
-      return this.registerForm.password === this.registerForm.passwordConfirm 
+
+    checkPassword() {
+      return this.registerForm.password === this.registerForm.passwordConfirm
     },
     async submitForm() {
       this.$refs.registerForm.validate(async(v) => {
@@ -136,7 +136,7 @@ export default {
     },
     changeLock() {
       this.lock = this.lock === 'lock' ? 'unlock' : 'lock'
-    },
+    }
   }
 }
 </script>

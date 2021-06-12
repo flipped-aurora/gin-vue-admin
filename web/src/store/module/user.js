@@ -42,15 +42,12 @@ export const user = {
   },
   actions: {
     async Register({ commit, dispatch, rootGetters, getters }, registerInfo) {
-      const res = await register(registerInfo).catch(err => {
-        console.log(err)
-      })
-      // console.log(res)
-      // debugger
-      // if (res.code === 0) {
-      //   console.log(res)
-      // }
-      return true
+      const res = await register(registerInfo)
+      if (res.code === 0) {
+        router.push('/login')
+
+        return true
+      }
     },
     async LoginIn({ commit, dispatch, rootGetters, getters }, loginInfo) {
       const res = await login(loginInfo)

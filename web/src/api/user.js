@@ -1,4 +1,4 @@
-import service from '@/utils/request'
+import service from "@/utils/request";
 
 // @Summary 用户登录
 // @Produce  application/json
@@ -6,11 +6,11 @@ import service from '@/utils/request'
 // @Router /base/login [post]
 export const login = (data) => {
   return service({
-    url: '/base/login',
-    method: 'post',
-    data: data
-  })
-}
+    url: "/base/login",
+    method: "post",
+    data: data,
+  });
+};
 
 // @Summary 获取验证码
 // @Produce  application/json
@@ -18,11 +18,11 @@ export const login = (data) => {
 // @Router /base/captcha [post]
 export const captcha = (data) => {
   return service({
-    url: '/base/captcha',
-    method: 'post',
-    data: data
-  })
-}
+    url: "/base/captcha",
+    method: "post",
+    data: data,
+  });
+};
 
 // @Summary 用户注册
 // @Produce  application/json
@@ -30,11 +30,11 @@ export const captcha = (data) => {
 // @Router /base/resige [post]
 export const register = (data) => {
   return service({
-    url: '/user/register',
-    method: 'post',
-    data: data
-  })
-}
+    url: "/base/register",
+    method: "post",
+    data: data,
+  });
+};
 
 // @Summary 修改密码
 // @Produce  application/json
@@ -42,11 +42,11 @@ export const register = (data) => {
 // @Router /user/changePassword [post]
 export const changePassword = (data) => {
   return service({
-    url: '/user/changePassword',
-    method: 'post',
-    data: data
-  })
-}
+    url: "/user/changePassword",
+    method: "post",
+    data: data,
+  });
+};
 
 // @Tags User
 // @Summary 分页获取用户列表
@@ -58,11 +58,11 @@ export const changePassword = (data) => {
 // @Router /user/getUserList [post]
 export const getUserList = (data) => {
   return service({
-    url: '/user/getUserList',
-    method: 'post',
-    data: data
-  })
-}
+    url: "/user/getUserList",
+    method: "post",
+    data: data,
+  });
+};
 
 // @Tags User
 // @Summary 设置用户权限
@@ -74,11 +74,11 @@ export const getUserList = (data) => {
 // @Router /user/setUserAuthority [post]
 export const setUserAuthority = (data) => {
   return service({
-    url: '/user/setUserAuthority',
-    method: 'post',
-    data: data
-  })
-}
+    url: "/user/setUserAuthority",
+    method: "post",
+    data: data,
+  });
+};
 
 // @Tags SysUser
 // @Summary 删除用户
@@ -90,11 +90,11 @@ export const setUserAuthority = (data) => {
 // @Router /user/deleteUser [delete]
 export const deleteUser = (data) => {
   return service({
-    url: '/user/deleteUser',
-    method: 'delete',
-    data: data
-  })
-}
+    url: "/user/deleteUser",
+    method: "delete",
+    data: data,
+  });
+};
 
 // @Tags SysUser
 // @Summary 设置用户信息
@@ -106,8 +106,8 @@ export const deleteUser = (data) => {
 // @Router /user/setUserInfo [put]
 export const setUserInfo = (data) => {
   return service({
-    url: '/user/setUserInfo',
-    method: 'put',
-    data: data
-  })
-}
+    url: "/user/setUserInfo",
+    method: "put",
+    data: data,
+  });
+};

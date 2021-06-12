@@ -62,6 +62,7 @@
         </el-form>
       </div>
 
+      <div class="text-center text-white cursor-pointer" @click="goToRegister">注 册</div>
       <div class="footer">
         <div class="links">
           <a href="http://doc.henrongyi.top/"><img src="@/assets/docs.png" class="link-icon"></a>
@@ -120,6 +121,11 @@ export default {
     ...mapActions('user', ['LoginIn']),
     async login() {
       return await this.LoginIn(this.loginForm)
+    },
+    goToRegister(){
+      this.$router.push({
+        name: 'Register'
+      })
     },
     async submitForm() {
       this.$refs.loginForm.validate(async(v) => {

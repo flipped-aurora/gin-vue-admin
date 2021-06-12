@@ -24,6 +24,11 @@ const baseRouters = [
     path: '/login',
     name: 'Login',
     component: () => import('@/view/login/login')
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/view/register/register')
   }
 ]
 

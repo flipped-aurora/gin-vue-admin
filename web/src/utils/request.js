@@ -82,7 +82,7 @@ service.interceptors.response.use(
         message: response.data.msg || decodeURI(response.headers.msg),
         type: response.headers.msgtype || 'error'
       })
-      if (response.data.data && response.data.data.reload) {
+      if (response.data.data && response.data.data.reload && router.history.current.name !== 'Register') {
         store.commit('user/LoginOut')
       }
       return response.data.msg ? response.data : response

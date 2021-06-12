@@ -1,4 +1,4 @@
-import { login } from '@/api/user'
+import { login, register } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 export const user = {
@@ -41,6 +41,17 @@ export const user = {
     }
   },
   actions: {
+    async Register({ commit, dispatch, rootGetters, getters }, registerInfo) {
+      const res = await register(registerInfo).catch(err => {
+        console.log(err)
+      })
+      // console.log(res)
+      // debugger
+      // if (res.code === 0) {
+      //   console.log(res)
+      // }
+      return true
+    },
     async LoginIn({ commit, dispatch, rootGetters, getters }, loginInfo) {
       const res = await login(loginInfo)
       if (res.code === 0) {

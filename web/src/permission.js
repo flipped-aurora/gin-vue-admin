@@ -34,14 +34,18 @@ router.beforeEach(async(to, from, next) => {
         }
       }
     }
+
+    // return
     // 不在白名单中并且未登陆的时候
-    if (!token) {
+    if (!token && router.history.pending.name !== 'Register') {
       next({
         name: 'Login',
         query: {
           redirect: document.location.hash
         }
       })
+    } else {
+      next()
     }
   }
 })

@@ -74,7 +74,6 @@ export default {
       console.log(this.hello)
     },
     async onSubmit() {
-      this.out = true
       const loading = this.$loading({
         lock: true,
         text: '正在初始化数据库，请稍候',
@@ -84,6 +83,7 @@ export default {
       try {
         const res = await initDB(this.form)
         if (res.code === 0) {
+          this.out = true
           this.$message({
             type: 'success',
             message: res.msg

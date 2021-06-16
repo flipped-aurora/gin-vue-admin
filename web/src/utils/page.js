@@ -1,8 +1,7 @@
-const title = 'GIN-VUE-ADMIN'
-
+import config from '@/core/config'
 export default function getPageTitle(pageTitle) {
   if (pageTitle) {
-    return `${pageTitle} - ${title}`
+    return `${pageTitle} - ${config.appName}`
   }
-  return `${title}`
+  return `${config.appName}`
 }

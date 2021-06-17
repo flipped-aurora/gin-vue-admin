@@ -1,11 +1,21 @@
 <template>
   <div class="init_page">
     <div class="init_page_panle">
-      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello  " @click="showNext">
+      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello  ">
         <div>
           <div class="hello_title">GIN-VUE-ADMIN</div>
-          <p class="in-two a-fadeinT">您需要初始化您的数据库并且填充初始数据</p>
-          <p class="init_p">点击进入初始化</p>
+          <p class="in-two a-fadeinT">初始化须知</p>
+          <p class="init_p">1.您需有用一定的VUE和golang基础</p>
+          <p class="init_p">2.请您确认是否已经阅读过官方文档</p>
+          <p class="init_p">3.请您确认是否了解后续的配置流程</p>
+          <p class="init_btn">
+            <el-button type="primary" @click="goDoc">
+              阅读文档
+            </el-button>
+            <el-button type="primary" @click="showNext">
+              我已确认
+            </el-button>
+          </p>
         </div>
       </div>
       <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
@@ -72,6 +82,9 @@ export default {
     showNext() {
       this.hello = this.hello + 1
       console.log(this.hello)
+    },
+    goDoc() {
+      window.open('https://www.gin-vue-admin.com')
     },
     async onSubmit() {
       const loading = this.$loading({
@@ -140,6 +153,9 @@ export default {
       .init_p{
         margin-top: 20px;
         color: #777777;
+      }
+      .init_btn{
+        margin-top: 20px;
       }
     }
     .form{

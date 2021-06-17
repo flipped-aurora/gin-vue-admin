@@ -24,8 +24,8 @@ func ParseInfoList2Excel(infoList []model.SysBaseMenu, filePath string) error {
 			menu.Component,
 		})
 	}
-	excel.SaveAs(filePath)
-	return nil
+	err := excel.SaveAs(filePath)
+	return err
 }
 
 func ParseExcel2InfoList() ([]model.SysBaseMenu, error) {

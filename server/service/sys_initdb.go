@@ -9,10 +9,11 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/source"
 	"gin-vue-admin/utils"
+	"path/filepath"
+
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"path/filepath"
 )
 
 //@author: [songzhibin97](https://github.com/songzhibin97)
@@ -71,13 +72,6 @@ func initDB(InitDBFunctions ...model.InitDBFunc) (err error) {
 //@return: error
 
 func InitDB(conf request.InitDB) error {
-	BaseMysql := config.Mysql{
-		Path:     "",
-		Dbname:   "",
-		Username: "",
-		Password: "",
-		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
-	}
 
 	if conf.Host == "" {
 		conf.Host = "127.0.0.1"
@@ -100,15 +94,11 @@ func InitDB(conf request.InitDB) error {
 		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
 	}
 
-	if err := writeConfig(global.GVA_VP, MysqlConfig); err != nil {
-		return err
-	}
-	m := global.GVA_CONFIG.Mysql
-	if m.Dbname == "" {
+	if MysqlConfig.Dbname == "" {
 		return nil
 	}
 
-	linkDns := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
+	linkDns := MysqlConfig.Username + ":" + MysqlConfig.Password + "@tcp(" + MysqlConfig.Path + ")/" + MysqlConfig.Dbname + "?" + MysqlConfig.Config
 	mysqlConfig := mysql.Config{
 		DSN:                       linkDns, // DSN data source name
 		DefaultStringSize:         191,     // string 类型字段的默认长度
@@ -118,15 +108,11 @@ func InitDB(conf request.InitDB) error {
 		SkipInitializeWithVersion: false,   // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}); err != nil {
-		//global.GVA_LOG.Error("MySQL启动异常!", zap.Any("err", err))
-		//os.Exit(0)
-		//return nil
-		_ = writeConfig(global.GVA_VP, BaseMysql)
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
-		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		sqlDB.SetMaxIdleConns(MysqlConfig.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(MysqlConfig.MaxOpenConns)
 		global.GVA_DB = db
 	}
 
@@ -147,7 +133,7 @@ func InitDB(conf request.InitDB) error {
 		model.SysOperationRecord{},
 	)
 	if err != nil {
-		_ = writeConfig(global.GVA_VP, BaseMysql)
+		global.GVA_DB = nil
 		return err
 	}
 	err = initDB(
@@ -163,7 +149,10 @@ func InitDB(conf request.InitDB) error {
 		source.File,
 		source.BaseMenu)
 	if err != nil {
-		_ = writeConfig(global.GVA_VP, BaseMysql)
+		global.GVA_DB = nil
+		return err
+	}
+	if err = writeConfig(global.GVA_VP, MysqlConfig); err != nil {
 		return err
 	}
 	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")

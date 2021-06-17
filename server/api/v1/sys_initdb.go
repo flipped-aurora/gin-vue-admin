@@ -18,8 +18,8 @@ import (
 // @Router /init/initdb [post]
 func InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
-		global.GVA_LOG.Error("非法访问!")
-		response.FailWithMessage("非法访问", c)
+		global.GVA_LOG.Error("已存在数据库配置!")
+		response.FailWithMessage("已存在数据库配置", c)
 		return
 	}
 	var dbInfo request.InitDB

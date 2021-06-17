@@ -360,8 +360,15 @@ func getNeedList(autoCode *model.AutoCodeStruct) (dataList []tplData, fileList [
 			origFileName := strings.TrimSuffix(trimBase[lastSeparator+1:], ".tpl")
 			firstDot := strings.Index(origFileName, ".")
 			if firstDot != -1 {
+				var fileName string
+				if origFileName[firstDot:] !=".go"{
+					fileName = autoCode.PackageName+origFileName[firstDot:]
+				}else{
+					fileName = autoCode.HumpPackageName+origFileName[firstDot:]
+				}
+
 				dataList[index].autoCodePath = filepath.Join(autoPath, trimBase[:lastSeparator], autoCode.PackageName,
-					origFileName[:firstDot], autoCode.PackageName+origFileName[firstDot:])
+					origFileName[:firstDot], fileName)
 			}
 		}
 

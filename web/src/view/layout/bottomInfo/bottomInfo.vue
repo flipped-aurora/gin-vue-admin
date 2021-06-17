@@ -3,7 +3,7 @@
     <div>
       <span>Powered by</span>
       <span>
-        <a href="https://github.com/flipped-aurora/gin-vue-admin">gin-vue-admin</a>
+        <a href="https://github.com/flipped-aurora/gin-vue-admin">{{ $GIN_VUE_ADMIN.appName }}</a>
       </span>
       <el-divider direction="vertical" />
       <span>Copyright</span>

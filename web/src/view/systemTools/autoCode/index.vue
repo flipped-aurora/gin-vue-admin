@@ -154,7 +154,7 @@ const fieldTemplate = {
 
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
 import PreviewCodeDialg from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
-import { toUpperCase, toHump } from '@/utils/stringFun'
+import { toUpperCase, toHump, toSQLLine } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
 
@@ -294,6 +294,8 @@ export default {
             })
             return false
           }
+          this.form.humpPackageName = toSQLLine(this.form.packageName)
+          debugger
           if (isPreview) {
             const data = await preview(this.form)
             this.preViewCode = data.data.autoCode

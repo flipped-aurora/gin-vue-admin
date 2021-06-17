@@ -2,6 +2,7 @@ import axios from 'axios' // 引入axios
 import { Message } from 'element-ui'
 import { store } from '@/store'
 import context from '@/main'
+import { MessageBox } from 'element-ui'
 
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
@@ -79,11 +80,14 @@ service.interceptors.response.use(
   },
   error => {
     closeLoading()
-    Message({
-      showClose: true,
-      message: error,
-      type: 'error'
+    MessageBox.confirm(`检测到接口错误${error},此类错误内容常见于后台panic，如果影响您正常使用可强制登出清理缓存`, '接口报错', {
+      distinguishCancelAndClose: true,
+      confirmButtonText: '清理缓存',
+      cancelButtonText: '取消'
     })
+      .then(() => {
+        store.commit('user/LoginOut')
+      })
     return error
   }
 )

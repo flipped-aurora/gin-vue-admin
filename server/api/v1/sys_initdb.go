@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
+
 	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
@@ -18,8 +19,8 @@ import (
 // @Router /init/initdb [post]
 func InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
-		global.GVA_LOG.Error("非法访问!")
-		response.FailWithMessage("非法访问", c)
+		global.GVA_LOG.Error("已存在数据库配置!")
+		response.FailWithMessage("已存在数据库配置", c)
 		return
 	}
 	var dbInfo request.InitDB
@@ -30,7 +31,7 @@ func InitDB(c *gin.Context) {
 	}
 	if err := service.InitDB(dbInfo); err != nil {
 		global.GVA_LOG.Error("自动创建数据库失败!", zap.Any("err", err))
-		response.FailWithMessage("自动创建数据库失败，请查看后台日志", c)
+		response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)
 		return
 	}
 	response.OkWithData("自动创建数据库成功", c)

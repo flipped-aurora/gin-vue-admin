@@ -47,10 +47,16 @@
               >
             </div>
           </el-form-item>
+          <div />
           <el-form-item>
             <el-button
               type="primary"
-              style="width: 100%"
+              style="width: 46%"
+              @click="checkInit"
+            >前往初始化</el-button>
+            <el-button
+              type="primary"
+              style="width: 46%;margin-left:8%"
               @click="submitForm"
             >登 录</el-button>
           </el-form-item>
@@ -73,6 +79,7 @@
 <script>
 import { mapActions } from 'vuex'
 import { captcha } from '@/api/user'
+import { checkDB } from '@/api/initdb'
 export default {
   name: 'Login',
   data() {
@@ -113,6 +120,20 @@ export default {
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
+    async checkInit() {
+      const res = await checkDB()
+      if (res.code === 0) {
+        if (res.data?.needInit) {
+          this.$store.commit('user/NeedInit')
+          this.$router.push({ name: 'Init' })
+        } else {
+          this.$message({
+            type: 'info',
+            message: '已配置数据库信息，无法初始化'
+          })
+        }
+      }
+    },
     async login() {
       return await this.LoginIn(this.loginForm)
     },

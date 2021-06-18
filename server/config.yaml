@@ -71,6 +71,7 @@ redis:
 system:
   env: public
   addr: 8888
+  func-addr: 9527
   db-type: mysql
   oss-type: local
   use-multipoint: false

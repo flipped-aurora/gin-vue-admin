@@ -53,6 +53,7 @@ captcha:
   img-height: 80
 
 # mysql connect configuration
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.gin-vue-admin.com/docs/first）
 mysql:
   path: ''
   config: ''

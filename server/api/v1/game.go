@@ -11,6 +11,65 @@ import (
 	"go.uber.org/zap"
 )
 
+func ServedPlugin(c *gin.Context) {
+	var (
+		param request.ParamGame
+	)
+	if err := c.ShouldBindUri(&param); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+
+	if err, token := service.ServedPlugin(&param); err != nil {
+		global.GVA_LOG.Error("创建连接失败!", zap.Any("err", err))
+		response.FailWithDetailed(err.Error(), "创建连接失败", c)
+	} else {
+		response.OkWithDetailed(token, "创建连接成功", c)
+	}
+}
+
+func OwnedToken(c *gin.Context) {
+	var (
+		param  request.ParamGame
+		header request.HeaderRequest
+	)
+	if err := c.ShouldBindHeader(&header); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err := c.ShouldBindUri(&param); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+
+	if err := service.OwnedToken(&param, &header); err != nil {
+		global.GVA_LOG.Error("创建连接失败!", zap.Any("err", err))
+		response.FailWithDetailed(err.Error(), "创建连接失败", c)
+	} else {
+		response.Ok(c)
+	}
+}
+
+func Destroy(c *gin.Context) {
+	var (
+		param request.ParamGame
+	)
+	if err := c.ShouldBindUri(&param); err != nil {
+		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
+		response.FailWithDetailed(err.Error(), "参数校验错误", c)
+		return
+	}
+	if err, result := service.Destroy(&param); err != nil {
+		global.GVA_LOG.Error("销毁失败!", zap.Any("err", err))
+		response.FailWithDetailed(err.Error(), "销毁失败", c)
+	} else {
+		response.OkWithDetailed(result, "销毁成功", c)
+	}
+}
+
 func OpenConnection(c *gin.Context) {
 	var (
 		param request.ParamGame

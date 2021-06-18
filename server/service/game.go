@@ -25,19 +25,15 @@ func init() {
 	hm = &hashmap.HashMap{}
 }
 
-func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConnection) (err error, token model.ConnectionToken) {
+func ServedPlugin(paramGame *request.ParamGame) (err error, game *model.ProductPlugin) {
 	var (
 		ok    bool
-		t     string
-		u     uuid.UUID
 		list  interface{}
-		game  *model.ProductPlugin
 		games []model.ProductPlugin
 		info  = request.ProductPluginSearch{
 			PageInfo: request.PageInfo{Page: 1, PageSize: 1000},
 		}
 	)
-
 	if err, list, _ = GetProductPluginInfoList(info); err != nil {
 		return
 	}
@@ -61,6 +57,76 @@ func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConn
 
 	if game == nil {
 		err = errors.Errorf("游戏插件未配置: %s", paramGame.ID)
+		return
+	}
+	return
+}
+
+func OwnedToken(paramGame *request.ParamGame, header *request.HeaderRequest) (err error) {
+	var (
+		id    string
+		token = header.Token
+	)
+
+	if id, err = gameID(token); err != nil {
+		return
+	}
+
+	if id != paramGame.ID {
+		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, paramGame.ID)
+		return
+	}
+	return
+}
+
+func Destroy(paramGame *request.ParamGame) (err error, result model.DestroyResult) {
+	var (
+		client  *plugin.Client
+		rpc     shared.Game
+		message string
+		err2    error
+	)
+
+	tks := tokens(paramGame.ID)
+	result.Total = len(tks)
+
+	for token, _ := range tks {
+		if rpc, err2 = gameClient(token); err2 != nil {
+			err = errors.Wrap(err, err2.Error())
+			result.Failed++
+			continue
+		}
+
+		if message, err2 = rpc.Close(); err2 != nil {
+			err2 = errors.Wrapf(err2, "rpc close failed, message: %s", message)
+			err = errors.Wrap(err, err2.Error())
+			result.Failed++
+			continue
+		}
+
+		if client, err2 = rpcClient(token); err2 != nil {
+			err = errors.Wrap(err, err2.Error())
+			result.Failed++
+			continue
+		}
+
+		client.Kill()
+		removeClient(token)
+		result.Success++
+	}
+
+	return
+}
+
+func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConnection) (err error, token model.ConnectionToken) {
+	var (
+		t    string
+		u    uuid.UUID
+		game *model.ProductPlugin
+	)
+
+	// 获取游戏插件
+	if err, game = ServedPlugin(paramGame); err != nil {
 		return
 	}
 
@@ -106,18 +172,8 @@ func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest
 	var (
 		client *plugin.Client
 		rpc    shared.Game
-		id     string
 		token  = header.Token
 	)
-
-	if id, err = gameID(token); err != nil {
-		return
-	}
-
-	if id != paramGame.ID {
-		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, paramGame.ID)
-		return
-	}
 
 	if rpc, err = gameClient(token); err != nil {
 		return
@@ -140,20 +196,11 @@ func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest
 
 func GameRequest(header *request.HeaderRequest, param *request.ParamRequest, req *shared.GameRequest) (err error, rsp *shared.GameResponse) {
 	var (
-		id    string
 		rpc   shared.Game
 		data  []byte
 		body  []byte
 		token = header.Token
 	)
-
-	if id, err = gameID(token); err != nil {
-		return
-	}
-	if id != param.ID {
-		err = errors.Errorf("token: %s, 不属于该游戏: %s", token, param.ID)
-		return
-	}
 
 	if rpc, err = gameClient(token); err != nil {
 		return
@@ -222,7 +269,7 @@ func gameID(token string) (id string, err error) {
 		ok bool
 		c  interface{}
 	)
-	if c, ok = hm.Get(tokenGameID(token)); !ok {
+	if c, ok = hm.Get(tokenGameName(token)); !ok {
 		err = errors.Errorf("Get client failed with token: %s", token)
 		return
 	}
@@ -243,18 +290,47 @@ func tokenGame(token string) string {
 	return token + ":gameItf"
 }
 
-func tokenGameID(token string) string {
-	return token + ":gameID"
+func tokenGameName(token string) string {
+	return token + ":gameName"
 }
 
-func saveClient(token string, client *plugin.Client, game shared.Game, id string) {
+func tokensKey(name string) string {
+	return "tokens:" + name
+}
+
+func tokens(name string) (tks map[string]bool) {
+	key := tokensKey(name)
+
+	var (
+		ok bool
+		v  interface{}
+	)
+	if v, ok = hm.Get(key); !ok {
+		tks = make(map[string]bool)
+	} else {
+		if tks, ok = v.(map[string]bool); !ok {
+			tks = make(map[string]bool)
+		}
+	}
+	return
+}
+
+func saveClient(token string, client *plugin.Client, game shared.Game, name string) {
 	hm.Set(tokenClient(token), client)
 	hm.Set(tokenGame(token), game)
-	hm.Set(tokenGameID(token), id)
+	hm.Set(tokenGameName(token), name)
+
+	tks := tokens(name)
+	tks[token] = true
+	hm.Set(tokensKey(name), tks)
 }
 
-func removeClient(t string) {
-	hm.Del(tokenClient(t))
-	hm.Del(tokenGame(t))
-	hm.Del(tokenGameID(t))
+func removeClient(token string) {
+	name := tokenGameName(token)
+	tks := tokens(name)
+	delete(tks, token)
+
+	hm.Del(tokenClient(token))
+	hm.Del(tokenGame(token))
+	hm.Del(tokenGameName(token))
 }

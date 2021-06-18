@@ -11,9 +11,10 @@ func InitGameProxyRouter(r *gin.RouterGroup) {
 	{
 		connRouter := gameProxyRouter.Group("connection")
 		{
-			connRouter.POST("open", v1.OpenConnection)
-			connRouter.POST("close", v1.CloseConnection)
+			connRouter.POST("open", v1.ServedPlugin, v1.OpenConnection)
+			connRouter.POST("close", v1.OwnedToken, v1.CloseConnection)
 		}
-		gameProxyRouter.POST("request/:request", v1.GameRequest)
+		gameProxyRouter.POST("destroy", v1.ServedPlugin, v1.Destroy)
+		gameProxyRouter.POST("request/:request", v1.OwnedToken, v1.GameRequest)
 	}
 }

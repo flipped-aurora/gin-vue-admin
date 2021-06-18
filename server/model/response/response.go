@@ -25,6 +25,11 @@ func Result(code int, data interface{}, msg string, c *gin.Context) {
 	})
 }
 
+func AbortResult(code int, data interface{}, msg string, c *gin.Context) {
+	c.Abort()
+	Result(code, data, msg, c)
+}
+
 func Ok(c *gin.Context) {
 	Result(SUCCESS, map[string]interface{}{}, "操作成功", c)
 }
@@ -42,13 +47,13 @@ func OkWithDetailed(data interface{}, message string, c *gin.Context) {
 }
 
 func Fail(c *gin.Context) {
-	Result(ERROR, map[string]interface{}{}, "操作失败", c)
+	AbortResult(ERROR, map[string]interface{}{}, "操作失败", c)
 }
 
 func FailWithMessage(message string, c *gin.Context) {
-	Result(ERROR, map[string]interface{}{}, message, c)
+	AbortResult(ERROR, map[string]interface{}{}, message, c)
 }
 
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
-	Result(ERROR, data, message, c)
+	AbortResult(ERROR, data, message, c)
 }

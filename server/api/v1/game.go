@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-func ServedPlugin(c *gin.Context) {
+func VServedPlugin(c *gin.Context) {
 	var (
 		param request.ParamGame
 	)
@@ -21,15 +21,13 @@ func ServedPlugin(c *gin.Context) {
 		return
 	}
 
-	if err, token := service.ServedPlugin(&param); err != nil {
-		global.GVA_LOG.Error("创建连接失败!", zap.Any("err", err))
-		response.FailWithDetailed(err.Error(), "创建连接失败", c)
-	} else {
-		response.OkWithDetailed(token, "创建连接成功", c)
+	if err, _ := service.ServedPlugin(&param); err != nil {
+		global.GVA_LOG.Error("服务插件错误!", zap.Any("err", err))
+		response.FailWithDetailed(err.Error(), "服务插件错误", c)
 	}
 }
 
-func OwnedToken(c *gin.Context) {
+func VOwnedToken(c *gin.Context) {
 	var (
 		param  request.ParamGame
 		header request.HeaderRequest
@@ -46,10 +44,8 @@ func OwnedToken(c *gin.Context) {
 	}
 
 	if err := service.OwnedToken(&param, &header); err != nil {
-		global.GVA_LOG.Error("创建连接失败!", zap.Any("err", err))
-		response.FailWithDetailed(err.Error(), "创建连接失败", c)
-	} else {
-		response.Ok(c)
+		global.GVA_LOG.Error("所属token错误!", zap.Any("err", err))
+		response.FailWithDetailed(err.Error(), "所属token错误", c)
 	}
 }
 
@@ -95,7 +91,6 @@ func OpenConnection(c *gin.Context) {
 
 func CloseConnection(c *gin.Context) {
 	var (
-		param  request.ParamGame
 		header request.HeaderRequest
 	)
 	if err := c.ShouldBindHeader(&header); err != nil {
@@ -103,12 +98,7 @@ func CloseConnection(c *gin.Context) {
 		response.FailWithDetailed(err.Error(), "参数校验错误", c)
 		return
 	}
-	if err := c.ShouldBindUri(&param); err != nil {
-		global.GVA_LOG.Error("参数校验错误！", zap.String("err", err.Error()))
-		response.FailWithDetailed(err.Error(), "参数校验错误", c)
-		return
-	}
-	if err := service.CloseConnection(&param, &header); err != nil {
+	if err := service.CloseConnection(&header); err != nil {
 		global.GVA_LOG.Error("关闭连接失败!", zap.Any("err", err))
 		response.FailWithDetailed(err.Error(), "关闭连接失败", c)
 	} else {

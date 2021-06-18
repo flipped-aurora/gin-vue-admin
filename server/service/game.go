@@ -168,7 +168,7 @@ func OpenConnection(paramGame *request.ParamGame, connection *request.CreateConn
 	return
 }
 
-func CloseConnection(paramGame *request.ParamGame, header *request.HeaderRequest) (err error) {
+func CloseConnection(header *request.HeaderRequest) (err error) {
 	var (
 		client *plugin.Client
 		rpc    shared.Game

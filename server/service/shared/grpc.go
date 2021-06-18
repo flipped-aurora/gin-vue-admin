@@ -3,7 +3,7 @@ package shared
 import (
 	"context"
 
-	"github.com/eyotang/game-api-admin/server/service/proto"
+	"github.com/eyotang/game-proxy/server/service/proto"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )

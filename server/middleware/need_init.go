@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/eyotang/game-api-admin/server/global"
-	"github.com/eyotang/game-api-admin/server/model/response"
+	"github.com/eyotang/game-proxy/server/global"
+	"github.com/eyotang/game-proxy/server/model/response"
 	"github.com/gin-gonic/gin"
 )
 

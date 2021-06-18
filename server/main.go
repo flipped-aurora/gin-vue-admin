@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/eyotang/game-api-admin/server/core"
-	"github.com/eyotang/game-api-admin/server/global"
-	"github.com/eyotang/game-api-admin/server/initialize"
+	"github.com/eyotang/game-proxy/server/core"
+	"github.com/eyotang/game-proxy/server/global"
+	"github.com/eyotang/game-proxy/server/initialize"
 )
 
 // @title Swagger Example API

@@ -13,11 +13,11 @@
 English | [简体中文](./README.md)
 
 # Project Guidelines
-[Online Documentation](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
+[Online Documentation](https://www.game-proxy.com/) : https://www.game-proxy.com/
 
 
 
-[Development Steps](https://www.gin-vue-admin.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[Development Steps](https://www.game-proxy.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 
@@ -25,7 +25,7 @@ English | [简体中文](./README.md)
 
 ### 1.1 Project Introduction
 
-[Online Demo](http://demo.gin-vue-admin.com/)
+[Online Demo](http://demo.game-proxy.com/)
 
 username：admin
 
@@ -34,11 +34,11 @@ password：123456
 > Gin-vue-admin is a full-stack (frontend and backend separation) framework designed for management system. 
 > It integrates multiple functions, such as JWT authentication, dynamic routing, dynamic menu, casbin authentication, form generator, code generator, etc. So that you can focus more time on your business Requirements.
 
-Hi! Thank you for choosing gin-vue-admin.
+Hi! Thank you for choosing game-proxy.
 
 Gin-vue-admin is a full-stack (frontend and backend separation) framework for developers, designers and product managers.
 
-We are excited that you are interested in contributing to gin-vue-admin. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
+We are excited that you are interested in contributing to game-proxy. Before submitting your contribution though, please make sure to take a moment and read through the following guidelines.
 
 ### 1.2 Contributing Guide
 #### 1.2.1 Issue Guidelines
@@ -63,8 +63,8 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 - master: 2.0 code, for prod
 - develop: 2.0 dev code, for test
-- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1](https://v1.gorm.io) Stable branch)
-- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2](https://v2.gorm.io) Development branch)
+- [game-proxy_v2_dev](https://github.com/flipped-aurora/game-proxy/tree/game-proxy_v2_dev) (v2.0 [GormV1](https://v1.gorm.io) Stable branch)
+- [gva_gormv2_dev](https://github.com/flipped-aurora/game-proxy/tree/gva_gormv2_dev) (v2.0 [GormV2](https://v2.gorm.io) Development branch)
 
 ## 2. Getting started
 
@@ -94,7 +94,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 - Use git to clone this project
     - ```git
-        git clone https://github.com/flipped-aurora/gin-vue-admin.git
+        git clone https://github.com/flipped-aurora/game-proxy.git
       ```
     
 - Use docker-compose up to start the startup project with one click
@@ -129,7 +129,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
     - Subnet address, the default gateway is 177.7.0.1 (docker-compose V2 needs to write, V3 does not need),For specific information, see the [official document](https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address)
 
-    - The default network name is gin-vue-admin_network, and the default is bridge mode
+    - The default network name is game-proxy_network, and the default is bridge mode
 
     - If the subnet is modified, the ipv4_address of each service needs to be modified, and the ip of the server on line 20 of [.docker-compose/nginx/conf.d/my.conf](.docker-compose/nginx/conf.d/my.conf) also needs to be modified
 
@@ -137,7 +137,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 - For mysql database, please use a local database installed on the server disk.
 	- Avoid using mysql in the docker container, there may be write problems, io is lower than the host machine, docker's persistence mechanism problem
-- [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) is for docker-compose ==experience this project==, prohibit the use of [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) to initialize project data, Database initialization[Please use this method](https://www.gin-vue-admin.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
+- [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) is for docker-compose ==experience this project==, prohibit the use of [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) to initialize project data, Database initialization[Please use this method](https://www.game-proxy.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
 	- Use [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql) to initialize all problems, please bear it yourself, and have nothing to do with this project
 - When deploying using docker-compose of this project,Please modify the [nginx configuration](.docker-compose/nginx/conf.d/my.conf), mysql configuration, networks configuration, redis configuration corresponding to [docker-compose.yaml](./docker-compose.yaml), and make changes as needed.
 
@@ -145,7 +145,7 @@ We are excited that you are interested in contributing to gin-vue-admin. Before 
 
 ```bash
 # clone the project
-git clone https://github.com/piexlmax/gin-vue-admin.git
+git clone https://github.com/piexlmax/game-proxy.git
 
 # enter the project directory
 cd web
@@ -260,7 +260,7 @@ After executing the above command，`docs` will show in `server/`，then open yo
 
 ### 4.1 Architecture Diagram
 
-![Architecture diagram](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
+![Architecture diagram](http://qmplusimg.henrongyi.top/gva/game-proxy.png)
 
 ### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
 
@@ -358,17 +358,17 @@ backend code file: model\dnModel\api.go
 | <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
 
 
-#### Wechat group: comment "加入gin-vue-admin交流群"
+#### Wechat group: comment "加入game-proxy交流群"
 
 | Wechat |
 |  :---:  | 
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-#### [About Us](https://www.gin-vue-admin.com/about/)
+#### [About Us](https://www.game-proxy.com/about/)
 
 ## 9. Donate
 
-If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.gin-vue-admin.com/docs/coffee)
+If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.game-proxy.com/docs/coffee)
 
 ## 10. Commercial considerations
 

@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/eyotang/game-api-admin/server/model"
+	"github.com/eyotang/game-proxy/server/model"
 )
 
 type SysUserResponse struct {

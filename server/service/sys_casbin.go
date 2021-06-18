@@ -2,9 +2,9 @@ package service
 
 import (
 	"errors"
-	"github.com/eyotang/game-api-admin/server/global"
-	"github.com/eyotang/game-api-admin/server/model"
-	"github.com/eyotang/game-api-admin/server/model/request"
+	"github.com/eyotang/game-proxy/server/global"
+	"github.com/eyotang/game-proxy/server/model"
+	"github.com/eyotang/game-proxy/server/model/request"
 	"strings"
 
 	"github.com/casbin/casbin/v2"

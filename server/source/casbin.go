@@ -1,7 +1,7 @@
 package source
 
 import (
-	"github.com/eyotang/game-api-admin/server/global"
+	"github.com/eyotang/game-proxy/server/global"
 
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/gookit/color"

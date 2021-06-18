@@ -1,6 +1,6 @@
 package response
 
-import "github.com/eyotang/game-api-admin/server/model"
+import "github.com/eyotang/game-proxy/server/model"
 
 type FilePathResponse struct {
 	FilePath string `json:"filePath"`

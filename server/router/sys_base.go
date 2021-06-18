@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/eyotang/game-api-admin/server/api/v1"
-	"github.com/eyotang/game-api-admin/server/middleware"
+	"github.com/eyotang/game-proxy/server/api/v1"
+	"github.com/eyotang/game-proxy/server/middleware"
 	"github.com/gin-gonic/gin"
 )
 

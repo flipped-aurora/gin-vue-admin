@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/eyotang/game-api-admin/server/utils"
+	"github.com/eyotang/game-proxy/server/utils"
 )
 
 //@author: [maplepie](https://github.com/maplepie)

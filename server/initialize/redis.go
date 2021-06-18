@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	"github.com/eyotang/game-api-admin/server/global"
+	"github.com/eyotang/game-proxy/server/global"
 	"github.com/go-redis/redis"
 	"go.uber.org/zap"
 )

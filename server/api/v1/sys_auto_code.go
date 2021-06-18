@@ -3,11 +3,11 @@ package v1
 import (
 	"errors"
 	"fmt"
-	"github.com/eyotang/game-api-admin/server/global"
-	"github.com/eyotang/game-api-admin/server/model"
-	"github.com/eyotang/game-api-admin/server/model/response"
-	"github.com/eyotang/game-api-admin/server/service"
-	"github.com/eyotang/game-api-admin/server/utils"
+	"github.com/eyotang/game-proxy/server/global"
+	"github.com/eyotang/game-proxy/server/model"
+	"github.com/eyotang/game-proxy/server/model/response"
+	"github.com/eyotang/game-proxy/server/service"
+	"github.com/eyotang/game-proxy/server/utils"
 	"net/url"
 	"os"
 

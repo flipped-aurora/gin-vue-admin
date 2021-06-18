@@ -1,6 +1,6 @@
 package request
 
-import "github.com/eyotang/game-api-admin/server/model"
+import "github.com/eyotang/game-proxy/server/model"
 
 // api分页条件查询及排序结构体
 type SearchApiParams struct {

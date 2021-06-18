@@ -1,13 +1,13 @@
 package v1
 
 import (
-	"github.com/eyotang/game-api-admin/server/global"
-	"github.com/eyotang/game-api-admin/server/middleware"
-	"github.com/eyotang/game-api-admin/server/model"
-	"github.com/eyotang/game-api-admin/server/model/request"
-	"github.com/eyotang/game-api-admin/server/model/response"
-	"github.com/eyotang/game-api-admin/server/service"
-	"github.com/eyotang/game-api-admin/server/utils"
+	"github.com/eyotang/game-proxy/server/global"
+	"github.com/eyotang/game-proxy/server/middleware"
+	"github.com/eyotang/game-proxy/server/model"
+	"github.com/eyotang/game-proxy/server/model/request"
+	"github.com/eyotang/game-proxy/server/model/response"
+	"github.com/eyotang/game-proxy/server/service"
+	"github.com/eyotang/game-proxy/server/utils"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"

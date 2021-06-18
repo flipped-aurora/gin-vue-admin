@@ -1,10 +1,10 @@
 package v1
 
 import (
-	"github.com/eyotang/game-api-admin/server/global"
-	"github.com/eyotang/game-api-admin/server/model/request"
-	"github.com/eyotang/game-api-admin/server/model/response"
-	"github.com/eyotang/game-api-admin/server/service"
+	"github.com/eyotang/game-proxy/server/global"
+	"github.com/eyotang/game-proxy/server/model/request"
+	"github.com/eyotang/game-proxy/server/model/response"
+	"github.com/eyotang/game-proxy/server/service"
 	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"

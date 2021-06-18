@@ -12,20 +12,20 @@
 
 [English](./README-en.md) | 简体中文
 
-[gitee地址:https://gitee.com/pixelmax/gin-vue-admin](https://gitee.com/pixelmax/gin-vue-admin)
+[gitee地址:https://gitee.com/pixelmax/game-proxy](https://gitee.com/pixelmax/game-proxy)
 
-[github地址:https://github.com/flipped-aurora/gin-vue-admin](https://github.com/flipped-aurora/gin-vue-admin)
+[github地址:https://github.com/flipped-aurora/game-proxy](https://github.com/flipped-aurora/game-proxy)
 
-[vue3版本分支地址:https://github.com/flipped-aurora/gin-vue-admin/tree/vue3Develop](https://github.com/flipped-aurora/gin-vue-admin/tree/vue3Develop)
+[vue3版本分支地址:https://github.com/flipped-aurora/game-proxy/tree/vue3Develop](https://github.com/flipped-aurora/game-proxy/tree/vue3Develop)
 
-[审批流分支:https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow)
+[审批流分支:https://github.com/flipped-aurora/game-proxy/tree/gva_workflow](https://github.com/flipped-aurora/game-proxy/tree/gva_workflow)
 
 # 项目文档
-[在线文档](https://www.gin-vue-admin.com/) : https://www.gin-vue-admin.com/
+[在线文档](https://www.game-proxy.com/) : https://www.game-proxy.com/
 
 [从环境到部署教学视频](https://www.bilibili.com/video/BV1fV411y7dT)
 
-[开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[开发教学](https://www.game-proxy.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - 前端UI框架：[element-ui](https://github.com/ElemeFE/element) 
 - 后台框架：[gin](https://github.com/gin-gonic/gin) 
 
@@ -33,7 +33,7 @@
 
 ### 1.1 项目介绍
 
-[在线预览](http://demo.gin-vue-admin.com/)
+[在线预览](http://demo.game-proxy.com/)
 
 测试用户名：admin
 
@@ -42,11 +42,11 @@
 > Gin-vue-admin是一个基于vue和gin开发的全栈前后端分离的后台管理系统，集成jwt鉴权，动态路由，动态菜单，casbin鉴权，表单生成器，代码生成器等功能，提供多种示例文件，让您把更多时间专注在业务开发上。
 
 ### 1.2 贡献指南
-Hi! 首先感谢你使用 gin-vue-admin。
+Hi! 首先感谢你使用 game-proxy。
 
 Gin-vue-admin 是一套为后台管理平台准备的一整套前后端分离架构式的开源框架，旨在快速搭建后台管理系统。
 
-Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-admin 贡献代码或提供建议，请阅读以下内容。
+Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 game-proxy 贡献代码或提供建议，请阅读以下内容。
 
 #### 1.2.1 Issue 规范
 - issue 仅用于提交 Bug 或 Feature 以及设计相关的内容，其它内容可能会被直接关闭。如果你在使用时产生了疑问，请到 Slack 或 [Gitter](https://gitter.im/ElemeFE/element) 里咨询。
@@ -68,8 +68,8 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 - master: 2.0, 用于生产环境
 - develop: 2.0, 用于测试环境
-- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1版本](https://v1.gorm.io)稳定分支)
-- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2版本](https://v2.gorm.io)开发分支)
+- [game-proxy_v2_dev](https://github.com/flipped-aurora/game-proxy/tree/game-proxy_v2_dev) (v2.0 [GormV1版本](https://v1.gorm.io)稳定分支)
+- [gva_gormv2_dev](https://github.com/flipped-aurora/game-proxy/tree/gva_gormv2_dev) (v2.0 [GormV2版本](https://v2.gorm.io)开发分支)
 
 ## 2. 使用说明
 
@@ -77,7 +77,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 - node版本 > v8.6.0
 - golang版本 >= v1.14
 - IDE推荐：Goland
-- 初始化项目： 不同版本数据库初始化不通 参见https://www.gin-vue-admin.com/docs/server#1-%E5%88%9D%E5%A7%8B%E5%8C%96server%E9%A1%B9%E7%9B%AE
+- 初始化项目： 不同版本数据库初始化不通 参见https://www.game-proxy.com/docs/server#1-%E5%88%9D%E5%A7%8B%E5%8C%96server%E9%A1%B9%E7%9B%AE
 - 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
 
@@ -100,7 +100,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 - 使用git克隆本项目
     - ```git
-        git clone https://github.com/flipped-aurora/gin-vue-admin.git
+        git clone https://github.com/flipped-aurora/game-proxy.git
       ```
     
 - 使用docker-compose up一键启动启动项目
@@ -135,7 +135,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 	- 子网地址, 默认网关是177.7.0.1(docker-compose V2需要写,V3则不需要),具体信息看[官方文档](https://docs.docker.com/compose/compose-file/#ipv4_address-ipv6_address)
 
-	- 默认的network名为gin-vue-admin_network,默认是bridge模式
+	- 默认的network名为game-proxy_network,默认是bridge模式
 
 	- 如果修改了子网,对应的每个service的ipv4_address都需要修改,还有[.docker-compose/nginx/conf.d/my.conf](./.docker-compose/nginx/conf.d/my.conf)的第20行的server的ip也需要修改
 
@@ -144,7 +144,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 - dockerfile_server使用了多阶段构建，这是docker 17.05后引入的，因此安装的docker版本需要高于17.05
 - mysql数据库请使用装在服务器磁盘的本地数据库.
 	- 避免使用docker容器内的mysql,可能会出现写入的问题, io比宿主机低  docker的持久化机制问题
-- [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)是给docker-compose进行<font color=red>体验本项目</font>的, 禁止[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)使用进行项目数据的初始化, 数据库初始化[请使用此方法](https://www.gin-vue-admin.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
+- [init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)是给docker-compose进行<font color=red>体验本项目</font>的, 禁止[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)使用进行项目数据的初始化, 数据库初始化[请使用此方法](https://www.game-proxy.com/docs/help#step1%EF%BC%9A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96)
 	- 使用[init.sql](.docker-compose/docker-entrypoint-initdb.d/init.sql)进行初始化出现的所有问题,请自行承担,与本项目无关
 - 使用本项目的docker-compose进行部署时,请修改[docker-compose.yaml](./docker-compose.yaml)对应的[nginx配置](.docker-compose/nginx/conf.d/my.conf),mysql配置,networks配置,redis配置,按需自行更改.
 
@@ -152,7 +152,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ```bash
 # clone the project
-git clone https://github.com/piexlmax/gin-vue-admin.git
+git clone https://github.com/piexlmax/game-proxy.git
 
 # enter the project directory
 cd web
@@ -166,7 +166,7 @@ npm run serve
 
 ### 2.2 server端
 
-使用 goland等编辑工具，打开server目录，不可以打开 gin-vue-admin 根目录
+使用 goland等编辑工具，打开server目录，不可以打开 game-proxy 根目录
 
 ```bash
 # 使用 go.mod
@@ -266,7 +266,7 @@ swag init
 ## 4. 项目架构
 ### 4.1 系统架构图
 
-![系统架构图](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
+![系统架构图](http://qmplusimg.henrongyi.top/gva/game-proxy.png)
 
 ### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
 
@@ -365,13 +365,13 @@ swag init
 |  :---:  | 
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-添加微信，备注"加入gin-vue-admin交流群"
+添加微信，备注"加入game-proxy交流群"
 
-### [关于我们](https://www.gin-vue-admin.com/about/)
+### [关于我们](https://www.game-proxy.com/about/)
 
 ## 9. 捐赠
 
-如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.game-proxy.com/docs/coffee)
 
 ## 10. 商用注意事项
 

@@ -1,4 +1,4 @@
-module github.com/eyotang/game-api-admin/server
+module github.com/eyotang/game-proxy/server
 
 go 1.14
 

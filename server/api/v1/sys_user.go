@@ -23,15 +23,15 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"登陆成功"}"
 // @Router /base/login [post]
 func Login(c *gin.Context) {
-	var L request.Login
-	_ = c.ShouldBindJSON(&L)
-	if err := utils.Verify(L, utils.LoginVerify); err != nil {
+	var l request.Login
+	_ = c.ShouldBindJSON(&l)
+	if err := utils.Verify(l, utils.LoginVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if store.Verify(L.CaptchaId, L.Captcha, true) {
-		U := &model.SysUser{Username: L.Username, Password: L.Password}
-		if err, user := service.Login(U); err != nil {
+	if store.Verify(l.CaptchaId, l.Captcha, true) {
+		u := &model.SysUser{Username: l.Username, Password: l.Password}
+		if err, user := service.Login(u); err != nil {
 			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
 		} else {
@@ -112,13 +112,13 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"注册成功"}"
 // @Router /user/register [post]
 func Register(c *gin.Context) {
-	var R request.Register
-	_ = c.ShouldBindJSON(&R)
-	if err := utils.Verify(R, utils.RegisterVerify); err != nil {
+	var r request.Register
+	_ = c.ShouldBindJSON(&r)
+	if err := utils.Verify(r, utils.RegisterVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	user := &model.SysUser{Username: R.Username, NickName: R.NickName, Password: R.Password, HeaderImg: R.HeaderImg, AuthorityId: R.AuthorityId}
+	user := &model.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId}
 	err, userReturn := service.Register(*user)
 	if err != nil {
 		global.GVA_LOG.Error("注册失败!", zap.Any("err", err))
@@ -142,8 +142,8 @@ func ChangePassword(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	U := &model.SysUser{Username: user.Username, Password: user.Password}
-	if err, _ := service.ChangePassword(U, user.NewPassword); err != nil {
+	u := &model.SysUser{Username: user.Username, Password: user.Password}
+	if err, _ := service.ChangePassword(u, user.NewPassword); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Any("err", err))
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 	} else {

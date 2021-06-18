@@ -19,7 +19,7 @@ service.interceptors.response.use((resp) => {
 
 export function Commits(page) {
     return service({
-        url: "https://api.github.com/repos/flipped-aurora/gin-vue-admin/commits?page=" +
+        url: "https://api.github.com/repos/flipped-aurora/game-proxy/commits?page=" +
             page,
         method: "get",
     });

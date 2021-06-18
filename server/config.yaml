@@ -11,7 +11,7 @@ aliyunoss:
   bucket-name: yourBucketName
   bucket-url: yourBucketUrl
 autocode:
-  root: ""
+  root: /home/gocode/src/game-proxy
   server: /server
   server-api: /api/v1
   server-initialize: /initialize
@@ -49,7 +49,7 @@ local:
 mysql:
   path: 127.0.0.1:3306
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: gapi
+  db-name: game_proxy
   username: eyotang
   password: Admin#123@4
   max-idle-conns: 0
@@ -102,7 +102,7 @@ zap:
   prefix: '[GAME-API-ADMIN]'
   director: log
   link-name: latest_log
-  showLine: true
+  showLine: false
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true

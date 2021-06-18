@@ -8,7 +8,7 @@
         <div class="header">
           <a href="/">
             <!-- <img src="~@/assets/logo.png" class="logo" alt="logo" /> -->
-            <span class="title">Game-API-Admin</span>
+            <span class="title">Game-Proxy</span>
           </a>
         </div>
       </div>
@@ -71,7 +71,7 @@
           <a href="https://www.yuque.com/flipped-aurora/"
             ><img src="@/assets/yuque.png" class="link-icon"
           /></a>
-          <a href="https://github.com/flipped-aurora/gin-vue-admin"
+          <a href="https://github.com/flipped-aurora/game-proxy"
             ><img src="@/assets/github.png" class="link-icon"
           /></a>
           <a href="https://space.bilibili.com/322210472"

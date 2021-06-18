@@ -47,7 +47,7 @@
                 <li>
                   <p class="title">密保邮箱</p>
                   <p class="desc">
-                    已绑定邮箱：gin-vue-admin@google.com.cn
+                    已绑定邮箱：game-proxy@google.com.cn
                     <a href="#">立即修改</a>
                   </p>
                 </li>

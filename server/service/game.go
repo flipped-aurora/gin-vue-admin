@@ -12,7 +12,6 @@ import (
 
 	"github.com/cornelk/hashmap"
 	"github.com/gofrs/uuid"
-	"github.com/golang-collections/collections/set"
 	"github.com/hashicorp/go-plugin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -89,33 +88,32 @@ func Destroy(paramGame *request.ParamGame) (err error, result model.DestroyResul
 	)
 
 	tks := tokens(paramGame.ID)
-	result.Total = tks.Len()
+	result.Total = len(tks)
 
-	tks.Do(func(i interface{}) {
-		token := i.(string)
+	for _, token := range tks {
 		if rpc, err2 = gameClient(token); err2 != nil {
 			err = errors.Wrap(err, err2.Error())
 			result.Failed++
-			return
+			continue
 		}
 
 		if message, err2 = rpc.Close(); err2 != nil {
 			err2 = errors.Wrapf(err2, "rpc close failed, message: %s", message)
 			err = errors.Wrap(err, err2.Error())
 			result.Failed++
-			return
+			continue
 		}
 
 		if client, err2 = rpcClient(token); err2 != nil {
 			err = errors.Wrap(err, err2.Error())
 			result.Failed++
-			return
+			continue
 		}
 
 		client.Kill()
 		removeClient(token)
 		result.Success++
-	})
+	}
 
 	return
 }
@@ -300,7 +298,7 @@ func tokensKey(name string) string {
 	return "tokens:" + name
 }
 
-func tokens(name string) (tks *set.Set) {
+func tokens(name string) (tks []string) {
 	key := tokensKey(name)
 
 	var (
@@ -308,10 +306,10 @@ func tokens(name string) (tks *set.Set) {
 		v  interface{}
 	)
 	if v, ok = hm.Get(key); !ok {
-		tks = set.New()
+		tks = []string{}
 	} else {
-		if tks, ok = v.(*set.Set); !ok {
-			tks = set.New()
+		if tks, ok = v.([]string); !ok {
+			tks = []string{}
 		}
 	}
 	return
@@ -323,16 +321,27 @@ func saveClient(token string, client *plugin.Client, game shared.Game, name stri
 	hm.Set(tokenGameName(token), name)
 
 	tks := tokens(name)
-	tks.Insert(token)
+	tks = append(tks, token)
 	hm.Set(tokensKey(name), tks)
 }
 
 func removeClient(token string) {
 	name := tokenGameName(token)
 	tks := tokens(name)
-	tks.Remove(token)
+	tks = removeToken(tks, token)
+	hm.Set(tokensKey(name), tks)
 
 	hm.Del(tokenClient(token))
 	hm.Del(tokenGame(token))
 	hm.Del(tokenGameName(token))
+}
+
+func removeToken(tks []string, t string) []string {
+	for idx, _ := range tks {
+		if t == tks[idx] {
+			tks[idx] = tks[len(tks)-1]
+			return tks[:len(tks)-1]
+		}
+	}
+	return tks
 }

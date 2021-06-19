@@ -88,6 +88,7 @@ func Destroy(paramGame *request.ParamGame) (err error, result model.DestroyResul
 	)
 
 	tks := tokens(paramGame.ID)
+	global.GVA_LOG.Info("Destroy", zap.Any("tokens", tks))
 	result.Total = len(tks)
 
 	for _, token := range tks {
@@ -321,7 +322,9 @@ func saveClient(token string, client *plugin.Client, game shared.Game, name stri
 	hm.Set(tokenGameName(token), name)
 
 	tks := tokens(name)
+	global.GVA_LOG.Info("saveClient", zap.Any("tks 1", tks))
 	tks = append(tks, token)
+	global.GVA_LOG.Info("saveClient", zap.Any("tks 2", tks))
 	hm.Set(tokensKey(name), tks)
 }
 

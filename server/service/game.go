@@ -322,9 +322,7 @@ func saveClient(token string, client *plugin.Client, game shared.Game, name stri
 	hm.Set(tokenGameName(token), name)
 
 	tks := tokens(name)
-	global.GVA_LOG.Info("saveClient", zap.String("name", name), zap.Any("tks 1", tks))
 	tks = append(tks, token)
-	global.GVA_LOG.Info("saveClient", zap.String("name", name), zap.Any("tks 2", tks))
 	hm.Set(tokensKey(name), tks)
 }
 
@@ -332,11 +330,8 @@ func removeClient(token string) {
 	name, err := gameID(token)
 	if err == nil {
 		tks := tokens(name)
-
-		global.GVA_LOG.Info("removeClient", zap.String("name", name), zap.Any("tks 1", tks))
 		tks = removeToken(tks, token)
 		hm.Set(tokensKey(name), tks)
-		global.GVA_LOG.Info("removeClient", zap.String("name", name), zap.Any("tks 2", tks))
 	}
 
 	hm.Del(tokenClient(token))

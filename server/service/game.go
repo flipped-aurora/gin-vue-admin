@@ -12,6 +12,7 @@ import (
 
 	"github.com/cornelk/hashmap"
 	"github.com/gofrs/uuid"
+	"github.com/golang-collections/collections/set"
 	"github.com/hashicorp/go-plugin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
@@ -88,32 +89,33 @@ func Destroy(paramGame *request.ParamGame) (err error, result model.DestroyResul
 	)
 
 	tks := tokens(paramGame.ID)
-	result.Total = len(tks)
+	result.Total = tks.Len()
 
-	for token, _ := range tks {
+	tks.Do(func(i interface{}) {
+		token := i.(string)
 		if rpc, err2 = gameClient(token); err2 != nil {
 			err = errors.Wrap(err, err2.Error())
 			result.Failed++
-			continue
+			return
 		}
 
 		if message, err2 = rpc.Close(); err2 != nil {
 			err2 = errors.Wrapf(err2, "rpc close failed, message: %s", message)
 			err = errors.Wrap(err, err2.Error())
 			result.Failed++
-			continue
+			return
 		}
 
 		if client, err2 = rpcClient(token); err2 != nil {
 			err = errors.Wrap(err, err2.Error())
 			result.Failed++
-			continue
+			return
 		}
 
 		client.Kill()
 		removeClient(token)
 		result.Success++
-	}
+	})
 
 	return
 }
@@ -298,7 +300,7 @@ func tokensKey(name string) string {
 	return "tokens:" + name
 }
 
-func tokens(name string) (tks map[string]bool) {
+func tokens(name string) (tks *set.Set) {
 	key := tokensKey(name)
 
 	var (
@@ -306,10 +308,10 @@ func tokens(name string) (tks map[string]bool) {
 		v  interface{}
 	)
 	if v, ok = hm.Get(key); !ok {
-		tks = make(map[string]bool)
+		tks = set.New()
 	} else {
-		if tks, ok = v.(map[string]bool); !ok {
-			tks = make(map[string]bool)
+		if tks, ok = v.(*set.Set); !ok {
+			tks = set.New()
 		}
 	}
 	return
@@ -321,14 +323,14 @@ func saveClient(token string, client *plugin.Client, game shared.Game, name stri
 	hm.Set(tokenGameName(token), name)
 
 	tks := tokens(name)
-	tks[token] = true
+	tks.Insert(token)
 	hm.Set(tokensKey(name), tks)
 }
 
 func removeClient(token string) {
 	name := tokenGameName(token)
 	tks := tokens(name)
-	delete(tks, token)
+	tks.Remove(token)
 
 	hm.Del(tokenClient(token))
 	hm.Del(tokenGame(token))

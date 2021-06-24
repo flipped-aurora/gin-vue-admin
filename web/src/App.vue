@@ -5,12 +5,8 @@
 </template>
 
 <script>
-import { checkDB } from '@/api/initdb'
 export default {
-  name: 'App',
-  async created() {
-    await checkDB()
-  }
+  name: 'App'
 }
 </script>
 

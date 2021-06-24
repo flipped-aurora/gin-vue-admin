@@ -26,7 +26,8 @@ func JsonInBlacklist(jwtList model.JwtBlacklist) (err error) {
 //@return: bool
 
 func IsBlacklist(jwt string) bool {
-	isNotFound := errors.Is(global.GVA_DB.Where("jwt = ?", jwt).First(&model.JwtBlacklist{}).Error, gorm.ErrRecordNotFound)
+	err := global.GVA_DB.Where("jwt = ?", jwt).First(&model.JwtBlacklist{}).Error
+	isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
 	return !isNotFound
 }
 

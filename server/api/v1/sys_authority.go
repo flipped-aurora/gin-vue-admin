@@ -7,6 +7,7 @@ import (
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
+
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -30,6 +31,7 @@ func CreateAuthority(c *gin.Context) {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
 	} else {
+		_ = service.UpdateCasbin(authority.AuthorityId, request.DefaultCasbin())
 		response.OkWithDetailed(response.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
 	}
 }

@@ -80,7 +80,12 @@ service.interceptors.response.use(
   },
   error => {
     closeLoading()
-    MessageBox.confirm(`检测到接口错误${error},此类错误内容常见于后台panic，如果影响您正常使用可强制登出清理缓存`, '接口报错', {
+    MessageBox.confirm(`
+    <p>检测到接口错误${error}</p>
+    <p>错误码500：此类错误内容常见于后台panic，如果影响您正常使用可强制登出清理缓存</p>
+    <p>错误码404：此类错误多为接口未注册（或未重启）或者请求路径（方法）与api路径（方法）不符</p>
+    `, '接口报错', {
+      dangerouslyUseHTMLString: true,
       distinguishCancelAndClose: true,
       confirmButtonText: '清理缓存',
       cancelButtonText: '取消'

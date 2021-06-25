@@ -17,6 +17,23 @@ export const createProductPlugin = (data) => {
  }
 
 
+ // @Tags ProductPlugin
+// @Summary 上传File
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.File true "上传File"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /productPlugin/upload [post]
+export const uploadApi = (data) => {
+    return service({
+        url: "/productPlugin/upload",
+        method: 'post',
+        data
+    })
+}
+
+
 // @Tags ProductPlugin
 // @Summary 删除ProductPlugin
 // @Security ApiKeyAuth

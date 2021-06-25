@@ -68,10 +68,21 @@
          <el-form-item label="产品名称:">
             <el-input v-model="formData.productName" clearable placeholder="请输入" ></el-input>
       </el-form-item>
-       
-         <el-form-item label="插件路径:">
-            <el-input v-model="formData.pluginPath" clearable placeholder="请输入" ></el-input>
+
+      <el-form-item label="插件路径:">
+            <el-input v-model="formData.pluginPath" clearable placeholder="上传插件后自动填写" disabled ></el-input>
+            <el-upload
+            :action="`${path}/productPlugin/upload`"
+            :headers="{ 'x-token': token }"
+            :on-error="uploadError"
+            :on-success="uploadSuccess"
+            :show-file-list="false"
+          >
+              <el-button size="small" type="primary">点击上传插件</el-button>
+            </el-upload>
       </el-form-item>
+
+       
        </el-form>
       <div class="dialog-footer" slot="footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -82,15 +93,19 @@
 </template>
 
 <script>
+const path = process.env.VUE_APP_BASE_API;
 import {
     createProductPlugin,
     deleteProductPlugin,
     deleteProductPluginByIds,
     updateProductPlugin,
     findProductPlugin,
-    getProductPluginList
+    getProductPluginList,
+    uploadApi
 } from "@/api/plugin";  //  此处请自行替换地址
 import { formatTimeToStr } from "@/utils/date";
+import { mapGetters } from "vuex";
+
 import infoList from "@/mixins/infoList";
 export default {
   name: "ProductPlugin",
@@ -100,14 +115,19 @@ export default {
       listApi: getProductPluginList,
       dialogFormVisible: false,
       type: "",
+      file: "",
+      path: path,
       deleteVisible: false,
-      multipleSelection: [],formData: {
+      multipleSelection: [],
+      formData: {
             productID:"",
             productName:"",
             pluginPath:"",
-            
       }
     };
+  },
+    computed: {
+    ...mapGetters("user", ["userInfo", "token"])
   },
   filters: {
     formatDate: function(time) {
@@ -226,7 +246,30 @@ export default {
     openDialog() {
       this.type = "create";
       this.dialogFormVisible = true;
-    }
+    },
+
+// 文件上传
+      uploadSuccess(res) {
+      if (res.code == 0) {
+        this.formData.pluginPath = res.data.file.url || "";
+        this.$message({
+          type: "success",
+          message: "上传成功"
+        });
+      } else {
+        this.$message({
+          type: "warning",
+          message: res.msg
+        });
+      }
+    },
+    uploadError() {
+      this.$message({
+        type: "error",
+        message: "上传失败"
+      });
+    },
+
   },
   async created() {
     await this.getTableData();

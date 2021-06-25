@@ -19,6 +19,8 @@
         </el-select>
       </div>
     </transition>
+
+
     <div
       :style="{display:'inline-block',float:'right',width:'31px',textAlign:'left',fontSize:'16px',paddingTop:'2px'}"
       class="user-box"
@@ -36,11 +38,13 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'SearchComponent',
+
   data() {
     return {
       value: '',
       show: false,
-      reload: false
+      reload: false,
+      color: '#fff'
     }
   },
   computed: {
@@ -66,7 +70,8 @@ export default {
       setTimeout(() => {
         this.reload = false
       }, 500)
-    }
+    },
+
   }
 }
 </script>

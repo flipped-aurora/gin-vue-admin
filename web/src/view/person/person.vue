@@ -18,15 +18,20 @@
                 <li>
                   <i class="el-icon-user" />{{ userInfo.nickName }}
                 </li>
-                <li>
-                  <i class="el-icon-data-analysis" />北京反转极光科技有限公司-技术部-前端事业群
-                </li>
+                <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="top">
+                  <li>
+                    <i class="el-icon-data-analysis" />北京反转极光科技有限公司-技术部-前端事业群
+                  </li>
+                </el-tooltip>
                 <li>
                   <i class="el-icon-video-camera-solid" />中国·北京市·朝阳区
                 </li>
-                <li>
-                  <i class="el-icon-medal-1" />goLang/JavaScript/Vue/Gorm
-                </li>
+                <el-tooltip class="item" effect="light" content="goLang/JavaScript/Vue/Gorm" placement="top">
+                  <li>
+                    <i class="el-icon-medal-1" />goLang/JavaScript/Vue/Gorm
+                  </li>
+                </el-tooltip>
+
               </ul>
             </div>
           </div>
@@ -245,7 +250,12 @@ export default {
       ul {
         display: inline-block;
         height: 100%;
+        width: 100%;
         li {
+          width: 100%;
+          white-space:nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           i {
             margin-right: 8px;
           }

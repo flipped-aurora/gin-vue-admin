@@ -74,9 +74,9 @@
           <router-view v-if="!$route.meta.keepAlive && reloadFlag" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box" />
         </transition>
         <BottomInfo />
+        <setting />
       </el-main>
     </el-container>
-
   </el-container>
 </template>
 
@@ -88,6 +88,7 @@ import Search from '@/view/layout/search/search'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
 import { mapGetters, mapActions } from 'vuex'
 import CustomPic from '@/components/customPic'
+import Setting from './setting'
 export default {
   name: 'Layout',
   components: {
@@ -96,7 +97,8 @@ export default {
     Screenfull,
     Search,
     BottomInfo,
-    CustomPic
+    CustomPic,
+    Setting
   },
   data() {
     return {

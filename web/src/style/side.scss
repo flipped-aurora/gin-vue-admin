@@ -20,21 +20,17 @@
   .tilte {
     min-height: $height-aside-tilte;
     line-height: $height-aside-tilte;
-    background: $bg-aside;
     text-align: center;
-
     .logoimg {
       width: $width-aside-img;
       height: $height-aside-img;
       vertical-align: middle;
-      background: #fff;
       border-radius: 50%;
       padding: 3px;
   }
 
     .tit-text {
       display: inline-block;
-      color: $aside-color;
       font-weight: 600;
       font-size: 20px;
       vertical-align: middle;

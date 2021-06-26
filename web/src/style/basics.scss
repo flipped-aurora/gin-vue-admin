@@ -1,3 +1,4 @@
+
 // basice
 $font-size: 14px;
 $icon-size:17px;
@@ -14,10 +15,11 @@ $width-mobile-aside:210px;
 $color-aside:rgba(255, 255, 255,.9);
 $icon-arrow-size-aside:12px;
 $width-submenu-aside:55px;
-$bg-aside:#191a23;
+$bg-aside:#fff;
 $height-aside-tilte:64px;
 $height-aside-img:30px;
 $width-aside-img:30px;
+$aside-color:#000;
 // header
 $height-header: 60px;
 // nav-scroll
@@ -35,3 +37,8 @@ $height-car:68px;
 // mobile
 $padding-xs: 5px;
 $margin-xs: 5px;
+
+:export{
+  bg_aside : $bg-aside ;
+  color_aside : $aside-color
+}

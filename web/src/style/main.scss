@@ -8,7 +8,7 @@
  */
 
 @import '@/style/basics.scss';
-
+@import "side.scss";
 html {
     line-height: 1.15;
     /* 1 */
@@ -546,138 +546,18 @@ li {
         top: 0;
     }
 
-    .el-aside {
-        -webkit-transition: width .2s;
-        transition: width .2s;
-        width: $width-aside;
-        background-color: $bg-aside;
-        height: 100%;
-        position: fixed;
-        font-size: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1001;
-        overflow: hidden;
-
-        .el-menu {
-            border-right: none;
-        }
-        
-        .tilte {
-            min-height: $height-aside-tilte;
-            line-height: $height-aside-tilte;
-            background: $bg-aside;
-            text-align: center;
-
-            .logoimg {
-                width: $width-aside-img;
-                height: $height-aside-img;
-                vertical-align: middle;
-                background: #fff;
-                border-radius: 50%;
-                padding: 3px;
-            }
-
-            .tit-text {
-                display: inline-block;
-                color: #fff;
-                font-weight: 600;
-                font-size: 20px;
-                vertical-align: middle;
-                padding-left: 10px;
-            }
-        }
-
-    }
-
-    .aside {
-        .el-menu-vertical {
-            background-color: $bg-aside;
-        }
-        .el-submenu {
-            background-color: $bg-aside;
-            .el-menu {
-                .el-menu-item {
-                    background-color: #000408;
-                    height: 44px;
-                    line-height: 44px;
-                }
-                .is-active {    
-                    background-color: #1890ff;
-                    // 关闭三级菜单二级菜单样式
-                    ul{
-                        border:none;
-                    }
-                }
-                // 关闭三级菜单二级菜单样式
-                .is-active.is-opened{
-                    background-color: #191a23;
-                    ul{
-                        border:none;
-                    }
-                }
-            }
-        }
-        .el-menu-item:focus, .el-menu-item:hover{
-            background-color: transparent;
-        }
-        .el-menu-item:hover i,
-        .el-menu-item:hover span {
-            color: #fff;
-        }
-
-        .el-submenu__title:hover {
-            background-color: $bg-aside;
-        }
-
-        .el-submenu__title:hover i,
-        .el-submenu__title:hover span {
-            color: #fff;
-        }
-        .el-menu--inline {
-            border-left: 5px solid #2c3b41;
-        }
-    }
-
-    .hideside {
-        .aside {
-            width: $width-hideside-aside;
-        }
-    }
-
-    .mobile.hideside {
-        .el-aside {
-            -webkit-transition-duration: .2s;
-            transition-duration: .2s;
-            -webkit-transform: translate3d(-210px, 0, 0);
-            transform: translate3d(-220px, 0, 0);
-        }
-    }
-
-    .mobile {
-        .el-aside {
-            -webkit-transition: -webkit-transform .28s;
-            transition: -webkit-transform .28s;
-            transition: transform .28s;
-            transition: transform .28s, -webkit-transform .28s;
-            width: $width-mobile-aside;
-        }
-    }
-
 
 
     .main-cont.el-main {
         min-height: 100%;
         -webkit-transition: margin-left .28s;
         transition: margin-left .28s;
-        margin-left: $width-aside;
         position: relative;
     }
 
     .hideside {
         .main-cont.el-main {
-            margin-left: 54px;
+            //margin-left: 54px;
         }
     }
 

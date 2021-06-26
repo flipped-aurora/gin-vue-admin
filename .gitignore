@@ -1,7 +1,7 @@
 .idea/
 /web/node_modules
 /web/dist
-
+/web/vue.config.js
 .DS_Store
 
 # local env files

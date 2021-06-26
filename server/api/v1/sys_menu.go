@@ -24,6 +24,9 @@ func GetMenu(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
 		response.FailWithMessage("获取失败", c)
 	} else {
+		if menus == nil {
+			menus = []model.SysMenu{}
+		}
 		response.OkWithDetailed(response.SysMenusResponse{Menus: menus}, "获取成功", c)
 	}
 }

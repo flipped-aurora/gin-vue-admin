@@ -14,7 +14,6 @@ import Bus from '@/utils/bus'
 import '../style/element_visiable.scss' // 导入主题色配置
 import config from './config'
 Vue.prototype.$GIN_VUE_ADMIN = config
-console.log(config)
 Vue.use(Bus)
 Vue.use(APlayer, {
   defaultCover: 'https://github.com/u3u.png',

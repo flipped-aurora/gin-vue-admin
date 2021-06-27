@@ -294,6 +294,7 @@ swag init
             ├─api       （向后台发送ajax的封装层）
             ├─assets	（静态文件）
             ├─components（组件）
+            ├─core      （gin-vue-admin组装文件）
             ├─router	（前端路由）
             ├─store     （vuex 状态管理仓）
             ├─style     （通用样式文件）

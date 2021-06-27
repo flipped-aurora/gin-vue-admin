@@ -11,6 +11,7 @@ import '../../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
 // 路由守卫
 import Bus from '@/utils/bus'
 // 加载网站配置文件夹
+import '../style/element_visiable.scss' // 导入主题色配置
 import config from './config'
 Vue.prototype.$GIN_VUE_ADMIN = config
 Vue.use(Bus)

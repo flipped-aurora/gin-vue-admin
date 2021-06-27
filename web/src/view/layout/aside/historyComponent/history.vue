@@ -9,12 +9,11 @@
       @tab-remove="removeTab"
     >
       <el-tab-pane
-        v-for="(item , index) in historys"
+        v-for="item in historys"
         :key="item.name + JSON.stringify(item.query)+JSON.stringify(item.params)"
         :label="item.meta.title"
         :name="item.name + JSON.stringify(item.query)+JSON.stringify(item.params)"
         :tab="item"
-        :style="'z-index:'+index"
       />
     </el-tabs>
 
@@ -24,7 +23,6 @@
       <li @click="closeLeft">关闭左侧</li>
       <li @click="closeRight">关闭右侧</li>
       <li @click="closeOther">关闭其他</li>
-      <li v-if="activeValue" @click="reload">重新加载</li>
     </ul>
   </div>
 </template>
@@ -259,9 +257,6 @@ export default {
         }
       }
       this.historys.splice(index, 1)
-    },
-    reload() {
-      this.$bus.$emit('reload')
     }
   }
 }
@@ -271,9 +266,8 @@ export default {
 .contextmenu {
   width: 100px;
   margin: 0;
-  border: 1px solid rgba(160, 156, 156, 0.2);
-  background: rgba(255,255,255,0.8);
-  backdrop-filter: blur(10px);
+  border: 1px solid #ccc;
+  background: #fff;
   z-index: 3000;
   position: absolute;
   list-style-type: none;
@@ -281,23 +275,14 @@ export default {
   border-radius: 4px;
   font-size: 14px;
   color: #333;
-  box-shadow: 1px 1px 15px 0  rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
 }
 .contextmenu li {
   margin: 0;
   padding: 7px 16px;
 }
 .contextmenu li:hover {
-  color: #1890ff;
+  background: #f2f2f2;
   cursor: pointer;
 }
-.el-tabs__item{
-  -webkit-mask: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANoAAAAkBAMAAAAdqzmBAAAAMFBMVEVHcEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlTPQ5AAAAD3RSTlMAr3DvEM8wgCBA379gj5//tJBPAAAAnUlEQVRIx2NgAAM27fj/tAO/xBsYkIHyf9qCT8iWMf6nNQhAsk2f5rYheY7Dnua2/U+A28ZEe8v+F9Ax2v7/F4DbxkUH2wzgtvHTwbYPo7aN2jZq26hto7aN2jZq25Cy7Qvctnw62PYNbls9HWz7S8/G6//PsI6H4396gAUQy1je08W2jxDbpv6nD4gB2uWp+J9eYPsEhv/0BPS1DQBvoBLVZ3BppgAAAABJRU5ErkJggg==);
-  mask: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANoAAAAkBAMAAAAdqzmBAAAAMFBMVEVHcEwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlTPQ5AAAAD3RSTlMAr3DvEM8wgCBA379gj5//tJBPAAAAnUlEQVRIx2NgAAM27fj/tAO/xBsYkIHyf9qCT8iWMf6nNQhAsk2f5rYheY7Dnua2/U+A28ZEe8v+F9Ax2v7/F4DbxkUH2wzgtvHTwbYPo7aN2jZq26hto7aN2jZq25Cy7Qvctnw62PYNbls9HWz7S8/G6//PsI6H4396gAUQy1je08W2jxDbpv6nD4gB2uWp+J9eYPsEhv/0BPS1DQBvoBLVZ3BppgAAAABJRU5ErkJggg==);
-  -webkit-mask-size: 100% 100%;
-  &.is-closable:hover{
-    background: #dee1e6;
-  }
-}
-
 </style>

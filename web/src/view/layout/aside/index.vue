@@ -6,9 +6,9 @@
           :collapse="isCollapse"
           :collapse-transition="true"
           :default-active="active"
+          active-text-color="#fff"
           class="el-menu-vertical"
-          :background-color="$store.getters['app/getSIdeMode'] === 'light' ? '#fff' : '#111'"
-          text-color="#777"
+          text-color="rgb(191, 203, 217)"
           unique-opened
           @select="selectMenuItem"
         >
@@ -93,17 +93,6 @@ export default {
     font-size: 20px;
     display: table-cell;
     vertical-align: middle;
-  }
-}
-.el-menu-item {
-  background-color: #fff;
-  height: 44px;
-  line-height: 44px;
-  color: #000;
-  &.is-active{
-    background-color: #e6f7ff ;
-    border-right: 4px solid  ;
-    color: #1890ff ;
   }
 }
 </style>

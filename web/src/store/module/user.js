@@ -1,6 +1,7 @@
 import { login } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
+import variables from '@/style/element_visiable.scss'
 export const user = {
   namespaced: true,
   state: {
@@ -8,7 +9,9 @@ export const user = {
       uuid: '',
       nickName: '',
       headerImg: '',
-      authority: ''
+      authority: '',
+      sideMode : 'dark',
+      theme: variables.colorPrimary,
     },
     token: ''
   },
@@ -38,6 +41,12 @@ export const user = {
       state.userInfo = { ...state.userInfo,
         ...userInfo
       }
+    },
+    CHANGETHEME: (state, value) => {
+      state.theme = value
+    },
+    CHANGESIDEMODE: (state ,val) => {
+      state.sideMode = val
     }
   },
   actions: {
@@ -64,6 +73,12 @@ export const user = {
       if (res.code === 0) {
         commit('LoginOut')
       }
+    },
+    changeTheme({ commit }, data) {
+      commit('CHANGETHEME', data)
+    },
+    changeSideMode({ commit },data) {
+      commit('CHANGESIDEMODE',data)
     }
   },
   getters: {
@@ -72,6 +87,9 @@ export const user = {
     },
     token(state) {
       return state.token
+    },
+    getSideMode(state) {
+      return state.sideMode
     }
 
   }

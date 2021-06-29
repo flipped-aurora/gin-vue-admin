@@ -118,13 +118,31 @@ export const user = {
     token(state) {
       return state.token
     },
-    sideMode(state) {
+    mode(state) {
       return state.userInfo.sideMode
     },
+    sideMode(state) {
+      if (state.userInfo.sideMode === 'dark') {
+        return '#191a23'
+      } else if (state.userInfo.sideMode === 'light') {
+        return '#fff'
+      } else {
+        return state.userInfo.sideMode
+      }
+    },
     baseColor(state) {
-      return state.userInfo.baseColor
+      if (state.userInfo.sideMode === 'dark') {
+        return '#fff'
+      } else if (state.userInfo.sideMode === 'light') {
+        return '#191a23'
+      } else {
+        return state.userInfo.baseColor
+      }
     },
     activeColor(state) {
+      if (state.userInfo.sideMode === 'dark' || state.userInfo.sideMode === 'light') {
+        return '#1890ff'
+      }
       return state.userInfo.activeColor
     }
 

@@ -16,7 +16,7 @@
         :tab="item"
         class="gva-tab"
       >
-        <span slot="label" :style="{color: activeColor}"><i class="dot" :style="{backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+        <span slot="label" :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
       </el-tab-pane>
     </el-tabs>
 

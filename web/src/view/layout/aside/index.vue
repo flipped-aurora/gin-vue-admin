@@ -6,9 +6,9 @@
           :collapse="isCollapse"
           :collapse-transition="true"
           :default-active="active"
-          :background-color="backgroundColor"
+          :background-color="sideMode"
           :active-text-color="activeColor"
-          :text-color="textColor"
+          :text-color="baseColor"
           class="el-menu-vertical"
           unique-opened
           @select="selectMenuItem"
@@ -38,25 +38,7 @@ export default {
   },
   computed: {
     ...mapGetters('router', ['asyncRouters']),
-    ...mapGetters('user', ['baseColor', 'activeColor', 'sideMode']),
-    backgroundColor() {
-      if (this.sideMode === 'dark') {
-        return '#191a23'
-      } else if (this.sideMode === 'light') {
-        return '#fff'
-      } else {
-        return this.sideMode
-      }
-    },
-    textColor() {
-      if (this.$store.getters['user/sideMode'] === 'dark') {
-        return '#fff'
-      } else if (this.$store.getters['user/sideMode'] === 'light') {
-        return '#191a23'
-      } else {
-        return this.baseColor
-      }
-    }
+    ...mapGetters('user', ['baseColor', 'activeColor', 'sideMode'])
   },
   watch: {
     $route() {

@@ -9,15 +9,15 @@
     >
       <div class="setting_body">
         <div class="setting_card">
-          <div class="setting_title">侧边栏主题</div>
+          <div class="setting_title">侧边栏主题 (注：自定义请先配置背景色)</div>
           <div class="setting_content">
             <div class="theme-box">
               <div class="item" @click="changeMode('light')">
-                <i v-if="sideMode === 'light'" class="el-icon-check check" />
+                <i v-if="mode === 'light'" class="el-icon-check check" />
                 <img src="https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg">
               </div>
               <div class="item" @click="changeMode('dark')">
-                <i v-if="sideMode === 'dark'" class="el-icon-check check" />
+                <i v-if="mode === 'dark'" class="el-icon-check check" />
                 <img src="https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg">
               </div>
             </div>
@@ -53,7 +53,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', ['sideMode', 'baseColor', 'activeColor'])
+    ...mapGetters('user', ['sideMode', 'baseColor', 'activeColor', 'mode'])
   },
   methods: {
     handleClose() {

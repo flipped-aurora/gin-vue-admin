@@ -6,10 +6,10 @@
           :collapse="isCollapse"
           :collapse-transition="true"
           :default-active="active"
-          :active-text-color="$store.getters['user/getSideMode'] === 'dark' ? '#1890ff' : '#1890ff'"
-          :background-color="$store.getters['user/getSideMode'] === 'dark' ? '#191a23 ' : '#fff'"
+          :background-color="backgroundColor"
+          :active-text-color="activeColor"
+          :text-color="textColor"
           class="el-menu-vertical"
-          text-color="#999"
           unique-opened
           @select="selectMenuItem"
         >
@@ -37,7 +37,26 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('router', ['asyncRouters'])
+    ...mapGetters('router', ['asyncRouters']),
+    ...mapGetters('user', ['baseColor', 'activeColor', 'sideMode']),
+    backgroundColor() {
+      if (this.sideMode === 'dark') {
+        return '#191a23'
+      } else if (this.sideMode === 'light') {
+        return '#fff'
+      } else {
+        return this.sideMode
+      }
+    },
+    textColor() {
+      if (this.$store.getters['user/sideMode'] === 'dark') {
+        return '#fff'
+      } else if (this.$store.getters['user/sideMode'] === 'light') {
+        return '#191a23'
+      } else {
+        return this.baseColor
+      }
+    }
   },
   watch: {
     $route() {
@@ -83,6 +102,11 @@ export default {
 </script>
 
 <style lang="scss">
+.el-submenu__title,.el-menu-item{
+  i{
+    color: inherit !important;
+  }
+}
 .el-scrollbar {
   .el-scrollbar__view {
     height: 100%;

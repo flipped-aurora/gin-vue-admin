@@ -89,6 +89,16 @@ export default {
     color: inherit !important;
   }
 }
+
+.el-submenu__title:hover,.el-menu-item:hover{
+  i{
+    color: inherit !important;
+  }
+  span{
+    color: inherit !important;
+  }
+}
+
 .el-scrollbar {
   .el-scrollbar__view {
     height: 100%;

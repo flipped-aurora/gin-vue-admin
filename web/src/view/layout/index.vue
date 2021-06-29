@@ -3,9 +3,9 @@
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click.native="changeShadow()" />
       <el-aside class="main-cont main-left">
-        <div class="tilte">
+        <div class="tilte" :class="$store.getters['user/getSideMode']">
           <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
-          <h2 v-if="isSider" class="tit-text">{{ $GIN_VUE_ADMIN.appName }}</h2>
+          <h2 v-if="isSider" class="tit-text" :class="$store.getters['user/getSideMode']">{{ $GIN_VUE_ADMIN.appName }}</h2>
         </div>
         <Aside class="aside" />
       </el-aside>
@@ -74,6 +74,7 @@
           <router-view v-if="!$route.meta.keepAlive && reloadFlag" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box" />
         </transition>
         <BottomInfo />
+        <setting />
       </el-main>
     </el-container>
 
@@ -88,6 +89,7 @@ import Search from '@/view/layout/search/search'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
 import { mapGetters, mapActions } from 'vuex'
 import CustomPic from '@/components/customPic'
+import Setting from './setting'
 export default {
   name: 'Layout',
   components: {
@@ -96,7 +98,8 @@ export default {
     Screenfull,
     Search,
     BottomInfo,
-    CustomPic
+    CustomPic,
+    Setting
   },
   data() {
     return {
@@ -339,4 +342,12 @@ export default {
 // 	justify-content: center;
 // 	align-items: center;
 // }
+.dark{
+  background-color: #191a23 !important;
+  color: #fff !important;
+}
+.light{
+  background-color: #fff !important;
+  color: #000 !important;
+}
 </style>

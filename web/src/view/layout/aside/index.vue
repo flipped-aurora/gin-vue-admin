@@ -6,9 +6,10 @@
           :collapse="isCollapse"
           :collapse-transition="true"
           :default-active="active"
-          active-text-color="#fff"
+          :active-text-color="$store.getters['user/getSideMode'] === 'dark' ? '#1890ff' : '#1890ff'"
+          :background-color="$store.getters['user/getSideMode'] === 'dark' ? '#191a23 ' : '#fff'"
           class="el-menu-vertical"
-          text-color="rgb(191, 203, 217)"
+          text-color="#999"
           unique-opened
           @select="selectMenuItem"
         >

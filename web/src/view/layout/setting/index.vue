@@ -89,9 +89,9 @@ export default {
 
 <style lang="scss" scoped>
 .drawer-container {
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: 20%;
+  bottom: 15%;
   height: 40px;
   width: 40px;
   display: flex;

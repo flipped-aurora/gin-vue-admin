@@ -200,7 +200,14 @@ func GetTables(dbName string) (err error, TableNames []request.TableReq) {
 //@return: err error, DBNames []request.DBReq
 
 func GetDB() (err error, DBNames []request.DBReq) {
-	err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+	switch global.GVA_CONFIG.System.DbType {
+	case "mysql":
+		err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+	case "postgres":
+		err = global.GVA_DB.Raw("SELECT datname as database FROM pg_database WHERE datistemplate = false;").Scan(&DBNames).Error
+	default:
+		err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
+	}
 	return err, DBNames
 }
 

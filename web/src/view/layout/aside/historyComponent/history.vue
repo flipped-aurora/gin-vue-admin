@@ -118,7 +118,14 @@ export default {
       if (this.historys.length === 1 && this.$route.name === this.defaultRouter) {
         return false
       }
-      if (e.srcElement.id) {
+      let id = ''
+      if (e.srcElement.nodeName === 'SPAN') {
+        console.log(e)
+        id = e.srcElement.offsetParent.id
+      } else {
+        id = e.srcElement.id
+      }
+      if (id) {
         this.contextMenuVisible = true
         let width
         if (this.isCollapse) {
@@ -131,7 +138,7 @@ export default {
         }
         this.left = e.clientX - width
         this.top = e.clientY + 10
-        this.rightActive = e.srcElement.id.split('-')[1]
+        this.rightActive = id.split('-')[1]
       }
     },
     closeAll() {

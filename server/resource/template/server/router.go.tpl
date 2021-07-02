@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Init{{.StructName}}Router 初始化 {{.StructName}} 路由信息
 func Init{{.StructName}}Router(Router *gin.RouterGroup) {
 	{{.StructName}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
 	{

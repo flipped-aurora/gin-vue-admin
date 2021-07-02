@@ -10,6 +10,7 @@ import (
     "go.uber.org/zap"
 )
 
+// Create{{.StructName}} 创建{{.StructName}}
 // @Tags {{.StructName}}
 // @Summary 创建{{.StructName}}
 // @Security ApiKeyAuth
@@ -29,6 +30,7 @@ func Create{{.StructName}}(c *gin.Context) {
 	}
 }
 
+// Delete{{.StructName}} 删除{{.StructName}}
 // @Tags {{.StructName}}
 // @Summary 删除{{.StructName}}
 // @Security ApiKeyAuth
@@ -48,6 +50,7 @@ func Delete{{.StructName}}(c *gin.Context) {
 	}
 }
 
+// Delete{{.StructName}}ByIds 批量删除{{.StructName}}
 // @Tags {{.StructName}}
 // @Summary 批量删除{{.StructName}}
 // @Security ApiKeyAuth
@@ -67,6 +70,7 @@ func Delete{{.StructName}}ByIds(c *gin.Context) {
 	}
 }
 
+// Update{{.StructName}} 更新{{.StructName}}
 // @Tags {{.StructName}}
 // @Summary 更新{{.StructName}}
 // @Security ApiKeyAuth
@@ -86,6 +90,7 @@ func Update{{.StructName}}(c *gin.Context) {
 	}
 }
 
+// Find{{.StructName}} 用id查询{{.StructName}}
 // @Tags {{.StructName}}
 // @Summary 用id查询{{.StructName}}
 // @Security ApiKeyAuth
@@ -105,6 +110,7 @@ func Find{{.StructName}}(c *gin.Context) {
 	}
 }
 
+// Get{{.StructName}}List 分页获取{{.StructName}}列表
 // @Tags {{.StructName}}
 // @Summary 分页获取{{.StructName}}列表
 // @Security ApiKeyAuth

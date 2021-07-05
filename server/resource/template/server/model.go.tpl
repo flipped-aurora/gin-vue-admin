@@ -5,6 +5,7 @@ import (
 	"gin-vue-admin/global"
 )
 
+// {{.StructName}} 结构体
 // 如果含有time.Time 请自行import time包
 type {{.StructName}} struct {
       global.GVA_MODEL {{- range .Fields}}
@@ -16,6 +17,7 @@ type {{.StructName}} struct {
 }
 
 {{ if .TableName }}
+// TableName {{.StructName}} 表名
 func ({{.StructName}}) TableName() string {
   return "{{.TableName}}"
 }

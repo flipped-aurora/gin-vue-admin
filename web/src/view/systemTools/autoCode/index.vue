@@ -295,7 +295,6 @@ export default {
             return false
           }
           this.form.humpPackageName = toSQLLine(this.form.packageName)
-          debugger
           if (isPreview) {
             const data = await preview(this.form)
             this.preViewCode = data.data.autoCode

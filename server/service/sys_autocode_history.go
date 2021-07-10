@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/utils"
 	"strings"
 
@@ -20,6 +21,7 @@ func CreateAutoCodeHistory(autoCodeMeta string, injectionMeta string, tableName 
 	}).Error
 }
 
+// RollBack 回滚
 func RollBack(id uint) error {
 	md := model.SysAutoCodeHistory{}
 	if err := global.GVA_DB.First(&md, id).Error; err != nil {
@@ -60,4 +62,14 @@ func RollBack(id uint) error {
 	}
 	md.Flag = 1
 	return global.GVA_DB.Save(&md).Error
+}
+
+func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, total int64) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB
+	var fileLists []model.SysAutoCodeHistory
+	err = db.Find(&fileLists).Count(&total).Error
+	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
+	return err, fileLists, total
 }

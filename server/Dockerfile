@@ -1,11 +1,9 @@
 FROM golang:alpine
 
-ENV GO111MODULE=on
-ENV GOPROXY=https://goproxy.io,direct
 WORKDIR /go/src/gin-vue-admin
 COPY . .
 
-RUN go env && go build -o server .
+RUN go generate && go env && go build -o server .
 
 FROM alpine:latest
 LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"

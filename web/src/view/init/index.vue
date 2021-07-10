@@ -85,7 +85,7 @@ export default {
       console.log(this.hello)
     },
     goDoc() {
-      window.open('https://www.gin-vue-admin.com')
+      window.open('https://www.gin-vue-admin.com/docs/first_master#3-init')
     },
     async onSubmit() {
       const loading = this.$loading({

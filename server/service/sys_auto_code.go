@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -99,7 +100,7 @@ func PreviewTemp(autoCode model.AutoCodeStruct) (map[string]string, error) {
 //@param: model.AutoCodeStruct
 //@return: err error
 
-func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
+func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 	dataList, fileList, needMkdir, err := getNeedList(&autoCode)
 	if err != nil {
 		return err
@@ -160,27 +161,33 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 				bf.WriteString(";")
 			}
 		}
+		idBf := strings.Builder{}
+		for _, id := range ids {
+			idBf.WriteString(strconv.Itoa(int(id)))
+			idBf.WriteString(";")
+		}
 
 		if autoCode.TableName != "" {
 			err = CreateAutoCodeHistory(bf.String(),
 				injectionCodeMeta.String(),
 				autoCode.TableName,
+				idBf.String(),
 			)
 		} else {
 			err = CreateAutoCodeHistory(bf.String(),
 				injectionCodeMeta.String(),
 				autoCode.StructName,
+				idBf.String(),
 			)
 		}
-
 		if err != nil {
 			return err
 		}
-		if global.GVA_CONFIG.AutoCode.TransferRestart {
-			go func() {
-				_ = utils.Reload()
-			}()
-		}
+		//if global.GVA_CONFIG.AutoCode.TransferRestart {
+		//	go func() {
+		//		_ = utils.Reload()
+		//	}()
+		//}
 		return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
 		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
@@ -301,7 +308,7 @@ func addAutoMoveFile(data *tplData) {
 //@param: a *model.AutoCodeStruct
 //@return: err error
 
-func AutoCreateApi(a *model.AutoCodeStruct) (err error) {
+func AutoCreateApi(a *model.AutoCodeStruct) (ids []uint, err error) {
 	var apiList = []model.SysApi{
 		{
 			Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
@@ -341,17 +348,20 @@ func AutoCreateApi(a *model.AutoCodeStruct) (err error) {
 		},
 	}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
 		for _, v := range apiList {
 			var api model.SysApi
 			if errors.Is(tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error, gorm.ErrRecordNotFound) {
-				if err := tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
+				if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
 					return err
+				} else {
+					ids = append(ids, v.ID)
 				}
 			}
 		}
 		return nil
 	})
-	return err
+	return ids, err
 }
 
 func getNeedList(autoCode *model.AutoCodeStruct) (dataList []tplData, fileList []string, needMkdir []string, err error) {

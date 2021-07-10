@@ -8,6 +8,7 @@
           <p class="init_p">1.您需有用一定的VUE和golang基础</p>
           <p class="init_p">2.请您确认是否已经阅读过官方文档</p>
           <p class="init_p">3.请您确认是否了解后续的配置流程</p>
+          <p class="init_p">注：开发组不为文档中书写过的内容提供无偿服务</p>
           <p class="init_btn">
             <el-button type="primary" @click="goDoc">
               阅读文档
@@ -84,7 +85,7 @@ export default {
       console.log(this.hello)
     },
     goDoc() {
-      window.open('https://www.gin-vue-admin.com')
+      window.open('https://www.gin-vue-admin.com/docs/first_master#3-init')
     },
     async onSubmit() {
       const loading = this.$loading({

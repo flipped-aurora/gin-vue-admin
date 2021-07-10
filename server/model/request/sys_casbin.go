@@ -11,3 +11,7 @@ type CasbinInReceive struct {
 	AuthorityId string       `json:"authorityId"` // 权限id
 	CasbinInfos []CasbinInfo `json:"casbinInfos"`
 }
+
+func DefaultCasbin() []CasbinInfo {
+	return []CasbinInfo{{Path: "/menu/getMenu", Method: "POST"}, {Path: "/jwt/jsonInBlacklist", Method: "POST"}}
+}

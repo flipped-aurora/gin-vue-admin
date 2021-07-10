@@ -16,6 +16,24 @@ import (
 )
 
 // @Tags AutoCode
+// @Summary 回滚
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body uint true "回滚自动生成代码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"回滚成功"}"
+// @Router /autoCode/preview [post]
+func RollBack(c *gin.Context) {
+	var id model.AutoHistoryByID
+	_ = c.ShouldBindJSON(&id)
+	if err := service.RollBack(id.ID); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("回滚成功", c)
+}
+
+// @Tags AutoCode
 // @Summary 预览创建后的代码
 // @Security ApiKeyAuth
 // @accept application/json

@@ -58,9 +58,9 @@
         <el-input v-model="form.description" placeholder="中文描述作为自动api描述" />
       </el-form-item>
       <el-form-item label="文件名称" prop="packageName">
-        <el-input v-model="form.packageName" placeholder="生成文件的默认名称" />
+        <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" />
       </el-form-item>
-      <el-form-item label="自动创建api">
+      <el-form-item label="自动创建api(将API相关信息注册到数据库中)">
         <el-checkbox v-model="form.autoCreateApiToSql" />
       </el-form-item>
       <el-form-item label="自动移动文件">
@@ -199,7 +199,7 @@ export default {
         packageName: [
           {
             required: true,
-            message: '文件名称：sys_xxxx_xxxx',
+            message: '文件名称：sysXxxxXxxx',
             trigger: 'blur'
           }
         ]

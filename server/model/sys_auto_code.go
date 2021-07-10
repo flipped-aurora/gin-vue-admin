@@ -2,12 +2,16 @@ package model
 
 import "errors"
 
+type AutoHistoryByID struct {
+	ID uint `json:"id"`
+}
+
 // 初始版本自动化代码工具
 type AutoCodeStruct struct {
 	StructName         string   `json:"structName"`         // Struct名称
 	TableName          string   `json:"tableName"`          // 表名
 	PackageName        string   `json:"packageName"`        // 文件名称
-	HumpPackageName    string   `json:"humpPackageName"`        // go文件名称
+	HumpPackageName    string   `json:"humpPackageName"`    // go文件名称
 	Abbreviation       string   `json:"abbreviation"`       // Struct简称
 	Description        string   `json:"description"`        // Struct中文名称
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api

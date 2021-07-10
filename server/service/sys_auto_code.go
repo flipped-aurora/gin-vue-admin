@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -146,6 +147,35 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		if err != nil {
 			return err
 		}
+		injectionCodeMeta := strings.Builder{}
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},"))
+		injectionCodeMeta.WriteString(";")
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)"))
+
+		// 保存生成信息
+		bf := strings.Builder{}
+		for _, data := range dataList {
+			if len(data.autoMoveFilePath) != 0 {
+				bf.WriteString(data.autoMoveFilePath)
+				bf.WriteString(";")
+			}
+		}
+
+		if autoCode.TableName != "" {
+			err = CreateAutoCodeHistory(bf.String(),
+				injectionCodeMeta.String(),
+				autoCode.TableName,
+			)
+		} else {
+			err = CreateAutoCodeHistory(bf.String(),
+				injectionCodeMeta.String(),
+				autoCode.StructName,
+			)
+		}
+
+		if err != nil {
+			return err
+		}
 		if global.GVA_CONFIG.AutoCode.TransferRestart {
 			go func() {
 				_ = utils.Reload()
@@ -213,6 +243,10 @@ func GetDB() (err error, DBNames []request.DBReq) {
 func GetColumn(tableName string, dbName string) (err error, Columns []request.ColumnReq) {
 	err = global.GVA_DB.Raw("SELECT COLUMN_NAME column_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT column_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columns).Error
 	return err, Columns
+}
+
+func DropTable(tableName string) error {
+	return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)
@@ -361,10 +395,10 @@ func getNeedList(autoCode *model.AutoCodeStruct) (dataList []tplData, fileList [
 			firstDot := strings.Index(origFileName, ".")
 			if firstDot != -1 {
 				var fileName string
-				if origFileName[firstDot:] !=".go"{
-					fileName = autoCode.PackageName+origFileName[firstDot:]
-				}else{
-					fileName = autoCode.HumpPackageName+origFileName[firstDot:]
+				if origFileName[firstDot:] != ".go" {
+					fileName = autoCode.PackageName + origFileName[firstDot:]
+				} else {
+					fileName = autoCode.HumpPackageName + origFileName[firstDot:]
 				}
 
 				dataList[index].autoCodePath = filepath.Join(autoPath, trimBase[:lastSeparator], autoCode.PackageName,

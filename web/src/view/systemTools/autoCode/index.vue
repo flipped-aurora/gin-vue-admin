@@ -60,11 +60,21 @@
       <el-form-item label="文件名称" prop="packageName">
         <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" />
       </el-form-item>
-      <el-form-item label="自动创建api(将API相关信息注册到数据库中)">
-        <el-checkbox v-model="form.autoCreateApiToSql" />
+      <el-form-item>
+        <template slot="label">
+          <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
+            <div> 自动创建API </div>
+          </el-tooltip>
+        </template>
+        <el-checkbox v-model="form.autoCreateApiToSql" /> 
       </el-form-item>
-      <el-form-item label="自动移动文件">
-        <el-checkbox v-model="form.autoMoveFile" />
+      <el-form-item>
+         <template slot="label">
+           <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
+            <div> 自动移动文件 </div>
+          </el-tooltip>
+        </template>
+        <el-checkbox v-model="form.autoMoveFile" /> 
       </el-form-item>
     </el-form>
     <!-- 组件列表 -->

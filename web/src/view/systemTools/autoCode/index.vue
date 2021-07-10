@@ -66,15 +66,15 @@
             <div> 自动创建API </div>
           </el-tooltip>
         </template>
-        <el-checkbox v-model="form.autoCreateApiToSql" /> 
+        <el-checkbox v-model="form.autoCreateApiToSql" />
       </el-form-item>
       <el-form-item>
-         <template slot="label">
-           <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
+        <template slot="label">
+          <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
             <div> 自动移动文件 </div>
           </el-tooltip>
         </template>
-        <el-checkbox v-model="form.autoMoveFile" /> 
+        <el-checkbox v-model="form.autoMoveFile" />
       </el-form-item>
     </el-form>
     <!-- 组件列表 -->

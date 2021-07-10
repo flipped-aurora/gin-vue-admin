@@ -8,6 +8,7 @@ import (
 func InitAutoCodeRouter(Router *gin.RouterGroup) {
 	AutoCodeRouter := Router.Group("autoCode")
 	{
+		AutoCodeRouter.POST("getSysHistory", v1.GetSysHistory)     // 获取回滚记录分页
 		AutoCodeRouter.POST("rollback", v1.RollBack)     // 回滚
 		AutoCodeRouter.POST("preview", v1.PreviewTemp)   // 获取自动创建代码预览
 		AutoCodeRouter.POST("createTemp", v1.CreateTemp) // 创建自动化代码

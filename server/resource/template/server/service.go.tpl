@@ -6,67 +6,43 @@ import (
 	"gin-vue-admin/model/request"
 )
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Create{{.StructName}}
-//@description: 创建{{.StructName}}记录
-//@param: {{.Abbreviation}} model.{{.StructName}}
-//@return: err error
-
+// Create{{.StructName}} 创建{{.StructName}}记录
+// Author [piexlmax](https://github.com/piexlmax)
 func Create{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Create(&{{.Abbreviation}}).Error
 	return err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Delete{{.StructName}}
-//@description: 删除{{.StructName}}记录
-//@param: {{.Abbreviation}} model.{{.StructName}}
-//@return: err error
-
+// Delete{{.StructName}} 删除{{.StructName}}记录
+// Author [piexlmax](https://github.com/piexlmax)
 func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Delete(&{{.Abbreviation}}).Error
 	return err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Delete{{.StructName}}ByIds
-//@description: 批量删除{{.StructName}}记录
-//@param: ids request.IdsReq
-//@return: err error
-
+// Delete{{.StructName}}ByIds 批量删除{{.StructName}}记录
+// Author [piexlmax](https://github.com/piexlmax)
 func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in ?",ids.Ids).Error
 	return err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Update{{.StructName}}
-//@description: 更新{{.StructName}}记录
-//@param: {{.Abbreviation}} *model.{{.StructName}}
-//@return: err error
-
+// Update{{.StructName}} 更新{{.StructName}}记录
+// Author [piexlmax](https://github.com/piexlmax)
 func Update{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Save(&{{.Abbreviation}}).Error
 	return err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Get{{.StructName}}
-//@description: 根据id获取{{.StructName}}记录
-//@param: id uint
-//@return: err error, {{.Abbreviation}} model.{{.StructName}}
-
+// Get{{.StructName}} 根据id获取{{.StructName}}记录
+// Author [piexlmax](https://github.com/piexlmax)
 func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructName}}) {
 	err = global.GVA_DB.Where("id = ?", id).First(&{{.Abbreviation}}).Error
 	return
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: Get{{.StructName}}InfoList
-//@description: 分页获取{{.StructName}}记录
-//@param: info request.{{.StructName}}Search
-//@return: err error, list interface{}, total int64
-
+// Get{{.StructName}}InfoList 分页获取{{.StructName}}记录
+// Author [piexlmax](https://github.com/piexlmax)
 func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

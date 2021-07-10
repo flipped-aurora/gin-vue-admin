@@ -62,8 +62,8 @@ mysql:
   password: ''
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: false
-  log-zap: ""
+  log-mode: ""
+  log-zap: false
 
 # local configuration
 local:

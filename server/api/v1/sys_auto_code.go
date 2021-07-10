@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
@@ -16,15 +17,40 @@ import (
 )
 
 // @Tags AutoCode
+// @Summary 查询回滚记录
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.SysAutoHistory true "查询回滚记录"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"回滚成功"}"
+// @Router /autoCode/preview [post]
+func GetSysHistory(c *gin.Context) {
+	var search request.SysAutoHistory
+	_ = c.ShouldBindJSON(&search)
+	err, list, total := service.GetSysHistoryPage(search.PageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     search.Page,
+			PageSize: search.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+// @Tags AutoCode
 // @Summary 回滚
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body uint true "回滚自动生成代码"
+// @Param data body request.AutoHistoryByID true "回滚自动生成代码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"回滚成功"}"
 // @Router /autoCode/preview [post]
 func RollBack(c *gin.Context) {
-	var id model.AutoHistoryByID
+	var id request.AutoHistoryByID
 	_ = c.ShouldBindJSON(&id)
 	if err := service.RollBack(id.ID); err != nil {
 		response.FailWithMessage(err.Error(), c)

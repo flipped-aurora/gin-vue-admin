@@ -1,5 +1,13 @@
 package request
 
+type SysAutoHistory struct {
+	PageInfo
+}
+
+type AutoHistoryByID struct {
+	ID uint `json:"id"`
+}
+
 type DBReq struct {
 	Database string `json:"database" gorm:"column:database"`
 }

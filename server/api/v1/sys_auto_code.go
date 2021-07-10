@@ -72,15 +72,18 @@ func CreateTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	var apiIds []uint
 	if a.AutoCreateApiToSql {
-		if err := service.AutoCreateApi(&a); err != nil {
+		if ids, err := service.AutoCreateApi(&a); err != nil {
 			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Any("err", err))
 			c.Writer.Header().Add("success", "false")
 			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
 			return
+		} else {
+			apiIds = ids
 		}
 	}
-	err := service.CreateTemp(a)
+	err := service.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, model.AutoMoveErr) {
 			c.Writer.Header().Add("success", "false")

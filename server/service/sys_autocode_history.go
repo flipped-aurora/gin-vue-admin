@@ -11,11 +11,12 @@ import (
 )
 
 // CreateAutoCodeHistory RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
-func CreateAutoCodeHistory(autoCodeMeta string, injectionMeta string, tableName string) error {
+func CreateAutoCodeHistory(autoCodeMeta string, injectionMeta string, tableName string, apiIds string) error {
 	return global.GVA_DB.Create(&model.SysAutoCodeHistory{
 		AutoCodeMeta:  autoCodeMeta,
 		InjectionMeta: injectionMeta,
 		TableName:     tableName,
+		ApiIDs:        apiIds,
 	}).Error
 }
 
@@ -24,10 +25,15 @@ func RollBack(id uint) error {
 	if err := global.GVA_DB.First(&md, id).Error; err != nil {
 		return err
 	}
-	// 切分数据
+	// 清除API表
+	err := DeleteApiByIds(strings.Split(md.ApiIDs, ";"))
+	if err != nil {
+		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
+	}
+	// 获取全部表名
 	err, dbNames := GetTables(global.GVA_CONFIG.Mysql.Dbname)
 	if err != nil {
-		return err
+		global.GVA_LOG.Error("ClearTag GetTables:", zap.Error(err))
 	}
 	// 删除表
 	for _, name := range dbNames {
@@ -40,7 +46,6 @@ func RollBack(id uint) error {
 		}
 	}
 	// 删除文件
-
 	for _, path := range strings.Split(md.AutoCodeMeta, ";") {
 		_ = utils.DeLFile(path)
 	}

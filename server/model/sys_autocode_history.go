@@ -9,5 +9,6 @@ type SysAutoCodeHistory struct {
 	TableName     string
 	AutoCodeMeta  string `gorm:"type:text"` // 其他meta信息 path;path
 	InjectionMeta string `gorm:"type:text"` // 注入的内容 RouterPath@functionName@RouterString;
+	ApiIDs        string // api表注册内容
 	Flag          int    // 表示对应状态 0 代表创建, 1 代表回滚 ...
 }

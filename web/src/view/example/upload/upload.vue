@@ -17,7 +17,7 @@
         </el-col>
         <el-col :span="12">
           带压缩的上传, (512(k)为压缩限制)
-          <upload-image v-model="imageUrl" :file-size="512" :max-w-h="1080" />
+          <upload-image v-model="imageUrl" :file-size="512" :max-w-h="1080" @on-success="getTableData" />
           已上传文件 {{ imageUrl }}
         </el-col>
       </el-row>

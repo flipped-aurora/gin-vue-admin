@@ -22,7 +22,7 @@ import (
 // @accept application/json
 // @Produce application/json
 // @Param data body request.SysAutoHistory true "查询回滚记录"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"回滚成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /autoCode/preview [post]
 func GetSysHistory(c *gin.Context) {
 	var search request.SysAutoHistory

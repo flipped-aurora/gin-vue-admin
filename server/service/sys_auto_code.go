@@ -127,6 +127,13 @@ func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 			return
 		}
 	}()
+	bf := strings.Builder{}
+	idBf := strings.Builder{}
+	injectionCodeMeta := strings.Builder{}
+	for _, id := range ids {
+		idBf.WriteString(strconv.Itoa(int(id)))
+		idBf.WriteString(";")
+	}
 	if autoCode.AutoMoveFile { // 判断是否需要自动转移
 		for index, _ := range dataList {
 			addAutoMoveFile(&dataList[index])
@@ -148,53 +155,51 @@ func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 		if err != nil {
 			return err
 		}
-		injectionCodeMeta := strings.Builder{}
+
 		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},"))
 		injectionCodeMeta.WriteString(";")
 		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)"))
 
 		// 保存生成信息
-		bf := strings.Builder{}
 		for _, data := range dataList {
 			if len(data.autoMoveFilePath) != 0 {
 				bf.WriteString(data.autoMoveFilePath)
 				bf.WriteString(";")
 			}
 		}
-		idBf := strings.Builder{}
-		for _, id := range ids {
-			idBf.WriteString(strconv.Itoa(int(id)))
-			idBf.WriteString(";")
-		}
 
-		if autoCode.TableName != "" {
-			err = CreateAutoCodeHistory(bf.String(),
-				injectionCodeMeta.String(),
-				autoCode.TableName,
-				idBf.String(),
-			)
-		} else {
-			err = CreateAutoCodeHistory(bf.String(),
-				injectionCodeMeta.String(),
-				autoCode.StructName,
-				idBf.String(),
-			)
+		if global.GVA_CONFIG.AutoCode.TransferRestart {
+			go func() {
+				_ = utils.Reload()
+			}()
 		}
-		if err != nil {
-			return err
-		}
-		//if global.GVA_CONFIG.AutoCode.TransferRestart {
-		//	go func() {
-		//		_ = utils.Reload()
-		//	}()
-		//}
-		return errors.New("创建代码成功并移动文件成功")
+		//return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
-		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
+		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
 		}
 	}
+	if autoCode.TableName != "" {
+		err = CreateAutoCodeHistory(bf.String(),
+			injectionCodeMeta.String(),
+			autoCode.TableName,
+			idBf.String(),
+		)
+	} else {
+		err = CreateAutoCodeHistory(bf.String(),
+			injectionCodeMeta.String(),
+			autoCode.StructName,
+			idBf.String(),
+		)
+	}
+	if err != nil {
+		return err
+	}
+	if autoCode.AutoMoveFile {
+		return errors.New("创建代码成功并移动文件成功")
+	}
 	return nil
+
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

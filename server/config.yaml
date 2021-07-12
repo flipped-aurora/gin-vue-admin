@@ -104,6 +104,7 @@ aliyun-oss:
   access-key-secret: 'yourAccessKeySecret'
   bucket-name: 'yourBucketName'
   bucket-url: 'yourBucketUrl'
+  base-path: 'yourBasePath'
 
 # tencent cos configuration
 tencent-cos:

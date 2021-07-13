@@ -78,7 +78,7 @@ func GormMysql() *gorm.DB {
 		DontSupportRenameColumn:   true,  // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
 		SkipInitializeWithVersion: false, // 根据版本自动配置
 	}
-	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig(m.LogMode)); err != nil {
+	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig()); err != nil {
 		//global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
 		//os.Exit(0)
 		//return nil
@@ -97,9 +97,9 @@ func GormMysql() *gorm.DB {
 //@param: mod bool
 //@return: *gorm.Config
 
-func gormConfig(mod bool) *gorm.Config {
-	var config = &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
-	switch global.GVA_CONFIG.Mysql.LogZap {
+func gormConfig() *gorm.Config {
+	config := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
+	switch global.GVA_CONFIG.Mysql.LogMode {
 	case "silent", "Silent":
 		config.Logger = internal.Default.LogMode(logger.Silent)
 	case "error", "Error":
@@ -108,14 +108,8 @@ func gormConfig(mod bool) *gorm.Config {
 		config.Logger = internal.Default.LogMode(logger.Warn)
 	case "info", "Info":
 		config.Logger = internal.Default.LogMode(logger.Info)
-	case "zap", "Zap":
-		config.Logger = internal.Default.LogMode(logger.Info)
 	default:
-		if mod {
-			config.Logger = internal.Default.LogMode(logger.Info)
-			break
-		}
-		config.Logger = internal.Default.LogMode(logger.Silent)
+		config.Logger = internal.Default.LogMode(logger.Info)
 	}
 	return config
 }

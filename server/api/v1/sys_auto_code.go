@@ -23,7 +23,7 @@ import (
 // @Produce application/json
 // @Param data body request.SysAutoHistory true "查询回滚记录"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /autoCode/preview [post]
+// @Router /autoCode/getSysHistory [post]
 func GetSysHistory(c *gin.Context) {
 	var search request.SysAutoHistory
 	_ = c.ShouldBindJSON(&search)
@@ -48,7 +48,7 @@ func GetSysHistory(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.AutoHistoryByID true "回滚自动生成代码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"回滚成功"}"
-// @Router /autoCode/preview [post]
+// @Router /autoCode/rollback [post]
 func RollBack(c *gin.Context) {
 	var id request.AutoHistoryByID
 	_ = c.ShouldBindJSON(&id)
@@ -57,6 +57,26 @@ func RollBack(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("回滚成功", c)
+}
+
+// @Tags AutoCode
+// @Summary 回滚
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.AutoHistoryByID true "获取meta信息"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /autoCode/getMeta [post]
+func GetMeta(c *gin.Context) {
+	var id request.AutoHistoryByID
+	_ = c.ShouldBindJSON(&id)
+	if v, err := service.GetMeta(id.ID); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithDetailed(gin.H{"meta": v}, "获取成功", c)
+	}
+
 }
 
 // @Tags AutoCode

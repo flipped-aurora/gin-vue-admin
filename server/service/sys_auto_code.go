@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"gin-vue-admin/global"
@@ -105,6 +106,7 @@ func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 	if err != nil {
 		return err
 	}
+	meta, _ := json.Marshal(autoCode)
 	// 写入文件前，先创建文件夹
 	if err = utils.CreateDir(needMkdir...); err != nil {
 		return err
@@ -179,18 +181,24 @@ func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 			return err
 		}
 	}
-	if autoCode.TableName != "" {
-		err = CreateAutoCodeHistory(bf.String(),
-			injectionCodeMeta.String(),
-			autoCode.TableName,
-			idBf.String(),
-		)
-	} else {
-		err = CreateAutoCodeHistory(bf.String(),
-			injectionCodeMeta.String(),
-			autoCode.StructName,
-			idBf.String(),
-		)
+	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql {
+		if autoCode.TableName != "" {
+			err = CreateAutoCodeHistory(
+				string(meta),
+				bf.String(),
+				injectionCodeMeta.String(),
+				autoCode.TableName,
+				idBf.String(),
+			)
+		} else {
+			err = CreateAutoCodeHistory(
+				string(meta),
+				bf.String(),
+				injectionCodeMeta.String(),
+				autoCode.StructName,
+				idBf.String(),
+			)
+		}
 	}
 	if err != nil {
 		return err

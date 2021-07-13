@@ -3,8 +3,7 @@ FROM node:12.16.1
 WORKDIR /gva_web/
 COPY . .
 
-RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
-RUN cnpm install || npm install
+RUN npm install
 RUN npm run build
 
 FROM nginx:alpine

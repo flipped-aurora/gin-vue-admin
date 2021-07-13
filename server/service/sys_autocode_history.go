@@ -1,7 +1,6 @@
 package service
 
 import (
-	"errors"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -12,9 +11,10 @@ import (
 )
 
 // CreateAutoCodeHistory RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
-func CreateAutoCodeHistory(autoCodeMeta string, injectionMeta string, tableName string, apiIds string) error {
+func CreateAutoCodeHistory(meta, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {
 	return global.GVA_DB.Create(&model.SysAutoCodeHistory{
-		AutoCodeMeta:  autoCodeMeta,
+		RequestMeta:   meta,
+		AutoCodePath:  autoCodePath,
 		InjectionMeta: injectionMeta,
 		TableName:     tableName,
 		ApiIDs:        apiIds,
@@ -48,20 +48,24 @@ func RollBack(id uint) error {
 		}
 	}
 	// 删除文件
-	for _, path := range strings.Split(md.AutoCodeMeta, ";") {
+	for _, path := range strings.Split(md.AutoCodePath, ";") {
 		_ = utils.DeLFile(path)
 	}
 	// 清除注入
 	for _, v := range strings.Split(md.InjectionMeta, ";") {
 		// RouterPath@functionName@RouterString
 		meta := strings.Split(v, "@")
-		if len(meta) != 3 {
-			return errors.New("split InjectionMeta Err")
+		if len(meta) == 3 {
+			_ = utils.AutoClearCode(meta[0], meta[2])
 		}
-		_ = utils.AutoClearCode(meta[0], meta[2])
 	}
 	md.Flag = 1
 	return global.GVA_DB.Save(&md).Error
+}
+
+func GetMeta(id uint) (string, error) {
+	var meta string
+	return meta, global.GVA_DB.Model(model.SysAutoCodeHistory{}).Select("request_meta").First(&meta, id).Error
 }
 
 func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, total int64) {
@@ -70,6 +74,6 @@ func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, tota
 	db := global.GVA_DB
 	var fileLists []model.SysAutoCodeHistory
 	err = db.Find(&fileLists).Count(&total).Error
-	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
+	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,table_name,auto_code_path,injection_meta,api_ids,flag").Find(&fileLists).Error
 	return err, fileLists, total
 }

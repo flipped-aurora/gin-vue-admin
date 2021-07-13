@@ -60,3 +60,11 @@ export const getColumn = (params) => {
     params
   })
 }
+
+export const getSysHistory = (data) => {
+  return service({
+    url: '/autoCode/getSysHistory',
+    method: 'post',
+    data
+  })
+}

@@ -89,6 +89,7 @@ var carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/autoCode/getSysHistory", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/autoCode/rollback", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/autoCode/getMeta", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/autoCode/delSysHistory", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/base/login", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},

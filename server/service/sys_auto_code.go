@@ -185,6 +185,8 @@ func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 		if autoCode.TableName != "" {
 			err = CreateAutoCodeHistory(
 				string(meta),
+				autoCode.StructName,
+				autoCode.Description,
 				bf.String(),
 				injectionCodeMeta.String(),
 				autoCode.TableName,
@@ -193,6 +195,8 @@ func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 		} else {
 			err = CreateAutoCodeHistory(
 				string(meta),
+				autoCode.StructName,
+				autoCode.Description,
 				bf.String(),
 				injectionCodeMeta.String(),
 				autoCode.StructName,

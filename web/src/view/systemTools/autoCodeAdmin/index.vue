@@ -50,7 +50,7 @@
           <div>
             <el-button size="mini" type="primary" @click="rollback(scope.row)">回滚</el-button>
             <el-button size="mini" type="success" @click="goAutoCode(scope.row)">复用</el-button>
-            <el-button size="mini" type="warning" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button size="mini" type="danger" @click="deleteRow(scope.row)">删除</el-button>
           </div>
         </template>
       </el-table-column>
@@ -71,7 +71,7 @@
 
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
-import { getSysHistory, rollback } from '@/api/autoCode.js'
+import { getSysHistory, rollback, delSysHistory } from '@/api/autoCode.js'
 import { formatTimeToStr } from '@/utils/date'
 import infoList from '@/mixins/infoList'
 
@@ -104,6 +104,19 @@ export default {
     this.getTableData()
   },
   methods: {
+    async deleteRow(row) {
+      this.$confirm('此操作将删除本历史, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const res = await delSysHistory({ id: Number(row.ID) })
+        if (res.code === 0) {
+          this.$message.success('删除成功')
+          this.getTableData()
+        }
+      })
+    },
     async rollback(row) {
       this.$confirm('此操作将删除自动创建的文件和api, 是否继续?', '提示', {
         confirmButtonText: '确定',

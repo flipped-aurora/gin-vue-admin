@@ -165,7 +165,7 @@ const fieldTemplate = {
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
 import PreviewCodeDialg from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
 import { toUpperCase, toHump, toSQLLine } from '@/utils/stringFun'
-import { createTemp, getDB, getTable, getColumn, preview } from '@/api/autoCode'
+import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
 
 export default {
@@ -223,6 +223,10 @@ export default {
   created() {
     this.getDb()
     this.setFdMap()
+    const id = this.$route.params.id
+    if (id) {
+      this.getAutoCodeJson(id)
+    }
   },
   methods: {
     editAndAddField(item) {
@@ -395,6 +399,12 @@ export default {
           this.fdMap[item.label] = fdtype
         })
       })
+    },
+    async getAutoCodeJson(id) {
+      const res = await getMeta({ id: Number(id) })
+      if (res.code === 0) {
+        this.form = JSON.parse(res.data.meta)
+      }
     }
   }
 }

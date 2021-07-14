@@ -17,6 +17,26 @@ import (
 )
 
 // @Tags AutoCode
+// @Summary 删除回滚记录
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.AutoHistoryByID true "删除回滚记录"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /autoCode/delSysHistory [post]
+func DelSysHistory(c *gin.Context) {
+	var id request.AutoHistoryByID
+	_ = c.ShouldBindJSON(&id)
+	err := service.DeletePage(id.ID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	}
+	response.OkWithMessage("删除成功", c)
+
+}
+
+// @Tags AutoCode
 // @Summary 查询回滚记录
 // @Security ApiKeyAuth
 // @accept application/json

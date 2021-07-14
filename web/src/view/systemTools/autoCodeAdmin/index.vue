@@ -48,7 +48,7 @@
       <el-table-column label="操作" min-width="180">
         <template slot-scope="scope">
           <div>
-            <el-button size="mini" type="primary" :disabled="scope.row.flag" @click="rollback(scope.row)">回滚</el-button>
+            <el-button size="mini" type="primary" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
             <el-button size="mini" type="success" @click="goAutoCode(scope.row)">复用</el-button>
             <el-button size="mini" type="danger" @click="deleteRow(scope.row)">删除</el-button>
           </div>

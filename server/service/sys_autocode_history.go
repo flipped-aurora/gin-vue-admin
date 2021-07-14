@@ -11,11 +11,13 @@ import (
 )
 
 // CreateAutoCodeHistory RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
-func CreateAutoCodeHistory(meta, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {
+func CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {
 	return global.GVA_DB.Create(&model.SysAutoCodeHistory{
 		RequestMeta:   meta,
 		AutoCodePath:  autoCodePath,
 		InjectionMeta: injectionMeta,
+		StructName:    structName,
+		StructCNName:  structCNName,
 		TableName:     tableName,
 		ApiIDs:        apiIds,
 	}).Error
@@ -74,6 +76,6 @@ func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, tota
 	db := global.GVA_DB
 	var fileLists []model.SysAutoCodeHistory
 	err = db.Find(&fileLists).Count(&total).Error
-	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,table_name,auto_code_path,injection_meta,api_ids,flag").Find(&fileLists).Error
+	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag").Find(&fileLists).Error
 	return err, fileLists, total
 }

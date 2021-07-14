@@ -89,6 +89,7 @@ var apis = []model.SysApi{
 	{global.GVA_MODEL{ID: 86, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/getSysHistory", "查询回滚记录", "autoCode", "POST"},
 	{global.GVA_MODEL{ID: 87, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/rollback", "回滚自动生成代码", "autoCode", "POST"},
 	{global.GVA_MODEL{ID: 88, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/getMeta", "获取meta信息", "autoCode", "POST"},
+	{global.GVA_MODEL{ID: 89, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/delSysHistory", "删除回滚记录", "autoCode", "POST"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

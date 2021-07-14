@@ -84,3 +84,11 @@ export const getMeta = (data) => {
     data
   })
 }
+
+export const delSysHistory = (data) => {
+  return service({
+    url: '/autoCode/delSysHistory',
+    method: 'post',
+    data
+  })
+}

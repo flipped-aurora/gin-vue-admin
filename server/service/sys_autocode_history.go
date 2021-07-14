@@ -76,6 +76,6 @@ func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, tota
 	db := global.GVA_DB
 	var fileLists []model.SysAutoCodeHistory
 	err = db.Find(&fileLists).Count(&total).Error
-	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag").Find(&fileLists).Error
+	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag,table_name").Find(&fileLists).Error
 	return err, fileLists, total
 }

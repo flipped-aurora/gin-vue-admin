@@ -68,3 +68,19 @@ export const getSysHistory = (data) => {
     data
   })
 }
+
+export const rollback = (data) => {
+  return service({
+    url: '/autoCode/rollback',
+    method: 'post',
+    data
+  })
+}
+
+export const getMeta = (data) => {
+  return service({
+    url: '/autoCode/getMeta',
+    method: 'post',
+    data
+  })
+}

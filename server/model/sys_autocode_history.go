@@ -13,6 +13,6 @@ type SysAutoCodeHistory struct {
 	StructName    string `json:"structName"`
 	StructCNName  string `json:"structCNName"`
 	ApiIDs        string `json:"apiIDs,omitempty"` // api表注册内容
-	Flag          int    // 表示对应状态 0 代表创建, 1 代表回滚 ...
+	Flag          int    `json:"flag"`             // 表示对应状态 0 代表创建, 1 代表回滚 ...
 
 }

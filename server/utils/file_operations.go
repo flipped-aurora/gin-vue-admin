@@ -42,6 +42,10 @@ Redirect:
 	return os.Rename(src, dst)
 }
 
+func DeLFile(filePath string) error {
+	return os.RemoveAll(filePath)
+}
+
 //@author: [songzhibin97](https://github.com/songzhibin97)
 //@function: TrimSpace
 //@description: 去除结构体空格

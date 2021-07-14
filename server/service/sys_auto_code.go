@@ -1,7 +1,9 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
@@ -9,6 +11,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"text/template"
 
@@ -98,11 +101,12 @@ func PreviewTemp(autoCode model.AutoCodeStruct) (map[string]string, error) {
 //@param: model.AutoCodeStruct
 //@return: err error
 
-func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
+func CreateTemp(autoCode model.AutoCodeStruct, ids ...uint) (err error) {
 	dataList, fileList, needMkdir, err := getNeedList(&autoCode)
 	if err != nil {
 		return err
 	}
+	meta, _ := json.Marshal(autoCode)
 	// 写入文件前，先创建文件夹
 	if err = utils.CreateDir(needMkdir...); err != nil {
 		return err
@@ -125,6 +129,13 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 			return
 		}
 	}()
+	bf := strings.Builder{}
+	idBf := strings.Builder{}
+	injectionCodeMeta := strings.Builder{}
+	for _, id := range ids {
+		idBf.WriteString(strconv.Itoa(int(id)))
+		idBf.WriteString(";")
+	}
 	if autoCode.AutoMoveFile { // 判断是否需要自动转移
 		for index, _ := range dataList {
 			addAutoMoveFile(&dataList[index])
@@ -146,18 +157,61 @@ func CreateTemp(autoCode model.AutoCodeStruct) (err error) {
 		if err != nil {
 			return err
 		}
+
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},"))
+		injectionCodeMeta.WriteString(";")
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)"))
+
+		// 保存生成信息
+		for _, data := range dataList {
+			if len(data.autoMoveFilePath) != 0 {
+				bf.WriteString(data.autoMoveFilePath)
+				bf.WriteString(";")
+			}
+		}
+
 		if global.GVA_CONFIG.AutoCode.TransferRestart {
 			go func() {
 				_ = utils.Reload()
 			}()
 		}
-		return errors.New("创建代码成功并移动文件成功")
+		//return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
-		if err := utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
+		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
 		}
 	}
+	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql {
+		if autoCode.TableName != "" {
+			err = CreateAutoCodeHistory(
+				string(meta),
+				autoCode.StructName,
+				autoCode.Description,
+				bf.String(),
+				injectionCodeMeta.String(),
+				autoCode.TableName,
+				idBf.String(),
+			)
+		} else {
+			err = CreateAutoCodeHistory(
+				string(meta),
+				autoCode.StructName,
+				autoCode.Description,
+				bf.String(),
+				injectionCodeMeta.String(),
+				autoCode.StructName,
+				idBf.String(),
+			)
+		}
+	}
+	if err != nil {
+		return err
+	}
+	if autoCode.AutoMoveFile {
+		return errors.New("创建代码成功并移动文件成功")
+	}
 	return nil
+
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -215,6 +269,10 @@ func GetColumn(tableName string, dbName string) (err error, Columns []request.Co
 	return err, Columns
 }
 
+func DropTable(tableName string) error {
+	return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
+}
+
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@author: [songzhibin97](https://github.com/songzhibin97)
 //@function: addAutoMoveFile
@@ -267,7 +325,7 @@ func addAutoMoveFile(data *tplData) {
 //@param: a *model.AutoCodeStruct
 //@return: err error
 
-func AutoCreateApi(a *model.AutoCodeStruct) (err error) {
+func AutoCreateApi(a *model.AutoCodeStruct) (ids []uint, err error) {
 	var apiList = []model.SysApi{
 		{
 			Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
@@ -307,17 +365,20 @@ func AutoCreateApi(a *model.AutoCodeStruct) (err error) {
 		},
 	}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
 		for _, v := range apiList {
 			var api model.SysApi
 			if errors.Is(tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error, gorm.ErrRecordNotFound) {
-				if err := tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
+				if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
 					return err
+				} else {
+					ids = append(ids, v.ID)
 				}
 			}
 		}
 		return nil
 	})
-	return err
+	return ids, err
 }
 
 func getNeedList(autoCode *model.AutoCodeStruct) (dataList []tplData, fileList []string, needMkdir []string, err error) {
@@ -361,10 +422,10 @@ func getNeedList(autoCode *model.AutoCodeStruct) (dataList []tplData, fileList [
 			firstDot := strings.Index(origFileName, ".")
 			if firstDot != -1 {
 				var fileName string
-				if origFileName[firstDot:] !=".go"{
-					fileName = autoCode.PackageName+origFileName[firstDot:]
-				}else{
-					fileName = autoCode.HumpPackageName+origFileName[firstDot:]
+				if origFileName[firstDot:] != ".go" {
+					fileName = autoCode.PackageName + origFileName[firstDot:]
+				} else {
+					fileName = autoCode.HumpPackageName + origFileName[firstDot:]
 				}
 
 				dataList[index].autoCodePath = filepath.Join(autoPath, trimBase[:lastSeparator], autoCode.PackageName,

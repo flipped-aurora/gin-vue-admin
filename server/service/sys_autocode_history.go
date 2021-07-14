@@ -70,6 +70,7 @@ func GetMeta(id uint) (string, error) {
 	return meta, global.GVA_DB.Model(model.SysAutoCodeHistory{}).Select("request_meta").First(&meta, id).Error
 }
 
+// GetSysHistoryPage  获取系统历史数据
 func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -78,4 +79,9 @@ func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, tota
 	err = db.Find(&fileLists).Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag").Find(&fileLists).Error
 	return err, fileLists, total
+}
+
+// DeletePage 删除历史数据
+func DeletePage(id uint) error {
+	return global.GVA_DB.Delete(model.SysAutoCodeHistory{}, id).Error
 }

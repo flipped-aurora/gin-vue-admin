@@ -6,10 +6,10 @@
           <el-input v-model="searchInfo.tableName" placeholder="表名" />
         </el-form-item>
         <el-form-item label="结构体名称">
-          <el-input v-model="searchInfo.tableName" placeholder="结构体名称" />
+          <el-input v-model="searchInfo.structName" placeholder="结构体名称" />
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode">新增</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode(null)">新增</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -22,9 +22,38 @@
       <el-table-column label="日期" width="180">
         <template slot-scope="scope">{{ scope.row.CreatedAt|formatDate }}</template>
       </el-table-column>
-      <el-table-column label="结构体名" min-width="150" prop="tableName" />
+      <el-table-column label="结构体名" min-width="150" prop="structName" />
+      <el-table-column label="结构体描述" min-width="150" prop="structCNName" />
       <el-table-column label="表名称" min-width="150" prop="tableName" />
-
+      <el-table-column label="回滚标记" min-width="150" prop="flag">
+        <template slot-scope="scope">
+          <el-tag
+            v-if="scope.row.flag"
+            type="danger"
+            size="mini"
+            effect="dark"
+          >
+            已回滚
+          </el-tag>
+          <el-tag
+            v-else
+            size="mini"
+            type="success"
+            effect="dark"
+          >
+            未回滚
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="180">
+        <template slot-scope="scope">
+          <div>
+            <el-button size="mini" type="primary" @click="rollback(scope.row)">回滚</el-button>
+            <el-button size="mini" type="success" @click="goAutoCode(scope.row)">复用</el-button>
+            <el-button size="mini" type="warning" @click="deleteRow(scope.row)">删除</el-button>
+          </div>
+        </template>
+      </el-table-column>
     </el-table>
     <el-pagination
       :current-page="page"
@@ -42,7 +71,7 @@
 
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
-import { getSysHistory } from '@/api/autoCode.js'
+import { getSysHistory, rollback } from '@/api/autoCode.js'
 import { formatTimeToStr } from '@/utils/date'
 import infoList from '@/mixins/infoList'
 
@@ -75,8 +104,27 @@ export default {
     this.getTableData()
   },
   methods: {
-    goAutoCode() {
-      this.$router.push({ name: 'autoCode' })
+    async rollback(row) {
+      this.$confirm('此操作将删除自动创建的文件和api, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const res = await rollback({ id: Number(row.ID) })
+        if (res.code === 0) {
+          this.$message.success('回滚成功')
+          this.getTableData()
+        }
+      })
+    },
+    goAutoCode(row) {
+      if (row) {
+        this.$router.push({ name: 'autoCodeEdit', params: {
+          id: row.ID
+        }})
+      } else {
+        this.$router.push({ name: 'autoCode' })
+      }
     }
   }
 }

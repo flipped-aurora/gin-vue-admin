@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gin-vue-admin/global"
 	"gin-vue-admin/model"
+	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
@@ -14,6 +15,89 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
+
+// @Tags AutoCode
+// @Summary 删除回滚记录
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.AutoHistoryByID true "删除回滚记录"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Router /autoCode/delSysHistory [post]
+func DelSysHistory(c *gin.Context) {
+	var id request.AutoHistoryByID
+	_ = c.ShouldBindJSON(&id)
+	err := service.DeletePage(id.ID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	}
+	response.OkWithMessage("删除成功", c)
+
+}
+
+// @Tags AutoCode
+// @Summary 查询回滚记录
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.SysAutoHistory true "查询回滚记录"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /autoCode/getSysHistory [post]
+func GetSysHistory(c *gin.Context) {
+	var search request.SysAutoHistory
+	_ = c.ShouldBindJSON(&search)
+	err, list, total := service.GetSysHistoryPage(search.PageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     search.Page,
+			PageSize: search.PageSize,
+		}, "获取成功", c)
+	}
+}
+
+// @Tags AutoCode
+// @Summary 回滚
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.AutoHistoryByID true "回滚自动生成代码"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"回滚成功"}"
+// @Router /autoCode/rollback [post]
+func RollBack(c *gin.Context) {
+	var id request.AutoHistoryByID
+	_ = c.ShouldBindJSON(&id)
+	if err := service.RollBack(id.ID); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("回滚成功", c)
+}
+
+// @Tags AutoCode
+// @Summary 回滚
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body request.AutoHistoryByID true "获取meta信息"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /autoCode/getMeta [post]
+func GetMeta(c *gin.Context) {
+	var id request.AutoHistoryByID
+	_ = c.ShouldBindJSON(&id)
+	if v, err := service.GetMeta(id.ID); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithDetailed(gin.H{"meta": v}, "获取成功", c)
+	}
+
+}
 
 // @Tags AutoCode
 // @Summary 预览创建后的代码
@@ -54,15 +138,18 @@ func CreateTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	var apiIds []uint
 	if a.AutoCreateApiToSql {
-		if err := service.AutoCreateApi(&a); err != nil {
+		if ids, err := service.AutoCreateApi(&a); err != nil {
 			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Any("err", err))
 			c.Writer.Header().Add("success", "false")
 			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
 			return
+		} else {
+			apiIds = ids
 		}
 	}
-	err := service.CreateTemp(a)
+	err := service.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, model.AutoMoveErr) {
 			c.Writer.Header().Add("success", "false")

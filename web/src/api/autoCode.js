@@ -60,3 +60,27 @@ export const getColumn = (params) => {
     params
   })
 }
+
+export const getSysHistory = (data) => {
+  return service({
+    url: '/autoCode/getSysHistory',
+    method: 'post',
+    data
+  })
+}
+
+export const rollback = (data) => {
+  return service({
+    url: '/autoCode/rollback',
+    method: 'post',
+    data
+  })
+}
+
+export const getMeta = (data) => {
+  return service({
+    url: '/autoCode/getMeta',
+    method: 'post',
+    data
+  })
+}

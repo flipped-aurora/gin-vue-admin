@@ -61,15 +61,15 @@ func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, 
         db = db.Where("`{{.ColumnName}}` {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "int" }}
-    if info.{{.FieldName}} != 0 {
+    if info.{{.FieldName}} != nil {
         db = db.Where("`{{.ColumnName}}` {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "float64" }}
-    if info.{{.FieldName}} != 0 {
+    if info.{{.FieldName}} != nil {
         db = db.Where("`{{.ColumnName}}` {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- else if eq .FieldType "time.Time" }}
-    if !info.{{.FieldName}}.IsZero() {
+    if !info.{{.FieldName}} != nil {
          db = db.Where("`{{.ColumnName}}` {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
                 {{- end }}

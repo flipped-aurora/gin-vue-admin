@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/createSysOperationRecord [post]
 func CreateSysOperationRecord(c *gin.Context) {
-	var sysOperationRecord model.SysOperationRecord
+	var sysOperationRecord system.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
 	if err := service.CreateSysOperationRecord(sysOperationRecord); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
@@ -39,7 +39,7 @@ func CreateSysOperationRecord(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 func DeleteSysOperationRecord(c *gin.Context) {
-	var sysOperationRecord model.SysOperationRecord
+	var sysOperationRecord system.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
 	if err := service.DeleteSysOperationRecord(sysOperationRecord); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
@@ -77,7 +77,7 @@ func DeleteSysOperationRecordByIds(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysOperationRecord/findSysOperationRecord [get]
 func FindSysOperationRecord(c *gin.Context) {
-	var sysOperationRecord model.SysOperationRecord
+	var sysOperationRecord system.SysOperationRecord
 	_ = c.ShouldBindQuery(&sysOperationRecord)
 	if err := utils.Verify(sysOperationRecord, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)

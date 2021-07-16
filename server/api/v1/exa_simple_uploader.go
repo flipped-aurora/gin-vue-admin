@@ -2,7 +2,7 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/example"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
@@ -19,7 +19,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"切片创建成功"}"
 // @Router /simpleUploader/upload [post]
 func SimpleUploaderUpload(c *gin.Context) {
-	var chunk model.ExaSimpleUploader
+	var chunk example.ExaSimpleUploader
 	_, header, err := c.Request.FormFile("file")
 	chunk.Filename = c.PostForm("filename")
 	chunk.ChunkNumber = c.PostForm("chunkNumber")

@@ -2,7 +2,7 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/example"
 	"gin-vue-admin/model/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
@@ -24,7 +24,7 @@ import (
 // @Success 200
 // @Router /excel/exportExcel [post]
 func ExportExcel(c *gin.Context) {
-	var excelInfo model.ExcelInfo
+	var excelInfo example.ExcelInfo
 	_ = c.ShouldBindJSON(&excelInfo)
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	err := service.ParseInfoList2Excel(excelInfo.InfoList, filePath)

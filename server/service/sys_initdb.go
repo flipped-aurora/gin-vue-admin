@@ -5,8 +5,9 @@ import (
 	"fmt"
 	"gin-vue-admin/config"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/example"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
 	"gin-vue-admin/source"
 	"gin-vue-admin/utils"
 	"path/filepath"
@@ -55,7 +56,7 @@ func createTable(dsn string, driver string, createSql string) error {
 	return err
 }
 
-func initDB(InitDBFunctions ...model.InitDBFunc) (err error) {
+func initDB(InitDBFunctions ...system.InitDBFunc) (err error) {
 	for _, v := range InitDBFunctions {
 		err = v.Init()
 		if err != nil {
@@ -117,21 +118,21 @@ func InitDB(conf request.InitDB) error {
 	}
 
 	err := global.GVA_DB.AutoMigrate(
-		model.SysUser{},
-		model.SysAuthority{},
-		model.SysApi{},
-		model.SysBaseMenu{},
-		model.SysBaseMenuParameter{},
-		model.JwtBlacklist{},
-		model.SysDictionary{},
-		model.SysDictionaryDetail{},
-		model.ExaFileUploadAndDownload{},
-		model.ExaFile{},
-		model.ExaFileChunk{},
-		model.ExaSimpleUploader{},
-		model.ExaCustomer{},
-		model.SysOperationRecord{},
-		model.SysAutoCodeHistory{},
+		system.SysUser{},
+		system.SysAuthority{},
+		system.SysApi{},
+		system.SysBaseMenu{},
+		system.SysBaseMenuParameter{},
+		system.JwtBlacklist{},
+		system.SysDictionary{},
+		system.SysDictionaryDetail{},
+		example.ExaFileUploadAndDownload{},
+		example.ExaFile{},
+		example.ExaFileChunk{},
+		example.ExaSimpleUploader{},
+		example.ExaCustomer{},
+		system.SysOperationRecord{},
+		system.SysAutoCodeHistory{},
 	)
 	if err != nil {
 		global.GVA_DB = nil

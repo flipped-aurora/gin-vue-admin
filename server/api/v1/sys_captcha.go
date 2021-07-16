@@ -2,7 +2,7 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system/response"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"

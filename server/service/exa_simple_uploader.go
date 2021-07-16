@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/example"
 	"gorm.io/gorm"
 	"io/ioutil"
 	"os"
@@ -17,7 +17,7 @@ import (
 //@param: uploader model.ExaSimpleUploader
 //@return: err error
 
-func SaveChunk(uploader model.ExaSimpleUploader) (err error) {
+func SaveChunk(uploader example.ExaSimpleUploader) (err error) {
 	return global.GVA_DB.Create(uploader).Error
 }
 
@@ -27,9 +27,9 @@ func SaveChunk(uploader model.ExaSimpleUploader) (err error) {
 //@param: md5 string
 //@return: err error, uploads []model.ExaSimpleUploader, isDone bool
 
-func CheckFileMd5(md5 string) (err error, uploads []model.ExaSimpleUploader, isDone bool) {
+func CheckFileMd5(md5 string) (err error, uploads []example.ExaSimpleUploader, isDone bool) {
 	err = global.GVA_DB.Find(&uploads, "identifier = ? AND is_done = ?", md5, false).Error
-	isDone = errors.Is(global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound)
+	isDone = errors.Is(global.GVA_DB.First(&example.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound)
 	return err, uploads, !isDone
 }
 
@@ -43,7 +43,7 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 	finishDir := "./finish/"
 	dir := "./chunk/" + md5
 	// 如果文件上传成功 不做后续操作 通知成功即可
-	if !errors.Is(global.GVA_DB.First(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound) {
+	if !errors.Is(global.GVA_DB.First(&example.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, true).Error, gorm.ErrRecordNotFound) {
 		return nil
 	}
 
@@ -71,11 +71,11 @@ func MergeFileMd5(md5 string, fileName string) (err error) {
 	}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		// 删除切片信息
-		if err = tx.Delete(&model.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, false).Error; err != nil {
+		if err = tx.Delete(&example.ExaSimpleUploader{}, "identifier = ? AND is_done = ?", md5, false).Error; err != nil {
 			fmt.Println(err)
 			return err
 		}
-		data := model.ExaSimpleUploader{
+		data := example.ExaSimpleUploader{
 			Identifier: md5,
 			IsDone:     true,
 			FilePath:   finishDir + fileName,

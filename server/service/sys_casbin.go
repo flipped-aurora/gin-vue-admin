@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
@@ -23,7 +23,7 @@ func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 	ClearCasbin(0, authorityId)
 	rules := [][]string{}
 	for _, v := range casbinInfos {
-		cm := model.CasbinModel{
+		cm := system.CasbinModel{
 			Ptype:       "p",
 			AuthorityId: authorityId,
 			Path:        v.Path,
@@ -46,7 +46,7 @@ func UpdateCasbin(authorityId string, casbinInfos []request.CasbinInfo) error {
 //@return: error
 
 func UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
-	err := global.GVA_DB.Table("casbin_rule").Model(&model.CasbinModel{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
+	err := global.GVA_DB.Table("casbin_rule").Model(&system.CasbinModel{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error

@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/example"
+	"gin-vue-admin/model/example/request"
+	"gin-vue-admin/model/example/response"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -19,7 +19,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"上传成功"}"
 // @Router /fileUploadAndDownload/upload [post]
 func UploadFile(c *gin.Context) {
-	var file model.ExaFileUploadAndDownload
+	var file example.ExaFileUploadAndDownload
 	noSave := c.DefaultQuery("noSave", "0")
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
@@ -44,7 +44,7 @@ func UploadFile(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /fileUploadAndDownload/deleteFile [post]
 func DeleteFile(c *gin.Context) {
-	var file model.ExaFileUploadAndDownload
+	var file example.ExaFileUploadAndDownload
 	_ = c.ShouldBindJSON(&file)
 	if err := service.DeleteFile(file); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))

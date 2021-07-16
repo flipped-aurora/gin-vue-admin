@@ -3,7 +3,7 @@ package service
 import (
 	"errors"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/example"
 	"gorm.io/gorm"
 )
 
@@ -13,8 +13,8 @@ import (
 //@param: fileMd5 string, fileName string, chunkTotal int
 //@return: err error, file model.ExaFile
 
-func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err error, file model.ExaFile) {
-	var cfile model.ExaFile
+func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err error, file example.ExaFile) {
+	var cfile example.ExaFile
 	cfile.FileMd5 = fileMd5
 	cfile.FileName = fileName
 	cfile.ChunkTotal = chunkTotal
@@ -36,7 +36,7 @@ func FindOrCreateFile(fileMd5 string, fileName string, chunkTotal int) (err erro
 //@return: error
 
 func CreateFileChunk(id uint, fileChunkPath string, fileChunkNumber int) error {
-	var chunk model.ExaFileChunk
+	var chunk example.ExaFileChunk
 	chunk.FileChunkPath = fileChunkPath
 	chunk.ExaFileID = id
 	chunk.FileChunkNumber = fileChunkNumber
@@ -51,8 +51,8 @@ func CreateFileChunk(id uint, fileChunkPath string, fileChunkNumber int) error {
 //@return: error
 
 func DeleteFileChunk(fileMd5 string, fileName string, filePath string) error {
-	var chunks []model.ExaFileChunk
-	var file model.ExaFile
+	var chunks []example.ExaFileChunk
+	var file example.ExaFile
 	err := global.GVA_DB.Where("file_md5 = ? AND file_name = ?", fileMd5, fileName).First(&file).Update("IsFinish", true).Update("file_path", filePath).Error
 	err = global.GVA_DB.Where("exa_file_id = ?", file.ID).Delete(&chunks).Unscoped().Error
 	return err

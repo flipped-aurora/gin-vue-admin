@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 
@@ -21,7 +21,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /authority/createAuthority [post]
 func CreateAuthority(c *gin.Context) {
-	var authority model.SysAuthority
+	var authority system.SysAuthority
 	_ = c.ShouldBindJSON(&authority)
 	if err := utils.Verify(authority, utils.AuthorityVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -72,7 +72,7 @@ func CopyAuthority(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /authority/deleteAuthority [post]
 func DeleteAuthority(c *gin.Context) {
-	var authority model.SysAuthority
+	var authority system.SysAuthority
 	_ = c.ShouldBindJSON(&authority)
 	if err := utils.Verify(authority, utils.AuthorityIdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -95,7 +95,7 @@ func DeleteAuthority(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /authority/updateAuthority [post]
 func UpdateAuthority(c *gin.Context) {
-	var auth model.SysAuthority
+	var auth system.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
 	if err := utils.Verify(auth, utils.AuthorityVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -146,7 +146,7 @@ func GetAuthorityList(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /authority/setDataAuthority [post]
 func SetDataAuthority(c *gin.Context) {
-	var auth model.SysAuthority
+	var auth system.SysAuthority
 	_ = c.ShouldBindJSON(&auth)
 	if err := utils.Verify(auth, utils.AuthorityIdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)

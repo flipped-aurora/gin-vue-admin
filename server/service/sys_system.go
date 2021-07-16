@@ -3,7 +3,7 @@ package service
 import (
 	"gin-vue-admin/config"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/system"
 	"gin-vue-admin/utils"
 	"go.uber.org/zap"
 )
@@ -24,7 +24,7 @@ func GetSystemConfig() (err error, conf config.Server) {
 //@param: system model.System
 //@return: err error
 
-func SetSystemConfig(system model.System) (err error) {
+func SetSystemConfig(system system.System) (err error) {
 	cs := utils.StructToMap(system.Config)
 	for k, v := range cs {
 		global.GVA_VP.Set(k, v)

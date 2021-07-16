@@ -3,9 +3,9 @@ package v1
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"time"
@@ -30,7 +30,7 @@ func Login(c *gin.Context) {
 		return
 	}
 	if store.Verify(l.CaptchaId, l.Captcha, true) {
-		u := &model.SysUser{Username: l.Username, Password: l.Password}
+		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		if err, user := service.Login(u); err != nil {
 			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Any("err", err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
@@ -43,7 +43,7 @@ func Login(c *gin.Context) {
 }
 
 // 登录以后签发jwt
-func tokenNext(c *gin.Context, user model.SysUser) {
+func tokenNext(c *gin.Context, user system.SysUser) {
 	j := &middleware.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	claims := request.CustomClaims{
 		UUID:        user.UUID,
@@ -87,7 +87,7 @@ func tokenNext(c *gin.Context, user model.SysUser) {
 		global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))
 		response.FailWithMessage("设置登录状态失败", c)
 	} else {
-		var blackJWT model.JwtBlacklist
+		var blackJWT system.JwtBlacklist
 		blackJWT.Jwt = jwtStr
 		if err := service.JsonInBlacklist(blackJWT); err != nil {
 			response.FailWithMessage("jwt作废失败", c)
@@ -118,7 +118,7 @@ func Register(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	user := &model.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId}
+	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId}
 	err, userReturn := service.Register(*user)
 	if err != nil {
 		global.GVA_LOG.Error("注册失败!", zap.Any("err", err))
@@ -142,7 +142,7 @@ func ChangePassword(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	u := &model.SysUser{Username: user.Username, Password: user.Password}
+	u := &system.SysUser{Username: user.Username, Password: user.Password}
 	if err, _ := service.ChangePassword(u, user.NewPassword); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Any("err", err))
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
@@ -239,7 +239,7 @@ func DeleteUser(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /user/setUserInfo [put]
 func SetUserInfo(c *gin.Context) {
-	var user model.SysUser
+	var user system.SysUser
 	_ = c.ShouldBindJSON(&user)
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)

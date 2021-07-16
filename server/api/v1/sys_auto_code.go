@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"net/url"
@@ -108,7 +108,7 @@ func GetMeta(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/preview [post]
 func PreviewTemp(c *gin.Context) {
-	var a model.AutoCodeStruct
+	var a system.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
 	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -132,7 +132,7 @@ func PreviewTemp(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/createTemp [post]
 func CreateTemp(c *gin.Context) {
-	var a model.AutoCodeStruct
+	var a system.AutoCodeStruct
 	_ = c.ShouldBindJSON(&a)
 	if err := utils.Verify(a, utils.AutoCodeVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -151,7 +151,7 @@ func CreateTemp(c *gin.Context) {
 	}
 	err := service.CreateTemp(a, apiIds...)
 	if err != nil {
-		if errors.Is(err, model.AutoMoveErr) {
+		if errors.Is(err, system.AutoMoveErr) {
 			c.Writer.Header().Add("success", "false")
 			c.Writer.Header().Add("msgtype", "success")
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))

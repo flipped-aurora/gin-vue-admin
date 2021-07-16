@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /sysDictionary/createSysDictionary [post]
 func CreateSysDictionary(c *gin.Context) {
-	var dictionary model.SysDictionary
+	var dictionary system.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
 	if err := service.CreateSysDictionary(dictionary); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
@@ -39,7 +39,7 @@ func CreateSysDictionary(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysDictionary/deleteSysDictionary [delete]
 func DeleteSysDictionary(c *gin.Context) {
-	var dictionary model.SysDictionary
+	var dictionary system.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
 	if err := service.DeleteSysDictionary(dictionary); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
@@ -58,7 +58,7 @@ func DeleteSysDictionary(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /sysDictionary/updateSysDictionary [put]
 func UpdateSysDictionary(c *gin.Context) {
-	var dictionary model.SysDictionary
+	var dictionary system.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
 	if err := service.UpdateSysDictionary(&dictionary); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
@@ -77,7 +77,7 @@ func UpdateSysDictionary(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionary/findSysDictionary [get]
 func FindSysDictionary(c *gin.Context) {
-	var dictionary model.SysDictionary
+	var dictionary system.SysDictionary
 	_ = c.ShouldBindQuery(&dictionary)
 	if err, sysDictionary := service.GetSysDictionary(dictionary.Type, dictionary.ID); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Any("err", err))

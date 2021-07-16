@@ -4,12 +4,12 @@ import (
 	"errors"
 	"fmt"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/system"
 	"github.com/360EntSecGroup-Skylar/excelize/v2"
 	"strconv"
 )
 
-func ParseInfoList2Excel(infoList []model.SysBaseMenu, filePath string) error {
+func ParseInfoList2Excel(infoList []system.SysBaseMenu, filePath string) error {
 	excel := excelize.NewFile()
 	excel.SetSheetRow("Sheet1", "A1", &[]string{"ID", "路由Name", "路由Path", "是否隐藏", "父节点", "排序", "文件名称"})
 	for i, menu := range infoList {
@@ -28,14 +28,14 @@ func ParseInfoList2Excel(infoList []model.SysBaseMenu, filePath string) error {
 	return err
 }
 
-func ParseExcel2InfoList() ([]model.SysBaseMenu, error) {
+func ParseExcel2InfoList() ([]system.SysBaseMenu, error) {
 	skipHeader := true
 	fixedHeader := []string{"ID", "路由Name", "路由Path", "是否隐藏", "父节点", "排序", "文件名称"}
 	file, err := excelize.OpenFile(global.GVA_CONFIG.Excel.Dir + "ExcelImport.xlsx")
 	if err != nil {
 		return nil, err
 	}
-	menus := make([]model.SysBaseMenu, 0)
+	menus := make([]system.SysBaseMenu, 0)
 	rows, err := file.Rows("Sheet1")
 	if err != nil {
 		return nil, err
@@ -59,7 +59,7 @@ func ParseExcel2InfoList() ([]model.SysBaseMenu, error) {
 		id, _ := strconv.Atoi(row[0])
 		hidden, _ := strconv.ParseBool(row[3])
 		sort, _ := strconv.Atoi(row[5])
-		menu := model.SysBaseMenu{
+		menu := system.SysBaseMenu{
 			GVA_MODEL: global.GVA_MODEL{
 				ID: uint(id),
 			},

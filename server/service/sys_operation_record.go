@@ -2,8 +2,8 @@ package service
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
 )
 
 //@author: [granty1](https://github.com/granty1)
@@ -12,7 +12,7 @@ import (
 //@param: sysOperationRecord model.SysOperationRecord
 //@return: err error
 
-func CreateSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
+func CreateSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Create(&sysOperationRecord).Error
 	return err
 }
@@ -25,7 +25,7 @@ func CreateSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err 
 //@return: err error
 
 func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]model.SysOperationRecord{}, "id in (?)", ids.Ids).Error
+	err = global.GVA_DB.Delete(&[]system.SysOperationRecord{}, "id in (?)", ids.Ids).Error
 	return err
 }
 
@@ -35,7 +35,7 @@ func DeleteSysOperationRecordByIds(ids request.IdsReq) (err error) {
 //@param: sysOperationRecord model.SysOperationRecord
 //@return: err error
 
-func DeleteSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err error) {
+func DeleteSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Delete(&sysOperationRecord).Error
 	return err
 }
@@ -46,7 +46,7 @@ func DeleteSysOperationRecord(sysOperationRecord model.SysOperationRecord) (err 
 //@param: id uint
 //@return: err error, sysOperationRecord model.SysOperationRecord
 
-func GetSysOperationRecord(id uint) (err error, sysOperationRecord model.SysOperationRecord) {
+func GetSysOperationRecord(id uint) (err error, sysOperationRecord system.SysOperationRecord) {
 	err = global.GVA_DB.Where("id = ?", id).First(&sysOperationRecord).Error
 	return
 }
@@ -62,8 +62,8 @@ func GetSysOperationRecordInfoList(info request.SysOperationRecordSearch) (err e
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&model.SysOperationRecord{})
-	var sysOperationRecords []model.SysOperationRecord
+	db := global.GVA_DB.Model(&system.SysOperationRecord{})
+	var sysOperationRecords []system.SysOperationRecord
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Method != "" {
 		db = db.Where("method = ?", info.Method)

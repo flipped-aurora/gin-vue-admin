@@ -3,8 +3,8 @@ package middleware
 import (
 	"bytes"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/system"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -37,7 +37,7 @@ func OperationRecord() gin.HandlerFunc {
 			}
 			userId = id
 		}
-		record := model.SysOperationRecord{
+		record := system.SysOperationRecord{
 			Ip:     c.ClientIP(),
 			Method: c.Request.Method,
 			Path:   c.Request.URL.Path,

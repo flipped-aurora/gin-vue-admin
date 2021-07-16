@@ -2,7 +2,7 @@ package source
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/system"
 	"github.com/gookit/color"
 	"time"
 
@@ -13,7 +13,7 @@ var Api = new(api)
 
 type api struct{}
 
-var apis = []model.SysApi{
+var apis = []system.SysApi{
 	{global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/base/login", "用户登录", "base", "POST"},
 	{global.GVA_MODEL{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/register", "用户注册", "user", "POST"},
 	{global.GVA_MODEL{ID: 3, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/api/createApi", "创建api", "api", "POST"},
@@ -96,7 +96,7 @@ var apis = []model.SysApi{
 //@description: sys_apis 表数据初始化
 func (a *api) Init() error {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if tx.Where("id IN ?", []int{1, 67}).Find(&[]model.SysApi{}).RowsAffected == 2 {
+		if tx.Where("id IN ?", []int{1, 67}).Find(&[]system.SysApi{}).RowsAffected == 2 {
 			color.Danger.Println("\n[Mysql] --> sys_apis 表的初始数据已存在!")
 			return nil
 		}

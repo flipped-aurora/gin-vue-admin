@@ -2,8 +2,8 @@ package service
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
 	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/system"
 	"gin-vue-admin/utils"
 	"strings"
 
@@ -12,7 +12,7 @@ import (
 
 // CreateAutoCodeHistory RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
 func CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {
-	return global.GVA_DB.Create(&model.SysAutoCodeHistory{
+	return global.GVA_DB.Create(&system.SysAutoCodeHistory{
 		RequestMeta:   meta,
 		AutoCodePath:  autoCodePath,
 		InjectionMeta: injectionMeta,
@@ -25,7 +25,7 @@ func CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, 
 
 // RollBack 回滚
 func RollBack(id uint) error {
-	md := model.SysAutoCodeHistory{}
+	md := system.SysAutoCodeHistory{}
 	if err := global.GVA_DB.First(&md, id).Error; err != nil {
 		return err
 	}
@@ -67,7 +67,7 @@ func RollBack(id uint) error {
 
 func GetMeta(id uint) (string, error) {
 	var meta string
-	return meta, global.GVA_DB.Model(model.SysAutoCodeHistory{}).Select("request_meta").First(&meta, id).Error
+	return meta, global.GVA_DB.Model(system.SysAutoCodeHistory{}).Select("request_meta").First(&meta, id).Error
 }
 
 // GetSysHistoryPage  获取系统历史数据
@@ -75,7 +75,7 @@ func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, tota
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
-	var fileLists []model.SysAutoCodeHistory
+	var fileLists []system.SysAutoCodeHistory
 	err = db.Find(&fileLists).Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag,table_name").Find(&fileLists).Error
 	return err, fileLists, total
@@ -83,5 +83,5 @@ func GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, tota
 
 // DeletePage 删除历史数据
 func DeletePage(id uint) error {
-	return global.GVA_DB.Delete(model.SysAutoCodeHistory{}, id).Error
+	return global.GVA_DB.Delete(system.SysAutoCodeHistory{}, id).Error
 }

@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 
@@ -21,7 +21,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /api/createApi [post]
 func CreateApi(c *gin.Context) {
-	var api model.SysApi
+	var api system.SysApi
 	_ = c.ShouldBindJSON(&api)
 	if err := utils.Verify(api, utils.ApiVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -44,7 +44,7 @@ func CreateApi(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /api/deleteApi [post]
 func DeleteApi(c *gin.Context) {
-	var api model.SysApi
+	var api system.SysApi
 	_ = c.ShouldBindJSON(&api)
 	if err := utils.Verify(api.GVA_MODEL, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -119,7 +119,7 @@ func GetApiById(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /api/updateApi [post]
 func UpdateApi(c *gin.Context) {
-	var api model.SysApi
+	var api system.SysApi
 	_ = c.ShouldBindJSON(&api)
 	if err := utils.Verify(api, utils.ApiVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)

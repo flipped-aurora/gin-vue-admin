@@ -2,8 +2,8 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 
@@ -34,7 +34,7 @@ func GetSystemConfig(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /system/setSystemConfig [post]
 func SetSystemConfig(c *gin.Context) {
-	var sys model.System
+	var sys system.System
 	_ = c.ShouldBindJSON(&sys)
 	if err := service.SetSystemConfig(sys); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Any("err", err))

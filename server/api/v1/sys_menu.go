@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 
@@ -25,7 +25,7 @@ func GetMenu(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	} else {
 		if menus == nil {
-			menus = []model.SysMenu{}
+			menus = []system.SysMenu{}
 		}
 		response.OkWithDetailed(response.SysMenusResponse{Menus: menus}, "获取成功", c)
 	}
@@ -102,7 +102,7 @@ func GetMenuAuthority(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"添加成功"}"
 // @Router /menu/addBaseMenu [post]
 func AddBaseMenu(c *gin.Context) {
-	var menu model.SysBaseMenu
+	var menu system.SysBaseMenu
 	_ = c.ShouldBindJSON(&menu)
 	if err := utils.Verify(menu, utils.MenuVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -153,7 +153,7 @@ func DeleteBaseMenu(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /menu/updateBaseMenu [post]
 func UpdateBaseMenu(c *gin.Context) {
-	var menu model.SysBaseMenu
+	var menu system.SysBaseMenu
 	_ = c.ShouldBindJSON(&menu)
 	if err := utils.Verify(menu, utils.MenuVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)

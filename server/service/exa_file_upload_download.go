@@ -3,8 +3,8 @@ package service
 import (
 	"errors"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/example"
+	"gin-vue-admin/model/example/request"
 	"gin-vue-admin/utils/upload"
 	"mime/multipart"
 	"strings"
@@ -16,7 +16,7 @@ import (
 //@param: file model.ExaFileUploadAndDownload
 //@return: error
 
-func Upload(file model.ExaFileUploadAndDownload) error {
+func Upload(file example.ExaFileUploadAndDownload) error {
 	return global.GVA_DB.Create(&file).Error
 }
 
@@ -26,8 +26,8 @@ func Upload(file model.ExaFileUploadAndDownload) error {
 //@param: id uint
 //@return: error, model.ExaFileUploadAndDownload
 
-func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
-	var file model.ExaFileUploadAndDownload
+func FindFile(id uint) (error, example.ExaFileUploadAndDownload) {
+	var file example.ExaFileUploadAndDownload
 	err := global.GVA_DB.Where("id = ?", id).First(&file).Error
 	return err, file
 }
@@ -38,8 +38,8 @@ func FindFile(id uint) (error, model.ExaFileUploadAndDownload) {
 //@param: file model.ExaFileUploadAndDownload
 //@return: err error
 
-func DeleteFile(file model.ExaFileUploadAndDownload) (err error) {
-	var fileFromDb model.ExaFileUploadAndDownload
+func DeleteFile(file example.ExaFileUploadAndDownload) (err error) {
+	var fileFromDb example.ExaFileUploadAndDownload
 	err, fileFromDb = FindFile(file.ID)
 	oss := upload.NewOss()
 	if err = oss.DeleteFile(fileFromDb.Key); err != nil {
@@ -59,7 +59,7 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB
-	var fileLists []model.ExaFileUploadAndDownload
+	var fileLists []example.ExaFileUploadAndDownload
 	err = db.Find(&fileLists).Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
 	return err, fileLists, total
@@ -71,7 +71,7 @@ func GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, 
 //@param: header *multipart.FileHeader, noSave string
 //@return: err error, file model.ExaFileUploadAndDownload
 
-func UploadFile(header *multipart.FileHeader, noSave string) (err error, file model.ExaFileUploadAndDownload) {
+func UploadFile(header *multipart.FileHeader, noSave string) (err error, file example.ExaFileUploadAndDownload) {
 	oss := upload.NewOss()
 	filePath, key, uploadErr := oss.UploadFile(header)
 	if uploadErr != nil {
@@ -79,7 +79,7 @@ func UploadFile(header *multipart.FileHeader, noSave string) (err error, file mo
 	}
 	if noSave == "0" {
 		s := strings.Split(header.Filename, ".")
-		f := model.ExaFileUploadAndDownload{
+		f := example.ExaFileUploadAndDownload{
 			Url:  filePath,
 			Name: header.Filename,
 			Tag:  s[len(s)-1],

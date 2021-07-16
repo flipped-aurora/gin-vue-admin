@@ -2,8 +2,8 @@ package service
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -12,7 +12,7 @@ import (
 //@param: sysDictionaryDetail model.SysDictionaryDetail
 //@return: err error
 
-func CreateSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (err error) {
+func CreateSysDictionaryDetail(sysDictionaryDetail system.SysDictionaryDetail) (err error) {
 	err = global.GVA_DB.Create(&sysDictionaryDetail).Error
 	return err
 }
@@ -23,7 +23,7 @@ func CreateSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (e
 //@param: sysDictionaryDetail model.SysDictionaryDetail
 //@return: err error
 
-func DeleteSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (err error) {
+func DeleteSysDictionaryDetail(sysDictionaryDetail system.SysDictionaryDetail) (err error) {
 	err = global.GVA_DB.Delete(&sysDictionaryDetail).Error
 	return err
 }
@@ -34,7 +34,7 @@ func DeleteSysDictionaryDetail(sysDictionaryDetail model.SysDictionaryDetail) (e
 //@param: sysDictionaryDetail *model.SysDictionaryDetail
 //@return: err error
 
-func UpdateSysDictionaryDetail(sysDictionaryDetail *model.SysDictionaryDetail) (err error) {
+func UpdateSysDictionaryDetail(sysDictionaryDetail *system.SysDictionaryDetail) (err error) {
 	err = global.GVA_DB.Save(sysDictionaryDetail).Error
 	return err
 }
@@ -45,7 +45,7 @@ func UpdateSysDictionaryDetail(sysDictionaryDetail *model.SysDictionaryDetail) (
 //@param: id uint
 //@return: err error, sysDictionaryDetail model.SysDictionaryDetail
 
-func GetSysDictionaryDetail(id uint) (err error, sysDictionaryDetail model.SysDictionaryDetail) {
+func GetSysDictionaryDetail(id uint) (err error, sysDictionaryDetail system.SysDictionaryDetail) {
 	err = global.GVA_DB.Where("id = ?", id).First(&sysDictionaryDetail).Error
 	return
 }
@@ -60,8 +60,8 @@ func GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (err
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&model.SysDictionaryDetail{})
-	var sysDictionaryDetails []model.SysDictionaryDetail
+	db := global.GVA_DB.Model(&system.SysDictionaryDetail{})
+	var sysDictionaryDetails []system.SysDictionaryDetail
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Label != "" {
 		db = db.Where("label LIKE ?", "%"+info.Label+"%")

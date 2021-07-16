@@ -2,9 +2,9 @@ package v1
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"
 	"github.com/gin-gonic/gin"
@@ -20,7 +20,7 @@ import (
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /sysDictionaryDetail/createSysDictionaryDetail [post]
 func CreateSysDictionaryDetail(c *gin.Context) {
-	var detail model.SysDictionaryDetail
+	var detail system.SysDictionaryDetail
 	_ = c.ShouldBindJSON(&detail)
 	if err := service.CreateSysDictionaryDetail(detail); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
@@ -39,7 +39,7 @@ func CreateSysDictionaryDetail(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysDictionaryDetail/deleteSysDictionaryDetail [delete]
 func DeleteSysDictionaryDetail(c *gin.Context) {
-	var detail model.SysDictionaryDetail
+	var detail system.SysDictionaryDetail
 	_ = c.ShouldBindJSON(&detail)
 	if err := service.DeleteSysDictionaryDetail(detail); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
@@ -58,7 +58,7 @@ func DeleteSysDictionaryDetail(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /sysDictionaryDetail/updateSysDictionaryDetail [put]
 func UpdateSysDictionaryDetail(c *gin.Context) {
-	var detail model.SysDictionaryDetail
+	var detail system.SysDictionaryDetail
 	_ = c.ShouldBindJSON(&detail)
 	if err := service.UpdateSysDictionaryDetail(&detail); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
@@ -77,7 +77,7 @@ func UpdateSysDictionaryDetail(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionaryDetail/findSysDictionaryDetail [get]
 func FindSysDictionaryDetail(c *gin.Context) {
-	var detail model.SysDictionaryDetail
+	var detail system.SysDictionaryDetail
 	_ = c.ShouldBindQuery(&detail)
 	if err := utils.Verify(detail, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)

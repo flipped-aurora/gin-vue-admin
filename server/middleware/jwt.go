@@ -3,9 +3,9 @@ package middleware
 import (
 	"errors"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
+	"gin-vue-admin/model/system/response"
 	"gin-vue-admin/service"
 	"strconv"
 	"time"
@@ -43,7 +43,7 @@ func JWTAuth() gin.HandlerFunc {
 			return
 		}
 		if err, _ = service.FindUserByUuid(claims.UUID.String()); err != nil {
-			_ = service.JsonInBlacklist(model.JwtBlacklist{Jwt: token})
+			_ = service.JsonInBlacklist(system.JwtBlacklist{Jwt: token})
 			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
 			c.Abort()
 		}
@@ -58,7 +58,7 @@ func JWTAuth() gin.HandlerFunc {
 				if err != nil {
 					global.GVA_LOG.Error("get redis jwt failed", zap.Any("err", err))
 				} else { // 当之前的取成功时才进行拉黑操作
-					_ = service.JsonInBlacklist(model.JwtBlacklist{Jwt: RedisJwtToken})
+					_ = service.JsonInBlacklist(system.JwtBlacklist{Jwt: RedisJwtToken})
 				}
 				// 无论如何都要记录当前的活跃状态
 				_ = service.SetRedisJWT(newToken, newClaims.Username)

@@ -3,8 +3,8 @@ package middleware
 import (
 	"bytes"
 	"gin-vue-admin/global"
-	"gin-vue-admin/model/request"
 	"gin-vue-admin/model/system"
+	"gin-vue-admin/model/system/request"
 	"gin-vue-admin/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -13,6 +13,8 @@ import (
 	"strconv"
 	"time"
 )
+
+var operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 
 func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -65,7 +67,7 @@ func OperationRecord() gin.HandlerFunc {
 		record.Latency = latency
 		record.Resp = writer.body.String()
 
-		if err := service.CreateSysOperationRecord(record); err != nil {
+		if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
 			global.GVA_LOG.Error("create operation record error:", zap.Any("err", err))
 		}
 	}

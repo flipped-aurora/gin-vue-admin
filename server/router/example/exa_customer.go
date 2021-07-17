@@ -1,18 +1,22 @@
 package example
 
 import (
-	"gin-vue-admin/api/v1"
+	v1 "gin-vue-admin/api/v1"
 	"gin-vue-admin/middleware"
 	"github.com/gin-gonic/gin"
 )
 
-func (e *Router) InitCustomerRouter(Router *gin.RouterGroup) {
-	CustomerRouter := Router.Group("customer").Use(middleware.OperationRecord())
+type CustomerRouter struct {
+}
+
+func (e *CustomerRouter) InitCustomerRouter(Router *gin.RouterGroup) {
+	customerRouter := Router.Group("customer").Use(middleware.OperationRecord())
+	var exaCustomerApi = v1.ApiGroupApp.ExampleApiGroup.CustomerApi
 	{
-		CustomerRouter.POST("customer", v1.CreateExaCustomer)     // 创建客户
-		CustomerRouter.PUT("customer", v1.UpdateExaCustomer)      // 更新客户
-		CustomerRouter.DELETE("customer", v1.DeleteExaCustomer)   // 删除客户
-		CustomerRouter.GET("customer", v1.GetExaCustomer)         // 获取单一客户信息
-		CustomerRouter.GET("customerList", v1.GetExaCustomerList) // 获取客户列表
+		customerRouter.POST("customer", exaCustomerApi.CreateExaCustomer)     // 创建客户
+		customerRouter.PUT("customer", exaCustomerApi.UpdateExaCustomer)      // 更新客户
+		customerRouter.DELETE("customer", exaCustomerApi.DeleteExaCustomer)   // 删除客户
+		customerRouter.GET("customer", exaCustomerApi.GetExaCustomer)         // 获取单一客户信息
+		customerRouter.GET("customerList", exaCustomerApi.GetExaCustomerList) // 获取客户列表
 	}
 }

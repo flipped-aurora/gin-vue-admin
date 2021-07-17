@@ -5,11 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (e *Router) InitSimpleUploaderRouter(Router *gin.RouterGroup) {
-	SimpleUploaderRouter := Router.Group("simpleUploader")
+type SimpleUploaderRouter struct{}
+
+func (e *SimpleUploaderRouter) InitSimpleUploaderRouter(Router *gin.RouterGroup) {
+	simpleUploaderRouter := Router.Group("simpleUploader")
+	var simpleUploaderApi = v1.ApiGroupApp.ExampleApiGroup.SimpleUploaderApi
 	{
-		SimpleUploaderRouter.POST("upload", v1.SimpleUploaderUpload) // 上传功能
-		SimpleUploaderRouter.GET("checkFileMd5", v1.CheckFileMd5)    // 文件完整度验证
-		SimpleUploaderRouter.GET("mergeFileMd5", v1.MergeFileMd5)    // 合并文件
+		simpleUploaderRouter.POST("upload", simpleUploaderApi.SimpleUploaderUpload) // 上传功能
+		simpleUploaderRouter.GET("checkFileMd5", simpleUploaderApi.CheckFileMd5)    // 文件完整度验证
+		simpleUploaderRouter.GET("mergeFileMd5", simpleUploaderApi.MergeFileMd5)    // 合并文件
 	}
 }

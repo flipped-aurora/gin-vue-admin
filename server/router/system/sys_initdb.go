@@ -5,10 +5,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitInitRouter(Router *gin.RouterGroup) {
-	InitRouter := Router.Group("init")
+type InitRouter struct {
+}
+
+func (s *InitRouter) InitInitRouter(Router *gin.RouterGroup) {
+	initRouter := Router.Group("init")
+	var dbApi = v1.ApiGroupApp.SystemApiGroup.DBApi
 	{
-		InitRouter.POST("initdb", v1.InitDB)   // 创建Api
-		InitRouter.POST("checkdb", v1.CheckDB) // 创建Api
+		initRouter.POST("initdb", dbApi.InitDB)   // 创建Api
+		initRouter.POST("checkdb", dbApi.CheckDB) // 创建Api
 	}
 }

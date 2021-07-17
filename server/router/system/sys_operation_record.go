@@ -6,14 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitSysOperationRecordRouter(Router *gin.RouterGroup) {
-	SysOperationRecordRouter := Router.Group("sysOperationRecord").Use(middleware.OperationRecord())
+type OperationRecordRouter struct {
+}
+
+func (s *OperationRecordRouter) InitSysOperationRecordRouter(Router *gin.RouterGroup) {
+	operationRecordRouter := Router.Group("sysOperationRecord").Use(middleware.OperationRecord())
+	var authorityMenuApi = v1.ApiGroupApp.SystemApiGroup.OperationRecordApi
 	{
-		SysOperationRecordRouter.POST("createSysOperationRecord", v1.CreateSysOperationRecord)             // 新建SysOperationRecord
-		SysOperationRecordRouter.DELETE("deleteSysOperationRecord", v1.DeleteSysOperationRecord)           // 删除SysOperationRecord
-		SysOperationRecordRouter.DELETE("deleteSysOperationRecordByIds", v1.DeleteSysOperationRecordByIds) // 批量删除SysOperationRecord
-		SysOperationRecordRouter.GET("findSysOperationRecord", v1.FindSysOperationRecord)                  // 根据ID获取SysOperationRecord
-		SysOperationRecordRouter.GET("getSysOperationRecordList", v1.GetSysOperationRecordList)            // 获取SysOperationRecord列表
+		operationRecordRouter.POST("createSysOperationRecord", authorityMenuApi.CreateSysOperationRecord)             // 新建SysOperationRecord
+		operationRecordRouter.DELETE("deleteSysOperationRecord", authorityMenuApi.DeleteSysOperationRecord)           // 删除SysOperationRecord
+		operationRecordRouter.DELETE("deleteSysOperationRecordByIds", authorityMenuApi.DeleteSysOperationRecordByIds) // 批量删除SysOperationRecord
+		operationRecordRouter.GET("findSysOperationRecord", authorityMenuApi.FindSysOperationRecord)                  // 根据ID获取SysOperationRecord
+		operationRecordRouter.GET("getSysOperationRecordList", authorityMenuApi.GetSysOperationRecordList)            // 获取SysOperationRecord列表
 
 	}
 }

@@ -6,14 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitAuthorityRouter(Router *gin.RouterGroup) {
-	AuthorityRouter := Router.Group("authority").Use(middleware.OperationRecord())
+type AuthorityRouter struct {
+}
+
+func (s *AuthorityRouter) InitAuthorityRouter(Router *gin.RouterGroup) {
+	authorityRouter := Router.Group("authority").Use(middleware.OperationRecord())
+	var authorityApi = v1.ApiGroupApp.SystemApiGroup.AuthorityApi
 	{
-		AuthorityRouter.POST("createAuthority", v1.CreateAuthority)   // 创建角色
-		AuthorityRouter.POST("deleteAuthority", v1.DeleteAuthority)   // 删除角色
-		AuthorityRouter.PUT("updateAuthority", v1.UpdateAuthority)    // 更新角色
-		AuthorityRouter.POST("copyAuthority", v1.CopyAuthority)       // 更新角色
-		AuthorityRouter.POST("getAuthorityList", v1.GetAuthorityList) // 获取角色列表
-		AuthorityRouter.POST("setDataAuthority", v1.SetDataAuthority) // 设置角色资源权限
+		authorityRouter.POST("createAuthority", authorityApi.CreateAuthority)   // 创建角色
+		authorityRouter.POST("deleteAuthority", authorityApi.DeleteAuthority)   // 删除角色
+		authorityRouter.PUT("updateAuthority", authorityApi.UpdateAuthority)    // 更新角色
+		authorityRouter.POST("copyAuthority", authorityApi.CopyAuthority)       // 更新角色
+		authorityRouter.POST("getAuthorityList", authorityApi.GetAuthorityList) // 获取角色列表
+		authorityRouter.POST("setDataAuthority", authorityApi.SetDataAuthority) // 设置角色资源权限
 	}
 }

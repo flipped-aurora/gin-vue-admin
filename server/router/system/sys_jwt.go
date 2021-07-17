@@ -6,9 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitJwtRouter(Router *gin.RouterGroup) {
-	JwtRouter := Router.Group("jwt").Use(middleware.OperationRecord())
+type JwtRouter struct {
+}
+
+func (s *JwtRouter) InitJwtRouter(Router *gin.RouterGroup) {
+	jwtRouter := Router.Group("jwt").Use(middleware.OperationRecord())
+	var jwtApi = v1.ApiGroupApp.SystemApiGroup.JwtApi
 	{
-		JwtRouter.POST("jsonInBlacklist", v1.JsonInBlacklist) // jwt加入黑名单
+		jwtRouter.POST("jsonInBlacklist", jwtApi.JsonInBlacklist) // jwt加入黑名单
 	}
 }

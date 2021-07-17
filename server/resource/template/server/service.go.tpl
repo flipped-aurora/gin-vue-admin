@@ -2,53 +2,56 @@ package service
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
+	"gin-vue-admin/model/autocode"
+	"gin-vue-admin/model/autocode/request"
 )
+
+type {{.StructName}}Service struct {
+}
 
 // Create{{.StructName}} 创建{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func Create{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} autocode.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Create(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func Delete{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.Abbreviation}} autocode.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Delete(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
-	err = global.GVA_DB.Delete(&[]model.{{.StructName}}{},"id in ?",ids.Ids).Error
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
+	err = global.GVA_DB.Delete(&[]autocode.{{.StructName}}{},"id in ?",ids.Ids).Error
 	return err
 }
 
 // Update{{.StructName}} 更新{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func Update{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} autocode.{{.StructName}}) (err error) {
 	err = global.GVA_DB.Save(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据id获取{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} model.{{.StructName}}) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} autocode.{{.StructName}}) {
 	err = global.GVA_DB.Where("id = ?", id).First(&{{.Abbreviation}}).Error
 	return
 }
 
 // Get{{.StructName}}InfoList 分页获取{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int64) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := global.GVA_DB.Model(&model.{{.StructName}}{})
-    var {{.Abbreviation}}s []model.{{.StructName}}
+	db := global.GVA_DB.Model(&autocode.{{.StructName}}{})
+    var {{.Abbreviation}}s []autocode.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
         {{- range .Fields}}
             {{- if .FieldSearchType}}

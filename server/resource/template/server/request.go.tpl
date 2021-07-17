@@ -1,8 +1,11 @@
 package request
 
-import "gin-vue-admin/model"
+import (
+	"gin-vue-admin/model/autocode"
+	"gin-vue-admin/model/common/request"
+)
 
 type {{.StructName}}Search struct{
-    model.{{.StructName}}
-    PageInfo
+    autocode.{{.StructName}}
+    request.PageInfo
 }

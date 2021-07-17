@@ -6,10 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitCasbinRouter(Router *gin.RouterGroup) {
-	CasbinRouter := Router.Group("casbin").Use(middleware.OperationRecord())
+type CasbinRouter struct {
+}
+
+func (s *CasbinRouter) InitCasbinRouter(Router *gin.RouterGroup) {
+	casbinRouter := Router.Group("casbin").Use(middleware.OperationRecord())
+	var casbinApi = v1.ApiGroupApp.SystemApiGroup.CasbinApi
 	{
-		CasbinRouter.POST("updateCasbin", v1.UpdateCasbin)
-		CasbinRouter.POST("getPolicyPathByAuthorityId", v1.GetPolicyPathByAuthorityId)
+		casbinRouter.POST("updateCasbin", casbinApi.UpdateCasbin)
+		casbinRouter.POST("getPolicyPathByAuthorityId", casbinApi.GetPolicyPathByAuthorityId)
 	}
 }

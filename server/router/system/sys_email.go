@@ -6,9 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitEmailRouter(Router *gin.RouterGroup) {
-	EmailRouter := Router.Group("email").Use(middleware.OperationRecord())
+type EmailRouter struct {
+}
+
+func (s *EmailRouter) InitEmailRouter(Router *gin.RouterGroup) {
+	emailRouter := Router.Group("email").Use(middleware.OperationRecord())
+	var systemApi = v1.ApiGroupApp.SystemApiGroup.SystemApi
 	{
-		EmailRouter.POST("emailTest", v1.EmailTest) // 发送测试邮件
+		emailRouter.POST("emailTest", systemApi.EmailTest) // 发送测试邮件
 	}
 }

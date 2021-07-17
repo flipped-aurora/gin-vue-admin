@@ -6,14 +6,18 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitUserRouter(Router *gin.RouterGroup) {
-	UserRouter := Router.Group("user").Use(middleware.OperationRecord())
+type UserRouter struct {
+}
+
+func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
+	userRouter := Router.Group("user").Use(middleware.OperationRecord())
+	var baseApi = v1.ApiGroupApp.SystemApiGroup.BaseApi
 	{
-		UserRouter.POST("register", v1.Register)                 // 用户注册账号
-		UserRouter.POST("changePassword", v1.ChangePassword)     // 用户修改密码
-		UserRouter.POST("getUserList", v1.GetUserList)           // 分页获取用户列表
-		UserRouter.POST("setUserAuthority", v1.SetUserAuthority) // 设置用户权限
-		UserRouter.DELETE("deleteUser", v1.DeleteUser)           // 删除用户
-		UserRouter.PUT("setUserInfo", v1.SetUserInfo)            // 设置用户信息
+		userRouter.POST("register", baseApi.Register)                 // 用户注册账号
+		userRouter.POST("changePassword", baseApi.ChangePassword)     // 用户修改密码
+		userRouter.POST("getUserList", baseApi.GetUserList)           // 分页获取用户列表
+		userRouter.POST("setUserAuthority", baseApi.SetUserAuthority) // 设置用户权限
+		userRouter.DELETE("deleteUser", baseApi.DeleteUser)           // 删除用户
+		userRouter.PUT("setUserInfo", baseApi.SetUserInfo)            // 设置用户信息
 	}
 }

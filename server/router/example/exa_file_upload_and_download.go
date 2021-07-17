@@ -5,15 +5,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (e *Router) InitFileUploadAndDownloadRouter(Router *gin.RouterGroup) {
-	FileUploadAndDownloadRouter := Router.Group("fileUploadAndDownload")
+type FileUploadAndDownloadRouter struct {
+}
+
+func (e *FileUploadAndDownloadRouter) InitFileUploadAndDownloadRouter(Router *gin.RouterGroup) {
+	fileUploadAndDownloadRouter := Router.Group("fileUploadAndDownload")
+	var exaFileUploadAndDownloadApi = v1.ApiGroupApp.ExampleApiGroup.FileUploadAndDownloadApi
 	{
-		FileUploadAndDownloadRouter.POST("/upload", v1.UploadFile)                                 // 上传文件
-		FileUploadAndDownloadRouter.POST("/getFileList", v1.GetFileList)                           // 获取上传文件列表
-		FileUploadAndDownloadRouter.POST("/deleteFile", v1.DeleteFile)                             // 删除指定文件
-		FileUploadAndDownloadRouter.POST("/breakpointContinue", v1.BreakpointContinue)             // 断点续传
-		FileUploadAndDownloadRouter.GET("/findFile", v1.FindFile)                                  // 查询当前文件成功的切片
-		FileUploadAndDownloadRouter.POST("/breakpointContinueFinish", v1.BreakpointContinueFinish) // 查询当前文件成功的切片
-		FileUploadAndDownloadRouter.POST("/removeChunk", v1.RemoveChunk)                           // 查询当前文件成功的切片
+		fileUploadAndDownloadRouter.POST("/upload", exaFileUploadAndDownloadApi.UploadFile)                                 // 上传文件
+		fileUploadAndDownloadRouter.POST("/getFileList", exaFileUploadAndDownloadApi.GetFileList)                           // 获取上传文件列表
+		fileUploadAndDownloadRouter.POST("/deleteFile", exaFileUploadAndDownloadApi.DeleteFile)                             // 删除指定文件
+		fileUploadAndDownloadRouter.POST("/breakpointContinue", exaFileUploadAndDownloadApi.BreakpointContinue)             // 断点续传
+		fileUploadAndDownloadRouter.GET("/findFile", exaFileUploadAndDownloadApi.FindFile)                                  // 查询当前文件成功的切片
+		fileUploadAndDownloadRouter.POST("/breakpointContinueFinish", exaFileUploadAndDownloadApi.BreakpointContinueFinish) // 查询当前文件成功的切片
+		fileUploadAndDownloadRouter.POST("/removeChunk", exaFileUploadAndDownloadApi.RemoveChunk)                           // 查询当前文件成功的切片
 	}
 }

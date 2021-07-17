@@ -6,13 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitSysDictionaryDetailRouter(Router *gin.RouterGroup) {
-	SysDictionaryDetailRouter := Router.Group("sysDictionaryDetail").Use(middleware.OperationRecord())
+type DictionaryDetailRouter struct {
+}
+
+func (s *DictionaryDetailRouter) InitSysDictionaryDetailRouter(Router *gin.RouterGroup) {
+	dictionaryDetailRouter := Router.Group("sysDictionaryDetail").Use(middleware.OperationRecord())
+	var sysDictionaryDetailApi = v1.ApiGroupApp.SystemApiGroup.DictionaryDetailApi
 	{
-		SysDictionaryDetailRouter.POST("createSysDictionaryDetail", v1.CreateSysDictionaryDetail)   // 新建SysDictionaryDetail
-		SysDictionaryDetailRouter.DELETE("deleteSysDictionaryDetail", v1.DeleteSysDictionaryDetail) // 删除SysDictionaryDetail
-		SysDictionaryDetailRouter.PUT("updateSysDictionaryDetail", v1.UpdateSysDictionaryDetail)    // 更新SysDictionaryDetail
-		SysDictionaryDetailRouter.GET("findSysDictionaryDetail", v1.FindSysDictionaryDetail)        // 根据ID获取SysDictionaryDetail
-		SysDictionaryDetailRouter.GET("getSysDictionaryDetailList", v1.GetSysDictionaryDetailList)  // 获取SysDictionaryDetail列表
+		dictionaryDetailRouter.POST("createSysDictionaryDetail", sysDictionaryDetailApi.CreateSysDictionaryDetail)   // 新建SysDictionaryDetail
+		dictionaryDetailRouter.DELETE("deleteSysDictionaryDetail", sysDictionaryDetailApi.DeleteSysDictionaryDetail) // 删除SysDictionaryDetail
+		dictionaryDetailRouter.PUT("updateSysDictionaryDetail", sysDictionaryDetailApi.UpdateSysDictionaryDetail)    // 更新SysDictionaryDetail
+		dictionaryDetailRouter.GET("findSysDictionaryDetail", sysDictionaryDetailApi.FindSysDictionaryDetail)        // 根据ID获取SysDictionaryDetail
+		dictionaryDetailRouter.GET("getSysDictionaryDetailList", sysDictionaryDetailApi.GetSysDictionaryDetailList)  // 获取SysDictionaryDetail列表
 	}
 }

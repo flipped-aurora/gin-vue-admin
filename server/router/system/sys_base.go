@@ -5,11 +5,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
-	BaseRouter := Router.Group("base")
+type BaseRouter struct {
+}
+
+func (s *BaseRouter) InitBaseRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
+	baseRouter := Router.Group("base")
+	var baseApi = v1.ApiGroupApp.SystemApiGroup.BaseApi
 	{
-		BaseRouter.POST("login", v1.Login)
-		BaseRouter.POST("captcha", v1.Captcha)
+		baseRouter.POST("login", baseApi.Login)
+		baseRouter.POST("captcha", baseApi.Captcha)
 	}
-	return BaseRouter
+	return baseRouter
 }

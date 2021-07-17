@@ -1,5 +1,5 @@
 // 自动生成模板{{.StructName}}
-package model
+package autocode
 
 import (
 	"gin-vue-admin/global"

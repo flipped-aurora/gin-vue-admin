@@ -6,13 +6,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Router) InitSysDictionaryRouter(Router *gin.RouterGroup) {
-	SysDictionaryRouter := Router.Group("sysDictionary").Use(middleware.OperationRecord())
+type DictionaryRouter struct {
+}
+
+func (s *DictionaryRouter) InitSysDictionaryRouter(Router *gin.RouterGroup) {
+	sysDictionaryRouter := Router.Group("sysDictionary").Use(middleware.OperationRecord())
+	var sysDictionaryApi = v1.ApiGroupApp.SystemApiGroup.DictionaryApi
 	{
-		SysDictionaryRouter.POST("createSysDictionary", v1.CreateSysDictionary)   // 新建SysDictionary
-		SysDictionaryRouter.DELETE("deleteSysDictionary", v1.DeleteSysDictionary) // 删除SysDictionary
-		SysDictionaryRouter.PUT("updateSysDictionary", v1.UpdateSysDictionary)    // 更新SysDictionary
-		SysDictionaryRouter.GET("findSysDictionary", v1.FindSysDictionary)        // 根据ID获取SysDictionary
-		SysDictionaryRouter.GET("getSysDictionaryList", v1.GetSysDictionaryList)  // 获取SysDictionary列表
+		sysDictionaryRouter.POST("createSysDictionary", sysDictionaryApi.CreateSysDictionary)   // 新建SysDictionary
+		sysDictionaryRouter.DELETE("deleteSysDictionary", sysDictionaryApi.DeleteSysDictionary) // 删除SysDictionary
+		sysDictionaryRouter.PUT("updateSysDictionary", sysDictionaryApi.UpdateSysDictionary)    // 更新SysDictionary
+		sysDictionaryRouter.GET("findSysDictionary", sysDictionaryApi.FindSysDictionary)        // 根据ID获取SysDictionary
+		sysDictionaryRouter.GET("getSysDictionaryList", sysDictionaryApi.GetSysDictionaryList)  // 获取SysDictionary列表
 	}
 }

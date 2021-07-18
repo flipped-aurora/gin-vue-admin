@@ -52,7 +52,7 @@ func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndD
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetFileRecordInfoList
 //@description: 分页获取数据
-//@param: info requset.PageInfo
+//@param: info request.PageInfo
 //@return: err error, list interface{}, total int64
 
 func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {

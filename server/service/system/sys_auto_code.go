@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	autoPath = "autoCode/"
+	autoPath = "autocode_template/"
 	basePath = "resource/template"
 )
 

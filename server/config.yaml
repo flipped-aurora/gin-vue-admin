@@ -73,7 +73,7 @@ local:
 autocode:
   transfer-restart: true
   root: ""
-  server: /server/autocode
+  server: /server
   server-api: /api/v1/autocode
   server-initialize: /initialize
   server-model: /model/autocode

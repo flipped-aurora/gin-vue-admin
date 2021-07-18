@@ -3,7 +3,7 @@ package autocode
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model/autocode"
-	autocodeReq "gin-vue-admin/model/autocode/requset"
+	autocodeReq "gin-vue-admin/model/autocode/request"
 	"gin-vue-admin/model/common/response"
 	"gin-vue-admin/service"
 	"gin-vue-admin/utils"

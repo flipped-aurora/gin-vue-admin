@@ -1,13 +1,12 @@
-package v1
+package autocode
 
 import (
 	"gin-vue-admin/global"
     "gin-vue-admin/model/autocode"
-    "gin-vue-admin/model/common/requset"
-    autocodeReq "gin-vue-admin/model/autocode/requset"
+    "gin-vue-admin/model/common/request"
+    autocodeReq "gin-vue-admin/model/autocode/request"
     "gin-vue-admin/model/common/response"
     "gin-vue-admin/service"
-    "gin-vue-admin/utils"
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
 )
@@ -28,7 +27,7 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.AutoCodeServiceGroup.{{.S
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} model.{{.StructName}}
+	var {{.Abbreviation}} autocode.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Any("err", err))

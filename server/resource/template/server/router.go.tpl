@@ -1,4 +1,4 @@
-package router
+package autocode
 
 import (
 	"gin-vue-admin/api/v1"

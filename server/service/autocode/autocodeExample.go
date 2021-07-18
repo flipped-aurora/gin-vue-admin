@@ -3,7 +3,7 @@ package autocode
 import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/model/autocode"
-	"gin-vue-admin/model/autocode/requset"
+	"gin-vue-admin/model/autocode/request"
 )
 
 type AutoCodeExampleService struct {

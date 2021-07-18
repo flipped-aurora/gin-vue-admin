@@ -154,6 +154,14 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
 		initializeRouterFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
+		initializeApiFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, "enter.go")
+
+		initializeAutoRouterFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRouter, "enter.go")
+		initializeServiceFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, "enter.go")
+
 		err = utils.AutoInjectionCode(initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},")
 		if err != nil {
 			return err
@@ -162,10 +170,28 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		if err != nil {
 			return err
 		}
+		err = utils.AutoInjectionCode(initializeApiFilePath, "ApiGroup", autoCode.StructName+"Api")
+		if err != nil {
+			return err
+		}
+		err = utils.AutoInjectionCode(initializeAutoRouterFilePath, "RouterGroup", autoCode.StructName+"Router")
+		if err != nil {
+			return err
+		}
+		err = utils.AutoInjectionCode(initializeServiceFilePath, "ServiceGroup", autoCode.StructName+"Service")
+		if err != nil {
+			return err
+		}
 
 		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},"))
 		injectionCodeMeta.WriteString(";")
 		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)"))
+		injectionCodeMeta.WriteString(";")
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeApiFilePath, "ApiGroup", autoCode.StructName+"Api"))
+		injectionCodeMeta.WriteString(";")
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeAutoRouterFilePath, "RouterGroup", autoCode.StructName+"Router"))
+		injectionCodeMeta.WriteString(";")
+		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeServiceFilePath, "ServiceGroup", autoCode.StructName+"Service"))
 
 		// 保存生成信息
 		for _, data := range dataList {
@@ -176,9 +202,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 
 		if global.GVA_CONFIG.AutoCode.TransferRestart {
-			go func() {
-				_ = utils.Reload()
-			}()
+			//go func() {
+			//	_ = utils.Reload()
+			//}()
 		}
 		//return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
@@ -414,7 +440,6 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 	// 生成文件路径，填充 autoCodePath 字段，readme.txt.tpl不符合规则，需要特殊处理
 	// resource/template/web/api.js.tpl -> autoCode/web/autoCode.PackageName/api/autoCode.PackageName.js
 	// resource/template/readme.txt.tpl -> autoCode/readme.txt
-	autoPath := "autoCode/"
 	for index, value := range dataList {
 		trimBase := strings.TrimPrefix(value.locationPath, basePath+"/")
 		if trimBase == "readme.txt.tpl" {

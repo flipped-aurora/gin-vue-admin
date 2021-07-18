@@ -19,9 +19,55 @@ import (
 )
 
 const (
-	autoPath = "autoCode/"
+	autoPath = "autocode_template/"
 	basePath = "resource/template"
 )
+
+var injectionPaths []injectionMeta
+
+func Init() {
+	if len(injectionPaths) != 0 {
+		return
+	}
+	injectionPaths = []injectionMeta{
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
+			funcName:    "MysqlTables",
+			structNameF: "autocode.%s{},",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
+			funcName:    "Routers",
+			structNameF: "autocodeRouter.Init%sRouter(PrivateGroup)",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, "enter.go"),
+			funcName:    "ApiGroup",
+			structNameF: "%sApi",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRouter, "enter.go"),
+			funcName:    "RouterGroup",
+			structNameF: "%sRouter",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, "enter.go"),
+			funcName:    "ServiceGroup",
+			structNameF: "%sService",
+		},
+	}
+}
+
+type injectionMeta struct {
+	path        string
+	funcName    string
+	structNameF string // 带格式化的
+}
 
 type tplData struct {
 	template         *template.Template
@@ -142,6 +188,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		idBf.WriteString(";")
 	}
 	if autoCode.AutoMoveFile { // 判断是否需要自动转移
+		Init()
 		for index := range dataList {
 			autoCodeService.addAutoMoveFile(&dataList[index])
 		}
@@ -150,23 +197,10 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				return err
 			}
 		}
-		initializeGormFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
-		initializeRouterFilePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
-		err = utils.AutoInjectionCode(initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},")
+		err = injectionCode(autoCode.StructName, &injectionCodeMeta)
 		if err != nil {
-			return err
+			return
 		}
-		err = utils.AutoInjectionCode(initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)")
-		if err != nil {
-			return err
-		}
-
-		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeGormFilePath, "MysqlTables", "model."+autoCode.StructName+"{},"))
-		injectionCodeMeta.WriteString(";")
-		injectionCodeMeta.WriteString(fmt.Sprintf("%s@%s@%s", initializeRouterFilePath, "Routers", "router.Init"+autoCode.StructName+"Router(PrivateGroup)"))
-
 		// 保存生成信息
 		for _, data := range dataList {
 			if len(data.autoMoveFilePath) != 0 {
@@ -180,7 +214,6 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				_ = utils.Reload()
 			}()
 		}
-		//return errors.New("创建代码成功并移动文件成功")
 	} else { // 打包
 		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
@@ -414,7 +447,6 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 	// 生成文件路径，填充 autoCodePath 字段，readme.txt.tpl不符合规则，需要特殊处理
 	// resource/template/web/api.js.tpl -> autoCode/web/autoCode.PackageName/api/autoCode.PackageName.js
 	// resource/template/readme.txt.tpl -> autoCode/readme.txt
-	autoPath := "autoCode/"
 	for index, value := range dataList {
 		trimBase := strings.TrimPrefix(value.locationPath, basePath+"/")
 		if trimBase == "readme.txt.tpl" {
@@ -446,4 +478,16 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 		fileList = append(fileList, value.autoCodePath)
 	}
 	return dataList, fileList, needMkdir, err
+}
+
+// injectionCode 封装代码注入
+func injectionCode(structName string, bf *strings.Builder) error {
+	for _, meta := range injectionPaths {
+		code := fmt.Sprintf(meta.structNameF, structName)
+		if err := utils.AutoInjectionCode(meta.path, meta.funcName, code); err != nil {
+			return err
+		}
+		bf.WriteString(fmt.Sprintf("%s@%s@%s;", meta.path, meta.funcName, code))
+	}
+	return nil
 }

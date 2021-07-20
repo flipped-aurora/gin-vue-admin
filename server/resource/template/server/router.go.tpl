@@ -1,4 +1,4 @@
-package router
+package autocode
 
 import (
 	"gin-vue-admin/api/v1"
@@ -6,15 +6,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type {{.StructName}}Router struct {
+}
+
 // Init{{.StructName}}Router 初始化 {{.StructName}} 路由信息
-func Init{{.StructName}}Router(Router *gin.RouterGroup) {
-	{{.StructName}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
+func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGroup) {
+	{{.Abbreviation}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
+	var {{.Abbreviation}}Api = v1.ApiGroupApp.AutoCodeApiGroup.{{.StructName}}Api
 	{
-		{{.StructName}}Router.POST("create{{.StructName}}", v1.Create{{.StructName}})   // 新建{{.StructName}}
-		{{.StructName}}Router.DELETE("delete{{.StructName}}", v1.Delete{{.StructName}}) // 删除{{.StructName}}
-		{{.StructName}}Router.DELETE("delete{{.StructName}}ByIds", v1.Delete{{.StructName}}ByIds) // 批量删除{{.StructName}}
-		{{.StructName}}Router.PUT("update{{.StructName}}", v1.Update{{.StructName}})    // 更新{{.StructName}}
-		{{.StructName}}Router.GET("find{{.StructName}}", v1.Find{{.StructName}})        // 根据ID获取{{.StructName}}
-		{{.StructName}}Router.GET("get{{.StructName}}List", v1.Get{{.StructName}}List)  // 获取{{.StructName}}列表
+		{{.Abbreviation}}Router.POST("create{{.StructName}}", {{.Abbreviation}}Api.Create{{.StructName}})   // 新建{{.StructName}}
+		{{.Abbreviation}}Router.DELETE("delete{{.StructName}}", {{.Abbreviation}}Api.Delete{{.StructName}}) // 删除{{.StructName}}
+		{{.Abbreviation}}Router.DELETE("delete{{.StructName}}ByIds", {{.Abbreviation}}Api.Delete{{.StructName}}ByIds) // 批量删除{{.StructName}}
+		{{.Abbreviation}}Router.PUT("update{{.StructName}}", {{.Abbreviation}}Api.Update{{.StructName}})    // 更新{{.StructName}}
+		{{.Abbreviation}}Router.GET("find{{.StructName}}", {{.Abbreviation}}Api.Find{{.StructName}})        // 根据ID获取{{.StructName}}
+		{{.Abbreviation}}Router.GET("get{{.StructName}}List", {{.Abbreviation}}Api.Get{{.StructName}}List)  // 获取{{.StructName}}列表
 	}
 }

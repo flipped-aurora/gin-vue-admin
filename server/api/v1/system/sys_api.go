@@ -21,7 +21,7 @@ type SystemApiApi struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysApi true "api路径, api中文描述, api组, 方法"
+// @Param data body system.SysApi true "api路径, api中文描述, api组, 方法"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /api/createApi [post]
 func (s *SystemApiApi) CreateApi(c *gin.Context) {
@@ -44,7 +44,7 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysApi true "ID"
+// @Param data body system.SysApi true "ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /api/deleteApi [post]
 func (s *SystemApiApi) DeleteApi(c *gin.Context) {
@@ -119,7 +119,7 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysApi true "api路径, api中文描述, api组, 方法"
+// @Param data body system.SysApi true "api路径, api中文描述, api组, 方法"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /api/updateApi [post]
 func (s *SystemApiApi) UpdateApi(c *gin.Context) {

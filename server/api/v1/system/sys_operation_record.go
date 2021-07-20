@@ -19,7 +19,7 @@ type OperationRecordApi struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysOperationRecord true "创建SysOperationRecord"
+// @Param data body system.SysOperationRecord true "创建SysOperationRecord"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/createSysOperationRecord [post]
 func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
@@ -38,7 +38,7 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysOperationRecord true "SysOperationRecord模型"
+// @Param data body system.SysOperationRecord true "SysOperationRecord模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
@@ -76,7 +76,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysOperationRecord true "Id"
+// @Param data body system.SysOperationRecord true "Id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysOperationRecord/findSysOperationRecord [get]
 func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {

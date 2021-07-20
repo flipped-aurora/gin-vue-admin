@@ -106,7 +106,7 @@ func (autoApi *AutoCodeApi) GetMeta(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.AutoCodeStruct true "预览创建代码"
+// @Param data body system.AutoCodeStruct true "预览创建代码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/preview [post]
 func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
@@ -130,7 +130,7 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.AutoCodeStruct true "创建自动代码"
+// @Param data body system.AutoCodeStruct true "创建自动代码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/createTemp [post]
 func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {

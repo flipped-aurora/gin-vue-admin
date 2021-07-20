@@ -141,3 +141,7 @@ func DeleteApisByIds(ids request.IdsReq) (err error) {
 	err = global.GVA_DB.Delete(&[]model.SysApi{}, "id in ?", ids.Ids).Error
 	return err
 }
+
+func DeleteApiByIds(ids []string) (err error) {
+	return global.GVA_DB.Delete(model.SysApi{}, ids).Error
+}

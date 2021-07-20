@@ -33,7 +33,7 @@ func (s *SystemApi) GetSystemConfig(c *gin.Context) {
 // @Summary 设置配置文件内容
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body model.System true "设置配置文件内容"
+// @Param data body system.System true "设置配置文件内容"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /system/setSystemConfig [post]
 func (s *SystemApi) SetSystemConfig(c *gin.Context) {

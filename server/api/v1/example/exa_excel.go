@@ -22,7 +22,7 @@ type ExcelApi struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce  application/octet-stream
-// @Param data body model.ExcelInfo true "导出Excel文件信息"
+// @Param data body example.ExcelInfo true "导出Excel文件信息"
 // @Success 200
 // @Router /excel/exportExcel [post]
 func (e *ExcelApi) ExportExcel(c *gin.Context) {

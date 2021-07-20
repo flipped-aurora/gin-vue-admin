@@ -36,7 +36,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="getColumn">使用此表创建</el-button>
+            <el-button size="mini" type="primary" @click="getColumn">使用此表创建</el-button>
           </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -58,18 +58,28 @@
         <el-input v-model="form.description" placeholder="中文描述作为自动api描述" />
       </el-form-item>
       <el-form-item label="文件名称" prop="packageName">
-        <el-input v-model="form.packageName" placeholder="生成文件的默认名称" />
+        <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" />
       </el-form-item>
-      <el-form-item label="自动创建api">
+      <el-form-item>
+        <template slot="label">
+          <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
+            <div> 自动创建API </div>
+          </el-tooltip>
+        </template>
         <el-checkbox v-model="form.autoCreateApiToSql" />
       </el-form-item>
-      <el-form-item label="自动移动文件">
+      <el-form-item>
+        <template slot="label">
+          <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
+            <div> 自动移动文件 </div>
+          </el-tooltip>
+        </template>
         <el-checkbox v-model="form.autoMoveFile" />
       </el-form-item>
     </el-form>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
-      <el-button type="primary" @click="editAndAddField()">新增Field</el-button>
+      <el-button size="mini" type="primary" @click="editAndAddField()">新增Field</el-button>
     </div>
     <el-table :data="form.fields" border stripe>
       <el-table-column type="index" label="序列" width="100" />
@@ -117,15 +127,15 @@
     <el-tag type="danger">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
     <!-- 组件列表 -->
     <div class="button-box clearflex">
-      <el-button type="primary" @click="enterForm(true)">预览代码</el-button>
-      <el-button type="primary" @click="enterForm(false)">生成代码</el-button>
+      <el-button size="mini" type="primary" @click="enterForm(true)">预览代码</el-button>
+      <el-button size="mini" type="primary" @click="enterForm(false)">生成代码</el-button>
     </div>
     <!-- 组件弹窗 -->
     <el-dialog title="组件内容" :visible.sync="dialogFlag">
       <FieldDialog v-if="dialogFlag" ref="fieldDialog" :dialog-middle="dialogMiddle" />
       <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="enterDialog">确 定</el-button>
+        <el-button size="mini" @click="closeDialog">取 消</el-button>
+        <el-button size="mini" type="primary" @click="enterDialog">确 定</el-button>
       </div>
     </el-dialog>
 
@@ -199,7 +209,7 @@ export default {
         packageName: [
           {
             required: true,
-            message: '文件名称：sys_xxxx_xxxx',
+            message: '文件名称：sysXxxxXxxx',
             trigger: 'blur'
           }
         ]

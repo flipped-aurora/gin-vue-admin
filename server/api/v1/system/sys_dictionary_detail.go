@@ -18,7 +18,7 @@ type DictionaryDetailApi struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "SysDictionaryDetail模型"
+// @Param data body system.SysDictionaryDetail true "SysDictionaryDetail模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /sysDictionaryDetail/createSysDictionaryDetail [post]
 func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c *gin.Context) {
@@ -37,7 +37,7 @@ func (s *DictionaryDetailApi) CreateSysDictionaryDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "SysDictionaryDetail模型"
+// @Param data body system.SysDictionaryDetail true "SysDictionaryDetail模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysDictionaryDetail/deleteSysDictionaryDetail [delete]
 func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c *gin.Context) {
@@ -56,7 +56,7 @@ func (s *DictionaryDetailApi) DeleteSysDictionaryDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "更新SysDictionaryDetail"
+// @Param data body system.SysDictionaryDetail true "更新SysDictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /sysDictionaryDetail/updateSysDictionaryDetail [put]
 func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *gin.Context) {
@@ -75,7 +75,7 @@ func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionaryDetail true "用id查询SysDictionaryDetail"
+// @Param data body system.SysDictionaryDetail true "用id查询SysDictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionaryDetail/findSysDictionaryDetail [get]
 func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {

@@ -131,6 +131,7 @@ func InitDB(conf request.InitDB) error {
 		model.ExaSimpleUploader{},
 		model.ExaCustomer{},
 		model.SysOperationRecord{},
+		model.SysAutoCodeHistory{},
 	)
 	if err != nil {
 		global.GVA_DB = nil

@@ -19,7 +19,7 @@ type CustomerApi struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "客户用户名, 客户手机号码"
+// @Param data body example.ExaCustomer true "客户用户名, 客户手机号码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /customer/customer [post]
 func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
@@ -44,7 +44,7 @@ func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "客户ID"
+// @Param data body example.ExaCustomer true "客户ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /customer/customer [delete]
 func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
@@ -67,7 +67,7 @@ func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "客户ID, 客户信息"
+// @Param data body example.ExaCustomer true "客户ID, 客户信息"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /customer/customer [put]
 func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
@@ -94,7 +94,7 @@ func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.ExaCustomer true "客户ID"
+// @Param data body example.ExaCustomer true "客户ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [get]
 func (e *CustomerApi) GetExaCustomer(c *gin.Context) {

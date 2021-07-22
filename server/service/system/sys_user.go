@@ -40,7 +40,7 @@ func (userService *UserService) Register(u system.SysUser) (err error, userInter
 func (userService *UserService) Login(u *system.SysUser) (err error, userInter *system.SysUser) {
 	var user system.SysUser
 	u.Password = utils.MD5V([]byte(u.Password))
-	err = global.GVA_DB.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authority").First(&user).Error
+	err = global.GVA_DB.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authorities").Preload("Authority").First(&user).Error
 	return err, &user
 }
 
@@ -69,7 +69,7 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (err erro
 	db := global.GVA_DB.Model(&system.SysUser{})
 	var userList []system.SysUser
 	err = db.Count(&total).Error
-	err = db.Limit(limit).Offset(offset).Preload("Authority").Find(&userList).Error
+	err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
 	return err, userList, total
 }
 
@@ -79,9 +79,40 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (err erro
 //@param: uuid uuid.UUID, authorityId string
 //@return: err error
 
-func (userService *UserService) SetUserAuthority(uuid uuid.UUID, authorityId string) (err error) {
+func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, authorityId string) (err error) {
+	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUseAuthority{}).Error
+	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
+		return errors.New("该用户无此角色")
+	}
 	err = global.GVA_DB.Where("uuid = ?", uuid).First(&system.SysUser{}).Update("authority_id", authorityId).Error
 	return err
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetUserAuthorities
+//@description: 设置一个用户的权限
+//@param: id uint, authorityIds []string
+//@return: err error
+
+func (userService *UserService) SetUserAuthorities(id uint, authorityIds []string) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		TxErr := tx.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+		if TxErr != nil {
+			return TxErr
+		}
+		useAuthority := []system.SysUseAuthority{}
+		for _, v := range authorityIds {
+			useAuthority = append(useAuthority, system.SysUseAuthority{
+				id, v,
+			})
+		}
+		TxErr = tx.Create(&useAuthority).Error
+		if TxErr != nil {
+			return TxErr
+		}
+		// 返回 nil 提交事务
+		return nil
+	})
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -93,6 +124,7 @@ func (userService *UserService) SetUserAuthority(uuid uuid.UUID, authorityId str
 func (userService *UserService) DeleteUser(id float64) (err error) {
 	var user system.SysUser
 	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
+	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
 	return err
 }
 
@@ -104,6 +136,18 @@ func (userService *UserService) DeleteUser(id float64) (err error) {
 
 func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, user system.SysUser) {
 	err = global.GVA_DB.Updates(&reqUser).Error
+	return err, reqUser
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetUserInfo
+//@description: 获取用户信息
+//@param: uuid uuid.UUID
+//@return: err error, user system.SysUser
+
+func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user system.SysUser) {
+	var reqUser system.SysUser
+	err = global.GVA_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
 	return err, reqUser
 }
 

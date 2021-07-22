@@ -1,4 +1,4 @@
-import { login } from '@/api/user'
+import { login, getUserInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { setUserInfo } from '@/api/user'
@@ -56,6 +56,13 @@ export const user = {
     }
   },
   actions: {
+    async GetUserInfo({ commit }) {
+      const res = await getUserInfo()
+      if (res.code === 0) {
+        commit('setUserInfo', res.data.userInfo)
+      }
+      return res
+    },
     async LoginIn({ commit, dispatch, rootGetters, getters }, loginInfo) {
       const res = await login(loginInfo)
       if (res.code === 0) {

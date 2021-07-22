@@ -1,14 +1,13 @@
 package request
 
-import uuid "github.com/satori/go.uuid"
-
 // User register structure
 type Register struct {
-	Username    string `json:"userName"`
-	Password    string `json:"passWord"`
-	NickName    string `json:"nickName" gorm:"default:'QMPlusUser'"`
-	HeaderImg   string `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
-	AuthorityId string `json:"authorityId" gorm:"default:888"`
+	Username     string   `json:"userName"`
+	Password     string   `json:"passWord"`
+	NickName     string   `json:"nickName" gorm:"default:'QMPlusUser'"`
+	HeaderImg    string   `json:"headerImg" gorm:"default:'http://www.henrongyi.top/avatar/lufu.jpg'"`
+	AuthorityId  string   `json:"authorityId" gorm:"default:888"`
+	AuthorityIds []string `json:"authorityIds"`
 }
 
 // User login structure
@@ -28,6 +27,11 @@ type ChangePasswordStruct struct {
 
 // Modify  user's auth structure
 type SetUserAuth struct {
-	UUID        uuid.UUID `json:"uuid"`        // 用户UUID
-	AuthorityId string    `json:"authorityId"` // 角色ID
+	AuthorityId string `json:"authorityId"` // 角色ID
+}
+
+// Modify  user's auth structure
+type SetUserAuthorities struct {
+	ID           uint
+	AuthorityIds []string `json:"authorityIds"` // 角色ID
 }

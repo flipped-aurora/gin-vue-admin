@@ -275,7 +275,7 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysUser true "ID, 用户名, 昵称, 头像链接"
+// @Param data body system.SysUser true "ID, 用户名, 昵称, 头像链接"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /user/setUserInfo [put]
 func (b *BaseApi) SetUserInfo(c *gin.Context) {

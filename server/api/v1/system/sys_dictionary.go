@@ -18,7 +18,7 @@ type DictionaryApi struct {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionary true "SysDictionary模型"
+// @Param data body system.SysDictionary true "SysDictionary模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /sysDictionary/createSysDictionary [post]
 func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
@@ -37,7 +37,7 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionary true "SysDictionary模型"
+// @Param data body system.SysDictionary true "SysDictionary模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysDictionary/deleteSysDictionary [delete]
 func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
@@ -56,7 +56,7 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionary true "SysDictionary模型"
+// @Param data body system.SysDictionary true "SysDictionary模型"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /sysDictionary/updateSysDictionary [put]
 func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
@@ -75,7 +75,7 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysDictionary true "ID或字典英名"
+// @Param data body system.SysDictionary true "ID或字典英名"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionary/findSysDictionary [get]
 func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {

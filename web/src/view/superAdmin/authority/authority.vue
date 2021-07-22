@@ -43,6 +43,7 @@
         </template>
       </el-table-column>
     </el-table>
+    <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
     <!-- 新增角色弹窗 -->
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
       <el-form ref="authorityForm" :model="form" :rules="rules">

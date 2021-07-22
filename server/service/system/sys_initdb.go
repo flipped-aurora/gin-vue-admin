@@ -152,7 +152,9 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		source.Dictionary,
 		source.DictionaryDetail,
 		source.File,
-		source.BaseMenu)
+		source.BaseMenu,
+		source.UserAuthority,
+	)
 	if err != nil {
 		global.GVA_DB = nil
 		return err

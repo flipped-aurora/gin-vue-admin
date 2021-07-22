@@ -102,7 +102,7 @@ func (a *AuthorityMenuApi) GetMenuAuthority(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysBaseMenu true "路由path, 父菜单ID, 路由name, 对应前端文件路径, 排序标记"
+// @Param data body system.SysBaseMenu true "路由path, 父菜单ID, 路由name, 对应前端文件路径, 排序标记"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"添加成功"}"
 // @Router /menu/addBaseMenu [post]
 func (a *AuthorityMenuApi) AddBaseMenu(c *gin.Context) {
@@ -153,7 +153,7 @@ func (a *AuthorityMenuApi) DeleteBaseMenu(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.SysBaseMenu true "路由path, 父菜单ID, 路由name, 对应前端文件路径, 排序标记"
+// @Param data body system.SysBaseMenu true "路由path, 父菜单ID, 路由name, 对应前端文件路径, 排序标记"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /menu/updateBaseMenu [post]
 func (a *AuthorityMenuApi) UpdateBaseMenu(c *gin.Context) {

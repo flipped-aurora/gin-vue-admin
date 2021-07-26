@@ -10,6 +10,9 @@ import APlayer from '@moefe/vue-aplayer'
 import '../../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
 // 路由守卫
 import Bus from '@/utils/bus'
+// 加载网站配置文件夹
+import config from './config'
+Vue.prototype.$GIN_VUE_ADMIN = config
 Vue.use(Bus)
 Vue.use(APlayer, {
   defaultCover: 'https://github.com/u3u.png',
@@ -19,7 +22,7 @@ Vue.use(uploader)
 
 console.log(`
    欢迎使用 Gin-Vue-Admin
-   当前版本:V2.4.2
+   当前版本:V2.4.4 RC
    加群方式:微信：shouzi_1994 QQ群：622360840
    默认自动化文档地址:http://127.0.0.1:${process.env.VUE_APP_SERVER_PORT}/swagger/index.html
    默认前端文件运行地址:http://127.0.0.1:${process.env.VUE_APP_CLI_PORT}

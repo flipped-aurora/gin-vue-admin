@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="button-box clearflex">
-      <el-button type="primary" @click="addUser">新增用户</el-button>
+      <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
     </div>
     <el-table :data="tableData" border stripe>
       <el-table-column label="头像" min-width="50">
@@ -17,12 +17,14 @@
       <el-table-column label="用户角色" min-width="150">
         <template slot-scope="scope">
           <el-cascader
-            v-model="scope.row.authority.authorityId"
+            v-model="scope.row.authorityIds"
             :options="authOptions"
             :show-all-levels="false"
-            :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
             filterable
-            @change="changeAuthority(scope.row)"
+            :clearable="false"
+            @visible-change="(flag)=>{changeAuthority(scope.row,flag)}"
+            @remove-tag="()=>{changeAuthority(scope.row,false)}"
           />
         </template>
       </el-table-column>
@@ -34,11 +36,12 @@
               <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="el-icon-delete" size="small">删除</el-button>
+            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini">删除</el-button>
           </el-popover>
         </template>
       </el-table-column>
     </el-table>
+    <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
     <el-pagination
       :current-page="page"
       :page-size="pageSize"
@@ -69,11 +72,12 @@
         </el-form-item>
         <el-form-item label="用户角色" label-width="80px" prop="authorityId">
           <el-cascader
-            v-model="userInfo.authorityId"
+            v-model="userInfo.authorityIds"
             :options="authOptions"
             :show-all-levels="false"
-            :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
             filterable
+            :clearable="false"
           />
         </el-form-item>
       </el-form>
@@ -91,7 +95,7 @@
 const path = process.env.VUE_APP_BASE_API
 import {
   getUserList,
-  setUserAuthority,
+  setUserAuthorities,
   register,
   deleteUser
 } from '@/api/user'
@@ -115,7 +119,8 @@ export default {
         password: '',
         nickName: '',
         headerImg: '',
-        authorityId: ''
+        authorityId: '',
+        authorityIds: []
       },
       rules: {
         username: [
@@ -139,11 +144,20 @@ export default {
     ...mapGetters('user', ['token'])
   },
   async created() {
-    this.getTableData()
+    await this.getTableData()
+    this.setAuthorityIds()
     const res = await getAuthorityList({ page: 1, pageSize: 999 })
     this.setOptions(res.data.list)
   },
   methods: {
+    setAuthorityIds() {
+      this.tableData && this.tableData.forEach((user) => {
+        const authorityIds = user.authorities && user.authorities.map(i => {
+          return i.authorityId
+        })
+        this.$set(user, 'authorityIds', authorityIds)
+      })
+    },
     openHeaderChange() {
       this.$refs.chooseImg.open()
     },
@@ -174,11 +188,14 @@ export default {
     async deleteUser(row) {
       const res = await deleteUser({ id: row.ID })
       if (res.code === 0) {
-        this.getTableData()
+        this.$message.success('删除成功')
+        await this.getTableData()
+        this.setAuthorityIds()
         row.visible = false
       }
     },
     async enterAddUserDialog() {
+      this.userInfo.authorityId = this.userInfo.authorityIds[0]
       this.$refs.userForm.validate(async valid => {
         if (valid) {
           const res = await register(this.userInfo)
@@ -186,6 +203,7 @@ export default {
             this.$message({ type: 'success', message: '创建成功' })
           }
           await this.getTableData()
+          this.setAuthorityIds()
           this.closeAddUserDialog()
         }
       })
@@ -194,20 +212,22 @@ export default {
       this.$refs.userForm.resetFields()
       this.addUserDialog = false
     },
-    handleAvatarSuccess(res) {
-      this.userInfo.headerImg = res.data.file.url
-    },
     addUser() {
       this.addUserDialog = true
     },
-    async changeAuthority(row) {
-      const res = await setUserAuthority({
-        uuid: row.uuid,
-        authorityId: row.authority.authorityId
-      })
-      if (res.code === 0) {
-        this.$message({ type: 'success', message: '角色设置成功' })
+    async changeAuthority(row, flag) {
+      if (flag) {
+        return
       }
+      this.$nextTick(async() => {
+        const res = await setUserAuthorities({
+          ID: row.ID,
+          authorityIds: row.authorityIds
+        })
+        if (res.code === 0) {
+          this.$message({ type: 'success', message: '角色设置成功' })
+        }
+      })
     }
   }
 }

@@ -64,6 +64,10 @@
     border: 1px solid #409EFF;
 }
 
+.el-pager li.active+li{
+    border-left: 1px;
+}
+
 .el-pager li:hover{
     color: #409EFF !important;
     border: 1px solid #409EFF;

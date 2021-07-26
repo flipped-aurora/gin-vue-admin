@@ -111,3 +111,33 @@ export const setUserInfo = (data) => {
     data: data
   })
 }
+
+// @Tags User
+// @Summary 设置用户权限
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body api.setUserAuthorities true "设置用户权限"
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setUserAuthorities [post]
+export const setUserAuthorities = (data) => {
+  return service({
+    url: '/user/setUserAuthorities',
+    method: 'post',
+    data: data
+  })
+}
+
+// @Tags User
+// @Summary 获取用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /user/getUserInfo [get]
+export const getUserInfo = () => {
+  return service({
+    url: '/user/getUserInfo',
+    method: 'get'
+  })
+}

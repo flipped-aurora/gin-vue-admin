@@ -23,6 +23,7 @@ router.beforeEach(async(to, from, next) => {
       if (!asyncRouterFlag && store.getters['router/asyncRouters'].length === 0) {
         asyncRouterFlag++
         await store.dispatch('router/SetAsyncRouter')
+        await store.dispatch('user/GetUserInfo')
         const asyncRouters = store.getters['router/asyncRouters']
         router.addRoutes(asyncRouters)
         next({ ...to, replace: true })

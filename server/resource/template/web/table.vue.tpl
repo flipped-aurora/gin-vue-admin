@@ -4,7 +4,7 @@
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clear placeholder="请选择">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
                 <el-option
                     key="true"
                     label="是"

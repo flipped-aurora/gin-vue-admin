@@ -44,6 +44,7 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.7.0
+	github.com/suisrc/gin-i18n v0.1.1 // indirect
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7
 	github.com/tebeka/strftime v0.1.3 // indirect
@@ -51,6 +52,7 @@ require (
 	github.com/unrolled/secure v1.0.7
 	go.uber.org/zap v1.10.0
 	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
+	golang.org/x/text v0.3.3 // indirect
 	golang.org/x/tools v0.0.0-20200324003944-a576cf524670 // indirect
 	google.golang.org/protobuf v1.24.0 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect

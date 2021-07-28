@@ -5,6 +5,8 @@ import (
 	"gin-vue-admin/global"
 	"gin-vue-admin/middleware"
 	"gin-vue-admin/router"
+	i18n "github.com/suisrc/gin-i18n"
+	"golang.org/x/text/language"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -24,6 +26,16 @@ func Routers() *gin.Engine {
 	global.GVA_LOG.Info("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Info("register swagger handler")
+
+	//多语言初始化
+	bundle := i18n.NewBundle(
+		language.Chinese, //默认中文
+		"language/zh-CN.toml",
+		"language/en-US.toml",
+	)
+	Router.Use(i18n.Serve(bundle))
+	//多语言end
+
 	// 方便统一添加路由组前缀 多服务器上线使用
 	PublicGroup := Router.Group("")
 	{

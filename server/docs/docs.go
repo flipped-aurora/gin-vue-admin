@@ -1476,9 +1476,7 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -1511,9 +1509,7 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -2884,7 +2880,7 @@ var doc = `{
             }
         },
         "/user/changePassword": {
-            "put": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -2949,6 +2945,33 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getUserInfo": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "获取用户信息",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -3024,7 +3047,7 @@ var doc = `{
                 }
             }
         },
-        "/user/setUserAuthority": {
+        "/user/setUserAuthorities": {
             "post": {
                 "security": [
                     {
@@ -3041,6 +3064,44 @@ var doc = `{
                     "SysUser"
                 ],
                 "summary": "设置用户权限",
+                "parameters": [
+                    {
+                        "description": "用户UUID, 角色ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SetUserAuthorities"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/setUserAuthority": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "更改用户权限",
                 "parameters": [
                     {
                         "description": "用户UUID, 角色ID",
@@ -3838,6 +3899,12 @@ var doc = `{
                 "authorityId": {
                     "type": "string"
                 },
+                "authorityIds": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "headerImg": {
                     "type": "string"
                 },
@@ -3907,10 +3974,21 @@ var doc = `{
                 "authorityId": {
                     "description": "角色ID",
                     "type": "string"
+                }
+            }
+        },
+        "request.SetUserAuthorities": {
+            "type": "object",
+            "properties": {
+                "authorityIds": {
+                    "description": "角色ID",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
-                "uuid": {
-                    "description": "用户UUID",
-                    "type": "string"
+                "id": {
+                    "type": "integer"
                 }
             }
         },
@@ -4523,6 +4601,12 @@ var doc = `{
                 "activeColor": {
                     "description": "活跃颜色",
                     "type": "string"
+                },
+                "authorities": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.SysAuthority"
+                    }
                 },
                 "authority": {
                     "$ref": "#/definitions/system.SysAuthority"

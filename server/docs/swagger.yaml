@@ -514,6 +514,10 @@ definitions:
     properties:
       authorityId:
         type: string
+      authorityIds:
+        items:
+          type: string
+        type: array
       headerImg:
         type: string
       nickName:
@@ -564,9 +568,16 @@ definitions:
       authorityId:
         description: 角色ID
         type: string
-      uuid:
-        description: 用户UUID
-        type: string
+    type: object
+  request.SetUserAuthorities:
+    properties:
+      authorityIds:
+        description: 角色ID
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
     type: object
   request.SysAutoHistory:
     properties:
@@ -1009,6 +1020,10 @@ definitions:
       activeColor:
         description: 活跃颜色
         type: string
+      authorities:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
       authority:
         $ref: '#/definitions/system.SysAuthority'
       authorityId:
@@ -1928,8 +1943,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1949,8 +1963,7 @@ paths:
       produces:
       - application/octet-stream
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -2783,7 +2796,7 @@ paths:
       tags:
       - System
   /user/changePassword:
-    put:
+    post:
       parameters:
       - description: 用户名, 原密码, 新密码
         in: body
@@ -2824,6 +2837,22 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除用户
+      tags:
+      - SysUser
+  /user/getUserInfo:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
       tags:
       - SysUser
   /user/getUserList:
@@ -2868,6 +2897,29 @@ paths:
       summary: 用户注册账号
       tags:
       - SysUser
+  /user/setUserAuthorities:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户UUID, 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserAuthorities'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户权限
+      tags:
+      - SysUser
   /user/setUserAuthority:
     post:
       consumes:
@@ -2888,7 +2940,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 设置用户权限
+      summary: 更改用户权限
       tags:
       - SysUser
   /user/setUserInfo:

@@ -68,7 +68,7 @@
             <!-- 当前面包屑用路由自动生成可根据需求修改 -->
             <!--
             :to="{ path: item.path }" 暂时注释不用-->
-            <HistoryComponent />
+            <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
         <transition mode="out-in" name="el-fade-in-linear">

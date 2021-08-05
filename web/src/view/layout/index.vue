@@ -45,11 +45,17 @@
                       </span>
                       <el-dropdown-menu slot="dropdown" class="dropdown-group">
                         <el-dropdown-item>
-                          <span>
-                            更多信息
-                            <el-badge is-dot />
+                          <span style="font-weight: 600;">
+                            当前角色：{{ userInfo.authority.authorityName }}
                           </span>
                         </el-dropdown-item>
+                        <template v-if="userInfo.authorities">
+                          <el-dropdown-item v-for="item in userInfo.authorities.filter(i=>i.authorityId!==userInfo.authorityId)" :key="item.authorityId" @click.native="changeUserAuth(item.authorityId)">
+                            <span>
+                              切换为：{{ item.authorityName }}
+                            </span>
+                          </el-dropdown-item>
+                        </template>
                         <el-dropdown-item icon="el-icon-s-custom" @click.native="toPerson">个人信息</el-dropdown-item>
                         <el-dropdown-item icon="el-icon-table-lamp" @click.native="LoginOut">登 出</el-dropdown-item>
                       </el-dropdown-menu>
@@ -90,6 +96,7 @@ import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
 import { mapGetters, mapActions } from 'vuex'
 import CustomPic from '@/components/customPic'
 import Setting from './setting'
+import { setUserAuthority } from '@/api/user'
 export default {
   name: 'Layout',
   components: {
@@ -186,7 +193,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions('user', ['LoginOut']),
+    ...mapActions('user', ['LoginOut', 'GetUserInfo']),
+    async changeUserAuth(id) {
+      const res = await setUserAuthority({
+        authorityId: id
+      })
+      if (res.code === 0) {
+        window.location.reload()
+      }
+    },
     reload() {
       this.reloadFlag = false
       this.$nextTick(() => {

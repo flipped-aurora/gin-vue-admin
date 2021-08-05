@@ -62,8 +62,8 @@ mysql:
   password: ''
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: ""
-  log-zap: false
+  log-mode: false
+  log-zap: ""
 
 # local configuration
 local:
@@ -74,12 +74,12 @@ autocode:
   transfer-restart: true
   root: ""
   server: /server
-  server-api: /api/v1
+  server-api: /api/v1/autocode
   server-initialize: /initialize
-  server-model: /model
-  server-request: /model/request/
-  server-router: /router
-  server-service: /service
+  server-model: /model/autocode
+  server-request: /model/autocode/request/
+  server-router: /router/autocode
+  server-service: /service/autocode
   web: /web/src
   web-api: /api
   web-flow: /view

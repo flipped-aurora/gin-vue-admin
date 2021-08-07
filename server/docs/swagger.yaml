@@ -1857,8 +1857,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1878,8 +1877,7 @@ paths:
       produces:
       - application/octet-stream
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -2924,7 +2922,7 @@ paths:
       tags:
       - System
   /user/changePassword:
-    put:
+    post:
       parameters:
       - description: 用户名, 原密码, 新密码
         in: body

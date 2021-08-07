@@ -387,27 +387,6 @@ definitions:
           $ref: '#/definitions/system.SysBaseMenu'
         type: array
     type: object
-  request.AutoCodeExampleSearch:
-    properties:
-      autoCodeExampleField:
-        description: 展示值
-        type: string
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
   request.AutoHistoryByID:
     properties:
       id:
@@ -514,6 +493,10 @@ definitions:
     properties:
       authorityId:
         type: string
+      authorityIds:
+        items:
+          type: string
+        type: array
       headerImg:
         type: string
       nickName:
@@ -564,9 +547,16 @@ definitions:
       authorityId:
         description: 角色ID
         type: string
-      uuid:
-        description: 用户UUID
-        type: string
+    type: object
+  request.SetUserAuthorities:
+    properties:
+      authorityIds:
+        description: 角色ID
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
     type: object
   request.SysAutoHistory:
     properties:
@@ -575,123 +565,6 @@ definitions:
         type: integer
       pageSize:
         description: 每页大小
-        type: integer
-    type: object
-  request.SysDictionaryDetailSearch:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      label:
-        description: 展示值
-        type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      sort:
-        description: 排序标记
-        type: integer
-      status:
-        description: 启用状态
-        type: boolean
-      sysDictionaryID:
-        description: 关联标记
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-      value:
-        description: 字典值
-        type: integer
-    type: object
-  request.SysDictionarySearch:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      desc:
-        description: 描述
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      name:
-        description: 字典名（中）
-        type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      status:
-        description: 状态
-        type: boolean
-      sysDictionaryDetails:
-        items:
-          $ref: '#/definitions/system.SysDictionaryDetail'
-        type: array
-      type:
-        description: 字典名（英）
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  request.SysOperationRecordSearch:
-    properties:
-      agent:
-        description: 代理
-        type: string
-      body:
-        description: 请求Body
-        type: string
-      createdAt:
-        description: 创建时间
-        type: string
-      error_message:
-        description: 错误信息
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      ip:
-        description: 请求ip
-        type: string
-      latency:
-        description: 延迟
-        type: string
-      method:
-        description: 请求方法
-        type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      path:
-        description: 请求路径
-        type: string
-      resp:
-        description: 响应Body
-        type: string
-      status:
-        description: 请求状态
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-      user:
-        $ref: '#/definitions/system.SysUser'
-      user_id:
-        description: 用户id
         type: integer
     type: object
   response.SysAuthorityCopyResponse:
@@ -1009,6 +882,10 @@ definitions:
       activeColor:
         description: 活跃颜色
         type: string
+      authorities:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
       authority:
         $ref: '#/definitions/system.SysAuthority'
       authorityId:
@@ -1644,12 +1521,22 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 用id查询AutoCodeExample
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/autocode.AutoCodeExample'
+      - description: 展示值
+        in: query
+        name: autoCodeExampleField
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -1667,12 +1554,30 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.AutoCodeExampleSearch'
+      - description: 展示值
+        in: query
+        name: autoCodeExampleField
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -1816,12 +1721,34 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 客户ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExaCustomer'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 客户名
+        in: query
+        name: customerName
+        type: string
+      - description: 客户手机号
+        in: query
+        name: customerPhoneData
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 管理角色ID
+        in: query
+        name: sysUserAuthorityID
+        type: string
+      - description: 管理ID
+        in: query
+        name: sysUserId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -1883,12 +1810,14 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.PageInfo'
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
@@ -1928,8 +1857,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1949,8 +1877,7 @@ paths:
       produces:
       - application/octet-stream
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -2425,12 +2352,34 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: ID或字典英名
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/system.SysDictionary'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 描述
+        in: query
+        name: desc
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 字典名（中）
+        in: query
+        name: name
+        type: string
+      - description: 状态
+        in: query
+        name: status
+        type: boolean
+      - description: 字典名（英）
+        in: query
+        name: type
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -2448,12 +2397,42 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysDictionarySearch'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 描述
+        in: query
+        name: desc
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 字典名（中）
+        in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 状态
+        in: query
+        name: status
+        type: boolean
+      - description: 字典名（英）
+        in: query
+        name: type
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -2540,12 +2519,38 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 用id查询SysDictionaryDetail
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/system.SysDictionaryDetail'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 展示值
+        in: query
+        name: label
+        type: string
+      - description: 排序标记
+        in: query
+        name: sort
+        type: integer
+      - description: 启用状态
+        in: query
+        name: status
+        type: boolean
+      - description: 关联标记
+        in: query
+        name: sysDictionaryID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 字典值
+        in: query
+        name: value
+        type: integer
       produces:
       - application/json
       responses:
@@ -2563,12 +2568,46 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysDictionaryDetailSearch'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 展示值
+        in: query
+        name: label
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 排序标记
+        in: query
+        name: sort
+        type: integer
+      - description: 启用状态
+        in: query
+        name: status
+        type: boolean
+      - description: 关联标记
+        in: query
+        name: sysDictionaryID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 字典值
+        in: query
+        name: value
+        type: integer
       produces:
       - application/json
       responses:
@@ -2678,12 +2717,58 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Id
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/system.SysOperationRecord'
+      - description: 代理
+        in: query
+        name: agent
+        type: string
+      - description: 请求Body
+        in: query
+        name: body
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 错误信息
+        in: query
+        name: error_message
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 请求ip
+        in: query
+        name: ip
+        type: string
+      - description: 延迟
+        in: query
+        name: latency
+        type: string
+      - description: 请求方法
+        in: query
+        name: method
+        type: string
+      - description: 请求路径
+        in: query
+        name: path
+        type: string
+      - description: 响应Body
+        in: query
+        name: resp
+        type: string
+      - description: 请求状态
+        in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
       produces:
       - application/json
       responses:
@@ -2701,12 +2786,66 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysOperationRecordSearch'
+      - description: 代理
+        in: query
+        name: agent
+        type: string
+      - description: 请求Body
+        in: query
+        name: body
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 错误信息
+        in: query
+        name: error_message
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 请求ip
+        in: query
+        name: ip
+        type: string
+      - description: 延迟
+        in: query
+        name: latency
+        type: string
+      - description: 请求方法
+        in: query
+        name: method
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 请求路径
+        in: query
+        name: path
+        type: string
+      - description: 响应Body
+        in: query
+        name: resp
+        type: string
+      - description: 请求状态
+        in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
       produces:
       - application/json
       responses:
@@ -2783,7 +2922,7 @@ paths:
       tags:
       - System
   /user/changePassword:
-    put:
+    post:
       parameters:
       - description: 用户名, 原密码, 新密码
         in: body
@@ -2824,6 +2963,22 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除用户
+      tags:
+      - SysUser
+  /user/getUserInfo:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
       tags:
       - SysUser
   /user/getUserList:
@@ -2868,6 +3023,29 @@ paths:
       summary: 用户注册账号
       tags:
       - SysUser
+  /user/setUserAuthorities:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户UUID, 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserAuthorities'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户权限
+      tags:
+      - SysUser
   /user/setUserAuthority:
     post:
       consumes:
@@ -2888,7 +3066,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 设置用户权限
+      summary: 更改用户权限
       tags:
       - SysUser
   /user/setUserInfo:

@@ -1013,13 +1013,28 @@ var doc = `{
                 "summary": "用id查询AutoCodeExample",
                 "parameters": [
                     {
-                        "description": "用id查询AutoCodeExample",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/autocode.AutoCodeExample"
-                        }
+                        "type": "string",
+                        "description": "展示值",
+                        "name": "autoCodeExampleField",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1051,13 +1066,40 @@ var doc = `{
                 "summary": "分页获取AutoCodeExample列表",
                 "parameters": [
                     {
-                        "description": "页码, 每页大小, 搜索条件",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.AutoCodeExampleSearch"
-                        }
+                        "type": "string",
+                        "description": "展示值",
+                        "name": "autoCodeExampleField",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1260,13 +1302,46 @@ var doc = `{
                 "summary": "获取单一客户信息",
                 "parameters": [
                     {
-                        "description": "客户ID",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/example.ExaCustomer"
-                        }
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "客户名",
+                        "name": "customerName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "客户手机号",
+                        "name": "customerPhoneData",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "管理角色ID",
+                        "name": "sysUserAuthorityID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "管理ID",
+                        "name": "sysUserId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1406,13 +1481,16 @@ var doc = `{
                 "summary": "分页获取权限客户列表",
                 "parameters": [
                     {
-                        "description": "页码, 每页大小",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.PageInfo"
-                        }
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2297,13 +2375,46 @@ var doc = `{
                 "summary": "用id查询SysDictionary",
                 "parameters": [
                     {
-                        "description": "ID或字典英名",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/system.SysDictionary"
-                        }
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "描述",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "字典名（中）",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "字典名（英）",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2335,13 +2446,58 @@ var doc = `{
                 "summary": "分页获取SysDictionary列表",
                 "parameters": [
                     {
-                        "description": "页码, 每页大小, 搜索条件",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SysDictionarySearch"
-                        }
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "描述",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "字典名（中）",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "字典名（英）",
+                        "name": "type",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2487,13 +2643,52 @@ var doc = `{
                 "summary": "用id查询SysDictionaryDetail",
                 "parameters": [
                     {
-                        "description": "用id查询SysDictionaryDetail",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/system.SysDictionaryDetail"
-                        }
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "展示值",
+                        "name": "label",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "排序标记",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "启用状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "关联标记",
+                        "name": "sysDictionaryID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "字典值",
+                        "name": "value",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2525,13 +2720,64 @@ var doc = `{
                 "summary": "分页获取SysDictionaryDetail列表",
                 "parameters": [
                     {
-                        "description": "页码, 每页大小, 搜索条件",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SysDictionaryDetailSearch"
-                        }
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "展示值",
+                        "name": "label",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "排序标记",
+                        "name": "sort",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "启用状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "关联标记",
+                        "name": "sysDictionaryID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "字典值",
+                        "name": "value",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2715,13 +2961,82 @@ var doc = `{
                 "summary": "用id查询SysOperationRecord",
                 "parameters": [
                     {
-                        "description": "Id",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/system.SysOperationRecord"
-                        }
+                        "type": "string",
+                        "description": "代理",
+                        "name": "agent",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求Body",
+                        "name": "body",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "错误信息",
+                        "name": "error_message",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求ip",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "延迟",
+                        "name": "latency",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求方法",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求路径",
+                        "name": "path",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "响应Body",
+                        "name": "resp",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "请求状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -2753,13 +3068,94 @@ var doc = `{
                 "summary": "分页获取SysOperationRecord列表",
                 "parameters": [
                     {
-                        "description": "页码, 每页大小, 搜索条件",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.SysOperationRecordSearch"
-                        }
+                        "type": "string",
+                        "description": "代理",
+                        "name": "agent",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求Body",
+                        "name": "body",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "错误信息",
+                        "name": "error_message",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求ip",
+                        "name": "ip",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "延迟",
+                        "name": "latency",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求方法",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "请求路径",
+                        "name": "path",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "响应Body",
+                        "name": "resp",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "请求状态",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "用户id",
+                        "name": "user_id",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -3716,35 +4112,6 @@ var doc = `{
                 }
             }
         },
-        "request.AutoCodeExampleSearch": {
-            "type": "object",
-            "properties": {
-                "autoCodeExampleField": {
-                    "description": "展示值",
-                    "type": "string"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页大小",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
         "request.AutoHistoryByID": {
             "type": "object",
             "properties": {
@@ -4001,166 +4368,6 @@ var doc = `{
                 },
                 "pageSize": {
                     "description": "每页大小",
-                    "type": "integer"
-                }
-            }
-        },
-        "request.SysDictionaryDetailSearch": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "label": {
-                    "description": "展示值",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页大小",
-                    "type": "integer"
-                },
-                "sort": {
-                    "description": "排序标记",
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "启用状态",
-                    "type": "boolean"
-                },
-                "sysDictionaryID": {
-                    "description": "关联标记",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                },
-                "value": {
-                    "description": "字典值",
-                    "type": "integer"
-                }
-            }
-        },
-        "request.SysDictionarySearch": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "desc": {
-                    "description": "描述",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "name": {
-                    "description": "字典名（中）",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页大小",
-                    "type": "integer"
-                },
-                "status": {
-                    "description": "状态",
-                    "type": "boolean"
-                },
-                "sysDictionaryDetails": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/system.SysDictionaryDetail"
-                    }
-                },
-                "type": {
-                    "description": "字典名（英）",
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                }
-            }
-        },
-        "request.SysOperationRecordSearch": {
-            "type": "object",
-            "properties": {
-                "agent": {
-                    "description": "代理",
-                    "type": "string"
-                },
-                "body": {
-                    "description": "请求Body",
-                    "type": "string"
-                },
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "error_message": {
-                    "description": "错误信息",
-                    "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "ip": {
-                    "description": "请求ip",
-                    "type": "string"
-                },
-                "latency": {
-                    "description": "延迟",
-                    "type": "string"
-                },
-                "method": {
-                    "description": "请求方法",
-                    "type": "string"
-                },
-                "page": {
-                    "description": "页码",
-                    "type": "integer"
-                },
-                "pageSize": {
-                    "description": "每页大小",
-                    "type": "integer"
-                },
-                "path": {
-                    "description": "请求路径",
-                    "type": "string"
-                },
-                "resp": {
-                    "description": "响应Body",
-                    "type": "string"
-                },
-                "status": {
-                    "description": "请求状态",
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                },
-                "user": {
-                    "$ref": "#/definitions/system.SysUser"
-                },
-                "user_id": {
-                    "description": "用户id",
                     "type": "integer"
                 }
             }

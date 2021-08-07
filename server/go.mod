@@ -10,7 +10,6 @@ require (
 	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/casbin/casbin/v2 v2.11.0
 	github.com/casbin/gorm-adapter/v3 v3.0.2
-	github.com/cpuguy83/go-md2man/v2 v2.0.0 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/fastly/go-utils v0.0.0-20180712184237-d95a45783239 // indirect
 	github.com/fsnotify/fsnotify v1.4.9
@@ -37,7 +36,6 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/qiniu/api.v7/v7 v7.4.1
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v3.21.1+incompatible
 	github.com/spf13/afero v1.2.2 // indirect

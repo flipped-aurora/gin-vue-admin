@@ -14,7 +14,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 )
 
@@ -142,7 +142,7 @@ func (b *BaseApi) Register(c *gin.Context) {
 // @Produce  application/json
 // @Param data body systemReq.ChangePasswordStruct true "用户名, 原密码, 新密码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
-// @Router /user/changePassword [put]
+// @Router /user/changePassword [post]
 func (b *BaseApi) ChangePassword(c *gin.Context) {
 	var user systemReq.ChangePasswordStruct
 	_ = c.ShouldBindJSON(&user)

@@ -1554,9 +1554,7 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -1589,9 +1587,7 @@ var doc = `{
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -3280,7 +3276,7 @@ var doc = `{
             }
         },
         "/user/changePassword": {
-            "put": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []

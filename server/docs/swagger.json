@@ -1538,9 +1538,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -1573,9 +1571,7 @@
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "description": ""
-                    }
+                    "200": {}
                 }
             }
         },
@@ -3264,7 +3260,7 @@
             }
         },
         "/user/changePassword": {
-            "put": {
+            "post": {
                 "security": [
                     {
                         "ApiKeyAuth": []

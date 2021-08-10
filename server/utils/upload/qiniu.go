@@ -38,6 +38,7 @@ func (*Qiniu) UploadFile(file *multipart.FileHeader) (string, string, error) {
 
 		return "", "", errors.New("function file.Open() Filed, err:" + openError.Error())
 	}
+	defer f.Close() // 创建文件 defer 关闭
 	fileKey := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename) // 文件名格式 自己可以改 建议保证唯一性
 	putErr := formUploader.Put(context.Background(), &ret, upToken, fileKey, f, file.Size, &putExtra)
 	if putErr != nil {
@@ -71,8 +72,7 @@ func (*Qiniu) DeleteFile(key string) error {
 //@object: *Qiniu
 //@function: qiniuConfig
 //@description: 根据配置文件进行返回七牛云的配置
-//@param: key string
-//@return: error
+//@return: *storage.Config
 
 func qiniuConfig() *storage.Config {
 	cfg := storage.Config{

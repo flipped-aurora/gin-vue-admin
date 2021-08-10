@@ -1,24 +1,27 @@
-<template>
+﻿<template>
   <div class="router-history">
     <el-tabs
-      :closable="!(historys.length==1&&this.$route.name==defaultRouter)"
+      v-model="activeValue"
+      :closable="!(historys.length===1&&this.$route.name===defaultRouter)"
+      type="card"
       @contextmenu.prevent.native="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
-      type="card"
-      v-model="activeValue"
     >
       <el-tab-pane
-        :key="item.name + JSON.stringify(item.query)+JSON.stringify(item.params)"
-        :label="item.meta.title"
-        :name="item.name + JSON.stringify(item.query)+JSON.stringify(item.params)"
-        :tab="item"
         v-for="item in historys"
-      ></el-tab-pane>
+        :key="name(item)"
+        :label="item.meta.title"
+        :name="name(item)"
+        :tab="item"
+        class="gva-tab"
+      >
+        <span slot="label" :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+      </el-tab-pane>
     </el-tabs>
 
     <!--自定义右键菜单html代码-->
-    <ul :style="{left:left+'px',top:top+'px'}" class="contextmenu" v-show="contextMenuVisible">
+    <ul v-show="contextMenuVisible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
       <li @click="closeAll">关闭所有</li>
       <li @click="closeLeft">关闭左侧</li>
       <li @click="closeRight">关闭右侧</li>
@@ -26,84 +29,116 @@
     </ul>
   </div>
 </template>
+
 <script>
-import { mapGetters } from "vuex";
- const getFmtString = (item)=>{
-         return item.name +
-            JSON.stringify(item.query) +
-            JSON.stringify(item.params)
-    }
+import { mapGetters } from 'vuex'
+const getFmtString = (item) => {
+  return item.name +
+      JSON.stringify(item.query) +
+      JSON.stringify(item.params)
+}
 export default {
-  name: "HistoryComponent",
+  name: 'HistoryComponent',
   data() {
     return {
       historys: [],
-      activeValue: "",
+      activeValue: '',
       contextMenuVisible: false,
       left: 0,
       top: 0,
       isCollapse: false,
       isMobile: false,
-      rightActive: ""
-    };
+      rightActive: ''
+    }
   },
   computed: {
-    ...mapGetters("user", ["userInfo"]),
+    ...mapGetters('user', ['userInfo', 'activeColor']),
     defaultRouter() {
-      return this.userInfo.authority.defaultRouter;
+      return this.userInfo.authority.defaultRouter
+    }
+  },
+  watch: {
+    contextMenuVisible() {
+      if (this.contextMenuVisible) {
+        document.body.addEventListener('click', () => {
+          this.contextMenuVisible = false
+        })
+      } else {
+        document.body.removeEventListener('click', () => {
+          this.contextMenuVisible = false
+        })
+      }
+    },
+    $route(to, now) {
+      this.historys = this.historys.filter(item => !item.meta.closeTab)
+      this.setTab(to)
+      sessionStorage.setItem('historys', JSON.stringify(this.historys))
+      this.activeValue = window.sessionStorage.getItem('activeValue')
+      if (now && to && now.name === to.name) {
+        this.$bus.$emit('reload')
+      }
     }
   },
   created() {
-    this.$bus.on("mobile", isMobile => {
-      this.isMobile = isMobile;
-    });
-    this.$bus.on("collapse", isCollapse => {
-      this.isCollapse = isCollapse;
-    });
+    this.$bus.on('mobile', isMobile => {
+      this.isMobile = isMobile
+    })
+    this.$bus.on('collapse', isCollapse => {
+      this.isCollapse = isCollapse
+    })
     const initHistorys = [
       {
         name: this.defaultRouter,
         meta: {
-          title: "首页"
+          title: '首页'
         },
         query: {},
         params: {}
       }
-    ];
+    ]
     this.historys =
-      JSON.parse(sessionStorage.getItem("historys")) || initHistorys;
-      if(!window.sessionStorage.getItem("activeValue")){
-        this.activeValue = getFmtString(this.$route)
-      }else{
-        this.activeValue = window.sessionStorage.getItem("activeValue");
-      }
-    this.setTab(this.$route);
+      JSON.parse(sessionStorage.getItem('historys')) || initHistorys
+    if (!window.sessionStorage.getItem('activeValue')) {
+      this.activeValue = getFmtString(this.$route)
+    } else {
+      this.activeValue = window.sessionStorage.getItem('activeValue')
+    }
+    this.setTab(this.$route)
   },
 
   beforeDestroy() {
-    this.$bus.off("collapse");
-    this.$bus.off("mobile");
+    this.$bus.off('collapse')
+    this.$bus.off('mobile')
   },
   methods: {
-   
+    name(item) {
+      return item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
+    },
     openContextMenu(e) {
-      if (this.historys.length == 1 && this.$route.name == this.defaultRouter) {
-        return false;
+      if (this.historys.length === 1 && this.$route.name === this.defaultRouter) {
+        return false
       }
-      if (e.srcElement.id) {
-        this.contextMenuVisible = true;
-        let width;
+      let id = ''
+      if (e.srcElement.nodeName === 'SPAN') {
+        console.log(e)
+        id = e.srcElement.offsetParent.id
+      } else {
+        id = e.srcElement.id
+      }
+      if (id) {
+        this.contextMenuVisible = true
+        let width
         if (this.isCollapse) {
-          width = 54;
+          width = 54
         } else {
-          width = 220;
+          width = 220
         }
         if (this.isMobile) {
-          width = 0;
+          width = 0
         }
-        this.left = e.clientX - width;
-        this.top = e.clientY + 10;
-        this.rightActive = e.srcElement.id.split("-")[1];
+        this.left = e.clientX - width
+        this.top = e.clientY + 10
+        this.rightActive = id.split('-')[1]
       }
     },
     closeAll() {
@@ -111,155 +146,134 @@ export default {
         {
           name: this.defaultRouter,
           meta: {
-            title: "首页"
+            title: '首页'
           },
           query: {},
           params: {}
         }
-      ];
-      this.$router.push({ name: this.defaultRouter });
-      this.contextMenuVisible = false;
-      sessionStorage.setItem("historys", JSON.stringify(this.historys));
+      ]
+      this.$router.push({ name: this.defaultRouter })
+      this.contextMenuVisible = false
+      sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     closeLeft() {
-      let right;
+      let right
       const rightIndex = this.historys.findIndex(item => {
-        if (getFmtString(item) == this.rightActive) {
-          right = item;
+        if (getFmtString(item) === this.rightActive) {
+          right = item
         }
         return (
-          getFmtString(item) == this.rightActive
-        );
-      });
+          getFmtString(item) === this.rightActive
+        )
+      })
       const activeIndex = this.historys.findIndex(
-        item => getFmtString(item) == this.activeValue
-      );
-      this.historys.splice(0, rightIndex);
+        item => getFmtString(item) === this.activeValue
+      )
+      this.historys.splice(0, rightIndex)
       if (rightIndex > activeIndex) {
-        this.$router.push(right);
+        this.$router.push(right)
       }
-      sessionStorage.setItem("historys", JSON.stringify(this.historys));
+      sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     closeRight() {
-      let right;
+      let right
       const leftIndex = this.historys.findIndex(item => {
-        if ( getFmtString(item) ==  this.rightActive ) {
-          right = item;
+        if (getFmtString(item) === this.rightActive) {
+          right = item
         }
-        return ( getFmtString(item) == this.rightActive );
-      });
+        return (getFmtString(item) === this.rightActive)
+      })
       const activeIndex = this.historys.findIndex(
-        item => getFmtString(item) == this.activeValue
-      );
-      this.historys.splice(leftIndex + 1, this.historys.length);
+        item => getFmtString(item) === this.activeValue
+      )
+      this.historys.splice(leftIndex + 1, this.historys.length)
       if (leftIndex < activeIndex) {
-        this.$router.push(right);
+        this.$router.push(right)
       }
-      sessionStorage.setItem("historys", JSON.stringify(this.historys));
+      sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     closeOther() {
-      let right;
+      let right
       this.historys = this.historys.filter(item => {
-        if ( getFmtString(item) == this.rightActive
+        if (getFmtString(item) === this.rightActive
         ) {
-          right = item;
+          right = item
         }
-        return ( getFmtString(item) == this.rightActive
-        );
-      });
-      this.$router.push(right);
-      sessionStorage.setItem("historys", JSON.stringify(this.historys));
+        return (getFmtString(item) === this.rightActive
+        )
+      })
+      this.$router.push(right)
+      sessionStorage.setItem('historys', JSON.stringify(this.historys))
     },
     isSame(route1, route2) {
-      if (route1.name != route2.name) {
-        return false;
+      if (route1.name !== route2.name) {
+        return false
       }
-      for (let key in route1.query) {
-        if (route1.query[key] != route2.query[key]) {
-          return false;
+      for (const key in route1.query) {
+        if (route1.query[key] !== route2.query[key]) {
+          return false
         }
       }
-      for (let key in route1.params) {
-        if (route1.params[key] != route2.params[key]) {
-          return false;
+      for (const key in route1.params) {
+        if (route1.params[key] !== route2.params[key]) {
+          return false
         }
       }
-      return true;
+      return true
     },
     setTab(route) {
       if (!this.historys.some(item => this.isSame(item, route))) {
-        const obj = {};
-        obj.name = route.name;
-        obj.meta = route.meta;
-        obj.query = route.query;
-        obj.params = route.params;
-        this.historys.push(obj);
+        const obj = {}
+        obj.name = route.name
+        obj.meta = route.meta
+        obj.query = route.query
+        obj.params = route.params
+        this.historys.push(obj)
       }
       window.sessionStorage.setItem(
-        "activeValue",
+        'activeValue',
         getFmtString(this.$route)
-      );
+      )
     },
     changeTab(component) {
-      const tab = component.$attrs.tab;
+      const tab = component.$attrs.tab
       this.$router.push({
         name: tab.name,
         query: tab.query,
         params: tab.params
-      });
+      })
     },
     removeTab(tab) {
       const index = this.historys.findIndex(
-        item => getFmtString(item) ==  tab
-      );
+        item => getFmtString(item) === tab
+      )
       if (
-        getFmtString(this.$route) == tab
+        getFmtString(this.$route) === tab
       ) {
-        if (this.historys.length == 1) {
-          this.$router.push({ name: this.defaultRouter });
+        if (this.historys.length === 1) {
+          this.$router.push({ name: this.defaultRouter })
         } else {
           if (index < this.historys.length - 1) {
             this.$router.push({
               name: this.historys[index + 1].name,
               query: this.historys[index + 1].query,
               params: this.historys[index + 1].params
-            });
+            })
           } else {
             this.$router.push({
               name: this.historys[index - 1].name,
               query: this.historys[index - 1].query,
               params: this.historys[index - 1].params
-            });
+            })
           }
         }
       }
-      this.historys.splice(index, 1);
-    }
-  },
-  watch: {
-    contextMenuVisible() {
-      if (this.contextMenuVisible) {
-        document.body.addEventListener("click", () => {
-          this.contextMenuVisible = false;
-        });
-      } else {
-        document.body.removeEventListener("click", () => {
-          this.contextMenuVisible = false;
-        });
-      }
-    },
-    $route(to, now) {
-      this.historys = this.historys.filter(item => !item.meta.closeTab);
-      this.setTab(to);
-      sessionStorage.setItem("historys", JSON.stringify(this.historys));
-      this.activeValue = window.sessionStorage.getItem("activeValue");
-      if (now && to && now.name == to.name) {
-        this.$bus.$emit("reload");
-      }
+      this.historys.splice(index, 1)
     }
   }
-};
+}
 </script>
+
 <style lang="scss">
 .contextmenu {
   width: 100px;
@@ -275,6 +289,19 @@ export default {
   color: #333;
   box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
 }
+.el-tabs__item .el-icon-close{
+  color: initial !important;
+}
+.el-tabs__item .dot {
+  content: "";
+  width: 9px;
+  height: 9px;
+  margin-right: 8px;
+  display: inline-block;
+  border-radius: 50%;
+  transition: background-color .2s;
+}
+
 .contextmenu li {
   margin: 0;
   padding: 7px 16px;

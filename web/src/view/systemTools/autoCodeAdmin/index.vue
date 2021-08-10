@@ -1,0 +1,159 @@
+<template>
+  <div>
+    <div class="search-term">
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
+        <el-form-item label="表名">
+          <el-input v-model="searchInfo.tableName" placeholder="表名" />
+        </el-form-item>
+        <el-form-item label="结构体名称">
+          <el-input v-model="searchInfo.structName" placeholder="结构体名称" />
+        </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode(null)">新增</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <el-table :data="tableData" border stripe>
+      <el-table-column
+        type="selection"
+        width="55"
+      />
+      <el-table-column label="id" width="60" prop="ID" />
+      <el-table-column label="日期" width="180">
+        <template slot-scope="scope">{{ scope.row.CreatedAt|formatDate }}</template>
+      </el-table-column>
+      <el-table-column label="结构体名" min-width="150" prop="structName" />
+      <el-table-column label="结构体描述" min-width="150" prop="structCNName" />
+      <el-table-column label="表名称" min-width="150" prop="tableName" />
+      <el-table-column label="回滚标记" min-width="150" prop="flag">
+        <template slot-scope="scope">
+          <el-tag
+            v-if="scope.row.flag"
+            type="danger"
+            size="mini"
+            effect="dark"
+          >
+            已回滚
+          </el-tag>
+          <el-tag
+            v-else
+            size="mini"
+            type="success"
+            effect="dark"
+          >
+            未回滚
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" min-width="180">
+        <template slot-scope="scope">
+          <div>
+            <el-button size="mini" type="primary" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
+            <el-button size="mini" type="success" @click="goAutoCode(scope.row)">复用</el-button>
+            <el-button size="mini" type="danger" @click="deleteRow(scope.row)">删除</el-button>
+          </div>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      :current-page="page"
+      :page-size="pageSize"
+      :page-sizes="[10, 30, 50, 100]"
+      :style="{float:'right',padding:'20px'}"
+      :total="total"
+      layout="total, sizes, prev, pager, next, jumper"
+      @current-change="handleCurrentChange"
+      @size-change="handleSizeChange"
+    />
+
+  </div>
+</template>
+
+<script>
+// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
+import { getSysHistory, rollback, delSysHistory } from '@/api/autoCode.js'
+import { formatTimeToStr } from '@/utils/date'
+import infoList from '@/mixins/infoList'
+
+export default {
+  name: 'Api',
+  filters: {
+    formatDate: function(time) {
+      if (time !== null && time !== '') {
+        var date = new Date(time)
+        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
+      } else {
+        return ''
+      }
+    },
+    formatBoolean: function(bool) {
+      if (bool !== null) {
+        return bool ? '是' : '否'
+      } else {
+        return ''
+      }
+    }
+  },
+  mixins: [infoList],
+  data() {
+    return {
+      listApi: getSysHistory
+    }
+  },
+  created() {
+    this.getTableData()
+  },
+  methods: {
+    async deleteRow(row) {
+      this.$confirm('此操作将删除本历史, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const res = await delSysHistory({ id: Number(row.ID) })
+        if (res.code === 0) {
+          this.$message.success('删除成功')
+          this.getTableData()
+        }
+      })
+    },
+    async rollback(row) {
+      this.$confirm('此操作将删除自动创建的文件和api, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async() => {
+        const res = await rollback({ id: Number(row.ID) })
+        if (res.code === 0) {
+          this.$message.success('回滚成功')
+          this.getTableData()
+        }
+      })
+    },
+    goAutoCode(row) {
+      if (row) {
+        this.$router.push({ name: 'autoCodeEdit', params: {
+          id: row.ID
+        }})
+      } else {
+        this.$router.push({ name: 'autoCode' })
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.button-box {
+  padding: 10px 20px;
+  .el-button {
+    float: right;
+  }
+}
+.el-tag--mini {
+  margin-left: 5px;
+}
+.warning {
+  color: #dc143c;
+}
+</style>

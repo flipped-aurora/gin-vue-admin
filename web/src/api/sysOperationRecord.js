@@ -9,11 +9,11 @@ import service from '@/utils/request'
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 export const deleteSysOperationRecord = (data) => {
-    return service({
-        url: "/sysOperationRecord/deleteSysOperationRecord",
-        method: 'delete',
-        data
-    })
+  return service({
+    url: '/sysOperationRecord/deleteSysOperationRecord',
+    method: 'delete',
+    data
+  })
 }
 
 // @Tags SysOperationRecord
@@ -25,11 +25,11 @@ export const deleteSysOperationRecord = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 export const deleteSysOperationRecordByIds = (data) => {
-    return service({
-        url: "/sysOperationRecord/deleteSysOperationRecordByIds",
-        method: 'delete',
-        data
-    })
+  return service({
+    url: '/sysOperationRecord/deleteSysOperationRecordByIds',
+    method: 'delete',
+    data
+  })
 }
 
 // @Tags SysOperationRecord
@@ -41,9 +41,9 @@ export const deleteSysOperationRecordByIds = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
 export const getSysOperationRecordList = (params) => {
-    return service({
-        url: "/sysOperationRecord/getSysOperationRecordList",
-        method: 'get',
-        params
-    })
+  return service({
+    url: '/sysOperationRecord/getSysOperationRecordList',
+    method: 'get',
+    params
+  })
 }

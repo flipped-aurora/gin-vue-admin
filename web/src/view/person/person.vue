@@ -4,29 +4,34 @@
       <el-col :span="6">
         <div class="fl-left avatar-box">
           <div class="user-card">
-              <div class="user-headpic-update" :style="{ 'background-image': `url(${(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg})`,'background-repeat':'no-repeat','background-size':'cover' }" >
+            <div class="user-headpic-update" :style="{ 'background-image': `url(${(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg})`,'background-repeat':'no-repeat','background-size':'cover' }">
               <span class="update" @click="openChooseImg">
-                <i class="el-icon-edit"></i>
+                <i class="el-icon-edit" />
                 重新上传</span>
-              </div>
+            </div>
             <div class="user-personality">
-              <p class="nickname">{{userInfo.nickName}}</p>
+              <p class="nickname">{{ userInfo.nickName }}</p>
               <p class="person-info">这个家伙很懒，什么都没有留下</p>
             </div>
             <div class="user-information">
               <ul>
                 <li>
-                   <i class="el-icon-user"></i>{{userInfo.nickName}}
+                  <i class="el-icon-user" />{{ userInfo.nickName }}
                 </li>
+                <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="top">
+                  <li>
+                    <i class="el-icon-data-analysis" />北京反转极光科技有限公司-技术部-前端事业群
+                  </li>
+                </el-tooltip>
                 <li>
-                  <i class="el-icon-data-analysis"></i>北京反转极光科技有限公司-技术部-前端事业群
+                  <i class="el-icon-video-camera-solid" />中国·北京市·朝阳区
                 </li>
-                <li>
-                  <i class="el-icon-video-camera-solid"></i>中国·北京市·朝阳区
-                </li>
-                <li>
-                  <i class="el-icon-medal-1"></i>goLang/JavaScript/Vue/Gorm
-                </li>
+                <el-tooltip class="item" effect="light" content="goLang/JavaScript/Vue/Gorm" placement="top">
+                  <li>
+                    <i class="el-icon-medal-1" />goLang/JavaScript/Vue/Gorm
+                  </li>
+                </el-tooltip>
+
               </ul>
             </div>
           </div>
@@ -74,73 +79,74 @@
 
     <ChooseImg ref="chooseImg" @enter-img="enterImg" />
 
-    <el-dialog :visible.sync="showPassword" @close="clearPassword" title="修改密码" width="360px">
-      <el-form :model="pwdModify" :rules="rules" label-width="80px" ref="modifyPwdForm">
+    <el-dialog :visible.sync="showPassword" title="修改密码" width="360px" @close="clearPassword">
+      <el-form ref="modifyPwdForm" :model="pwdModify" :rules="rules" label-width="80px">
         <el-form-item :minlength="6" label="原密码" prop="password">
-          <el-input show-password v-model="pwdModify.password"></el-input>
+          <el-input v-model="pwdModify.password" show-password />
         </el-form-item>
         <el-form-item :minlength="6" label="新密码" prop="newPassword">
-          <el-input show-password v-model="pwdModify.newPassword"></el-input>
+          <el-input v-model="pwdModify.newPassword" show-password />
         </el-form-item>
         <el-form-item :minlength="6" label="确认密码" prop="confirmPassword">
-          <el-input show-password v-model="pwdModify.confirmPassword"></el-input>
+          <el-input v-model="pwdModify.confirmPassword" show-password />
         </el-form-item>
       </el-form>
-      <div class="dialog-footer" slot="footer">
+      <div slot="footer" class="dialog-footer">
         <el-button @click="showPassword=false">取 消</el-button>
-        <el-button @click="savePassword" type="primary">确 定</el-button>
+        <el-button type="primary" @click="savePassword">确 定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
-<script>
-import ChooseImg from "@/components/chooseImg";
-import { setUserInfo,changePassword } from "@/api/user";
 
-import { mapGetters, mapMutations } from "vuex";
-const path = process.env.VUE_APP_BASE_API;
+<script>
+import ChooseImg from '@/components/chooseImg'
+import { setUserInfo, changePassword } from '@/api/user'
+
+import { mapGetters, mapMutations } from 'vuex'
+const path = process.env.VUE_APP_BASE_API
 export default {
-  name: "Person",
+  name: 'Person',
+  components: {
+    ChooseImg
+  },
   data() {
     return {
       path: path,
-      activeName: "second",
+      activeName: 'second',
       showPassword: false,
       pwdModify: {},
       rules: {
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, message: "最少6个字符", trigger: "blur" }
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
         ],
         newPassword: [
-          { required: true, message: "请输入新密码", trigger: "blur" },
-          { min: 6, message: "最少6个字符", trigger: "blur" }
+          { required: true, message: '请输入新密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' }
         ],
         confirmPassword: [
-          { required: true, message: "请输入确认密码", trigger: "blur" },
-          { min: 6, message: "最少6个字符", trigger: "blur" },
+          { required: true, message: '请输入确认密码', trigger: 'blur' },
+          { min: 6, message: '最少6个字符', trigger: 'blur' },
           {
             validator: (rule, value, callback) => {
               if (value !== this.pwdModify.newPassword) {
-                callback(new Error("两次密码不一致"));
+                callback(new Error('两次密码不一致'))
               } else {
-                callback();
+                callback()
               }
             },
-            trigger: "blur"
+            trigger: 'blur'
           }
         ]
       }
-    };
-  },
-  components: {
-    ChooseImg
+    }
   },
   computed: {
-    ...mapGetters("user", ["userInfo", "token"])
+    ...mapGetters('user', ['userInfo', 'token'])
   },
   methods: {
-    ...mapMutations("user", ["ResetUserInfo"]),
+    ...mapMutations('user', ['ResetUserInfo']),
     savePassword() {
       this.$refs.modifyPwdForm.validate(valid => {
         if (valid) {
@@ -149,43 +155,44 @@ export default {
             password: this.pwdModify.password,
             newPassword: this.pwdModify.newPassword
           }).then((res) => {
-            if(res.code == 0){
-              this.$message.success("修改密码成功！");
+            if (res.code === 0) {
+              this.$message.success('修改密码成功！')
             }
-            this.showPassword = false;
-          });
+            this.showPassword = false
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     clearPassword() {
       this.pwdModify = {
-        password: "",
-        newPassword: "",
-        confirmPassword: ""
-      };
-      this.$refs.modifyPwdForm.clearValidate();
+        password: '',
+        newPassword: '',
+        confirmPassword: ''
+      }
+      this.$refs.modifyPwdForm.clearValidate()
     },
     openChooseImg() {
-      this.$refs.chooseImg.open();
+      this.$refs.chooseImg.open()
     },
     async enterImg(url) {
-      const res = await setUserInfo({ headerImg: url, ID: this.userInfo.ID });
-      if (res.code == 0) {
-        this.ResetUserInfo({ headerImg: url });
+      const res = await setUserInfo({ headerImg: url, ID: this.userInfo.ID })
+      if (res.code === 0) {
+        this.ResetUserInfo({ headerImg: url })
         this.$message({
-          type: "success",
-          message: "设置成功"
-        });
+          type: 'success',
+          message: '设置成功'
+        })
       }
     },
     handleClick(tab, event) {
-      console.log(tab, event);
+      console.log(tab, event)
     }
   }
-};
+}
 </script>
+
 <style lang="scss">
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
@@ -243,7 +250,12 @@ export default {
       ul {
         display: inline-block;
         height: 100%;
+        width: 100%;
         li {
+          width: 100%;
+          white-space:nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
           i {
             margin-right: 8px;
           }

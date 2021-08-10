@@ -86,6 +86,12 @@ var carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "888", V1: "/excel/exportExcel", V2: "POST"},
 	{PType: "p", V0: "888", V1: "/excel/downloadTemplate", V2: "GET"},
 	{PType: "p", V0: "888", V1: "/api/deleteApisByIds", V2: "DELETE"},
+	{PType: "p", V0: "888", V1: "/autoCode/getSysHistory", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/autoCode/rollback", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/autoCode/getMeta", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/autoCode/delSysHistory", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/user/setUserAuthorities", V2: "POST"},
+	{PType: "p", V0: "888", V1: "/user/getUserInfo", V2: "GET"},
 	{PType: "p", V0: "8881", V1: "/base/login", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},
@@ -123,6 +129,7 @@ var carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "8881", V1: "/customer/customer", V2: "DELETE"},
 	{PType: "p", V0: "8881", V1: "/customer/customer", V2: "GET"},
 	{PType: "p", V0: "8881", V1: "/customer/customerList", V2: "GET"},
+	{PType: "p", V0: "8881", V1: "/user/getUserInfo", V2: "GET"},
 	{PType: "p", V0: "9528", V1: "/base/login", V2: "POST"},
 	{PType: "p", V0: "9528", V1: "/user/register", V2: "POST"},
 	{PType: "p", V0: "9528", V1: "/api/createApi", V2: "POST"},
@@ -161,6 +168,7 @@ var carbines = []gormadapter.CasbinRule{
 	{PType: "p", V0: "9528", V1: "/customer/customer", V2: "GET"},
 	{PType: "p", V0: "9528", V1: "/customer/customerList", V2: "GET"},
 	{PType: "p", V0: "9528", V1: "/autoCode/createTemp", V2: "POST"},
+	{PType: "p", V0: "9528", V1: "/user/getUserInfo", V2: "GET"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

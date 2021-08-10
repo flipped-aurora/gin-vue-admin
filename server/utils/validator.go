@@ -32,8 +32,7 @@ func RegisterRule(key string, rule Rules) (err error) {
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: NotEmpty
 //@description: 非空 不能为其对应类型的0值
-//@param: key string, rule Rules
-//@return: err error
+//@return: string
 
 func NotEmpty() string {
 	return "notEmpty"

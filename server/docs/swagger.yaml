@@ -1,10 +1,27 @@
 basePath: /
 definitions:
+  autocode.AutoCodeExample:
+    properties:
+      autoCodeExampleField:
+        description: 展示值
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   config.AliyunOSS:
     properties:
       accessKeyId:
         type: string
       accessKeySecret:
+        type: string
+      basePath:
         type: string
       bucketName:
         type: string
@@ -31,6 +48,8 @@ definitions:
         type: string
       serverService:
         type: string
+      transferRestart:
+        type: boolean
       web:
         type: string
       webApi:
@@ -129,9 +148,10 @@ definitions:
         type: string
       logMode:
         description: 是否开启Gorm全局日志
-        type: boolean
-      logZap:
         type: string
+      logZap:
+        description: 是否通过zap写入日志文件
+        type: boolean
       maxIdleConns:
         description: 空闲中的最大连接数
         type: integer
@@ -296,35 +316,7 @@ definitions:
         description: 栈名
         type: string
     type: object
-  model.AutoCodeStruct:
-    properties:
-      abbreviation:
-        description: Struct简称
-        type: string
-      autoCreateApiToSql:
-        description: 是否自动创建api
-        type: boolean
-      autoMoveFile:
-        description: 是否自动移动文件
-        type: boolean
-      description:
-        description: Struct中文名称
-        type: string
-      fields:
-        items:
-          $ref: '#/definitions/model.Field'
-        type: array
-      packageName:
-        description: 文件名称
-        type: string
-      structName:
-        description: Struct名称
-        type: string
-      tableName:
-        description: 表名
-        type: string
-    type: object
-  model.ExaCustomer:
+  example.ExaCustomer:
     properties:
       createdAt:
         description: 创建时间
@@ -339,7 +331,7 @@ definitions:
         description: 主键ID
         type: integer
       sysUser:
-        $ref: '#/definitions/model.SysUser'
+        $ref: '#/definitions/system.SysUser'
         description: 管理详情
       sysUserAuthorityID:
         description: 管理角色ID
@@ -351,7 +343,7 @@ definitions:
         description: 更新时间
         type: string
     type: object
-  model.ExaFileUploadAndDownload:
+  example.ExaFileUploadAndDownload:
     properties:
       createdAt:
         description: 创建时间
@@ -375,320 +367,15 @@ definitions:
         description: 文件地址
         type: string
     type: object
-  model.ExcelInfo:
+  example.ExcelInfo:
     properties:
       fileName:
         description: 文件名
         type: string
       infoList:
         items:
-          $ref: '#/definitions/model.SysBaseMenu'
+          $ref: '#/definitions/system.SysBaseMenu'
         type: array
-    type: object
-  model.Field:
-    properties:
-      columnName:
-        description: 数据库字段
-        type: string
-      comment:
-        description: 数据库字段描述
-        type: string
-      dataType:
-        description: 数据库字段类型
-        type: string
-      dataTypeLong:
-        description: 数据库字段长度
-        type: string
-      dictType:
-        description: 字典
-        type: string
-      fieldDesc:
-        description: 中文名
-        type: string
-      fieldJson:
-        description: FieldJson
-        type: string
-      fieldName:
-        description: Field名
-        type: string
-      fieldSearchType:
-        description: 搜索条件
-        type: string
-      fieldType:
-        description: Field数据类型
-        type: string
-    type: object
-  model.SysApi:
-    properties:
-      apiGroup:
-        description: api组
-        type: string
-      createdAt:
-        description: 创建时间
-        type: string
-      description:
-        description: api中文描述
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      method:
-        description: 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
-        type: string
-      path:
-        description: api路径
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  model.SysAuthority:
-    properties:
-      authorityId:
-        description: 角色ID
-        type: string
-      authorityName:
-        description: 角色名
-        type: string
-      children:
-        items:
-          $ref: '#/definitions/model.SysAuthority'
-        type: array
-      createdAt:
-        description: 创建时间
-        type: string
-      dataAuthorityId:
-        items:
-          $ref: '#/definitions/model.SysAuthority'
-        type: array
-      defaultRouter:
-        description: 默认菜单(默认dashboard)
-        type: string
-      deletedAt:
-        type: string
-      menus:
-        items:
-          $ref: '#/definitions/model.SysBaseMenu'
-        type: array
-      parentId:
-        description: 父角色ID
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  model.SysBaseMenu:
-    properties:
-      authoritys:
-        items:
-          $ref: '#/definitions/model.SysAuthority'
-        type: array
-      children:
-        items:
-          $ref: '#/definitions/model.SysBaseMenu'
-        type: array
-      closeTab:
-        description: 自动关闭tab
-        type: boolean
-      component:
-        description: 对应前端文件路径
-        type: string
-      createdAt:
-        description: 创建时间
-        type: string
-      defaultMenu:
-        description: 是否是基础路由（开发中）
-        type: boolean
-      hidden:
-        description: 是否在列表隐藏
-        type: boolean
-      icon:
-        description: 菜单图标
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      keepAlive:
-        description: 是否缓存
-        type: boolean
-      name:
-        description: 路由name
-        type: string
-      parameters:
-        items:
-          $ref: '#/definitions/model.SysBaseMenuParameter'
-        type: array
-      parentId:
-        description: 父菜单ID
-        type: string
-      path:
-        description: 路由path
-        type: string
-      sort:
-        description: 排序标记
-        type: integer
-      title:
-        description: 菜单名
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  model.SysBaseMenuParameter:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      key:
-        description: 地址栏携带参数的key
-        type: string
-      sysBaseMenuID:
-        type: integer
-      type:
-        description: 地址栏携带参数为params还是query
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-      value:
-        description: 地址栏携带参数的值
-        type: string
-    type: object
-  model.SysDictionary:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      desc:
-        description: 描述
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      name:
-        description: 字典名（中）
-        type: string
-      status:
-        description: 状态
-        type: boolean
-      sysDictionaryDetails:
-        items:
-          $ref: '#/definitions/model.SysDictionaryDetail'
-        type: array
-      type:
-        description: 字典名（英）
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  model.SysDictionaryDetail:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      label:
-        description: 展示值
-        type: string
-      sort:
-        description: 排序标记
-        type: integer
-      status:
-        description: 启用状态
-        type: boolean
-      sysDictionaryID:
-        description: 关联标记
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-      value:
-        description: 字典值
-        type: integer
-    type: object
-  model.SysOperationRecord:
-    properties:
-      agent:
-        description: 代理
-        type: string
-      body:
-        description: 请求Body
-        type: string
-      createdAt:
-        description: 创建时间
-        type: string
-      error_message:
-        description: 错误信息
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      ip:
-        description: 请求ip
-        type: string
-      latency:
-        description: 延迟
-        type: string
-      method:
-        description: 请求方法
-        type: string
-      path:
-        description: 请求路径
-        type: string
-      resp:
-        description: 响应Body
-        type: string
-      status:
-        description: 请求状态
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-      user:
-        $ref: '#/definitions/model.SysUser'
-      user_id:
-        description: 用户id
-        type: integer
-    type: object
-  model.SysUser:
-    properties:
-      authority:
-        $ref: '#/definitions/model.SysAuthority'
-      authorityId:
-        description: 用户角色ID
-        type: string
-      createdAt:
-        description: 创建时间
-        type: string
-      headerImg:
-        description: 用户头像
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      nickName:
-        description: 用户昵称
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-      userName:
-        description: 用户登录名
-        type: string
-      uuid:
-        description: 用户UUID
-        type: string
-    type: object
-  model.System:
-    properties:
-      config:
-        $ref: '#/definitions/config.Server'
     type: object
   request.AddMenuAuthorityInfo:
     properties:
@@ -697,8 +384,13 @@ definitions:
         type: string
       menus:
         items:
-          $ref: '#/definitions/model.SysBaseMenu'
+          $ref: '#/definitions/system.SysBaseMenu'
         type: array
+    type: object
+  request.AutoHistoryByID:
+    properties:
+      id:
+        type: integer
     type: object
   request.CasbinInReceive:
     properties:
@@ -797,6 +489,23 @@ definitions:
         description: 每页大小
         type: integer
     type: object
+  request.Register:
+    properties:
+      authorityId:
+        type: string
+      authorityIds:
+        items:
+          type: string
+        type: array
+      headerImg:
+        type: string
+      nickName:
+        type: string
+      passWord:
+        type: string
+      userName:
+        type: string
+    type: object
   request.SearchApiParams:
     properties:
       apiGroup:
@@ -838,11 +547,266 @@ definitions:
       authorityId:
         description: 角色ID
         type: string
-      uuid:
-        description: 用户UUID
+    type: object
+  request.SetUserAuthorities:
+    properties:
+      authorityIds:
+        description: 角色ID
+        items:
+          type: string
+        type: array
+      id:
+        type: integer
+    type: object
+  request.SysAutoHistory:
+    properties:
+      page:
+        description: 页码
+        type: integer
+      pageSize:
+        description: 每页大小
+        type: integer
+    type: object
+  response.SysAuthorityCopyResponse:
+    properties:
+      authority:
+        $ref: '#/definitions/system.SysAuthority'
+      oldAuthorityId:
+        description: 旧角色ID
         type: string
     type: object
-  request.SysDictionaryDetailSearch:
+  system.AutoCodeStruct:
+    properties:
+      abbreviation:
+        description: Struct简称
+        type: string
+      autoCreateApiToSql:
+        description: 是否自动创建api
+        type: boolean
+      autoMoveFile:
+        description: 是否自动移动文件
+        type: boolean
+      description:
+        description: Struct中文名称
+        type: string
+      fields:
+        items:
+          $ref: '#/definitions/system.Field'
+        type: array
+      humpPackageName:
+        description: go文件名称
+        type: string
+      packageName:
+        description: 文件名称
+        type: string
+      structName:
+        description: Struct名称
+        type: string
+      tableName:
+        description: 表名
+        type: string
+    type: object
+  system.Field:
+    properties:
+      columnName:
+        description: 数据库字段
+        type: string
+      comment:
+        description: 数据库字段描述
+        type: string
+      dataType:
+        description: 数据库字段类型
+        type: string
+      dataTypeLong:
+        description: 数据库字段长度
+        type: string
+      dictType:
+        description: 字典
+        type: string
+      fieldDesc:
+        description: 中文名
+        type: string
+      fieldJson:
+        description: FieldJson
+        type: string
+      fieldName:
+        description: Field名
+        type: string
+      fieldSearchType:
+        description: 搜索条件
+        type: string
+      fieldType:
+        description: Field数据类型
+        type: string
+    type: object
+  system.SysApi:
+    properties:
+      apiGroup:
+        description: api组
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      description:
+        description: api中文描述
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      method:
+        description: 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
+        type: string
+      path:
+        description: api路径
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysAuthority:
+    properties:
+      authorityId:
+        description: 角色ID
+        type: string
+      authorityName:
+        description: 角色名
+        type: string
+      children:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      dataAuthorityId:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
+      defaultRouter:
+        description: 默认菜单(默认dashboard)
+        type: string
+      deletedAt:
+        type: string
+      menus:
+        items:
+          $ref: '#/definitions/system.SysBaseMenu'
+        type: array
+      parentId:
+        description: 父角色ID
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysBaseMenu:
+    properties:
+      authoritys:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
+      children:
+        items:
+          $ref: '#/definitions/system.SysBaseMenu'
+        type: array
+      closeTab:
+        description: 自动关闭tab
+        type: boolean
+      component:
+        description: 对应前端文件路径
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      defaultMenu:
+        description: 是否是基础路由（开发中）
+        type: boolean
+      hidden:
+        description: 是否在列表隐藏
+        type: boolean
+      icon:
+        description: 菜单图标
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      keepAlive:
+        description: 是否缓存
+        type: boolean
+      name:
+        description: 路由name
+        type: string
+      parameters:
+        items:
+          $ref: '#/definitions/system.SysBaseMenuParameter'
+        type: array
+      parentId:
+        description: 父菜单ID
+        type: string
+      path:
+        description: 路由path
+        type: string
+      sort:
+        description: 排序标记
+        type: integer
+      title:
+        description: 菜单名
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysBaseMenuParameter:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      key:
+        description: 地址栏携带参数的key
+        type: string
+      sysBaseMenuID:
+        type: integer
+      type:
+        description: 地址栏携带参数为params还是query
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      value:
+        description: 地址栏携带参数的值
+        type: string
+    type: object
+  system.SysDictionary:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      desc:
+        description: 描述
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        description: 字典名（中）
+        type: string
+      status:
+        description: 状态
+        type: boolean
+      sysDictionaryDetails:
+        items:
+          $ref: '#/definitions/system.SysDictionaryDetail'
+        type: array
+      type:
+        description: 字典名（英）
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.SysDictionaryDetail:
     properties:
       createdAt:
         description: 创建时间
@@ -853,12 +817,6 @@ definitions:
       label:
         description: 展示值
         type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
       sort:
         description: 排序标记
         type: integer
@@ -875,41 +833,7 @@ definitions:
         description: 字典值
         type: integer
     type: object
-  request.SysDictionarySearch:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      desc:
-        description: 描述
-        type: string
-      id:
-        description: 主键ID
-        type: integer
-      name:
-        description: 字典名（中）
-        type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
-      status:
-        description: 状态
-        type: boolean
-      sysDictionaryDetails:
-        items:
-          $ref: '#/definitions/model.SysDictionaryDetail'
-        type: array
-      type:
-        description: 字典名（英）
-        type: string
-      updatedAt:
-        description: 更新时间
-        type: string
-    type: object
-  request.SysOperationRecordSearch:
+  system.SysOperationRecord:
     properties:
       agent:
         description: 代理
@@ -935,12 +859,6 @@ definitions:
       method:
         description: 请求方法
         type: string
-      page:
-        description: 页码
-        type: integer
-      pageSize:
-        description: 每页大小
-        type: integer
       path:
         description: 请求路径
         type: string
@@ -954,18 +872,57 @@ definitions:
         description: 更新时间
         type: string
       user:
-        $ref: '#/definitions/model.SysUser'
+        $ref: '#/definitions/system.SysUser'
       user_id:
         description: 用户id
         type: integer
     type: object
-  response.SysAuthorityCopyResponse:
+  system.SysUser:
     properties:
-      authority:
-        $ref: '#/definitions/model.SysAuthority'
-      oldAuthorityId:
-        description: 旧角色ID
+      activeColor:
+        description: 活跃颜色
         type: string
+      authorities:
+        items:
+          $ref: '#/definitions/system.SysAuthority'
+        type: array
+      authority:
+        $ref: '#/definitions/system.SysAuthority'
+      authorityId:
+        description: 用户角色ID
+        type: string
+      baseColor:
+        description: 基础颜色
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      headerImg:
+        description: 用户头像
+        type: string
+      id:
+        description: 主键ID
+        type: integer
+      nickName:
+        description: 用户昵称
+        type: string
+      sideMode:
+        description: 用户侧边主题
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      userName:
+        description: 用户登录名
+        type: string
+      uuid:
+        description: 用户UUID
+        type: string
+    type: object
+  system.System:
+    properties:
+      config:
+        $ref: '#/definitions/config.Server'
     type: object
 info:
   contact: {}
@@ -973,6 +930,68 @@ info:
   title: Swagger Example API
   version: 0.0.1
 paths:
+  /SimpleUploaderApi/checkFileMd5:
+    get:
+      parameters:
+      - description: md5
+        in: query
+        name: md5
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 断点续传插件版示例
+      tags:
+      - SimpleUploader
+  /SimpleUploaderApi/mergeFileMd5:
+    get:
+      parameters:
+      - description: md5
+        in: query
+        name: md5
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"合并成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 合并文件
+      tags:
+      - SimpleUploader
+  /SimpleUploaderApi/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 断点续传插件版示例
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"切片创建成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 断点续传插件版示例
+      tags:
+      - SimpleUploader
   /api/createApi:
     post:
       consumes:
@@ -983,7 +1002,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysApi'
+          $ref: '#/definitions/system.SysApi'
       produces:
       - application/json
       responses:
@@ -1006,7 +1025,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysApi'
+          $ref: '#/definitions/system.SysApi'
       produces:
       - application/json
       responses:
@@ -1114,7 +1133,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysApi'
+          $ref: '#/definitions/system.SysApi'
       produces:
       - application/json
       responses:
@@ -1160,7 +1179,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysAuthority'
+          $ref: '#/definitions/system.SysAuthority'
       produces:
       - application/json
       responses:
@@ -1183,7 +1202,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysAuthority'
+          $ref: '#/definitions/system.SysAuthority'
       produces:
       - application/json
       responses:
@@ -1229,7 +1248,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysAuthority'
+          $ref: '#/definitions/system.SysAuthority'
       produces:
       - application/json
       responses:
@@ -1252,7 +1271,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysAuthority'
+          $ref: '#/definitions/system.SysAuthority'
       produces:
       - application/json
       responses:
@@ -1275,7 +1294,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.AutoCodeStruct'
+          $ref: '#/definitions/system.AutoCodeStruct'
       produces:
       - application/json
       responses:
@@ -1286,6 +1305,29 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 自动代码模板
+      tags:
+      - AutoCode
+  /autoCode/delSysHistory:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除回滚记录
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AutoHistoryByID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除回滚记录
       tags:
       - AutoCode
   /autoCode/getColumn:
@@ -1320,6 +1362,52 @@ paths:
       summary: 获取当前所有数据库
       tags:
       - AutoCode
+  /autoCode/getMeta:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 获取meta信息
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AutoHistoryByID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 回滚
+      tags:
+      - AutoCode
+  /autoCode/getSysHistory:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 查询回滚记录
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SysAutoHistory'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 查询回滚记录
+      tags:
+      - AutoCode
   /autoCode/getTables:
     get:
       consumes:
@@ -1346,7 +1434,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.AutoCodeStruct'
+          $ref: '#/definitions/system.AutoCodeStruct'
       produces:
       - application/json
       responses:
@@ -1359,6 +1447,172 @@ paths:
       summary: 预览创建后的代码
       tags:
       - AutoCode
+  /autoCode/rollback:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 回滚自动生成代码
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AutoHistoryByID'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"回滚成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 回滚
+      tags:
+      - AutoCode
+  /autoCodeExample/createAutoCodeExample:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: AutoCodeExample模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/autocode.AutoCodeExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建AutoCodeExample
+      tags:
+      - AutoCodeExample
+  /autoCodeExample/deleteAutoCodeExample:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: AutoCodeExample模型
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/autocode.AutoCodeExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除AutoCodeExample
+      tags:
+      - AutoCodeExample
+  /autoCodeExample/findAutoCodeExample:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 展示值
+        in: query
+        name: autoCodeExampleField
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询AutoCodeExample
+      tags:
+      - AutoCodeExample
+  /autoCodeExample/getAutoCodeExampleList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 展示值
+        in: query
+        name: autoCodeExampleField
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取AutoCodeExample列表
+      tags:
+      - AutoCodeExample
+  /autoCodeExample/updateAutoCodeExample:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新AutoCodeExample
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/autocode.AutoCodeExample'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新AutoCodeExample
+      tags:
+      - AutoCodeExample
   /base/captcha:
     post:
       consumes:
@@ -1450,7 +1704,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ExaCustomer'
+          $ref: '#/definitions/example.ExaCustomer'
       produces:
       - application/json
       responses:
@@ -1467,12 +1721,34 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 客户ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.ExaCustomer'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 客户名
+        in: query
+        name: customerName
+        type: string
+      - description: 客户手机号
+        in: query
+        name: customerPhoneData
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 管理角色ID
+        in: query
+        name: sysUserAuthorityID
+        type: string
+      - description: 管理ID
+        in: query
+        name: sysUserId
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -1494,7 +1770,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ExaCustomer'
+          $ref: '#/definitions/example.ExaCustomer'
       produces:
       - application/json
       responses:
@@ -1516,7 +1792,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ExaCustomer'
+          $ref: '#/definitions/example.ExaCustomer'
       produces:
       - application/json
       responses:
@@ -1534,12 +1810,14 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.PageInfo'
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
       produces:
       - application/json
       responses:
@@ -1579,8 +1857,7 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1596,12 +1873,11 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ExcelInfo'
+          $ref: '#/definitions/example.ExcelInfo'
       produces:
       - application/octet-stream
       responses:
-        "200":
-          description: ""
+        "200": {}
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -1673,7 +1949,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.ExaFileUploadAndDownload'
+          $ref: '#/definitions/example.ExaFileUploadAndDownload'
       produces:
       - application/json
       responses:
@@ -1855,7 +2131,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysBaseMenu'
+          $ref: '#/definitions/system.SysBaseMenu'
       produces:
       - application/json
       responses:
@@ -2012,7 +2288,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysBaseMenu'
+          $ref: '#/definitions/system.SysBaseMenu'
       produces:
       - application/json
       responses:
@@ -2025,68 +2301,6 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
-  /simpleUploader/checkFileMd5:
-    get:
-      parameters:
-      - description: md5
-        in: query
-        name: md5
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 断点续传插件版示例
-      tags:
-      - SimpleUploader
-  /simpleUploader/mergeFileMd5:
-    get:
-      parameters:
-      - description: md5
-        in: query
-        name: md5
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"合并成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 合并文件
-      tags:
-      - SimpleUploader
-  /simpleUploader/upload:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 断点续传插件版示例
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"切片创建成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 断点续传插件版示例
-      tags:
-      - SimpleUploader
   /sysDictionary/createSysDictionary:
     post:
       consumes:
@@ -2097,7 +2311,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysDictionary'
+          $ref: '#/definitions/system.SysDictionary'
       produces:
       - application/json
       responses:
@@ -2120,7 +2334,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysDictionary'
+          $ref: '#/definitions/system.SysDictionary'
       produces:
       - application/json
       responses:
@@ -2138,12 +2352,34 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: ID或字典英名
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.SysDictionary'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 描述
+        in: query
+        name: desc
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 字典名（中）
+        in: query
+        name: name
+        type: string
+      - description: 状态
+        in: query
+        name: status
+        type: boolean
+      - description: 字典名（英）
+        in: query
+        name: type
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -2161,12 +2397,42 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysDictionarySearch'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 描述
+        in: query
+        name: desc
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 字典名（中）
+        in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 状态
+        in: query
+        name: status
+        type: boolean
+      - description: 字典名（英）
+        in: query
+        name: type
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
       produces:
       - application/json
       responses:
@@ -2189,7 +2455,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysDictionary'
+          $ref: '#/definitions/system.SysDictionary'
       produces:
       - application/json
       responses:
@@ -2212,7 +2478,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysDictionaryDetail'
+          $ref: '#/definitions/system.SysDictionaryDetail'
       produces:
       - application/json
       responses:
@@ -2235,7 +2501,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysDictionaryDetail'
+          $ref: '#/definitions/system.SysDictionaryDetail'
       produces:
       - application/json
       responses:
@@ -2253,12 +2519,38 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 用id查询SysDictionaryDetail
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.SysDictionaryDetail'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 展示值
+        in: query
+        name: label
+        type: string
+      - description: 排序标记
+        in: query
+        name: sort
+        type: integer
+      - description: 启用状态
+        in: query
+        name: status
+        type: boolean
+      - description: 关联标记
+        in: query
+        name: sysDictionaryID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 字典值
+        in: query
+        name: value
+        type: integer
       produces:
       - application/json
       responses:
@@ -2276,12 +2568,46 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysDictionaryDetailSearch'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 展示值
+        in: query
+        name: label
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 排序标记
+        in: query
+        name: sort
+        type: integer
+      - description: 启用状态
+        in: query
+        name: status
+        type: boolean
+      - description: 关联标记
+        in: query
+        name: sysDictionaryID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 字典值
+        in: query
+        name: value
+        type: integer
       produces:
       - application/json
       responses:
@@ -2304,7 +2630,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysDictionaryDetail'
+          $ref: '#/definitions/system.SysDictionaryDetail'
       produces:
       - application/json
       responses:
@@ -2327,7 +2653,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysOperationRecord'
+          $ref: '#/definitions/system.SysOperationRecord'
       produces:
       - application/json
       responses:
@@ -2350,7 +2676,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysOperationRecord'
+          $ref: '#/definitions/system.SysOperationRecord'
       produces:
       - application/json
       responses:
@@ -2391,12 +2717,58 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: Id
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/model.SysOperationRecord'
+      - description: 代理
+        in: query
+        name: agent
+        type: string
+      - description: 请求Body
+        in: query
+        name: body
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 错误信息
+        in: query
+        name: error_message
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 请求ip
+        in: query
+        name: ip
+        type: string
+      - description: 延迟
+        in: query
+        name: latency
+        type: string
+      - description: 请求方法
+        in: query
+        name: method
+        type: string
+      - description: 请求路径
+        in: query
+        name: path
+        type: string
+      - description: 响应Body
+        in: query
+        name: resp
+        type: string
+      - description: 请求状态
+        in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
       produces:
       - application/json
       responses:
@@ -2414,12 +2786,66 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 页码, 每页大小, 搜索条件
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.SysOperationRecordSearch'
+      - description: 代理
+        in: query
+        name: agent
+        type: string
+      - description: 请求Body
+        in: query
+        name: body
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 错误信息
+        in: query
+        name: error_message
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 请求ip
+        in: query
+        name: ip
+        type: string
+      - description: 延迟
+        in: query
+        name: latency
+        type: string
+      - description: 请求方法
+        in: query
+        name: method
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 请求路径
+        in: query
+        name: path
+        type: string
+      - description: 响应Body
+        in: query
+        name: resp
+        type: string
+      - description: 请求状态
+        in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - description: 用户id
+        in: query
+        name: user_id
+        type: integer
       produces:
       - application/json
       responses:
@@ -2482,7 +2908,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.System'
+          $ref: '#/definitions/system.System'
       produces:
       - application/json
       responses:
@@ -2496,7 +2922,7 @@ paths:
       tags:
       - System
   /user/changePassword:
-    put:
+    post:
       parameters:
       - description: 用户名, 原密码, 新密码
         in: body
@@ -2539,6 +2965,22 @@ paths:
       summary: 删除用户
       tags:
       - SysUser
+  /user/getUserInfo:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - SysUser
   /user/getUserList:
     post:
       consumes:
@@ -2570,7 +3012,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysUser'
+          $ref: '#/definitions/request.Register'
       produces:
       - application/json
       responses:
@@ -2579,6 +3021,29 @@ paths:
           schema:
             type: string
       summary: 用户注册账号
+      tags:
+      - SysUser
+  /user/setUserAuthorities:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户UUID, 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.SetUserAuthorities'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户权限
       tags:
       - SysUser
   /user/setUserAuthority:
@@ -2601,7 +3066,7 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 设置用户权限
+      summary: 更改用户权限
       tags:
       - SysUser
   /user/setUserInfo:
@@ -2614,7 +3079,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.SysUser'
+          $ref: '#/definitions/system.SysUser'
       produces:
       - application/json
       responses:

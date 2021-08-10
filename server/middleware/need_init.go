@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model/response"
+	"gin-vue-admin/model/common/response"
 	"github.com/gin-gonic/gin"
 )
 

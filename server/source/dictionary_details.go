@@ -2,7 +2,7 @@ package source
 
 import (
 	"gin-vue-admin/global"
-	"gin-vue-admin/model"
+	"gin-vue-admin/model/system"
 	"github.com/gookit/color"
 	"time"
 
@@ -16,7 +16,7 @@ type dictionaryDetail struct{}
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@description: dictionary_details 表数据初始化
 func (d *dictionaryDetail) Init() error {
-	var details = []model.SysDictionaryDetail{
+	var details = []system.SysDictionaryDetail{
 		{global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "smallint", 1, status, 1, 2},
 		{global.GVA_MODEL{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "mediumint", 2, status, 2, 2},
 		{global.GVA_MODEL{ID: 3, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "int", 3, status, 3, 2},
@@ -42,7 +42,7 @@ func (d *dictionaryDetail) Init() error {
 		{global.GVA_MODEL{ID: 23, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "tinyint", 0, status, 0, 6},
 	}
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		if tx.Where("id IN ?", []int{1, 23}).Find(&[]model.SysDictionaryDetail{}).RowsAffected == 2 {
+		if tx.Where("id IN ?", []int{1, 23}).Find(&[]system.SysDictionaryDetail{}).RowsAffected == 2 {
 			color.Danger.Println("\n[Mysql] --> sys_dictionary_details 表的初始数据已存在!")
 			return nil
 		}

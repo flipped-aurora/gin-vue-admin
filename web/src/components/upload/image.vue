@@ -1,12 +1,3 @@
-<!--
-  <div>
-    带压缩的上传
-    <upload-image v-model="imageUrl" :fileSize="512" />
-    已上传文件 {{ imageUrl }}
-  </div>
-
-
--->
 
 <template>
   <div>
@@ -19,62 +10,67 @@
       :before-upload="beforeImageUpload"
       :multiple="false"
     >
-      <img v-if="imageUrl" :src="path + imageUrl" class="image" />
-      <i v-else class="el-icon-plus image-uploader-icon"></i>
+      <img v-if="imageUrl" :src="showImageUrl" class="image">
+      <i v-else class="el-icon-plus image-uploader-icon" />
     </el-upload>
   </div>
 </template>
+
 <script>
-const path = process.env.VUE_APP_BASE_API;
-import { mapGetters } from "vuex";
-import ImageCompress from "@/utils/image.js";
+const path = process.env.VUE_APP_BASE_API
+import { mapGetters } from 'vuex'
+import ImageCompress from '@/utils/image'
 export default {
-  name: "upload-image",
+  name: 'UploadImage',
   model: {
-    prop: "imageUrl",
-    event: "change",
+    prop: 'imageUrl',
+    event: 'change'
   },
   props: {
     imageUrl: {
       type: String,
-      default: "",
+      default: ''
     },
     fileSize: {
       type: Number,
-      default: 2048, // 2M 超出后执行压缩
+      default: 2048 // 2M 超出后执行压缩
     },
     maxWH: {
       type: Number,
-      default: 1920, // 图片长宽上限
-    },
+      default: 1920 // 图片长宽上限
+    }
   },
   data() {
     return {
-      path: path,
-    };
+      path: path
+    }
   },
   computed: {
-    ...mapGetters("user", ["userInfo", "token"]),
+    ...mapGetters('user', ['userInfo', 'token']),
+    showImageUrl() {
+      return (this.imageUrl && this.imageUrl.slice(0, 4) !== 'http') ? path + this.imageUrl : this.imageUrl
+    }
   },
   methods: {
     beforeImageUpload(file) {
-      let isRightSize = file.size / 1024 < this.fileSize;
+      const isRightSize = file.size / 1024 < this.fileSize
       if (!isRightSize) {
         // 压缩
-        let compress = new ImageCompress(file, this.fileSize, this.maxWH);
-        return compress.compress();
+        const compress = new ImageCompress(file, this.fileSize, this.maxWH)
+        return compress.compress()
       }
-      return isRightSize;
+      return isRightSize
     },
     handleImageSuccess(res) {
       // this.imageUrl = URL.createObjectURL(file.raw);
-      const {  data } = res;
+      const { data } = res
       if (data.file) {
-        this.$emit("change", data.file.url);
+        this.$emit('change', data.file.url)
+        this.$emit('on-success')
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

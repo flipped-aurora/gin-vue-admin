@@ -38,6 +38,10 @@ web
 │   ├── api  -- 所有请求
 │   ├── assets  --  主题 字体等静态资源
 |   ├── components -- components组件
+|   ├── core -- gva抽离的一些前端资源
+|   |   ├── config.js -- 配置文件
+|   |   └── element_lazy.js -- elementt按需引入文件
+|   |   └── gin-vue-admin.js -- gva前端控制库
 |   ├── directive -- 公用方法 
 |   ├── mixins -- 公用方法
 |   ├── router -- 路由权限
@@ -57,15 +61,20 @@ web
 |   |   ├── example --上传案例
 |   |   ├── iconList -- icon列表
 |   |   ├── init -- 初始化数据  
+|   |   |   ├── index -- 新版本
+|   |   |   ├── init -- 旧版本
 |   |   ├── layout  --  layout约束页面 
 |   |   |   ├── aside -- 
 |   |   |   ├── bottomInfo -- bottomInfo
 |   |   |   ├── screenfull -- 全屏设置
+|   |   |   ├── setting    -- 系统设置
 |   |   |   └── index.vue -- base 约束
-|   |   ├── login --结算单管理 
-|   |   ├── person --结算单管理 
+|   |   ├── login --登录 
+|   |   ├── person --个人中心 
 |   |   ├── superAdmin -- 超级管理员操作
-|   |   └── home.vue -- page 入口页面 
+|   |   ├── system -- 系统检测页面
+|   |   ├── systemTools -- 系统配置相关页面
+|   |   └── routerHolder.vue -- page 入口页面 
 │   ├── App.vue  -- 入口页面
 │   ├── main.js  -- 入口文件 加载组件 初始化等
 │   └── permission.js  -- 跳转

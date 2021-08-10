@@ -1,16 +1,12 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
 <script>
-import { checkDB } from "@/api/initdb"
 export default {
-  name: 'app',
-  async created(){
-    await checkDB()
-  }  
+  name: 'App'
 }
 </script>
 
@@ -23,5 +19,9 @@ export default {
   background: #eee;
   height: 100vh;
   overflow: hidden;
+  font-weight: 400 !important;
+}
+.el-button{
+  font-weight: 400 !important;
 }
 </style>

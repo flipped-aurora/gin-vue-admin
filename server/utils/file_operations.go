@@ -42,11 +42,15 @@ Redirect:
 	return os.Rename(src, dst)
 }
 
+func DeLFile(filePath string) error {
+	return os.RemoveAll(filePath)
+}
+
 //@author: [songzhibin97](https://github.com/songzhibin97)
 //@function: TrimSpace
 //@description: 去除结构体空格
 //@param: target interface (target: 目标结构体,传入必须是指针类型)
-//@return: err error
+//@return: null
 
 func TrimSpace(target interface{}) {
 	t := reflect.TypeOf(target)

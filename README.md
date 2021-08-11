@@ -23,9 +23,19 @@
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 
-[从环境到部署教学视频](https://www.bilibili.com/video/BV1fV411y7dT)
+[初始化](https://www.gin-vue-admin.com/docs/first_master)
+						       
+[从环境到部署教学视频](https://www.bilibili.com/video/BV1Rg411u7xH)
 
 [开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+
+# 重要提示
+
+1.本项目从起步到开发到部署均有文档和详细视频教程
+
+2.本项目需要您有一定的golang和vue基础
+
+3.你完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/docs/payment)
 
 ## 1. 基本介绍
 
@@ -243,27 +253,23 @@ swag init
 
 ## 6.2 教学视频
 
-（1）环境搭建
+（1）手把手教学视频
 
-> bilibili：https://www.bilibili.com/video/BV1Fg4y187Bw/ (v1.0版本视频，v2.0操作相同目录不同)
+> https://www.bilibili.com/video/BV1Rg411u7xH/
 
-（2）模板使用
+（2）后端目录结构调整介绍以及使用方法
 
-> bilibili：https://www.bilibili.com/video/BV16K4y1r7BD/ (v1.0版本视频，v2.0操作相同目录不同)
+> https://www.bilibili.com/video/BV1x44y117TT/
 
-（3）2.0目录以及开发体验
-
-> bilibili：https://www.bilibili.com/video/BV1aV411d7Gm#reply2831798461
-
-（4）golang基础教学视频
+（3）golang基础教学视频
 
 > bilibili：https://space.bilibili.com/322210472/channel/detail?cid=108884
 
-（5）gin框架基础教学
+（4）gin框架基础教学
 
 > bilibili：https://space.bilibili.com/322210472/channel/detail?cid=126418&ctype=0
 
-（6）gin-vue-admin 版本更新介绍视频
+（5）gin-vue-admin 版本更新介绍视频
 
 > bilibili：https://space.bilibili.com/322210472/channel/detail?cid=126418&ctype=0
 

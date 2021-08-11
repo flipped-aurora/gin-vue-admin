@@ -35,7 +35,7 @@
 
 2.本项目需要您有一定的golang和vue基础
 
-3.你完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/docs/payment)
+3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/docs/payment)
 
 ## 1. 基本介绍
 

@@ -52,7 +52,7 @@ module.exports = {
         properties: 'always'
       }
     ],
-    'comma-dangle': [2, 'never'],
+    'comma-dangle': [2, 'only-multiline'],
     'comma-spacing': [
       2,
       {

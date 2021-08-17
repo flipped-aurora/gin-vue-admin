@@ -1857,7 +1857,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200": {}
+        "200":
+          description: ""
       security:
       - ApiKeyAuth: []
       summary: 下载模板
@@ -1877,7 +1878,8 @@ paths:
       produces:
       - application/octet-stream
       responses:
-        "200": {}
+        "200":
+          description: ""
       security:
       - ApiKeyAuth: []
       summary: 导出Excel
@@ -2098,29 +2100,6 @@ paths:
       summary: jwt加入黑名单
       tags:
       - Jwt
-  /menu/GetMenuAuthority:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 角色ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.GetAuthorityId'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 获取指定角色menu
-      tags:
-      - AuthorityMenu
   /menu/addBaseMenu:
     post:
       consumes:
@@ -2253,6 +2232,29 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户动态路由
+      tags:
+      - AuthorityMenu
+  /menu/getMenuAuthority:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 角色ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetAuthorityId'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取指定角色menu
       tags:
       - AuthorityMenu
   /menu/getMenuList:

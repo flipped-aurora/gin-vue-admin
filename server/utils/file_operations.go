@@ -27,16 +27,18 @@ func FileMove(src string, dst string) (err error) {
 	}
 	var revoke = false
 	dir := filepath.Dir(dst)
-Redirect:
-	_, err = os.Stat(dir)
-	if err != nil {
-		err = os.MkdirAll(dir, 0755)
+	for {
+		_, err = os.Stat(dir)
 		if err != nil {
-			return err
-		}
-		if !revoke {
-			revoke = true
-			goto Redirect
+			err = os.MkdirAll(dir, 0755)
+			if err != nil {
+				return err
+			}
+			if !revoke {
+				revoke = true
+			} else {
+				break
+			}
 		}
 	}
 	return os.Rename(src, dst)

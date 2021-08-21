@@ -1,7 +1,7 @@
 package example
 
 import (
-	"gin-vue-admin/utils/plugin"
+	"github.com/flipped-aurora/gin-vue-admin/utils/plugin"
 
 	"github.com/gin-gonic/gin"
 )

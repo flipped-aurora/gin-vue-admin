@@ -3,13 +3,14 @@ package internal
 import (
 	"context"
 	"fmt"
-	"gin-vue-admin/global"
-	"gorm.io/gorm/logger"
-	"gorm.io/gorm/utils"
 	"io/ioutil"
 	"log"
 	"os"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"gorm.io/gorm/logger"
+	"gorm.io/gorm/utils"
 )
 
 type config struct {

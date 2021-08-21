@@ -1,11 +1,12 @@
 package source
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/example"
+	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/example"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
-	"time"
 )
 
 var File = new(file)

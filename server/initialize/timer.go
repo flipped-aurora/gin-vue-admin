@@ -2,9 +2,10 @@ package initialize
 
 import (
 	"fmt"
-	"gin-vue-admin/config"
-	"gin-vue-admin/global"
-	"gin-vue-admin/utils"
+
+	"github.com/flipped-aurora/gin-vue-admin/config"
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/utils"
 )
 
 func Timer() {

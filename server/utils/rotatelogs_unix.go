@@ -3,12 +3,13 @@
 package utils
 
 import (
-	"gin-vue-admin/global"
-	zaprotatelogs "github.com/lestrrat-go/file-rotatelogs"
-	"go.uber.org/zap/zapcore"
 	"os"
 	"path"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	zaprotatelogs "github.com/lestrrat-go/file-rotatelogs"
+	"go.uber.org/zap/zapcore"
 )
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

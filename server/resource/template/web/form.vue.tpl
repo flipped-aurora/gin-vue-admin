@@ -3,35 +3,35 @@
     <el-form :model="formData" label-position="right" label-width="80px">
     {{- range .Fields}}
       <el-form-item label="{{.FieldDesc}}:">
-    {{- if eq .FieldType "bool" }}
-        <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.{{.FieldJson}}" clearable ></el-switch>
-    {{- end }}
-    {{- if eq .FieldType "string" }}
-        <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
-    {{- end }}
-    {{- if eq .FieldType "int" }}
-    {{- if .DictType }}
-        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
-          <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-        </el-select>
-    {{- else }}
-        <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />
-    {{- end }}
-    {{- end }}
-    {{- if eq .FieldType "time.Time" }}
-        <el-date-picker type="date" placeholder="选择日期" v-model="formData.{{ .FieldJson }}" clearable></el-date-picker>
-    {{- end }}
-    {{- if eq .FieldType "float64" }}
-        <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
-    {{- end }}
+    {{ if eq .FieldType "bool" -}}
+      <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.{{.FieldJson}}" clearable ></el-switch>
+    {{ end -}}
+    {{ if eq .FieldType "string" -}}
+      <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
+    {{ end -}}
+    {{ if eq .FieldType "int" -}}
+    {{ if .DictType -}}
+      <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
+        <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value"></el-option>
+      </el-select>
+    {{ else -}}
+      <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入"/>
+    {{ end -}}
+    {{ end -}}
+    {{ if eq .FieldType "time.Time" }}
+      <el-date-picker type="date" placeholder="选择日期" v-model="formData.{{ .FieldJson }}" clearable></el-date-picker>
+    {{ end -}}
+    {{ if eq .FieldType "float64" }}
+      <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
+    {{ end -}}
       </el-form-item>
-    {{- end }}
+    {{ end -}}
       <el-form-item>
         <el-button size="mini" type="primary" @click="save">保存</el-button>
         <el-button size="mini" type="primary" @click="back">返回</el-button>
       </el-form-item>
     </el-form>
-  </div>
+</div>
 </template>
 
 <script>
@@ -47,29 +47,29 @@ export default {
   data() {
     return {
       type: '',
-      {{- range .Fields}}
+      {{range .Fields}}
           {{- if .DictType }}
       {{ .DictType }}Options: [],
-          {{- end }}
-      {{- end }}
+          {{ end -}}
+      {{end -}}
       formData: {
-        {{- range .Fields}}
-          {{- if eq .FieldType "bool" }}
-        {{.FieldJson}}: false,
-          {{- end }}
-          {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-          {{- end }}
-          {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: 0,
-          {{- end }}
-          {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-          {{- end }}
-          {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-          {{- end }}
-        {{- end }}
+            {{range .Fields}}
+            {{- if eq .FieldType "bool" -}}
+         {{.FieldJson}}: false,
+            {{ end -}}
+            {{- if eq .FieldType "string" -}}
+         {{.FieldJson}}: '',
+            {{ end -}}
+            {{- if eq .FieldType "int" -}}
+         {{.FieldJson}}: 0,
+            {{ end -}}
+            {{- if eq .FieldType "time.Time" -}}
+         {{.FieldJson}}: new Date(),
+            {{ end -}}
+            {{- if eq .FieldType "float64" -}}
+         {{.FieldJson}}: 0,
+            {{ end -}}
+            {{ end }}
       }
     }
   },
@@ -84,10 +84,10 @@ export default {
     } else {
       this.type = 'create'
     }
-    {{- range .Fields }}
+    {{ range .Fields -}}
       {{- if .DictType }}
-    await this.getDict('{{.DictType}}')
-      {{- end }}
+    await this.getDict("{{.DictType}}")
+      {{ end -}}
     {{- end }}
   },
   methods: {

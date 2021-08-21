@@ -78,7 +78,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) UpdateAutoCodeExample(c *gin.Conte
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query autocode.AutoCodeExample true "用id查询AutoCodeExample"
+// @Param data body autocode.AutoCodeExample true "用id查询AutoCodeExample"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /autoCodeExample/findAutoCodeExample [get]
 func (autoCodeExampleApi *AutoCodeExampleApi) FindAutoCodeExample(c *gin.Context) {
@@ -101,7 +101,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) FindAutoCodeExample(c *gin.Context
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query autocodeReq.AutoCodeExampleSearch true "页码, 每页大小, 搜索条件"
+// @Param data body autocodeReq.AutoCodeExampleSearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /autoCodeExample/getAutoCodeExampleList [get]
 func (autoCodeExampleApi *AutoCodeExampleApi) GetAutoCodeExampleList(c *gin.Context) {

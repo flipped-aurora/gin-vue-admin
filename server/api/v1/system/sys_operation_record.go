@@ -76,7 +76,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query system.SysOperationRecord true "Id"
+// @Param data body system.SysOperationRecord true "Id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysOperationRecord/findSysOperationRecord [get]
 func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
@@ -99,7 +99,7 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query request.SysOperationRecordSearch true "页码, 每页大小, 搜索条件"
+// @Param data body request.SysOperationRecordSearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
 func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {

@@ -285,10 +285,18 @@ swag init
 
 ### [关于我们](https://www.gin-vue-admin.com/about/)
 
-## 8. 捐赠
+## 8. 贡献者
+
+感谢您对gin-vue-admin的贡献!
+
+<a href="https://github.com/flipped-aurora/gin-vue-admin/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=flipped-aurora/gin-vue-admin" />
+</a>
+
+## 9. 捐赠
 
 如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
 
-## 9. 商用注意事项
+## 10. 商用注意事项
 
 如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

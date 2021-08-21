@@ -1,9 +1,9 @@
 package v1
 
 import (
-	"gin-vue-admin/api/v1/autocode"
-	"gin-vue-admin/api/v1/example"
-	"gin-vue-admin/api/v1/system"
+	"github.com/flipped-aurora/gin-vue-admin/api/v1/autocode"
+	"github.com/flipped-aurora/gin-vue-admin/api/v1/example"
+	"github.com/flipped-aurora/gin-vue-admin/api/v1/system"
 )
 
 type ApiGroup struct {

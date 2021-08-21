@@ -1,15 +1,16 @@
 package middleware
 
 import (
-	"gin-vue-admin/global"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"net"
 	"net/http"
 	"net/http/httputil"
 	"os"
 	"runtime/debug"
 	"strings"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志

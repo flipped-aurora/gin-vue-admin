@@ -132,3 +132,4 @@ Timer:
     { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
     #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
   ]
+

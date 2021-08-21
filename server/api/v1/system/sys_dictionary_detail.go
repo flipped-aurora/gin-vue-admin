@@ -75,7 +75,7 @@ func (s *DictionaryDetailApi) UpdateSysDictionaryDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body system.SysDictionaryDetail true "用id查询SysDictionaryDetail"
+// @Param data query system.SysDictionaryDetail true "用id查询SysDictionaryDetail"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionaryDetail/findSysDictionaryDetail [get]
 func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
@@ -98,7 +98,7 @@ func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SysDictionaryDetailSearch true "页码, 每页大小, 搜索条件"
+// @Param data query request.SysDictionaryDetailSearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysDictionaryDetail/getSysDictionaryDetailList [get]
 func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c *gin.Context) {

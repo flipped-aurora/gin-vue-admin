@@ -1,8 +1,9 @@
 package upload
 
 import (
-	"gin-vue-admin/global"
 	"mime/multipart"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
 )
 
 //@author: [ccfish86](https://github.com/ccfish86)

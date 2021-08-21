@@ -1,6 +1,6 @@
 package request
 
-import "gin-vue-admin/model/common/request"
+import "github.com/flipped-aurora/gin-vue-admin/model/common/request"
 
 type SysAutoHistory struct {
 	request.PageInfo

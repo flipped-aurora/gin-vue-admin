@@ -1,4 +1,4 @@
-module gin-vue-admin
+module github.com/flipped-aurora/gin-vue-admin
 
 go 1.14
 
@@ -20,9 +20,9 @@ require (
 	github.com/go-openapi/spec v0.20.3 // indirect
 	github.com/go-openapi/swag v0.19.15 // indirect
 	github.com/go-playground/validator/v10 v10.3.0 // indirect
-	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/go-redis/redis/v8 v8.11.0
 	github.com/go-sql-driver/mysql v1.5.0
+	github.com/gofrs/uuid v3.2.0+incompatible
 	github.com/gookit/color v1.3.1
 	github.com/jehiah/go-strftime v0.0.0-20171201141054-1d33003b3869 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84

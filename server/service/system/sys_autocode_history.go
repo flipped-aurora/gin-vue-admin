@@ -2,13 +2,14 @@ package system
 
 import (
 	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/request"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/utils"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/utils"
 
 	"go.uber.org/zap"
 )

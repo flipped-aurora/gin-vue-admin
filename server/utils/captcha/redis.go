@@ -1,8 +1,9 @@
 package captcha
 
 import (
-	"gin-vue-admin/global"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
 
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"

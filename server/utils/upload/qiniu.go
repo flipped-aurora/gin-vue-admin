@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gin-vue-admin/global"
+	"mime/multipart"
+	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
 	"github.com/qiniu/api.v7/v7/auth/qbox"
 	"github.com/qiniu/api.v7/v7/storage"
 	"go.uber.org/zap"
-	"mime/multipart"
-	"time"
 )
 
 type Qiniu struct{}
@@ -38,7 +39,7 @@ func (*Qiniu) UploadFile(file *multipart.FileHeader) (string, string, error) {
 
 		return "", "", errors.New("function file.Open() Filed, err:" + openError.Error())
 	}
-	defer f.Close() // 创建文件 defer 关闭
+	defer f.Close()                                                  // 创建文件 defer 关闭
 	fileKey := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename) // 文件名格式 自己可以改 建议保证唯一性
 	putErr := formUploader.Put(context.Background(), &ret, upToken, fileKey, f, file.Size, &putExtra)
 	if putErr != nil {

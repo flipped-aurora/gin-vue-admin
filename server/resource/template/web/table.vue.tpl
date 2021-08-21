@@ -19,8 +19,8 @@
             </el-form-item>
                   {{- else }}
         <el-form-item label="{{.FieldDesc}}">
-          <el-input placeholder="搜索条件" v-model="searchInfo.{{.FieldJson}}" />
-        </el-form-item> {{ end }} {{ end }}  {{ end }}
+          <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+        </el-form-item>{{ end }}{{ end }}{{ end }}
         <el-form-item>
           <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
@@ -52,15 +52,16 @@
       {{- if .DictType}}
       <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
         <template slot-scope="scope">
-          {{"{{"}}filterDict(scope.row.{{.FieldJson}},"{{.DictType}}"){{"}}"}}
+          {{"{{"}} filterDict(scope.row.{{.FieldJson}},"{{.DictType}}") {{"}}"}}
         </template>
       </el-table-column>
       {{- else if eq .FieldType "bool" }}
       <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
         <template slot-scope="scope">{{ "{{scope.row."}}{{.FieldJson}}{{"|formatBoolean}}" }}</template>
       </el-table-column> {{- else }}
-      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" /> {{ end -}}
-      {{ end -}}
+      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+      {{- end }}
+      {{- end }}
       <el-table-column label="按钮组">
         <template slot-scope="scope">
           <el-button size="small" type="primary" icon="el-icon-edit" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
@@ -82,30 +83,30 @@
       <el-form :model="formData" label-position="right" label-width="80px">
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:">
-      {{ if eq .FieldType "bool" }}
+      {{- if eq .FieldType "bool" }}
           <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.{{.FieldJson}}" clearable ></el-switch>
-      {{ end -}}
-      {{ if eq .FieldType "string" }}
+      {{- end }}
+      {{- if eq .FieldType "string" }}
           <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
-      {{ end -}}
-      {{ if eq .FieldType "int" }}
+      {{- end }}
+      {{- if eq .FieldType "int" }}
       {{- if .DictType}}
           <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
-      {{ else }}
+      {{- else }}
           <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />
-      {{ end -}}
-      {{ end -}}
-      {{ if eq .FieldType "time.Time" }}
+      {{- end }}
+      {{- end }}
+      {{- if eq .FieldType "time.Time" }}
           <el-date-picker type="date" placeholder="选择日期" v-model="formData.{{ .FieldJson }}" clearable />
-       {{ end -}}
-       {{- if eq .FieldType "float64" }}
+      {{- end }}
+      {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable />
-       {{ end -}}
-            </el-form-item>
-       {{- end }}
-     </el-form>
+      {{- end }}
+        </el-form-item>
+      {{- end }}
+      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="enterDialog">确 定</el-button>
@@ -127,45 +128,11 @@ import { formatTimeToStr } from '@/utils/date'
 import infoList from '@/mixins/infoList'
 export default {
   name: '{{.StructName}}',
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: get{{ .StructName }}List,
-      dialogFormVisible: false,
-      type: '',
-      deleteVisible: false,
-      multipleSelection: [],
-      {{ range .Fields}}
-          {{- if .DictType }}
-      {{ .DictType }}Options: [],
-          {{ end -}}
-      {{ end }}
-      formData: {
-        {{range .Fields}}
-          {{- if eq .FieldType "bool" -}}
-        {{.FieldJson}}: false,
-          {{ end -}}
-          {{- if eq .FieldType "string" -}}
-        {{.FieldJson}}: '',
-          {{ end -}}
-          {{- if eq .FieldType "int" -}}
-        {{.FieldJson}}: 0,
-          {{ end -}}
-          {{- if eq .FieldType "time.Time" -}}
-        {{.FieldJson}}: new Date(),
-          {{ end -}}
-          {{- if eq .FieldType "float64" -}}
-        {{.FieldJson}}: 0,
-          {{ end -}}
-        {{ end }}
-      }
-    }
-  },
   filters: {
     formatDate: function(time) {
       if (time !== null && time !== '') {
-        var date = new Date(time);
-        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss');
+        var date = new Date(time)
+        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
       } else {
         return ''
       }
@@ -178,23 +145,57 @@ export default {
       }
     }
   },
+  mixins: [infoList],
+  data() {
+    return {
+      listApi: get{{ .StructName }}List,
+      dialogFormVisible: false,
+      type: '',
+      deleteVisible: false,
+      multipleSelection: [],
+      {{- range .Fields}}
+          {{- if .DictType }}
+      {{ .DictType }}Options: [],
+          {{- end }}
+      {{- end }}
+      formData: {
+    {{- range .Fields}}
+      {{- if eq .FieldType "bool" }}
+        {{.FieldJson}}: false,
+      {{- end }}
+      {{- if eq .FieldType "string" }}
+        {{.FieldJson}}: '',
+      {{- end }}
+      {{- if eq .FieldType "int" }}
+        {{.FieldJson}}: 0,
+      {{- end }}
+      {{- if eq .FieldType "time.Time" }}
+        {{.FieldJson}}: new Date(),
+      {{- end }}
+      {{- if eq .FieldType "float64" }}
+        {{.FieldJson}}: 0,
+      {{- end }}
+    {{- end }}
+      }
+    }
+  },
   async created() {
     await this.getTableData()
-    {{ range .Fields -}}
-      {{- if .DictType }}
+{{- range .Fields }}
+  {{- if .DictType }}
     await this.getDict('{{.DictType}}')
-      {{ end -}}
-    {{- end }}
+  {{- end }}
+{{- end }}
   },
   methods: {
   // 条件搜索前端看此方法
     onSubmit() {
       this.page = 1
       this.pageSize = 10
-      {{- range .Fields}} {{- if eq .FieldType "bool" }}
+      {{- range .Fields}}{{- if eq .FieldType "bool" }}
       if (this.searchInfo.{{.FieldJson}} === ""){
         this.searchInfo.{{.FieldJson}}=null
-      } {{ end }} {{ end }}
+      }{{ end }}{{ end }}
       this.getTableData()
     },
     handleSelectionChange(val) {
@@ -246,23 +247,23 @@ export default {
     closeDialog() {
       this.dialogFormVisible = false
       this.formData = {
-        {{range .Fields}}
-          {{- if eq .FieldType "bool" -}}
+      {{- range .Fields}}
+        {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
-          {{ end -}}
-          {{- if eq .FieldType "string" -}}
+        {{- end }}
+        {{- if eq .FieldType "string" }}
         {{.FieldJson}}: '',
-          {{ end -}}
-          {{- if eq .FieldType "int" -}}
+        {{- end }}
+        {{- if eq .FieldType "int" }}
         {{.FieldJson}}: 0,
-          {{ end -}}
-          {{- if eq .FieldType "time.Time" -}}
+        {{- end }}
+        {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),
-          {{ end -}}
-          {{- if eq .FieldType "float64" -}}
+        {{- end }}
+        {{- if eq .FieldType "float64" }}
         {{.FieldJson}}: 0,
-          {{ end -}}
-        {{ end }}
+        {{- end }}
+      {{- end }}
       }
     },
     async delete{{.StructName}}(row) {
@@ -272,7 +273,7 @@ export default {
           type: 'success',
           message: '删除成功'
         })
-        if (this.tableData.length === 1 && this.page > 1 ) {
+        if (this.tableData.length === 1 && this.page > 1) {
           this.page--
         }
         this.getTableData()
@@ -281,10 +282,10 @@ export default {
     async enterDialog() {
       let res
       switch (this.type) {
-        case "create":
+        case 'create':
           res = await create{{.StructName}}(this.formData)
           break
-        case "update":
+        case 'update':
           res = await update{{.StructName}}(this.formData)
           break
         default:

@@ -94,7 +94,7 @@ func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body example.ExaCustomer true "客户ID"
+// @Param data query example.ExaCustomer true "客户ID"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [get]
 func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
@@ -118,7 +118,7 @@ func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "页码, 每页大小"
+// @Param data query request.PageInfo true "页码, 每页大小"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customerList [get]
 func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {

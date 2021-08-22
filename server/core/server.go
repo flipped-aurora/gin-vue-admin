@@ -19,6 +19,7 @@ func RunWindowsServer() {
 		initialize.Redis()
 	}
 	Router := initialize.Routers()
+
 	Router.Static("/form-generator", "./resource/page")
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)

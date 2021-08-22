@@ -1,8 +1,8 @@
 package example
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
 )
 
 type ExaCustomer struct {

@@ -3,12 +3,13 @@ package example
 import (
 	"errors"
 	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/example"
-	"gorm.io/gorm"
 	"io/ioutil"
 	"os"
 	"strconv"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/example"
+	"gorm.io/gorm"
 )
 
 type SimpleUploaderService struct {

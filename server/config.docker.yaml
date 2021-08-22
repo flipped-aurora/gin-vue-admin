@@ -1,4 +1,4 @@
-# Gin-Vue-Admin Global Configuration
+# github.com/flipped-aurora/gin-vue-admin Global Configuration
 
 # jwt configuration
 jwt:
@@ -10,7 +10,7 @@ jwt:
 zap:
   level: 'info'
   format: 'console'
-  prefix: '[GIN-VUE-ADMIN]'
+  prefix: '[github.com/flipped-aurora/gin-vue-admin]'
   director: 'log'
   link-name: 'latest_log'
   show-line: true
@@ -111,7 +111,7 @@ tencent-cos:
   secret-id: 'xxxxxxxx'
   secret-key: 'xxxxxxxx'
   base-url: 'https://gin.vue.admin'
-  path-prefix: 'gin-vue-admin'
+  path-prefix: 'github.com/flipped-aurora/gin-vue-admin'
 
 # excel configuration
 excel:

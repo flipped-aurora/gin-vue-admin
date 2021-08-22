@@ -1,16 +1,17 @@
 package middleware
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
-	"gin-vue-admin/service"
-	"gin-vue-admin/utils"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/service"
+	"github.com/flipped-aurora/gin-vue-admin/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 var userService = service.ServiceGroupApp.SystemServiceGroup.UserService

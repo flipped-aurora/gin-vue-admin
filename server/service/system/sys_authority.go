@@ -2,12 +2,13 @@ package system
 
 import (
 	"errors"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/request"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/response"
-	"gorm.io/gorm"
 	"strconv"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/model/system/response"
+	"gorm.io/gorm"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)

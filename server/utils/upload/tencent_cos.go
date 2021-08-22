@@ -4,11 +4,12 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gin-vue-admin/global"
 	"mime/multipart"
 	"net/http"
 	"net/url"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
 
 	"github.com/tencentyun/cos-go-sdk-v5"
 	"go.uber.org/zap"

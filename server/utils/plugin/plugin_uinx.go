@@ -10,7 +10,28 @@ import (
 	"os"
 	"path/filepath"
 	"plugin"
+	"sync"
 )
+
+var ManagementPlugin = managementPlugin{mp: make(map[string]*plugin.Plugin)}
+
+type managementPlugin struct {
+	mp map[string]*plugin.Plugin
+	sync.Mutex
+}
+
+func (m *managementPlugin) SetPlugin(key string, p *plugin.Plugin) {
+	m.Lock()
+	defer m.Unlock()
+	m.mp[key] = p
+}
+
+func (m *managementPlugin) GetPlugin(key string) (p *plugin.Plugin, ok bool) {
+	m.Lock()
+	defer m.Unlock()
+	p, ok = m.mp[key]
+	return
+}
 
 // LoadPlugin 加载插件 传入path
 func LoadPlugin(path string) error {

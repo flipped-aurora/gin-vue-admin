@@ -1,7 +1,7 @@
 package system
 
 import (
-	"gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/global"
 )
 
 type SysApi struct {

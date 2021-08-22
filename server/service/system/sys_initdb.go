@@ -3,14 +3,15 @@ package system
 import (
 	"database/sql"
 	"fmt"
-	"gin-vue-admin/config"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/example"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
-	"gin-vue-admin/source"
-	"gin-vue-admin/utils"
 	"path/filepath"
+
+	"github.com/flipped-aurora/gin-vue-admin/config"
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/source"
+	"github.com/flipped-aurora/gin-vue-admin/utils"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"

@@ -1,8 +1,8 @@
 package source
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
 	"github.com/gookit/color"
 )
 

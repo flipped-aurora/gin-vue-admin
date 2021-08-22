@@ -1,14 +1,15 @@
 package example
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/response"
-	exampleRes "gin-vue-admin/model/example/response"
-	"gin-vue-admin/utils"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"strconv"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/common/response"
+	exampleRes "github.com/flipped-aurora/gin-vue-admin/model/example/response"
+	"github.com/flipped-aurora/gin-vue-admin/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 // @Tags ExaFileUploadAndDownload

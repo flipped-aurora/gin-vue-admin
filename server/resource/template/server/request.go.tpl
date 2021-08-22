@@ -1,8 +1,8 @@
 package request
 
 import (
-	"gin-vue-admin/model/autocode"
-	"gin-vue-admin/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/model/autocode"
+	"github.com/flipped-aurora/gin-vue-admin/model/common/request"
 )
 
 type {{.StructName}}Search struct{

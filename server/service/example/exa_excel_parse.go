@@ -3,10 +3,11 @@ package example
 import (
 	"errors"
 	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
-	"github.com/xuri/excelize/v2"
 	"strconv"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
+	"github.com/xuri/excelize/v2"
 )
 
 type ExcelService struct {

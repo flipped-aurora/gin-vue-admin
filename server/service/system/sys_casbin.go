@@ -2,15 +2,16 @@ package system
 
 import (
 	"errors"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
+	"strings"
+	"sync"
+
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"github.com/flipped-aurora/gin-vue-admin/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/model/system/request"
 	_ "github.com/go-sql-driver/mysql"
-	"strings"
-	"sync"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)

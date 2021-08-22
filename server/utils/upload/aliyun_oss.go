@@ -2,11 +2,12 @@ package upload
 
 import (
 	"errors"
-	"gin-vue-admin/global"
-	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"go.uber.org/zap"
 	"mime/multipart"
 	"time"
+
+	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/flipped-aurora/gin-vue-admin/global"
+	"go.uber.org/zap"
 )
 
 type AliyunOSS struct{}

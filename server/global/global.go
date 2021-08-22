@@ -1,13 +1,13 @@
 package global
 
 import (
-	"gin-vue-admin/utils/timer"
+	"github.com/flipped-aurora/gin-vue-admin/utils/timer"
 
 	"golang.org/x/sync/singleflight"
 
 	"go.uber.org/zap"
 
-	"gin-vue-admin/config"
+	"github.com/flipped-aurora/gin-vue-admin/config"
 
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"

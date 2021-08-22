@@ -1,14 +1,15 @@
 package captcha
 
 import (
-	"context"
-	"gin-vue-admin/global"
+	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/global"
+
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
-	"time"
 )
 
-func NewDefaultRedisStore() *RedisStore {
+func NewDefaultRedisStore() base64Captcha.Store {
 	return &RedisStore{
 		Expiration: time.Second * 180,
 		PreKey:     "CAPTCHA_",
@@ -18,29 +19,23 @@ func NewDefaultRedisStore() *RedisStore {
 type RedisStore struct {
 	Expiration time.Duration
 	PreKey     string
-	Context    context.Context
-}
-
-func (rs *RedisStore) UseWithCtx(ctx context.Context) base64Captcha.Store {
-	rs.Context = ctx
-	return rs
 }
 
 func (rs *RedisStore) Set(id string, value string) {
-	err := global.GVA_REDIS.Set(rs.Context, rs.PreKey+id, value, rs.Expiration).Err()
+	err := global.GVA_REDIS.Set(rs.PreKey+id, value, rs.Expiration).Err()
 	if err != nil {
 		global.GVA_LOG.Error("RedisStoreSetError!", zap.Error(err))
 	}
 }
 
 func (rs *RedisStore) Get(key string, clear bool) string {
-	val, err := global.GVA_REDIS.Get(rs.Context, key).Result()
+	val, err := global.GVA_REDIS.Get(key).Result()
 	if err != nil {
 		global.GVA_LOG.Error("RedisStoreGetError!", zap.Error(err))
 		return ""
 	}
 	if clear {
-		err := global.GVA_REDIS.Del(rs.Context, key).Err()
+		err := global.GVA_REDIS.Del(key).Err()
 		if err != nil {
 			global.GVA_LOG.Error("RedisStoreClearError!", zap.Error(err))
 			return ""

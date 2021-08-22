@@ -1,6 +1,6 @@
 package response
 
-import "gin-vue-admin/model/system"
+import "github.com/flipped-aurora/gin-vue-admin/model/system"
 
 type SysAuthorityResponse struct {
 	Authority system.SysAuthority `json:"authority"`

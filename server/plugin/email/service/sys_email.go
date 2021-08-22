@@ -1,7 +1,7 @@
-package system
+package service
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/utils"
+	"github.com/flipped-aurora/gin-vue-admin/plugin/email/utils"
 )
 
 type EmailService struct {

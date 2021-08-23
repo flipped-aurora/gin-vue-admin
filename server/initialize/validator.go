@@ -1,6 +1,6 @@
 package initialize
 
-import "github.com/flipped-aurora/gin-vue-admin/utils"
+import "github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 func init() {
 	_ = utils.RegisterRule("PageVerify",

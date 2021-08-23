@@ -6,9 +6,9 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/flipped-aurora/gin-vue-admin/global"
-	_ "github.com/flipped-aurora/gin-vue-admin/packfile"
-	"github.com/flipped-aurora/gin-vue-admin/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	_ "github.com/flipped-aurora/gin-vue-admin/server/packfile"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"

@@ -1,6 +1,6 @@
 package response
 
-import "github.com/flipped-aurora/gin-vue-admin/model/system"
+import "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
 type SysAPIResponse struct {
 	Api system.SysApi `json:"api"`

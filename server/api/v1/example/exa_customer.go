@@ -1,12 +1,12 @@
 package example
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/global"
-	"github.com/flipped-aurora/gin-vue-admin/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/model/example"
-	exampleRes "github.com/flipped-aurora/gin-vue-admin/model/example/response"
-	"github.com/flipped-aurora/gin-vue-admin/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	exampleRes "github.com/flipped-aurora/gin-vue-admin/server/model/example/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )

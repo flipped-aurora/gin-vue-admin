@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/core"
-	"github.com/flipped-aurora/gin-vue-admin/global"
-	"github.com/flipped-aurora/gin-vue-admin/initialize"
+	"github.com/flipped-aurora/gin-vue-admin/server/core"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 )
 
 //go:generate go env -w GO111MODULE=on

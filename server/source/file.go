@@ -3,8 +3,8 @@ package source
 import (
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/global"
-	"github.com/flipped-aurora/gin-vue-admin/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/gookit/color"
 	"gorm.io/gorm"
 )

@@ -66,7 +66,7 @@
         </el-form-item>
         <el-form-item label="头像" label-width="80px">
           <div style="display:inline-block" @click="openHeaderChange">
-            <img v-if="userInfo.headerImg" class="header-img-box" :src="userInfo.headerImg">
+            <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
             <div v-else class="header-img-box">从媒体库选择</div>
           </div>
         </el-form-item>

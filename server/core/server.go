@@ -31,7 +31,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	欢迎使用 github.com/flipped-aurora/gin-vue-admin/server
-	当前版本:V2.4.4
+	当前版本:V2.4.5 alpha
     加群方式:微信号：shouzi_1994 QQ群：622360840
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html
 	默认前端文件运行地址:http://127.0.0.1:8080

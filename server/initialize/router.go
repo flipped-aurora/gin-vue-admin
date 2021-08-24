@@ -1,7 +1,7 @@
 package initialize
 
 import (
-	//"github.com/flipped-aurora/gva-plug-email"   // 在线仓库模式
+	//email "github.com/flipped-aurora/gva-plug-email"   // 在线仓库模式
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email" // 本地插件仓库地址模式
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/example_plugin"
 	"net/http"

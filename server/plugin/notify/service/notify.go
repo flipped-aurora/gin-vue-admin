@@ -17,7 +17,12 @@ import (
 type NotifyService struct {
 }
 
-func SendTextMessage(content string) error {
+//@author: [Espoir](https://github.com/nightsimon)
+//@function: NotifyController
+//@description: 钉钉通知测试
+//@return: err error
+
+func (e *NotifyService) SendTextMessage(content string) error {
 	msg := map[string]interface{}{
 		"msgtype": "text",
 		"text": map[string]string{
@@ -98,17 +103,4 @@ func sign(t int64, secret string) string {
 	hmac256.Write([]byte(strToHash))
 	data := hmac256.Sum(nil)
 	return base64.StdEncoding.EncodeToString(data)
-}
-
-//@author: [Espoir](https://github.com/nightsimon)
-//@function: NotifyController
-//@description: 钉钉通知测试
-//@return: err error
-
-func (e *NotifyService) Send() (err error) {
-	err = SendTextMessage("test")
-	if err != nil {
-		return err
-	}
-	return err
 }

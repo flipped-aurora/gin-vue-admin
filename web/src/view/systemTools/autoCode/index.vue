@@ -324,6 +324,13 @@ export default {
             if (data.headers?.success === 'false') {
               return
             } else {
+              if (this.form.autoMoveFile) {
+                this.$message({
+                  type: 'success',
+                  message: '自动化代码创建成功，自动移动成功'
+                })
+                return
+              }
               this.$message({
                 type: 'success',
                 message: '自动化代码创建成功，正在下载'

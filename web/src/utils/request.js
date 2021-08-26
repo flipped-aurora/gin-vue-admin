@@ -62,14 +62,16 @@ service.interceptors.response.use(
     if (response.headers['new-token']) {
       store.commit('user/setToken', response.headers['new-token'])
     }
-    debugger
     if (response.data.code === 0 || response.headers.success === 'true') {
+      if (response.headers.msg) {
+        response.data.msg = decodeURI(response.headers.msg)
+      }
       return response.data
     } else {
       ElMessage({
         showClose: true,
-        message: response.data.msg || decodeURI(response.headers.msg),
-        type: response.headers.msgtype || 'error'
+        message: response.data.msg,
+        type: 'error'
       })
       if (response.data.data && response.data.data.reload) {
         store.commit('user/LoginOut')

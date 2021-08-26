@@ -5,5 +5,3 @@
 项目github:"https://github.com/piexlmax/github.com/flipped-aurora/gin-vue-admin/server"
 
 希望大家给个star多多鼓励
-
-暂时不保存大家生成的结构体 只为方便一次性使用

@@ -4,5 +4,4 @@ type ServiceGroup struct {
 	FileUploadAndDownloadService
 	CustomerService
 	ExcelService
-	SimpleUploaderService
 }

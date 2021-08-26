@@ -1,4 +1,6 @@
 import { getDict } from '@/utils/dictionary'
+import { formatTimeToStr } from '@/utils/date'
+
 export default {
   data() {
     return {
@@ -10,6 +12,21 @@ export default {
     }
   },
   methods: {
+    formatBoolean: function(bool) {
+      if (bool !== null) {
+        return bool ? '是' : '否'
+      } else {
+        return ''
+      }
+    },
+    formatDate: function(time) {
+      if (time !== null && time !== '') {
+        var date = new Date(time)
+        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
+      } else {
+        return ''
+      }
+    },
     filterDict(value, type) {
       const rowLabel = this[type + 'Options'] && this[type + 'Options'].filter(item => item.value === value)
       return rowLabel && rowLabel[0] && rowLabel[0].label

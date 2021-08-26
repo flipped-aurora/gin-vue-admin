@@ -1,7 +1,7 @@
 // 权限按钮展示指令
 import { store } from '@/store'
-export const auth = (Vue) => {
-  Vue.directive('auth', {
+export const auth = (app) => {
+  app.directive('auth', {
     // 当被绑定的元素插入到 DOM 中时……
     bind: function(el, binding) {
       const userInfo = store.getters['user/userInfo']

@@ -10,9 +10,9 @@ type NotifyRouter struct {
 }
 
 func (s *NotifyRouter) InitRouter(Router *gin.RouterGroup) {
-	emailRouter := Router.Use(middleware.OperationRecord())
+	router := Router.Use(middleware.OperationRecord())
 	var Controller = api.ApiGroupApp.Api.NotifyController
 	{
-		emailRouter.POST("dingding", Controller)
+		router.POST("dingding", Controller)
 	}
 }

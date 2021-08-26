@@ -81,12 +81,12 @@
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
     />
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:">
       {{- if eq .FieldType "bool" }}
-          <el-switch active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" v-model="formData.{{.FieldJson}}" clearable ></el-switch>
+          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
           <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
@@ -101,7 +101,7 @@
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker type="date" placeholder="选择日期" v-model="formData.{{ .FieldJson }}" clearable />
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" clearable />
       {{- end }}
       {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable />
@@ -128,7 +128,6 @@ import {
   find{{.StructName}},
   get{{.StructName}}List
 } from '@/api/{{.PackageName}}' //  此处请自行替换地址
-import { formatTimeToStr } from '@/utils/date'
 import infoList from '@/mixins/infoList'
 export default {
   name: '{{.StructName}}',

@@ -12,7 +12,7 @@ type Api struct {
 }
 
 func (s *Api) NotifyController(c *gin.Context) {
-	if err := service.ServiceGroupApp.Send(); err != nil {
+	if err := service.ServiceGroupApp.SendTextMessage("test"); err != nil {
 		global.GVA_LOG.Error("发送失败!", zap.Any("err", err))
 		response.FailWithMessage("发送失败", c)
 	} else {

@@ -1,7 +1,6 @@
 package notify
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/notify/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/notify/router"
 	"github.com/gin-gonic/gin"
 )
@@ -12,10 +11,7 @@ type ddPlugin struct {
 	Url    string
 }
 
-func CreateDDPlug(Url string, Secret string, Token string) *ddPlugin {
-	global.GlobalConfig.Secret = Secret
-	global.GlobalConfig.Token = Token
-	global.GlobalConfig.Url = Url
+func CreateDDPlug() *ddPlugin {
 	return &ddPlugin{}
 }
 

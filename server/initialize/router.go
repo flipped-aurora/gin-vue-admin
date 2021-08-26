@@ -67,11 +67,7 @@ func Routers() *gin.Engine {
 	PluginInit(PublicGroup, example_plugin.ExamplePlugin)
 
 	//  钉钉通知，暂时开放权限
-	PluginInit(PublicGroup, notify.CreateDDPlug(
-		global.GVA_CONFIG.DingDing.Url,
-		global.GVA_CONFIG.DingDing.Secret,
-		global.GVA_CONFIG.DingDing.Token,
-	))
+	PluginInit(PublicGroup, notify.CreateDDPlug())
 
 	//  添加跟角色挂钩权限的插件 示例 本地示例模式于在线仓库模式注意上方的import 可以自行切换 效果相同
 	PluginInit(PrivateGroup, email.CreateEmailPlug(

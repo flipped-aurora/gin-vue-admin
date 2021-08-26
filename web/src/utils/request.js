@@ -59,10 +59,10 @@ service.interceptors.request.use(
 service.interceptors.response.use(
   response => {
     closeLoading()
-
     if (response.headers['new-token']) {
       store.commit('user/setToken', response.headers['new-token'])
     }
+    debugger
     if (response.data.code === 0 || response.headers.success === 'true') {
       return response.data
     } else {

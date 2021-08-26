@@ -22,7 +22,7 @@ type NotifyService struct {
 //@description: 钉钉通知测试
 //@return: err error
 
-func (e *NotifyService) SendTextMessage(content string) error {
+func (e *NotifyService) SendTextMessage(content string) (err error) {
 	msg := map[string]interface{}{
 		"msgtype": "text",
 		"text": map[string]string{

@@ -34,11 +34,6 @@ email:
   secret: 'xxx'
   nickname: 'test'
 
-dingding:
-  url: 'https://oapi.dingtalk.com/robot/send'
-  secret: 'SEC38425b7bd57c6bca9ce20611c41b437994ed65e0ddbd42e840ffa7a8c7da2106'
-  token: '77d18293e221b3b7bdae7330d19a213c3cbb20fa07de5f4c273c0363ae475c34'
-
 # casbin configuration
 casbin:
   model-path: './resource/rbac_model.conf'

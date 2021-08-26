@@ -39,14 +39,14 @@ func SendMessage(msg interface{}) error {
 	}
 
 	value := url.Values{}
-	value.Set("access_token", global.GlobalConfig.Token)
-	if global.GlobalConfig.Secret != "" {
+	value.Set("access_token", global.GlobalConfig_.Token)
+	if global.GlobalConfig_.Secret != "" {
 		t := time.Now().UnixNano() / 1e6
 		value.Set("timestamp", fmt.Sprintf("%d", t))
-		value.Set("sign", sign(t, global.GlobalConfig.Secret))
+		value.Set("sign", sign(t, global.GlobalConfig_.Secret))
 	}
 
-	request, err := http.NewRequest(http.MethodPost, global.GlobalConfig.Url, body)
+	request, err := http.NewRequest(http.MethodPost, global.GlobalConfig_.Url, body)
 	if err != nil {
 		return fmt.Errorf("error request: %v", err.Error())
 	}

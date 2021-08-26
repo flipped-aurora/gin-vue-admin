@@ -32,7 +32,7 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column label="日期" width="180">
-        <template slot-scope="scope">{{ scope.row.CreatedAt|formatDate }}</template>
+        <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
       </el-table-column>
 
       <el-table-column label="展示值" prop="label" width="120" />
@@ -40,21 +40,23 @@
       <el-table-column label="字典值" prop="value" width="120" />
 
       <el-table-column label="启用状态" prop="status" width="120">
-        <template slot-scope="scope">{{ scope.row.status|formatBoolean }}</template>
+        <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
       </el-table-column>
 
       <el-table-column label="排序标记" prop="sort" width="120" />
 
       <el-table-column label="按钮组">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="small" type="primary" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
-          <el-popover v-model="scope.row.visible" placement="top" width="160">
+          <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="deleteSysDictionaryDetail(scope.row)">确定</el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+            <template #reference>
+              <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
@@ -71,7 +73,7 @@
       @size-change="handleSizeChange"
     />
 
-    <el-dialog :before-close="closeDialog" :visible.sync="dialogFormVisible" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="110px">
         <el-form-item label="展示值" prop="label">
           <el-input
@@ -98,10 +100,12 @@
           <el-input-number v-model.number="formData.sort" placeholder="排序标记" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="enterDialog">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -114,28 +118,10 @@ import {
   findSysDictionaryDetail,
   getSysDictionaryDetailList
 } from '@/api/sysDictionaryDetail' //  此处请自行替换地址
-import { formatTimeToStr } from '@/utils/date'
 import infoList from '@/mixins/infoList'
 
 export default {
   name: 'SysDictionaryDetail',
-  filters: {
-    formatDate: function(time) {
-      if (time !== null && time !== '') {
-        var date = new Date(time)
-        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
-      } else {
-        return ''
-      }
-    },
-    formatBoolean: function(bool) {
-      if (bool !== null) {
-        return bool ? '是' : '否'
-      } else {
-        return ''
-      }
-    }
-  },
   mixins: [infoList],
   data() {
     return {

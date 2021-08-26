@@ -3,11 +3,13 @@ import { asyncRouterHandle } from '@/utils/asyncRouter'
 import { asyncMenu } from '@/api/menu'
 
 const routerList = []
+
 const formatRouter = (routes) => {
   routes && routes.map(item => {
-    if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404') {
+    if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404' && !item.hidden) {
       routerList.push({ label: item.meta.title, value: item.name })
     }
+    item.meta.hidden = item.hidden
     if (item.children && item.children.length > 0) {
       formatRouter(item.children)
     }
@@ -18,7 +20,7 @@ export const router = {
   namespaced: true,
   state: {
     asyncRouters: [],
-    routerList: routerList
+    routerList: routerList,
   },
   mutations: {
     setRouterList(state, routerList) {
@@ -42,24 +44,22 @@ export const router = {
         children: []
       }]
       const asyncRouterRes = await asyncMenu()
-      if (asyncRouterRes.code !== 0) {
-        return
-      }
-      const asyncRouter = asyncRouterRes.data && asyncRouterRes.data.menus
+      const asyncRouter = asyncRouterRes.data.menus
       asyncRouter.push({
         path: '404',
         name: '404',
         hidden: true,
         meta: {
-          title: '迷路了*。*'
+          title: '迷路了*。*',
         },
         component: 'view/error/index.vue'
       })
       formatRouter(asyncRouter)
       baseRouter[0].children = asyncRouter
       baseRouter.push({
-        path: '*',
+        path: '/:catchAll(.*)',
         redirect: '/layout/404'
+
       })
       asyncRouterHandle(baseRouter)
       commit('setAsyncRouter', baseRouter)
@@ -74,9 +74,6 @@ export const router = {
     },
     routerList(state) {
       return state.routerList
-    },
-    defaultRouter(state) {
-      return state.defaultRouter
     }
   }
 }

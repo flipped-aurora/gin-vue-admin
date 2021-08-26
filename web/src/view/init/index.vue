@@ -82,7 +82,6 @@ export default {
   methods: {
     showNext() {
       this.hello = this.hello + 1
-      console.log(this.hello)
     },
     goDoc() {
       window.open('https://www.gin-vue-admin.com/docs/first_master#3-init')

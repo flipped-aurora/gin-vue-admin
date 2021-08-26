@@ -3,7 +3,7 @@
     <!-- 从数据库直接获取字段 -->
     <el-collapse v-model="activeNames">
       <el-collapse-item name="1">
-        <template slot="title">
+        <template #title>
           <div :style="{fontSize:'16px',paddingLeft:'20px'}">
             点这里从现有数据库创建代码
             <i class="header-icon el-icon-thumb" />
@@ -61,7 +61,7 @@
         <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" />
       </el-form-item>
       <el-form-item>
-        <template slot="label">
+        <template #label>
           <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
             <div> 自动创建API </div>
           </el-tooltip>
@@ -69,7 +69,7 @@
         <el-checkbox v-model="form.autoCreateApiToSql" />
       </el-form-item>
       <el-form-item>
-        <template slot="label">
+        <template #label>
           <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
             <div> 自动移动文件 </div>
           </el-tooltip>
@@ -94,7 +94,7 @@
       <el-table-column prop="fieldSearchType" label="搜索条件" width="130" />
       <el-table-column prop="dictType" label="字典" width="130" />
       <el-table-column label="操作" width="300">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button
             size="mini"
             type="primary"
@@ -113,13 +113,15 @@
             :disabled="(scope.$index + 1) === form.fields.length"
             @click="moveDownField(scope.$index)"
           >下移</el-button>
-          <el-popover v-model="scope.row.visible" placement="top">
+          <el-popover v-model:visible="scope.row.visible" placement="top">
             <p>确定删除吗？</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
             </div>
-            <el-button slot="reference" size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+            <template #reference>
+              <el-button size="mini" type="danger" icon="el-icon-delete">删除</el-button>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
@@ -131,19 +133,23 @@
       <el-button size="mini" type="primary" @click="enterForm(false)">生成代码</el-button>
     </div>
     <!-- 组件弹窗 -->
-    <el-dialog title="组件内容" :visible.sync="dialogFlag">
+    <el-dialog v-model="dialogFlag" title="组件内容">
       <FieldDialog v-if="dialogFlag" ref="fieldDialog" :dialog-middle="dialogMiddle" />
-      <div slot="footer" class="dialog-footer">
-        <el-button size="mini" @click="closeDialog">取 消</el-button>
-        <el-button size="mini" type="primary" @click="enterDialog">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button size="mini" @click="closeDialog">取 消</el-button>
+          <el-button size="mini" type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
 
-    <el-dialog :visible.sync="previewFlag">
+    <el-dialog v-model="previewFlag">
       <PreviewCodeDialg v-if="previewFlag" :preview-code="preViewCode" />
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="previewFlag = false">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="previewFlag = false">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>

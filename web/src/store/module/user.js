@@ -2,7 +2,7 @@ import { login, getUserInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { setUserInfo } from '@/api/user'
-import { Message } from 'element-ui'
+import { ElMessage } from 'element-plus'
 
 export const user = {
   namespaced: true,
@@ -16,7 +16,7 @@ export const user = {
       activeColor: '#1890ff',
       baseColor: '#fff'
     },
-    token: ''
+    token: '',
   },
   mutations: {
     setUserInfo(state, userInfo) {
@@ -70,7 +70,9 @@ export const user = {
         commit('setToken', res.data.token)
         await dispatch('router/SetAsyncRouter', {}, { root: true })
         const asyncRouters = rootGetters['router/asyncRouters']
-        router.addRoutes(asyncRouters)
+        asyncRouters.map(asyncRouter => {
+          router.addRoute(asyncRouter)
+        })
         // const redirect = router.history.current.query.redirect
         // console.log(redirect)
         // if (redirect) {
@@ -91,7 +93,7 @@ export const user = {
       const res = await setUserInfo({ activeColor: data, ID: state.userInfo.ID })
       if (res.code === 0) {
         commit('ChangeActiveColor', data)
-        Message({
+        ElMessage({
           type: 'success',
           message: '设置成功'
         })
@@ -101,7 +103,7 @@ export const user = {
       const res = await setUserInfo({ sideMode: data, ID: state.userInfo.ID })
       if (res.code === 0) {
         commit('ChangeSideMode', data)
-        Message({
+        ElMessage({
           type: 'success',
           message: '设置成功'
         })
@@ -111,7 +113,7 @@ export const user = {
       const res = await setUserInfo({ baseColor: data, ID: state.userInfo.ID })
       if (res.code === 0) {
         commit('ChangeBaseColor', data)
-        Message({
+        ElMessage({
           type: 'success',
           message: '设置成功'
         })
@@ -152,6 +154,5 @@ export const user = {
       }
       return state.userInfo.activeColor
     }
-
   }
 }

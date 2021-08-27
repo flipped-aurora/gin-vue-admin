@@ -155,8 +155,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.AutoMoveErr) {
-			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msgtype", "success")
+			c.Writer.Header().Add("success", "true")
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
 		} else {
 			c.Writer.Header().Add("success", "false")

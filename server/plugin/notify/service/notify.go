@@ -22,19 +22,49 @@ type NotifyService struct {
 //@description: 钉钉通知测试
 //@return: err error
 
-func (e *NotifyService) SendTextMessage(content string) (err error) {
+func (e *NotifyService) SendTextMessage(content string, atMobiles []string, isAtAll bool) (err error) {
 	msg := map[string]interface{}{
 		"msgtype": "text",
 		"text": map[string]string{
 			"content": content,
 		},
-		//"at": map[string]interface{}{
-		//	"atMobiles": atMobiles,
-		//	"isAtAll":   isAtAll,
-		//},
+		"at": map[string]interface{}{
+			"atMobiles": atMobiles,
+			"isAtAll":   isAtAll,
+		},
 	}
 	return SendMessage(msg)
 }
+
+func (e *NotifyService) SendLinkMessage(content, title, picUrl, messageUrl string) (err error) {
+	msg := map[string]interface{}{
+		"msgtype": "link",
+		"link": map[string]string{
+			"text":       content,
+			"title":      title,
+			"picUrl":     picUrl,
+			"messageUrl": messageUrl,
+		},
+	}
+	return SendMessage(msg)
+}
+
+func (e *NotifyService) SendMarkdownMessage(content, title string, atMobiles []string, isAtAll bool) (err error) {
+	msg := map[string]interface{}{
+		"msgtype": "markdown",
+		"markdown": map[string]string{
+			"text":  content,
+			"title": title,
+		},
+		"at": map[string]interface{}{
+			"atMobiles": atMobiles,
+			"isAtAll":   isAtAll,
+		},
+	}
+	return SendMessage(msg)
+}
+
+//	其余方法请参考 https://developers.dingtalk.com/document/robots/custom-robot-access?spm=ding_open_doc.document.0.0.7f8710afbfzduV#topic-2026027
 
 func SendMessage(msg interface{}) error {
 	body := bytes.NewBuffer(nil)

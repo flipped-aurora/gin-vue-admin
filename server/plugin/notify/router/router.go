@@ -11,8 +11,8 @@ type NotifyRouter struct {
 
 func (s *NotifyRouter) InitRouter(Router *gin.RouterGroup) {
 	router := Router.Use(middleware.OperationRecord())
-	var Controller = api.ApiGroupApp.Api.NotifyController
+	var SendTextMessage = api.ApiGroupApp.Api.SendTextMessage
 	{
-		router.POST("dingding", Controller)
+		router.POST("sendTextMessage", SendTextMessage)
 	}
 }

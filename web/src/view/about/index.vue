@@ -3,7 +3,9 @@
     <el-row :gutter="10">
       <el-col :span="12">
         <el-card>
-          <div slot="header">gin-vue-admin</div>
+          <template #header>
+            <el-divider>gin-vue-admin</el-divider>
+          </template>
           <div>
             <el-row>
               <el-col :span="8" :offset="8">
@@ -48,7 +50,9 @@
           </div>
         </el-card>
         <el-card style="margin-top: 20px">
-          <div slot="header">flipped-aurora团队</div>
+          <template #header>
+            <div>flipped-aurora团队</div>
+          </template>
           <div>
             <el-row>
               <el-col :span="8" :offset="8">
@@ -62,23 +66,23 @@
               </el-col>
             </el-row>
             <el-row style="margin-left: 40px" :gutter="20">
-              <template v-for="(item, index) in members">
-                <el-col :key="index" :span="8">
-                  <a :href="item.html_url">
-                    <img class="avatar-img" :src="item.avatar_url">
-                    <a class="author-name" style="">{{ item.login }}</a>
-                  </a>
-                </el-col>
-              </template>
+              <el-col v-for="(item, index) in members" :key="index" :span="8">
+                <a :href="item.html_url">
+                  <img class="avatar-img" :src="item.avatar_url">
+                  <a class="author-name" style="">{{ item.login }}</a>
+                </a>
+              </el-col>
             </el-row>
           </div>
         </el-card>
       </el-col>
       <el-col :span="12">
         <el-card>
-          <div slot="header">
-            提交记录
-          </div>
+          <template #header>
+            <div>
+              提交记录
+            </div>
+          </template>
           <div>
             <Timeline
               :timeline-items="dataTimeline"

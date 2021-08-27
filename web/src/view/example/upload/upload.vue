@@ -12,7 +12,9 @@
             :show-file-list="false"
           >
             <el-button size="small" type="primary">点击上传</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            <template #tip>
+              <div class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </template>
           </el-upload>
         </el-col>
         <el-col :span="12">
@@ -24,19 +26,19 @@
 
       <el-table :data="tableData" border stripe>
         <el-table-column label="预览" width="100">
-          <template slot-scope="scope">
+          <template #default="scope">
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
         <el-table-column label="日期" prop="UpdatedAt" width="180">
-          <template slot-scope="scope">
-            <div>{{ scope.row.UpdatedAt | formatDate }}</div>
+          <template #default="scope">
+            <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
         <el-table-column label="文件名" prop="name" width="180" />
         <el-table-column label="链接" prop="url" min-width="300" />
         <el-table-column label="标签" prop="tag" width="100">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-tag
               :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
               disable-transitions
@@ -44,7 +46,7 @@
           </template>
         </el-table-column>
         <el-table-column label="操作" width="160">
-          <template slot-scope="scope">
+          <template #default="scope">
             <el-button size="small" type="text" @click="downloadFile(scope.row)">下载</el-button>
             <el-button size="small" type="text" @click="deleteFile(scope.row)">删除</el-button>
           </template>
@@ -70,7 +72,6 @@ import { mapGetters } from 'vuex'
 import infoList from '@/mixins/infoList'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import { formatTimeToStr } from '@/utils/date'
 import CustomPic from '@/components/customPic'
 import UploadImage from '@/components/upload/image.vue'
 export default {
@@ -78,16 +79,6 @@ export default {
   components: {
     CustomPic,
     UploadImage
-  },
-  filters: {
-    formatDate: function(time) {
-      if (time !== null && time !== '') {
-        var date = new Date(time)
-        return formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
-      } else {
-        return ''
-      }
-    }
   },
   mixins: [infoList],
   data() {

@@ -24,13 +24,15 @@
         <el-form-item>
           <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
           <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog('addApi')">新增</el-button>
-          <el-popover v-model="deleteVisible" placement="top" width="160">
+          <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
               <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
             </div>
-            <el-button slot="reference" icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
+            <template #reference>
+              <el-button icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
+            </template>
           </el-popover>
         </el-form-item>
       </el-form>
@@ -45,22 +47,21 @@
       <el-table-column label="api分组" min-width="150" prop="apiGroup" sortable="custom" />
       <el-table-column label="api简介" min-width="150" prop="description" sortable="custom" />
       <el-table-column label="请求" min-width="150" prop="method" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div>
             {{ scope.row.method }}
             <el-tag
               :key="scope.row.methodFiletr"
-              :type="scope.row.method|tagTypeFiletr"
+              :type="tagTypeFiletr(scope.row.method)"
               effect="dark"
               size="mini"
-            >{{ scope.row.method|methodFiletr }}</el-tag>
-            <!-- {{scope.row.method|methodFiletr}} -->
+            >{{ methodFiletr(scope.row.method) }}</el-tag>
           </div>
         </template>
       </el-table-column>
 
       <el-table-column fixed="right" label="操作" width="200">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="small" type="primary" icon="el-icon-edit" @click="editApi(scope.row)">编辑</el-button>
           <el-button
             size="small"
@@ -82,7 +83,7 @@
       @size-change="handleSizeChange"
     />
 
-    <el-dialog :before-close="closeDialog" :title="dialogTitle" :visible.sync="dialogFormVisible">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
       <el-form ref="apiForm" :inline="true" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="路径" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
@@ -105,10 +106,12 @@
         </el-form-item>
       </el-form>
       <div class="warning">新增Api需要在角色管理内配置权限才可使用</div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="enterDialog">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -151,17 +154,6 @@ const methodOptions = [
 
 export default {
   name: 'Api',
-  filters: {
-    methodFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      // return target && `${target.label}(${target.value})`
-      return target && `${target.label}`
-    },
-    tagTypeFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      return target && `${target.type}`
-    }
-  },
   mixins: [infoList],
   data() {
     return {
@@ -196,6 +188,14 @@ export default {
     this.getTableData()
   },
   methods: {
+    methodFiletr(value) {
+      const target = methodOptions.filter(item => item.value === value)[0]
+      return target && `${target.label}`
+    },
+    tagTypeFiletr(value) {
+      const target = methodOptions.filter(item => item.value === value)[0]
+      return target && `${target.type}`
+    },
     //  选中api
     handleSelectionChange(val) {
       this.apis = val

@@ -133,7 +133,6 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		example.ExaFileUploadAndDownload{},
 		example.ExaFile{},
 		example.ExaFileChunk{},
-		example.ExaSimpleUploader{},
 		example.ExaCustomer{},
 		system.SysOperationRecord{},
 		system.SysAutoCodeHistory{},

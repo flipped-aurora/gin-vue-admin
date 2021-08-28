@@ -1,16 +1,18 @@
 <template>
-  <el-drawer title="媒体库" :visible.sync="drawer">
+  <el-drawer v-model="drawer" title="媒体库">
     <div class="media">
       <el-image
         v-for="(item,key) in picList"
         :key="key"
         class="header-img-box-list"
         :src="(item.url && item.url.slice(0, 4) !== 'http')?path+item.url:item.url"
-        @click.native="chooseImg(item.url,target,targetKey)"
+        @click="chooseImg(item.url,target,targetKey)"
       >
-        <div slot="error" class="header-img-box-list">
-          <i class="el-icon-picture-outline" />
-        </div>
+        <template #error>
+          <div class="header-img-box-list">
+            <i class="el-icon-picture-outline" />
+          </div>
+        </template>
       </el-image>
     </div>
   </el-drawer>

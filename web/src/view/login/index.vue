@@ -9,11 +9,13 @@
           ref="loginForm"
           :model="loginForm"
           :rules="rules"
-          @keyup.enter.native="submitForm"
+          @keyup.enter="submitForm"
         >
           <el-form-item prop="username">
             <el-input v-model="loginForm.username" placeholder="请输入用户名">
-              <i slot="suffix" class="el-input__icon el-icon-user" />
+              <template #suffix>
+                <i class="el-input__icon el-icon-user" />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item prop="password">
@@ -22,11 +24,12 @@
               :type="lock === 'lock' ? 'password' : 'text'"
               placeholder="请输入密码"
             >
-              <i
-                slot="suffix"
-                :class="'el-input__icon el-icon-' + lock"
-                @click="changeLock"
-              />
+              <template #suffix>
+                <i
+                  :class="'el-input__icon el-icon-' + lock"
+                  @click="changeLock"
+                />
+              </template>
             </el-input>
           </el-form-item>
           <el-form-item style="position: relative">
@@ -40,14 +43,11 @@
               <img
                 v-if="picPath"
                 :src="picPath"
-                width="100%"
-                height="100%"
                 alt="请输入验证码"
                 @click="loginVerify()"
               >
             </div>
           </el-form-item>
-          <div />
           <el-form-item>
             <el-button
               type="primary"

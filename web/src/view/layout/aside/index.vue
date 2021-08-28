@@ -4,7 +4,7 @@
       <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
         <el-menu
           :collapse="isCollapse"
-          :collapse-transition="true"
+          :collapse-transition="false"
           :default-active="active"
           :background-color="sideMode"
           :active-text-color="activeColor"
@@ -25,6 +25,8 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import AsideComponent from '@/view/layout/aside/asideComponent'
+import { emitter } from '@/utils/bus.js'
+
 export default {
   name: 'Aside',
   components: {
@@ -52,12 +54,12 @@ export default {
       this.isCollapse = !this.isCollapse
     }
 
-    this.$bus.on('collapse', item => {
+    emitter.on('collapse', item => {
       this.isCollapse = item
     })
   },
   beforeDestroy() {
-    this.$bus.off('collapse')
+    emitter.off('collapse')
   },
   methods: {
     ...mapMutations('history', ['addHistory']),
@@ -84,13 +86,13 @@ export default {
 </script>
 
 <style lang="scss">
-.el-submenu__title,.el-menu-item{
+.el-sub-menu__title,.el-menu-item{
   i{
     color: inherit !important;
   }
 }
 
-.el-submenu__title:hover,.el-menu-item:hover{
+.el-sub-menu__title:hover,.el-menu-item:hover{
   i{
     color: inherit !important;
   }

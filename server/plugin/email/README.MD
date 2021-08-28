@@ -1,4 +1,5 @@
 ## GVA 邮件发送功能插件
+#### 开发者：GIN-VUE-ADMIN 官方
 
 ### 使用步骤
 
@@ -27,8 +28,9 @@
     true,
     ))
 
-#### 2. 配置说明
+### 2. 配置说明
 
+#### 2-1 全局配置结构体说明
     //其中 Form 和 Secret 通常来说就是用户名和密码
 
     type Email struct {
@@ -40,8 +42,17 @@
 	    Port     int     // 端口     请前往QQ或者你要发邮件的邮箱查看其smtp协议 大多为 465
 	    IsSSL    bool    // 是否SSL   是否开启SSL
     }
+#### 2-2 入参结构说明
+    //其中 Form 和 Secret 通常来说就是用户名和密码
 
-### 方法API
+    type Email struct {
+        To      string `json:"to"`      // 邮件发送给谁
+        Subject string `json:"subject"` // 邮件标题
+        Body    string `json:"body"`    // 邮件内容
+    }
+
+
+### 3. 方法API
 
     utils.EmailTest(邮件标题，邮件主体) 发送测试邮件
     例:utils.EmailTest("测试邮件"，"测试邮件")
@@ -49,3 +60,16 @@
     例:utils.ErrorToEmail("测试邮件"，"测试邮件")
     utils.Email(目标邮箱多个的话用逗号分隔，邮件标题，邮件主体) 发送测试邮件
     例:utils.Email(”a.qq.com,b.qq.com“,"测试邮件"，"测试邮件")
+
+### 4. 可直接调用的接口
+
+    测试接口： /email/emailTest [post] 已配置swagger
+
+    发送邮件接口接口： /email/emailSend [post] 已配置swagger
+    入参：
+    type Email struct {
+        To      string `json:"to"`      // 邮件发送给谁
+        Subject string `json:"subject"` // 邮件标题
+        Body    string `json:"body"`    // 邮件内容
+    }
+   

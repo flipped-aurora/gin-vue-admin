@@ -86,7 +86,9 @@
     <div class="bottom">
       <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="12">
-          <div class="chart-player" />
+          <div class="chart-player">
+            <iframe src="//player.bilibili.com/player.html?aid=504048096&bvid=BV1Rg411u7xH&cid=367498785&page=1" framespacing="0" class="iPlayer" allowfullscreen="false"> </iframe>
+          </div>
         </el-col>
         <el-col :xs="24" :sm="24" :lg="12">
           <div class="chart-player" />
@@ -197,6 +199,10 @@ export default {
       height: 270px;
       padding: 10px;
       background-color: #fff;
+    }
+    .iPlayer{
+      width: 100%;
+      height: 100%;
     }
   }
 }

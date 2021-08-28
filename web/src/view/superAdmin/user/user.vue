@@ -5,7 +5,7 @@
     </div>
     <el-table :data="tableData" border stripe>
       <el-table-column label="头像" min-width="50">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div :style="{'textAlign':'center'}">
             <CustomPic :pic-src="scope.row.headerImg" />
           </div>
@@ -15,7 +15,7 @@
       <el-table-column label="用户名" min-width="150" prop="userName" />
       <el-table-column label="昵称" min-width="150" prop="nickName" />
       <el-table-column label="用户角色" min-width="150">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-cascader
             v-model="scope.row.authorityIds"
             :options="authOptions"
@@ -29,14 +29,16 @@
         </template>
       </el-table-column>
       <el-table-column label="操作" min-width="150">
-        <template slot-scope="scope">
-          <el-popover v-model="scope.row.visible" placement="top" width="160">
+        <template #default="scope">
+          <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
             <p>确定要删除此用户吗</p>
             <div style="text-align: right; margin: 0">
               <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
               <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
             </div>
-            <el-button slot="reference" type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+            <template #reference>
+              <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+            </template>
           </el-popover>
         </template>
       </el-table-column>
@@ -53,7 +55,7 @@
       @size-change="handleSizeChange"
     />
 
-    <el-dialog :visible.sync="addUserDialog" custom-class="user-dialog" title="新增用户">
+    <el-dialog v-model="addUserDialog" custom-class="user-dialog" title="新增用户">
       <el-form ref="userForm" :rules="rules" :model="userInfo">
         <el-form-item label="用户名" label-width="80px" prop="username">
           <el-input v-model="userInfo.username" />
@@ -72,7 +74,8 @@
         </el-form-item>
         <el-form-item label="用户角色" label-width="80px" prop="authorityId">
           <el-cascader
-            v-model="userInfo.authorityIds"
+            v-if="userInfo"
+            v-model:visible="userInfo.authorityIds"
             :options="authOptions"
             :show-all-levels="false"
             :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
@@ -81,10 +84,12 @@
           />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeAddUserDialog">取 消</el-button>
-        <el-button type="primary" @click="enterAddUserDialog">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeAddUserDialog">取 消</el-button>
+          <el-button type="primary" @click="enterAddUserDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
     <ChooseImg ref="chooseImg" :target="userInfo" :target-key="`headerImg`" />
   </div>
@@ -155,7 +160,7 @@ export default {
         const authorityIds = user.authorities && user.authorities.map(i => {
           return i.authorityId
         })
-        this.$set(user, 'authorityIds', authorityIds)
+        user.authorityIds = authorityIds
       })
     },
     openHeaderChange() {

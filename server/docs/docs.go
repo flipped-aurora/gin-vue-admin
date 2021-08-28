@@ -24,108 +24,6 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/SimpleUploaderApi/checkFileMd5": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SimpleUploader"
-                ],
-                "summary": "断点续传插件版示例",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "md5",
-                        "name": "md5",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/SimpleUploaderApi/mergeFileMd5": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SimpleUploader"
-                ],
-                "summary": "合并文件",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "md5",
-                        "name": "md5",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"合并成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/SimpleUploaderApi/upload": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "multipart/form-data"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "SimpleUploader"
-                ],
-                "summary": "断点续传插件版示例",
-                "parameters": [
-                    {
-                        "type": "file",
-                        "description": "断点续传插件版示例",
-                        "name": "file",
-                        "in": "formData",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"切片创建成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/api/createApi": {
             "post": {
                 "security": [
@@ -1517,6 +1415,41 @@ var doc = `{
                     "System"
                 ],
                 "summary": "发送测试邮件",
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"发送成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/email/sendEmail": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "发送邮件",
+                "parameters": [
+                    {
+                        "description": "发送邮件必须的参数",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/response.Email"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"发送成功\"}",
@@ -4373,6 +4306,23 @@ var doc = `{
                 "pageSize": {
                     "description": "每页大小",
                     "type": "integer"
+                }
+            }
+        },
+        "response.Email": {
+            "type": "object",
+            "properties": {
+                "body": {
+                    "description": "邮件内容",
+                    "type": "string"
+                },
+                "subject": {
+                    "description": "邮件标题",
+                    "type": "string"
+                },
+                "to": {
+                    "description": "邮件发送给谁",
+                    "type": "string"
                 }
             }
         },

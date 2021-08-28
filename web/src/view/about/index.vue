@@ -79,20 +79,22 @@
       <el-col :span="12">
         <el-card>
           <template #header>
-            <div>
-              提交记录
-            </div>
+            <div>提交记录</div>
           </template>
           <div>
-            <Timeline
-              :timeline-items="dataTimeline"
-              :message-when-no-items="messageWhenNoItems"
-              :unique-timeline="true"
-              :unique-year="true"
-              :show-day-and-month="true"
-              order="desc"
-              date-locale="zh-CN"
-            />
+            <el-timeline>
+              <el-timeline-item
+                v-for="(item,index) in dataTimeline"
+                :key="index"
+                timestamp="2018/4/12"
+                placement="top"
+              >
+                <el-card>
+                  <h4>{{ item.title }}</h4>
+                  <p>{{ item.message }}</p>
+                </el-card>
+              </el-timeline-item>
+            </el-timeline>
           </div>
           <el-button
             class="load-more"
@@ -107,18 +109,14 @@
 
 <script>
 import { Commits, Members } from '@/api/github'
-import Timeline from 'timeline-vuejs'
 export default {
   name: 'About',
-  components: {
-    Timeline
-  },
   data() {
     return {
       messageWhenNoItems: 'There arent commits',
       members: [],
       dataTimeline: [],
-      page: 0
+      page: 0,
     }
   },
   created() {
@@ -138,7 +136,7 @@ export default {
               from: new Date(element.commit.author.date),
               title: element.commit.author.name,
               showDayAndMonth: true,
-              description: `<a style="color: #26191b" href="${element.html_url}">${element.commit.message}</a>`
+              message: element.commit.message,
             })
           }
         })
@@ -149,8 +147,8 @@ export default {
         this.members = data
         this.members.sort()
       })
-    }
-  }
+    },
+  },
 }
 </script>
 

@@ -21,10 +21,24 @@
         密钥))
 }
 ```
-### 3方法API
+
+### 3 参数说明
+#### 3-1 全局参数说明
+
+```go
+	Url    string `mapstructure:"url" json:"url" yaml:"url"`          // Url
+	Token  string `mapstructure:"token" json:"token" yaml:"token"`    // access_token
+	Secret string `mapstructure:"secret" json:"secret" yaml:"secret"` // 密钥
+```
+#### 3-2 请求入参说明
 ```go
 
-可调用方法
+
+```
+
+### 3方法API（可调用方法）
+```go
+
 //content 发送的内容
 //atMobiles 需要艾特的人的手机号 
 //isAtAll 是否艾特全体
@@ -34,8 +48,6 @@ SendTextMessage(content string,atMobiles []string,isAtAll bool)
 //title 内容标题
 //picUrl 配图
 //messageUrl 点击跳转路径
-//atMobiles 需要艾特的人的手机号 
-//isAtAll 是否艾特全体
 SendLinkMessage(content,title,picUrl,messageUrl string)
 
 //content 发送的内容(markdown语法)
@@ -46,20 +58,17 @@ SendMarkdownMessage(content,title string,atMobiles []string,isAtAll bool)
 
 ```
 
-### 4. 使用示例
+### 4. 可直接调用接口
 
-在代码中调用 `SendTextMessage` 方法即可
-```go
-// 示例
-func NotifyController(c *gin.Context) {
-    if err := service.ServiceGroupApp.SendTextMessage("test",[]string{"手机号"},是否艾特全体); err != nil {
-        global.GVA_LOG.Error("发送失败!", zap.Any("err", err))
-        response.FailWithMessage("发送失败", c)
-    } else {
-        response.OkWithData("发送成功", c)
+    发送文字消息接口： /notify/sendTextMessage [post] 已配置swagger
+    发送图文链接消息接口： /notify/sendLinkMessage [post] 已配置swagger
+    发送markdown消息接口： /notify/sendMarkdownMessage [post] 已配置swagger
+
+    入参：
+    type Email struct {
+        To      string `json:"to"`      // 邮件发送给谁
+        Subject string `json:"subject"` // 邮件标题
+        Body    string `json:"body"`    // 邮件内容
     }
-}
-
-```
 
 

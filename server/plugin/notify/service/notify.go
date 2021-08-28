@@ -18,8 +18,11 @@ type NotifyService struct {
 }
 
 //@author: [Espoir](https://github.com/nightsimon)
-//@function: NotifyController
-//@description: 钉钉通知测试
+//@function: SendTextMessage
+//@description: 发送钉钉文字信息
+//@params content string发送的文字内容
+//@params atMobiles []string 艾特的手机号
+//@params isAtAll bool 是否艾特全体
 //@return: err error
 
 func (e *NotifyService) SendTextMessage(content string, atMobiles []string, isAtAll bool) (err error) {
@@ -36,6 +39,15 @@ func (e *NotifyService) SendTextMessage(content string, atMobiles []string, isAt
 	return SendMessage(msg)
 }
 
+//@author: [Espoir](https://github.com/nightsimon)
+//@function: SendLinkMessage
+//@description: 发送钉钉图文链接信息
+//@params content string 发送的文字内容
+//@params title string 发送的标题
+//@params picUrl string 艾特的手机号
+//@params messageUrl string 是否艾特全体
+//@return: err error
+
 func (e *NotifyService) SendLinkMessage(content, title, picUrl, messageUrl string) (err error) {
 	msg := map[string]interface{}{
 		"msgtype": "link",
@@ -48,6 +60,15 @@ func (e *NotifyService) SendLinkMessage(content, title, picUrl, messageUrl strin
 	}
 	return SendMessage(msg)
 }
+
+//@author: [Espoir](https://github.com/nightsimon)
+//@function: SendMarkdownMessage
+//@description: 发送钉钉Markdown信息
+//@params content 发送的文字内容
+//@params title 发送的标题
+//@params atMobiles []string 艾特的手机号
+//@params isAtAll bool 是否艾特全体
+//@return: err error
 
 func (e *NotifyService) SendMarkdownMessage(content, title string, atMobiles []string, isAtAll bool) (err error) {
 	msg := map[string]interface{}{
@@ -63,8 +84,6 @@ func (e *NotifyService) SendMarkdownMessage(content, title string, atMobiles []s
 	}
 	return SendMessage(msg)
 }
-
-//	其余方法请参考 https://developers.dingtalk.com/document/robots/custom-robot-access?spm=ding_open_doc.document.0.0.7f8710afbfzduV#topic-2026027
 
 func SendMessage(msg interface{}) error {
 	body := bytes.NewBuffer(nil)
@@ -134,3 +153,5 @@ func sign(t int64, secret string) string {
 	data := hmac256.Sum(nil)
 	return base64.StdEncoding.EncodeToString(data)
 }
+
+//	其余方法请参考 https://developers.dingtalk.com/document/robots/custom-robot-access?spm=ding_open_doc.document.0.0.7f8710afbfzduV#topic-2026027

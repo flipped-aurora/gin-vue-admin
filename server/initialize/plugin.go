@@ -2,6 +2,9 @@ package initialize
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/ws"
+	"go.uber.org/zap"
+
 	//email "github.com/flipped-aurora/gva-plug-email"   // 在线仓库模式
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email" // 本地插件仓库地址模式
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/example_plugin"
@@ -18,7 +21,8 @@ func PluginInit(group *gin.RouterGroup, Plugin ...plugin.Plugin) {
 
 func InstallPlugin(PublicGroup *gin.RouterGroup, PrivateGroup *gin.RouterGroup) {
 	//  添加开放权限的插件 示例
-	PluginInit(PublicGroup, example_plugin.ExamplePlugin)
+	PluginInit(PublicGroup, example_plugin.ExamplePlugin, ws.GenerateWs(
+		zap.L(), 100, ws.DefaultCheckMap()))
 
 	//  添加跟角色挂钩权限的插件 示例 本地示例模式于在线仓库模式注意上方的import 可以自行切换 效果相同
 	PluginInit(PrivateGroup, email.CreateEmailPlug(

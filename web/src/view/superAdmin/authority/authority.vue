@@ -14,7 +14,7 @@
       <el-table-column label="角色id" min-width="180" prop="authorityId" />
       <el-table-column label="角色名称" min-width="180" prop="authorityName" />
       <el-table-column fixed="right" label="操作" width="460">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button size="mini" type="primary" @click="opdendrawer(scope.row)">设置权限</el-button>
           <el-button
             icon="el-icon-plus"
@@ -45,7 +45,7 @@
     </el-table>
     <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
     <!-- 新增角色弹窗 -->
-    <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible">
+    <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
       <el-form ref="authorityForm" :model="form" :rules="rules">
         <el-form-item label="父级角色" prop="parentId">
           <el-cascader
@@ -64,22 +64,24 @@
           <el-input v-model="form.authorityName" autocomplete="off" />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="enterDialog">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
 
-    <el-drawer v-if="drawer" :visible.sync="drawer" :with-header="false" size="40%" title="角色配置">
+    <el-drawer v-if="drawer" v-model="drawer" :with-header="false" size="40%" title="角色配置">
       <el-tabs :before-leave="autoEnter" class="role-box" type="border-card">
         <el-tab-pane label="角色菜单">
-          <Menus ref="menus" :row="activeRow" />
+          <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
         <el-tab-pane label="角色api">
-          <apis ref="apis" :row="activeRow" />
+          <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
         <el-tab-pane label="资源权限">
-          <Datas ref="datas" :authority="tableData" :row="activeRow" />
+          <Datas ref="datas" :authority="tableData" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -158,6 +160,9 @@ export default {
     await this.getTableData()
   },
   methods: {
+    changeRow(key, value) {
+      this.activeRow[key] = value
+    },
     autoEnter(activeName, oldActiveName) {
       const paneArr = ['menus', 'apis', 'datas']
       if (oldActiveName) {

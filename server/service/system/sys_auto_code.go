@@ -247,7 +247,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return err
 	}
 	if autoCode.AutoMoveFile {
-		return errors.New("创建代码成功并移动文件成功")
+		return system.AutoMoveErr
 	}
 	return nil
 

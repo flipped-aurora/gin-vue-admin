@@ -2,8 +2,8 @@
   <div>
     <el-button type="primary" class="drawer-container" icon="el-icon-setting" @click="showSettingDrawer" />
     <el-drawer
+      v-model="drawer"
       title="系统配置"
-      :visible.sync="drawer"
       :direction="direction"
       :before-close="handleClose"
     >

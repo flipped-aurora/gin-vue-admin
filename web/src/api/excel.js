@@ -1,5 +1,5 @@
 import service from '@/utils/request'
-import { Message } from 'element-ui'
+import { ElMessage } from 'element-plus'
 
 const handleFileError = (res, fileName) => {
   if (typeof (res.data) !== 'undefined') {
@@ -7,7 +7,7 @@ const handleFileError = (res, fileName) => {
       const reader = new FileReader()
       reader.onload = function() {
         const message = JSON.parse(reader.result).msg
-        Message({
+        ElMessage({
           showClose: true,
           message: message,
           type: 'error'

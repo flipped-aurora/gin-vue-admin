@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { Loading } from 'element-ui'
+import { ElLoading } from 'element-plus'
 
 let loadingInstance
 const service = axios.create()
 
 service.interceptors.request.use((config) => {
-  loadingInstance = Loading.service({ fullscreen: true })
+  loadingInstance = ElLoading.service({ fullscreen: true })
   return config
 })
 

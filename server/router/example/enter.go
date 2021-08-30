@@ -4,5 +4,4 @@ type RouterGroup struct {
 	CustomerRouter
 	ExcelRouter
 	FileUploadAndDownloadRouter
-	SimpleUploaderRouter
 }

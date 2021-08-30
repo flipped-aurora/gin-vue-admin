@@ -74,8 +74,7 @@
         </el-form-item>
         <el-form-item label="用户角色" label-width="80px" prop="authorityId">
           <el-cascader
-            v-if="userInfo"
-            v-model:visible="userInfo.authorityIds"
+            v-model="userInfo.authorityIds"
             :options="authOptions"
             :show-all-levels="false"
             :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"

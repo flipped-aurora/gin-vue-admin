@@ -2,9 +2,6 @@
 * gin-vue-admin web框架组
 *
 * */
-// time line css
-import '../../node_modules/timeline-vuejs/dist/timeline-vuejs.css'
-
 // 加载网站配置文件夹
 import config from './config'
 

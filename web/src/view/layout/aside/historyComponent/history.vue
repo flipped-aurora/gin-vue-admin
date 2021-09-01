@@ -16,7 +16,9 @@
         :tab="item"
         class="gva-tab"
       >
-<span slot="label" :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{ backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+      <template #label>
+          <span :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+        </template>
       </el-tab-pane>
     </el-tabs>
 
@@ -106,13 +108,6 @@ export default {
       this.activeValue = window.sessionStorage.getItem('activeValue')
     }
     this.setTab(this.$route)
-  },
-  mounted(){
- //全局监听 关闭当前页面函数
-    this.$bus.on('closeThisPage', ()=>{
-      const router = this.$route.path.split("/")
-      this.removeTab(`${router[router.length - 1]}`)
-    })
   },
   beforeDestroy() {
     emitter.off('collapse')
@@ -251,7 +246,6 @@ export default {
       })
     },
     removeTab(tab) {
-      console.log(tab)
       const index = this.historys.findIndex(
         item => getFmtString(item) === tab
       )

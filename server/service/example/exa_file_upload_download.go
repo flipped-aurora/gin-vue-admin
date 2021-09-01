@@ -2,12 +2,13 @@ package example
 
 import (
 	"errors"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/request"
-	"gin-vue-admin/model/example"
-	"gin-vue-admin/utils/upload"
 	"mime/multipart"
 	"strings"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/upload"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)

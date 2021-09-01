@@ -8,7 +8,6 @@ type RouterGroup struct {
 	CasbinRouter
 	DictionaryRouter
 	DictionaryDetailRouter
-	EmailRouter
 	InitRouter
 	JwtRouter
 	MenuRouter

@@ -1,11 +1,15 @@
 package system
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/request"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/utils"
+	"fmt"
+	"path/filepath"
 	"strings"
+	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"go.uber.org/zap"
 )
@@ -55,8 +59,16 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(id uint) error {
 		}
 	}
 	// 删除文件
+
 	for _, path := range strings.Split(md.AutoCodePath, ";") {
-		_ = utils.DeLFile(path)
+		// 迁移
+		nPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			"rm_file", time.Now().Format("20060102"), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
+		err = utils.FileMove(path, nPath)
+		if err != nil {
+			fmt.Println(">>>>>>>>>>>>>>>>>>>", err)
+		}
+		//_ = utils.DeLFile(path)
 	}
 	// 清除注入
 	for _, v := range strings.Split(md.InjectionMeta, ";") {

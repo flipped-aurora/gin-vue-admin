@@ -2,9 +2,9 @@
   <div class="router-history">
     <el-tabs
       v-model="activeValue"
-      :closable="!(historys.length===1&&this.$route.name===defaultRouter)"
+      :closable="!(historys.length===1&&$route.name===defaultRouter)"
       type="card"
-      @contextmenu.prevent.native="openContextMenu($event)"
+      @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
     >
@@ -16,7 +16,7 @@
         :tab="item"
         class="gva-tab"
       >
-        <span slot="label" :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{ backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+<span slot="label" :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{ backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
       </el-tab-pane>
     </el-tabs>
 
@@ -32,6 +32,8 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { emitter } from '@/utils/bus.js'
+
 const getFmtString = (item) => {
   return item.name +
       JSON.stringify(item.query) +
@@ -75,15 +77,15 @@ export default {
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
       this.activeValue = window.sessionStorage.getItem('activeValue')
       if (now && to && now.name === to.name) {
-        this.$bus.$emit('reload')
+        emitter.emit('reload')
       }
     }
   },
   created() {
-    this.$bus.on('mobile', isMobile => {
+    emitter.on('mobile', isMobile => {
       this.isMobile = isMobile
     })
-    this.$bus.on('collapse', isCollapse => {
+    emitter.on('collapse', isCollapse => {
       this.isCollapse = isCollapse
     })
     const initHistorys = [
@@ -113,8 +115,8 @@ export default {
     })
   },
   beforeDestroy() {
-    this.$bus.off('collapse')
-    this.$bus.off('mobile')
+    emitter.off('collapse')
+    emitter.off('mobile')
   },
   methods: {
     name(item) {
@@ -126,7 +128,6 @@ export default {
       }
       let id = ''
       if (e.srcElement.nodeName === 'SPAN') {
-        console.log(e)
         id = e.srcElement.offsetParent.id
       } else {
         id = e.srcElement.id
@@ -242,7 +243,7 @@ export default {
       )
     },
     changeTab(component) {
-      const tab = component.$attrs.tab
+      const tab = component.instance.attrs.tab
       this.$router.push({
         name: tab.name,
         query: tab.query,

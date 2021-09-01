@@ -1,12 +1,12 @@
 package autocode
 
 import (
-	"gin-vue-admin/global"
-    "gin-vue-admin/model/autocode"
-    "gin-vue-admin/model/common/request"
-    autocodeReq "gin-vue-admin/model/autocode/request"
-    "gin-vue-admin/model/common/response"
-    "gin-vue-admin/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+    "github.com/flipped-aurora/gin-vue-admin/server/model/autocode"
+    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+    autocodeReq "github.com/flipped-aurora/gin-vue-admin/server/model/autocode/request"
+    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+    "github.com/flipped-aurora/gin-vue-admin/server/service"
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
 )
@@ -103,7 +103,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body autocode.{{.StructName}} true "用id查询{{.StructName}}"
+// @Param data query autocode.{{.StructName}} true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
@@ -123,7 +123,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body autocodeReq.{{.StructName}}Search true "分页获取{{.StructName}}列表"
+// @Param data query autocodeReq.{{.StructName}}Search true "分页获取{{.StructName}}列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {

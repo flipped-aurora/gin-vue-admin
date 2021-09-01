@@ -20,7 +20,7 @@ type AliyunOSS struct {
 	AccessKeySecret string `mapstructure:"access-key-secret" json:"accessKeySecret" yaml:"access-key-secret"`
 	BucketName      string `mapstructure:"bucket-name" json:"bucketName" yaml:"bucket-name"`
 	BucketUrl       string `mapstructure:"bucket-url" json:"bucketUrl" yaml:"bucket-url"`
-	BasePath 		string `mapstructure:"base-path" json:"basePath" yaml:"base-path"`
+	BasePath        string `mapstructure:"base-path" json:"basePath" yaml:"base-path"`
 }
 type TencentCOS struct {
 	Bucket     string `mapstructure:"bucket" json:"bucket" yaml:"bucket"`

@@ -3,14 +3,15 @@ package system
 import (
 	"database/sql"
 	"fmt"
-	"gin-vue-admin/config"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/example"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
-	"gin-vue-admin/source"
-	"gin-vue-admin/utils"
 	"path/filepath"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/config"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/source"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
@@ -132,7 +133,6 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		example.ExaFileUploadAndDownload{},
 		example.ExaFile{},
 		example.ExaFileChunk{},
-		example.ExaSimpleUploader{},
 		example.ExaCustomer{},
 		system.SysOperationRecord{},
 		system.SysAutoCodeHistory{},

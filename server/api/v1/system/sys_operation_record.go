@@ -1,12 +1,12 @@
 package system
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/request"
-	"gin-vue-admin/model/common/response"
-	"gin-vue-admin/model/system"
-	systemReq "gin-vue-admin/model/system/request"
-	"gin-vue-admin/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -76,7 +76,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body system.SysOperationRecord true "Id"
+// @Param data query system.SysOperationRecord true "Id"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysOperationRecord/findSysOperationRecord [get]
 func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
@@ -99,7 +99,7 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SysOperationRecordSearch true "页码, 每页大小, 搜索条件"
+// @Param data query request.SysOperationRecordSearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
 func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {

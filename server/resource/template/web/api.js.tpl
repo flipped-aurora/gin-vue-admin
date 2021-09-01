@@ -69,7 +69,7 @@ export const update{{.StructName}} = (data) => {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body model.{{.StructName}} true "用id查询{{.StructName}}"
+// @Param data query model.{{.StructName}} true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 export const find{{.StructName}} = (params) => {
@@ -85,7 +85,7 @@ export const find{{.StructName}} = (params) => {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.PageInfo true "分页获取{{.StructName}}列表"
+// @Param data query request.PageInfo true "分页获取{{.StructName}}列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 export const get{{.StructName}}List = (params) => {

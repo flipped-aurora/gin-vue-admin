@@ -3,13 +3,14 @@ package system
 import (
 	"errors"
 	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/response"
-	"gin-vue-admin/model/system"
-	systemReq "gin-vue-admin/model/system/request"
-	"gin-vue-admin/utils"
 	"net/url"
 	"os"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -154,8 +155,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.AutoMoveErr) {
-			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msgtype", "success")
+			c.Writer.Header().Add("success", "true")
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
 		} else {
 			c.Writer.Header().Add("success", "false")

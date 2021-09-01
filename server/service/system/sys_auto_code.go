@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
-	"gin-vue-admin/utils"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"gorm.io/gorm"
 )
@@ -246,7 +247,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return err
 	}
 	if autoCode.AutoMoveFile {
-		return errors.New("创建代码成功并移动文件成功")
+		return system.AutoMoveErr
 	}
 	return nil
 

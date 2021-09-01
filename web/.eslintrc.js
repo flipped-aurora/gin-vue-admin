@@ -16,6 +16,7 @@ module.exports = {
   // add your custom rules here
   // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    'vue/no-v-model-argument':'off',
     'vue/max-attributes-per-line': [
       2,
       {
@@ -52,7 +53,7 @@ module.exports = {
         properties: 'always'
       }
     ],
-    'comma-dangle': [2, 'never'],
+    'comma-dangle': [2, 'only-multiline'],
     'comma-spacing': [
       2,
       {

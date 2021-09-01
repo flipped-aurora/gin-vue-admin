@@ -2,13 +2,14 @@ package middleware
 
 import (
 	"errors"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/response"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
-	"gin-vue-admin/service"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"

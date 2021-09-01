@@ -3,11 +3,12 @@ package core
 import (
 	"flag"
 	"fmt"
-	"gin-vue-admin/global"
-	_ "gin-vue-admin/packfile"
-	"gin-vue-admin/utils"
 	"os"
 	"path/filepath"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	_ "github.com/flipped-aurora/gin-vue-admin/server/packfile"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"

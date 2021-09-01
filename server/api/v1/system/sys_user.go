@@ -1,20 +1,21 @@
 package system
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/middleware"
-	"gin-vue-admin/model/common/request"
-	"gin-vue-admin/model/common/response"
-	"gin-vue-admin/model/system"
-	systemReq "gin-vue-admin/model/system/request"
-	systemRes "gin-vue-admin/model/system/response"
-	"gin-vue-admin/utils"
 	"strconv"
 	"time"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 )
 
@@ -142,7 +143,7 @@ func (b *BaseApi) Register(c *gin.Context) {
 // @Produce  application/json
 // @Param data body systemReq.ChangePasswordStruct true "用户名, 原密码, 新密码"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
-// @Router /user/changePassword [put]
+// @Router /user/changePassword [post]
 func (b *BaseApi) ChangePassword(c *gin.Context) {
 	var user systemReq.ChangePasswordStruct
 	_ = c.ShouldBindJSON(&user)

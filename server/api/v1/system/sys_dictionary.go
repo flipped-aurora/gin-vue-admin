@@ -1,11 +1,11 @@
 package system
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/common/response"
-	"gin-vue-admin/model/system"
-	"gin-vue-admin/model/system/request"
-	"gin-vue-admin/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -75,7 +75,7 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body system.SysDictionary true "ID或字典英名"
+// @Param data query system.SysDictionary true "ID或字典英名"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionary/findSysDictionary [get]
 func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
@@ -94,7 +94,7 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.SysDictionarySearch true "页码, 每页大小, 搜索条件"
+// @Param data query request.SysDictionarySearch true "页码, 每页大小, 搜索条件"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysDictionary/getSysDictionaryList [get]
 func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {

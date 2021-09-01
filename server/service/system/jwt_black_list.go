@@ -3,9 +3,10 @@ package system
 import (
 	"context"
 	"errors"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/system"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
 	"gorm.io/gorm"
 )

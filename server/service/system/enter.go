@@ -10,7 +10,6 @@ type ServiceGroup struct {
 	CasbinService
 	DictionaryService
 	DictionaryDetailService
-	EmailService
 	InitDBService
 	MenuService
 	OperationRecordService

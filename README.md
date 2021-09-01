@@ -16,7 +16,7 @@
 
 [github地址](https://github.com/flipped-aurora/gin-vue-admin): https://github.com/flipped-aurora/gin-vue-admin
 
-[vue3版本分支地址](https://github.com/flipped-aurora/gin-vue-admin/tree/vue3Develop): https://github.com/flipped-aurora/gin-vue-admin/tree/vue3Develop
+[插件仓库以及开发规范](https://github.com/flipped-aurora/gva-plugins):https://github.com/flipped-aurora/gva-plugins
 
 [审批流分支](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow): https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow
 

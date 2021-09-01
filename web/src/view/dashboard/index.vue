@@ -57,11 +57,11 @@
       <el-col>
         <el-card shadow="hover">
           <h2>
-            使用教学：<a style="color:#409EFF" target="view_window" href="https://www.bilibili.com/video/BV1fV411y7dT/">https://www.bilibili.com/video/BV1fV411y7dT/</a>
+            使用教学：<a style="color:#409EFF" target="view_window" href="https://www.bilibili.com/video/BV1Rg411u7xH/">https://www.bilibili.com/video/BV1Rg411u7xH/</a>
           </h2>
           <br>
           <h2>
-            工作流教学：<a style="color:#409EFF" target="view_window" href="https://www.bilibili.com/video/BV1Ka411F7Ji/">https://www.bilibili.com/video/BV1Ka411F7Ji/</a>
+            插件仓库：<a style="color:#409EFF" target="view_window" href="https://github.com/flipped-aurora/gva-plugins">https://github.com/flipped-aurora/gva-plugins</a>
           </h2>
           <div />
         </el-card>
@@ -80,16 +80,6 @@
             <i :class="card.icon" :style="{ color: card.color }" />
             <p>{{ card.label }}</p>
           </el-card>
-        </el-col>
-      </el-row>
-    </div>
-    <div class="bottom">
-      <el-row :gutter="32">
-        <el-col :xs="24" :sm="24" :lg="12">
-          <div class="chart-player" />
-        </el-col>
-        <el-col :xs="24" :sm="24" :lg="12">
-          <div class="chart-player" />
         </el-col>
       </el-row>
     </div>
@@ -187,7 +177,7 @@ export default {
   }
   .bottom {
     width: 100%;
-    height: 300px;
+    height: 420px;
     // margin: 20px 0;
     .el-row {
       margin-right: 4px !important;
@@ -197,6 +187,10 @@ export default {
       height: 270px;
       padding: 10px;
       background-color: #fff;
+    }
+    .iPlayer{
+      width: 100%;
+      height: 100%;
     }
   }
 }

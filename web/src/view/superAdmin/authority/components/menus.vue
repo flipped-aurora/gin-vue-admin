@@ -14,20 +14,22 @@
       show-checkbox
       @check="nodeChange"
     >
-      <span slot-scope="{ node , data }" class="custom-tree-node">
-        <span>{{ node.label }}</span>
-        <span>
-          <el-button
-            type="text"
-            size="mini"
-            :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
-            :disabled="!node.checked"
-            @click="() => setDefault(data)"
-          >
-            {{ row.defaultRouter === data.name?"首页":"设为首页" }}
-          </el-button>
+      <template #default="{ node , data }">
+        <span class="custom-tree-node">
+          <span>{{ node.label }}</span>
+          <span>
+            <el-button
+              type="text"
+              size="mini"
+              :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
+              :disabled="!node.checked"
+              @click="() => setDefault(data)"
+            >
+              {{ row.defaultRouter === data.name?"首页":"设为首页" }}
+            </el-button>
+          </span>
         </span>
-      </span>
+      </template>
     </el-tree>
   </div>
 </template>
@@ -81,7 +83,7 @@ export default {
       const res = await updateAuthority({ authorityId: this.row.authorityId, AuthorityName: this.row.authorityName, parentId: this.row.parentId, defaultRouter: data.name })
       if (res.code === 0) {
         this.$message({ type: 'success', message: '设置成功' })
-        this.row.defaultRouter = res.data.authority.defaultRouter
+        this.$emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
       }
     },
     nodeChange() {

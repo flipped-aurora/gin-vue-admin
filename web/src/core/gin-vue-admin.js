@@ -7,7 +7,6 @@ import config from './config'
 
 export const run = function(app) {
   app.config.globalProperties.$GIN_VUE_ADMIN = config
-
   // app.use(uploader)
 
   console.log(`

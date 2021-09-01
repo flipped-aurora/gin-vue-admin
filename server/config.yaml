@@ -130,6 +130,7 @@ Timer:
     # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
     # 2160h = 24 * 30 * 3 -> 三个月
     { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
+    { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
     #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
   ]
 

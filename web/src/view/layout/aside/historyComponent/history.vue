@@ -74,6 +74,9 @@ export default {
       }
     },
     $route(to, now) {
+      if (to.name === 'Login') {
+        return
+      }
       this.historys = this.historys.filter(item => !item.meta.closeTab)
       this.setTab(to)
       sessionStorage.setItem('historys', JSON.stringify(this.historys))
@@ -84,6 +87,14 @@ export default {
     }
   },
   created() {
+    // 全局监听 关闭当前页面函数
+    emitter.on('closeThisPage', () => {
+      this.removeTab(this.name(this.$route))
+    })
+    // 全局监听 关闭所有页面函数
+    emitter.on('closeAllPage', () => {
+      this.closeAll()
+    })
     emitter.on('mobile', isMobile => {
       this.isMobile = isMobile
     })
@@ -108,12 +119,6 @@ export default {
       this.activeValue = window.sessionStorage.getItem('activeValue')
     }
     this.setTab(this.$route)
-  },
-  mounted() {
-    // 全局监听 关闭当前页面函数
-    emitter.on('closeThisPage', () => {
-      this.removeTab(this.name(this.$route))
-    })
   },
   beforeDestroy() {
     emitter.off('collapse')
@@ -252,7 +257,6 @@ export default {
       })
     },
     removeTab(tab) {
-      console.log(tab)
       const index = this.historys.findIndex(
         item => getFmtString(item) === tab
       )

@@ -212,6 +212,7 @@ export default {
         authorityId: id
       })
       if (res.code === 0) {
+        emitter.emit('closeAllPage')
         window.location.reload()
       }
     },

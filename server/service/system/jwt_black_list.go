@@ -2,13 +2,10 @@ package system
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-
-	"gorm.io/gorm"
 )
 
 type JwtService struct {
@@ -22,6 +19,11 @@ type JwtService struct {
 
 func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err error) {
 	err = global.GVA_DB.Create(&jwtList).Error
+	if err != nil {
+		return
+	}
+	global.BlackCache.SetDefault(jwtList.Jwt, struct {
+	}{})
 	return
 }
 
@@ -32,9 +34,11 @@ func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err 
 //@return: bool
 
 func (jwtService *JwtService) IsBlacklist(jwt string) bool {
-	err := global.GVA_DB.Where("jwt = ?", jwt).First(&system.JwtBlacklist{}).Error
-	isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
-	return !isNotFound
+	_, ok := global.BlackCache.Get(jwt)
+	return ok
+	//err := global.GVA_DB.Where("jwt = ?", jwt).First(&system.JwtBlacklist{}).Error
+	//isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
+	//return !isNotFound
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -59,4 +63,16 @@ func (jwtService *JwtService) SetRedisJWT(jwt string, userName string) (err erro
 	timer := time.Duration(global.GVA_CONFIG.JWT.ExpiresTime) * time.Second
 	err = global.GVA_REDIS.Set(context.Background(), userName, jwt, timer).Err()
 	return err
+}
+
+func LoadAll() {
+	var data []string
+	err := global.GVA_DB.Find(&system.JwtBlacklist{}).Select("jwt").Find(&data).Error
+	if err != nil {
+		// 从db加载jwt数据
+		for i := range data {
+			global.BlackCache.SetDefault(data[i], struct {
+			}{})
+		}
+	}
 }

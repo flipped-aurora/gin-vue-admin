@@ -1,5 +1,5 @@
 {
-  "name": "gvav3",
+  "name": "gin-vue-admin",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -8,7 +8,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@moefe/vue-aplayer": "^2.0.0-beta.5",
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "element-plus": "^1.1.0-beta.4",
@@ -22,12 +21,9 @@
     "screenfull": "^5.0.2",
     "script-ext-html-webpack-plugin": "^2.1.4",
     "spark-md5": "^3.0.1",
-    "timeline-vuejs": "1.1.1",
     "vue": "^3.0.0",
     "vue-particle-line": "^0.1.4",
     "vue-router": "^4.0.0-0",
-    "vue-simple-uploader": "^0.7.4",
-    "vuescroll": "^4.14.4",
     "vuex": "^4.0.0-0",
     "vuex-persist": "^2.1.0"
   },

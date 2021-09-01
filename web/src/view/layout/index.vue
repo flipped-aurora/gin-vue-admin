@@ -75,7 +75,7 @@
             <!-- 当前面包屑用路由自动生成可根据需求修改 -->
             <!--
             :to="{ path: item.path }" 暂时注释不用-->
-            <HistoryComponent />
+            <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
         <router-view v-if="$route.meta.keepAlive && reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">

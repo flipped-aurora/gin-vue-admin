@@ -17,7 +17,7 @@
         class="gva-tab"
       >
         <template #label>
-          <span :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+          <span :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{ backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -109,7 +109,12 @@ export default {
     }
     this.setTab(this.$route)
   },
-
+  mounted() {
+    // 全局监听 关闭当前页面函数
+    emitter.on('closeThisPage', () => {
+      this.removeTab(this.name(this.$route))
+    })
+  },
   beforeDestroy() {
     emitter.off('collapse')
     emitter.off('mobile')

@@ -4,7 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/ws"
 	"go.uber.org/zap"
-
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/notify"
 	//email "github.com/flipped-aurora/gva-plug-email"   // 在线仓库模式
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email" // 本地插件仓库地址模式
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/example_plugin"
@@ -34,4 +34,10 @@ func InstallPlugin(PublicGroup *gin.RouterGroup, PrivateGroup *gin.RouterGroup) 
 		global.GVA_CONFIG.Email.Port,
 		global.GVA_CONFIG.Email.IsSSL,
 	))
+
+	//  钉钉通知，暂时开放权限
+	PluginInit(PublicGroup, notify.CreateDDPlug(
+		"https://oapi.dingtalk.com/robot/send",
+		"8ded23f91917dc4f6275f44ba5ef243e6ed1d2cc74de83f01a6f5f5f39905671",
+		"SECaecf452bd6e671ab0d47469c3ad933e32fcc47b335333049a1b8961606192f38"))
 }

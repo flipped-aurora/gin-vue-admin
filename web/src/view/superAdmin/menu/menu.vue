@@ -10,7 +10,7 @@
       <el-table-column label="路由Name" min-width="160" prop="name" />
       <el-table-column label="路由Path" min-width="160" prop="path" />
       <el-table-column label="是否隐藏" min-width="100" prop="hidden">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
         </template>
       </el-table-column>
@@ -18,18 +18,18 @@
       <el-table-column label="排序" min-width="70" prop="sort" />
       <el-table-column label="文件路径" min-width="360" prop="component" />
       <el-table-column label="展示名称" min-width="120" prop="authorityName">
-        <template slot-scope="scope">
+        <template #default="scope">
           <span>{{ scope.row.meta.title }}</span>
         </template>
       </el-table-column>
       <el-table-column label="图标" min-width="140" prop="authorityName">
-        <template slot-scope="scope">
+        <template #default="scope">
           <i :class="`el-icon-${scope.row.meta.icon}`" />
           <span>{{ scope.row.meta.icon }}</span>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="操作" width="300">
-        <template slot-scope="scope">
+        <template #default="scope">
           <el-button
             size="mini"
             type="primary"
@@ -52,8 +52,9 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :before-close="handleClose" :title="dialogTitle" :visible.sync="dialogFormVisible">
+    <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle">
       <el-form
+        v-if="dialogFormVisible"
         ref="menuForm"
         :inline="true"
         :model="form"
@@ -70,10 +71,13 @@
           />
         </el-form-item>
         <el-form-item prop="path" style="width:30%">
-          <div slot="label" style="display:inline-block">
-            路由path
-            <el-checkbox v-model="checkFlag" style="float:right;margin-left:20px;">添加参数</el-checkbox>
-          </div>
+          <template #label>
+            <div style="display:inline-flex">
+              路由path
+              <el-checkbox v-model="checkFlag" style="float:right;margin-left:20px;">添加参数</el-checkbox>
+            </div>
+          </template>
+
           <el-input
             v-model="form.path"
             :disabled="!checkFlag"
@@ -105,9 +109,7 @@
           <el-input v-model="form.meta.title" autocomplete="off" />
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <icon :meta="form.meta">
-            <template slot="prepend">el-icon-</template>
-          </icon>
+          <icon :meta="form.meta" />
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
@@ -135,7 +137,7 @@
         >新增菜单参数</el-button>
         <el-table :data="form.parameters" stripe style="width: 100%">
           <el-table-column prop="type" label="参数类型" width="180">
-            <template slot-scope="scope">
+            <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
                 <el-option key="query" value="query" label="query" />
                 <el-option key="params" value="params" label="params" />
@@ -143,21 +145,21 @@
             </template>
           </el-table-column>
           <el-table-column prop="key" label="参数key" width="180">
-            <template slot-scope="scope">
+            <template #default="scope">
               <div>
                 <el-input v-model="scope.row.key" />
               </div>
             </template>
           </el-table-column>
           <el-table-column prop="value" label="参数值">
-            <template slot-scope="scope">
+            <template #default="scope">
               <div>
                 <el-input v-model="scope.row.value" />
               </div>
             </template>
           </el-table-column>
           <el-table-column>
-            <template slot-scope="scope">
+            <template #default="scope">
               <div>
                 <el-button
                   type="danger"
@@ -170,10 +172,12 @@
           </el-table-column>
         </el-table>
       </div>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="enterDialog">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
@@ -244,7 +248,7 @@ export default {
   methods: {
     addParameter(form) {
       if (!form.parameters) {
-        this.$set(form, 'parameters', [])
+        this.form.parameters = []
       }
       form.parameters.push({
         type: 'query',

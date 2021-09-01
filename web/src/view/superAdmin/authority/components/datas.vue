@@ -25,7 +25,7 @@ export default {
     },
     authority: {
       default: function() {
-        return {}
+        return []
       },
       type: Array
     }
@@ -53,19 +53,19 @@ export default {
     },
     all() {
       this.dataAuthorityId = [...this.authoritys]
-      this.row.dataAuthorityId = this.dataAuthorityId
+      this.$emit('changeRow', 'dataAuthorityId', this.dataAuthorityId)
       this.needConfirm = true
     },
     self() {
       this.dataAuthorityId = this.authoritys.filter(item => item.authorityId === this.row.authorityId)
-      this.row.dataAuthorityId = this.dataAuthorityId
+      this.$emit('changeRow', 'dataAuthorityId', this.dataAuthorityId)
       this.needConfirm = true
     },
     selfAndChildren() {
       const arrBox = []
       this.getChildrenId(this.row, arrBox)
       this.dataAuthorityId = this.authoritys.filter(item => arrBox.indexOf(item.authorityId) > -1)
-      this.row.dataAuthorityId = this.dataAuthorityId
+      this.$emit('changeRow', 'dataAuthorityId', this.dataAuthorityId)
       this.needConfirm = true
     },
     getChildrenId(row, arrBox) {
@@ -95,7 +95,7 @@ export default {
     },
     //   选择
     selectAuthority() {
-      this.row.dataAuthorityId = this.dataAuthorityId
+      this.$emit('changeRow', 'dataAuthorityId', this.dataAuthorityId)
       this.needConfirm = true
     }
   }

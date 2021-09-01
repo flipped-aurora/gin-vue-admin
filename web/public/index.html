@@ -1,27 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
+<html lang="">
+  <head>
     <meta charset="utf-8">
-    <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%=htmlWebpackPlugin.options.title%></title>
-    <% if(process.env.NODE_ENV!=='development' && htmlWebpackPlugin.options.cdns){ %>
-      <% htmlWebpackPlugin.options.cdns.forEach(function(item){ if(item.js){ %>
-        <script type="text/javascript" src="<%= item.js %>"></script>
-      <% } }) %>
-    <% } %>  
-</head>
-
-<body>
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body>
     <noscript>
-      <strong>We're sorry but GIN-VUE-ADMIN doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
-    <script src="./js/project.js"></script>
-</body>
-
+  </body>
 </html>

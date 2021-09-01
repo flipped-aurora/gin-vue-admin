@@ -252,7 +252,6 @@ export default {
       })
     },
     removeTab(tab) {
-      console.log(tab)
       const index = this.historys.findIndex(
         item => getFmtString(item) === tab
       )

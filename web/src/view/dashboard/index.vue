@@ -191,7 +191,7 @@ export default {
         &-right {
             height: 600px;
             width: 600px;
-            margin-top: -20px;
+            margin-top: 28px;
         }
     }
     .dashbord2 {

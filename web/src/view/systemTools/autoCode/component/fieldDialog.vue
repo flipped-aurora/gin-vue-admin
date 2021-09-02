@@ -3,14 +3,14 @@
     <span style="color:red">搜索时如果条件为LIKE只支持字符串</span>
     <el-form
       ref="fieldDialogFrom"
-      :model="dialogMiddle"
+      :model="middleDate"
       label-width="120px"
       label-position="left"
       :rules="rules"
     >
       <el-form-item label="Field名称" prop="fieldName">
         <el-col :span="6">
-          <el-input v-model="dialogMiddle.fieldName" autocomplete="off" />
+          <el-input v-model="middleDate.fieldName" autocomplete="off" />
         </el-col>
         <el-col :offset="1" :span="2">
           <el-button size="mini" @click="autoFill">自动填充</el-button>
@@ -18,28 +18,28 @@
       </el-form-item>
       <el-form-item label="Field中文名" prop="fieldDesc">
         <el-col :span="6">
-          <el-input v-model="dialogMiddle.fieldDesc" autocomplete="off" />
+          <el-input v-model="middleDate.fieldDesc" autocomplete="off" />
         </el-col>
       </el-form-item>
       <el-form-item label="FieldJSON" prop="fieldJson">
         <el-col :span="6">
-          <el-input v-model="dialogMiddle.fieldJson" autocomplete="off" />
+          <el-input v-model="middleDate.fieldJson" autocomplete="off" />
         </el-col>
       </el-form-item>
       <el-form-item label="数据库字段名" prop="columnName">
         <el-col :span="6">
-          <el-input v-model="dialogMiddle.columnName" autocomplete="off" />
+          <el-input v-model="middleDate.columnName" autocomplete="off" />
         </el-col>
       </el-form-item>
       <el-form-item label="数据库字段描述" prop="comment">
         <el-col :span="6">
-          <el-input v-model="dialogMiddle.comment" autocomplete="off" />
+          <el-input v-model="middleDate.comment" autocomplete="off" />
         </el-col>
       </el-form-item>
       <el-form-item label="Field数据类型" prop="fieldType">
         <el-col :span="8">
           <el-select
-            v-model="dialogMiddle.fieldType"
+            v-model="middleDate.fieldType"
             placeholder="请选择field数据类型"
             clearable
             @change="getDbfdOptions"
@@ -57,8 +57,8 @@
       <el-form-item label="数据库字段类型" prop="dataType">
         <el-col :span="8">
           <el-select
-            v-model="dialogMiddle.dataType"
-            :disabled="!dialogMiddle.fieldType"
+            v-model="middleDate.dataType"
+            :disabled="!middleDate.fieldType"
             placeholder="请选择数据库字段类型"
             clearable
           >
@@ -73,12 +73,12 @@
       </el-form-item>
       <el-form-item label="数据库字段长度" prop="dataTypeLong">
         <el-col :span="8">
-          <el-input v-model="dialogMiddle.dataTypeLong" placeholder="自定义类型必须指定长度" :disabled="!dialogMiddle.dataType" />
+          <el-input v-model="middleDate.dataTypeLong" placeholder="自定义类型必须指定长度" :disabled="!middleDate.dataType" />
         </el-col>
       </el-form-item>
       <el-form-item label="Field查询条件" prop="fieldSearchType">
         <el-col :span="8">
-          <el-select v-model="dialogMiddle.fieldSearchType" placeholder="请选择Field查询条件" clearable>
+          <el-select v-model="middleDate.fieldSearchType" placeholder="请选择Field查询条件" clearable>
             <el-option
               v-for="item in typeSearchOptions"
               :key="item.value"
@@ -91,7 +91,7 @@
 
       <el-form-item label="关联字典" prop="dictType">
         <el-col :span="8">
-          <el-select v-model="dialogMiddle.dictType" :disabled="dialogMiddle.fieldType!=='int'" placeholder="请选择字典" clearable>
+          <el-select v-model="middleDate.dictType" :disabled="middleDate.fieldType!=='int'" placeholder="请选择字典" clearable>
             <el-option
               v-for="item in dictOptions"
               :key="item.type"
@@ -122,6 +122,7 @@ export default {
   },
   data() {
     return {
+      middleDate: {},
       dbfdOptions: [],
       dictOptions: [],
       typeSearchOptions: [
@@ -188,6 +189,7 @@ export default {
     }
   },
   async created() {
+    this.middleDate = this.dialogMiddle
     const dictRes = await getSysDictionaryList({
       page: 1,
       pageSize: 999999
@@ -197,16 +199,16 @@ export default {
   },
   methods: {
     autoFill() {
-      this.dialogMiddle.fieldJson = toLowerCase(this.dialogMiddle.fieldName)
-      this.dialogMiddle.columnName = toSQLLine(this.dialogMiddle.fieldJson)
+      this.middleDate.fieldJson = toLowerCase(this.middleDate.fieldName)
+      this.middleDate.columnName = toSQLLine(this.middleDate.fieldJson)
     },
     async getDbfdOptions() {
-      this.dialogMiddle.dataType = ''
-      this.dialogMiddle.dataTypeLong = ''
-      this.dialogMiddle.fieldSearchType = ''
-      this.dialogMiddle.dictType = ''
-      if (this.dialogMiddle.fieldType) {
-        this.dbfdOptions = await getDict(this.dialogMiddle.fieldType)
+      this.middleDate.dataType = ''
+      this.middleDate.dataTypeLong = ''
+      this.middleDate.fieldSearchType = ''
+      this.middleDate.dictType = ''
+      if (this.middleDate.fieldType) {
+        this.dbfdOptions = await getDict(this.middleDate.fieldType)
       }
     }
   }

@@ -79,7 +79,7 @@
 
     <ChooseImg ref="chooseImg" @enter-img="enterImg" />
 
-    <el-dialog :visible.sync="showPassword" title="修改密码" width="360px" @close="clearPassword">
+    <el-dialog v-model="showPassword" title="修改密码" width="360px" @close="clearPassword">
       <el-form ref="modifyPwdForm" :model="pwdModify" :rules="rules" label-width="80px">
         <el-form-item :minlength="6" label="原密码" prop="password">
           <el-input v-model="pwdModify.password" show-password />
@@ -91,10 +91,12 @@
           <el-input v-model="pwdModify.confirmPassword" show-password />
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="showPassword=false">取 消</el-button>
-        <el-button type="primary" @click="savePassword">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="showPassword=false">取 消</el-button>
+          <el-button type="primary" @click="savePassword">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>

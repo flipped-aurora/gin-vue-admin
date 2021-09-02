@@ -1,6 +1,6 @@
 {
   "name": "gin-vue-admin",
-  "version": "0.1.0",
+  "version": "2.3.5",
   "private": true,
   "scripts": {
     "serve": "node openDocument.js && vue-cli-service serve",
@@ -8,16 +8,12 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@antv/dom-util": "2.0.2",
-    "@antv/g-canvas": "^0.4.12",
-    "@antv/g6": "3.5.2",
-    "@antv/matrix-util": "2.0.7",
-    "@antv/util": "~2.0.9",
-    "@moefe/vue-aplayer": "^2.0.0-beta.5",
     "axios": "^0.19.2",
-    "element-ui": "^2.12.0",
+    "core-js": "^3.6.5",
+    "element-plus": "^1.1.0-beta.4",
     "highlight.js": "^10.6.0",
     "marked": "^2.0.0",
+    "mitt": "^3.0.0",
     "path": "^0.12.7",
     "qs": "^6.8.0",
     "quill": "^1.3.7",
@@ -25,51 +21,24 @@
     "screenfull": "^5.0.2",
     "script-ext-html-webpack-plugin": "^2.1.4",
     "spark-md5": "^3.0.1",
-    "timeline-vuejs": "1.1.1",
-    "vue": "^2.6.10",
+    "vue": "^3.0.0",
     "vue-particle-line": "^0.1.4",
-    "vue-router": "^3.1.3",
-    "vue-simple-uploader": "^0.7.4",
-    "vuescroll": "^4.14.4",
-    "vuex": "^3.1.1",
+    "vue-router": "^4.0.0-0",
+    "vuex": "^4.0.0-0",
     "vuex-persist": "^2.1.0"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^4.5.6",
-    "@vue/cli-plugin-eslint": "^4.5.6",
-    "@vue/cli-service": "^4.5.6",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
     "babel-eslint": "^10.1.0",
-    "babel-plugin-component": "^1.1.1",
-    "babel-preset-es2015": "^6.24.1",
-    "core-js": "^3.3.2",
+    "babel-plugin-import": "^1.13.3",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
-    "numericjs": "^1.2.6",
-    "raw-loader": "^3.1.0",
-    "sass-loader": "^8.0.0",
-    "vue-template-compiler": "^2.6.10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "eslint:recommended"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
-  },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions"
-  ]
+    "eslint-plugin-vue": "^7.0.0",
+    "sass": "^1.26.5",
+    "sass-loader": "^8.0.2"
+  }
 }

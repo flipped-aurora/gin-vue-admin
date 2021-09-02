@@ -213,7 +213,9 @@ export default {
       })
       if (res.code === 0) {
         emitter.emit('closeAllPage')
-        window.location.reload()
+        setTimeout(() => {
+          window.location.reload()
+        }, 1)
       }
     },
     reload() {

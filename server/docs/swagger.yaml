@@ -567,6 +567,18 @@ definitions:
         description: 每页大小
         type: integer
     type: object
+  response.Email:
+    properties:
+      body:
+        description: 邮件内容
+        type: string
+      subject:
+        description: 邮件标题
+        type: string
+      to:
+        description: 邮件发送给谁
+        type: string
+    type: object
   response.SysAuthorityCopyResponse:
     properties:
       authority:
@@ -930,68 +942,6 @@ info:
   title: Swagger Example API
   version: 0.0.1
 paths:
-  /SimpleUploaderApi/checkFileMd5:
-    get:
-      parameters:
-      - description: md5
-        in: query
-        name: md5
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"查询成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 断点续传插件版示例
-      tags:
-      - SimpleUploader
-  /SimpleUploaderApi/mergeFileMd5:
-    get:
-      parameters:
-      - description: md5
-        in: query
-        name: md5
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"合并成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 合并文件
-      tags:
-      - SimpleUploader
-  /SimpleUploaderApi/upload:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 断点续传插件版示例
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"切片创建成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 断点续传插件版示例
-      tags:
-      - SimpleUploader
   /api/createApi:
     post:
       consumes:
@@ -1842,6 +1792,27 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 发送测试邮件
+      tags:
+      - System
+  /email/sendEmail:
+    post:
+      parameters:
+      - description: 发送邮件必须的参数
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/response.Email'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"发送成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 发送邮件
       tags:
       - System
   /excel/downloadTemplate:

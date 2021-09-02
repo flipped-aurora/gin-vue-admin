@@ -18,7 +18,8 @@
       <el-table-column label="路由Name" min-width="160" prop="name" />
       <el-table-column label="路由Path" min-width="160" prop="path" />
       <el-table-column label="是否隐藏" min-width="100" prop="hidden">
-        <template slot-scope="scope">
+
+        <template #default="scope">
           <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
         </template>
       </el-table-column>

@@ -33,6 +33,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { emitter } from '@/utils/bus.js'
 
 export default {
   name: 'SearchComponent',
@@ -44,8 +45,9 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('router', ['routerList'])
+    ...mapGetters('router', ['routerList']),
   },
+
   methods: {
     changeRouter() {
       this.$router.push({ name: this.value })
@@ -62,7 +64,7 @@ export default {
     },
     handleReload() {
       this.reload = true
-      this.$bus.$emit('reload')
+      emitter.emit('reload')
       setTimeout(() => {
         this.reload = false
       }, 500)

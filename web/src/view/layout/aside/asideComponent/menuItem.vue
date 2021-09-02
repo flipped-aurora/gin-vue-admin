@@ -1,7 +1,9 @@
 <template>
   <el-menu-item :index="routerInfo.name" :route="{parameters:routerInfo.parameters}">
     <i :class="'el-icon-'+routerInfo.meta.icon" />
-    <span slot="title">{{ routerInfo.meta.title }}</span>
+    <template #title>
+      <span>{{ routerInfo.meta.title }}</span>
+    </template>
   </el-menu-item>
 </template>
 

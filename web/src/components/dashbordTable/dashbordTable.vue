@@ -48,6 +48,7 @@ export default {
     &-title{
         color: rgb(56,137,206);
         font-size: 18px;
+        margin-bottom: 20px;
     }
 }
 </style>

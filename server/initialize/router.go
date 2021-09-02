@@ -17,7 +17,7 @@ import (
 func Routers() *gin.Engine {
 	var Router = gin.Default()
 
-	// 想代理前端网页，修改 web/.env.production 下的
+	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
 	// VUE_APP_BASE_API = /
 	// VUE_APP_BASE_PATH = http://localhost
 	// 然后执行打包命令 npm run build。在打开下面4行注释

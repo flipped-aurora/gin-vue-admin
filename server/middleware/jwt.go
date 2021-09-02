@@ -1,17 +1,15 @@
 package middleware
 
 import (
-	"errors"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"strconv"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -32,11 +30,11 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		j := NewJWT()
+		j := utils.NewJWT()
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if err == TokenExpired {
+			if err == utils.TokenExpired {
 				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
 				c.Abort()
 				return
@@ -45,11 +43,12 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		if err, _ = userService.FindUserByUuid(claims.UUID.String()); err != nil {
-			_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: token})
-			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
-			c.Abort()
-		}
+		// 用户被删除的逻辑 需要优化 此处比较消耗性能 如果需要 请自行打开
+		//if err, _ = userService.FindUserByUuid(claims.UUID.String()); err != nil {
+		//	_ = jwtService.JsonInBlacklist(system.JwtBlacklist{Jwt: token})
+		//	response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+		//	c.Abort()
+		//}
 		if claims.ExpiresAt-time.Now().Unix() < claims.BufferTime {
 			claims.ExpiresAt = time.Now().Unix() + global.GVA_CONFIG.JWT.ExpiresTime
 			newToken, _ := j.CreateTokenByOldToken(token, *claims)
@@ -72,84 +71,3 @@ func JWTAuth() gin.HandlerFunc {
 	}
 }
 
-type JWT struct {
-	SigningKey []byte
-}
-
-var (
-	TokenExpired     = errors.New("Token is expired")
-	TokenNotValidYet = errors.New("Token not active yet")
-	TokenMalformed   = errors.New("That's not even a token")
-	TokenInvalid     = errors.New("Couldn't handle this token:")
-)
-
-func NewJWT() *JWT {
-	return &JWT{
-		[]byte(global.GVA_CONFIG.JWT.SigningKey),
-	}
-}
-
-// 创建一个token
-func (j *JWT) CreateToken(claims request.CustomClaims) (string, error) {
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(j.SigningKey)
-}
-
-// CreateTokenByOldToken 旧token 换新token 使用归并回源避免并发问题
-func (j *JWT) CreateTokenByOldToken(oldToken string, claims request.CustomClaims) (string, error) {
-	v, err, _ := global.GVA_Concurrency_Control.Do("JWT:"+oldToken, func() (interface{}, error) {
-		return j.CreateToken(claims)
-	})
-	return v.(string), err
-}
-
-// 解析 token
-func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
-	token, err := jwt.ParseWithClaims(tokenString, &request.CustomClaims{}, func(token *jwt.Token) (i interface{}, e error) {
-		return j.SigningKey, nil
-	})
-	if err != nil {
-		if ve, ok := err.(*jwt.ValidationError); ok {
-			if ve.Errors&jwt.ValidationErrorMalformed != 0 {
-				return nil, TokenMalformed
-			} else if ve.Errors&jwt.ValidationErrorExpired != 0 {
-				// Token is expired
-				return nil, TokenExpired
-			} else if ve.Errors&jwt.ValidationErrorNotValidYet != 0 {
-				return nil, TokenNotValidYet
-			} else {
-				return nil, TokenInvalid
-			}
-		}
-	}
-	if token != nil {
-		if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
-			return claims, nil
-		}
-		return nil, TokenInvalid
-
-	} else {
-		return nil, TokenInvalid
-
-	}
-
-}
-
-// 更新token
-//func (j *JWT) RefreshToken(tokenString string) (string, error) {
-//	jwt.TimeFunc = func() time.Time {
-//		return time.Unix(0, 0)
-//	}
-//	token, err := jwt.ParseWithClaims(tokenString, &request.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
-//		return j.SigningKey, nil
-//	})
-//	if err != nil {
-//		return "", err
-//	}
-//	if claims, ok := token.Claims.(*request.CustomClaims); ok && token.Valid {
-//		jwt.TimeFunc = time.Now
-//		claims.StandardClaims.ExpiresAt = time.Now().Unix() + 60*60*24*7
-//		return j.CreateToken(*claims)
-//	}
-//	return "", TokenInvalid
-//}

@@ -1,8 +1,10 @@
-const _import = require('./_import') // 获取组件的方法
+const modules = import.meta.glob('../../view/**/*.vue')
+
 export const asyncRouterHandle = (asyncRouter) => {
   asyncRouter.map(item => {
     if (item.component) {
-      item.component = _import(item.component)
+      item.component = dynamicImport(modules, item.component)
+      console.log(item.component)
     } else {
       delete item['component']
     }
@@ -10,4 +12,19 @@ export const asyncRouterHandle = (asyncRouter) => {
       asyncRouterHandle(item.children)
     }
   })
+}
+
+function dynamicImport(
+  dynamicViewsModules,
+  component
+) {
+  const keys = Object.keys(dynamicViewsModules)
+  const matchKeys = keys.filter((key) => {
+    let k = key.replace('../../view', '')
+    const lastIndex = k.lastIndexOf('.')
+    k = k.substring(0, lastIndex)
+    return k === component
+  })
+  const matchKey = matchKeys[0]
+  return dynamicViewsModules[matchKey]
 }

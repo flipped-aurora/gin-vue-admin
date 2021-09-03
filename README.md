@@ -72,20 +72,13 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 - 合并代码需要两名维护人员参与：一人进行 review 后 approve，另一人再次 review，通过后即可合并。
 
-### 1.3 版本列表
-
-- master: 2.0, 用于生产环境
-- develop: 2.0, 用于测试环境
-- [gin-vue-admin_v2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gin-vue-admin_v2_dev) (v2.0 [GormV1版本](https://v1.gorm.io)稳定分支)
-- [gva_gormv2_dev](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_gormv2_dev) (v2.0 [GormV2版本](https://v2.gorm.io)开发分支)
-
 ## 2. 使用说明
 
 ```
-- node版本 > v8.6.0
-- golang版本 >= v1.14
+- node版本 > v12.18.3
+- golang版本 >= v1.16
 - IDE推荐：Goland
-- 初始化项目： 不同版本数据库初始化不通 参见 https://www.gin-vue-admin.com/docs/first
+- 初始化项目： 不同版本数据库初始化不通 参见 https://www.gin-vue-admin.com/docs/first_master
 - 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
 

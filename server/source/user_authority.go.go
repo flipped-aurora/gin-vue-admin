@@ -21,7 +21,7 @@ var userAuthorityModel = []system.SysUseAuthority{
 //@description: user_authority 数据初始化
 func (a *userAuthority) Init() error {
 	return global.GVA_DB.Model(&system.SysUseAuthority{}).Transaction(func(tx *gorm.DB) error {
-		if tx.Where("sys_user_id IN (1, 2)").Find(&[]AuthorityMenus{}).RowsAffected == 4 {
+		if tx.Where("sys_user_id IN (1, 2)").Find(&[]system.SysUseAuthority{}).RowsAffected == 4 {
 			color.Danger.Println("\n[Mysql] --> sys_user_authority 表的初始数据已存在!")
 			return nil
 		}

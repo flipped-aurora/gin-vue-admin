@@ -74,6 +74,7 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 		}, "登录成功", c)
 		return
 	}
+
 	if err, jwtStr := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
 			global.GVA_LOG.Error("设置登录状态失败!", zap.Any("err", err))

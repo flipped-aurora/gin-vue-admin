@@ -70,4 +70,3 @@ func JWTAuth() gin.HandlerFunc {
 		c.Next()
 	}
 }
-

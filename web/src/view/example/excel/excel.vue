@@ -31,7 +31,7 @@
 </template>
 
 <script>
-const path = process.env.VUE_APP_BASE_API
+const path = import.meta.env.VITE_BASE_API
 import { mapGetters } from 'vuex'
 import infoList from '@/mixins/infoList'
 import { exportExcel, loadExcelData, downloadTemplate } from '@/api/excel'

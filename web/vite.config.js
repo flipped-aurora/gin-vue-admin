@@ -2,12 +2,25 @@
 import legacyPlugin from '@vitejs/plugin-legacy';
 // import usePluginImport from 'vite-plugin-importer';
 import * as path from 'path';
+import * as dotenv from 'dotenv';
+import * as fs from 'fs';
 import vuePlugin from '@vitejs/plugin-vue';
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,
   mode
 }) => {
+  let NODE_ENV = process.env.NODE_ENV || 'development'
+  let envFiles=[
+    `.env.${NODE_ENV}`
+  ]
+  for (const file of envFiles) {
+		const envConfig = dotenv.parse(fs.readFileSync(file))
+		for (const k in envConfig) {
+			process.env[k] = envConfig[k]
+		}
+	}
+
   let rollupOptions = {};
 
 
@@ -19,20 +32,6 @@ export default ({
     'vue$': 'vue/dist/vue.runtime.esm-bundler.js',
   }
 
-  let proxy = {
-    'undefined': {
-      "target": "undefined:undefined/",
-      "changeOrigin": true,
-      "pathRewrite": {
-        "^undefined": ""
-      }
-    },
-  }
-
-  let define = {
-    'process.env.NODE_ENV': '"development"',
-  }
-
   let esbuild = {}
 
   return {
@@ -41,10 +40,20 @@ export default ({
     resolve: {
       alias,
     },
-    define: define,
+    define: {
+      'process.env': {}
+    },
     server: {
-      // 代理
-      proxy,
+      port: process.env.VITE_CLI_PORT,
+      proxy:{
+       // 把key的路径代理到target位置
+      // detail: https://cli.vuejs.org/config/#devserver-proxy
+      [process.env.VITE_BASE_API]: { // 需要代理的路径   例如 '/api'
+        target: `${process.env.VITE_BASE_PATH}:${process.env.VITE_SERVER_PORT}/`, // 代理到 目标路径
+        changeOrigin: true,
+        rewrite: path => path.replace(new RegExp('^' + process.env.VITE_BASE_API), ''),
+      } 
+      },
     },
     build: {
       target: 'es2015',

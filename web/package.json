@@ -3,8 +3,8 @@
 	"version": "2.3.5",
 	"private": true,
 	"scripts": {
-		"serve": "node openDocument.js && vite",
-		"build": "vite build",
+		"serve": "node openDocument.js && vite --host --mode development",
+		"build": "vite build --mode production",
 		"preview": "vite preview"
 	},
 	"dependencies": {
@@ -28,6 +28,8 @@
 		"vuex-persist": "^2.1.0"
 	},
 	"devDependencies": {
+		"@vitejs/plugin-legacy": "^1.4.4",
+		"@vitejs/plugin-vue": "latest",
 		"@vue/cli-plugin-babel": "~4.5.0",
 		"@vue/cli-plugin-eslint": "~4.5.0",
 		"@vue/cli-plugin-router": "~4.5.0",
@@ -36,13 +38,12 @@
 		"@vue/compiler-sfc": "^3.1.5",
 		"babel-eslint": "^10.1.0",
 		"babel-plugin-import": "^1.13.3",
+		"dotenv": "^10.0.0",
 		"eslint": "^6.7.2",
 		"eslint-plugin-vue": "^7.0.0",
 		"sass": "^1.26.5",
 		"sass-loader": "^8.0.2",
 		"vite": "2",
-		"@vitejs/plugin-legacy": "^1.4.4",
-		"vite-plugin-importer": "^0.2.5",
-		"@vitejs/plugin-vue": "latest"
+		"vite-plugin-importer": "^0.2.5"
 	}
 }

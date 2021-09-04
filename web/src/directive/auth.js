@@ -3,7 +3,7 @@ import { store } from '@/store'
 export const auth = (app) => {
   app.directive('auth', {
     // 当被绑定的元素插入到 DOM 中时……
-    bind: function(el, binding) {
+    mounted: function(el, binding) {
       const userInfo = store.getters['user/userInfo']
       let type = ''
       switch (Object.prototype.toString.call(binding.value)) {

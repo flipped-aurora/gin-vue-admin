@@ -4,7 +4,6 @@ export const asyncRouterHandle = (asyncRouter) => {
   asyncRouter.map(item => {
     if (item.component) {
       item.component = dynamicImport(modules, item.component)
-      console.log(item.component)
     } else {
       delete item['component']
     }

@@ -214,6 +214,8 @@ export default {
     },
     closeAddUserDialog() {
       this.$refs.userForm.resetFields()
+      this.userInfo.headerImg = ''
+      this.userInfo.authorityIds = []
       this.addUserDialog = false
     },
     addUser() {

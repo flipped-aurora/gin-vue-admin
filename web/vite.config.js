@@ -44,6 +44,7 @@ export default ({
       'process.env': {}
     },
     server: {
+      open:true,
       port: process.env.VITE_CLI_PORT,
       proxy:{
        // 把key的路径代理到target位置
@@ -60,7 +61,7 @@ export default ({
       minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
       manifest: false, // 是否产出maifest.json
       sourcemap: false, // 是否产出soucemap.json
-      outDir: 'build', // 产出目录
+      outDir: 'dist', // 产出目录
       rollupOptions,
     },
     esbuild,

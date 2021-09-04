@@ -16,7 +16,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-const path = process.env.VUE_APP_BASE_API
+const path = import.meta.env.VITE_BASE_API
 export default {
   name: 'CustomPic',
   props: {

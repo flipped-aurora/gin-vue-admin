@@ -72,7 +72,7 @@ import { mapGetters } from 'vuex'
 import infoList from '@/mixins/infoList'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import CustomPic from '@/components/customPic'
+import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 export default {
   name: 'Upload',

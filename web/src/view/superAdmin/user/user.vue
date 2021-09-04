@@ -106,8 +106,8 @@ import {
 import { getAuthorityList } from '@/api/authority'
 import infoList from '@/mixins/infoList'
 import { mapGetters } from 'vuex'
-import CustomPic from '@/components/customPic'
-import ChooseImg from '@/components/chooseImg'
+import CustomPic from '@/components/customPic/index.vue'
+import ChooseImg from '@/components/chooseImg/index.vue'
 export default {
   name: 'Api',
   components: { CustomPic, ChooseImg },

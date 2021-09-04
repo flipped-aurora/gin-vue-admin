@@ -193,7 +193,7 @@ import {
   getBaseMenuById
 } from '@/api/menu'
 import infoList from '@/mixins/infoList'
-import icon from '@/view/superAdmin/menu/icon'
+import icon from '@/view/superAdmin/menu/icon.vue'
 export default {
   name: 'Menus',
   components: {

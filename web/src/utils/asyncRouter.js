@@ -1,4 +1,4 @@
-const modules = import.meta.glob('../../view/**/*.vue')
+const modules = import.meta.glob('../view/**/*.vue')
 
 export const asyncRouterHandle = (asyncRouter) => {
   asyncRouter.map(item => {
@@ -20,11 +20,10 @@ function dynamicImport(
 ) {
   const keys = Object.keys(dynamicViewsModules)
   const matchKeys = keys.filter((key) => {
-    let k = key.replace('../../view', '')
-    const lastIndex = k.lastIndexOf('.')
-    k = k.substring(0, lastIndex)
+    const k = key.replace('../', '')
     return k === component
   })
   const matchKey = matchKeys[0]
+
   return dynamicViewsModules[matchKey]
 }

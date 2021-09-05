@@ -140,7 +140,7 @@ export default {
     },
     async upLoadFileSlice(item) {
       // 切片上传
-      await axios.post(process.env.VUE_APP_BASE_API + '/fileUploadAndDownload/breakpointContinue', item.formData)
+      await axios.post(import.meta.env.VITE_BASE_API + '/fileUploadAndDownload/breakpointContinue', item.formData)
       this.waitNum-- // 百分数增加
       if (this.waitNum === 0) {
         // 切片传完以后 合成文件

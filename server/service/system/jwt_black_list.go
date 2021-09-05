@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+	"go.uber.org/zap"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -22,8 +23,7 @@ func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err 
 	if err != nil {
 		return
 	}
-	global.BlackCache.SetDefault(jwtList.Jwt, struct {
-	}{})
+	global.BlackCache.SetDefault(jwtList.Jwt, struct{}{})
 	return
 }
 
@@ -67,12 +67,12 @@ func (jwtService *JwtService) SetRedisJWT(jwt string, userName string) (err erro
 
 func LoadAll() {
 	var data []string
-	err := global.GVA_DB.Find(&system.JwtBlacklist{}).Select("jwt").Find(&data).Error
+	err := global.GVA_DB.Model(&system.JwtBlacklist{}).Select("jwt").Find(&data).Error
 	if err != nil {
-		// 从db加载jwt数据
-		for i := range data {
-			global.BlackCache.SetDefault(data[i], struct {
-			}{})
-		}
+		global.GVA_LOG.Error("加载数据库jwt黑名单失败!", zap.Error(err))
+		return
 	}
+	for i := 0; i < len(data); i++ {
+		global.BlackCache.SetDefault(data[i], struct{}{})
+	} // jwt黑名单 加入 BlackCache 中
 }

@@ -44,14 +44,18 @@ export default {
       this.page = val
       this.getTableData()
     },
-    async getTableData(page = this.page, pageSize = this.pageSize) {
-      const table = await this.listApi({ page, pageSize, ...this.searchInfo })
+    // @params beforeFunc function 请求发起前执行的函数 默认为空函数
+    // @params afterFunc function 请求完成后执行的函数 默认为空函数
+    async getTableData(beforeFunc = () => {}, afterFunc = () => {}) {
+      beforeFunc()
+      const table = await this.listApi({ page: this.page, pageSize: this.pageSize, ...this.searchInfo })
       if (table.code === 0) {
         this.tableData = table.data.list
         this.total = table.data.total
         this.page = table.data.page
         this.pageSize = table.data.pageSize
       }
+      afterFunc()
     }
   }
 }

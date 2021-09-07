@@ -144,7 +144,7 @@
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
-      <PreviewCodeDialg v-if="previewFlag" :preview-code="preViewCode" />
+      <PreviewCodeDialog v-if="previewFlag" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer">
           <el-button type="primary" @click="previewFlag = false">确 定</el-button>
@@ -169,7 +169,7 @@ const fieldTemplate = {
 }
 
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialg from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
+import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
 import { toUpperCase, toHump, toSQLLine } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
@@ -178,7 +178,7 @@ export default {
   name: 'AutoCode',
   components: {
     FieldDialog,
-    PreviewCodeDialg
+    PreviewCodeDialog
   },
   data() {
     return {
@@ -307,6 +307,7 @@ export default {
       this.$refs.autoCodeForm.validate(async valid => {
         if (valid) {
           this.form.structName = toUpperCase(this.form.structName)
+          if (this.form.tableName) { this.form.tableName = this.form.tableName.replace(' ', '') }
           if (this.form.structName === this.form.abbreviation) {
             this.$message({
               type: 'error',

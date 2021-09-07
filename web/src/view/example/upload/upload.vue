@@ -163,7 +163,11 @@ export default {
       this.fullscreenLoading = false
     },
     downloadFile(row) {
-      downloadImage(row.url, row.name)
+      if (row.url.indexOf('http://') > -1 || row.url.indexOf('https://') > -1) {
+        downloadImage(row.url, row.name)
+      } else {
+        downloadImage(this.path + row.url, row.name)
+      }
     }
   }
 }

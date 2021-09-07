@@ -147,9 +147,13 @@ export default {
   computed: {
     ...mapGetters('user', ['token'])
   },
+  watch: {
+    tableData() {
+      this.setAuthorityIds()
+    }
+  },
   async created() {
     await this.getTableData()
-    this.setAuthorityIds()
     const res = await getAuthorityList({ page: 1, pageSize: 999 })
     this.setOptions(res.data.list)
   },
@@ -194,7 +198,6 @@ export default {
       if (res.code === 0) {
         this.$message.success('删除成功')
         await this.getTableData()
-        this.setAuthorityIds()
         row.visible = false
       }
     },
@@ -207,7 +210,6 @@ export default {
             this.$message({ type: 'success', message: '创建成功' })
           }
           await this.getTableData()
-          this.setAuthorityIds()
           this.closeAddUserDialog()
         }
       })
@@ -234,7 +236,7 @@ export default {
           this.$message({ type: 'success', message: '角色设置成功' })
         }
       })
-    }
+    },
   }
 }
 </script>

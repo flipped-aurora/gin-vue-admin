@@ -61,6 +61,13 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(id uint) error {
 	// 删除文件
 
 	for _, path := range strings.Split(md.AutoCodePath, ";") {
+
+		// 增加安全判断补丁:
+		_path, err := filepath.Abs(path)
+		if err != nil || _path != path {
+			continue
+		}
+
 		// 迁移
 		nPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			"rm_file", time.Now().Format("20060102"), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))

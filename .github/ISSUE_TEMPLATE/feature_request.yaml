@@ -6,6 +6,7 @@ assignees:
   - piexlmax
 body:
   - type: textarea
+    id: desc
     attributes:
       label: 功能描述以及必要性描述
       description: 您觉得此新功能会为框架带来什么便利.
@@ -15,6 +16,7 @@ body:
     validations:
       required: true
   - type: textarea
+    id: advise
     attributes:
       label: 建议和方案
       description: 您有好的建议或者修改方案可以提供给我们。

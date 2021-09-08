@@ -46,28 +46,28 @@
                   <p class="title">密保手机</p>
                   <p class="desc">
                     已绑定手机:1245678910
-                    <a href="#">立即修改</a>
+                    <a href="javascript:void(0)">立即修改</a>
                   </p>
                 </li>
                 <li>
                   <p class="title">密保邮箱</p>
                   <p class="desc">
                     已绑定邮箱：gin-vue-admin@google.com.cn
-                    <a href="#">立即修改</a>
+                    <a href="javascript:void(0)">立即修改</a>
                   </p>
                 </li>
                 <li>
                   <p class="title">密保问题</p>
                   <p class="desc">
                     未设置密保问题
-                    <a href="#">去设置</a>
+                    <a href="javascript:void(0)">去设置</a>
                   </p>
                 </li>
                 <li>
                   <p class="title">修改密码</p>
                   <p class="desc">
                     修改个人密码
-                    <a href="#" @click="showPassword=true">修改密码</a>
+                    <a href="javascript:void(0)" @click="showPassword=true">修改密码</a>
                   </p>
                 </li>
               </ul>

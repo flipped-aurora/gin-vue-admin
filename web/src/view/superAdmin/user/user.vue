@@ -96,7 +96,7 @@
 
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
-const path = process.env.VUE_APP_BASE_API
+const path = import.meta.env.VITE_BASE_API
 import {
   getUserList,
   setUserAuthorities,
@@ -106,8 +106,8 @@ import {
 import { getAuthorityList } from '@/api/authority'
 import infoList from '@/mixins/infoList'
 import { mapGetters } from 'vuex'
-import CustomPic from '@/components/customPic'
-import ChooseImg from '@/components/chooseImg'
+import CustomPic from '@/components/customPic/index.vue'
+import ChooseImg from '@/components/chooseImg/index.vue'
 export default {
   name: 'Api',
   components: { CustomPic, ChooseImg },
@@ -147,9 +147,13 @@ export default {
   computed: {
     ...mapGetters('user', ['token'])
   },
+  watch: {
+    tableData() {
+      this.setAuthorityIds()
+    }
+  },
   async created() {
     await this.getTableData()
-    this.setAuthorityIds()
     const res = await getAuthorityList({ page: 1, pageSize: 999 })
     this.setOptions(res.data.list)
   },
@@ -194,7 +198,6 @@ export default {
       if (res.code === 0) {
         this.$message.success('删除成功')
         await this.getTableData()
-        this.setAuthorityIds()
         row.visible = false
       }
     },
@@ -207,13 +210,14 @@ export default {
             this.$message({ type: 'success', message: '创建成功' })
           }
           await this.getTableData()
-          this.setAuthorityIds()
           this.closeAddUserDialog()
         }
       })
     },
     closeAddUserDialog() {
       this.$refs.userForm.resetFields()
+      this.userInfo.headerImg = ''
+      this.userInfo.authorityIds = []
       this.addUserDialog = false
     },
     addUser() {
@@ -232,7 +236,7 @@ export default {
           this.$message({ type: 'success', message: '角色设置成功' })
         }
       })
-    }
+    },
   }
 }
 </script>

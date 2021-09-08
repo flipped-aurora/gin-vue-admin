@@ -100,14 +100,14 @@
 </template>
 
 <script>
-import Aside from '@/view/layout/aside'
-import HistoryComponent from '@/view/layout/aside/historyComponent/history'
-import Screenfull from '@/view/layout/screenfull'
-import Search from '@/view/layout/search/search'
-import BottomInfo from '@/view/layout/bottomInfo/bottomInfo'
+import Aside from '@/view/layout/aside/index.vue'
+import HistoryComponent from '@/view/layout/aside/historyComponent/history.vue'
+import Screenfull from '@/view/layout/screenfull/index.vue'
+import Search from '@/view/layout/search/search.vue'
+import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import { mapGetters, mapActions } from 'vuex'
-import CustomPic from '@/components/customPic'
-import Setting from './setting'
+import CustomPic from '@/components/customPic/index.vue'
+import Setting from './setting/index.vue'
 import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
 export default {

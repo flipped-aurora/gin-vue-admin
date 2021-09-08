@@ -9,7 +9,7 @@
 </template>
 <script>
 import echarts from 'echarts'
-require('echarts/theme/macarons')
+import 'echarts/theme/macarons'
 
 var dataAxis = []
 for (var i = 1; i < 21; i++) {

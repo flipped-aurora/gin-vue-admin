@@ -99,9 +99,9 @@ import {
   copyAuthority
 } from '@/api/authority'
 
-import Menus from '@/view/superAdmin/authority/components/menus'
-import Apis from '@/view/superAdmin/authority/components/apis'
-import Datas from '@/view/superAdmin/authority/components/datas'
+import Menus from '@/view/superAdmin/authority/components/menus.vue'
+import Apis from '@/view/superAdmin/authority/components/apis.vue'
+import Datas from '@/view/superAdmin/authority/components/datas.vue'
 
 import infoList from '@/mixins/infoList'
 export default {

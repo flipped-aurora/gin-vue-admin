@@ -67,12 +67,12 @@
 </template>
 
 <script>
-const path = process.env.VUE_APP_BASE_API
+const path = import.meta.env.VITE_BASE_API
 import { mapGetters } from 'vuex'
 import infoList from '@/mixins/infoList'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import CustomPic from '@/components/customPic'
+import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 export default {
   name: 'Upload',
@@ -163,7 +163,11 @@ export default {
       this.fullscreenLoading = false
     },
     downloadFile(row) {
-      downloadImage(row.url, row.name)
+      if (row.url.indexOf('http://') > -1 || row.url.indexOf('https://') > -1) {
+        downloadImage(row.url, row.name)
+      } else {
+        downloadImage(this.path + row.url, row.name)
+      }
     }
   }
 }

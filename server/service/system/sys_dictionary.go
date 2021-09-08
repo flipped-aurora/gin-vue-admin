@@ -52,15 +52,12 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 		"Desc":   sysDictionary.Desc,
 	}
 	db := global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict)
-	if dict.Type == sysDictionary.Type {
-		err = db.Updates(sysDictionaryMap).Error
-	} else {
-		if (!errors.Is(global.GVA_DB.First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound)) {
+	if dict.Type != sysDictionary.Type {
+		if !errors.Is(global.GVA_DB.First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound) {
 			return errors.New("存在相同的type，不允许创建")
 		}
-		err = db.Updates(sysDictionaryMap).Error
-
 	}
+	err = db.Updates(sysDictionaryMap).Error
 	return err
 }
 

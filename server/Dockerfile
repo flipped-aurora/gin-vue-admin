@@ -3,7 +3,11 @@ FROM golang:alpine
 WORKDIR /go/src/github.com/flipped-aurora/gin-vue-admin/server
 COPY . .
 
-RUN go generate && go env && go build -o server .
+RUN go env -w GO111MODULE=on
+RUN go env -w GOPROXY=https://goproxy.cn,direct
+RUN go env
+RUN go mod tidy
+RUN go build -o server .
 
 FROM alpine:latest
 LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"

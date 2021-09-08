@@ -1,7 +1,7 @@
 name: 🚀 Feature request
 description: Suggest an idea for Gin-Vue-Admin
 title: "[Feature]: "
-labels: [feature, ]
+labels: [feature]
 assignees:
   - piexlmax
 body:

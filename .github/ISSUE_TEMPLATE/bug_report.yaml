@@ -7,47 +7,47 @@ assignees:
   - songzhibin97
   - SliverHorn
 body:
-- type: input
-  attributes:
-    label: gin-vue-admin 版本
-    description: 请输入您当前使用的项目版本?
-    placeholder: 2.4.5Beta
-  validations:
-    required: true
-- type: input
-  attributes:
-    label: Node 版本
-    description: 请输入您当前使用的NODE版本?
-    placeholder: v14.16.0
-  validations:
-    required: true
-- type: input
-  attributes:
-    label: Golang 版本
-    description: 请输入您当前使用的GOLANG版本?
-    placeholder: go 1.16
-  validations:
-    required: true
-- type: dropdown
-  attributes:
-    label: 是否依旧存在
-    description: 是否可以在master分支复现此bug?
-    options:
-      - 可以
-      - 不可以
-      - 未测试
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: bug描述
-    description: 请简要描述bug以及复现过程.
-    placeholder: |
-      1. 首先...
-      2. 然后...
-  validations:
-    required: true
-- type: textarea
-  attributes:
-    label: 修改建议
-    description: 您有好的建议或者修改方案可以提供给我们。
+  - type: input
+    attributes:
+      label: gin-vue-admin 版本
+      description: 请输入您当前使用的项目版本?
+      placeholder: 2.4.5Beta
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Node 版本
+      description: 请输入您当前使用的NODE版本?
+      placeholder: v14.16.0
+    validations:
+      required: true
+  - type: input
+    attributes:
+      label: Golang 版本
+      description: 请输入您当前使用的GOLANG版本?
+      placeholder: go 1.16
+    validations:
+      required: true
+  - type: dropdown
+    attributes:
+      label: 是否依旧存在
+      description: 是否可以在master分支复现此bug?
+      options:
+        - 可以
+        - 不可以
+        - 未测试
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: bug描述
+      description: 请简要描述bug以及复现过程.
+      placeholder: |
+        1. 首先...
+        2. 然后...
+    validations:
+      required: true
+  - type: textarea
+    attributes:
+      label: 修改建议
+      description: 您有好的建议或者修改方案可以提供给我们。

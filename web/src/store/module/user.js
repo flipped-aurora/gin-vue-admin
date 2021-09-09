@@ -11,7 +11,7 @@ export const user = {
       uuid: '',
       nickName: '',
       headerImg: '',
-      authority: '',
+      authority: {},
       sideMode: 'dark',
       activeColor: '#1890ff',
       baseColor: '#fff'

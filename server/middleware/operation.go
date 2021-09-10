@@ -2,17 +2,20 @@ package middleware
 
 import (
 	"bytes"
-	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/service"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
+
+var operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 
 func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -37,7 +40,7 @@ func OperationRecord() gin.HandlerFunc {
 			}
 			userId = id
 		}
-		record := model.SysOperationRecord{
+		record := system.SysOperationRecord{
 			Ip:     c.ClientIP(),
 			Method: c.Request.Method,
 			Path:   c.Request.URL.Path,
@@ -65,7 +68,7 @@ func OperationRecord() gin.HandlerFunc {
 		record.Latency = latency
 		record.Resp = writer.body.String()
 
-		if err := service.CreateSysOperationRecord(record); err != nil {
+		if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
 			global.GVA_LOG.Error("create operation record error:", zap.Any("err", err))
 		}
 	}

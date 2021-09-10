@@ -1,9 +1,10 @@
 package utils
 
 import (
-	"gin-vue-admin/global"
-	"go.uber.org/zap"
 	"os"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"go.uber.org/zap"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -37,9 +38,9 @@ func CreateDir(dirs ...string) (err error) {
 		}
 		if !exist {
 			global.GVA_LOG.Debug("create directory" + v)
-			err = os.MkdirAll(v, os.ModePerm)
-			if err != nil {
-				global.GVA_LOG.Error("create directory"+ v, zap.Any(" error:", err))
+			if err := os.MkdirAll(v, os.ModePerm); err != nil {
+				global.GVA_LOG.Error("create directory"+v, zap.Any(" error:", err))
+				return err
 			}
 		}
 	}

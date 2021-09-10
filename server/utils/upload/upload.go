@@ -1,8 +1,9 @@
 package upload
 
 import (
-	"gin-vue-admin/global"
 	"mime/multipart"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
 //@author: [ccfish86](https://github.com/ccfish86)
@@ -28,6 +29,10 @@ func NewOss() OSS {
 		return &Local{}
 	case "qiniu":
 		return &Qiniu{}
+	case "tencent-cos":
+		return &TencentCOS{}
+	case "aliyun-oss":
+		return &AliyunOSS{}
 	default:
 		return &Local{}
 	}

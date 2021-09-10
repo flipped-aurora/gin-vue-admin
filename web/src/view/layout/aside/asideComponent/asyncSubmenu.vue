@@ -1,11 +1,11 @@
 <template>
-  <el-submenu :popper-append-to-body="false" ref="subMenu" :index="routerInfo.name">
-    <template slot="title">
-      <i :class="'el-icon-'+routerInfo.meta.icon"></i>
-      <span slot="title">{{routerInfo.meta.title}}</span>
+  <el-sub-menu ref="subMenu" :index="routerInfo.name">
+    <template #title>
+      <i :class="'el-icon-'+routerInfo.meta.icon" />
+      <span>{{ routerInfo.meta.title }}</span>
     </template>
-    <slot></slot>
-  </el-submenu>
+    <slot />
+  </el-sub-menu>
 </template>
 
 <script>
@@ -21,5 +21,3 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-</style>

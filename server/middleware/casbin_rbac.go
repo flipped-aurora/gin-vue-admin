@@ -1,12 +1,14 @@
 package middleware
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/model/response"
-	"gin-vue-admin/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 )
+
+var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 
 // 拦截器
 func CasbinHandler() gin.HandlerFunc {
@@ -19,7 +21,7 @@ func CasbinHandler() gin.HandlerFunc {
 		act := c.Request.Method
 		// 获取用户的角色
 		sub := waitUse.AuthorityId
-		e := service.Casbin()
+		e := casbinService.Casbin()
 		// 判断策略中是否存在
 		success, _ := e.Enforce(sub, obj, act)
 		if global.GVA_CONFIG.System.Env == "develop" || success {

@@ -1,13 +1,12 @@
 <template>
   <div id="app">
-    <router-view></router-view>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app',
-  components: {}
+  name: 'App'
 }
 </script>
 
@@ -20,5 +19,9 @@ export default {
   background: #eee;
   height: 100vh;
   overflow: hidden;
+  font-weight: 400 !important;
+}
+.el-button{
+  font-weight: 400 !important;
 }
 </style>

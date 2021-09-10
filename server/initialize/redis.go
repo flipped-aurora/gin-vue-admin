@@ -1,8 +1,11 @@
 package initialize
 
 import (
-	"gin-vue-admin/global"
-	"github.com/go-redis/redis"
+	"context"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+
+	"github.com/go-redis/redis/v8"
 	"go.uber.org/zap"
 )
 
@@ -13,11 +16,11 @@ func Redis() {
 		Password: redisCfg.Password, // no password set
 		DB:       redisCfg.DB,       // use default DB
 	})
-	pong, err := client.Ping().Result()
+	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {
 		global.GVA_LOG.Error("redis connect ping failed, err:", zap.Any("err", err))
 	} else {
-		global.GVA_LOG.Info("redis connect ping response:", zap.String("pong",pong))
+		global.GVA_LOG.Info("redis connect ping response:", zap.String("pong", pong))
 		global.GVA_REDIS = client
 	}
 }

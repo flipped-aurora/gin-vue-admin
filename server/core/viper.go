@@ -3,12 +3,20 @@ package core
 import (
 	"flag"
 	"fmt"
-	"gin-vue-admin/global"
-	_ "gin-vue-admin/packfile"
-	"gin-vue-admin/utils"
+	"os"
+	"path/filepath"
+	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+
+	"github.com/songzhibin97/gkit/cache/local_cache"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	_ "github.com/flipped-aurora/gin-vue-admin/server/packfile"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"os"
 )
 
 func Viper(path ...string) *viper.Viper {
@@ -34,6 +42,7 @@ func Viper(path ...string) *viper.Viper {
 
 	v := viper.New()
 	v.SetConfigFile(config)
+	v.SetConfigType("yaml")
 	err := v.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("Fatal error config file: %s \n", err))
@@ -46,9 +55,15 @@ func Viper(path ...string) *viper.Viper {
 			fmt.Println(err)
 		}
 	})
-
 	if err := v.Unmarshal(&global.GVA_CONFIG); err != nil {
 		fmt.Println(err)
+	}
+	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
+	global.BlackCache = local_cache.NewCache(
+		local_cache.SetDefaultExpire(time.Duration(global.GVA_CONFIG.JWT.ExpiresTime)))
+	// 从db加载jwt数据
+	if global.GVA_DB != nil {
+		system.LoadAll()
 	}
 	return v
 }

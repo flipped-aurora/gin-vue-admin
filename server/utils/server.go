@@ -35,7 +35,6 @@ type Cpu struct {
 	Cores int       `json:"cores"`
 }
 
-
 type Rrm struct {
 	UsedMB      int `json:"usedMb"`
 	TotalMB     int `json:"totalMb"`
@@ -89,9 +88,9 @@ func InitCPU() (c Cpu, err error) {
 //@return: r Rrm, err error
 
 func InitRAM() (r Rrm, err error) {
-	if u, err := mem.VirtualMemory(); err != nil{
+	if u, err := mem.VirtualMemory(); err != nil {
 		return r, err
-	}else {
+	} else {
 		r.UsedMB = int(u.Used) / MB
 		r.TotalMB = int(u.Total) / MB
 		r.UsedPercent = int(u.UsedPercent)
@@ -105,7 +104,7 @@ func InitRAM() (r Rrm, err error) {
 //@return: d Disk, err error
 
 func InitDisk() (d Disk, err error) {
-	if u, err := disk.Usage("/"); err != nil{
+	if u, err := disk.Usage("/"); err != nil {
 		return d, err
 	} else {
 		d.UsedMB = int(u.Used) / MB

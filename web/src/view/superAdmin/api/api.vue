@@ -3,56 +3,72 @@
     <div class="search-term">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="路径">
-          <el-input placeholder="路径" v-model="searchInfo.path"></el-input>
+          <el-input v-model="searchInfo.path" placeholder="路径" />
         </el-form-item>
         <el-form-item label="描述">
-          <el-input placeholder="描述" v-model="searchInfo.description"></el-input>
+          <el-input v-model="searchInfo.description" placeholder="描述" />
         </el-form-item>
         <el-form-item label="api组">
-          <el-input placeholder="api组" v-model="searchInfo.apiGroup"></el-input>
+          <el-input v-model="searchInfo.apiGroup" placeholder="api组" />
         </el-form-item>
         <el-form-item label="请求">
-          <el-select clearable placeholder="请选择" v-model="searchInfo.method">
+          <el-select v-model="searchInfo.method" clearable placeholder="请选择">
             <el-option
+              v-for="item in methodOptions"
               :key="item.value"
               :label="`${item.label}(${item.value})`"
               :value="item.value"
-              v-for="item in methodOptions"
-            ></el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click="onSubmit" type="primary">查询</el-button>
-        </el-form-item>
-        <el-form-item>
-          <el-button @click="openDialog('addApi')" type="primary">新增api</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog('addApi')">新增</el-button>
+          <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+            <p>确定要删除吗？</p>
+            <div style="text-align: right; margin: 0">
+              <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
+              <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
+            </div>
+            <template #reference>
+              <el-button icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
+            </template>
+          </el-popover>
         </el-form-item>
       </el-form>
     </div>
-    <el-table :data="tableData" @sort-change="sortChange" border stripe>
-      <el-table-column label="id" min-width="60" prop="ID" sortable="custom"></el-table-column>
-      <el-table-column label="api路径" min-width="150" prop="path" sortable="custom"></el-table-column>
-      <el-table-column label="api分组" min-width="150" prop="apiGroup" sortable="custom"></el-table-column>
-      <el-table-column label="api简介" min-width="150" prop="description" sortable="custom"></el-table-column>
+    <el-table :data="tableData" border stripe @sort-change="sortChange" @selection-change="handleSelectionChange">
+      <el-table-column
+        type="selection"
+        width="55"
+      />
+      <el-table-column label="id" min-width="60" prop="ID" sortable="custom" />
+      <el-table-column label="api路径" min-width="150" prop="path" sortable="custom" />
+      <el-table-column label="api分组" min-width="150" prop="apiGroup" sortable="custom" />
+      <el-table-column label="api简介" min-width="150" prop="description" sortable="custom" />
       <el-table-column label="请求" min-width="150" prop="method" sortable="custom">
-        <template slot-scope="scope">
+        <template #default="scope">
           <div>
-            {{scope.row.method}}
+            {{ scope.row.method }}
             <el-tag
               :key="scope.row.methodFiletr"
-              :type="scope.row.method|tagTypeFiletr"
+              :type="tagTypeFiletr(scope.row.method)"
               effect="dark"
               size="mini"
-            >{{scope.row.method|methodFiletr}}</el-tag>
-            <!-- {{scope.row.method|methodFiletr}} -->
+            >{{ methodFiletr(scope.row.method) }}</el-tag>
           </div>
         </template>
       </el-table-column>
 
       <el-table-column fixed="right" label="操作" width="200">
-        <template slot-scope="scope">
-          <el-button @click="editApi(scope.row)" size="small" type="primary" icon="el-icon-edit">编辑</el-button>
-          <el-button @click="deleteApi(scope.row)" size="small" type="danger" icon="el-icon-delete">删除</el-button>
+        <template #default="scope">
+          <el-button size="small" type="primary" icon="el-icon-edit" @click="editApi(scope.row)">编辑</el-button>
+          <el-button
+            size="small"
+            type="danger"
+            icon="el-icon-delete"
+            @click="deleteApi(scope.row)"
+          >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -62,42 +78,43 @@
       :page-sizes="[10, 30, 50, 100]"
       :style="{float:'right',padding:'20px'}"
       :total="total"
+      layout="total, sizes, prev, pager, next, jumper"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
-      layout="total, sizes, prev, pager, next, jumper"
-    ></el-pagination>
+    />
 
-    <el-dialog :before-close="closeDialog" :title="dialogTitle" :visible.sync="dialogFormVisible">
-      <el-form :inline="true" :model="form" :rules="rules" label-width="80px" ref="apiForm">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
+      <el-form ref="apiForm" :inline="true" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="路径" prop="path">
-          <el-input autocomplete="off" v-model="form.path"></el-input>
+          <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
         <el-form-item label="请求" prop="method">
-          <el-select placeholder="请选择" v-model="form.method">
+          <el-select v-model="form.method" placeholder="请选择">
             <el-option
+              v-for="item in methodOptions"
               :key="item.value"
               :label="`${item.label}(${item.value})`"
               :value="item.value"
-              v-for="item in methodOptions"
-            ></el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="api分组" prop="apiGroup">
-          <el-input autocomplete="off" v-model="form.apiGroup"></el-input>
+          <el-input v-model="form.apiGroup" autocomplete="off" />
         </el-form-item>
         <el-form-item label="api简介" prop="description">
-          <el-input autocomplete="off" v-model="form.description"></el-input>
+          <el-input v-model="form.description" autocomplete="off" />
         </el-form-item>
       </el-form>
       <div class="warning">新增Api需要在角色管理内配置权限才可使用</div>
-      <div class="dialog-footer" slot="footer">
-        <el-button @click="closeDialog">取 消</el-button>
-        <el-button @click="enterDialog" type="primary">确 定</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
-
 
 <script>
 // 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
@@ -107,7 +124,8 @@ import {
   getApiList,
   createApi,
   updateApi,
-  deleteApi
+  deleteApi,
+  deleteApisByIds
 } from '@/api/api'
 import infoList from '@/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
@@ -139,9 +157,11 @@ export default {
   mixins: [infoList],
   data() {
     return {
+      deleteVisible: false,
       listApi: getApiList,
       dialogFormVisible: false,
       dialogTitle: '新增Api',
+      apis: [],
       form: {
         path: '',
         apiGroup: '',
@@ -164,16 +184,46 @@ export default {
       }
     }
   },
+  created() {
+    this.getTableData()
+  },
   methods: {
+    methodFiletr(value) {
+      const target = methodOptions.filter(item => item.value === value)[0]
+      return target && `${target.label}`
+    },
+    tagTypeFiletr(value) {
+      const target = methodOptions.filter(item => item.value === value)[0]
+      return target && `${target.type}`
+    },
+    //  选中api
+    handleSelectionChange(val) {
+      this.apis = val
+    },
+    async onDelete() {
+      const ids = this.apis.map(item => item.ID)
+      const res = await deleteApisByIds({ ids })
+      if (res.code === 0) {
+        this.$message({
+          type: 'success',
+          message: res.msg
+        })
+        if (this.tableData.length === ids.length && this.page > 1) {
+          this.page--
+        }
+        this.deleteVisible = false
+        this.getTableData()
+      }
+    },
     // 排序
     sortChange({ prop, order }) {
       if (prop) {
         this.searchInfo.orderKey = toSQLLine(prop)
-        this.searchInfo.desc = order == 'descending'
+        this.searchInfo.desc = order === 'descending'
       }
       this.getTableData()
     },
-    //条件搜索前端看此方法
+    // 条件搜索前端看此方法
     onSubmit() {
       this.page = 1
       this.pageSize = 10
@@ -181,7 +231,7 @@ export default {
     },
     initForm() {
       this.$refs.apiForm.resetFields()
-      this.form= {
+      this.form = {
         path: '',
         apiGroup: '',
         method: '',
@@ -195,10 +245,10 @@ export default {
     openDialog(type) {
       switch (type) {
         case 'addApi':
-          this.dialogTitlethis = '新增Api'
+          this.dialogTitle = '新增Api'
           break
         case 'edit':
-          this.dialogTitlethis = '编辑Api'
+          this.dialogTitle = '编辑Api'
           break
         default:
           break
@@ -212,18 +262,21 @@ export default {
       this.openDialog('edit')
     },
     async deleteApi(row) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+      this.$confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
-        .then(async () => {
+        .then(async() => {
           const res = await deleteApi(row)
-          if (res.code == 0) {
+          if (res.code === 0) {
             this.$message({
               type: 'success',
               message: '删除成功!'
             })
+            if (this.tableData.length === 1 && this.page > 1) {
+              this.page--
+            }
             this.getTableData()
           }
         })
@@ -241,7 +294,7 @@ export default {
             case 'addApi':
               {
                 const res = await createApi(this.form)
-                if (res.code == 0) {
+                if (res.code === 0) {
                   this.$message({
                     type: 'success',
                     message: '添加成功',
@@ -256,7 +309,7 @@ export default {
             case 'edit':
               {
                 const res = await updateApi(this.form)
-                if (res.code == 0) {
+                if (res.code === 0) {
                   this.$message({
                     type: 'success',
                     message: '编辑成功',
@@ -268,6 +321,7 @@ export default {
               }
               break
             default:
+              // eslint-disable-next-line no-lone-blocks
               {
                 this.$message({
                   type: 'error',
@@ -280,23 +334,10 @@ export default {
         }
       })
     }
-  },
-  filters: {
-    methodFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      // return target && `${target.label}(${target.value})`
-      return target && `${target.label}`
-    },
-    tagTypeFiletr(value) {
-      const target = methodOptions.filter(item => item.value === value)[0]
-      return target && `${target.type}`
-    }
-  },
-  created(){
-    this.getTableData()
   }
 }
 </script>
+
 <style scoped lang="scss">
 .button-box {
   padding: 10px 20px;

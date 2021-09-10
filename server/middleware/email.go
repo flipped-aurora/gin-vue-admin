@@ -1,17 +1,20 @@
 package middleware
 
 import (
-	"gin-vue-admin/global"
-	"gin-vue-admin/model"
-	"gin-vue-admin/model/request"
-	"gin-vue-admin/service"
-	"gin-vue-admin/utils"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/utils"
 	"io/ioutil"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
+
+var userService = service.ServiceGroupApp.SystemServiceGroup.UserService
 
 func ErrorToEmail() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -21,14 +24,14 @@ func ErrorToEmail() gin.HandlerFunc {
 			username = waitUse.Username
 		} else {
 			id, _ := strconv.Atoi(c.Request.Header.Get("x-user-id"))
-			err, user := service.FindUserById(id)
+			err, user := userService.FindUserById(id)
 			if err != nil {
 				username = "Unknown"
 			}
 			username = user.Username
 		}
 		body, _ := ioutil.ReadAll(c.Request.Body)
-		record := model.SysOperationRecord{
+		record := system.SysOperationRecord{
 			Ip:     c.ClientIP(),
 			Method: c.Request.Method,
 			Path:   c.Request.URL.Path,

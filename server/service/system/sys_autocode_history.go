@@ -25,7 +25,7 @@ var AutoCodeHistoryServiceApp = new(AutoCodeHistoryService)
 func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string) bool {
 
 	var count int64
-	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ?", structName).Count(&count)
+	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ? and flag = 0", structName).Count(&count)
 	return count > 0
 }
 

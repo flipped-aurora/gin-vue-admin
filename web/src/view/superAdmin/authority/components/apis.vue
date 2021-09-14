@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearflex">
-      <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">确 定</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="authApiEnter">确 定</el-button>
     </div>
     <el-tree
       ref="apiTree"

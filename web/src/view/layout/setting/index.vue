@@ -89,8 +89,12 @@ export default {
 
 <style lang="scss" scoped>
 .drawer-container {
+  transition: all 0.2s;
+  &:hover{
+    right: 0
+  }
   position: fixed;
-  right: 0;
+  right: -20px;
   bottom: 15%;
   height: 40px;
   width: 40px;

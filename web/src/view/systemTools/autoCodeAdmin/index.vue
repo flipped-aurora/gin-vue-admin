@@ -1,17 +1,9 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="表名">
-          <el-input v-model="searchInfo.tableName" placeholder="表名" />
-        </el-form-item>
-        <el-form-item label="结构体名称">
-          <el-input v-model="searchInfo.structName" placeholder="结构体名称" />
-        </el-form-item>
-        <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode(null)">新增</el-button>
-        </el-form-item>
-      </el-form>
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode(null)">新增</el-button>
+      </div>
     </div>
     <el-table :data="tableData" border stripe>
       <el-table-column

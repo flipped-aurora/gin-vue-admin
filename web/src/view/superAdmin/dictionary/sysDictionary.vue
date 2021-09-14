@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
+      <el-form :inline="true" :model="searchInfo">
         <el-form-item label="字典名（中）">
           <el-input v-model="searchInfo.name" placeholder="搜索条件" />
         </el-form-item>
@@ -17,11 +17,11 @@
         <el-form-item label="描述">
           <el-input v-model="searchInfo.desc" placeholder="搜索条件" />
         </el-form-item>
-        <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
-        </el-form-item>
       </el-form>
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
+      </div>
     </div>
     <el-table
       ref="multipleTable"

@@ -1,6 +1,6 @@
 <template>
   <div class="authority">
-    <div class="button-box clearflex">
+    <div class="gva-btn-list">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="addAuthority('0')">新增角色</el-button>
     </div>
     <el-table
@@ -13,7 +13,7 @@
     >
       <el-table-column label="角色id" min-width="180" prop="authorityId" />
       <el-table-column label="角色名称" min-width="180" prop="authorityName" />
-      <el-table-column fixed="right" label="操作" width="460">
+      <el-table-column label="操作" width="460">
         <template #default="scope">
           <el-button size="mini" type="primary" @click="opdendrawer(scope.row)">设置权限</el-button>
           <el-button
@@ -369,16 +369,10 @@ export default {
       display: none;
     }
   }
-  .button-box {
-    padding: 10px 20px;
-    .el-button {
-      float: right;
-    }
-  }
 }
 .role-box {
   .el-tabs__content {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 72px);
     overflow: auto;
   }
 }

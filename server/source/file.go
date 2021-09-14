@@ -14,8 +14,8 @@ var File = new(file)
 type file struct{}
 
 var files = []example.ExaFileUploadAndDownload{
-	{global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "10.png", "http://qmplusimg.henrongyi.top/gvalogo.png", "png", "158787308910.png"},
-	{global.GVA_MODEL{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "logo.png", "http://qmplusimg.henrongyi.top/1576554439myAvatar.png", "png", "1587973709logo.png"},
+	{global.GVA_MODEL{ID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "10.png", "https://qmplusimg.henrongyi.top/gvalogo.png", "png", "158787308910.png"},
+	{global.GVA_MODEL{ID: 2, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "logo.png", "https://qmplusimg.henrongyi.top/1576554439myAvatar.png", "png", "1587973709logo.png"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

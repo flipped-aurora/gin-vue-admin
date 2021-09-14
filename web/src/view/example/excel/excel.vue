@@ -8,10 +8,10 @@
         :on-success="loadExcel"
         :show-file-list="false"
       >
-        <el-button size="small" type="primary" icon="el-icon-upload2">导入</el-button>
+        <el-button size="mini" type="primary" icon="el-icon-upload2">导入</el-button>
       </el-upload>
-      <el-button class="excel-btn" size="small" type="primary" icon="el-icon-download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
-      <el-button class="excel-btn" size="small" type="success" icon="el-icon-download" @click="downloadExcelTemplate()">下载模板</el-button>
+      <el-button class="excel-btn" size="mini" type="primary" icon="el-icon-download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
+      <el-button class="excel-btn" size="mini" type="success" icon="el-icon-download" @click="downloadExcelTemplate()">下载模板</el-button>
     </div>
     <el-table :data="tableData" border row-key="ID" stripe>
       <el-table-column label="ID" min-width="100" prop="ID" />
@@ -74,6 +74,7 @@ export default {
 .btn-list{
   display: flex;
   margin-bottom: 12px;
+  justify-content: flex-end;
   .excel-btn+.excel-btn{
     margin-left: 12px;
   }

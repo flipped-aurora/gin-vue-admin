@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -28,6 +29,10 @@ func main() {
 		// 程序结束前关闭数据库链接
 		db, _ := global.GVA_DB.DB()
 		defer db.Close()
+	}
+	// 从db加载jwt数据
+	if global.GVA_DB != nil {
+		system.LoadAll()
 	}
 	core.RunWindowsServer()
 }

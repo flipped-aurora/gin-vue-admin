@@ -2,8 +2,9 @@ package system
 
 import (
 	"context"
-	"go.uber.org/zap"
 	"time"
+
+	"go.uber.org/zap"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -23,7 +24,7 @@ func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err 
 	if err != nil {
 		return
 	}
-	global.BlackCache.SetDefault(jwtList.Jwt, struct{}{})
+	global.BlackCache.SetNoExpire(jwtList.Jwt, struct{}{})
 	return
 }
 
@@ -73,6 +74,6 @@ func LoadAll() {
 		return
 	}
 	for i := 0; i < len(data); i++ {
-		global.BlackCache.SetDefault(data[i], struct{}{})
+		global.BlackCache.SetNoExpire(data[i], struct{}{})
 	} // jwt黑名单 加入 BlackCache 中
 }

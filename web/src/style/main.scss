@@ -653,7 +653,7 @@ li {
             color: #fff;
         }
         .el-menu--inline {
-            border-left: 5px solid #2c3b41;
+            // border-left: 5px solid #2c3b41;
         }
     }
     .hideside {
@@ -810,9 +810,6 @@ li {
     padding: 0 15px;
     border-left: 1px solid #ebeef5;
     border-right: 1px solid #ebeef5;
-    .demo-form-inline {
-        margin-bottom: 10px;
-    }
 }
 
 // table
@@ -892,6 +889,14 @@ li {
 // upload-demo
 .upload-demo,
 .upload {
+    .upload-box{
+        margin-bottom: 12px;
+        display: flex;
+        justify-content: flex-end;
+        .upload-btn{
+            margin-left: 12px;
+        }
+    }
     background-color: $white-bg;
     padding: 15px;
     .el-upload-list__item-status-label {
@@ -1019,6 +1024,7 @@ li {
     .main-cont.el-main {
         background-color: $bg-main;
         .menu-total {
+            cursor: pointer;
             font-size: 22px;
             color: #838383;
             margin-top: 16px;
@@ -1042,7 +1048,12 @@ li {
                     height: $height-nav-scroll;
                     border: none;
                     border-left: 1px solid $border-color;
+                    border-right: 1px solid $border-color;
+                    +.el-tabs__item{
+                        border-left: 0px solid $border-color;
+                    }
                 }
+                
                 .el-tabs__item.is-active {
                     background-color: rgba(64, 158, 255, .08);
                 }
@@ -1145,10 +1156,6 @@ $mainHight: 100vh;
     }
 }
 
-.el-scrollbar__wrap {
-    padding-bottom: 17px;
-}
-
 .layout-cont {
     .right-box {
         height: $height-header;
@@ -1174,10 +1181,6 @@ $mainHight: 100vh;
             background-color: #fff;
             padding: 0;
         }
-        .fl-right {
-            // height: $height-header;
-            // line-height: $height-header;
-        }
         &.el-main {
             overflow: auto;
             background: #fff;
@@ -1186,6 +1189,8 @@ $mainHight: 100vh;
         overflow: visible;
         position: relative;
         .menu-total {
+            margin-left:6px;
+            cursor: pointer;
             float: left;
             margin-top: 10px;
             width: 30px;
@@ -1201,7 +1206,7 @@ $mainHight: 100vh;
             }
         }
         .el-menu-vertical {
-            height: calc(100vh - 64px) !important;
+            height: calc(100vh - 60px) !important;
             visibility: auto;
             &:not(.el-menu--collapse) {
                 width: 220px;
@@ -1394,6 +1399,15 @@ $mainHight: 100vh;
             font-size: $el-icon-small;
             margin-bottom: 8px;
         }
+    }
+}
+
+.gva-btn-list{
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: flex-end;
+    .el-button+.el-button{
+        margin-left: 12px;
     }
 }
 

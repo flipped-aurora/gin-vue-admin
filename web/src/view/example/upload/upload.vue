@@ -1,28 +1,26 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="upload">
-      <el-row>
-        <el-col :span="12">
-          <el-upload
-            :action="`${path}/fileUploadAndDownload/upload`"
-            :before-upload="checkFile"
-            :headers="{ 'x-token': token }"
-            :on-error="uploadError"
-            :on-success="uploadSuccess"
-            :show-file-list="false"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <template #tip>
-              <div class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </template>
-          </el-upload>
-        </el-col>
-        <el-col :span="12">
-          带压缩的上传, (512(k)为压缩限制)
-          <upload-image v-model="imageUrl" :file-size="512" :max-w-h="1080" @on-success="getTableData" />
-          已上传文件 {{ imageUrl }}
-        </el-col>
-      </el-row>
+      <div class="upload-box">
+        <el-upload
+          :action="`${path}/fileUploadAndDownload/upload`"
+          :before-upload="checkFile"
+          :headers="{ 'x-token': token }"
+          :on-error="uploadError"
+          :on-success="uploadSuccess"
+          :show-file-list="false"
+          class="upload-btn"
+        >
+          <el-button size="mini" type="primary">普通上传</el-button>
+        </el-upload>
+        <upload-image
+          v-model="imageUrl"
+          :file-size="512"
+          :max-w-h="1080"
+          class="upload-btn"
+          @on-success="getTableData"
+        />
+      </div>
 
       <el-table :data="tableData" border stripe>
         <el-table-column label="预览" width="100">
@@ -127,13 +125,13 @@ export default {
       this.fullscreenLoading = true
       const isJPG = file.type === 'image/jpeg'
       const isPng = file.type === 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 0.5
       if (!isJPG && !isPng) {
-        this.$message.error('上传头像图片只能是 JPG或png 格式!')
+        this.$message.error('上传图片只能是 jpg或png 格式!')
         this.fullscreenLoading = false
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error('未压缩未见上传图片大小不能超过 500KB，请使用压缩上传')
         this.fullscreenLoading = false
       }
       return (isPng || isJPG) && isLt2M

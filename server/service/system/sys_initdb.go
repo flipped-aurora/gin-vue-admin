@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"path/filepath"
 
+	uuid "github.com/satori/go.uuid"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
@@ -33,6 +35,7 @@ func (initDBService *InitDBService) writeConfig(viper *viper.Viper, mysql config
 	for k, v := range cs {
 		viper.Set(k, v)
 	}
+	viper.Set("jwt.signing-key", uuid.NewV4())
 	return viper.WriteConfig()
 }
 
@@ -159,6 +162,7 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		global.GVA_DB = nil
 		return err
 	}
+
 	if err = initDBService.writeConfig(global.GVA_VP, MysqlConfig); err != nil {
 		return err
 	}

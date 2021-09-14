@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
+      <el-form :inline="true" :model="searchInfo">
         <el-form-item label="请求方法">
           <el-input v-model="searchInfo.method" placeholder="搜索条件" />
         </el-form-item>
@@ -11,20 +11,20 @@
         <el-form-item label="结果状态码">
           <el-input v-model="searchInfo.status" placeholder="搜索条件" />
         </el-form-item>
-        <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
-              <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
-            </div>
-            <template #reference>
-              <el-button icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
-            </template>
-          </el-popover>
-        </el-form-item>
       </el-form>
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+          <p>确定要删除吗？</p>
+          <div style="text-align: right; margin: 0">
+            <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
+            <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
+          </div>
+          <template #reference>
+            <el-button icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
+          </template>
+        </el-popover>
+      </div>
     </div>
     <el-table
       ref="multipleTable"

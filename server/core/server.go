@@ -6,6 +6,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"go.uber.org/zap"
 )
 
@@ -18,6 +19,12 @@ func RunWindowsServer() {
 		// 初始化redis服务
 		initialize.Redis()
 	}
+
+	// 从db加载jwt数据
+	if global.GVA_DB != nil {
+		system.LoadAll()
+	}
+
 	Router := initialize.Routers()
 
 	Router.Static("/form-generator", "./resource/page")

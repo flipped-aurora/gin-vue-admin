@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="button-box clearflex">
+    <div class="gva-btn-list">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMenu('0')">新增根菜单</el-button>
     </div>
 
@@ -413,12 +413,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
 .warning {
   color: #dc143c;
 }

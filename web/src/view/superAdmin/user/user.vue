@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="button-box clearflex">
+    <div class="gva-btn-list">
       <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
     </div>
     <el-table :data="tableData" border stripe>
@@ -242,13 +242,6 @@ export default {
 </script>
 
 <style lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
-
 .user-dialog {
   .header-img-box {
   width: 200px;

@@ -299,12 +299,11 @@
         </el-form-item>
       </template>
       <!--  ossType end  -->
-
-      <el-form-item>
-        <el-button type="primary" @click="update">立即更新</el-button>
-        <el-button type="primary" @click="reload">重启服务（开发中）</el-button>
-      </el-form-item>
     </el-form>
+    <div class="gva-btn-list">
+      <el-button type="primary" size="mini" @click="update">立即更新</el-button>
+      <el-button type="primary" size="mini" @click="reload">重启服务（开发中）</el-button>
+    </div>
   </div>
 </template>
 
@@ -378,7 +377,7 @@ export default {
     padding: 10px;
     margin: 10px 0;
     font-size: 16px;
-    box-shadow: -4px 1px 3px 0px #e7e8e8;
+    box-shadow: -4px 0px 0px 0px #e7e8e8;
   }
 }
 </style>

@@ -1,6 +1,7 @@
 package system
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -14,10 +15,19 @@ import (
 	"go.uber.org/zap"
 )
 
+var RepeatErr = errors.New("重复创建")
+
 type AutoCodeHistoryService struct {
 }
 
 var AutoCodeHistoryServiceApp = new(AutoCodeHistoryService)
+
+func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string) bool {
+
+	var count int64
+	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ? and flag = 0", structName).Count(&count)
+	return count > 0
+}
 
 // CreateAutoCodeHistory RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
 func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {

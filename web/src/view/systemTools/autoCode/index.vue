@@ -78,7 +78,7 @@
       </el-form-item>
     </el-form>
     <!-- 组件列表 -->
-    <div class="button-box clearflex">
+    <div class="gva-btn-list">
       <el-button size="mini" type="primary" @click="editAndAddField()">新增Field</el-button>
     </div>
     <el-table :data="form.fields" border stripe>
@@ -128,7 +128,7 @@
     </el-table>
     <el-tag type="danger">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
     <!-- 组件列表 -->
-    <div class="button-box clearflex">
+    <div class="gva-btn-list">
       <el-button size="mini" type="primary" @click="enterForm(true)">预览代码</el-button>
       <el-button size="mini" type="primary" @click="enterForm(false)">生成代码</el-button>
     </div>

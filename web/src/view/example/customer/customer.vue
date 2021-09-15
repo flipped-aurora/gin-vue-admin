@@ -1,11 +1,9 @@
 <template>
   <div>
     <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-search" @click="openDialog">新增</el-button>
-        </el-form-item>
-      </el-form>
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
+      </div>
     </div>
     <el-table
       ref="multipleTable"
@@ -156,5 +154,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

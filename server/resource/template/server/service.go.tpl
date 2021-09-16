@@ -80,6 +80,9 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
         {{- end }}
     {{- end }}
 	err = db.Count(&total).Error
+	if err!=nil {
+    	return
+    }
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
 	return err, {{.Abbreviation}}s, total
 }

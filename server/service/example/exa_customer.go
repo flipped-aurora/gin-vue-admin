@@ -68,6 +68,9 @@ func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID string, info 
 	var a system.SysAuthority
 	a.AuthorityId = sysUserAuthorityID
 	err, auth := systemService.AuthorityServiceApp.GetAuthorityInfo(a)
+	if err != nil {
+		return
+	}
 	var dataId []string
 	for _, v := range auth.DataAuthorityId {
 		dataId = append(dataId, v.AuthorityId)

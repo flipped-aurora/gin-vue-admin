@@ -65,5 +65,4 @@ func TrimSpace(target interface{}) {
 			v.Field(i).SetString(strings.TrimSpace(v.Field(i).String()))
 		}
 	}
-	return
 }

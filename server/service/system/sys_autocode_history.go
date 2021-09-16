@@ -111,6 +111,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) GetSysHistoryPage(info req
 	db := global.GVA_DB
 	var fileLists []system.SysAutoCodeHistory
 	err = db.Find(&fileLists).Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag,table_name").Find(&fileLists).Error
 	return err, fileLists, total
 }

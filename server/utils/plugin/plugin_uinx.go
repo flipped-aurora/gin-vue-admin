@@ -83,6 +83,7 @@ func loadPlugin(path string, f fs.FileInfo) error {
 			return errors.New("没有实现指定接口")
 		} else {
 			// todo
+			fmt.Println("todo...")
 		}
 		fmt.Println("loadPlugin add ", filepath.Base(fPath))
 		ManagementPlugin.SetPlugin(filepath.Base(fPath), p)

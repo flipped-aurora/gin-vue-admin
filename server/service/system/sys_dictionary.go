@@ -99,6 +99,9 @@ func (dictionaryService *DictionaryService) GetSysDictionaryInfoList(info reques
 		db = db.Where("`desc` LIKE ?", "%"+info.Desc+"%")
 	}
 	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionarys).Error
 	return err, sysDictionarys, total
 }

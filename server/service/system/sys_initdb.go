@@ -53,7 +53,7 @@ func (initDBService *InitDBService) createTable(dsn string, driver string, creat
 	defer func(db *sql.DB) {
 		err := db.Close()
 		if err != nil {
-
+			fmt.Println(err)
 		}
 	}(db)
 	if err = db.Ping(); err != nil {

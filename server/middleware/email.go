@@ -42,7 +42,7 @@ func ErrorToEmail() gin.HandlerFunc {
 
 		c.Next()
 
-		latency := time.Now().Sub(now)
+		latency := time.Since(now)
 		status := c.Writer.Status()
 		record.ErrorMessage = c.Errors.ByType(gin.ErrorTypePrivate).String()
 		str := "接收到的请求为" + record.Body + "\n" + "请求方式为" + record.Method + "\n" + "报错信息如下" + record.ErrorMessage + "\n" + "耗时" + latency.String() + "\n"

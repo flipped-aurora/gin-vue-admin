@@ -652,9 +652,6 @@ li {
         .el-sub-menu__title:hover span {
             color: #fff;
         }
-        .el-menu--inline {
-            // border-left: 5px solid #2c3b41;
-        }
     }
     .hideside {
         .aside {
@@ -721,25 +718,9 @@ li {
 }
 
 .admin-box {
-    padding: 14px 20px;
-    .el-button {
-        padding: 7px 10px;
-    }
-    .el-input__inner {
-        height: 30px;
-        line-height: 30px;
-    }
-    .el-input__icon {
-        line-height: 30px;
-    }
-}
-
-.admin-box {
     min-height: calc(100vh - 200px);
-    background-color: $white-bg;
     padding: 14px;
-    margin: 114px 14px 20px;
-    border-radius: 2px;
+    margin: 100px 2px 20px;
     .el-table--border {
         border-radius: 4px;
         margin-bottom: 14px;
@@ -749,26 +730,30 @@ li {
             color: $color-table-thead;
         }
         th {
-            padding: 5px 0;
+            padding: 6px 0;
+            background: #F7FBFF;
             .cell {
-                min-height: 34px;
-                line-height: 34px;
+                color: rgba($color: #000000, $alpha: 0.85);
+                font-size: 14px;
+                min-height: 40px;
+                display: flex;
+                align-items: center;
             }
         }
         td {
-            padding: 8px 0;
+            padding: 6px 0;
+            .cell {
+                min-height: 40px;
+                display: flex;
+                align-items: center;
+                color: rgba($color: #000000, $alpha: 0.65);
+            }
         }
-        td,
-        th.is-leaf {
+        td.is-leaf {
             border-bottom: 1px solid #e8e8e8;
         }
-    }
-    .search-term {
-        border-left: none;
-        border-right: none;
-        padding: 0 5px;
-        .el-form-item {
-            margin-bottom: 10px;
+        th.is-leaf {
+            border-bottom: none;
         }
     }
     .el-pagination {
@@ -776,9 +761,6 @@ li {
     }
     .upload-demo,
     .upload {
-        padding: 0;
-    }
-    .system {
         padding: 0;
     }
     .el-form.el-form--inline {
@@ -789,6 +771,16 @@ li {
     .edit_container,
     .edit {
         padding: 0;
+    }
+    .el-input {
+        .el-input__suffix {
+            margin-top: -3px;
+        }
+    }
+    .el-input__inner {
+        border-color: rgba($color: #000000, $alpha: 0.15);
+        height: 32px;
+        border-radius: 2px;
     }
 }
 
@@ -803,13 +795,6 @@ li {
     background: $white-bg;
     border: none;
     padding: 0 0 10px 0px;
-}
-
-.search-term {
-    background: $white-bg;
-    padding: 0 15px;
-    border-left: 1px solid #ebeef5;
-    border-right: 1px solid #ebeef5;
 }
 
 // table
@@ -833,7 +818,7 @@ li {
 
 .el-table th,
 .el-table tr {
-    background-color: #fafafa;
+    background-color: #ffffff;
 }
 
 .el-pagination {
@@ -883,36 +868,6 @@ li {
     padding: 15px;
     .el-button {
         margin: 15px 0;
-    }
-}
-
-// upload-demo
-.upload-demo,
-.upload {
-    .upload-box{
-        margin-bottom: 12px;
-        display: flex;
-        justify-content: flex-end;
-        .upload-btn{
-            margin-left: 12px;
-        }
-    }
-    background-color: $white-bg;
-    padding: 15px;
-    .el-upload-list__item-status-label {
-        right: 0;
-        left: 120px;
-    }
-    .el-upload__tip {
-        margin: 10px 0;
-    }
-}
-
-// system
-.system {
-    padding: 15px;
-    .el-input__inner {
-        width: 80%;
     }
 }
 
@@ -971,14 +926,6 @@ li {
     //         td,
     //         th.is-leaf {
     //             border-bottom: 1px solid #e8e8e8;
-    //         }
-    //     }
-    //     .search-term {
-    //         border-left: none;
-    //         border-right: none;
-    //         padding: 0 5px;
-    //         .el-form-item {
-    //             margin-bottom: 10px;
     //         }
     //     }
     //     .el-pagination {
@@ -1049,11 +996,10 @@ li {
                     border: none;
                     border-left: 1px solid $border-color;
                     border-right: 1px solid $border-color;
-                    +.el-tabs__item{
+                    +.el-tabs__item {
                         border-left: 0px solid $border-color;
                     }
                 }
-                
                 .el-tabs__item.is-active {
                     background-color: rgba(64, 158, 255, .08);
                 }
@@ -1133,10 +1079,6 @@ li {
     font-size: 13px;
 }
 
-.table-button+span {
-    margin-left: 10px !important;
-}
-
 $headerHigh: 52px;
 $mainHight: 100vh;
 .dropdown-group {
@@ -1189,7 +1131,7 @@ $mainHight: 100vh;
         overflow: visible;
         position: relative;
         .menu-total {
-            margin-left:6px;
+            margin-left: 6px;
             cursor: pointer;
             float: left;
             margin-top: 10px;
@@ -1402,13 +1344,16 @@ $mainHight: 100vh;
     }
 }
 
-.gva-btn-list{
+.gva-btn-list {
     margin-bottom: 12px;
     display: flex;
-    justify-content: flex-end;
-    .el-button+.el-button{
+    .el-button+.el-button {
         margin-left: 12px;
     }
+}
+
+.justify-content-flex-end {
+    justify-content: flex-end;
 }
 
 ::-webkit-scrollbar-track-piece {
@@ -1429,4 +1374,59 @@ $mainHight: 100vh;
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: #bbb;
+}
+
+.el-button--primary {
+    --el-button-font-color: #ffffff;
+    --el-button-background-color: #4D70FF;
+    --el-button-border-color: #4D70FF;
+    --el-button-hover-color: #0d84ff;
+    --el-button-active-font-color: #e6e6e6;
+    --el-button-active-background-color: #0d84ff;
+    --el-button-active-border-color: #0d84ff;
+}
+
+.el-button--primary {
+    --el-button-font-color: #ffffff;
+    --el-button-background-color: #4D70FF;
+    --el-button-border-color: #4D70FF;
+    --el-button-hover-color: #0d84ff;
+    --el-button-active-font-color: #e6e6e6;
+    --el-button-active-background-color: #0d84ff;
+    --el-button-active-border-color: #0d84ff;
+}
+
+:root {
+    --el-color-primary: #4D70FF;
+}
+
+.gva-search-box {
+    padding: 24px;
+    padding-bottom: 2px;
+    background-color: #fff;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+
+.gva-table-box {
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 2px;
+}
+
+.gva-pagination {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.el-button--mini {
+    min-height: 32px;
+}
+
+.el-button {
+    padding: 8px 16px;
+    border-radius: 2px;
+    &.el-button--text {
+        padding: 8px 0;
+    }
 }

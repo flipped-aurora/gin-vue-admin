@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="search-term">
+    <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
@@ -21,66 +21,69 @@
         <el-form-item label="{{.FieldDesc}}">
           <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
         </el-form-item>{{ end }}{{ end }}{{ end }}
+        <el-form-item>
+          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+        </el-form-item>
       </el-form>
-      <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-        <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
-        <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-          <p>确定要删除吗？</p>
-          <div style="text-align: right; margin: 0">
-            <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
-            <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
-          </div>
-          <template #reference>
-            <el-button icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
-          </template>
-        </el-popover>
-      </div>
     </div>
-    <el-table
-      ref="multipleTable"
-      border
-      stripe
-      style="width: 100%"
-      tooltip-effect="dark"
-      :data="tableData"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" />
-      <el-table-column label="日期" width="180">
-        <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
-      </el-table-column>
-      {{- range .Fields}}
-      {{- if .DictType}}
-      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
-        <template #default="scope">
-          {{"{{"}} filterDict(scope.row.{{.FieldJson}},"{{.DictType}}") {{"}}"}}
-        </template>
-      </el-table-column>
-      {{- else if eq .FieldType "bool" }}
-      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
-        <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
-      </el-table-column> {{- else }}
-      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
-      {{- end }}
-      {{- end }}
-      <el-table-column label="按钮组">
-        <template #default="scope">
-          <el-button size="small" type="primary" icon="el-icon-edit" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      layout="total, sizes, prev, pager, next, jumper"
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    />
+    <div class="gva-table-box">
+        <div class="gva-btn-list">
+            <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
+            <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+            <p>确定要删除吗？</p>
+            <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
+                <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
+            </div>
+            <template #reference>
+                <el-button icon="el-icon-delete" size="mini" style="margin-left: 10px;">删除</el-button>
+            </template>
+            </el-popover>
+        </div>
+        <el-table
+        ref="multipleTable"
+        style="width: 100%"
+        tooltip-effect="dark"
+        :data="tableData"
+        @selection-change="handleSelectionChange"
+        >
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="日期" width="180">
+            <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
+        </el-table-column>
+        {{- range .Fields}}
+        {{- if .DictType}}
+        <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+            <template #default="scope">
+            {{"{{"}} filterDict(scope.row.{{.FieldJson}},"{{.DictType}}") {{"}}"}}
+            </template>
+        </el-table-column>
+        {{- else if eq .FieldType "bool" }}
+        <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+            <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
+        </el-table-column> {{- else }}
+        <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+        {{- end }}
+        {{- end }}
+        <el-table-column label="按钮组">
+            <template #default="scope">
+            <el-button size="small" type="text" icon="el-icon-edit" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
+            <el-button type="text" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
+            </template>
+        </el-table-column>
+        </el-table>
+        <div class="gva-pagination">
+            <el-pagination
+            layout="total, sizes, prev, pager, next, jumper"
+            :current-page="page"
+            :page-size="pageSize"
+            :page-sizes="[10, 30, 50, 100]"
+            :total="total"
+            @current-change="handleCurrentChange"
+            @size-change="handleSizeChange"
+            />
+        </div>
+    </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" label-width="80px">
     {{- range .Fields}}

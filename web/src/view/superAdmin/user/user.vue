@@ -1,60 +1,62 @@
 <template>
   <div>
-    <div class="gva-btn-list">
-      <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
-    </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column label="头像" min-width="50">
-        <template #default="scope">
-          <div :style="{'textAlign':'center'}">
-            <CustomPic :pic-src="scope.row.headerImg" />
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="uuid" min-width="250" prop="uuid" />
-      <el-table-column label="用户名" min-width="150" prop="userName" />
-      <el-table-column label="昵称" min-width="150" prop="nickName" />
-      <el-table-column label="用户角色" min-width="150">
-        <template #default="scope">
-          <el-cascader
-            v-model="scope.row.authorityIds"
-            :options="authOptions"
-            :show-all-levels="false"
-            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-            filterable
-            :clearable="false"
-            @visible-change="(flag)=>{changeAuthority(scope.row,flag)}"
-            @remove-tag="()=>{changeAuthority(scope.row,false)}"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" min-width="150">
-        <template #default="scope">
-          <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-            <p>确定要删除此用户吗</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
+      </div>
+      <el-table :data="tableData">
+        <el-table-column label="头像" min-width="50">
+          <template #default="scope">
+            <div :style="{'textAlign':'center'}">
+              <CustomPic :pic-src="scope.row.headerImg" />
             </div>
-            <template #reference>
-              <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
-            </template>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table>
-    <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    />
-
+          </template>
+        </el-table-column>
+        <el-table-column label="uuid" min-width="250" prop="uuid" />
+        <el-table-column label="用户名" min-width="150" prop="userName" />
+        <el-table-column label="昵称" min-width="150" prop="nickName" />
+        <el-table-column label="用户角色" min-width="150">
+          <template #default="scope">
+            <el-cascader
+              v-model="scope.row.authorityIds"
+              :options="authOptions"
+              :show-all-levels="false"
+              collapse-tags
+              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              :clearable="false"
+              @visible-change="(flag)=>{changeAuthority(scope.row,flag)}"
+              @remove-tag="()=>{changeAuthority(scope.row,false)}"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" min-width="150">
+          <template #default="scope">
+            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+              <p>确定要删除此用户吗</p>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
+              </div>
+              <template #reference>
+                <el-button type="text" icon="el-icon-delete" size="mini">删除</el-button>
+              </template>
+            </el-popover>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
+      <div class="gva-pagination">
+        <el-pagination
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
+      </div>
+    </div>
     <el-dialog v-model="addUserDialog" custom-class="user-dialog" title="新增用户">
       <el-form ref="userForm" :rules="rules" :model="userInfo">
         <el-form-item label="用户名" label-width="80px" prop="username">

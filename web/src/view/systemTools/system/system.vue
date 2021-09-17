@@ -1,6 +1,6 @@
 <template>
   <div class="system">
-    <el-form ref="form" :model="config" label-width="100px" class="system">
+    <el-form ref="form" :model="config" label-width="100px">
       <!--  System start  -->
       <h2>系统配置</h2>
       <el-form-item label="环境值">
@@ -373,6 +373,9 @@ export default {
 
 <style lang="scss">
 .system {
+  background: #fff;
+  padding:12px;
+  border-radius: 2px;
   h2 {
     padding: 10px;
     margin: 10px 0;

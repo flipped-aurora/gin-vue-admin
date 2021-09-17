@@ -1,7 +1,7 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
-    <div class="upload">
-      <div class="upload-box">
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
         <el-upload
           :action="`${path}/fileUploadAndDownload/upload`"
           :before-upload="checkFile"
@@ -22,7 +22,7 @@
         />
       </div>
 
-      <el-table :data="tableData" border stripe>
+      <el-table :data="tableData">
         <el-table-column label="预览" width="100">
           <template #default="scope">
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
@@ -50,16 +50,18 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :current-page="page"
-        :page-size="pageSize"
-        :page-sizes="[10, 30, 50, 100]"
-        :style="{ float: 'right', padding: '20px' }"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-      />
+      <div class="gva-pagination">
+        <el-pagination
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :style="{ float: 'right', padding: '20px' }"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -170,3 +172,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.upload-btn+.upload-btn {
+            margin-left: 12px;
+        }
+</style>

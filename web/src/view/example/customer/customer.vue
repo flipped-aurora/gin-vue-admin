@@ -1,55 +1,53 @@
 <template>
   <div>
-    <div class="search-term">
+    <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
       </div>
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        style="width: 100%"
+        tooltip-effect="dark"
+      >
+        <el-table-column type="selection" width="55" />
+        <el-table-column label="接入日期" width="180">
+          <template #default="scope">
+            <span>{{ formatDate(scope.row.CreatedAt) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="姓名" prop="customerName" width="120" />
+        <el-table-column label="电话" prop="customerPhoneData" width="120" />
+        <el-table-column label="接入人ID" prop="sysUserId" width="120" />
+        <el-table-column label="按钮组" min-width="160">
+          <template #default="scope">
+            <el-button size="small" type="text" @click="updateCustomer(scope.row)">变更</el-button>
+            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+              <p>确定要删除吗？</p>
+              <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
+              </div>
+              <template #reference>
+                <el-button type="text" icon="el-icon-delete" size="mini">删除</el-button>
+              </template>
+            </el-popover>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="gva-pagination">
+        <el-pagination
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
+      </div>
     </div>
-    <el-table
-      ref="multipleTable"
-      :data="tableData"
-      border
-      stripe
-      style="width: 100%"
-      tooltip-effect="dark"
-    >
-      <el-table-column type="selection" width="55" />
-      <el-table-column label="接入日期" width="180">
-        <template #default="scope">
-          <span>{{ formatDate(scope.row.CreatedAt) }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="姓名" prop="customerName" width="120" />
-      <el-table-column label="电话" prop="customerPhoneData" width="120" />
-      <el-table-column label="接入人ID" prop="sysUserId" width="120" />
-      <el-table-column label="按钮组" min-width="160">
-        <template #default="scope">
-          <el-button size="small" type="text" @click="updateCustomer(scope.row)">变更</el-button>
-          <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
-            </div>
-            <template #reference>
-              <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
-            </template>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    />
-
+    <div class="tips">在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="客户">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="客户名">
@@ -66,7 +64,6 @@
         </div>
       </template>
     </el-dialog>
-    <div class="tips">在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
   </div>
 </template>
 

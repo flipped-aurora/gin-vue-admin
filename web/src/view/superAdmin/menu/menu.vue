@@ -1,57 +1,58 @@
 <template>
   <div>
-    <div class="gva-btn-list">
-      <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMenu('0')">新增根菜单</el-button>
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMenu('0')">新增根菜单</el-button>
+      </div>
+
+      <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
+      <el-table :data="tableData" row-key="ID">
+        <el-table-column label="ID" min-width="100" prop="ID" />
+        <el-table-column label="路由Name" show-overflow-tooltip min-width="160" prop="name" />
+        <el-table-column label="路由Path" show-overflow-tooltip min-width="160" prop="path" />
+        <el-table-column label="是否隐藏" min-width="100" prop="hidden">
+          <template #default="scope">
+            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="父节点" min-width="90" prop="parentId" />
+        <el-table-column label="排序" min-width="70" prop="sort" />
+        <el-table-column label="文件路径" min-width="360" prop="component" />
+        <el-table-column label="展示名称" min-width="120" prop="authorityName">
+          <template #default="scope">
+            <span>{{ scope.row.meta.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="图标" min-width="140" prop="authorityName">
+          <template #default="scope">
+            <i :class="`el-icon-${scope.row.meta.icon}`" />
+            <span>{{ scope.row.meta.icon }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column fixed="right" label="操作" width="300">
+          <template #default="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="addMenu(scope.row.ID)"
+            >添加子菜单</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-edit"
+              @click="editMenu(scope.row.ID)"
+            >编辑</el-button>
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-delete"
+              @click="deleteMenu(scope.row.ID)"
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-
-    <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
-    <el-table :data="tableData" border row-key="ID" stripe>
-      <el-table-column label="ID" min-width="100" prop="ID" />
-      <el-table-column label="路由Name" min-width="160" prop="name" />
-      <el-table-column label="路由Path" min-width="160" prop="path" />
-      <el-table-column label="是否隐藏" min-width="100" prop="hidden">
-        <template #default="scope">
-          <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="父节点" min-width="90" prop="parentId" />
-      <el-table-column label="排序" min-width="70" prop="sort" />
-      <el-table-column label="文件路径" min-width="360" prop="component" />
-      <el-table-column label="展示名称" min-width="120" prop="authorityName">
-        <template #default="scope">
-          <span>{{ scope.row.meta.title }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="图标" min-width="140" prop="authorityName">
-        <template #default="scope">
-          <i :class="`el-icon-${scope.row.meta.icon}`" />
-          <span>{{ scope.row.meta.icon }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="right" label="操作" width="300">
-        <template #default="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            icon="el-icon-edit"
-            @click="addMenu(scope.row.ID)"
-          >添加子菜单</el-button>
-          <el-button
-            size="mini"
-            type="primary"
-            icon="el-icon-edit"
-            @click="editMenu(scope.row.ID)"
-          >编辑</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            icon="el-icon-delete"
-            @click="deleteMenu(scope.row.ID)"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
     <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle">
       <el-form
         v-if="dialogFormVisible"
@@ -135,7 +136,7 @@
           icon="el-icon-edit"
           @click="addParameter(form)"
         >新增菜单参数</el-button>
-        <el-table :data="form.parameters" stripe style="width: 100%">
+        <el-table :data="form.parameters" style="width: 100%">
           <el-table-column prop="type" label="参数类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">

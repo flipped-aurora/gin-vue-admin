@@ -1,48 +1,48 @@
 <template>
   <div class="authority">
-    <div class="gva-btn-list">
-      <el-button size="mini" type="primary" icon="el-icon-plus" @click="addAuthority('0')">新增角色</el-button>
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="addAuthority('0')">新增角色</el-button>
+      </div>
+      <el-table
+        :data="tableData"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        row-key="authorityId"
+        style="width: 100%"
+      >
+        <el-table-column label="角色id" min-width="180" prop="authorityId" />
+        <el-table-column label="角色名称" min-width="180" prop="authorityName" />
+        <el-table-column label="操作" width="460">
+          <template #default="scope">
+            <el-button size="mini" type="text" @click="opdendrawer(scope.row)">设置权限</el-button>
+            <el-button
+              icon="el-icon-plus"
+              size="mini"
+              type="text"
+              @click="addAuthority(scope.row.authorityId)"
+            >新增子角色</el-button>
+            <el-button
+              icon="el-icon-copy-document"
+              size="mini"
+              type="text"
+              @click="copyAuthority(scope.row)"
+            >拷贝</el-button>
+            <el-button
+              icon="el-icon-edit"
+              size="mini"
+              type="text"
+              @click="editAuthority(scope.row)"
+            >编辑</el-button>
+            <el-button
+              icon="el-icon-delete"
+              size="mini"
+              type="text"
+              @click="deleteAuth(scope.row)"
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
     </div>
-    <el-table
-      :data="tableData"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      border
-      row-key="authorityId"
-      stripe
-      style="width: 100%"
-    >
-      <el-table-column label="角色id" min-width="180" prop="authorityId" />
-      <el-table-column label="角色名称" min-width="180" prop="authorityName" />
-      <el-table-column label="操作" width="460">
-        <template #default="scope">
-          <el-button size="mini" type="primary" @click="opdendrawer(scope.row)">设置权限</el-button>
-          <el-button
-            icon="el-icon-plus"
-            size="mini"
-            type="primary"
-            @click="addAuthority(scope.row.authorityId)"
-          >新增子角色</el-button>
-          <el-button
-            icon="el-icon-copy-document"
-            size="mini"
-            type="primary"
-            @click="copyAuthority(scope.row)"
-          >拷贝</el-button>
-          <el-button
-            icon="el-icon-edit"
-            size="mini"
-            type="primary"
-            @click="editAuthority(scope.row)"
-          >编辑</el-button>
-          <el-button
-            icon="el-icon-delete"
-            size="mini"
-            type="danger"
-            @click="deleteAuth(scope.row)"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
     <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
     <!-- 新增角色弹窗 -->
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">

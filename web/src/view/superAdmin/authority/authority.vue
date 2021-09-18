@@ -14,7 +14,12 @@
         <el-table-column label="角色名称" min-width="180" prop="authorityName" />
         <el-table-column label="操作" width="460">
           <template #default="scope">
-            <el-button size="mini" type="text" @click="opdendrawer(scope.row)">设置权限</el-button>
+            <el-button
+              icon="el-icon-setting"
+              size="mini"
+              type="text"
+              @click="opdendrawer(scope.row)"
+            >设置权限</el-button>
             <el-button
               icon="el-icon-plus"
               size="mini"
@@ -42,8 +47,8 @@
           </template>
         </el-table-column>
       </el-table>
+      <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
     </div>
-    <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
     <!-- 新增角色弹窗 -->
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
       <el-form ref="authorityForm" :model="form" :rules="rules" label-width="80px">

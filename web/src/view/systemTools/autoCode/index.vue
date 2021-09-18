@@ -149,7 +149,7 @@
       <PreviewCodeDialog v-if="previewFlag" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer">
-          <el-button type="primary" @click="previewFlag = false">确 定</el-button>
+          <el-button size="small" type="primary" @click="previewFlag = false">确 定</el-button>
         </div>
       </template>
     </el-dialog>

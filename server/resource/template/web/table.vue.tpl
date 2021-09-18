@@ -96,7 +96,7 @@
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType}}
-          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
+          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" clearable>
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
@@ -104,18 +104,18 @@
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" clearable />
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" clearable />
       {{- end }}
       {{- if eq .FieldType "float64" }}
-          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable />
+          <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" clearable />
       {{- end }}
         </el-form-item>
       {{- end }}
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>

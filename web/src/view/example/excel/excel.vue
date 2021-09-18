@@ -17,8 +17,8 @@
       </div>
       <el-table :data="tableData" row-key="ID">
         <el-table-column label="ID" min-width="100" prop="ID" />
-        <el-table-column label="路由Name" min-width="160" prop="name" />
-        <el-table-column label="路由Path" min-width="160" prop="path" />
+        <el-table-column show-overflow-tooltip label="路由Name" min-width="160" prop="name" />
+        <el-table-column show-overflow-tooltip label="路由Path" min-width="160" prop="path" />
         <el-table-column label="是否隐藏" min-width="100" prop="hidden">
 
           <template #default="scope">

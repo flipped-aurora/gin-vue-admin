@@ -44,7 +44,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
+      <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
       <div class="gva-pagination">
         <el-pagination
           :current-page="page"
@@ -58,15 +58,25 @@
       </div>
     </div>
     <el-dialog v-model="addUserDialog" custom-class="user-dialog" title="新增用户">
-      <el-form ref="userForm" :rules="rules" :model="userInfo">
-        <el-form-item label="用户名" label-width="80px" prop="username">
+      <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="80px">
+        <el-form-item label="用户名" prop="username">
           <el-input v-model="userInfo.username" />
         </el-form-item>
-        <el-form-item label="密码" label-width="80px" prop="password">
+        <el-form-item label="密码" prop="password">
           <el-input v-model="userInfo.password" />
         </el-form-item>
-        <el-form-item label="别名" label-width="80px" prop="nickName">
+        <el-form-item label="别名" prop="nickName">
           <el-input v-model="userInfo.nickName" />
+        </el-form-item>
+        <el-form-item label="用户角色" prop="authorityId">
+          <el-cascader
+            v-model="userInfo.authorityIds"
+            style="width:100%"
+            :options="authOptions"
+            :show-all-levels="false"
+            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :clearable="false"
+          />
         </el-form-item>
         <el-form-item label="头像" label-width="80px">
           <div style="display:inline-block" @click="openHeaderChange">
@@ -74,21 +84,12 @@
             <div v-else class="header-img-box">从媒体库选择</div>
           </div>
         </el-form-item>
-        <el-form-item label="用户角色" label-width="80px" prop="authorityId">
-          <el-cascader
-            v-model="userInfo.authorityIds"
-            :options="authOptions"
-            :show-all-levels="false"
-            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-            filterable
-            :clearable="false"
-          />
-        </el-form-item>
+
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeAddUserDialog">取 消</el-button>
-          <el-button type="primary" @click="enterAddUserDialog">确 定</el-button>
+          <el-button size="small" @click="closeAddUserDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterAddUserDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -110,9 +111,10 @@ import infoList from '@/mixins/infoList'
 import { mapGetters } from 'vuex'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
+import warningBar from '@/components/warningBar/warningBar.vue'
 export default {
   name: 'Api',
-  components: { CustomPic, ChooseImg },
+  components: { CustomPic, ChooseImg, warningBar },
   mixins: [infoList],
   data() {
     return {

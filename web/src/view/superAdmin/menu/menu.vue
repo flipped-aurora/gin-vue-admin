@@ -64,7 +64,7 @@
         label-position="top"
         label-width="85px"
       >
-        <el-form-item label="路由name" prop="path" style="width:30%">
+        <el-form-item label="路由Name" prop="path" style="width:30%">
           <el-input
             v-model="form.name"
             autocomplete="off"
@@ -75,7 +75,7 @@
         <el-form-item prop="path" style="width:30%">
           <template #label>
             <div style="display:inline-flex">
-              路由path
+              路由Path
               <el-checkbox v-model="checkFlag" style="float:right;margin-left:20px;">添加参数</el-checkbox>
             </div>
           </template>
@@ -93,7 +93,7 @@
             <el-option :value="true" label="是" />
           </el-select>
         </el-form-item>
-        <el-form-item label="父节点Id" style="width:30%">
+        <el-form-item label="父节点ID" style="width:30%">
           <el-cascader
             v-model="form.parentId"
             :disabled="!isEdit"
@@ -116,13 +116,13 @@
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="keepAlive" prop="meta.keepAlive" style="width:30%">
+        <el-form-item label="KeepAlive" prop="meta.keepAlive" style="width:30%">
           <el-select v-model="form.meta.keepAlive" placeholder="是否keepAlive缓存页面">
             <el-option :value="false" label="否" />
             <el-option :value="true" label="是" />
           </el-select>
         </el-form-item>
-        <el-form-item label="closeTab" prop="meta.closeTab" style="width:30%">
+        <el-form-item label="CloseTab" prop="meta.closeTab" style="width:30%">
           <el-select v-model="form.meta.closeTab" placeholder="是否自动关闭tab">
             <el-option :value="false" label="否" />
             <el-option :value="true" label="是" />

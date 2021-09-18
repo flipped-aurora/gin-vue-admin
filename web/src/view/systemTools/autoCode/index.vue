@@ -47,7 +47,7 @@
         <el-form-item label="Struct名称" prop="structName">
           <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
         </el-form-item>
-        <el-form-item label="tableName" prop="tableName">
+        <el-form-item label="TableName" prop="tableName">
           <el-input v-model="form.tableName" placeholder="指定表名（非必填）" />
         </el-form-item>
         <el-form-item label="Struct简称" prop="abbreviation">

@@ -21,7 +21,7 @@
         <el-table-column label="接入人ID" prop="sysUserId" width="120" />
         <el-table-column label="按钮组" min-width="160">
           <template #default="scope">
-            <el-button size="small" type="text" @click="updateCustomer(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="el-icon-edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin: 0">

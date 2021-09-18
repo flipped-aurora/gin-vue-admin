@@ -60,8 +60,14 @@
 
         <el-table-column fixed="right" label="操作" width="200">
           <template #default="scope">
-            <el-button size="small" type="text" @click="editApi(scope.row)">编辑</el-button>
             <el-button
+              icon="el-icon-edit"
+              size="small"
+              type="text"
+              @click="editApi(scope.row)"
+            >编辑</el-button>
+            <el-button
+              icon="el-icon-delete"
               size="small"
               type="text"
               @click="deleteApi(scope.row)"

@@ -67,7 +67,7 @@
         {{- end }}
         <el-table-column label="按钮组">
             <template #default="scope">
-            <el-button size="small" type="text" icon="el-icon-edit" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
+            <el-button type="text" icon="el-icon-edit" size="small" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
             <el-button type="text" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>

@@ -46,7 +46,7 @@
 
         <el-table-column label="按钮组">
           <template #default="scope">
-            <el-button size="small" type="text" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="el-icon-edit" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin: 0">

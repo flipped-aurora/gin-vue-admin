@@ -34,7 +34,7 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-edit"
+              icon="el-icon-plus"
               @click="addMenu(scope.row.ID)"
             >添加子菜单</el-button>
             <el-button

@@ -43,13 +43,14 @@
         </el-table-column>
       </el-table>
     </div>
-    <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
+    <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
     <!-- 新增角色弹窗 -->
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
-      <el-form ref="authorityForm" :model="form" :rules="rules">
+      <el-form ref="authorityForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父级角色" prop="parentId">
           <el-cascader
             v-model="form.parentId"
+            style="width:100%"
             :disabled="dialogType=='add'"
             :options="AuthorityOption"
             :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
@@ -66,8 +67,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -102,6 +103,7 @@ import {
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
 import Datas from '@/view/superAdmin/authority/components/datas.vue'
+import warningBar from '@/components/warningBar/warningBar.vue'
 
 import infoList from '@/mixins/infoList'
 export default {
@@ -109,7 +111,8 @@ export default {
   components: {
     Menus,
     Apis,
-    Datas
+    Datas,
+    warningBar
   },
   mixins: [infoList],
   data() {

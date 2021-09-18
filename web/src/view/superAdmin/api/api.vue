@@ -84,12 +84,13 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
-      <el-form ref="apiForm" :inline="true" :model="form" :rules="rules" label-width="80px">
+      <warning-bar title="新增API，需要在角色管理内篇日志权限才可使用" />
+      <el-form ref="apiForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="路径" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
         <el-form-item label="请求" prop="method">
-          <el-select v-model="form.method" placeholder="请选择">
+          <el-select v-model="form.method" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -105,11 +106,10 @@
           <el-input v-model="form.description" autocomplete="off" />
         </el-form-item>
       </el-form>
-      <div class="warning">新增Api需要在角色管理内配置权限才可使用</div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -129,6 +129,7 @@ import {
 } from '@/api/api'
 import infoList from '@/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
+import warningBar from '@/components/warningBar/warningBar.vue'
 const methodOptions = [
   {
     value: 'POST',
@@ -154,6 +155,9 @@ const methodOptions = [
 
 export default {
   name: 'Api',
+  components: {
+    warningBar
+  },
   mixins: [infoList],
   data() {
     return {

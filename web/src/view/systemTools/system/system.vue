@@ -10,7 +10,7 @@
         <el-input v-model.number="config.system.addr" />
       </el-form-item>
       <el-form-item label="数据库类型">
-        <el-select v-model="config.system.dbType">
+        <el-select v-model="config.system.dbType" style="width:100%">
           <el-option value="mysql" />
           <el-option value="sqlite" />
           <el-option value="sqlserver" />
@@ -18,7 +18,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="Oss类型">
-        <el-select v-model="config.system.ossType">
+        <el-select v-model="config.system.ossType" style="width:100%">
           <el-option value="local" />
           <el-option value="qiniu" />
           <el-option value="tencent-cos" />

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo">
+      <el-form ref="searchForm" :inline="true" :model="searchInfo">
         <el-form-item label="路径">
           <el-input v-model="searchInfo.path" placeholder="路径" />
         </el-form-item>
@@ -23,6 +23,7 @@
         </el-form-item>
         <el-form-item>
           <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+          <el-button size="mini" icon="el-icon-refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -232,6 +233,9 @@ export default {
         this.searchInfo.desc = order === 'descending'
       }
       this.getTableData()
+    },
+    onReset() {
+      this.searchInfo = {}
     },
     // 条件搜索前端看此方法
     onSubmit() {

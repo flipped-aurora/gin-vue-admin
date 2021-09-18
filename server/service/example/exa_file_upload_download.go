@@ -42,6 +42,9 @@ func (e *FileUploadAndDownloadService) FindFile(id uint) (error, example.ExaFile
 func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndDownload) (err error) {
 	var fileFromDb example.ExaFileUploadAndDownload
 	err, fileFromDb = e.FindFile(file.ID)
+	if err != nil {
+		return
+	}
 	oss := upload.NewOss()
 	if err = oss.DeleteFile(fileFromDb.Key); err != nil {
 		return errors.New("文件删除失败")
@@ -62,6 +65,9 @@ func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageIn
 	db := global.GVA_DB
 	var fileLists []example.ExaFileUploadAndDownload
 	err = db.Find(&fileLists).Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
 	return err, fileLists, total
 }

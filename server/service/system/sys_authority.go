@@ -44,6 +44,9 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	}
 	copyInfo.Authority.Children = []system.SysAuthority{}
 	err, menus := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
+	if err != nil {
+		return
+	}
 	var baseMenu []system.SysBaseMenu
 	for _, v := range menus {
 		intNum, _ := strconv.Atoi(v.MenuId)
@@ -52,7 +55,9 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	}
 	copyInfo.Authority.SysBaseMenus = baseMenu
 	err = global.GVA_DB.Create(&copyInfo.Authority).Error
-
+	if err != nil {
+		return
+	}
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(copyInfo.OldAuthorityId)
 	err = CasbinServiceApp.UpdateCasbin(copyInfo.Authority.AuthorityId, paths)
 	if err != nil {
@@ -87,11 +92,20 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 	}
 	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth)
 	err = db.Unscoped().Delete(auth).Error
+	if err != nil {
+		return
+	}
 	if len(auth.SysBaseMenus) > 0 {
 		err = global.GVA_DB.Model(auth).Association("SysBaseMenus").Delete(auth.SysBaseMenus)
+		if err != nil {
+			return
+		}
 		//err = db.Association("SysBaseMenus").Delete(&auth)
 	} else {
 		err = db.Error
+		if err != nil {
+			return
+		}
 	}
 	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
 	CasbinServiceApp.ClearCasbin(0, auth.AuthorityId)

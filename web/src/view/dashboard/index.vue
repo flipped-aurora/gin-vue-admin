@@ -169,7 +169,7 @@ export default {
     background: #f0f2f5;
     padding: 0;
     .gva-card-box{
-      padding: 12px;
+      padding: 12px 16px;
       &+.gva-card-box{
         padding-top: 0px;
       }

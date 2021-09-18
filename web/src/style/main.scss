@@ -719,7 +719,7 @@ li {
 
 .admin-box {
     min-height: calc(100vh - 200px);
-    padding: 14px;
+    padding: 12px 16px;
     margin: 100px 2px 20px;
     .el-table--border {
         border-radius: 4px;
@@ -1124,6 +1124,7 @@ $mainHight: 100vh;
         }
     }
     .header-cont {
+        padding: 0 16px;
         height: $height-header;
         background: #fff;
     }
@@ -1417,7 +1418,7 @@ $mainHight: 100vh;
     padding-bottom: 2px;
     background-color: #fff;
     border-radius: 2px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 .gva-table-box {

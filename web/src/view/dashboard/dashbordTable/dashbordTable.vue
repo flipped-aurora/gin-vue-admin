@@ -64,6 +64,7 @@ export default {
         justify-content: space-between;
         margin-top: 14px;
         .key{
+          margin-left: 12px;
           &.top{
             background: #314659;
             color: #FFFFFF;;

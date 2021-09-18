@@ -30,7 +30,6 @@
       <el-table
         ref="multipleTable"
         :data="tableData"
-        style="width: 100%"
         tooltip-effect="dark"
       >
         <el-table-column type="selection" width="55" />
@@ -38,9 +37,9 @@
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column label="字典名（中）" prop="name" width="120" />
+        <el-table-column label="字典名（中）" prop="name" width="240" />
 
-        <el-table-column label="字典名（英）" prop="type" width="120" />
+        <el-table-column label="字典名（英）" prop="type" width="180" />
 
         <el-table-column label="状态" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>

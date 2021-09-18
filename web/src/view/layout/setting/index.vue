@@ -75,7 +75,7 @@ export default {
     right: 0
   }
   position: fixed;
-  right: -20px;
+  right: 0;
   bottom: 15%;
   height: 40px;
   width: 40px;
@@ -84,7 +84,7 @@ export default {
   justify-content: center;
   z-index: 999;
   color: #fff;
-  border-radius: 4px 0 0 4px;
+  border-radius: 4px 4px 0 0 ;
   cursor: pointer;
   -webkit-box-shadow: inset 0 0 6px rgba(0 ,0 ,0, 10%);
 }

@@ -12,7 +12,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="uuid" min-width="250" prop="uuid" />
+        <el-table-column label="UUID" min-width="250" prop="uuid" />
         <el-table-column label="用户名" min-width="150" prop="userName" />
         <el-table-column label="昵称" min-width="150" prop="nickName" />
         <el-table-column label="用户角色" min-width="150">

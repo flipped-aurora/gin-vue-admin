@@ -10,7 +10,7 @@
         row-key="authorityId"
         style="width: 100%"
       >
-        <el-table-column label="角色id" min-width="180" prop="authorityId" />
+        <el-table-column label="角色ID" min-width="180" prop="authorityId" />
         <el-table-column label="角色名称" min-width="180" prop="authorityName" />
         <el-table-column label="操作" width="460">
           <template #default="scope">

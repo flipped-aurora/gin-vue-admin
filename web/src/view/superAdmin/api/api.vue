@@ -8,7 +8,7 @@
         <el-form-item label="描述">
           <el-input v-model="searchInfo.description" placeholder="描述" />
         </el-form-item>
-        <el-form-item label="api组">
+        <el-form-item label="API组">
           <el-input v-model="searchInfo.apiGroup" placeholder="api组" />
         </el-form-item>
         <el-form-item label="请求">
@@ -48,9 +48,9 @@
           width="55"
         />
         <el-table-column label="id" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column label="api路径" min-width="150" prop="path" sortable="custom" />
-        <el-table-column label="api分组" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column label="api简介" min-width="150" prop="description" sortable="custom" />
+        <el-table-column label="API路径" min-width="150" prop="path" sortable="custom" />
+        <el-table-column label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
+        <el-table-column label="API简介" min-width="150" prop="description" sortable="custom" />
         <el-table-column label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>

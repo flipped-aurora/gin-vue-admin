@@ -54,6 +54,7 @@
       </el-table>
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle">
+      <warning-bar title="新增菜单，需要在角色管理内篇日志权限才可使用" />
       <el-form
         v-if="dialogFormVisible"
         ref="menuForm"
@@ -128,7 +129,6 @@
           </el-select>
         </el-form-item>
       </el-form>
-      <div class="warning">新增菜单需要在角色管理内配置权限才可使用</div>
       <div>
         <el-button
           size="small"
@@ -175,8 +175,8 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -195,10 +195,12 @@ import {
 } from '@/api/menu'
 import infoList from '@/mixins/infoList'
 import icon from '@/view/superAdmin/menu/icon.vue'
+import warningBar from '@/components/warningBar/warningBar.vue'
 export default {
   name: 'Menus',
   components: {
-    icon
+    icon,
+    warningBar
   },
   mixins: [infoList],
   data() {

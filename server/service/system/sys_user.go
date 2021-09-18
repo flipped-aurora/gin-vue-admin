@@ -70,6 +70,9 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (err erro
 	db := global.GVA_DB.Model(&system.SysUser{})
 	var userList []system.SysUser
 	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
 	return err, userList, total
 }
@@ -125,6 +128,9 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 func (userService *UserService) DeleteUser(id float64) (err error) {
 	var user system.SysUser
 	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
+	if err != nil {
+		return err
+	}
 	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
 	return err
 }

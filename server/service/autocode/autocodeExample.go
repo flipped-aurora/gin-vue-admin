@@ -71,6 +71,9 @@ func (autoCodeExampleService *AutoCodeExampleService) GetAutoCodeExampleInfoList
 		db = db.Where("label LIKE ?", "%"+info.AutoCodeExampleField+"%")
 	}
 	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Find(&autoCodeExamples).Error
 	return err, autoCodeExamples, total
 }

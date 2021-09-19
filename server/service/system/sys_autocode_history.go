@@ -108,9 +108,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) GetMeta(id uint) (string, 
 func (autoCodeHistoryService *AutoCodeHistoryService) GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&system.SysAutoCodeHistory{})
 	var fileLists []system.SysAutoCodeHistory
-	err = db.Find(&fileLists).Count(&total).Error
+	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}

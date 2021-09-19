@@ -776,13 +776,13 @@ li {
         .el-input__suffix {
             margin-top: -3px;
         }
-        &.is-disabled{
+        &.is-disabled {
             .el-input__suffix {
                 margin-top: 0px;
             }
         }
     }
-    .el-cascader{
+    .el-cascader {
         .el-input {
             .el-input__suffix {
                 margin-top: 0px;
@@ -984,8 +984,8 @@ li {
         background-color: $bg-main;
         .menu-total {
             cursor: pointer;
-            font-size: 22px;
-            color: #838383;
+            font-size: 24px;
+            color: #000000;
             margin-top: 16px;
         }
         // background-color: #f0f2f5;
@@ -1112,11 +1112,9 @@ $mainHight: 100vh;
 
 .layout-cont {
     .right-box {
-        height: $height-header;
-        line-height: $height-header;
-        text-align: center;
-        vertical-align: middle;
-        margin-right: 10px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
         img {
             vertical-align: middle;
             border: 1px solid #ccc;
@@ -1133,8 +1131,19 @@ $mainHight: 100vh;
             height: $height-header;
             line-height: $height-header;
             display: inline-block;
-            background-color: #fff;
             padding: 0;
+            margin-left: 46px;
+            font-size: 16px;
+            .el-breadcrumb__item {
+                .el-breadcrumb__inner {
+                    color: rgba($color: #000000, $alpha: 0.45);
+                }
+            }
+            .el-breadcrumb__item:nth-last-child(1) {
+                .el-breadcrumb__inner {
+                    color: rgba($color: #000000, $alpha: 0.65);
+                }
+            }
         }
         &.el-main {
             overflow: auto;
@@ -1199,10 +1208,6 @@ $mainHight: 100vh;
     }
 }
 
-.screenfull {
-    display: inline-block;
-}
-
 .header-avatar {
     display: flex;
     justify-content: center;
@@ -1210,10 +1215,8 @@ $mainHight: 100vh;
 }
 
 .search-component {
-    display: inline-block;
+    display: inline-flex;
     overflow: hidden;
-    height: 60px;
-    width: 120px;
     text-align: center;
     .el-input__inner {
         border: none;
@@ -1224,27 +1227,31 @@ $mainHight: 100vh;
     }
     .search-icon {
         font-size: $icon-size;
-        margin-right: 14px;
         display: inline-block;
         vertical-align: middle;
         box-sizing: border-box;
-        color: #606266;
+        color: rgba($color: #000000, $alpha: 0.65);
     }
     .dropdown-group {
         min-width: 100px;
+    }
+    .user-box {
+        cursor: pointer;
+        margin-right: 24px;
+        color: rgba($color: #000000, $alpha: 0.65);
     }
 }
 
 .transition-box {
     overflow: hidden;
     width: 120px;
+    margin-right: 32px;
     text-align: center;
 }
 
 .screenfull {
     overflow: hidden;
-    width: 40px;
-    text-align: center;
+    color: rgba($color: #000000, $alpha: 0.65);
 }
 
 .el-dropdown {
@@ -1419,6 +1426,13 @@ $mainHight: 100vh;
     background-color: #fff;
     border-radius: 2px;
     margin-bottom: 12px;
+    .el-form {
+        .el-form-item+.el-form-item {
+            .el-form-item__label {
+                padding-left: 28px;
+            }
+        }
+    }
 }
 
 .gva-table-box {
@@ -1430,38 +1444,38 @@ $mainHight: 100vh;
 .gva-pagination {
     display: flex;
     justify-content: flex-end;
-    .el-pagination__editor{
-        .el-input__inner{
+    .el-pagination__editor {
+        .el-input__inner {
             height: 32px;
         }
     }
-    .el-pagination__total{
-          line-height: 32px !important;
+    .el-pagination__total {
+        line-height: 32px !important;
     }
-    .btn-prev{
-        padding-right:6px;
+    .btn-prev {
+        padding-right: 6px;
         display: inline-flex;
         justify-content: center;
         align-items: center;
         width: 32px;
         height: 32px;
     }
-    .number{
+    .number {
         display: inline-flex;
         justify-content: center;
         align-items: center;
         width: 32px;
         height: 32px;
     }
-    .btn-quicknext{
+    .btn-quicknext {
         display: inline-flex;
         justify-content: center;
         align-items: center;
         width: 32px;
         height: 32px;
     }
-    .btn-next{
-        padding-left:6px;
+    .btn-next {
+        padding-left: 6px;
         width: 32px;
         height: 32px;
         display: inline-flex;
@@ -1473,20 +1487,18 @@ $mainHight: 100vh;
         border-radius: 2px;
         color: #ffffff !important;
     }
-    .el-pager li.active+li{
+    .el-pager li.active+li {
         border-left: 1px solid #ddd !important;
     }
-    .el-pagination__sizes{
-        .el-input{
+    .el-pagination__sizes {
+        .el-input {
             .el-input__suffix {
                 margin-top: 2px;
             }
         }
     }
-    .el-pagination__jump{
-        .el-pagination__editor{
-
-        }
+    .el-pagination__jump {
+        .el-pagination__editor {}
     }
 }
 
@@ -1504,29 +1516,29 @@ $mainHight: 100vh;
 
 .el-dialog {
     padding: 12px;
-    .el-dialog__body{
+    .el-dialog__body {
         padding: 12px 6px;
     }
-    .el-dialog__header{
-        .el-dialog__title{
+    .el-dialog__header {
+        .el-dialog__title {
             font-size: 14px;
             font-weight: 500;
         }
         padding: 2px 20px 12px 20px;
         border-bottom: 1px solid #E4E4E4;
     }
-    .el-dialog__headerbtn{
-        top:16px;
+    .el-dialog__headerbtn {
+        top: 16px;
     }
-    .el-dialog__footer{
+    .el-dialog__footer {
         margin-top: -12px;
         padding: 0 0 16px 0;
-        .dialog-footer{
-            .el-button{
+        .dialog-footer {
+            .el-button {
                 padding-left: 24px;
                 padding-right: 24px;
             }
-            .el-button+.el-button{
+            .el-button+.el-button {
                 margin-left: 30px;
             }
         }

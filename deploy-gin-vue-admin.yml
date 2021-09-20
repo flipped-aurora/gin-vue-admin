@@ -1,0 +1,243 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: config.yaml
+  namespace: default
+data:
+  config.yaml: |
+    # github.com/flipped-aurora/gin-vue-admin/server Global Configuration
+
+    # jwt configuration
+    jwt:
+      signing-key: 'qmPlus'
+      expires-time: 604800
+      buffer-time: 86400
+
+    # zap logger configuration
+    zap:
+      level: 'info'
+      format: 'console'
+      prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
+      director: 'log'
+      link-name: 'latest_log'
+      show-line: true
+      encode-level: 'LowercaseColorLevelEncoder'
+      stacktrace-key: 'stacktrace'
+      log-in-console: true
+
+    # redis configuration
+    redis:
+      db: 0
+      addr: '127.0.0.1:6379'
+      password: ''
+
+    # email configuration
+    email:
+      to: 'xxx@qq.com'
+      port: 465
+      from: 'xxx@163.com'
+      host: 'smtp.163.com'
+      is-ssl: true
+      secret: 'xxx'
+      nickname: 'test'
+
+    # casbin configuration
+    casbin:
+      model-path: './resource/rbac_model.conf'
+
+    # system configuration
+    system:
+      env: 'develop'  # Change to "develop" to skip authentication for development mode
+      addr: 8888
+      db-type: 'mysql'
+      oss-type: 'local'    # 控制oss选择走本期还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+      use-multipoint: false
+
+    # captcha configuration
+    captcha:
+      key-long: 6
+      img-width: 240
+      img-height: 80
+
+    # mysql connect configuration
+    # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
+    mysql:
+      path: ''
+      config: ''
+      db-name: ''
+      username: ''
+      password: ''
+      max-idle-conns: 10
+      max-open-conns: 100
+      log-mode: false
+      log-zap: ""
+
+    # local configuration
+    local:
+      path: 'uploads/file'
+
+    # autocode configuration
+    autocode:
+      transfer-restart: true
+      root: ""
+      server: /server
+      server-api: /api/v1/autocode
+      server-initialize: /initialize
+      server-model: /model/autocode
+      server-request: /model/autocode/request/
+      server-router: /router/autocode
+      server-service: /service/autocode
+      web: /web/src
+      web-api: /api
+      web-flow: /view
+      web-form: /view
+      web-table: /view
+
+    # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
+    qiniu:
+      zone: 'ZoneHuaDong'
+      bucket: ''
+      img-path: ''
+      use-https: false
+      access-key: ''
+      secret-key: ''
+      use-cdn-domains: false
+
+
+    # aliyun oss configuration
+    aliyun-oss:
+      endpoint: 'yourEndpoint'
+      access-key-id: 'yourAccessKeyId'
+      access-key-secret: 'yourAccessKeySecret'
+      bucket-name: 'yourBucketName'
+      bucket-url: 'yourBucketUrl'
+      base-path: 'yourBasePath'
+
+    # tencent cos configuration
+    tencent-cos:
+      bucket: 'xxxxx-10005608'
+      region: 'ap-shanghai'
+      secret-id: 'xxxxxxxx'
+      secret-key: 'xxxxxxxx'
+      base-url: 'https://gin.vue.admin'
+      path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
+
+    # excel configuration
+    excel:
+      dir: './resource/excel/'
+
+
+    # timer task db clear table
+    Timer:
+      start: true
+      spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
+      detail: [
+        # tableName: 需要清理的表名
+        # compareField: 需要比较时间的字段
+        # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
+        # 2160h = 24 * 30 * 3 -> 三个月
+        { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
+        { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
+        #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
+      ]
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my.conf
+  namespace: default
+data:
+  my.conf: |
+    server {
+        listen       8080;
+        server_name localhost;
+
+        #charset koi8-r;
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root /usr/share/nginx/html;
+            add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
+            try_files $uri $uri/ /index.html;
+        }
+
+        location /api {
+            proxy_set_header Host $http_host;
+            proxy_set_header  X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            rewrite ^/api/(.*)$ /$1 break;  #重写
+            proxy_pass http://177.7.0.12:8888; # 设置代理服务器的协议和地址
+         }
+
+        location /api/swagger/index.html {
+            proxy_pass http://127.0.0.1:8888/swagger/index.html;
+         }
+     }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-vue-admin
+  annotations:
+    kubesphere.io/description: gin-vue-admin 后端
+  labels:
+    app: gin-vue-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gin-vue-admin
+  template:
+    metadata:
+      labels:
+        app: gin-vue-admin
+    spec:
+      containers:
+        - name: gin-vue-admin-container
+          image: registry.cn-hangzhou.aliyuncs.com/gin-vue-admin/server:40fc3aa6
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /go/src/github.com/flipped-aurora/gin-vue-admin/server/config.yaml
+              name: config
+              subPath: config.yaml
+            - mountPath: /etc/localtime
+              name: localtime
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: config
+          configMap:
+            name: config.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-vue-admin-fe
+  annotations:
+    kubesphere.io/description: gin-vue-admin 前端
+  labels:
+    app: gin-vue-admin-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gin-vue-admin-fe
+  template:
+    metadata:
+      labels:
+        app: gin-vue-admin-fe
+    spec:
+      containers:
+        - name: gin-vue-admin-nginx-container
+          image: registry.cn-hangzhou.aliyuncs.com/gin-vue-admin/web:40fc3aa6
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/my.conf
+              name: nginx-config
+              subPath: my.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: my.conf

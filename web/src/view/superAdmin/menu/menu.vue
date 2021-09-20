@@ -7,29 +7,29 @@
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
       <el-table :data="tableData" row-key="ID">
-        <el-table-column label="ID" min-width="100" prop="ID" />
-        <el-table-column label="路由Name" show-overflow-tooltip min-width="160" prop="name" />
-        <el-table-column label="路由Path" show-overflow-tooltip min-width="160" prop="path" />
-        <el-table-column label="是否隐藏" min-width="100" prop="hidden">
+        <el-table-column align="center" label="ID" min-width="100" prop="ID" />
+        <el-table-column align="center" label="路由Name" show-overflow-tooltip min-width="160" prop="name" />
+        <el-table-column align="center" label="路由Path" show-overflow-tooltip min-width="160" prop="path" />
+        <el-table-column align="center" label="是否隐藏" min-width="100" prop="hidden">
           <template #default="scope">
             <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="父节点" min-width="90" prop="parentId" />
-        <el-table-column label="排序" min-width="70" prop="sort" />
-        <el-table-column label="文件路径" min-width="360" prop="component" />
-        <el-table-column label="展示名称" min-width="120" prop="authorityName">
+        <el-table-column align="center" label="父节点" min-width="90" prop="parentId" />
+        <el-table-column align="center" label="排序" min-width="70" prop="sort" />
+        <el-table-column align="center" label="文件路径" min-width="360" prop="component" />
+        <el-table-column align="center" label="展示名称" min-width="120" prop="authorityName">
           <template #default="scope">
             <span>{{ scope.row.meta.title }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="图标" min-width="140" prop="authorityName">
+        <el-table-column align="center" label="图标" min-width="140" prop="authorityName">
           <template #default="scope">
             <i :class="`el-icon-${scope.row.meta.icon}`" />
             <span>{{ scope.row.meta.icon }}</span>
           </template>
         </el-table-column>
-        <el-table-column fixed="right" label="操作" width="300">
+        <el-table-column align="center" fixed="right" label="操作" width="300">
           <template #default="scope">
             <el-button
               size="mini"
@@ -137,7 +137,7 @@
           @click="addParameter(form)"
         >新增菜单参数</el-button>
         <el-table :data="form.parameters" style="width: 100%">
-          <el-table-column prop="type" label="参数类型" width="180">
+          <el-table-column align="center" prop="type" label="参数类型" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" placeholder="请选择">
                 <el-option key="query" value="query" label="query" />
@@ -145,21 +145,21 @@
               </el-select>
             </template>
           </el-table-column>
-          <el-table-column prop="key" label="参数key" width="180">
+          <el-table-column align="center" prop="key" label="参数key" width="180">
             <template #default="scope">
               <div>
                 <el-input v-model="scope.row.key" />
               </div>
             </template>
           </el-table-column>
-          <el-table-column prop="value" label="参数值">
+          <el-table-column align="center" prop="value" label="参数值">
             <template #default="scope">
               <div>
                 <el-input v-model="scope.row.value" />
               </div>
             </template>
           </el-table-column>
-          <el-table-column>
+          <el-table-column align="center">
             <template #default="scope">
               <div>
                 <el-button

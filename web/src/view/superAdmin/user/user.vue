@@ -5,17 +5,17 @@
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
       </div>
       <el-table :data="tableData">
-        <el-table-column label="头像" min-width="50">
+        <el-table-column align="center" label="头像" min-width="50">
           <template #default="scope">
             <div :style="{'textAlign':'center'}">
               <CustomPic :pic-src="scope.row.headerImg" />
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="UUID" min-width="250" prop="uuid" />
-        <el-table-column label="用户名" min-width="150" prop="userName" />
-        <el-table-column label="昵称" min-width="150" prop="nickName" />
-        <el-table-column label="用户角色" min-width="150">
+        <el-table-column align="center" label="UUID" min-width="250" prop="uuid" />
+        <el-table-column align="center" label="用户名" min-width="150" prop="userName" />
+        <el-table-column align="center" label="昵称" min-width="150" prop="nickName" />
+        <el-table-column align="center" label="用户角色" min-width="150">
           <template #default="scope">
             <el-cascader
               v-model="scope.row.authorityIds"
@@ -29,7 +29,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="操作" min-width="150">
+        <el-table-column align="center" label="操作" min-width="150">
           <template #default="scope">
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>

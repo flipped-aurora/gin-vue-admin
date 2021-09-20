@@ -11,15 +11,15 @@
         tooltip-effect="dark"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column label="接入日期" width="180">
+        <el-table-column align="center" label="接入日期" width="180">
           <template #default="scope">
             <span>{{ formatDate(scope.row.CreatedAt) }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="姓名" prop="customerName" width="120" />
-        <el-table-column label="电话" prop="customerPhoneData" width="120" />
-        <el-table-column label="接入人ID" prop="sysUserId" width="120" />
-        <el-table-column label="按钮组" min-width="160">
+        <el-table-column align="center" label="姓名" prop="customerName" width="120" />
+        <el-table-column align="center" label="电话" prop="customerPhoneData" width="120" />
+        <el-table-column align="center" label="接入人ID" prop="sysUserId" width="120" />
+        <el-table-column align="center" label="按钮组" min-width="160">
           <template #default="scope">
             <el-button size="small" type="text" icon="el-icon-edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">

@@ -238,6 +238,15 @@ export default {
         text-align: center;
         color: #333;
         .quick-entrance-item {
+          padding: 16px 28px;
+          margin-top: -16px;
+          margin-bottom: -16px;
+          border-radius: 4px;
+          transition: all 0.2s;
+          &:hover{
+            box-shadow: 0px 0px 7px 0px rgba(217, 217, 217, 0.55);
+          }
+            cursor: pointer;
             height: auto;
             text-align: center;
             // align-items: center;

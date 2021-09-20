@@ -1427,10 +1427,8 @@ $mainHight: 100vh;
     border-radius: 2px;
     margin-bottom: 12px;
     .el-form {
-        .el-form-item+.el-form-item {
-            .el-form-item__label {
-                padding-left: 28px;
-            }
+        .el-form-item {
+            padding-right: 28px;
         }
     }
 }

@@ -23,19 +23,19 @@
       </div>
 
       <el-table :data="tableData">
-        <el-table-column label="预览" width="100">
+        <el-table-column align="center" label="预览" width="100">
           <template #default="scope">
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
-        <el-table-column label="日期" prop="UpdatedAt" width="180">
+        <el-table-column align="center" label="日期" prop="UpdatedAt" width="180">
           <template #default="scope">
             <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="文件名" prop="name" width="180" />
-        <el-table-column label="链接" prop="url" min-width="300" />
-        <el-table-column label="标签" prop="tag" width="100">
+        <el-table-column align="center" label="文件名" prop="name" width="180" />
+        <el-table-column align="center" label="链接" prop="url" min-width="300" />
+        <el-table-column align="center" label="标签" prop="tag" width="100">
           <template #default="scope">
             <el-tag
               :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
@@ -43,7 +43,7 @@
             >{{ scope.row.tag }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="160">
+        <el-table-column align="center" label="操作" width="160">
           <template #default="scope">
             <el-button size="small" icon="el-icon-download" type="text" @click="downloadFile(scope.row)">下载</el-button>
             <el-button size="small" icon="el-icon-delete" type="text" @click="deleteFile(scope.row)">删除</el-button>

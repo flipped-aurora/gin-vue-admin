@@ -49,24 +49,24 @@
         @selection-change="handleSelectionChange"
         >
         <el-table-column type="selection" width="55" />
-        <el-table-column label="日期" width="180">
+        <el-table-column align="center" label="日期" width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{- range .Fields}}
         {{- if .DictType}}
-        <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
             {{"{{"}} filterDict(scope.row.{{.FieldJson}},"{{.DictType}}") {{"}}"}}
             </template>
         </el-table-column>
         {{- else if eq .FieldType "bool" }}
-        <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
         </el-table-column> {{- else }}
-        <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+        <el-table-column align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
-        <el-table-column label="按钮组">
+        <el-table-column align="center" label="按钮组">
             <template #default="scope">
             <el-button type="text" icon="el-icon-edit" size="small" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
             <el-button type="text" icon="el-icon-delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>

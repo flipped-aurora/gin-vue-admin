@@ -38,26 +38,26 @@
         tooltip-effect="dark"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="操作人" width="140">
+        <el-table-column align="center" type="selection" width="55" />
+        <el-table-column align="center" label="操作人" width="140">
           <template #default="scope">
             <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
           </template>
         </el-table-column>
-        <el-table-column label="日期" width="180">
+        <el-table-column align="center" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column label="状态码" prop="status" width="120">
+        <el-table-column align="center" label="状态码" prop="status" width="120">
           <template #default="scope">
             <div>
               <el-tag type="success">{{ scope.row.status }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="请求IP" prop="ip" width="120" />
-        <el-table-column label="请求方法" prop="method" width="120" />
-        <el-table-column label="请求路径" prop="path" width="240" />
-        <el-table-column label="请求" prop="path" width="80">
+        <el-table-column align="center" label="请求IP" prop="ip" width="120" />
+        <el-table-column align="center" label="请求方法" prop="method" width="120" />
+        <el-table-column align="center" label="请求路径" prop="path" width="240" />
+        <el-table-column align="center" label="请求" prop="path" width="80">
           <template #default="scope">
             <div>
               <el-popover v-if="scope.row.body" placement="top-start" trigger="hover">
@@ -73,7 +73,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="响应" prop="path" width="80">
+        <el-table-column align="center" label="响应" prop="path" width="80">
           <template #default="scope">
             <div>
               <el-popover v-if="scope.row.resp" placement="top-start" trigger="hover">
@@ -88,7 +88,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="按钮组">
+        <el-table-column align="center" label="按钮组">
           <template #default="scope">
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>

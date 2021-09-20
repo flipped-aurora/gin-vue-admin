@@ -65,7 +65,10 @@
           </template>
         </el-table-column>
       </el-table>
-
+      <warning-bar
+        title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
+        style="margin-top:12px"
+      />
       <div class="gva-pagination">
         <el-pagination
           :current-page="page"
@@ -109,10 +112,7 @@
           <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
-
     </el-dialog>
-
-    <div style="margin-top:40px;color:red">获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释</div>
   </div>
 </template>
 
@@ -125,8 +125,12 @@ import {
   getSysDictionaryList
 } from '@/api/sysDictionary' //  此处请自行替换地址
 import infoList from '@/mixins/infoList'
+import warningBar from '@/components/warningBar/warningBar.vue'
 export default {
   name: 'SysDictionary',
+  components: {
+    warningBar
+  },
   mixins: [infoList],
   data() {
     return {

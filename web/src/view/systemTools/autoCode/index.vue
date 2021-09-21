@@ -116,7 +116,7 @@
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
             >下移</el-button>
-            <el-popover v-model:visible="scope.row.visible" placement="top">
+            <el-popover :visible="scope.row.visible" placement="top">
               <p>确定删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
@@ -397,7 +397,7 @@ export default {
         this.form.autoCreateApiToSql = true
         this.form.fields = []
         res.data.columns &&
-          res.data.columns.map(item => {
+          res.data.columns.forEach(item => {
             if (!gormModelList.some(gormfd => gormfd === item.columnName)) {
               const fbHump = toHump(item.columnName)
               this.form.fields.push({
@@ -418,9 +418,9 @@ export default {
     },
     async setFdMap() {
       const fdTypes = ['string', 'int', 'bool', 'float64', 'time.Time']
-      fdTypes.map(async fdtype => {
+      fdTypes.forEach(async fdtype => {
         const res = await getDict(fdtype)
-        res && res.map(item => {
+        res && res.forEach(item => {
           this.fdMap[item.label] = fdtype
         })
       })

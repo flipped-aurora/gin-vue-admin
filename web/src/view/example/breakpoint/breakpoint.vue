@@ -127,7 +127,7 @@ export default {
     },
     sliceFile() {
       this.waitUpLoad &&
-        this.waitUpLoad.map(item => {
+        this.waitUpLoad.forEach(item => {
           // 需要上传的切片
           item.formData.append('chunkTotal', this.formDataList.length) // 切片总数携带给后台 总有用的
           const fileR = new FileReader() // 功能同上

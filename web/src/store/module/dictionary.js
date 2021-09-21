@@ -21,7 +21,7 @@ export const dictionary = {
         if (res.code === 0) {
           const dictionaryMap = {}
           const dict = []
-          res.data.resysDictionary.sysDictionaryDetails && res.data.resysDictionary.sysDictionaryDetails.map(item => {
+          res.data.resysDictionary.sysDictionaryDetails && res.data.resysDictionary.sysDictionaryDetails.forEach(item => {
             dict.push({
               label: item.label,
               value: item.value

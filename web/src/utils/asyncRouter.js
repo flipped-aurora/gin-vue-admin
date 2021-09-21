@@ -1,7 +1,7 @@
 const modules = import.meta.glob('../view/**/*.vue')
 
 export const asyncRouterHandle = (asyncRouter) => {
-  asyncRouter.map(item => {
+  asyncRouter.forEach(item => {
     if (item.component) {
       item.component = dynamicImport(modules, item.component)
     } else {

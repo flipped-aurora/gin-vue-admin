@@ -29,7 +29,7 @@
         </el-table-column>
         <el-table-column align="center" label="操作" min-width="150">
           <template #default="scope">
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
@@ -162,7 +162,7 @@ export default {
   methods: {
     setAuthorityIds() {
       this.tableData && this.tableData.forEach((user) => {
-        const authorityIds = user.authorities && user.authorities.map(i => {
+        const authorityIds = user.authorities && user.authorities.forEach(i => {
           return i.authorityId
         })
         user.authorityIds = authorityIds
@@ -177,7 +177,7 @@ export default {
     },
     setAuthorityOptions(AuthorityData, optionsData) {
       AuthorityData &&
-        AuthorityData.map(item => {
+        AuthorityData.forEach(item => {
           if (item.children && item.children.length) {
             const option = {
               authorityId: item.authorityId,

@@ -42,6 +42,8 @@
           </el-form>
         </el-collapse-item>
       </el-collapse>
+    </div>
+    <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
       <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
         <el-form-item label="Struct名称" prop="structName">
@@ -146,9 +148,16 @@
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
+      <template #title>
+        <div class="previewCodeTool">
+          <p>操作栏：</p>
+          <el-button size="mini" type="primary" @click="selectText">全选</el-button>
+          <el-button size="mini" type="primary" @click="copy">复制</el-button>
+        </div>
+      </template>
       <PreviewCodeDialog v-if="previewFlag" :preview-code="preViewCode" />
       <template #footer>
-        <div class="dialog-footer">
+        <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
           <el-button size="small" type="primary" @click="previewFlag = false">确 定</el-button>
         </div>
       </template>
@@ -427,6 +436,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .previewCodeTool {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+  }
 .button-box {
   padding: 10px 20px;
   .el-button {

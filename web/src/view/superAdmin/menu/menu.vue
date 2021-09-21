@@ -96,6 +96,7 @@
         <el-form-item label="父节点ID" style="width:30%">
           <el-cascader
             v-model="form.parentId"
+            style="width:100%"
             :disabled="!isEdit"
             :options="menuOption"
             :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
@@ -111,19 +112,19 @@
           <el-input v-model="form.meta.title" autocomplete="off" />
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <icon :meta="form.meta" />
+          <icon :meta="form.meta" style="width:100%" />
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
         </el-form-item>
         <el-form-item label="KeepAlive" prop="meta.keepAlive" style="width:30%">
-          <el-select v-model="form.meta.keepAlive" placeholder="是否keepAlive缓存页面">
+          <el-select v-model="form.meta.keepAlive" style="width:100%" placeholder="是否keepAlive缓存页面">
             <el-option :value="false" label="否" />
             <el-option :value="true" label="是" />
           </el-select>
         </el-form-item>
         <el-form-item label="CloseTab" prop="meta.closeTab" style="width:30%">
-          <el-select v-model="form.meta.closeTab" placeholder="是否自动关闭tab">
+          <el-select v-model="form.meta.closeTab" style="width:100%" placeholder="是否自动关闭tab">
             <el-option :value="false" label="否" />
             <el-option :value="true" label="是" />
           </el-select>

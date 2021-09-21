@@ -13,7 +13,7 @@ export const user = {
       headerImg: '',
       authority: {},
       sideMode: 'dark',
-      activeColor: '#1890ff',
+      activeColor: '#0d84ff',
       baseColor: '#fff'
     },
     token: '',
@@ -45,15 +45,9 @@ export const user = {
         ...userInfo
       }
     },
-    ChangeActiveColor: async(state, val) => {
-      state.userInfo.activeColor = val
-    },
     ChangeSideMode: async(state, val) => {
       state.userInfo.sideMode = val
     },
-    ChangeBaseColor: (state, val) => {
-      state.userInfo.baseColor = val
-    }
   },
   actions: {
     async GetUserInfo({ commit }) {
@@ -89,16 +83,6 @@ export const user = {
         commit('LoginOut')
       }
     },
-    async changeActiveColor({ commit, state }, data) {
-      const res = await setUserInfo({ activeColor: data, ID: state.userInfo.ID })
-      if (res.code === 0) {
-        commit('ChangeActiveColor', data)
-        ElMessage({
-          type: 'success',
-          message: '设置成功'
-        })
-      }
-    },
     async changeSideMode({ commit, state }, data) {
       const res = await setUserInfo({ sideMode: data, ID: state.userInfo.ID })
       if (res.code === 0) {
@@ -109,16 +93,6 @@ export const user = {
         })
       }
     },
-    async changeBaseColor({ commit, state }, data) {
-      const res = await setUserInfo({ baseColor: data, ID: state.userInfo.ID })
-      if (res.code === 0) {
-        commit('ChangeBaseColor', data)
-        ElMessage({
-          type: 'success',
-          message: '设置成功'
-        })
-      }
-    }
   },
   getters: {
     userInfo(state) {
@@ -150,7 +124,7 @@ export const user = {
     },
     activeColor(state) {
       if (state.userInfo.sideMode === 'dark' || state.userInfo.sideMode === 'light') {
-        return '#1890ff'
+        return '#0d84ff'
       }
       return state.userInfo.activeColor
     }

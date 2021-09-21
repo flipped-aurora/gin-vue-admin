@@ -67,7 +67,7 @@ export default {
       this.chart.setOption({
         grid: {
           left: '40',
-          right: '40',
+          right: '20',
           top: '40',
           bottom: '20',
         },
@@ -102,7 +102,7 @@ export default {
         series: [
           {
             type: 'bar',
-            barWidth: 40,
+            barWidth: '40%',
             itemStyle: {
               borderRadius: [5, 5, 0, 0],
               color: '#188df0',

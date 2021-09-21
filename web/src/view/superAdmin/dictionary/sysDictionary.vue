@@ -30,7 +30,6 @@
       <el-table
         ref="multipleTable"
         :data="tableData"
-        style="width: 100%"
         tooltip-effect="dark"
       >
         <el-table-column type="selection" width="55" />

@@ -5,7 +5,7 @@ import { asyncMenu } from '@/api/menu'
 const routerList = []
 
 const formatRouter = (routes) => {
-  routes && routes.map(item => {
+  routes && routes.forEach(item => {
     if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404' && !item.hidden) {
       routerList.push({ label: item.meta.title, value: item.name })
     }

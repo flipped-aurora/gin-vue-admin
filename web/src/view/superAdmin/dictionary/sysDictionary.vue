@@ -53,7 +53,7 @@
           <template #default="scope">
             <el-button size="mini" icon="el-icon-document" type="text" @click="toDetile(scope.row)">详情</el-button>
             <el-button size="mini" icon="el-icon-edit" type="text" @click="updateSysDictionary(scope.row)">变更</el-button>
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>

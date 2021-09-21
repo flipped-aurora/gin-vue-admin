@@ -1,7 +1,6 @@
-import { login, getUserInfo } from '@/api/user'
+import { login, getUserInfo, setUserInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
-import { setUserInfo } from '@/api/user'
 import { ElMessage } from 'element-plus'
 
 export const user = {
@@ -45,7 +44,7 @@ export const user = {
         ...userInfo
       }
     },
-    ChangeSideMode: async(state, val) => {
+    ChangeSideMode: (state, val) => {
       state.userInfo.sideMode = val
     },
   },
@@ -64,7 +63,7 @@ export const user = {
         commit('setToken', res.data.token)
         await dispatch('router/SetAsyncRouter', {}, { root: true })
         const asyncRouters = rootGetters['router/asyncRouters']
-        asyncRouters.map(asyncRouter => {
+        asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
         // const redirect = router.history.current.query.redirect

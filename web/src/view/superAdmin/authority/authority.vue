@@ -321,7 +321,7 @@ export default {
     setAuthorityOptions(AuthorityData, optionsData, disabled) {
       this.form.authorityId = String(this.form.authorityId)
       AuthorityData &&
-        AuthorityData.map(item => {
+        AuthorityData.forEach(item => {
           if (item.children && item.children.length) {
             const option = {
               authorityId: item.authorityId,

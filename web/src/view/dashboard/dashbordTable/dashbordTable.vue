@@ -5,7 +5,7 @@
     </div>
     <div class="log">
       <div v-for="(item,key) in dataTimeline" :key="key" class="log-item">
-        <div class="flex-1 flex"><span class="key" :class="key<3&&'top'">{{ key+1 }}</span></div>
+        <div class="flex-1 flex key-box"><span class="key" :class="key<3&&'top'">{{ key+1 }}</span></div>
         <div class="flex-5 flex message">{{ item.message }}</div>
         <div class="flex-3 flex form">{{ item.from }}</div>
       </div>
@@ -58,8 +58,10 @@ export default {
         display: flex;
         justify-content: space-between;
         margin-top: 14px;
+        .key-box{
+          justify-content: center;
+        }
         .key{
-          margin-left: 12px;
           &.top{
             background: #314659;
             color: #FFFFFF;;

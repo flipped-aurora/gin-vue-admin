@@ -1083,10 +1083,10 @@
     "@babel/helper-validator-identifier" "^7.14.9"
     to-fast-properties "^2.0.0"
 
-"@element-plus/icons@0.0.11", "@element-plus/icons@^0.0.11":
+"@element-plus/icons@^0.0.11":
   version "0.0.11"
-  resolved "https://repo.huaweicloud.com/repository/npm/@element-plus/icons/-/icons-0.0.11.tgz#9b187c002774548b911850d17fa5fc2f9a515f57"
-  integrity sha512-iKQXSxXu131Ai+I9Ymtcof9WId7kaXvB1+WRfAfpQCW7UiAMYgdNDqb/u0hgTo2Yq3MwC4MWJnNuTBEpG8r7+A==
+  resolved "https://registry.nlark.com/@element-plus/icons/download/@element-plus/icons-0.0.11.tgz#9b187c002774548b911850d17fa5fc2f9a515f57"
+  integrity sha1-mxh8ACd0VIuRGFDRf6X8L5pRX1c=
 
 "@hapi/address@2.x.x":
   version "2.1.4"

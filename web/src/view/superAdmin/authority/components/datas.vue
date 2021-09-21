@@ -45,7 +45,7 @@ export default {
     this.authoritys = []
     this.dataAuthorityId = []
     this.roundAuthority(this.authority)
-    this.row.dataAuthorityId && this.row.dataAuthorityId.map(item => {
+    this.row.dataAuthorityId && this.row.dataAuthorityId.forEach(item => {
       const obj = this.authoritys && this.authoritys.filter(au => au.authorityId === item.authorityId) && this.authoritys.filter(au => au.authorityId === item.authorityId)[0]
       this.dataAuthorityId.push(obj)
     })
@@ -74,7 +74,7 @@ export default {
     },
     getChildrenId(row, arrBox) {
       arrBox.push(row.authorityId)
-      row.children && row.children.map(item => {
+      row.children && row.children.forEach(item => {
         this.getChildrenId(item, arrBox)
       })
     },
@@ -87,7 +87,7 @@ export default {
     },
     //   平铺角色
     roundAuthority(authoritys) {
-      authoritys && authoritys.map(item => {
+      authoritys && authoritys.forEach(item => {
         const obj = {}
         obj.authorityId = item.authorityId
         obj.authorityName = item.authorityName

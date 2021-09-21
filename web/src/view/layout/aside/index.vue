@@ -67,7 +67,7 @@ export default {
       const query = {}
       const params = {}
       ele.route.parameters &&
-      ele.route.parameters.map(item => {
+      ele.route.parameters.forEach(item => {
         if (item.type === 'query') {
           query[item.key] = item.value
         } else {

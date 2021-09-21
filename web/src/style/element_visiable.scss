@@ -7,14 +7,73 @@ $--color-primary: #1890ff;
     border-radius: 4px;
   }
 }
-///* 改变 icon 字体路径变量，必需 */
-//$--font-path: '~element-ui/lib/theme-chalk/fonts';
-//
-//
-//
-//@import "~element-ui/packages/theme-chalk/src/index";
-//
+.el-dialog{
+  border-radius: 10px;
+  .dialog-footer{
+    margin-right: 8px;
+  }
+}
 
+
+
+/* ZOOM FADE */
+.zoom-fade-enter-active,
+.zoom-fade-leave-active {
+  transition: transform 0.35s, opacity 0.28s ease-in-out;
+}
+.zoom-fade-enter {
+  transform: scale(0.97);
+  opacity: 0;
+}
+.zoom-fade-leave-to {
+  transform: scale(1.03);
+  opacity: 0;
+}
+/* FADE TRNASITION */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.28s ease-in-out;
+}
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+/* PAGE SLIDE */
+.slide-fade-enter-active,
+.slide-fade-leave-active {
+  transition: opacity 0.35s, transform 0.4s;
+}
+.slide-fade-enter {
+  opacity: 0;
+  transform: translateX(-30%);
+}
+.slide-fade-leave-to {
+  opacity: 0;
+  transform: translateX(30%);
+}
+/* ZOOM OUT */
+.zoom-out-enter-active,
+.zoom-out-leave-active {
+  transition: opacity 0.35s ease-in-out, transform 0.45s ease-out;
+}
+.zoom-out-enter,
+.zoom-out-leave-to {
+  opacity: 0;
+  transform: scale(0);
+}
+/* UNFOLD SLIDE */
+.fade-bottom-enter-active,
+.fade-bottom-leave-active {
+  transition: opacity 0.3s, transform 0.35s;
+}
+.fade-bottom-enter {
+  opacity: 0;
+  transform: translateY(-8%);
+}
+.fade-bottom-leave-to {
+  opacity: 0;
+  transform: translateY(8%);
+}
 
 :export {
   colorPrimary: $--color-primary

@@ -21,14 +21,14 @@
               <el-col>
                 <el-header class="header-cont">
                   <el-row class="pd-0">
-                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1">
+                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
                       <div class="menu-total" @click="totalCollapse">
                         <i v-if="isCollapse" class="el-icon-s-unfold" />
                         <i v-else class="el-icon-s-fold" />
                       </div>
                     </el-col>
-                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14">
-                      <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
+                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
+                      <el-breadcrumb class="breadcrumb">
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
@@ -36,7 +36,7 @@
                       </el-breadcrumb>
                     </el-col>
                     <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
-                      <div class="fl-right right-box">
+                      <div class="right-box">
                         <Search />
                         <Screenfull class="screenfull" :style="{cursor:'pointer'}" />
                         <el-dropdown>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="search-term">
+    <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
         <el-form-item label="请求方法">
           <el-input v-model="searchInfo.method" placeholder="搜索条件" />
@@ -11,105 +11,111 @@
         <el-form-item label="结果状态码">
           <el-input v-model="searchInfo.status" placeholder="搜索条件" />
         </el-form-item>
+        <el-form-item>
+          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+          <el-button size="mini" icon="el-icon-refresh" @click="onReset">重置</el-button>
+        </el-form-item>
       </el-form>
+    </div>
+    <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
+
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
-          <div style="text-align: right; margin: 0">
+          <div style="text-align: right; margin-top: 8px;">
             <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="el-icon-delete" size="mini" type="danger" style="margin-left: 10px;">批量删除</el-button>
+            <el-button icon="el-icon-delete" size="mini" style="margin-left: 10px;">删除</el-button>
           </template>
         </el-popover>
       </div>
-    </div>
-    <el-table
-      ref="multipleTable"
-      :data="tableData"
-      border
-      stripe
-      style="width: 100%"
-      tooltip-effect="dark"
-      @selection-change="handleSelectionChange"
-    >
-      <el-table-column type="selection" width="55" />
-      <el-table-column label="操作人" width="140">
-        <template #default="scope">
-          <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
-        </template>
-      </el-table-column>
-      <el-table-column label="日期" width="180">
-        <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
-      </el-table-column>
-      <el-table-column label="状态码" prop="status" width="120">
-        <template #default="scope">
-          <div>
-            <el-tag type="success">{{ scope.row.status }}</el-tag>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="请求ip" prop="ip" width="120" />
-      <el-table-column label="请求方法" prop="method" width="120" />
-      <el-table-column label="请求路径" prop="path" width="240" />
-      <el-table-column label="请求" prop="path" width="80">
-        <template #default="scope">
-          <div>
-            <el-popover v-if="scope.row.body" placement="top-start" trigger="hover">
-              <div class="popover-box">
-                <pre>{{ fmtBody(scope.row.body) }}</pre>
-              </div>
-              <template #reference>
-                <i class="el-icon-view" />
-              </template>
-            </el-popover>
-
-            <span v-else>无</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="响应" prop="path" width="80">
-        <template #default="scope">
-          <div>
-            <el-popover v-if="scope.row.resp" placement="top-start" trigger="hover">
-              <div class="popover-box">
-                <pre>{{ fmtBody(scope.row.resp) }}</pre>
-              </div>
-              <template #reference>
-                <i class="el-icon-view" />
-              </template>
-            </el-popover>
-            <span v-else>无</span>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="按钮组">
-        <template #default="scope">
-          <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin: 0">
-              <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-              <el-button size="mini" type="primary" @click="deleteSysOperationRecord(scope.row)">确定</el-button>
+      <el-table
+        ref="multipleTable"
+        :data="tableData"
+        style="width: 100%"
+        tooltip-effect="dark"
+        row-key="ID"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column align="center" type="selection" width="55" />
+        <el-table-column align="center" label="操作人" width="140">
+          <template #default="scope">
+            <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="日期" width="180">
+          <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
+        </el-table-column>
+        <el-table-column align="center" label="状态码" prop="status" width="120">
+          <template #default="scope">
+            <div>
+              <el-tag type="success">{{ scope.row.status }}</el-tag>
             </div>
-            <template #reference>
-              <el-button icon="el-icon-delete" size="mini" type="danger">删除</el-button>
-            </template>
-          </el-popover>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    />
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="请求IP" prop="ip" width="120" />
+        <el-table-column align="center" label="请求方法" prop="method" width="120" />
+        <el-table-column align="center" label="请求路径" prop="path" width="240" />
+        <el-table-column align="center" label="请求" prop="path" width="80">
+          <template #default="scope">
+            <div>
+              <el-popover v-if="scope.row.body" placement="top-start" trigger="hover">
+                <div class="popover-box">
+                  <pre>{{ fmtBody(scope.row.body) }}</pre>
+                </div>
+                <template #reference>
+                  <i class="el-icon-view" />
+                </template>
+              </el-popover>
+
+              <span v-else>无</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="响应" prop="path" width="80">
+          <template #default="scope">
+            <div>
+              <el-popover v-if="scope.row.resp" placement="top-start" trigger="hover">
+                <div class="popover-box">
+                  <pre>{{ fmtBody(scope.row.resp) }}</pre>
+                </div>
+                <template #reference>
+                  <i class="el-icon-view" />
+                </template>
+              </el-popover>
+              <span v-else>无</span>
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" label="按钮组">
+          <template #default="scope">
+            <el-popover :visible="scope.row.visible" placement="top" width="160">
+              <p>确定要删除吗？</p>
+              <div style="text-align: right; margin-top: 8px;">
+                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button size="mini" type="primary" @click="deleteSysOperationRecord(scope.row)">确定</el-button>
+              </div>
+              <template #reference>
+                <el-button icon="el-icon-delete" size="mini" type="text">删除</el-button>
+              </template>
+            </el-popover>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="gva-pagination">
+        <el-pagination
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -147,6 +153,9 @@ export default {
     this.getTableData()
   },
   methods: {
+    onReset() {
+      this.searchInfo = {}
+    },
     // 条件搜索前端看此方法
     onSubmit() {
       this.page = 1
@@ -159,7 +168,7 @@ export default {
     async onDelete() {
       const ids = []
       this.multipleSelection &&
-        this.multipleSelection.map(item => {
+        this.multipleSelection.forEach(item => {
           ids.push(item.ID)
         })
       const res = await deleteSysOperationRecordByIds({ ids })

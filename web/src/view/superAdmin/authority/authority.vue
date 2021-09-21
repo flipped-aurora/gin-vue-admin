@@ -1,55 +1,61 @@
 <template>
   <div class="authority">
-    <div class="gva-btn-list">
-      <el-button size="mini" type="primary" icon="el-icon-plus" @click="addAuthority('0')">新增角色</el-button>
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="addAuthority('0')">新增角色</el-button>
+      </div>
+      <el-table
+        :data="tableData"
+        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        row-key="authorityId"
+        style="width: 100%"
+      >
+        <el-table-column label="角色ID" min-width="180" prop="authorityId" />
+        <el-table-column align="center" label="角色名称" min-width="180" prop="authorityName" />
+        <el-table-column align="center" label="操作" width="460">
+          <template #default="scope">
+            <el-button
+              icon="el-icon-setting"
+              size="mini"
+              type="text"
+              @click="opdendrawer(scope.row)"
+            >设置权限</el-button>
+            <el-button
+              icon="el-icon-plus"
+              size="mini"
+              type="text"
+              @click="addAuthority(scope.row.authorityId)"
+            >新增子角色</el-button>
+            <el-button
+              icon="el-icon-copy-document"
+              size="mini"
+              type="text"
+              @click="copyAuthority(scope.row)"
+            >拷贝</el-button>
+            <el-button
+              icon="el-icon-edit"
+              size="mini"
+              type="text"
+              @click="editAuthority(scope.row)"
+            >编辑</el-button>
+            <el-button
+              icon="el-icon-delete"
+              size="mini"
+              type="text"
+              @click="deleteAuth(scope.row)"
+            >删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
     </div>
-    <el-table
-      :data="tableData"
-      :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
-      border
-      row-key="authorityId"
-      stripe
-      style="width: 100%"
-    >
-      <el-table-column label="角色id" min-width="180" prop="authorityId" />
-      <el-table-column label="角色名称" min-width="180" prop="authorityName" />
-      <el-table-column label="操作" width="460">
-        <template #default="scope">
-          <el-button size="mini" type="primary" @click="opdendrawer(scope.row)">设置权限</el-button>
-          <el-button
-            icon="el-icon-plus"
-            size="mini"
-            type="primary"
-            @click="addAuthority(scope.row.authorityId)"
-          >新增子角色</el-button>
-          <el-button
-            icon="el-icon-copy-document"
-            size="mini"
-            type="primary"
-            @click="copyAuthority(scope.row)"
-          >拷贝</el-button>
-          <el-button
-            icon="el-icon-edit"
-            size="mini"
-            type="primary"
-            @click="editAuthority(scope.row)"
-          >编辑</el-button>
-          <el-button
-            icon="el-icon-delete"
-            size="mini"
-            type="danger"
-            @click="deleteAuth(scope.row)"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <span style="color: red;font-size: 12px">注：右上角头像下拉可切换角色</span>
     <!-- 新增角色弹窗 -->
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
-      <el-form ref="authorityForm" :model="form" :rules="rules">
+      <el-form ref="authorityForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="父级角色" prop="parentId">
           <el-cascader
             v-model="form.parentId"
+            style="width:100%"
             :disabled="dialogType=='add'"
             :options="AuthorityOption"
             :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
@@ -66,8 +72,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -102,6 +108,7 @@ import {
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
 import Datas from '@/view/superAdmin/authority/components/datas.vue'
+import warningBar from '@/components/warningBar/warningBar.vue'
 
 import infoList from '@/mixins/infoList'
 export default {
@@ -109,7 +116,8 @@ export default {
   components: {
     Menus,
     Apis,
-    Datas
+    Datas,
+    warningBar
   },
   mixins: [infoList],
   data() {
@@ -313,7 +321,7 @@ export default {
     setAuthorityOptions(AuthorityData, optionsData, disabled) {
       this.form.authorityId = String(this.form.authorityId)
       AuthorityData &&
-        AuthorityData.map(item => {
+        AuthorityData.forEach(item => {
           if (item.children && item.children.length) {
             const option = {
               authorityId: item.authorityId,

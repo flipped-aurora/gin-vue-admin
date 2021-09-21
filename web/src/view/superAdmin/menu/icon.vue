@@ -5,7 +5,7 @@
       :class="'el-icon-'+ metaData.icon"
       style="position: absolute; z-index: 9999; padding: 5px 10px; "
     />
-    <el-select v-model="metaData.icon" clearable filterable class="gva-select" placeholder="请选择">
+    <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" placeholder="请选择">
       <el-option v-for="item in options" :key="item.key" :label="item.key" :value="item.key">
         <span class="icon" :class="item.label" />
         <span style="float: left">{{ item.key }}</span>

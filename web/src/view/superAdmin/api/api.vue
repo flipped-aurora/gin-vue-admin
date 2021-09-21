@@ -46,23 +46,22 @@
           </template>
         </el-popover>
       </div>
-      <el-table
-        :data="tableData"
-        @sort-change="sortChange"
-        @selection-change="handleSelectionChange"
-      >
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="id" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column label="API路径" min-width="150" prop="path" sortable="custom" />
-        <el-table-column label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column label="API简介" min-width="150" prop="description" sortable="custom" />
-        <el-table-column label="请求" min-width="150" prop="method" sortable="custom">
+      <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column align="center" label="id" min-width="60" prop="ID" sortable="custom" />
+        <el-table-column align="center" label="API路径" min-width="150" prop="path" sortable="custom" />
+        <el-table-column align="center" label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
+        <el-table-column align="center" label="API简介" min-width="150" prop="description" sortable="custom" />
+        <el-table-column align="center" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>{{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}</div>
           </template>
         </el-table-column>
 
-        <el-table-column fixed="right" label="操作" width="200">
+        <el-table-column align="center" fixed="right" label="操作" width="200">
           <template #default="scope">
             <el-button icon="el-icon-edit" size="small" type="text" @click="editApi(scope.row)">编辑</el-button>
             <el-popconfirm

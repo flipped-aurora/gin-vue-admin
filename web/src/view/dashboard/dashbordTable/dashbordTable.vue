@@ -10,11 +10,6 @@
         <div class="flex-3 flex form">{{ item.from }}</div>
       </div>
     </div>
-    <!-- <el-table v-loading="loading" :data="dataTimeline" style="width: 100%">
-      <el-table-column prop="from" show-overflow-tooltip label="日期" width="180" />
-      <el-table-column prop="title" show-overflow-tooltip label="推送者" width="120" />
-      <el-table-column prop="message" show-overflow-tooltip label="commit 信息" />
-    </el-table> -->
   </div>
 </template>
 

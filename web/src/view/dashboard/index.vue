@@ -1,12 +1,12 @@
 <template>
   <div class="page">
     <div class="gva-card-box">
-      <div class="gva-card dashbord1">
-        <div class="dashbord1-left">
-          <div class="dashbord1-left-title">早安，管理员，请开始一天的工作吧</div>
-          <div class="dashbord1-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
-          <div class="dashbord1-left-rows">
-            <el-row :gutter="20">
+      <div class="gva-card gva-top-card">
+        <div class="gva-top-card-left">
+          <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
+          <div class="gva-top-card-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
+          <div class="gva-top-card-left-rows">
+            <el-row>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
                   <i class="el-icon-sort icon" />今日流量 (1231231)
@@ -24,30 +24,26 @@
               </el-col>
             </el-row>
           </div>
-        </div>
-        <img src="@/assets/dashbord.png" class="dashbord1-right" alt>
-      </div>
-    </div>
-    <div class="gva-card-box">
-      <div class="gva-card dashbord2">
-        <div>
-          <div class="dashbord2-item">
-            使用教学：
-            <a
-              style="color:#409EFF"
-              target="view_window"
-              href="https://www.bilibili.com/video/BV1Rg411u7xH/"
-            >https://www.bilibili.com/video/BV1Rg411u7xH</a>
-          </div>
-          <div class="dashbord2-item">
-            插件仓库：
-            <a
-              style="color:#409EFF"
-              target="view_window"
-              href="https://github.com/flipped-aurora/gva-plugins"
-            >https://github.com/flipped-aurora/gva-plugins</a>
+          <div>
+            <div class="gva-top-card-left-item">
+              使用教学：
+              <a
+                style="color:#409EFF"
+                target="view_window"
+                href="https://www.bilibili.com/video/BV1Rg411u7xH/"
+              >https://www.bilibili.com/video/BV1Rg411u7xH</a>
+            </div>
+            <div class="gva-top-card-left-item">
+              插件仓库：
+              <a
+                style="color:#409EFF"
+                target="view_window"
+                href="https://github.com/flipped-aurora/gva-plugins"
+              >https://github.com/flipped-aurora/gva-plugins</a>
+            </div>
           </div>
         </div>
+        <img src="@/assets/dashbord.png" class="gva-top-card-right" alt>
       </div>
     </div>
     <div class="gva-card-box">
@@ -183,8 +179,8 @@ export default {
         overflow: hidden;
         box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.03);
     }
-    .dashbord1 {
-        height: 196px;
+    .gva-top-card {
+        height: 260px;
         @include flex-center;
         justify-content: space-between;
         color: #777;
@@ -192,7 +188,6 @@ export default {
           height: 100%;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
             &-title {
                 font-size: 22px;
                 color: #343844;
@@ -200,12 +195,20 @@ export default {
             &-dot {
                 font-size: 14px;
                 color: #6B7687;
+                margin-top: 24px;
             }
             &-rows {
                 // margin-top: 15px;
+                margin-top: 18px;
                 color: #6B7687;
                 width: 600px;
                 align-items: center;
+            }
+            &-item{
+              +.gva-top-card-left-item{
+                margin-top: 24px;
+              }
+              margin-top: 14px;
             }
         }
         &-right {
@@ -222,16 +225,6 @@ export default {
           padding-bottom: 20px;
           border-bottom: 1px solid #e8e8e8;
         }
-    .dashbord2 {
-        @include flex-center;
-        justify-content: flex-start;
-        &-item {
-            &+.dashbord2-item{
-              margin-top:24px;
-            }
-            line-height: 25px;
-        }
-    }
     .quick-entrance-title {
         height: 30px;
         font-size: 22px;
@@ -245,6 +238,15 @@ export default {
         text-align: center;
         color: #333;
         .quick-entrance-item {
+          padding: 16px 28px;
+          margin-top: -16px;
+          margin-bottom: -16px;
+          border-radius: 4px;
+          transition: all 0.2s;
+          &:hover{
+            box-shadow: 0px 0px 7px 0px rgba(217, 217, 217, 0.55);
+          }
+            cursor: pointer;
             height: auto;
             text-align: center;
             // align-items: center;
@@ -284,7 +286,7 @@ export default {
 @media (max-width: 750px) {
     .gva-card {
         padding: 20px 10px !important;
-        .dashbord1 {
+        .gva-top-card {
             height: auto;
             &-left {
                 &-title {
@@ -299,7 +301,7 @@ export default {
                 display: none;
             }
         }
-        .dashbord2 {
+        .gva-middle-card {
             &-item {
                 line-height: 20px;
             }

@@ -39,7 +39,7 @@ func (casbinService *CasbinService) UpdateCasbin(authorityId string, casbinInfos
 	}
 	e := casbinService.Casbin()
 	success, _ := e.AddPolicies(rules)
-	if success == false {
+	if !success {
 		return errors.New("存在相同api,添加失败,请联系管理员")
 	}
 	return nil

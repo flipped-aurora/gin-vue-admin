@@ -1,6 +1,8 @@
 <template>
   <div class="dashbord-line-box">
-    <div class="dashbord-line-title">Gva 仓库commit 记录</div>
+    <div class="dashbord-line-title">
+      访问趋势
+    </div>
     <div
       ref="echart"
       class="dashbord-line"
@@ -12,8 +14,8 @@ import echarts from 'echarts'
 import 'echarts/theme/macarons'
 
 var dataAxis = []
-for (var i = 1; i < 21; i++) {
-  dataAxis.push(`${i}号`)
+for (var i = 1; i < 13; i++) {
+  dataAxis.push(`${i}月`)
 }
 var data = [
   220,
@@ -28,14 +30,6 @@ var data = [
   321,
   90,
   149,
-  210,
-  122,
-  133,
-  334,
-  198,
-  123,
-  125,
-  220,
 ]
 var yMax = 500
 var dataShadow = []
@@ -71,6 +65,12 @@ export default {
     },
     setOptions() {
       this.chart.setOption({
+        grid: {
+          left: '40',
+          right: '40',
+          top: '40',
+          bottom: '20',
+        },
         xAxis: {
           data: dataAxis,
           axisTick: {
@@ -102,21 +102,14 @@ export default {
         series: [
           {
             type: 'bar',
+            barWidth: 40,
             itemStyle: {
               borderRadius: [5, 5, 0, 0],
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                { offset: 0, color: '#83bff6' },
-                { offset: 0.5, color: '#188df0' },
-                { offset: 1, color: '#188df0' },
-              ]),
+              color: '#188df0',
             },
             emphasis: {
               itemStyle: {
-                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                  { offset: 0, color: '#2378f7' },
-                  { offset: 0.7, color: '#2378f7' },
-                  { offset: 1, color: '#83bff6' },
-                ]),
+                color: '#188df0',
               },
             },
             data: data,
@@ -129,15 +122,14 @@ export default {
 </script>
 <style lang="scss" scoped>
 .dashbord-line-box {
-  padding: 20px;
   .dashbord-line {
     background-color: #fff;
     height: 360px;
-    width: calc(100% - 40px);
+    width: 100%;
   }
   .dashbord-line-title {
-    color: rgb(56, 137, 206);
-    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
   }
 }
 </style>

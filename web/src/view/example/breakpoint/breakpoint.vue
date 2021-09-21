@@ -1,29 +1,32 @@
 <template>
-  <div class="hello">
-    <el-divider content-position="left">大文件上传</el-divider>
-    <form id="fromCont" method="post">
-      <div class="fileUpload" @click="inputChange">
-        选择文件
-        <input v-show="false" id="file" ref="Input" multiple="multiple" type="file" @change="choseFile">
-      </div>
-    </form>
-    <el-button :disabled="limitFileSize" type="primary" size="mini" class="uploadBtn" @click="getFile">上传文件</el-button>
-    <div class="el-upload__tip">请上传不超过5MB的文件</div>
-    <div class="list">
-      <transition name="list" tag="p">
-        <div v-if="file" class="list-item">
-          <i class="el-icon-document" />
-          <span>{{ file.name }}</span>
-          <span class="percentage">{{ percentage }}%</span>
-          <el-progress :show-text="false" :text-inside="false" :stroke-width="2" :percentage="percentage" />
+  <div class="break-point">
+    <div class="gva-table-box">
+      <el-divider content-position="left">大文件上传</el-divider>
+      <form id="fromCont" method="post">
+        <div class="fileUpload" @click="inputChange">
+          选择文件
+          <input v-show="false" id="file" ref="Input" multiple="multiple" type="file" @change="choseFile">
         </div>
-      </transition>
-    </div>
-    <!-- <span
+      </form>
+      <el-button :disabled="limitFileSize" type="primary" size="mini" class="uploadBtn" @click="getFile">上传文件</el-button>
+      <div class="el-upload__tip">请上传不超过5MB的文件</div>
+      <div class="list">
+        <transition name="list" tag="p">
+          <div v-if="file" class="list-item">
+            <i class="el-icon-document" />
+            <span>{{ file.name }}</span>
+            <span class="percentage">{{ percentage }}%</span>
+            <el-progress :show-text="false" :text-inside="false" :stroke-width="2" :percentage="percentage" />
+          </div>
+        </transition>
+      </div>
+      <!-- <span
       v-if="this.file"
     >{{Math.floor(((this.formDataList.length-this.waitNum)/this.formDataList.length)*100)}}%</span> -->
-    <div class="tips">此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹</div>
+      <div class="tips">此版本为先行体验功能测试版，样式美化和性能优化正在进行中，上传切片文件和合成的完整文件分别再QMPlusserver目录的breakpointDir文件夹和fileDir文件夹</div>
+    </div>
   </div>
+
 </template>
 
 <script>
@@ -35,7 +38,7 @@ import {
   removeChunk
 } from '@/api/breakpoint'
 export default {
-  name: 'HelloWorld',
+  name: 'BreakPoint',
   data() {
     return {
       file: null,

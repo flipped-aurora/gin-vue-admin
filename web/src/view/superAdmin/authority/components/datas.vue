@@ -9,16 +9,17 @@
     <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
       <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
     </el-checkbox-group>
-    <span>
-      此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）
-    </span>
+    <warning-bar title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）" />
   </div>
 </template>
 
 <script>
 import { setDataAuthority } from '@/api/authority'
+import warningBar from '@/components/warningBar/warningBar.vue'
+
 export default {
   name: 'Datas',
+  components: { warningBar },
   props: {
     row: {
       default: function() {

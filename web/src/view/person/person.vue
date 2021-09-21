@@ -26,9 +26,9 @@
                 <li>
                   <i class="el-icon-video-camera-solid" />中国·北京市·朝阳区
                 </li>
-                <el-tooltip class="item" effect="light" content="goLang/JavaScript/Vue/Gorm" placement="top">
+                <el-tooltip class="item" effect="light" content="GoLang/JavaScript/Vue/Gorm" placement="top">
                   <li>
-                    <i class="el-icon-medal-1" />goLang/JavaScript/Vue/Gorm
+                    <i class="el-icon-medal-1" />GoLang/JavaScript/Vue/Gorm
                   </li>
                 </el-tooltip>
 
@@ -93,8 +93,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="showPassword=false">取 消</el-button>
-          <el-button type="primary" @click="savePassword">确 定</el-button>
+          <el-button size="small" @click="showPassword=false">取 消</el-button>
+          <el-button size="small" type="primary" @click="savePassword">确 定</el-button>
         </div>
       </template>
     </el-dialog>

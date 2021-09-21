@@ -8,7 +8,9 @@ metadata:
     app: gin-vue-admin-service
 spec:
   ports:
-  - port: 8080
-    targetPort: 8080
+    - name: server
+      port: 8080
+      targetPort: 8080
+      protocol: TCP
   selector:
     app: gin-vue-admin-fe

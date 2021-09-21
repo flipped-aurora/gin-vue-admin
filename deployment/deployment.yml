@@ -26,6 +26,15 @@ spec:
               subPath: config.yaml
             - mountPath: /etc/localtime
               name: localtime
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+              httpHeaders:
+                - name: X-Custom-Header
+                  value: Awesome
+            initialDelaySeconds: 10
+            periodSeconds: 20
       volumes:
         - name: localtime
           hostPath:

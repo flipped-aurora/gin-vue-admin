@@ -32,6 +32,7 @@
         :data="tableData"
         style="width: 100%"
         tooltip-effect="dark"
+        row-key="ID"
       >
         <el-table-column type="selection" width="55" />
         <el-table-column align="center" label="日期" width="180">
@@ -54,7 +55,7 @@
             <el-button size="mini" icon="el-icon-edit" type="text" @click="updateSysDictionary(scope.row)">变更</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
-              <div style="text-align: right; margin: 0">
+              <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="mini" @click="deleteSysDictionary(scope.row)">确定</el-button>
               </div>

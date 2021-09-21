@@ -118,7 +118,7 @@
             >下移</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top">
               <p>确定删除吗？</p>
-              <div style="text-align: right; margin: 0">
+              <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
               </div>

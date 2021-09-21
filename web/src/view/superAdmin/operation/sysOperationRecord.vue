@@ -22,7 +22,7 @@
 
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
-          <div style="text-align: right; margin: 0">
+          <div style="text-align: right; margin-top: 8px;">
             <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
@@ -36,6 +36,7 @@
         :data="tableData"
         style="width: 100%"
         tooltip-effect="dark"
+        row-key="ID"
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="center" type="selection" width="55" />
@@ -92,7 +93,7 @@
           <template #default="scope">
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
-              <div style="text-align: right; margin: 0">
+              <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
                 <el-button size="mini" type="primary" @click="deleteSysOperationRecord(scope.row)">确定</el-button>
               </div>

@@ -7,9 +7,7 @@
       <el-table :data="tableData">
         <el-table-column align="center" label="头像" min-width="50">
           <template #default="scope">
-            <div :style="{'textAlign':'center'}">
-              <CustomPic :pic-src="scope.row.headerImg" />
-            </div>
+            <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
           </template>
         </el-table-column>
         <el-table-column align="center" label="UUID" min-width="250" prop="uuid" />
@@ -33,7 +31,7 @@
           <template #default="scope">
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
-              <div style="text-align: right; margin: 0">
+              <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
               </div>

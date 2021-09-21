@@ -1,8 +1,8 @@
 <template>
   <span class="headerAvatar">
     <template v-if="picType === 'avatar'">
-      <el-avatar v-if="userInfo.headerImg" :size="30" :src="avatar" />
-      <el-avatar v-else :size="30" :src="require('@/assets/noBody.png')" />
+      <el-avatar v-if="userInfo.headerImg" :size="24" :src="avatar" />
+      <el-avatar v-else :size="24" :src="require('@/assets/noBody.png')" />
     </template>
     <template v-if="picType === 'img'">
       <img v-if="userInfo.headerImg" :src="avatar" class="avatar">
@@ -66,6 +66,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 8px;
 }
 .file{
     width: 80px;

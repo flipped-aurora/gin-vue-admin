@@ -29,6 +29,7 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
+
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog('addApi')">新增</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
@@ -37,12 +38,7 @@
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button
-              icon="el-icon-delete"
-              size="mini"
-              style="margin-left: 10px;"
-              :disabled="showTableHeadDelbtn"
-            >删除</el-button>
+            <el-button icon="el-icon-delete" size="mini" style="margin-left: 10px;">删除</el-button>
           </template>
         </el-popover>
       </div>
@@ -57,25 +53,26 @@
         <el-table-column align="center" label="API简介" min-width="150" prop="description" sortable="custom" />
         <el-table-column align="center" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
-            <div>{{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}</div>
+            <div>
+              {{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}
+            </div>
           </template>
         </el-table-column>
 
         <el-table-column align="center" fixed="right" label="操作" width="200">
           <template #default="scope">
-            <el-button icon="el-icon-edit" size="small" type="text" @click="editApi(scope.row)">编辑</el-button>
-            <el-popconfirm
-              confirmButtonText="好的"
-              cancelButtonText="不用了"
-              icon="el-icon-info"
-              iconColor="red"
-              title="你确定要删除吗？"
-              @confirm="deleteApi(scope.row)"
-            >
-              <template #reference>
-                <el-button icon="el-icon-delete" size="small" type="text">删除</el-button>
-              </template>
-            </el-popconfirm>
+            <el-button
+              icon="el-icon-edit"
+              size="small"
+              type="text"
+              @click="editApi(scope.row)"
+            >编辑</el-button>
+            <el-button
+              icon="el-icon-delete"
+              size="small"
+              type="text"
+              @click="deleteApi(scope.row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,11 +87,12 @@
           @size-change="handleSizeChange"
         />
       </div>
+
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
       <warning-bar title="新增API，需要在角色管理内篇日志权限才可使用" />
-      <el-form ref="apiForm" :model="form" :rules="rules" label-width="120px">
+      <el-form ref="apiForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="路径" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
@@ -194,8 +192,7 @@ export default {
         description: [
           { required: true, message: '请输入api介绍', trigger: 'blur' }
         ]
-      },
-      showTableHeadDelbtn: true
+      }
     }
   },
   created() {
@@ -212,11 +209,6 @@ export default {
     },
     //  选中api
     handleSelectionChange(val) {
-      if (val.length) {
-        this.showTableHeadDelbtn = false
-      } else {
-        this.showTableHeadDelbtn = true
-      }
       this.apis = val
     },
     async onDelete() {
@@ -284,17 +276,30 @@ export default {
       this.openDialog('edit')
     },
     async deleteApi(row) {
-      const res = await deleteApi(row)
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
+      this.$confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+        .then(async() => {
+          const res = await deleteApi(row)
+          if (res.code === 0) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            if (this.tableData.length === 1 && this.page > 1) {
+              this.page--
+            }
+            this.getTableData()
+          }
         })
-        if (this.tableData.length === 1 && this.page > 1) {
-          this.page--
-        }
-        this.getTableData()
-      }
+        .catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
     },
     async enterDialog() {
       this.$refs.apiForm.validate(async valid => {

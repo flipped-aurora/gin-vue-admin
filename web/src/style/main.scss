@@ -761,11 +761,6 @@ li {
     .upload {
         padding: 0;
     }
-    .el-form.el-form--inline {
-        .el-form-item:last-child {
-            margin-bottom: 0;
-        }
-    }
     .edit_container,
     .edit {
         padding: 0;
@@ -1419,6 +1414,13 @@ $mainHight: 100vh;
 }
 
 .gva-search-box {
+    .el-collapse {
+        border: none;
+        .el-collapse-item__header,
+        .el-collapse-item__wrap {
+            border-bottom: none;
+        }
+    }
     padding: 24px;
     padding-bottom: 2px;
     background-color: #fff;
@@ -1429,6 +1431,12 @@ $mainHight: 100vh;
             padding-right: 28px;
         }
     }
+}
+
+.gva-form-box {
+    padding: 24px;
+    background-color: #fff;
+    border-radius: 2px;
 }
 
 .gva-table-box {

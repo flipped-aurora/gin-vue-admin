@@ -33,7 +33,7 @@
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog('addApi')">新增</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
-          <div style="text-align: right; margin: 0">
+          <div style="text-align: right; margin-top: 8px;">
             <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
@@ -293,12 +293,6 @@ export default {
             }
             this.getTableData()
           }
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
         })
     },
     async enterDialog() {

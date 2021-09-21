@@ -42,6 +42,8 @@
           </el-form>
         </el-collapse-item>
       </el-collapse>
+    </div>
+    <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
       <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
         <el-form-item label="Struct名称" prop="structName">
@@ -83,18 +85,18 @@
         <el-button size="mini" type="primary" @click="editAndAddField()">新增Field</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column type="index" label="序列" width="100" />
-        <el-table-column prop="fieldName" label="Field名" />
-        <el-table-column prop="fieldDesc" label="中文名" />
-        <el-table-column prop="fieldJson" label="FieldJson" />
-        <el-table-column prop="fieldType" label="Field数据类型" width="130" />
-        <el-table-column prop="dataType" label="数据库字段类型" width="130" />
-        <el-table-column prop="dataTypeLong" label="数据库字段长度" width="130" />
-        <el-table-column prop="columnName" label="数据库字段" width="130" />
-        <el-table-column prop="comment" label="数据库字段描述" width="130" />
-        <el-table-column prop="fieldSearchType" label="搜索条件" width="130" />
-        <el-table-column prop="dictType" label="字典" width="130" />
-        <el-table-column label="操作" width="300">
+        <el-table-column align="center" type="index" label="序列" width="100" />
+        <el-table-column align="center" prop="fieldName" label="Field名" />
+        <el-table-column align="center" prop="fieldDesc" label="中文名" />
+        <el-table-column align="center" prop="fieldJson" label="FieldJson" />
+        <el-table-column align="center" prop="fieldType" label="Field数据类型" width="130" />
+        <el-table-column align="center" prop="dataType" label="数据库字段类型" width="130" />
+        <el-table-column align="center" prop="dataTypeLong" label="数据库字段长度" width="130" />
+        <el-table-column align="center" prop="columnName" label="数据库字段" width="130" />
+        <el-table-column align="center" prop="comment" label="数据库字段描述" width="130" />
+        <el-table-column align="center" prop="fieldSearchType" label="搜索条件" width="130" />
+        <el-table-column align="center" prop="dictType" label="字典" width="130" />
+        <el-table-column align="center" label="操作" width="300">
           <template #default="scope">
             <el-button
               size="mini"
@@ -146,9 +148,16 @@
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
+      <template #title>
+        <div class="previewCodeTool">
+          <p>操作栏：</p>
+          <el-button size="mini" type="primary" @click="selectText">全选</el-button>
+          <el-button size="mini" type="primary" @click="copy">复制</el-button>
+        </div>
+      </template>
       <PreviewCodeDialog v-if="previewFlag" :preview-code="preViewCode" />
       <template #footer>
-        <div class="dialog-footer">
+        <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
           <el-button size="small" type="primary" @click="previewFlag = false">确 定</el-button>
         </div>
       </template>
@@ -427,6 +436,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+  .previewCodeTool {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+  }
 .button-box {
   padding: 10px 20px;
   .el-button {

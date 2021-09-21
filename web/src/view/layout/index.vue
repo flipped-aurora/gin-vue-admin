@@ -160,7 +160,7 @@ export default {
       return this.$route.matched
     }
   },
-  mounted() {
+  created() {
     const screenWidth = document.body.clientWidth
     if (screenWidth < 1000) {
       this.isMobile = true
@@ -175,6 +175,8 @@ export default {
       this.isSider = true
       this.isCollapse = false
     }
+  },
+  mounted() {
     emitter.emit('collapse', this.isCollapse)
     emitter.emit('mobile', this.isMobile)
     emitter.on('reload', this.reload)

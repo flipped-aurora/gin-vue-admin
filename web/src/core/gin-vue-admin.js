@@ -6,8 +6,8 @@
 import { register } from './global'
 
 export const run = function(app) {
-    register(app)
-    console.log(`
+  register(app)
+  console.log(`
      欢迎使用 Gin-Vue-Admin
      当前版本:V2.4.5 beta.1
      加群方式:微信：shouzi_1994 QQ群：622360840

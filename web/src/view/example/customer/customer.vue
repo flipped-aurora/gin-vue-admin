@@ -9,6 +9,7 @@
         :data="tableData"
         style="width: 100%"
         tooltip-effect="dark"
+        row-key="ID"
       >
         <el-table-column type="selection" width="55" />
         <el-table-column align="center" label="接入日期" width="180">
@@ -24,7 +25,7 @@
             <el-button size="small" type="text" icon="el-icon-edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
-              <div style="text-align: right; margin: 0">
+              <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
               </div>
@@ -35,6 +36,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <warning-bar style="margin-top:12px;" title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
       <div class="gva-pagination">
         <el-pagination
           :current-page="page"
@@ -47,7 +49,6 @@
         />
       </div>
     </div>
-    <div class="tips">在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示</div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="客户">
       <el-form :inline="true" :model="form" label-width="80px">
         <el-form-item label="客户名">
@@ -76,9 +77,11 @@ import {
   getExaCustomerList
 } from '@/api/customer'
 import infoList from '@/mixins/infoList'
+import warningBar from '@/components/warningBar/warningBar.vue'
 
 export default {
   name: 'Customer',
+  components: { warningBar },
   mixins: [infoList],
   data() {
     return {

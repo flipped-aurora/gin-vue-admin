@@ -1,5 +1,6 @@
 <template>
   <div>
+    <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
@@ -12,15 +13,15 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="center" label="接入日期" width="180">
+        <el-table-column align="left" label="接入日期" width="180">
           <template #default="scope">
             <span>{{ formatDate(scope.row.CreatedAt) }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="姓名" prop="customerName" width="120" />
-        <el-table-column align="center" label="电话" prop="customerPhoneData" width="120" />
-        <el-table-column align="center" label="接入人ID" prop="sysUserId" width="120" />
-        <el-table-column align="center" label="按钮组" min-width="160">
+        <el-table-column align="left" label="姓名" prop="customerName" width="120" />
+        <el-table-column align="left" label="电话" prop="customerPhoneData" width="120" />
+        <el-table-column align="left" label="接入人ID" prop="sysUserId" width="120" />
+        <el-table-column align="left" label="按钮组" min-width="160">
           <template #default="scope">
             <el-button size="small" type="text" icon="el-icon-edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover :visible="scope.row.visible" placement="top" width="160">
@@ -36,7 +37,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <warning-bar style="margin-top:12px;" title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
       <div class="gva-pagination">
         <el-pagination
           :current-page="page"

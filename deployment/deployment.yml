@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-vue-admin
+  annotations:
+    kubesphere.io/description: gin-vue-admin 后端
+  labels:
+    app: gin-vue-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gin-vue-admin
+  template:
+    metadata:
+      labels:
+        app: gin-vue-admin
+    spec:
+      containers:
+        - name: gin-vue-admin-container
+          image: registry.cn-hangzhou.aliyuncs.com/gin-vue-admin/server:40fc3aa6
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /go/src/github.com/flipped-aurora/gin-vue-admin/server/config.yaml
+              name: config
+              subPath: config.yaml
+            - mountPath: /etc/localtime
+              name: localtime
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8888
+              httpHeaders:
+                - name: X-Custom-Header
+                  value: Awesome
+            initialDelaySeconds: 10
+            periodSeconds: 20
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: config
+          configMap:
+            name: config.yaml
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gin-vue-admin-fe
+  annotations:
+    kubesphere.io/description: gin-vue-admin 前端
+  labels:
+    app: gin-vue-admin-fe
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gin-vue-admin-fe
+  template:
+    metadata:
+      labels:
+        app: gin-vue-admin-fe
+    spec:
+      containers:
+        - name: gin-vue-admin-nginx-container
+          image: registry.cn-hangzhou.aliyuncs.com/gin-vue-admin/web:40fc3aa6
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/my.conf
+              name: nginx-config
+              subPath: my.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: my.conf

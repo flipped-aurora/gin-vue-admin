@@ -1,5 +1,4 @@
 /* 改变主题色变量 */
-$--color-primary: #1890ff;
 
 #app{
   .el-button{
@@ -11,11 +10,6 @@ $--color-primary: #1890ff;
 .el-dialog{
   border-radius: 2px;
 }
-
-:export {
-  colorPrimary: $--color-primary
-}
-
 
 ::-webkit-scrollbar-track-piece {
   background-color: #f8f8f8;

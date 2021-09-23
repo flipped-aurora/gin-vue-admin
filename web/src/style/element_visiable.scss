@@ -7,14 +7,10 @@ $--color-primary: #1890ff;
     border-radius: 4px;
   }
 }
-///* 改变 icon 字体路径变量，必需 */
-//$--font-path: '~element-ui/lib/theme-chalk/fonts';
-//
-//
-//
-//@import "~element-ui/packages/theme-chalk/src/index";
-//
 
+.el-dialog{
+  border-radius: 4px;
+}
 
 :export {
   colorPrimary: $--color-primary

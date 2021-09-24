@@ -12,7 +12,7 @@ export const user = {
       headerImg: '',
       authority: {},
       sideMode: 'dark',
-      activeColor: '#0d84ff',
+      activeColor: '#4D70FF',
       baseColor: '#fff'
     },
     token: '',
@@ -123,7 +123,7 @@ export const user = {
     },
     activeColor(state) {
       if (state.userInfo.sideMode === 'dark' || state.userInfo.sideMode === 'light') {
-        return '#0d84ff'
+        return '#4D70FF'
       }
       return state.userInfo.activeColor
     }

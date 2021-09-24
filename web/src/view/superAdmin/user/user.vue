@@ -1,19 +1,20 @@
 <template>
   <div>
+    <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
       </div>
       <el-table :data="tableData">
-        <el-table-column align="center" label="头像" min-width="50">
+        <el-table-column align="left" label="头像" min-width="50">
           <template #default="scope">
             <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
           </template>
         </el-table-column>
-        <el-table-column align="center" label="UUID" min-width="250" prop="uuid" />
-        <el-table-column align="center" label="用户名" min-width="150" prop="userName" />
-        <el-table-column align="center" label="昵称" min-width="150" prop="nickName" />
-        <el-table-column align="center" label="用户角色" min-width="150">
+        <el-table-column align="left" label="UUID" min-width="250" prop="uuid" />
+        <el-table-column align="left" label="用户名" min-width="150" prop="userName" />
+        <el-table-column align="left" label="昵称" min-width="150" prop="nickName" />
+        <el-table-column align="left" label="用户角色" min-width="150">
           <template #default="scope">
             <el-cascader
               v-model="scope.row.authorityIds"
@@ -27,7 +28,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" min-width="150">
+        <el-table-column align="left" label="操作" min-width="150">
           <template #default="scope">
             <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
@@ -42,7 +43,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
       <div class="gva-pagination">
         <el-pagination
           :current-page="page"

@@ -42,6 +42,12 @@ func Routers() *gin.Engine {
 	autocodeRouter := router.RouterGroupApp.Autocode
 	PublicGroup := Router.Group("")
 	{
+		// 健康监测
+		PublicGroup.GET("/health", func(c *gin.Context) {
+			c.JSON(200, "ok")
+		})
+	}
+	{
 		systemRouter.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
 		systemRouter.InitInitRouter(PublicGroup) // 自动初始化相关
 	}

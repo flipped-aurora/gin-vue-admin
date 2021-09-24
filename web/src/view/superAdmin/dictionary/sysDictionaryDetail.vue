@@ -32,21 +32,21 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="center" label="日期" width="180">
+        <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="center" label="展示值" prop="label" width="120" />
+        <el-table-column align="left" label="展示值" prop="label" width="120" />
 
-        <el-table-column align="center" label="字典值" prop="value" width="120" />
+        <el-table-column align="left" label="字典值" prop="value" width="120" />
 
-        <el-table-column align="center" label="启用状态" prop="status" width="120">
+        <el-table-column align="left" label="启用状态" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="center" label="排序标记" prop="sort" width="120" />
+        <el-table-column align="left" label="排序标记" prop="sort" width="120" />
 
-        <el-table-column align="center" label="按钮组">
+        <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button size="small" type="text" icon="el-icon-edit" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
             <el-popover :visible="scope.row.visible" placement="top" width="160">

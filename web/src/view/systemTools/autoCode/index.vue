@@ -155,7 +155,7 @@
           <el-button size="mini" type="primary" @click="copy">复制</el-button>
         </div>
       </template>
-      <PreviewCodeDialog v-if="previewFlag" :preview-code="preViewCode" />
+      <PreviewCodeDialog v-if="previewFlag" ref="preview" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
           <el-button size="small" type="primary" @click="previewFlag = false">确 定</el-button>
@@ -246,6 +246,12 @@ export default {
     }
   },
   methods: {
+    selectText() {
+      this.$refs.preview.selectText()
+    },
+    copy() {
+      this.$refs.preview.copy()
+    },
     editAndAddField(item) {
       this.dialogFlag = true
       if (item) {

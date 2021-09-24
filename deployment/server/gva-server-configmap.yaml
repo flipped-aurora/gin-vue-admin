@@ -2,7 +2,13 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: config.yaml
-  namespace: default
+  annotations:
+    flipped-aurora/gin-vue-admin: backend
+    github: "https://github.com/flipped-aurora/gin-vue-admin.git"
+    app.kubernetes.io/version: 0.0.1
+  labels:
+    app: gva-server
+    version: gva-vue3
 data:
   config.yaml: |
     # github.com/flipped-aurora/gin-vue-admin/server Global Configuration
@@ -140,37 +146,3 @@ data:
         { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
         #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
       ]
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: my.conf
-  namespace: default
-data:
-  my.conf: |
-    server {
-        listen       8080;
-        server_name localhost;
-
-        #charset koi8-r;
-        #access_log  logs/host.access.log  main;
-
-        location / {
-            root /usr/share/nginx/html;
-            add_header Cache-Control 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0';
-            try_files $uri $uri/ /index.html;
-        }
-
-        location /api {
-            proxy_set_header Host $http_host;
-            proxy_set_header  X-Real-IP $remote_addr;
-            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            rewrite ^/api/(.*)$ /$1 break;  #重写
-            proxy_pass http://177.7.0.12:8888; # 设置代理服务器的协议和地址
-         }
-
-        location /api/swagger/index.html {
-            proxy_pass http://127.0.0.1:8888/swagger/index.html;
-         }
-     }

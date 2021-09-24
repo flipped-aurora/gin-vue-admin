@@ -85,18 +85,18 @@
         <el-button size="mini" type="primary" @click="editAndAddField()">新增Field</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column align="center" type="index" label="序列" width="100" />
-        <el-table-column align="center" prop="fieldName" label="Field名" />
-        <el-table-column align="center" prop="fieldDesc" label="中文名" />
-        <el-table-column align="center" prop="fieldJson" label="FieldJson" />
-        <el-table-column align="center" prop="fieldType" label="Field数据类型" width="130" />
-        <el-table-column align="center" prop="dataType" label="数据库字段类型" width="130" />
-        <el-table-column align="center" prop="dataTypeLong" label="数据库字段长度" width="130" />
-        <el-table-column align="center" prop="columnName" label="数据库字段" width="130" />
-        <el-table-column align="center" prop="comment" label="数据库字段描述" width="130" />
-        <el-table-column align="center" prop="fieldSearchType" label="搜索条件" width="130" />
-        <el-table-column align="center" prop="dictType" label="字典" width="130" />
-        <el-table-column align="center" label="操作" width="300">
+        <el-table-column align="left" type="index" label="序列" width="100" />
+        <el-table-column align="left" prop="fieldName" label="Field名" />
+        <el-table-column align="left" prop="fieldDesc" label="中文名" />
+        <el-table-column align="left" prop="fieldJson" label="FieldJson" />
+        <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
+        <el-table-column align="left" prop="dataType" label="数据库字段类型" width="130" />
+        <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="130" />
+        <el-table-column align="left" prop="columnName" label="数据库字段" width="130" />
+        <el-table-column align="left" prop="comment" label="数据库字段描述" width="130" />
+        <el-table-column align="left" prop="fieldSearchType" label="搜索条件" width="130" />
+        <el-table-column align="left" prop="dictType" label="字典" width="130" />
+        <el-table-column align="left" label="操作" width="300">
           <template #default="scope">
             <el-button
               size="mini"

@@ -29,7 +29,6 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog('addApi')">新增</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
@@ -38,7 +37,7 @@
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="el-icon-delete" size="mini" style="margin-left: 10px;">删除</el-button>
+            <el-button icon="el-icon-delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">删除</el-button>
           </template>
         </el-popover>
       </div>
@@ -47,11 +46,11 @@
           type="selection"
           width="55"
         />
-        <el-table-column align="center" label="id" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column align="center" label="API路径" min-width="150" prop="path" sortable="custom" />
-        <el-table-column align="center" label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column align="center" label="API简介" min-width="150" prop="description" sortable="custom" />
-        <el-table-column align="center" label="请求" min-width="150" prop="method" sortable="custom">
+        <el-table-column align="left" label="id" min-width="60" prop="ID" sortable="custom" />
+        <el-table-column align="left" label="API路径" min-width="150" prop="path" sortable="custom" />
+        <el-table-column align="left" label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
+        <el-table-column align="left" label="API简介" min-width="150" prop="description" sortable="custom" />
+        <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>
               {{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}
@@ -59,7 +58,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="center" fixed="right" label="操作" width="200">
+        <el-table-column align="left" fixed="right" label="操作" width="200">
           <template #default="scope">
             <el-button
               icon="el-icon-edit"

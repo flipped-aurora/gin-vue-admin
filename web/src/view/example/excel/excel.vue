@@ -16,18 +16,18 @@
         <el-button class="excel-btn" size="mini" type="success" icon="el-icon-download" @click="downloadExcelTemplate()">下载模板</el-button>
       </div>
       <el-table :data="tableData" row-key="ID">
-        <el-table-column align="center" label="ID" min-width="100" prop="ID" />
-        <el-table-column align="center" show-overflow-tooltip label="路由Name" min-width="160" prop="name" />
-        <el-table-column align="center" show-overflow-tooltip label="路由Path" min-width="160" prop="path" />
-        <el-table-column align="center" label="是否隐藏" min-width="100" prop="hidden">
+        <el-table-column align="left" label="ID" min-width="100" prop="ID" />
+        <el-table-column align="left" show-overflow-tooltip label="路由Name" min-width="160" prop="name" />
+        <el-table-column align="left" show-overflow-tooltip label="路由Path" min-width="160" prop="path" />
+        <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
 
           <template #default="scope">
             <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="父节点" min-width="90" prop="parentId" />
-        <el-table-column align="center" label="排序" min-width="70" prop="sort" />
-        <el-table-column align="center" label="文件路径" min-width="360" prop="component" />
+        <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
+        <el-table-column align="left" label="排序" min-width="70" prop="sort" />
+        <el-table-column align="left" label="文件路径" min-width="360" prop="component" />
       </el-table>
     </div>
   </div>

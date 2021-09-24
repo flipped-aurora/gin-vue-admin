@@ -1,5 +1,6 @@
 <template>
   <div class="authority">
+    <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="mini" type="primary" icon="el-icon-plus" @click="addAuthority('0')">新增角色</el-button>
@@ -11,8 +12,8 @@
         style="width: 100%"
       >
         <el-table-column label="角色ID" min-width="180" prop="authorityId" />
-        <el-table-column align="center" label="角色名称" min-width="180" prop="authorityName" />
-        <el-table-column align="center" label="操作" width="460">
+        <el-table-column align="left" label="角色名称" min-width="180" prop="authorityName" />
+        <el-table-column align="left" label="操作" width="460">
           <template #default="scope">
             <el-button
               icon="el-icon-setting"
@@ -47,7 +48,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <warning-bar title="注：右上角头像下拉可切换角色" style="margin-top:12px;" />
     </div>
     <!-- 新增角色弹窗 -->
     <el-dialog v-model="dialogFormVisible" :title="dialogTitle">

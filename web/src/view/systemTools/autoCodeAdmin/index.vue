@@ -9,14 +9,14 @@
           type="selection"
           width="55"
         />
-        <el-table-column align="center" label="id" width="60" prop="ID" />
-        <el-table-column align="center" label="日期" width="180">
+        <el-table-column align="left" label="id" width="60" prop="ID" />
+        <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="center" label="结构体名" min-width="150" prop="structName" />
-        <el-table-column align="center" label="结构体描述" min-width="150" prop="structCNName" />
-        <el-table-column align="center" label="表名称" min-width="150" prop="tableName" />
-        <el-table-column align="center" label="回滚标记" min-width="150" prop="flag">
+        <el-table-column align="left" label="结构体名" min-width="150" prop="structName" />
+        <el-table-column align="left" label="结构体描述" min-width="150" prop="structCNName" />
+        <el-table-column align="left" label="表名称" min-width="150" prop="tableName" />
+        <el-table-column align="left" label="回滚标记" min-width="150" prop="flag">
           <template #default="scope">
             <el-tag
               v-if="scope.row.flag"
@@ -36,7 +36,7 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="center" label="操作" min-width="180">
+        <el-table-column align="left" label="操作" min-width="180">
           <template #default="scope">
             <div>
               <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>

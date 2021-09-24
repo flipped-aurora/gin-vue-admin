@@ -1,5 +1,8 @@
 <template>
   <div>
+    <warning-bar
+      title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
+    />
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
         <el-form-item label="字典名（中）">
@@ -35,21 +38,21 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="center" label="日期" width="180">
+        <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="center" label="字典名（中）" prop="name" width="160" />
+        <el-table-column align="left" label="字典名（中）" prop="name" width="160" />
 
-        <el-table-column align="center" label="字典名（英）" prop="type" width="120" />
+        <el-table-column align="left" label="字典名（英）" prop="type" width="120" />
 
-        <el-table-column align="center" label="状态" prop="status" width="120">
+        <el-table-column align="left" label="状态" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="center" label="描述" prop="desc" width="280" />
+        <el-table-column align="left" label="描述" prop="desc" width="280" />
 
-        <el-table-column align="center" label="按钮组">
+        <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button size="mini" icon="el-icon-document" type="text" @click="toDetile(scope.row)">详情</el-button>
             <el-button size="mini" icon="el-icon-edit" type="text" @click="updateSysDictionary(scope.row)">变更</el-button>
@@ -66,10 +69,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <warning-bar
-        title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
-        style="margin-top:12px"
-      />
+
       <div class="gva-pagination">
         <el-pagination
           :current-page="page"

@@ -1,5 +1,7 @@
 <template>
-  <div class="warning-bar">
+  <div
+    class="warning-bar"
+  >
     <el-icon>
       <warning-filled />
     </el-icon>
@@ -19,7 +21,7 @@ export default {
     title: {
       type: String,
       default: ''
-    }
+    },
   }
 }
 </script>
@@ -30,14 +32,16 @@ export default {
     padding: 6px 14px;
     display: flex;
     align-items: center;
+    border-radius: 2px;
     .el-icon{
-        color: #ED6A0C;
+      font-size: 18px;
+      color: #ED6A0C;
     }
-    margin-bottom: 22px;
+    margin-bottom: 12px;
     span{
-        color:#5D5D5E;
+        line-height: 22px;
+        color:#F67207;
         margin-left: 8px;
-        line-height: 18px;
     }
 }
 </style>

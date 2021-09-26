@@ -114,6 +114,10 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 		if TxErr != nil {
 			return TxErr
 		}
+		TxErr = tx.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityIds[0]).Error
+		if TxErr != nil {
+			return TxErr
+		}
 		// 返回 nil 提交事务
 		return nil
 	})

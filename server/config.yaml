@@ -84,7 +84,6 @@ autocode:
   server-service: /service/autocode
   web: /web/src
   web-api: /api
-  web-flow: /view
   web-form: /view
   web-table: /view
 

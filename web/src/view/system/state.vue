@@ -159,7 +159,7 @@ export default {
       this.reload()
     }, 1000 * 10)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     clearInterval(this.timer)
     this.timer = null
   },

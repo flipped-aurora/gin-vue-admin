@@ -35,7 +35,7 @@ email:
   nickname: 'test'
 
 # casbin configuration
-casbin:ss
+casbin:
   model-path: './resource/rbac_model.conf'
 
 # system configuration

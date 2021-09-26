@@ -90,7 +90,7 @@ export default {
       screenfull.on('change', this.changeFullShow)
     }
   },
-  destroyed() {
+  unmounted() {
     screenfull.off('change', this.changeFullShow)
   },
   methods: {

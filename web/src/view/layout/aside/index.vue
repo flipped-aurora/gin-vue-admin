@@ -58,7 +58,7 @@ export default {
       this.isCollapse = item
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     emitter.off('collapse')
   },
   methods: {

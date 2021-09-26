@@ -120,7 +120,7 @@ export default {
     }
     this.setTab(this.$route)
   },
-  beforeDestroy() {
+  beforeUnmount() {
     emitter.off('collapse')
     emitter.off('mobile')
   },

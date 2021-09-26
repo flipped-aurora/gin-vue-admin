@@ -35,7 +35,7 @@ email:
   nickname: 'test'
 
 # casbin configuration
-casbin:
+casbin:ss
   model-path: './resource/rbac_model.conf'
 
 # system configuration
@@ -84,7 +84,6 @@ autocode:
   server-service: /service/autocode
   web: /web/src
   web-api: /api
-  web-flow: /view
   web-form: /view
   web-table: /view
 

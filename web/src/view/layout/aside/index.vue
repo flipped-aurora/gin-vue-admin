@@ -66,7 +66,7 @@ export default {
     selectMenuItem(index, _, ele) {
       const query = {}
       const params = {}
-      ele.route.parameters &&
+     ele?.route?.parameters &&
       ele.route.parameters.forEach(item => {
         if (item.type === 'query') {
           query[item.key] = item.value
@@ -74,12 +74,12 @@ export default {
           params[item.key] = item.value
         }
       })
-      if (index === this.$route.name) return
-      if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-        window.open(index)
-      } else {
-        this.$router.push({ name: index, query, params })
-      }
+     if (index === this.$route.name) return
+     if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
+       window.open(index)
+     } else {
+       this.$router.push({ name: index, query, params })
+     }
     }
   }
 }

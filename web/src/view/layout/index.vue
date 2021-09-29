@@ -78,19 +78,13 @@
             <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
-        <router-view v-if="$route.meta.keepAlive && reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
+        <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
           <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive>
+            <keep-alive :include="$store.getters['router/keepAliveRouters']">
               <component :is="Component" />
             </keep-alive>
           </transition>
         </router-view>
-        <router-view v-if="!$route.meta.keepAlive && reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
-          <transition mode="out-in" name="el-fade-in-linear">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-
         <BottomInfo />
         <setting />
       </el-main>

@@ -129,9 +129,8 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-tag type="danger" style="margin:12px 0;">id , created_at , updated_at , deleted_at 会自动生成请勿重复创建</el-tag>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-content-flex-end">
+      <div class="gva-btn-list justify-content-flex-end auto-btn-list">
         <el-button size="mini" type="primary" @click="enterForm(true)">预览代码</el-button>
         <el-button size="mini" type="primary" @click="enterForm(false)">生成代码</el-button>
       </div>
@@ -453,5 +452,8 @@ export default {
     margin-right: 20px;
     float: right;
   }
+}
+.auto-btn-list{
+  margin-top: 16px;
 }
 </style>

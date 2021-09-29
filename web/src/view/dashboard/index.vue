@@ -96,6 +96,7 @@
 import echartsLine from '@/view/dashboard/dashbordCharts/echartsLine.vue'
 import dashbordTable from '@/view/dashboard/dashbordTable/dashbordTable.vue'
 export default {
+  name: 'Dashboard',
   components: {
     echartsLine,
     dashbordTable

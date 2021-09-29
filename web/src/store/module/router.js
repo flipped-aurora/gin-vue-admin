@@ -3,6 +3,7 @@ import { asyncRouterHandle } from '@/utils/asyncRouter'
 import { asyncMenu } from '@/api/menu'
 
 const routerList = []
+const keepAliveRouters = []
 
 const formatRouter = (routes) => {
   routes && routes.forEach(item => {
@@ -16,11 +17,24 @@ const formatRouter = (routes) => {
   })
 }
 
+const KeepAliveFilter = (routes) => {
+  routes && routes.forEach(item => {
+    // 子菜单中有 keep-alive 的，父菜单也必须 keep-alive，否则无效。这里将子菜单中有 keep-alive 的父菜单也加入。
+    if ((item.children && item.children.some(ch => ch.meta.keepAlive) || item.meta.keepAlive)) {
+      item.component().then(val => { keepAliveRouters.push(val.default.name) })
+    }
+    if (item.children && item.children.length > 0) {
+      KeepAliveFilter(item.children)
+    }
+  })
+}
+
 export const router = {
   namespaced: true,
   state: {
     asyncRouters: [],
     routerList: routerList,
+    keepAliveRouters: keepAliveRouters
   },
   mutations: {
     setRouterList(state, routerList) {
@@ -29,6 +43,10 @@ export const router = {
     // 设置动态路由
     setAsyncRouter(state, asyncRouters) {
       state.asyncRouters = asyncRouters
+    },
+    // 设置需要缓存的路由
+    setKeepAliveRouters(state, keepAliveRouters) {
+      state.keepAliveRouters = keepAliveRouters
     }
   },
   actions: {
@@ -62,8 +80,10 @@ export const router = {
 
       })
       asyncRouterHandle(baseRouter)
+      KeepAliveFilter(asyncRouter)
       commit('setAsyncRouter', baseRouter)
       commit('setRouterList', routerList)
+      commit('setKeepAliveRouters', keepAliveRouters)
       return true
     }
   },
@@ -74,6 +94,9 @@ export const router = {
     },
     routerList(state) {
       return state.routerList
+    },
+    keepAliveRouters(state) {
+      return state.keepAliveRouters
     }
   }
 }

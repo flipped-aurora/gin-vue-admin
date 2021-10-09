@@ -55,15 +55,17 @@ captcha:
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
 mysql:
-  path: ''
-  config: ''
-  db-name: ''
   username: ''
-  password: ''
+  password: ""
+  path: ''
+mysql-config:
+  db-name: ''
+  config: charset=utf8mb4&parseTime=True&loc=Local
   max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: false
-  log-zap: ""
+  max-open-conns: 10
+  log-mode: ""
+  log-zap: false
+mysql-slaves: []
 
 # local configuration
 local:
@@ -130,8 +132,8 @@ Timer:
     # compareField: 需要比较时间的字段
     # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
     # 2160h = 24 * 30 * 3 -> 三个月
-    { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
-    { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
+  { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
+  { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
     #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
   ]
 

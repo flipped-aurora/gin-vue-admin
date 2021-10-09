@@ -179,7 +179,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /autoCode/getTables [get]
 func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
-	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.MysqlConfig.Dbname)
 	err, tables := autoCodeService.GetTables(dbName)
 	if err != nil {
 		global.GVA_LOG.Error("查询table失败!", zap.Any("err", err))
@@ -213,7 +213,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /autoCode/getColumn [get]
 func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
-	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.MysqlConfig.Dbname)
 	tableName := c.Query("tableName")
 	if err, columns := autoCodeService.GetColumn(tableName, dbName); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))

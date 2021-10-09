@@ -54,12 +54,13 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="width: 46%" @click="checkInit"
+            <el-button type="primary" v-if="isNeedInit" style="width: 46%" @click="checkInit"
               >前往初始化</el-button
             >
             <el-button
               type="primary"
-              style="width: 46%; margin-left: 8%"
+              v-if="!isNeedInit"
+              style="width: 46%;"
               @click="submitForm"
               >登 录</el-button
             >
@@ -113,6 +114,7 @@ export default {
     return {
       curYear: 0,
       lock: 'lock',
+      isNeedInit:false,
       loginForm: {
         username: 'admin',
         password: '123456',
@@ -124,7 +126,7 @@ export default {
         password: [{ validator: checkPassword, trigger: 'blur' }],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
           {
-            min: 5,
+            min: 1,
             max: 6,
             message: '验证码格式不正确',
             trigger: 'blur',
@@ -137,6 +139,9 @@ export default {
   created() {
     this.loginVerify()
     this.curYear = new Date().getFullYear()
+  },
+  mounted() {
+    this.checkInitTop()
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
@@ -153,6 +158,13 @@ export default {
           })
         }
       }
+    },
+    async checkInitTop() {
+      checkDB().then(res=>{
+        if (res.code === 0 && res.data?.needInit) {
+          this.isNeedInit = true
+        }
+      })
     },
     async login() {
       return await this.LoginIn(this.loginForm)

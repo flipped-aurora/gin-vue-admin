@@ -16,6 +16,7 @@ export const user = {
       baseColor: '#fff'
     },
     token: '',
+    requestId: ''
   },
   mutations: {
     setUserInfo(state, userInfo) {
@@ -25,6 +26,10 @@ export const user = {
     setToken(state, token) {
       // 这里的 `state` 对象是模块的局部状态
       state.token = token
+    },
+    setRequestId(state, requestId) {
+      // 这里的 `state` 对象是模块的局部状态
+      state.requestId = requestId
     },
     NeedInit(state) {
       state.userInfo = {}
@@ -99,6 +104,9 @@ export const user = {
     },
     token(state) {
       return state.token
+    },
+    requestId(state) {
+      return state.requestId
     },
     mode(state) {
       return state.userInfo.sideMode

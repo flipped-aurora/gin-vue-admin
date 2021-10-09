@@ -36,11 +36,13 @@ service.interceptors.request.use(
         }
         const token = store.getters['user/token']
         const user = store.getters['user/userInfo']
+        const requestId = store.getters['user/requestId']
         config.data = JSON.stringify(config.data)
         config.headers = {
             'Content-Type': 'application/json',
             'x-token': token,
-            'x-user-id': user.ID
+            'x-user-id': user.ID,
+            'X-Request-Id': requestId
         }
         return config
     },
@@ -61,6 +63,9 @@ service.interceptors.response.use(
         closeLoading()
         if (response.headers['new-token']) {
             store.commit('user/setToken', response.headers['new-token'])
+        }
+        if (response.headers['x-request-id']) {
+            store.commit('user/setRequestId', response.headers['x-request-id'])
         }
         if (response.data.code === 0 || response.headers.success === 'true') {
             if (response.headers.msg) {

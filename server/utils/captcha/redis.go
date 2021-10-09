@@ -27,20 +27,20 @@ func (rs *RedisStore) UseWithCtx(ctx context.Context) base64Captcha.Store {
 }
 
 func (rs *RedisStore) Set(id string, value string) {
-	err := global.GVA_REDIS.Set(rs.Context, rs.PreKey+id, value, rs.Expiration).Err()
+	err := global.GVA_REDIS.Set(rs.PreKey+id, value, rs.Expiration)
 	if err != nil {
 		global.GVA_LOG.Error("RedisStoreSetError!", zap.Error(err))
 	}
 }
 
 func (rs *RedisStore) Get(key string, clear bool) string {
-	val, err := global.GVA_REDIS.Get(rs.Context, key).Result()
+	val, err := global.GVA_REDIS.GetString(key)
 	if err != nil {
 		global.GVA_LOG.Error("RedisStoreGetError!", zap.Error(err))
 		return ""
 	}
 	if clear {
-		err := global.GVA_REDIS.Del(rs.Context, key).Err()
+		err := global.GVA_REDIS.Delete(key)
 		if err != nil {
 			global.GVA_LOG.Error("RedisStoreClearError!", zap.Error(err))
 			return ""

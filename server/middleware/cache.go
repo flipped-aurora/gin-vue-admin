@@ -125,7 +125,7 @@ func CacheApi(isBindUser bool) gin.HandlerFunc {
 				if k == "Authorization" {
 					if v, ok := c.Get("claims"); ok {
 						claims := v.(*systemReq.CustomClaims)
-						userId := strconv.Itoa(int(claims.ID))
+						userId := claims.UUID
 						requestUrl = KEY_USERID_BIND + userId + requestUrl
 					}
 				}

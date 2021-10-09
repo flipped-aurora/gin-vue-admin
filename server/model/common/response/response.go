@@ -20,7 +20,7 @@ type JsonStruct struct {
 }
 
 var (
-	Success              = JsonStruct{Code: 1, Msg: "成功"}
+	Success              = JsonStruct{Code: 0, Msg: "成功"}
 	ParameterError       = JsonStruct{Code: 1000, Msg: "参数错误"}
 	AccountErr           = JsonStruct{Code: 1001, Msg: "账号或密码错误"}
 	AccountNotExit       = JsonStruct{Code: 1002, Msg: "账号不存在"}
@@ -77,6 +77,11 @@ func (r *Response) AppendData(key string, value interface{}) *Response {
 
 func (r *Response) SetData(value interface{}) *Response {
 	r.Data.Data = value
+	return r
+}
+
+func (r *Response) SetCode(code int) *Response {
+	r.Data.Code = code
 	return r
 }
 

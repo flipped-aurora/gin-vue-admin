@@ -4,14 +4,16 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
+	"image/color"
 )
 
 // 当开启多服务器部署时，替换下面的配置，使用redis共享存储验证码
-//var store = captcha.NewDefaultRedisStore()
-var store = base64Captcha.DefaultMemStore
+var store = captcha.NewDefaultRedisStore()
+//var store = base64Captcha.DefaultMemStore
 
 type BaseApi struct {
 }
@@ -26,9 +28,19 @@ type BaseApi struct {
 func (b *BaseApi) Captcha(c *gin.Context) {
 	// 字符,公式,验证码配置
 	// 生成默认数字的driver
-	driver := base64Captcha.NewDriverDigit(global.GVA_CONFIG.Captcha.ImgHeight, global.GVA_CONFIG.Captcha.ImgWidth, global.GVA_CONFIG.Captcha.KeyLong, 0.7, 80)
-	//cp := base64Captcha.NewCaptcha(driver, store.UseWithCtx(c))   // v8下使用redis
-	cp := base64Captcha.NewCaptcha(driver, store)
+	driver := (&base64Captcha.DriverMath{
+		Height:          global.GVA_CONFIG.Captcha.ImgHeight,
+		Width:           global.GVA_CONFIG.Captcha.ImgWidth,
+		NoiseCount:      3,
+		ShowLineOptions: base64Captcha.OptionShowHollowLine | base64Captcha.OptionShowSlimeLine | base64Captcha.OptionShowSineLine, //ShowLineOptions := OptionShowHollowLine | OptionShowSlimeLine | OptionShowSineLine .
+		BgColor:         &color.RGBA{A: 0, B: 0, G: 0, R: 0},
+		Fonts: []string{
+			"wqy-microhei.ttc",
+		},
+	}).ConvertFonts()
+	//driver := base64Captcha.NewDriverDigit(global.GVA_CONFIG.Captcha.ImgHeight, global.GVA_CONFIG.Captcha.ImgWidth, global.GVA_CONFIG.Captcha.KeyLong, 0.7, 80)
+	cp := base64Captcha.NewCaptcha(driver, store.UseWithCtx(c))   // v8下使用redis
+	//cp := base64Captcha.NewCaptcha(driver, store)
 	if id, b64s, err := cp.Generate(); err != nil {
 		global.GVA_LOG.Error("验证码获取失败!", zap.Any("err", err))
 		response.FailWithMessage("验证码获取失败", c)

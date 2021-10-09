@@ -18,6 +18,7 @@ func IPLimit() gin.HandlerFunc {
 		expiration := time.Duration(second) * time.Second
 		if err := SetLimitWithTime(key, limit, expiration); err != nil {
 			response.FailWithMessage(err.Error(), c)
+			c.Abort()
 			return
 		}
 		// 继续往下处理

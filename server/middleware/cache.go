@@ -48,7 +48,7 @@ type Options struct {
 func (o *Options) init() {
 	if o.Headers == nil {
 		o.Headers = []string{
-			"Authorization",
+			"x-token",
 		}
 	}
 }
@@ -122,7 +122,7 @@ func CacheApi(isBindUser bool) gin.HandlerFunc {
 		requestUrl := c.Request.URL.RequestURI()
 		if isBindUser {
 			for _, k := range cache.options.Headers {
-				if k == "Authorization" {
+				if k == "x-token" {
 					if v, ok := c.Get("claims"); ok {
 						claims := v.(*systemReq.CustomClaims)
 						userId := claims.UUID

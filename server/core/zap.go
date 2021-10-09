@@ -38,9 +38,6 @@ func Zap() (logger *zap.Logger) {
 		getEncoderCore(fmt.Sprintf("./%s/server_info.log", global.GVA_CONFIG.Zap.Director), infoPriority),
 		getEncoderCore(fmt.Sprintf("./%s/server_warn.log", global.GVA_CONFIG.Zap.Director), warnPriority),
 		getEncoderCore(fmt.Sprintf("./%s/server_error.log", global.GVA_CONFIG.Zap.Director), errorPriority),
-		//getEncoderCore(fmt.Sprintf("./%s/server_dpanic.log", global.GVA_CONFIG.Zap.Director), zapcore.DPanicLevel),
-		//getEncoderCore(fmt.Sprintf("./%s/server_panic.log", global.GVA_CONFIG.Zap.Director), zapcore.PanicLevel),
-		//getEncoderCore(fmt.Sprintf("./%s/server_fatal.log", global.GVA_CONFIG.Zap.Director), zapcore.FatalLevel),
 	}
 	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
 
@@ -96,5 +93,5 @@ func getEncoderCore(fileName string, level zapcore.LevelEnabler) (core zapcore.C
 
 // 自定义日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	enc.AppendString(t.Format(global.GVA_CONFIG.Zap.Prefix + "2006/01/02 - 15:04:05.000"))
+	enc.AppendString(t.Format(global.GVA_CONFIG.Zap.Prefix + "-2006/01/02 - 15:04:05.000"))
 }

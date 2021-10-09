@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"context"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/tools"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 
@@ -21,6 +22,8 @@ func Redis() {
 		global.GVA_LOG.Error("redis connect ping failed, err:", zap.Any("err", err))
 	} else {
 		global.GVA_LOG.Info("redis connect ping response:", zap.String("pong", pong))
-		global.GVA_REDIS = client
+		global.GVA_REDIS = &tools.Redis{
+			Client: client,
+		}
 	}
 }

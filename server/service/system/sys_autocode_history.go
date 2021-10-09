@@ -54,7 +54,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(id uint) error {
 		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 	}
 	// 获取全部表名
-	err, dbNames := AutoCodeServiceApp.GetTables(global.GVA_CONFIG.Mysql.Dbname)
+	err, dbNames := AutoCodeServiceApp.GetTables(global.GVA_CONFIG.MysqlConfig.Dbname)
 	if err != nil {
 		global.GVA_LOG.Error("ClearTag GetTables:", zap.Error(err))
 	}

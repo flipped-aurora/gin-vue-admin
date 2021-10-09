@@ -2,12 +2,12 @@ package system
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
 
@@ -27,7 +27,7 @@ func (userService *UserService) Register(u system.SysUser) (err error, userInter
 	}
 	// 否则 附加uuid 密码md5简单加密 注册
 	u.Password = utils.MD5V([]byte(u.Password))
-	u.UUID = uuid.NewV4()
+	u.UUID = fmt.Sprintf("%d",global.IdWorker.GetId())
 	err = global.GVA_DB.Create(&u).Error
 	return err, u
 }
@@ -83,7 +83,7 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (err erro
 //@param: uuid uuid.UUID, authorityId string
 //@return: err error
 
-func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, authorityId string) (err error) {
+func (userService *UserService) SetUserAuthority(id uint, uuid string, authorityId string) (err error) {
 	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUseAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
@@ -156,7 +156,7 @@ func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, 
 //@param: uuid uuid.UUID
 //@return: err error, user system.SysUser
 
-func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user system.SysUser) {
+func (userService *UserService) GetUserInfo(uuid string) (err error, user system.SysUser) {
 	var reqUser system.SysUser
 	err = global.GVA_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
 	return err, reqUser

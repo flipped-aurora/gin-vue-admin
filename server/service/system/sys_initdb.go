@@ -29,8 +29,9 @@ import (
 type InitDBService struct {
 }
 
-func (initDBService *InitDBService) writeConfig(viper *viper.Viper, mysql config.Mysql) error {
-	global.GVA_CONFIG.Mysql = mysql
+func (initDBService *InitDBService) writeConfig(viper *viper.Viper, mysql config.Mysql, mysqlConfig config.MysqlConfig) error {
+	global.GVA_CONFIG.MysqlMaster = mysql
+	global.GVA_CONFIG.MysqlConfig = mysqlConfig
 	cs := utils.StructToMap(global.GVA_CONFIG)
 	for k, v := range cs {
 		viper.Set(k, v)
@@ -94,19 +95,20 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		return err
 	}
 
-	MysqlConfig := config.Mysql{
+	MysqlConnect := config.Mysql{
 		Path:     fmt.Sprintf("%s:%s", conf.Host, conf.Port),
-		Dbname:   conf.DBName,
 		Username: conf.UserName,
 		Password: conf.Password,
-		Config:   "charset=utf8mb4&parseTime=True&loc=Local",
 	}
 
-	if MysqlConfig.Dbname == "" {
+	MysqlConfig := global.GVA_CONFIG.MysqlConfig
+	MysqlConfig.Dbname = conf.DBName
+	MysqlConfig.Config = "charset=utf8mb4&parseTime=True&loc=Local"
+	if conf.DBName == "" {
 		return nil
 	}
 
-	linkDns := MysqlConfig.Username + ":" + MysqlConfig.Password + "@tcp(" + MysqlConfig.Path + ")/" + MysqlConfig.Dbname + "?" + MysqlConfig.Config
+	linkDns := MysqlConnect.Username + ":" + MysqlConnect.Password + "@tcp(" + MysqlConnect.Path + ")/" + MysqlConfig.Dbname + "?" + MysqlConfig.Config
 	mysqlConfig := mysql.Config{
 		DSN:                       linkDns, // DSN data source name
 		DefaultStringSize:         191,     // string 类型字段的默认长度
@@ -119,8 +121,8 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
-		sqlDB.SetMaxIdleConns(MysqlConfig.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(MysqlConfig.MaxOpenConns)
+		sqlDB.SetMaxIdleConns(global.GVA_CONFIG.MysqlConfig.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(global.GVA_CONFIG.MysqlConfig.MaxOpenConns)
 		global.GVA_DB = db
 	}
 
@@ -163,7 +165,7 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 		return err
 	}
 
-	if err = initDBService.writeConfig(global.GVA_VP, MysqlConfig); err != nil {
+	if err = initDBService.writeConfig(global.GVA_VP, MysqlConnect, MysqlConfig); err != nil {
 		return err
 	}
 	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")

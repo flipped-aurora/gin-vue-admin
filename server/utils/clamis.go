@@ -4,7 +4,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/satori/go.uuid"
 )
 
 // 从Gin的Context中获取从jwt解析出来的用户ID
@@ -19,10 +18,10 @@ func GetUserID(c *gin.Context) uint {
 }
 
 // 从Gin的Context中获取从jwt解析出来的用户UUID
-func GetUserUuid(c *gin.Context) uuid.UUID {
+func GetUserUuid(c *gin.Context) string {
 	if claims, exists := c.Get("claims"); !exists {
 		global.GVA_LOG.Error("从Gin的Context中获取从jwt解析出来的用户UUID失败, 请检查路由是否使用jwt中间件!")
-		return uuid.UUID{}
+		return ""
 	} else {
 		waitUse := claims.(*systemReq.CustomClaims)
 		return waitUse.UUID

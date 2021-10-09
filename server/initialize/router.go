@@ -40,6 +40,15 @@ func Routers() *gin.Engine {
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
 	autocodeRouter := router.RouterGroupApp.Autocode
+	// 所有接口
+	// 日志打印
+	Router.Use(middleware.LoggerToFile())
+	// 请求预警
+	Router.Use(middleware.IPLimit())
+	// 添加请求ID
+	Router.Use(middleware.SetRequestId())
+	// 添加加密
+	//Router.Use(encryption.App())
 	PublicGroup := Router.Group("")
 	{
 		// 健康监测

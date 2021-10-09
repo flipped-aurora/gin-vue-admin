@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"gorm.io/plugin/dbresolver"
 	"os"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -68,32 +69,54 @@ func MysqlTables(db *gorm.DB) {
 //@return: *gorm.DB
 
 func GormMysql() *gorm.DB {
-	m := global.GVA_CONFIG.Mysql
-	if m.Dbname == "" {
-		return nil
-	}
-	dsn := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
-	mysqlConfig := mysql.Config{
-		DSN:                       dsn,   // DSN data source name
-		DefaultStringSize:         191,   // string 类型字段的默认长度
-		DisableDatetimePrecision:  true,  // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
-		DontSupportRenameIndex:    true,  // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
-		DontSupportRenameColumn:   true,  // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
-		SkipInitializeWithVersion: false, // 根据版本自动配置
-	}
-	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig()); err != nil {
-		//global.GVA_LOG.Error("MySQL启动异常", zap.Any("err", err))
-		//os.Exit(0)
-		//return nil
+	var DB_MAIN *gorm.DB
+	mysqlMaster := global.GVA_CONFIG.MysqlMaster
+	mysqlSlaves := global.GVA_CONFIG.MysqlSlaves
+	mysqlConfig := global.GVA_CONFIG.MysqlConfig
+	address := mysqlMaster.Username + ":" + mysqlMaster.Password + "@tcp(" + mysqlMaster.Path + ")/" + mysqlConfig.Dbname + "?" + mysqlConfig.Config
+	master := CreateMysql(address)
+	if db, err := gorm.Open(master, gormConfig()); err != nil {
+		//if db, err := gorm.Open(master, &gorm.Config{SkipDefaultTransaction: true}); err != nil {
+		global.GVA_LOG.Error("MySQL主库启动异常", zap.Error(err))
 		return nil
 	} else {
+		global.GVA_LOG.Debug("----mysql主库建立链接成功----")
 		sqlDB, _ := db.DB()
-		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
-		return db
+		sqlDB.SetMaxIdleConns(global.GVA_CONFIG.MysqlConfig.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(global.GVA_CONFIG.MysqlConfig.MaxOpenConns)
+		DB_MAIN = db
 	}
+	var slaves []gorm.Dialector
+	// 配置从库
+	for _, dbConfig := range mysqlSlaves {
+		slaveAddress := dbConfig.Username + ":" + dbConfig.Password + "@tcp(" + dbConfig.Path + ")/" + mysqlConfig.Dbname + "?" + mysqlConfig.Config
+		slaves = append(slaves, CreateMysql(slaveAddress))
+	}
+	if len(slaves) > 0 {
+		if err := DB_MAIN.Use(dbresolver.Register(dbresolver.Config{
+			Sources:  []gorm.Dialector{master},
+			Replicas: slaves,
+			// sources/replicas 负载均衡策略
+			Policy: dbresolver.RandomPolicy{},
+		})); err != nil {
+			global.GVA_LOG.Error("MySQL从库启动异常", zap.Error(err))
+		} else {
+			global.GVA_LOG.Debug("MySQL从库链接建立成功", zap.Any("mysql", slaves), zap.String("dbname", mysqlConfig.Dbname))
+		}
+	}
+	return DB_MAIN
 }
 
+func CreateMysql(address string) gorm.Dialector {
+	return mysql.New(mysql.Config{
+		DSN:                       address, // data source name, refer https://github.com/go-sql-driver/mysql#dsn-data-source-name
+		DefaultStringSize:         256,     // add default size for string fields, by default, will use db type `longtext` for fields without size, not a primary key, no index defined and don't have default values
+		DisableDatetimePrecision:  true,    // disable datetime precision support, which not supported before MySQL 5.6
+		DontSupportRenameIndex:    true,    // drop & create index when rename index, rename index not supported before MySQL 5.7, MariaDB
+		DontSupportRenameColumn:   true,    // use change when rename column, rename rename not supported before MySQL 8, MariaDB
+		SkipInitializeWithVersion: false,   // smart configure based on used version
+	})
+}
 //@author: SliverHorn
 //@function: gormConfig
 //@description: 根据配置决定是否开启日志
@@ -102,7 +125,7 @@ func GormMysql() *gorm.DB {
 
 func gormConfig() *gorm.Config {
 	config := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
-	switch global.GVA_CONFIG.Mysql.LogMode {
+	switch global.GVA_CONFIG.MysqlConfig.LogMode {
 	case "silent", "Silent":
 		config.Logger = internal.Default.LogMode(logger.Silent)
 	case "error", "Error":

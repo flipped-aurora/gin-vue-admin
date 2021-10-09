@@ -1,7 +1,6 @@
 package config
 
 type Zap struct {
-	Level         string `mapstructure:"level" json:"level" yaml:"level"`                           // 级别
 	Format        string `mapstructure:"format" json:"format" yaml:"format"`                        // 输出
 	Prefix        string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`                        // 日志前缀
 	Director      string `mapstructure:"director" json:"director"  yaml:"director"`                 // 日志文件夹

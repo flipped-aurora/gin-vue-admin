@@ -8,9 +8,8 @@ jwt:
 
 # zap logger configuration
 zap:
-  level: 'info'
   format: 'console'
-  prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
+  prefix: 'server'
   director: 'log'
   link-name: 'latest_log'
   show-line: true
@@ -40,11 +39,17 @@ casbin:
 
 # system configuration
 system:
+  # 每一台服务器单独部署的ID 保证集群的ID都是不一样的，方便识别每一台Server
+  server-id: 1
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
   db-type: 'mysql'
   oss-type: 'local'    # 控制oss选择走本期还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
-  use-multipoint: false
+  use-multipoint: true
+  # IP限制次数 一个小时15000次
+  iplimit-count: 15000
+  #  IP限制一个小时
+  iplimit-time: 3600
 
 # captcha configuration
 captcha:
@@ -52,18 +57,31 @@ captcha:
   img-width: 240
   img-height: 80
 
+# 数据库基础配置
+mysql-config:
+  db-name: ''
+  config: 'charset=utf8&parseTime=True&loc=Local'
+  max-idle-conns: 10
+  max-open-conns: 10
+  log-mode: ""
+  log-zap: false
+
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
 mysql:
   path: ''
-  config: ''
-  db-name: ''
   username: ''
   password: ''
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: false
-  log-zap: ""
+
+
+# 从数据库 可配置多个
+mysql-slaves:
+#  - username: 'root'
+#    password: '123456'
+#    path: '172.26.72.225:3306'
+#  - username: root
+#    password: '123456'
+#    path: '172.26.72.224:3306'
 
 # local configuration
 local:
@@ -130,8 +148,8 @@ Timer:
     # compareField: 需要比较时间的字段
     # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
     # 2160h = 24 * 30 * 3 -> 三个月
-    { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
-    { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
+  { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
+  { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
     #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
   ]
 

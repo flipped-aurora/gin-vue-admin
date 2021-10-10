@@ -50,13 +50,13 @@ func (z _zap) GetZapCore() []zapcore.Core {
 
 	now := time.Now().Local().Format(timeout.DateFormat)
 	cores := []zapcore.Core{
-		z.GetEncoderCore(fmt.Sprintf("./%s/debug/%s.log", global.GVA_CONFIG.Zap.Director, now), debugPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/info/%s.log", global.GVA_CONFIG.Zap.Director, now), infoPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/warn/%s.log", global.GVA_CONFIG.Zap.Director, now), warnPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/error/%s.log", global.GVA_CONFIG.Zap.Director, now), errorPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/dpanic/%s.log", global.GVA_CONFIG.Zap.Director, now), dPanicPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/panic/%s.log", global.GVA_CONFIG.Zap.Director, now), panicPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/fatal/%s.log", global.GVA_CONFIG.Zap.Director, now), fatalPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/debug.log", global.GVA_CONFIG.Zap.Director, now), debugPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/info.log", global.GVA_CONFIG.Zap.Director, now), infoPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/warn.log", global.GVA_CONFIG.Zap.Director, now), warnPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/error.log", global.GVA_CONFIG.Zap.Director, now), errorPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/dpanic.log", global.GVA_CONFIG.Zap.Director, now), dPanicPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/panic.log", global.GVA_CONFIG.Zap.Director, now), panicPriority),
+		z.GetEncoderCore(fmt.Sprintf("./%s/%s/fatal.log", global.GVA_CONFIG.Zap.Director, now), fatalPriority),
 	}
 	return cores
 }

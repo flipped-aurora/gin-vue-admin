@@ -12,7 +12,6 @@ zap:
   format: 'console'
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
   director: 'log'
-  link-name: 'latest_log'
   show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'

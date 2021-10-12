@@ -17,21 +17,21 @@ type LimitConfig struct {
 	// GenerationKey 根据业务生成key 下面CheckOrMark查询生成
 	GenerationKey func(c *gin.Context) string
 	// 检查函数,用户可修改具体逻辑,更加灵活
-	CheckOrMark func(key string, Expire int) bool
+	CheckOrMark func(key string, expire int, limit int) error
 	// Expire key 过期时间
 	Expire int
 	// Limit 周期时间
 	Limit int
 }
 
-func (l *LimitConfig) LimitWithTime() gin.HandlerFunc {
+func (l LimitConfig) LimitWithTime() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if l.CheckOrMark(l.GenerationKey(c), l.Expire) {
-			c.Next()
-		} else {
-			c.JSON(http.StatusOK, gin.H{"code": response.ERROR, "msg": "操作频繁,请稍后再试"})
+		if err := l.CheckOrMark(l.GenerationKey(c), l.Expire, l.Limit); err != nil {
+			c.JSON(http.StatusOK, gin.H{"code": response.ERROR, "msg": err})
 			c.Abort()
 			return
+		} else {
+			c.Next()
 		}
 	}
 }
@@ -41,37 +41,29 @@ func DefaultGenerationKey(c *gin.Context) string {
 	return "GVA_Limit" + c.ClientIP()
 }
 
-func DefaultCheckOrMark(key string, expire int, limit int) bool {
+func DefaultCheckOrMark(key string, expire int, limit int) (err error) {
 	// 判断是否开启redis
 	if global.GVA_REDIS == nil {
-		return true
+		return err
 	}
-	if err := SetLimitWithTime(key, limit, time.Duration(expire)*time.Second); err != nil {
+	if err = SetLimitWithTime(key, limit, time.Duration(expire)*time.Second); err != nil {
 		global.GVA_LOG.Error("limit", zap.Error(err))
-		return false
+
 	}
-	return true
+	return err
 
 }
 
-// IPLimit ip限制
-func IPLimit() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		key := "RequestClientIPLimit===" + c.ClientIP()
-		limit := global.GVA_CONFIG.System.LimitCountIP
-		second := global.GVA_CONFIG.System.LimitTimeIP
-		expiration := time.Duration(second) * time.Second
-		if err := SetLimitWithTime(key, limit, expiration); err != nil {
-			response.FailWithMessage(err.Error(), c)
-			c.Abort()
-			return
-		}
-		// 继续往下处理
-		c.Next()
-	}
+func DefaultLimit() gin.HandlerFunc {
+	return LimitConfig{
+		GenerationKey: DefaultGenerationKey,
+		CheckOrMark:   DefaultCheckOrMark,
+		Expire:        global.GVA_CONFIG.System.LimitTimeIP,
+		Limit:         global.GVA_CONFIG.System.LimitCountIP,
+	}.LimitWithTime()
 }
 
-// 设置访问次数
+// SetLimitWithTime 设置访问次数
 func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
 	count, err := global.GVA_REDIS.Exists(context.Background(), key).Result()
 	if err != nil {

@@ -73,7 +73,7 @@ func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
 		pipe := global.GVA_REDIS.TxPipeline()
 		pipe.Incr(context.Background(), key)
 		pipe.Expire(context.Background(), key, expiration)
-		_, err := pipe.Exec(context.Background())
+		_, err = pipe.Exec(context.Background())
 		return err
 	} else {
 		//次数

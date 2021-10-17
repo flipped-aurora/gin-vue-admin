@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/natefinch/lumberjack"
 	"github.com/songzhibin97/gkit/timeout"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -48,15 +47,14 @@ func (z _zap) GetZapCore() []zapcore.Core {
 		return lev == zap.FatalLevel
 	}) // panic级别
 
-	now := time.Now().Local().Format(timeout.DateFormat)
 	cores := []zapcore.Core{
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/debug.log", global.GVA_CONFIG.Zap.Director, now), debugPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/info.log", global.GVA_CONFIG.Zap.Director, now), infoPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/warn.log", global.GVA_CONFIG.Zap.Director, now), warnPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/error.log", global.GVA_CONFIG.Zap.Director, now), errorPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/dpanic.log", global.GVA_CONFIG.Zap.Director, now), dPanicPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/panic.log", global.GVA_CONFIG.Zap.Director, now), panicPriority),
-		z.GetEncoderCore(fmt.Sprintf("./%s/%s/fatal.log", global.GVA_CONFIG.Zap.Director, now), fatalPriority),
+		z.GetEncoderCore(fmt.Sprintf("debug.log"), debugPriority),
+		z.GetEncoderCore(fmt.Sprintf("info.log"), infoPriority),
+		z.GetEncoderCore(fmt.Sprintf("warn.log"), warnPriority),
+		z.GetEncoderCore(fmt.Sprintf("error.log"), errorPriority),
+		z.GetEncoderCore(fmt.Sprintf("dpanic.log"), dPanicPriority),
+		z.GetEncoderCore(fmt.Sprintf("panic.log"), panicPriority),
+		z.GetEncoderCore(fmt.Sprintf("fatal.log"), fatalPriority),
 	}
 	return cores
 }
@@ -64,12 +62,15 @@ func (z _zap) GetZapCore() []zapcore.Core {
 // GetWriteSyncer zap logger中加入lumberjack lumberjack 切割
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (z *_zap) GetWriteSyncer(file string) zapcore.WriteSyncer {
-	lumberJackLogger := &lumberjack.Logger{
-		Filename:   file, //日志文件的位置
-		MaxSize:    10,   //在进行切割之前，日志文件的最大大小（以MB为单位）
-		MaxBackups: 200,  //保留旧文件的最大个数
-		MaxAge:     30,   //保留旧文件的最大天数
-		Compress:   true, //是否压缩/归档旧文件
+	lumberJackLogger := &Logger{
+		Filename:   file,                                  //日志文件的位置
+		DateFormat: timeout.DateFormat,                    //日期分隔
+		FileDir:    global.GVA_CONFIG.Zap.Director, //保存的目录
+		MaxSize:    10,                                    //在进行切割之前，日志文件的最大大小（以MB为单位）
+		MaxBackups: 500,                                   //保留旧文件的最大个数 最大5000M日志保存
+		MaxAge:     30,                                    //保留旧文件的最大天数 一个月内的日志
+		Compress:   true,                                  //是否压缩/归档旧文件
+		LocalTime:  true,                                  //使用本地时区
 	}
 
 	if global.GVA_CONFIG.Zap.LogInConsole {

@@ -11,7 +11,7 @@ zap:
   level: 'info'
   format: 'console'
   prefix: '[GIN-VUE-ADMIN]'
-  director: 'log'
+  director: './log'
   show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'

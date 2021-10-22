@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -24,6 +25,10 @@ func FileMove(src string, dst string) (err error) {
 	dst, err = filepath.Abs(dst)
 	if err != nil {
 		return err
+	}
+	_, err = os.Stat(dst)
+	if err == nil {
+		return errors.New("文件已存在")
 	}
 	var revoke = false
 	dir := filepath.Dir(dst)

@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"errors"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -25,10 +24,6 @@ func FileMove(src string, dst string) (err error) {
 	dst, err = filepath.Abs(dst)
 	if err != nil {
 		return err
-	}
-	_, err = os.Stat(dst)
-	if err == nil {
-		return errors.New("文件已存在")
 	}
 	var revoke = false
 	dir := filepath.Dir(dst)
@@ -70,4 +65,10 @@ func TrimSpace(target interface{}) {
 			v.Field(i).SetString(strings.TrimSpace(v.Field(i).String()))
 		}
 	}
+}
+
+// FileExist 判断文件是否存在
+func FileExist(path string) bool {
+	_, err := os.Lstat(path)
+	return !os.IsNotExist(err)
 }

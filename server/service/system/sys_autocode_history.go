@@ -81,6 +81,11 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(id uint) error {
 		// 迁移
 		nPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			"rm_file", time.Now().Format("20060102"), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
+		// 判断目标文件是否存在
+		for utils.FileExist(nPath) {
+			fmt.Println("文件已存在:", nPath)
+			nPath += fmt.Sprintf("_%d", time.Now().Nanosecond())
+		}
 		err = utils.FileMove(path, nPath)
 		if err != nil {
 			fmt.Println(">>>>>>>>>>>>>>>>>>>", err)

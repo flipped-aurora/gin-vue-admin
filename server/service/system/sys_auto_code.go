@@ -197,6 +197,12 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		for index := range dataList {
 			autoCodeService.addAutoMoveFile(&dataList[index])
 		}
+		// 判断目标文件是否都可以移动
+		for _, value := range dataList {
+			if utils.FileExist(value.autoMoveFilePath) {
+				return errors.New(fmt.Sprintf("目标文件已存在:%s\n", value.autoMoveFilePath))
+			}
+		}
 		for _, value := range dataList { // 移动文件
 			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
 				return err

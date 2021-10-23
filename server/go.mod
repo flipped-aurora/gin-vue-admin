@@ -17,15 +17,15 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gookit/color v1.3.1
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
-	github.com/lestrrat-go/file-rotatelogs v2.3.0+incompatible
 	github.com/mojocn/base64Captcha v1.3.1
+	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/qiniu/api.v7/v7 v7.4.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil v3.21.1+incompatible
 	github.com/songzhibin97/gkit v1.1.1
 	github.com/spf13/viper v1.7.0
-	github.com/stretchr/testify v1.7.0 // indirect
+	github.com/stretchr/testify v1.7.0
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
@@ -33,7 +33,8 @@ require (
 	github.com/xuri/excelize/v2 v2.4.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gorm.io/driver/mysql v1.0.1
-	gorm.io/gorm v1.20.7
+	gorm.io/gorm v1.20.11
 	nhooyr.io/websocket v1.8.6
 )

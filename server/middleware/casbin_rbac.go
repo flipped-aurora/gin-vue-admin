@@ -3,8 +3,8 @@ package middleware
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,8 +13,7 @@ var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 // 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		claims, _ := c.Get("claims")
-		waitUse := claims.(*request.CustomClaims)
+		waitUse := utils.GetClaims(c)
 		// 获取请求的URI
 		obj := c.Request.URL.RequestURI()
 		// 获取请求方法

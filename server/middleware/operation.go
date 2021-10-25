@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"bytes"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"io/ioutil"
 	"net/http"
 	"strconv"
@@ -9,7 +10,6 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -30,9 +30,9 @@ func OperationRecord() gin.HandlerFunc {
 				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 			}
 		}
-		if claims, ok := c.Get("claims"); ok {
-			waitUse := claims.(*request.CustomClaims)
-			userId = int(waitUse.ID)
+		claims, _ := utils.GetClaims(c)
+		if claims.ID != 0 {
+			userId = int(claims.ID)
 		} else {
 			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
 			if err != nil {

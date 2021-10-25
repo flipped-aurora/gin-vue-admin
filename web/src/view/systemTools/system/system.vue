@@ -43,6 +43,9 @@
           <el-form-item label="缓冲期（秒）">
             <el-input v-model="config.jwt.bufferTime" />
           </el-form-item>
+          <el-form-item label="签发者">
+            <el-input v-model="config.jwt.issuer" />
+          </el-form-item>
         </el-collapse-item>
         <el-collapse-item title="Zap日志配置" name="3">
           <el-form-item label="级别">

@@ -66,7 +66,6 @@ func JWTAuth() gin.HandlerFunc {
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
 			}
 		}
-		c.Set("claims", claims)
 		c.Next()
 	}
 }

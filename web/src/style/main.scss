@@ -568,7 +568,6 @@ li {
         -webkit-transition: width .2s;
         transition: width .2s;
         width: $width-aside;
-        background-color: $bg-aside;
         height: 100%;
         position: fixed;
         font-size: 0;
@@ -583,7 +582,6 @@ li {
         .tilte {
             min-height: $height-aside-tilte;
             line-height: $height-aside-tilte;
-            background: $bg-aside;
             text-align: center;
             transition: all 0.3s;
             .logoimg {
@@ -610,19 +608,13 @@ li {
                 padding: 0 15px !important;
             }
         }
-        .el-menu-vertical {
-            background-color: $bg-aside;
-        }
         .el-sub-menu {
-            background-color: $bg-aside;
             .el-menu {
                 .el-menu-item {
-                    background-color: #000408;
                     height: 44px;
                     line-height: 44px;
                 }
                 .is-active {
-                    background-color: #1890ff;
                     // 关闭三级菜单二级菜单样式
                     ul {
                         border: none;
@@ -630,7 +622,6 @@ li {
                 }
                 // 关闭三级菜单二级菜单样式
                 .is-active.is-opened {
-                    background-color: #191a23;
                     ul {
                         border: none;
                     }
@@ -644,9 +635,6 @@ li {
         .el-menu-item:hover i,
         .el-menu-item:hover span {
             color: #fff;
-        }
-        .el-sub-menu__title:hover {
-            background-color: $bg-aside;
         }
         .el-sub-menu__title:hover i,
         .el-sub-menu__title:hover span {

@@ -19,8 +19,8 @@ var userService = service.ServiceGroupApp.SystemServiceGroup.UserService
 func ErrorToEmail() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var username string
-		claims := utils2.GetClaims(c)
-		if claims.Username !="" {
+		claims, _ := utils2.GetClaims(c)
+		if claims.Username != "" {
 			username = claims.Username
 		} else {
 			id, _ := strconv.Atoi(c.Request.Header.Get("x-user-id"))

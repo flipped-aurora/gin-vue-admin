@@ -30,7 +30,7 @@ func OperationRecord() gin.HandlerFunc {
 				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 			}
 		}
-		claims := utils.GetClaims(c)
+		claims, _ := utils.GetClaims(c)
 		if claims.ID != 0 {
 			userId = int(claims.ID)
 		} else {

@@ -13,7 +13,7 @@ var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 // 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		waitUse := utils.GetClaims(c)
+		waitUse, _ := utils.GetClaims(c)
 		// 获取请求的URI
 		obj := c.Request.URL.RequestURI()
 		// 获取请求方法

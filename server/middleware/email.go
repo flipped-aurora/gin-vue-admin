@@ -2,13 +2,13 @@ package middleware
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/utils"
+	utils2 "github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"io/ioutil"
 	"strconv"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -19,9 +19,9 @@ var userService = service.ServiceGroupApp.SystemServiceGroup.UserService
 func ErrorToEmail() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var username string
-		if claims, ok := c.Get("claims"); ok {
-			waitUse := claims.(*request.CustomClaims)
-			username = waitUse.Username
+		claims, _ := utils2.GetClaims(c)
+		if claims.Username != "" {
+			username = claims.Username
 		} else {
 			id, _ := strconv.Atoi(c.Request.Header.Get("x-user-id"))
 			err, user := userService.FindUserById(id)

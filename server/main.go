@@ -30,5 +30,4 @@ func main() {
 		defer db.Close()
 	}
 	core.RunWindowsServer()
-
 }

@@ -11,6 +11,7 @@
 </template>
 <script>
 import echarts from 'echarts'
+import { toRaw } from 'vue'
 import 'echarts/theme/macarons'
 
 var dataAxis = []
@@ -64,7 +65,7 @@ export default {
       this.setOptions()
     },
     setOptions() {
-      this.chart.setOption({
+      toRaw(this.chart).setOption({
         grid: {
           left: '40',
           right: '20',

@@ -125,5 +125,5 @@ func (autoCodeHistoryService *AutoCodeHistoryService) GetSysHistoryPage(info req
 
 // DeletePage 删除历史数据
 func (autoCodeHistoryService *AutoCodeHistoryService) DeletePage(id uint) error {
-	return global.GVA_DB.Delete(system.SysAutoCodeHistory{}, id).Error
+	return global.GVA_DB.Delete(&system.SysAutoCodeHistory{}, id).Error
 }

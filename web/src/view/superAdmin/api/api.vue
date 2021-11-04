@@ -211,7 +211,7 @@ export default {
       this.apis = val
     },
     async onDelete() {
-      const ids = this.apis.forEach(item => item.ID)
+      const ids = this.apis.map(item => item.ID)
       const res = await deleteApisByIds({ ids })
       if (res.code === 0) {
         this.$message({

@@ -158,7 +158,7 @@ export default {
         {{.FieldJson}}: '',
       {{- end }}
       {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: 0,
+        {{.FieldJson}}: {{- if .DictType}} undefined{{ else }} 0{{- end }},
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),
@@ -249,7 +249,7 @@ export default {
         {{.FieldJson}}: '',
         {{- end }}
         {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: 0,
+        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
         {{- end }}
         {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),

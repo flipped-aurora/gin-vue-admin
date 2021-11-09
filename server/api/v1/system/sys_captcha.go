@@ -34,8 +34,9 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 		response.FailWithMessage("验证码获取失败", c)
 	} else {
 		response.OkWithDetailed(systemRes.SysCaptchaResponse{
-			CaptchaId: id,
-			PicPath:   b64s,
+			CaptchaId:     id,
+			PicPath:       b64s,
+			CaptchaLength: global.GVA_CONFIG.Captcha.KeyLong,
 		}, "验证码获取成功", c)
 	}
 }

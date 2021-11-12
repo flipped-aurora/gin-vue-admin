@@ -1,6 +1,7 @@
 package system
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -14,10 +15,19 @@ import (
 	"go.uber.org/zap"
 )
 
+var RepeatErr = errors.New("重复创建")
+
 type AutoCodeHistoryService struct {
 }
 
 var AutoCodeHistoryServiceApp = new(AutoCodeHistoryService)
+
+func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string) bool {
+
+	var count int64
+	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ? and flag = 0", structName).Count(&count)
+	return count > 0
+}
 
 // CreateAutoCodeHistory RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
 func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {
@@ -71,6 +81,11 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(id uint) error {
 		// 迁移
 		nPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			"rm_file", time.Now().Format("20060102"), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
+		// 判断目标文件是否存在
+		for utils.FileExist(nPath) {
+			fmt.Println("文件已存在:", nPath)
+			nPath += fmt.Sprintf("_%d", time.Now().Nanosecond())
+		}
 		err = utils.FileMove(path, nPath)
 		if err != nil {
 			fmt.Println(">>>>>>>>>>>>>>>>>>>", err)
@@ -98,14 +113,17 @@ func (autoCodeHistoryService *AutoCodeHistoryService) GetMeta(id uint) (string, 
 func (autoCodeHistoryService *AutoCodeHistoryService) GetSysHistoryPage(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&system.SysAutoCodeHistory{})
 	var fileLists []system.SysAutoCodeHistory
-	err = db.Find(&fileLists).Count(&total).Error
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Select("id,created_at,updated_at,struct_name,struct_cn_name,flag,table_name").Find(&fileLists).Error
 	return err, fileLists, total
 }
 
 // DeletePage 删除历史数据
 func (autoCodeHistoryService *AutoCodeHistoryService) DeletePage(id uint) error {
-	return global.GVA_DB.Delete(system.SysAutoCodeHistory{}, id).Error
+	return global.GVA_DB.Delete(&system.SysAutoCodeHistory{}, id).Error
 }

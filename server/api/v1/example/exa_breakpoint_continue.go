@@ -1,7 +1,9 @@
 package example
 
 import (
+	"fmt"
 	"io/ioutil"
+	"mime/multipart"
 	"strconv"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -38,7 +40,12 @@ func (u *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 		response.FailWithMessage("文件读取失败", c)
 		return
 	}
-	defer f.Close()
+	defer func(f multipart.File) {
+		err := f.Close()
+		if err != nil {
+			fmt.Println(err)
+		}
+	}(f)
 	cen, _ := ioutil.ReadAll(f)
 	if !utils.CheckMd5(cen, chunkMd5) {
 		global.GVA_LOG.Error("检查md5失败!", zap.Any("err", err))
@@ -120,6 +127,9 @@ func (u *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath := c.Query("filePath")
 	err := utils.RemoveChunk(fileMd5)
+	if err != nil {
+		return
+	}
 	err = fileUploadAndDownloadService.DeleteFileChunk(fileMd5, fileName, filePath)
 	if err != nil {
 		global.GVA_LOG.Error("缓存切片删除失败!", zap.Any("err", err))

@@ -7,8 +7,6 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
-
 	"github.com/songzhibin97/gkit/cache/local_cache"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -58,12 +56,11 @@ func Viper(path ...string) *viper.Viper {
 	if err := v.Unmarshal(&global.GVA_CONFIG); err != nil {
 		fmt.Println(err)
 	}
+	// root 适配性
+	// 根据root位置去找到对应迁移位置,保证root路径有效
 	global.GVA_CONFIG.AutoCode.Root, _ = filepath.Abs("..")
 	global.BlackCache = local_cache.NewCache(
-		local_cache.SetDefaultExpire(time.Duration(global.GVA_CONFIG.JWT.ExpiresTime)))
-	// 从db加载jwt数据
-	if global.GVA_DB != nil {
-		system.LoadAll()
-	}
+		local_cache.SetDefaultExpire(time.Second * time.Duration(global.GVA_CONFIG.JWT.ExpiresTime)),
+	)
 	return v
 }

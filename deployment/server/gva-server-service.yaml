@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gva-server
+  annotations:
+    flipped-aurora/gin-vue-admin: backend
+    github: "https://github.com/flipped-aurora/gin-vue-admin.git"
+    app.kubernetes.io/version: 0.0.1
+  labels:
+    app: gva-server
+    version: gva-vue3
+spec:
+  selector:
+    app: gva-server
+    version: gva-vue3
+  ports:
+    - port: 8888
+      name: http
+      targetPort: 8888
+  type: ClusterIP
+#  type: NodePort

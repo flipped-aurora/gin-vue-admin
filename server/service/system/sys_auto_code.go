@@ -154,6 +154,10 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 //@return: err error
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
+	// 增加判断: 重复创建struct
+	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName) {
+		return RepeatErr
+	}
 	dataList, fileList, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return err
@@ -192,6 +196,12 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		Init()
 		for index := range dataList {
 			autoCodeService.addAutoMoveFile(&dataList[index])
+		}
+		// 判断目标文件是否都可以移动
+		for _, value := range dataList {
+			if utils.FileExist(value.autoMoveFilePath) {
+				return errors.New(fmt.Sprintf("目标文件已存在:%s\n", value.autoMoveFilePath))
+			}
 		}
 		for _, value := range dataList { // 移动文件
 			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {

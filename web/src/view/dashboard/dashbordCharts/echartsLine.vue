@@ -10,7 +10,7 @@
   </div>
 </template>
 <script>
-import echarts from 'echarts'
+import * as echarts from 'echarts'
 import { toRaw } from 'vue'
 import 'echarts/theme/macarons'
 

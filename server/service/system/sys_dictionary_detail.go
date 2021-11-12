@@ -79,6 +79,9 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 		db = db.Where("sys_dictionary_id = ?", info.SysDictionaryID)
 	}
 	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionaryDetails).Error
 	return err, sysDictionaryDetails, total
 }

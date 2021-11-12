@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearflex">
-      <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="relation">确 定</el-button>
     </div>
     <el-tree
       ref="menuTree"
@@ -70,7 +70,7 @@ export default {
     const res1 = await getMenuAuthority({ authorityId: this.row.authorityId })
     const menus = res1.data.menus
     const arr = []
-    menus.map(item => {
+    menus.forEach(item => {
       // 防止直接选中父级造成全选
       if (!menus.some(same => same.parentId === item.menuId)) {
         arr.push(Number(item.menuId))

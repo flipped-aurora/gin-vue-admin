@@ -1,71 +1,63 @@
 <template>
   <div>
-    <div class="search-term">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
-        <el-form-item label="表名">
-          <el-input v-model="searchInfo.tableName" placeholder="表名" />
-        </el-form-item>
-        <el-form-item label="结构体名称">
-          <el-input v-model="searchInfo.structName" placeholder="结构体名称" />
-        </el-form-item>
-        <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode(null)">新增</el-button>
-        </el-form-item>
-      </el-form>
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
+        <el-button size="mini" type="primary" icon="el-icon-plus" @click="goAutoCode(null)">新增</el-button>
+      </div>
+      <el-table :data="tableData">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column align="left" label="id" width="60" prop="ID" />
+        <el-table-column align="left" label="日期" width="180">
+          <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
+        </el-table-column>
+        <el-table-column align="left" label="结构体名" min-width="150" prop="structName" />
+        <el-table-column align="left" label="结构体描述" min-width="150" prop="structCNName" />
+        <el-table-column align="left" label="表名称" min-width="150" prop="tableName" />
+        <el-table-column align="left" label="回滚标记" min-width="150" prop="flag">
+          <template #default="scope">
+            <el-tag
+              v-if="scope.row.flag"
+              type="danger"
+              size="mini"
+              effect="dark"
+            >
+              已回滚
+            </el-tag>
+            <el-tag
+              v-else
+              size="mini"
+              type="success"
+              effect="dark"
+            >
+              未回滚
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="操作" min-width="180">
+          <template #default="scope">
+            <div>
+              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
+              <el-button size="mini" type="text" @click="goAutoCode(scope.row)">复用</el-button>
+              <el-button size="mini" type="text" @click="deleteRow(scope.row)">删除</el-button>
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div class="gva-pagination">
+        <el-pagination
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
+      </div>
     </div>
-    <el-table :data="tableData" border stripe>
-      <el-table-column
-        type="selection"
-        width="55"
-      />
-      <el-table-column label="id" width="60" prop="ID" />
-      <el-table-column label="日期" width="180">
-        <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
-      </el-table-column>
-      <el-table-column label="结构体名" min-width="150" prop="structName" />
-      <el-table-column label="结构体描述" min-width="150" prop="structCNName" />
-      <el-table-column label="表名称" min-width="150" prop="tableName" />
-      <el-table-column label="回滚标记" min-width="150" prop="flag">
-        <template #default="scope">
-          <el-tag
-            v-if="scope.row.flag"
-            type="danger"
-            size="mini"
-            effect="dark"
-          >
-            已回滚
-          </el-tag>
-          <el-tag
-            v-else
-            size="mini"
-            type="success"
-            effect="dark"
-          >
-            未回滚
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" min-width="180">
-        <template #default="scope">
-          <div>
-            <el-button size="mini" type="primary" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
-            <el-button size="mini" type="success" @click="goAutoCode(scope.row)">复用</el-button>
-            <el-button size="mini" type="danger" @click="deleteRow(scope.row)">删除</el-button>
-          </div>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :page-sizes="[10, 30, 50, 100]"
-      :style="{float:'right',padding:'20px'}"
-      :total="total"
-      layout="total, sizes, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    />
-
   </div>
 </template>
 

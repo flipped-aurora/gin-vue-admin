@@ -1,36 +1,38 @@
 <template>
   <div>
-    <el-form :model="formData" label-position="right" label-width="80px">
-    {{- range .Fields}}
-      <el-form-item label="{{.FieldDesc}}:">
-    {{- if eq .FieldType "bool" }}
-        <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
-    {{- end }}
-    {{- if eq .FieldType "string" }}
-        <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
-    {{- end }}
-    {{- if eq .FieldType "int" }}
-    {{- if .DictType }}
-        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
-          <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-        </el-select>
-    {{- else }}
-        <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />
-    {{- end }}
-    {{- end }}
-    {{- if eq .FieldType "time.Time" }}
-        <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" clearable></el-date-picker>
-    {{- end }}
-    {{- if eq .FieldType "float64" }}
-        <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
-    {{- end }}
-      </el-form-item>
-    {{- end }}
-      <el-form-item>
-        <el-button size="mini" type="primary" @click="save">保存</el-button>
-        <el-button size="mini" type="primary" @click="back">返回</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="gva-form-box">
+      <el-form :model="formData" label-position="right" label-width="80px">
+      {{- range .Fields}}
+        <el-form-item label="{{.FieldDesc}}:">
+      {{- if eq .FieldType "bool" }}
+          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+      {{- end }}
+      {{- if eq .FieldType "string" }}
+          <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
+      {{- end }}
+      {{- if eq .FieldType "int" }}
+      {{- if .DictType }}
+          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
+            <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+          </el-select>
+      {{- else }}
+          <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />
+      {{- end }}
+      {{- end }}
+      {{- if eq .FieldType "time.Time" }}
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" clearable></el-date-picker>
+      {{- end }}
+      {{- if eq .FieldType "float64" }}
+          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
+      {{- end }}
+        </el-form-item>
+      {{- end }}
+        <el-form-item>
+          <el-button size="mini" type="primary" @click="save">保存</el-button>
+          <el-button size="mini" type="primary" @click="back">返回</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -61,7 +63,7 @@ export default {
         {{.FieldJson}}: '',
           {{- end }}
           {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: 0,
+        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearflex">
-      <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">确 定</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="authApiEnter">确 定</el-button>
     </div>
     <el-tree
       ref="apiTree"
@@ -52,7 +52,7 @@ export default {
     })
     this.activeUserId = this.row.authorityId
     this.apiTreeIds = []
-    res.data.paths && res.data.paths.map(item => {
+    res.data.paths && res.data.paths.forEach(item => {
       this.apiTreeIds.push('p:' + item.path + 'm:' + item.method)
     })
   },
@@ -68,7 +68,7 @@ export default {
     buildApiTree(apis) {
       const apiObj = {}
       apis &&
-        apis.map(item => {
+        apis.forEach(item => {
           item.onlyId = 'p:' + item.path + 'm:' + item.method
           if (Object.prototype.hasOwnProperty.call(apiObj, item.apiGroup)) {
             apiObj[item.apiGroup].push(item)
@@ -91,7 +91,7 @@ export default {
     async authApiEnter() {
       const checkArr = this.$refs.apiTree.getCheckedNodes(true)
       var casbinInfos = []
-      checkArr && checkArr.map(item => {
+      checkArr && checkArr.forEach(item => {
         var casbinInfo = {
           path: item.path,
           method: item.method

@@ -68,6 +68,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 8px;
 }
 .file{
     width: 80px;

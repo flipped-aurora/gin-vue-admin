@@ -58,6 +58,9 @@ func (e *FileUploadAndDownloadService) DeleteFileChunk(fileMd5 string, fileName 
 	var chunks []example.ExaFileChunk
 	var file example.ExaFile
 	err := global.GVA_DB.Where("file_md5 = ? AND file_name = ?", fileMd5, fileName).First(&file).Update("IsFinish", true).Update("file_path", filePath).Error
+	if err != nil {
+		return err
+	}
 	err = global.GVA_DB.Where("exa_file_id = ?", file.ID).Delete(&chunks).Unscoped().Error
 	return err
 }

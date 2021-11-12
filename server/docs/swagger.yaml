@@ -54,8 +54,6 @@ definitions:
         type: string
       webApi:
         type: string
-      webFlow:
-        type: string
       webForm:
         type: string
       webTable:

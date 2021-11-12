@@ -1,21 +1,191 @@
 /* 改变主题色变量 */
-$--color-primary: #1890ff;
 
 #app{
   .el-button{
     font-weight: 400;
-    border-radius: 4px;
+    border-radius: 2px;
   }
 }
-///* 改变 icon 字体路径变量，必需 */
-//$--font-path: '~element-ui/lib/theme-chalk/fonts';
-//
-//
-//
-//@import "~element-ui/packages/theme-chalk/src/index";
-//
 
+.el-dialog{
+  border-radius: 2px;
+}
 
-:export {
-  colorPrimary: $--color-primary
+::-webkit-scrollbar-track-piece {
+  background-color: #f8f8f8;
+}
+
+::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #dddddd;
+  background-clip: padding-box;
+  min-height: 28px;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #bbb;
+}
+
+.el-button--primary {
+  --el-button-font-color: #ffffff;
+  --el-button-background-color: #4D70FF;
+  --el-button-border-color: #4D70FF;
+  --el-button-hover-color: #0d84ff;
+  --el-button-active-font-color: #e6e6e6;
+  --el-button-active-background-color: #0d84ff;
+  --el-button-active-border-color: #0d84ff;
+}
+
+.el-button--primary {
+  --el-button-font-color: #ffffff;
+  --el-button-background-color: #4D70FF;
+  --el-button-border-color: #4D70FF;
+  --el-button-hover-color: #0d84ff;
+  --el-button-active-font-color: #e6e6e6;
+  --el-button-active-background-color: #0d84ff;
+  --el-button-active-border-color: #0d84ff;
+}
+
+:root {
+  --el-color-primary: #4D70FF;
+}
+
+.gva-search-box {
+  .el-collapse {
+      border: none;
+      .el-collapse-item__header,
+      .el-collapse-item__wrap {
+          border-bottom: none;
+      }
+  }
+  padding: 24px;
+  padding-bottom: 2px;
+  background-color: #fff;
+  border-radius: 2px;
+  margin-bottom: 12px;
+  .el-form {
+      .el-form-item {
+          padding-right: 28px;
+      }
+  }
+}
+
+.gva-form-box {
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+.gva-table-box {
+  padding: 24px;
+  background-color: #fff;
+  border-radius: 2px;
+}
+
+.gva-pagination {
+  display: flex;
+  justify-content: flex-end;
+  .el-pagination__editor {
+      .el-input__inner {
+          height: 32px;
+      }
+  }
+  .el-pagination__total {
+      line-height: 32px !important;
+  }
+  .btn-prev {
+      padding-right: 6px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+  }
+  .number {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+  }
+  .btn-quicknext {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+  }
+  .btn-next {
+      padding-left: 6px;
+      width: 32px;
+      height: 32px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+  }
+  .active {
+      background: #4D70FF;
+      border-radius: 2px;
+      color: #ffffff !important;
+  }
+  .el-pager li.active+li {
+      border-left: 1px solid #ddd !important;
+  }
+  .el-pagination__sizes {
+      .el-input {
+          .el-input__suffix {
+              margin-top: 2px;
+          }
+      }
+  }
+  .el-pagination__jump {
+      .el-pagination__editor {}
+  }
+}
+
+.el-button--mini {
+  min-height: 32px;
+}
+
+.el-button {
+  padding: 8px 16px;
+  border-radius: 2px;
+  &.el-button--text {
+      padding: 8px 0;
+  }
+}
+
+.el-dialog {
+  padding: 12px;
+  .el-dialog__body {
+      padding: 12px 6px;
+  }
+  .el-dialog__header {
+      .el-dialog__title {
+          font-size: 14px;
+          font-weight: 500;
+      }
+      padding: 2px 20px 12px 20px;
+      border-bottom: 1px solid #E4E4E4;
+  }
+  .el-dialog__headerbtn {
+      top: 16px;
+  }
+  .el-dialog__footer {
+      padding: 0 16px 16px 0;
+      .dialog-footer {
+          .el-button {
+              padding-left: 24px;
+              padding-right: 24px;
+          }
+          .el-button+.el-button {
+              margin-left: 30px;
+          }
+      }
+  }
 }

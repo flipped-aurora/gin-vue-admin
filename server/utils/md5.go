@@ -11,8 +11,8 @@ import (
 //@param: str []byte
 //@return: string
 
-func MD5V(str []byte) string {
+func MD5V(str []byte, b ...byte) string {
 	h := md5.New()
 	h.Write(str)
-	return hex.EncodeToString(h.Sum(nil))
+	return hex.EncodeToString(h.Sum(b))
 }

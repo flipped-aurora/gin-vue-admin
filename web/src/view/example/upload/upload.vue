@@ -1,43 +1,41 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
-    <div class="upload">
-      <el-row>
-        <el-col :span="12">
-          <el-upload
-            :action="`${path}/fileUploadAndDownload/upload`"
-            :before-upload="checkFile"
-            :headers="{ 'x-token': token }"
-            :on-error="uploadError"
-            :on-success="uploadSuccess"
-            :show-file-list="false"
-          >
-            <el-button size="small" type="primary">点击上传</el-button>
-            <template #tip>
-              <div class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
-            </template>
-          </el-upload>
-        </el-col>
-        <el-col :span="12">
-          带压缩的上传, (512(k)为压缩限制)
-          <upload-image v-model="imageUrl" :file-size="512" :max-w-h="1080" @on-success="getTableData" />
-          已上传文件 {{ imageUrl }}
-        </el-col>
-      </el-row>
+    <div class="gva-table-box">
+      <div class="gva-btn-list">
+        <el-upload
+          :action="`${path}/fileUploadAndDownload/upload`"
+          :before-upload="checkFile"
+          :headers="{ 'x-token': token }"
+          :on-error="uploadError"
+          :on-success="uploadSuccess"
+          :show-file-list="false"
+          class="upload-btn"
+        >
+          <el-button size="mini" type="primary">普通上传</el-button>
+        </el-upload>
+        <upload-image
+          v-model="imageUrl"
+          :file-size="512"
+          :max-w-h="1080"
+          class="upload-btn"
+          @on-success="getTableData"
+        />
+      </div>
 
-      <el-table :data="tableData" border stripe>
-        <el-table-column label="预览" width="100">
+      <el-table :data="tableData">
+        <el-table-column align="left" label="预览" width="100">
           <template #default="scope">
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
-        <el-table-column label="日期" prop="UpdatedAt" width="180">
+        <el-table-column align="left" label="日期" prop="UpdatedAt" width="180">
           <template #default="scope">
             <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="文件名" prop="name" width="180" />
-        <el-table-column label="链接" prop="url" min-width="300" />
-        <el-table-column label="标签" prop="tag" width="100">
+        <el-table-column align="left" label="文件名" prop="name" width="180" />
+        <el-table-column align="left" label="链接" prop="url" min-width="300" />
+        <el-table-column align="left" label="标签" prop="tag" width="100">
           <template #default="scope">
             <el-tag
               :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
@@ -45,23 +43,25 @@
             >{{ scope.row.tag }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="操作" width="160">
+        <el-table-column align="left" label="操作" width="160">
           <template #default="scope">
-            <el-button size="small" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" type="text" @click="deleteFile(scope.row)">删除</el-button>
+            <el-button size="small" icon="el-icon-download" type="text" @click="downloadFile(scope.row)">下载</el-button>
+            <el-button size="small" icon="el-icon-delete" type="text" @click="deleteFile(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination
-        :current-page="page"
-        :page-size="pageSize"
-        :page-sizes="[10, 30, 50, 100]"
-        :style="{ float: 'right', padding: '20px' }"
-        :total="total"
-        layout="total, sizes, prev, pager, next, jumper"
-        @current-change="handleCurrentChange"
-        @size-change="handleSizeChange"
-      />
+      <div class="gva-pagination">
+        <el-pagination
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :style="{ float: 'right', padding: '20px' }"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -127,13 +127,13 @@ export default {
       this.fullscreenLoading = true
       const isJPG = file.type === 'image/jpeg'
       const isPng = file.type === 'image/png'
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 0.5
       if (!isJPG && !isPng) {
-        this.$message.error('上传头像图片只能是 JPG或png 格式!')
+        this.$message.error('上传图片只能是 jpg或png 格式!')
         this.fullscreenLoading = false
       }
       if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
+        this.$message.error('未压缩未见上传图片大小不能超过 500KB，请使用压缩上传')
         this.fullscreenLoading = false
       }
       return (isPng || isJPG) && isLt2M
@@ -172,3 +172,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.upload-btn+.upload-btn {
+            margin-left: 12px;
+        }
+</style>

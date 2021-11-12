@@ -149,5 +149,5 @@ func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 }
 
 func (apiService *ApiService) DeleteApiByIds(ids []string) (err error) {
-	return global.GVA_DB.Delete(system.SysApi{}, ids).Error
+	return global.GVA_DB.Delete(&system.SysApi{}, "id in ?", ids).Error
 }

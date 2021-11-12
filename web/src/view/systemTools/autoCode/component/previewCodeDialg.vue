@@ -1,10 +1,5 @@
 <template>
   <div class="previewCode">
-    <div class="previewCodeTool">
-      <p>操作栏：</p>
-      <el-button @click="selectText">全选</el-button>
-      <el-button @click="copy">复制</el-button>
-    </div>
     <el-tabs v-model="activeName">
       <el-tab-pane v-for="(item, key) in previewCode" :key="key" :label="key" :name="key">
         <div :id="key" class="tab-info" />
@@ -82,12 +77,6 @@ export default {
 
 <style lang="scss">
 .previewCode {
-  .previewCodeTool {
-    display: flex;
-    align-items: center;
-    padding: 5px 0;
-    margin-top: -40px;
-  }
   .tab-info {
     height: 50vh;
     background: #fff;

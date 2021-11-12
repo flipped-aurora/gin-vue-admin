@@ -68,7 +68,7 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 //@return: err error, sysDictionary model.SysDictionary
 
 func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint) (err error, sysDictionary system.SysDictionary) {
-	err = global.GVA_DB.Where("type = ? OR id = ?", Type, Id).Preload("SysDictionaryDetails").First(&sysDictionary).Error
+	err = global.GVA_DB.Where("type = ? OR id = ? and status = ?", Type, Id, true).Preload("SysDictionaryDetails", "status = ?", true).First(&sysDictionary).Error
 	return
 }
 
@@ -99,6 +99,9 @@ func (dictionaryService *DictionaryService) GetSysDictionaryInfoList(info reques
 		db = db.Where("`desc` LIKE ?", "%"+info.Desc+"%")
 	}
 	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionarys).Error
 	return err, sysDictionarys, total
 }

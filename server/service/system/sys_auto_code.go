@@ -89,6 +89,7 @@ var AutoCodeServiceApp = new(AutoCodeService)
 //@return: map[string]string, error
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
+	makeDictTypes(&autoCode)
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return nil, err
@@ -147,6 +148,19 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 	return ret, nil
 }
 
+func makeDictTypes(autoCode *system.AutoCodeStruct) {
+	DictTypeM := make(map[string]string)
+	for _, v := range autoCode.Fields {
+		if v.DictType != "" {
+			DictTypeM[v.DictType] = ""
+		}
+	}
+
+	for k, _ := range DictTypeM {
+		autoCode.DictTypes = append(autoCode.DictTypes, k)
+	}
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateTemp
 //@description: 创建代码
@@ -154,6 +168,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 //@return: err error
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
+	makeDictTypes(&autoCode)
 	// 增加判断: 重复创建struct
 	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName) {
 		return RepeatErr

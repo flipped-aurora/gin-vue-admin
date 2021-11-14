@@ -189,6 +189,7 @@ export default {
     })
 
     this.dictOptions = dictRes.data.list
+    this.getDict()
   },
   methods: {
     autoFill() {
@@ -200,6 +201,9 @@ export default {
       this.middleDate.dataTypeLong = ''
       this.middleDate.fieldSearchType = ''
       this.middleDate.dictType = ''
+      this.getDict()
+    },
+    async getDict() {
       if (this.middleDate.fieldType) {
         this.dbfdOptions = await getDict(this.middleDate.fieldType)
       }

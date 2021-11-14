@@ -13,6 +13,7 @@ type AutoCodeStruct struct {
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields"`
+	DictTypes          []string `json:"-"`
 }
 
 type Field struct {

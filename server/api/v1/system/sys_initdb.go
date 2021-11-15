@@ -26,12 +26,12 @@ func (i *DBApi) InitDB(c *gin.Context) {
 	}
 	var dbInfo request.InitDB
 	if err := c.ShouldBindJSON(&dbInfo); err != nil {
-		global.GVA_LOG.Error("参数校验不通过!", zap.Any("err", err))
+		global.GVA_LOG.Error("参数校验不通过!", zap.Error(err))
 		response.FailWithMessage("参数校验不通过", c)
 		return
 	}
 	if err := initDBService.InitDB(dbInfo); err != nil {
-		global.GVA_LOG.Error("自动创建数据库失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("自动创建数据库失败!", zap.Error(err))
 		response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)
 		return
 	}

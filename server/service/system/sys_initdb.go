@@ -80,7 +80,17 @@ func (initDBService *InitDBService) initDB(InitDBFunctions ...system.InitDBFunc)
 //@return: error
 
 func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
+	switch conf.DBType {
+	case "mysql":
+		return initDBService.initMsqlDB(conf)
+	case "pgsql":
+		return nil
+	default:
+		return initDBService.initMsqlDB(conf)
+	}
+}
 
+func (initDBService *InitDBService) initMsqlDB(conf request.InitDB) error {
 	if conf.Host == "" {
 		conf.Host = "127.0.0.1"
 	}

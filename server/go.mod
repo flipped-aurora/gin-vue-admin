@@ -36,6 +36,7 @@ require (
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gorm.io/driver/mysql v1.0.1
+	gorm.io/driver/postgres v0.2.6
 	gorm.io/gorm v1.20.11
 	nhooyr.io/websocket v1.8.6
 )

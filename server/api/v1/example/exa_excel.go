@@ -31,7 +31,7 @@ func (e *ExcelApi) ExportExcel(c *gin.Context) {
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	err := excelService.ParseInfoList2Excel(excelInfo.InfoList, filePath)
 	if err != nil {
-		global.GVA_LOG.Error("转换Excel失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("转换Excel失败!", zap.Error(err))
 		response.FailWithMessage("转换Excel失败", c)
 		return
 	}
@@ -50,7 +50,7 @@ func (e *ExcelApi) ExportExcel(c *gin.Context) {
 func (e *ExcelApi) ImportExcel(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
 		response.FailWithMessage("接收文件失败", c)
 		return
 	}
@@ -67,7 +67,7 @@ func (e *ExcelApi) ImportExcel(c *gin.Context) {
 func (e *ExcelApi) LoadExcel(c *gin.Context) {
 	menus, err := excelService.ParseExcel2InfoList()
 	if err != nil {
-		global.GVA_LOG.Error("加载数据失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("加载数据失败!", zap.Error(err))
 		response.FailWithMessage("加载数据失败", c)
 		return
 	}
@@ -92,7 +92,7 @@ func (e *ExcelApi) DownloadTemplate(c *gin.Context) {
 	filePath := global.GVA_CONFIG.Excel.Dir + fileName
 	ok, err := utils.PathExists(filePath)
 	if !ok || err != nil {
-		global.GVA_LOG.Error("文件不存在!", zap.Any("err", err))
+		global.GVA_LOG.Error("文件不存在!", zap.Error(err))
 		response.FailWithMessage("文件不存在", c)
 		return
 	}

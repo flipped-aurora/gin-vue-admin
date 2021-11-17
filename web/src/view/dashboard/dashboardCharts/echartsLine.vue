@@ -1,11 +1,11 @@
 <template>
-  <div class="dashbord-line-box">
-    <div class="dashbord-line-title">
+  <div class="dashboard-line-box">
+    <div class="dashboard-line-title">
       访问趋势
     </div>
     <div
       ref="echart"
-      class="dashbord-line"
+      class="dashboard-line"
     />
   </div>
 </template>
@@ -122,13 +122,13 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.dashbord-line-box {
-  .dashbord-line {
+.dashboard-line-box {
+  .dashboard-line {
     background-color: #fff;
     height: 360px;
     width: 100%;
   }
-  .dashbord-line-title {
+  .dashboard-line-title {
     font-weight: 600;
     margin-bottom: 12px;
   }

@@ -10,7 +10,12 @@
                 重新上传</span>
             </div>
             <div class="user-personality">
-              <p class="nickname">{{ userInfo.nickName }}</p>
+              <p v-if="!editFlag" class="nickName">{{ userInfo.nickName }} <i class="el-icon-edit pointer" style="color:#66b1ff" @click="openEidt" /></p>
+              <p v-if="editFlag" class="nickName">
+                <el-input v-model="nickName" />
+                <i class="el-icon-check pointer" style="color:#67c23a" @click="enterEdit" />
+                <i class="el-icon-close pointer" style="color:#f23c3c" @click="closeEdit" />
+              </p>
               <p class="person-info">这个家伙很懒，什么都没有留下</p>
             </div>
             <div class="user-information">
@@ -118,6 +123,8 @@ export default {
       activeName: 'second',
       showPassword: false,
       pwdModify: {},
+      nickName: '',
+      editFlag: false,
       rules: {
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
@@ -188,6 +195,26 @@ export default {
         })
       }
     },
+    openEidt() {
+      this.nickName = this.userInfo.nickName
+      this.editFlag = true
+    },
+    closeEdit() {
+      this.nickName = ''
+      this.editFlag = false
+    },
+    async enterEdit() {
+      const res = await setUserInfo({ nickName: this.nickName, ID: this.userInfo.ID })
+      if (res.code === 0) {
+        this.ResetUserInfo({ nickName: this.nickName })
+        this.$message({
+          type: 'success',
+          message: '设置成功'
+        })
+      }
+      this.nickName = ''
+      this.editFlag = false
+    },
     handleClick(tab, event) {
       console.log(tab, event)
     }
@@ -236,7 +263,10 @@ export default {
       p {
         font-size: 16px;
       }
-      .nickname {
+      .nickName {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         font-size: 26px;
       }
       .person-info{
@@ -313,5 +343,8 @@ export default {
       text-align: center;
       color:transparent;
     }
+  }
+  .pointer{
+    cursor: pointer;
   }
 </style>

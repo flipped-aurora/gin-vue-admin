@@ -41,7 +41,7 @@ func MysqlDataInitialize(inits ...InitData) error {
 
 		if err := inits[i].Initialize(); err != nil {
 			color.Info.Printf(InitDataFailed, Mysql, err)
-			continue
+			return err
 		} else {
 			color.Info.Printf(InitDataSuccess, Mysql, inits[i].TableName())
 		}

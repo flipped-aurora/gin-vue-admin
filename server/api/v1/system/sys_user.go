@@ -301,3 +301,21 @@ func (b *BaseApi) GetUserInfo(c *gin.Context) {
 		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "获取成功", c)
 	}
 }
+
+// @Tags SysUser
+// @Summary 用户修改密码
+// @Security ApiKeyAuth
+// @Produce  application/json
+// @Param data body system.SysUser true "ID"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/resetPassword [post]
+func (b *BaseApi) ResetPassword(c *gin.Context) {
+	var user system.SysUser
+	_ = c.ShouldBindJSON(&user)
+	if err := userService.ResetPassword(user.ID); err != nil {
+		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		response.FailWithMessage("重置失败"+err.Error(), c)
+	} else {
+		response.OkWithMessage("重置成功", c)
+	}
+}

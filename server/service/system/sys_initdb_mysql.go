@@ -110,7 +110,6 @@ func (initDBService *InitDBService) initMysqlData() error {
 		system.AuthoritiesMenus,
 		system.DictionaryDetail,
 		system.ViewAuthorityMenuMysql,
-
 		example.File,
 	)
 }

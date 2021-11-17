@@ -187,3 +187,14 @@ func (userService *UserService) FindUserByUuid(uuid string) (err error, user *sy
 	}
 	return nil, &u
 }
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: resetPassword
+//@description: 修改用户密码
+//@param: ID uint
+//@return: err error
+
+func (userService *UserService) ResetPassword(ID uint) (err error) {
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.MD5V([]byte("123456"))).Error
+	return err
+}

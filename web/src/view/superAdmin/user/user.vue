@@ -13,7 +13,16 @@
         </el-table-column>
         <el-table-column align="left" label="UUID" min-width="250" prop="uuid" />
         <el-table-column align="left" label="用户名" min-width="150" prop="userName" />
-        <el-table-column align="left" label="昵称" min-width="150" prop="nickName" />
+        <el-table-column align="left" label="昵称" min-width="100" prop="nickName">
+          <template #default="scope">
+            <p v-if="!scope.row.editFlag" class="nickName">{{ scope.row.nickName }} <i class="el-icon-edit pointer" style="color:#66b1ff" @click="openEidt(scope.row)" /></p>
+            <p v-if="scope.row.editFlag" class="nickName">
+              <el-input v-model="scope.row.nickName" />
+              <i class="el-icon-check pointer" style="color:#67c23a" @click="enterEdit(scope.row)" />
+              <i class="el-icon-close pointer" style="color:#f23c3c" @click="closeEdit(scope.row)" />
+            </p>
+          </template>
+        </el-table-column>
         <el-table-column align="left" label="用户角色" min-width="150">
           <template #default="scope">
             <el-cascader
@@ -40,6 +49,7 @@
                 <el-button type="text" icon="el-icon-delete" size="mini">删除</el-button>
               </template>
             </el-popover>
+            <el-button type="text" icon="el-icon-magic-stick" size="mini" @click="resetPassword(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -110,6 +120,7 @@ import { mapGetters } from 'vuex'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
 import warningBar from '@/components/warningBar/warningBar.vue'
+import { setUserInfo, resetPassword } from '@/api/user.js'
 export default {
   name: 'Api',
   components: { CustomPic, ChooseImg, warningBar },
@@ -120,6 +131,7 @@ export default {
       path: path,
       authOptions: [],
       addUserDialog: false,
+      backNickName: '',
       userInfo: {
         username: '',
         password: '',
@@ -160,6 +172,32 @@ export default {
     this.setOptions(res.data.list)
   },
   methods: {
+    resetPassword(row) {
+      this.$confirm(
+        '是否将此用户密码重置为123456?',
+        '警告',
+        {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }
+      ).then(async() => {
+        const res = await resetPassword({
+          ID: row.ID,
+        })
+        if (res.code === 0) {
+          this.$message({
+            type: 'success',
+            message: res.msg,
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.msg,
+          })
+        }
+      })
+    },
     setAuthorityIds() {
       this.tableData && this.tableData.forEach((user) => {
         const authorityIds = user.authorities && user.authorities.map(i => {
@@ -174,6 +212,30 @@ export default {
     setOptions(authData) {
       this.authOptions = []
       this.setAuthorityOptions(authData, this.authOptions)
+    },
+    openEidt(row) {
+      if (this.tableData.some(item => item.editFlag)) {
+        this.$message('当前存在正在编辑的用户')
+        return
+      }
+      this.backNickName = row.nickName
+      row.editFlag = true
+    },
+    async enterEdit(row) {
+      const res = await setUserInfo({ nickName: row.nickName, ID: row.ID })
+      if (res.code === 0) {
+        this.$message({
+          type: 'success',
+          message: '设置成功'
+        })
+      }
+      this.backNickName = ''
+      row.editFlag = false
+    },
+    closeEdit(row) {
+      row.nickName = this.backNickName
+      this.backNickName = ''
+      row.editFlag = false
     },
     setAuthorityOptions(AuthorityData, optionsData) {
       AuthorityData &&
@@ -272,5 +334,15 @@ export default {
     height: 178px;
     display: block;
   }
+}
+.nickName{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.pointer{
+  cursor: pointer;
+  font-size: 16px;
+  margin-left: 2px;
 }
 </style>

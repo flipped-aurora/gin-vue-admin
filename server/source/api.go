@@ -93,6 +93,7 @@ var apis = []system.SysApi{
 	{global.GVA_MODEL{ID: 89, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/autoCode/delSysHistory", "删除回滚记录", "autoCode", "POST"},
 	{global.GVA_MODEL{ID: 90, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/setUserAuthorities", "设置权限组", "user", "POST"},
 	{global.GVA_MODEL{ID: 91, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/getUserInfo", "获取自身信息（必选）", "user", "GET"},
+	{global.GVA_MODEL{ID: 92, CreatedAt: time.Now(), UpdatedAt: time.Now()}, "/user/resetPassword", "重置指定用户密码", "user", "POST"},
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

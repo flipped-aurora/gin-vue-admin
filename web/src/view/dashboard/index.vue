@@ -43,7 +43,7 @@
             </div>
           </div>
         </div>
-        <img src="@/assets/dashbord.png" class="gva-top-card-right" alt>
+        <img src="@/assets/dashboard.png" class="gva-top-card-right" alt>
       </div>
     </div>
     <div class="gva-card-box">
@@ -84,7 +84,7 @@
               <echarts-line />
             </el-col>
             <el-col :xs="24" :sm="6">
-              <dashbord-table />
+              <dashboard-table />
             </el-col>
           </el-row>
         </div>
@@ -93,13 +93,13 @@
   </div>
 </template>
 <script>
-import echartsLine from '@/view/dashboard/dashbordCharts/echartsLine.vue'
-import dashbordTable from '@/view/dashboard/dashbordTable/dashbordTable.vue'
+import echartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
+import dashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 export default {
   name: 'Dashboard',
   components: {
     echartsLine,
-    dashbordTable
+    dashboardTable
   },
   data() {
     return {

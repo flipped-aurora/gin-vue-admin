@@ -1,7 +1,6 @@
 package system
 
 import (
-	"context"
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -9,7 +8,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/source/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/source/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"github.com/jackc/pgx/v4"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -19,6 +17,7 @@ import (
 // writePgsqlConfig pgsql 回写配置
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (initDBService *InitDBService) writePgsqlConfig(pgsql config.Pgsql) error {
+	global.GVA_CONFIG.System.DbType = "pgsql"
 	global.GVA_CONFIG.Pgsql = pgsql
 	cs := utils.StructToMap(global.GVA_CONFIG)
 	for k, v := range cs {
@@ -28,27 +27,10 @@ func (initDBService *InitDBService) writePgsqlConfig(pgsql config.Pgsql) error {
 	return global.GVA_VP.WriteConfig()
 }
 
-// createPgsqlDatabase 根据页面传递的数据库名 创建数据库
-// Author [SliverHorn](https://github.com/SliverHorn)
-func (initDBService *InitDBService) createPgsqlDatabase(dsn string, dbName string) error {
-	ctx := context.Background()
-	_sql := "CREATE DATABASE " + dbName
-	db, err := pgx.Connect(ctx, dsn)
-	if err != nil {
-		return err
-	}
-	defer func() {
-		_ = db.Close(ctx)
-	}()
-	if err = db.Ping(ctx); err != nil {
-		return err
-	}
-	_, err = db.Exec(ctx, _sql)
-	return err
-}
 func (initDBService *InitDBService) initPgsqlDB(conf request.InitDB) error {
 	dsn := conf.PgsqlEmptyDsn()
-	if err := initDBService.createPgsqlDatabase(dsn, conf.DBName); err != nil {
+	createSql := "CREATE DATABASE " + conf.DBName
+	if err := initDBService.createDatabase(dsn, "pgx", createSql); err != nil {
 		return err
 	} // 创建数据库
 
@@ -100,6 +82,6 @@ func (initDBService *InitDBService) initPgsqlData() error {
 		system.DictionaryDetail,
 		system.ViewAuthorityMenuPostgres,
 
-		example.File,
+		example.FilePgsql,
 	)
 }

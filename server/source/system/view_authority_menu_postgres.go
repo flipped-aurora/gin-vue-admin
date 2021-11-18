@@ -36,9 +36,9 @@ func (a *viewAuthorityMenuPostgres) Initialize() error {
 		   @menus.deleted_at               as deleted_at,
 		   @menus.menu_level               as menu_level,
 		   @menus.default_menu             as default_menu,
-		   @authorities_menus.menu_id      as menu_id,
-		   @authorities_menus.authority_id as authority_id
-	from (@authorities_menus join @menus on ((@authorities_menus.menu_id = @menus.id)));`
+		   @authorities_menus.sys_base_menu_id      as menu_id,
+		   @authorities_menus.sys_authority_authority_id as authority_id
+	from (@authorities_menus join @menus on ((@authorities_menus.sys_base_menu_id = @menus.id)));`
 	sql = strings.ReplaceAll(sql, "@table_name", a.TableName())
 	sql = strings.ReplaceAll(sql, "@menus", "sys_base_menus")
 	sql = strings.ReplaceAll(sql, "@authorities_menus", entity.TableName())

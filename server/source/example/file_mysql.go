@@ -7,15 +7,15 @@ import (
 	"gorm.io/gorm"
 )
 
-var File = new(file)
+var FileMysql = new(fileMysql)
 
-type file struct{}
+type fileMysql struct{}
 
-func (f *file) TableName() string {
+func (f *fileMysql) TableName() string {
 	return "exa_file_upload_and_downloads"
 }
 
-func (f *file) Initialize() error {
+func (f *fileMysql) Initialize() error {
 	entities := []example.ExaFileUploadAndDownload{
 		{Name: "10.png", Url: "https://qmplusimg.henrongyi.top/gvalogo.png", Tag: "png", Key: "158787308910.png"},
 		{Name: "logo.png", Url: "https://qmplusimg.henrongyi.top/1576554439myAvatar.png", Tag: "png", Key: "1587973709logo.png"},
@@ -26,7 +26,7 @@ func (f *file) Initialize() error {
 	return nil
 }
 
-func (f *file) CheckDataExist() bool {
+func (f *fileMysql) CheckDataExist() bool {
 	if errors.Is(global.GVA_DB.Where("`name` = ? AND `key` = ?", "logo.png", "1587973709logo.png").First(&example.ExaFileUploadAndDownload{}).Error, gorm.ErrRecordNotFound) {
 		return false
 	}

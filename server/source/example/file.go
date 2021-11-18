@@ -27,7 +27,7 @@ func (f *file) Initialize() error {
 }
 
 func (f *file) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("name = ? AND key = ?", "logo.png", "1587973709logo.png").First(&example.ExaFileUploadAndDownload{}).Error, gorm.ErrRecordNotFound) {
+	if errors.Is(global.GVA_DB.Where("`name` = ? AND `key` = ?", "logo.png", "1587973709logo.png").First(&example.ExaFileUploadAndDownload{}).Error, gorm.ErrRecordNotFound) {
 		return false
 	}
 	return true

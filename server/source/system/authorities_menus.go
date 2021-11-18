@@ -73,7 +73,7 @@ func (a *authoritiesMenus) Initialize() error {
 }
 
 func (a *authoritiesMenus) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("menu_id = ? AND authority_id = ?", 17, "9528").First(&AuthorityMenus{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
+	if errors.Is(global.GVA_DB.Where("sys_base_menu_id = ? AND sys_authority_authority_id = ?", 17, "9528").First(&AuthorityMenus{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
 		return false
 	}
 	return true

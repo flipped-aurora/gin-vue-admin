@@ -33,7 +33,7 @@ func (a *dataAuthorities) Initialize() error {
 }
 
 func (a *dataAuthorities) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("authority_id = ? AND resources_id = ?", "9528", "9528").First(&AuthoritiesResources{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
+	if errors.Is(global.GVA_DB.Where("sys_authority_authority_id = ? AND data_authority_id_authority_id = ?", "9528", "9528").First(&AuthoritiesResources{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
 		return false
 	}
 	return true
@@ -41,8 +41,8 @@ func (a *dataAuthorities) CheckDataExist() bool {
 
 // AuthoritiesResources 角色资源表
 type AuthoritiesResources struct {
-	AuthorityId string `gorm:"column:authority_id"`
-	ResourcesId string `gorm:"column:resources_id"`
+	AuthorityId string `gorm:"column:sys_authority_authority_id"`
+	ResourcesId string `gorm:"column:data_authority_id_authority_id"`
 }
 
 func (a *AuthoritiesResources) TableName() string {

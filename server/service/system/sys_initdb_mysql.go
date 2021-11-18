@@ -1,7 +1,6 @@
 package system
 
 import (
-	"database/sql"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -27,27 +26,6 @@ func (initDBService *InitDBService) writeMysqlConfig(mysql config.Mysql) error {
 	}
 	global.GVA_VP.Set("jwt.signing-key", uuid.NewV4())
 	return global.GVA_VP.WriteConfig()
-}
-
-// createDatabase 创建数据库(mysql)
-// Author [SliverHorn](https://github.com/SliverHorn)
-// Author: [songzhibin97](https://github.com/songzhibin97)
-func (initDBService *InitDBService) createDatabase(dsn string, driver string, createSql string) error {
-	db, err := sql.Open(driver, dsn)
-	if err != nil {
-		return err
-	}
-	defer func(db *sql.DB) {
-		err = db.Close()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}(db)
-	if err = db.Ping(); err != nil {
-		return err
-	}
-	_, err = db.Exec(createSql)
-	return err
 }
 
 // initMsqlDB 创建数据库并初始化 mysql
@@ -110,6 +88,6 @@ func (initDBService *InitDBService) initMysqlData() error {
 		system.AuthoritiesMenus,
 		system.DictionaryDetail,
 		system.ViewAuthorityMenuMysql,
-		example.File,
+		example.FileMysql,
 	)
 }

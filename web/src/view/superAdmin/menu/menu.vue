@@ -305,23 +305,6 @@ export default {
       this.initForm()
       done()
     },
-    // 懒加载子菜单
-    load(tree, treeNode, resolve) {
-      resolve([
-        {
-          id: 31,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        },
-        {
-          id: 32,
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄'
-        }
-      ])
-    },
     // 删除菜单
     deleteMenu(ID) {
       this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {

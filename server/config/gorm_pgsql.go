@@ -1,7 +1,8 @@
 package config
 
-type Mysql struct {
+type Pgsql struct {
 	Path         string `mapstructure:"path" json:"path" yaml:"path"`                             // 服务器地址:端口
+	Port         string `mapstructure:"port" json:"port" yaml:"port"`                             //:端口
 	Config       string `mapstructure:"config" json:"config" yaml:"config"`                       // 高级配置
 	Dbname       string `mapstructure:"db-name" json:"dbname" yaml:"db-name"`                     // 数据库名
 	Username     string `mapstructure:"username" json:"username" yaml:"username"`                 // 数据库用户名
@@ -12,6 +13,6 @@ type Mysql struct {
 	LogZap       bool   `mapstructure:"log-zap" json:"logZap" yaml:"log-zap"`                     // 是否通过zap写入日志文件
 }
 
-func (m *Mysql) Dsn() string {
-	return m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
+func (p *Pgsql) Dsn() string {
+	return "host=" + p.Path + " user=" + p.Username + " password=" + p.Password + " dbname=" + p.Dbname + " port=" + p.Port + " " + p.Config
 }

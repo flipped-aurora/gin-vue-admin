@@ -13,6 +13,7 @@
           <el-form-item label="数据库类型">
             <el-select v-model="config.system.dbType" style="width:100%">
               <el-option value="mysql" />
+              <el-option value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item label="Oss类型">
@@ -160,6 +161,29 @@
             </el-form-item>
             <el-form-item label="logMode">
               <el-checkbox v-model="config.mysql.logMode" />
+            </el-form-item>
+          </template>
+          <template v-if="config.system.dbType === 'pgsql'">
+            <el-form-item label="username">
+              <el-input v-model="config.pgsql.username" />
+            </el-form-item>
+            <el-form-item label="password">
+              <el-input v-model="config.pgsql.password" />
+            </el-form-item>
+            <el-form-item label="path">
+              <el-input v-model="config.pgsql.path" />
+            </el-form-item>
+            <el-form-item label="dbname">
+              <el-input v-model="config.pgsql.dbname" />
+            </el-form-item>
+            <el-form-item label="maxIdleConns">
+              <el-input v-model.number="config.pgsql.maxIdleConns" />
+            </el-form-item>
+            <el-form-item label="maxOpenConns">
+              <el-input v-model.number="config.pgsql.maxOpenConns" />
+            </el-form-item>
+            <el-form-item label="logMode">
+              <el-checkbox v-model="config.pgsql.logMode" />
             </el-form-item>
           </template>
         </el-collapse-item>
@@ -321,6 +345,7 @@ export default {
         jwt: {},
         casbin: {},
         mysql: {},
+        pgsql: {},
         excel: {},
         autoCode: {},
         redis: {},

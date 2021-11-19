@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var FilePgsql = new(fileMysql)
+var FilePgsql = new(filePgsql)
 
 type filePgsql struct{}
 

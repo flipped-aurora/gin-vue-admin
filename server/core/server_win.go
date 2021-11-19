@@ -13,8 +13,8 @@ func initServer(address string, router *gin.Engine) server {
 	return &http.Server{
 		Addr:           address,
 		Handler:        router,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
+		ReadTimeout:    20 * time.Second,
+		WriteTimeout:   20 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 }

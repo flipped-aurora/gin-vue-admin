@@ -28,7 +28,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) CreateAutoCodeExample(c *gin.Conte
 	var autoCodeExample autocode.AutoCodeExample
 	_ = c.ShouldBindJSON(&autoCodeExample)
 	if err := autoCodeExampleService.CreateAutoCodeExample(autoCodeExample); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -47,7 +47,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) DeleteAutoCodeExample(c *gin.Conte
 	var autoCodeExample autocode.AutoCodeExample
 	_ = c.ShouldBindJSON(&autoCodeExample)
 	if err := autoCodeExampleService.DeleteAutoCodeExample(autoCodeExample); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -66,7 +66,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) UpdateAutoCodeExample(c *gin.Conte
 	var autoCodeExample autocode.AutoCodeExample
 	_ = c.ShouldBindJSON(&autoCodeExample)
 	if err := autoCodeExampleService.UpdateAutoCodeExample(&autoCodeExample); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -89,7 +89,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) FindAutoCodeExample(c *gin.Context
 		return
 	}
 	if err, reAutoCodeExample := autoCodeExampleService.GetAutoCodeExample(autoCodeExample.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"reAutoCodeExample": reAutoCodeExample}, "查询成功", c)
@@ -108,7 +108,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) GetAutoCodeExampleList(c *gin.Cont
 	var pageInfo autocodeReq.AutoCodeExampleSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := autoCodeExampleService.GetAutoCodeExampleInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Any("err", err))
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{

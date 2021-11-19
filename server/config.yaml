@@ -59,6 +59,21 @@ captcha:
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
 mysql:
   path: ''
+  port: ''
+  config: ''
+  db-name: ''
+  username: ''
+  password: ''
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: ""
+  log-zap: false
+
+# pgsql connect configuration
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
+pgsql:
+  path: ''
+  port: ''
   config: ''
   db-name: ''
   username: ''
@@ -137,4 +152,5 @@ Timer:
     { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
     #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
   ]
+
 

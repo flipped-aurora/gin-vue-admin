@@ -22,8 +22,9 @@
       <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
         <el-form ref="form" :model="form" label-width="100px">
           <el-form-item label="数据库类型">
-            <el-select v-model="form.sqlType" disabled placeholder="请选择">
-              <el-option key="mysql" label="mysql(目前只支持mysql)" value="mysql" />
+            <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
+              <el-option key="mysql" label="mysql" value="mysql" />
+              <el-option key="pgsql" label="pgsql(测试版)" value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item label="host">
@@ -63,7 +64,7 @@ export default {
       hello: 0,
       out: false,
       form: {
-        sqlType: 'mysql',
+        dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',
         userName: 'root',
@@ -72,14 +73,40 @@ export default {
       }
     }
   },
-  created() {
-    // setInterval(() => {
-    //   if (this.hello < 3) {
-    //     this.hello = this.hello + 1
-    //   }
-    // }, 2000)
-  },
   methods: {
+    changeDB(val) {
+      switch (val) {
+        case 'mysql':
+          this.form = {
+            dbType: 'mysql',
+            host: '127.0.0.1',
+            port: '3306',
+            userName: 'root',
+            password: '',
+            dbName: 'gva'
+          }
+          break
+        case 'pgsql':
+          this.form = {
+            dbType: 'pgsql',
+            host: '127.0.0.1',
+            port: '5432',
+            userName: 'postgres',
+            password: '',
+            dbName: 'gva'
+          }
+          break
+        default:
+          this.form = {
+            dbType: 'mysql',
+            host: '127.0.0.1',
+            port: '3306',
+            userName: 'root',
+            password: '',
+            dbName: 'gva'
+          }
+      }
+    },
     showNext() {
       this.hello = this.hello + 1
     },

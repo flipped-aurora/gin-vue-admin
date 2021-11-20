@@ -7,8 +7,8 @@ import (
 )
 
 type ServiceGroup struct {
-	ExampleServiceGroup  example.ServiceGroup
 	SystemServiceGroup   system.ServiceGroup
+	ExampleServiceGroup  example.ServiceGroup
 	AutoCodeServiceGroup autocode.ServiceGroup
 }
 

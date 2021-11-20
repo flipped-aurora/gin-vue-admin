@@ -7,8 +7,8 @@ import (
 )
 
 type ApiGroup struct {
-	ExampleApiGroup  example.ApiGroup
 	SystemApiGroup   system.ApiGroup
+	ExampleApiGroup  example.ApiGroup
 	AutoCodeApiGroup autocode.ApiGroup
 }
 

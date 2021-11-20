@@ -2,7 +2,7 @@ package system
 
 import "errors"
 
-// 初始版本自动化代码工具
+// AutoCodeStruct 初始版本自动化代码工具
 type AutoCodeStruct struct {
 	StructName         string   `json:"structName"`         // Struct名称
 	TableName          string   `json:"tableName"`          // 表名

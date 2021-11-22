@@ -7,6 +7,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"strings"
 )
 
 var AutoCodePgsql = new(autoCodePgsql)
@@ -43,34 +44,46 @@ func (a *autoCodePgsql) GetTables(dbName string) (data []response.Table, err err
 func (a *autoCodePgsql) GetColumn(tableName string, dbName string) (data []response.Column, err error) {
 	// todo 数据获取不全, 待完善sql
 	sql := `
-	SELECT columns.COLUMN_NAME as column_name,
-       columns.DATA_TYPE   as data_type,
-       CASE
-           columns.DATA_TYPE
-           WHEN 'text' THEN
-               concat_ws('', '', columns.CHARACTER_MAXIMUM_LENGTH)
-           WHEN 'varchar' THEN
-               concat_ws('', '', columns.CHARACTER_MAXIMUM_LENGTH)
-           WHEN 'smallint' THEN
-               concat_ws(',', columns.NUMERIC_PRECISION, columns.NUMERIC_SCALE)
-           WHEN 'decimal' THEN
-               concat_ws(',', columns.NUMERIC_PRECISION, columns.NUMERIC_SCALE)
-           WHEN 'integer' THEN
-               concat_ws('', '', columns.NUMERIC_PRECISION)
-           WHEN 'bigint' THEN
-               concat_ws('', '', columns.NUMERIC_PRECISION)
-           ELSE ''
-           END             AS data_type_long
-	FROM INFORMATION_SCHEMA.COLUMNS columns
-	WHERE table_catalog = ?
-	  and table_schema = ?
-	  and table_name = ?
+		SELECT columns.COLUMN_NAME                                                                                      as column_name,
+		   columns.DATA_TYPE                                                                                        as data_type,
+		   CASE
+			   columns.DATA_TYPE
+			   WHEN 'text' THEN
+				   concat_ws('', '', columns.CHARACTER_MAXIMUM_LENGTH)
+			   WHEN 'varchar' THEN
+				   concat_ws('', '', columns.CHARACTER_MAXIMUM_LENGTH)
+			   WHEN 'smallint' THEN
+				   concat_ws(',', columns.NUMERIC_PRECISION, columns.NUMERIC_SCALE)
+			   WHEN 'decimal' THEN
+				   concat_ws(',', columns.NUMERIC_PRECISION, columns.NUMERIC_SCALE)
+			   WHEN 'integer' THEN
+				   concat_ws('', '', columns.NUMERIC_PRECISION)
+			   WHEN 'bigint' THEN
+				   concat_ws('', '', columns.NUMERIC_PRECISION)
+			   ELSE ''
+			   END                                                                                                  AS data_type_long,
+		   (select description.description
+			from pg_description description
+			where description.objoid = (select attribute.attrelid
+										from pg_attribute attribute
+										where attribute.attrelid =
+											  (select oid from pg_class class where class.relname = '@table_name') and attname =columns.COLUMN_NAME )
+			  and description.objsubid = (select attribute.attnum
+										  from pg_attribute attribute
+										  where attribute.attrelid =
+												(select oid from pg_class class where class.relname = '@table_name') and attname =columns.COLUMN_NAME )) as column_comment
+		FROM INFORMATION_SCHEMA.COLUMNS columns
+		WHERE table_catalog = '@table_catalog'
+		  and table_schema = 'public'
+		  and table_name = '@table_name';
 	`
 	var entities []response.Column
 	db, _err := gorm.Open(postgres.Open(global.GVA_CONFIG.Pgsql.LinkDsn(dbName)), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
 	if _err != nil {
 		return nil, errors.Wrapf(err, "[pgsql] 连接 数据库(%s)的表(%s)失败!", dbName, tableName)
 	}
-	err = db.Raw(sql, dbName, "public", tableName).Scan(&entities).Error
+	sql = strings.ReplaceAll(sql, "@table_catalog", dbName)
+	sql = strings.ReplaceAll(sql, "@table_name", tableName)
+	err = db.Raw(sql).Scan(&entities).Error
 	return entities, err
 }

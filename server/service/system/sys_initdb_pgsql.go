@@ -23,7 +23,7 @@ func (initDBService *InitDBService) writePgsqlConfig(pgsql config.Pgsql) error {
 	for k, v := range cs {
 		global.GVA_VP.Set(k, v)
 	}
-	global.GVA_VP.Set("jwt.signing-key", uuid.NewV4())
+	global.GVA_VP.Set("jwt.signing-key", uuid.NewV4().String())
 	return global.GVA_VP.WriteConfig()
 }
 
@@ -69,7 +69,7 @@ func (initDBService *InitDBService) initPgsqlDB(conf request.InitDB) error {
 // initPgsqlData pgsql 初始化数据
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (initDBService *InitDBService) initPgsqlData() error {
-	return model.MysqlDataInitialize(
+	return model.PgsqlDataInitialize(
 		system.Api,
 		system.User,
 		system.Casbin,

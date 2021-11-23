@@ -69,7 +69,7 @@ func (initDBService *InitDBService) initPgsqlDB(conf request.InitDB) error {
 // initPgsqlData pgsql 初始化数据
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (initDBService *InitDBService) initPgsqlData() error {
-	return model.MysqlDataInitialize(
+	return model.PgsqlDataInitialize(
 		system.Api,
 		system.User,
 		system.Casbin,

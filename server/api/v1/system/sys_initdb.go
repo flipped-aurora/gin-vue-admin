@@ -9,9 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DBApi struct {
-}
+type DBApi struct{}
 
+// InitDB
 // @Tags InitDB
 // @Summary 初始化用户数据库
 // @Produce  application/json
@@ -38,6 +38,7 @@ func (i *DBApi) InitDB(c *gin.Context) {
 	response.OkWithData("自动创建数据库成功", c)
 }
 
+// CheckDB
 // @Tags CheckDB
 // @Summary 初始化用户数据库
 // @Produce  application/json

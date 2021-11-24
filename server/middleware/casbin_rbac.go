@@ -14,8 +14,8 @@ var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		waitUse, _ := utils.GetClaims(c)
-		// 获取请求的URI
-		obj := c.Request.URL.RequestURI()
+		// 获取请求的PATH
+		obj := c.Request.URL.Path
 		// 获取请求方法
 		act := c.Request.Method
 		// 获取用户的角色

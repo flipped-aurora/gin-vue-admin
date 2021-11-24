@@ -3,10 +3,19 @@
     <div class="login_panle">
       <div class="login_panle_form">
         <div class="login_panle_form_title">
-          <img class="login_panle_form_title_logo" :src="$GIN_VUE_ADMIN.appLogo" alt>
+          <img
+            class="login_panle_form_title_logo"
+            :src="$GIN_VUE_ADMIN.appLogo"
+            alt
+          >
           <p class="login_panle_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
         </div>
-        <el-form ref="loginForm" :model="loginForm" :rules="rules" @keyup.enter="submitForm">
+        <el-form
+          ref="loginForm"
+          :model="loginForm"
+          :rules="rules"
+          @keyup.enter="submitForm"
+        >
           <el-form-item prop="username">
             <el-input v-model="loginForm.username" placeholder="请输入用户名">
               <template #suffix>
@@ -21,7 +30,10 @@
               placeholder="请输入密码"
             >
               <template #suffix>
-                <i :class="'el-input__icon el-icon-' + lock" @click="changeLock" />
+                <i
+                  :class="'el-input__icon el-icon-' + lock"
+                  @click="changeLock"
+                />
               </template>
             </el-input>
           </el-form-item>
@@ -33,12 +45,25 @@
               style="width: 60%"
             />
             <div class="vPic">
-              <img v-if="picPath" :src="picPath" alt="请输入验证码" @click="loginVerify()">
+              <img
+                v-if="picPath"
+                :src="picPath"
+                alt="请输入验证码"
+                @click="loginVerify()"
+              >
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" style="width: 46%" @click="checkInit">前往初始化</el-button>
-            <el-button type="primary" style="width: 46%;margin-left:8%" @click="submitForm">登 录</el-button>
+            <el-button
+              type="primary"
+              style="width: 46%"
+              @click="checkInit"
+            >前往初始化</el-button>
+            <el-button
+              type="primary"
+              style="width: 46%; margin-left: 8%"
+              @click="submitForm"
+            >登 录</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -58,16 +83,18 @@
             <img src="@/assets/video.png" class="link-icon">
           </a>
         </div>
-        <div class="copyright">Copyright &copy; {{ curYear }} 💖 flipped-aurora</div>
+        <div class="copyright">
+          <bootomInfo />
+        </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
 import { mapActions } from 'vuex'
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
+import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 export default {
   name: 'Login',
   data() {
@@ -86,7 +113,6 @@ export default {
       }
     }
     return {
-      curYear: 0,
       lock: 'lock',
       loginForm: {
         username: 'admin',
@@ -99,8 +125,6 @@ export default {
         password: [{ validator: checkPassword, trigger: 'blur' }],
         captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
           {
-            min: 5,
-            max: 6,
             message: '验证码格式不正确',
             trigger: 'blur',
           }]
@@ -109,9 +133,11 @@ export default {
       picPath: ''
     }
   },
+  components:{
+    bootomInfo
+  },
   created() {
     this.loginVerify()
-    this.curYear = new Date().getFullYear()
   },
   methods: {
     ...mapActions('user', ['LoginIn']),
@@ -155,12 +181,15 @@ export default {
     },
     loginVerify() {
       captcha({}).then((ele) => {
+        this.rules.captcha[1].max = ele.data.captchaLength
+        this.rules.captcha[1].min = ele.data.captchaLength
         this.picPath = ele.data.picPath
         this.loginForm.captchaId = ele.data.captchaId
       })
     }
   }
 }
+
 </script>
 
 <style lang="scss" scoped>

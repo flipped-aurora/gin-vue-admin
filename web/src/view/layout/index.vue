@@ -21,14 +21,14 @@
               <el-col>
                 <el-header class="header-cont">
                   <el-row class="pd-0">
-                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1">
+                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
                       <div class="menu-total" @click="totalCollapse">
                         <i v-if="isCollapse" class="el-icon-s-unfold" />
                         <i v-else class="el-icon-s-fold" />
                       </div>
                     </el-col>
-                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14">
-                      <el-breadcrumb class="breadcrumb" separator-class="el-icon-arrow-right">
+                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
+                      <el-breadcrumb class="breadcrumb">
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
@@ -36,7 +36,7 @@
                       </el-breadcrumb>
                     </el-col>
                     <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
-                      <div class="fl-right right-box">
+                      <div class="right-box">
                         <Search />
                         <Screenfull class="screenfull" :style="{cursor:'pointer'}" />
                         <el-dropdown>
@@ -78,19 +78,13 @@
             <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
-        <router-view v-if="$route.meta.keepAlive && reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
+        <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
           <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive>
+            <keep-alive :include="$store.getters['router/keepAliveRouters']">
               <component :is="Component" />
             </keep-alive>
           </transition>
         </router-view>
-        <router-view v-if="!$route.meta.keepAlive && reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
-          <transition mode="out-in" name="el-fade-in-linear">
-            <component :is="Component" />
-          </transition>
-        </router-view>
-
         <BottomInfo />
         <setting />
       </el-main>
@@ -160,7 +154,7 @@ export default {
       return this.$route.matched
     }
   },
-  mounted() {
+  created() {
     const screenWidth = document.body.clientWidth
     if (screenWidth < 1000) {
       this.isMobile = true
@@ -175,6 +169,8 @@ export default {
       this.isSider = true
       this.isCollapse = false
     }
+  },
+  mounted() {
     emitter.emit('collapse', this.isCollapse)
     emitter.emit('mobile', this.isMobile)
     emitter.on('reload', this.reload)

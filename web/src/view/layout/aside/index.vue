@@ -58,7 +58,7 @@ export default {
       this.isCollapse = item
     })
   },
-  beforeDestroy() {
+  beforeUnmount() {
     emitter.off('collapse')
   },
   methods: {
@@ -66,8 +66,8 @@ export default {
     selectMenuItem(index, _, ele) {
       const query = {}
       const params = {}
-      ele.route.parameters &&
-      ele.route.parameters.map(item => {
+      ele?.route?.parameters &&
+      ele.route.parameters.forEach(item => {
         if (item.type === 'query') {
           query[item.key] = item.value
         } else {

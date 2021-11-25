@@ -76,11 +76,22 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 		db = db.Limit(limit).Offset(offset)
 		if order != "" {
 			var OrderStr string
-			if desc {
-				OrderStr = order + " desc"
-			} else {
-				OrderStr = order
+			// 设置有效排序key 防止sql注入
+			// 感谢 Tom4t0 提交漏洞信息
+			orderMap := make(map[string]bool, 5)
+			orderMap["id"] = true
+			orderMap["path"] = true
+			orderMap["api_group"] = true
+			orderMap["description"] = true
+			orderMap["method"] = true
+			if orderMap[order] {
+				if desc {
+					OrderStr = order + " desc"
+				} else {
+					OrderStr = order
+				}
 			}
+
 			err = db.Order(OrderStr).Find(&apiList).Error
 		} else {
 			err = db.Order("api_group").Find(&apiList).Error
@@ -149,5 +160,5 @@ func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 }
 
 func (apiService *ApiService) DeleteApiByIds(ids []string) (err error) {
-	return global.GVA_DB.Delete(system.SysApi{}, ids).Error
+	return global.GVA_DB.Delete(&system.SysApi{}, "id in ?", ids).Error
 }

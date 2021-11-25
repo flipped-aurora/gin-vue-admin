@@ -1,32 +1,35 @@
 <template>
   <div class="upload">
-    <div class="btn-list">
-      <el-upload
-        class="excel-btn"
-        :action="`${path}/excel/importExcel`"
-        :headers="{'x-token':token}"
-        :on-success="loadExcel"
-        :show-file-list="false"
-      >
-        <el-button size="mini" type="primary" icon="el-icon-upload2">导入</el-button>
-      </el-upload>
-      <el-button class="excel-btn" size="mini" type="primary" icon="el-icon-download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
-      <el-button class="excel-btn" size="mini" type="success" icon="el-icon-download" @click="downloadExcelTemplate()">下载模板</el-button>
-    </div>
-    <el-table :data="tableData" border row-key="ID" stripe>
-      <el-table-column label="ID" min-width="100" prop="ID" />
-      <el-table-column label="路由Name" min-width="160" prop="name" />
-      <el-table-column label="路由Path" min-width="160" prop="path" />
-      <el-table-column label="是否隐藏" min-width="100" prop="hidden">
+    <div class="gva-table-box">
 
-        <template #default="scope">
-          <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="父节点" min-width="90" prop="parentId" />
-      <el-table-column label="排序" min-width="70" prop="sort" />
-      <el-table-column label="文件路径" min-width="360" prop="component" />
-    </el-table>
+      <div class="gva-btn-list">
+        <el-upload
+          class="excel-btn"
+          :action="`${path}/excel/importExcel`"
+          :headers="{'x-token':token}"
+          :on-success="loadExcel"
+          :show-file-list="false"
+        >
+          <el-button size="mini" type="primary" icon="el-icon-upload2">导入</el-button>
+        </el-upload>
+        <el-button class="excel-btn" size="mini" type="primary" icon="el-icon-download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
+        <el-button class="excel-btn" size="mini" type="success" icon="el-icon-download" @click="downloadExcelTemplate()">下载模板</el-button>
+      </div>
+      <el-table :data="tableData" row-key="ID">
+        <el-table-column align="left" label="ID" min-width="100" prop="ID" />
+        <el-table-column align="left" show-overflow-tooltip label="路由Name" min-width="160" prop="name" />
+        <el-table-column align="left" show-overflow-tooltip label="路由Path" min-width="160" prop="path" />
+        <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
+
+          <template #default="scope">
+            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
+        <el-table-column align="left" label="排序" min-width="70" prop="sort" />
+        <el-table-column align="left" label="文件路径" min-width="360" prop="component" />
+      </el-table>
+    </div>
   </div>
 </template>
 
@@ -75,8 +78,9 @@ export default {
   display: flex;
   margin-bottom: 12px;
   justify-content: flex-end;
-  .excel-btn+.excel-btn{
-    margin-left: 12px;
-  }
+
+}
+.excel-btn+.excel-btn{
+  margin-left: 10px;
 }
 </style>

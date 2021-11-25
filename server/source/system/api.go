@@ -22,7 +22,7 @@ func (a *api) Initialize() error {
 
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/register", Description: "用户注册(必选)"},
-		{ApiGroup: "系统用户", Method: "user", Path: "/user/getUserList", Description: "获取用户列表"},
+		{ApiGroup: "系统用户", Method: "POST", Path: "/user/getUserList", Description: "获取用户列表"},
 		{ApiGroup: "系统用户", Method: "PUT", Path: "/user/setUserInfo", Description: "设置用户信息(必选)"},
 		{ApiGroup: "系统用户", Method: "GET", Path: "/user/getUserInfo", Description: "获取自身信息(必选)"},
 		{ApiGroup: "系统用户", Method: "POST", Path: "/user/setUserAuthorities", Description: "设置权限组"},

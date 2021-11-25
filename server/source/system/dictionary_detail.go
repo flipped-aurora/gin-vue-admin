@@ -19,6 +19,8 @@ func (d *dictionaryDetail) Initialize() error {
 	status := new(bool)
 	*status = true
 	entities := []system.SysDictionaryDetail{
+		{Label: "男", Value: 1, Status: status, Sort: 1, SysDictionaryID: 1},
+		{Label: "女", Value: 2, Status: status, Sort: 2, SysDictionaryID: 1},
 		{Label: "smallint", Value: 1, Status: status, Sort: 1, SysDictionaryID: 2},
 		{Label: "mediumint", Value: 2, Status: status, Sort: 2, SysDictionaryID: 2},
 		{Label: "int", Value: 3, Status: status, Sort: 3, SysDictionaryID: 2},

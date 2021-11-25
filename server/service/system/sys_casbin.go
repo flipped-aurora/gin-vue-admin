@@ -2,11 +2,9 @@ package system
 
 import (
 	"errors"
-	"strings"
 	"sync"
 
 	"github.com/casbin/casbin/v2"
-	"github.com/casbin/casbin/v2/util"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -104,33 +102,7 @@ func (casbinService *CasbinService) Casbin() *casbin.SyncedEnforcer {
 	once.Do(func() {
 		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
 		syncedEnforcer, _ = casbin.NewSyncedEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
-		syncedEnforcer.AddFunction("ParamsMatch", casbinService.ParamsMatchFunc)
 	})
 	_ = syncedEnforcer.LoadPolicy()
 	return syncedEnforcer
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: ParamsMatch
-//@description: 自定义规则函数
-//@param: fullNameKey1 string, key2 string
-//@return: bool
-
-func (casbinService *CasbinService) ParamsMatch(fullNameKey1 string, key2 string) bool {
-	key1 := strings.Split(fullNameKey1, "?")[0]
-	// 剥离路径后再使用casbin的keyMatch2
-	return util.KeyMatch2(key1, key2)
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: ParamsMatchFunc
-//@description: 自定义规则函数
-//@param: args ...interface{}
-//@return: interface{}, error
-
-func (casbinService *CasbinService) ParamsMatchFunc(args ...interface{}) (interface{}, error) {
-	name1 := args[0].(string)
-	name2 := args[1].(string)
-
-	return casbinService.ParamsMatch(name1, name2), nil
 }

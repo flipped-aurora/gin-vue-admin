@@ -42,6 +42,11 @@ export const viteLogo = (env) => {
                 `> 默认前端文件运行地址:http://127.0.0.1:${env.VITE_CLI_PORT}`
             )
         )
+        console.log(
+            chalk.green(
+                `> 如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/coffee`
+            )
+        )
         console.log('\n')
     }
 }

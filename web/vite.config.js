@@ -1,18 +1,18 @@
-import legacyPlugin from '@vitejs/plugin-legacy';
+import legacyPlugin from '@vitejs/plugin-legacy'
 // import usePluginImport from 'vite-plugin-importer';
 import { viteLogo } from './src/core/config'
 import Banner from 'vite-plugin-banner'
-import * as path from 'path';
-import * as dotenv from 'dotenv';
-import * as fs from 'fs';
-import vuePlugin from '@vitejs/plugin-vue';
+import * as path from 'path'
+import * as dotenv from 'dotenv'
+import * as fs from 'fs'
+import vuePlugin from '@vitejs/plugin-vue'
 // @see https://cn.vitejs.dev/config/
 export default ({
     command,
     mode
 }) => {
-    let NODE_ENV = process.env.NODE_ENV || 'development'
-    let envFiles = [
+    const NODE_ENV = process.env.NODE_ENV || 'development'
+    const envFiles = [
         `.env.${NODE_ENV}`
     ]
     for (const file of envFiles) {
@@ -24,24 +24,24 @@ export default ({
 
     viteLogo(process.env)
 
-    let timestamp = Date.parse(new Date())
+    const timestamp = Date.parse(new Date())
 
-    let rollupOptions = {
+    const rollupOptions = {
         output: {
             entryFileNames: `gva/gin-vue-admin-[name].${timestamp}.js`,
             chunkFileNames: `js/gin-vue-admin-[name].${timestamp}.js`,
             assetFileNames: `assets/gin-vue-admin-[name].${timestamp}.[ext]`
         }
-    };
+    }
 
-    let optimizeDeps = {};
+    const optimizeDeps = {}
 
-    let alias = {
+    const alias = {
         '@': path.resolve(__dirname, './src'),
         'vue$': 'vue/dist/vue.runtime.esm-bundler.js',
     }
 
-    let esbuild = {}
+    const esbuild = {}
 
     return {
         base: './', // index.html文件所在位置

@@ -12,6 +12,7 @@ type Server struct {
 	AutoCode Autocode `mapstructure:"autoCode" json:"autoCode" yaml:"autoCode"`
 	// gorm
 	Mysql Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Pgsql Pgsql `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
 	// oss
 	Local      Local      `mapstructure:"local" json:"local" yaml:"local"`
 	Qiniu      Qiniu      `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`

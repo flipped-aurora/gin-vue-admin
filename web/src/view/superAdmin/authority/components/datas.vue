@@ -9,16 +9,17 @@
     <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
       <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
     </el-checkbox-group>
-    <span>
-      此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）
-    </span>
+    <warning-bar title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）" />
   </div>
 </template>
 
 <script>
 import { setDataAuthority } from '@/api/authority'
+import warningBar from '@/components/warningBar/warningBar.vue'
+
 export default {
   name: 'Datas',
+  components: { warningBar },
   props: {
     row: {
       default: function() {
@@ -44,7 +45,7 @@ export default {
     this.authoritys = []
     this.dataAuthorityId = []
     this.roundAuthority(this.authority)
-    this.row.dataAuthorityId && this.row.dataAuthorityId.map(item => {
+    this.row.dataAuthorityId && this.row.dataAuthorityId.forEach(item => {
       const obj = this.authoritys && this.authoritys.filter(au => au.authorityId === item.authorityId) && this.authoritys.filter(au => au.authorityId === item.authorityId)[0]
       this.dataAuthorityId.push(obj)
     })
@@ -73,7 +74,7 @@ export default {
     },
     getChildrenId(row, arrBox) {
       arrBox.push(row.authorityId)
-      row.children && row.children.map(item => {
+      row.children && row.children.forEach(item => {
         this.getChildrenId(item, arrBox)
       })
     },
@@ -86,7 +87,7 @@ export default {
     },
     //   平铺角色
     roundAuthority(authoritys) {
-      authoritys && authoritys.map(item => {
+      authoritys && authoritys.forEach(item => {
         const obj = {}
         obj.authorityId = item.authorityId
         obj.authorityName = item.authorityName

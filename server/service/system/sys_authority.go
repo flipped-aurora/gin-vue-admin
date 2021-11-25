@@ -121,9 +121,10 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&system.SysAuthority{})
+	err = db.Where("parent_id = ?", "0").Count(&total).Error
 	var authority []system.SysAuthority
-	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = 0").Find(&authority).Error
+	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
 	if len(authority) > 0 {
 		for k := range authority {
 			err = authorityService.findChildrenAuthority(&authority[k])

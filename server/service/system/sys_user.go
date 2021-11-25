@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -39,6 +40,10 @@ func (userService *UserService) Register(u system.SysUser) (err error, userInter
 //@return: err error, userInter *model.SysUser
 
 func (userService *UserService) Login(u *system.SysUser) (err error, userInter *system.SysUser) {
+	if nil == global.GVA_DB {
+		return fmt.Errorf("db not init"), nil
+	}
+
 	var user system.SysUser
 	u.Password = utils.MD5V([]byte(u.Password))
 	err = global.GVA_DB.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authorities").Preload("Authority").First(&user).Error
@@ -114,6 +119,10 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 		if TxErr != nil {
 			return TxErr
 		}
+		TxErr = tx.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityIds[0]).Error
+		if TxErr != nil {
+			return TxErr
+		}
 		// 返回 nil 提交事务
 		return nil
 	})
@@ -182,4 +191,15 @@ func (userService *UserService) FindUserByUuid(uuid string) (err error, user *sy
 		return errors.New("用户不存在"), &u
 	}
 	return nil, &u
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: resetPassword
+//@description: 修改用户密码
+//@param: ID uint
+//@return: err error
+
+func (userService *UserService) ResetPassword(ID uint) (err error) {
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.MD5V([]byte("123456"))).Error
+	return err
 }

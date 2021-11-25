@@ -13,7 +13,6 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"gorm.io/gorm"
@@ -89,6 +88,7 @@ var AutoCodeServiceApp = new(AutoCodeService)
 //@return: map[string]string, error
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
+	makeDictTypes(&autoCode)
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return nil, err
@@ -147,6 +147,19 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 	return ret, nil
 }
 
+func makeDictTypes(autoCode *system.AutoCodeStruct) {
+	DictTypeM := make(map[string]string)
+	for _, v := range autoCode.Fields {
+		if v.DictType != "" {
+			DictTypeM[v.DictType] = ""
+		}
+	}
+
+	for k, _ := range DictTypeM {
+		autoCode.DictTypes = append(autoCode.DictTypes, k)
+	}
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateTemp
 //@description: 创建代码
@@ -154,6 +167,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 //@return: err error
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
+	makeDictTypes(&autoCode)
 	// 增加判断: 重复创建struct
 	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName) {
 		return RepeatErr
@@ -196,6 +210,12 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		Init()
 		for index := range dataList {
 			autoCodeService.addAutoMoveFile(&dataList[index])
+		}
+		// 判断目标文件是否都可以移动
+		for _, value := range dataList {
+			if utils.FileExist(value.autoMoveFilePath) {
+				return errors.New(fmt.Sprintf("目标文件已存在:%s\n", value.autoMoveFilePath))
+			}
 		}
 		for _, value := range dataList { // 移动文件
 			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
@@ -281,36 +301,10 @@ func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList 
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: GetTables
-//@description: 获取数据库的所有表名
-//@param: dbName string
-//@return: err error, TableNames []request.TableReq
-
-func (autoCodeService *AutoCodeService) GetTables(dbName string) (err error, TableNames []request.TableReq) {
-	err = global.GVA_DB.Raw("select table_name as table_name from information_schema.tables where table_schema = ?", dbName).Scan(&TableNames).Error
-	return err, TableNames
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: GetDB
-//@description: 获取数据库的所有数据库名
-//@return: err error, DBNames []request.DBReq
-
-func (autoCodeService *AutoCodeService) GetDB() (err error, DBNames []request.DBReq) {
-	err = global.GVA_DB.Raw("SELECT SCHEMA_NAME AS `database` FROM INFORMATION_SCHEMA.SCHEMATA;").Scan(&DBNames).Error
-	return err, DBNames
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetDB
 //@description: 获取指定数据库和指定数据表的所有字段名,类型值等
 //@param: tableName string, dbName string
 //@return: err error, Columns []request.ColumnReq
-
-func (autoCodeService *AutoCodeService) GetColumn(tableName string, dbName string) (err error, Columns []request.ColumnReq) {
-	err = global.GVA_DB.Raw("SELECT COLUMN_NAME column_name,DATA_TYPE data_type,CASE DATA_TYPE WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH WHEN 'double' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'decimal' THEN CONCAT_WS( ',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE ) WHEN 'int' THEN c.NUMERIC_PRECISION WHEN 'bigint' THEN c.NUMERIC_PRECISION ELSE '' END AS data_type_long,COLUMN_COMMENT column_comment FROM INFORMATION_SCHEMA.COLUMNS c WHERE table_name = ? AND table_schema = ?", tableName, dbName).Scan(&Columns).Error
-	return err, Columns
-}
 
 func (autoCodeService *AutoCodeService) DropTable(tableName string) error {
 	return global.GVA_DB.Exec("DROP TABLE " + tableName).Error

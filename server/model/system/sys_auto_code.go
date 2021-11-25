@@ -2,7 +2,7 @@ package system
 
 import "errors"
 
-// 初始版本自动化代码工具
+// AutoCodeStruct 初始版本自动化代码工具
 type AutoCodeStruct struct {
 	StructName         string   `json:"structName"`         // Struct名称
 	TableName          string   `json:"tableName"`          // 表名
@@ -13,6 +13,7 @@ type AutoCodeStruct struct {
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields"`
+	DictTypes          []string `json:"-"`
 }
 
 type Field struct {

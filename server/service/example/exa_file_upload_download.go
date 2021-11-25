@@ -62,9 +62,9 @@ func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndD
 func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB
+	db := global.GVA_DB.Model(&example.ExaFileUploadAndDownload{})
 	var fileLists []example.ExaFileUploadAndDownload
-	err = db.Find(&fileLists).Count(&total).Error
+	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}

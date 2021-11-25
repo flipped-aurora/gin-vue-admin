@@ -3,8 +3,49 @@
  */
 
 const config = {
-  appName: 'Gin-Vue-Admin',
-  appLogo: 'https://www.gin-vue-admin.com/img/logo.png'
+    appName: 'Gin-Vue-Admin',
+    appLogo: 'https://www.gin-vue-admin.com/img/logo.png',
+    showViteLogo: true
 }
+
+
+export const viteLogo = (env) => {
+    if (config.showViteLogo) {
+        const chalk = require('chalk')
+        console.log(
+            chalk.green(
+                `> 欢迎使用Gin-Vue-Admin，开源地址：https://github.com/flipped-aurora/gin-vue-admin`
+            )
+        )
+        console.log(
+            chalk.green(
+                `> 当前版本:V2.4.6 Apache`
+            )
+        )
+        console.log(
+            chalk.green(
+                `> 加群方式:微信：shouzi_1994 QQ群：622360840`
+            )
+        )
+        console.log(
+            chalk.green(
+                `> 默认自动化文档地址:http://127.0.0.1:${env.VITE_SERVER_PORT}/swagger/index.html`
+            )
+        )
+        console.log(
+            chalk.green(
+                `> 默认自动化文档地址:http://127.0.0.1:${env.VITE_SERVER_PORT}/swagger/index.html`
+            )
+        )
+        console.log(
+            chalk.green(
+                `> 默认前端文件运行地址:http://127.0.0.1:${env.VITE_CLI_PORT}`
+            )
+        )
+        console.log('\n')
+    }
+}
+
+
 
 export default config

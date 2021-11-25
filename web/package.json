@@ -1,11 +1,13 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.3.5",
+    "version": "2.4.6",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
         "build": "vite build --mode production",
-        "preview": "vite preview"
+        "limit-build": "npm install increase-memory-limit-fixbug cross-env -g && npm run fix-memory-limit && node ./limit && npm run build",
+        "preview": "vite preview",
+        "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
     },
     "dependencies": {
         "@element-plus/icons": "0.0.11",

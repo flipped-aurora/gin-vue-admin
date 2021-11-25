@@ -84,7 +84,7 @@
           </a>
         </div>
         <div class="copyright">
-          Copyright &copy; {{ curYear }} 💖 flipped-aurora
+          <bootomInfo />
         </div>
       </div>
     </div>
@@ -94,6 +94,7 @@
 import { mapActions } from 'vuex'
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
+import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 export default {
   name: 'Login',
   data() {
@@ -112,7 +113,6 @@ export default {
       }
     }
     return {
-      curYear: 0,
       lock: 'lock',
       loginForm: {
         username: 'admin',
@@ -133,9 +133,11 @@ export default {
       picPath: ''
     }
   },
+  components:{
+    bootomInfo
+  },
   created() {
     this.loginVerify()
-    this.curYear = new Date().getFullYear()
   },
   methods: {
     ...mapActions('user', ['LoginIn']),

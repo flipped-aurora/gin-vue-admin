@@ -1,11 +1,12 @@
 package middleware
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/utils"
-	utils2 "github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"io/ioutil"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/utils"
+	utils2 "github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -24,7 +25,7 @@ func ErrorToEmail() gin.HandlerFunc {
 			username = claims.Username
 		} else {
 			id, _ := strconv.Atoi(c.Request.Header.Get("x-user-id"))
-			err, user := userService.FindUserById(id)
+			user, err := userService.FindUserById(id)
 			if err != nil {
 				username = "Unknown"
 			}

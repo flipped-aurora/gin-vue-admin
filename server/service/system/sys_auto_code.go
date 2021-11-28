@@ -155,7 +155,7 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 		}
 	}
 
-	for k, _ := range DictTypeM {
+	for k := range DictTypeM {
 		autoCode.DictTypes = append(autoCode.DictTypes, k)
 	}
 }
@@ -214,7 +214,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		// 判断目标文件是否都可以移动
 		for _, value := range dataList {
 			if utils.FileExist(value.autoMoveFilePath) {
-				return errors.New(fmt.Sprintf("目标文件已存在:%s\n", value.autoMoveFilePath))
+				return fmt.Errorf("目标文件已存在:%s", value.autoMoveFilePath)
 			}
 		}
 		for _, value := range dataList { // 移动文件

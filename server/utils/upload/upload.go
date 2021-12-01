@@ -6,23 +6,17 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
-//@author: [ccfish86](https://github.com/ccfish86)
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@interface_name: OSS
-//@description: OSS接口
-
+// OSS 对象存储接口
+// Author [SliverHorn](https://github.com/SliverHorn)
+// Author [ccfish86](https://github.com/ccfish86)
 type OSS interface {
 	UploadFile(file *multipart.FileHeader) (string, string, error)
 	DeleteFile(key string) error
 }
 
-//@author: [ccfish86](https://github.com/ccfish86)
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: NewOss
-//@description: OSS接口
-//@description: OSS的实例化方法
-//@return: OSS
-
+// NewOss OSS的实例化方法
+// Author [SliverHorn](https://github.com/SliverHorn)
+// Author [ccfish86](https://github.com/ccfish86)
 func NewOss() OSS {
 	switch global.GVA_CONFIG.System.OssType {
 	case "local":
@@ -33,6 +27,8 @@ func NewOss() OSS {
 		return &TencentCOS{}
 	case "aliyun-oss":
 		return &AliyunOSS{}
+	case "huawei-obs":
+		return HuaWeiObs
 	default:
 		return &Local{}
 	}

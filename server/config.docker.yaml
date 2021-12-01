@@ -94,7 +94,6 @@ qiniu:
   secret-key: ''
   use-cdn-domains: false
 
-
 # aliyun oss configuration
 aliyun-oss:
   endpoint: 'yourEndpoint'
@@ -112,10 +111,17 @@ tencent-cos:
   base-url: 'https://gin.vue.admin'
   path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
 
+# huawei obs configuration
+hua-wei-obs:
+  path: 'you-path'
+  bucket: 'you-bucket'
+  endpoint: 'you-endpoint'
+  access-key: 'you-access-key'
+  secret-key: 'you-secret-key'
+
 # excel configuration
 excel:
   dir: './resource/excel/'
-
 
 # timer task db clear table
 Timer:

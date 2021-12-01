@@ -22,6 +22,7 @@
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
               <el-option value="aliyun-oss" />
+              <el-option value="huawei-obs" />
             </el-select>
           </el-form-item>
           <el-form-item label="多点登录拦截">
@@ -258,6 +259,24 @@
               <el-input v-model="config.aliyunOSS.bucketUrl" />
             </el-form-item>
           </template>
+          <template v-if="config.system.ossType === 'huawei-obs'">
+            <h2>华为云Obs上传配置</h2>
+            <el-form-item label="path">
+              <el-input v-model="config.huaWeiObs.path" />
+            </el-form-item>
+            <el-form-item label="bucket">
+              <el-input v-model="config.huaWeiObs.bucket" />
+            </el-form-item>
+            <el-form-item label="endpoint">
+              <el-input v-model="config.huaWeiObs.endpoint" />
+            </el-form-item>
+            <el-form-item label="accessKey">
+              <el-input v-model="config.huaWeiObs.AccessKey" />
+            </el-form-item>
+            <el-form-item label="secretKey">
+              <el-input v-model="config.huaWeiObs.secretKey" />
+            </el-form-item>
+          </template>
 
         </el-collapse-item>
 
@@ -352,6 +371,7 @@ export default {
         qiniu: {},
         tencentCOS: {},
         aliyunOSS: {},
+        huaWeiObs: {},
         captcha: {},
         zap: {},
         local: {},

@@ -8,6 +8,8 @@ type ApiGroup struct {
 	FileUploadAndDownloadApi
 }
 
-var excelService = service.ServiceGroupApp.ExampleServiceGroup.ExcelService
-var customerService = service.ServiceGroupApp.ExampleServiceGroup.CustomerService
-var fileUploadAndDownloadService = service.ServiceGroupApp.ExampleServiceGroup.FileUploadAndDownloadService
+var (
+	excelService                 = service.ServiceGroupApp.ExampleServiceGroup.ExcelService
+	customerService              = service.ServiceGroupApp.ExampleServiceGroup.CustomerService
+	fileUploadAndDownloadService = service.ServiceGroupApp.ExampleServiceGroup.FileUploadAndDownloadService
+)

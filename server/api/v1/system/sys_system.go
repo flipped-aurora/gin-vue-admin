@@ -11,8 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type SystemApi struct {
-}
+type SystemApi struct{}
 
 // @Tags System
 // @Summary 获取配置文件内容

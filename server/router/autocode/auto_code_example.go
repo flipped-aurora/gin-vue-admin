@@ -6,13 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AutoCodeExampleRouter struct {
-}
+type AutoCodeExampleRouter struct{}
 
 func (s *AutoCodeExampleRouter) InitSysAutoCodeExampleRouter(Router *gin.RouterGroup) {
 	autoCodeExampleRouter := Router.Group("autoCodeExample").Use(middleware.OperationRecord())
 	autoCodeExampleRouterWithoutRecord := Router.Group("autoCodeExample")
-	var autoCodeExampleApi = v1.ApiGroupApp.AutoCodeApiGroup.AutoCodeExampleApi
+	autoCodeExampleApi := v1.ApiGroupApp.AutoCodeApiGroup.AutoCodeExampleApi
 	{
 		autoCodeExampleRouter.POST("createSysAutoCodeExample", autoCodeExampleApi.CreateAutoCodeExample)   // 新建AutoCodeExample
 		autoCodeExampleRouter.DELETE("deleteSysAutoCodeExample", autoCodeExampleApi.DeleteAutoCodeExample) // 删除AutoCodeExample

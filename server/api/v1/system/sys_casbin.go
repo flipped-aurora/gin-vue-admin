@@ -10,8 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type CasbinApi struct {
-}
+type CasbinApi struct{}
 
 // @Tags Casbin
 // @Summary 更新角色api权限

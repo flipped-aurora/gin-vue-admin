@@ -5,12 +5,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type OperationRecordRouter struct {
-}
+type OperationRecordRouter struct{}
 
 func (s *OperationRecordRouter) InitSysOperationRecordRouter(Router *gin.RouterGroup) {
 	operationRecordRouter := Router.Group("sysOperationRecord")
-	var authorityMenuApi = v1.ApiGroupApp.SystemApiGroup.OperationRecordApi
+	authorityMenuApi := v1.ApiGroupApp.SystemApiGroup.OperationRecordApi
 	{
 		operationRecordRouter.POST("createSysOperationRecord", authorityMenuApi.CreateSysOperationRecord)             // 新建SysOperationRecord
 		operationRecordRouter.DELETE("deleteSysOperationRecord", authorityMenuApi.DeleteSysOperationRecord)           // 删除SysOperationRecord

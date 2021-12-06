@@ -58,7 +58,6 @@ func (w *wsPlugin) Register(g *gin.RouterGroup) {
 		InsecureSkipVerify: true,
 	}))
 	g.POST("/sendMsg", w.adminCase.SendMsg("gva_ws"))
-
 }
 
 func (w *wsPlugin) RouterPath() string {
@@ -78,6 +77,8 @@ func GenerateWs(logger *zap.Logger, manageBuf int64, checkMap map[string]biz.Che
 	for key, handler := range registeredMsgHandler {
 		admin.RegisteredMsgHandler(key, handler)
 	}
-	return &wsPlugin{logger: logger, manageBuf: manageBuf,
-		registeredMsgHandler: registeredMsgHandler, checkMap: checkMap, admin: admin, adminCase: biz.NewAdmin(admin)}
+	return &wsPlugin{
+		logger: logger, manageBuf: manageBuf,
+		registeredMsgHandler: registeredMsgHandler, checkMap: checkMap, admin: admin, adminCase: biz.NewAdmin(admin),
+	}
 }

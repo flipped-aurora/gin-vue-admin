@@ -17,8 +17,7 @@ import (
 //@param: auth model.SysAuthority
 //@return: err error, authority model.SysAuthority
 
-type AuthorityService struct {
-}
+type AuthorityService struct{}
 
 var AuthorityServiceApp = new(AuthorityService)
 
@@ -100,7 +99,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 		if err != nil {
 			return
 		}
-		//err = db.Association("SysBaseMenus").Delete(&auth)
+		// err = db.Association("SysBaseMenus").Delete(&auth)
 	} else {
 		err = db.Error
 		if err != nil {

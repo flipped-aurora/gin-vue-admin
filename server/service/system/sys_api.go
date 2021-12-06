@@ -16,8 +16,7 @@ import (
 //@param: api model.SysApi
 //@return: err error
 
-type ApiService struct {
-}
+type ApiService struct{}
 
 var ApiServiceApp = new(ApiService)
 

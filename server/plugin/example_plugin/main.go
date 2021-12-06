@@ -6,8 +6,7 @@ import (
 
 var ExamplePlugin = new(pluginExample)
 
-type pluginExample struct {
-}
+type pluginExample struct{}
 
 func (*pluginExample) Register(group *gin.RouterGroup) {
 	//如需细分权限 可以在此处use中间件 gva项目包名已改为github模式

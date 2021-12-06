@@ -3,6 +3,7 @@ package system
 import (
 	"database/sql"
 	"fmt"
+
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
@@ -49,7 +50,6 @@ func (initDBService *InitDBService) initTables() error {
 		example.ExaFileChunk{},
 		example.ExaFileUploadAndDownload{},
 	)
-
 }
 
 // createDatabase 创建数据库(mysql)

@@ -10,8 +10,7 @@ import (
 	"github.com/xuri/excelize/v2"
 )
 
-type ExcelService struct {
-}
+type ExcelService struct{}
 
 func (exa *ExcelService) ParseInfoList2Excel(infoList []system.SysBaseMenu, filePath string) error {
 	excel := excelize.NewFile()

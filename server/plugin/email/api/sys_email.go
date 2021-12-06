@@ -9,8 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type EmailApi struct {
-}
+type EmailApi struct{}
 
 // @Tags System
 // @Summary 发送测试邮件

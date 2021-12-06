@@ -6,8 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/autocode/request"
 )
 
-type AutoCodeExampleService struct {
-}
+type AutoCodeExampleService struct{}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateAutoCodeExample
@@ -16,7 +15,6 @@ type AutoCodeExampleService struct {
 //@return: err error
 
 func (autoCodeExampleService *AutoCodeExampleService) CreateAutoCodeExample(autoCodeExample autocode.AutoCodeExample) (err error) {
-
 	err = global.GVA_DB.Create(&autoCodeExample).Error
 	return err
 }

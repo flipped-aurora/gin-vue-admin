@@ -18,8 +18,7 @@ import (
 //@param: u model.SysUser
 //@return: err error, userInter model.SysUser
 
-type UserService struct {
-}
+type UserService struct{}
 
 func (userService *UserService) Register(u system.SysUser) (err error, userInter system.SysUser) {
 	var user system.SysUser

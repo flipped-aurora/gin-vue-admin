@@ -39,12 +39,12 @@ func AutoInjectionCode(filepath string, funcName string, codeData string) error 
 		return err
 	}
 	codeData = strings.TrimSpace(codeData)
-	var codeStartPos = -1
-	var codeEndPos = srcDataLen
+	codeStartPos := -1
+	codeEndPos := srcDataLen
 	var expectedFunction *ast.FuncDecl
 
-	var startCommentPos = -1
-	var endCommentPos = srcDataLen
+	startCommentPos := -1
+	endCommentPos := srcDataLen
 
 	// 如果指定了函数名，先寻找对应函数
 	if funcName != "" {
@@ -113,7 +113,7 @@ func AutoInjectionCode(filepath string, funcName string, codeData string) error 
 	srcData = append(append(srcData[:indexPos], insertData...), remainData...)
 
 	// 写回数据
-	return ioutil.WriteFile(filepath, srcData, 0600)
+	return ioutil.WriteFile(filepath, srcData, 0o600)
 }
 
 func checkExist(srcData *[]byte, startPos int, endPos int, blockStmt *ast.BlockStmt, target string) bool {
@@ -161,7 +161,7 @@ func AutoClearCode(filepath string, codeData string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filepath, srcData, 0600)
+	return ioutil.WriteFile(filepath, srcData, 0o600)
 }
 
 func cleanCode(clearCode string, srcData string) ([]byte, error) {

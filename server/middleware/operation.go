@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"bytes"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"

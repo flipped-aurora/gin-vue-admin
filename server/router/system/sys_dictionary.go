@@ -6,13 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DictionaryRouter struct {
-}
+type DictionaryRouter struct{}
 
 func (s *DictionaryRouter) InitSysDictionaryRouter(Router *gin.RouterGroup) {
 	sysDictionaryRouter := Router.Group("sysDictionary").Use(middleware.OperationRecord())
 	sysDictionaryRouterWithoutRecord := Router.Group("sysDictionary")
-	var sysDictionaryApi = v1.ApiGroupApp.SystemApiGroup.DictionaryApi
+	sysDictionaryApi := v1.ApiGroupApp.SystemApiGroup.DictionaryApi
 	{
 		sysDictionaryRouter.POST("createSysDictionary", sysDictionaryApi.CreateSysDictionary)   // 新建SysDictionary
 		sysDictionaryRouter.DELETE("deleteSysDictionary", sysDictionaryApi.DeleteSysDictionary) // 删除SysDictionary

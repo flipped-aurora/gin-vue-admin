@@ -1,12 +1,13 @@
 package internal
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 	"log"
 	"os"
 	"time"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var Gorm = new(_gorm)

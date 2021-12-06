@@ -1,8 +1,9 @@
 package global
 
 import (
-	"gorm.io/gorm"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 type GVA_MODEL struct {

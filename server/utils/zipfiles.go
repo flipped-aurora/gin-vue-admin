@@ -14,7 +14,6 @@ import (
 //@return: error
 
 func ZipFiles(filename string, files []string, oldForm, newForm string) error {
-
 	newZipFile, err := os.Create(filename)
 	if err != nil {
 		return err

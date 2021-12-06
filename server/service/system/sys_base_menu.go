@@ -8,8 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type BaseMenuService struct {
-}
+type BaseMenuService struct{}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteBaseMenu

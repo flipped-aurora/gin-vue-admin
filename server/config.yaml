@@ -83,6 +83,26 @@ pgsql:
   log-mode: ""
   log-zap: false
 
+db-list: [
+  {
+    disabled: true, # 是否启用
+    type: "", # 数据库的类型,目前支持mysql、pgsql
+    alias-name: "", # 数据库的名称,注意: alias-name 需要在db-list中唯一
+    path: '',
+    port: '',
+    config: '',
+    db-name: '',
+    username: '',
+    password: '',
+    max-idle-conns: 10,
+    max-open-conns: 100,
+    log-mode: "",
+    log-zap: false,
+  }
+]
+
+
+
 # local configuration
 local:
   path: 'uploads/file'

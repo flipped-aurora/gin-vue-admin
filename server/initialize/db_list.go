@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const system = "system"
+const sys = "system"
 
 func DBList() {
 	dbMap := make(map[string]*gorm.DB)
@@ -24,7 +24,7 @@ func DBList() {
 	}
 	// 做特殊判断,是否有迁移
 	// 适配低版本迁移多数据库版本
-	if sysDB, ok := dbMap[system]; ok {
+	if sysDB, ok := dbMap[sys]; ok {
 		global.GVA_DB = sysDB
 	}
 	global.GVA_DBList = dbMap

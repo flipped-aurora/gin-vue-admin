@@ -56,12 +56,8 @@
           <el-form-item>
             <el-button
               type="primary"
-              style="width: 46%"
-              @click="checkInit"
-            >前往初始化</el-button>
-            <el-button
-              type="primary"
-              style="width: 46%; margin-left: 8%"
+              style="width: 100%;margin-top: 20px"
+              :disabled="btnDisable"
               @click="submitForm"
             >登 录</el-button>
           </el-form-item>
@@ -97,6 +93,9 @@ import { checkDB } from '@/api/initdb'
 import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 export default {
   name: 'Login',
+  components: {
+    bootomInfo
+  },
   data() {
     const checkUsername = (rule, value, callback) => {
       if (value.length < 5) {
@@ -130,13 +129,25 @@ export default {
           }]
       },
       logVerify: '',
-      picPath: ''
+      picPath: '',
+      btnDisable: false
     }
   },
-  components:{
-    bootomInfo
-  },
   created() {
+    const that = this
+    if (import.meta.env.MODE === 'development' && (/^true$/i).test(import.meta.env.VITE_NEED_INIT)) {
+      console.log('没有初始化系统')
+      this.$notify({
+        title: '提示',
+        message: '系统还未初始化，请先初始化系统！',
+        duration: 0,
+        type: 'error',
+        onClick() {
+          that.checkInit()
+          that.$notify.closeAll()
+        }
+      })
+    }
     this.loginVerify()
   },
   methods: {

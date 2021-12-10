@@ -48,10 +48,8 @@ func DefaultCheckOrMark(key string, expire int, limit int) (err error) {
 	}
 	if err = SetLimitWithTime(key, limit, time.Duration(expire)*time.Second); err != nil {
 		global.GVA_LOG.Error("limit", zap.Error(err))
-
 	}
 	return err
-
 }
 
 func DefaultLimit() gin.HandlerFunc {
@@ -76,7 +74,7 @@ func SetLimitWithTime(key string, limit int, expiration time.Duration) error {
 		_, err = pipe.Exec(context.Background())
 		return err
 	} else {
-		//次数
+		// 次数
 		if times, err := global.GVA_REDIS.Get(context.Background(), key).Int(); err != nil {
 			return err
 		} else {

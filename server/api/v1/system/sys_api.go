@@ -13,8 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type SystemApiApi struct {
-}
+type SystemApiApi struct{}
 
 // @Tags SysApi
 // @Summary 创建基础api

@@ -13,8 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type AuthorityMenuApi struct {
-}
+type AuthorityMenuApi struct{}
 
 // @Tags AuthorityMenu
 // @Summary 获取用户动态路由

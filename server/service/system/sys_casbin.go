@@ -18,8 +18,7 @@ import (
 //@param: authorityId string, casbinInfos []request.CasbinInfo
 //@return: error
 
-type CasbinService struct {
-}
+type CasbinService struct{}
 
 var CasbinServiceApp = new(CasbinService)
 
@@ -85,7 +84,6 @@ func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
 	e := casbinService.Casbin()
 	success, _ := e.RemoveFilteredPolicy(v, p...)
 	return success
-
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

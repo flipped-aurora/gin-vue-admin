@@ -16,7 +16,8 @@ func (a *api) TableName() string {
 }
 
 func (a *api) Initialize() error {
-	entities := []system.SysApi{{ApiGroup: "base", Method: "POST", Path: "/base/login", Description: "用户登录(必选)"},
+	entities := []system.SysApi{
+		{ApiGroup: "base", Method: "POST", Path: "/base/login", Description: "用户登录(必选)"},
 
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: "jwt加入黑名单(退出，必选)"},
 

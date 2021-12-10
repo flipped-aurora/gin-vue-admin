@@ -48,7 +48,7 @@ func CorsByRules() gin.HandlerFunc {
 		}
 
 		// 严格白名单模式且未通过检查，直接拒绝处理请求
-		if whitelist == nil && global.GVA_CONFIG.Cors.Mode == "strict-whitelist" {
+		if whitelist == nil && global.GVA_CONFIG.Cors.Mode == "strict-whitelist" && !(c.Request.Method == "GET" && c.Request.URL.Path == "/health") {
 			c.AbortWithStatus(http.StatusForbidden)
 		} else {
 			// 非严格白名单模式，无论是否通过检查均放行所有 OPTIONS 方法

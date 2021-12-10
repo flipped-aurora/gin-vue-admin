@@ -11,8 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type OperationRecordApi struct {
-}
+type OperationRecordApi struct{}
 
 // @Tags SysOperationRecord
 // @Summary 创建SysOperationRecord

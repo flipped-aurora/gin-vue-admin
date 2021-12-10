@@ -1,8 +1,9 @@
 package middleware
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 // 处理跨域请求,支持options访问

@@ -117,7 +117,7 @@ export default {
       const loading = this.$loading({
         lock: true,
         text: '正在初始化数据库，请稍候',
-        spinner: 'el-icon-loading',
+        spinner: 'loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })
       try {

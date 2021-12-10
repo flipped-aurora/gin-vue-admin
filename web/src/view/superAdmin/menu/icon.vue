@@ -1,13 +1,17 @@
 <template>
   <div>
-    <i
-      class="icon"
-      :class="'el-icon-'+ metaData.icon"
-      style="position: absolute; z-index: 9999; padding: 5px 10px; "
-    />
+    <span class="icon" style="position: absolute; z-index: 9999; padding: 5px 10px; ">
+      <el-icon>
+        <component :is="metaData.icon" />
+      </el-icon>
+    </span>
     <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" placeholder="请选择">
       <el-option v-for="item in options" :key="item.key" :label="item.key" :value="item.key">
-        <span class="icon" :class="item.label" />
+        <span class="icon" :class="item.label">
+          <el-icon>
+            <component :is="item.label" />
+          </el-icon>
+        </span>
         <span style="float: left">{{ item.key }}</span>
       </el-option>
     </el-select>
@@ -30,288 +34,1126 @@ export default {
       input: '',
       metaData: {},
       options: [
-        { key: 'platform-eleme', label: 'el-icon-platform-eleme' },
-        { key: 'eleme', label: 'el-icon-eleme' },
-        { key: 'delete-solid', label: 'el-icon-delete-solid' },
-        { key: 'delete', label: 'el-icon-delete' },
-        { key: 's-tools', label: 'el-icon-s-tools' },
-        { key: 'setting', label: 'el-icon-setting' },
-        { key: 'user-solid', label: 'el-icon-user-solid' },
-        { key: 'user', label: 'el-icon-user' },
-        { key: 'phone', label: 'el-icon-phone' },
-        { key: 'phone-outline', label: 'el-icon-phone-outline' },
-        { key: 'more', label: 'el-icon-more' },
-        { key: 'more-outline', label: 'el-icon-more-outline' },
-        { key: 'star-on', label: 'el-icon-star-on' },
-        { key: 'star-off', label: 'el-icon-star-off' },
-        { key: 's-goods', label: 'el-icon-s-goods' },
-        { key: 'goods', label: 'el-icon-goods' },
-        { key: 'warning', label: 'el-icon-warning' },
-        { key: 'warning-outline', label: 'el-icon-warning-outline' },
-        { key: 'question', label: 'el-icon-question' },
-        { key: 'info', label: 'el-icon-info' },
-        { key: 'remove', label: 'el-icon-remove' },
-        { key: 'circle-plus', label: 'el-icon-circle-plus' },
-        { key: 'success', label: 'el-icon-success' },
-        { key: 'error', label: 'el-icon-error' },
-        { key: 'zoom-in', label: 'el-icon-zoom-in' },
-        { key: 'zoom-out', label: 'el-icon-zoom-out' },
-        { key: 'remove-outline', label: 'el-icon-remove-outline' },
-        { key: 'circle-plus-outline', label: 'el-icon-circle-plus-outline' },
-        { key: 'circle-check', label: 'el-icon-circle-check' },
-        { key: 'circle-close', label: 'el-icon-circle-close' },
-        { key: 's-help', label: 'el-icon-s-help' },
-        { key: 'help', label: 'el-icon-help' },
-        { key: 'minus', label: 'el-icon-minus' },
-        { key: 'plus', label: 'el-icon-plus' },
-        { key: 'check', label: 'el-icon-check' },
-        { key: 'close', label: 'el-icon-close' },
-        { key: 'picture', label: 'el-icon-picture' },
-        { key: 'picture-outline', label: 'el-icon-picture-outline' },
         {
-          key: 'picture-outline-round',
-          label: 'el-icon-picture-outline-round'
+          'key': 'aim',
+          'label': 'aim'
         },
-        { key: 'upload', label: 'el-icon-upload' },
-        { key: 'upload2', label: 'el-icon-upload2' },
-        { key: 'download', label: 'el-icon-download' },
-        { key: 'camera-solid', label: 'el-icon-camera-solid' },
-        { key: 'camera', label: 'el-icon-camera' },
-        { key: 'video-camera-solid', label: 'el-icon-video-camera-solid' },
-        { key: 'video-camera', label: 'el-icon-video-camera' },
-        { key: 'message-solid', label: 'el-icon-message-solid' },
-        { key: 'bell', label: 'el-icon-bell' },
-        { key: 's-cooperation', label: 'el-icon-s-cooperation' },
-        { key: 's-order', label: 'el-icon-s-order' },
-        { key: 's-platform', label: 'el-icon-s-platform' },
-        { key: 's-fold', label: 'el-icon-s-fold' },
-        { key: 's-unfold', label: 'el-icon-s-unfold' },
-        { key: 's-operation', label: 'el-icon-s-operation' },
-        { key: 's-promotion', label: 'el-icon-s-promotion' },
-        { key: 's-home', label: 'el-icon-s-home' },
-        { key: 's-release', label: 'el-icon-s-release' },
-        { key: 's-ticket', label: 'el-icon-s-ticket' },
-        { key: 's-management', label: 'el-icon-s-management' },
-        { key: 's-open', label: 'el-icon-s-open' },
-        { key: 's-shop', label: 'el-icon-s-shop' },
-        { key: 's-marketing', label: 'el-icon-s-marketing' },
-        { key: 's-flag', label: 'el-icon-s-flag' },
-        { key: 's-comment', label: 'el-icon-s-comment' },
-        { key: 's-finance', label: 'el-icon-s-finance' },
-        { key: 's-claim', label: 'el-icon-s-claim' },
-        { key: 's-custom', label: 'el-icon-s-custom' },
-        { key: 's-opportunity', label: 'el-icon-s-opportunity' },
-        { key: 's-data', label: 'el-icon-s-data' },
-        { key: 's-check', label: 'el-icon-s-check' },
-        { key: 's-grid', label: 'el-icon-s-grid' },
-        { key: 'menu', label: 'el-icon-menu' },
-        { key: 'share', label: 'el-icon-share' },
-        { key: 'd-caret', label: 'el-icon-d-caret' },
-        { key: 'caret-left', label: 'el-icon-caret-left' },
-        { key: 'caret-right', label: 'el-icon-caret-right' },
-        { key: 'caret-bottom', label: 'el-icon-caret-bottom' },
-        { key: 'caret-top', label: 'el-icon-caret-top' },
-        { key: 'bottom-left', label: 'el-icon-bottom-left' },
-        { key: 'bottom-right', label: 'el-icon-bottom-right' },
-        { key: 'back', label: 'el-icon-back' },
-        { key: 'right', label: 'el-icon-right' },
-        { key: 'bottom', label: 'el-icon-bottom' },
-        { key: 'top', label: 'el-icon-top' },
-        { key: 'top-left', label: 'el-icon-top-left' },
-        { key: 'top-right', label: 'el-icon-top-right' },
-        { key: 'arrow-left', label: 'el-icon-arrow-left' },
-        { key: 'arrow-right', label: 'el-icon-arrow-right' },
-        { key: 'arrow-down', label: 'el-icon-arrow-down' },
-        { key: 'arrow-up', label: 'el-icon-arrow-up' },
-        { key: 'd-arrow-left', label: 'el-icon-d-arrow-left' },
-        { key: 'd-arrow-right', label: 'el-icon-d-arrow-right' },
-        { key: 'video-pause', label: 'el-icon-video-pause' },
-        { key: 'video-play', label: 'el-icon-video-play' },
-        { key: 'refresh', label: 'el-icon-refresh' },
-        { key: 'refresh-right', label: 'el-icon-refresh-right' },
-        { key: 'refresh-left', label: 'el-icon-refresh-left' },
-        { key: 'finished', label: 'el-icon-finished' },
-        { key: 'sort', label: 'el-icon-sort' },
-        { key: 'sort-up', label: 'el-icon-sort-up' },
-        { key: 'sort-down', label: 'el-icon-sort-down' },
-        { key: 'rank', label: 'el-icon-rank' },
-        { key: 'loading', label: 'el-icon-loading' },
-        { key: 'view', label: 'el-icon-view' },
-        { key: 'c-scale-to-original', label: 'el-icon-c-scale-to-original' },
-        { key: 'date', label: 'el-icon-date' },
-        { key: 'edit', label: 'el-icon-edit' },
-        { key: 'edit-outline', label: 'el-icon-edit-outline' },
-        { key: 'folder', label: 'el-icon-folder' },
-        { key: 'folder-opened', label: 'el-icon-folder-opened' },
-        { key: 'folder-add', label: 'el-icon-folder-add' },
-        { key: 'folder-remove', label: 'el-icon-folder-remove' },
-        { key: 'folder-delete', label: 'el-icon-folder-delete' },
-        { key: 'folder-checked', label: 'el-icon-folder-checked' },
-        { key: 'tickets', label: 'el-icon-tickets' },
-        { key: 'document-remove', label: 'el-icon-document-remove' },
-        { key: 'document-delete', label: 'el-icon-document-delete' },
-        { key: 'document-copy', label: 'el-icon-document-copy' },
-        { key: 'document-checked', label: 'el-icon-document-checked' },
-        { key: 'document', label: 'el-icon-document' },
-        { key: 'document-add', label: 'el-icon-document-add' },
-        { key: 'printer', label: 'el-icon-printer' },
-        { key: 'paperclip', label: 'el-icon-paperclip' },
-        { key: 'takeaway-box', label: 'el-icon-takeaway-box' },
-        { key: 'search', label: 'el-icon-search' },
-        { key: 'monitor', label: 'el-icon-monitor' },
-        { key: 'attract', label: 'el-icon-attract' },
-        { key: 'mobile', label: 'el-icon-mobile' },
-        { key: 'scissors', label: 'el-icon-scissors' },
-        { key: 'umbrella', label: 'el-icon-umbrella' },
-        { key: 'headset', label: 'el-icon-headset' },
-        { key: 'brush', label: 'el-icon-brush' },
-        { key: 'mouse', label: 'el-icon-mouse' },
-        { key: 'coordinate', label: 'el-icon-coordinate' },
-        { key: 'magic-stick', label: 'el-icon-magic-stick' },
-        { key: 'reading', label: 'el-icon-reading' },
-        { key: 'data-line', label: 'el-icon-data-line' },
-        { key: 'data-board', label: 'el-icon-data-board' },
-        { key: 'pie-chart', label: 'el-icon-pie-chart' },
-        { key: 'data-analysis', label: 'el-icon-data-analysis' },
-        { key: 'collection-tag', label: 'el-icon-collection-tag' },
-        { key: 'film', label: 'el-icon-film' },
-        { key: 'suitcase', label: 'el-icon-suitcase' },
-        { key: 'suitcase-1', label: 'el-icon-suitcase-1' },
-        { key: 'receiving', label: 'el-icon-receiving' },
-        { key: 'collection', label: 'el-icon-collection' },
-        { key: 'files', label: 'el-icon-files' },
-        { key: 'notebook-1', label: 'el-icon-notebook-1' },
-        { key: 'notebook-2', label: 'el-icon-notebook-2' },
-        { key: 'toilet-paper', label: 'el-icon-toilet-paper' },
-        { key: 'office-building', label: 'el-icon-office-building' },
-        { key: 'school', label: 'el-icon-school' },
-        { key: 'table-lamp', label: 'el-icon-table-lamp' },
-        { key: 'house', label: 'el-icon-house' },
-        { key: 'no-smoking', label: 'el-icon-no-smoking' },
-        { key: 'smoking', label: 'el-icon-smoking' },
-        { key: 'shopping-cart-full', label: 'el-icon-shopping-cart-full' },
-        { key: 'shopping-cart-1', label: 'el-icon-shopping-cart-1' },
-        { key: 'shopping-cart-2', label: 'el-icon-shopping-cart-2' },
-        { key: 'shopping-bag-1', label: 'el-icon-shopping-bag-1' },
-        { key: 'shopping-bag-2', label: 'el-icon-shopping-bag-2' },
-        { key: 'sold-out', label: 'el-icon-sold-out' },
-        { key: 'sell', label: 'el-icon-sell' },
-        { key: 'present', label: 'el-icon-present' },
-        { key: 'box', label: 'el-icon-box' },
-        { key: 'bank-card', label: 'el-icon-bank-card' },
-        { key: 'money', label: 'el-icon-money' },
-        { key: 'coin', label: 'el-icon-coin' },
-        { key: 'wallet', label: 'el-icon-wallet' },
-        { key: 'discount', label: 'el-icon-discount' },
-        { key: 'price-tag', label: 'el-icon-price-tag' },
-        { key: 'news', label: 'el-icon-news' },
-        { key: 'guide', label: 'el-icon-guide' },
-        { key: 'male', label: 'el-icon-male' },
-        { key: 'female', label: 'el-icon-female' },
-        { key: 'thumb', label: 'el-icon-thumb' },
-        { key: 'cpu', label: 'el-icon-cpu' },
-        { key: 'link', label: 'el-icon-link' },
-        { key: 'connection', label: 'el-icon-connection' },
-        { key: 'open', label: 'el-icon-open' },
-        { key: 'turn-off', label: 'el-icon-turn-off' },
-        { key: 'set-up', label: 'el-icon-set-up' },
-        { key: 'chat-round', label: 'el-icon-chat-round' },
-        { key: 'chat-line-round', label: 'el-icon-chat-line-round' },
-        { key: 'chat-square', label: 'el-icon-chat-square' },
-        { key: 'chat-dot-round', label: 'el-icon-chat-dot-round' },
-        { key: 'chat-dot-square', label: 'el-icon-chat-dot-square' },
-        { key: 'chat-line-square', label: 'el-icon-chat-line-square' },
-        { key: 'message', label: 'el-icon-message' },
-        { key: 'postcard', label: 'el-icon-postcard' },
-        { key: 'position', label: 'el-icon-position' },
-        { key: 'turn-off-microphone', label: 'el-icon-turn-off-microphone' },
-        { key: 'microphone', label: 'el-icon-microphone' },
-        { key: 'close-notification', label: 'el-icon-close-notification' },
-        { key: 'bangzhu', label: 'el-icon-bangzhu' },
-        { key: 'time', label: 'el-icon-time' },
-        { key: 'odometer', label: 'el-icon-odometer' },
-        { key: 'crop', label: 'el-icon-crop' },
-        { key: 'aim', label: 'el-icon-aim' },
-        { key: 'switch-button', label: 'el-icon-switch-button' },
-        { key: 'full-screen', label: 'el-icon-full-screen' },
-        { key: 'copy-document', label: 'el-icon-copy-document' },
-        { key: 'mic', label: 'el-icon-mic' },
-        { key: 'stopwatch', label: 'el-icon-stopwatch' },
-        { key: 'medal-1', label: 'el-icon-medal-1' },
-        { key: 'medal', label: 'el-icon-medal' },
-        { key: 'trophy', label: 'el-icon-trophy' },
-        { key: 'trophy-1', label: 'el-icon-trophy-1' },
-        { key: 'first-aid-kit', label: 'el-icon-first-aid-kit' },
-        { key: 'discover', label: 'el-icon-discover' },
-        { key: 'place', label: 'el-icon-place' },
-        { key: 'location', label: 'el-icon-location' },
-        { key: 'location-outline', label: 'el-icon-location-outline' },
-        { key: 'location-information', label: 'el-icon-location-information' },
-        { key: 'add-location', label: 'el-icon-add-location' },
-        { key: 'delete-location', label: 'el-icon-delete-location' },
-        { key: 'map-location', label: 'el-icon-map-location' },
-        { key: 'alarm-clock', label: 'el-icon-alarm-clock' },
-        { key: 'timer', label: 'el-icon-timer' },
-        { key: 'watch-1', label: 'el-icon-watch-1' },
-        { key: 'watch', label: 'el-icon-watch' },
-        { key: 'lock', label: 'el-icon-lock' },
-        { key: 'unlock', label: 'el-icon-unlock' },
-        { key: 'key', label: 'el-icon-key' },
-        { key: 'service', label: 'el-icon-service' },
-        { key: 'mobile-phone', label: 'el-icon-mobile-phone' },
-        { key: 'bicycle', label: 'el-icon-bicycle' },
-        { key: 'truck', label: 'el-icon-truck' },
-        { key: 'ship', label: 'el-icon-ship' },
-        { key: 'basketball', label: 'el-icon-basketball' },
-        { key: 'football', label: 'el-icon-football' },
-        { key: 'soccer', label: 'el-icon-soccer' },
-        { key: 'baseball', label: 'el-icon-baseball' },
-        { key: 'wind-power', label: 'el-icon-wind-power' },
-        { key: 'light-rain', label: 'el-icon-light-rain' },
-        { key: 'lightning', label: 'el-icon-lightning' },
-        { key: 'heavy-rain', label: 'el-icon-heavy-rain' },
-        { key: 'sunrise', label: 'el-icon-sunrise' },
-        { key: 'sunrise-1', label: 'el-icon-sunrise-1' },
-        { key: 'sunset', label: 'el-icon-sunset' },
-        { key: 'sunny', label: 'el-icon-sunny' },
-        { key: 'cloudy', label: 'el-icon-cloudy' },
-        { key: 'partly-cloudy', label: 'el-icon-partly-cloudy' },
-        { key: 'cloudy-and-sunny', label: 'el-icon-cloudy-and-sunny' },
-        { key: 'moon', label: 'el-icon-moon' },
-        { key: 'moon-night', label: 'el-icon-moon-night' },
-        { key: 'dish', label: 'el-icon-dish' },
-        { key: 'dish-1', label: 'el-icon-dish-1' },
-        { key: 'food', label: 'el-icon-food' },
-        { key: 'chicken', label: 'el-icon-chicken' },
-        { key: 'fork-spoon', label: 'el-icon-fork-spoon' },
-        { key: 'knife-fork', label: 'el-icon-knife-fork' },
-        { key: 'burger', label: 'el-icon-burger' },
-        { key: 'tableware', label: 'el-icon-tableware' },
-        { key: 'sugar', label: 'el-icon-sugar' },
-        { key: 'dessert', label: 'el-icon-dessert' },
-        { key: 'ice-cream', label: 'el-icon-ice-cream' },
-        { key: 'hot-water', label: 'el-icon-hot-water' },
-        { key: 'water-cup', label: 'el-icon-water-cup' },
-        { key: 'coffee-cup', label: 'el-icon-coffee-cup' },
-        { key: 'cold-drink', label: 'el-icon-cold-drink' },
-        { key: 'goblet', label: 'el-icon-goblet' },
-        { key: 'goblet-full', label: 'el-icon-goblet-full' },
-        { key: 'goblet-square', label: 'el-icon-goblet-square' },
-        { key: 'goblet-square-full', label: 'el-icon-goblet-square-full' },
-        { key: 'refrigerator', label: 'el-icon-refrigerator' },
-        { key: 'grape', label: 'el-icon-grape' },
-        { key: 'watermelon', label: 'el-icon-watermelon' },
-        { key: 'cherry', label: 'el-icon-cherry' },
-        { key: 'apple', label: 'el-icon-apple' },
-        { key: 'pear', label: 'el-icon-pear' },
-        { key: 'orange', label: 'el-icon-orange' },
-        { key: 'coffee', label: 'el-icon-coffee' },
-        { key: 'ice-tea', label: 'el-icon-ice-tea' },
-        { key: 'ice-drink', label: 'el-icon-ice-drink' },
-        { key: 'potato-strips', label: 'el-icon-potato-strips' },
-        { key: 'lollipop', label: 'el-icon-lollipop' },
-        { key: 'ice-cream-square', label: 'el-icon-ice-cream-square' },
-        { key: 'ice-cream-round', label: 'el-icon-ice-cream-round' }
+        {
+          'key': 'add-location',
+          'label': 'add-location'
+        },
+        {
+          'key': 'apple',
+          'label': 'apple'
+        },
+        {
+          'key': 'alarm-clock',
+          'label': 'alarm-clock'
+        },
+        {
+          'key': 'arrow-down',
+          'label': 'arrow-down'
+        },
+        {
+          'key': 'arrow-down-bold',
+          'label': 'arrow-down-bold'
+        },
+        {
+          'key': 'arrow-left',
+          'label': 'arrow-left'
+        },
+        {
+          'key': 'arrow-left-bold',
+          'label': 'arrow-left-bold'
+        },
+        {
+          'key': 'arrow-right-bold',
+          'label': 'arrow-right-bold'
+        },
+        {
+          'key': 'arrow-up',
+          'label': 'arrow-up'
+        },
+        {
+          'key': 'back',
+          'label': 'back'
+        },
+        {
+          'key': 'bell',
+          'label': 'bell'
+        },
+        {
+          'key': 'baseball',
+          'label': 'baseball'
+        },
+        {
+          'key': 'bicycle',
+          'label': 'bicycle'
+        },
+        {
+          'key': 'bell-filled',
+          'label': 'bell-filled'
+        },
+        {
+          'key': 'basketball',
+          'label': 'basketball'
+        },
+        {
+          'key': 'bottom',
+          'label': 'bottom'
+        },
+        {
+          'key': 'box',
+          'label': 'box'
+        },
+        {
+          'key': 'briefcase',
+          'label': 'briefcase'
+        },
+        {
+          'key': 'brush-filled',
+          'label': 'brush-filled'
+        },
+        {
+          'key': 'bowl',
+          'label': 'bowl'
+        },
+        {
+          'key': 'avatar',
+          'label': 'avatar'
+        },
+        {
+          'key': 'brush',
+          'label': 'brush'
+        },
+        {
+          'key': 'burger',
+          'label': 'burger'
+        },
+        {
+          'key': 'camera',
+          'label': 'camera'
+        },
+        {
+          'key': 'bottom-left',
+          'label': 'bottom-left'
+        },
+        {
+          'key': 'calendar',
+          'label': 'calendar'
+        },
+        {
+          'key': 'caret-bottom',
+          'label': 'caret-bottom'
+        },
+        {
+          'key': 'caret-left',
+          'label': 'caret-left'
+        },
+        {
+          'key': 'caret-right',
+          'label': 'caret-right'
+        },
+        {
+          'key': 'caret-top',
+          'label': 'caret-top'
+        },
+        {
+          'key': 'chat-dot-square',
+          'label': 'chat-dot-square'
+        },
+        {
+          'key': 'cellphone',
+          'label': 'cellphone'
+        },
+        {
+          'key': 'chat-dot-round',
+          'label': 'chat-dot-round'
+        },
+        {
+          'key': 'chat-line-square',
+          'label': 'chat-line-square'
+        },
+        {
+          'key': 'chat-line-round',
+          'label': 'chat-line-round'
+        },
+        {
+          'key': 'chat-round',
+          'label': 'chat-round'
+        },
+        {
+          'key': 'check',
+          'label': 'check'
+        },
+        {
+          'key': 'chat-square',
+          'label': 'chat-square'
+        },
+        {
+          'key': 'cherry',
+          'label': 'cherry'
+        },
+        {
+          'key': 'chicken',
+          'label': 'chicken'
+        },
+        {
+          'key': 'circle-check-filled',
+          'label': 'circle-check-filled'
+        },
+        {
+          'key': 'circle-check',
+          'label': 'circle-check'
+        },
+        {
+          'key': 'checked',
+          'label': 'checked'
+        },
+        {
+          'key': 'circle-close-filled',
+          'label': 'circle-close-filled'
+        },
+        {
+          'key': 'circle-close',
+          'label': 'circle-close'
+        },
+        {
+          'key': 'arrow-right',
+          'label': 'arrow-right'
+        },
+        {
+          'key': 'circle-plus',
+          'label': 'circle-plus'
+        },
+        {
+          'key': 'clock',
+          'label': 'clock'
+        },
+        {
+          'key': 'close-bold',
+          'label': 'close-bold'
+        },
+        {
+          'key': 'close',
+          'label': 'close'
+        },
+        {
+          'key': 'cloudy',
+          'label': 'cloudy'
+        },
+        {
+          'key': 'circle-plus-filled',
+          'label': 'circle-plus-filled'
+        },
+        {
+          'key': 'coffee-cup',
+          'label': 'coffee-cup'
+        },
+        {
+          'key': 'cold-drink',
+          'label': 'cold-drink'
+        },
+        {
+          'key': 'coin',
+          'label': 'coin'
+        },
+        {
+          'key': 'arrow-up-bold',
+          'label': 'arrow-up-bold'
+        },
+        {
+          'key': 'collection-tag',
+          'label': 'collection-tag'
+        },
+        {
+          'key': 'bottom-right',
+          'label': 'bottom-right'
+        },
+        {
+          'key': 'coffee',
+          'label': 'coffee'
+        },
+        {
+          'key': 'camera-filled',
+          'label': 'camera-filled'
+        },
+        {
+          'key': 'collection',
+          'label': 'collection'
+        },
+        {
+          'key': 'cpu',
+          'label': 'cpu'
+        },
+        {
+          'key': 'crop',
+          'label': 'crop'
+        },
+        {
+          'key': 'coordinate',
+          'label': 'coordinate'
+        },
+        {
+          'key': 'd-arrow-left',
+          'label': 'd-arrow-left'
+        },
+        {
+          'key': 'compass',
+          'label': 'compass'
+        },
+        {
+          'key': 'connection',
+          'label': 'connection'
+        },
+        {
+          'key': 'credit-card',
+          'label': 'credit-card'
+        },
+        {
+          'key': 'data-board',
+          'label': 'data-board'
+        },
+        {
+          'key': 'd-arrow-right',
+          'label': 'd-arrow-right'
+        },
+        {
+          'key': 'dessert',
+          'label': 'dessert'
+        },
+        {
+          'key': 'delete-location',
+          'label': 'delete-location'
+        },
+        {
+          'key': 'd-caret',
+          'label': 'd-caret'
+        },
+        {
+          'key': 'delete',
+          'label': 'delete'
+        },
+        {
+          'key': 'dish',
+          'label': 'dish'
+        },
+        {
+          'key': 'dish-dot',
+          'label': 'dish-dot'
+        },
+        {
+          'key': 'document-copy',
+          'label': 'document-copy'
+        },
+        {
+          'key': 'discount',
+          'label': 'discount'
+        },
+        {
+          'key': 'document-checked',
+          'label': 'document-checked'
+        },
+        {
+          'key': 'document-add',
+          'label': 'document-add'
+        },
+        {
+          'key': 'document-remove',
+          'label': 'document-remove'
+        },
+        {
+          'key': 'data-analysis',
+          'label': 'data-analysis'
+        },
+        {
+          'key': 'delete-filled',
+          'label': 'delete-filled'
+        },
+        {
+          'key': 'download',
+          'label': 'download'
+        },
+        {
+          'key': 'drizzling',
+          'label': 'drizzling'
+        },
+        {
+          'key': 'eleme',
+          'label': 'eleme'
+        },
+        {
+          'key': 'eleme-filled',
+          'label': 'eleme-filled'
+        },
+        {
+          'key': 'edit',
+          'label': 'edit'
+        },
+        {
+          'key': 'failed',
+          'label': 'failed'
+        },
+        {
+          'key': 'expand',
+          'label': 'expand'
+        },
+        {
+          'key': 'female',
+          'label': 'female'
+        },
+        {
+          'key': 'document',
+          'label': 'document'
+        },
+        {
+          'key': 'film',
+          'label': 'film'
+        },
+        {
+          'key': 'finished',
+          'label': 'finished'
+        },
+        {
+          'key': 'data-line',
+          'label': 'data-line'
+        },
+        {
+          'key': 'filter',
+          'label': 'filter'
+        },
+        {
+          'key': 'flag',
+          'label': 'flag'
+        },
+        {
+          'key': 'folder-checked',
+          'label': 'folder-checked'
+        },
+        {
+          'key': 'first-aid-kit',
+          'label': 'first-aid-kit'
+        },
+        {
+          'key': 'folder-add',
+          'label': 'folder-add'
+        },
+        {
+          'key': 'fold',
+          'label': 'fold'
+        },
+        {
+          'key': 'folder-delete',
+          'label': 'folder-delete'
+        },
+        {
+          'key': 'document-delete',
+          'label': 'document-delete'
+        },
+        {
+          'key': 'folder',
+          'label': 'folder'
+        },
+        {
+          'key': 'food',
+          'label': 'food'
+        },
+        {
+          'key': 'folder-opened',
+          'label': 'folder-opened'
+        },
+        {
+          'key': 'football',
+          'label': 'football'
+        },
+        {
+          'key': 'folder-remove',
+          'label': 'folder-remove'
+        },
+        {
+          'key': 'fries',
+          'label': 'fries'
+        },
+        {
+          'key': 'full-screen',
+          'label': 'full-screen'
+        },
+        {
+          'key': 'fork-spoon',
+          'label': 'fork-spoon'
+        },
+        {
+          'key': 'goblet',
+          'label': 'goblet'
+        },
+        {
+          'key': 'goblet-full',
+          'label': 'goblet-full'
+        },
+        {
+          'key': 'goods',
+          'label': 'goods'
+        },
+        {
+          'key': 'goblet-square-full',
+          'label': 'goblet-square-full'
+        },
+        {
+          'key': 'goods-filled',
+          'label': 'goods-filled'
+        },
+        {
+          'key': 'grid',
+          'label': 'grid'
+        },
+        {
+          'key': 'grape',
+          'label': 'grape'
+        },
+        {
+          'key': 'goblet-square',
+          'label': 'goblet-square'
+        },
+        {
+          'key': 'headset',
+          'label': 'headset'
+        },
+        {
+          'key': 'comment',
+          'label': 'comment'
+        },
+        {
+          'key': 'help-filled',
+          'label': 'help-filled'
+        },
+        {
+          'key': 'histogram',
+          'label': 'histogram'
+        },
+        {
+          'key': 'home-filled',
+          'label': 'home-filled'
+        },
+        {
+          'key': 'help',
+          'label': 'help'
+        },
+        {
+          'key': 'house',
+          'label': 'house'
+        },
+        {
+          'key': 'ice-cream-round',
+          'label': 'ice-cream-round'
+        },
+        {
+          'key': 'hot-water',
+          'label': 'hot-water'
+        },
+        {
+          'key': 'ice-cream',
+          'label': 'ice-cream'
+        },
+        {
+          'key': 'files',
+          'label': 'files'
+        },
+        {
+          'key': 'ice-cream-square',
+          'label': 'ice-cream-square'
+        },
+        {
+          'key': 'key',
+          'label': 'key'
+        },
+        {
+          'key': 'ice-tea',
+          'label': 'ice-tea'
+        },
+        {
+          'key': 'knife-fork',
+          'label': 'knife-fork'
+        },
+        {
+          'key': 'iphone',
+          'label': 'iphone'
+        },
+        {
+          'key': 'info-filled',
+          'label': 'info-filled'
+        },
+        {
+          'key': 'link',
+          'label': 'link'
+        },
+        {
+          'key': 'ice-drink',
+          'label': 'ice-drink'
+        },
+        {
+          'key': 'lightning',
+          'label': 'lightning'
+        },
+        {
+          'key': 'loading',
+          'label': 'loading'
+        },
+        {
+          'key': 'lollipop',
+          'label': 'lollipop'
+        },
+        {
+          'key': 'location-information',
+          'label': 'location-information'
+        },
+        {
+          'key': 'lock',
+          'label': 'lock'
+        },
+        {
+          'key': 'location-filled',
+          'label': 'location-filled'
+        },
+        {
+          'key': 'magnet',
+          'label': 'magnet'
+        },
+        {
+          'key': 'male',
+          'label': 'male'
+        },
+        {
+          'key': 'location',
+          'label': 'location'
+        },
+        {
+          'key': 'menu',
+          'label': 'menu'
+        },
+        {
+          'key': 'magic-stick',
+          'label': 'magic-stick'
+        },
+        {
+          'key': 'message-box',
+          'label': 'message-box'
+        },
+        {
+          'key': 'map-location',
+          'label': 'map-location'
+        },
+        {
+          'key': 'mic',
+          'label': 'mic'
+        },
+        {
+          'key': 'message',
+          'label': 'message'
+        },
+        {
+          'key': 'medal',
+          'label': 'medal'
+        },
+        {
+          'key': 'milk-tea',
+          'label': 'milk-tea'
+        },
+        {
+          'key': 'microphone',
+          'label': 'microphone'
+        },
+        {
+          'key': 'minus',
+          'label': 'minus'
+        },
+        {
+          'key': 'money',
+          'label': 'money'
+        },
+        {
+          'key': 'moon-night',
+          'label': 'moon-night'
+        },
+        {
+          'key': 'monitor',
+          'label': 'monitor'
+        },
+        {
+          'key': 'moon',
+          'label': 'moon'
+        },
+        {
+          'key': 'more',
+          'label': 'more'
+        },
+        {
+          'key': 'mostly-cloudy',
+          'label': 'mostly-cloudy'
+        },
+        {
+          'key': 'more-filled',
+          'label': 'more-filled'
+        },
+        {
+          'key': 'mouse',
+          'label': 'mouse'
+        },
+        {
+          'key': 'mug',
+          'label': 'mug'
+        },
+        {
+          'key': 'mute',
+          'label': 'mute'
+        },
+        {
+          'key': 'no-smoking',
+          'label': 'no-smoking'
+        },
+        {
+          'key': 'mute-notification',
+          'label': 'mute-notification'
+        },
+        {
+          'key': 'notification',
+          'label': 'notification'
+        },
+        {
+          'key': 'notebook',
+          'label': 'notebook'
+        },
+        {
+          'key': 'odometer',
+          'label': 'odometer'
+        },
+        {
+          'key': 'office-building',
+          'label': 'office-building'
+        },
+        {
+          'key': 'operation',
+          'label': 'operation'
+        },
+        {
+          'key': 'opportunity',
+          'label': 'opportunity'
+        },
+        {
+          'key': 'orange',
+          'label': 'orange'
+        },
+        {
+          'key': 'open',
+          'label': 'open'
+        },
+        {
+          'key': 'paperclip',
+          'label': 'paperclip'
+        },
+        {
+          'key': 'pear',
+          'label': 'pear'
+        },
+        {
+          'key': 'partly-cloudy',
+          'label': 'partly-cloudy'
+        },
+        {
+          'key': 'phone',
+          'label': 'phone'
+        },
+        {
+          'key': 'picture-filled',
+          'label': 'picture-filled'
+        },
+        {
+          'key': 'phone-filled',
+          'label': 'phone-filled'
+        },
+        {
+          'key': 'picture-rounded',
+          'label': 'picture-rounded'
+        },
+        {
+          'key': 'guide',
+          'label': 'guide'
+        },
+        {
+          'key': 'place',
+          'label': 'place'
+        },
+        {
+          'key': 'platform',
+          'label': 'platform'
+        },
+        {
+          'key': 'pie-chart',
+          'label': 'pie-chart'
+        },
+        {
+          'key': 'pointer',
+          'label': 'pointer'
+        },
+        {
+          'key': 'plus',
+          'label': 'plus'
+        },
+        {
+          'key': 'position',
+          'label': 'position'
+        },
+        {
+          'key': 'postcard',
+          'label': 'postcard'
+        },
+        {
+          'key': 'present',
+          'label': 'present'
+        },
+        {
+          'key': 'price-tag',
+          'label': 'price-tag'
+        },
+        {
+          'key': 'promotion',
+          'label': 'promotion'
+        },
+        {
+          'key': 'pouring',
+          'label': 'pouring'
+        },
+        {
+          'key': 'reading-lamp',
+          'label': 'reading-lamp'
+        },
+        {
+          'key': 'question-filled',
+          'label': 'question-filled'
+        },
+        {
+          'key': 'printer',
+          'label': 'printer'
+        },
+        {
+          'key': 'picture',
+          'label': 'picture'
+        },
+        {
+          'key': 'refresh-right',
+          'label': 'refresh-right'
+        },
+        {
+          'key': 'reading',
+          'label': 'reading'
+        },
+        {
+          'key': 'refresh-left',
+          'label': 'refresh-left'
+        },
+        {
+          'key': 'refresh',
+          'label': 'refresh'
+        },
+        {
+          'key': 'refrigerator',
+          'label': 'refrigerator'
+        },
+        {
+          'key': 'remove-filled',
+          'label': 'remove-filled'
+        },
+        {
+          'key': 'right',
+          'label': 'right'
+        },
+        {
+          'key': 'scale-to-original',
+          'label': 'scale-to-original'
+        },
+        {
+          'key': 'school',
+          'label': 'school'
+        },
+        {
+          'key': 'remove',
+          'label': 'remove'
+        },
+        {
+          'key': 'scissor',
+          'label': 'scissor'
+        },
+        {
+          'key': 'select',
+          'label': 'select'
+        },
+        {
+          'key': 'management',
+          'label': 'management'
+        },
+        {
+          'key': 'search',
+          'label': 'search'
+        },
+        {
+          'key': 'sell',
+          'label': 'sell'
+        },
+        {
+          'key': 'semi-select',
+          'label': 'semi-select'
+        },
+        {
+          'key': 'share',
+          'label': 'share'
+        },
+        {
+          'key': 'setting',
+          'label': 'setting'
+        },
+        {
+          'key': 'service',
+          'label': 'service'
+        },
+        {
+          'key': 'ship',
+          'label': 'ship'
+        },
+        {
+          'key': 'set-up',
+          'label': 'set-up'
+        },
+        {
+          'key': 'shopping-bag',
+          'label': 'shopping-bag'
+        },
+        {
+          'key': 'shop',
+          'label': 'shop'
+        },
+        {
+          'key': 'shopping-cart',
+          'label': 'shopping-cart'
+        },
+        {
+          'key': 'shopping-cart-full',
+          'label': 'shopping-cart-full'
+        },
+        {
+          'key': 'soccer',
+          'label': 'soccer'
+        },
+        {
+          'key': 'sold-out',
+          'label': 'sold-out'
+        },
+        {
+          'key': 'smoking',
+          'label': 'smoking'
+        },
+        {
+          'key': 'sort-down',
+          'label': 'sort-down'
+        },
+        {
+          'key': 'sort',
+          'label': 'sort'
+        },
+        {
+          'key': 'sort-up',
+          'label': 'sort-up'
+        },
+        {
+          'key': 'star',
+          'label': 'star'
+        },
+        {
+          'key': 'stamp',
+          'label': 'stamp'
+        },
+        {
+          'key': 'star-filled',
+          'label': 'star-filled'
+        },
+        {
+          'key': 'stopwatch',
+          'label': 'stopwatch'
+        },
+        {
+          'key': 'success-filled',
+          'label': 'success-filled'
+        },
+        {
+          'key': 'suitcase',
+          'label': 'suitcase'
+        },
+        {
+          'key': 'sugar',
+          'label': 'sugar'
+        },
+        {
+          'key': 'sunny',
+          'label': 'sunny'
+        },
+        {
+          'key': 'sunrise',
+          'label': 'sunrise'
+        },
+        {
+          'key': 'switch',
+          'label': 'switch'
+        },
+        {
+          'key': 'ticket',
+          'label': 'ticket'
+        },
+        {
+          'key': 'sunset',
+          'label': 'sunset'
+        },
+        {
+          'key': 'tickets',
+          'label': 'tickets'
+        },
+        {
+          'key': 'switch-button',
+          'label': 'switch-button'
+        },
+        {
+          'key': 'takeaway-box',
+          'label': 'takeaway-box'
+        },
+        {
+          'key': 'toilet-paper',
+          'label': 'toilet-paper'
+        },
+        {
+          'key': 'timer',
+          'label': 'timer'
+        },
+        {
+          'key': 'tools',
+          'label': 'tools'
+        },
+        {
+          'key': 'top-left',
+          'label': 'top-left'
+        },
+        {
+          'key': 'top',
+          'label': 'top'
+        },
+        {
+          'key': 'top-right',
+          'label': 'top-right'
+        },
+        {
+          'key': 'trend-charts',
+          'label': 'trend-charts'
+        },
+        {
+          'key': 'turn-off',
+          'label': 'turn-off'
+        },
+        {
+          'key': 'unlock',
+          'label': 'unlock'
+        },
+        {
+          'key': 'trophy',
+          'label': 'trophy'
+        },
+        {
+          'key': 'umbrella',
+          'label': 'umbrella'
+        },
+        {
+          'key': 'upload-filled',
+          'label': 'upload-filled'
+        },
+        {
+          'key': 'user-filled',
+          'label': 'user-filled'
+        },
+        {
+          'key': 'upload',
+          'label': 'upload'
+        },
+        {
+          'key': 'user',
+          'label': 'user'
+        },
+        {
+          'key': 'van',
+          'label': 'van'
+        },
+        {
+          'key': 'copy-document',
+          'label': 'copy-document'
+        },
+        {
+          'key': 'video-pause',
+          'label': 'video-pause'
+        },
+        {
+          'key': 'video-camera-filled',
+          'label': 'video-camera-filled'
+        },
+        {
+          'key': 'view',
+          'label': 'view'
+        },
+        {
+          'key': 'wallet',
+          'label': 'wallet'
+        },
+        {
+          'key': 'warning-filled',
+          'label': 'warning-filled'
+        },
+        {
+          'key': 'watch',
+          'label': 'watch'
+        },
+        {
+          'key': 'video-play',
+          'label': 'video-play'
+        },
+        {
+          'key': 'watermelon',
+          'label': 'watermelon'
+        },
+        {
+          'key': 'video-camera',
+          'label': 'video-camera'
+        },
+        {
+          'key': 'wallet-filled',
+          'label': 'wallet-filled'
+        },
+        {
+          'key': 'warning',
+          'label': 'warning'
+        },
+        {
+          'key': 'list',
+          'label': 'list'
+        },
+        {
+          'key': 'zoom-in',
+          'label': 'zoom-in'
+        },
+        {
+          'key': 'zoom-out',
+          'label': 'zoom-out'
+        },
+        {
+          'key': 'rank',
+          'label': 'rank'
+        },
+        {
+          'key': 'wind-power',
+          'label': 'wind-power'
+        }
       ],
       value: ''
     }

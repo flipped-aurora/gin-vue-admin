@@ -23,8 +23,10 @@
                   <el-row class="pd-0">
                     <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
                       <div class="menu-total" @click="totalCollapse">
-                        <i v-if="isCollapse" class="el-icon-s-unfold" />
-                        <i v-else class="el-icon-s-fold" />
+                        <el-icon v-if="isCollapse" size="24"><expand /></el-icon>
+                        <el-icon v-else size="24">
+                          <fold />
+                        </el-icon>
                       </div>
                     </el-col>
                     <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
@@ -38,13 +40,14 @@
                     <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
                       <div class="right-box">
                         <Search />
-                        <Screenfull class="screenfull" :style="{cursor:'pointer'}" />
                         <el-dropdown>
                           <div class="dp-flex justify-content-center align-items height-full width-full">
                             <span class="header-avatar" style="cursor: pointer">
                               <CustomPic />
                               <span style="margin-left: 5px">{{ userInfo.nickName }}</span>
-                              <i class="el-icon-arrow-down" />
+                              <el-icon>
+                                <arrow-down />
+                              </el-icon>
                             </span>
                           </div>
                           <template #dropdown>
@@ -61,8 +64,8 @@
                                   </span>
                                 </el-dropdown-item>
                               </template>
-                              <el-dropdown-item icon="el-icon-s-custom" @click="toPerson">个人信息</el-dropdown-item>
-                              <el-dropdown-item icon="el-icon-table-lamp" @click="LoginOut">登 出</el-dropdown-item>
+                              <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
+                              <el-dropdown-item icon="reading-lamp" @click="LoginOut">登 出</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>
                         </el-dropdown>
@@ -96,7 +99,6 @@
 <script>
 import Aside from '@/view/layout/aside/index.vue'
 import HistoryComponent from '@/view/layout/aside/historyComponent/history.vue'
-import Screenfull from '@/view/layout/screenfull/index.vue'
 import Search from '@/view/layout/search/search.vue'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import { mapGetters, mapActions } from 'vuex'
@@ -109,7 +111,6 @@ export default {
   components: {
     Aside,
     HistoryComponent,
-    Screenfull,
     Search,
     BottomInfo,
     CustomPic,

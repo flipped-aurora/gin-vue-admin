@@ -15,14 +15,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-button size="mini" icon="el-icon-refresh" @click="onReset">重置</el-button>
+          <el-button size="mini" type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button size="mini" icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增字典项</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -48,7 +48,7 @@
 
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
-            <el-button size="small" type="text" icon="el-icon-edit" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
             <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
@@ -56,7 +56,7 @@
                 <el-button type="primary" size="mini" @click="deleteSysDictionaryDetail(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="el-icon-delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="mini">删除</el-button>
               </template>
             </el-popover>
           </template>

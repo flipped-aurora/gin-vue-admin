@@ -7,7 +7,9 @@
           <template #title>
             <div :style="{fontSize:'16px',paddingLeft:'20px'}">
               点这里从现有数据库创建代码
-              <i class="header-icon el-icon-thumb" />
+              <el-icon class="header-icon ">
+                <pointer />
+              </el-icon>
             </div>
           </template>
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
@@ -101,7 +103,7 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-edit"
+              icon="edit"
               @click="editAndAddField(scope.row)"
             >编辑</el-button>
             <el-button
@@ -123,7 +125,7 @@
                 <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
               </div>
               <template #reference>
-                <el-button size="mini" type="text" icon="el-icon-delete">删除</el-button>
+                <el-button size="mini" type="text" icon="delete">删除</el-button>
               </template>
             </el-popover>
           </template>

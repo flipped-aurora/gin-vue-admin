@@ -8,8 +8,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type JwtApi struct {
-}
+type JwtApi struct{}
 
 // @Tags Jwt
 // @Summary jwt加入黑名单

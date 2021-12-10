@@ -15,10 +15,12 @@ type mockJob struct{}
 func (job mockJob) Run() {
 	mockFunc()
 }
+
 func mockFunc() {
 	time.Sleep(time.Second)
 	fmt.Println("1s...")
 }
+
 func TestNewTimerTask(t *testing.T) {
 	tm := NewTimerTask()
 	_tm := tm.(*timer)

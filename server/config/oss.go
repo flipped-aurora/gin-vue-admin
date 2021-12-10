@@ -22,6 +22,7 @@ type AliyunOSS struct {
 	BucketUrl       string `mapstructure:"bucket-url" json:"bucketUrl" yaml:"bucket-url"`
 	BasePath        string `mapstructure:"base-path" json:"basePath" yaml:"base-path"`
 }
+
 type TencentCOS struct {
 	Bucket     string `mapstructure:"bucket" json:"bucket" yaml:"bucket"`
 	Region     string `mapstructure:"region" json:"region" yaml:"region"`

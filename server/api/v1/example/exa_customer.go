@@ -11,8 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type CustomerApi struct {
-}
+type CustomerApi struct{}
 
 // @Tags ExaCustomer
 // @Summary 创建客户

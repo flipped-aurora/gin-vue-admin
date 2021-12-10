@@ -11,13 +11,16 @@ type Server struct {
 	// auto
 	AutoCode Autocode `mapstructure:"autoCode" json:"autoCode" yaml:"autoCode"`
 	// gorm
-	Mysql Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
-	Pgsql Pgsql `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
+	Mysql  Mysql `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
+	Pgsql  Pgsql `mapstructure:"pgsql" json:"pgsql" yaml:"pgsql"`
+	DBList []DB  `mapstructure:"db-list" json:"db-list" yaml:"db-list"`
 	// oss
 	Local      Local      `mapstructure:"local" json:"local" yaml:"local"`
 	Qiniu      Qiniu      `mapstructure:"qiniu" json:"qiniu" yaml:"qiniu"`
 	AliyunOSS  AliyunOSS  `mapstructure:"aliyun-oss" json:"aliyunOSS" yaml:"aliyun-oss"`
+	HuaWeiObs  HuaWeiObs  `mapstructure:"hua-wei-obs" json:"huaWeiObs" yaml:"hua-wei-obs"`
 	TencentCOS TencentCOS `mapstructure:"tencent-cos" json:"tencentCOS" yaml:"tencent-cos"`
-	Excel      Excel      `mapstructure:"excel" json:"excel" yaml:"excel"`
-	Timer      Timer      `mapstructure:"timer" json:"timer" yaml:"timer"`
+
+	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
+	Timer Timer `mapstructure:"timer" json:"timer" yaml:"timer"`
 }

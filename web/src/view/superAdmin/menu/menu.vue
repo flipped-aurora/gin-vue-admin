@@ -2,7 +2,7 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-plus" @click="addMenu('0')">新增根菜单</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="addMenu('0')">新增根菜单</el-button>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -25,8 +25,12 @@
         </el-table-column>
         <el-table-column align="left" label="图标" min-width="140" prop="authorityName">
           <template #default="scope">
-            <i :class="`el-icon-${scope.row.meta.icon}`" />
-            <span>{{ scope.row.meta.icon }}</span>
+            <div class="icon-column">
+              <el-icon>
+                <component :is="scope.row.meta.icon" />
+              </el-icon>
+              <span>{{ scope.row.meta.icon }}</span>
+            </div>
           </template>
         </el-table-column>
         <el-table-column align="left" fixed="right" label="操作" width="300">
@@ -34,19 +38,19 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-plus"
+              icon="plus"
               @click="addMenu(scope.row.ID)"
             >添加子菜单</el-button>
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-edit"
+              icon="edit"
               @click="editMenu(scope.row.ID)"
             >编辑</el-button>
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-delete"
+              icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >删除</el-button>
           </template>
@@ -134,7 +138,7 @@
         <el-button
           size="small"
           type="primary"
-          icon="el-icon-edit"
+          icon="edit"
           @click="addParameter(form)"
         >新增菜单参数</el-button>
         <el-table :data="form.parameters" style="width: 100%">
@@ -166,7 +170,7 @@
                 <el-button
                   type="danger"
                   size="small"
-                  icon="el-icon-delete"
+                  icon="delete"
                   @click="deleteParameter(form.parameters,scope.$index)"
                 >删除</el-button>
               </div>
@@ -402,5 +406,12 @@ export default {
 <style scoped lang="scss">
 .warning {
   color: #dc143c;
+}
+.icon-column{
+  display: flex;
+  align-items: center;
+  .el-icon{
+    margin-right: 8px;
+  }
 }
 </style>

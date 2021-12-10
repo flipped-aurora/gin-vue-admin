@@ -37,6 +37,7 @@ func (v *viewAuthorityMenuMysql) Initialize() error {
 		   @menus.keep_alive        AS keep_alive,
 		   @menus.menu_level        AS menu_level,
 		   @menus.default_menu      AS default_menu,
+		   @menus.close_tab      	AS close_tab,
 		   @authorities_menus.sys_base_menu_id      AS menu_id,
 		   @authorities_menus.sys_authority_authority_id AS authority_id
 	from (@authorities_menus

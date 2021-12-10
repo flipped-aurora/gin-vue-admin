@@ -10,7 +10,7 @@
       >
         <template #error>
           <div class="header-img-box-list">
-            <i class="el-icon-picture-outline" />
+            <el-icon><picture /></el-icon>
           </div>
         </template>
       </el-image>

@@ -12,8 +12,8 @@
           <el-input v-model="searchInfo.status" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-button size="mini" icon="el-icon-refresh" @click="onReset">重置</el-button>
+          <el-button size="mini" type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button size="mini" icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -27,7 +27,7 @@
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="el-icon-delete" size="mini" style="margin-left: 10px;" :disabled="!multipleSelection.length">删除</el-button>
+            <el-button icon="delete" size="mini" style="margin-left: 10px;" :disabled="!multipleSelection.length">删除</el-button>
           </template>
         </el-popover>
       </div>
@@ -66,7 +66,9 @@
                   <pre>{{ fmtBody(scope.row.body) }}</pre>
                 </div>
                 <template #reference>
-                  <i class="el-icon-view" />
+                  <el-icon>
+                    <view />
+                  </el-icon>
                 </template>
               </el-popover>
 
@@ -82,7 +84,9 @@
                   <pre>{{ fmtBody(scope.row.resp) }}</pre>
                 </div>
                 <template #reference>
-                  <i class="el-icon-view" />
+                  <el-icon>
+                    <view />
+                  </el-icon>
                 </template>
               </el-popover>
               <span v-else>无</span>
@@ -98,7 +102,7 @@
                 <el-button size="mini" type="primary" @click="deleteSysOperationRecord(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button icon="el-icon-delete" size="mini" type="text">删除</el-button>
+                <el-button icon="delete" size="mini" type="text">删除</el-button>
               </template>
             </el-popover>
           </template>

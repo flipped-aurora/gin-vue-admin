@@ -3,7 +3,7 @@
     <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog">新增</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="openDialog">新增</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -23,7 +23,7 @@
         <el-table-column align="left" label="接入人ID" prop="sysUserId" width="120" />
         <el-table-column align="left" label="按钮组" min-width="160">
           <template #default="scope">
-            <el-button size="small" type="text" icon="el-icon-edit" @click="updateCustomer(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
@@ -31,7 +31,7 @@
                 <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="el-icon-delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="mini">删除</el-button>
               </template>
             </el-popover>
           </template>

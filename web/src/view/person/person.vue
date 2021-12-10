@@ -6,34 +6,56 @@
           <div class="user-card">
             <div class="user-headpic-update" :style="{ 'background-image': `url(${(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg})`,'background-repeat':'no-repeat','background-size':'cover' }">
               <span class="update" @click="openChooseImg">
-                <i class="el-icon-edit" />
+                <el-icon>
+                  <edit />
+                </el-icon>
                 重新上传</span>
             </div>
             <div class="user-personality">
-              <p v-if="!editFlag" class="nickName">{{ userInfo.nickName }} <i class="el-icon-edit pointer" style="color:#66b1ff" @click="openEidt" /></p>
+              <p v-if="!editFlag" class="nickName">{{ userInfo.nickName }}
+                <el-icon class="pointer" color="#66b1ff" @click="openEidt">
+                  <edit />
+                </el-icon>
+              </p>
               <p v-if="editFlag" class="nickName">
                 <el-input v-model="nickName" />
-                <i class="el-icon-check pointer" style="color:#67c23a" @click="enterEdit" />
-                <i class="el-icon-close pointer" style="color:#f23c3c" @click="closeEdit" />
+                <el-icon class="pointer" color="#67c23a" @click="enterEdit">
+                  <check />
+                </el-icon>
+                <el-icon class="pointer" color="#f23c3c" @click="closeEdit">
+                  <close />
+                </el-icon>
               </p>
               <p class="person-info">这个家伙很懒，什么都没有留下</p>
             </div>
             <div class="user-information">
               <ul>
                 <li>
-                  <i class="el-icon-user" />{{ userInfo.nickName }}
+                  <el-icon>
+                    <user />
+                  </el-icon>
+                  {{ userInfo.nickName }}
                 </li>
                 <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="top">
                   <li>
-                    <i class="el-icon-data-analysis" />北京反转极光科技有限公司-技术部-前端事业群
+                    <el-icon>
+                      <data-analysis />
+                    </el-icon>
+                    北京反转极光科技有限公司-技术部-前端事业群
                   </li>
                 </el-tooltip>
                 <li>
-                  <i class="el-icon-video-camera-solid" />中国·北京市·朝阳区
+                  <el-icon>
+                    <video-camera />
+                  </el-icon>
+                  中国·北京市·朝阳区
                 </li>
                 <el-tooltip class="item" effect="light" content="GoLang/JavaScript/Vue/Gorm" placement="top">
                   <li>
-                    <i class="el-icon-medal-1" />GoLang/JavaScript/Vue/Gorm
+                    <el-icon>
+                      <medal />
+                    </el-icon>
+                    GoLang/JavaScript/Vue/Gorm
                   </li>
                 </el-tooltip>
 

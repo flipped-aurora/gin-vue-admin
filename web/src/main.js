@@ -16,6 +16,7 @@ import { store } from '@/store/index'
 import App from './App.vue'
 const app = createApp(App)
 app.config.productionTip = false
+
 app.use(run)
   .use(auth)
   .use(store)

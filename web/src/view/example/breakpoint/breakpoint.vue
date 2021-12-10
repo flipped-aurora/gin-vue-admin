@@ -13,7 +13,9 @@
       <div class="list">
         <transition name="list" tag="p">
           <div v-if="file" class="list-item">
-            <i class="el-icon-document" />
+            <el-icon>
+              <document />
+            </el-icon>
             <span>{{ file.name }}</span>
             <span class="percentage">{{ percentage }}%</span>
             <el-progress :show-text="false" :text-inside="false" :stroke-width="2" :percentage="percentage" />

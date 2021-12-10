@@ -19,7 +19,11 @@
           <el-form-item prop="username">
             <el-input v-model="loginForm.username" placeholder="请输入用户名">
               <template #suffix>
-                <i class="el-input__icon el-icon-user" />
+                <span class="input-icon">
+                  <el-icon>
+                    <user />
+                  </el-icon>
+                </span>
               </template>
             </el-input>
           </el-form-item>
@@ -30,10 +34,9 @@
               placeholder="请输入密码"
             >
               <template #suffix>
-                <i
-                  :class="'el-input__icon el-icon-' + lock"
-                  @click="changeLock"
-                />
+                <span class="input-icon">
+                  <el-icon><component :is="lock" @click="changeLock" /></el-icon>
+                </span>
               </template>
             </el-input>
           </el-form-item>
@@ -97,6 +100,9 @@ import { checkDB } from '@/api/initdb'
 import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 export default {
   name: 'Login',
+  components: {
+    bootomInfo
+  },
   data() {
     const checkUsername = (rule, value, callback) => {
       if (value.length < 5) {
@@ -132,9 +138,6 @@ export default {
       logVerify: '',
       picPath: ''
     }
-  },
-  components:{
-    bootomInfo
   },
   created() {
     this.loginVerify()

@@ -3,7 +3,7 @@
     <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-plus" @click="addUser">新增用户</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="addUser">新增用户</el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column align="left" label="头像" min-width="50">
@@ -15,11 +15,19 @@
         <el-table-column align="left" label="用户名" min-width="150" prop="userName" />
         <el-table-column align="left" label="昵称" min-width="100" prop="nickName">
           <template #default="scope">
-            <p v-if="!scope.row.editFlag" class="nickName">{{ scope.row.nickName }} <i class="el-icon-edit pointer" style="color:#66b1ff" @click="openEidt(scope.row)" /></p>
+            <p v-if="!scope.row.editFlag" class="nickName">{{ scope.row.nickName }}
+              <el-icon class="pointer" color="#66b1ff" @click="openEidt(scope.row)">
+                <edit />
+              </el-icon>
+            </p>
             <p v-if="scope.row.editFlag" class="nickName">
               <el-input v-model="scope.row.nickName" />
-              <i class="el-icon-check pointer" style="color:#67c23a" @click="enterEdit(scope.row)" />
-              <i class="el-icon-close pointer" style="color:#f23c3c" @click="closeEdit(scope.row)" />
+              <el-icon class="pointer" color="#67c23a" @click="enterEdit(scope.row)">
+                <check />
+              </el-icon>
+              <el-icon class="pointer" color="#f23c3c" @click="closeEdit(scope.row)">
+                <close />
+              </el-icon>
             </p>
           </template>
         </el-table-column>
@@ -46,10 +54,10 @@
                 <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="el-icon-delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="mini">删除</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="el-icon-magic-stick" size="mini" @click="resetPassword(scope.row)">重置密码</el-button>
+            <el-button type="text" icon="magic-stick" size="mini" @click="resetPassword(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>

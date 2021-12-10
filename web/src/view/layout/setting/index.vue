@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="primary" class="drawer-container" icon="el-icon-setting" @click="showSettingDrawer" />
+    <el-button type="primary" class="drawer-container" icon="setting" @click="showSettingDrawer" />
     <el-drawer
       v-model="drawer"
       title="系统配置"
@@ -13,7 +13,9 @@
             <div class="theme-box">
               <div class="item" @click="changeMode('light')">
                 <div class="item-top">
-                  <i v-if="mode === 'light'" class="el-icon-check check" />
+                  <el-icon v-if="mode === 'light'" class="check">
+                    <check />
+                  </el-icon>
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg">
                 </div>
                 <p>
@@ -22,7 +24,9 @@
               </div>
               <div class="item" @click="changeMode('dark')">
                 <div class="item-top">
-                  <i v-if="mode === 'dark'" class="el-icon-check check" />
+                  <el-icon v-if="mode === 'dark'" class="check">
+                    <check />
+                  </el-icon>
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg">
                 </div>
                 <p>

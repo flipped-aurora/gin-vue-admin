@@ -36,6 +36,7 @@ func (a *viewAuthorityMenuPostgres) Initialize() error {
 		   @menus.deleted_at               as deleted_at,
 		   @menus.menu_level               as menu_level,
 		   @menus.default_menu             as default_menu,
+		   @menus.close_tab                as close_tab,
 		   @authorities_menus.sys_base_menu_id      as menu_id,
 		   @authorities_menus.sys_authority_authority_id as authority_id
 	from (@authorities_menus join @menus on ((@authorities_menus.sys_base_menu_id = @menus.id)));`

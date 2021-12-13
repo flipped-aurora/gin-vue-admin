@@ -40,25 +40,8 @@
           />
         </el-select>
       </el-form-item>
-
-      <el-form-item label="数据库字段类型" prop="dataType">
-        <el-select
-          v-model="middleDate.dataType"
-          style="width:100%"
-          :disabled="!middleDate.fieldType"
-          placeholder="请选择数据库字段类型"
-          clearable
-        >
-          <el-option
-            v-for="item in dbfdOptions"
-            :key="item.label"
-            :label="item.label"
-            :value="item.label"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="数据库字段长度" prop="dataTypeLong">
-        <el-input v-model="middleDate.dataTypeLong" placeholder="自定义类型必须指定长度" :disabled="!middleDate.dataType" />
+      <el-form-item label="类型长度" prop="dataTypeLong">
+        <el-input v-model="middleDate.dataTypeLong" placeholder="数据库类型长度" />
       </el-form-item>
       <el-form-item label="Field查询条件" prop="fieldSearchType">
         <el-select
@@ -97,7 +80,6 @@
 </template>
 
 <script>
-import { getDict } from '@/utils/dictionary'
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import warningBar from '@/components/warningBar/warningBar.vue'
@@ -116,7 +98,6 @@ export default {
   data() {
     return {
       middleDate: {},
-      dbfdOptions: [],
       dictOptions: [],
       typeSearchOptions: [
         {
@@ -189,25 +170,12 @@ export default {
     })
 
     this.dictOptions = dictRes.data.list
-    this.getDict()
   },
   methods: {
     autoFill() {
       this.middleDate.fieldJson = toLowerCase(this.middleDate.fieldName)
       this.middleDate.columnName = toSQLLine(this.middleDate.fieldJson)
     },
-    async getDbfdOptions() {
-      this.middleDate.dataType = ''
-      this.middleDate.dataTypeLong = ''
-      this.middleDate.fieldSearchType = ''
-      this.middleDate.dictType = ''
-      this.getDict()
-    },
-    async getDict() {
-      if (this.middleDate.fieldType) {
-        this.dbfdOptions = await getDict(this.middleDate.fieldType)
-      }
-    }
   }
 }
 </script>

@@ -13,8 +13,7 @@ import (
 //@description: 读取配置文件
 //@return: err error, conf config.Server
 
-type SystemConfigService struct {
-}
+type SystemConfigService struct{}
 
 func (systemConfigService *SystemConfigService) GetSystemConfig() (err error, conf config.Server) {
 	return nil, global.GVA_CONFIG

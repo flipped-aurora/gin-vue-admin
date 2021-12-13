@@ -9,8 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type ExcelApi struct {
-}
+type ExcelApi struct{}
 
 // /excel/importExcel 接口，与upload接口作用类似，只是把文件存到resource/excel目录下，用于导入Excel时存放Excel文件(ExcelImport.xlsx)
 // /excel/loadExcel接口，用于读取resource/excel目录下的文件((ExcelImport.xlsx)并加载为[]model.SysBaseMenu类型的示例数据

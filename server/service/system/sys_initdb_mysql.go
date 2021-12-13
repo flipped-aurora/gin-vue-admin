@@ -2,6 +2,8 @@ package system
 
 import (
 	"fmt"
+	"path/filepath"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -12,7 +14,6 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"path/filepath"
 )
 
 // writeMysqlConfig mysql回写配置

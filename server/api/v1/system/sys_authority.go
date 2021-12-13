@@ -13,8 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type AuthorityApi struct {
-}
+type AuthorityApi struct{}
 
 // @Tags Authority
 // @Summary 创建角色

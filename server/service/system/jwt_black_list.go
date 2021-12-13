@@ -2,15 +2,15 @@ package system
 
 import (
 	"context"
-	"go.uber.org/zap"
 	"time"
+
+	"go.uber.org/zap"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 )
 
-type JwtService struct {
-}
+type JwtService struct{}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: JsonInBlacklist
@@ -36,9 +36,9 @@ func (jwtService *JwtService) JsonInBlacklist(jwtList system.JwtBlacklist) (err 
 func (jwtService *JwtService) IsBlacklist(jwt string) bool {
 	_, ok := global.BlackCache.Get(jwt)
 	return ok
-	//err := global.GVA_DB.Where("jwt = ?", jwt).First(&system.JwtBlacklist{}).Error
-	//isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
-	//return !isNotFound
+	// err := global.GVA_DB.Where("jwt = ?", jwt).First(&system.JwtBlacklist{}).Error
+	// isNotFound := errors.Is(err, gorm.ErrRecordNotFound)
+	// return !isNotFound
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

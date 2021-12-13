@@ -6,13 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CustomerRouter struct {
-}
+type CustomerRouter struct{}
 
 func (e *CustomerRouter) InitCustomerRouter(Router *gin.RouterGroup) {
 	customerRouter := Router.Group("customer").Use(middleware.OperationRecord())
 	customerRouterWithoutRecord := Router.Group("customer")
-	var exaCustomerApi = v1.ApiGroupApp.ExampleApiGroup.CustomerApi
+	exaCustomerApi := v1.ApiGroupApp.ExampleApiGroup.CustomerApi
 	{
 		customerRouter.POST("customer", exaCustomerApi.CreateExaCustomer)   // 创建客户
 		customerRouter.PUT("customer", exaCustomerApi.UpdateExaCustomer)    // 更新客户

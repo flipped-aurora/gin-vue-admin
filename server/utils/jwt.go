@@ -2,10 +2,11 @@ package utils
 
 import (
 	"errors"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"time"
 )
 
 type JWT struct {
@@ -79,7 +80,5 @@ func (j *JWT) ParseToken(tokenString string) (*request.CustomClaims, error) {
 
 	} else {
 		return nil, TokenInvalid
-
 	}
-
 }

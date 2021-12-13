@@ -6,13 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ApiRouter struct {
-}
+type ApiRouter struct{}
 
 func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup) {
 	apiRouter := Router.Group("api").Use(middleware.OperationRecord())
 	apiRouterWithoutRecord := Router.Group("api")
-	var apiRouterApi = v1.ApiGroupApp.SystemApiGroup.SystemApiApi
+	apiRouterApi := v1.ApiGroupApp.SystemApiGroup.SystemApiApi
 	{
 		apiRouter.POST("createApi", apiRouterApi.CreateApi)               // 创建Api
 		apiRouter.POST("deleteApi", apiRouterApi.DeleteApi)               // 删除Api

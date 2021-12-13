@@ -13,8 +13,7 @@ import (
 //@param: sysOperationRecord model.SysOperationRecord
 //@return: err error
 
-type OperationRecordService struct {
-}
+type OperationRecordService struct{}
 
 func (operationRecordService *OperationRecordService) CreateSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Create(&sysOperationRecord).Error

@@ -23,4 +23,7 @@ type Server struct {
 
 	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 	Timer Timer `mapstructure:"timer" json:"timer" yaml:"timer"`
+
+	// 跨域配置
+	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
 }

@@ -18,7 +18,7 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> 当前版本:V2.4.6 Apache`
+        `> 当前版本:V2.4.6 Beta.2`
       )
     )
     console.log(

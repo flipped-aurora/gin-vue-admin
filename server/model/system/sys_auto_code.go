@@ -21,7 +21,6 @@ type Field struct {
 	FieldDesc       string `json:"fieldDesc"`       // 中文名
 	FieldType       string `json:"fieldType"`       // Field数据类型
 	FieldJson       string `json:"fieldJson"`       // FieldJson
-	DataType        string `json:"dataType"`        // 数据库字段类型
 	DataTypeLong    string `json:"dataTypeLong"`    // 数据库字段长度
 	Comment         string `json:"comment"`         // 数据库字段描述
 	ColumnName      string `json:"columnName"`      // 数据库字段

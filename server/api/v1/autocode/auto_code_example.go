@@ -11,8 +11,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type AutoCodeExampleApi struct {
-}
+type AutoCodeExampleApi struct{}
 
 var autoCodeExampleService = service.ServiceGroupApp.AutoCodeServiceGroup.AutoCodeExampleService
 

@@ -2,10 +2,11 @@ package system
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
-	"strings"
 )
 
 var ViewAuthorityMenuMysql = new(viewAuthorityMenuMysql)

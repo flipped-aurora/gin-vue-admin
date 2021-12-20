@@ -66,9 +66,7 @@
                   <pre>{{ fmtBody(scope.row.body) }}</pre>
                 </div>
                 <template #reference>
-                  <el-icon>
-                    <view />
-                  </el-icon>
+                  <el-icon style="cursor: pointer;"><warning /></el-icon>
                 </template>
               </el-popover>
 
@@ -84,9 +82,7 @@
                   <pre>{{ fmtBody(scope.row.resp) }}</pre>
                 </div>
                 <template #reference>
-                  <el-icon>
-                    <view />
-                  </el-icon>
+                  <el-icon style="cursor: pointer;"><warning /></el-icon>
                 </template>
               </el-popover>
               <span v-else>无</span>

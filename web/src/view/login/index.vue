@@ -73,16 +73,16 @@
       <div class="login_panle_right" />
       <div class="login_panle_foot">
         <div class="links">
-          <a href="http://doc.henrongyi.top/">
+          <a href="http://doc.henrongyi.top/" target="_blank">
             <img src="@/assets/docs.png" class="link-icon">
           </a>
-          <a href="https://www.yuque.com/flipped-aurora/">
-            <img src="@/assets/yuque.png" class="link-icon">
+          <a href="https://support.qq.com/product/371961" target="_blank">
+            <img src="@/assets/kefu.png" class="link-icon">
           </a>
-          <a href="https://github.com/flipped-aurora/gin-vue-admin">
+          <a href="https://github.com/flipped-aurora/gin-vue-admin" target="_blank">
             <img src="@/assets/github.png" class="link-icon">
           </a>
-          <a href="https://space.bilibili.com/322210472">
+          <a href="https://space.bilibili.com/322210472" target="_blank">
             <img src="@/assets/video.png" class="link-icon">
           </a>
         </div>

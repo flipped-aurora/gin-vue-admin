@@ -29,6 +29,8 @@
 
 [开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 
+[交流社区](https://support.qq.com/products/371961)
+
 # 重要提示
 
 1.本项目从起步到开发到部署均有文档和详细视频教程

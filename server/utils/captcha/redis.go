@@ -2,10 +2,11 @@ package captcha
 
 import (
 	"context"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
-	"time"
 )
 
 func NewDefaultRedisStore() *RedisStore {

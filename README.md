@@ -29,6 +29,8 @@
 
 [开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 
+[交流社区](https://support.qq.com/products/371961)
+
 # 重要提示
 
 1.本项目从起步到开发到部署均有文档和详细视频教程
@@ -41,7 +43,7 @@
 
 <img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
 
-5.如果您需要服务器的话 2C4G8M 80GB 腾讯云 一年70 三年198 在这里购买：https://curl.qcloud.com/tJrn0bK0
+5.如果您需要服务器的话 2C4G8M 80GB 腾讯云 一年74 三年222 在这里购买：https://curl.qcloud.com/sArxMfaw
 
 ## 1. 基本介绍
 

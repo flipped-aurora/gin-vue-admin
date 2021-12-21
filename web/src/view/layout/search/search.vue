@@ -23,13 +23,29 @@
       v-if="btnShow"
       class="user-box"
     >
-      <i class="el-icon-refresh reload" :class="[reload ? 'reloading' : '']" @click="handleReload" />
+      <el-icon class="reload" :class="[reload ? 'reloading' : '']" @click="handleReload">
+        <refresh />
+      </el-icon>
     </div>
     <div
       v-if="btnShow"
       class="user-box"
     >
-      <i class="el-icon-search search-icon" @click="showSearch()" />
+      <el-icon class="search-icon" @click="showSearch()">
+        <search />
+      </el-icon>
+    </div>
+    <div
+      v-if="btnShow"
+      class="user-box"
+    >
+      <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
+    </div>
+    <div
+      v-if="btnShow"
+      class="user-box"
+    >
+      <el-icon class="search-icon" @click="toService"><service /></el-icon>
     </div>
   </div>
 </template>
@@ -37,9 +53,13 @@
 <script>
 import { mapGetters } from 'vuex'
 import { emitter } from '@/utils/bus.js'
+import Screenfull from '@/view/layout/screenfull/index.vue'
 
 export default {
   name: 'SearchComponent',
+  components: {
+    Screenfull
+  },
   data() {
     return {
       value: '',
@@ -76,6 +96,9 @@ export default {
       setTimeout(() => {
         this.reload = false
       }, 500)
+    },
+    toService() {
+      window.open('https://support.qq.com/product/371961')
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div @click="click">
+  <el-icon @click="click">
     <svg
       v-if="isShow"
       t="1590133227479"
@@ -59,7 +59,7 @@
         p-id="1871"
       />
     </svg>
-  </div>
+  </el-icon>
 </template>
 
 <script>

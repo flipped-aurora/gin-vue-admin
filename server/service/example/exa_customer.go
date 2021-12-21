@@ -8,8 +8,7 @@ import (
 	systemService "github.com/flipped-aurora/gin-vue-admin/server/service/system"
 )
 
-type CustomerService struct {
-}
+type CustomerService struct{}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateExaCustomer

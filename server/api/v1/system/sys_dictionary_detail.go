@@ -10,8 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type DictionaryDetailApi struct {
-}
+type DictionaryDetailApi struct{}
 
 // @Tags SysDictionaryDetail
 // @Summary 创建SysDictionaryDetail

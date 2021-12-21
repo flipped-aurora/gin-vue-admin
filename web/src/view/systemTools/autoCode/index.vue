@@ -7,7 +7,9 @@
           <template #title>
             <div :style="{fontSize:'16px',paddingLeft:'20px'}">
               点这里从现有数据库创建代码
-              <i class="header-icon el-icon-thumb" />
+              <el-icon class="header-icon ">
+                <pointer />
+              </el-icon>
             </div>
           </template>
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
@@ -59,7 +61,7 @@
           <el-input v-model="form.description" placeholder="中文描述作为自动api描述" />
         </el-form-item>
         <el-form-item label="文件名称" prop="packageName">
-          <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" />
+          <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" @blur="toLowerCase(form,'packageName')" />
         </el-form-item>
         <el-form-item>
           <template #label>
@@ -90,7 +92,6 @@
         <el-table-column align="left" prop="fieldDesc" label="中文名" />
         <el-table-column align="left" prop="fieldJson" label="FieldJson" />
         <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
-        <el-table-column align="left" prop="dataType" label="数据库字段类型" width="130" />
         <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="130" />
         <el-table-column align="left" prop="columnName" label="数据库字段" width="130" />
         <el-table-column align="left" prop="comment" label="数据库字段描述" width="130" />
@@ -101,7 +102,7 @@
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-edit"
+              icon="edit"
               @click="editAndAddField(scope.row)"
             >编辑</el-button>
             <el-button
@@ -123,7 +124,7 @@
                 <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
               </div>
               <template #reference>
-                <el-button size="mini" type="text" icon="el-icon-delete">删除</el-button>
+                <el-button size="mini" type="text" icon="delete">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -180,7 +181,7 @@ const fieldTemplate = {
 
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
 import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
-import { toUpperCase, toHump, toSQLLine } from '@/utils/stringFun'
+import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
 
@@ -245,6 +246,9 @@ export default {
     }
   },
   methods: {
+    toLowerCase(form, key) {
+      form[key] = toLowerCase(form[key])
+    },
     selectText() {
       this.$refs.preview.selectText()
     },
@@ -322,6 +326,11 @@ export default {
       }
       this.$refs.autoCodeForm.validate(async valid => {
         if (valid) {
+          for (const key in this.form) {
+            if (typeof this.form[key] === 'string') {
+              this.form[key] = this.form[key].trim()
+            }
+          }
           this.form.structName = toUpperCase(this.form.structName)
           if (this.form.tableName) { this.form.tableName = this.form.tableName.replace(' ', '') }
           if (this.form.structName === this.form.abbreviation) {
@@ -411,7 +420,7 @@ export default {
                 fieldType: this.fdMap[item.dataType],
                 dataType: item.dataType,
                 fieldJson: fbHump,
-                dataTypeLong: item.dataTypeLong,
+                dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
                 columnName: item.columnName,
                 comment: item.columnComment,
                 fieldSearchType: '',

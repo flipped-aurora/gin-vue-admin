@@ -10,8 +10,7 @@ import (
 	"go.uber.org/zap"
 )
 
-type FileUploadAndDownloadApi struct {
-}
+type FileUploadAndDownloadApi struct{}
 
 // @Tags ExaFileUploadAndDownload
 // @Summary 上传文件示例

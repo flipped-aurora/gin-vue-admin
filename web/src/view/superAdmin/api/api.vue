@@ -22,14 +22,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" icon="el-icon-search" @click="onSubmit">查询</el-button>
-          <el-button size="mini" icon="el-icon-refresh" @click="onReset">重置</el-button>
+          <el-button size="mini" type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button size="mini" icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="el-icon-plus" @click="openDialog('addApi')">新增</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
@@ -37,7 +37,7 @@
             <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="el-icon-delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">删除</el-button>
+            <el-button icon="delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">删除</el-button>
           </template>
         </el-popover>
       </div>
@@ -61,13 +61,13 @@
         <el-table-column align="left" fixed="right" label="操作" width="200">
           <template #default="scope">
             <el-button
-              icon="el-icon-edit"
+              icon="edit"
               size="small"
               type="text"
               @click="editApi(scope.row)"
             >编辑</el-button>
             <el-button
-              icon="el-icon-delete"
+              icon="delete"
               size="small"
               type="text"
               @click="deleteApi(scope.row)"

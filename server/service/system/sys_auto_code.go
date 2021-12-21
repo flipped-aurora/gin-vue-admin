@@ -76,8 +76,7 @@ type tplData struct {
 	autoMoveFilePath string
 }
 
-type AutoCodeService struct {
-}
+type AutoCodeService struct{}
 
 var AutoCodeServiceApp = new(AutoCodeService)
 
@@ -108,7 +107,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if ext = filepath.Ext(value.autoCodePath); ext == ".txt" {
 			continue
 		}
-		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0755)
+		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0o755)
 		if err != nil {
 			return nil, err
 		}
@@ -116,7 +115,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			return nil, err
 		}
 		_ = f.Close()
-		f, err = os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_RDONLY, 0755)
+		f, err = os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_RDONLY, 0o755)
 		if err != nil {
 			return nil, err
 		}
@@ -155,7 +154,7 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 		}
 	}
 
-	for k, _ := range DictTypeM {
+	for k := range DictTypeM {
 		autoCode.DictTypes = append(autoCode.DictTypes, k)
 	}
 }
@@ -184,7 +183,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 
 	// 生成文件
 	for _, value := range dataList {
-		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0755)
+		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0o755)
 		if err != nil {
 			return err
 		}
@@ -274,7 +273,6 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return system.AutoMoveErr
 	}
 	return nil
-
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -363,7 +361,7 @@ func (autoCodeService *AutoCodeService) addAutoMoveFile(data *tplData) {
 //@return: err error
 
 func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) (ids []uint, err error) {
-	var apiList = []system.SysApi{
+	apiList := []system.SysApi{
 		{
 			Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
 			Description: "新增" + a.Description,
@@ -402,7 +400,6 @@ func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) 
 		},
 	}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-
 		for _, v := range apiList {
 			var api system.SysApi
 			if errors.Is(tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error, gorm.ErrRecordNotFound) {

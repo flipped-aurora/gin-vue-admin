@@ -8,8 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type FileUploadAndDownloadService struct {
-}
+type FileUploadAndDownloadService struct{}
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: FindOrCreateFile

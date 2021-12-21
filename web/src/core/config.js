@@ -28,6 +28,11 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
+        `> GVA讨论社区：https://support.qq.com/products/371961`
+      )
+    )
+    console.log(
+      chalk.green(
         `> 默认自动化文档地址:http://127.0.0.1:${env.VITE_SERVER_PORT}/swagger/index.html`
       )
     )

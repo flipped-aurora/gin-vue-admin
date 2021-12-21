@@ -41,6 +41,12 @@
     >
       <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
     </div>
+    <div
+      v-if="btnShow"
+      class="user-box"
+    >
+      <el-icon class="search-icon" @click="toService"><service /></el-icon>
+    </div>
   </div>
 </template>
 
@@ -90,6 +96,9 @@ export default {
       setTimeout(() => {
         this.reload = false
       }, 500)
+    },
+    toService() {
+      window.open('https://support.qq.com/product/371961')
     }
   }
 }

@@ -143,9 +143,6 @@
           }
       }
   }
-  .el-pagination__jump {
-      .el-pagination__editor {}
-  }
 }
 
 .el-button--mini {
@@ -188,4 +185,8 @@
           }
       }
   }
+}
+
+.el-drawer__body{
+  padding:0;
 }

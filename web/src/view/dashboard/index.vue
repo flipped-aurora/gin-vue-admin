@@ -9,7 +9,7 @@
             <el-row>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
-                  <el-icon class="icon">
+                  <el-icon class="dasboard-icon">
                     <sort />
                   </el-icon>
                   今日流量 (1231231)
@@ -17,7 +17,7 @@
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
-                  <el-icon class="icon">
+                  <el-icon class="dasboard-icon">
                     <avatar />
                   </el-icon>
                   总用户数 (24001)
@@ -25,7 +25,7 @@
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
-                  <el-icon class="icon">
+                  <el-icon class="dasboard-icon">
                     <comment />
                   </el-icon>
                   好评率 (99%)
@@ -282,7 +282,7 @@ export default {
       padding: 14px;
     }
 }
-.icon {
+.dasboard-icon {
     font-size: 20px;
     color: rgb(85, 160, 248);
     width: 30px;
@@ -318,7 +318,7 @@ export default {
                 line-height: 20px;
             }
         }
-        .icon {
+        .dasboard-icon {
             font-size: 18px;
         }
     }

@@ -48,6 +48,6 @@ jobs:
             PROT: ${{ secrets.PROT }}
             MKDIR: ${{ secrets.MKDIR }}
           run: |
-            scp -P ${PROT} -r web/dist/* ${USER}@${HOST}:${MKDIR}
-            ssh -p ${PROT} ${USER}@${HOST} "touch ${MKDIR}test.txt"
+            scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}
+            ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "touch ${MKDIR}test.txt"
               

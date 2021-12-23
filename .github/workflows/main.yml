@@ -1,0 +1,47 @@
+name: CI
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+        - name: Checkout
+          uses: actions/checkout@v2
+        - name: Sed Config Base
+          shell: bash
+          run: |
+            ls -l
+        - name: use Node.js 16
+          uses: actions/setup-node@v2.1.2
+          with:
+            node-version: '16.x'
+        - name: Build
+          run: |
+            cd web/ && yarn install && yarn run build
+        - name: Set up Go 1.12
+          uses: actions/setup-go@v1
+          with:
+              go-version: 1.12
+          id: go
+        - name: Check out code into the Go module directory
+          uses: actions/checkout@v1
+        - name: Get dependencies
+          run: |
+              go get -v -t -d ./...
+              if [ -f Gopkg.toml ]; then
+                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                  dep ensure
+              fi
+        - name: Buildgo
+          run: |
+              cd server/ && go build -v . && mv server ../web/dist/ && cd ../web/dist/ && ls -s 
+          
+          
+          
+          
+      

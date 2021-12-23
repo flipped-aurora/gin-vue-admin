@@ -12,26 +12,30 @@ jobs:
         steps:
         - name: Checkout
           uses: actions/checkout@v2
-
-        - name: Sed Config Base
+        - name: Sed Config
           shell: bash
           run: |
             ls -l
-
         - name: use Node.js 16
           uses: actions/setup-node@v2.1.2
           with:
             node-version: '16.x'
-
         - name: Build-vue
           run: |
             cd web/ && yarn install && yarn run build
-
         - name: Set up Go 1.16
           uses: actions/setup-go@v1
           with:
             go-version: 1.16
-            
-        - name: Buildgo
+        - name: Build-go
           run: |
               cd server/ && go mod tidy && go build && mv server ../web/dist/ && cd ../web/dist/ && ls -s 
+        - name: scp-centos
+          env:
+            KEY: ${{ secrets.KEY }}
+            HOST: ${{ secrets.Host }}
+            USER: ${{ secrets.USER }}
+          run: |
+            mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa && ssh-keyscan github.com >> ~/.ssh/known_hosts
+            scp -r web/dist/* "$USER"@"$HOST":/opt/gin-vue-admin/dist/
+            ssh "$USER"@"$HOST" 'touch /opt/gin-vue-admin/dist/test.txt' 

@@ -16,7 +16,7 @@ jobs:
       - name: Sed Config Base
         shell: bash
         run: |
-          cat ./.env.production
+          ls -l
       - name: use Node.js 16
         uses: actions/setup-node@v2.1.2
         with:

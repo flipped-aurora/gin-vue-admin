@@ -55,6 +55,7 @@ captcha:
 # mysql connect configuration
 mysql:
   path: ''
+  port: ''
   config: ''
   db-name: ''
   username: ''

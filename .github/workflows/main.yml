@@ -1,9 +1,8 @@
 name: CI
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    tags:
+      - v*
   workflow_dispatch:
 jobs:
     build:
@@ -34,10 +33,6 @@ jobs:
         - name: scp-centos
           env:
             KEY: ${{ secrets.KEY }}
-            HOST: ${{ secrets.Host }}
-            USER: ${{ secrets.USER }}
-            PROT: ${{ secrets.PROT }}
-            MKDIR: ${{ secrets.MKDIR }}
           run: |
             mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
@@ -49,5 +44,5 @@ jobs:
             MKDIR: ${{ secrets.MKDIR }}
           run: |
             scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}
-            ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "touch ${MKDIR}test.txt"
+            ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "touch ${MKDIR}test2.txt"
               

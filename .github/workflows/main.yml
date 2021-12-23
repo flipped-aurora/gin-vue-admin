@@ -41,5 +41,13 @@ jobs:
           run: |
             mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
             ssh-keyscan github.com >> ~/.ssh/known_hosts
+        - name: scp-scp-centos2
+          env:
+            HOST: ${{ secrets.Host }}
+            USER: ${{ secrets.USER }}
+            PROT: ${{ secrets.PROT }}
+            MKDIR: ${{ secrets.MKDIR }}
+          run: |
             scp -P ${PROT} -r web/dist/* ${USER}@${HOST}:${MKDIR}
             ssh -p ${PROT} ${USER}@${HOST} "touch ${MKDIR}test.txt"
+              

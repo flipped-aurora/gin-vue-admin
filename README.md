@@ -20,7 +20,7 @@
 
 [审批流分支](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow): https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow
 
-# 项目文档
+# 项目文档1
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 
 [初始化](https://www.gin-vue-admin.com/docs/first_master)

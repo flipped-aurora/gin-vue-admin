@@ -1,4 +1,4 @@
-name: CI
+name: devops
 on:
   push:
     tags:
@@ -29,20 +29,19 @@ jobs:
             go-version: 1.16
         - name: Build-go
           run: |
-              cd server/ && go mod tidy && go build && mv server ../web/dist/ && cd ../web/dist/ && ls -s 
+              cd server/ && go mod tidy && go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/dist/ && ls -s 
         - name: scp-centos
           env:
             KEY: ${{ secrets.KEY }}
-          run: |
-            mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan github.com >> ~/.ssh/known_hosts
-        - name: scp-scp-centos2
-          env:
             HOST: ${{ secrets.Host }}
             USER: ${{ secrets.USER }}
             PROT: ${{ secrets.PROT }}
             MKDIR: ${{ secrets.MKDIR }}
           run: |
-            scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}
+            mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan github.com >> ~/.ssh/known_hosts
+            scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}dist/
+            scp -P ${PROT} -o StrictHostKeyChecking=no -r web/ser/* ${USER}@${HOST}:${MKDIR}
             ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "touch ${MKDIR}test2.txt"
+            
               

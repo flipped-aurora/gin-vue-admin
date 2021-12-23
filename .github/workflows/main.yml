@@ -12,36 +12,26 @@ jobs:
         steps:
         - name: Checkout
           uses: actions/checkout@v2
+
         - name: Sed Config Base
           shell: bash
           run: |
             ls -l
+
         - name: use Node.js 16
           uses: actions/setup-node@v2.1.2
           with:
             node-version: '16.x'
-        - name: Build
+
+        - name: Build-vue
           run: |
             cd web/ && yarn install && yarn run build
-        - name: Set up Go 1.12
+
+        - name: Set up Go 1.16
           uses: actions/setup-go@v1
           with:
-              go-version: 1.12
-          id: go
-        - name: Check out code into the Go module directory
-          uses: actions/checkout@v1
-        - name: Get dependencies
-          run: |
-              go get -v -t -d ./...
-              if [ -f Gopkg.toml ]; then
-                  curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-                  dep ensure
-              fi
+            go-version: 1.16
+            
         - name: Buildgo
           run: |
-              cd server/ && go build -v . && mv server ../web/dist/ && cd ../web/dist/ && ls -s 
-          
-          
-          
-          
-      
+              cd server/ && go mod tidy && go build && mv server ../web/dist/ && cd ../web/dist/ && ls -s 

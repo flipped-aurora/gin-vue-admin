@@ -15,6 +15,7 @@ jobs:
         - name: Sed Config
           shell: bash
           run: |
+            git branch 
             ls -l
         - name: use Node.js 16
           uses: actions/setup-node@v2.1.2
@@ -38,6 +39,6 @@ jobs:
             PROT: ${{ secrets.PROT }}
             MKDIR: ${{ secrets.MKDIR }}
           run: |
-            mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+            mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa && ssh-keyscan -R ${HOST} 
             scp -P ${PROT} -r web/dist/* ${USER}@${HOST}:${MKDIR}
             ssh -p ${PROT} ${USER}@${HOST} "touch ${MKDIR}test.txt"

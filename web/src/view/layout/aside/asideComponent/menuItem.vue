@@ -23,7 +23,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.gva-menu-item-title {
-  min-width: 160px;
-}
+// .gva-menu-item-title {
+//   min-width: 160px;
+// }
 </style>

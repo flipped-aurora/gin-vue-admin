@@ -46,4 +46,6 @@ jobs:
           ssh-keyscan github.com >> ~/.ssh/known_hosts
           scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}dist/
           scp -P ${PROT} -o StrictHostKeyChecking=no -r web/ser/* ${USER}@${HOST}:${MKDIR}
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIR}resource/ && rm -rf ${MKDIR}resource/*"
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r server/resource/* ${USER}@${HOST}:${MKDIR}resource/
           ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIR} && bash restart.sh > /dev/null  2>&1 &"

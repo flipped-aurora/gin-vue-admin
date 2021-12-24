@@ -1,13 +1,13 @@
 <template>
   <div>
-    <span class="icon" style="position: absolute; z-index: 9999; padding: 5px 10px; ">
+    <span class="gva-icon" style="position: absolute; z-index: 9999; padding: 5px 10px; ">
       <el-icon>
         <component :is="metaData.icon" />
       </el-icon>
     </span>
     <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" placeholder="请选择">
       <el-option v-for="item in options" :key="item.key" :label="item.key" :value="item.key">
-        <span class="icon" :class="item.label">
+        <span class="gva-icon" :class="item.label">
           <el-icon>
             <component :is="item.label" />
           </el-icon>
@@ -1166,7 +1166,7 @@ export default {
 </script>
 
 <style lang="scss">
-.icon {
+.gva-icon {
   float: left;
   color: rgb(132, 146, 166);
   font-size: 13px;

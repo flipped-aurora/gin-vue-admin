@@ -27,13 +27,11 @@ export const user = {
       state.token = token
     },
     NeedInit(state) {
-      state.userInfo = {}
       state.token = ''
       sessionStorage.clear()
       router.push({ name: 'Init', replace: true })
     },
     LoginOut(state) {
-      state.userInfo = {}
       state.token = ''
       sessionStorage.clear()
       router.push({ name: 'Login', replace: true })

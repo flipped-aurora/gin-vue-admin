@@ -1,0 +1,51 @@
+name: devops
+on:
+  push:
+    tags:
+      - v*
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['16.x']
+        go-version: ['1.16']
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+      - name: Sed Config
+        shell: bash
+        run: |
+          git branch 
+          ls -l
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build-Node
+        run: |
+          cd web/ && yarn install && yarn run build
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Build-go
+        run: |
+          cd server/ && go mod tidy && go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
+      - name: restart
+        env:
+          KEY: ${{ secrets.KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+          PROT: ${{ secrets.PROT }}
+          MKDIR: ${{ secrets.MKDIR }}
+        run: |
+          mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}dist/
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r web/ser/* ${USER}@${HOST}:${MKDIR}
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIR}resource/ && rm -rf ${MKDIR}resource/*"
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r server/resource/* ${USER}@${HOST}:${MKDIR}resource/
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIR} && bash restart.sh > /dev/null  2>&1 &"

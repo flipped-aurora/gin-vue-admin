@@ -152,7 +152,7 @@ export default {
       return this.$route.meta.title || '当前页面'
     },
     matched() {
-      return this.$route.matched
+      return this.$route.meta.matcheds
     }
   },
   created() {

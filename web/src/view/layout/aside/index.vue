@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :style="{background:sideMode}">
     <el-scrollbar style="height:calc(100vh - 60px)">
       <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
         <el-menu

@@ -18,7 +18,7 @@ async function handleKeepAlive(to) {
     if (to.matched && to.matched.length > 2) {
         for (let i = 1; i < to.matched.length; i++) {
             const element = to.matched[i - 1]
-            if (element.name === "layout") {
+            if (element.name === 'layout') {
                 to.matched.splice(i, 1)
                 await handleKeepAlive(to)
             }
@@ -32,7 +32,6 @@ async function handleKeepAlive(to) {
 }
 
 router.beforeEach(async(to, from, next) => {
-    to.meta.matcheds =JSON.parse(JSON.stringify(to.matched)) 
     handleKeepAlive(to)
     const token = store.getters['user/token']
         // 在白名单中的判断情况

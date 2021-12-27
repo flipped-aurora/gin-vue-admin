@@ -70,7 +70,7 @@ service.interceptors.response.use(
         } else {
             ElMessage({
                 showClose: true,
-                message: response.data.msg,
+                message: response.data.msg||decodeURI(response.headers.msg),
                 type: 'error'
             })
             if (response.data.data && response.data.data.reload) {

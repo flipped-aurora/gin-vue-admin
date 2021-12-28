@@ -51,13 +51,13 @@
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
+                <el-button type="primary" size="mini" @click="deleteUserFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
                 <el-button type="text" icon="delete" size="mini">删除</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="magic-stick" size="mini" @click="resetPassword(scope.row)">重置密码</el-button>
+            <el-button type="text" icon="magic-stick" size="mini" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -114,139 +114,32 @@
 </template>
 
 <script>
-// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
-const path = import.meta.env.VITE_BASE_API
+export default {
+  name: 'User',
+}
+</script>
+
+<script setup>
 import {
   getUserList,
   setUserAuthorities,
   register,
   deleteUser
 } from '@/api/user'
+
 import { getAuthorityList } from '@/api/authority'
-import infoList from '@/mixins/infoList'
-import { mapGetters } from 'vuex'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
 import warningBar from '@/components/warningBar/warningBar.vue'
 import { setUserInfo, resetPassword } from '@/api/user.js'
-export default {
-  name: 'Api',
-  components: { CustomPic, ChooseImg, warningBar },
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: getUserList,
-      path: path,
-      authOptions: [],
-      addUserDialog: false,
-      backNickName: '',
-      userInfo: {
-        username: '',
-        password: '',
-        nickName: '',
-        headerImg: '',
-        authorityId: '',
-        authorityIds: []
-      },
-      rules: {
-        username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 5, message: '最低5位字符', trigger: 'blur' }
-        ],
-        password: [
-          { required: true, message: '请输入用户密码', trigger: 'blur' },
-          { min: 6, message: '最低6位字符', trigger: 'blur' }
-        ],
-        nickName: [
-          { required: true, message: '请输入用户昵称', trigger: 'blur' }
-        ],
-        authorityId: [
-          { required: true, message: '请选择用户角色', trigger: 'blur' }
-        ]
-      }
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['token'])
-  },
-  watch: {
-    tableData() {
-      this.setAuthorityIds()
-    }
-  },
-  async created() {
-    await this.getTableData()
-    const res = await getAuthorityList({ page: 1, pageSize: 999 })
-    this.setOptions(res.data.list)
-  },
-  methods: {
-    resetPassword(row) {
-      this.$confirm(
-        '是否将此用户密码重置为123456?',
-        '警告',
-        {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
-        }
-      ).then(async() => {
-        const res = await resetPassword({
-          ID: row.ID,
-        })
-        if (res.code === 0) {
-          this.$message({
-            type: 'success',
-            message: res.msg,
-          })
-        } else {
-          this.$message({
-            type: 'error',
-            message: res.msg,
-          })
-        }
-      })
-    },
-    setAuthorityIds() {
-      this.tableData && this.tableData.forEach((user) => {
-        const authorityIds = user.authorities && user.authorities.map(i => {
-          return i.authorityId
-        })
-        user.authorityIds = authorityIds
-      })
-    },
-    openHeaderChange() {
-      this.$refs.chooseImg.open()
-    },
-    setOptions(authData) {
-      this.authOptions = []
-      this.setAuthorityOptions(authData, this.authOptions)
-    },
-    openEidt(row) {
-      if (this.tableData.some(item => item.editFlag)) {
-        this.$message('当前存在正在编辑的用户')
-        return
-      }
-      this.backNickName = row.nickName
-      row.editFlag = true
-    },
-    async enterEdit(row) {
-      const res = await setUserInfo({ nickName: row.nickName, ID: row.ID })
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '设置成功'
-        })
-      }
-      this.backNickName = ''
-      row.editFlag = false
-    },
-    closeEdit(row) {
-      row.nickName = this.backNickName
-      this.backNickName = ''
-      row.editFlag = false
-    },
-    setAuthorityOptions(AuthorityData, optionsData) {
-      AuthorityData &&
+
+import { nextTick, ref, watch } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+const path = ref(import.meta.env.VITE_BASE_API)
+
+// 初始化相关
+const setAuthorityOptions = (AuthorityData, optionsData) => {
+  AuthorityData &&
         AuthorityData.forEach(item => {
           if (item.children && item.children.length) {
             const option = {
@@ -254,7 +147,7 @@ export default {
               authorityName: item.authorityName,
               children: []
             }
-            this.setAuthorityOptions(item.children, option.children)
+            setAuthorityOptions(item.children, option.children)
             optionsData.push(option)
           } else {
             const option = {
@@ -264,51 +157,192 @@ export default {
             optionsData.push(option)
           }
         })
-    },
-    async deleteUser(row) {
-      const res = await deleteUser({ id: row.ID })
+}
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(10)
+const tableData = ref([])
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
+}
+
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+// 查询
+const getTableData = async() => {
+  const table = await getUserList({ page: page.value, pageSize: pageSize.value })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
+  }
+}
+
+watch(tableData, () => {
+  setAuthorityIds()
+})
+
+const initPage = async() => {
+  getTableData()
+  const res = await getAuthorityList({ page: 1, pageSize: 999 })
+  setOptions(res.data.list)
+}
+
+initPage()
+
+const resetPasswordFunc = (row) => {
+  ElMessageBox.confirm(
+    '是否将此用户密码重置为123456?',
+    '警告',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(async() => {
+    const res = await resetPassword({
+      ID: row.ID,
+    })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: res.msg,
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: res.msg,
+      })
+    }
+  })
+}
+const setAuthorityIds = () => {
+  tableData.value && tableData.value.forEach((user) => {
+    const authorityIds = user.authorities && user.authorities.map(i => {
+      return i.authorityId
+    })
+    user.authorityIds = authorityIds
+  })
+}
+
+const chooseImg = ref(null)
+const openHeaderChange = () => {
+  chooseImg.value.open()
+}
+
+const authOptions = ref([])
+const setOptions = (authData) => {
+  authOptions.value = []
+  setAuthorityOptions(authData, authOptions.value)
+}
+
+const backNickName = ref('')
+const openEidt = (row) => {
+  if (tableData.value.some(item => item.editFlag)) {
+    ElMessage('当前存在正在编辑的用户')
+    return
+  }
+  backNickName.value = row.nickName
+  row.editFlag = true
+}
+
+const enterEdit = async(row) => {
+  const res = await setUserInfo({ nickName: row.nickName, ID: row.ID })
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '设置成功'
+    })
+  }
+  backNickName.value = ref('')
+  row.editFlag = false
+}
+
+const closeEdit = (row) => {
+  row.nickName = backNickName.value
+  backNickName.value = ''
+  row.editFlag = false
+}
+
+const deleteUserFunc = async(row) => {
+  const res = await deleteUser({ id: row.ID })
+  if (res.code === 0) {
+    ElMessage.success('删除成功')
+    await getTableData()
+    row.visible = false
+  }
+}
+
+// 弹窗相关
+const userInfo = ref({
+  username: '',
+  password: '',
+  nickName: '',
+  headerImg: '',
+  authorityId: '',
+  authorityIds: []
+})
+
+const rules = ref({
+  username: [
+    { required: true, message: '请输入用户名', trigger: 'blur' },
+    { min: 5, message: '最低5位字符', trigger: 'blur' }
+  ],
+  password: [
+    { required: true, message: '请输入用户密码', trigger: 'blur' },
+    { min: 6, message: '最低6位字符', trigger: 'blur' }
+  ],
+  nickName: [
+    { required: true, message: '请输入用户昵称', trigger: 'blur' }
+  ],
+  authorityId: [
+    { required: true, message: '请选择用户角色', trigger: 'blur' }
+  ]
+})
+const userForm = ref(null)
+const enterAddUserDialog = async() => {
+  userInfo.value.authorityId = userInfo.value.authorityIds[0]
+  userForm.value.validate(async valid => {
+    if (valid) {
+      const res = await register(userInfo.value)
       if (res.code === 0) {
-        this.$message.success('删除成功')
-        await this.getTableData()
-        row.visible = false
+        ElMessage({ type: 'success', message: '创建成功' })
       }
-    },
-    async enterAddUserDialog() {
-      this.userInfo.authorityId = this.userInfo.authorityIds[0]
-      this.$refs.userForm.validate(async valid => {
-        if (valid) {
-          const res = await register(this.userInfo)
-          if (res.code === 0) {
-            this.$message({ type: 'success', message: '创建成功' })
-          }
-          await this.getTableData()
-          this.closeAddUserDialog()
-        }
-      })
-    },
-    closeAddUserDialog() {
-      this.$refs.userForm.resetFields()
-      this.userInfo.headerImg = ''
-      this.userInfo.authorityIds = []
-      this.addUserDialog = false
-    },
-    addUser() {
-      this.addUserDialog = true
-    },
-    async changeAuthority(row, flag) {
-      if (flag) {
-        return
-      }
-      this.$nextTick(async() => {
-        const res = await setUserAuthorities({
-          ID: row.ID,
-          authorityIds: row.authorityIds
-        })
-        if (res.code === 0) {
-          this.$message({ type: 'success', message: '角色设置成功' })
-        }
-      })
-    },
+      await getTableData()
+      closeAddUserDialog()
+    }
+  })
+}
+
+const addUserDialog = ref(false)
+const closeAddUserDialog = () => {
+  userForm.value.resetFields()
+  userInfo.value.headerImg = ''
+  userInfo.value.authorityIds = []
+  addUserDialog.value = false
+}
+const addUser = () => {
+  addUserDialog.value = true
+}
+const changeAuthority = async(row, flag) => {
+  if (flag) {
+    return
+  }
+
+  await nextTick()
+  const res = await setUserAuthorities({
+    ID: row.ID,
+    authorityIds: row.authorityIds
+  })
+  if (res.code === 0) {
+    ElMessage({ type: 'success', message: '角色设置成功' })
   }
 }
 </script>

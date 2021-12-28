@@ -3,18 +3,18 @@
     <div class="init_page_panle">
       <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello  ">
         <div>
-          <div class="hello_title">GIN-VUE-ADMIN</div>
-          <p class="in-two a-fadeinT">初始化须知</p>
-          <p class="init_p">1.您需有用一定的VUE和GOLANG基础</p>
-          <p class="init_p">2.请您确认是否已经阅读过官方文档</p>
-          <p class="init_p">3.请您确认是否了解后续的配置流程</p>
-          <p class="init_p">注：开发组不为文档中书写过的内容提供无偿服务</p>
+          <div class="hello_title">{{ $GIN_VUE_ADMIN.appName }}</div>
+          <p class="in-two a-fadeinT">{{ $t('init.note') }}</p>
+          <p class="init_p">{{ $t('init.note1') }}</p>
+          <p class="init_p">{{ $t('init.note2') }}</p>
+          <p class="init_p">{{ $t('init.note3') }}</p>
+          <p class="init_p">{{ $t('init.note4') }}</p>
           <p class="init_btn">
             <el-button type="primary" @click="goDoc">
-              阅读文档
+              {{ $t('init.readDocs') }}
             </el-button>
             <el-button type="primary" @click="showNext">
-              我已确认
+              {{ $t('init.confirm') }}
             </el-button>
           </p>
         </div>

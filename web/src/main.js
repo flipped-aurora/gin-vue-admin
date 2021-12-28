@@ -9,6 +9,7 @@ import './core/gin-vue-admin'
 import router from '@/router/index'
 import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
+import { createI18n } from './i18n' // added by mohamed hassan to multilangauge
 
 import '@/permission'
 import { store } from '@/store/index'
@@ -16,6 +17,10 @@ import { store } from '@/store/index'
 import App from './App.vue'
 const app = createApp(App)
 app.config.productionTip = false
+
+const i18n = createI18n() // added by mohamed hassan to multilangauge
+
+app.use(i18n)
 
 app.use(run)
   .use(auth)

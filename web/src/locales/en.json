@@ -1,0 +1,35 @@
+{
+  "login": {
+    "entUserName": "Please enter username",
+    "entPassword": "Please enter the password",
+    "entVerificationCode": "Please enter verification code",
+    "login": "Login",
+    "init": "Go to initialization",
+    "errUserName": "Please enter the correct username",
+    "errPassword": "Please enter the correct password",
+    "errVerificationCode": "Incorrect verification code",
+    "errLogin": "Please fill in the login information correctly",
+    "errInit" : "Database information has been configured and cannot be initialized",
+    "language": "Languages"
+  },
+  "init": {
+    "note": "Initialization notice",
+    "note1": "1.You should be familiar with Vue AND GoLang.",
+    "note2": "2.Please confirm that you have read the official documents.",
+    "note3": "3.Please confirm that you understand the subsequent configuration process.",
+    "note4": "Note: The development team does not provide free services for the content written in the document.",
+    "readDocs": "Read the documentation",
+    "confirm": "I confirm"
+  },
+  "pages": {
+    "home": {
+      "title": "Home",
+      "count": "count is: {value}",
+      "virtual": "msg from virtual module: {msg}",
+      "inter": "this will be styled with a font-face"
+    },
+    "about": {
+      "title": "About"
+    }
+  }
+}

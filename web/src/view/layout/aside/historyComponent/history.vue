@@ -2,7 +2,7 @@
   <div class="router-history">
     <el-tabs
       v-model="activeValue"
-      :closable="!(historys.length===1&&$route.name===defaultRouter)"
+      :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
@@ -17,13 +17,28 @@
         class="gva-tab"
       >
         <template #label>
-          <span :style="{color: activeValue===name(item)?activeColor:'#333'}"><i class="dot" :style="{ backgroundColor:activeValue===name(item)?activeColor:'#ddd'}" /> {{ item.meta.title }}</span>
+          <span
+            :style="{
+              color: activeValue === name(item) ? activeColor : '#333',
+            }"
+          ><i
+             class="dot"
+             :style="{
+               backgroundColor:
+                 activeValue === name(item) ? activeColor : '#ddd',
+             }"
+           />
+            {{ item.meta.title }}</span>
         </template>
       </el-tab-pane>
     </el-tabs>
 
     <!--自定义右键菜单html代码-->
-    <ul v-show="contextMenuVisible" :style="{left:left+'px',top:top+'px'}" class="contextmenu">
+    <ul
+      v-show="contextMenuVisible"
+      :style="{ left: left + 'px', top: top + 'px' }"
+      class="contextmenu"
+    >
       <li @click="closeAll">关闭所有</li>
       <li @click="closeLeft">关闭左侧</li>
       <li @click="closeRight">关闭右侧</li>
@@ -33,258 +48,259 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { emitter } from '@/utils/bus.js'
-
-const getFmtString = (item) => {
-  return item.name +
-      JSON.stringify(item.query) +
-      JSON.stringify(item.params)
-}
 export default {
   name: 'HistoryComponent',
-  data() {
-    return {
-      historys: [],
-      activeValue: '',
-      contextMenuVisible: false,
-      left: 0,
-      top: 0,
-      isCollapse: false,
-      isMobile: false,
-      rightActive: ''
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['userInfo', 'activeColor']),
-    defaultRouter() {
-      return this.userInfo.authority.defaultRouter
-    }
-  },
-  watch: {
-    contextMenuVisible() {
-      if (this.contextMenuVisible) {
-        document.body.addEventListener('click', () => {
-          this.contextMenuVisible = false
-        })
-      } else {
-        document.body.removeEventListener('click', () => {
-          this.contextMenuVisible = false
-        })
-      }
-    },
-    $route(to, now) {
-      if (to.name === 'Login') {
-        return
-      }
-      this.historys = this.historys.filter(item => !item.meta.closeTab)
-      this.setTab(to)
-      sessionStorage.setItem('historys', JSON.stringify(this.historys))
-      this.activeValue = window.sessionStorage.getItem('activeValue')
-      if (now && to && now.name === to.name) {
-        emitter.emit('reload')
-      }
-    }
-  },
-  created() {
-    // 全局监听 关闭当前页面函数
-    emitter.on('closeThisPage', () => {
-      this.removeTab(this.name(this.$route))
-    })
-    // 全局监听 关闭所有页面函数
-    emitter.on('closeAllPage', () => {
-      this.closeAll()
-    })
-    emitter.on('mobile', isMobile => {
-      this.isMobile = isMobile
-    })
-    emitter.on('collapse', isCollapse => {
-      this.isCollapse = isCollapse
-    })
-    const initHistorys = [
-      {
-        name: this.defaultRouter,
-        meta: {
-          title: '首页'
-        },
-        query: {},
-        params: {}
-      }
-    ]
-    this.historys =
-      JSON.parse(sessionStorage.getItem('historys')) || initHistorys
-    if (!window.sessionStorage.getItem('activeValue')) {
-      this.activeValue = getFmtString(this.$route)
+}
+</script>
+
+<script setup>
+import { useStore } from 'vuex'
+import { emitter } from '@/utils/bus.js'
+import { computed, onUnmounted, ref, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const store = useStore()
+const route = useRoute()
+const router = useRouter()
+
+const getFmtString = (item) => {
+  return item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
+}
+
+const historys = ref([])
+const activeValue = ref('')
+const contextMenuVisible = ref(false)
+
+const userInfo = computed(() => store.getters['user/userInfo'])
+const activeColor = computed(() => store.getters['user/activeColor'])
+
+const name = (item) => {
+  return (
+    item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
+  )
+}
+
+const left = ref(0)
+const top = ref(0)
+const isCollapse = ref(false)
+const isMobile = ref(false)
+const rightActive = ref('')
+const defaultRouter = computed(() => userInfo.value.authority.defaultRouter)
+const openContextMenu = (e) => {
+  if (
+    historys.value.length === 1 &&
+        route.name === defaultRouter.value
+  ) {
+    return false
+  }
+  let id = ''
+  if (e.srcElement.nodeName === 'SPAN') {
+    id = e.srcElement.offsetParent.id
+  } else {
+    id = e.srcElement.id
+  }
+  if (id) {
+    contextMenuVisible.value = true
+    let width
+    if (isCollapse.value) {
+      width = 54
     } else {
-      this.activeValue = window.sessionStorage.getItem('activeValue')
+      width = 220
     }
-    this.setTab(this.$route)
-  },
-  beforeUnmount() {
-    emitter.off('collapse')
-    emitter.off('mobile')
-  },
-  methods: {
-    name(item) {
-      return item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
-    },
-    openContextMenu(e) {
-      if (this.historys.length === 1 && this.$route.name === this.defaultRouter) {
-        return false
-      }
-      let id = ''
-      if (e.srcElement.nodeName === 'SPAN') {
-        id = e.srcElement.offsetParent.id
-      } else {
-        id = e.srcElement.id
-      }
-      if (id) {
-        this.contextMenuVisible = true
-        let width
-        if (this.isCollapse) {
-          width = 54
-        } else {
-          width = 220
-        }
-        if (this.isMobile) {
-          width = 0
-        }
-        this.left = e.clientX - width
-        this.top = e.clientY + 10
-        this.rightActive = id.split('-')[1]
-      }
-    },
-    closeAll() {
-      this.historys = [
-        {
-          name: this.defaultRouter,
-          meta: {
-            title: '首页'
-          },
-          query: {},
-          params: {}
-        }
-      ]
-      this.$router.push({ name: this.defaultRouter })
-      this.contextMenuVisible = false
-      sessionStorage.setItem('historys', JSON.stringify(this.historys))
-    },
-    closeLeft() {
-      let right
-      const rightIndex = this.historys.findIndex(item => {
-        if (getFmtString(item) === this.rightActive) {
-          right = item
-        }
-        return (
-          getFmtString(item) === this.rightActive
-        )
-      })
-      const activeIndex = this.historys.findIndex(
-        item => getFmtString(item) === this.activeValue
-      )
-      this.historys.splice(0, rightIndex)
-      if (rightIndex > activeIndex) {
-        this.$router.push(right)
-      }
-      sessionStorage.setItem('historys', JSON.stringify(this.historys))
-    },
-    closeRight() {
-      let right
-      const leftIndex = this.historys.findIndex(item => {
-        if (getFmtString(item) === this.rightActive) {
-          right = item
-        }
-        return (getFmtString(item) === this.rightActive)
-      })
-      const activeIndex = this.historys.findIndex(
-        item => getFmtString(item) === this.activeValue
-      )
-      this.historys.splice(leftIndex + 1, this.historys.length)
-      if (leftIndex < activeIndex) {
-        this.$router.push(right)
-      }
-      sessionStorage.setItem('historys', JSON.stringify(this.historys))
-    },
-    closeOther() {
-      let right
-      this.historys = this.historys.filter(item => {
-        if (getFmtString(item) === this.rightActive
-        ) {
-          right = item
-        }
-        return (getFmtString(item) === this.rightActive
-        )
-      })
-      this.$router.push(right)
-      sessionStorage.setItem('historys', JSON.stringify(this.historys))
-    },
-    isSame(route1, route2) {
-      if (route1.name !== route2.name) {
-        return false
-      }
-      for (const key in route1.query) {
-        if (route1.query[key] !== route2.query[key]) {
-          return false
-        }
-      }
-      for (const key in route1.params) {
-        if (route1.params[key] !== route2.params[key]) {
-          return false
-        }
-      }
-      return true
-    },
-    setTab(route) {
-      if (!this.historys.some(item => this.isSame(item, route))) {
-        const obj = {}
-        obj.name = route.name
-        obj.meta = route.meta
-        obj.query = route.query
-        obj.params = route.params
-        this.historys.push(obj)
-      }
-      window.sessionStorage.setItem(
-        'activeValue',
-        getFmtString(this.$route)
-      )
-    },
-    changeTab(component) {
-      const tab = component.instance.attrs.tab
-      this.$router.push({
-        name: tab.name,
-        query: tab.query,
-        params: tab.params
-      })
-    },
-    removeTab(tab) {
-      const index = this.historys.findIndex(
-        item => getFmtString(item) === tab
-      )
-      if (
-        getFmtString(this.$route) === tab
-      ) {
-        if (this.historys.length === 1) {
-          this.$router.push({ name: this.defaultRouter })
-        } else {
-          if (index < this.historys.length - 1) {
-            this.$router.push({
-              name: this.historys[index + 1].name,
-              query: this.historys[index + 1].query,
-              params: this.historys[index + 1].params
-            })
-          } else {
-            this.$router.push({
-              name: this.historys[index - 1].name,
-              query: this.historys[index - 1].query,
-              params: this.historys[index - 1].params
-            })
-          }
-        }
-      }
-      this.historys.splice(index, 1)
+    if (isMobile.value) {
+      width = 0
     }
+    left.value = e.clientX - width
+    top.value = e.clientY + 10
+    rightActive.value = id.split('-')[1]
   }
 }
+const closeAll = () => {
+  historys.value = [
+    {
+      name: defaultRouter.value,
+      meta: {
+        title: '首页',
+      },
+      query: {},
+      params: {},
+    },
+  ]
+  router.push({ name: defaultRouter.value })
+  contextMenuVisible.value = false
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+}
+const closeLeft = () => {
+  let right
+  const rightIndex = historys.value.findIndex((item) => {
+    if (getFmtString(item) === rightActive.value) {
+      right = item
+    }
+    return getFmtString(item) === rightActive.value
+  })
+  const activeIndex = historys.value.findIndex(
+    (item) => getFmtString(item) === activeValue.value
+  )
+  historys.value.splice(0, rightIndex)
+  if (rightIndex > activeIndex) {
+    router.push(right)
+  }
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+}
+const closeRight = () => {
+  let right
+  const leftIndex = historys.value.findIndex((item) => {
+    if (getFmtString(item) === rightActive.value) {
+      right = item
+    }
+    return getFmtString(item) === rightActive.value
+  })
+  const activeIndex = historys.value.findIndex(
+    (item) => getFmtString(item) === activeValue.value
+  )
+  historys.value.splice(leftIndex + 1, historys.value.length)
+  if (leftIndex < activeIndex) {
+    router.push(right)
+  }
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+}
+const closeOther = () => {
+  let right
+  historys.value = historys.value.filter((item) => {
+    if (getFmtString(item) === rightActive.value) {
+      right = item
+    }
+    return getFmtString(item) === rightActive.value
+  })
+  router.push(right)
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+}
+const isSame = (route1, route2) => {
+  if (route1.name !== route2.name) {
+    return false
+  }
+  for (const key in route1.query) {
+    if (route1.query[key] !== route2.query[key]) {
+      return false
+    }
+  }
+  for (const key in route1.params) {
+    if (route1.params[key] !== route2.params[key]) {
+      return false
+    }
+  }
+  return true
+}
+const setTab = (route) => {
+  if (!historys.value.some((item) => isSame(item, route))) {
+    const obj = {}
+    obj.name = route.name
+    obj.meta = route.meta
+    obj.query = route.query
+    obj.params = route.params
+    historys.value.push(obj)
+  }
+  window.sessionStorage.setItem('activeValue', getFmtString(route))
+}
+const changeTab = (component) => {
+  const tab = component.instance.attrs.tab
+  router.push({
+    name: tab.name,
+    query: tab.query,
+    params: tab.params,
+  })
+}
+const removeTab = (tab) => {
+  const index = historys.value.findIndex(
+    (item) => getFmtString(item) === tab
+  )
+  if (getFmtString(route) === tab) {
+    if (historys.value.length === 1) {
+      router.push({ name: defaultRouter.value })
+    } else {
+      if (index < historys.value.length - 1) {
+        router.push({
+          name: historys.value[index + 1].name,
+          query: historys.value[index + 1].query,
+          params: historys.value[index + 1].params,
+        })
+      } else {
+        router.push({
+          name: historys.value[index - 1].name,
+          query: historys.value[index - 1].query,
+          params: historys.value[index - 1].params,
+        })
+      }
+    }
+  }
+  historys.value.splice(index, 1)
+}
+
+watch(contextMenuVisible, () => {
+  if (contextMenuVisible.value) {
+    document.body.addEventListener('click', () => {
+      contextMenuVisible.value = false
+    })
+  } else {
+    document.body.removeEventListener('click', () => {
+      contextMenuVisible.value = false
+    })
+  }
+})
+
+watch(route, (to, now) => {
+  if (to.name === 'Login') {
+    return
+  }
+  historys.value = historys.value.filter((item) => !item.meta.closeTab)
+  setTab(to)
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+  activeValue.value = window.sessionStorage.getItem('activeValue')
+  if (now && to && now.name === to.name) {
+    emitter.emit('reload')
+  }
+})
+
+const initPage = () => {
+  // 全局监听 关闭当前页面函数
+  emitter.on('closeThisPage', () => {
+    removeTab(name(route))
+  })
+  // 全局监听 关闭所有页面函数
+  emitter.on('closeAllPage', () => {
+    closeAll()
+  })
+  emitter.on('mobile', (data) => {
+    isMobile.value = data
+  })
+  emitter.on('collapse', (data) => {
+    isCollapse.value = data
+  })
+  const initHistorys = [
+    {
+      name: defaultRouter.value,
+      meta: {
+        title: '首页',
+      },
+      query: {},
+      params: {},
+    },
+  ]
+  historys.value =
+      JSON.parse(sessionStorage.getItem('historys')) || initHistorys
+  if (!window.sessionStorage.getItem('activeValue')) {
+    activeValue.value = getFmtString(route)
+  } else {
+    activeValue.value = window.sessionStorage.getItem('activeValue')
+  }
+  setTab(route)
+}
+initPage()
+
+onUnmounted(() => {
+  emitter.off('collapse')
+  emitter.off('mobile')
+})
 </script>
 
 <style lang="scss">
@@ -302,7 +318,7 @@ export default {
   color: #333;
   box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
 }
-.el-tabs__item .el-icon-close{
+.el-tabs__item .el-icon-close {
   color: initial !important;
 }
 .el-tabs__item .dot {
@@ -312,7 +328,7 @@ export default {
   margin-right: 8px;
   display: inline-block;
   border-radius: 50%;
-  transition: background-color .2s;
+  transition: background-color 0.2s;
 }
 
 .contextmenu li {

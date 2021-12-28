@@ -11,15 +11,19 @@
 </template>
 
 <script>
+import { defineProps } from 'vue'
 export default {
   name: 'AsyncSubmenu',
-  props: {
-    routerInfo: {
-      default: function() {
-        return null
-      },
-      type: Object
-    }
-  }
 }
+</script>
+
+<script setup>
+defineProps({
+  routerInfo: {
+    default: function() {
+      return null
+    },
+    type: Object
+  }
+})
 </script>

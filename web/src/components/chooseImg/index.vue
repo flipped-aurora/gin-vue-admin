@@ -18,42 +18,41 @@
   </el-drawer>
 </template>
 
-<script>
-const path = process.env.VUE_APP_BASE_API
+<script setup>
+import { defineEmits, defineProps, ref, defineExpose } from 'vue'
 import { getFileList } from '@/api/fileUploadAndDownload'
-export default {
-  props: {
-    target: {
-      type: Object,
-      default: null
-    },
-    targetKey: {
-      type: String,
-      default: ''
-    }
+
+const emit = defineEmits(['chooseImg'])
+defineProps({
+  target: {
+    type: Object,
+    default: null
   },
-  data() {
-    return {
-      drawer: false,
-      picList: [],
-      path: path
-    }
-  },
-  methods: {
-    chooseImg(url, target, targetKey) {
-      if (target && targetKey) {
-        target[targetKey] = url
-      }
-      this.$emit('enter-img', url)
-      this.drawer = false
-    },
-    async open() {
-      const res = await getFileList({ page: 1, pageSize: 9999 })
-      this.picList = res.data.list
-      this.drawer = true
-    }
+  targetKey: {
+    type: String,
+    default: ''
   }
+})
+
+const drawer = ref(false)
+const picList = ref([])
+const path = ref(import.meta.env.VITE_BASE_API)
+
+const chooseImg = (url, target, targetKey) => {
+  if (target && targetKey) {
+    target[targetKey] = url
+  }
+  emit('enter-img', url)
+  drawer.value = false
 }
+
+const open = async() => {
+  const res = await getFileList({ page: 1, pageSize: 9999 })
+  picList.value = res.data.list
+  drawer.value = true
+}
+
+defineExpose({ open })
 </script>
 
 <style lang="scss">

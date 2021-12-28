@@ -7,31 +7,29 @@
 </template>
 
 <script>
-import MenuItem from './menuItem.vue'
-import AsyncSubmenu from './asyncSubmenu.vue'
-
 export default {
   name: 'AsideComponent',
-  components: {
-    MenuItem,
-    AsyncSubmenu
-  },
-  props: {
-    routerInfo: {
-      default: function() {
-        return null
-      },
-      type: Object
-    }
-  },
-  computed: {
-    menuComponent() {
-      if (this.routerInfo.children && this.routerInfo.children.filter(item => !item.hidden).length) {
-        return 'AsyncSubmenu'
-      } else {
-        return 'MenuItem'
-      }
-    }
-  }
 }
 </script>
+
+<script setup>
+import MenuItem from './menuItem.vue'
+import AsyncSubmenu from './asyncSubmenu.vue'
+import { computed, defineProps } from 'vue'
+const props = defineProps({
+  routerInfo: {
+    type: Object,
+    default: () => null,
+  },
+})
+
+const menuComponent = computed(() => {
+  if (props.routerInfo.children && props.routerInfo.children.filter(item => !item.hidden).length) {
+    return AsyncSubmenu
+  } else {
+    return MenuItem
+  }
+})
+
+</script>
+

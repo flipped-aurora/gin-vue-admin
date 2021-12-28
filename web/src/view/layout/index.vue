@@ -97,145 +97,135 @@
 </template>
 
 <script>
+export default {
+  name: 'Layout',
+}
+</script>
+
+<script setup>
 import Aside from '@/view/layout/aside/index.vue'
 import HistoryComponent from '@/view/layout/aside/historyComponent/history.vue'
 import Search from '@/view/layout/search/search.vue'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
-import { mapGetters, mapActions } from 'vuex'
 import CustomPic from '@/components/customPic/index.vue'
 import Setting from './setting/index.vue'
+import { useStore } from 'vuex'
 import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
-export default {
-  name: 'Layout',
-  components: {
-    Aside,
-    HistoryComponent,
-    Search,
-    BottomInfo,
-    CustomPic,
-    Setting
-  },
-  data() {
-    return {
-      show: false,
-      isCollapse: false,
-      isSider: true,
-      isMobile: false,
-      isShadowBg: false,
-      loadingFlag: false,
-      reloadFlag: true,
-      value: ''
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['userInfo', 'sideMode', 'baseColor']),
-    textColor() {
-      if (this.$store.getters['user/sideMode'] === 'dark') {
-        return '#fff'
-      } else if (this.$store.getters['user/sideMode'] === 'light') {
-        return '#191a23'
-      } else {
-        return this.baseColor
-      }
-    },
-    backgroundColor() {
-      if (this.sideMode === 'dark') {
-        return '#191a23'
-      } else if (this.sideMode === 'light') {
-        return '#fff'
-      } else {
-        return this.sideMode
-      }
-    },
-    title() {
-      return this.$route.meta.title || '当前页面'
-    },
-    matched() {
-      return this.$route.matched
-    }
-  },
-  created() {
-    const screenWidth = document.body.clientWidth
-    if (screenWidth < 1000) {
-      this.isMobile = true
-      this.isSider = false
-      this.isCollapse = true
-    } else if (screenWidth >= 1000 && screenWidth < 1200) {
-      this.isMobile = false
-      this.isSider = false
-      this.isCollapse = true
-    } else {
-      this.isMobile = false
-      this.isSider = true
-      this.isCollapse = false
-    }
-  },
-  mounted() {
-    emitter.emit('collapse', this.isCollapse)
-    emitter.emit('mobile', this.isMobile)
-    emitter.on('reload', this.reload)
-    emitter.on('showLoading', () => {
-      this.loadingFlag = true
-    })
-    emitter.on('closeLoading', () => {
-      this.loadingFlag = false
-    })
-    window.onresize = () => {
-      return (() => {
-        const screenWidth = document.body.clientWidth
-        if (screenWidth < 1000) {
-          this.isMobile = true
-          this.isSider = false
-          this.isCollapse = true
-        } else if (screenWidth >= 1000 && screenWidth < 1200) {
-          this.isMobile = false
-          this.isSider = false
-          this.isCollapse = true
-        } else {
-          this.isMobile = false
-          this.isSider = true
-          this.isCollapse = false
-        }
-        emitter.emit('collapse', this.isCollapse)
-        emitter.emit('mobile', this.isMobile)
-      })()
-    }
-  },
-  methods: {
-    ...mapActions('user', ['LoginOut', 'GetUserInfo']),
-    async changeUserAuth(id) {
-      const res = await setUserAuthority({
-        authorityId: id
-      })
-      if (res.code === 0) {
-        emitter.emit('closeAllPage')
-        setTimeout(() => {
-          window.location.reload()
-        }, 1)
-      }
-    },
-    reload() {
-      this.reloadFlag = false
-      this.$nextTick(() => {
-        this.reloadFlag = true
-      })
-    },
-    totalCollapse() {
-      this.isCollapse = !this.isCollapse
-      this.isSider = !this.isCollapse
-      this.isShadowBg = !this.isCollapse
-      emitter.emit('collapse', this.isCollapse)
-    },
-    toPerson() {
-      this.$router.push({ name: 'person' })
-    },
-    changeShadow() {
-      this.isShadowBg = !this.isShadowBg
-      this.isSider = !!this.isCollapse
-      this.totalCollapse()
-    }
+import { computed, ref, onMounted, nextTick } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+
+const store = useStore()
+const router = useRouter()
+const route = useRoute()
+
+// 三种窗口适配
+const isCollapse = ref(false)
+const isSider = ref(true)
+const isMobile = ref(false)
+const initPage = () => {
+  const screenWidth = document.body.clientWidth
+  if (screenWidth < 1000) {
+    isMobile.value = true
+    isSider.value = false
+    isCollapse.value = true
+  } else if (screenWidth >= 1000 && screenWidth < 1200) {
+    isMobile.value = false
+    isSider.value = false
+    isCollapse.value = true
+  } else {
+    isMobile.value = false
+    isSider.value = true
+    isCollapse.value = false
   }
+}
+
+initPage()
+
+const loadingFlag = ref(false)
+onMounted(() => {
+  // 挂载一些通用的事件
+  emitter.emit('collapse', isCollapse.value)
+  emitter.emit('mobile', isMobile.value)
+  emitter.on('reload', reload)
+  emitter.on('showLoading', () => {
+    loadingFlag.value = true
+  })
+  emitter.on('closeLoading', () => {
+    loadingFlag.value = false
+  })
+  window.onresize = () => {
+    return (() => {
+      initPage()
+      emitter.emit('collapse', isCollapse.value)
+      emitter.emit('mobile', isMobile.value)
+    })()
+  }
+})
+
+const userInfo = computed(() => store.getters['user/userInfo'])
+const sideMode = computed(() => store.getters['user/sideMode'])
+const baseColor = computed(() => store.getters['user/baseColor'])
+const textColor = computed(() => {
+  if (sideMode === 'dark') {
+    return '#fff'
+  } else if (sideMode === 'light') {
+    return '#191a23'
+  } else {
+    return baseColor.value
+  }
+})
+
+const backgroundColor = computed(() => {
+  if (sideMode === 'dark') {
+    return '#191a23'
+  } else if (sideMode === 'light') {
+    return '#fff'
+  } else {
+    return sideMode.value
+  }
+})
+
+const matched = computed(() => route.matched)
+
+const LoginOut = () => {
+  store.dispatch('user/LoginOut')
+}
+
+const changeUserAuth = async(id) => {
+  const res = await setUserAuthority({
+    authorityId: id
+  })
+  if (res.code === 0) {
+    emitter.emit('closeAllPage')
+    setTimeout(() => {
+      window.location.reload()
+    }, 1)
+  }
+}
+
+const reloadFlag = ref(true)
+const reload = async() => {
+  reloadFlag.value = false
+  await nextTick()
+  reloadFlag.value = true
+}
+
+const isShadowBg = ref(false)
+const totalCollapse = () => {
+  isCollapse.value = !isCollapse.value
+  isSider.value = !isCollapse.value
+  isShadowBg.value = !isCollapse.value
+  emitter.emit('collapse', isCollapse.value)
+}
+
+const toPerson = () => {
+  router.push({ name: 'person' })
+}
+const changeShadow = () => {
+  isShadowBg.value = !isShadowBg.value
+  isSider.value = !!isCollapse.value
+  totalCollapse()
 }
 </script>
 

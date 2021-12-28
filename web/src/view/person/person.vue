@@ -4,7 +4,19 @@
       <el-col :span="6">
         <div class="fl-left avatar-box">
           <div class="user-card">
-            <div class="user-headpic-update" :style="{ 'background-image': `url(${(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg})`,'background-repeat':'no-repeat','background-size':'cover' }">
+            <div
+              class="user-headpic-update"
+              :style="{
+                'background-image': `url(${
+                  userInfo.headerImg &&
+                  userInfo.headerImg.slice(0, 4) !== 'http'
+                    ? path + userInfo.headerImg
+                    : userInfo.headerImg
+                })`,
+                'background-repeat': 'no-repeat',
+                'background-size': 'cover',
+              }"
+            >
               <span class="update" @click="openChooseImg">
                 <el-icon>
                   <edit />
@@ -12,7 +24,8 @@
                 重新上传</span>
             </div>
             <div class="user-personality">
-              <p v-if="!editFlag" class="nickName">{{ userInfo.nickName }}
+              <p v-if="!editFlag" class="nickName">
+                {{ userInfo.nickName }}
                 <el-icon class="pointer" color="#66b1ff" @click="openEidt">
                   <edit />
                 </el-icon>
@@ -36,7 +49,12 @@
                   </el-icon>
                   {{ userInfo.nickName }}
                 </li>
-                <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="top">
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="北京反转极光科技有限公司-技术部-前端事业群"
+                  placement="top"
+                >
                   <li>
                     <el-icon>
                       <data-analysis />
@@ -50,7 +68,12 @@
                   </el-icon>
                   中国·北京市·朝阳区
                 </li>
-                <el-tooltip class="item" effect="light" content="GoLang/JavaScript/Vue/Gorm" placement="top">
+                <el-tooltip
+                  class="item"
+                  effect="light"
+                  content="GoLang/JavaScript/Vue/Gorm"
+                  placement="top"
+                >
                   <li>
                     <el-icon>
                       <medal />
@@ -58,7 +81,6 @@
                     GoLang/JavaScript/Vue/Gorm
                   </li>
                 </el-tooltip>
-
               </ul>
             </div>
           </div>
@@ -94,7 +116,10 @@
                   <p class="title">修改密码</p>
                   <p class="desc">
                     修改个人密码
-                    <a href="javascript:void(0)" @click="showPassword=true">修改密码</a>
+                    <a
+                      href="javascript:void(0)"
+                      @click="showPassword = true"
+                    >修改密码</a>
                   </p>
                 </li>
               </ul>
@@ -104,10 +129,20 @@
       </el-col>
     </el-row>
 
-    <ChooseImg ref="chooseImg" @enter-img="enterImg" />
+    <ChooseImg ref="chooseImgRef" @enter-img="enterImg" />
 
-    <el-dialog v-model="showPassword" title="修改密码" width="360px" @close="clearPassword">
-      <el-form ref="modifyPwdForm" :model="pwdModify" :rules="rules" label-width="80px">
+    <el-dialog
+      v-model="showPassword"
+      title="修改密码"
+      width="360px"
+      @close="clearPassword"
+    >
+      <el-form
+        ref="modifyPwdForm"
+        :model="pwdModify"
+        :rules="rules"
+        label-width="80px"
+      >
         <el-form-item :minlength="6" label="原密码" prop="password">
           <el-input v-model="pwdModify.password" show-password />
         </el-form-item>
@@ -120,8 +155,15 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="showPassword=false">取 消</el-button>
-          <el-button size="small" type="primary" @click="savePassword">确 定</el-button>
+          <el-button
+            size="small"
+            @click="showPassword = false"
+          >取 消</el-button>
+          <el-button
+            size="small"
+            type="primary"
+            @click="savePassword"
+          >确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -129,118 +171,128 @@
 </template>
 
 <script>
-import ChooseImg from '@/components/chooseImg/index.vue'
-import { setUserInfo, changePassword } from '@/api/user.js'
-
-import { mapGetters, mapMutations } from 'vuex'
-const path = import.meta.env.VITE_BASE_API
 export default {
   name: 'Person',
-  components: {
-    ChooseImg
-  },
-  data() {
-    return {
-      path: path,
-      activeName: 'second',
-      showPassword: false,
-      pwdModify: {},
-      nickName: '',
-      editFlag: false,
-      rules: {
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 6, message: '最少6个字符', trigger: 'blur' }
-        ],
-        newPassword: [
-          { required: true, message: '请输入新密码', trigger: 'blur' },
-          { min: 6, message: '最少6个字符', trigger: 'blur' }
-        ],
-        confirmPassword: [
-          { required: true, message: '请输入确认密码', trigger: 'blur' },
-          { min: 6, message: '最少6个字符', trigger: 'blur' },
-          {
-            validator: (rule, value, callback) => {
-              if (value !== this.pwdModify.newPassword) {
-                callback(new Error('两次密码不一致'))
-              } else {
-                callback()
-              }
-            },
-            trigger: 'blur'
-          }
-        ]
-      }
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['userInfo', 'token'])
-  },
-  methods: {
-    ...mapMutations('user', ['ResetUserInfo']),
-    savePassword() {
-      this.$refs.modifyPwdForm.validate(valid => {
-        if (valid) {
-          changePassword({
-            username: this.userInfo.userName,
-            password: this.pwdModify.password,
-            newPassword: this.pwdModify.newPassword
-          }).then((res) => {
-            if (res.code === 0) {
-              this.$message.success('修改密码成功！')
-            }
-            this.showPassword = false
-          })
+}
+</script>
+
+<script setup>
+import ChooseImg from '@/components/chooseImg/index.vue'
+import { setUserInfo, changePassword } from '@/api/user.js'
+import { useStore } from 'vuex'
+import { computed, reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
+const store = useStore()
+
+const path = ref(import.meta.env.VITE_BASE_API)
+const activeName = ref('second')
+const rules = reactive({
+  password: [
+    { required: true, message: '请输入密码', trigger: 'blur' },
+    { min: 6, message: '最少6个字符', trigger: 'blur' },
+  ],
+  newPassword: [
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 6, message: '最少6个字符', trigger: 'blur' },
+  ],
+  confirmPassword: [
+    { required: true, message: '请输入确认密码', trigger: 'blur' },
+    { min: 6, message: '最少6个字符', trigger: 'blur' },
+    {
+      validator: (rule, value, callback) => {
+        if (value !== pwdModify.value.newPassword) {
+          callback(new Error('两次密码不一致'))
         } else {
-          return false
+          callback()
         }
+      },
+      trigger: 'blur',
+    },
+  ],
+})
+
+const userInfo = computed(() => store.getters['user/userInfo'])
+const modifyPwdForm = ref(null)
+const showPassword = ref(false)
+const pwdModify = ref({})
+const nickName = ref('')
+const editFlag = ref(false)
+const savePassword = async() => {
+  modifyPwdForm.value.validate((valid) => {
+    if (valid) {
+      changePassword({
+        username: userInfo.value.userName,
+        password: pwdModify.value.password,
+        newPassword: pwdModify.value.newPassword,
+      }).then((res) => {
+        if (res.code === 0) {
+          ElMessage.success('修改密码成功！')
+        }
+        showPassword.value = false
       })
-    },
-    clearPassword() {
-      this.pwdModify = {
-        password: '',
-        newPassword: '',
-        confirmPassword: ''
-      }
-      this.$refs.modifyPwdForm.clearValidate()
-    },
-    openChooseImg() {
-      this.$refs.chooseImg.open()
-    },
-    async enterImg(url) {
-      const res = await setUserInfo({ headerImg: url, ID: this.userInfo.ID })
-      if (res.code === 0) {
-        this.ResetUserInfo({ headerImg: url })
-        this.$message({
-          type: 'success',
-          message: '设置成功'
-        })
-      }
-    },
-    openEidt() {
-      this.nickName = this.userInfo.nickName
-      this.editFlag = true
-    },
-    closeEdit() {
-      this.nickName = ''
-      this.editFlag = false
-    },
-    async enterEdit() {
-      const res = await setUserInfo({ nickName: this.nickName, ID: this.userInfo.ID })
-      if (res.code === 0) {
-        this.ResetUserInfo({ nickName: this.nickName })
-        this.$message({
-          type: 'success',
-          message: '设置成功'
-        })
-      }
-      this.nickName = ''
-      this.editFlag = false
-    },
-    handleClick(tab, event) {
-      console.log(tab, event)
+    } else {
+      return false
     }
+  })
+}
+
+const clearPassword = () => {
+  pwdModify.value = {
+    password: '',
+    newPassword: '',
+    confirmPassword: '',
   }
+  modifyPwdForm.value.clearValidate()
+}
+
+const chooseImgRef = ref(null)
+const openChooseImg = () => {
+  chooseImgRef.value.open()
+}
+
+const ResetUserInfo = (data) => {
+  store.commit('user/ResetUserInfo', data)
+}
+const enterImg = async(url) => {
+  const res = await setUserInfo({ headerImg: url, ID: userInfo.value.ID })
+  if (res.code === 0) {
+    ResetUserInfo({ headerImg: url })
+    ElMessage({
+      type: 'success',
+      message: '设置成功',
+    })
+  }
+}
+
+const openEidt = () => {
+  nickName.value = userInfo.value.nickName
+  editFlag.value = true
+}
+
+const closeEdit = () => {
+  nickName.value = ''
+  editFlag.value = false
+}
+
+const enterEdit = async() => {
+  const res = await setUserInfo({
+    nickName: nickName.value,
+    ID: userInfo.value.ID,
+  })
+  if (res.code === 0) {
+    ResetUserInfo({ nickName: nickName.value })
+    ElMessage({
+      type: 'success',
+      message: '设置成功',
+    })
+  }
+  nickName.value = ''
+  editFlag.value = false
+}
+
+const handleClick = (tab, event) => {
+  console.log(tab, event)
 }
 </script>
 
@@ -291,10 +343,10 @@ export default {
         align-items: center;
         font-size: 26px;
       }
-      .person-info{
+      .person-info {
         margin-top: 6px;
         font-size: 14px;
-        color:#999
+        color: #999;
       }
     }
     .user-information {
@@ -307,7 +359,7 @@ export default {
         width: 100%;
         li {
           width: 100%;
-          white-space:nowrap;
+          white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
           i {
@@ -343,30 +395,40 @@ export default {
     }
   }
 }
-.user-headpic-update{
-    width: 120px;
-    height: 120px;
-    line-height: 120px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    border-radius: 20px;
-     &:hover{
+.user-headpic-update {
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  &:hover {
+    color: #fff;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.15) 0%,
+        rgba(0, 0, 0, 0.15) 100%
+      ),
+      radial-gradient(
+          at top center,
+          rgba(255, 255, 255, 0.4) 0%,
+          rgba(0, 0, 0, 0.4) 120%
+        )
+        #989898;
+    background-blend-mode: multiply, multiply;
+    .update {
       color: #fff;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.15) 0%, rgba(0,0,0,0.15) 100%), radial-gradient(at top center, rgba(255,255,255,0.40) 0%, rgba(0,0,0,0.40) 120%) #989898;
-      background-blend-mode: multiply,multiply;
-      .update{
-        color:#fff ;
-      }
-    }
-    .update{
-      height: 120px;
-      width: 120px;
-      text-align: center;
-      color:transparent;
     }
   }
-  .pointer{
-    cursor: pointer;
+  .update {
+    height: 120px;
+    width: 120px;
+    text-align: center;
+    color: transparent;
   }
+}
+.pointer {
+  cursor: pointer;
+}
 </style>

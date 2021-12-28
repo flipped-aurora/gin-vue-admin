@@ -12,12 +12,15 @@
         </div>
         <el-form
           ref="loginForm"
-          :model="loginForm"
+          :model="loginFormData"
           :rules="rules"
           @keyup.enter="submitForm"
         >
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="请输入用户名">
+            <el-input
+              v-model="loginFormData.username"
+              placeholder="请输入用户名"
+            >
               <template #suffix>
                 <span class="input-icon">
                   <el-icon>
@@ -29,21 +32,25 @@
           </el-form-item>
           <el-form-item prop="password">
             <el-input
-              v-model="loginForm.password"
+              v-model="loginFormData.password"
               :type="lock === 'lock' ? 'password' : 'text'"
               placeholder="请输入密码"
             >
               <template #suffix>
                 <span class="input-icon">
-                  <el-icon><component :is="lock" @click="changeLock" /></el-icon>
+                  <el-icon>
+                    <component
+                      :is="lock"
+                      @click="changeLock"
+                    />
+                  </el-icon>
                 </span>
               </template>
             </el-input>
           </el-form-item>
           <el-form-item style="position: relative" prop="captcha">
             <el-input
-              v-model="loginForm.captcha"
-              name="logVerify"
+              v-model="loginFormData.captcha"
               placeholder="请输入验证码"
               style="width: 60%"
             />
@@ -79,7 +86,10 @@
           <a href="https://support.qq.com/product/371961" target="_blank">
             <img src="@/assets/kefu.png" class="link-icon">
           </a>
-          <a href="https://github.com/flipped-aurora/gin-vue-admin" target="_blank">
+          <a
+            href="https://github.com/flipped-aurora/gin-vue-admin"
+            target="_blank"
+          >
             <img src="@/assets/github.png" class="link-icon">
           </a>
           <a href="https://space.bilibili.com/322210472" target="_blank">
@@ -93,101 +103,109 @@
     </div>
   </div>
 </template>
+
 <script>
-import { mapActions } from 'vuex'
+export default {
+  name: 'Login',
+}
+</script>
+
+<script setup>
+import { useStore } from 'vuex'
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
 import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
-export default {
-  name: 'Login',
-  components: {
-    bootomInfo
-  },
-  data() {
-    const checkUsername = (rule, value, callback) => {
-      if (value.length < 5) {
-        return callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
-    const checkPassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        return callback(new Error('请输入正确的密码'))
-      } else {
-        callback()
-      }
-    }
-    return {
-      lock: 'lock',
-      loginForm: {
-        username: 'admin',
-        password: '123456',
-        captcha: '',
-        captchaId: ''
-      },
-      rules: {
-        username: [{ validator: checkUsername, trigger: 'blur' }],
-        password: [{ validator: checkPassword, trigger: 'blur' }],
-        captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
-          {
-            message: '验证码格式不正确',
-            trigger: 'blur',
-          }]
-      },
-      logVerify: '',
-      picPath: ''
-    }
-  },
-  created() {
-    this.loginVerify()
-  },
-  methods: {
-    ...mapActions('user', ['LoginIn']),
-    async checkInit() {
-      const res = await checkDB()
-      if (res.code === 0) {
-        if (res.data?.needInit) {
-          this.$store.commit('user/NeedInit')
-          this.$router.push({ name: 'Init' })
-        } else {
-          this.$message({
-            type: 'info',
-            message: '已配置数据库信息，无法初始化'
-          })
-        }
-      }
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const store = useStore()
+
+// 验证函数
+const checkUsername = (rule, value, callback) => {
+  if (value.length < 5) {
+    return callback(new Error('请输入正确的用户名'))
+  } else {
+    callback()
+  }
+}
+const checkPassword = (rule, value, callback) => {
+  if (value.length < 6) {
+    return callback(new Error('请输入正确的密码'))
+  } else {
+    callback()
+  }
+}
+
+// 获取验证码
+const loginVerify = () => {
+  captcha({}).then((ele) => {
+    rules.captcha[1].max = ele.data.captchaLength
+    rules.captcha[1].min = ele.data.captchaLength
+    picPath.value = ele.data.picPath
+    loginFormData.captchaId = ele.data.captchaId
+  })
+}
+loginVerify()
+
+// 登录相关操作
+const lock = ref('lock')
+const changeLock = () => {
+  lock.value = lock.value === 'lock' ? 'unlock' : 'lock'
+}
+
+const loginForm = ref(null)
+const picPath = ref('')
+const loginFormData = reactive({
+  username: 'admin',
+  password: '123456',
+  captcha: '',
+  captchaId: '',
+})
+const rules = reactive({
+  username: [{ validator: checkUsername, trigger: 'blur' }],
+  password: [{ validator: checkPassword, trigger: 'blur' }],
+  captcha: [
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    {
+      message: '验证码格式不正确',
+      trigger: 'blur',
     },
-    async login() {
-      return await this.LoginIn(this.loginForm)
-    },
-    async submitForm() {
-      this.$refs.loginForm.validate(async(v) => {
-        if (v) {
-          const flag = await this.login()
-          if (!flag) {
-            this.loginVerify()
-          }
-        } else {
-          this.$message({
-            type: 'error',
-            message: '请正确填写登录信息',
-            showClose: true
-          })
-          this.loginVerify()
-          return false
-        }
+  ],
+})
+const login = async() => {
+  return await store.dispatch('user/LoginIn', loginFormData)
+}
+const submitForm = () => {
+  loginForm.value.validate(async(v) => {
+    if (v) {
+      const flag = await login()
+      if (!flag) {
+        loginVerify()
+      }
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '请正确填写登录信息',
+        showClose: true,
       })
-    },
-    changeLock() {
-      this.lock = this.lock === 'lock' ? 'unlock' : 'lock'
-    },
-    loginVerify() {
-      captcha({}).then((ele) => {
-        this.rules.captcha[1].max = ele.data.captchaLength
-        this.rules.captcha[1].min = ele.data.captchaLength
-        this.picPath = ele.data.picPath
-        this.loginForm.captchaId = ele.data.captchaId
+      loginVerify()
+      return false
+    }
+  })
+}
+
+// 跳转初始化
+const checkInit = async() => {
+  const res = await checkDB()
+  if (res.code === 0) {
+    if (res.data?.needInit) {
+      store.commit('user/NeedInit')
+      router.push({ name: 'Init' })
+    } else {
+      ElMessage({
+        type: 'info',
+        message: '已配置数据库信息，无法初始化',
       })
     }
   }

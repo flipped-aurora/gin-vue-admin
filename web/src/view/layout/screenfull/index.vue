@@ -1,5 +1,5 @@
 <template>
-  <el-icon @click="click">
+  <el-icon @click="clickFull">
     <svg
       v-if="isShow"
       t="1590133227479"
@@ -63,47 +63,50 @@
 </template>
 
 <script>
-import screenfull from 'screenfull' // 引入screenfull
 export default {
   name: 'Screenfull',
-  props: {
-    width: {
-      type: Number,
-      default: 22
-    },
-    height: {
-      type: Number,
-      default: 22
-    },
-    fill: {
-      type: String,
-      default: '#48576a'
-    }
+}
+</script>
+
+<script setup>
+import screenfull from 'screenfull' // 引入screenfull
+import { defineProps, onMounted, onUnmounted, ref } from 'vue'
+defineProps({
+  width: {
+    type: Number,
+    default: 22
   },
-  data() {
-    return {
-      isShow: true
-    }
+  height: {
+    type: Number,
+    default: 22
   },
-  mounted() {
-    if (screenfull.isEnabled) {
-      screenfull.on('change', this.changeFullShow)
-    }
-  },
-  unmounted() {
-    screenfull.off('change', this.changeFullShow)
-  },
-  methods: {
-    click() {
-      if (screenfull.isEnabled) {
-        screenfull.toggle()
-      }
-    },
-    changeFullShow() {
-      this.isShow = !screenfull.isFullscreen
-    }
+  fill: {
+    type: String,
+    default: '#48576a'
+  }
+})
+
+onMounted(() => {
+  if (screenfull.isEnabled) {
+    screenfull.on('change', changeFullShow)
+  }
+})
+
+onUnmounted(() => {
+  screenfull.off('change')
+})
+
+const clickFull = () => {
+  if (screenfull.isEnabled) {
+    screenfull.toggle()
   }
 }
+
+const isShow = ref(true)
+const changeFullShow = () => {
+  isShow.value = !screenfull.isFullscreen
+}
+
 </script>
 
 <style scoped lang="scss">

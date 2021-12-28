@@ -1,0 +1,35 @@
+{
+  "login": {
+    "entUserName": "أدخل إسم المستخدم",
+    "entPassword": "أدخل كلمة المرور",
+    "entVerificationCode": "أدخل رمز التأكيد",
+    "login": "الدخول للنظام",
+    "init": "التهيئة",
+    "errUserName": "إدخل إسم مستخدم صحيح",
+    "errPassword": "إدخل كلمة مرور صحيحة",
+    "errVerificationCode": "رمز تأكيد خطاء",
+    "errLogin": "من فضلك إدخل بيانات دخول صحيحة",
+    "errInit" : "تم تهية قاعدة البيانات مسبقا، لاداعى للتهيئة مجددا",
+    "language": "Languages"
+  },
+  "init": {
+    "note": "إشعار التهيئة",
+    "note1": "1.يجب ان تكون على دراية بإستخدام GoLang و Vue.",
+    "note2": "2.من فضلك تأكد من قرءاة ",
+    "note3": "3.Please confirm that you understand the subsequent configuration process.",
+    "note4": "Note: The development team does not provide free services for the content written in the document.",
+    "readDocs": "قرأة الإرشادات",
+    "confirm": "تأكيد"
+  },
+  "pages": {
+    "home": {
+      "title": "Home",
+      "count": "count is: {value}",
+      "virtual": "msg from virtual module: {msg}",
+      "inter": "this will be styled with a font-face"
+    },
+    "about": {
+      "title": "About"
+    }
+  }
+}

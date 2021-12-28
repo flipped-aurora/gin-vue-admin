@@ -1,0 +1,35 @@
+{
+  "login": {
+    "entUserName": "请输入用户名",
+    "entPassword": "请输入密码",
+    "entVerificationCode": "请输入验证码",
+    "login": "登 录",
+    "init": "前往初始化",
+    "errUserName": "请输入正确的用户名",
+    "errPassword": "请输入正确的密码",
+    "errVerificationCode": "验证码格式不正确",
+    "errLoging": "请正确填写登录信息",
+    "errInit" : "已配置数据库信息，无法初始化",
+    "language": "Languages"
+  },
+  "init": {
+    "note": "初始化须知",
+    "note1": "1.您需有用一定的VUE和GOLANG基础",
+    "note2": "2.请您确认是否已经阅读过官方文档",
+    "note3": "3.请您确认是否了解后续的配置流程",
+    "note4": "注：开发组不为文档中书写过的内容提供无偿服务",
+    "readDocs": "阅读文档",
+    "confirm": "我已确认"
+  },
+  "pages": {
+    "home": {
+      "title": "Home",
+      "count": "count is: {value}",
+      "virtual": "msg from virtual module: {msg}",
+      "inter": "this will be styled with a font-face"
+    },
+    "about": {
+      "title": "About"
+    }
+  }
+}

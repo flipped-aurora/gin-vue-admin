@@ -2,6 +2,14 @@
   <div id="userLayout">
     <div class="login_panle">
       <div class="login_panle_form">
+        <!--
+        <label for="locale">Select Language:</label>
+        <select v-model="$i18n.locale" width="50px">
+          <option>en</option>
+          <option>cn</option>
+          <option>ar</option>
+        </select>
+        -->
         <div class="login_panle_form_title">
           <img
             class="login_panle_form_title_logo"
@@ -17,7 +25,7 @@
           @keyup.enter="submitForm"
         >
           <el-form-item prop="username">
-            <el-input v-model="loginForm.username" placeholder="请输入用户名">
+            <el-input v-model="loginForm.username" :placeholder="$t('login.entUserName')">
               <template #suffix>
                 <span class="input-icon">
                   <el-icon>
@@ -31,7 +39,7 @@
             <el-input
               v-model="loginForm.password"
               :type="lock === 'lock' ? 'password' : 'text'"
-              placeholder="请输入密码"
+              :placeholder="$t('login.entPassword')"
             >
               <template #suffix>
                 <span class="input-icon">
@@ -44,29 +52,39 @@
             <el-input
               v-model="loginForm.captcha"
               name="logVerify"
-              placeholder="请输入验证码"
+              :placeholder="$t('login.entVerificationCode')"
               style="width: 60%"
             />
             <div class="vPic">
               <img
                 v-if="picPath"
                 :src="picPath"
-                alt="请输入验证码"
+                :alt="$t('login.entVerificationCode')"
                 @click="loginVerify()"
               >
             </div>
           </el-form-item>
+          <!-- added by mohamed hassan to support multi language -->
+          <el-form-item>
+            <label for="locale" style="padding-right: 88px">Select Language:</label>
+            <el-select v-model="$i18n.locale" value-key="value" placeholder="Select Language">
+              <el-option v-for="item in langs" :key="item.value" :label="item.label" :value="item.value">
+                <img :src="item.photo"> {{ item.label }}
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- end of adding -->
           <el-form-item>
             <el-button
               type="primary"
               style="width: 46%"
               @click="checkInit"
-            >前往初始化</el-button>
+            >{{ $t('login.init') }}</el-button>
             <el-button
               type="primary"
               style="width: 46%; margin-left: 8%"
               @click="submitForm"
-            >登 录</el-button>
+            >{{ $t('login.login') }}</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -106,14 +124,14 @@ export default {
   data() {
     const checkUsername = (rule, value, callback) => {
       if (value.length < 5) {
-        return callback(new Error('请输入正确的用户名'))
+        return callback(new Error(this.$t('login.errUserName')))
       } else {
         callback()
       }
     }
     const checkPassword = (rule, value, callback) => {
       if (value.length < 6) {
-        return callback(new Error('请输入正确的密码'))
+        return callback(new Error(this.$t('login.errPassword')))
       } else {
         callback()
       }
@@ -129,17 +147,32 @@ export default {
       rules: {
         username: [{ validator: checkUsername, trigger: 'blur' }],
         password: [{ validator: checkPassword, trigger: 'blur' }],
-        captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
+        captcha: [{ required: true, message: this.$t('login.entVerificationCode'), trigger: 'blur' },
           {
-            message: '验证码格式不正确',
+            message: this.$t('login.errVerificationCode'),
             trigger: 'blur',
           }]
       },
       logVerify: '',
-      picPath: ''
+      picPath: '',
+      langs: [{
+        value: 'en',
+        label: 'English',
+        photo: '@/assets/flags/us.svg'
+      }, {
+        value: 'cn',
+        label: '中文',
+        photo: '@/assets/flags/cn.svg'
+      }, {
+        value: 'ar',
+        label: 'العربية',
+        photo: '@/assets/flags/eg.svg'
+      }],
     }
   },
   created() {
+    this.$i18n.locale = this.langs[0].value
+
     this.loginVerify()
   },
   methods: {
@@ -153,7 +186,7 @@ export default {
         } else {
           this.$message({
             type: 'info',
-            message: '已配置数据库信息，无法初始化'
+            message: this.$t('login.errInit')
           })
         }
       }
@@ -171,7 +204,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: '请正确填写登录信息',
+            message: this.$t('login.errLogin'),
             showClose: true
           })
           this.loginVerify()
@@ -189,6 +222,9 @@ export default {
         this.picPath = ele.data.picPath
         this.loginForm.captchaId = ele.data.captchaId
       })
+    },
+    setLocale(locale) {
+      this.$$i18n.locale = locale
     }
   }
 }
@@ -197,4 +233,13 @@ export default {
 
 <style lang="scss" scoped>
 @import "@/style/newLogin.scss";
+
+img {
+  width: 20px;
+  height: 20px;
+}
+
+.prefix {
+  margin-top: 10px;
+}
 </style>

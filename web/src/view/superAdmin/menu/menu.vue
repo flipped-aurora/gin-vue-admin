@@ -188,9 +188,7 @@
   </div>
 </template>
 
-<script>
-// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
-
+<script setup>
 import {
   updateBaseMenu,
   getMenuList,
@@ -198,207 +196,228 @@ import {
   deleteBaseMenu,
   getBaseMenuById
 } from '@/api/menu'
-import infoList from '@/mixins/infoList'
 import icon from '@/view/superAdmin/menu/icon.vue'
 import warningBar from '@/components/warningBar/warningBar.vue'
-export default {
-  name: 'Menus',
-  components: {
-    icon,
-    warningBar
+import { reactive, ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+const rules = reactive({
+  path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
+  component: [
+    { required: true, message: '请输入文件路径', trigger: 'blur' }
+  ],
+  'meta.title': [
+    { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
+  ]
+})
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(999)
+const tableData = ref([])
+const searchInfo = ref({})
+// 查询
+const getTableData = async() => {
+  const table = await getMenuList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
+  }
+}
+
+getTableData()
+
+// 新增参数
+const addParameter = (form) => {
+  if (!form.parameters) {
+    form.value.parameters = []
+  }
+  form.parameters.push({
+    type: 'query',
+    key: '',
+    value: ''
+  })
+}
+// 删除参数
+const deleteParameter = (parameters, index) => {
+  parameters.splice(index, 1)
+}
+
+const form = ref({
+  ID: 0,
+  path: '',
+  name: '',
+  hidden: '',
+  parentId: '',
+  component: '',
+  meta: {
+    title: '',
+    icon: '',
+    defaultMenu: false,
+    closeTab: false,
+    keepAlive: false
   },
-  mixins: [infoList],
-  data() {
-    return {
-      checkFlag: false,
-      listApi: getMenuList,
-      dialogFormVisible: false,
-      dialogTitle: '新增菜单',
-      menuOption: [
-        {
-          ID: '0',
-          title: '根菜单'
+  parameters: []
+})
+const changeName = () => {
+  form.value.path = form.value.name
+}
+
+const handleClose = (done) => {
+  initForm()
+  done()
+}
+// 删除菜单
+const deleteMenu = (ID) => {
+  ElMessageBox.confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async() => {
+      const res = await deleteBaseMenu({ ID })
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功!'
+        })
+        if (tableData.value.length === 1 && page.value > 1) {
+          page.value--
         }
-      ],
-      form: {
-        ID: 0,
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
-        meta: {
-          title: '',
-          icon: '',
-          defaultMenu: false,
-          closeTab: false,
-          keepAlive: false
-        },
-        parameters: []
-      },
-      rules: {
-        path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
-        component: [
-          { required: true, message: '请输入文件路径', trigger: 'blur' }
-        ],
-        'meta.title': [
-          { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
-        ]
-      },
-      isEdit: false,
-      test: ''
-    }
-  },
-  async created() {
-    this.pageSize = 999
-    await this.getTableData()
-  },
-  methods: {
-    addParameter(form) {
-      if (!form.parameters) {
-        this.form.parameters = []
+        getTableData()
       }
-      form.parameters.push({
-        type: 'query',
-        key: '',
-        value: ''
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除'
       })
-    },
-    deleteParameter(parameters, index) {
-      parameters.splice(index, 1)
-    },
-    changeName() {
-      this.form.path = this.form.name
-    },
-    setOptions() {
-      this.menuOption = [
-        {
-          ID: '0',
-          title: '根目录'
-        }
-      ]
-      this.setMenuOptions(this.tableData, this.menuOption, false)
-    },
-    setMenuOptions(menuData, optionsData, disabled) {
-      menuData &&
+    })
+}
+// 初始化弹窗内表格方法
+const menuForm = ref(null)
+const checkFlag = ref(false)
+const initForm = () => {
+  checkFlag.value = false
+  menuForm.value.resetFields()
+  form.value = {
+    ID: 0,
+    path: '',
+    name: '',
+    hidden: '',
+    parentId: '',
+    component: '',
+    meta: {
+      title: '',
+      icon: '',
+      defaultMenu: false,
+      keepAlive: ''
+    }
+  }
+}
+// 关闭弹窗
+
+const dialogFormVisible = ref(false)
+const closeDialog = () => {
+  initForm()
+  dialogFormVisible.value = false
+}
+// 添加menu
+const enterDialog = async() => {
+  menuForm.value.validate(async valid => {
+    if (valid) {
+      let res
+      if (isEdit.value) {
+        res = await updateBaseMenu(form.value)
+      } else {
+        res = await addBaseMenu(form.value)
+      }
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: isEdit.value ? '编辑成功' : '添加成功!'
+        })
+        getTableData()
+      }
+      initForm()
+      dialogFormVisible.value = false
+    }
+  })
+}
+
+const menuOption = ref([
+  {
+    ID: '0',
+    title: '根菜单'
+  }
+])
+const setOptions = () => {
+  menuOption.value = [
+    {
+      ID: '0',
+      title: '根目录'
+    }
+  ]
+  setMenuOptions(tableData.value, menuOption.value, false)
+}
+const setMenuOptions = (menuData, optionsData, disabled) => {
+  menuData &&
         menuData.forEach(item => {
           if (item.children && item.children.length) {
             const option = {
               title: item.meta.title,
               ID: String(item.ID),
-              disabled: disabled || item.ID === this.form.ID,
+              disabled: disabled || item.ID === form.value.ID,
               children: []
             }
-            this.setMenuOptions(
+            setMenuOptions(
               item.children,
               option.children,
-              disabled || item.ID === this.form.ID
+              disabled || item.ID === form.value.ID
             )
             optionsData.push(option)
           } else {
             const option = {
               title: item.meta.title,
               ID: String(item.ID),
-              disabled: disabled || item.ID === this.form.ID
+              disabled: disabled || item.ID === form.value.ID
             }
             optionsData.push(option)
           }
         })
-    },
-    handleClose(done) {
-      this.initForm()
-      done()
-    },
-    // 删除菜单
-    deleteMenu(ID) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(async() => {
-          const res = await deleteBaseMenu({ ID })
-          if (res.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            if (this.tableData.length === 1 && this.page > 1) {
-              this.page--
-            }
-            this.getTableData()
-          }
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-    },
-    // 初始化弹窗内表格方法
-    initForm() {
-      this.checkFlag = false
-      this.$refs.menuForm.resetFields()
-      this.form = {
-        ID: 0,
-        path: '',
-        name: '',
-        hidden: '',
-        parentId: '',
-        component: '',
-        meta: {
-          title: '',
-          icon: '',
-          defaultMenu: false,
-          keepAlive: ''
-        }
-      }
-    },
-    // 关闭弹窗
-    closeDialog() {
-      this.initForm()
-      this.dialogFormVisible = false
-    },
-    // 添加menu
-    async enterDialog() {
-      this.$refs.menuForm.validate(async valid => {
-        if (valid) {
-          let res
-          if (this.isEdit) {
-            res = await updateBaseMenu(this.form)
-          } else {
-            res = await addBaseMenu(this.form)
-          }
-          if (res.code === 0) {
-            this.$message({
-              type: 'success',
-              message: this.isEdit ? '编辑成功' : '添加成功!'
-            })
-            this.getTableData()
-          }
-          this.initForm()
-          this.dialogFormVisible = false
-        }
-      })
-    },
-    // 添加菜单方法，id为 0则为添加根菜单
-    addMenu(id) {
-      this.dialogTitle = '新增菜单'
-      this.form.parentId = String(id)
-      this.isEdit = false
-      this.setOptions()
-      this.dialogFormVisible = true
-    },
-    // 修改菜单方法
-    async editMenu(id) {
-      this.dialogTitle = '编辑菜单'
-      const res = await getBaseMenuById({ id })
-      this.form = res.data.menu
-      this.isEdit = true
-      this.setOptions()
-      this.dialogFormVisible = true
-    }
+}
+
+// 添加菜单方法，id为 0则为添加根菜单
+const isEdit = ref(false)
+const dialogTitle = ref('新增菜单')
+const addMenu = (id) => {
+  dialogTitle.value = '新增菜单'
+  form.value.parentId = String(id)
+  isEdit.value = false
+  setOptions()
+  dialogFormVisible.value = true
+}
+// 修改菜单方法
+const editMenu = async(id) => {
+  dialogTitle.value = '编辑菜单'
+  const res = await getBaseMenuById({ id })
+  form.value = res.data.menu
+  isEdit.value = true
+  setOptions()
+  dialogFormVisible.value = true
+}
+
+</script>
+
+<script>
+// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成
+
+export default {
+  name: 'Menus',
+  methods: {
+
   }
 }
 </script>

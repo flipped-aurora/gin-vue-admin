@@ -34,79 +34,90 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
 import {
   updateAuthority
 } from '@/api/authority'
-export default {
-  name: 'Menus',
-  props: {
-    row: {
-      default: function() {
-        return {}
-      },
-      type: Object
-    }
-  },
-  data() {
-    return {
-      menuTreeData: [],
-      menuTreeIds: [],
-      needConfirm: false,
-      menuDefaultProps: {
-        children: 'children',
-        label: function(data) {
-          return data.meta.title
-        }
-      }
-    }
-  },
-  async created() {
-    // 获取所有菜单树
-    const res = await getBaseMenuTree()
-    this.menuTreeData = res.data.menus
-
-    const res1 = await getMenuAuthority({ authorityId: this.row.authorityId })
-    const menus = res1.data.menus
-    const arr = []
-    menus.forEach(item => {
-      // 防止直接选中父级造成全选
-      if (!menus.some(same => same.parentId === item.menuId)) {
-        arr.push(Number(item.menuId))
-      }
-    })
-    this.menuTreeIds = arr
-  },
-  methods: {
-    async setDefault(data) {
-      const res = await updateAuthority({ authorityId: this.row.authorityId, AuthorityName: this.row.authorityName, parentId: this.row.parentId, defaultRouter: data.name })
-      if (res.code === 0) {
-        this.$message({ type: 'success', message: '设置成功' })
-        this.$emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
-      }
+import { defineProps, defineEmits, ref, defineExpose } from 'vue'
+import { ElMessage } from 'element-plus'
+const props = defineProps({
+  row: {
+    default: function() {
+      return {}
     },
-    nodeChange() {
-      this.needConfirm = true
-    },
-    // 暴露给外层使用的切换拦截统一方法
-    enterAndNext() {
-      this.relation()
-    },
-    // 关联树 确认方法
-    async relation() {
-      const checkArr = this.$refs.menuTree.getCheckedNodes(false, true)
-      const res = await addMenuAuthority({
-        menus: checkArr,
-        authorityId: this.row.authorityId
-      })
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '菜单设置成功!'
-        })
-      }
-    }
+    type: Object
   }
+})
+
+const emit = defineEmits(['changeRow'])
+
+const menuTreeData = ref([])
+const menuTreeIds = ref([])
+const needConfirm = ref(false)
+const menuDefaultProps = ref({
+  children: 'children',
+  label: function(data) {
+    return data.meta.title
+  }
+})
+
+const init = async() => {
+  // 获取所有菜单树
+  const res = await getBaseMenuTree()
+  menuTreeData.value = res.data.menus
+
+  const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
+  const menus = res1.data.menus
+  const arr = []
+  menus.forEach(item => {
+    // 防止直接选中父级造成全选
+    if (!menus.some(same => same.parentId === item.menuId)) {
+      arr.push(Number(item.menuId))
+    }
+  })
+  menuTreeIds.value = arr
+}
+
+init()
+
+const setDefault = async(data) => {
+  const res = await updateAuthority({ authorityId: props.row.authorityId, AuthorityName: props.row.authorityName, parentId: props.row.parentId, defaultRouter: data.name })
+  if (res.code === 0) {
+    ElMessage({ type: 'success', message: '设置成功' })
+    emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
+  }
+}
+const nodeChange = () => {
+  needConfirm.value = true
+}
+// 暴露给外层使用的切换拦截统一方法
+const enterAndNext = () => {
+  relation()
+}
+// 关联树 确认方法
+const menuTree = ref(null)
+const relation = async() => {
+  const checkArr = menuTree.value.getCheckedNodes(false, true)
+  const res = await addMenuAuthority({
+    menus: checkArr,
+    authorityId: props.row.authorityId
+  })
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '菜单设置成功!'
+    })
+  }
+}
+
+defineExpose({ enterAndNext, needConfirm })
+
+</script>
+
+<script>
+
+export default {
+  name: 'Menus'
 }
 </script>

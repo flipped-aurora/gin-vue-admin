@@ -67,7 +67,6 @@ init()
 
 // 暴露给外层使用的切换拦截统一方法
 const enterAndNext = () => {
-  console.log(123)
   authDataEnter()
 }
 
@@ -97,7 +96,6 @@ const getChildrenId = (row, arrBox) => {
 }
 // 提交
 const authDataEnter = async() => {
-  console.log(123, props.row)
   const res = await setDataAuthority(props.row)
   if (res.code === 0) {
     ElMessage({ type: 'success', message: '资源设置成功' })

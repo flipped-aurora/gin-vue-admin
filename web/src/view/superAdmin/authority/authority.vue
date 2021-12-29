@@ -179,7 +179,6 @@ const datas = ref(null)
 const autoEnter = (activeName, oldActiveName) => {
   const paneArr = [menus, apis, datas]
   if (oldActiveName) {
-    console.log(paneArr[oldActiveName].value.needConfirm)
     if (paneArr[oldActiveName].value.needConfirm) {
       paneArr[oldActiveName].value.enterAndNext()
       paneArr[oldActiveName].value.needConfirm = false

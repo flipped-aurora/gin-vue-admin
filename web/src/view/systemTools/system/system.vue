@@ -127,19 +127,6 @@
             <el-input v-model.number="config.captcha.imgHeight" />
           </el-form-item>
         </el-collapse-item>
-
-        <el-collapse-item title="验证码配置" name="8">
-          <el-form-item label="keyLong">
-            <el-input v-model.number="config.captcha.keyLong" />
-          </el-form-item>
-          <el-form-item label="imgWidth">
-            <el-input v-model.number="config.captcha.imgWidth" />
-          </el-form-item>
-          <el-form-item label="imgHeight">
-            <el-input v-model.number="config.captcha.imgHeight" />
-          </el-form-item>
-        </el-collapse-item>
-
         <el-collapse-item title="数据库配置" name="9">
           <template v-if="config.system.dbType === 'mysql'">
             <el-form-item label="username">
@@ -353,73 +340,72 @@
 </template>
 
 <script>
+export default {
+  name: 'Config'
+}
+</script>
+<script setup>
 import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
-export default {
-  name: 'Config',
-  data() {
-    return {
-      config: {
-        system: {},
-        jwt: {},
-        casbin: {},
-        mysql: {},
-        pgsql: {},
-        excel: {},
-        autoCode: {},
-        redis: {},
-        qiniu: {},
-        tencentCOS: {},
-        aliyunOSS: {},
-        huaWeiObs: {},
-        captcha: {},
-        zap: {},
-        local: {},
-        email: {},
-        timer: {
-          detail: {}
-        }
-      }
-    }
-  },
-  async created() {
-    await this.initForm()
-  },
-  methods: {
-    async initForm() {
-      const res = await getSystemConfig()
-      if (res.code === 0) {
-        this.config = res.data.config
-      }
-    },
-    reload() {},
-    async update() {
-      const res = await setSystemConfig({ config: this.config })
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '配置文件设置成功'
-        })
-        await this.initForm()
-      }
-    },
-    async email() {
-      const res = await emailTest()
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '邮件发送成功'
-        })
-        await this.initForm()
-      } else {
-        this.$message({
-          type: 'error',
-          message: '邮件发送失败'
-        })
-      }
-    }
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+
+const config = ref({
+  system: {},
+  jwt: {},
+  casbin: {},
+  mysql: {},
+  pgsql: {},
+  excel: {},
+  autoCode: {},
+  redis: {},
+  qiniu: {},
+  tencentCOS: {},
+  aliyunOSS: {},
+  huaWeiObs: {},
+  captcha: {},
+  zap: {},
+  local: {},
+  email: {},
+  timer: {
+    detail: {}
+  }
+})
+
+const initForm = async() => {
+  const res = await getSystemConfig()
+  if (res.code === 0) {
+    config.value = res.data.config
   }
 }
+initForm()
+const reload = () => {}
+const update = async() => {
+  const res = await setSystemConfig({ config: config.value })
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '配置文件设置成功'
+    })
+    await initForm()
+  }
+}
+const email = async() => {
+  const res = await emailTest()
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '邮件发送成功'
+    })
+    await initForm()
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '邮件发送失败'
+    })
+  }
+}
+
 </script>
 
 <style lang="scss">

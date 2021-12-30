@@ -140,14 +140,12 @@ import {
   get{{.StructName}}List
 } from '@/api/{{.PackageName}}'
 
+// 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 
-const dialogFormVisible = ref(false)
-const type = ref('')
-const deleteVisible = ref(false)
-const multipleSelection = ref([])
+// 自动化生成的字典（可能为空）以及字段
     {{- range $index, $element := .DictTypes}}
 const {{ $element }}Options = ref([])
     {{- end }}
@@ -171,17 +169,19 @@ const formData = ref({
         {{- end }}
         })
 
+// =========== 表格控制部分 ===========
 const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
 
+// 重置
 const onReset = () => {
   searchInfo.value = {}
 }
-// 搜索
 
+// 搜索
 const onSubmit = () => {
   page.value = 1
   pageSize.value = 10
@@ -198,6 +198,7 @@ const handleSizeChange = (val) => {
   getTableData()
 }
 
+// 修改页面容量
 const handleCurrentChange = (val) => {
   page.value = val
   getTableData()
@@ -216,18 +217,27 @@ const getTableData = async() => {
 
 getTableData()
 
+// ============== 表格控制部分结束 ===============
+
+// 获取需要的字典 可能为空 按需保留
 const setOptions = async () =>{
 {{- range $index, $element := .DictTypes }}
     {{ $element }}Options.value = await getDictFunc('{{$element}}')
 {{- end }}
 }
 
+// 获取需要的字典 可能为空 按需保留
 setOptions()
 
+
+// 多选数据
+const multipleSelection = ref([])
+// 多选
 const handleSelectionChange = (val) => {
     multipleSelection.value = val
 }
 
+// 删除行
 const deleteRow = (row) => {
     ElMessageBox.confirm('确定要删除吗?', '提示', {
         confirmButtonText: '确定',
@@ -237,7 +247,13 @@ const deleteRow = (row) => {
             delete{{.StructName}}Func(row)
         })
     }
- const onDelete = async() => {
+
+
+// 批量删除控制标记
+const deleteVisible = ref(false)
+
+// 多选删除
+const onDelete = async() => {
       const ids = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
@@ -263,6 +279,11 @@ const deleteRow = (row) => {
         getTableData()
       }
     }
+
+// 行为控制标记（弹窗内部需要增还是改）
+const type = ref('')
+
+// 更新行
 const update{{.StructName}}Func = async(row) => {
     const res = await find{{.StructName}}({ ID: row.ID })
     type.value = 'update'
@@ -271,6 +292,33 @@ const update{{.StructName}}Func = async(row) => {
         dialogFormVisible.value = true
     }
 }
+
+
+// 删除行
+const delete{{.StructName}}Func = async (row) => {
+    const res = await delete{{.StructName}}({ ID: row.ID })
+    if (res.code === 0) {
+        ElMessage({
+                type: 'success',
+                message: '删除成功'
+            })
+            if (tableData.value.length === 1 && page.value > 1) {
+            page.value--
+        }
+        getTableData()
+    }
+}
+
+// 弹窗控制标记
+const dialogFormVisible = ref(false)
+
+// 打开弹窗
+const openDialog = () => {
+    type.value = 'create'
+    dialogFormVisible.value = true
+}
+
+// 关闭弹窗
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
@@ -293,19 +341,7 @@ const closeDialog = () => {
         {{- end }}
         }
 }
-const delete{{.StructName}}Func = async (row) => {
-    const res = await delete{{.StructName}}({ ID: row.ID })
-    if (res.code === 0) {
-        ElMessage({
-                type: 'success',
-                message: '删除成功'
-            })
-            if (tableData.value.length === 1 && page.value > 1) {
-            page.value--
-        }
-        getTableData()
-    }
-}
+// 弹窗确定
 const enterDialog = async () => {
       let res
       switch (type.value) {
@@ -327,10 +363,6 @@ const enterDialog = async () => {
         closeDialog()
         getTableData()
       }
-}
-const openDialog = () => {
-    type.value = 'create'
-    dialogFormVisible.value = true
 }
 </script>
 

@@ -20,34 +20,34 @@
         </div>
       </div>
       <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
-        <el-form ref="form" :model="form" label-width="100px">
-          <el-form-item label="数据库类型">
-            <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
-              <el-option key="mysql" label="mysql" value="mysql" />
-              <el-option key="pgsql" label="pgsql(测试版)" value="pgsql" />
+        <el-form ref="form" :model="form" label-width="120px">
+          <el-form-item :label="$t('init.dbType')">
+            <el-select v-model="form.dbType" placeholder="$('general.pleaseSelect')" @change="changeDB">
+              <el-option key="mysql" label="MySQL" value="mysql" />
+              <el-option key="pgsql" :label="'PostgreSQL (' + $t('init.beta') + ')'" value="pgsql" />
             </el-select>
           </el-form-item>
-          <el-form-item label="host">
-            <el-input v-model="form.host" placeholder="请输入数据库链接" />
+          <el-form-item :label="$t('init.dbHost')">
+            <el-input v-model="form.host" :placeholder="$t('init.enterDBHost')" />
           </el-form-item>
-          <el-form-item label="port">
-            <el-input v-model="form.port" placeholder="请输入数据库端口" />
+          <el-form-item :label="$t('init.dbPort')">
+            <el-input v-model="form.port" :placeholder="$t('init.enterDBPort')" />
           </el-form-item>
-          <el-form-item label="userName">
-            <el-input v-model="form.userName" placeholder="请输入数据库用户名" />
+          <el-form-item :label="$t('init.dbUsername')">
+            <el-input v-model="form.userName" :placeholder="$t('init.enterDBUsername')" />
           </el-form-item>
-          <el-form-item label="password">
+          <el-form-item :label="$t('init.dbPassword')">
             <el-input
               v-model="form.password"
-              placeholder="请输入数据库密码（没有则为空）"
+              :placeholder="$t('init.enterDBPassword')"
             />
           </el-form-item>
-          <el-form-item label="dbName">
-            <el-input v-model="form.dbName" placeholder="请输入数据库名称" />
+          <el-form-item :label="$t('init.dbName')">
+            <el-input v-model="form.dbName" :placeholder="$t('init.enterDBName')" />
           </el-form-item>
           <el-form-item>
             <div style="text-align: right">
-              <el-button type="primary" @click="onSubmit">立即初始化</el-button>
+              <el-button type="primary" @click="onSubmit">{{ $t('init.initNow') }}</el-button>
             </div>
           </el-form-item>
         </el-form>
@@ -116,7 +116,7 @@ export default {
     async onSubmit() {
       const loading = this.$loading({
         lock: true,
-        text: '正在初始化数据库，请稍候',
+        text: this.$t('init.pleaseWait'),
         spinner: 'loading',
         background: 'rgba(0, 0, 0, 0.7)'
       })

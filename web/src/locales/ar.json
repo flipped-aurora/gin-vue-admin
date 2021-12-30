@@ -1,4 +1,9 @@
 {
+  "general": {
+    "pleaseSelect" : "من فضلك إختار",
+    "langSwitch" : "!!تم تغيير اللغة بنجاح",
+    "" : ""
+  },
   "login": {
     "entUserName": "أدخل إسم المستخدم",
     "entPassword": "أدخل كلمة المرور",
@@ -13,13 +18,28 @@
     "language": "Languages"
   },
   "init": {
-    "note": "إشعار التهيئة",
+    "note": "تعليمات التهيئة",
     "note1": "1.يجب ان تكون على دراية بإستخدام GoLang و Vue.",
     "note2": "2.من فضلك تأكد من قرءاة ",
     "note3": "3.Please confirm that you understand the subsequent configuration process.",
     "note4": "Note: The development team does not provide free services for the content written in the document.",
     "readDocs": "قرأة الإرشادات",
-    "confirm": "تأكيد"
+    "confirm": "تأكيد",
+    "dbType": "نوع قاعدة البيانات",
+    "beta": "تجريبي",
+    "dbHost": "عنوان الخادم",
+    "enterDBHost" : "أدخل عنوان خادم قاعدة البيانات",
+    "dbPort": "رقم المنفذ",
+    "enterDBPort": "أدخل رقم منفذ قاعدة البيانات",
+    "dbUser": "إسم المستخدم",
+    "enterDBUser" : "أدخل كلمة إسم مستخدم قاعدة البيانات",
+    "dbPassword": "كلمة المرور",
+    "enterDBPassword": "أدخل كلمة مرور مستخدم قاعدة البيانات",
+    "dbName": "إسم قاعدة البيانات",
+    "enterDBName": "أدخل إسم قاعدة البيانات",
+    "initNow": "بداء التهيئة",
+    "pleaseWait": "جارى تهيئة قاعدة البيانات, من فضلك إنتظر",
+    "" : ""
   },
   "pages": {
     "home": {

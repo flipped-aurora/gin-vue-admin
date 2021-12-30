@@ -43,6 +43,7 @@ export default ({
   const alias = {
     '@': path.resolve(__dirname, './src'),
     'vue$': 'vue/dist/vue.runtime.esm-bundler.js',
+    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue', '.svg'],
   }
 
   const esbuild = {}
@@ -94,6 +95,6 @@ export default ({
           javascriptEnabled: true,
         }
       }
-    },
+    }
   }
 }

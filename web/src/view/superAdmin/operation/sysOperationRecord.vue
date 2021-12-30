@@ -173,11 +173,10 @@ const getTableData = async() => {
   }
 }
 
-const deleteVisible = ref(false)
-const multipleSelection = ref([])
-
 getTableData()
 
+const deleteVisible = ref(false)
+const multipleSelection = ref([])
 const handleSelectionChange = (val) => {
   multipleSelection.value = val
 }

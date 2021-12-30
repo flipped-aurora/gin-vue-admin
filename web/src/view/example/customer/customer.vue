@@ -81,8 +81,6 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { formatDate } from '@/utils/format'
 
-const dialogFormVisible = ref(false)
-const type = ref('')
 const form = ref({
   customerName: '',
   customerPhoneData: ''
@@ -117,6 +115,8 @@ const getTableData = async() => {
 
 getTableData()
 
+const dialogFormVisible = ref(false)
+const type = ref('')
 const updateCustomer = async(row) => {
   const res = await getExaCustomer({ ID: row.ID })
   type.value = 'update'

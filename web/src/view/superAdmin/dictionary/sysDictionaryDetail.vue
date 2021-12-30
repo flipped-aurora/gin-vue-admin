@@ -133,8 +133,6 @@ import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
-const dialogFormVisible = ref(false)
-const type = ref('')
 const formData = ref({
   label: null,
   value: null,
@@ -212,6 +210,8 @@ const getTableData = async() => {
 
 getTableData()
 
+const type = ref('')
+const dialogFormVisible = ref(false)
 const updateSysDictionaryDetailFunc = async(row) => {
   const res = await findSysDictionaryDetail({ ID: row.ID })
   type.value = 'update'

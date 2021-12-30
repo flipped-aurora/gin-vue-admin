@@ -25,6 +25,7 @@ const props = defineProps({
   }
 })
 
+const activeName = ref('')
 onMounted(() => {
   marked.setOptions({
     renderer: new marked.Renderer(),
@@ -41,14 +42,12 @@ onMounted(() => {
     xhtml: false
   })
   for (const key in props.previewCode) {
-    if (this.activeName === '') {
-      this.activeName = key
+    if (activeName.value === '') {
+      activeName.value = key
     }
     document.getElementById(key).innerHTML = marked(props.previewCode[key])
   }
 })
-
-const activeName = ref('')
 
 const selectText = () => {
   const element = document.getElementById(activeName.value)

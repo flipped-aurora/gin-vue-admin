@@ -15,52 +15,54 @@
 </template>
 
 <script>
-import noAvatar from '@/assets/noBody.png'
-import { mapGetters } from 'vuex'
-const path = import.meta.env.VITE_BASE_API
 export default {
-  name: 'CustomPic',
-  props: {
-    picType: {
-      type: String,
-      required: false,
-      default: 'avatar'
-    },
-    picSrc: {
-      type: String,
-      required: false,
-      default: ''
-    }
-  },
-  data() {
-    return {
-      noAvatar: noAvatar,
-      path: path + '/'
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['userInfo']),
-    avatar() {
-      if (this.picSrc === '') {
-        if (this.userInfo.headerImg !== '' && this.userInfo.headerImg.slice(0, 4) === 'http') {
-          return this.userInfo.headerImg
-        }
-        return this.path + this.userInfo.headerImg
-      } else {
-        if (this.picSrc !== '' && this.picSrc.slice(0, 4) === 'http') {
-          return this.picSrc
-        }
-        return this.path + this.picSrc
-      }
-    },
-    file() {
-      if (this.picSrc && this.picSrc.slice(0, 4) !== 'http') {
-        return this.path + this.picSrc
-      }
-      return this.picSrc
-    }
-  }
+  name: 'CustomPic'
 }
+</script>
+
+<script setup>
+import noAvatarPng from '@/assets/noBody.png'
+import { useStore } from 'vuex'
+import { computed, ref, defineProps } from 'vue-demi'
+const store = useStore()
+
+const props = defineProps({
+  picType: {
+    type: String,
+    required: false,
+    default: 'avatar'
+  },
+  picSrc: {
+    type: String,
+    required: false,
+    default: ''
+  }
+})
+
+const path = ref(import.meta.env.VITE_BASE_API + '/')
+const noAvatar = ref(noAvatarPng)
+const userInfo = computed(() => store.getters['user/userInfo'])
+
+const avatar = computed(() => {
+  if (props.picSrc === '') {
+    if (userInfo.value.headerImg !== '' && userInfo.value.headerImg.slice(0, 4) === 'http') {
+      return userInfo.value.headerImg
+    }
+    return path.value + userInfo.value.headerImg
+  } else {
+    if (props.picSrc !== '' && props.picSrc.slice(0, 4) === 'http') {
+      return props.picSrc
+    }
+    return path.value + props.picSrc
+  }
+})
+const file = computed(() => {
+  if (props.picSrc && props.picSrc.slice(0, 4) !== 'http') {
+    return path.value + props.picSrc
+  }
+  return props.picSrc
+})
+
 </script>
 
 <style scoped>

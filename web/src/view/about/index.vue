@@ -108,48 +108,46 @@
 </template>
 
 <script>
-import { Commits, Members } from '@/api/github'
 export default {
   name: 'About',
-  data() {
-    return {
-      messageWhenNoItems: 'There arent commits',
-      members: [],
-      dataTimeline: [],
-      page: 0,
-    }
-  },
-  created() {
-    this.loadCommits()
-    this.loadMembers()
-  },
-  methods: {
-    loadMore() {
-      this.page++
-      this.loadCommits()
-    },
-    loadCommits() {
-      Commits(this.page).then(({ data }) => {
-        data.forEach((element) => {
-          if (element.commit.message) {
-            this.dataTimeline.push({
-              from: new Date(element.commit.author.date),
-              title: element.commit.author.name,
-              showDayAndMonth: true,
-              message: element.commit.message,
-            })
-          }
-        })
-      })
-    },
-    loadMembers() {
-      Members().then(({ data }) => {
-        this.members = data
-        this.members.sort()
-      })
-    },
-  },
 }
+</script>
+
+<script setup>
+import { ref } from 'vue'
+import { Commits, Members } from '@/api/github'
+const members = ref([])
+const dataTimeline = ref([])
+const page = ref(0)
+
+const loadMore = () => {
+  page.value++
+  loadCommits()
+}
+const loadCommits = () => {
+  Commits(page.value).then(({ data }) => {
+    data.forEach((element) => {
+      if (element.commit.message) {
+        dataTimeline.value.push({
+          from: new Date(element.commit.author.date),
+          title: element.commit.author.name,
+          showDayAndMonth: true,
+          message: element.commit.message,
+        })
+      }
+    })
+  })
+}
+const loadMembers = () => {
+  Members().then(({ data }) => {
+    members.value = data
+    members.value.sort()
+  })
+}
+
+loadCommits()
+loadMembers()
+
 </script>
 
 <style scoped>

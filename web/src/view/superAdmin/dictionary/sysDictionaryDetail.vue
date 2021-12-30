@@ -48,12 +48,12 @@
 
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
-            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetail(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
             <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteSysDictionaryDetail(scope.row)">确定</el-button>
+                <el-button type="primary" size="mini" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
                 <el-button type="text" icon="delete" size="mini">删除</el-button>
@@ -77,7 +77,7 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
-      <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="110px">
+      <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
         <el-form-item label="展示值" prop="label">
           <el-input
             v-model="formData.label"
@@ -114,6 +114,12 @@
 </template>
 
 <script>
+export default {
+  name: 'SysDictionaryDetail'
+}
+</script>
+
+<script setup>
 import {
   createSysDictionaryDetail,
   deleteSysDictionaryDetail,
@@ -121,128 +127,157 @@ import {
   findSysDictionaryDetail,
   getSysDictionaryDetailList
 } from '@/api/sysDictionaryDetail' //  此处请自行替换地址
-import infoList from '@/mixins/infoList'
+import { ref } from 'vue'
+import { useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { formatBoolean, formatDate } from '@/utils/format'
+const route = useRoute()
 
-export default {
-  name: 'SysDictionaryDetail',
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: getSysDictionaryDetailList,
-      dialogFormVisible: false,
-      type: '',
-      formData: {
-        label: null,
-        value: null,
-        status: true,
-        sort: null
-      },
-      rules: {
-        label: [
-          {
-            required: true,
-            message: '请输入展示值',
-            trigger: 'blur'
-          }
-        ],
-        value: [
-          {
-            required: true,
-            message: '请输入字典值',
-            trigger: 'blur'
-          }
-        ],
-        sort: [
-          {
-            required: true,
-            message: '排序标记',
-            trigger: 'blur'
-          }
-        ]
-      }
+const dialogFormVisible = ref(false)
+const type = ref('')
+const formData = ref({
+  label: null,
+  value: null,
+  status: true,
+  sort: null
+})
+const rules = ref({
+  label: [
+    {
+      required: true,
+      message: '请输入展示值',
+      trigger: 'blur'
     }
-  },
-  created() {
-    this.searchInfo.sysDictionaryID = Number(this.$route.params.id)
-    this.getTableData()
-  },
-  methods: {
-    onReset() {
-      this.searchInfo = {}
-    },
-    // 条件搜索前端看此方法
-    onSubmit() {
-      this.page = 1
-      this.pageSize = 10
-      if (this.searchInfo.status === '') {
-        this.searchInfo.status = null
-      }
-      this.getTableData()
-    },
-    async updateSysDictionaryDetail(row) {
-      const res = await findSysDictionaryDetail({ ID: row.ID })
-      this.type = 'update'
-      if (res.code === 0) {
-        this.formData = res.data.resysDictionaryDetail
-        this.dialogFormVisible = true
-      }
-    },
-    closeDialog() {
-      this.dialogFormVisible = false
-      this.formData = {
-        label: null,
-        value: null,
-        status: true,
-        sort: null,
-        sysDictionaryID: ''
-      }
-    },
-    async deleteSysDictionaryDetail(row) {
-      row.visible = false
-      const res = await deleteSysDictionaryDetail({ ID: row.ID })
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '删除成功'
-        })
-        if (this.tableData.length === 1 && this.page > 1) {
-          this.page--
-        }
-        this.getTableData()
-      }
-    },
-    async enterDialog() {
-      this.formData.sysDictionaryID = Number(this.$route.params.id)
-      this.$refs['elForm'].validate(async valid => {
-        if (!valid) return
-        let res
-        switch (this.type) {
-          case 'create':
-            res = await createSysDictionaryDetail(this.formData)
-            break
-          case 'update':
-            res = await updateSysDictionaryDetail(this.formData)
-            break
-          default:
-            res = await createSysDictionaryDetail(this.formData)
-            break
-        }
-        if (res.code === 0) {
-          this.$message({
-            type: 'success',
-            message: '创建/更改成功'
-          })
-          this.closeDialog()
-          this.getTableData()
-        }
-      })
-    },
-    openDialog() {
-      this.type = 'create'
-      this.dialogFormVisible = true
+  ],
+  value: [
+    {
+      required: true,
+      message: '请输入字典值',
+      trigger: 'blur'
     }
+  ],
+  sort: [
+    {
+      required: true,
+      message: '排序标记',
+      trigger: 'blur'
+    }
+  ]
+})
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(10)
+const tableData = ref([])
+const searchInfo = ref({ sysDictionaryID: Number(route.params.id) })
+const onReset = () => {
+  searchInfo.value = { sysDictionaryID: Number(route.params.id) }
+}
+
+// 条件搜索前端看此方法
+const onSubmit = () => {
+  page.value = 1
+  pageSize.value = 10
+  if (searchInfo.value.status === '') {
+    searchInfo.value.status = null
+  }
+  getTableData()
+}
+
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
+}
+
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+// 查询
+const getTableData = async() => {
+  const table = await getSysDictionaryDetailList({
+    page: page.value,
+    pageSize: pageSize.value,
+    ...searchInfo.value,
+  })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
   }
 }
+
+getTableData()
+
+const updateSysDictionaryDetailFunc = async(row) => {
+  const res = await findSysDictionaryDetail({ ID: row.ID })
+  type.value = 'update'
+  if (res.code === 0) {
+    formData.value = res.data.resysDictionaryDetail
+    dialogFormVisible.value = true
+  }
+}
+
+const closeDialog = () => {
+  dialogFormVisible.value = false
+  formData.value = {
+    label: null,
+    value: null,
+    status: true,
+    sort: null,
+    sysDictionaryID: ''
+  }
+}
+const deleteSysDictionaryDetailFunc = async(row) => {
+  row.visible = false
+  const res = await deleteSysDictionaryDetail({ ID: row.ID })
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '删除成功'
+    })
+    if (tableData.value.length === 1 && page.value > 1) {
+      page.value--
+    }
+    getTableData()
+  }
+}
+
+const dialogForm = ref(null)
+const enterDialog = async() => {
+  formData.value.sysDictionaryID = Number(route.params.id)
+  dialogForm.value.validate(async valid => {
+    if (!valid) return
+    let res
+    switch (type.value) {
+      case 'create':
+        res = await createSysDictionaryDetail(formData.value)
+        break
+      case 'update':
+        res = await updateSysDictionaryDetail(formData.value)
+        break
+      default:
+        res = await createSysDictionaryDetail(formData.value)
+        break
+    }
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '创建/更改成功'
+      })
+      closeDialog()
+      getTableData()
+    }
+  })
+}
+const openDialog = () => {
+  type.value = 'create'
+  dialogFormVisible.value = true
+}
+
 </script>
 
 <style>

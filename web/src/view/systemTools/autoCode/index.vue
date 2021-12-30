@@ -185,12 +185,12 @@ import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCode
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
-import { ref, getCurrentInstance } from 'vue'
+import { ref, getCurrentInstance, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
 const route = useRoute()
-const activeNames = ref([''])
+const activeNames = reactive([])
 const preViewCode = ref({})
 const dbform = ref({
   dbName: '',

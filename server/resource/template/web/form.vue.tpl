@@ -37,83 +37,89 @@
 </template>
 
 <script>
+export default {
+  name: '{{.StructName}}'
+}
+</script>
+
+<script setup>
 import {
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
-} from '@/api/{{.PackageName}}' //  此处请自行替换地址
-import infoList from '@/mixins/infoList'
-export default {
-  name: '{{.StructName}}',
-  mixins: [infoList],
-  data() {
-    return {
-      type: '',
-      {{- range $index, $element := .DictTypes}}
-      {{ $element }}Options: [],
-      {{- end }}
-      formData: {
+} from '@/api/{{.PackageName}}'
+
+import { getDictFunc } from '@/utils/format'
+import { useRoute, useRouter } from "vue-router"
+import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+const route = useRoute()
+const router = useRouter()
+const type = ref('')
+    {{- range $index, $element := .DictTypes}}
+const {{ $element }}Options = ref([])
+    {{- end }}
+const formData = ref({
         {{- range .Fields}}
-          {{- if eq .FieldType "bool" }}
+        {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
-          {{- end }}
-          {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-          {{- end }}
-          {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
-          {{- end }}
-          {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-          {{- end }}
-          {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-          {{- end }}
         {{- end }}
-      }
-    }
-  },
-  async created() {
-    // 建议通过url传参获取目标数据ID 调用 find方法进行查询数据操作 从而决定本页面是create还是update 以下为id作为url参数示例
-    if (this.$route.query.id) {
-      const res = await find{{.StructName}}({ ID: this.$route.query.id })
+        {{- if eq .FieldType "string" }}
+        {{.FieldJson}}: '',
+        {{- end }}
+        {{- if eq .FieldType "int" }}
+        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+        {{- end }}
+        {{- if eq .FieldType "time.Time" }}
+        {{.FieldJson}}: new Date(),
+        {{- end }}
+        {{- if eq .FieldType "float64" }}
+        {{.FieldJson}}: 0,
+        {{- end }}
+        {{- end }}
+        })
+const init = async () => {
+ // 建议通过url传参获取目标数据ID 调用 find方法进行查询数据操作 从而决定本页面是create还是update 以下为id作为url参数示例
+    if (route.query.id) {
+      const res = await find{{.StructName}}({ ID: route.query.id })
       if (res.code === 0) {
-        this.formData = res.data.re{{.Abbreviation}}
-        this.type = 'update'
+        formData.value = res.data.re{{.Abbreviation}}
+        type.value = 'update'
       }
     } else {
-      this.type = 'create'
+      type.value = 'create'
     }
     {{- range $index, $element := .DictTypes }}
-    await this.getDict('{{$element}}')
+    {{ $element }}Options.value = await getDictFunc('{{$element}}')
     {{- end }}
-  },
-  methods: {
-    async save() {
+}
+
+init()
+
+ const save = async() => {
       let res
-      switch (this.type) {
+      switch (type.value) {
         case 'create':
-          res = await create{{.StructName}}(this.formData)
+          res = await create{{.StructName}}(formData.value)
           break
         case 'update':
-          res = await update{{.StructName}}(this.formData)
+          res = await update{{.StructName}}(formData.value)
           break
         default:
-          res = await create{{.StructName}}(this.formData)
+          res = await create{{.StructName}}(formData.value)
           break
       }
       if (res.code === 0) {
-        this.$message({
+        ElMessage({
           type: 'success',
           message: '创建/更改成功'
         })
       }
-    },
-    back() {
-      this.$router.go(-1)
     }
-  }
+const back = () => {
+    router.go(-1)
 }
+
 </script>
 
 <style>

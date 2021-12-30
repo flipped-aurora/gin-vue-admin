@@ -347,11 +347,15 @@ export default {
 <script setup>
 import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 
+const activeNames = reactive([])
 const config = ref({
-  system: {},
+  system: {
+    iplimitCount: 0,
+    iplimitTime: 0
+  },
   jwt: {},
   casbin: {},
   mysql: {},

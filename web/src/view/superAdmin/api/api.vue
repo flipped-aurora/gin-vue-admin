@@ -239,7 +239,7 @@ const getTableData = async() => {
   }
 }
 
-getTableData(getApiList)
+getTableData()
 
 // 批量操作
 const handleSelectionChange = (val) => {

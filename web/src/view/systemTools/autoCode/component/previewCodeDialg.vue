@@ -8,70 +8,78 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import marked from 'marked'
 import hljs from 'highlight.js'
-// import 'highlight.js/styles/atelier-cave-light.css';
 import 'highlight.js/styles/atelier-plateau-light.css'
-export default {
-  props: {
-    previewCode: {
-      type: Object,
-      default() {
-        return {}
-      }
-    }
-  },
-  data() {
-    return {
-      activeName: ''
-    }
-  },
-  mounted() {
-    marked.setOptions({
-      renderer: new marked.Renderer(),
-      highlight: function(code) {
-        return hljs.highlightAuto(code).value
-      },
-      pedantic: false,
-      gfm: true,
-      tables: true,
-      breaks: false,
-      sanitize: false,
-      smartLists: true,
-      smartypants: false,
-      xhtml: false
-    })
-    for (const key in this.previewCode) {
-      if (this.activeName === '') {
-        this.activeName = key
-      }
-      document.getElementById(key).innerHTML = marked(this.previewCode[key])
-    }
-  },
-  methods: {
-    selectText() {
-      const element = document.getElementById(this.activeName)
-      if (document.body.createTextRange) {
-        const range = document.body.createTextRange()
-        range.moveToElementText(element)
-        range.select()
-      } else if (window.getSelection) {
-        const selection = window.getSelection()
-        const range = document.createRange()
-        range.selectNodeContents(element)
-        selection.removeAllRanges()
-        selection.addRange(range)
-      } else {
-        alert('none')
-      }
-    },
-    copy() {
-      this.selectText()
-      document.execCommand('copy')
-      this.$message.success('复制成功')
+import { onMounted, ref } from 'vue-demi'
+import { ElMessage } from 'element-plus'
+import { defineProps, defineExpose } from 'vue'
+
+const props = defineProps({
+  previewCode: {
+    type: Object,
+    default() {
+      return {}
     }
   }
+})
+
+onMounted(() => {
+  marked.setOptions({
+    renderer: new marked.Renderer(),
+    highlight: function(code) {
+      return hljs.highlightAuto(code).value
+    },
+    pedantic: false,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    xhtml: false
+  })
+  for (const key in props.previewCode) {
+    if (this.activeName === '') {
+      this.activeName = key
+    }
+    document.getElementById(key).innerHTML = marked(props.previewCode[key])
+  }
+})
+
+const activeName = ref('')
+
+const selectText = () => {
+  const element = document.getElementById(activeName.value)
+  if (document.body.createTextRange) {
+    const range = document.body.createTextRange()
+    range.moveToElementText(element)
+    range.select()
+  } else if (window.getSelection) {
+    const selection = window.getSelection()
+    const range = document.createRange()
+    range.selectNodeContents(element)
+    selection.removeAllRanges()
+    selection.addRange(range)
+  } else {
+    alert('none')
+  }
+}
+const copy = () => {
+  selectText()
+  document.execCommand('copy')
+  ElMessage.success('复制成功')
+}
+
+defineExpose({ copy })
+
+</script>
+
+<script>
+
+export default {
+
 }
 </script>
 

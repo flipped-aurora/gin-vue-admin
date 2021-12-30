@@ -2,14 +2,6 @@
   <div id="userLayout">
     <div class="login_panle">
       <div class="login_panle_form">
-        <!--
-        <label for="locale">Select Language:</label>
-        <select v-model="$i18n.locale" width="50px">
-          <option>en</option>
-          <option>cn</option>
-          <option>ar</option>
-        </select>
-        -->
         <div class="login_panle_form_title">
           <img
             class="login_panle_form_title_logo"
@@ -17,6 +9,41 @@
             alt
           >
           <p class="login_panle_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
+        </div>
+        <div style="padding-left: 92%; padding-bottom: 20px;">
+          <el-dropdown trigger="click" @command="handleSetLanguage">
+            <span class="el-dropdown-link">
+              <img src="@/assets/language.svg" style="width: 30px; height: 30px;">
+            </span>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item v-model="en" :disabled="language==='en'" command="en"><img src="@/assets/flags/en.svg" class="img">English</el-dropdown-item>
+                <el-dropdown-item v-model="zh" :disabled="language==='zh'" command="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-dropdown-item>
+                <el-dropdown-item v-model="ar" :disabled="language==='ar'" command="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+
+          <!-- added by mohamed hassan to support multi language -->
+          <!-- <label for="locale" style="padding-right: 88px">Select Language:</label> -->
+          <!--
+            <img src="@/assets/language.svg">
+            <el-select v-model="$i18n.locale" value-key="value" placeholder="Select Language">
+              <el-option value="en"><img src="@/assets/flags/en.svg" class="img">English</el-option>
+              <el-option value="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-option>
+              <el-option value="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-option>
+            </el-select>
+            -->
+
+          <!--
+            <el-select v-model="langSelector" value-key="value" @change="setLocale">
+              <el-option v-for="item in langs" :key="item.value" :label="item.label" :value="item">
+                <img :src="item.photo"> {{ item.label }}
+              </el-option>
+            </el-select>
+            -->
+          <!-- end of adding -->
+
         </div>
         <el-form
           ref="loginForm"
@@ -64,16 +91,6 @@
               >
             </div>
           </el-form-item>
-          <!-- added by mohamed hassan to support multi language -->
-          <el-form-item>
-            <label for="locale" style="padding-right: 88px">Select Language:</label>
-            <el-select v-model="$i18n.locale" value-key="value" placeholder="Select Language">
-              <el-option v-for="item in langs" :key="item.value" :label="item.label" :value="item.value">
-                <img :src="item.photo"> {{ item.label }}
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <!-- end of adding -->
           <el-form-item>
             <el-button
               type="primary"
@@ -116,6 +133,7 @@ import { mapActions } from 'vuex'
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
 import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
+import Cookies from 'js-cookie'
 export default {
   name: 'Login',
   components: {
@@ -155,23 +173,30 @@ export default {
       },
       logVerify: '',
       picPath: '',
-      langs: [{
+      /* langs: [{
         value: 'en',
         label: 'English',
-        photo: '@/assets/flags/us.svg'
+        photo: '@/assets/flags/en.svg'
       }, {
-        value: 'cn',
+        value: 'zh',
         label: '中文',
-        photo: '@/assets/flags/cn.svg'
+        photo: '@/assets/flags/zh.svg'
       }, {
         value: 'ar',
         label: 'العربية',
-        photo: '@/assets/flags/eg.svg'
-      }],
+        photo: '@/assets/flags/ar.svg'
+      }], */
     }
   },
+  computed: {
+    // language() {
+    //   var lang = Cookies.get('language')
+    //   console.log('computed: Loaded language from cookies: ' + lang)
+    //   return (lang || 'en')
+    // }
+  },
   created() {
-    this.$i18n.locale = this.langs[0].value
+    this.getLanguage()
 
     this.loginVerify()
   },
@@ -223,8 +248,48 @@ export default {
         this.loginForm.captchaId = ele.data.captchaId
       })
     },
-    setLocale(locale) {
-      this.$$i18n.locale = locale
+    setLocale(local) {
+      console.log('Selected langauge is: ' + local.value)
+      this.$i18n.locale = local.value
+    },
+    getLanguage() {
+      var lang = Cookies.get('language')
+      console.log('Loaded language from cookies: ' + lang)
+      return (lang || 'en')
+    },
+    handleSetLanguage(lang) {
+      console.log('handleSetLanguage() = ' + lang)
+      this.$i18n.locale = lang
+
+      Cookies.set('language', lang)
+      // this.$store.dispatch('setLanguage', lang)
+
+      // if (lang === 'ar') {
+      //   console.log('Arabic language selected changing to RTL')
+      //   document.querySelector('html').classList.add('is-rtl')
+      // } else {
+      //   console.log('Non Arabic language selected changing to LTR')
+      //   document.querySelector('html').classList.add('is-ltr')
+      // }
+
+      // const htmlEl = document.querySelector('html')
+
+      // if (this.$i18n.locale === 'ar') {
+      //   console.log('change language to arabic and ltr to rtl')
+      //   htmlEl.setAttribute('dir', 'rtl')
+      // } else {
+      //   console.log('change language to english and rtl to ltr')
+      //   htmlEl.setAttribute('dir', 'ltr')
+      // }
+
+      // htmlEl.setAttribute('lang', lang)
+
+      this.$message({
+        message: this.$t('general.langSwitch'),
+        type: 'success'
+      })
+
+      // this.$emit('handerevent')
     }
   }
 }
@@ -235,11 +300,28 @@ export default {
 @import "@/style/newLogin.scss";
 
 img {
+  padding-right: 20px;
   width: 20px;
   height: 20px;
 }
 
-.prefix {
+prefix {
   margin-top: 10px;
+  width: 100px;
+  height: 100px;
+}
+
+.international-icon {
+  font-size: 20px;
+  cursor: pointer;
+  vertical-align: -5px!important;
+}
+
+html.is-rtl * {
+    direction: rtl;
+}
+
+html.is-ltr * {
+    direction: ltr;
 }
 </style>

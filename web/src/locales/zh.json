@@ -1,4 +1,9 @@
 {
+  "general": {
+    "pleaseSelect" : "请选择",
+    "langSwitch" : "语言切换成功!!",
+    "" : ""
+  },
   "login": {
     "entUserName": "请输入用户名",
     "entPassword": "请输入密码",
@@ -19,7 +24,22 @@
     "note3": "3.请您确认是否了解后续的配置流程",
     "note4": "注：开发组不为文档中书写过的内容提供无偿服务",
     "readDocs": "阅读文档",
-    "confirm": "我已确认"
+    "confirm": "我已确认",
+    "dbType": "数据库类型",
+    "beta": "测试版",
+    "dbHost" : "Host",
+    "enterDBAddress" : "请输入数据库链接",
+    "dbPort" : "Port",
+    "enterDBPort" : "请输入数据库端口",
+    "dbUser" : "Username",
+    "enterDBUser" : "请输入数据库用户名",
+    "dbPassword" : "Database Password",
+    "enterDBPassword" : "请输入数据库密码（没有则为空）",
+    "dbName" : "DB Name",
+    "enterDBName" : "请输入数据库名称",
+    "initNow" : "立即初始化",
+    "pleaseWait" : "正在初始化数据库，请稍候",
+    "" : ""
   },
   "pages": {
     "home": {

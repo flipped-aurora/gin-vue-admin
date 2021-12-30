@@ -1,4 +1,9 @@
 {
+  "general": {
+    "pleaseSelect" : "Please select",
+    "langSwitch" : "Language switched successfully!!",
+    "" : ""
+  },
   "login": {
     "entUserName": "Please enter username",
     "entPassword": "Please enter the password",
@@ -19,7 +24,22 @@
     "note3": "3.Please confirm that you understand the subsequent configuration process.",
     "note4": "Note: The development team does not provide free services for the content written in the document.",
     "readDocs": "Read the documentation",
-    "confirm": "I confirm"
+    "confirm": "I confirm",
+    "dbType": "Database Type",
+    "beta": "Beta",
+    "dbHost": "Host",
+    "enterDBHost" : "Please enter database host",
+    "dbPort": "Port",
+    "enterDBPort": "Please enter database port",
+    "dbUsername": "Username",
+    "enterDBUsername" : "Please enter database username",
+    "dbPassword": "Password",
+    "enterDBPassword": "Please enter the database password (empty if none)",
+    "dbName": "DB Name",
+    "enterDBName": "Please enter database name",
+    "initNow": "Initialize Now",
+    "pleaseWait": "Initializing database, please wait",
+    "" : ""
   },
   "pages": {
     "home": {

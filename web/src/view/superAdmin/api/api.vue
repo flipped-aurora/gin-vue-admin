@@ -228,6 +228,9 @@ export default {
     // 排序
     sortChange({ prop, order }) {
       if (prop) {
+        if (prop === 'ID') {
+          prop = 'id'
+        }
         this.searchInfo.orderKey = toSQLLine(prop)
         this.searchInfo.desc = order === 'descending'
       }

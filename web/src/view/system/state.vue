@@ -138,37 +138,37 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { getSystemState } from '@/api/system'
+import { onUnmounted, ref } from 'vue'
+const timer = ref(null)
+const state = ref({})
+const colors = ref([
+  { color: '#5cb87a', percentage: 20 },
+  { color: '#e6a23c', percentage: 40 },
+  { color: '#f56c6c', percentage: 80 }
+])
+
+const reload = async() => {
+  const { data } = await getSystemState()
+  state.value = data.server
+}
+
+reload()
+timer.value = setInterval(() => {
+  reload()
+}, 1000 * 10)
+
+onUnmounted(() => {
+  clearInterval(timer.value)
+  timer.value = null
+})
+
+</script>
+
+<script>
 export default {
   name: 'State',
-  data() {
-    return {
-      timer: null,
-      state: {},
-      colors: [
-        { color: '#5cb87a', percentage: 20 },
-        { color: '#e6a23c', percentage: 40 },
-        { color: '#f56c6c', percentage: 80 }
-      ]
-    }
-  },
-  created() {
-    this.reload()
-    this.timer = setInterval(() => {
-      this.reload()
-    }, 1000 * 10)
-  },
-  beforeUnmount() {
-    clearInterval(this.timer)
-    this.timer = null
-  },
-  methods: {
-    async reload() {
-      const { data } = await getSystemState()
-      this.state = data.server
-    }
-  }
 }
 </script>
 

@@ -209,9 +209,9 @@ const deleteSysOperationRecordFunc = async(row) => {
       message: '删除成功'
     })
     if (tableData.value.length === 1 && page.value > 1) {
-      this.page--
+      page.value--
     }
-    this.getTableData()
+    getTableData()
   }
 }
 const fmtBody = (value) => {

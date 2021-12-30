@@ -2,7 +2,7 @@
   <div class="system">
     <el-form ref="form" :model="config" label-width="240px">
       <!--  System start  -->
-      <el-collapse v-model="activeNames" @change="handleChange">
+      <el-collapse v-model="activeNames">
         <el-collapse-item title="系统配置" name="1">
           <el-form-item label="环境值">
             <el-input v-model="config.system.env" />

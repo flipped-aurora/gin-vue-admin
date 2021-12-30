@@ -37,10 +37,8 @@ const props = defineProps({
     }
   })
 
-
 const path = ref(import.meta.env.VITE_BASE_API)
 const token = computed(()=>store.getters['user/token'])
-const showImageUrl = computed(()=>(props.imageUrl && props.imageUrl.slice(0, 4) !== 'http') ? path.value + props.imageUrl : props.imageUrl)
 
 const beforeImageUpload = (file) => {
       const isJPG = file.type === 'image/jpeg'

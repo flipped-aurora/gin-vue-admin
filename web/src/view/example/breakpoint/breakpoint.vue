@@ -34,16 +34,17 @@ import axios from 'axios'
 import {
   findFile,
   breakpointContinueFinish,
-  removeChunk
+  removeChunk,
+  breakpointContinue
 } from '@/api/breakpoint'
-import { ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const file = ref(null)
 const fileMd5 = ref('')
 const formDataList = ref([])
 const waitUpLoad = ref([])
-const waitNum = ref(0)
+const waitNum = ref(NaN)
 const limitFileSize = ref(false)
 const percentage = ref(0)
 const percentageFlage = ref(true)
@@ -100,8 +101,10 @@ const choseFile = async(e) => {
         })
       } else {
         waitUpLoad.value = [] // 秒传则没有需要上传的切片
+        ElMessage.success("文件已秒传")
       }
       waitNum.value = waitUpLoad.value.length // 记录长度用于百分比展示
+      console.log(waitNum.value)
     }
   } else {
     limitFileSize.value = true
@@ -115,7 +118,6 @@ const getFile = () => {
     ElMessage('请先上传文件')
     return
   }
-  percentage.value = Math.floor(((formDataList.value.length - waitNum.value) / formDataList.value.length) * 100)
   if (percentage.value === 100) {
     percentageFlage.value = false
   }
@@ -139,9 +141,14 @@ const sliceFile = () => {
         })
 }
 
+watch(waitNum,()=>{percentage.value = Math.floor(((formDataList.value.length - waitNum.value) / formDataList.value.length) * 100)})
+
 const upLoadFileSlice = async(item) => {
   // 切片上传
-  await axios.post(import.meta.env.VITE_BASE_API + '/fileUploadAndDownload/breakpointContinue', item.formData)
+  const fileRe = await breakpointContinue(item.formData)
+  if (fileRe.code !== 0) {
+    return
+  }
   waitNum.value-- // 百分数增加
   if (waitNum.value === 0) {
     // 切片传完以后 合成文件
@@ -150,13 +157,12 @@ const upLoadFileSlice = async(item) => {
       fileMd5: fileMd5.value
     }
     const res = await breakpointContinueFinish(params)
-    if (res.success) {
+    if (res.code === 0) {
       // 合成文件过后 删除缓存切片
       const params = {
-        fileName: file.value.name,
         fileMd5: fileMd5.value,
-        filePath: res.data.filePath
       }
+      ElMessage.success(上传成功)
       await removeChunk(params)
     }
   }
@@ -171,15 +177,7 @@ const inputChange = () => {
 <script>
 
 export default {
-  name: 'BreakPoint',
-  data() {
-    return {
-
-    }
-  },
-  methods: {
-
-  }
+  name: 'BreakPoint'
 }
 </script>
 

@@ -2,6 +2,7 @@ package example
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"io/ioutil"
 	"mime/multipart"
 	"strconv"
@@ -123,18 +124,18 @@ func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"缓存切片删除成功"}"
 // @Router /fileUploadAndDownload/removeChunk [post]
 func (u *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
-	fileMd5 := c.Query("fileMd5")
-	fileName := c.Query("fileName")
-	filePath := c.Query("filePath")
-	err := utils.RemoveChunk(fileMd5)
-	if err != nil {
-		return
-	}
-	err = fileUploadAndDownloadService.DeleteFileChunk(fileMd5, fileName, filePath)
+	var file example.ExaFile
+	c.ShouldBindJSON(&file)
+	err := utils.RemoveChunk(file.FileMd5)
 	if err != nil {
 		global.GVA_LOG.Error("缓存切片删除失败!", zap.Error(err))
-		response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "缓存切片删除失败", c)
+		return
+	}
+	err = fileUploadAndDownloadService.DeleteFileChunk(file.FileMd5, file.FileName, file.FilePath)
+	if err != nil {
+		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "缓存切片删除成功", c)
+		response.OkWithMessage("缓存切片删除成功", c)
 	}
 }

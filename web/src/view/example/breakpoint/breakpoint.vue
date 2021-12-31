@@ -33,11 +33,11 @@
 
 <script>
 import SparkMD5 from 'spark-md5'
-import axios from 'axios'
 import {
   findFile,
   breakpointContinueFinish,
-  removeChunk
+  removeChunk,
+  breakpointContinue
 } from '@/api/breakpoint'
 export default {
   name: 'BreakPoint',
@@ -47,11 +47,16 @@ export default {
       fileMd5: '',
       formDataList: [],
       waitUpLoad: [],
-      waitNum: 0,
+      waitNum: NaN,
       limitFileSize: false,
       percentage: 0,
       percentageFlage: true,
       customColor: '#409eff'
+    }
+  },
+  watch: {
+    waitNum() {
+      this.percentage = Math.floor(((this.formDataList.length - this.waitNum) / this.formDataList.length) * 100)
     }
   },
   methods: {
@@ -107,6 +112,7 @@ export default {
             })
           } else {
             this.waitUpLoad = [] // 秒传则没有需要上传的切片
+            this.$message.success('文件已秒传')
           }
           this.waitNum = this.waitUpLoad.length // 记录长度用于百分比展示
         }
@@ -121,7 +127,6 @@ export default {
         this.$message('请先上传文件')
         return
       }
-      this.percentage = Math.floor(((this.formDataList.length - this.waitNum) / this.formDataList.length) * 100)
       if (this.percentage === 100) {
         this.percentageFlage = false
       }
@@ -145,7 +150,10 @@ export default {
     },
     async upLoadFileSlice(item) {
       // 切片上传
-      await axios.post(import.meta.env.VITE_BASE_API + '/fileUploadAndDownload/breakpointContinue', item.formData)
+      const fileRe = await breakpointContinue(item.formData)
+      if (fileRe.code !== 0) {
+        return
+      }
       this.waitNum-- // 百分数增加
       if (this.waitNum === 0) {
         // 切片传完以后 合成文件
@@ -154,13 +162,14 @@ export default {
           fileMd5: this.fileMd5
         }
         const res = await breakpointContinueFinish(params)
-        if (res.success) {
+        if (res.code === 0) {
           // 合成文件过后 删除缓存切片
           const params = {
             fileName: this.file.name,
             fileMd5: this.fileMd5,
             filePath: res.data.filePath
           }
+          this.$message.success('上传成功')
           await removeChunk(params)
         }
       }

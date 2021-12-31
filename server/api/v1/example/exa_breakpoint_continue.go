@@ -2,6 +2,7 @@ package example
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"io/ioutil"
 	"mime/multipart"
 	"strconv"

@@ -124,17 +124,11 @@ func (b *FileUploadAndDownloadApi) BreakpointContinueFinish(c *gin.Context) {
 // @Router /fileUploadAndDownload/removeChunk [post]
 func (u *FileUploadAndDownloadApi) RemoveChunk(c *gin.Context) {
 	fileMd5 := c.Query("fileMd5")
-	fileName := c.Query("fileName")
-	filePath := c.Query("filePath")
 	err := utils.RemoveChunk(fileMd5)
 	if err != nil {
-		return
-	}
-	err = fileUploadAndDownloadService.DeleteFileChunk(fileMd5, fileName, filePath)
-	if err != nil {
 		global.GVA_LOG.Error("缓存切片删除失败!", zap.Error(err))
-		response.FailWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "缓存切片删除失败", c)
+		response.FailWithMessage( "缓存切片删除失败", c)
 	} else {
-		response.OkWithDetailed(exampleRes.FilePathResponse{FilePath: filePath}, "缓存切片删除成功", c)
+		response.OkWithMessage("缓存切片删除成功", c)
 	}
 }

@@ -19,6 +19,8 @@
 [插件仓库以及开发规范](https://github.com/flipped-aurora/gva-plugins):https://github.com/flipped-aurora/gva-plugins
 
 [审批流分支](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow): https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow
+						       
+[setup语法糖版本地址](https://github.com/flipped-aurora/gin-vue-admin/tree/gva-vue3-setup): https://github.com/flipped-aurora/gin-vue-admin/tree/gva-vue3-setup
 
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com

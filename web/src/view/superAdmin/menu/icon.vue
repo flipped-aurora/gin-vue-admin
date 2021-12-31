@@ -1160,6 +1160,9 @@ export default {
   },
   created() {
     this.metaData = this.meta
+    if (this.metaData.icon === '') {
+      this.metaData.icon = this.options[0].label
+    }
   },
   methods: {}
 }

@@ -5,7 +5,7 @@ import { emitter } from '@/utils/bus.js'
 import * as ElIconModules from '@element-plus/icons'
 // 导入转换图标名称的函数
 
-const closeThisPage = () => {
+export const closeThisPage = () => {
   emitter.emit('closeThisPage')
 }
 
@@ -14,8 +14,5 @@ export const register = (app) => {
   for (const iconName in ElIconModules) {
     app.component(iconName, ElIconModules[iconName])
   }
-
   app.config.globalProperties.$GIN_VUE_ADMIN = config
-  app.config.globalProperties.$CloseThisPage = closeThisPage
 }
-

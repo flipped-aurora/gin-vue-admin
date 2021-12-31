@@ -222,6 +222,9 @@ const handleCurrentChange = (val) => {
 // 排序
 const sortChange = ({ prop, order }) => {
   if (prop) {
+    if (prop === 'ID') {
+      prop = 'id'
+    }
     searchInfo.value.orderKey = toSQLLine(prop)
     searchInfo.value.desc = order === 'descending'
   }

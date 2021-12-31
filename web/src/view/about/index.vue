@@ -116,14 +116,14 @@ export default {
 <script setup>
 import { ref } from 'vue'
 import { Commits, Members } from '@/api/github'
-const members = ref([])
-const dataTimeline = ref([])
 const page = ref(0)
 
 const loadMore = () => {
   page.value++
   loadCommits()
 }
+
+const dataTimeline = ref([])
 const loadCommits = () => {
   Commits(page.value).then(({ data }) => {
     data.forEach((element) => {
@@ -138,6 +138,8 @@ const loadCommits = () => {
     })
   })
 }
+
+const members = ref([])
 const loadMembers = () => {
   Members().then(({ data }) => {
     members.value = data

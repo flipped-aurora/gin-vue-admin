@@ -217,8 +217,6 @@ import { formatBoolean, formatDate } from '@/utils/format'
 
 const router = useRouter()
 
-const dialogFormVisible = ref(false)
-const type = ref('')
 const formData = ref({
   name: null,
   type: null,
@@ -306,6 +304,8 @@ const toDetile = (row) => {
   })
 }
 
+const dialogFormVisible = ref(false)
+const type = ref('')
 const updateSysDictionaryFunc = async(row) => {
   const res = await findSysDictionary({ ID: row.ID })
   type.value = 'update'

@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.4.6",
+    "version": "2.5.0",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",

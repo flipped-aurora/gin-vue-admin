@@ -82,7 +82,6 @@ const store = useStore()
 const path = ref(import.meta.env.VITE_BASE_API)
 const token = computed(() => store.getters['user/token'])
 
-const fullscreenLoading = ref(false)
 const imageUrl = ref('')
 
 const page = ref(1)
@@ -139,6 +138,8 @@ const deleteFileFunc = async(row) => {
       })
     })
 }
+
+const fullscreenLoading = ref(false)
 const checkFile = (file) => {
   fullscreenLoading.value = true
   const isJPG = file.type === 'image/jpeg'

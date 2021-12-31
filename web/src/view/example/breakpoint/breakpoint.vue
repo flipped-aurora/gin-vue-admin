@@ -160,9 +160,11 @@ const upLoadFileSlice = async(item) => {
     if (res.code === 0) {
       // 合成文件过后 删除缓存切片
       const params = {
+        fileName: file.value.name,
         fileMd5: fileMd5.value,
+        filePath: res.data.filePath,
       }
-      ElMessage.success(上传成功)
+      ElMessage.success("上传成功")
       await removeChunk(params)
     }
   }

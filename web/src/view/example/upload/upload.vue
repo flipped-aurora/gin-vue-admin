@@ -43,10 +43,10 @@
             >{{ scope.row.tag }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" width="160">
+        <el-table-column align="left" :lable="$t('general.operations')" width="160">
           <template #default="scope">
             <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFile(scope.row)">删除</el-button>
+            <el-button size="small" icon="delete" type="text" @click="deleteFile(scope.row)">{{ $t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>

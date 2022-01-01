@@ -120,8 +120,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="showPassword=false">取 消</el-button>
-          <el-button size="small" type="primary" @click="savePassword">确 定</el-button>
+          <el-button size="small" @click="showPassword=false">{{ $t('general.close') }}</el-button>
+          <el-button size="small" type="primary" @click="savePassword">{{ $t('general.sure') }}</el-button>
         </div>
       </template>
     </el-dialog>

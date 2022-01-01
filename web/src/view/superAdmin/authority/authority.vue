@@ -13,7 +13,7 @@
       >
         <el-table-column label="角色ID" min-width="180" prop="authorityId" />
         <el-table-column align="left" label="角色名称" min-width="180" prop="authorityName" />
-        <el-table-column align="left" label="操作" width="460">
+        <el-table-column align="left" :lable="$t('general.operations')" width="460">
           <template #default="scope">
             <el-button
               icon="setting"
@@ -38,13 +38,13 @@
               size="mini"
               type="text"
               @click="editAuthority(scope.row)"
-            >编辑</el-button>
+            >{{ $t('general.edit') }}</el-button>
             <el-button
               icon="delete"
               size="mini"
               type="text"
               @click="deleteAuth(scope.row)"
-            >删除</el-button>
+            >{{ $t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -72,8 +72,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -297,7 +297,7 @@ export default {
               if (res.code === 0) {
                 this.$message({
                   type: 'success',
-                  message: '复制成功！'
+                  message: this.$t('general.copySuccess')
                 })
                 this.getTableData()
               }

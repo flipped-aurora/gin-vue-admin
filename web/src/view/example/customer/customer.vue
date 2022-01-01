@@ -27,11 +27,11 @@
             <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
+                <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">{{ $t('general.sure') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="mini">{{ $t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -60,8 +60,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
         </div>
       </template>
     </el-dialog>

@@ -17,33 +17,12 @@
             </span>
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-model="en" :disabled="language==='en'" command="en"><img src="@/assets/flags/en.svg" class="img">English</el-dropdown-item>
-                <el-dropdown-item v-model="zh" :disabled="language==='zh'" command="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-dropdown-item>
-                <el-dropdown-item v-model="ar" :disabled="language==='ar'" command="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-dropdown-item>
+                <el-dropdown-item :disabled="$i18n.locale==='en'" command="en"><img src="@/assets/flags/en.svg" class="img">English</el-dropdown-item>
+                <el-dropdown-item :disabled="$i18n.locale==='zh'" command="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-dropdown-item>
+                <el-dropdown-item :disabled="$i18n.locale==='ar'" command="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
-
-          <!-- added by mohamed hassan to support multi language -->
-          <!-- <label for="locale" style="padding-right: 88px">Select Language:</label> -->
-          <!--
-            <img src="@/assets/language.svg">
-            <el-select v-model="$i18n.locale" value-key="value" placeholder="Select Language">
-              <el-option value="en"><img src="@/assets/flags/en.svg" class="img">English</el-option>
-              <el-option value="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-option>
-              <el-option value="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-option>
-            </el-select>
-            -->
-
-          <!--
-            <el-select v-model="langSelector" value-key="value" @change="setLocale">
-              <el-option v-for="item in langs" :key="item.value" :label="item.label" :value="item">
-                <img :src="item.photo"> {{ item.label }}
-              </el-option>
-            </el-select>
-            -->
-          <!-- end of adding -->
-
         </div>
         <el-form
           ref="loginForm"
@@ -173,19 +152,6 @@ export default {
       },
       logVerify: '',
       picPath: '',
-      /* langs: [{
-        value: 'en',
-        label: 'English',
-        photo: '@/assets/flags/en.svg'
-      }, {
-        value: 'zh',
-        label: '中文',
-        photo: '@/assets/flags/zh.svg'
-      }, {
-        value: 'ar',
-        label: 'العربية',
-        photo: '@/assets/flags/ar.svg'
-      }], */
     }
   },
   computed: {
@@ -254,11 +220,9 @@ export default {
     },
     getLanguage() {
       var lang = Cookies.get('language')
-      console.log('Loaded language from cookies: ' + lang)
       return (lang || 'en')
     },
     handleSetLanguage(lang) {
-      console.log('handleSetLanguage() = ' + lang)
       this.$i18n.locale = lang
 
       Cookies.set('language', lang)

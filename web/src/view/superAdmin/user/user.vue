@@ -45,16 +45,16 @@
             />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" min-width="150">
+        <el-table-column align="left" :lable="$t('general.operations')" min-width="150">
           <template #default="scope">
             <el-popover :visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteUser(scope.row)">确定</el-button>
+                <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteUser(scope.row)">{{ $t('general.sure') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="mini">{{ $t('general.delete') }}</el-button>
               </template>
             </el-popover>
             <el-button type="text" icon="magic-stick" size="mini" @click="resetPassword(scope.row)">重置密码</el-button>
@@ -104,8 +104,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeAddUserDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterAddUserDialog">确 定</el-button>
+          <el-button size="small" @click="closeAddUserDialog">{{ $t('general.close') }}</el-button>
+          <el-button size="small" type="primary" @click="enterAddUserDialog">{{ $t('general.sure') }}</el-button>
         </div>
       </template>
     </el-dialog>

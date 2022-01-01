@@ -41,15 +41,17 @@
     "pleaseWait": "جارى تهيئة قاعدة البيانات, من فضلك إنتظر",
     "" : ""
   },
-  "pages": {
-    "home": {
-      "title": "Home",
-      "count": "count is: {value}",
-      "virtual": "msg from virtual module: {msg}",
-      "inter": "this will be styled with a font-face"
-    },
-    "about": {
-      "title": "About"
-    }
+  "autoCode": {
+    "existDB": "إضغط هنا لإنشاء الكود من قاعدة بيانات موجوده",
+    "dbName" : "قاعدة البيانات",
+    "selectDB" : "إختار قاعدة البيانات",
+    "tableName" : "إسم الجدول",
+    "selectTable" : "إختار الجدول",
+    "createUsingTable" : "Create using this table",
+    "structName" : "Struct Name",
+    "structNameNote" : "The first letter is automatically converted to uppercase",
+    "tableNameNote": "Specify the table name (not required)",
+    "structAbbreviation": "Struct abbreviation",
+    "" : ""
   }
 }

@@ -36,12 +36,12 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" min-width="180">
+        <el-table-column align="left" :lable="$t('general.operations')" min-width="180">
           <template #default="scope">
             <div>
               <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
               <el-button size="mini" type="text" @click="goAutoCode(scope.row)">复用</el-button>
-              <el-button size="mini" type="text" @click="deleteRow(scope.row)">删除</el-button>
+              <el-button size="mini" type="text" @click="deleteRow(scope.row)">{{ $t('general.delete') }}</el-button>
             </div>
           </template>
         </el-table-column>

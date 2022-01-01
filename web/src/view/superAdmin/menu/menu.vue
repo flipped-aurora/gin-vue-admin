@@ -33,7 +33,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" fixed="right" label="操作" width="300">
+        <el-table-column align="left" fixed="right" :lable="$t('general.operations')" width="300">
           <template #default="scope">
             <el-button
               size="mini"
@@ -46,13 +46,13 @@
               type="text"
               icon="edit"
               @click="editMenu(scope.row.ID)"
-            >编辑</el-button>
+            >{{ $t('general.edit') }}</el-button>
             <el-button
               size="mini"
               type="text"
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
-            >删除</el-button>
+            >{{ $t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -172,7 +172,7 @@
                   size="small"
                   icon="delete"
                   @click="deleteParameter(form.parameters,scope.$index)"
-                >删除</el-button>
+                >{{ $t('general.delete') }}</el-button>
               </div>
             </template>
           </el-table-column>
@@ -180,8 +180,8 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
         </div>
       </template>
     </el-dialog>

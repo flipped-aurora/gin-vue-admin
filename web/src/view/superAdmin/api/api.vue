@@ -33,11 +33,11 @@
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
-            <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
+            <el-button size="mini" type="text" @click="deleteVisible = false">{{ $t('general.cancel') }}</el-button>
+            <el-button size="mini" type="primary" @click="onDelete">{{ $t('general.sure') }}</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">删除</el-button>
+            <el-button icon="delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">{{ $t('general.delete') }}</el-button>
           </template>
         </el-popover>
       </div>
@@ -58,20 +58,20 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="left" fixed="right" label="操作" width="200">
+        <el-table-column align="left" fixed="right" :lable="$t('general.operations')" width="200">
           <template #default="scope">
             <el-button
               icon="edit"
               size="small"
               type="text"
               @click="editApi(scope.row)"
-            >编辑</el-button>
+            >{{ $t('general.edit') }}</el-button>
             <el-button
               icon="delete"
               size="small"
               type="text"
               @click="deleteApi(scope.row)"
-            >删除</el-button>
+            >{{ $t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -114,8 +114,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
         </div>
       </template>
     </el-dialog>

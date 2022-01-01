@@ -69,7 +69,7 @@ export default {
     copy() {
       this.selectText()
       document.execCommand('copy')
-      this.$message.success('复制成功')
+      this.$message.success(this.$t('general.copySuccess'))
     }
   }
 }

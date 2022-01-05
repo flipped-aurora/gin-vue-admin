@@ -20,6 +20,7 @@ type Server struct {
 	AliyunOSS  AliyunOSS  `mapstructure:"aliyun-oss" json:"aliyunOSS" yaml:"aliyun-oss"`
 	HuaWeiObs  HuaWeiObs  `mapstructure:"hua-wei-obs" json:"huaWeiObs" yaml:"hua-wei-obs"`
 	TencentCOS TencentCOS `mapstructure:"tencent-cos" json:"tencentCOS" yaml:"tencent-cos"`
+	AwsS3      AwsS3      `mapstructure:"aws-s3" json:"awsS3" yaml:"aws-s3"`
 
 	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 	Timer Timer `mapstructure:"timer" json:"timer" yaml:"timer"`

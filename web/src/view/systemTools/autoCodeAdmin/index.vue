@@ -39,7 +39,7 @@
         <el-table-column align="left" label="操作" min-width="180">
           <template #default="scope">
             <div>
-              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
+              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row)">回滚</el-button>
               <el-button size="mini" type="text" @click="goAutoCode(scope.row)">复用</el-button>
               <el-button size="mini" type="text" @click="deleteRow(scope.row)">删除</el-button>
             </div>
@@ -62,59 +62,87 @@
 </template>
 
 <script>
-// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
-import { getSysHistory, rollback, delSysHistory } from '@/api/autoCode.js'
-import infoList from '@/mixins/infoList'
-
 export default {
-  name: 'Api',
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: getSysHistory
-    }
-  },
-  created() {
-    this.getTableData()
-  },
-  methods: {
-    async deleteRow(row) {
-      this.$confirm('此操作将删除本历史, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        const res = await delSysHistory({ id: Number(row.ID) })
-        if (res.code === 0) {
-          this.$message.success('删除成功')
-          this.getTableData()
-        }
-      })
-    },
-    async rollback(row) {
-      this.$confirm('此操作将删除自动创建的文件和api, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(async() => {
-        const res = await rollback({ id: Number(row.ID) })
-        if (res.code === 0) {
-          this.$message.success('回滚成功')
-          this.getTableData()
-        }
-      })
-    },
-    goAutoCode(row) {
-      if (row) {
-        this.$router.push({ name: 'autoCodeEdit', params: {
-          id: row.ID
-        }})
-      } else {
-        this.$router.push({ name: 'autoCode' })
-      }
-    }
+  name: 'AutoCodeAdmin',
+}
+</script>
+
+<script setup>
+import { getSysHistory, rollback, delSysHistory } from '@/api/autoCode.js'
+import { useRouter } from 'vue-router'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref } from 'vue'
+import { formatDate } from '@/utils/format'
+const router = useRouter()
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(10)
+const tableData = ref([])
+
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
+}
+
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+// 查询
+const getTableData = async() => {
+  const table = await getSysHistory({
+    page: page.value,
+    pageSize: pageSize.value
+  })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
   }
 }
+
+getTableData()
+
+const deleteRow = async(row) => {
+  ElMessageBox.confirm('此操作将删除本历史, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await delSysHistory({ id: Number(row.ID) })
+    if (res.code === 0) {
+      ElMessage.success('删除成功')
+      getTableData()
+    }
+  })
+}
+const rollbackFunc = async(row) => {
+  ElMessageBox.confirm('此操作将删除自动创建的文件和api, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await rollback({ id: Number(row.ID) })
+    if (res.code === 0) {
+      ElMessage.success('回滚成功')
+      getTableData()
+    }
+  })
+}
+const goAutoCode = (row) => {
+  if (row) {
+    router.push({ name: 'autoCodeEdit', params: {
+      id: row.ID
+    }})
+  } else {
+    router.push({ name: 'autoCode' })
+  }
+}
+
 </script>
 
 <style scoped lang="scss">

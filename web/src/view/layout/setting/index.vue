@@ -43,33 +43,33 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 export default {
-  data() {
-    return {
-      drawer: false,
-      direction: 'rtl'
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['mode'])
-  },
-  methods: {
-    handleClose() {
-      this.drawer = false
-    },
-    showSettingDrawer() {
-      this.drawer = true
-    },
-    changeMode(e) {
-      if (e === null) {
-        this.$store.dispatch('user/changeSideMode', 'dark')
-        return
-      }
-      this.$store.dispatch('user/changeSideMode', e)
-    },
-  }
+  name: 'Setting',
 }
+</script>
+
+<script setup>
+import { useStore } from 'vuex'
+import { computed, ref } from 'vue'
+const store = useStore()
+const drawer = ref(false)
+const direction = ref('rtl')
+const mode = computed(() => store.getters['user/mode'])
+
+const handleClose = () => {
+  drawer.value = false
+}
+const showSettingDrawer = () => {
+  drawer.value = true
+}
+const changeMode = (e) => {
+  if (e === null) {
+    store.dispatch('user/changeSideMode', 'dark')
+    return
+  }
+  store.dispatch('user/changeSideMode', e)
+}
+
 </script>
 
 <style lang="scss" scoped>

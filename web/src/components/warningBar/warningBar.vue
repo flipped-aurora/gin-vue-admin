@@ -10,20 +10,15 @@
     </span>
   </div>
 </template>
-<script>
+<script setup>
 import { WarningFilled } from '@element-plus/icons'
-
-export default {
-  components: {
-    [WarningFilled.name]: WarningFilled
+import { defineProps } from 'vue'
+defineProps({
+  title: {
+    type: String,
+    default: ''
   },
-  props: {
-    title: {
-      type: String,
-      default: ''
-    },
-  }
-}
+})
 </script>
 <style lang="scss" scoped>
 .warning-bar{

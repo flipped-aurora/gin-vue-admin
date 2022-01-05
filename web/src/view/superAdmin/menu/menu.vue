@@ -58,7 +58,7 @@
       </el-table>
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle">
-      <warning-bar title="新增菜单，需要在角色管理内篇日志权限才可使用" />
+      <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
       <el-form
         v-if="dialogFormVisible"
         ref="menuForm"

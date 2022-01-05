@@ -95,7 +95,7 @@
               @click="updateSysDictionaryFunc(scope.row)"
             >变更</el-button>
             <el-popover
-              :visible="scope.row.visible"
+              v-model:visible="scope.row.visible"
               placement="top"
               width="160"
             >

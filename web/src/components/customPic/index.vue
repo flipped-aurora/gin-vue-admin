@@ -23,7 +23,7 @@ export default {
 <script setup>
 import noAvatarPng from '@/assets/noBody.png'
 import { useStore } from 'vuex'
-import { computed, ref, defineProps } from 'vue-demi'
+import { computed, ref, defineProps } from 'vue'
 const store = useStore()
 
 const props = defineProps({

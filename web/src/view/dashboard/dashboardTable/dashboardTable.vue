@@ -21,7 +21,7 @@ export default {
 <script setup>
 import { Commits } from '@/api/github'
 import { formatTimeToStr } from '@/utils/date.js'
-import { ref } from 'vue-demi'
+import { ref } from 'vue'
 
 const loading = ref(true)
 const dataTimeline = ref([])

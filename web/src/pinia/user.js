@@ -3,22 +3,29 @@ import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
+
+const baseInfoStr = window.localStorage.getItem('userInfo')
+let baseInfo = {
+  uuid: '',
+  nickName: '',
+  headerImg: '',
+  authority: {},
+  sideMode: 'dark',
+  activeColor: '#4D70FF',
+  baseColor: '#fff'
+}
+
+if (baseInfoStr) {
+  baseInfo = JSON.parse(baseInfoStr)
+}
 
 export const useUserStore = defineStore('user', () => {
   const routerStore = useRouterStore()
 
-  const userInfo = ref({
-    uuid: '',
-    nickName: '',
-    headerImg: '',
-    authority: {},
-    sideMode: 'dark',
-    activeColor: '#4D70FF',
-    baseColor: '#fff'
-  })
-  const token = ref('')
+  const userInfo = ref(baseInfo)
+  const token = ref(window.localStorage.getItem('token') || '')
 
   const setUserInfo = (val) => {
     userInfo.value = val
@@ -30,6 +37,7 @@ export const useUserStore = defineStore('user', () => {
 
   const NeedInit = () => {
     token.value = ''
+    window.localStorage.removeItem('token')
     sessionStorage.clear()
     router.push({ name: 'Init', replace: true })
   }
@@ -109,6 +117,14 @@ export const useUserStore = defineStore('user', () => {
       return '#4D70FF'
     }
     return userInfo.activeColor
+  })
+
+  watch(userInfo, () => {
+    window.localStorage.setItem('userInfo', JSON.stringify(userInfo.value))
+  })
+
+  watch(token, () => {
+    window.localStorage.setItem('token', token.value)
   })
 
   return {

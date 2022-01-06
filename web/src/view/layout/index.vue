@@ -83,7 +83,7 @@
         </transition>
         <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
           <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive :include="$store.getters['router/keepAliveRouters']">
+            <keep-alive :include="useRouterStore.keepAliveRouters">
               <component :is="Component" />
             </keep-alive>
           </transition>
@@ -114,6 +114,7 @@ import { emitter } from '@/utils/bus.js'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/pinia/user'
+import { useRouterStore } from '@/pinia/router'
 
 const router = useRouter()
 const route = useRoute()

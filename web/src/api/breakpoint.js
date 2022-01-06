@@ -1,4 +1,4 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 // @Summary 设置角色资源权限
 // @Security ApiKeyAuth
 // @accept application/json
@@ -8,7 +8,6 @@ import { createService } from '@/utils/request'
 // @Router /authority/setDataAuthority [post]
 
 export const findFile = (params) => {
-  const service = createService()
   return service({
     url: '/fileUploadAndDownload/findFile',
     method: 'get',
@@ -17,7 +16,6 @@ export const findFile = (params) => {
 }
 
 export const breakpointContinue = (data) => {
-  const service = createService()
   return service({
     url: '/fileUploadAndDownload/breakpointContinue',
     method: 'post',
@@ -27,7 +25,6 @@ export const breakpointContinue = (data) => {
 }
 
 export const breakpointContinueFinish = (params) => {
-  const service = createService()
   return service({
     url: '/fileUploadAndDownload/breakpointContinueFinish',
     method: 'post',
@@ -36,7 +33,6 @@ export const breakpointContinueFinish = (params) => {
 }
 
 export const removeChunk = (data, params) => {
-  const service = createService()
   return service({
     url: '/fileUploadAndDownload/removeChunk',
     method: 'post',

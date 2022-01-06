@@ -1,5 +1,4 @@
-import { createService } from '@/utils/request'
-const service = createService()
+import service from '@/utils/request'
 import { ElMessage } from 'element-plus'
 
 const handleFileError = (res, fileName) => {

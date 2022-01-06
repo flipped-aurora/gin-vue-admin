@@ -1,4 +1,4 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 // @Tags systrm
 // @Summary 获取配置文件内容
 // @Security ApiKeyAuth
@@ -6,7 +6,6 @@ import { createService } from '@/utils/request'
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /system/getSystemConfig [post]
 export const getSystemConfig = () => {
-  const service = createService()
   return service({
     url: '/system/getSystemConfig',
     method: 'post'
@@ -21,7 +20,6 @@ export const getSystemConfig = () => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /system/setSystemConfig [post]
 export const setSystemConfig = (data) => {
-  const service = createService()
   return service({
     url: '/system/setSystemConfig',
     method: 'post',
@@ -36,7 +34,6 @@ export const setSystemConfig = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /system/getServerInfo [post]
 export const getSystemState = () => {
-  const service = createService()
   return service({
     url: '/system/getServerInfo',
     method: 'post',

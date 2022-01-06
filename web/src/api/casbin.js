@@ -1,4 +1,4 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 // @Tags authority
 // @Summary 更改角色api权限
 // @Security ApiKeyAuth
@@ -8,7 +8,6 @@ import { createService } from '@/utils/request'
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/UpdateCasbin [post]
 export const UpdateCasbin = (data) => {
-  const service = createService()
   return service({
     url: '/casbin/updateCasbin',
     method: 'post',
@@ -25,7 +24,6 @@ export const UpdateCasbin = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 export const getPolicyPathByAuthorityId = (data) => {
-  const service = createService()
   return service({
     url: '/casbin/getPolicyPathByAuthorityId',
     method: 'post',

@@ -1,4 +1,4 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 // @Tags SysDictionaryDetail
 // @Summary 创建SysDictionaryDetail
 // @Security ApiKeyAuth
@@ -8,7 +8,6 @@ import { createService } from '@/utils/request'
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysDictionaryDetail/createSysDictionaryDetail [post]
 export const createSysDictionaryDetail = (data) => {
-  const service = createService()
   return service({
     url: '/sysDictionaryDetail/createSysDictionaryDetail',
     method: 'post',
@@ -25,7 +24,6 @@ export const createSysDictionaryDetail = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysDictionaryDetail/deleteSysDictionaryDetail [delete]
 export const deleteSysDictionaryDetail = (data) => {
-  const service = createService()
   return service({
     url: '/sysDictionaryDetail/deleteSysDictionaryDetail',
     method: 'delete',
@@ -42,7 +40,6 @@ export const deleteSysDictionaryDetail = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /sysDictionaryDetail/updateSysDictionaryDetail [put]
 export const updateSysDictionaryDetail = (data) => {
-  const service = createService()
   return service({
     url: '/sysDictionaryDetail/updateSysDictionaryDetail',
     method: 'put',
@@ -59,7 +56,6 @@ export const updateSysDictionaryDetail = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /sysDictionaryDetail/findSysDictionaryDetail [get]
 export const findSysDictionaryDetail = (params) => {
-  const service = createService()
   return service({
     url: '/sysDictionaryDetail/findSysDictionaryDetail',
     method: 'get',
@@ -76,7 +72,6 @@ export const findSysDictionaryDetail = (params) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysDictionaryDetail/getSysDictionaryDetailList [get]
 export const getSysDictionaryDetailList = (params) => {
-  const service = createService()
   return service({
     url: '/sysDictionaryDetail/getSysDictionaryDetailList',
     method: 'get',

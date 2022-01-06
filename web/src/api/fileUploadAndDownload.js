@@ -1,4 +1,4 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 // @Tags FileUploadAndDownload
 // @Summary 分页文件列表
 // @Security ApiKeyAuth
@@ -8,7 +8,6 @@ import { createService } from '@/utils/request'
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /fileUploadAndDownload/getFileList [post]
 export const getFileList = (data) => {
-  const service = createService()
   return service({
     url: '/fileUploadAndDownload/getFileList',
     method: 'post',
@@ -24,7 +23,6 @@ export const getFileList = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /fileUploadAndDownload/deleteFile [post]
 export const deleteFile = (data) => {
-  const service = createService()
   return service({
     url: '/fileUploadAndDownload/deleteFile',
     method: 'post',

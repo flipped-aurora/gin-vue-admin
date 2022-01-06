@@ -1,4 +1,4 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 // @Tags SysOperationRecord
 // @Summary 删除SysOperationRecord
 // @Security ApiKeyAuth
@@ -8,7 +8,6 @@ import { createService } from '@/utils/request'
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 export const deleteSysOperationRecord = (data) => {
-  const service = createService()
   return service({
     url: '/sysOperationRecord/deleteSysOperationRecord',
     method: 'delete',
@@ -25,7 +24,6 @@ export const deleteSysOperationRecord = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 export const deleteSysOperationRecordByIds = (data) => {
-  const service = createService()
   return service({
     url: '/sysOperationRecord/deleteSysOperationRecordByIds',
     method: 'delete',
@@ -42,7 +40,6 @@ export const deleteSysOperationRecordByIds = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
 export const getSysOperationRecordList = (params) => {
-  const service = createService()
   return service({
     url: '/sysOperationRecord/getSysOperationRecordList',
     method: 'get',

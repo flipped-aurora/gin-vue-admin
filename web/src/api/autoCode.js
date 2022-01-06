@@ -1,7 +1,6 @@
-import { createService } from '@/utils/request'
+import service from '@/utils/request'
 
 export const preview = (data) => {
-  const service = createService()
   return service({
     url: '/autoCode/preview',
     method: 'post',
@@ -10,7 +9,6 @@ export const preview = (data) => {
 }
 
 export const createTemp = (data) => {
-  const service = createService()
   return service({
     url: '/autoCode/createTemp',
     method: 'post',
@@ -27,7 +25,6 @@ export const createTemp = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/getDatabase [get]
 export const getDB = () => {
-  const service = createService()
   return service({
     url: '/autoCode/getDB',
     method: 'get'
@@ -42,7 +39,6 @@ export const getDB = () => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/getTables [get]
 export const getTable = (params) => {
-  const service = createService()
   return service({
     url: '/autoCode/getTables',
     method: 'get',
@@ -58,7 +54,6 @@ export const getTable = (params) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /autoCode/getColumn [get]
 export const getColumn = (params) => {
-  const service = createService()
   return service({
     url: '/autoCode/getColumn',
     method: 'get',
@@ -67,7 +62,6 @@ export const getColumn = (params) => {
 }
 
 export const getSysHistory = (data) => {
-  const service = createService()
   return service({
     url: '/autoCode/getSysHistory',
     method: 'post',
@@ -76,7 +70,6 @@ export const getSysHistory = (data) => {
 }
 
 export const rollback = (data) => {
-  const service = createService()
   return service({
     url: '/autoCode/rollback',
     method: 'post',
@@ -85,7 +78,6 @@ export const rollback = (data) => {
 }
 
 export const getMeta = (data) => {
-  const service = createService()
   return service({
     url: '/autoCode/getMeta',
     method: 'post',
@@ -94,7 +86,6 @@ export const getMeta = (data) => {
 }
 
 export const delSysHistory = (data) => {
-  const service = createService()
   return service({
     url: '/autoCode/delSysHistory',
     method: 'post',

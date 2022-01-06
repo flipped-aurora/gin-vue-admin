@@ -7,8 +7,6 @@ import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
 
 export const useUserStore = defineStore('user', () => {
-  const routerStore = useRouterStore()
-
   const userInfo = ref({
     uuid: '',
     nickName: '',
@@ -54,7 +52,8 @@ export const useUserStore = defineStore('user', () => {
     if (res.code === 0) {
       setUserInfo(res.data.user)
       setToken(res.data.token)
-      await routerStore.SetAsyncRouter({})
+      const routerStore = useRouterStore()
+      await routerStore.SetAsyncRouter()
       const asyncRouters = routerStore.asyncRouters
       asyncRouters.forEach(asyncRouter => {
         router.addRoute(asyncRouter)

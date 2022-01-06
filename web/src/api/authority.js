@@ -1,7 +1,7 @@
 import { createService } from '@/utils/request'
-const service = createService()
 // @Router /authority/getAuthorityList [post]
 export const getAuthorityList = (data) => {
+  const service = createService()
   return service({
     url: '/authority/getAuthorityList',
     method: 'post',
@@ -17,6 +17,7 @@ export const getAuthorityList = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/deleteAuthority [post]
 export const deleteAuthority = (data) => {
+  const service = createService()
   return service({
     url: '/authority/deleteAuthority',
     method: 'post',
@@ -32,6 +33,7 @@ export const deleteAuthority = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /authority/createAuthority [post]
 export const createAuthority = (data) => {
+  const service = createService()
   return service({
     url: '/authority/createAuthority',
     method: 'post',
@@ -48,6 +50,7 @@ export const createAuthority = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"拷贝成功"}"
 // @Router /authority/copyAuthority [post]
 export const copyAuthority = (data) => {
+  const service = createService()
   return service({
     url: '/authority/copyAuthority',
     method: 'post',
@@ -63,6 +66,7 @@ export const copyAuthority = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /authority/setDataAuthority [post]
 export const setDataAuthority = (data) => {
+  const service = createService()
   return service({
     url: '/authority/setDataAuthority',
     method: 'post',
@@ -78,6 +82,7 @@ export const setDataAuthority = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /authority/setDataAuthority [post]
 export const updateAuthority = (data) => {
+  const service = createService()
   return service({
     url: '/authority/updateAuthority',
     method: 'put',

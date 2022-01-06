@@ -8,10 +8,10 @@
               class="user-headpic-update"
               :style="{
                 'background-image': `url(${
-                  userInfo.headerImg &&
-                  userInfo.headerImg.slice(0, 4) !== 'http'
-                    ? path + userInfo.headerImg
-                    : userInfo.headerImg
+                  userStore.userInfo.headerImg &&
+                  userStore.userInfo.headerImg.slice(0, 4) !== 'http'
+                    ? path + userStore.userInfo.headerImg
+                    : userStore.userInfo.headerImg
                 })`,
                 'background-repeat': 'no-repeat',
                 'background-size': 'cover',
@@ -25,7 +25,7 @@
             </div>
             <div class="user-personality">
               <p v-if="!editFlag" class="nickName">
-                {{ userInfo.nickName }}
+                {{ userStore.userInfo.nickName }}
                 <el-icon class="pointer" color="#66b1ff" @click="openEidt">
                   <edit />
                 </el-icon>
@@ -47,7 +47,7 @@
                   <el-icon>
                     <user />
                   </el-icon>
-                  {{ userInfo.nickName }}
+                  {{ userStore.userInfo.nickName }}
                 </li>
                 <el-tooltip
                   class="item"
@@ -211,7 +211,6 @@ const rules = reactive({
 })
 
 const userStore = useUserStore()
-const userInfo = userStore.userInfo
 const modifyPwdForm = ref(null)
 const showPassword = ref(false)
 const pwdModify = ref({})
@@ -221,7 +220,7 @@ const savePassword = async() => {
   modifyPwdForm.value.validate((valid) => {
     if (valid) {
       changePassword({
-        username: userInfo.value.userName,
+        username: userStore.userInfo.userName,
         password: pwdModify.value.password,
         newPassword: pwdModify.value.newPassword,
       }).then((res) => {
@@ -254,7 +253,7 @@ const ResetUserInfo = (data) => {
   userStore.ResetUserInfo(data)
 }
 const enterImg = async(url) => {
-  const res = await setUserInfo({ headerImg: url, ID: userInfo.value.ID })
+  const res = await setUserInfo({ headerImg: url, ID: userStore.userInfo.ID })
   if (res.code === 0) {
     ResetUserInfo({ headerImg: url })
     ElMessage({
@@ -265,7 +264,7 @@ const enterImg = async(url) => {
 }
 
 const openEidt = () => {
-  nickName.value = userInfo.value.nickName
+  nickName.value = userStore.userInfo.nickName
   editFlag.value = true
 }
 
@@ -277,7 +276,7 @@ const closeEdit = () => {
 const enterEdit = async() => {
   const res = await setUserInfo({
     nickName: nickName.value,
-    ID: userInfo.value.ID,
+    ID: userStore.userInfo.ID,
   })
   if (res.code === 0) {
     ResetUserInfo({ nickName: nickName.value })

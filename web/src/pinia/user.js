@@ -122,6 +122,7 @@ export const useUserStore = defineStore('user', () => {
     changeSideMode,
     mode,
     sideMode,
+    setToken,
     baseColor,
     activeColor
   }

@@ -6,7 +6,7 @@
         <el-upload
           class="excel-btn"
           :action="`${path}/excel/importExcel`"
-          :headers="{'x-token':token}"
+          :headers="{'x-token':userStore.token}"
           :on-success="loadExcel"
           :show-file-list="false"
         >
@@ -64,7 +64,6 @@ const getTableData = async(f = () => {}) => {
 getTableData(getMenuList)
 
 const userStore = useUserStore()
-const token = userStore.token
 
 const handleExcelExport = (fileName) => {
   if (!fileName || typeof fileName !== 'string') {

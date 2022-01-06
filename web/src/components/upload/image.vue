@@ -3,7 +3,7 @@
   <div>
     <el-upload
       :action="`${path}/fileUploadAndDownload/upload`"
-      :headers="{ 'x-token': token }"
+      :headers="{ 'x-token': userStore.token }"
       :show-file-list="false"
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"
@@ -39,7 +39,6 @@ const props = defineProps({
 const path = ref(import.meta.env.VITE_BASE_API)
 
 const userStore = useUserStore()
-const token = userStore.token
 
 const beforeImageUpload = (file) => {
       const isJPG = file.type === 'image/jpeg'

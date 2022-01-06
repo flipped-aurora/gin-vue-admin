@@ -38,12 +38,10 @@ export const createService = () => {
         showLoading()
       }
 
-      const token = userStore.token
-      const user = userStore.userInfo
       config.headers = {
         'Content-Type': 'application/json',
-        'x-token': token,
-        'x-user-id': user.ID,
+        'x-token': userStore.token,
+        'x-user-id': userStore.userInfo.ID,
         ...config.headers
       }
       return config
@@ -116,4 +114,5 @@ export const createService = () => {
       return error
     }
   )
+  return service
 }

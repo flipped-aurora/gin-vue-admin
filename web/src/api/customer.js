@@ -1,5 +1,4 @@
 import { createService } from '@/utils/request'
-const service = createService()
 // @Tags SysApi
 // @Summary 删除客户
 // @Security ApiKeyAuth
@@ -9,6 +8,7 @@ const service = createService()
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [post]
 export const createExaCustomer = (data) => {
+  const service = createService()
   return service({
     url: '/customer/customer',
     method: 'post',
@@ -25,6 +25,7 @@ export const createExaCustomer = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [put]
 export const updateExaCustomer = (data) => {
+  const service = createService()
   return service({
     url: '/customer/customer',
     method: 'put',
@@ -41,6 +42,7 @@ export const updateExaCustomer = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [delete]
 export const deleteExaCustomer = (data) => {
+  const service = createService()
   return service({
     url: '/customer/customer',
     method: 'delete',
@@ -57,6 +59,7 @@ export const deleteExaCustomer = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customer [get]
 export const getExaCustomer = (params) => {
+  const service = createService()
   return service({
     url: '/customer/customer',
     method: 'get',
@@ -73,6 +76,7 @@ export const getExaCustomer = (params) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /customer/customerList [get]
 export const getExaCustomerList = (params) => {
+  const service = createService()
   return service({
     url: '/customer/customerList',
     method: 'get',

@@ -5,7 +5,7 @@
         <el-upload
           :action="`${path}/fileUploadAndDownload/upload`"
           :before-upload="checkFile"
-          :headers="{ 'x-token': token }"
+          :headers="{ 'x-token': userStore.token }"
           :on-error="uploadError"
           :on-success="uploadSuccess"
           :show-file-list="false"
@@ -79,7 +79,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 const path = ref(import.meta.env.VITE_BASE_API)
 const userStore = useUserStore()
-const token = userStore.token
 
 const imageUrl = ref('')
 

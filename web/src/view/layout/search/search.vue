@@ -11,7 +11,7 @@
           @change="changeRouter"
         >
           <el-option
-            v-for="item in routerList"
+            v-for="item in routerStore.routerList"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -66,7 +66,6 @@ import { useRouterStore } from '@/pinia/router'
 const router = useRouter()
 
 const routerStore = useRouterStore()
-const routerList = routerStore.routerList
 
 const value = ref('')
 const changeRouter = () => {

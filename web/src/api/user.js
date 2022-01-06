@@ -1,10 +1,10 @@
 import { createService } from '@/utils/request'
-const service = createService()
 // @Summary 用户登录
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}
 // @Router /base/login [post]
 export const login = (data) => {
+  const service = createService()
   return service({
     url: '/base/login',
     method: 'post',
@@ -17,6 +17,7 @@ export const login = (data) => {
 // @Param data body {username:"string",password:"string"}
 // @Router /base/captcha [post]
 export const captcha = (data) => {
+  const service = createService()
   return service({
     url: '/base/captcha',
     method: 'post',
@@ -29,6 +30,7 @@ export const captcha = (data) => {
 // @Param data body {username:"string",password:"string"}
 // @Router /base/resige [post]
 export const register = (data) => {
+  const service = createService()
   return service({
     url: '/user/register',
     method: 'post',
@@ -41,6 +43,7 @@ export const register = (data) => {
 // @Param data body {username:"string",password:"string",newPassword:"string"}
 // @Router /user/changePassword [post]
 export const changePassword = (data) => {
+  const service = createService()
   return service({
     url: '/user/changePassword',
     method: 'post',
@@ -57,6 +60,7 @@ export const changePassword = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserList [post]
 export const getUserList = (data) => {
+  const service = createService()
   return service({
     url: '/user/getUserList',
     method: 'post',
@@ -73,6 +77,7 @@ export const getUserList = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthority [post]
 export const setUserAuthority = (data) => {
+  const service = createService()
   return service({
     url: '/user/setUserAuthority',
     method: 'post',
@@ -89,6 +94,7 @@ export const setUserAuthority = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/deleteUser [delete]
 export const deleteUser = (data) => {
+  const service = createService()
   return service({
     url: '/user/deleteUser',
     method: 'delete',
@@ -105,6 +111,7 @@ export const deleteUser = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserInfo [put]
 export const setUserInfo = (data) => {
+  const service = createService()
   return service({
     url: '/user/setUserInfo',
     method: 'put',
@@ -121,6 +128,7 @@ export const setUserInfo = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"修改成功"}"
 // @Router /user/setUserAuthorities [post]
 export const setUserAuthorities = (data) => {
+  const service = createService()
   return service({
     url: '/user/setUserAuthorities',
     method: 'post',
@@ -136,6 +144,7 @@ export const setUserAuthorities = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /user/getUserInfo [get]
 export const getUserInfo = () => {
+  const service = createService()
   return service({
     url: '/user/getUserInfo',
     method: 'get'
@@ -143,6 +152,7 @@ export const getUserInfo = () => {
 }
 
 export const resetPassword = () => {
+  const service = createService()
   return service({
     url: '/user/resetPassword',
     method: 'post'

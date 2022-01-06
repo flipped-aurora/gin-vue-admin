@@ -1,5 +1,4 @@
 import { createService } from '@/utils/request'
-const service = createService()
 // @Tags email
 // @Summary 发送测试邮件
 // @Security ApiKeyAuth
@@ -7,6 +6,7 @@ const service = createService()
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"返回成功"}"
 // @Router /email/emailTest [post]
 export const emailTest = (data) => {
+  const service = createService()
   return service({
     url: '/email/emailTest',
     method: 'post',

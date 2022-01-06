@@ -1,5 +1,4 @@
 import { createService } from '@/utils/request'
-const service = createService()
 // @Tags api
 // @Summary 分页获取角色列表
 // @Security ApiKeyAuth
@@ -13,6 +12,7 @@ const service = createService()
 //	pageSize int
 // }
 export const getApiList = (data) => {
+  const service = createService()
   return service({
     url: '/api/getApiList',
     method: 'post',
@@ -29,6 +29,7 @@ export const getApiList = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/createApi [post]
 export const createApi = (data) => {
+  const service = createService()
   return service({
     url: '/api/createApi',
     method: 'post',
@@ -45,6 +46,7 @@ export const createApi = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /menu/getApiById [post]
 export const getApiById = (data) => {
+  const service = createService()
   return service({
     url: '/api/getApiById',
     method: 'post',
@@ -61,6 +63,7 @@ export const getApiById = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /api/updateApi [post]
 export const updateApi = (data) => {
+  const service = createService()
   return service({
     url: '/api/updateApi',
     method: 'post',
@@ -77,6 +80,7 @@ export const updateApi = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /api/setAuthApi [post]
 export const setAuthApi = (data) => {
+  const service = createService()
   return service({
     url: '/api/setAuthApi',
     method: 'post',
@@ -92,6 +96,7 @@ export const setAuthApi = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/getAllApis [post]
 export const getAllApis = (data) => {
+  const service = createService()
   return service({
     url: '/api/getAllApis',
     method: 'post',
@@ -108,6 +113,7 @@ export const getAllApis = (data) => {
 // @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /api/deleteApi [post]
 export const deleteApi = (data) => {
+  const service = createService()
   return service({
     url: '/api/deleteApi',
     method: 'post',
@@ -124,6 +130,7 @@ export const deleteApi = (data) => {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /api/deleteApisByIds [delete]
 export const deleteApisByIds = (data) => {
+  const service = createService()
   return service({
     url: '/api/deleteApisByIds',
     method: 'delete',

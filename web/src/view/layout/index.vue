@@ -44,7 +44,7 @@
                           <div class="dp-flex justify-content-center align-items height-full width-full">
                             <span class="header-avatar" style="cursor: pointer">
                               <CustomPic />
-                              <span style="margin-left: 5px">{{ userInfo.nickName }}</span>
+                              <span style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
                               <el-icon>
                                 <arrow-down />
                               </el-icon>
@@ -54,18 +54,18 @@
                             <el-dropdown-menu class="dropdown-group">
                               <el-dropdown-item>
                                 <span style="font-weight: 600;">
-                                  当前角色：{{ userInfo.authority.authorityName }}
+                                  当前角色：{{ userStore.userInfo.authority.authorityName }}
                                 </span>
                               </el-dropdown-item>
-                              <template v-if="userInfo.authorities">
-                                <el-dropdown-item v-for="item in userInfo.authorities.filter(i=>i.authorityId!==userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
+                              <template v-if="userStore.userInfo.authorities">
+                                <el-dropdown-item v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
                                   <span>
                                     切换为：{{ item.authorityName }}
                                   </span>
                                 </el-dropdown-item>
                               </template>
                               <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
-                              <el-dropdown-item icon="reading-lamp" @click="LoginOut">登 出</el-dropdown-item>
+                              <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">登 出</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>
                         </el-dropdown>
@@ -164,32 +164,27 @@ onMounted(() => {
 
 const userStore = useUserStore()
 
-const userInfo = userStore.userInfo
-const sideMode = userStore.sideMode
-const baseColor = userStore.baseColor
 const textColor = computed(() => {
-  if (sideMode === 'dark') {
+  if (userStore.sideMode === 'dark') {
     return '#fff'
-  } else if (sideMode === 'light') {
+  } else if (userStore.sideMode === 'light') {
     return '#191a23'
   } else {
-    return baseColor.value
+    return userStore.baseColor
   }
 })
 
 const backgroundColor = computed(() => {
-  if (sideMode === 'dark') {
+  if (userStore.sideMode === 'dark') {
     return '#191a23'
-  } else if (sideMode === 'light') {
+  } else if (userStore.sideMode === 'light') {
     return '#fff'
   } else {
-    return sideMode.value
+    return userStore.sideMode
   }
 })
 
 const matched = computed(() => route.matched)
-
-const LoginOut = userStore.LoginOut()
 
 const changeUserAuth = async(id) => {
   const res = await setUserAuthority({

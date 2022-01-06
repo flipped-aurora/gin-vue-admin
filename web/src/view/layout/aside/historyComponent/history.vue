@@ -19,13 +19,13 @@
         <template #label>
           <span
             :style="{
-              color: activeValue === name(item) ? activeColor : '#333',
+              color: activeValue === name(item) ? userStore.activeColor : '#333',
             }"
           ><i
              class="dot"
              :style="{
                backgroundColor:
-                 activeValue === name(item) ? activeColor : '#ddd',
+                 activeValue === name(item) ? userStore.activeColor : '#ddd',
              }"
            />
             {{ item.meta.title }}</span>
@@ -71,8 +71,6 @@ const activeValue = ref('')
 const contextMenuVisible = ref(false)
 
 const userStore = useUserStore()
-const userInfo = userStore.userInfo
-const activeColor = userStore.activeColor
 
 const name = (item) => {
   return (
@@ -85,7 +83,7 @@ const top = ref(0)
 const isCollapse = ref(false)
 const isMobile = ref(false)
 const rightActive = ref('')
-const defaultRouter = computed(() => userInfo.value.authority.defaultRouter)
+const defaultRouter = computed(() => userStore.userInfo.authority.defaultRouter)
 const openContextMenu = (e) => {
   if (
     historys.value.length === 1 &&

@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ background: sideMode }">
+  <div :style="{ background: userStore.sideMode }">
     <el-scrollbar style="height: calc(100vh - 60px)">
       <transition
         :duration="{ enter: 800, leave: 100 }"
@@ -10,14 +10,14 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           :default-active="active"
-          :background-color="sideMode"
-          :active-text-color="activeColor"
-          :text-color="baseColor"
+          :background-color="userStore.sideMode"
+          :active-text-color="userStore.activeColor"
+          :text-color="userStore.baseColor"
           class="el-menu-vertical"
           unique-opened
           @select="selectMenuItem"
         >
-          <template v-for="item in asyncRouters[0].children">
+          <template v-for="item in routerStore.asyncRouters[0].children">
             <aside-component
               v-if="!item.hidden"
               :key="item.name"
@@ -48,13 +48,7 @@ const route = useRoute()
 const router = useRouter()
 
 const userStore = useUserStore()
-
-const sideMode = userStore.sideMode
-const baseColor = userStore.baseColor
-const activeColor = userStore.activeColor
-
 const routerStore = useRouterStore()
-const asyncRouters = routerStore.asyncRouters
 
 const active = ref('')
 watch(route, () => {

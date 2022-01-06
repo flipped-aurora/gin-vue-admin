@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 // @Tags jwt
 // @Summary jwt加入黑名单
 // @Security ApiKeyAuth

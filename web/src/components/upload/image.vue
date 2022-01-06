@@ -17,9 +17,8 @@
 <script setup>
 import ImageCompress from '@/utils/image'
 import { computed, ref } from 'vue'
-import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
-const store = useStore()
+import {useUserStore} from '@/pinia/user'
 
 const emit = defineEmits(['on-success'])
 const props = defineProps({
@@ -38,7 +37,9 @@ const props = defineProps({
   })
 
 const path = ref(import.meta.env.VITE_BASE_API)
-const token = computed(()=>store.getters['user/token'])
+
+const userStore = useUserStore()
+const token = userStore.token
 
 const beforeImageUpload = (file) => {
       const isJPG = file.type === 'image/jpeg'

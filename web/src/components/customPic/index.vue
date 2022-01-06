@@ -22,10 +22,8 @@ export default {
 
 <script setup>
 import noAvatarPng from '@/assets/noBody.png'
-import { useStore } from 'vuex'
+import { useUserStore } from '@/pinia/user'
 import { computed, ref, defineProps } from 'vue'
-const store = useStore()
-
 const props = defineProps({
   picType: {
     type: String,
@@ -41,7 +39,9 @@ const props = defineProps({
 
 const path = ref(import.meta.env.VITE_BASE_API + '/')
 const noAvatar = ref(noAvatarPng)
-const userInfo = computed(() => store.getters['user/userInfo'])
+
+const userStore = useUserStore()
+const userInfo = computed(() => userStore.userInfo)
 
 const avatar = computed(() => {
   if (props.picSrc === '') {

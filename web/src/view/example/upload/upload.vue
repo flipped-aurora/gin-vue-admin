@@ -67,9 +67,9 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
+import { useUserStore } from '@/pinia/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import { formatDate } from '@/utils/format'
@@ -77,10 +77,9 @@ import { formatDate } from '@/utils/format'
 import { computed, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const store = useStore()
-
 const path = ref(import.meta.env.VITE_BASE_API)
-const token = computed(() => store.getters['user/token'])
+const userStore = useUserStore()
+const token = userStore.token
 
 const imageUrl = ref('')
 

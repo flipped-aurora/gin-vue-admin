@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 // @Tags InitDB
 // @Summary 初始化用户数据库
 // @Produce  application/json

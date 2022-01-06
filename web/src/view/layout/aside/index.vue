@@ -37,20 +37,24 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
 import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
 import { emitter } from '@/utils/bus.js'
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/pinia/user'
+import { useRouterStore } from '@/pinia/router'
 
 const route = useRoute()
 const router = useRouter()
-const store = useStore()
 
-const asyncRouters = computed(() => store.getters['router/asyncRouters'])
-const baseColor = computed(() => store.getters['user/baseColor'])
-const activeColor = computed(() => store.getters['user/activeColor'])
-const sideMode = computed(() => store.getters['user/sideMode'])
+const userStore = useUserStore()
+
+const sideMode = userStore.sideMode
+const baseColor = userStore.baseColor
+const activeColor = userStore.activeColor
+
+const routerStore = useRouterStore()
+const asyncRouters = routerStore.asyncRouters
 
 const active = ref('')
 watch(route, () => {

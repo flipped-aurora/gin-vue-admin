@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 export const preview = (data) => {
   return service({
     url: '/autoCode/preview',

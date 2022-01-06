@@ -179,11 +179,9 @@ export default {
 <script setup>
 import ChooseImg from '@/components/chooseImg/index.vue'
 import { setUserInfo, changePassword } from '@/api/user.js'
-import { useStore } from 'vuex'
-import { computed, reactive, ref } from 'vue'
+import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-
-const store = useStore()
+import { useUserStore } from '@/pinia/user'
 
 const path = ref(import.meta.env.VITE_BASE_API)
 const activeName = ref('second')
@@ -212,7 +210,8 @@ const rules = reactive({
   ],
 })
 
-const userInfo = computed(() => store.getters['user/userInfo'])
+const userStore = useUserStore()
+const userInfo = userStore.userInfo
 const modifyPwdForm = ref(null)
 const showPassword = ref(false)
 const pwdModify = ref({})
@@ -252,7 +251,7 @@ const openChooseImg = () => {
 }
 
 const ResetUserInfo = (data) => {
-  store.commit('user/ResetUserInfo', data)
+  userStore.ResetUserInfo(data)
 }
 const enterImg = async(url) => {
   const res = await setUserInfo({ headerImg: url, ID: userInfo.value.ID })

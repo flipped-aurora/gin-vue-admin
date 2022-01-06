@@ -54,12 +54,11 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
 import { emitter } from '@/utils/bus.js'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/pinia/user'
 
-const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -71,8 +70,9 @@ const historys = ref([])
 const activeValue = ref('')
 const contextMenuVisible = ref(false)
 
-const userInfo = computed(() => store.getters['user/userInfo'])
-const activeColor = computed(() => store.getters['user/activeColor'])
+const userStore = useUserStore()
+const userInfo = userStore.userInfo
+const activeColor = userStore.activeColor
 
 const name = (item) => {
   return (

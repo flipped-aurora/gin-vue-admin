@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 // @Summary 用户登录
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}

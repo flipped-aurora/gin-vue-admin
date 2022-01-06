@@ -109,13 +109,12 @@ import Search from '@/view/layout/search/search.vue'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import CustomPic from '@/components/customPic/index.vue'
 import Setting from './setting/index.vue'
-import { useStore } from 'vuex'
 import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/pinia/user'
 
-const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -163,9 +162,11 @@ onMounted(() => {
   }
 })
 
-const userInfo = computed(() => store.getters['user/userInfo'])
-const sideMode = computed(() => store.getters['user/sideMode'])
-const baseColor = computed(() => store.getters['user/baseColor'])
+const userStore = useUserStore()
+
+const userInfo = userStore.userInfo
+const sideMode = userStore.sideMode
+const baseColor = userStore.baseColor
 const textColor = computed(() => {
   if (sideMode === 'dark') {
     return '#fff'
@@ -188,9 +189,7 @@ const backgroundColor = computed(() => {
 
 const matched = computed(() => route.matched)
 
-const LoginOut = () => {
-  store.dispatch('user/LoginOut')
-}
+const LoginOut = userStore.LoginOut()
 
 const changeUserAuth = async(id) => {
   const res = await setUserAuthority({

@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 // @Tags SysDictionaryDetail
 // @Summary 创建SysDictionaryDetail
 // @Security ApiKeyAuth

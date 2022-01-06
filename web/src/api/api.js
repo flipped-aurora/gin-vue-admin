@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 // @Tags api
 // @Summary 分页获取角色列表
 // @Security ApiKeyAuth

@@ -49,12 +49,13 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
-const store = useStore()
+import { ref } from 'vue'
+import { useUserStore } from '@/pinia/user'
 const drawer = ref(false)
 const direction = ref('rtl')
-const mode = computed(() => store.getters['user/mode'])
+
+const userStore = useUserStore()
+const mode = userStore.mode
 
 const handleClose = () => {
   drawer.value = false
@@ -64,10 +65,10 @@ const showSettingDrawer = () => {
 }
 const changeMode = (e) => {
   if (e === null) {
-    store.dispatch('user/changeSideMode', 'dark')
+    userStore.changeSideMode('dark')
     return
   }
-  store.dispatch('user/changeSideMode', e)
+  userStore.changeSideMode(e)
 }
 
 </script>

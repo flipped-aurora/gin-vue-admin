@@ -1,5 +1,5 @@
-import service from '@/utils/request'
-
+import { createService } from '@/utils/request'
+const service = createService()
 // @Summary 用户登录 获取动态路由
 // @Produce  application/json
 // @Param 可以什么都不填 调一下即可

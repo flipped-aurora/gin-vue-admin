@@ -74,7 +74,7 @@ import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import { formatDate } from '@/utils/format'
 
-import { computed, ref } from 'vue-demi'
+import { computed, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const store = useStore()

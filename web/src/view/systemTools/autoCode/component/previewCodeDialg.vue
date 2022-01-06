@@ -12,9 +12,8 @@
 import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atelier-plateau-light.css'
-import { onMounted, ref } from 'vue-demi'
 import { ElMessage } from 'element-plus'
-import { defineProps, defineExpose } from 'vue'
+import { defineProps, defineExpose, onMounted, ref } from 'vue'
 
 const props = defineProps({
   previewCode: {

@@ -1,4 +1,4 @@
-import { login, getUserInfo, setUserInfo as setUserInfoApi } from '@/api/user'
+import { login, getUserInfo, setSelfInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElMessage } from 'element-plus'
@@ -74,7 +74,7 @@ export const useUserStore = defineStore('user', () => {
   }
   /* 设置侧边栏模式*/
   const changeSideMode = async(data) => {
-    const res = await setUserInfoApi({ sideMode: data, ID: userInfo.value.ID })
+    const res = await setSelfInfo({ sideMode: data })
     if (res.code === 0) {
       userInfo.value.sideMode = data
       ElMessage({

@@ -41,8 +41,8 @@ import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
 import { emitter } from '@/utils/bus.js'
 import { ref, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/pinia/user'
-import { useRouterStore } from '@/pinia/router'
+import { useUserStore } from '@/pinia/modules/user'
+import { useRouterStore } from '@/pinia/modules/router'
 
 const route = useRoute()
 const router = useRouter()

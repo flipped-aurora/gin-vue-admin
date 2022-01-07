@@ -117,9 +117,8 @@ import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 const router = useRouter()
-
 // 验证函数
 const checkUsername = (rule, value, callback) => {
   if (value.length < 5) {

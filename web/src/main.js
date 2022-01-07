@@ -10,17 +10,17 @@ import router from '@/router/index'
 import '@/permission'
 import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
-import { createPinia } from 'pinia'
+import { store } from '@/pinia'
 import App from './App.vue'
 const app = createApp(App)
 app.config.productionTip = false
-const pinia = createPinia()
 
 app
   .use(run)
-  .use(pinia)
+  .use(store)
   .use(auth)
   .use(router)
-  .use(ElementPlus, { locale: zhCn }).mount('#app')
+  .use(ElementPlus, { locale: zhCn })
+  .mount('#app')
 
 export default app

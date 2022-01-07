@@ -50,7 +50,7 @@ export default {
 
 <script setup>
 import { ref } from 'vue'
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 const drawer = ref(false)
 const direction = ref('rtl')
 

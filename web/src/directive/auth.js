@@ -1,5 +1,5 @@
 // 权限按钮展示指令
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 export default {
   install: (app) => {
     const userStore = useUserStore()

@@ -38,7 +38,7 @@ export const useUserStore = defineStore('user', () => {
       ...value
     }
   }
-
+  /* 获取用户信息*/
   const GetUserInfo = async() => {
     const res = await getUserInfo()
     if (res.code === 0) {
@@ -46,7 +46,7 @@ export const useUserStore = defineStore('user', () => {
     }
     return res
   }
-
+  /* 登录*/
   const LoginIn = async(loginInfo) => {
     const res = await login(loginInfo)
     if (res.code === 0) {
@@ -62,7 +62,7 @@ export const useUserStore = defineStore('user', () => {
       return true
     }
   }
-
+  /* 登出*/
   const LoginOut = async() => {
     const res = await jsonInBlacklist()
     if (res.code === 0) {
@@ -72,7 +72,7 @@ export const useUserStore = defineStore('user', () => {
       window.location.reload()
     }
   }
-
+  /* 设置侧边栏模式*/
   const changeSideMode = async(data) => {
     const res = await setUserInfoApi({ sideMode: data, ID: userInfo.value.ID })
     if (res.code === 0) {

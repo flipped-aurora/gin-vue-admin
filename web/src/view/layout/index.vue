@@ -113,8 +113,8 @@ import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useUserStore } from '@/pinia/user'
-import { useRouterStore } from '@/pinia/router'
+import { useUserStore } from '@/pinia/modules/user'
+import { useRouterStore } from '@/pinia/modules/router'
 
 const router = useRouter()
 const route = useRoute()

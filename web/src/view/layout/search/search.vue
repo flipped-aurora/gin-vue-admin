@@ -61,7 +61,7 @@ import Screenfull from '@/view/layout/screenfull/index.vue'
 import { emitter } from '@/utils/bus.js'
 import { ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
-import { useRouterStore } from '@/pinia/router'
+import { useRouterStore } from '@/pinia/modules/router'
 
 const router = useRouter()
 

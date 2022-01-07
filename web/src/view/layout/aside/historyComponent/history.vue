@@ -57,7 +57,7 @@ export default {
 import { emitter } from '@/utils/bus.js'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 
 const route = useRoute()
 const router = useRouter()

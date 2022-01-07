@@ -1,6 +1,6 @@
 import axios from 'axios' // 引入axios
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 import { emitter } from '@/utils/bus.js'
 
 const service = axios.create({

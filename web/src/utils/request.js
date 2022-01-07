@@ -2,6 +2,7 @@ import axios from 'axios' // 引入axios
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 import { emitter } from '@/utils/bus.js'
+import router from '@/router/index'
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -57,9 +58,9 @@ service.interceptors.request.use(
 // http response 拦截器
 service.interceptors.response.use(
   response => {
+    const userStore = useUserStore()
     closeLoading()
     if (response.headers['new-token']) {
-      const userStore = useUserStore()
       userStore.setToken(response.headers['new-token'])
     }
     if (response.data.code === 0 || response.headers.success === 'true') {
@@ -74,8 +75,9 @@ service.interceptors.response.use(
         type: 'error'
       })
       if (response.data.data && response.data.data.reload) {
-        const userStore = useUserStore()
-        userStore.LoginOut()
+        userStore.token = ''
+        localStorage.clear()
+        router.push({ name: 'Login', replace: true })
       }
       return response.data.msg ? response.data : response
     }
@@ -95,7 +97,9 @@ service.interceptors.response.use(
         })
           .then(() => {
             const userStore = useUserStore()
-            userStore.LoginOut()
+            userStore.token = ''
+            localStorage.clear()
+            router.push({ name: 'Login', replace: true })
           })
         break
       case 404:

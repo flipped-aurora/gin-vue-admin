@@ -6,8 +6,8 @@ import { ref } from 'vue'
 export const useDictionaryStore = defineStore('dictionary', () => {
   const dictionaryMap = ref({})
 
-  const setDictionaryMap = (dictionaryMap) => {
-    dictionaryMap.value = { ...dictionaryMap.value, ...dictionaryMap }
+  const setDictionaryMap = (dictionaryRes) => {
+    dictionaryMap.value = { ...dictionaryMap.value, ...dictionaryRes }
   }
 
   const getDictionary = async(type) => {
@@ -16,7 +16,7 @@ export const useDictionaryStore = defineStore('dictionary', () => {
     } else {
       const res = await findSysDictionary({ type })
       if (res.code === 0) {
-        const dictionaryMap = {}
+        const dictionaryRes = {}
         const dict = []
         res.data.resysDictionary.sysDictionaryDetails && res.data.resysDictionary.sysDictionaryDetails.forEach(item => {
           dict.push({
@@ -24,8 +24,8 @@ export const useDictionaryStore = defineStore('dictionary', () => {
             value: item.value
           })
         })
-        dictionaryMap[res.data.resysDictionary.type] = dict
-        setDictionaryMap(dictionaryMap)
+        dictionaryRes[res.data.resysDictionary.type] = dict
+        setDictionaryMap(dictionaryRes)
         return dictionaryMap.value[type]
       }
     }

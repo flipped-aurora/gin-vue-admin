@@ -40,7 +40,7 @@ export default {
 </script>
 
 <script setup>
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 import { exportExcel, loadExcelData, downloadTemplate } from '@/api/excel'
 import { getMenuList } from '@/api/menu'
 import { ref } from 'vue'

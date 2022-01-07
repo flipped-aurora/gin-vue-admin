@@ -16,5 +16,5 @@ export default {
 }
 </script>
 <script setup>
-import { useRouterStore } from '@/pinia/router'
+import { useRouterStore } from '@/pinia/modules/router'
 </script>

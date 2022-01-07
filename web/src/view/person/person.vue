@@ -181,7 +181,7 @@ import ChooseImg from '@/components/chooseImg/index.vue'
 import { setUserInfo, changePassword } from '@/api/user.js'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 
 const path = ref(import.meta.env.VITE_BASE_API)
 const activeName = ref('second')

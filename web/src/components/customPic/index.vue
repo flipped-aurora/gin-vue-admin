@@ -22,7 +22,7 @@ export default {
 
 <script setup>
 import noAvatarPng from '@/assets/noBody.png'
-import { useUserStore } from '@/pinia/user'
+import { useUserStore } from '@/pinia/modules/user'
 import { computed, ref } from 'vue'
 const props = defineProps({
   picType: {

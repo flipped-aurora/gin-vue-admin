@@ -11,7 +11,7 @@
           @change="changeRouter"
         >
           <el-option
-            v-for="item in routerList"
+            v-for="item in routerStore.routerList"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -58,15 +58,14 @@ export default {
 
 <script setup>
 import Screenfull from '@/view/layout/screenfull/index.vue'
-import { useStore } from 'vuex'
 import { emitter } from '@/utils/bus.js'
-import { ref, computed, nextTick } from 'vue'
+import { ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
+import { useRouterStore } from '@/pinia/modules/router'
 
-const store = useStore()
 const router = useRouter()
 
-const routerList = computed(() => store.getters['router/routerList'])
+const routerStore = useRouterStore()
 
 const value = ref('')
 const changeRouter = () => {

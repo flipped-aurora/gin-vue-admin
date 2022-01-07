@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, reactive } from 'vue'
+import { ref, reactive } from 'vue'
 const props = defineProps({
   meta: {
     default: function() {
@@ -1153,6 +1153,7 @@ const options = reactive([
 ])
 
 const metaData = ref(props.meta)
+metaData.value.icon = options[0].label
 </script>
 
 <script>

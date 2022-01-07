@@ -111,16 +111,14 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
 import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { useUserStore } from '@/pinia/modules/user'
 const router = useRouter()
-const store = useStore()
-
 // 验证函数
 const checkUsername = (rule, value, callback) => {
   if (value.length < 5) {
@@ -173,8 +171,10 @@ const rules = reactive({
     },
   ],
 })
+
+const userStore = useUserStore()
 const login = async() => {
-  return await store.dispatch('user/LoginIn', loginFormData)
+  return await userStore.LoginIn(loginFormData)
 }
 const submitForm = () => {
   loginForm.value.validate(async(v) => {
@@ -200,7 +200,7 @@ const checkInit = async() => {
   const res = await checkDB()
   if (res.code === 0) {
     if (res.data?.needInit) {
-      store.commit('user/NeedInit')
+      userStore.NeedInit()
       router.push({ name: 'Init' })
     } else {
       ElMessage({

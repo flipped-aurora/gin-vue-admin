@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref, reactive } from 'vue'
+import { ref, reactive } from 'vue'
 const props = defineProps({
   meta: {
     default: function() {

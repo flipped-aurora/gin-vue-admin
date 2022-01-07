@@ -7,9 +7,8 @@ let asyncRouterFlag = 0
 
 const whiteList = ['Login', 'Init']
 
-const getRouter = async() => {
+const getRouter = async(userStore) => {
   const routerStore = useRouterStore()
-  const userStore = useUserStore()
   await routerStore.SetAsyncRouter()
   await userStore.GetUserInfo()
   const asyncRouters = routerStore.asyncRouters
@@ -45,7 +44,7 @@ router.beforeEach(async(to, from, next) => {
     if (token) {
       if (!asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
         asyncRouterFlag++
-        await getRouter()
+        await getRouter(userStore)
       }
       next({ name: userStore.userInfo.authority.defaultRouter })
     } else {
@@ -57,7 +56,7 @@ router.beforeEach(async(to, from, next) => {
       // 添加flag防止多次获取动态路由和栈溢出
       if (!asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
         asyncRouterFlag++
-        await getRouter()
+        await getRouter(userStore)
         next({ ...to, replace: true })
       } else {
         if (to.matched.length) {

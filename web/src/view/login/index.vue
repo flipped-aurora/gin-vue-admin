@@ -66,8 +66,12 @@
           <el-form-item>
             <el-button
               type="primary"
-              style="width: 100%;margin-top: 20px"
-              :disabled="btnDisable"
+              style="width: 46%"
+              @click="checkInit"
+            >前往初始化</el-button>
+            <el-button
+              type="primary"
+              style="width: 46%; margin-left: 8%"
               @click="submitForm"
             >登 录</el-button>
           </el-form-item>
@@ -111,85 +115,61 @@ import { useStore } from 'vuex'
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
 import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+const router = useRouter()
+const store = useStore()
 
-export default {
-  name: 'Login',
-  components: {
-    bootomInfo
-  },
-  data() {
-    const checkUsername = (rule, value, callback) => {
-      if (value.length < 5) {
-        return callback(new Error('请输入正确的用户名'))
-      } else {
-        callback()
-      }
-    }
-    const checkPassword = (rule, value, callback) => {
-      if (value.length < 6) {
-        return callback(new Error('请输入正确的密码'))
-      } else {
-        callback()
-      }
-    }
-    return {
-      lock: 'lock',
-      loginForm: {
-        username: 'admin',
-        password: '123456',
-        captcha: '',
-        captchaId: ''
-      },
-      rules: {
-        username: [{ validator: checkUsername, trigger: 'blur' }],
-        password: [{ validator: checkPassword, trigger: 'blur' }],
-        captcha: [{ required: true, message: '请输入验证码', trigger: 'blur' },
-          {
-            message: '验证码格式不正确',
-            trigger: 'blur',
-          }]
-      },
-      logVerify: '',
-      picPath: '',
-      btnDisable: false
-    }
-  },
-  created() {
-    const that = this
-    if (import.meta.env.MODE === 'development' && (/^true$/i).test(import.meta.env.VITE_NEED_INIT)) {
-      console.log('没有初始化系统')
-      this.$notify({
-        title: '提示',
-        message: '系统还未初始化，请先初始化系统！',
-        duration: 0,
-        type: 'error',
-        onClick() {
-          that.checkInit()
-          that.$notify.closeAll()
-        }
-      })
-    }
-    this.loginVerify()
-  },
-  methods: {
-    ...mapActions('user', ['LoginIn']),
-    async checkInit() {
-      const res = await checkDB()
-      if (res.code === 0) {
-        if (res.data?.needInit) {
-          this.$store.commit('user/NeedInit')
-          this.$router.push({ name: 'Init' })
-        } else {
-          this.$message({
-            type: 'info',
-            message: '已配置数据库信息，无法初始化'
-          })
-        }
-      }
-    },
-    async login() {
-      return await this.LoginIn(this.loginForm)
+// 验证函数
+const checkUsername = (rule, value, callback) => {
+  if (value.length < 5) {
+    return callback(new Error('请输入正确的用户名'))
+  } else {
+    callback()
+  }
+}
+const checkPassword = (rule, value, callback) => {
+  if (value.length < 6) {
+    return callback(new Error('请输入正确的密码'))
+  } else {
+    callback()
+  }
+}
 
+// 获取验证码
+const loginVerify = () => {
+  captcha({}).then((ele) => {
+    rules.captcha[1].max = ele.data.captchaLength
+    rules.captcha[1].min = ele.data.captchaLength
+    picPath.value = ele.data.picPath
+    loginFormData.captchaId = ele.data.captchaId
+  })
+}
+loginVerify()
+
+// 登录相关操作
+const lock = ref('lock')
+const changeLock = () => {
+  lock.value = lock.value === 'lock' ? 'unlock' : 'lock'
+}
+
+const loginForm = ref(null)
+const picPath = ref('')
+const loginFormData = reactive({
+  username: 'admin',
+  password: '123456',
+  captcha: '',
+  captchaId: '',
+})
+const rules = reactive({
+  username: [{ validator: checkUsername, trigger: 'blur' }],
+  password: [{ validator: checkPassword, trigger: 'blur' }],
+  captcha: [
+    { required: true, message: '请输入验证码', trigger: 'blur' },
+    {
+      message: '验证码格式不正确',
+      trigger: 'blur',
     },
   ],
 })

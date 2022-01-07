@@ -128,7 +128,7 @@ import { mapGetters } from 'vuex'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
 import warningBar from '@/components/warningBar/warningBar.vue'
-import { setUserInfo, resetPassword } from '@/api/user.js'
+import { setSelfInfo, resetPassword } from '@/api/user.js'
 export default {
   name: 'Api',
   components: { CustomPic, ChooseImg, warningBar },
@@ -230,7 +230,7 @@ export default {
       row.editFlag = true
     },
     async enterEdit(row) {
-      const res = await setUserInfo({ nickName: row.nickName, ID: row.ID })
+      const res = await setSelfInfo({ nickName: row.nickName })
       if (res.code === 0) {
         this.$message({
           type: 'success',

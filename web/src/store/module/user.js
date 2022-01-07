@@ -1,4 +1,4 @@
-import { login, getUserInfo, setUserInfo } from '@/api/user'
+import { login, getUserInfo, setSelfInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElMessage } from 'element-plus'
@@ -81,7 +81,7 @@ export const user = {
       }
     },
     async changeSideMode({ commit, state }, data) {
-      const res = await setUserInfo({ sideMode: data, ID: state.userInfo.ID })
+      const res = await setSelfInfo({ sideMode: data })
       if (res.code === 0) {
         commit('ChangeSideMode', data)
         ElMessage({

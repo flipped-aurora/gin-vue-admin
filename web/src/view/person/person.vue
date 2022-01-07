@@ -130,7 +130,7 @@
 
 <script>
 import ChooseImg from '@/components/chooseImg/index.vue'
-import { setUserInfo, changePassword } from '@/api/user.js'
+import { setSelfInfo, changePassword } from '@/api/user.js'
 
 import { mapGetters, mapMutations } from 'vuex'
 const path = import.meta.env.VITE_BASE_API
@@ -208,7 +208,7 @@ export default {
       this.$refs.chooseImg.open()
     },
     async enterImg(url) {
-      const res = await setUserInfo({ headerImg: url, ID: this.userInfo.ID })
+      const res = await setSelfInfo({ headerImg: url })
       if (res.code === 0) {
         this.ResetUserInfo({ headerImg: url })
         this.$message({
@@ -226,7 +226,7 @@ export default {
       this.editFlag = false
     },
     async enterEdit() {
-      const res = await setUserInfo({ nickName: this.nickName, ID: this.userInfo.ID })
+      const res = await setSelfInfo({ nickName: this.nickName })
       if (res.code === 0) {
         this.ResetUserInfo({ nickName: this.nickName })
         this.$message({

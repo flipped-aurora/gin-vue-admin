@@ -13,7 +13,7 @@
             <div class="theme-box">
               <div class="item" @click="changeMode('light')">
                 <div class="item-top">
-                  <el-icon v-if="mode === 'light'" class="check">
+                  <el-icon v-if="userStore.mode === 'light'" class="check">
                     <check />
                   </el-icon>
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg">
@@ -24,7 +24,7 @@
               </div>
               <div class="item" @click="changeMode('dark')">
                 <div class="item-top">
-                  <el-icon v-if="mode === 'dark'" class="check">
+                  <el-icon v-if="userStore.mode === 'dark'" class="check">
                     <check />
                   </el-icon>
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg">
@@ -49,12 +49,12 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
-import { computed, ref } from 'vue'
-const store = useStore()
+import { ref } from 'vue'
+import { useUserStore } from '@/pinia/modules/user'
 const drawer = ref(false)
 const direction = ref('rtl')
-const mode = computed(() => store.getters['user/mode'])
+
+const userStore = useUserStore()
 
 const handleClose = () => {
   drawer.value = false
@@ -64,10 +64,10 @@ const showSettingDrawer = () => {
 }
 const changeMode = (e) => {
   if (e === null) {
-    store.dispatch('user/changeSideMode', 'dark')
+    userStore.changeSideMode('dark')
     return
   }
-  store.dispatch('user/changeSideMode', e)
+  userStore.changeSideMode(e)
 }
 
 </script>

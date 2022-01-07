@@ -30,14 +30,13 @@
 
 <script setup>
 import SparkMD5 from 'spark-md5'
-import axios from 'axios'
 import {
   findFile,
   breakpointContinueFinish,
   removeChunk,
   breakpointContinue
 } from '@/api/breakpoint'
-import { computed, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 
 const file = ref(null)
@@ -101,7 +100,7 @@ const choseFile = async(e) => {
         })
       } else {
         waitUpLoad.value = [] // 秒传则没有需要上传的切片
-        ElMessage.success("文件已秒传")
+        ElMessage.success('文件已秒传')
       }
       waitNum.value = waitUpLoad.value.length // 记录长度用于百分比展示
       console.log(waitNum.value)
@@ -141,7 +140,7 @@ const sliceFile = () => {
         })
 }
 
-watch(waitNum,()=>{percentage.value = Math.floor(((formDataList.value.length - waitNum.value) / formDataList.value.length) * 100)})
+watch(waitNum, () => { percentage.value = Math.floor(((formDataList.value.length - waitNum.value) / formDataList.value.length) * 100) })
 
 const upLoadFileSlice = async(item) => {
   // 切片上传
@@ -164,7 +163,7 @@ const upLoadFileSlice = async(item) => {
         fileMd5: fileMd5.value,
         filePath: res.data.filePath,
       }
-      ElMessage.success("上传成功")
+      ElMessage.success('上传成功')
       await removeChunk(params)
     }
   }

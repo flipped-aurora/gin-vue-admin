@@ -12,7 +12,6 @@
 </template>
 <script setup>
 import { WarningFilled } from '@element-plus/icons'
-import { defineProps } from 'vue'
 defineProps({
   title: {
     type: String,

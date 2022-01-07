@@ -19,13 +19,13 @@
         <template #label>
           <span
             :style="{
-              color: activeValue === name(item) ? activeColor : '#333',
+              color: activeValue === name(item) ? userStore.activeColor : '#333',
             }"
           ><i
              class="dot"
              :style="{
                backgroundColor:
-                 activeValue === name(item) ? activeColor : '#ddd',
+                 activeValue === name(item) ? userStore.activeColor : '#ddd',
              }"
            />
             {{ item.meta.title }}</span>
@@ -54,12 +54,11 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
 import { emitter } from '@/utils/bus.js'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/pinia/modules/user'
 
-const store = useStore()
 const route = useRoute()
 const router = useRouter()
 
@@ -71,8 +70,7 @@ const historys = ref([])
 const activeValue = ref('')
 const contextMenuVisible = ref(false)
 
-const userInfo = computed(() => store.getters['user/userInfo'])
-const activeColor = computed(() => store.getters['user/activeColor'])
+const userStore = useUserStore()
 
 const name = (item) => {
   return (
@@ -85,7 +83,7 @@ const top = ref(0)
 const isCollapse = ref(false)
 const isMobile = ref(false)
 const rightActive = ref('')
-const defaultRouter = computed(() => userInfo.value.authority.defaultRouter)
+const defaultRouter = computed(() => userStore.userInfo.authority.defaultRouter)
 const openContextMenu = (e) => {
   if (
     historys.value.length === 1 &&

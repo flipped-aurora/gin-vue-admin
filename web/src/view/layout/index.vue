@@ -44,7 +44,7 @@
                           <div class="dp-flex justify-content-center align-items height-full width-full">
                             <span class="header-avatar" style="cursor: pointer">
                               <CustomPic />
-                              <span style="margin-left: 5px">{{ userInfo.nickName }}</span>
+                              <span style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
                               <el-icon>
                                 <arrow-down />
                               </el-icon>
@@ -54,18 +54,18 @@
                             <el-dropdown-menu class="dropdown-group">
                               <el-dropdown-item>
                                 <span style="font-weight: 600;">
-                                  当前角色：{{ userInfo.authority.authorityName }}
+                                  当前角色：{{ userStore.userInfo.authority.authorityName }}
                                 </span>
                               </el-dropdown-item>
-                              <template v-if="userInfo.authorities">
-                                <el-dropdown-item v-for="item in userInfo.authorities.filter(i=>i.authorityId!==userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
+                              <template v-if="userStore.userInfo.authorities">
+                                <el-dropdown-item v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
                                   <span>
                                     切换为：{{ item.authorityName }}
                                   </span>
                                 </el-dropdown-item>
                               </template>
                               <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
-                              <el-dropdown-item icon="reading-lamp" @click="LoginOut">登 出</el-dropdown-item>
+                              <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">登 出</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>
                         </el-dropdown>
@@ -83,7 +83,7 @@
         </transition>
         <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
           <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive :include="$store.getters['router/keepAliveRouters']">
+            <keep-alive :include="useRouterStore.keepAliveRouters">
               <component :is="Component" />
             </keep-alive>
           </transition>
@@ -109,13 +109,13 @@ import Search from '@/view/layout/search/search.vue'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import CustomPic from '@/components/customPic/index.vue'
 import Setting from './setting/index.vue'
-import { useStore } from 'vuex'
 import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from '@/pinia/modules/user'
+import { useRouterStore } from '@/pinia/modules/router'
 
-const store = useStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -163,34 +163,29 @@ onMounted(() => {
   }
 })
 
-const userInfo = computed(() => store.getters['user/userInfo'])
-const sideMode = computed(() => store.getters['user/sideMode'])
-const baseColor = computed(() => store.getters['user/baseColor'])
+const userStore = useUserStore()
+
 const textColor = computed(() => {
-  if (sideMode === 'dark') {
+  if (userStore.sideMode === 'dark') {
     return '#fff'
-  } else if (sideMode === 'light') {
+  } else if (userStore.sideMode === 'light') {
     return '#191a23'
   } else {
-    return baseColor.value
+    return userStore.baseColor
   }
 })
 
 const backgroundColor = computed(() => {
-  if (sideMode === 'dark') {
+  if (userStore.sideMode === 'dark') {
     return '#191a23'
-  } else if (sideMode === 'light') {
+  } else if (userStore.sideMode === 'light') {
     return '#fff'
   } else {
-    return sideMode.value
+    return userStore.sideMode
   }
 })
 
 const matched = computed(() => route.matched)
-
-const LoginOut = () => {
-  store.dispatch('user/LoginOut')
-}
 
 const changeUserAuth = async(id) => {
   const res = await setUserAuthority({

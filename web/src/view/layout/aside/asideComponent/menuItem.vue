@@ -16,7 +16,6 @@ export default {
 </script>
 
 <script setup>
-import { defineProps } from 'vue'
 defineProps({
   routerInfo: {
     default: function() {

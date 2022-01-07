@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ background: sideMode }">
+  <div :style="{ background: userStore.sideMode }">
     <el-scrollbar style="height: calc(100vh - 60px)">
       <transition
         :duration="{ enter: 800, leave: 100 }"
@@ -10,14 +10,14 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           :default-active="active"
-          :background-color="sideMode"
-          :active-text-color="activeColor"
-          :text-color="baseColor"
+          :background-color="userStore.sideMode"
+          :active-text-color="userStore.activeColor"
+          :text-color="userStore.baseColor"
           class="el-menu-vertical"
           unique-opened
           @select="selectMenuItem"
         >
-          <template v-for="item in asyncRouters[0].children">
+          <template v-for="item in routerStore.asyncRouters[0].children">
             <aside-component
               v-if="!item.hidden"
               :key="item.name"
@@ -37,20 +37,18 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
 import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
 import { emitter } from '@/utils/bus.js'
-import { ref, computed, watch, onUnmounted } from 'vue'
+import { ref, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useUserStore } from '@/pinia/modules/user'
+import { useRouterStore } from '@/pinia/modules/router'
 
 const route = useRoute()
 const router = useRouter()
-const store = useStore()
 
-const asyncRouters = computed(() => store.getters['router/asyncRouters'])
-const baseColor = computed(() => store.getters['user/baseColor'])
-const activeColor = computed(() => store.getters['user/activeColor'])
-const sideMode = computed(() => store.getters['user/sideMode'])
+const userStore = useUserStore()
+const routerStore = useRouterStore()
 
 const active = ref('')
 watch(route, () => {

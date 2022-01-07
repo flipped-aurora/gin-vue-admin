@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { defineEmits, defineProps, ref, defineExpose } from 'vue'
+import { ref } from 'vue'
 import { getFileList } from '@/api/fileUploadAndDownload'
 
 const emit = defineEmits(['chooseImg'])

@@ -6,7 +6,7 @@
         <el-upload
           class="excel-btn"
           :action="`${path}/excel/importExcel`"
-          :headers="{'x-token':token}"
+          :headers="{'x-token':userStore.token}"
           :on-success="loadExcel"
           :show-file-list="false"
         >
@@ -40,10 +40,10 @@ export default {
 </script>
 
 <script setup>
-import { useStore } from 'vuex'
+import { useUserStore } from '@/pinia/modules/user'
 import { exportExcel, loadExcelData, downloadTemplate } from '@/api/excel'
 import { getMenuList } from '@/api/menu'
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 const path = ref(import.meta.env.VITE_BASE_API)
 
 const page = ref(1)
@@ -63,8 +63,7 @@ const getTableData = async(f = () => {}) => {
 }
 getTableData(getMenuList)
 
-const store = useStore()
-const token = computed(() => store.getters['user/token'])
+const userStore = useUserStore()
 
 const handleExcelExport = (fileName) => {
   if (!fileName || typeof fileName !== 'string') {

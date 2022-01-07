@@ -287,6 +287,26 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 }
 
 // @Tags SysUser
+// @Summary 设置用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysUser true "ID, 用户名, 昵称, 头像链接"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
+// @Router /user/SetSelfInfo [put]
+func (b *BaseApi) SetSelfInfo(c *gin.Context) {
+	var user system.SysUser
+	_ = c.ShouldBindJSON(&user)
+	user.ID = utils.GetUserID(c)
+	if err, ReqUser := userService.SetUserInfo(user); err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "设置成功", c)
+	}
+}
+
+// @Tags SysUser
 // @Summary 获取用户信息
 // @Security ApiKeyAuth
 // @accept application/json

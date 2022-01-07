@@ -70,7 +70,7 @@ export default {
 
 <script setup>
 import screenfull from 'screenfull' // 引入screenfull
-import { defineProps, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 defineProps({
   width: {
     type: Number,

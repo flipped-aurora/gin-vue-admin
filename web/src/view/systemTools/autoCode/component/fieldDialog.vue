@@ -83,7 +83,7 @@
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import warningBar from '@/components/warningBar/warningBar.vue'
-import { ref, defineProps, defineExpose } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   dialogMiddle: {

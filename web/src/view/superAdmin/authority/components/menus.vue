@@ -39,7 +39,7 @@ import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
 import {
   updateAuthority
 } from '@/api/authority'
-import { defineProps, defineEmits, ref, defineExpose } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 const props = defineProps({
   row: {

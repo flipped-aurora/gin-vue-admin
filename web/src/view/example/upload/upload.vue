@@ -5,7 +5,7 @@
         <el-upload
           :action="`${path}/fileUploadAndDownload/upload`"
           :before-upload="checkFile"
-          :headers="{ 'x-token': token }"
+          :headers="{ 'x-token': userStore.token }"
           :on-error="uploadError"
           :on-success="uploadSuccess"
           :show-file-list="false"
@@ -67,20 +67,18 @@
 </template>
 
 <script setup>
-import { useStore } from 'vuex'
 import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
+import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import { formatDate } from '@/utils/format'
 
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const store = useStore()
-
 const path = ref(import.meta.env.VITE_BASE_API)
-const token = computed(() => store.getters['user/token'])
+const userStore = useUserStore()
 
 const imageUrl = ref('')
 

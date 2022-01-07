@@ -22,7 +22,7 @@
 import { ref } from 'vue'
 import { getFileList } from '@/api/fileUploadAndDownload'
 
-const emit = defineEmits(['chooseImg'])
+const emit = defineEmits(['enterImg'])
 defineProps({
   target: {
     type: Object,
@@ -42,7 +42,7 @@ const chooseImg = (url, target, targetKey) => {
   if (target && targetKey) {
     target[targetKey] = url
   }
-  emit('enter-img', url)
+  emit('enterImg', url)
   drawer.value = false
 }
 

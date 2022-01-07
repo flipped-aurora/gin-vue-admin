@@ -178,7 +178,7 @@ export default {
 
 <script setup>
 import ChooseImg from '@/components/chooseImg/index.vue'
-import { setUserInfo, changePassword } from '@/api/user.js'
+import { setSelfInfo, changePassword } from '@/api/user.js'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
@@ -249,13 +249,10 @@ const openChooseImg = () => {
   chooseImgRef.value.open()
 }
 
-const ResetUserInfo = (data) => {
-  userStore.ResetUserInfo(data)
-}
 const enterImg = async(url) => {
-  const res = await setUserInfo({ headerImg: url, ID: userStore.userInfo.ID })
+  const res = await setSelfInfo({ headerImg: url })
   if (res.code === 0) {
-    ResetUserInfo({ headerImg: url })
+    userStore.ResetUserInfo({ headerImg: url })
     ElMessage({
       type: 'success',
       message: '设置成功',
@@ -274,12 +271,11 @@ const closeEdit = () => {
 }
 
 const enterEdit = async() => {
-  const res = await setUserInfo({
-    nickName: nickName.value,
-    ID: userStore.userInfo.ID,
+  const res = await setSelfInfo({
+    nickName: nickName.value
   })
   if (res.code === 0) {
-    ResetUserInfo({ nickName: nickName.value })
+    userStore.ResetUserInfo({ nickName: nickName.value })
     ElMessage({
       type: 'success',
       message: '设置成功',

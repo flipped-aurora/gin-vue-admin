@@ -1,4 +1,4 @@
-name: gin-vue-admin build test
+name: gin-vue-admin run test
 
 on:
   push:
@@ -15,40 +15,37 @@ on:
       - "**.md"
 
 jobs:
-  frontend:
-    name: Frontend build
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.16.0]
-    steps:
-      - name: Check out branch
-        uses: actions/checkout@v2
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Build test
-        run: |
-          npm install
-          npm run build
-        working-directory: ./web
-
   backend:
     name: Backend build
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['16.x']
+        go-version: ['1.16']
+    services:
+        grpc:
+          image: registry.cn-hangzhou.aliyuncs.com/tscuite/ddddorc:v1
+          ports:
+            - 7000:7000         
+        redis:
+          image: redis
+          ports:
+            - 6379/tcp
+        mysql:
+          image: mysql
+          ports:
+            - 3306:3306
+          env:
+            MYSQL_DATABASE: 'test'
+            MYSQL_ROOT_PASSWORD: '123456'
     steps:
-      - name: Set up Go 1.6
-        uses: actions/setup-go@v1
-        with:
-          go-version: 1.16
-        id: go
-
       - name: Check out branch
         uses: actions/checkout@v2
-
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+        id: go
       - name: Download dependencies
         run: |
           go get -v -t -d ./...
@@ -57,8 +54,30 @@ jobs:
               dep ensure
           fi
         working-directory: ./server
-
       - name: Test and Build
         run: |
           go build -v -race
         working-directory: ./server
+      - name: server run
+        run: |
+          nohup ./server &
+          sleep 30
+          curl -H 'Accept: application/json, text/plain, */*' -H 'Content-type: application/json' -X POST -d '{"dbType": "mysql", "host": "127.0.0.1", "port": "3306", "userName": "root", "password": "123456", "dbName": "test"}'  http://127.0.0.1:8888/init/initdb 
+          sleep 10
+          cat config.yaml
+        working-directory: ./server
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: web build
+        run: |
+          yarn install && yarn build
+        working-directory: ./web
+      - name: web run 
+        run: |
+          yarn install && nohup yarn serve &
+          sleep 60
+          wget https://tscuite.github.io/gvatest/gvatest && chmod 777 gvatest && nohup ./gvatest &
+          sleep 30
+        working-directory: ./web

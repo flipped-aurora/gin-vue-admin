@@ -1,19 +1,19 @@
 <template>
   <div>
-    <warning-bar title="注：右上角头像下拉可切换角色" />
+    <warning-bar :title="$t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="addUser">新增用户</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="addUser">{{ $t('user.addUser') }}</el-button>
       </div>
       <el-table :data="tableData">
-        <el-table-column align="left" label="头像" min-width="50">
+        <el-table-column align="left" :label="$t('user.avatar')" min-width="50">
           <template #default="scope">
             <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
           </template>
         </el-table-column>
         <el-table-column align="left" label="UUID" min-width="250" prop="uuid" />
-        <el-table-column align="left" label="用户名" min-width="150" prop="userName" />
-        <el-table-column align="left" label="昵称" min-width="100" prop="nickName">
+        <el-table-column align="left" :label="$t('user.userName')" min-width="150" prop="userName" />
+        <el-table-column align="left" :label="$t('user.nickName')" min-width="100" prop="nickName">
           <template #default="scope">
             <p v-if="!scope.row.editFlag" class="nickName">{{ scope.row.nickName }}
               <el-icon class="pointer" color="#66b1ff" @click="openEidt(scope.row)">
@@ -31,7 +31,7 @@
             </p>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="用户角色" min-width="150">
+        <el-table-column align="left" :label="$t('user.userRole')" min-width="150">
           <template #default="scope">
             <el-cascader
               v-model="scope.row.authorityIds"
@@ -48,16 +48,16 @@
         <el-table-column align="left" :lable="$t('general.operations')" min-width="150">
           <template #default="scope">
             <el-popover :visible="scope.row.visible" placement="top" width="160">
-              <p>确定要删除此用户吗</p>
+              <p>{{ $t('user.deleteUserConfrim') }}</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
-                <el-button type="primary" size="mini" @click="deleteUser(scope.row)">{{ $t('general.sure') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteUser(scope.row)">{{ $t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button type="text" icon="delete" size="mini">{{ $t('general.delete') }}</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="magic-stick" size="mini" @click="resetPassword(scope.row)">重置密码</el-button>
+            <el-button type="text" icon="magic-stick" size="mini" @click="resetPassword(scope.row)">{{ $t('user.resetPassword') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,18 +73,18 @@
         />
       </div>
     </div>
-    <el-dialog v-model="addUserDialog" custom-class="user-dialog" title="新增用户">
-      <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="80px">
-        <el-form-item label="用户名" prop="username">
+    <el-dialog v-model="addUserDialog" custom-class="user-dialog" :title="$t('user.addUser')">
+      <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="90px">
+        <el-form-item :label="$t('user.userName')" prop="username">
           <el-input v-model="userInfo.username" />
         </el-form-item>
-        <el-form-item label="密码" prop="password">
+        <el-form-item :label="$t('user.password')" prop="password">
           <el-input v-model="userInfo.password" />
         </el-form-item>
-        <el-form-item label="别名" prop="nickName">
+        <el-form-item :label="$t('user.nickName')" prop="nickName">
           <el-input v-model="userInfo.nickName" />
         </el-form-item>
-        <el-form-item label="用户角色" prop="authorityId">
+        <el-form-item :label="$t('user.userRole')" prop="authorityId">
           <el-cascader
             v-model="userInfo.authorityIds"
             style="width:100%"
@@ -94,10 +94,10 @@
             :clearable="false"
           />
         </el-form-item>
-        <el-form-item label="头像" label-width="80px">
+        <el-form-item label="" label-width="80px">
           <div style="display:inline-block" @click="openHeaderChange">
             <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
-            <div v-else class="header-img-box">从媒体库选择</div>
+            <div v-else class="header-img-box">{{ $t('user.mediaLibrary') }}</div>
           </div>
         </el-form-item>
 
@@ -105,7 +105,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="small" @click="closeAddUserDialog">{{ $t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterAddUserDialog">{{ $t('general.sure') }}</el-button>
+          <el-button size="small" type="primary" @click="enterAddUserDialog">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -150,18 +150,18 @@ export default {
       },
       rules: {
         username: [
-          { required: true, message: '请输入用户名', trigger: 'blur' },
-          { min: 5, message: '最低5位字符', trigger: 'blur' }
+          { required: true, message: this.$t('user.userNameNote'), trigger: 'blur' },
+          { min: 5, message: this.$t('user.userNameLenNote'), trigger: 'blur' }
         ],
         password: [
-          { required: true, message: '请输入用户密码', trigger: 'blur' },
-          { min: 6, message: '最低6位字符', trigger: 'blur' }
+          { required: true, message: this.$t('user.passwordNote'), trigger: 'blur' },
+          { min: 6, message: this.$t('user.passwordLenNote'), trigger: 'blur' }
         ],
         nickName: [
-          { required: true, message: '请输入用户昵称', trigger: 'blur' }
+          { required: true, message: this.$t('user.nickNameNote'), trigger: 'blur' }
         ],
         authorityId: [
-          { required: true, message: '请选择用户角色', trigger: 'blur' }
+          { required: true, message: this.$t('user.userRoleNote'), trigger: 'blur' }
         ]
       }
     }
@@ -182,11 +182,11 @@ export default {
   methods: {
     resetPassword(row) {
       this.$confirm(
-        '是否将此用户密码重置为123456?',
-        '警告',
+        this.$t('user.resetPasswordConfrim'),
+        this.$t('general.warning'),
         {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+          confirmButtonText: this.$t('general.confirm'),
+          cancelButtonText: this.$t('general.cancel'),
           type: 'warning',
         }
       ).then(async() => {
@@ -223,7 +223,7 @@ export default {
     },
     openEidt(row) {
       if (this.tableData.some(item => item.editFlag)) {
-        this.$message('当前存在正在编辑的用户')
+        this.$message(this.$t('user.anotherUserEdit'))
         return
       }
       this.backNickName = row.nickName
@@ -234,7 +234,7 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '设置成功'
+          message: this.$t('user.setUserInfoNote')
         })
       }
       this.backNickName = ''
@@ -268,7 +268,7 @@ export default {
     async deleteUser(row) {
       const res = await deleteUser({ id: row.ID })
       if (res.code === 0) {
-        this.$message.success('删除成功')
+        this.$message.success(this.$t('general.deleteSuccess'))
         await this.getTableData()
         row.visible = false
       }
@@ -279,7 +279,7 @@ export default {
         if (valid) {
           const res = await register(this.userInfo)
           if (res.code === 0) {
-            this.$message({ type: 'success', message: '创建成功' })
+            this.$message({ type: 'success', message: this.$t('user.userAddedNote') })
           }
           await this.getTableData()
           this.closeAddUserDialog()
@@ -305,7 +305,7 @@ export default {
           authorityIds: row.authorityIds
         })
         if (res.code === 0) {
-          this.$message({ type: 'success', message: '角色设置成功' })
+          this.$message({ type: 'success', message: this.$t('user.roleSetNote') })
         }
       })
     },

@@ -28,7 +28,7 @@
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="日期" prop="UpdatedAt" width="180">
+        <el-table-column align="left" :label="$t('general.date')" prop="UpdatedAt" width="180">
           <template #default="scope">
             <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
@@ -98,9 +98,9 @@ export default {
   },
   methods: {
     async deleteFile(row) {
-      this.$confirm('此操作将永久文件, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('此操作将永久文件, 是否继续?', this.$t('general.hint'), {
+        confirmButtonText: this.$t('general.confirm'),
+        cancelButtonText: this.$t('general.cancel'),
         type: 'warning'
       })
         .then(async() => {

@@ -121,7 +121,7 @@
               <p>{{ $t('autoCode.confirmDelete') }}</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
-                <el-button type="primary" size="mini" @click="deleteField(scope.$index)">{{ $t('general.sure') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteField(scope.$index)">{{ $t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button size="mini" type="text" icon="delete">{{ $t('general.delete') }}</el-button>
@@ -142,7 +142,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="mini" @click="closeDialog">{{ $t('general.close') }}</el-button>
-          <el-button size="mini" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
+          <el-button size="mini" type="primary" @click="enterDialog">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -158,7 +158,7 @@
       <PreviewCodeDialog v-if="previewFlag" ref="preview" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
-          <el-button size="small" type="primary" @click="previewFlag = false">{{ $t('general.sure') }}</el-button>
+          <el-button size="small" type="primary" @click="previewFlag = false">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>

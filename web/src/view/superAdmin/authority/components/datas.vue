@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearflex" style="margin:18px">
-      <el-button class="fl-right" size="mini" type="primary" @click="authDataEnter">{{ $t('general.sure') }}</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="authDataEnter">{{ $t('general.confirm') }}</el-button>
       <el-button class="fl-left" size="mini" type="primary" @click="all">{{ $t('general.selectAll') }}</el-button>
       <el-button class="fl-left" size="mini" type="primary" @click="self">本角色</el-button>
       <el-button class="fl-left" size="mini" type="primary" @click="selfAndChildren">本角色及子角色</el-button>

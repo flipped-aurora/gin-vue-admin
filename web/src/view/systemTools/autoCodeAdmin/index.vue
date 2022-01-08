@@ -2,7 +2,7 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="goAutoCode(null)">新增</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="goAutoCode(null)">{{ $t('general.add') }}</el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column
@@ -10,13 +10,13 @@
           width="55"
         />
         <el-table-column align="left" label="id" width="60" prop="ID" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="$t('general.date')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="结构体名" min-width="150" prop="structName" />
-        <el-table-column align="left" label="结构体描述" min-width="150" prop="structCNName" />
-        <el-table-column align="left" label="表名称" min-width="150" prop="tableName" />
-        <el-table-column align="left" label="回滚标记" min-width="150" prop="flag">
+        <el-table-column align="left" :label="$t('autoCode.structName')" min-width="150" prop="structName" />
+        <el-table-column align="left" :label="$t('autoCode.structChineseName')" min-width="150" prop="structCNName" />
+        <el-table-column align="left" :label="$t('autoCode.tableName')" min-width="150" prop="tableName" />
+        <el-table-column align="left" :label="$t('autoCodeAdmin.rollBackMark')" min-width="150" prop="flag">
           <template #default="scope">
             <el-tag
               v-if="scope.row.flag"
@@ -24,7 +24,7 @@
               size="mini"
               effect="dark"
             >
-              已回滚
+              {{ $t('autoCodeAdmin.rolledBack') }}
             </el-tag>
             <el-tag
               v-else
@@ -32,15 +32,15 @@
               type="success"
               effect="dark"
             >
-              未回滚
+              {{ $t('autoCodeAdmin.notRolledBack') }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column align="left" :lable="$t('general.operations')" min-width="180">
           <template #default="scope">
             <div>
-              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">回滚</el-button>
-              <el-button size="mini" type="text" @click="goAutoCode(scope.row)">复用</el-button>
+              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">{{ $t('autoCodeAdmin.rollBack') }}</el-button>
+              <el-button size="mini" type="text" @click="goAutoCode(scope.row)">{{ $t('autoCodeAdmin.reuse') }}</el-button>
               <el-button size="mini" type="text" @click="deleteRow(scope.row)">{{ $t('general.delete') }}</el-button>
             </div>
           </template>
@@ -79,27 +79,27 @@ export default {
   },
   methods: {
     async deleteRow(row) {
-      this.$confirm('此操作将删除本历史, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('autoCodeAdmin.deleteHistoryConfirm'), this.$t('general.hint'), {
+        confirmButtonText: this.$t('general.confirm'),
+        cancelButtonText: this.$t('general.cancel'),
         type: 'warning'
       }).then(async() => {
         const res = await delSysHistory({ id: Number(row.ID) })
         if (res.code === 0) {
-          this.$message.success('删除成功')
+          this.$message.success(this.$t('general.deleteSuccess'))
           this.getTableData()
         }
       })
     },
     async rollback(row) {
-      this.$confirm('此操作将删除自动创建的文件和api, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm(this.$t('autoCodeAdmin.rollbackConfirm'), this.$t('general.hint'), {
+        confirmButtonText: this.$t('general.confirm'),
+        cancelButtonText: this.$t('general.cancel'),
         type: 'warning'
       }).then(async() => {
         const res = await rollback({ id: Number(row.ID) })
         if (res.code === 0) {
-          this.$message.success('回滚成功')
+          this.$message.success(this.$t('autoCodeAdmin.rollbackSuccess'))
           this.getTableData()
         }
       })

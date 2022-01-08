@@ -1160,6 +1160,10 @@ export default {
   },
   created() {
     this.metaData = this.meta
+    // added by mohamed hassan - PR: Update icon.vue #865
+    if (this.metaData.icon === '') {
+      this.metaData.icon = this.options[0].label
+    }
   },
   methods: {}
 }

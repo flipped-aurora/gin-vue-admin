@@ -3,13 +3,20 @@
     "pleaseSelect" : "请选择",
     "langSwitch" : "语言切换成功!!",
     "operations" : "操作",
+    "add" : "新增",
     "edit" : "编辑",
+    "delete" : "删除",
+    "copy" : "拷贝",
     "cancel" : "取消",
     "sure" : "确定",
-    "delete" : "删除",
     "close" : "取 消",
     "selectAll" : "全选",
     "copySuccess" : "复制成功",
+    "deleteSuccess": "删除成功",
+    "date" : "日期",
+    "hint" : "提示",
+    "warning" : "警告",
+    "enable" : "开启",
     "" : ""
   },
   "login": {
@@ -47,6 +54,48 @@
     "enterDBName" : "请输入数据库名称",
     "initNow" : "立即初始化",
     "pleaseWait" : "正在初始化数据库，请稍候",
+    "" : ""
+  },
+  "authority" : {
+    "authorityNote" : "注：右上角头像下拉可切换角色",
+    "addRole" : "新增角色",
+    "editRole" : "编辑角色",
+    "roleID" : "角色ID",
+    "roleName" : "角色名称",
+    "setPermissions" : "设置权限",
+    "parentRole" : "父级角色",
+    "roleConfig" : "角色配置",
+    "roleMenu" : "角色菜单",
+    "roleAPI" : "角色api",
+    "resourcePermissions" : "资源权限",
+    "positiveIntNote" : "请输入正整数",
+    "rootRole" : "根角色",
+    "roleIdNote" : "请输入角色ID",
+    "roleNameNote" : "请输入角色名",
+    
+    "" : ""
+  },
+  "user": {
+    "addUser" : "新增用户",
+    "avatar" : "头像",
+    "userName" : "用户名",
+    "nickName" : "昵称",
+    "userRole" : "用户角色",
+    "deleteUserConfrim" : "确定要删除此用户吗",
+    "resetPassword" : "重置密码",
+    "password" : "密码",
+    "mediaLibrary" : "从媒体库选择",
+    "userNameNote" : "请输入用户名",
+    "userNameLenNote" : "最低5位字符",
+    "passwordNote" : "请输入用户密码",
+    "passwordLenNote" : "最低6位字符",
+    "nickNameNote" : "请输入用户昵称",
+    "userRoleNote" : "请选择用户角色",
+    "resetPasswordConfrim" : "是否将此用户密码重置为123456",
+    "anotherUserEdit" : "当前存在正在编辑的用户",
+    "setUserInfoNote" : "设置成功",
+    "userAddedNote" : "创建成功",
+    "roleSetNote" : "角色设置成功",
     "" : ""
   },
   "autoCode": {
@@ -119,6 +168,25 @@
     "entFieldJson" : "请输入field格式化json",
     "entColumnName" : "请输入数据库字段",
     "entFieldDataType" : "请选择field数据类型",
+    "" : ""
+  },
+  "autoCodeAdmin" : {
+    "rollBackMark" : "回滚标记",
+    "rolledBack" : "已回滚",
+    "notRolledBack" : "未回滚",
+    "rollBack" : "回滚",
+    "reuse" : "复用",
+    "deleteHistoryConfirm" : "此操作将删除本历史, 是否继续?",
+    "rollbackConfirm" : "此操作将删除自动创建的文件和api, 是否继续?",
+    "rollbackSuccess" : "回滚成功",
+    "" : ""
+  },
+  "system" : {
+    "systemConfig" : "系统配置",
+    "envValues" : "环境值",
+    "portValue" : "端口值",
+    "ossType": "Oss类型",
+    "multiLogin" : "多点登录拦截",
     "" : ""
   }
 }

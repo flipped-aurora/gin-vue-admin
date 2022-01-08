@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearflex">
-      <el-button class="fl-right" size="mini" type="primary" @click="relation">{{ $t('general.sure') }}</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="relation">{{ $t('general.confirm') }}</el-button>
     </div>
     <el-tree
       ref="menuTree"

@@ -3,7 +3,7 @@
     <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="openDialog">新增</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="openDialog">{{ $t('general.add') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -28,7 +28,7 @@
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
-                <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">{{ $t('general.sure') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">{{ $t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button type="text" icon="delete" size="mini">{{ $t('general.delete') }}</el-button>
@@ -61,7 +61,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -119,7 +119,7 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '删除成功'
+          message: this.$t('general.deleteSuccess')
         })
         if (this.tableData.length === 1 && this.page > 1) {
           this.page--

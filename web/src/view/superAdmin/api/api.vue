@@ -29,12 +29,12 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="openDialog('addApi')">{{ $t('general.add') }}</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
             <el-button size="mini" type="text" @click="deleteVisible = false">{{ $t('general.cancel') }}</el-button>
-            <el-button size="mini" type="primary" @click="onDelete">{{ $t('general.sure') }}</el-button>
+            <el-button size="mini" type="primary" @click="onDelete">{{ $t('general.confirm') }}</el-button>
           </div>
           <template #reference>
             <el-button icon="delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">{{ $t('general.delete') }}</el-button>
@@ -115,7 +115,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -278,9 +278,9 @@ export default {
       this.openDialog('edit')
     },
     async deleteApi(row) {
-      this.$confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('此操作将永久删除所有角色下该api, 是否继续?', this.$t('general.hint'), {
+        confirmButtonText: this.$t('general.confirm'),
+        cancelButtonText: this.$t('general.cancel'),
         type: 'warning'
       })
         .then(async() => {

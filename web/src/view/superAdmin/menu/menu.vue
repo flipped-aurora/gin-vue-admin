@@ -181,7 +181,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -311,9 +311,9 @@ export default {
     },
     // 删除菜单
     deleteMenu(ID) {
-      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+      this.$confirm('此操作将永久删除所有角色下该菜单, 是否继续?', this.$t('general.hint'), {
+        confirmButtonText: this.$t('general.confirm'),
+        cancelButtonText: this.$t('general.cancel'),
         type: 'warning'
       })
         .then(async() => {

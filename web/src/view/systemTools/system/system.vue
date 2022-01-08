@@ -3,21 +3,21 @@
     <el-form ref="form" :model="config" label-width="240px">
       <!--  System start  -->
       <el-collapse v-model="activeNames" @change="handleChange">
-        <el-collapse-item title="系统配置" name="1">
-          <el-form-item label="环境值">
+        <el-collapse-item :title="$t('system.systemConfig')" name="1">
+          <el-form-item :label="$t('system.envValues')">
             <el-input v-model="config.system.env" />
           </el-form-item>
-          <el-form-item label="端口值">
+          <el-form-item :label="$t('system.portValue')">
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
-          <el-form-item label="数据库类型">
-            <el-select v-model="config.system.dbType" style="width:100%">
-              <el-option value="mysql" />
-              <el-option value="pgsql" />
+          <el-form-item :label="$t('init.dbType')">
+            <el-select v-model="config.system.dbType" style="width: 100%">
+              <el-option value="MySQL" />
+              <el-option value="PostgreSQL" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Oss类型">
-            <el-select v-model="config.system.ossType" style="width:100%">
+          <el-form-item :label="$t('system.ossType')">
+            <el-select v-model="config.system.ossType" style="width: 100%">
               <el-option value="local" />
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
@@ -25,8 +25,8 @@
               <el-option value="huawei-obs" />
             </el-select>
           </el-form-item>
-          <el-form-item label="多点登录拦截">
-            <el-checkbox v-model="config.system.useMultipoint">开启</el-checkbox>
+          <el-form-item :label="$t('system.multiLogin')">
+            <el-checkbox v-model="config.system.useMultipoint">{{ $t('general.enable') }}</el-checkbox>
           </el-form-item>
           <el-form-item label="限流次数">
             <el-input-number v-model.number="config.system.iplimitCount" />
@@ -208,7 +208,7 @@
               <el-input v-model="config.qiniu.imgPath" />
             </el-form-item>
             <el-form-item label="是否使用https">
-              <el-checkbox v-model="config.qiniu.useHttps">开启</el-checkbox>
+              <el-checkbox v-model="config.qiniu.useHttps">{{ $t('general.enable') }}</el-checkbox>
             </el-form-item>
             <el-form-item label="accessKey">
               <el-input v-model="config.qiniu.accessKey" />
@@ -217,7 +217,7 @@
               <el-input v-model="config.qiniu.secretKey" />
             </el-form-item>
             <el-form-item label="上传是否使用CDN上传加速">
-              <el-checkbox v-model="config.qiniu.useCdnDomains">开启</el-checkbox>
+              <el-checkbox v-model="config.qiniu.useCdnDomains">{{ $t('general.enable') }}</el-checkbox>
             </el-form-item>
           </template>
           <template v-if="config.system.ossType === 'tencent-cos'">
@@ -277,7 +277,6 @@
               <el-input v-model="config.huaWeiObs.secretKey" />
             </el-form-item>
           </template>
-
         </el-collapse-item>
 
         <el-collapse-item title="Excel上传配置" name="11">
@@ -335,9 +334,9 @@
           <el-form-item label="Spec(CRON表达式)">
             <el-input v-model="config.timer.spec" />
           </el-form-item>
-          <template v-for="(item,k) in config.timer.detail">
-            <div v-for="(key,k2) in item" :key="k2">
-              <el-form-item :key="k+k2" :label="k2">
+          <template v-for="(item, k) in config.timer.detail">
+            <div v-for="(key, k2) in item" :key="k2">
+              <el-form-item :key="k + k2" :label="k2">
                 <el-input v-model="item[k2]" />
               </el-form-item>
             </div>
@@ -377,9 +376,9 @@ export default {
         local: {},
         email: {},
         timer: {
-          detail: {}
-        }
-      }
+          detail: {},
+        },
+      },
     }
   },
   async created() {
@@ -398,7 +397,7 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '配置文件设置成功'
+          message: '配置文件设置成功',
         })
         await this.initForm()
       }
@@ -408,24 +407,24 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '邮件发送成功'
+          message: '邮件发送成功',
         })
         await this.initForm()
       } else {
         this.$message({
           type: 'error',
-          message: '邮件发送失败'
+          message: '邮件发送失败',
         })
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style lang="scss">
 .system {
   background: #fff;
-  padding:36px;
+  padding: 36px;
   border-radius: 2px;
   h2 {
     padding: 10px;
@@ -433,11 +432,11 @@ export default {
     font-size: 16px;
     box-shadow: -4px 0px 0px 0px #e7e8e8;
   }
-  ::v-deep(.el-input-number__increase){
-    top:5px !important;
+  ::v-deep(.el-input-number__increase) {
+    top: 5px !important;
   }
-  .gva-btn-list{
-    margin-top:16px;
+  .gva-btn-list {
+    margin-top: 16px;
   }
 }
 </style>

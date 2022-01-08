@@ -28,7 +28,7 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="openDialog">新增</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="openDialog">{{ $t('general.add') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -38,7 +38,7 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="$t('general.date')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
@@ -60,7 +60,7 @@
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
-                <el-button type="primary" size="mini" @click="deleteSysDictionary(scope.row)">{{ $t('general.sure') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteSysDictionary(scope.row)">{{ $t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button type="text" icon="delete" size="mini" style="margin-left:10px">{{ $t('general.delete') }}</el-button>
@@ -101,7 +101,7 @@
           />
         </el-form-item>
         <el-form-item label="状态" prop="status" required>
-          <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
+          <el-switch v-model="formData.status" :active-text="$t('general.enable')" inactive-text="停用" />
         </el-form-item>
         <el-form-item label="描述" prop="desc">
           <el-input v-model="formData.desc" placeholder="请输入描述" clearable :style="{width: '100%'}" />
@@ -110,7 +110,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button size="small" @click="closeDialog">{{ $t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.sure') }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ $t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -216,7 +216,7 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '删除成功'
+          message: this.$t('general.deleteSuccess')
         })
         if (this.tableData.length === 1 && this.page > 1) {
           this.page--

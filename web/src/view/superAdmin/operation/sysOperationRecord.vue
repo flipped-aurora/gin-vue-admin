@@ -24,7 +24,7 @@
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
             <el-button size="mini" type="text" @click="deleteVisible = false">{{ $t('general.cancel') }}</el-button>
-            <el-button size="mini" type="primary" @click="onDelete">{{ $t('general.sure') }}</el-button>
+            <el-button size="mini" type="primary" @click="onDelete">{{ $t('general.confirm') }}</el-button>
           </div>
           <template #reference>
             <el-button icon="delete" size="mini" style="margin-left: 10px;" :disabled="!multipleSelection.length">{{ $t('general.delete') }}</el-button>
@@ -45,7 +45,7 @@
             <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="$t('general.date')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column align="left" label="状态码" prop="status" width="120">
@@ -95,7 +95,7 @@
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="mini" type="text" @click="scope.row.visible = false">{{ $t('general.cancel') }}</el-button>
-                <el-button size="mini" type="primary" @click="deleteSysOperationRecord(scope.row)">{{ $t('general.sure') }}</el-button>
+                <el-button size="mini" type="primary" @click="deleteSysOperationRecord(scope.row)">{{ $t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button icon="delete" size="mini" type="text">{{ $t('general.delete') }}</el-button>
@@ -175,7 +175,7 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '删除成功'
+          message: this.$t('general.deleteSuccess')
         })
         if (this.tableData.length === ids.length && this.page > 1) {
           this.page--
@@ -190,7 +190,7 @@ export default {
       if (res.code === 0) {
         this.$message({
           type: 'success',
-          message: '删除成功'
+          message: this.$t('general.deleteSuccess')
         })
         if (this.tableData.length === 1 && this.page > 1) {
           this.page--

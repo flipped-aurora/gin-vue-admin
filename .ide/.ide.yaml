@@ -1,0 +1,110 @@
+version: smartide/v0.2
+orchestrator:
+  type: docker-compose
+  version: 3
+workspace:
+  dev-container:
+    service-name: server-dev
+    webide-port: 6800
+    ports:
+      webide-port: 6800
+      ssh: 6822
+      service-api: 8888
+      gva-mysql: 13306
+      phpmyadmin: 8090
+      gva-redis: 16379
+      web: 8000
+      ideweb: 6808
+    ide-type: jb-projector
+    volumes:
+      git-config: true
+      ssh-key: true
+  services:
+    server-dev:
+      container_name: server-dev
+      image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-jetbrain-goland
+      restart: always
+      environment:
+        TZ: Asia/Shanghai
+      volumes:
+        - .:/home/project
+      expose:
+        - 8888
+        - 8887
+      ports:
+        - 8888:8888
+      depends_on:
+        - gva-mysql
+        - gva-redis
+      links:
+        - gva-mysql
+        - gva-redis
+      networks:
+        - go-dev-network
+    web-dev:
+      container_name: web-dev
+      image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-base:latest
+      restart: always
+      environment:
+        TZ: Asia/Shanghai
+      volumes:
+        - .:/home/project
+      expose:
+        - 3000
+        - 8000
+        - 8080
+        - 22
+      ports:
+        - 6808:3000
+        - 8000:8000
+        - 8080:8080
+        - 6832:22
+      depends_on:
+        - server-dev
+      links:
+        - server-dev
+      networks:
+        - go-dev-network
+    gva-mysql:
+      image: mysql:8.0.21
+      container_name: gva-mysql
+      command: 
+        - --default-authentication-plugin=mysql_native_password
+        - --character-set-server=utf8mb4
+        - --collation-server=utf8mb4_unicode_ci
+      restart: always
+      ports:
+        - "13306:3306" # host物理直接映射端口为13306
+      expose:
+        - 3306
+      environment:
+        MYSQL_DATABASE: "qmPlus" # 初始化启动时要创建的数据库的名称
+        MYSQL_ROOT_PASSWORD: "Aa@6447985" # root管理员用户密码
+      networks:
+        - go-dev-network
+    phpmyadmin:
+      container_name: phpmyadmin
+      image: registry.cn-hangzhou.aliyuncs.com/boathouse/phpmyadmin:5.0.4-apache
+      restart: always
+      expose:
+        - 8090
+      ports:
+        - 8090:80
+      environment:
+        PMA_ARBITRARY: "1"
+      networks:
+        - go-dev-network
+    gva-redis:
+      image: redis:6.0.6
+      container_name: gva-redis
+      restart: always
+      expose:
+        - 6379
+      ports:
+        - "16379:6379"
+      networks:
+        - go-dev-network
+
+  networks:
+    go-dev-network:
+      external: true

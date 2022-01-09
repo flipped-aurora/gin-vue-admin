@@ -74,7 +74,7 @@ jwt:
   buffer-time: 86400
   expires-time: 604800
   issuer: qmPlus
-  signing-key: cb27fa35-72c4-4951-9bad-6e0f22ad2e10
+  signing-key: 07612a7b-3cd0-403e-a943-97c01eff9801
 local:
   path: uploads/file
 mysql:
@@ -141,7 +141,7 @@ zap:
   format: console
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
   director: log
-  showLine: true
+  showLine: false
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true

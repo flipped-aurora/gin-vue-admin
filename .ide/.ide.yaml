@@ -64,7 +64,7 @@ workspace:
         - --collation-server=utf8mb4_unicode_ci
       restart: always
       ports:
-        - "13306:3306" # host物理直接映射端口为13306
+        - "3306:3306" # host物理直接映射端口为13306
       expose:
         - 3306
       environment:

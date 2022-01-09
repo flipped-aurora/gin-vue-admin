@@ -18,7 +18,6 @@ type BaseApi struct{}
 // Captcha
 // @Tags Base
 // @Summary 生成验证码
-// @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{data=systemRes.SysCaptchaResponse} "生成一个随机验证码，返回包括随机生成id，base64 图像字符串，验证码长度"

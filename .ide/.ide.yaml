@@ -10,7 +10,7 @@ workspace:
       ide-goland: 8887
       dev-container-ssh: 6822
       gva-service-api: 8888
-      gva-web: 8000
+      gva-web: 8080
       gva-mysql: 3306
       gva-redis: 6379
       phpmyadmin: 8090

@@ -5,21 +5,21 @@ orchestrator:
 workspace:
   dev-container:
     service-name: gva-vscode-dev
-    webide-port: 6800
     ports:
       ide-vscode: 6800
-      ide-goland: 6808
+      ide-goland: 8887
       dev-container-ssh: 6822
       gva-service-api: 8888
       gva-web: 8000
       gva-mysql: 13306
       gva-redis: 16379
       phpmyadmin: 8090
-    ide-type: jb-projector
+    ide-type: vscode
     volumes:
       git-config: true
       ssh-key: true
     command:
+      - cd web
       - npm config set registry https://registry.npmmirror.com
       - npm install
       - export NODE_ENV=smartide
@@ -33,20 +33,9 @@ workspace:
         TZ: Asia/Shanghai
       volumes:
         - .:/home/project
-      expose:
-        - 3000
-        - 8000
-        - 8080
-        - 22
       ports:
-        - 6800:3000
         - 8000:8000
         - 8080:8080
-        - 6832:22
-      depends_on:
-        - gva-goland-dev
-      links:
-        - gva-goland-dev
       networks:
         - gva-dev-network
     gva-goland-dev:
@@ -57,16 +46,10 @@ workspace:
         TZ: Asia/Shanghai
       volumes:
         - .:/home/project
-      expose:
-        - 8888
-        - 8887
       ports:
         - 8888:8888
-        - 6808:8887
+        - 8887:8887
       depends_on:
-        - gva-mysql
-        - gva-redis
-      links:
         - gva-mysql
         - gva-redis
       networks:

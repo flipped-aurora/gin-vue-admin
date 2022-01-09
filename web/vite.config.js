@@ -12,6 +12,8 @@ export default ({
     mode
 }) => {
     const NODE_ENV = process.env.NODE_ENV || 'development'
+    console.log("NODE_ENV:" + NODE_ENV)
+    const OPEN_BROWSER = !(process.env.NODE_ENV === 'smartide')
     const envFiles = [
         `.env.${NODE_ENV}`
     ]
@@ -53,13 +55,13 @@ export default ({
             'process.env': {}
         },
         server: {
-            open: true,
+            open: OPEN_BROWSER, 
             port: process.env.VITE_CLI_PORT,
             proxy: {
                 // 把key的路径代理到target位置
                 // detail: https://cli.vuejs.org/config/#devserver-proxy
                 [process.env.VITE_BASE_API]: { // 需要代理的路径   例如 '/api'
-                    target: `${process.env.VITE_BASE_PATH}:${process.env.VITE_SERVER_PORT}/`, // 代理到 目标路径
+                    target: `${process.env.VITE_BASE_PATH}:${process.env.VITE_SERVER_PORT}`, // 代理到 目标路径
                     changeOrigin: true,
                     rewrite: path => path.replace(new RegExp('^' + process.env.VITE_BASE_API), ''),
                 }

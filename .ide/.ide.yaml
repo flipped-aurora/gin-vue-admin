@@ -4,11 +4,11 @@ orchestrator:
   version: 3
 workspace:
   dev-container:
-    service-name: gva-goland-dev
+    service-name: gva-vscode-dev
     webide-port: 6800
     ports:
-      ide-goland: 6800
-      ide-vscode: 6808
+      ide-vscode: 6800
+      ide-goland: 6808
       dev-container-ssh: 6822
       gva-service-api: 8888
       gva-web: 8000
@@ -19,28 +19,12 @@ workspace:
     volumes:
       git-config: true
       ssh-key: true
+    command:
+      - npm config set registry https://registry.npmmirror.com
+      - npm install
+      - export NODE_ENV=smartide
+      - npm run smartide
   services:
-    gva-goland-dev:
-      container_name: gva-goland-dev
-      image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-jetbrain-goland
-      restart: always
-      environment:
-        TZ: Asia/Shanghai
-      volumes:
-        - .:/home/project
-      expose:
-        - 8888
-        - 8887
-      ports:
-        - 8888:8888
-      depends_on:
-        - gva-mysql
-        - gva-redis
-      links:
-        - gva-mysql
-        - gva-redis
-      networks:
-        - gva-dev-network
     gva-vscode-dev:
       container_name: gva-vscode-dev
       image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-base:latest
@@ -55,7 +39,7 @@ workspace:
         - 8080
         - 22
       ports:
-        - 6808:3000
+        - 6800:3000
         - 8000:8000
         - 8080:8080
         - 6832:22
@@ -65,6 +49,29 @@ workspace:
         - gva-goland-dev
       networks:
         - gva-dev-network
+    gva-goland-dev:
+      container_name: gva-goland-dev
+      image: registry.cn-hangzhou.aliyuncs.com/smartide/smartide-jetbrain-goland
+      restart: always
+      environment:
+        TZ: Asia/Shanghai
+      volumes:
+        - .:/home/project
+      expose:
+        - 8888
+        - 8887
+      ports:
+        - 8888:8888
+        - 6808:8887
+      depends_on:
+        - gva-mysql
+        - gva-redis
+      links:
+        - gva-mysql
+        - gva-redis
+      networks:
+        - gva-dev-network
+    
     gva-mysql:
       image: registry.cn-hangzhou.aliyuncs.com/smartide/mysql:8.0.21
       container_name: gva-mysql

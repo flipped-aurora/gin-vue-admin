@@ -85,7 +85,7 @@ workspace:
       networks:
         - gva-dev-network
     gva-redis:
-      image: redis:6.0.6
+      image: registry.cn-hangzhou.aliyuncs.com/smartide/redis:6.0.6
       container_name: gva-redis
       restart: always
       expose:

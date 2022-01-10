@@ -16,7 +16,7 @@ type DBApi struct{}
 // @Summary 初始化用户数据库
 // @Produce  application/json
 // @Param data body request.InitDB true "初始化数据库参数"
-// @Success 200 {string} string "{"code":0,"data":{},"msg":"自动创建数据库成功"}"
+// @Success 200 {object} response.Response{data="自动创建数据库成功"} "初始化用户数据库"
 // @Router /init/initdb [post]
 func (i *DBApi) InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
@@ -42,7 +42,7 @@ func (i *DBApi) InitDB(c *gin.Context) {
 // @Tags CheckDB
 // @Summary 初始化用户数据库
 // @Produce  application/json
-// @Success 200 {string} string "{"code":0,"data":{},"msg":"探测完成"}"
+// @Success 200 {object} response.Response{data=gin.H,msg=} "初始化用户数据库"
 // @Router /init/checkdb [post]
 func (i *DBApi) CheckDB(c *gin.Context) {
 	var (

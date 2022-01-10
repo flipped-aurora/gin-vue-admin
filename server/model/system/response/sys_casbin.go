@@ -5,5 +5,5 @@ import (
 )
 
 type PolicyPathResponse struct {
-	Paths []request.CasbinInfo `json:"paths"`
+	Paths []request.CasbinInfo `json:"paths" comment:"casbin详情列表"`
 }

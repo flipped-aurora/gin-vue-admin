@@ -1,10 +1,9 @@
-FROM node:12.16.1
+FROM node:16
 
 WORKDIR /gva_web/
 COPY . .
 
-RUN npm install
-RUN npm run build
+RUN yarn && yarn build
 
 FROM nginx:alpine
 LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"

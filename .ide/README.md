@@ -12,7 +12,7 @@ SmartIDE是下一代的云原生IDE，可以帮助你一件启动开源项目的
 
 本文档将对如何使用SmartIDE进行Gin-Vue-Admin项目的前后端联调进行描述。
 
-## 启动项目
+## 本地启动项目
 
 使用SmartIDE启动Gin-Vue-Admin的开发调试非常简单，仅需要两个步骤
 
@@ -21,6 +21,21 @@ SmartIDE是下一代的云原生IDE，可以帮助你一件启动开源项目的
 
 ```shell
 ## SmartIDE是一款跨平台开发工具，您可以在Windows或者MacOS上执行同样的指令
-smartide start git@github.com:SmartIDE/gin-vue-admin.git
+smartide start https://github.com/SmartIDE/gin-vue-admin.git
 ```
+
+以上命令会在运行命令的当前目录自动完成代码克隆，拉取开发环境镜像，启动容器，自动开启浏览器打开VSCode WebIDE以及自动恢复vue前端项目的npm依赖包并启动前端项目等一系列动作。
+
+以上动作完成后，看到类似如下的VSCode WebIDE窗口。
+
+> VSCode WebIDE的地址是 https://localhost:6800
+
+![](images/vscode-webide.png)
+
+我们的环境中还内置了JetBrain GoLand WebIDE
+
+> JetBrain WebIDE的地址是 https://localhost:8887
+
+![](images/goland-webide.png)
+
 

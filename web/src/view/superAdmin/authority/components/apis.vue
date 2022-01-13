@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearflex">
-      <el-button class="fl-right" size="mini" type="primary" @click="authApiEnter">确 定</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="authApiEnter">{{ t('general.sure') }}</el-button>
     </div>
     <el-tree
       ref="apiTree"
@@ -27,6 +27,10 @@ import { getAllApis } from '@/api/api'
 import { UpdateCasbin, getPolicyPathByAuthorityId } from '@/api/casbin'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 const props = defineProps({
   row: {
     default: function() {
@@ -86,7 +90,7 @@ const buildApiTree = (apis) => {
   for (const key in apiObj) {
     const treeNode = {
       ID: key,
-      description: key + '组',
+      description: key + t('api.group'),
       children: apiObj[key]
     }
     apiTree.push(treeNode)
@@ -111,7 +115,7 @@ const authApiEnter = async() => {
     casbinInfos
   })
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: 'api设置成功' })
+    ElMessage({ type: 'success', message: t('api.setupSuccess') })
   }
 }
 

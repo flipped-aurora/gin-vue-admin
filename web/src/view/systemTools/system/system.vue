@@ -349,6 +349,9 @@ import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const activeNames = reactive([])
 const config = ref({

@@ -5,7 +5,7 @@
         <component :is="metaData.icon" />
       </el-icon>
     </span>
-    <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" placeholder="请选择">
+    <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" :placeholder="t('general.pleaseSelect')">
       <el-option v-for="item in options" :key="item.key" :label="item.key" :value="item.key">
         <span class="gva-icon" :class="item.label">
           <el-icon>
@@ -20,6 +20,10 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 const props = defineProps({
   meta: {
     default: function() {

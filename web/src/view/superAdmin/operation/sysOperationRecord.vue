@@ -128,6 +128,9 @@ import {
 import { formatDate } from '@/utils/format'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const page = ref(1)
 const total = ref(0)

@@ -66,5 +66,40 @@ smartide host list
 smartide start --host <主机ID> https://github.com/SmartIDE/gin-vue-admin.git
 ```
 
+## 前后端联调
+
+使用SmartIDE启动环境后，前端应用已经自动启动；此时只需要启动后端调试模式即可开始调试Gin-Vue-Admin。进入联调模式的环境状态如下
+
+![](images/gva-debug.png)
+
+调试相关的入口如下：
+
+- VSCode WebIDE http://localhost:6800
+- 前端应用 http://localhost:8080
+- JetBrain GoLand WebIDE http://localhost:8887
+- 后端应用(Swagger-UI) http://localhost:8888/swagger-ui/index.html
+- 数据库管理PHPMyAdmin http://localhost:8090
+
+## 技术支持
+
+**特别说明:** SmartIDE本身是开源产品，并且对独立开发者提供免费使用授权。
+
+大家可以通过以下链接获取SmartIDE的技术支持
+
+- 产品官网 https://SmartIDE.cn
+  - 通过产品官网上的二维码可以加入 [Smart早鸟群] 与其他的 Smart Developer 一起交流
+- 开源首页：SmartIDE采用GitHub和Gitee双通道开源模式，方便国内开发者访问
+  - https://githbu.com/SmartIDE
+  - https://gitee.com/SmartIDE
+  
+  大家可以通过以上地址提交Issue，产品组的小伙伴会及时给予反馈
+
+  > 如果大家喜欢我们的产品，请给予 Star 支持
+
+- B站频道：我们定制组织直播，为大家更新产品开发进展
+  - https://space.bilibili.com/1001970523
+
+  > 如果大家喜欢我们的产品和视频，一定要记得 “三连” 
+
 
 

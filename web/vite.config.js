@@ -54,7 +54,7 @@ export default ({
       'process.env': {}
     },
     server: {
-      open: OPEN_BROWSER,
+      open: OPEN_BROWSER, //在SmartIDE容器环境中，不能直接开启浏览器
       port: process.env.VITE_CLI_PORT,
       proxy: {
         // 把key的路径代理到target位置

@@ -1,5 +1,4 @@
 import service from '@/utils/request'
-
 // @Summary 用户登录
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}
@@ -107,6 +106,22 @@ export const deleteUser = (data) => {
 export const setUserInfo = (data) => {
   return service({
     url: '/user/setUserInfo',
+    method: 'put',
+    data: data
+  })
+}
+
+// @Tags SysUser
+// @Summary 设置用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.SysUser true "设置用户信息"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setSelfInfo [put]
+export const setSelfInfo = (data) => {
+  return service({
+    url: '/user/setSelfInfo',
     method: 'put',
     data: data
   })

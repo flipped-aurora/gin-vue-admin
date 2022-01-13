@@ -74,8 +74,6 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 - commit 信息要以`[文件名]: 描述信息` 的形式填写，例如 `README.md: fix xxx bug`。
 
-- <font color=red>确保 PR 是提交到 `develop` 分支，而不是 `master` 分支。</font>
-
 - 如果是修复 bug，请在 PR 中给出描述信息。
 
 - 合并代码需要两名维护人员参与：一人进行 review 后 approve，另一人再次 review，通过后即可合并。

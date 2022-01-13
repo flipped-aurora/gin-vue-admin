@@ -20,7 +20,7 @@
         </div>
       </div>
       <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
-        <el-form ref="form" :model="form" label-width="100px">
+        <el-form ref="formRef" :model="form" label-width="100px">
           <el-form-item label="数据库类型">
             <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
               <el-option key="mysql" label="mysql" value="mysql" />
@@ -55,86 +55,93 @@
     </div>
   </div>
 </template>
+
 <script>
-import { initDB } from '@/api/initdb'
 export default {
   name: 'Init',
-  data() {
-    return {
-      hello: 0,
-      out: false,
-      form: {
+}
+</script>
+
+<script setup>
+import { initDB } from '@/api/initdb'
+import { reactive, ref } from 'vue'
+import { ElLoading, ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+
+const hello = ref(0)
+const showNext = () => {
+  hello.value = hello.value + 1
+}
+
+const goDoc = () => {
+  window.open('https://www.gin-vue-admin.com/docs/first_master#3-init')
+}
+
+const out = ref(false)
+
+const form = reactive({
+  dbType: 'mysql',
+  host: '127.0.0.1',
+  port: '3306',
+  userName: 'root',
+  password: '',
+  dbName: 'gva'
+})
+const changeDB = (val) => {
+  switch (val) {
+    case 'mysql':
+      Object.assign(form, {
         dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',
         userName: 'root',
         password: '',
         dbName: 'gva'
-      }
-    }
-  },
-  methods: {
-    changeDB(val) {
-      switch (val) {
-        case 'mysql':
-          this.form = {
-            dbType: 'mysql',
-            host: '127.0.0.1',
-            port: '3306',
-            userName: 'root',
-            password: '',
-            dbName: 'gva'
-          }
-          break
-        case 'pgsql':
-          this.form = {
-            dbType: 'pgsql',
-            host: '127.0.0.1',
-            port: '5432',
-            userName: 'postgres',
-            password: '',
-            dbName: 'gva'
-          }
-          break
-        default:
-          this.form = {
-            dbType: 'mysql',
-            host: '127.0.0.1',
-            port: '3306',
-            userName: 'root',
-            password: '',
-            dbName: 'gva'
-          }
-      }
-    },
-    showNext() {
-      this.hello = this.hello + 1
-    },
-    goDoc() {
-      window.open('https://www.gin-vue-admin.com/docs/first_master#3-init')
-    },
-    async onSubmit() {
-      const loading = this.$loading({
-        lock: true,
-        text: '正在初始化数据库，请稍候',
-        spinner: 'loading',
-        background: 'rgba(0, 0, 0, 0.7)'
       })
-      try {
-        const res = await initDB(this.form)
-        if (res.code === 0) {
-          this.out = true
-          this.$message({
-            type: 'success',
-            message: res.msg
-          })
-          this.$router.push({ name: 'Login' })
-        }
-        loading.close()
-      } catch (err) {
-        loading.close()
-      }
+      break
+    case 'pgsql':
+      Object.assign(form, {
+        dbType: 'pgsql',
+        host: '127.0.0.1',
+        port: '5432',
+        userName: 'postgres',
+        password: '',
+        dbName: 'gva'
+      })
+      break
+    default:
+      Object.assign(form, {
+        dbType: 'mysql',
+        host: '127.0.0.1',
+        port: '3306',
+        userName: 'root',
+        password: '',
+        dbName: 'gva'
+      })
+  }
+}
+const onSubmit = async() => {
+  const loading = ElLoading.service({
+    lock: true,
+    text: '正在初始化数据库，请稍候',
+    spinner: 'loading',
+    background: 'rgba(0, 0, 0, 0.7)'
+  })
+  try {
+    const res = await initDB(form)
+    if (res.code === 0) {
+      out.value = true
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+      router.push({ name: 'Login' })
     }
+    loading.close()
+  } catch (err) {
+    loading.close()
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <transition name="el-fade-in-linear">
       <div v-show="show" class="transition-box" style="display: inline-block; ">
         <el-select
-          ref="search-input"
+          ref="searchInput"
           v-model="value"
           filterable
           placeholder="请选择"
@@ -11,7 +11,7 @@
           @change="changeRouter"
         >
           <el-option
-            v-for="item in routerList"
+            v-for="item in routerStore.routerList"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -31,7 +31,7 @@
       v-if="btnShow"
       class="user-box"
     >
-      <el-icon class="search-icon" @click="showSearch()">
+      <el-icon class="search-icon" @click="showSearch">
         <search />
       </el-icon>
     </div>
@@ -51,57 +51,57 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { emitter } from '@/utils/bus.js'
-import Screenfull from '@/view/layout/screenfull/index.vue'
-
 export default {
-  name: 'SearchComponent',
-  components: {
-    Screenfull
-  },
-  data() {
-    return {
-      value: '',
-      show: false,
-      btnShow: true,
-      reload: false
-    }
-  },
-  computed: {
-    ...mapGetters('router', ['routerList']),
-  },
-
-  methods: {
-    changeRouter() {
-      this.$router.push({ name: this.value })
-      this.value = ''
-    },
-    hiddenSearch() {
-      this.show = false
-      setTimeout(() => {
-        this.btnShow = true
-      }, 500)
-    },
-    showSearch() {
-      this.btnShow = false
-      this.show = true
-      this.$nextTick(() => {
-        this.$refs['search-input'].focus()
-      })
-    },
-    handleReload() {
-      this.reload = true
-      emitter.emit('reload')
-      setTimeout(() => {
-        this.reload = false
-      }, 500)
-    },
-    toService() {
-      window.open('https://support.qq.com/product/371961')
-    }
-  }
+  name: 'BtnBox',
 }
+</script>
+
+<script setup>
+import Screenfull from '@/view/layout/screenfull/index.vue'
+import { emitter } from '@/utils/bus.js'
+import { ref, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import { useRouterStore } from '@/pinia/modules/router'
+
+const router = useRouter()
+
+const routerStore = useRouterStore()
+
+const value = ref('')
+const changeRouter = () => {
+  router.push({ name: value.value })
+  value.value = ''
+}
+
+const show = ref(false)
+const btnShow = ref(true)
+const hiddenSearch = () => {
+  show.value = false
+  setTimeout(() => {
+    btnShow.value = true
+  }, 500)
+}
+
+const searchInput = ref(null)
+const showSearch = async() => {
+  btnShow.value = false
+  show.value = true
+  await nextTick()
+  searchInput.value.focus()
+}
+
+const reload = ref(false)
+const handleReload = () => {
+  reload.value = true
+  emitter.emit('reload')
+  setTimeout(() => {
+    reload.value = false
+  }, 500)
+}
+const toService = () => {
+  window.open('https://support.qq.com/product/371961')
+}
+
 </script>
 <style scoped lang="scss">
 .reload{

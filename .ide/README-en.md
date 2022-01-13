@@ -2,7 +2,7 @@
 
 SmartIDE is next-generation CloudNative IDE, it can help you to setup development environment and start coding and debugging without any SDK or tools installation.
 
-Get started with SmartIDE is much simplier than traditional way, you can start a fully functional SFDE (Standard Fullstack Development Environment) with just one simple command (smartide start), which includes in case of Gin-Vue-Admin:
+Get started with SmartIDE is much simplier than traditional way, you can start a fully functional SFDE (Standard Fullstack Development Environment) with just one simple command (smartide start), in case of Gin-Vue-Admin:
 
 - Node.js SDK for Vue front-end development
 - Go SDK for Gin development
@@ -20,7 +20,7 @@ https://www.bilibili.com/video/BV1eL4y1b7ep/
 
 ## 2. Local Mode Quick Start
 
-To start using SmartIDE is a very simple 2 steps process:
+Start using SmartIDE is a very simple 2 steps process:
 
 1. Install SmartIDE CLI - [Installation Documentation](https://smartide.cn/zh/docs/install/) 
 2. Start up SFDE
@@ -30,7 +30,7 @@ To start using SmartIDE is a very simple 2 steps process:
 smartide start https://github.com/SmartIDE/gin-vue-admin.git
 ```
 
-This single line command will do a series of operations, including: git clone, pull container images, boot up containerized environment, lanuch VSCode WebIDE and run npm install automatically. Everything you need to debug this application will be ready after this single comamnd.
+This one liner will do a series of operations, including: git clone, pull container images, boot up containerized environment, lanuch VSCode WebIDE and run npm install, all automatically. Everything you need to debug this application will be ready after this single comamnd.
 
 You will see the following VSCode WebIDE screen:
 
@@ -46,7 +46,7 @@ And, we have included a JetBrain GoLand WebIDE for you:
 
 ## 3. Remote Mode Quick Start
 
-If you watched the video, you will see that we are using remote mode start up. SmartIDE Remote Mode allows you to leverage a remote linux machine to extend your local environment, you can use WebIDE to access this environment and use resources in the Cloud to boost up your development environment.
+SmartIDE Remote Mode allows you to leverage a remote linux machine to extend your local environment, you can use WebIDE to access this environment and use resources in the Cloud to make development environment super powerful.
 
 Still a simple 2 steps process to get started with remote mode:
 

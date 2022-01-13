@@ -1,6 +1,6 @@
 # 使用SmartIDE开发和调试Gin-Vuew-Admin
 
-SmartIDE是下一代的云原生IDE，可以帮助你一键启动项目的集成开发环境，直接进入编码调试，免除安装SDK，IDE和其他相关工具麻烦。
+SmartIDE是下一代的云原生IDE，可以帮助你一键启动项目的集成开发环境，直接进入编码调试，免除安装SDK，IDE和其他相关工具的麻烦。
 
 我们已经对Gin-Vue-Admin进行了SmartIDE适配，可以一键启动包含以下工具的 **标准化全栈开发环境(SFDE - Standard Fullstack Development Environment)**：
 

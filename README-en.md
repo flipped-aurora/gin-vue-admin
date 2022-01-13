@@ -165,8 +165,33 @@ swag init
 
 > After executing the above command，server directory will appear in the docs folder `docs.go`, `swagger.json`, `swagger.yaml` Three file updates，After starting the go service, type in the browser [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) You can view swagger document
 
+## 3. Getting started - SmartIDE way
 
-## 3. Technical selection
+Get started with SmartIDE is much simplier than traditional way, you can start a fully functional SFDE (Standard Fullstack Development Environment) with just one simple command (smartide start), which includes:
+
+- Node.js SDK for Vue front-end development
+- Go SDK for Gin development
+- VSCode WebIDE for front-end coding and debugging
+- JetBrain GoLand WebIDE for backend coding and debugging
+- PHPMyAdmin for manage the MySQL database server
+
+```shell
+## Startup command
+## You can run this same command on Windows or MacOS
+smartide start https://github.com/SmartIDE/gin-vue-admin.git
+```
+
+After the command is running, you can see the following screen:
+
+![](.ide/images/gva-debug.png)
+
+We have prepared an video for you to see the whole setup and debugging process:
+
+https://www.bilibili.com/video/BV1eL4y1b7ep/
+
+More detailed instructions, please refer to  [SmartIDE README](.ide/README-en.md)
+
+## 4. Technical selection
 
 - Frontend: using [Element](https://github.com/ElemeFE/element) based on [Vue](https://vuejs.org)，to code the page.
 - Backend: using [Gin](https://gin-gonic.com/) to quickly build basic RESTful API. [Gin](https://gin-gonic.com/)is a web framework written in Go (Golang).
@@ -176,17 +201,17 @@ swag init
 - Config: using [fsnotify](https://github.com/fsnotify/fsnotify) and [viper](https://github.com/spf13/viper) to implement `yaml` config file。
 - Log: using [zap](https://github.com/uber-go/zap) record logs。
 
-## 4. Project Architecture
+## 5. Project Architecture
 
-### 4.1 Architecture Diagram
+### 5.1 Architecture Diagram
 
 ![Architecture diagram](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
-### 4.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
+### 5.2 Front-end Detailed Design Diagram (Contributor: <a href="https://github.com/baobeisuper">baobeisuper</a>)
 
 ![Front-end Detailed Design Diagram](http://qmplusimg.henrongyi.top/naotu.png)
 
-### 4.3 Project Layout
+### 5.3 Project Layout
 
 ```
     ├── server
@@ -228,7 +253,7 @@ swag init
 
 ```
 
-## 5. Features
+## 6. Features
 
 - Authority management: Authority management based on `jwt` and `casbin`. 
 - File upload and download: implement file upload operations based on `Qiniuyun', `Aliyun 'and `Tencent Cloud` (please develop your own application for each platform corresponding to `token` or `key` ).
@@ -247,15 +272,15 @@ swag init
 - Form Builder：With the help of [@form-generator](https://github.com/JakHuang/form-generator).
 - Code generator: Providing backend with basic logic and simple curd code generator.
 
-## 6. Knowledge base
+## 7. Knowledge base
 
-### 6.1 Team blog
+### 7.1 Team blog
 
 > https://www.yuque.com/flipped-aurora
 >
 >There are video courses about frontend framework in our blo. If you think the project is helpful to you, you can add my personal WeChat:shouzi_1994，your comments is welcomed。
 
-### 6.2 Video courses
+### 7.2 Video courses
 
 (1) Development environment course
 
@@ -280,9 +305,9 @@ swag init
 (6) gin-vue-admin version update introduction video
 > bilibili：https://space.bilibili.com/322210472/channel/detail?cid=126418&ctype=0
 
-## 7.Contacts
+## 8.Contacts
 
-### 7.1 Groups
+### 8.1 Groups
 
 #### QQ group: 622360840
 
@@ -299,7 +324,7 @@ swag init
 
 #### [About Us](https://www.gin-vue-admin.com/about/)
 
-## 8. Contributors
+## 9. Contributors
 
 Thank you for considering your contribution to gin-vue-admin!
 
@@ -307,11 +332,11 @@ Thank you for considering your contribution to gin-vue-admin!
   <img src="https://contrib.rocks/image?repo=flipped-aurora/gin-vue-admin" />
 </a>
 
-## 9. Donate
+## 10. Donate
 
 If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.gin-vue-admin.com/docs/coffee)
 
-## 10. Commercial considerations
+## 11. Commercial considerations
 
 If you use this project for commercial purposes, please comply with the Apache2.0 agreement and retain the author's technical support statement.
 

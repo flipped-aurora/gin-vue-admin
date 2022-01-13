@@ -162,8 +162,33 @@ swag init
 
 > 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后, 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
 
+## 3. 使用说明 - SmartIDE方式
 
-## 3. 技术选型
+使用SmartIDE启动Gin-Vue-Admin的开发调试非常简单，仅需要执行一个指令即可一键启动完整的前后端联调环境，包括：
+
+- 完整支持Vue的Node.js开发工具语言包（SDK）
+- 完整支持Go语言Gin框架的开发工具语言包（SDK）
+- 前端开发工具VSCode WebIDE
+- 后端开发工具GoLand WebIDE
+- 数据管理工具PHPMyAdmin用于管理Gva后台的MySQL数据库
+
+```shell
+## 启动指令
+## SmartIDE是一款跨平台开发工具，您可以在Windows或者MacOS上执行同样的指令
+smartide start https://github.com/SmartIDE/gin-vue-admin.git
+```
+
+启动联调以后的效果如下
+
+![](.ide/images/gva-debug.png)
+
+为了便于大家更直观的了解使用SmartIDE开发调试Gin-Vue-Admin的过程，我们在B站提上提供了视频供大家参考，视频地址如下：
+
+https://www.bilibili.com/video/BV1eL4y1b7ep/
+
+详细操作说明请参考: [Gva项目SmartIDE说明文档](.ide/README.md)
+
+## 4. 技术选型
 
 - 前端：用基于 [Vue](https://vuejs.org) 的 [Element](https://github.com/ElemeFE/element) 构建基础页面。
 - 后端：用 [Gin](https://gin-gonic.com/) 快速搭建基础restful风格API，[Gin](https://gin-gonic.com/) 是一个go语言编写的Web框架。
@@ -173,17 +198,17 @@ swag init
 - 配置文件：使用 [fsnotify](https://github.com/fsnotify/fsnotify) 和 [viper](https://github.com/spf13/viper) 实现`yaml`格式的配置文件。
 - 日志：使用 [zap](https://github.com/uber-go/zap) 实现日志记录。
 
-## 4. 项目架构
+## 5. 项目架构
 
-### 4.1 系统架构图
+### 5.1 系统架构图
 
 ![系统架构图](http://qmplusimg.henrongyi.top/gva/gin-vue-admin.png)
 
-### 4.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
+### 5.2 前端详细设计图 （提供者:<a href="https://github.com/baobeisuper">baobeisuper</a>）
 
 ![前端详细设计图](http://qmplusimg.henrongyi.top/naotu.png)
 
-### 4.3 目录结构
+### 5.3 目录结构
 
 ```
     ├── server
@@ -225,7 +250,7 @@ swag init
 
 ```
 
-## 5. 主要功能
+## 6. 主要功能
 
 - 权限管理：基于`jwt`和`casbin`实现的权限管理。
 - 文件上传下载：实现基于`七牛云`, `阿里云`, `腾讯云` 的文件上传操作(请开发自己去各个平台的申请对应 `token` 或者对应`key`)。
@@ -244,15 +269,15 @@ swag init
 - 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator) 。
 - 代码生成器：后台基础逻辑以及简单curd的代码生成器。
 
-## 6. 知识库 
+## 7. 知识库 
 
-## 6.1 团队博客
+## 7.1 团队博客
 
 > https://www.yuque.com/flipped-aurora
 >
 >内有前端框架教学视频。如果觉得项目对您有所帮助可以添加我的个人微信:shouzi_1994，欢迎您提出宝贵的需求。
 
-## 6.2 教学视频
+## 7.2 教学视频
 
 （1）手把手教学视频
 
@@ -274,9 +299,9 @@ swag init
 
 > bilibili：https://space.bilibili.com/322210472/channel/detail?cid=126418&ctype=0
 
-## 7. 联系方式
+## 8. 联系方式
 
-### 7.1 技术群
+### 8.1 技术群
 
 ### QQ交流群：622360840
 | QQ 群 |
@@ -292,7 +317,7 @@ swag init
 
 ### [关于我们](https://www.gin-vue-admin.com/about/)
 
-## 8. 贡献者
+## 9. 贡献者
 
 感谢您对gin-vue-admin的贡献!
 
@@ -300,10 +325,10 @@ swag init
   <img src="https://contrib.rocks/image?repo=flipped-aurora/gin-vue-admin" />
 </a>
 
-## 9. 捐赠
+## 10. 捐赠
 
 如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
 
-## 10. 商用注意事项
+## 11. 商用注意事项
 
 如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

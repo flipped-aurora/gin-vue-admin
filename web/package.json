@@ -11,11 +11,12 @@
     },
     "dependencies": {
         "@element-plus/icons": "0.0.11",
-        "axios": "^0.19.2",
+        "axios": "^0.24.0",
         "core-js": "^3.6.5",
         "echarts": "4.9.0",
         "element-plus": "1.2.0-beta.6",
         "highlight.js": "^10.6.0",
+        "js-cookie": "^3.0.1",
         "marked": "^2.0.0",
         "mitt": "^3.0.0",
         "path": "^0.12.7",
@@ -26,9 +27,12 @@
         "script-ext-html-webpack-plugin": "^2.1.4",
         "spark-md5": "^3.0.1",
         "vue": "^3.2.25",
+        "vue-i18n": "^9.2.0-beta.26",
         "vue-router": "^4.0.0-0"
     },
     "devDependencies": {
+        "@intlify/vite-plugin-vue-i18n": "^3.2.1",
+        "@intlify/vue-i18n-loader": "^4.1.0",
         "@vitejs/plugin-legacy": "^1.4.4",
         "@vitejs/plugin-vue": "latest",
         "@vue/cli-plugin-babel": "~4.5.0",

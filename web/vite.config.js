@@ -6,6 +6,8 @@ import * as path from 'path'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
+import vueI18n from '@intlify/vite-plugin-vue-i18n' // added by mohamed hassan to support multilanguage
+
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,
@@ -76,6 +78,11 @@ export default ({
     esbuild,
     optimizeDeps,
     plugins: [
+      // added by mohamed hassan to support multilangauge
+      vueI18n({
+        include: path.resolve(__dirname, './src/locales/**'),
+        compositionOnly: true
+      }), // end of adding by mohamed hassan to support multilangauge
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
       }), vuePlugin(), [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)]

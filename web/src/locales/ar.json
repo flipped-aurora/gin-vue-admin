@@ -1,0 +1,57 @@
+{
+  "general": {
+    "pleaseSelect" : "من فضلك إختار",
+    "langSwitch" : "!!تم تغيير اللغة بنجاح",
+    "" : ""
+  },
+  "login": {
+    "entUserName": "أدخل إسم المستخدم",
+    "entPassword": "أدخل كلمة المرور",
+    "entVerificationCode": "أدخل رمز التأكيد",
+    "login": "الدخول للنظام",
+    "init": "التهيئة",
+    "errUserName": "إدخل إسم مستخدم صحيح",
+    "errPassword": "إدخل كلمة مرور صحيحة",
+    "errVerificationCode": "رمز تأكيد خطاء",
+    "errLogin": "من فضلك إدخل بيانات دخول صحيحة",
+    "errInit" : "تم تهية قاعدة البيانات مسبقا، لاداعى للتهيئة مجددا",
+    "language": "Languages"
+  },
+  "init": {
+    "note": "تعليمات التهيئة",
+    "note1": "1.يجب ان تكون على دراية بإستخدام GoLang و Vue.",
+    "note2": "2.من فضلك تأكد من قرءاة ",
+    "note3": "3.Please confirm that you understand the subsequent configuration process.",
+    "note4": "Note: The development team does not provide free services for the content written in the document.",
+    "readDocs": "قرأة الإرشادات",
+    "confirm": "تأكيد",
+    "dbType": "نوع قاعدة البيانات",
+    "beta": "تجريبي",
+    "dbHost": "عنوان الخادم",
+    "enterDBHost" : "أدخل عنوان خادم قاعدة البيانات",
+    "dbPort": "رقم المنفذ",
+    "enterDBPort": "أدخل رقم منفذ قاعدة البيانات",
+    "dbUser": "إسم المستخدم",
+    "enterDBUser" : "أدخل كلمة إسم مستخدم قاعدة البيانات",
+    "dbPassword": "كلمة المرور",
+    "enterDBPassword": "أدخل كلمة مرور مستخدم قاعدة البيانات",
+    "dbName": "إسم قاعدة البيانات",
+    "enterDBName": "أدخل إسم قاعدة البيانات",
+    "initNow": "بداء التهيئة",
+    "pleaseWait": "جارى تهيئة قاعدة البيانات, من فضلك إنتظر",
+    "" : ""
+  },
+  "autoCode": {
+    "existDB": "إضغط هنا لإنشاء الكود من قاعدة بيانات موجوده",
+    "dbName" : "قاعدة البيانات",
+    "selectDB" : "إختار قاعدة البيانات",
+    "tableName" : "إسم الجدول",
+    "selectTable" : "إختار الجدول",
+    "createUsingTable" : "Create using this table",
+    "structName" : "Struct Name",
+    "structNameNote" : "The first letter is automatically converted to uppercase",
+    "tableNameNote": "Specify the table name (not required)",
+    "structAbbreviation": "Struct abbreviation",
+    "" : ""
+  }
+}

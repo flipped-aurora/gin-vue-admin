@@ -6,15 +6,15 @@
         <el-collapse-item name="1">
           <template #title>
             <div :style="{fontSize:'16px',paddingLeft:'20px'}">
-              点这里从现有数据库创建代码
+              {{ t('autoCode.existDB') }}
               <el-icon class="header-icon ">
                 <pointer />
               </el-icon>
             </div>
           </template>
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
-            <el-form-item label="数据库名" prop="structName">
-              <el-select v-model="dbform.dbName" filterable placeholder="请选择数据库" @change="getTableFunc">
+            <el-form-item :label="t('autoCode.dbName')" prop="structName">
+              <el-select v-model="dbform.dbName" filterable :placeholder="t('autoCode.selectDB')" @change="getTable">
                 <el-option
                   v-for="item in dbOptions"
                   :key="item.database"
@@ -23,12 +23,12 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="表名" prop="structName">
+            <el-form-item :label="t('autoCode.tableName')" prop="structName">
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
                 filterable
-                placeholder="请选择表"
+                :placeholder="t('autoCode.selectTable')"
               >
                 <el-option
                   v-for="item in tableOptions"
@@ -39,7 +39,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button size="mini" type="primary" @click="getColumnFunc">使用此表创建</el-button>
+              <el-button size="mini" type="primary" @click="getColumn">{{ t('autoCode.createUsingTable') }}</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -47,34 +47,34 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
-        <el-form-item label="Struct名称" prop="structName">
-          <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
+      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="180px" :inline="true">
+        <el-form-item :label="t('autoCode.structName')" prop="structName">
+          <el-input v-model="form.structName" :placeholder="t('autoCode.structNameNote')" />
         </el-form-item>
-        <el-form-item label="TableName" prop="tableName">
-          <el-input v-model="form.tableName" placeholder="指定表名（非必填）" />
+        <el-form-item :label="t('autoCode.tableName')" prop="tableName">
+          <el-input v-model="form.tableName" :placeholder="t('autoCode.tableNameNote')" />
         </el-form-item>
-        <el-form-item label="Struct简称" prop="abbreviation">
-          <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group" />
+        <el-form-item :label="t('autoCode.structAbbreviation')" prop="abbreviation">
+          <el-input v-model="form.abbreviation" :placeholder="t('autoCode.structAbbreviationNote')" />
         </el-form-item>
-        <el-form-item label="Struct中文名称" prop="description">
-          <el-input v-model="form.description" placeholder="中文描述作为自动api描述" />
+        <el-form-item :label="t('autoCode.structChineseName')" prop="description">
+          <el-input v-model="form.description" :placeholder="t('autoCode.structChineseNameNote')" />
         </el-form-item>
-        <el-form-item label="文件名称" prop="packageName">
-          <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" @blur="toLowerCaseFunc(form,'packageName')" />
+        <el-form-item :label="t('autoCode.fileName')" prop="packageName">
+          <el-input v-model="form.packageName" :placeholder="t('autoCode.fileNameNote')" @blur="toLowerCase(form,'packageName')" />
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
-              <div> 自动创建API </div>
+            <el-tooltip :content="t('autoCode.autoAPIDBTip')" placement="bottom" effect="light">
+              <div> {{ t('autoCode.autoAPIDBCreate') }} </div>
             </el-tooltip>
           </template>
           <el-checkbox v-model="form.autoCreateApiToSql" />
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
-              <div> 自动移动文件 </div>
+            <el-tooltip :content="t('autoCode.autoMoveFilesTip')" placement="bottom" effect="light">
+              <div> {{ t('autoCode.autoMoveFiles') }} </div>
             </el-tooltip>
           </template>
           <el-checkbox v-model="form.autoMoveFile" />
@@ -84,47 +84,47 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" @click="editAndAddField()">新增Field</el-button>
+        <el-button size="mini" type="primary" @click="editAndAddField()">{{ t('autoCode.addField') }}</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column align="left" type="index" label="序列" width="100" />
-        <el-table-column align="left" prop="fieldName" label="Field名" />
-        <el-table-column align="left" prop="fieldDesc" label="中文名" />
-        <el-table-column align="left" prop="fieldJson" label="FieldJson" />
-        <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
-        <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="130" />
-        <el-table-column align="left" prop="columnName" label="数据库字段" width="130" />
-        <el-table-column align="left" prop="comment" label="数据库字段描述" width="130" />
-        <el-table-column align="left" prop="fieldSearchType" label="搜索条件" width="130" />
-        <el-table-column align="left" prop="dictType" label="字典" width="130" />
-        <el-table-column align="left" label="操作" width="300">
+        <el-table-column align="left" type="index" :label="t('autoCode.fieldIndex')" width="100" />
+        <el-table-column align="left" prop="fieldName" :label="t('autoCode.fieldName')" width="120" />
+        <el-table-column align="left" prop="fieldDesc" :label="t('autoCode.fieldDesc')" width="120" />
+        <el-table-column align="left" prop="fieldJson" :label="t('autoCode.fieldJson')" width="110" />
+        <el-table-column align="left" prop="fieldType" :label="t('autoCode.fieldDataType')" width="130" />
+        <el-table-column align="left" prop="dataTypeLong" :label="t('autoCode.fieldLen')" width="130" />
+        <el-table-column align="left" prop="columnName" :label="t('autoCode.columnName')" width="130" />
+        <el-table-column align="left" prop="comment" :label="t('autoCode.comment')" width="130" />
+        <el-table-column align="left" prop="fieldSearchType" :label="t('autoCode.searchType')" width="130" />
+        <el-table-column align="left" prop="dictType" :label="t('autoCode.dictionary')" width="130" />
+        <el-table-column align="left" :lable="t('general.operations')" width="300">
           <template #default="scope">
             <el-button
               size="mini"
               type="text"
               icon="edit"
               @click="editAndAddField(scope.row)"
-            >编辑</el-button>
+            >{{ t('general.edit') }}</el-button>
             <el-button
               size="mini"
               type="text"
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
-            >上移</el-button>
+            >{{ t('autoCode.moveUp') }}</el-button>
             <el-button
               size="mini"
               type="text"
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
-            >下移</el-button>
-            <el-popover v-model:visible="scope.row.visible" placement="top">
-              <p>确定删除吗？</p>
+            >{{ t('autoCode.moveDown') }}</el-button>
+            <el-popover :visible="scope.row.visible" placement="top">
+              <p>{{ t('autoCode.confirmDelete') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
+                <el-button size="mini" type="text" @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" size="mini" @click="deleteField(scope.$index)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button size="mini" type="text" icon="delete">删除</el-button>
+                <el-button size="mini" type="text" icon="delete">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -132,17 +132,17 @@
       </el-table>
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-content-flex-end auto-btn-list">
-        <el-button size="mini" type="primary" @click="enterForm(true)">预览代码</el-button>
-        <el-button size="mini" type="primary" @click="enterForm(false)">生成代码</el-button>
+        <el-button size="mini" type="primary" @click="enterForm(true)">{{ t('autoCode.codePreview') }}</el-button>
+        <el-button size="mini" type="primary" @click="enterForm(false)">{{ t('autoCode.generateCode') }}</el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
-    <el-dialog v-model="dialogFlag" title="组件内容">
-      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
+    <el-dialog v-model="dialogFlag" :title="t('autoCode.componentContent')">
+      <FieldDialog v-if="dialogFlag" ref="fieldDialog" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="mini" @click="closeDialog">取 消</el-button>
-          <el-button size="mini" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="mini" @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button size="mini" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -150,22 +150,40 @@
     <el-dialog v-model="previewFlag">
       <template #title>
         <div class="previewCodeTool">
-          <p>操作栏：</p>
-          <el-button size="mini" type="primary" @click="selectText">全选</el-button>
-          <el-button size="mini" type="primary" @click="copy">复制</el-button>
+          <p>{{ t('autoCode.actionBar') }}</p>
+          <el-button size="mini" type="primary" @click="selectText">{{ t('general.selectAll') }}</el-button>
+          <el-button size="mini" type="primary" @click="copy">{{ t('autoCode.copy') }}</el-button>
         </div>
       </template>
-      <PreviewCodeDialog v-if="previewFlag" ref="previewNode" :preview-code="preViewCode" />
+      <PreviewCodeDialog v-if="previewFlag" ref="preview" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
-          <el-button size="small" type="primary" @click="previewFlag = false">确 定</el-button>
+          <el-button size="small" type="primary" @click="previewFlag = false">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
   </div>
 </template>
 
+<script>
+
+export default {
+  name: 'AutoCode'
+}
+</script>
+
 <script setup>
+import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
+import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
+import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
+import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
+import { getDict } from '@/utils/dictionary'
+import { ref, getCurrentInstance, reactive } from 'vue'
+import { useRoute } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const fieldTemplate = {
   fieldName: '',
@@ -179,15 +197,6 @@ const fieldTemplate = {
   fieldSearchType: '',
   dictType: ''
 }
-
-import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
-import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
-import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
-import { getDict } from '@/utils/dictionary'
-import { ref, getCurrentInstance, reactive } from 'vue'
-import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
 
 const route = useRoute()
 const activeNames = reactive([])
@@ -212,22 +221,23 @@ const form = ref({
 })
 const rules = ref({
   structName: [
-    { required: true, message: '请输入结构体名称', trigger: 'blur' }
+    { required: true, message: t('autoCode.entStructName'), trigger: 'blur' }
   ],
   abbreviation: [
-    { required: true, message: '请输入结构体简称', trigger: 'blur' }
+    { required: true, message: t('autoCode.entStructAbbreviation'), trigger: 'blur' }
   ],
   description: [
-    { required: true, message: '请输入结构体描述', trigger: 'blur' }
+    { required: true, message: t('autoCode.entStructDesc'), trigger: 'blur' }
   ],
   packageName: [
     {
       required: true,
-      message: '文件名称：sysXxxxXxxx',
+      message: t('autoCode.entFileName'),
       trigger: 'blur'
     }
   ]
 })
+
 const dialogMiddle = ref({})
 const bk = ref({})
 const dialogFlag = ref(false)
@@ -236,13 +246,17 @@ const previewFlag = ref(false)
 const toLowerCaseFunc = (form, key) => {
   form[key] = toLowerCase(form[key])
 }
+
 const previewNode = ref(null)
+
 const selectText = () => {
   previewNode.value.selectText()
 }
+
 const copy = () => {
   previewNode.value.copy()
 }
+
 const editAndAddField = (item) => {
   dialogFlag.value = true
   if (item) {
@@ -254,6 +268,7 @@ const editAndAddField = (item) => {
     dialogMiddle.value = JSON.parse(JSON.stringify(fieldTemplate))
   }
 }
+
 const moveUpField = (index) => {
   if (index === 0) {
     return
@@ -273,6 +288,7 @@ const moveDownField = (index) => {
 }
 
 const currentInstance = getCurrentInstance()
+
 const enterDialog = () => {
   currentInstance.refs.fieldDialogNode.fieldDialogFrom.validate(valid => {
     if (valid) {
@@ -294,15 +310,18 @@ const closeDialog = () => {
   }
   dialogFlag.value = false
 }
+
 const deleteField = (index) => {
   form.value.fields.splice(index, 1)
 }
+
 const autoCodeForm = ref(null)
+
 const enterForm = async(isPreview) => {
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
-      message: '请填写至少一个field'
+      message: t('autoCode.errNoFields')
     })
     return false
   }
@@ -311,7 +330,7 @@ const enterForm = async(isPreview) => {
   ) {
     ElMessage({
       type: 'error',
-      message: '存在与结构体同名的字段'
+      message: t('autoCode.errSameFiledName')
     })
     return false
   }
@@ -327,7 +346,7 @@ const enterForm = async(isPreview) => {
       if (form.value.structName === form.value.abbreviation) {
         ElMessage({
           type: 'error',
-          message: 'structName和struct简称不能相同'
+          message: t('autoCode.errSameStructDescAbbr')
         })
         return false
       }
@@ -344,13 +363,13 @@ const enterForm = async(isPreview) => {
           if (form.value.autoMoveFile) {
             ElMessage({
               type: 'success',
-              message: '自动化代码创建成功，自动移动成功'
+              message: t('autoCode.codeGenMoveSuccess')
             })
             return
           }
           ElMessage({
             type: 'success',
-            message: '自动化代码创建成功，正在下载'
+            message: t('autoCode.codeGenDownload')
           })
         }
         const blob = new Blob([data])
@@ -398,7 +417,7 @@ const getColumnFunc = async() => {
     form.value.tableName = dbform.value.tableName
     form.value.packageName = tbHump
     form.value.abbreviation = tbHump
-    form.value.description = tbHump + '表'
+    form.value.description = tbHump + t('autoCode.table')
     form.value.autoCreateApiToSql = true
     form.value.fields = []
     res.data.columns &&
@@ -407,7 +426,7 @@ const getColumnFunc = async() => {
               const fbHump = toHump(item.columnName)
               form.value.fields.push({
                 fieldName: toUpperCase(fbHump),
-                fieldDesc: item.columnComment || fbHump + '字段',
+                fieldDesc: item.columnComment || fbHump + t('autoCode.field'),
                 fieldType: fdMap.value[item.dataType],
                 dataType: item.dataType,
                 fieldJson: fbHump,
@@ -447,13 +466,6 @@ const init = () => {
 }
 init()
 
-</script>
-
-<script>
-
-export default {
-  name: 'AutoCode'
-}
 </script>
 
 <style scoped lang="scss">

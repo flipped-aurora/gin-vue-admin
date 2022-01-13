@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="clearflex" style="margin:18px">
-      <el-button class="fl-right" size="mini" type="primary" @click="authDataEnter">确 定</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="all">全选</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="self">本角色</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="selfAndChildren">本角色及子角色</el-button>
+      <el-button class="fl-right" size="mini" type="primary" @click="authDataEnter">{{ t('general.sure') }}</el-button>
+      <el-button class="fl-left" size="mini" type="primary" @click="all">{{ t('general.selectAll') }}</el-button>
+      <el-button class="fl-left" size="mini" type="primary" @click="self">{{ t('datas.thisRole') }}</el-button>
+      <el-button class="fl-left" size="mini" type="primary" @click="selfAndChildren">{{ t('datas.thisRoleAndSubRoles') }}</el-button>
     </div>
     <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
       <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
     </el-checkbox-group>
-    <warning-bar title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）" />
+    <warning-bar :title="t('datas.datasNote')" />
   </div>
 </template>
 
@@ -24,6 +24,10 @@ import { setDataAuthority } from '@/api/authority'
 import warningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 const props = defineProps({
   row: {
     default: function() {
@@ -98,7 +102,7 @@ const getChildrenId = (row, arrBox) => {
 const authDataEnter = async() => {
   const res = await setDataAuthority(props.row)
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: '资源设置成功' })
+    ElMessage({ type: 'success', message: t('datas.resourceSetupSuccess') })
   }
 }
 

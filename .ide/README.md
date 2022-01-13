@@ -12,11 +12,17 @@ SmartIDE是下一代的云原生IDE，可以帮助你一件启动开源项目的
 
 本文档将对如何使用SmartIDE进行Gin-Vue-Admin项目的前后端联调进行描述。
 
-## 本地启动项目
+## 完整操作视频
+
+为了便于大家更直观的了解使用SmartIDE开发调试Gin-Vue-Admin的过程，我们在B站提上提供了视频供大家参考，视频地址如下：
+
+https://www.bilibili.com/video/BV1eL4y1b7ep/
+
+## 本地模式启动项目
 
 使用SmartIDE启动Gin-Vue-Admin的开发调试非常简单，仅需要两个步骤
 
-1. 按照 安装手册 完成 SmartIDE 本地命令行工具的安装
+1. 按照 [安装手册](https://smartide.cn/zh/docs/install/) 完成 SmartIDE 本地命令行工具的安装
 2. 使用以下命令一键启动以上所列的SFDE
 
 ```shell
@@ -37,5 +43,28 @@ smartide start https://github.com/SmartIDE/gin-vue-admin.git
 > JetBrain WebIDE的地址是 https://localhost:8887
 
 ![](images/goland-webide.png)
+
+## 远程主机模式启动项目
+
+以上B站操作使用平所使用的是远程主机模式，远程主机模式允许你将SmartIDE的开发环境一键部署到一台安装了Docker环境的远程主机上，并使用WebIDE远程连接到这台主机进行开发，对于比较复杂的项目来说这样做可以让你扩展本地开发机的能力，实现云端本地一体化的开发体验。
+
+使用远程模式也仅需要两个步骤
+
+> 注意：远程主机模式下你不必在本地安装Docker环境，只需要安装好SmartIDE的命令行工具即可
+
+1. 按照 [Docker & Docker-Compose 安装手册 (Linux服务器)](https://smartide.cn/zh/docs/install/docker-install-linux/) 准备好一台远程主机
+2. 按照以下指令启动项目
+
+```shell
+# 将远程主机添加到SmartIDE中
+smartide host add <IpAddress> --username <SSH-UserName> --password <SSH-Password> --port <SSH-Port默认为22>
+
+# 获取主机ID
+smartide host list
+
+# 使用远程主机启动项目
+smartide start --host <主机ID> https://github.com/SmartIDE/gin-vue-admin.git
+```
+
 
 

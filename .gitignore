@@ -27,3 +27,4 @@ yarn-error.log*
 /server/latest_log
 
 *.iml
+*.dccache

@@ -158,9 +158,10 @@ export const getUserInfo = () => {
   })
 }
 
-export const resetPassword = () => {
+export const resetPassword = (data) => {
   return service({
     url: '/user/resetPassword',
-    method: 'post'
+    method: 'post',
+    data: data
   })
 }

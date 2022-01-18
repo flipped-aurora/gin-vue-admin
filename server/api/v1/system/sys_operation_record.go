@@ -19,7 +19,7 @@ type OperationRecordApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysOperationRecord true "创建SysOperationRecord"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{msg=string} "创建SysOperationRecord"
 // @Router /sysOperationRecord/createSysOperationRecord [post]
 func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord system.SysOperationRecord
@@ -38,7 +38,7 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysOperationRecord true "SysOperationRecord模型"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "删除SysOperationRecord"
 // @Router /sysOperationRecord/deleteSysOperationRecord [delete]
 func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord system.SysOperationRecord
@@ -57,7 +57,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.IdsReq true "批量删除SysOperationRecord"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "批量删除SysOperationRecord"
 // @Router /sysOperationRecord/deleteSysOperationRecordByIds [delete]
 func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 	var IDS request.IdsReq
@@ -76,7 +76,7 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query system.SysOperationRecord true "Id"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "用id查询SysOperationRecord"
 // @Router /sysOperationRecord/findSysOperationRecord [get]
 func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord system.SysOperationRecord
@@ -99,7 +99,7 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query request.SysOperationRecordSearch true "页码, 每页大小, 搜索条件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取SysOperationRecord列表,返回包括列表,总数,页码,每页数量"
 // @Router /sysOperationRecord/getSysOperationRecordList [get]
 func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {
 	var pageInfo systemReq.SysOperationRecordSearch

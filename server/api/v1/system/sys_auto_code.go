@@ -24,7 +24,7 @@ type AutoCodeApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body system.AutoCodeStruct true "预览创建代码"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "预览创建后的代码"
 // @Router /autoCode/preview [post]
 func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 	var a system.AutoCodeStruct
@@ -94,7 +94,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "获取当前所有数据库"
 // @Router /autoCode/getDatabase [get]
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	dbs, err := autoCodeService.Database().GetDB()
@@ -111,7 +111,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "获取当前数据库所有表"
 // @Router /autoCode/getTables [get]
 func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
@@ -130,7 +130,7 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "获取当前表所有字段"
 // @Router /autoCode/getColumn [get]
 func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)

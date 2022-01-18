@@ -15,12 +15,13 @@ var store = base64Captcha.DefaultMemStore
 
 type BaseApi struct{}
 
+// Captcha
 // @Tags Base
 // @Summary 生成验证码
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"验证码获取成功"}"
+// @Success 200 {object} response.Response{data=systemRes.SysCaptchaResponse,msg=string} "生成验证码,返回包括随机数id,base64,验证码长度"
 // @Router /base/captcha [post]
 func (b *BaseApi) Captcha(c *gin.Context) {
 	// 字符,公式,验证码配置

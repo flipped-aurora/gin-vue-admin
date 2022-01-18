@@ -18,7 +18,7 @@ type AutoCodeHistoryApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body request.GetById true "请求参数"
-// @Success 200 {object} response.Response{} "获取成功!"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "获取meta信息"
 // @Router /autoCode/getMeta [post]
 func (a *AutoCodeHistoryApi) First(c *gin.Context) {
 	var info request.GetById
@@ -38,7 +38,7 @@ func (a *AutoCodeHistoryApi) First(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.GetById true "请求参数"
-// @Success 200 {object} response.Response{} "删除成功!"
+// @Success 200 {object} response.Response{msg=string} "删除回滚记录"
 // @Router /autoCode/delSysHistory [post]
 func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 	var info request.GetById
@@ -59,7 +59,7 @@ func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.GetById true "请求参数"
-// @Success 200 {object} response.Response{} "回滚成功!"
+// @Success 200 {object} response.Response{msg=string} "回滚自动生成代码"
 // @Router /autoCode/rollback [post]
 func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
 	var info request.GetById
@@ -78,7 +78,7 @@ func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body systemReq.SysAutoHistory true "请求参数"
-// @Success 200 {object} response.Response{} "获取成功!"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "查询回滚记录,返回包括列表,总数,页码,每页数量"
 // @Router /autoCode/getSysHistory [post]
 func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
 	var search systemReq.SysAutoHistory

@@ -21,7 +21,7 @@ type SystemApiApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysApi true "api路径, api中文描述, api组, 方法"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Success 200 {object} response.Response{msg=string} "创建基础api"
 // @Router /api/createApi [post]
 func (s *SystemApiApi) CreateApi(c *gin.Context) {
 	var api system.SysApi
@@ -44,7 +44,7 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysApi true "ID"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "删除api"
 // @Router /api/deleteApi [post]
 func (s *SystemApiApi) DeleteApi(c *gin.Context) {
 	var api system.SysApi
@@ -67,7 +67,7 @@ func (s *SystemApiApi) DeleteApi(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body systemReq.SearchApiParams true "分页获取API列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取API列表,返回包括列表,总数,页码,每页数量"
 // @Router /api/getApiList [post]
 func (s *SystemApiApi) GetApiList(c *gin.Context) {
 	var pageInfo systemReq.SearchApiParams
@@ -89,13 +89,14 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 	}
 }
 
+// todo
 // @Tags SysApi
 // @Summary 根据id获取api
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
 // @Param data body request.GetById true "根据id获取api"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=systemRes.SysAPIResponse} "根据id获取api,返回包括api详情"
 // @Router /api/getApiById [post]
 func (s *SystemApiApi) GetApiById(c *gin.Context) {
 	var idInfo request.GetById
@@ -114,12 +115,12 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 }
 
 // @Tags SysApi
-// @Summary 创建基础api
+// @Summary 修改基础api
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysApi true "api路径, api中文描述, api组, 方法"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Success 200 {object} response.Response{msg=string} "修改基础api"
 // @Router /api/updateApi [post]
 func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 	var api system.SysApi
@@ -141,7 +142,7 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=systemRes.SysAPIListResponse,msg=string} "获取所有的Api 不分页,返回包括api列表"
 // @Router /api/getAllApis [post]
 func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 	if err, apis := apiService.GetAllApis(); err != nil {
@@ -158,7 +159,7 @@ func (s *SystemApiApi) GetAllApis(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.IdsReq true "ID"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "删除选中Api"
 // @Router /api/deleteApisByIds [delete]
 func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 	var ids request.IdsReq

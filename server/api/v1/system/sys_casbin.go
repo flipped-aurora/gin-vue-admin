@@ -18,7 +18,7 @@ type CasbinApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body request.CasbinInReceive true "权限id, 权限模型列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Success 200 {object} response.Response{msg=string} "更新角色api权限"
 // @Router /casbin/UpdateCasbin [post]
 func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 	var cmr request.CasbinInReceive
@@ -41,7 +41,7 @@ func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body request.CasbinInReceive true "权限id, 权限模型列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=systemRes.PolicyPathResponse,msg=string} "获取权限列表,返回包括casbin详情列表"
 // @Router /casbin/getPolicyPathByAuthorityId [post]
 func (cas *CasbinApi) GetPolicyPathByAuthorityId(c *gin.Context) {
 	var casbin request.CasbinInReceive

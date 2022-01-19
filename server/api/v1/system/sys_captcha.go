@@ -20,7 +20,7 @@ type BaseApi struct{}
 // @Summary 生成验证码
 // @accept application/json
 // @Produce application/json
-// @Success 200 {object} response.Response{data=systemRes.SysCaptchaResponse} "生成一个随机验证码，返回包括随机生成id，base64 图像字符串，验证码长度"
+// @Success 200 {object} response.Response{data=systemRes.SysCaptchaResponse,msg=string} "生成验证码,返回包括随机数id,base64,验证码长度"
 // @Router /base/captcha [post]
 func (b *BaseApi) Captcha(c *gin.Context) {
 	// 字符,公式,验证码配置

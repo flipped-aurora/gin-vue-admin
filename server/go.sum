@@ -771,8 +771,9 @@ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C
 gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 h1:tQIYjPdBoyREyB9XMu+nnTclpTYkz2zFM+lzLJFO4gQ=
 gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776/go.mod h1:K4uyk7z7BCEPqu6E+C64Yfv1cQ7kz7rIZviUmN+EgEM=
 gorm.io/driver/mysql v0.3.0/go.mod h1:A7H1JD9dKdcjeUTpTuWKEC+E1a74qzW7/zaXqKaTbfM=
-gorm.io/driver/mysql v1.0.1 h1:omJoilUzyrAp0xNoio88lGJCroGdIOen9hq2A/+3ifw=
 gorm.io/driver/mysql v1.0.1/go.mod h1:KtqSthtg55lFp3S5kUXqlGaelnWpKitn4k1xZTnoiPw=
+gorm.io/driver/mysql v1.0.3 h1:+JKBYPfn1tygR1/of/Fh2T8iwuVwzt+PEJmKaXzMQXg=
+gorm.io/driver/mysql v1.0.3/go.mod h1:twGxftLBlFgNVNakL7F+P/x9oYqoymG3YYT8cAfI9oI=
 gorm.io/driver/postgres v0.2.6 h1:hoE6SzA5wKOo6AYxz2V7ooxnzD6S6ToLAHHDDawt+b0=
 gorm.io/driver/postgres v0.2.6/go.mod h1:AsPyuhKFOplSmQwOPsycVKbe0dRxF8v18KZ7p9i8dIs=
 gorm.io/driver/sqlserver v0.2.4 h1:AGofGL/TfzTZotzIHlaLISfxEKJpzj0ATbtXJW+ga1A=
@@ -780,9 +781,12 @@ gorm.io/driver/sqlserver v0.2.4/go.mod h1:TcPfkdce5b8qlCMgyUeUdm7HQa1ZzWUuxzI+od
 gorm.io/gorm v0.2.19/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/gorm v0.2.23/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/gorm v1.9.19/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
+gorm.io/gorm v1.20.4/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/gorm v1.20.7/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
 gorm.io/gorm v1.20.11 h1:jYHQ0LLUViV85V8dM1TP9VBBkfzKTnuTXDjYObkI6yc=
 gorm.io/gorm v1.20.11/go.mod h1:0HFTzE/SqkGTzK6TlDPPQbAYCluiVvhzoA1+aVyzenw=
+gorm.io/plugin/dbresolver v1.1.0 h1:cegr4DeprR6SkLIQlKhJLYxH8muFbJ4SmnojXvoeb00=
+gorm.io/plugin/dbresolver v1.1.0/go.mod h1:tpImigFAEejCALOttyhWqsy4vfa2Uh/vAUVnL5IRF7Y=
 honnef.co/go/tools v0.0.0-20190102054323-c2f93a96b099/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190106161140-3f1c8253044a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=
 honnef.co/go/tools v0.0.0-20190418001031-e561f6794a2a/go.mod h1:rf3lG4BRIbNafJWhAfAdb/ePZxsR/4RtNHQocxwk9r4=

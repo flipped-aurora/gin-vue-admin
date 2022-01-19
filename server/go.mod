@@ -3,7 +3,6 @@ module github.com/flipped-aurora/gin-vue-admin/server
 go 1.16
 
 require (
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.6+incompatible
 	github.com/aws/aws-sdk-go v1.42.27
 	github.com/casbin/casbin/v2 v2.11.0
@@ -38,8 +37,9 @@ require (
 	go.uber.org/zap v1.16.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
-	gorm.io/driver/mysql v1.0.1
+	gorm.io/driver/mysql v1.0.3
 	gorm.io/driver/postgres v0.2.6
 	gorm.io/gorm v1.20.11
+	gorm.io/plugin/dbresolver v1.1.0
 	nhooyr.io/websocket v1.8.6
 )

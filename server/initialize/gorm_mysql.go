@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/plugin/dbresolver"
 )
 
 // GormMysql 初始化Mysql数据库
@@ -45,6 +46,27 @@ func GormMysqlByConfig(m config.DB) *gorm.DB {
 		panic(err)
 	} else {
 		sqlDB, _ := db.DB()
+		if global.GVA_CONFIG.OpenReadWriteSeparation {
+			var writeDsn []gorm.Dialector
+			var readDsn []gorm.Dialector
+			switch m.Duty {
+			case "read":
+				readDsn = append(readDsn, mysql.Open(m.Dsn()))
+			case "write":
+				writeDsn = append(writeDsn, mysql.Open(m.Dsn()))
+			default:
+				return nil
+			}
+			dbResolverCfg := dbresolver.Config{
+				Sources:  writeDsn,
+				Replicas: readDsn,
+				Policy:   dbresolver.RandomPolicy{}}
+			readWritePlugin := dbresolver.Register(dbResolverCfg)
+			err = db.Use(readWritePlugin)
+			if err != nil {
+				return nil
+			}
+		}
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
 		return db

@@ -25,6 +25,27 @@ func GormPgSql() *gorm.DB {
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
+		if global.GVA_CONFIG.OpenReadWriteSeparation {
+			var writeDsn []gorm.Dialector
+			var readDsn []gorm.Dialector
+			switch p.Duty {
+			case "read":
+				readDsn = append(readDsn, postgres.Open(p.Dsn()))
+			case "write":
+				writeDsn = append(writeDsn, postgres.Open(p.Dsn()))
+			default:
+				return nil
+			}
+			dbResolverCfg := dbresolver.Config{
+				Sources:  writeDsn,
+				Replicas: readDsn,
+				Policy:   dbresolver.RandomPolicy{}}
+			readWritePlugin := dbresolver.Register(dbResolverCfg)
+			err = db.Use(readWritePlugin)
+			if err != nil {
+				return nil
+			}
+		}
 		sqlDB.SetMaxIdleConns(p.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(p.MaxOpenConns)
 		return db

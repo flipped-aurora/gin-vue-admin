@@ -26,6 +26,27 @@ func GormMysql() *gorm.DB {
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
+		if global.GVA_CONFIG.OpenReadWriteSeparation {
+			var writeDsn []gorm.Dialector
+			var readDsn []gorm.Dialector
+			switch m.Duty {
+			case "read":
+				readDsn = append(readDsn, mysql.Open(m.Dsn()))
+			case "write":
+				writeDsn = append(writeDsn, mysql.Open(m.Dsn()))
+			default:
+				return nil
+			}
+			dbResolverCfg := dbresolver.Config{
+				Sources:  writeDsn,
+				Replicas: readDsn,
+				Policy:   dbresolver.RandomPolicy{}}
+			readWritePlugin := dbresolver.Register(dbResolverCfg)
+			err = db.Use(readWritePlugin)
+			if err != nil {
+				return nil
+			}
+		}
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
 		return db

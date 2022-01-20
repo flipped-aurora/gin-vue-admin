@@ -16,7 +16,7 @@ type DBApi struct{}
 // @Summary 初始化用户数据库
 // @Produce  application/json
 // @Param data body request.InitDB true "初始化数据库参数"
-// @Success 200 {string} string "{"code":0,"data":{},"msg":"自动创建数据库成功"}"
+// @Success 200 {object} response.Response{data=string} "初始化用户数据库"
 // @Router /init/initdb [post]
 func (i *DBApi) InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
@@ -42,16 +42,19 @@ func (i *DBApi) InitDB(c *gin.Context) {
 // @Tags CheckDB
 // @Summary 初始化用户数据库
 // @Produce  application/json
-// @Success 200 {string} string "{"code":0,"data":{},"msg":"探测完成"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "初始化用户数据库"
 // @Router /init/checkdb [post]
 func (i *DBApi) CheckDB(c *gin.Context) {
+	var (
+		message  = "前往初始化数据库"
+		needInit = true
+	)
+
 	if global.GVA_DB != nil {
-		global.GVA_LOG.Info("数据库无需初始化")
-		response.OkWithDetailed(gin.H{"needInit": false}, "数据库无需初始化", c)
-		return
-	} else {
-		global.GVA_LOG.Info("前往初始化数据库")
-		response.OkWithDetailed(gin.H{"needInit": true}, "前往初始化数据库", c)
-		return
+		message = "数据库无需初始化"
+		needInit = false
 	}
+	global.GVA_LOG.Info(message)
+	response.OkWithDetailed(gin.H{"needInit": needInit}, message, c)
+	return
 }

@@ -19,7 +19,7 @@ type CustomerApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body example.ExaCustomer true "客户用户名, 客户手机号码"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Success 200 {object} response.Response{msg=string} "创建客户"
 // @Router /customer/customer [post]
 func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
@@ -44,7 +44,7 @@ func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body example.ExaCustomer true "客户ID"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "删除客户"
 // @Router /customer/customer [delete]
 func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
@@ -67,7 +67,7 @@ func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body example.ExaCustomer true "客户ID, 客户信息"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Success 200 {object} response.Response{msg=string} "更新客户信息"
 // @Router /customer/customer [put]
 func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
@@ -94,7 +94,7 @@ func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query example.ExaCustomer true "客户ID"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=exampleRes.ExaCustomerResponse,msg=string} "获取单一客户信息,返回包括客户详情"
 // @Router /customer/customer [get]
 func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
@@ -118,7 +118,7 @@ func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query request.PageInfo true "页码, 每页大小"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取权限客户列表,返回包括列表,总数,页码,每页数量"
 // @Router /customer/customerList [get]
 func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {
 	var pageInfo request.PageInfo

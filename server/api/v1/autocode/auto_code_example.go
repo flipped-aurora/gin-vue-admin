@@ -21,7 +21,7 @@ var autoCodeExampleService = service.ServiceGroupApp.AutoCodeServiceGroup.AutoCo
 // @accept application/json
 // @Produce application/json
 // @Param data body autocode.AutoCodeExample true "AutoCodeExample模型"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Success 200 {object} response.Response{msg=string} "创建AutoCodeExample"
 // @Router /autoCodeExample/createAutoCodeExample [post]
 func (autoCodeExampleApi *AutoCodeExampleApi) CreateAutoCodeExample(c *gin.Context) {
 	var autoCodeExample autocode.AutoCodeExample
@@ -40,7 +40,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) CreateAutoCodeExample(c *gin.Conte
 // @accept application/json
 // @Produce application/json
 // @Param data body autocode.AutoCodeExample true "AutoCodeExample模型"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "删除AutoCodeExample"
 // @Router /autoCodeExample/deleteAutoCodeExample [delete]
 func (autoCodeExampleApi *AutoCodeExampleApi) DeleteAutoCodeExample(c *gin.Context) {
 	var autoCodeExample autocode.AutoCodeExample
@@ -59,7 +59,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) DeleteAutoCodeExample(c *gin.Conte
 // @accept application/json
 // @Produce application/json
 // @Param data body autocode.AutoCodeExample true "更新AutoCodeExample"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Success 200 {object} response.Response{msg=string} "更新AutoCodeExample"
 // @Router /autoCodeExample/updateAutoCodeExample [put]
 func (autoCodeExampleApi *AutoCodeExampleApi) UpdateAutoCodeExample(c *gin.Context) {
 	var autoCodeExample autocode.AutoCodeExample
@@ -78,7 +78,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) UpdateAutoCodeExample(c *gin.Conte
 // @accept application/json
 // @Produce application/json
 // @Param data query autocode.AutoCodeExample true "用id查询AutoCodeExample"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "用id查询AutoCodeExample"
 // @Router /autoCodeExample/findAutoCodeExample [get]
 func (autoCodeExampleApi *AutoCodeExampleApi) FindAutoCodeExample(c *gin.Context) {
 	var autoCodeExample autocode.AutoCodeExample
@@ -101,7 +101,7 @@ func (autoCodeExampleApi *AutoCodeExampleApi) FindAutoCodeExample(c *gin.Context
 // @accept application/json
 // @Produce application/json
 // @Param data query autocodeReq.AutoCodeExampleSearch true "页码, 每页大小, 搜索条件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取AutoCodeExample列表,返回包括列表,总数,页码,每页数量"
 // @Router /autoCodeExample/getAutoCodeExampleList [get]
 func (autoCodeExampleApi *AutoCodeExampleApi) GetAutoCodeExampleList(c *gin.Context) {
 	var pageInfo autocodeReq.AutoCodeExampleSearch

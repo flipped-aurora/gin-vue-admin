@@ -59,6 +59,43 @@ definitions:
       webTable:
         type: string
     type: object
+  config.AwsS3:
+    properties:
+      baseURL:
+        type: string
+      bucket:
+        type: string
+      pathPrefix:
+        type: string
+      region:
+        type: string
+      secretID:
+        type: string
+      secretKey:
+        type: string
+    type: object
+  config.CORS:
+    properties:
+      mode:
+        type: string
+      whitelist:
+        items:
+          $ref: '#/definitions/config.CORSWhitelist'
+        type: array
+    type: object
+  config.CORSWhitelist:
+    properties:
+      allow-credentials:
+        type: boolean
+      allow-headers:
+        type: string
+      allow-methods:
+        type: string
+      allow-origin:
+        type: string
+      expose-headers:
+        type: string
+    type: object
   config.Captcha:
     properties:
       imgHeight:
@@ -75,6 +112,44 @@ definitions:
     properties:
       modelPath:
         description: 存放casbin模型的相对路径
+        type: string
+    type: object
+  config.DB:
+    properties:
+      alias-name:
+        type: string
+      config:
+        description: 高级配置
+        type: string
+      dbname:
+        description: 数据库名
+        type: string
+      disable:
+        type: boolean
+      logMode:
+        description: 是否开启Gorm全局日志
+        type: string
+      logZap:
+        type: boolean
+      maxIdleConns:
+        description: 空闲中的最大连接数
+        type: integer
+      maxOpenConns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      type:
+        type: string
+      username:
+        description: 数据库用户名
         type: string
     type: object
   config.Detail:
@@ -118,6 +193,19 @@ definitions:
       dir:
         type: string
     type: object
+  config.HuaWeiObs:
+    properties:
+      accessKey:
+        type: string
+      bucket:
+        type: string
+      endpoint:
+        type: string
+      path:
+        type: string
+      secretKey:
+        type: string
+    type: object
   config.JWT:
     properties:
       bufferTime:
@@ -126,6 +214,9 @@ definitions:
       expiresTime:
         description: 过期时间
         type: integer
+      issuer:
+        description: 签发者
+        type: string
       signingKey:
         description: jwt签名
         type: string
@@ -160,7 +251,43 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 服务器地址
+        type: string
+      port:
+        description: 端口
+        type: string
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
+  config.Pgsql:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      dbname:
+        description: 数据库名
+        type: string
+      logMode:
+        description: 是否开启Gorm全局日志
+        type: string
+      logZap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      maxIdleConns:
+        description: 空闲中的最大连接数
+        type: integer
+      maxOpenConns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
         description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
         type: string
       username:
         description: 数据库用户名
@@ -209,14 +336,25 @@ definitions:
       autoCode:
         $ref: '#/definitions/config.Autocode'
         description: auto
+      awsS3:
+        $ref: '#/definitions/config.AwsS3'
       captcha:
         $ref: '#/definitions/config.Captcha'
       casbin:
         $ref: '#/definitions/config.Casbin'
+      cors:
+        $ref: '#/definitions/config.CORS'
+        description: 跨域配置
+      db-list:
+        items:
+          $ref: '#/definitions/config.DB'
+        type: array
       email:
         $ref: '#/definitions/config.Email'
       excel:
         $ref: '#/definitions/config.Excel'
+      huaWeiObs:
+        $ref: '#/definitions/config.HuaWeiObs'
       jwt:
         $ref: '#/definitions/config.JWT'
       local:
@@ -225,6 +363,8 @@ definitions:
       mysql:
         $ref: '#/definitions/config.Mysql'
         description: gorm
+      pgsql:
+        $ref: '#/definitions/config.Pgsql'
       qiniu:
         $ref: '#/definitions/config.Qiniu'
       redis:
@@ -249,6 +389,10 @@ definitions:
       env:
         description: 环境值
         type: string
+      iplimitCount:
+        type: integer
+      iplimitTime:
+        type: integer
       ossType:
         description: Oss类型
         type: string
@@ -297,9 +441,6 @@ definitions:
         type: string
       level:
         description: 级别
-        type: string
-      linkName:
-        description: 软链接名称
         type: string
       logInConsole:
         description: 输出控制台
@@ -385,11 +526,6 @@ definitions:
           $ref: '#/definitions/system.SysBaseMenu'
         type: array
     type: object
-  request.AutoHistoryByID:
-    properties:
-      id:
-        type: integer
-    type: object
   request.CasbinInReceive:
     properties:
       authorityId:
@@ -446,6 +582,9 @@ definitions:
     properties:
       dbName:
         description: 数据库名
+        type: string
+      dbType:
+        description: 数据库类型
         type: string
       host:
         description: 服务器地址
@@ -577,6 +716,15 @@ definitions:
         description: 邮件发送给谁
         type: string
     type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data:
+        type: object
+      msg:
+        type: string
+    type: object
   response.SysAuthorityCopyResponse:
     properties:
       authority:
@@ -623,9 +771,6 @@ definitions:
         type: string
       comment:
         description: 数据库字段描述
-        type: string
-      dataType:
-        description: 数据库字段类型
         type: string
       dataTypeLong:
         description: 数据库字段长度
@@ -1260,19 +1405,19 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 删除回滚记录
+      - description: 请求参数
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.AutoHistoryByID'
+          $ref: '#/definitions/request.GetById'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          description: 删除成功!
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
       security:
       - ApiKeyAuth: []
       summary: 删除回滚记录
@@ -1315,22 +1460,22 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 获取meta信息
+      - description: 请求参数
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.AutoHistoryByID'
+          $ref: '#/definitions/request.GetById'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          description: 获取成功!
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
       security:
       - ApiKeyAuth: []
-      summary: 回滚
+      summary: 获取meta信息
       tags:
       - AutoCode
   /autoCode/getSysHistory:
@@ -1338,7 +1483,7 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 查询回滚记录
+      - description: 请求参数
         in: body
         name: data
         required: true
@@ -1348,9 +1493,9 @@ paths:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          description: 获取成功!
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
       security:
       - ApiKeyAuth: []
       summary: 查询回滚记录
@@ -1400,22 +1545,22 @@ paths:
       consumes:
       - application/json
       parameters:
-      - description: 回滚自动生成代码
+      - description: 请求参数
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/request.AutoHistoryByID'
+          $ref: '#/definitions/request.GetById'
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"回滚成功"}'
+          description: 回滚成功!
           schema:
-            type: string
+            $ref: '#/definitions/response.Response'
       security:
       - ApiKeyAuth: []
-      summary: 回滚
+      summary: 回滚自动生成代码
       tags:
       - AutoCode
   /autoCodeExample/createAutoCodeExample:
@@ -2892,6 +3037,29 @@ paths:
       summary: 设置配置文件内容
       tags:
       - System
+  /user/SetSelfInfo:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID, 用户名, 昵称, 头像链接
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"设置成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户信息
+      tags:
+      - SysUser
   /user/changePassword:
     post:
       parameters:
@@ -2992,6 +3160,27 @@ paths:
           schema:
             type: string
       summary: 用户注册账号
+      tags:
+      - SysUser
+  /user/resetPassword:
+    post:
+      parameters:
+      - description: ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"修改成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用户修改密码
       tags:
       - SysUser
   /user/setUserAuthorities:

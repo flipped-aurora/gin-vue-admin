@@ -564,20 +564,20 @@ var doc = `{
                 "summary": "删除回滚记录",
                 "parameters": [
                     {
-                        "description": "删除回滚记录",
+                        "description": "请求参数",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.AutoHistoryByID"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "description": "删除成功!",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -653,23 +653,23 @@ var doc = `{
                 "tags": [
                     "AutoCode"
                 ],
-                "summary": "回滚",
+                "summary": "获取meta信息",
                 "parameters": [
                     {
-                        "description": "获取meta信息",
+                        "description": "请求参数",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.AutoHistoryByID"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "description": "获取成功!",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -694,7 +694,7 @@ var doc = `{
                 "summary": "查询回滚记录",
                 "parameters": [
                     {
-                        "description": "查询回滚记录",
+                        "description": "请求参数",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -705,9 +705,9 @@ var doc = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "description": "获取成功!",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -794,23 +794,23 @@ var doc = `{
                 "tags": [
                     "AutoCode"
                 ],
-                "summary": "回滚",
+                "summary": "回滚自动生成代码",
                 "parameters": [
                     {
-                        "description": "回滚自动生成代码",
+                        "description": "请求参数",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/request.AutoHistoryByID"
+                            "$ref": "#/definitions/request.GetById"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"回滚成功\"}",
+                        "description": "回滚成功!",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.Response"
                         }
                     }
                 }
@@ -3212,6 +3212,44 @@ var doc = `{
                 }
             }
         },
+        "/user/SetSelfInfo": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "设置用户信息",
+                "parameters": [
+                    {
+                        "description": "ID, 用户名, 昵称, 头像链接",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"设置成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/user/changePassword": {
             "post": {
                 "security": [
@@ -3373,6 +3411,41 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"注册成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/resetPassword": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "用户修改密码",
+                "parameters": [
+                    {
+                        "description": "ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"修改成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -3584,6 +3657,63 @@ var doc = `{
                 }
             }
         },
+        "config.AwsS3": {
+            "type": "object",
+            "properties": {
+                "baseURL": {
+                    "type": "string"
+                },
+                "bucket": {
+                    "type": "string"
+                },
+                "pathPrefix": {
+                    "type": "string"
+                },
+                "region": {
+                    "type": "string"
+                },
+                "secretID": {
+                    "type": "string"
+                },
+                "secretKey": {
+                    "type": "string"
+                }
+            }
+        },
+        "config.CORS": {
+            "type": "object",
+            "properties": {
+                "mode": {
+                    "type": "string"
+                },
+                "whitelist": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.CORSWhitelist"
+                    }
+                }
+            }
+        },
+        "config.CORSWhitelist": {
+            "type": "object",
+            "properties": {
+                "allow-credentials": {
+                    "type": "boolean"
+                },
+                "allow-headers": {
+                    "type": "string"
+                },
+                "allow-methods": {
+                    "type": "string"
+                },
+                "allow-origin": {
+                    "type": "string"
+                },
+                "expose-headers": {
+                    "type": "string"
+                }
+            }
+        },
         "config.Captcha": {
             "type": "object",
             "properties": {
@@ -3606,6 +3736,59 @@ var doc = `{
             "properties": {
                 "modelPath": {
                     "description": "存放casbin模型的相对路径",
+                    "type": "string"
+                }
+            }
+        },
+        "config.DB": {
+            "type": "object",
+            "properties": {
+                "alias-name": {
+                    "type": "string"
+                },
+                "config": {
+                    "description": "高级配置",
+                    "type": "string"
+                },
+                "dbname": {
+                    "description": "数据库名",
+                    "type": "string"
+                },
+                "disable": {
+                    "type": "boolean"
+                },
+                "logMode": {
+                    "description": "是否开启Gorm全局日志",
+                    "type": "string"
+                },
+                "logZap": {
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "description": "空闲中的最大连接数",
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "description": "打开到数据库的最大连接数",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "数据库密码",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "服务器地址:端口",
+                    "type": "string"
+                },
+                "port": {
+                    "description": ":端口",
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "username": {
+                    "description": "数据库用户名",
                     "type": "string"
                 }
             }
@@ -3668,6 +3851,26 @@ var doc = `{
                 }
             }
         },
+        "config.HuaWeiObs": {
+            "type": "object",
+            "properties": {
+                "accessKey": {
+                    "type": "string"
+                },
+                "bucket": {
+                    "type": "string"
+                },
+                "endpoint": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "secretKey": {
+                    "type": "string"
+                }
+            }
+        },
         "config.JWT": {
             "type": "object",
             "properties": {
@@ -3678,6 +3881,10 @@ var doc = `{
                 "expiresTime": {
                     "description": "过期时间",
                     "type": "integer"
+                },
+                "issuer": {
+                    "description": "签发者",
+                    "type": "string"
                 },
                 "signingKey": {
                     "description": "jwt签名",
@@ -3726,7 +3933,56 @@ var doc = `{
                     "type": "string"
                 },
                 "path": {
+                    "description": "服务器地址",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "端口",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "数据库用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "config.Pgsql": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "description": "高级配置",
+                    "type": "string"
+                },
+                "dbname": {
+                    "description": "数据库名",
+                    "type": "string"
+                },
+                "logMode": {
+                    "description": "是否开启Gorm全局日志",
+                    "type": "string"
+                },
+                "logZap": {
+                    "description": "是否通过zap写入日志文件",
+                    "type": "boolean"
+                },
+                "maxIdleConns": {
+                    "description": "空闲中的最大连接数",
+                    "type": "integer"
+                },
+                "maxOpenConns": {
+                    "description": "打开到数据库的最大连接数",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "数据库密码",
+                    "type": "string"
+                },
+                "path": {
                     "description": "服务器地址:端口",
+                    "type": "string"
+                },
+                "port": {
+                    "description": ":端口",
                     "type": "string"
                 },
                 "username": {
@@ -3795,17 +4051,33 @@ var doc = `{
                     "description": "auto",
                     "$ref": "#/definitions/config.Autocode"
                 },
+                "awsS3": {
+                    "$ref": "#/definitions/config.AwsS3"
+                },
                 "captcha": {
                     "$ref": "#/definitions/config.Captcha"
                 },
                 "casbin": {
                     "$ref": "#/definitions/config.Casbin"
                 },
+                "cors": {
+                    "description": "跨域配置",
+                    "$ref": "#/definitions/config.CORS"
+                },
+                "db-list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.DB"
+                    }
+                },
                 "email": {
                     "$ref": "#/definitions/config.Email"
                 },
                 "excel": {
                     "$ref": "#/definitions/config.Excel"
+                },
+                "huaWeiObs": {
+                    "$ref": "#/definitions/config.HuaWeiObs"
                 },
                 "jwt": {
                     "$ref": "#/definitions/config.JWT"
@@ -3817,6 +4089,9 @@ var doc = `{
                 "mysql": {
                     "description": "gorm",
                     "$ref": "#/definitions/config.Mysql"
+                },
+                "pgsql": {
+                    "$ref": "#/definitions/config.Pgsql"
                 },
                 "qiniu": {
                     "$ref": "#/definitions/config.Qiniu"
@@ -3852,6 +4127,12 @@ var doc = `{
                 "env": {
                     "description": "环境值",
                     "type": "string"
+                },
+                "iplimitCount": {
+                    "type": "integer"
+                },
+                "iplimitTime": {
+                    "type": "integer"
                 },
                 "ossType": {
                     "description": "Oss类型",
@@ -3922,10 +4203,6 @@ var doc = `{
                 },
                 "level": {
                     "description": "级别",
-                    "type": "string"
-                },
-                "linkName": {
-                    "description": "软链接名称",
                     "type": "string"
                 },
                 "logInConsole": {
@@ -4046,14 +4323,6 @@ var doc = `{
                 }
             }
         },
-        "request.AutoHistoryByID": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer"
-                }
-            }
-        },
         "request.CasbinInReceive": {
             "type": "object",
             "properties": {
@@ -4140,6 +4409,10 @@ var doc = `{
             "properties": {
                 "dbName": {
                     "description": "数据库名",
+                    "type": "string"
+                },
+                "dbType": {
+                    "description": "数据库类型",
                     "type": "string"
                 },
                 "host": {
@@ -4323,6 +4596,20 @@ var doc = `{
                 }
             }
         },
+        "response.Response": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "data": {
+                    "type": "object"
+                },
+                "msg": {
+                    "type": "string"
+                }
+            }
+        },
         "response.SysAuthorityCopyResponse": {
             "type": "object",
             "properties": {
@@ -4387,10 +4674,6 @@ var doc = `{
                 },
                 "comment": {
                     "description": "数据库字段描述",
-                    "type": "string"
-                },
-                "dataType": {
-                    "description": "数据库字段类型",
                     "type": "string"
                 },
                 "dataTypeLong": {

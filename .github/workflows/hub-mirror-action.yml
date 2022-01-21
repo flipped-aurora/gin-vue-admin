@@ -1,0 +1,22 @@
+name: hub-mirror-action
+on:
+  push:
+    branches: 
+      - "*"
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: hub-mirror-action
+      uses: tscuite/hub-mirror-action@main
+      with:
+        src: github/flipped-aurora
+        dst: gitee/pixel
+        dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+        dst_token: ${{ secrets.GITEE_TOKEN }}
+        src_account_type: org
+        dst_account_type: user
+        force_update: true
+        timeout: 600
+        static_list: "gin-vue-admin"

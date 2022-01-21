@@ -69,6 +69,9 @@ func TrimSpace(target interface{}) {
 
 // FileExist 判断文件是否存在
 func FileExist(path string) bool {
-	_, err := os.Lstat(path)
+	fi, err := os.Lstat(path)
+	if err == nil {
+		return !fi.IsDir()
+	}
 	return !os.IsNotExist(err)
 }

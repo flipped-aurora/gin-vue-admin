@@ -324,11 +324,11 @@ func (b *BaseApi) GetUserInfo(c *gin.Context) {
 }
 
 // @Tags SysUser
-// @Summary 用户修改密码
+// @Summary 重置用户密码
 // @Security ApiKeyAuth
 // @Produce  application/json
 // @Param data body system.SysUser true "ID"
-// @Success 200 {object} response.Response{msg=string} "用户修改密码"
+// @Success 200 {object} response.Response{msg=string} "重置用户密码"
 // @Router /user/resetPassword [post]
 func (b *BaseApi) ResetPassword(c *gin.Context) {
 	var user system.SysUser

@@ -7,14 +7,15 @@ import { ref } from 'vue'
 const routerListArr = []
 const keepAliveRoutersArr = []
 
-const formatRouter = (routes) => {
+const formatRouter = (routes, routeMap) => {
   routes && routes.forEach(item => {
     if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404' && !item.hidden) {
       routerListArr.push({ label: item.meta.title, value: item.name })
     }
     item.meta.hidden = item.hidden
+    routeMap[item.name] = item
     if (item.children && item.children.length > 0) {
-      formatRouter(item.children)
+      formatRouter(item.children, routeMap)
     }
   })
 }
@@ -35,6 +36,7 @@ export const useRouterStore = defineStore('router', () => {
   const asyncRouters = ref([])
   const routerList = ref(routerListArr)
   const keepAliveRouters = ref(keepAliveRoutersArr)
+  const routeMap = ({})
   // 从后台获取动态路由
   const SetAsyncRouter = async() => {
     const baseRouter = [{
@@ -57,7 +59,7 @@ export const useRouterStore = defineStore('router', () => {
       },
       component: 'view/error/index.vue'
     })
-    formatRouter(asyncRouter)
+    formatRouter(asyncRouter, routeMap)
     baseRouter[0].children = asyncRouter
     baseRouter.push({
       path: '/:catchAll(.*)',
@@ -76,7 +78,8 @@ export const useRouterStore = defineStore('router', () => {
     asyncRouters,
     routerList,
     keepAliveRouters,
-    SetAsyncRouter
+    SetAsyncRouter,
+    routeMap
   }
 })
 

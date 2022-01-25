@@ -5,14 +5,15 @@ import { asyncMenu } from '@/api/menu'
 const routerList = []
 const keepAliveRouters = []
 
-const formatRouter = (routes) => {
+const formatRouter = (routes, routeMap) => {
   routes && routes.forEach(item => {
     if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404' && !item.hidden) {
       routerList.push({ label: item.meta.title, value: item.name })
     }
     item.meta.hidden = item.hidden
+    routeMap[item.name] = item
     if (item.children && item.children.length > 0) {
-      formatRouter(item.children)
+      formatRouter(item.children, routeMap)
     }
   })
 }
@@ -33,6 +34,7 @@ export const router = {
   namespaced: true,
   state: {
     asyncRouters: [],
+    routeMap: {},
     routerList: routerList,
     keepAliveRouters: keepAliveRouters
   },
@@ -47,6 +49,9 @@ export const router = {
     // 设置需要缓存的路由
     setKeepAliveRouters(state, keepAliveRouters) {
       state.keepAliveRouters = keepAliveRouters
+    },
+    serRouteMap(state, routeMap) {
+      state.routeMap = routeMap
     }
   },
   actions: {
@@ -62,6 +67,7 @@ export const router = {
         children: []
       }]
       const asyncRouterRes = await asyncMenu()
+      const routeMap = {}
       const asyncRouter = asyncRouterRes.data.menus
       asyncRouter.push({
         path: '404',
@@ -72,7 +78,7 @@ export const router = {
         },
         component: 'view/error/index.vue'
       })
-      formatRouter(asyncRouter)
+      formatRouter(asyncRouter, routeMap)
       baseRouter[0].children = asyncRouter
       baseRouter.push({
         path: '/:catchAll(.*)',
@@ -82,6 +88,7 @@ export const router = {
       asyncRouterHandle(baseRouter)
       KeepAliveFilter(asyncRouter)
       commit('setAsyncRouter', baseRouter)
+      commit('serRouteMap', routeMap)
       commit('setRouterList', routerList)
       commit('setKeepAliveRouters', keepAliveRouters)
       return true
@@ -97,6 +104,9 @@ export const router = {
     },
     keepAliveRouters(state) {
       return state.keepAliveRouters
+    },
+    routeMap(state) {
+      return state.routeMap
     }
   }
 }

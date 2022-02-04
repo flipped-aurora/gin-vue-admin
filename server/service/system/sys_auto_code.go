@@ -234,9 +234,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 
 		if global.GVA_CONFIG.AutoCode.TransferRestart {
-			go func() {
-				_ = utils.Reload()
-			}()
+			// endless 会复用之前的指令
+			// 如果是你 goland debug/run 后用的还是之前打包的文件,没有做到真正意义上的重启
+			// 故此,拿掉迁移后的重启功能
 		}
 	} else { // 打包
 		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {

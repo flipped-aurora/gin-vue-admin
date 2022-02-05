@@ -274,6 +274,7 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 func (b *BaseApi) SetUserInfo(c *gin.Context) {
 	var user system.SysUser
 	_ = c.ShouldBindJSON(&user)
+	user.Username = ""
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -297,6 +298,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 	var user system.SysUser
 	_ = c.ShouldBindJSON(&user)
+	user.Username = ""
 	user.ID = utils.GetUserID(c)
 	if err, ReqUser := userService.SetUserInfo(user); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))

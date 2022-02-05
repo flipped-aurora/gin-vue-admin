@@ -14,7 +14,7 @@
           </template>
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
             <el-form-item :label="t('autoCode.dbName')" prop="structName">
-              <el-select v-model="dbform.dbName" filterable :placeholder="t('autoCode.selectDB')" @change="getTable">
+              <el-select v-model="dbform.dbName" filterable :placeholder="t('autoCode.selectDB')" @change="getTableFunc">
                 <el-option
                   v-for="item in dbOptions"
                   :key="item.database"
@@ -39,7 +39,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button size="mini" type="primary" @click="getColumn">{{ t('autoCode.createUsingTable') }}</el-button>
+              <el-button size="mini" type="primary" @click="getColumnFunc">{{ t('autoCode.createUsingTable') }}</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -61,7 +61,7 @@
           <el-input v-model="form.description" :placeholder="t('autoCode.structChineseNameNote')" />
         </el-form-item>
         <el-form-item :label="t('autoCode.fileName')" prop="packageName">
-          <el-input v-model="form.packageName" :placeholder="t('autoCode.fileNameNote')" @blur="toLowerCase(form,'packageName')" />
+          <el-input v-model="form.packageName" :placeholder="t('autoCode.fileNameNote')" @blur="toLowerCaseFunc(form,'packageName')" />
         </el-form-item>
         <el-form-item>
           <template #label>

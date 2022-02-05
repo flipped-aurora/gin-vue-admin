@@ -13,6 +13,7 @@ type InitDB struct {
 	UserName string `json:"userName" binding:"required"` // 数据库用户名
 	Password string `json:"password"`                    // 数据库密码
 	DBName   string `json:"dbName" binding:"required"`   // 数据库名
+	Language string `json:"language",omitempty`          // DB initial langauge // added by mohamed hassan to support multilanguage
 }
 
 // MysqlEmptyDsn msyql 空数据库 建库链接

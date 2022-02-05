@@ -59,12 +59,13 @@
     "enterDBPort" : "请输入数据库端口",
     "dbUser" : "Username",
     "enterDBUser" : "请输入数据库用户名",
-    "dbPassword" : "Database Password",
+    "dbPassword" : "Password",
     "enterDBPassword" : "请输入数据库密码（没有则为空）",
     "dbName" : "DB Name",
     "enterDBName" : "请输入数据库名称",
     "initNow" : "立即初始化",
     "pleaseWait" : "正在初始化数据库，请稍候",
+    "language" : "语",
     "" : ""
   },
   "authority" : {
@@ -256,6 +257,27 @@
     "portValue" : "端口值",
     "ossType": "Oss类型",
     "multiLogin" : "多点登录拦截",
+    "" : ""
+  },
+  "layout" : 
+  {
+    "currentRole" : "当前角色：",
+    "switchTo" : "切换为：",
+    "personalInfo" : "个人信息",
+    "logout" : "登 出",
+    "loading" : "正在加载中",
+    "" : ""
+  },
+  "historyComponent" : {
+    "closeAll" : "关闭所有",
+    "closeLeft" : "关闭左侧",
+    "closeRight" : "关闭右侧",
+    "closeOther" : "关闭其他",
+    "" : ""
+  }, 
+  "setting" : {
+    "simpleWhite" : "简约白",
+    "businessBlack" : "商务黑",
     "" : ""
   }
 }

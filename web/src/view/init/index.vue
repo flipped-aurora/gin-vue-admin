@@ -21,6 +21,15 @@
       </div>
       <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
         <el-form ref="formRef" :model="form" label-width="130px">
+          <!-- added by mohamed hassan to support multilangauge -->
+          <el-form-item :label="t('init.language')">
+            <el-select v-model="form.language" :placeholder="t('general.pleaseSelect')" @change="changeLanguage">
+              <el-option key="en" label="English" value="en"><img src="@/assets/flags/en.svg" class="img">English</el-option>
+              <el-option key="zh" label="中文" value="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-option>
+              <el-option key="ar" label="العربية" value="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-option>
+            </el-select>
+          </el-form-item>
+          <!-- end of adding -->
           <el-form-item :label="t('init.dbType')">
             <el-select v-model="form.dbType" :placeholder="t('general.pleaseSelect')" @change="changeDB">
               <el-option key="mysql" label="MySQL" value="mysql" />
@@ -69,6 +78,8 @@ import { ElLoading, ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
+const i18n = useI18n() // added by mohamed hassan to support multilanguage
+
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const router = useRouter()
@@ -90,7 +101,8 @@ const form = reactive({
   port: '3306',
   userName: 'root',
   password: '',
-  dbName: 'gva'
+  dbName: 'gva',
+  language: 'en', // added by mohamed hassan to support multilanguage
 })
 const changeDB = (val) => {
   switch (val) {
@@ -147,9 +159,19 @@ const onSubmit = async() => {
     loading.close()
   }
 }
+// added by mohamed hassan to support multilanguage
+const changeLanguage = (val) => {
+  i18n.locale.value = val
+}
 </script>
 
 <style lang="scss" scoped>
+img {
+  padding-right: 20px;
+  width: 20px;
+  height: 20px;
+}
+
 .init_page{
   margin: 0;
   padding: 0;

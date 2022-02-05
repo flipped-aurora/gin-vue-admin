@@ -3,7 +3,7 @@
     <el-button type="primary" class="drawer-container" icon="setting" @click="showSettingDrawer" />
     <el-drawer
       v-model="drawer"
-      title="系统配置"
+      :title="t('system.systemConfig')"
       :direction="direction"
       :before-close="handleClose"
     >
@@ -19,7 +19,7 @@
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg">
                 </div>
                 <p>
-                  简约白
+                  {{ t('setting.simpleWhite') }}
                 </p>
               </div>
               <div class="item" @click="changeMode('dark')">
@@ -30,7 +30,7 @@
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg">
                 </div>
                 <p>
-                  商务黑
+                  {{ t('setting.businessBlack') }}
                 </p>
               </div>
             </div>
@@ -51,6 +51,10 @@ export default {
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/pinia/modules/user'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 const drawer = ref(false)
 const direction = ref('rtl')
 

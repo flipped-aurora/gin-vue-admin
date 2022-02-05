@@ -30,6 +30,17 @@ func (i *DBApi) InitDB(c *gin.Context) {
 		response.FailWithMessage("参数校验不通过", c)
 		return
 	}
+
+	// added by mohamed hassan to allow multilanguage support
+	if dbInfo.Language != "" {
+		if dbInfo.Language == "en" || dbInfo.Language == "zh" || dbInfo.Language == "ar" {
+			global.GVA_CONFIG.Language = dbInfo.Language // set intial database and system langauge here
+		} else {
+			global.GVA_CONFIG.Language = "en" // set defualt language to initialize database and system to english
+		}
+	}
+	// end of adding
+
 	if err := initDBService.InitDB(dbInfo); err != nil {
 		global.GVA_LOG.Error("自动创建数据库失败!", zap.Error(err))
 		response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)

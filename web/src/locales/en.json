@@ -16,7 +16,7 @@
     "editSuccess" : "Edited successfully",
     "copySuccess" : "Copied successfully!",
     "deleteSuccess": "Deleted successfully!",
-    "setupSuccess" : "Set up successfully!!",
+    "setupSuccess" : "Setup successfully!!",
     "undeleted" : "Undeleted",
     "date" : "Date",
     "hint" : "Hint",
@@ -45,7 +45,7 @@
   },
   "init": {
     "note": "Initialization notice",
-    "note1": "1.You should be familiar with Vue AND GoLang.",
+    "note1": "1.You should be familiar with Vue And GoLang.",
     "note2": "2.Please confirm that you have read the official documents.",
     "note3": "3.Please confirm that you understand the subsequent configuration process.",
     "note4": "Note: The development team does not provide free services for the content written in the document.",
@@ -65,6 +65,7 @@
     "enterDBName": "Please enter database name",
     "initNow": "Initialize Now",
     "pleaseWait": "Initializing database, please wait",
+    "language" : "Language",
     "" : ""
   },
   "authority" : {
@@ -256,6 +257,27 @@
     "portValue" : "Port Value",
     "ossType": "Oss Type",
     "multiLogin" : "Multi-login interception",
+    "" : ""
+  },
+  "layout" : 
+  {
+    "currentRole" : "Current Role: ",
+    "switchTo" : "Switch To: ",
+    "personalInfo" : "Personal Information",
+    "logout" : "Logout",
+    "loading" : "Loading",
+    "" : ""
+  },
+  "historyComponent" : {
+    "closeAll" : "Close All",
+    "closeLeft" : "Close Left",
+    "closeRight" : "Close Right",
+    "closeOther" : "Close Other",
+    "" : ""
+  }, 
+  "setting" : {
+    "simpleWhite" : "Light Mode",
+    "businessBlack" : "Dark Mode",
     "" : ""
   }
 }

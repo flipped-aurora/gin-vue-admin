@@ -3,7 +3,7 @@
     <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="addUser">新增用户</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="addUser">新增用户</el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column align="left" label="头像" min-width="50">
@@ -47,17 +47,17 @@
         </el-table-column>
         <el-table-column align="left" label="操作" min-width="150">
           <template #default="scope">
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover v-model:visible="scope.row.visible" placement="top" width="160" trigger="click">
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteUserFunc(scope.row)">确定</el-button>
+                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" size="small" @click="deleteUserFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="magic-stick" size="mini" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
+            <el-button type="text" icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
       </el-table>

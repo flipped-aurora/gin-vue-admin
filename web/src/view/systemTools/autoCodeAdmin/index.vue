@@ -2,7 +2,7 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="goAutoCode(null)">新增</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="goAutoCode(null)">新增</el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column
@@ -21,14 +21,14 @@
             <el-tag
               v-if="scope.row.flag"
               type="danger"
-              size="mini"
+              size="small"
               effect="dark"
             >
               已回滚
             </el-tag>
             <el-tag
               v-else
-              size="mini"
+              size="small"
               type="success"
               effect="dark"
             >
@@ -39,9 +39,9 @@
         <el-table-column align="left" label="操作" min-width="180">
           <template #default="scope">
             <div>
-              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row)">回滚</el-button>
-              <el-button size="mini" type="text" @click="goAutoCode(scope.row)">复用</el-button>
-              <el-button size="mini" type="text" @click="deleteRow(scope.row)">删除</el-button>
+              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row)">回滚</el-button>
+              <el-button size="small" type="text" @click="goAutoCode(scope.row)">复用</el-button>
+              <el-button size="small" type="text" @click="deleteRow(scope.row)">删除</el-button>
             </div>
           </template>
         </el-table-column>

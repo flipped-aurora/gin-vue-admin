@@ -68,11 +68,17 @@
     background-color: #fff;
     border-radius: 2px;
     margin-bottom: 12px;
-    .el-form {
-        .el-form-item {
-            padding-right: 28px;
-        }
+}
+
+.el-form--inline{
+    .el-form-item{
+        margin-right: 24px;
     }
+}
+
+.el-input__inner{
+    height: 40px;
+    line-height: 40px;
 }
 
 .gva-form-box {
@@ -145,8 +151,14 @@
     }
 }
 
-.el-button--mini {
+.el-button--small {
     min-height: 32px;
+    font-size: 12px !important;
+    line-height: 32px;
+}
+
+.el-checkbox{
+    height: auto;
 }
 
 .el-button {

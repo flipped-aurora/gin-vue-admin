@@ -276,6 +276,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 	_ = c.ShouldBindJSON(&user)
 	user.Username = ""
 	user.Password = ""
+	user.AuthorityId = ""
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -301,6 +302,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 	_ = c.ShouldBindJSON(&user)
 	user.Username = ""
 	user.Password = ""
+	user.AuthorityId = ""
 	user.ID = utils.GetUserID(c)
 	if err, ReqUser := userService.SetUserInfo(user); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))

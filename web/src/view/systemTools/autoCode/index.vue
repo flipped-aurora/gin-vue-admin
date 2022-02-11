@@ -39,7 +39,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button size="mini" type="primary" @click="getColumnFunc">使用此表创建</el-button>
+              <el-button size="small" type="primary" @click="getColumnFunc">使用此表创建</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -84,7 +84,7 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" @click="editAndAddField()">新增Field</el-button>
+        <el-button size="small" type="primary" @click="editAndAddField()">新增Field</el-button>
       </div>
       <el-table :data="form.fields">
         <el-table-column align="left" type="index" label="序列" width="100" />
@@ -100,19 +100,19 @@
         <el-table-column align="left" label="操作" width="300">
           <template #default="scope">
             <el-button
-              size="mini"
+              size="small"
               type="text"
               icon="edit"
               @click="editAndAddField(scope.row)"
             >编辑</el-button>
             <el-button
-              size="mini"
+              size="small"
               type="text"
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
             >上移</el-button>
             <el-button
-              size="mini"
+              size="small"
               type="text"
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
@@ -120,11 +120,11 @@
             <el-popover v-model:visible="scope.row.visible" placement="top">
               <p>确定删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteField(scope.$index)">确定</el-button>
+                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" size="small" @click="deleteField(scope.$index)">确定</el-button>
               </div>
               <template #reference>
-                <el-button size="mini" type="text" icon="delete">删除</el-button>
+                <el-button size="small" type="text" icon="delete" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -132,8 +132,8 @@
       </el-table>
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-content-flex-end auto-btn-list">
-        <el-button size="mini" type="primary" @click="enterForm(true)">预览代码</el-button>
-        <el-button size="mini" type="primary" @click="enterForm(false)">生成代码</el-button>
+        <el-button size="small" type="primary" @click="enterForm(true)">预览代码</el-button>
+        <el-button size="small" type="primary" @click="enterForm(false)">生成代码</el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
@@ -141,8 +141,8 @@
       <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="mini" @click="closeDialog">取 消</el-button>
-          <el-button size="mini" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -151,8 +151,8 @@
       <template #title>
         <div class="previewCodeTool">
           <p>操作栏：</p>
-          <el-button size="mini" type="primary" @click="selectText">全选</el-button>
-          <el-button size="mini" type="primary" @click="copy">复制</el-button>
+          <el-button size="small" type="primary" @click="selectText">全选</el-button>
+          <el-button size="small" type="primary" @click="copy">复制</el-button>
         </div>
       </template>
       <PreviewCodeDialog v-if="previewFlag" ref="previewNode" :preview-code="preViewCode" />

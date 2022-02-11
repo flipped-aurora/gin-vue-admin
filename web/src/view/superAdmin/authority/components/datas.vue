@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="clearflex" style="margin:18px">
-      <el-button class="fl-right" size="mini" type="primary" @click="authDataEnter">确 定</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="all">全选</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="self">本角色</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="selfAndChildren">本角色及子角色</el-button>
+      <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">确 定</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="all">全选</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="self">本角色</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="selfAndChildren">本角色及子角色</el-button>
     </div>
     <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
       <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>

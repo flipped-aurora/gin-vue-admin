@@ -2,7 +2,7 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="addMenu('0')">新增根菜单</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="addMenu('0')">新增根菜单</el-button>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -36,19 +36,19 @@
         <el-table-column align="left" fixed="right" label="操作" width="300">
           <template #default="scope">
             <el-button
-              size="mini"
+              size="small"
               type="text"
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >添加子菜单</el-button>
             <el-button
-              size="mini"
+              size="small"
               type="text"
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >编辑</el-button>
             <el-button
-              size="mini"
+              size="small"
               type="text"
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
@@ -110,7 +110,7 @@
         </el-form-item>
         <el-form-item label="文件路径" prop="component" style="width:60%">
           <el-input v-model="form.component" autocomplete="off" />
-          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button size="mini" @click="form.component = 'view/routerHolder.vue'">点我设置</el-button>
+          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">点我设置</el-button>
         </el-form-item>
         <el-form-item label="展示名称" prop="meta.title" style="width:30%">
           <el-input v-model="form.meta.title" autocomplete="off" />

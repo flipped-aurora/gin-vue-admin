@@ -10,7 +10,7 @@
     >
       <el-form-item label="Field名称" prop="fieldName">
         <el-input v-model="middleDate.fieldName" autocomplete="off" style="width:80%" />
-        <el-button size="mini" style="width:18%;margin-left:2%" @click="autoFill">自动填充</el-button>
+        <el-button size="small" style="width:18%;margin-left:2%" @click="autoFill">自动填充</el-button>
       </el-form-item>
       <el-form-item label="Field中文名" prop="fieldDesc">
         <el-input v-model="middleDate.fieldDesc" autocomplete="off" />

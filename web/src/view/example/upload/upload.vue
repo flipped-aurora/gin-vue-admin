@@ -11,7 +11,7 @@
           :show-file-list="false"
           class="upload-btn"
         >
-          <el-button size="mini" type="primary">普通上传</el-button>
+          <el-button size="small" type="primary">普通上传</el-button>
         </el-upload>
         <upload-image
           v-model:imageUrl="imageUrl"

@@ -39,7 +39,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('router', ['asyncRouters']),
+    ...mapGetters('router', ['asyncRouters', 'routeMap']),
     ...mapGetters('user', ['baseColor', 'activeColor', 'sideMode'])
   },
   watch: {
@@ -63,11 +63,11 @@ export default {
   },
   methods: {
     ...mapMutations('history', ['addHistory']),
-    selectMenuItem(index, _, ele) {
+    selectMenuItem(index) {
       const query = {}
       const params = {}
-      ele?.route?.parameters &&
-      ele.route.parameters.forEach(item => {
+      this.routeMap[index]?.parameters &&
+      this.routeMap[index].parameters.forEach(item => {
         if (item.type === 'query') {
           query[item.key] = item.value
         } else {

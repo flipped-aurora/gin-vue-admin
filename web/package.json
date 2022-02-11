@@ -10,11 +10,11 @@
         "fix-memory-limit": "cross-env LIMIT=4096 increase-memory-limit"
     },
     "dependencies": {
-        "@element-plus/icons": "0.0.11",
+        "@element-plus/icons-vue": "^0.2.7",
         "axios": "^0.19.2",
         "core-js": "^3.6.5",
         "echarts": "4.9.0",
-        "element-plus": "1.2.0-beta.6",
+        "element-plus": "2.0.1",
         "highlight.js": "^10.6.0",
         "marked": "^2.0.0",
         "mitt": "^3.0.0",

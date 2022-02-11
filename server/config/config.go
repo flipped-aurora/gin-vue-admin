@@ -27,4 +27,6 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	// 是否打开读写分离
+	OpenReadWriteSeparation bool `mapstructure:"open-read-write-separation" json:"open-read-write-separation" yaml:"open-read-write-separation"`
 }

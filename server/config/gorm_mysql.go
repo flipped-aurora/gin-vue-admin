@@ -2,6 +2,7 @@ package config
 
 type Mysql struct {
 	Path         string `mapstructure:"path" json:"path" yaml:"path"`                             // 服务器地址
+	Duty         string `mapstructure:"duty" json:"duty" yaml:"duty" enums:"read,write"`          // 职责
 	Port         string `mapstructure:"port" json:"port" yaml:"port"`                             // 端口
 	Config       string `mapstructure:"config" json:"config" yaml:"config"`                       // 高级配置
 	Dbname       string `mapstructure:"db-name" json:"dbname" yaml:"db-name"`                     // 数据库名

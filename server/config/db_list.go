@@ -3,6 +3,7 @@ package config
 type DB struct {
 	Disable      bool   `mapstructure:"disable" json:"disable" yaml:"disable"`
 	Type         string `mapstructure:"type" json:"type" yaml:"type"`
+	Duty         string `mapstructure:"duty" json:"duty" yaml:"duty"` // 职责
 	AliasName    string `mapstructure:"alias-name" json:"alias-name" yaml:"alias-name"`
 	Path         string `mapstructure:"path" json:"path" yaml:"path"`                             // 服务器地址:端口
 	Port         string `mapstructure:"port" json:"port" yaml:"port"`                             //:端口

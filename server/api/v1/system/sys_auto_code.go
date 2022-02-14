@@ -35,10 +35,10 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 	}
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
-		global.GVA_LOG.Error("预览失败!", zap.Error(err))
-		response.FailWithMessage("预览失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.previewFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.previewFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
+		response.OkWithDetailed(gin.H{"autoCode": autoCode}, global.Translate("sys_auto_code.previewSuccess"), c)
 	}
 }
 
@@ -49,7 +49,7 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body system.AutoCodeStruct true "创建自动代码"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"general.createSuccss"}"
 // @Router /autoCode/createTemp [post]
 func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	var a system.AutoCodeStruct
@@ -61,9 +61,9 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	var apiIds []uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
-			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
+			global.GVA_LOG.Error(global.Translate("sys_auto_code.autoCreateFail"), zap.Error(err))
 			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
+			c.Writer.Header().Add("msg", url.QueryEscape(global.Translate("sys_auto_code.autoCreateFail")))
 			return
 		} else {
 			apiIds = ids
@@ -99,10 +99,10 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	dbs, err := autoCodeService.Database().GetDB()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	}
-	response.OkWithDetailed(gin.H{"dbs": dbs}, "获取成功", c)
+	response.OkWithDetailed(gin.H{"dbs": dbs}, global.Translate("general.getDataSuccess"), c)
 }
 
 // GetTables
@@ -117,10 +117,10 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
 	tables, err := autoCodeService.Database().GetTables(dbName)
 	if err != nil {
-		global.GVA_LOG.Error("查询table失败!", zap.Error(err))
-		response.FailWithMessage("查询table失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_auto_code.queryTablesFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_auto_code.queryTablesFail"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"tables": tables}, "获取成功", c)
+		response.OkWithDetailed(gin.H{"tables": tables}, global.Translate("general.getDataSuccess"), c)
 	}
 }
 
@@ -137,8 +137,8 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database().GetColumn(tableName, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	}
-	response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
+	response.OkWithDetailed(gin.H{"columns": columns}, global.Translate("general.getDataSuccess"), c)
 }

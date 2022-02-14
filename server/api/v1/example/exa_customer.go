@@ -31,10 +31,10 @@ func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 	customer.SysUserID = utils.GetUserID(c)
 	customer.SysUserAuthorityID = utils.GetUserAuthorityId(c)
 	if err := customerService.CreateExaCustomer(customer); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage("general.creationFailErr", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage("general.createSuccss", c)
 	}
 }
 
@@ -54,10 +54,10 @@ func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 		return
 	}
 	if err := customerService.DeleteExaCustomer(customer); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage("general.deletFailErr", c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage("general.deleteSuccess", c)
 	}
 }
 
@@ -81,10 +81,10 @@ func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 		return
 	}
 	if err := customerService.UpdateExaCustomer(&customer); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage("general.updateFailErr", c)
 	} else {
-		response.OkWithMessage("更新成功", c)
+		response.OkWithMessage("general.updateSuccess", c)
 	}
 }
 
@@ -105,10 +105,10 @@ func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 	}
 	err, data := customerService.GetExaCustomer(customer.ID)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage("general.getDataFailErr", c)
 	} else {
-		response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, "获取成功", c)
+		response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, "general.getDataSuccess", c)
 	}
 }
 
@@ -129,14 +129,14 @@ func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {
 	}
 	err, customerList, total := customerService.GetCustomerInfoList(utils.GetUserAuthorityId(c), pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage("general.getDataFailErr"+" "+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     customerList,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		}, "general.getDataSuccess", c)
 	}
 }

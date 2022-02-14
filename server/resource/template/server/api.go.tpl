@@ -24,16 +24,16 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.AutoCodeServiceGroup.{{.S
 // @accept application/json
 // @Produce application/json
 // @Param data body autocode.{{.StructName}} true "创建{{.StructName}}"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":global.Translate("general.getDataSuccess")}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} autocode.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}({{.Abbreviation}}); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+        global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage("general.creationFailErr", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage("general.createSuccss", c)
 	}
 }
 
@@ -50,10 +50,10 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 	var {{.Abbreviation}} autocode.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+        global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage("general.deletFailErr", c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage("general.deleteSuccess", c)
 	}
 }
 
@@ -90,10 +90,10 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 	var {{.Abbreviation}} autocode.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+        global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage("general.updateFailErr", c)
 	} else {
-		response.OkWithMessage("更新成功", c)
+		response.OkWithMessage("general.updateSuccess", c)
 	}
 }
 
@@ -110,8 +110,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 	var {{.Abbreviation}} autocode.{{.StructName}}
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
 	if err, re{{.Abbreviation}} := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+        global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage("general.queryFailErr", c)
 	} else {
 		response.OkWithData(gin.H{"re{{.Abbreviation}}": re{{.Abbreviation}}}, c)
 	}
@@ -124,20 +124,20 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 // @accept application/json
 // @Produce application/json
 // @Param data query autocodeReq.{{.StructName}}Search true "分页获取{{.StructName}}列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":global.Translate("general.getDataSuccess")}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
 	var pageInfo autocodeReq.{{.StructName}}Search
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
+	    global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+        response.FailWithMessage("general.getDataFailErr", c)
     } else {
         response.OkWithDetailed(response.PageResult{
             List:     list,
             Total:    total,
             Page:     pageInfo.Page,
             PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
+        }, "general.getDataSuccess", c)
     }
 }

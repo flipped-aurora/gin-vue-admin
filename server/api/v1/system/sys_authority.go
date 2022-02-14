@@ -31,12 +31,12 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		return
 	}
 	if err, authBack := authorityService.CreateAuthority(authority); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFailErr")+" "+err.Error(), c)
 	} else {
 		_ = menuService.AddMenuAuthority(systemReq.DefaultMenu(), authority.AuthorityId)
 		_ = casbinService.UpdateCasbin(authority.AuthorityId, systemReq.DefaultCasbin())
-		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
+		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, global.Translate("general.createSuccss"), c)
 	}
 }
 
@@ -60,10 +60,10 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 		return
 	}
 	if err, authBack := authorityService.CopyAuthority(copyInfo); err != nil {
-		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
-		response.FailWithMessage("拷贝失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.copyFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.copyFailErr")+" "+err.Error(), c)
 	} else {
-		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, "拷贝成功", c)
+		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, global.Translate("general.copySuccess"), c)
 	}
 }
 
@@ -83,10 +83,10 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 		return
 	}
 	if err := authorityService.DeleteAuthority(&authority); err != nil { // 删除角色之前需要判断是否有用户正在使用此角色
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deletFailErr")+" "+err.Error(), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}
 }
 
@@ -106,10 +106,10 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 		return
 	}
 	if err, authority := authorityService.UpdateAuthority(auth); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.updateFailErr")+" "+err.Error(), c)
 	} else {
-		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authority}, "更新成功", c)
+		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authority}, global.Translate("general.updateSuccess"), c)
 	}
 }
 
@@ -129,15 +129,15 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 		return
 	}
 	if err, list, total := authorityService.GetAuthorityInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr")+" "+err.Error(), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		}, global.Translate("general.getDataSuccess"), c)
 	}
 }
 
@@ -157,9 +157,9 @@ func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
 		return
 	}
 	if err := authorityService.SetDataAuthority(auth); err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
-		response.FailWithMessage("设置失败"+err.Error(), c)
+		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.setupFail")+" "+err.Error(), c)
 	} else {
-		response.OkWithMessage("设置成功", c)
+		response.OkWithMessage(global.Translate("general.setupSuccess"), c)
 	}
 }

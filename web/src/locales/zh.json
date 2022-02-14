@@ -8,7 +8,7 @@
     "delete" : "删除",
     "copy" : "拷贝",
     "cancel" : "取消",
-    "sure" : "确定",
+    "confirm" : "确定",
     "close" : "取 消",
     "selectAll" : "全选",
     "addSuccess" : "添加成功!",
@@ -39,7 +39,7 @@
     "errUserName": "请输入正确的用户名",
     "errPassword": "请输入正确的密码",
     "errVerificationCode": "验证码格式不正确",
-    "errLoging": "请正确填写登录信息",
+    "errLogin": "请正确填写登录信息",
     "errInit" : "已配置数据库信息，无法初始化",
     "language": "Languages"
   },

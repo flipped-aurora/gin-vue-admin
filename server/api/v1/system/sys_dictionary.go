@@ -24,10 +24,10 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
 	if err := dictionaryService.CreateSysDictionary(dictionary); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage(global.Translate("general.createSuccss"), c)
 	}
 }
 
@@ -43,10 +43,10 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
 	if err := dictionaryService.DeleteSysDictionary(dictionary); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}
 }
 
@@ -62,10 +62,10 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
 	_ = c.ShouldBindJSON(&dictionary)
 	if err := dictionaryService.UpdateSysDictionary(&dictionary); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
 	} else {
-		response.OkWithMessage("更新成功", c)
+		response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 	}
 }
 
@@ -81,10 +81,10 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
 	_ = c.ShouldBindQuery(&dictionary)
 	if err, sysDictionary := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, "查询成功", c)
+		response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, global.Translate("general.querySuccess"), c)
 	}
 }
 
@@ -104,14 +104,14 @@ func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 		return
 	}
 	if err, list, total := dictionaryService.GetSysDictionaryInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		}, global.Translate("general.getDataSuccess"), c)
 	}
 }

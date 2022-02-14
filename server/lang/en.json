@@ -1,0 +1,104 @@
+{
+    "general" : {
+        "modifyFail" : "Modification failed!",
+        "modifySuccess" : "Modified successfully",
+        "getDataFail" : "Getting data failed!",
+        "getDataFailErr" : "Getting data failed",
+        "getDataSuccess": "Getting data successfully",
+        "deleteFail" : "Deletion failed!",
+        "deletFailErr" : "Delete failed",
+        "deleteSuccess" : "Deleted successfully",
+        "setupFail" : "Setup failed",
+        "setupFailErr" : "Setup failed!",
+        "setupSuccess" : "Set up successfully",
+        "creationFail" : "Creation failed!",
+        "creationFailErr" : "Creation failed",
+        "createSuccss" : "Created successfully",
+        "updateFail" : "Update failed!",
+        "updateFailErr" : "Update failed",
+        "updateSuccess" : "Updated successfully",
+        "queryFail" : "Query failed!",
+        "queryFailErr" : "Query failed",
+        "querySuccess" : "Query successfully",
+        "" : ""
+    },
+    "init" : {
+        "dbAlreadyExist" : "Database configuration already exists!!",
+        "initDB" : "Go to initialize the database",
+        "dbAlreadyInit" : "Database already initialized!"
+    },
+    "sys_user" : {
+        "vCodeErr" : "Verification code error",
+        "loginFail" : "Login failed! Username does not exist or password is incorrect!",
+        "userNameOrPasswordError" : "Username does not exist or password is incorrect",
+        "getTokenFail" : "Failed to get token!",
+        "getTokenErr" : "Failed to get token",
+        "loginSuccess" : "Logged in successfully",
+        "loginStatusFail" : "Failed to set the login status!",
+        "loginStatusFailErr" : "Failed to set the login status",
+        "jwtInvalidationFailed" : "JWT invalidation failed!",
+        "registrationFail" : "Registration failed!",
+        "registrationFailErr" : "Registration failed",
+        "registrationSuccess" : "Registration success",
+        "changePWErr" : "The modification failed, the original password does not match the current account",
+        "deleteUserFail" : "Delete user failed",
+        "resetPWFail" : "Reset password failed!",
+        "resetPWFailErr" : "Reset password failed",
+        "resetPWSuccess" : "Password reset successfully",
+        "" : ""
+    }, 
+    "sys_captcha" : {
+        "vCodeFail" : "Obtaining verification code failed!",
+        "vCodeFailErr" : "Obtaining verification code failed",
+        "vCodeSuccess" : "Verification code obtained successfully",
+        "" : ""
+    }, 
+    "sys_system" : {
+        "rebootFail" : "Failed to reboot the system!",
+        "rebootFailErr" : "Failed to reboot the system",
+        "rebootSuccess" : "Reboot the system successfully",
+        "" : ""
+    }, 
+    "sys_authority" : {
+        "copyFail" : "Copy failed!",
+        "copyFailErr" : "Copy failed",
+        "copySuccess" : "Copy successfully",
+        "" : ""
+    },
+    "sys_auto_code_history" : {
+        "rollbackSuccess" : "Rolledback successfully"
+    },
+    "sys_auto_code" : {
+        "previewFail" : "Preview failed!",
+        "previewFailErr" : "Preview failed",
+        "previewSuccess" : "Previewed successfully",
+        "autoCreateFail" : "Automatic creation failed! Please clear the junk data yourself!",
+        "queryTablesFail" : "Failed to query tables",
+        "" : ""
+    },
+    "sys_initdb" : {
+        "paramVerifyFail" : "Parameter verification failed!",
+        "paramVerifyFailErr" : "Parameter verification failed",
+        "autoCreateDBFail" : "Automatic database creation failed!",
+        "autoCreateDBFailErr" : "Automatic database creation failed, please check the background log and initialize it after checking",
+        "autoCreateDBSuccess" : "Automatic database created successfully",
+        "" : ""
+    },
+    "sys_jwt_blacklist" : {
+        "jwtInvalidationFailedErr" : "JWT invalidation failed",
+        "jwtInvalidatedSuccess" : "jwt was invalidated successfully"
+    },
+    "sys_menu" : {
+        "addFail" : "Adding failed!",
+        "addFailErr" : "Adding failed",
+        "addSuccess" : "Added successfully"
+    },
+    "sys_operation_record" : {
+        "batchDeleteFail" : "Batch delete failed!",
+        "batchDeleteFailErr" : "Batch delete failed",
+        "batchDeleteSuccess" : "Batch delete successfully"
+    }
+}
+
+
+

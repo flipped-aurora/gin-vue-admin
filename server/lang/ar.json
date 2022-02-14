@@ -1,0 +1,7 @@
+{
+    "init" : {
+        "dbAlreadyExist" : "已存在数据库配置",
+        "initDB" : "前往初始化数据库",
+        "dbAlreadyInit" : "数据库无需初始化"
+        }
+}

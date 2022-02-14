@@ -8,7 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/flipped-aurora/gin-vue-admin/server/router"
 	"github.com/gin-gonic/gin"
-	"github.com/swaggo/gin-swagger"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
@@ -33,6 +33,10 @@ func Routers() *gin.Engine {
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
 	//Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
 	global.GVA_LOG.Info("use middleware cors")
+	// added by mohamed hassan to allow multilanguage handling
+	global.GVA_LOG.Info("use middleware translator")
+	Router.Use(middleware.LanguageHandler()) // add global language handler middleware
+	// end of adding
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Info("register swagger handler")
 	// 方便统一添加路由组前缀 多服务器上线使用

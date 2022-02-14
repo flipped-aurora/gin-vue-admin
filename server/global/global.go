@@ -4,6 +4,7 @@ import (
 	"sync"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/timer"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/translate"
 	"github.com/songzhibin97/gkit/cache/local_cache"
 
 	"golang.org/x/sync/singleflight"
@@ -30,6 +31,8 @@ var (
 
 	BlackCache local_cache.Cache
 	lock       sync.RWMutex
+
+	GVA_TRANSLATOR translate.Translator // added by mohamed hassan to support multilanguage
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db
@@ -48,4 +51,14 @@ func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 		panic("db no init")
 	}
 	return db
+}
+
+// added by mohamed hassan to support multilanguage
+func Translate(msg string) string {
+	if GVA_TRANSLATOR.IsInit {
+		message := GVA_TRANSLATOR.TranslateMessage(msg)
+		return message
+	}
+
+	return msg
 }

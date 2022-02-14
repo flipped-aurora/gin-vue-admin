@@ -49,11 +49,11 @@ func (u *FileUploadAndDownloadApi) DeleteFile(c *gin.Context) {
 	var file example.ExaFileUploadAndDownload
 	_ = c.ShouldBindJSON(&file)
 	if err := fileUploadAndDownloadService.DeleteFile(file); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage("general.deletFailErr", c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage("general.deleteSuccess", c)
 }
 
 // @Tags ExaFileUploadAndDownload
@@ -69,14 +69,14 @@ func (u *FileUploadAndDownloadApi) GetFileList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&pageInfo)
 	err, list, total := fileUploadAndDownloadService.GetFileRecordInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage("general.getDataFailErr", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		}, "general.getDataSuccess", c)
 	}
 }

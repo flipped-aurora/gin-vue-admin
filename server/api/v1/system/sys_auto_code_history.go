@@ -28,7 +28,7 @@ func (a *AutoCodeHistoryApi) First(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	response.OkWithDetailed(gin.H{"meta": data}, "获取成功", c)
+	response.OkWithDetailed(gin.H{"meta": data}, global.Translate("general.getDataSuccess"), c)
 }
 
 // Delete
@@ -45,11 +45,11 @@ func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 	_ = c.ShouldBindJSON(&info)
 	err := autoCodeHistoryService.Delete(&info)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
 		return
 	}
-	response.OkWithMessage("删除成功", c)
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
 // RollBack
@@ -68,7 +68,7 @@ func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	response.OkWithMessage("回滚成功", c)
+	response.OkWithMessage(global.Translate("sys_auto_code_history.rollbackSuccess"), c)
 }
 
 // GetList
@@ -85,8 +85,8 @@ func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
 	_ = c.ShouldBindJSON(&search)
 	list, total, err := autoCodeHistoryService.GetList(search.PageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
 	response.OkWithDetailed(response.PageResult{
@@ -94,5 +94,5 @@ func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
 		Total:    total,
 		Page:     search.Page,
 		PageSize: search.PageSize,
-	}, "获取成功", c)
+	}, global.Translate("general.getDataSuccess"), c)
 }

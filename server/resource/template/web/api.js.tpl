@@ -6,7 +6,7 @@ import service from '@/utils/request'
 // @accept application/json
 // @Produce application/json
 // @Param data body model.{{.StructName}} true "创建{{.StructName}}"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":global.Translate("general.getDataSuccess")}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 export const create{{.StructName}} = (data) => {
   return service({
@@ -86,7 +86,7 @@ export const find{{.StructName}} = (params) => {
 // @accept application/json
 // @Produce application/json
 // @Param data query request.PageInfo true "分页获取{{.StructName}}列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":global.Translate("general.getDataSuccess")}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 export const get{{.StructName}}List = (params) => {
   return service({

@@ -17,12 +17,24 @@ export const useUserStore = defineStore('user', () => {
     baseColor: '#fff'
   })
   const token = ref(window.localStorage.getItem('token') || '')
+  const language = ref(window.localStorage.getItem('langauge') || 'en') // added by mohamed hassan to allow store selected language for multilanguage support.
+
   const setUserInfo = (val) => {
     userInfo.value = val
   }
 
   const setToken = (val) => {
     token.value = val
+  }
+
+  // added by mohame hassan to allow store selected language for multilanguage support.
+  const setLanguage = (val) => {
+    console.log('setLanguage called with value: ' + val)
+    language.value = val
+  }
+
+  const getLanguage = () => {
+    return language.value
   }
 
   const NeedInit = () => {
@@ -117,11 +129,14 @@ export const useUserStore = defineStore('user', () => {
   return {
     userInfo,
     token,
+    language, // added by mohame hassan to allow store selected language for multilanguage support.
     NeedInit,
     ResetUserInfo,
     GetUserInfo,
     LoginIn,
     LoginOut,
+    setLanguage, // added by mohame hassan to allow store selected language for multilanguage support.
+    getLanguage, // added by mohame hassan to allow store selected language for multilanguage support.
     changeSideMode,
     mode,
     sideMode,

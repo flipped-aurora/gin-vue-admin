@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/translate"
 )
 
 //go:generate go env -w GO111MODULE=on
@@ -19,6 +20,10 @@ import (
 // @name x-token
 // @BasePath /
 func main() {
+	// added by mohamed hassan to support multilanguage
+	global.GVA_TRANSLATOR = translate.Translator{}
+	global.GVA_TRANSLATOR.InitTranslator(global.GVA_CONFIG.Language)
+	// end of adding
 	global.GVA_VP = core.Viper()      // 初始化Viper
 	global.GVA_LOG = core.Zap()       // 初始化zap日志库
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库

@@ -27,10 +27,10 @@ func (autoCodeExampleApi *AutoCodeExampleApi) CreateAutoCodeExample(c *gin.Conte
 	var autoCodeExample autocode.AutoCodeExample
 	_ = c.ShouldBindJSON(&autoCodeExample)
 	if err := autoCodeExampleService.CreateAutoCodeExample(autoCodeExample); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage(global.Translate("general.createSuccss"), c)
 	}
 }
 
@@ -46,10 +46,10 @@ func (autoCodeExampleApi *AutoCodeExampleApi) DeleteAutoCodeExample(c *gin.Conte
 	var autoCodeExample autocode.AutoCodeExample
 	_ = c.ShouldBindJSON(&autoCodeExample)
 	if err := autoCodeExampleService.DeleteAutoCodeExample(autoCodeExample); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}
 }
 
@@ -65,10 +65,10 @@ func (autoCodeExampleApi *AutoCodeExampleApi) UpdateAutoCodeExample(c *gin.Conte
 	var autoCodeExample autocode.AutoCodeExample
 	_ = c.ShouldBindJSON(&autoCodeExample)
 	if err := autoCodeExampleService.UpdateAutoCodeExample(&autoCodeExample); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
+		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
 	} else {
-		response.OkWithMessage("更新成功", c)
+		response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 	}
 }
 
@@ -88,10 +88,10 @@ func (autoCodeExampleApi *AutoCodeExampleApi) FindAutoCodeExample(c *gin.Context
 		return
 	}
 	if err, reAutoCodeExample := autoCodeExampleService.GetAutoCodeExample(autoCodeExample.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"reAutoCodeExample": reAutoCodeExample}, "查询成功", c)
+		response.OkWithDetailed(gin.H{"reAutoCodeExample": reAutoCodeExample}, global.Translate("general.querySuccess"), c)
 	}
 }
 
@@ -107,14 +107,14 @@ func (autoCodeExampleApi *AutoCodeExampleApi) GetAutoCodeExampleList(c *gin.Cont
 	var pageInfo autocodeReq.AutoCodeExampleSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := autoCodeExampleService.GetAutoCodeExampleInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		}, global.Translate("general.getDataSuccess"), c)
 	}
 }

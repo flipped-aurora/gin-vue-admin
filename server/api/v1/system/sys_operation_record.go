@@ -25,10 +25,10 @@ func (s *OperationRecordApi) CreateSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord system.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
 	if err := operationRecordService.CreateSysOperationRecord(sysOperationRecord); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithMessage(global.Translate("general.createSuccss"), c)
 	}
 }
 
@@ -44,10 +44,10 @@ func (s *OperationRecordApi) DeleteSysOperationRecord(c *gin.Context) {
 	var sysOperationRecord system.SysOperationRecord
 	_ = c.ShouldBindJSON(&sysOperationRecord)
 	if err := operationRecordService.DeleteSysOperationRecord(sysOperationRecord); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
 	} else {
-		response.OkWithMessage("删除成功", c)
+		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}
 }
 
@@ -63,10 +63,10 @@ func (s *OperationRecordApi) DeleteSysOperationRecordByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	_ = c.ShouldBindJSON(&IDS)
 	if err := operationRecordService.DeleteSysOperationRecordByIds(IDS); err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
+		global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFailErr"), c)
 	} else {
-		response.OkWithMessage("批量删除成功", c)
+		response.OkWithMessage(global.Translate("sys_operation_record.batchDeleteSuccess"), c)
 	}
 }
 
@@ -86,10 +86,10 @@ func (s *OperationRecordApi) FindSysOperationRecord(c *gin.Context) {
 		return
 	}
 	if err, resysOperationRecord := operationRecordService.GetSysOperationRecord(sysOperationRecord.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"resysOperationRecord": resysOperationRecord}, "查询成功", c)
+		response.OkWithDetailed(gin.H{"resysOperationRecord": resysOperationRecord}, global.Translate("general.querySuccess"), c)
 	}
 }
 
@@ -105,14 +105,14 @@ func (s *OperationRecordApi) GetSysOperationRecordList(c *gin.Context) {
 	var pageInfo systemReq.SysOperationRecordSearch
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := operationRecordService.GetSysOperationRecordInfoList(pageInfo); err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:     list,
 			Total:    total,
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
-		}, "获取成功", c)
+		}, global.Translate("general.getDataSuccess"), c)
 	}
 }

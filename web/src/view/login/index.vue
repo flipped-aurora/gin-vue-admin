@@ -245,11 +245,14 @@ const checkInit = async() => {
 }
 
 const handleSetLanguage = (lang) => {
-  console.log('handleSetLanguage() called with value: ' + lang)
+  // console.log('handleSetLanguage() called with value: ' + lang)
   i18n.locale.value = lang
 
+  userStore.setLanguage(lang)
+
+  // console.log('userStore handleSetLanguage() called with value: ' + userStore.getLanguage())
+
   Cookies.set('language', lang)
-  // this.$store.dispatch('setLanguage', lang)
 
   // if (lang === 'ar') {
   //   console.log('Arabic language selected changing to RTL')

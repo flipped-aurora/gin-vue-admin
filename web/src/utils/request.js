@@ -40,6 +40,7 @@ service.interceptors.request.use(
       'Content-Type': 'application/json',
       'x-token': userStore.token,
       'x-user-id': userStore.userInfo.ID,
+      'Accept-Language': userStore.language, // added by mohame hassan to allow store selected language for multilanguage support.
       ...config.headers
     }
     return config

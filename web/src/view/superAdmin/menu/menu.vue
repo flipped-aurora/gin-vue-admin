@@ -25,7 +25,7 @@
         </el-table-column>
         <el-table-column align="left" label="图标" min-width="140" prop="authorityName">
           <template #default="scope">
-            <div class="icon-column">
+            <div v-if="scope.row.meta.icon" class="icon-column">
               <el-icon>
                 <component :is="scope.row.meta.icon" />
               </el-icon>

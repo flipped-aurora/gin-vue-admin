@@ -1,7 +1,7 @@
 <template>
   <el-sub-menu ref="subMenu" :index="routerInfo.name">
     <template #title>
-      <el-icon>
+      <el-icon v-if="routerInfo.meta.icon">
         <component :is="routerInfo.meta.icon" />
       </el-icon>
       <span>{{ routerInfo.meta.title }}</span>

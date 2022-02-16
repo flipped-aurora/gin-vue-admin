@@ -151,6 +151,8 @@
     "avatar" : "Avatar",
     "userName" : "Username",
     "nickName" : "Nickname",
+	"phone" : "Phone",
+	"email" : "E-Mail",
     "userRole" : "User Role",
     "deleteUserConfrim" : "Are you sure you want to delete this user",
     "resetPassword" : "Reset Password",

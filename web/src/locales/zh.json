@@ -151,6 +151,8 @@
     "avatar" : "头像",
     "userName" : "用户名",
     "nickName" : "昵称",
+	"phone" : "手机号",
+	"email" : "邮箱",
     "userRole" : "用户角色",
     "deleteUserConfrim" : "确定要删除此用户吗",
     "resetPassword" : "重置密码",

@@ -22,13 +22,13 @@
         </el-form-item>
         <el-form-item>
           <el-button
-            size="mini"
+            size="small"
             type="primary"
             icon="search"
             @click="onSubmit"
           >查询</el-button>
           <el-button
-            size="mini"
+            size="small"
             icon="refresh"
             @click="onReset"
           >重置</el-button>
@@ -38,7 +38,7 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button
-          size="mini"
+          size="small"
           type="primary"
           icon="plus"
           @click="openDialog"
@@ -83,13 +83,13 @@
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
             <el-button
-              size="mini"
+              size="small"
               icon="document"
               type="text"
               @click="toDetile(scope.row)"
             >详情</el-button>
             <el-button
-              size="mini"
+              size="small"
               icon="edit"
               type="text"
               @click="updateSysDictionaryFunc(scope.row)"
@@ -102,13 +102,13 @@
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px">
                 <el-button
-                  size="mini"
+                  size="small"
                   type="text"
                   @click="scope.row.visible = false"
                 >取消</el-button>
                 <el-button
                   type="primary"
-                  size="mini"
+                  size="small"
                   @click="deleteSysDictionaryFunc(scope.row)"
                 >确定</el-button>
               </div>
@@ -116,8 +116,9 @@
                 <el-button
                   type="text"
                   icon="delete"
-                  size="mini"
+                  size="small"
                   style="margin-left: 10px"
+                  @click="scope.row.visible = true"
                 >删除</el-button>
               </template>
             </el-popover>

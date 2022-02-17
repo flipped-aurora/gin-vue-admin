@@ -22,9 +22,11 @@
 		"setupFail": "فشل الإعداد",
 		"setupFailErr": "فشل الإعداد!",
 		"setupSuccess": "تم الإعداد بنجاح",
+		"tabelDataInitFail": "فشل تهيئة بيانات الجدول!",
 		"updateFail": "فشل التحديث!",
 		"updateFailErr": "فشل التحديث",
-		"updateSuccess": "تم التحديث بنجاح"
+		"updateSuccess": "تم التحديث بنجاح",
+		"viewCreateFail": "فشل في إنشاء العرض!"
 	},
 	"sys_authority": {
 		"copyFail": "فشل النسخ!",
@@ -92,8 +94,33 @@
 		"vCodeErr": "رمز التحقق غير صحيح"
 	},
 	"system": {
+		"api": {
+			"role": "دور",
+			"systemUser": "مستخدم النظام",
+			"userLoginRequired": "تسجيل دخول المستخدم (مطلوب)"
+		},
+		"authority": {
+			"normalUserSubRole": "عادي المستخدم subrole",
+			"normalUsers": "المستخدمين العاديين",
+			"testRole": "اختبار الدور"
+		},
+		"dictionary": {
+			"boolType": "نوع bool قاعدة البيانات",
+			"floatType": "أرقام غير صحيحة",
+			"gender": "جنس",
+			"genderDict": "قاموس النوع الاجتماعي",
+			"intType": "أرقام صحيحة",
+			"intTypeDict": "نوع قاعدة البيانات المطابق لنوع int",
+			"stringType": "نصي",
+			"timeDateType": "نوع التاريخ الزمني لقاعدة البيانات",
+			"timeDateTypeDict": "نوع التاريخ الزمني لقاعدة البيانات"
+		},
+		"dictionary_detail": {
+			"female": "انثي",
+			"male": "ذكر"
+		},
 		"menu": {
-			"about": "معلومات عنا",
+			"about": "معلومات عن النظام",
 			"adminTools": "أدوات إدارة النظام",
 			"apiManage": "إدارة API",
 			"autoCode": "مولد الأكواد",
@@ -108,10 +135,11 @@
 			"examples": "أمثلة",
 			"excelImportExport": "استيراد و تصدير Excel",
 			"formCreator": "منشئ النموذج",
-			"medisLibUpDown": "مكتبة الوسائط (تحميل وتنزيل)",
+			"mediaLibUpDown": "مكتبة الوسائط (تحميل وتنزيل)",
 			"menuManage": "إدارة القوائم",
 			"operationLog": "سجل التدقيق",
 			"personalInfo": "معلومات شخصية",
+			"resumableUpload": "تحميل قابل لإعادة الإضافة (إصدار مكون إضافي)",
 			"resume": "استئناف من نقطة توقف (إصدار مكون إضافي)",
 			"roleManage": "إدارة الأدوار",
 			"serverStatus": "حالة الخادم",

@@ -19,7 +19,9 @@
 		"updateSuccess": "更新成功",
 		"queryFail": "查询失败!",
 		"queryFailErr": "查询失败",
-		"querySuccess": "查询成功"
+		"querySuccess": "查询成功",
+		"tabelDataInitFail": "表数据初始化失败!",
+		"viewCreateFail": "视图创建失败!"
 	},
 	"init": {
 		"dbAlreadyExist": "已存在数据库配置",
@@ -92,6 +94,31 @@
 		"batchDeleteSuccess": "批量删除成功"
 	},
 	"system": {
+		"api": {
+			"role": "角色",
+			"systemUser": "系统用户",
+			"userLoginRequired": "用户登录(必选)"
+		},
+		"authority": {
+			"normalUserSubRole": "普通用户子角色",
+			"normalUsers": "普通用户",
+			"testRole": "测试角色"
+		},
+		"dictionary": {
+			"boolType": "数据库bool类型",
+			"floatType": "数据库浮点型",
+			"gender": "性别",
+			"genderDict": "性别字典",
+			"intType": "数据库int类型",
+			"intTypeDict": "int类型对应的数据库类型",
+			"stringType": "数据库字符串",
+			"timeDateType": "数据库时间日期类型",
+			"timeDateTypeDict": "数据库时间日期类型"
+		},
+		"dictionary_detail": {
+			"female": "女",
+			"male": "男"
+		},
 		"menu": {
 			"about": "关于我们",
 			"adminTools": "超级管理员",
@@ -108,10 +135,11 @@
 			"examples": "示例文件",
 			"excelImportExport": "excel导入导出",
 			"formCreator": "表单生成器",
-			"medisLibUpDown": "媒体库（上传下载）",
+			"mediaLibUpDown": "媒体库（上传下载）",
 			"menuManage": "菜单管理",
 			"operationLog": "操作历史",
 			"personalInfo": "个人信息",
+			"resumableUpload": "断点续传（插件版）",
 			"resume": "断点续传（插件版）",
 			"roleManage": "角色管理",
 			"serverStatus": "服务器状态",

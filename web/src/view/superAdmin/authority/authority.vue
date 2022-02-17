@@ -206,7 +206,7 @@ const opdendrawer = (row) => {
 // 删除角色
 const deleteAuth = (row) => {
   ElMessageBox.confirm(t('authority.roleDeleteConfirm'), t('general.hint'), {
-    confirmButtonText: t('general.sure'),
+    confirmButtonText: t('general.confirm'),
     cancelButtonText: t('general.cancel'),
     type: 'warning'
   })

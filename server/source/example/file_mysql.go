@@ -21,7 +21,7 @@ func (f *fileMysql) Initialize() error {
 		{Name: "logo.png", Url: "https://qmplusimg.henrongyi.top/1576554439myAvatar.png", Tag: "png", Key: "1587973709logo.png"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, f.TableName()+"表数据初始化失败!")
+		return errors.Wrap(err, f.TableName()+" "+"general.tabelDataInitFail")
 	}
 	return nil
 }

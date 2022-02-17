@@ -17,12 +17,12 @@ func (a *authority) TableName() string {
 
 func (a *authority) Initialize() error {
 	entities := []system.SysAuthority{
-		{AuthorityId: "888", AuthorityName: "普通用户", ParentId: "0", DefaultRouter: "dashboard"},
-		{AuthorityId: "9528", AuthorityName: "测试角色", ParentId: "0", DefaultRouter: "dashboard"},
-		{AuthorityId: "8881", AuthorityName: "普通用户子角色", ParentId: "888", DefaultRouter: "dashboard"},
+		{AuthorityId: "888", AuthorityName: global.Translate("system.authority.normalUsers"), ParentId: "0", DefaultRouter: "dashboard"},
+		{AuthorityId: "9528", AuthorityName: global.Translate("system.authority.testRole"), ParentId: "0", DefaultRouter: "dashboard"},
+		{AuthorityId: "8881", AuthorityName: global.Translate("system.authority.normalUserSubRole"), ParentId: "888", DefaultRouter: "dashboard"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrapf(err, "%s表数据初始化失败!", a.TableName())
+		return errors.Wrapf(err, "%s "+global.Translate("general.tabelDataInitFail"), a.TableName())
 	}
 	return nil
 }

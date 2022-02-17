@@ -24,7 +24,7 @@ func (a *userAuthority) Initialize() error {
 		{SysUserId: 2, SysAuthorityAuthorityId: "888"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, a.TableName()+"表数据初始化失败!")
+		return errors.Wrap(err, a.TableName()+" "+"general.tabelDataInitFail")
 	}
 	return nil
 }

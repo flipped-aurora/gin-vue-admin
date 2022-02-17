@@ -202,7 +202,7 @@ func (c *casbin) Initialize() error {
 		{PType: "p", V0: "9528", V1: "/user/getUserInfo", V2: "GET"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, c.TableName()+"表数据初始化失败!")
+		return errors.Wrap(err, c.TableName()+" "+"general.tabelDataInitFail")
 	}
 	return nil
 }

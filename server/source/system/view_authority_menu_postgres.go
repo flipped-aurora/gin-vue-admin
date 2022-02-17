@@ -45,7 +45,7 @@ func (a *viewAuthorityMenuPostgres) Initialize() error {
 	sql = strings.ReplaceAll(sql, "@menus", "sys_base_menus")
 	sql = strings.ReplaceAll(sql, "@authorities_menus", entity.TableName())
 	if err := global.GVA_DB.Exec(sql).Error; err != nil {
-		return errors.Wrap(err, a.TableName()+"视图创建失败!")
+		return errors.Wrap(err, a.TableName()+" "+"general.viewCreateFail")
 	}
 	return nil
 }

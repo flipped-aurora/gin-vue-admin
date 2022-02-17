@@ -22,7 +22,7 @@ func (u *user) Initialize() error {
 		{UUID: uuid.NewV4(), Username: "a303176530", Password: "3ec063004a6f31642261936a379fde3d", NickName: "QMPlusUser", HeaderImg: "https:///qmplusimg.henrongyi.top/1572075907logo.png", AuthorityId: "9528", Phone: "17611111111", Email: "333333333@qq.com"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, u.TableName()+"表数据初始化失败!")
+		return errors.Wrap(err, u.TableName()+" "+"general.tabelDataInitFail")
 	}
 	return nil
 }

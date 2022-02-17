@@ -68,7 +68,7 @@ func (a *authoritiesMenus) Initialize() error {
 		{BaseMenuId: 17, AuthorityId: "9528"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, a.TableName()+"表数据初始化失败!")
+		return errors.Wrap(err, a.TableName()+" "+"general.tabelDataInitFail")
 	}
 	return nil
 }

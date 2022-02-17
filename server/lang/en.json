@@ -19,7 +19,9 @@
 		"updateSuccess": "Updated successfully",
 		"queryFail": "Query failed!",
 		"queryFailErr": "Query failed",
-		"querySuccess": "Query successfully"
+		"querySuccess": "Query successfully",
+		"tabelDataInitFail": "Table data initialization failed!",
+		"viewCreateFail": "View creation failed!"
 	},
 	"init": {
 		"dbAlreadyExist": "Database configuration already exists!!",
@@ -92,8 +94,33 @@
 		"batchDeleteSuccess": "Batch delete successfully"
 	},
 	"system": {
+		"api": {
+			"role": "Role",
+			"systemUser": "System User",
+			"userLoginRequired": "User login (required)"
+		},
+		"authority": {
+			"normalUserSubRole": "Normal User Sub-Role",
+			"normalUsers": "Normal Users",
+			"testRole": "Test Role"
+		},
+		"dictionary": {
+			"boolType": "Boolean Type",
+			"floatType": "Float Type",
+			"gender": "Gender Type",
+			"genderDict": "Gender dictionary",
+			"intType": "Integer Type",
+			"intTypeDict": "The database type corresponding to the int type",
+			"stringType": "String Type",
+			"timeDateType": "Time-Date Type",
+			"timeDateTypeDict": "Database Time-Date Type"
+		},
+		"dictionary_detail": {
+			"female": "Female",
+			"male": "Male"
+		},
 		"menu": {
-			"about": "About US",
+			"about": "About",
 			"adminTools": "Administration Tools",
 			"apiManage": "API Management",
 			"autoCode": "Code Generator",
@@ -108,10 +135,11 @@
 			"examples": "Examples",
 			"excelImportExport": "Excel Import And Export",
 			"formCreator": "Form Builder",
-			"medisLibUpDown": "Media Library (Upload and Download)",
+			"mediaLibUpDown": "Media Library (Upload and Download)",
 			"menuManage": "Menu Management",
 			"operationLog": "Audit Log",
 			"personalInfo": "Personal Information",
+			"resumableUpload": "Resumable upload (plug-in version)",
 			"resume": "Resume From a Breakpoint (plug-in version)",
 			"roleManage": "Role Management",
 			"serverStatus": "Server Status",

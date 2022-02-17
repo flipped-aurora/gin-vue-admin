@@ -19,15 +19,15 @@ func (d *dictionary) Initialize() error {
 	status := new(bool)
 	*status = true
 	entities := []system.SysDictionary{
-		{GVA_MODEL: global.GVA_MODEL{ID: 1}, Name: "性别", Type: "gender", Status: status, Desc: "性别字典"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 2}, Name: "数据库int类型", Type: "int", Status: status, Desc: "int类型对应的数据库类型"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 3}, Name: "数据库时间日期类型", Type: "time.Time", Status: status, Desc: "数据库时间日期类型"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 4}, Name: "数据库浮点型", Type: "float64", Status: status, Desc: "数据库浮点型"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 5}, Name: "数据库字符串", Type: "string", Status: status, Desc: "数据库字符串"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 6}, Name: "数据库bool类型", Type: "bool", Status: status, Desc: "数据库bool类型"},
+		{GVA_MODEL: global.GVA_MODEL{ID: 1}, Name: global.Translate("system.dictionary.gender"), Type: "gender", Status: status, Desc: global.Translate("system.dictionary.genderDict")},
+		{GVA_MODEL: global.GVA_MODEL{ID: 2}, Name: global.Translate("system.dictionary.intType"), Type: "int", Status: status, Desc: global.Translate("system.dictionary.intTypeDict")},
+		{GVA_MODEL: global.GVA_MODEL{ID: 3}, Name: global.Translate("system.dictionary.timeDateType"), Type: "time.Time", Status: status, Desc: global.Translate("system.dictionary.timeDateTypeDict")},
+		{GVA_MODEL: global.GVA_MODEL{ID: 4}, Name: global.Translate("system.dictionary.floatType"), Type: "float64", Status: status, Desc: global.Translate("system.dictionary.floatType")},
+		{GVA_MODEL: global.GVA_MODEL{ID: 5}, Name: global.Translate("system.dictionary.stringType"), Type: "string", Status: status, Desc: global.Translate("system.dictionary.stringType")},
+		{GVA_MODEL: global.GVA_MODEL{ID: 6}, Name: global.Translate("system.dictionary.boolType"), Type: "bool", Status: status, Desc: global.Translate("system.dictionary.boolType")},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, d.TableName()+"表数据初始化失败!")
+		return errors.Wrap(err, d.TableName()+" "+"general.tabelDataInitFail")
 	}
 	return nil
 }

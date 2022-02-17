@@ -20,15 +20,15 @@ import (
 // @name x-token
 // @BasePath /
 func main() {
-	// added by mohamed hassan to support multilanguage
-	global.GVA_TRANSLATOR = translate.Translator{}
-	global.GVA_TRANSLATOR.InitTranslator(global.GVA_CONFIG.Language)
-	// end of adding
 	global.GVA_VP = core.Viper()      // 初始化Viper
 	global.GVA_LOG = core.Zap()       // 初始化zap日志库
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	initialize.Timer()
 	initialize.DBList()
+	// added by mohamed hassan to support multilanguage
+	global.GVA_TRANSLATOR = translate.Translator{} // create translator inestance  here
+	global.GVA_TRANSLATOR.InitTranslator(global.GVA_CONFIG.Language)
+	// end of adding
 	if global.GVA_DB != nil {
 		initialize.RegisterTables(global.GVA_DB) // 初始化表
 		// 程序结束前关闭数据库链接

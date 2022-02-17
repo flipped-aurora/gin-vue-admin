@@ -1,100 +1,124 @@
 {
-    "general" : {
-        "modifyFail" : "修改失败!",
-        "modifySuccess" : "修改成功",
-        "getDataFail" : "获取失败!",
-        "getDataFailErr" : "获取失败",
-        "getDataSuccess": "获取成功",
-        "deleteFail" : "删除失败!",
-        "deletFailErr" : "删除失败",
-        "deleteSuccess" : "删除成功",
-        "setupFail" : "设置失败",
-        "setupFailErr" : "设置失败!",
-        "setupSuccess" : "设置成功",
-        "creationFail" : "创建失败!",
-        "creationFailErr" : "创建失败",
-        "createSuccss" : "创建成功",
-        "updateFail" : "更新失败!",
-        "updateFailErr" : "更新失败",
-        "updateSuccess" : "更新成功",
-        "queryFail" : "查询失败!",
-        "queryFailErr" : "查询失败",
-        "querySuccess" : "查询成功",
-        "" : ""
-    },
-    "init" : {
-        "dbAlreadyExist" : "已存在数据库配置",
-        "initDB" : "前往初始化数据库",
-        "dbAlreadyInit" : "数据库无需初始化"
-    },
-    "sys_user" : {
-        "vCodeErr" : "验证码错误",
-        "loginFail" : "登陆失败! 用户名不存在或者密码错误!",
-        "userNameOrPasswordError" : "用户名不存在或者密码错误",
-        "getTokenFail" : "获取token失败!",
-        "getTokenErr" : "获取token失败",
-        "loginSuccess" : "登录成功",
-        "loginStatusFail" : "设置登录状态失败!",
-        "loginStatusFailErr" : "设置登录状态失败",
-        "jwtInvalidationFailed" : "jwt作废失败",
-        "registrationFail" : "注册失败!",
-        "registrationFailErr" : "注册失败",
-        "registrationSuccess" : "注册成功",
-        "changePWErr" : "修改失败，原密码与当前账户不符",
-        "deleteUserFail" : "删除失败, 自杀失败",
-        "resetPWFail" : "重置失败!",
-        "resetPWFailErr" : "重置失败",
-        "resetPWSuccess" : "重置成功",
-        "" : ""
-    }, 
-    "sys_captcha" : {
-        "vCodeFail" : "验证码获取失败",
-        "vCodeSuccess" : "验证码获取成功",
-        "" : ""
-    }, 
-    "sys_system" : {
-        "rebootFail" : "验证码获取失败",
-        "rebootFailErr" : "验证码获取成功",
-        "rebootSuccess" : "重启系统成功",
-        "" : ""
-    }, 
-    "sys_authority" : {
-        "copyFail" : "拷贝失败!",
-        "copyFailErr" : "拷贝失败",
-        "copySuccess" : "拷贝成功",
-        "" : ""
-    },
-    "sys_auto_code_history" : {
-        "rollbackSuccess" : "回滚成功"
-    },
-    "sys_auto_code" : {
-        "previewFail" : "预览失败!",
-        "previewFailErr" : "预览失败",
-        "previewSuccess" : "预览成功",
-        "autoCreateFail" : "自动化创建失败!请自行清空垃圾数据!",
-        "queryTablesFail" : "查询table失败",
-        "" : ""
-    },
-    "sys_initdb" : {
-        "paramVerifyFail" : "参数校验不通过!",
-        "paramVerifyFailErr" : "参数校验不通过",
-        "autoCreateDBFail" : "自动创建数据库失败",
-        "autoCreateDBFailErr" : "自动创建数据库失败，请查看后台日志，检查后在进行初始化",
-        "autoCreateDBSuccess" : "自动创建数据库成功",
-        "" : ""
-    },
-    "sys_jwt_blacklist" : {
-        "jwtInvalidationFailedErr" : "jwt作废失败",
-        "jwtInvalidatedSuccess" : "jwt作废成功"
-    },
-    "sys_menu" : {
-        "addFail" : "添加失败!",
-        "addFailErr" : "添加失败",
-        "addSuccess" : "添加成功"
-    },
-    "sys_operation_record" : {
-        "batchDeleteFail" : "批量删除失败!",
-        "batchDeleteFailErr" : "批量删除失败",
-        "batchDeleteSuccess" : "批量删除成功"
-    }
+	"general": {
+		"modifyFail": "修改失败!",
+		"modifySuccess": "修改成功",
+		"getDataFail": "获取失败!",
+		"getDataFailErr": "获取失败",
+		"getDataSuccess": "获取成功",
+		"deleteFail": "删除失败!",
+		"deletFailErr": "删除失败",
+		"deleteSuccess": "删除成功",
+		"setupFail": "设置失败",
+		"setupFailErr": "设置失败!",
+		"setupSuccess": "设置成功",
+		"creationFail": "创建失败!",
+		"creationFailErr": "创建失败",
+		"createSuccss": "创建成功",
+		"updateFail": "更新失败!",
+		"updateFailErr": "更新失败",
+		"updateSuccess": "更新成功",
+		"queryFail": "查询失败!",
+		"queryFailErr": "查询失败",
+		"querySuccess": "查询成功"
+	},
+	"init": {
+		"dbAlreadyExist": "已存在数据库配置",
+		"initDB": "前往初始化数据库",
+		"dbAlreadyInit": "数据库无需初始化"
+	},
+	"sys_user": {
+		"vCodeErr": "验证码错误",
+		"loginFail": "登陆失败! 用户名不存在或者密码错误!",
+		"userNameOrPasswordError": "用户名不存在或者密码错误",
+		"getTokenFail": "获取token失败!",
+		"getTokenErr": "获取token失败",
+		"loginSuccess": "登录成功",
+		"loginStatusFail": "设置登录状态失败!",
+		"loginStatusFailErr": "设置登录状态失败",
+		"jwtInvalidationFailed": "jwt作废失败",
+		"registrationFail": "注册失败!",
+		"registrationFailErr": "注册失败",
+		"registrationSuccess": "注册成功",
+		"changePWErr": "修改失败，原密码与当前账户不符",
+		"deleteUserFail": "删除失败, 自杀失败",
+		"resetPWFail": "重置失败!",
+		"resetPWFailErr": "重置失败",
+		"resetPWSuccess": "重置成功"
+	},
+	"sys_captcha": {
+		"vCodeFail": "验证码获取失败",
+		"vCodeSuccess": "验证码获取成功",
+		"vCodeFailErr": "验证码获取失败!"
+	},
+	"sys_system": {
+		"rebootFail": "重启系统失败!",
+		"rebootFailErr": "重启系统失败",
+		"rebootSuccess": "重启系统成功"
+	},
+	"sys_authority": {
+		"copyFail": "拷贝失败!",
+		"copyFailErr": "拷贝失败",
+		"copySuccess": "拷贝成功"
+	},
+	"sys_auto_code_history": {
+		"rollbackSuccess": "回滚成功"
+	},
+	"sys_auto_code": {
+		"previewFail": "预览失败!",
+		"previewFailErr": "预览失败",
+		"previewSuccess": "预览成功",
+		"autoCreateFail": "自动化创建失败!请自行清空垃圾数据!",
+		"queryTablesFail": "查询table失败"
+	},
+	"sys_initdb": {
+		"paramVerifyFail": "参数校验不通过!",
+		"paramVerifyFailErr": "参数校验不通过",
+		"autoCreateDBFail": "自动创建数据库失败",
+		"autoCreateDBFailErr": "自动创建数据库失败，请查看后台日志，检查后在进行初始化",
+		"autoCreateDBSuccess": "自动创建数据库成功"
+	},
+	"sys_jwt_blacklist": {
+		"jwtInvalidationFailedErr": "jwt作废失败",
+		"jwtInvalidatedSuccess": "jwt作废成功"
+	},
+	"sys_menu": {
+		"addFail": "添加失败!",
+		"addFailErr": "添加失败",
+		"addSuccess": "添加成功"
+	},
+	"sys_operation_record": {
+		"batchDeleteFail": "批量删除失败!",
+		"batchDeleteFailErr": "批量删除失败",
+		"batchDeleteSuccess": "批量删除成功"
+	},
+	"system": {
+		"menu": {
+			"about": "关于我们",
+			"adminTools": "超级管理员",
+			"apiManage": "api管理",
+			"autoCode": "代码生成器",
+			"autoCodeEdit": "自动化代码（复用）",
+			"autoCodeManage": "自动化代码管理",
+			"breakPoint": "断点续传",
+			"customerList": "客户列表（资源示例）",
+			"dashboard": "仪表盘",
+			"dataTableInitFail": "表数据初始化失败",
+			"dictDetail": "字典详情",
+			"dictMange": "字典管理",
+			"examples": "示例文件",
+			"excelImportExport": "excel导入导出",
+			"formCreator": "表单生成器",
+			"medisLibUpDown": "媒体库（上传下载）",
+			"menuManage": "菜单管理",
+			"operationLog": "操作历史",
+			"personalInfo": "个人信息",
+			"resume": "断点续传（插件版）",
+			"roleManage": "角色管理",
+			"serverStatus": "服务器状态",
+			"system": "系统配置",
+			"systemTools": "系统工具",
+			"userManage": "用户管理",
+			"website": "官方网站"
+		}
+	}
 }

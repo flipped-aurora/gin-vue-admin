@@ -1,7 +1,124 @@
 {
-    "init" : {
-        "dbAlreadyExist" : "已存在数据库配置",
-        "initDB" : "前往初始化数据库",
-        "dbAlreadyInit" : "数据库无需初始化"
-        }
+	"init": {
+		"dbAlreadyExist": "قاعدة البيانات موجودة بالفعل",
+		"initDB": "انتقل إلى تهيئة قاعدة البيانات",
+		"dbAlreadyInit": "لا تحتاج قاعدة البيانات إلى التهيئة"
+	},
+	"general": {
+		"createSuccss": "تم إنشاؤه بنجاح",
+		"creationFail": "فشل في الإنشاء!",
+		"creationFailErr": "فشل في الإنشاء",
+		"deletFailErr": "فشل في الحذف",
+		"deleteFail": "فشل في الحذف!",
+		"deleteSuccess": "تم الحذف بنجاح",
+		"getDataFail": "فشل في الحصول على البيانات!",
+		"getDataFailErr": "فشل في الحصول على البيانات",
+		"getDataSuccess": "تم الحصول على البيانات بنجاح",
+		"modifyFail": "فشل في التعديل!",
+		"modifySuccess": "تم التعديل بنجاح",
+		"queryFail": "فشل في البحث!",
+		"queryFailErr": "فشل في البحث",
+		"querySuccess": "بحث ناجح",
+		"setupFail": "فشل الإعداد",
+		"setupFailErr": "فشل الإعداد!",
+		"setupSuccess": "تم الإعداد بنجاح",
+		"updateFail": "فشل التحديث!",
+		"updateFailErr": "فشل التحديث",
+		"updateSuccess": "تم التحديث بنجاح"
+	},
+	"sys_authority": {
+		"copyFail": "فشل النسخ!",
+		"copyFailErr": "فشل النسخ",
+		"copySuccess": "تم النسخ بنجاح"
+	},
+	"sys_auto_code": {
+		"autoCreateFail": "فشل الإنشاء التلقائي! يرجى مسح البيانات غير المهمة بنفسك!",
+		"previewFail": "فشلت المعاينة!",
+		"previewFailErr": "فشلت المعاينة",
+		"previewSuccess": "تمت المعاينة بنجاح",
+		"queryTablesFail": "فشل الاستعلام عن الجدول"
+	},
+	"sys_auto_code_history": {
+		"rollbackSuccess": "تمت الاستعادة بنجاح"
+	},
+	"sys_captcha": {
+		"vCodeFail": "فشل في الحصول على رمز التحقق",
+		"vCodeFailErr": "فشل في الحصول على رمز التحقق!",
+		"vCodeSuccess": "تم الحصول على رمز التحقق بنجاح"
+	},
+	"sys_initdb": {
+		"autoCreateDBFail": "فشل إنشاء قاعدة البيانات تلقائيًا",
+		"autoCreateDBFailErr": "فشل إنشاء قاعدة البيانات تلقائيًا ، يرجى التحقق من سجل الخلفية وتهيئته بعد التحقق",
+		"autoCreateDBSuccess": "نجح إنشاء قاعدة البيانات التلقائية",
+		"paramVerifyFail": "فشل التحقق من المعاملات!",
+		"paramVerifyFailErr": "فشل التحقق من المعاملات"
+	},
+	"sys_jwt_blacklist": {
+		"jwtInvalidatedSuccess": "تم إلغاء JWT بنجاح",
+		"jwtInvalidationFailedErr": "فشل JWT في إلغاء"
+	},
+	"sys_menu": {
+		"addFail": "فشل في الإضافة!",
+		"addFailErr": "فشل في الإضافة",
+		"addSuccess": "تمت الإضافة بنجاح"
+	},
+	"sys_operation_record": {
+		"batchDeleteFail": "فشل في الحذف المجمع!",
+		"batchDeleteFailErr": "فشل في الحذف المجمع",
+		"batchDeleteSuccess": "تم الحذف المجمع بنجاح"
+	},
+	"sys_system": {
+		"rebootFail": "فشل في إعادة التشغيل!",
+		"rebootFailErr": "فشل في إعادة التشغيل",
+		"rebootSuccess": "تم إعادة تشغيل النظام بنجاح"
+	},
+	"sys_user": {
+		"changePWErr": "فشل التعديل، وكلمة المرور الأصلية لا تتطابق مع الحساب الجاري",
+		"deleteUserFail": "فشل في حذف المستخدم",
+		"getTokenErr": "فشل الحصول على الرمز المميز",
+		"getTokenFail": "فشل في الحصول على الرمز المميز!",
+		"jwtInvalidationFailed": "فشل في إلغاء JWT",
+		"loginFail": "فشل تسجيل الدخول! اسم المستخدم غير موجود أو كلمة المرور غير صحيحة!",
+		"loginStatusFail": "فشل في تعيين حالة تسجيل الدخول!",
+		"loginStatusFailErr": "فشل تعيين حالة تسجيل الدخول",
+		"loginSuccess": "تسجيل الدخول بنجاح",
+		"registrationFail": "فشل التسجيل!",
+		"registrationFailErr": "فشل التسجيل",
+		"registrationSuccess": "نجاح التسجيل",
+		"resetPWFail": "فشلت إعادة الضبط!",
+		"resetPWFailErr": "فشل في إعادة ضبط كلمة السر",
+		"resetPWSuccess": "تم إعادة ضبط كلمة السر بنجاح",
+		"userNameOrPasswordError": "اسم المستخدم غير موجود أو كلمة المرور غير صحيحة",
+		"vCodeErr": "رمز التحقق غير صحيح"
+	},
+	"system": {
+		"menu": {
+			"about": "معلومات عنا",
+			"adminTools": "أدوات إدارة النظام",
+			"apiManage": "إدارة API",
+			"autoCode": "مولد الأكواد",
+			"autoCodeEdit": "أتمتة الكود (إعادة الاستخدام)",
+			"autoCodeManage": "إدارة الكود الآلي",
+			"breakPoint": "HTTP",
+			"customerList": "قائمة العملاء (مثال مورد)",
+			"dashboard": "لوحة القيادة",
+			"dataTableInitFail": "فشل في تهيئة بيانات الجدول",
+			"dictDetail": "تفاصيل القاموس",
+			"dictMange": "إدارة القاموس",
+			"examples": "أمثلة",
+			"excelImportExport": "استيراد و تصدير Excel",
+			"formCreator": "منشئ النموذج",
+			"medisLibUpDown": "مكتبة الوسائط (تحميل وتنزيل)",
+			"menuManage": "إدارة القوائم",
+			"operationLog": "سجل التدقيق",
+			"personalInfo": "معلومات شخصية",
+			"resume": "استئناف من نقطة توقف (إصدار مكون إضافي)",
+			"roleManage": "إدارة الأدوار",
+			"serverStatus": "حالة الخادم",
+			"system": "أعدادات النظام",
+			"systemTools": "أدوات النظام",
+			"userManage": "إدارة المستخدم",
+			"website": "الموقع الرسمي"
+		}
+	}
 }

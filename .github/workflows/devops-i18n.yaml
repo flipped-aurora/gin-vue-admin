@@ -1,7 +1,7 @@
-name: devops-test
+name: devops-i18n
 on:
   push:
-    branches: [test]
+    branches: [i18n-dev-new]
   workflow_dispatch:
 jobs:
   build:

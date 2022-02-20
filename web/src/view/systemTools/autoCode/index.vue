@@ -290,7 +290,22 @@ const moveDownField = (index) => {
 const currentInstance = getCurrentInstance()
 
 const enterDialog = () => {
-  currentInstance.refs.fieldDialogNode.fieldDialogFrom.validate(valid => {
+  
+  // currentInstance.refs.fieldDialogNode.fieldDialogFrom.validate(valid => {
+  //   if (valid) {
+  //     dialogMiddle.value.fieldName = toUpperCase(
+  //       dialogMiddle.value.fieldName
+  //     )
+  //     if (addFlag.value === 'add') {
+  //       form.value.fields.push(dialogMiddle.value)
+  //     }
+  //     dialogFlag.value = false
+  //   } else {
+  //     return false
+  //   }
+  // })
+
+  currentInstance.refs.fieldDialog.fieldDialogFrom.validate(valid => {
     if (valid) {
       dialogMiddle.value.fieldName = toUpperCase(
         dialogMiddle.value.fieldName

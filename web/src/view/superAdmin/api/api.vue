@@ -2,17 +2,17 @@
   <div>
     <div class="gva-search-box">
       <el-form ref="searchForm" :inline="true" :model="searchInfo">
-        <el-form-item label="Path"> 
-          <el-input v-model="searchInfo.path" placeholder="Path" />
+        <el-form-item :label="t('api.path')"> 
+          <el-input v-model="searchInfo.path" :placeholder="t('api.path')" />
         </el-form-item>
-        <el-form-item label="Description">
-          <el-input v-model="searchInfo.description" placeholder="Description" />
+        <el-form-item :label="t('api.description')">
+          <el-input v-model="searchInfo.description" :placeholder="t('api.description')" />
         </el-form-item>
-        <el-form-item label="API Group">
-          <el-input v-model="searchInfo.apiGroup" placeholder="api group" />
+        <el-form-item :label="t('api.apiGroup')">
+          <el-input v-model="searchInfo.apiGroup" :placeholder="t('api.apiGroup')" />
         </el-form-item>
-        <el-form-item label="Method">
-          <el-select v-model="searchInfo.method" clearable placeholder="please choose">
+        <el-form-item :label="t('api.method')">
+          <el-select v-model="searchInfo.method" clearable :placeholder="t('api.pleaseChoose')">
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -22,22 +22,22 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">Search</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">Reset</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">{{t('general.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">Add API</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">{{t('api.addAPI')}}</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-          <p>You sure you want to delete it?</p>
+          <p>{{t('api.comfirmDelete')}}</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="small" type="text" @click="deleteVisible = false">Cancel</el-button>
-            <el-button size="small" type="primary" @click="onDelete">Sure</el-button>
+            <el-button size="small" type="text" @click="deleteVisible = false">{{t('general.cancel')}}</el-button>
+            <el-button size="small" type="primary" @click="onDelete">{{t('general.yes')}}</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;">Delete</el-button>
+            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;">{{t('general.delete')}}</el-button>
           </template>
         </el-popover>
       </div>
@@ -47,10 +47,10 @@
           width="55"
         />
         <el-table-column align="left" label="id" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column align="left" label="API Path" min-width="150" prop="path" sortable="custom" />
-        <el-table-column align="left" label="API Group" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column align="left" label="About API" min-width="150" prop="description" sortable="custom" />
-        <el-table-column align="left" label="Method" min-width="150" prop="method" sortable="custom">
+        <el-table-column align="left" :label= "t('api.apiPath')" min-width="150" prop="path" sortable="custom" />
+        <el-table-column align="left" :label="t('api.apiGroup')" min-width="150" prop="apiGroup" sortable="custom" />
+        <el-table-column align="left" :label="t('api.aboutAPI')" min-width="150" prop="description" sortable="custom" />
+        <el-table-column align="left" :label="t('api.method')" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>
               {{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}
@@ -58,20 +58,20 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="left" fixed="right" label="Operater" width="200">
+        <el-table-column align="left" fixed="right" :label="t('general.action')" width="200">
           <template #default="scope">
             <el-button
               icon="edit"
               size="small"
               type="text"
               @click="editApiFunc(scope.row)"
-            >Edit</el-button>
+            >{{t('general.edit')}}</el-button>
             <el-button
               icon="delete"
               size="small"
               type="text"
               @click="deleteApiFunc(scope.row)"
-            >Delete</el-button>
+            >{{t('general.delete')}}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,13 +90,13 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
-      <warning-bar title="New API, need to configure permissions within role management" />
+      <warning-bar :title="t('api.warningBarTitle')" />
       <el-form ref="apiForm" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="Path" prop="path">
+        <el-form-item :label="t('api.path')" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="Method" prop="method">
-          <el-select v-model="form.method" placeholder="Please choose" style="width:100%">
+        <el-form-item :label="t('api.method')" prop="method">
+          <el-select v-model="form.method" :placeholder="t('api.pleaseChoose')" style="width:100%">
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -105,17 +105,17 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="api group" prop="apiGroup">
+        <el-form-item :label="t('api.apiGroup')" prop="apiGroup">
           <el-input v-model="form.apiGroup" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="abou api" prop="description">
+        <el-form-item :label="t('api.aboutAPI')" prop="description">
           <el-input v-model="form.description" autocomplete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">Cancel</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">Sure</el-button>
+          <el-button size="small" @click="closeDialog">{{t('general.cancel')}}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{t('general.yes')}}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -357,9 +357,9 @@ const enterDialog = async() => {
 }
 
 const deleteApiFunc = async(row) => {
-  ElMessageBox.confirm('This action will permanently delete the API under all roles, do you continue?', 'Hint', {
-    confirmButtonText: 'Sure',
-    cancelButtonText: 'Cancel',
+  ElMessageBox.confirm(t('api.deleteAPIMessage'), 'Hint', {
+    confirmButtonText: t('general.yes'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   })
     .then(async() => {
@@ -367,7 +367,7 @@ const deleteApiFunc = async(row) => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: 'Successfully deleted!'
+          message: t('genera.deleteSuccess')
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--

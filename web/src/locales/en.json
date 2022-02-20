@@ -1,7 +1,21 @@
 {
 	"api": {
 		"group": " Group",
-		"setupSuccess": "API set up successfully!"
+		"setupSuccess": "API set up successfully!",
+		"path":"Path",
+		"description": "Description",
+		"apiGroup" : "API Group",
+		"method": "Method",
+		"pleaseChoose": "Please choose",
+		"addAPI": "Add API",
+		"comfirmDelete":"You sure you want to delete it?",
+		"warningBarTitle": "New API, need to configure permissions within role management",
+		"apiPath": "API path",
+		"aboutAPI": "About API",
+		"deleteAPIMessage": "This action will permanently delete the API under all roles, do you continue?"
+		
+
+		
 	},
 	"authority": {
 		"addRole": "Add Role",
@@ -138,7 +152,12 @@
 		"undeleted": "Undeleted",
 		"updateSuccess": "Updated Successfully!",
 		"warning": "Warning",
-		"yes": "Yes"
+		"yes": "Yes",
+		"search": "Search",
+		"reset": "Reset",
+		"about" :"About",
+		"action": "Action"
+		
 	},
 	"historyComponent": {
 		"closeAll": "Close All",

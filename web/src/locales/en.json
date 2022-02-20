@@ -272,5 +272,31 @@
 		"userNameNote": "Please enter username",
 		"userRole": "User Role",
 		"userRoleNote": "Please select user role"
+	},
+	"view": {
+		"dashboard": {
+			"about": "About us",
+			"codeGen": "Code generator",
+			"dashboardCharts": {
+				"accesssTrends": "Access Trends",
+				"month": "Month"
+			},
+			"dashboardTable": {
+				"changeLog": "Change log"
+			},
+			"formCreator": "Form Builder",
+			"instructionalUse": "Instructional Use:",
+			"menuManage": "Menu Management",
+			"note": "Sunny today, 0°C - 10°C, cold weather, pay attention to adding clothing.",
+			"pluginRepo": "Plugin repository:",
+			"positiveRatings": "Positive ratings",
+			"quickEntry": "Quick entry",
+			"roleManage": "Role management",
+			"statistics": "Statistics",
+			"title": "Good morning, admin, please start your day",
+			"todaysTraffic": "Today's traffic",
+			"totalNumberOfUsers": "Number of users",
+			"userManage": "User management"
+		}
 	}
 }

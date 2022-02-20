@@ -272,5 +272,31 @@
 		"userNameNote": "",
 		"userRole": "",
 		"userRoleNote": ""
+	},
+	"view": {
+		"dashboard": {
+			"about": "معلومات عنا",
+			"codeGen": "مولد الأكواد",
+			"dashboardCharts": {
+				"accesssTrends": "اتجاهات الوصول",
+				"month": "شهر"
+			},
+			"dashboardTable": {
+				"changeLog": "سجل التغيير"
+			},
+			"formCreator": "منشئ النموذج",
+			"instructionalUse": "تعليمات التشغيل:",
+			"menuManage": "إدارة القائمة",
+			"note": "مشمس اليوم، 0°C - 10°C، الطقس البارد، وإيلاء الاهتمام لإضافة الملابس.",
+			"pluginRepo": "مستودع البرنامج المساعد:",
+			"positiveRatings": "تقييمات إيجابية",
+			"quickEntry": "دخول سريع",
+			"roleManage": "إدارة الأدوار",
+			"statistics": "إحصائيات",
+			"title": "صباح الخير، أيها المشرف، من فضلك ابدأ اليوم",
+			"todaysTraffic": "حركة المرور اليوم",
+			"totalNumberOfUsers": "إجمالي عدد المستخدمين",
+			"userManage": "إدارةالمستخدم"
+		}
 	}
 }

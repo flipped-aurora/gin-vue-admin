@@ -2,27 +2,27 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="展示值">
-          <el-input v-model="searchInfo.label" placeholder="搜索条件" />
+        <el-form-item label="Impression">
+          <el-input v-model="searchInfo.label" placeholder="search condition" />
         </el-form-item>
-        <el-form-item label="字典值">
-          <el-input v-model="searchInfo.value" placeholder="搜索条件" />
+        <el-form-item label="Dictionary">
+          <el-input v-model="searchInfo.value" placeholder="search condition" />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status">
-          <el-select v-model="searchInfo.status" placeholder="请选择">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+        <el-form-item label="Enabled State" prop="status">
+          <el-select v-model="searchInfo.status" placeholder="please choose">
+            <el-option key="true" label="Yes" value="true" />
+            <el-option key="false" label="No" value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">Search</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">Reset</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog">Add Entry</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -32,31 +32,31 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" label="Date" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="展示值" prop="label" width="120" />
+        <el-table-column align="left" label="Impression" prop="label" width="120" />
 
-        <el-table-column align="left" label="字典值" prop="value" width="120" />
+        <el-table-column align="left" label="Dictionary" prop="value" width="120" />
 
-        <el-table-column align="left" label="启用状态" prop="status" width="120">
+        <el-table-column align="left" label="Enabled State" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="排序标记" prop="sort" width="120" />
+        <el-table-column align="left" label="Sort mark" prop="sort" width="120" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" label="Action">
           <template #default="scope">
-            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">Change</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-              <p>确定要删除吗？</p>
+              <p>You sure you want to delete it?</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
+                <el-button size="small" type="text" @click="scope.row.visible = false">Cancel</el-button>
+                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">Sure</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
+                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">Delete</el-button>
               </template>
             </el-popover>
           </template>
@@ -76,37 +76,37 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="Popup operation">
       <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
-        <el-form-item label="展示值" prop="label">
+        <el-form-item label="Impression" prop="label">
           <el-input
             v-model="formData.label"
-            placeholder="请输入展示值"
+            placeholder="Please enter an Impression"
             clearable
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="字典值" prop="value">
+        <el-form-item label="Dictionary" prop="value">
           <el-input-number
             v-model.number="formData.value"
             step-strictly
             :step="1"
-            placeholder="请输入字典值"
+            placeholder="Please enter a Dictionary"
             clearable
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status" required>
-          <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
+        <el-form-item label="Enabled state" prop="status" required>
+          <el-switch v-model="formData.status" active-text="Turn on" inactive-text="Disable" />
         </el-form-item>
-        <el-form-item label="排序标记" prop="sort">
-          <el-input-number v-model.number="formData.sort" placeholder="排序标记" />
+        <el-form-item label="Sort mark" prop="sort">
+          <el-input-number v-model.number="formData.sort" placeholder="Sort mark" />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">Cancel</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">Sure</el-button>
         </div>
       </template>
     </el-dialog>
@@ -147,21 +147,21 @@ const rules = ref({
   label: [
     {
       required: true,
-      message: '请输入展示值',
+      message: 'Please enter an Impression',
       trigger: 'blur'
     }
   ],
   value: [
     {
       required: true,
-      message: '请输入字典值',
+      message: 'Please enter a Dictionary',
       trigger: 'blur'
     }
   ],
   sort: [
     {
       required: true,
-      message: '排序标记',
+      message: 'Sort mark',
       trigger: 'blur'
     }
   ]
@@ -241,7 +241,7 @@ const deleteSysDictionaryDetailFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: 'Successfully deleted'
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--
@@ -270,7 +270,7 @@ const enterDialog = async() => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '创建/更改成功'
+        message: 'Create/change successful'
       })
       closeDialog()
       getTableData()

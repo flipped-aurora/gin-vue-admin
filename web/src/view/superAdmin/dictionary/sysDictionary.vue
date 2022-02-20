@@ -5,20 +5,20 @@
     />
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="字典名（中）">
-          <el-input v-model="searchInfo.name" placeholder="搜索条件" />
+        <el-form-item label="Name (middle)">
+          <el-input v-model="searchInfo.name" placeholder="search condition" />
         </el-form-item>
-        <el-form-item label="字典名（英）">
-          <el-input v-model="searchInfo.type" placeholder="搜索条件" />
+        <el-form-item label="Name (English)">
+          <el-input v-model="searchInfo.type" placeholder="search condition" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
-          <el-select v-model="searchInfo.status" clear placeholder="请选择">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+        <el-form-item label="Status" prop="status">
+          <el-select v-model="searchInfo.status" clear placeholder="please choose">
+            <el-option key="true" label="Yes" value="true" />
+            <el-option key="false" label="No" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="描述">
-          <el-input v-model="searchInfo.desc" placeholder="搜索条件" />
+        <el-form-item label="Describe">
+          <el-input v-model="searchInfo.desc" placeholder="search condition" />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -26,12 +26,12 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >查询</el-button>
+          >Search</el-button>
           <el-button
             size="small"
             icon="refresh"
             @click="onReset"
-          >重置</el-button>
+          >Reset</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -42,7 +42,7 @@
           type="primary"
           icon="plus"
           @click="openDialog"
-        >新增</el-button>
+        >Add new</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -52,7 +52,7 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" label="date" width="180">
           <template #default="scope">{{
             formatDate(scope.row.CreatedAt)
           }}</template>
@@ -60,57 +60,57 @@
 
         <el-table-column
           align="left"
-          label="字典名（中）"
+          label="Name (middle)"
           prop="name"
           width="160"
         />
 
         <el-table-column
           align="left"
-          label="字典名（英）"
+          label="Name (English)"
           prop="type"
           width="120"
         />
 
-        <el-table-column align="left" label="状态" prop="status" width="120">
+        <el-table-column align="left" label="Status" prop="status" width="120">
           <template #default="scope">{{
             formatBoolean(scope.row.status)
           }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="描述" prop="desc" width="280" />
+        <el-table-column align="left" label="Describe" prop="desc" width="280" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" label="Action">
           <template #default="scope">
             <el-button
               size="small"
               icon="document"
               type="text"
               @click="toDetile(scope.row)"
-            >详情</el-button>
+            >Details</el-button>
             <el-button
               size="small"
               icon="edit"
               type="text"
               @click="updateSysDictionaryFunc(scope.row)"
-            >变更</el-button>
+            >Change</el-button>
             <el-popover
               v-model:visible="scope.row.visible"
               placement="top"
               width="160"
             >
-              <p>确定要删除吗？</p>
+              <p>You sure you want to delete it?</p>
               <div style="text-align: right; margin-top: 8px">
                 <el-button
                   size="small"
                   type="text"
                   @click="scope.row.visible = false"
-                >取消</el-button>
+                >Cancel</el-button>
                 <el-button
                   type="primary"
                   size="small"
                   @click="deleteSysDictionaryFunc(scope.row)"
-                >确定</el-button>
+                >Sure</el-button>
               </div>
               <template #reference>
                 <el-button
@@ -119,7 +119,7 @@
                   size="small"
                   style="margin-left: 10px"
                   @click="scope.row.visible = true"
-                >删除</el-button>
+                >Delete</el-button>
               </template>
             </el-popover>
           </template>
@@ -141,7 +141,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      title="弹窗操作"
+      title="Popup operation"
     >
       <el-form
         ref="dialogForm"
@@ -150,33 +150,33 @@
         size="medium"
         label-width="110px"
       >
-        <el-form-item label="字典名（中）" prop="name">
+        <el-form-item label="Name (middle)" prop="name">
           <el-input
             v-model="formData.name"
-            placeholder="请输入字典名（中）"
+            placeholder="Please enter a dictionary name (in)"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item label="字典名（英）" prop="type">
+        <el-form-item label="Name (English)" prop="type">
           <el-input
             v-model="formData.type"
-            placeholder="请输入字典名（英）"
+            placeholder="Please enter the dictionary name (English)"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item label="状态" prop="status" required>
+        <el-form-item label="Status" prop="status" required>
           <el-switch
             v-model="formData.status"
-            active-text="开启"
-            inactive-text="停用"
+            active-text="Turn on"
+            inactive-text="Disable"
           />
         </el-form-item>
-        <el-form-item label="描述" prop="desc">
+        <el-form-item label="Describe" prop="desc">
           <el-input
             v-model="formData.desc"
-            placeholder="请输入描述"
+            placeholder="Please enter a description"
             clearable
             :style="{ width: '100%' }"
           />
@@ -184,12 +184,12 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
+          <el-button size="small" @click="closeDialog">Cancel</el-button>
           <el-button
             size="small"
             type="primary"
             @click="enterDialog"
-          >确 定</el-button>
+          >Sure</el-button>
         </div>
       </template>
     </el-dialog>
@@ -231,21 +231,21 @@ const rules = ref({
   name: [
     {
       required: true,
-      message: '请输入字典名（中）',
+      message: 'Please enter a dictionary name (in)',
       trigger: 'blur',
     },
   ],
   type: [
     {
       required: true,
-      message: '请输入字典名（英）',
+      message: 'Please enter the dictionary name (English)',
       trigger: 'blur',
     },
   ],
   desc: [
     {
       required: true,
-      message: '请输入描述',
+      message: 'Please enter a description',
       trigger: 'blur',
     },
   ],
@@ -261,7 +261,7 @@ const onReset = () => {
   searchInfo.value = {}
 }
 
-// 条件搜索前端看此方法
+// Conditional search front-end to see this method
 const onSubmit = () => {
   page.value = 1
   pageSize.value = 10
@@ -271,7 +271,7 @@ const onSubmit = () => {
   getTableData()
 }
 
-// 分页
+// pagination
 const handleSizeChange = (val) => {
   pageSize.value = val
   getTableData()
@@ -282,7 +282,7 @@ const handleCurrentChange = (val) => {
   getTableData()
 }
 
-// 查询
+// Search
 const getTableData = async() => {
   const table = await getSysDictionaryList({
     page: page.value,
@@ -333,7 +333,7 @@ const deleteSysDictionaryFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功',
+      message: 'Successfully Deleted',
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--

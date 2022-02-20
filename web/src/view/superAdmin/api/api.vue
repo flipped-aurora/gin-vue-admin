@@ -2,17 +2,17 @@
   <div>
     <div class="gva-search-box">
       <el-form ref="searchForm" :inline="true" :model="searchInfo">
-        <el-form-item label="路径">
-          <el-input v-model="searchInfo.path" placeholder="路径" />
+        <el-form-item label="Path"> 
+          <el-input v-model="searchInfo.path" placeholder="Path" />
         </el-form-item>
-        <el-form-item label="描述">
-          <el-input v-model="searchInfo.description" placeholder="描述" />
+        <el-form-item label="Description">
+          <el-input v-model="searchInfo.description" placeholder="Description" />
         </el-form-item>
-        <el-form-item label="API组">
-          <el-input v-model="searchInfo.apiGroup" placeholder="api组" />
+        <el-form-item label="API Group">
+          <el-input v-model="searchInfo.apiGroup" placeholder="api group" />
         </el-form-item>
-        <el-form-item label="请求">
-          <el-select v-model="searchInfo.method" clearable placeholder="请选择">
+        <el-form-item label="Method">
+          <el-select v-model="searchInfo.method" clearable placeholder="please choose">
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -22,22 +22,22 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">Search</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">Reset</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">Add API</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-          <p>确定要删除吗？</p>
+          <p>You sure you want to delete it?</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="small" type="text" @click="deleteVisible = false">取消</el-button>
-            <el-button size="small" type="primary" @click="onDelete">确定</el-button>
+            <el-button size="small" type="text" @click="deleteVisible = false">Cancel</el-button>
+            <el-button size="small" type="primary" @click="onDelete">Sure</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;">删除</el-button>
+            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;">Delete</el-button>
           </template>
         </el-popover>
       </div>
@@ -47,10 +47,10 @@
           width="55"
         />
         <el-table-column align="left" label="id" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column align="left" label="API路径" min-width="150" prop="path" sortable="custom" />
-        <el-table-column align="left" label="API分组" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column align="left" label="API简介" min-width="150" prop="description" sortable="custom" />
-        <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
+        <el-table-column align="left" label="API Path" min-width="150" prop="path" sortable="custom" />
+        <el-table-column align="left" label="API Group" min-width="150" prop="apiGroup" sortable="custom" />
+        <el-table-column align="left" label="About API" min-width="150" prop="description" sortable="custom" />
+        <el-table-column align="left" label="Method" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>
               {{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}
@@ -58,20 +58,20 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="left" fixed="right" label="操作" width="200">
+        <el-table-column align="left" fixed="right" label="Operater" width="200">
           <template #default="scope">
             <el-button
               icon="edit"
               size="small"
               type="text"
               @click="editApiFunc(scope.row)"
-            >编辑</el-button>
+            >Edit</el-button>
             <el-button
               icon="delete"
               size="small"
               type="text"
               @click="deleteApiFunc(scope.row)"
-            >删除</el-button>
+            >Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -90,13 +90,13 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
-      <warning-bar title="新增API，需要在角色管理内配置权限才可使用" />
+      <warning-bar title="New API, need to configure permissions within role management" />
       <el-form ref="apiForm" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="路径" prop="path">
+        <el-form-item label="Path" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="请求" prop="method">
-          <el-select v-model="form.method" placeholder="请选择" style="width:100%">
+        <el-form-item label="Method" prop="method">
+          <el-select v-model="form.method" placeholder="Please choose" style="width:100%">
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -105,17 +105,17 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="api分组" prop="apiGroup">
+        <el-form-item label="api group" prop="apiGroup">
           <el-input v-model="form.apiGroup" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="api简介" prop="description">
+        <el-form-item label="abou api" prop="description">
           <el-input v-model="form.description" autocomplete="off" />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">Cancel</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">Sure</el-button>
         </div>
       </template>
     </el-dialog>
@@ -160,37 +160,37 @@ const form = ref({
 const methodOptions = ref([
   {
     value: 'POST',
-    label: '创建',
+    label: 'Create',
     type: 'success'
   },
   {
     value: 'GET',
-    label: '查看',
+    label: 'Check',
     type: ''
   },
   {
     value: 'PUT',
-    label: '更新',
+    label: 'Renew',
     type: 'warning'
   },
   {
     value: 'DELETE',
-    label: '删除',
+    label: 'Delete',
     type: 'danger'
   }
 ])
 
 const type = ref('')
 const rules = ref({
-  path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
+  path: [{ required: true, message: 'Please enter the API path', trigger: 'blur' }],
   apiGroup: [
-    { required: true, message: '请输入组名称', trigger: 'blur' }
+    { required: true, message: 'Please enter the group name', trigger: 'blur' }
   ],
   method: [
-    { required: true, message: '请选择请求方式', trigger: 'blur' }
+    { required: true, message: 'Please select a request method', trigger: 'blur' }
   ],
   description: [
-    { required: true, message: '请输入api介绍', trigger: 'blur' }
+    { required: true, message: 'Please enter the API introduction', trigger: 'blur' }
   ]
 })
 
@@ -281,15 +281,15 @@ const initForm = () => {
   }
 }
 
-const dialogTitle = ref('新增Api')
+const dialogTitle = ref('New Api')
 const dialogFormVisible = ref(false)
 const openDialog = (key) => {
   switch (key) {
     case 'addApi':
-      dialogTitle.value = '新增Api'
+      dialogTitle.value = 'New API'
       break
     case 'edit':
-      dialogTitle.value = '编辑Api'
+      dialogTitle.value = 'Edit API'
       break
     default:
       break
@@ -318,7 +318,7 @@ const enterDialog = async() => {
             if (res.code === 0) {
               ElMessage({
                 type: 'success',
-                message: '添加成功',
+                message: 'Added successfully',
                 showClose: true
               })
             }
@@ -333,7 +333,7 @@ const enterDialog = async() => {
             if (res.code === 0) {
               ElMessage({
                 type: 'success',
-                message: '编辑成功',
+                message: 'Editor success',
                 showClose: true
               })
             }
@@ -346,7 +346,7 @@ const enterDialog = async() => {
           {
             ElMessage({
               type: 'error',
-              message: '未知操作',
+              message: 'Unknown operation',
               showClose: true
             })
           }
@@ -357,9 +357,9 @@ const enterDialog = async() => {
 }
 
 const deleteApiFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm('This action will permanently delete the API under all roles, do you continue?', 'Hint', {
+    confirmButtonText: 'Sure',
+    cancelButtonText: 'Cancel',
     type: 'warning'
   })
     .then(async() => {
@@ -367,7 +367,7 @@ const deleteApiFunc = async(row) => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!'
+          message: 'Successfully deleted!'
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--

@@ -3,8 +3,8 @@
     <div class="gva-card-box">
       <div class="gva-card gva-top-card">
         <div class="gva-top-card-left">
-          <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
-          <div class="gva-top-card-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
+          <div class="gva-top-card-left-title">Good morning, administrator!k</div>
+          <div class="gva-top-card-left-dot">Please start a day of work</div>
           <div class="gva-top-card-left-rows">
             <el-row>
               <el-col :span="8" :xs="24" :sm="8">
@@ -12,7 +12,7 @@
                   <el-icon class="dasboard-icon">
                     <sort />
                   </el-icon>
-                  今日流量 (1231231)
+                  Today's traffic (1231231)
                 </div>
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
@@ -20,7 +20,7 @@
                   <el-icon class="dasboard-icon">
                     <avatar />
                   </el-icon>
-                  总用户数 (24001)
+                  Total number of users (24001)
                 </div>
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
@@ -28,14 +28,14 @@
                   <el-icon class="dasboard-icon">
                     <comment />
                   </el-icon>
-                  好评率 (99%)
+                  Praise rate (99%)
                 </div>
               </el-col>
             </el-row>
           </div>
           <div>
             <div class="gva-top-card-left-item">
-              使用教学：
+              Use teaching:
               <a
                 style="color:#409EFF"
                 target="view_window"
@@ -43,7 +43,7 @@
               >https://www.bilibili.com/video/BV1Rg411u7xH</a>
             </div>
             <div class="gva-top-card-left-item">
-              插件仓库：
+              Plug-in warehouse:
               <a
                 style="color:#409EFF"
                 target="view_window"
@@ -59,7 +59,7 @@
       <el-card class="gva-card quick-entrance">
         <template #header>
           <div class="card-header">
-            <span>快捷入口</span>
+            <span>Quick</span>
           </div>
         </template>
         <el-row :gutter="20">
@@ -87,7 +87,7 @@
     <div class="gva-card-box">
       <div class="gva-card">
         <div class="card-header">
-          <span>数据统计</span>
+          <span>Data statistics</span>
         </div>
         <div class="echart-box">
           <el-row :gutter="20">
@@ -112,42 +112,42 @@ import { useRouter } from 'vue-router'
 
 const toolCards = ref([
   {
-    label: '用户管理',
+    label: 'User Management',
     icon: 'monitor',
     name: 'user',
     color: '#ff9c6e',
     bg: 'rgba(255, 156, 110,.3)'
   },
   {
-    label: '角色管理',
+    label: 'Role management',
     icon: 'setting',
     name: 'authority',
     color: '#69c0ff',
     bg: 'rgba(105, 192, 255,.3)'
   },
   {
-    label: '菜单管理',
+    label: 'Menu management',
     icon: 'menu',
     name: 'menu',
     color: '#b37feb',
     bg: 'rgba(179, 127, 235,.3)'
   },
   {
-    label: '代码生成器',
+    label: 'Code generator',
     icon: 'cpu',
     name: 'autoCode',
     color: '#ffd666',
     bg: 'rgba(255, 214, 102,.3)'
   },
   {
-    label: '表单生成器',
+    label: 'Form generator',
     icon: 'document-checked',
     name: 'formCreate',
     color: '#ff85c0',
     bg: 'rgba(255, 133, 192,.3)'
   },
   {
-    label: '关于我们',
+    label: 'About us',
     icon: 'user',
     name: 'about',
     color: '#5cdbd3',

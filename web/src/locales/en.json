@@ -162,9 +162,8 @@
 		"change": "Change",
 		"confirmDelete": "You sure you want to delete it?",
 		"disable": "Disable",
-		"turnOn":"Turn on"
-		
-
+		"turnOn":"Turn on",
+		"response": "Response"
 		
 	},
 	"historyComponent": {
@@ -313,7 +312,17 @@
 		"addEntry": "Add Entry",
 		"sortMark": "Sort Mark",
 		"pleaseEnterAnImpression": "Please enter an Impression",
-		"pleaseEnterADictionary":"Please enter a Dictionary"
+		"pleaseEnterADictionary":"Please enter a Dictionary",
+		"createChangeSuccessful": "Create/change successful"
+	},
+	"operationRecord":{
+		"requestMethod": "Request method",
+		"requestPath": "Request path",
+		"statusCode": "Status Code",
+		"requestIP": "Request IP",
+		"ask": "Ask",
+		"operator": "Operator"
+		
 
 	}
 }

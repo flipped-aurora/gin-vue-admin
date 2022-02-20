@@ -147,21 +147,21 @@ const rules = ref({
   label: [
     {
       required: true,
-      message: 'Please enter an Impression',
+      message: t('dic.pleaseEnterAnImpression'),
       trigger: 'blur'
     }
   ],
   value: [
     {
       required: true,
-      message: 'Please enter a Dictionary',
+      message: t('dic.pleaseEnterADictionary'),
       trigger: 'blur'
     }
   ],
   sort: [
     {
       required: true,
-      message: 'Sort mark',
+      message: t('dic.sortMark'),
       trigger: 'blur'
     }
   ]
@@ -241,7 +241,7 @@ const deleteSysDictionaryDetailFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: 'Successfully deleted'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--
@@ -270,7 +270,7 @@ const enterDialog = async() => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: 'Create/change successful'
+        message: t('dic.createChangeSuccessful')
       })
       closeDialog()
       getTableData()

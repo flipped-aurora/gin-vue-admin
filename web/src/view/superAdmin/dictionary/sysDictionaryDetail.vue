@@ -2,27 +2,27 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="Impression">
-          <el-input v-model="searchInfo.label" placeholder="search condition" />
+        <el-form-item :label="t('dic.impression')">
+          <el-input v-model="searchInfo.label" :placeholder="t('general.searchCondition')" />
         </el-form-item>
-        <el-form-item label="Dictionary">
-          <el-input v-model="searchInfo.value" placeholder="search condition" />
+        <el-form-item :label="t('dic.dictionary')">
+          <el-input v-model="searchInfo.value" :placeholder="t('general.searchCondition')" />
         </el-form-item>
-        <el-form-item label="Enabled State" prop="status">
-          <el-select v-model="searchInfo.status" placeholder="please choose">
-            <el-option key="true" label="Yes" value="true" />
-            <el-option key="false" label="No" value="false" />
+        <el-form-item :label="t('dic.enableState')" prop="status">
+          <el-select v-model="searchInfo.status" :placeholder="t('general.choose')">
+            <el-option key="true" :label="t('general.yes')" value="true" />
+            <el-option key="false" :label="t('general.no')" value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">Search</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">Reset</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">{{t('general.search')}}</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">{{t('general.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog">Add Entry</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog">{{t('dic.addEntry')}}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -32,31 +32,31 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="Date" width="180">
+        <el-table-column align="left" :label="t('general.date')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="Impression" prop="label" width="120" />
+        <el-table-column align="left" :label="t('dic.impression')" prop="label" width="120" />
 
-        <el-table-column align="left" label="Dictionary" prop="value" width="120" />
+        <el-table-column align="left" :label="t('dic.dictionary')" prop="value" width="120" />
 
-        <el-table-column align="left" label="Enabled State" prop="status" width="120">
+        <el-table-column align="left" :label="t('dic.enableState')" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="Sort mark" prop="sort" width="120" />
+        <el-table-column align="left" :label="t('dic.sortMark')" prop="sort" width="120" />
 
-        <el-table-column align="left" label="Action">
+        <el-table-column align="left" :label="t('general.action')">
           <template #default="scope">
             <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">Change</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-              <p>You sure you want to delete it?</p>
+              <p>{{t('general.confirmDelete')}}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">Cancel</el-button>
-                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">Sure</el-button>
+                <el-button size="small" type="text" @click="scope.row.visible = false">{{t('general.cancel')}}</el-button>
+                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">{{t('general.yes')}}</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">Delete</el-button>
+                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">{{t('general.delete')}}</el-button>
               </template>
             </el-popover>
           </template>
@@ -76,37 +76,37 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="Popup operation">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="t('general.operations')">
       <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
-        <el-form-item label="Impression" prop="label">
+        <el-form-item :label="t('dic.impression')" prop="label">
           <el-input
             v-model="formData.label"
-            placeholder="Please enter an Impression"
+            :placeholder="t('dic.pleaseEnterAnImpression')"
             clearable
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="Dictionary" prop="value">
+        <el-form-item :label="t('dic.dictionary')" prop="value">
           <el-input-number
             v-model.number="formData.value"
             step-strictly
             :step="1"
-            placeholder="Please enter a Dictionary"
+            :placeholder="t('dic.pleaseEnterADictionary')"
             clearable
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="Enabled state" prop="status" required>
-          <el-switch v-model="formData.status" active-text="Turn on" inactive-text="Disable" />
+        <el-form-item :label="t('dic.enableState')" prop="status" required>
+          <el-switch v-model="formData.status" :active-text="t('general.turnOn')" inactive-text="Disable" />
         </el-form-item>
-        <el-form-item label="Sort mark" prop="sort">
-          <el-input-number v-model.number="formData.sort" placeholder="Sort mark" />
+        <el-form-item :label="t('dic.sortMark')" prop="sort">
+          <el-input-number v-model.number="formData.sort" :placeholder="t('dic.sortMark')" />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">Cancel</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">Sure</el-button>
+          <el-button size="small" @click="closeDialog">{{t('general.cancel')}}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{t('general.yes')}}</el-button>
         </div>
       </template>
     </el-dialog>

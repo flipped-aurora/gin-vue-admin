@@ -13,9 +13,6 @@
 		"apiPath": "API path",
 		"aboutAPI": "About API",
 		"deleteAPIMessage": "This action will permanently delete the API under all roles, do you continue?"
-		
-
-		
 	},
 	"authority": {
 		"addRole": "Add Role",
@@ -156,7 +153,18 @@
 		"search": "Search",
 		"reset": "Reset",
 		"about" :"About",
-		"action": "Action"
+		"action": "Action",
+		"searchCondition": "Search Condition",
+		"choose": "Choose",
+		"status": "Status",
+		"des": "Description",
+		"detail": "Detail",
+		"change": "Change",
+		"confirmDelete": "You sure you want to delete it?",
+		"disable": "Disable",
+		"turnOn":"Turn on"
+		
+
 		
 	},
 	"historyComponent": {
@@ -291,5 +299,21 @@
 		"userNameNote": "Please enter username",
 		"userRole": "User Role",
 		"userRoleNote": "Please select user role"
+	},
+	"dic":{
+		"warningBarTitle": "Get a dictionary and the cache method has been encapsulated at the front end Utils / Dictionary has been packaged until you write a way you write.",
+		"nameMiddle": "Name (Middle)",
+		"nameEnglish": "Name (English)",
+		"pleaseEnterADictionaryNameIn": "Please enter a dictionary name (in)",
+		"pleaseEnterADictionaryNameEn": "Please enter a dictionary name (English)",
+		"pleaseEnterADescription": "Please enter a description",
+		"impression" : "Impression",
+		"dictionary": "Dictionary",
+		"enableState": "Enable State",
+		"addEntry": "Add Entry",
+		"sortMark": "Sort Mark",
+		"pleaseEnterAnImpression": "Please enter an Impression",
+		"pleaseEnterADictionary":"Please enter a Dictionary"
+
 	}
 }

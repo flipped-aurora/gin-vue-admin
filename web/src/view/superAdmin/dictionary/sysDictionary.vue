@@ -1,24 +1,24 @@
 <template>
   <div>
     <warning-bar
-      title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
+      :title="t('dic.warningBarTitle')"
     />
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="Name (middle)">
-          <el-input v-model="searchInfo.name" placeholder="search condition" />
+        <el-form-item :label="t('dic.nameMiddle')">
+          <el-input v-model="searchInfo.name" :placeholder="t('general.searchCondition')" />
         </el-form-item>
-        <el-form-item label="Name (English)">
-          <el-input v-model="searchInfo.type" placeholder="search condition" />
+        <el-form-item :label="t('dic.nameEnglish')">
+          <el-input v-model="searchInfo.type" :placeholder="t('general.searchCondition')" />
         </el-form-item>
-        <el-form-item label="Status" prop="status">
-          <el-select v-model="searchInfo.status" clear placeholder="please choose">
+        <el-form-item :label="t('general.status')" prop="status">
+          <el-select v-model="searchInfo.status" clear :placeholder="t('general.choose')">
             <el-option key="true" label="Yes" value="true" />
             <el-option key="false" label="No" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="Describe">
-          <el-input v-model="searchInfo.desc" placeholder="search condition" />
+        <el-form-item :label="t('general.des')">
+          <el-input v-model="searchInfo.desc" :placeholder="t('general.searchCondition')" />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -26,12 +26,12 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >Search</el-button>
+          >{{t('general.date')}}</el-button>
           <el-button
             size="small"
             icon="refresh"
             @click="onReset"
-          >Reset</el-button>
+          >{{t('general.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -42,7 +42,7 @@
           type="primary"
           icon="plus"
           @click="openDialog"
-        >Add new</el-button>
+        >{{t('general.add')}}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -52,7 +52,7 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="date" width="180">
+        <el-table-column align="left" :label="t('general.date')" width="180">
           <template #default="scope">{{
             formatDate(scope.row.CreatedAt)
           }}</template>
@@ -60,46 +60,46 @@
 
         <el-table-column
           align="left"
-          label="Name (middle)"
+          :label="t('dic.nameMiddle')"
           prop="name"
           width="160"
         />
 
         <el-table-column
           align="left"
-          label="Name (English)"
+          :label="t('dic.nameEnglish')"
           prop="type"
           width="120"
         />
 
-        <el-table-column align="left" label="Status" prop="status" width="120">
+        <el-table-column align="left" :label="t('general.status')" prop="status" width="120">
           <template #default="scope">{{
             formatBoolean(scope.row.status)
           }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="Describe" prop="desc" width="280" />
+        <el-table-column align="left" :label="t('general.des')" prop="desc" width="280" />
 
-        <el-table-column align="left" label="Action">
+        <el-table-column align="left" :label="t('general.action')">
           <template #default="scope">
             <el-button
               size="small"
               icon="document"
               type="text"
               @click="toDetile(scope.row)"
-            >Details</el-button>
+            >{{t('general.detail')}}</el-button>
             <el-button
               size="small"
               icon="edit"
               type="text"
               @click="updateSysDictionaryFunc(scope.row)"
-            >Change</el-button>
+            >{{t('general.change')}}</el-button>
             <el-popover
               v-model:visible="scope.row.visible"
               placement="top"
               width="160"
             >
-              <p>You sure you want to delete it?</p>
+              <p>{{t('general.confirmDelete')}}</p>
               <div style="text-align: right; margin-top: 8px">
                 <el-button
                   size="small"
@@ -110,7 +110,7 @@
                   type="primary"
                   size="small"
                   @click="deleteSysDictionaryFunc(scope.row)"
-                >Sure</el-button>
+                >{{t('general.yes')}}</el-button>
               </div>
               <template #reference>
                 <el-button
@@ -119,7 +119,7 @@
                   size="small"
                   style="margin-left: 10px"
                   @click="scope.row.visible = true"
-                >Delete</el-button>
+                >{{t('general.delete')}}</el-button>
               </template>
             </el-popover>
           </template>
@@ -141,7 +141,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      title="Popup operation"
+      :title="t('general.operations')"
     >
       <el-form
         ref="dialogForm"
@@ -150,33 +150,33 @@
         size="medium"
         label-width="110px"
       >
-        <el-form-item label="Name (middle)" prop="name">
+        <el-form-item :label="t('dic.nameMiddle')" prop="name">
           <el-input
             v-model="formData.name"
-            placeholder="Please enter a dictionary name (in)"
+            :placeholder="t('dic.pleaseEnterADictionaryNameIn')"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item label="Name (English)" prop="type">
+        <el-form-item :label="t('dic.nameEnglish')" prop="type">
           <el-input
             v-model="formData.type"
-            placeholder="Please enter the dictionary name (English)"
+            :placeholder="t('dic.pleaseEnterADictionaryNameEn')"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item label="Status" prop="status" required>
+        <el-form-item :label="t('general.status')" prop="status" required>
           <el-switch
             v-model="formData.status"
-            active-text="Turn on"
-            inactive-text="Disable"
+            :active-text="t('general.turOn')"
+            :inactive-text="t('general.disable')"
           />
         </el-form-item>
-        <el-form-item label="Describe" prop="desc">
+        <el-form-item :label="t('general.des')" prop="desc">
           <el-input
             v-model="formData.desc"
-            placeholder="Please enter a description"
+            :placeholder="t('dic.pleaseEnterADescription')"
             clearable
             :style="{ width: '100%' }"
           />
@@ -184,12 +184,12 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">Cancel</el-button>
+          <el-button size="small" @click="closeDialog">{{t('general.cancel')}}</el-button>
           <el-button
             size="small"
             type="primary"
             @click="enterDialog"
-          >Sure</el-button>
+          >{{t('general.yes')}}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -231,21 +231,21 @@ const rules = ref({
   name: [
     {
       required: true,
-      message: 'Please enter a dictionary name (in)',
+      message: t('dic.pleaseEnterADictionaryNameIn'),
       trigger: 'blur',
     },
   ],
   type: [
     {
       required: true,
-      message: 'Please enter the dictionary name (English)',
+      message: t('dic.pleaseEnterADictionaryNameEn'),
       trigger: 'blur',
     },
   ],
   desc: [
     {
       required: true,
-      message: 'Please enter a description',
+      message: t('dic.pleaseEnterADescription'),
       trigger: 'blur',
     },
   ],

@@ -10,24 +10,24 @@
           :on-success="loadExcel"
           :show-file-list="false"
         >
-          <el-button size="small" type="primary" icon="upload">导入</el-button>
+          <el-button size="small" type="primary" icon="upload">Import</el-button>
         </el-upload>
-        <el-button class="excel-btn" size="small" type="primary" icon="download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
-        <el-button class="excel-btn" size="small" type="success" icon="download" @click="downloadExcelTemplate()">下载模板</el-button>
+        <el-button class="excel-btn" size="small" type="primary" icon="download" @click="handleExcelExport('ExcelExport.xlsx')">Export</el-button>
+        <el-button class="excel-btn" size="small" type="success" icon="download" @click="downloadExcelTemplate()">Download template</el-button>
       </div>
       <el-table :data="tableData" row-key="ID">
         <el-table-column align="left" label="ID" min-width="100" prop="ID" />
-        <el-table-column align="left" show-overflow-tooltip label="路由Name" min-width="160" prop="name" />
-        <el-table-column align="left" show-overflow-tooltip label="路由Path" min-width="160" prop="path" />
-        <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
+        <el-table-column align="left" show-overflow-tooltip label="Route Name" min-width="160" prop="name" />
+        <el-table-column align="left" show-overflow-tooltip label="Routing Path" min-width="160" prop="path" />
+        <el-table-column align="left" label="Is id hidden?" min-width="100" prop="hidden">
 
           <template #default="scope">
-            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+            <span>{{ scope.row.hidden?"hide":"show" }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
-        <el-table-column align="left" label="排序" min-width="70" prop="sort" />
-        <el-table-column align="left" label="文件路径" min-width="360" prop="component" />
+        <el-table-column align="left" label="Parent node" min-width="90" prop="parentId" />
+        <el-table-column align="left" label="Sort" min-width="70" prop="sort" />
+        <el-table-column align="left" label="File path" min-width="360" prop="component" />
       </el-table>
     </div>
   </div>

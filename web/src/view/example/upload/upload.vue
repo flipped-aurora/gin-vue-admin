@@ -11,7 +11,7 @@
           :show-file-list="false"
           class="upload-btn"
         >
-          <el-button size="small" type="primary">普通上传</el-button>
+          <el-button size="small" type="primary">Ordinary upload</el-button>
         </el-upload>
         <upload-image
           v-model:imageUrl="imageUrl"
@@ -23,19 +23,19 @@
       </div>
 
       <el-table :data="tableData">
-        <el-table-column align="left" label="预览" width="100">
+        <el-table-column align="left" label="Preview" width="100">
           <template #default="scope">
             <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="日期" prop="UpdatedAt" width="180">
+        <el-table-column align="left" label="Date" prop="UpdatedAt" width="180">
           <template #default="scope">
             <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="文件名" prop="name" width="180" />
-        <el-table-column align="left" label="链接" prop="url" min-width="300" />
-        <el-table-column align="left" label="标签" prop="tag" width="100">
+        <el-table-column align="left" label="File Name" prop="name" width="180" />
+        <el-table-column align="left" label="Link" prop="url" min-width="300" />
+        <el-table-column align="left" label="Tag" prop="tag" width="100">
           <template #default="scope">
             <el-tag
               :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
@@ -43,10 +43,10 @@
             >{{ scope.row.tag }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" width="160">
+        <el-table-column align="left" label="Action" width="160">
           <template #default="scope">
-            <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">删除</el-button>
+            <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">Download</el-button>
+            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">Delete</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -111,9 +111,9 @@ const getTableData = async() => {
 getTableData()
 
 const deleteFileFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久文件, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm('Does this action will permanently file, do you continue?', 'hint', {
+    confirmButtonText: 'Sure',
+    cancelButtonText: 'Cancel',
     type: 'warning'
   })
     .then(async() => {
@@ -121,7 +121,7 @@ const deleteFileFunc = async(row) => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!'
+          message: 'Successfull deleted!'
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
@@ -132,7 +132,7 @@ const deleteFileFunc = async(row) => {
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: '已取消删除'
+        message: 'Delete'
       })
     })
 }
@@ -144,11 +144,11 @@ const checkFile = (file) => {
   const isPng = file.type === 'image/png'
   const isLt2M = file.size / 1024 / 1024 < 0.5
   if (!isJPG && !isPng) {
-    ElMessage.error('上传图片只能是 jpg或png 格式!')
+    ElMessage.error('Upload images can only be JPG or PNG format!')
     fullscreenLoading.value = false
   }
   if (!isLt2M) {
-    ElMessage.error('未压缩未见上传图片大小不能超过 500KB，请使用压缩上传')
+    ElMessage.error('Uncompressed, no upper image size cannot exceed 500KB, please use compression upload')
     fullscreenLoading.value = false
   }
   return (isPng || isJPG) && isLt2M
@@ -173,7 +173,7 @@ const uploadSuccess = (res) => {
 const uploadError = () => {
   ElMessage({
     type: 'error',
-    message: '上传失败'
+    message: 'upload failed'
   })
   fullscreenLoading.value = false
 }

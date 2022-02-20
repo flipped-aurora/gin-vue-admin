@@ -21,7 +21,7 @@
                 <el-icon>
                   <edit />
                 </el-icon>
-                重新上传</span>
+                re-upload</span>
             </div>
             <div class="user-personality">
               <p v-if="!editFlag" class="nickName">
@@ -39,7 +39,7 @@
                   <close />
                 </el-icon>
               </p>
-              <p class="person-info">这个家伙很懒，什么都没有留下</p>
+              <p class="person-info">This guy is too lazy, nothing left</p>
             </div>
             <div class="user-information">
               <ul>
@@ -52,21 +52,21 @@
                 <el-tooltip
                   class="item"
                   effect="light"
-                  content="北京反转极光科技有限公司-技术部-前端事业群"
+                  content="Beijing Inverse Aurora Science and Technology Co., Ltd. - Technical Department - Front End Business Group"
                   placement="top"
                 >
                   <li>
                     <el-icon>
                       <data-analysis />
                     </el-icon>
-                    北京反转极光科技有限公司-技术部-前端事业群
+                    Beijing Inverse Aurora Science and Technology Co., Ltd. - Technical Department - Front End Business Group
                   </li>
                 </el-tooltip>
                 <li>
                   <el-icon>
                     <video-camera />
                   </el-icon>
-                  中国·北京市·朝阳区
+                  China · Beijing Chaoyang District
                 </li>
                 <el-tooltip
                   class="item"
@@ -89,37 +89,37 @@
       <el-col :span="18">
         <div class="user-addcount">
           <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="账号绑定" name="second">
+            <el-tab-pane label="Account binding" name="second">
               <ul>
                 <li>
-                  <p class="title">密保手机</p>
+                  <p class="title">Phone</p>
                   <p class="desc">
-                    已绑定手机:{{ userStore.userInfo.phone }}
-                    <a href="javascript:void(0)" @click="changePhoneFlag = true">立即修改</a>
+                    Binding mobile phone:{{ userStore.userInfo.phone }}
+                    <a href="javascript:void(0)" @click="changePhoneFlag = true">Modification</a>
                   </p>
                 </li>
                 <li>
-                  <p class="title">密保邮箱</p>
+                  <p class="title">Secret mailbox</p>
                   <p class="desc">
-                    已绑定邮箱：{{ userStore.userInfo.email }}
-                    <a href="javascript:void(0)" @click="changeEmailFlag = true">立即修改</a>
+                    Binding mailbox:{{ userStore.userInfo.email }}
+                    <a href="javascript:void(0)" @click="changeEmailFlag = true">Modification</a>
                   </p>
                 </li>
                 <li>
-                  <p class="title">密保问题</p>
+                  <p class="title">Security Question</p>
                   <p class="desc">
-                    未设置密保问题
-                    <a href="javascript:void(0)">去设置</a>
+                    No security issues are set
+                    <a href="javascript:void(0)">Set</a>
                   </p>
                 </li>
                 <li>
-                  <p class="title">修改密码</p>
+                  <p class="title">Change Password</p>
                   <p class="desc">
-                    修改个人密码
+                    Modify personal password
                     <a
                       href="javascript:void(0)"
                       @click="showPassword = true"
-                    >修改密码</a>
+                    >Change Password</a>
                   </p>
                 </li>
               </ul>
@@ -133,7 +133,7 @@
 
     <el-dialog
       v-model="showPassword"
-      title="修改密码"
+      title="Change Password"
       width="360px"
       @close="clearPassword"
     >
@@ -143,13 +143,13 @@
         :rules="rules"
         label-width="80px"
       >
-        <el-form-item :minlength="6" label="原密码" prop="password">
+        <el-form-item :minlength="6" label="Password" prop="password">
           <el-input v-model="pwdModify.password" show-password />
         </el-form-item>
-        <el-form-item :minlength="6" label="新密码" prop="newPassword">
+        <el-form-item :minlength="6" label="New Password" prop="newPassword">
           <el-input v-model="pwdModify.newPassword" show-password />
         </el-form-item>
-        <el-form-item :minlength="6" label="确认密码" prop="confirmPassword">
+        <el-form-item :minlength="6" label="Confirm Password" prop="confirmPassword">
           <el-input v-model="pwdModify.confirmPassword" show-password />
         </el-form-item>
       </el-form>
@@ -158,25 +158,25 @@
           <el-button
             size="small"
             @click="showPassword = false"
-          >取 消</el-button>
+          >Cancel</el-button>
           <el-button
             size="small"
             type="primary"
             @click="savePassword"
-          >确 定</el-button>
+          >Save</el-button>
         </div>
       </template>
     </el-dialog>
 
-    <el-dialog v-model="changePhoneFlag" title="绑定手机" width="600px">
+    <el-dialog v-model="changePhoneFlag" title="Bind mobile phone" width="600px">
       <el-form :model="phoneForm">
-        <el-form-item label="手机号" label-width="120px">
-          <el-input v-model="phoneForm.phone" placeholder="请输入手机号" autocomplete="off" />
+        <el-form-item label="Phone" label-width="120px">
+          <el-input v-model="phoneForm.phone" placeholder="Please enter the phone" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="验证码" label-width="120px">
+        <el-form-item label="Verification code" label-width="120px">
           <div class="code-box">
-            <el-input v-model="phoneForm.code" autocomplete="off" placeholder="请自行设计短信服务，此处为模拟随便写" style="width:300px" />
-            <el-button size="small" type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-input v-model="phoneForm.code" autocomplete="off" placeholder="Please design SMS service yourself, here to write casually" style="width:300px" />
+            <el-button size="small" type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)Re-acquire`:'get verification code' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -185,25 +185,25 @@
           <el-button
             size="small"
             @click="closeChangePhone"
-          >取消</el-button>
+          >Cancel</el-button>
           <el-button
             type="primary"
             size="small"
             @click="changePhone"
-          >更改</el-button>
+          >Change</el-button>
         </span>
       </template>
     </el-dialog>
 
-    <el-dialog v-model="changeEmailFlag" title="绑定邮箱" width="600px">
+    <el-dialog v-model="changeEmailFlag" title="Binding mailbox" width="600px">
       <el-form :model="emailForm">
-        <el-form-item label="邮箱" label-width="120px">
-          <el-input v-model="emailForm.email" placeholder="请输入邮箱" autocomplete="off" />
+        <el-form-item label="Mail" label-width="120px">
+          <el-input v-model="emailForm.email" placeholder="Please input your email" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="验证码" label-width="120px">
+        <el-form-item label="Code" label-width="120px">
           <div class="code-box">
-            <el-input v-model="emailForm.code" placeholder="请自行设计邮件服务，此处为模拟随便写" autocomplete="off" style="width:300px" />
-            <el-button size="small" type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-input v-model="emailForm.code" placeholder="Please design the mail service yourself, here to write casually" autocomplete="off" style="width:300px" />
+            <el-button size="small" type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)Re-acquire`:'get verification code' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -212,12 +212,12 @@
           <el-button
             size="small"
             @click="closeChangeEmail"
-          >取消</el-button>
+          >Cancel</el-button>
           <el-button
             type="primary"
             size="small"
             @click="changeEmail"
-          >更改</el-button>
+          >Change</el-button>
         </span>
       </template>
     </el-dialog>
@@ -241,20 +241,20 @@ const path = ref(import.meta.env.VITE_BASE_API)
 const activeName = ref('second')
 const rules = reactive({
   password: [
-    { required: true, message: '请输入密码', trigger: 'blur' },
-    { min: 6, message: '最少6个字符', trigger: 'blur' },
+    { required: true, message: 'Please enter your password', trigger: 'blur' },
+    { min: 6, message: 'At least 6 characters', trigger: 'blur' },
   ],
   newPassword: [
-    { required: true, message: '请输入新密码', trigger: 'blur' },
-    { min: 6, message: '最少6个字符', trigger: 'blur' },
+    { required: true, message: 'Please enter a new password', trigger: 'blur' },
+    { min: 6, message: 'At least 6 characters', trigger: 'blur' },
   ],
   confirmPassword: [
-    { required: true, message: '请输入确认密码', trigger: 'blur' },
-    { min: 6, message: '最少6个字符', trigger: 'blur' },
+    { required: true, message: 'Please enter a confirmation password', trigger: 'blur' },
+    { min: 6, message: 'At least 6 characters', trigger: 'blur' },
     {
       validator: (rule, value, callback) => {
         if (value !== pwdModify.value.newPassword) {
-          callback(new Error('两次密码不一致'))
+          callback(new Error('Two passwords are inconsistent'))
         } else {
           callback()
         }
@@ -279,7 +279,7 @@ const savePassword = async() => {
         newPassword: pwdModify.value.newPassword,
       }).then((res) => {
         if (res.code === 0) {
-          ElMessage.success('修改密码成功！')
+          ElMessage.success('successfully change password!')
         }
         showPassword.value = false
       })
@@ -309,7 +309,7 @@ const enterImg = async(url) => {
     userStore.ResetUserInfo({ headerImg: url })
     ElMessage({
       type: 'success',
-      message: '设置成功',
+      message: 'Set success',
     })
   }
 }
@@ -332,7 +332,7 @@ const enterEdit = async() => {
     userStore.ResetUserInfo({ nickName: nickName.value })
     ElMessage({
       type: 'success',
-      message: '设置成功',
+      message: 'Set success',
     })
   }
   nickName.value = ''
@@ -370,7 +370,7 @@ const closeChangePhone = () => {
 const changePhone = async() => {
   const res = await setSelfInfo({ phone: phoneForm.phone })
   if (res.code === 0) {
-    ElMessage.success('修改成功')
+    ElMessage.success('Successfully modified')
     userStore.ResetUserInfo({ phone: phoneForm.phone })
     closeChangePhone()
   }
@@ -403,7 +403,7 @@ const closeChangeEmail = () => {
 const changeEmail = async() => {
   const res = await setSelfInfo({ email: emailForm.email })
   if (res.code === 0) {
-    ElMessage.success('修改成功')
+    ElMessage.success('Successfully modified')
     userStore.ResetUserInfo({ email: emailForm.email })
     closeChangeEmail()
   }

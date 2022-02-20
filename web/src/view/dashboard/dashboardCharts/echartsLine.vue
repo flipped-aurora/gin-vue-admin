@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-line-box">
     <div class="dashboard-line-title">
-      访问趋势
+      {{ t("view.dashboard.dashboardCharts.accesssTrends") }}
     </div>
     <div
       ref="echart"
@@ -13,10 +13,13 @@
 import * as echarts from 'echarts'
 import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import 'echarts/theme/macarons'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 var dataAxis = []
 for (var i = 1; i < 13; i++) {
-  dataAxis.push(`${i}月`)
+  dataAxis.push(`${i} ` + t('view.dashboard.dashboardCharts.month'))
 }
 var data = [
   220,

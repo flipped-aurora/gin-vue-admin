@@ -272,5 +272,31 @@
 		"userNameNote": "请输入用户名",
 		"userRole": "用户角色",
 		"userRoleNote": "请选择用户角色"
+	},
+	"view": {
+		"dashboard": {
+			"about": "关于我们",
+			"codeGen": "代码生成器",
+			"dashboardCharts": {
+				"accesssTrends": "访问趋势",
+				"month": "月"
+			},
+			"dashboardTable": {
+				"changeLog": "更新日志"
+			},
+			"formCreator": "表单生成器",
+			"instructionalUse": "使用教学：",
+			"menuManage": "菜单管理",
+			"note": "今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。",
+			"pluginRepo": "插件仓库：",
+			"positiveRatings": "好评率",
+			"quickEntry": "快捷入口",
+			"roleManage": "角色管理",
+			"statistics": "数据统计",
+			"title": "早安，管理员，请开始一天的工作吧",
+			"todaysTraffic": "今日流量",
+			"totalNumberOfUsers": "总用户数",
+			"userManage": "用户管理"
+		}
 	}
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="commit-table">
     <div class="commit-table-title">
-      更新日志
+      {{ t ("view.dashboard.dashboardTable.changeLog") }}
     </div>
     <div class="log">
       <div v-for="(item,key) in dataTimeline" :key="key" class="log-item">
@@ -22,6 +22,9 @@ export default {
 import { Commits } from '@/api/github'
 import { formatTimeToStr } from '@/utils/date.js'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const loading = ref(true)
 const dataTimeline = ref([])

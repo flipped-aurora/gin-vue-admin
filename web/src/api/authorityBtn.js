@@ -17,3 +17,11 @@ export const setAuthorityBtnApi = (data) => {
   })
 }
 
+export const canRemoveAuthorityBtnApi = (params) => {
+  return service({
+    url: '/authorityBtn/canRemoveAuthorityBtn',
+    method: 'post',
+    params
+  })
+}
+

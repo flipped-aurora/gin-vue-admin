@@ -1,6 +1,7 @@
 package system
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -18,7 +19,7 @@ func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (e
 	}
 	var selected []uint
 	for _, v := range authorityBtn {
-		selected = append(selected, v.SysMenuBtnID)
+		selected = append(selected, v.SysBaseMenuBtnID)
 	}
 	res.Selected = selected
 	return err, res
@@ -33,15 +34,25 @@ func (a *AuthorityBtnService) SetAuthorityBtn(req request.SysAuthorityBtnReq) (e
 		}
 		for _, v := range req.Selected {
 			authorityBtn = append(authorityBtn, system.SysAuthorityBtn{
-				req.AuthorityId,
-				req.MenuID,
-				v,
+				AuthorityId:      req.AuthorityId,
+				SysMenuID:        req.MenuID,
+				SysBaseMenuBtnID: v,
 			})
 		}
-		err = tx.Create(&authorityBtn).Error
+		if len(authorityBtn) > 0 {
+			err = tx.Create(&authorityBtn).Error
+		}
 		if err != nil {
 			return err
 		}
 		return err
 	})
+}
+
+func (a *AuthorityBtnService) CanRemoveAuthorityBtn(ID string) (err error) {
+	fErr := global.GVA_DB.First(&system.SysAuthorityBtn{}, "sys_base_menu_btn_id = ?", ID).Error
+	if errors.Is(fErr, gorm.ErrRecordNotFound) {
+		return nil
+	}
+	return errors.New("此按钮正在被使用无法删除")
 }

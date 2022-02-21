@@ -184,8 +184,10 @@ const enterDialog = async() => {
     selected,
     authorityId: props.row.authorityId
   })
-  console.log(res)
-  btnVisible.value = false
+  if (res.code === 0) {
+    ElMessage({ type: 'success', message: '设置成功' })
+    btnVisible.value = false
+  }
 }
 
 </script>

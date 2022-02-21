@@ -149,7 +149,7 @@ const btnTableRef = ref()
 let menuID = ''
 const OpenBtn = async(data) => {
   menuID = data.ID
-  const res = await getAuthorityBtnApi({ menuID: menuID })
+  const res = await getAuthorityBtnApi({ menuID: menuID, authorityId: props.row.authorityId })
   if (res.code === 0) {
     openDialog(data)
     await nextTick()
@@ -179,7 +179,11 @@ const closeDialog = () => {
 }
 const enterDialog = async() => {
   const selected = multipleSelection.value.map(item => item.ID)
-  const res = await setAuthorityBtnApi({ menuID, selected })
+  const res = await setAuthorityBtnApi({
+    menuID,
+    selected,
+    authorityId: props.row.authorityId
+  })
   console.log(res)
   btnVisible.value = false
 }

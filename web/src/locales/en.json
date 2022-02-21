@@ -227,8 +227,8 @@
 		"sort": "Sort",
 		"sortTags": "Sort Tags",
 		"subMenuNote": "If the menu contains submenus, create a router-view secondary routing page or",
-		"visibility": "Visibility",
-		"visibilityNote": "Hide in the list"
+		"visibility": "Whether to hide",
+		"visibilityNote": "Whether to hide in the list"
 	},
 	"menus": {
 		"": "",
@@ -250,7 +250,6 @@
 		"systemConfig": "System Configuration"
 	},
 	"user": {
-		"": "",
 		"addUser": "Add User",
 		"anotherUserEdit": "There is currently a user who is editing",
 		"avatar": "Avatar",

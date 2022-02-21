@@ -250,7 +250,6 @@
 		"systemConfig": "系统配置"
 	},
 	"user": {
-		"": "",
 		"addUser": "新增用户",
 		"anotherUserEdit": "当前存在正在编辑的用户",
 		"avatar": "头像",

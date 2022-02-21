@@ -12,6 +12,7 @@ const formatRouter = (routes, routeMap) => {
     if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404' && !item.hidden) {
       routerListArr.push({ label: item.meta.title, value: item.name })
     }
+    item.meta.btns = item.btns
     item.meta.hidden = item.hidden
     routeMap[item.name] = item
     if (item.children && item.children.length > 0) {

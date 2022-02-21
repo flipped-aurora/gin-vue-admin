@@ -177,6 +177,42 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-button
+          style="margin-top:12px"
+          size="small"
+          type="primary"
+          icon="edit"
+          @click="addBtn(form)"
+        >新增可控按钮</el-button>
+        <el-table :data="form.menuBtn" style="width: 100%">
+          <el-table-column align="left" prop="name" label="按钮名称" width="180">
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.name" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="left" prop="name" label="备注" width="180">
+            <template #default="scope">
+              <div>
+                <el-input v-model="scope.row.desc" />
+              </div>
+            </template>
+          </el-table-column>
+          <el-table-column align="left">
+            <template #default="scope">
+              <div>
+                <el-button
+                  type="danger"
+                  size="small"
+                  icon="delete"
+                  @click="deleteBtn(form.menuBtn,scope.$index)"
+                >删除</el-button>
+              </div>
+            </template>
+          </el-table-column>
+        </el-table>
       </div>
       <template #footer>
         <div class="dialog-footer">
@@ -232,7 +268,7 @@ getTableData()
 // 新增参数
 const addParameter = (form) => {
   if (!form.parameters) {
-    form.value.parameters = []
+    form.parameters = []
   }
   form.parameters.push({
     type: 'query',
@@ -243,6 +279,22 @@ const addParameter = (form) => {
 // 删除参数
 const deleteParameter = (parameters, index) => {
   parameters.splice(index, 1)
+}
+
+// 新增可控按钮
+const addBtn = (form) => {
+  console.log(form)
+  if (!form.menuBtn) {
+    form.menuBtn = []
+  }
+  form.menuBtn.push({
+    name: '',
+    desc: '',
+  })
+}
+// 删除可控按钮
+const deleteBtn = (btns, index) => {
+  btns.splice(index, 1)
 }
 
 const form = ref({
@@ -259,7 +311,8 @@ const form = ref({
     closeTab: false,
     keepAlive: false
   },
-  parameters: []
+  parameters: [],
+  menuBtn: []
 })
 const changeName = () => {
   form.value.path = form.value.name

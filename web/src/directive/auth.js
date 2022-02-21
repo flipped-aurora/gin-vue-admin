@@ -34,7 +34,7 @@ export default {
           flag = !flag
         }
         if (!flag) {
-          el.style.display = 'none'
+          el.parentNode.removeChild(el)
         }
       }
     })

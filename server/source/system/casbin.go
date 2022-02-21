@@ -120,6 +120,10 @@ func (c *casbin) Initialize() error {
 		{PType: "p", V0: "888", V1: "/excel/exportExcel", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/excel/downloadTemplate", V2: "GET"},
 
+		{PType: "p", V0: "888", V1: "/authorityBtn/setAuthorityBtn", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/authorityBtn/getAuthorityBtn", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/authorityBtn/canRemoveAuthorityBtn", V2: "POST"},
+
 		{PType: "p", V0: "8881", V1: "/base/login", V2: "POST"},
 		{PType: "p", V0: "8881", V1: "/user/register", V2: "POST"},
 		{PType: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},

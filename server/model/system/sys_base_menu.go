@@ -17,6 +17,7 @@ type SysBaseMenu struct {
 	SysAuthoritys []SysAuthority                    `json:"authoritys" gorm:"many2many:sys_authority_menus;"`
 	Children      []SysBaseMenu                     `json:"children" gorm:"-"`
 	Parameters    []SysBaseMenuParameter            `json:"parameters"`
+	MenuBtn       []SysBaseMenuBtn                  `json:"menuBtn"`
 }
 
 type Meta struct {

@@ -6,7 +6,7 @@
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
           <div class="gva-top-card-left-rows">
-            <el-row>
+            <el-row v-auth="888">
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
                   <el-icon class="dasboard-icon">

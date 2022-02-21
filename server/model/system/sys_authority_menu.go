@@ -6,6 +6,7 @@ type SysMenu struct {
 	AuthorityId string                 `json:"-" gorm:"comment:角色ID"`
 	Children    []SysMenu              `json:"children" gorm:"-"`
 	Parameters  []SysBaseMenuParameter `json:"parameters" gorm:"foreignKey:SysBaseMenuID;references:MenuId"`
+	Btns        map[string]string      `json:"btns" gorm:"-"`
 }
 
 func (s SysMenu) TableName() string {

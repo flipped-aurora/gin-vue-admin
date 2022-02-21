@@ -31,9 +31,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
-		response.FailWithMessage("general.creationFailErr", c)
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
 	} else {
-		response.OkWithMessage("general.createSuccss", c)
+		response.OkWithMessage(global.Translate("general.createSuccss"), c)
 	}
 }
 
@@ -51,9 +51,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage("general.deletFailErr", c)
+		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
 	} else {
-		response.OkWithMessage("general.deleteSuccess", c)
+		response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 	}
 }
 
@@ -70,10 +70,10 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 	var IDS request.IdsReq
     _ = c.ShouldBindJSON(&IDS)
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
+        global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFailErr"), c)
 	} else {
-		response.OkWithMessage("批量删除成功", c)
+		response.OkWithMessage(global.Translate("sys_operation_record.batchDeleteSuccess"), c)
 	}
 }
 
@@ -91,9 +91,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
-		response.FailWithMessage("general.updateFailErr", c)
+		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
 	} else {
-		response.OkWithMessage("general.updateSuccess", c)
+		response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 	}
 }
 
@@ -111,7 +111,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
 	if err, re{{.Abbreviation}} := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
         global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
-		response.FailWithMessage("general.queryFailErr", c)
+		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
 		response.OkWithData(gin.H{"re{{.Abbreviation}}": re{{.Abbreviation}}}, c)
 	}
@@ -131,13 +131,13 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
 	    global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
-        response.FailWithMessage("general.getDataFailErr", c)
+        response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
     } else {
         response.OkWithDetailed(response.PageResult{
             List:     list,
             Total:    total,
             Page:     pageInfo.Page,
             PageSize: pageInfo.PageSize,
-        }, "general.getDataSuccess", c)
+        }, global.Translate("general.getDataSuccess"), c)
     }
 }

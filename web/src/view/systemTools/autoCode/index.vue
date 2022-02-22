@@ -95,7 +95,7 @@
         <el-table-column align="left" prop="dataTypeLong" :label="t('autoCode.fieldLen')" width="130" />
         <el-table-column align="left" prop="columnName" :label="t('autoCode.columnName')" width="130" />
         <el-table-column align="left" prop="comment" :label="t('autoCode.comment')" width="130" />
-        <el-table-column align="left" prop="fieldSearchType" :label="t('autoCode.searchType')" width="130" />
+        <el-table-column align="left" prop="fieldSearchType" :label="t('general.searchCriteria')" width="130" />
         <el-table-column align="left" prop="dictType" :label="t('autoCode.dictionary')" width="130" />
         <el-table-column align="left" :lable="t('general.operations')" width="300">
           <template #default="scope">

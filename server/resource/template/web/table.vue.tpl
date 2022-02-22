@@ -4,40 +4,40 @@
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')">
                 <el-option
                     key="true"
-                    label="是"
+                    label="t('general.yes')"
                     value="true">
                 </el-option>
                 <el-option
                     key="false"
-                    label="否"
+                    label="t('general.no')"
                     value="false">
                 </el-option>
             </el-select>
             </el-form-item>
                   {{- else }}
         <el-form-item label="{{.FieldDesc}}">
-          <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+          <el-input v-model="searchInfo.{{.FieldJson}}" :placeholder="t('general.searchCriteria')" />
         </el-form-item>{{ end }}{{ end }}{{ end }}
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">{{ "{{ t('general.search') }}" }}</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">{{ "{{ t('general.reset') }}" }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button size="small" type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <el-button size="small" type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}}</el-button>
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-            <p>确定要删除吗？</p>
+            <p>{{" {{ t('general.deleteConfirm') }}" }}</p>
             <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="deleteVisible = false">取消</el-button>
-                <el-button size="small" type="primary" @click="onDelete">确定</el-button>
+                <el-button size="small" type="text" @click="deleteVisible = false">{{ "{{ t('general.cancel') }}" }}</el-button>
+                <el-button size="small" type="primary" @click="onDelete">{{ "{{ t('general.confirm') }}" }}</el-button>
             </div>
             <template #reference>
-                <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length">删除</el-button>
+                <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length">{{ "{{ t('general.delete') }}" }}</el-button>
             </template>
             </el-popover>
         </div>
@@ -50,7 +50,7 @@
         @selection-change="handleSelectionChange"
         >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{- range .Fields}}
@@ -67,10 +67,10 @@
         <el-table-column align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" :label="t('general.buttonGroups')">
             <template #default="scope">
-            <el-button type="text" icon="edit" size="small" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
-            <el-button type="text" icon="delete" size="small" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button type="text" icon="edit" size="small" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ "{{ t('general.change') }}" }}</el-button>
+            <el-button type="text" icon="delete" size="small" @click="deleteRow(scope.row)">{{ "{{ t('general.delete') }}" }}</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -86,7 +86,7 @@
             />
         </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="t('general.popUpOperation')">
       <el-form :model="formData" label-position="right" label-width="80px">
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:">
@@ -144,6 +144,9 @@ import {
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 // 自动化生成的字典（可能为空）以及字段
     {{- range $index, $element := .DictTypes}}

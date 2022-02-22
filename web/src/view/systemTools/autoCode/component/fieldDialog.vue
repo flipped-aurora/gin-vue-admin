@@ -43,7 +43,7 @@
       <el-form-item :label="t('autoCode.fieldLen')" prop="dataTypeLong">
         <el-input v-model="middleDate.dataTypeLong" :placeholder="t('fieldDialog.dataTypeNote')" />
       </el-form-item>
-      <el-form-item :label="t('autoCode.searchType')" prop="fieldSearchType">
+      <el-form-item :label="t('general.searchCriteria')" prop="fieldSearchType">
         <el-select
           v-model="middleDate.fieldSearchType"
           style="width:100%"

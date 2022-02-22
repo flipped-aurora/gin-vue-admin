@@ -10,7 +10,7 @@
           width="55"
         />
         <el-table-column align="left" label="id" width="60" prop="ID" />
-        <el-table-column align="left" :label="t('general.date')" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column align="left" :label="t('autoCode.structName')" min-width="150" prop="structName" />

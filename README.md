@@ -4,7 +4,7 @@
 </div>
 <div align=center>
 <img src="https://img.shields.io/badge/golang-1.16-blue"/>
-<img src="https://img.shields.io/badge/gin-1.6.3-lightBlue"/>
+<img src="https://img.shields.io/badge/gin-1.7.0-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.0.0-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-1.1.0beta8-green"/>
 <img src="https://img.shields.io/badge/gorm-1.20.7-red"/>
@@ -12,13 +12,14 @@
 
 [English](./README-en.md) | 简体中文
 
-[gitee地址](https://gitee.com/pixelmax/gin-vue-admin): https://gitee.com/pixelmax/gin-vue-admin
+## 不同版本
 
-[github地址](https://github.com/flipped-aurora/gin-vue-admin): https://github.com/flipped-aurora/gin-vue-admin
+我们会对以下四个版本持续维护，请选择适合自己的版本使用。最新技术栈为组合式api版本，已支持多语言（I18N）
 
-[插件仓库以及开发规范](https://github.com/flipped-aurora/gva-plugins):https://github.com/flipped-aurora/gva-plugins
-
-[审批流分支](https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow): https://github.com/flipped-aurora/gin-vue-admin/tree/gva_workflow
+[组合式API版（主）](https://github.com/flipped-aurora/gin-vue-admin) | 
+[组合式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev-new) | 
+[声明式API版](https://github.com/flipped-aurora/gin-vue-admin/tree/v2.4.x) | 
+[声明式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev)
 
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
@@ -44,6 +45,8 @@
 <img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
 
 5.如果您需要服务器的话 2C4G8M 80GB 腾讯云 一年74 三年222 在这里购买：https://curl.qcloud.com/sArxMfaw
+									      
+阿里云服务器 1c2g1m 38一年 在这里购买:https://www.aliyun.com/minisite/goods?userCode=xqe01uob
 
 ## 1. 基本介绍
 

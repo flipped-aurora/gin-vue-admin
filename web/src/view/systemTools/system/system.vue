@@ -28,6 +28,9 @@
           <el-form-item label="多点登录拦截">
             <el-checkbox v-model="config.system.useMultipoint">开启</el-checkbox>
           </el-form-item>
+          <el-form-item label="开启redis">
+            <el-checkbox v-model="config.system.useRedis">开启</el-checkbox>
+          </el-form-item>
           <el-form-item label="限流次数">
             <el-input-number v-model.number="config.system.iplimitCount" />
           </el-form-item>
@@ -333,8 +336,8 @@
       </el-collapse>
     </el-form>
     <div class="gva-btn-list">
-      <el-button type="primary" size="mini" @click="update">立即更新</el-button>
-      <el-button type="primary" size="mini" @click="reload">重启服务（开发中）</el-button>
+      <el-button type="primary" size="small" @click="update">立即更新</el-button>
+      <el-button type="primary" size="small" @click="reload">重启服务（开发中）</el-button>
     </div>
   </div>
 </template>

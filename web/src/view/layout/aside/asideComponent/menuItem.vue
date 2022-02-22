@@ -1,6 +1,6 @@
 <template>
-  <el-menu-item :index="routerInfo.name" :route="{parameters:routerInfo.parameters}">
-    <el-icon>
+  <el-menu-item :index="routerInfo.name">
+    <el-icon v-if="routerInfo.meta.icon">
       <component :is="routerInfo.meta.icon" />
     </el-icon>
     <template #title>

@@ -26,12 +26,12 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >查询</el-button>
+          >{{ t('general.search') }}</el-button>
           <el-button
             size="small"
             icon="refresh"
             @click="onReset"
-          >重置</el-button>
+          >{{ t('general.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </div>

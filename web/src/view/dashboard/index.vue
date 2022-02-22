@@ -87,7 +87,7 @@
     <div class="gva-card-box">
       <div class="gva-card">
         <div class="card-header">
-          <span>{{t("view.dashboard.statistics")}}</span>
+          <span>{{ t("view.dashboard.statistics") }}</span>
         </div>
         <div class="echart-box">
           <el-row :gutter="20">

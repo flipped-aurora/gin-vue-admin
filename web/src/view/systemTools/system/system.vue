@@ -28,6 +28,9 @@
           <el-form-item label="多点登录拦截">
             <el-checkbox v-model="config.system.useMultipoint">开启</el-checkbox>
           </el-form-item>
+          <el-form-item label="开启redis">
+            <el-checkbox v-model="config.system.useRedis">开启</el-checkbox>
+          </el-form-item>
           <el-form-item label="限流次数">
             <el-input-number v-model.number="config.system.iplimitCount" />
           </el-form-item>

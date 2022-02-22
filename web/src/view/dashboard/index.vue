@@ -6,7 +6,7 @@
           <div class="gva-top-card-left-title">{{ t("view.dashboard.title") }}</div>
           <div class="gva-top-card-left-dot">{{ t("view.dashboard.note") }}</div>
           <div class="gva-top-card-left-rows">
-            <el-row>
+            <el-row v-auth="888">
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
                   <el-icon class="dasboard-icon">

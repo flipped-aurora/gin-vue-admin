@@ -15,4 +15,5 @@ type ServiceGroup struct {
 	AutoCodeHistoryService
 	OperationRecordService
 	DictionaryDetailService
+	AuthorityBtnService
 }

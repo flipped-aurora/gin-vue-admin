@@ -1,4 +1,4 @@
-module github.com/flipped-aurora/gin-vue-admin/server
+module github.com/xiel11/gin-vue-admin/server
 
 go 1.16
 
@@ -8,11 +8,12 @@ require (
 	github.com/casbin/casbin/v2 v2.11.0
 	github.com/casbin/gorm-adapter/v3 v3.0.2
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/flipped-aurora/gin-vue-admin/server v0.0.0-20220222030135-1c33ec897524
 	github.com/flipped-aurora/gva-plugins v0.0.0-20210828060501-fc8b729b9a4a
 	github.com/flipped-aurora/ws v1.0.2
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.0
 	github.com/go-redis/redis/v8 v8.11.0
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gookit/color v1.3.1
@@ -31,14 +32,12 @@ require (
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.7.0
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
-	github.com/tklauser/go-sysconf v0.3.9 // indirect
 	github.com/unrolled/secure v1.0.7
 	github.com/xuri/excelize/v2 v2.4.1
 	go.uber.org/zap v1.16.0
 	golang.org/x/sync v0.0.0-20210220032951-036812b2e83c
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gorm.io/driver/mysql v1.0.1
-	gorm.io/driver/postgres v0.2.6
-	gorm.io/gorm v1.20.11
+	gorm.io/driver/postgres v1.2.3
+	gorm.io/gorm v1.22.5
 	nhooyr.io/websocket v1.8.6
 )

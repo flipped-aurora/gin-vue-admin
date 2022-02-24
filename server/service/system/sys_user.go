@@ -140,7 +140,7 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 //@param: id float64
 //@return: err error
 
-func (userService *UserService) DeleteUser(id float64) (err error) {
+func (userService *UserService) DeleteUser(id int) (err error) {
 	var user system.SysUser
 	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
 	if err != nil {

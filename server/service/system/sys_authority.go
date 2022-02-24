@@ -64,16 +64,16 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	if err != nil {
 		return
 	}
-	for i := range btns {
-		btns[i].AuthorityId = copyInfo.Authority.AuthorityId
+	if len(btns) > 0 {
+		for i := range btns {
+			btns[i].AuthorityId = copyInfo.Authority.AuthorityId
+		}
+		err = global.GVA_DB.Create(&btns).Error
+
+		if err != nil {
+			return
+		}
 	}
-
-	err = global.GVA_DB.Create(&btns).Error
-
-	if err != nil {
-		return
-	}
-
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(copyInfo.OldAuthorityId)
 	err = CasbinServiceApp.UpdateCasbin(copyInfo.Authority.AuthorityId, paths)
 	if err != nil {

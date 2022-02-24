@@ -57,6 +57,23 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	if err != nil {
 		return
 	}
+
+	var btns []system.SysAuthorityBtn
+
+	err = global.GVA_DB.Find(&btns, "authority_id = ?", copyInfo.OldAuthorityId).Error
+	if err != nil {
+		return
+	}
+	for i := range btns {
+		btns[i].AuthorityId = copyInfo.Authority.AuthorityId
+	}
+
+	err = global.GVA_DB.Create(&btns).Error
+
+	if err != nil {
+		return
+	}
+
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(copyInfo.OldAuthorityId)
 	err = CasbinServiceApp.UpdateCasbin(copyInfo.Authority.AuthorityId, paths)
 	if err != nil {
@@ -113,6 +130,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 		}
 	}
 	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
+	err = global.GVA_DB.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ?", auth.AuthorityId).Error
 	CasbinServiceApp.ClearCasbin(0, auth.AuthorityId)
 	return err
 }

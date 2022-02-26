@@ -150,10 +150,13 @@ tencent-cos:
   base-url: 'https://gin.vue.admin'
   path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
 
-# aws s3 configuration
+# aws s3 configuration (minio compatible)
 aws-s3:
   bucket: xxxxx-10005608
   region: ap-shanghai
+  endpoint: ''
+  s3-force-path-style: false
+  disable-ssl: false
   secret-id: xxxxxxxx
   secret-key: xxxxxxxx
   base-url: https://gin.vue.admin

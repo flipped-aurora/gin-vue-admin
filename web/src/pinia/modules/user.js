@@ -67,6 +67,7 @@ export const useUserStore = defineStore('user', () => {
     const res = await jsonInBlacklist()
     if (res.code === 0) {
       token.value = ''
+      sessionStorage.clear()
       localStorage.clear()
       router.push({ name: 'Login', replace: true })
       window.location.reload()

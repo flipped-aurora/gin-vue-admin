@@ -83,7 +83,10 @@ func (*AwsS3) DeleteFile(key string) error {
 // newSession Create S3 session
 func newSession() *session.Session {
 	sess, _ := session.NewSession(&aws.Config{
-		Region: aws.String(global.GVA_CONFIG.AwsS3.Region),
+		Region:           aws.String(global.GVA_CONFIG.AwsS3.Region),
+		Endpoint:         aws.String(global.GVA_CONFIG.AwsS3.Endpoint), //minio在这里设置地址,可以兼容
+		S3ForcePathStyle: aws.Bool(global.GVA_CONFIG.AwsS3.S3ForcePathStyle),
+		DisableSSL:       aws.Bool(global.GVA_CONFIG.AwsS3.DisableSSL),
 		Credentials: credentials.NewStaticCredentials(
 			global.GVA_CONFIG.AwsS3.SecretID,
 			global.GVA_CONFIG.AwsS3.SecretKey,

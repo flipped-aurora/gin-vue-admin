@@ -29,5 +29,5 @@ type Server struct {
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
 
 	// added by mohamed hassan to support multi-language
-	Language string `mapstructure:"language" json:"language" yaml:"language"`
+	Language Language `mapstructure:"language" json:"language" yaml:"language"`
 }

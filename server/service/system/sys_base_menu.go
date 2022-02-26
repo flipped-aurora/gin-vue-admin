@@ -16,12 +16,14 @@ type BaseMenuService struct{}
 //@param: id float64
 //@return: err error
 
-func (baseMenuService *BaseMenuService) DeleteBaseMenu(id float64) (err error) {
+func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
 	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
 	if err != nil {
 		var menu system.SysBaseMenu
 		db := global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)
 		err = global.GVA_DB.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
+		err = global.GVA_DB.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
+		err = global.GVA_DB.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
 		if err != nil {
 			return err
 		}
@@ -116,7 +118,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 //@param: id float64
 //@return: err error, menu model.SysBaseMenu
 
-func (baseMenuService *BaseMenuService) GetBaseMenuById(id float64) (err error, menu system.SysBaseMenu) {
+func (baseMenuService *BaseMenuService) GetBaseMenuById(id int) (err error, menu system.SysBaseMenu) {
 	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("id = ?", id).First(&menu).Error
 	return
 }

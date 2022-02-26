@@ -34,9 +34,9 @@ func (i *DBApi) InitDB(c *gin.Context) {
 	// added by mohamed hassan to allow multilanguage support
 	if dbInfo.Language != "" {
 		if dbInfo.Language == "en" || dbInfo.Language == "zh" || dbInfo.Language == "ar" {
-			global.GVA_CONFIG.Language = dbInfo.Language // set intial database and system langauge here
+			global.GVA_CONFIG.Language.Language = dbInfo.Language // set intial database and system langauge here
 		} else {
-			global.GVA_CONFIG.Language = "en" // set defualt language to initialize database and system to english
+			global.GVA_CONFIG.Language.Language = "en" // set defualt language to initialize database and system to english
 		}
 	}
 	// end of adding

@@ -44,7 +44,7 @@
 
 <img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
 
-5.如果您需要服务器的话 2C4G8M 80GB 腾讯云 一年74 三年222 在这里购买：https://curl.qcloud.com/sArxMfaw
+5.如果您需要服务器的话 2C4G8M 80GB 腾讯云 一年74 三年222 在这里购买：https://curl.qcloud.com/Rm5Rhd4k
 									      
 阿里云服务器 1c2g1m 38一年 在这里购买:https://www.aliyun.com/minisite/goods?userCode=xqe01uob
 

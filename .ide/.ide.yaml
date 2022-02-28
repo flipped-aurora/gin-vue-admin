@@ -6,14 +6,15 @@ workspace:
   dev-container:
     service-name: gva-vscode-dev
     ports:
-      ide-vscode: 6800
-      ide-goland: 8887
-      dev-container-ssh: 6822
-      gva-service-api: 8888
-      gva-web: 8080
-      gva-mysql: 3306
-      gva-redis: 6379
-      phpmyadmin: 8090
+      tools-webide-vscode: 6800
+      tools-webide-jb-projector: 8887
+      tools-phpmyadmin: 8090
+      tools-ssh: 6822
+      apps-gva-service-api: 8888
+      apps-application: 8080
+      apps-gva-mysql: 3306
+      apps-gva-redis: 6379
+
     ide-type: vscode
     volumes:
       git-config: true

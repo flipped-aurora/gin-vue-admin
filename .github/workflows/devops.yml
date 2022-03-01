@@ -20,6 +20,7 @@ jobs:
         run: |
           git branch 
           ls -l
+          sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v2.1.2
         with:

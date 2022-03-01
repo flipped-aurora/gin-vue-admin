@@ -7,11 +7,11 @@ workspace:
     service-name: gva-vscode-dev
     ports:
       tools-webide-vscode: 6800
-      tools-webide-jb-projector: 8887
+      tools-webide-goland: 8887
       tools-phpmyadmin: 8090
       tools-ssh: 6822
       apps-gva-service-api: 8888
-      apps-application: 8080
+      apps-gva-web: 8080
       apps-gva-mysql: 3306
       apps-gva-redis: 6379
 

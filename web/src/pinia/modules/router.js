@@ -57,8 +57,18 @@ export const useRouterStore = defineStore('router', () => {
       hidden: true,
       meta: {
         title: '迷路了*。*',
+        closeTab: true,
       },
       component: 'view/error/index.vue'
+    }, {
+      path: 'reload',
+      name: 'Reload',
+      hidden: true,
+      meta: {
+        title: '',
+        closeTab: true,
+      },
+      component: 'view/error/reload.vue'
     })
     formatRouter(asyncRouter, routeMap)
     baseRouter[0].children = asyncRouter

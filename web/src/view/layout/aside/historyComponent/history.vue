@@ -247,16 +247,13 @@ watch(contextMenuVisible, () => {
 })
 
 watch(route, (to, now) => {
-  if (to.name === 'Login') {
+  if (to.name === 'Login' || to.name === 'Reload') {
     return
   }
   historys.value = historys.value.filter((item) => !item.meta.closeTab)
   setTab(to)
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
   activeValue.value = window.sessionStorage.getItem('activeValue')
-  if (now && to && now.name === to.name) {
-    emitter.emit('reload')
-  }
 })
 
 const initPage = () => {

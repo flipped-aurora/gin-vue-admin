@@ -34,7 +34,7 @@
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
-                        >{{ item.meta.title }}</el-breadcrumb-item>
+                        >{{ route.params.title || item.meta.title }}</el-breadcrumb-item>
                       </el-breadcrumb>
                     </el-col>
                     <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
@@ -83,7 +83,7 @@
         </transition>
         <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" :element-loading-text="t('layout.loading')" class="admin-box">
           <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive :include="useRouterStore.keepAliveRouters">
+            <keep-alive :include="routerStore.keepAliveRouters">
               <component :is="Component" />
             </keep-alive>
           </transition>
@@ -121,7 +121,8 @@ const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const router = useRouter()
 const route = useRoute()
-
+const routerStore = useRouterStore()
+console.log(routerStore.keepAliveRouters)
 // 三种窗口适配
 const isCollapse = ref(false)
 const isSider = ref(true)
@@ -204,9 +205,14 @@ const changeUserAuth = async(id) => {
 
 const reloadFlag = ref(true)
 const reload = async() => {
-  reloadFlag.value = false
-  await nextTick()
-  reloadFlag.value = true
+  if (route.meta.keepAlive) {
+    reloadFlag.value = false
+    await nextTick()
+    reloadFlag.value = true
+  } else {
+    const title = route.meta.title
+    router.push({ name: 'Reload', params: { title }})
+  }
 }
 
 const isShadowBg = ref(false)

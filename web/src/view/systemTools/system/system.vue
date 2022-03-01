@@ -388,7 +388,7 @@ const config = ref({
   email: {},
   timer: {
     detail: {}
-  }，
+  },
   language: {}
 })
 

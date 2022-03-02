@@ -117,7 +117,7 @@
 		"add": "新增",
 		"addSuccess": "添加成功!",
 		"cancel": "取消",
-		"close": "取 消",
+		"close": "取消",
 		"confirm": "确定",
 		"copy": "拷贝",
 		"copySuccess": "复制成功!",
@@ -138,7 +138,15 @@
 		"undeleted": "已取消删除",
 		"updateSuccess": "更新成功!",
 		"warning": "警告",
-		"yes": "是"
+		"yes": "是",
+		"pleaseEnter" : "请输入",
+		"selectDate" :"选择日期",
+		"save" : "保存",
+		"back" : "返回",
+		"createUpdateSuccess" : "创建/更改成功",
+		"deleteConfirm" : "确定要删除吗?",
+		"selectDataToDelete" : "请选择要删除的数据",
+		"" : ""
 	},
 	"historyComponent": {
 		"closeAll": "关闭所有",

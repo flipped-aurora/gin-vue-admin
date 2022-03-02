@@ -7,12 +7,12 @@
             <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')">
                 <el-option
                     key="true"
-                    label="t('general.yes')"
+                    :label="t('general.yes')"
                     value="true">
                 </el-option>
                 <el-option
                     key="false"
-                    label="t('general.no')"
+                    :label="t('general.no')"
                     value="false">
                 </el-option>
             </el-select>
@@ -91,22 +91,22 @@
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:">
       {{- if eq .FieldType "bool" }}
-          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
+          <el-input v-model="formData.{{.FieldJson}}" clearable :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType}}
-          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" clearable>
+          <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('general.pleaseSelect')" style="width:100%" clearable>
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />
+          <el-input v-model.number="formData.{{ .FieldJson }}" clearable :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" clearable />
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" :placeholder="t('general.selectDate')" clearable />
       {{- end }}
       {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" clearable />
@@ -116,8 +116,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button size="small" @click="closeDialog">{{ "{{ t('general.close') }}" }}</el-button>
+          <el-button size="small" type="primary" @click="enterDialog">{{ "{{ t('general.confirm') }}" }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -242,9 +242,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint')), {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning'
     }).then(() => {
             delete{{.StructName}}Func(row)
@@ -261,7 +261,7 @@ const onDelete = async() => {
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: '请选择要删除的数据'
+          message: t('general.selectDataToDelete')
         })
         return
       }
@@ -273,7 +273,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功'
+          message: t('general.deleteSuccess')
         })
         if (tableData.value.length === ids.length && page.value > 1) {
           page.value--
@@ -303,7 +303,7 @@ const delete{{.StructName}}Func = async (row) => {
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
-                message: '删除成功'
+                message: t('general.deleteSuccess')
             })
             if (tableData.value.length === 1 && page.value > 1) {
             page.value--
@@ -361,7 +361,7 @@ const enterDialog = async () => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '创建/更改成功'
+          message: t('general.createUpdateSuccess')
         })
         closeDialog()
         getTableData()

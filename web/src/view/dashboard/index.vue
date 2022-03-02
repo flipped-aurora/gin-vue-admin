@@ -3,8 +3,8 @@
     <div class="gva-card-box">
       <div class="gva-card gva-top-card">
         <div class="gva-top-card-left">
-          <div class="gva-top-card-left-title">{{ t("view.dashboard.title") }}</div>
-          <div class="gva-top-card-left-dot">{{ t("view.dashboard.note") }}</div>
+          <div class="gva-top-card-left-title">{{ t('view.dashboard.title') }}</div>
+          <div class="gva-top-card-left-dot">{{ t('view.dashboard.note') }}</div>
           <div class="gva-top-card-left-rows">
             <el-row v-auth="888">
               <el-col :span="8" :xs="24" :sm="8">
@@ -12,7 +12,7 @@
                   <el-icon class="dasboard-icon">
                     <sort />
                   </el-icon>
-                  {{ t("view.dashboard.todaysTraffic") }} (1231231)
+                  {{ t('view.dashboard.todaysTraffic') }} (1231231)
                 </div>
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
@@ -20,7 +20,7 @@
                   <el-icon class="dasboard-icon">
                     <avatar />
                   </el-icon>
-                  {{ t("view.dashboard.totalNumberOfUsers") }} (24001)
+                  {{ t('view.dashboard.totalNumberOfUsers') }} (24001)
                 </div>
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
@@ -28,14 +28,14 @@
                   <el-icon class="dasboard-icon">
                     <comment />
                   </el-icon>
-                  {{ t("view.dashboard.positiveRatings") }} (99%)
+                  {{ t('view.dashboard.positiveRatings') }} (99%)
                 </div>
               </el-col>
             </el-row>
           </div>
           <div>
             <div class="gva-top-card-left-item">
-              {{ t("view.dashboard.instructionalUse") }}
+              {{ t('view.dashboard.instructionalUse') }}
               <a
                 style="color:#409EFF"
                 target="view_window"
@@ -43,7 +43,7 @@
               >https://www.bilibili.com/video/BV1Rg411u7xH</a>
             </div>
             <div class="gva-top-card-left-item">
-              {{ t("view.dashboard.pluginRepo") }}
+              {{ t('view.dashboard.pluginRepo') }}
               <a
                 style="color:#409EFF"
                 target="view_window"
@@ -59,7 +59,7 @@
       <el-card class="gva-card quick-entrance">
         <template #header>
           <div class="card-header">
-            <span>{{ t("view.dashboard.quickEntry") }}</span>
+            <span>{{ t('view.dashboard.quickEntry') }}</span>
           </div>
         </template>
         <el-row :gutter="20">
@@ -87,7 +87,7 @@
     <div class="gva-card-box">
       <div class="gva-card">
         <div class="card-header">
-          <span>{{ t("view.dashboard.statistics") }}</span>
+          <span>{{ t('view.dashboard.statistics') }}</span>
         </div>
         <div class="echart-box">
           <el-row :gutter="20">

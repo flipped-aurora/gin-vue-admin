@@ -158,12 +158,12 @@
           <el-button
             size="small"
             @click="showPassword = false"
-          >取 消</el-button>
+          >{{ t('general.close') }}</el-button>
           <el-button
             size="small"
             type="primary"
             @click="savePassword"
-          >确 定</el-button>
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -236,6 +236,9 @@ import { setSelfInfo, changePassword } from '@/api/user.js'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const path = ref(import.meta.env.VITE_BASE_API)
 const activeName = ref('second')

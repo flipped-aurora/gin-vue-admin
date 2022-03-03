@@ -146,6 +146,10 @@
 		"createUpdateSuccess" : "创建/更改成功",
 		"deleteConfirm" : "确定要删除吗?",
 		"selectDataToDelete" : "请选择要删除的数据",
+		"search" : "查询",
+		"reset" : "重置",
+		"popUpOperation" : "弹窗操作",
+		"change" : "变更",
 		"" : ""
 	},
 	"historyComponent": {
@@ -236,7 +240,11 @@
 		"sortTags": "排序标记",
 		"subMenuNote": "如果菜单包含子菜单，请创建router-view二级路由页面或者",
 		"visibility": "是否隐藏",
-		"visibilityNote": "是否在列表隐藏"
+		"visibilityNote": "是否在列表隐藏",
+		"addButton" : "新增可控按钮",
+		"buttonName" : "按钮名称",
+		"comments" : "备注",
+		"" : ""
 	},
 	"menus": {
 		"": "",

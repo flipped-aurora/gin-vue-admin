@@ -28,8 +28,8 @@
         </el-form-item>
       {{- end }}
         <el-form-item>
-          <el-button size="mini" type="primary" @click="save">{{ "{{ t('general.save') }}"</el-button>
-          <el-button size="mini" type="primary" @click="back">{{ "{{ t('general.back') }}"</el-button>
+          <el-button size="mini" type="primary" @click="save">{{ "{{ t('general.save') }}" }}</el-button>
+          <el-button size="mini" type="primary" @click="back">{{ "{{ t('general.back') }}" }}</el-button>
         </el-form-item>
       </el-form>
     </div>

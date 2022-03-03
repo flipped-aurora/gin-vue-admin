@@ -138,7 +138,7 @@
     </div>
     <!-- 组件弹窗 -->
     <el-dialog v-model="dialogFlag" :title="t('autoCode.componentContent')">
-      <FieldDialog v-if="dialogFlag" ref="fieldDialog" :dialog-middle="dialogMiddle" />
+      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
           <el-button size="mini" @click="closeDialog">{{ t('general.close') }}</el-button>

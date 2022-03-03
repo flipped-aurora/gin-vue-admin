@@ -29,7 +29,7 @@
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button size="small" type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}}</el-button>
+            <el-button size="small" type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}</el-button>
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>{{" {{ t('general.deleteConfirm') }}" }}</p>
             <div style="text-align: right; margin-top: 8px;">
@@ -67,7 +67,7 @@
         <el-table-column align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
-        <el-table-column align="left" :label="t('general.buttonGroups')">
+        <el-table-column align="left" :label="t('general.operations')">
             <template #default="scope">
             <el-button type="text" icon="edit" size="small" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ "{{ t('general.change') }}" }}</el-button>
             <el-button type="text" icon="delete" size="small" @click="deleteRow(scope.row)">{{ "{{ t('general.delete') }}" }}</el-button>
@@ -242,7 +242,7 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint')), {
+    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
         confirmButtonText: t('general.confirm'),
         cancelButtonText: t('general.cancel'),
         type: 'warning'

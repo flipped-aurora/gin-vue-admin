@@ -138,7 +138,19 @@
 		"undeleted": "Undeleted",
 		"updateSuccess": "Updated Successfully!",
 		"warning": "Warning",
-		"yes": "Yes"
+		"yes": "Yes",
+		"pleaseEnter" : "Please enter",
+		"selectDate" :"Select date",
+		"save" : "Save",
+		"back" : "Back",
+		"createUpdateSuccess" : "Create/change successful",
+		"deleteConfirm" : "You sure you want to delete it?",
+		"selectDataToDelete" : "Please select the data to delete",
+		"search" : "Search",
+		"reset" : "Reset",
+		"popUpOperation" : "Pop-up operation",
+		"change" : "Modify",
+		"" : ""
 	},
 	"historyComponent": {
 		"closeAll": "Close All",
@@ -228,7 +240,11 @@
 		"sortTags": "Sort Tags",
 		"subMenuNote": "If the menu contains submenus, create a router-view secondary routing page or",
 		"visibility": "Whether to hide",
-		"visibilityNote": "Whether to hide in the list"
+		"visibilityNote": "Whether to hide in the list",
+		"addButton" : "Add a controllable button",
+		"buttonName" : "Button name",
+		"comments" : "Comments",
+		"" : ""
 	},
 	"menus": {
 		"": "",

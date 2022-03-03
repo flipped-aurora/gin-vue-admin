@@ -57,7 +57,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle" width="780px">
+    <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle" width="800px">
       <warning-bar :title="t('menu.newMenuNote')" />
       <el-form
         v-if="dialogFormVisible"
@@ -66,7 +66,7 @@
         :model="form"
         :rules="rules"
         label-position="top"
-        label-width="85px"
+        label-width="100px"
       >
         <el-form-item :label="t('menu.routeName')" prop="path" style="width:30%">
           <el-input
@@ -184,16 +184,16 @@
           type="primary"
           icon="edit"
           @click="addBtn(form)"
-        >新增可控按钮</el-button>
+        >{{ t('menu.addButton') }}</el-button>
         <el-table :data="form.menuBtn" style="width: 100%">
-          <el-table-column align="left" prop="name" label="按钮名称" width="180">
+          <el-table-column align="left" prop="name" :label="t('menu.buttonName')" width="180">
             <template #default="scope">
               <div>
                 <el-input v-model="scope.row.name" />
               </div>
             </template>
           </el-table-column>
-          <el-table-column align="left" prop="name" label="备注" width="180">
+          <el-table-column align="left" prop="name" :label="t('menu.comments')" width="180">
             <template #default="scope">
               <div>
                 <el-input v-model="scope.row.desc" />
@@ -208,7 +208,7 @@
                   size="small"
                   icon="delete"
                   @click="deleteBtn(form.menuBtn,scope.$index)"
-                >删除</el-button>
+                >{{ t('general.delete') }}</el-button>
               </div>
             </template>
           </el-table-column>

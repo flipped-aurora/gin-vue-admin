@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-line-box">
     <div class="dashboard-line-title">
-      {{ t("view.dashboard.dashboardCharts.accesssTrends") }}
+      {{ t('view.dashboard.dashboardCharts.accesssTrends') }}
     </div>
     <div
       ref="echart"

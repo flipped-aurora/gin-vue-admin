@@ -2,16 +2,16 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="展示值">
-          <el-input v-model="searchInfo.label" placeholder="搜索条件" />
+        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.displayValue')">
+          <el-input v-model="searchInfo.label" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
-        <el-form-item label="字典值">
-          <el-input v-model="searchInfo.value" placeholder="搜索条件" />
+        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.dictValue')">
+          <el-input v-model="searchInfo.value" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status">
+        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status">
           <el-select v-model="searchInfo.status" :placeholder="t('general.pleaseSelect')">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+            <el-option key="true" :label="t('general.yes')" value="true" />
+            <el-option key="false" :label="t('general.no')" value="false" />
           </el-select>
         </el-form-item>
         <el-form-item>
@@ -22,7 +22,7 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog">{{ t('view.dictionary.sysDictionaryDetail.addDictEntry') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -32,25 +32,25 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="展示值" prop="label" width="120" />
+        <el-table-column align="left" :label="t('view.dictionary.sysDictionaryDetail.displayValue')" prop="label" width="120" />
 
-        <el-table-column align="left" label="字典值" prop="value" width="120" />
+        <el-table-column align="left" :label="t('view.dictionary.sysDictionaryDetail.dictValue')" prop="value" width="140" />
 
-        <el-table-column align="left" label="启用状态" prop="status" width="120">
+        <el-table-column align="left" :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="排序标记" prop="sort" width="120" />
+        <el-table-column align="left" :label="t('general.order')" prop="sort" width="120" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" :label="t('general.operations')">
           <template #default="scope">
-            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
+            <el-button size="small" type="text" icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">{{ t('general.change') }}</el-button>
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-              <p>确定要删除吗？</p>
+              <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="small" type="text" @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
                 <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">{{ t('general.confirm') }}</el-button>
@@ -76,31 +76,31 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="t('general.popUpOperation')">
       <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
-        <el-form-item label="展示值" prop="label">
+        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.displayValue')" prop="label">
           <el-input
             v-model="formData.label"
-            placeholder="请输入展示值"
+            :placeholder="t('view.dictionary.sysDictionaryDetail.enterDisplayValue')"
             clearable
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="字典值" prop="value">
+        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.dictValue')" prop="value">
           <el-input-number
             v-model.number="formData.value"
             step-strictly
             :step="1"
-            placeholder="请输入字典值"
+            :placeholder="t('view.dictionary.sysDictionaryDetail.enterDictValue')"
             clearable
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status" required>
-          <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
+        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status" required>
+          <el-switch v-model="formData.status" :active-text="t('general.enable')" :inactive-text="t('general.disable')" />
         </el-form-item>
-        <el-form-item label="排序标记" prop="sort">
-          <el-input-number v-model.number="formData.sort" placeholder="排序标记" />
+        <el-form-item :label="t('general.order')" prop="sort">
+          <el-input-number v-model.number="formData.sort" :placeholder="t('view.dictionary.sysDictionaryDetail.enabledStatus')" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -147,21 +147,21 @@ const rules = ref({
   label: [
     {
       required: true,
-      message: '请输入展示值',
+      message: t('view.dictionary.sysDictionaryDetail.enterDisplayValue'),
       trigger: 'blur'
     }
   ],
   value: [
     {
       required: true,
-      message: '请输入字典值',
+      message: t('view.dictionary.sysDictionaryDetail.enterDictValue'),
       trigger: 'blur'
     }
   ],
   sort: [
     {
       required: true,
-      message: '排序标记',
+      message: t('general.order'),
       trigger: 'blur'
     }
   ]
@@ -241,7 +241,7 @@ const deleteSysDictionaryDetailFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--
@@ -270,7 +270,7 @@ const enterDialog = async() => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '创建/更改成功'
+        message: t('general.createUpdateSuccess')
       })
       closeDialog()
       getTableData()

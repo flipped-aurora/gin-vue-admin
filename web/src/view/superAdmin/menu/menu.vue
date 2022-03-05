@@ -118,7 +118,7 @@
         <el-form-item :label="t('menu.icon')" prop="meta.icon" style="width:30%">
           <icon :meta="form.meta" style="width:100%" />
         </el-form-item>
-        <el-form-item :label="t('menu.sortTags')" prop="sort" style="width:30%">
+        <el-form-item :label="t('general.order')" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
         </el-form-item>
         <el-form-item label="KeepAlive" prop="meta.keepAlive" style="width:30%">

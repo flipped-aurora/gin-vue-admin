@@ -26,10 +26,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label="多点登录拦截">
-            <el-checkbox v-model="config.system.useMultipoint">开启</el-checkbox>
+            <el-checkbox v-model="config.system.useMultipoint">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
           <el-form-item label="开启redis">
-            <el-checkbox v-model="config.system.useRedis">开启</el-checkbox>
+            <el-checkbox v-model="config.system.useRedis">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
           <el-form-item label="限流次数">
             <el-input-number v-model.number="config.system.iplimitCount" />
@@ -198,7 +198,7 @@
               <el-input v-model="config.qiniu.imgPath" />
             </el-form-item>
             <el-form-item label="是否使用https">
-              <el-checkbox v-model="config.qiniu.useHttps">开启</el-checkbox>
+              <el-checkbox v-model="config.qiniu.useHttps">{{ t('general.enable') }}</el-checkbox>
             </el-form-item>
             <el-form-item label="accessKey">
               <el-input v-model="config.qiniu.accessKey" />
@@ -207,7 +207,7 @@
               <el-input v-model="config.qiniu.secretKey" />
             </el-form-item>
             <el-form-item label="上传是否使用CDN上传加速">
-              <el-checkbox v-model="config.qiniu.useCdnDomains">开启</el-checkbox>
+              <el-checkbox v-model="config.qiniu.useCdnDomains">{{ t('general.enable') }}</el-checkbox>
             </el-form-item>
           </template>
           <template v-if="config.system.ossType === 'tencent-cos'">

@@ -119,7 +119,7 @@ const deleteRow = async(row) => {
   }).then(async() => {
     const res = await delSysHistory({ id: Number(row.ID) })
     if (res.code === 0) {
-      ElMessage.success('删除成功')
+      ElMessage.success(t('general.deleteSuccess'))
       getTableData()
     }
   })

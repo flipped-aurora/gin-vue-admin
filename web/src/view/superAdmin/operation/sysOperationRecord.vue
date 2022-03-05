@@ -2,14 +2,14 @@
   <div>
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="请求方法">
-          <el-input v-model="searchInfo.method" placeholder="搜索条件" />
+        <el-form-item :label="t('view.operation.sysOperationRecord.requestMethod')">
+          <el-input v-model="searchInfo.method" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item label="请求路径">
-          <el-input v-model="searchInfo.path" placeholder="搜索条件" />
+          <el-input v-model="searchInfo.path" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item label="结果状态码">
-          <el-input v-model="searchInfo.status" placeholder="搜索条件" />
+          <el-input v-model="searchInfo.status" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item>
           <el-button size="small" type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
@@ -21,7 +21,7 @@
       <div class="gva-btn-list">
 
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-          <p>确定要删除吗？</p>
+          <p>{{ t('general.deleteConfirm') }}</p>
           <div style="text-align: right; margin-top: 8px;">
             <el-button size="small" type="text" @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
             <el-button size="small" type="primary" @click="onDelete">{{ t('general.confirm') }}</el-button>
@@ -45,7 +45,7 @@
             <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column align="left" label="状态码" prop="status" width="120">
@@ -89,10 +89,10 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" :label="t('general.operations')">
           <template #default="scope">
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
-              <p>确定要删除吗？</p>
+              <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
                 <el-button size="small" type="text" @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
                 <el-button size="small" type="primary" @click="deleteSysOperationRecordFunc(scope.row)">{{ t('general.confirm') }}</el-button>
@@ -193,7 +193,7 @@ const onDelete = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === ids.length && page.value > 1) {
       page.value--
@@ -208,7 +208,7 @@ const deleteSysOperationRecordFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--

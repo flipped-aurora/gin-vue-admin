@@ -127,6 +127,7 @@
 		"edit": "Edit",
 		"editSuccess": "Edited successfully",
 		"enable": "Enable",
+		"disable": "Disable",
 		"hint": "Hint",
 		"langSwitch": "Language switched successfully!!",
 		"no": "No",
@@ -152,7 +153,7 @@
 		"change" : "Modify",
 		"description" : "Description",
 		"request" : "Request",
-		"" : ""
+		"order": "Order"
 	},
 	"historyComponent": {
 		"closeAll": "Close All",
@@ -239,7 +240,6 @@
 		"routePathNote": "It is recommended to only stitch the parameters at the back",
 		"show": "Show",
 		"sort": "Sort",
-		"sortTags": "Sort Tags",
 		"subMenuNote": "If the menu contains submenus, create a router-view secondary routing page or",
 		"visibility": "Whether to hide",
 		"visibilityNote": "Whether to hide in the list",
@@ -334,6 +334,32 @@
 			"unknownOperation" : "Unknown operation",
 			"deleteApiConfirm" : "This operation will permanently delete the api under all roles, Do you want to continue?",
 			"" : ""
+		},
+		"dictionary" : {
+			"sysDictionary" : {
+				"dictNote" : "Get the dictionary and the cache method has been encapsulated in the front-end utils/dictionary No need to write it yourself Use the method to view the comments in the file.",
+				"dictName" : "Dictionary Name (Medium)",
+				"dictNameEn" : "Dictionary name (English)",
+				"status" : "Status",
+				"details" : "Details",
+				"enterDictName" : "Please enter a dictionary name (Medium)",
+				"enterDictNameEn" : "Please enter a dictionary name (English)",
+				"enterDescription" : "Please enter a description"
+			},
+			"sysDictionaryDetail" : {
+				"displayValue" : "Display value",
+				"dictValue" : "Dictionary value",
+				"enabledStatus" : "Enabled status",
+				"addDictEntry" : "Add dictionary entry",
+				"enterDisplayValue" : "Please enter a display value",
+				"enterDictValue" : "Please enter a dictionary value"
+			}
+		},
+		"operation" : {
+			"sysOperationRecord" : {
+				"requestMethod" : "Request method",
+				"" : ""
+			}
 		}
 	}
 }

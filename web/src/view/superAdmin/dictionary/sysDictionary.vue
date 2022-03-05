@@ -1,24 +1,24 @@
 <template>
   <div>
     <warning-bar
-      title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
+      :title="t('view.dictionary.sysDictionary.dictNote')"
     />
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
-        <el-form-item label="字典名（中）">
-          <el-input v-model="searchInfo.name" placeholder="搜索条件" />
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictName')">
+          <el-input v-model="searchInfo.name" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
-        <el-form-item label="字典名（英）">
-          <el-input v-model="searchInfo.type" placeholder="搜索条件" />
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictNameEn')">
+          <el-input v-model="searchInfo.type" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="t('view.dictionary.sysDictionary.status')" prop="status">
           <el-select v-model="searchInfo.status" clear :placeholder="t('general.pleaseSelect')">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+            <el-option key="true" :label="t('general.yes')" value="true" />
+            <el-option key="false" :label="t('general.no')" value="false" />
           </el-select>
         </el-form-item>
         <el-form-item :label="t('general.description')">
-          <el-input v-model="searchInfo.desc" placeholder="搜索条件" />
+          <el-input v-model="searchInfo.desc" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -52,7 +52,7 @@
         row-key="ID"
       >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" :label="t('general.createdAt')" width="180">
           <template #default="scope">{{
             formatDate(scope.row.CreatedAt)
           }}</template>
@@ -60,19 +60,19 @@
 
         <el-table-column
           align="left"
-          label="字典名（中）"
+          :label="t('view.dictionary.sysDictionary.dictName')"
           prop="name"
           width="160"
         />
 
         <el-table-column
           align="left"
-          label="字典名（英）"
+          :label="t('view.dictionary.sysDictionary.dictNameEn')"
           prop="type"
           width="120"
         />
 
-        <el-table-column align="left" label="状态" prop="status" width="120">
+        <el-table-column align="left" :label="t('view.dictionary.sysDictionary.status')" prop="status" width="120">
           <template #default="scope">{{
             formatBoolean(scope.row.status)
           }}</template>
@@ -80,26 +80,26 @@
 
         <el-table-column align="left" :label="t('general.description')" prop="desc" width="280" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" :label="t('general.operations')">
           <template #default="scope">
             <el-button
               size="small"
               icon="document"
               type="text"
               @click="toDetile(scope.row)"
-            >详情</el-button>
+            >{{ t('view.dictionary.sysDictionary.details') }}</el-button>
             <el-button
               size="small"
               icon="edit"
               type="text"
               @click="updateSysDictionaryFunc(scope.row)"
-            >变更</el-button>
+            >{{ t('general.change') }}</el-button>
             <el-popover
               v-model:visible="scope.row.visible"
               placement="top"
               width="160"
             >
-              <p>确定要删除吗？</p>
+              <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px">
                 <el-button
                   size="small"
@@ -141,7 +141,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      title="弹窗操作"
+      :title="t('general.popUpOperation')"
     >
       <el-form
         ref="dialogForm"
@@ -150,33 +150,33 @@
         size="medium"
         label-width="110px"
       >
-        <el-form-item label="字典名（中）" prop="name">
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictName')" prop="name">
           <el-input
             v-model="formData.name"
-            placeholder="请输入字典名（中）"
+            :placeholder="t('view.dictionary.sysDictionary.enterDictName')"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item label="字典名（英）" prop="type">
+        <el-form-item :label="t('view.dictionary.sysDictionary.dictNameEn')" prop="type">
           <el-input
             v-model="formData.type"
-            placeholder="请输入字典名（英）"
+            :placeholder="t('view.dictionary.sysDictionary.enterDictNameEn')"
             clearable
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item label="状态" prop="status" required>
+        <el-form-item :label="t('view.dictionary.sysDictionary.status')" prop="status" required>
           <el-switch
             v-model="formData.status"
-            active-text="开启"
-            inactive-text="停用"
+            :active-text="t('general.enable')"
+            :inactive-text="t('general.disable')"
           />
         </el-form-item>
         <el-form-item :label="t('general.description')" prop="desc">
           <el-input
             v-model="formData.desc"
-            placeholder="请输入描述"
+            :placeholder="t('view.dictionary.sysDictionary.enterDescription')"
             clearable
             :style="{ width: '100%' }"
           />
@@ -231,21 +231,21 @@ const rules = ref({
   name: [
     {
       required: true,
-      message: '请输入字典名（中）',
+      message: t('view.dictionary.sysDictionary.enterDictName'),
       trigger: 'blur',
     },
   ],
   type: [
     {
       required: true,
-      message: '请输入字典名（英）',
+      message: t('view.dictionary.sysDictionary.enterDictNameEn'),
       trigger: 'blur',
     },
   ],
   desc: [
     {
       required: true,
-      message: '请输入描述',
+      message: t('view.dictionary.sysDictionary.enterDescription'),
       trigger: 'blur',
     },
   ],
@@ -333,7 +333,7 @@ const deleteSysDictionaryFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功',
+      message: t('general.deleteSuccess'),
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--

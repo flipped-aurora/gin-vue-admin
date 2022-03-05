@@ -127,6 +127,7 @@
 		"edit": "编辑",
 		"editSuccess": "编辑成功!",
 		"enable": "开启",
+		"disable": "停用",
 		"hint": "提示",
 		"langSwitch": "语言切换成功!!",
 		"no": "否",
@@ -152,7 +153,7 @@
 		"change" : "变更",
 		"description" : "描述",
 		"request" : "请求",
-		"" : ""
+		"order": "排序标记"
 	},
 	"historyComponent": {
 		"closeAll": "关闭所有",
@@ -239,7 +240,6 @@
 		"routePathNote": "建议只在后方拼接参数",
 		"show": "显示",
 		"sort": "排序",
-		"sortTags": "排序标记",
 		"subMenuNote": "如果菜单包含子菜单，请创建router-view二级路由页面或者",
 		"visibility": "是否隐藏",
 		"visibilityNote": "是否在列表隐藏",
@@ -334,6 +334,32 @@
 			"unknownOperation" : "未知操作",
 			"deleteApiConfirm" : "此操作将永久删除所有角色下该api, 是否继续?",
 			"": ""
+		},
+		"dictionary" : {
+			"sysDictionary" : {
+				"dictNote" : "获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释",
+				"dictName" : "字典名（中)",
+				"dictNameEn" : "字典名（英)",
+				"status" : "状态",
+				"details" : "详情",
+				"enterDictName" : "请输入字典名（中)",
+				"enterDictNameEn" : "请输入字典名（英)",
+				"enterDescription" : "请输入描述"
+			},
+			"sysDictionaryDetail" : {
+				"displayValue" : "展示值",
+				"dictValue" : "字典值",
+				"enabledStatus" : "启用状态",
+				"addDictEntry" : "新增字典项",
+				"enterDisplayValue" : "请输入展示值",
+				"enterDictValue" : "请输入字典值"
+			}
+		},
+		"operation" : {
+			"sysOperationRecord" : {
+				"requestMethod" : "请求方法",
+				"" : ""
+			}
 		}
 	}
 }

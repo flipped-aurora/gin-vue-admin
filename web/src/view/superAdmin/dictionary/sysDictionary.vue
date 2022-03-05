@@ -12,12 +12,12 @@
           <el-input v-model="searchInfo.type" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="状态" prop="status">
-          <el-select v-model="searchInfo.status" clear placeholder="请选择">
+          <el-select v-model="searchInfo.status" clear :placeholder="t('general.pleaseSelect')">
             <el-option key="true" label="是" value="true" />
             <el-option key="false" label="否" value="false" />
           </el-select>
         </el-form-item>
-        <el-form-item label="描述">
+        <el-form-item :label="t('general.description')">
           <el-input v-model="searchInfo.desc" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item>
@@ -42,7 +42,7 @@
           type="primary"
           icon="plus"
           @click="openDialog"
-        >新增</el-button>
+        >{{ t('general.add') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -78,7 +78,7 @@
           }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="描述" prop="desc" width="280" />
+        <el-table-column align="left" :label="t('general.description')" prop="desc" width="280" />
 
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
@@ -105,12 +105,12 @@
                   size="small"
                   type="text"
                   @click="scope.row.visible = false"
-                >取消</el-button>
+                >{{ t('general.cancel') }}</el-button>
                 <el-button
                   type="primary"
                   size="small"
                   @click="deleteSysDictionaryFunc(scope.row)"
-                >确定</el-button>
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
                 <el-button
@@ -119,7 +119,7 @@
                   size="small"
                   style="margin-left: 10px"
                   @click="scope.row.visible = true"
-                >删除</el-button>
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -173,7 +173,7 @@
             inactive-text="停用"
           />
         </el-form-item>
-        <el-form-item label="描述" prop="desc">
+        <el-form-item :label="t('general.description')" prop="desc">
           <el-input
             v-model="formData.desc"
             placeholder="请输入描述"

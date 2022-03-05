@@ -43,10 +43,10 @@
             >{{ scope.row.tag }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="操作" width="160">
+        <el-table-column align="left" :label="t('general.operations')" width="160">
           <template #default="scope">
             <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">删除</el-button>
+            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -76,6 +76,9 @@ import { formatDate } from '@/utils/format'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const path = ref(import.meta.env.VITE_BASE_API)
 const userStore = useUserStore()
@@ -111,9 +114,9 @@ const getTableData = async() => {
 getTableData()
 
 const deleteFileFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久文件, 是否继续?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm('此操作将永久文件, 是否继续?', t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   })
     .then(async() => {

@@ -6,7 +6,7 @@
           ref="searchInput"
           v-model="value"
           filterable
-          placeholder="请选择"
+          :placeholder="t('general.pleaseSelect')"
           @blur="hiddenSearch"
           @change="changeRouter"
         >
@@ -62,6 +62,9 @@ import { emitter } from '@/utils/bus.js'
 import { ref, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const router = useRouter()
 

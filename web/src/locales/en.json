@@ -150,6 +150,8 @@
 		"reset" : "Reset",
 		"popUpOperation" : "Pop-up operation",
 		"change" : "Modify",
+		"description" : "Description",
+		"request" : "Request",
 		"" : ""
 	},
 	"historyComponent": {
@@ -312,6 +314,26 @@
 			"todaysTraffic": "Today's traffic",
 			"totalNumberOfUsers": "Number of users",
 			"userManage": "User management"
+		},
+		"api" : {
+			"path" : "Path",
+			"apiGroup" : "API Group",
+			"apiPath" : "API Path",
+			"apiGrouping" : "API Group",
+			"apiDescrpition" : "API Description",
+			"newApiNote" : "New API, you need to configure permissions in role management to use it",
+			"create" : "Create",
+			"view" : "View",
+			"update" : "Update",
+			"enterApiPath" : "Please enter the api path",
+			"enterGroupName" : "Please enter group name",
+			"selectRequestMethod" : "Please select request method",
+			"enterApiDescription" : "Please enter api description",
+			"newApi" : "New Api",
+			"editApi" : "Edit Api",
+			"unknownOperation" : "Unknown operation",
+			"deleteApiConfirm" : "This operation will permanently delete the api under all roles, Do you want to continue?",
+			"" : ""
 		}
 	}
 }

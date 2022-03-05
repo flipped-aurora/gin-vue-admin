@@ -150,6 +150,8 @@
 		"reset" : "重置",
 		"popUpOperation" : "弹窗操作",
 		"change" : "变更",
+		"description" : "描述",
+		"request" : "请求",
 		"" : ""
 	},
 	"historyComponent": {
@@ -312,6 +314,26 @@
 			"todaysTraffic": "今日流量",
 			"totalNumberOfUsers": "总用户数",
 			"userManage": "用户管理"
+		},
+		"api" : {
+			"path" : "路径",
+			"apiGroup" : "API组",
+			"apiPath" : "API路径",
+			"apiGrouping" : "API分组",
+			"apiDescrpition" : "API简介",
+			"newApiNote" : "新增API，需要在角色管理内配置权限才可使用",
+			"create" : "创建",
+			"view" : "查看",
+			"update" : "更新",
+			"enterApiPath" : "请输入api路径",
+			"enterGroupName" : "请输入组名称",
+			"selectRequestMethod" : "请选择请求方式",
+			"enterApiDescription" : "请输入api介绍",
+			"newApi" : "新增Api",
+			"editApi" : "编辑Api",
+			"unknownOperation" : "未知操作",
+			"deleteApiConfirm" : "此操作将永久删除所有角色下该api, 是否继续?",
+			"": ""
 		}
 	}
 }

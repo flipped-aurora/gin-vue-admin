@@ -23,11 +23,11 @@
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="small" type="text" @click="deleteVisible = false">取消</el-button>
-            <el-button size="small" type="primary" @click="onDelete">确定</el-button>
+            <el-button size="small" type="text" @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
+            <el-button size="small" type="primary" @click="onDelete">{{ t('general.confirm') }}</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length">删除</el-button>
+            <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length">{{ t('general.delete') }}</el-button>
           </template>
         </el-popover>
       </div>
@@ -58,7 +58,7 @@
         <el-table-column align="left" label="请求IP" prop="ip" width="120" />
         <el-table-column align="left" label="请求方法" prop="method" width="120" />
         <el-table-column align="left" label="请求路径" prop="path" width="240" />
-        <el-table-column align="left" label="请求" prop="path" width="80">
+        <el-table-column align="left" :label="t('general.request')" prop="path" width="80">
           <template #default="scope">
             <div>
               <el-popover v-if="scope.row.body" placement="left-start" trigger="click">
@@ -94,11 +94,11 @@
             <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button size="small" type="primary" @click="deleteSysOperationRecordFunc(scope.row)">确定</el-button>
+                <el-button size="small" type="text" @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button size="small" type="primary" @click="deleteSysOperationRecordFunc(scope.row)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button icon="delete" size="small" type="text" @click="scope.row.visible = true">删除</el-button>
+                <el-button icon="delete" size="small" type="text" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>

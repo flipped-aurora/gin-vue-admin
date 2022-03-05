@@ -185,7 +185,7 @@
           <el-button
             size="small"
             @click="closeChangePhone"
-          >取消</el-button>
+          >{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
             size="small"
@@ -212,7 +212,7 @@
           <el-button
             size="small"
             @click="closeChangeEmail"
-          >取消</el-button>
+          >{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
             size="small"

@@ -1,9 +1,10 @@
 import { formatTimeToStr } from '@/utils/date'
 import { getDict } from '@/utils/dictionary'
+import i18n from '@/i18n' // added by mohamed hassan to multilangauge
 
 export const formatBoolean = (bool) => {
   if (bool !== null) {
-    return bool ? '是' : '否'
+    return bool ? i18n.t('general.yes') : i18n.t('general.no')
   } else {
     return ''
   }

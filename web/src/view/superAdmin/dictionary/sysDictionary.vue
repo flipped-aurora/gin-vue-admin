@@ -62,14 +62,14 @@
           align="left"
           :label="t('view.dictionary.sysDictionary.dictName')"
           prop="name"
-          width="160"
+          width="200"
         />
 
         <el-table-column
           align="left"
           :label="t('view.dictionary.sysDictionary.dictNameEn')"
           prop="type"
-          width="120"
+          width="200"
         />
 
         <el-table-column align="left" :label="t('view.dictionary.sysDictionary.status')" prop="status" width="120">
@@ -148,7 +148,7 @@
         :model="formData"
         :rules="rules"
         size="medium"
-        label-width="110px"
+        label-width="130px"
       >
         <el-form-item :label="t('view.dictionary.sysDictionary.dictName')" prop="name">
           <el-input

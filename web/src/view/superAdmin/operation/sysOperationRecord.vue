@@ -5,10 +5,10 @@
         <el-form-item :label="t('view.operation.sysOperationRecord.requestMethod')">
           <el-input v-model="searchInfo.method" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
-        <el-form-item label="请求路径">
+        <el-form-item :label="t('view.operation.sysOperationRecord.requestPath')">
           <el-input v-model="searchInfo.path" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
-        <el-form-item label="结果状态码">
+        <el-form-item :label="t('view.operation.sysOperationRecord.resultStatusCode')">
           <el-input v-model="searchInfo.status" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item>
@@ -40,7 +40,7 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column align="left" type="selection" width="55" />
-        <el-table-column align="left" label="操作人" width="140">
+        <el-table-column align="left" :label="t('view.operation.sysOperationRecord.operator')" width="140">
           <template #default="scope">
             <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
           </template>
@@ -48,16 +48,16 @@
         <el-table-column align="left" :label="t('general.createdAt')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="状态码" prop="status" width="120">
+        <el-table-column align="left" :label="t('view.operation.sysOperationRecord.statusCode')" prop="status" width="120">
           <template #default="scope">
             <div>
               <el-tag type="success">{{ scope.row.status }}</el-tag>
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="请求IP" prop="ip" width="120" />
-        <el-table-column align="left" label="请求方法" prop="method" width="120" />
-        <el-table-column align="left" label="请求路径" prop="path" width="240" />
+        <el-table-column align="left" :label="t('view.operation.sysOperationRecord.requestIP')" prop="ip" width="120" />
+        <el-table-column align="left" :label="t('view.operation.sysOperationRecord.requestMethod')" prop="method" width="140" />
+        <el-table-column align="left" :label="t('view.operation.sysOperationRecord.requestPath')" prop="path" width="240" />
         <el-table-column align="left" :label="t('general.request')" prop="path" width="80">
           <template #default="scope">
             <div>
@@ -70,11 +70,11 @@
                 </template>
               </el-popover>
 
-              <span v-else>无</span>
+              <span v-else>{{ t('view.operation.sysOperationRecord.none') }}</span>
             </div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="响应" prop="path" width="80">
+        <el-table-column align="left" :label="t('view.operation.sysOperationRecord.response')" prop="path" width="100">
           <template #default="scope">
             <div>
               <el-popover v-if="scope.row.resp" placement="left-start" trigger="click">
@@ -85,7 +85,7 @@
                   <el-icon style="cursor: pointer;"><warning /></el-icon>
                 </template>
               </el-popover>
-              <span v-else>无</span>
+              <span v-else>{{ t('view.operation.sysOperationRecord.none') }}</span>
             </div>
           </template>
         </el-table-column>

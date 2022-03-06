@@ -358,6 +358,13 @@
 		"operation" : {
 			"sysOperationRecord" : {
 				"requestMethod" : "请求方法",
+				"requestPath" : "请求路径",
+				"resultStatusCode" : "结果状态码",
+				"operator" : "操作人",
+				"statusCode" : "状态码",
+				"requestIP" : "请求IP",
+				"none" : "无",
+				"response" : "响应",
 				"" : ""
 			}
 		}

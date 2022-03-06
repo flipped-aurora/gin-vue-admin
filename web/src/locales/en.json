@@ -357,7 +357,14 @@
 		},
 		"operation" : {
 			"sysOperationRecord" : {
-				"requestMethod" : "Request method",
+				"requestMethod" : "Request Method",
+				"requestPath" : "Request Path",
+				"resultStatusCode" : "Result Status Code",
+				"operator" : "Operator",
+				"statusCode" : "Status Code",
+				"requestIP" : "Request IP",
+				"none" : "None",
+				"response" : "Response",
 				"" : ""
 			}
 		}

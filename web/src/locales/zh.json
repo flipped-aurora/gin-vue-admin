@@ -367,6 +367,55 @@
 				"response" : "响应",
 				"" : ""
 			}
+		},
+		"systemTools" : 
+		{
+			"system" : {
+				"systemConfig" : "系统配置",
+				"envValue" : "环境值",
+				"portValue" : "端口值",
+				"dbType" : "数据库类型",
+				"ossType" : "Oss类型",
+				"blockMultiSignOn" : "多点登录拦截",
+				"enableRedis" : "开启redis",
+				"ipLimitCount" : "限流次数",
+				"ipLimitTime" : "限流时间",
+				"jwtSignature" : "jwt签名",
+				"expirartionSec" : "有效期（秒)",
+				"bufferPeriodSec" : "缓冲期（秒)",
+				"issuer" : "签发者",
+				"zapLogConfig" : "Zap日志配置",
+				"level" : "级别",
+				"output" : "输出",
+				"logPrefix" : "日志前缀",
+				"logFolder" : "日志文件夹",
+				"encodeLevel" : "编码级",
+				"stackName" : "栈名",
+				"showLine" : "显示行",
+				"outputConsole" : "输出控制台",
+				"redisAdminDBConfig" : "Redis admin数据库配置",
+				"emailConfig" : "邮箱配置",
+				"recipientEmail" : "接收者邮箱",
+				"emailNote" : "可多个，以逗号分隔",
+				"port" : "端口",
+				"emailSender" : "发送者邮箱",
+				"enableSSL" : "是否为ssl",
+				"testEmail" : "测试邮件",
+				"casbinConfig" : "casbin配置",
+				"modelAddress" : "模型地址",
+				"verCodeConfig" : "验证码配置",
+				"dbConfig" : "数据库配置",
+				"ossConfig" : "oss配置",
+				"localFileConfig" : "本地文件配置",
+				"localFilePath" : "本地文件路径",
+				"excelUploadConfig" : "Excel上传配置",
+				"excelDir" : "合成目标地址",
+				"autoCodeConfig" : "自动化代码配置",
+				"autoRestart" : "是否自动重启(linux)",
+				"updateNow" : "立即更新",
+				"restartService" : "重启服务（开发中)",
+				"" : ""
+			}
 		}
 	}
 }

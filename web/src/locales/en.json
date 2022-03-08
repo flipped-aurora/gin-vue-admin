@@ -367,6 +367,55 @@
 				"response" : "Response",
 				"" : ""
 			}
+		},
+		"systemTools" : 
+		{
+			"system" : {
+				"systemConfig" : "System Configuration",
+				"envValue" : "Environmental Value",
+				"portValue" : "Port Value",
+				"dbType" : "Database Type",
+				"ossType" : "OSS Type",
+				"blockMultiSignOn" : "Block Multi Sign-On",
+				"enableRedis" : "Use Redis",
+				"ipLimitCount" : "Current Limit Count",
+				"ipLimitTime" : "Current Limit Time",
+				"jwtSignature" : "JWT Signature",
+				"expirartionSec" : "Expiration (Seconds)",
+				"bufferPeriodSec" : "Buffer Period (Seconds)",
+				"issuer" : "Issuer",
+				"zapLogConfig" : "Zap Log Configuration",
+				"level" : "Level",
+				"output" : "Output",
+				"logPrefix" : "Log Prefix",
+				"logFolder" : "Log Folder",
+				"encodeLevel" : "Encoding Level",
+				"stackName" : "Stack Name",
+				"showLine" : "Show Line",
+				"outputConsole" : "Output Console",
+				"redisAdminDBConfig" : "Redis Admin Database Configuration",
+				"emailConfig" : "Email Configuration",
+				"recipientEmail" : "Recipient's Email",
+				"emailNote" : "Multiple, Separated By Commas",
+				"port" : "Port",
+				"emailSender" : "Email's Sender",
+				"enableSSL" : "Enable SSL",
+				"testEmail" : "Test Email",
+				"casbinConfig" : "Casbin Configuration",
+				"modelAddress" : "Model Address",
+				"verCodeConfig" : "Verification Code Configuration",
+				"dbConfig" : "Database Configuration",
+				"ossConfig" : "OSS Configuration",
+				"localFileConfig" : "Local File Configuration",
+				"localFilePath" : "Local File Path",
+				"excelUploadConfig" : "Excel Upload Configuration",
+				"excelDir" : "Synthetic Destination Address",
+				"autoCodeConfig" : "Automated Code Configuration",
+				"autoRestart" : "Restart Automatically (Linux)",
+				"updateNow" : "Update Now",
+				"restartService" : "Restart Service (Under Development)",
+				"" : ""
+			}
 		}
 	}
 }

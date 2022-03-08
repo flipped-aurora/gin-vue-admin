@@ -3,20 +3,20 @@
     <el-form ref="form" :model="config" label-width="240px">
       <!--  System start  -->
       <el-collapse v-model="activeNames">
-        <el-collapse-item title="系统配置" name="1">
-          <el-form-item label="环境值">
+        <el-collapse-item :title="t('view.systemTools.system.systemConfig')" name="1">
+          <el-form-item :label="t('view.systemTools.system.envValue')">
             <el-input v-model="config.system.env" />
           </el-form-item>
-          <el-form-item label="端口值">
+          <el-form-item :label="t('view.systemTools.system.portValue')">
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
-          <el-form-item label="数据库类型">
+          <el-form-item :label="t('view.systemTools.system.dbType')">
             <el-select v-model="config.system.dbType" style="width:100%">
               <el-option value="mysql" />
               <el-option value="pgsql" />
             </el-select>
           </el-form-item>
-          <el-form-item label="Oss类型">
+          <el-form-item :label="t('view.systemTools.system.ossType')">
             <el-select v-model="config.system.ossType" style="width:100%">
               <el-option value="local" />
               <el-option value="qiniu" />
@@ -25,60 +25,60 @@
               <el-option value="huawei-obs" />
             </el-select>
           </el-form-item>
-          <el-form-item label="多点登录拦截">
+          <el-form-item :label="t('view.systemTools.system.blockMultiSignOn')">
             <el-checkbox v-model="config.system.useMultipoint">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
-          <el-form-item label="开启redis">
+          <el-form-item :label="t('view.systemTools.system.enableRedis')">
             <el-checkbox v-model="config.system.useRedis">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
-          <el-form-item label="限流次数">
+          <el-form-item :label="t('view.systemTools.system.ipLimitCount')">
             <el-input-number v-model.number="config.system.iplimitCount" />
           </el-form-item>
-          <el-form-item label="限流时间">
+          <el-form-item :label="t('view.systemTools.system.ipLimitTime')">
             <el-input-number v-model.number="config.system.iplimitTime" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="jwt签名" name="2">
-          <el-form-item label="jwt签名">
+        <el-collapse-item :title="t('view.systemTools.system.jwtSignature')" name="2">
+          <el-form-item :label="t('view.systemTools.system.jwtSignature')">
             <el-input v-model="config.jwt.signingKey" />
           </el-form-item>
-          <el-form-item label="有效期（秒）">
+          <el-form-item :label="t('view.systemTools.system.expirartionSec')">
             <el-input v-model="config.jwt.expiresTime" />
           </el-form-item>
-          <el-form-item label="缓冲期（秒）">
+          <el-form-item :label="t('view.systemTools.system.bufferPeriodSec')">
             <el-input v-model="config.jwt.bufferTime" />
           </el-form-item>
-          <el-form-item label="签发者">
+          <el-form-item :label="t('view.systemTools.system.issuer')">
             <el-input v-model="config.jwt.issuer" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="Zap日志配置" name="3">
-          <el-form-item label="级别">
+        <el-collapse-item :title="t('view.systemTools.system.zapLogConfig')" name="3">
+          <el-form-item :label="t('view.systemTools.system.level')">
             <el-input v-model.number="config.zap.level" />
           </el-form-item>
-          <el-form-item label="输出">
+          <el-form-item :label="t('view.systemTools.system.output')">
             <el-input v-model="config.zap.format" />
           </el-form-item>
-          <el-form-item label="日志前缀">
+          <el-form-item :label="t('view.systemTools.system.logPrefix')">
             <el-input v-model="config.zap.prefix" />
           </el-form-item>
-          <el-form-item label="日志文件夹">
+          <el-form-item :label="t('view.systemTools.system.logFolder')">
             <el-input v-model="config.zap.director" />
           </el-form-item>
-          <el-form-item label="编码级">
+          <el-form-item :label="t('view.systemTools.system.encodeLevel')">
             <el-input v-model="config.zap.encodeLevel" />
           </el-form-item>
-          <el-form-item label="栈名">
+          <el-form-item :label="t('view.systemTools.system.stackName')">
             <el-input v-model="config.zap.stacktraceKey" />
           </el-form-item>
-          <el-form-item label="显示行">
+          <el-form-item :label="t('view.systemTools.system.showLine')">
             <el-checkbox v-model="config.zap.showLine" />
           </el-form-item>
-          <el-form-item label="输出控制台">
+          <el-form-item :label="t('view.systemTools.system.outputConsole')">
             <el-checkbox v-model="config.zap.logInConsole" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="Redis admin数据库配置" name="4">
+        <el-collapse-item :title="t('view.systemTools.system.redisAdminDBConfig')" name="4">
           <el-form-item label="db">
             <el-input v-model="config.redis.db" />
           </el-form-item>
@@ -90,36 +90,36 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="邮箱配置" name="5">
-          <el-form-item label="接收者邮箱">
-            <el-input v-model="config.email.to" placeholder="可多个，以逗号分隔" />
+        <el-collapse-item :title="t('view.systemTools.system.emailConfig')" name="5">
+          <el-form-item :label="t('view.systemTools.system.recipientEmail')">
+            <el-input v-model="config.email.to" :placeholder="t('view.systemTools.system.emailNote')" />
           </el-form-item>
-          <el-form-item label="端口">
+          <el-form-item :label="t('view.systemTools.system.port')">
             <el-input v-model.number="config.email.port" />
           </el-form-item>
-          <el-form-item label="发送者邮箱">
+          <el-form-item :label="t('view.systemTools.system.emailSender')">
             <el-input v-model="config.email.from" />
           </el-form-item>
-          <el-form-item label="host">
+          <el-form-item label="Host">
             <el-input v-model="config.email.host" />
           </el-form-item>
-          <el-form-item label="是否为ssl">
+          <el-form-item :label="t('view.systemTools.system.enableSSL')">
             <el-checkbox v-model="config.email.isSSL" />
           </el-form-item>
-          <el-form-item label="secret">
+          <el-form-item label="Secret">
             <el-input v-model="config.email.secret" />
           </el-form-item>
-          <el-form-item label="测试邮件">
-            <el-button @click="email">测试邮件</el-button>
+          <el-form-item :label="t('view.systemTools.system.testEmail')">
+            <el-button @click="email">{{ t('view.systemTools.system.testEmail') }}</el-button>
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="casbin配置" name="6">
-          <el-form-item label="模型地址">
+        <el-collapse-item :title="t('view.systemTools.system.casbinConfig')" name="6">
+          <el-form-item :label="t('view.systemTools.system.modelAddress')">
             <el-input v-model="config.casbin.modelPath" />
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="验证码配置" name="7">
+        <el-collapse-item :title="t('view.systemTools.system.verCodeConfig')" name="7">
           <el-form-item label="keyLong">
             <el-input v-model.number="config.captcha.keyLong" />
           </el-form-item>
@@ -130,7 +130,7 @@
             <el-input v-model.number="config.captcha.imgHeight" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="数据库配置" name="9">
+        <el-collapse-item :title="t('view.systemTools.system.dbConfig')" name="9">
           <template v-if="config.system.dbType === 'mysql'">
             <el-form-item label="username">
               <el-input v-model="config.mysql.username" />
@@ -179,10 +179,10 @@
           </template>
         </el-collapse-item>
 
-        <el-collapse-item title="oss配置" name="10">
+        <el-collapse-item :title="t('view.systemTools.system.ossConfig')" name="10">
           <template v-if="config.system.ossType === 'local'">
-            <h2>本地文件配置</h2>
-            <el-form-item label="本地文件路径">
+            <h2>{{ t('view.systemTools.system.localFileConfig') }}</h2>
+            <el-form-item :label="t('view.systemTools.system.localFilePath')">
               <el-input v-model="config.local.path" />
             </el-form-item>
           </template>
@@ -270,14 +270,14 @@
 
         </el-collapse-item>
 
-        <el-collapse-item title="Excel上传配置" name="11">
-          <el-form-item label="合成目标地址">
+        <el-collapse-item :title="t('view.systemTools.system.excelUploadConfig')" name="11">
+          <el-form-item :label="t('view.systemTools.system.excelDir')">
             <el-input v-model="config.excel.dir" />
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="自动化代码配置" name="12">
-          <el-form-item label="是否自动重启(linux)">
+        <el-collapse-item :title="t('view.systemTools.system.autoCodeConfig')" name="12">
+          <el-form-item :label="t('view.systemTools.system.autoRestart')">
             <el-checkbox v-model="config.autoCode.transferRestart" />
           </el-form-item>
           <el-form-item label="root(项目根路径)">
@@ -333,7 +333,7 @@
             </div>
           </template>
         </el-collapse-item>
-        
+
         <el-collapse-item title="国际化" name="14">
           <el-form-item label="语言文件地址">
             <el-input v-model="config.language.dir" />
@@ -345,8 +345,8 @@
       </el-collapse>
     </el-form>
     <div class="gva-btn-list">
-      <el-button type="primary" size="small" @click="update">立即更新</el-button>
-      <el-button type="primary" size="small" @click="reload">重启服务（开发中）</el-button>
+      <el-button type="primary" size="small" @click="update">{{ t('view.systemTools.system.updateNow') }}</el-button>
+      <el-button type="primary" size="small" @click="reload">{{ t('view.systemTools.system.restartService') }}</el-button>
     </div>
   </div>
 </template>

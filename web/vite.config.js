@@ -53,7 +53,8 @@ export default ({
       'process.env': {}
     },
     server: {
-      open: true,
+      // TODO docker 容器内打开操作会引起报错
+      open: false,
       port: process.env.VITE_CLI_PORT,
       proxy: {
         // 把key的路径代理到target位置

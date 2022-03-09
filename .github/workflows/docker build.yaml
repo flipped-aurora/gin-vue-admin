@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       webtag:
-        description: 'Set web tag,Default latest'
+        description: 'Set web tag, Default latest'
         required: true
         default: "latest"
       servertag:
-        description: 'Set server tag,Default latest'
+        description: 'Set server tag, Default latest'
         required: true
         default: "latest"
 

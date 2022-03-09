@@ -60,6 +60,7 @@ jobs:
         uses: crazy-max/ghaction-container-scan@v1
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/web:${{ github.event.inputs.webtag }}
+          dockerfile: web/Dockerfile
       # 更新 docker 描述页面
       - 
         name: Docker Hub Description
@@ -116,6 +117,7 @@ jobs:
         uses: crazy-max/ghaction-container-scan@v1
         with:
           image: ${{ secrets.DOCKERHUB_USERNAME }}/server:${{ github.event.inputs.servertag }}
+          dockerfile: server/Dockerfile
       # 更新 docker 描述页面
       - 
         name: Docker Hub Description

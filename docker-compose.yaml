@@ -1,12 +1,18 @@
 version: "3"
 
+# 声明一个名为network的networks,subnet为network的子网地址,默认网关是177.7.0.1
 networks:
   network:
     ipam:
       driver: default
       config:
         - subnet: '177.7.0.0/16'
-
+        
+# 设置mysql，redis持久化保存
+volumes:
+  mysql:
+  redis:
+  
 services:
   web:
     build:
@@ -42,7 +48,7 @@ services:
         ipv4_address: 177.7.0.12
 
   mysql:
-    image: mysql:8.0.21
+    image: mysql:8.0.21       # 如果您是 arm64 架构：如 MacOS 的 M1，请修改镜像为 image: mysql/mysql-server:8.0.21
     container_name: gva-mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
     restart: always
@@ -51,6 +57,8 @@ services:
     environment:
       MYSQL_DATABASE: 'qmPlus' # 初始化启动时要创建的数据库的名称
       MYSQL_ROOT_PASSWORD: 'Aa@6447985' # root管理员用户密码
+    volumes:
+      - mysql:/var/lib/mysql
     networks:
       network:
         ipv4_address: 177.7.0.13
@@ -61,6 +69,8 @@ services:
     restart: always
     ports:
       - '16379:6379'
+    volumes:
+      - redis:/data
     networks:
       network:
         ipv4_address: 177.7.0.14

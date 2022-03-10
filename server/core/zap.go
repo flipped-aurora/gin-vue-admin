@@ -30,7 +30,7 @@ func Zap() (logger *zap.Logger) {
 	})
 	// 错误级别
 	errorPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
-		return lev >= zap.ErrorLevel
+		return lev == zap.ErrorLevel
 	})
 
 	cores := [...]zapcore.Core{

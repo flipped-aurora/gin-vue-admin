@@ -1,53 +1,38 @@
 version: "3"
 
-# networks:
-#   network:
-#     ipam:
-#       driver: default
-#       config:
-#         - subnet: '177.7.0.0/16'
+# 声明一个名为network的networks,subnet为network的子网地址,默认网关是177.7.0.1
+networks:
+  network:
+    ipam:
+      driver: default
+      config:
+        - subnet: '177.7.0.0/16'
+        
+# 设置mysql，redis持久化保存
 volumes:
-  # 设置持久化保存
-  node_modules:
   mysql:
   redis:
 
 services:
   web:
-    # build:
-    #   context: ./web
-    #   dockerfile: ./Dockerfile
-    # 如果可以，请使用GitHub action 编译 docker 缓存一下 npm 的包，image 改成你们的镜像名称
-    # TODO 这里需要修改为你们的镜像地址
-    image: node
+    image: node:16
     container_name: gva-web
-    # hostname 方便不同容器间访问，不需要设置IP
-    hostname: gva-web
+    hostname: gva-web           #可以通过容器名访问
     restart: always
     ports:
       - '8080:8080'
     depends_on:
       - server
-    # TODO 如果docker 设置了workdir 则此处不需要设置
-    working_dir: /gva-web
-    command: bash -c "npm i --registry https://registry.npm.taobao.org  && npm run serve"
+    working_dir: /gva-web       # 如果docker 设置了workdir 则此处不需要设置
+    command: bash -c "yarn config set registry https://registry.npm.taobao.org --global && yarn install && yarn serve"
     volumes:
       - ./web:/gva-web
-      # 怕容器内的 node_modules 和宿主机的 node_modules 不一致，所以挂载一个
-      - node_modules:/web/node_modules/
-    # TODO 
-    # entrypoint:
-    #   - VITE_BASE_PATH=http://gva-server
-    # networks:
-      # network:
-        # ipv4_address: 177.7.0.11
+    networks:
+      network:
+        ipv4_address: 177.7.0.11
 
   server:
-    # build:
-    #   context: ./server
-    #   dockerfile: ./Dockerfile
-    # TODO 这里需要修改为你们的镜像地址
-    image: golang
+    image: golang:1.16
     container_name: gva-server
     hostname: gva-server
     restart: always
@@ -58,18 +43,17 @@ services:
       - redis
     volumes:
       - ./server:/gva-server
-    # TODO 如果docker 设置了workdir 则此处不需要设置
-    working_dir: /gva-server
-    command: bash -c "go env -w GOPROXY=https://goproxy.cn,direct && go run main.go"
+    working_dir: /gva-server    # 如果docker 设置了workdir 则此处不需要设置 
+    command: bash -c "go env -w GOPROXY=https://goproxy.cn,direct && go mod tidy && go run main.go"
     links:
       - mysql
       - redis
-    # networks:
-    #   network:
-    #     ipv4_address: 177.7.0.12
+    networks:
+      network:
+        ipv4_address: 177.7.0.12
 
   mysql:
-    image: mysql:8.0.21
+    image: mysql:8.0.21    # 如果您是 arm64 架构：如 MacOS 的 M1，请修改镜像为 image: mysql/mysql-server:8.0.21
     container_name: gva-mysql
     hostname: gva-mysql
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
@@ -81,9 +65,9 @@ services:
       MYSQL_ROOT_PASSWORD: 'Aa@6447985' # root管理员用户密码
     volumes:
       - mysql:/var/lib/mysql
-    # networks:
-    #   network:
-    #     ipv4_address: 177.7.0.13
+    networks:
+      network:
+        ipv4_address: 177.7.0.13
 
   redis:
     image: redis:6.0.6
@@ -94,6 +78,6 @@ services:
       - '16379:6379'
     volumes:
       - redis:/data
-    # networks:
-    #   network:
-    #     ipv4_address: 177.7.0.14
+    networks:
+      network:
+        ipv4_address: 177.7.0.14

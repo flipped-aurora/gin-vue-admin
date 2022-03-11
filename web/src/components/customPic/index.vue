@@ -4,6 +4,10 @@
       <el-avatar v-if="userStore.userInfo.headerImg" :size="30" :src="avatar" />
       <el-avatar v-else :size="30" :src="noAvatar" />
     </template>
+    <template v-if="picType === 'avatar-list'">
+      <el-avatar v-if="picSrc !==''" :size="30" :src="avatar" />
+      <el-avatar v-else :size="30" :src="noAvatar" />
+    </template>
     <template v-if="picType === 'img'">
       <img v-if="userStore.userInfo.headerImg" :src="avatar" class="avatar">
       <img v-else :src="noAvatar" class="avatar">

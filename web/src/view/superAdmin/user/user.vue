@@ -11,7 +11,7 @@
       >
         <el-table-column align="left" label="头像" min-width="75">
           <template #default="scope">
-            <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
+            <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" pic-type="avatar-list"/>
           </template>
         </el-table-column>
         <el-table-column align="left" label="ID" min-width="50" prop="ID" />

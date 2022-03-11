@@ -1,0 +1,114 @@
+name: GIN-VUE-ADMIN Docker Build
+
+on:
+  push:
+    branches: [stopstopstop]
+  #workflow_dispatch:
+  #  inputs:
+  #    webtag:
+  #      description: 'Set web tag, Default latest'
+  #      required: true
+  #      default: "latest"
+  #    servertag:
+  #      description: 'Set server tag, Default latest'
+  #      required: true
+  #      default: "latest"
+
+jobs:
+  GIN_VUE_ADMIN_WEB:
+    name: GIN VUE ADMIN WEB
+    runs-on: ubuntu-latest
+    steps:
+      - name: Private Actions Checkout
+        uses: actions/checkout@v2.3.4
+      - name: Docker Setup QEMU
+        uses: docker/setup-qemu-action@v1.2.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v1.6.0
+      - name: Docker Login
+        uses: docker/login-action@v1.10.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Login in Aliyun
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ${{ secrets.DOCKERHUB_REGISTRY_ALIYUN }}
+          username: ${{ secrets.DOCKERHUB_ACCOUNT_ALIYUN }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD_ALIYUN }}
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2.7.0
+        with:
+          context: .
+          # 这里是适配 arm64 ，主要看你们的程序是否支持 arm64
+          platforms: linux/amd64,linux/arm64
+          file: web/Dockerfile
+          push: true
+          # 这里是给docker 打标签，默认不上传 latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/web:${{ github.event.inputs.webtag }}
+            ${{ secrets.DOCKERHUB_REGISTRY_ALIYUN }}/${{ secrets.DOCKERHUB_USERNAME_ALIYUN }}web:${{ github.event.inputs.webtag }}
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/web:${{ github.event.inputs.webtag }}.cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/web:${{ github.event.inputs.webtag }}.cache,mode=max
+      # 漏洞扫描
+      - name: Scan for vulnerabilities
+        uses: crazy-max/ghaction-container-scan@v1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/web:${{ github.event.inputs.webtag }}
+          dockerfile: web/Dockerfile
+      # 更新 docker 描述页面
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/web
+
+  GIN_VUE_ADMIN_SERVER:
+    name: GIN VUE ADMIN SERVER
+    runs-on: ubuntu-latest
+    steps:
+      - name: Private Actions Checkout
+        uses: actions/checkout@v2.3.4
+      - name: Docker Setup QEMU
+        uses: docker/setup-qemu-action@v1.2.0
+      - name: Docker Setup Buildx
+        uses: docker/setup-buildx-action@v1.6.0
+      - name: Docker Login
+        uses: docker/login-action@v1.10.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Docker Login in Aliyun
+        uses: docker/login-action@v1.10.0
+        with:
+          registry: ${{ secrets.DOCKERHUB_REGISTRY_ALIYUN }}
+          username: ${{ secrets.DOCKERHUB_ACCOUNT_ALIYUN }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD_ALIYUN }}
+      - name: Build and push Docker images
+        uses: docker/build-push-action@v2.7.0
+        with:
+          context: .
+          # 这里是适配 arm64 ，主要看你们的程序是否支持 arm64
+          platforms: linux/amd64,linux/arm64
+          file: server/Dockerfile
+          push: true
+          # 这里是给docker 打标签，默认不上传 latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/server:${{ github.event.inputs.servertag }}
+            ${{ secrets.DOCKERHUB_REGISTRY_ALIYUN }}/${{ secrets.DOCKERHUB_USERNAME_ALIYUN }}server:${{ github.event.inputs.servertag }}
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/server:${{ github.event.inputs.servertag }}.cache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/server:${{ github.event.inputs.servertag }}.cache,mode=max
+      # 漏洞扫描
+      - name: Scan for vulnerabilities
+        uses: crazy-max/ghaction-container-scan@v1
+        with:
+          image: ${{ secrets.DOCKERHUB_USERNAME }}/server:${{ github.event.inputs.servertag }}
+          dockerfile: server/Dockerfile
+      # 更新 docker 描述页面
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: ${{ secrets.DOCKERHUB_USERNAME }}/server

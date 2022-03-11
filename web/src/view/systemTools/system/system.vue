@@ -280,49 +280,49 @@
           <el-form-item :label="t('view.systemTools.system.autoRestart')">
             <el-checkbox v-model="config.autoCode.transferRestart" />
           </el-form-item>
-          <el-form-item label="root(项目根路径)">
+          <el-form-item :label="t('view.systemTools.system.projectRootPath')">
             <el-input v-model="config.autoCode.root" disabled />
           </el-form-item>
-          <el-form-item label="Server(后端代码地址)">
+          <el-form-item :label="t('view.systemTools.system.backendCodePath')">
             <el-input v-model="config.autoCode.transferRestart" />
           </el-form-item>
-          <el-form-item label="SApi(后端api文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendApiPath')">
             <el-input v-model="config.autoCode.serverApi" />
           </el-form-item>
-          <el-form-item label="SInitialize(后端Initialize文件夹)">
+          <el-form-item :label="t('view.systemTools.system.backendInitPath')">
             <el-input v-model="config.autoCode.serverInitialize" />
           </el-form-item>
-          <el-form-item label="SModel(后端Model文件地址)">
+          <el-form-item :label="t('view.systemTools.system.backendModelPath')">
             <el-input v-model="config.autoCode.serverModel" />
           </el-form-item>
-          <el-form-item label="SRequest(后端Request文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendRequestPath')">
             <el-input v-model="config.autoCode.serverRequest" />
           </el-form-item>
-          <el-form-item label="SRouter(后端Router文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendRouterPath')">
             <el-input v-model="config.autoCode.serverRouter" />
           </el-form-item>
-          <el-form-item label="SService(后端Service文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.backendServicePath')">
             <el-input v-model="config.autoCode.serverService" />
           </el-form-item>
-          <el-form-item label="Web(前端文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendCodePath')">
             <el-input v-model="config.autoCode.web" />
           </el-form-item>
-          <el-form-item label="WApi(后端WApi文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendApiPath')">
             <el-input v-model="config.autoCode.webApi" />
           </el-form-item>
-          <el-form-item label="WForm(后端WForm文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendFormPath')">
             <el-input v-model="config.autoCode.webForm" />
           </el-form-item>
-          <el-form-item label="WTable(后端WTable文件夹地址)">
+          <el-form-item :label="t('view.systemTools.system.frontendTablePath')">
             <el-input v-model="config.autoCode.webTable" />
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item title="Timer(定时任务)" name="13">
-          <el-form-item label="Start（是否启用）">
+        <el-collapse-item :title="t('view.systemTools.system.timedTask')" name="13">
+          <el-form-item :label="t('view.systemTools.system.startEnableDisable')">
             <el-select v-model="config.timer.wTable" />
           </el-form-item>
-          <el-form-item label="Spec(CRON表达式)">
+          <el-form-item :label="t('view.systemTools.system.cronExp')">
             <el-input v-model="config.timer.spec" />
           </el-form-item>
           <template v-for="(item,k) in config.timer.detail">
@@ -334,11 +334,11 @@
           </template>
         </el-collapse-item>
 
-        <el-collapse-item title="国际化" name="14">
-          <el-form-item label="语言文件地址">
+        <el-collapse-item :title="t('view.systemTools.system.i18n')" name="14">
+          <el-form-item :label="t('view.systemTools.system.langFilesPath')">
             <el-input v-model="config.language.dir" />
           </el-form-item>
-          <el-form-item label="语言">
+          <el-form-item :label="t('view.systemTools.system.language')">
             <el-input v-model="config.language.language" />
           </el-form-item>
         </el-collapse-item>
@@ -405,7 +405,7 @@ const update = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '配置文件设置成功'
+      message: t('view.systemTools.system.configSetupSuccess')
     })
     await initForm()
   }
@@ -415,13 +415,13 @@ const email = async() => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '邮件发送成功'
+      message: t('view.systemTools.system.emailSentSuccess')
     })
     await initForm()
   } else {
     ElMessage({
       type: 'error',
-      message: '邮件发送失败'
+      message: t('view.systemTools.system.emailSentError')
     })
   }
 }

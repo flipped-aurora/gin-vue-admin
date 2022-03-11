@@ -1,7 +1,7 @@
 <template>
   <span class="headerAvatar">
     <template v-if="picType === 'avatar'">
-      <el-avatar v-if="userStore.userInfo.headerImg" :size="30" :src="avatar" />
+      <el-avatar v-if="userStore.userInfo.headerImg || picSrc !== ''" :size="30" :src="avatar" />
       <el-avatar v-else :size="30" :src="noAvatar" />
     </template>
     <template v-if="picType === 'img'">

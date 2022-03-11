@@ -414,7 +414,27 @@
 				"autoRestart" : "Restart Automatically (Linux)",
 				"updateNow" : "Update Now",
 				"restartService" : "Restart Service (Under Development)",
-				"" : ""
+				"projectRootPath" : "Root (Project Root Folder Path)",
+				"backendCodePath" : "Server (Backend Code Folder Path)",
+				"backendApiPath" : "Server Api (Backend API Folder Path)",
+				"backendInitPath" : "Server Initialize (Backend Initialize Folder Path)",
+				"backendModelPath" : "Server Model (Backend Model File Path)",
+				"backendRequestPath" : "Server Request (Backend Request Folder Path)",
+				"backendRouterPath" : "Server Router (Backend Router Folder Path)",
+				"backendServicePath" : "Server Service (Backend Service Folder Path)",
+				"frontendCodePath" : "Web (Frontend Code Folder Path)",
+				"frontendApiPath" : "Web Api (Frontend Api Folder Path)",
+				"frontendFormPath" : "Web Form (Frontend Form Folder Path)",
+				"frontendTablePath" : "Web Table (Frontend Table Folder Path)",
+				"timedTask" : "Timer (timed task)",
+				"startEnableDisable" : "Start（Enable/Disable)",
+				"cronExp" : "Spec(CRON expression)",
+				"i18n" : "Internationalization",
+				"langFilesPath" : "Language Files Path",
+				"language" : "Language",
+				"configSetupSuccess" : "The Configuration File Was Setup Successfully",
+				"emailSentSuccess" : "The Email Was Sent Successfully",
+				"emailSentError" : "Failed To Send Email"
 			}
 		}
 	}

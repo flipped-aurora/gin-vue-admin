@@ -414,7 +414,27 @@
 				"autoRestart" : "是否自动重启(linux)",
 				"updateNow" : "立即更新",
 				"restartService" : "重启服务（开发中)",
-				"" : ""
+				"projectRootPath" : "root(项目根路径)",
+				"backendCodePath" : "Server(后端代码地址)",
+				"backendApiPath" : "SApi(后端api文件夹地址)",
+				"backendInitPath" : "SInitialize(后端Initialize文件夹)",
+				"backendModelPath" : "SModel(后端Model文件地址)",
+				"backendRequestPath" : "SRequest(后端Request文件夹地址)",
+				"backendRouterPath" : "SRouter(后端Router文件夹地址)",
+				"backendServicePath" : "SService(后端Service文件夹地址)",
+				"frontendCodePath" : "Web(前端文件夹地址)",
+				"frontendApiPath" : "WApi(后端WApi文件夹地址)",
+				"frontendFormPath" : "WForm(后端WForm文件夹地址)",
+				"frontendTablePath" : "WTable(后端WTable文件夹地址)",
+				"timedTask" : "Timer(定时任务)",
+				"startEnableDisable" : "Start（是否启用)",
+				"cronExp" : "Spec(CRON表达式)",
+				"i18n" : "国际化",
+				"langFilesPath" : "语言文件地址",
+				"language" : "语言",
+				"configSetupSuccess" : "配置文件设置成功",
+				"emailSentSuccess" : "邮件发送成功",
+				"emailSentError" : "邮件发送失败"
 			}
 		}
 	}

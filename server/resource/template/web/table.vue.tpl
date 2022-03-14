@@ -37,7 +37,7 @@
                 <el-button size="small" type="primary" @click="onDelete">{{ "{{ t('general.confirm') }}" }}</el-button>
             </div>
             <template #reference>
-                <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length">{{ "{{ t('general.delete') }}" }}</el-button>
+                <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">{{ "{{ t('general.delete') }}" }}</el-button>
             </template>
             </el-popover>
         </div>

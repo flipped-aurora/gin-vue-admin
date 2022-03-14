@@ -31,6 +31,7 @@
                     </el-col>
                     <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
                       <el-breadcrumb class="breadcrumb">
+
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
@@ -122,7 +123,6 @@ const { t } = useI18n() // added by mohamed hassan to support multilanguage
 const router = useRouter()
 const route = useRoute()
 const routerStore = useRouterStore()
-console.log(routerStore.keepAliveRouters)
 // 三种窗口适配
 const isCollapse = ref(false)
 const isSider = ref(true)
@@ -189,7 +189,7 @@ const backgroundColor = computed(() => {
   }
 })
 
-const matched = computed(() => route.matched)
+const matched = computed(() => route.meta.matched)
 
 const changeUserAuth = async(id) => {
   const res = await setUserAuthority({

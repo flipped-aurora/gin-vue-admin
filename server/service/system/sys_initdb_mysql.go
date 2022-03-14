@@ -29,7 +29,7 @@ func (initDBService *InitDBService) writeMysqlConfig(mysql config.Mysql) error {
 	return global.GVA_VP.WriteConfig()
 }
 
-// initMsqlDB 创建数据库并初始化 mysql
+// initMysqlDB 创建数据库并初始化 mysql
 // Author [piexlmax](https://github.com/piexlmax)
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author: [songzhibin97](https://github.com/songzhibin97)

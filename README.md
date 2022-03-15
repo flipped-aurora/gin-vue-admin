@@ -307,7 +307,9 @@ swag init
 
 ## 10. 友情链接
 									  
-[H5-Dooring ｜ H5页面制作神器](https://github.com/MrXujiang/h5-Dooring)									  
+[H5-Dooring ｜ H5页面制作神器](https://github.com/MrXujiang/h5-Dooring)	
+									  
+[go-zero｜缩短从需求到上线的距离的微服务框架](https://go-zero.dev/cn/)		
 									  
 ## 11. 商用注意事项
 

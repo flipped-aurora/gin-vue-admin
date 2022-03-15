@@ -36,7 +36,7 @@ async function handleKeepAlive(to) {
 
 router.beforeEach(async(to, from, next) => {
   const userStore = useUserStore()
-  to.meta.matched = JSON.parse(JSON.stringify(to.matched))
+  to.meta.matched = [...to.matched]
   handleKeepAlive(to)
   const token = userStore.token
   // 在白名单中的判断情况

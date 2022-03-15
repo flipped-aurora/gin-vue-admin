@@ -35,6 +35,8 @@ workspace:
       volumes:
         - .:/home/project
       ports:
+        - 6800:3000
+        - 6822:22
         - 8000:8000
         - 8080:8080
       networks:

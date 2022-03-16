@@ -29,7 +29,7 @@ export const captcha = (data) => {
 // @Router /base/resige [post]
 export const register = (data) => {
   return service({
-    url: '/user/register',
+    url: '/user/admin_register',
     method: 'post',
     data: data
   })

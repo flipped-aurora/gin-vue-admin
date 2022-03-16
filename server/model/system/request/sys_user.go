@@ -35,3 +35,11 @@ type SetUserAuthorities struct {
 	ID           uint
 	AuthorityIds []string `json:"authorityIds"` // 角色ID
 }
+
+type SetUserInfo struct {
+	NickName string `json:"nickName"`
+	Phone    string `json:"phone"`
+	Email    string `json:"email"`
+	HeadImg  string `json:"headImg"`
+	SetUserAuthorities
+}

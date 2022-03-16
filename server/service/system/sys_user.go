@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"fmt"
+	sysReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -46,10 +47,10 @@ func (userService *UserService) Login(u *system.SysUser) (err error, userInter *
 	var user system.SysUser
 	u.Password = utils.MD5V([]byte(u.Password))
 	err = global.GVA_DB.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authorities").Preload("Authority").First(&user).Error
-	if err == nil{
+	if err == nil {
 		var am system.SysMenu
-		ferr := global.GVA_DB.First(&am,"name = ? AND authority_id = ?",user.Authority.DefaultRouter,user.AuthorityId).Error
-		if errors.Is(ferr,gorm.ErrRecordNotFound) {
+		ferr := global.GVA_DB.First(&am, "name = ? AND authority_id = ?", user.Authority.DefaultRouter, user.AuthorityId).Error
+		if errors.Is(ferr, gorm.ErrRecordNotFound) {
 			user.Authority.DefaultRouter = "404"
 		}
 	}
@@ -95,7 +96,7 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (err erro
 //@return: err error
 
 func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, authorityId string) (err error) {
-	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUseAuthority{}).Error
+	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}
@@ -111,17 +112,17 @@ func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, author
 
 func (userService *UserService) SetUserAuthorities(id uint, authorityIds []string) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		TxErr := tx.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+		TxErr := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 		if TxErr != nil {
 			return TxErr
 		}
-		useAuthority := []system.SysUseAuthority{}
+		userAuthority := []system.SysUserAuthority{}
 		for _, v := range authorityIds {
-			useAuthority = append(useAuthority, system.SysUseAuthority{
+			userAuthority = append(userAuthority, system.SysUserAuthority{
 				id, v,
 			})
 		}
-		TxErr = tx.Create(&useAuthority).Error
+		TxErr = tx.Create(&userAuthority).Error
 		if TxErr != nil {
 			return TxErr
 		}
@@ -146,7 +147,7 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 	if err != nil {
 		return err
 	}
-	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 	return err
 }
 
@@ -156,9 +157,43 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 //@param: reqUser model.SysUser
 //@return: err error, user model.SysUser
 
-func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, user system.SysUser) {
-	err = global.GVA_DB.Updates(&reqUser).Error
-	return err, reqUser
+func (userService *UserService) SetUserInfo(reqUser sysReq.SetUserInfo) (err error, user system.SysUser) {
+	userId := reqUser.ID
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		thisUser := func(tx *gorm.DB) *gorm.DB {
+			return tx.Model(&system.SysUser{}).Where("id = ?", userId)
+		}
+		if len(reqUser.AuthorityIds) > 0 {
+			if err = tx.Model(system.SysUserAuthority{}).
+				Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", userId).Error; err != nil {
+				return err
+			}
+			var userAuthorities []system.SysUserAuthority
+			for _, authorityId := range reqUser.AuthorityIds {
+				userAuthorities = append(userAuthorities, system.SysUserAuthority{userId, authorityId})
+			}
+			if err = tx.Create(&userAuthorities).Error; err != nil {
+				return err
+			}
+			if err = tx.Scopes(thisUser).Update("AuthorityId", userAuthorities[0].SysAuthorityId).Error; err != nil {
+				return err
+			}
+		}
+		if err = tx.Scopes(thisUser).Updates(&system.SysUser{
+			NickName:  reqUser.NickName,
+			HeaderImg: reqUser.HeadImg,
+			Phone:     reqUser.Phone,
+			Email:     reqUser.Email,
+		}).Error; err != nil {
+			return err
+		}
+		if err = tx.Scopes(thisUser).First(&user).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	// !returned user only useful while success, thus empty object permitted
+	return err, user
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -170,12 +205,12 @@ func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, 
 func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user system.SysUser) {
 	var reqUser system.SysUser
 	err = global.GVA_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
-	if err!=nil{
+	if err != nil {
 		return err, reqUser
 	}
 	var am system.SysMenu
-	ferr := global.GVA_DB.First(&am,"name = ? AND authority_id = ?",reqUser.Authority.DefaultRouter,reqUser.AuthorityId).Error
-	if errors.Is(ferr,gorm.ErrRecordNotFound) {
+	ferr := global.GVA_DB.First(&am, "name = ? AND authority_id = ?", reqUser.Authority.DefaultRouter, reqUser.AuthorityId).Error
+	if errors.Is(ferr, gorm.ErrRecordNotFound) {
 		reqUser.Authority.DefaultRouter = "404"
 	}
 	return err, reqUser

@@ -272,20 +272,17 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "设置用户信息"
 // @Router /user/setUserInfo [put]
 func (b *BaseApi) SetUserInfo(c *gin.Context) {
-	var user system.SysUser
+	var user systemReq.SetUserInfo
 	_ = c.ShouldBindJSON(&user)
-	user.Username = ""
-	user.Password = ""
-	user.AuthorityId = ""
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, ReqUser := userService.SetUserInfo(user); err != nil {
+	if err, RespUser := userService.SetUserInfo(user); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "设置成功", c)
+		response.OkWithDetailed(gin.H{"userInfo": RespUser}, "设置成功", c)
 	}
 }
 
@@ -298,17 +295,14 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "设置用户信息"
 // @Router /user/SetSelfInfo [put]
 func (b *BaseApi) SetSelfInfo(c *gin.Context) {
-	var user system.SysUser
+	var user systemReq.SetUserInfo
 	_ = c.ShouldBindJSON(&user)
-	user.Username = ""
-	user.Password = ""
-	user.AuthorityId = ""
 	user.ID = utils.GetUserID(c)
-	if err, ReqUser := userService.SetUserInfo(user); err != nil {
+	if err, RespUser := userService.SetUserInfo(user); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "设置成功", c)
+		response.OkWithDetailed(gin.H{"userInfo": RespUser}, "设置成功", c)
 	}
 }
 

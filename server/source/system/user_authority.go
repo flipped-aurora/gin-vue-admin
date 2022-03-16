@@ -12,16 +12,16 @@ var UserAuthority = new(userAuthority)
 type userAuthority struct{}
 
 func (a *userAuthority) TableName() string {
-	var entity system.SysUseAuthority
+	var entity system.SysUserAuthority
 	return entity.TableName()
 }
 
 func (a *userAuthority) Initialize() error {
-	entities := []system.SysUseAuthority{
-		{SysUserId: 1, SysAuthorityAuthorityId: "888"},
-		{SysUserId: 1, SysAuthorityAuthorityId: "8881"},
-		{SysUserId: 1, SysAuthorityAuthorityId: "9528"},
-		{SysUserId: 2, SysAuthorityAuthorityId: "888"},
+	entities := []system.SysUserAuthority{
+		{SysUserId: 1, SysAuthorityId: "888"},
+		{SysUserId: 1, SysAuthorityId: "8881"},
+		{SysUserId: 1, SysAuthorityId: "9528"},
+		{SysUserId: 2, SysAuthorityId: "888"},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil {
 		return errors.Wrap(err, a.TableName()+"表数据初始化失败!")
@@ -30,7 +30,7 @@ func (a *userAuthority) Initialize() error {
 }
 
 func (a *userAuthority) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", 2, "888").First(&system.SysUseAuthority{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
+	if errors.Is(global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", 2, "888").First(&system.SysUserAuthority{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
 		return false
 	}
 	return true

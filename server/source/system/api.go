@@ -22,7 +22,7 @@ func (a *api) Initialize() error {
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: global.Translate("system.api.jwtAddedToBlackList")},
 
 		{ApiGroup: global.Translate("system.api.systemUser"), Method: "DELETE", Path: "/user/deleteUser", Description: global.Translate("system.api.deleteUsers")},
-		{ApiGroup: global.Translate("system.api.systemUser"), Method: "POST", Path: "/user/register", Description: global.Translate("system.api.userRegistration")},
+		{ApiGroup: global.Translate("system.api.systemUser"), Method: "POST", Path: "/user/admin_register", Description: global.Translate("system.api.userRegistration")},
 		{ApiGroup: global.Translate("system.api.systemUser"), Method: "POST", Path: "/user/getUserList", Description: global.Translate("system.api.getUsersList")},
 		{ApiGroup: global.Translate("system.api.systemUser"), Method: "PUT", Path: "/user/setUserInfo", Description: global.Translate("system.api.setUserInfo")},
 		{ApiGroup: global.Translate("system.api.systemUser"), Method: "PUT", Path: "/user/setSelfInfo", Description: global.Translate("system.api.setSelfInfo")},

@@ -1,0 +1,1 @@
+package gin_vue_admin

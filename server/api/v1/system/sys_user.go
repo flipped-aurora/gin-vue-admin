@@ -105,7 +105,7 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 // @Produce  application/json
 // @Param data body systemReq.Register true "用户名, 昵称, 密码, 角色ID"
 // @Success 200 {object} response.Response{data=systemRes.SysUserResponse,msg=string} "用户注册账号,返回包括用户信息"
-// @Router /user/register [post]
+// @Router /user/admin_register [post]
 func (b *BaseApi) Register(c *gin.Context) {
 	var r systemReq.Register
 	_ = c.ShouldBindJSON(&r)

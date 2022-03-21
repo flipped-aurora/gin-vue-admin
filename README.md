@@ -306,9 +306,11 @@ swag init
 如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
 
 ## 10. 友情链接
-									  
-[H5-Dooring ｜ H5页面制作神器](https://github.com/MrXujiang/h5-Dooring)									  
-									  
+
+[H5-Dooring ｜ H5页面制作神器](https://github.com/MrXujiang/h5-Dooring)	
+
+[go-zero 微服务框架｜缩短从需求到上线的距离](https://github.com/zeromicro/go-zero)
+
 ## 11. 商用注意事项
 
 如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

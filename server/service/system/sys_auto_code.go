@@ -11,6 +11,8 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
@@ -19,9 +21,17 @@ import (
 )
 
 const (
-	autoPath = "autocode_template/"
-	basePath = "resource/template"
+	autoPath       = "autocode_template/"
+	basePath       = "resource/template"
+	packageService = "service/%s/enter.go"
+	packageRouter  = "router/%s/enter.go"
+	packageAPI     = "api/v1/%s/enter.go"
 )
+
+type autoPackage struct {
+	path string
+	temp string
+}
 
 var injectionPaths []injectionMeta
 
@@ -484,6 +494,59 @@ func injectionCode(structName string, bf *strings.Builder) error {
 			return err
 		}
 		bf.WriteString(fmt.Sprintf("%s@%s@%s;", meta.path, meta.funcName, code))
+	}
+	return nil
+}
+
+func (autoCodeService *AutoCodeService) CreateAutoCode(s *system.SysAutoCode) error {
+	if s.PackageName == "autocode" || s.PackageName == "system" || s.PackageName == "example" || s.PackageName == "" {
+		return errors.New("不能使用已保留的package name")
+	}
+	if !errors.Is(global.GVA_DB.Where("package_name = ?", s.PackageName).First(&system.SysAutoCode{}).Error, gorm.ErrRecordNotFound) {
+		return errors.New("存在相同PackageName")
+	}
+	return global.GVA_DB.Create(&s).Error
+}
+
+func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) error {
+	pendingTemp := []autoPackage{{
+		path: packageService,
+		temp: string(subcontract.Server),
+	}, {
+		path: packageRouter,
+		temp: string(subcontract.Router),
+	}, {
+		path: packageAPI,
+		temp: string(subcontract.API),
+	}}
+	for i, s := range pendingTemp {
+		pendingTemp[i].path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, filepath.Clean(fmt.Sprintf(s.path, packageName)))
+	}
+	// 选择模板
+	for _, s := range pendingTemp {
+
+		err := os.MkdirAll(filepath.Dir(s.path), 0755)
+		if err != nil {
+			return err
+		}
+
+		f, err := os.Create(s.path)
+		if err != nil {
+			return err
+		}
+
+		defer f.Close()
+
+		temp, err := template.New("").Parse(s.temp)
+		if err != nil {
+			return err
+		}
+		err = temp.Execute(f, struct {
+			PackageName string `json:"package_name"`
+		}{packageName})
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

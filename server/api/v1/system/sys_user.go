@@ -105,7 +105,7 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 // @Produce  application/json
 // @Param data body systemReq.Register true "用户名, 昵称, 密码, 角色ID"
 // @Success 200 {object} response.Response{data=systemRes.SysUserResponse,msg=string} "用户注册账号,返回包括用户信息"
-// @Router /user/register [post]
+// @Router /user/admin_register [post]
 func (b *BaseApi) Register(c *gin.Context) {
 	var r systemReq.Register
 	_ = c.ShouldBindJSON(&r)
@@ -272,20 +272,34 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "设置用户信息"
 // @Router /user/setUserInfo [put]
 func (b *BaseApi) SetUserInfo(c *gin.Context) {
-	var user system.SysUser
+	var user systemReq.ChangeUserInfo
 	_ = c.ShouldBindJSON(&user)
-	user.Username = ""
-	user.Password = ""
-	user.AuthorityId = ""
 	if err := utils.Verify(user, utils.IdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, ReqUser := userService.SetUserInfo(user); err != nil {
+
+	if len(user.AuthorityIds) != 0 {
+		err := userService.SetUserAuthorities(user.ID, user.AuthorityIds)
+		if err != nil {
+			global.GVA_LOG.Error("设置失败!", zap.Error(err))
+			response.FailWithMessage("设置失败", c)
+		}
+	}
+
+	if err := userService.SetUserInfo(system.SysUser{
+		GVA_MODEL: global.GVA_MODEL{
+			ID: user.ID,
+		},
+		NickName:  user.NickName,
+		HeaderImg: user.HeaderImg,
+		Phone:     user.Phone,
+		Email:     user.Email,
+	}); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "设置成功", c)
+		response.OkWithMessage("设置成功", c)
 	}
 }
 
@@ -298,17 +312,22 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "设置用户信息"
 // @Router /user/SetSelfInfo [put]
 func (b *BaseApi) SetSelfInfo(c *gin.Context) {
-	var user system.SysUser
+	var user systemReq.ChangeUserInfo
 	_ = c.ShouldBindJSON(&user)
-	user.Username = ""
-	user.Password = ""
-	user.AuthorityId = ""
 	user.ID = utils.GetUserID(c)
-	if err, ReqUser := userService.SetUserInfo(user); err != nil {
+	if err := userService.SetUserInfo(system.SysUser{
+		GVA_MODEL: global.GVA_MODEL{
+			ID: user.ID,
+		},
+		NickName:  user.NickName,
+		HeaderImg: user.HeaderImg,
+		Phone:     user.Phone,
+		Email:     user.Email,
+	}); err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"userInfo": ReqUser}, "设置成功", c)
+		response.OkWithMessage("设置成功", c)
 	}
 }
 

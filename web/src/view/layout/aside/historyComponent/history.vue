@@ -194,9 +194,10 @@ const isSame = (route1, route2) => {
 }
 const setTab = (route) => {
   if (!historys.value.some((item) => isSame(item, route))) {
+    const { matched, ...otherMetas } = route.meta // 排除matched
     const obj = {}
     obj.name = route.name
-    obj.meta = route.meta
+    obj.meta = otherMetas
     obj.query = route.query
     obj.params = route.params
     historys.value.push(obj)

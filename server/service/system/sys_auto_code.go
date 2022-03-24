@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"sync"
 	"text/template"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
@@ -21,56 +22,85 @@ import (
 )
 
 const (
-	autoPath       = "autocode_template/"
-	basePath       = "resource/template"
-	packageService = "service/%s/enter.go"
-	packageRouter  = "router/%s/enter.go"
-	packageAPI     = "api/v1/%s/enter.go"
+	autoPath           = "autocode_template/"
+	basePath           = "resource/template"
+	packageService     = "service/%s/enter.go"
+	packageServiceName = "service"
+	packageRouter      = "router/%s/enter.go"
+	packageRouterName  = "router"
+	packageAPI         = "api/v1/%s/enter.go"
+	packageAPIName     = "api/v1"
 )
 
 type autoPackage struct {
 	path string
 	temp string
+	name string
 }
 
-var injectionPaths []injectionMeta
+var (
+	packageInjectionMap map[string]injectionMeta
+	injectionPaths      []injectionMeta
+	do                  sync.Once
+)
 
 func Init() {
-	if len(injectionPaths) != 0 {
-		return
-	}
-	injectionPaths = []injectionMeta{
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
-			funcName:    "MysqlTables",
-			structNameF: "autocode.%s{},",
-		},
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
-			funcName:    "Routers",
-			structNameF: "autocodeRouter.Init%sRouter(PrivateGroup)",
-		},
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, "enter.go"),
-			funcName:    "ApiGroup",
-			structNameF: "%sApi",
-		},
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRouter, "enter.go"),
-			funcName:    "RouterGroup",
-			structNameF: "%sRouter",
-		},
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, "enter.go"),
-			funcName:    "ServiceGroup",
-			structNameF: "%sService",
-		},
-	}
+	do.Do(func() {
+		injectionPaths = []injectionMeta{
+			{
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
+				funcName:    "MysqlTables",
+				structNameF: "autocode.%s{},",
+			},
+			{
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
+				funcName:    "Routers",
+				structNameF: "autocodeRouter.Init%sRouter(PrivateGroup)",
+			},
+			{
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, "enter.go"),
+				funcName:    "ApiGroup",
+				structNameF: "%sApi",
+			},
+			{
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRouter, "enter.go"),
+				funcName:    "RouterGroup",
+				structNameF: "%sRouter",
+			},
+			{
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, "enter.go"),
+				funcName:    "ServiceGroup",
+				structNameF: "%sService",
+			},
+		}
+
+		packageInjectionMap = map[string]injectionMeta{
+			packageServiceName: {
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
+				funcName:    "",
+				structNameF: "%sAutoCodeGroup %s.ServiceGroup", // 首字母大写
+			},
+			packageRouterName: {
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
+				funcName:    "",
+				structNameF: "%sAutoCodeGroup %s.RouterGroup", // 首字母大写
+			},
+			packageAPIName: {
+				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+					global.GVA_CONFIG.AutoCode.Server, "api/v1", "enter.go"),
+				funcName:    "",
+				structNameF: "%sAutoCodeGroup %s.ApiGroup", // 首字母大写
+			},
+		}
+	})
+
 }
 
 type injectionMeta struct {
@@ -509,14 +539,18 @@ func (autoCodeService *AutoCodeService) CreateAutoCode(s *system.SysAutoCode) er
 }
 
 func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) error {
+	Init()
 	pendingTemp := []autoPackage{{
 		path: packageService,
+		name: packageServiceName,
 		temp: string(subcontract.Server),
 	}, {
 		path: packageRouter,
+		name: packageRouterName,
 		temp: string(subcontract.Router),
 	}, {
 		path: packageAPI,
+		name: packageAPIName,
 		temp: string(subcontract.API),
 	}}
 	for i, s := range pendingTemp {
@@ -545,6 +579,17 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 			PackageName string `json:"package_name"`
 		}{packageName})
 		if err != nil {
+			return err
+		}
+	}
+	// 创建完成后在对应的位置插入结构代码
+	for _, v := range pendingTemp {
+		meta := packageInjectionMap[v.name]
+		code := fmt.Sprintf(meta.structNameF, strings.Title(packageName), packageName)
+		if err := utils.AutoInjectionCode(meta.path, meta.funcName, code); err != nil {
+			return err
+		}
+		if err := utils.ImportReference(meta.path, fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/%s/%s", v.name, packageName)); err != nil {
 			return err
 		}
 	}

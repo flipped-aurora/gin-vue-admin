@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -11,8 +12,6 @@ import (
 	"strings"
 	"sync"
 	"text/template"
-
-	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -84,19 +83,19 @@ func Init() {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
 				funcName:    "",
-				structNameF: "%sAutoCodeGroup %s.ServiceGroup", // 首字母大写
+				structNameF: "%sGroup %s.ServiceGroup", // 首字母大写
 			},
 			packageRouterName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
 				funcName:    "",
-				structNameF: "%sAutoCodeGroup %s.RouterGroup", // 首字母大写
+				structNameF: "%sGroup %s.RouterGroup", // 首字母大写
 			},
 			packageAPIName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, "api/v1", "enter.go"),
 				funcName:    "",
-				structNameF: "%sAutoCodeGroup %s.ApiGroup", // 首字母大写
+				structNameF: "%sGroup %s.ApiGroup", // 首字母大写
 			},
 		}
 	})
@@ -535,6 +534,9 @@ func (autoCodeService *AutoCodeService) CreateAutoCode(s *system.SysAutoCode) er
 	if !errors.Is(global.GVA_DB.Where("package_name = ?", s.PackageName).First(&system.SysAutoCode{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同PackageName")
 	}
+	if e:= autoCodeService.CreatePackageTemp(s.PackageName);e !=nil{
+		return e
+	}
 	return global.GVA_DB.Create(&s).Error
 }
 
@@ -558,7 +560,6 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	}
 	// 选择模板
 	for _, s := range pendingTemp {
-
 		err := os.MkdirAll(filepath.Dir(s.path), 0755)
 		if err != nil {
 			return err
@@ -585,11 +586,14 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		code := fmt.Sprintf(meta.structNameF, strings.Title(packageName), packageName)
-		if err := utils.AutoInjectionCode(meta.path, meta.funcName, code); err != nil {
-			return err
-		}
-		if err := utils.ImportReference(meta.path, fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/%s/%s", v.name, packageName)); err != nil {
+		StructArr := strings.Split(meta.structNameF," ")
+		s := fmt.Sprintf(StructArr[0],packageName)
+		s = strings.Title(s)
+		FG := strings.Split(StructArr[1],".")
+		f:= fmt.Sprintf(FG[0],packageName)
+		g:= FG[1]
+
+		if err := utils.ImportReference(meta.path, fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/%s/%s", v.name, packageName),s,f,g); err != nil {
 			return err
 		}
 	}

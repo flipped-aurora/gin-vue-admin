@@ -142,3 +142,29 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	}
 	response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
 }
+
+
+// PreviewTemp
+// @Tags AutoCode
+// @Summary 预览创建后的代码
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysAutoCode true "预览创建代码"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "预览创建后的代码"
+// @Router /autoCode/createPackage [post]
+func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
+	var a system.SysAutoCode
+	_ = c.ShouldBindJSON(&a)
+	if err := utils.Verify(a, utils.AutoPackageVerify); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err := autoCodeService.CreateAutoCode(&a)
+	if err != nil {
+		global.GVA_LOG.Error("创建成功!", zap.Error(err))
+		response.FailWithMessage("创建失败", c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}

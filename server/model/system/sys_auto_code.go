@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
@@ -36,5 +35,5 @@ var AutoMoveErr error = errors.New("创建代码成功并移动文件成功")
 
 type SysAutoCode struct {
 	global.GVA_MODEL
-	PackageName string `json:"package_name" gorm:"comment:包名"`
+	PackageName string `json:"packageName" gorm:"comment:包名"`
 }

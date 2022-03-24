@@ -69,19 +69,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *request.Get
 	if err != nil {
 		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 	}
-	// 获取全部表名
-	dbNames, err := AutoCodeServiceApp.Database().GetTables(global.GVA_CONFIG.Mysql.Dbname)
-	if err != nil {
-		global.GVA_LOG.Error("ClearTag GetTables:", zap.Error(err))
-	}
 	// 删除表
-	for _, name := range dbNames {
-		if strings.Contains(strings.ToUpper(strings.Replace(name.TableName, "_", "", -1)), strings.ToUpper(md.TableName)) {
-			// 删除表
-			if err = AutoCodeServiceApp.DropTable(name.TableName); err != nil {
-				global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
-			}
-		}
+	if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
+		global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
 	}
 	// 删除文件
 

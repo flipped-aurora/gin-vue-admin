@@ -323,7 +323,10 @@ const enterForm = async(isPreview) => {
         }
       }
       form.value.structName = toUpperCase(form.value.structName)
-      if (form.value.tableName) { form.value.tableName = form.value.tableName.replace(' ', '') }
+      form.value.tableName = form.value.tableName.replace(' ', '')
+      if (!form.value.tableName) {
+        form.value.tableName = toSQLLine(toLowerCase(form.value.structName))
+      }
       if (form.value.structName === form.value.abbreviation) {
         ElMessage({
           type: 'error',

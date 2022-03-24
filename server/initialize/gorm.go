@@ -42,6 +42,8 @@ func RegisterTables(db *gorm.DB) {
 		system.SysBaseMenuParameter{},
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
+		system.SysAutoCode{},
+
 		// 示例模块表
 		example.ExaFile{},
 		example.ExaCustomer{},

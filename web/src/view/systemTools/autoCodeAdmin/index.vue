@@ -13,7 +13,7 @@
         <el-table-column align="left" label="日期" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="结构体名" min-width="150" prop="structNameF" />
+        <el-table-column align="left" label="结构体名" min-width="150" prop="structName" />
         <el-table-column align="left" label="结构体描述" min-width="150" prop="structCNName" />
         <el-table-column align="left" label="表名称" min-width="150" prop="tableName" />
         <el-table-column align="left" label="回滚标记" min-width="150" prop="flag">

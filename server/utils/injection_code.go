@@ -1,16 +1,12 @@
 package utils
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"go/ast"
-	"go/format"
 	"go/parser"
 	"go/token"
 	"io/ioutil"
-	"log"
-	"strconv"
 	"strings"
 )
 
@@ -182,113 +178,3 @@ func cleanCode(clearCode string, srcData string) ([]byte, error) {
 	}
 	return []byte(srcData), errors.New("未找到内容")
 }
-
-type Visitor struct {
-	NeedImport string
-	StructName string
-	PackageName string
-	GroupName string
-}
-
-func (vi *Visitor) Visit(node ast.Node) ast.Visitor {
-	switch n := node.(type) {
-	case *ast.GenDecl:
-		// 查找有没有import context包
-		// Notice：没有考虑没有import任何包的情况
-		if n.Tok == token.IMPORT {
-			vi.addImport(n)
-			// 不需要再遍历子树
-			return nil
-		}
-		if n.Tok == token.TYPE{
-			vi.addStruct(n)
-			return nil
-		}
-	}
-	return vi
-}
-
-func (vi *Visitor) addStruct(genDecl *ast.GenDecl) ast.Visitor{
-	for i := range genDecl.Specs {
-		switch n:=genDecl.Specs[i].(type) {
-		case *ast.TypeSpec:
-			if strings.Index(n.Name.Name,"Group") >- 1 {
-				switch t := n.Type.(type) {
-				case *ast.StructType:
-
-					f := &ast.Field {
-					Names: []*ast.Ident {
-						 &ast.Ident {
-							Name: vi.StructName,
-							Obj: &ast.Object {
-								Kind: ast.Var,
-								Name: vi.StructName,
-							},
-						},
-					},
-					Type: &ast.SelectorExpr {
-						X: &ast.Ident {
-							Name: vi.PackageName,
-						},
-						Sel: &ast.Ident {
-							Name: vi.GroupName,
-						},
-					},
-				}
-					t.Fields.List = append(t.Fields.List, f)
-				}
-			}
-
-		}
-	}
-	return vi
-}
-
-func (vi *Visitor) addImport(genDecl *ast.GenDecl) ast.Visitor {
-	// 是否已经import
-	hasImported := false
-	for _, v := range genDecl.Specs {
-		imptSpec := v.(*ast.ImportSpec)
-		// 如果已经包含
-		if imptSpec.Path.Value == strconv.Quote(vi.NeedImport) {
-			hasImported = true
-		}
-		if !hasImported {
-			genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
-				Path: &ast.BasicLit{
-					Kind:  token.STRING,
-					Value: strconv.Quote(vi.NeedImport),
-				},
-			})
-		}
-	}
-	return nil
-}
-
-func ImportReference(filepath , codeData ,structName,packageName,groupName string) error {
-	fset := token.NewFileSet()
-	fparser, err := parser.ParseFile(fset, filepath, nil, parser.ParseComments)
-	if err != nil {
-		return err
-	}
-	codeData = strings.TrimSpace(codeData)
-
-	v := &Visitor{
-		NeedImport: codeData,
-		StructName:structName,
-		PackageName:packageName,
-		GroupName:groupName,
-
-	}
-	ast.Walk(v, fparser)
-
-	var output []byte
-	buffer := bytes.NewBuffer(output)
-	err = format.Node(buffer, fset, fparser)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// 写回数据
-	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
-}
-

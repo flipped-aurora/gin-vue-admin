@@ -615,7 +615,7 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 }
 
 type Visitor struct {
-	NeedImport  string
+	ImportCode  string
 	StructName  string
 	PackageName string
 	GroupName   string
@@ -626,12 +626,12 @@ func (vi *Visitor) Visit(node ast.Node) ast.Visitor {
 	case *ast.GenDecl:
 		// 查找有没有import context包
 		// Notice：没有考虑没有import任何包的情况
-		if n.Tok == token.IMPORT {
+		if n.Tok == token.IMPORT && vi.ImportCode != "" {
 			vi.addImport(n)
 			// 不需要再遍历子树
 			return nil
 		}
-		if n.Tok == token.TYPE {
+		if n.Tok == token.TYPE && vi.PackageName != "" && vi.GroupName != "" {
 			vi.addStruct(n)
 			return nil
 		}
@@ -679,14 +679,14 @@ func (vi *Visitor) addImport(genDecl *ast.GenDecl) ast.Visitor {
 	for _, v := range genDecl.Specs {
 		importSpec := v.(*ast.ImportSpec)
 		// 如果已经包含
-		if importSpec.Path.Value == strconv.Quote(vi.NeedImport) {
+		if importSpec.Path.Value == strconv.Quote(vi.ImportCode) {
 			hasImported = true
 		}
 		if !hasImported {
 			genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
 				Path: &ast.BasicLit{
 					Kind:  token.STRING,
-					Value: strconv.Quote(vi.NeedImport),
+					Value: strconv.Quote(vi.ImportCode),
 				},
 			})
 		}
@@ -703,7 +703,7 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 	importCode = strings.TrimSpace(importCode)
 
 	v := &Visitor{
-		NeedImport:  importCode,
+		ImportCode:  importCode,
 		StructName:  structName,
 		PackageName: packageName,
 		GroupName:   groupName,

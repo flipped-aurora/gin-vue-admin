@@ -13,7 +13,7 @@
             </div>
           </template>
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
-            <el-form-item label="数据库名" prop="structNameF">
+            <el-form-item label="数据库名" prop="structName">
               <el-select v-model="dbform.dbName" filterable placeholder="请选择数据库" @change="getTableFunc">
                 <el-option
                   v-for="item in dbOptions"
@@ -23,7 +23,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="表名" prop="structNameF">
+            <el-form-item label="表名" prop="structName">
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
@@ -48,8 +48,8 @@
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
       <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
-        <el-form-item label="Struct名称" prop="structNameF">
-          <el-input v-model="form.structNameF" placeholder="首字母自动转换大写" />
+        <el-form-item label="Struct名称" prop="structName">
+          <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
         </el-form-item>
         <el-form-item label="TableName" prop="tableName">
           <el-input v-model="form.tableName" placeholder="指定表名（非必填）" />

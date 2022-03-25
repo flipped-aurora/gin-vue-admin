@@ -1,17 +1,24 @@
 package system
 
 import (
+	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
+	"go/ast"
+	"go/format"
+	"go/parser"
+	"go/token"
 	"io/ioutil"
+	"log"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"sync"
 	"text/template"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -38,7 +45,7 @@ type autoPackage struct {
 }
 
 var (
-	packageInjectionMap map[string]injectionMeta
+	packageInjectionMap map[string]astInjectionMeta
 	injectionPaths      []injectionMeta
 	do                  sync.Once
 )
@@ -78,24 +85,30 @@ func Init() {
 			},
 		}
 
-		packageInjectionMap = map[string]injectionMeta{
+		packageInjectionMap = map[string]astInjectionMeta{
 			packageServiceName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
-				funcName:    "",
-				structNameF: "%sGroup %s.ServiceGroup", // 首字母大写
+				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
+				packageNameF: "%s",
+				groupName:    "ServiceGroup",
+				structNameF:  "%sGroup",
 			},
 			packageRouterName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
-				funcName:    "",
-				structNameF: "%sGroup %s.RouterGroup", // 首字母大写
+				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
+				packageNameF: "%s",
+				groupName:    "RouterGroup",
+				structNameF:  "%sGroup",
 			},
 			packageAPIName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, "api/v1", "enter.go"),
-				funcName:    "",
-				structNameF: "%sGroup %s.ApiGroup", // 首字母大写
+				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
+				packageNameF: "%s",
+				groupName:    "ApiGroup",
+				structNameF:  "%sGroup",
 			},
 		}
 	})
@@ -106,6 +119,14 @@ type injectionMeta struct {
 	path        string
 	funcName    string
 	structNameF string // 带格式化的
+}
+
+type astInjectionMeta struct {
+	path         string
+	importCodeF  string
+	structNameF  string
+	packageNameF string
+	groupName    string
 }
 
 type tplData struct {
@@ -534,7 +555,7 @@ func (autoCodeService *AutoCodeService) CreateAutoCode(s *system.SysAutoCode) er
 	if !errors.Is(global.GVA_DB.Where("package_name = ?", s.PackageName).First(&system.SysAutoCode{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同PackageName")
 	}
-	if e:= autoCodeService.CreatePackageTemp(s.PackageName);e !=nil{
+	if e := autoCodeService.CreatePackageTemp(s.PackageName); e != nil {
 		return e
 	}
 	return global.GVA_DB.Create(&s).Error
@@ -586,16 +607,115 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		StructArr := strings.Split(meta.structNameF," ")
-		s := fmt.Sprintf(StructArr[0],packageName)
-		s = strings.Title(s)
-		FG := strings.Split(StructArr[1],".")
-		f:= fmt.Sprintf(FG[0],packageName)
-		g:= FG[1]
-
-		if err := utils.ImportReference(meta.path, fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/%s/%s", v.name, packageName),s,f,g); err != nil {
+		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, strings.Title(v.name), packageName), fmt.Sprintf(meta.structNameF, packageName), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+type Visitor struct {
+	NeedImport  string
+	StructName  string
+	PackageName string
+	GroupName   string
+}
+
+func (vi *Visitor) Visit(node ast.Node) ast.Visitor {
+	switch n := node.(type) {
+	case *ast.GenDecl:
+		// 查找有没有import context包
+		// Notice：没有考虑没有import任何包的情况
+		if n.Tok == token.IMPORT {
+			vi.addImport(n)
+			// 不需要再遍历子树
+			return nil
+		}
+		if n.Tok == token.TYPE {
+			vi.addStruct(n)
+			return nil
+		}
+	}
+	return vi
+}
+
+func (vi *Visitor) addStruct(genDecl *ast.GenDecl) ast.Visitor {
+	for i := range genDecl.Specs {
+		switch n := genDecl.Specs[i].(type) {
+		case *ast.TypeSpec:
+			if strings.Index(n.Name.Name, "Group") > -1 {
+				switch t := n.Type.(type) {
+				case *ast.StructType:
+					f := &ast.Field{
+						Names: []*ast.Ident{
+							&ast.Ident{
+								Name: vi.StructName,
+								Obj: &ast.Object{
+									Kind: ast.Var,
+									Name: vi.StructName,
+								},
+							},
+						},
+						Type: &ast.SelectorExpr{
+							X: &ast.Ident{
+								Name: vi.PackageName,
+							},
+							Sel: &ast.Ident{
+								Name: vi.GroupName,
+							},
+						},
+					}
+					t.Fields.List = append(t.Fields.List, f)
+				}
+			}
+		}
+	}
+	return vi
+}
+
+func (vi *Visitor) addImport(genDecl *ast.GenDecl) ast.Visitor {
+	// 是否已经import
+	hasImported := false
+	for _, v := range genDecl.Specs {
+		importSpec := v.(*ast.ImportSpec)
+		// 如果已经包含
+		if importSpec.Path.Value == strconv.Quote(vi.NeedImport) {
+			hasImported = true
+		}
+		if !hasImported {
+			genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
+				Path: &ast.BasicLit{
+					Kind:  token.STRING,
+					Value: strconv.Quote(vi.NeedImport),
+				},
+			})
+		}
+	}
+	return nil
+}
+
+func ImportReference(filepath, importCode, structName, packageName, groupName string) error {
+	fSet := token.NewFileSet()
+	fParser, err := parser.ParseFile(fSet, filepath, nil, parser.ParseComments)
+	if err != nil {
+		return err
+	}
+	importCode = strings.TrimSpace(importCode)
+
+	v := &Visitor{
+		NeedImport:  importCode,
+		StructName:  structName,
+		PackageName: packageName,
+		GroupName:   groupName,
+	}
+	ast.Walk(v, fParser)
+
+	var output []byte
+	buffer := bytes.NewBuffer(output)
+	err = format.Node(buffer, fSet, fParser)
+	if err != nil {
+		log.Fatal(err)
+	}
+	// 写回数据
+	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
 }

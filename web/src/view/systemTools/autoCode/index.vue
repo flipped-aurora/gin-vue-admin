@@ -13,7 +13,7 @@
             </div>
           </template>
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
-            <el-form-item label="数据库名" prop="structName">
+            <el-form-item label="数据库名" prop="structNameF">
               <el-select v-model="dbform.dbName" filterable placeholder="请选择数据库" @change="getTableFunc">
                 <el-option
                   v-for="item in dbOptions"
@@ -23,7 +23,7 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="表名" prop="structName">
+            <el-form-item label="表名" prop="structNameF">
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
@@ -48,8 +48,8 @@
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
       <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
-        <el-form-item label="Struct名称" prop="structName">
-          <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
+        <el-form-item label="Struct名称" prop="structNameF">
+          <el-input v-model="form.structNameF" placeholder="首字母自动转换大写" />
         </el-form-item>
         <el-form-item label="TableName" prop="tableName">
           <el-input v-model="form.tableName" placeholder="指定表名（非必填）" />
@@ -201,7 +201,7 @@ const tableOptions = ref([])
 const addFlag = ref('')
 const fdMap = ref({})
 const form = ref({
-  structName: '',
+  structNameF: '',
   tableName: '',
   packageName: '',
   abbreviation: '',
@@ -211,7 +211,7 @@ const form = ref({
   fields: []
 })
 const rules = ref({
-  structName: [
+  structNameF: [
     { required: true, message: '请输入结构体名称', trigger: 'blur' }
   ],
   abbreviation: [
@@ -307,7 +307,7 @@ const enterForm = async(isPreview) => {
     return false
   }
   if (
-    form.value.fields.some(item => item.fieldName === form.value.structName)
+    form.value.fields.some(item => item.fieldName === form.value.structNameF)
   ) {
     ElMessage({
       type: 'error',
@@ -322,12 +322,12 @@ const enterForm = async(isPreview) => {
           form.value[key] = form.value[key].trim()
         }
       }
-      form.value.structName = toUpperCase(form.value.structName)
+      form.value.structNameF = toUpperCase(form.value.structNameF)
       form.value.tableName = form.value.tableName.replace(' ', '')
       if (!form.value.tableName) {
-        form.value.tableName = toSQLLine(toLowerCase(form.value.structName))
+        form.value.tableName = toSQLLine(toLowerCase(form.value.structNameF))
       }
-      if (form.value.structName === form.value.abbreviation) {
+      if (form.value.structNameF === form.value.abbreviation) {
         ElMessage({
           type: 'error',
           message: 'structName和struct简称不能相同'
@@ -397,7 +397,7 @@ const getColumnFunc = async() => {
   const res = await getColumn(dbform.value)
   if (res.code === 0) {
     const tbHump = toHump(dbform.value.tableName)
-    form.value.structName = toUpperCase(tbHump)
+    form.value.structNameF = toUpperCase(tbHump)
     form.value.tableName = dbform.value.tableName
     form.value.packageName = tbHump
     form.value.abbreviation = tbHump

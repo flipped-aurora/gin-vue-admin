@@ -201,7 +201,7 @@ const tableOptions = ref([])
 const addFlag = ref('')
 const fdMap = ref({})
 const form = ref({
-  structNameF: '',
+  structName: '',
   tableName: '',
   packageName: '',
   abbreviation: '',
@@ -211,7 +211,7 @@ const form = ref({
   fields: []
 })
 const rules = ref({
-  structNameF: [
+  structName: [
     { required: true, message: '请输入结构体名称', trigger: 'blur' }
   ],
   abbreviation: [
@@ -307,7 +307,7 @@ const enterForm = async(isPreview) => {
     return false
   }
   if (
-    form.value.fields.some(item => item.fieldName === form.value.structNameF)
+    form.value.fields.some(item => item.fieldName === form.value.structName)
   ) {
     ElMessage({
       type: 'error',
@@ -322,12 +322,12 @@ const enterForm = async(isPreview) => {
           form.value[key] = form.value[key].trim()
         }
       }
-      form.value.structNameF = toUpperCase(form.value.structNameF)
+      form.value.structName = toUpperCase(form.value.structName)
       form.value.tableName = form.value.tableName.replace(' ', '')
       if (!form.value.tableName) {
-        form.value.tableName = toSQLLine(toLowerCase(form.value.structNameF))
+        form.value.tableName = toSQLLine(toLowerCase(form.value.structName))
       }
-      if (form.value.structNameF === form.value.abbreviation) {
+      if (form.value.structName === form.value.abbreviation) {
         ElMessage({
           type: 'error',
           message: 'structName和struct简称不能相同'
@@ -397,7 +397,7 @@ const getColumnFunc = async() => {
   const res = await getColumn(dbform.value)
   if (res.code === 0) {
     const tbHump = toHump(dbform.value.tableName)
-    form.value.structNameF = toUpperCase(tbHump)
+    form.value.structName = toUpperCase(tbHump)
     form.value.tableName = dbform.value.tableName
     form.value.packageName = tbHump
     form.value.abbreviation = tbHump

@@ -18,5 +18,6 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup,RouterPub *g
 		autoCodeRouter.POST("preview", autoCodeApi.PreviewTemp)   // 获取自动创建代码预览
 		autoCodeRouter.POST("createTemp", autoCodeApi.CreateTemp) // 创建自动化代码
 		pub.POST("createPackage",autoCodeApi.CreatePackage) // 创建package包
+		pub.POST("getPackage",autoCodeApi.GetPackage) // 获取package包
 	}
 }

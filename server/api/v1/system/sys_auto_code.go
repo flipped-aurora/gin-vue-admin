@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -33,6 +34,7 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	a.PackageT = strings.Title(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
 		global.GVA_LOG.Error("预览失败!", zap.Error(err))
@@ -69,6 +71,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
+	a.PackageT = strings.Title(a.Package)
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.AutoMoveErr) {
@@ -144,14 +147,14 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 }
 
 
-// PreviewTemp
+// CreatePackage
 // @Tags AutoCode
-// @Summary 预览创建后的代码
+// @Summary 创建package
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body system.SysAutoCode true "预览创建代码"
-// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "预览创建后的代码"
+// @Param data body system.SysAutoCode true "创建package成功"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建package成功"
 // @Router /autoCode/createPackage [post]
 func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	var a system.SysAutoCode
@@ -166,5 +169,24 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
+	}
+}
+
+
+// GetPackage
+// @Tags AutoCode
+// @Summary 获取package
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建package成功"
+// @Router /autoCode/getPackage [post]
+func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
+	pkgs,err := autoCodeService.GetPackage()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"pkgs": pkgs},"获取成功", c)
 	}
 }

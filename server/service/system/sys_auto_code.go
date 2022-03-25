@@ -50,36 +50,37 @@ var (
 	do                  sync.Once
 )
 
-func Init() {
+func Init(Package string) {
+
 	do.Do(func() {
 		injectionPaths = []injectionMeta{
 			{
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
 				funcName:    "MysqlTables",
-				structNameF: "autocode.%s{},",
+				structNameF: Package + ".%s{},",
 			},
 			{
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
 				funcName:    "Routers",
-				structNameF: "autocodeRouter.Init%sRouter(PrivateGroup)",
+				structNameF: Package + "Router.Init%sRouter(PrivateGroup)",
 			},
 			{
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, "enter.go"),
+					global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SApi, Package), "enter.go"),
 				funcName:    "ApiGroup",
 				structNameF: "%sApi",
 			},
 			{
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRouter, "enter.go"),
+					global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SRouter, Package), "enter.go"),
 				funcName:    "RouterGroup",
 				structNameF: "%sRouter",
 			},
 			{
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, "enter.go"),
+					global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SService, Package), "enter.go"),
 				funcName:    "ServiceGroup",
 				structNameF: "%sService",
 			},
@@ -92,7 +93,7 @@ func Init() {
 				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
 				packageNameF: "%s",
 				groupName:    "ServiceGroup",
-				structNameF:  "%sGroup",
+				structNameF:  "%sServiceGroup",
 			},
 			packageRouterName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
@@ -100,7 +101,7 @@ func Init() {
 				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
 				packageNameF: "%s",
 				groupName:    "RouterGroup",
-				structNameF:  "%sGroup",
+				structNameF:  "%s",
 			},
 			packageAPIName: {
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
@@ -108,7 +109,7 @@ func Init() {
 				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
 				packageNameF: "%s",
 				groupName:    "ApiGroup",
-				structNameF:  "%sGroup",
+				structNameF:  "%sApiGroup",
 			},
 		}
 	})
@@ -131,6 +132,7 @@ type astInjectionMeta struct {
 
 type tplData struct {
 	template         *template.Template
+	autoPackage      string
 	locationPath     string
 	autoCodePath     string
 	autoMoveFilePath string
@@ -266,7 +268,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		idBf.WriteString(";")
 	}
 	if autoCode.AutoMoveFile { // 判断是否需要自动转移
-		Init()
+		Init(autoCode.Package)
 		for index := range dataList {
 			autoCodeService.addAutoMoveFile(&dataList[index])
 		}
@@ -293,11 +295,14 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			}
 		}
 
-		if global.GVA_CONFIG.AutoCode.TransferRestart {
-			// endless 会复用之前的指令
-			// 如果是你 goland debug/run 后用的还是之前打包的文件,没有做到真正意义上的重启
-			// 故此,拿掉迁移后的重启功能
-		}
+		var gormPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+		var routePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
+		var imporStr = fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", autoCode.Package)
+		_ = ImportReference(routePath, "", "", "", "")
+		_ = ImportReference(gormPath, imporStr, "", "", "")
+
 	} else { // 打包
 		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
@@ -385,19 +390,19 @@ func (autoCodeService *AutoCodeService) addAutoMoveFile(data *tplData) {
 	if strings.Contains(fileSlice[1], "server") {
 		if strings.Contains(fileSlice[n-2], "router") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server,
-				global.GVA_CONFIG.AutoCode.SRouter, base)
+				fmt.Sprintf(global.GVA_CONFIG.AutoCode.SRouter, data.autoPackage), base)
 		} else if strings.Contains(fileSlice[n-2], "api") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SApi, base)
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SApi, data.autoPackage), base)
 		} else if strings.Contains(fileSlice[n-2], "service") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SService, base)
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SService, data.autoPackage), base)
 		} else if strings.Contains(fileSlice[n-2], "model") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SModel, base)
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SModel, data.autoPackage), base)
 		} else if strings.Contains(fileSlice[n-2], "request") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SRequest, base)
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SRequest, data.autoPackage), base)
 		}
 	} else if strings.Contains(fileSlice[1], "web") {
 		if strings.Contains(fileSlice[n-1], "js") {
@@ -491,7 +496,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 	needMkdir = make([]string, 0, len(tplFileList)) // 当文件夹下存在多个tpl文件时，改为map更合理
 	// 根据文件路径生成 tplData 结构体，待填充数据
 	for _, value := range tplFileList {
-		dataList = append(dataList, tplData{locationPath: value})
+		dataList = append(dataList, tplData{locationPath: value, autoPackage: autoCode.Package})
 	}
 	// 生成 *Template, 填充 template 字段
 	for index, value := range dataList {
@@ -561,8 +566,13 @@ func (autoCodeService *AutoCodeService) CreateAutoCode(s *system.SysAutoCode) er
 	return global.GVA_DB.Create(&s).Error
 }
 
+func (autoCodeService *AutoCodeService) GetPackage() (pkgList []system.SysAutoCode, err error) {
+	err = global.GVA_DB.Find(&pkgList).Error
+	return pkgList, err
+}
+
 func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) error {
-	Init()
+	Init(packageName)
 	pendingTemp := []autoPackage{{
 		path: packageService,
 		name: packageServiceName,
@@ -607,7 +617,7 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, strings.Title(v.name), packageName), fmt.Sprintf(meta.structNameF, packageName), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
+		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, strings.Title(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
 			return err
 		}
 	}
@@ -631,10 +641,16 @@ func (vi *Visitor) Visit(node ast.Node) ast.Visitor {
 			// 不需要再遍历子树
 			return nil
 		}
-		if n.Tok == token.TYPE && vi.PackageName != "" && vi.GroupName != "" {
+		if n.Tok == token.TYPE && vi.StructName != "" && vi.PackageName != "" && vi.GroupName != "" {
 			vi.addStruct(n)
 			return nil
 		}
+	case *ast.FuncDecl:
+		if n.Name.Name == "Routers" {
+			vi.addFuncBodyVar(n)
+			return nil
+		}
+
 	}
 	return vi
 }
@@ -682,16 +698,64 @@ func (vi *Visitor) addImport(genDecl *ast.GenDecl) ast.Visitor {
 		if importSpec.Path.Value == strconv.Quote(vi.ImportCode) {
 			hasImported = true
 		}
-		if !hasImported {
-			genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
-				Path: &ast.BasicLit{
-					Kind:  token.STRING,
-					Value: strconv.Quote(vi.ImportCode),
-				},
-			})
+	}
+	if !hasImported {
+		genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
+			Path: &ast.BasicLit{
+				Kind:  token.STRING,
+				Value: strconv.Quote(vi.ImportCode),
+			},
+		})
+	}
+	return vi
+}
+
+func (vi *Visitor) addFuncBodyVar(funDecl *ast.FuncDecl) ast.Visitor {
+	hasVar := false
+	for _, v := range funDecl.Body.List {
+		switch varSpec := v.(type) {
+		case *ast.AssignStmt:
+			for i := range varSpec.Lhs {
+				switch nn := varSpec.Lhs[i].(type){
+				case *ast.Ident:
+					if nn.Name == vi.PackageName+"Router"{
+						hasVar = true
+					}
+				}
+			}
 		}
 	}
-	return nil
+	if !hasVar{
+	assignStmt := &ast.AssignStmt{
+		Lhs: []ast.Expr{
+			&ast.Ident{
+				Name: vi.PackageName+"Router",
+				Obj: &ast.Object{
+					Kind: ast.Var,
+					Name: vi.PackageName+"Router",
+				},
+			},
+		},
+		Tok: token.DEFINE,
+		Rhs: []ast.Expr{
+			&ast.SelectorExpr{
+				X: &ast.SelectorExpr{
+					X: &ast.Ident{
+						Name: "router",
+					},
+					Sel: &ast.Ident{
+						Name: "RouterGroupApp",
+					},
+				},
+				Sel: &ast.Ident{
+					Name: strings.Title(vi.PackageName),
+				},
+			},
+		},
+	}
+	funDecl.Body.List = append(funDecl.Body.List, assignStmt)
+	}
+	return vi
 }
 
 func ImportReference(filepath, importCode, structName, packageName, groupName string) error {
@@ -701,13 +765,16 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 		return err
 	}
 	importCode = strings.TrimSpace(importCode)
-
 	v := &Visitor{
 		ImportCode:  importCode,
 		StructName:  structName,
 		PackageName: packageName,
 		GroupName:   groupName,
 	}
+	if importCode == "" {
+		ast.Print(fSet, fParser)
+	}
+
 	ast.Walk(v, fParser)
 
 	var output []byte

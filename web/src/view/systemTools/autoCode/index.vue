@@ -63,6 +63,11 @@
         <el-form-item label="文件名称" prop="packageName">
           <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" @blur="toLowerCaseFunc(form,'packageName')" />
         </el-form-item>
+        <el-form-item label="Package" prop="packageName">
+          <el-select v-model="form.package" style="width:194px">
+            <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <template #label>
             <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
@@ -183,7 +188,7 @@ const fieldTemplate = {
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
 import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
-import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
+import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
 import { ref, getCurrentInstance, reactive } from 'vue'
 import { useRoute } from 'vue-router'
@@ -204,6 +209,7 @@ const form = ref({
   structName: '',
   tableName: '',
   packageName: '',
+  package: '',
   abbreviation: '',
   description: '',
   autoCreateApiToSql: false,
@@ -226,6 +232,9 @@ const rules = ref({
       message: '文件名称：sysXxxxXxxx',
       trigger: 'blur'
     }
+  ],
+  package: [
+    { required: true, message: '请选择package', trigger: 'blur' }
   ]
 })
 const dialogMiddle = ref({})
@@ -440,9 +449,18 @@ const getAutoCodeJson = async(id) => {
   }
 }
 
+const pkgs = ref([])
+const getPkgs = async() => {
+  const res = await getPackageApi()
+  if (res.code === 0) {
+    pkgs.value = res.data.pkgs
+  }
+}
+
 const init = () => {
   getDbFunc()
   setFdMap()
+  getPkgs()
   const id = route.params.id
   if (id) {
     getAutoCodeJson(id)

@@ -1,10 +1,10 @@
-package autocode
+package {{.Package}}
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/autocode"
+    "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
     "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    autocodeReq "github.com/flipped-aurora/gin-vue-admin/server/model/autocode/request"
+    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
     "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
     "github.com/flipped-aurora/gin-vue-admin/server/service"
     "github.com/gin-gonic/gin"
@@ -14,7 +14,7 @@ import (
 type {{.StructName}}Api struct {
 }
 
-var {{.Abbreviation}}Service = service.ServiceGroupApp.AutoCodeServiceGroup.{{.StructName}}Service
+var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup.{{.StructName}}Service
 
 
 // Create{{.StructName}} 创建{{.StructName}}
@@ -23,11 +23,11 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.AutoCodeServiceGroup.{{.S
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body autocode.{{.StructName}} true "创建{{.StructName}}"
+// @Param data body {{.Package}}.{{.StructName}} true "创建{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} autocode.{{.StructName}}
+	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
@@ -43,11 +43,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body autocode.{{.StructName}} true "删除{{.StructName}}"
+// @Param data body {{.Package}}.{{.StructName}} true "删除{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} autocode.{{.StructName}}
+	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("删除失败!", zap.Error(err))
@@ -83,11 +83,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body autocode.{{.StructName}} true "更新{{.StructName}}"
+// @Param data body {{.Package}}.{{.StructName}} true "更新{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
 // @Router /{{.Abbreviation}}/update{{.StructName}} [put]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} autocode.{{.StructName}}
+	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
 	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Error(err))
@@ -103,11 +103,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query autocode.{{.StructName}} true "用id查询{{.StructName}}"
+// @Param data query {{.Package}}.{{.StructName}} true "用id查询{{.StructName}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
-	var {{.Abbreviation}} autocode.{{.StructName}}
+	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
 	if err, re{{.Abbreviation}} := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
         global.GVA_LOG.Error("查询失败!", zap.Error(err))
@@ -123,11 +123,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query autocodeReq.{{.StructName}}Search true "分页获取{{.StructName}}列表"
+// @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.StructName}}列表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
-	var pageInfo autocodeReq.{{.StructName}}Search
+	var pageInfo {{.Package}}Req.{{.StructName}}Search
 	_ = c.ShouldBindQuery(&pageInfo)
 	if err, list, total := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
 	    global.GVA_LOG.Error("获取失败!", zap.Error(err))

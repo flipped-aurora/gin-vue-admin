@@ -15,7 +15,6 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
-	"sync"
 	"text/template"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
@@ -47,11 +46,9 @@ type autoPackage struct {
 var (
 	packageInjectionMap map[string]astInjectionMeta
 	injectionPaths      []injectionMeta
-	do                  sync.Once
 )
 
 func Init(Package string) {
-	do.Do(func() {
 		injectionPaths = []injectionMeta{
 			{
 				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
@@ -111,8 +108,6 @@ func Init(Package string) {
 				structNameF:  "%sApiGroup",
 			},
 		}
-	})
-
 }
 
 type injectionMeta struct {

@@ -42,6 +42,7 @@ func (m *menu) Initialize() error {
 		{GVA_MODEL: global.GVA_MODEL{ID: 23}, MenuLevel: 0, Hidden: false, ParentId: "0", Path: "state", Name: "state", Component: "view/system/state.vue", Sort: 6, Meta: system.Meta{Title: "服务器状态", Icon: "cloudy"}},
 		{GVA_MODEL: global.GVA_MODEL{ID: 24}, MenuLevel: 0, Hidden: false, ParentId: "14", Path: "autoCodeAdmin", Name: "autoCodeAdmin", Component: "view/systemTools/autoCodeAdmin/index.vue", Sort: 1, Meta: system.Meta{Title: "自动化代码管理", Icon: "magic-stick"}},
 		{GVA_MODEL: global.GVA_MODEL{ID: 25}, MenuLevel: 0, Hidden: true, ParentId: "14", Path: "autoCodeEdit/:id", Name: "autoCodeEdit", Component: "view/systemTools/autoCode/index.vue", Sort: 0, Meta: system.Meta{Title: "自动化代码（复用）", Icon: "magic-stick"}},
+		{GVA_MODEL: global.GVA_MODEL{ID: 26}, MenuLevel: 0, Hidden: false, ParentId: "14", Path: "autoPkg", Name: "autoPkg", Component: "view/systemTools/autoPkg/autoPkg.vue", Sort: 0, Meta: system.Meta{Title: "自动化package", Icon: "folder"}},
 	}
 	if err := global.GVA_DB.Create(&entities).Error; err != nil { // 创建 model.User 初始化数据
 		return errors.Wrap(err, m.TableName()+"表数据初始化失败!")

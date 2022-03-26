@@ -16,5 +16,8 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup) {
 		autoCodeRouter.GET("getColumn", autoCodeApi.GetColumn)    // 获取指定表所有字段信息
 		autoCodeRouter.POST("preview", autoCodeApi.PreviewTemp)   // 获取自动创建代码预览
 		autoCodeRouter.POST("createTemp", autoCodeApi.CreateTemp) // 创建自动化代码
+		autoCodeRouter.POST("createPackage",autoCodeApi.CreatePackage) // 创建package包
+		autoCodeRouter.POST("getPackage",autoCodeApi.GetPackage) // 获取package包
+		autoCodeRouter.POST("delPackage",autoCodeApi.DelPackage) // 获取package包
 	}
 }

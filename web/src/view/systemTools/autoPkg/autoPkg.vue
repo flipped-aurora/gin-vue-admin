@@ -5,12 +5,12 @@
         <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
-        <el-table-column align="left" label="id" min-width="60" prop="ID" />
-        <el-table-column align="left" label="包名" min-width="150" prop="packageName" />
-        <el-table-column align="left" label="展示名" min-width="150" prop="label" />
+        <el-table-column align="left" label="id" width="60" prop="ID" />
+        <el-table-column align="left" label="包名" width="150" prop="packageName" />
+        <el-table-column align="left" label="展示名" width="150" prop="label" />
         <el-table-column align="left" label="描述" min-width="150" prop="desc" />
 
-        <el-table-column align="left" fixed="right" label="操作" width="200">
+        <el-table-column align="left" label="操作" width="200">
           <template #default="scope">
             <el-button
               icon="delete"
@@ -57,9 +57,10 @@ export default {
 import {
   createPackageApi,
   getPackageApi,
+  deletePackageApi,
 } from '@/api/autoCode'
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const form = ref({
   packageName: '',
@@ -109,6 +110,24 @@ const getTableData = async() => {
   if (table.code === 0) {
     tableData.value = table.data.pkgs
   }
+}
+
+const deleteApiFunc = async(row) => {
+  ElMessageBox.confirm('此操作仅删除数据库中的pkg存储，后端相应目录结构请自行删除与数据库保持一致！', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async() => {
+      const res = await deletePackageApi(row)
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功!'
+        })
+        getTableData()
+      }
+    })
 }
 
 getTableData()

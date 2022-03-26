@@ -153,7 +153,7 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body system.SysAutoCode true "创建package成功"
+// @Param data body system.SysAutoCode true "创建package"
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建package成功"
 // @Router /autoCode/createPackage [post]
 func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
@@ -188,5 +188,28 @@ func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"pkgs": pkgs},"获取成功", c)
+	}
+}
+
+
+
+// DelPackage
+// @Tags AutoCode
+// @Summary 删除package
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysAutoCode true "创建package"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "删除package成功"
+// @Router /autoCode/delPackage [post]
+func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
+	var a system.SysAutoCode
+	_ = c.ShouldBindJSON(&a)
+	err := autoCodeService.DelPackage(a)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage("删除失败", c)
+	} else {
+		response.OkWithMessage("删除成功", c)
 	}
 }

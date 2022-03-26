@@ -51,7 +51,6 @@ var (
 )
 
 func Init(Package string) {
-
 	do.Do(func() {
 		injectionPaths = []injectionMeta{
 			{
@@ -571,6 +570,10 @@ func (autoCodeService *AutoCodeService) GetPackage() (pkgList []system.SysAutoCo
 	return pkgList, err
 }
 
+func (AutoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error{
+	return global.GVA_DB.Delete(a).Error
+}
+
 func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) error {
 	Init(packageName)
 	pendingTemp := []autoPackage{{
@@ -789,3 +792,4 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 	// 写回数据
 	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
 }
+

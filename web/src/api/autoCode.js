@@ -108,3 +108,10 @@ export const getPackageApi = () => {
   })
 }
 
+export const deletePackageApi = (data) => {
+  return service({
+    url: '/autoCode/delPackage',
+    method: 'post',
+    data
+  })
+}

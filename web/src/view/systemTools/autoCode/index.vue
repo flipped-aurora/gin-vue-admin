@@ -63,10 +63,12 @@
         <el-form-item label="文件名称" prop="packageName">
           <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" @blur="toLowerCaseFunc(form,'packageName')" />
         </el-form-item>
-        <el-form-item label="Package" prop="packageName">
+        <el-form-item label="Package（包）" prop="packageName">
           <el-select v-model="form.package" style="width:194px">
             <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
           </el-select>
+          <el-icon class="auto-icon" @click="getPkgs"><refresh /></el-icon>
+          <el-icon class="auto-icon" @click="goPkgs"><document-add /></el-icon>
         </el-form-item>
         <el-form-item>
           <template #label>
@@ -191,10 +193,11 @@ import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
 import { ref, getCurrentInstance, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
 const route = useRoute()
+const router = useRouter()
 const activeNames = reactive([])
 const preViewCode = ref({})
 const dbform = ref({
@@ -457,6 +460,10 @@ const getPkgs = async() => {
   }
 }
 
+const goPkgs = () => {
+  router.push({ name: 'autoPkg' })
+}
+
 const init = () => {
   getDbFunc()
   setFdMap()
@@ -492,5 +499,10 @@ export default {
 }
 .auto-btn-list{
   margin-top: 16px;
+}
+.auto-icon{
+  margin-left: 6px;
+  color: #666;
+  cursor: pointer;
 }
 </style>

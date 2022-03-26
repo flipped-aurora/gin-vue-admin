@@ -89,6 +89,9 @@ func (c *casbin) Initialize() error {
 		{PType: "p", V0: "888", V1: "/autoCode/createTemp", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/autoCode/delSysHistory", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/autoCode/getSysHistory", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/autoCode/createPackage", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/autoCode/getPackage", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/autoCode/delPackage", V2: "POST"},
 
 		{PType: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{PType: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},

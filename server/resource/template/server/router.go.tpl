@@ -1,4 +1,4 @@
-package autocode
+package {{.Package}}
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
@@ -13,7 +13,7 @@ type {{.StructName}}Router struct {
 func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGroup) {
 	{{.Abbreviation}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
 	{{.Abbreviation}}RouterWithoutRecord := Router.Group("{{.Abbreviation}}")
-	var {{.Abbreviation}}Api = v1.ApiGroupApp.AutoCodeApiGroup.{{.StructName}}Api
+	var {{.Abbreviation}}Api = v1.ApiGroupApp.{{.PackageT}}ApiGroup.{{.StructName}}Api
 	{
 		{{.Abbreviation}}Router.POST("create{{.StructName}}", {{.Abbreviation}}Api.Create{{.StructName}})   // 新建{{.StructName}}
 		{{.Abbreviation}}Router.DELETE("delete{{.StructName}}", {{.Abbreviation}}Api.Delete{{.StructName}}) // 删除{{.StructName}}

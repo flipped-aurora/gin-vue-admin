@@ -85,10 +85,18 @@ func (a *api) Initialize() error {
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/preview", Description: "预览自动化代码"},
 		{ApiGroup: "代码生成器", Method: "GET", Path: "/autoCode/getColumn", Description: "获取所选table的所有字段"},
 
+		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/createPackage", Description: "生成包(package)"},
+		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/getPackage", Description: "获取所有包(package)"},
+		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/delPackage", Description: "删除包(package)"},
+
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/getMeta", Description: "获取meta信息"},
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/rollback", Description: "回滚自动生成代码"},
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/getSysHistory", Description: "查询回滚记录"},
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/delSysHistory", Description: "删除回滚记录"},
+
+
+
+
 
 		{ApiGroup: "系统字典详情", Method: "PUT", Path: "/sysDictionaryDetail/updateSysDictionaryDetail", Description: "更新字典内容"},
 		{ApiGroup: "系统字典详情", Method: "POST", Path: "/sysDictionaryDetail/createSysDictionaryDetail", Description: "新增字典内容"},

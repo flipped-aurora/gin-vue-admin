@@ -300,7 +300,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		var routePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
 		var imporStr = fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", autoCode.Package)
-		_ = ImportReference(routePath, "", "", "", "")
+		_ = ImportReference(routePath, "", "", autoCode.Package, "")
 		_ = ImportReference(gormPath, imporStr, "", "", "")
 
 	} else { // 打包
@@ -716,44 +716,47 @@ func (vi *Visitor) addFuncBodyVar(funDecl *ast.FuncDecl) ast.Visitor {
 		switch varSpec := v.(type) {
 		case *ast.AssignStmt:
 			for i := range varSpec.Lhs {
-				switch nn := varSpec.Lhs[i].(type){
+				switch nn := varSpec.Lhs[i].(type) {
 				case *ast.Ident:
-					if nn.Name == vi.PackageName+"Router"{
+					if nn.Name == vi.PackageName+"Router" {
 						hasVar = true
 					}
 				}
 			}
 		}
 	}
-	if !hasVar{
-	assignStmt := &ast.AssignStmt{
-		Lhs: []ast.Expr{
-			&ast.Ident{
-				Name: vi.PackageName+"Router",
-				Obj: &ast.Object{
-					Kind: ast.Var,
-					Name: vi.PackageName+"Router",
+	if !hasVar {
+		assignStmt := &ast.AssignStmt{
+			Lhs: []ast.Expr{
+				&ast.Ident{
+					Name: vi.PackageName + "Router",
+					Obj: &ast.Object{
+						Kind: ast.Var,
+						Name: vi.PackageName + "Router",
+					},
 				},
 			},
-		},
-		Tok: token.DEFINE,
-		Rhs: []ast.Expr{
-			&ast.SelectorExpr{
-				X: &ast.SelectorExpr{
-					X: &ast.Ident{
-						Name: "router",
+			Tok: token.DEFINE,
+			Rhs: []ast.Expr{
+				&ast.SelectorExpr{
+					X: &ast.SelectorExpr{
+						X: &ast.Ident{
+							Name: "router",
+						},
+						Sel: &ast.Ident{
+							Name: "RouterGroupApp",
+						},
 					},
 					Sel: &ast.Ident{
-						Name: "RouterGroupApp",
+						Name: strings.Title(vi.PackageName),
 					},
 				},
-				Sel: &ast.Ident{
-					Name: strings.Title(vi.PackageName),
-				},
 			},
-		},
-	}
-	funDecl.Body.List = append(funDecl.Body.List, assignStmt)
+		}
+		funDecl.Body.List = append(funDecl.Body.List, funDecl.Body.List[1])
+		index := 1
+		copy(funDecl.Body.List[index+1:], funDecl.Body.List[index:])
+		funDecl.Body.List[index] = assignStmt
 	}
 	return vi
 }

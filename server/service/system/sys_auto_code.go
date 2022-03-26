@@ -49,65 +49,65 @@ var (
 )
 
 func Init(Package string) {
-		injectionPaths = []injectionMeta{
-			{
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
-				funcName:    "MysqlTables",
-				structNameF: Package + ".%s{},",
-			},
-			{
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
-				funcName:    "Routers",
-				structNameF: Package + "Router.Init%sRouter(PrivateGroup)",
-			},
-			{
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SApi, Package), "enter.go"),
-				funcName:    "ApiGroup",
-				structNameF: "%sApi",
-			},
-			{
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SRouter, Package), "enter.go"),
-				funcName:    "RouterGroup",
-				structNameF: "%sRouter",
-			},
-			{
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SService, Package), "enter.go"),
-				funcName:    "ServiceGroup",
-				structNameF: "%sService",
-			},
-		}
+	injectionPaths = []injectionMeta{
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
+			funcName:    "MysqlTables",
+			structNameF: Package + ".%s{},",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
+			funcName:    "Routers",
+			structNameF: Package + "Router.Init%sRouter(PrivateGroup)",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SApi, Package), "enter.go"),
+			funcName:    "ApiGroup",
+			structNameF: "%sApi",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SRouter, Package), "enter.go"),
+			funcName:    "RouterGroup",
+			structNameF: "%sRouter",
+		},
+		{
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SService, Package), "enter.go"),
+			funcName:    "ServiceGroup",
+			structNameF: "%sService",
+		},
+	}
 
-		packageInjectionMap = map[string]astInjectionMeta{
-			packageServiceName: {
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
-				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
-				packageNameF: "%s",
-				groupName:    "ServiceGroup",
-				structNameF:  "%sServiceGroup",
-			},
-			packageRouterName: {
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
-				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
-				packageNameF: "%s",
-				groupName:    "RouterGroup",
-				structNameF:  "%s",
-			},
-			packageAPIName: {
-				path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-					global.GVA_CONFIG.AutoCode.Server, "api/v1", "enter.go"),
-				importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
-				packageNameF: "%s",
-				groupName:    "ApiGroup",
-				structNameF:  "%sApiGroup",
-			},
-		}
+	packageInjectionMap = map[string]astInjectionMeta{
+		packageServiceName: {
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, "service", "enter.go"),
+			importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
+			packageNameF: "%s",
+			groupName:    "ServiceGroup",
+			structNameF:  "%sServiceGroup",
+		},
+		packageRouterName: {
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, "router", "enter.go"),
+			importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
+			packageNameF: "%s",
+			groupName:    "RouterGroup",
+			structNameF:  "%s",
+		},
+		packageAPIName: {
+			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, "api/v1", "enter.go"),
+			importCodeF:  "github.com/flipped-aurora/gin-vue-admin/server/%s/%s",
+			packageNameF: "%s",
+			groupName:    "ApiGroup",
+			structNameF:  "%sApiGroup",
+		},
+	}
 }
 
 type injectionMeta struct {
@@ -224,7 +224,7 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
 	makeDictTypes(&autoCode)
 	// 增加判断: 重复创建struct
-	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName) {
+	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName, autoCode.Package) {
 		return RepeatErr
 	}
 	dataList, fileList, needMkdir, err := autoCodeService.getNeedList(&autoCode)
@@ -312,6 +312,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				injectionCodeMeta.String(),
 				autoCode.TableName,
 				idBf.String(),
+				autoCode.Package,
 			)
 		} else {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
@@ -322,6 +323,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				injectionCodeMeta.String(),
 				autoCode.StructName,
 				idBf.String(),
+				autoCode.Package,
 			)
 		}
 	}
@@ -565,7 +567,7 @@ func (autoCodeService *AutoCodeService) GetPackage() (pkgList []system.SysAutoCo
 	return pkgList, err
 }
 
-func (AutoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error{
+func (AutoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error {
 	return global.GVA_DB.Delete(a).Error
 }
 
@@ -787,4 +789,3 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 	// 写回数据
 	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
 }
-

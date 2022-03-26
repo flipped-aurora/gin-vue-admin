@@ -44,6 +44,7 @@ func (initDBService *InitDBService) initTables() error {
 		system.SysBaseMenuParameter{},
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
+		system.SysAutoCode{},
 
 		adapter.CasbinRule{},
 

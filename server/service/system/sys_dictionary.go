@@ -44,7 +44,10 @@ func (dictionaryService *DictionaryService) DeleteSysDictionary(sysDictionary sy
 		return err
 	}
 
-	return global.GVA_DB.Model(&system.SysDictionaryDetail{}).Delete(sysDictionary.SysDictionaryDetails).Error
+	if sysDictionary.SysDictionaryDetails != nil {
+		return global.GVA_DB.Where("sys_dictionary_id=?", sysDictionary.ID).Delete(sysDictionary.SysDictionaryDetails).Error
+	}
+	return
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

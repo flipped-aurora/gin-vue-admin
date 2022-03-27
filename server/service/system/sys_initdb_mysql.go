@@ -10,7 +10,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/source/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/source/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
@@ -21,10 +20,7 @@ import (
 // Author [songzhibin97](https://github.com/songzhibin97)
 func (initDBService *InitDBService) writeMysqlConfig(mysql config.Mysql) error {
 	global.GVA_CONFIG.Mysql = mysql
-	cs := utils.StructToMap(global.GVA_CONFIG)
-	for k, v := range cs {
-		global.GVA_VP.Set(k, v)
-	}
+	global.GVA_VP.Set("mysql", mysql)
 	global.GVA_VP.Set("jwt.signing-key", uuid.NewV4().String())
 	return global.GVA_VP.WriteConfig()
 }

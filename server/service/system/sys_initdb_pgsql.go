@@ -9,7 +9,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/source/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/source/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -20,10 +19,7 @@ import (
 func (initDBService *InitDBService) writePgsqlConfig(pgsql config.Pgsql) error {
 	global.GVA_CONFIG.System.DbType = "pgsql"
 	global.GVA_CONFIG.Pgsql = pgsql
-	cs := utils.StructToMap(global.GVA_CONFIG)
-	for k, v := range cs {
-		global.GVA_VP.Set(k, v)
-	}
+	global.GVA_VP.Set("pgsql", pgsql)
 	global.GVA_VP.Set("jwt.signing-key", uuid.NewV4().String())
 	return global.GVA_VP.WriteConfig()
 }

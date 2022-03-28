@@ -22,8 +22,8 @@
                   <el-row class="pd-0">
                     <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
                       <div class="menu-total" @click="totalCollapse">
-                        <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right"></div>
-                        <div v-else class="gvaIcon gvaIcon-arrow-double-left"></div>
+                        <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
+                        <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
                       </div>
                     </el-col>
                     <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
@@ -157,6 +157,9 @@ onMounted(() => {
       emitter.emit('collapse', isCollapse.value)
       emitter.emit('mobile', isMobile.value)
     })()
+  }
+  if (userStore.loadingInstance) {
+    userStore.loadingInstance.close()
   }
 })
 

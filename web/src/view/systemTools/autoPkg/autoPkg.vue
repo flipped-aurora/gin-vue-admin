@@ -68,8 +68,19 @@ const form = ref({
   desc: '',
 })
 
+const validateNum = (rule, value, callback) => {
+  if ((/^\d+$/.test(value[0]))) {
+    callback(new Error('不能够以数字开头'))
+  } else {
+    callback()
+  }
+}
+
 const rules = ref({
-  packageName: [{ required: true, message: '请输入包名', trigger: 'blur' }],
+  packageName: [
+    { required: true, message: '请输入包名', trigger: 'blur' },
+    { validator: validateNum, trigger: 'blur' }
+  ],
 })
 
 const dialogFormVisible = ref(false)

@@ -4,7 +4,7 @@
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
       </div>
-      <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
+      <el-table :data="tableData">
         <el-table-column align="left" label="id" width="60" prop="ID" />
         <el-table-column align="left" label="包名" width="150" prop="packageName" />
         <el-table-column align="left" label="展示名" width="150" prop="label" />
@@ -60,6 +60,7 @@ import {
   deletePackageApi,
 } from '@/api/autoCode'
 import { ref } from 'vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const form = ref({

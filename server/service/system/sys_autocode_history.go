@@ -27,8 +27,9 @@ var AutoCodeHistoryServiceApp = new(AutoCodeHistoryService)
 // RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string) error {
+func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string, Package string) error {
 	return global.GVA_DB.Create(&system.SysAutoCodeHistory{
+		Package:       Package,
 		RequestMeta:   meta,
 		AutoCodePath:  autoCodePath,
 		InjectionMeta: injectionMeta,
@@ -50,9 +51,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) First(info *request.GetByI
 // Repeat 检测重复
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string) bool {
+func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string, Package string) bool {
 	var count int64
-	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ? and flag = 0", structName).Count(&count)
+	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ? and package = ? and flag = 0", structName, Package).Count(&count)
 	return count > 0
 }
 
@@ -69,19 +70,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *request.Get
 	if err != nil {
 		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 	}
-	// 获取全部表名
-	dbNames, err := AutoCodeServiceApp.Database().GetTables(global.GVA_CONFIG.Mysql.Dbname)
-	if err != nil {
-		global.GVA_LOG.Error("ClearTag GetTables:", zap.Error(err))
-	}
 	// 删除表
-	for _, name := range dbNames {
-		if strings.Contains(strings.ToUpper(strings.Replace(name.TableName, "_", "", -1)), strings.ToUpper(md.TableName)) {
-			// 删除表
-			if err = AutoCodeServiceApp.DropTable(name.TableName); err != nil {
-				global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
-			}
-		}
+	if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
+		global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
 	}
 	// 删除文件
 

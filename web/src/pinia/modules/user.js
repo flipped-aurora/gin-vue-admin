@@ -54,19 +54,24 @@ export const useUserStore = defineStore('user', () => {
       fullscreen: true,
       text: '登陆中，请稍候...',
     })
-    const res = await login(loginInfo)
-    if (res.code === 0) {
-      setUserInfo(res.data.user)
-      setToken(res.data.token)
-      const routerStore = useRouterStore()
-      await routerStore.SetAsyncRouter()
-      const asyncRouters = routerStore.asyncRouters
-      asyncRouters.forEach(asyncRouter => {
-        router.addRoute(asyncRouter)
-      })
-      router.push({ name: userInfo.value.authority.defaultRouter })
-      return true
+    try {
+      const res = await login(loginInfo)
+      if (res.code === 0) {
+        setUserInfo(res.data.user)
+        setToken(res.data.token)
+        const routerStore = useRouterStore()
+        await routerStore.SetAsyncRouter()
+        const asyncRouters = routerStore.asyncRouters
+        asyncRouters.forEach(asyncRouter => {
+          router.addRoute(asyncRouter)
+        })
+        router.push({ name: userInfo.value.authority.defaultRouter })
+        return true
+      }
+    } catch (e) {
+      loadingInstance.value.close()
     }
+    loadingInstance.value.close()
   }
   /* 登出*/
   const LoginOut = async() => {

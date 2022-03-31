@@ -36,12 +36,13 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" :lable="t('general.operations')" min-width="180">
+        <el-table-column align="left" :lable="t('general.operations')" min-width="240">
           <template #default="scope">
             <div>
-              <el-button size="mini" type="text" :disabled="scope.row.flag === 1" @click="rollback(scope.row)">{{ t('autoCodeAdmin.rollBack') }}</el-button>
-              <el-button size="mini" type="text" @click="goAutoCode(scope.row)">{{ t('autoCodeAdmin.reuse') }}</el-button>
-              <el-button size="mini" type="text" @click="deleteRow(scope.row)">{{ t('general.delete') }}</el-button>
+              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,true)">{{ t('autoCodeAdmin.rollBackDeleteTable') }}</el-button>
+              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,false)">{{ t('autoCodeAdmin.rollBackWithoutDeleteTable') }}</el-button>
+              <el-button size="small" type="text" @click="goAutoCode(scope.row)">{{ t('autoCodeAdmin.reuse') }}</el-button>
+              <el-button size="small" type="text" @click="deleteRow(scope.row)">{{ t('general.delete') }}</el-button>
             </div>
           </template>
         </el-table-column>
@@ -124,13 +125,13 @@ const deleteRow = async(row) => {
     }
   })
 }
-const rollbackFunc = async(row) => {
-  ElMessageBox.confirm(t('autoCodeAdmin.rollbackConfirm'), t('general.hint'), {
+const rollbackFunc = async(row, flag) => {
+  ElMessageBox.confirm(t('autoCodeAdmin.rollbackConfirm') + `${flag ? t('autoCodeAdmin.includeDBTables') : ' ,'}` + t('autoCodeAdmin.rollBackContinue'), t('general.hint'), {
     confirmButtonText: t('general.confirm'),
     cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
-    const res = await rollback({ id: Number(row.ID) })
+    const res = await rollback({ id: Number(row.ID), deleteTable: flag })
     if (res.code === 0) {
       ElMessage.success(t('autoCodeAdmin.rollbackSuccess'))
       getTableData()

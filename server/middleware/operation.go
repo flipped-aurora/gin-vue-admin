@@ -64,11 +64,12 @@ func OperationRecord() gin.HandlerFunc {
 			Body:   string(body),
 			UserID: userId,
 		}
-		// 存在某些未知错误 TODO
-		//values := c.Request.Header.Values("content-type")
-		//if len(values) >0 && strings.Contains(values[0], "boundary") {
-		//	record.Body = "file"
-		//}
+		// 上传文件时候 中间件日志进行裁断操作
+		if strings.Index(c.GetHeader("Content-Type"), "multipart/form-data") > -1 {
+			if len(record.Body) > 512 {
+				record.Body = "File or Length out of limit"
+			}
+		}
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,
 			body:           &bytes.Buffer{},

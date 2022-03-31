@@ -1,6 +1,9 @@
 package system
 
-import "errors"
+import (
+	"errors"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+)
 
 // AutoCodeStruct 初始版本自动化代码工具
 type AutoCodeStruct struct {
@@ -14,6 +17,8 @@ type AutoCodeStruct struct {
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields"`
 	DictTypes          []string `json:"-"`
+	Package			string   `json:"package"`
+	PackageT		string  	`json:"-"`
 }
 
 type Field struct {
@@ -29,3 +34,10 @@ type Field struct {
 }
 
 var AutoMoveErr error = errors.New("创建代码成功并移动文件成功")
+
+type SysAutoCode struct {
+	global.GVA_MODEL
+	PackageName string `json:"packageName" gorm:"comment:包名"`
+	Label        string `json:"label" gorm:"comment:展示名"`
+	Desc        string `json:"desc" gorm:"comment:描述"`
+}

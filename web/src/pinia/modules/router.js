@@ -51,7 +51,7 @@ export const useRouterStore = defineStore('router', () => {
     }]
     const asyncRouterRes = await asyncMenu()
     const asyncRouter = asyncRouterRes.data.menus
-    asyncRouter.push({
+    asyncRouter && asyncRouter.push({
       path: '404',
       name: '404',
       hidden: true,

@@ -23,17 +23,13 @@
       v-if="btnShow"
       class="user-box"
     >
-      <el-icon class="reload" :class="[reload ? 'reloading' : '']" @click="handleReload">
-        <refresh />
-      </el-icon>
+      <div class="gvaIcon gvaIcon-refresh"  :class="[reload ? 'reloading' : '']" @click="handleReload"></div>
     </div>
     <div
       v-if="btnShow"
       class="user-box"
     >
-      <el-icon class="search-icon" @click="showSearch">
-        <search />
-      </el-icon>
+      <div class="gvaIcon gvaIcon-search"  @click="showSearch"></div>
     </div>
     <div
       v-if="btnShow"
@@ -45,7 +41,7 @@
       v-if="btnShow"
       class="user-box"
     >
-      <el-icon class="search-icon" @click="toService"><service /></el-icon>
+     <div class="gvaIcon gvaIcon-customer-service"  @click="toService"></div>
     </div>
   </div>
 </template>

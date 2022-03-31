@@ -11,13 +11,13 @@
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.dbType')">
-            <el-select v-model="config.system.dbType" style="width:100%">
+            <el-select v-model="config.system['db-type']" style="width:100%">
               <el-option value="mysql" />
               <el-option value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.ossType')">
-            <el-select v-model="config.system.ossType" style="width:100%">
+            <el-select v-model="config.system['oss-type']" style="width:100%">
               <el-option value="local" />
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
@@ -26,27 +26,27 @@
             </el-select>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.blockMultiSignOn')">
-            <el-checkbox v-model="config.system.useMultipoint">{{ t('general.enable') }}</el-checkbox>
+            <el-checkbox v-model="config.system['use-multipoint']">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.enableRedis')">
-            <el-checkbox v-model="config.system.useRedis">{{ t('general.enable') }}</el-checkbox>
+            <el-checkbox v-model="config.system['use-redis']">{{ t('general.enable') }}</el-checkbox>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.ipLimitCount')">
-            <el-input-number v-model.number="config.system.iplimitCount" />
+            <el-input-number v-model.number="config.system['iplimit-count']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.ipLimitTime')">
-            <el-input-number v-model.number="config.system.iplimitTime" />
+            <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item :title="t('view.systemTools.system.jwtSignature')" name="2">
           <el-form-item :label="t('view.systemTools.system.jwtSignature')">
-            <el-input v-model="config.jwt.signingKey" />
+            <el-input v-model="config.jwt['signing-key']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.expirartionSec')">
-            <el-input v-model="config.jwt.expiresTime" />
+            <el-input v-model="config.jwt['expires-time']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.bufferPeriodSec')">
-            <el-input v-model="config.jwt.bufferTime" />
+            <el-input v-model="config.jwt['buffer-time']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.issuer')">
             <el-input v-model="config.jwt.issuer" />
@@ -66,16 +66,16 @@
             <el-input v-model="config.zap.director" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.encodeLevel')">
-            <el-input v-model="config.zap.encodeLevel" />
+            <el-input v-model="config.zap['encode-level']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.stackName')">
-            <el-input v-model="config.zap.stacktraceKey" />
+            <el-input v-model="config.zap['stacktrace-key']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.showLine')">
-            <el-checkbox v-model="config.zap.showLine" />
+            <el-checkbox v-model="config.zap['show-line']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.outputConsole')">
-            <el-checkbox v-model="config.zap.logInConsole" />
+            <el-checkbox v-model="config.zap['log-in-console']" />
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item :title="t('view.systemTools.system.redisAdminDBConfig')" name="4">
@@ -104,7 +104,7 @@
             <el-input v-model="config.email.host" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.enableSSL')">
-            <el-checkbox v-model="config.email.isSSL" />
+            <el-checkbox v-model="config.email['is-ssl']" />
           </el-form-item>
           <el-form-item label="Secret">
             <el-input v-model="config.email.secret" />
@@ -115,23 +115,23 @@
         </el-collapse-item>
         <el-collapse-item :title="t('view.systemTools.system.casbinConfig')" name="6">
           <el-form-item :label="t('view.systemTools.system.modelAddress')">
-            <el-input v-model="config.casbin.modelPath" />
+            <el-input v-model="config.casbin['model-path']" />
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item :title="t('view.systemTools.system.verCodeConfig')" name="7">
           <el-form-item label="keyLong">
-            <el-input v-model.number="config.captcha.keyLong" />
+            <el-input v-model.number="config.captcha['key-long']" />
           </el-form-item>
           <el-form-item label="imgWidth">
-            <el-input v-model.number="config.captcha.imgWidth" />
+            <el-input v-model.number="config.captcha['img-width']" />
           </el-form-item>
           <el-form-item label="imgHeight">
-            <el-input v-model.number="config.captcha.imgHeight" />
+            <el-input v-model.number="config.captcha['img-height']" />
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item :title="t('view.systemTools.system.dbConfig')" name="9">
-          <template v-if="config.system.dbType === 'mysql'">
+          <template v-if="config.system['db-type'] === 'mysql'">
             <el-form-item label="username">
               <el-input v-model="config.mysql.username" />
             </el-form-item>
@@ -142,16 +142,16 @@
               <el-input v-model="config.mysql.path" />
             </el-form-item>
             <el-form-item label="dbname">
-              <el-input v-model="config.mysql.dbname" />
+              <el-input v-model="config.mysql['db-name']" />
             </el-form-item>
             <el-form-item label="maxIdleConns">
-              <el-input v-model.number="config.mysql.maxIdleConns" />
+              <el-input v-model.number="config.mysql['max-idle-conns']" />
             </el-form-item>
             <el-form-item label="maxOpenConns">
-              <el-input v-model.number="config.mysql.maxOpenConns" />
+              <el-input v-model.number="config.mysql['max-open-conns']" />
             </el-form-item>
             <el-form-item label="logMode">
-              <el-checkbox v-model="config.mysql.logMode" />
+              <el-checkbox v-model="config.mysql['log-mode']" />
             </el-form-item>
           </template>
           <template v-if="config.system.dbType === 'pgsql'">
@@ -168,25 +168,25 @@
               <el-input v-model="config.pgsql.dbname" />
             </el-form-item>
             <el-form-item label="maxIdleConns">
-              <el-input v-model.number="config.pgsql.maxIdleConns" />
+              <el-input v-model.number="config.pgsql['max-idle-conns']" />
             </el-form-item>
             <el-form-item label="maxOpenConns">
-              <el-input v-model.number="config.pgsql.maxOpenConns" />
+              <el-input v-model.number="config.pgsql['max-open-conns']" />
             </el-form-item>
             <el-form-item label="logMode">
-              <el-checkbox v-model="config.pgsql.logMode" />
+              <el-checkbox v-model="config.pgsql['log-mode']" />
             </el-form-item>
           </template>
         </el-collapse-item>
 
         <el-collapse-item :title="t('view.systemTools.system.ossConfig')" name="10">
-          <template v-if="config.system.ossType === 'local'">
+          <template v-if="config.system['oss-type'] === 'local'">
             <h2>{{ t('view.systemTools.system.localFileConfig') }}</h2>
             <el-form-item :label="t('view.systemTools.system.localFilePath')">
               <el-input v-model="config.local.path" />
             </el-form-item>
           </template>
-          <template v-if="config.system.ossType === 'qiniu'">
+          <template v-if="config.system['oss-type'] === 'qiniu'">
             <h2>qiniu上传配置</h2>
             <el-form-item label="存储区域">
               <el-input v-model="config.qiniu.zone" />
@@ -195,76 +195,76 @@
               <el-input v-model="config.qiniu.bucket" />
             </el-form-item>
             <el-form-item label="CDN加速域名">
-              <el-input v-model="config.qiniu.imgPath" />
+              <el-input v-model="config.qiniu['img-path']" />
             </el-form-item>
             <el-form-item label="是否使用https">
-              <el-checkbox v-model="config.qiniu.useHttps">{{ t('general.enable') }}</el-checkbox>
+              <el-checkbox v-model="config.qiniu['use-https']">{{ t('general.enable') }}</el-checkbox>
             </el-form-item>
             <el-form-item label="accessKey">
-              <el-input v-model="config.qiniu.accessKey" />
+              <el-input v-model="config.qiniu['access-key']" />
             </el-form-item>
             <el-form-item label="secretKey">
-              <el-input v-model="config.qiniu.secretKey" />
+              <el-input v-model="config.qiniu['secret-key']" />
             </el-form-item>
             <el-form-item label="上传是否使用CDN上传加速">
-              <el-checkbox v-model="config.qiniu.useCdnDomains">{{ t('general.enable') }}</el-checkbox>
+              <el-checkbox v-model="config.qiniu['use-cdn-domains']">{{ t('general.enable') }}</el-checkbox>
             </el-form-item>
           </template>
-          <template v-if="config.system.ossType === 'tencent-cos'">
+          <template v-if="config.system['oss-type'] === 'tencent-cos'">
             <h2>腾讯云COS上传配置</h2>
             <el-form-item label="bucket">
-              <el-input v-model="config.tencentCOS.bucket" />
+              <el-input v-model="config['tencent-cos']['bucket']" />
             </el-form-item>
             <el-form-item label="region">
-              <el-input v-model="config.tencentCOS.region" />
+              <el-input v-model="config['tencent-cos'].region" />
             </el-form-item>
             <el-form-item label="secretID">
-              <el-input v-model="config.tencentCOS.secretID" />
+              <el-input v-model="config['tencent-cos'].secretID" />
             </el-form-item>
             <el-form-item label="secretKey">
-              <el-input v-model="config.tencentCOS.secretKey" />
+              <el-input v-model="config['tencent-cos'].secretKey" />
             </el-form-item>
             <el-form-item label="pathPrefix">
-              <el-input v-model="config.tencentCOS.pathPrefix" />
+              <el-input v-model="config['tencent-cos'].pathPrefix" />
             </el-form-item>
             <el-form-item label="baseURL">
-              <el-input v-model="config.tencentCOS.baseURL" />
+              <el-input v-model="config['tencent-cos'].baseURL" />
             </el-form-item>
           </template>
-          <template v-if="config.system.ossType === 'aliyun-oss'">
+          <template v-if="config.system['oss-type'] === 'aliyun-oss'">
             <h2>阿里云OSS上传配置</h2>
             <el-form-item label="endpoint">
-              <el-input v-model="config.aliyunOSS.endpoint" />
+              <el-input v-model="config['aliyun-oss'].endpoint" />
             </el-form-item>
             <el-form-item label="accessKeyId">
-              <el-input v-model="config.aliyunOSS.accessKeyId" />
+              <el-input v-model="config['aliyun-oss']['access-key-id']" />
             </el-form-item>
             <el-form-item label="accessKeySecret">
-              <el-input v-model="config.aliyunOSS.accessKeySecret" />
+              <el-input v-model="config['aliyun-oss']['access-key-secret']" />
             </el-form-item>
             <el-form-item label="bucketName">
-              <el-input v-model="config.aliyunOSS.bucketName" />
+              <el-input v-model="config['aliyun-oss']['bucket-name']" />
             </el-form-item>
             <el-form-item label="bucketUrl">
-              <el-input v-model="config.aliyunOSS.bucketUrl" />
+              <el-input v-model="config['aliyun-oss']['bucket-url']" />
             </el-form-item>
           </template>
-          <template v-if="config.system.ossType === 'huawei-obs'">
+          <template v-if="config.system['oss-type'] === 'huawei-obs'">
             <h2>华为云Obs上传配置</h2>
             <el-form-item label="path">
-              <el-input v-model="config.huaWeiObs.path" />
+              <el-input v-model="config['hua-wei-obs'].path" />
             </el-form-item>
             <el-form-item label="bucket">
-              <el-input v-model="config.huaWeiObs.bucket" />
+              <el-input v-model="config['hua-wei-obs'].bucket" />
             </el-form-item>
             <el-form-item label="endpoint">
-              <el-input v-model="config.huaWeiObs.endpoint" />
+              <el-input v-model="config['hua-wei-obs'].endpoint" />
             </el-form-item>
             <el-form-item label="accessKey">
-              <el-input v-model="config.huaWeiObs.AccessKey" />
+              <el-input v-model="config['hua-wei-obs']['access-key']" />
             </el-form-item>
             <el-form-item label="secretKey">
-              <el-input v-model="config.huaWeiObs.secretKey" />
+              <el-input v-model="config['hua-wei-obs']['secret-key']" />
             </el-form-item>
           </template>
 
@@ -278,49 +278,49 @@
 
         <el-collapse-item :title="t('view.systemTools.system.autoCodeConfig')" name="12">
           <el-form-item :label="t('view.systemTools.system.autoRestart')">
-            <el-checkbox v-model="config.autoCode.transferRestart" />
+            <el-checkbox v-model="config.autocode['transfer-restart']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.projectRootPath')">
-            <el-input v-model="config.autoCode.root" disabled />
+            <el-input v-model="config.autocode.root" disabled />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendCodePath')">
-            <el-input v-model="config.autoCode.transferRestart" />
+            <el-input v-model="config.autocode['transfer-restart']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendApiPath')">
-            <el-input v-model="config.autoCode.serverApi" />
+            <el-input v-model="config.autocode['server-api']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendInitPath')">
-            <el-input v-model="config.autoCode.serverInitialize" />
+            <el-input v-model="config.autocode['server-initialize']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendModelPath')">
-            <el-input v-model="config.autoCode.serverModel" />
+            <el-input v-model="config.autocode['server-model']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendRequestPath')">
-            <el-input v-model="config.autoCode.serverRequest" />
+            <el-input v-model="config.autocode['server-request']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendRouterPath')">
-            <el-input v-model="config.autoCode.serverRouter" />
+            <el-input v-model="config.autocode['server-router']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendServicePath')">
-            <el-input v-model="config.autoCode.serverService" />
+            <el-input v-model="config.autocode['server-service']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.frontendCodePath')">
-            <el-input v-model="config.autoCode.web" />
+            <el-input v-model="config.autocode.web" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.frontendApiPath')">
-            <el-input v-model="config.autoCode.webApi" />
+            <el-input v-model="config.autocode['web-api']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.frontendFormPath')">
-            <el-input v-model="config.autoCode.webForm" />
+            <el-input v-model="config.autocode['web-form']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.frontendTablePath')">
-            <el-input v-model="config.autoCode.webTable" />
+            <el-input v-model="config.autocode['web-table']" />
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item :title="t('view.systemTools.system.timedTask')" name="13">
           <el-form-item :label="t('view.systemTools.system.startEnableDisable')">
-            <el-select v-model="config.timer.wTable" />
+            <el-select v-model="config.timer['w-table']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.cronExp')">
             <el-input v-model="config.timer.spec" />
@@ -368,20 +368,20 @@ const { t } = useI18n() // added by mohamed hassan to support multilanguage
 const activeNames = reactive([])
 const config = ref({
   system: {
-    iplimitCount: 0,
-    iplimitTime: 0
+    'iplimit-count': 0,
+    'iplimit-time': 0
   },
   jwt: {},
   casbin: {},
   mysql: {},
   pgsql: {},
   excel: {},
-  autoCode: {},
+  autocode: {},
   redis: {},
   qiniu: {},
-  tencentCOS: {},
-  aliyunOSS: {},
-  huaWeiObs: {},
+  'tencent-cos': {},
+  'aliyun-oss': {},
+  'hua-wei-obs': {},
   captcha: {},
   zap: {},
   local: {},

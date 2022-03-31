@@ -111,12 +111,12 @@ autocode:
   # 请不要手动配置,他会在项目加载的时候识别出根路径
   root: ""
   server: /server
-  server-api: /api/v1/autocode
+  server-api: /api/v1/%s
   server-initialize: /initialize
-  server-model: /model/autocode
-  server-request: /model/autocode/request/
-  server-router: /router/autocode
-  server-service: /service/autocode
+  server-model: /model/%s
+  server-request: /model/%s/request/
+  server-router: /router/%s
+  server-service: /service/%s
   web: /web/src
   web-api: /api
   web-form: /view

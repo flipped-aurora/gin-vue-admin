@@ -63,6 +63,13 @@
         <el-form-item :label="t('autoCode.fileName')" prop="packageName">
           <el-input v-model="form.packageName" :placeholder="t('autoCode.fileNameNote')" @blur="toLowerCaseFunc(form,'packageName')" />
         </el-form-item>
+        <el-form-item label="Package（包）" prop="packageName">
+          <el-select v-model="form.package" style="width:194px">
+            <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
+          </el-select>
+          <el-icon class="auto-icon" @click="getPkgs"><refresh /></el-icon>
+          <el-icon class="auto-icon" @click="goPkgs"><document-add /></el-icon>
+        </el-form-item>
         <el-form-item>
           <template #label>
             <el-tooltip :content="t('autoCode.autoAPIDBTip')" placement="bottom" effect="light">
@@ -176,10 +183,10 @@ export default {
 import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
 import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
-import { createTemp, getDB, getTable, getColumn, preview, getMeta } from '@/api/autoCode'
+import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
 import { ref, getCurrentInstance, reactive } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
@@ -199,6 +206,7 @@ const fieldTemplate = {
 }
 
 const route = useRoute()
+const router = useRouter()
 const activeNames = reactive([])
 const preViewCode = ref({})
 const dbform = ref({
@@ -213,6 +221,7 @@ const form = ref({
   structName: '',
   tableName: '',
   packageName: '',
+  package: '',
   abbreviation: '',
   description: '',
   autoCreateApiToSql: false,
@@ -235,6 +244,9 @@ const rules = ref({
       message: t('autoCode.entFileName'),
       trigger: 'blur'
     }
+  ],
+  package: [
+    { required: true, message: '请选择package', trigger: 'blur' }
   ]
 })
 
@@ -342,7 +354,10 @@ const enterForm = async(isPreview) => {
         }
       }
       form.value.structName = toUpperCase(form.value.structName)
-      if (form.value.tableName) { form.value.tableName = form.value.tableName.replace(' ', '') }
+      form.value.tableName = form.value.tableName.replace(' ', '')
+      if (!form.value.tableName) {
+        form.value.tableName = toSQLLine(toLowerCase(form.value.structName))
+      }
       if (form.value.structName === form.value.abbreviation) {
         ElMessage({
           type: 'error',
@@ -456,9 +471,22 @@ const getAutoCodeJson = async(id) => {
   }
 }
 
+const pkgs = ref([])
+const getPkgs = async() => {
+  const res = await getPackageApi()
+  if (res.code === 0) {
+    pkgs.value = res.data.pkgs
+  }
+}
+
+const goPkgs = () => {
+  router.push({ name: 'autoPkg' })
+}
+
 const init = () => {
   getDbFunc()
   setFdMap()
+  getPkgs()
   const id = route.params.id
   if (id) {
     getAutoCodeJson(id)
@@ -483,5 +511,10 @@ init()
 }
 .auto-btn-list{
   margin-top: 16px;
+}
+.auto-icon{
+  margin-left: 6px;
+  color: #666;
+  cursor: pointer;
 }
 </style>

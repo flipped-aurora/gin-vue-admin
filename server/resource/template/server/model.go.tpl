@@ -1,5 +1,5 @@
 // 自动生成模板{{.StructName}}
-package autocode
+package {{.Package}}
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"

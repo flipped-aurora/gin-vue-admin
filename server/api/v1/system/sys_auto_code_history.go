@@ -58,11 +58,11 @@ func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.GetById true "请求参数"
+// @Param data body systemReq.RollBack true "请求参数"
 // @Success 200 {object} response.Response{msg=string} "回滚自动生成代码"
 // @Router /autoCode/rollback [post]
 func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
-	var info request.GetById
+	var info systemReq.RollBack
 	_ = c.ShouldBindJSON(&info)
 	if err := autoCodeHistoryService.RollBack(&info); err != nil {
 		response.FailWithMessage(err.Error(), c)

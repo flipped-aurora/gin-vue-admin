@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"fmt"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"path/filepath"
 	"strings"
 	"time"
@@ -60,9 +61,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string, 
 // RollBack 回滚
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *request.GetById) error {
+func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.RollBack) error {
 	md := system.SysAutoCodeHistory{}
-	if err := global.GVA_DB.Where("id = ?", info.Uint()).First(&md).Error; err != nil {
+	if err := global.GVA_DB.Where("id = ?", info.ID).First(&md).Error; err != nil {
 		return err
 	}
 	// 清除API表
@@ -71,8 +72,10 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *request.Get
 		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 	}
 	// 删除表
-	if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
-		global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
+	if info.DeleteTable {
+		if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
+			global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
+		}
 	}
 	// 删除文件
 

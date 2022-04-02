@@ -23,7 +23,7 @@ func (e *FileUploadAndDownloadService) Upload(file example.ExaFileUploadAndDownl
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: FindFile
-//@description: 删除文件切片记录
+//@description: 查询文件记录
 //@param: id uint
 //@return: error, model.ExaFileUploadAndDownload
 

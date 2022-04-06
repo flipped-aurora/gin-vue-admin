@@ -10,7 +10,7 @@
 <img src="https://img.shields.io/badge/gorm-1.20.7-red"/>
 </div>
 
-[English](./README-en.md) | 简体中文
+[English](./README-en.md) | 简体中文 这是更新后的
 
 [gitee地址](https://gitee.com/pixelmax/gin-vue-admin): https://gitee.com/pixelmax/gin-vue-admin
 

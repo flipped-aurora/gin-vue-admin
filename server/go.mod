@@ -6,9 +6,9 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/aliyun/aliyun-oss-go-sdk v2.1.6+incompatible
 	github.com/aws/aws-sdk-go v1.42.27
+	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
 	github.com/casbin/casbin/v2 v2.11.0
 	github.com/casbin/gorm-adapter/v3 v3.0.2
-	github.com/flipped-aurora/gva-plugins v0.0.0-20210828060501-fc8b729b9a4a
 	github.com/flipped-aurora/ws v1.0.2
 	github.com/fsnotify/fsnotify v1.5.1
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
@@ -17,9 +17,11 @@ require (
 	github.com/go-sql-driver/mysql v1.6.0
 	github.com/golang-jwt/jwt/v4 v4.3.0
 	github.com/gookit/color v1.3.1
+	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.21.8+incompatible
 	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
+	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mojocn/base64Captcha v1.3.5
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/nicksnyder/go-i18n/v2 v2.1.2
@@ -35,6 +37,7 @@ require (
 	github.com/swaggo/swag v1.7.9
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.19
 	github.com/tklauser/go-sysconf v0.3.9 // indirect
+	github.com/ugorji/go v1.1.13 // indirect
 	github.com/unrolled/secure v1.0.7
 	github.com/xuri/excelize/v2 v2.4.1
 	go.uber.org/zap v1.21.0

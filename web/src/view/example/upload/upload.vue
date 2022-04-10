@@ -2,17 +2,11 @@
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-upload
-          :action="`${path}/fileUploadAndDownload/upload`"
-          :before-upload="checkFile"
-          :headers="{ 'x-token': userStore.token }"
-          :on-error="uploadError"
-          :on-success="uploadSuccess"
-          :show-file-list="false"
-          class="upload-btn"
-        >
-          <el-button size="small" type="primary">普通上传</el-button>
-        </el-upload>
+        <upload-common
+            v-model:imageCommon="imageCommon"
+            class="upload-btn"
+            @on-success="getTableData"
+          />
         <upload-image
           v-model:imageUrl="imageUrl"
           :file-size="512"
@@ -72,6 +66,7 @@ import { downloadImage } from '@/utils/downloadImg'
 import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
+import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
 
 import { ref } from 'vue'
@@ -81,6 +76,7 @@ const path = ref(import.meta.env.VITE_BASE_API)
 const userStore = useUserStore()
 
 const imageUrl = ref('')
+const imageCommon = ref('')
 
 const page = ref(1)
 const total = ref(0)
@@ -137,46 +133,6 @@ const deleteFileFunc = async(row) => {
     })
 }
 
-const fullscreenLoading = ref(false)
-const checkFile = (file) => {
-  fullscreenLoading.value = true
-  const isJPG = file.type === 'image/jpeg'
-  const isPng = file.type === 'image/png'
-  const isLt2M = file.size / 1024 / 1024 < 0.5
-  if (!isJPG && !isPng) {
-    ElMessage.error('上传图片只能是 jpg或png 格式!')
-    fullscreenLoading.value = false
-  }
-  if (!isLt2M) {
-    ElMessage.error('未压缩未见上传图片大小不能超过 500KB，请使用压缩上传')
-    fullscreenLoading.value = false
-  }
-  return (isPng || isJPG) && isLt2M
-}
-const uploadSuccess = (res) => {
-  fullscreenLoading.value = false
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '上传成功'
-    })
-    if (res.code === 0) {
-      getTableData()
-    }
-  } else {
-    ElMessage({
-      type: 'warning',
-      message: res.msg
-    })
-  }
-}
-const uploadError = () => {
-  ElMessage({
-    type: 'error',
-    message: '上传失败'
-  })
-  fullscreenLoading.value = false
-}
 const downloadFile = (row) => {
   if (row.url.indexOf('http://') > -1 || row.url.indexOf('https://') > -1) {
     downloadImage(row.url, row.name)

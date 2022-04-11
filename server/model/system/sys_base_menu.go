@@ -35,3 +35,7 @@ type SysBaseMenuParameter struct {
 	Key           string `json:"key" gorm:"comment:地址栏携带参数的key"`            // 地址栏携带参数的key
 	Value         string `json:"value" gorm:"comment:地址栏携带参数的值"`            // 地址栏携带参数的值
 }
+
+func (SysBaseMenu) TableName() string {
+	return "sys_base_menus"
+}

@@ -30,6 +30,7 @@
           style="width:100%"
           placeholder="请选择field数据类型"
           clearable
+          @change="clearOther"
         >
           <el-option
             v-for="item in typeOptions"
@@ -54,6 +55,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="middleDate.fieldType!=='string'&&item.value==='LIKE'"
           />
         </el-select>
       </el-form-item>
@@ -172,6 +174,11 @@ init()
 const autoFill = () => {
   middleDate.value.fieldJson = toLowerCase(middleDate.value.fieldName)
   middleDate.value.columnName = toSQLLine(middleDate.value.fieldJson)
+}
+
+const clearOther = () => {
+  middleDate.value.fieldSearchType = ''
+  middleDate.value.dictType = ''
 }
 
 const fieldDialogFrom = ref(null)

@@ -36,7 +36,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.SysAuthorityBtnReq true "菜单id, 角色id, 选中的按钮id"
 // @Success 200 {object} response.Response{msg=string} "返回列表成功"
-// @Router /authorityBtn/getAuthorityBtn [post]
+// @Router /authorityBtn/setAuthorityBtn [post]
 func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 	var req request.SysAuthorityBtnReq
 	_ = c.ShouldBindJSON(&req)

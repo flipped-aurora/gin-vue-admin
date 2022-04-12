@@ -21,3 +21,7 @@ type SysUser struct {
 	Phone       string         `json:"phone"  gorm:"comment:用户手机号"` // 用户手机号
 	Email       string         `json:"email"  gorm:"comment:用户邮箱"`  // 用户邮箱
 }
+
+func (SysUser) TableName() string {
+	return "sys_users"
+}

@@ -46,6 +46,13 @@ func (userService *UserService) Login(u *system.SysUser) (err error, userInter *
 	var user system.SysUser
 	u.Password = utils.MD5V([]byte(u.Password))
 	err = global.GVA_DB.Where("username = ? AND password = ?", u.Username, u.Password).Preload("Authorities").Preload("Authority").First(&user).Error
+	if err == nil {
+		var am system.SysMenu
+		ferr := global.GVA_DB.First(&am, "name = ? AND authority_id = ?", user.Authority.DefaultRouter, user.AuthorityId).Error
+		if errors.Is(ferr, gorm.ErrRecordNotFound) {
+			user.Authority.DefaultRouter = "404"
+		}
+	}
 	return err, &user
 }
 
@@ -133,7 +140,7 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []strin
 //@param: id float64
 //@return: err error
 
-func (userService *UserService) DeleteUser(id float64) (err error) {
+func (userService *UserService) DeleteUser(id int) (err error) {
 	var user system.SysUser
 	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
 	if err != nil {
@@ -149,9 +156,8 @@ func (userService *UserService) DeleteUser(id float64) (err error) {
 //@param: reqUser model.SysUser
 //@return: err error, user model.SysUser
 
-func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, user system.SysUser) {
-	err = global.GVA_DB.Updates(&reqUser).Error
-	return err, reqUser
+func (userService *UserService) SetUserInfo(req system.SysUser) error {
+	return global.GVA_DB.Updates(&req).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -163,6 +169,14 @@ func (userService *UserService) SetUserInfo(reqUser system.SysUser) (err error, 
 func (userService *UserService) GetUserInfo(uuid uuid.UUID) (err error, user system.SysUser) {
 	var reqUser system.SysUser
 	err = global.GVA_DB.Preload("Authorities").Preload("Authority").First(&reqUser, "uuid = ?", uuid).Error
+	if err != nil {
+		return err, reqUser
+	}
+	var am system.SysMenu
+	ferr := global.GVA_DB.First(&am, "name = ? AND authority_id = ?", reqUser.Authority.DefaultRouter, reqUser.AuthorityId).Error
+	if errors.Is(ferr, gorm.ErrRecordNotFound) {
+		reqUser.Authority.DefaultRouter = "404"
+	}
 	return err, reqUser
 }
 

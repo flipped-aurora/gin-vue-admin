@@ -1,5 +1,19 @@
 <template>
   <el-drawer v-model="drawer" title="媒体库">
+    <div class="gva-btn-list">
+      <upload-common
+          v-model:imageCommon="imageCommon"
+          class="upload-btn-media-library"
+          @on-success="open"
+      />
+      <upload-image
+          v-model:imageUrl="imageUrl"
+          :file-size="512"
+          :max-w-h="1080"
+          class="upload-btn-media-library"
+          @on-success="open"
+      />
+    </div>
     <div class="media">
       <el-image
         v-for="(item,key) in picList"
@@ -18,45 +32,55 @@
   </el-drawer>
 </template>
 
+<<<<<<< HEAD
 <script>
 const path = import.meta.env.VITE_BASE_API
+=======
+<script setup>
+import { ref } from 'vue'
+>>>>>>> 5a3f175d88254ba6949426233a355d2d21b270d1
 import { getFileList } from '@/api/fileUploadAndDownload'
-export default {
-  props: {
-    target: {
-      type: Object,
-      default: null
-    },
-    targetKey: {
-      type: String,
-      default: ''
-    }
+import UploadImage from '@/components/upload/image.vue'
+import UploadCommon from '@/components/upload/common.vue'
+
+const imageUrl = ref('')
+const imageCommon = ref('')
+
+const emit = defineEmits(['enterImg'])
+defineProps({
+  target: {
+    type: Object,
+    default: null
   },
-  data() {
-    return {
-      drawer: false,
-      picList: [],
-      path: path
-    }
-  },
-  methods: {
-    chooseImg(url, target, targetKey) {
-      if (target && targetKey) {
-        target[targetKey] = url
-      }
-      this.$emit('enter-img', url)
-      this.drawer = false
-    },
-    async open() {
-      const res = await getFileList({ page: 1, pageSize: 9999 })
-      this.picList = res.data.list
-      this.drawer = true
-    }
+  targetKey: {
+    type: String,
+    default: ''
   }
+})
+
+const drawer = ref(false)
+const picList = ref([])
+const path = ref(import.meta.env.VITE_BASE_API)
+
+const chooseImg = (url, target, targetKey) => {
+  if (target && targetKey) {
+    target[targetKey] = url
+  }
+  emit('enterImg', url)
+  drawer.value = false
 }
+
+const open = async() => {
+  const res = await getFileList({ page: 1, pageSize: 9999 })
+  picList.value = res.data.list
+  drawer.value = true
+}
+
+defineExpose({ open })
 </script>
 
 <style lang="scss">
+.upload-btn-media-library{margin-left: 20px;}
 .media{
   display:flex;
   flex-wrap:wrap;

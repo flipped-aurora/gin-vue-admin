@@ -20,11 +20,11 @@ type InitDBService struct{}
 func (initDBService *InitDBService) InitDB(conf request.InitDB) error {
 	switch conf.DBType {
 	case "mysql":
-		return initDBService.initMsqlDB(conf)
+		return initDBService.initMysqlDB(conf)
 	case "pgsql":
 		return initDBService.initPgsqlDB(conf)
 	default:
-		return initDBService.initMsqlDB(conf)
+		return initDBService.initMysqlDB(conf)
 	}
 }
 
@@ -42,6 +42,9 @@ func (initDBService *InitDBService) initTables() error {
 		system.SysOperationRecord{},
 		system.SysDictionaryDetail{},
 		system.SysBaseMenuParameter{},
+		system.SysBaseMenuBtn{},
+		system.SysAuthorityBtn{},
+		system.SysAutoCode{},
 
 		adapter.CasbinRule{},
 

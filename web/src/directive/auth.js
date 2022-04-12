@@ -1,11 +1,12 @@
 // 权限按钮展示指令
-import { store } from '@/store'
+import { useUserStore } from '@/pinia/modules/user'
 export default {
   install: (app) => {
+    const userStore = useUserStore()
     app.directive('auth', {
       // 当被绑定的元素插入到 DOM 中时……
       mounted: function(el, binding) {
-        const userInfo = store.getters['user/userInfo']
+        const userInfo = userStore.userInfo
         let type = ''
         switch (Object.prototype.toString.call(binding.value)) {
           case '[object Array]':
@@ -22,9 +23,7 @@ export default {
             break
         }
         if (type === '') {
-          /* eslint-disable */
-              console.error("v-auth必须是Array,Number,String属性,暂不支持其他属性")
-              /* eslint-enable */
+          el.parentNode.removeChild(el)
           return
         }
         const waitUse = binding.value.toString().split(',')
@@ -33,7 +32,7 @@ export default {
           flag = !flag
         }
         if (!flag) {
-          el.style.display = 'none'
+          el.parentNode.removeChild(el)
         }
       }
     })

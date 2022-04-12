@@ -18,7 +18,7 @@ type DictionaryApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysDictionary true "SysDictionary模型"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
+// @Success 200 {object} response.Response{msg=string} "创建SysDictionary"
 // @Router /sysDictionary/createSysDictionary [post]
 func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
@@ -37,7 +37,7 @@ func (s *DictionaryApi) CreateSysDictionary(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysDictionary true "SysDictionary模型"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
+// @Success 200 {object} response.Response{msg=string} "删除SysDictionary"
 // @Router /sysDictionary/deleteSysDictionary [delete]
 func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
@@ -56,7 +56,7 @@ func (s *DictionaryApi) DeleteSysDictionary(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body system.SysDictionary true "SysDictionary模型"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Success 200 {object} response.Response{msg=string} "更新SysDictionary"
 // @Router /sysDictionary/updateSysDictionary [put]
 func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
@@ -75,7 +75,7 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query system.SysDictionary true "ID或字典英名"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "用id查询SysDictionary"
 // @Router /sysDictionary/findSysDictionary [get]
 func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
@@ -94,7 +94,7 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query request.SysDictionarySearch true "页码, 每页大小, 搜索条件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量"
 // @Router /sysDictionary/getSysDictionaryList [get]
 func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 	var pageInfo request.SysDictionarySearch

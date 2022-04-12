@@ -6,7 +6,7 @@
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
           <div class="gva-top-card-left-rows">
-            <el-row>
+            <el-row v-auth="888">
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
                   <el-icon class="dasboard-icon">
@@ -103,68 +103,68 @@
     </div>
   </div>
 </template>
-<script>
+
+<script setup>
 import echartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
 import dashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
-export default {
-  name: 'Dashboard',
-  components: {
-    echartsLine,
-    dashboardTable
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const toolCards = ref([
+  {
+    label: '用户管理',
+    icon: 'monitor',
+    name: 'user',
+    color: '#ff9c6e',
+    bg: 'rgba(255, 156, 110,.3)'
   },
-  data() {
-    return {
-      toolCards: [
-        {
-          label: '用户管理',
-          icon: 'monitor',
-          name: 'user',
-          color: '#ff9c6e',
-          bg: 'rgba(255, 156, 110,.3)'
-        },
-        {
-          label: '角色管理',
-          icon: 'setting',
-          name: 'authority',
-          color: '#69c0ff',
-          bg: 'rgba(105, 192, 255,.3)'
-        },
-        {
-          label: '菜单管理',
-          icon: 'menu',
-          name: 'menu',
-          color: '#b37feb',
-          bg: 'rgba(179, 127, 235,.3)'
-        },
-        {
-          label: '代码生成器',
-          icon: 'cpu',
-          name: 'autoCode',
-          color: '#ffd666',
-          bg: 'rgba(255, 214, 102,.3)'
-        },
-        {
-          label: '表单生成器',
-          icon: 'document-checked',
-          name: 'formCreate',
-          color: '#ff85c0',
-          bg: 'rgba(255, 133, 192,.3)'
-        },
-        {
-          label: '关于我们',
-          icon: 'user',
-          name: 'about',
-          color: '#5cdbd3',
-          bg: 'rgba(92, 219, 211,.3)'
-        }
-      ]
-    }
+  {
+    label: '角色管理',
+    icon: 'setting',
+    name: 'authority',
+    color: '#69c0ff',
+    bg: 'rgba(105, 192, 255,.3)'
   },
-  methods: {
-    toTarget(name) {
-      this.$router.push({ name })
-    }
+  {
+    label: '菜单管理',
+    icon: 'menu',
+    name: 'menu',
+    color: '#b37feb',
+    bg: 'rgba(179, 127, 235,.3)'
+  },
+  {
+    label: '代码生成器',
+    icon: 'cpu',
+    name: 'autoCode',
+    color: '#ffd666',
+    bg: 'rgba(255, 214, 102,.3)'
+  },
+  {
+    label: '表单生成器',
+    icon: 'document-checked',
+    name: 'formCreate',
+    color: '#ff85c0',
+    bg: 'rgba(255, 133, 192,.3)'
+  },
+  {
+    label: '关于我们',
+    icon: 'user',
+    name: 'about',
+    color: '#5cdbd3',
+    bg: 'rgba(92, 219, 211,.3)'
   }
+])
+
+const router = useRouter()
+
+const toTarget = (name) => {
+  router.push({ name })
+}
+
+</script>
+<script>
+export default {
+  name: 'Dashboard'
 }
 </script>
 

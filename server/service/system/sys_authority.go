@@ -57,6 +57,23 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	if err != nil {
 		return
 	}
+
+	var btns []system.SysAuthorityBtn
+
+	err = global.GVA_DB.Find(&btns, "authority_id = ?", copyInfo.OldAuthorityId).Error
+	if err != nil {
+		return
+	}
+	if len(btns) > 0 {
+		for i := range btns {
+			btns[i].AuthorityId = copyInfo.Authority.AuthorityId
+		}
+		err = global.GVA_DB.Create(&btns).Error
+
+		if err != nil {
+			return
+		}
+	}
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(copyInfo.OldAuthorityId)
 	err = CasbinServiceApp.UpdateCasbin(copyInfo.Authority.AuthorityId, paths)
 	if err != nil {
@@ -83,6 +100,12 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 //@return: err error
 
 func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthority) (err error) {
+	if errors.Is(global.GVA_DB.Debug().Preload("Users").First(&auth).Error, gorm.ErrRecordNotFound) {
+		return errors.New("该角色不存在")
+	}
+	if len(auth.Users) != 0 {
+		return errors.New("此角色有用户正在使用禁止删除")
+	}
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysUser{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("此角色有用户正在使用禁止删除")
 	}
@@ -107,6 +130,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 		}
 	}
 	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
+	err = global.GVA_DB.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ?", auth.AuthorityId).Error
 	CasbinServiceApp.ClearCasbin(0, auth.AuthorityId)
 	return err
 }

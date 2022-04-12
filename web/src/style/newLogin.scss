@@ -8,7 +8,7 @@
     position: relative;
     .input-icon{
         padding-right: 6px;
-        padding-top: 2px;
+        padding-top: 4px;
     }
     .login_panle {
         position: absolute;
@@ -48,15 +48,18 @@
                     padding-left: 20px;
                 }
             }
+            .vPicBox{
+                display:flex;
+                justify-content:space-between;
+                width:100%;
+            }
             .vPic {
                 width: 33%;
                 height: 38px;
-                float: right !important;
                 background: #ccc;
                 img {
                     width: 100%;
                     height: 100%;
-                    cursor: pointer;
                     vertical-align: middle;
                 }
             }

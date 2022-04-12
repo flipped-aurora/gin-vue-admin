@@ -1,5 +1,4 @@
 import service from '@/utils/request'
-
 // @Tags jwt
 // @Summary jwt加入黑名单
 // @Security ApiKeyAuth

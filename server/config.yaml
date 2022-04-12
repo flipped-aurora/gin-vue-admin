@@ -43,6 +43,7 @@ system:
   addr: 8888
   db-type: 'mysql'
   oss-type: 'local'    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  use-redis: false     # 使用redis
   use-multipoint: false
   # IP限制次数 一个小时15000次
   iplimit-count: 15000
@@ -83,24 +84,20 @@ pgsql:
   log-mode: ""
   log-zap: false
 
-db-list: [
-  {
-    disabled: true, # 是否启用
-    type: "", # 数据库的类型,目前支持mysql、pgsql
-    alias-name: "", # 数据库的名称,注意: alias-name 需要在db-list中唯一
-    path: '',
-    port: '',
-    config: '',
-    db-name: '',
-    username: '',
-    password: '',
-    max-idle-conns: 10,
-    max-open-conns: 100,
-    log-mode: "",
-    log-zap: false,
-  }
-]
-
+db-list:
+  - disabled: true # 是否启用
+    type: "" # 数据库的类型,目前支持mysql、pgsql
+    alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
+    path: ''
+    port: ''
+    config: ''
+    db-name: ''
+    username: ''
+    password: ''
+    max-idle-conns: 10
+    max-open-conns: 100
+    log-mode: ""
+    log-zap: false
 
 
 # local configuration
@@ -114,12 +111,12 @@ autocode:
   # 请不要手动配置,他会在项目加载的时候识别出根路径
   root: ""
   server: /server
-  server-api: /api/v1/autocode
+  server-api: /api/v1/%s
   server-initialize: /initialize
-  server-model: /model/autocode
-  server-request: /model/autocode/request/
-  server-router: /router/autocode
-  server-service: /service/autocode
+  server-model: /model/%s
+  server-request: /model/%s/request/
+  server-router: /router/%s
+  server-service: /service/%s
   web: /web/src
   web-api: /api
   web-form: /view
@@ -153,6 +150,18 @@ tencent-cos:
   base-url: 'https://gin.vue.admin'
   path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
 
+# aws s3 configuration (minio compatible)
+aws-s3:
+  bucket: xxxxx-10005608
+  region: ap-shanghai
+  endpoint: ''
+  s3-force-path-style: false
+  disable-ssl: false
+  secret-id: xxxxxxxx
+  secret-key: xxxxxxxx
+  base-url: https://gin.vue.admin
+  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+
 # huawei obs configuration
 hua-wei-obs:
   path: 'you-path'
@@ -169,15 +178,13 @@ excel:
 Timer:
   start: true
   spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
-  detail: [
-    # tableName: 需要清理的表名
-    # compareField: 需要比较时间的字段
-    # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
-    # 2160h = 24 * 30 * 3 -> 三个月
-    { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
-    { tableName: "jwt_blacklists" , compareField: "created_at", interval: "168h" }
-    #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
-  ]
+  detail:
+    - tableName: "sys_operation_records"
+      compareField: "created_at"
+      interval: "2160h"
+    - tableName: "jwt_blacklists"
+      compareField: "created_at"
+      interval: "168h"
 
 # 跨域配置
 # 需要配合 server/initialize/router.go#L32 使用
@@ -194,3 +201,10 @@ cors:
       allow-methods: GET, POST
       expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
       allow-credentials: true # 布尔值
+
+# elasticsearch configuration
+elasticsearch:
+  host: "127.0.0.1"                     #es地址
+  port: "9200"                          #es端口
+  user: "elastic"                       #es用户名
+  pass: ""                              #es密码

@@ -8,6 +8,7 @@
  */
 
 @import '@/style/basics.scss';
+@import '@/style/iconfont.css';
 html {
     line-height: 1.15;
     /* 1 */
@@ -665,8 +666,6 @@ li {
     }
     .main-cont.el-main {
         min-height: 100%;
-        -webkit-transition: margin-left .28s;
-        transition: margin-left .28s;
         margin-left: $width-aside;
         position: relative;
     }
@@ -971,10 +970,10 @@ li {
 .el-input-number__increase {
     position: absolute;
     z-index: 1;
-    top: 3px !important;
+    top: 2px !important;
     width: 42px;
-    height: 29px;
-    line-height: 29px;
+    height: 28px;
+    line-height: 28px;
     text-align: center;
     background: #F5F7FA;
     color: #606266;

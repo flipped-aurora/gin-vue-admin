@@ -1,10 +1,11 @@
 package example
 
 import (
+	"os"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -44,7 +45,7 @@ func (e *ExcelApi) ExportExcel(c *gin.Context) {
 // @accept multipart/form-data
 // @Produce  application/json
 // @Param file formData file true "导入Excel文件"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"导入成功"}"
+// @Success 200 {object} response.Response{msg=string} "导入Excel文件"
 // @Router /excel/importExcel [post]
 func (e *ExcelApi) ImportExcel(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")
@@ -61,7 +62,7 @@ func (e *ExcelApi) ImportExcel(c *gin.Context) {
 // @Summary 加载Excel数据
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"加载数据成功"}"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "加载Excel数据,返回包括列表,总数,页码,每页数量"
 // @Router /excel/loadExcel [get]
 func (e *ExcelApi) LoadExcel(c *gin.Context) {
 	menus, err := excelService.ParseExcel2InfoList()
@@ -89,10 +90,16 @@ func (e *ExcelApi) LoadExcel(c *gin.Context) {
 func (e *ExcelApi) DownloadTemplate(c *gin.Context) {
 	fileName := c.Query("fileName")
 	filePath := global.GVA_CONFIG.Excel.Dir + fileName
-	ok, err := utils.PathExists(filePath)
-	if !ok || err != nil {
+
+	fi, err := os.Stat(filePath)
+	if err != nil {
 		global.GVA_LOG.Error("文件不存在!", zap.Error(err))
 		response.FailWithMessage("文件不存在", c)
+		return
+	}
+	if fi.IsDir() {
+		global.GVA_LOG.Error("不支持下载文件夹!", zap.Error(err))
+		response.FailWithMessage("不支持下载文件夹", c)
 		return
 	}
 	c.Writer.Header().Add("success", "true")

@@ -3,7 +3,7 @@
     <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="openDialog">新增</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog">新增</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -24,14 +24,14 @@
         <el-table-column align="left" label="按钮组" min-width="160">
           <template #default="scope">
             <el-button size="small" type="text" icon="edit" @click="updateCustomer(scope.row)">变更</el-button>
-            <el-popover :visible="scope.row.visible" placement="top" width="160">
+            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="mini" @click="deleteCustomer(scope.row)">确定</el-button>
+                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" size="small" @click="deleteCustomer(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="mini">删除</el-button>
+                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -68,7 +68,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import {
   createExaCustomer,
   updateExaCustomer,
@@ -76,81 +76,106 @@ import {
   getExaCustomer,
   getExaCustomerList
 } from '@/api/customer'
-import infoList from '@/mixins/infoList'
 import warningBar from '@/components/warningBar/warningBar.vue'
+import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { formatDate } from '@/utils/format'
+
+const form = ref({
+  customerName: '',
+  customerPhoneData: ''
+})
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(10)
+const tableData = ref([])
+
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
+}
+
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+// 查询
+const getTableData = async() => {
+  const table = await getExaCustomerList({ page: page.value, pageSize: pageSize.value })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
+  }
+}
+
+getTableData()
+
+const dialogFormVisible = ref(false)
+const type = ref('')
+const updateCustomer = async(row) => {
+  const res = await getExaCustomer({ ID: row.ID })
+  type.value = 'update'
+  if (res.code === 0) {
+    form.value = res.data.customer
+    dialogFormVisible.value = true
+  }
+}
+const closeDialog = () => {
+  dialogFormVisible.value = false
+  form.value = {
+    customerName: '',
+    customerPhoneData: ''
+  }
+}
+const deleteCustomer = async(row) => {
+  row.visible = false
+  const res = await deleteExaCustomer({ ID: row.ID })
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: '删除成功'
+    })
+    if (tableData.value.length === 1 && page.value > 1) {
+      page.value--
+    }
+    getTableData()
+  }
+}
+const enterDialog = async() => {
+  let res
+  switch (type.value) {
+    case 'create':
+      res = await createExaCustomer(form.value)
+      break
+    case 'update':
+      res = await updateExaCustomer(form.value)
+      break
+    default:
+      res = await createExaCustomer(form.value)
+      break
+  }
+
+  if (res.code === 0) {
+    closeDialog()
+    getTableData()
+  }
+}
+const openDialog = () => {
+  type.value = 'create'
+  dialogFormVisible.value = true
+}
+
+</script>
+
+<script>
 
 export default {
-  name: 'Customer',
-  components: { warningBar },
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: getExaCustomerList,
-      dialogFormVisible: false,
-      type: '',
-      form: {
-        customerName: '',
-        customerPhoneData: ''
-      }
-    }
-  },
-  created() {
-    this.getTableData()
-  },
-  methods: {
-    async updateCustomer(row) {
-      const res = await getExaCustomer({ ID: row.ID })
-      this.type = 'update'
-      if (res.code === 0) {
-        this.form = res.data.customer
-        this.dialogFormVisible = true
-      }
-    },
-    closeDialog() {
-      this.dialogFormVisible = false
-      this.form = {
-        customerName: '',
-        customerPhoneData: ''
-      }
-    },
-    async deleteCustomer(row) {
-      row.visible = false
-      const res = await deleteExaCustomer({ ID: row.ID })
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '删除成功'
-        })
-        if (this.tableData.length === 1 && this.page > 1) {
-          this.page--
-        }
-        this.getTableData()
-      }
-    },
-    async enterDialog() {
-      let res
-      switch (this.type) {
-        case 'create':
-          res = await createExaCustomer(this.form)
-          break
-        case 'update':
-          res = await updateExaCustomer(this.form)
-          break
-        default:
-          res = await createExaCustomer(this.form)
-          break
-      }
-
-      if (res.code === 0) {
-        this.closeDialog()
-        this.getTableData()
-      }
-    },
-    openDialog() {
-      this.type = 'create'
-      this.dialogFormVisible = true
-    }
-  }
+  name: 'Customer'
 }
 </script>
 

@@ -2,9 +2,12 @@ package middleware
 
 import (
 	"bytes"
+	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
@@ -30,6 +33,18 @@ func OperationRecord() gin.HandlerFunc {
 			} else {
 				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
 			}
+		} else {
+			query := c.Request.URL.RawQuery
+			query, _ = url.QueryUnescape(query)
+			split := strings.Split(query, "&")
+			m := make(map[string]string)
+			for _, v := range split {
+				kv := strings.Split(v, "=")
+				if len(kv) == 2 {
+					m[kv[0]] = kv[1]
+				}
+			}
+			body, _ = json.Marshal(&m)
 		}
 		claims, _ := utils.GetClaims(c)
 		if claims.ID != 0 {
@@ -49,11 +64,12 @@ func OperationRecord() gin.HandlerFunc {
 			Body:   string(body),
 			UserID: userId,
 		}
-		// 存在某些未知错误 TODO
-		//values := c.Request.Header.Values("content-type")
-		//if len(values) >0 && strings.Contains(values[0], "boundary") {
-		//	record.Body = "file"
-		//}
+		// 上传文件时候 中间件日志进行裁断操作
+		if strings.Index(c.GetHeader("Content-Type"), "multipart/form-data") > -1 {
+			if len(record.Body) > 512 {
+				record.Body = "File or Length out of limit"
+			}
+		}
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,
 			body:           &bytes.Buffer{},

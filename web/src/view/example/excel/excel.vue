@@ -6,14 +6,14 @@
         <el-upload
           class="excel-btn"
           :action="`${path}/excel/importExcel`"
-          :headers="{'x-token':token}"
+          :headers="{'x-token':userStore.token}"
           :on-success="loadExcel"
           :show-file-list="false"
         >
-          <el-button size="mini" type="primary" icon="upload">导入</el-button>
+          <el-button size="small" type="primary" icon="upload">导入</el-button>
         </el-upload>
-        <el-button class="excel-btn" size="mini" type="primary" icon="download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
-        <el-button class="excel-btn" size="mini" type="success" icon="download" @click="downloadExcelTemplate()">下载模板</el-button>
+        <el-button class="excel-btn" size="small" type="primary" icon="download" @click="handleExcelExport('ExcelExport.xlsx')">导出</el-button>
+        <el-button class="excel-btn" size="small" type="success" icon="download" @click="downloadExcelTemplate()">下载模板</el-button>
       </div>
       <el-table :data="tableData" row-key="ID">
         <el-table-column align="left" label="ID" min-width="100" prop="ID" />
@@ -34,43 +34,50 @@
 </template>
 
 <script>
-const path = import.meta.env.VITE_BASE_API
-import { mapGetters } from 'vuex'
-import infoList from '@/mixins/infoList'
-import { exportExcel, loadExcelData, downloadTemplate } from '@/api/excel'
-import { getMenuList } from '@/api/menu'
 export default {
   name: 'Excel',
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: getMenuList,
-      path: path
-    }
-  },
-  computed: {
-    ...mapGetters('user', ['userInfo', 'token'])
-  },
-  created() {
-    this.pageSize = 999
-    this.getTableData()
-  },
-  methods: {
-    handleExcelExport(fileName) {
-      if (!fileName || typeof fileName !== 'string') {
-        fileName = 'ExcelExport.xlsx'
-      }
-      exportExcel(this.tableData, fileName)
-    },
-    loadExcel() {
-      this.listApi = loadExcelData
-      this.getTableData()
-    },
-    downloadExcelTemplate() {
-      downloadTemplate('ExcelTemplate.xlsx')
-    }
+}
+</script>
+
+<script setup>
+import { useUserStore } from '@/pinia/modules/user'
+import { exportExcel, loadExcelData, downloadTemplate } from '@/api/excel'
+import { getMenuList } from '@/api/menu'
+import { ref } from 'vue'
+const path = ref(import.meta.env.VITE_BASE_API)
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(999)
+const tableData = ref([])
+
+// 查询
+const getTableData = async(f = () => {}) => {
+  const table = await f({ page: page.value, pageSize: pageSize.value })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
   }
 }
+getTableData(getMenuList)
+
+const userStore = useUserStore()
+
+const handleExcelExport = (fileName) => {
+  if (!fileName || typeof fileName !== 'string') {
+    fileName = 'ExcelExport.xlsx'
+  }
+  exportExcel(tableData.value, fileName)
+}
+const loadExcel = () => {
+  getTableData(loadExcelData)
+}
+const downloadExcelTemplate = () => {
+  downloadTemplate('ExcelTemplate.xlsx')
+}
+
 </script>
 
 <style lang="scss" scoped>

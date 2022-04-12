@@ -1,5 +1,4 @@
 import service from '@/utils/request'
-
 // @Summary 用户登录
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}
@@ -30,7 +29,7 @@ export const captcha = (data) => {
 // @Router /base/resige [post]
 export const register = (data) => {
   return service({
-    url: '/user/register',
+    url: '/user/admin_register',
     method: 'post',
     data: data
   })
@@ -112,6 +111,22 @@ export const setUserInfo = (data) => {
   })
 }
 
+// @Tags SysUser
+// @Summary 设置用户信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.SysUser true "设置用户信息"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/setSelfInfo [put]
+export const setSelfInfo = (data) => {
+  return service({
+    url: '/user/setSelfInfo',
+    method: 'put',
+    data: data
+  })
+}
+
 // @Tags User
 // @Summary 设置用户权限
 // @Security ApiKeyAuth
@@ -142,9 +157,10 @@ export const getUserInfo = () => {
   })
 }
 
-export const resetPassword = () => {
+export const resetPassword = (data) => {
   return service({
     url: '/user/resetPassword',
-    method: 'post'
+    method: 'post',
+    data: data
   })
 }

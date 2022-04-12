@@ -22,22 +22,22 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="mini" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="mini" icon="refresh" @click="onReset">重置</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
         <el-popover v-model:visible="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
-            <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
+            <el-button size="small" type="text" @click="deleteVisible = false">取消</el-button>
+            <el-button size="small" type="primary" @click="onDelete">确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="mini" :disabled="!apis.length" style="margin-left: 10px;">删除</el-button>
+            <el-button icon="delete" size="small" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">删除</el-button>
           </template>
         </el-popover>
       </div>
@@ -64,13 +64,13 @@
               icon="edit"
               size="small"
               type="text"
-              @click="editApi(scope.row)"
+              @click="editApiFunc(scope.row)"
             >编辑</el-button>
             <el-button
               icon="delete"
               size="small"
               type="text"
-              @click="deleteApi(scope.row)"
+              @click="deleteApiFunc(scope.row)"
             >删除</el-button>
           </template>
         </el-table-column>
@@ -123,8 +123,12 @@
 </template>
 
 <script>
-// 获取列表内容封装在mixins内部  getTableData方法 初始化已封装完成 条件搜索时候 请把条件安好后台定制的结构体字段 放到 this.searchInfo 中即可实现条件搜索
+export default {
+  name: 'Api',
+}
+</script>
 
+<script setup>
 import {
   getApiById,
   getApiList,
@@ -133,10 +137,24 @@ import {
   deleteApi,
   deleteApisByIds
 } from '@/api/api'
-import infoList from '@/mixins/infoList'
 import { toSQLLine } from '@/utils/stringFun'
 import warningBar from '@/components/warningBar/warningBar.vue'
-const methodOptions = [
+import { ref } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+const methodFiletr = (value) => {
+  const target = methodOptions.value.filter(item => item.value === value)[0]
+  return target && `${target.label}`
+}
+
+const apis = ref([])
+const form = ref({
+  path: '',
+  apiGroup: '',
+  method: '',
+  description: ''
+})
+const methodOptions = ref([
   {
     value: 'POST',
     label: '创建',
@@ -157,42 +175,57 @@ const methodOptions = [
     label: '删除',
     type: 'danger'
   }
-]
+])
 
-export default {
-  name: 'Api',
-  components: {
-    warningBar
-  },
-  mixins: [infoList],
-  data() {
-    return {
-      deleteVisible: false,
-      listApi: getApiList,
-      dialogFormVisible: false,
-      dialogTitle: '新增Api',
-      apis: [],
-      form: {
-        path: '',
-        apiGroup: '',
-        method: '',
-        description: ''
-      },
-      methodOptions: methodOptions,
-      type: '',
-      rules: {
-        path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
-        apiGroup: [
-          { required: true, message: '请输入组名称', trigger: 'blur' }
-        ],
-        method: [
-          { required: true, message: '请选择请求方式', trigger: 'blur' }
-        ],
-        description: [
-          { required: true, message: '请输入api介绍', trigger: 'blur' }
-        ]
-      }
+const type = ref('')
+const rules = ref({
+  path: [{ required: true, message: '请输入api路径', trigger: 'blur' }],
+  apiGroup: [
+    { required: true, message: '请输入组名称', trigger: 'blur' }
+  ],
+  method: [
+    { required: true, message: '请选择请求方式', trigger: 'blur' }
+  ],
+  description: [
+    { required: true, message: '请输入api介绍', trigger: 'blur' }
+  ]
+})
+
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(10)
+const tableData = ref([])
+const searchInfo = ref({})
+
+const onReset = () => {
+  searchInfo.value = {}
+}
+// 搜索
+
+const onSubmit = () => {
+  page.value = 1
+  pageSize.value = 10
+  getTableData()
+}
+
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
+}
+
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+// 排序
+const sortChange = ({ prop, order }) => {
+  if (prop) {
+    if (prop === 'ID') {
+      prop = 'id'
     }
+<<<<<<< HEAD
   },
   created() {
     this.getTableData()
@@ -260,92 +293,157 @@ export default {
     },
     openDialog(type) {
       switch (type) {
-        case 'addApi':
-          this.dialogTitle = '新增Api'
-          break
-        case 'edit':
-          this.dialogTitle = '编辑Api'
-          break
-        default:
-          break
-      }
-      this.type = type
-      this.dialogFormVisible = true
-    },
-    async editApi(row) {
-      const res = await getApiById({ id: row.ID })
-      this.form = res.data.api
-      this.openDialog('edit')
-    },
-    async deleteApi(row) {
-      this.$confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(async() => {
-          const res = await deleteApi(row)
-          if (res.code === 0) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            if (this.tableData.length === 1 && this.page > 1) {
-              this.page--
-            }
-            this.getTableData()
-          }
-        })
-    },
-    async enterDialog() {
-      this.$refs.apiForm.validate(async valid => {
-        if (valid) {
-          switch (this.type) {
-            case 'addApi':
-              {
-                const res = await createApi(this.form)
-                if (res.code === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: '添加成功',
-                    showClose: true
-                  })
-                }
-                this.getTableData()
-                this.closeDialog()
-              }
+=======
+    searchInfo.value.orderKey = toSQLLine(prop)
+    searchInfo.value.desc = order === 'descending'
+  }
+  getTableData()
+}
 
-              break
-            case 'edit':
-              {
-                const res = await updateApi(this.form)
-                if (res.code === 0) {
-                  this.$message({
-                    type: 'success',
-                    message: '编辑成功',
-                    showClose: true
-                  })
-                }
-                this.getTableData()
-                this.closeDialog()
-              }
-              break
-            default:
-              // eslint-disable-next-line no-lone-blocks
-              {
-                this.$message({
-                  type: 'error',
-                  message: '未知操作',
-                  showClose: true
-                })
-              }
-              break
-          }
-        }
-      })
-    }
+// 查询
+const getTableData = async() => {
+  const table = await getApiList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
   }
 }
+
+getTableData()
+
+// 批量操作
+const handleSelectionChange = (val) => {
+  apis.value = val
+}
+
+const deleteVisible = ref(false)
+const onDelete = async() => {
+  const ids = apis.value.map(item => item.ID)
+  const res = await deleteApisByIds({ ids })
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+    if (tableData.value.length === ids.length && page.value > 1) {
+      page.value--
+    }
+    deleteVisible.value = false
+    getTableData()
+  }
+}
+
+// 弹窗相关
+const apiForm = ref(null)
+const initForm = () => {
+  apiForm.value.resetFields()
+  form.value = {
+    path: '',
+    apiGroup: '',
+    method: '',
+    description: ''
+  }
+}
+
+const dialogTitle = ref('新增Api')
+const dialogFormVisible = ref(false)
+const openDialog = (key) => {
+  switch (key) {
+    case 'addApi':
+      dialogTitle.value = '新增Api'
+      break
+    case 'edit':
+      dialogTitle.value = '编辑Api'
+      break
+    default:
+      break
+  }
+  type.value = key
+  dialogFormVisible.value = true
+}
+const closeDialog = () => {
+  initForm()
+  dialogFormVisible.value = false
+}
+
+const editApiFunc = async(row) => {
+  const res = await getApiById({ id: row.ID })
+  form.value = res.data.api
+  openDialog('edit')
+}
+
+const enterDialog = async() => {
+  apiForm.value.validate(async valid => {
+    if (valid) {
+      switch (type.value) {
+>>>>>>> 5a3f175d88254ba6949426233a355d2d21b270d1
+        case 'addApi':
+          {
+            const res = await createApi(form.value)
+            if (res.code === 0) {
+              ElMessage({
+                type: 'success',
+                message: '添加成功',
+                showClose: true
+              })
+            }
+            getTableData()
+            closeDialog()
+          }
+
+          break
+        case 'edit':
+          {
+            const res = await updateApi(form.value)
+            if (res.code === 0) {
+              ElMessage({
+                type: 'success',
+                message: '编辑成功',
+                showClose: true
+              })
+            }
+            getTableData()
+            closeDialog()
+          }
+          break
+        default:
+          // eslint-disable-next-line no-lone-blocks
+          {
+            ElMessage({
+              type: 'error',
+              message: '未知操作',
+              showClose: true
+            })
+          }
+          break
+      }
+    }
+  })
+}
+
+const deleteApiFunc = async(row) => {
+  ElMessageBox.confirm('此操作将永久删除所有角色下该api, 是否继续?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  })
+    .then(async() => {
+      const res = await deleteApi(row)
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: '删除成功!'
+        })
+        if (tableData.value.length === 1 && page.value > 1) {
+          page.value--
+        }
+        getTableData()
+      }
+    })
+}
+
 </script>
 
 <style scoped lang="scss">

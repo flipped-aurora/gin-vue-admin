@@ -22,22 +22,22 @@
           <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
         </el-form-item>{{ end }}{{ end }}{{ end }}
         <el-form-item>
-          <el-button size="mini" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="mini" icon="refresh" @click="onReset">重置</el-button>
+          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button size="mini" type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <el-button size="small" type="primary" icon="plus" @click="openDialog">新增</el-button>
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="deleteVisible = false">取消</el-button>
-                <el-button size="mini" type="primary" @click="onDelete">确定</el-button>
+                <el-button size="small" type="text" @click="deleteVisible = false">取消</el-button>
+                <el-button size="small" type="primary" @click="onDelete">确定</el-button>
             </div>
             <template #reference>
-                <el-button icon="delete" size="mini" style="margin-left: 10px;" :disabled="!multipleSelection.length">删除</el-button>
+                <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
             </template>
             </el-popover>
         </div>
@@ -57,7 +57,7 @@
         {{- if .DictType}}
         <el-table-column align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
-            {{"{{"}} filterDict(scope.row.{{.FieldJson}},"{{.DictType}}") {{"}}"}}
+            {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
             </template>
         </el-table-column>
         {{- else if eq .FieldType "bool" }}
@@ -69,8 +69,8 @@
         {{- end }}
         <el-table-column align="left" label="按钮组">
             <template #default="scope">
-            <el-button type="text" icon="edit" size="small" class="table-button" @click="update{{.StructName}}(scope.row)">变更</el-button>
-            <el-button type="text" icon="delete" size="mini" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button type="text" icon="edit" size="small" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
+            <el-button type="text" icon="delete" size="small" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -125,6 +125,12 @@
 </template>
 
 <script>
+export default {
+  name: '{{.StructName}}'
+}
+</script>
+
+<script setup>
 import {
   create{{.StructName}},
   delete{{.StructName}},
@@ -132,112 +138,19 @@ import {
   update{{.StructName}},
   find{{.StructName}},
   get{{.StructName}}List
-} from '@/api/{{.PackageName}}' //  此处请自行替换地址
-import infoList from '@/mixins/infoList'
-export default {
-  name: '{{.StructName}}',
-  mixins: [infoList],
-  data() {
-    return {
-      listApi: get{{ .StructName }}List,
-      dialogFormVisible: false,
-      type: '',
-      deleteVisible: false,
-      multipleSelection: [],
-      {{- range $index, $element := .DictTypes }}
-      {{ $element }}Options: [],
-      {{- end }}
-      formData: {
-    {{- range .Fields}}
-      {{- if eq .FieldType "bool" }}
-        {{.FieldJson}}: false,
-      {{- end }}
-      {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-      {{- end }}
-      {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if .DictType}} undefined{{ else }} 0{{- end }},
-      {{- end }}
-      {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-      {{- end }}
-      {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-      {{- end }}
+} from '@/api/{{.PackageName}}'
+
+// 全量引入格式化工具 请按需保留
+import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { ref } from 'vue'
+
+// 自动化生成的字典（可能为空）以及字段
+    {{- range $index, $element := .DictTypes}}
+const {{ $element }}Options = ref([])
     {{- end }}
-      }
-    }
-  },
-  async created() {
-    await this.getTableData()
-{{- range $index, $element := .DictTypes }}
-    await this.getDict('{{$element}}')
-{{- end }}
-  },
-  methods: {
-  onReset() {
-    this.searchInfo = {}
-  },
-  // 条件搜索前端看此方法
-    onSubmit() {
-      this.page = 1
-      this.pageSize = 10
-      {{- range .Fields}}{{- if eq .FieldType "bool" }}
-      if (this.searchInfo.{{.FieldJson}} === ""){
-        this.searchInfo.{{.FieldJson}}=null
-      }{{ end }}{{ end }}
-      this.getTableData()
-    },
-    handleSelectionChange(val) {
-      this.multipleSelection = val
-    },
-    deleteRow(row) {
-      this.$confirm('确定要删除吗?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.delete{{.StructName}}(row)
-      })
-    },
-    async onDelete() {
-      const ids = []
-      if (this.multipleSelection.length === 0) {
-        this.$message({
-          type: 'warning',
-          message: '请选择要删除的数据'
-        })
-        return
-      }
-      this.multipleSelection &&
-        this.multipleSelection.map(item => {
-          ids.push(item.ID)
-        })
-      const res = await delete{{.StructName}}ByIds({ ids })
-      if (res.code === 0) {
-        this.$message({
-          type: 'success',
-          message: '删除成功'
-        })
-        if (this.tableData.length === ids.length && this.page > 1) {
-          this.page--
-        }
-        this.deleteVisible = false
-        this.getTableData()
-      }
-    },
-    async update{{.StructName}}(row) {
-      const res = await find{{.StructName}}({ ID: row.ID })
-      this.type = 'update'
-      if (res.code === 0) {
-        this.formData = res.data.re{{.Abbreviation}}
-        this.dialogFormVisible = true
-      }
-    },
-    closeDialog() {
-      this.dialogFormVisible = false
-      this.formData = {
-      {{- range .Fields}}
+const formData = ref({
+        {{- range .Fields}}
         {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
         {{- end }}
@@ -253,49 +166,203 @@ export default {
         {{- if eq .FieldType "float64" }}
         {{.FieldJson}}: 0,
         {{- end }}
-      {{- end }}
+        {{- end }}
+        })
+
+// =========== 表格控制部分 ===========
+const page = ref(1)
+const total = ref(0)
+const pageSize = ref(10)
+const tableData = ref([])
+const searchInfo = ref({})
+
+// 重置
+const onReset = () => {
+  searchInfo.value = {}
+}
+
+// 搜索
+const onSubmit = () => {
+  page.value = 1
+  pageSize.value = 10
+{{- range .Fields}}{{- if eq .FieldType "bool" }}
+  if (searchInfo.value.{{.FieldJson}} === ""){
+      searchInfo.value.{{.FieldJson}}=null
+  }{{ end }}{{ end }}
+  getTableData()
+}
+
+// 分页
+const handleSizeChange = (val) => {
+  pageSize.value = val
+  getTableData()
+}
+
+// 修改页面容量
+const handleCurrentChange = (val) => {
+  page.value = val
+  getTableData()
+}
+
+// 查询
+const getTableData = async() => {
+  const table = await get{{.StructName}}List({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  if (table.code === 0) {
+    tableData.value = table.data.list
+    total.value = table.data.total
+    page.value = table.data.page
+    pageSize.value = table.data.pageSize
+  }
+}
+
+getTableData()
+
+// ============== 表格控制部分结束 ===============
+
+// 获取需要的字典 可能为空 按需保留
+const setOptions = async () =>{
+{{- range $index, $element := .DictTypes }}
+    {{ $element }}Options.value = await getDictFunc('{{$element}}')
+{{- end }}
+}
+
+// 获取需要的字典 可能为空 按需保留
+setOptions()
+
+
+// 多选数据
+const multipleSelection = ref([])
+// 多选
+const handleSelectionChange = (val) => {
+    multipleSelection.value = val
+}
+
+// 删除行
+const deleteRow = (row) => {
+    ElMessageBox.confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+    }).then(() => {
+            delete{{.StructName}}Func(row)
+        })
+    }
+
+
+// 批量删除控制标记
+const deleteVisible = ref(false)
+
+// 多选删除
+const onDelete = async() => {
+      const ids = []
+      if (multipleSelection.value.length === 0) {
+        ElMessage({
+          type: 'warning',
+          message: '请选择要删除的数据'
+        })
+        return
       }
-    },
-    async delete{{.StructName}}(row) {
-      const res = await delete{{.StructName}}({ ID: row.ID })
+      multipleSelection.value &&
+        multipleSelection.value.map(item => {
+          ids.push(item.ID)
+        })
+      const res = await delete{{.StructName}}ByIds({ ids })
       if (res.code === 0) {
-        this.$message({
+        ElMessage({
           type: 'success',
           message: '删除成功'
         })
-        if (this.tableData.length === 1 && this.page > 1) {
-          this.page--
+        if (tableData.value.length === ids.length && page.value > 1) {
+          page.value--
         }
-        this.getTableData()
+        deleteVisible.value = false
+        getTableData()
       }
-    },
-    async enterDialog() {
+    }
+
+// 行为控制标记（弹窗内部需要增还是改）
+const type = ref('')
+
+// 更新行
+const update{{.StructName}}Func = async(row) => {
+    const res = await find{{.StructName}}({ ID: row.ID })
+    type.value = 'update'
+    if (res.code === 0) {
+        formData.value = res.data.re{{.Abbreviation}}
+        dialogFormVisible.value = true
+    }
+}
+
+
+// 删除行
+const delete{{.StructName}}Func = async (row) => {
+    const res = await delete{{.StructName}}({ ID: row.ID })
+    if (res.code === 0) {
+        ElMessage({
+                type: 'success',
+                message: '删除成功'
+            })
+            if (tableData.value.length === 1 && page.value > 1) {
+            page.value--
+        }
+        getTableData()
+    }
+}
+
+// 弹窗控制标记
+const dialogFormVisible = ref(false)
+
+// 打开弹窗
+const openDialog = () => {
+    type.value = 'create'
+    dialogFormVisible.value = true
+}
+
+// 关闭弹窗
+const closeDialog = () => {
+    dialogFormVisible.value = false
+    formData.value = {
+    {{- range .Fields}}
+        {{- if eq .FieldType "bool" }}
+        {{.FieldJson}}: false,
+        {{- end }}
+        {{- if eq .FieldType "string" }}
+        {{.FieldJson}}: '',
+        {{- end }}
+        {{- if eq .FieldType "int" }}
+        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+        {{- end }}
+        {{- if eq .FieldType "time.Time" }}
+        {{.FieldJson}}: new Date(),
+        {{- end }}
+        {{- if eq .FieldType "float64" }}
+        {{.FieldJson}}: 0,
+        {{- end }}
+        {{- end }}
+        }
+}
+// 弹窗确定
+const enterDialog = async () => {
       let res
-      switch (this.type) {
+      switch (type.value) {
         case 'create':
-          res = await create{{.StructName}}(this.formData)
+          res = await create{{.StructName}}(formData.value)
           break
         case 'update':
-          res = await update{{.StructName}}(this.formData)
+          res = await update{{.StructName}}(formData.value)
           break
         default:
-          res = await create{{.StructName}}(this.formData)
+          res = await create{{.StructName}}(formData.value)
           break
       }
       if (res.code === 0) {
-        this.$message({
+        ElMessage({
           type: 'success',
           message: '创建/更改成功'
         })
-        this.closeDialog()
-        this.getTableData()
+        closeDialog()
+        getTableData()
       }
-    },
-    openDialog() {
-      this.type = 'create'
-      this.dialogFormVisible = true
-    }
-  },
 }
 </script>
 

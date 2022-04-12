@@ -7,7 +7,6 @@ import (
 	"github.com/casbin/casbin/v2"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -26,13 +25,7 @@ func (casbinService *CasbinService) UpdateCasbin(authorityId string, casbinInfos
 	casbinService.ClearCasbin(0, authorityId)
 	rules := [][]string{}
 	for _, v := range casbinInfos {
-		cm := system.CasbinModel{
-			Ptype:       "p",
-			AuthorityId: authorityId,
-			Path:        v.Path,
-			Method:      v.Method,
-		}
-		rules = append(rules, []string{cm.AuthorityId, cm.Path, cm.Method})
+		rules = append(rules, []string{authorityId, v.Path, v.Method})
 	}
 	e := casbinService.Casbin()
 	success, _ := e.AddPolicies(rules)
@@ -49,7 +42,7 @@ func (casbinService *CasbinService) UpdateCasbin(authorityId string, casbinInfos
 //@return: error
 
 func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
-	err := global.GVA_DB.Table("casbin_rule").Model(&system.CasbinModel{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
+	err := global.GVA_DB.Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error

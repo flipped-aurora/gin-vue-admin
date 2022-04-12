@@ -1,27 +1,49 @@
 package system
 
 import (
+	"context"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	"gorm.io/gorm"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/pkg/errors"
 )
 
-var ViewAuthorityMenuMysql = new(viewAuthorityMenuMysql)
+const initOrderMenuViewMysql = initOrderMenuAuthority + 1
 
-type viewAuthorityMenuMysql struct{}
+type initMenuViewMysql struct{}
 
-func (v *viewAuthorityMenuMysql) TableName() string {
-	var entity system.SysMenu
-	return entity.TableName()
+// auto run
+func init() {
+	system.RegisterInit(initOrderMenuViewMysql, &initMenuViewMysql{})
 }
 
-func (v *viewAuthorityMenuMysql) Initialize() error {
-	var entity AuthorityMenus
+func (i initMenuViewMysql) InitializerName() string {
+	return fmt.Sprintf("mysql 视图<%s>", sysModel.SysMenu{}.TableName())
+}
+
+func (i *initMenuViewMysql) InitializeData(ctx context.Context) (context.Context, error) {
+	return ctx, nil
+}
+
+func (i *initMenuViewMysql) DataInserted(ctx context.Context) bool {
+	return true // ignore
+}
+
+func (v *initMenuViewMysql) MigrateTable(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
+	if s, ok := ctx.Value("dbtype").(string); !ok || s != "mysql" {
+		return ctx, nil // ignore
+	}
+	joinTableName := db.Model(&sysModel.SysAuthority{}).Association("SysBaseMenus").Relationship.JoinTable.Name
 	sql := `
-	CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW @table_name AS
+	CREATE OR REPLACE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW @table_name AS
 	select @menus.id                AS id,
 		   @menus.path              AS path,
 		   @menus.icon              AS icon,
@@ -43,18 +65,23 @@ func (v *viewAuthorityMenuMysql) Initialize() error {
 	from (@authorities_menus
 			 join @menus on ((@authorities_menus.sys_base_menu_id = @menus.id)));
 	`
-	sql = strings.ReplaceAll(sql, "@table_name", v.TableName())
-	sql = strings.ReplaceAll(sql, "@menus", "sys_base_menus")
-	sql = strings.ReplaceAll(sql, "@authorities_menus", entity.TableName())
-	if err := global.GVA_DB.Exec(sql).Error; err != nil {
-		return errors.Wrap(err, v.TableName()+"视图创建失败!")
+	sql = strings.ReplaceAll(sql, "@table_name", sysModel.SysMenu{}.TableName())
+	sql = strings.ReplaceAll(sql, "@menus", sysModel.SysBaseMenu{}.TableName())
+	sql = strings.ReplaceAll(sql, "@authorities_menus", joinTableName)
+	if err := db.Exec(sql).Error; err != nil {
+		return ctx, errors.Wrap(err, sysModel.SysMenu{}.TableName()+"视图创建失败!")
 	}
-	return nil
+	return ctx, nil
 }
 
-func (v *viewAuthorityMenuMysql) CheckDataExist() bool {
-	err1 := global.GVA_DB.Find(&[]system.SysMenu{}).Error
-	err2 := errors.New(fmt.Sprintf("Error 1146: Table '%v.%v' doesn't exist", global.GVA_CONFIG.Mysql.Dbname, v.TableName()))
+func (i *initMenuViewMysql) TableCreated(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	err1 := db.Find(&[]sysModel.SysMenu{}).Error
+	err2 := errors.New(fmt.Sprintf("Error 1146: Table '%v.%v' doesn't exist",
+		global.GVA_CONFIG.Mysql.Dbname, sysModel.SysMenu{}.TableName()))
 	if errors.As(err1, &err2) {
 		return false
 	}

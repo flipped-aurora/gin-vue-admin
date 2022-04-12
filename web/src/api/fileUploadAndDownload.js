@@ -29,3 +29,16 @@ export const deleteFile = (data) => {
     data
   })
 }
+
+/**
+ * 编辑文件名或者备注
+ * @param data
+ * @returns {*}
+ */
+export const editFileName = (data) => {
+  return service({
+    url: '/fileUploadAndDownload/editFileName',
+    method: 'post',
+    data
+  })
+}

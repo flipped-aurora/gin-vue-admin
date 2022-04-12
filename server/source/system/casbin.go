@@ -1,22 +1,48 @@
 package system
 
 import (
+	"context"
 	adapter "github.com/casbin/gorm-adapter/v3"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
-var Casbin = new(casbin)
+const initOrderCasbin = initOrderApi + 1
 
-type casbin struct{}
+type initCasbin struct{}
 
-func (c *casbin) TableName() string {
+// auto run
+func init() {
+	system.RegisterInit(initOrderCasbin, &initCasbin{})
+}
+
+func (i *initCasbin) MigrateTable(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
+	return ctx, db.AutoMigrate(&adapter.CasbinRule{})
+}
+
+func (i *initCasbin) TableCreated(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	return db.Migrator().HasTable(&adapter.CasbinRule{})
+}
+
+func (i initCasbin) InitializerName() string {
 	var entity adapter.CasbinRule
 	return entity.TableName()
 }
 
-func (c *casbin) Initialize() error {
+func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
 	entities := []adapter.CasbinRule{
 		{PType: "p", V0: "888", V1: "/base/login", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/user/admin_register", V2: "POST"},
@@ -208,14 +234,20 @@ func (c *casbin) Initialize() error {
 		{PType: "p", V0: "9528", V1: "/autoCode/createTemp", V2: "POST"},
 		{PType: "p", V0: "9528", V1: "/user/getUserInfo", V2: "GET"},
 	}
-	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, c.TableName()+"表数据初始化失败!")
+	if err := db.Create(&entities).Error; err != nil {
+		return ctx, errors.Wrap(err, "Casbin 表 ("+i.InitializerName()+") 数据初始化失败!")
 	}
-	return nil
+	next := context.WithValue(ctx, i.InitializerName(), entities)
+	return next, nil
 }
 
-func (c *casbin) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where(adapter.CasbinRule{PType: "p", V0: "9528", V1: "GET", V2: "/user/getUserInfo"}).First(&adapter.CasbinRule{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
+func (i *initCasbin) DataInserted(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	if errors.Is(db.Where(adapter.CasbinRule{PType: "p", V0: "9528", V1: "GET", V2: "/user/getUserInfo"}).
+		First(&adapter.CasbinRule{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
 		return false
 	}
 	return true

@@ -1,39 +1,70 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"context"
+	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
-var Dictionary = new(dictionary)
+const initOrderDict = initOrderCasbin + 1
 
-type dictionary struct{}
+type initDict struct{}
 
-func (d *dictionary) TableName() string {
-	return "sys_dictionaries"
+// auto run
+func init() {
+	system.RegisterInit(initOrderDict, &initDict{})
 }
 
-func (d *dictionary) Initialize() error {
-	status := new(bool)
-	*status = true
-	entities := []system.SysDictionary{
-		{GVA_MODEL: global.GVA_MODEL{ID: 1}, Name: "性别", Type: "gender", Status: status, Desc: "性别字典"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 2}, Name: "数据库int类型", Type: "int", Status: status, Desc: "int类型对应的数据库类型"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 3}, Name: "数据库时间日期类型", Type: "time.Time", Status: status, Desc: "数据库时间日期类型"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 4}, Name: "数据库浮点型", Type: "float64", Status: status, Desc: "数据库浮点型"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 5}, Name: "数据库字符串", Type: "string", Status: status, Desc: "数据库字符串"},
-		{GVA_MODEL: global.GVA_MODEL{ID: 6}, Name: "数据库bool类型", Type: "bool", Status: status, Desc: "数据库bool类型"},
+func (i *initDict) MigrateTable(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
 	}
-	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, d.TableName()+"表数据初始化失败!")
-	}
-	return nil
+	return ctx, db.AutoMigrate(&sysModel.SysDictionary{})
 }
 
-func (d *dictionary) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("type = ?", "bool").First(&system.SysDictionary{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
+func (i *initDict) TableCreated(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	return db.Migrator().HasTable(&sysModel.SysDictionary{})
+}
+
+func (i initDict) InitializerName() string {
+	return sysModel.SysDictionary{}.TableName()
+}
+
+func (i *initDict) InitializeData(ctx context.Context) (next context.Context, err error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
+	True := true
+	entities := []sysModel.SysDictionary{
+		{Name: "性别", Type: "gender", Status: &True, Desc: "性别字典"},
+		{Name: "数据库int类型", Type: "int", Status: &True, Desc: "int类型对应的数据库类型"},
+		{Name: "数据库时间日期类型", Type: "time.Time", Status: &True, Desc: "数据库时间日期类型"},
+		{Name: "数据库浮点型", Type: "float64", Status: &True, Desc: "数据库浮点型"},
+		{Name: "数据库字符串", Type: "string", Status: &True, Desc: "数据库字符串"},
+		{Name: "数据库bool类型", Type: "bool", Status: &True, Desc: "数据库bool类型"},
+	}
+
+	if err = db.Create(&entities).Error; err != nil {
+		return ctx, errors.Wrap(err, sysModel.SysDictionary{}.TableName()+"表数据初始化失败!")
+	}
+	next = context.WithValue(ctx, i.InitializerName(), entities)
+	return next, nil
+}
+
+func (i *initDict) DataInserted(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	if errors.Is(db.Where("type = ?", "bool").First(&sysModel.SysDictionary{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
 		return false
 	}
 	return true

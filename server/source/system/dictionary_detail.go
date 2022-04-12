@@ -1,59 +1,113 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"context"
+	"fmt"
+	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
-var DictionaryDetail = new(dictionaryDetail)
+const initOrderDictDetail = initOrderDict + 1
 
-type dictionaryDetail struct{}
+type initDictDetail struct{}
 
-func (d *dictionaryDetail) TableName() string {
-	return "sys_dictionary_details"
+// auto run
+func init() {
+	system.RegisterInit(initOrderDictDetail, &initDictDetail{})
 }
 
-func (d *dictionaryDetail) Initialize() error {
-	status := new(bool)
-	*status = true
-	entities := []system.SysDictionaryDetail{
-		{Label: "男", Value: 1, Status: status, Sort: 1, SysDictionaryID: 1},
-		{Label: "女", Value: 2, Status: status, Sort: 2, SysDictionaryID: 1},
-		{Label: "smallint", Value: 1, Status: status, Sort: 1, SysDictionaryID: 2},
-		{Label: "mediumint", Value: 2, Status: status, Sort: 2, SysDictionaryID: 2},
-		{Label: "int", Value: 3, Status: status, Sort: 3, SysDictionaryID: 2},
-		{Label: "bigint", Value: 4, Status: status, Sort: 4, SysDictionaryID: 2},
-		{Label: "date", Status: status, SysDictionaryID: 3},
-		{Label: "time", Value: 1, Status: status, Sort: 1, SysDictionaryID: 3},
-		{Label: "year", Value: 2, Status: status, Sort: 2, SysDictionaryID: 3},
-		{Label: "datetime", Value: 3, Status: status, Sort: 3, SysDictionaryID: 3},
-		{Label: "timestamp", Value: 5, Status: status, Sort: 5, SysDictionaryID: 3},
-		{Label: "float", Status: status, SysDictionaryID: 4},
-		{Label: "double", Value: 1, Status: status, Sort: 1, SysDictionaryID: 4},
-		{Label: "decimal", Value: 2, Status: status, Sort: 2, SysDictionaryID: 4},
-		{Label: "char", Status: status, SysDictionaryID: 5},
-		{Label: "varchar", Value: 1, Status: status, Sort: 1, SysDictionaryID: 5},
-		{Label: "tinyblob", Value: 2, Status: status, Sort: 2, SysDictionaryID: 5},
-		{Label: "tinytext", Value: 3, Status: status, Sort: 3, SysDictionaryID: 5},
-		{Label: "text", Value: 4, Status: status, Sort: 4, SysDictionaryID: 5},
-		{Label: "blob", Value: 5, Status: status, Sort: 5, SysDictionaryID: 5},
-		{Label: "mediumblob", Value: 6, Status: status, Sort: 6, SysDictionaryID: 5},
-		{Label: "mediumtext", Value: 7, Status: status, Sort: 7, SysDictionaryID: 5},
-		{Label: "longblob", Value: 8, Status: status, Sort: 8, SysDictionaryID: 5},
-		{Label: "longtext", Value: 9, Status: status, Sort: 9, SysDictionaryID: 5},
-		{Label: "tinyint", Status: status, SysDictionaryID: 6},
+func (i *initDictDetail) MigrateTable(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
 	}
-	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, d.TableName()+"表数据初始化失败!")
-	}
-	return nil
+	return ctx, db.AutoMigrate(&sysModel.SysDictionaryDetail{})
 }
 
-func (d *dictionaryDetail) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("id = ?", 23).First(&system.SysDictionaryDetail{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
+func (i *initDictDetail) TableCreated(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
 		return false
 	}
-	return true
+	return db.Migrator().HasTable(&sysModel.SysDictionaryDetail{})
+}
+
+func (i initDictDetail) InitializerName() string {
+	return sysModel.SysDictionaryDetail{}.TableName()
+}
+
+func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
+	dicts, ok := ctx.Value(initDict{}.InitializerName()).([]sysModel.SysDictionary)
+	if !ok {
+		return ctx, errors.Wrap(system.ErrMissingDependentContext,
+			fmt.Sprintf("未找到 %s 表初始化数据", sysModel.SysDictionary{}.TableName()))
+	}
+	True := true
+	dicts[0].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
+		{Label: "男", Value: 1, Status: &True, Sort: 1},
+		{Label: "女", Value: 2, Status: &True, Sort: 2},
+	}
+
+	dicts[1].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
+		{Label: "smallint", Value: 1, Status: &True, Sort: 1},
+		{Label: "mediumint", Value: 2, Status: &True, Sort: 2},
+		{Label: "int", Value: 3, Status: &True, Sort: 3},
+		{Label: "bigint", Value: 4, Status: &True, Sort: 4},
+	}
+
+	dicts[2].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
+		{Label: "date", Status: &True},
+		{Label: "time", Value: 1, Status: &True, Sort: 1},
+		{Label: "year", Value: 2, Status: &True, Sort: 2},
+		{Label: "datetime", Value: 3, Status: &True, Sort: 3},
+		{Label: "timestamp", Value: 5, Status: &True, Sort: 5},
+	}
+	dicts[3].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
+		{Label: "float", Status: &True},
+		{Label: "double", Value: 1, Status: &True, Sort: 1},
+		{Label: "decimal", Value: 2, Status: &True, Sort: 2},
+	}
+
+	dicts[4].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
+		{Label: "char", Status: &True},
+		{Label: "varchar", Value: 1, Status: &True, Sort: 1},
+		{Label: "tinyblob", Value: 2, Status: &True, Sort: 2},
+		{Label: "tinytext", Value: 3, Status: &True, Sort: 3},
+		{Label: "text", Value: 4, Status: &True, Sort: 4},
+		{Label: "blob", Value: 5, Status: &True, Sort: 5},
+		{Label: "mediumblob", Value: 6, Status: &True, Sort: 6},
+		{Label: "mediumtext", Value: 7, Status: &True, Sort: 7},
+		{Label: "longblob", Value: 8, Status: &True, Sort: 8},
+		{Label: "longtext", Value: 9, Status: &True, Sort: 9},
+	}
+
+	dicts[5].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
+		{Label: "tinyint", Status: &True},
+	}
+	for _, dict := range dicts {
+		if err := db.Model(&dict).Association("SysDictionaryDetails").
+			Replace(dict.SysDictionaryDetails); err != nil {
+			return ctx, errors.Wrap(err, sysModel.SysDictionaryDetail{}.TableName()+"表数据初始化失败!")
+		}
+	}
+	return ctx, nil
+}
+
+func (i *initDictDetail) DataInserted(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	var dict sysModel.SysDictionary
+	if err := db.Preload("SysDictionaryDetails").
+		First(&dict, &sysModel.SysDictionary{Name: "数据库bool类型"}).Error; err != nil {
+		return false
+	}
+	return len(dict.SysDictionaryDetails) > 0 && dict.SysDictionaryDetails[0].Label == "tinyint"
 }

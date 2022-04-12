@@ -1,22 +1,48 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"context"
+	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
 
-var Api = new(api)
+type initApi struct{}
 
-type api struct{}
+const initOrderApi = system.InitOrderSystem + 1
 
-func (a *api) TableName() string {
-	return "sys_apis"
+// auto run
+func init() {
+	system.RegisterInit(initOrderApi, &initApi{})
 }
 
-func (a *api) Initialize() error {
-	entities := []system.SysApi{
+func (i initApi) InitializerName() string {
+	return sysModel.SysApi{}.TableName()
+}
+
+func (i *initApi) MigrateTable(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
+	return ctx, db.AutoMigrate(&sysModel.SysApi{})
+}
+
+func (i *initApi) TableCreated(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	return db.Migrator().HasTable(&sysModel.SysApi{})
+}
+
+func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return ctx, system.ErrMissingDBContext
+	}
+	entities := []sysModel.SysApi{
 		{ApiGroup: "base", Method: "POST", Path: "/base/login", Description: "用户登录(必选)"},
 
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: "jwt加入黑名单(退出，必选)"},
@@ -94,10 +120,6 @@ func (a *api) Initialize() error {
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/getSysHistory", Description: "查询回滚记录"},
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/delSysHistory", Description: "删除回滚记录"},
 
-
-
-
-
 		{ApiGroup: "系统字典详情", Method: "PUT", Path: "/sysDictionaryDetail/updateSysDictionaryDetail", Description: "更新字典内容"},
 		{ApiGroup: "系统字典详情", Method: "POST", Path: "/sysDictionaryDetail/createSysDictionaryDetail", Description: "新增字典内容"},
 		{ApiGroup: "系统字典详情", Method: "DELETE", Path: "/sysDictionaryDetail/deleteSysDictionaryDetail", Description: "删除字典内容"},
@@ -132,14 +154,20 @@ func (a *api) Initialize() error {
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/getAuthorityBtn", Description: "获取已有按钮权限"},
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/canRemoveAuthorityBtn", Description: "删除按钮"},
 	}
-	if err := global.GVA_DB.Create(&entities).Error; err != nil {
-		return errors.Wrap(err, a.TableName()+"表数据初始化失败!")
+	if err := db.Create(&entities).Error; err != nil {
+		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+"表数据初始化失败!")
 	}
-	return nil
+	next := context.WithValue(ctx, i.InitializerName(), entities)
+	return next, nil
 }
 
-func (a *api) CheckDataExist() bool {
-	if errors.Is(global.GVA_DB.Where("path = ? AND method = ?", "/excel/downloadTemplate", "GET").First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
+func (i *initApi) DataInserted(ctx context.Context) bool {
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	if errors.Is(db.Where("path = ? AND method = ?", "/authorityBtn/canRemoveAuthorityBtn", "POST").
+		First(&sysModel.SysApi{}).Error, gorm.ErrRecordNotFound) {
 		return false
 	}
 	return true

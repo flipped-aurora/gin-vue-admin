@@ -142,10 +142,10 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
 	}
-	response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
 }
-
 
 // CreatePackage
 // @Tags AutoCode
@@ -172,7 +172,6 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	}
 }
 
-
 // GetPackage
 // @Tags AutoCode
 // @Summary 获取package
@@ -182,16 +181,14 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建package成功"
 // @Router /autoCode/getPackage [post]
 func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
-	pkgs,err := autoCodeService.GetPackage()
+	pkgs, err := autoCodeService.GetPackage()
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"pkgs": pkgs},"获取成功", c)
+		response.OkWithDetailed(gin.H{"pkgs": pkgs}, "获取成功", c)
 	}
 }
-
-
 
 // DelPackage
 // @Tags AutoCode

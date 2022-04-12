@@ -11,3 +11,7 @@ type SysApi struct {
 	ApiGroup    string `json:"apiGroup" gorm:"comment:api组"`          // api组
 	Method      string `json:"method" gorm:"default:POST;comment:方法"` // 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
 }
+
+func (SysApi) TableName() string {
+	return "sys_apis"
+}

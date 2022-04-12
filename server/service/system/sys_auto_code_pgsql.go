@@ -1,8 +1,6 @@
 package system
 
 import (
-	"strings"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/pkg/errors"
@@ -74,17 +72,17 @@ func (a *autoCodePgsql) GetColumn(tableName string, dbName string) (data []respo
 										  where attribute.attrelid =
 												(select oid from pg_class class where class.relname = '@table_name') and attname =columns.COLUMN_NAME )) as column_comment
 		FROM INFORMATION_SCHEMA.COLUMNS columns
-		WHERE table_catalog = '@table_catalog'
+		WHERE table_catalog = '?'
 		  and table_schema = 'public'
-		  and table_name = '@table_name';
+		  and table_name = '?';
 	`
 	var entities []response.Column
 	db, _err := gorm.Open(postgres.Open(global.GVA_CONFIG.Pgsql.LinkDsn(dbName)), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
 	if _err != nil {
 		return nil, errors.Wrapf(err, "[pgsql] 连接 数据库(%s)的表(%s)失败!", dbName, tableName)
 	}
-	sql = strings.ReplaceAll(sql, "@table_catalog", dbName)
-	sql = strings.ReplaceAll(sql, "@table_name", tableName)
-	err = db.Raw(sql).Scan(&entities).Error
+	//sql = strings.ReplaceAll(sql, "@table_catalog", dbName)
+	//sql = strings.ReplaceAll(sql, "@table_name", tableName)
+	err = db.Raw(sql, dbName, tableName).Scan(&entities).Error
 	return entities, err
 }

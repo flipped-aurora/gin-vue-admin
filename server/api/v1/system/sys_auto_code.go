@@ -104,8 +104,9 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"dbs": dbs}, "获取成功", c)
 	}
-	response.OkWithDetailed(gin.H{"dbs": dbs}, "获取成功", c)
 }
 
 // GetTables

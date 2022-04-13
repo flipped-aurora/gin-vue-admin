@@ -127,7 +127,8 @@ const editFileNameFunc = async(row) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     inputPattern: /\S/,
-    inputErrorMessage: '不能为空'
+    inputErrorMessage: '不能为空',
+	inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
     // console.log(row)

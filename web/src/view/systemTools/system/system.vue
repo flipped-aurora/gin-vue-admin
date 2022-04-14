@@ -5,7 +5,11 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item title="系统配置" name="1">
           <el-form-item label="环境值">
-            <el-input v-model="config.system.env" />
+<!--            <el-input v-model="config.system.env" />-->
+            <el-select v-model="config.system.env" style="width:100%">
+              <el-option value="public" />
+              <el-option value="develop" />
+            </el-select>
           </el-form-item>
           <el-form-item label="端口值">
             <el-input v-model.number="config.system.addr" />
@@ -79,13 +83,13 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item title="Redis admin数据库配置" name="4">
-          <el-form-item label="db">
+          <el-form-item label="库">
             <el-input v-model="config.redis.db" />
           </el-form-item>
-          <el-form-item label="addr">
+          <el-form-item label="地址">
             <el-input v-model="config.redis.addr" />
           </el-form-item>
-          <el-form-item label="password">
+          <el-form-item label="密码">
             <el-input v-model="config.redis.password" />
           </el-form-item>
         </el-collapse-item>
@@ -120,28 +124,28 @@
         </el-collapse-item>
 
         <el-collapse-item title="验证码配置" name="7">
-          <el-form-item label="keyLong">
+          <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
           </el-form-item>
-          <el-form-item label="imgWidth">
+          <el-form-item label="平台宽度">
             <el-input v-model.number="config.captcha['img-width']" />
           </el-form-item>
-          <el-form-item label="imgHeight">
+          <el-form-item label="图片高度">
             <el-input v-model.number="config.captcha['img-height']" />
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item title="数据库配置" name="9">
           <template v-if="config.system['db-type'] === 'mysql'">
-            <el-form-item label="username">
+            <el-form-item label="用户名">
               <el-input v-model="config.mysql.username" />
             </el-form-item>
-            <el-form-item label="password">
+            <el-form-item label="密码">
               <el-input v-model="config.mysql.password" />
             </el-form-item>
-            <el-form-item label="path">
+            <el-form-item label="地址">
               <el-input v-model="config.mysql.path" />
             </el-form-item>
-            <el-form-item label="dbname">
+            <el-form-item label="数据库">
               <el-input v-model="config.mysql['db-name']" />
             </el-form-item>
             <el-form-item label="maxIdleConns">
@@ -150,21 +154,21 @@
             <el-form-item label="maxOpenConns">
               <el-input v-model.number="config.mysql['max-open-conns']" />
             </el-form-item>
-            <el-form-item label="logMode">
+            <el-form-item label="日志模式">
               <el-checkbox v-model="config.mysql['log-mode']" />
             </el-form-item>
           </template>
           <template v-if="config.system.dbType === 'pgsql'">
-            <el-form-item label="username">
+            <el-form-item label="用户名">
               <el-input v-model="config.pgsql.username" />
             </el-form-item>
-            <el-form-item label="password">
+            <el-form-item label="密码">
               <el-input v-model="config.pgsql.password" />
             </el-form-item>
-            <el-form-item label="path">
+            <el-form-item label="地址">
               <el-input v-model="config.pgsql.path" />
             </el-form-item>
-            <el-form-item label="dbname">
+            <el-form-item label="数据库">
               <el-input v-model="config.pgsql.dbname" />
             </el-form-item>
             <el-form-item label="maxIdleConns">
@@ -173,7 +177,7 @@
             <el-form-item label="maxOpenConns">
               <el-input v-model.number="config.pgsql['max-open-conns']" />
             </el-form-item>
-            <el-form-item label="logMode">
+            <el-form-item label="日志模式">
               <el-checkbox v-model="config.pgsql['log-mode']" />
             </el-form-item>
           </template>
@@ -212,28 +216,28 @@
           </template>
           <template v-if="config.system['oss-type'] === 'tencent-cos'">
             <h2>腾讯云COS上传配置</h2>
-            <el-form-item label="bucket">
+            <el-form-item label="存储桶名称">
               <el-input v-model="config['tencent-cos']['bucket']" />
             </el-form-item>
-            <el-form-item label="region">
+            <el-form-item label="所属地域">
               <el-input v-model="config['tencent-cos'].region" />
             </el-form-item>
             <el-form-item label="secretID">
-              <el-input v-model="config['tencent-cos'].secretID" />
+              <el-input v-model="config['tencent-cos']['secret-id']" />
             </el-form-item>
             <el-form-item label="secretKey">
-              <el-input v-model="config['tencent-cos'].secretKey" />
+              <el-input v-model="config['tencent-cos']['secret-key']" />
             </el-form-item>
-            <el-form-item label="pathPrefix">
-              <el-input v-model="config['tencent-cos'].pathPrefix" />
+            <el-form-item label="路径前缀">
+              <el-input v-model="config['tencent-cos']['path-prefix']" />
             </el-form-item>
-            <el-form-item label="baseURL">
-              <el-input v-model="config['tencent-cos'].baseURL" />
+            <el-form-item label="访问域名">
+              <el-input v-model="config['tencent-cos']['base-url']" />
             </el-form-item>
           </template>
           <template v-if="config.system['oss-type'] === 'aliyun-oss'">
             <h2>阿里云OSS上传配置</h2>
-            <el-form-item label="endpoint">
+            <el-form-item label="区域">
               <el-input v-model="config['aliyun-oss'].endpoint" />
             </el-form-item>
             <el-form-item label="accessKeyId">
@@ -242,22 +246,22 @@
             <el-form-item label="accessKeySecret">
               <el-input v-model="config['aliyun-oss']['access-key-secret']" />
             </el-form-item>
-            <el-form-item label="bucketName">
+            <el-form-item label="存储桶名称">
               <el-input v-model="config['aliyun-oss']['bucket-name']" />
             </el-form-item>
-            <el-form-item label="bucketUrl">
+            <el-form-item label="访问域名">
               <el-input v-model="config['aliyun-oss']['bucket-url']" />
             </el-form-item>
           </template>
           <template v-if="config.system['oss-type'] === 'huawei-obs'">
             <h2>华为云Obs上传配置</h2>
-            <el-form-item label="path">
+            <el-form-item label="路径">
               <el-input v-model="config['hua-wei-obs'].path" />
             </el-form-item>
-            <el-form-item label="bucket">
+            <el-form-item label="存储桶名称">
               <el-input v-model="config['hua-wei-obs'].bucket" />
             </el-form-item>
-            <el-form-item label="endpoint">
+            <el-form-item label="区域">
               <el-input v-model="config['hua-wei-obs'].endpoint" />
             </el-form-item>
             <el-form-item label="accessKey">

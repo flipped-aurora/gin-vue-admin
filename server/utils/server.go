@@ -19,7 +19,7 @@ const (
 type Server struct {
 	Os   Os   `json:"os"`
 	Cpu  Cpu  `json:"cpu"`
-	Rrm  Rrm  `json:"ram"`
+	Ram  Ram  `json:"ram"`
 	Disk Disk `json:"disk"`
 }
 
@@ -36,7 +36,7 @@ type Cpu struct {
 	Cores int       `json:"cores"`
 }
 
-type Rrm struct {
+type Ram struct {
 	UsedMB      int `json:"usedMb"`
 	TotalMB     int `json:"totalMb"`
 	UsedPercent int `json:"usedPercent"`
@@ -85,10 +85,10 @@ func InitCPU() (c Cpu, err error) {
 
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: InitRAM
-//@description: ARM信息
-//@return: r Rrm, err error
+//@description: RAM信息
+//@return: r Ram, err error
 
-func InitRAM() (r Rrm, err error) {
+func InitRAM() (r Ram, err error) {
 	if u, err := mem.VirtualMemory(); err != nil {
 		return r, err
 	} else {

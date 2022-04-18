@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
@@ -20,6 +21,14 @@ import (
 )
 
 var operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
+
+var respPool sync.Pool
+
+func init() {
+	respPool.New = func() interface{} {
+		return make([]byte, 1024)
+	}
+}
 
 func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -64,11 +73,13 @@ func OperationRecord() gin.HandlerFunc {
 			Body:   string(body),
 			UserID: userId,
 		}
-		// 上传文件时候 中间件日志进行裁断操作
-		if strings.Index(c.GetHeader("Content-Type"), "multipart/form-data") > -1 {
-			if len(record.Body) > 512 {
-				record.Body = "File or Length out of limit"
-			}
+
+		if len(record.Body) > 1024 {
+			// 截断
+			newBody := respPool.Get().([]byte)
+			copy(newBody, record.Body)
+			record.Body = string(newBody)
+			defer respPool.Put(newBody[:0])
 		}
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,

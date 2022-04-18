@@ -96,6 +96,14 @@ func OperationRecord() gin.HandlerFunc {
 		record.Latency = latency
 		record.Resp = writer.body.String()
 
+		if len(record.Resp) > 1024 {
+			// 截断
+			newBody := respPool.Get().([]byte)
+			copy(newBody, record.Resp)
+			record.Body = string(newBody)
+			defer respPool.Put(newBody[:0])
+		}
+
 		if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
 			global.GVA_LOG.Error("create operation record error:", zap.Error(err))
 		}

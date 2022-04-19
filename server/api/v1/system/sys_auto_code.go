@@ -203,7 +203,7 @@ func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
 func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
 	var a system.SysAutoCode
 	_ = c.ShouldBindJSON(&a)
-	err := autoCodeService.DelPackage(&a)
+	err := autoCodeService.DelPackage(a)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)

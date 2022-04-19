@@ -568,7 +568,7 @@ func (autoCodeService *AutoCodeService) GetPackage() (pkgList []system.SysAutoCo
 }
 
 func (AutoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error {
-	return global.GVA_DB.Delete(a).Error
+	return global.GVA_DB.Delete(&a).Error
 }
 
 func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) error {

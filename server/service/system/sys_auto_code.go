@@ -567,7 +567,7 @@ func (autoCodeService *AutoCodeService) GetPackage() (pkgList []system.SysAutoCo
 	return pkgList, err
 }
 
-func (AutoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error {
+func (autoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error {
 	return global.GVA_DB.Delete(&a).Error
 }
 

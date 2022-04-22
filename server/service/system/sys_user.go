@@ -45,9 +45,7 @@ func (userService *UserService) Login(u *system.SysUser) (err error, userInter *
 	var user system.SysUser
 	err = global.GVA_DB.Where("username = ?", u.Username).Preload("Authorities").Preload("Authority").First(&user).Error
 	if err == nil {
-		ok := utils.BcryptCheck(u.Password, user.Password)
-		fmt.Println(ok)
-		if !ok {
+		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return errors.New("密码错误"), nil
 		}
 		var am system.SysMenu

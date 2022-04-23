@@ -1,7 +1,7 @@
 package api
 
 type ApiGroup struct {
-	AliSmsApi
+	{{ .PlugName}}Api
 }
 
 var ApiGroupApp = new(ApiGroup)

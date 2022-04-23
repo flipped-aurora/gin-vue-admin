@@ -1,7 +1,7 @@
 package service
 
 type ServiceGroup struct {
-	AliSmsService
+	{{ .PlugName}}Service
 }
 
 var ServiceGroupApp = new(ServiceGroup)

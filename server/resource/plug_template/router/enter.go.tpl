@@ -1,7 +1,7 @@
 package router
 
 type RouterGroup struct {
-	AliSmsRouter
+	{{ .PlugName}}Router
 }
 
 var RouterGroupApp = new(RouterGroup)

@@ -1,18 +1,22 @@
-package plug
+package {{ .Snake}}
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .PlugName}}/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .PlugName}}/router"
+{{- if .HasGlobal }}
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .Snake}}/global"
+{{- end }}
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .Snake}}/router"
 	"github.com/gin-gonic/gin"
 )
 
 type {{ .PlugName}}Plugin struct {
 }
 
-func Create{{ .PlugName}}Plug() ({{- range .Global}} {{.Key}} {{.Type}} {{- end }})*{{ .PlugName}}Plugin {
+func Create{{ .PlugName}}Plug({{- range .Global}} {{.Key}} {{.Type}} {{- end }})*{{ .PlugName}}Plugin {
+{{- if .HasGlobal }}
 	{{- range .Global}}
 	    global.GlobalConfig.{{.Key}} = {{.Key}}
 	{{- end }}
+{{ end }}
 	return &{{ .PlugName}}Plugin{}
 }
 

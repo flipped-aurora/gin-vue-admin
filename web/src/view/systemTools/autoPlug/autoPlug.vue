@@ -6,7 +6,7 @@
           <el-input v-model="form.plugName" />
         </el-form-item>
         <el-form-item label="路由组">
-          <el-input v-model="form.routerGloup" />
+          <el-input v-model="form.routerGroup" />
         </el-form-item>
         <el-form-item label="使用全局属性">
           <el-checkbox v-model="form.hasGloabl" />
@@ -18,6 +18,9 @@
             </span>
             <span>
               <el-input v-model="i.type" placeholder="type" />
+            </span>
+            <span>
+              <el-input v-model="i.desc" placeholder="备注" />
             </span>
             <span>
               <el-button :icon="Plus" circle @click="addkv(form.global)" />
@@ -39,6 +42,9 @@
               <el-input v-model="i.type" placeholder="type" />
             </span>
             <span>
+              <el-input v-model="i.desc" placeholder="备注" />
+            </span>
+            <span>
               <el-button :icon="Plus" circle @click="addkv(form.request)" />
             </span>
             <span>
@@ -58,12 +64,18 @@
               <el-input v-model="i.type" placeholder="type" />
             </span>
             <span>
+              <el-input v-model="i.desc" placeholder="备注" />
+            </span>
+            <span>
               <el-button :icon="Plus" circle @click="addkv(form.response)" />
             </span>
             <span>
               <el-button :icon="Minus" circle @click="minkv(form.response,k)" />
             </span>
           </div>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="createPlug">创建</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -75,7 +87,9 @@ import {
   Plus,
   Minus
 } from '@element-plus/icons-vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
+
+import { createPlugApi } from '@/api/autoCode.js'
 
 import { reactive } from 'vue'
 
@@ -88,16 +102,26 @@ const form = reactive({
   global: [{
     key: '',
     type: '',
+    desc: '',
   }],
   request: [{
     key: '',
     type: '',
+    desc: '',
   }],
   response: [{
     key: '',
     type: '',
+    desc: '',
   }]
 })
+
+const createPlug = async() => {
+  const res = await createPlugApi(form)
+  if (res.code === 0) {
+    ElMessageBox('创建成功，插件已自动写入后端plugin目录下，请按照自己的逻辑进行创造')
+  }
+}
 
 const addkv = (arr) => {
   arr.push({

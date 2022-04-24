@@ -53,6 +53,12 @@ func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndD
 	return err
 }
 
+// EditFileName 编辑文件名或者备注
+func (e *FileUploadAndDownloadService) EditFileName(file example.ExaFileUploadAndDownload) (err error) {
+	var fileFromDb example.ExaFileUploadAndDownload
+	return global.GVA_DB.Where("id = ?", file.ID).First(&fileFromDb).Update("name", file.Name).Error
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetFileRecordInfoList
 //@description: 分页获取数据
@@ -62,8 +68,12 @@ func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndD
 func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
+	keyword := info.Keyword
 	db := global.GVA_DB.Model(&example.ExaFileUploadAndDownload{})
 	var fileLists []example.ExaFileUploadAndDownload
+	if len(keyword) > 0 {
+		db = db.Where("name LIKE ?", "%"+keyword+"%")
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

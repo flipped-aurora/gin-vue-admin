@@ -14,3 +14,7 @@ type SysDictionary struct {
 	Desc                 string                `json:"desc" form:"desc" gorm:"column:desc;comment:描述"`       // 描述
 	SysDictionaryDetails []SysDictionaryDetail `json:"sysDictionaryDetails" form:"sysDictionaryDetails"`
 }
+
+func (SysDictionary) TableName() string {
+	return "sys_dictionaries"
+}

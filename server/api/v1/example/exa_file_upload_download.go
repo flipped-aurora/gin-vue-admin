@@ -38,6 +38,18 @@ func (u *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, "上传成功", c)
 }
 
+// EditFileName 编辑文件名或者备注
+func (u *FileUploadAndDownloadApi) EditFileName(c *gin.Context) {
+	var file example.ExaFileUploadAndDownload
+	_ = c.ShouldBindJSON(&file)
+	if err := fileUploadAndDownloadService.EditFileName(file); err != nil {
+		global.GVA_LOG.Error("编辑失败!", zap.Error(err))
+		response.FailWithMessage("编辑失败", c)
+		return
+	}
+	response.OkWithMessage("编辑成功", c)
+}
+
 // @Tags ExaFileUploadAndDownload
 // @Summary 删除文件
 // @Security ApiKeyAuth

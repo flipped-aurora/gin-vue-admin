@@ -1,13 +1,13 @@
 package example
 
 import (
-	"os"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"os"
+	"strings"
 )
 
 type ExcelApi struct{}
@@ -28,6 +28,10 @@ type ExcelApi struct{}
 func (e *ExcelApi) ExportExcel(c *gin.Context) {
 	var excelInfo example.ExcelInfo
 	_ = c.ShouldBindJSON(&excelInfo)
+	if strings.Index(excelInfo.FileName, "..") > -1 {
+		response.FailWithMessage("包含非法字符", c)
+		return
+	}
 	filePath := global.GVA_CONFIG.Excel.Dir + excelInfo.FileName
 	err := excelService.ParseInfoList2Excel(excelInfo.InfoList, filePath)
 	if err != nil {

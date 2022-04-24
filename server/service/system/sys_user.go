@@ -54,7 +54,6 @@ func (userService *UserService) Login(u *system.SysUser) (err error, userInter *
 			user.Authority.DefaultRouter = "404"
 		}
 	}
-	fmt.Println(err)
 
 	return err, &user
 }

@@ -11,8 +11,8 @@
 </template>
 <script setup>
 import * as echarts from 'echarts'
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
-import 'echarts/theme/macarons'
+import { nextTick, onMounted, onUnmounted, ref , shallowRef } from 'vue'
+// import 'echarts/theme/macarons'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -43,10 +43,10 @@ for (var i = 0; i < data.length; i++) {
   dataShadow.push(yMax)
 }
 
-const chart = ref(null)
+const chart = shallowRef(null)
 const echart = ref(null)
 const initChart = () => {
-  chart.value = echarts.init(echart.value, 'macarons')
+  chart.value = echarts.init(echart.value, /*'macarons'*/)
   setOptions()
 }
 const setOptions = () => {

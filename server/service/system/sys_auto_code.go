@@ -17,7 +17,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
+	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -28,7 +28,8 @@ import (
 
 const (
 	autoPath           = "autocode_template/"
-	basePath           = "resource/template"
+	autocodePath       = "resource/autocode_template"
+	plugPath           = "resource/plug_template"
 	packageService     = "service/%s/enter.go"
 	packageServiceName = "service"
 	packageRouter      = "router/%s/enter.go"
@@ -483,7 +484,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 		utils.TrimSpace(field)
 	}
 	// 获取 basePath 文件夹下所有tpl文件
-	tplFileList, err := autoCodeService.GetAllTplFile(basePath, nil)
+	tplFileList, err := autoCodeService.GetAllTplFile(autocodePath, nil)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -505,7 +506,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 	// resource/template/web/api.js.tpl -> autoCode/web/autoCode.PackageName/api/autoCode.PackageName.js
 	// resource/template/readme.txt.tpl -> autoCode/readme.txt
 	for index, value := range dataList {
-		trimBase := strings.TrimPrefix(value.locationPath, basePath+"/")
+		trimBase := strings.TrimPrefix(value.locationPath, autocodePath+"/")
 		if trimBase == "readme.txt.tpl" {
 			dataList[index].autoCodePath = autoPath + "readme.txt"
 			continue
@@ -788,4 +789,27 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 	}
 	// 写回数据
 	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
+}
+
+// 自动创建插件模板
+func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) error {
+	tplFileList, _ := autoCodeService.GetAllTplFile(plugPath, nil)
+	for _, tpl := range tplFileList {
+		temp, err := template.ParseFiles(tpl)
+		fmt.Println(err)
+		pathArr := strings.SplitAfter(tpl, "/")
+		if strings.Index(pathArr[2], "tpl") < 0 {
+			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[2]))
+			os.MkdirAll(dirPath, 0755)
+		}
+		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
+		f, _ := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		e := temp.Execute(f, plug)
+		if e != nil {
+			fmt.Println(e)
+			return e
+		}
+		defer f.Close()
+	}
+	return nil
 }

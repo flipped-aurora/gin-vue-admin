@@ -3,21 +3,27 @@
     <div class="gva-table-box">
       <el-form label-width="140px" class="plug-form">
         <el-form-item label="插件名">
-          <el-input v-model="form.plugName" />
+          <el-input v-model="form.plugName" placeholder="必填（英文大写字母开头）" @blur="titleCase" />
         </el-form-item>
         <el-form-item label="路由组">
-          <el-input v-model="form.routerGroup" />
+          <el-input v-model="form.routerGroup" placeholder="将会作为插件路由组使用" />
         </el-form-item>
         <el-form-item label="使用全局属性">
-          <el-checkbox v-model="form.hasGloabl" />
+          <el-checkbox v-model="form.hasGlobal" />
         </el-form-item>
-        <el-form-item v-if="form.hasGloabl" label="全局属性">
+        <el-form-item v-if="form.hasGlobal" label="全局属性">
           <div v-for="(i,k) in form.global" :key="k" class="plug-row">
             <span>
-              <el-input v-model="i.key" placeholder="key" />
+              <el-input v-model="i.key" placeholder="key 必填" />
             </span>
             <span>
-              <el-input v-model="i.type" placeholder="type" />
+              <el-select v-model="i.type" placeholder="type 必填">
+                <el-option label="string" value="string" />
+                <el-option label="int" value="int" />
+                <el-option label="float32" value="float32" />
+                <el-option label="float64" value="float64" />
+                <el-option label="bool" value="bool" />
+              </el-select>
             </span>
             <span>
               <el-input v-model="i.desc" placeholder="备注" />
@@ -36,10 +42,16 @@
         <el-form-item v-if="form.hasRequest" label="Request">
           <div v-for="(i,k) in form.request" :key="k" class="plug-row">
             <span>
-              <el-input v-model="i.key" placeholder="key" />
+              <el-input v-model="i.key" placeholder="key 必填" />
             </span>
             <span>
-              <el-input v-model="i.type" placeholder="type" />
+              <el-select v-model="i.type" placeholder="type 必填">
+                <el-option label="string" value="string" />
+                <el-option label="int" value="int" />
+                <el-option label="float32" value="float32" />
+                <el-option label="float64" value="float64" />
+                <el-option label="bool" value="bool" />
+              </el-select>
             </span>
             <span>
               <el-input v-model="i.desc" placeholder="备注" />
@@ -58,10 +70,16 @@
         <el-form-item v-if="form.hasResponse" label="Response">
           <div v-for="(i,k) in form.response" :key="k" class="plug-row">
             <span>
-              <el-input v-model="i.key" placeholder="key" />
+              <el-input v-model="i.key" placeholder="key 必填" />
             </span>
             <span>
-              <el-input v-model="i.type" placeholder="type" />
+              <el-select v-model="i.type" placeholder="type 必填">
+                <el-option label="string" value="string" />
+                <el-option label="int" value="int" />
+                <el-option label="float32" value="float32" />
+                <el-option label="float64" value="float64" />
+                <el-option label="bool" value="bool" />
+              </el-select>
             </span>
             <span>
               <el-input v-model="i.desc" placeholder="备注" />
@@ -83,6 +101,7 @@
 </template>
 
 <script setup>
+import { toUpperCase } from '@/utils/stringFun'
 import {
   Plus,
   Minus
@@ -116,7 +135,48 @@ const form = reactive({
   }]
 })
 
+const titleCase = () => {
+  form.plugName = toUpperCase(form.plugName)
+}
+
 const createPlug = async() => {
+  if (!form.plugName || !form.routerGroup) {
+    ElMessage.error('插件名称和插件路由组为必填项')
+    return
+  }
+  if (form.hasGlobal) {
+    const intercept = form.global.some(i => {
+      if (!i.key || !i.type) {
+        return true
+      }
+    })
+    if (intercept) {
+      ElMessage.error('全局属性的key和type为必填项')
+      return
+    }
+  }
+  if (form.hasRequest) {
+    const intercept = form.request.some(i => {
+      if (!i.key || !i.type) {
+        return true
+      }
+    })
+    if (intercept) {
+      ElMessage.error('请求属性的key和type为必填项')
+      return
+    }
+  }
+  if (form.hasResponse) {
+    const intercept = form.response.some(i => {
+      if (!i.key || !i.type) {
+        return true
+      }
+    })
+    if (intercept) {
+      ElMessage.error('响应属性的key和type为必填项')
+      return
+    }
+  }
   const res = await createPlugApi(form)
   if (res.code === 0) {
     ElMessageBox('创建成功，插件已自动写入后端plugin目录下，请按照自己的逻辑进行创造')

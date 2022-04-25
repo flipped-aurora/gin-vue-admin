@@ -799,11 +799,16 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 		fmt.Println(err)
 		pathArr := strings.SplitAfter(tpl, "/")
 		if strings.Index(pathArr[2], "tpl") < 0 {
-			os.MkdirAll("./plugin/"+plug.Snake+"/"+pathArr[2], 0755)
+			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[2]))
+			os.MkdirAll(dirPath, 0755)
 		}
-		f, _ := os.OpenFile("./plugin/"+plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4], os.O_WRONLY|os.O_CREATE, 0666)
+		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
+		f, _ := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
 		e := temp.Execute(f, plug)
-		fmt.Println(e, f)
+		if e != nil {
+			fmt.Println(e)
+			return e
+		}
 		defer f.Close()
 	}
 	return nil

@@ -17,8 +17,8 @@ type AutoCodeStruct struct {
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields"`
 	DictTypes          []string `json:"-"`
-	Package			string   `json:"package"`
-	PackageT		string  	`json:"-"`
+	Package            string   `json:"package"`
+	PackageT           string   `json:"-"`
 }
 
 type Field struct {
@@ -38,6 +38,31 @@ var AutoMoveErr error = errors.New("创建代码成功并移动文件成功")
 type SysAutoCode struct {
 	global.GVA_MODEL
 	PackageName string `json:"packageName" gorm:"comment:包名"`
-	Label        string `json:"label" gorm:"comment:展示名"`
+	Label       string `json:"label" gorm:"comment:展示名"`
 	Desc        string `json:"desc" gorm:"comment:描述"`
+}
+
+type AutoPlugReq struct {
+	PlugName    string `json:"plugName"` // 必然大写开头
+	Snake       string `json:"snake"`    // 后端自动转为 snake
+	RouterGroup string `json:"routerGroup"`
+	HasGlobal   bool   `json:"hasGlobal"`
+	HasRequest  bool   `json:"hasRequest"`
+	HasResponse bool   `json:"hasResponse"`
+	NeedModel   bool   `json:"needModel"`
+	Global      []struct {
+		Key  string `json:"key"`
+		Type string `json:"type"`
+		Desc string `json:"desc"`
+	} `json:"global"`
+	Request []struct {
+		Key  string `json:"key"`
+		Type string `json:"type"`
+		Desc string `json:"desc"`
+	} `json:"request"`
+	Response []struct {
+		Key  string `json:"key"`
+		Type string `json:"type"`
+		Desc string `json:"desc"`
+	} `json:"response"`
 }

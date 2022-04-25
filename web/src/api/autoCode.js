@@ -115,3 +115,12 @@ export const deletePackageApi = (data) => {
     data
   })
 }
+
+export const createPlugApi = (data) => {
+  return service({
+    url: '/autoCode/createPlug',
+    method: 'post',
+    data
+  })
+}
+

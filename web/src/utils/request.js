@@ -85,17 +85,17 @@ service.interceptors.response.use(
   error => {
     closeLoading()
 
-    if(!error.response){
+    if (!error.response) {
       ElMessageBox.confirm(`
         <p>检测到请求错误</p>
         <p>${error}</p>
         `, '请求报错', {
-          dangerouslyUseHTMLString: true,
-          distinguishCancelAndClose: true,
-          confirmButtonText: '稍后重试',
-          cancelButtonText: '取消'
-        })
-        return
+        dangerouslyUseHTMLString: true,
+        distinguishCancelAndClose: true,
+        confirmButtonText: '稍后重试',
+        cancelButtonText: '取消'
+      })
+      return
     }
 
     switch (error.response.status) {

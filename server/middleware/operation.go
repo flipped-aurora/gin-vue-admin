@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
@@ -20,6 +21,14 @@ import (
 )
 
 var operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
+
+var respPool sync.Pool
+
+func init() {
+	respPool.New = func() interface{} {
+		return make([]byte, 1024)
+	}
+}
 
 func OperationRecord() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -64,12 +73,18 @@ func OperationRecord() gin.HandlerFunc {
 			Body:   string(body),
 			UserID: userId,
 		}
+
 		// 上传文件时候 中间件日志进行裁断操作
 		if strings.Index(c.GetHeader("Content-Type"), "multipart/form-data") > -1 {
-			if len(record.Body) > 512 {
-				record.Body = "File or Length out of limit"
+			if len(record.Body) > 1024 {
+				// 截断
+				newBody := respPool.Get().([]byte)
+				copy(newBody, record.Body)
+				record.Body = string(newBody)
+				defer respPool.Put(newBody[:0])
 			}
 		}
+
 		writer := responseBodyWriter{
 			ResponseWriter: c.Writer,
 			body:           &bytes.Buffer{},
@@ -84,6 +99,24 @@ func OperationRecord() gin.HandlerFunc {
 		record.Status = c.Writer.Status()
 		record.Latency = latency
 		record.Resp = writer.body.String()
+
+		if strings.Index(c.Writer.Header().Get("Pragma"), "public") > -1 ||
+			strings.Index(c.Writer.Header().Get("Expires"), "0") > -1 ||
+			strings.Index(c.Writer.Header().Get("Cache-Control"), "must-revalidate, post-check=0, pre-check=0") > -1 ||
+			strings.Index(c.Writer.Header().Get("Content-Type"), "application/force-download") > -1 ||
+			strings.Index(c.Writer.Header().Get("Content-Type"), "application/octet-stream") > -1 ||
+			strings.Index(c.Writer.Header().Get("Content-Type"), "application/vnd.ms-excel") > -1 ||
+			strings.Index(c.Writer.Header().Get("Content-Type"), "application/download") > -1 ||
+			strings.Index(c.Writer.Header().Get("Content-Disposition"), "attachment") > -1 ||
+			strings.Index(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") > -1 {
+			if len(record.Resp) > 1024 {
+				// 截断
+				newBody := respPool.Get().([]byte)
+				copy(newBody, record.Resp)
+				record.Body = string(newBody)
+				defer respPool.Put(newBody[:0])
+			}
+		}
 
 		if err := operationRecordService.CreateSysOperationRecord(record); err != nil {
 			global.GVA_LOG.Error("create operation record error:", zap.Error(err))

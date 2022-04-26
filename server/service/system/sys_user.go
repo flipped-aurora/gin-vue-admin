@@ -198,7 +198,7 @@ func (userService *UserService) FindUserByUuid(uuid string) (err error, user *sy
 //@param: ID uint
 //@return: err error
 
-func (userService *UserService) ResetPassword(ID uint) (err error) {
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.MD5V([]byte("123456"))).Error
+func (userService *UserService) ResetPassword(id uint) (err error) {
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", id).Update("password", utils.MD5V([]byte("123456"))).Error
 	return err
 }

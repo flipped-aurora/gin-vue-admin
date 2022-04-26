@@ -142,9 +142,18 @@ export const getUserInfo = () => {
   })
 }
 
-export const resetPassword = () => {
+
+// @Tags User
+// @Summary 重置密码
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} json "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /user/resetPassword [put]
+export const resetPassword = (data) => {
   return service({
     url: '/user/resetPassword',
-    method: 'post'
+    method: 'put',
+    data: data
   })
 }

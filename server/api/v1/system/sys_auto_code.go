@@ -211,3 +211,26 @@ func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
 		response.OkWithMessage("删除成功", c)
 	}
 }
+
+// DelPackage
+// @Tags AutoCode
+// @Summary 创建插件模板
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysAutoCode true "创建插件模板"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建插件模板成功"
+// @Router /autoCode/createPlug [post]
+func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
+	var a system.AutoPlugReq
+	_ = c.ShouldBindJSON(&a)
+	a.Snake = strings.ToLower(a.PlugName)
+	a.NeedModel = a.HasRequest || a.HasResponse
+	err := autoCodeService.CreatePlug(a)
+	if err != nil {
+		global.GVA_LOG.Error("预览失败!", zap.Error(err))
+		response.FailWithMessage("预览失败", c)
+	} else {
+		response.Ok(c)
+	}
+}

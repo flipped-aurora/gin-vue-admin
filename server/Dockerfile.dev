@@ -1,6 +1,6 @@
 FROM golang:1.18.1-stretch
 
-COPY ./server /gva-server
+COPY . /gva-server
 
 WORKDIR /gva-server
 

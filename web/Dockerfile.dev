@@ -1,6 +1,6 @@
 FROM node:16.15.0-slim
 
-COPY ./web /gva_web
+COPY . /gva_web
 
 WORKDIR /gva-web
 

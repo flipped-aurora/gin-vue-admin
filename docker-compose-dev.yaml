@@ -16,7 +16,8 @@ volumes:
 services:
   web:
     build:
-        dockerfile: ./webDockerfile # 适配 M1
+      context: ./web
+      dockerfile: ./Dockerfile.dev # 适配 M1
     container_name: gva-web
     hostname: gva-web           #可以通过容器名访问
     restart: always
@@ -27,14 +28,15 @@ services:
     working_dir: /gva-web       # 如果docker 设置了workdir 则此处不需要设置
     command: bash -c "npx nodemon -x npm run serve"
     volumes:
-      - ./web:/gva-web
+      - ../web:/gva-web
     networks:
       network:
         ipv4_address: 177.7.0.11
 
   server:
     build:
-        dockerfile: ./serverDockerfile # 适配 M1
+      context: ./server
+      dockerfile: ./Dockerfile.dev # 适配 M1
     container_name: gva-server
     hostname: gva-server
     restart: always
@@ -44,7 +46,7 @@ services:
       - mysql
       - redis
     volumes:
-      - ./server:/gva-server
+      - ../server:/gva-server
     working_dir: /gva-server    # 如果docker 设置了workdir 则此处不需要设置
     command: bash -c "air"
     links:
@@ -72,8 +74,8 @@ services:
         ipv4_address: 177.7.0.13
 
   redis:
-    # image: arm64v8/redis:6-alpine3.15 # 适配 M1
-    image: redis:6.0.6 # amd64 架构
+    image: arm64v8/redis:6-alpine3.15 # 适配 M1
+    # image: redis:6.0.6 # amd64 架构
     container_name: gva-redis # 容器名
     hostname: gva-redis
     restart: always

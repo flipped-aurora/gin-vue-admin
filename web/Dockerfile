@@ -1,6 +1,6 @@
 FROM node:16
 
-WORKDIR /gva_web/
+WORKDIR /gva-web
 COPY . .
 
 RUN yarn && yarn build

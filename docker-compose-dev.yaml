@@ -28,7 +28,7 @@ services:
     working_dir: /gva-web       # 如果docker 设置了workdir 则此处不需要设置
     command: bash -c "npx nodemon -x npm run serve"
     volumes:
-      - ../web:/gva-web
+      - ./web:/gva-web
     networks:
       network:
         ipv4_address: 177.7.0.11
@@ -46,7 +46,7 @@ services:
       - mysql
       - redis
     volumes:
-      - ../server:/gva-server
+      - ./server:/gva-server
     working_dir: /gva-server    # 如果docker 设置了workdir 则此处不需要设置
     command: bash -c "air"
     links:

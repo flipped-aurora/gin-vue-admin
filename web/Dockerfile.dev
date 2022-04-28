@@ -1,8 +1,8 @@
 FROM node:16.15.0-slim
 
-COPY . /gva_web
-
 WORKDIR /gva-web
+
+COPY . .
 
 RUN yarn config set registry https://registry.npm.taobao.org --global \
     && yarn install && npm install -g nodemon

@@ -1,8 +1,8 @@
 FROM golang:1.18.1-stretch
 
-COPY . /gva-server
-
 WORKDIR /gva-server
+
+COPY . .
 
 RUN go env -w GOPROXY=https://goproxy.cn,direct \
     && go mod tidy \

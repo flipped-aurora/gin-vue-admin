@@ -33,11 +33,13 @@ func Zap() (logger *zap.Logger) {
 		return lev >= zap.ErrorLevel
 	})
 
+	now := time.Now().Format("2006-01-02")
+
 	cores := [...]zapcore.Core{
-		getEncoderCore(fmt.Sprintf("./%s/server_debug.log", global.GVA_CONFIG.Zap.Director), debugPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_info.log", global.GVA_CONFIG.Zap.Director), infoPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_warn.log", global.GVA_CONFIG.Zap.Director), warnPriority),
-		getEncoderCore(fmt.Sprintf("./%s/server_error.log", global.GVA_CONFIG.Zap.Director), errorPriority),
+		getEncoderCore(fmt.Sprintf("./%s/%s/debug.log", global.GVA_CONFIG.Zap.Director, now), debugPriority),
+		getEncoderCore(fmt.Sprintf("./%s/%s/info.log", global.GVA_CONFIG.Zap.Director, now), infoPriority),
+		getEncoderCore(fmt.Sprintf("./%s/%s/warn.log", global.GVA_CONFIG.Zap.Director, now), warnPriority),
+		getEncoderCore(fmt.Sprintf("./%s/%s/error.log", global.GVA_CONFIG.Zap.Director, now), errorPriority),
 	}
 	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
 
@@ -91,7 +93,7 @@ func getEncoderCore(fileName string, level zapcore.LevelEnabler) (core zapcore.C
 	return zapcore.NewCore(getEncoder(), writer, level)
 }
 
-// 自定义日志输出时间格式
+// CustomTimeEncoder 自定义日志输出时间格式
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format(global.GVA_CONFIG.Zap.Prefix + "2006/01/02 - 15:04:05.000"))
 }

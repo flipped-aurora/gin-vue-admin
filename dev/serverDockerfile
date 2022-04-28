@@ -1,0 +1,9 @@
+FROM golang:1.18.1-stretch
+
+COPY ./server /gva-server
+
+WORKDIR /gva-server
+
+RUN go env -w GOPROXY=https://goproxy.cn,direct \
+    && go mod tidy \
+    && go install github.com/cosmtrek/air@latest

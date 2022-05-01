@@ -24,4 +24,4 @@ jobs:
         shell: bash
         run: |
           make images
-          docker push registry.cn-hangzhou.aliyuncs.com/tscuite/gva:v${{github.run_number}}
+          docker push registry.cn-hangzhou.aliyuncs.com/tscuite/gva:v1

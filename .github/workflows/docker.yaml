@@ -23,5 +23,7 @@ jobs:
       - name: Sed Config
         shell: bash
         run: |
+          sed -i "s/https://demo.gin-vue-admin.com/http://127.0.0.1/g" web/.env.production
+          sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
           make images
           docker push registry.cn-hangzhou.aliyuncs.com/tscuite/gva:v1

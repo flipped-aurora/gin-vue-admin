@@ -23,8 +23,8 @@ jobs:
       - name: Sed Config
         shell: bash
         run: |
-          sed -i "s#make build-web-local#build-web-local-action#g" Makefile
-          sed -i "s#make build-server-local#build-serer-local-action#g" Makefile
+          sed -i "s#make build-web-local#make build-web-local-action#g" Makefile
+          sed -i "s#make build-server-local#make build-serer-local-action#g" Makefile
           sed -i "s#https://demo.gin-vue-admin.com#http://127.0.0.1#g" web/.env.production
           sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
           make images

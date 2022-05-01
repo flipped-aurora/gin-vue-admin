@@ -3,13 +3,11 @@ SHELL = /bin/bash
 CONFIG_FILE         = config.yaml
 PROJECT_NAME        = github.com/flipped-aurora/gin-vue-admin/server
 
-# default istio version
-#ISTIO_VERSION   = $(shell cat ISTIO_VERSION)
-SCRIPT_DIR          = $(shell pwd)/etc/script
+#SCRIPT_DIR          = $(shell pwd)/etc/script
 BUILD_IMAGE_SERVER  = golang:1.16
 BUILD_IMAGE_WEB     = node:16
-IMAGE_NAME          = gin-vue-admin
-REPOSITORY          = tscuite/${IMAGE_NAME}
+IMAGE_NAME          = all
+REPOSITORY          = gin-vue-admin/${IMAGE_NAME}
 
 # support build custom tags
 ifneq ($(TAGS),)
@@ -44,11 +42,9 @@ build-local:
 
 #本地环境打包前端
 build-web-local:
-	sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
 	@cd web/ && if [ -d "dist" ];then rm -rf dist; else echo "OK!"; fi \
 	&& yarn config set registry http://mirrors.cloud.tencent.com/npm/ \
 	&& yarn install && yarn build
-	sed -i 's/${basePort}/${basePath}:${basePath}/g' web/src/view/systemTools/formCreate/index.vue
 
 #本地环境打包后端
 build-server-local:

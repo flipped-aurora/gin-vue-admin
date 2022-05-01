@@ -11,5 +11,5 @@ fi
 redis-server &
 /usr/sbin/nginx &
 cd /usr/share/nginx/html/ && ./server &
-echo "gva ALL $Version"
+echo "gva ALL start!!!"
 tail -f /dev/null

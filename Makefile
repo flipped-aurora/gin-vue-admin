@@ -3,15 +3,15 @@ SHELL = /bin/bash
 CONFIG_FILE         = config.yaml
 PROJECT_NAME        = github.com/flipped-aurora/gin-vue-admin/server
 
-#SCRIPT_DIR          = $(shell pwd)/etc/script
+#SCRIPT_DIR         = $(shell pwd)/etc/script
 BUILD_IMAGE_SERVER  = golang:1.16
 BUILD_IMAGE_WEB     = node:16
 IMAGE_NAME          = all
-REPOSITORY          = gin-vue-admin/${IMAGE_NAME}
+REPOSITORY          = gin-vue-admin
 
 # support build custom tags
 ifneq ($(TAGS),)
-TAGS_OPT 		= -tags ${TAGS}
+TAGS_OPT 	    = -tags ${TAGS}
 endif
 
 #前后端共同打包
@@ -28,11 +28,11 @@ build-server:
 
 #构建web镜像
 build-image-web:
-	@cd web/ && docker build --rm -t ${WASM_IMAGE}:${MAJOR_VERSION} .
+	@cd web/ && docker build --rm -t ${REPOSITORY}/web:${TAGS_OPT} .
 
 #构建server镜像
 build-image-server:
-	@cd server/ && docker build --rm -t ${WASM_IMAGE}:${MAJOR_VERSION} .
+	@cd server/ && docker build --rm -t ${REPOSITORY}/server:${TAGS_OPT} .
 
 #本地环境打包前后端
 build-local:
@@ -61,23 +61,10 @@ build-server-local-action:
 	&& go mod tidy && go build
 #后端打包待优化版
 build-server-locallll:
-	@rm -rf build/bundles/${MAJOR_VERSION}/binary
 	GO111MODULE=on CGO_ENABLED=1 go build ${TAGS_OPT} \
-		-ldflags "-B 0x$(shell head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X main.Version=${MAJOR_VERSION}(${GIT_VERSION}) -X ${PROJECT_NAME}/pkg/istio.IstioVersion=${ISTIO_VERSION}" \
-		-v -o ${TARGET} \
-		${PROJECT_NAME}/cmd/mosn/main
-	mkdir -p build/bundles/${MAJOR_VERSION}/binary
-	mv ${TARGET} build/bundles/${MAJOR_VERSION}/binary
-	@cd build/bundles/${MAJOR_VERSION}/binary && $(shell which md5sum) -b ${TARGET} | cut -d' ' -f1  > ${TARGET}.md5
-	cp configs/${CONFIG_FILE} build/bundles/${MAJOR_VERSION}/binary
-	cp build/bundles/${MAJOR_VERSION}/binary/${TARGET}  build/bundles/${MAJOR_VERSION}/binary/${TARGET_SIDECAR}
-
+		-ldflags "-B 0x$(shell head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X main.Version=${MAJOR_VERSION}(${GIT_VERSION})" \
+		-v -o ${TARGET} 
+#镜像待优化自动化版本
 images: build
 	docker build -t registry.cn-hangzhou.aliyuncs.com/tscuite/gva:v1 .
-image:
-	@rm -rf IMAGEBUILD
-	cp -r build/contrib/builder/image IMAGEBUILD && cp build/bundles/${MAJOR_VERSION}/binary/${TARGET} IMAGEBUILD && cp -r configs IMAGEBUILD && cp -r etc IMAGEBUILD
-	docker build --no-cache --rm -t ${IMAGE_NAME}:${MAJOR_VERSION}-${GIT_VERSION} IMAGEBUILD
-	docker tag ${IMAGE_NAME}:${MAJOR_VERSION}-${GIT_VERSION} ${REPOSITORY}:${MAJOR_VERSION}-${GIT_VERSION}
-	rm -rf IMAGEBUILD
 

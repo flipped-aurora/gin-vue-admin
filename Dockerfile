@@ -4,7 +4,7 @@ ARG Version=v2.5.3
 ENV Version=${Version} \
     LANG=en_US.utf8
 COPY entrypoint.sh .
-COPY build/* /usr/share/nginx/html/
+COPY build/ /usr/share/nginx/html/
 COPY server/config.yaml /usr/share/nginx/html/config.yaml
 COPY web/.docker-compose/nginx/conf.d/nginx.conf /etc/nginx/conf.d/nginx.conf
 RUN set -ex \

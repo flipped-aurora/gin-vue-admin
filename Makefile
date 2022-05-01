@@ -51,6 +51,14 @@ build-server-local:
 	@cd server/ && if [ -f "server" ];then rm -rf server; else echo "OK!"; fi \
 	&& go env -w GO111MODULE=on && go env -w GOPROXY=https://goproxy.cn,direct \
 	&& go env -w CGO_ENABLED=0 && go env  && go mod tidy && go build
+
+build-web-local-action:
+	@cd web/ && if [ -d "dist" ];then rm -rf dist; else echo "OK!"; fi \
+	&& yarn install && yarn build
+
+build-server-local-action:
+	@cd server/ && if [ -f "server" ];then rm -rf server; else echo "OK!"; fi \
+	&& go mod tidy && go build
 #后端打包待优化版
 build-server-locallll:
 	@rm -rf build/bundles/${MAJOR_VERSION}/binary

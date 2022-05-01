@@ -69,7 +69,7 @@ build-server-locallll:
 	cp build/bundles/${MAJOR_VERSION}/binary/${TARGET}  build/bundles/${MAJOR_VERSION}/binary/${TARGET_SIDECAR}
 
 images: build
-	docker build -t cdz:v3 .
+	docker build -t registry.cn-hangzhou.aliyuncs.com/tscuite/gva:v1 .
 image:
 	@rm -rf IMAGEBUILD
 	cp -r build/contrib/builder/image IMAGEBUILD && cp build/bundles/${MAJOR_VERSION}/binary/${TARGET} IMAGEBUILD && cp -r configs IMAGEBUILD && cp -r etc IMAGEBUILD

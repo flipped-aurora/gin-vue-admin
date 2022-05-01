@@ -44,9 +44,11 @@ build-local:
 
 #本地环境打包前端
 build-web-local:
+	sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
 	@cd web/ && if [ -d "dist" ];then rm -rf dist; else echo "OK!"; fi \
 	&& yarn config set registry http://mirrors.cloud.tencent.com/npm/ \
 	&& yarn install && yarn build
+	sed -i 's/${basePort}/${basePath}:${basePath}/g' web/src/view/systemTools/formCreate/index.vue
 
 #本地环境打包后端
 build-server-local:

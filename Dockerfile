@@ -11,10 +11,8 @@ RUN set -ex \
     && echo "LANG=en_US.utf8" > /etc/locale.conf \
     && echo "net.core.somaxconn = 1024" >> /etc/sysctl.conf \
     && echo "vm.overcommit_memory = 1" >> /etc/sysctl.conf \
-    && yum -y install wget gcc epel-release git yum-utils \
-    && echo -e "[nginx-stable]\nname=nginx stable repo\nbaseurl=http://nginx.org/packages/centos/\$releasever/\$basearch/\ngpgcheck=1\nenabled=1\ngpgkey=https://nginx.org/keys/nginx_signing.key" > /etc/yum.repos.d/nginx.repo \
-    && rpm --import https://nginx.org/keys/nginx_signing.key \
+    && yum -y install yum -y install *epel* \
     && yum -y localinstall http://mirrors.ustc.edu.cn/mysql-repo/mysql57-community-release-el7.rpm \
-    && yum -y install mysql-community-server redis nginx && chmod +x ./entrypoint.sh
+    && yum -y install mysql-community-server redis nginx  --nogpgcheck && chmod +x ./entrypoint.sh
 EXPOSE 80
 ENTRYPOINT ["./entrypoint.sh"]

@@ -13,15 +13,15 @@ TAGS_OPT            = 2.5.0b
 else
 endif
 
-#前后端共同打包
+#容器环境前后端共同打包
 build: build-web build-server
 	docker run --name build-local --rm -v $(shell pwd):/go/src/${PROJECT_NAME} -w /go/src/${PROJECT_NAME} ${BUILD_IMAGE_SERVER} make build-local
 
-#容器打包前端
+#容器环境打包前端
 build-web:
 	docker run --name build-web-local --rm -v $(shell pwd):/go/src/${PROJECT_NAME} -w /go/src/${PROJECT_NAME} ${BUILD_IMAGE_WEB} make build-web-local
 
-#容器打包后端
+#容器环境打包后端
 build-server:
 	docker run --name build-server-local --rm -v $(shell pwd):/go/src/${PROJECT_NAME} -w /go/src/${PROJECT_NAME} ${BUILD_IMAGE_SERVER} make build-server-local
 
@@ -52,6 +52,10 @@ build-server-local:
 	&& go env -w CGO_ENABLED=0 && go env  && go mod tidy \
 	&& go build -ldflags "-B 0x$(shell head -c20 /dev/urandom|od -An -tx1|tr -d ' \n') -X main.Version=${TAGS_OPT}" -v
 
-#镜像待优化自动化版本
+#打包前后端二合一镜像
+image: build 
+	docker build -t ${REPOSITORY}/all-one:${TAGS_OPT} .
+
+#尝鲜版
 images: build build-image-web build-image-server
 	docker build -t ${REPOSITORY}/all:${TAGS_OPT} .

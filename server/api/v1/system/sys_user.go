@@ -294,6 +294,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		HeaderImg: user.HeaderImg,
 		Phone:     user.Phone,
 		Email:     user.Email,
+		SideMode:  user.SideMode,
 	}); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.setupFail"), c)
@@ -322,6 +323,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		HeaderImg: user.HeaderImg,
 		Phone:     user.Phone,
 		Email:     user.Email,
+		SideMode:  user.SideMode,
 	}); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.setupFail"), c)

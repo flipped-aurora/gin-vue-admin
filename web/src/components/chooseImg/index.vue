@@ -1,5 +1,8 @@
 <template>
   <el-drawer v-model="drawer" title="媒体库" size="650px">
+    <warning-bar
+        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+    />
     <div class="gva-btn-list">
       <upload-common
         v-model:imageCommon="imageCommon"
@@ -61,6 +64,7 @@ import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import warningBar from '@/components/warningBar/warningBar.vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -69,7 +73,6 @@ const search = ref({})
 const page = ref(1)
 const total = ref(0)
 const pageSize = ref(20)
-const keyword = ref('')
 
 // 分页
 const handleSizeChange = (val) => {
@@ -128,7 +131,7 @@ const editFileNameFunc = async(row) => {
     cancelButtonText: '取消',
     inputPattern: /\S/,
     inputErrorMessage: '不能为空',
-	inputValue: row.name
+    inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
     // console.log(row)

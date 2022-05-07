@@ -80,7 +80,7 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：自动迁移生成的文件到ymal配置的对应位置" placement="bottom" effect="light">
+            <el-tooltip content="注：自动迁移生成的文件到yaml配置的对应位置" placement="bottom" effect="light">
               <div> 自动移动文件 </div>
             </el-tooltip>
           </template>

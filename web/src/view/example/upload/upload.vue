@@ -1,24 +1,26 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="gva-table-box">
+      <warning-bar
+        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+      />
       <div class="gva-btn-list">
         <upload-common
-            v-model:imageCommon="imageCommon"
-            class="upload-btn"
-            @on-success="getTableData"
+          v-model:imageCommon="imageCommon"
+          class="upload-btn"
+          @on-success="getTableData"
         />
         <upload-image
-            v-model:imageUrl="imageUrl"
-            :file-size="512"
-            :max-w-h="1080"
-            class="upload-btn"
-            @on-success="getTableData"
+          v-model:imageUrl="imageUrl"
+          :file-size="512"
+          :max-w-h="1080"
+          class="upload-btn"
+          @on-success="getTableData"
         />
-
 
         <el-form ref="searchForm" :inline="true" :model="search">
           <el-form-item label="">
-            <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注"/>
+            <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注" />
           </el-form-item>
 
           <el-form-item>
@@ -31,7 +33,7 @@
       <el-table :data="tableData">
         <el-table-column align="left" label="预览" width="100">
           <template #default="scope">
-            <CustomPic pic-type="file" :pic-src="scope.row.url"/>
+            <CustomPic pic-type="file" :pic-src="scope.row.url" />
           </template>
         </el-table-column>
         <el-table-column align="left" label="日期" prop="UpdatedAt" width="180">
@@ -41,15 +43,15 @@
         </el-table-column>
         <el-table-column align="left" label="文件名/备注" prop="name" width="180">
           <template #default="scope">
-            <div class="name" @click="editFileNameFunc(scope.row)">{{scope.row.name}}</div>
+            <div class="name" @click="editFileNameFunc(scope.row)">{{ scope.row.name }}</div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="链接" prop="url" min-width="300"/>
+        <el-table-column align="left" label="链接" prop="url" min-width="300" />
         <el-table-column align="left" label="标签" prop="tag" width="100">
           <template #default="scope">
             <el-tag
-                :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
-                disable-transitions
+              :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
+              disable-transitions
             >{{ scope.row.tag }}
             </el-tag>
           </template>
@@ -63,14 +65,14 @@
       </el-table>
       <div class="gva-pagination">
         <el-pagination
-            :current-page="page"
-            :page-size="pageSize"
-            :page-sizes="[10, 30, 50, 100]"
-            :style="{ float: 'right', padding: '20px' }"
-            :total="total"
-            layout="total, sizes, prev, pager, next, jumper"
-            @current-change="handleCurrentChange"
-            @size-change="handleSizeChange"
+          :current-page="page"
+          :page-size="pageSize"
+          :page-sizes="[10, 30, 50, 100]"
+          :style="{ float: 'right', padding: '20px' }"
+          :total="total"
+          layout="total, sizes, prev, pager, next, jumper"
+          @current-change="handleCurrentChange"
+          @size-change="handleSizeChange"
         />
       </div>
     </div>
@@ -85,6 +87,7 @@ import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
+import warningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -130,25 +133,25 @@ const deleteFileFunc = async(row) => {
     cancelButtonText: '取消',
     type: 'warning',
   })
-      .then(async() => {
-        const res = await deleteFile(row)
-        if (res.code === 0) {
-          ElMessage({
-            type: 'success',
-            message: '删除成功!',
-          })
-          if (tableData.value.length === 1 && page.value > 1) {
-            page.value--
-          }
-          getTableData()
-        }
-      })
-      .catch(() => {
+    .then(async() => {
+      const res = await deleteFile(row)
+      if (res.code === 0) {
         ElMessage({
-          type: 'info',
-          message: '已取消删除',
+          type: 'success',
+          message: '删除成功!',
         })
+        if (tableData.value.length === 1 && page.value > 1) {
+          page.value--
+        }
+        getTableData()
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        type: 'info',
+        message: '已取消删除',
       })
+    })
 }
 
 const downloadFile = (row) => {
@@ -170,10 +173,10 @@ const editFileNameFunc = async(row) => {
     cancelButtonText: '取消',
     inputPattern: /\S/,
     inputErrorMessage: '不能为空',
-	inputValue: row.name
+    inputValue: row.name
   }).then(async({ value }) => {
-    row.name = value;
-    //console.log(row)
+    row.name = value
+    // console.log(row)
     const res = await editFileName(row)
     if (res.code === 0) {
       ElMessage({
@@ -186,8 +189,8 @@ const editFileNameFunc = async(row) => {
     ElMessage({
       type: 'info',
       message: '取消修改'
-    });
-  });
+    })
+  })
 }
 </script>
 
@@ -198,9 +201,10 @@ export default {
 }
 </script>
 <style scoped>
-.name{
+.name {
   cursor: pointer;
 }
+
 .upload-btn + .upload-btn {
   margin-left: 12px;
 }

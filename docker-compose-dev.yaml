@@ -24,7 +24,9 @@ services:
     depends_on:
       - server
     working_dir: /gva-web       # 如果docker 设置了workdir 则此处不需要设置
-    command: bash -c "yarn config set registry https://registry.npm.taobao.org --global && yarn install && yarn serve"
+    #若网络不太好，请自行换源，如下
+    #command: bash -c "yarn config set registry https://registry.npm.taobao.org --global && yarn install && yarn serve"
+    command: bash -c "yarn install && yarn serve"
     volumes:
       - ./web:/gva-web
     networks:

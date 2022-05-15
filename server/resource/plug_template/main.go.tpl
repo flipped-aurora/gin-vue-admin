@@ -11,7 +11,7 @@ import (
 type {{ .PlugName}}Plugin struct {
 }
 
-func Create{{ .PlugName}}Plug({{- range .Global}} {{.Key}} {{.Type}} {{- end }})*{{ .PlugName}}Plugin {
+func Create{{ .PlugName}}Plug({{- range .Global}} {{.Key}} {{.Type}}, {{- end }})*{{ .PlugName}}Plugin {
 {{- if .HasGlobal }}
 	{{- range .Global}}
 	    global.GlobalConfig.{{.Key}} = {{.Key}}

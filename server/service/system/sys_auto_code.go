@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go.uber.org/zap"
 	"go/ast"
 	"go/format"
 	"go/parser"
@@ -793,10 +794,15 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 
 // 自动创建插件模板
 func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) error {
+	// 检查列表参数是否有效
+	plug.CheckList()
 	tplFileList, _ := autoCodeService.GetAllTplFile(plugPath, nil)
 	for _, tpl := range tplFileList {
 		temp, err := template.ParseFiles(tpl)
-		fmt.Println(err)
+		if err != nil {
+			zap.L().Error("parse err", zap.String("tpl", tpl), zap.Error(err))
+			return err
+		}
 		pathArr := strings.SplitAfter(tpl, "/")
 		if strings.Index(pathArr[2], "tpl") < 0 {
 			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[2]))
@@ -804,10 +810,10 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 		}
 		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
 		f, _ := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
-		e := temp.Execute(f, plug)
-		if e != nil {
-			fmt.Println(e)
-			return e
+		err = temp.Execute(f, plug)
+		if err != nil {
+			zap.L().Error("exec err", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
 		}
 		defer f.Close()
 	}

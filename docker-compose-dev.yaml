@@ -23,12 +23,12 @@ services:
       - '8080:8080'
     depends_on:
       - server
-    working_dir: /gva-web       # 如果docker 设置了workdir 则此处不需要设置
+    working_dir: /web       # 如果docker 设置了workdir 则此处不需要设置
     #若网络不太好，请自行换源，如下
     #command: bash -c "yarn config set registry https://registry.npm.taobao.org --global && yarn install && yarn serve"
     command: bash -c "yarn install && yarn serve"
     volumes:
-      - ./web:/gva-web
+      - ./web:/web
     networks:
       network:
         ipv4_address: 177.7.0.11
@@ -44,8 +44,8 @@ services:
       - mysql
       - redis
     volumes:
-      - ./server:/gva-server
-    working_dir: /gva-server    # 如果docker 设置了workdir 则此处不需要设置 
+      - ./server:/server
+    working_dir: /server    # 如果docker 设置了workdir 则此处不需要设置 
     command: bash -c "go env -w GOPROXY=https://goproxy.cn,direct && go mod tidy && go run main.go"
     links:
       - mysql

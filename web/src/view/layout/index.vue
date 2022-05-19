@@ -79,11 +79,13 @@
           </div>
         </transition>
         <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" element-loading-text="正在加载中" class="admin-box">
-          <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive :include="routerStore.keepAliveRouters">
-              <component :is="Component" />
-            </keep-alive>
-          </transition>
+          <div>
+            <transition mode="out-in" name="el-fade-in-linear">
+              <keep-alive :include="routerStore.keepAliveRouters">
+                <component :is="Component" />
+              </keep-alive>
+            </transition>
+          </div>
         </router-view>
         <BottomInfo />
         <setting />
@@ -120,6 +122,11 @@ const routerStore = useRouterStore()
 const isCollapse = ref(false)
 const isSider = ref(true)
 const isMobile = ref(false)
+
+const cc = (e) => {
+  console.log(e)
+}
+
 const initPage = () => {
   const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {

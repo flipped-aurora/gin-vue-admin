@@ -1,7 +1,7 @@
 <template>
   <el-drawer v-model="drawer" title="媒体库" size="650px">
     <warning-bar
-        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+      title="点击“文件名/备注”可以编辑文件名或者备注内容。"
     />
     <div class="gva-btn-list">
       <upload-common
@@ -99,7 +99,7 @@ defineProps({
 
 const drawer = ref(false)
 const picList = ref([])
-const path = ref(import.meta.env.VITE_BASE_API)
+const path = ref(import.meta.env.VITE_BASE_API + '/')
 
 const chooseImg = (url, target, targetKey) => {
   if (target && targetKey) {

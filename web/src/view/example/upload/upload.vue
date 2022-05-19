@@ -158,7 +158,8 @@ const downloadFile = (row) => {
   if (row.url.indexOf('http://') > -1 || row.url.indexOf('https://') > -1) {
     downloadImage(row.url, row.name)
   } else {
-    downloadImage(path.value + row.url, row.name)
+    debugger
+    downloadImage(path.value + '/' + row.url, row.name)
   }
 }
 

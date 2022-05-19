@@ -3,6 +3,7 @@ package initialize
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/pprof"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin"
 	"github.com/gin-gonic/gin"
 )
@@ -25,4 +26,6 @@ func InstallPlugin(PublicGroup *gin.RouterGroup, PrivateGroup *gin.RouterGroup) 
 		global.GVA_CONFIG.Email.Port,
 		global.GVA_CONFIG.Email.IsSSL,
 	))
+	// 添加pprof插件 根据需要自行切换修改
+	PluginInit(PublicGroup, pprof.CreatePprofPlug(global.GVA_CONFIG.Pprof.Prefix))
 }

@@ -3,6 +3,8 @@ package system
 import (
 	"errors"
 	"fmt"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"net/url"
 	"os"
 	"strings"
@@ -17,6 +19,8 @@ import (
 )
 
 type AutoCodeApi struct{}
+
+var caser = cases.Title(language.English)
 
 // PreviewTemp
 // @Tags AutoCode
@@ -34,7 +38,8 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	a.PackageT = strings.Title(a.Package)
+
+	a.PackageT = caser.String(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
 		global.GVA_LOG.Error("预览失败!", zap.Error(err))
@@ -71,7 +76,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
-	a.PackageT = strings.Title(a.Package)
+	a.PackageT = caser.String(a.Package)
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.AutoMoveErr) {

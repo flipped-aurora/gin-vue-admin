@@ -110,7 +110,7 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithData(systemRes.SysAPIResponse{Api: api}, c)
+		response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, "获取成功", c)
 	}
 }
 

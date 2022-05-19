@@ -10,6 +10,8 @@ import (
 	"go/format"
 	"go/parser"
 	"go/token"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"io/ioutil"
 	"log"
 	"os"
@@ -48,6 +50,7 @@ type autoPackage struct {
 var (
 	packageInjectionMap map[string]astInjectionMeta
 	injectionPaths      []injectionMeta
+	caser               = cases.Title(language.English)
 )
 
 func Init(Package string) {
@@ -619,7 +622,7 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, strings.Title(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
+		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, caser.String(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
 			return err
 		}
 	}
@@ -750,7 +753,7 @@ func (vi *Visitor) addFuncBodyVar(funDecl *ast.FuncDecl) ast.Visitor {
 						},
 					},
 					Sel: &ast.Ident{
-						Name: strings.Title(vi.PackageName),
+						Name: caser.String(vi.PackageName),
 					},
 				},
 			},

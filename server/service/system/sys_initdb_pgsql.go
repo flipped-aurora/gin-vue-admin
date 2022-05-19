@@ -31,11 +31,11 @@ func (h PgsqlInitHandler) WriteConfig(ctx context.Context) error {
 	}
 	global.GVA_CONFIG.System.DbType = "pgsql"
 	global.GVA_CONFIG.Pgsql = c
+	global.GVA_CONFIG.JWT.SigningKey = uuid.NewV4().String()
 	cs := utils.StructToMap(global.GVA_CONFIG)
 	for k, v := range cs {
 		global.GVA_VP.Set(k, v)
 	}
-	global.GVA_VP.Set("jwt.signing-key", uuid.NewV4().String())
 	return global.GVA_VP.WriteConfig()
 }
 

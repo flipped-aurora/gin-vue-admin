@@ -22,7 +22,7 @@ func (s *EmailApi) EmailTest(c *gin.Context) {
 		global.GVA_LOG.Error("发送失败!", zap.Error(err))
 		response.FailWithMessage("发送失败", c)
 	} else {
-		response.OkWithData("发送成功", c)
+		response.OkWithMessage("发送成功", c)
 	}
 }
 
@@ -40,6 +40,6 @@ func (s *EmailApi) SendEmail(c *gin.Context) {
 		global.GVA_LOG.Error("发送失败!", zap.Error(err))
 		response.FailWithMessage("发送失败", c)
 	} else {
-		response.OkWithData("发送成功", c)
+		response.OkWithMessage("发送成功", c)
 	}
 }

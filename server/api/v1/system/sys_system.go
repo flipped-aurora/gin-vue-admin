@@ -42,7 +42,7 @@ func (s *SystemApi) SetSystemConfig(c *gin.Context) {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 	} else {
-		response.OkWithData("设置成功", c)
+		response.OkWithMessage("设置成功", c)
 	}
 }
 

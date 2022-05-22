@@ -31,7 +31,7 @@ func GormPgSql() *gorm.DB {
 }
 
 // GormPgSqlByConfig 初始化 Postgresql 数据库 通过参数
-func GormPgSqlByConfig(p config.DB) *gorm.DB {
+func GormPgSqlByConfig(p config.Pgsql) *gorm.DB {
 	if p.Dbname == "" {
 		return nil
 	}

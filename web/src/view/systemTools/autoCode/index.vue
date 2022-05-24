@@ -63,7 +63,7 @@
         <el-form-item label="文件名称" prop="packageName">
           <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" @blur="toLowerCaseFunc(form,'packageName')" />
         </el-form-item>
-        <el-form-item label="Package（包）" prop="packageName">
+        <el-form-item label="Package（包）" prop="package">
           <el-select v-model="form.package" style="width:194px">
             <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
           </el-select>

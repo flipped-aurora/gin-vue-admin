@@ -35,7 +35,7 @@ func (i *DBApi) InitDB(c *gin.Context) {
 		response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)
 		return
 	}
-	response.OkWithData("自动创建数据库成功", c)
+	response.OkWithMessage("自动创建数据库成功", c)
 }
 
 // CheckDB

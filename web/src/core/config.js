@@ -33,7 +33,7 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `插件市场:https://plugin.gin-vue-admin.com`
+        `> 插件市场:https://plugin.gin-vue-admin.com`
       )
     )
     console.log(

@@ -18,7 +18,7 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> 当前版本:v2.5.1`
+        `> 当前版本:v2.5.1b`
       )
     )
     console.log(
@@ -29,6 +29,11 @@ export const viteLogo = (env) => {
     console.log(
       chalk.green(
         `> GVA讨论社区：https://support.qq.com/products/371961`
+      )
+    )
+    console.log(
+      chalk.green(
+        `插件市场:https://plugin.gin-vue-admin.com`
       )
     )
     console.log(

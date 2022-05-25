@@ -32,6 +32,8 @@
 
 [交流社区](https://support.qq.com/products/371961)
 
+[插件市场](https://plugin.gin-vue-admin.com/)
+
 # 重要提示
 
 1.本项目从起步到开发到部署均有文档和详细视频教程

@@ -12,6 +12,7 @@ type GeneralDB struct {
 	Path         string `mapstructure:"path" json:"path" yaml:"path"`                               // 服务器地址:端口
 	Port         string `mapstructure:"port" json:"port" yaml:"port"`                               //:端口
 	Config       string `mapstructure:"config" json:"config" yaml:"config"`                         // 高级配置
+	AliasName    string `mapstructure:"alias-name" json:"alias-name" yaml:"alias-name"`             // 在多数据库中 生效
 	Dbname       string `mapstructure:"db-name" json:"db-name" yaml:"db-name"`                      // 数据库名
 	Username     string `mapstructure:"username" json:"username" yaml:"username"`                   // 数据库用户名
 	Password     string `mapstructure:"password" json:"password" yaml:"password"`                   // 数据库密码

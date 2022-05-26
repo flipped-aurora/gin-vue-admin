@@ -67,14 +67,18 @@ func (a *initMenuViewPg) MigrateTable(ctx context.Context) (context.Context, err
 	sql = strings.ReplaceAll(sql, "@table_name", sysModel.SysMenu{}.TableName())
 	sql = strings.ReplaceAll(sql, "@menus", sysModel.SysBaseMenu{}.TableName())
 	sql = strings.ReplaceAll(sql, "@authorities_menus", joinTableName)
-	if err := global.GVA_DB.Exec(sql).Error; err != nil {
+	if err := db.Exec(sql).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysMenu{}.TableName()+"视图创建失败!")
 	}
 	return ctx, nil
 }
 
 func (a *initMenuViewPg) TableCreated(ctx context.Context) bool {
-	err1 := global.GVA_DB.Find(&[]sysModel.SysMenu{}).Error
+	db, ok := ctx.Value("db").(*gorm.DB)
+	if !ok {
+		return false
+	}
+	err1 := db.Find(&[]sysModel.SysMenu{}).Error
 	err2 := errors.New(fmt.Sprintf("Error 1146: Table '%v.%v' doesn't exist",
 		global.GVA_CONFIG.Pgsql.Dbname, sysModel.SysMenu{}.TableName()))
 	if errors.As(err1, &err2) {

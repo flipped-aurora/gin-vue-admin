@@ -596,17 +596,8 @@ li {
         }
     }
     .aside {
-        .el-menu-item {
-            >div {
-                padding: 0 15px !important;
-            }
-        }
         .el-sub-menu {
             .el-menu {
-                .el-menu-item {
-                    height: 44px;
-                    line-height: 44px;
-                }
                 .is-active {
                     // 关闭三级菜单二级菜单样式
                     ul {

@@ -6,15 +6,17 @@ jwt:
   expires-time: 604800
   buffer-time: 86400
   issuer: 'qmPlus'
+
 # zap logger configuration
 zap:
   level: 'info'
-  format: 'console'
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
+  format: 'console'
   director: 'log'
-  show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'
+  max-age: 720h # 默认日志留存为24h * 30，也就是一个月
+  show-line: true
   log-in-console: true
 
 # redis configuration

@@ -34,9 +34,9 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 		i.Host = "127.0.0.1"
 	}
 	if i.Port == "" {
-		i.Port = "3306"
+		i.Port = "5432"
 	}
-	return "host=" + i.Host + " user=" + i.UserName + " password=" + i.Password + " port=" + i.Port + " " + "sslmode=disable TimeZone=Asia/Shanghai"
+	return "host=" + i.Host + " user=" + i.UserName + " password=" + i.Password + " port=" + i.Port + " dbname=" + "postgres" + " " + "sslmode=disable TimeZone=Asia/Shanghai"
 }
 
 // ToMysqlConfig 转换 config.Mysql

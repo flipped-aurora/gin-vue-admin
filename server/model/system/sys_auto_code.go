@@ -26,7 +26,7 @@ type AutoCodeStruct struct {
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (a *AutoCodeStruct) KeyWord() {
 	if token.IsKeyword(a.Abbreviation) {
-		a.Abbreviation = "_" + a.Abbreviation
+		a.Abbreviation = a.Abbreviation + "_"
 	}
 }
 

@@ -15,7 +15,7 @@ zap:
   director: 'log'
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'
-  max-age: 720h # 默认日志留存为24h * 30，也就是一个月
+  max-age: 30 # 默认日志留存默认以天为单位
   show-line: true
   log-in-console: true
 

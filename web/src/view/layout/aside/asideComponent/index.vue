@@ -10,7 +10,7 @@
       <AsideComponent
         v-for="item in routerInfo.children"
         :key="item.name"
-        :is-collapse="isCollapse"
+        :is-collapse="false"
         :router-info="item"
         :theme="theme"
       />

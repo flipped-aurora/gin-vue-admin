@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
 	"os"
 	"time"
 
@@ -11,37 +12,41 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
+// Zap 获取 zap.Logger
+// Author [SliverHorn](https://github.com/SliverHorn)
 func Zap() (logger *zap.Logger) {
 	if ok, _ := utils.PathExists(global.GVA_CONFIG.Zap.Director); !ok { // 判断是否有Director文件夹
 		fmt.Printf("create %v directory\n", global.GVA_CONFIG.Zap.Director)
 		_ = os.Mkdir(global.GVA_CONFIG.Zap.Director, os.ModePerm)
 	}
-	// 调试级别
-	debugPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
-		return lev == zap.DebugLevel
-	})
-	// 日志级别
-	infoPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
-		return lev == zap.InfoLevel
-	})
-	// 警告级别
-	warnPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
-		return lev == zap.WarnLevel
-	})
-	// 错误级别
-	errorPriority := zap.LevelEnablerFunc(func(lev zapcore.Level) bool {
-		return lev >= zap.ErrorLevel
-	})
 
-	now := time.Now().Format("2006-01-02")
-
-	cores := [...]zapcore.Core{
-		getEncoderCore(fmt.Sprintf("./%s/%s/debug.log", global.GVA_CONFIG.Zap.Director, now), debugPriority),
-		getEncoderCore(fmt.Sprintf("./%s/%s/info.log", global.GVA_CONFIG.Zap.Director, now), infoPriority),
-		getEncoderCore(fmt.Sprintf("./%s/%s/warn.log", global.GVA_CONFIG.Zap.Director, now), warnPriority),
-		getEncoderCore(fmt.Sprintf("./%s/%s/error.log", global.GVA_CONFIG.Zap.Director, now), errorPriority),
+	cores := make([]zapcore.Core, 0, 7)
+	debugLevel := getEncoderCore(zap.DebugLevel)
+	infoLevel := getEncoderCore(zap.InfoLevel)
+	warnLevel := getEncoderCore(zap.WarnLevel)
+	errorLevel := getEncoderCore(zap.ErrorLevel)
+	dPanicLevel := getEncoderCore(zap.DPanicLevel)
+	panicLevel := getEncoderCore(zap.PanicLevel)
+	fatalLevel := getEncoderCore(zap.FatalLevel)
+	switch global.GVA_CONFIG.Zap.Level {
+	case "debug", "DEBUG":
+		cores = append(cores, debugLevel, infoLevel, warnLevel, errorLevel, dPanicLevel, panicLevel, fatalLevel)
+	case "info", "INFO":
+		cores = append(cores, infoLevel, warnLevel, errorLevel, dPanicLevel, panicLevel, fatalLevel)
+	case "warn", "WARN":
+		cores = append(cores, warnLevel, errorLevel, dPanicLevel, panicLevel, fatalLevel)
+	case "error", "ERROR":
+		cores = append(cores, errorLevel, dPanicLevel, panicLevel, fatalLevel)
+	case "dpanic", "DPANIC":
+		cores = append(cores, dPanicLevel, panicLevel, fatalLevel)
+	case "panic", "PANIC":
+		cores = append(cores, panicLevel, fatalLevel)
+	case "fatal", "FATAL":
+		cores = append(cores, panicLevel, fatalLevel)
+	default:
+		cores = append(cores, debugLevel, infoLevel, warnLevel, errorLevel, dPanicLevel, panicLevel, fatalLevel)
 	}
-	logger = zap.New(zapcore.NewTee(cores[:]...), zap.AddCaller())
+	logger = zap.New(zapcore.NewTee(cores...), zap.AddCaller())
 
 	if global.GVA_CONFIG.Zap.ShowLine {
 		logger = logger.WithOptions(zap.AddCaller())
@@ -50,6 +55,7 @@ func Zap() (logger *zap.Logger) {
 }
 
 // getEncoderConfig 获取zapcore.EncoderConfig
+// Author [SliverHorn](https://github.com/SliverHorn)
 func getEncoderConfig() (config zapcore.EncoderConfig) {
 	config = zapcore.EncoderConfig{
 		MessageKey:     "message",
@@ -80,6 +86,7 @@ func getEncoderConfig() (config zapcore.EncoderConfig) {
 }
 
 // getEncoder 获取zapcore.Encoder
+// Author [SliverHorn](https://github.com/SliverHorn)
 func getEncoder() zapcore.Encoder {
 	if global.GVA_CONFIG.Zap.Format == "json" {
 		return zapcore.NewJSONEncoder(getEncoderConfig())
@@ -88,12 +95,18 @@ func getEncoder() zapcore.Encoder {
 }
 
 // getEncoderCore 获取Encoder的zapcore.Core
-func getEncoderCore(fileName string, level zapcore.LevelEnabler) (core zapcore.Core) {
-	writer := utils.GetWriteSyncer(fileName) // 使用file-rotatelogs进行日志分割
+// Author [SliverHorn](https://github.com/SliverHorn)
+func getEncoderCore(level zapcore.Level) (core zapcore.Core) {
+	writer, err := internal.FileRotatelogs.GetWriteSyncer(level.String()) // 使用file-rotatelogs进行日志分割
+	if err != nil {
+		fmt.Printf("Get Write Syncer Failed err:%v", err.Error())
+		return
+	}
 	return zapcore.NewCore(getEncoder(), writer, level)
 }
 
 // CustomTimeEncoder 自定义日志输出时间格式
+// Author [SliverHorn](https://github.com/SliverHorn)
 func CustomTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
 	enc.AppendString(t.Format(global.GVA_CONFIG.Zap.Prefix + "2006/01/02 - 15:04:05.000"))
 }

@@ -30,7 +30,7 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authBack := authorityService.CreateAuthority(authority); err != nil {
+	if authBack, err := authorityService.CreateAuthority(authority); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
 	} else {
@@ -59,7 +59,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authBack := authorityService.CopyAuthority(copyInfo); err != nil {
+	if authBack, err := authorityService.CopyAuthority(copyInfo); err != nil {
 		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
 	} else {
@@ -105,7 +105,7 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authority := authorityService.UpdateAuthority(auth); err != nil {
+	if authority, err := authorityService.UpdateAuthority(auth); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败"+err.Error(), c)
 	} else {
@@ -128,7 +128,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := authorityService.GetAuthorityInfoList(pageInfo); err != nil {
+	if list, total, err := authorityService.GetAuthorityInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)
 	} else {

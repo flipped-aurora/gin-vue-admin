@@ -31,7 +31,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 	}
 	if store.Verify(l.CaptchaId, l.Captcha, true) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
-		if err, user := userService.Login(u); err != nil {
+		if user, err := userService.Login(u); err != nil {
 			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
 		} else {
@@ -67,7 +67,7 @@ func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
 		return
 	}
 
-	if err, jwtStr := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
+	if jwtStr, err := jwtService.GetRedisJWT(user.Username); err == redis.Nil {
 		if err := jwtService.SetRedisJWT(token, user.Username); err != nil {
 			global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
 			response.FailWithMessage("设置登录状态失败", c)
@@ -120,7 +120,7 @@ func (b *BaseApi) Register(c *gin.Context) {
 		})
 	}
 	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: r.AuthorityId, Authorities: authorities}
-	err, userReturn := userService.Register(*user)
+	userReturn, err := userService.Register(*user)
 	if err != nil {
 		global.GVA_LOG.Error("注册失败!", zap.Error(err))
 		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
@@ -144,7 +144,7 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 		return
 	}
 	u := &system.SysUser{Username: user.Username, Password: user.Password}
-	if err, _ := userService.ChangePassword(u, user.NewPassword); err != nil {
+	if _, err := userService.ChangePassword(u, user.NewPassword); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 	} else {
@@ -167,7 +167,7 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := userService.GetUserInfoList(pageInfo); err != nil {
+	if list, total, err := userService.GetUserInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -342,7 +342,7 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 // @Router /user/getUserInfo [get]
 func (b *BaseApi) GetUserInfo(c *gin.Context) {
 	uuid := utils.GetUserUuid(c)
-	if err, ReqUser := userService.GetUserInfo(uuid); err != nil {
+	if ReqUser, err := userService.GetUserInfo(uuid); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

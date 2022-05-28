@@ -689,7 +689,6 @@ li {
         }
         th {
             padding: 6px 0;
-            background: #F7FBFF;
             .cell {
                 color: rgba($color: #000000, $alpha: 0.85);
                 font-size: 14px;
@@ -709,6 +708,7 @@ li {
             border-bottom: 1px solid #e8e8e8;
         }
         th.is-leaf {
+            background: #F7FBFF;
             border-bottom: none;
         }
     }

@@ -75,6 +75,9 @@
           <el-form-item label="栈名">
             <el-input v-model="config.zap['stacktrace-key']" />
           </el-form-item>
+          <el-form-item label="日志留存时间(默认以天为单位)">
+            <el-input v-model.number="config.zap['max-age']" />
+          </el-form-item>
           <el-form-item label="显示行">
             <el-checkbox v-model="config.zap['show-line']" />
           </el-form-item>

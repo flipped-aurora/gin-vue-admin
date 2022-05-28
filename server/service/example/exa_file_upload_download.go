@@ -25,12 +25,12 @@ func (e *FileUploadAndDownloadService) Upload(file example.ExaFileUploadAndDownl
 //@function: FindFile
 //@description: 查询文件记录
 //@param: id uint
-//@return: error, model.ExaFileUploadAndDownload
+//@return: model.ExaFileUploadAndDownload, error
 
-func (e *FileUploadAndDownloadService) FindFile(id uint) (error, example.ExaFileUploadAndDownload) {
+func (e *FileUploadAndDownloadService) FindFile(id uint) (example.ExaFileUploadAndDownload, error) {
 	var file example.ExaFileUploadAndDownload
 	err := global.GVA_DB.Where("id = ?", id).First(&file).Error
-	return err, file
+	return file, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -41,7 +41,7 @@ func (e *FileUploadAndDownloadService) FindFile(id uint) (error, example.ExaFile
 
 func (e *FileUploadAndDownloadService) DeleteFile(file example.ExaFileUploadAndDownload) (err error) {
 	var fileFromDb example.ExaFileUploadAndDownload
-	err, fileFromDb = e.FindFile(file.ID)
+	fileFromDb, err = e.FindFile(file.ID)
 	if err != nil {
 		return
 	}
@@ -63,9 +63,9 @@ func (e *FileUploadAndDownloadService) EditFileName(file example.ExaFileUploadAn
 //@function: GetFileRecordInfoList
 //@description: 分页获取数据
 //@param: info request.PageInfo
-//@return: err error, list interface{}, total int64
+//@return: list interface{}, total int64, err error
 
-func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
+func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	keyword := info.Keyword
@@ -79,16 +79,16 @@ func (e *FileUploadAndDownloadService) GetFileRecordInfoList(info request.PageIn
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Order("updated_at desc").Find(&fileLists).Error
-	return err, fileLists, total
+	return fileLists, total, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: UploadFile
 //@description: 根据配置文件判断是文件上传到本地或者七牛云
 //@param: header *multipart.FileHeader, noSave string
-//@return: err error, file model.ExaFileUploadAndDownload
+//@return: file model.ExaFileUploadAndDownload, err error
 
-func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, noSave string) (err error, file example.ExaFileUploadAndDownload) {
+func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, noSave string) (file example.ExaFileUploadAndDownload, err error) {
 	oss := upload.NewOss()
 	filePath, key, uploadErr := oss.UploadFile(header)
 	if uploadErr != nil {
@@ -102,7 +102,7 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 			Tag:  s[len(s)-1],
 			Key:  key,
 		}
-		return e.Upload(f), f
+		return f, e.Upload(f)
 	}
 	return
 }

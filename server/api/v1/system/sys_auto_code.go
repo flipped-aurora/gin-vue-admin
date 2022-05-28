@@ -218,7 +218,7 @@ func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
 	}
 }
 
-// DelPackage
+// AutoPlug
 // @Tags AutoCode
 // @Summary 创建插件模板
 // @Security ApiKeyAuth

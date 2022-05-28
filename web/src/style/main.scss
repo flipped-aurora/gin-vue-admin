@@ -596,7 +596,16 @@ li {
         }
     }
     .aside {
+        .el-menu--collapse {
+            >.el-menu-item{
+                padding: 0 15px !important;
+
+            }
+        }
         .el-sub-menu {
+            .el-menu-item{
+                padding: 0 20px;
+            }
             .el-menu {
                 .is-active {
                     // 关闭三级菜单二级菜单样式

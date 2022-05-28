@@ -24,10 +24,11 @@ require (
 	github.com/jackc/pgx/v4 v4.15.0 // indirect
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/json-iterator/go v1.1.10 // indirect
+	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
+	github.com/lestrrat-go/strftime v1.0.6 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
 	github.com/mojocn/base64Captcha v1.3.1
-	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/qiniu/api.v7/v7 v7.4.1
@@ -53,7 +54,6 @@ require (
 	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.1.5 // indirect
 	gopkg.in/ini.v1 v1.55.0 // indirect
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gorm.io/driver/mysql v1.0.1
 	gorm.io/driver/postgres v1.2.3
 	gorm.io/gorm v1.22.5

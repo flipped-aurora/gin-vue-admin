@@ -80,7 +80,7 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 //@param: Type string, Id uint
 //@return: err error, sysDictionary model.SysDictionary
 
-func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint) (err error, sysDictionary system.SysDictionary) {
+func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint) (sysDictionary system.SysDictionary, err error) {
 	err = global.GVA_DB.Where("type = ? OR id = ? and status = ?", Type, Id, true).Preload("SysDictionaryDetails", "status = ?", true).First(&sysDictionary).Error
 	return
 }
@@ -92,7 +92,7 @@ func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uin
 //@param: info request.SysDictionarySearch
 //@return: err error, list interface{}, total int64
 
-func (dictionaryService *DictionaryService) GetSysDictionaryInfoList(info request.SysDictionarySearch) (err error, list interface{}, total int64) {
+func (dictionaryService *DictionaryService) GetSysDictionaryInfoList(info request.SysDictionarySearch) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -116,5 +116,5 @@ func (dictionaryService *DictionaryService) GetSysDictionaryInfoList(info reques
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionarys).Error
-	return err, sysDictionarys, total
+	return sysDictionarys, total, err
 }

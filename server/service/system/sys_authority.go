@@ -11,38 +11,40 @@ import (
 	"gorm.io/gorm"
 )
 
+var ErrRoleExistence = errors.New("存在相同角色id")
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CreateAuthority
 //@description: 创建一个角色
 //@param: auth model.SysAuthority
-//@return: err error, authority model.SysAuthority
+//@return: authority system.SysAuthority, err error
 
 type AuthorityService struct{}
 
 var AuthorityServiceApp = new(AuthorityService)
 
-func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthority) (err error, authority system.SysAuthority) {
+func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同角色id"), auth
+		return auth, ErrRoleExistence
 	}
 	err = global.GVA_DB.Create(&auth).Error
-	return err, auth
+	return auth, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: CopyAuthority
 //@description: 复制一个角色
 //@param: copyInfo response.SysAuthorityCopyResponse
-//@return: err error, authority model.SysAuthority
+//@return: authority system.SysAuthority, err error
 
-func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (err error, authority system.SysAuthority) {
+func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (authority system.SysAuthority, err error) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同角色id"), authority
+		return authority, ErrRoleExistence
 	}
 	copyInfo.Authority.Children = []system.SysAuthority{}
-	err, menus := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
+	menus, err := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
 	if err != nil {
 		return
 	}
@@ -79,18 +81,18 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	if err != nil {
 		_ = authorityService.DeleteAuthority(&copyInfo.Authority)
 	}
-	return err, copyInfo.Authority
+	return copyInfo.Authority, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: UpdateAuthority
 //@description: 更改一个角色
 //@param: auth model.SysAuthority
-//@return: err error, authority model.SysAuthority
+//@return: authority system.SysAuthority, err error
 
-func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthority) (err error, authority system.SysAuthority) {
+func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
 	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Updates(&auth).Error
-	return err, auth
+	return auth, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -139,9 +141,9 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 //@function: GetAuthorityInfoList
 //@description: 分页获取数据
 //@param: info request.PageInfo
-//@return: err error, list interface{}, total int64
+//@return: list interface{}, total int64, err error
 
-func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo) (err error, list interface{}, total int64) {
+func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&system.SysAuthority{})
@@ -153,18 +155,18 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(info request.Page
 			err = authorityService.findChildrenAuthority(&authority[k])
 		}
 	}
-	return err, authority, total
+	return authority, total, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetAuthorityInfo
 //@description: 获取所有角色信息
 //@param: auth model.SysAuthority
-//@return: err error, sa model.SysAuthority
+//@return: sa system.SysAuthority, err error
 
-func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthority) (err error, sa system.SysAuthority) {
+func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthority) (sa system.SysAuthority, err error) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(&sa).Error
-	return err, sa
+	return sa, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

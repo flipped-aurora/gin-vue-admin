@@ -11,12 +11,12 @@ import (
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetSystemConfig
 //@description: 读取配置文件
-//@return: err error, conf config.Server
+//@return: conf config.Server, err error
 
 type SystemConfigService struct{}
 
-func (systemConfigService *SystemConfigService) GetSystemConfig() (err error, conf config.Server) {
-	return nil, global.GVA_CONFIG
+func (systemConfigService *SystemConfigService) GetSystemConfig() (conf config.Server, err error) {
+	return global.GVA_CONFIG, nil
 }
 
 // @description   set system config,

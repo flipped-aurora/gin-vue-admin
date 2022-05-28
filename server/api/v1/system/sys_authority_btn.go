@@ -21,7 +21,7 @@ type AuthorityBtnApi struct{}
 func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 	var req request.SysAuthorityBtnReq
 	_ = c.ShouldBindJSON(&req)
-	if err, res := authorityBtnService.GetAuthorityBtn(req); err != nil {
+	if res, err := authorityBtnService.GetAuthorityBtn(req); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {

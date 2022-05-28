@@ -11,7 +11,7 @@ import (
 
 type AuthorityBtnService struct{}
 
-func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (err error, res response.SysAuthorityBtnRes) {
+func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (res response.SysAuthorityBtnRes, err error) {
 	var authorityBtn []system.SysAuthorityBtn
 	err = global.GVA_DB.Find(&authorityBtn, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error
 	if err != nil {
@@ -22,7 +22,7 @@ func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (e
 		selected = append(selected, v.SysBaseMenuBtnID)
 	}
 	res.Selected = selected
-	return err, res
+	return res, err
 }
 
 func (a *AuthorityBtnService) SetAuthorityBtn(req request.SysAuthorityBtnReq) (err error) {

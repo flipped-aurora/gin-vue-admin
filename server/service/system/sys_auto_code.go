@@ -795,7 +795,7 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
 }
 
-// 自动创建插件模板
+// CreatePlug 自动创建插件模板
 func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) error {
 	// 检查列表参数是否有效
 	plug.CheckList()

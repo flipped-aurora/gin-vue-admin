@@ -109,7 +109,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
-	if err, re{{.Abbreviation}} := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
+	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
         global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
@@ -129,7 +129,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
 	var pageInfo {{.Package}}Req.{{.StructName}}Search
 	_ = c.ShouldBindQuery(&pageInfo)
-	if err, list, total := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
+	if list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
 	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
         response.FailWithMessage("获取失败", c)
     } else {

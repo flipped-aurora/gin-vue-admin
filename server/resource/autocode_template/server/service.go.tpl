@@ -84,5 +84,5 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
     	return
     }
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
-	return err, {{.Abbreviation}}s, total
+	return  {{.Abbreviation}}s, total, err
 }

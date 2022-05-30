@@ -220,7 +220,7 @@ const removeTab = (tab) => {
   const index = historys.value.findIndex(
     (item) => getFmtString(item) === tab
   )
-  if (getFmtString(route) === tab) {
+  if (getFmtString(route) === tab)  {
     if (historys.value.length === 1) {
       router.push({ name: defaultRouter.value })
     } else {
@@ -262,6 +262,12 @@ watch(route, (to, now) => {
   setTab(to)
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
   activeValue.value = window.sessionStorage.getItem('activeValue')
+})
+
+watch(() => historys.value, () => {
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
+}, {
+  deep: true
 })
 
 const initPage = () => {

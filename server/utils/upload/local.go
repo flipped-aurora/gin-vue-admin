@@ -34,13 +34,14 @@ func (*Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	// 拼接新文件名
 	filename := name + "_" + time.Now().Format("20060102150405") + ext
 	// 尝试创建此路径
-	mkdirErr := os.MkdirAll(global.GVA_CONFIG.Local.Path, os.ModePerm)
+	mkdirErr := os.MkdirAll(global.GVA_CONFIG.Local.StorePath, os.ModePerm)
 	if mkdirErr != nil {
 		global.GVA_LOG.Error("function os.MkdirAll() Filed", zap.Any("err", mkdirErr.Error()))
 		return "", "", errors.New("function os.MkdirAll() Filed, err:" + mkdirErr.Error())
 	}
 	// 拼接路径和文件名
-	p := global.GVA_CONFIG.Local.Path + "/" + filename
+	p := global.GVA_CONFIG.Local.StorePath + "/" + filename
+	filepath := global.GVA_CONFIG.Local.Path + "/" + filename
 
 	f, openError := file.Open() // 读取文件
 	if openError != nil {
@@ -62,7 +63,7 @@ func (*Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 		global.GVA_LOG.Error("function io.Copy() Filed", zap.Any("err", copyErr.Error()))
 		return "", "", errors.New("function io.Copy() Filed, err:" + copyErr.Error())
 	}
-	return p, filename, nil
+	return filepath, filename, nil
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -75,8 +76,8 @@ func (*Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 //@return: error
 
 func (*Local) DeleteFile(key string) error {
-	p := global.GVA_CONFIG.Local.Path + "/" + key
-	if strings.Contains(p, global.GVA_CONFIG.Local.Path) {
+	p := global.GVA_CONFIG.Local.StorePath + "/" + key
+	if strings.Contains(p, global.GVA_CONFIG.Local.StorePath) {
 		if err := os.Remove(p); err != nil {
 			return errors.New("本地文件删除失败, err:" + err.Error())
 		}

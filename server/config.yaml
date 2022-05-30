@@ -104,7 +104,8 @@ db-list:
 
 # local configuration
 local:
-  path: 'uploads/file'
+  path: 'uploads/file' # 访问路径
+  store-path: 'uploads/file' # 存储路径
 
 # autocode configuration
 autocode:

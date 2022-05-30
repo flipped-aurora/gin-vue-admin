@@ -217,7 +217,7 @@ const removeTab = (tab) => {
   const index = historys.value.findIndex(
     (item) => getFmtString(item) === tab
   )
-  if (getFmtString(route) === tab) {
+  if (getFmtString(historys.value[index]) === tab) {
     if (historys.value.length === 1) {
       router.push({ name: defaultRouter.value })
     } else {
@@ -237,6 +237,7 @@ const removeTab = (tab) => {
     }
   }
   historys.value.splice(index, 1)
+  sessionStorage.setItem('historys', JSON.stringify(historys.value))
 }
 
 watch(contextMenuVisible, () => {

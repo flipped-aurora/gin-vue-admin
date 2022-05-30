@@ -159,7 +159,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/canRemoveAuthorityBtn", Description: "删除按钮"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
-		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+" "+"general.tabelDataInitFail")
+		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+" "+global.Translate("general.tabelDataInitFail"))
 	}
 	next := context.WithValue(ctx, i.InitializerName(), entities)
 	return next, nil

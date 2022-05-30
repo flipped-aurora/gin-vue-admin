@@ -80,7 +80,7 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
 	_ = c.ShouldBindQuery(&dictionary)
-	if err, sysDictionary := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID); err != nil {
+	if sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
@@ -103,7 +103,7 @@ func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := dictionaryService.GetSysDictionaryInfoList(pageInfo); err != nil {
+	if list, total, err := dictionaryService.GetSysDictionaryInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {

@@ -40,8 +40,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="t('autoCode.fieldLen')" prop="dataTypeLong">
-        <el-input v-model="middleDate.dataTypeLong" :placeholder="t('fieldDialog.dataTypeNote')" />
+      <el-form-item :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'" prop="dataTypeLong">
+        <el-input v-model="middleDate.dataTypeLong" placeholder="数据库类型长度" />
       </el-form-item>
       <el-form-item :label="t('general.searchCriteria')" prop="fieldSearchType">
         <el-select
@@ -143,6 +143,10 @@ const typeOptions = ref([
   {
     label: t('fieldDialog.time'),
     value: 'time.Time'
+  },
+  {
+    label: '枚举',
+    value: 'enum'
   }
 ])
 const rules = ref({

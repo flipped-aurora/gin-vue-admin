@@ -5,7 +5,7 @@
       <el-aside class="main-cont main-left">
         <div class="tilte" :style="{background: backgroundColor}">
           <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
-          <h2 v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</h2>
+          <div v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
         <Aside class="aside" />
       </el-aside>
@@ -79,11 +79,13 @@
           </div>
         </transition>
         <router-view v-if="reloadFlag" v-slot="{ Component }" v-loading="loadingFlag" :element-loading-text="t('layout.loading')" class="admin-box">
-          <transition mode="out-in" name="el-fade-in-linear">
-            <keep-alive :include="routerStore.keepAliveRouters">
-              <component :is="Component" />
-            </keep-alive>
-          </transition>
+          <div>
+            <transition mode="out-in" name="el-fade-in-linear">
+              <keep-alive :include="routerStore.keepAliveRouters">
+                <component :is="Component" />
+              </keep-alive>
+            </transition>
+          </div>
         </router-view>
         <BottomInfo />
         <setting />
@@ -123,6 +125,11 @@ const routerStore = useRouterStore()
 const isCollapse = ref(false)
 const isSider = ref(true)
 const isMobile = ref(false)
+
+const cc = (e) => {
+  console.log(e)
+}
+
 const initPage = () => {
   const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {

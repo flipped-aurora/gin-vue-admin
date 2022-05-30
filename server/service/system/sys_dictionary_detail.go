@@ -45,9 +45,9 @@ func (dictionaryDetailService *DictionaryDetailService) UpdateSysDictionaryDetai
 //@function: GetSysDictionaryDetail
 //@description: 根据id获取字典详情单条数据
 //@param: id uint
-//@return: err error, sysDictionaryDetail model.SysDictionaryDetail
+//@return: sysDictionaryDetail system.SysDictionaryDetail, err error
 
-func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetail(id uint) (err error, sysDictionaryDetail system.SysDictionaryDetail) {
+func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetail(id uint) (sysDictionaryDetail system.SysDictionaryDetail, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&sysDictionaryDetail).Error
 	return
 }
@@ -56,9 +56,9 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetail(i
 //@function: GetSysDictionaryDetailInfoList
 //@description: 分页获取字典详情列表
 //@param: info request.SysDictionaryDetailSearch
-//@return: err error, list interface{}, total int64
+//@return: list interface{}, total int64, err error
 
-func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (err error, list interface{}, total int64) {
+func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailInfoList(info request.SysDictionaryDetailSearch) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -82,5 +82,5 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 		return
 	}
 	err = db.Limit(limit).Offset(offset).Find(&sysDictionaryDetails).Error
-	return err, sysDictionaryDetails, total
+	return sysDictionaryDetails, total, err
 }

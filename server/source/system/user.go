@@ -70,8 +70,8 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 			Phone:       "17611111111",
 			Email:       "333333333@qq.com"},
 	}
-	if err = global.GVA_DB.Create(&entities).Error; err != nil {
-		return ctx, errors.Wrap(err, sysModel.SysUser{}.TableName()+" "+"general.tabelDataInitFail")
+	if err = db.Create(&entities).Error; err != nil {
+		return ctx, errors.Wrap(err, sysModel.SysUser{}.TableName()+" "+global.Translate("system.api.systemUser"))
 	}
 	next = context.WithValue(ctx, i.InitializerName(), entities)
 	authorityEntities, ok := ctx.Value(initAuthority{}.InitializerName()).([]sysModel.SysAuthority)

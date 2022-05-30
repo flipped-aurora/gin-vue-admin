@@ -189,8 +189,11 @@
         <el-collapse-item title="oss配置" name="10">
           <template v-if="config.system['oss-type'] === 'local'">
             <h2>本地文件配置</h2>
-            <el-form-item label="本地文件路径">
+            <el-form-item label="本地文件访问路径">
               <el-input v-model="config.local.path" />
+            </el-form-item>
+            <el-form-item label="本地文件存储路径">
+              <el-input v-model="config.local['store-path']" />
             </el-form-item>
           </template>
           <template v-if="config.system['oss-type'] === 'qiniu'">

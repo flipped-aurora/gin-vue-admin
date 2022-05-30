@@ -139,7 +139,7 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-const path = ref(import.meta.env.VITE_BASE_API)
+const path = ref(import.meta.env.VITE_BASE_API + '/')
 // 初始化相关
 const setAuthorityOptions = (AuthorityData, optionsData) => {
   AuthorityData &&

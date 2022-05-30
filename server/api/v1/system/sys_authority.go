@@ -30,7 +30,7 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authBack := authorityService.CreateAuthority(authority); err != nil {
+	if authBack, err := authorityService.CreateAuthority(authority); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.creationFailErr")+" "+err.Error(), c)
 	} else {
@@ -59,7 +59,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authBack := authorityService.CopyAuthority(copyInfo); err != nil {
+	if authBack, err := authorityService.CopyAuthority(copyInfo); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.copyFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.copyFailErr")+" "+err.Error(), c)
 	} else {
@@ -105,7 +105,7 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, authority := authorityService.UpdateAuthority(auth); err != nil {
+	if authority, err := authorityService.UpdateAuthority(auth); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.updateFailErr")+" "+err.Error(), c)
 	} else {
@@ -128,7 +128,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := authorityService.GetAuthorityInfoList(pageInfo); err != nil {
+	if list, total, err := authorityService.GetAuthorityInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr")+" "+err.Error(), c)
 	} else {

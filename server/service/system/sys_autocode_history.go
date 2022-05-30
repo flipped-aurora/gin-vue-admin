@@ -97,7 +97,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		}
 		err = utils.FileMove(path, nPath)
 		if err != nil {
-			fmt.Println(">>>>>>>>>>>>>>>>>>>", err)
+			global.GVA_LOG.Error("file move err ", zap.Error(err))
 		}
 		//_ = utils.DeLFile(path)
 	}

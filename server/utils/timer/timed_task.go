@@ -28,7 +28,7 @@ func (t *timer) AddTaskByFunc(taskName string, spec string, task func()) (cron.E
 	t.Lock()
 	defer t.Unlock()
 	if _, ok := t.taskList[taskName]; !ok {
-		t.taskList[taskName] = cron.New()
+		t.taskList[taskName] = cron.New(cron.WithSeconds())
 	}
 	id, err := t.taskList[taskName].AddFunc(spec, task)
 	t.taskList[taskName].Start()

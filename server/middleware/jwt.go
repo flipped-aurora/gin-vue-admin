@@ -57,7 +57,7 @@ func JWTAuth() gin.HandlerFunc {
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt, 10))
 			if global.GVA_CONFIG.System.UseMultipoint {
-				err, RedisJwtToken := jwtService.GetRedisJWT(newClaims.Username)
+				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.Username)
 				if err != nil {
 					global.GVA_LOG.Error("get redis jwt failed", zap.Error(err))
 				} else { // 当之前的取成功时才进行拉黑操作

@@ -3,6 +3,8 @@ package system
 import (
 	"errors"
 	"fmt"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"net/url"
 	"os"
 	"strings"
@@ -17,6 +19,8 @@ import (
 )
 
 type AutoCodeApi struct{}
+
+var caser = cases.Title(language.English)
 
 // PreviewTemp
 // @Tags AutoCode
@@ -34,7 +38,8 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	a.PackageT = strings.Title(a.Package)
+	a.KeyWord() // 处理go关键字
+	a.PackageT = caser.String(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_auto_code.previewFail"), zap.Error(err))
@@ -60,6 +65,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	a.KeyWord() // 处理go关键字
 	var apiIds []uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
@@ -71,7 +77,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
-	a.PackageT = strings.Title(a.Package)
+	a.PackageT = caser.String(a.Package)
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.AutoMoveErr) {
@@ -212,7 +218,7 @@ func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
 	}
 }
 
-// DelPackage
+// AutoPlug
 // @Tags AutoCode
 // @Summary 创建插件模板
 // @Security ApiKeyAuth

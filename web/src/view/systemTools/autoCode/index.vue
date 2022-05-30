@@ -63,7 +63,7 @@
         <el-form-item :label="t('autoCode.fileName')" prop="packageName">
           <el-input v-model="form.packageName" :placeholder="t('autoCode.fileNameNote')" @blur="toLowerCaseFunc(form,'packageName')" />
         </el-form-item>
-        <el-form-item label="Package（包）" prop="packageName">
+        <el-form-item label="Package（包）" prop="package">
           <el-select v-model="form.package" style="width:194px">
             <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
           </el-select>
@@ -493,6 +493,10 @@ const init = () => {
   }
 }
 init()
+
+watch(() => route.params.id, (id) => {
+  init()
+})
 
 </script>
 

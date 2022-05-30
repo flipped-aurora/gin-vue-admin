@@ -1,6 +1,9 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="gva-table-box">
+      <warning-bar
+        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+      />
       <div class="gva-btn-list">
         <upload-common
           v-model:imageCommon="imageCommon"
@@ -84,6 +87,7 @@ import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
+import warningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -157,7 +161,8 @@ const downloadFile = (row) => {
   if (row.url.indexOf('http://') > -1 || row.url.indexOf('https://') > -1) {
     downloadImage(row.url, row.name)
   } else {
-    downloadImage(path.value + row.url, row.name)
+    debugger
+    downloadImage(path.value + '/' + row.url, row.name)
   }
 }
 
@@ -200,9 +205,10 @@ export default {
 }
 </script>
 <style scoped>
-.name{
+.name {
   cursor: pointer;
 }
+
 .upload-btn + .upload-btn {
   margin-left: 12px;
 }

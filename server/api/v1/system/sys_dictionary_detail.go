@@ -84,7 +84,7 @@ func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, resysDictionaryDetail := dictionaryDetailService.GetSysDictionaryDetail(detail.ID); err != nil {
+	if resysDictionaryDetail, err := dictionaryDetailService.GetSysDictionaryDetail(detail.ID); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
@@ -103,7 +103,7 @@ func (s *DictionaryDetailApi) FindSysDictionaryDetail(c *gin.Context) {
 func (s *DictionaryDetailApi) GetSysDictionaryDetailList(c *gin.Context) {
 	var pageInfo request.SysDictionaryDetailSearch
 	_ = c.ShouldBindQuery(&pageInfo)
-	if err, list, total := dictionaryDetailService.GetSysDictionaryDetailInfoList(pageInfo); err != nil {
+	if list, total, err := dictionaryDetailService.GetSysDictionaryDetailInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {

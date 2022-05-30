@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"go/token"
 )
 
 // AutoCodeStruct 初始版本自动化代码工具
@@ -15,10 +16,18 @@ type AutoCodeStruct struct {
 	Description        string   `json:"description"`        // Struct中文名称
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
-	Fields             []*Field `json:"fields"`
+	Fields             []*Field `json:"fields,omitempty"`
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`
+}
+
+// KeyWord 是go关键字的处理加上 _ ，防止编译报错
+// Author [SliverHorn](https://github.com/SliverHorn)
+func (a *AutoCodeStruct) KeyWord() {
+	if token.IsKeyword(a.Abbreviation) {
+		a.Abbreviation = a.Abbreviation + "_"
+	}
 }
 
 type Field struct {
@@ -43,26 +52,40 @@ type SysAutoCode struct {
 }
 
 type AutoPlugReq struct {
-	PlugName    string `json:"plugName"` // 必然大写开头
-	Snake       string `json:"snake"`    // 后端自动转为 snake
-	RouterGroup string `json:"routerGroup"`
-	HasGlobal   bool   `json:"hasGlobal"`
-	HasRequest  bool   `json:"hasRequest"`
-	HasResponse bool   `json:"hasResponse"`
-	NeedModel   bool   `json:"needModel"`
-	Global      []struct {
-		Key  string `json:"key"`
-		Type string `json:"type"`
-		Desc string `json:"desc"`
-	} `json:"global"`
-	Request []struct {
-		Key  string `json:"key"`
-		Type string `json:"type"`
-		Desc string `json:"desc"`
-	} `json:"request"`
-	Response []struct {
-		Key  string `json:"key"`
-		Type string `json:"type"`
-		Desc string `json:"desc"`
-	} `json:"response"`
+	PlugName    string         `json:"plugName"` // 必然大写开头
+	Snake       string         `json:"snake"`    // 后端自动转为 snake
+	RouterGroup string         `json:"routerGroup"`
+	HasGlobal   bool           `json:"hasGlobal"`
+	HasRequest  bool           `json:"hasRequest"`
+	HasResponse bool           `json:"hasResponse"`
+	NeedModel   bool           `json:"needModel"`
+	Global      []AutoPlugInfo `json:"global,omitempty"`
+	Request     []AutoPlugInfo `json:"request,omitempty"`
+	Response    []AutoPlugInfo `json:"response,omitempty"`
+}
+
+func (a *AutoPlugReq) CheckList() {
+	a.Global = bind(a.Global)
+	a.Request = bind(a.Request)
+	a.Response = bind(a.Response)
+
+}
+func bind(req []AutoPlugInfo) []AutoPlugInfo {
+	var r []AutoPlugInfo
+	for _, info := range req {
+		if info.Effective() {
+			r = append(r, info)
+		}
+	}
+	return r
+}
+
+type AutoPlugInfo struct {
+	Key  string `json:"key"`
+	Type string `json:"type"`
+	Desc string `json:"desc"`
+}
+
+func (a AutoPlugInfo) Effective() bool {
+	return a.Key != "" && a.Type != "" && a.Desc != ""
 }

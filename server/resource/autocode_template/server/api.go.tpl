@@ -23,13 +23,8 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-<<<<<<< HEAD
-// @Param data body autocode.{{.StructName}} true "创建{{.StructName}}"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":global.Translate("general.getDataSuccess")}"
-=======
 // @Param data body {{.Package}}.{{.StructName}} true "创建{{.StructName}}"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
->>>>>>> main
+// @Success 200 {string} string "{"success":true,"data":{},"msg":global.Translate("general.getDataSuccess")}"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
@@ -114,7 +109,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindQuery(&{{.Abbreviation}})
-	if err, re{{.Abbreviation}} := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
+	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
         global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
 	} else {
@@ -134,7 +129,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
 	var pageInfo {{.Package}}Req.{{.StructName}}Search
 	_ = c.ShouldBindQuery(&pageInfo)
-	if err, list, total := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
+	if list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
 	    global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
         response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
     } else {

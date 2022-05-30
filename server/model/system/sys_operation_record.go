@@ -1,4 +1,3 @@
-// 自动生成模板SysOperationRecord
 package system
 
 import (
@@ -7,7 +6,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
-// 如果含有time.Time 请自行import time包
 type SysOperationRecord struct {
 	global.GVA_MODEL
 	Ip           string        `json:"ip" form:"ip" gorm:"column:ip;comment:请求ip"`                                   // 请求ip
@@ -21,4 +19,9 @@ type SysOperationRecord struct {
 	Resp         string        `json:"resp" form:"resp" gorm:"type:text;column:resp;comment:响应Body"`                 // 响应Body
 	UserID       int           `json:"user_id" form:"user_id" gorm:"column:user_id;comment:用户id"`                    // 用户id
 	User         SysUser       `json:"user"`
+}
+
+// TableName 系统操作日志表
+func (s *SysOperationRecord) TableName() string {
+	return "sys_operation_records"
 }

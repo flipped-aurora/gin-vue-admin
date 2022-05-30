@@ -1,5 +1,10 @@
 package config
 
+import (
+	"path"
+	"strings"
+)
+
 type Autocode struct {
 	TransferRestart bool   `mapstructure:"transfer-restart" json:"transfer-restart" yaml:"transfer-restart"`
 	Root            string `mapstructure:"root" json:"root" yaml:"root"`
@@ -15,4 +20,14 @@ type Autocode struct {
 	WApi            string `mapstructure:"web-api" json:"web-api" yaml:"web-api"`
 	WForm           string `mapstructure:"web-form" json:"web-form" yaml:"web-form"`
 	WTable          string `mapstructure:"web-table" json:"web-table" yaml:"web-table"`
+}
+
+// Model 返回model不带%s
+// Author [SliverHorn](https://github.com/SliverHorn)
+func (a *Autocode) Model() string {
+	s1 := strings.Replace(a.SModel, "%s", "", -1)
+	if strings.Contains(s1, "/") {
+		s1 = strings.Replace(s1, "/", "", 1)
+	}
+	return path.Join(s1)
 }

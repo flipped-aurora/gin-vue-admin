@@ -12,6 +12,7 @@ type ExaFileUploadAndDownload struct {
 	Key  string `json:"key" gorm:"comment:编号"`   // 编号
 }
 
+// TableName 实例文件信息表
 func (ExaFileUploadAndDownload) TableName() string {
 	return "exa_file_upload_and_downloads"
 }

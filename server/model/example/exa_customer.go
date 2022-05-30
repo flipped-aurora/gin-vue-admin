@@ -13,3 +13,8 @@ type ExaCustomer struct {
 	SysUserAuthorityID string         `json:"sysUserAuthorityID" form:"sysUserAuthorityID" gorm:"comment:管理角色ID"` // 管理角色ID
 	SysUser            system.SysUser `json:"sysUser" form:"sysUser" gorm:"comment:管理详情"`                         // 管理详情
 }
+
+// TableName 实例客户表
+func (e *ExaCustomer) TableName() string {
+	return "exa_customers"
+}

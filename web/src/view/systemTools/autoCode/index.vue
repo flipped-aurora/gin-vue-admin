@@ -54,6 +54,9 @@
         <el-form-item label="TableName" prop="tableName">
           <el-input v-model="form.tableName" placeholder="指定表名（非必填）" />
         </el-form-item>
+        <el-form-item label="表注释" prop="tableComment">
+          <el-input v-model="form.tableComment" placeholder="表注释" />
+        </el-form-item>
         <el-form-item label="Struct简称" prop="abbreviation">
           <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group" />
         </el-form-item>
@@ -211,6 +214,7 @@ const fdMap = ref({})
 const form = ref({
   structName: '',
   tableName: '',
+  tableComment: '',
   packageName: '',
   package: '',
   abbreviation: '',
@@ -222,6 +226,9 @@ const form = ref({
 const rules = ref({
   structName: [
     { required: true, message: '请输入结构体名称', trigger: 'blur' }
+  ],
+  tableComment: [
+    { required: true, message: '请输入表注释', trigger: 'blur' }
   ],
   abbreviation: [
     { required: true, message: '请输入结构体简称', trigger: 'blur' }

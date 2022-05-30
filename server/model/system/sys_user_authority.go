@@ -5,6 +5,7 @@ type SysUseAuthority struct {
 	SysAuthorityAuthorityId string `gorm:"column:sys_authority_authority_id"`
 }
 
+// TableName 系统用户角色表
 func (s *SysUseAuthority) TableName() string {
 	return "sys_user_authority"
 }

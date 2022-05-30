@@ -12,7 +12,7 @@ import (
 type SysAutoCodeHistory struct {
 	global.GVA_MODEL
 	Package       string `json:"package"`
-	TableName     string `json:"tableName"`
+	TableName_    string `json:"tableName" gorm:"column:table_name;comment:表名"`
 	RequestMeta   string `gorm:"type:text" json:"requestMeta,omitempty"`   // 前端传入的结构化信息
 	AutoCodePath  string `gorm:"type:text" json:"autoCodePath,omitempty"`  // 其他meta信息 path;path
 	InjectionMeta string `gorm:"type:text" json:"injectionMeta,omitempty"` // 注入的内容 RouterPath@functionName@RouterString;
@@ -20,6 +20,11 @@ type SysAutoCodeHistory struct {
 	StructCNName  string `json:"structCNName"`
 	ApiIDs        string `json:"apiIDs,omitempty"` // api表注册内容
 	Flag          int    `json:"flag"`             // 表示对应状态 0 代表创建, 1 代表回滚 ...
+}
+
+// TableName 系统代码生成器历史记录表
+func (m *SysAutoCodeHistory) TableName() string {
+	return "sys_auto_code_histories"
 }
 
 // ToRequestIds ApiIDs 转换 request.IdsReq

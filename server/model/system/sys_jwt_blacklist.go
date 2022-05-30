@@ -8,3 +8,8 @@ type JwtBlacklist struct {
 	global.GVA_MODEL
 	Jwt string `gorm:"type:text;comment:jwt"`
 }
+
+// TableName 系统jwt黑名单表
+func (j *JwtBlacklist) TableName() string {
+	return "jwt_blacklists"
+}

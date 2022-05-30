@@ -18,6 +18,7 @@ type SysAuthority struct {
 	DefaultRouter   string          `json:"defaultRouter" gorm:"comment:默认菜单;default:dashboard"` // 默认菜单(默认dashboard)
 }
 
+// TableName 系统角色表
 func (SysAuthority) TableName() string {
 	return "sys_authorities"
 }

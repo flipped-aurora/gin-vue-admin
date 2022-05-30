@@ -36,6 +36,7 @@ type SysBaseMenuParameter struct {
 	Value         string `json:"value" gorm:"comment:地址栏携带参数的值"`            // 地址栏携带参数的值
 }
 
+// TableName 系统基础菜单表
 func (SysBaseMenu) TableName() string {
 	return "sys_base_menus"
 }

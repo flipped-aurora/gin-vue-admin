@@ -8,14 +8,15 @@ import (
 
 // AutoCodeStruct 初始版本自动化代码工具
 type AutoCodeStruct struct {
-	StructName         string   `json:"structName"`         // Struct名称
 	TableName          string   `json:"tableName"`          // 表名
-	PackageName        string   `json:"packageName"`        // 文件名称
-	HumpPackageName    string   `json:"humpPackageName"`    // go文件名称
-	Abbreviation       string   `json:"abbreviation"`       // Struct简称
+	StructName         string   `json:"structName"`         // Struct名称
 	Description        string   `json:"description"`        // Struct中文名称
-	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
+	PackageName        string   `json:"packageName"`        // 文件名称
+	Abbreviation       string   `json:"abbreviation"`       // Struct简称
+	TableComment       string   `json:"tableComment"`       // 表注释
+	HumpPackageName    string   `json:"humpPackageName"`    // go文件名称
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
+	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
 	Fields             []*Field `json:"fields,omitempty"`
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
@@ -49,6 +50,11 @@ type SysAutoCode struct {
 	PackageName string `json:"packageName" gorm:"comment:包名"`
 	Label       string `json:"label" gorm:"comment:展示名"`
 	Desc        string `json:"desc" gorm:"comment:描述"`
+}
+
+// TableName 系统代码生成器包名表
+func (s *SysAutoCode) TableName() string {
+	return "sys_auto_codes"
 }
 
 type AutoPlugReq struct {

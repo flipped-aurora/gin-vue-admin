@@ -12,6 +12,7 @@ type SysApi struct {
 	Method      string `json:"method" gorm:"default:POST;comment:方法"` // 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
 }
 
+// TableName 系统api表
 func (SysApi) TableName() string {
 	return "sys_apis"
 }

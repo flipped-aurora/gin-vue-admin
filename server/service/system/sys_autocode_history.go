@@ -36,7 +36,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta
 		InjectionMeta: injectionMeta,
 		StructName:    structName,
 		StructCNName:  structCNName,
-		TableName:     tableName,
+		TableName_:    tableName,
 		ApiIDs:        apiIds,
 	}).Error
 }
@@ -73,7 +73,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 	}
 	// 删除表
 	if info.DeleteTable {
-		if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
+		if err = AutoCodeServiceApp.DropTable(md.TableName_); err != nil {
 			global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
 		}
 	}

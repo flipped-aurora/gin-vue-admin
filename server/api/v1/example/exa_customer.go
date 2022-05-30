@@ -103,7 +103,7 @@ func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, data := customerService.GetExaCustomer(customer.ID)
+	data, err := customerService.GetExaCustomer(customer.ID)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -127,7 +127,7 @@ func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, customerList, total := customerService.GetCustomerInfoList(utils.GetUserAuthorityId(c), pageInfo)
+	customerList, total, err := customerService.GetCustomerInfoList(utils.GetUserAuthorityId(c), pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)

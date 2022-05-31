@@ -122,7 +122,7 @@ export const useUserStore = defineStore('user', () => {
     return userInfo.activeColor
   })
 
-  watch(token, () => {
+  watch(() => token.value, () => {
     window.localStorage.setItem('token', token.value)
   })
 

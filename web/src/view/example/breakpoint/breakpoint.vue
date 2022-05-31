@@ -140,7 +140,7 @@ const sliceFile = () => {
         })
 }
 
-watch(waitNum, () => { percentage.value = Math.floor(((formDataList.value.length - waitNum.value) / formDataList.value.length) * 100) })
+watch(() => waitNum.value, () => { percentage.value = Math.floor(((formDataList.value.length - waitNum.value) / formDataList.value.length) * 100) })
 
 const upLoadFileSlice = async(item) => {
   // 切片上传

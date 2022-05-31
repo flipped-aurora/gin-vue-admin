@@ -217,7 +217,7 @@ const removeTab = (tab) => {
   const index = historys.value.findIndex(
     (item) => getFmtString(item) === tab
   )
-  if (getFmtString(route) === tab)  {
+  if (getFmtString(route) === tab) {
     if (historys.value.length === 1) {
       router.push({ name: defaultRouter.value })
     } else {
@@ -239,7 +239,7 @@ const removeTab = (tab) => {
   historys.value.splice(index, 1)
 }
 
-watch(contextMenuVisible, () => {
+watch(() => contextMenuVisible.value, () => {
   if (contextMenuVisible.value) {
     document.body.addEventListener('click', () => {
       contextMenuVisible.value = false
@@ -251,7 +251,7 @@ watch(contextMenuVisible, () => {
   }
 })
 
-watch(route, (to, now) => {
+watch(() => route, (to, now) => {
   if (to.name === 'Login' || to.name === 'Reload') {
     return
   }
@@ -259,7 +259,7 @@ watch(route, (to, now) => {
   setTab(to)
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
   activeValue.value = window.sessionStorage.getItem('activeValue')
-})
+}, { deep: true })
 
 watch(() => historys.value, () => {
   sessionStorage.setItem('historys', JSON.stringify(historys.value))

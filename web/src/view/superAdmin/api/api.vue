@@ -30,7 +30,7 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
-        <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+        <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
             <el-button size="small" type="primary" link @click="deleteVisible = false">取消</el-button>

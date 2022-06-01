@@ -18,31 +18,31 @@
             <el-button
               icon="setting"
               size="small"
-              type="text"
+              type="primary" link
               @click="opdendrawer(scope.row)"
             >设置权限</el-button>
             <el-button
               icon="plus"
               size="small"
-              type="text"
+              type="primary" link
               @click="addAuthority(scope.row.authorityId)"
             >新增子角色</el-button>
             <el-button
               icon="copy-document"
               size="small"
-              type="text"
+              type="primary" link
               @click="copyAuthorityFunc(scope.row)"
             >拷贝</el-button>
             <el-button
               icon="edit"
               size="small"
-              type="text"
+              type="primary" link
               @click="editAuthority(scope.row)"
             >编辑</el-button>
             <el-button
               icon="delete"
               size="small"
-              type="text"
+              type="primary" link
               @click="deleteAuth(scope.row)"
             >删除</el-button>
           </template>

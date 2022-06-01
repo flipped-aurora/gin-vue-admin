@@ -23,15 +23,15 @@
         <el-table-column align="left" label="接入人ID" prop="sysUserId" width="120" />
         <el-table-column align="left" label="按钮组" min-width="160">
           <template #default="scope">
-            <el-button size="small" type="text" icon="edit" @click="updateCustomer(scope.row)">变更</el-button>
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-button size="small" type="primary" link icon="edit" @click="updateCustomer(scope.row)">变更</el-button>
+            <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteCustomer(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
+                <el-button type="primary" link icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>

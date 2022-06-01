@@ -134,12 +134,24 @@
         justify-content: center;
         align-items: center;
     }
+    // 兼容久版用户升级
     .active {
         background: #4D70FF;
         border-radius: 2px;
         color: #ffffff !important;
     }
     .el-pager li.active+li {
+        border-left: 1px solid #ddd !important;
+    }
+    // end
+
+
+    .is-active {
+        background: #4D70FF;
+        border-radius: 2px;
+        color: #ffffff !important;
+    }
+    .el-pager li.is-active+li {
         border-left: 1px solid #ddd !important;
     }
     .el-pagination__sizes {

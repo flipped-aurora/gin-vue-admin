@@ -19,7 +19,7 @@
           <span>{{ node.label }}</span>
           <span>
             <el-button
-              type="text"
+              type="primary" link
               size="small"
               :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
               :disabled="!node.checked"
@@ -30,7 +30,7 @@
           </span>
           <span v-if="data.menuBtn.length">
             <el-button
-              type="text"
+              type="primary" link
               size="small"
               @click="() => OpenBtn(data)"
             >

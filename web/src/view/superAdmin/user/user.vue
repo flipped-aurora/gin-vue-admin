@@ -193,7 +193,7 @@ const getTableData = async() => {
   }
 }
 
-watch(tableData, () => {
+watch(() => tableData.value, () => {
   setAuthorityIds()
 })
 

@@ -13,7 +13,12 @@
       "name": "root"
     }
   ],
-  "settings": {},
+  "settings": {
+    "go.toolsEnvVars": {
+      "GOPROXY": "https://goproxy.cn,direct",
+      "GONOPROXY": "none;"
+    }
+  },
   "launch": {
     "version": "0.2.0",
     "configurations": [
@@ -30,7 +35,7 @@
         "cwd": "${workspaceFolder:frontend}",
         "name": "Frontend",
         "runtimeExecutable": "npm",
-        "runtimeArgs": ["run-script", "serve"],
+        "runtimeArgs": ["run-script", "serve"]
       }
     ],
     "compounds": [

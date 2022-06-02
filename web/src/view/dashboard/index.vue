@@ -111,7 +111,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import axios from 'axios'
-import {ref} from "vue";
 
 const weatherInfo = ref('今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。')
 //key换成你自己的 https://console.amap.com/dev/index

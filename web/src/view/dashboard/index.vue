@@ -4,7 +4,7 @@
       <div class="gva-card gva-top-card">
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
-          <div class="gva-top-card-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
+          <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
           <div class="gva-top-card-left-rows">
             <el-row v-auth="888">
               <el-col :span="8" :xs="24" :sm="8">
@@ -109,6 +109,43 @@ import echartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
 import dashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+
+import axios from 'axios'
+import {ref} from "vue";
+
+const weatherInfo = ref('今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。')
+//key换成你自己的 https://console.amap.com/dev/index
+const amapKey = ref('8e8baa8a7317586c29ec694895de6e0a')
+
+const ip = () => {
+  if (amapKey.value === "") {
+    return false
+  }
+  axios.get('https://restapi.amap.com/v3/ip?key=' + amapKey.value)
+      .then(function (response) {
+        if (response.data.adcode){
+          getWeather(response.data.adcode)
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+}
+
+const getWeather = (code) => {
+  axios.get('https://restapi.amap.com/v3/weather/weatherInfo?key=' + amapKey.value + '&extensions=base&city=' + code)
+      .then(function (response) {
+        if(response.data.status === '1'){
+          let s = response.data.lives[0]
+          weatherInfo.value = s.city + " 天气：" + s.weather + " 温度：" + s.temperature + "摄氏度 风向：" + s.winddirection + " 风力：" + s.windpower + "级 空气湿度：" + s.humidity
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+}
+
+ip()
 
 const toolCards = ref([
   {

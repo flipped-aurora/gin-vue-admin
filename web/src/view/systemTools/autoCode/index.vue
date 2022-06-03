@@ -108,30 +108,33 @@
           <template #default="scope">
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               icon="edit"
               @click="editAndAddField(scope.row)"
             >编辑</el-button>
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
             >上移</el-button>
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
             >下移</el-button>
-            <el-popover v-model:visible="scope.row.visible" placement="top">
+            <el-popover v-model="scope.row.visible" placement="top">
               <p>确定删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteField(scope.$index)">确定</el-button>
               </div>
               <template #reference>
-                <el-button size="small" type="text" icon="delete" @click="scope.row.visible = true">删除</el-button>
+                <el-button size="small" type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -215,8 +218,8 @@ const form = ref({
   package: '',
   abbreviation: '',
   description: '',
-  autoCreateApiToSql: false,
-  autoMoveFile: false,
+  autoCreateApiToSql: true,
+  autoMoveFile: true,
   fields: []
 })
 const rules = ref({
@@ -415,6 +418,7 @@ const getColumnFunc = async() => {
     form.value.abbreviation = tbHump
     form.value.description = tbHump + '表'
     form.value.autoCreateApiToSql = true
+    form.value.autoMoveFile = true
     form.value.fields = []
     res.data.columns &&
           res.data.columns.forEach(item => {

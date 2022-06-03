@@ -39,10 +39,10 @@
         <el-table-column align="left" label="操作" min-width="240">
           <template #default="scope">
             <div>
-              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,true)">回滚(删表)</el-button>
-              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,false)">回滚(不删表)</el-button>
-              <el-button size="small" type="text" @click="goAutoCode(scope.row)">复用</el-button>
-              <el-button size="small" type="text" @click="deleteRow(scope.row)">删除</el-button>
+              <el-button size="small" type="primary" link :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,true)">回滚(删表)</el-button>
+              <el-button size="small" type="primary" link :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,false)">回滚(不删表)</el-button>
+              <el-button size="small" type="primary" link @click="goAutoCode(scope.row)">复用</el-button>
+              <el-button size="small" type="primary" link @click="deleteRow(scope.row)">删除</el-button>
             </div>
           </template>
         </el-table-column>

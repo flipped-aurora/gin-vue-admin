@@ -162,7 +162,6 @@ const onSubmit = async() => {
     width: 96vw;
     height: 94vh;
     background-color: rgba(255,255,255,.8);
-    backdrop-filter: blur(5px);
     border-radius: 10px;
     display: flex;
     align-items: center;

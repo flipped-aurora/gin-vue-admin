@@ -5,7 +5,7 @@
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
       @contextmenu.prevent="openContextMenu($event)"
-      @tab-click="changeTab"
+      @tab-change="changeTab"
       @tab-remove="removeTab"
     >
       <el-tab-pane
@@ -18,6 +18,7 @@
       >
         <template #label>
           <span
+            :tab="item"
             :style="{
               color: activeValue === name(item) ? userStore.activeColor : '#333',
             }"
@@ -200,13 +201,22 @@ const setTab = (route) => {
     delete obj.meta.matched
     obj.query = route.query
     obj.params = route.params
-    console.log(obj)
     historys.value.push(obj)
   }
   window.sessionStorage.setItem('activeValue', getFmtString(route))
 }
-const changeTab = (component) => {
-  const tab = component.instance.attrs.tab
+
+const historyMap = ref({})
+
+watch(()=>historys.value,()=>{
+    historyMap.value={}
+   historys.value.forEach((item)=>{
+    historyMap.value[getFmtString(item)] = item
+   })
+})
+
+const changeTab = (name) => {
+  const tab = historyMap.value[name]
   router.push({
     name: tab.name,
     query: tab.query,

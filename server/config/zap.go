@@ -1,5 +1,7 @@
 package config
 
+import "go.uber.org/zap/zapcore"
+
 type Zap struct {
 	Level         string `mapstructure:"level" json:"level" yaml:"level"`                            // 级别
 	Prefix        string `mapstructure:"prefix" json:"prefix" yaml:"prefix"`                         // 日志前缀
@@ -11,4 +13,21 @@ type Zap struct {
 	MaxAge       int  `mapstructure:"mintage" json:"max-age" yaml:"max-age"`                      // 日志留存时间
 	ShowLine     bool `mapstructure:"show-line" json:"show-line" yaml:"show-line"`                // 显示行
 	LogInConsole bool `mapstructure:"log-in-console" json:"log-in-console" yaml:"log-in-console"` // 输出控制台
+}
+
+// ZapEncodeLevel 根据 EncodeLevel 返回 zapcore.LevelEncoder
+// Author [SliverHorn](https://github.com/SliverHorn)
+func (z *Zap) ZapEncodeLevel() zapcore.LevelEncoder {
+	switch {
+	case z.EncodeLevel == "LowercaseLevelEncoder": // 小写编码器(默认)
+		return zapcore.LowercaseLevelEncoder
+	case z.EncodeLevel == "LowercaseColorLevelEncoder": // 小写编码器带颜色
+		return zapcore.LowercaseColorLevelEncoder
+	case z.EncodeLevel == "CapitalLevelEncoder": // 大写编码器
+		return zapcore.CapitalLevelEncoder
+	case z.EncodeLevel == "CapitalColorLevelEncoder": // 大写编码器带颜色
+		return zapcore.CapitalColorLevelEncoder
+	default:
+		return zapcore.LowercaseLevelEncoder
+	}
 }

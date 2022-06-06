@@ -61,30 +61,8 @@ func (z *_zap) CustomTimeEncoder(t time.Time, encoder zapcore.PrimitiveArrayEnco
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (z *_zap) GetZapCores() []zapcore.Core {
 	cores := make([]zapcore.Core, 0, 7)
-	debugCore := z.GetEncoderCore(zap.DebugLevel, z.GetLevelPriority(zap.DebugLevel))
-	infoCore := z.GetEncoderCore(zap.InfoLevel, z.GetLevelPriority(zap.InfoLevel))
-	warnCore := z.GetEncoderCore(zap.WarnLevel, z.GetLevelPriority(zap.WarnLevel))
-	errorCore := z.GetEncoderCore(zap.ErrorLevel, z.GetLevelPriority(zap.ErrorLevel))
-	dPanicCore := z.GetEncoderCore(zap.DPanicLevel, z.GetLevelPriority(zap.DPanicLevel))
-	panicCore := z.GetEncoderCore(zap.PanicLevel, z.GetLevelPriority(zap.PanicLevel))
-	fatalCore := z.GetEncoderCore(zap.FatalLevel, z.GetLevelPriority(zap.FatalLevel))
-	switch global.GVA_CONFIG.Zap.Level {
-	case "debug", "DEBUG":
-		cores = append(cores, debugCore, infoCore, warnCore, errorCore, dPanicCore, panicCore, fatalCore)
-	case "info", "INFO":
-		cores = append(cores, infoCore, warnCore, errorCore, dPanicCore, panicCore, fatalCore)
-	case "warn", "WARN":
-		cores = append(cores, warnCore, errorCore, dPanicCore, panicCore, fatalCore)
-	case "error", "ERROR":
-		cores = append(cores, errorCore, dPanicCore, panicCore, fatalCore)
-	case "dpanic", "DPANIC":
-		cores = append(cores, dPanicCore, panicCore, fatalCore)
-	case "panic", "PANIC":
-		cores = append(cores, panicCore, fatalCore)
-	case "fatal", "FATAL":
-		cores = append(cores, fatalCore)
-	default:
-		cores = append(cores, debugCore, infoCore, warnCore, errorCore, dPanicCore, panicCore, fatalCore)
+	for level := global.GVA_CONFIG.Zap.TransportLevel(); level <= zapcore.FatalLevel; level++ {
+		cores = append(cores, z.GetEncoderCore(level, z.GetLevelPriority(level)))
 	}
 	return cores
 }

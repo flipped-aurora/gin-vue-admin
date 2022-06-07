@@ -120,12 +120,6 @@
             <el-button @click="email">测试邮件</el-button>
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="casbin配置" name="6">
-          <el-form-item label="模型地址">
-            <el-input v-model="config.casbin['model-path']" />
-          </el-form-item>
-        </el-collapse-item>
-
         <el-collapse-item title="验证码配置" name="7">
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
@@ -370,7 +364,6 @@ const config = ref({
     'iplimit-time': 0
   },
   jwt: {},
-  casbin: {},
   mysql: {},
   pgsql: {},
   excel: {},

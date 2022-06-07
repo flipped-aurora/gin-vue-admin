@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"github.com/casbin/casbin/v2/model"
 	"sync"
 
 	"github.com/casbin/casbin/v2"
@@ -92,7 +93,25 @@ var (
 func (casbinService *CasbinService) Casbin() *casbin.SyncedEnforcer {
 	once.Do(func() {
 		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
-		syncedEnforcer, _ = casbin.NewSyncedEnforcer(global.GVA_CONFIG.Casbin.ModelPath, a)
+		text := `
+		[request_definition]
+		r = sub, obj, act
+		
+		[policy_definition]
+		p = sub, obj, act
+		
+		[role_definition]
+		g = _, _
+		
+		[policy_effect]
+		e = some(where (p.eft == allow))
+		
+		[matchers]
+		m = g(r.sub, p.sub) && r.obj == p.obj && r.act == p.act
+		`
+		m, _ := model.NewModelFromString(text)
+
+		syncedEnforcer, _ = casbin.NewSyncedEnforcer(m, a)
 	})
 	_ = syncedEnforcer.LoadPolicy()
 	return syncedEnforcer

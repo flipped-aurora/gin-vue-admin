@@ -1,4 +1,4 @@
-import { login, getUserInfo, setSelfInfo } from '@/api/user'
+import { login, getUserInfo, setSelfInfo, userRegister } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElLoading, ElMessage } from 'element-plus'
@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
     authority: {},
     sideMode: 'dark',
     activeColor: '#4D70FF',
-    baseColor: '#fff'
+    baseColor: '#fff',
   })
   const token = ref(window.localStorage.getItem('token') || '')
   const setUserInfo = (val) => {
@@ -37,7 +37,7 @@ export const useUserStore = defineStore('user', () => {
   const ResetUserInfo = (value = {}) => {
     userInfo.value = {
       ...userInfo.value,
-      ...value
+      ...value,
     }
   }
   /* 获取用户信息*/
@@ -73,6 +73,31 @@ export const useUserStore = defineStore('user', () => {
     }
     loadingInstance.value.close()
   }
+  // 注册
+  const Register = async(loginInfo) => {
+    loadingInstance.value = ElLoading.service({
+      fullscreen: true,
+      text: '注册中，请稍候...',
+    })
+    try {
+      const res = await userRegister(loginInfo)
+      if (res.code === 0) {
+        setUserInfo(res.data.user)
+        setToken(res.data.token)
+        const routerStore = useRouterStore()
+        await routerStore.SetAsyncRouter()
+        const asyncRouters = routerStore.asyncRouters
+        asyncRouters.forEach((asyncRouter) => {
+          router.addRoute(asyncRouter)
+        })
+        router.push({ name: userInfo.value.authority.defaultRouter })
+        return true
+      }
+    } catch (e) {
+      loadingInstance.value.close()
+    }
+    loadingInstance.value.close()
+  }
   /* 登出*/
   const LoginOut = async() => {
     const res = await jsonInBlacklist()
@@ -91,7 +116,7 @@ export const useUserStore = defineStore('user', () => {
       userInfo.value.sideMode = data
       ElMessage({
         type: 'success',
-        message: '设置成功'
+        message: '设置成功',
       })
     }
   }
@@ -133,6 +158,7 @@ export const useUserStore = defineStore('user', () => {
     ResetUserInfo,
     GetUserInfo,
     LoginIn,
+    Register,
     LoginOut,
     changeSideMode,
     mode,
@@ -140,6 +166,6 @@ export const useUserStore = defineStore('user', () => {
     setToken,
     baseColor,
     activeColor,
-    loadingInstance
+    loadingInstance,
   }
 })

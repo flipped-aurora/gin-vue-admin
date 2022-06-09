@@ -66,18 +66,12 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              style="width: 46%"
-              size="large"
-              @click="checkInit"
-            >前往初始化</el-button>
-            <el-button
-              type="primary"
-              size="large"
-              style="width: 46%; margin-left: 8%"
-              @click="submitForm"
-            >登 录</el-button>
+            <el-button type="primary" style="width: 38%" size="large" @click="checkInit">前往初始化</el-button>
+            <el-button type="primary" size="large" style="width: 38%; margin-left: 8%" @click="submitForm">
+              <div v-if="loginType.status">注 册</div>
+              <div v-if="!loginType.status">登 录</div>
+            </el-button>
+            <el-switch v-model="loginType.status" style="width: 13%; margin-left: 3%" />
           </el-form-item>
         </el-form>
       </div>
@@ -122,6 +116,7 @@ import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
+
 const router = useRouter()
 // 验证函数
 const checkUsername = (rule, value, callback) => {
@@ -164,6 +159,9 @@ const loginFormData = reactive({
   captcha: '',
   captchaId: '',
 })
+const loginType = reactive({
+  status: false,
+})
 const rules = reactive({
   username: [{ validator: checkUsername, trigger: 'blur' }],
   password: [{ validator: checkPassword, trigger: 'blur' }],
@@ -180,12 +178,21 @@ const userStore = useUserStore()
 const login = async() => {
   return await userStore.LoginIn(loginFormData)
 }
+const register = async() => {
+  return await userStore.Register(loginFormData)
+}
 const submitForm = () => {
   loginForm.value.validate(async(v) => {
     if (v) {
-      const flag = await login()
+      let flag
+      if (loginType.status) {
+        flag = await register()
+      } else {
+        flag = await login()
+      }
       if (!flag) {
         loginVerify()
+        loginType.status = false
       }
     } else {
       ElMessage({

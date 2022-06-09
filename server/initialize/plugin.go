@@ -3,6 +3,9 @@ package initialize
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/profile"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/project"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/register"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin"
 	"github.com/gin-gonic/gin"
 )
@@ -25,4 +28,7 @@ func InstallPlugin(PublicGroup *gin.RouterGroup, PrivateGroup *gin.RouterGroup) 
 		global.GVA_CONFIG.Email.Port,
 		global.GVA_CONFIG.Email.IsSSL,
 	))
+	PluginInit(PublicGroup, register.CreateRegisterPlug("5"))
+	PluginInit(PrivateGroup, profile.CreateProfilePlug("profile"))
+	PluginInit(PrivateGroup, project.CreateProjectPlug("project"))
 }

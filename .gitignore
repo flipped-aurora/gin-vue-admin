@@ -25,5 +25,9 @@ yarn-error.log*
 /server/log/
 /server/gva
 /server/latest_log
-
+/server/plugin/profile
+/server/plugin/project
+/server/
+server/config.yaml.bak
+server/docs
 *.iml

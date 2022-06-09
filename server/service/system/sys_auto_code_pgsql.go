@@ -43,38 +43,52 @@ func (a *autoCodePgsql) GetTables(dbName string) (data []response.Table, err err
 func (a *autoCodePgsql) GetColumn(tableName string, dbName string) (data []response.Column, err error) {
 	// todo 数据获取不全, 待完善sql
 	sql := `
-		SELECT columns.COLUMN_NAME                                                                                      as column_name,
-		   columns.DATA_TYPE                                                                                        as data_type,
-		   CASE
-			   columns.DATA_TYPE
-			   WHEN 'text' THEN
-				   concat_ws('', '', columns.CHARACTER_MAXIMUM_LENGTH)
-			   WHEN 'varchar' THEN
-				   concat_ws('', '', columns.CHARACTER_MAXIMUM_LENGTH)
-			   WHEN 'smallint' THEN
-				   concat_ws(',', columns.NUMERIC_PRECISION, columns.NUMERIC_SCALE)
-			   WHEN 'decimal' THEN
-				   concat_ws(',', columns.NUMERIC_PRECISION, columns.NUMERIC_SCALE)
-			   WHEN 'integer' THEN
-				   concat_ws('', '', columns.NUMERIC_PRECISION)
-			   WHEN 'bigint' THEN
-				   concat_ws('', '', columns.NUMERIC_PRECISION)
-			   ELSE ''
-			   END                                                                                                  AS data_type_long,
-		   (select description.description
-			from pg_description description
-			where description.objoid = (select attribute.attrelid
-										from pg_attribute attribute
-										where attribute.attrelid =
-											  (select oid from pg_class class where class.relname = '@table_name') and attname =columns.COLUMN_NAME )
-			  and description.objsubid = (select attribute.attnum
-										  from pg_attribute attribute
-										  where attribute.attrelid =
-												(select oid from pg_class class where class.relname = '@table_name') and attname =columns.COLUMN_NAME )) as column_comment
-		FROM INFORMATION_SCHEMA.COLUMNS columns
-		WHERE table_catalog = '?'
-		  and table_schema = 'public'
-		  and table_name = '?';
+		SELECT psc.COLUMN_NAME AS COLUMN_NAME,
+ psc.udt_name AS data_type,
+CASE
+  psc.udt_name 
+  WHEN 'text' THEN
+   concat_ws ( '', '', psc.CHARACTER_MAXIMUM_LENGTH ) 
+  WHEN 'varchar' THEN
+   concat_ws ( '', '', psc.CHARACTER_MAXIMUM_LENGTH ) 
+  WHEN 'smallint' THEN
+   concat_ws ( ',', psc.NUMERIC_PRECISION, psc.NUMERIC_SCALE ) 
+  WHEN 'decimal' THEN
+   concat_ws ( ',', psc.NUMERIC_PRECISION, psc.NUMERIC_SCALE ) 
+  WHEN 'integer' THEN
+   concat_ws ( '', '', psc.NUMERIC_PRECISION ) 
+  WHEN 'int4' THEN
+   concat_ws ( '', '', psc.NUMERIC_PRECISION ) 
+  WHEN 'int8' THEN
+   concat_ws ( '', '', psc.NUMERIC_PRECISION ) 
+  WHEN 'bigint' THEN
+   concat_ws ( '', '', psc.NUMERIC_PRECISION ) 
+  WHEN 'timestamp' THEN
+   concat_ws ( '', '', psc.datetime_precision ) 
+  ELSE '' 
+ END AS data_type_long,
+ (
+   SELECT
+    pd.description 
+   FROM
+    pg_description pd 
+   WHERE
+    (pd.objoid,pd.objsubid) in (
+       SELECT pa.attrelid,pa.attnum
+       FROM
+        pg_attribute pa 
+      WHERE pa.attrelid = ( SELECT oid FROM pg_class pc WHERE 
+      pc.relname = psc.table_name
+      ) 
+      and attname = psc.column_name
+    ) 
+ ) AS column_comment 
+FROM
+ INFORMATION_SCHEMA.COLUMNS psc 
+WHERE
+ table_catalog = ?
+ AND table_schema = 'public' 
+ AND TABLE_NAME = ?;
 	`
 	var entities []response.Column
 	db, _err := gorm.Open(postgres.Open(global.GVA_CONFIG.Pgsql.LinkDsn(dbName)), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})

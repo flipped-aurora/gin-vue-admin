@@ -221,7 +221,7 @@ const updateSysDictionaryDetailFunc = async(row) => {
   const res = await findSysDictionaryDetail({ ID: row.ID })
   type.value = 'update'
   if (res.code === 0) {
-    formData.value = res.data.resysDictionaryDetail
+    formData.value = res.data.reSysDictionaryDetail
     dialogFormVisible.value = true
   }
 }

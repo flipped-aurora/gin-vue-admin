@@ -2,7 +2,6 @@ export const fmtTitle = (title, now) => {
   const reg = /\$\{(.+?)\}/
   const reg_g = /\$\{(.+?)\}/g
   const result = title.match(reg_g)
-  console.log('result=', result)
   if (result) {
     result.forEach((item) => {
       const key = item.match(reg)[1]

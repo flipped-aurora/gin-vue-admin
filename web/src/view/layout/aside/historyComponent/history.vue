@@ -29,7 +29,7 @@
                  activeValue === name(item) ? userStore.activeColor : '#ddd',
              }"
            />
-            {{ item.meta.title }}</span>
+            {{ fmtTitle(item.meta.title,item) }}</span>
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -59,6 +59,7 @@ import { emitter } from '@/utils/bus.js'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
+import { fmtTitle } from '@/utils/fmtRouterTitle'
 
 const route = useRoute()
 const router = useRouter()
@@ -208,11 +209,11 @@ const setTab = (route) => {
 
 const historyMap = ref({})
 
-watch(()=>historys.value,()=>{
-    historyMap.value={}
-   historys.value.forEach((item)=>{
+watch(() => historys.value, () => {
+  historyMap.value = {}
+  historys.value.forEach((item) => {
     historyMap.value[getFmtString(item)] = item
-   })
+  })
 })
 
 const changeTab = (name) => {

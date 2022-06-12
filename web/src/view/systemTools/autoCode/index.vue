@@ -480,7 +480,9 @@ const init = () => {
 init()
 
 watch(() => route.params.id, (id) => {
-  init()
+  if (route.name === 'autoCodeEdit') {
+    init()
+  }
 })
 
 </script>

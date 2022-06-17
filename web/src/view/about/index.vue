@@ -98,7 +98,7 @@
           </div>
           <el-button
             class="load-more"
-            type="text"
+            type="primary" link
             @click="loadMore"
           >Load more</el-button>
         </el-card>

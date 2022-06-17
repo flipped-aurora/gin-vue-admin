@@ -4,7 +4,7 @@
       <div class="gva-card gva-top-card">
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
-          <div class="gva-top-card-left-dot">今日晴，0℃ - 10℃，天气寒冷，注意添加衣物。</div>
+          <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
           <div class="gva-top-card-left-rows">
             <el-row v-auth="888">
               <el-col :span="8" :xs="24" :sm="8">
@@ -109,6 +109,8 @@ import echartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
 import dashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useWeatherInfo } from '@/view/dashboard/weather.js'
+const weatherInfo = useWeatherInfo()
 
 const toolCards = ref([
   {
@@ -205,7 +207,7 @@ export default {
                 color: #343844;
             }
             &-dot {
-                font-size: 14px;
+                font-size: 16px;
                 color: #6B7687;
                 margin-top: 24px;
             }

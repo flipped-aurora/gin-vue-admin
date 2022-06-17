@@ -80,9 +80,9 @@ func (s *DictionaryApi) UpdateSysDictionary(c *gin.Context) {
 func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 	var dictionary system.SysDictionary
 	_ = c.ShouldBindQuery(&dictionary)
-	if sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID); err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
-		response.FailWithMessage("查询失败", c)
+	if sysDictionary, err := dictionaryService.GetSysDictionary(dictionary.Type, dictionary.ID, dictionary.Status); err != nil {
+		global.GVA_LOG.Error("字典未创建或未开启!", zap.Error(err))
+		response.FailWithMessage("字典未创建或未开启", c)
 	} else {
 		response.OkWithDetailed(gin.H{"resysDictionary": sysDictionary}, "查询成功", c)
 	}

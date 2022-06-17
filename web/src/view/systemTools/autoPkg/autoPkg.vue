@@ -15,7 +15,7 @@
             <el-button
               icon="delete"
               size="small"
-              type="text"
+              type="primary" link
               @click="deleteApiFunc(scope.row)"
             >删除</el-button>
           </template>

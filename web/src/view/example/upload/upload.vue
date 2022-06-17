@@ -58,8 +58,8 @@
         </el-table-column>
         <el-table-column align="left" label="操作" width="160">
           <template #default="scope">
-            <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">删除</el-button>
+            <el-button size="small" icon="download" type="primary" link @click="downloadFile(scope.row)">下载</el-button>
+            <el-button size="small" icon="delete" type="primary" link @click="deleteFileFunc(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

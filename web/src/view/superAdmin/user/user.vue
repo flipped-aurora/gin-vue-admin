@@ -36,18 +36,18 @@
 
         <el-table-column label="操作" min-width="250" fixed="right">
           <template #default="scope">
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteUserFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="small">删除</el-button>
+                <el-button type="primary" link icon="delete" size="small">删除</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="edit" size="small" @click="openEdit(scope.row)">编辑</el-button>
-            <el-button type="text" icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
+            <el-button type="primary" link icon="edit" size="small" @click="openEdit(scope.row)">编辑</el-button>
+            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
 

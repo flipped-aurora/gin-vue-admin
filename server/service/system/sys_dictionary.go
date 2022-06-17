@@ -80,8 +80,14 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 //@param: Type string, Id uint
 //@return: err error, sysDictionary model.SysDictionary
 
-func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint) (sysDictionary system.SysDictionary, err error) {
-	err = global.GVA_DB.Where("type = ? OR id = ? and status = ?", Type, Id, true).Preload("SysDictionaryDetails", "status = ?", true).First(&sysDictionary).Error
+func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint, status *bool) (sysDictionary system.SysDictionary, err error) {
+	var flag = false
+	if status == nil {
+		flag = true
+	} else {
+		flag = *status
+	}
+	err = global.GVA_DB.Where("(type = ? OR id = ?) and status = ?", Type, Id, flag).Preload("SysDictionaryDetails", "status = ?", true).First(&sysDictionary).Error
 	return
 }
 

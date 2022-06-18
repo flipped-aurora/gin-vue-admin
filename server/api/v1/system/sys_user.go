@@ -35,7 +35,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
 			response.FailWithMessage("用户名不存在或者密码错误", c)
 		} else {
-			b.tokenNext(c, *user)
+			b.TokenNext(c, *user)
 		}
 	} else {
 		response.FailWithMessage("验证码错误", c)
@@ -43,7 +43,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 }
 
 // 登录以后签发jwt
-func (b *BaseApi) tokenNext(c *gin.Context, user system.SysUser) {
+func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
 	claims := j.CreateClaims(systemReq.BaseClaims{
 		UUID:        user.UUID,

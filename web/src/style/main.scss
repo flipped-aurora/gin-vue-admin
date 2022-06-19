@@ -943,21 +943,6 @@ li {
     }
 }
 
-.el-input-number__decrease,
-.el-input-number__increase {
-    position: absolute;
-    z-index: 1;
-    top: 2px !important;
-    width: 42px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    background: #F5F7FA;
-    color: #606266;
-    cursor: pointer;
-    font-size: 12px;
-}
-
 $headerHigh: 52px;
 $mainHight: 100vh;
 .dropdown-group {

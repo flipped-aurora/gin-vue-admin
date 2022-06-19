@@ -282,7 +282,7 @@ const addParameter = (form) => {
 }
 
 const fmtComponent = () => {
-  form.value.component = form.value.component.replace('\\', '/')
+  form.value.component = form.value.component.replace(/\\/g, '/')
 }
 
 // 删除参数

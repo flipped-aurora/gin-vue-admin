@@ -6,7 +6,7 @@
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
           <div class="gva-top-card-left-rows">
-            <el-row v-auth="btnAuth.a">
+            <el-row>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
                   <el-icon class="dasboard-icon">

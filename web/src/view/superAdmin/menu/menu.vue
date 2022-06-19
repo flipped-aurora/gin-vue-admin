@@ -37,19 +37,22 @@
           <template #default="scope">
             <el-button
               size="small"
-              type="primary" link
+              type="primary"
+              link
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >添加子菜单</el-button>
             <el-button
               size="small"
-              type="primary" link
+              type="primary"
+              link
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >编辑</el-button>
             <el-button
               size="small"
-              type="primary" link
+              type="primary"
+              link
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >删除</el-button>
@@ -109,7 +112,7 @@
           />
         </el-form-item>
         <el-form-item label="文件路径" prop="component" style="width:60%">
-          <el-input v-model="form.component" autocomplete="off" />
+          <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @blur="fmtComponent" />
           <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">点我设置</el-button>
         </el-form-item>
         <el-form-item label="展示名称" prop="meta.title" style="width:30%">
@@ -277,6 +280,11 @@ const addParameter = (form) => {
     value: ''
   })
 }
+
+const fmtComponent = () => {
+  form.value.component = form.value.component.replace('\\', '/')
+}
+
 // 删除参数
 const deleteParameter = (parameters, index) => {
   parameters.splice(index, 1)

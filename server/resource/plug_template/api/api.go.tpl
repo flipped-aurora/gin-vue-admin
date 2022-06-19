@@ -15,7 +15,7 @@ type {{ .PlugName}}Api struct{}
 // @Summary 请手动填写接口功能
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
-// @Router /{{ .RouterGroup}}/routerName[post]
+// @Router /{{ .RouterGroup}}/routerName [post]
 func (p *{{ .PlugName}}Api) ApiName(c *gin.Context) {
     {{- if .HasRequest}}
         var plug model.Request

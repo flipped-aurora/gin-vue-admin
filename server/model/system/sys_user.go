@@ -18,8 +18,9 @@ type SysUser struct {
 	AuthorityId string         `json:"authorityId" gorm:"default:888;comment:用户角色ID"`                                        // 用户角色ID
 	Authority   SysAuthority   `json:"authority" gorm:"foreignKey:AuthorityId;references:AuthorityId;comment:用户角色"`
 	Authorities []SysAuthority `json:"authorities" gorm:"many2many:sys_user_authority;"`
-	Phone       string         `json:"phone"  gorm:"comment:用户手机号"` // 用户手机号
-	Email       string         `json:"email"  gorm:"comment:用户邮箱"`  // 用户邮箱
+	Phone       string         `json:"phone"  gorm:"comment:用户手机号"`                     // 用户手机号
+	Email       string         `json:"email"  gorm:"comment:用户邮箱"`                      // 用户邮箱
+	Enable      int            `json:"enable" gorm:"default:1;comment:用户是否被冻结 1正常 2冻结"` //用户是否被冻结 1正常 2冻结
 }
 
 func (SysUser) TableName() string {

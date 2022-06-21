@@ -111,6 +111,11 @@
       {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" clearable />
       {{- end }}
+      {{- if eq .FieldType "enum" }}
+            <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" clearable>
+               <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
+            </el-select>
+      {{- end }}
         </el-form-item>
       {{- end }}
       </el-form>

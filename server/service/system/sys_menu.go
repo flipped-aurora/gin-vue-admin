@@ -22,12 +22,36 @@ var MenuServiceApp = new(MenuService)
 
 func (menuService *MenuService) getMenuTreeMap(authorityId string) (treeMap map[string][]system.SysMenu, err error) {
 	var allMenus []system.SysMenu
+	var baseMenu []system.SysBaseMenu
 	var btns []system.SysAuthorityBtn
 	treeMap = make(map[string][]system.SysMenu)
-	err = global.GVA_DB.Where("authority_id = ?", authorityId).Order("sort").Preload("Parameters").Find(&allMenus).Error
+
+	var SysAuthorityMenus []system.SysAuthorityMenu
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
 	if err != nil {
 		return
 	}
+
+	var MenuIds []string
+
+	for i := range SysAuthorityMenus {
+		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+	}
+
+	err = global.GVA_DB.Where("id in (?)", MenuIds).Order("sort").Preload("Parameters").Find(&baseMenu).Error
+	if err != nil {
+		return
+	}
+
+	for i := range baseMenu {
+		allMenus = append(allMenus, system.SysMenu{
+			SysBaseMenu: baseMenu[i],
+			AuthorityId: authorityId,
+			MenuId:      strconv.Itoa(int(baseMenu[i].ID)),
+			Parameters:  baseMenu[i].Parameters,
+		})
+	}
+
 	err = global.GVA_DB.Where("authority_id = ?", authorityId).Preload("SysBaseMenuBtn").Find(&btns).Error
 	if err != nil {
 		return

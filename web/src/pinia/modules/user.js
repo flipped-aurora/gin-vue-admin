@@ -66,12 +66,12 @@ export const useUserStore = defineStore('user', () => {
           router.addRoute(asyncRouter)
         })
         router.push({ name: userInfo.value.authority.defaultRouter })
+        loadingInstance.value.close()
         return true
       }
     } catch (e) {
       loadingInstance.value.close()
     }
-    loadingInstance.value.close()
   }
   /* 登出*/
   const LoginOut = async() => {

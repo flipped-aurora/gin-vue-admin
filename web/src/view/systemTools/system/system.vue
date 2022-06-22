@@ -324,7 +324,7 @@
 
         <el-collapse-item title="Timer(定时任务)" name="13">
           <el-form-item label="Start（是否启用）">
-            <el-select v-model="config.timer['w-table']" />
+            <el-checkbox v-model="config.timer['start']" />
           </el-form-item>
           <el-form-item label="Spec(CRON表达式)">
             <el-input v-model="config.timer.spec" />

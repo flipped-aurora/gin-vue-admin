@@ -369,7 +369,6 @@ const openEdit = (row) => {
   addUserDialog.value = true
 }
 
-
 const switchEnable = async(row) => {
   userInfo.value = JSON.parse(JSON.stringify(row))
   await nextTick()
@@ -378,7 +377,7 @@ const switchEnable = async(row) => {
   }
   const res = await setUserInfo(req)
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: '编辑成功' })
+    ElMessage({ type: 'success', message: `${req.enable === 2 ? '禁用' : '启用'}成功` })
     await getTableData()
     userInfo.value.headerImg = ''
     userInfo.value.authorityIds = []

@@ -50,7 +50,7 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 		}
 
 		var SysAuthorityMenus []system.SysAuthorityMenu
-		err = global.GVA_DB.Where("sys_authority_authority_id = ?", u.AuthorityId).Find(&SysAuthorityMenus).Error
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", user.AuthorityId).Find(&SysAuthorityMenus).Error
 		if err != nil {
 			return
 		}
@@ -62,7 +62,7 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 		}
 
 		var am system.SysBaseMenu
-		ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", u.Authority.DefaultRouter, MenuIds).Error
+		ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, MenuIds).Error
 		if errors.Is(ferr, gorm.ErrRecordNotFound) {
 			user.Authority.DefaultRouter = "404"
 		}

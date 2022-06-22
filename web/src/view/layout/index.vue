@@ -124,10 +124,6 @@ const isCollapse = ref(false)
 const isSider = ref(true)
 const isMobile = ref(false)
 
-const cc = (e) => {
-  console.log(e)
-}
-
 const initPage = () => {
   const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {

@@ -33,6 +33,17 @@
             />
           </template>
         </el-table-column>
+        <el-table-column align="left" label="启用" min-width="150">
+          <template #default="scope">
+            <el-switch
+              v-model="scope.row.enable"
+              inline-prompt
+              :active-value="1"
+              :inactive-value="2"
+              @change="()=>{switchEnable(scope.row)}"
+            />
+          </template>
+        </el-table-column>
 
         <el-table-column label="操作" min-width="250" fixed="right">
           <template #default="scope">
@@ -97,6 +108,14 @@
               :show-all-levels="false"
               :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
               :clearable="false"
+            />
+          </el-form-item>
+          <el-form-item label="启用" prop="disabled">
+            <el-switch
+              v-model="userInfo.enable"
+              inline-prompt
+              :active-value="1"
+              :inactive-value="2"
             />
           </el-form-item>
           <el-form-item label="头像" label-width="80px">
@@ -268,6 +287,7 @@ const userInfo = ref({
   headerImg: '',
   authorityId: '',
   authorityIds: [],
+  enable: 1,
 })
 
 const rules = ref({
@@ -347,6 +367,22 @@ const openEdit = (row) => {
   dialogFlag.value = 'edit'
   userInfo.value = JSON.parse(JSON.stringify(row))
   addUserDialog.value = true
+}
+
+
+const switchEnable = async(row) => {
+  userInfo.value = JSON.parse(JSON.stringify(row))
+  await nextTick()
+  const req = {
+    ...userInfo.value
+  }
+  const res = await setUserInfo(req)
+  if (res.code === 0) {
+    ElMessage({ type: 'success', message: '编辑成功' })
+    await getTableData()
+    userInfo.value.headerImg = ''
+    userInfo.value.authorityIds = []
+  }
 }
 
 </script>

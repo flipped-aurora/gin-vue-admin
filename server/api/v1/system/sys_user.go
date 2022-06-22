@@ -289,6 +289,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		if err != nil {
 			global.GVA_LOG.Error("设置失败!", zap.Error(err))
 			response.FailWithMessage("设置失败", c)
+			return
 		}
 	}
 

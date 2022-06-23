@@ -63,13 +63,15 @@
             <el-button
               icon="edit"
               size="small"
-              type="primary" link
+              type="primary"
+              link
               @click="editApiFunc(scope.row)"
             >编辑</el-button>
             <el-button
               icon="delete"
               size="small"
-              type="primary" link
+              type="primary"
+              link
               @click="deleteApiFunc(scope.row)"
             >删除</el-button>
           </template>

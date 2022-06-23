@@ -199,7 +199,7 @@ const changeUserAuth = async(id) => {
     emitter.emit('closeAllPage')
     setTimeout(() => {
       window.location.reload()
-    }, 1)
+    }, 50)
   }
 }
 

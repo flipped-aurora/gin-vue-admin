@@ -72,6 +72,7 @@ export const useUserStore = defineStore('user', () => {
     } catch (e) {
       loadingInstance.value.close()
     }
+    loadingInstance.value.close()
   }
   /* 登出*/
   const LoginOut = async() => {

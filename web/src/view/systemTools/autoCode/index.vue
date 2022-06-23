@@ -159,7 +159,7 @@
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
-      <template #title>
+      <template #header>
         <div class="previewCodeTool">
           <p>操作栏：</p>
           <el-button size="small" type="primary" @click="selectText">全选</el-button>

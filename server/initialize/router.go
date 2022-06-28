@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"net/http"
 
 	_ "github.com/flipped-aurora/gin-vue-admin/server/docs"
@@ -26,6 +27,19 @@ func Routers() *gin.Engine {
 	// Router.Static("/favicon.ico", "./dist/favicon.ico")
 	// Router.Static("/static", "./dist/assets")   // dist里面的静态资源
 	// Router.StaticFile("/", "./dist/index.html") // 前端网页入口页面
+
+	// 处理接口异常
+	Router.Use(middleware.GinRecovery(true))
+	// 全局捕获
+	Router.NoRoute(func(c *gin.Context) {
+		response.FailWithMessage("NoRoute err", c)
+		c.Abort()
+	})
+	// 全局捕获
+	Router.NoMethod(func(c *gin.Context) {
+		response.FailWithMessage("NoMethod err", c)
+		c.Abort()
+	})
 
 	Router.StaticFS(global.GVA_CONFIG.Local.Path, http.Dir(global.GVA_CONFIG.Local.StorePath)) // 为用户头像和文件提供静态地址
 	// Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")

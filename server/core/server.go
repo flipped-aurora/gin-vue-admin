@@ -2,6 +2,7 @@ package core
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/validators"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -19,7 +20,7 @@ func RunWindowsServer() {
 		// 初始化redis服务
 		initialize.Redis()
 	}
-
+	validators.InitTrans("zh")
 	// 从db加载jwt数据
 	if global.GVA_DB != nil {
 		system.LoadAll()

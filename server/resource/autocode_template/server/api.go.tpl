@@ -3,6 +3,7 @@ package {{.Package}}
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
     "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
+    "github.com/flipped-aurora/gin-vue-admin/server/model/common/validators"
     "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
     {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
     "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -28,7 +29,9 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	if validators.GVAShouldBind(&{{.Abbreviation}}, c) {
+        return
+    }
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -48,7 +51,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	if validators.GVAShouldBind(&{{.Abbreviation}}, c) {
+        return
+    }
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
@@ -69,6 +74,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gin.Context) {
 	var IDS request.IdsReq
     _ = c.ShouldBindJSON(&IDS)
+    if validators.GVAShouldBind(&IDS, c) {
+        return
+    }
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS); err != nil {
         global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
@@ -88,7 +96,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 // @Router /{{.Abbreviation}}/update{{.StructName}} [put]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	if validators.GVAShouldBind(&{{.Abbreviation}}, c) {
+        return
+    }
 	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
@@ -108,7 +118,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindQuery(&{{.Abbreviation}})
+	if validators.GVAShouldBind(&{{.Abbreviation}}, c) {
+        return
+    }
 	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
         global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
@@ -128,7 +140,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
 	var pageInfo {{.Package}}Req.{{.StructName}}Search
-	_ = c.ShouldBindQuery(&pageInfo)
+	if validators.GVAShouldBind(&pageInfo, c) {
+        return
+    }
 	if list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
 	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
         response.FailWithMessage("获取失败", c)

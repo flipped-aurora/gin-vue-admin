@@ -3,7 +3,6 @@ package middleware
 import (
 	"context"
 	"errors"
-	"net/http"
 	"time"
 
 	"go.uber.org/zap"
@@ -27,7 +26,8 @@ type LimitConfig struct {
 func (l LimitConfig) LimitWithTime() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := l.CheckOrMark(l.GenerationKey(c), l.Expire, l.Limit); err != nil {
-			c.JSON(http.StatusOK, gin.H{"code": response.ERROR, "msg": err})
+			response.MakeResponse(c).Error(response.ExceedLimitRequestIP)
+			//c.JSON(http.StatusOK, gin.H{"code": response.ExceedLimitRequestIP.Code, "msg": response.ExceedLimitRequestIP.Msg})
 			c.Abort()
 			return
 		} else {

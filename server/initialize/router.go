@@ -29,7 +29,7 @@ func Routers() *gin.Engine {
 	// Router.StaticFile("/", "./dist/index.html") // 前端网页入口页面
 
 	// 处理接口异常
-	Router.Use(middleware.GinRecovery(true))
+	// Router.Use(middleware.GinRecovery(true))
 	// 全局捕获
 	Router.NoRoute(func(c *gin.Context) {
 		response.FailWithMessage("NoRoute err", c)

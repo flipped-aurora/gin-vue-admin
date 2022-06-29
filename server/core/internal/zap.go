@@ -1,10 +1,14 @@
 package internal
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go.uber.org/zap"
+	"go.uber.org/zap/buffer"
 	"go.uber.org/zap/zapcore"
+	"runtime"
+	"strings"
 	"time"
 )
 
@@ -35,7 +39,7 @@ func (z *_zap) GetEncoderConfig() zapcore.EncoderConfig {
 		EncodeLevel:    global.GVA_CONFIG.Zap.ZapEncodeLevel(),
 		EncodeTime:     z.CustomTimeEncoder,
 		EncodeDuration: zapcore.SecondsDurationEncoder,
-		EncodeCaller:   zapcore.FullCallerEncoder,
+		EncodeCaller:   CallerEncoder,
 	}
 }
 
@@ -48,7 +52,7 @@ func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapco
 		return nil
 	}
 
-	return zapcore.NewCore(z.GetEncoder(), writer, level)
+	return zapcore.NewCore(&EscapeSeqJSONEncoder{z.GetEncoder()}, writer, level)
 }
 
 // CustomTimeEncoder 自定义日志输出时间格式
@@ -104,4 +108,42 @@ func (z *_zap) GetLevelPriority(level zapcore.Level) zap.LevelEnablerFunc {
 			return level == zap.DebugLevel
 		}
 	}
+}
+
+// FuncName 返回调用本函数的函数名称
+// pc runtime.Caller 返回的第一个值
+func FuncName(pc uintptr) string {
+	funcName := runtime.FuncForPC(pc).Name()
+	sFuncName := strings.Split(funcName, ".")
+	return sFuncName[len(sFuncName)-1]
+}
+
+// CallerEncoder serializes a caller in package/file:funcname:line format
+func CallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
+	shortCaller := caller.TrimmedPath()
+	shortCallerSplited := strings.Split(shortCaller, ":")
+	funcName := FuncName(caller.PC)
+	result := shortCallerSplited[0] + ":" + funcName + ":" + shortCallerSplited[1]
+	enc.AppendString(result)
+}
+
+type EscapeSeqJSONEncoder struct {
+	zapcore.Encoder
+}
+
+// EncodeEntry 将方法zap.error中的errorVerbose的堆栈换行符修改
+func (enc *EscapeSeqJSONEncoder) EncodeEntry(entry zapcore.Entry, fields []zapcore.Field) (*buffer.Buffer, error) {
+	b, err := enc.Encoder.EncodeEntry(entry, fields)
+	if err != nil {
+		return nil, err
+	}
+	newb := buffer.NewPool().Get()
+
+	b1 := bytes.Replace(b.Bytes(), []byte("\\n"), []byte("\n"), -1)
+	b2 := bytes.Replace(b1, []byte("\\t"), []byte("\t"), -1)
+	_, err = newb.Write(b2)
+	if err != nil {
+		return nil, err
+	}
+	return newb, nil
 }

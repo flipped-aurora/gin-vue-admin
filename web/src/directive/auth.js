@@ -27,7 +27,7 @@ export default {
           return
         }
         const waitUse = binding.value.toString().split(',')
-        let flag = waitUse.some(item => item === userInfo.authorityId)
+        let flag = waitUse.some(item => Number(item) === userInfo.authorityId)
         if (binding.modifiers.not) {
           flag = !flag
         }

@@ -60,7 +60,7 @@ func (exa *CustomerService) GetExaCustomer(id uint) (customer example.ExaCustome
 //@param: sysUserAuthorityID string, info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID string, info request.PageInfo) (list interface{}, total int64, err error) {
+func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&example.ExaCustomer{})
@@ -70,7 +70,7 @@ func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID string, info 
 	if err != nil {
 		return
 	}
-	var dataId []string
+	var dataId []uint
 	for _, v := range auth.DataAuthorityId {
 		dataId = append(dataId, v.AuthorityId)
 	}

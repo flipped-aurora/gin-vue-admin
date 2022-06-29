@@ -111,9 +111,6 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWeatherInfo } from '@/view/dashboard/weather.js'
 
-import { useBtnAuth } from '@/utils/btnAuth'
-const btnAuth = useBtnAuth()
-
 const weatherInfo = useWeatherInfo()
 
 const toolCards = ref([

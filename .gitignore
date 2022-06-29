@@ -27,3 +27,5 @@ yarn-error.log*
 /server/latest_log
 
 *.iml
+web/.pnpm-debug.log
+web/pnpm-lock.yaml

@@ -123,4 +123,3 @@ export const createPlugApi = (data) => {
     data
   })
 }
-

@@ -71,14 +71,6 @@ const copy = () => {
 }
 
 defineExpose({ copy })
-
-</script>
-
-<script>
-
-export default {
-
-}
 </script>
 
 <style lang="scss">

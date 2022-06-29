@@ -1,5 +1,4 @@
 import { asyncRouterHandle } from '@/utils/asyncRouter'
-
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -93,4 +92,3 @@ export const useRouterStore = defineStore('router', () => {
     routeMap
   }
 })
-

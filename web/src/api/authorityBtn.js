@@ -1,4 +1,3 @@
-
 import service from '@/utils/request'
 
 export const getAuthorityBtnApi = (data) => {
@@ -24,4 +23,3 @@ export const canRemoveAuthorityBtnApi = (params) => {
     params
   })
 }
-

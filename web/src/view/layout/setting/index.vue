@@ -38,13 +38,12 @@
         </div>
       </div>
     </el-drawer>
-
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Setting',
+  name: 'Setting'
 }
 </script>
 
@@ -69,13 +68,12 @@ const changeMode = (e) => {
   }
   userStore.changeSideMode(e)
 }
-
 </script>
 
 <style lang="scss" scoped>
 .drawer-container {
   transition: all 0.2s;
-  &:hover{
+  &:hover {
     right: 0
   }
   position: fixed;
@@ -92,46 +90,45 @@ const changeMode = (e) => {
   cursor: pointer;
   -webkit-box-shadow: inset 0 0 6px rgba(0 ,0 ,0, 10%);
 }
-.setting_body{
+.setting_body {
   padding: 20px;
-  .setting_card{
+  .setting_card {
     margin-bottom: 20px;
   }
-  .setting_content{
+  .setting_content {
     margin-top: 20px;
     display: flex;
     flex-direction: column;
-    >.theme-box{
+    >.theme-box {
      display: flex;
     }
-    >.color-box{
-      div{
+    >.color-box {
+      div {
         display: flex;
         flex-direction: column;
       }
     }
-    .item{
+    .item {
       display: flex;
       align-items: center;
       justify-content: center;
       flex-direction: column;
       margin-right: 20px;
-      .item-top{
+      .item-top {
         position: relative;
       }
-      .check{
+      .check {
         position: absolute;
         font-size: 20px;
         color: #00afff;
         right:10px;
         bottom: 10px;
       }
-      p{
+      p {
         text-align: center;
         font-size: 12px;
       }
     }
   }
 }
-
 </style>

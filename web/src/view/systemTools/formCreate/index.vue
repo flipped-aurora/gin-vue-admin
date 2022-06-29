@@ -1,5 +1,5 @@
 <template>
-  <div style="height:80vh">
+  <div style="height: 80vh">
     <iframe width="100%" height="100%" :src="`${basePath}:${basePort}/form-generator/#/`" frameborder="0" />
   </div>
 </template>

@@ -1,13 +1,13 @@
 <template>
   <div @click="clickFull">
-    <div class="gvaIcon gvaIcon-fullscreen-expand" v-if="isShow"></div>
+    <div v-if="isShow" class="gvaIcon gvaIcon-fullscreen-expand"></div>
     <div v-else class="gvaIcon gvaIcon-fullscreen-shrink"></div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Screenfull',
+  name: 'Screenfull'
 }
 </script>
 
@@ -49,7 +49,6 @@ const isShow = ref(true)
 const changeFullShow = () => {
   isShow.value = !screenfull.isFullscreen
 }
-
 </script>
 
 <style scoped lang="scss">

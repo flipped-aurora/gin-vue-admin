@@ -23,6 +23,5 @@ export const filterDict = (value, options) => {
 }
 
 export const getDictFunc = async(type) => {
-  const dicts = await getDict(type)
-  return dicts
+  return await getDict(type)
 }

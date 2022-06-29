@@ -1,15 +1,13 @@
 <template>
   <el-drawer v-model="drawer" title="媒体库" size="650px">
-    <warning-bar
-      title="点击“文件名/备注”可以编辑文件名或者备注内容。"
-    />
+    <WarningBar title="点击“文件名/备注”可以编辑文件名或者备注内容" />
     <div class="gva-btn-list">
-      <upload-common
+      <UploadCommon
         v-model:imageCommon="imageCommon"
         class="upload-btn-media-library"
         @on-success="open"
       />
-      <upload-image
+      <UploadImage
         v-model:imageUrl="imageUrl"
         :file-size="512"
         :max-w-h="1080"
@@ -27,7 +25,7 @@
       </el-form>
     </div>
     <div class="media">
-      <div v-for="(item,key) in picList" :key="key" class="media-box">
+      <div v-for="(item, key) in picList" :key="key" class="media-box">
         <div class="header-img-box-list">
           <el-image
             :key="key"
@@ -50,7 +48,7 @@
       :current-page="page"
       :page-size="pageSize"
       :total="total"
-      :style="{'justify-content':'center'}"
+      :style="{ 'justify-content': 'center' }"
       layout="total, prev, pager, next, jumper"
       @current-change="handleCurrentChange"
       @size-change="handleSizeChange"
@@ -64,7 +62,7 @@ import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -134,7 +132,6 @@ const editFileNameFunc = async(row) => {
     inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
-    // console.log(row)
     const res = await editFileName(row)
     if (res.code === 0) {
       ElMessage({
@@ -195,5 +192,4 @@ defineExpose({ open })
     }
   }
 }
-
 </style>

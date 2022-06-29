@@ -1,4 +1,3 @@
-
 import axios from 'axios'
 import { ref } from 'vue'
 
@@ -28,4 +27,3 @@ const getWeather = async(code) => {
     weatherInfo.value = s.city + ' 天气：' + s.weather + ' 温度：' + s.temperature + '摄氏度 风向：' + s.winddirection + ' 风力：' + s.windpower + '级 空气湿度：' + s.humidity
   }
 }
-

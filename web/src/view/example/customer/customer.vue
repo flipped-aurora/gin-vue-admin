@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
+    <WarningBar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="openDialog">新增</el-button>
@@ -26,7 +26,7 @@
             <el-button size="small" type="primary" link icon="edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
-              <div style="text-align: right; margin-top: 8px;">
+              <div style="text-align: right;margin-top: 8px;">
                 <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteCustomer(scope.row)">确定</el-button>
               </div>
@@ -68,6 +68,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Customer'
+}
+</script>
+
 <script setup>
 import {
   createExaCustomer,
@@ -76,7 +82,7 @@ import {
   getExaCustomer,
   getExaCustomerList
 } from '@/api/customer'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { formatDate } from '@/utils/format'
@@ -169,14 +175,4 @@ const openDialog = () => {
   type.value = 'create'
   dialogFormVisible.value = true
 }
-
 </script>
-
-<script>
-
-export default {
-  name: 'Customer'
-}
-</script>
-
-<style></style>

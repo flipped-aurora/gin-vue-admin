@@ -34,7 +34,7 @@
       </el-tab-pane>
     </el-tabs>
 
-    <!--自定义右键菜单html代码-->
+    <!-- 自定义右键菜单html代码 -->
     <ul
       v-show="contextMenuVisible"
       :style="{ left: left + 'px', top: top + 'px' }"
@@ -50,7 +50,7 @@
 
 <script>
 export default {
-  name: 'HistoryComponent',
+  name: 'HistoryComponent'
 }
 </script>
 

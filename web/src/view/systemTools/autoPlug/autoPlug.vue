@@ -12,7 +12,7 @@
           <el-checkbox v-model="form.hasGlobal" />
         </el-form-item>
         <el-form-item v-if="form.hasGlobal" label="全局属性">
-          <div v-for="(i,k) in form.global" :key="k" class="plug-row">
+          <div v-for="(i, k) in form.global" :key="k" class="plug-row">
             <span>
               <el-input v-model="i.key" placeholder="key 必填" />
             </span>
@@ -40,7 +40,7 @@
           <el-checkbox v-model="form.hasRequest" />
         </el-form-item>
         <el-form-item v-if="form.hasRequest" label="Request">
-          <div v-for="(i,k) in form.request" :key="k" class="plug-row">
+          <div v-for="(i, k) in form.request" :key="k" class="plug-row">
             <span>
               <el-input v-model="i.key" placeholder="key 必填" />
             </span>
@@ -68,7 +68,7 @@
           <el-checkbox v-model="form.hasResponse" />
         </el-form-item>
         <el-form-item v-if="form.hasResponse" label="Response">
-          <div v-for="(i,k) in form.response" :key="k" class="plug-row">
+          <div v-for="(i, k) in form.response" :key="k" class="plug-row">
             <span>
               <el-input v-model="i.key" placeholder="key 必填" />
             </span>
@@ -107,9 +107,7 @@ import {
   Minus
 } from '@element-plus/icons-vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-
 import { createPlugApi } from '@/api/autoCode.js'
-
 import { reactive } from 'vue'
 
 const form = reactive({
@@ -197,22 +195,21 @@ const minkv = (arr, key) => {
   }
   arr.splice(key, 1)
 }
-
 </script>
 
 <style lang="scss" scoped>
-        .plug-form{
-            width: 680px;
-        }
-    .plug-row{
-        display: flex;
-        align-items: center;
-        width: 100%;
-        &+&{
-            margin-top: 12px;
-        }
-        &>span{
-            margin-left: 8px;
-        }
-    }
+.plug-form {
+  width: 680px;
+}
+.plug-row {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  &+& {
+    margin-top: 12px;
+  }
+  &>span {
+    margin-left: 8px;
+  }
+}
 </style>

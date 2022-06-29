@@ -5,13 +5,14 @@
     @click="open"
   >
     <el-icon>
-      <warning-filled />
+      <WarningFilled />
     </el-icon>
     <span>
       {{ title }}
     </span>
   </div>
 </template>
+
 <script setup>
 import { WarningFilled } from '@element-plus/icons-vue'
 const prop = defineProps({
@@ -31,26 +32,27 @@ const open = () => {
   }
 }
 </script>
+
 <style lang="scss" scoped>
-.warning-bar{
+.warning-bar {
     background-color: #FFF5ED;
     font-size: 14px;
     padding: 6px 14px;
     display: flex;
     align-items: center;
     border-radius: 2px;
-    .el-icon{
+    .el-icon {
       font-size: 18px;
       color: #ED6A0C;
     }
     margin-bottom: 12px;
-    span{
+    span {
         line-height: 22px;
         color:#F67207;
         margin-left: 8px;
     }
 }
-.can-click{
+.can-click {
   cursor: pointer;
 }
 </style>

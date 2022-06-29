@@ -1,13 +1,13 @@
 <template>
   <div class="authority">
-    <warning-bar title="注：右上角头像下拉可切换角色" />
+    <WarningBar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addAuthority('0')">新增角色</el-button>
       </div>
       <el-table
         :data="tableData"
-        :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
+        :tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
         row-key="authorityId"
         style="width: 100%"
       >
@@ -60,16 +60,16 @@
         <el-form-item label="父级角色" prop="parentId">
           <el-cascader
             v-model="form.parentId"
-            style="width:100%"
-            :disabled="dialogType=='add'"
+            style="width: 100%"
+            :disabled="dialogType === 'add'"
             :options="AuthorityOption"
-            :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :props="{ checkStrictly: true, label: 'authorityName', value: 'authorityId', disabled: 'disabled', emitPath: false}"
             :show-all-levels="false"
             filterable
           />
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
-          <el-input v-model="form.authorityId" :disabled="dialogType=='edit'" autocomplete="off" />
+          <el-input v-model="form.authorityId" :disabled="dialogType === 'edit'" autocomplete="off" />
         </el-form-item>
         <el-form-item label="角色姓名" prop="authorityName">
           <el-input v-model="form.authorityName" autocomplete="off" />
@@ -99,6 +99,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Authority'
+}
+</script>
+
 <script setup>
 import {
   getAuthorityList,
@@ -111,7 +117,7 @@ import {
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
 import Datas from '@/view/superAdmin/authority/components/datas.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -251,7 +257,6 @@ const closeDialog = () => {
   apiDialogFlag.value = false
 }
 // 确定弹窗
-
 const enterDialog = () => {
   if (form.value.authorityId === '0') {
     ElMessage({
@@ -375,14 +380,6 @@ const editAuthority = (row) => {
   }
   setOptions()
   dialogFormVisible.value = true
-}
-
-</script>
-
-<script>
-
-export default {
-  name: 'Authority'
 }
 </script>
 

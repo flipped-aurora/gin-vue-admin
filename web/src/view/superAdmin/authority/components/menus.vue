@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearflex">
+    <div class="clearfix">
       <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
     <el-tree
@@ -19,19 +19,21 @@
           <span>{{ node.label }}</span>
           <span>
             <el-button
-              type="primary" link
+              type="primary"
               size="small"
-              :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
+              link
+              :style="{ color: row.defaultRouter === data.name?'#E6A23C':'#85ce61' }"
               :disabled="!node.checked"
               @click="() => setDefault(data)"
             >
-              {{ row.defaultRouter === data.name?"首页":"设为首页" }}
+              {{ row.defaultRouter === data.name?'首页':'设为首页' }}
             </el-button>
           </span>
           <span v-if="data.menuBtn.length">
             <el-button
-              type="primary" link
+              type="primary"
               size="small"
+              link
               @click="() => OpenBtn(data)"
             >
               分配按钮
@@ -62,6 +64,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Menus'
+}
+</script>
+
 <script setup>
 import { getBaseMenuTree, getMenuAuthority, addMenuAuthority } from '@/api/menu'
 import {
@@ -72,9 +80,7 @@ import { nextTick, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 const props = defineProps({
   row: {
-    default: function() {
-      return {}
-    },
+    default: () => {},
     type: Object
   }
 })
@@ -189,19 +195,11 @@ const enterDialog = async() => {
     btnVisible.value = false
   }
 }
-
-</script>
-
-<script>
-
-export default {
-  name: 'Menus'
-}
 </script>
 
 <style lang="scss" scope>
-.custom-tree-node{
-  span+span{
+.custom-tree-node {
+  span+span {
     margin-left: 12px;
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearflex">
+    <div class="clearfix">
       <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">确 定</el-button>
     </div>
     <el-tree
@@ -16,9 +16,10 @@
     />
   </div>
 </template>
+
 <script>
 export default {
-  name: 'Apis',
+  name: 'Apis'
 }
 </script>
 
@@ -29,9 +30,7 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 const props = defineProps({
   row: {
-    default: function() {
-      return {}
-    },
+    default: () => {},
     type: Object
   }
 })
@@ -119,5 +118,4 @@ defineExpose({
   needConfirm,
   enterAndNext
 })
-
 </script>

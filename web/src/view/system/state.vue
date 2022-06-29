@@ -138,6 +138,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'State'
+}
+</script>
+
 <script setup>
 import { getSystemState } from '@/api/system'
 import { onUnmounted, ref } from 'vue'
@@ -163,13 +169,6 @@ onUnmounted(() => {
   clearInterval(timer.value)
   timer.value = null
 })
-
-</script>
-
-<script>
-export default {
-  name: 'State',
-}
 </script>
 
 <style>

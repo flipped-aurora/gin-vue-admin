@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'AsideComponent',
+  name: 'AsideComponent'
 }
 </script>
 
@@ -30,19 +30,15 @@ import AsyncSubmenu from './asyncSubmenu.vue'
 import { computed } from 'vue'
 const props = defineProps({
   routerInfo: {
-    type: Object,
     default: () => null,
+    type: Object,
   },
   isCollapse: {
-    default: function() {
-      return false
-    },
+    default: () => false,
     type: Boolean
   },
   theme: {
-    default: function() {
-      return {}
-    },
+    default: () => {},
     type: Object
   }
 })
@@ -54,6 +50,4 @@ const menuComponent = computed(() => {
     return MenuItem
   }
 })
-
 </script>
-

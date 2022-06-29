@@ -1,12 +1,11 @@
 <template>
   <div class="upload">
     <div class="gva-table-box">
-
       <div class="gva-btn-list">
         <el-upload
           class="excel-btn"
           :action="`${path}/excel/importExcel`"
-          :headers="{'x-token':userStore.token}"
+          :headers="{ 'x-token': userStore.token }"
           :on-success="loadExcel"
           :show-file-list="false"
         >
@@ -22,7 +21,7 @@
         <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
 
           <template #default="scope">
-            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+            <span>{{ scope.row.hidden?'隐藏':'显示' }}</span>
           </template>
         </el-table-column>
         <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
@@ -35,7 +34,7 @@
 
 <script>
 export default {
-  name: 'Excel',
+  name: 'Excel'
 }
 </script>
 
@@ -77,17 +76,16 @@ const loadExcel = () => {
 const downloadExcelTemplate = () => {
   downloadTemplate('ExcelTemplate.xlsx')
 }
-
 </script>
 
 <style lang="scss" scoped>
-.btn-list{
+.btn-list {
   display: flex;
   margin-bottom: 12px;
   justify-content: flex-end;
 
 }
-.excel-btn+.excel-btn{
+.excel-btn+.excel-btn {
   margin-left: 10px;
 }
 </style>

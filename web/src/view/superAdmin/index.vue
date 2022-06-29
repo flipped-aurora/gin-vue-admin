@@ -15,6 +15,7 @@ export default {
   name: 'SuperAdmin'
 }
 </script>
+
 <script setup>
 import { useRouterStore } from '@/pinia/modules/router'
 const routerStore = useRouterStore()

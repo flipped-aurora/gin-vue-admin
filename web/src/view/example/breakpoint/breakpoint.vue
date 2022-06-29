@@ -28,6 +28,12 @@
 
 </template>
 
+<script>
+export default {
+  name: 'BreakPoint'
+}
+</script>
+
 <script setup>
 import SparkMD5 from 'spark-md5'
 import {
@@ -175,13 +181,6 @@ const inputChange = () => {
 }
 </script>
 
-<script>
-
-export default {
-  name: 'BreakPoint'
-}
-</script>
-
 <style lang='scss' scoped>
 h3 {
   margin: 40px 0 0;
@@ -197,63 +196,63 @@ li {
 a {
   color: #42b983;
 }
-#fromCont{
+#fromCont {
   display: inline-block;
 }
-.fileUpload{
-    padding: 3px 10px;
-    font-size: 12px;
-    height: 20px;
-    line-height: 20px;
-    position: relative;
+.fileUpload {
+  padding: 3px 10px;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  position: relative;
+  cursor: pointer;
+  color: #000;
+  border: 1px solid #c1c1c1;
+  border-radius: 4px;
+  overflow: hidden;
+  display: inline-block;
+  input {
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
     cursor: pointer;
-    color: #000;
-    border: 1px solid #c1c1c1;
-    border-radius: 4px;
-    overflow: hidden;
-    display: inline-block;
-    input{
-      position: absolute;
-      font-size: 100px;
-      right: 0;
-      top: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
+  }
 }
- .fileName{
-    display: inline-block;
-    vertical-align: top;
-    margin: 6px 15px 0 15px;
-  }
-  .uploadBtn{
-    position: relative;
-    top: -10px;
-    margin-left: 15px;
-  }
-  .tips{
-    margin-top: 30px;
-    font-size: 14px;
-    font-weight: 400;
-    color: #606266;
-  }
-  .el-divider{
-    margin: 0 0 30px 0;
-  }
+.fileName {
+  display: inline-block;
+  vertical-align: top;
+  margin: 6px 15px 0 15px;
+}
+.uploadBtn {
+  position: relative;
+  top: -10px;
+  margin-left: 15px;
+}
+.tips {
+  margin-top: 30px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #606266;
+}
+.el-divider {
+  margin: 0 0 30px 0;
+}
 
- .list{
-   margin-top:15px;
- }
- .list-item {
+.list {
+  margin-top:15px;
+}
+.list-item {
   display: block;
   margin-right: 10px;
   color: #606266;
   line-height: 25px;
   margin-bottom: 5px;
   width: 40%;
-   .percentage{
-          float: right;
-        }
+  .percentage {
+    float: right;
+  }
 }
 .list-enter-active, .list-leave-active {
   transition: all 1s;

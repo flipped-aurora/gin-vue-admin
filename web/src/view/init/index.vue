@@ -1,7 +1,7 @@
 <template>
   <div class="init_page">
-    <div class="init_page_panle">
-      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello  ">
+    <div class="init_page_panel">
+      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello">
         <div>
           <div class="hello_title">GIN-VUE-ADMIN</div>
           <p class="in-two a-fadeinT">初始化须知</p>
@@ -19,7 +19,7 @@
           </p>
         </div>
       </div>
-      <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
+      <div v-if="hello > 0" :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class="form">
         <el-form ref="formRef" :model="form" label-width="100px">
           <el-form-item label="数据库类型">
             <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
@@ -58,7 +58,7 @@
 
 <script>
 export default {
-  name: 'Init',
+  name: 'Init'
 }
 </script>
 
@@ -147,7 +147,7 @@ const onSubmit = async() => {
 </script>
 
 <style lang="scss" scoped>
-.init_page{
+.init_page {
   margin: 0;
   padding: 0;
   background-image: url("@/assets/login_background.jpg");
@@ -155,7 +155,7 @@ const onSubmit = async() => {
   width: 100%;
   height: 100%;
   position: relative;
-  .init_page_panle{
+  .init_page_panel {
     position: absolute;
     top: 3vh;
     left: 2vw;
@@ -166,7 +166,7 @@ const onSubmit = async() => {
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    .hello{
+    .hello {
       position: absolute;
       z-index: 2;
       text-align: center;
@@ -176,22 +176,22 @@ const onSubmit = async() => {
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      .hello_title{
+      .hello_title {
         font-size: 32px;
         line-height: 98px;
       }
-      .in-two{
+      .in-two {
         font-size: 22px;
       }
-      .init_p{
+      .init_p {
         margin-top: 20px;
         color: #777777;
       }
-      .init_btn{
+      .init_btn {
         margin-top: 20px;
       }
     }
-    .form{
+    .form {
       position: absolute;
       z-index: 3;
       margin-top: 60px;
@@ -293,5 +293,4 @@ const onSubmit = async() => {
     padding: 0;
   }
 }
-
 </style>

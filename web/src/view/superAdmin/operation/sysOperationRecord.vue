@@ -19,10 +19,9 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-
         <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
+          <div style="text-align: right;margin-top: 8px;">
             <el-button size="small" type="primary" link @click="deleteVisible = false">取消</el-button>
             <el-button size="small" type="primary" @click="onDelete">确定</el-button>
           </div>
@@ -69,7 +68,6 @@
                   <el-icon style="cursor: pointer;"><warning /></el-icon>
                 </template>
               </el-popover>
-
               <span v-else>无</span>
             </div>
           </template>
@@ -93,7 +91,7 @@
           <template #default="scope">
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
-              <div style="text-align: right; margin-top: 8px;">
+              <div style="text-align: right;margin-top: 8px;">
                 <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button size="small" type="primary" @click="deleteSysOperationRecordFunc(scope.row)">确定</el-button>
               </div>
@@ -118,6 +116,12 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'SysOperationRecord'
+}
+</script>
 
 <script setup>
 import {
@@ -219,14 +223,6 @@ const fmtBody = (value) => {
   } catch (err) {
     return value
   }
-}
-
-</script>
-
-<script>
-
-export default {
-  name: 'SysOperationRecord'
 }
 </script>
 

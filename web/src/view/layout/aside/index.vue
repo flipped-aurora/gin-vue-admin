@@ -17,7 +17,7 @@
           @select="selectMenuItem"
         >
           <template v-for="item in routerStore.asyncRouters[0].children">
-            <aside-component
+            <AsideComponent
               v-if="!item.hidden"
               :key="item.name"
               :is-collapse="isCollapse"
@@ -33,7 +33,7 @@
 
 <script>
 export default {
-  name: 'Aside',
+  name: 'Aside'
 }
 </script>
 
@@ -129,7 +129,6 @@ const selectMenuItem = (index, _, ele, aaa) => {
 </script>
 
 <style lang="scss">
-
 .el-sub-menu__title:hover,
 .el-menu-item:hover {
   background: transparent;

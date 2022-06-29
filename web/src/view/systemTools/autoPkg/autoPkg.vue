@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
+    <WarningBar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
@@ -10,7 +10,6 @@
         <el-table-column align="left" label="包名" width="150" prop="packageName" />
         <el-table-column align="left" label="展示名" width="150" prop="label" />
         <el-table-column align="left" label="描述" min-width="150" prop="desc" />
-
         <el-table-column align="left" label="操作" width="200">
           <template #default="scope">
             <el-button
@@ -23,11 +22,10 @@
           </template>
         </el-table-column>
       </el-table>
-
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="创建Package">
-      <warning-bar title="新增Pkg用于自动化代码使用" />
+      <WarningBar title="新增Pkg用于自动化代码使用" />
       <el-form ref="pkgForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="包名" prop="packageName">
           <el-input v-model="form.packageName" autocomplete="off" />
@@ -51,7 +49,7 @@
 
 <script>
 export default {
-  name: 'AutoPkg',
+  name: 'AutoPkg'
 }
 </script>
 

@@ -26,7 +26,7 @@
             <div class="user-personality">
               <p v-if="!editFlag" class="nickName">
                 {{ userStore.userInfo.nickName }}
-                <el-icon class="pointer" color="#66b1ff" @click="openEidt">
+                <el-icon class="pointer" color="#66b1ff" @click="openEdit">
                   <edit />
                 </el-icon>
               </p>
@@ -175,7 +175,7 @@
         </el-form-item>
         <el-form-item label="验证码" label-width="120px">
           <div class="code-box">
-            <el-input v-model="phoneForm.code" autocomplete="off" placeholder="请自行设计短信服务，此处为模拟随便写" style="width:300px" />
+            <el-input v-model="phoneForm.code" autocomplete="off" placeholder="请自行设计短信服务，此处为模拟随便写" style="width: 300px" />
             <el-button size="small" type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
           </div>
         </el-form-item>
@@ -202,7 +202,7 @@
         </el-form-item>
         <el-form-item label="验证码" label-width="120px">
           <div class="code-box">
-            <el-input v-model="emailForm.code" placeholder="请自行设计邮件服务，此处为模拟随便写" autocomplete="off" style="width:300px" />
+            <el-input v-model="emailForm.code" placeholder="请自行设计邮件服务，此处为模拟随便写" autocomplete="off" style="width: 300px" />
             <el-button size="small" type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
           </div>
         </el-form-item>
@@ -226,7 +226,7 @@
 
 <script>
 export default {
-  name: 'Person',
+  name: 'Person'
 }
 </script>
 
@@ -314,7 +314,7 @@ const enterImg = async(url) => {
   }
 }
 
-const openEidt = () => {
+const openEdit = () => {
   nickName.value = userStore.userInfo.nickName
   editFlag.value = true
 }
@@ -408,7 +408,6 @@ const changeEmail = async() => {
     closeChangeEmail()
   }
 }
-
 </script>
 
 <style lang="scss">

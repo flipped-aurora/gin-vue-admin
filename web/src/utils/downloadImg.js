@@ -1,4 +1,4 @@
-export const downloadImage = (imgsrc, name) => { // 下载图片地址和图片名
+export const downloadImage = (src, name) => { // 下载图片地址和图片名
   var image = new Image()
   image.setAttribute('crossOrigin', 'anonymous')
   image.onload = function() {
@@ -15,5 +15,5 @@ export const downloadImage = (imgsrc, name) => { // 下载图片地址和图片�
     a.href = url // 将生成的URL设置为a.href属性
     a.dispatchEvent(event) // 触发a的单击事件
   }
-  image.src = imgsrc
+  image.src = src
 }

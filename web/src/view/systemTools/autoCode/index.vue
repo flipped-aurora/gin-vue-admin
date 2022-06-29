@@ -1,12 +1,12 @@
 <template>
   <div>
-    <warning-bar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
+    <WarningBar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
       <el-collapse v-model="activeNames" style="margin-bottom:12px">
         <el-collapse-item name="1">
           <template #title>
-            <div :style="{fontSize:'16px',paddingLeft:'20px'}">
+            <div :style="{fontSize:'16px', paddingLeft:'20px'}">
               点这里从现有数据库创建代码
               <el-icon class="header-icon ">
                 <pointer />
@@ -176,8 +176,13 @@
   </div>
 </template>
 
-<script setup>
+<script>
+export default {
+  name: 'AutoCode'
+}
+</script>
 
+<script setup>
 const fieldTemplate = {
   fieldName: '',
   fieldDesc: '',
@@ -486,18 +491,10 @@ watch(() => route.params.id, (id) => {
     init()
   }
 })
-
-</script>
-
-<script>
-
-export default {
-  name: 'AutoCode'
-}
 </script>
 
 <style scoped lang="scss">
-  .previewCodeTool {
+.previewCodeTool {
     display: flex;
     align-items: center;
     padding: 5px 0;
@@ -509,10 +506,10 @@ export default {
     float: right;
   }
 }
-.auto-btn-list{
+.auto-btn-list {
   margin-top: 16px;
 }
-.auto-icon{
+.auto-icon {
   margin-left: 6px;
   color: #666;
   cursor: pointer;

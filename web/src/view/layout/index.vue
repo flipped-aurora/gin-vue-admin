@@ -3,9 +3,9 @@
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click="changeShadow()" />
       <el-aside class="main-cont main-left">
-        <div class="tilte" :style="{background: backgroundColor}">
+        <div class="tilte" :style="{ background: backgroundColor }">
           <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
-          <div v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
+          <div v-if="isSider" class="tit-text" :style="{ color: textColor }">{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
         <Aside class="aside" />
       </el-aside>
@@ -13,7 +13,7 @@
       <el-main class="main-cont main-right">
         <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
           <div
-            :style="{width: `calc(100% - ${isMobile?'0px':isCollapse?'54px':'220px'})`}"
+            :style="{ width: `calc(100% - ${isMobile?'0px':isCollapse?'54px':'220px'})` }"
             class="topfix"
           >
             <el-row>
@@ -73,8 +73,7 @@
               </el-col>
             </el-row>
             <!-- 当前面包屑用路由自动生成可根据需求修改 -->
-            <!--
-            :to="{ path: item.path }" 暂时注释不用-->
+            <!-- :to="{ path: item.path }" 暂时注释不用 -->
             <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
@@ -88,7 +87,7 @@
           </div>
         </router-view>
         <BottomInfo />
-        <setting />
+        <Setting />
       </el-main>
     </el-container>
 
@@ -97,7 +96,7 @@
 
 <script>
 export default {
-  name: 'Layout',
+  name: 'Layout'
 }
 </script>
 
@@ -242,11 +241,11 @@ const changeShadow = () => {
 <style lang="scss">
 @import '@/style/mobile.scss';
 
-.dark{
+.dark {
   background-color: #191a23 !important;
   color: #fff !important;
 }
-.light{
+.light {
   background-color: #fff !important;
   color: #000 !important;
 }

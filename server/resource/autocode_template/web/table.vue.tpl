@@ -99,7 +99,7 @@
       {{- if eq .FieldType "int" }}
       {{- if .DictType}}
           <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" clearable>
-            <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+            <el-option v-for="(item, key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
           <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />

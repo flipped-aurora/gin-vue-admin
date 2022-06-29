@@ -65,13 +65,13 @@ const file = computed(() => {
 </script>
 
 <style scoped>
-.headerAvatar{
+.headerAvatar {
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 8px;
 }
-.file{
+.file {
     width: 80px;
     height: 80px;
     position: relative;

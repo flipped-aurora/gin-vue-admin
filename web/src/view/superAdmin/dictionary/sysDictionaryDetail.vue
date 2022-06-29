@@ -51,7 +51,7 @@
             <el-button size="small" type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
-              <div style="text-align: right; margin-top: 8px;">
+              <div style="text-align: right;margin-top: 8px;">
                 <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
               </div>
@@ -83,7 +83,7 @@
             v-model="formData.label"
             placeholder="请输入展示值"
             clearable
-            :style="{width: '100%'}"
+            :style="{ width: '100%' }"
           />
         </el-form-item>
         <el-form-item label="字典值" prop="value">
@@ -93,7 +93,7 @@
             :step="1"
             placeholder="请输入字典值"
             clearable
-            :style="{width: '100%'}"
+            :style="{ width: '100%' }"
           />
         </el-form-item>
         <el-form-item label="启用状态" prop="status" required>
@@ -126,7 +126,7 @@ import {
   updateSysDictionaryDetail,
   findSysDictionaryDetail,
   getSysDictionaryDetailList
-} from '@/api/sysDictionaryDetail' //  此处请自行替换地址
+} from '@/api/sysDictionaryDetail' // 此处请自行替换地址
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -282,8 +282,4 @@ const openDialog = () => {
   type.value = 'create'
   dialogFormVisible.value = true
 }
-
 </script>
-
-<style>
-</style>

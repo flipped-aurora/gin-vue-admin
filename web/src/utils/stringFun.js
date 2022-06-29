@@ -18,12 +18,12 @@ export const toLowerCase = (str) => {
 // 驼峰转换下划线
 export const toSQLLine = (str) => {
     if (str === 'ID') return 'ID'
-    return str.replace(/([A-Z])/g, "_$1").toLowerCase();
+    return str.replace(/([A-Z])/g, "_$1").toLowerCase()
 }
 
 // 下划线转换驼峰
 export const toHump = (name) => {
     return name.replace(/\_(\w)/g, function(all, letter) {
-        return letter.toUpperCase();
-    });
+        return letter.toUpperCase()
+    })
 }

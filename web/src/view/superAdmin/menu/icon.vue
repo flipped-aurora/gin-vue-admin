@@ -1,11 +1,11 @@
 <template>
   <div>
-    <span class="gva-icon" style="position: absolute; z-index: 9999; padding: 3px 10px 0; ">
+    <span class="gva-icon" style="position: absolute;z-index: 9999;padding: 3px 10px 0;">
       <el-icon>
         <component :is="metaData.icon" />
       </el-icon>
     </span>
-    <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" placeholder="请选择">
+    <el-select v-model="metaData.icon" style="width: 100%" clearable filterable class="gva-select" placeholder="请选择">
       <el-option
         v-for="item in options"
         :key="item.key"
@@ -13,7 +13,7 @@
         :label="item.key"
         :value="item.key"
       >
-        <span class="gva-icon" style=" padding: 3px 0 0; " :class="item.label">
+        <span class="gva-icon" style="padding: 3px 0 0;" :class="item.label">
           <el-icon>
             <component :is="item.label" />
           </el-icon>
@@ -24,14 +24,18 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Icon'
+}
+</script>
+
 <script setup>
 import { ref, reactive } from 'vue'
 
 const props = defineProps({
   meta: {
-    default: function() {
-      return {}
-    },
+    default: () => {},
     type: Object,
   },
 })
@@ -1162,12 +1166,6 @@ const options = reactive([
 const metaData = ref(props.meta)
 if (!metaData.value.icon) {
   metaData.value.icon = options[0].label
-}
-</script>
-
-<script>
-export default {
-  name: 'Icon',
 }
 </script>
 

@@ -32,7 +32,7 @@
         <el-button size="small" type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
         <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
+          <div style="text-align: right;margin-top: 8px;">
             <el-button size="small" type="primary" link @click="deleteVisible = false">取消</el-button>
             <el-button size="small" type="primary" @click="onDelete">确定</el-button>
           </div>
@@ -53,7 +53,7 @@
         <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>
-              {{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}
+              {{ scope.row.method }} / {{ methodFilter(scope.row.method) }}
             </div>
           </template>
         </el-table-column>
@@ -88,17 +88,16 @@
           @size-change="handleSizeChange"
         />
       </div>
-
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
-      <warning-bar title="新增API，需要在角色管理内配置权限才可使用" />
+      <WarningBar title="新增API，需要在角色管理内配置权限才可使用" />
       <el-form ref="apiForm" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="路径" prop="path">
           <el-input v-model="form.path" autocomplete="off" />
         </el-form-item>
         <el-form-item label="请求" prop="method">
-          <el-select v-model="form.method" placeholder="请选择" style="width:100%">
+          <el-select v-model="form.method" placeholder="请选择" style="width: 100%">
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -126,7 +125,7 @@
 
 <script>
 export default {
-  name: 'Api',
+  name: 'Api'
 }
 </script>
 
@@ -140,11 +139,11 @@ import {
   deleteApisByIds
 } from '@/api/api'
 import { toSQLLine } from '@/utils/stringFun'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const methodFiletr = (value) => {
+const methodFilter = (value) => {
   const target = methodOptions.value.filter(item => item.value === value)[0]
   return target && `${target.label}`
 }
@@ -375,7 +374,6 @@ const deleteApiFunc = async(row) => {
       }
     })
 }
-
 </script>
 
 <style scoped lang="scss">

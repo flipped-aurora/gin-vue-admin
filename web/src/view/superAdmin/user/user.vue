@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar title="注：右上角头像下拉可切换角色" />
+    <WarningBar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addUser">新增用户</el-button>
@@ -26,7 +26,7 @@
               :options="authOptions"
               :show-all-levels="false"
               collapse-tags
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              :props="{ multiple: true, checkStrictly: true, label: 'authorityName', value: 'authorityId', disabled: 'disabled', emitPath: false }"
               :clearable="false"
               @visible-change="(flag)=>{changeAuthority(scope.row,flag)}"
               @remove-tag="()=>{changeAuthority(scope.row,false)}"
@@ -106,7 +106,7 @@
               style="width:100%"
               :options="authOptions"
               :show-all-levels="false"
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              :props="{ multiple: true, checkStrictly: true, label: 'authorityName', value: 'authorityId', disabled: 'disabled', emitPath: false }"
               :clearable="false"
             />
           </el-form-item>
@@ -124,9 +124,7 @@
               <div v-else class="header-img-box">从媒体库选择</div>
             </div>
           </el-form-item>
-
         </el-form>
-
       </div>
 
       <template #footer>
@@ -142,12 +140,11 @@
 
 <script>
 export default {
-  name: 'User',
+  name: 'User'
 }
 </script>
 
 <script setup>
-
 import {
   getUserList,
   setUserAuthorities,
@@ -158,7 +155,7 @@ import {
 import { getAuthorityList } from '@/api/authority'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { setUserInfo, resetPassword } from '@/api/user.js'
 
 import { nextTick, ref, watch } from 'vue'
@@ -383,7 +380,6 @@ const switchEnable = async(row) => {
     userInfo.value.authorityIds = []
   }
 }
-
 </script>
 
 <style lang="scss">
@@ -416,12 +412,12 @@ const switchEnable = async(row) => {
     display: block;
   }
 }
-.nickName{
+.nickName {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
-.pointer{
+.pointer {
   cursor: pointer;
   font-size: 16px;
   margin-left: 2px;

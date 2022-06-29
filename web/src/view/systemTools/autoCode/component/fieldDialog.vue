@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar title="id , created_at , updated_at , deleted_at 会自动生成请勿重复创建。搜索时如果条件为LIKE只支持字符串" />
+    <WarningBar title="id , created_at , updated_at , deleted_at 会自动生成请勿重复创建。搜索时如果条件为LIKE只支持字符串" />
     <el-form
       ref="fieldDialogFrom"
       :model="middleDate"
@@ -80,19 +80,22 @@
   </div>
 </template>
 
-<script setup>
+<script>
+export default {
+  name: 'FieldDialog'
+}
+</script>
 
+<script setup>
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 
 const props = defineProps({
   dialogMiddle: {
+    default: () => {},
     type: Object,
-    default: function() {
-      return {}
-    }
   }
 })
 
@@ -187,11 +190,4 @@ const clearOther = () => {
 
 const fieldDialogFrom = ref(null)
 defineExpose({ fieldDialogFrom })
-</script>
-
-<script>
-
-export default {
-  name: 'FieldDialog'
-}
 </script>

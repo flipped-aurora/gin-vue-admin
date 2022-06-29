@@ -84,7 +84,7 @@
           <div>
             <el-timeline>
               <el-timeline-item
-                v-for="(item,index) in dataTimeline"
+                v-for="(item, index) in dataTimeline"
                 :key="index"
                 timestamp="2018/4/12"
                 placement="top"
@@ -98,7 +98,8 @@
           </div>
           <el-button
             class="load-more"
-            type="primary" link
+            type="primary"
+            link
             @click="loadMore"
           >Load more</el-button>
         </el-card>
@@ -109,7 +110,7 @@
 
 <script>
 export default {
-  name: 'About',
+  name: 'About'
 }
 </script>
 
@@ -149,7 +150,6 @@ const loadMembers = () => {
 
 loadCommits()
 loadMembers()
-
 </script>
 
 <style scoped>

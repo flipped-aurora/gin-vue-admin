@@ -6,7 +6,6 @@ import service from '@/utils/request'
 // @Param data body sysModel.SysAuthority true "设置角色资源权限"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"设置成功"}"
 // @Router /authority/setDataAuthority [post]
-
 export const findFile = (params) => {
   return service({
     url: '/fileUploadAndDownload/findFile',

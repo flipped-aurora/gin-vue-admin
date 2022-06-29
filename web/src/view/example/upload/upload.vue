@@ -1,16 +1,14 @@
 <template>
-  <div v-loading.fullscreen.lock="fullscreenLoading">
+  <div>
     <div class="gva-table-box">
-      <warning-bar
-        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
-      />
+      <WarningBar title="点击“文件名/备注”可以编辑文件名或者备注内容" />
       <div class="gva-btn-list">
-        <upload-common
+        <UploadCommon
           v-model:imageCommon="imageCommon"
           class="upload-btn"
           @on-success="getTableData"
         />
-        <upload-image
+        <UploadImage
           v-model:imageUrl="imageUrl"
           :file-size="512"
           :max-w-h="1080"
@@ -79,21 +77,25 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Upload'
+}
+</script>
+
 <script setup>
 import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const path = ref(import.meta.env.VITE_BASE_API)
-const userStore = useUserStore()
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -177,7 +179,6 @@ const editFileNameFunc = async(row) => {
     inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
-    // console.log(row)
     const res = await editFileName(row)
     if (res.code === 0) {
       ElMessage({
@@ -195,12 +196,6 @@ const editFileNameFunc = async(row) => {
 }
 </script>
 
-<script>
-
-export default {
-  name: 'Upload',
-}
-</script>
 <style scoped>
 .name {
   cursor: pointer;

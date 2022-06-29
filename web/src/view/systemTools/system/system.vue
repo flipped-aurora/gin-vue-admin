@@ -1,12 +1,12 @@
 <template>
   <div class="system">
     <el-form ref="form" :model="config" label-width="240px">
-      <!--  System start  -->
+      <!-- System start -->
       <el-collapse v-model="activeNames">
         <el-collapse-item title="系统配置" name="1">
           <el-form-item label="环境值">
-<!--            <el-input v-model="config.system.env" />-->
-            <el-select v-model="config.system.env" style="width:100%">
+            <!-- <el-input v-model="config.system.env" /> -->
+            <el-select v-model="config.system.env" style="width: 100%">
               <el-option value="public" />
               <el-option value="develop" />
             </el-select>
@@ -15,13 +15,13 @@
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
           <el-form-item label="数据库类型">
-            <el-select v-model="config.system['db-type']" style="width:100%">
+            <el-select v-model="config.system['db-type']" style="width: 100%">
               <el-option value="mysql" />
               <el-option value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item label="Oss类型">
-            <el-select v-model="config.system['oss-type']" style="width:100%">
+            <el-select v-model="config.system['oss-type']" style="width: 100%">
               <el-option value="local" />
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
@@ -329,8 +329,8 @@
           <el-form-item label="Spec(CRON表达式)">
             <el-input v-model="config.timer.spec" />
           </el-form-item>
-          <template v-for="(item,k) in config.timer.detail">
-            <div v-for="(key,k2) in item" :key="k2">
+          <template v-for="(item, k) in config.timer.detail">
+            <div v-for="(key, k2) in item" :key="k2">
               <el-form-item :key="k+k2" :label="k2">
                 <el-input v-model="item[k2]" />
               </el-form-item>
@@ -351,6 +351,7 @@ export default {
   name: 'Config'
 }
 </script>
+
 <script setup>
 import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
@@ -415,7 +416,6 @@ const email = async() => {
     })
   }
 }
-
 </script>
 
 <style lang="scss">
@@ -429,7 +429,7 @@ const email = async() => {
     font-size: 16px;
     box-shadow: -4px 0px 0px 0px #e7e8e8;
   }
-  ::v-deep(.el-input-number__increase){
+  ::v-deep(.el-input-number__increase) {
     top:5px !important;
   }
   .gva-btn-list{

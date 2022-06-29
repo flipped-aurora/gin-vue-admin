@@ -12,7 +12,7 @@
         <el-table-column align="left" label="路由Path" show-overflow-tooltip min-width="160" prop="path" />
         <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
           <template #default="scope">
-            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+            <span>{{ scope.row.hidden?'隐藏':'显示' }}</span>
           </template>
         </el-table-column>
         <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
@@ -61,7 +61,7 @@
       </el-table>
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="handleClose" :title="dialogTitle">
-      <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
+      <WarningBar title="新增菜单，需要在角色管理内配置权限才可使用" />
       <el-form
         v-if="dialogFormVisible"
         ref="menuForm"
@@ -106,7 +106,7 @@
             style="width:100%"
             :disabled="!isEdit"
             :options="menuOption"
-            :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
+            :props="{ checkStrictly: true, label: 'title', value: 'ID', disabled: 'disabled', emitPath: false}"
             :show-all-levels="false"
             filterable
           />
@@ -119,7 +119,7 @@
           <el-input v-model="form.meta.title" autocomplete="off" />
         </el-form-item>
         <el-form-item label="图标" prop="meta.icon" style="width:30%">
-          <icon :meta="form.meta" style="width:100%" />
+          <Icon :meta="form.meta" style="width:100%" />
         </el-form-item>
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
@@ -227,6 +227,12 @@
   </div>
 </template>
 
+<script>
+export default {
+  name: 'Menus'
+}
+</script>
+
 <script setup>
 import {
   updateBaseMenu,
@@ -235,8 +241,8 @@ import {
   deleteBaseMenu,
   getBaseMenuById
 } from '@/api/menu'
-import icon from '@/view/superAdmin/menu/icon.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import Icon from '@/view/superAdmin/menu/icon.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -388,7 +394,6 @@ const initForm = () => {
   }
 }
 // 关闭弹窗
-
 const dialogFormVisible = ref(false)
 const closeDialog = () => {
   initForm()
@@ -478,20 +483,13 @@ const editMenu = async(id) => {
   setOptions()
   dialogFormVisible.value = true
 }
-
-</script>
-
-<script>
-export default {
-  name: 'Menus',
-}
 </script>
 
 <style scoped lang="scss">
 .warning {
   color: #dc143c;
 }
-.icon-column{
+.icon-column {
   display: flex;
   align-items: center;
   .el-icon{

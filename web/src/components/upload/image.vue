@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <el-upload
@@ -13,6 +12,12 @@
     </el-upload>
   </div>
 </template>
+
+<script>
+export default {
+  name: 'UploadImage'
+}
+</script>
 
 <script setup>
 import ImageCompress from '@/utils/image'
@@ -64,16 +69,6 @@ const handleImageSuccess = (res) => {
   }
 }
 
-</script>
-
-<script>
-
-export default {
-  name: 'UploadImage',
-  methods: {
-
-  }
-}
 </script>
 
 <style lang="scss" scoped>

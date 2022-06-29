@@ -9,9 +9,10 @@
     />
   </div>
 </template>
+
 <script setup>
 import * as echarts from 'echarts'
-import { nextTick, onMounted, onUnmounted, ref , shallowRef } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 // import 'echarts/theme/macarons'
 
 var dataAxis = []
@@ -114,6 +115,7 @@ onUnmounted(() => {
   chart.value = null
 })
 </script>
+
 <style lang="scss" scoped>
 .dashboard-line-box {
   .dashboard-line {

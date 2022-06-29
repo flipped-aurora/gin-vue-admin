@@ -64,7 +64,7 @@
 
 <script>
 export default {
-  name: 'AutoCodeAdmin',
+  name: 'AutoCodeAdmin'
 }
 </script>
 
@@ -169,7 +169,6 @@ const goAutoCode = (row) => {
     router.push({ name: 'autoCode' })
   }
 }
-
 </script>
 
 <style scoped lang="scss">

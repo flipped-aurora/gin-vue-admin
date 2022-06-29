@@ -1,8 +1,6 @@
 <template>
   <div>
-    <warning-bar
-      title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
-    />
+    <WarningBar title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释" />
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo">
         <el-form-item label="字典名（中）">
@@ -87,7 +85,7 @@
               icon="document"
               type="primary"
               link
-              @click="toDetile(scope.row)"
+              @click="toDetail(scope.row)"
             >详情</el-button>
             <el-button
               size="small"
@@ -202,7 +200,7 @@
 
 <script>
 export default {
-  name: 'SysDictionary',
+  name: 'SysDictionary'
 }
 </script>
 
@@ -213,8 +211,8 @@ import {
   updateSysDictionary,
   findSysDictionary,
   getSysDictionaryList,
-} from '@/api/sysDictionary' //  此处请自行替换地址
-import warningBar from '@/components/warningBar/warningBar.vue'
+} from '@/api/sysDictionary' // 此处请自行替换地址
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -300,7 +298,7 @@ const getTableData = async() => {
 
 getTableData()
 
-const toDetile = (row) => {
+const toDetail = (row) => {
   router.push({
     name: 'dictionaryDetail',
     params: {
@@ -371,5 +369,3 @@ const openDialog = () => {
   dialogFormVisible.value = true
 }
 </script>
-
-<style></style>

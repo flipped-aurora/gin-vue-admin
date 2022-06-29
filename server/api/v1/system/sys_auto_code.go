@@ -240,3 +240,41 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 		response.Ok(c)
 	}
 }
+
+func (autoApi *AutoCodeApi) InstAllPlugin(c *gin.Context) {
+	const GVAPLUGPATH = "./gva-plug-temp/"
+	header, err := c.FormFile("plug")
+	_, err = os.Stat(GVAPLUGPATH)
+	if os.IsNotExist(err) {
+		os.Mkdir(GVAPLUGPATH, os.ModePerm)
+	}
+	err = c.SaveUploadedFile(header, GVAPLUGPATH+header.Filename)
+	paths, err := utils.Unzip(GVAPLUGPATH+header.Filename, GVAPLUGPATH)
+	var webIndex = 0
+	var serverIndex = 0
+	for i := range paths {
+		pathArr := strings.Split(paths[i], "\\")
+		if pathArr[len(pathArr)-1] == "server" {
+			serverIndex = i + 1
+		}
+		if pathArr[len(pathArr)-1] == "web" {
+			webIndex = i + 1
+		}
+	}
+	if webIndex == 0 && serverIndex == 0 {
+		fmt.Println("非标准插件，请按照文档自动迁移使用")
+		return
+	}
+
+	if webIndex != 0 {
+		err := os.Rename(global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Server+"/"+paths[webIndex], global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Web+"/plugin")
+		fmt.Println(err)
+	}
+
+	if serverIndex != 0 {
+		err := os.Rename(global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Server+"/"+paths[serverIndex], global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Server+"/plugin")
+		fmt.Println(err)
+	}
+	os.RemoveAll(GVAPLUGPATH)
+	fmt.Println(err)
+}

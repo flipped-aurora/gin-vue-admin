@@ -17,7 +17,13 @@
                 </el-option>
             </el-select>
             </el-form-item>
-                  {{- else }}
+           {{- else if .DictType}}
+           <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
+              <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+            </el-select>
+            </el-form-item>
+            {{- else }}
         <el-form-item label="{{.FieldDesc}}">
           <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
         </el-form-item>{{ end }}{{ end }}{{ end }}

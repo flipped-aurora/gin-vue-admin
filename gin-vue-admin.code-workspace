@@ -27,7 +27,7 @@
         "request": "launch",
         "name": "Backend",
         "cwd": "${workspaceFolder:backend}",
-        "program": "${workspaceFolder:backend}/main.go"
+        "program": "${workspaceFolder:backend}/"
       },
       {
         "type": "node",

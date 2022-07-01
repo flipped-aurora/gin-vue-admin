@@ -76,7 +76,7 @@ func (i *initMenuAuthority) DataInserted(ctx context.Context) bool {
 	}
 	auth := &sysModel.SysAuthority{}
 	if ret := db.Model(auth).
-		Where("authority_id = ?", "9528").Preload("SysBaseMenus").Find(auth); ret != nil {
+		Where("authority_id = ?", 9528).Preload("SysBaseMenus").Find(auth); ret != nil {
 		if ret.Error != nil {
 			return false
 		}

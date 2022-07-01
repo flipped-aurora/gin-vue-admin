@@ -97,25 +97,12 @@
         </el-form-item>
       </el-form>
 
-      <div>
-        <el-upload
-          class="excel-btn"
-          :action="`${path}/autoCode/installPlug`"
-          :headers="{'x-token':userStore.token}"
-          :show-file-list="false"
-          name="plug"
-        >
-          <el-button size="small" type="primary" icon="upload">导入</el-button>
-        </el-upload>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import { toUpperCase } from '@/utils/stringFun'
-
-import { useUserStore } from '@/pinia/modules/user'
 
 import {
   Plus,
@@ -125,9 +112,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 
 import { createPlugApi } from '@/api/autoCode.js'
 
-import { reactive, ref } from 'vue'
-const userStore = useUserStore()
-const path = ref(import.meta.env.VITE_BASE_API)
+import { reactive } from 'vue'
+
 const form = reactive({
   plugName: '',
   routerGroup: '',

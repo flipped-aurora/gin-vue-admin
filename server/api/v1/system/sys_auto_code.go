@@ -3,16 +3,17 @@ package system
 import (
 	"errors"
 	"fmt"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
-	"net/url"
-	"os"
-	"strings"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	cp "github.com/otiai10/copy"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+	"net/url"
+	"os"
+	"path/filepath"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -241,8 +242,9 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 	}
 }
 
-func (autoApi *AutoCodeApi) InstAllPlugin(c *gin.Context) {
+func (autoApi *AutoCodeApi) InstallPlugin(c *gin.Context) {
 	const GVAPLUGPATH = "./gva-plug-temp/"
+	defer os.RemoveAll(GVAPLUGPATH)
 	header, err := c.FormFile("plug")
 	_, err = os.Stat(GVAPLUGPATH)
 	if os.IsNotExist(err) {
@@ -253,28 +255,60 @@ func (autoApi *AutoCodeApi) InstAllPlugin(c *gin.Context) {
 	var webIndex = 0
 	var serverIndex = 0
 	for i := range paths {
-		pathArr := strings.Split(paths[i], "\\")
-		if pathArr[len(pathArr)-1] == "server" {
+		paths[i] = filepath.ToSlash(paths[i])
+		pathArr := strings.Split(paths[i], "/")
+		if pathArr[len(pathArr)-2] == "server" && pathArr[len(pathArr)-1] == "plugin" {
 			serverIndex = i + 1
 		}
-		if pathArr[len(pathArr)-1] == "web" {
+		if pathArr[len(pathArr)-2] == "web" && pathArr[len(pathArr)-1] == "plugin" {
 			webIndex = i + 1
 		}
 	}
 	if webIndex == 0 && serverIndex == 0 {
 		fmt.Println("非标准插件，请按照文档自动迁移使用")
+		response.FailWithMessage("非标准插件，请按照文档自动迁移使用", c)
 		return
 	}
 
 	if webIndex != 0 {
-		err := os.Rename(global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Server+"/"+paths[webIndex], global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Web+"/plugin")
-		fmt.Println(err)
+		webNameArr := strings.Split(filepath.ToSlash(paths[webIndex]), "/")
+		webName := webNameArr[len(webNameArr)-1]
+		var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/" + paths[webIndex])
+		var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Web + "/plugin/" + webName)
+		_, err := os.Stat(to)
+		if err == nil {
+			fmt.Println("web 已存在同名插件，请自行手动安装")
+			response.FailWithMessage("web 已存在同名插件，请自行手动安装", c)
+			return
+		}
+		err = cp.Copy(form, to)
+		if err != nil {
+			response.FailWithMessage(err.Error(), c)
+			return
+		}
 	}
 
 	if serverIndex != 0 {
-		err := os.Rename(global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Server+"/"+paths[serverIndex], global.GVA_CONFIG.AutoCode.Root+global.GVA_CONFIG.AutoCode.Server+"/plugin")
-		fmt.Println(err)
+		serverNameArr := strings.Split(filepath.ToSlash(paths[serverIndex]), "/")
+		serverName := serverNameArr[len(serverNameArr)-1]
+		var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/" + paths[serverIndex])
+		var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/plugin/" + serverName)
+		_, err := os.Stat(to)
+		if err == nil {
+			fmt.Println("server 已存在同名插件，请自行手动安装")
+			response.FailWithMessage("server 已存在同名插件，请自行手动安装", c)
+			return
+		}
+		err = cp.Copy(form, to)
+		if err != nil {
+			response.FailWithMessage(err.Error(), c)
+			return
+		}
 	}
-	os.RemoveAll(GVAPLUGPATH)
-	fmt.Println(err)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithMessage("插件安装成功，请按照说明配置使用", c)
+	}
 }

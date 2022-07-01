@@ -27,7 +27,7 @@ func GVAShouldBind(s interface{}, c *gin.Context) bool {
 	return false
 }
 
-func RemoveTopStruct(fields map[string]string) string {
+func firstError(fields map[string]string) string {  // 是这个意义？
 	//res := map[string]string{}
 	//for field, err := range fields {
 	//	res[field[strings.Index(field, ".")+1:]] = err

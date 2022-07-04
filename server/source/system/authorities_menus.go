@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -73,10 +74,13 @@ func (i *initMenuAuthority) DataInserted(ctx context.Context) bool {
 	if !ok {
 		return false
 	}
-	var count int64
-	if err := db.Model(&sysModel.SysAuthority{}).
-		Where("authority_id = ?", "9528").Preload("SysBaseMenus").Count(&count); err != nil {
-		return count == 16
+	auth := &sysModel.SysAuthority{}
+	if ret := db.Model(auth).
+		Where("authority_id = ?", 9528).Preload("SysBaseMenus").Find(auth); ret != nil {
+		if ret.Error != nil {
+			return false
+		}
+		return len(auth.SysBaseMenus) > 0
 	}
 	return false
 }

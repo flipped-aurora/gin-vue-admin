@@ -85,6 +85,12 @@ export const useUserStore = defineStore('user', () => {
       window.location.reload()
     }
   }
+  /* 清理数据 */
+  const ClearStorage = async() => {
+    token.value = ''
+    sessionStorage.clear()
+    localStorage.clear()
+  }
   /* 设置侧边栏模式*/
   const changeSideMode = async(data) => {
     const res = await setSelfInfo({ sideMode: data })
@@ -141,6 +147,7 @@ export const useUserStore = defineStore('user', () => {
     setToken,
     baseColor,
     activeColor,
-    loadingInstance
+    loadingInstance,
+    ClearStorage
   }
 })

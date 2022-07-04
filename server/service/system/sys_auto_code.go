@@ -149,6 +149,12 @@ var AutoCodeServiceApp = new(AutoCodeService)
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
 	makeDictTypes(&autoCode)
+	for i := range autoCode.Fields {
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			break
+		}
+	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return nil, err
@@ -228,6 +234,12 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
 	makeDictTypes(&autoCode)
+	for i := range autoCode.Fields {
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			break
+		}
+	}
 	// 增加判断: 重复创建struct
 	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName, autoCode.Package) {
 		return RepeatErr

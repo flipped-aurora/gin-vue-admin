@@ -79,8 +79,7 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 
 func (userService *UserService) ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
 	var user system.SysUser
-	err = global.GVA_DB.Where("username = ?", u.Username).First(&user).Error
-	if err != nil {
+	if err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error; err != nil {
 		return nil, err
 	}
 	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
@@ -117,12 +116,12 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 //@param: uuid uuid.UUID, authorityId string
 //@return: err error
 
-func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, authorityId uint) (err error) {
-	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUseAuthority{}).Error
+func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err error) {
+	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}
-	err = global.GVA_DB.Where("uuid = ?", uuid).First(&system.SysUser{}).Update("authority_id", authorityId).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityId).Error
 	return err
 }
 
@@ -134,13 +133,13 @@ func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, author
 
 func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		TxErr := tx.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+		TxErr := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 		if TxErr != nil {
 			return TxErr
 		}
-		var useAuthority []system.SysUseAuthority
+		var useAuthority []system.SysUserAuthority
 		for _, v := range authorityIds {
-			useAuthority = append(useAuthority, system.SysUseAuthority{
+			useAuthority = append(useAuthority, system.SysUserAuthority{
 				SysUserId: id, SysAuthorityAuthorityId: v,
 			})
 		}
@@ -169,7 +168,7 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 	if err != nil {
 		return err
 	}
-	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 	return err
 }
 

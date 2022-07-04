@@ -274,7 +274,6 @@ const savePassword = async() => {
   modifyPwdForm.value.validate((valid) => {
     if (valid) {
       changePassword({
-        username: userStore.userInfo.userName,
         password: pwdModify.value.password,
         newPassword: pwdModify.value.newPassword,
       }).then((res) => {

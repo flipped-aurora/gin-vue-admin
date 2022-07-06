@@ -297,7 +297,7 @@ export default {
     @include flex-center;
 }
 
-//小屏幕不显示右侧，将登陆框居中
+//小屏幕不显示右侧，将登录框居中
 @media (max-width: 750px) {
     .gva-card {
         padding: 20px 10px !important;

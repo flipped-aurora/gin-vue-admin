@@ -52,7 +52,7 @@ export const useUserStore = defineStore('user', () => {
   const LoginIn = async(loginInfo) => {
     loadingInstance.value = ElLoading.service({
       fullscreen: true,
-      text: '登陆中，请稍候...',
+      text: '登录中，请稍候...',
     })
     try {
       const res = await login(loginInfo)

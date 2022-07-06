@@ -67,7 +67,7 @@ router.beforeEach(async(to, from, next) => {
       next()
     }
   } else {
-    // 不在白名单中并且已经登陆的时候
+    // 不在白名单中并且已经登录的时候
     if (token) {
       // 添加flag防止多次获取动态路由和栈溢出
       if (!asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
@@ -89,7 +89,7 @@ router.beforeEach(async(to, from, next) => {
         }
       }
     }
-    // 不在白名单中并且未登陆的时候
+    // 不在白名单中并且未登录的时候
     if (!token) {
       next({
         name: 'Login',

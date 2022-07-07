@@ -3,16 +3,15 @@ package system
 import (
 	"errors"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"net/url"
 	"os"
 	"strings"
-
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -238,5 +237,20 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 		response.FailWithMessage("预览失败", c)
 	} else {
 		response.Ok(c)
+	}
+}
+
+func (autoApi *AutoCodeApi) InstallPlugin(c *gin.Context) {
+	header, err := c.FormFile("plug")
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = autoCodeService.InstallPlugin(header)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithMessage("插件安装成功，请按照说明配置使用", c)
 	}
 }

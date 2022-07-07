@@ -22,8 +22,8 @@ type Login struct {
 }
 
 // Modify password structure
-type ChangePasswordStruct struct {
-	Username    string `json:"username"`    // 用户名
+type ChangePasswordReq struct {
+	ID          uint   `json:"-"`           // 从 JWT 中提取 user id，避免越权
 	Password    string `json:"password"`    // 密码
 	NewPassword string `json:"newPassword"` // 新密码
 }
@@ -42,7 +42,7 @@ type SetUserAuthorities struct {
 type ChangeUserInfo struct {
 	ID           uint                 `gorm:"primarykey"`                                                                           // 主键ID
 	NickName     string               `json:"nickName" gorm:"default:系统用户;comment:用户昵称"`                                            // 用户昵称
-	Phone        string               `json:"phone"  gorm:"comment:用户手机号"`                                                          // 用户角色ID
+	Phone        string               `json:"phone"  gorm:"comment:用户手机号"`                                                          // 用户手机号
 	AuthorityIds []uint               `json:"authorityIds" gorm:"-"`                                                                // 角色ID
 	Email        string               `json:"email"  gorm:"comment:用户邮箱"`                                                           // 用户邮箱
 	HeaderImg    string               `json:"headerImg" gorm:"default:https://qmplusimg.henrongyi.top/gva_header.jpg;comment:用户头像"` // 用户头像

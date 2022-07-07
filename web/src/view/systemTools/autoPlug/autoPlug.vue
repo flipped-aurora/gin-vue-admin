@@ -96,12 +96,14 @@
           <el-button type="primary" @click="createPlug">创建</el-button>
         </el-form-item>
       </el-form>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { toUpperCase } from '@/utils/stringFun'
+
 import {
   Plus,
   Minus

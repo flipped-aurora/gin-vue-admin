@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearflex">
+    <div class="clearfix">
       <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">确 定</el-button>
     </div>
     <el-tree

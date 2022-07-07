@@ -7,7 +7,7 @@
           <el-input v-model="form.to" />
         </el-form-item>
         <el-form-item label="邮件">
-          <el-input v-model="form.subjec" />
+          <el-input v-model="form.subject" />
         </el-form-item>
         <el-form-item label="邮件内容">
           <el-input v-model="form.body" type="textarea" />
@@ -36,7 +36,7 @@ import { reactive, ref } from 'vue'
 const emailForm = ref(null)
 const form = reactive({
   to: '',
-  subjec: '',
+  subject: '',
   body: '',
 })
 const sendTestEmail = async() => {

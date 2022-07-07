@@ -87,7 +87,7 @@
               icon="document"
               type="primary"
               link
-              @click="toDetile(scope.row)"
+              @click="toDetail(scope.row)"
             >详情</el-button>
             <el-button
               size="small"
@@ -213,8 +213,8 @@ import {
   updateSysDictionary,
   findSysDictionary,
   getSysDictionaryList,
-} from '@/api/sysDictionary' //  此处请自行替换地址
-import warningBar from '@/components/warningBar/warningBar.vue'
+} from '@/api/sysDictionary' // 此处请自行替换地址
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -300,7 +300,7 @@ const getTableData = async() => {
 
 getTableData()
 
-const toDetile = (row) => {
+const toDetail = (row) => {
   router.push({
     name: 'dictionaryDetail',
     params: {

@@ -236,7 +236,7 @@ import {
   getBaseMenuById
 } from '@/api/menu'
 import icon from '@/view/superAdmin/menu/icon.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'

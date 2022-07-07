@@ -11,7 +11,7 @@
 </template>
 <script setup>
 import * as echarts from 'echarts'
-import { nextTick, onMounted, onUnmounted, ref , shallowRef } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 // import 'echarts/theme/macarons'
 
 var dataAxis = []

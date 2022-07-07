@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearflex">
+    <div class="clearfix">
       <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
     <el-tree
@@ -19,7 +19,8 @@
           <span>{{ node.label }}</span>
           <span>
             <el-button
-              type="primary" link
+              type="primary"
+              link
               size="small"
               :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
               :disabled="!node.checked"
@@ -30,7 +31,8 @@
           </span>
           <span v-if="data.menuBtn.length">
             <el-button
-              type="primary" link
+              type="primary"
+              link
               size="small"
               @click="() => OpenBtn(data)"
             >

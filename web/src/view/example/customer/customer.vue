@@ -76,7 +76,7 @@ import {
   getExaCustomer,
   getExaCustomerList
 } from '@/api/customer'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { formatDate } from '@/utils/format'

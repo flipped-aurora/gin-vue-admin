@@ -126,7 +126,7 @@ import {
   updateSysDictionaryDetail,
   findSysDictionaryDetail,
   getSysDictionaryDetailList
-} from '@/api/sysDictionaryDetail' //  此处请自行替换地址
+} from '@/api/sysDictionaryDetail' // 此处请自行替换地址
 import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { ElMessage } from 'element-plus'

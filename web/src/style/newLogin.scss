@@ -10,7 +10,7 @@
         padding-right: 6px;
         padding-top: 4px;
     }
-    .login_panle {
+    .login_panel {
         position: absolute;
         top: 3vh;
         left: 2vw;
@@ -21,28 +21,28 @@
         display: flex;
         align-items: center;
         justify-content: space-evenly;
-        .login_panle_right {
+        .login_panel_right {
             background-image: url("@/assets/login_left.svg");
             background-size: cover;
             width: 40%;
             height: 60%;
             float: right !important;
         }
-        .login_panle_form {
+        .login_panel_form {
             width: 420px;
             background-color: #fff;
             padding: 40px 40px 40px 40px;
             border-radius: 10px;
             box-shadow: 2px 3px 7px rgba(0, 0, 0, .2);
-            .login_panle_form_title {
+            .login_panel_form_title {
                 display: flex;
                 align-items: center;
                 margin: 30px 0;
-                .login_panle_form_title_logo {
+                .login_panel_form_title_logo {
                     width: 90px;
                     height: 72px;
                 }
-                .login_panle_form_title_p {
+                .login_panel_form_title_p {
                     font-size: 40px;
                     padding-left: 20px;
                 }
@@ -63,7 +63,7 @@
                 }
             }
         }
-        .login_panle_foot {
+        .login_panel_foot {
             position: absolute;
             bottom: 20px;
             .links {
@@ -85,16 +85,16 @@
 
 //小屏幕不显示右侧，将登录框居中
 @media (max-width: 750px) {
-    .login_panle_right {
+    .login_panel_right {
         display: none;
     }
-    .login_panle {
+    .login_panel {
         width: 100vw;
         height: 100vh;
         top: 0;
         left: 0;
     }
-    .login_panle_form {
+    .login_panel_form {
         width: 100%;
     }
 }

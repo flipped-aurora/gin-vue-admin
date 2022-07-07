@@ -9,7 +9,7 @@
             <el-row>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
-                  <el-icon class="dasboard-icon">
+                  <el-icon class="dashboard-icon">
                     <sort />
                   </el-icon>
                   今日流量 (1231231)
@@ -17,7 +17,7 @@
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
-                  <el-icon class="dasboard-icon">
+                  <el-icon class="dashboard-icon">
                     <avatar />
                   </el-icon>
                   总用户数 (24001)
@@ -25,7 +25,7 @@
               </el-col>
               <el-col :span="8" :xs="24" :sm="8">
                 <div class="flex-center">
-                  <el-icon class="dasboard-icon">
+                  <el-icon class="dashboard-icon">
                     <comment />
                   </el-icon>
                   好评率 (99%)
@@ -105,8 +105,8 @@
 </template>
 
 <script setup>
-import echartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
-import dashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
+import EchartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
+import DashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWeatherInfo } from '@/view/dashboard/weather.js'
@@ -285,7 +285,7 @@ export default {
       padding: 14px;
     }
 }
-.dasboard-icon {
+.dashboard-icon {
     font-size: 20px;
     color: rgb(85, 160, 248);
     width: 30px;
@@ -321,7 +321,7 @@ export default {
                 line-height: 20px;
             }
         }
-        .dasboard-icon {
+        .dashboard-icon {
             font-size: 18px;
         }
     }

@@ -53,7 +53,7 @@
         <el-table-column align="left" label="请求" min-width="150" prop="method" sortable="custom">
           <template #default="scope">
             <div>
-              {{ scope.row.method }} / {{ methodFiletr(scope.row.method) }}
+              {{ scope.row.method }} / {{ methodFilter(scope.row.method) }}
             </div>
           </template>
         </el-table-column>
@@ -140,11 +140,11 @@ import {
   deleteApisByIds
 } from '@/api/api'
 import { toSQLLine } from '@/utils/stringFun'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
-const methodFiletr = (value) => {
+const methodFilter = (value) => {
   const target = methodOptions.value.filter(item => item.value === value)[0]
   return target && `${target.label}`
 }

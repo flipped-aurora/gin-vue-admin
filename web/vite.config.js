@@ -69,8 +69,8 @@ export default ({
     build: {
       target: 'es2015',
       minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
-      manifest: false, // 是否产出maifest.json
-      sourcemap: false, // 是否产出soucemap.json
+      manifest: false, // 是否产出manifest.json
+      sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
       rollupOptions,
     },

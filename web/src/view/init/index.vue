@@ -1,7 +1,7 @@
 <template>
   <div class="init_page">
-    <div class="init_page_panle">
-      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello  ">
+    <div class="init_page_panel">
+      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello">
         <div>
           <div class="hello_title">GIN-VUE-ADMIN</div>
           <p class="in-two a-fadeinT">初始化须知</p>
@@ -19,7 +19,7 @@
           </p>
         </div>
       </div>
-      <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class=" form">
+      <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class="form">
         <el-form ref="formRef" :model="form" label-width="100px">
           <el-form-item label="数据库类型">
             <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
@@ -155,7 +155,7 @@ const onSubmit = async() => {
   width: 100%;
   height: 100%;
   position: relative;
-  .init_page_panle{
+  .init_page_panel{
     position: absolute;
     top: 3vh;
     left: 2vw;

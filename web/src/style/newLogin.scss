@@ -6,7 +6,7 @@
     width: 100%;
     height: 100%;
     position: relative;
-    .input-icon{
+    .input-icon {
         padding-right: 6px;
         padding-top: 4px;
     }
@@ -47,10 +47,10 @@
                     padding-left: 20px;
                 }
             }
-            .vPicBox{
-                display:flex;
-                justify-content:space-between;
-                width:100%;
+            .vPicBox {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
             }
             .vPic {
                 width: 33%;
@@ -83,7 +83,7 @@
     }
 }
 
-//小屏幕不显示右侧，将登陆框居中
+//小屏幕不显示右侧，将登录框居中
 @media (max-width: 750px) {
     .login_panle_right {
         display: none;

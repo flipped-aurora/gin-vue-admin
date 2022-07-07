@@ -131,7 +131,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 			return
 		}
 	}
-	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
+	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
 	err = global.GVA_DB.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ?", auth.AuthorityId).Error
 	authorityId := strconv.Itoa(int(auth.AuthorityId))
 	CasbinServiceApp.ClearCasbin(0, authorityId)

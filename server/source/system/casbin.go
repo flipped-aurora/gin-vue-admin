@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -120,6 +121,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{PType: "p", V0: "888", V1: "/autoCode/getPackage", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/autoCode/delPackage", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/autoCode/createPlug", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/autoCode/installPlugin", V2: "POST"},
 
 		{PType: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{PType: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},
@@ -250,7 +252,7 @@ func (i *initCasbin) DataInserted(ctx context.Context) bool {
 	if !ok {
 		return false
 	}
-	if errors.Is(db.Where(adapter.CasbinRule{PType: "p", V0: "9528", V1: "GET", V2: "/user/getUserInfo"}).
+	if errors.Is(db.Where(adapter.CasbinRule{PType: "p", V0: "9528", V1: "/user/getUserInfo", V2: "GET"}).
 		First(&adapter.CasbinRule{}).Error, gorm.ErrRecordNotFound) { // 判断是否存在数据
 		return false
 	}

@@ -138,18 +138,19 @@ func (b *BaseApi) Register(c *gin.Context) {
 // @Summary 用户修改密码
 // @Security ApiKeyAuth
 // @Produce  application/json
-// @Param data body systemReq.ChangePasswordStruct true "用户名, 原密码, 新密码"
+// @Param data body systemReq.ChangePasswordReq true "用户名, 原密码, 新密码"
 // @Success 200 {object} response.Response{msg=string} "用户修改密码"
 // @Router /user/changePassword [post]
 func (b *BaseApi) ChangePassword(c *gin.Context) {
-	var user systemReq.ChangePasswordStruct
-	_ = c.ShouldBindJSON(&user)
-	if err := utils.Verify(user, utils.ChangePasswordVerify); err != nil {
+	var req systemReq.ChangePasswordReq
+	_ = c.ShouldBindJSON(&req)
+	if err := utils.Verify(req, utils.ChangePasswordVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	u := &system.SysUser{Username: user.Username, Password: user.Password}
-	if _, err := userService.ChangePassword(u, user.NewPassword); err != nil {
+	uid := utils.GetUserID(c)
+	u := &system.SysUser{GVA_MODEL: global.GVA_MODEL{ID: uid}, Password: req.Password}
+	if _, err := userService.ChangePassword(u, req.NewPassword); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage("修改失败，原密码与当前账户不符", c)
 	} else {
@@ -201,8 +202,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 		return
 	}
 	userID := utils.GetUserID(c)
-	uuid := utils.GetUserUuid(c)
-	if err := userService.SetUserAuthority(userID, uuid, sua.AuthorityId); err != nil {
+	if err := userService.SetUserAuthority(userID, sua.AuthorityId); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {

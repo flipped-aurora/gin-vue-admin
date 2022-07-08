@@ -121,7 +121,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{PType: "p", V0: "888", V1: "/autoCode/getPackage", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/autoCode/delPackage", V2: "POST"},
 		{PType: "p", V0: "888", V1: "/autoCode/createPlug", V2: "POST"},
-		{PType: "p", V0: "888", V1: "/autoCode/installPlug", V2: "POST"},
+		{PType: "p", V0: "888", V1: "/autoCode/installPlugin", V2: "POST"},
 
 		{PType: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{PType: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},

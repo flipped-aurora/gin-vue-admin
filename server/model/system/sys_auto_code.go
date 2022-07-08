@@ -40,8 +40,8 @@ func (a *AutoCodeStruct) KeyWord() {
 // SuffixTest 处理_test 后缀
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (a *AutoCodeStruct) SuffixTest() {
-	if strings.HasSuffix(a.Package, "test") {
-		a.Package = a.Package + "_"
+	if strings.HasSuffix(a.HumpPackageName, "test") {
+		a.HumpPackageName = a.HumpPackageName + "_"
 	}
 }
 

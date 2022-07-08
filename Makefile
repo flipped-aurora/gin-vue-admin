@@ -1,15 +1,21 @@
 SHELL = /bin/bash
 
-CONFIG_FILE         = config.yaml
-PROJECT_NAME        = github.com/flipped-aurora/gin-vue-admin/server
 #SCRIPT_DIR         = $(shell pwd)/etc/script
+#请选择golang版本
 BUILD_IMAGE_SERVER  = golang:1.16
+#请选择node版本
 BUILD_IMAGE_WEB     = node:16
+#项目名称
+PROJECT_NAME        = github.com/flipped-aurora/gin-vue-admin/server
+#配置文件目录
+CONFIG_FILE         = config.yaml
+#镜像仓库命名空间
 IMAGE_NAME          = gva
+#镜像地址
 REPOSITORY          = registry.cn-hangzhou.aliyuncs.com/${IMAGE_NAME}
 
 ifeq ($(TAGS_OPT),)
-TAGS_OPT            = 2.5.0b
+TAGS_OPT            = latest
 else
 endif
 
@@ -42,8 +48,7 @@ build-local:
 #本地环境打包前端
 build-web-local:
 	@cd web/ && if [ -d "dist" ];then rm -rf dist; else echo "OK!"; fi \
-	&& yarn config set registry http://mirrors.cloud.tencent.com/npm/ \
-	&& yarn install && yarn build
+	&& yarn config set registry http://mirrors.cloud.tencent.com/npm/ && yarn install && yarn build
 
 #本地环境打包后端
 build-server-local:
@@ -54,8 +59,8 @@ build-server-local:
 
 #打包前后端二合一镜像
 image: build 
-	docker build -t ${REPOSITORY}/all-one:${TAGS_OPT} .
+	docker build -t ${REPOSITORY}/gin-vue-admin:${TAGS_OPT} -f deploy/docker/Dockerfile .
 
 #尝鲜版
 images: build build-image-web build-image-server
-	docker build -t ${REPOSITORY}/all:${TAGS_OPT} .
+	docker build -t ${REPOSITORY}/all:${TAGS_OPT} -f deploy/docker/Dockerfile .

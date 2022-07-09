@@ -845,11 +845,11 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 }
 
 func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader) (web, server int, err error) {
-	const GVAPLUGPATH = "./gva-plug-temp/"
-	defer os.RemoveAll(GVAPLUGPATH)
-	_, err = os.Stat(GVAPLUGPATH)
+	const GVAPLUGPINATH = "./gva-plug-temp/"
+	defer os.RemoveAll(GVAPLUGPINATH)
+	_, err = os.Stat(GVAPLUGPINATH)
 	if os.IsNotExist(err) {
-		os.Mkdir(GVAPLUGPATH, os.ModePerm)
+		os.Mkdir(GVAPLUGPINATH, os.ModePerm)
 	}
 
 	src, err := file.Open()
@@ -858,7 +858,7 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	}
 	defer src.Close()
 
-	out, err := os.Create(GVAPLUGPATH + file.Filename)
+	out, err := os.Create(GVAPLUGPINATH + file.Filename)
 	if err != nil {
 		return -1, -1, err
 	}
@@ -866,7 +866,7 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 
 	_, err = io.Copy(out, src)
 
-	paths, err := utils.Unzip(GVAPLUGPATH+file.Filename, GVAPLUGPATH)
+	paths, err := utils.Unzip(GVAPLUGPINATH+file.Filename, GVAPLUGPINATH)
 	paths = filterFile(paths)
 	var webIndex = -1
 	var serverIndex = -1

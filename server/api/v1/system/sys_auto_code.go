@@ -37,7 +37,7 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	a.KeyWord() // 处理go关键字
+	a.Pretreatment() // 处理go关键字
 	a.PackageT = caser.String(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
@@ -64,7 +64,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	a.KeyWord() // 处理go关键字
+	a.Pretreatment()
 	var apiIds []uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {

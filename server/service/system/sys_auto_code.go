@@ -844,7 +844,7 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 	return nil
 }
 
-func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader) (err error) {
+func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader) (web, server int, err error) {
 	const GVAPLUGPATH = "./gva-plug-temp/"
 	defer os.RemoveAll(GVAPLUGPATH)
 	_, err = os.Stat(GVAPLUGPATH)
@@ -854,13 +854,13 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 
 	src, err := file.Open()
 	if err != nil {
-		return err
+		return -1, -1, err
 	}
 	defer src.Close()
 
 	out, err := os.Create(GVAPLUGPATH + file.Filename)
 	if err != nil {
-		return err
+		return -1, -1, err
 	}
 	defer out.Close()
 
@@ -884,22 +884,22 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 			webIndex = i
 		}
 	}
-	if webIndex == 0 && serverIndex == 0 {
+	if webIndex == -1 && serverIndex == -1 {
 		zap.L().Error("非标准插件，请按照文档自动迁移使用")
-		return errors.New("非标准插件，请按照文档自动迁移使用")
+		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
 	}
 
 	if webIndex != -1 {
 		err = installation(paths[webIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
 		if err != nil {
-			return err
+			return webIndex, serverIndex, err
 		}
 	}
 
 	if serverIndex != -1 {
 		err = installation(paths[serverIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
 	}
-	return err
+	return webIndex, serverIndex, err
 }
 
 func installation(path string, formPath string, toPath string) error {

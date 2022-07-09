@@ -932,9 +932,7 @@ func filterFile(paths []string) []string {
 }
 
 func skipMacSpecialDocument(src string) (bool, error) {
-	fmt.Println(src)
 	if strings.Contains(src, ".DS_Store") || strings.Contains(src, "__MACOSX") {
-		fmt.Println("filter")
 		return true, nil
 	}
 	return false, nil

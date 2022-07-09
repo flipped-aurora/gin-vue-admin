@@ -182,9 +182,12 @@ Timer:
     - tableName: "sys_operation_records"
       compareField: "created_at"
       interval: "2160h"
+      with_seconds: false
     - tableName: "jwt_blacklists"
       compareField: "created_at"
       interval: "168h"
+      with_seconds: false
+
 
 # 跨域配置
 # 需要配合 server/initialize/router.go#L32 使用

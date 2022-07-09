@@ -41,7 +41,7 @@
         </el-select>
       </el-form-item>
       <el-form-item :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'" prop="dataTypeLong">
-        <el-input v-model="middleDate.dataTypeLong" placeholder="数据库类型长度" />
+        <el-input v-model="middleDate.dataTypeLong" :placeholder="middleDate.fieldType === 'enum'?`例:'北京','天津'`:'数据库类型长度'" />
       </el-form-item>
       <el-form-item label="Field查询条件" prop="fieldSearchType">
         <el-select
@@ -84,7 +84,7 @@
 
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 
 const props = defineProps({

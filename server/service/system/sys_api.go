@@ -35,18 +35,26 @@ func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 //@return: err error
 
 func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
-	err = global.GVA_DB.Delete(&api).Error
-	CasbinServiceApp.ClearCasbin(1, api.Path, api.Method)
-	return err
+	var entity system.SysApi
+	err = global.GVA_DB.Where("id = ?", api.ID).First(&entity).Error // 根据id查询api记录
+	if errors.Is(err, gorm.ErrRecordNotFound) {                      // api记录不存在
+		return err
+	}
+	err = global.GVA_DB.Delete(&entity).Error
+	if err != nil {
+		return err
+	}
+	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
+	return nil
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetAPIInfoList
 //@description: 分页获取数据,
 //@param: api model.SysApi, info request.PageInfo, order string, desc bool
-//@return: err error
+//@return: list interface{}, total int64, err error
 
-func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.PageInfo, order string, desc bool) (err error, list interface{}, total int64) {
+func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.PageInfo, order string, desc bool) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&system.SysApi{})
@@ -71,7 +79,7 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 	err = db.Count(&total).Error
 
 	if err != nil {
-		return err, apiList, total
+		return apiList, total, err
 	} else {
 		db = db.Limit(limit).Offset(offset)
 		if order != "" {
@@ -92,7 +100,7 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 				}
 			} else { // didn't matched any order key in `orderMap`
 				err = fmt.Errorf("非法的排序字段: %v", order)
-				return err, apiList, total
+				return apiList, total, err
 			}
 
 			err = db.Order(OrderStr).Find(&apiList).Error
@@ -100,15 +108,15 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 			err = db.Order("api_group").Find(&apiList).Error
 		}
 	}
-	return err, apiList, total
+	return apiList, total, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetAllApis
 //@description: 获取所有的api
-//@return: err error, apis []model.SysApi
+//@return:  apis []model.SysApi, err error
 
-func (apiService *ApiService) GetAllApis() (err error, apis []system.SysApi) {
+func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
 	err = global.GVA_DB.Find(&apis).Error
 	return
 }
@@ -117,9 +125,9 @@ func (apiService *ApiService) GetAllApis() (err error, apis []system.SysApi) {
 //@function: GetApiById
 //@description: 根据id获取api
 //@param: id float64
-//@return: err error, api model.SysApi
+//@return: api model.SysApi, err error
 
-func (apiService *ApiService) GetApiById(id int) (err error, api system.SysApi) {
+func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
 	return
 }

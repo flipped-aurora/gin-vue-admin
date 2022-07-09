@@ -15,13 +15,13 @@ type {{ .PlugName}}Api struct{}
 // @Summary 请手动填写接口功能
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
-// @Router /{{ .RouterGroup}}/routerName[post]
+// @Router /{{ .RouterGroup}}/routerName [post]
 func (p *{{ .PlugName}}Api) ApiName(c *gin.Context) {
-    {{- if .HasRequest}}
+    {{ if .HasRequest}}
         var plug model.Request
         _ = c.ShouldBindJSON(&plug)
-    {{ end -}}
-        if err{{- if .HasResponse }},res {{ end -}}:= service.ServiceGroupApp.PlugService({{ if .HasRequest }}plug{{ end -}}); err != nil {
+    {{ end }}
+        if {{ if .HasResponse }} res, {{ end }} err:= service.ServiceGroupApp.PlugService({{ if .HasRequest }}plug{{ end -}}); err != nil {
 		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("失败", c)
 	} else {

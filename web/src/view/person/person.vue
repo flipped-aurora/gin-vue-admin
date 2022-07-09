@@ -26,7 +26,7 @@
             <div class="user-personality">
               <p v-if="!editFlag" class="nickName">
                 {{ userStore.userInfo.nickName }}
-                <el-icon class="pointer" color="#66b1ff" @click="openEidt">
+                <el-icon class="pointer" color="#66b1ff" @click="openEdit">
                   <edit />
                 </el-icon>
               </p>
@@ -274,7 +274,6 @@ const savePassword = async() => {
   modifyPwdForm.value.validate((valid) => {
     if (valid) {
       changePassword({
-        username: userStore.userInfo.userName,
         password: pwdModify.value.password,
         newPassword: pwdModify.value.newPassword,
       }).then((res) => {
@@ -314,7 +313,7 @@ const enterImg = async(url) => {
   }
 }
 
-const openEidt = () => {
+const openEdit = () => {
   nickName.value = userStore.userInfo.nickName
   editFlag.value = true
 }

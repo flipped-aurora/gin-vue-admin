@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearflex" style="margin:18px">
+    <div class="clearfix" style="margin: 18px">
       <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">确 定</el-button>
       <el-button class="fl-left" size="small" type="primary" @click="all">全选</el-button>
       <el-button class="fl-left" size="small" type="primary" @click="self">本角色</el-button>
@@ -21,7 +21,7 @@ export default {
 
 <script setup>
 import { setDataAuthority } from '@/api/authority'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 const props = defineProps({

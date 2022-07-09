@@ -1,7 +1,7 @@
 <template>
   <div class="search-component">
     <transition name="el-fade-in-linear">
-      <div v-show="show" class="transition-box" style="display: inline-block; ">
+      <div v-show="show" class="transition-box" style="display: inline-block;">
         <el-select
           ref="searchInput"
           v-model="value"
@@ -23,13 +23,13 @@
       v-if="btnShow"
       class="user-box"
     >
-      <div class="gvaIcon gvaIcon-refresh"  :class="[reload ? 'reloading' : '']" @click="handleReload"></div>
+      <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload"></div>
     </div>
     <div
       v-if="btnShow"
       class="user-box"
     >
-      <div class="gvaIcon gvaIcon-search"  @click="showSearch"></div>
+      <div class="gvaIcon gvaIcon-search" @click="showSearch"></div>
     </div>
     <div
       v-if="btnShow"
@@ -41,7 +41,7 @@
       v-if="btnShow"
       class="user-box"
     >
-     <div class="gvaIcon gvaIcon-customer-service"  @click="toService"></div>
+      <div class="gvaIcon gvaIcon-customer-service" @click="toService"></div>
     </div>
   </div>
 </template>

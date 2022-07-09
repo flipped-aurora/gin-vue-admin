@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.5.0",
+    "version": "2.5.3",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
@@ -14,7 +14,7 @@
         "axios": "^0.19.2",
         "core-js": "^3.6.5",
         "echarts": "5.3.2",
-        "element-plus": "2.0.1",
+        "element-plus": "2.2.5",
         "highlight.js": "^10.6.0",
         "marked": "^2.0.0",
         "mitt": "^3.0.0",

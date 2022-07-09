@@ -75,6 +75,9 @@
           <el-form-item label="栈名">
             <el-input v-model="config.zap['stacktrace-key']" />
           </el-form-item>
+          <el-form-item label="日志留存时间(默认以天为单位)">
+            <el-input v-model.number="config.zap['max-age']" />
+          </el-form-item>
           <el-form-item label="显示行">
             <el-checkbox v-model="config.zap['show-line']" />
           </el-form-item>
@@ -117,12 +120,6 @@
             <el-button @click="email">测试邮件</el-button>
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item title="casbin配置" name="6">
-          <el-form-item label="模型地址">
-            <el-input v-model="config.casbin['model-path']" />
-          </el-form-item>
-        </el-collapse-item>
-
         <el-collapse-item title="验证码配置" name="7">
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
@@ -186,8 +183,11 @@
         <el-collapse-item title="oss配置" name="10">
           <template v-if="config.system['oss-type'] === 'local'">
             <h2>本地文件配置</h2>
-            <el-form-item label="本地文件路径">
+            <el-form-item label="本地文件访问路径">
               <el-input v-model="config.local.path" />
+            </el-form-item>
+            <el-form-item label="本地文件存储路径">
+              <el-input v-model="config.local['store-path']" />
             </el-form-item>
           </template>
           <template v-if="config.system['oss-type'] === 'qiniu'">
@@ -324,7 +324,7 @@
 
         <el-collapse-item title="Timer(定时任务)" name="13">
           <el-form-item label="Start（是否启用）">
-            <el-select v-model="config.timer['w-table']" />
+            <el-checkbox v-model="config.timer['start']" />
           </el-form-item>
           <el-form-item label="Spec(CRON表达式)">
             <el-input v-model="config.timer.spec" />
@@ -364,7 +364,6 @@ const config = ref({
     'iplimit-time': 0
   },
   jwt: {},
-  casbin: {},
   mysql: {},
   pgsql: {},
   excel: {},

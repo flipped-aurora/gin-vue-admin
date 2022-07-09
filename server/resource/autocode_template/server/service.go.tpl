@@ -40,14 +40,14 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.
 
 // Get{{.StructName}} 根据id获取{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id uint) (err error, {{.Abbreviation}} {{.Package}}.{{.StructName}}) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id uint) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&{{.Abbreviation}}).Error
 	return
 }
 
 // Get{{.StructName}}InfoList 分页获取{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (err error, list interface{}, total int64) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
@@ -84,5 +84,5 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
     	return
     }
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
-	return err, {{.Abbreviation}}s, total
+	return  {{.Abbreviation}}s, total, err
 }

@@ -3,7 +3,7 @@
     <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="addAuthority('0')">新增角色</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -18,31 +18,36 @@
             <el-button
               icon="setting"
               size="small"
-              type="text"
+              type="primary"
+              link
               @click="opdendrawer(scope.row)"
             >设置权限</el-button>
             <el-button
               icon="plus"
               size="small"
-              type="text"
+              type="primary"
+              link
               @click="addAuthority(scope.row.authorityId)"
             >新增子角色</el-button>
             <el-button
               icon="copy-document"
               size="small"
-              type="text"
+              type="primary"
+              link
               @click="copyAuthorityFunc(scope.row)"
             >拷贝</el-button>
             <el-button
               icon="edit"
               size="small"
-              type="text"
+              type="primary"
+              link
               @click="editAuthority(scope.row)"
             >编辑</el-button>
             <el-button
               icon="delete"
               size="small"
-              type="text"
+              type="primary"
+              link
               @click="deleteAuth(scope.row)"
             >删除</el-button>
           </template>
@@ -106,7 +111,7 @@ import {
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
 import Datas from '@/view/superAdmin/authority/components/datas.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -120,7 +125,7 @@ const mustUint = (rule, value, callback) => {
 
 const AuthorityOption = ref([
   {
-    authorityId: '0',
+    authorityId: 0,
     authorityName: '根角色'
   }
 ])
@@ -134,20 +139,20 @@ const apiDialogFlag = ref(false)
 const copyForm = ref({})
 
 const form = ref({
-  authorityId: '',
+  authorityId: 0,
   authorityName: '',
-  parentId: '0'
+  parentId: 0
 })
 const rules = ref({
   authorityId: [
     { required: true, message: '请输入角色ID', trigger: 'blur' },
-    { validator: mustUint, trigger: 'blur' }
+    { validator: mustUint, trigger: 'blur', message: '必须为正整数' }
   ],
   authorityName: [
     { required: true, message: '请输入角色名', trigger: 'blur' }
   ],
   parentId: [
-    { required: true, message: '请选择请求方式', trigger: 'blur' }
+    { required: true, message: '请选择父角色', trigger: 'blur' },
   ]
 })
 
@@ -234,9 +239,9 @@ const initForm = () => {
     authorityForm.value.resetFields()
   }
   form.value = {
-    authorityId: '',
+    authorityId: 0,
     authorityName: '',
-    parentId: '0'
+    parentId: 0
   }
 }
 // 关闭窗口
@@ -248,7 +253,8 @@ const closeDialog = () => {
 // 确定弹窗
 
 const enterDialog = () => {
-  if (form.value.authorityId === '0') {
+  form.value.authorityId = Number(form.value.authorityId)
+  if (form.value.authorityId === 0) {
     ElMessage({
       type: 'error',
       message: '角色id不能为0'
@@ -287,10 +293,10 @@ const enterDialog = () => {
         case 'copy': {
           const data = {
             authority: {
-              authorityId: 'string',
-              authorityName: 'string',
+              authorityId: 0,
+              authorityName: '',
               datauthorityId: [],
-              parentId: 'string'
+              parentId: 0
             },
             oldAuthorityId: 0
           }
@@ -318,7 +324,7 @@ const enterDialog = () => {
 const setOptions = () => {
   AuthorityOption.value = [
     {
-      authorityId: '0',
+      authorityId: 0,
       authorityName: '根角色'
     }
   ]

@@ -10,9 +10,8 @@
           :collapse="isCollapse"
           :collapse-transition="false"
           :default-active="active"
-          :background-color="userStore.sideMode"
-          :active-text-color="userStore.activeColor"
-          :text-color="userStore.baseColor"
+          :background-color="theme.background"
+          :active-text-color="theme.active"
           class="el-menu-vertical"
           unique-opened
           @select="selectMenuItem"
@@ -21,7 +20,9 @@
             <aside-component
               v-if="!item.hidden"
               :key="item.name"
+              :is-collapse="isCollapse"
               :router-info="item"
+              :theme="theme"
             />
           </template>
         </el-menu>
@@ -50,9 +51,42 @@ const router = useRouter()
 const userStore = useUserStore()
 const routerStore = useRouterStore()
 
+const theme = ref({})
+
+const getTheme = () => {
+  switch (userStore.sideMode) {
+    case '#fff':
+      theme.value = {
+        background: '#fff',
+        activeBackground: '#4D70FF',
+        activeText: '#fff',
+        normalText: '#333',
+        hoverBackground: 'rgba(64, 158, 255, 0.08)',
+        hoverText: '#333',
+      }
+      break
+    case '#191a23':
+      theme.value = {
+        background: '#191a23',
+        activeBackground: '#4D70FF',
+        activeText: '#fff',
+        normalText: '#fff',
+        hoverBackground: 'rgba(64, 158, 255, 0.08)',
+        hoverText: '#fff',
+      }
+      break
+  }
+}
+
+getTheme()
+
 const active = ref('')
-watch(route, () => {
+watch(() => route, () => {
   active.value = route.name
+}, { deep: true })
+
+watch(() => userStore.sideMode, () => {
+  getTheme()
 })
 
 const isCollapse = ref(false)
@@ -95,21 +129,10 @@ const selectMenuItem = (index, _, ele, aaa) => {
 </script>
 
 <style lang="scss">
-.el-sub-menu__title,
-.el-menu-item {
-  i {
-    color: inherit !important;
-  }
-}
 
 .el-sub-menu__title:hover,
 .el-menu-item:hover {
-  i {
-    color: inherit !important;
-  }
-  span {
-    color: inherit !important;
-  }
+  background: transparent;
 }
 
 .el-scrollbar {

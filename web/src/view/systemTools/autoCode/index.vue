@@ -1,5 +1,6 @@
 <template>
   <div>
+    <warning-bar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
       <el-collapse v-model="activeNames" style="margin-bottom:12px">
@@ -108,30 +109,33 @@
           <template #default="scope">
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               icon="edit"
               @click="editAndAddField(scope.row)"
             >编辑</el-button>
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
             >上移</el-button>
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
             >下移</el-button>
-            <el-popover v-model:visible="scope.row.visible" placement="top">
+            <el-popover v-model="scope.row.visible" placement="top">
               <p>确定删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteField(scope.$index)">确定</el-button>
               </div>
               <template #reference>
-                <el-button size="small" type="text" icon="delete" @click="scope.row.visible = true">删除</el-button>
+                <el-button size="small" type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -155,7 +159,7 @@
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
-      <template #title>
+      <template #header>
         <div class="previewCodeTool">
           <p>操作栏：</p>
           <el-button size="small" type="primary" @click="selectText">全选</el-button>
@@ -195,6 +199,7 @@ import { getDict } from '@/utils/dictionary'
 import { ref, getCurrentInstance, reactive, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -215,8 +220,8 @@ const form = ref({
   package: '',
   abbreviation: '',
   description: '',
-  autoCreateApiToSql: false,
-  autoMoveFile: false,
+  autoCreateApiToSql: true,
+  autoMoveFile: true,
   fields: []
 })
 const rules = ref({
@@ -415,6 +420,7 @@ const getColumnFunc = async() => {
     form.value.abbreviation = tbHump
     form.value.description = tbHump + '表'
     form.value.autoCreateApiToSql = true
+    form.value.autoMoveFile = true
     form.value.fields = []
     res.data.columns &&
           res.data.columns.forEach(item => {
@@ -476,7 +482,9 @@ const init = () => {
 init()
 
 watch(() => route.params.id, (id) => {
-  init()
+  if (route.name === 'autoCodeEdit') {
+    init()
+  }
 })
 
 </script>

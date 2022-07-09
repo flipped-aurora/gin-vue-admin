@@ -18,7 +18,7 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> 当前版本:v2.5.1b`
+        `> 当前版本:v2.5.3beta`
       )
     )
     console.log(
@@ -34,11 +34,6 @@ export const viteLogo = (env) => {
     console.log(
       chalk.green(
         `> 插件市场:https://plugin.gin-vue-admin.com`
-      )
-    )
-    console.log(
-      chalk.green(
-        `> 默认自动化文档地址:http://127.0.0.1:${env.VITE_SERVER_PORT}/swagger/index.html`
       )
     )
     console.log(

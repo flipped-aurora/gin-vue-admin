@@ -33,21 +33,32 @@
             />
           </template>
         </el-table-column>
+        <el-table-column align="left" label="启用" min-width="150">
+          <template #default="scope">
+            <el-switch
+              v-model="scope.row.enable"
+              inline-prompt
+              :active-value="1"
+              :inactive-value="2"
+              @change="()=>{switchEnable(scope.row)}"
+            />
+          </template>
+        </el-table-column>
 
         <el-table-column label="操作" min-width="250" fixed="right">
           <template #default="scope">
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">取消</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
                 <el-button type="primary" size="small" @click="deleteUserFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="small">删除</el-button>
+                <el-button type="primary" link icon="delete" size="small">删除</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="edit" size="small" @click="openEdit(scope.row)">编辑</el-button>
-            <el-button type="text" icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
+            <el-button type="primary" link icon="edit" size="small" @click="openEdit(scope.row)">编辑</el-button>
+            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
 
@@ -99,6 +110,14 @@
               :clearable="false"
             />
           </el-form-item>
+          <el-form-item label="启用" prop="disabled">
+            <el-switch
+              v-model="userInfo.enable"
+              inline-prompt
+              :active-value="1"
+              :inactive-value="2"
+            />
+          </el-form-item>
           <el-form-item label="头像" label-width="80px">
             <div style="display:inline-block" @click="openHeaderChange">
               <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
@@ -139,7 +158,7 @@ import {
 import { getAuthorityList } from '@/api/authority'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { setUserInfo, resetPassword } from '@/api/user.js'
 
 import { nextTick, ref, watch } from 'vue'
@@ -193,7 +212,7 @@ const getTableData = async() => {
   }
 }
 
-watch(tableData, () => {
+watch(() => tableData.value, () => {
   setAuthorityIds()
 })
 
@@ -268,6 +287,7 @@ const userInfo = ref({
   headerImg: '',
   authorityId: '',
   authorityIds: [],
+  enable: 1,
 })
 
 const rules = ref({
@@ -347,6 +367,21 @@ const openEdit = (row) => {
   dialogFlag.value = 'edit'
   userInfo.value = JSON.parse(JSON.stringify(row))
   addUserDialog.value = true
+}
+
+const switchEnable = async(row) => {
+  userInfo.value = JSON.parse(JSON.stringify(row))
+  await nextTick()
+  const req = {
+    ...userInfo.value
+  }
+  const res = await setUserInfo(req)
+  if (res.code === 0) {
+    ElMessage({ type: 'success', message: `${req.enable === 2 ? '禁用' : '启用'}成功` })
+    await getTableData()
+    userInfo.value.headerImg = ''
+    userInfo.value.authorityIds = []
+  }
 }
 
 </script>

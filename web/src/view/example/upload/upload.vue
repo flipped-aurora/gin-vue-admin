@@ -58,8 +58,8 @@
         </el-table-column>
         <el-table-column align="left" label="操作" width="160">
           <template #default="scope">
-            <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">删除</el-button>
+            <el-button size="small" icon="download" type="primary" link @click="downloadFile(scope.row)">下载</el-button>
+            <el-button size="small" icon="delete" type="primary" link @click="deleteFileFunc(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,7 +87,7 @@ import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'

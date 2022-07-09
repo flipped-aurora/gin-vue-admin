@@ -596,17 +596,14 @@ li {
         }
     }
     .aside {
-        .el-menu-item {
-            >div {
-                padding: 0 15px !important;
+        .el-menu--collapse {
+            >.el-menu-item{
+                display: flex;
+                justify-content: center;
             }
         }
         .el-sub-menu {
             .el-menu {
-                .el-menu-item {
-                    height: 44px;
-                    line-height: 44px;
-                }
                 .is-active {
                     // 关闭三级菜单二级菜单样式
                     ul {
@@ -620,18 +617,6 @@ li {
                     }
                 }
             }
-        }
-        .el-menu-item:focus,
-        .el-menu-item:hover {
-            background-color: transparent;
-        }
-        .el-menu-item:hover i,
-        .el-menu-item:hover span {
-            color: #fff;
-        }
-        .el-sub-menu__title:hover i,
-        .el-sub-menu__title:hover span {
-            color: #fff;
         }
     }
     .hideside {
@@ -710,7 +695,6 @@ li {
         }
         th {
             padding: 6px 0;
-            background: #F7FBFF;
             .cell {
                 color: rgba($color: #000000, $alpha: 0.85);
                 font-size: 14px;
@@ -730,6 +714,7 @@ li {
             border-bottom: 1px solid #e8e8e8;
         }
         th.is-leaf {
+            background: #F7FBFF;
             border-bottom: none;
         }
     }
@@ -956,21 +941,6 @@ li {
             width: 10px;
         }
     }
-}
-
-.el-input-number__decrease,
-.el-input-number__increase {
-    position: absolute;
-    z-index: 1;
-    top: 2px !important;
-    width: 42px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    background: #F5F7FA;
-    color: #606266;
-    cursor: pointer;
-    font-size: 12px;
 }
 
 $headerHigh: 52px;

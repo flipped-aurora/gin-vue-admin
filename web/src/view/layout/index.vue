@@ -31,7 +31,7 @@
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
-                        >{{ route.params.title || item.meta.title }}</el-breadcrumb-item>
+                        >{{ fmtTitle(item.meta.title,route) }}</el-breadcrumb-item>
                       </el-breadcrumb>
                     </el-col>
                     <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
@@ -114,6 +114,7 @@ import { computed, ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
+import { fmtTitle } from '@/utils/fmtRouterTitle'
 
 const router = useRouter()
 const route = useRoute()
@@ -122,10 +123,6 @@ const routerStore = useRouterStore()
 const isCollapse = ref(false)
 const isSider = ref(true)
 const isMobile = ref(false)
-
-const cc = (e) => {
-  console.log(e)
-}
 
 const initPage = () => {
   const screenWidth = document.body.clientWidth
@@ -202,7 +199,7 @@ const changeUserAuth = async(id) => {
     emitter.emit('closeAllPage')
     setTimeout(() => {
       window.location.reload()
-    }, 1)
+    }, 50)
   }
 }
 

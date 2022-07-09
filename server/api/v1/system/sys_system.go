@@ -20,7 +20,7 @@ type SystemApi struct{}
 // @Success 200 {object} response.Response{data=systemRes.SysConfigResponse,msg=string} "获取配置文件内容,返回包括系统配置"
 // @Router /system/getSystemConfig [post]
 func (s *SystemApi) GetSystemConfig(c *gin.Context) {
-	if err, config := systemConfigService.GetSystemConfig(); err != nil {
+	if config, err := systemConfigService.GetSystemConfig(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

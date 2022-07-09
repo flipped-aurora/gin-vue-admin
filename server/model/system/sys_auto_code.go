@@ -3,6 +3,8 @@ package system
 import (
 	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"go/token"
+	"strings"
 )
 
 // AutoCodeStruct 初始版本自动化代码工具
@@ -16,9 +18,31 @@ type AutoCodeStruct struct {
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields,omitempty"`
+	HasTimer           bool
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`
+}
+
+func (a *AutoCodeStruct) Pretreatment() {
+	a.KeyWord()
+	a.SuffixTest()
+}
+
+// KeyWord 是go关键字的处理加上 _ ，防止编译报错
+// Author [SliverHorn](https://github.com/SliverHorn)
+func (a *AutoCodeStruct) KeyWord() {
+	if token.IsKeyword(a.Abbreviation) {
+		a.Abbreviation = a.Abbreviation + "_"
+	}
+}
+
+// SuffixTest 处理_test 后缀
+// Author [SliverHorn](https://github.com/SliverHorn)
+func (a *AutoCodeStruct) SuffixTest() {
+	if strings.HasSuffix(a.HumpPackageName, "test") {
+		a.HumpPackageName = a.HumpPackageName + "_"
+	}
 }
 
 type Field struct {

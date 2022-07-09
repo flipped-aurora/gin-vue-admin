@@ -32,7 +32,11 @@ const path = ref(import.meta.env.VITE_BASE_API)
 
 const handleSuccess = (res) => {
   if (res.code === 0) {
-    ElMessage.success(res.msg)
+    let msg = ``
+    res.data && res.data.forEach((item, index) => {
+      msg += `${index + 1}.${item.msg}\n`
+    })
+    alert(msg)
   } else {
     ElMessage.error(res.msg)
   }

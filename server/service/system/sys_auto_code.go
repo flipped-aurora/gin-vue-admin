@@ -5,14 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	cp "github.com/otiai10/copy"
-	"go.uber.org/zap"
 	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/token"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"io"
 	"io/ioutil"
 	"log"
@@ -22,6 +18,11 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	cp "github.com/otiai10/copy"
+	"go.uber.org/zap"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 
@@ -827,13 +828,18 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 			os.MkdirAll(dirPath, 0755)
 		}
 		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
-		f, _ := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			zap.L().Error("open file", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
+		}
+		defer f.Close()
+
 		err = temp.Execute(f, plug)
 		if err != nil {
 			zap.L().Error("exec err", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
 			return err
 		}
-		defer f.Close()
 	}
 	return nil
 }
@@ -861,50 +867,61 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	_, err = io.Copy(out, src)
 
 	paths, err := utils.Unzip(GVAPLUGPATH+file.Filename, GVAPLUGPATH)
-	var webIndex = 0
-	var serverIndex = 0
+	paths = filterFile(paths)
+	var webIndex = -1
+	var serverIndex = -1
 	for i := range paths {
 		paths[i] = filepath.ToSlash(paths[i])
 		pathArr := strings.Split(paths[i], "/")
-		if pathArr[len(pathArr)-2] == "server" && pathArr[len(pathArr)-1] == "plugin" {
-			serverIndex = i + 1
+		ln := len(pathArr)
+		if ln < 2 {
+			continue
 		}
-		if pathArr[len(pathArr)-2] == "web" && pathArr[len(pathArr)-1] == "plugin" {
-			webIndex = i + 1
+		if pathArr[ln-2] == "server" && pathArr[ln-1] == "plugin" {
+			serverIndex = i
+		}
+		if pathArr[ln-2] == "web" && pathArr[ln-1] == "plugin" {
+			webIndex = i
 		}
 	}
 	if webIndex == 0 && serverIndex == 0 {
-		fmt.Println("非标准插件，请按照文档自动迁移使用")
+		zap.L().Error("非标准插件，请按照文档自动迁移使用")
 		return errors.New("非标准插件，请按照文档自动迁移使用")
 	}
 
-	if webIndex != 0 {
+	if webIndex != -1 {
 		webNameArr := strings.Split(filepath.ToSlash(paths[webIndex]), "/")
-		webName := webNameArr[len(webNameArr)-1]
+		if len(webNameArr) < 3 {
+			return errors.New("无效 webNameArr")
+		}
+		webName := webNameArr[len(webNameArr)-3]
 		var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/" + paths[webIndex])
-		var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Web + "/plugin/" + webName)
-		_, err := os.Stat(to)
+		var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Web + "/plugin/")
+		_, err := os.Stat(to + webName)
 		if err == nil {
-			fmt.Println("web 已存在同名插件，请自行手动安装")
+			zap.L().Error("web 已存在同名插件，请自行手动安装", zap.String("to", to))
 			return errors.New("web 已存在同名插件，请自行手动安装")
 		}
-		err = cp.Copy(form, to)
+		err = cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
 		if err != nil {
 			return err
 		}
 	}
 
-	if serverIndex != 0 {
+	if serverIndex != -1 {
 		serverNameArr := strings.Split(filepath.ToSlash(paths[serverIndex]), "/")
-		serverName := serverNameArr[len(serverNameArr)-1]
+		if len(serverNameArr) < 3 {
+			return errors.New("无效 serverNameArr")
+		}
+		serverName := serverNameArr[len(serverNameArr)-3]
 		var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/" + paths[serverIndex])
-		var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/plugin/" + serverName)
-		_, err := os.Stat(to)
+		var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + global.GVA_CONFIG.AutoCode.Server + "/plugin/")
+		_, err := os.Stat(to + serverName)
 		if err == nil {
-			fmt.Println("server 已存在同名插件，请自行手动安装")
+			zap.L().Error("server 已存在同名插件，请自行手动安装", zap.String("to", to))
 			return errors.New("server 已存在同名插件，请自行手动安装")
 		}
-		err = cp.Copy(form, to)
+		err = cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
 		if err != nil {
 			return err
 		}
@@ -914,4 +931,24 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	} else {
 		return nil
 	}
+}
+
+func filterFile(paths []string) []string {
+	np := make([]string, 0, len(paths))
+	for _, path := range paths {
+		if ok, _ := skipMacSpecialDocument(path); ok {
+			continue
+		}
+		np = append(np, path)
+	}
+	return np
+}
+
+func skipMacSpecialDocument(src string) (bool, error) {
+	fmt.Println(src)
+	if strings.Contains(src, ".DS_Store") || strings.Contains(src, "__MACOSX") {
+		fmt.Println("filter")
+		return true, nil
+	}
+	return false, nil
 }

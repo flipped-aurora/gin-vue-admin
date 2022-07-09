@@ -845,11 +845,11 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 }
 
 func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader) (err error) {
-	const GVAPLUGPATH = "./gva-plug-temp/"
-	defer os.RemoveAll(GVAPLUGPATH)
-	_, err = os.Stat(GVAPLUGPATH)
+	const GVAPLUGINPATH = "./gva-plug-temp/"
+	defer os.RemoveAll(GVAPLUGINPATH)
+	_, err = os.Stat(GVAPLUGINPATH)
 	if os.IsNotExist(err) {
-		os.Mkdir(GVAPLUGPATH, os.ModePerm)
+		os.Mkdir(GVAPLUGINPATH, os.ModePerm)
 	}
 
 	src, err := file.Open()
@@ -858,7 +858,7 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	}
 	defer src.Close()
 
-	out, err := os.Create(GVAPLUGPATH + file.Filename)
+	out, err := os.Create(GVAPLUGINPATH + file.Filename)
 	if err != nil {
 		return err
 	}
@@ -866,7 +866,7 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 
 	_, err = io.Copy(out, src)
 
-	paths, err := utils.Unzip(GVAPLUGPATH+file.Filename, GVAPLUGPATH)
+	paths, err := utils.Unzip(GVAPLUGINPATH+file.Filename, GVAPLUGINPATH)
 	paths = filterFile(paths)
 	var webIndex = -1
 	var serverIndex = -1
@@ -932,9 +932,7 @@ func filterFile(paths []string) []string {
 }
 
 func skipMacSpecialDocument(src string) (bool, error) {
-	fmt.Println(src)
 	if strings.Contains(src, ".DS_Store") || strings.Contains(src, "__MACOSX") {
-		fmt.Println("filter")
 		return true, nil
 	}
 	return false, nil

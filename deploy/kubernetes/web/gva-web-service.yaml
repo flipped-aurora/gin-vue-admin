@@ -10,8 +10,8 @@ metadata:
     app: gva-web
     version: gva-vue3
 spec:
-  type: NodePort
-#  type: ClusterIP
+#  type: NodePort
+  type: ClusterIP
   ports:
     - name: http
       port: 8080

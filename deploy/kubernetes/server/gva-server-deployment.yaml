@@ -23,8 +23,8 @@ spec:
     spec:
       containers:
         - name: gin-vue-admin-container
-          image: registry.cn-hangzhou.aliyuncs.com/gin-vue-admin/server:40fc3aa6
-          imagePullPolicy: IfNotPresent
+          image: registry.cn-hangzhou.aliyuncs.com/gva/server:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8888
               name: http
@@ -41,22 +41,28 @@ spec:
             requests:
               cpu: 100m
               memory: 200Mi
-#          readinessProbe:
-#            httpGet:
-#              path: /ready
-#              port: http
-#            initialDelaySeconds: 20
-#            periodSeconds: 10
-#            successThreshold: 1
-#            failureThreshold: 3
-#          livenessProbe:
-#            httpGet:
-#              path: /health
-#              port: http
-#            initialDelaySeconds: 20
-#            periodSeconds: 10
-#            successThreshold: 1
-#            failureThreshold: 3
+          livenessProbe:
+            failureThreshold: 1
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8888
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8888
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 40
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8888
+            timeoutSeconds: 1
       #imagePullSecrets:
       #  - name: docker-registry
       volumes:

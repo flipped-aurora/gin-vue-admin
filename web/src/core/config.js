@@ -48,7 +48,7 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> 如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.gin-vue-admin.com/docs/coffee`
+        `> 如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.gin-vue-admin.com/coffee/index.html`
       )
     )
     console.log('\n')

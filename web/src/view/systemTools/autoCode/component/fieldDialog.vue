@@ -5,12 +5,15 @@
       ref="fieldDialogFrom"
       :model="middleDate"
       label-width="120px"
-      label-position="left"
+      label-position="right"
       :rules="rules"
+      class="grid-form"
     >
       <el-form-item label="Field名称" prop="fieldName">
         <el-input v-model="middleDate.fieldName" autocomplete="off" style="width:80%" />
-        <el-button size="small" style="width:18%;margin-left:2%" @click="autoFill">自动填充</el-button>
+        <el-button size="small" style="width:18%;margin-left:2%" @click="autoFill">
+          <span style="font-size: 12px">自动填充</span>
+        </el-button>
       </el-form-item>
       <el-form-item label="Field中文名" prop="fieldDesc">
         <el-input v-model="middleDate.fieldDesc" autocomplete="off" />
@@ -59,7 +62,6 @@
           />
         </el-select>
       </el-form-item>
-
       <el-form-item label="关联字典" prop="dictType">
         <el-select
           v-model="middleDate.dictType"
@@ -76,16 +78,21 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="前端表单验证">
+        <el-switch v-model="middleDate.fontRuleKey" />
+      </el-form-item>
+      <el-form-item v-if="middleDate.fontRuleKey" label="验证规则">
+        <div class="click-text" @click="handleOpenDialogVisible">点击设置前端表单验证</div>
+      </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup>
-
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 
 const props = defineProps({
   dialogMiddle: {
@@ -98,6 +105,7 @@ const props = defineProps({
 
 const middleDate = ref({})
 const dictOptions = ref([])
+const ruleDialog = ref()
 const typeSearchOptions = ref([
   {
     label: '=',
@@ -195,3 +203,15 @@ export default {
   name: 'FieldDialog'
 }
 </script>
+<style scoped>
+.grid-form{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+.click-text{
+  color: #0d84ff;
+  font-size: 13px;
+  cursor: pointer;
+  user-select: none;
+}
+</style>

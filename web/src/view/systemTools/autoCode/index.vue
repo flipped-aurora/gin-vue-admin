@@ -48,7 +48,7 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" size="small" label-width="120px"  :inline="true">
+      <el-form ref="autoCodeForm" :rules="rules" :model="form" size="small" label-width="120px" :inline="true">
         <el-form-item label="Struct名称" prop="structName">
           <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
         </el-form-item>
@@ -98,8 +98,8 @@
         <el-table-column align="left" type="index" label="序列" width="60" />
         <el-table-column align="left" prop="fieldName" label="Field名" />
         <el-table-column align="left" prop="fieldDesc" label="中文名" />
-        <el-table-column align="left" prop="fieldDesc" label="是否必填">
-          <template #default="{row}">{{row.require?"是":"否"}}</template>
+        <el-table-column align="left" prop="require" label="是否必填">
+          <template #default="{row}">{{ row.require?"是":"否" }}</template>
         </el-table-column>
         <el-table-column align="left" prop="fieldJson" min-width="120px" label="FieldJson" />
         <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
@@ -190,9 +190,9 @@ const fieldTemplate = {
   columnName: '',
   dataTypeLong: '',
   comment: '',
-  require:false,
-  errorText:"",
-  clearable:true,
+  require: false,
+  errorText: '',
+  clearable: true,
   fieldSearchType: '',
   dictType: ''
 }
@@ -441,9 +441,9 @@ const getColumnFunc = async() => {
                 dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
                 columnName: item.columnName,
                 comment: item.columnComment,
-                require:false,
-                errorText:"",
-                clearable:true,
+                require: false,
+                errorText: '',
+                clearable: true,
                 fieldSearchType: '',
                 dictType: ''
               })

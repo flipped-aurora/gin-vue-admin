@@ -92,7 +92,7 @@
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { reactive, ref } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   dialogMiddle: {
@@ -105,7 +105,6 @@ const props = defineProps({
 
 const middleDate = ref({})
 const dictOptions = ref([])
-const ruleDialog = ref()
 const typeSearchOptions = ref([
   {
     label: '=',

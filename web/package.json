@@ -30,7 +30,7 @@
     },
     "devDependencies": {
         "@vitejs/plugin-legacy": "^1.4.4",
-        "@vitejs/plugin-vue": "latest",
+        "@vitejs/plugin-vue": "^2.3.3",
         "@vue/cli-plugin-babel": "~4.5.0",
         "@vue/cli-plugin-eslint": "~4.5.0",
         "@vue/cli-plugin-router": "~4.5.0",

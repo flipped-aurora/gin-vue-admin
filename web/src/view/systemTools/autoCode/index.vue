@@ -48,7 +48,7 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
+      <el-form ref="autoCodeForm" :rules="rules" :model="form" size="small" label-width="120px"  :inline="true">
         <el-form-item label="Struct名称" prop="structName">
           <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
         </el-form-item>
@@ -98,7 +98,7 @@
         <el-table-column align="left" type="index" label="序列" width="100" />
         <el-table-column align="left" prop="fieldName" label="Field名" />
         <el-table-column align="left" prop="fieldDesc" label="中文名" />
-        <el-table-column align="left" prop="fieldJson" label="FieldJson" />
+        <el-table-column align="left" prop="fieldJson" min-width="120px" label="FieldJson" />
         <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
         <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="130" />
         <el-table-column align="left" prop="columnName" label="数据库字段" width="130" />
@@ -148,7 +148,7 @@
       </div>
     </div>
     <!-- 组件弹窗 -->
-    <el-dialog v-model="dialogFlag" title="组件内容">
+    <el-dialog v-model="dialogFlag" width="70%" title="组件内容">
       <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
@@ -517,4 +517,5 @@ export default {
   color: #666;
   cursor: pointer;
 }
+
 </style>

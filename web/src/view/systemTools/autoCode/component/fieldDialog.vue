@@ -85,12 +85,10 @@
         <div class="click-text" @click="handleOpenDialogVisible">点击设置前端表单验证</div>
       </el-form-item>
     </el-form>
-    <rules-dialog ref="ruleDialog" v-model:value="ruleDialogVisible" @close="handleCloseDialogVisible" @confirm="handleAddRule" />
   </div>
 </template>
 
 <script setup>
-import RulesDialog from './rulesDialog.vue'
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -106,7 +104,6 @@ const props = defineProps({
 })
 
 const middleDate = ref({})
-const ruleDialogVisible = ref(false)
 const dictOptions = ref([])
 const ruleDialog = ref()
 const typeSearchOptions = ref([
@@ -194,23 +191,6 @@ const autoFill = () => {
 const clearOther = () => {
   middleDate.value.fieldSearchType = ''
   middleDate.value.dictType = ''
-}
-// 打开验证表单弹窗
-const handleOpenDialogVisible = () => {
-  if (middleDate.value.rules) {
-    ruleDialog.value.initDialog({
-      value: middleDate.value.rules
-    })
-  }
-  ruleDialogVisible.value = true
-}
-const handleCloseDialogVisible = () => {
-  ruleDialogVisible.value = false
-}
-
-const handleAddRule = (e) => {
-  middleDate.value.rules = e
-  handleCloseDialogVisible()
 }
 
 const fieldDialogFrom = ref(null)

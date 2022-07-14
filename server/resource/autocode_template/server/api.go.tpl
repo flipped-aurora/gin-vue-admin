@@ -9,6 +9,9 @@ import (
     "github.com/flipped-aurora/gin-vue-admin/server/service"
     "github.com/gin-gonic/gin"
     "go.uber.org/zap"
+    {{- if .NeedValid }}
+    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+    {{- end }}
 )
 
 type {{.StructName}}Api struct {
@@ -29,6 +32,19 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+    {{- if .NeedValid }}
+    verify := utils.Rules{
+    {{- range $index,$element := .Fields }}
+       {{- if $element.Require }}
+        "{{$element.FieldName}}":{utils.NotEmpty()},
+        {{- end }}
+    {{- end }}
+    }
+	if err := utils.Verify({{.Abbreviation}}, verify); err != nil {
+    		response.FailWithMessage(err.Error(), c)
+    		return
+    	}
+    {{- end }}
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -89,6 +105,19 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	{{- if .NeedValid }}
+      verify := utils.Rules{
+      {{- range $index,$element := .Fields }}
+         {{- if $element.Require }}
+          "{{$element.FieldName}}":{utils.NotEmpty()},
+          {{- end }}
+      {{- end }}
+      }
+    if err := utils.Verify({{.Abbreviation}}, verify); err != nil {
+      	response.FailWithMessage(err.Error(), c)
+      	return
+     }
+    {{- end }}
 	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)

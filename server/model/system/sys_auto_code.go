@@ -22,6 +22,7 @@ type AutoCodeStruct struct {
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`
+	NeedValid          bool     `json:"-"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {
@@ -55,6 +56,9 @@ type Field struct {
 	ColumnName      string `json:"columnName"`      // 数据库字段
 	FieldSearchType string `json:"fieldSearchType"` // 搜索条件
 	DictType        string `json:"dictType"`        // 字典
+	Require         bool   `json:"require"`         // 是否必填
+	ErrorText       string `json:"errorText"`       // 校验失败文字
+	Clearable       bool   `json:"clearable"`       // 是否可清空
 }
 
 var AutoMoveErr error = errors.New("创建代码成功并移动文件成功")

@@ -95,9 +95,12 @@
         <el-button size="small" type="primary" @click="editAndAddField()">新增Field</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column align="left" type="index" label="序列" width="100" />
+        <el-table-column align="left" type="index" label="序列" width="60" />
         <el-table-column align="left" prop="fieldName" label="Field名" />
         <el-table-column align="left" prop="fieldDesc" label="中文名" />
+        <el-table-column align="left" prop="fieldDesc" label="是否必填">
+          <template #default="{row}">{{row.require?"是":"否"}}</template>
+        </el-table-column>
         <el-table-column align="left" prop="fieldJson" min-width="120px" label="FieldJson" />
         <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
         <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="130" />
@@ -105,7 +108,7 @@
         <el-table-column align="left" prop="comment" label="数据库字段描述" width="130" />
         <el-table-column align="left" prop="fieldSearchType" label="搜索条件" width="130" />
         <el-table-column align="left" prop="dictType" label="字典" width="130" />
-        <el-table-column align="left" label="操作" width="300">
+        <el-table-column align="left" label="操作" width="300" fixed="right">
           <template #default="scope">
             <el-button
               size="small"
@@ -187,6 +190,9 @@ const fieldTemplate = {
   columnName: '',
   dataTypeLong: '',
   comment: '',
+  require:false,
+  errorText:"",
+  clearable:true,
   fieldSearchType: '',
   dictType: ''
 }
@@ -435,6 +441,9 @@ const getColumnFunc = async() => {
                 dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
                 columnName: item.columnName,
                 comment: item.columnComment,
+                require:false,
+                errorText:"",
+                clearable:true,
                 fieldSearchType: '',
                 dictType: ''
               })

@@ -8,25 +8,25 @@
           <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" type="{{.Rules.VisibleType}}" :clearable="{{.Rules.Clearable}}" placeholder="请输入" />
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" placeholder="请输入" />
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType }}
-          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" :clearable="{{.Rules.Clearable}}">
+          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" :clearable="{{.Clearable}}">
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" type="{{.Rules.VisibleType}}"  :clearable="{{.Rules.Clearable}}" placeholder="请输入" />
+          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Rules.Clearable}}"></el-date-picker>
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
       {{- end }}
       {{- if eq .FieldType "float64" }}
-          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Rules.Clearable}}"></el-input-number>
+          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>
       {{- end }}
       {{- if eq .FieldType "enum" }}
-        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Rules.Clearable}}">
+        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}">
           <el-option v-for="item in [{{ .DataTypeLong }}]" :key="item" :label="item" :value="item" />
         </el-select>
       {{- end }}
@@ -88,10 +88,10 @@ const formData = ref({
 // 验证规则
 const rule = reactive({
     {{- range .Fields }}
-            {{- if eq .Rules.Require true }}
+            {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,
-                   message: '{{ .Rules.ErrorText }}',
+                   message: '{{ .ErrorText }}',
                    trigger: ['input','blur'],
                }],
             {{- end }}

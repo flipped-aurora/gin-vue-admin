@@ -158,6 +158,10 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			autoCode.HasTimer = true
 			break
 		}
+		if autoCode.Fields[i].Require {
+			autoCode.NeedValid = true
+			break
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -241,6 +245,10 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
+			break
+		}
+		if autoCode.Fields[i].Require {
+			autoCode.NeedValid = true
 			break
 		}
 	}

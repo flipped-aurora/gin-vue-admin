@@ -2,6 +2,7 @@ import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
 import getPageTitle from '@/utils/page'
 import router from '@/router'
+import { ElProgress } from 'element-plus'
 
 let asyncRouterFlag = 0
 
@@ -36,7 +37,7 @@ async function handleKeepAlive(to) {
   }
 }
 
-router.beforeEach(async(to, from, next) => {
+router.beforeEach(async(to, from) => {
   const userStore = useUserStore()
   to.meta.matched = [...to.matched]
   handleKeepAlive(to)
@@ -51,20 +52,19 @@ router.beforeEach(async(to, from, next) => {
       }
       // token 可以解析但是却是不存在的用户 id 或角色 id 会导致无限调用
       if (userStore.userInfo?.authority?.defaultRouter != null) {
-        next({ name: userStore.userInfo.authority.defaultRouter })
+        return { name: userStore.userInfo.authority.defaultRouter }
       } else {
         // 强制退出账号
         userStore.ClearStorage()
-        next({
+        return {
           name: 'Login',
           query: {
             redirect: document.location.hash
           }
-        })
-        return
+        }
       }
     } else {
-      next()
+      return true
     }
   } else {
     // 不在白名单中并且已经登录的时候
@@ -74,29 +74,29 @@ router.beforeEach(async(to, from, next) => {
         asyncRouterFlag++
         await getRouter(userStore)
         if (userStore.token) {
-          next({ ...to, replace: true })
+          return { ...to, replace: true }
         } else {
-          next({
+          return {
             name: 'Login',
             query: { redirect: to.href }
-          })
+          }
         }
       } else {
         if (to.matched.length) {
-          next()
+          return true
         } else {
-          next({ path: '/layout/404' })
+          return { path: '/layout/404' }
         }
       }
     }
     // 不在白名单中并且未登录的时候
     if (!token) {
-      next({
+      return {
         name: 'Login',
         query: {
           redirect: document.location.hash
         }
-      })
+      }
     }
   }
 })

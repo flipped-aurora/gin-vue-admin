@@ -1,32 +1,32 @@
 <template>
   <div>
     <div class="gva-form-box">
-      <el-form :model="formData" label-position="right" label-width="80px">
+      <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
-        <el-form-item label="{{.FieldDesc}}:">
+        <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
       {{- if eq .FieldType "bool" }}
           <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" clearable placeholder="请输入" />
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" placeholder="请输入" />
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType }}
-          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" clearable>
+          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" :clearable="{{.Clearable}}">
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" clearable placeholder="请输入" />
+          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" clearable></el-date-picker>
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
       {{- end }}
       {{- if eq .FieldType "float64" }}
-          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
+          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>
       {{- end }}
       {{- if eq .FieldType "enum" }}
-        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" clearable>
+        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}">
           <el-option v-for="item in [{{ .DataTypeLong }}]" :key="item" :label="item" :value="item" />
         </el-select>
       {{- end }}
@@ -58,32 +58,47 @@ import {
 import { getDictFunc } from '@/utils/format'
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 const route = useRoute()
 const router = useRouter()
+
 const type = ref('')
     {{- range $index, $element := .DictTypes}}
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- range .Fields}}
-        {{- if eq .FieldType "bool" }}
-        {{.FieldJson}}: false,
-        {{- end }}
-        {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-        {{- end }}
-        {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
-        {{- end }}
-        {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-        {{- end }}
-        {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-        {{- end }}
+            {{- if eq .FieldType "bool" }}
+            {{.FieldJson}}: false,
+            {{- end }}
+            {{- if eq .FieldType "string" }}
+            {{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "int" }}
+            {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+            {{- end }}
+            {{- if eq .FieldType "time.Time" }}
+            {{.FieldJson}}: new Date(),
+            {{- end }}
+            {{- if eq .FieldType "float64" }}
+            {{.FieldJson}}: 0,
+            {{- end }}
         {{- end }}
         })
+// 验证规则
+const rule = reactive({
+    {{- range .Fields }}
+            {{- if eq .Require true }}
+               {{.FieldJson }} : [{
+                   required: true,
+                   message: '{{ .ErrorText }}',
+                   trigger: ['input','blur'],
+               }],
+            {{- end }}
+    {{- end }}
+})
+
+const elFormRef = ref()
 
 // 初始化方法
 const init = async () => {
@@ -105,24 +120,27 @@ const init = async () => {
 init()
 // 保存按钮
 const save = async() => {
-      let res
-      switch (type.value) {
-        case 'create':
-          res = await create{{.StructName}}(formData.value)
-          break
-        case 'update':
-          res = await update{{.StructName}}(formData.value)
-          break
-        default:
-          res = await create{{.StructName}}(formData.value)
-          break
-      }
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: '创建/更改成功'
-        })
-      }
+      elFormRef.value?.validate( async (valid) => {
+         if (!valid) return
+            let res
+           switch (type.value) {
+             case 'create':
+               res = await create{{.StructName}}(formData.value)
+               break
+             case 'update':
+               res = await update{{.StructName}}(formData.value)
+               break
+             default:
+               res = await create{{.StructName}}(formData.value)
+               break
+           }
+           if (res.code === 0) {
+             ElMessage({
+               type: 'success',
+               message: '创建/更改成功'
+             })
+           }
+       })
 }
 
 // 返回按钮

@@ -24,11 +24,11 @@
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 
-[初始化](https://www.gin-vue-admin.com/docs/first_master)
+[初始化](https://www.gin-vue-admin.com/guide/start-quickly/initialization.html)
 						       
 [从环境到部署教学视频](https://www.bilibili.com/video/BV1Rg411u7xH)
 
-[开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[开发教学](https://www.gin-vue-admin.com/guide/start-quickly/env.html) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 
 [交流社区](https://support.qq.com/products/371961)
 
@@ -40,7 +40,7 @@
 
 2.本项目需要您有一定的golang和vue基础
 
-3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/docs/payment)
+3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)
 
 4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请联系微信：shouzi_1994
 

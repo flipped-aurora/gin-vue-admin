@@ -556,7 +556,7 @@ li {
         position: fixed;
         top: 0;
     }
-    .el-aside {
+    .gva-aside {
         -webkit-transition: width .2s;
         transition: width .2s;
         width: $width-aside;
@@ -625,7 +625,7 @@ li {
         }
     }
     .mobile.hideside {
-        .el-aside {
+        .gva-aside {
             -webkit-transition-duration: .2s;
             transition-duration: .2s;
             -webkit-transform: translate3d(-210px, 0, 0);
@@ -633,7 +633,7 @@ li {
         }
     }
     .mobile {
-        .el-aside {
+        .gva-aside {
             -webkit-transition: -webkit-transform .28s;
             transition: -webkit-transform .28s;
             transition: transform .28s;

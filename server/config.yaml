@@ -6,15 +6,17 @@ jwt:
   expires-time: 604800
   buffer-time: 86400
   issuer: 'qmPlus'
+
 # zap logger configuration
 zap:
   level: 'info'
-  format: 'console'
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
+  format: 'console'
   director: 'log'
-  show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'
+  max-age: 30 # 默认日志留存默认以天为单位
+  show-line: true
   log-in-console: true
 
 # redis configuration
@@ -32,10 +34,6 @@ email:
   is-ssl: true
   secret: 'xxx'
   nickname: 'test'
-
-# casbin configuration
-casbin:
-  model-path: './resource/rbac_model.conf'
 
 # system configuration
 system:
@@ -57,7 +55,7 @@ captcha:
   img-height: 80
 
 # mysql connect configuration
-# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
   path: ''
   port: ''
@@ -71,7 +69,7 @@ mysql:
   log-zap: false
 
 # pgsql connect configuration
-# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://www.github.com/flipped-aurora/gin-vue-admin/server.com/docs/first）
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 pgsql:
   path: ''
   port: ''
@@ -102,7 +100,8 @@ db-list:
 
 # local configuration
 local:
-  path: 'uploads/file'
+  path: 'uploads/file' # 访问路径
+  store-path: 'uploads/file' # 存储路径
 
 # autocode configuration
 autocode:
@@ -111,12 +110,13 @@ autocode:
   # 请不要手动配置,他会在项目加载的时候识别出根路径
   root: ""
   server: /server
-  server-api: /api/v1/autocode
+  server-plug: /plugin/%s
+  server-api: /api/v1/%s
   server-initialize: /initialize
-  server-model: /model/autocode
-  server-request: /model/autocode/request/
-  server-router: /router/autocode
-  server-service: /service/autocode
+  server-model: /model/%s
+  server-request: /model/%s/request/
+  server-router: /router/%s
+  server-service: /service/%s
   web: /web/src
   web-api: /api
   web-form: /view

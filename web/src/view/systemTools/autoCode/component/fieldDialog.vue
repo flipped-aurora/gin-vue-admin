@@ -78,12 +78,16 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="前端表单验证">
-        <el-switch v-model="middleDate.fontRuleKey" />
+      <el-form-item label="是否必填">
+        <el-switch v-model="middleDate.require" />
       </el-form-item>
-      <el-form-item v-if="middleDate.fontRuleKey" label="验证规则">
-        <div class="click-text" @click="handleOpenDialogVisible">点击设置前端表单验证</div>
+      <el-form-item label="是否可清空">
+        <el-switch v-model="middleDate.clearable" />
       </el-form-item>
+      <el-form-item label="校验失败文案">
+        <el-input v-model="middleDate.errorText" />
+      </el-form-item>
+
     </el-form>
   </div>
 </template>

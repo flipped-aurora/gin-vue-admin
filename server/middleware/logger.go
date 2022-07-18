@@ -2,8 +2,13 @@ package middleware
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
+	"github.com/google/uuid"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"strings"
 	"time"
@@ -84,4 +89,29 @@ func DefaultLogger() gin.HandlerFunc {
 		},
 		Source: "GVA",
 	}.SetLoggerMiddleware()
+}
+
+func TraceLoggerMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		start := time.Now()
+		uuidStr := strings.ReplaceAll(uuid.New().String(), "-", "")
+		path := c.Request.URL.Path
+		userId := c.GetInt("user_id")
+		ctx := context.WithValue(context.Background(), common.TraceKey, &common.Trace{TraceId: uuidStr, Caller: path, UserId: userId})
+		c.Set(common.TraceCtx, ctx)
+
+		c.Next()
+		cost := time.Since(start)
+		global.GVA_LOG.Info("gva_request_info",
+			zap.Int("Status", c.Writer.Status()),
+			zap.String("Method", c.Request.Method),
+			zap.String("IP", c.ClientIP()),
+			zap.String("Path", path),
+			zap.String("TraceId", uuidStr),
+			zap.Int("UserId", userId),
+			zap.String("query", c.Request.URL.RawQuery),
+			zap.String("UserAgent", c.Request.UserAgent()),
+			zap.Duration("Cost", cost),
+		)
+	}
 }

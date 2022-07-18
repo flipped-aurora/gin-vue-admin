@@ -30,12 +30,14 @@ func GetTraceCtx(c *gin.Context) context.Context {
 //	获取traceId
 func GetTraceId(c *gin.Context) string {
 	var uuidStr string
-	if value, ok := c.Get(TraceCtx); ok {
-		trace := value.(context.Context).Value(TraceKey).(*Trace)
-		uuidStr = trace.TraceId
-	} else {
-		uuidStr = strings.ReplaceAll(uuid.New().String(), "-", "")
-		context.WithValue(context.Background(), TraceKey, &Trace{TraceId: uuidStr})
+	if c != nil {
+		if value, ok := c.Get(TraceCtx); ok {
+			trace := value.(context.Context).Value(TraceKey).(*Trace)
+			uuidStr = trace.TraceId
+		} else {
+			uuidStr = strings.ReplaceAll(uuid.New().String(), "-", "")
+			context.WithValue(context.Background(), TraceKey, &Trace{TraceId: uuidStr})
+		}
 	}
 
 	return uuidStr

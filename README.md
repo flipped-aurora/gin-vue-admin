@@ -370,7 +370,7 @@ swag init
 
 添加微信，备注"加入gin-vue-admin交流群"
 
-### [关于我们](https://www.gin-vue-admin.com/about/)
+### [关于我们](https://www.gin-vue-admin.com/about/join.html)
 
 ## 8. 贡献者
 
@@ -382,7 +382,7 @@ swag init
 
 ## 9. 捐赠
 
-如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/coffee/index.html)
 
 ## 10. 友情链接
 

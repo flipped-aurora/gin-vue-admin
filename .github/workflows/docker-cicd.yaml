@@ -19,7 +19,7 @@ jobs:
       - name: Sed Config
         shell: bash
         run: |
-          sed  -i 51c"\        && yarn install && yarn build" Makefile
+          sed  -i 56c"\        && yarn install && yarn build" Makefile
           make image TAGS_OPT="latest"
           sed -i 's#./entrypoint.sh"#./entrypoint.sh","actions"#g' deploy/docker/Dockerfile
           sed -i "s#COPY build/ /usr/share/nginx/html/#COPY . /opt/gva#g" deploy/docker/Dockerfile

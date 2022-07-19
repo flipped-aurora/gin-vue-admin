@@ -16,7 +16,7 @@ volumes:
 services:
   web:
     build:
-      context: ./web
+      context: ../../web
       dockerfile: ./Dockerfile
     container_name: gva-web
     restart: always
@@ -31,7 +31,7 @@ services:
 
   server:
     build:
-      context: ./server
+      context: ../../server
       dockerfile: ./Dockerfile
     container_name: gva-server
     restart: always

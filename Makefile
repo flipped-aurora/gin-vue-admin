@@ -19,6 +19,11 @@ TAGS_OPT            = latest
 else
 endif
 
+ifeq ($(PLUGIN),)
+PLUGIN            = email
+else
+endif
+
 #容器环境前后端共同打包
 build: build-web build-server
 	docker run --name build-local --rm -v $(shell pwd):/go/src/${PROJECT_NAME} -w /go/src/${PROJECT_NAME} ${BUILD_IMAGE_SERVER} make build-local
@@ -64,3 +69,10 @@ image: build
 #尝鲜版
 images: build build-image-web build-image-server
 	docker build -t ${REPOSITORY}/all:${TAGS_OPT} -f deploy/docker/Dockerfile .
+	
+#插件快捷打包： make plugin PLUGIN="这里是插件文件夹名称,默认为email"
+plugin:
+	if [ -d ".plugin" ];then rm -rf .plugin ; else echo "OK!"; fi && mkdir -p .plugin/${PLUGIN}/{server/plugin,web/plugin} \
+	&& if [ -d "server/plugin/${PLUGIN}" ];then cp -r server/plugin/${PLUGIN} .plugin/${PLUGIN}/server/plugin/ ; else echo "OK!"; fi \
+	&& if [ -d "web/src/plugin/${PLUGIN}" ];then cp -r web/src/plugin/${PLUGIN} .plugin/${PLUGIN}/web/plugin/ ; else echo "OK!"; fi \
+	&& cd .plugin && zip -r ${PLUGIN}.zip ${PLUGIN} && mv ${PLUGIN}.zip ../ && cd ..

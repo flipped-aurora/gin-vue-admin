@@ -3,7 +3,6 @@ package internal
 import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -59,8 +58,6 @@ func (z *_zap) GetEncoderCore(l zapcore.Level, level zap.LevelEnablerFunc) zapco
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (z *_zap) CustomTimeEncoder(t time.Time, encoder zapcore.PrimitiveArrayEncoder) {
 	encoder.AppendString(t.Format(global.GVA_CONFIG.Zap.Prefix + "2006/01/02 - 15:04:05.000"))
-	encoder.AppendString("traceId:")
-	encoder.AppendString("traceId:" + common.GetTraceId(Zap.ctx))
 }
 
 // GetZapCores 根据配置文件的Level获取 []zapcore.Core

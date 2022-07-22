@@ -21,8 +21,13 @@ import (
 // @BasePath /
 func main() {
 	global.GVA_VP = core.Viper() // 初始化Viper
-	global.GVA_LOG = core.Zap()  // 初始化zap日志库
-	zap.ReplaceGlobals(global.GVA_LOG)
+	//global.GVA_LOG = core.Zap() // 初始化zap日志库
+	//zap.ReplaceGlobals(global.GVA_LOG)
+	//以下为zao的包装方法，实现打印trace信息,使用的时候将上两行注释掉
+	//同时需要将global.GVA_LOG 的数据类型改成*internal.LogWrapper
+	global.GVA_LOG = core.ZapWrapper() // 初始化zap日志库
+	zap.ReplaceGlobals(global.GVA_LOG.ZapLogger)
+
 	global.GVA_DB = initialize.Gorm() // gorm连接数据库
 	initialize.Timer()
 	initialize.DBList()

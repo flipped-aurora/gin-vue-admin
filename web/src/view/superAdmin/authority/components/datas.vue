@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div class="clearfix" style="margin: 18px">
+    <div class="clearfix sticky-button" style="margin: 18px">
       <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">确 定</el-button>
       <el-button class="fl-left" size="small" type="primary" @click="all">全选</el-button>
       <el-button class="fl-left" size="small" type="primary" @click="self">本角色</el-button>
       <el-button class="fl-left" size="small" type="primary" @click="selfAndChildren">本角色及子角色</el-button>
     </div>
-    <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
-      <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
-    </el-checkbox-group>
+    <div class="tree-content">
+      <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
+        <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
+      </el-checkbox-group>
+    </div>
     <warning-bar title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）" />
   </div>
 </template>

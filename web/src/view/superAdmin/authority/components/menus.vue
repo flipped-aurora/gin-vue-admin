@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearfix">
+    <div class="clearfix sticky-button">
       <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
     <el-tree
@@ -207,4 +207,5 @@ export default {
     margin-left: 12px;
   }
 }
+@import "@/style/button.scss";
 </style>

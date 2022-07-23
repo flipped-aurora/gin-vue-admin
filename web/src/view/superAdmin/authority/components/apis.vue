@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="clearfix">
+    <div class="clearfix sticky-button">
       <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">确 定</el-button>
     </div>
     <el-tree
@@ -121,3 +121,6 @@ defineExpose({
 })
 
 </script>
+<style lang="scss" scoped>
+@import "@/style/button.scss";
+</style>

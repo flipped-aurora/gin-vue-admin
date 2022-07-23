@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="clearfix sticky-button">
+      <el-input class="fitler" v-model="filterText" placeholder="筛选" />
       <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">确 定</el-button>
     </div>
     <el-tree
@@ -12,6 +13,7 @@
       highlight-current
       node-key="onlyId"
       show-checkbox
+      :filter-node-method="filterNode"
       @check="nodeChange"
     />
   </div>
@@ -25,7 +27,7 @@ export default {
 <script setup>
 import { getAllApis } from '@/api/api'
 import { UpdateCasbin, getPolicyPathByAuthorityId } from '@/api/casbin'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 const props = defineProps({
   row: {
@@ -40,7 +42,7 @@ const apiDefaultProps = ref({
   children: 'children',
   label: 'description'
 })
-
+const filterText = ref('')
 const apiTreeData = ref([])
 const apiTreeIds = ref([])
 const activeUserId = ref('')
@@ -120,7 +122,16 @@ defineExpose({
   enterAndNext
 })
 
+const filterNode = (value, data) => {
+  if (!value) return true
+  return data.description.indexOf(value) !== -1
+}
+watch(filterText, (val) => {
+  apiTree.value.filter(val)
+})
+
 </script>
+
 <style lang="scss" scoped>
 @import "@/style/button.scss";
 </style>

@@ -1,50 +1,51 @@
 <template>
   <div>
     <div class="clearfix sticky-button">
-      <el-input class="fitler" v-model="filterText" placeholder="筛选" />
+      <el-input v-model="filterText" class="fitler" placeholder="筛选" />
       <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
-    <el-tree
-      ref="menuTree"
-      :data="menuTreeData"
-      :default-checked-keys="menuTreeIds"
-      :props="menuDefaultProps"
-      default-expand-all
-      highlight-current
-      node-key="ID"
-      show-checkbox
-      @check="nodeChange"
-      :filter-node-method="filterNode"
-    >
-      <template #default="{ node , data }">
-        <span class="custom-tree-node">
-          <span>{{ node.label }}</span>
-          <span>
-            <el-button
-              type="primary"
-              link
-              size="small"
-              :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
-              :disabled="!node.checked"
-              @click="() => setDefault(data)"
-            >
-              {{ row.defaultRouter === data.name?"首页":"设为首页" }}
-            </el-button>
+    <div class="tree-content">
+      <el-tree
+        ref="menuTree"
+        :data="menuTreeData"
+        :default-checked-keys="menuTreeIds"
+        :props="menuDefaultProps"
+        default-expand-all
+        highlight-current
+        node-key="ID"
+        show-checkbox
+        :filter-node-method="filterNode"
+        @check="nodeChange"
+      >
+        <template #default="{ node , data }">
+          <span class="custom-tree-node">
+            <span>{{ node.label }}</span>
+            <span>
+              <el-button
+                type="primary"
+                link
+                size="small"
+                :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
+                :disabled="!node.checked"
+                @click="() => setDefault(data)"
+              >
+                {{ row.defaultRouter === data.name?"首页":"设为首页" }}
+              </el-button>
+            </span>
+            <span v-if="data.menuBtn.length">
+              <el-button
+                type="primary"
+                link
+                size="small"
+                @click="() => OpenBtn(data)"
+              >
+                分配按钮
+              </el-button>
+            </span>
           </span>
-          <span v-if="data.menuBtn.length">
-            <el-button
-              type="primary"
-              link
-              size="small"
-              @click="() => OpenBtn(data)"
-            >
-              分配按钮
-            </el-button>
-          </span>
-        </span>
-      </template>
-    </el-tree>
-
+        </template>
+      </el-tree>
+    </div>
     <el-dialog v-model="btnVisible" title="分配按钮" destroy-on-close>
       <el-table
         ref="btnTableRef"

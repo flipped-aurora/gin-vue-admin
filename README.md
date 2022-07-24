@@ -42,13 +42,9 @@
 
 3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)
 
-4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请联系微信：shouzi_1994
+4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
 
 <img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
-
-5.如果您需要服务器的话 2核2G腾讯云服务器45元/年 在这里购买：https://cloud.tencent.com/act/new?fromSource=gwzcw.4325959.4325959.4325959&utm_medium=cps&utm_id=gwzcw.4325959.4325959.4325959&cps_key=962a7fdaa930cda1c06e36a7608e95cc
-									      
-阿里云服务器 1c2g1m 38一年 在这里购买:https://www.aliyun.com/minisite/goods?userCode=xqe01uob
 
 ## 1. 基本介绍
 
@@ -86,11 +82,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ## 2. 使用说明
 
 ```
-- node版本 > v12.18.3
+- node版本 > v16.8.3
 - golang版本 >= v1.16
 - IDE推荐：Goland
-- 初始化项目： 不同版本数据库初始化不通 参见 https://www.gin-vue-admin.com/docs/first_master
-- 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
 
 ### 2.1 server项目
@@ -121,7 +115,7 @@ go build -o server main.go (windows编译命令为go build -o server.exe main.go
 cd web
 
 # 安装依赖
-cnpm install || npm install
+npm install
 
 # 启动web项目
 npm run serve
@@ -352,7 +346,7 @@ swag init
 
 （5）gin-vue-admin 版本更新介绍视频
 
-> bilibili：https://space.bilibili.com/322210472/channel/detail?cid=126418&ctype=0
+> bilibili：https://www.bilibili.com/video/BV1kv4y1g7nT
 
 ## 7. 联系方式
 
@@ -384,12 +378,6 @@ swag init
 
 如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/coffee/index.html)
 
-## 10. 友情链接
-
-[H5-Dooring ｜ H5页面制作神器](https://github.com/MrXujiang/h5-Dooring)	
-
-[go-zero 微服务框架｜缩短从需求到上线的距离](https://github.com/zeromicro/go-zero)
-
-## 11. 商用注意事项
+## 10. 商用注意事项
 
 如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

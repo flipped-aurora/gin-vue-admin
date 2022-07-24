@@ -1,48 +1,51 @@
 <template>
   <div>
-    <div class="clearfix">
+    <div class="clearfix sticky-button">
+      <el-input v-model="filterText" class="fitler" placeholder="筛选" />
       <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
     </div>
-    <el-tree
-      ref="menuTree"
-      :data="menuTreeData"
-      :default-checked-keys="menuTreeIds"
-      :props="menuDefaultProps"
-      default-expand-all
-      highlight-current
-      node-key="ID"
-      show-checkbox
-      @check="nodeChange"
-    >
-      <template #default="{ node , data }">
-        <span class="custom-tree-node">
-          <span>{{ node.label }}</span>
-          <span>
-            <el-button
-              type="primary"
-              link
-              size="small"
-              :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
-              :disabled="!node.checked"
-              @click="() => setDefault(data)"
-            >
-              {{ row.defaultRouter === data.name?"首页":"设为首页" }}
-            </el-button>
+    <div class="tree-content">
+      <el-tree
+        ref="menuTree"
+        :data="menuTreeData"
+        :default-checked-keys="menuTreeIds"
+        :props="menuDefaultProps"
+        default-expand-all
+        highlight-current
+        node-key="ID"
+        show-checkbox
+        :filter-node-method="filterNode"
+        @check="nodeChange"
+      >
+        <template #default="{ node , data }">
+          <span class="custom-tree-node">
+            <span>{{ node.label }}</span>
+            <span>
+              <el-button
+                type="primary"
+                link
+                size="small"
+                :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
+                :disabled="!node.checked"
+                @click="() => setDefault(data)"
+              >
+                {{ row.defaultRouter === data.name?"首页":"设为首页" }}
+              </el-button>
+            </span>
+            <span v-if="data.menuBtn.length">
+              <el-button
+                type="primary"
+                link
+                size="small"
+                @click="() => OpenBtn(data)"
+              >
+                分配按钮
+              </el-button>
+            </span>
           </span>
-          <span v-if="data.menuBtn.length">
-            <el-button
-              type="primary"
-              link
-              size="small"
-              @click="() => OpenBtn(data)"
-            >
-              分配按钮
-            </el-button>
-          </span>
-        </span>
-      </template>
-    </el-tree>
-
+        </template>
+      </el-tree>
+    </div>
     <el-dialog v-model="btnVisible" title="分配按钮" destroy-on-close>
       <el-table
         ref="btnTableRef"
@@ -70,8 +73,9 @@ import {
   updateAuthority
 } from '@/api/authority'
 import { getAuthorityBtnApi, setAuthorityBtnApi } from '@/api/authorityBtn'
-import { nextTick, ref } from 'vue'
+import { nextTick, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+
 const props = defineProps({
   row: {
     default: function() {
@@ -82,7 +86,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['changeRow'])
-
+const filterText = ref('')
 const menuTreeData = ref([])
 const menuTreeIds = ref([])
 const needConfirm = ref(false)
@@ -192,6 +196,16 @@ const enterDialog = async() => {
   }
 }
 
+const filterNode = (value, data) => {
+  if (!value) return true
+  // console.log(data.mate.title)
+  return data.meta.title.indexOf(value) !== -1
+}
+
+watch(filterText, (val) => {
+  menuTree.value.filter(val)
+})
+
 </script>
 
 <script>
@@ -202,6 +216,7 @@ export default {
 </script>
 
 <style lang="scss" scope>
+@import "@/style/button.scss";
 .custom-tree-node{
   span+span{
     margin-left: 12px;

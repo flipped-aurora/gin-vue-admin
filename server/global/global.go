@@ -1,7 +1,7 @@
 package global
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/log"
+	"go.uber.org/zap"
 	"sync"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/timer"
@@ -25,8 +25,8 @@ var (
 	GVA_CONFIG config.Server
 	GVA_VP     *viper.Viper
 	// GVA_LOG    *oplogging.Logger
-	//GVA_LOG                 *zap.Logger
-	GVA_LOG                 *log.LogWrapper
+	GVA_LOG *zap.Logger
+	//GVA_LOG                 *log.LogWrapper
 	GVA_Timer               timer.Timer = timer.NewTimerTask()
 	GVA_Concurrency_Control             = &singleflight.Group{}
 

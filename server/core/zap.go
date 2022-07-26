@@ -40,7 +40,8 @@ func ZapWrapper() (logger *log.LogWrapper) {
 	zapLogger = zap.New(zapcore.NewTee(cores...))
 
 	if global.GVA_CONFIG.Zap.ShowLine {
-		zapLogger = zapLogger.WithOptions(zap.AddCaller())
+		// 跳过1层 caller 调用栈,避免调用包装类造成行号都是一样的
+		zapLogger = zapLogger.WithOptions(zap.AddCaller(), zap.AddCallerSkip(1))
 	}
 	log.GvaLog = &log.LogWrapper{ZapLogger: zapLogger}
 	return log.GvaLog

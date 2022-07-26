@@ -26,13 +26,13 @@ export default ({
 
   const timestamp = Date.parse(new Date())
 
-  const rollupOptions = {
-    output: {
-      entryFileNames: `gva/gin-vue-admin-[name].${timestamp}.js`,
-      chunkFileNames: `js/gin-vue-admin-[name].${timestamp}.js`,
-      assetFileNames: `assets/gin-vue-admin-[name].${timestamp}.[ext]`
-    }
-  }
+  // const rollupOptions = {
+  //   output: {
+  //     entryFileNames: `gva/gin-vue-admin-[name].${timestamp}.js`,
+  //     chunkFileNames: `js/gin-vue-admin-[name].${timestamp}.js`,
+  //     assetFileNames: `assets/gin-vue-admin-[name].${timestamp}.[ext]`
+  //   }
+  // }
 
   const optimizeDeps = {}
 
@@ -72,7 +72,7 @@ export default ({
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
-      rollupOptions,
+      // rollupOptions,
     },
     esbuild,
     optimizeDeps,

@@ -3,6 +3,7 @@ package internal
 import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"
@@ -10,7 +11,9 @@ import (
 
 var Zap = new(_zap)
 
-type _zap struct{}
+type _zap struct {
+	ctx *gin.Context
+}
 
 // GetEncoder 获取 zapcore.Encoder
 // Author [SliverHorn](https://github.com/SliverHorn)

@@ -66,10 +66,10 @@ func (l Logger) SetLoggerMiddleware() gin.HandlerFunc {
 		}
 		// 处理鉴权需要的信息
 		l.AuthProcess(c, &layout)
-		if l.FilterKeyword != nil {
-			// 自行判断key/value 脱敏等
-			l.FilterKeyword(&layout)
-		}
+		//if l.FilterKeyword != nil {
+		//	// 自行判断key/value 脱敏等
+		//	l.FilterKeyword(&layout)
+		//}
 		// 自行处理日志
 		l.Print(layout)
 	}
@@ -85,3 +85,18 @@ func DefaultLogger() gin.HandlerFunc {
 		Source: "GVA",
 	}.SetLoggerMiddleware()
 }
+
+//func AddTraceId() gin.HandlerFunc {
+//	return func(g *gin.Context) {
+//		traceId := g.GetHeader("traceId")
+//		if traceId == "" {
+//			traceId = uuid.New().String()
+//		}
+//		g.Request = g.Request.WithContext(context.WithValue(g, "traceId", traceId))
+//		//global.GVA_LOG.WithOptions()
+//		//global.GVA_LOG = global.GVA_LOG.With(zap.Any("traceId", traceId))
+//		//global.GVA_LOG = global.GVA_LOG.With(
+//		global.GVA_LOG = core.Zap().With(zap.Any("traceId", traceId))
+//		g.Next()
+//	}
+//}

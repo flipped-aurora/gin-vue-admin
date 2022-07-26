@@ -77,6 +77,7 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[st
 //@return: menus []system.SysMenu, err error
 
 func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.SysMenu, err error) {
+	global.GVA_LOG.Info("/menu/getMenu model")
 	menuTree, err := menuService.getMenuTreeMap(authorityId)
 	menus = menuTree["0"]
 	for i := 0; i < len(menus); i++ {

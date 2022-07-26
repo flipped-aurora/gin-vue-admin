@@ -47,7 +47,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id uin
 
 // Get{{.StructName}}InfoList 分页获取{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list interface{}, total int64, err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db

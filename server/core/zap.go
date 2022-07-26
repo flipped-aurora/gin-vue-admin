@@ -42,6 +42,6 @@ func ZapWrapper() (logger *log.LogWrapper) {
 	if global.GVA_CONFIG.Zap.ShowLine {
 		zapLogger = zapLogger.WithOptions(zap.AddCaller())
 	}
-	log.EcoLog = &log.LogWrapper{ZapLogger: zapLogger}
-	return log.EcoLog
+	log.GvaLog = &log.LogWrapper{ZapLogger: zapLogger}
+	return log.GvaLog
 }

@@ -86,17 +86,27 @@ func DefaultLogger() gin.HandlerFunc {
 	}.SetLoggerMiddleware()
 }
 
-//func AddTraceId() gin.HandlerFunc {
-//	return func(g *gin.Context) {
-//		traceId := g.GetHeader("traceId")
-//		if traceId == "" {
-//			traceId = uuid.New().String()
-//		}
-//		g.Request = g.Request.WithContext(context.WithValue(g, "traceId", traceId))
-//		//global.GVA_LOG.WithOptions()
-//		//global.GVA_LOG = global.GVA_LOG.With(zap.Any("traceId", traceId))
-//		//global.GVA_LOG = global.GVA_LOG.With(
-//		global.GVA_LOG = core.Zap().With(zap.Any("traceId", traceId))
-//		g.Next()
+//func AddTraceInfo() gin.HandlerFunc {
+//	return func(c *gin.Context) {
+//		start := time.Now()
+//		uuidStr := strings.ReplaceAll(uuid.New().String(), "-", "")
+//		path := c.Request.URL.Path
+//		userId := c.GetInt("user_id")
+//		ctx := context.WithValue(context.Background(), common.TraceKey, &common.Trace{TraceId: uuidStr, Caller: path, UserId: userId})
+//		c.Set(common.TraceCtx, ctx)
+//
+//		c.Next()
+//		cost := time.Since(start)
+//		global.GVA_LOG.Info("_com_request_info",
+//			zap.Int("Status", c.Writer.Status()),
+//			zap.String("Method", c.Request.Method),
+//			zap.String("IP", c.ClientIP()),
+//			zap.String("Path", path),
+//			zap.String("TraceId", uuidStr),
+//			zap.Int("UserId", userId),
+//			zap.String("query", c.Request.URL.RawQuery),
+//			zap.String("UserAgent", c.Request.UserAgent()),
+//			zap.Duration("Cost", cost),
+//		)
 //	}
 //}

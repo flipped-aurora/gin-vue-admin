@@ -14,14 +14,9 @@ import (
 // 初始化总路由
 func Routers() *gin.Engine {
 	Router := gin.Default()
-	// 开启以下两行注释代码，则会重新生成一个带有记录traceId的中间件，在每个http的日志中打印出来traceId
+	// 开启以下两行注释代码，则会重新生成一个带有记录trace信息的中间件，在每个http的日志中打印出来trace信息
 	//Router := gin.New()
-	//Router.Use(middleware.AddTraceId())
-	//Router.Use(middleware.DefaultLogger())
-	//traceId := gin.Context.get   .GetHeader("traceId")
-	//if traceId == "" {
-	//	traceId = uuid.New().String()
-	//}
+	//Router.Use(middleware.AddTraceInfo())
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的

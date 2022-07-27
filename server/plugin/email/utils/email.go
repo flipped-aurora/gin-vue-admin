@@ -43,7 +43,7 @@ func ErrorToEmail(subject string, body string) error {
 //@return: error
 
 func EmailTest(subject string, body string) error {
-	to := []string{global.GlobalConfig.From}
+	to := []string{global.GlobalConfig.To}
 	return send(to, subject, body)
 }
 

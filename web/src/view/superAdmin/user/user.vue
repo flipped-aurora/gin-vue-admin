@@ -28,8 +28,8 @@
               collapse-tags
               :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
               :clearable="false"
-              @visible-change="(flag)=>{changeAuthority(scope.row,flag)}"
-              @remove-tag="()=>{changeAuthority(scope.row,false)}"
+              @visible-change="(flag)=>{changeAuthority(scope.row,flag,0)}"
+              @remove-tag="(removeAuth)=>{changeAuthority(scope.row,false,removeAuth)}"
             />
           </template>
         </el-table-column>
@@ -348,11 +348,15 @@ const addUser = () => {
   dialogFlag.value = 'add'
   addUserDialog.value = true
 }
-const changeAuthority = async(row, flag) => {
+
+const tempAuth = {}
+const changeAuthority = async(row, flag, removeAuth) => {
   if (flag) {
+    if (!removeAuth) {
+      tempAuth[row.ID] = [...row.authorityIds]
+    }
     return
   }
-
   await nextTick()
   const res = await setUserAuthorities({
     ID: row.ID,
@@ -360,6 +364,13 @@ const changeAuthority = async(row, flag) => {
   })
   if (res.code === 0) {
     ElMessage({ type: 'success', message: '角色设置成功' })
+  } else {
+    if (!removeAuth) {
+      row.authorityIds = [...tempAuth[row.ID]]
+      delete tempAuth[row.ID]
+    } else {
+      row.authorityIds = [removeAuth, ...row.authorityIds]
+    }
   }
 }
 

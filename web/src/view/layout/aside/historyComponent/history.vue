@@ -112,7 +112,7 @@ const openContextMenu = (e) => {
     }
     left.value = e.clientX - width
     top.value = e.clientY + 10
-    rightActive.value = id.split('-')[1]
+    rightActive.value = id.substring(4)
   }
 }
 const closeAll = () => {

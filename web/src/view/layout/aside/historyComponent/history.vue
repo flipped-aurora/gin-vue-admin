@@ -311,6 +311,10 @@ const initPage = () => {
     activeValue.value = window.sessionStorage.getItem('activeValue')
   }
   setTab(route)
+  if (window.sessionStorage.getItem('needCloseAll') === 'true') {
+    closeAll()
+    window.sessionStorage.removeItem('needCloseAll')
+  }
 }
 initPage()
 

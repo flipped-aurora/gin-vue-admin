@@ -118,9 +118,9 @@ import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
 import { computed, ref, onMounted, nextTick } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
+import { useUserStore } from '@/pinia/modules/user'
 
 const router = useRouter()
 const route = useRoute()
@@ -202,10 +202,8 @@ const changeUserAuth = async(id) => {
     authorityId: id
   })
   if (res.code === 0) {
-    emitter.emit('closeAllPage')
-    setTimeout(() => {
-      window.location.reload()
-    }, 50)
+    window.sessionStorage.setItem('needCloseAll', 'true')
+    window.location.reload()
   }
 }
 

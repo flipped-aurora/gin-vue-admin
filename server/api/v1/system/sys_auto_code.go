@@ -3,15 +3,16 @@ package system
 import (
 	"errors"
 	"fmt"
+	"net/url"
+	"os"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
-	"net/url"
-	"os"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -79,7 +80,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	a.PackageT = caser.String(a.Package)
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
-		if errors.Is(err, system.AutoMoveErr) {
+		if errors.Is(err, system.ErrAutoMove) {
 			c.Writer.Header().Add("success", "true")
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
 		} else {

@@ -43,7 +43,7 @@ for (var i = 0; i < data.length; i++) {
 const chart = shallowRef(null)
 const echart = ref(null)
 const initChart = () => {
-  chart.value = echarts.init(echart.value, /*'macarons'*/)
+  chart.value = echarts.init(echart.value /* 'macarons' */)
   setOptions()
 }
 const setOptions = () => {

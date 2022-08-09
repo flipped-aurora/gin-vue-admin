@@ -82,7 +82,6 @@
 <script setup>
 import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
@@ -93,7 +92,6 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const path = ref(import.meta.env.VITE_BASE_API)
-const userStore = useUserStore()
 
 const imageUrl = ref('')
 const imageCommon = ref('')

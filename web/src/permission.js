@@ -2,7 +2,6 @@ import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
 import getPageTitle from '@/utils/page'
 import router from '@/router'
-import { ElProgress } from 'element-plus'
 
 let asyncRouterFlag = 0
 

@@ -5,7 +5,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item title="系统配置" name="1">
           <el-form-item label="环境值">
-<!--            <el-input v-model="config.system.env" />-->
+            <!-- <el-input v-model="config.system.env" />-->
             <el-select v-model="config.system.env" style="width:100%">
               <el-option value="public" />
               <el-option value="develop" />

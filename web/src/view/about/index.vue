@@ -98,7 +98,8 @@
           </div>
           <el-button
             class="load-more"
-            type="primary" link
+            type="primary"
+            link
             @click="loadMore"
           >Load more</el-button>
         </el-card>
@@ -116,7 +117,7 @@ export default {
 <script setup>
 import { ref } from 'vue'
 import { Commits, Members } from '@/api/github'
-import {formatTimeToStr} from "@/utils/date";
+import { formatTimeToStr } from '@/utils/date'
 const page = ref(0)
 
 const loadMore = () => {

@@ -56,5 +56,4 @@ func (i *DBApi) CheckDB(c *gin.Context) {
 	}
 	global.GVA_LOG.Info(message)
 	response.OkWithDetailed(gin.H{"needInit": needInit}, message, c)
-	return
 }

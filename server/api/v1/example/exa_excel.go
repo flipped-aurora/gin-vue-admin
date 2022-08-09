@@ -1,13 +1,14 @@
 package example
 
 import (
+	"os"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"os"
-	"strings"
 )
 
 type ExcelApi struct{}

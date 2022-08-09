@@ -360,7 +360,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return err
 	}
 	if autoCode.AutoMoveFile {
-		return system.AutoMoveErr
+		return system.ErrAutoMove
 	}
 	return nil
 }

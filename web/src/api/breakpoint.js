@@ -19,6 +19,7 @@ export const breakpointContinue = (data) => {
   return service({
     url: '/fileUploadAndDownload/breakpointContinue',
     method: 'post',
+    donNotShowLoading: true,
     headers: { 'Content-Type': 'multipart/form-data' },
     data
   })

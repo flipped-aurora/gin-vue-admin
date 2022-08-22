@@ -14,6 +14,7 @@
           ref="loginForm"
           :model="loginFormData"
           :rules="rules"
+          :validate-on-rule-change="false"
           @keyup.enter="submitForm"
         >
           <el-form-item prop="username">

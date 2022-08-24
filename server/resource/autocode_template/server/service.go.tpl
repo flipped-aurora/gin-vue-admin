@@ -54,29 +54,24 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	db := global.GVA_DB.Model(&{{.Package}}.{{.StructName}}{})
     var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
+    if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
+     db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+    }
         {{- range .Fields}}
             {{- if .FieldSearchType}}
                 {{- if eq .FieldType "string" }}
     if info.{{.FieldName}} != "" {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
-                {{- else if eq .FieldType "bool" }}
+    {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+        if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {
+            db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ? AND ? ",info.Start{{.FieldName}},info.End{{.FieldName}})
+        }
+    {{- else}}
     if info.{{.FieldName}} != nil {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
-                {{- else if eq .FieldType "int" }}
-    if info.{{.FieldName}} != nil {
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-    }
-                {{- else if eq .FieldType "float64" }}
-    if info.{{.FieldName}} != nil {
-        db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-    }
-                {{- else if eq .FieldType "time.Time" }}
-    if info.{{.FieldName}} != nil {
-         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+{{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
-    }
-                {{- end }}
+            {{- end }}
         {{- end }}
     {{- end }}
 	err = db.Count(&total).Error

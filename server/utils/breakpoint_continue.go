@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"io/ioutil"
 	"os"
 	"strconv"
 )
@@ -75,7 +74,7 @@ func makeFileContent(content []byte, fileName string, FileDir string, contentNum
 //@return: error, string
 
 func MakeFile(fileName string, FileMd5 string) (string, error) {
-	rd, err := ioutil.ReadDir(breakpointDir + FileMd5)
+	rd, err := os.ReadDir(breakpointDir + FileMd5)
 	if err != nil {
 		return finishDir + fileName, err
 	}
@@ -86,7 +85,7 @@ func MakeFile(fileName string, FileMd5 string) (string, error) {
 	}
 	defer fd.Close()
 	for k := range rd {
-		content, _ := ioutil.ReadFile(breakpointDir + FileMd5 + "/" + fileName + "_" + strconv.Itoa(k))
+		content, _ := os.ReadFile(breakpointDir + FileMd5 + "/" + fileName + "_" + strconv.Itoa(k))
 		_, err = fd.Write(content)
 		if err != nil {
 			_ = os.Remove(finishDir + fileName)

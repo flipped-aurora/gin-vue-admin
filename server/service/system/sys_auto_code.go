@@ -10,7 +10,6 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
-	"io/ioutil"
 	"log"
 	"mime/multipart"
 	"os"
@@ -201,7 +200,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			builder.WriteString(strings.Replace(ext, ".", "", -1))
 		}
 		builder.WriteString("\n\n")
-		data, err := ioutil.ReadAll(f)
+		data, err := io.ReadAll(f)
 		if err != nil {
 			return nil, err
 		}
@@ -372,7 +371,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 //@return: []string, error
 
 func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList []string) ([]string, error) {
-	files, err := ioutil.ReadDir(pathName)
+	files, err := os.ReadDir(pathName)
 	for _, fi := range files {
 		if fi.IsDir() {
 			fileList, err = autoCodeService.GetAllTplFile(pathName+"/"+fi.Name(), fileList)
@@ -816,7 +815,7 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 		log.Fatal(err)
 	}
 	// 写回数据
-	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
+	return os.WriteFile(filepath, buffer.Bytes(), 0o600)
 }
 
 // CreatePlug 自动创建插件模板

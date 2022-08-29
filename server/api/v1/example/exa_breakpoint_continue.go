@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"mime/multipart"
 	"strconv"
 
@@ -48,7 +48,7 @@ func (b *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 			fmt.Println(err)
 		}
 	}(f)
-	cen, _ := ioutil.ReadAll(f)
+	cen, _ := io.ReadAll(f)
 	if !utils.CheckMd5(cen, chunkMd5) {
 		global.GVA_LOG.Error("检查md5失败!", zap.Error(err))
 		response.FailWithMessage("检查md5失败", c)

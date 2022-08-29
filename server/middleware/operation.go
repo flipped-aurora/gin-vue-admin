@@ -3,7 +3,7 @@ package middleware
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -36,11 +36,11 @@ func OperationRecord() gin.HandlerFunc {
 		var userId int
 		if c.Request.Method != http.MethodGet {
 			var err error
-			body, err = ioutil.ReadAll(c.Request.Body)
+			body, err = io.ReadAll(c.Request.Body)
 			if err != nil {
 				global.GVA_LOG.Error("read body from request error:", zap.Error(err))
 			} else {
-				c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+				c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 			}
 		} else {
 			query := c.Request.URL.RawQuery
@@ -75,7 +75,7 @@ func OperationRecord() gin.HandlerFunc {
 		}
 
 		// 上传文件时候 中间件日志进行裁断操作
-		if strings.Index(c.GetHeader("Content-Type"), "multipart/form-data") > -1 {
+		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data")  {
 			if len(record.Body) > 1024 {
 				// 截断
 				newBody := respPool.Get().([]byte)
@@ -100,15 +100,15 @@ func OperationRecord() gin.HandlerFunc {
 		record.Latency = latency
 		record.Resp = writer.body.String()
 
-		if strings.Index(c.Writer.Header().Get("Pragma"), "public") > -1 ||
-			strings.Index(c.Writer.Header().Get("Expires"), "0") > -1 ||
-			strings.Index(c.Writer.Header().Get("Cache-Control"), "must-revalidate, post-check=0, pre-check=0") > -1 ||
-			strings.Index(c.Writer.Header().Get("Content-Type"), "application/force-download") > -1 ||
-			strings.Index(c.Writer.Header().Get("Content-Type"), "application/octet-stream") > -1 ||
-			strings.Index(c.Writer.Header().Get("Content-Type"), "application/vnd.ms-excel") > -1 ||
-			strings.Index(c.Writer.Header().Get("Content-Type"), "application/download") > -1 ||
-			strings.Index(c.Writer.Header().Get("Content-Disposition"), "attachment") > -1 ||
-			strings.Index(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") > -1 {
+		if strings.Contains(c.Writer.Header().Get("Pragma"), "public")  ||
+			strings.Contains(c.Writer.Header().Get("Expires"), "0")  ||
+			strings.Contains(c.Writer.Header().Get("Cache-Control"), "must-revalidate, post-check=0, pre-check=0") ||
+			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/force-download")  ||
+			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/octet-stream")  ||
+			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/vnd.ms-excel")  ||
+			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/download")  ||
+			strings.Contains(c.Writer.Header().Get("Content-Disposition"), "attachment")  ||
+			strings.Contains(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") {
 			if len(record.Resp) > 1024 {
 				// 截断
 				newBody := respPool.Get().([]byte)

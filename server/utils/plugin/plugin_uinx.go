@@ -45,6 +45,7 @@ func LoadPlugin(path string) error {
 		return err
 	}
 	if fileInfo.IsDir() {
+		// TODO 返回的参数不一样暂时不修改(https://golang.google.cn/doc/go1.16#ioutil)
 		fileSlice, err := ioutil.ReadDir(path)
 		if err != nil {
 			return err

@@ -6,7 +6,7 @@ import (
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -28,7 +28,7 @@ const (
 //@return: error
 
 func AutoInjectionCode(filepath string, funcName string, codeData string) error {
-	srcData, err := ioutil.ReadFile(filepath)
+	srcData, err := os.ReadFile(filepath)
 	if err != nil {
 		return err
 	}
@@ -113,7 +113,7 @@ func AutoInjectionCode(filepath string, funcName string, codeData string) error 
 	srcData = append(append(srcData[:indexPos], insertData...), remainData...)
 
 	// 写回数据
-	return ioutil.WriteFile(filepath, srcData, 0o600)
+	return os.WriteFile(filepath, srcData, 0o600)
 }
 
 func checkExist(srcData *[]byte, startPos int, endPos int, blockStmt *ast.BlockStmt, target string) bool {
@@ -153,7 +153,7 @@ func checkExist(srcData *[]byte, startPos int, endPos int, blockStmt *ast.BlockS
 }
 
 func AutoClearCode(filepath string, codeData string) error {
-	srcData, err := ioutil.ReadFile(filepath)
+	srcData, err := os.ReadFile(filepath)
 	if err != nil {
 		return err
 	}
@@ -161,7 +161,7 @@ func AutoClearCode(filepath string, codeData string) error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(filepath, srcData, 0o600)
+	return os.WriteFile(filepath, srcData, 0o600)
 }
 
 func cleanCode(clearCode string, srcData string) ([]byte, error) {

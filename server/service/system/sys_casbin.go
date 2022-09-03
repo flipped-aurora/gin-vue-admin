@@ -35,6 +35,10 @@ func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos [
 	if !success {
 		return errors.New("存在相同api,添加失败,请联系管理员")
 	}
+	err := e.InvalidateCache()
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -49,6 +53,11 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
+	e := casbinService.Casbin()
+	err = e.InvalidateCache()
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -89,11 +98,11 @@ func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
 //@return: *casbin.Enforcer
 
 var (
-	syncedEnforcer *casbin.SyncedEnforcer
+	cachedEnforcer *casbin.CachedEnforcer
 	once           sync.Once
 )
 
-func (casbinService *CasbinService) Casbin() *casbin.SyncedEnforcer {
+func (casbinService *CasbinService) Casbin() *casbin.CachedEnforcer {
 	once.Do(func() {
 		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
 		text := `
@@ -117,8 +126,9 @@ func (casbinService *CasbinService) Casbin() *casbin.SyncedEnforcer {
 			zap.L().Error("字符串加载模型失败!", zap.Error(err))
 			return
 		}
-		syncedEnforcer, _ = casbin.NewSyncedEnforcer(m, a)
+		cachedEnforcer, _ = casbin.NewCachedEnforcer(m, a)
+		cachedEnforcer.SetExpireTime(60 * 60)
+		_ = cachedEnforcer.LoadPolicy()
 	})
-	_ = syncedEnforcer.LoadPolicy()
-	return syncedEnforcer
+	return cachedEnforcer
 }

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"time"
 
@@ -67,7 +68,17 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		return err
 	}
 	// 清除API表
-	err := ApiServiceApp.DeleteApiByIds(strings.Split(md.ApiIDs, ";"))
+
+	ids := request.IdsReq{}
+	idsStr := strings.Split(md.ApiIDs, ";")
+	for i := range idsStr {
+		id, err := strconv.Atoi(idsStr[i])
+		if err != nil {
+			return err
+		}
+		ids.Ids = append(ids.Ids, id)
+	}
+	err := ApiServiceApp.DeleteApisByIds(ids)
 	if err != nil {
 		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 	}

@@ -2,6 +2,7 @@ import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
 import getPageTitle from '@/utils/page'
 import router from '@/router'
+import Nprogress from 'nprogress'
 
 let asyncRouterFlag = 0
 
@@ -37,6 +38,7 @@ async function handleKeepAlive(to) {
 }
 
 router.beforeEach(async(to, from) => {
+  Nprogress.start()
   const userStore = useUserStore()
   to.meta.matched = [...to.matched]
   handleKeepAlive(to)
@@ -98,4 +100,14 @@ router.beforeEach(async(to, from) => {
       }
     }
   }
+})
+
+router.afterEach(() => {
+  // 路由加载完成后关闭进度条
+  Nprogress.done()
+})
+
+router.onError(() => {
+  // 路由发生错误后销毁进度条
+  Nprogress.remove()
 })

@@ -2,45 +2,43 @@
 
 # jwt configuration
 jwt:
-  signing-key: 'qmPlus'
-  expires-time: 604800
-  buffer-time: 86400
-  issuer: 'qmPlus'
-
+  signing-key: qmPlus
+  expires-time: 7d
+  buffer-time: 1d
+  issuer: qmPlus
 # zap logger configuration
 zap:
-  level: 'info'
-  prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
-  format: 'console'
-  director: 'log'
-  encode-level: 'LowercaseColorLevelEncoder'
-  stacktrace-key: 'stacktrace'
-  max-age: 30 # 默认日志留存默认以天为单位
+  level: info
+  format: console
+  prefix: [github.com/flipped-aurora/gin-vue-admin/server]
+  director: log
   show-line: true
+  encode-level: LowercaseColorLevelEncoder
+  stacktrace-key: stacktrace
   log-in-console: true
 
 # redis configuration
 redis:
   db: 0
-  addr: '127.0.0.1:6379'
-  password: ''
+  addr: 127.0.0.1:6379
+  password: ""
 
 # email configuration
 email:
-  to: 'xxx@qq.com'
+  to: xxx@qq.com
   port: 465
-  from: 'xxx@163.com'
-  host: 'smtp.163.com'
+  from: xxx@163.com
+  host: smtp.163.com
   is-ssl: true
-  secret: 'xxx'
-  nickname: 'test'
+  secret: xxx
+  nickname: test
 
 # system configuration
 system:
-  env: 'public'  # Change to "develop" to skip authentication for development mode
+  env: public  # Change to "develop" to skip authentication for development mode
   addr: 8888
-  db-type: 'mysql'
-  oss-type: 'local'    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  db-type: mysql
+  oss-type: local    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
   use-redis: false     # 使用redis
   use-multipoint: false
   # IP限制次数 一个小时15000次
@@ -57,12 +55,12 @@ captcha:
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
-  path: ''
-  port: ''
-  config: ''
-  db-name: ''
-  username: ''
-  password: ''
+  path: ""
+  port: ""
+  config: ""
+  db-name: ""
+  username: ""
+  password: ""
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: ""
@@ -71,12 +69,12 @@ mysql:
 # pgsql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 pgsql:
-  path: ''
-  port: ''
-  config: ''
-  db-name: ''
-  username: ''
-  password: ''
+  path: ""
+  port: ""
+  config: ""
+  db-name: ""
+  username: ""
+  password: ""
   max-idle-conns: 10
   max-open-conns: 100
   log-mode: ""
@@ -86,12 +84,12 @@ db-list:
   - disabled: true # 是否启用
     type: "" # 数据库的类型,目前支持mysql、pgsql
     alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
-    path: ''
-    port: ''
-    config: ''
-    db-name: ''
-    username: ''
-    password: ''
+    path: ""
+    port: ""
+    config: ""
+    db-name: ""
+    username: ""
+    password: ""
     max-idle-conns: 10
     max-open-conns: 100
     log-mode: ""
@@ -100,8 +98,8 @@ db-list:
 
 # local configuration
 local:
-  path: 'uploads/file' # 访问路径
-  store-path: 'uploads/file' # 存储路径
+  path: uploads/file
+  store-path: uploads/file
 
 # autocode configuration
 autocode:
@@ -124,67 +122,67 @@ autocode:
 
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:
-  zone: 'ZoneHuaDong'
-  bucket: ''
-  img-path: ''
+  zone: ZoneHuaDong
+  bucket: ""
+  img-path: ""
   use-https: false
-  access-key: ''
-  secret-key: ''
+  access-key: ""
+  secret-key: ""
   use-cdn-domains: false
 
 # aliyun oss configuration
 aliyun-oss:
-  endpoint: 'yourEndpoint'
-  access-key-id: 'yourAccessKeyId'
-  access-key-secret: 'yourAccessKeySecret'
-  bucket-name: 'yourBucketName'
-  bucket-url: 'yourBucketUrl'
-  base-path: 'yourBasePath'
+  endpoint: yourEndpoint
+  access-key-id: yourAccessKeyId
+  access-key-secret: yourAccessKeySecret
+  bucket-name: yourBucketName
+  bucket-url: yourBucketUrl
+  base-path: yourBasePath
 
 # tencent cos configuration
 tencent-cos:
-  bucket: 'xxxxx-10005608'
-  region: 'ap-shanghai'
-  secret-id: 'xxxxxxxx'
-  secret-key: 'xxxxxxxx'
-  base-url: 'https://gin.vue.admin'
-  path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
+  bucket: xxxxx-10005608
+  region: ap-shanghai
+  secret-id: your-secret-id
+  secret-key: your-secret-key
+  base-url: https://gin.vue.admin
+  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 
 # aws s3 configuration (minio compatible)
 aws-s3:
   bucket: xxxxx-10005608
   region: ap-shanghai
-  endpoint: ''
+  endpoint: ""
   s3-force-path-style: false
   disable-ssl: false
-  secret-id: xxxxxxxx
-  secret-key: xxxxxxxx
+  secret-id: your-secret-id
+  secret-key: your-secret-key
   base-url: https://gin.vue.admin
   path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 
 # huawei obs configuration
 hua-wei-obs:
-  path: 'you-path'
-  bucket: 'you-bucket'
-  endpoint: 'you-endpoint'
-  access-key: 'you-access-key'
-  secret-key: 'you-secret-key'
+  path: you-path
+  bucket: you-bucket
+  endpoint: you-endpoint
+  access-key: you-access-key
+  secret-key: you-secret-key
 
 # excel configuration
 excel:
-  dir: './resource/excel/'
+  dir: ./resource/excel/
 
 # timer task db clear table
 Timer:
   start: true
   spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
   detail:
-    - tableName: "sys_operation_records"
-      compareField: "created_at"
-      interval: "2160h"
-    - tableName: "jwt_blacklists"
-      compareField: "created_at"
-      interval: "168h"
+    - tableName: sys_operation_records
+      compareField: created_at
+      interval: 2160h
+    - tableName: jwt_blacklists
+      compareField: created_at
+      interval: 168h
 
 # 跨域配置
 # 需要配合 server/initialize/router.go#L32 使用

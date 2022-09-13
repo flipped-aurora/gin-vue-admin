@@ -85,17 +85,19 @@
             <el-button
               size="small"
               icon="document"
-              type="text"
-              @click="toDetile(scope.row)"
+              type="primary"
+              link
+              @click="toDetail(scope.row)"
             >详情</el-button>
             <el-button
               size="small"
               icon="edit"
-              type="text"
+              type="primary"
+              link
               @click="updateSysDictionaryFunc(scope.row)"
             >变更</el-button>
             <el-popover
-              v-model:visible="scope.row.visible"
+              v-model="scope.row.visible"
               placement="top"
               width="160"
             >
@@ -103,7 +105,8 @@
               <div style="text-align: right; margin-top: 8px">
                 <el-button
                   size="small"
-                  type="text"
+                  type="primary"
+                  link
                   @click="scope.row.visible = false"
                 >取消</el-button>
                 <el-button
@@ -114,7 +117,8 @@
               </div>
               <template #reference>
                 <el-button
-                  type="text"
+                  type="primary"
+                  link
                   icon="delete"
                   size="small"
                   style="margin-left: 10px"
@@ -209,8 +213,8 @@ import {
   updateSysDictionary,
   findSysDictionary,
   getSysDictionaryList,
-} from '@/api/sysDictionary' //  此处请自行替换地址
-import warningBar from '@/components/warningBar/warningBar.vue'
+} from '@/api/sysDictionary' // 此处请自行替换地址
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
@@ -296,7 +300,7 @@ const getTableData = async() => {
 
 getTableData()
 
-const toDetile = (row) => {
+const toDetail = (row) => {
   router.push({
     name: 'dictionaryDetail',
     params: {
@@ -308,7 +312,7 @@ const toDetile = (row) => {
 const dialogFormVisible = ref(false)
 const type = ref('')
 const updateSysDictionaryFunc = async(row) => {
-  const res = await findSysDictionary({ ID: row.ID })
+  const res = await findSysDictionary({ ID: row.ID, status: row.status })
   type.value = 'update'
   if (res.code === 0) {
     formData.value = res.data.resysDictionary
@@ -356,6 +360,7 @@ const enterDialog = async() => {
         break
     }
     if (res.code === 0) {
+      ElMessage.success('操作成功')
       closeDialog()
       getTableData()
     }

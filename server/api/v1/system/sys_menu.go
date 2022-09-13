@@ -23,7 +23,7 @@ type AuthorityMenuApi struct{}
 // @Success 200 {object} response.Response{data=systemRes.SysMenusResponse,msg=string} "获取用户动态路由,返回包括系统菜单详情列表"
 // @Router /menu/getMenu [post]
 func (a *AuthorityMenuApi) GetMenu(c *gin.Context) {
-	if err, menus := menuService.GetMenuTree(utils.GetUserAuthorityId(c)); err != nil {
+	if menus, err := menuService.GetMenuTree(utils.GetUserAuthorityId(c)); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -42,7 +42,7 @@ func (a *AuthorityMenuApi) GetMenu(c *gin.Context) {
 // @Success 200 {object} response.Response{data=systemRes.SysBaseMenusResponse,msg=string} "获取用户动态路由,返回包括系统菜单列表"
 // @Router /menu/getBaseMenuTree [post]
 func (a *AuthorityMenuApi) GetBaseMenuTree(c *gin.Context) {
-	if err, menus := menuService.GetBaseMenuTree(); err != nil {
+	if menus, err := menuService.GetBaseMenuTree(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -88,7 +88,7 @@ func (a *AuthorityMenuApi) GetMenuAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, menus := menuService.GetMenuAuthority(&param); err != nil {
+	if menus, err := menuService.GetMenuAuthority(&param); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithDetailed(systemRes.SysMenusResponse{Menus: menus}, "获取失败", c)
 	} else {
@@ -189,7 +189,7 @@ func (a *AuthorityMenuApi) GetBaseMenuById(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, menu := baseMenuService.GetBaseMenuById(idInfo.ID); err != nil {
+	if menu, err := baseMenuService.GetBaseMenuById(idInfo.ID); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -212,7 +212,7 @@ func (a *AuthorityMenuApi) GetMenuList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, menuList, total := menuService.GetInfoList(); err != nil {
+	if menuList, total, err := menuService.GetInfoList(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

@@ -14,3 +14,7 @@ type SysDictionaryDetail struct {
 	Sort            int    `json:"sort" form:"sort" gorm:"column:sort;comment:排序标记"`                                    // 排序标记
 	SysDictionaryID int    `json:"sysDictionaryID" form:"sysDictionaryID" gorm:"column:sys_dictionary_id;comment:关联标记"` // 关联标记
 }
+
+func (SysDictionaryDetail) TableName() string {
+	return "sys_dictionary_details"
+}

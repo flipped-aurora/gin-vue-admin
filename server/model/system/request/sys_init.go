@@ -34,24 +34,26 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 		i.Host = "127.0.0.1"
 	}
 	if i.Port == "" {
-		i.Port = "3306"
+		i.Port = "5432"
 	}
-	return "host=" + i.Host + " user=" + i.UserName + " password=" + i.Password + " port=" + i.Port + " " + "sslmode=disable TimeZone=Asia/Shanghai"
+	return "host=" + i.Host + " user=" + i.UserName + " password=" + i.Password + " port=" + i.Port + " dbname=" + "postgres" + " " + "sslmode=disable TimeZone=Asia/Shanghai"
 }
 
 // ToMysqlConfig 转换 config.Mysql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToMysqlConfig() config.Mysql {
 	return config.Mysql{
-		Path:         i.Host,
-		Port:         i.Port,
-		Dbname:       i.DBName,
-		Username:     i.UserName,
-		Password:     i.Password,
-		MaxIdleConns: 10,
-		MaxOpenConns: 100,
-		LogMode:      "error",
-		Config:       "charset=utf8mb4&parseTime=True&loc=Local",
+		GeneralDB: config.GeneralDB{
+			Path:         i.Host,
+			Port:         i.Port,
+			Dbname:       i.DBName,
+			Username:     i.UserName,
+			Password:     i.Password,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogMode:      "error",
+			Config:       "charset=utf8mb4&parseTime=True&loc=Local",
+		},
 	}
 }
 
@@ -59,14 +61,16 @@ func (i *InitDB) ToMysqlConfig() config.Mysql {
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToPgsqlConfig() config.Pgsql {
 	return config.Pgsql{
-		Path:         i.Host,
-		Port:         i.Port,
-		Dbname:       i.DBName,
-		Username:     i.UserName,
-		Password:     i.Password,
-		MaxIdleConns: 10,
-		MaxOpenConns: 100,
-		LogMode:      "error",
-		Config:       "sslmode=disable TimeZone=Asia/Shanghai",
+		GeneralDB: config.GeneralDB{
+			Path:         i.Host,
+			Port:         i.Port,
+			Dbname:       i.DBName,
+			Username:     i.UserName,
+			Password:     i.Password,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogMode:      "error",
+			Config:       "sslmode=disable TimeZone=Asia/Shanghai",
+		},
 	}
 }

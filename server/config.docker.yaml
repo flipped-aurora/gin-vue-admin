@@ -5,17 +5,18 @@ jwt:
   signing-key: 'qmPlus'
   expires-time: 604800
   buffer-time: 86400
+  issuer: 'qmPlus'
 
 # zap logger configuration
 zap:
   level: 'info'
-  format: 'console'
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
+  format: 'console'
   director: 'log'
-  link-name: 'latest_log'
-  show-line: true
   encode-level: 'LowercaseColorLevelEncoder'
   stacktrace-key: 'stacktrace'
+  max-age: 30 # 默认日志留存默认以天为单位
+  show-line: true
   log-in-console: true
 
 # redis configuration
@@ -34,17 +35,18 @@ email:
   secret: 'xxx'
   nickname: 'test'
 
-# casbin configuration
-casbin:
-  model-path: './resource/rbac_model.conf'
-
 # system configuration
 system:
   env: 'public'  # Change to "develop" to skip authentication for development mode
   addr: 8888
   db-type: 'mysql'
   oss-type: 'local'    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  use-redis: false     # 使用redis
   use-multipoint: false
+  # IP限制次数 一个小时15000次
+  iplimit-count: 15000
+  #  IP限制一个小时
+  iplimit-time: 3600
 
 # captcha configuration
 captcha:
@@ -53,6 +55,7 @@ captcha:
   img-height: 80
 
 # mysql connect configuration
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
   path: ''
   port: ''
@@ -65,21 +68,55 @@ mysql:
   log-mode: ""
   log-zap: false
 
+# pgsql connect configuration
+# 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
+pgsql:
+  path: ''
+  port: ''
+  config: ''
+  db-name: ''
+  username: ''
+  password: ''
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: ""
+  log-zap: false
+
+db-list:
+  - disabled: true # 是否启用
+    type: "" # 数据库的类型,目前支持mysql、pgsql
+    alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
+    path: ''
+    port: ''
+    config: ''
+    db-name: ''
+    username: ''
+    password: ''
+    max-idle-conns: 10
+    max-open-conns: 100
+    log-mode: ""
+    log-zap: false
+
+
 # local configuration
 local:
-  path: 'uploads/file'
+  path: 'uploads/file' # 访问路径
+  store-path: 'uploads/file' # 存储路径
 
 # autocode configuration
 autocode:
   transfer-restart: true
+  # root 自动适配项目根目录
+  # 请不要手动配置,他会在项目加载的时候识别出根路径
   root: ""
   server: /server
-  server-api: /api/v1
+  server-plug: /plugin/%s
+  server-api: /api/v1/%s
   server-initialize: /initialize
-  server-model: /model
-  server-request: /model/request/
-  server-router: /router
-  server-service: /service
+  server-model: /model/%s
+  server-request: /model/%s/request/
+  server-router: /router/%s
+  server-service: /service/%s
   web: /web/src
   web-api: /api
   web-form: /view
@@ -102,6 +139,7 @@ aliyun-oss:
   access-key-secret: 'yourAccessKeySecret'
   bucket-name: 'yourBucketName'
   bucket-url: 'yourBucketUrl'
+  base-path: 'yourBasePath'
 
 # tencent cos configuration
 tencent-cos:
@@ -111,6 +149,18 @@ tencent-cos:
   secret-key: 'xxxxxxxx'
   base-url: 'https://gin.vue.admin'
   path-prefix: 'github.com/flipped-aurora/gin-vue-admin/server'
+
+# aws s3 configuration (minio compatible)
+aws-s3:
+  bucket: xxxxx-10005608
+  region: ap-shanghai
+  endpoint: ''
+  s3-force-path-style: false
+  disable-ssl: false
+  secret-id: xxxxxxxx
+  secret-key: xxxxxxxx
+  base-url: https://gin.vue.admin
+  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 
 # huawei obs configuration
 hua-wei-obs:
@@ -128,14 +178,13 @@ excel:
 Timer:
   start: true
   spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
-  detail: [
-    # tableName: 需要清理的表名
-    # compareField: 需要比较时间的字段
-    # interval: 时间间隔, 具体配置详看 time.ParseDuration() 中字符串表示 且不能为负数
-    # 2160h = 24 * 30 * 3 -> 三个月
-    { tableName: "sys_operation_records" , compareField: "created_at", interval: "2160h" },
-    #{ tableName: "log2" , compareField: "created_at", interval: "2160h" }
-  ]
+  detail:
+    - tableName: "sys_operation_records"
+      compareField: "created_at"
+      interval: "2160h"
+    - tableName: "jwt_blacklists"
+      compareField: "created_at"
+      interval: "168h"
 
 # 跨域配置
 # 需要配合 server/initialize/router.go#L32 使用

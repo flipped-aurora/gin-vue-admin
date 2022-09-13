@@ -86,7 +86,7 @@
               <el-timeline-item
                 v-for="(item,index) in dataTimeline"
                 :key="index"
-                timestamp="2018/4/12"
+                :timestamp="item.from"
                 placement="top"
               >
                 <el-card>
@@ -98,7 +98,8 @@
           </div>
           <el-button
             class="load-more"
-            type="text"
+            type="primary"
+            link
             @click="loadMore"
           >Load more</el-button>
         </el-card>
@@ -116,6 +117,7 @@ export default {
 <script setup>
 import { ref } from 'vue'
 import { Commits, Members } from '@/api/github'
+import { formatTimeToStr } from '@/utils/date'
 const page = ref(0)
 
 const loadMore = () => {
@@ -129,7 +131,7 @@ const loadCommits = () => {
     data.forEach((element) => {
       if (element.commit.message) {
         dataTimeline.value.push({
-          from: new Date(element.commit.author.date),
+          from: formatTimeToStr(element.commit.author.date, 'yyyy-MM-dd'),
           title: element.commit.author.name,
           showDayAndMonth: true,
           message: element.commit.message,

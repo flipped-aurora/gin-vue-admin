@@ -1,18 +1,15 @@
 <template>
   <div v-loading.fullscreen.lock="fullscreenLoading">
     <div class="gva-table-box">
+      <warning-bar
+        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+      />
       <div class="gva-btn-list">
-        <el-upload
-          :action="`${path}/fileUploadAndDownload/upload`"
-          :before-upload="checkFile"
-          :headers="{ 'x-token': userStore.token }"
-          :on-error="uploadError"
-          :on-success="uploadSuccess"
-          :show-file-list="false"
+        <upload-common
+          v-model:imageCommon="imageCommon"
           class="upload-btn"
-        >
-          <el-button size="small" type="primary">普通上传</el-button>
-        </el-upload>
+          @on-success="getTableData"
+        />
         <upload-image
           v-model:imageUrl="imageUrl"
           :file-size="512"
@@ -20,6 +17,17 @@
           class="upload-btn"
           @on-success="getTableData"
         />
+
+        <el-form ref="searchForm" :inline="true" :model="search">
+          <el-form-item label="">
+            <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注" />
+          </el-form-item>
+
+          <el-form-item>
+            <el-button size="small" type="primary" icon="search" @click="getTableData">查询</el-button>
+          </el-form-item>
+        </el-form>
+
       </div>
 
       <el-table :data="tableData">
@@ -33,20 +41,25 @@
             <div>{{ formatDate(scope.row.UpdatedAt) }}</div>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="文件名" prop="name" width="180" />
+        <el-table-column align="left" label="文件名/备注" prop="name" width="180">
+          <template #default="scope">
+            <div class="name" @click="editFileNameFunc(scope.row)">{{ scope.row.name }}</div>
+          </template>
+        </el-table-column>
         <el-table-column align="left" label="链接" prop="url" min-width="300" />
         <el-table-column align="left" label="标签" prop="tag" width="100">
           <template #default="scope">
             <el-tag
               :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
               disable-transitions
-            >{{ scope.row.tag }}</el-tag>
+            >{{ scope.row.tag }}
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column align="left" label="操作" width="160">
           <template #default="scope">
-            <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">删除</el-button>
+            <el-button size="small" icon="download" type="primary" link @click="downloadFile(scope.row)">下载</el-button>
+            <el-button size="small" icon="delete" type="primary" link @click="deleteFileFunc(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -67,24 +80,26 @@
 </template>
 
 <script setup>
-import { getFileList, deleteFile } from '@/api/fileUploadAndDownload'
+import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
+import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const path = ref(import.meta.env.VITE_BASE_API)
-const userStore = useUserStore()
 
 const imageUrl = ref('')
+const imageCommon = ref('')
 
 const page = ref(1)
 const total = ref(0)
 const pageSize = ref(10)
+const search = ref({})
 const tableData = ref([])
 
 // 分页
@@ -100,7 +115,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getFileList({ page: page.value, pageSize: pageSize.value })
+  const table = await getFileList({ page: page.value, pageSize: pageSize.value, ...search.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -111,17 +126,17 @@ const getTableData = async() => {
 getTableData()
 
 const deleteFileFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久文件, 是否继续?', '提示', {
+  ElMessageBox.confirm('此操作将永久删除文件, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
-    type: 'warning'
+    type: 'warning',
   })
     .then(async() => {
       const res = await deleteFile(row)
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!'
+          message: '删除成功!',
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
@@ -132,69 +147,64 @@ const deleteFileFunc = async(row) => {
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: '已取消删除'
+        message: '已取消删除',
       })
     })
 }
 
-const fullscreenLoading = ref(false)
-const checkFile = (file) => {
-  fullscreenLoading.value = true
-  const isJPG = file.type === 'image/jpeg'
-  const isPng = file.type === 'image/png'
-  const isLt2M = file.size / 1024 / 1024 < 0.5
-  if (!isJPG && !isPng) {
-    ElMessage.error('上传图片只能是 jpg或png 格式!')
-    fullscreenLoading.value = false
-  }
-  if (!isLt2M) {
-    ElMessage.error('未压缩未见上传图片大小不能超过 500KB，请使用压缩上传')
-    fullscreenLoading.value = false
-  }
-  return (isPng || isJPG) && isLt2M
-}
-const uploadSuccess = (res) => {
-  fullscreenLoading.value = false
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '上传成功'
-    })
-    if (res.code === 0) {
-      getTableData()
-    }
-  } else {
-    ElMessage({
-      type: 'warning',
-      message: res.msg
-    })
-  }
-}
-const uploadError = () => {
-  ElMessage({
-    type: 'error',
-    message: '上传失败'
-  })
-  fullscreenLoading.value = false
-}
 const downloadFile = (row) => {
   if (row.url.indexOf('http://') > -1 || row.url.indexOf('https://') > -1) {
     downloadImage(row.url, row.name)
   } else {
-    downloadImage(path.value + row.url, row.name)
+    debugger
+    downloadImage(path.value + '/' + row.url, row.name)
   }
 }
 
+/**
+ * 编辑文件名或者备注
+ * @param row
+ * @returns {Promise<void>}
+ */
+const editFileNameFunc = async(row) => {
+  ElMessageBox.prompt('请输入文件名或者备注', '编辑', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputPattern: /\S/,
+    inputErrorMessage: '不能为空',
+    inputValue: row.name
+  }).then(async({ value }) => {
+    row.name = value
+    // console.log(row)
+    const res = await editFileName(row)
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '编辑成功!',
+      })
+      getTableData()
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消修改'
+    })
+  })
+}
 </script>
 
 <script>
 
 export default {
-  name: 'Upload'
+  name: 'Upload',
 }
 </script>
 <style scoped>
-.upload-btn+.upload-btn {
-            margin-left: 12px;
-        }
+.name {
+  cursor: pointer;
+}
+
+.upload-btn + .upload-btn {
+  margin-left: 12px;
+}
 </style>

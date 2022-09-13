@@ -76,7 +76,7 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err, list, total := apiService.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc); err != nil {
+	if list, total, err := apiService.GetAPIInfoList(pageInfo.SysApi, pageInfo.PageInfo, pageInfo.OrderKey, pageInfo.Desc); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -89,7 +89,6 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 	}
 }
 
-// todo
 // @Tags SysApi
 // @Summary 根据id获取api
 // @Security ApiKeyAuth
@@ -105,12 +104,12 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err, api := apiService.GetApiById(idInfo.ID)
+	api, err := apiService.GetApiById(idInfo.ID)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithData(systemRes.SysAPIResponse{Api: api}, c)
+		response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, "获取成功", c)
 	}
 }
 
@@ -145,7 +144,7 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 // @Success 200 {object} response.Response{data=systemRes.SysAPIListResponse,msg=string} "获取所有的Api 不分页,返回包括api列表"
 // @Router /api/getAllApis [post]
 func (s *SystemApiApi) GetAllApis(c *gin.Context) {
-	if err, apis := apiService.GetAllApis(); err != nil {
+	if apis, err := apiService.GetAllApis(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

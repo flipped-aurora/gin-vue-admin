@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [14.16.0]
+        node-version: [16.8.0]
     steps:
       - name: Check out branch
         uses: actions/checkout@v2

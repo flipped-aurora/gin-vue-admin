@@ -9,15 +9,21 @@ import (
 	"go/format"
 	"go/parser"
 	"go/token"
-	"io/ioutil"
+	"io"
 	"log"
+	"mime/multipart"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"text/template"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/resource/template/subcontract"
+	cp "github.com/otiai10/copy"
+	"go.uber.org/zap"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -28,7 +34,8 @@ import (
 
 const (
 	autoPath           = "autocode_template/"
-	basePath           = "resource/template"
+	autocodePath       = "resource/autocode_template"
+	plugPath           = "resource/plug_template"
 	packageService     = "service/%s/enter.go"
 	packageServiceName = "service"
 	packageRouter      = "router/%s/enter.go"
@@ -46,6 +53,7 @@ type autoPackage struct {
 var (
 	packageInjectionMap map[string]astInjectionMeta
 	injectionPaths      []injectionMeta
+	caser               = cases.Title(language.English)
 )
 
 func Init(Package string) {
@@ -144,6 +152,16 @@ var AutoCodeServiceApp = new(AutoCodeService)
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
 	makeDictTypes(&autoCode)
+	for i := range autoCode.Fields {
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			break
+		}
+		if autoCode.Fields[i].Require {
+			autoCode.NeedValid = true
+			break
+		}
+	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return nil, err
@@ -182,7 +200,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			builder.WriteString(strings.Replace(ext, ".", "", -1))
 		}
 		builder.WriteString("\n\n")
-		data, err := ioutil.ReadAll(f)
+		data, err := io.ReadAll(f)
 		if err != nil {
 			return nil, err
 		}
@@ -223,6 +241,16 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
 	makeDictTypes(&autoCode)
+	for i := range autoCode.Fields {
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			break
+		}
+		if autoCode.Fields[i].Require {
+			autoCode.NeedValid = true
+			break
+		}
+	}
 	// 增加判断: 重复创建struct
 	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName, autoCode.Package) {
 		return RepeatErr
@@ -331,7 +359,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return err
 	}
 	if autoCode.AutoMoveFile {
-		return system.AutoMoveErr
+		return system.ErrAutoMove
 	}
 	return nil
 }
@@ -343,7 +371,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 //@return: []string, error
 
 func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList []string) ([]string, error) {
-	files, err := ioutil.ReadDir(pathName)
+	files, err := os.ReadDir(pathName)
 	for _, fi := range files {
 		if fi.IsDir() {
 			fileList, err = autoCodeService.GetAllTplFile(pathName+"/"+fi.Name(), fileList)
@@ -483,7 +511,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 		utils.TrimSpace(field)
 	}
 	// 获取 basePath 文件夹下所有tpl文件
-	tplFileList, err := autoCodeService.GetAllTplFile(basePath, nil)
+	tplFileList, err := autoCodeService.GetAllTplFile(autocodePath, nil)
 	if err != nil {
 		return nil, nil, nil, err
 	}
@@ -505,7 +533,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 	// resource/template/web/api.js.tpl -> autoCode/web/autoCode.PackageName/api/autoCode.PackageName.js
 	// resource/template/readme.txt.tpl -> autoCode/readme.txt
 	for index, value := range dataList {
-		trimBase := strings.TrimPrefix(value.locationPath, basePath+"/")
+		trimBase := strings.TrimPrefix(value.locationPath, autocodePath+"/")
 		if trimBase == "readme.txt.tpl" {
 			dataList[index].autoCodePath = autoPath + "readme.txt"
 			continue
@@ -567,8 +595,8 @@ func (autoCodeService *AutoCodeService) GetPackage() (pkgList []system.SysAutoCo
 	return pkgList, err
 }
 
-func (AutoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error {
-	return global.GVA_DB.Delete(a).Error
+func (autoCodeService *AutoCodeService) DelPackage(a system.SysAutoCode) error {
+	return global.GVA_DB.Delete(&a).Error
 }
 
 func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) error {
@@ -617,7 +645,7 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, strings.Title(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
+		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, caser.String(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
 			return err
 		}
 	}
@@ -664,7 +692,7 @@ func (vi *Visitor) addStruct(genDecl *ast.GenDecl) ast.Visitor {
 				case *ast.StructType:
 					f := &ast.Field{
 						Names: []*ast.Ident{
-							&ast.Ident{
+							{
 								Name: vi.StructName,
 								Obj: &ast.Object{
 									Kind: ast.Var,
@@ -748,7 +776,7 @@ func (vi *Visitor) addFuncBodyVar(funDecl *ast.FuncDecl) ast.Visitor {
 						},
 					},
 					Sel: &ast.Ident{
-						Name: strings.Title(vi.PackageName),
+						Name: caser.String(vi.PackageName),
 					},
 				},
 			},
@@ -787,5 +815,132 @@ func ImportReference(filepath, importCode, structName, packageName, groupName st
 		log.Fatal(err)
 	}
 	// 写回数据
-	return ioutil.WriteFile(filepath, buffer.Bytes(), 0o600)
+	return os.WriteFile(filepath, buffer.Bytes(), 0o600)
+}
+
+// CreatePlug 自动创建插件模板
+func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) error {
+	// 检查列表参数是否有效
+	plug.CheckList()
+	tplFileList, _ := autoCodeService.GetAllTplFile(plugPath, nil)
+	for _, tpl := range tplFileList {
+		temp, err := template.ParseFiles(tpl)
+		if err != nil {
+			zap.L().Error("parse err", zap.String("tpl", tpl), zap.Error(err))
+			return err
+		}
+		pathArr := strings.SplitAfter(tpl, "/")
+		if strings.Index(pathArr[2], "tpl") < 0 {
+			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[2]))
+			os.MkdirAll(dirPath, 0755)
+		}
+		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
+		f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			zap.L().Error("open file", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
+		}
+		defer f.Close()
+
+		err = temp.Execute(f, plug)
+		if err != nil {
+			zap.L().Error("exec err", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
+		}
+	}
+	return nil
+}
+
+func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader) (web, server int, err error) {
+	const GVAPLUGPINATH = "./gva-plug-temp/"
+	defer os.RemoveAll(GVAPLUGPINATH)
+	_, err = os.Stat(GVAPLUGPINATH)
+	if os.IsNotExist(err) {
+		os.Mkdir(GVAPLUGPINATH, os.ModePerm)
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		return -1, -1, err
+	}
+	defer src.Close()
+
+	out, err := os.Create(GVAPLUGPINATH + file.Filename)
+	if err != nil {
+		return -1, -1, err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, src)
+
+	paths, err := utils.Unzip(GVAPLUGPINATH+file.Filename, GVAPLUGPINATH)
+	paths = filterFile(paths)
+	var webIndex = -1
+	var serverIndex = -1
+	for i := range paths {
+		paths[i] = filepath.ToSlash(paths[i])
+		pathArr := strings.Split(paths[i], "/")
+		ln := len(pathArr)
+		if ln < 2 {
+			continue
+		}
+		if pathArr[ln-2] == "server" && pathArr[ln-1] == "plugin" {
+			serverIndex = i
+		}
+		if pathArr[ln-2] == "web" && pathArr[ln-1] == "plugin" {
+			webIndex = i
+		}
+	}
+	if webIndex == -1 && serverIndex == -1 {
+		zap.L().Error("非标准插件，请按照文档自动迁移使用")
+		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
+	}
+
+	if webIndex != -1 {
+		err = installation(paths[webIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+		if err != nil {
+			return webIndex, serverIndex, err
+		}
+	}
+
+	if serverIndex != -1 {
+		err = installation(paths[serverIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+	}
+	return webIndex, serverIndex, err
+}
+
+func installation(path string, formPath string, toPath string) error {
+	arr := strings.Split(filepath.ToSlash(path), "/")
+	ln := len(arr)
+	if ln < 3 {
+		return errors.New("arr")
+	}
+	name := arr[ln-3]
+
+	var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + formPath + "/" + path)
+	var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + toPath + "/plugin/")
+	_, err := os.Stat(to + name)
+	if err == nil {
+		zap.L().Error("autoPath 已存在同名插件，请自行手动安装", zap.String("to", to))
+		return errors.New(toPath + "已存在同名插件，请自行手动安装")
+	}
+	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+}
+
+func filterFile(paths []string) []string {
+	np := make([]string, 0, len(paths))
+	for _, path := range paths {
+		if ok, _ := skipMacSpecialDocument(path); ok {
+			continue
+		}
+		np = append(np, path)
+	}
+	return np
+}
+
+func skipMacSpecialDocument(src string) (bool, error) {
+	if strings.Contains(src, ".DS_Store") || strings.Contains(src, "__MACOSX") {
+		return true, nil
+	}
+	return false, nil
 }

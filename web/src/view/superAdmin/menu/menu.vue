@@ -8,16 +8,6 @@
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
       <el-table :data="tableData" row-key="ID">
         <el-table-column align="left" label="ID" min-width="100" prop="ID" />
-        <el-table-column align="left" label="路由Name" show-overflow-tooltip min-width="160" prop="name" />
-        <el-table-column align="left" label="路由Path" show-overflow-tooltip min-width="160" prop="path" />
-        <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
-          <template #default="scope">
-            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
-        <el-table-column align="left" label="排序" min-width="70" prop="sort" />
-        <el-table-column align="left" label="文件路径" min-width="360" prop="component" />
         <el-table-column align="left" label="展示名称" min-width="120" prop="authorityName">
           <template #default="scope">
             <span>{{ scope.row.meta.title }}</span>
@@ -33,23 +23,36 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column align="left" label="路由Name" show-overflow-tooltip min-width="160" prop="name" />
+        <el-table-column align="left" label="路由Path" show-overflow-tooltip min-width="160" prop="path" />
+        <el-table-column align="left" label="是否隐藏" min-width="100" prop="hidden">
+          <template #default="scope">
+            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="父节点" min-width="90" prop="parentId" />
+        <el-table-column align="left" label="排序" min-width="70" prop="sort" />
+        <el-table-column align="left" label="文件路径" min-width="360" prop="component" />
         <el-table-column align="left" fixed="right" label="操作" width="300">
           <template #default="scope">
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >添加子菜单</el-button>
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >编辑</el-button>
             <el-button
               size="small"
-              type="text"
+              type="primary"
+              link
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >删除</el-button>
@@ -109,7 +112,7 @@
           />
         </el-form-item>
         <el-form-item label="文件路径" prop="component" style="width:60%">
-          <el-input v-model="form.component" autocomplete="off" />
+          <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @blur="fmtComponent" />
           <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">点我设置</el-button>
         </el-form-item>
         <el-form-item label="展示名称" prop="meta.title" style="width:30%">
@@ -233,7 +236,7 @@ import {
   getBaseMenuById
 } from '@/api/menu'
 import icon from '@/view/superAdmin/menu/icon.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -277,6 +280,11 @@ const addParameter = (form) => {
     value: ''
   })
 }
+
+const fmtComponent = () => {
+  form.value.component = form.value.component.replace(/\\/g, '/')
+}
+
 // 删除参数
 const deleteParameter = (parameters, index) => {
   parameters.splice(index, 1)
@@ -284,7 +292,6 @@ const deleteParameter = (parameters, index) => {
 
 // 新增可控按钮
 const addBtn = (form) => {
-  console.log(form)
   if (!form.menuBtn) {
     form.menuBtn = []
   }

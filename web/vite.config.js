@@ -26,13 +26,13 @@ export default ({
 
   const timestamp = Date.parse(new Date())
 
-  const rollupOptions = {
-    output: {
-      entryFileNames: `gva/gin-vue-admin-[name].${timestamp}.js`,
-      chunkFileNames: `js/gin-vue-admin-[name].${timestamp}.js`,
-      assetFileNames: `assets/gin-vue-admin-[name].${timestamp}.[ext]`
-    }
-  }
+  // const rollupOptions = {
+  //   output: {
+  //     entryFileNames: `gva/gin-vue-admin-[name].${timestamp}.js`,
+  //     chunkFileNames: `js/gin-vue-admin-[name].${timestamp}.js`,
+  //     assetFileNames: `assets/gin-vue-admin-[name].${timestamp}.[ext]`
+  //   }
+  // }
 
   const optimizeDeps = {}
 
@@ -67,12 +67,12 @@ export default ({
       },
     },
     build: {
-      target: 'es2015',
+      target: 'es2017',
       minify: 'terser', // 是否进行压缩,boolean | 'terser' | 'esbuild',默认使用terser
-      manifest: false, // 是否产出maifest.json
-      sourcemap: false, // 是否产出soucemap.json
+      manifest: false, // 是否产出manifest.json
+      sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
-      rollupOptions,
+      // rollupOptions,
     },
     esbuild,
     optimizeDeps,

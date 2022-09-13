@@ -21,7 +21,7 @@ type AuthorityBtnApi struct{}
 func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 	var req request.SysAuthorityBtnReq
 	_ = c.ShouldBindJSON(&req)
-	if err, res := authorityBtnService.GetAuthorityBtn(req); err != nil {
+	if res, err := authorityBtnService.GetAuthorityBtn(req); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
@@ -36,7 +36,7 @@ func (a *AuthorityBtnApi) GetAuthorityBtn(c *gin.Context) {
 // @Produce application/json
 // @Param data body request.SysAuthorityBtnReq true "菜单id, 角色id, 选中的按钮id"
 // @Success 200 {object} response.Response{msg=string} "返回列表成功"
-// @Router /authorityBtn/getAuthorityBtn [post]
+// @Router /authorityBtn/setAuthorityBtn [post]
 func (a *AuthorityBtnApi) SetAuthorityBtn(c *gin.Context) {
 	var req request.SysAuthorityBtnReq
 	_ = c.ShouldBindJSON(&req)

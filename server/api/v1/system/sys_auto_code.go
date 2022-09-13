@@ -11,12 +11,16 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 type AutoCodeApi struct{}
+
+var caser = cases.Title(language.English)
 
 // PreviewTemp
 // @Tags AutoCode
@@ -34,7 +38,8 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	a.PackageT = strings.Title(a.Package)
+	a.Pretreatment() // 处理go关键字
+	a.PackageT = caser.String(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
 		global.GVA_LOG.Error("预览失败!", zap.Error(err))
@@ -60,6 +65,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	a.Pretreatment()
 	var apiIds []uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
@@ -71,10 +77,10 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
-	a.PackageT = strings.Title(a.Package)
+	a.PackageT = caser.String(a.Package)
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
-		if errors.Is(err, system.AutoMoveErr) {
+		if errors.Is(err, system.ErrAutoMove) {
 			c.Writer.Header().Add("success", "true")
 			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
 		} else {
@@ -104,8 +110,9 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"dbs": dbs}, "获取成功", c)
 	}
-	response.OkWithDetailed(gin.H{"dbs": dbs}, "获取成功", c)
 }
 
 // GetTables
@@ -142,10 +149,10 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
 	}
-	response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
 }
-
 
 // CreatePackage
 // @Tags AutoCode
@@ -172,7 +179,6 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	}
 }
 
-
 // GetPackage
 // @Tags AutoCode
 // @Summary 获取package
@@ -182,16 +188,14 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 // @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建package成功"
 // @Router /autoCode/getPackage [post]
 func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
-	pkgs,err := autoCodeService.GetPackage()
+	pkgs, err := autoCodeService.GetPackage()
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"pkgs": pkgs},"获取成功", c)
+		response.OkWithDetailed(gin.H{"pkgs": pkgs}, "获取成功", c)
 	}
 }
-
-
 
 // DelPackage
 // @Tags AutoCode
@@ -211,5 +215,59 @@ func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
+	}
+}
+
+// AutoPlug
+// @Tags AutoCode
+// @Summary 创建插件模板
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body system.SysAutoCode true "创建插件模板"
+// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "创建插件模板成功"
+// @Router /autoCode/createPlug [post]
+func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
+	var a system.AutoPlugReq
+	_ = c.ShouldBindJSON(&a)
+	a.Snake = strings.ToLower(a.PlugName)
+	a.NeedModel = a.HasRequest || a.HasResponse
+	err := autoCodeService.CreatePlug(a)
+	if err != nil {
+		global.GVA_LOG.Error("预览失败!", zap.Error(err))
+		response.FailWithMessage("预览失败", c)
+	} else {
+		response.Ok(c)
+	}
+}
+
+func (autoApi *AutoCodeApi) InstallPlugin(c *gin.Context) {
+	header, err := c.FormFile("plug")
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	web, server, err := autoCodeService.InstallPlugin(header)
+	webStr := "web插件安装成功"
+	serverStr := "server插件安装成功"
+	if web == -1 {
+		webStr = "web端插件未成功安装，请按照文档自行解压安装，如果为纯后端插件请忽略此条提示"
+	}
+	if server == -1 {
+		serverStr = "server端插件未成功安装，请按照文档自行解压安装，如果为纯前端插件请忽略此条提示"
+	}
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	} else {
+		response.OkWithData([]interface{}{
+			gin.H{
+				"code": web,
+				"msg":  webStr,
+			},
+			gin.H{
+				"code": server,
+				"msg":  serverStr,
+			}}, c)
 	}
 }

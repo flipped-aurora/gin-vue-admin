@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gva-server
+  annotations:
+    flipped-aurora/gin-vue-admin: backend
+    github: "https://github.com/flipped-aurora/gin-vue-admin.git"
+    app.kubernetes.io/version: 0.0.1
+  labels:
+    app: gva-server
+    version: gva-vue3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gva-server
+      version: gva-vue3
+  template:
+    metadata:
+      labels:
+        app: gva-server
+        version: gva-vue3
+    spec:
+      containers:
+        - name: gin-vue-admin-container
+          image: registry.cn-hangzhou.aliyuncs.com/gva/server:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8888
+              name: http
+          volumeMounts:
+            - mountPath: /go/src/github.com/flipped-aurora/gin-vue-admin/server/config.yaml
+              name: config
+              subPath: config.yaml
+            - mountPath: /etc/localtime
+              name: localtime
+          resources:
+            limits:
+              cpu: 1000m
+              memory: 2000Mi
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          livenessProbe:
+            failureThreshold: 1
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8888
+            timeoutSeconds: 1
+          readinessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8888
+            timeoutSeconds: 1
+          startupProbe:
+            failureThreshold: 40
+            periodSeconds: 5
+            successThreshold: 1
+            tcpSocket:
+              port: 8888
+            timeoutSeconds: 1
+      #imagePullSecrets:
+      #  - name: docker-registry
+      volumes:
+        - name: localtime
+          hostPath:
+            path: /etc/localtime
+        - name: config
+          configMap:
+            name: config.yaml

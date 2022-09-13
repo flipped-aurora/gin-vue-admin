@@ -5,6 +5,7 @@ type Autocode struct {
 	Root            string `mapstructure:"root" json:"root" yaml:"root"`
 	Server          string `mapstructure:"server" json:"server" yaml:"server"`
 	SApi            string `mapstructure:"server-api" json:"server-api" yaml:"server-api"`
+	SPlug           string `mapstructure:"server-plug" json:"server-plug" yaml:"server-plug"`
 	SInitialize     string `mapstructure:"server-initialize" json:"server-initialize" yaml:"server-initialize"`
 	SModel          string `mapstructure:"server-model" json:"server-model" yaml:"server-model"`
 	SRequest        string `mapstructure:"server-request" json:"server-request"  yaml:"server-request"`

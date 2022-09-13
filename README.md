@@ -24,13 +24,15 @@
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 
-[初始化](https://www.gin-vue-admin.com/docs/first_master)
+[初始化](https://www.gin-vue-admin.com/guide/start-quickly/initialization.html)
 						       
 [从环境到部署教学视频](https://www.bilibili.com/video/BV1Rg411u7xH)
 
-[开发教学](https://www.gin-vue-admin.com/docs/help) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[开发教学](https://www.gin-vue-admin.com/guide/start-quickly/env.html) (贡献者:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 
 [交流社区](https://support.qq.com/products/371961)
+
+[插件市场](https://plugin.gin-vue-admin.com/)
 
 # 重要提示
 
@@ -38,15 +40,11 @@
 
 2.本项目需要您有一定的golang和vue基础
 
-3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/docs/payment)
+3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)
 
-4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请联系微信：shouzi_1994
+4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
 
 <img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
-
-5.如果您需要服务器的话 2C4G8M 80GB 腾讯云 一年74 三年222 在这里购买：https://curl.qcloud.com/Rm5Rhd4k
-									      
-阿里云服务器 1c2g1m 38一年 在这里购买:https://www.aliyun.com/minisite/goods?userCode=xqe01uob
 
 ## 1. 基本介绍
 
@@ -84,11 +82,9 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 ## 2. 使用说明
 
 ```
-- node版本 > v12.18.3
+- node版本 > v16.8.3
 - golang版本 >= v1.16
 - IDE推荐：Goland
-- 初始化项目： 不同版本数据库初始化不通 参见 https://www.gin-vue-admin.com/docs/first_master
-- 替换掉项目中的七牛云公钥，私钥，仓名和默认url地址，以免发生测试文件数据错乱
 ```
 
 ### 2.1 server项目
@@ -119,7 +115,7 @@ go build -o server main.go (windows编译命令为go build -o server.exe main.go
 cd web
 
 # 安装依赖
-cnpm install || npm install
+npm install
 
 # 启动web项目
 npm run serve
@@ -163,12 +159,30 @@ swag init
 
 > 执行上面的命令后，server目录下会出现docs文件夹里的 `docs.go`, `swagger.json`, `swagger.yaml` 三个文件更新，启动go服务之后, 在浏览器输入 [http://localhost:8888/swagger/index.html](http://localhost:8888/swagger/index.html) 即可查看swagger文档
 
+### 2.4 VSCode工作区
+
+#### 2.4.1 开发
+
+使用`VSCode`打开根目录下的工作区文件`gin-vue-admin.code-workspace`，在边栏可以看到三个虚拟目录：`backend`、`frontend`、`root`。
+
+#### 2.4.2 运行/调试
+
+在运行和调试中也可以看到三个task：`Backend`、`Frontend`、`Both (Backend & Frontend)`。运行`Both (Backend & Frontend)`可以同时启动前后端项目。
+
+#### 2.4.3 settings
+
+在工作区配置文件中有`go.toolsEnvVars`字段，是用于`VSCode`自身的go工具环境变量。此外在多go版本的系统中，可以通过`gopath`、`go.goroot`指定运行版本。
+
+```json
+    "go.gopath": null,
+    "go.goroot": null,
+```
 
 ## 3. 技术选型
 
 - 前端：用基于 [Vue](https://vuejs.org) 的 [Element](https://github.com/ElemeFE/element) 构建基础页面。
 - 后端：用 [Gin](https://gin-gonic.com/) 快速搭建基础restful风格API，[Gin](https://gin-gonic.com/) 是一个go语言编写的Web框架。
-- 数据库：采用`MySql`(5.6.44)版本，使用 [gorm](http://gorm.cn) 实现对数据库的基本操作。
+- 数据库：采用`MySql` > (5.7) 版本 数据库引擎 InnoDB，使用 [gorm](http://gorm.cn) 实现对数据库的基本操作。
 - 缓存：使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
 - API文档：使用`Swagger`构建自动化文档。
 - 配置文件：使用 [fsnotify](https://github.com/fsnotify/fsnotify) 和 [viper](https://github.com/spf13/viper) 实现`yaml`格式的配置文件。
@@ -332,7 +346,7 @@ swag init
 
 （5）gin-vue-admin 版本更新介绍视频
 
-> bilibili：https://space.bilibili.com/322210472/channel/detail?cid=126418&ctype=0
+> bilibili：https://www.bilibili.com/video/BV1kv4y1g7nT
 
 ## 7. 联系方式
 
@@ -350,7 +364,7 @@ swag init
 
 添加微信，备注"加入gin-vue-admin交流群"
 
-### [关于我们](https://www.gin-vue-admin.com/about/)
+### [关于我们](https://www.gin-vue-admin.com/about/join.html)
 
 ## 8. 贡献者
 
@@ -362,14 +376,8 @@ swag init
 
 ## 9. 捐赠
 
-如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/docs/coffee)
+如果你觉得这个项目对你有帮助，你可以请作者喝饮料 :tropical_drink: [点我](https://www.gin-vue-admin.com/coffee/index.html)
 
-## 10. 友情链接
-
-[H5-Dooring ｜ H5页面制作神器](https://github.com/MrXujiang/h5-Dooring)	
-
-[go-zero 微服务框架｜缩短从需求到上线的距离](https://github.com/zeromicro/go-zero)
-
-## 11. 商用注意事项
+## 10. 商用注意事项
 
 如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。

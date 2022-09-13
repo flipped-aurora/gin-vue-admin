@@ -175,7 +175,7 @@ excel:
 # timer task db clear table
 Timer:
   start: true
-  spec: @daily  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
+  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
   detail:
     - tableName: sys_operation_records
       compareField: created_at

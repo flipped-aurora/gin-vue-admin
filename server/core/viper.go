@@ -13,7 +13,6 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	_ "github.com/flipped-aurora/gin-vue-admin/server/packfile"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 )
 
 // Viper //

@@ -192,9 +192,10 @@ import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCode
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
-import { ref, getCurrentInstance, reactive } from 'vue'
+import { ref, getCurrentInstance, reactive, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -214,16 +215,6 @@ const fieldTemplate = {
   fieldSearchType: '',
   dictType: ''
 }
-
-import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
-import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
-import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
-import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
-import { getDict } from '@/utils/dictionary'
-import { ref, getCurrentInstance, reactive, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
-import WarningBar from '@/components/warningBar/warningBar.vue'
 
 const route = useRoute()
 const router = useRouter()

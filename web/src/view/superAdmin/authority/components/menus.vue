@@ -42,6 +42,7 @@
                 分配按钮
               </el-button>
             </span>
+          </span>
         </template>
       </el-tree>
     </div>

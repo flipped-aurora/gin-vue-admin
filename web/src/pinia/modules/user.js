@@ -77,7 +77,7 @@ export const useUserStore = defineStore('user', () => {
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
-        router.push({ name: userInfo.value.authority.defaultRouter })
+        await router.push({ name: userInfo.value.authority.defaultRouter })
         loadingInstance.value.close()
         return true
       }

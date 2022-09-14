@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"bytes"
-	"io/ioutil"
+	"io"
 	"strconv"
 	"time"
 
@@ -32,9 +32,9 @@ func ErrorToEmail() gin.HandlerFunc {
 			}
 			username = user.Username
 		}
-		body, _ := ioutil.ReadAll(c.Request.Body)
+		body, _ := io.ReadAll(c.Request.Body)
 		// 再重新写回请求体body中，ioutil.ReadAll会清空c.Request.Body中的数据
-		c.Request.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+		c.Request.Body = io.NopCloser(bytes.NewBuffer(body))
 		record := system.SysOperationRecord{
 			Ip:     c.ClientIP(),
 			Method: c.Request.Method,

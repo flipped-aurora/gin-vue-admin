@@ -461,22 +461,6 @@ a {
     text-decoration: none;
 }
 
-a:link {
-    color: #fff;
-}
-
-a:visited {
-    color: #fff;
-}
-
-a:hover {
-    color: #fff;
-}
-
-a:active {
-    color: #fff;
-}
-
 input::-ms-clear {
     display: none;
 }
@@ -597,7 +581,7 @@ li {
     }
     .aside {
         .el-menu--collapse {
-            >.el-menu-item{
+            >.el-menu-item {
                 display: flex;
                 justify-content: center;
             }

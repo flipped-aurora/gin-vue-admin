@@ -1,14 +1,14 @@
 <template>
   <div id="userLayout">
-    <div class="login_panle">
-      <div class="login_panle_form">
-        <div class="login_panle_form_title">
+    <div class="login_panel">
+      <div class="login_panel_form">
+        <div class="login_panel_form_title">
           <img
-            class="login_panle_form_title_logo"
+            class="login_panel_form_title_logo"
             :src="$GIN_VUE_ADMIN.appLogo"
             alt
           >
-          <p class="login_panle_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
+          <p class="login_panel_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
         </div>
         <div style="padding-left: 92%; padding-bottom: 20px;">
           <el-dropdown trigger="click" @command="handleSetLanguage">
@@ -91,8 +91,8 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="login_panle_right" />
-      <div class="login_panle_foot">
+      <div class="login_panel_right" />
+      <div class="login_panel_foot">
         <div class="links">
           <a href="http://doc.henrongyi.top/" target="_blank">
             <img src="@/assets/docs.png" class="link-icon">
@@ -111,7 +111,7 @@
           </a>
         </div>
         <div class="copyright">
-          <bootomInfo />
+          <BottomInfo />
         </div>
       </div>
     </div>
@@ -127,7 +127,7 @@ export default {
 <script setup>
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
-import bootomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
+import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -158,9 +158,13 @@ const checkPassword = (rule, value, callback) => {
 
 // 获取验证码
 const loginVerify = () => {
-  captcha({}).then((ele) => {
-    rules.captcha[1].max = ele.data.captchaLength
-    rules.captcha[1].min = ele.data.captchaLength
+  captcha({}).then(async(ele) => {
+    rules.captcha.push({
+      max: ele.data.captchaLength,
+      min: ele.data.captchaLength,
+      message: `请输入${ele.data.captchaLength}位验证码`,
+      trigger: 'blur',
+    })
     picPath.value = ele.data.picPath
     loginFormData.captchaId = ele.data.captchaId
   })
@@ -195,7 +199,6 @@ const rules = reactive({
   username: [{ validator: checkUsername, trigger: 'blur' }],
   password: [{ validator: checkPassword, trigger: 'blur' }],
   captcha: [
-    { required: true, message: t('login.entVerificationCode'), trigger: 'blur' },
     {
       message: t('login.errVerificationCode'),
       trigger: 'blur',

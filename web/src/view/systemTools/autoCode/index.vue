@@ -1,5 +1,6 @@
 <template>
   <div>
+    <warning-bar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
       <el-collapse v-model="activeNames" style="margin-bottom:12px">
@@ -47,7 +48,7 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="180px" :inline="true">
+      <el-form ref="autoCodeForm" :rules="rules" :model="form" size="small" label-width="120px" :inline="true">
         <el-form-item :label="t('autoCode.structName')" prop="structName">
           <el-input v-model="form.structName" :placeholder="t('autoCode.structNameNote')" />
         </el-form-item>
@@ -94,44 +95,50 @@
         <el-button size="mini" type="primary" @click="editAndAddField()">{{ t('autoCode.addField') }}</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column align="left" type="index" :label="t('autoCode.fieldIndex')" width="100" />
-        <el-table-column align="left" prop="fieldName" :label="t('autoCode.fieldName')" width="120" />
-        <el-table-column align="left" prop="fieldDesc" :label="t('autoCode.fieldDesc')" width="120" />
-        <el-table-column align="left" prop="fieldJson" :label="t('autoCode.fieldJson')" width="110" />
+        <el-table-column align="left" type="index" :label="t('autoCode.fieldIndex')" width="60" />
+        <el-table-column align="left" prop="fieldName" :label="t('autoCode.fieldName')" />
+        <el-table-column align="left" prop="fieldDesc" :label="t('autoCode.fieldDesc')" />
+        <el-table-column align="left" prop="require" label="是否必填">
+          <template #default="{row}">{{ row.require?"是":"否" }}</template>
+        </el-table-column>
+        <el-table-column align="left" prop="fieldJson" min-width="120px" label="FieldJson" />
         <el-table-column align="left" prop="fieldType" :label="t('autoCode.fieldDataType')" width="130" />
         <el-table-column align="left" prop="dataTypeLong" :label="t('autoCode.fieldLen')" width="130" />
         <el-table-column align="left" prop="columnName" :label="t('autoCode.columnName')" width="130" />
         <el-table-column align="left" prop="comment" :label="t('autoCode.comment')" width="130" />
         <el-table-column align="left" prop="fieldSearchType" :label="t('general.searchCriteria')" width="130" />
         <el-table-column align="left" prop="dictType" :label="t('autoCode.dictionary')" width="130" />
-        <el-table-column align="left" :lable="t('general.operations')" width="300">
+        <el-table-column align="left" :lable="t('general.operations')" width="300" fixed="right">
           <template #default="scope">
             <el-button
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               icon="edit"
               @click="editAndAddField(scope.row)"
             >{{ t('general.edit') }}</el-button>
             <el-button
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
             >{{ t('autoCode.moveUp') }}</el-button>
             <el-button
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
             >{{ t('autoCode.moveDown') }}</el-button>
-            <el-popover :visible="scope.row.visible" placement="top">
+            <el-popover v-model="scope.row.visible" placement="top">
               <p>{{ t('autoCode.confirmDelete') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" size="mini" @click="deleteField(scope.$index)">{{ t('general.confirm') }}</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" size="small" @click="deleteField(scope.$index)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button size="mini" type="text" icon="delete">{{ t('general.delete') }}</el-button>
+                <el-button size="small" type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -144,7 +151,7 @@
       </div>
     </div>
     <!-- 组件弹窗 -->
-    <el-dialog v-model="dialogFlag" :title="t('autoCode.componentContent')">
+    <el-dialog v-model="dialogFlag" width="70%" :title="t('autoCode.componentContent')">
       <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
@@ -155,7 +162,7 @@
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
-      <template #title>
+      <template #header>
         <div class="previewCodeTool">
           <p>{{ t('autoCode.actionBar') }}</p>
           <el-button size="mini" type="primary" @click="selectText">{{ t('general.selectAll') }}</el-button>
@@ -201,9 +208,22 @@ const fieldTemplate = {
   columnName: '',
   dataTypeLong: '',
   comment: '',
+  require: false,
+  errorText: '',
+  clearable: true,
   fieldSearchType: '',
   dictType: ''
 }
+
+import FieldDialog from '@/view/systemTools/autoCode/component/fieldDialog.vue'
+import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCodeDialg.vue'
+import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
+import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
+import { getDict } from '@/utils/dictionary'
+import { ref, getCurrentInstance, reactive, watch } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -224,8 +244,8 @@ const form = ref({
   package: '',
   abbreviation: '',
   description: '',
-  autoCreateApiToSql: false,
-  autoMoveFile: false,
+  autoCreateApiToSql: true,
+  autoMoveFile: true,
   fields: []
 })
 const rules = ref({
@@ -434,6 +454,7 @@ const getColumnFunc = async() => {
     form.value.abbreviation = tbHump
     form.value.description = tbHump + t('autoCode.table')
     form.value.autoCreateApiToSql = true
+    form.value.autoMoveFile = true
     form.value.fields = []
     res.data.columns &&
           res.data.columns.forEach(item => {
@@ -448,6 +469,9 @@ const getColumnFunc = async() => {
                 dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
                 columnName: item.columnName,
                 comment: item.columnComment,
+                require: false,
+                errorText: '',
+                clearable: true,
                 fieldSearchType: '',
                 dictType: ''
               })
@@ -495,7 +519,9 @@ const init = () => {
 init()
 
 watch(() => route.params.id, (id) => {
-  init()
+  if (route.name === 'autoCodeEdit') {
+    init()
+  }
 })
 
 </script>
@@ -521,4 +547,5 @@ watch(() => route.params.id, (id) => {
   color: #666;
   cursor: pointer;
 }
+
 </style>

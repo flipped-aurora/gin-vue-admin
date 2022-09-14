@@ -19,11 +19,14 @@ jobs:
       - name: Sed Config
         shell: bash
         run: |
-          sed -i 's#./entrypoint.sh"#./entrypoint.sh","actions"#g' Dockerfile
-          sed -i "s#COPY build/ /usr/share/nginx/html/#COPY . /opt/gva#g" Dockerfile
-          sed  -i 16c"\    && cd /opt/gva/server/ && go mod tidy && cd /opt/gva/web/ && yarn" Dockerfile
+          sed  -i 56c"\        && yarn install && yarn build" Makefile
+          make image TAGS_OPT="latest"
+          sed -i 's#./entrypoint.sh"#./entrypoint.sh","actions"#g' deploy/docker/Dockerfile
+          sed -i "s#COPY build/ /usr/share/nginx/html/#COPY . /opt/gva#g" deploy/docker/Dockerfile
+          sed -i 16c"\    && cd /opt/gva/server/ && go mod tidy && cd /opt/gva/web/ && yarn" deploy/docker/Dockerfile
           sed -i "s#open: true#open: false#g" web/vite.config.js
           make images TAGS_OPT="latest"
+          docker push registry.cn-hangzhou.aliyuncs.com/gva/gin-vue-admin:latest
           docker push registry.cn-hangzhou.aliyuncs.com/gva/web:latest
           docker push registry.cn-hangzhou.aliyuncs.com/gva/server:latest
           docker push registry.cn-hangzhou.aliyuncs.com/gva/all:latest

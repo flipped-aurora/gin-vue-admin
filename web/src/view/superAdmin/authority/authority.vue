@@ -3,7 +3,7 @@
     <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="addAuthority('0')">{{ t('authority.addRole') }}</el-button>
+        <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">{{ t('authority.addRole') }}</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -17,32 +17,37 @@
           <template #default="scope">
             <el-button
               icon="setting"
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               @click="opdendrawer(scope.row)"
             >{{ t('authority.setPermissions') }}</el-button>
             <el-button
               icon="plus"
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               @click="addAuthority(scope.row.authorityId)"
             >{{ t('general.add') }}</el-button>
             <el-button
               icon="copy-document"
-              size="mini"
-              type="text"
-              @click="copyAuthority(scope.row)"
+              size="small"
+              type="primary"
+              link
+              @click="copyAuthorityFunc(scope.row)"
             >{{ t('general.copy') }}</el-button>
             <el-button
               icon="edit"
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               @click="editAuthority(scope.row)"
             >{{ t('general.edit') }}</el-button>
             <el-button
               icon="delete"
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               @click="deleteAuth(scope.row)"
             >{{ t('general.delete') }}</el-button>
           </template>
@@ -78,8 +83,8 @@
       </template>
     </el-dialog>
 
-    <el-drawer v-if="drawer" v-model="drawer" :with-header="false" size="40%" :title="t('authority.roleConfig')">
-      <el-tabs :before-leave="autoEnter" class="role-box" type="border-card">
+    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="40%" :title="t('authority.roleConfig')">
+      <el-tabs :before-leave="autoEnter" type="border-card">
         <el-tab-pane :label="t('authority.roleMenu')">
           <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
         </el-tab-pane>
@@ -106,7 +111,7 @@ import {
 import Menus from '@/view/superAdmin/authority/components/menus.vue'
 import Apis from '@/view/superAdmin/authority/components/apis.vue'
 import Datas from '@/view/superAdmin/authority/components/datas.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -123,7 +128,7 @@ const mustUint = (rule, value, callback) => {
 
 const AuthorityOption = ref([
   {
-    authorityId: '0',
+    authorityId: 0,
     authorityName: t('authority.rootRole')
   }
 ])
@@ -137,20 +142,20 @@ const apiDialogFlag = ref(false)
 const copyForm = ref({})
 
 const form = ref({
-  authorityId: '',
+  authorityId: 0,
   authorityName: '',
-  parentId: '0'
+  parentId: 0
 })
 const rules = ref({
   authorityId: [
     { required: true, message: t('authority.roleIdNote'), trigger: 'blur' },
-    { validator: mustUint, trigger: 'blur' }
+    { validator: mustUint, trigger: 'blur', message: '必须为正整数' }
   ],
   authorityName: [
     { required: true, message: t('authority.roleNameNote'), trigger: 'blur' }
   ],
   parentId: [
-    { required: true, message: t('authority.roleSelectMethod'), trigger: 'blur' }
+    { required: true, message: t('authority.roleSelectMethod'), trigger: 'blur' },
   ]
 })
 
@@ -237,9 +242,9 @@ const initForm = () => {
     authorityForm.value.resetFields()
   }
   form.value = {
-    authorityId: '',
+    authorityId: 0,
     authorityName: '',
-    parentId: '0'
+    parentId: 0
   }
 }
 // 关闭窗口
@@ -251,7 +256,8 @@ const closeDialog = () => {
 // 确定弹窗
 
 const enterDialog = () => {
-  if (form.value.authorityId === '0') {
+  form.value.authorityId = Number(form.value.authorityId)
+  if (form.value.authorityId === 0) {
     ElMessage({
       type: 'error',
       message: t('authority.roleId0Error')
@@ -290,10 +296,10 @@ const enterDialog = () => {
         case 'copy': {
           const data = {
             authority: {
-              authorityId: 'string',
-              authorityName: 'string',
+              authorityId: 0,
+              authorityName: '',
               datauthorityId: [],
-              parentId: 'string'
+              parentId: 0
             },
             oldAuthorityId: 0
           }
@@ -321,7 +327,7 @@ const enterDialog = () => {
 const setOptions = () => {
   AuthorityOption.value = [
     {
-      authorityId: '0',
+      authorityId: 0,
       authorityName: t('authority.rootRole')
     }
   ]
@@ -393,10 +399,15 @@ export default {
     }
   }
 }
-.role-box {
-  .el-tabs__content {
-    height: calc(100vh - 72px);
-    overflow: auto;
+.tree-content{
+  overflow: auto;
+  height: calc(100vh - 100px);
+  margin-top: 10px;
+}
+
+.auth-drawer{
+  .el-drawer__body{
+    overflow: hidden;
   }
 }
 </style>

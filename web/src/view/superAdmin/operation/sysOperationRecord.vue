@@ -20,10 +20,10 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
 
-        <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+        <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>{{ t('general.deleteConfirm') }}</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="small" type="text" @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
+            <el-button size="small" type="primary" link @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
             <el-button size="small" type="primary" @click="onDelete">{{ t('general.confirm') }}</el-button>
           </div>
           <template #reference>
@@ -91,14 +91,14 @@
         </el-table-column>
         <el-table-column align="left" :label="t('general.operations')">
           <template #default="scope">
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="text" @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
                 <el-button size="small" type="primary" @click="deleteSysOperationRecordFunc(scope.row)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button icon="delete" size="small" type="text" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button icon="delete" size="small" type="primary" link @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>

@@ -124,3 +124,10 @@ export const createPlugApi = (data) => {
   })
 }
 
+export const installPlug = (data) => {
+  return service({
+    url: '/autoCode/installPlug',
+    method: 'post',
+    data
+  })
+}

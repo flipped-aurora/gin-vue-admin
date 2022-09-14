@@ -26,7 +26,7 @@
               </el-select>
             </span>
             <span>
-              <el-input v-model="i.desc" placeholder="备注" />
+              <el-input v-model="i.desc" placeholder="备注 必填" />
             </span>
             <span>
               <el-button :icon="Plus" circle @click="addkv(form.global)" />
@@ -54,7 +54,7 @@
               </el-select>
             </span>
             <span>
-              <el-input v-model="i.desc" placeholder="备注" />
+              <el-input v-model="i.desc" placeholder="备注 必填" />
             </span>
             <span>
               <el-button :icon="Plus" circle @click="addkv(form.request)" />
@@ -82,7 +82,7 @@
               </el-select>
             </span>
             <span>
-              <el-input v-model="i.desc" placeholder="备注" />
+              <el-input v-model="i.desc" placeholder="备注 必填" />
             </span>
             <span>
               <el-button :icon="Plus" circle @click="addkv(form.response)" />
@@ -96,12 +96,14 @@
           <el-button type="primary" @click="createPlug">创建</el-button>
         </el-form-item>
       </el-form>
+
     </div>
   </div>
 </template>
 
 <script setup>
 import { toUpperCase } from '@/utils/stringFun'
+
 import {
   Plus,
   Minus

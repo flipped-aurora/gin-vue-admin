@@ -25,7 +25,7 @@ English | [简体中文](./README.md)
 
 [From the environment to the deployment of teaching videos](https://www.bilibili.com/video/BV1fV411y7dT)
 
-[Development Steps](https://www.gin-vue-admin.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
+[Development Steps](https://www.gin-vue-admin.com/guide/start-quickly/env.html) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 
 ## 1. Basic Introduction
 
@@ -297,7 +297,7 @@ swag init
 |  :---:  | 
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-#### [About Us](https://www.gin-vue-admin.com/about/)
+#### [About Us](https://www.gin-vue-admin.com/about/join.html)
 
 ## 8. Contributors
 
@@ -309,7 +309,7 @@ Thank you for considering your contribution to gin-vue-admin!
 
 ## 9. Donate
 
-If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.gin-vue-admin.com/docs/coffee)
+If you find this project useful, you can buy author a glass of juice :tropical_drink: [here](https://www.gin-vue-admin.com/coffee/index.html)
 
 ## 10. Commercial considerations
 

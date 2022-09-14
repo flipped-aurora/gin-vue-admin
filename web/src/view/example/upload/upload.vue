@@ -58,8 +58,8 @@
         </el-table-column>
         <el-table-column align="left" :label="t('general.operations')" width="160">
           <template #default="scope">
-            <el-button size="small" icon="download" type="text" @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="text" @click="deleteFileFunc(scope.row)">{{ t('general.delete') }}</el-button>
+            <el-button size="small" icon="download" type="primary" link @click="downloadFile(scope.row)">下载</el-button>
+            <el-button size="small" icon="delete" type="primary" link @click="deleteFileFunc(scope.row)">{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -82,12 +82,11 @@
 <script setup>
 import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
-import { useUserStore } from '@/pinia/modules/user'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import { formatDate } from '@/utils/format'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -96,7 +95,6 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const path = ref(import.meta.env.VITE_BASE_API)
-const userStore = useUserStore()
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -131,10 +129,10 @@ const getTableData = async() => {
 getTableData()
 
 const deleteFileFunc = async(row) => {
-  ElMessageBox.confirm('此操作将永久文件, 是否继续?', t('general.hint'), {
+  ElMessageBox.confirm('此操作将永久删除文件, 是否继续?', t('general.hint'), {
     confirmButtonText: t('general.confirm'),
     cancelButtonText: t('general.cancel'),
-    type: 'warning'
+    type: 'warning',
   })
     .then(async() => {
       const res = await deleteFile(row)

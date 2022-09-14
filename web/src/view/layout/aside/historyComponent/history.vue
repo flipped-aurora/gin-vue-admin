@@ -5,7 +5,7 @@
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
       @contextmenu.prevent="openContextMenu($event)"
-      @tab-click="changeTab"
+      @tab-change="changeTab"
       @tab-remove="removeTab"
     >
       <el-tab-pane
@@ -18,6 +18,7 @@
       >
         <template #label>
           <span
+            :tab="item"
             :style="{
               color: activeValue === name(item) ? userStore.activeColor : '#333',
             }"
@@ -28,7 +29,7 @@
                  activeValue === name(item) ? userStore.activeColor : '#ddd',
              }"
            />
-            {{ item.meta.title }}</span>
+            {{ fmtTitle(item.meta.title,item) }}</span>
         </template>
       </el-tab-pane>
     </el-tabs>
@@ -58,9 +59,11 @@ import { emitter } from '@/utils/bus.js'
 import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
+import { fmtTitle } from '@/utils/fmtRouterTitle'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 
 const route = useRoute()
 const router = useRouter()
@@ -113,7 +116,7 @@ const openContextMenu = (e) => {
     }
     left.value = e.clientX - width
     top.value = e.clientY + 10
-    rightActive.value = id.split('-')[1]
+    rightActive.value = id.substring(4)
   }
 }
 const closeAll = () => {
@@ -203,13 +206,22 @@ const setTab = (route) => {
     delete obj.meta.matched
     obj.query = route.query
     obj.params = route.params
-    console.log(obj)
     historys.value.push(obj)
   }
   window.sessionStorage.setItem('activeValue', getFmtString(route))
 }
-const changeTab = (component) => {
-  const tab = component.instance.attrs.tab
+
+const historyMap = ref({})
+
+watch(() => historys.value, () => {
+  historyMap.value = {}
+  historys.value.forEach((item) => {
+    historyMap.value[getFmtString(item)] = item
+  })
+})
+
+const changeTab = (name) => {
+  const tab = historyMap.value[name]
   router.push({
     name: tab.name,
     query: tab.query,
@@ -220,7 +232,7 @@ const removeTab = (tab) => {
   const index = historys.value.findIndex(
     (item) => getFmtString(item) === tab
   )
-  if (getFmtString(route) === tab)  {
+  if (getFmtString(route) === tab) {
     if (historys.value.length === 1) {
       router.push({ name: defaultRouter.value })
     } else {
@@ -242,7 +254,7 @@ const removeTab = (tab) => {
   historys.value.splice(index, 1)
 }
 
-watch(contextMenuVisible, () => {
+watch(() => contextMenuVisible.value, () => {
   if (contextMenuVisible.value) {
     document.body.addEventListener('click', () => {
       contextMenuVisible.value = false
@@ -254,7 +266,7 @@ watch(contextMenuVisible, () => {
   }
 })
 
-watch(route, (to, now) => {
+watch(() => route, (to, now) => {
   if (to.name === 'Login' || to.name === 'Reload') {
     return
   }
@@ -262,7 +274,7 @@ watch(route, (to, now) => {
   setTab(to)
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
   activeValue.value = window.sessionStorage.getItem('activeValue')
-})
+}, { deep: true })
 
 watch(() => historys.value, () => {
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
@@ -303,6 +315,10 @@ const initPage = () => {
     activeValue.value = window.sessionStorage.getItem('activeValue')
   }
   setTab(route)
+  if (window.sessionStorage.getItem('needCloseAll') === 'true') {
+    closeAll()
+    window.sessionStorage.removeItem('needCloseAll')
+  }
 }
 initPage()
 

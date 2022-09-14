@@ -8,16 +8,6 @@
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
       <el-table :data="tableData" row-key="ID">
         <el-table-column align="left" label="ID" min-width="100" prop="ID" />
-        <el-table-column align="left" :label="t('menu.routeName')" show-overflow-tooltip min-width="160" prop="name" />
-        <el-table-column align="left" :label="t('menu.routePath')" show-overflow-tooltip min-width="160" prop="path" />
-        <el-table-column align="left" :label="t('menu.visibility')" min-width="100" prop="hidden">
-          <template #default="scope">
-            <span>{{ scope.row.hidden? t('menu.hide') : t('menu.show') }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column align="left" :label="t('menu.parent')" min-width="90" prop="parentId" />
-        <el-table-column align="left" :label="t('menu.sort')" min-width="70" prop="sort" />
-        <el-table-column align="left" :label="t('menu.filePath')" min-width="360" prop="component" />
         <el-table-column align="left" :label="t('menu.displayName')" min-width="120" prop="authorityName">
           <template #default="scope">
             <span>{{ scope.row.meta.title }}</span>
@@ -33,23 +23,36 @@
             </div>
           </template>
         </el-table-column>
+        <el-table-column align="left" :label="t('menu.routeName')" show-overflow-tooltip min-width="160" prop="name" />
+        <el-table-column align="left" :label="t('menu.routePath')" show-overflow-tooltip min-width="160" prop="path" />
+        <el-table-column align="left" :label="t('menu.visibility')" min-width="100" prop="hidden">
+          <template #default="scope">
+            <span>{{ scope.row.hidden? t('menu.hide') : t('menu.show') }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" :label="t('menu.parent')" min-width="90" prop="parentId" />
+        <el-table-column align="left" :label="t('menu.sort')" min-width="70" prop="sort" />
+        <el-table-column align="left" :label="t('menu.filePath')" min-width="360" prop="component" />
         <el-table-column align="left" fixed="right" :label="t('general.operations')" width="300">
           <template #default="scope">
             <el-button
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >{{ t('menu.addSubMenu') }}</el-button>
             <el-button
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >{{ t('general.edit') }}</el-button>
             <el-button
-              size="mini"
-              type="text"
+              size="small"
+              type="primary"
+              link
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
             >{{ t('general.delete') }}</el-button>
@@ -109,8 +112,8 @@
           />
         </el-form-item>
         <el-form-item :label="t('menu.filePath')" prop="component" style="width:60%">
-          <el-input v-model="form.component" autocomplete="off" />
-          <span style="font-size:12px;margin-right:12px;">{{ t('menu.subMenuNote') }}</span><el-button size="mini" @click="form.component = 'view/routerHolder.vue'">{{ t('menu.clickMe') }}</el-button>
+          <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @blur="fmtComponent" />
+          <span style="font-size:12px;margin-right:12px;">{{ t('menu.subMenuNote') }}</span><el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">{{ t('menu.clickMe') }}</el-button>
         </el-form-item>
         <el-form-item :label="t('menu.displayName')" prop="meta.title" style="width:30%">
           <el-input v-model="form.meta.title" autocomplete="off" />
@@ -233,7 +236,7 @@ import {
   getBaseMenuById
 } from '@/api/menu'
 import icon from '@/view/superAdmin/menu/icon.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -280,6 +283,11 @@ const addParameter = (form) => {
     value: ''
   })
 }
+
+const fmtComponent = () => {
+  form.value.component = form.value.component.replace(/\\/g, '/')
+}
+
 // 删除参数
 const deleteParameter = (parameters, index) => {
   parameters.splice(index, 1)
@@ -287,7 +295,6 @@ const deleteParameter = (parameters, index) => {
 
 // 新增可控按钮
 const addBtn = (form) => {
-  console.log(form)
   if (!form.menuBtn) {
     form.menuBtn = []
   }

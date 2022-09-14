@@ -82,7 +82,7 @@
 		"rollBackDeleteTable" : "Rollback (Delete Table)",
 		"rollBackWithoutDeleteTable" : "Rollback (Without Delete Table)",
 		"rollBackMark": "Rollback mark",
-		"rollbackConfirm": "This operation will delete the automatically created files and api ",
+		"rollbackConfirm": "This operation will delete the automatically created files and api, do you want to continue?",
 		"includeDBTables" : " (including database tables!), ",
 		"rollBackContinue" : " do you want to continue?",
 		"rollbackSuccess": "Rollback successfully!",

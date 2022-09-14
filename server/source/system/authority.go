@@ -45,9 +45,9 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 		return ctx, system.ErrMissingDBContext
 	}
 	entities := []sysModel.SysAuthority{
-		{AuthorityId: "888", AuthorityName: global.Translate("system.authority.normalUsers"), ParentId: "0", DefaultRouter: "dashboard"},
-		{AuthorityId: "9528", AuthorityName: global.Translate("system.authority.testRole"), ParentId: "0", DefaultRouter: "dashboard"},
-		{AuthorityId: "8881", AuthorityName: global.Translate("system.authority.normalUserSubRole"), ParentId: "888", DefaultRouter: "dashboard"},
+		{AuthorityId: 888, AuthorityName: global.Translate("system.authority.normalUsers"), ParentId: 0, DefaultRouter: "dashboard"},
+		{AuthorityId: 9528, AuthorityName: global.Translate("system.authority.testRole"), ParentId: 0, DefaultRouter: "dashboard"},
+		{AuthorityId: 8881, AuthorityName: global.Translate("system.authority.normalUserSubRole"), ParentId: 888, DefaultRouter: "dashboard"},
 	}
 
 	if err := db.Create(&entities).Error; err != nil {
@@ -56,17 +56,17 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 	// data authority
 	if err := db.Model(&entities[0]).Association("DataAuthorityId").Replace(
 		[]*sysModel.SysAuthority{
-			{AuthorityId: "888"},
-			{AuthorityId: "9528"},
-			{AuthorityId: "8881"},
+			{AuthorityId: 888},
+			{AuthorityId: 9528},
+			{AuthorityId: 8881},
 		}); err != nil {
 		return ctx, errors.Wrapf(err, "%s "+global.Translate("general.tabelDataInitFail"),
 			db.Model(&entities[0]).Association("DataAuthorityId").Relationship.JoinTable.Name)
 	}
 	if err := db.Model(&entities[1]).Association("DataAuthorityId").Replace(
 		[]*sysModel.SysAuthority{
-			{AuthorityId: "9528"},
-			{AuthorityId: "8881"},
+			{AuthorityId: 9528},
+			{AuthorityId: 8881},
 		}); err != nil {
 		return ctx, errors.Wrapf(err, "%s "+global.Translate("general.tabelDataInitFail"),
 			db.Model(&entities[1]).Association("DataAuthorityId").Relationship.JoinTable.Name)

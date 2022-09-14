@@ -1,29 +1,34 @@
 <template>
   <div>
     <div class="gva-form-box">
-      <el-form :model="formData" label-position="right" label-width="20%">
+      <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
-        <el-form-item label="{{.FieldDesc}}:">
+        <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
       {{- if eq .FieldType "bool" }}
           <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" clearable :placeholder="t('general.pleaseEnter')" />
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType }}
-          <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('general.pleaseSelect')" clearable>
+          <el-select v-model="formData.{{ .FieldJson }}" placeholder="t('general.pleaseSelect')" :clearable="{{.Clearable}}">
             <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
           </el-select>
       {{- else }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" clearable :placeholder="t('general.pleaseEnter')" />
+          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" :placeholder="t('general.selectDate')" clearable></el-date-picker>
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" :placeholder="t('general.selectDate')" :clearable="{{.Clearable}}"></el-date-picker>
       {{- end }}
       {{- if eq .FieldType "float64" }}
-          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" clearable></el-input-number>
+          <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>
+      {{- end }}
+      {{- if eq .FieldType "enum" }}
+        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}">
+          <el-option v-for="item in [{{ .DataTypeLong }}]" :key="item" :label="item" :value="item" />
+        </el-select>
       {{- end }}
         </el-form-item>
       {{- end }}
@@ -53,36 +58,51 @@ import {
 import { getDictFunc } from '@/utils/format'
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const route = useRoute()
 const router = useRouter()
+
 const type = ref('')
     {{- range $index, $element := .DictTypes}}
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- range .Fields}}
-        {{- if eq .FieldType "bool" }}
-        {{.FieldJson}}: false,
-        {{- end }}
-        {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-        {{- end }}
-        {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
-        {{- end }}
-        {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-        {{- end }}
-        {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-        {{- end }}
+            {{- if eq .FieldType "bool" }}
+            {{.FieldJson}}: false,
+            {{- end }}
+            {{- if eq .FieldType "string" }}
+            {{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "int" }}
+            {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+            {{- end }}
+            {{- if eq .FieldType "time.Time" }}
+            {{.FieldJson}}: new Date(),
+            {{- end }}
+            {{- if eq .FieldType "float64" }}
+            {{.FieldJson}}: 0,
+            {{- end }}
         {{- end }}
         })
+// 验证规则
+const rule = reactive({
+    {{- range .Fields }}
+            {{- if eq .Require true }}
+               {{.FieldJson }} : [{
+                   required: true,
+                   message: '{{ .ErrorText }}',
+                   trigger: ['input','blur'],
+               }],
+            {{- end }}
+    {{- end }}
+})
+
+const elFormRef = ref()
 
 // 初始化方法
 const init = async () => {
@@ -104,24 +124,27 @@ const init = async () => {
 init()
 // 保存按钮
 const save = async() => {
-      let res
-      switch (type.value) {
-        case 'create':
-          res = await create{{.StructName}}(formData.value)
-          break
-        case 'update':
-          res = await update{{.StructName}}(formData.value)
-          break
-        default:
-          res = await create{{.StructName}}(formData.value)
-          break
-      }
-      if (res.code === 0) {
-        ElMessage({
-          type: 'success',
-          message: t('general.createUpdateSuccess')
-        })
-      }
+      elFormRef.value?.validate( async (valid) => {
+         if (!valid) return
+            let res
+           switch (type.value) {
+             case 'create':
+               res = await create{{.StructName}}(formData.value)
+               break
+             case 'update':
+               res = await update{{.StructName}}(formData.value)
+               break
+             default:
+               res = await create{{.StructName}}(formData.value)
+               break
+           }
+           if (res.code === 0) {
+             ElMessage({
+               type: 'success',
+               message:  t('general.createUpdateSuccess')
+             })
+           }
+       })
 }
 
 // 返回按钮

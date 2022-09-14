@@ -1,14 +1,16 @@
 <template>
   <div>
-    <div class="clearflex" style="margin:18px">
-      <el-button class="fl-right" size="mini" type="primary" @click="authDataEnter">{{ t('general.confirm') }}</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="all">{{ t('general.selectAll') }}</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="self">{{ t('datas.thisRole') }}</el-button>
-      <el-button class="fl-left" size="mini" type="primary" @click="selfAndChildren">{{ t('datas.thisRoleAndSubRoles') }}</el-button>
+    <div class="clearfix sticky-button" style="margin: 18px">
+      <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">{{ t('general.confirm') }}</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="all">{{ t('general.selectAll') }}</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="self">{{ t('datas.thisRole') }}</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="selfAndChildren">{{ t('datas.thisRoleAndSubRoles') }}</el-button>
     </div>
-    <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
-      <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
-    </el-checkbox-group>
+    <div class="tree-content">
+      <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
+        <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
+      </el-checkbox-group>
+    </div>
     <warning-bar :title="t('datas.datasNote')" />
   </div>
 </template>
@@ -21,7 +23,7 @@ export default {
 
 <script setup>
 import { setDataAuthority } from '@/api/authority'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage

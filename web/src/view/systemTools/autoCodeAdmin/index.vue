@@ -2,47 +2,78 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="goAutoCode(null)">{{ t('general.add') }}</el-button>
+        <el-button size="mini" type="primary" icon="plus" @click="goAutoCode(null)">{{
+          t("general.add")
+        }}</el-button>
       </div>
       <el-table :data="tableData">
-        <el-table-column
-          type="selection"
-          width="55"
-        />
+        <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="id" width="60" prop="ID" />
         <el-table-column align="left" :label="t('general.createdAt')" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" :label="t('autoCode.structName')" min-width="150" prop="structName" />
-        <el-table-column align="left" :label="t('autoCode.structChineseName')" min-width="150" prop="structCNName" />
-        <el-table-column align="left" :label="t('autoCode.tableName')" min-width="150" prop="tableName" />
-        <el-table-column align="left" :label="t('autoCodeAdmin.rollBackMark')" min-width="150" prop="flag">
+        <el-table-column
+          align="left"
+          :label="t('autoCode.structName')"
+          min-width="150"
+          prop="structName"
+        />
+        <el-table-column
+          align="left"
+          :label="t('autoCode.structChineseName')"
+          min-width="150"
+          prop="structCNName"
+        />
+        <el-table-column
+          align="left"
+          :label="t('autoCode.tableName')"
+          min-width="150"
+          prop="tableName"
+        />
+        <el-table-column
+          align="left"
+          :label="t('autoCodeAdmin.rollBackMark')"
+          min-width="150"
+          prop="flag"
+        >
           <template #default="scope">
-            <el-tag
-              v-if="scope.row.flag"
-              type="danger"
-              size="mini"
-              effect="dark"
-            >
-              {{ t('autoCodeAdmin.rolledBack') }}
+            <el-tag v-if="scope.row.flag" type="danger" size="mini" effect="dark">
+              {{ t("autoCodeAdmin.rolledBack") }}
             </el-tag>
-            <el-tag
-              v-else
-              size="mini"
-              type="success"
-              effect="dark"
-            >
-              {{ t('autoCodeAdmin.notRolledBack') }}
+            <el-tag v-else size="mini" type="success" effect="dark">
+              {{ t("autoCodeAdmin.notRolledBack") }}
             </el-tag>
           </template>
         </el-table-column>
         <el-table-column align="left" :lable="t('general.operations')" min-width="240">
           <template #default="scope">
             <div>
-              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,true)">{{ t('autoCodeAdmin.rollBackDeleteTable') }}</el-button>
-              <el-button size="small" type="text" :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,false)">{{ t('autoCodeAdmin.rollBackWithoutDeleteTable') }}</el-button>
-              <el-button size="small" type="text" @click="goAutoCode(scope.row)">{{ t('autoCodeAdmin.reuse') }}</el-button>
-              <el-button size="small" type="text" @click="deleteRow(scope.row)">{{ t('general.delete') }}</el-button>
+              <el-button
+                size="small"
+                type="primary"
+                link
+                :disabled="scope.row.flag === 1"
+                @click="rollbackFunc(scope.row, true)"
+                >{{ t("autoCodeAdmin.rollBackDeleteTable") }}</el-button
+              >
+              <el-button
+                size="small"
+                type="primary"
+                link
+                :disabled="scope.row.flag === 1"
+                @click="rollbackFunc(scope.row, false)"
+                >{{ t("autoCodeAdmin.rollBackWithoutDeleteTable") }}</el-button
+              >
+              <el-button
+                size="small"
+                type="primary"
+                link
+                @click="goAutoCode(scope.row)"
+                >{{ t("autoCodeAdmin.reuse") }}</el-button
+              >
+              <el-button size="small" type="primary" link @click="deleteRow(scope.row)">{{
+                t("general.delete")
+              }}</el-button>
             </div>
           </template>
         </el-table-column>
@@ -64,8 +95,9 @@
 
 <script>
 export default {
-  name: 'AutoCodeAdmin',
-}
+  watch: {},
+  name: "AutoCodeAdmin",
+};
 </script>
 
 <script setup>
@@ -126,17 +158,43 @@ const deleteRow = async(row) => {
   })
 }
 const rollbackFunc = async(row, flag) => {
-  ElMessageBox.confirm(t('autoCodeAdmin.rollbackConfirm') + `${flag ? t('autoCodeAdmin.includeDBTables') : ' ,'}` + t('autoCodeAdmin.rollBackContinue'), t('general.hint'), {
-    confirmButtonText: t('general.confirm'),
-    cancelButtonText: t('general.cancel'),
-    type: 'warning'
-  }).then(async() => {
-    const res = await rollback({ id: Number(row.ID), deleteTable: flag })
-    if (res.code === 0) {
-      ElMessage.success(t('autoCodeAdmin.rollbackSuccess'))
-      getTableData()
-    }
-  })
+  if (flag) {
+    ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 是否继续?`, t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
+      type: 'warning'
+    }).then(async() => {
+      ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 请继续确认！！！`, '会删除表', {
+        confirmButtonText: t('general.confirm'),
+        cancelButtonText: t('general.cancel'),
+        type: 'warning'
+      }).then(async() => {
+        ElMessageBox.confirm(`此操作将删除自动创建的文件和api（会删除表！！！）, 请继续确认！！！`, '会删除表', {
+          confirmButtonText: t('general.confirm'),
+          cancelButtonText: t('general.cancel'),
+          type: 'warning'
+        }).then(async() => {
+          const res = await rollback({ id: Number(row.ID), deleteTable: flag })
+          if (res.code === 0) {
+            ElMessage.success(t('autoCodeAdmin.rollbackSuccess'))
+            getTableData()
+          }
+        })
+      })
+    })
+  } else {
+    ElMessageBox.confirm(t('autoCodeAdmin.rollbackConfirm'), t('general.hint'), {
+      confirmButtonText: t('general.confirm'),
+      cancelButtonText: t('general.cancel'),
+      type: 'warning'
+    }).then(async() => {
+      const res = await rollback({ id: Number(row.ID), deleteTable: flag })
+      if (res.code === 0) {
+        ElMessage.success(t('autoCodeAdmin.rollbackSuccess'))
+        getTableData()
+      }
+    })
+  }
 }
 const goAutoCode = (row) => {
   if (row) {
@@ -147,7 +205,6 @@ const goAutoCode = (row) => {
     router.push({ name: 'autoCode' })
   }
 }
-
 </script>
 
 <style scoped lang="scss">

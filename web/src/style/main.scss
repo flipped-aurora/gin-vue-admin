@@ -556,7 +556,7 @@ li {
         position: fixed;
         top: 0;
     }
-    .el-aside {
+    .gva-aside {
         -webkit-transition: width .2s;
         transition: width .2s;
         width: $width-aside;
@@ -598,14 +598,11 @@ li {
     .aside {
         .el-menu--collapse {
             >.el-menu-item{
-                padding: 0 15px !important;
-
+                display: flex;
+                justify-content: center;
             }
         }
         .el-sub-menu {
-            .el-menu-item{
-                padding: 0 20px;
-            }
             .el-menu {
                 .is-active {
                     // 关闭三级菜单二级菜单样式
@@ -628,7 +625,7 @@ li {
         }
     }
     .mobile.hideside {
-        .el-aside {
+        .gva-aside {
             -webkit-transition-duration: .2s;
             transition-duration: .2s;
             -webkit-transform: translate3d(-210px, 0, 0);
@@ -636,7 +633,7 @@ li {
         }
     }
     .mobile {
-        .el-aside {
+        .gva-aside {
             -webkit-transition: -webkit-transform .28s;
             transition: -webkit-transform .28s;
             transition: transform .28s;
@@ -944,21 +941,6 @@ li {
             width: 10px;
         }
     }
-}
-
-.el-input-number__decrease,
-.el-input-number__increase {
-    position: absolute;
-    z-index: 1;
-    top: 2px !important;
-    width: 42px;
-    height: 28px;
-    line-height: 28px;
-    text-align: center;
-    background: #F5F7FA;
-    color: #606266;
-    cursor: pointer;
-    font-size: 12px;
 }
 
 $headerHigh: 52px;

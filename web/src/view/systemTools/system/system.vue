@@ -5,7 +5,7 @@
       <el-collapse v-model="activeNames">
         <el-collapse-item :title="t('view.systemTools.system.systemConfig')" name="1">
           <el-form-item :label="t('view.systemTools.system.envValue')">
-            <!--            <el-input v-model="config.system.env" />-->
+            <!-- <el-input v-model="config.system.env" />-->
             <el-select v-model="config.system.env" style="width:100%">
               <el-option value="public" />
               <el-option value="develop" />
@@ -120,12 +120,6 @@
             <el-button @click="email">{{ t('view.systemTools.system.testEmail') }}</el-button>
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item :title="t('view.systemTools.system.casbinConfig')" name="6">
-          <el-form-item :label="t('view.systemTools.system.modelAddress')">
-            <el-input v-model="config.casbin['model-path']" />
-          </el-form-item>
-        </el-collapse-item>
-
         <el-collapse-item :title="t('view.systemTools.system.verCodeConfig')" name="7">
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
@@ -327,7 +321,7 @@
 
         <el-collapse-item :title="t('view.systemTools.system.timedTask')" name="13">
           <el-form-item :label="t('view.systemTools.system.startEnableDisable')">
-            <el-select v-model="config.timer['w-table']" />
+            <el-checkbox v-model="config.timer['start']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.cronExp')">
             <el-input v-model="config.timer.spec" />
@@ -379,7 +373,6 @@ const config = ref({
     'iplimit-time': 0
   },
   jwt: {},
-  casbin: {},
   mysql: {},
   pgsql: {},
   excel: {},

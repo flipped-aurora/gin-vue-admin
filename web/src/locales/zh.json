@@ -82,7 +82,7 @@
 		"rollBackDeleteTable" : "回滚(删表)",
 		"rollBackWithoutDeleteTable" : "回滚(不删表)",
 		"rollBackMark": "回滚标记",
-		"rollbackConfirm": "此操作将删除自动创建的文件和api",
+		"rollbackConfirm": "此操作将删除自动创建的文件和api, 是否继续?",
 		"includeDBTables" : "（包含数据库表！）,",
 		"rollBackContinue" : " 是否继续?",
 		"rollbackSuccess": "回滚成功",

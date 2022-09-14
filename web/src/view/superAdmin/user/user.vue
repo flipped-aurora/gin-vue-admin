@@ -40,24 +40,36 @@
               collapse-tags
               :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
               :clearable="false"
-              @visible-change="(flag)=>{changeAuthority(scope.row,flag)}"
-              @remove-tag="()=>{changeAuthority(scope.row,false)}"
+              @visible-change="(flag)=>{changeAuthority(scope.row,flag,0)}"
+              @remove-tag="(removeAuth)=>{changeAuthority(scope.row,false,removeAuth)}"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column align="left" label="启用" min-width="150">
+          <template #default="scope">
+            <el-switch
+              v-model="scope.row.enable"
+              inline-prompt
+              :active-value="1"
+              :inactive-value="2"
+              @change="()=>{switchEnable(scope.row)}"
             />
           </template>
         </el-table-column>
         <el-table-column align="left" :label="t('general.operations')" min-width="150">
           <template #default="scope">
-            <el-popover v-model:visible="scope.row.visible" placement="top" width="160">
+            <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>{{ t('user.deleteUserConfrim') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="mini" type="text" @click="scope.row.visible = false">>{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" size="mini" @click="deleteUserFunc(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" size="small" @click="deleteUserFunc(scope.row)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="text" icon="delete" size="mini">{{ t('general.delete') }}</el-button>
+                <el-button type="primary" link icon="delete" size="small">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
-            <el-button type="text" icon="magic-stick" size="mini" @click="resetPasswordFunc(scope.row)">{{ t('user.resetPassword') }}</el-button>
+            <el-button type="primary" link icon="edit" size="small" @click="openEdit(scope.row)">{{ t('general.edit') }}</el-button>
+            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">{{ t('user.resetPassword') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,35 +85,57 @@
         />
       </div>
     </div>
-    <el-dialog v-model="addUserDialog" custom-class="user-dialog" :title="t('user.addUser')">
-      <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="90px">
-        <el-form-item :label="t('user.userName')" prop="username">
-          <el-input v-model="userInfo.username" />
-        </el-form-item>
-        <el-form-item :label="t('user.password')" prop="password">
-          <el-input v-model="userInfo.password" />
-        </el-form-item>
-        <el-form-item :label="t('user.nickName')" prop="nickName">
-          <el-input v-model="userInfo.nickName" />
-        </el-form-item>
-        <el-form-item :label="t('user.userRole')" prop="authorityId">
-          <el-cascader
-            v-model="userInfo.authorityIds"
-            style="width:100%"
-            :options="authOptions"
-            :show-all-levels="false"
-            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-            :clearable="false"
-          />
-        </el-form-item>
-        <el-form-item :label="t('user.avatar')" label-width="80px">
-          <div style="display:inline-block" @click="openHeaderChange">
-            <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
-            <div v-else class="header-img-box">{{ t('user.mediaLibrary') }}</div>
-          </div>
-        </el-form-item>
-
-      </el-form>
+    <el-dialog
+      v-model="addUserDialog"
+      custom-class="user-dialog"
+      :title="t('user.addUser')"
+      :show-close="false"
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+    >
+      <div style="height:60vh;overflow:auto;padding:0 12px;">
+        <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="80px">
+          <el-form-item v-if="dialogFlag === 'add'" :label="t('user.userName')" prop="userName">
+            <el-input v-model="userInfo.userName" />
+          </el-form-item>
+          <el-form-item v-if="dialogFlag === 'add'" :label="t('user.password')" prop="password">
+            <el-input v-model="userInfo.password" />
+          </el-form-item>
+          <el-form-item :label="t('user.nickName')" prop="nickName">
+            <el-input v-model="userInfo.nickName" />
+          </el-form-item>
+          <el-form-item :label="t('user.phone')" prop="phone">
+            <el-input v-model="userInfo.phone" />
+          </el-form-item>
+          <el-form-item :label="t('user.email')" prop="email">
+            <el-input v-model="userInfo.email" />
+          </el-form-item>
+          <el-form-item :label="t('user.userRole')" prop="authorityId">
+            <el-cascader
+              v-model="userInfo.authorityIds"
+              style="width:100%"
+              :options="authOptions"
+              :show-all-levels="false"
+              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+              :clearable="false"
+            />
+          </el-form-item>
+          <el-form-item label="启用" prop="disabled">
+            <el-switch
+              v-model="userInfo.enable"
+              inline-prompt
+              :active-value="1"
+              :inactive-value="2"
+            />
+          </el-form-item>
+          <el-form-item :label="t('user.avatar')" label-width="80px">
+            <div style="display:inline-block" @click="openHeaderChange">
+              <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
+              <div v-else class="header-img-box">{{ t('user.mediaLibrary') }}</div>
+            </div>
+          </el-form-item>
+        </el-form>
+      </div>
       <template #footer>
         <div class="dialog-footer">
           <el-button size="small" @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
@@ -130,7 +164,7 @@ import {
 import { getAuthorityList } from '@/api/authority'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
-import warningBar from '@/components/warningBar/warningBar.vue'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { setUserInfo, resetPassword } from '@/api/user.js'
 
 import { nextTick, ref, watch } from 'vue'
@@ -188,7 +222,7 @@ const getTableData = async() => {
   }
 }
 
-watch(tableData, () => {
+watch(() => tableData.value, () => {
   setAuthorityIds()
 })
 
@@ -290,7 +324,8 @@ const userInfo = ref({
   nickName: '',
   headerImg: '',
   authorityId: '',
-  authorityIds: []
+  authorityIds: [],
+  enable: 1,
 })
 
 const rules = ref({
@@ -334,11 +369,15 @@ const closeAddUserDialog = () => {
 const addUser = () => {
   addUserDialog.value = true
 }
-const changeAuthority = async(row, flag) => {
+
+const tempAuth = {}
+const changeAuthority = async(row, flag, removeAuth) => {
   if (flag) {
+    if (!removeAuth) {
+      tempAuth[row.ID] = [...row.authorityIds]
+    }
     return
   }
-
   await nextTick()
   const res = await setUserAuthorities({
     ID: row.ID,
@@ -346,8 +385,37 @@ const changeAuthority = async(row, flag) => {
   })
   if (res.code === 0) {
     ElMessage({ type: 'success', message: t('user.roleSetNote') })
+  } else {
+    if (!removeAuth) {
+      row.authorityIds = [...tempAuth[row.ID]]
+      delete tempAuth[row.ID]
+    } else {
+      row.authorityIds = [removeAuth, ...row.authorityIds]
+    }
   }
 }
+
+const openEdit = (row) => {
+  dialogFlag.value = 'edit'
+  userInfo.value = JSON.parse(JSON.stringify(row))
+  addUserDialog.value = true
+}
+
+const switchEnable = async(row) => {
+  userInfo.value = JSON.parse(JSON.stringify(row))
+  await nextTick()
+  const req = {
+    ...userInfo.value
+  }
+  const res = await setUserInfo(req)
+  if (res.code === 0) {
+    ElMessage({ type: 'success', message: `${req.enable === 2 ? '禁用' : '启用'}成功` })
+    await getTableData()
+    userInfo.value.headerImg = ''
+    userInfo.value.authorityIds = []
+  }
+}
+
 </script>
 
 <style lang="scss">

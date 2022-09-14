@@ -5,20 +5,24 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"go.uber.org/zap"
 	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/token"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
+	"io"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"text/template"
+
+	cp "github.com/otiai10/copy"
+	"go.uber.org/zap"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 
@@ -149,6 +153,16 @@ var AutoCodeServiceApp = new(AutoCodeService)
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
 	makeDictTypes(&autoCode)
+	for i := range autoCode.Fields {
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			break
+		}
+		if autoCode.Fields[i].Require {
+			autoCode.NeedValid = true
+			break
+		}
+	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return nil, err
@@ -228,6 +242,16 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
 	makeDictTypes(&autoCode)
+	for i := range autoCode.Fields {
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			break
+		}
+		if autoCode.Fields[i].Require {
+			autoCode.NeedValid = true
+			break
+		}
+	}
 	// 增加判断: 重复创建struct
 	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName, autoCode.Package) {
 		return RepeatErr
@@ -336,7 +360,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return err
 	}
 	if autoCode.AutoMoveFile {
-		return system.AutoMoveErr
+		return system.ErrAutoMove
 	}
 	return nil
 }
@@ -669,7 +693,7 @@ func (vi *Visitor) addStruct(genDecl *ast.GenDecl) ast.Visitor {
 				case *ast.StructType:
 					f := &ast.Field{
 						Names: []*ast.Ident{
-							&ast.Ident{
+							{
 								Name: vi.StructName,
 								Obj: &ast.Object{
 									Kind: ast.Var,
@@ -812,13 +836,112 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 			os.MkdirAll(dirPath, 0755)
 		}
 		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
-		f, _ := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			zap.L().Error("open file", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
+		}
+		defer f.Close()
+
 		err = temp.Execute(f, plug)
 		if err != nil {
 			zap.L().Error("exec err", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
 			return err
 		}
-		defer f.Close()
 	}
 	return nil
+}
+
+func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader) (web, server int, err error) {
+	const GVAPLUGPINATH = "./gva-plug-temp/"
+	defer os.RemoveAll(GVAPLUGPINATH)
+	_, err = os.Stat(GVAPLUGPINATH)
+	if os.IsNotExist(err) {
+		os.Mkdir(GVAPLUGPINATH, os.ModePerm)
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		return -1, -1, err
+	}
+	defer src.Close()
+
+	out, err := os.Create(GVAPLUGPINATH + file.Filename)
+	if err != nil {
+		return -1, -1, err
+	}
+	defer out.Close()
+
+	_, err = io.Copy(out, src)
+
+	paths, err := utils.Unzip(GVAPLUGPINATH+file.Filename, GVAPLUGPINATH)
+	paths = filterFile(paths)
+	var webIndex = -1
+	var serverIndex = -1
+	for i := range paths {
+		paths[i] = filepath.ToSlash(paths[i])
+		pathArr := strings.Split(paths[i], "/")
+		ln := len(pathArr)
+		if ln < 2 {
+			continue
+		}
+		if pathArr[ln-2] == "server" && pathArr[ln-1] == "plugin" {
+			serverIndex = i
+		}
+		if pathArr[ln-2] == "web" && pathArr[ln-1] == "plugin" {
+			webIndex = i
+		}
+	}
+	if webIndex == -1 && serverIndex == -1 {
+		zap.L().Error("非标准插件，请按照文档自动迁移使用")
+		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
+	}
+
+	if webIndex != -1 {
+		err = installation(paths[webIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+		if err != nil {
+			return webIndex, serverIndex, err
+		}
+	}
+
+	if serverIndex != -1 {
+		err = installation(paths[serverIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+	}
+	return webIndex, serverIndex, err
+}
+
+func installation(path string, formPath string, toPath string) error {
+	arr := strings.Split(filepath.ToSlash(path), "/")
+	ln := len(arr)
+	if ln < 3 {
+		return errors.New("arr")
+	}
+	name := arr[ln-3]
+
+	var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + formPath + "/" + path)
+	var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + toPath + "/plugin/")
+	_, err := os.Stat(to + name)
+	if err == nil {
+		zap.L().Error("autoPath 已存在同名插件，请自行手动安装", zap.String("to", to))
+		return errors.New(toPath + "已存在同名插件，请自行手动安装")
+	}
+	return cp.Copy(form, to, cp.Options{Skip: skipMacSpecialDocument})
+}
+
+func filterFile(paths []string) []string {
+	np := make([]string, 0, len(paths))
+	for _, path := range paths {
+		if ok, _ := skipMacSpecialDocument(path); ok {
+			continue
+		}
+		np = append(np, path)
+	}
+	return np
+}
+
+func skipMacSpecialDocument(src string) (bool, error) {
+	if strings.Contains(src, ".DS_Store") || strings.Contains(src, "__MACOSX") {
+		return true, nil
+	}
+	return false, nil
 }

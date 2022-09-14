@@ -53,6 +53,7 @@
 
 :root {
     --el-color-primary: #4D70FF;
+    --el-menu-item-height:56px ;
 }
 
 .gva-search-box {
@@ -134,12 +135,24 @@
         justify-content: center;
         align-items: center;
     }
+    // 兼容久版用户升级
     .active {
         background: #4D70FF;
         border-radius: 2px;
         color: #ffffff !important;
     }
     .el-pager li.active+li {
+        border-left: 1px solid #ddd !important;
+    }
+    // end
+
+
+    .is-active {
+        background: #4D70FF;
+        border-radius: 2px;
+        color: #ffffff !important;
+    }
+    .el-pager li.is-active+li {
         border-left: 1px solid #ddd !important;
     }
     .el-pagination__sizes {
@@ -180,9 +193,6 @@
         }
         padding: 2px 20px 12px 20px;
         border-bottom: 1px solid #E4E4E4;
-    }
-    .el-dialog__headerbtn {
-        top: 16px;
     }
     .el-dialog__footer {
         padding: 0 16px 16px 0;

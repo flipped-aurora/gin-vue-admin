@@ -48,8 +48,21 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("密码错误")
 		}
-		var am system.SysMenu
-		ferr := global.GVA_DB.First(&am, "name = ? AND authority_id = ?", user.Authority.DefaultRouter, user.AuthorityId).Error
+
+		var SysAuthorityMenus []system.SysAuthorityMenu
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", user.AuthorityId).Find(&SysAuthorityMenus).Error
+		if err != nil {
+			return
+		}
+
+		var MenuIds []string
+
+		for i := range SysAuthorityMenus {
+			MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+		}
+
+		var am system.SysBaseMenu
+		ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, MenuIds).Error
 		if errors.Is(ferr, gorm.ErrRecordNotFound) {
 			user.Authority.DefaultRouter = "404"
 		}
@@ -66,8 +79,7 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 
 func (userService *UserService) ChangePassword(u *system.SysUser, newPassword string) (userInter *system.SysUser, err error) {
 	var user system.SysUser
-	err = global.GVA_DB.Where("username = ?", u.Username).First(&user).Error
-	if err != nil {
+	if err = global.GVA_DB.Where("id = ?", u.ID).First(&user).Error; err != nil {
 		return nil, err
 	}
 	if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
@@ -104,12 +116,12 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 //@param: uuid uuid.UUID, authorityId string
 //@return: err error
 
-func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, authorityId string) (err error) {
-	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUseAuthority{}).Error
+func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err error) {
+	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}
-	err = global.GVA_DB.Where("uuid = ?", uuid).First(&system.SysUser{}).Update("authority_id", authorityId).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityId).Error
 	return err
 }
 
@@ -119,16 +131,16 @@ func (userService *UserService) SetUserAuthority(id uint, uuid uuid.UUID, author
 //@param: id uint, authorityIds []string
 //@return: err error
 
-func (userService *UserService) SetUserAuthorities(id uint, authorityIds []string) (err error) {
+func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		TxErr := tx.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+		TxErr := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 		if TxErr != nil {
 			return TxErr
 		}
-		useAuthority := []system.SysUseAuthority{}
+		var useAuthority []system.SysUserAuthority
 		for _, v := range authorityIds {
-			useAuthority = append(useAuthority, system.SysUseAuthority{
-				id, v,
+			useAuthority = append(useAuthority, system.SysUserAuthority{
+				SysUserId: id, SysAuthorityAuthorityId: v,
 			})
 		}
 		TxErr = tx.Create(&useAuthority).Error
@@ -156,7 +168,7 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 	if err != nil {
 		return err
 	}
-	err = global.GVA_DB.Delete(&[]system.SysUseAuthority{}, "sys_user_id = ?", id).Error
+	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 	return err
 }
 
@@ -182,8 +194,21 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 	if err != nil {
 		return reqUser, err
 	}
-	var am system.SysMenu
-	ferr := global.GVA_DB.First(&am, "name = ? AND authority_id = ?", reqUser.Authority.DefaultRouter, reqUser.AuthorityId).Error
+
+	var SysAuthorityMenus []system.SysAuthorityMenu
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", reqUser.AuthorityId).Find(&SysAuthorityMenus).Error
+	if err != nil {
+		return
+	}
+
+	var MenuIds []string
+
+	for i := range SysAuthorityMenus {
+		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
+	}
+
+	var am system.SysBaseMenu
+	ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", reqUser.Authority.DefaultRouter, MenuIds).Error
 	if errors.Is(ferr, gorm.ErrRecordNotFound) {
 		reqUser.Authority.DefaultRouter = "404"
 	}

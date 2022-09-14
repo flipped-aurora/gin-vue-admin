@@ -83,7 +83,7 @@ getTheme()
 const active = ref('')
 watch(() => route, () => {
   active.value = route.name
-})
+}, { deep: true })
 
 watch(() => userStore.sideMode, () => {
   getTheme()

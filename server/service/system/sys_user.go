@@ -32,6 +32,7 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
+//@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: Login
 //@description: 用户登录
 //@param: u *model.SysUser
@@ -48,26 +49,8 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("密码错误")
 		}
-
-		var SysAuthorityMenus []system.SysAuthorityMenu
-		err = global.GVA_DB.Where("sys_authority_authority_id = ?", user.AuthorityId).Find(&SysAuthorityMenus).Error
-		if err != nil {
-			return
-		}
-
-		var MenuIds []string
-
-		for i := range SysAuthorityMenus {
-			MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
-		}
-
-		var am system.SysBaseMenu
-		ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, MenuIds).Error
-		if errors.Is(ferr, gorm.ErrRecordNotFound) {
-			user.Authority.DefaultRouter = "404"
-		}
+		MenuServiceApp.UserAuthorityDefaultRouter(&user)
 	}
-
 	return &user, err
 }
 
@@ -183,6 +166,7 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
+//@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: GetUserInfo
 //@description: 获取用户信息
 //@param: uuid uuid.UUID
@@ -194,24 +178,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 	if err != nil {
 		return reqUser, err
 	}
-
-	var SysAuthorityMenus []system.SysAuthorityMenu
-	err = global.GVA_DB.Where("sys_authority_authority_id = ?", reqUser.AuthorityId).Find(&SysAuthorityMenus).Error
-	if err != nil {
-		return
-	}
-
-	var MenuIds []string
-
-	for i := range SysAuthorityMenus {
-		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
-	}
-
-	var am system.SysBaseMenu
-	ferr := global.GVA_DB.First(&am, "name = ? and id in (?)", reqUser.Authority.DefaultRouter, MenuIds).Error
-	if errors.Is(ferr, gorm.ErrRecordNotFound) {
-		reqUser.Authority.DefaultRouter = "404"
-	}
+	MenuServiceApp.UserAuthorityDefaultRouter(&user)
 	return reqUser, err
 }
 

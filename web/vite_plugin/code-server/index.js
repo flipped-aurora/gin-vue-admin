@@ -16,6 +16,7 @@ for (const file of envFiles) {
 export default function GvaPositionServer() {
   return {
     name: 'gva-position-server',
+    apply: 'serve',
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         if (req._parsedUrl.pathname === '/gvaPositionCode') {

@@ -1,9 +1,11 @@
 export const initDom = () => {
-  document.onmousedown = function(e) {
-    console.log(e.shiftKey, e.button)
-    if (e.shiftKey && e.button === 0) {
-      e.preventDefault()
-      sendRequestToOpenFileInEditor(getFilePath(e))
+  if (import.meta.env.MODE === 'development') {
+    document.onmousedown = function(e) {
+      console.log(e.shiftKey, e.button)
+      if (e.shiftKey && e.button === 0) {
+        e.preventDefault()
+        sendRequestToOpenFileInEditor(getFilePath(e))
+      }
     }
   }
 }

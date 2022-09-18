@@ -12,6 +12,8 @@ import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
+import { initDom } from './utils/positionToCode'
+initDom()
 /**
  * @description 导入加载进度条，防止首屏加载时间过长，用户等待
  *

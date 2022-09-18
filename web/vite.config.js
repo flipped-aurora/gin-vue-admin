@@ -6,6 +6,8 @@ import * as path from 'path'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
+import GvaPosition from './vite_plugin/gva-position'
+import GvaPositionServer from './vite_plugin/code-server'
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,
@@ -77,6 +79,8 @@ export default ({
     esbuild,
     optimizeDeps,
     plugins: [
+      GvaPositionServer(),
+      GvaPosition(),
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
       }), vuePlugin(), [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)]

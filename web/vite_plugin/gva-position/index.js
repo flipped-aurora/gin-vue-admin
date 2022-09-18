@@ -31,7 +31,7 @@ const addLineAttr = (lineStr, line, id) => {
   if (leftTagList) {
     leftTagList = Array.from(new Set(leftTagList))
     leftTagList.forEach((item) => {
-      if (item && item.indexOf('template') === -1) {
+      if (item && item.indexOf('template') === -1 && item.indexOf('transition') === -1) {
         const reg = new RegExp(`${item}`)
         const location = `${item} code-location="${id}:${line}"`
         lineStr = lineStr.replace(reg, location)

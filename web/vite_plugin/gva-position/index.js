@@ -8,7 +8,7 @@ export default function GvaPosition() {
       if (ext.toLowerCase() === 'vue') {
         return codeLineTrack(code, id)
       }
-    }
+    },
   }
 }
 
@@ -31,7 +31,16 @@ const addLineAttr = (lineStr, line, id) => {
   if (leftTagList) {
     leftTagList = Array.from(new Set(leftTagList))
     leftTagList.forEach((item) => {
-      if (item && item.indexOf('template') === -1 && item.indexOf('transition') === -1) {
+      const skip = [
+        'KeepAlive',
+        'template',
+        'keep-alive',
+        'transition',
+        'el-',
+        'El',
+        'router-view',
+      ]
+      if (item && !skip.some((i) => item.indexOf(i) > -1)) {
         const reg = new RegExp(`${item}`)
         const location = `${item} code-location="${id}:${line}"`
         lineStr = lineStr.replace(reg, location)

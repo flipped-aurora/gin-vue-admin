@@ -189,7 +189,7 @@ func compareVerify(value reflect.Value, VerifyStr string) bool {
 
 func isBlank(value reflect.Value) bool {
 	switch value.Kind() {
-	case reflect.String:
+	case reflect.String, reflect.Slice:
 		return value.Len() == 0
 	case reflect.Bool:
 		return !value.Bool()

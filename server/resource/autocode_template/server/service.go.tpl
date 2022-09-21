@@ -5,6 +5,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
     {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
+    {{- if .AutoCreateResource }}
+    "gorm.io/gorm"
+    {{- end}}
 )
 
 type {{.StructName}}Service struct {
@@ -20,14 +23,38 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{
 // Delete{{.StructName}} 删除{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
+	{{- if .AutoCreateResource }}
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id = ?", {{.Abbreviation}}.ID).Update("deleted_by", {{.Abbreviation}}.DeletedBy).Error; err != nil {
+              return err
+        }
+        if err = tx.Delete(&{{.Abbreviation}}).Error; err != nil {
+              return err
+        }
+        return nil
+	})
+    {{- else }}
 	err = global.GVA_DB.Delete(&{{.Abbreviation}}).Error
+	{{- end }}
 	return err
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq,deleted_by uint) (err error) {
+	{{- if .AutoCreateResource }}
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id in ?", ids.Ids).Update("deleted_by", deleted_by).Error; err != nil {
+            return err
+        }
+        if err := tx.Where("id in ?", ids.Ids).Delete(&{{.Package}}.{{.StructName}}{}).Error; err != nil {
+            return err
+        }
+        return nil
+    })
+    {{- else}}
 	err = global.GVA_DB.Delete(&[]{{.Package}}.{{.StructName}}{},"id in ?",ids.Ids).Error
+    {{- end}}
 	return err
 }
 

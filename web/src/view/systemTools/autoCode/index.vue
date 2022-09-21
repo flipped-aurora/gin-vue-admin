@@ -73,6 +73,14 @@
         </el-form-item>
         <el-form-item>
           <template #label>
+            <el-tooltip content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制" placement="bottom" effect="light">
+              <div> 创建资源标识 <el-icon><QuestionFilled /></el-icon> </div>
+            </el-tooltip>
+          </template>
+          <el-checkbox v-model="form.autoCreateResource" />
+        </el-form-item>
+        <el-form-item>
+          <template #label>
             <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
               <div> 自动创建API </div>
             </el-tooltip>
@@ -228,6 +236,7 @@ const form = ref({
   description: '',
   autoCreateApiToSql: true,
   autoMoveFile: true,
+  autoCreateResource: false,
   fields: []
 })
 const rules = ref({

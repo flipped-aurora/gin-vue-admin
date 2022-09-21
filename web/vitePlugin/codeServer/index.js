@@ -21,7 +21,7 @@ export default function GvaPositionServer() {
       server.middlewares.use((req, res, next) => {
         if (req._parsedUrl.pathname === '/gvaPositionCode') {
           const path = req._parsedUrl.query && req._parsedUrl.query.split('=')[1]
-          if (path) {
+          if (path && path !== 'null') {
             if (process.env.VITE_EDITOR === 'webstorm') {
               const linePath = path.split(':')[1]
               const filePath = path.split(':')[0]

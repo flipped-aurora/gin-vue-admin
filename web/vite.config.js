@@ -6,8 +6,8 @@ import * as path from 'path'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
-import GvaPosition from './vite_plugin/gva-position'
-import GvaPositionServer from './vite_plugin/code-server'
+import GvaPosition from './vitePlugin/gvaPosition'
+import GvaPositionServer from './vitePlugin/codeServer'
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,

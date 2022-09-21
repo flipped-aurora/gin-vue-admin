@@ -11,6 +11,8 @@ import (
     "go.uber.org/zap"
     {{- if .NeedValid }}
     "github.com/flipped-aurora/gin-vue-admin/server/utils"
+    {{- else if .AutoCreateResource}}
+    "github.com/flipped-aurora/gin-vue-admin/server/utils"
     {{- end }}
 )
 
@@ -32,6 +34,9 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	{{- if .AutoCreateResource }}
+    {{.Abbreviation}}.CreatedBy = utils.GetUserID(c)
+	{{- end }}
     {{- if .NeedValid }}
     verify := utils.Rules{
     {{- range $index,$element := .Fields }}
@@ -65,6 +70,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+		{{- if .AutoCreateResource }}
+    {{.Abbreviation}}.DeletedBy = utils.GetUserID(c)
+        {{- end }}
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
@@ -85,7 +93,10 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gin.Context) {
 	var IDS request.IdsReq
     _ = c.ShouldBindJSON(&IDS)
-	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS); err != nil {
+    	{{- if .AutoCreateResource }}
+    deletedBy := utils.GetUserID(c)
+        {{- end }}
+	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS,deletedBy); err != nil {
         global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
@@ -105,6 +116,9 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
 	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	    {{- if .AutoCreateResource }}
+    {{.Abbreviation}}.UpdatedBy = utils.GetUserID(c)
+        {{- end }}
 	{{- if .NeedValid }}
       verify := utils.Rules{
       {{- range $index,$element := .Fields }}

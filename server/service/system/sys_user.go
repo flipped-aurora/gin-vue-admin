@@ -178,7 +178,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 	if err != nil {
 		return reqUser, err
 	}
-	MenuServiceApp.UserAuthorityDefaultRouter(&user)
+	MenuServiceApp.UserAuthorityDefaultRouter(&reqUser)
 	return reqUser, err
 }
 

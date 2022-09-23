@@ -11,35 +11,43 @@ import (
 
 type EmailApi struct{}
 
-// @Tags System
-// @Summary 发送测试邮件
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
-// @Router /email/emailTest [post]
+// EmailTest
+// @Tags      System
+// @Summary   发送测试邮件
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Success   200  {string}  string  "{"success":true,"data":{},"msg":"发送成功"}"
+// @Router    /email/emailTest [post]
 func (s *EmailApi) EmailTest(c *gin.Context) {
-	if err := service.ServiceGroupApp.EmailTest(); err != nil {
+	err := service.ServiceGroupApp.EmailTest()
+	if err != nil {
 		global.GVA_LOG.Error("发送失败!", zap.Error(err))
 		response.FailWithMessage("发送失败", c)
-	} else {
-		response.OkWithMessage("发送成功", c)
+		return
 	}
+	response.OkWithMessage("发送成功", c)
 }
 
-// @Tags System
-// @Summary 发送邮件
-// @Security ApiKeyAuth
-// @Produce  application/json
-// @Param data body email_response.Email true "发送邮件必须的参数"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
-// @Router /email/sendEmail [post]
+// SendEmail
+// @Tags      System
+// @Summary   发送邮件
+// @Security  ApiKeyAuth
+// @Produce   application/json
+// @Param     data  body      email_response.Email  true  "发送邮件必须的参数"
+// @Success   200   {string}  string                "{"success":true,"data":{},"msg":"发送成功"}"
+// @Router    /email/sendEmail [post]
 func (s *EmailApi) SendEmail(c *gin.Context) {
 	var email email_response.Email
-	_ = c.ShouldBindJSON(&email)
-	if err := service.ServiceGroupApp.SendEmail(email.To, email.Subject, email.Body); err != nil {
+	err := c.ShouldBindJSON(&email)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = service.ServiceGroupApp.SendEmail(email.To, email.Subject, email.Body)
+	if err != nil {
 		global.GVA_LOG.Error("发送失败!", zap.Error(err))
 		response.FailWithMessage("发送失败", c)
-	} else {
-		response.OkWithMessage("发送成功", c)
+		return
 	}
+	response.OkWithMessage("发送成功", c)
 }

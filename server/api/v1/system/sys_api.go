@@ -121,8 +121,13 @@ func (s *SystemApiApi) GetApiList(c *gin.Context) {
 // @Router    /api/getApiById [post]
 func (s *SystemApiApi) GetApiById(c *gin.Context) {
 	var idInfo request.GetById
-	_ = c.ShouldBindJSON(&idInfo)
-	if err := utils.Verify(idInfo, utils.IdVerify); err != nil {
+	err := c.ShouldBindJSON(&idInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(idInfo, utils.IdVerify)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
@@ -130,9 +135,9 @@ func (s *SystemApiApi) GetApiById(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
-	} else {
-		response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, "获取成功", c)
+		return
 	}
+	response.OkWithDetailed(systemRes.SysAPIResponse{Api: api}, "获取成功", c)
 }
 
 // UpdateApi

@@ -49,6 +49,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 			return
 		}
 		b.TokenNext(c, *user)
+		return
 	}
 	response.FailWithMessage("验证码错误", c)
 }

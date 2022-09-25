@@ -12,12 +12,12 @@ import (
 type DBApi struct{}
 
 // InitDB
-// @Tags InitDB
-// @Summary 初始化用户数据库
+// @Tags     InitDB
+// @Summary  初始化用户数据库
 // @Produce  application/json
-// @Param data body request.InitDB true "初始化数据库参数"
-// @Success 200 {object} response.Response{data=string} "初始化用户数据库"
-// @Router /init/initdb [post]
+// @Param    data  body      request.InitDB                  true  "初始化数据库参数"
+// @Success  200   {object}  response.Response{data=string}  "初始化用户数据库"
+// @Router   /init/initdb [post]
 func (i *DBApi) InitDB(c *gin.Context) {
 	if global.GVA_DB != nil {
 		global.GVA_LOG.Error("已存在数据库配置!")
@@ -39,11 +39,11 @@ func (i *DBApi) InitDB(c *gin.Context) {
 }
 
 // CheckDB
-// @Tags CheckDB
-// @Summary 初始化用户数据库
+// @Tags     CheckDB
+// @Summary  初始化用户数据库
 // @Produce  application/json
-// @Success 200 {object} response.Response{data=map[string]interface{},msg=string} "初始化用户数据库"
-// @Router /init/checkdb [post]
+// @Success  200  {object}  response.Response{data=map[string]interface{},msg=string}  "初始化用户数据库"
+// @Router   /init/checkdb [post]
 func (i *DBApi) CheckDB(c *gin.Context) {
 	var (
 		message  = "前往初始化数据库"

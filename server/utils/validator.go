@@ -43,6 +43,7 @@ func NotEmpty() string {
 // @description: 正则校验 校验输入项是否满足正则表达式
 // @param:  rule string
 // @return: string
+
 func RegexpMatch(rule string) string {
 	return "regexp=" + rule
 }

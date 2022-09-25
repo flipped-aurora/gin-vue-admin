@@ -64,7 +64,11 @@ func (a *AuthorityMenuApi) GetBaseMenuTree(c *gin.Context) {
 // @Router    /menu/addMenuAuthority [post]
 func (a *AuthorityMenuApi) AddMenuAuthority(c *gin.Context) {
 	var authorityMenu systemReq.AddMenuAuthorityInfo
-	_ = c.ShouldBindJSON(&authorityMenu)
+	err := c.ShouldBindJSON(&authorityMenu)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if err := utils.Verify(authorityMenu, utils.AuthorityIdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return

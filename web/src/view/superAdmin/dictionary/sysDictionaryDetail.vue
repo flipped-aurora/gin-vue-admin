@@ -134,8 +134,10 @@ import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
 watch(() => route.params.id, (id) => {
-  searchInfo.value.sysDictionaryID = Number(id)
-  getTableData()
+  if (!(isNaN(Number(id)))) {
+    searchInfo.value.sysDictionaryID = Number(id)
+    getTableData()
+  }
 })
 
 const formData = ref({

@@ -46,10 +46,10 @@
           <el-form-item label="jwt签名">
             <el-input v-model="config.jwt['signing-key']" />
           </el-form-item>
-          <el-form-item label="有效期（秒）">
+          <el-form-item label="有效期">
             <el-input v-model="config.jwt['expires-time']" />
           </el-form-item>
-          <el-form-item label="缓冲期（秒）">
+          <el-form-item label="缓冲期">
             <el-input v-model="config.jwt['buffer-time']" />
           </el-form-item>
           <el-form-item label="签发者">
@@ -151,8 +151,11 @@
             <el-form-item label="maxOpenConns">
               <el-input v-model.number="config.mysql['max-open-conns']" />
             </el-form-item>
+            <el-form-item label="写入日志">
+              <el-checkbox v-model="config.mysql['log-zap']" />
+            </el-form-item>
             <el-form-item label="日志模式">
-              <el-checkbox v-model="config.mysql['log-mode']" />
+              <el-input v-model="config.mysql['log-mode']" />
             </el-form-item>
           </template>
           <template v-if="config.system.dbType === 'pgsql'">
@@ -174,8 +177,11 @@
             <el-form-item label="maxOpenConns">
               <el-input v-model.number="config.pgsql['max-open-conns']" />
             </el-form-item>
+            <el-form-item label="写入日志">
+              <el-checkbox v-model="config.pgsql['log-zap']" />
+            </el-form-item>
             <el-form-item label="日志模式">
-              <el-checkbox v-model="config.pgsql['log-mode']" />
+              <el-input v-model="config.pgsql['log-mode']" />
             </el-form-item>
           </template>
         </el-collapse-item>

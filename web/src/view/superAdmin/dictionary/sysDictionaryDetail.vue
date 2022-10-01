@@ -127,15 +127,17 @@ import {
   findSysDictionaryDetail,
   getSysDictionaryDetailList
 } from '@/api/sysDictionaryDetail' // 此处请自行替换地址
-import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
+import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
-watch(() => route.params.id, (id) => {
-  searchInfo.value.sysDictionaryID = Number(id)
-  getTableData()
+onBeforeRouteUpdate((to, form) => {
+  if (to.name === 'dictionaryDetail') {
+    searchInfo.value.sysDictionaryID = to.params.id
+    getTableData()
+  }
 })
 
 const formData = ref({

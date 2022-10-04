@@ -45,6 +45,8 @@ system:
   iplimit-count: 15000
   #  IP限制一个小时
   iplimit-time: 3600
+  # 系统数据库自动迁移
+  auto-migrate: true
 
 # captcha configuration
 captcha:

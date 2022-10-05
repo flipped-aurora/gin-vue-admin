@@ -7,7 +7,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -28,16 +28,16 @@ func Gorm() *gorm.DB {
 // RegisterTables 注册数据库表专用
 // Author SliverHorn
 func RegisterTables(db *gorm.DB) {
+	// release模式时按照配置文件AutoMigrate配置进行自动数据库迁移。调试、测试模式默认打开。
 	auto_migrate := true
-	env := os.Getenv("ENV")
-	fmt.Println("ENV", env)
-	if env == "dev" {
-		fmt.Println("Developement 环境, Auto migrate 自动打开")
-	} else if env == "docker" { // 部署在docker上
-		fmt.Println("Docker 环境")
-	} else if env == "prod" { // 部署在docker上
-		fmt.Println("Product 环境, Auto migrate 由环境变量控制")
+	switch gin.Mode() {
+	case gin.DebugMode:
+		fmt.Printf("您正在使用gin模式的%s环境名称\n", gin.EnvGinMode)
+	case gin.ReleaseMode:
+		fmt.Printf("您正在使用gin模式的%s环境名称\n", gin.EnvGinMode)
 		auto_migrate = global.GVA_CONFIG.System.AutoMigrate
+	case gin.TestMode:
+		fmt.Printf("您正在使用gin模式的%s环境名称\n", gin.EnvGinMode)
 	}
 
 	if auto_migrate {

@@ -7,6 +7,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -34,6 +35,24 @@ func RunWindowsServer() {
 	// In order to ensure that the text order output can be deleted
 	time.Sleep(10 * time.Microsecond)
 	global.GVA_LOG.Info("server run success on ", zap.String("address", address))
+
+	switch gin.Mode() {
+	case gin.DebugMode:
+		fmt.Printf("您正在使用gin模式的%s环境名称\n", gin.EnvGinMode)
+	case gin.ReleaseMode:
+		fmt.Printf("您正在使用gin模式的%s环境名称\n", gin.EnvGinMode)
+	case gin.TestMode:
+		fmt.Printf("您正在使用gin模式的%s环境名称\n", gin.EnvGinMode)
+	}
+	// env := os.Getenv("ENV")
+	// fmt.Println("ENV", env)
+	// if env == "dev" {
+	// 	fmt.Println("Developement 环境")
+	// } else if env == "docker" { // 部署在docker上
+	// 	fmt.Println("Docker 环境")
+	// } else if env == "prod" { // 部署在docker上
+	// 	fmt.Println("Product 环境")
+	// }
 
 	fmt.Printf(`
 	欢迎使用 gin-vue-admin

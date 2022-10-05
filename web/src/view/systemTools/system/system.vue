@@ -41,6 +41,9 @@
           <el-form-item label="限流时间">
             <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
+          <el-form-item label="开启数据库自动迁移">
+            <el-checkbox v-model="config.system['auto-migrate']">开启</el-checkbox>
+          </el-form-item>
         </el-collapse-item>
         <el-collapse-item title="jwt签名" name="2">
           <el-form-item label="jwt签名">
@@ -361,7 +364,7 @@ const activeNames = reactive([])
 const config = ref({
   system: {
     'iplimit-count': 0,
-    'iplimit-time': 0
+    'iplimit-time': 0,
   },
   jwt: {},
   mysql: {},

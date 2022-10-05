@@ -107,6 +107,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 	}
     	{{- if .AutoCreateResource }}
     deletedBy := utils.GetUserID(c)
+      	{{- else }}
+    	deletedBy  := uint(0)
         {{- end }}
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS,deletedBy); err != nil {
         global.GVA_LOG.Error("批量删除失败!", zap.Error(err))

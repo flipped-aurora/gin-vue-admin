@@ -321,7 +321,7 @@ const form = ref({
   ID: 0,
   path: '',
   name: '',
-  hidden: '',
+  hidden: false,
   parentId: '',
   component: '',
   meta: {
@@ -379,14 +379,15 @@ const initForm = () => {
     ID: 0,
     path: '',
     name: '',
-    hidden: '',
+    hidden: false,
     parentId: '',
     component: '',
     meta: {
       title: '',
       icon: '',
       defaultMenu: false,
-      keepAlive: ''
+      closeTab: false,
+      keepAlive: false
     }
   }
 }

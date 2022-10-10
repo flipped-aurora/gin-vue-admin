@@ -15,6 +15,9 @@ import App from './App.vue'
 import i18n from './i18n' // added by mohamed hassan to multilangauge
 
 /* *
+import { initDom } from './utils/positionToCode'
+initDom()
+/**
  * @description 导入加载进度条，防止首屏加载时间过长，用户等待
  *
  * */

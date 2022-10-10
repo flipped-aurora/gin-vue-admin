@@ -13,130 +13,164 @@ import (
 
 type CustomerApi struct{}
 
-// @Tags ExaCustomer
-// @Summary 创建客户
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body example.ExaCustomer true "客户用户名, 客户手机号码"
-// @Success 200 {object} response.Response{msg=string} "创建客户"
-// @Router /customer/customer [post]
+// CreateExaCustomer
+// @Tags      ExaCustomer
+// @Summary   创建客户
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      example.ExaCustomer            true  "客户用户名, 客户手机号码"
+// @Success   200   {object}  response.Response{msg=string}  "创建客户"
+// @Router    /customer/customer [post]
 func (e *CustomerApi) CreateExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
-	_ = c.ShouldBindJSON(&customer)
-	if err := utils.Verify(customer, utils.CustomerVerify); err != nil {
+	err := c.ShouldBindJSON(&customer)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(customer, utils.CustomerVerify)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	customer.SysUserID = utils.GetUserID(c)
 	customer.SysUserAuthorityID = utils.GetUserAuthorityId(c)
-	if err := customerService.CreateExaCustomer(customer); err != nil {
+	err = customerService.CreateExaCustomer(customer)
+	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.creationFail"), zap.Error(err))
-		response.FailWithMessage("general.creationFailErr", c)
-	} else {
-		response.OkWithMessage("general.createSuccss", c)
+		response.FailWithMessage(global.Translate("general.creationFailErr"), c)
+		return
 	}
+	response.OkWithMessage(global.Translate("general.createSuccss"), c)
 }
 
-// @Tags ExaCustomer
-// @Summary 删除客户
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body example.ExaCustomer true "客户ID"
-// @Success 200 {object} response.Response{msg=string} "删除客户"
-// @Router /customer/customer [delete]
+// DeleteExaCustomer
+// @Tags      ExaCustomer
+// @Summary   删除客户
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      example.ExaCustomer            true  "客户ID"
+// @Success   200   {object}  response.Response{msg=string}  "删除客户"
+// @Router    /customer/customer [delete]
 func (e *CustomerApi) DeleteExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
-	_ = c.ShouldBindJSON(&customer)
-	if err := utils.Verify(customer.GVA_MODEL, utils.IdVerify); err != nil {
+	err := c.ShouldBindJSON(&customer)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := customerService.DeleteExaCustomer(customer); err != nil {
-		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
-		response.FailWithMessage("general.deletFailErr", c)
-	} else {
-		response.OkWithMessage("general.deleteSuccess", c)
+	err = utils.Verify(customer.GVA_MODEL, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
 	}
+	err = customerService.DeleteExaCustomer(customer)
+	if err != nil {
+		global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
+		return
+	}
+	response.OkWithMessage(global.Translate("general.deleteSuccess"), c)
 }
 
-// @Tags ExaCustomer
-// @Summary 更新客户信息
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body example.ExaCustomer true "客户ID, 客户信息"
-// @Success 200 {object} response.Response{msg=string} "更新客户信息"
-// @Router /customer/customer [put]
+// UpdateExaCustomer
+// @Tags      ExaCustomer
+// @Summary   更新客户信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      example.ExaCustomer            true  "客户ID, 客户信息"
+// @Success   200   {object}  response.Response{msg=string}  "更新客户信息"
+// @Router    /customer/customer [put]
 func (e *CustomerApi) UpdateExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
-	_ = c.ShouldBindJSON(&customer)
-	if err := utils.Verify(customer.GVA_MODEL, utils.IdVerify); err != nil {
+	err := c.ShouldBindJSON(&customer)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := utils.Verify(customer, utils.CustomerVerify); err != nil {
+	err = utils.Verify(customer.GVA_MODEL, utils.IdVerify)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if err := customerService.UpdateExaCustomer(&customer); err != nil {
+	err = utils.Verify(customer, utils.CustomerVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = customerService.UpdateExaCustomer(&customer)
+	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
-		response.FailWithMessage("general.updateFailErr", c)
-	} else {
-		response.OkWithMessage("general.updateSuccess", c)
+		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
+		return
 	}
+	response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 }
 
-// @Tags ExaCustomer
-// @Summary 获取单一客户信息
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query example.ExaCustomer true "客户ID"
-// @Success 200 {object} response.Response{data=exampleRes.ExaCustomerResponse,msg=string} "获取单一客户信息,返回包括客户详情"
-// @Router /customer/customer [get]
+// GetExaCustomer
+// @Tags      ExaCustomer
+// @Summary   获取单一客户信息
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     example.ExaCustomer                                                true  "客户ID"
+// @Success   200   {object}  response.Response{data=exampleRes.ExaCustomerResponse,msg=string}  "获取单一客户信息,返回包括客户详情"
+// @Router    /customer/customer [get]
 func (e *CustomerApi) GetExaCustomer(c *gin.Context) {
 	var customer example.ExaCustomer
-	_ = c.ShouldBindQuery(&customer)
-	if err := utils.Verify(customer.GVA_MODEL, utils.IdVerify); err != nil {
+	err := c.ShouldBindQuery(&customer)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(customer.GVA_MODEL, utils.IdVerify)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	data, err := customerService.GetExaCustomer(customer.ID)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
-		response.FailWithMessage("general.getDataFailErr", c)
-	} else {
-		response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, "general.getDataSuccess", c)
+		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
+		return
 	}
+	response.OkWithDetailed(exampleRes.ExaCustomerResponse{Customer: data}, global.Translate("general.getDataSuccess"), c)
 }
 
-// @Tags ExaCustomer
-// @Summary 分页获取权限客户列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query request.PageInfo true "页码, 每页大小"
-// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "分页获取权限客户列表,返回包括列表,总数,页码,每页数量"
-// @Router /customer/customerList [get]
+// GetExaCustomerList
+// @Tags      ExaCustomer
+// @Summary   分页获取权限客户列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  query     request.PageInfo                                        true  "页码, 每页大小"
+// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取权限客户列表,返回包括列表,总数,页码,每页数量"
+// @Router    /customer/customerList [get]
 func (e *CustomerApi) GetExaCustomerList(c *gin.Context) {
 	var pageInfo request.PageInfo
-	_ = c.ShouldBindQuery(&pageInfo)
-	if err := utils.Verify(pageInfo, utils.PageInfoVerify); err != nil {
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(pageInfo, utils.PageInfoVerify)
+	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	customerList, total, err := customerService.GetCustomerInfoList(utils.GetUserAuthorityId(c), pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
-		response.FailWithMessage("general.getDataFailErr"+" "+err.Error(), c)
-	} else {
-		response.OkWithDetailed(response.PageResult{
-			List:     customerList,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
-		}, "general.getDataSuccess", c)
+		response.FailWithMessage(global.Translate("general.getDataFailErr")+" "+err.Error(), c)
+		return
 	}
+	response.OkWithDetailed(response.PageResult{
+		List:     customerList,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
+	}, global.Translate("general.getDataSuccess"), c)
 }

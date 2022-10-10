@@ -48,7 +48,7 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" size="small" label-width="120px" :inline="true">
+      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
         <el-form-item :label="t('autoCode.structName')" prop="structName">
           <el-input v-model="form.structName" :placeholder="t('autoCode.structNameNote')" />
         </el-form-item>
@@ -70,6 +70,14 @@
           </el-select>
           <el-icon class="auto-icon" @click="getPkgs"><refresh /></el-icon>
           <el-icon class="auto-icon" @click="goPkgs"><document-add /></el-icon>
+        </el-form-item>
+        <el-form-item>
+          <template #label>
+            <el-tooltip content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制" placement="bottom" effect="light">
+              <div> 创建资源标识 <el-icon><QuestionFilled /></el-icon> </div>
+            </el-tooltip>
+          </template>
+          <el-checkbox v-model="form.autoCreateResource" />
         </el-form-item>
         <el-form-item>
           <template #label>
@@ -237,6 +245,7 @@ const form = ref({
   description: '',
   autoCreateApiToSql: true,
   autoMoveFile: true,
+  autoCreateResource: false,
   fields: []
 })
 const rules = ref({

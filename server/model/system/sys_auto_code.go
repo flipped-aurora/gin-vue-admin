@@ -17,6 +17,7 @@ type AutoCodeStruct struct {
 	Abbreviation       string   `json:"abbreviation"`       // Struct简称
 	Description        string   `json:"description"`        // Struct中文名称
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
+	AutoCreateResource bool     `json:"autoCreateResource"` // 是否自动创建资源标识
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	Fields             []*Field `json:"fields,omitempty"`
 	HasTimer           bool

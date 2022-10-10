@@ -11,6 +11,8 @@ import (
     "go.uber.org/zap"
     {{- if .NeedValid }}
     "github.com/flipped-aurora/gin-vue-admin/server/utils"
+    {{- else if .AutoCreateResource}}
+    "github.com/flipped-aurora/gin-vue-admin/server/utils"
     {{- end }}
 )
 
@@ -31,7 +33,14 @@ var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	err := c.ShouldBindJSON(&{{.Abbreviation}})
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	{{- if .AutoCreateResource }}
+    {{.Abbreviation}}.CreatedBy = utils.GetUserID(c)
+	{{- end }}
     {{- if .NeedValid }}
     verify := utils.Rules{
     {{- range $index,$element := .Fields }}
@@ -64,7 +73,14 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	err := c.ShouldBindJSON(&{{.Abbreviation}})
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+		{{- if .AutoCreateResource }}
+    {{.Abbreviation}}.DeletedBy = utils.GetUserID(c)
+        {{- end }}
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error(global.Translate("general.deleteFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.deletFailErr"), c)
@@ -84,8 +100,15 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 // @Router /{{.Abbreviation}}/delete{{.StructName}}ByIds [delete]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    _ = c.ShouldBindJSON(&IDS)
-	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS); err != nil {
+    err := c.ShouldBindJSON(&IDS)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+    	{{- if .AutoCreateResource }}
+    deletedBy := utils.GetUserID(c)
+        {{- end }}
+	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS,deletedBy); err != nil {
         global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFailErr"), c)
 	} else {
@@ -104,7 +127,14 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 // @Router /{{.Abbreviation}}/update{{.StructName}} [put]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindJSON(&{{.Abbreviation}})
+	err := c.ShouldBindJSON(&{{.Abbreviation}})
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	    {{- if .AutoCreateResource }}
+    {{.Abbreviation}}.UpdatedBy = utils.GetUserID(c)
+        {{- end }}
 	{{- if .NeedValid }}
       verify := utils.Rules{
       {{- range $index,$element := .Fields }}
@@ -137,7 +167,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
 	var {{.Abbreviation}} {{.Package}}.{{.StructName}}
-	_ = c.ShouldBindQuery(&{{.Abbreviation}})
+	err := c.ShouldBindQuery(&{{.Abbreviation}})
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
         global.GVA_LOG.Error(global.Translate("general.queryFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.queryFailErr"), c)
@@ -157,7 +191,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 // @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Context) {
 	var pageInfo {{.Package}}Req.{{.StructName}}Search
-	_ = c.ShouldBindQuery(&pageInfo)
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
 	if list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
 	    global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
         response.FailWithMessage(global.Translate("general.getDataFailErr"), c)

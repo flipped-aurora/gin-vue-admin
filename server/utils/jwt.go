@@ -32,7 +32,7 @@ func (j *JWT) CreateClaims(baseClaims request.BaseClaims) request.CustomClaims {
 	ep, _ := ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
 	claims := request.CustomClaims{
 		BaseClaims: baseClaims,
-		BufferTime: int64(bf), // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
+		BufferTime: int64(bf / time.Second), // 缓冲时间1天 缓冲时间内会获得新的token刷新令牌 此时一个用户会存在两个有效令牌 但是前端只留一个 另一个会丢失
 		StandardClaims: jwt.StandardClaims{
 			NotBefore: time.Now().Unix() - 1000,     // 签名生效时间
 			ExpiresAt: time.Now().Add(ep).Unix(),    // 过期时间 7天  配置文件

@@ -102,3 +102,36 @@ web
  └── yarn.lock
 
 ```
+
+```
+electron改造步骤
+1.安装依赖
+cnpm i electron electron-builder -D
+
+2.修改package.json文件
+增加main入口文件
+"main": "background.js",
+
+增加scripts命令
+ "start": "electron .",
+ "build:electron": "electron-builder build --config ./electron-builder.json",
+ 
+3.增加background.js文件
+内容见仓库文件
+
+4.增加打包配置文件electron-builder.json
+
+5.修改.env.production环境变量
+由于electron打包后请求不再使用反向代理，所以，这里我们把axios请求的baseUrl修改为后端真实地址
+VITE_BASE_API = http://127.0.0.1:8888
+
+6.打包
+打包生成静态资源
+npm run build
+
+打包生成安装包
+npm run build:electron
+
+需要注意的是，如果运行npm run start，需要先运行npm run serve，然本地环境跑起来
+本地开发可只使用npm run serve，因为electron只是个壳子，里面嵌的是本地网址
+```

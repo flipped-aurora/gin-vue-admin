@@ -1,0 +1,25 @@
+{
+  "productName": "gin-vue-admin",
+  "files": [
+    "./background.js",
+    "./dist"
+  ],
+  "directories": {
+    "output": "./release"
+  },
+  "win": {
+    "requestedExecutionLevel": "requireAdministrator",
+    "target": [
+      "nsis",
+      "zip"
+    ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "allowElevation": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "gin-vue-admin"
+  }
+}

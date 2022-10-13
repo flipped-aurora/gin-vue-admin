@@ -71,6 +71,31 @@
           <el-icon class="auto-icon" @click="getPkgs"><refresh /></el-icon>
           <el-icon class="auto-icon" @click="goPkgs"><document-add /></el-icon>
         </el-form-item>
+        <el-form-item label="业务库" prop="businessDB">
+          <template #label>
+            <el-tooltip content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))" placement="bottom" effect="light">
+              <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
+            </el-tooltip>
+          </template>
+          <el-select
+            v-model="form.businessDB"
+            style="width:194px"
+            placeholder="选择业务库"
+          >
+            <el-option
+              v-for="item in dbList"
+              :key="item.aliasName"
+              :value="item.aliasName"
+              :label="item.aliasName"
+              :disabled="item.disable"
+            >
+              <div>
+                <span>{{ item.aliasName }}</span>
+                <span style="float:right;color:#8492a6;font-size:13px">{{ item.dbName }}</span>
+              </div>
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
           <template #label>
             <el-tooltip content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制" placement="bottom" effect="light">
@@ -223,7 +248,6 @@ const dbform = ref({
   dbName: '',
   tableName: ''
 })
-const dbOptions = ref([])
 const tableOptions = ref([])
 const addFlag = ref('')
 const fdMap = ref({})
@@ -234,6 +258,7 @@ const form = ref({
   package: '',
   abbreviation: '',
   description: '',
+  businessDB: '',
   autoCreateApiToSql: true,
   autoMoveFile: true,
   autoCreateResource: false,
@@ -411,10 +436,14 @@ const enterForm = async(isPreview) => {
     }
   })
 }
+
+const dbList = ref([])
+const dbOptions = ref([])
 const getDbFunc = async() => {
   const res = await getDB()
   if (res.code === 0) {
     dbOptions.value = res.data.dbs
+    dbList.value = res.data.dbList
   }
 }
 const getTableFunc = async() => {

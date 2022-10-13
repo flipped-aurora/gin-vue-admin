@@ -41,7 +41,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
 
 // Delete{{.StructName}}ByIds 批量删除{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq,deleted_by uint) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq{{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id in ?", ids.Ids).Update("deleted_by", deleted_by).Error; err != nil {

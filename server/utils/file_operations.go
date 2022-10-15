@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"strings"
+	"os/exec"
 )
 
 //@author: [songzhibin97](https://github.com/songzhibin97)
@@ -39,7 +40,23 @@ Redirect:
 			goto Redirect
 		}
 	}
-	return os.Rename(src, dst)
+	err = os.Rename(src, dst)
+	if err != nil {
+		copyErr := FileCopy(src, dst)
+		if copyErr != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func FileCopy(src string, dst string) (err error) {
+	var cmd *exec.Cmd
+	cmd = exec.Command("cp", src, dst)
+	_, err = cmd.Output()
+	if err != nil {
+	}
+	return err
 }
 
 func DeLFile(filePath string) error {

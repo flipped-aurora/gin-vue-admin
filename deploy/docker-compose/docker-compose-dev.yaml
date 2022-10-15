@@ -45,6 +45,7 @@ services:
       - redis
     volumes:
       - ../../server:/server
+      - ../../web:/web
     working_dir: /server    # 如果docker 设置了workdir 则此处不需要设置 
     command: bash -c "go env -w GOPROXY=https://goproxy.cn,direct && go mod tidy && go run main.go"
     links:

@@ -82,7 +82,8 @@ getTheme()
 
 const active = ref('')
 watch(() => route, () => {
-  active.value = route.name
+  console.log(route.meta.activeName)
+  active.value = route.meta.activeName || route.name
 }, { deep: true })
 
 watch(() => userStore.sideMode, () => {
@@ -91,7 +92,7 @@ watch(() => userStore.sideMode, () => {
 
 const isCollapse = ref(false)
 const initPage = () => {
-  active.value = route.name
+  active.value = route.meta.activeName || route.name
   const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {
     isCollapse.value = !isCollapse.value

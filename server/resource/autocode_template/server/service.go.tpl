@@ -13,10 +13,17 @@ import (
 type {{.StructName}}Service struct {
 }
 
+{{- $db := "" }}
+{{- if eq .BusinessDB "" }}
+ {{- $db = "global.GVA_DB" }}
+{{- else}}
+ {{- $db =  printf "global.MustGetGlobalDBByDBName(\"%s\")" .BusinessDB   }}
+{{- end}}
+
 // Create{{.StructName}} 创建{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
-	err = global.GVA_DB.Create(&{{.Abbreviation}}).Error
+	err = {{$db}}.Create(&{{.Abbreviation}}).Error
 	return err
 }
 
@@ -24,7 +31,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
 	{{- if .AutoCreateResource }}
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id = ?", {{.Abbreviation}}.ID).Update("deleted_by", {{.Abbreviation}}.DeletedBy).Error; err != nil {
               return err
         }
@@ -34,7 +41,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
         return nil
 	})
     {{- else }}
-	err = global.GVA_DB.Delete(&{{.Abbreviation}}).Error
+	err = {{$db}}.Delete(&{{.Abbreviation}}).Error
 	{{- end }}
 	return err
 }
@@ -43,7 +50,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq{{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
-	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id in ?", ids.Ids).Update("deleted_by", deleted_by).Error; err != nil {
             return err
         }
@@ -53,7 +60,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
         return nil
     })
     {{- else}}
-	err = global.GVA_DB.Delete(&[]{{.Package}}.{{.StructName}}{},"id in ?",ids.Ids).Error
+	err = {{$db}}.Delete(&[]{{.Package}}.{{.StructName}}{},"id in ?",ids.Ids).Error
     {{- end}}
 	return err
 }
@@ -61,14 +68,14 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
 // Update{{.StructName}} 更新{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
-	err = global.GVA_DB.Save(&{{.Abbreviation}}).Error
+	err = {{$db}}.Save(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据id获取{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id uint) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&{{.Abbreviation}}).Error
+	err = {{$db}}.Where("id = ?", id).First(&{{.Abbreviation}}).Error
 	return
 }
 
@@ -78,7 +85,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := global.GVA_DB.Model(&{{.Package}}.{{.StructName}}{})
+	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
     var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
     if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {

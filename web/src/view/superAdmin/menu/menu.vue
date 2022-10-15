@@ -124,6 +124,17 @@
         <el-form-item label="排序标记" prop="sort" style="width:30%">
           <el-input v-model.number="form.sort" autocomplete="off" />
         </el-form-item>
+        <el-form-item prop="meta.activeName" style="width:30%">
+          <template #label>
+            <div>
+              <span> 高亮菜单 </span>
+              <el-tooltip content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。" placement="bottom" effect="light">
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </div>
+          </template>
+          <el-input v-model="form.meta.activeName" :placeholder="form.name" autocomplete="off" />
+        </el-form-item>
         <el-form-item label="KeepAlive" prop="meta.keepAlive" style="width:30%">
           <el-select v-model="form.meta.keepAlive" style="width:100%" placeholder="是否keepAlive缓存页面">
             <el-option :value="false" label="否" />
@@ -322,6 +333,7 @@ const form = ref({
   parentId: '',
   component: '',
   meta: {
+    activeName: '',
     title: '',
     icon: '',
     defaultMenu: false,

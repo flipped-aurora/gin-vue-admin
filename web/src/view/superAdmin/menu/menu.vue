@@ -126,9 +126,12 @@
         </el-form-item>
         <el-form-item prop="meta.activeName" style="width:30%">
           <template #label>
-            <el-tooltip content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。" placement="bottom" effect="light">
-              <div> 高亮菜单 <el-icon><QuestionFilled /></el-icon> </div>
-            </el-tooltip>
+            <div>
+              <span> 高亮菜单 </span>
+              <el-tooltip content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。" placement="bottom" effect="light">
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </div>
           </template>
           <el-input v-model="form.meta.activeName" :placeholder="form.name" autocomplete="off" />
         </el-form-item>

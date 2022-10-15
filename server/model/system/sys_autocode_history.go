@@ -12,6 +12,7 @@ import (
 type SysAutoCodeHistory struct {
 	global.GVA_MODEL
 	Package       string `json:"package"`
+	BusinessDB    string `json:"businessDB"`
 	TableName     string `json:"tableName"`
 	RequestMeta   string `gorm:"type:text" json:"requestMeta,omitempty"`   // 前端传入的结构化信息
 	AutoCodePath  string `gorm:"type:text" json:"autoCodePath,omitempty"`  // 其他meta信息 path;path

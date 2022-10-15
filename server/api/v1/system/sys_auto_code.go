@@ -107,11 +107,19 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 // @Router    /autoCode/getDatabase [get]
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	dbs, err := autoCodeService.Database().GetDB()
+	var dbList []map[string]interface{}
+	for _, db := range global.GVA_CONFIG.DBList {
+		var item = make(map[string]interface{})
+		item["aliasName"] = db.AliasName
+		item["dbName"] = db.Dbname
+		item["disable"] = db.Disable
+		dbList = append(dbList, item)
+	}
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"dbs": dbs}, "获取成功", c)
+		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, "获取成功", c)
 	}
 }
 
@@ -172,6 +180,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	}
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
+
 		global.GVA_LOG.Error("创建成功!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {

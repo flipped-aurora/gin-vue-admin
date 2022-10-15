@@ -19,6 +19,7 @@ type AutoCodeStruct struct {
 	AutoCreateApiToSql bool     `json:"autoCreateApiToSql"` // 是否自动创建api
 	AutoCreateResource bool     `json:"autoCreateResource"` // 是否自动创建资源标识
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
+	BusinessDB         string   `json:"businessDB"`         // 业务数据库
 	Fields             []*Field `json:"fields,omitempty"`
 	HasTimer           bool
 	DictTypes          []string `json:"-"`

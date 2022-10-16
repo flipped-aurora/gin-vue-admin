@@ -14,7 +14,7 @@ on:
 
 jobs:
   init:
-    if: github.repository_owner == 'flipped-aurora'
+    if: github.repository_owner == 'tscuite'
     runs-on: ubuntu-latest
     steps:
       - name: init
@@ -129,7 +129,7 @@ jobs:
           ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIRTEST} && bash restart.sh > /dev/null  2>&1 &"
 
   release-pr:
-    if: ${{ github.event_name == 'workflow_dispatch' && github.repository_owner == 'flipped-aurora'}}
+    if: ${{ github.event_name == 'workflow_dispatch' && github.repository_owner == 'tscuite'}}
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v3

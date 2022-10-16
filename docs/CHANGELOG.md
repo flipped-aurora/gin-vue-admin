@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.6.2](https://github.com/tscuite/gin-vue-admin/compare/v3.6.1...v3.6.2) (2022-10-16)
+
+
+### Bug Fixes
+
+* demo ([b4de157](https://github.com/tscuite/gin-vue-admin/commit/b4de1578e1dc86321edb04e0d28596484ee4a27b))
+
 ## 3.6.1 (2022-10-16)
 
 

@@ -132,15 +132,32 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' && github.repository_owner == 'flipped-aurora'}}
     runs-on: ubuntu-latest
     steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+      - name: Sed Config
+        env:
+          GVA_VERSION: ${{ inputs.gva_version }}
+        shell: bash
+        run: |
+          sed -i 's/当前版本.*`$/当前版本:v'${GVA_VERSION##v}'`/' web/src/core/config.js
+          sed -i 's/当前版本.*$/当前版本:v'${GVA_VERSION##v}'/' server/core/server.go
+          sed -i 's/当前版本.*$/当前版本:v'${GVA_VERSION##v}'/' web/src/core/gin-vue-admin.js
+          sed -i 's/"version": ".*",$/"version": "'${GVA_VERSION##v}'",/' web/package.json
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add . && git commit -m "release: v${GVA_VERSION##v}"
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
       - uses: google-github-actions/release-please-action@v3
         with:
           command: release-pr
           release-type: simple
           changelog-path: docs/CHANGELOG.md
           release-as: ${{ inputs.gva_version }}
-          package-name: release-please-action
-          extra-files: |
-            x-release-please-version.json
+          package-name: gin-vue-admin
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
 
   release-please:
@@ -163,9 +180,9 @@ jobs:
           release-type: simple
           changelog-path: docs/CHANGELOG.md
           #release-as: ${{ inputs.deploy_target }}
-          package-name: release-please-action
-          extra-files: |
-            x-release-please-version.json
+          package-name: gin-vue-admin
+          #extra-files: |
+          #  x-release-please-version.json
           changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
 
   devops-prod:

@@ -59,6 +59,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	upDateMap["hidden"] = menu.Hidden
 	upDateMap["component"] = menu.Component
 	upDateMap["title"] = menu.Title
+	upDateMap["active_name"] = menu.ActiveName
 	upDateMap["icon"] = menu.Icon
 	upDateMap["sort"] = menu.Sort
 

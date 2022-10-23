@@ -5,6 +5,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 const routerListArr = []
+const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
 
 const formatRouter = (routes, routeMap) => {
@@ -14,9 +15,16 @@ const formatRouter = (routes, routeMap) => {
     }
     item.meta.btns = item.btns
     item.meta.hidden = item.hidden
-    routeMap[item.name] = item
-    if (item.children && item.children.length > 0) {
-      formatRouter(item.children, routeMap)
+    if (item.meta.defaultMenu === true) {
+      notLayoutRouterArr.push({
+        ...item,
+        path: `/${item.path}`,
+      })
+    } else {
+      routeMap[item.name] = item
+      if (item.children && item.children.length > 0) {
+        formatRouter(item.children, routeMap)
+      }
     }
   })
 }
@@ -72,6 +80,9 @@ export const useRouterStore = defineStore('router', () => {
     })
     formatRouter(asyncRouter, routeMap)
     baseRouter[0].children = asyncRouter
+    if (notLayoutRouterArr.length !== 0) {
+      baseRouter.push(...notLayoutRouterArr)
+    }
     baseRouter.push({
       path: '/:catchAll(.*)',
       redirect: '/layout/404'

@@ -16,11 +16,11 @@
           <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
             <el-form-item label="业务库" prop="selectDBtype">
               <template #label>
-                <el-tooltip content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))" placement="bottom" effect="light">
+                <el-tooltip content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）" placement="bottom" effect="light">
                   <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
-              <el-select v-model="dbform.businessDB"  clearable style="width:194px"  placeholder="选择业务库" @change="getDbFunc">
+              <el-select v-model="dbform.businessDB" clearable style="width:194px" placeholder="选择业务库" @change="getDbFunc">
                 <el-option
                   v-for="item in dbList"
                   :key="item.aliasName"
@@ -36,7 +36,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="数据库名" prop="structName">
-              <el-select v-model="dbform.dbName" filterable placeholder="请选择数据库" @change="getTableFunc">
+              <el-select v-model="dbform.dbName" clearable filterable placeholder="请选择数据库" @change="getTableFunc">
                 <el-option
                   v-for="item in dbOptions"
                   :key="item.database"
@@ -244,8 +244,7 @@ import { ref, getCurrentInstance, reactive, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import {toRaw} from "@vue/reactivity"
-
+import { toRaw } from '@vue/reactivity'
 
 const fieldTemplate = {
   fieldName: '',
@@ -464,15 +463,16 @@ const dbList = ref([])
 const dbOptions = ref([])
 
 const getDbFunc = async() => {
-  const res = await getDB({businessDB: dbform.value.businessDB})
+  dbform.value.dbName = ''
+  dbform.value.tableName = ''
+  const res = await getDB({ businessDB: dbform.value.businessDB })
   if (res.code === 0) {
     dbOptions.value = res.data.dbs
     dbList.value = res.data.dbList
-    
   }
 }
 const getTableFunc = async() => {
-  const res = await getTable({businessDB: dbform.value.businessDB, dbName: dbform.value.dbName })
+  const res = await getTable({ businessDB: dbform.value.businessDB, dbName: dbform.value.dbName })
   if (res.code === 0) {
     tableOptions.value = res.data.tables
   }
@@ -481,17 +481,16 @@ const getTableFunc = async() => {
 
 const getColumnFunc = async() => {
   const gormModelList = ['id', 'created_at', 'updated_at', 'deleted_at']
-  const res = await getColumn( dbform.value)
+  const res = await getColumn(dbform.value)
   if (res.code === 0) {
     let dbtype = ''
-    if (dbform.value.businessDB !=""){
-      const dbtmp = dbList.value.find(item => item.aliasName == dbform.value.businessDB) 
+    if (dbform.value.businessDB !== '') {
+      const dbtmp = dbList.value.find(item => item.aliasName === dbform.value.businessDB)
       console.log(dbtmp)
-      const dbraw = toRaw(dbtmp)      
+      const dbraw = toRaw(dbtmp)
       console.log(dbraw)
-      dbtype =  dbraw.dbtype  
-    
-    }    
+      dbtype = dbraw.dbtype
+    }
     const tbHump = toHump(dbform.value.tableName)
     form.value.structName = toUpperCase(tbHump)
     form.value.tableName = dbform.value.tableName
@@ -512,7 +511,7 @@ const getColumnFunc = async() => {
                 dataType: item.dataType,
                 fieldJson: fbHump,
                 dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
-                columnName: dbtype=='oracle' ? item.columnName.toUpperCase():item.columnName,
+                columnName: dbtype == 'oracle' ? item.columnName.toUpperCase() : item.columnName,
                 comment: item.columnComment,
                 require: false,
                 errorText: '',
@@ -553,7 +552,7 @@ const goPkgs = () => {
 }
 
 const init = () => {
-  getDbFunc()  
+  getDbFunc()
   setFdMap()
   getPkgs()
   const id = route.params.id

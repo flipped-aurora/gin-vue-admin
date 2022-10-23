@@ -147,6 +147,12 @@
             <el-option :value="true" label="是" />
           </el-select>
         </el-form-item>
+        <el-form-item label="是否是基础路由" style="width:30%">
+          <el-select v-model="form.meta.defaultMenu" style="width:100%" placeholder="是否是基础路由">
+            <el-option :value="false" label="否" />
+            <el-option :value="true" label="是" />
+          </el-select>
+        </el-form-item>
       </el-form>
       <div>
         <el-button

@@ -33,6 +33,8 @@ func (g *_gorm) Config() *gorm.Config {
 		logMode = &global.GVA_CONFIG.Mysql
 	case "pgsql":
 		logMode = &global.GVA_CONFIG.Pgsql
+	case "oracle":
+		logMode = &global.GVA_CONFIG.Oracle
 	default:
 		logMode = &global.GVA_CONFIG.Mysql
 	}

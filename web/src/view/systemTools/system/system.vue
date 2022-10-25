@@ -87,7 +87,7 @@
         </el-collapse-item>
         <el-collapse-item title="Redis admin数据库配置" name="4">
           <el-form-item label="库">
-            <el-input v-model="config.redis.db" />
+            <el-input v-model.number="config.redis.db" />
           </el-form-item>
           <el-form-item label="地址">
             <el-input v-model="config.redis.addr" />

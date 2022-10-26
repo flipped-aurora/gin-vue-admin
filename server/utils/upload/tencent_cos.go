@@ -38,8 +38,7 @@ func (*TencentCOS) UploadFile(file *multipart.FileHeader) (string, string, error
 // DeleteFile delete file form COS
 func (*TencentCOS) DeleteFile(key string) error {
 	client := NewClient()
-	name := global.GVA_CONFIG.TencentCOS.PathPrefix + "/" + key
-	_, err := client.Object.Delete(context.Background(), name)
+	_, err := client.Object.Delete(context.Background(), key)
 	if err != nil {
 		global.GVA_LOG.Error("function bucketManager.Delete() Filed", zap.Any("err", err.Error()))
 		return errors.New("function bucketManager.Delete() Filed, err:" + err.Error())

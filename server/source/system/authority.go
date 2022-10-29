@@ -4,6 +4,7 @@ import (
 	"context"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -43,9 +44,9 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 		return ctx, system.ErrMissingDBContext
 	}
 	entities := []sysModel.SysAuthority{
-		{AuthorityId: 888, AuthorityName: "普通用户", ParentId: 0, DefaultRouter: "dashboard"},
-		{AuthorityId: 9528, AuthorityName: "测试角色", ParentId: 0, DefaultRouter: "dashboard"},
-		{AuthorityId: 8881, AuthorityName: "普通用户子角色", ParentId: 888, DefaultRouter: "dashboard"},
+		{AuthorityId: 888, AuthorityName: "普通用户", ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
+		{AuthorityId: 9528, AuthorityName: "测试角色", ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
+		{AuthorityId: 8881, AuthorityName: "普通用户子角色", ParentId: utils.Pointer[uint](888), DefaultRouter: "dashboard"},
 	}
 
 	if err := db.Create(&entities).Error; err != nil {

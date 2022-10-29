@@ -6,6 +6,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/gookit/color"
+	"strconv"
 
 	"gorm.io/gorm"
 )
@@ -123,8 +125,15 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 //@description: 获取所有的api
 //@return:  apis []model.SysApi, err error
 
-func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
-	err = global.GVA_DB.Find(&apis).Error
+func (apiService *ApiService) GetAllApis(sysId interface{}) (apis []system.SysApi, err error) {
+	adminId, _ := strconv.Atoi(fmt.Sprintf("%d", sysId))
+	color.Printf("adminId %T, %d", adminId, adminId)
+	if adminId != 1 {
+		err = global.GVA_DB.Debug().Where("only_sys_admin = ?", 0).Find(&apis).Error
+	} else {
+		err = global.GVA_DB.Debug().Where("only_sys_admin in (0, 1)").Find(&apis).Error
+	}
+
 	return
 }
 

@@ -155,9 +155,9 @@ func (menuService *MenuService) getBaseMenuTreeMap(sysId interface{}) (treeMap m
 	color.Printf("getBaseMenuTreeMap adminId %d", adminId)
 
 	if adminId > 1 {
-		err = global.GVA_DB.Debug().Where("only_sys_admin = ?", 0).Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
+		err = global.GVA_DB.Where("only_sys_admin = ?", 0).Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
 	} else {
-		err = global.GVA_DB.Debug().Where("only_sys_admin in (0, 1)").Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
+		err = global.GVA_DB.Where("only_sys_admin in (0, 1)").Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
 	}
 
 	for _, v := range allMenus {

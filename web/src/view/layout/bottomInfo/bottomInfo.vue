@@ -1,5 +1,5 @@
 <template>
-  <div class="bottom-info">
+  <div class="bottom-info" style="display:none;">
     <div>
       <span>Powered by</span>
       <span>

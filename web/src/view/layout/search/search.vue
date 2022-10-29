@@ -37,12 +37,12 @@
     >
       <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
     </div>
-    <div
-      v-if="btnShow"
-      class="user-box"
-    >
-      <div class="gvaIcon gvaIcon-customer-service" @click="toService" />
-    </div>
+<!--    <div-->
+<!--      v-if="btnShow"-->
+<!--      class="user-box"-->
+<!--    >-->
+<!--      <div class="gvaIcon gvaIcon-customer-service" @click="toService" />-->
+<!--    </div>-->
   </div>
 </template>
 

@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"fmt"
 	"strconv"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -38,13 +39,13 @@ func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthori
 //@param: copyInfo response.SysAuthorityCopyResponse
 //@return: authority system.SysAuthority, err error
 
-func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (authority system.SysAuthority, err error) {
+func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse, sysId interface{}) (authority system.SysAuthority, err error) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
 		return authority, ErrRoleExistence
 	}
 	copyInfo.Authority.Children = []system.SysAuthority{}
-	menus, err := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId})
+	menus, err := MenuServiceApp.GetMenuAuthority(&request.GetAuthorityId{AuthorityId: copyInfo.OldAuthorityId}, sysId)
 	if err != nil {
 		return
 	}
@@ -144,12 +145,16 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 //@param: info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
+func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo, sysId interface{}) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&system.SysAuthority{})
 	err = db.Where("parent_id = ?", "0").Count(&total).Error
 	var authority []system.SysAuthority
+	adminId, _ := strconv.Atoi(fmt.Sprintf("%d", sysId))
+	if adminId != 1 {
+		db.Where("authority_id != ?", 888)
+	}
 	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
 	if len(authority) > 0 {
 		for k := range authority {

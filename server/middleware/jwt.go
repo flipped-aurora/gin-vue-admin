@@ -71,6 +71,7 @@ func JWTAuth() gin.HandlerFunc {
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
 			}
 		}
+		c.Set("sys_id", claims.ID)
 		c.Set("claims", claims)
 		c.Next()
 	}

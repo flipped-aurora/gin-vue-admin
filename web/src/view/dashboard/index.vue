@@ -1,89 +1,89 @@
 <template>
   <div class="page">
-    <div class="gva-card-box">
-      <div class="gva-card gva-top-card">
-        <div class="gva-top-card-left">
-          <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
-          <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
-          <div class="gva-top-card-left-rows">
-            <el-row>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex-center">
-                  <el-icon class="dashboard-icon">
-                    <sort />
-                  </el-icon>
-                  今日流量 (1231231)
-                </div>
-              </el-col>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex-center">
-                  <el-icon class="dashboard-icon">
-                    <avatar />
-                  </el-icon>
-                  总用户数 (24001)
-                </div>
-              </el-col>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex-center">
-                  <el-icon class="dashboard-icon">
-                    <comment />
-                  </el-icon>
-                  好评率 (99%)
-                </div>
-              </el-col>
-            </el-row>
-          </div>
-          <div>
-            <div class="gva-top-card-left-item">
-              使用教学：
-              <a
-                style="color:#409EFF"
-                target="view_window"
-                href="https://www.bilibili.com/video/BV1Rg411u7xH/"
-              >https://www.bilibili.com/video/BV1Rg411u7xH</a>
-            </div>
-            <div class="gva-top-card-left-item">
-              插件仓库：
-              <a
-                style="color:#409EFF"
-                target="view_window"
-                href="https://plugin.gin-vue-admin.com/#/layout/home"
-              >https://plugin.gin-vue-admin.com</a>
-            </div>
-          </div>
-        </div>
-        <img src="@/assets/dashboard.png" class="gva-top-card-right" alt>
-      </div>
-    </div>
-    <div class="gva-card-box">
-      <el-card class="gva-card quick-entrance">
-        <template #header>
-          <div class="card-header">
-            <span>快捷入口</span>
-          </div>
-        </template>
-        <el-row :gutter="20">
-          <el-col
-            v-for="(card, key) in toolCards"
-            :key="key"
-            :span="4"
-            :xs="8"
-            class="quick-entrance-items"
-            @click="toTarget(card.name)"
-          >
-            <div class="quick-entrance-item">
-              <div class="quick-entrance-item-icon" :style="{ backgroundColor: card.bg }">
-                <el-icon>
-                  <component :is="card.icon" :style="{ color: card.color }" />
-                </el-icon>
-              </div>
-              <p>{{ card.label }}</p>
-            </div>
-          </el-col>
-        </el-row>
-      </el-card>
-    <!-- <div class="quick-entrance-title"></div> -->
-    </div>
+<!--    <div class="gva-card-box">-->
+<!--      <div class="gva-card gva-top-card">-->
+<!--        <div class="gva-top-card-left">-->
+<!--&lt;!&ndash;          <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>&ndash;&gt;-->
+<!--&lt;!&ndash;          <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>&ndash;&gt;-->
+<!--&lt;!&ndash;          <div class="gva-top-card-left-rows">&ndash;&gt;-->
+<!--&lt;!&ndash;            <el-row>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-col :span="8" :xs="24" :sm="8">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="flex-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <el-icon class="dashboard-icon">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <sort />&ndash;&gt;-->
+<!--&lt;!&ndash;                  </el-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;                  今日流量 (1231231)&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </el-col>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-col :span="8" :xs="24" :sm="8">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="flex-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <el-icon class="dashboard-icon">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <avatar />&ndash;&gt;-->
+<!--&lt;!&ndash;                  </el-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;                  总用户数 (24001)&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </el-col>&ndash;&gt;-->
+<!--&lt;!&ndash;              <el-col :span="8" :xs="24" :sm="8">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="flex-center">&ndash;&gt;-->
+<!--&lt;!&ndash;                  <el-icon class="dashboard-icon">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <comment />&ndash;&gt;-->
+<!--&lt;!&ndash;                  </el-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;                  好评率 (99%)&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;              </el-col>&ndash;&gt;-->
+<!--&lt;!&ndash;            </el-row>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          <div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="gva-top-card-left-item">&ndash;&gt;-->
+<!--&lt;!&ndash;              使用教学：&ndash;&gt;-->
+<!--&lt;!&ndash;              <a&ndash;&gt;-->
+<!--&lt;!&ndash;                style="color:#409EFF"&ndash;&gt;-->
+<!--&lt;!&ndash;                target="view_window"&ndash;&gt;-->
+<!--&lt;!&ndash;                href="https://www.bilibili.com/video/BV1Rg411u7xH/"&ndash;&gt;-->
+<!--&lt;!&ndash;              >https://www.bilibili.com/video/BV1Rg411u7xH</a>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="gva-top-card-left-item">&ndash;&gt;-->
+<!--&lt;!&ndash;              插件仓库：&ndash;&gt;-->
+<!--&lt;!&ndash;              <a&ndash;&gt;-->
+<!--&lt;!&ndash;                style="color:#409EFF"&ndash;&gt;-->
+<!--&lt;!&ndash;                target="view_window"&ndash;&gt;-->
+<!--&lt;!&ndash;                href="https://plugin.gin-vue-admin.com/#/layout/home"&ndash;&gt;-->
+<!--&lt;!&ndash;              >https://plugin.gin-vue-admin.com</a>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <img src="@/assets/dashboard.png" class="gva-top-card-right" alt>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="gva-card-box">-->
+<!--      <el-card class="gva-card quick-entrance">-->
+<!--        <template #header>-->
+<!--          <div class="card-header">-->
+<!--            <span>快捷入口</span>-->
+<!--          </div>-->
+<!--        </template>-->
+<!--        <el-row :gutter="20">-->
+<!--          <el-col-->
+<!--            v-for="(card, key) in toolCards"-->
+<!--            :key="key"-->
+<!--            :span="4"-->
+<!--            :xs="8"-->
+<!--            class="quick-entrance-items"-->
+<!--            @click="toTarget(card.name)"-->
+<!--          >-->
+<!--            <div class="quick-entrance-item">-->
+<!--              <div class="quick-entrance-item-icon" :style="{ backgroundColor: card.bg }">-->
+<!--                <el-icon>-->
+<!--                  <component :is="card.icon" :style="{ color: card.color }" />-->
+<!--                </el-icon>-->
+<!--              </div>-->
+<!--              <p>{{ card.label }}</p>-->
+<!--            </div>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--      </el-card>-->
+<!--    &lt;!&ndash; <div class="quick-entrance-title"></div> &ndash;&gt;-->
+<!--    </div>-->
     <div class="gva-card-box">
       <div class="gva-card">
         <div class="card-header">
@@ -94,9 +94,9 @@
             <el-col :xs="24" :sm="18">
               <echarts-line />
             </el-col>
-            <el-col :xs="24" :sm="6">
-              <dashboard-table />
-            </el-col>
+<!--            <el-col :xs="24" :sm="6">-->
+<!--              <dashboard-table />-->
+<!--            </el-col>-->
           </el-row>
         </div>
       </div>

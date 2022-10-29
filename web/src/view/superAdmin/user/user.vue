@@ -1,6 +1,6 @@
 <template>
   <div>
-    <warning-bar title="注：右上角头像下拉可切换角色" />
+<!--    <warning-bar title="注：右上角头像下拉可切换角色" />-->
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button size="small" type="primary" icon="plus" @click="addUser">新增用户</el-button>

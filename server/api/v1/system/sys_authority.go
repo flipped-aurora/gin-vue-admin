@@ -8,7 +8,6 @@ import (
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -58,6 +57,7 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 // @Router    /authority/copyAuthority [post]
 func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 	var copyInfo systemRes.SysAuthorityCopyResponse
+	sysId, _ := c.Get("sys_id")
 	err := c.ShouldBindJSON(&copyInfo)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -73,7 +73,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	authBack, err := authorityService.CopyAuthority(copyInfo)
+	authBack, err := authorityService.CopyAuthority(copyInfo, sysId)
 	if err != nil {
 		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
@@ -153,6 +153,7 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 // @Router    /authority/getAuthorityList [post]
 func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	var pageInfo request.PageInfo
+	sysId, _ := c.Get("sys_id")
 	err := c.ShouldBindJSON(&pageInfo)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -163,7 +164,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := authorityService.GetAuthorityInfoList(pageInfo)
+	list, total, err := authorityService.GetAuthorityInfoList(pageInfo, sysId)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)

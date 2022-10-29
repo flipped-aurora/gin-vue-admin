@@ -2,6 +2,8 @@ package system
 
 import (
 	"errors"
+	"fmt"
+	"github.com/gookit/color"
 	"strconv"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -104,9 +106,9 @@ func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap ma
 //@description: 获取路由分页
 //@return: list interface{}, total int64,err error
 
-func (menuService *MenuService) GetInfoList() (list interface{}, total int64, err error) {
+func (menuService *MenuService) GetInfoList(sysId interface{}) (list interface{}, total int64, err error) {
 	var menuList []system.SysBaseMenu
-	treeMap, err := menuService.getBaseMenuTreeMap()
+	treeMap, err := menuService.getBaseMenuTreeMap(sysId)
 	menuList = treeMap["0"]
 	for i := 0; i < len(menuList); i++ {
 		err = menuService.getBaseChildrenList(&menuList[i], treeMap)
@@ -146,10 +148,18 @@ func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
 //@description: 获取路由总树map
 //@return: treeMap map[string][]system.SysBaseMenu, err error
 
-func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[string][]system.SysBaseMenu, err error) {
+func (menuService *MenuService) getBaseMenuTreeMap(sysId interface{}) (treeMap map[string][]system.SysBaseMenu, err error) {
 	var allMenus []system.SysBaseMenu
 	treeMap = make(map[string][]system.SysBaseMenu)
-	err = global.GVA_DB.Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
+	adminId, _ := strconv.Atoi(fmt.Sprintf("%d", sysId))
+	color.Printf("getBaseMenuTreeMap adminId %d", adminId)
+
+	if adminId > 1 {
+		err = global.GVA_DB.Debug().Where("only_sys_admin = ?", 0).Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
+	} else {
+		err = global.GVA_DB.Debug().Where("only_sys_admin in (0, 1)").Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
+	}
+
 	for _, v := range allMenus {
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
@@ -161,8 +171,8 @@ func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[string][]syste
 //@description: 获取基础路由树
 //@return: menus []system.SysBaseMenu, err error
 
-func (menuService *MenuService) GetBaseMenuTree() (menus []system.SysBaseMenu, err error) {
-	treeMap, err := menuService.getBaseMenuTreeMap()
+func (menuService *MenuService) GetBaseMenuTree(sysId interface{}) (menus []system.SysBaseMenu, err error) {
+	treeMap, err := menuService.getBaseMenuTreeMap(sysId)
 	menus = treeMap["0"]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getBaseChildrenList(&menus[i], treeMap)
@@ -190,7 +200,7 @@ func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, aut
 //@param: info *request.GetAuthorityId
 //@return: menus []system.SysMenu, err error
 
-func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (menus []system.SysMenu, err error) {
+func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId, sysId interface{}) (menus []system.SysMenu, err error) {
 	var baseMenu []system.SysBaseMenu
 	var SysAuthorityMenus []system.SysAuthorityMenu
 	err = global.GVA_DB.Where("sys_authority_authority_id = ?", info.AuthorityId).Find(&SysAuthorityMenus).Error
@@ -203,7 +213,10 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 	for i := range SysAuthorityMenus {
 		MenuIds = append(MenuIds, SysAuthorityMenus[i].MenuId)
 	}
-
+	adminId, _ := strconv.Atoi(fmt.Sprintf("%d", sysId))
+	if adminId != 1 {
+		global.GVA_DB.Where("OnlySysAdmin = ?", 0)
+	}
 	err = global.GVA_DB.Where("id in (?) ", MenuIds).Order("sort").Find(&baseMenu).Error
 
 	for i := range baseMenu {
@@ -220,7 +233,8 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 }
 
 // UserAuthorityDefaultRouter 用户角色默认路由检查
-//  Author [SliverHorn](https://github.com/SliverHorn)
+//
+//	Author [SliverHorn](https://github.com/SliverHorn)
 func (menuService *MenuService) UserAuthorityDefaultRouter(user *system.SysUser) {
 	var menuIds []string
 	err := global.GVA_DB.Model(&system.SysAuthorityMenu{}).Where("sys_authority_authority_id = ?", user.AuthorityId).Pluck("sys_base_menu_id", &menuIds).Error

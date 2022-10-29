@@ -189,6 +189,7 @@ func (b *BaseApi) ChangePassword(c *gin.Context) {
 // @Router    /user/getUserList [post]
 func (b *BaseApi) GetUserList(c *gin.Context) {
 	var pageInfo request.PageInfo
+	sysId, _ := c.Get("sys_id")
 	err := c.ShouldBindJSON(&pageInfo)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -199,7 +200,7 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := userService.GetUserInfoList(pageInfo)
+	list, total, err := userService.GetUserInfoList(pageInfo, sysId)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)

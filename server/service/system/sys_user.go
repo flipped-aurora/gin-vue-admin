@@ -9,6 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -80,7 +81,7 @@ func (userService *UserService) ChangePassword(u *system.SysUser, newPassword st
 //@param: info request.PageInfo
 //@return: err error, list interface{}, total int64
 
-func (userService *UserService) GetUserInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
+func (userService *UserService) GetUserInfoList(info request.PageInfo, sysId interface{}) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&system.SysUser{})
@@ -88,6 +89,10 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 	err = db.Count(&total).Error
 	if err != nil {
 		return
+	}
+	adminId, _ := strconv.Atoi(fmt.Sprintf("%d", sysId))
+	if adminId > 1 {
+		db.Where("id != ?", 1)
 	}
 	err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
 	return userList, total, err

@@ -75,9 +75,9 @@ const showNext = () => {
   hello.value = hello.value + 1
 }
 
-const goDoc = () => {
-  window.open('https://www.gin-vue-admin.com/guide/start-quickly/env.html')
-}
+// const goDoc = () => {
+//   window.open('https://www.gin-vue-admin.com/guide/start-quickly/env.html')
+// }
 
 const out = ref(false)
 

@@ -82,7 +82,6 @@ getTheme()
 
 const active = ref('')
 watch(() => route, () => {
-  console.log(route.meta.activeName)
   active.value = route.meta.activeName || route.name
 }, { deep: true })
 

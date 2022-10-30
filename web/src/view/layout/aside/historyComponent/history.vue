@@ -209,13 +209,6 @@ const setTab = (route) => {
 
 const historyMap = ref({})
 
-watch(() => historys.value, () => {
-  historyMap.value = {}
-  historys.value.forEach((item) => {
-    historyMap.value[getFmtString(item)] = item
-  })
-})
-
 const changeTab = (name) => {
   const tab = historyMap.value[name]
   router.push({
@@ -274,6 +267,11 @@ watch(() => route, (to, now) => {
 
 watch(() => historys.value, () => {
   sessionStorage.setItem('historys', JSON.stringify(historys.value))
+  historyMap.value = {}
+  historys.value.forEach((item) => {
+    historyMap.value[getFmtString(item)] = item
+  })
+  emitter.emit('setKeepAlive', historys.value)
 }, {
   deep: true
 })

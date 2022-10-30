@@ -1,5 +1,5 @@
 import { asyncRouterHandle } from '@/utils/asyncRouter'
-
+import { emitter } from '@/utils/bus.js'
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
@@ -7,6 +7,7 @@ import { ref } from 'vue'
 const routerListArr = []
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
+const nameMap = {}
 
 const formatRouter = (routes, routeMap) => {
   routes && routes.forEach(item => {
@@ -33,7 +34,10 @@ const KeepAliveFilter = (routes) => {
   routes && routes.forEach(item => {
     // 子菜单中有 keep-alive 的，父菜单也必须 keep-alive，否则无效。这里将子菜单中有 keep-alive 的父菜单也加入。
     if ((item.children && item.children.some(ch => ch.meta.keepAlive) || item.meta.keepAlive)) {
-      item.component && item.component().then(val => { keepAliveRoutersArr.push(val.default.name) })
+      item.component && item.component().then(val => {
+        keepAliveRoutersArr.push(val.default.name)
+        nameMap[item.name] = val.default.name
+      })
     }
     if (item.children && item.children.length > 0) {
       KeepAliveFilter(item.children)
@@ -42,9 +46,20 @@ const KeepAliveFilter = (routes) => {
 }
 
 export const useRouterStore = defineStore('router', () => {
+  const keepAliveRouters = ref([])
+  const setKeepAliveRouters = (history) => {
+    const keepArrTemp = []
+    history.forEach(item => {
+      if (nameMap[item.name]) {
+        keepArrTemp.push(nameMap[item.name])
+      }
+    })
+    keepAliveRouters.value = Array.from(new Set(keepArrTemp))
+  }
+  emitter.on('setKeepAlive', setKeepAliveRouters)
+
   const asyncRouters = ref([])
   const routerList = ref(routerListArr)
-  const keepAliveRouters = ref(keepAliveRoutersArr)
   const routeMap = ({})
   // 从后台获取动态路由
   const SetAsyncRouter = async() => {
@@ -92,7 +107,6 @@ export const useRouterStore = defineStore('router', () => {
     KeepAliveFilter(asyncRouter)
     asyncRouters.value = baseRouter
     routerList.value = routerListArr
-    keepAliveRouters.value = keepAliveRoutersArr
     return true
   }
 

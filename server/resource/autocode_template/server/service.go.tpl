@@ -112,6 +112,23 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	if err!=nil {
     	return
     }
+    {{- if .NeedSort}}
+        var OrderStr string
+        orderMap := make(map[string]bool)
+       {{- range .Fields}}
+            {{- if .Sort}}
+         	orderMap["{{.FieldJson}}"] = true
+         	{{- end}}
+       {{- end}}
+       if orderMap[info.Sort] {
+          OrderStr = info.Sort
+          if info.Order == "descending" {
+             OrderStr = OrderStr + " desc"
+          }
+          db = db.Order(OrderStr)
+       }
+    {{- end}}
+
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }

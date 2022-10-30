@@ -155,6 +155,9 @@
         <el-table-column align="left" prop="require" label="是否必填">
           <template #default="{row}">{{ row.require?"是":"否" }}</template>
         </el-table-column>
+        <el-table-column align="left" prop="sort" label="是否排序">
+          <template #default="{row}">{{ row.sort?"是":"否" }}</template>
+        </el-table-column>
         <el-table-column align="left" prop="fieldJson" min-width="120px" label="FieldJson" />
         <el-table-column align="left" prop="fieldType" label="Field数据类型" width="130" />
         <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="130" />
@@ -240,11 +243,10 @@ import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCode
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
-import { ref, getCurrentInstance, reactive, watch ,toRaw } from 'vue'
+import { ref, getCurrentInstance, reactive, watch, toRaw } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-
 
 const fieldTemplate = {
   fieldName: '',
@@ -256,6 +258,7 @@ const fieldTemplate = {
   dataTypeLong: '',
   comment: '',
   require: false,
+  sort: false,
   errorText: '',
   clearable: true,
   fieldSearchType: '',

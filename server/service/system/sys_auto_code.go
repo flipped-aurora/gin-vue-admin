@@ -161,6 +161,10 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			autoCode.NeedValid = true
 			break
 		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
+			break
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -248,6 +252,10 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 		if autoCode.Fields[i].Require {
 			autoCode.NeedValid = true
+			break
+		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
 			break
 		}
 	}

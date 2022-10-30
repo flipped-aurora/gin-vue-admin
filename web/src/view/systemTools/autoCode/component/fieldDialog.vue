@@ -81,6 +81,9 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="是否排序">
+        <el-switch v-model="middleDate.sort" />
+      </el-form-item>
       <el-form-item label="是否必填">
         <el-switch v-model="middleDate.require" />
       </el-form-item>

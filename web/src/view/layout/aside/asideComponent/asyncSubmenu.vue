@@ -89,4 +89,7 @@ watch(() => props.theme, () => {
     }
   }
 
+.gva-subMenu {
+  padding-left: 4px;
+}
 </style>

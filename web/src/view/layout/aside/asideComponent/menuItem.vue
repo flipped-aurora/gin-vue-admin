@@ -78,7 +78,7 @@ watch(() => props.theme, () => {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-	padding-left: 6px;
+    padding-left: 4px;
 
 .gva-menu-item-title {
     flex:1;

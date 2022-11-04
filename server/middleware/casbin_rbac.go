@@ -11,12 +11,10 @@ import (
 
 var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 
-// 拦截器
+// CasbinHandler 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if global.GVA_CONFIG.System.Env == "develop" {
-			c.Next()
-		} else {
+		if global.GVA_CONFIG.System.Env != "develop" {
 			waitUse, _ := utils.GetClaims(c)
 			//获取请求的PATH
 			obj := c.Request.URL.Path
@@ -26,13 +24,12 @@ func CasbinHandler() gin.HandlerFunc {
 			sub := strconv.Itoa(int(waitUse.AuthorityId))
 			e := casbinService.Casbin() // 判断策略中是否存在
 			success, _ := e.Enforce(sub, obj, act)
-			if success {
-				c.Next()
-			} else {
+			if !success {
 				response.FailWithDetailed(gin.H{}, "权限不足", c)
 				c.Abort()
 				return
 			}
 		}
+		c.Next()
 	}
 }

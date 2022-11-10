@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"gorm.io/gorm/schema"
 	"log"
 	"os"
 	"time"
@@ -20,8 +21,14 @@ type _gorm struct{}
 
 // Config gorm 自定义配置
 // Author [SliverHorn](https://github.com/SliverHorn)
-func (g *_gorm) Config() *gorm.Config {
-	config := &gorm.Config{DisableForeignKeyConstraintWhenMigrating: true}
+func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
+	config := &gorm.Config{
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix:   prefix,
+			SingularTable: singular,
+		},
+		DisableForeignKeyConstraintWhenMigrating: true,
+	}
 	_default := logger.New(NewWriter(log.New(os.Stdout, "\r\n", log.LstdFlags)), logger.Config{
 		SlowThreshold: 200 * time.Millisecond,
 		LogLevel:      logger.Warn,

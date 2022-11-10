@@ -24,7 +24,7 @@
           <el-form-item label="数据库类型">
             <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
               <el-option key="mysql" label="mysql" value="mysql" />
-              <el-option key="pgsql" label="pgsql(测试版)" value="pgsql" />
+              <el-option key="pgsql" label="pgsql" value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item label="host">

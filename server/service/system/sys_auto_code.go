@@ -161,6 +161,10 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			autoCode.NeedValid = true
 			break
 		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
+			break
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -250,9 +254,13 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			autoCode.NeedValid = true
 			break
 		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
+			break
+		}
 	}
 	// 增加判断: 重复创建struct
-	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.StructName, autoCode.Package) {
+	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.BusinessDB, autoCode.StructName, autoCode.Package) {
 		return RepeatErr
 	}
 	dataList, fileList, needMkdir, err := autoCodeService.getNeedList(&autoCode)
@@ -393,8 +401,12 @@ func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList 
 //@param: tableName string, dbName string
 //@return: err error, Columns []request.ColumnReq
 
-func (autoCodeService *AutoCodeService) DropTable(tableName string) error {
-	return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
+func (autoCodeService *AutoCodeService) DropTable(BusinessDb, tableName string) error {
+	if BusinessDb != "" {
+		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
+	} else {
+		return global.MustGetGlobalDBByDBName(BusinessDb).Exec("DROP TABLE " + tableName).Error
+	}
 }
 
 //@author: [SliverHorn](https://github.com/SliverHorn)

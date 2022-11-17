@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 )
@@ -45,9 +46,9 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 		return ctx, system.ErrMissingDBContext
 	}
 	entities := []sysModel.SysAuthority{
-		{AuthorityId: 888, AuthorityName: global.Translate("system.authority.normalUsers"), ParentId: 0, DefaultRouter: "dashboard"},
-		{AuthorityId: 9528, AuthorityName: global.Translate("system.authority.testRole"), ParentId: 0, DefaultRouter: "dashboard"},
-		{AuthorityId: 8881, AuthorityName: global.Translate("system.authority.normalUserSubRole"), ParentId: 888, DefaultRouter: "dashboard"},
+		{AuthorityId: 888, AuthorityName: global.Translate("system.authority.normalUsers"), ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
+		{AuthorityId: 9528, AuthorityName: global.Translate("system.authority.testRole"), ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
+		{AuthorityId: 8881, AuthorityName: global.Translate("system.authority.normalUserSubRole"), ParentId: utils.Pointer[uint](888), DefaultRouter: "dashboard"},
 	}
 
 	if err := db.Create(&entities).Error; err != nil {

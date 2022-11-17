@@ -17,4 +17,8 @@ type {{.StructName}}Search struct{
         {{- end }}
        {{- end }}
     request.PageInfo
+    {{- if .NeedSort}}
+    Sort  string `json:"sort" form:"sort"`
+    Order string `json:"order" form:"order"`
+    {{- end}}
 }

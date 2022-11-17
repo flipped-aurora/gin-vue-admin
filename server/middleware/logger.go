@@ -64,8 +64,10 @@ func (l Logger) SetLoggerMiddleware() gin.HandlerFunc {
 		if l.Filter != nil && !l.Filter(c) {
 			layout.Body = string(body)
 		}
-		// 处理鉴权需要的信息
-		l.AuthProcess(c, &layout)
+		if l.AuthProcess != nil {
+			// 处理鉴权需要的信息
+			l.AuthProcess(c, &layout)
+		}
 		if l.FilterKeyword != nil {
 			// 自行判断key/value 脱敏等
 			l.FilterKeyword(&layout)

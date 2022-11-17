@@ -1,0 +1,269 @@
+name: CI
+
+on:
+  push:
+    branches: [ '*' ]
+  pull_request:
+  release:
+    types: [ created, edited ]
+  workflow_dispatch:
+    inputs:
+      gva_version:
+        required: true
+        type: string
+
+jobs:
+  init:
+    if: github.repository_owner == 'flipped-aurora'
+    runs-on: ubuntu-latest
+    steps:
+      - name: init
+        run: |
+          echo "flipped-aurora"
+  frontend:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
+    name: Frontend node ${{ matrix.node-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.8.0]
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build test
+        run: |
+          npm install
+          npm run build
+        working-directory: ./web
+
+  backend:
+    if: github.event_name == 'push' || github.event_name == 'pull_request' || github.event_name == 'release'
+    name: Backend go
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.18]
+    steps:
+      - name: Set up Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+        id: go
+
+      - name: Check out branch
+        uses: actions/checkout@v2
+
+      - name: Download dependencies
+        run: |
+          go get -v -t -d ./...
+          if [ -f Gopkg.toml ]; then
+              curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+              dep ensure
+          fi
+        working-directory: ./server
+
+      - name: Test and Build
+        run: |
+          go build -v -race
+        working-directory: ./server
+
+  devops-test:
+    if: github.ref == 'refs/heads/test'
+    name: devops-test
+    needs: 
+      - init
+      - backend
+      - frontend
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.8.0]
+        go-version: [1.18]
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+      - name: Sed Config
+        env:
+          PROD: ${{ secrets.PROD }}
+          TESTING: ${{ secrets.TESTING }}
+        shell: bash
+        run: |
+          git branch 
+          ls -l
+          sed -i "s/${PROD}/${TESTING}/g" web/.env.production
+          sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build-Node
+        run: |
+          cd web/ && yarn install && yarn run build
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Build-go
+        run: |
+          cd server/ && go mod tidy && go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
+      - name: restart
+        env:
+          KEY: ${{ secrets.KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+          PROT: ${{ secrets.PROT }}
+          MKDIRTEST: ${{ secrets.MKDIRTEST }}
+        run: |
+          mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIRTEST}dist/
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r web/ser/* ${USER}@${HOST}:${MKDIRTEST}
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIRTEST}resource/ && rm -rf ${MKDIRTEST}resource/*"
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r server/resource/* ${USER}@${HOST}:${MKDIRTEST}resource/
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIRTEST} && bash restart.sh > /dev/null  2>&1 &"
+
+  release-pr:
+    if: ${{ github.event_name == 'workflow_dispatch' && github.repository_owner == 'flipped-aurora'}}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+      - name: Sed Config
+        env:
+          GVA_VERSION: ${{ inputs.gva_version }}
+        shell: bash
+        run: |
+          sed -i 's/当前版本.*`$/当前版本:v'${GVA_VERSION##v}'`/' web/src/core/config.js
+          sed -i 's/当前版本.*$/当前版本:v'${GVA_VERSION##v}'/' server/core/server.go
+          sed -i 's/当前版本.*$/当前版本:v'${GVA_VERSION##v}'/' web/src/core/gin-vue-admin.js
+          sed -i 's/"version": ".*",$/"version": "'${GVA_VERSION##v}'",/' web/package.json
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add . && git commit -m "release: v${GVA_VERSION##v}"
+      - name: Push
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+      - uses: google-github-actions/release-please-action@v3
+        with:
+          command: release-pr
+          release-type: simple
+          changelog-path: docs/CHANGELOG.md
+          release-as: ${{ inputs.gva_version }}
+          package-name: gin-vue-admin
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
+
+  release-please:
+    if: github.ref == 'refs/heads/main' || github.event_name == 'release'
+    runs-on: ubuntu-latest
+    needs:
+      - init
+      - backend
+      - frontend
+    outputs:
+      release_created: ${{ steps.release_please.outputs.release_created }}
+      tag_name: ${{ steps.release_please.outputs.tag_name }}
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release_please
+        with:
+          #token: ${{ secrets.GAV_TOKEN }}
+          command: github-release
+          #signoff: "github-actions[bot] <github-actions[bot]@users.noreply.github.com>"
+          release-type: simple
+          changelog-path: docs/CHANGELOG.md
+          #release-as: ${{ inputs.deploy_target }}
+          package-name: gin-vue-admin
+          #extra-files: |
+          #  x-release-please-version.json
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"chore","section":"Miscellaneous","hidden":false}]'
+
+  devops-prod:
+    if: needs.release-please.outputs.release_created || github.event_name == 'release'
+    runs-on: ubuntu-latest
+    needs:
+      - init
+      - release-please
+    name: devops-prod
+    strategy:
+      matrix:
+        node-version: ['16.x']
+        go-version: ['1.18']
+    steps:
+      - uses: actions/checkout@v2
+      - name: tag major and minor versions
+        run: |
+          echo " ${{ needs.release-please.outputs.tag_name }}"
+      - name: Sed Config
+        shell: bash
+        run: |
+          git branch 
+          ls -l
+          sed -i 's/${basePath}:${basePort}/${basePath}/g' web/src/view/systemTools/formCreate/index.vue
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2.1.2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Build-Node
+        run: |
+          cd web/ && yarn install && yarn run build
+      - name: Use Go ${{ matrix.go-version }}
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+      - name: Build-go
+        run: |
+          cd server/ && go mod tidy && go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
+      - name: restart
+        env:
+          KEY: ${{ secrets.KEY }}
+          HOST: ${{ secrets.HOST }}
+          USER: ${{ secrets.USER }}
+          PROT: ${{ secrets.PROT }}
+          MKDIR: ${{ secrets.MKDIR }}
+        run: |
+          mkdir -p ~/.ssh/ && echo "$KEY" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r web/dist/* ${USER}@${HOST}:${MKDIR}dist/
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r web/ser/* ${USER}@${HOST}:${MKDIR}
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIR}resource/ && rm -rf ${MKDIR}resource/*"
+          scp -P ${PROT} -o StrictHostKeyChecking=no -r server/resource/* ${USER}@${HOST}:${MKDIR}resource/
+          ssh -p ${PROT} -o StrictHostKeyChecking=no ${USER}@${HOST} "cd ${MKDIR} && bash restart.sh > /dev/null  2>&1 &"
+
+  docker:
+    name: docker
+    if: github.ref == 'refs/heads/stop-stop-stop'
+    runs-on: ubuntu-latest
+    needs:
+      - init
+      - release-please
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v2
+      - name: Login to Aliyun Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ secrets.ALIYUN_REGISTRY }}
+          username: ${{ secrets.ALIYUN_DOCKERHUB_USER }}
+          password: ${{ secrets.ALIYUN_DOCKERHUB_PASSWORD }}
+      - name: Sed Config
+        shell: bash
+        run: |
+          sed  -i 56c"\        && yarn install && yarn build" Makefile
+          make image TAGS_OPT="latest"
+          sed -i 's#./entrypoint.sh"#./entrypoint.sh","actions"#g' deploy/docker/Dockerfile
+          sed -i "s#COPY build/ /usr/share/nginx/html/#COPY . /opt/gva#g" deploy/docker/Dockerfile
+          sed -i 16c"\    && cd /opt/gva/server/ && go mod tidy && cd /opt/gva/web/ && yarn" deploy/docker/Dockerfile
+          sed -i "s#open: true#open: false#g" web/vite.config.js
+          make images TAGS_OPT="latest"
+          docker push registry.cn-hangzhou.aliyuncs.com/gva/gin-vue-admin:latest
+          docker push registry.cn-hangzhou.aliyuncs.com/gva/web:latest
+          docker push registry.cn-hangzhou.aliyuncs.com/gva/server:latest
+          docker push registry.cn-hangzhou.aliyuncs.com/gva/all:latest

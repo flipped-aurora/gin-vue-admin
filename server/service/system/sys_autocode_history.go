@@ -53,9 +53,9 @@ func (autoCodeHistoryService *AutoCodeHistoryService) First(info *request.GetByI
 // Repeat 检测重复
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(structName string, Package string) bool {
+func (autoCodeHistoryService *AutoCodeHistoryService) Repeat(businessDB, structName, Package string) bool {
 	var count int64
-	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("struct_name = ? and package = ? and flag = 0", structName, Package).Count(&count)
+	global.GVA_DB.Model(&system.SysAutoCodeHistory{}).Where("business_db = ? and struct_name = ? and package = ? and flag = 0", businessDB, structName, Package).Count(&count)
 	return count > 0
 }
 
@@ -84,7 +84,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 	}
 	// 删除表
 	if info.DeleteTable {
-		if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
+		if err = AutoCodeServiceApp.DropTable(md.BusinessDB, md.TableName); err != nil {
 			global.GVA_LOG.Error("ClearTag DropTable:", zap.Error(err))
 		}
 	}

@@ -108,7 +108,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
     	{{- if .AutoCreateResource }}
     deletedBy := utils.GetUserID(c)
         {{- end }}
-	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS,deletedBy); err != nil {
+	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS{{- if .AutoCreateResource }},deletedBy{{- end }}); err != nil {
         global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFailErr"), c)
 	} else {

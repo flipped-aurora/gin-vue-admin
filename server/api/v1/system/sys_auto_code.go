@@ -106,12 +106,22 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前所有数据库"
 // @Router    /autoCode/getDatabase [get]
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
-	dbs, err := autoCodeService.Database().GetDB()
+	businessDB := c.Query("businessDB")
+	dbs, err := autoCodeService.Database(businessDB).GetDB(businessDB)
+	var dbList []map[string]interface{}
+	for _, db := range global.GVA_CONFIG.DBList {
+		var item = make(map[string]interface{})
+		item["aliasName"] = db.AliasName
+		item["dbName"] = db.Dbname
+		item["disable"] = db.Disable
+		item["dbtype"] = db.Type
+		dbList = append(dbList, item)
+	}
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 	} else {
-		response.OkWithDetailed(gin.H{"dbs": dbs}, global.Translate("general.getDataSuccess"), c)
+		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, global.Translate("general.getDataSuccess"), c)
 	}
 }
 
@@ -125,7 +135,8 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 // @Router    /autoCode/getTables [get]
 func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
-	tables, err := autoCodeService.Database().GetTables(dbName)
+	businessDB := c.Query("businessDB")
+	tables, err := autoCodeService.Database(businessDB).GetTables(businessDB, dbName)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_auto_code.queryTablesFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("sys_auto_code.queryTablesFail"), c)
@@ -143,9 +154,10 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前表所有字段"
 // @Router    /autoCode/getColumn [get]
 func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
+	businessDB := c.Query("businessDB")
 	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
 	tableName := c.Query("tableName")
-	columns, err := autoCodeService.Database().GetColumn(tableName, dbName)
+	columns, err := autoCodeService.Database(businessDB).GetColumn(businessDB, tableName, dbName)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
@@ -172,6 +184,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	}
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
+
 		global.GVA_LOG.Error("创建成功!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {

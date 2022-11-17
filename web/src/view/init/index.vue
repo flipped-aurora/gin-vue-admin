@@ -33,7 +33,7 @@
           <el-form-item :label="t('init.dbType')">
             <el-select v-model="form.dbType" :placeholder="t('general.pleaseSelect')" @change="changeDB">
               <el-option key="mysql" label="MySQL" value="mysql" />
-              <el-option key="pgsql" :label="'PostgreSQL (' + t('init.beta') + ')'" value="pgsql" />
+              <el-option key="pgsql" label="PostgreSQL" value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item :label="t('init.dbHost')">

@@ -87,7 +87,7 @@
         </el-collapse-item>
         <el-collapse-item :title="t('view.systemTools.system.redisAdminDBConfig')" name="4">
           <el-form-item label="库">
-            <el-input v-model="config.redis.db" />
+            <el-input v-model.number="config.redis.db" />
           </el-form-item>
           <el-form-item label="地址">
             <el-input v-model="config.redis.addr" />
@@ -145,6 +145,15 @@
             <el-form-item label="数据库">
               <el-input v-model="config.mysql['db-name']" />
             </el-form-item>
+            <el-form-item label="前缀">
+              <el-input v-model="config.mysql['refix']" />
+            </el-form-item>
+            <el-form-item label="复数表">
+              <el-switch v-model="config.mysql['singular']" />
+            </el-form-item>
+            <el-form-item label="引擎">
+              <el-input v-model="config.mysql['engine']" />
+            </el-form-item>
             <el-form-item label="maxIdleConns">
               <el-input v-model.number="config.mysql['max-idle-conns']" />
             </el-form-item>
@@ -170,6 +179,15 @@
             </el-form-item>
             <el-form-item label="数据库">
               <el-input v-model="config.pgsql.dbname" />
+            </el-form-item>
+            <el-form-item label="前缀">
+              <el-input v-model="config.pgsql['refix']" />
+            </el-form-item>
+            <el-form-item label="复数表">
+              <el-switch v-model="config.pgsql['singular']" />
+            </el-form-item>
+            <el-form-item label="引擎">
+              <el-input v-model="config.pgsql['engine']" />
             </el-form-item>
             <el-form-item label="maxIdleConns">
               <el-input v-model.number="config.pgsql['max-idle-conns']" />

@@ -2,9 +2,9 @@ package core
 
 import (
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/core/internal"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gzpz/golf-sales-system/server/core/internal"
+	"github.com/gzpz/golf-sales-system/server/global"
+	"github.com/gzpz/golf-sales-system/server/utils"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"os"

@@ -1,16 +1,16 @@
-# github.com/flipped-aurora/gin-vue-admin/server Global Configuration
+# github.com/gzpz/golf-sales-system/server Global Configuration
 
 # jwt configuration
 jwt:
-  signing-key: qmPlus
+  signing-key: sdfsfsdfsadhjaksdfsdf
   expires-time: 7d
   buffer-time: 1d
-  issuer: qmPlus
+  issuer: root
 # zap logger configuration
 zap:
   level: info
   format: console
-  prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
+  prefix: "[github.com/gzpz/golf-sales-system/server]"
   director: log
   show-line: true
   encode-level: LowercaseColorLevelEncoder
@@ -20,7 +20,7 @@ zap:
 # redis configuration
 redis:
   db: 0
-  addr: 127.0.0.1:6379
+  addr: 177.7.0.13:6379
   password: ""
 
 # email configuration
@@ -55,15 +55,18 @@ captcha:
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
+  path: gz-cynosdbmysql-grp-52l1i2l5.sql.tencentcdb.com
+  port: "24476"
+  config: charset=utf8mb4&parseTime=True&loc=Local
+  db-name: golf
+  username: root
+  password: jNedd1VkxYdaFGrK
+  prefix: ""
+  singular: false
+  engine: ""
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: ""
+  log-mode: error
   log-zap: false
 
 # pgsql connect configuration
@@ -146,7 +149,7 @@ tencent-cos:
   secret-id: your-secret-id
   secret-key: your-secret-key
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: github.com/gzpz/golf-sales-system/server
 
 # aws s3 configuration (minio compatible)
 aws-s3:
@@ -158,7 +161,7 @@ aws-s3:
   secret-id: your-secret-id
   secret-key: your-secret-key
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: github.com/gzpz/golf-sales-system/server
 
 # huawei obs configuration
 hua-wei-obs:

@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/api"
+	"github.com/gzpz/golf-sales-system/server/middleware"
+	"github.com/gzpz/golf-sales-system/server/plugin/email/api"
 	"github.com/gin-gonic/gin"
 )
 

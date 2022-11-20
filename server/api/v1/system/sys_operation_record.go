@@ -1,13 +1,13 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
+	"github.com/gzpz/golf-sales-system/server/global"
+	"github.com/gzpz/golf-sales-system/server/model/common/request"
+	"github.com/gzpz/golf-sales-system/server/model/common/response"
+	"github.com/gzpz/golf-sales-system/server/model/system"
+	systemReq "github.com/gzpz/golf-sales-system/server/model/system/request"
+	"github.com/gzpz/golf-sales-system/server/utils"
 	"go.uber.org/zap"
 )
 

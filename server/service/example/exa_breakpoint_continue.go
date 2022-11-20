@@ -3,8 +3,8 @@ package example
 import (
 	"errors"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
+	"github.com/gzpz/golf-sales-system/server/global"
+	"github.com/gzpz/golf-sales-system/server/model/example"
 	"gorm.io/gorm"
 )
 

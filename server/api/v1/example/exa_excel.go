@@ -4,10 +4,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/gin-gonic/gin"
+	"github.com/gzpz/golf-sales-system/server/global"
+	"github.com/gzpz/golf-sales-system/server/model/common/response"
+	"github.com/gzpz/golf-sales-system/server/model/example"
 	"go.uber.org/zap"
 )
 

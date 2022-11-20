@@ -1,4 +1,4 @@
-module github.com/flipped-aurora/gin-vue-admin/server
+module github.com/gzpz/golf-sales-system/server
 
 go 1.18
 

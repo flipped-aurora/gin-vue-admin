@@ -8,8 +8,8 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/gin-gonic/gin"
+	"github.com/gzpz/golf-sales-system/server/global"
 	"go.uber.org/zap"
 )
 

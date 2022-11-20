@@ -10,9 +10,9 @@ PROJECT_NAME        = github.com/flipped-aurora/gin-vue-admin/server
 #配置文件目录
 CONFIG_FILE         = config.yaml
 #镜像仓库命名空间
-IMAGE_NAME          = gva
+IMAGE_NAME          = golf
 #镜像地址
-REPOSITORY          = registry.cn-hangzhou.aliyuncs.com/${IMAGE_NAME}
+REPOSITORY          = ccr.ccs.tencentyun.com/${IMAGE_NAME}
 
 ifeq ($(TAGS_OPT),)
 TAGS_OPT            = latest

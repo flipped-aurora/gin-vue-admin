@@ -3,10 +3,10 @@ package system
 import (
 	"errors"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gzpz/golf-sales-system/server/global"
+	"github.com/gzpz/golf-sales-system/server/model/common/request"
+	"github.com/gzpz/golf-sales-system/server/model/system"
+	"github.com/gzpz/golf-sales-system/server/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )

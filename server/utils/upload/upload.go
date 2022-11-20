@@ -3,7 +3,7 @@ package upload
 import (
 	"mime/multipart"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/gzpz/golf-sales-system/server/global"
 )
 
 // OSS 对象存储接口

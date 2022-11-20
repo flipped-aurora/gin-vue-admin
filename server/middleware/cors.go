@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/gin-gonic/gin"
+	"github.com/gzpz/golf-sales-system/server/config"
+	"github.com/gzpz/golf-sales-system/server/global"
 	"net/http"
 )
 

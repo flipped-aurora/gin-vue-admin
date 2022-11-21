@@ -35,23 +35,28 @@ func (b *BaseApi) Login(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if store.Verify(l.CaptchaId, l.Captcha, true) {
-		u := &system.SysUser{Username: l.Username, Password: l.Password}
-		user, err := userService.Login(u)
-		if err != nil {
-			global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
-			response.FailWithMessage("用户名不存在或者密码错误", c)
+	// 如果系统环境是debelp时不需要验证码
+	if global.GVA_CONFIG.System.Env != "develop" {
+		if store.Verify(l.CaptchaId, l.Captcha, true) {
+			response.FailWithMessage("验证码错误", c)
 			return
 		}
-		if user.Enable != 1 {
-			global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
-			response.FailWithMessage("用户被禁止登录", c)
-			return
-		}
-		b.TokenNext(c, *user)
+	}
+
+	u := &system.SysUser{Username: l.Username, Password: l.Password}
+	user, err := userService.Login(u)
+	if err != nil {
+		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
+		response.FailWithMessage("用户名不存在或者密码错误", c)
 		return
 	}
-	response.FailWithMessage("验证码错误", c)
+	if user.Enable != 1 {
+		global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+		response.FailWithMessage("用户被禁止登录", c)
+		return
+	}
+	b.TokenNext(c, *user)
+
 }
 
 // TokenNext 登录以后签发jwt

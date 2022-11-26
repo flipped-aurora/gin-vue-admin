@@ -5,3 +5,15 @@ export const getDict = async(type) => {
   await dictionaryStore.getDictionary(type)
   return dictionaryStore.dictionaryMap[type]
 }
+
+//  字典文字展示方法
+export const showDictLabel = (dict, code) => {
+  if (!dict) {
+    return ''
+  }
+  const dictMap = {}
+  dict.forEach(item => {
+    dictMap[item.value] = item.label
+  })
+  return dictMap[code]
+}

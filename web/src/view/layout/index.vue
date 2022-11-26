@@ -27,7 +27,8 @@
                       </div>
                     </el-col>
                     <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
-                      <el-breadcrumb class="breadcrumb">
+                      <!-- 修改为手机端不显示顶部标签 -->
+                      <el-breadcrumb v-show="!isMobile" class="breadcrumb">
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
@@ -41,7 +42,7 @@
                           <div class="dp-flex justify-content-center align-items height-full width-full">
                             <span class="header-avatar" style="cursor: pointer">
                               <CustomPic />
-                              <span style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
+                              <span v-show="!isMobile" style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
                               <el-icon>
                                 <arrow-down />
                               </el-icon>

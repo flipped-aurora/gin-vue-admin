@@ -41,7 +41,7 @@ func Routers() *gin.Engine {
 	{
 		// 健康监测
 		PublicGroup.GET("/health", func(c *gin.Context) {
-			c.JSON(200, "ok")
+			c.JSON(http.StatusOK, "ok")
 		})
 	}
 	{

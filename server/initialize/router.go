@@ -65,7 +65,6 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup) // 字典详情管理
 		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)  // 字典详情管理
 
-		exampleRouter.InitExcelRouter(PrivateGroup)                 // 表格导入导出
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 

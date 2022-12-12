@@ -148,11 +148,6 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/checkFileMd5", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/mergeFileMd5", V2: "GET"},
 
-		{Ptype: "p", V0: "888", V1: "/excel/importExcel", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/excel/loadExcel", V2: "GET"},
-		{Ptype: "p", V0: "888", V1: "/excel/exportExcel", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/excel/downloadTemplate", V2: "GET"},
-
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/setAuthorityBtn", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/getAuthorityBtn", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/canRemoveAuthorityBtn", V2: "POST"},

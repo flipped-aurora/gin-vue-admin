@@ -148,11 +148,6 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "email", Method: "POST", Path: "/email/emailTest", Description: "发送测试邮件"},
 		{ApiGroup: "email", Method: "POST", Path: "/email/emailSend", Description: "发送邮件示例"},
 
-		{ApiGroup: "excel", Method: "POST", Path: "/excel/importExcel", Description: "导入excel"},
-		{ApiGroup: "excel", Method: "GET", Path: "/excel/loadExcel", Description: "下载excel"},
-		{ApiGroup: "excel", Method: "POST", Path: "/excel/exportExcel", Description: "导出excel"},
-		{ApiGroup: "excel", Method: "GET", Path: "/excel/downloadTemplate", Description: "下载excel模板"},
-
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/setAuthorityBtn", Description: "设置按钮权限"},
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/getAuthorityBtn", Description: "获取已有按钮权限"},
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/canRemoveAuthorityBtn", Description: "删除按钮"},

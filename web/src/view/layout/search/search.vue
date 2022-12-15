@@ -41,7 +41,7 @@
       v-if="btnShow"
       class="user-box"
     >
-      <div class="gvaIcon gvaIcon-customer-service" @click="toService" />
+      <div class="service gvaIcon-customer-service" @click="toService" />
     </div>
   </div>
 </template>
@@ -113,5 +113,21 @@ const toService = () => {
   50%{-webkit-transform:rotate(180deg);}
   75%{-webkit-transform:rotate(270deg);}
   100%{-webkit-transform:rotate(360deg);}
+}
+
+
+.service {
+  font-family: "gvaIcon" !important;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 800;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+//小屏幕不显示
+@media (max-width: 750px) {
+  .service {
+    display: none;
+  }
 }
 </style>

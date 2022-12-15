@@ -26,6 +26,7 @@ type AutoCodeStruct struct {
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`
 	NeedValid          bool     `json:"-"`
+	NeedSort           bool     `json:"-"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {
@@ -62,6 +63,7 @@ type Field struct {
 	Require         bool   `json:"require"`         // 是否必填
 	ErrorText       string `json:"errorText"`       // 校验失败文字
 	Clearable       bool   `json:"clearable"`       // 是否可清空
+	Sort            bool   `json:"sort"`            // 是否增加排序
 }
 
 var ErrAutoMove error = errors.New("创建代码成功并移动文件成功")

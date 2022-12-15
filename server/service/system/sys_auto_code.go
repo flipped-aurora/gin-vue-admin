@@ -161,6 +161,10 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			autoCode.NeedValid = true
 			break
 		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
+			break
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -248,6 +252,10 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 		if autoCode.Fields[i].Require {
 			autoCode.NeedValid = true
+			break
+		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
 			break
 		}
 	}
@@ -395,9 +403,9 @@ func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList 
 
 func (autoCodeService *AutoCodeService) DropTable(BusinessDb, tableName string) error {
 	if BusinessDb != "" {
-		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
-	} else {
 		return global.MustGetGlobalDBByDBName(BusinessDb).Exec("DROP TABLE " + tableName).Error
+	} else {
+		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
 	}
 }
 

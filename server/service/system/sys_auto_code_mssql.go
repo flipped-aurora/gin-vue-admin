@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 )
@@ -29,11 +30,11 @@ func (s *autoCodeMssql) GetDB(businessDB string) (data []response.Db, err error)
 func (s *autoCodeMssql) GetTables(businessDB string, dbName string) (data []response.Table, err error) {
 	var entities []response.Table
 
-	sql := `use ? ;select name as 'table_name' from sysobjects where xtype='U'`
+	sql := fmt.Sprintf(`select name as 'table_name' from %s.DBO.sysobjects where xtype='U'`, dbName)
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql, dbName).Scan(&entities).Error
+		err = global.GVA_DB.Raw(sql).Scan(&entities).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql, dbName).Scan(&entities).Error
+		err = global.GVA_DBList[businessDB].Raw(sql).Scan(&entities).Error
 	}
 
 	return entities, err
@@ -44,13 +45,13 @@ func (s *autoCodeMssql) GetTables(businessDB string, dbName string) (data []resp
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodeMssql) GetColumn(businessDB string, tableName string, dbName string) (data []response.Column, err error) {
 	var entities []response.Column
-	sql := `use ?;select sc.name column_name
-								,st.name data_type
-	 from syscolumns sc,systypes st where sc.xtype=st.xtype and sc.id in(select id from sysobjects where xtype='U' and name=?);`
+	sql := fmt.Sprintf(`select sc.name as column_name,st.name as data_type, sc.length as data_type_long
+	 from %s.DBO.syscolumns sc,systypes st where sc.xtype=st.xtype and st.usertype=0 and sc.id in (select id from %s.DBO.sysobjects where xtype='U' and name='%s');`, dbName, dbName, tableName)
+
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql,dbName,tableName).Scan(&entities).Error
+		err = global.GVA_DB.Raw(sql).Scan(&entities).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql, tableName, dbName).Scan(&entities).Error
+		err = global.GVA_DBList[businessDB].Raw(sql).Scan(&entities).Error
 	}
 
 	return entities, err

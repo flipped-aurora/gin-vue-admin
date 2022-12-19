@@ -10,7 +10,7 @@ jwt:
 zap:
   level: info
   format: console
-  prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
+  prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'
   director: log
   show-line: true
   encode-level: LowercaseColorLevelEncoder
@@ -21,7 +21,7 @@ zap:
 redis:
   db: 0
   addr: 127.0.0.1:6379
-  password: ""
+  password: ''
 
 # email configuration
 email:
@@ -35,11 +35,11 @@ email:
 
 # system configuration
 system:
-  env: public  # Change to "develop" to skip authentication for development mode
+  env: public # Change to "develop" to skip authentication for development mode
   addr: 8888
   db-type: mysql
-  oss-type: local    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
-  use-redis: false     # 使用redis
+  oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  use-redis: false # 使用redis
   use-multipoint: false
   # IP限制次数 一个小时15000次
   iplimit-count: 15000
@@ -57,46 +57,45 @@ captcha:
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
+  path: ''
+  port: ''
+  config: ''
+  db-name: ''
+  username: ''
+  password: ''
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: ""
+  log-mode: ''
   log-zap: false
 
 # pgsql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 pgsql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
+  path: ''
+  port: ''
+  config: ''
+  db-name: ''
+  username: ''
+  password: ''
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: ""
+  log-mode: ''
   log-zap: false
 
 db-list:
   - disable: true # 是否禁用
-    type: "" # 数据库的类型,目前支持mysql、pgsql
-    alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
-    path: ""
-    port: ""
-    config: ""
-    db-name: ""
-    username: ""
-    password: ""
+    type: '' # 数据库的类型,目前支持mysql、pgsql
+    alias-name: '' # 数据库的名称,注意: alias-name 需要在db-list中唯一
+    path: ''
+    port: ''
+    config: ''
+    db-name: ''
+    username: ''
+    password: ''
     max-idle-conns: 10
     max-open-conns: 100
-    log-mode: ""
+    log-mode: ''
     log-zap: false
-
 
 # local configuration
 local:
@@ -108,7 +107,7 @@ autocode:
   transfer-restart: true
   # root 自动适配项目根目录
   # 请不要手动配置,他会在项目加载的时候识别出根路径
-  root: ""
+  root: ''
   server: /server
   server-plug: /plugin/%s
   server-api: /api/v1/%s
@@ -125,11 +124,11 @@ autocode:
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:
   zone: ZoneHuaDong
-  bucket: ""
-  img-path: ""
+  bucket: ''
+  img-path: ''
   use-https: false
-  access-key: ""
-  secret-key: ""
+  access-key: ''
+  secret-key: ''
   use-cdn-domains: false
 
 # aliyun oss configuration
@@ -154,7 +153,7 @@ tencent-cos:
 aws-s3:
   bucket: xxxxx-10005608
   region: ap-shanghai
-  endpoint: ""
+  endpoint: ''
   s3-force-path-style: false
   disable-ssl: false
   secret-id: your-secret-id
@@ -177,7 +176,7 @@ excel:
 # timer task db clear table
 Timer:
   start: true
-  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
+  spec: '@daily' # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
   detail:
     - tableName: sys_operation_records
       compareField: created_at

@@ -288,6 +288,7 @@
 		"resetPasswordConfrim": "是否将此用户密码重置为123456",
 		"roleSetNote": "角色设置成功",
 		"userAddedNote": "创建成功",
+		"userEditedNote": "编辑成功",
 		"userName": "用户名",
 		"userNameLenNote": "最低5位字符",
 		"userNameNote": "请输入用户名",
@@ -372,7 +373,7 @@
 				"" : ""
 			}
 		},
-		"systemTools" : 
+		"systemTools" :
 		{
 			"system" : {
 				"systemConfig" : "系统配置",

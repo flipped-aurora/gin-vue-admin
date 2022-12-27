@@ -266,6 +266,7 @@
 		"resetPasswordConfrim": "ما إذا كان سيتم إعادة تعيين كلمة مرور هذا المستخدم إلى 123456",
 		"roleSetNote": "تم تعيين الدور بنجاح",
 		"userAddedNote": "تم إنشاؤه بنجاح",
+		"userEditedNote": "تم تحريره بنجاح",
 		"userName": "اسم االمستخدم",
 		"userNameLenNote": "5 أحرف على الأقل",
 		"userNameNote": "الرجاء إدخال اسم المستخدم",

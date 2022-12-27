@@ -349,12 +349,25 @@ const enterAddUserDialog = async() => {
   userInfo.value.authorityId = userInfo.value.authorityIds[0]
   userForm.value.validate(async valid => {
     if (valid) {
-      const res = await register(userInfo.value)
-      if (res.code === 0) {
-        ElMessage({ type: 'success', message: t('user.userAddedNote') })
+      const req = {
+        ...userInfo.value
       }
-      await getTableData()
-      closeAddUserDialog()
+      if (dialogFlag.value === 'add') {
+        const res = await register(req)
+        if (res.code === 0) {
+          ElMessage({ type: 'success', message: t('user.userAddedNote') })
+          await getTableData()
+          closeAddUserDialog()
+        }
+      }
+      if (dialogFlag.value === 'edit') {
+        const res = await setUserInfo(req)
+        if (res.code === 0) {
+          ElMessage({ type: 'success', message: t('user.userEditedNote') })
+          await getTableData()
+          closeAddUserDialog()
+        }
+      }
     }
   })
 }
@@ -366,6 +379,9 @@ const closeAddUserDialog = () => {
   userInfo.value.authorityIds = []
   addUserDialog.value = false
 }
+
+const dialogFlag = ref('add')
+
 const addUser = () => {
   addUserDialog.value = true
 }

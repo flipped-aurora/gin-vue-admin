@@ -39,6 +39,21 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 	return "host=" + i.Host + " user=" + i.UserName + " password=" + i.Password + " port=" + i.Port + " dbname=" + "postgres" + " " + "sslmode=disable TimeZone=Asia/Shanghai"
 }
 
+// PgsqlDsn pgsql 建库链接
+// Author eavesmy
+func (i *InitDB) PgsqlDsn() string {
+	if i.Host == "" {
+		i.Host = "127.0.0.1"
+	}
+	if i.Port == "" {
+		i.Port = "5432"
+	}
+	if i.DBName == "" {
+		i.DBName = "postgres"
+	}
+	return "host=" + i.Host + " user=" + i.UserName + " password=" + i.Password + " port=" + i.Port + " dbname=" + i.DBName + " " + "sslmode=disable TimeZone=Asia/Shanghai"
+}
+
 // ToMysqlConfig 转换 config.Mysql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToMysqlConfig() config.Mysql {

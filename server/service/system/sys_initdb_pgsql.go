@@ -52,7 +52,7 @@ func (h PgsqlInitHandler) EnsureDB(ctx context.Context, conf *request.InitDB) (n
 		return ctx, nil
 	} // 如果没有数据库名, 则跳出初始化数据
 
-	dsn := conf.PgsqlEmptyDsn()
+	dsn := conf.PgsqlDsn()
 	createSql := fmt.Sprintf("CREATE DATABASE %s;", c.Dbname)
 	if err = createDatabase(dsn, "pgx", createSql); err != nil {
 		return nil, err

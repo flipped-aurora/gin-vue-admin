@@ -49,7 +49,7 @@
               </template>
             </el-input>
           </el-form-item>
-          <el-form-item prop="captcha">
+          <el-form-item prop="captcha" v-if="loginFormData.openCaptcha">
             <div class="vPicBox">
               <el-input
                 v-model="loginFormData.captcha"
@@ -151,6 +151,7 @@ const loginVerify = () => {
     })
     picPath.value = ele.data.picPath
     loginFormData.captchaId = ele.data.captchaId
+    loginFormData.openCaptcha = ele.data.openCaptcha
   })
 }
 loginVerify()
@@ -168,6 +169,7 @@ const loginFormData = reactive({
   password: '123456',
   captcha: '',
   captchaId: '',
+  openCaptcha: false,
 })
 const rules = reactive({
   username: [{ validator: checkUsername, trigger: 'blur' }],

@@ -125,14 +125,15 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 			return
 		}
 		// err = db.Association("SysBaseMenus").Delete(&auth)
-	} else {
-		err = db.Error
-		if err != nil {
-			return
-		}
 	}
 	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
+	if err != nil {
+		return
+	}
 	err = global.GVA_DB.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ?", auth.AuthorityId).Error
+	if err != nil {
+		return
+	}
 	authorityId := strconv.Itoa(int(auth.AuthorityId))
 	CasbinServiceApp.ClearCasbin(0, authorityId)
 	return err
@@ -148,13 +149,13 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(info request.Page
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&system.SysAuthority{})
-	err = db.Where("parent_id = ?", "0").Count(&total).Error
+	if err = db.Where("parent_id = ?", "0").Count(&total).Error; total == 0 || err != nil {
+		return
+	}
 	var authority []system.SysAuthority
 	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
-	if len(authority) > 0 {
-		for k := range authority {
-			err = authorityService.findChildrenAuthority(&authority[k])
-		}
+	for k := range authority {
+		err = authorityService.findChildrenAuthority(&authority[k])
 	}
 	return authority, total, err
 }

@@ -403,9 +403,9 @@ func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList 
 
 func (autoCodeService *AutoCodeService) DropTable(BusinessDb, tableName string) error {
 	if BusinessDb != "" {
-		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
-	} else {
 		return global.MustGetGlobalDBByDBName(BusinessDb).Exec("DROP TABLE " + tableName).Error
+	} else {
+		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
 	}
 }
 

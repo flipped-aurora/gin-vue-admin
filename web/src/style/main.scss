@@ -1081,10 +1081,22 @@ $mainHight: 100vh;
 
 .transition-box {
     overflow: hidden;
-    width: 120px;
+    width: 160px;
     margin-right: 32px;
     text-align: center;
     margin-top: -12px;
+		.el-input__wrapper{
+			.el-input__inner{
+				height: 100%;
+			}
+			box-shadow: none !important;
+		}
+		.el-select .el-input .el-input__wrapper.is-focus{
+			box-shadow: none !important;
+		}
+		.el-select .el-input.is-focus .el-input__wrapper{
+			box-shadow: none !important;
+		}
 }
 
 .screenfull {

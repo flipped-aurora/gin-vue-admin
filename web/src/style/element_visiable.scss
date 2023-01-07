@@ -105,6 +105,12 @@
     .el-pagination__total {
         line-height: 32px !important;
     }
+    //小屏幕不显示
+    @media (max-width: 750px) {
+        .el-pagination__sizes{
+            display: none !important;
+        }
+    }
     .btn-prev {
         padding-right: 6px;
         display: inline-flex;

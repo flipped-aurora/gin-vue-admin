@@ -20,7 +20,7 @@ func GormPgSql() *gorm.DB {
 		DSN:                  p.Dsn(), // DSN data source name
 		PreferSimpleProtocol: false,
 	}
-	if db, err := gorm.Open(postgres.New(pgsqlConfig), internal.Gorm.Config()); err != nil {
+	if db, err := gorm.Open(postgres.New(pgsqlConfig), internal.Gorm.Config(p.Prefix, p.Singular)); err != nil {
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
@@ -39,7 +39,7 @@ func GormPgSqlByConfig(p config.Pgsql) *gorm.DB {
 		DSN:                  p.Dsn(), // DSN data source name
 		PreferSimpleProtocol: false,
 	}
-	if db, err := gorm.Open(postgres.New(pgsqlConfig), internal.Gorm.Config()); err != nil {
+	if db, err := gorm.Open(postgres.New(pgsqlConfig), internal.Gorm.Config(p.Prefix, p.Singular)); err != nil {
 		panic(err)
 	} else {
 		sqlDB, _ := db.DB()

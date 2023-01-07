@@ -31,7 +31,7 @@ func Routers() *gin.Engine {
 	// Router.Use(middleware.LoadTls())  // 如果需要使用https 请打开此中间件 然后前往 core/server.go 将启动模式 更变为 Router.RunTLS("端口","你的cre/pem文件","你的key文件")
 	// 跨域，如需跨域可以打开下面的注释
 	// Router.Use(middleware.Cors()) // 直接放行全部跨域请求
-	//Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
+	// Router.Use(middleware.CorsByRules()) // 按照配置的规则放行跨域请求
 	//global.GVA_LOG.Info("use middleware cors")
 	Router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Info("register swagger handler")
@@ -41,7 +41,7 @@ func Routers() *gin.Engine {
 	{
 		// 健康监测
 		PublicGroup.GET("/health", func(c *gin.Context) {
-			c.JSON(200, "ok")
+			c.JSON(http.StatusOK, "ok")
 		})
 	}
 	{
@@ -65,7 +65,6 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup) // 字典详情管理
 		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)  // 字典详情管理
 
-		exampleRouter.InitExcelRouter(PrivateGroup)                 // 表格导入导出
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 

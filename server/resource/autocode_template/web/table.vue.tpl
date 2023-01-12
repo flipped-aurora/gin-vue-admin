@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline">
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
       <el-form-item label="创建时间">
       <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
        —

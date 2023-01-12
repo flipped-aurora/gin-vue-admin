@@ -302,6 +302,12 @@ const rules = ref({
   nickName: [
     { required: true, message: '请输入用户昵称', trigger: 'blur' }
   ],
+  phone: [
+    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: "请输入合法手机号", trigger: "blur" },
+  ],
+  email: [
+    { pattern: /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: "请输入正确的邮箱", trigger: "blur" },
+  ],
   authorityId: [
     { required: true, message: '请选择用户角色', trigger: 'blur' }
   ]

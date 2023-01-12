@@ -1,24 +1,22 @@
 <template>
   <div class="search-component">
-    <transition name="el-fade-in-linear">
-      <div v-show="show" class="transition-box" style="display: inline-block;">
-        <el-select
-          ref="searchInput"
-          v-model="value"
-          filterable
-          placeholder="请选择"
-          @blur="hiddenSearch"
-          @change="changeRouter"
-        >
-          <el-option
-            v-for="item in routerStore.routerList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </div>
-    </transition>
+    <div v-if="show" class="transition-box" style="display: inline-block;">
+      <el-select
+        ref="searchInput"
+        v-model="value"
+        filterable
+        placeholder="请选择"
+        @blur="hiddenSearch"
+        @change="changeRouter"
+      >
+        <el-option
+          v-for="item in routerStore.routerList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
     <div
       v-if="btnShow"
       class="user-box"
@@ -73,9 +71,7 @@ const show = ref(false)
 const btnShow = ref(true)
 const hiddenSearch = () => {
   show.value = false
-  setTimeout(() => {
-    btnShow.value = true
-  }, 500)
+  btnShow.value = true
 }
 
 const searchInput = ref(null)

@@ -35,11 +35,11 @@ email:
 
 # system configuration
 system:
-  env: public  # Change to "develop" to skip authentication for development mode
+  env: public # Change to "develop" to skip authentication for development mode
   addr: 8888
   db-type: mysql
-  oss-type: local    # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
-  use-redis: false     # 使用redis
+  oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
+  use-redis: false # 使用redis
   use-multipoint: false
   # IP限制次数 一个小时15000次
   iplimit-count: 15000
@@ -81,10 +81,31 @@ pgsql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
-
+oracle:
+  path: ""
+  port: ""
+  config: ""
+  db-name: ""
+  username: ""
+  password: ""
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: ""
+  log-zap: false
+mssql:
+  path: ""
+  port: ""
+  config: ""
+  db-name: ""
+  username: ""
+  password: ""
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: ""
+  log-zap: false
 db-list:
   - disable: true # 是否禁用
-    type: "" # 数据库的类型,目前支持mysql、pgsql
+    type: "" # 数据库的类型,目前支持mysql、pgsql、mssql、oracle
     alias-name: "" # 数据库的名称,注意: alias-name 需要在db-list中唯一
     path: ""
     port: ""
@@ -96,7 +117,6 @@ db-list:
     max-open-conns: 100
     log-mode: ""
     log-zap: false
-
 
 # local configuration
 local:
@@ -177,7 +197,7 @@ excel:
 # timer task db clear table
 Timer:
   start: true
-  spec: "@daily"  # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
+  spec: "@daily" # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
   detail:
     - tableName: sys_operation_records
       compareField: created_at

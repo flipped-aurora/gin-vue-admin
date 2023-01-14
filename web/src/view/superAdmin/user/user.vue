@@ -120,7 +120,7 @@
           </el-form-item>
           <el-form-item label="头像" label-width="80px">
             <div style="display:inline-block" @click="openHeaderChange">
-              <img v-if="userInfo.headerImg" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
+              <img v-if="userInfo.headerImg" alt="头像" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
               <div v-else class="header-img-box">从媒体库选择</div>
             </div>
           </el-form-item>
@@ -252,10 +252,9 @@ const resetPasswordFunc = (row) => {
 }
 const setAuthorityIds = () => {
   tableData.value && tableData.value.forEach((user) => {
-    const authorityIds = user.authorities && user.authorities.map(i => {
+    user.authorityIds = user.authorities && user.authorities.map(i => {
       return i.authorityId
     })
-    user.authorityIds = authorityIds
   })
 }
 
@@ -303,10 +302,10 @@ const rules = ref({
     { required: true, message: '请输入用户昵称', trigger: 'blur' }
   ],
   phone: [
-    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: "请输入合法手机号", trigger: "blur" },
+    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: '请输入合法手机号', trigger: 'blur' },
   ],
   email: [
-    { pattern: /^([0-9A-Za-z\-_\.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: "请输入正确的邮箱", trigger: "blur" },
+    { pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: '请输入正确的邮箱', trigger: 'blur' },
   ],
   authorityId: [
     { required: true, message: '请选择用户角色', trigger: 'blur' }

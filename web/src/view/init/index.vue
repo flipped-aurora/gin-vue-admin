@@ -19,8 +19,11 @@
           </p>
         </div>
       </div>
-      <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']"
-        class="form">
+      <div
+        v-if="hello > 0 "
+        :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']"
+        class="form"
+      >
         <el-form ref="formRef" :model="form" label-width="100px">
           <el-form-item label="数据库类型">
             <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
@@ -143,7 +146,7 @@ const changeDB = (val) => {
       })
   }
 }
-const onSubmit = async () => {
+const onSubmit = async() => {
   const loading = ElLoading.service({
     lock: true,
     text: '正在初始化数据库，请稍候',
@@ -241,72 +244,60 @@ const onSubmit = async () => {
 }
 @-webkit-keyframes slide-in-fwd-top {
   0% {
-    -webkit-transform: translateZ(-1400px) translateY(-800px);
     transform: translateZ(-1400px) translateY(-800px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateZ(0) translateY(0);
     transform: translateZ(0) translateY(0);
     opacity: 1;
   }
 }
 @keyframes slide-in-fwd-top {
   0% {
-    -webkit-transform: translateZ(-1400px) translateY(-800px);
     transform: translateZ(-1400px) translateY(-800px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateZ(0) translateY(0);
     transform: translateZ(0) translateY(0);
     opacity: 1;
   }
 }
 @-webkit-keyframes slide-out-right {
   0% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateX(1000px);
     transform: translateX(1000px);
     opacity: 0;
   }
 }
 @keyframes slide-out-right {
   0% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateX(1000px);
     transform: translateX(1000px);
     opacity: 0;
   }
 }
 @-webkit-keyframes slide-in-left {
   0% {
-    -webkit-transform: translateX(-1000px);
     transform: translateX(-1000px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
 }
 @keyframes slide-in-left {
   0% {
-    -webkit-transform: translateX(-1000px);
     transform: translateX(-1000px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }

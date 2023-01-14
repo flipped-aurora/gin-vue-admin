@@ -1,12 +1,14 @@
 package middleware
 
 import (
+	"strconv"
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
@@ -17,7 +19,8 @@ func CasbinHandler() gin.HandlerFunc {
 		if global.GVA_CONFIG.System.Env != "develop" {
 			waitUse, _ := utils.GetClaims(c)
 			//获取请求的PATH
-			obj := c.Request.URL.Path
+			path := c.Request.URL.Path
+			obj := strings.TrimPrefix(path, global.GVA_CONFIG.System.RouterPrefix)
 			// 获取请求方法
 			act := c.Request.Method
 			// 获取用户的角色

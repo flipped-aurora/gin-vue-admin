@@ -47,6 +47,7 @@ const KeepAliveFilter = (routes) => {
 
 export const useRouterStore = defineStore('router', () => {
   const keepAliveRouters = ref([])
+  const asyncRouterFlag = ref(0)
   const setKeepAliveRouters = (history) => {
     const keepArrTemp = []
     history.forEach(item => {
@@ -63,6 +64,7 @@ export const useRouterStore = defineStore('router', () => {
   const routeMap = ({})
   // 从后台获取动态路由
   const SetAsyncRouter = async() => {
+    asyncRouterFlag.value++
     const baseRouter = [{
       path: '/layout',
       name: 'layout',
@@ -114,6 +116,7 @@ export const useRouterStore = defineStore('router', () => {
     asyncRouters,
     routerList,
     keepAliveRouters,
+    asyncRouterFlag,
     SetAsyncRouter,
     routeMap
   }

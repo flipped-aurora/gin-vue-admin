@@ -1,24 +1,22 @@
 <template>
   <div class="search-component">
-    <transition name="el-fade-in-linear">
-      <div v-show="show" class="transition-box" style="display: inline-block;">
-        <el-select
-          ref="searchInput"
-          v-model="value"
-          filterable
-          :placeholder="t('general.pleaseSelect')"
-          @blur="hiddenSearch"
-          @change="changeRouter"
-        >
-          <el-option
-            v-for="item in routerStore.routerList"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </div>
-    </transition>
+    <div v-if="show" class="transition-box" style="display: inline-block;">
+      <el-select
+        ref="searchInput"
+        v-model="value"
+        filterable
+        :placeholder="t('general.pleaseSelect')"
+        @blur="hiddenSearch"
+        @change="changeRouter"
+      >
+        <el-option
+          v-for="item in routerStore.routerList"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+    </div>
     <div
       v-if="btnShow"
       class="user-box"
@@ -76,9 +74,7 @@ const show = ref(false)
 const btnShow = ref(true)
 const hiddenSearch = () => {
   show.value = false
-  setTimeout(() => {
-    btnShow.value = true
-  }, 500)
+  btnShow.value = true
 }
 
 const searchInput = ref(null)
@@ -111,16 +107,15 @@ const toService = () => {
   animation:turn 0.5s linear infinite;
 }
 @keyframes turn {
-  0%{-webkit-transform:rotate(0deg);}
-  25%{-webkit-transform:rotate(90deg);}
-  50%{-webkit-transform:rotate(180deg);}
-  75%{-webkit-transform:rotate(270deg);}
-  100%{-webkit-transform:rotate(360deg);}
+  0%{transform:rotate(0deg);}
+  25%{transform:rotate(90deg);}
+  50%{transform:rotate(180deg);}
+  75%{transform:rotate(270deg);}
+  100%{transform:rotate(360deg);}
 }
 
-
 .service {
-  font-family: "gvaIcon" !important;
+  font-family: "gvaIcon",serif !important;
     font-size: 16px;
     font-style: normal;
     font-weight: 800;

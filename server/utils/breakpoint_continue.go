@@ -55,7 +55,7 @@ func CheckMd5(content []byte, chunkMd5 string) (CanUpload bool) {
 //@return: string, error
 
 func makeFileContent(content []byte, fileName string, FileDir string, contentNumber int) (string, error) {
-	if strings.Index(fileName, "./") > -1 || strings.Index(FileDir, "./") > -1 {
+	if strings.Index(fileName, "..") > -1 || strings.Index(FileDir, "..") > -1 {
 		return "", errors.New("文件名或路径不合法")
 	}
 	path := FileDir + fileName + "_" + strconv.Itoa(contentNumber)

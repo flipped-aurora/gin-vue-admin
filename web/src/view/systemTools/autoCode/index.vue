@@ -150,21 +150,80 @@
       </div>
       <el-table :data="form.fields">
         <el-table-column align="left" type="index" :label="t('autoCode.fieldIndex')" width="60" />
-        <el-table-column align="left" prop="fieldName" :label="t('autoCode.fieldName')" />
-        <el-table-column align="left" prop="fieldDesc" :label="t('autoCode.fieldDesc')" />
-        <el-table-column align="left" prop="require" label="是否必填">
-          <template #default="{row}">{{ row.require?"是":"否" }}</template>
+        <el-table-column align="left" prop="fieldName" :label="t('autoCode.fieldName')" width="160">
+          <template #default="{row}">
+            <el-input v-model="row.fieldName" />
+          </template>
         </el-table-column>
-        <el-table-column align="left" prop="sort" label="是否排序">
-          <template #default="{row}">{{ row.sort?"是":"否" }}</template>
+        <el-table-column align="left" prop="fieldDesc" :label="t('autoCode.fieldDesc')" width="160">
+          <template #default="{row}">
+            <el-input v-model="row.fieldDesc" />
+          </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldJson" min-width="120px" label="FieldJson" />
-        <el-table-column align="left" prop="fieldType" :label="t('autoCode.fieldDataType')" width="130" />
-        <el-table-column align="left" prop="dataTypeLong" :label="t('autoCode.fieldLen')" width="130" />
-        <el-table-column align="left" prop="columnName" :label="t('autoCode.columnName')" width="130" />
-        <el-table-column align="left" prop="comment" :label="t('autoCode.comment')" width="130" />
-        <el-table-column align="left" prop="fieldSearchType" :label="t('general.searchCriteria')" width="130" />
-        <el-table-column align="left" prop="dictType" :label="t('autoCode.dictionary')" width="130" />
+        <el-table-column align="left" prop="require" label="必填">
+          <template #default="{row}"> <el-checkbox v-model="row.require" /></template>
+        </el-table-column>
+        <el-table-column align="left" prop="sort" label="排序">
+          <template #default="{row}"> <el-checkbox v-model="row.sort" /> </template>
+        </el-table-column>
+        <el-table-column align="left" prop="fieldJson" width="160px" label="FieldJson">
+          <template #default="{row}">
+            <el-input v-model="row.fieldJson" />
+          </template>
+        </el-table-column>
+        <el-table-column align="left" prop="fieldType" :label="t('autoCode.fieldDataType')" width="160">
+          <template #default="{row}">
+            <el-select
+              v-model="row.fieldType"
+              style="width:100%"
+              placeholder="请选择field数据类型"
+              clearable
+            >
+              <el-option
+                v-for="item in typeOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column align="left" prop="dataTypeLong" :label="t('autoCode.fieldLen')" width="160">
+          <template #default="{row}">
+            <el-input v-model="row.dataTypeLong" />
+          </template>
+        </el-table-column>
+        <el-table-column align="left" prop="columnName" :label="t('autoCode.columnName')" width="160">
+          <template #default="{row}">
+            <el-input v-model="row.columnName" />
+          </template>
+        </el-table-column>
+        <el-table-column align="left" prop="comment" :label="t('autoCode.comment')" width="160">
+          <template #default="{row}">
+            <el-input v-model="row.columnName" />
+          </template>
+        </el-table-column>
+        <el-table-column align="left" prop="fieldSearchType" :label="t('general.searchCriteria')" width="130">
+          <template #default="{row}">
+            <el-select
+              v-model="row.fieldSearchType"
+              style="width:100%"
+              placeholder="请选择Field查询条件"
+              clearable
+            >
+              <el-option
+                v-for="item in typeSearchOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+                :disabled="
+                  (row.fieldType!=='string'&&item.value==='LIKE')||
+                    ((row.fieldType!=='int'&&row.fieldType!=='time.Time'&&row.fieldType!=='float64')&&(item.value==='BETWEEN' || item.value==='NOT BETWEEN'))"
+              />
+            </el-select>
+          </template>
+
+        </el-table-column>
         <el-table-column align="left" :lable="t('general.operations')" width="300" fixed="right">
           <template #default="scope">
             <el-button
@@ -256,6 +315,64 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+const typeOptions = ref([
+  {
+    label: '字符串',
+    value: 'string'
+  },
+  {
+    label: '整型',
+    value: 'int'
+  },
+  {
+    label: '布尔值',
+    value: 'bool'
+  },
+  {
+    label: '浮点型',
+    value: 'float64'
+  },
+  {
+    label: '时间',
+    value: 'time.Time'
+  },
+  {
+    label: '枚举',
+    value: 'enum'
+  }
+])
+
+const typeSearchOptions = ref([
+  {
+    label: '=',
+    value: '='
+  },
+  {
+    label: '<>',
+    value: '<>'
+  },
+  {
+    label: '>',
+    value: '>'
+  },
+  {
+    label: '<',
+    value: '<'
+  },
+  {
+    label: 'LIKE',
+    value: 'LIKE'
+  },
+  {
+    label: 'BETWEEN',
+    value: 'BETWEEN'
+  },
+  {
+    label: 'NOT BETWEEN',
+    value: 'NOT BETWEEN'
+  }
+])
 
 const fieldTemplate = {
   fieldName: '',

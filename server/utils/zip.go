@@ -19,7 +19,7 @@ func Unzip(zipFile string, destDir string) ([]string, error) {
 	defer zipReader.Close()
 
 	for _, f := range zipReader.File {
-		if strings.Index(f.Name, "../") > -1 {
+		if strings.Index(f.Name, "..") > -1 {
 			return []string{}, fmt.Errorf("%s 文件名不合法", f.Name)
 		}
 		fpath := filepath.Join(destDir, f.Name)

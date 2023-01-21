@@ -35,47 +35,32 @@
             <el-input
               v-model="loginFormData.username"
               :placeholder="t('login.entUserName')"
-            >
-              <template #suffix>
-                <span class="input-icon">
-                  <el-icon>
-                    <user />
-                  </el-icon>
-                </span>
-              </template>
-            </el-input>
+              suffix-icon="user"
+            />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
               v-model="loginFormData.password"
-              :type="lock === 'lock' ? 'password' : 'text'"
+              show-password
+              type="password"
               :placeholder="t('login.entPassword')"
-            >
-              <template #suffix>
-                <span class="input-icon">
-                  <el-icon>
-                    <component
-                      :is="lock"
-                      @click="changeLock"
-                    />
-                  </el-icon>
-                </span>
-              </template>
-            </el-input>
-          </el-form-item>
-          <el-form-item style="position: relative" prop="captcha">
-            <el-input
-              v-model="loginFormData.captcha"
-              :placeholder="t('login.entVerificationCode')"
-              style="width: 60%"
             />
-            <div class="vPic">
-              <img
-                v-if="picPath"
-                :src="picPath"
-                :alt="t('login.entVerificationCode')"
-                @click="loginVerify()"
-              >
+          </el-form-item>
+          <el-form-item v-if="loginFormData.openCaptcha" prop="captcha">
+            <div class="vPicBox">
+              <el-input
+                v-model="loginFormData.captcha"
+                :placeholder="t('login.entVerificationCode')"
+                style="width: 60%"
+              />
+              <div class="vPic">
+                <img
+                  v-if="picPath"
+                  :src="picPath"
+                  :alt="t('login.entVerificationCode')"
+                  @click="loginVerify()"
+                >
+              </div>
             </div>
           </el-form-item>
           <el-form-item>
@@ -96,19 +81,19 @@
       <div class="login_panel_foot">
         <div class="links">
           <a href="http://doc.henrongyi.top/" target="_blank">
-            <img src="@/assets/docs.png" class="link-icon">
+            <img src="@/assets/docs.png" class="link-icon" alt="文档">
           </a>
           <a href="https://support.qq.com/product/371961" target="_blank">
-            <img src="@/assets/kefu.png" class="link-icon">
+            <img src="@/assets/kefu.png" class="link-icon" alt="客服">
           </a>
           <a
             href="https://github.com/flipped-aurora/gin-vue-admin"
             target="_blank"
           >
-            <img src="@/assets/github.png" class="link-icon">
+            <img src="@/assets/github.png" class="link-icon" alt="github">
           </a>
           <a href="https://space.bilibili.com/322210472" target="_blank">
-            <img src="@/assets/video.png" class="link-icon">
+            <img src="@/assets/video.png" class="link-icon" alt="视频站">
           </a>
         </div>
         <div class="copyright">
@@ -168,6 +153,7 @@ const loginVerify = () => {
     })
     picPath.value = ele.data.picPath
     loginFormData.captchaId = ele.data.captchaId
+    loginFormData.openCaptcha = ele.data.openCaptcha
   })
 }
 
@@ -181,11 +167,6 @@ getLanguage()
 loginVerify()
 
 // 登录相关操作
-const lock = ref('lock')
-const changeLock = () => {
-  lock.value = lock.value === 'lock' ? 'unlock' : 'lock'
-}
-
 const loginForm = ref(null)
 const picPath = ref('')
 
@@ -194,6 +175,7 @@ const loginFormData = reactive({
   password: '123456',
   captcha: '',
   captchaId: '',
+  openCaptcha: false,
 })
 
 const rules = reactive({

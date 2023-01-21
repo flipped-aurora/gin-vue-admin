@@ -41,6 +41,14 @@
           <el-form-item :label="t('view.systemTools.system.ipLimitTime')">
             <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
+          <el-tooltip
+            content="请修改完成后，注意一并修改前端env环境下的VITE_BASE_PATH"
+            placement="top-start"
+          >
+            <el-form-item label="全局路由前缀">
+              <el-input v-model="config.system['router-prefix']" />
+            </el-form-item>
+          </el-tooltip>
         </el-collapse-item>
         <el-collapse-item :title="t('view.systemTools.system.jwtSignature')" name="2">
           <el-form-item :label="t('view.systemTools.system.jwtSignature')">

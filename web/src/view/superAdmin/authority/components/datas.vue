@@ -1,5 +1,6 @@
 <template>
   <div>
+    <warning-bar title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）。此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。" href="https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=36" />
     <div class="clearfix sticky-button" style="margin: 18px">
       <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">确 定</el-button>
       <el-button class="fl-left" size="small" type="primary" @click="all">全选</el-button>
@@ -11,7 +12,6 @@
         <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
       </el-checkbox-group>
     </div>
-    <warning-bar title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）" />
   </div>
 </template>
 

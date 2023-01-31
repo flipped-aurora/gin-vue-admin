@@ -1,122 +1,144 @@
 <template>
   <div>
+    <warning-bar
+      title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）。此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。"
+      href="https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=36"
+    />
     <div class="clearfix sticky-button" style="margin: 18px">
-      <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">{{ t('general.confirm') }}</el-button>
-      <el-button class="fl-left" size="small" type="primary" @click="all">{{ t('general.selectAll') }}</el-button>
-      <el-button class="fl-left" size="small" type="primary" @click="self">{{ t('datas.thisRole') }}</el-button>
-      <el-button class="fl-left" size="small" type="primary" @click="selfAndChildren">{{ t('datas.thisRoleAndSubRoles') }}</el-button>
+      <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">{{
+        t("general.confirm")
+      }}</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="all">{{
+        t("general.selectAll")
+      }}</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="self">{{
+        t("datas.thisRole")
+      }}</el-button>
+      <el-button class="fl-left" size="small" type="primary" @click="selfAndChildren">{{
+        t("datas.thisRoleAndSubRoles")
+      }}</el-button>
     </div>
     <div class="tree-content">
       <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">
-        <el-checkbox v-for="(item,key) in authoritys" :key="key" :label="item">{{ item.authorityName }}</el-checkbox>
+        <el-checkbox v-for="(item, key) in authoritys" :key="key" :label="item">{{
+          item.authorityName
+        }}</el-checkbox>
       </el-checkbox-group>
     </div>
-    <warning-bar :title="t('datas.datasNote')" />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Datas'
-}
+  name: "Datas",
+};
 </script>
 
 <script setup>
-import { setDataAuthority } from '@/api/authority'
-import WarningBar from '@/components/warningBar/warningBar.vue'
-import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+import { setDataAuthority } from "@/api/authority";
+import WarningBar from "@/components/warningBar/warningBar.vue";
+import { ref } from "vue";
+import { ElMessage } from "element-plus";
+import { useI18n } from "vue-i18n"; // added by mohamed hassan to support multilanguage
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
+const { t } = useI18n(); // added by mohamed hassan to support multilanguage
 
 const props = defineProps({
   row: {
-    default: function() {
-      return {}
+    default: function () {
+      return {};
     },
-    type: Object
+    type: Object,
   },
   authority: {
-    default: function() {
-      return []
+    default: function () {
+      return [];
     },
-    type: Array
-  }
-})
+    type: Array,
+  },
+});
 
-const authoritys = ref([])
-const needConfirm = ref(false)
+const authoritys = ref([]);
+const needConfirm = ref(false);
 //   平铺角色
 const roundAuthority = (authoritysData) => {
-  authoritysData && authoritysData.forEach(item => {
-    const obj = {}
-    obj.authorityId = item.authorityId
-    obj.authorityName = item.authorityName
-    authoritys.value.push(obj)
-    if (item.children && item.children.length) {
-      roundAuthority(item.children)
-    }
-  })
-}
+  authoritysData &&
+    authoritysData.forEach((item) => {
+      const obj = {};
+      obj.authorityId = item.authorityId;
+      obj.authorityName = item.authorityName;
+      authoritys.value.push(obj);
+      if (item.children && item.children.length) {
+        roundAuthority(item.children);
+      }
+    });
+};
 
-const dataAuthorityId = ref([])
+const dataAuthorityId = ref([]);
 const init = () => {
-  roundAuthority(props.authority)
-  props.row.dataAuthorityId && props.row.dataAuthorityId.forEach(item => {
-    const obj = authoritys.value && authoritys.value.filter(au => au.authorityId === item.authorityId) && authoritys.value.filter(au => au.authorityId === item.authorityId)[0]
-    dataAuthorityId.value.push(obj)
-  })
-}
+  roundAuthority(props.authority);
+  props.row.dataAuthorityId &&
+    props.row.dataAuthorityId.forEach((item) => {
+      const obj =
+        authoritys.value &&
+        authoritys.value.filter((au) => au.authorityId === item.authorityId) &&
+        authoritys.value.filter((au) => au.authorityId === item.authorityId)[0];
+      dataAuthorityId.value.push(obj);
+    });
+};
 
-init()
+init();
 
 // 暴露给外层使用的切换拦截统一方法
 const enterAndNext = () => {
-  authDataEnter()
-}
+  authDataEnter();
+};
 
-const emit = defineEmits(['changeRow'])
+const emit = defineEmits(["changeRow"]);
 const all = () => {
-  dataAuthorityId.value = [...authoritys.value]
-  emit('changeRow', 'dataAuthorityId', dataAuthorityId.value)
-  needConfirm.value = true
-}
+  dataAuthorityId.value = [...authoritys.value];
+  emit("changeRow", "dataAuthorityId", dataAuthorityId.value);
+  needConfirm.value = true;
+};
 const self = () => {
-  dataAuthorityId.value = authoritys.value.filter(item => item.authorityId === props.row.authorityId)
-  emit('changeRow', 'dataAuthorityId', dataAuthorityId.value)
-  needConfirm.value = true
-}
+  dataAuthorityId.value = authoritys.value.filter(
+    (item) => item.authorityId === props.row.authorityId
+  );
+  emit("changeRow", "dataAuthorityId", dataAuthorityId.value);
+  needConfirm.value = true;
+};
 const selfAndChildren = () => {
-  const arrBox = []
-  getChildrenId(props.row, arrBox)
-  dataAuthorityId.value = authoritys.value.filter(item => arrBox.indexOf(item.authorityId) > -1)
-  emit('changeRow', 'dataAuthorityId', dataAuthorityId.value)
-  needConfirm.value = true
-}
+  const arrBox = [];
+  getChildrenId(props.row, arrBox);
+  dataAuthorityId.value = authoritys.value.filter(
+    (item) => arrBox.indexOf(item.authorityId) > -1
+  );
+  emit("changeRow", "dataAuthorityId", dataAuthorityId.value);
+  needConfirm.value = true;
+};
 const getChildrenId = (row, arrBox) => {
-  arrBox.push(row.authorityId)
-  row.children && row.children.forEach(item => {
-    getChildrenId(item, arrBox)
-  })
-}
+  arrBox.push(row.authorityId);
+  row.children &&
+    row.children.forEach((item) => {
+      getChildrenId(item, arrBox);
+    });
+};
 // 提交
-const authDataEnter = async() => {
-  const res = await setDataAuthority(props.row)
+const authDataEnter = async () => {
+  const res = await setDataAuthority(props.row);
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: t('datas.resourceSetupSuccess') })
+    ElMessage({ type: "success", message: t("datas.resourceSetupSuccess") });
   }
-}
+};
 
 //   选择
 const selectAuthority = () => {
-  emit('changeRow', 'dataAuthorityId', dataAuthorityId.value)
-  needConfirm.value = true
-}
+  emit("changeRow", "dataAuthorityId", dataAuthorityId.value);
+  needConfirm.value = true;
+};
 
 defineExpose({
   enterAndNext,
-  needConfirm
-})
-
+  needConfirm,
+});
 </script>

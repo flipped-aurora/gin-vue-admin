@@ -34,7 +34,7 @@ services:
         ipv4_address: 177.7.0.11
 
   server:
-    image: golang:1.16
+    image: golang:1.18
     container_name: gva-server
     hostname: gva-server
     restart: always

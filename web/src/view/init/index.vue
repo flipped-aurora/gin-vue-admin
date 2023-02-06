@@ -19,12 +19,18 @@
           </p>
         </div>
       </div>
-      <div v-if="hello > 0 " :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']" class="form">
+      <div
+        v-if="hello > 0 "
+        :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']"
+        class="form"
+      >
         <el-form ref="formRef" :model="form" label-width="100px">
           <el-form-item label="数据库类型">
             <el-select v-model="form.dbType" placeholder="请选择" @change="changeDB">
               <el-option key="mysql" label="mysql" value="mysql" />
               <el-option key="pgsql" label="pgsql" value="pgsql" />
+              <el-option key="oracle" label="oracle" value="oracle" />
+              <el-option key="mssql" label="mssql" value="mssql" />
             </el-select>
           </el-form-item>
           <el-form-item label="host">
@@ -37,10 +43,7 @@
             <el-input v-model="form.userName" placeholder="请输入数据库用户名" />
           </el-form-item>
           <el-form-item label="password">
-            <el-input
-              v-model="form.password"
-              placeholder="请输入数据库密码（没有则为空）"
-            />
+            <el-input v-model="form.password" placeholder="请输入数据库密码（没有则为空）" />
           </el-form-item>
           <el-form-item label="dbName">
             <el-input v-model="form.dbName" placeholder="请输入数据库名称" />
@@ -63,6 +66,7 @@ export default {
 </script>
 
 <script setup>
+// @ts-ignore
 import { initDB } from '@/api/initdb'
 import { reactive, ref } from 'vue'
 import { ElLoading, ElMessage } from 'element-plus'
@@ -87,7 +91,7 @@ const form = reactive({
   port: '3306',
   userName: 'root',
   password: '',
-  dbName: 'gva'
+  dbName: 'gva',
 })
 const changeDB = (val) => {
   switch (val) {
@@ -98,7 +102,7 @@ const changeDB = (val) => {
         port: '3306',
         userName: 'root',
         password: '',
-        dbName: 'gva'
+        dbName: 'gva',
       })
       break
     case 'pgsql':
@@ -108,7 +112,27 @@ const changeDB = (val) => {
         port: '5432',
         userName: 'postgres',
         password: '',
-        dbName: 'gva'
+        dbName: 'gva',
+      })
+      break
+    case 'oracle':
+      Object.assign(form, {
+        dbType: 'oracle',
+        host: '127.0.0.1',
+        port: '1521',
+        userName: 'oracle',
+        password: '',
+        dbName: 'gva',
+      })
+      break
+    case 'mssql':
+      Object.assign(form, {
+        dbType: 'mssql',
+        host: '127.0.0.1',
+        port: '1433',
+        userName: 'mssql',
+        password: '',
+        dbName: 'gva',
       })
       break
     default:
@@ -118,7 +142,7 @@ const changeDB = (val) => {
         port: '3306',
         userName: 'root',
         password: '',
-        dbName: 'gva'
+        dbName: 'gva',
       })
   }
 }
@@ -127,7 +151,7 @@ const onSubmit = async() => {
     lock: true,
     text: '正在初始化数据库，请稍候',
     spinner: 'loading',
-    background: 'rgba(0, 0, 0, 0.7)'
+    background: 'rgba(0, 0, 0, 0.7)',
   })
   try {
     const res = await initDB(form)
@@ -135,7 +159,7 @@ const onSubmit = async() => {
       out.value = true
       ElMessage({
         type: 'success',
-        message: res.msg
+        message: res.msg,
       })
       router.push({ name: 'Login' })
     }
@@ -147,26 +171,26 @@ const onSubmit = async() => {
 </script>
 
 <style lang="scss" scoped>
-.init_page{
+.init_page {
   margin: 0;
   padding: 0;
-  background-image: url("@/assets/login_background.jpg");
+  background-image: url('@/assets/login_background.jpg');
   background-size: cover;
   width: 100%;
   height: 100%;
   position: relative;
-  .init_page_panel{
+  .init_page_panel {
     position: absolute;
     top: 3vh;
     left: 2vw;
     width: 96vw;
     height: 94vh;
-    background-color: rgba(255,255,255,.8);
+    background-color: rgba(255, 255, 255, 0.8);
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    .hello{
+    .hello {
       position: absolute;
       z-index: 2;
       text-align: center;
@@ -176,22 +200,22 @@ const onSubmit = async() => {
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      .hello_title{
+      .hello_title {
         font-size: 32px;
         line-height: 98px;
       }
-      .in-two{
+      .in-two {
         font-size: 22px;
       }
-      .init_p{
+      .init_p {
         margin-top: 20px;
         color: #777777;
       }
-      .init_btn{
+      .init_btn {
         margin-top: 20px;
       }
     }
-    .form{
+    .form {
       position: absolute;
       z-index: 3;
       margin-top: 60px;
@@ -204,94 +228,84 @@ const onSubmit = async() => {
 }
 
 .slide-in-fwd-top {
-  -webkit-animation: slide-in-fwd-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  animation: slide-in-fwd-top 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  -webkit-animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-fwd-top 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 .slide-out-right {
-  -webkit-animation: slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
-  animation: slide-out-right 0.5s cubic-bezier(0.550, 0.085, 0.680, 0.530) both;
+  -webkit-animation: slide-out-right 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53)
+    both;
+  animation: slide-out-right 0.5s cubic-bezier(0.55, 0.085, 0.68, 0.53) both;
 }
 .slide-in-left {
-  -webkit-animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-  animation: slide-in-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  -webkit-animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-left 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 @-webkit-keyframes slide-in-fwd-top {
   0% {
-    -webkit-transform: translateZ(-1400px) translateY(-800px);
     transform: translateZ(-1400px) translateY(-800px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateZ(0) translateY(0);
     transform: translateZ(0) translateY(0);
     opacity: 1;
   }
 }
 @keyframes slide-in-fwd-top {
   0% {
-    -webkit-transform: translateZ(-1400px) translateY(-800px);
     transform: translateZ(-1400px) translateY(-800px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateZ(0) translateY(0);
     transform: translateZ(0) translateY(0);
     opacity: 1;
   }
 }
 @-webkit-keyframes slide-out-right {
   0% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateX(1000px);
     transform: translateX(1000px);
     opacity: 0;
   }
 }
 @keyframes slide-out-right {
   0% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
   100% {
-    -webkit-transform: translateX(1000px);
     transform: translateX(1000px);
     opacity: 0;
   }
 }
 @-webkit-keyframes slide-in-left {
   0% {
-    -webkit-transform: translateX(-1000px);
     transform: translateX(-1000px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
 }
 @keyframes slide-in-left {
   0% {
-    -webkit-transform: translateX(-1000px);
     transform: translateX(-1000px);
     opacity: 0;
   }
   100% {
-    -webkit-transform: translateX(0);
     transform: translateX(0);
     opacity: 1;
   }
 }
 @media (max-width: 750px) {
-  .form{
+  .form {
     width: 94vw !important;
     padding: 0;
   }
 }
-
 </style>

@@ -175,7 +175,7 @@
               <el-input v-model="config.mysql['log-mode']" />
             </el-form-item>
           </template>
-          <template v-if="config.system.dbType === 'pgsql'">
+          <template v-if="config.system['db-type'] === 'pgsql'">
             <el-form-item label="用户名">
               <el-input v-model="config.pgsql.username" />
             </el-form-item>

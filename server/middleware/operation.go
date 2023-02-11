@@ -113,7 +113,7 @@ func OperationRecord() gin.HandlerFunc {
 				// 截断
 				newBody := respPool.Get().([]byte)
 				copy(newBody, record.Resp)
-				record.Body = string(newBody)
+				record.Resp = string(newBody)
 				defer respPool.Put(newBody[:0])
 			}
 		}

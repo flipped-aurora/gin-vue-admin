@@ -1,5 +1,7 @@
 import legacyPlugin from '@vitejs/plugin-legacy'
-// import usePluginImport from 'vite-plugin-importer';
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteLogo } from './src/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
@@ -79,6 +81,14 @@ export default ({
     esbuild,
     optimizeDeps,
     plugins: [
+      AutoImport({
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver({
+          importStyle: 'sass'
+        })]
+      }),
       GvaPositionServer(),
       GvaPosition(),
       legacyPlugin({
@@ -87,9 +97,8 @@ export default ({
     ],
     css: {
       preprocessorOptions: {
-        less: {
-          // 支持内联 JavaScript
-          javascriptEnabled: true,
+        scss: {
+          additionalData: `@use "@/style/element/index.scss" as *;`,
         }
       }
     },

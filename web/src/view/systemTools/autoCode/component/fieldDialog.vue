@@ -11,7 +11,7 @@
     >
       <el-form-item label="Field名称" prop="fieldName">
         <el-input v-model="middleDate.fieldName" autocomplete="off" style="width:80%" />
-        <el-button size="small" style="width:18%;margin-left:2%" @click="autoFill">
+        <el-button style="width:18%;margin-left:2%" @click="autoFill">
           <span style="font-size: 12px">自动填充</span>
         </el-button>
       </el-form-item>
@@ -224,11 +224,5 @@ export default {
 .grid-form{
   display: grid;
   grid-template-columns: 1fr 1fr;
-}
-.click-text{
-  color: #0d84ff;
-  font-size: 13px;
-  cursor: pointer;
-  user-select: none;
 }
 </style>

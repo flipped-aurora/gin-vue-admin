@@ -2,7 +2,7 @@
   <div>
     <div class="clearfix sticky-button">
       <el-input v-model="filterText" class="fitler" placeholder="筛选" />
-      <el-button class="fl-right" size="small" type="primary" @click="relation">确 定</el-button>
+      <el-button class="fl-right" type="primary" @click="relation">确 定</el-button>
     </div>
     <div class="tree-content">
       <el-tree
@@ -24,7 +24,7 @@
               <el-button
                 type="primary"
                 link
-                size="small"
+
                 :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
                 :disabled="!node.checked"
                 @click="() => setDefault(data)"
@@ -36,7 +36,7 @@
               <el-button
                 type="primary"
                 link
-                size="small"
+
                 @click="() => OpenBtn(data)"
               >
                 分配按钮
@@ -59,8 +59,8 @@
       </el-table>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -215,7 +215,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 @import "@/style/button.scss";
 .custom-tree-node{
   span+span{

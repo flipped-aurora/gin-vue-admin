@@ -362,7 +362,7 @@
             <el-input v-model="config.timer.spec" />
           </el-form-item>
           <template v-for="(item,k) in config.timer.detail">
-            <div v-for="(key,k2) in item" :key="k2">
+            <div v-for="(_,k2) in item" :key="k2">
               <el-form-item :key="k+k2" :label="k2">
                 <el-input v-model="item[k2]" />
               </el-form-item>
@@ -372,8 +372,8 @@
       </el-collapse>
     </el-form>
     <div class="gva-btn-list">
-      <el-button type="primary" size="small" @click="update">立即更新</el-button>
-      <el-button type="primary" size="small" @click="reload">重启服务（开发中）</el-button>
+      <el-button type="primary" @click="update">立即更新</el-button>
+      <el-button type="primary" @click="reload">重启服务（开发中）</el-button>
     </div>
   </div>
 </template>

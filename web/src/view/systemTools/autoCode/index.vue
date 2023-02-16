@@ -61,7 +61,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button size="small" type="primary" @click="getColumnFunc">使用此表创建</el-button>
+              <el-button type="primary" @click="getColumnFunc">使用此表创建</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -146,7 +146,7 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" @click="editAndAddField()">新增Field</el-button>
+        <el-button type="primary" @click="editAndAddField()">新增Field</el-button>
       </div>
       <el-table :data="form.fields">
         <el-table-column align="left" type="index" label="序列" width="60" />
@@ -228,21 +228,21 @@
         <el-table-column align="left" label="操作" width="300" fixed="right">
           <template #default="scope">
             <el-button
-              size="small"
+
               type="primary"
               link
               icon="edit"
               @click="editAndAddField(scope.row)"
             >高级编辑</el-button>
             <el-button
-              size="small"
+
               type="primary"
               link
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
             >上移</el-button>
             <el-button
-              size="small"
+
               type="primary"
               link
               :disabled="(scope.$index + 1) === form.fields.length"
@@ -251,11 +251,11 @@
             <el-popover v-model="scope.row.visible" placement="top">
               <p>确定删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="small" @click="deleteField(scope.$index)">确定</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" @click="deleteField(scope.$index)">确定</el-button>
               </div>
               <template #reference>
-                <el-button size="small" type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
+                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -263,8 +263,8 @@
       </el-table>
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-content-flex-end auto-btn-list">
-        <el-button size="small" type="primary" @click="enterForm(true)">预览代码</el-button>
-        <el-button size="small" type="primary" @click="enterForm(false)">生成代码</el-button>
+        <el-button type="primary" @click="enterForm(true)">预览代码</el-button>
+        <el-button type="primary" @click="enterForm(false)">生成代码</el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
@@ -272,8 +272,8 @@
       <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -282,14 +282,14 @@
       <template #header>
         <div class="previewCodeTool">
           <p>操作栏：</p>
-          <el-button size="small" type="primary" @click="selectText">全选</el-button>
-          <el-button size="small" type="primary" @click="copy">复制</el-button>
+          <el-button type="primary" @click="selectText">全选</el-button>
+          <el-button type="primary" @click="copy">复制</el-button>
         </div>
       </template>
       <PreviewCodeDialog v-if="previewFlag" ref="previewNode" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
-          <el-button size="small" type="primary" @click="previewFlag = false">确 定</el-button>
+          <el-button type="primary" @click="previewFlag = false">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -607,9 +607,7 @@ const getColumnFunc = async() => {
     let dbtype = ''
     if (dbform.value.businessDB !== '') {
       const dbtmp = dbList.value.find(item => item.aliasName === dbform.value.businessDB)
-      console.log(dbtmp)
       const dbraw = toRaw(dbtmp)
-      console.log(dbraw)
       dbtype = dbraw.dbtype
     }
     const tbHump = toHump(dbform.value.tableName)
@@ -632,7 +630,7 @@ const getColumnFunc = async() => {
                 dataType: item.dataType,
                 fieldJson: fbHump,
                 dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
-                columnName: dbtype == 'oracle' ? item.columnName.toUpperCase() : item.columnName,
+                columnName: dbtype === 'oracle' ? item.columnName.toUpperCase() : item.columnName,
                 comment: item.columnComment,
                 require: false,
                 errorText: '',
@@ -683,7 +681,7 @@ const init = () => {
 }
 init()
 
-watch(() => route.params.id, (id) => {
+watch(() => route.params.id, () => {
   if (route.name === 'autoCodeEdit') {
     init()
   }

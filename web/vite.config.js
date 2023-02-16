@@ -82,10 +82,12 @@ export default ({
     optimizeDeps,
     plugins: [
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver()]
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver({
+          importStyle: 'sass'
+        })]
       }),
       GvaPositionServer(),
       GvaPosition(),
@@ -95,9 +97,8 @@ export default ({
     ],
     css: {
       preprocessorOptions: {
-        less: {
-          // 支持内联 JavaScript
-          javascriptEnabled: true,
+        scss: {
+          additionalData: `@use "@/style/element/index.scss" as *;`,
         }
       }
     },

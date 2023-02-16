@@ -20,6 +20,7 @@
           <el-form-item prop="username">
             <el-input
               v-model="loginFormData.username"
+              size="large"
               placeholder="请输入用户名"
               suffix-icon="user"
             />
@@ -28,6 +29,7 @@
             <el-input
               v-model="loginFormData.password"
               show-password
+              size="large"
               type="password"
               placeholder="请输入密码"
             />
@@ -37,7 +39,8 @@
               <el-input
                 v-model="loginFormData.captcha"
                 placeholder="请输入验证码"
-                style="width: 60%"
+                size="large"
+                style="flex:1;padding-right: 20px;"
               />
               <div class="vPic">
                 <img

@@ -15,14 +15,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">重置</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button icon="refresh" @click="onReset">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
+        <el-button type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -48,15 +48,15 @@
 
         <el-table-column align="left" label="按钮组">
           <template #default="scope">
-            <el-button size="small" type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" size="small" @click="scope.row.visible = true">删除</el-button>
+                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -77,7 +77,7 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
-      <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
+      <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
         <el-form-item label="展示值" prop="label">
           <el-input
             v-model="formData.label"
@@ -105,8 +105,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -133,7 +133,7 @@ import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
 
-onBeforeRouteUpdate((to, form) => {
+onBeforeRouteUpdate((to) => {
   if (to.name === 'dictionaryDetail') {
     searchInfo.value.sysDictionaryID = to.params.id
     getTableData()

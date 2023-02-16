@@ -3,7 +3,7 @@
     <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
+        <el-button type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -17,35 +17,35 @@
           <template #default="scope">
             <el-button
               icon="setting"
-              size="small"
+
               type="primary"
               link
               @click="opdendrawer(scope.row)"
             >设置权限</el-button>
             <el-button
               icon="plus"
-              size="small"
+
               type="primary"
               link
               @click="addAuthority(scope.row.authorityId)"
             >新增子角色</el-button>
             <el-button
               icon="copy-document"
-              size="small"
+
               type="primary"
               link
               @click="copyAuthorityFunc(scope.row)"
             >拷贝</el-button>
             <el-button
               icon="edit"
-              size="small"
+
               type="primary"
               link
               @click="editAuthority(scope.row)"
             >编辑</el-button>
             <el-button
               icon="delete"
-              size="small"
+
               type="primary"
               link
               @click="deleteAuth(scope.row)"
@@ -61,7 +61,7 @@
           <el-cascader
             v-model="form.parentId"
             style="width:100%"
-            :disabled="dialogType=='add'"
+            :disabled="dialogType==='add'"
             :options="AuthorityOption"
             :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
             :show-all-levels="false"
@@ -69,7 +69,7 @@
           />
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
-          <el-input v-model="form.authorityId" :disabled="dialogType=='edit'" autocomplete="off" />
+          <el-input v-model="form.authorityId" :disabled="dialogType==='edit'" autocomplete="off" />
         </el-form-item>
         <el-form-item label="角色姓名" prop="authorityName">
           <el-input v-model="form.authorityName" autocomplete="off" />
@@ -77,8 +77,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">确 定</el-button>
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>

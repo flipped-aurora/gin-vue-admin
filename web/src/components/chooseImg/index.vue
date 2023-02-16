@@ -22,7 +22,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="open">查询</el-button>
+          <el-button type="primary" icon="search" @click="open">查询</el-button>
         </el-form-item>
       </el-form>
     </div>

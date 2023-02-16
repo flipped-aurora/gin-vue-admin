@@ -3,7 +3,7 @@
     <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="addUser">新增用户</el-button>
+        <el-button type="primary" icon="plus" @click="addUser">新增用户</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -50,15 +50,15 @@
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>确定要删除此用户吗</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" size="small" @click="deleteUserFunc(scope.row)">确定</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">取消</el-button>
+                <el-button type="primary" @click="deleteUserFunc(scope.row)">确定</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" size="small">删除</el-button>
+                <el-button type="primary" link icon="delete">删除</el-button>
               </template>
             </el-popover>
-            <el-button type="primary" link icon="edit" size="small" @click="openEdit(scope.row)">编辑</el-button>
-            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
+            <el-button type="primary" link icon="edit" @click="openEdit(scope.row)">编辑</el-button>
+            <el-button type="primary" link icon="magic-stick" @click="resetPasswordFunc(scope.row)">重置密码</el-button>
           </template>
         </el-table-column>
 
@@ -131,8 +131,8 @@
 
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeAddUserDialog">取 消</el-button>
-          <el-button size="small" type="primary" @click="enterAddUserDialog">确 定</el-button>
+          <el-button @click="closeAddUserDialog">取 消</el-button>
+          <el-button type="primary" @click="enterAddUserDialog">确 定</el-button>
         </div>
       </template>
     </el-dialog>

@@ -246,13 +246,4 @@ const changeShadow = () => {
 
 <style lang="scss">
 @import '@/style/mobile.scss';
-
-.dark{
-  background-color: #191a23 !important;
-  color: #fff !important;
-}
-.light{
-  background-color: #fff !important;
-  color: #000 !important;
-}
 </style>

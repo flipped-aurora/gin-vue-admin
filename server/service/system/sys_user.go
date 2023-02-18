@@ -179,6 +179,18 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetUserInfo
+//@description: 设置用户信息
+//@param: reqUser model.SysUser
+//@return: err error, user model.SysUser
+
+func (userService *UserService) SetSelfInfo(req system.SysUser) error {
+	return global.GVA_DB.Model(&system.SysUser{}).
+		Where("id=?", req.ID).
+		Updates(req).Error
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: GetUserInfo
 //@description: 获取用户信息

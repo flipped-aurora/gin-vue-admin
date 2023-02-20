@@ -9,7 +9,10 @@ import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
 import { initDom } from './utils/positionToCode'
-import 'element-plus/theme-chalk/src/message.scss'
+import 'element-plus/es/components/message/style/css'
+import 'element-plus/es/components/loading/style/css'
+import 'element-plus/es/components/notification/style/css'
+import 'element-plus/es/components/message-box/style/css'
 import './style/element_visiable.scss'
 
 initDom()

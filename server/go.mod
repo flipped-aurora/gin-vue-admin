@@ -41,6 +41,7 @@ require (
 	gorm.io/driver/postgres v1.3.4
 	gorm.io/driver/sqlserver v1.3.2
 	gorm.io/gorm v1.23.4
+	gorm.io/plugin/soft_delete v1.2.0
 	nhooyr.io/websocket v1.8.7
 )
 

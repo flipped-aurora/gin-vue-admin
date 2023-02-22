@@ -15,4 +15,5 @@ func TestAddRegisterTablesAst(t *testing.T) {
 func Register() {
 	test := global.GetGlobalDBByDBName("test")
 	test.AutoMigrate(example.ExaFile{})
+
 }

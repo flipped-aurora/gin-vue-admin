@@ -1,4 +1,4 @@
-package utils
+package ast
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"

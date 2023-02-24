@@ -1,4 +1,4 @@
-package utils
+package ast
 
 import (
 	"bytes"
@@ -22,15 +22,13 @@ func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	//ast.Print(fileSet, astFile)
 	AddImport(astFile, modelPk)
-	//ast.Print(fileSet, astFile)
 	FuncNode := FindFunction(astFile, funcName)
 	if FuncNode != nil {
 		ast.Print(fileSet, FuncNode)
 	}
-	AddDBVar(FuncNode.Body, dbName)
-	AddAutoMigrate(FuncNode.Body, dbName, pk, model)
+	addDBVar(FuncNode.Body, dbName)
+	addAutoMigrate(FuncNode.Body, dbName, pk, model)
 	var out []byte
 	bf := bytes.NewBuffer(out)
 	printer.Fprint(bf, fileSet, astFile)
@@ -38,48 +36,8 @@ func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
 	os.WriteFile(path, bf.Bytes(), 0666)
 }
 
-// 增加 import 方法
-func AddImport(astNode ast.Node, imp string) {
-	impStr := fmt.Sprintf("\"%s\"", imp)
-	ast.Inspect(astNode, func(node ast.Node) bool {
-		if genDecl, ok := node.(*ast.GenDecl); ok {
-			if genDecl.Tok == token.IMPORT {
-				for i := range genDecl.Specs {
-					if impNode, ok := genDecl.Specs[i].(*ast.ImportSpec); ok {
-						if impNode.Path.Value == impStr {
-							return false
-						}
-					}
-				}
-				genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
-					Path: &ast.BasicLit{
-						Kind:  token.STRING,
-						Value: impStr,
-					},
-				})
-			}
-		}
-		return true
-	})
-}
-
-// 查询特定function方法
-func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
-	var funcDeclP *ast.FuncDecl
-	ast.Inspect(astNode, func(node ast.Node) bool {
-		if funcDecl, ok := node.(*ast.FuncDecl); ok {
-			if funcDecl.Name.String() == FunctionName {
-				funcDeclP = funcDecl
-				return false
-			}
-		}
-		return true
-	})
-	return funcDeclP
-}
-
 // 增加一个 db库变量
-func AddDBVar(astBody *ast.BlockStmt, dbName string) {
+func addDBVar(astBody *ast.BlockStmt, dbName string) {
 	dbStr := fmt.Sprintf("\"%s\"", dbName)
 	for i := range astBody.List {
 		if assignStmt, ok := astBody.List[i].(*ast.AssignStmt); ok {
@@ -120,7 +78,7 @@ func AddDBVar(astBody *ast.BlockStmt, dbName string) {
 }
 
 // 为db库变量增加 AutoMigrate 方法
-func AddAutoMigrate(astBody *ast.BlockStmt, dbname string, pk string, model string) {
+func addAutoMigrate(astBody *ast.BlockStmt, dbname string, pk string, model string) {
 	flag := true
 	ast.Inspect(astBody, func(node ast.Node) bool {
 		// 首先判断需要加入的方法调用语句是否存在 不存在则直接走到下方逻辑

@@ -10,7 +10,9 @@ import (
 	"os"
 )
 
-func AddRegisterTablesAst(path string, funcName string) {
+// 自动为 gorm.go 注册一个自动迁移
+func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
+	modelPk := fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", pk)
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
@@ -21,20 +23,22 @@ func AddRegisterTablesAst(path string, funcName string) {
 		fmt.Println(err)
 	}
 	//ast.Print(fileSet, astFile)
-	AddImport(astFile, "qimiao/niubi/666")
+	AddImport(astFile, modelPk)
 	//ast.Print(fileSet, astFile)
-	FuncNode := FindFunction(astFile, "Register")
+	FuncNode := FindFunction(astFile, funcName)
 	if FuncNode != nil {
 		ast.Print(fileSet, FuncNode)
 	}
-	AddDBVar(FuncNode.Body, "dbname")
-	AddAutoMigrate(FuncNode.Body, "test2", "example", "ExaFile")
+	AddDBVar(FuncNode.Body, dbName)
+	AddAutoMigrate(FuncNode.Body, dbName, pk, model)
 	var out []byte
 	bf := bytes.NewBuffer(out)
 	printer.Fprint(bf, fileSet, astFile)
-	fmt.Println(bf.String())
+
+	os.WriteFile(path, bf.Bytes(), 0666)
 }
 
+// 增加 import 方法
 func AddImport(astNode ast.Node, imp string) {
 	impStr := fmt.Sprintf("\"%s\"", imp)
 	ast.Inspect(astNode, func(node ast.Node) bool {
@@ -59,6 +63,7 @@ func AddImport(astNode ast.Node, imp string) {
 	})
 }
 
+// 查询特定function方法
 func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 	var funcDeclP *ast.FuncDecl
 	ast.Inspect(astNode, func(node ast.Node) bool {
@@ -73,6 +78,7 @@ func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 	return funcDeclP
 }
 
+// 增加一个 db库变量
 func AddDBVar(astBody *ast.BlockStmt, dbName string) {
 	dbStr := fmt.Sprintf("\"%s\"", dbName)
 	for i := range astBody.List {
@@ -113,6 +119,7 @@ func AddDBVar(astBody *ast.BlockStmt, dbName string) {
 	astBody.List = append([]ast.Stmt{assignNode}, astBody.List...)
 }
 
+// 为db库变量增加 AutoMigrate 方法
 func AddAutoMigrate(astBody *ast.BlockStmt, dbname string, pk string, model string) {
 	flag := true
 	ast.Inspect(astBody, func(node ast.Node) bool {
@@ -175,6 +182,7 @@ func AddAutoMigrate(astBody *ast.BlockStmt, dbname string, pk string, model stri
 	}
 }
 
+// 为automigrate增加实参
 func NeedAppendModel(callNode ast.Node, pk string, model string) bool {
 	flag := true
 	ast.Inspect(callNode, func(node ast.Node) bool {

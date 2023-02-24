@@ -60,12 +60,6 @@ func Init(Package string) {
 	injectionPaths = []injectionMeta{
 		{
 			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
-			funcName:    "MysqlTables",
-			structNameF: Package + ".%s{},",
-		},
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
 			funcName:    "Routers",
 			structNameF: Package + "Router.Init%sRouter(PrivateGroup)",
@@ -313,6 +307,13 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				return err
 			}
 		}
+		// 在gorm.go 注入 自动迁移
+
+		path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+
+		utils.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, autoCode.BusinessDB, autoCode.StructName)
+
 		err = injectionCode(autoCode.StructName, &injectionCodeMeta)
 		if err != nil {
 			return

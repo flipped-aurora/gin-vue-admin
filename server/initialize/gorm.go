@@ -48,7 +48,6 @@ func RegisterTables() {
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
 
-		// 示例模块表
 		example.ExaFile{},
 		example.ExaCustomer{},
 		example.ExaFileChunk{},

@@ -302,12 +302,20 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				return err
 			}
 		}
-		// 在gorm.go 注入 自动迁移
 
-		path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+		{
+			// 在gorm.go 注入 自动迁移
+			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, autoCode.BusinessDB, autoCode.StructName)
+		}
 
-		ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, autoCode.BusinessDB, autoCode.StructName)
+		{
+			// router.go 注入 自动迁移
+			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
+			ast2.AddRouterCode(path, "Routers", autoCode.Package, autoCode.StructName)
+		}
 
 		err = injectionCode(autoCode.StructName, &injectionCodeMeta)
 		if err != nil {
@@ -320,15 +328,6 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				bf.WriteString(";")
 			}
 		}
-
-		var gormPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
-		var routePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
-		var imporStr = fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", autoCode.Package)
-		_ = ImportReference(routePath, "", "", autoCode.Package, "")
-		_ = ImportReference(gormPath, imporStr, "", "", "")
-
 	} else { // 打包
 		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err

@@ -38,6 +38,9 @@ func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
 
 // 增加一个 db库变量
 func addDBVar(astBody *ast.BlockStmt, dbName string) {
+	if dbName == "" {
+		return
+	}
 	dbStr := fmt.Sprintf("\"%s\"", dbName)
 	for i := range astBody.List {
 		if assignStmt, ok := astBody.List[i].(*ast.AssignStmt); ok {
@@ -79,6 +82,9 @@ func addDBVar(astBody *ast.BlockStmt, dbName string) {
 
 // 为db库变量增加 AutoMigrate 方法
 func addAutoMigrate(astBody *ast.BlockStmt, dbname string, pk string, model string) {
+	if dbname == "" {
+		dbname = "db"
+	}
 	flag := true
 	ast.Inspect(astBody, func(node ast.Node) bool {
 		// 首先判断需要加入的方法调用语句是否存在 不存在则直接走到下方逻辑

@@ -86,7 +86,7 @@ func AddRouterCode(path, funcName, pk, model string) {
 	var out []byte
 	bf := bytes.NewBuffer(out)
 	printer.Fprint(bf, fileSet, astFile)
-	fmt.Println(bf.String())
+	os.WriteFile(path, bf.Bytes(), 0666)
 }
 
 func needAppendRouter(funcNode ast.Node, pk string) (bool, *ast.BlockStmt) {

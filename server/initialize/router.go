@@ -16,6 +16,7 @@ import (
 
 func Routers() *gin.Engine {
 	Router := gin.Default()
+	InstallPlugin(Router) // 安装插件
 	systemRouter := router.RouterGroupApp.System
 	exampleRouter := router.RouterGroupApp.Example
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
@@ -70,8 +71,6 @@ func Routers() *gin.Engine {
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 
 	}
-
-	InstallPlugin(Router) // 安装插件
 
 	global.GVA_LOG.Info("router register success")
 	return Router

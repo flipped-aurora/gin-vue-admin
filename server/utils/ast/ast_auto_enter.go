@@ -39,6 +39,9 @@ func ImportForAutoEnter(path string, funcName string, code string) {
 	})
 	var out []byte
 	bf := bytes.NewBuffer(out)
-	printer.Fprint(bf, fileSet, astFile)
-	fmt.Printf(bf.String())
+	err = printer.Fprint(bf, fileSet, astFile)
+	if err != nil {
+		return
+	}
+	_ = os.WriteFile(path, bf.Bytes(), 0666)
 }

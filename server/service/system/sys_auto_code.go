@@ -308,7 +308,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
 			ast2.AddRouterCode(path, "Routers", autoCode.Package, autoCode.StructName)
 		}
-
+		//给各个enter进行注入
 		err = injectionCode(autoCode.StructName, &injectionCodeMeta)
 		if err != nil {
 			return

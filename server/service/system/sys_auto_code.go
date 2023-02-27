@@ -451,37 +451,37 @@ func (autoCodeService *AutoCodeService) addAutoMoveFile(data *tplData) {
 func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) (ids []uint, err error) {
 	apiList := []system.SysApi{
 		{
-			Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
+			Path:        "/" + global.GVA_CONFIG.System.RouterPrefix + "/" + a.Abbreviation + "/" + "create" + a.StructName,
 			Description: "新增" + a.Description,
 			ApiGroup:    a.Abbreviation,
 			Method:      "POST",
 		},
 		{
-			Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName,
+			Path:        "/" + global.GVA_CONFIG.System.RouterPrefix + "/" + a.Abbreviation + "/" + "delete" + a.StructName,
 			Description: "删除" + a.Description,
 			ApiGroup:    a.Abbreviation,
 			Method:      "DELETE",
 		},
 		{
-			Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName + "ByIds",
+			Path:        "/" + global.GVA_CONFIG.System.RouterPrefix + "/" + a.Abbreviation + "/" + "delete" + a.StructName + "ByIds",
 			Description: "批量删除" + a.Description,
 			ApiGroup:    a.Abbreviation,
 			Method:      "DELETE",
 		},
 		{
-			Path:        "/" + a.Abbreviation + "/" + "update" + a.StructName,
+			Path:        "/" + global.GVA_CONFIG.System.RouterPrefix + "/" + a.Abbreviation + "/" + "update" + a.StructName,
 			Description: "更新" + a.Description,
 			ApiGroup:    a.Abbreviation,
 			Method:      "PUT",
 		},
 		{
-			Path:        "/" + a.Abbreviation + "/" + "find" + a.StructName,
+			Path:        "/" + global.GVA_CONFIG.System.RouterPrefix + "/" + a.Abbreviation + "/" + "find" + a.StructName,
 			Description: "根据ID获取" + a.Description,
 			ApiGroup:    a.Abbreviation,
 			Method:      "GET",
 		},
 		{
-			Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
+			Path:       "/" + global.GVA_CONFIG.System.RouterPrefix +  "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
 			Description: "获取" + a.Description + "列表",
 			ApiGroup:    a.Abbreviation,
 			Method:      "GET",

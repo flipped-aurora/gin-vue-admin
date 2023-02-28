@@ -104,7 +104,11 @@ var (
 
 func (casbinService *CasbinService) Casbin() *casbin.CachedEnforcer {
 	once.Do(func() {
-		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
+		a, err := gormadapter.NewAdapterByDB(global.GVA_DB)
+		if err != nil {
+			zap.L().Error("适配数据库失败请检查casbin表是否为InnoDB引擎!", zap.Error(err))
+			return
+		}
 		text := `
 		[request_definition]
 		r = sub, obj, act

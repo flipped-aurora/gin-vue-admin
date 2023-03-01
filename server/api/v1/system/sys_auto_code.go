@@ -11,16 +11,12 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
 type AutoCodeApi struct{}
-
-var caser = cases.Title(language.English)
 
 // PreviewTemp
 // @Tags      AutoCode
@@ -39,7 +35,7 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 		return
 	}
 	a.Pretreatment() // 处理go关键字
-	a.PackageT = caser.String(a.Package)
+	a.PackageT = utils.FirstUpper(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
 		global.GVA_LOG.Error("预览失败!", zap.Error(err))
@@ -77,7 +73,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
-	a.PackageT = caser.String(a.Package)
+	a.PackageT = utils.FirstUpper(a.Package)
 	err := autoCodeService.CreateTemp(a, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.ErrAutoMove) {

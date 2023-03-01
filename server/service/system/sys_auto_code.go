@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	ast2 "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"io"
 	"mime/multipart"
 	"os"
@@ -642,7 +640,7 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		if err := ast2.ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, cases.Title(language.English).String(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
+		if err := ast2.ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, utils.FirstUpper(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
 			return err
 		}
 	}

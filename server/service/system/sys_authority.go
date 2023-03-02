@@ -114,7 +114,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 	if !errors.Is(global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("此角色存在子角色不允许删除")
 	}
-	db := global.GVA_DB.Preload("SysBaseMenus").Where("authority_id = ?", auth.AuthorityId).First(auth)
+	db := global.GVA_DB.Preload("SysBaseMenus").Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(auth)
 	err = db.Unscoped().Delete(auth).Error
 	if err != nil {
 		return
@@ -125,6 +125,12 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 			return
 		}
 		// err = db.Association("SysBaseMenus").Delete(&auth)
+	}
+	if len(auth.DataAuthorityId) > 0 {
+		err = global.GVA_DB.Model(auth).Association("DataAuthorityId").Delete(auth.DataAuthorityId)
+		if err != nil {
+			return
+		}
 	}
 	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
 	if err != nil {

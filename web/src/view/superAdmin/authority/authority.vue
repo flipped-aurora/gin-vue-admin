@@ -397,14 +397,9 @@ export default {
   }
 }
 .tree-content{
-  overflow: auto;
-  height: calc(100vh - 100px);
   margin-top: 10px;
+  height: calc(100vh - 148px);
+  overflow: auto;
 }
 
-.auth-drawer{
-  .el-drawer__body{
-    overflow: hidden;
-  }
-}
 </style>

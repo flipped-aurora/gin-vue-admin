@@ -315,7 +315,7 @@ swag init
     - 后台文件参考: [server/router/sys_api.go](https://github.com/flipped-aurora/gin-vue-admin/blob/master/server/router/sys_api.go)
 - 多点登录限制：需要在`config.yaml`中把`system`中的`use-multipoint`修改为true(需要自行配置Redis和Config中的Redis参数，测试阶段，有bug请及时反馈)。
 - 分片长传：提供文件分片上传和大文件分片上传功能示例。
-- 表单生成器：表单生成器借助 [@form-generator](https://github.com/JakHuang/form-generator) 。
+- 表单生成器：表单生成器借助 [@Variant Form](https://github.com/vform666/variant-form) 。
 - 代码生成器：后台基础逻辑以及简单curd的代码生成器。
 
 ## 6. 知识库 

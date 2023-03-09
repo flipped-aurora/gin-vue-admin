@@ -34,6 +34,9 @@
               placeholder="请输入密码"
             />
           </el-form-item>
+          <el-form-item prop="isLdap">
+            <el-checkbox v-model="loginFormData.isLdap" label="使用LDAP账号登录" />
+          </el-form-item>
           <el-form-item v-if="loginFormData.openCaptcha" prop="captcha">
             <div class="vPicBox">
               <el-input
@@ -151,6 +154,7 @@ const loginFormData = reactive({
   captcha: '',
   captchaId: '',
   openCaptcha: false,
+  isLdap: false
 })
 const rules = reactive({
   username: [{ validator: checkUsername, trigger: 'blur' }],

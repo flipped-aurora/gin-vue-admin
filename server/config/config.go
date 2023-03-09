@@ -28,4 +28,5 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	Ldap Ldap `mapstructure:"ldap" json:"ldap" yaml:"ldap"`
 }

@@ -64,6 +64,83 @@
             <el-input v-model="config.jwt.issuer" />
           </el-form-item>
         </el-collapse-item>
+        <el-collapse-item title="Ldap配置" name="14">
+          <el-form-item label="启用">
+            <el-checkbox v-model="config.ldap.enable" />
+          </el-form-item>
+          <el-form-item label="地址">
+            <el-input v-model="config.ldap.host" />
+          </el-form-item>
+          <el-form-item label="端口">
+            <el-input v-model.number="config.ldap.port" placeholder="389" />
+          </el-form-item>
+          <el-form-item label="BaseDN">
+            <el-input v-model="config.ldap['base-dn']" placeholder="dc=example,dc=org" />
+          </el-form-item>
+          <el-form-item label="BindUser">
+            <template #label>
+              BindUser
+              <el-tooltip effect="light" placement="right">
+                <template #content>openldap格式: dc=example,dc=org <br>AD格式: manange@example.org </template>
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </template>
+            <el-input v-model="config.ldap['bind-user']" placeholder="cn=manager,dc=example,dc=org" />
+          </el-form-item>
+          <el-form-item label="BindPass">
+            <el-input v-model="config.ldap['bind-pass']" />
+          </el-form-item>
+          <el-form-item>
+            <template #label>
+              AuthFilter
+              <el-tooltip effect="light" placement="right">
+                <template #content>openldap格式: (&(uid=%s)) <br>AD格式: (&(sAMAccountName=%s)) <br> 查询时%s使用Username </template>
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </template>
+            <el-input v-model="config.ldap['auth-filter']" placeholder="(&(cn=%s))" />
+          </el-form-item>
+          <el-form-item label="是否TLS">
+            <el-checkbox v-model="config.ldap.tls" />
+          </el-form-item>
+          <el-form-item label="启用TLS">
+            <el-checkbox v-model="config.ldap['start-tls']" />
+          </el-form-item>
+          <el-form-item label="">
+            <template #label>
+              Ldap更新用户属性
+              <el-tooltip effect="light" content="是否从ldap更新用户属性" placement="right">
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </template>
+            <el-checkbox v-model="config.ldap['cover-attributes']" />
+          </el-form-item>
+          <el-form-item label="新用户初始角色">
+            <el-select v-model="config.ldap['default-role-ids']" multiple>
+              <el-option
+                v-for="item in roleList"
+                :key="item.authorityId"
+                :value="item.authorityId"
+                :label="item.authorityName"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Ldap属性映射">
+            <el-input v-model="config.ldap.attributes.email">
+              <template #prepend>邮箱</template>
+            </el-input>
+            <el-input v-model="config.ldap.attributes.nickname">
+              <template #prepend>昵称</template>
+            </el-input>
+            <el-input v-model="config.ldap.attributes.phone">
+              <template #prepend>手机号</template>
+            </el-input>
+            <el-input v-model="config.ldap.attributes['header-img']">
+              <template #prepend>头像URL</template>
+            </el-input>
+          </el-form-item>
+
+        </el-collapse-item>
         <el-collapse-item title="Zap日志配置" name="3">
           <el-form-item label="级别">
             <el-input v-model.number="config.zap.level" />
@@ -385,6 +462,7 @@ export default {
 </script>
 <script setup>
 import { getSystemConfig, setSystemConfig } from '@/api/system'
+import { getAuthorityList } from '@/api/authority'
 import { emailTest } from '@/api/email'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
@@ -409,10 +487,12 @@ const config = ref({
   zap: {},
   local: {},
   email: {},
+  ldap: { attributes: {}},
   timer: {
     detail: {}
   }
 })
+const roleList = ref([])
 
 const initForm = async() => {
   const res = await getSystemConfig()
@@ -420,7 +500,14 @@ const initForm = async() => {
     config.value = res.data.config
   }
 }
+const initLdapRoleOption = async() => {
+  const res = await getAuthorityList({ page: 1, pageSize: 999 })
+  if (res.code === 0) {
+    roleList.value = res.data.list
+  }
+}
 initForm()
+initLdapRoleOption()
 const reload = () => {}
 const update = async() => {
   const res = await setSystemConfig({ config: config.value })

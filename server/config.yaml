@@ -224,3 +224,25 @@ cors:
       allow-methods: GET, POST
       expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
       allow-credentials: true # 布尔值
+
+
+# ldap 配置
+ldap:
+  enable: false
+  host: ldap.example.org
+  port: 389
+  base-dn: dc=example,dc=org
+  auth-filter: (&(uid=%s))
+  bind-user: cn=manager,dc=example,dc=org
+  bind-pass: password
+  tls: false
+  start-tls: false
+  # 创建用户的初始角色, 对应Authority ID
+  default-role-ids:
+    - 888
+  cover-attributes: true
+  attributes:
+    nickname: cn
+    phone: mobile
+    email: mail
+    header-img: jpegPhoto

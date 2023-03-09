@@ -3,12 +3,14 @@ package system
 import (
 	"errors"
 	"fmt"
+	"go.uber.org/zap"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/ldap"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
 )
@@ -52,6 +54,72 @@ func (userService *UserService) Login(u *system.SysUser) (userInter *system.SysU
 			return nil, errors.New("密码错误")
 		}
 		MenuServiceApp.UserAuthorityDefaultRouter(&user)
+	}
+	return &user, err
+}
+
+//@function: LdapLogin
+//@description: Ldap用户登录
+//@param: u *model.SysUser
+//@return: err error, userInter *model.SysUser
+
+func (userService *UserService) LdapLogin(u *system.SysUser) (userInter *system.SysUser, err error) {
+	if u.Username == "" || u.Password == "" {
+		return nil, errors.New("用户名或密码为空")
+	}
+	sr, err := ldap.LdapReq(u.Username, u.Password)
+	if err != nil {
+		return nil, err
+	}
+	var user system.SysUser
+	err = global.GVA_DB.Where("username = ?", u.Username).Preload("Authorities").Preload("Authority").Find(&user).Error
+	if err != nil {
+		return nil, err
+	}
+
+	if user.ID == 0 {
+		user.Username = u.Username
+		user.NickName = u.NickName
+	}
+	// copy attributes from ldap
+	attrs := global.GVA_CONFIG.Ldap.Attributes
+	if attrs.NickName != "" {
+		user.NickName = sr.Entries[0].GetAttributeValue(attrs.NickName)
+	}
+	if attrs.Email != "" {
+		user.Email = sr.Entries[0].GetAttributeValue(attrs.Email)
+	}
+	if attrs.Phone != "" {
+		user.Phone = sr.Entries[0].GetAttributeValue(attrs.Phone)
+	}
+	if attrs.HeaderImg != "" {
+		user.HeaderImg = sr.Entries[0].GetAttributeValue(attrs.HeaderImg)
+	}
+
+	if user.ID > 0 {
+		if global.GVA_CONFIG.Ldap.CoverAttributes {
+			err := userService.SetUserInfo(user)
+			if err != nil {
+				global.GVA_LOG.Error("从Ldap更新用户属性失败!", zap.Error(err))
+			}
+		}
+		return &user, nil
+	}
+
+	user.Password = "ldap-fake-password"
+	user.UUID = uuid.NewV4()
+	err = global.GVA_DB.Create(&user).Error
+	if err != nil {
+		global.GVA_LOG.Error("Ldap创建用户失败!", zap.Error(err))
+		return nil, err
+	}
+	global.GVA_LOG.Info("Ldap创建用户,", zap.String("username:", user.Username))
+	if len(global.GVA_CONFIG.Ldap.DefaultRoleIds) > 0 {
+		err = userService.SetUserAuthorities(user.ID, global.GVA_CONFIG.Ldap.DefaultRoleIds)
+		if err != nil {
+			return nil, err
+		}
+		user, err = userService.GetUserInfo(user.UUID)
 	}
 	return &user, err
 }

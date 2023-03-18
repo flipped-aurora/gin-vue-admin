@@ -515,6 +515,15 @@ const enterForm = async(isPreview) => {
     })
     return false
   }
+
+  if (form.value.package === form.value.abbreviation) {
+    ElMessage({
+      type: 'error',
+      message: 'package和结构体简称不可同名'
+    })
+    return false
+  }
+
   autoCodeForm.value.validate(async valid => {
     if (valid) {
       for (const key in form.value) {

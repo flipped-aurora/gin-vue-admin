@@ -77,15 +77,6 @@ export const useRouterStore = defineStore('router', () => {
     const asyncRouterRes = await asyncMenu()
     const asyncRouter = asyncRouterRes.data.menus
     asyncRouter && asyncRouter.push({
-      path: '404',
-      name: '404',
-      hidden: true,
-      meta: {
-        title: '迷路了*。*',
-        closeTab: true,
-      },
-      component: 'view/error/index.vue'
-    }, {
       path: 'reload',
       name: 'Reload',
       hidden: true,
@@ -100,11 +91,6 @@ export const useRouterStore = defineStore('router', () => {
     if (notLayoutRouterArr.length !== 0) {
       baseRouter.push(...notLayoutRouterArr)
     }
-    baseRouter.push({
-      path: '/:catchAll(.*)',
-      redirect: '/layout/404'
-
-    })
     asyncRouterHandle(baseRouter)
     KeepAliveFilter(asyncRouter)
     asyncRouters.value = baseRouter

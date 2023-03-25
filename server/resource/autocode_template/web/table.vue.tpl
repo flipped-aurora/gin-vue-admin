@@ -1,70 +1,98 @@
 <template>
   <div>
-    <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
-      <el-form-item label="创建时间">
-      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
-       —
-      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
-      </el-form-item>
-           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
-            <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
-                <el-option
-                    key="true"
-                    label="是"
-                    value="true">
-                </el-option>
-                <el-option
-                    key="false"
-                    label="否"
-                    value="false">
-                </el-option>
-            </el-select>
-            </el-form-item>
-           {{- else if .DictType}}
-           <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
-              <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-            </el-select>
-            </el-form-item>
-            {{- else}}
-        <el-form-item label="{{.FieldDesc}}">
+    <div class="gva-search">
+      <el-collapse-transition>
+        <el-form
+          ref="searchForm"
+          class="gva-search-form"
+          :style="{
+            height: loadMore ? 'auto' : '140px',
+          }"
+          :model="searchInfo"
+        >
+
+         {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
+              <el-form-item label="{{.FieldDesc}}" class="gva-search-form-item" label-width="80px" prop="{{.FieldJson}}">
+              <el-select v-model="searchInfo.{{.FieldJson}}"  class="gva-search-form-select" clearable placeholder="请选择">
+                  <el-option
+                      key="true"
+                      label="是"
+                      value="true">
+                  </el-option>
+                  <el-option
+                      key="false"
+                      label="否"
+                      value="false">
+                  </el-option>
+              </el-select>
+              </el-form-item>
+             {{- else if .DictType}}
+             <el-form-item label="{{.FieldDesc}}" class="gva-search-form-item" label-width="80px" prop="{{.FieldJson}}">
+              <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择"  class="gva-search-form-select" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+              </el-form-item>
+              {{- else}}
+          <el-form-item label="{{.FieldDesc}}" class="gva-search-form-item" label-width="80px">
 
 
-        {{- if eq .FieldType "float64" "int"}}
-            {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="搜索条件（起）" />
-            —
-            <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="搜索条件（止）" />
-           {{- else}}
-             {{- if .DictType}}
-              <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
-               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-             </el-select>
-                    {{- else}}
-             <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
-                    {{- end }}
+          {{- if eq .FieldType "float64" "int"}}
+              {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+              <el-input v-model.number="searchInfo.start{{.FieldName}}"  class="gva-search-form-input" placeholder="搜索条件（起）" />
+              —
+              <el-input v-model.number="searchInfo.end{{.FieldName}}"  class="gva-search-form-input" placeholder="搜索条件（止）" />
+             {{- else}}
+               {{- if .DictType}}
+                <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择"  class="gva-search-form-select" style="width:100%" :clearable="true" >
+                 <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+               </el-select>
+                      {{- else}}
+               <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+                      {{- end }}
+            {{- end}}
+          {{- else if eq .FieldType "time.Time"}}
+              {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+              <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime"  class="gva-search-form-time" placeholder="搜索条件（起）"></el-date-picker>
+              —
+              <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime"  class="gva-search-form-time" placeholder="搜索条件（止）"></el-date-picker>
+             {{- else}}
+             <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime"  class="gva-search-form-time" placeholder="搜索条件"></el-date-picker>
+            {{- end}}
+          {{- else}}
+           <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件"  class="gva-search-form-input" />
           {{- end}}
-        {{- else if eq .FieldType "time.Time"}}
-            {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="搜索条件（起）"></el-date-picker>
-            —
-            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="搜索条件（止）"></el-date-picker>
-           {{- else}}
-           <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" placeholder="搜索条件"></el-date-picker>
-          {{- end}}
-        {{- else}}
-         <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
-        {{- end}}
 
-        </el-form-item>{{ end }}{{ end }}{{ end }}
-        <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button icon="refresh" @click="onReset">重置</el-button>
+
+          </el-form-item>{{ end }}{{ end }}{{ end }}
+         <el-form-item label="创建时间" class="gva-search-form-item date-picker" label-width="80px">
+          <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
+           —
+          <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
         </el-form-item>
-      </el-form>
+        </el-form>
+      </el-collapse-transition>
+      <div class="gva-search-line" />
+      <div class="gva-search-btns">
+        <el-button
+          class="gva-search-btns-item"
+          type="primary"
+          :icon="Search"
+          @click="onSubmit"
+        >搜索</el-button>
+        <el-button
+          class="gva-search-btns-item"
+          :icon="Refresh"
+          @click="onReset"
+        >重置</el-button>
+        <el-button
+          class="gva-search-btns-item"
+          :icon="loadMore ? ArrowUpBold : ArrowDownBold"
+          link
+          @click="loadMore = !loadMore"
+        >{{ "{{loadMore ? '收缩' : '展开'}}" }}</el-button>
+      </div>
     </div>
+
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
@@ -195,6 +223,10 @@ import {
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { Search, Refresh, ArrowUpBold, ArrowDownBold } from '@element-plus/icons-vue'
+
+
+const loadMore = ref(false)
 
 // 自动化生成的字典（可能为空）以及字段
     {{- range $index, $element := .DictTypes}}

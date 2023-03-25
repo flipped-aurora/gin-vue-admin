@@ -22,8 +22,8 @@ type {{.StructName}}Service struct {
 
 // Create{{.StructName}} 创建{{.StructName}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
-	err = {{$db}}.Create(&{{.Abbreviation}}).Error
+func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
+	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 

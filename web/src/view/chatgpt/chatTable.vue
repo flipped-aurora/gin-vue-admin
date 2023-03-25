@@ -136,7 +136,7 @@ const data = ref({
 })
 const deleteSK = () => {
   ipt.value = ''
-  Object.keys(form).forEach(key => (form[key] = ''))
+  form.value = {}
   chatToken.value = false
   tableData.value = []
 }

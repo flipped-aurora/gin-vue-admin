@@ -18,13 +18,17 @@ type InitDB struct {
 // MysqlEmptyDsn msyql 空数据库 建库链接
 // Author SliverHorn
 func (i *InitDB) MysqlEmptyDsn() string {
+	initTls := ""
+	if config.GeneralDB.InitTls {
+		initTls = "?tls=true"
+	}
 	if i.Host == "" {
 		i.Host = "127.0.0.1"
 	}
 	if i.Port == "" {
 		i.Port = "3306"
 	}
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/", i.UserName, i.Password, i.Host, i.Port)
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/"+initTls, i.UserName, i.Password, i.Host, i.Port)
 }
 
 // PgsqlEmptyDsn pgsql 空数据库 建库链接
@@ -42,6 +46,10 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 // ToMysqlConfig 转换 config.Mysql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToMysqlConfig() config.Mysql {
+	initTls := ""
+	if config.GeneralDB.InitTls {
+		initTls = "&tls=true"
+	}
 	return config.Mysql{
 		GeneralDB: config.GeneralDB{
 			Path:         i.Host,
@@ -52,7 +60,7 @@ func (i *InitDB) ToMysqlConfig() config.Mysql {
 			MaxIdleConns: 10,
 			MaxOpenConns: 100,
 			LogMode:      "error",
-			Config:       "charset=utf8mb4&parseTime=True&loc=Local",
+			Config:       "charset=utf8mb4&parseTime=True&loc=Local" + initTls,
 		},
 	}
 }

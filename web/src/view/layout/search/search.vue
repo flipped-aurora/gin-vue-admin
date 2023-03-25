@@ -66,7 +66,7 @@ const changeRouter = (e) => {
   router.push({ name: e })
 }
 
-const show = ref(true)
+const show = ref(false)
 const hiddenSearch = async() => {
   setTimeout(() => {
     show.value = false

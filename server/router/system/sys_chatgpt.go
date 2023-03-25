@@ -10,12 +10,11 @@ type ChatGptRouter struct{}
 
 func (s *ChatGptRouter) InitChatGptRouter(Router *gin.RouterGroup) {
 	chatGptRouter := Router.Group("chatGpt").Use(middleware.OperationRecord())
-	chatGptRouterWithoutRecord := Router.Group("chatGpt")
 	chatGptApi := v1.ApiGroupApp.SystemApiGroup.ChatGptApi
 	{
-		chatGptRouter.POST("createToken", chatGptApi.CreateToken)
-	}
-	{
-		chatGptRouterWithoutRecord.POST("getTable", chatGptApi.GetTable)
+		chatGptRouter.POST("createSK", chatGptApi.CreateSK)
+		chatGptRouter.GET("getSK", chatGptApi.GetSK)
+		chatGptRouter.DELETE("deleteSK", chatGptApi.DeleteSK)
+		chatGptRouter.POST("getTable", chatGptApi.GetTable)
 	}
 }

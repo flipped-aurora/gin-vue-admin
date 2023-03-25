@@ -6,6 +6,10 @@ type ChatGpt struct {
 	ChatID string `json:"chatID,omitempty"`
 }
 
+type SysChatGptOption struct {
+	SK string `json:"sk"`
+}
+
 type ChatField struct {
 	TABLE_NAME     string
 	COLUMN_NAME    string

@@ -1,18 +1,11 @@
 <template>
-  <div  class="gva-table-box">
+  <div class="gva-table-box">
     <div v-if="!chatToken">
       <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
-      <el-input class="query-ipt" v-model="ipt" placeholder="请输入token进行保存" clearable />
+      <el-input v-model="skObj.sk" class="query-ipt" placeholder="请输入您的ChatGpt SK" clearable />
       <el-button type="primary" @click="save">保存</el-button>
       <div class="secret">
-        <p>
-          <el-icon><FolderChecked /></el-icon>
-          获取SK链接：<el-link type="success">{{ skURL }}</el-link>
-        </p>
-        <p>
-          <el-icon><Connection /></el-icon>
-          GVA会严格保护您的隐私，不会将敏感数据透露给任第三方
-        </p>
+        <el-empty description="请到gpt网站获取您的sk：https://platform.openai.com/account/api-keys" />
       </div>
     </div>
     <div v-else>
@@ -29,136 +22,119 @@
           </el-popover>
         </el-form-item>
         <el-form-item label="查询db名称：">
-          <el-input
-              v-model="form.dbname"
-              placeholder="请输入要查询的内容"
-              class="input-with-select query-ipt"
-              clearable
-          >
-            <template #prepend>
-              <el-select v-model="form.select" placeholder="请选择库" style="width: 115px">
-                <el-option
-                    v-for="(item, index) in dbArr"
-                    :key="index"
-                    :label="item.label"
-                    :value="item.value"
-                />
-              </el-select>
-            </template>
-          </el-input>
+          <el-select v-model="form.dbname" placeholder="请选择库" style="width: 115px">
+            <el-option
+              v-for="(item, index) in dbArr"
+              :key="index"
+              :label="item.database"
+              :value="item.database"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="查询db描述：">
           <el-input
-              v-model="form.textarea"
+            v-model="form.chat"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            type="textarea"
+            clearable
+            placeholder="请输入对话"
+          />
+        </el-form-item>
+        <el-form-item label="GPT生成SQL:">
+          <el-input
+              v-model="sql"
               :autosize="{ minRows: 2, maxRows: 4 }"
               type="textarea"
-              clearable
-              placeholder="Please input"
+              disabled
+              placeholder="此处展示自动生成的sql"
           />
         </el-form-item>
         <el-button type="primary" @click="handleQueryTable">查询</el-button>
       </el-form>
       <div class="tables">
         <el-table
-            ref="multipleTable"
-            :data="tableData"
-            style="width: 100%"
-            tooltip-effect="dark"
-            row-key="ID"
-            v-if="tableData.length"
+          v-if="tableData.length"
+          ref="multipleTable"
+          :data="tableData"
+          style="width: 100%"
+          tooltip-effect="dark"
+          height="400px"
         >
-<!--          <el-table-column-->
-<!--              v-for="(item, index) in tableData"-->
-<!--              :key="index"-->
-<!--              :prop="item.address"-->
-<!--              label="Address" />-->
-          <el-table-column align="left" label="address" prop="address" width="120" />
+          <el-table-column
+            v-for="(item, index) in tableData[0]"
+            :key="index"
+            :prop="index"
+            :label="index"
+            min-width="200"
+            show-overflow-tooltip
+          />
         </el-table>
         <p v-else class="text">请在对话框输入你需要AI帮你查询的内容：）</p>
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script setup>
 import { ElMessage } from 'element-plus'
-import { getTable } from '@/api/chatgpt'
-import { ref } from 'vue'
+import { getTableApi,
+  createSKApi,
+  getSKApi,
+  deleteSKApi } from '@/api/chatgpt'
+import { getDB as getDBAPI } from '@/api/autoCode'
+import { ref, reactive } from 'vue'
 
 const chatToken = ref(null)
-const ipt = ref('')
-const skURL = ref('www.bing.com')
-// 页面初始化的时候去后台接口查询拿sk 如果不存在就展示保存页面
-const getSK = () => {
-  //此处模拟sk不存在的情况 需要重新输入
-  chatToken.value = false
+const skObj = reactive({
+  sk: '',
+})
+const sql = ref("")
+const getSK = async() => {
+  const res = await getSKApi()
+  chatToken.value = res.data.ok
+}
+
+const getDB = async() => {
+  const res = await getDBAPI()
+  if (res.code === 0) {
+    dbArr.value = res.data.dbs
+  }
 }
 getSK()
-const save = async () => {
-  chatToken.value = true
-  // const res = await getTable({
-  //   dbname: 'gva',
-  //   chat: `帮我找到角色id为${ipt.value}的用户`,
-  // })
-  // if(res.code === 0) {
-  //   ElMessage({
-  //     message: '保存成功',
-  //     type: 'success',
-  //   })
-  // }
+getDB()
+const save = async() => {
+  const res = await createSKApi(skObj)
+  if (res.code === 0) {
+    await getSK()
+  }
+}
 
+const deleteSK = async() => {
+  const res = await deleteSKApi()
+  if (res.code === 0) {
+    await getSK()
+  }
 }
 
 const form = ref({
   dbname: '',
-  select: '',
-  textarea: ''
+  chat: '',
 })
-const dbArr = ref([
-  {
-    label: '测试1',
-    value: 1
-  },
-  {
-    label: '测试2',
-    value: 2
-  },
-  {
-    label: '测试3',
-    value: 3
-  }
-])
+const dbArr = ref([])
 const tableData = ref([])
-const data = ref({
-  currentPage: 1,
-  pageSize: 10,
-  totalCount: 0,
-})
-const deleteSK = () => {
-  ipt.value = ''
-  form.value = {}
-  chatToken.value = false
-  tableData.value = []
-}
 
-const handleQueryTable = () => {
-  // 把所选内容提交至后台
-  console.log(form.value)
-  let obj = [
-    {
-      date: '2016-05-03',
-      name: 'Tom',
-      address: 'No. 189, Grove St, Los Angeles',
-    }
-  ]
+const handleQueryTable = async() => {
+  const res = await getTableApi(form.value)
+  if (res.code === 0) {
+    tableData.value = res.data.results||[]
+  }
+  sql.value = res.data.sql
   // 根据后台返回值动态渲染表格
-  tableData.value = obj
 }
 </script>
 
 <style scoped lang="scss">
 .secret{
-  width: 96%;
   padding: 30px;
   margin-top: 20px;
   background: #F5F5F5;

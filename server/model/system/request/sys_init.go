@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
 type InitDB struct {
@@ -18,13 +19,17 @@ type InitDB struct {
 // MysqlEmptyDsn msyql 空数据库 建库链接
 // Author SliverHorn
 func (i *InitDB) MysqlEmptyDsn() string {
+	initUseTls := ""
+	if global.GVA_CONFIG.Mysql.InitUseTls {
+		initUseTls = "?tls=true"
+	}
 	if i.Host == "" {
 		i.Host = "127.0.0.1"
 	}
 	if i.Port == "" {
 		i.Port = "3306"
 	}
-	return fmt.Sprintf("%s:%s@tcp(%s:%s)/", i.UserName, i.Password, i.Host, i.Port)
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/"+initUseTls, i.UserName, i.Password, i.Host, i.Port)
 }
 
 // PgsqlEmptyDsn pgsql 空数据库 建库链接
@@ -42,6 +47,10 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 // ToMysqlConfig 转换 config.Mysql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToMysqlConfig() config.Mysql {
+	initUseTls := ""
+	if global.GVA_CONFIG.Mysql.InitUseTls {
+		initUseTls = "&tls=true"
+	}
 	return config.Mysql{
 		GeneralDB: config.GeneralDB{
 			Path:         i.Host,
@@ -52,7 +61,7 @@ func (i *InitDB) ToMysqlConfig() config.Mysql {
 			MaxIdleConns: 10,
 			MaxOpenConns: 100,
 			LogMode:      "error",
-			Config:       "charset=utf8mb4&parseTime=True&loc=Local",
+			Config:       "charset=utf8mb4&parseTime=True&loc=Local" + initUseTls,
 		},
 	}
 }
@@ -60,6 +69,10 @@ func (i *InitDB) ToMysqlConfig() config.Mysql {
 // ToPgsqlConfig 转换 config.Pgsql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToPgsqlConfig() config.Pgsql {
+	initUseTls := ""
+	if !global.GVA_CONFIG.Pgsql.InitUseTls {
+		initUseTls = "sslmode=disable "
+	}
 	return config.Pgsql{
 		GeneralDB: config.GeneralDB{
 			Path:         i.Host,
@@ -70,7 +83,7 @@ func (i *InitDB) ToPgsqlConfig() config.Pgsql {
 			MaxIdleConns: 10,
 			MaxOpenConns: 100,
 			LogMode:      "error",
-			Config:       "sslmode=disable TimeZone=Asia/Shanghai",
+			Config:       initUseTls + "TimeZone=Asia/Shanghai",
 		},
 	}
 }

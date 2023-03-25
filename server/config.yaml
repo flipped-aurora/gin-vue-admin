@@ -69,6 +69,7 @@ mysql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+  init-use-tls: false
 
 # pgsql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
@@ -83,6 +84,7 @@ pgsql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+  init-use-tls: false
 oracle:
   path: ""
   port: ""
@@ -94,6 +96,7 @@ oracle:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+  init-use-tls: false
 mssql:
   path: ""
   port: ""
@@ -105,6 +108,7 @@ mssql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+  init-use-tls: false
 db-list:
   - disable: true # 是否禁用
     type: "" # 数据库的类型,目前支持mysql、pgsql、mssql、oracle
@@ -119,6 +123,7 @@ db-list:
     max-open-conns: 100
     log-mode: ""
     log-zap: false
+    init-use-tls: false
 
 # local configuration
 local:

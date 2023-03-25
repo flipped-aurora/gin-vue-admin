@@ -47,6 +47,7 @@ func RegisterTables() {
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
+		system.SysChatGptOption{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

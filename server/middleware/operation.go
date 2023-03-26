@@ -73,6 +73,11 @@ func OperationRecord() gin.HandlerFunc {
 			Body:   string(body),
 			UserID: userId,
 		}
+		
+		// 截断浏览器代理信息，魔法数字191是因为本框架的模型中string定义为varchar(191)
+		if len(record.Agent) > 191 {
+			record.Agent=record.Agent[0:191]
+		}
 
 		// 上传文件时候 中间件日志进行裁断操作
 		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data")  {

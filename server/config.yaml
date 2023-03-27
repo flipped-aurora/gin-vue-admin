@@ -69,7 +69,6 @@ mysql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
-  init-tls: false
 
 # pgsql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）

@@ -12,7 +12,7 @@
                   fit="cover"
                 />
               </el-col>
-              <el-col :span="1"/>
+              <el-col :span="1" />
               <el-col :span="22">
                 <div class="chat-message-text">
                   <pre><code v-html="md.render(message.text)" /></pre>
@@ -44,65 +44,71 @@ export default {
 <script setup>
 import MarkdownIt from 'markdown-it'
 import { chat } from '@/api/chat'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { UserFilled, Tools } from '@element-plus/icons-vue'
+import { ElMessageBox } from 'element-plus'
 
 const md = new MarkdownIt()
+const contentVisible = ref(false)
 
 const messages = ref([
-  {
-    'username': '用户',
-    'text': '提问',
-    'icon': UserFilled
-  },
-  {
-    'username': 'Bot',
-    'text': '# test\n' +
-        '```go\n' +
-        '// 中间件函数  \n' +
-        'func myMiddleware(next http.Handler) http.Handler {  \n' +
-        '\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n' +
-        '\t\tlog.Println(r.Method, r.Body)  \n' +
-        '\t\t// 在请求被处理之前执行的逻辑代码  \n' +
-        '\t\tlog.Println("Middleware processing request...")  \n' +
-        '\t\tlog.Println("Config allow Origin")  \n' +
-        '\t\tw.Header().Set("Access-Control-Allow-Origin", "*")  \n' +
-        '     \n' +
-        '\t\tif r.Method == http.MethodOptions {  \n' +
-        '\t        w.WriteHeader(http.StatusOK)  \n' +
-        '\t    }  \n' +
-        '\t    log.Println(r.Method)  \n' +
-        '\t    log.Println("Config allow Origin done")  \n' +
-        '\t    next.ServeHTTP(w, r)  \n' +
-        '\t    // 在请求被处理之后执行的逻辑代码  \n' +
-        '\t    // ...\n' +
-        '\t})  \n' +
-        '}\n' +
-        '```\n' +
-        '```go\n' +
-        '// 中间件函数  \n' +
-        'func myMiddleware(next http.Handler) http.Handler {  \n' +
-        '\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n' +
-        '\t\tlog.Println(r.Method, r.Body)  \n' +
-        '\t\t// 在请求被处理之前执行的逻辑代码  \n' +
-        '\t\tlog.Println("Middleware processing request...")  \n' +
-        '\t\tlog.Println("Config allow Origin")  \n' +
-        '\t\tw.Header().Set("Access-Control-Allow-Origin", "*")  \n' +
-        '     \n' +
-        '\t\tif r.Method == http.MethodOptions {  \n' +
-        '\t        w.WriteHeader(http.StatusOK)  \n' +
-        '\t    }  \n' +
-        '\t    log.Println(r.Method)  \n' +
-        '\t    log.Println("Config allow Origin done")  \n' +
-        '\t    next.ServeHTTP(w, r)  \n' +
-        '\t    // 在请求被处理之后执行的逻辑代码  \n' +
-        '\t    // ...\n' +
-        '\t})  \n' +
-        '}\n' +
-        '```',
-    'icon': Tools
-  },
+  // {
+  //   'username': '用户',
+  //   'text': '提问',
+  //   'icon': UserFilled
+  // },
+  // {
+  //   'username': 'Bot',
+  //   'text': '# test\n' +
+  //       '```go\n' +
+  //       '// 中间件函数  \n' +
+  //       'func myMiddleware(next http.Handler) http.Handler {  \n' +
+  //       '\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n' +
+  //       '\t\tlog.Println(r.Method, r.Body)  \n' +
+  //       '\t\t// 在请求被处理之前执行的逻辑代码  \n' +
+  //       '\t\tlog.Println("Middleware processing request...")  \n' +
+  //       '\t\tlog.Println("Config allow Origin")  \n' +
+  //       '\t\tw.Header().Set("Access-Control-Allow-Origin", "*")  \n' +
+  //       '     \n' +
+  //       '\t\tif r.Method == http.MethodOptions {  \n' +
+  //       '\t        w.WriteHeader(http.StatusOK)  \n' +
+  //       '\t    }  \n' +
+  //       '\t    log.Println(r.Method)  \n' +
+  //       '\t    log.Println("Config allow Origin done")  \n' +
+  //       '\t    next.ServeHTTP(w, r)  \n' +
+  //       '\t    // 在请求被处理之后执行的逻辑代码  \n' +
+  //       '\t    // ...\n' +
+  //       '\t})  \n' +
+  //       '}\n' +
+  //       '```\n' +
+  //       '```go\n' +
+  //       '// 中间件函数  \n' +
+  //       'func myMiddleware(next http.Handler) http.Handler {  \n' +
+  //       '\treturn http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {\n' +
+  //       '\t\tlog.Println(r.Method, r.Body)  \n' +
+  //       '\t\t// 在请求被处理之前执行的逻辑代码  \n' +
+  //       '\t\tlog.Println("Middleware processing request...")  \n' +
+  //       '\t\tlog.Println("Config allow Origin")  \n' +
+  //       '\t\tw.Header().Set("Access-Control-Allow-Origin", "*")  \n' +
+  //       '     \n' +
+  //       '\t\tif r.Method == http.MethodOptions {  \n' +
+  //       '\t        w.WriteHeader(http.StatusOK)  \n' +
+  //       '\t    }  \n' +
+  //       '\t    log.Println(r.Method)  \n' +
+  //       '\t    log.Println("Config allow Origin done")  \n' +
+  //       '\t    next.ServeHTTP(w, r)  \n' +
+  //       '\t    // 在请求被处理之后执行的逻辑代码  \n' +
+  //       '\t    // ...\n' +
+  //       '\t})  \n' +
+  //       '}\n' +
+  //       '```',
+  //   'icon': Tools
+  // },
 ])
+
+onMounted(() => {
+  askQuestions()
+})
 
 const getAvatarUrl = async(username) => {
   // 返回头像图片的 URL，根据实际情况进行修改
@@ -145,6 +151,50 @@ const sendMessage = async() => {
   } catch (error) {
     console.error('Error sending message:', error)
   }
+}
+
+const askQuestions = async() => {
+  await ElMessageBox.prompt('请确认是否是用了正确的设备', '请检查使用的设备', {
+    showInput: true,
+    inputPlaceholder: '输入 yes 确认',
+    inputType: 'text',
+    inputValidator(input) {
+      return input === 'yes' ? true : '请确认所需要确认的事项，如无法确认请直接退出'
+    },
+
+    showConfirmButton: false,
+    showCancelButton: false,
+    showClose: false, // 隐藏关闭按钮
+
+    closeOnClickModal: false, // 禁止点击模态背景关闭对话框
+    closeOnPressEscape: false, // 禁止按下 Escape 键关闭对话框
+
+    center: true,
+    type: 'warning',
+    lockScroll: false,
+  })
+
+  await ElMessageBox.prompt('请确认知道不要问不该问的问题', '时刻注意言行', {
+    showInput: true,
+    inputPlaceholder: '输入 yes 确认',
+    inputType: 'text',
+    inputValidator(input) {
+      return input === 'yes' ? true : '请确认所需要确认的事项，如无法确认请直接退出'
+    },
+
+    showConfirmButton: false,
+    showCancelButton: false,
+    showClose: false, // 隐藏关闭按钮
+
+    closeOnClickModal: false, // 禁止点击模态背景关闭对话框
+    closeOnPressEscape: false, // 禁止按下 Escape 键关闭对话框
+
+    center: true,
+    type: 'warning',
+    lockScroll: false,
+  })
+
+  contentVisible.value = true
 }
 
 </script>

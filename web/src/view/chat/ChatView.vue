@@ -4,7 +4,7 @@
       <div class="chat-container">
         <div ref="body" class="chat-body">
           <div v-for="(message, index) in messages" :key="index" class="chat-message">
-            <el-row>
+            <el-row :gutter="20">
               <el-col :span="1">
                 <el-avatar
                   :icon="message.icon"
@@ -12,9 +12,10 @@
                   fit="cover"
                 />
               </el-col>
-              <el-col :span="23">
+              <el-col :span="1"/>
+              <el-col :span="22">
                 <div class="chat-message-text">
-                  <pre><div v-html="md.render(message.text)" /></pre>
+                  <pre><code v-html="md.render(message.text)" /></pre>
                 </div>
               </el-col>
             </el-row>
@@ -157,7 +158,7 @@ const sendMessage = async() => {
   position: absolute;
   top: 0;
   left: 50%;
-  width: 70%;
+  width: 80%;
   height: 90%;
   transform: translateX(-50%);
   display: flex;
@@ -183,7 +184,7 @@ const sendMessage = async() => {
   overflow-y: auto;
 }
 
-.chat-message-text div {
+.chat-message-text code {
   display: block;
   padding: 10px;
   border: 1px solid #e5e5e5;

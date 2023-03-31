@@ -12,7 +12,7 @@ const nameMap = {}
 const formatRouter = (routes, routeMap) => {
   routes && routes.forEach(item => {
     if ((!item.children || item.children.every(ch => ch.hidden)) && item.name !== '404' && !item.hidden) {
-      routerListArr.push({ label: item.meta.title, value: item.name })
+      routerListArr.push({ label: item.meta.title, value: item.name, params: item.parameters })
     }
     item.meta.btns = item.btns
     item.meta.hidden = item.hidden
@@ -63,7 +63,7 @@ export const useRouterStore = defineStore('router', () => {
   const routerList = ref(routerListArr)
   const routeMap = ({})
   // 从后台获取动态路由
-  const SetAsyncRouter = async() => {
+  const SetAsyncRouter = async () => {
     asyncRouterFlag.value++
     const baseRouter = [{
       path: '/layout',

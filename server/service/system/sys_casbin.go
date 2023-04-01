@@ -2,16 +2,15 @@ package system
 
 import (
 	"errors"
-	"strconv"
-	"sync"
-
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
-	_ "github.com/go-sql-driver/mysql"
-	"go.uber.org/zap"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	_ "github.com/go-sql-driver/mysql"
+	"go.uber.org/zap"
+	"strconv"
+	"sync"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -99,13 +98,17 @@ func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
 //@return: *casbin.Enforcer
 
 var (
-	syncedCachedEnforcer *casbin.SyncedCachedEnforcer
+	cachedEnforcer *casbin.CachedEnforcer
 	once           sync.Once
 )
 
-func (casbinService *CasbinService) Casbin() *casbin.SyncedCachedEnforcer {
+func (casbinService *CasbinService) Casbin() *casbin.CachedEnforcer {
 	once.Do(func() {
-		a, _ := gormadapter.NewAdapterByDB(global.GVA_DB)
+		a, err := gormadapter.NewAdapterByDB(global.GVA_DB)
+		if err != nil {
+			zap.L().Error("适配数据库失败请检查casbin表是否为InnoDB引擎!", zap.Error(err))
+			return
+		}
 		text := `
 		[request_definition]
 		r = sub, obj, act
@@ -127,10 +130,9 @@ func (casbinService *CasbinService) Casbin() *casbin.SyncedCachedEnforcer {
 			zap.L().Error("字符串加载模型失败!", zap.Error(err))
 			return
 		}
-
-		syncedCachedEnforcer, _ = casbin.NewSyncedCachedEnforcer(m, a)
-		syncedCachedEnforcer.SetExpireTime(3600)
-		_ = syncedCachedEnforcer.LoadPolicy()
+		cachedEnforcer, _ = casbin.NewCachedEnforcer(m, a)
+		cachedEnforcer.SetExpireTime(60 * 60)
+		_ = cachedEnforcer.LoadPolicy()
 	})
-	return syncedCachedEnforcer
+	return cachedEnforcer
 }

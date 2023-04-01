@@ -46,8 +46,12 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 	var tableName string
 	global.GVA_DB.Table("information_schema.columns").Where("TABLE_SCHEMA = ?", req.DBName).Scan(&tablesInfo)
 
+	var tablesMap = make(map[string]bool)
 	for i := range tablesInfo {
-		tableName += tablesInfo[i].TABLE_NAME + ","
+		tablesMap[tablesInfo[i].TABLE_NAME] = true
+	}
+	for i := range tablesMap {
+		tableName += i + ","
 	}
 	option, err := chat.GetSK()
 	if err != nil {
@@ -61,7 +65,10 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 		return "", nil, err
 	}
 	tableArr := strings.Split(tables, ",")
-
+	if len(tableArr) != 0 {
+		firstKeyArr := strings.Split(tableArr[0], ":")
+		tableArr[0] = strings.Trim(firstKeyArr[len(firstKeyArr)-1], "\n")
+	}
 	sql, err = getSql(ctx, client, tableArr, tablesInfo, req.Chat)
 	if err != nil {
 		return "", nil, err
@@ -73,27 +80,29 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 func getTables(ctx context.Context, client *openai.Client, tables string, chat string) (string, error) {
 	var tablePrompt = `You are a database administrator
 
-If I want to query at least those tables, I will provide you with the following table configuration information:
+Filter out the table names you might need from the tables I provided formatted as:
 
-Table 1, Table 2, Table 3
+Table1,Table2,Table3
 
-Please return the table name I need according to the input format
+I will provide you with the following table configuration information:
 
-Please do not return information other than the table
+Table1,Table2,Table3
+
+Do not return information other than the table
 
 Configured as:
-
 %s
 
 The problem is:
 %s
 `
+	content := fmt.Sprintf(tablePrompt, tables, chat)
 	chatReq := openai.ChatCompletionRequest{
-		Model: openai.GPT3TextDavinci003,
+		Model: openai.GPT3Dot5Turbo,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,
-				Content: fmt.Sprintf(tablePrompt, tables, chat),
+				Content: content,
 			},
 		},
 	}
@@ -125,20 +134,19 @@ The problem is:
 
 %s`
 	var configured string
-
-	var tablesMap = make(map[string]bool)
-	for i := range tables {
-		tablesMap[tables[i]] = true
-	}
-
-	for i := range ChatField {
-		if tablesMap[ChatField[i].TABLE_NAME] {
-			configured += fmt.Sprintf("%s | %s | %s \n", ChatField[i].TABLE_NAME, ChatField[i].COLUMN_NAME, ChatField[i].COLUMN_COMMENT)
+	for ii := range ChatField {
+		for i := range tables {
+			if strings.Index(tables[i], ChatField[ii].TABLE_NAME) > -1 {
+				configured += fmt.Sprintf("%s | %s | %s \n", ChatField[ii].TABLE_NAME, ChatField[ii].COLUMN_NAME, ChatField[ii].COLUMN_COMMENT)
+			}
 		}
 	}
 
+	if configured == "" {
+		return "", errors.New("未找到表")
+	}
 	chatReq := openai.ChatCompletionRequest{
-		Model: openai.GPT3TextDavinci003,
+		Model: openai.GPT3Dot5Turbo,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,
@@ -152,5 +160,8 @@ The problem is:
 		fmt.Printf("Completion error: %v\n", err)
 		return "", err
 	}
-	return resp.Choices[0].Message.Content, nil
+	sql := resp.Choices[0].Message.Content
+	sqlArr := strings.Split(sql, ":")
+	sql = sqlArr[len(sqlArr)-1]
+	return sql, nil
 }

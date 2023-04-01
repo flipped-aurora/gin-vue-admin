@@ -119,10 +119,7 @@ Do not return information other than SQL
 
 Configured as:
 
-user | username | 用户名
-user | sex | 性别
-user | age | 年龄
-user | pwd | 密码
+%s
 
 The problem is:
 

@@ -1,22 +1,14 @@
 <template>
   <div>
     <warning-bar
-      title="此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）。此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。"
+      :title="t('datas.datasNote')"
       href="https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=36"
     />
     <div class="clearfix sticky-button" style="margin: 18px">
-      <el-button class="fl-right" size="small" type="primary" @click="authDataEnter">{{
-        t("general.confirm")
-      }}</el-button>
-      <el-button class="fl-left" size="small" type="primary" @click="all">{{
-        t("general.selectAll")
-      }}</el-button>
-      <el-button class="fl-left" size="small" type="primary" @click="self">{{
-        t("datas.thisRole")
-      }}</el-button>
-      <el-button class="fl-left" size="small" type="primary" @click="selfAndChildren">{{
-        t("datas.thisRoleAndSubRoles")
-      }}</el-button>
+      <el-button class="fl-right" type="primary" @click="authDataEnter">{{ t("general.confirm") }}</el-button>
+      <el-button class="fl-left" type="primary" @click="all">{{ t("general.selectAll") }}</el-button>
+      <el-button class="fl-left" type="primary" @click="self">{{ t("datas.thisRole") }}</el-button>
+      <el-button class="fl-left" type="primary" @click="selfAndChildren">{{ t("datas.thisRoleAndSubRoles") }}</el-button>
     </div>
     <div class="tree-content">
       <el-checkbox-group v-model="dataAuthorityId" @change="selectAuthority">

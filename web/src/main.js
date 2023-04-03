@@ -1,6 +1,4 @@
 import { createApp } from 'vue'
-import 'element-plus/dist/index.css'
-import './style/element_visiable.scss'
 import ElementPlus from 'element-plus'
 // import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 引入gin-vue-admin前端初始化相关内容
@@ -16,6 +14,12 @@ import i18n from './i18n' // added by mohamed hassan to multilangauge
 
 /* *
 import { initDom } from './utils/positionToCode'
+import 'element-plus/es/components/message/style/css'
+import 'element-plus/es/components/loading/style/css'
+import 'element-plus/es/components/notification/style/css'
+import 'element-plus/es/components/message-box/style/css'
+import './style/element_visiable.scss'
+
 initDom()
 /**
  * @description 导入加载进度条，防止首屏加载时间过长，用户等待

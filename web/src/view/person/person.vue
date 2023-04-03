@@ -156,11 +156,11 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button
-            size="small"
+
             @click="showPassword = false"
           >{{ t('general.close') }}</el-button>
           <el-button
-            size="small"
+
             type="primary"
             @click="savePassword"
           >{{ t('general.confirm') }}</el-button>
@@ -176,19 +176,19 @@
         <el-form-item label="验证码" label-width="120px">
           <div class="code-box">
             <el-input v-model="phoneForm.code" autocomplete="off" placeholder="请自行设计短信服务，此处为模拟随便写" style="width:300px" />
-            <el-button size="small" type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-button type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button
-            size="small"
+
             @click="closeChangePhone"
           >{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
-            size="small"
+
             @click="changePhone"
           >更改</el-button>
         </span>
@@ -203,19 +203,19 @@
         <el-form-item label="验证码" label-width="120px">
           <div class="code-box">
             <el-input v-model="emailForm.code" placeholder="请自行设计邮件服务，此处为模拟随便写" autocomplete="off" style="width:300px" />
-            <el-button size="small" type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-button type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button
-            size="small"
+
             @click="closeChangeEmail"
           >{{ t('general.cancel') }}</el-button>
           <el-button
             type="primary"
-            size="small"
+
             @click="changeEmail"
           >更改</el-button>
         </span>
@@ -311,7 +311,7 @@ const enterImg = async(url) => {
     userStore.ResetUserInfo({ headerImg: url })
     ElMessage({
       type: 'success',
-      message: '设置成功',
+      message: t('general.setupSuccess'),
     })
   }
 }
@@ -334,7 +334,7 @@ const enterEdit = async() => {
     userStore.ResetUserInfo({ nickName: nickName.value })
     ElMessage({
       type: 'success',
-      message: '设置成功',
+      message: t('general.setupSuccess'),
     })
   }
   nickName.value = ''

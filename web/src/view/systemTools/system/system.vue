@@ -175,7 +175,7 @@
               <el-input v-model="config.mysql['log-mode']" />
             </el-form-item>
           </template>
-          <template v-if="config.system.dbType === 'pgsql'">
+          <template v-if="config.system['db-type'] === 'pgsql'">
             <el-form-item label="用户名">
               <el-input v-model="config.pgsql.username" />
             </el-form-item>
@@ -359,7 +359,7 @@
             <el-input v-model="config.timer.spec" />
           </el-form-item>
           <template v-for="(item,k) in config.timer.detail">
-            <div v-for="(key,k2) in item" :key="k2">
+            <div v-for="(_,k2) in item" :key="k2">
               <el-form-item :key="k+k2" :label="k2">
                 <el-input v-model="item[k2]" />
               </el-form-item>
@@ -378,8 +378,8 @@
       </el-collapse>
     </el-form>
     <div class="gva-btn-list">
-      <el-button type="primary" size="small" @click="update">{{ t('view.systemTools.system.updateNow') }}</el-button>
-      <el-button type="primary" size="small" @click="reload">{{ t('view.systemTools.system.restartService') }}</el-button>
+      <el-button type="primary" @click="update">{{ t('view.systemTools.system.updateNow') }}</el-button>
+      <el-button type="primary" @click="reload">{{ t('view.systemTools.system.restartService') }}</el-button>
     </div>
   </div>
 </template>

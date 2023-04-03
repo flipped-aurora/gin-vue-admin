@@ -3,7 +3,7 @@
     <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="addUser">{{ t('user.addUser') }}</el-button>
+        <el-button type="primary" icon="plus" @click="addUser">{{ t('user.addUser') }}</el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column align="left" :label="t('user.avatar')" min-width="50">
@@ -61,15 +61,15 @@
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>{{ t('user.deleteUserConfrim') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" size="small" @click="deleteUserFunc(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" @click="deleteUserFunc(scope.row)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" size="small">{{ t('general.delete') }}</el-button>
+                <el-button type="primary" link icon="delete">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
-            <el-button type="primary" link icon="edit" size="small" @click="openEdit(scope.row)">{{ t('general.edit') }}</el-button>
-            <el-button type="primary" link icon="magic-stick" size="small" @click="resetPasswordFunc(scope.row)">{{ t('user.resetPassword') }}</el-button>
+            <el-button type="primary" link icon="edit" @click="openEdit(scope.row)">{{ t('general.edit') }}</el-button>
+            <el-button type="primary" link icon="magic-stick" @click="resetPasswordFunc(scope.row)">{{ t('user.resetPassword') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -138,8 +138,8 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterAddUserDialog">{{ t('general.confirm') }}</el-button>
+          <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
+          <el-button type="primary" @click="enterAddUserDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>

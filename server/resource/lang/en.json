@@ -194,5 +194,11 @@
 			"userManage": "User Management",
 			"website": "Official Website"
 		}
+	},
+	"core": {
+		"server" : {
+			"welcomeTo" : "Welcome to",
+			"currentVersion" : "Current version"
+		}
 	}
 }

@@ -1,9 +1,8 @@
 <template>
   <div class="search-component">
-    <div v-if="show" class="transition-box" style="display: inline-block;">
+    <div v-if="show" class="transition-box">
       <el-select
         ref="searchInput"
-        v-model="value"
         filterable
         :placeholder="t('general.pleaseSelect')"
         @blur="hiddenSearch"
@@ -17,30 +16,28 @@
         />
       </el-select>
     </div>
-    <div
-      v-if="btnShow"
-      class="user-box"
-    >
-      <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
-    </div>
-    <div
-      v-if="btnShow"
-      class="user-box"
-    >
-      <div class="gvaIcon gvaIcon-search" @click="showSearch" />
-    </div>
-    <div
-      v-if="btnShow"
-      class="user-box"
-    >
-      <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
-    </div>
-    <div
-      v-if="btnShow"
-      class="user-box"
-    >
-      <div class="service gvaIcon-customer-service" @click="toService" />
-    </div>
+    <template v-else>
+      <div
+        class="user-box"
+      >
+        <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
+      </div>
+      <div
+        class="user-box"
+      >
+        <div class="gvaIcon gvaIcon-search" @click="showSearch" />
+      </div>
+      <div
+        class="user-box"
+      >
+        <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
+      </div>
+      <div
+        class="user-box"
+      >
+        <div class="service gvaIcon-customer-service" @click="toService" />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -64,22 +61,23 @@ const router = useRouter()
 
 const routerStore = useRouterStore()
 
-const value = ref('')
-const changeRouter = () => {
-  router.push({ name: value.value })
-  value.value = ''
+const changeRouter = (e) => {
+  if (e.indexOf('http:') > -1 || e.indexOf('https:') > -1) {
+    window.open(e)
+    return
+  }
+  router.push({ name: e })
 }
 
 const show = ref(false)
-const btnShow = ref(true)
-const hiddenSearch = () => {
-  show.value = false
-  btnShow.value = true
+const hiddenSearch = async() => {
+  setTimeout(() => {
+    show.value = false
+  }, 100)
 }
 
 const searchInput = ref(null)
 const showSearch = async() => {
-  btnShow.value = false
   show.value = true
   await nextTick()
   searchInput.value.focus()
@@ -102,6 +100,26 @@ const toService = () => {
 .reload{
   font-size: 18px;
 }
+
+.transition-box {
+  overflow: hidden;
+  width: 160px;
+  margin-right: 32px;
+  text-align: center;
+  ::v-deep(.el-input__wrapper){
+    .el-input__inner{
+      border-bottom: 1px solid var(--el-color-info-light-7);
+    }
+    box-shadow: none !important;
+  }
+  ::v-deep(.el-select .el-input .el-input__wrapper.is-focus){
+    box-shadow: none !important;
+  }
+::v-deep(.el-select .el-input.is-focus .el-input__wrapper){
+    box-shadow: none !important;
+  }
+}
+
 
 .reloading{
   animation:turn 0.5s linear infinite;

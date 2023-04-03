@@ -34,6 +34,7 @@
           <el-form-item prop="username">
             <el-input
               v-model="loginFormData.username"
+              size="large"
               :placeholder="t('login.entUserName')"
               suffix-icon="user"
             />
@@ -42,16 +43,19 @@
             <el-input
               v-model="loginFormData.password"
               show-password
+              size="large"
               type="password"
               :placeholder="t('login.entPassword')"
             />
           </el-form-item>
           <el-form-item v-if="loginFormData.openCaptcha" prop="captcha">
             <div class="vPicBox">
+              <!-- style="width: 60%" -->
               <el-input
                 v-model="loginFormData.captcha"
                 :placeholder="t('login.entVerificationCode')"
-                style="width: 60%"
+                size="large"
+                style="flex:1;padding-right: 20px;"
               />
               <div class="vPic">
                 <img

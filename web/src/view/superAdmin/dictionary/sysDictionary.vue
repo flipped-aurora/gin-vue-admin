@@ -22,13 +22,13 @@
         </el-form-item>
         <el-form-item>
           <el-button
-            size="small"
+
             type="primary"
             icon="search"
             @click="onSubmit"
           >{{ t('general.search') }}</el-button>
           <el-button
-            size="small"
+
             icon="refresh"
             @click="onReset"
           >{{ t('general.reset') }}</el-button>
@@ -38,7 +38,7 @@
     <div class="gva-table-box">
       <div class="gva-btn-list">
         <el-button
-          size="small"
+
           type="primary"
           icon="plus"
           @click="openDialog"
@@ -83,14 +83,14 @@
         <el-table-column align="left" :label="t('general.operations')">
           <template #default="scope">
             <el-button
-              size="small"
+
               icon="document"
               type="primary"
               link
               @click="toDetail(scope.row)"
             >{{ t('view.dictionary.sysDictionary.details') }}</el-button>
             <el-button
-              size="small"
+
               icon="edit"
               type="primary"
               link
@@ -104,14 +104,14 @@
               <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px">
                 <el-button
-                  size="small"
+
                   type="primary"
                   link
                   @click="scope.row.visible = false"
                 >{{ t('general.cancel') }}</el-button>
                 <el-button
                   type="primary"
-                  size="small"
+
                   @click="deleteSysDictionaryFunc(scope.row)"
                 >{{ t('general.confirm') }}</el-button>
               </div>
@@ -120,7 +120,7 @@
                   type="primary"
                   link
                   icon="delete"
-                  size="small"
+
                   style="margin-left: 10px"
                   @click="scope.row.visible = true"
                 >{{ t('general.delete') }}</el-button>
@@ -151,8 +151,7 @@
         ref="dialogForm"
         :model="formData"
         :rules="rules"
-        size="medium"
-        label-width="130px"
+        label-width="110px"
       >
         <el-form-item :label="t('view.dictionary.sysDictionary.dictName')" prop="name">
           <el-input
@@ -188,9 +187,9 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
           <el-button
-            size="small"
+
             type="primary"
             @click="enterDialog"
           >{{ t('general.confirm') }}</el-button>

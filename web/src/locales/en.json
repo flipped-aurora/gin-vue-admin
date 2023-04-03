@@ -22,7 +22,9 @@
 		"roleNameNote": "Please enter role name",
 		"roleSelectMethod": "Please select the request method",
 		"rootRole": "Root Role",
-		"setPermissions": "Set Permissions"
+		"setPermissions": "Set Permissions",
+		"roleIdError" : "Must be a positive integer",
+		"" : ""
 	},
 	"autoCode": {
 		"actionBar": "Actions:",
@@ -89,7 +91,7 @@
 		"rolledBack": "Rolled back"
 	},
 	"datas": {
-		"datasNote": "This function is only used to create a many2many relationship table for roles and roles, and the specific use must also be combined with the table to implement the business, for details, refer to the sample code (customer example)",
+		"datasNote": "This function is only used to create a many2many relationship table for roles and roles, and the specific use must also be combined with the table to implement the business, for details, refer to the sample code (customer example), This function is not recommended. It is recommended to use the plug-in market [Organization Management Function (click to go)] to manage resource permissions.",
 		"resourceSetupSuccess": "Resource set up successfully!",
 		"thisRole": "This Role",
 		"thisRoleAndSubRoles": "This role and sub-roles"
@@ -157,7 +159,8 @@
 		"change" : "Modify",
 		"description" : "Description",
 		"request" : "Request",
-		"order": "Order"
+		"order": "Order",
+		"filter": "Filter"
 	},
 	"historyComponent": {
 		"closeAll": "Close All",
@@ -186,9 +189,10 @@
 		"language": "Language",
 		"note": "Initialization notice",
 		"note1": "1.You should be familiar with Vue And GoLang.",
-		"note2": "2.Please confirm that you have read the official documents.",
+		"note2": "2.Please confirm that you have read the official documentation.",
 		"note3": "3.Please confirm that you understand the subsequent configuration process.",
-		"note4": "Note: The development team does not provide free services for the content written in the document.",
+		"note4": "4.If you use a mysql database, please confirm that the database engine is ",
+		"note5": "Note: The development team does not provide free services for the content written in the document.",
 		"pleaseWait": "Initializing database, please wait",
 		"readDocs": "Read the documentation"
 	},
@@ -256,7 +260,8 @@
 		"": "",
 		"home": "Homepage",
 		"menuSetupSuccess": "Menu set successfully!",
-		"setAsHome": "Set as homepage"
+		"setAsHome": "Set as homepage",
+		"assignButton" : "Assign button"
 	},
 	"setting": {
 		"": "",

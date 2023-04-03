@@ -1,5 +1,7 @@
 import legacyPlugin from '@vitejs/plugin-legacy'
-// import usePluginImport from 'vite-plugin-importer';
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { viteLogo } from './src/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
@@ -10,6 +12,7 @@ import vueI18n from '@intlify/vite-plugin-vue-i18n' // added by mohamed hassan t
 
 import GvaPosition from './vitePlugin/gvaPosition'
 import GvaPositionServer from './vitePlugin/codeServer'
+import fullImportPlugin from './vitePlugin/fullImport/fullImport.js'
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,
@@ -30,14 +33,6 @@ export default ({
 
   const timestamp = Date.parse(new Date())
 
-  // const rollupOptions = {
-  //   output: {
-  //     entryFileNames: `gva/gin-vue-admin-[name].${timestamp}.js`,
-  //     chunkFileNames: `js/gin-vue-admin-[name].${timestamp}.js`,
-  //     assetFileNames: `assets/gin-vue-admin-[name].${timestamp}.[ext]`
-  //   }
-  // }
-
   const optimizeDeps = {}
 
   const alias = {
@@ -47,7 +42,7 @@ export default ({
 
   const esbuild = {}
 
-  return {
+  const config = {
     base: './', // index.html文件所在位置
     root: './', // js导入的资源路径，src
     resolve: {
@@ -90,15 +85,32 @@ export default ({
       GvaPosition(),
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
-      }), vuePlugin(), [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)]
+      }),
+      vuePlugin(),
+      [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)]
     ],
     css: {
       preprocessorOptions: {
-        less: {
-          // 支持内联 JavaScript
-          javascriptEnabled: true,
+        scss: {
+          additionalData: `@use "@/style/element/index.scss" as *;`,
         }
       }
     },
   }
+
+  if (NODE_ENV === 'development') {
+    config.plugins.push(
+      fullImportPlugin()
+    )
+  } else {
+    config.plugins.push(AutoImport({
+      resolvers: [ElementPlusResolver()]
+    }),
+    Components({
+      resolvers: [ElementPlusResolver({
+        importStyle: 'sass'
+      })]
+    }))
+  }
+  return config
 }

@@ -12,8 +12,8 @@
           <el-input v-model="searchInfo.status" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -23,11 +23,11 @@
         <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>{{ t('general.deleteConfirm') }}</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button size="small" type="primary" link @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
-            <el-button size="small" type="primary" @click="onDelete">{{ t('general.confirm') }}</el-button>
+            <el-button type="primary" link @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
+            <el-button type="primary" @click="onDelete">{{ t('general.confirm') }}</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">{{ t('general.delete') }}</el-button>
+            <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">{{ t('general.delete') }}</el-button>
           </template>
         </el-popover>
       </div>
@@ -94,11 +94,11 @@
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button size="small" type="primary" @click="deleteSysOperationRecordFunc(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" @click="deleteSysOperationRecordFunc(scope.row)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button icon="delete" size="small" type="primary" link @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button icon="delete" type="primary" link @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>

@@ -22,7 +22,9 @@
 		"roleNameNote": "请输入角色名",
 		"roleSelectMethod": "请选择请求方式",
 		"rootRole": "根角色",
-		"setPermissions": "设置权限"
+		"setPermissions": "设置权限",
+		"roleIdError" : "必须为正整数",
+		"" : ""
 	},
 	"autoCode": {
 		"actionBar": "操作栏:",
@@ -89,7 +91,7 @@
 		"rolledBack": "已回滚"
 	},
 	"datas": {
-		"datasNote": "此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）",
+		"datasNote": "此功能仅用于创建角色和角色的many2many关系表，具体使用还须自己结合表实现业务，详情参考示例代码（客户示例）此功能不建议使用，建议使用插件市场【组织管理功能（点击前往）】来管理资源权限。",
 		"resourceSetupSuccess": "资源设置成功",
 		"thisRole": "本角色",
 		"thisRoleAndSubRoles": "本角色及子角色"
@@ -157,7 +159,8 @@
 		"change" : "变更",
 		"description" : "描述",
 		"request" : "请求",
-		"order": "排序标记"
+		"order": "排序标记",
+		"filter": "筛选"
 	},
 	"historyComponent": {
 		"closeAll": "关闭所有",
@@ -188,7 +191,8 @@
 		"note1": "1.您需有用一定的VUE和GOLANG基础",
 		"note2": "2.请您确认是否已经阅读过官方文档",
 		"note3": "3.请您确认是否了解后续的配置流程",
-		"note4": "注：开发组不为文档中书写过的内容提供无偿服务",
+		"note4": "4.如果您使用mysql数据库，请确认数据库引擎为",
+		"note5": "注：开发组不为文档中书写过的内容提供无偿服务",
 		"pleaseWait": "正在初始化数据库，请稍候",
 		"readDocs": "阅读文档"
 	},
@@ -256,7 +260,8 @@
 		"": "",
 		"home": "首页",
 		"menuSetupSuccess": "菜单设置成功!",
-		"setAsHome": "设为首页"
+		"setAsHome": "设为首页",
+		"assignButton": "分配按钮"
 	},
 	"setting": {
 		"": "",

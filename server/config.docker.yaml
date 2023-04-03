@@ -187,7 +187,7 @@ Timer:
       interval: 168h
 
 # 跨域配置
-# 需要配合 server/initialize/router.go#L32 使用
+# 需要配合 server/initialize/router.go -> `Router.Use(middleware.CorsByRules())` 使用
 cors:
   mode: whitelist # 放行模式: allow-all, 放行全部; whitelist, 白名单模式, 来自白名单内域名的请求添加 cors 头; strict-whitelist 严格白名单模式, 白名单外的请求一律拒绝
   whitelist:

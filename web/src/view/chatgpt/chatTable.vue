@@ -1,7 +1,7 @@
 <template>
   <div class="gva-table-box">
+    <warning-bar title="使用GPT-3.5模型，存在一定不稳定性，成功率为50%左右，使用GPT-4可以极大提升成功率，但是费用较高。" />
     <div v-if="!chatToken">
-      <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
       <el-input v-model="skObj.sk" class="query-ipt" placeholder="请输入您的ChatGpt SK" clearable />
       <el-button type="primary" @click="save">保存</el-button>
       <div class="secret">
@@ -76,7 +76,7 @@
 </template>
 
 <script setup>
-import { ElMessage } from 'element-plus'
+import WarningBar from '@/components/warningBar/warningBar.vue'
 import { getTableApi,
   createSKApi,
   getSKApi,

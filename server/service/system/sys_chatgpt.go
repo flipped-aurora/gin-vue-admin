@@ -2,7 +2,6 @@ package system
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -10,6 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/sashabaranov/go-openai"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type ChatGptService struct{}
@@ -43,10 +43,15 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 		return "", nil, errors.New("未选择db")
 	}
 	var tablesInfo []system.ChatField
+	var tableName string
 	global.GVA_DB.Table("information_schema.columns").Where("TABLE_SCHEMA = ?", req.DBName).Scan(&tablesInfo)
-	b, err := json.Marshal(tablesInfo)
-	if err != nil {
-		return
+
+	var tablesMap = make(map[string]bool)
+	for i := range tablesInfo {
+		tablesMap[tablesInfo[i].TABLE_NAME] = true
+	}
+	for i := range tablesMap {
+		tableName += i + ","
 	}
 	option, err := chat.GetSK()
 	if err != nil {
@@ -55,12 +60,49 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 	client := openai.NewClient(option.SK)
 	ctx := context.Background()
 
+	tables, err := getTables(ctx, client, tableName, req.Chat)
+	if err != nil {
+		return "", nil, err
+	}
+	tableArr := strings.Split(tables, ",")
+	if len(tableArr) != 0 {
+		firstKeyArr := strings.Split(tableArr[0], ":")
+		tableArr[0] = strings.Trim(firstKeyArr[len(firstKeyArr)-1], "\n")
+	}
+	sql, err = getSql(ctx, client, tableArr, tablesInfo, req.Chat)
+	if err != nil {
+		return "", nil, err
+	}
+	err = global.GVA_DB.Raw(sql).Scan(&results).Error
+	return sql, results, err
+}
+
+func getTables(ctx context.Context, client *openai.Client, tables string, chat string) (string, error) {
+	var tablePrompt = `You are a database administrator
+
+Filter out the table names you might need from the tables I provided formatted as:
+
+Table1,Table2,Table3
+
+I will provide you with the following table configuration information:
+
+Table1,Table2,Table3
+
+Do not return information other than the table
+
+Configured as:
+%s
+
+The problem is:
+%s
+`
+	content := fmt.Sprintf(tablePrompt, tables, chat)
 	chatReq := openai.ChatCompletionRequest{
 		Model: openai.GPT3Dot5Turbo,
 		Messages: []openai.ChatCompletionMessage{
 			{
 				Role:    openai.ChatMessageRoleUser,
-				Content: fmt.Sprintf("数据库所有字段用json表示,表名为TABLE_NAME,列名为COLUMN_NAME,列描述为COLUMN_COMMENT,%s,根据语句帮我生成单纯的查询sql,,不要提示语\n+%s", string(b), req.Chat),
+				Content: content,
 			},
 		},
 	}
@@ -68,9 +110,58 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 	resp, err := client.CreateChatCompletion(ctx, chatReq)
 	if err != nil {
 		fmt.Printf("Completion error: %v\n", err)
-		return
+		return "", err
+	}
+	return resp.Choices[0].Message.Content, nil
+}
+
+func getSql(ctx context.Context, client *openai.Client, tables []string, ChatField []system.ChatField, chat string) (string, error) {
+	var sqlPrompt = `You are a database administrator
+
+Give me an SQL statement based on my question
+
+I will provide you with my current database table configuration information in the form below
+
+Table Name | Column Name | Column Description
+
+Do not return information other than SQL
+
+Configured as:
+
+%s
+
+The problem is:
+
+%s`
+	var configured string
+	for ii := range ChatField {
+		for i := range tables {
+			if strings.Index(tables[i], ChatField[ii].TABLE_NAME) > -1 {
+				configured += fmt.Sprintf("%s | %s | %s \n", ChatField[ii].TABLE_NAME, ChatField[ii].COLUMN_NAME, ChatField[ii].COLUMN_COMMENT)
+			}
+		}
 	}
 
-	err = global.GVA_DB.Raw(resp.Choices[0].Message.Content).Scan(&results).Error
-	return resp.Choices[0].Message.Content, results, err
+	if configured == "" {
+		return "", errors.New("未找到表")
+	}
+	chatReq := openai.ChatCompletionRequest{
+		Model: openai.GPT3Dot5Turbo,
+		Messages: []openai.ChatCompletionMessage{
+			{
+				Role:    openai.ChatMessageRoleUser,
+				Content: fmt.Sprintf(sqlPrompt, configured, chat),
+			},
+		},
+	}
+
+	resp, err := client.CreateChatCompletion(ctx, chatReq)
+	if err != nil {
+		fmt.Printf("Completion error: %v\n", err)
+		return "", err
+	}
+	sql := resp.Choices[0].Message.Content
+	sqlArr := strings.Split(sql, ":")
+	sql = sqlArr[len(sqlArr)-1]
+	return sql, nil
 }

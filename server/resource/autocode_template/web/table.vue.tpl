@@ -60,22 +60,22 @@
 
         </el-form-item>{{ end }}{{ end }}{{ end }}
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">{{ "{{ t('general.search') }}" }}</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">{{ "{{ t('general.reset') }}" }}</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{ "{{ t('general.search') }}" }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{ "{{ t('general.reset') }}" }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button size="small" type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}</el-button>
+            <el-button type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}</el-button>
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>{{" {{ t('general.deleteConfirm') }}" }}</p>
             <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="deleteVisible = false">{{ "{{ t('general.cancel') }}" }}</el-button>
-                <el-button size="small" type="primary" @click="onDelete">{{ "{{ t('general.confirm') }}" }}</el-button>
+                <el-button type="primary" link @click="deleteVisible = false">{{ "{{ t('general.cancel') }}" }}</el-button>
+                <el-button type="primary" @click="onDelete">{{ "{{ t('general.confirm') }}" }}</el-button>
             </div>
             <template #reference>
-                <el-button icon="delete" size="small" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">{{ "{{ t('general.delete') }}" }}</el-button>
+                <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">{{ "{{ t('general.delete') }}" }}</el-button>
             </template>
             </el-popover>
         </div>
@@ -115,8 +115,8 @@
         {{- end }}
         <el-table-column align="left" :label="t('general.operations')">
             <template #default="scope">
-            <el-button type="primary" link icon="edit" size="small" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ "{{ t('general.change') }}" }}</el-button>
-            <el-button type="primary" link icon="delete" size="small" @click="deleteRow(scope.row)">{{ "{{ t('general.delete') }}" }}</el-button>
+            <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ "{{ t('general.change') }}" }}</el-button>
+            <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">{{ "{{ t('general.delete') }}" }}</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -167,8 +167,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">{{ "{{ t('general.close') }}" }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ "{{ t('general.confirm') }}" }}</el-button>
+          <el-button @click="closeDialog">{{ "{{ t('general.close') }}" }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{ "{{ t('general.confirm') }}" }}</el-button>
         </div>
       </template>
     </el-dialog>

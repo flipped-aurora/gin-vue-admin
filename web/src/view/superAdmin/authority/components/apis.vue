@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="clearfix sticky-button">
-      <el-input v-model="filterText" class="fitler" placeholder="筛选" />
-      <el-button class="fl-right" size="small" type="primary" @click="authApiEnter">{{ t('general.confirm') }}</el-button>
+      <el-input v-model="filterText" class="fitler" :placeholder="t('general.filter')" />
+      <el-button class="fl-right" type="primary" @click="authApiEnter">{{ t('general.confirm') }}</el-button>
     </div>
     <div class="tree-content">
       <el-tree

@@ -8,7 +8,8 @@
           <p class="init_p">{{ t('init.note1') }}</p>
           <p class="init_p">{{ t('init.note2') }}</p>
           <p class="init_p">{{ t('init.note3') }}</p>
-          <p class="init_p">{{ t('init.note4') }}</p>
+          <p class="init_p">{{ t('init.note4') }}<span style="color: red">innoDB</span></p>
+          <p class="init_p">{{ t('init.note5') }}</p>
           <p class="init_btn">
             <el-button type="primary" @click="goDoc">
               {{ t('init.readDocs') }}

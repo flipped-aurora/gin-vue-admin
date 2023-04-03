@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"strconv"
 	"time"
 
@@ -35,7 +36,7 @@ func JWTAuth() gin.HandlerFunc {
 		// parseToken 解析token包含的信息
 		claims, err := j.ParseToken(token)
 		if err != nil {
-			if err == utils.TokenExpired {
+			if errors.Is(err, utils.TokenExpired) {
 				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
 				c.Abort()
 				return

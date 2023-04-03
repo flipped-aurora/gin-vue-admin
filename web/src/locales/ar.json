@@ -169,7 +169,8 @@
 		"note1": "1.يجب ان تكون على دراية بإستخدام GoLang و Vue.",
 		"note2": "2.من فضلك تأكد من قرءاة ",
 		"note3": "3.Please confirm that you understand the subsequent configuration process.",
-		"note4": "Note: The development team does not provide free services for the content written in the document.",
+		"note4": "4.",
+		"note5": "Note: The development team does not provide free services for the content written in the document.",
 		"pleaseWait": "جارى تهيئة قاعدة البيانات, من فضلك إنتظر",
 		"readDocs": "قرأة الإرشادات"
 	},
@@ -193,7 +194,7 @@
 		"language": "اللغات",
 		"login": "الدخول للنظام"
 	},
-	"menu": {
+	"menus": {
 		"addMenu": "إضافة قائمة",
 		"addMenuParameters": "أضف معلمات القائمة",
 		"addParameter": "أضف معلمات",
@@ -228,13 +229,11 @@
 		"sortTags": "علامة الفرز",
 		"subMenuNote": "إذا كانت القائمة تحتوي على قوائم فرعية ، فقم بإنشاء صفحة توجيه ثانوية لعرض جهاز التوجيه أو",
 		"visibility": "سواء للاختباء",
-		"visibilityNote": "سواء للاختباء في القائمة"
-	},
-	"menus": {
-		"": "",
+		"visibilityNote": "سواء للاختباء في القائمة",
 		"home": "",
 		"menuSetupSuccess": "",
-		"setAsHome": ""
+		"setAsHome": "",
+		"": ""
 	},
 	"setting": {
 		"": "",

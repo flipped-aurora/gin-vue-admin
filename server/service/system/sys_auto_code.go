@@ -1,16 +1,11 @@
 package system
 
 import (
-	"bytes"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"go/ast"
-	"go/format"
-	"go/parser"
-	"go/token"
+	ast2 "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"io"
-	"log"
 	"mime/multipart"
 	"os"
 	"path/filepath"
@@ -18,12 +13,9 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 	cp "github.com/otiai10/copy"
 	"go.uber.org/zap"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
-
-	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -53,23 +45,10 @@ type autoPackage struct {
 var (
 	packageInjectionMap map[string]astInjectionMeta
 	injectionPaths      []injectionMeta
-	caser               = cases.Title(language.English)
 )
 
 func Init(Package string) {
 	injectionPaths = []injectionMeta{
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go"),
-			funcName:    "MysqlTables",
-			structNameF: Package + ".%s{},",
-		},
-		{
-			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go"),
-			funcName:    "Routers",
-			structNameF: Package + "Router.Init%sRouter(PrivateGroup)",
-		},
 		{
 			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 				global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SApi, Package), "enter.go"),
@@ -144,26 +123,23 @@ type AutoCodeService struct{}
 
 var AutoCodeServiceApp = new(AutoCodeService)
 
-//@author: [songzhibin97](https://github.com/songzhibin97)
-//@function: PreviewTemp
-//@description: 预览创建代码
-//@param: model.AutoCodeStruct
-//@return: map[string]string, error
+// @author: [songzhibin97](https://github.com/songzhibin97)
+// @function: PreviewTemp
+// @description: 预览创建代码
+// @param: model.AutoCodeStruct
+// @return: map[string]string, error
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
 	makeDictTypes(&autoCode)
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
-			break
 		}
 		if autoCode.Fields[i].Require {
 			autoCode.NeedValid = true
-			break
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
-			break
 		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
@@ -237,26 +213,23 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 	}
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: CreateTemp
-//@description: 创建代码
-//@param: model.AutoCodeStruct
-//@return: err error
+// @author: [piexlmax](https://github.com/piexlmax)
+// @function: CreateTemp
+// @description: 创建代码
+// @param: model.AutoCodeStruct
+// @return: err error
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
 	makeDictTypes(&autoCode)
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
-			break
 		}
 		if autoCode.Fields[i].Require {
 			autoCode.NeedValid = true
-			break
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
-			break
 		}
 	}
 	// 增加判断: 重复创建struct
@@ -313,6 +286,22 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				return err
 			}
 		}
+
+		{
+			// 在gorm.go 注入 自动迁移
+			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+			autoCode.BusinessDB = utils.MaheHump(autoCode.BusinessDB) // 这里将 数据库中间存在 - 的转换为驼峰
+			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, autoCode.BusinessDB, autoCode.StructName)
+		}
+
+		{
+			// router.go 注入 自动迁移
+			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
+			ast2.AddRouterCode(path, "Routers", autoCode.Package, autoCode.StructName)
+		}
+		// 给各个enter进行注入
 		err = injectionCode(autoCode.StructName, &injectionCodeMeta)
 		if err != nil {
 			return
@@ -324,15 +313,6 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				bf.WriteString(";")
 			}
 		}
-
-		var gormPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
-		var routePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
-		var imporStr = fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", autoCode.Package)
-		_ = ImportReference(routePath, "", "", autoCode.Package, "")
-		_ = ImportReference(gormPath, imporStr, "", "", "")
-
 	} else { // 打包
 		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
 			return err
@@ -372,11 +352,11 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	return nil
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: GetAllTplFile
-//@description: 获取 pathName 文件夹下所有 tpl 文件
-//@param: pathName string, fileList []string
-//@return: []string, error
+// @author: [piexlmax](https://github.com/piexlmax)
+// @function: GetAllTplFile
+// @description: 获取 pathName 文件夹下所有 tpl 文件
+// @param: pathName string, fileList []string
+// @return: []string, error
 
 func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList []string) ([]string, error) {
 	files, err := os.ReadDir(pathName)
@@ -395,11 +375,11 @@ func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList 
 	return fileList, err
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: GetDB
-//@description: 获取指定数据库和指定数据表的所有字段名,类型值等
-//@param: tableName string, dbName string
-//@return: err error, Columns []request.ColumnReq
+// @author: [piexlmax](https://github.com/piexlmax)
+// @function: GetDB
+// @description: 获取指定数据库和指定数据表的所有字段名,类型值等
+// @param: tableName string, dbName string
+// @return: err error, Columns []request.ColumnReq
 
 func (autoCodeService *AutoCodeService) DropTable(BusinessDb, tableName string) error {
 	if BusinessDb != "" {
@@ -409,12 +389,12 @@ func (autoCodeService *AutoCodeService) DropTable(BusinessDb, tableName string) 
 	}
 }
 
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@author: [songzhibin97](https://github.com/songzhibin97)
-//@function: addAutoMoveFile
-//@description: 生成对应的迁移文件路径
-//@param: *tplData
-//@return: null
+// @author: [SliverHorn](https://github.com/SliverHorn)
+// @author: [songzhibin97](https://github.com/songzhibin97)
+// @function: addAutoMoveFile
+// @description: 生成对应的迁移文件路径
+// @param: *tplData
+// @return: null
 
 func (autoCodeService *AutoCodeService) addAutoMoveFile(data *tplData) {
 	base := filepath.Base(data.autoCodePath)
@@ -454,12 +434,12 @@ func (autoCodeService *AutoCodeService) addAutoMoveFile(data *tplData) {
 	}
 }
 
-//@author: [piexlmax](https://github.com/piexlmax)
-//@author: [SliverHorn](https://github.com/SliverHorn)
-//@function: CreateApi
-//@description: 自动创建api数据,
-//@param: a *model.AutoCodeStruct
-//@return: err error
+// @author: [piexlmax](https://github.com/piexlmax)
+// @author: [SliverHorn](https://github.com/SliverHorn)
+// @function: CreateApi
+// @description: 自动创建api数据,
+// @param: a *model.AutoCodeStruct
+// @return: err error
 
 func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) (ids []uint, err error) {
 	apiList := []system.SysApi{
@@ -581,9 +561,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 func injectionCode(structName string, bf *strings.Builder) error {
 	for _, meta := range injectionPaths {
 		code := fmt.Sprintf(meta.structNameF, structName)
-		if err := utils.AutoInjectionCode(meta.path, meta.funcName, code); err != nil {
-			return err
-		}
+		ast2.ImportForAutoEnter(meta.path, meta.funcName, code)
 		bf.WriteString(fmt.Sprintf("%s@%s@%s;", meta.path, meta.funcName, code))
 	}
 	return nil
@@ -657,177 +635,11 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 	// 创建完成后在对应的位置插入结构代码
 	for _, v := range pendingTemp {
 		meta := packageInjectionMap[v.name]
-		if err := ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, caser.String(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
+		if err := ast2.ImportReference(meta.path, fmt.Sprintf(meta.importCodeF, v.name, packageName), fmt.Sprintf(meta.structNameF, utils.FirstUpper(packageName)), fmt.Sprintf(meta.packageNameF, packageName), meta.groupName); err != nil {
 			return err
 		}
 	}
 	return nil
-}
-
-type Visitor struct {
-	ImportCode  string
-	StructName  string
-	PackageName string
-	GroupName   string
-}
-
-func (vi *Visitor) Visit(node ast.Node) ast.Visitor {
-	switch n := node.(type) {
-	case *ast.GenDecl:
-		// 查找有没有import context包
-		// Notice：没有考虑没有import任何包的情况
-		if n.Tok == token.IMPORT && vi.ImportCode != "" {
-			vi.addImport(n)
-			// 不需要再遍历子树
-			return nil
-		}
-		if n.Tok == token.TYPE && vi.StructName != "" && vi.PackageName != "" && vi.GroupName != "" {
-			vi.addStruct(n)
-			return nil
-		}
-	case *ast.FuncDecl:
-		if n.Name.Name == "Routers" {
-			vi.addFuncBodyVar(n)
-			return nil
-		}
-
-	}
-	return vi
-}
-
-func (vi *Visitor) addStruct(genDecl *ast.GenDecl) ast.Visitor {
-	for i := range genDecl.Specs {
-		switch n := genDecl.Specs[i].(type) {
-		case *ast.TypeSpec:
-			if strings.Index(n.Name.Name, "Group") > -1 {
-				switch t := n.Type.(type) {
-				case *ast.StructType:
-					f := &ast.Field{
-						Names: []*ast.Ident{
-							{
-								Name: vi.StructName,
-								Obj: &ast.Object{
-									Kind: ast.Var,
-									Name: vi.StructName,
-								},
-							},
-						},
-						Type: &ast.SelectorExpr{
-							X: &ast.Ident{
-								Name: vi.PackageName,
-							},
-							Sel: &ast.Ident{
-								Name: vi.GroupName,
-							},
-						},
-					}
-					t.Fields.List = append(t.Fields.List, f)
-				}
-			}
-		}
-	}
-	return vi
-}
-
-func (vi *Visitor) addImport(genDecl *ast.GenDecl) ast.Visitor {
-	// 是否已经import
-	hasImported := false
-	for _, v := range genDecl.Specs {
-		importSpec := v.(*ast.ImportSpec)
-		// 如果已经包含
-		if importSpec.Path.Value == strconv.Quote(vi.ImportCode) {
-			hasImported = true
-		}
-	}
-	if !hasImported {
-		genDecl.Specs = append(genDecl.Specs, &ast.ImportSpec{
-			Path: &ast.BasicLit{
-				Kind:  token.STRING,
-				Value: strconv.Quote(vi.ImportCode),
-			},
-		})
-	}
-	return vi
-}
-
-func (vi *Visitor) addFuncBodyVar(funDecl *ast.FuncDecl) ast.Visitor {
-	hasVar := false
-	for _, v := range funDecl.Body.List {
-		switch varSpec := v.(type) {
-		case *ast.AssignStmt:
-			for i := range varSpec.Lhs {
-				switch nn := varSpec.Lhs[i].(type) {
-				case *ast.Ident:
-					if nn.Name == vi.PackageName+"Router" {
-						hasVar = true
-					}
-				}
-			}
-		}
-	}
-	if !hasVar {
-		assignStmt := &ast.AssignStmt{
-			Lhs: []ast.Expr{
-				&ast.Ident{
-					Name: vi.PackageName + "Router",
-					Obj: &ast.Object{
-						Kind: ast.Var,
-						Name: vi.PackageName + "Router",
-					},
-				},
-			},
-			Tok: token.DEFINE,
-			Rhs: []ast.Expr{
-				&ast.SelectorExpr{
-					X: &ast.SelectorExpr{
-						X: &ast.Ident{
-							Name: "router",
-						},
-						Sel: &ast.Ident{
-							Name: "RouterGroupApp",
-						},
-					},
-					Sel: &ast.Ident{
-						Name: caser.String(vi.PackageName),
-					},
-				},
-			},
-		}
-		funDecl.Body.List = append(funDecl.Body.List, funDecl.Body.List[1])
-		index := 1
-		copy(funDecl.Body.List[index+1:], funDecl.Body.List[index:])
-		funDecl.Body.List[index] = assignStmt
-	}
-	return vi
-}
-
-func ImportReference(filepath, importCode, structName, packageName, groupName string) error {
-	fSet := token.NewFileSet()
-	fParser, err := parser.ParseFile(fSet, filepath, nil, parser.ParseComments)
-	if err != nil {
-		return err
-	}
-	importCode = strings.TrimSpace(importCode)
-	v := &Visitor{
-		ImportCode:  importCode,
-		StructName:  structName,
-		PackageName: packageName,
-		GroupName:   groupName,
-	}
-	if importCode == "" {
-		ast.Print(fSet, fParser)
-	}
-
-	ast.Walk(v, fParser)
-
-	var output []byte
-	buffer := bytes.NewBuffer(output)
-	err = format.Node(buffer, fSet, fParser)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// 写回数据
-	return os.WriteFile(filepath, buffer.Bytes(), 0o600)
 }
 
 // CreatePlug 自动创建插件模板

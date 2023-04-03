@@ -194,5 +194,11 @@
 			"userManage": "用户管理",
 			"website": "官方网站"
 		}
+	},
+	"core": {
+		"server" : {
+			"welcomeTo" : "欢迎使用",
+			"currentVersion" : "当前版本"
+		}
 	}
 }

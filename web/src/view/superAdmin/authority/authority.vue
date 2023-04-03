@@ -3,7 +3,7 @@
     <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="addAuthority(0)">{{ t('authority.addRole') }}</el-button>
+        <el-button type="primary" icon="plus" @click="addAuthority(0)">{{ t('authority.addRole') }}</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -17,35 +17,35 @@
           <template #default="scope">
             <el-button
               icon="setting"
-              size="small"
+
               type="primary"
               link
               @click="opdendrawer(scope.row)"
             >{{ t('authority.setPermissions') }}</el-button>
             <el-button
               icon="plus"
-              size="small"
+
               type="primary"
               link
               @click="addAuthority(scope.row.authorityId)"
             >{{ t('general.add') }}</el-button>
             <el-button
               icon="copy-document"
-              size="small"
+
               type="primary"
               link
               @click="copyAuthorityFunc(scope.row)"
             >{{ t('general.copy') }}</el-button>
             <el-button
               icon="edit"
-              size="small"
+
               type="primary"
               link
               @click="editAuthority(scope.row)"
             >{{ t('general.edit') }}</el-button>
             <el-button
               icon="delete"
-              size="small"
+
               type="primary"
               link
               @click="deleteAuth(scope.row)"
@@ -61,7 +61,7 @@
           <el-cascader
             v-model="form.parentId"
             style="width:100%"
-            :disabled="dialogType=='add'"
+            :disabled="dialogType==='add'"
             :options="AuthorityOption"
             :props="{ checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
             :show-all-levels="false"
@@ -69,7 +69,7 @@
           />
         </el-form-item>
         <el-form-item :label="t('authority.roleID')" prop="authorityId">
-          <el-input v-model="form.authorityId" :disabled="dialogType=='edit'" autocomplete="off" />
+          <el-input v-model="form.authorityId" :disabled="dialogType==='edit'" autocomplete="off" />
         </el-form-item>
         <el-form-item :label="t('authority.roleName')" prop="authorityName">
           <el-input v-model="form.authorityName" autocomplete="off" />
@@ -77,8 +77,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -149,7 +149,7 @@ const form = ref({
 const rules = ref({
   authorityId: [
     { required: true, message: t('authority.roleIdNote'), trigger: 'blur' },
-    { validator: mustUint, trigger: 'blur', message: '必须为正整数' }
+    { validator: mustUint, trigger: 'blur', message: t('authority.roleIdError') }
   ],
   authorityName: [
     { required: true, message: t('authority.roleNameNote'), trigger: 'blur' }
@@ -400,14 +400,9 @@ export default {
   }
 }
 .tree-content{
-  overflow: auto;
-  height: calc(100vh - 100px);
   margin-top: 10px;
+  height: calc(100vh - 148px);
+  overflow: auto;
 }
 
-.auth-drawer{
-  .el-drawer__body{
-    overflow: hidden;
-  }
-}
 </style>

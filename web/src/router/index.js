@@ -13,12 +13,19 @@ const routes = [{
   path: '/login',
   name: 'Login',
   component: () => import('@/view/login/index.vue')
+},
+{
+  path: '/:catchAll(.*)',
+  meta: {
+    closeTab: true,
+  },
+  component: () => import('@/view/error/index.vue')
 }
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
-  routes
+  routes,
 })
 
 export default router

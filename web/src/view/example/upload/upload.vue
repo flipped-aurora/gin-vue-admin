@@ -24,7 +24,7 @@
           </el-form-item>
 
           <el-form-item>
-            <el-button size="small" type="primary" icon="search" @click="getTableData">查询</el-button>
+            <el-button type="primary" icon="search" @click="getTableData">查询</el-button>
           </el-form-item>
         </el-form>
 
@@ -58,8 +58,8 @@
         </el-table-column>
         <el-table-column align="left" :label="t('general.operations')" width="160">
           <template #default="scope">
-            <el-button size="small" icon="download" type="primary" link @click="downloadFile(scope.row)">下载</el-button>
-            <el-button size="small" icon="delete" type="primary" link @click="deleteFileFunc(scope.row)">{{ t('general.delete') }}</el-button>
+            <el-button icon="download" type="primary" link @click="downloadFile(scope.row)">下载</el-button>
+            <el-button icon="delete" type="primary" link @click="deleteFileFunc(scope.row)">{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>

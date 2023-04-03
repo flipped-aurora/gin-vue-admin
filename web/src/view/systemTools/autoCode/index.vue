@@ -61,7 +61,7 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button size="mini" type="primary" @click="getColumnFunc">{{ t('autoCode.createUsingTable') }}</el-button>
+              <el-button type="primary" @click="getColumnFunc">{{ t('autoCode.createUsingTable') }}</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -146,7 +146,7 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" @click="editAndAddField()">{{ t('autoCode.addField') }}</el-button>
+        <el-button type="primary" @click="editAndAddField()">{{ t('autoCode.addField') }}</el-button>
       </div>
       <el-table :data="form.fields">
         <el-table-column align="left" type="index" :label="t('autoCode.fieldIndex')" width="60" />
@@ -227,21 +227,21 @@
         <el-table-column align="left" :lable="t('general.operations')" width="300" fixed="right">
           <template #default="scope">
             <el-button
-              size="small"
+
               type="primary"
               link
               icon="edit"
               @click="editAndAddField(scope.row)"
             >{{ t('general.edit') }}</el-button>
             <el-button
-              size="small"
+
               type="primary"
               link
               :disabled="scope.$index === 0"
               @click="moveUpField(scope.$index)"
             >{{ t('autoCode.moveUp') }}</el-button>
             <el-button
-              size="small"
+
               type="primary"
               link
               :disabled="(scope.$index + 1) === form.fields.length"
@@ -250,11 +250,11 @@
             <el-popover v-model="scope.row.visible" placement="top">
               <p>{{ t('autoCode.confirmDelete') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" size="small" @click="deleteField(scope.$index)">{{ t('general.confirm') }}</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" @click="deleteField(scope.$index)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button size="small" type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -262,8 +262,8 @@
       </el-table>
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-content-flex-end auto-btn-list">
-        <el-button size="mini" type="primary" @click="enterForm(true)">{{ t('autoCode.codePreview') }}</el-button>
-        <el-button size="mini" type="primary" @click="enterForm(false)">{{ t('autoCode.generateCode') }}</el-button>
+        <el-button type="primary" @click="enterForm(true)">{{ t('autoCode.codePreview') }}</el-button>
+        <el-button type="primary" @click="enterForm(false)">{{ t('autoCode.generateCode') }}</el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
@@ -271,8 +271,8 @@
       <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="mini" @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button size="mini" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -280,15 +280,15 @@
     <el-dialog v-model="previewFlag">
       <template #header>
         <div class="previewCodeTool">
-          <p>{{ t('autoCode.actionBar') }}</p>
-          <el-button size="mini" type="primary" @click="selectText">{{ t('general.selectAll') }}</el-button>
-          <el-button size="mini" type="primary" @click="copy">{{ t('autoCode.copy') }}</el-button>
+          <p>操作栏：</p>
+          <el-button type="primary" @click="selectText">{{ t('general.selectAll') }}</el-button>
+          <el-button type="primary" @click="copy">{{ t('autoCode.copy') }}</el-button>
         </div>
       </template>
       <PreviewCodeDialog v-if="previewFlag" ref="preview" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
-          <el-button size="small" type="primary" @click="previewFlag = false">{{ t('general.confirm') }}</el-button>
+          <el-button type="primary" @click="previewFlag = false">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -533,6 +533,15 @@ const enterForm = async(isPreview) => {
     })
     return false
   }
+
+  if (form.value.package === form.value.abbreviation) {
+    ElMessage({
+      type: 'error',
+      message: 'package和结构体简称不可同名'
+    })
+    return false
+  }
+
   autoCodeForm.value.validate(async valid => {
     if (valid) {
       for (const key in form.value) {
@@ -625,9 +634,7 @@ const getColumnFunc = async() => {
     let dbtype = ''
     if (dbform.value.businessDB !== '') {
       const dbtmp = dbList.value.find(item => item.aliasName === dbform.value.businessDB)
-      console.log(dbtmp)
       const dbraw = toRaw(dbtmp)
-      console.log(dbraw)
       dbtype = dbraw.dbtype
     }
     const tbHump = toHump(dbform.value.tableName)
@@ -701,7 +708,7 @@ const init = () => {
 }
 init()
 
-watch(() => route.params.id, (id) => {
+watch(() => route.params.id, () => {
   if (route.name === 'autoCodeEdit') {
     init()
   }

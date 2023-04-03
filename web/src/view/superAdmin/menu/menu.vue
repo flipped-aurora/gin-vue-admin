@@ -2,7 +2,7 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="mini" type="primary" icon="plus" @click="addMenu('0')">{{ t('menu.addRootMenu') }}</el-button>
+        <el-button type="primary" icon="plus" @click="addMenu('0')">{{ t('menu.addRootMenu') }}</el-button>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -36,21 +36,19 @@
         <el-table-column align="left" fixed="right" :label="t('general.operations')" width="300">
           <template #default="scope">
             <el-button
-              size="small"
               type="primary"
               link
               icon="plus"
               @click="addMenu(scope.row.ID)"
             >{{ t('menu.addSubMenu') }}</el-button>
             <el-button
-              size="small"
               type="primary"
               link
               icon="edit"
               @click="editMenu(scope.row.ID)"
             >{{ t('general.edit') }}</el-button>
             <el-button
-              size="small"
+
               type="primary"
               link
               icon="delete"
@@ -81,10 +79,10 @@
         </el-form-item>
         <el-form-item prop="path" style="width:30%">
           <template #label>
-            <div style="display:inline-flex">
-              {{ t('menu.routePath') }}
-              <el-checkbox v-model="checkFlag" style="float:right;margin-left:20px;">{{ t('menu.addParameter') }}</el-checkbox>
-            </div>
+            <span style="display: inline-flex;align-items: center;">
+              <span>{{ t('menu.routePath') }}</span>
+              <el-checkbox v-model="checkFlag" style="margin-left:12px;height: auto">{{ t('menu.addParameter') }}</el-checkbox>
+            </span>
           </template>
 
           <el-input
@@ -113,7 +111,7 @@
         </el-form-item>
         <el-form-item :label="t('menu.filePath')" prop="component" style="width:60%">
           <el-input v-model="form.component" autocomplete="off" placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue" @blur="fmtComponent" />
-          <span style="font-size:12px;margin-right:12px;">{{ t('menu.subMenuNote') }}</span><el-button style="margin-top:4px" size="small" @click="form.component = 'view/routerHolder.vue'">{{ t('menu.clickMe') }}</el-button>
+          <span style="font-size:12px;margin-right:12px;">{{ t('menu.subMenuNote') }}</span><el-button style="margin-top:4px" @click="form.component = 'view/routerHolder.vue'">{{ t('menu.clickMe') }}</el-button>
         </el-form-item>
         <el-form-item :label="t('menu.displayName')" prop="meta.title" style="width:30%">
           <el-input v-model="form.meta.title" autocomplete="off" />
@@ -165,12 +163,11 @@
       </el-form>
       <div>
         <el-button
-          size="small"
           type="primary"
           icon="edit"
           @click="addParameter(form)"
-        >{{ t('menu.addMenuParameters') }}</el-button>
-        <el-table :data="form.parameters" style="width: 100%">
+        > {{ t('menu.addMenuParameters') }} </el-button>
+        <el-table :data="form.parameters" style="width: 100%;margin-top: 12px;">
           <el-table-column align="left" prop="type" :label="t('menu.parameterType')" width="180">
             <template #default="scope">
               <el-select v-model="scope.row.type" :placeholder="t('general.pleaseSelect')">
@@ -198,7 +195,7 @@
               <div>
                 <el-button
                   type="danger"
-                  size="small"
+
                   icon="delete"
                   @click="deleteParameter(form.parameters,scope.$index)"
                 >{{ t('general.delete') }}</el-button>
@@ -209,12 +206,11 @@
 
         <el-button
           style="margin-top:12px"
-          size="small"
           type="primary"
           icon="edit"
           @click="addBtn(form)"
         >{{ t('menu.addButton') }}</el-button>
-        <el-table :data="form.menuBtn" style="width: 100%">
+        <el-table :data="form.menuBtn" style="width: 100%;margin-top: 12px;">
           <el-table-column align="left" prop="name" :label="t('menu.buttonName')" width="180">
             <template #default="scope">
               <div>
@@ -234,7 +230,7 @@
               <div>
                 <el-button
                   type="danger"
-                  size="small"
+
                   icon="delete"
                   @click="deleteBtn(form.menuBtn,scope.$index)"
                 >{{ t('general.delete') }}</el-button>
@@ -245,8 +241,8 @@
       </div>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">{{ t('general.cancel') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button @click="closeDialog">{{ t('general.cancel') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -339,7 +335,6 @@ const deleteBtn = async(btns, index) => {
   const res = await canRemoveAuthorityBtnApi({ id: btn.ID })
   if (res.code === 0) {
     btns.splice(index, 1)
-    return
   }
 }
 

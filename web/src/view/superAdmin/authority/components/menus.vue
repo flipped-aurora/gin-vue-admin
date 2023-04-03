@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="clearfix sticky-button">
-      <el-input v-model="filterText" class="fitler" placeholder="筛选" />
-      <el-button class="fl-right" size="small" type="primary" @click="relation">{{ t('general.confirm') }}</el-button>
+      <el-input v-model="filterText" class="fitler" :placeholder="t('general.filter')" />
+      <el-button class="fl-right" type="primary" @click="relation">{{ t('general.confirm') }}</el-button>
     </div>
     <div class="tree-content">
       <el-tree
@@ -24,7 +24,7 @@
               <el-button
                 type="primary"
                 link
-                size="small"
+
                 :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
                 :disabled="!node.checked"
                 @click="() => setDefault(data)"
@@ -36,17 +36,17 @@
               <el-button
                 type="primary"
                 link
-                size="small"
+
                 @click="() => OpenBtn(data)"
               >
-                分配按钮
+                {{ t('menus.assignButton') }}
               </el-button>
             </span>
           </span>
         </template>
       </el-tree>
     </div>
-    <el-dialog v-model="btnVisible" title="分配按钮" destroy-on-close>
+    <el-dialog v-model="btnVisible" :title="t('menus.assignButton')" destroy-on-close>
       <el-table
         ref="btnTableRef"
         :data="btnData"
@@ -59,8 +59,8 @@
       </el-table>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -195,7 +195,7 @@ const enterDialog = async() => {
     authorityId: props.row.authorityId
   })
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: '设置成功' })
+    ElMessage({ type: 'success', message: t('general.setupSuccess') })
     btnVisible.value = false
   }
 }
@@ -219,7 +219,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 @import "@/style/button.scss";
 .custom-tree-node{
   span+span{

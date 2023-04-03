@@ -15,14 +15,14 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button size="small" type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
-          <el-button size="small" icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
+          <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
+          <el-button icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button size="small" type="primary" icon="plus" @click="openDialog">{{ t('view.dictionary.sysDictionaryDetail.addDictEntry') }}</el-button>
+        <el-button type="primary" icon="plus" @click="openDialog">{{ t('view.dictionary.sysDictionaryDetail.addDictEntry') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -48,15 +48,15 @@
 
         <el-table-column align="left" :label="t('general.operations')">
           <template #default="scope">
-            <el-button size="small" type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">{{ t('general.change') }}</el-button>
+            <el-button type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">{{ t('general.change') }}</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
               <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button size="small" type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" size="small" @click="deleteSysDictionaryDetailFunc(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
+                <el-button type="primary" @click="deleteSysDictionaryDetailFunc(scope.row)">{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" size="small" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -77,7 +77,7 @@
     </div>
 
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="t('general.popUpOperation')">
-      <el-form ref="dialogForm" :model="formData" :rules="rules" size="medium" label-width="110px">
+      <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.displayValue')" prop="label">
           <el-input
             v-model="formData.label"
@@ -105,8 +105,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button size="small" @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button size="small" type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
+          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -137,7 +137,7 @@ const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const route = useRoute()
 
-onBeforeRouteUpdate((to, form) => {
+onBeforeRouteUpdate((to) => {
   if (to.name === 'dictionaryDetail') {
     searchInfo.value.sysDictionaryID = to.params.id
     getTableData()

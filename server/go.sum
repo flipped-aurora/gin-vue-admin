@@ -52,8 +52,6 @@ github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c/go.mod h1:MKsuJm
 github.com/casbin/casbin/v2 v2.37.4/go.mod h1:vByNa/Fchek0KZUgG5wEsl7iFsiviAYKRtgrQfcJqHg=
 github.com/casbin/casbin/v2 v2.51.0 h1:BC41imD9Z2coIJpELapy2h5kMT+lB4vFDTYpMhTsU4A=
 github.com/casbin/casbin/v2 v2.51.0/go.mod h1:vByNa/Fchek0KZUgG5wEsl7iFsiviAYKRtgrQfcJqHg=
-github.com/casbin/casbin/v2 v2.66.0 h1:yyccSWtCvIs277FPIHG6pjl2IXdejRH/vpMiDuNCiEU=
-github.com/casbin/casbin/v2 v2.66.0/go.mod h1:vByNa/Fchek0KZUgG5wEsl7iFsiviAYKRtgrQfcJqHg=
 github.com/casbin/gorm-adapter/v3 v3.7.3 h1:tp3EL3vS31dF+GX0n3QwUytQlrFOPXtOKKZ7SZtLOA8=
 github.com/casbin/gorm-adapter/v3 v3.7.3/go.mod h1:7mwHmC2phiw6N4gDWlzi+c4DUX7zaVmQC/hINsRgBDg=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=

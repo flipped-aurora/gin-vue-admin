@@ -63,13 +63,14 @@
                                 </el-dropdown-item>
                               </template>
                               <el-dropdown-item icon="avatar">
-                                <el-row style="width: 100%;" @click="handleCommand">
-                                  <el-col :span="12">指令菜单</el-col>
-                                  <el-col :span="12">
+                                <div class="command-box" style="display: flex" @click="handleCommand">
+                                  <div>指令菜单</div>
+                                  <div style="margin-left: 8px">
                                     <span class="button">{{ first }}</span>
+                                    +
                                     <span class="button">K</span>
-                                  </el-col>
-                                </el-row>
+                                  </div>
+                                </div>
                               </el-dropdown-item>
                               <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
                               <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">登 出</el-dropdown-item>
@@ -292,5 +293,8 @@ const changeShadow = () => {
 }
 :deep .el-overlay {
   background-color: hsla(0,0%,100%,.9) !important;
+}
+.command-box{
+
 }
 </style>

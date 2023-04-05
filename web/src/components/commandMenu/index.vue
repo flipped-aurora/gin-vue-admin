@@ -1,81 +1,24 @@
 <template>
   <el-dialog
-      v-model="dialogVisible"
-      width="30%"
-      class="overlay"
+    v-model="dialogVisible"
+    width="30%"
+    class="overlay"
+    :show-close="false"
   >
-      <el-select
-          ref="searchInput"
-          filterable
-          placeholder="请选择要去的页面"
-          @change="changeRouter"
-      >
-        <el-option-group
-            v-for="group in menuList"
-            :key="group.label"
-            :label="group.label"
-        >
-          <el-option
-              v-for="item in group.options"
-              :key="item.value"
-              :label="item.meta.title"
-              :value="item.path"
-          />
-        </el-option-group>
-      </el-select>
-    <div class="apps">
-      <p class="title">快速应用</p>
-      <ul>
-        <li class="list">
-          <el-row>
-            <el-col :span="10" style="height: 40px;">
-              <el-icon class="icon"><Switch /></el-icon>
-              切换主题
-            </el-col>
-            <el-col :span="14">
-              <el-row style="height: 40px;">
-                <el-col :span="12" style="height: 40px;">
-                  <div class="item" @click="changeMode('light')">
-                    <div class="item-top">
-                      <el-icon v-if="userStore.mode === 'light'" class="check">
-                        <check />
-                      </el-icon>
-                      <img src="https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg">
-                    </div>
-                    <p>
-                      简约白
-                    </p>
-                  </div>
-                </el-col>
-                <el-col :span="12" style="height: 40px;">
-                  <div class="item" @click="changeMode('dark')">
-                    <div class="item-top">
-                      <el-icon v-if="userStore.mode === 'dark'" class="check">
-                        <check />
-                      </el-icon>
-                      <img src="https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg">
-                    </div>
-                    <p>
-                      商务黑
-                    </p>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-col>
-          </el-row>
-        </li>
-        <li class="list" @click="userStore.LoginOut">
-          <el-icon><ReadingLamp /></el-icon>
-          登出
-        </li>
-      </ul>
+    <template #header>
+      <input v-model="searchInput" class="quick-input" placeholder="请输入你需要快捷到达的功能">
+    </template>
+
+    <div v-for="(option,index) in options" :key="index">
+      <div v-if="option.children.length" class="quick-title">{{ option.label }}</div>
+      <div v-for="(item,key) in option.children" :key="index+'-'+key" class="quick-item" @click="item.func">
+        {{ item.label }}
+      </div>
     </div>
+
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogVisible = false">Cancel</el-button>
-        <el-button type="primary" @click="close">
-          Confirm
-        </el-button>
+        <el-button @click="close">关闭</el-button>
       </span>
     </template>
   </el-dialog>
@@ -83,11 +26,11 @@
 
 <script>
 export default {
-  name: 'commandMenu',
+  name: 'CommandMenu',
 }
 </script>
 <script setup>
-import { ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
 import { useUserStore } from '@/pinia/modules/user'
@@ -95,29 +38,71 @@ const router = useRouter()
 const userStore = useUserStore()
 const routerStore = useRouterStore()
 const dialogVisible = ref(false)
-const searchInput = ref(null)
-const menus = ref(routerStore.asyncRouters[0].children)
-const menuList = []
+const searchInput = ref('')
+const options = reactive([])
+const deepMenus = (menus) => {
+  const arr = []
+  menus.forEach(menu => {
+    if (menu.children && menu.children.length > 0) {
+      arr.push(...deepMenus(menu.children))
+    } else {
+      if (menu.meta.title && menu.meta.title.indexOf(searchInput.value) > -1) {
+        arr.push({
+          label: menu.meta.title,
+          func: () => changeRouter(menu)
+        })
+      }
+    }
+  })
+  return arr
+}
+
+const addQuickMenu = () => {
+  const option = {
+    label: '跳转',
+    children: []
+  }
+  const menus = deepMenus(routerStore.asyncRouters[0].children)
+  option.children.push(...menus)
+  options.push(option)
+}
+
+const addQuickOption = () => {
+  const option = {
+    label: '操作',
+    children: []
+  }
+  const quickArr = [
+    {
+      label: '亮色主题',
+      func: () => changeMode('light')
+    }, {
+      label: '暗色主题',
+      func: () => changeMode('dark')
+    }, {
+      label: '退出登录',
+      func: () => changeMode('dark')
+    }
+  ]
+  option.children.push(...quickArr.filter(item => item.label.indexOf(searchInput.value) > -1))
+  options.push(option)
+}
+
+addQuickMenu()
+addQuickOption()
 
 const open = () => {
   dialogVisible.value = true
-  menus.value.forEach((item) => {
-    if(item.children && !item.hidden ) {
-      let obj = {}
-      obj.label = item.meta.title
-      obj.basePath = item.path
-      obj.options = item.children
-      menuList.push(obj)
-    }
-  })
 }
+
 const changeRouter = (e) => {
-  if (e.indexOf('http:') > -1 || e.indexOf('https:') > -1) {
-    window.open(e)
+  const name = e.name
+  if (name.indexOf('http:') > -1 || name.indexOf('https:') > -1) {
+    window.open(name)
     return
   }
+  router.push({ name: name })
   dialogVisible.value = false
-  router.push({ name: e })
 }
 
 const changeMode = (e) => {
@@ -128,54 +113,57 @@ const changeMode = (e) => {
   userStore.changeSideMode(e)
 }
 
-const close = () =>{
+const close = () => {
   dialogVisible.value = false
 }
 
 defineExpose({ open })
+
+watch(searchInput, () => {
+  options.length = 0
+  addQuickMenu()
+  addQuickOption()
+})
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .overlay {
-  color: #666;
-.apps{
-  padding-top: 30px;
-  list-style: none;
-  .title{
+  border-radius: 4px;
+  .el-dialog__header{
+    padding:0 !important;
+    margin-right:0 !important;
+  }
+  .el-dialog__body{
+    padding: 12px !important;
+    height: 50vh;
+    overflow: auto !important;
+  }
+  .quick-title{
+    margin-top: 8px;
     font-size: 12px;
+    font-weight: 600;
+    color: #666;
   }
-  .list{
-    height: 48px;
-    line-height: 48px;
-    margin-bottom: 20px;
-    cursor:pointer;
+  .quick-input{
+    color: #666;
+    border-radius: 4px 4px 0 0;
+    border:none;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;
   }
-  .item{
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 20px;
-    .item-top{
-      position: relative;
-      img {
-        width: 36px;
-        height: 36px;
-      }
-    }
-    .check{
-      position: absolute;
-      font-size: 20px;
-      color: #00afff;
-      right:10px;
-      bottom: 10px;
-    }
-    p{
-      text-align: center;
-      font-size: 12px;
+  .quick-item{
+    font-size: 14px;
+    padding: 8px;
+    margin: 4px 0;
+    &:hover{
+      cursor: pointer;
+      background: #eee;
+      border-radius: 4px;
     }
   }
-}
 }
 
 </style>

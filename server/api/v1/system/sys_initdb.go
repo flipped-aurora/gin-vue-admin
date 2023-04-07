@@ -1,6 +1,7 @@
 package system
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -56,4 +57,34 @@ func (i *DBApi) CheckDB(c *gin.Context) {
 	}
 	global.GVA_LOG.Info(message)
 	response.OkWithDetailed(gin.H{"needInit": needInit}, message, c)
+}
+
+// ReInitDB
+// @Tags     ReInitDB
+// @Summary  重新初始化用户数据库
+// @Produce  application/json
+// @Param    data  body      request.InitDB                  true  "初始化数据库参数"
+// @Success  200   {object}  response.Response{data=string}  "初始化用户数据库"
+// @Router   /init/reinitdb [post]
+func (i *DBApi) ReInitDB(c *gin.Context) {
+	println("即将重新进入初始化数据库!继续请输入:yes;取消则输入其他任意字符;")
+	var confirm string
+	_, _ = fmt.Scanln(&confirm)
+	if confirm != "yes" && confirm != "YES" && confirm != "y" && confirm != "Y" {
+		response.OkWithMessage("已取消重新初始化数据库", c)
+		return
+	}
+	println("即将重新初始化数据库!")
+	var dbInfo request.InitDB
+	if err := c.ShouldBindJSON(&dbInfo); err != nil {
+		global.GVA_LOG.Error("参数校验不通过!", zap.Error(err))
+		response.FailWithMessage("参数校验不通过", c)
+		return
+	}
+	if err := initDBService.InitDB(dbInfo); err != nil {
+		global.GVA_LOG.Error("自动创建数据库失败!", zap.Error(err))
+		response.FailWithMessage("自动创建数据库失败，请查看后台日志，检查后在进行初始化", c)
+		return
+	}
+	response.OkWithMessage("自动创建数据库成功", c)
 }

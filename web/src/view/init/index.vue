@@ -68,12 +68,18 @@ export default {
 
 <script setup>
 // @ts-ignore
-import { initDB } from '@/api/initdb'
+import { initDB, reInitDB } from '@/api/initdb'
 import { reactive, ref } from 'vue'
 import { ElLoading, ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
+
+// 获取路由参数
+const { re_init } = route.query
+
+console.log(re_init)
 
 const hello = ref(0)
 const showNext = () => {
@@ -148,25 +154,49 @@ const changeDB = (val) => {
   }
 }
 const onSubmit = async() => {
-  const loading = ElLoading.service({
-    lock: true,
-    text: '正在初始化数据库，请稍候',
-    spinner: 'loading',
-    background: 'rgba(0, 0, 0, 0.7)',
-  })
-  try {
-    const res = await initDB(form)
-    if (res.code === 0) {
-      out.value = true
-      ElMessage({
-        type: 'success',
-        message: res.msg,
-      })
-      router.push({ name: 'Login' })
+  if (re_init) {
+    const loading = ElLoading.service({
+      lock: true,
+      text: '危险操作，请前往后端运行cmd，查看输入指令强制初始化数据库',
+      spinner: 'loading',
+      background: 'rgba(255,255,255,.9)',
+    })
+
+    try {
+      const res = await reInitDB(form)
+      if (res.code === 0) {
+        out.value = true
+        ElMessage({
+          type: 'success',
+          message: res.msg,
+        })
+        router.push({ name: 'Login' })
+      }
+      loading.close()
+    } catch (err) {
+      loading.close()
     }
-    loading.close()
-  } catch (err) {
-    loading.close()
+  } else {
+    const loading = ElLoading.service({
+      lock: true,
+      text: '正在初始化数据库，请稍候',
+      spinner: 'loading',
+      background: 'rgba(255,255,255,.9)',
+    })
+    try {
+      const res = await initDB(form)
+      if (res.code === 0) {
+        out.value = true
+        ElMessage({
+          type: 'success',
+          message: res.msg,
+        })
+        router.push({ name: 'Login' })
+      }
+      loading.close()
+    } catch (err) {
+      loading.close()
+    }
   }
 }
 </script>

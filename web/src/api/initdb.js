@@ -24,3 +24,11 @@ export const checkDB = () => {
     method: 'post'
   })
 }
+
+export const reInitDB = (data) => {
+  return service({
+    url: '/init/reinitdb',
+    method: 'post',
+    data
+  })
+}

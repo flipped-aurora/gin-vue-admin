@@ -53,18 +53,21 @@
             </div>
           </el-form-item>
           <el-form-item>
-            <el-button
-              type="primary"
-              style="width: 46%"
-              size="large"
-              @click="checkInit"
-            >前往初始化</el-button>
-            <el-button
-              type="primary"
-              size="large"
-              style="width: 46%; margin-left: 8%"
-              @click="submitForm"
-            >登 录</el-button>
+            <div class="flex">
+              <el-button
+                v-if="showInit"
+                type="primary"
+                class="init-btn"
+                size="large"
+                @click="doInit"
+              >前往初始化</el-button>
+              <el-button
+                type="primary"
+                size="large"
+                class="login-btn"
+                @click="submitForm"
+              >登 录</el-button>
+            </div>
           </el-form-item>
         </el-form>
       </div>
@@ -105,11 +108,12 @@ export default {
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
-import { reactive, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 const router = useRouter()
+const showInit = ref(false)
 // 验证函数
 const checkUsername = (rule, value, callback) => {
   if (value.length < 5) {
@@ -140,7 +144,6 @@ const loginVerify = () => {
     loginFormData.openCaptcha = ele.data.openCaptcha
   })
 }
-loginVerify()
 
 // 登录相关操作
 const loginForm = ref(null)
@@ -188,22 +191,35 @@ const submitForm = () => {
 
 // 跳转初始化
 const checkInit = async() => {
+
   const res = await checkDB()
   if (res.code === 0) {
     if (res.data?.needInit) {
-      userStore.NeedInit()
-      router.push({ name: 'Init' })
-    } else {
-      ElMessage({
-        type: 'info',
-        message: '已配置数据库信息，无法初始化',
-      })
+      showInit.value = true
     }
   }
 }
 
+const doInit = () => {
+  userStore.NeedInit()
+  router.push({ name: 'Init' })
+}
+
+onMounted(() => {
+  checkInit()
+  loginVerify()
+})
 </script>
 
 <style lang="scss" scoped>
 @import "@/style/newLogin.scss";
+.flex{
+  display: flex;
+  align-items: center;
+  width: 100%;
+  .login-btn,
+  .init-btn{
+    flex: 1;
+  }
+}
 </style>

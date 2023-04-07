@@ -374,7 +374,31 @@
     <div class="gva-btn-list">
       <el-button type="primary" @click="update">立即更新</el-button>
       <el-button type="primary" @click="reload">重启服务（开发中）</el-button>
+      <el-button type="danger" @click="reinit">强制重置系统</el-button>
     </div>
+
+    <el-dialog
+      v-model="dialogVisible"
+      title="系统初始化"
+      width="400px"
+      append-to-body
+      custom-class="sys-dialog sys-dialog--init"
+      :before-close="handleClose"
+      lock-scroll
+      :close-on-press-escape="false"
+      :close-on-click-modal="false"
+      destroy-on-close
+    >
+      <div style="color: red;">
+        即将进入系统初始化阶段，系统初始化将会清空所有数据，包括用户数据、角色数据、权限数据、菜单数据、字典数据、系统配置数据等。并且此操作不可逆，请谨慎操作！
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false"> 取消 </el-button>
+          <el-button type="danger" @click="handleSubmit">确定</el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
@@ -388,8 +412,11 @@ import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
 import { ref, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/pinia/modules/user'
 
 const activeNames = reactive([])
+const dialogVisible = ref(false)
 const config = ref({
   system: {
     'iplimit-count': 0,
@@ -413,7 +440,8 @@ const config = ref({
     detail: {}
   }
 })
-
+const router = useRouter()
+const userStore = useUserStore()
 const initForm = async() => {
   const res = await getSystemConfig()
   if (res.code === 0) {
@@ -446,6 +474,21 @@ const email = async() => {
       message: '邮件发送失败'
     })
   }
+}
+const reinit = () => {
+  // 强制重新初始化系统
+  dialogVisible.value = true
+}
+
+const handleClose = (done) => {
+  dialogVisible.value = false
+  done()
+}
+
+const handleSubmit = () => {
+  window.localStorage.clear()
+  userStore.NeedInit()
+  router.push({ name: 'Init', query: { re_init: true }})
 }
 
 </script>

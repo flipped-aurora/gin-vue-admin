@@ -94,7 +94,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, "登录成功", c)
 		return
 	}
@@ -108,7 +108,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, "登录成功", c)
 	} else if err != nil {
 		global.GVA_LOG.Error("设置登录状态失败!", zap.Error(err))
@@ -127,7 +127,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, "登录成功", c)
 	}
 }
@@ -268,7 +268,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		c.Header("new-token", token)
-		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt, 10))
+		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
 		response.OkWithMessage("修改成功", c)
 	}
 }

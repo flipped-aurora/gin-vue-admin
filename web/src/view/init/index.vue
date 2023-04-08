@@ -79,8 +79,6 @@ const route = useRoute()
 // 获取路由参数
 const { re_init } = route.query
 
-console.log(re_init)
-
 const hello = ref(0)
 const showNext = () => {
   hello.value = hello.value + 1

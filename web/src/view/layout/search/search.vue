@@ -1,24 +1,20 @@
 <template>
   <div class="search-component">
-    <div v-if="show" class="transition-box">
-      <el-select ref="searchInput" filterable placeholder="请选择" @blur="hiddenSearch" @change="changeRouter">
-        <el-option v-for="item in routerStore.routerList" :key="item.value" :label="item.label" :value="item" />
-      </el-select>
+    <div
+      class="user-box"
+    >
+      <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
     </div>
-    <template v-else>
-      <div class="user-box">
-        <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
-      </div>
-      <div class="user-box">
-        <div class="gvaIcon gvaIcon-search" @click="showSearch" />
-      </div>
-      <div class="user-box">
-        <Screenfull class="search-icon" :style="{ cursor: 'pointer' }" />
-      </div>
-      <div class="user-box">
-        <div class="service gvaIcon-customer-service" @click="toService" />
-      </div>
-    </template>
+    <div
+      class="user-box"
+    >
+      <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
+    </div>
+    <div
+      class="user-box"
+    >
+      <div class="service gvaIcon-customer-service" @click="toService" />
+    </div>
   </div>
 </template>
 
@@ -31,49 +27,6 @@ export default {
 <script setup>
 import Screenfull from '@/view/layout/screenfull/index.vue'
 import { emitter } from '@/utils/bus.js'
-import { ref, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-import { useRouterStore } from '@/pinia/modules/router'
-
-const router = useRouter()
-
-const routerStore = useRouterStore()
-
-const changeRouter = (e) => {
-  if (e.value.indexOf('http:') > -1 || e.value.indexOf('https:') > -1) {
-    window.open(e.value)
-    return
-  }
-  if (e.params.length == 0) {
-    router.push({ name: e.value })
-  } else {
-    let params = {}
-    let query = {}
-    e.params.forEach(res => {
-      if (res.type == "query") {
-        query[res.key] = res.value
-      } else if (res.type == "params") {
-        params[res.key] = res.value
-      }
-    })
-    router.push({ name: e.value, params: params, query: query })
-  }
-}
-
-const show = ref(false)
-const hiddenSearch = async () => {
-  setTimeout(() => {
-    show.value = false
-  }, 100)
-}
-
-const searchInput = ref(null)
-const showSearch = async () => {
-  show.value = true
-  await nextTick()
-  searchInput.value.focus()
-}
-
 const reload = ref(false)
 const handleReload = () => {
   reload.value = true
@@ -115,9 +68,8 @@ const toService = () => {
   }
 }
 
-
-.reloading {
-  animation: turn 0.5s linear infinite;
+.reloading{
+  animation:turn 0.5s linear infinite;
 }
 
 @keyframes turn {

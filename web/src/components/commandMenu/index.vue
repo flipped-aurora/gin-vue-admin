@@ -81,7 +81,7 @@ const addQuickOption = () => {
       func: () => changeMode('dark')
     }, {
       label: '退出登录',
-      func: () => changeMode('dark')
+      func: () => userStore.LoginOut()
     }
   ]
   option.children.push(...quickArr.filter(item => item.label.indexOf(searchInput.value) > -1))

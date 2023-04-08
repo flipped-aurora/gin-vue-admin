@@ -31,10 +31,11 @@ export default {
 </script>
 <script setup>
 import { reactive, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter,useRoute } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
 import { useUserStore } from '@/pinia/modules/user'
 const router = useRouter()
+const route = useRouter()
 const userStore = useUserStore()
 const routerStore = useRouterStore()
 const dialogVisible = ref(false)
@@ -96,12 +97,23 @@ const open = () => {
 }
 
 const changeRouter = (e) => {
-  const name = e.name
-  if (name.indexOf('http:') > -1 || name.indexOf('https:') > -1) {
-    window.open(name)
-    return
+  const index = e.name
+  const query = {}
+  const params = {}
+  routerStore.routeMap[index]?.parameters &&
+  routerStore.routeMap[index]?.parameters.forEach((item) => {
+    if (item.type === 'query') {
+      query[item.key] = item.value
+    } else {
+      params[item.key] = item.value
+    }
+  })
+  if (index === route.name) return
+  if (e.name.indexOf('http://') > -1 || e.name.indexOf('https://') > -1) {
+    window.open(e.name)
+  } else {
+    router.push({ name: index, query, params })
   }
-  router.push({ name: name })
   dialogVisible.value = false
 }
 

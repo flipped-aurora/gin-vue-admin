@@ -27,6 +27,7 @@ export default {
 <script setup>
 import Screenfull from '@/view/layout/screenfull/index.vue'
 import { emitter } from '@/utils/bus.js'
+import { ref } from 'vue'
 const reload = ref(false)
 const handleReload = () => {
   reload.value = true

@@ -43,10 +43,7 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	if err != nil {
 		return err
 	}
-	success := CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
-	if !success {
-		return errors.New(entity.Path + ":" + entity.Method + "casbin同步清理失败")
-	}
+	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
 	e := CasbinServiceApp.Casbin()
 	err = e.InvalidateCache()
 	if err != nil {
@@ -179,10 +176,7 @@ func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 		return err
 	} else {
 		for _, sysApi := range apis {
-			success := CasbinServiceApp.ClearCasbin(1, sysApi.Path, sysApi.Method)
-			if !success {
-				return errors.New(sysApi.Path + ":" + sysApi.Method + "casbin同步清理失败")
-			}
+			CasbinServiceApp.ClearCasbin(1, sysApi.Path, sysApi.Method)
 		}
 		e := CasbinServiceApp.Casbin()
 		err = e.InvalidateCache()

@@ -1,3 +1,8 @@
+import 'element-plus/es/components/message/style/css'
+import 'element-plus/es/components/loading/style/css'
+import 'element-plus/es/components/notification/style/css'
+import 'element-plus/es/components/message-box/style/css'
+import './style/element_visiable.scss'
 import { createApp } from 'vue'
 // 引入gin-vue-admin前端初始化相关内容
 import './core/gin-vue-admin'
@@ -9,11 +14,6 @@ import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
 import { initDom } from './utils/positionToCode'
-import 'element-plus/es/components/message/style/css'
-import 'element-plus/es/components/loading/style/css'
-import 'element-plus/es/components/notification/style/css'
-import 'element-plus/es/components/message-box/style/css'
-import './style/element_visiable.scss'
 
 initDom()
 /**

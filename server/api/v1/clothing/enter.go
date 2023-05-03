@@ -7,4 +7,10 @@ type ApiGroup struct {
 	AppUserApi
 	UserRoleApi
 	UserWalletApi
+	TeamUserApi
+	ClothApi
+	StyleApi
+	ProcessApi
+	CroppingRecordApi
+	JobApi
 }

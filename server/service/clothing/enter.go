@@ -7,4 +7,10 @@ type ServiceGroup struct {
 	AppUserService
 	UserRoleService
 	UserWalletService
+	TeamUserService
+	ClothService
+	StyleService
+	ProcessService
+	CroppingRecordService
+	JobService
 }

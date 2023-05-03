@@ -7,4 +7,10 @@ type RouterGroup struct {
 	AppUserRouter
 	UserRoleRouter
 	UserWalletRouter
+	TeamUserRouter
+	ClothRouter
+	StyleRouter
+	ProcessRouter
+	CroppingRecordRouter
+	JobRouter
 }

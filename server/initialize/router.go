@@ -66,6 +66,13 @@ func Routers() *gin.Engine {
 		clothingRouter.InitAppUserRouter(PrivateGroup)
 		clothingRouter.InitUserRoleRouter(PrivateGroup)
 		clothingRouter.InitUserWalletRouter(PrivateGroup)
+		clothingRouter.InitTeamUserRouter(PrivateGroup)
+		clothingRouter.InitClothRouter(PrivateGroup)
+		clothingRouter.InitStyleRouter(PrivateGroup)
+		clothingRouter.InitProcessRouter(PrivateGroup)
+		clothingRouter.InitCroppingRecordRouter(PrivateGroup)
+		clothingRouter.InitJobRouter(PrivateGroup)
+
 	}
 
 	global.GVA_LOG.Info("router register success")

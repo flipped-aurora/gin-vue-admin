@@ -22,3 +22,16 @@ type Login struct {
 	Username string `json:"username"` // 用户名
 	Password string `json:"password"` // 密码
 }
+
+type Register struct {
+	PhoneNum        string `json:"phoneNum"`        // 手机号
+	Username        string `json:"username"`        // 用户名
+	Password        string `json:"password"`        // 密码
+	ConfirmPassword string `json:"confirmPassword"` // 确认密码
+	VerifyCode      string `json:"verifyCode"`      // 验证码
+}
+
+type CheckExist struct {
+	Content string `json:"content"` // 检测内容
+	Type    int    `json:"type"`    // 1:用户名；2：手机号
+}

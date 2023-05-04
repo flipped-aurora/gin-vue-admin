@@ -12,3 +12,8 @@ type UserInfo struct {
 	PhoneNum string        `json:"phoneNum"`
 	Username string        `json:"username"`
 }
+
+type CheckExistResponse struct {
+	IsExist bool   `json:"isExist"` // 是否存在
+	Msg     string `json:"msg"`     // 错误信息
+}

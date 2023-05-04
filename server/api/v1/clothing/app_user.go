@@ -21,15 +21,6 @@ type AppUserApi struct {
 var appUserService = service.ServiceGroupApp.ClothingServiceGroup.AppUserService
 var jwtService = service.ServiceGroupApp.ClothingServiceGroup.JwtService
 
-// CreateAppUser 创建AppUser
-// @Tags AppUser
-// @Summary 创建AppUser
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.AppUser true "创建AppUser"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /appUser/createAppUser [post]
 func (appUserApi *AppUserApi) CreateAppUser(c *gin.Context) {
 	var appUser clothing.AppUser
 	err := c.ShouldBindJSON(&appUser)
@@ -46,15 +37,6 @@ func (appUserApi *AppUserApi) CreateAppUser(c *gin.Context) {
 	}
 }
 
-// DeleteAppUser 删除AppUser
-// @Tags AppUser
-// @Summary 删除AppUser
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.AppUser true "删除AppUser"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /appUser/deleteAppUser [delete]
 func (appUserApi *AppUserApi) DeleteAppUser(c *gin.Context) {
 	var appUser clothing.AppUser
 	err := c.ShouldBindJSON(&appUser)
@@ -71,15 +53,6 @@ func (appUserApi *AppUserApi) DeleteAppUser(c *gin.Context) {
 	}
 }
 
-// DeleteAppUserByIds 批量删除AppUser
-// @Tags AppUser
-// @Summary 批量删除AppUser
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除AppUser"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /appUser/deleteAppUserByIds [delete]
 func (appUserApi *AppUserApi) DeleteAppUserByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	err := c.ShouldBindJSON(&IDS)
@@ -96,15 +69,6 @@ func (appUserApi *AppUserApi) DeleteAppUserByIds(c *gin.Context) {
 	}
 }
 
-// UpdateAppUser 更新AppUser
-// @Tags AppUser
-// @Summary 更新AppUser
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.AppUser true "更新AppUser"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /appUser/updateAppUser [put]
 func (appUserApi *AppUserApi) UpdateAppUser(c *gin.Context) {
 	var appUser clothing.AppUser
 	err := c.ShouldBindJSON(&appUser)
@@ -121,15 +85,6 @@ func (appUserApi *AppUserApi) UpdateAppUser(c *gin.Context) {
 	}
 }
 
-// FindAppUser 用id查询AppUser
-// @Tags AppUser
-// @Summary 用id查询AppUser
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query clothing.AppUser true "用id查询AppUser"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /appUser/findAppUser [get]
 func (appUserApi *AppUserApi) FindAppUser(c *gin.Context) {
 	var appUser clothing.AppUser
 	err := c.ShouldBindQuery(&appUser)
@@ -145,15 +100,6 @@ func (appUserApi *AppUserApi) FindAppUser(c *gin.Context) {
 	}
 }
 
-// GetAppUserList 分页获取AppUser列表
-// @Tags AppUser
-// @Summary 分页获取AppUser列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query clothingReq.AppUserSearch true "分页获取AppUser列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /appUser/getAppUserList [get]
 func (appUserApi *AppUserApi) GetAppUserList(c *gin.Context) {
 	var pageInfo clothingReq.AppUserSearch
 	err := c.ShouldBindQuery(&pageInfo)
@@ -174,6 +120,64 @@ func (appUserApi *AppUserApi) GetAppUserList(c *gin.Context) {
 	}
 }
 
+// CheckExist 检测用户名或手机号存在
+// @Tags AppUser
+// @Summary 检测用户名或手机号存在
+// @accept application/json
+// @Produce application/json
+// @Param data query clothingReq.CheckExist true "检测用户名或手机号存在"
+// @Success 200 {string} clothingRes.CheckExistResponse
+// @Router /appUser/checkExist [get]
+func (AppUserApi *AppUserApi) CheckExist(c *gin.Context) {
+	var l clothingReq.CheckExist
+	err := c.ShouldBindQuery(&l)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	var r clothingRes.CheckExistResponse
+	if err := appUserService.CheckExist(l.Content, l.Type); err != nil {
+		r.IsExist = true
+		r.Msg = err.Error()
+	}
+	response.OkWithDetailed(r, "获取成功", c)
+}
+
+// Register 注册
+// @Tags AppUser
+// @Summary 注册
+// @accept application/json
+// @Produce application/json
+// @Param data query clothingReq.Register true "注册"
+// @Success 200 {string} string "{"success":true,"msg":"创建成功"}"
+// @Router /appUser/register [post]
+func (AppUserApi *AppUserApi) Register(c *gin.Context) {
+	var l clothingReq.Register
+	err := c.ShouldBindJSON(&l)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	var appUser clothing.AppUser
+	appUser.PhoneNum = l.PhoneNum
+	appUser.Username = l.Username
+	appUser.Password = l.Password
+	if err := appUserService.CreateAppUser(&appUser); err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("创建失败", c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}
+
+// Login 登录
+// @Tags AppUser
+// @Summary 登录
+// @accept application/json
+// @Produce application/json
+// @Param data query clothingReq.Login true "登录"
+// @Success 200 {string} clothingRes.LoginResponse
+// @Router /appUser/login [post]
 func (appUserApi *AppUserApi) Login(c *gin.Context) {
 	var l clothingReq.Login
 	err := c.ShouldBindJSON(&l)
@@ -262,5 +266,23 @@ func (appUserApi *AppUserApi) TokenNext(c *gin.Context, user clothing.AppUser) {
 			Token:     token,
 			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, "登录成功", c)
+	}
+}
+
+// Login 获取用户详情
+// @Tags AppUser
+// @Summary 获取用户详情
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} clothing.AppUser
+// @Router /appUser/getUserInfo [get]
+func (AppUserApi *AppUserApi) GetUserInfo(c *gin.Context) {
+	userId := utils.GetUserID(c)
+	if reappUser, err := appUserService.GetAppUser(userId); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(reappUser, c)
 	}
 }

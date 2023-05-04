@@ -1,5 +1,403 @@
 basePath: /
 definitions:
+  clothing.AppRole:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+    type: object
+  clothing.Banner:
+    properties:
+      content:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      mediaUrl:
+        type: string
+      sort:
+        type: integer
+      status:
+        type: integer
+      title:
+        type: string
+      type:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      url:
+        type: string
+    type: object
+  clothing.Cloth:
+    properties:
+      color:
+        type: string
+      companyID:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      length:
+        type: number
+      styleID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+    type: object
+  clothing.Company:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      status:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.CroppingRecord:
+    properties:
+      color:
+        type: string
+      companyID:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      length:
+        type: number
+      quantity:
+        type: integer
+      size:
+        type: string
+      step:
+        type: integer
+      styleID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.Job:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      croppingID:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      income:
+        type: number
+      jobType:
+        type: integer
+      price:
+        type: number
+      processName:
+        type: string
+      quantity:
+        type: integer
+      realIncome:
+        type: number
+      realQuantity:
+        type: integer
+      step:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.JobQuestion:
+    properties:
+      content:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      jobID:
+        type: integer
+      status:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.MsgBox:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      msgID:
+        type: integer
+      msgType:
+        type: integer
+      status:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.Process:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      percent:
+        type: number
+      price:
+        type: number
+      sort:
+        type: integer
+      styleID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+    type: object
+  clothing.Style:
+    properties:
+      companyID:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+    type: object
+  clothing.Team:
+    properties:
+      companyID:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      name:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+    type: object
+  clothing.TeamApply:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      status:
+        type: integer
+      teamID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.TeamUser:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      teamID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.UserRole:
+    properties:
+      company:
+        $ref: '#/definitions/clothing.Company'
+      companyID:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      role:
+        $ref: '#/definitions/clothing.AppRole'
+      roleID:
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+    type: object
+  clothing.UserWallet:
+    properties:
+      companyID:
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      createdBy:
+        type: integer
+      deletedBy:
+        type: integer
+      id:
+        description: 主键ID
+        type: integer
+      updatedAt:
+        description: 更新时间
+        type: string
+      updatedBy:
+        type: integer
+      userID:
+        type: integer
+      wages:
+        type: number
+    type: object
   config.AliyunOSS:
     properties:
       access-key-id:
@@ -100,6 +498,12 @@ definitions:
       key-long:
         description: 验证码长度
         type: integer
+      open-captcha:
+        description: 防爆破验证码开启此数，0代表每次登录都需要验证码，其他数字代表错误密码此数，如3代表错误三次后出现验证码
+        type: integer
+      open-captcha-timeout:
+        description: 防爆破验证码超时时间，单位：s(秒)
+        type: integer
     type: object
   config.Detail:
     properties:
@@ -179,13 +583,17 @@ definitions:
         description: 本地文件存储路径
         type: string
     type: object
-  config.Mysql:
+  config.Mssql:
     properties:
       config:
         description: 高级配置
         type: string
       db-name:
         description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
         type: string
       log-mode:
         description: 是否开启Gorm全局日志
@@ -208,6 +616,98 @@ definitions:
       port:
         description: :端口
         type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
+  config.Mysql:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
+  config.Oracle:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       username:
         description: 数据库用户名
         type: string
@@ -220,6 +720,10 @@ definitions:
       db-name:
         description: 数据库名
         type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
@@ -241,6 +745,12 @@ definitions:
       port:
         description: :端口
         type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       username:
         description: 数据库用户名
         type: string
@@ -280,6 +790,9 @@ definitions:
       password:
         description: 密码
         type: string
+      prefix:
+        description: 前缀
+        type: string
     type: object
   config.Server:
     properties:
@@ -310,9 +823,13 @@ definitions:
       local:
         $ref: '#/definitions/config.Local'
         description: oss
+      mssql:
+        $ref: '#/definitions/config.Mssql'
       mysql:
         $ref: '#/definitions/config.Mysql'
         description: gorm
+      oracle:
+        $ref: '#/definitions/config.Oracle'
       pgsql:
         $ref: '#/definitions/config.Pgsql'
       qiniu:
@@ -340,6 +857,10 @@ definitions:
         type: string
       disable:
         type: boolean
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
@@ -361,6 +882,12 @@ definitions:
       port:
         description: :端口
         type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       type:
         type: string
       username:
@@ -384,6 +911,8 @@ definitions:
         type: integer
       oss-type:
         description: Oss类型
+        type: string
+      router-prefix:
         type: string
       use-multipoint:
         description: 多点登录拦截
@@ -548,16 +1077,6 @@ definitions:
         description: 文件地址
         type: string
     type: object
-  example.ExcelInfo:
-    properties:
-      fileName:
-        description: 文件名
-        type: string
-      infoList:
-        items:
-          $ref: '#/definitions/system.SysBaseMenu'
-        type: array
-    type: object
   request.AddMenuAuthorityInfo:
     properties:
       authorityId:
@@ -671,20 +1190,31 @@ definitions:
   request.Register:
     properties:
       authorityId:
-        type: integer
+        example: int 角色id
+        type: string
       authorityIds:
-        items:
-          type: integer
-        type: array
+        example: '[]uint 角色id'
+        type: string
+      email:
+        example: 电子邮箱
+        type: string
       enable:
-        type: integer
+        example: int 是否启用
+        type: string
       headerImg:
+        example: 头像链接
         type: string
       nickName:
+        example: 昵称
         type: string
       passWord:
+        example: 密码
+        type: string
+      phone:
+        example: 电话号码
         type: string
       userName:
+        example: 用户名
         type: string
     type: object
   request.RollBack:
@@ -892,6 +1422,8 @@ definitions:
         type: string
       captchaLength:
         type: integer
+      openCaptcha:
+        type: boolean
       picPath:
         type: string
     type: object
@@ -926,6 +1458,9 @@ definitions:
       autoMoveFile:
         description: 是否自动移动文件
         type: boolean
+      businessDB:
+        description: 业务数据库
+        type: string
       description:
         description: Struct中文名称
         type: string
@@ -987,6 +1522,9 @@ definitions:
         type: string
       require:
         description: 是否必填
+        type: boolean
+      sort:
+        description: 是否增加排序
         type: boolean
     type: object
   system.SysApi:
@@ -1068,6 +1606,8 @@ definitions:
     type: object
   system.SysBaseMenu:
     properties:
+      activeName:
+        type: string
       authoritys:
         items:
           $ref: '#/definitions/system.SysAuthority'
@@ -1225,6 +1765,8 @@ definitions:
     type: object
   system.SysMenu:
     properties:
+      activeName:
+        type: string
       authoritys:
         items:
           $ref: '#/definitions/system.SysAuthority'
@@ -1589,6 +2131,295 @@ paths:
       summary: 修改基础api
       tags:
       - SysApi
+  /appRole/createAppRole:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建AppRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.AppRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建AppRole
+      tags:
+      - AppRole
+  /appRole/deleteAppRole:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除AppRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.AppRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除AppRole
+      tags:
+      - AppRole
+  /appRole/deleteAppRoleByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除AppRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除AppRole
+      tags:
+      - AppRole
+  /appRole/findAppRole:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询AppRole
+      tags:
+      - AppRole
+  /appRole/getAppRoleList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取AppRole列表
+      tags:
+      - AppRole
+  /appRole/updateAppRole:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新AppRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.AppRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新AppRole
+      tags:
+      - AppRole
+  /appUser/checkExist:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 检测内容
+        in: query
+        name: content
+        type: string
+      - description: 1:用户名；2：手机号
+        in: query
+        name: type
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 检测用户名或手机号存在
+      tags:
+      - AppUser
+  /appUser/getUserInfo:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户详情
+      tags:
+      - AppUser
+  /appUser/login:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      - description: 用户名
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 登录
+      tags:
+      - AppUser
+  /appUser/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 确认密码
+        in: query
+        name: confirmPassword
+        type: string
+      - description: 密码
+        in: query
+        name: password
+        type: string
+      - description: 手机号
+        in: query
+        name: phoneNum
+        type: string
+      - description: 用户名
+        in: query
+        name: username
+        type: string
+      - description: 验证码
+        in: query
+        name: verifyCode
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"msg":"创建成功"}'
+          schema:
+            type: string
+      summary: 注册
+      tags:
+      - AppUser
   /authority/copyAuthority:
     post:
       consumes:
@@ -2204,6 +3035,234 @@ paths:
       summary: 回滚自动生成代码
       tags:
       - AutoCode
+  /banner/createBanner:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Banner
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Banner'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Banner
+      tags:
+      - Banner
+  /banner/deleteBanner:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Banner
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Banner'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Banner
+      tags:
+      - Banner
+  /banner/deleteBannerByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Banner
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Banner
+      tags:
+      - Banner
+  /banner/findBanner:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: content
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: mediaUrl
+        type: string
+      - in: query
+        name: sort
+        type: integer
+      - in: query
+        name: status
+        type: integer
+      - in: query
+        name: title
+        type: string
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: url
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Banner
+      tags:
+      - Banner
+  /banner/getBannerList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: content
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: mediaUrl
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: sort
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: status
+        type: integer
+      - in: query
+        name: title
+        type: string
+      - in: query
+        name: type
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: url
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Banner列表
+      tags:
+      - Banner
+  /banner/updateBanner:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Banner
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Banner'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Banner
+      tags:
+      - Banner
   /base/captcha:
     post:
       consumes:
@@ -2212,7 +3271,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: 生成验证码,返回包括随机数id,base64,验证码长度
+          description: 生成验证码,返回包括随机数id,base64,验证码长度,是否开启验证码
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
@@ -2311,6 +3370,654 @@ paths:
       summary: 获取权限列表
       tags:
       - Casbin
+  /cloth/createCloth:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Cloth
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Cloth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Cloth
+      tags:
+      - Cloth
+  /cloth/deleteCloth:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Cloth
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Cloth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Cloth
+      tags:
+      - Cloth
+  /cloth/deleteClothByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Cloth
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Cloth
+      tags:
+      - Cloth
+  /cloth/findCloth:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: color
+        type: string
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: length
+        type: number
+      - in: query
+        name: styleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Cloth
+      tags:
+      - Cloth
+  /cloth/getClothList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: color
+        type: string
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: length
+        type: number
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: styleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Cloth列表
+      tags:
+      - Cloth
+  /cloth/updateCloth:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Cloth
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Cloth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Cloth
+      tags:
+      - Cloth
+  /company/createCompany:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Company
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Company
+      tags:
+      - Company
+  /company/deleteCompany:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Company
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Company
+      tags:
+      - Company
+  /company/deleteCompanyByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Company
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Company
+      tags:
+      - Company
+  /company/findCompany:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Company
+      tags:
+      - Company
+  /company/getCompanyList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Company列表
+      tags:
+      - Company
+  /company/updateCompany:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Company
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Company'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Company
+      tags:
+      - Company
+  /croppingRecord/createCroppingRecord:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建CroppingRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.CroppingRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建CroppingRecord
+      tags:
+      - CroppingRecord
+  /croppingRecord/deleteCroppingRecord:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除CroppingRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.CroppingRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除CroppingRecord
+      tags:
+      - CroppingRecord
+  /croppingRecord/deleteCroppingRecordByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除CroppingRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除CroppingRecord
+      tags:
+      - CroppingRecord
+  /croppingRecord/findCroppingRecord:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: color
+        type: string
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: length
+        type: number
+      - in: query
+        name: quantity
+        type: integer
+      - in: query
+        name: size
+        type: string
+      - in: query
+        name: step
+        type: integer
+      - in: query
+        name: styleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询CroppingRecord
+      tags:
+      - CroppingRecord
+  /croppingRecord/getCroppingRecordList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: color
+        type: string
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: length
+        type: number
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: quantity
+        type: integer
+      - in: query
+        name: size
+        type: string
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: step
+        type: integer
+      - in: query
+        name: styleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取CroppingRecord列表
+      tags:
+      - CroppingRecord
+  /croppingRecord/updateCroppingRecord:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新CroppingRecord
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.CroppingRecord'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新CroppingRecord
+      tags:
+      - CroppingRecord
   /customer/customer:
     delete:
       consumes:
@@ -2515,95 +4222,6 @@ paths:
       summary: 发送邮件
       tags:
       - System
-  /excel/downloadTemplate:
-    get:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 模板名称
-        in: query
-        name: fileName
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ""
-      security:
-      - ApiKeyAuth: []
-      summary: 下载模板
-      tags:
-      - excel
-  /excel/exportExcel:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 导出Excel文件信息
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExcelInfo'
-      produces:
-      - application/octet-stream
-      responses:
-        "200":
-          description: ""
-      security:
-      - ApiKeyAuth: []
-      summary: 导出Excel
-      tags:
-      - excel
-  /excel/importExcel:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 导入Excel文件
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 导入Excel文件
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 导入Excel文件
-      tags:
-      - excel
-  /excel/loadExcel:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 加载Excel数据,返回包括列表,总数,页码,每页数量
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 加载Excel数据
-      tags:
-      - excel
   /fileUploadAndDownload/breakpointContinue:
     post:
       consumes:
@@ -2816,6 +4434,462 @@ paths:
       summary: 初始化用户数据库
       tags:
       - InitDB
+  /job/createJob:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Job
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Job'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Job
+      tags:
+      - Job
+  /job/deleteJob:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Job
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Job'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Job
+      tags:
+      - Job
+  /job/deleteJobByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Job
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Job
+      tags:
+      - Job
+  /job/findJob:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: croppingID
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: income
+        type: number
+      - in: query
+        name: jobType
+        type: integer
+      - in: query
+        name: price
+        type: number
+      - in: query
+        name: processName
+        type: string
+      - in: query
+        name: quantity
+        type: integer
+      - in: query
+        name: realIncome
+        type: number
+      - in: query
+        name: realQuantity
+        type: integer
+      - in: query
+        name: step
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Job
+      tags:
+      - Job
+  /job/getJobList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: croppingID
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: income
+        type: number
+      - in: query
+        name: jobType
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: price
+        type: number
+      - in: query
+        name: processName
+        type: string
+      - in: query
+        name: quantity
+        type: integer
+      - in: query
+        name: realIncome
+        type: number
+      - in: query
+        name: realQuantity
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: step
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Job列表
+      tags:
+      - Job
+  /job/updateJob:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Job
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Job'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Job
+      tags:
+      - Job
+  /jobQuestion/createJobQuestion:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建JobQuestion
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.JobQuestion'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建JobQuestion
+      tags:
+      - JobQuestion
+  /jobQuestion/deleteJobQuestion:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除JobQuestion
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.JobQuestion'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除JobQuestion
+      tags:
+      - JobQuestion
+  /jobQuestion/deleteJobQuestionByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除JobQuestion
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除JobQuestion
+      tags:
+      - JobQuestion
+  /jobQuestion/findJobQuestion:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: content
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: jobID
+        type: integer
+      - in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询JobQuestion
+      tags:
+      - JobQuestion
+  /jobQuestion/getJobQuestionList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: content
+        type: string
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: jobID
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取JobQuestion列表
+      tags:
+      - JobQuestion
+  /jobQuestion/updateJobQuestion:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新JobQuestion
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.JobQuestion'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新JobQuestion
+      tags:
+      - JobQuestion
   /jwt/jsonInBlacklist:
     post:
       consumes:
@@ -3096,6 +5170,636 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
+  /msgBox/createMsgBox:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建MsgBox
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.MsgBox'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建MsgBox
+      tags:
+      - MsgBox
+  /msgBox/deleteMsgBox:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除MsgBox
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.MsgBox'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除MsgBox
+      tags:
+      - MsgBox
+  /msgBox/deleteMsgBoxByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除MsgBox
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除MsgBox
+      tags:
+      - MsgBox
+  /msgBox/findMsgBox:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: msgID
+        type: integer
+      - in: query
+        name: msgType
+        type: integer
+      - in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询MsgBox
+      tags:
+      - MsgBox
+  /msgBox/getMsgBoxList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: msgID
+        type: integer
+      - in: query
+        name: msgType
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: status
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取MsgBox列表
+      tags:
+      - MsgBox
+  /msgBox/updateMsgBox:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新MsgBox
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.MsgBox'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新MsgBox
+      tags:
+      - MsgBox
+  /process/createProcess:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Process
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Process'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Process
+      tags:
+      - Process
+  /process/deleteProcess:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Process
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Process'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Process
+      tags:
+      - Process
+  /process/deleteProcessByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Process
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Process
+      tags:
+      - Process
+  /process/findProcess:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: percent
+        type: number
+      - in: query
+        name: price
+        type: number
+      - in: query
+        name: sort
+        type: integer
+      - in: query
+        name: styleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Process
+      tags:
+      - Process
+  /process/getProcessList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: percent
+        type: number
+      - in: query
+        name: price
+        type: number
+      - in: query
+        name: sort
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: styleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Process列表
+      tags:
+      - Process
+  /process/updateProcess:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Process
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Process'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Process
+      tags:
+      - Process
+  /style/createStyle:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Style
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Style'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Style
+      tags:
+      - Style
+  /style/deleteStyle:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Style
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Style'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Style
+      tags:
+      - Style
+  /style/deleteStyleByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Style
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Style
+      tags:
+      - Style
+  /style/findStyle:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - in: query
+        name: price
+        type: number
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Style
+      tags:
+      - Style
+  /style/getStyleList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: price
+        type: number
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Style列表
+      tags:
+      - Style
+  /style/updateStyle:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Style
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Style'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Style
+      tags:
+      - Style
   /sysDictionary/createSysDictionary:
     post:
       consumes:
@@ -3843,6 +6547,606 @@ paths:
       summary: 设置配置文件内容
       tags:
       - System
+  /team/createTeam:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建Team
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Team'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建Team
+      tags:
+      - Team
+  /team/deleteTeam:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除Team
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Team'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除Team
+      tags:
+      - Team
+  /team/deleteTeamByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除Team
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除Team
+      tags:
+      - Team
+  /team/findTeam:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: name
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询Team
+      tags:
+      - Team
+  /team/getTeamList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取Team列表
+      tags:
+      - Team
+  /team/updateTeam:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新Team
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.Team'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新Team
+      tags:
+      - Team
+  /teamApply/createTeamApply:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建TeamApply
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.TeamApply'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建TeamApply
+      tags:
+      - TeamApply
+  /teamApply/deleteTeamApply:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除TeamApply
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.TeamApply'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除TeamApply
+      tags:
+      - TeamApply
+  /teamApply/deleteTeamApplyByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除TeamApply
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除TeamApply
+      tags:
+      - TeamApply
+  /teamApply/findTeamApply:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: status
+        type: integer
+      - in: query
+        name: teamID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询TeamApply
+      tags:
+      - TeamApply
+  /teamApply/getTeamApplyList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: status
+        type: integer
+      - in: query
+        name: teamID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取TeamApply列表
+      tags:
+      - TeamApply
+  /teamApply/updateTeamApply:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新TeamApply
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.TeamApply'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新TeamApply
+      tags:
+      - TeamApply
+  /teamUser/createTeamUser:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建TeamUser
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.TeamUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建TeamUser
+      tags:
+      - TeamUser
+  /teamUser/deleteTeamUser:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除TeamUser
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.TeamUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除TeamUser
+      tags:
+      - TeamUser
+  /teamUser/deleteTeamUserByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除TeamUser
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除TeamUser
+      tags:
+      - TeamUser
+  /teamUser/findTeamUser:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: teamID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询TeamUser
+      tags:
+      - TeamUser
+  /teamUser/getTeamUserList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: teamID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取TeamUser列表
+      tags:
+      - TeamUser
+  /teamUser/updateTeamUser:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新TeamUser
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.TeamUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新TeamUser
+      tags:
+      - TeamUser
   /user/SetSelfInfo:
     put:
       consumes:
@@ -4121,6 +7425,414 @@ paths:
       summary: 设置用户信息
       tags:
       - SysUser
+  /userRole/createUserRole:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建UserRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.UserRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建UserRole
+      tags:
+      - UserRole
+  /userRole/deleteUserRole:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除UserRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.UserRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除UserRole
+      tags:
+      - UserRole
+  /userRole/deleteUserRoleByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除UserRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除UserRole
+      tags:
+      - UserRole
+  /userRole/findUserRole:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: roleID
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询UserRole
+      tags:
+      - UserRole
+  /userRole/getUserRoleList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: roleID
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取UserRole列表
+      tags:
+      - UserRole
+  /userRole/updateUserRole:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新UserRole
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.UserRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新UserRole
+      tags:
+      - UserRole
+  /userWallet/createUserWallet:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建UserWallet
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.UserWallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建UserWallet
+      tags:
+      - UserWallet
+  /userWallet/deleteUserWallet:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除UserWallet
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.UserWallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除UserWallet
+      tags:
+      - UserWallet
+  /userWallet/deleteUserWalletByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除UserWallet
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除UserWallet
+      tags:
+      - UserWallet
+  /userWallet/findUserWallet:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      - in: query
+        name: wages
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询UserWallet
+      tags:
+      - UserWallet
+  /userWallet/getUserWalletList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - in: query
+        name: companyID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      - in: query
+        name: userID
+        type: integer
+      - in: query
+        name: wages
+        type: number
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取UserWallet列表
+      tags:
+      - UserWallet
+  /userWallet/updateUserWallet:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新UserWallet
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/clothing.UserWallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新UserWallet
+      tags:
+      - UserWallet
 securityDefinitions:
   ApiKeyAuth:
     in: header

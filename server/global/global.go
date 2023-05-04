@@ -50,3 +50,7 @@ func MustGetGlobalDBByDBName(dbname string) *gorm.DB {
 	}
 	return db
 }
+
+func GetAppApi() string {
+	return "api/"
+}

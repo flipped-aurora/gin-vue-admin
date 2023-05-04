@@ -62,7 +62,9 @@ func (appUserService *AppUserService) UpdateAppUser(appUser clothing.AppUser) (e
 // GetAppUser 根据id获取AppUser记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (appUserService *AppUserService) GetAppUser(id uint) (appUser clothing.AppUser, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&appUser).Error
+	err = global.GVA_DB.Preload("Roles", func(db *gorm.DB) *gorm.DB {
+		return db.Preload("Role").Preload("Company")
+	}).Where("id = ?", id).First(&appUser).Error
 	return
 }
 
@@ -107,6 +109,32 @@ func (appUserService *AppUserService) GetAppUserInfoList(info clothingReq.AppUse
 
 	err = db.Limit(limit).Offset(offset).Find(&appUsers).Error
 	return appUsers, total, err
+}
+
+func (AppUserService *AppUserService) CheckExist(content string, checkType int) error {
+	var user clothing.AppUser
+	if checkType == 1 {
+		if !errors.Is(global.GVA_DB.Where("username = ?", content).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
+			return errors.New("用户名已注册")
+		}
+	} else {
+		if !errors.Is(global.GVA_DB.Where("phone_num = ?", content).First(&user).Error, gorm.ErrRecordNotFound) { // 判断手机号是否注册
+			return errors.New("手机号已注册")
+		}
+	}
+	return nil
+}
+
+func (AppUserService *AppUserService) Register(appUser clothing.AppUser) (userInter clothing.AppUser, err error) {
+	if err := AppUserService.CheckExist(appUser.Username, 1); err != nil { // 判断用户名是否注册
+		return userInter, err
+	}
+	if err := AppUserService.CheckExist(appUser.PhoneNum, 2); err != nil { // 判断手机号是否注册
+		return userInter, err
+	}
+	appUser.Password = utils.BcryptHash(appUser.Password)
+	err = global.GVA_DB.Create(&appUser).Error
+	return appUser, err
 }
 
 func (appUserService *AppUserService) Login(u *clothing.AppUser) (userInter *clothing.AppUser, err error) {

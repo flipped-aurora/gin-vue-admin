@@ -13,4 +13,8 @@ type ApiGroup struct {
 	ProcessApi
 	CroppingRecordApi
 	JobApi
+	JobQuestionApi
+	TeamApplyApi
+	MsgBoxApi
+	BannerApi
 }

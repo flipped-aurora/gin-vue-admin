@@ -2,21 +2,20 @@ package clothing
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
+	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type AppRoleApi struct {
 }
 
 var appRoleService = service.ServiceGroupApp.ClothingServiceGroup.AppRoleService
-
 
 // CreateAppRole 创建AppRole
 // @Tags AppRole
@@ -34,9 +33,9 @@ func (appRoleApi *AppRoleApi) CreateAppRole(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    appRole.CreatedBy = utils.GetUserID(c)
+	appRole.CreatedBy = utils.GetUserID(c)
 	if err := appRoleService.CreateAppRole(&appRole); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -59,9 +58,9 @@ func (appRoleApi *AppRoleApi) DeleteAppRole(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    appRole.DeletedBy = utils.GetUserID(c)
+	appRole.DeletedBy = utils.GetUserID(c)
 	if err := appRoleService.DeleteAppRole(appRole); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -79,14 +78,14 @@ func (appRoleApi *AppRoleApi) DeleteAppRole(c *gin.Context) {
 // @Router /appRole/deleteAppRoleByIds [delete]
 func (appRoleApi *AppRoleApi) DeleteAppRoleByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    err := c.ShouldBindJSON(&IDS)
+	err := c.ShouldBindJSON(&IDS)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    deletedBy := utils.GetUserID(c)
-	if err := appRoleService.DeleteAppRoleByIds(IDS,deletedBy); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+	deletedBy := utils.GetUserID(c)
+	if err := appRoleService.DeleteAppRoleByIds(IDS, deletedBy); err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -109,9 +108,9 @@ func (appRoleApi *AppRoleApi) UpdateAppRole(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    appRole.UpdatedBy = utils.GetUserID(c)
+	appRole.UpdatedBy = utils.GetUserID(c)
 	if err := appRoleService.UpdateAppRole(appRole); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -135,7 +134,7 @@ func (appRoleApi *AppRoleApi) FindAppRole(c *gin.Context) {
 		return
 	}
 	if reappRole, err := appRoleService.GetAppRole(appRole.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reappRole": reappRole}, c)
@@ -159,14 +158,14 @@ func (appRoleApi *AppRoleApi) GetAppRoleList(c *gin.Context) {
 		return
 	}
 	if list, total, err := appRoleService.GetAppRoleInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

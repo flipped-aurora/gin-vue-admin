@@ -13,4 +13,9 @@ type ServiceGroup struct {
 	ProcessService
 	CroppingRecordService
 	JobService
+	JobQuestionService
+	TeamApplyService
+	MsgBoxService
+	BannerService
+	JwtService
 }

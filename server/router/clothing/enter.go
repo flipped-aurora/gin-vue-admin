@@ -13,4 +13,8 @@ type RouterGroup struct {
 	ProcessRouter
 	CroppingRecordRouter
 	JobRouter
+	JobQuestionRouter
+	TeamApplyRouter
+	MsgBoxRouter
+	BannerRouter
 }

@@ -34,7 +34,7 @@
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <!-- <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin-top: 8px;">
@@ -44,7 +44,7 @@
             <template #reference>
                 <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
             </template>
-            </el-popover>
+            </el-popover> -->
         </div>
         <el-table
         ref="multipleTable"
@@ -74,7 +74,7 @@
         <el-table-column align="left" label="按钮组">
             <template #default="scope">
             <el-button type="primary" link icon="edit" class="table-button" @click="updateAppUserFunc(scope.row)">变更</el-button>
-            <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <!-- <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button> -->
             </template>
         </el-table-column>
         </el-table>
@@ -92,24 +92,24 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        <el-form-item label="用户名:"  prop="userName" >
+        <!-- <el-form-item label="用户名:"  prop="userName" >
           <el-input v-model="formData.userName" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="密码:"  prop="password" >
+        </el-form-item> -->
+        <!-- <el-form-item label="密码:"  prop="password" >
           <el-input v-model="formData.password" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="昵称:"  prop="nickname" >
           <el-input v-model="formData.nickname" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="工资:"  prop="wages" >
+        <!-- <el-form-item label="工资:"  prop="wages" >
           <el-input-number v-model="formData.wages"  style="width:100%" :precision="2" :clearable="true"  />
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="状态:"  prop="status" >
           <el-select v-model="formData.status" placeholder="请选择" style="width:100%" :clearable="true" >
             <el-option v-for="(item,key) in statusOptions" :key="key" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item label="手机号:"  prop="phoneNum" >
+        <!-- <el-form-item label="手机号:"  prop="phoneNum" >
           <el-input v-model="formData.phoneNum" :clearable="true"  placeholder="请输入" />
         </el-form-item>
         <el-form-item label="openID:"  prop="openID" >
@@ -117,7 +117,7 @@
         </el-form-item>
         <el-form-item label="unionID:"  prop="unionID" >
           <el-input v-model="formData.unionID" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
+        </el-form-item> -->
       </el-form>
       <template #footer>
         <div class="dialog-footer">

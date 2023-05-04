@@ -72,6 +72,10 @@ func Routers() *gin.Engine {
 		clothingRouter.InitProcessRouter(PrivateGroup)
 		clothingRouter.InitCroppingRecordRouter(PrivateGroup)
 		clothingRouter.InitJobRouter(PrivateGroup)
+		clothingRouter.InitJobQuestionRouter(PrivateGroup)
+		clothingRouter.InitTeamApplyRouter(PrivateGroup)
+		clothingRouter.InitMsgBoxRouter(PrivateGroup)
+		clothingRouter.InitBannerRouter(PrivateGroup)
 
 	}
 

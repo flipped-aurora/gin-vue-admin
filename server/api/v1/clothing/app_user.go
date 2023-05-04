@@ -151,7 +151,7 @@ func (AppUserApi *AppUserApi) CheckExist(c *gin.Context) {
 // @Param data query clothingReq.Register true "注册"
 // @Success 200 {string} string "{"success":true,"msg":"创建成功"}"
 // @Router /appUser/register [post]
-func (AppUserApi *AppUserApi) Register(c *gin.Context) {
+func (appUserApi *AppUserApi) Register(c *gin.Context) {
 	var l clothingReq.Register
 	err := c.ShouldBindJSON(&l)
 	if err != nil {
@@ -162,11 +162,11 @@ func (AppUserApi *AppUserApi) Register(c *gin.Context) {
 	appUser.PhoneNum = l.PhoneNum
 	appUser.Username = l.Username
 	appUser.Password = l.Password
-	if err := appUserService.CreateAppUser(&appUser); err != nil {
+	if user, err := appUserService.Register(appUser); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		appUserApi.TokenNext(c, user)
 	}
 }
 

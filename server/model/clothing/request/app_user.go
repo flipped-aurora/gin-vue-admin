@@ -32,6 +32,6 @@ type Register struct {
 }
 
 type CheckExist struct {
-	Content string `json:"content"` // 检测内容
-	Type    int    `json:"type"`    // 1:用户名；2：手机号
+	Content string `json:"content" form:"content"` // 检测内容
+	Type    int    `json:"type" form:"type"`       // 1:用户名；2：手机号
 }

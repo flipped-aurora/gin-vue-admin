@@ -24,9 +24,9 @@ import (
 var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
 var appJwtService = service.ServiceGroupApp.ClothingServiceGroup.JwtService
 var dappSkipUrl = map[string]interface{}{
-	"/" + global.GetAppApi() + "user/checkExist": nil,
-	"/" + global.GetAppApi() + "user/register":   nil,
-	"/" + global.GetAppApi() + "user/login":      nil,
+	"/" + global.GetAppApi() + "appUser/checkExist": nil,
+	"/" + global.GetAppApi() + "appUser/register":   nil,
+	"/" + global.GetAppApi() + "appUser/login":      nil,
 }
 
 func JWTAuth() gin.HandlerFunc {
@@ -34,7 +34,6 @@ func JWTAuth() gin.HandlerFunc {
 		// 判断是dapp还是后台请求
 		if strings.Contains(c.Request.URL.Path, global.GetAppApi()) {
 			if _, ok := dappSkipUrl[c.Request.URL.Path]; ok {
-				c.Next()
 				return
 			}
 			// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录

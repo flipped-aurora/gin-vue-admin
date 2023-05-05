@@ -150,3 +150,37 @@ func (appUserService *AppUserService) Login(u *clothing.AppUser) (userInter *clo
 	}
 	return &user, err
 }
+
+func (appUserService *AppUserService) GetAppUserList(info clothingReq.UserFilter) (list []clothing.AppUser, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	// 创建db
+	db := global.GVA_DB.Model(&clothing.AppUser{})
+	var appUsers []clothing.AppUser
+	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.Username != "" {
+		db = db.Where("user_name LIKE ?", "%"+info.Username+"%")
+	}
+	if info.Nickname != "" {
+		db = db.Where("nickname LIKE ?", "%"+info.Nickname+"%")
+	}
+	if info.PhoneNum != "" {
+		db = db.Where("phone_num = ?", info.PhoneNum)
+	}
+	if info.CompanyID != 0 {
+		userIDs := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.UserRole{}).Where("company_id = ?", info.CompanyID).Pluck("user_id", &userIDs)
+		db = db.Where("id in ?", userIDs)
+	}
+	if info.TeamID != 0 {
+		userIDs := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.TeamUser{}).Where("team_id = ?", info.TeamID).Pluck("user_id", &userIDs)
+		db = db.Where("id in ?", userIDs)
+	}
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Limit(limit).Offset(offset).Find(&appUsers).Error
+	return appUsers, total, err
+}

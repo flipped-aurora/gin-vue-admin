@@ -269,7 +269,7 @@ func (appUserApi *AppUserApi) TokenNext(c *gin.Context, user clothing.AppUser) {
 	}
 }
 
-// Login 获取用户详情
+// GetUserInfo 获取用户详情
 // @Tags AppUser
 // @Summary 获取用户详情
 // @Security ApiKeyAuth
@@ -277,12 +277,41 @@ func (appUserApi *AppUserApi) TokenNext(c *gin.Context, user clothing.AppUser) {
 // @Produce application/json
 // @Success 200 {string} clothing.AppUser
 // @Router /appUser/getUserInfo [get]
-func (AppUserApi *AppUserApi) GetUserInfo(c *gin.Context) {
+func (appUserApi *AppUserApi) GetUserInfo(c *gin.Context) {
 	userId := utils.GetUserID(c)
 	if reappUser, err := appUserService.GetAppUser(userId); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(reappUser, c)
+	}
+}
+
+// GetUserList 获取用户列表
+// @Tags AppUser
+// @Summary 获取用户列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query clothingReq.UserFilter true "获取用户列表"
+// @Success 200 {string} response.PageResult
+// @Router /appUser/getUserList [get]
+func (appUserApi *AppUserApi) GetUserList(c *gin.Context) {
+	var filter clothingReq.UserFilter
+	err := c.ShouldBindQuery(&filter)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if list, total, err := appUserService.GetAppUserList(filter); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     filter.Page,
+			PageSize: filter.PageSize,
+		}, "获取成功", c)
 	}
 }

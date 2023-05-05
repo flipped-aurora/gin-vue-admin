@@ -18,4 +18,5 @@ type ServiceGroup struct {
 	MsgBoxService
 	BannerService
 	JwtService
+	CompanyApplyService
 }

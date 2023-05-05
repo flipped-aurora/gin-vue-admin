@@ -8,7 +8,8 @@ import (
 // MsgBox 结构体
 type MsgBox struct {
 	global.GVA_MODEL
-	UserID    uint `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
+	From      uint `json:"from" form:"from" gorm:"column:from;comment:;"`
+	To        uint `json:"to" form:"to" gorm:"column:to;comment:;"`
 	MsgType   uint `json:"msgType" form:"msgType" gorm:"column:msg_type;comment:;"`
 	MsgID     uint `json:"msgID" form:"msgID" gorm:"column:msg_id;comment:;"`
 	Status    *int `json:"status" form:"status" gorm:"column:status;comment:;"`

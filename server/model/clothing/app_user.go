@@ -12,7 +12,7 @@ type AppUser struct {
 	Password  string   `json:"password" form:"password" gorm:"column:password;comment:;size:64;"`
 	Nickname  string   `json:"nickname" form:"nickname" gorm:"column:nickname;comment:;size:20;"`
 	Wages     float64  `json:"wages" form:"wages" gorm:"column:wages;type:decimal(10,2);comment:;"`
-	Status    *int     `json:"status" form:"status" gorm:"column:status;comment:;size:1;"`
+	Status    *bool    `json:"status" form:"status" gorm:"column:status;comment:;size:1;"`
 	PhoneNum  string   `json:"phoneNum" form:"phoneNum" gorm:"column:phone_num;comment:;size:11;"`
 	OpenID    string   `json:"openID" form:"openID" gorm:"column:open_id;comment:;size:64;"`
 	UnionID   string   `json:"unionID" form:"unionID" gorm:"column:union_id;comment:;size:64;"`

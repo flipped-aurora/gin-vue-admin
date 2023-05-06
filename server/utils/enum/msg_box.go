@@ -1,0 +1,3 @@
+package enum
+
+const ()

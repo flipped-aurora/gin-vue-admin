@@ -85,3 +85,16 @@ func (msgBoxService *MsgBoxService) GetMsgBoxInfoList(info clothingReq.MsgBoxSea
 	err = db.Limit(limit).Offset(offset).Find(&msgBoxs).Error
 	return msgBoxs, total, err
 }
+
+func (msgBoxService *MsgBoxService) SendMsg(from, to uint, objType int, objID uint) error {
+	var msg clothing.MsgBox
+	status := new(bool)
+	*status = false
+	msg.From = from
+	msg.To = to
+	msg.MsgType = uint(objType)
+	msg.MsgID = objID
+	msg.Status = status
+	return global.GVA_DB.Create(&msg).Error
+
+}

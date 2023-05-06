@@ -15,13 +15,13 @@ func (s *CompanyRouter) InitCompanyRouter(Router *gin.RouterGroup) {
 	companyRouterWithoutRecord := Router.Group("company")
 	var companyApi = v1.ApiGroupApp.ClothingApiGroup.CompanyApi
 	{
-		companyRouter.POST("createCompany", companyApi.CreateCompany)   // 新建Company
-		companyRouter.DELETE("deleteCompany", companyApi.DeleteCompany) // 删除Company
+		// companyRouter.POST("createCompany", companyApi.CreateCompany)   // 新建Company
+		companyRouter.DELETE("deleteCompany", companyApi.DeleteCompany)           // 删除Company
 		companyRouter.DELETE("deleteCompanyByIds", companyApi.DeleteCompanyByIds) // 批量删除Company
-		companyRouter.PUT("updateCompany", companyApi.UpdateCompany)    // 更新Company
+		companyRouter.PUT("updateCompany", companyApi.UpdateCompany)              // 更新Company
 	}
 	{
-		companyRouterWithoutRecord.GET("findCompany", companyApi.FindCompany)        // 根据ID获取Company
-		companyRouterWithoutRecord.GET("getCompanyList", companyApi.GetCompanyList)  // 获取Company列表
+		companyRouterWithoutRecord.GET("findCompany", companyApi.FindCompany)       // 根据ID获取Company
+		companyRouterWithoutRecord.GET("getCompanyList", companyApi.GetCompanyList) // 获取Company列表
 	}
 }

@@ -13,7 +13,7 @@ type Banner struct {
 	Content   string `json:"content" form:"content" gorm:"column:content;comment:;"`
 	MediaUrl  string `json:"mediaUrl" form:"mediaUrl" gorm:"column:media_url;comment:;"`
 	Sort      uint   `json:"sort" form:"sort" gorm:"column:sort;comment:;"`
-	Status    *int   `json:"status" form:"status" gorm:"column:status;comment:;"`
+	Status    *bool  `json:"status" form:"status" gorm:"column:status;comment:;"`
 	Type      uint   `json:"type" form:"type" gorm:"column:type;comment:;"`
 	CreatedBy uint   `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy uint   `gorm:"column:updated_by;comment:更新者"`

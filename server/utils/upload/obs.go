@@ -8,15 +8,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-var HuaWeiObs = new(Obs)
+//var HuaWeiObs = new(Obs)
 
-type Obs struct{}
+type HuaWeiObs struct{}
 
 func NewHuaWeiObsClient() (client *obs.ObsClient, err error) {
 	return obs.New(global.GVA_CONFIG.HuaWeiObs.AccessKey, global.GVA_CONFIG.HuaWeiObs.SecretKey, global.GVA_CONFIG.HuaWeiObs.Endpoint)
 }
 
-func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
+func (*HuaWeiObs) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	// var open multipart.File
 	open, err := file.Open()
 	if err != nil {
@@ -49,7 +49,7 @@ func (o *Obs) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	return filepath, filename, err
 }
 
-func (o *Obs) DeleteFile(key string) error {
+func (*HuaWeiObs) DeleteFile(key string) error {
 	client, err := NewHuaWeiObsClient()
 	if err != nil {
 		return errors.Wrap(err, "获取华为对象存储对象失败!")

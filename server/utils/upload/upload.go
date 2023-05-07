@@ -28,7 +28,7 @@ func NewOss() OSS {
 	case "aliyun-oss":
 		return &AliyunOSS{}
 	case "huawei-obs":
-		return HuaWeiObs
+		return &HuaWeiObs{}
 	case "aws-s3":
 		return &AwsS3{}
 	default:

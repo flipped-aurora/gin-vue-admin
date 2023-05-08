@@ -43,8 +43,6 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		return ctx, system.ErrMissingDBContext
 	}
 	entities := []sysModel.SysApi{
-		{ApiGroup: "base", Method: "POST", Path: "/base/login", Description: "用户登录(必选)"},
-
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: "jwt加入黑名单(退出，必选)"},
 
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},

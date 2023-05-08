@@ -1,6 +1,6 @@
 FROM node:16-alpine as build-stage
 
-WORKDIR /gva_web/
+WORKDIR /gva-web/
 RUN corepack enable
 
 COPY package.json yarn.lock ./
@@ -14,7 +14,7 @@ FROM nginx:alpine
 LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
 
 COPY .docker-compose/nginx/conf.d/my.conf /etc/nginx/conf.d/my.conf
-COPY --from=build-stage /gva_web/dist /usr/share/nginx/html
+COPY --from=build-stage /gva-web/dist /usr/share/nginx/html
 RUN cat /etc/nginx/nginx.conf
 RUN cat /etc/nginx/conf.d/my.conf
 RUN ls -al /usr/share/nginx/html

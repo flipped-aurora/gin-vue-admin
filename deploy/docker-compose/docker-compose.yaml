@@ -16,7 +16,7 @@ services:
   web:
     build:
       context: ../../web
-    image: gva-web
+    image: registry.cn-hangzhou.aliyuncs.com/gva/web
     container_name: gva-web
     restart: unless-stopped
     ports:
@@ -29,7 +29,7 @@ services:
   server:
     build:
       context: ../../server
-    image: gva-server
+    image: registry.cn-hangzhou.aliyuncs.com/gva/server
     container_name: gva-server
     restart: unless-stopped
     ports:

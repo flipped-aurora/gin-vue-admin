@@ -8,8 +8,8 @@ import (
 // MsgBox 结构体
 type MsgBox struct {
 	global.GVA_MODEL
-	From      uint  `json:"from" form:"from" gorm:"column:from;comment:;"`
-	To        uint  `json:"to" form:"to" gorm:"column:to;comment:;"`
+	From      uint  `json:"from" form:"from" gorm:"column:from_user;comment:;"`
+	To        uint  `json:"to" form:"to" gorm:"column:to_user;comment:;"`
 	MsgType   uint  `json:"msgType" form:"msgType" gorm:"column:msg_type;comment:;"`
 	MsgID     uint  `json:"msgID" form:"msgID" gorm:"column:msg_id;comment:;"`
 	Status    *bool `json:"status" form:"status" gorm:"column:status;comment:;"`

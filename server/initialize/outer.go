@@ -20,4 +20,7 @@ func OtherInit() {
 	global.BlackCache = local_cache.NewCache(
 		local_cache.SetDefaultExpire(dr),
 	)
+	global.AppBlackCache = local_cache.NewCache(
+		local_cache.SetDefaultExpire(dr),
+	)
 }

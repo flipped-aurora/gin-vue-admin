@@ -16,7 +16,6 @@ type CompanySearch struct {
 
 type JoinCompany struct {
 	RoleID    uint   `json:"roleID" form:"roleID"`
-	UserID    uint   `json:"userID" form:"userID"`
 	Remark    string `json:"remark" form:"remark"`
 	CompanyID uint   `json:"companyID" form:"companyID"`
 	TeamID    uint   `json:"teamID" form:"teamID"`

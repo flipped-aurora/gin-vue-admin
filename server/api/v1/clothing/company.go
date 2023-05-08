@@ -126,6 +126,15 @@ func (companyApi *CompanyApi) GetCompanyList(c *gin.Context) {
 	}
 }
 
+// JoinCompany 加入公司
+// @Tags Company
+// @Summary 加入公司
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query clothingReq.JoinCompany true "加入公司"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /company/getCompanyList [get]
 func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 	var joinCompany clothingReq.JoinCompany
 	err := c.ShouldBindJSON(&joinCompany)
@@ -149,9 +158,77 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 			response.FailWithMessage("公司不存在", c)
 			return
 		} else {
-			if err := msgBoxService.SendMsg(userID,company.UserID,) {
-				
+			var companyApply clothing.CompanyApply
+			companyApply.CompanyID = company.ID
+			companyApply.UserID = userID
+			companyApply.RoleID = enum.Tailor
+			status := new(int)
+			*status = 0
+			companyApply.Status = status
+			if err := companyApplyService.CreateCompanyApply(&companyApply); err != nil {
+				global.GVA_LOG.Sugar().Error(err)
+				response.FailWithMessage("操作失败", c)
+				return
+			}
+			if err := msgBoxService.SendMsg(userID, company.UserID, enum.CompanyApply, companyApply.ID); err != nil {
+				global.GVA_LOG.Sugar().Error(err)
+				response.FailWithMessage("操作失败", c)
+				return
 			}
 		}
+	case enum.GroupLeader:
+		if company, err := companyService.GetCompany(joinCompany.CompanyID); err != nil {
+			response.FailWithMessage("公司不存在", c)
+			return
+		} else {
+			if _, err := teamService.GetTeamByName(company, joinCompany.Remark); err == nil {
+				response.FailWithMessage("组已存在", c)
+				return
+			}
+			var companyApply clothing.CompanyApply
+			companyApply.CompanyID = company.ID
+			companyApply.UserID = userID
+			companyApply.RoleID = enum.GroupLeader
+			companyApply.Remark = joinCompany.Remark
+			status := new(int)
+			*status = 0
+			companyApply.Status = status
+			if err := companyApplyService.CreateCompanyApply(&companyApply); err != nil {
+				global.GVA_LOG.Sugar().Error(err)
+				response.FailWithMessage("操作失败", c)
+				return
+			}
+			if err := msgBoxService.SendMsg(userID, company.UserID, enum.CompanyApply, companyApply.ID); err != nil {
+				global.GVA_LOG.Sugar().Error(err)
+				response.FailWithMessage("操作失败", c)
+				return
+			}
+		}
+	case enum.Worker:
+		if team, err := teamService.GetTeam(joinCompany.TeamID); err != nil {
+			response.FailWithMessage("组不存在", c)
+			return
+		} else {
+			var teamApply clothing.TeamApply
+			teamApply.TeamID = team.ID
+			teamApply.UserID = userID
+			status := new(int)
+			*status = 0
+			teamApply.Status = status
+			if err := teamApplyService.CreateTeamApply(&teamApply); err != nil {
+				global.GVA_LOG.Sugar().Error(err)
+				response.FailWithMessage("操作失败", c)
+				return
+			}
+			if err := msgBoxService.SendMsg(userID, team.UserID, enum.WorkerApply, teamApply.ID); err != nil {
+				global.GVA_LOG.Sugar().Error(err)
+				response.FailWithMessage("操作失败", c)
+				return
+			}
+		}
+	default:
+		response.FailWithMessage("未定义的角色类型", c)
+		return
 	}
+	response.Ok(c)
 }

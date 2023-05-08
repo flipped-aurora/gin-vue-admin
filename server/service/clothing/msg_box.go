@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"gorm.io/gorm"
 )
 
@@ -62,13 +63,18 @@ func (msgBoxService *MsgBoxService) GetMsgBox(id uint) (msgBox clothing.MsgBox, 
 	return
 }
 
+func (msgBoxService *MsgBoxService) SetRead(id uint) (err error) {
+	err = global.GVA_DB.Model(&clothing.MsgBox{}).Where("id = ?", id).Update("status", enum.MsgRead).Error
+	return
+}
+
 // GetMsgBoxInfoList 分页获取MsgBox记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (msgBoxService *MsgBoxService) GetMsgBoxInfoList(info clothingReq.MsgBoxSearch) (list []clothing.MsgBox, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&clothing.MsgBox{})
+	db := global.GVA_DB.Model(&clothing.MsgBox{}).Order("status asc,id desc")
 	var msgBoxs []clothing.MsgBox
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
@@ -76,6 +82,12 @@ func (msgBoxService *MsgBoxService) GetMsgBoxInfoList(info clothingReq.MsgBoxSea
 	}
 	if info.MsgType != 0 {
 		db = db.Where("msg_type = ?", info.MsgType)
+	}
+	if info.To != 0 {
+		db = db.Where("to_user = ?", info.To)
+	}
+	if info.From != 0 {
+		db = db.Where("from_user = ?", info.From)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
@@ -89,7 +101,7 @@ func (msgBoxService *MsgBoxService) GetMsgBoxInfoList(info clothingReq.MsgBoxSea
 func (msgBoxService *MsgBoxService) SendMsg(from, to uint, objType int, objID uint) error {
 	var msg clothing.MsgBox
 	status := new(bool)
-	*status = false
+	*status = enum.MsgPending
 	msg.From = from
 	msg.To = to
 	msg.MsgType = uint(objType)

@@ -142,7 +142,7 @@ func (appUserService *AppUserService) Login(u *clothing.AppUser) (userInter *clo
 		return nil, fmt.Errorf("db not init")
 	}
 	var user clothing.AppUser
-	err = global.GVA_DB.Where("username = ?", u.Username).First(&user).Error
+	err = global.GVA_DB.Where("username = ? or phone_num = ?", u.Username, u.PhoneNum).First(&user).Error
 	if err == nil {
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("密码错误")

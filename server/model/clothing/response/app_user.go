@@ -1,5 +1,7 @@
 package response
 
+import "github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
+
 type LoginResponse struct {
 	User      UserInfo `json:"user"`
 	Token     string   `json:"token"`
@@ -7,10 +9,10 @@ type LoginResponse struct {
 }
 
 type UserInfo struct {
-	ID       uint          `json:"ID"`
-	Roles    []interface{} `json:"roles"`
-	PhoneNum string        `json:"phoneNum"`
-	Username string        `json:"username"`
+	ID       uint                `json:"ID"`
+	Roles    []clothing.UserRole `json:"roles"`
+	PhoneNum string              `json:"phoneNum"`
+	Username string              `json:"username"`
 }
 
 type CheckExistResponse struct {

@@ -1,7 +1,8 @@
 package clothing
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
+	v1 "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +14,7 @@ type CompanyRouter struct {
 func (s *CompanyRouter) InitCompanyRouter(Router *gin.RouterGroup) {
 	companyRouter := Router.Group("company").Use(middleware.OperationRecord())
 	companyRouterWithoutRecord := Router.Group("company")
+	h5CompanyRouterWithoutRecord := Router.Group(global.GetAppApi() + "company")
 	var companyApi = v1.ApiGroupApp.ClothingApiGroup.CompanyApi
 	{
 		// companyRouter.POST("createCompany", companyApi.CreateCompany)   // 新建Company
@@ -23,5 +25,9 @@ func (s *CompanyRouter) InitCompanyRouter(Router *gin.RouterGroup) {
 	{
 		companyRouterWithoutRecord.GET("findCompany", companyApi.FindCompany)       // 根据ID获取Company
 		companyRouterWithoutRecord.GET("getCompanyList", companyApi.GetCompanyList) // 获取Company列表
+	}
+	{
+		h5CompanyRouterWithoutRecord.GET("getCompanyList", companyApi.GetCompanyList) // 获取Company列表
+		h5CompanyRouterWithoutRecord.POST("joinCompany", companyApi.JoinCompany)      // 加入公司
 	}
 }

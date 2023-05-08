@@ -26,3 +26,9 @@ type AppUser struct {
 func (AppUser) TableName() string {
 	return "app_user"
 }
+
+func (u *AppUser) GetRoles() []UserRole {
+	roles := make([]UserRole, 0)
+	global.GVA_DB.Preload("Role").Preload("Company").Where("user_id = ?", u.ID).Find(&roles)
+	return roles
+}

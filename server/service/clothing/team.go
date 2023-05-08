@@ -85,3 +85,8 @@ func (teamService *TeamService) GetTeamInfoList(info clothingReq.TeamSearch) (li
 	err = db.Limit(limit).Offset(offset).Find(&teams).Error
 	return teams, total, err
 }
+
+func (teamService *TeamService) GetTeamByName(company clothing.Company, name string) (team clothing.Team, err error) {
+	err = global.GVA_DB.Where("company_id = ? and name = ?", company.ID, name).First(&team).Error
+	return
+}

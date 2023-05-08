@@ -746,6 +746,83 @@ var doc = `{
                 }
             }
         },
+        "/appUser/getUserList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AppUser"
+                ],
+                "summary": "获取用户列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "公司id",
+                        "name": "companyID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "昵称",
+                        "name": "nickname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "手机号",
+                        "name": "phoneNum",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "组id",
+                        "name": "teamID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/appUser/login": {
             "post": {
                 "consumes": [
@@ -763,6 +840,12 @@ var doc = `{
                         "type": "string",
                         "description": "密码",
                         "name": "password",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "手机号",
+                        "name": "phoneNum",
                         "in": "query"
                     },
                     {
@@ -2093,7 +2176,7 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "name": "status",
                         "in": "query"
                     },
@@ -2218,7 +2301,7 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "name": "status",
                         "in": "query"
                     },
@@ -2831,121 +2914,7 @@ var doc = `{
                 }
             }
         },
-        "/company/createCompany": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "创建Company",
-                "parameters": [
-                    {
-                        "description": "创建Company",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/clothing.Company"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/company/deleteCompany": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "删除Company",
-                "parameters": [
-                    {
-                        "description": "删除Company",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/clothing.Company"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/company/deleteCompanyByIds": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "批量删除Company",
-                "parameters": [
-                    {
-                        "description": "批量删除Company",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.IdsReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/company/findCompany": {
+        "/company/getCompanyList": {
             "get": {
                 "security": [
                     {
@@ -2961,8 +2930,62 @@ var doc = `{
                 "tags": [
                     "Company"
                 ],
-                "summary": "用id查询Company",
+                "summary": "加入公司",
                 "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "companyID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "remark",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "roleID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "teamID",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/companyApply/findCompanyApply": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CompanyApply"
+                ],
+                "summary": "用id查询CompanyApply",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "name": "companyID",
+                        "in": "query"
+                    },
                     {
                         "type": "string",
                         "description": "创建时间",
@@ -2987,7 +3010,12 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "name": "name",
+                        "name": "remark",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "roleID",
                         "in": "query"
                     },
                     {
@@ -3022,112 +3050,7 @@ var doc = `{
                 }
             }
         },
-        "/company/getCompanyList": {
-            "get": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "分页获取Company列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "createdBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "deletedBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "endCreatedAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "关键字",
-                        "name": "keyword",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页大小",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "startCreatedAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "updatedBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "userID",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/company/updateCompany": {
+        "/companyApply/optApply": {
             "put": {
                 "security": [
                     {
@@ -3141,23 +3064,24 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Company"
+                    "CompanyApply"
                 ],
-                "summary": "更新Company",
+                "summary": "审核申请",
                 "parameters": [
                     {
-                        "description": "更新Company",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/clothing.Company"
-                        }
+                        "type": "integer",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "status",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -4844,7 +4768,7 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "name": "status",
                         "in": "query"
                     },
@@ -4954,7 +4878,7 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "name": "status",
                         "in": "query"
                     },
@@ -5522,120 +5446,6 @@ var doc = `{
                 }
             }
         },
-        "/msgBox/createMsgBox": {
-            "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "MsgBox"
-                ],
-                "summary": "创建MsgBox",
-                "parameters": [
-                    {
-                        "description": "创建MsgBox",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/clothing.MsgBox"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/msgBox/deleteMsgBox": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "MsgBox"
-                ],
-                "summary": "删除MsgBox",
-                "parameters": [
-                    {
-                        "description": "删除MsgBox",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/clothing.MsgBox"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/msgBox/deleteMsgBoxByIds": {
-            "delete": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "MsgBox"
-                ],
-                "summary": "批量删除MsgBox",
-                "parameters": [
-                    {
-                        "description": "批量删除MsgBox",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.IdsReq"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
         "/msgBox/findMsgBox": {
             "get": {
                 "security": [
@@ -5672,6 +5482,11 @@ var doc = `{
                     },
                     {
                         "type": "integer",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
                         "description": "主键ID",
                         "name": "id",
                         "in": "query"
@@ -5687,8 +5502,13 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "to",
                         "in": "query"
                     },
                     {
@@ -5700,11 +5520,6 @@ var doc = `{
                     {
                         "type": "integer",
                         "name": "updatedBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "userID",
                         "in": "query"
                     }
                 ],
@@ -5718,7 +5533,7 @@ var doc = `{
                 }
             }
         },
-        "/msgBox/getMsgBoxList": {
+        "/msgBox/getMyMsgList": {
             "get": {
                 "security": [
                     {
@@ -5734,7 +5549,7 @@ var doc = `{
                 "tags": [
                     "MsgBox"
                 ],
-                "summary": "分页获取MsgBox列表",
+                "summary": "分页获取收到的信息",
                 "parameters": [
                     {
                         "type": "string",
@@ -5755,6 +5570,11 @@ var doc = `{
                     {
                         "type": "string",
                         "name": "endCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "from",
                         "in": "query"
                     },
                     {
@@ -5797,8 +5617,13 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "to",
                         "in": "query"
                     },
                     {
@@ -5810,11 +5635,6 @@ var doc = `{
                     {
                         "type": "integer",
                         "name": "updatedBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "userID",
                         "in": "query"
                     }
                 ],
@@ -5828,8 +5648,8 @@ var doc = `{
                 }
             }
         },
-        "/msgBox/updateMsgBox": {
-            "put": {
+        "/msgBox/getMySendMsgList": {
+            "get": {
                 "security": [
                     {
                         "ApiKeyAuth": []
@@ -5844,21 +5664,185 @@ var doc = `{
                 "tags": [
                     "MsgBox"
                 ],
-                "summary": "更新MsgBox",
+                "summary": "分页获取发送的信息",
                 "parameters": [
                     {
-                        "description": "更新MsgBox",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/clothing.MsgBox"
-                        }
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "createdBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "deletedBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "endCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "msgID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "msgType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "startCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "updatedBy",
+                        "in": "query"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/msgBox/setRead": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "MsgBox"
+                ],
+                "summary": "设置已读",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "createdBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "deletedBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "msgID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "msgType",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "updatedBy",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
                         "schema": {
                             "type": "string"
                         }
@@ -7997,6 +7981,11 @@ var doc = `{
                         "type": "integer",
                         "name": "updatedBy",
                         "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "userID",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -8096,6 +8085,11 @@ var doc = `{
                     {
                         "type": "integer",
                         "name": "updatedBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "userID",
                         "in": "query"
                     }
                 ],
@@ -10024,7 +10018,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "status": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "title": {
                     "type": "string"
@@ -10247,45 +10241,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "status": {
-                    "type": "integer"
-                },
-                "updatedAt": {
-                    "description": "更新时间",
-                    "type": "string"
-                },
-                "updatedBy": {
-                    "type": "integer"
-                },
-                "userID": {
-                    "type": "integer"
-                }
-            }
-        },
-        "clothing.MsgBox": {
-            "type": "object",
-            "properties": {
-                "createdAt": {
-                    "description": "创建时间",
-                    "type": "string"
-                },
-                "createdBy": {
-                    "type": "integer"
-                },
-                "deletedBy": {
-                    "type": "integer"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
-                "msgID": {
-                    "type": "integer"
-                },
-                "msgType": {
-                    "type": "integer"
-                },
-                "status": {
-                    "type": "integer"
+                    "type": "boolean"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -10403,6 +10359,9 @@ var doc = `{
                     "type": "string"
                 },
                 "updatedBy": {
+                    "type": "integer"
+                },
+                "userID": {
                     "type": "integer"
                 }
             }

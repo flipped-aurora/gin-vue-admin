@@ -39,7 +39,7 @@ definitions:
       sort:
         type: integer
       status:
-        type: integer
+        type: boolean
       title:
         type: string
       type:
@@ -191,33 +191,7 @@ definitions:
       jobID:
         type: integer
       status:
-        type: integer
-      updatedAt:
-        description: 更新时间
-        type: string
-      updatedBy:
-        type: integer
-      userID:
-        type: integer
-    type: object
-  clothing.MsgBox:
-    properties:
-      createdAt:
-        description: 创建时间
-        type: string
-      createdBy:
-        type: integer
-      deletedBy:
-        type: integer
-      id:
-        description: 主键ID
-        type: integer
-      msgID:
-        type: integer
-      msgType:
-        type: integer
-      status:
-        type: integer
+        type: boolean
       updatedAt:
         description: 更新时间
         type: string
@@ -298,6 +272,8 @@ definitions:
         description: 更新时间
         type: string
       updatedBy:
+        type: integer
+      userID:
         type: integer
     type: object
   clothing.TeamApply:
@@ -2362,6 +2338,55 @@ paths:
       summary: 获取用户详情
       tags:
       - AppUser
+  /appUser/getUserList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 公司id
+        in: query
+        name: companyID
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 昵称
+        in: query
+        name: nickname
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - description: 手机号
+        in: query
+        name: phoneNum
+        type: string
+      - description: 组id
+        in: query
+        name: teamID
+        type: integer
+      - description: 用户名
+        in: query
+        name: username
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户列表
+      tags:
+      - AppUser
   /appUser/login:
     post:
       consumes:
@@ -2370,6 +2395,10 @@ paths:
       - description: 密码
         in: query
         name: password
+        type: string
+      - description: 手机号
+        in: query
+        name: phoneNum
         type: string
       - description: 用户名
         in: query
@@ -3134,7 +3163,7 @@ paths:
         type: integer
       - in: query
         name: status
-        type: integer
+        type: boolean
       - in: query
         name: title
         type: string
@@ -3211,7 +3240,7 @@ paths:
         type: string
       - in: query
         name: status
-        type: integer
+        type: boolean
       - in: query
         name: title
         type: string
@@ -3580,17 +3609,23 @@ paths:
       summary: 更新Cloth
       tags:
       - Cloth
-  /company/createCompany:
-    post:
+  /company/getCompanyList:
+    get:
       consumes:
       - application/json
       parameters:
-      - description: 创建Company
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/clothing.Company'
+      - in: query
+        name: companyID
+        type: integer
+      - in: query
+        name: remark
+        type: string
+      - in: query
+        name: roleID
+        type: integer
+      - in: query
+        name: teamID
+        type: integer
       produces:
       - application/json
       responses:
@@ -3600,60 +3635,17 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 创建Company
+      summary: 加入公司
       tags:
       - Company
-  /company/deleteCompany:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除Company
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/clothing.Company'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除Company
-      tags:
-      - Company
-  /company/deleteCompanyByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除Company
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除Company
-      tags:
-      - Company
-  /company/findCompany:
+  /companyApply/findCompanyApply:
     get:
       consumes:
       - application/json
       parameters:
+      - in: query
+        name: companyID
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -3669,8 +3661,11 @@ paths:
         name: id
         type: integer
       - in: query
-        name: name
+        name: remark
         type: string
+      - in: query
+        name: roleID
+        type: integer
       - in: query
         name: status
         type: integer
@@ -3693,61 +3688,19 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 用id查询Company
+      summary: 用id查询CompanyApply
       tags:
-      - Company
-  /company/getCompanyList:
-    get:
+      - CompanyApply
+  /companyApply/optApply:
+    put:
       consumes:
       - application/json
       parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
       - in: query
-        name: createdBy
+        name: ID
         type: integer
-      - in: query
-        name: deletedBy
-        type: integer
-      - in: query
-        name: endCreatedAt
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - in: query
-        name: name
-        type: string
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - in: query
-        name: startCreatedAt
-        type: string
       - in: query
         name: status
-        type: integer
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
-      - in: query
-        name: updatedBy
-        type: integer
-      - in: query
-        name: userID
         type: integer
       produces:
       - application/json
@@ -3758,32 +3711,9 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 分页获取Company列表
+      summary: 审核申请
       tags:
-      - Company
-  /company/updateCompany:
-    put:
-      consumes:
-      - application/json
-      parameters:
-      - description: 更新Company
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/clothing.Company'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 更新Company
-      tags:
-      - Company
+      - CompanyApply
   /croppingRecord/createCroppingRecord:
     post:
       consumes:
@@ -4776,7 +4706,7 @@ paths:
         type: integer
       - in: query
         name: status
-        type: integer
+        type: boolean
       - description: 更新时间
         in: query
         name: updatedAt
@@ -4844,7 +4774,7 @@ paths:
         type: string
       - in: query
         name: status
-        type: integer
+        type: boolean
       - description: 更新时间
         in: query
         name: updatedAt
@@ -5170,75 +5100,6 @@ paths:
       summary: 更新菜单
       tags:
       - Menu
-  /msgBox/createMsgBox:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 创建MsgBox
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/clothing.MsgBox'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"获取成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 创建MsgBox
-      tags:
-      - MsgBox
-  /msgBox/deleteMsgBox:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 删除MsgBox
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/clothing.MsgBox'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 删除MsgBox
-      tags:
-      - MsgBox
-  /msgBox/deleteMsgBoxByIds:
-    delete:
-      consumes:
-      - application/json
-      parameters:
-      - description: 批量删除MsgBox
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.IdsReq'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
-          schema:
-            type: string
-      security:
-      - ApiKeyAuth: []
-      summary: 批量删除MsgBox
-      tags:
-      - MsgBox
   /msgBox/findMsgBox:
     get:
       consumes:
@@ -5254,6 +5115,9 @@ paths:
       - in: query
         name: deletedBy
         type: integer
+      - in: query
+        name: from
+        type: integer
       - description: 主键ID
         in: query
         name: id
@@ -5266,6 +5130,9 @@ paths:
         type: integer
       - in: query
         name: status
+        type: boolean
+      - in: query
+        name: to
         type: integer
       - description: 更新时间
         in: query
@@ -5273,9 +5140,6 @@ paths:
         type: string
       - in: query
         name: updatedBy
-        type: integer
-      - in: query
-        name: userID
         type: integer
       produces:
       - application/json
@@ -5289,7 +5153,7 @@ paths:
       summary: 用id查询MsgBox
       tags:
       - MsgBox
-  /msgBox/getMsgBoxList:
+  /msgBox/getMyMsgList:
     get:
       consumes:
       - application/json
@@ -5307,6 +5171,9 @@ paths:
       - in: query
         name: endCreatedAt
         type: string
+      - in: query
+        name: from
+        type: integer
       - description: 主键ID
         in: query
         name: id
@@ -5334,6 +5201,9 @@ paths:
         type: string
       - in: query
         name: status
+        type: boolean
+      - in: query
+        name: to
         type: integer
       - description: 更新时间
         in: query
@@ -5341,9 +5211,6 @@ paths:
         type: string
       - in: query
         name: updatedBy
-        type: integer
-      - in: query
-        name: userID
         type: integer
       produces:
       - application/json
@@ -5354,30 +5221,131 @@ paths:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 分页获取MsgBox列表
+      summary: 分页获取收到的信息
       tags:
       - MsgBox
-  /msgBox/updateMsgBox:
-    put:
+  /msgBox/getMySendMsgList:
+    get:
       consumes:
       - application/json
       parameters:
-      - description: 更新MsgBox
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/clothing.MsgBox'
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: endCreatedAt
+        type: string
+      - in: query
+        name: from
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: msgID
+        type: integer
+      - in: query
+        name: msgType
+        type: integer
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - in: query
+        name: status
+        type: boolean
+      - in: query
+        name: to
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
       produces:
       - application/json
       responses:
         "200":
-          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
           schema:
             type: string
       security:
       - ApiKeyAuth: []
-      summary: 更新MsgBox
+      summary: 分页获取发送的信息
+      tags:
+      - MsgBox
+  /msgBox/setRead:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: createdBy
+        type: integer
+      - in: query
+        name: deletedBy
+        type: integer
+      - in: query
+        name: from
+        type: integer
+      - description: 主键ID
+        in: query
+        name: id
+        type: integer
+      - in: query
+        name: msgID
+        type: integer
+      - in: query
+        name: msgType
+        type: integer
+      - in: query
+        name: status
+        type: boolean
+      - in: query
+        name: to
+        type: integer
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      - in: query
+        name: updatedBy
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 设置已读
       tags:
       - MsgBox
   /process/createProcess:
@@ -6648,6 +6616,9 @@ paths:
       - in: query
         name: updatedBy
         type: integer
+      - in: query
+        name: userID
+        type: integer
       produces:
       - application/json
       responses:
@@ -6709,6 +6680,9 @@ paths:
         type: string
       - in: query
         name: updatedBy
+        type: integer
+      - in: query
+        name: userID
         type: integer
       produces:
       - application/json

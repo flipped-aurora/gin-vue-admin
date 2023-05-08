@@ -20,6 +20,7 @@ type AppUserSearch struct {
 
 type Login struct {
 	Username string `json:"username"` // 用户名
+	PhoneNum string `json:"phoneNum"` // 手机号
 	Password string `json:"password"` // 密码
 }
 

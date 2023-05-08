@@ -164,7 +164,7 @@ func (appUserApi *AppUserApi) Register(c *gin.Context) {
 	appUser.Password = l.Password
 	if user, err := appUserService.Register(appUser); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		response.FailWithMessage(err.Error(), c)
 	} else {
 		appUserApi.TokenNext(c, user)
 	}
@@ -187,12 +187,12 @@ func (appUserApi *AppUserApi) Login(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(l, utils.LoginVerify)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	u := &clothing.AppUser{Username: l.Username, Password: l.Password}
+	// err = utils.Verify(l, utils.LoginVerify)
+	// if err != nil {
+	// 	response.FailWithMessage(err.Error(), c)
+	// 	return
+	// }
+	u := &clothing.AppUser{PhoneNum: l.PhoneNum, Username: l.Username, Password: l.Password}
 	user, err := appUserService.Login(u)
 	if err != nil {
 		global.GVA_LOG.Error("登陆失败! 用户名不存在或者密码错误!", zap.Error(err))
@@ -201,7 +201,7 @@ func (appUserApi *AppUserApi) Login(c *gin.Context) {
 		response.FailWithMessage("用户名不存在或者密码错误", c)
 		return
 	}
-	if *user.Status != 1 {
+	if user.Status != nil && !*user.Status {
 		global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
 		// 验证码次数+1
 		global.BlackCache.Increment(key, 1)
@@ -209,7 +209,6 @@ func (appUserApi *AppUserApi) Login(c *gin.Context) {
 		return
 	}
 	appUserApi.TokenNext(c, *user)
-	return
 }
 
 // TokenNext 登录以后签发jwt
@@ -220,7 +219,12 @@ func (appUserApi *AppUserApi) TokenNext(c *gin.Context, user clothing.AppUser) {
 		NickName: user.Nickname,
 		Username: user.Username,
 	})
-	userInfo := clothingRes.UserInfo{}
+	userInfo := clothingRes.UserInfo{
+		ID:       user.ID,
+		PhoneNum: user.PhoneNum,
+		Username: user.Username,
+		Roles:    user.GetRoles(),
+	}
 	token, err := j.CreateToken(claims)
 	if err != nil {
 		global.GVA_LOG.Error("获取token失败!", zap.Error(err))

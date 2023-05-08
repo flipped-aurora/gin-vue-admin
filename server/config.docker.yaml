@@ -6,6 +6,7 @@ jwt:
   expires-time: 7d
   buffer-time: 1d
   issuer: qmPlus
+
 # zap logger configuration
 zap:
   level: info
@@ -20,7 +21,7 @@ zap:
 # redis configuration
 redis:
   db: 0
-  addr: 177.7.0.14:6379
+  addr: gva-redis:6379
   password: ""
 
 # email configuration

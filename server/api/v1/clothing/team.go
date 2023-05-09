@@ -168,7 +168,7 @@ func (teamApi *TeamApi) JoinTeam(c *gin.Context) {
 	}
 	if err := teamService.JoinTeam(req.UserID, team); err != nil {
 		global.GVA_LOG.Sugar().Error(err)
-		response.FailWithMessage("加入公司失败", c)
+		response.FailWithMessage("加入组失败", c)
 		return
 	}
 	response.Ok(c)

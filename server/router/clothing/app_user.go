@@ -31,5 +31,6 @@ func (s *AppUserRouter) InitAppUserRouter(Router *gin.RouterGroup) {
 		h5Router.POST("register", appUserApi.Register)      //注册
 		h5Router.POST("login", appUserApi.Login)            //登录
 		h5Router.GET("getUserInfo", appUserApi.GetUserInfo) //获取用户详情
+		h5Router.GET("getUserList", appUserApi.GetUserList) //获取用户列表
 	}
 }

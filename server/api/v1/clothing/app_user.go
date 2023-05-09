@@ -307,12 +307,34 @@ func (appUserApi *AppUserApi) GetUserList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	global.GVA_LOG.Sugar().Info(filter)
+	userID := utils.GetUserID(c)
+	if filter.CompanyID > 0 || filter.TeamID > 0 {
+		companyID := filter.CompanyID
+		if team, err := teamService.GetTeam(uint(filter.TeamID)); err == nil {
+			companyID = int(team.CompanyID)
+		}
+		global.GVA_LOG.Sugar().Info(companyID)
+		if !userRoleService.CheckPurview(userID, uint(companyID)) {
+			response.FailWithMessage("权限不足", c)
+			return
+		}
+	}
 	if list, total, err := appUserService.GetAppUserList(filter); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
+		res := make([]clothingRes.UserInfo, len(list))
+		for i, v := range list {
+			res[i] = clothingRes.UserInfo{
+				ID:       v.ID,
+				Roles:    v.GetRoles(),
+				PhoneNum: v.PhoneNum,
+				Username: v.Username,
+			}
+		}
 		response.OkWithDetailed(response.PageResult{
-			List:     list,
+			List:     res,
 			Total:    total,
 			Page:     filter.Page,
 			PageSize: filter.PageSize,

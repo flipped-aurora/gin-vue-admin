@@ -9,10 +9,10 @@ type LoginResponse struct {
 }
 
 type UserInfo struct {
-	ID       uint                `json:"ID"`
-	Roles    []clothing.UserRole `json:"roles"`
-	PhoneNum string              `json:"phoneNum"`
-	Username string              `json:"username"`
+	ID       uint                   `json:"ID"`
+	Roles    []clothing.CompanyRole `json:"roles"`
+	PhoneNum string                 `json:"phoneNum"`
+	Username string                 `json:"username"`
 }
 
 type CheckExistResponse struct {

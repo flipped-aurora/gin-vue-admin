@@ -137,11 +137,11 @@ func (companyApplyApi *CompanyApplyApi) GetCompanyApplyList(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query clothingReq.OptApply true "审核申请"
+// @Param data query clothingReq.OptCompanyApply true "审核申请"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /companyApply/optApply [put]
 func (companyApplyApi *CompanyApplyApi) OptApply(c *gin.Context) {
-	var opt clothingReq.OptApply
+	var opt clothingReq.OptCompanyApply
 	err := c.ShouldBindJSON(&opt)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)

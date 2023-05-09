@@ -209,21 +209,31 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 			response.FailWithMessage("组不存在", c)
 			return
 		} else {
-			var teamApply clothing.TeamApply
-			teamApply.TeamID = team.ID
-			teamApply.UserID = userID
-			status := new(int)
-			*status = 0
-			teamApply.Status = status
-			if err := teamApplyService.CreateTeamApply(&teamApply); err != nil {
-				global.GVA_LOG.Sugar().Error(err)
-				response.FailWithMessage("操作失败", c)
+			if company, err := companyService.GetCompany(team.CompanyID); err != nil {
+				response.FailWithMessage("公司不存在", c)
 				return
-			}
-			if err := msgBoxService.SendMsg(userID, team.UserID, enum.WorkerApply, teamApply.ID); err != nil {
-				global.GVA_LOG.Sugar().Error(err)
-				response.FailWithMessage("操作失败", c)
-				return
+			} else {
+				if err := companyApplyService.JoinCompany(enum.Worker, userID, company); err != nil {
+					global.GVA_LOG.Sugar().Error(err)
+					response.FailWithMessage("加入公司失败", c)
+					return
+				}
+				var teamApply clothing.TeamApply
+				teamApply.TeamID = team.ID
+				teamApply.UserID = userID
+				status := new(int)
+				*status = 0
+				teamApply.Status = status
+				if err := teamApplyService.CreateTeamApply(&teamApply); err != nil {
+					global.GVA_LOG.Sugar().Error(err)
+					response.FailWithMessage("操作失败", c)
+					return
+				}
+				if err := msgBoxService.SendMsg(userID, team.UserID, enum.WorkerApply, teamApply.ID); err != nil {
+					global.GVA_LOG.Sugar().Error(err)
+					response.FailWithMessage("操作失败", c)
+					return
+				}
 			}
 		}
 	default:

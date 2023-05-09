@@ -1,6 +1,8 @@
 package clothing
 
 import (
+	"errors"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -89,4 +91,15 @@ func (teamService *TeamService) GetTeamInfoList(info clothingReq.TeamSearch) (li
 func (teamService *TeamService) GetTeamByName(company clothing.Company, name string) (team clothing.Team, err error) {
 	err = global.GVA_DB.Where("company_id = ? and name = ?", company.ID, name).First(&team).Error
 	return
+}
+
+func (teamService *TeamService) JoinTeam(userID uint, team clothing.Team) (err error) {
+	var teamUser clothing.TeamUser
+	teamUser.TeamID = team.ID
+	teamUser.UserID = userID
+	err = global.GVA_DB.Where(&teamUser).First(&teamUser).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = global.GVA_DB.Create(&teamUser).Error
+	}
+	return err
 }

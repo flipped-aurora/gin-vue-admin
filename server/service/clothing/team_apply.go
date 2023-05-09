@@ -1,6 +1,8 @@
 package clothing
 
 import (
+	"errors"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -84,23 +86,23 @@ func (teamApplyService *TeamApplyService) GetTeamApplyInfoList(info clothingReq.
 	return teamApplys, total, err
 }
 
-func (teamApplyService *TeamApplyService) JoinTeam(userID uint, team clothing.Team) (err error) {
-	db := global.GVA_DB
-	tx := db.Begin()
-	defer tx.Commit()
-	var role clothing.UserRole
-	role.RoleID = enum.Worker
-	role.UserID = userID
-	role.CompanyID = team.CompanyID
-	if err = global.GVA_DB.Create(&role).Error; err != nil {
-		tx.Rollback()
-		return err
+func (teamApplyService *TeamApplyService) OptApply(apply clothing.TeamApply, status int, team clothing.Team) (err error) {
+	if apply.Status != nil && *apply.Status != enum.ApplyPending {
+		return errors.New("已处理")
+	}
+	if status == enum.ApplyReject {
+		err = global.GVA_DB.Model(&apply).Update("status", enum.ApplyReject).Error
+		return
 	}
 	var teamUser clothing.TeamUser
 	teamUser.TeamID = team.ID
-	teamUser.UserID = userID
-	if err = global.GVA_DB.Create(&teamUser).Error; err != nil {
-		tx.Rollback()
+	teamUser.UserID = apply.UserID
+	err = global.GVA_DB.Where(&teamUser).First(&teamUser).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = global.GVA_DB.Create(&teamUser).Error
+	}
+	if err == nil {
+		err = global.GVA_DB.Model(&apply).Update("status", status).Error
 	}
 	return err
 }

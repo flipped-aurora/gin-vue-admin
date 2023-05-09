@@ -91,7 +91,10 @@ func (companyApplyService *CompanyApplyService) JoinCompany(roleID uint, userID 
 	role.RoleID = roleID
 	role.UserID = userID
 	role.CompanyID = company.ID
-	err = global.GVA_DB.Create(&role).Error
+	err = global.GVA_DB.Where(&role).First(&role).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = global.GVA_DB.Create(&role).Error
+	}
 	return err
 }
 
@@ -113,7 +116,15 @@ func (companyApplyService *CompanyApplyService) OptApply(apply clothing.CompanyA
 		team.Name = apply.Remark
 		err = global.GVA_DB.Create(&team).Error
 		if err == nil {
-			err = companyApplyService.JoinCompany(enum.GroupLeader, apply.UserID, company)
+			if err = companyApplyService.JoinCompany(enum.GroupLeader, apply.UserID, company); err == nil {
+				var teamUser clothing.TeamUser
+				teamUser.TeamID = team.ID
+				teamUser.UserID = apply.UserID
+				err = global.GVA_DB.Where(&teamUser).First(&teamUser).Error
+				if errors.Is(err, gorm.ErrRecordNotFound) {
+					err = global.GVA_DB.Create(&teamUser).Error
+				}
+			}
 		}
 	default:
 		err = errors.New("角色类型错误")

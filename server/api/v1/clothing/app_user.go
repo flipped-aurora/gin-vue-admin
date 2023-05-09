@@ -315,7 +315,7 @@ func (appUserApi *AppUserApi) GetUserList(c *gin.Context) {
 			companyID = int(team.CompanyID)
 		}
 		global.GVA_LOG.Sugar().Info(companyID)
-		if !userRoleService.CheckPurview(userID, uint(companyID)) {
+		if !userRoleService.CheckStaff(userID, uint(companyID)) {
 			response.FailWithMessage("权限不足", c)
 			return
 		}

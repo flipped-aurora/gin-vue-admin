@@ -94,6 +94,12 @@ func (companyApplyService *CompanyApplyService) JoinCompany(roleID uint, userID 
 	err = global.GVA_DB.Where(&role).First(&role).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		err = global.GVA_DB.Create(&role).Error
+		if err == nil {
+			var wallet clothing.UserWallet
+			wallet.CompanyID = company.ID
+			wallet.UserID = userID
+			err = global.GVA_DB.Create(&wallet).Error
+		}
 	}
 	return err
 }

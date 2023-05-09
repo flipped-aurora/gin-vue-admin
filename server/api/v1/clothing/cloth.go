@@ -2,21 +2,20 @@ package clothing
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
+	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type ClothApi struct {
 }
 
 var clothService = service.ServiceGroupApp.ClothingServiceGroup.ClothService
-
 
 // CreateCloth 创建Cloth
 // @Tags Cloth
@@ -34,9 +33,14 @@ func (clothApi *ClothApi) CreateCloth(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    cloth.CreatedBy = utils.GetUserID(c)
+	cloth.CreatedBy = utils.GetUserID(c)
+	if !userRoleService.CheckManager(cloth.CreatedBy, cloth.CompanyID) {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := clothService.CreateCloth(&cloth); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -59,34 +63,30 @@ func (clothApi *ClothApi) DeleteCloth(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    cloth.DeletedBy = utils.GetUserID(c)
+	cloth.DeletedBy = utils.GetUserID(c)
+	if !userRoleService.CheckManager(cloth.CreatedBy, cloth.CompanyID) {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := clothService.DeleteCloth(cloth); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
 	}
 }
 
-// DeleteClothByIds 批量删除Cloth
-// @Tags Cloth
-// @Summary 批量删除Cloth
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除Cloth"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /cloth/deleteClothByIds [delete]
 func (clothApi *ClothApi) DeleteClothByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    err := c.ShouldBindJSON(&IDS)
+	err := c.ShouldBindJSON(&IDS)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    deletedBy := utils.GetUserID(c)
-	if err := clothService.DeleteClothByIds(IDS,deletedBy); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+	deletedBy := utils.GetUserID(c)
+	if err := clothService.DeleteClothByIds(IDS, deletedBy); err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -109,9 +109,14 @@ func (clothApi *ClothApi) UpdateCloth(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    cloth.UpdatedBy = utils.GetUserID(c)
+	cloth.UpdatedBy = utils.GetUserID(c)
+	if !userRoleService.CheckManager(cloth.CreatedBy, cloth.CompanyID) {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := clothService.UpdateCloth(cloth); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -135,7 +140,7 @@ func (clothApi *ClothApi) FindCloth(c *gin.Context) {
 		return
 	}
 	if recloth, err := clothService.GetCloth(cloth.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"recloth": recloth}, c)
@@ -159,14 +164,14 @@ func (clothApi *ClothApi) GetClothList(c *gin.Context) {
 		return
 	}
 	if list, total, err := clothService.GetClothInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

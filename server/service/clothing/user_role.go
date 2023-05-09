@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"gorm.io/gorm"
 )
 
@@ -83,11 +84,21 @@ func (userRoleService *UserRoleService) GetUserRoleInfoList(info clothingReq.Use
 	return userRoles, total, err
 }
 
-func (userRoleService *UserRoleService) CheckPurview(userID, companyID uint) (pass bool) {
+// 检查是否职员
+func (userRoleService *UserRoleService) CheckStaff(userID, companyID uint) (pass bool) {
 	var userRole clothing.UserRole
 	userRole.UserID = userID
 	userRole.CompanyID = companyID
 	if err := global.GVA_DB.Where(&userRole).First(&userRole).Error; err == nil {
+		return true
+	}
+	return
+}
+
+// 检查是否管理层
+func (userRoleService *UserRoleService) CheckManager(userID, companyID uint) (pass bool) {
+	var userRole clothing.UserRole
+	if err := global.GVA_DB.Where("user_id = ? and company_id = ? and role_id in ?", userID, companyID, []int{enum.Boss, enum.Tailor}).First(&userRole).Error; err == nil {
 		return true
 	}
 	return

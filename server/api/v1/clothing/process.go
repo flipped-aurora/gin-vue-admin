@@ -2,21 +2,20 @@ package clothing
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-    clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
-    "github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
+	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type ProcessApi struct {
 }
 
 var processService = service.ServiceGroupApp.ClothingServiceGroup.ProcessService
-
 
 // CreateProcess 创建Process
 // @Tags Process
@@ -34,9 +33,20 @@ func (processApi *ProcessApi) CreateProcess(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    process.CreatedBy = utils.GetUserID(c)
+	process.CreatedBy = utils.GetUserID(c)
+	style, err := styleService.GetStyle(process.StyleID)
+	if err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("款式不存在", c)
+		return
+	}
+	if !userRoleService.CheckManager(process.CreatedBy, style.CompanyID) {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := processService.CreateProcess(&process); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -59,34 +69,36 @@ func (processApi *ProcessApi) DeleteProcess(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    process.DeletedBy = utils.GetUserID(c)
+	process.DeletedBy = utils.GetUserID(c)
+	style, err := styleService.GetStyle(process.StyleID)
+	if err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("款式不存在", c)
+		return
+	}
+	if !userRoleService.CheckManager(process.CreatedBy, style.CompanyID) {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := processService.DeleteProcess(process); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
 	}
 }
 
-// DeleteProcessByIds 批量删除Process
-// @Tags Process
-// @Summary 批量删除Process
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除Process"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /process/deleteProcessByIds [delete]
 func (processApi *ProcessApi) DeleteProcessByIds(c *gin.Context) {
 	var IDS request.IdsReq
-    err := c.ShouldBindJSON(&IDS)
+	err := c.ShouldBindJSON(&IDS)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    deletedBy := utils.GetUserID(c)
-	if err := processService.DeleteProcessByIds(IDS,deletedBy); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+	deletedBy := utils.GetUserID(c)
+	if err := processService.DeleteProcessByIds(IDS, deletedBy); err != nil {
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -109,9 +121,20 @@ func (processApi *ProcessApi) UpdateProcess(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-    process.UpdatedBy = utils.GetUserID(c)
+	process.UpdatedBy = utils.GetUserID(c)
+	style, err := styleService.GetStyle(process.StyleID)
+	if err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("款式不存在", c)
+		return
+	}
+	if !userRoleService.CheckManager(process.CreatedBy, style.CompanyID) {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := processService.UpdateProcess(process); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -135,7 +158,7 @@ func (processApi *ProcessApi) FindProcess(c *gin.Context) {
 		return
 	}
 	if reprocess, err := processService.GetProcess(process.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"reprocess": reprocess}, c)
@@ -159,14 +182,14 @@ func (processApi *ProcessApi) GetProcessList(c *gin.Context) {
 		return
 	}
 	if list, total, err := processService.GetProcessInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

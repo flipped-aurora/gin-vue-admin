@@ -3,7 +3,7 @@ FROM node:16-alpine as build-stage
 WORKDIR /gva-web/
 RUN corepack enable
 
-COPY package.json yarn.lock ./
+COPY package.json ./
 RUN --mount=type=cache,id=yarn-store,target=/root/.yarn-store \
     yarn install --registry=https://registry.npmmirror.com
 

@@ -17,15 +17,6 @@ type AppRoleApi struct {
 
 var appRoleService = service.ServiceGroupApp.ClothingServiceGroup.AppRoleService
 
-// CreateAppRole 创建AppRole
-// @Tags AppRole
-// @Summary 创建AppRole
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.AppRole true "创建AppRole"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /appRole/createAppRole [post]
 func (appRoleApi *AppRoleApi) CreateAppRole(c *gin.Context) {
 	var appRole clothing.AppRole
 	err := c.ShouldBindJSON(&appRole)
@@ -42,15 +33,6 @@ func (appRoleApi *AppRoleApi) CreateAppRole(c *gin.Context) {
 	}
 }
 
-// DeleteAppRole 删除AppRole
-// @Tags AppRole
-// @Summary 删除AppRole
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.AppRole true "删除AppRole"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /appRole/deleteAppRole [delete]
 func (appRoleApi *AppRoleApi) DeleteAppRole(c *gin.Context) {
 	var appRole clothing.AppRole
 	err := c.ShouldBindJSON(&appRole)
@@ -67,15 +49,6 @@ func (appRoleApi *AppRoleApi) DeleteAppRole(c *gin.Context) {
 	}
 }
 
-// DeleteAppRoleByIds 批量删除AppRole
-// @Tags AppRole
-// @Summary 批量删除AppRole
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除AppRole"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /appRole/deleteAppRoleByIds [delete]
 func (appRoleApi *AppRoleApi) DeleteAppRoleByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	err := c.ShouldBindJSON(&IDS)
@@ -92,15 +65,6 @@ func (appRoleApi *AppRoleApi) DeleteAppRoleByIds(c *gin.Context) {
 	}
 }
 
-// UpdateAppRole 更新AppRole
-// @Tags AppRole
-// @Summary 更新AppRole
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.AppRole true "更新AppRole"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /appRole/updateAppRole [put]
 func (appRoleApi *AppRoleApi) UpdateAppRole(c *gin.Context) {
 	var appRole clothing.AppRole
 	err := c.ShouldBindJSON(&appRole)
@@ -117,15 +81,6 @@ func (appRoleApi *AppRoleApi) UpdateAppRole(c *gin.Context) {
 	}
 }
 
-// FindAppRole 用id查询AppRole
-// @Tags AppRole
-// @Summary 用id查询AppRole
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query clothing.AppRole true "用id查询AppRole"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /appRole/findAppRole [get]
 func (appRoleApi *AppRoleApi) FindAppRole(c *gin.Context) {
 	var appRole clothing.AppRole
 	err := c.ShouldBindQuery(&appRole)
@@ -141,15 +96,6 @@ func (appRoleApi *AppRoleApi) FindAppRole(c *gin.Context) {
 	}
 }
 
-// GetAppRoleList 分页获取AppRole列表
-// @Tags AppRole
-// @Summary 分页获取AppRole列表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query clothingReq.AppRoleSearch true "分页获取AppRole列表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /appRole/getAppRoleList [get]
 func (appRoleApi *AppRoleApi) GetAppRoleList(c *gin.Context) {
 	var pageInfo clothingReq.AppRoleSearch
 	err := c.ShouldBindQuery(&pageInfo)

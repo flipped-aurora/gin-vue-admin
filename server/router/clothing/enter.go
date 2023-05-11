@@ -18,4 +18,5 @@ type RouterGroup struct {
 	MsgBoxRouter
 	BannerRouter
 	CompanyApplyRouter
+	JobApplyRouter
 }

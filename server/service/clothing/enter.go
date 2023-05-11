@@ -19,4 +19,5 @@ type ServiceGroup struct {
 	BannerService
 	JwtService
 	CompanyApplyService
+	JobApplyService
 }

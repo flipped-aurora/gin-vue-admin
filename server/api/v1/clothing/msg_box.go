@@ -81,15 +81,6 @@ func (msgBoxApi *MsgBoxApi) UpdateMsgBox(c *gin.Context) {
 	}
 }
 
-// FindMsgBox 用id查询MsgBox
-// @Tags MsgBox
-// @Summary 用id查询MsgBox
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data query clothing.MsgBox true "用id查询MsgBox"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
-// @Router /msgBox/findMsgBox [get]
 func (msgBoxApi *MsgBoxApi) FindMsgBox(c *gin.Context) {
 	var msgBox clothing.MsgBox
 	err := c.ShouldBindQuery(&msgBox)

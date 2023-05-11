@@ -18,4 +18,5 @@ type ApiGroup struct {
 	MsgBoxApi
 	BannerApi
 	CompanyApplyApi
+	JobApplyApi
 }

@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : 39.105.214.148
+ Source Server         : 8.134.131.67
  Source Server Type    : MySQL
  Source Server Version : 101102 (10.11.2-MariaDB-1:10.11.2+maria~ubu2204)
- Source Host           : 39.105.214.148:3306
- Source Schema         : gva
+ Source Host           : 8.134.131.67:3306
+ Source Schema         : clothing
 
  Target Server Type    : MySQL
  Target Server Version : 101102 (10.11.2-MariaDB-1:10.11.2+maria~ubu2204)
  File Encoding         : 65001
 
- Date: 04/05/2023 13:37:30
+ Date: 11/05/2023 21:57:00
 */
 
 SET NAMES utf8mb4;
@@ -29,7 +29,7 @@ CREATE TABLE `app_jwt_blacklist`  (
   `jwt` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'jwt',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_app_jwt_blacklist_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of app_jwt_blacklist
@@ -50,7 +50,7 @@ CREATE TABLE `app_role`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_app_role_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of app_role
@@ -73,7 +73,7 @@ CREATE TABLE `app_user`  (
   `password` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `nickname` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `wages` decimal(10, 2) NULL DEFAULT NULL,
-  `status` tinyint NULL DEFAULT NULL,
+  `status` tinyint(1) NULL DEFAULT NULL,
   `phone_num` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `open_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `union_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -82,11 +82,15 @@ CREATE TABLE `app_user`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_app_user_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of app_user
 -- ----------------------------
+INSERT INTO `app_user` VALUES (1, '2023-05-04 18:32:26.163', '2023-05-04 18:32:26.163', NULL, 'lph', '$2a$10$/H9ShAKz.CVeZazugunWfeajmO0z7v19cPxehjIIwSuPPh7NbwyMm', '', 0.00, NULL, '15625538114', '', '', 0, 0, 0);
+INSERT INTO `app_user` VALUES (2, '2023-05-08 10:39:37.435', '2023-05-08 10:39:37.435', NULL, 'lph2', '$2a$10$NxFGW69wc/eWte3SvadAd.1/BSKszku.erbYcWMEvpKPRl2k4WnIq', '', 0.00, NULL, '15625560423', '', '', 0, 0, 0);
+INSERT INTO `app_user` VALUES (3, '2023-05-08 14:29:10.528', '2023-05-08 14:29:10.528', NULL, 'lph4', '$2a$10$fX5P2ew7WAV16no3a6/zFeYSdvncf1PmosBtvZok/f2uPpjsV35la', '', 0.00, NULL, '15625560425', '', '', 0, 0, 0);
+INSERT INTO `app_user` VALUES (4, '2023-05-08 14:48:40.626', '2023-05-08 14:48:40.626', NULL, 'lph3', '$2a$10$GtN8DLVZy6WarrISyZOCm.dM61uRanMlnj5G6sBncCYks0fdJ1/B2', '', 0.00, NULL, '15625560424', '', '', 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for banner
@@ -102,14 +106,14 @@ CREATE TABLE `banner`  (
   `content` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `media_url` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `sort` bigint UNSIGNED NULL DEFAULT NULL,
-  `status` bigint NULL DEFAULT NULL,
+  `status` tinyint(1) NULL DEFAULT NULL,
   `type` bigint UNSIGNED NULL DEFAULT NULL,
   `created_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
   `updated_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_banner_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of banner
@@ -132,7 +136,7 @@ CREATE TABLE `casbin_rule`  (
   `v7` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_casbin_rule`(`ptype` ASC, `v0` ASC, `v1` ASC, `v2` ASC, `v3` ASC, `v4` ASC, `v5` ASC, `v6` ASC, `v7` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 295 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 295 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of casbin_rule
@@ -357,7 +361,7 @@ CREATE TABLE `cloth`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_cloth_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cloth
@@ -380,11 +384,39 @@ CREATE TABLE `company`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_company_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of company
 -- ----------------------------
+INSERT INTO `company` VALUES (1, '2023-05-08 10:37:12.593', '2023-05-08 10:37:12.593', NULL, 1, 'test', 1, 0, 0, 0);
+
+-- ----------------------------
+-- Table structure for company_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `company_apply`;
+CREATE TABLE `company_apply`  (
+  `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `created_at` datetime(3) NULL DEFAULT NULL,
+  `updated_at` datetime(3) NULL DEFAULT NULL,
+  `deleted_at` datetime(3) NULL DEFAULT NULL,
+  `company_id` bigint UNSIGNED NULL DEFAULT NULL,
+  `user_id` bigint UNSIGNED NULL DEFAULT NULL,
+  `role_id` bigint UNSIGNED NULL DEFAULT NULL,
+  `remark` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `created_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
+  `updated_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
+  `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
+  `status` bigint NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  INDEX `idx_company_apply_deleted_at`(`deleted_at` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of company_apply
+-- ----------------------------
+INSERT INTO `company_apply` VALUES (1, '2023-05-08 14:49:51.826', '2023-05-09 09:14:08.979', NULL, 1, 2, 2, '', 0, 0, 0, 1);
+INSERT INTO `company_apply` VALUES (2, '2023-05-08 14:49:58.469', '2023-05-09 09:15:11.096', NULL, 1, 4, 3, 'test', 0, 0, 0, 1);
 
 -- ----------------------------
 -- Table structure for cropping_record
@@ -408,7 +440,7 @@ CREATE TABLE `cropping_record`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_cropping_record_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of cropping_record
@@ -429,7 +461,7 @@ CREATE TABLE `exa_customers`  (
   `sys_user_authority_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '管理角色ID',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_customers_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of exa_customers
@@ -449,7 +481,7 @@ CREATE TABLE `exa_file_chunks`  (
   `file_chunk_path` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_file_chunks_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of exa_file_chunks
@@ -470,7 +502,7 @@ CREATE TABLE `exa_file_upload_and_downloads`  (
   `key` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '编号',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_file_upload_and_downloads_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of exa_file_upload_and_downloads
@@ -494,7 +526,7 @@ CREATE TABLE `exa_files`  (
   `is_finish` tinyint(1) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_exa_files_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of exa_files
@@ -524,7 +556,7 @@ CREATE TABLE `job`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_job_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of job
@@ -542,13 +574,13 @@ CREATE TABLE `job_question`  (
   `job_id` bigint UNSIGNED NULL DEFAULT NULL,
   `user_id` bigint UNSIGNED NULL DEFAULT NULL,
   `content` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `status` bigint NULL DEFAULT NULL,
+  `status` tinyint(1) NULL DEFAULT NULL,
   `created_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
   `updated_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_job_question_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of job_question
@@ -566,12 +598,11 @@ CREATE TABLE `jwt_blacklists`  (
   `jwt` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL COMMENT 'jwt',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_jwt_blacklists_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of jwt_blacklists
 -- ----------------------------
-INSERT INTO `jwt_blacklists` VALUES (1, '2023-05-02 17:46:14.872', '2023-05-02 17:46:14.872', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiODgwOThlNWQtYjhjNi00NmZhLTk3MTMtNDk5ZDkyNGY0Yjg3IiwiSUQiOjEsIlVzZXJuYW1lIjoiYWRtaW4iLCJOaWNrTmFtZSI6Ik1yLuWlh-a3vCIsIkF1dGhvcml0eUlkIjo4ODgsIkJ1ZmZlclRpbWUiOjg2NDAwLCJpc3MiOiJxbVBsdXMiLCJhdWQiOlsiR1ZBIl0sImV4cCI6MTY4MzYyNTU1MywibmJmIjoxNjgzMDIwNzUzfQ.QHx30ORp7C-M5QaXZawpmq1q4sKDdGJnglJS67KDs5g');
 INSERT INTO `jwt_blacklists` VALUES (2, '2023-05-04 13:36:48.574', '2023-05-04 13:36:48.574', NULL, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJVVUlEIjoiNDY4NDgyMjYtODMwZS00ZmRkLTgwMDQtODdiMjY4YzMwNDVmIiwiSUQiOjEsIlVzZXJuYW1lIjoiYWRtaW4iLCJOaWNrTmFtZSI6Ik1yLuWlh-a3vCIsIkF1dGhvcml0eUlkIjo4ODgsIkJ1ZmZlclRpbWUiOjg2NDAwLCJpc3MiOiJxbVBsdXMiLCJhdWQiOlsiR1ZBIl0sImV4cCI6MTY4Mzc4MjEyNiwibmJmIjoxNjgzMTc3MzI2fQ.03BWXABvdL2zjT96KIViGDO7cs3p53KXokywC-8Ra6M');
 
 -- ----------------------------
@@ -583,20 +614,25 @@ CREATE TABLE `msg_box`  (
   `created_at` datetime(3) NULL DEFAULT NULL,
   `updated_at` datetime(3) NULL DEFAULT NULL,
   `deleted_at` datetime(3) NULL DEFAULT NULL,
-  `user_id` bigint UNSIGNED NULL DEFAULT NULL,
   `msg_type` bigint UNSIGNED NULL DEFAULT NULL,
   `msg_id` bigint UNSIGNED NULL DEFAULT NULL,
-  `status` bigint NULL DEFAULT NULL,
+  `status` tinyint(1) NULL DEFAULT NULL,
   `created_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
   `updated_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
+  `from_user` bigint UNSIGNED NULL DEFAULT NULL,
+  `to_user` bigint UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_msg_box_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of msg_box
 -- ----------------------------
+INSERT INTO `msg_box` VALUES (1, '2023-05-08 14:49:51.872', '2023-05-08 16:00:01.406', NULL, 1, 1, 1, 0, 0, 0, 2, 1);
+INSERT INTO `msg_box` VALUES (2, '2023-05-08 14:49:58.521', '2023-05-08 14:49:58.521', NULL, 1, 2, 0, 0, 0, 0, 4, 1);
+INSERT INTO `msg_box` VALUES (3, '2023-05-09 16:16:15.534', '2023-05-09 16:16:15.534', NULL, 2, 1, 0, 0, 0, 0, 3, 4);
+INSERT INTO `msg_box` VALUES (4, '2023-05-09 16:16:17.878', '2023-05-09 16:16:17.878', NULL, 2, 2, 0, 0, 0, 0, 3, 4);
 
 -- ----------------------------
 -- Table structure for process
@@ -617,7 +653,7 @@ CREATE TABLE `process`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_process_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of process
@@ -640,7 +676,7 @@ CREATE TABLE `style`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_style_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of style
@@ -661,7 +697,7 @@ CREATE TABLE `sys_apis`  (
   `method` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'POST' COMMENT '方法',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_apis_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 208 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 220 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_apis
@@ -873,6 +909,18 @@ INSERT INTO `sys_apis` VALUES (204, '2023-05-04 09:43:06.806', '2023-05-04 09:43
 INSERT INTO `sys_apis` VALUES (205, '2023-05-04 09:43:07.020', '2023-05-04 09:43:07.020', NULL, '/banner/updateBanner', '更新轮播图', 'banner', 'PUT');
 INSERT INTO `sys_apis` VALUES (206, '2023-05-04 09:43:07.237', '2023-05-04 09:43:07.237', NULL, '/banner/findBanner', '根据ID获取轮播图', 'banner', 'GET');
 INSERT INTO `sys_apis` VALUES (207, '2023-05-04 09:43:07.453', '2023-05-04 09:43:07.453', NULL, '/banner/getBannerList', '获取轮播图列表', 'banner', 'GET');
+INSERT INTO `sys_apis` VALUES (208, '2023-05-05 10:44:52.000', '2023-05-05 10:44:52.000', NULL, '/companyApply/createCompanyApply', '新增公司申请', 'companyApply', 'POST');
+INSERT INTO `sys_apis` VALUES (209, '2023-05-05 10:44:52.004', '2023-05-05 10:44:52.004', NULL, '/companyApply/deleteCompanyApply', '删除公司申请', 'companyApply', 'DELETE');
+INSERT INTO `sys_apis` VALUES (210, '2023-05-05 10:44:52.008', '2023-05-05 10:44:52.008', NULL, '/companyApply/deleteCompanyApplyByIds', '批量删除公司申请', 'companyApply', 'DELETE');
+INSERT INTO `sys_apis` VALUES (211, '2023-05-05 10:44:52.012', '2023-05-05 10:44:52.012', NULL, '/companyApply/updateCompanyApply', '更新公司申请', 'companyApply', 'PUT');
+INSERT INTO `sys_apis` VALUES (212, '2023-05-05 10:44:52.014', '2023-05-05 10:44:52.014', NULL, '/companyApply/findCompanyApply', '根据ID获取公司申请', 'companyApply', 'GET');
+INSERT INTO `sys_apis` VALUES (213, '2023-05-05 10:44:52.017', '2023-05-05 10:44:52.017', NULL, '/companyApply/getCompanyApplyList', '获取公司申请列表', 'companyApply', 'GET');
+INSERT INTO `sys_apis` VALUES (214, '2023-05-11 21:00:29.974', '2023-05-11 21:00:29.974', NULL, '/jobApply/createJobApply', '新增工单申请', 'jobApply', 'POST');
+INSERT INTO `sys_apis` VALUES (215, '2023-05-11 21:00:30.007', '2023-05-11 21:00:30.007', NULL, '/jobApply/deleteJobApply', '删除工单申请', 'jobApply', 'DELETE');
+INSERT INTO `sys_apis` VALUES (216, '2023-05-11 21:00:30.039', '2023-05-11 21:00:30.039', NULL, '/jobApply/deleteJobApplyByIds', '批量删除工单申请', 'jobApply', 'DELETE');
+INSERT INTO `sys_apis` VALUES (217, '2023-05-11 21:00:30.071', '2023-05-11 21:00:30.071', NULL, '/jobApply/updateJobApply', '更新工单申请', 'jobApply', 'PUT');
+INSERT INTO `sys_apis` VALUES (218, '2023-05-11 21:00:30.102', '2023-05-11 21:00:30.102', NULL, '/jobApply/findJobApply', '根据ID获取工单申请', 'jobApply', 'GET');
+INSERT INTO `sys_apis` VALUES (219, '2023-05-11 21:00:30.134', '2023-05-11 21:00:30.134', NULL, '/jobApply/getJobApplyList', '获取工单申请列表', 'jobApply', 'GET');
 
 -- ----------------------------
 -- Table structure for sys_authorities
@@ -888,7 +936,7 @@ CREATE TABLE `sys_authorities`  (
   `default_router` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT 'dashboard' COMMENT '默认菜单',
   PRIMARY KEY (`authority_id`) USING BTREE,
   UNIQUE INDEX `authority_id`(`authority_id` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9529 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 9529 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_authorities
@@ -905,7 +953,7 @@ CREATE TABLE `sys_authority_btns`  (
   `authority_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '角色ID',
   `sys_menu_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '菜单ID',
   `sys_base_menu_btn_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '菜单按钮ID'
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_authority_btns
@@ -919,7 +967,7 @@ CREATE TABLE `sys_authority_menus`  (
   `sys_base_menu_id` bigint UNSIGNED NOT NULL,
   `sys_authority_authority_id` bigint UNSIGNED NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`sys_base_menu_id`, `sys_authority_authority_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_authority_menus
@@ -998,7 +1046,7 @@ CREATE TABLE `sys_auto_code_histories`  (
   `flag` bigint NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_auto_code_histories_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 20 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_auto_code_histories
@@ -1022,6 +1070,8 @@ INSERT INTO `sys_auto_code_histories` VALUES (16, '2023-05-04 09:26:09.373', '20
 INSERT INTO `sys_auto_code_histories` VALUES (17, '2023-05-04 09:34:04.419', '2023-05-04 09:34:04.419', NULL, 'clothing', '', 'msg_box', '{\"structName\":\"MsgBox\",\"tableName\":\"msg_box\",\"packageName\":\"msgBox\",\"humpPackageName\":\"msg_box\",\"abbreviation\":\"msgBox\",\"description\":\"消息盒子\",\"autoCreateApiToSql\":true,\"autoCreateResource\":true,\"autoMoveFile\":true,\"businessDB\":\"\",\"fields\":[{\"fieldName\":\"UserID\",\"fieldDesc\":\"用户id\",\"fieldType\":\"int\",\"fieldJson\":\"userID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"user_id\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"MsgType\",\"fieldDesc\":\"消息类型\",\"fieldType\":\"int\",\"fieldJson\":\"msgType\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"msg_type\",\"fieldSearchType\":\"=\",\"dictType\":\"msgType\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"MsgID\",\"fieldDesc\":\"消息id\",\"fieldType\":\"int\",\"fieldJson\":\"msgID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"msg_id\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Status\",\"fieldDesc\":\"状态\",\"fieldType\":\"int\",\"fieldJson\":\"status\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"status\",\"fieldSearchType\":\"\",\"dictType\":\"handleStatus\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false}],\"HasTimer\":false,\"package\":\"clothing\"}', 'd:\\project\\clothing\\server\\api\\v1\\clothing\\msg_box.go;d:\\project\\clothing\\server\\model\\clothing\\msg_box.go;d:\\project\\clothing\\server\\model\\clothing\\request\\msg_box.go;d:\\project\\clothing\\server\\router\\clothing\\msg_box.go;d:\\project\\clothing\\server\\service\\clothing\\msg_box.go;d:\\project\\clothing\\web\\src\\api\\msgBox.js;d:\\project\\clothing\\web\\src\\view\\msgBox\\msgBoxForm.vue;d:\\project\\clothing\\web\\src\\view\\msgBox\\msgBox.vue;', 'd:\\project\\clothing\\server\\api\\v1\\clothing\\enter.go@ApiGroup@MsgBoxApi;d:\\project\\clothing\\server\\router\\clothing\\enter.go@RouterGroup@MsgBoxRouter;d:\\project\\clothing\\server\\service\\clothing\\enter.go@ServiceGroup@MsgBoxService;', 'MsgBox', '消息盒子', '190;191;192;193;194;195;', 0);
 INSERT INTO `sys_auto_code_histories` VALUES (18, '2023-05-04 09:38:57.294', '2023-05-04 09:40:09.009', NULL, 'clothing', '', 'banner', '{\"structName\":\"Banner\",\"tableName\":\"banner\",\"packageName\":\"banner\",\"humpPackageName\":\"banner\",\"abbreviation\":\"banner\",\"description\":\"轮播图\",\"autoCreateApiToSql\":true,\"autoCreateResource\":true,\"autoMoveFile\":true,\"businessDB\":\"\",\"fields\":[{\"fieldName\":\"Url\",\"fieldDesc\":\"跳转链接\",\"fieldType\":\"string\",\"fieldJson\":\"url\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"url\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Title\",\"fieldDesc\":\"标题\",\"fieldType\":\"string\",\"fieldJson\":\"title\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"title\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Content\",\"fieldDesc\":\"内容\",\"fieldType\":\"string\",\"fieldJson\":\"content\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"content\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Img\",\"fieldDesc\":\"图片链接\",\"fieldType\":\"string\",\"fieldJson\":\"img\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"img\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Sort\",\"fieldDesc\":\"排序\",\"fieldType\":\"int\",\"fieldJson\":\"sort\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"sort\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Status\",\"fieldDesc\":\"状态\",\"fieldType\":\"int\",\"fieldJson\":\"status\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"status\",\"fieldSearchType\":\"=\",\"dictType\":\"status\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false}],\"HasTimer\":false,\"package\":\"clothing\"}', 'd:\\project\\clothing\\server\\api\\v1\\clothing\\banner.go;d:\\project\\clothing\\server\\model\\clothing\\banner.go;d:\\project\\clothing\\server\\model\\clothing\\request\\banner.go;d:\\project\\clothing\\server\\router\\clothing\\banner.go;d:\\project\\clothing\\server\\service\\clothing\\banner.go;d:\\project\\clothing\\web\\src\\api\\banner.js;d:\\project\\clothing\\web\\src\\view\\banner\\bannerForm.vue;d:\\project\\clothing\\web\\src\\view\\banner\\banner.vue;', 'd:\\project\\clothing\\server\\api\\v1\\clothing\\enter.go@ApiGroup@BannerApi;d:\\project\\clothing\\server\\router\\clothing\\enter.go@RouterGroup@BannerRouter;d:\\project\\clothing\\server\\service\\clothing\\enter.go@ServiceGroup@BannerService;', 'Banner', '轮播图', '196;197;198;199;200;201;', 1);
 INSERT INTO `sys_auto_code_histories` VALUES (19, '2023-05-04 09:43:07.813', '2023-05-04 09:43:07.813', NULL, 'clothing', '', 'banner', '{\"structName\":\"Banner\",\"tableName\":\"banner\",\"packageName\":\"banner\",\"humpPackageName\":\"banner\",\"abbreviation\":\"banner\",\"description\":\"轮播图\",\"autoCreateApiToSql\":true,\"autoCreateResource\":true,\"autoMoveFile\":true,\"businessDB\":\"\",\"fields\":[{\"fieldName\":\"Url\",\"fieldDesc\":\"跳转链接\",\"fieldType\":\"string\",\"fieldJson\":\"url\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"url\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Title\",\"fieldDesc\":\"标题\",\"fieldType\":\"string\",\"fieldJson\":\"title\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"title\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Content\",\"fieldDesc\":\"内容\",\"fieldType\":\"string\",\"fieldJson\":\"content\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"content\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"MediaUrl\",\"fieldDesc\":\"媒体链接\",\"fieldType\":\"string\",\"fieldJson\":\"mediaUrl\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"media_url\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Sort\",\"fieldDesc\":\"排序\",\"fieldType\":\"int\",\"fieldJson\":\"sort\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"sort\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Status\",\"fieldDesc\":\"状态\",\"fieldType\":\"int\",\"fieldJson\":\"status\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"status\",\"fieldSearchType\":\"=\",\"dictType\":\"status\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Type\",\"fieldDesc\":\"媒体类型\",\"fieldType\":\"int\",\"fieldJson\":\"type\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"type\",\"fieldSearchType\":\"\",\"dictType\":\"mediaType\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false}],\"HasTimer\":false,\"package\":\"clothing\"}', 'd:\\project\\clothing\\server\\api\\v1\\clothing\\banner.go;d:\\project\\clothing\\server\\model\\clothing\\banner.go;d:\\project\\clothing\\server\\model\\clothing\\request\\banner.go;d:\\project\\clothing\\server\\router\\clothing\\banner.go;d:\\project\\clothing\\server\\service\\clothing\\banner.go;d:\\project\\clothing\\web\\src\\api\\banner.js;d:\\project\\clothing\\web\\src\\view\\banner\\bannerForm.vue;d:\\project\\clothing\\web\\src\\view\\banner\\banner.vue;', 'd:\\project\\clothing\\server\\api\\v1\\clothing\\enter.go@ApiGroup@BannerApi;d:\\project\\clothing\\server\\router\\clothing\\enter.go@RouterGroup@BannerRouter;d:\\project\\clothing\\server\\service\\clothing\\enter.go@ServiceGroup@BannerService;', 'Banner', '轮播图', '202;203;204;205;206;207;', 0);
+INSERT INTO `sys_auto_code_histories` VALUES (20, '2023-05-05 10:44:52.190', '2023-05-05 10:44:52.190', NULL, 'clothing', '', 'company_apply', '{\"structName\":\"CompanyApply\",\"tableName\":\"company_apply\",\"packageName\":\"companyApply\",\"humpPackageName\":\"company_apply\",\"abbreviation\":\"companyApply\",\"description\":\"公司申请\",\"autoCreateApiToSql\":true,\"autoCreateResource\":true,\"autoMoveFile\":true,\"businessDB\":\"\",\"fields\":[{\"fieldName\":\"CompanyID\",\"fieldDesc\":\"公司id\",\"fieldType\":\"int\",\"fieldJson\":\"companyID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"company_id\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"UserID\",\"fieldDesc\":\"申请人id\",\"fieldType\":\"int\",\"fieldJson\":\"userID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"user_id\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"RoleID\",\"fieldDesc\":\"角色id\",\"fieldType\":\"int\",\"fieldJson\":\"roleID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"role_id\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Remark\",\"fieldDesc\":\"备注\",\"fieldType\":\"string\",\"fieldJson\":\"remark\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"remark\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false}],\"HasTimer\":false,\"package\":\"clothing\"}', 'D:\\project\\clothing\\server\\api\\v1\\clothing\\company_apply.go;D:\\project\\clothing\\server\\model\\clothing\\company_apply.go;D:\\project\\clothing\\server\\model\\clothing\\request\\company_apply.go;D:\\project\\clothing\\server\\router\\clothing\\company_apply.go;D:\\project\\clothing\\server\\service\\clothing\\company_apply.go;D:\\project\\clothing\\web\\src\\api\\companyApply.js;D:\\project\\clothing\\web\\src\\view\\companyApply\\companyApplyForm.vue;D:\\project\\clothing\\web\\src\\view\\companyApply\\companyApply.vue;', 'D:\\project\\clothing\\server\\api\\v1\\clothing\\enter.go@ApiGroup@CompanyApplyApi;D:\\project\\clothing\\server\\router\\clothing\\enter.go@RouterGroup@CompanyApplyRouter;D:\\project\\clothing\\server\\service\\clothing\\enter.go@ServiceGroup@CompanyApplyService;', 'CompanyApply', '公司申请', '208;209;210;211;212;213;', 0);
+INSERT INTO `sys_auto_code_histories` VALUES (21, '2023-05-11 21:00:30.259', '2023-05-11 21:00:30.259', NULL, 'clothing', '', 'job_apply', '{\"structName\":\"JobApply\",\"tableName\":\"job_apply\",\"packageName\":\"jobApply\",\"humpPackageName\":\"job_apply\",\"abbreviation\":\"jobApply\",\"description\":\"工单申请\",\"autoCreateApiToSql\":true,\"autoCreateResource\":true,\"autoMoveFile\":true,\"businessDB\":\"\",\"fields\":[{\"fieldName\":\"CroppingID\",\"fieldDesc\":\"裁剪单id\",\"fieldType\":\"int\",\"fieldJson\":\"croppingID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"cropping_id\",\"fieldSearchType\":\"=\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"UserID\",\"fieldDesc\":\"用户id\",\"fieldType\":\"int\",\"fieldJson\":\"userID\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"user_id\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"ProcessName\",\"fieldDesc\":\"工序名\",\"fieldType\":\"string\",\"fieldJson\":\"processName\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"process_name\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Price\",\"fieldDesc\":\"价格\",\"fieldType\":\"float64\",\"fieldJson\":\"price\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"price\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Quantity\",\"fieldDesc\":\"数量\",\"fieldType\":\"int\",\"fieldJson\":\"quantity\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"quantity\",\"fieldSearchType\":\"\",\"dictType\":\"\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"JobType\",\"fieldDesc\":\"计价类型\",\"fieldType\":\"int\",\"fieldJson\":\"jobType\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"job_type\",\"fieldSearchType\":\"\",\"dictType\":\"jobType\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false},{\"fieldName\":\"Status\",\"fieldDesc\":\"审核状态\",\"fieldType\":\"int\",\"fieldJson\":\"status\",\"dataTypeLong\":\"\",\"comment\":\"\",\"columnName\":\"status\",\"fieldSearchType\":\"=\",\"dictType\":\"handleStatus\",\"require\":false,\"errorText\":\"\",\"clearable\":true,\"sort\":false}],\"HasTimer\":false,\"package\":\"clothing\"}', 'D:\\project\\gin-vue-admin\\server\\api\\v1\\clothing\\job_apply.go;D:\\project\\gin-vue-admin\\server\\model\\clothing\\job_apply.go;D:\\project\\gin-vue-admin\\server\\model\\clothing\\request\\job_apply.go;D:\\project\\gin-vue-admin\\server\\router\\clothing\\job_apply.go;D:\\project\\gin-vue-admin\\server\\service\\clothing\\job_apply.go;D:\\project\\gin-vue-admin\\web\\src\\api\\jobApply.js;D:\\project\\gin-vue-admin\\web\\src\\view\\jobApply\\jobApplyForm.vue;D:\\project\\gin-vue-admin\\web\\src\\view\\jobApply\\jobApply.vue;', 'D:\\project\\gin-vue-admin\\server\\api\\v1\\clothing\\enter.go@ApiGroup@JobApplyApi;D:\\project\\gin-vue-admin\\server\\router\\clothing\\enter.go@RouterGroup@JobApplyRouter;D:\\project\\gin-vue-admin\\server\\service\\clothing\\enter.go@ServiceGroup@JobApplyService;', 'JobApply', '工单申请', '214;215;216;217;218;219;', 0);
 
 -- ----------------------------
 -- Table structure for sys_auto_codes
@@ -1037,7 +1087,7 @@ CREATE TABLE `sys_auto_codes`  (
   `desc` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_auto_codes_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_auto_codes
@@ -1058,7 +1108,7 @@ CREATE TABLE `sys_base_menu_btns`  (
   `sys_base_menu_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '菜单ID',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_base_menu_btns_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_base_menu_btns
@@ -1079,7 +1129,7 @@ CREATE TABLE `sys_base_menu_parameters`  (
   `value` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '地址栏携带参数的值',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_base_menu_parameters_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_base_menu_parameters
@@ -1109,7 +1159,7 @@ CREATE TABLE `sys_base_menus`  (
   `close_tab` tinyint(1) NULL DEFAULT NULL COMMENT '附加属性',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_base_menus_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 35 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_base_menus
@@ -1155,7 +1205,7 @@ INSERT INTO `sys_base_menus` VALUES (34, '2023-05-02 21:16:17.353', '2023-05-02 
 DROP TABLE IF EXISTS `sys_chat_gpt_options`;
 CREATE TABLE `sys_chat_gpt_options`  (
   `sk` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_chat_gpt_options
@@ -1169,7 +1219,7 @@ CREATE TABLE `sys_data_authority_id`  (
   `sys_authority_authority_id` bigint UNSIGNED NOT NULL COMMENT '角色ID',
   `data_authority_id_authority_id` bigint UNSIGNED NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`sys_authority_authority_id`, `data_authority_id_authority_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_data_authority_id
@@ -1195,7 +1245,7 @@ CREATE TABLE `sys_dictionaries`  (
   `desc` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '描述',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionaries_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dictionaries
@@ -1230,7 +1280,7 @@ CREATE TABLE `sys_dictionary_details`  (
   `sys_dictionary_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '关联标记',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_dictionary_details_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 45 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 48 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_dictionary_details
@@ -1271,14 +1321,17 @@ INSERT INTO `sys_dictionary_details` VALUES (33, '2023-05-03 15:14:56.795', '202
 INSERT INTO `sys_dictionary_details` VALUES (34, '2023-05-03 15:36:40.111', '2023-05-03 15:36:40.111', NULL, '工序', 1, 1, 1, 10);
 INSERT INTO `sys_dictionary_details` VALUES (35, '2023-05-03 15:36:48.800', '2023-05-03 15:36:48.800', NULL, '成衣', 2, 1, 2, 10);
 INSERT INTO `sys_dictionary_details` VALUES (36, '2023-05-04 09:22:00.222', '2023-05-04 09:22:00.222', NULL, '待处理', 0, 1, 0, 11);
-INSERT INTO `sys_dictionary_details` VALUES (37, '2023-05-04 09:22:22.952', '2023-05-04 09:22:22.952', NULL, '已完成', 1, 1, 1, 11);
-INSERT INTO `sys_dictionary_details` VALUES (38, '2023-05-04 09:29:32.242', '2023-05-04 11:33:48.576', NULL, '进组申请', 3, 1, 3, 12);
-INSERT INTO `sys_dictionary_details` VALUES (39, '2023-05-04 09:30:02.489', '2023-05-04 11:34:04.838', NULL, '工单问题', 4, 1, 4, 12);
-INSERT INTO `sys_dictionary_details` VALUES (40, '2023-05-04 09:30:17.475', '2023-05-04 11:34:11.914', NULL, '工单审核', 5, 1, 5, 12);
+INSERT INTO `sys_dictionary_details` VALUES (37, '2023-05-04 09:22:22.952', '2023-05-08 16:49:14.838', NULL, '已通过', 1, 1, 1, 11);
+INSERT INTO `sys_dictionary_details` VALUES (38, '2023-05-04 09:29:32.242', '2023-05-08 13:37:58.135', NULL, '进组申请', 2, 1, 2, 12);
+INSERT INTO `sys_dictionary_details` VALUES (39, '2023-05-04 09:30:02.489', '2023-05-08 13:38:06.349', NULL, '工单问题', 4, 1, 4, 12);
+INSERT INTO `sys_dictionary_details` VALUES (40, '2023-05-04 09:30:17.475', '2023-05-08 13:38:11.988', NULL, '工单审核', 5, 1, 5, 12);
 INSERT INTO `sys_dictionary_details` VALUES (41, '2023-05-04 09:41:36.101', '2023-05-04 09:41:36.101', NULL, '图片', 1, 1, 1, 13);
 INSERT INTO `sys_dictionary_details` VALUES (42, '2023-05-04 09:41:45.135', '2023-05-04 09:41:45.135', NULL, '视频', 2, 1, 2, 13);
-INSERT INTO `sys_dictionary_details` VALUES (43, '2023-05-04 11:33:25.288', '2023-05-04 11:33:55.687', NULL, '裁缝申请', 1, 1, 1, 12);
-INSERT INTO `sys_dictionary_details` VALUES (44, '2023-05-04 11:33:41.396', '2023-05-04 11:33:41.396', NULL, '组长申请', 2, 1, 2, 12);
+INSERT INTO `sys_dictionary_details` VALUES (43, '2023-05-04 11:33:25.288', '2023-05-08 13:37:37.855', NULL, '裁缝、组长申请', 1, 1, 1, 12);
+INSERT INTO `sys_dictionary_details` VALUES (44, '2023-05-04 11:33:41.396', '2023-05-04 11:33:41.396', '2023-05-05 10:45:59.102', '组长申请', 2, 1, 2, 12);
+INSERT INTO `sys_dictionary_details` VALUES (45, '2023-05-08 09:06:08.670', '2023-05-08 13:38:02.892', NULL, '工单申请', 3, 1, 3, 12);
+INSERT INTO `sys_dictionary_details` VALUES (46, '2023-05-08 09:46:06.961', '2023-05-08 09:46:28.561', '2023-05-08 13:37:52.432', '组长申请', 2, 1, 2, 12);
+INSERT INTO `sys_dictionary_details` VALUES (47, '2023-05-08 16:49:22.415', '2023-05-08 16:49:22.415', NULL, '已拒绝', 2, 1, 2, 11);
 
 -- ----------------------------
 -- Table structure for sys_operation_records
@@ -1301,7 +1354,7 @@ CREATE TABLE `sys_operation_records`  (
   `user_id` bigint UNSIGNED NULL DEFAULT NULL COMMENT '用户id',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_sys_operation_records_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 77 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_operation_records
@@ -1357,6 +1410,31 @@ INSERT INTO `sys_operation_records` VALUES (48, '2023-05-04 11:33:48.758', '2023
 INSERT INTO `sys_operation_records` VALUES (49, '2023-05-04 11:33:55.867', '2023-05-04 11:33:55.867', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 180006500, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":43,\"CreatedAt\":\"2023-05-04T11:33:25.288+08:00\",\"UpdatedAt\":\"2023-05-04T11:33:25.288+08:00\",\"label\":\"裁缝申请\",\"value\":1,\"status\":true,\"sort\":1,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
 INSERT INTO `sys_operation_records` VALUES (50, '2023-05-04 11:34:05.032', '2023-05-04 11:34:05.032', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 190914200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":39,\"CreatedAt\":\"2023-05-04T09:30:02.489+08:00\",\"UpdatedAt\":\"2023-05-04T09:30:02.489+08:00\",\"label\":\"工单问题\",\"value\":4,\"status\":true,\"sort\":4,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
 INSERT INTO `sys_operation_records` VALUES (51, '2023-05-04 11:34:12.098', '2023-05-04 11:34:12.098', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 183971100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":40,\"CreatedAt\":\"2023-05-04T09:30:17.475+08:00\",\"UpdatedAt\":\"2023-05-04T09:30:17.475+08:00\",\"label\":\"工单审核\",\"value\":5,\"status\":true,\"sort\":5,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (52, '2023-05-04 13:39:22.641', '2023-05-04 13:39:22.641', NULL, '127.0.0.1', 'POST', '/system/getSystemConfig', 200, 521700, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '', '{\"code\":0,\"data\":{\"config\":{\"jwt\":{\"signing-key\":\"b84badd0-4e04-4ee9-a914-a38116489b6a\",\"expires-time\":\"7d\",\"buffer-time\":\"1d\",\"issuer\":\"qmPlus\"},\"zap\":{\"level\":\"info\",\"prefix\":\"[github.com/flipped-aurora/gin-vue-admin/server]\",\"format\":\"console\",\"director\":\"log\",\"encode-level\":\"LowercaseColorLevelEncoder\",\"stacktrace-key\":\"stacktrace\",\"max-age\":0,\"show-line\":true,\"log-in-console\":true},\"redis\":{\"db\":0,\"addr\":\"127.0.0.1:6379\",\"password\":\"\",\"prefix\":\"\"},\"email\":{\"to\":\"xxx@qq.com\",\"port\":465,\"from\":\"xxx@163.com\",\"host\":\"smtp.163.com\",\"is-ssl\":true,\"secret\":\"xxx\",\"nickname\":\"test\"},\"system\":{\"env\":\"public\",\"addr\":8889,\"db-type\":\"mysql\",\"oss-type\":\"local\",\"use-multipoint\":false,\"use-redis\":false,\"iplimit-count\":15000,\"iplimit-time\":3600,\"router-prefix\":\"\"},\"captcha\":{\"key-long\":6,\"img-width\":240,\"img-height\":80,\"open-captcha\":0,\"open-captcha-timeout\":3600},\"autocode\":{\"transfer-restart\":true,\"root\":\"D:\\\\project\\\\clothing\",\"server\":\"/server\",\"server-api\":\"/api/v1/%s\",\"server-plug\":\"/plugin/%s\",\"server-initialize\":\"/initialize\",\"server-model\":\"/model/%s\",\"server-request\":\"/model/%s/request/\",\"server-router\":\"/router/%s\",\"server-service\":\"/service/%s\",\"web\":\"/web/src\",\"web-api\":\"/api\",\"web-form\":\"/view\",\"web-table\":\"/view\"},\"mysql\":{\"path\":\"127.0.0.1\",\"port\":\"3306\",\"config\":\"charset=utf8mb4\\u0026parseTime=True\\u0026loc=Local\",\"db-name\":\"clothing\",\"username\":\"root\",\"password\":\"local123\",\"prefix\":\"\",\"singular\":false,\"engine\":\"\",\"max-idle-conns\":10,\"max-open-conns\":100,\"log-mode\":\"error\",\"log-zap\":false},\"mssql\":{\"path\":\"\",\"port\":\"\",\"config\":\"\",\"db-name\":\"\",\"username\":\"\",\"password\":\"\",\"prefix\":\"\",\"singular\":false,\"engine\":\"\",\"max-idle-conns\":10,\"max-open-conns\":100,\"log-mode\":\"\",\"log-zap\":false},\"pgsql\":{\"path\":\"\",\"port\":\"\",\"config\":\"\",\"db-name\":\"\",\"username\":\"\",\"password\":\"\",\"prefix\":\"\",\"singular\":false,\"engine\":\"\",\"max-idle-conns\":10,\"max-open-conns\":100,\"log-mode\":\"\",\"log-zap\":false},\"oracle\":{\"path\":\"\",\"port\":\"\",\"config\":\"\",\"db-name\":\"\",\"username\":\"\",\"password\":\"\",\"prefix\":\"\",\"singular\":false,\"engine\":\"\",\"max-idle-conns\":10,\"max-open-conns\":100,\"log-mode\":\"\",\"log-zap\":false},\"db-list\":[{\"disable\":true,\"type\":\"\",\"alias-name\":\"\",\"path\":\"\",\"port\":\"\",\"config\":\"\",\"db-name\":\"\",\"username\":\"\",\"password\":\"\",\"prefix\":\"\",\"singular\":false,\"engine\":\"\",\"max-idle-conns\":10,\"max-open-conns\":100,\"log-mode\":\"\",\"log-zap\":false}],\"local\":{\"path\":\"uploads/file\",\"store-path\":\"uploads/file\"},\"qiniu\":{\"zone\":\"ZoneHuaDong\",\"bucket\":\"\",\"img-path\":\"\",\"use-https\":false,\"access-key\":\"\",\"secret-key\":\"\",\"use-cdn-domains\":false},\"aliyun-oss\":{\"endpoint\":\"yourEndpoint\",\"access-key-id\":\"yourAccessKeyId\",\"access-key-secret\":\"yourAccessKeySecret\",\"bucket-name\":\"yourBucketName\",\"bucket-url\":\"yourBucketUrl\",\"base-path\":\"yourBasePath\"},\"hua-wei-obs\":{\"path\":\"you-path\",\"bucket\":\"you-bucket\",\"endpoint\":\"you-endpoint\",\"access-key\":\"you-access-key\",\"secret-key\":\"you-secret-key\"},\"tencent-cos\":{\"bucket\":\"xxxxx-10005608\",\"region\":\"ap-shanghai\",\"secret-id\":\"your-secret-id\",\"secret-key\":\"your-secret-key\",\"base-url\":\"https://gin.vue.admin\",\"path-prefix\":\"github.com/flipped-aurora/gin-vue-admin/server\"},\"aws-s3\":{\"bucket\":\"xxxxx-10005608\",\"region\":\"ap-shanghai\",\"endpoint\":\"\",\"s3-force-path-style\":false,\"disable-ssl\":false,\"secret-id\":\"your-secret-id\",\"secret-key\":\"your-secret-key\",\"base-url\":\"https://gin.vue.admin\",\"path-prefix\":\"github.com/flipped-aurora/gin-vue-admin/server\"},\"excel\":{\"dir\":\"./resource/excel/\"},\"timer\":{\"start\":true,\"spec\":\"@daily\",\"with_seconds\":false,\"detail\":[{\"tableName\":\"sys_operation_records\",\"compareField\":\"created_at\",\"interval\":\"2160h\"},{\"tableName\":\"jwt_blacklists\",\"compareField\":\"created_at\",\"interval\":\"168h\"}]},\"cors\":{\"mode\":\"strict-whitelist\",\"whitelist\":[{\"allow-origin\":\"example1.com\",\"allow-methods\":\"POST, GET\",\"allow-headers\":\"Content-Type,AccessToken,X-CSRF-Token, Authorization, Token,X-Token,X-User-Id\",\"expose-headers\":\"Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type\",\"allow-credentials\":true},{\"allow-origin\":\"example2.com\",\"allow-methods\":\"GET, POST\",\"allow-headers\":\"content-type\",\"expose-headers\":\"Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type\",\"allow-credentials\":true}]}}},\"msg\":\"获取成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (53, '2023-05-05 10:45:50.362', '2023-05-05 10:45:50.362', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 15003800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":43,\"CreatedAt\":\"2023-05-04T11:33:25.288+08:00\",\"UpdatedAt\":\"2023-05-04T11:33:55.687+08:00\",\"label\":\"裁缝/组长申请\",\"value\":1,\"status\":true,\"sort\":1,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (54, '2023-05-05 10:45:59.109', '2023-05-05 10:45:59.109', NULL, '127.0.0.1', 'DELETE', '/sysDictionaryDetail/deleteSysDictionaryDetail', 200, 5649200, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":44}', '{\"code\":0,\"data\":{},\"msg\":\"删除成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (55, '2023-05-05 10:46:03.848', '2023-05-05 10:46:03.848', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 7841300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":38,\"CreatedAt\":\"2023-05-04T09:29:32.242+08:00\",\"UpdatedAt\":\"2023-05-04T11:33:48.576+08:00\",\"label\":\"进组申请\",\"value\":2,\"status\":true,\"sort\":2,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (56, '2023-05-05 10:46:10.332', '2023-05-05 10:46:10.332', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 6339400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":39,\"CreatedAt\":\"2023-05-04T09:30:02.489+08:00\",\"UpdatedAt\":\"2023-05-04T11:34:04.838+08:00\",\"label\":\"工单问题\",\"value\":3,\"status\":true,\"sort\":3,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (57, '2023-05-05 10:46:14.254', '2023-05-05 10:46:14.254', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 4288300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":40,\"CreatedAt\":\"2023-05-04T09:30:17.475+08:00\",\"UpdatedAt\":\"2023-05-04T11:34:11.914+08:00\",\"label\":\"工单审核\",\"value\":4,\"status\":true,\"sort\":4,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (58, '2023-05-08 09:06:08.749', '2023-05-08 09:06:08.749', NULL, '127.0.0.1', 'POST', '/sysDictionaryDetail/createSysDictionaryDetail', 200, 165308400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"label\":\"工单申请\",\"value\":3,\"status\":true,\"sort\":3,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"创建成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (59, '2023-05-08 09:06:16.527', '2023-05-08 09:06:16.527', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 37250900, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":39,\"CreatedAt\":\"2023-05-04T09:30:02.489+08:00\",\"UpdatedAt\":\"2023-05-05T10:46:10.327+08:00\",\"label\":\"工单问题\",\"value\":4,\"status\":true,\"sort\":4,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (60, '2023-05-08 09:06:21.694', '2023-05-08 09:06:21.694', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 58388600, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":40,\"CreatedAt\":\"2023-05-04T09:30:17.475+08:00\",\"UpdatedAt\":\"2023-05-05T10:46:14.25+08:00\",\"label\":\"工单审核\",\"value\":5,\"status\":true,\"sort\":5,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (61, '2023-05-08 09:46:06.995', '2023-05-08 09:46:06.995', NULL, '127.0.0.1', 'POST', '/sysDictionaryDetail/createSysDictionaryDetail', 200, 34532700, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"label\":\"组长申请\",\"value\":2,\"status\":true,\"sort\":2,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"创建成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (62, '2023-05-08 09:46:12.798', '2023-05-08 09:46:12.798', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 41695000, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":43,\"CreatedAt\":\"2023-05-04T11:33:25.288+08:00\",\"UpdatedAt\":\"2023-05-05T10:45:50.348+08:00\",\"label\":\"裁缝申请\",\"value\":1,\"status\":true,\"sort\":1,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (63, '2023-05-08 09:46:17.226', '2023-05-08 09:46:17.226', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 37396600, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":46,\"CreatedAt\":\"2023-05-08T09:46:06.961+08:00\",\"UpdatedAt\":\"2023-05-08T09:46:06.961+08:00\",\"label\":\"组长申请\",\"value\":3,\"status\":true,\"sort\":3,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (64, '2023-05-08 09:46:28.595', '2023-05-08 09:46:28.595', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 34677100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":46,\"CreatedAt\":\"2023-05-08T09:46:06.961+08:00\",\"UpdatedAt\":\"2023-05-08T09:46:17.187+08:00\",\"label\":\"组长申请\",\"value\":2,\"status\":true,\"sort\":2,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (65, '2023-05-08 09:46:38.331', '2023-05-08 09:46:38.331', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 35042400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":38,\"CreatedAt\":\"2023-05-04T09:29:32.242+08:00\",\"UpdatedAt\":\"2023-05-05T10:46:03.842+08:00\",\"label\":\"进组申请\",\"value\":3,\"status\":true,\"sort\":3,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (66, '2023-05-08 09:46:43.500', '2023-05-08 09:46:43.500', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 39902100, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":45,\"CreatedAt\":\"2023-05-08T09:06:08.67+08:00\",\"UpdatedAt\":\"2023-05-08T09:06:08.67+08:00\",\"label\":\"工单申请\",\"value\":4,\"status\":true,\"sort\":4,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (67, '2023-05-08 09:46:50.396', '2023-05-08 09:46:50.396', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 34994600, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":39,\"CreatedAt\":\"2023-05-04T09:30:02.489+08:00\",\"UpdatedAt\":\"2023-05-08T09:06:16.487+08:00\",\"label\":\"工单问题\",\"value\":5,\"status\":true,\"sort\":5,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (68, '2023-05-08 09:50:23.589', '2023-05-08 09:50:23.589', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 34873900, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":40,\"CreatedAt\":\"2023-05-04T09:30:17.475+08:00\",\"UpdatedAt\":\"2023-05-08T09:06:21.632+08:00\",\"label\":\"工单审核\",\"value\":6,\"status\":true,\"sort\":6,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (69, '2023-05-08 13:37:37.890', '2023-05-08 13:37:37.890', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 37238800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":43,\"CreatedAt\":\"2023-05-04T11:33:25.288+08:00\",\"UpdatedAt\":\"2023-05-08T09:46:12.757+08:00\",\"label\":\"裁缝、组长申请\",\"value\":1,\"status\":true,\"sort\":1,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (70, '2023-05-08 13:37:52.465', '2023-05-08 13:37:52.465', NULL, '127.0.0.1', 'DELETE', '/sysDictionaryDetail/deleteSysDictionaryDetail', 200, 32952400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":46}', '{\"code\":0,\"data\":{},\"msg\":\"删除成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (71, '2023-05-08 13:37:58.169', '2023-05-08 13:37:58.169', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 36058300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":38,\"CreatedAt\":\"2023-05-04T09:29:32.242+08:00\",\"UpdatedAt\":\"2023-05-08T09:46:38.296+08:00\",\"label\":\"进组申请\",\"value\":2,\"status\":true,\"sort\":2,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (72, '2023-05-08 13:38:02.930', '2023-05-08 13:38:02.930', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 38928800, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":45,\"CreatedAt\":\"2023-05-08T09:06:08.67+08:00\",\"UpdatedAt\":\"2023-05-08T09:46:43.457+08:00\",\"label\":\"工单申请\",\"value\":3,\"status\":true,\"sort\":3,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (73, '2023-05-08 13:38:06.385', '2023-05-08 13:38:06.385', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 34710300, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":39,\"CreatedAt\":\"2023-05-04T09:30:02.489+08:00\",\"UpdatedAt\":\"2023-05-08T09:46:50.36+08:00\",\"label\":\"工单问题\",\"value\":4,\"status\":true,\"sort\":4,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (74, '2023-05-08 13:38:12.023', '2023-05-08 13:38:12.023', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 33318400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":40,\"CreatedAt\":\"2023-05-04T09:30:17.475+08:00\",\"UpdatedAt\":\"2023-05-08T09:50:23.555+08:00\",\"label\":\"工单审核\",\"value\":5,\"status\":true,\"sort\":5,\"sysDictionaryID\":12}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (75, '2023-05-08 16:49:14.881', '2023-05-08 16:49:14.881', NULL, '127.0.0.1', 'PUT', '/sysDictionaryDetail/updateSysDictionaryDetail', 200, 47861400, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"ID\":37,\"CreatedAt\":\"2023-05-04T09:22:22.952+08:00\",\"UpdatedAt\":\"2023-05-04T09:22:22.952+08:00\",\"label\":\"已通过\",\"value\":1,\"status\":true,\"sort\":1,\"sysDictionaryID\":11}', '{\"code\":0,\"data\":{},\"msg\":\"更新成功\"}', 1);
+INSERT INTO `sys_operation_records` VALUES (76, '2023-05-08 16:49:22.452', '2023-05-08 16:49:22.452', NULL, '127.0.0.1', 'POST', '/sysDictionaryDetail/createSysDictionaryDetail', 200, 36420500, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36 Edg/112.0.1722.64', '', '{\"label\":\"已拒绝\",\"value\":2,\"status\":true,\"sort\":2,\"sysDictionaryID\":11}', '{\"code\":0,\"data\":{},\"msg\":\"创建成功\"}', 1);
 
 -- ----------------------------
 -- Table structure for sys_user_authority
@@ -1366,7 +1444,7 @@ CREATE TABLE `sys_user_authority`  (
   `sys_user_id` bigint UNSIGNED NOT NULL,
   `sys_authority_authority_id` bigint UNSIGNED NOT NULL COMMENT '角色ID',
   PRIMARY KEY (`sys_user_id`, `sys_authority_authority_id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_user_authority
@@ -1401,7 +1479,7 @@ CREATE TABLE `sys_users`  (
   INDEX `idx_sys_users_deleted_at`(`deleted_at` ASC) USING BTREE,
   INDEX `idx_sys_users_uuid`(`uuid` ASC) USING BTREE,
   INDEX `idx_sys_users_username`(`username` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of sys_users
@@ -1423,13 +1501,15 @@ CREATE TABLE `team`  (
   `created_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '创建者',
   `updated_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '更新者',
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
+  `user_id` bigint UNSIGNED NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_team_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of team
 -- ----------------------------
+INSERT INTO `team` VALUES (1, '2023-05-09 09:15:10.880', '2023-05-09 09:15:10.880', NULL, 1, 'test', 0, 0, 0, 4);
 
 -- ----------------------------
 -- Table structure for team_apply
@@ -1448,11 +1528,13 @@ CREATE TABLE `team_apply`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_team_apply_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of team_apply
 -- ----------------------------
+INSERT INTO `team_apply` VALUES (1, '2023-05-09 16:16:15.476', '2023-05-09 16:22:40.157', NULL, 1, 3, 1, 0, 0, 0);
+INSERT INTO `team_apply` VALUES (2, '2023-05-09 16:16:17.823', '2023-05-09 16:21:37.129', NULL, 1, 3, 1, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for team_user
@@ -1470,11 +1552,13 @@ CREATE TABLE `team_user`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_team_user_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of team_user
 -- ----------------------------
+INSERT INTO `team_user` VALUES (1, '2023-05-09 16:21:37.073', '2023-05-09 16:21:37.073', NULL, 1, 4, 0, 0, 0);
+INSERT INTO `team_user` VALUES (2, '2023-05-09 16:21:37.073', '2023-05-09 16:21:37.073', NULL, 1, 3, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for user_role
@@ -1493,11 +1577,15 @@ CREATE TABLE `user_role`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_user_role_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
+INSERT INTO `user_role` VALUES (1, '2023-05-08 10:37:12.638', '2023-05-08 10:37:12.638', NULL, 1, 1, 1, 0, 0, 0);
+INSERT INTO `user_role` VALUES (4, '2023-05-09 09:14:08.875', '2023-05-09 09:14:08.875', NULL, 2, 2, 1, 0, 0, 0);
+INSERT INTO `user_role` VALUES (5, '2023-05-09 09:15:10.990', '2023-05-09 09:15:10.990', NULL, 4, 3, 1, 0, 0, 0);
+INSERT INTO `user_role` VALUES (6, '2023-05-09 16:16:15.414', '2023-05-09 16:16:15.414', NULL, 3, 4, 1, 0, 0, 0);
 
 -- ----------------------------
 -- Table structure for user_wallet
@@ -1516,7 +1604,7 @@ CREATE TABLE `user_wallet`  (
   `deleted_by` bigint UNSIGNED NULL DEFAULT NULL COMMENT '删除者',
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `idx_user_wallet_deleted_at`(`deleted_at` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user_wallet

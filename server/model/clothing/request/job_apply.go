@@ -6,9 +6,14 @@ import (
 	"time"
 )
 
-type JobApplySearch struct{
-    clothing.JobApply
-    StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
-    EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
-    request.PageInfo
+type JobApplySearch struct {
+	clothing.JobApply
+	StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
+	EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+	request.PageInfo
+}
+
+type OptJobApply struct {
+	Status int `json:"status" form:"status"`
+	ID     int `json:"ID" form:"ID"`
 }

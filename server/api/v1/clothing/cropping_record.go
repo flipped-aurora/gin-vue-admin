@@ -8,6 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -34,6 +35,8 @@ func (croppingRecordApi *CroppingRecordApi) CreateCroppingRecord(c *gin.Context)
 		return
 	}
 	croppingRecord.CreatedBy = utils.GetUserID(c)
+	croppingRecord.UserID = utils.GetUserID(c)
+	croppingRecord.Step = enum.CroppingPending
 	if !userRoleService.CheckManager(croppingRecord.CreatedBy, croppingRecord.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)

@@ -27,10 +27,10 @@ func (s *StyleRouter) InitStyleRouter(Router *gin.RouterGroup) {
 		styleRouterWithoutRecord.GET("getStyleList", styleApi.GetStyleList) // 获取Style列表
 	}
 	{
-		h5StyleRouterWithoutRecord.POST("createStyle", styleApi.CreateStyle)   // 新建Style
-		h5StyleRouterWithoutRecord.DELETE("deleteStyle", styleApi.DeleteStyle) // 删除Style
-		h5StyleRouterWithoutRecord.PUT("updateStyle", styleApi.UpdateStyle)    // 更新Style
-		h5StyleRouterWithoutRecord.GET("findStyle", styleApi.FindStyle)        // 根据ID获取Style
-		h5StyleRouterWithoutRecord.GET("getStyleList", styleApi.GetStyleList)  // 获取Style列表
+		h5StyleRouterWithoutRecord.POST("createStyle", styleApi.CreateStyle) // 新建Style
+		//h5StyleRouterWithoutRecord.DELETE("deleteStyle", styleApi.DeleteStyle) // 删除Style
+		h5StyleRouterWithoutRecord.PUT("updateStyle", styleApi.UpdateStyle)   // 更新Style
+		h5StyleRouterWithoutRecord.GET("findStyle", styleApi.FindStyle)       // 根据ID获取Style
+		h5StyleRouterWithoutRecord.GET("getStyleList", styleApi.GetStyleList) // 获取Style列表
 	}
 }

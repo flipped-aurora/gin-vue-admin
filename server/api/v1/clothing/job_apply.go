@@ -78,7 +78,12 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		msgBoxService.SendMsg(jobApply.CreatedBy, team.UserID, enum.JobApply, jobApply.ID)
+		err := msgBoxService.SendMsg(jobApply.CreatedBy, team.UserID, enum.JobApply, jobApply.ID)
+		if err != nil {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("创建失败", c)
+			return
+		}
 		response.OkWithMessage("创建成功", c)
 	}
 }
@@ -181,5 +186,32 @@ func (jobApplyApi *JobApplyApi) GetJobApplyList(c *gin.Context) {
 			Page:     pageInfo.Page,
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
+	}
+}
+
+func (jobApplyApi *JobApplyApi) OptApply(c *gin.Context) {
+	var opt clothingReq.OptJobApply
+	err := c.ShouldBindJSON(&opt)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	userID := utils.GetUserID(c)
+	apply, err := jobApplyService.GetJobApply(uint(opt.ID))
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	team, err := teamService.GetTeam(apply.TeamID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	if team.UserID != userID {
+		global.GVA_LOG.Error("权限不足!", zap.Error(err))
+		response.FailWithMessage("权限不足", c)
+		return
 	}
 }

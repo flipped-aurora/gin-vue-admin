@@ -31,6 +31,7 @@ var (
 	BlackCache    local_cache.Cache
 	lock          sync.RWMutex
 	AppBlackCache local_cache.Cache
+	GVA_KEYLOCK   = NewKeyLock()
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db

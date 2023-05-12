@@ -27,11 +27,9 @@ func (s *ClothRouter) InitClothRouter(Router *gin.RouterGroup) {
 		clothRouterWithoutRecord.GET("getClothList", clothApi.GetClothList) // 获取Cloth列表
 	}
 	{
-		h5ClothRouterWithoutRecord.POST("createCloth", clothApi.CreateCloth)             // 新建Cloth
-		h5ClothRouterWithoutRecord.DELETE("deleteCloth", clothApi.DeleteCloth)           // 删除Cloth
-		h5ClothRouterWithoutRecord.DELETE("deleteClothByIds", clothApi.DeleteClothByIds) // 批量删除Cloth
-		h5ClothRouterWithoutRecord.PUT("updateCloth", clothApi.UpdateCloth)              // 更新Cloth
-		h5ClothRouterWithoutRecord.GET("findCloth", clothApi.FindCloth)                  // 根据ID获取Cloth
-		h5ClothRouterWithoutRecord.GET("getClothList", clothApi.GetClothList)            // 获取Cloth列表
+		h5ClothRouterWithoutRecord.POST("creatCloth", clothApi.CreateCloth)   // 新建Cloth
+		h5ClothRouterWithoutRecord.PUT("updateCloth", clothApi.UpdateCloth)   // 更新Cloth
+		h5ClothRouterWithoutRecord.GET("findCloth", clothApi.FindCloth)       // 根据ID获取Cloth
+		h5ClothRouterWithoutRecord.GET("getClothList", clothApi.GetClothList) // 获取Cloth列表
 	}
 }

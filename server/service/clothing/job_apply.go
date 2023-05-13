@@ -3,6 +3,7 @@ package clothing
 import (
 	"errors"
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -106,14 +107,17 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 	if err := global.GVA_DB.First(&cropping, apply.CroppingID).Error; err != nil {
 		return errors.New("裁剪单不存在")
 	}
-	if apply.JobType == enum.Whole {
-
-	} else {
-
-	}
 	switch apply.JobType {
 	case enum.Whole:
-
+		// 整件
+		if cropping.Step != enum.CroppingPending {
+			return errors.New("裁剪单已处理中")
+		}
+	case enum.Process:
+		// 工序
+		if cropping.Step == enum.CroppingComplete {
+			return errors.New("裁剪单已完成")
+		}
 	}
 	return
 }

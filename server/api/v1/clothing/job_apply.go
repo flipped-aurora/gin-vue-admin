@@ -69,6 +69,7 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 			response.FailWithMessage("款式不存在", c)
 			return
 		}
+		jobApply.ProcessName = "成衣"
 		jobApply.Price = style.Price
 	}
 	status := new(int)

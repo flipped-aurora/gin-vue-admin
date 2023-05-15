@@ -107,6 +107,7 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 	if err := global.GVA_DB.First(&cropping, apply.CroppingID).Error; err != nil {
 		return errors.New("裁剪单不存在")
 	}
+	var job clothing.Job
 	switch apply.JobType {
 	case enum.Whole:
 		// 整件
@@ -119,5 +120,18 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 			return errors.New("裁剪单已完成")
 		}
 	}
-	return
+	if err := global.GVA_DB.Model(&cropping).Update("step", enum.CroppingHandling).Error; err != nil {
+		return err
+	}
+	job.JobType = apply.JobType
+	job.CroppingID = apply.CroppingID
+	job.UserID = apply.UserID
+	job.TeamID = apply.TeamID
+	job.Step = enum.CroppingPending
+	job.ProcessID = apply.ProcessID
+	job.ProcessName = apply.ProcessName
+	job.Price = apply.Price
+	job.Quantity = apply.Quantity
+	job.Income = job.Price * float64(job.Quantity)
+	return global.GVA_DB.Create(&job).Error
 }

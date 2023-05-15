@@ -29,5 +29,6 @@ func (s *JobApplyRouter) InitJobApplyRouter(Router *gin.RouterGroup) {
 	{
 		h5JobApplyRouterWithoutRecord.GET("findJobApply", jobApplyApi.FindJobApply)      // 根据ID获取JobApply
 		h5JobApplyRouterWithoutRecord.POST("createJobApply", jobApplyApi.CreateJobApply) // 新建JobApply
+		h5JobApplyRouterWithoutRecord.PUT("optApply", jobApplyApi.OptApply)              // 审核申请
 	}
 }

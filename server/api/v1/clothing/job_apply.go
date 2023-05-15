@@ -41,6 +41,7 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 		return
 	}
 	jobApply.CreatedBy = utils.GetUserID(c)
+	jobApply.UserID = utils.GetUserID(c)
 	if !userRoleService.CheckStaff(jobApply.CreatedBy, croppingRecord.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
@@ -190,6 +191,15 @@ func (jobApplyApi *JobApplyApi) GetJobApplyList(c *gin.Context) {
 	}
 }
 
+// OptApply 工单申请审核
+// @Tags JobApply
+// @Summary 工单申请审核
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query clothingReq.OptJobApply true "工单申请审核"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /jobApply/optApply [put]
 func (jobApplyApi *JobApplyApi) OptApply(c *gin.Context) {
 	var opt clothingReq.OptJobApply
 	err := c.ShouldBindJSON(&opt)
@@ -214,5 +224,10 @@ func (jobApplyApi *JobApplyApi) OptApply(c *gin.Context) {
 		global.GVA_LOG.Error("权限不足!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
+	}
+	if err := jobApplyService.OptApply(apply, opt.Status); err != nil {
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		response.Ok(c)
 	}
 }

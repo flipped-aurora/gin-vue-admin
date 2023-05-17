@@ -27,10 +27,10 @@ func (s *ProcessRouter) InitProcessRouter(Router *gin.RouterGroup) {
 		processRouterWithoutRecord.GET("getProcessList", processApi.GetProcessList) // 获取Process列表
 	}
 	{
-		h5ProcessRouterWithoutRecord.POST("createProcess", processApi.CreateProcess)   // 新建Process
-		h5ProcessRouterWithoutRecord.DELETE("deleteProcess", processApi.DeleteProcess) // 删除Process
-		h5ProcessRouterWithoutRecord.PUT("updateProcess", processApi.UpdateProcess)    // 更新Process
-		h5ProcessRouterWithoutRecord.GET("findProcess", processApi.FindProcess)        // 根据ID获取Process
-		h5ProcessRouterWithoutRecord.GET("getProcessList", processApi.GetProcessList)  // 获取Process列表
+		h5ProcessRouterWithoutRecord.POST("createProcess", processApi.CreateProcess) // 新建Process
+		//h5ProcessRouterWithoutRecord.DELETE("deleteProcess", processApi.DeleteProcess) // 删除Process
+		h5ProcessRouterWithoutRecord.PUT("updateProcess", processApi.UpdateProcess) // 更新Process
+		//h5ProcessRouterWithoutRecord.GET("findProcess", processApi.FindProcess)        // 根据ID获取Process
+		h5ProcessRouterWithoutRecord.GET("getProcessList", processApi.GetProcessList) // 获取Process列表
 	}
 }

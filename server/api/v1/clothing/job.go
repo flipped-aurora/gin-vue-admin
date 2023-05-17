@@ -17,15 +17,6 @@ type JobApi struct {
 
 var jobService = service.ServiceGroupApp.ClothingServiceGroup.JobService
 
-// CreateJob 创建Job
-// @Tags Job
-// @Summary 创建Job
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.Job true "创建Job"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /job/createJob [post]
 func (jobApi *JobApi) CreateJob(c *gin.Context) {
 	var job clothing.Job
 	err := c.ShouldBindJSON(&job)
@@ -42,15 +33,6 @@ func (jobApi *JobApi) CreateJob(c *gin.Context) {
 	}
 }
 
-// DeleteJob 删除Job
-// @Tags Job
-// @Summary 删除Job
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.Job true "删除Job"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
-// @Router /job/deleteJob [delete]
 func (jobApi *JobApi) DeleteJob(c *gin.Context) {
 	var job clothing.Job
 	err := c.ShouldBindJSON(&job)
@@ -67,15 +49,6 @@ func (jobApi *JobApi) DeleteJob(c *gin.Context) {
 	}
 }
 
-// DeleteJobByIds 批量删除Job
-// @Tags Job
-// @Summary 批量删除Job
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body request.IdsReq true "批量删除Job"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /job/deleteJobByIds [delete]
 func (jobApi *JobApi) DeleteJobByIds(c *gin.Context) {
 	var IDS request.IdsReq
 	err := c.ShouldBindJSON(&IDS)
@@ -92,15 +65,6 @@ func (jobApi *JobApi) DeleteJobByIds(c *gin.Context) {
 	}
 }
 
-// UpdateJob 更新Job
-// @Tags Job
-// @Summary 更新Job
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body clothing.Job true "更新Job"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /job/updateJob [put]
 func (jobApi *JobApi) UpdateJob(c *gin.Context) {
 	var job clothing.Job
 	err := c.ShouldBindJSON(&job)
@@ -170,6 +134,33 @@ func (jobApi *JobApi) GetJobList(c *gin.Context) {
 	}
 }
 
-func (jobApi *JobApi) GetJobListByFilter(c *gin.Context) {
-	var pageInfo clothingReq.JobSearch
+func (jobApi *JobApi) PostJobList(c *gin.Context) {
+	var data clothingReq.JobList
+	if err := c.ShouldBindJSON(&data); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	userID := utils.GetUserID(c)
+	team, err := teamService.GetTeam(data.TeamID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	if team.UserID != userID {
+		response.FailWithMessage("权限不足", c)
+		return
+	}
+	cropping, err := croppingRecordService.GetCroppingRecord(data.CroppingID)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	if err := jobService.PostJob(cropping, data); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.Ok(c)
 }

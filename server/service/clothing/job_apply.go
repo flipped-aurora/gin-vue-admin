@@ -104,7 +104,7 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 	global.GVA_KEYLOCK.Lock(fmt.Sprintf("%d-Cropping", apply.CroppingID))
 	defer global.GVA_KEYLOCK.Unlock(fmt.Sprintf("%d-Cropping", apply.CroppingID))
 	var cropping clothing.CroppingRecord
-	if err := global.GVA_DB.First(&cropping, apply.CroppingID).Error; err != nil {
+	if err := global.GVA_DB.Preload("Style").First(&cropping, apply.CroppingID).Error; err != nil {
 		return errors.New("裁剪单不存在")
 	}
 	var job clothing.Job
@@ -114,11 +114,21 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 		if cropping.Step != enum.CroppingPending {
 			return errors.New("裁剪单已处理中")
 		}
+		job.ProcessID = 0
+		job.ProcessName = "成衣"
+		job.Price = cropping.Style.Price
 	case enum.Process:
 		// 工序
 		if cropping.Step == enum.CroppingComplete {
 			return errors.New("裁剪单已完成")
 		}
+		var process clothing.Process
+		if err := global.GVA_DB.First(&process, apply.ProcessID).Error; err != nil {
+			return errors.New("工序不存在")
+		}
+		job.ProcessID = process.ID
+		job.ProcessName = process.Name
+		job.Price = process.Price
 	}
 	if err := global.GVA_DB.Model(&cropping).Update("step", enum.CroppingHandling).Error; err != nil {
 		return err
@@ -127,11 +137,8 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 	job.CroppingID = apply.CroppingID
 	job.UserID = apply.UserID
 	job.TeamID = apply.TeamID
-	job.Step = enum.CroppingPending
-	job.ProcessID = apply.ProcessID
-	job.ProcessName = apply.ProcessName
-	job.Price = apply.Price
-	job.Quantity = apply.Quantity
+	job.Step = enum.CroppingHandling
+	job.Quantity = int(cropping.Quantity)
 	job.Income = job.Price * float64(job.Quantity)
 	return global.GVA_DB.Create(&job).Error
 }

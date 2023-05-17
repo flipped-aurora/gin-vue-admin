@@ -58,7 +58,7 @@ func (croppingRecordService *CroppingRecordService) UpdateCroppingRecord(croppin
 // GetCroppingRecord 根据id获取CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (croppingRecordService *CroppingRecordService) GetCroppingRecord(id uint) (croppingRecord clothing.CroppingRecord, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&croppingRecord).Error
+	err = global.GVA_DB.Preload("Style").Where("id = ?", id).First(&croppingRecord).Error
 	return
 }
 

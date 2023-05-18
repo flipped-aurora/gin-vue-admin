@@ -218,6 +218,14 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 					response.FailWithMessage("加入公司失败", c)
 					return
 				}
+				var wallet clothing.UserWallet
+				wallet.CompanyID = company.ID
+				wallet.UserID = userID
+				if err := userWalletService.CreateUserWallet(&wallet); err != nil {
+					global.GVA_LOG.Sugar().Error(err)
+					response.FailWithMessage("创建钱包失败", c)
+					return
+				}
 				var teamApply clothing.TeamApply
 				teamApply.TeamID = team.ID
 				teamApply.UserID = userID

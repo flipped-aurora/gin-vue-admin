@@ -55,6 +55,11 @@ func (jobQuestionService *JobQuestionService) UpdateJobQuestion(jobQuestion clot
 	return err
 }
 
+func (jobQuestionService *JobQuestionService) HandleJobQuestion(jobQuestion clothing.JobQuestion) (err error) {
+	err = global.GVA_DB.Model(&clothing.JobQuestion{}).Where("id = ?", jobQuestion.ID).Update("status", true).Error
+	return err
+}
+
 // GetJobQuestion 根据id获取JobQuestion记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (jobQuestionService *JobQuestionService) GetJobQuestion(id uint) (jobQuestion clothing.JobQuestion, err error) {

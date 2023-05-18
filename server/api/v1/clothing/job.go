@@ -8,6 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -163,4 +164,53 @@ func (jobApi *JobApi) PostJobList(c *gin.Context) {
 		return
 	}
 	response.Ok(c)
+}
+
+func (jobApi *JobApi) JobAuditApply(c *gin.Context) {
+	var job clothing.Job
+	err := c.ShouldBindJSON(&job)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	job.UpdatedBy = utils.GetUserID(c)
+	oJob, err := jobService.GetJob(job.ID)
+	if err != nil {
+		response.FailWithMessage("找不到工单", c)
+		return
+	}
+	oJob.UpdatedBy = utils.GetUserID(c)
+	if err := jobService.AuditApply(oJob, job.RealQuantity); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		err := msgBoxService.SendMsg(job.UpdatedBy, job.Team.UserID, enum.JobComplete, oJob.ID)
+		if err != nil {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("创建失败", c)
+			return
+		}
+		response.OkWithMessage("更新成功", c)
+	}
+}
+
+func (jobApi *JobApi) JobAuditOpt(c *gin.Context) {
+	var job clothingReq.JobAuditOpt
+	err := c.ShouldBindJSON(&job)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	oJob, err := jobService.GetJob(job.ID)
+	if err != nil {
+		response.FailWithMessage("找不到工单", c)
+		return
+	}
+	oJob.UpdatedBy = utils.GetUserID(c)
+	if err := jobService.JobAuditOpt(oJob, job.Status); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
 }

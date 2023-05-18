@@ -27,3 +27,8 @@ type JobList struct {
 	TeamID     uint      `json:"teamId"`
 	Jobs       []PostJob `json:"jobs"`
 }
+
+type JobAuditOpt struct {
+	ID     uint `json:"id"`
+	Status bool `json:"status"`
+}

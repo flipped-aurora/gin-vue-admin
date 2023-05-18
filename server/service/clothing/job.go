@@ -57,10 +57,20 @@ func (jobService *JobService) UpdateJob(job clothing.Job) (err error) {
 	return err
 }
 
+func (jobService *JobService) AuditApply(job clothing.Job, realQuantity uint) (err error) {
+	err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{
+		"real_quantity": realQuantity,
+		"real_income":   job.Price * float64(realQuantity),
+		"step":          enum.CroppingAudit,
+		"updated_by":    job.UpdatedBy,
+	}).Error
+	return err
+}
+
 // GetJob 根据id获取Job记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (jobService *JobService) GetJob(id uint) (job clothing.Job, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&job).Error
+	err = global.GVA_DB.Preload("Team").Where("id = ?", id).First(&job).Error
 	return
 }
 
@@ -78,6 +88,9 @@ func (jobService *JobService) GetJobInfoList(info clothingReq.JobSearch) (list [
 	}
 	if info.CroppingID > 0 {
 		db = db.Where("cropping_id = ?", info.CroppingID)
+	}
+	if info.TeamID > 0 {
+		db = db.Where("team_id = ?", info.CroppingID)
 	}
 	if info.Step != 0 {
 		db = db.Where("step = ?", info.Step)
@@ -133,4 +146,21 @@ func (jobService *JobService) PostJob(cropping clothing.CroppingRecord, data clo
 		return err
 	}
 	return nil
+}
+
+func (jobService *JobService) JobAuditOpt(job clothing.Job, status bool) (err error) {
+	if status {
+		err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{"step": enum.CroppingComplete, "updated_by": job.UpdatedBy}).Error
+		if err != nil {
+			return err
+		}
+		err = global.GVA_DB.Model(&clothing.UserWallet{}).Where("user_id = ? and company_id = ?", job.UserID, job.Team.CompanyID).
+			Updates(map[string]interface{}{
+				"wages":        gorm.Expr("wages + ?", job.RealIncome),
+				"pendingWages": gorm.Expr("pendingWages + ?", job.RealIncome),
+			}).Error
+	} else {
+		err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{"step": enum.CroppingHandling, "updated_by": job.UpdatedBy}).Error
+	}
+	return
 }

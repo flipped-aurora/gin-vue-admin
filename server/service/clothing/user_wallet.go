@@ -80,11 +80,16 @@ func (userWalletService *UserWalletService) GetUserWalletInfoList(info clothingR
 	if info.CompanyID != 0 {
 		db = db.Where("company_id = ?", info.CompanyID)
 	}
+	if info.TeamID != 0 {
+		ids := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.TeamUser{}).Where("team_id = ?", info.TeamID).Pluck("user_id", &ids)
+		db = db.Where("user_id in ?", ids)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&userWallets).Error
+	err = db.Limit(limit).Preload("User").Preload("Company").Offset(offset).Find(&userWallets).Error
 	return userWallets, total, err
 }

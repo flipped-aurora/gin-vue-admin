@@ -37,7 +37,7 @@ func (croppingRecordApi *CroppingRecordApi) CreateCroppingRecord(c *gin.Context)
 	croppingRecord.CreatedBy = utils.GetUserID(c)
 	croppingRecord.UserID = utils.GetUserID(c)
 	croppingRecord.Step = enum.CroppingPending
-	if !userRoleService.CheckManager(croppingRecord.CreatedBy, croppingRecord.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), croppingRecord.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -99,7 +99,7 @@ func (croppingRecordApi *CroppingRecordApi) UpdateCroppingRecord(c *gin.Context)
 		return
 	}
 	croppingRecord.UpdatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(croppingRecord.CreatedBy, croppingRecord.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), croppingRecord.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return

@@ -7,11 +7,10 @@
        —
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
       </el-form-item>
-           <el-form-item label="状态" prop="status">
-            <el-select v-model="searchInfo.status" clearable placeholder="请选择" @clear="()=>{searchInfo.status=undefined}">
-              <el-option v-for="(item,key) in statusOptions" :key="key" :label="item.label" :value="item.value" />
-            </el-select>
-            </el-form-item>
+        <el-form-item label="代理人名称">
+         <el-input v-model="searchInfo.name" placeholder="搜索条件" />
+
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
           <el-button icon="refresh" @click="onReset">重置</el-button>
@@ -44,22 +43,11 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="跳转链接" prop="url" width="120" />
-        <el-table-column align="left" label="标题" prop="title" width="120" />
-        <el-table-column align="left" label="内容" prop="content" width="120" />
-        <el-table-column align="left" label="媒体链接" prop="mediaUrl" width="120" />
-        <el-table-column align="left" label="排序" prop="sort" width="120" />
-        <el-table-column align="left" label="状态" prop="status" width="120">
-            <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
-        </el-table-column>
-        <el-table-column align="left" label="媒体类型" prop="type" width="120">
-            <template #default="scope">
-            {{ filterDict(scope.row.type,mediaTypeOptions) }}
-            </template>
-        </el-table-column>
+        <el-table-column align="left" label="代理人名称" prop="name" width="120" />
+        <el-table-column align="left" label="推荐人数" prop="memberCount" width="120" />
         <el-table-column align="left" label="按钮组">
             <template #default="scope">
-            <el-button type="primary" link icon="edit" class="table-button" @click="updateBannerFunc(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="edit" class="table-button" @click="updateAgentFunc(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
@@ -78,28 +66,11 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        <el-form-item label="跳转链接:"  prop="url" >
-          <el-input v-model="formData.url" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="代理人名称:"  prop="name" >
+          <el-input v-model="formData.name" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="标题:"  prop="title" >
-          <el-input v-model="formData.title" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="内容:"  prop="content" >
-          <el-input v-model="formData.content" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="媒体链接:"  prop="mediaUrl" >
-          <el-input v-model="formData.mediaUrl" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="排序:"  prop="sort" >
-          <el-input v-model.number="formData.sort" :clearable="true" placeholder="请输入" />
-        </el-form-item>
-          <el-form-item label="状态显示:"  prop="status" >
-              <el-switch v-model="formData.status" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
-          </el-form-item>
-        <el-form-item label="媒体类型:"  prop="type" >
-          <el-select v-model="formData.type" placeholder="请选择" style="width:100%" :clearable="true" >
-            <el-option v-for="(item,key) in mediaTypeOptions" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
+        <el-form-item label="推荐人数:"  prop="memberCount" >
+          <el-input v-model.number="formData.memberCount" :clearable="true" placeholder="请输入" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -114,19 +85,19 @@
 
 <script>
 export default {
-  name: 'Banner'
+  name: 'Agent'
 }
 </script>
 
 <script setup>
 import {
-  createBanner,
-  deleteBanner,
-  deleteBannerByIds,
-  updateBanner,
-  findBanner,
-  getBannerList
-} from '@/api/banner'
+  createAgent,
+  deleteAgent,
+  deleteAgentByIds,
+  updateAgent,
+  findAgent,
+  getAgentList
+} from '@/api/agent'
 
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
@@ -134,16 +105,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
 // 自动化生成的字典（可能为空）以及字段
-const statusOptions = ref([])
-const mediaTypeOptions = ref([])
 const formData = ref({
-        url: '',
-        title: '',
-        content: '',
-        mediaUrl: '',
-        sort: 0,
-        status: undefined,
-        type: undefined,
+        name: '',
+        memberCount: 0,
         })
 
 // 验证规则
@@ -187,7 +151,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getBannerList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getAgentList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -202,8 +166,6 @@ getTableData()
 
 // 获取需要的字典 可能为空 按需保留
 const setOptions = async () =>{
-    statusOptions.value = await getDictFunc('status')
-    mediaTypeOptions.value = await getDictFunc('mediaType')
 }
 
 // 获取需要的字典 可能为空 按需保留
@@ -224,7 +186,7 @@ const deleteRow = (row) => {
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-            deleteBannerFunc(row)
+            deleteAgentFunc(row)
         })
     }
 
@@ -246,7 +208,7 @@ const onDelete = async() => {
         multipleSelection.value.map(item => {
           ids.push(item.ID)
         })
-      const res = await deleteBannerByIds({ ids })
+      const res = await deleteAgentByIds({ ids })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
@@ -264,19 +226,19 @@ const onDelete = async() => {
 const type = ref('')
 
 // 更新行
-const updateBannerFunc = async(row) => {
-    const res = await findBanner({ ID: row.ID })
+const updateAgentFunc = async(row) => {
+    const res = await findAgent({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.rebanner
+        formData.value = res.data.reagent
         dialogFormVisible.value = true
     }
 }
 
 
 // 删除行
-const deleteBannerFunc = async (row) => {
-    const res = await deleteBanner({ ID: row.ID })
+const deleteAgentFunc = async (row) => {
+    const res = await deleteAgent({ ID: row.ID })
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
@@ -302,13 +264,8 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-        url: '',
-        title: '',
-        content: '',
-        mediaUrl: '',
-        sort: 0,
-        status: undefined,
-        type: undefined,
+        name: '',
+        memberCount: 0,
         }
 }
 // 弹窗确定
@@ -318,13 +275,13 @@ const enterDialog = async () => {
               let res
               switch (type.value) {
                 case 'create':
-                  res = await createBanner(formData.value)
+                  res = await createAgent(formData.value)
                   break
                 case 'update':
-                  res = await updateBanner(formData.value)
+                  res = await updateAgent(formData.value)
                   break
                 default:
-                  res = await createBanner(formData.value)
+                  res = await createAgent(formData.value)
                   break
               }
               if (res.code === 0) {

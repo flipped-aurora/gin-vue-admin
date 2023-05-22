@@ -24,9 +24,11 @@ import (
 var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
 var appJwtService = service.ServiceGroupApp.ClothingServiceGroup.JwtService
 var dappSkipUrl = map[string]interface{}{
-	"/" + global.GetAppApi() + "appUser/checkExist": nil,
-	"/" + global.GetAppApi() + "appUser/register":   nil,
-	"/" + global.GetAppApi() + "appUser/login":      nil,
+	"/" + global.GetAppApi() + "appUser/checkExist":   nil,
+	"/" + global.GetAppApi() + "appUser/register":     nil,
+	"/" + global.GetAppApi() + "appUser/login":        nil,
+	"/" + global.GetAppApi() + "banner/getBannerList": nil,
+	"/" + global.GetAppApi() + "banner/findBanner":    nil,
 }
 
 func JWTAuth() gin.HandlerFunc {

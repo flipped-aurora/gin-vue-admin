@@ -5,4 +5,5 @@ const (
 	Tailor
 	GroupLeader
 	Worker
+	FlowWorker
 )

@@ -79,6 +79,11 @@ func (teamService *TeamService) GetTeamInfoList(info clothingReq.TeamSearch) (li
 	if info.CompanyID != 0 {
 		db = db.Where("company_id = ?", info.CompanyID)
 	}
+	if info.UserID != 0 {
+		ids := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.TeamUser{}).Where("user_id = ?", info.UserID).Pluck("team_id", &ids)
+		db = db.Where("id in ?", ids)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

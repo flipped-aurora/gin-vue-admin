@@ -27,6 +27,7 @@ func (s *TeamApplyRouter) InitTeamApplyRouter(Router *gin.RouterGroup) {
 		teamApplyRouterWithoutRecord.GET("getTeamApplyList", teamApplyApi.GetTeamApplyList) // 获取TeamApply列表
 	}
 	{
-		h5TeamApplyRouterWithoutRecord.PUT("optApply", teamApplyApi.OptApply) // 审核申请
+		h5TeamApplyRouterWithoutRecord.GET("findTeamApply", teamApplyApi.FindTeamApply) // 审核申请
+		h5TeamApplyRouterWithoutRecord.PUT("optApply", teamApplyApi.OptApply)           // 审核申请
 	}
 }

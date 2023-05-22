@@ -34,7 +34,7 @@ func (styleApi *StyleApi) CreateStyle(c *gin.Context) {
 		return
 	}
 	style.CreatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(style.CreatedBy, style.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), style.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -64,7 +64,7 @@ func (styleApi *StyleApi) DeleteStyle(c *gin.Context) {
 		return
 	}
 	style.CreatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(style.CreatedBy, style.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), style.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -110,7 +110,7 @@ func (styleApi *StyleApi) UpdateStyle(c *gin.Context) {
 		return
 	}
 	style.UpdatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(style.CreatedBy, style.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), style.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return

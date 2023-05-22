@@ -79,8 +79,8 @@ func (jobQuestionService *JobQuestionService) GetJobQuestionInfoList(info clothi
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
 		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
-	if info.JobID != 0 {
-		db = db.Where("job_id = ?", info.JobID)
+	if info.ToUserID != 0 {
+		db = db.Where("to_user_id = ?", info.ToUserID)
 	}
 	if info.UserID != 0 {
 		db = db.Where("user_id = ?", info.UserID)

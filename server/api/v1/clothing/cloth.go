@@ -34,7 +34,7 @@ func (clothApi *ClothApi) CreateCloth(c *gin.Context) {
 		return
 	}
 	cloth.CreatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(cloth.CreatedBy, cloth.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), cloth.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -64,7 +64,7 @@ func (clothApi *ClothApi) DeleteCloth(c *gin.Context) {
 		return
 	}
 	cloth.DeletedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(cloth.CreatedBy, cloth.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), cloth.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -110,7 +110,7 @@ func (clothApi *ClothApi) UpdateCloth(c *gin.Context) {
 		return
 	}
 	cloth.UpdatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(cloth.CreatedBy, cloth.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), cloth.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return

@@ -19,4 +19,5 @@ type ApiGroup struct {
 	BannerApi
 	CompanyApplyApi
 	JobApplyApi
+	AgentApi
 }

@@ -34,10 +34,10 @@ func (jobQuestionApi *JobQuestionApi) CreateJobQuestion(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	job, err := jobService.GetJob(jobQuestion.JobID)
+	toUser, err := appUserService.GetAppUser(jobQuestion.ToUserID)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("工单不存在", c)
+		response.FailWithMessage("用户不存在", c)
 		return
 	}
 	jobQuestion.CreatedBy = utils.GetUserID(c)
@@ -46,7 +46,7 @@ func (jobQuestionApi *JobQuestionApi) CreateJobQuestion(c *gin.Context) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		err := msgBoxService.SendMsg(jobQuestion.UserID, job.Team.UserID, enum.JobQuestion, jobQuestion.ID)
+		err := msgBoxService.SendMsg(jobQuestion.UserID, toUser.ID, enum.JobQuestion, jobQuestion.ID)
 		if err != nil {
 			global.GVA_LOG.Error("创建失败!", zap.Error(err))
 			response.FailWithMessage("创建失败", c)

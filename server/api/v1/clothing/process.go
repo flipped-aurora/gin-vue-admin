@@ -40,7 +40,7 @@ func (processApi *ProcessApi) CreateProcess(c *gin.Context) {
 		response.FailWithMessage("款式不存在", c)
 		return
 	}
-	if !userRoleService.CheckManager(process.CreatedBy, style.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), style.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -76,7 +76,7 @@ func (processApi *ProcessApi) DeleteProcess(c *gin.Context) {
 		response.FailWithMessage("款式不存在", c)
 		return
 	}
-	if !userRoleService.CheckManager(process.CreatedBy, style.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), style.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return
@@ -128,7 +128,7 @@ func (processApi *ProcessApi) UpdateProcess(c *gin.Context) {
 		response.FailWithMessage("款式不存在", c)
 		return
 	}
-	if !userRoleService.CheckManager(process.CreatedBy, style.CompanyID) {
+	if !userRoleService.CheckManager(utils.GetUserID(c), style.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return

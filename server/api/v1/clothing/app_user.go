@@ -287,7 +287,13 @@ func (appUserApi *AppUserApi) GetUserInfo(c *gin.Context) {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(reappUser, c)
+		userInfo := clothingRes.UserInfo{
+			ID:       reappUser.ID,
+			PhoneNum: reappUser.PhoneNum,
+			Username: reappUser.Username,
+			Roles:    reappUser.GetRoles(),
+		}
+		response.OkWithData(userInfo, c)
 	}
 }
 

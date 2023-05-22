@@ -62,9 +62,7 @@ func (appUserService *AppUserService) UpdateAppUser(appUser clothing.AppUser) (e
 // GetAppUser 根据id获取AppUser记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (appUserService *AppUserService) GetAppUser(id uint) (appUser clothing.AppUser, err error) {
-	err = global.GVA_DB.Preload("Roles", func(db *gorm.DB) *gorm.DB {
-		return db.Preload("Role").Preload("Company")
-	}).Where("id = ?", id).First(&appUser).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&appUser).Error
 	return
 }
 

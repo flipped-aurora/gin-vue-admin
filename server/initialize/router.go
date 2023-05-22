@@ -78,6 +78,7 @@ func Routers() *gin.Engine {
 		clothingRouter.InitBannerRouter(PrivateGroup)
 		clothingRouter.InitCompanyApplyRouter(PrivateGroup)
 		clothingRouter.InitJobApplyRouter(PrivateGroup)
+		clothingRouter.InitAgentRouter(PrivateGroup)
 
 	}
 

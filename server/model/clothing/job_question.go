@@ -8,7 +8,7 @@ import (
 // JobQuestion 结构体
 type JobQuestion struct {
 	global.GVA_MODEL
-	JobID     uint   `json:"jobID" form:"jobID" gorm:"column:job_id;comment:;"`
+	ToUserID  uint   `json:"toUserID" form:"toUserID" gorm:"column:to_user_id;comment:;"`
 	UserID    uint   `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
 	Content   string `json:"content" form:"content" gorm:"column:content;comment:;"`
 	Status    *bool  `json:"status" form:"status" gorm:"column:status;comment:;"`

@@ -9,6 +9,7 @@ import (
 type Company struct {
 	global.GVA_MODEL
 	UserID    uint   `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
+	AgentID   uint   `json:"agentID" form:"agentID" gorm:"column:agent_id;comment:;"`
 	Name      string `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Status    *int   `json:"status" form:"status" gorm:"column:status;comment:;"`
 	CreatedBy uint   `gorm:"column:created_by;comment:创建者"`

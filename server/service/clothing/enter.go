@@ -20,4 +20,5 @@ type ServiceGroup struct {
 	JwtService
 	CompanyApplyService
 	JobApplyService
+	AgentService
 }

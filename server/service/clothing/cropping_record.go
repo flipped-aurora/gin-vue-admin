@@ -85,6 +85,6 @@ func (croppingRecordService *CroppingRecordService) GetCroppingRecordInfoList(in
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&croppingRecords).Error
+	err = db.Preload("Style").Limit(limit).Offset(offset).Find(&croppingRecords).Error
 	return croppingRecords, total, err
 }

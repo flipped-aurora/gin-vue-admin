@@ -27,6 +27,7 @@ func (s *CompanyApplyRouter) InitCompanyApplyRouter(Router *gin.RouterGroup) {
 		companyApplyRouterWithoutRecord.GET("getCompanyApplyList", companyApplyApi.GetCompanyApplyList) // 获取CompanyApply列表
 	}
 	{
-		h5CompanyApplyRouterWithoutRecord.PUT("optApply", companyApplyApi.OptApply) // 审核申请
+		h5CompanyApplyRouterWithoutRecord.GET("findCompanyApply", companyApplyApi.OptApply) // 审核申请
+		h5CompanyApplyRouterWithoutRecord.PUT("optApply", companyApplyApi.OptApply)         // 审核申请
 	}
 }

@@ -74,6 +74,9 @@ func (clothService *ClothService) GetClothInfoList(info clothingReq.ClothSearch)
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
 		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
+	if info.CompanyID != 0 {
+		db = db.Where("company_id = ?", info.CompanyID)
+	}
 	if info.StyleID != 0 {
 		db = db.Where("style_id = ?", info.StyleID)
 	}

@@ -26,7 +26,7 @@ export default function GvaPositionServer() {
               const linePath = path.split(':')[1]
               const filePath = path.split(':')[0]
               const platform = os()
-              if (platform === 'win32') {
+              if (platform === 'Windows') {
                 child_process.exec(`webstorm64.exe  --line ${linePath} ${filePath}`)
               } else {
                 child_process.exec(`webstorm64  --line ${linePath} ${filePath}`)

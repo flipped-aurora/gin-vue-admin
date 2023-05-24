@@ -20,4 +20,6 @@ type RouterGroup struct {
 	CompanyApplyRouter
 	JobApplyRouter
 	AgentRouter
+	RechargeOptionRouter
+	OrderRouter
 }

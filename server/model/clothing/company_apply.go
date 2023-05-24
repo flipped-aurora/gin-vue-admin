@@ -17,6 +17,7 @@ type CompanyApply struct {
 	UpdatedBy uint    `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy uint    `gorm:"column:deleted_by;comment:删除者"`
 	Company   Company `json:"company" form:"company" gorm:"foreignKey:CompanyID"`
+	User      AppUser `json:"user" form:"user" gorm:"foreignKey:UserID"`
 }
 
 // TableName CompanyApply 表名

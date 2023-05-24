@@ -27,5 +27,10 @@ type Server struct {
 	Timer Timer `mapstructure:"timer" json:"timer" yaml:"timer"`
 
 	// 跨域配置
-	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	Cors   CORS   `mapstructure:"cors" json:"cors" yaml:"cors"`
+	Wechat Wechat `mapstructure:"wechat" json:"wechat" yaml:"wechat"`
+
+	TxCloud TXCloud `mapstructure:"txCloud" json:"txCloud" yaml:"txCloud"`
+	Ali     Ali     `mapstructure:"ali" json:"ali" yaml:"ali"`
+	Douyin  Douyin  `mapstructure:"douyin" json:"douyin" yaml:"douyin"`
 }

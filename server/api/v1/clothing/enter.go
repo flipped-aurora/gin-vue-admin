@@ -20,4 +20,6 @@ type ApiGroup struct {
 	CompanyApplyApi
 	JobApplyApi
 	AgentApi
+	RechargeOptionApi
+	OrderApi
 }

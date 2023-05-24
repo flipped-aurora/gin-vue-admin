@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"errors"
+	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -74,4 +76,19 @@ func FileExist(path string) bool {
 		return !fi.IsDir()
 	}
 	return !os.IsNotExist(err)
+}
+
+// File2Bytes 读取文件到[]byte中
+func File2Bytes(filename string) ([]byte, error) {
+
+	//获取本地文件
+	file, err := os.Open(filename)
+	if err != nil {
+		err = errors.New("打开本地文件失败")
+		return nil, err
+	}
+	defer file.Close()
+	imgByte, _ := ioutil.ReadAll(file)
+
+	return imgByte, nil
 }

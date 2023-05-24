@@ -11,6 +11,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"strings"
 )
 
 type CompanyApi struct {
@@ -18,21 +19,30 @@ type CompanyApi struct {
 
 var companyService = service.ServiceGroupApp.ClothingServiceGroup.CompanyService
 
-// func (companyApi *CompanyApi) CreateCompany(c *gin.Context) {
-// 	var company clothing.Company
-// 	err := c.ShouldBindJSON(&company)
-// 	if err != nil {
-// 		response.FailWithMessage(err.Error(), c)
-// 		return
-// 	}
-// 	company.CreatedBy = utils.GetUserID(c)
-// 	if err := companyService.CreateCompany(&company); err != nil {
-// 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-// 		response.FailWithMessage("创建失败", c)
-// 	} else {
-// 		response.OkWithMessage("创建成功", c)
-// 	}
-// }
+func (companyApi *CompanyApi) CreateCompany(c *gin.Context) {
+	var company clothing.Company
+	err := c.ShouldBindJSON(&company)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	company.CreatedBy = utils.GetUserID(c)
+
+	if _, err := appUserService.GetAppUser(company.UserID); err != nil {
+		response.FailWithMessage("用户不存在", c)
+		return
+	}
+	if err := companyService.CreateCompany(company.Name, company.UserID, company.AgentID); err != nil {
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		if strings.Contains(err.Error(), "unique") {
+			response.FailWithMessage("公司名已存在", c)
+			return
+		}
+		response.FailWithMessage("创建失败", c)
+	} else {
+		response.OkWithMessage("创建成功", c)
+	}
+}
 
 func (companyApi *CompanyApi) DeleteCompany(c *gin.Context) {
 	var company clothing.Company
@@ -74,6 +84,7 @@ func (companyApi *CompanyApi) UpdateCompany(c *gin.Context) {
 		return
 	}
 	company.UpdatedBy = utils.GetUserID(c)
+	global.GVA_LOG.Sugar().Info(company)
 	if err := companyService.UpdateCompany(company); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
@@ -149,7 +160,7 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 			response.FailWithMessage("公司已存在", c)
 			return
 		}
-		if err := companyService.CreateCompany(joinCompany.Remark, userID); err != nil {
+		if err := companyService.CreateCompany(joinCompany.Remark, userID, 0); err != nil {
 			response.FailWithMessage("服务器错误", c)
 			return
 		}

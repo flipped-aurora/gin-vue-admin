@@ -8,13 +8,15 @@ import (
 // Company 结构体
 type Company struct {
 	global.GVA_MODEL
-	UserID    uint   `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
-	AgentID   uint   `json:"agentID" form:"agentID" gorm:"column:agent_id;comment:;"`
-	Name      string `json:"name" form:"name" gorm:"column:name;comment:;"`
-	Status    *int   `json:"status" form:"status" gorm:"column:status;comment:;"`
-	CreatedBy uint   `gorm:"column:created_by;comment:创建者"`
-	UpdatedBy uint   `gorm:"column:updated_by;comment:更新者"`
-	DeletedBy uint   `gorm:"column:deleted_by;comment:删除者"`
+	UserID    uint    `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
+	AgentID   uint    `json:"agentID" form:"agentID" gorm:"column:agent_id;comment:;"`
+	Name      string  `json:"name" form:"name" gorm:"column:name;comment:;unique;"`
+	Status    *bool   `json:"status" form:"status" gorm:"column:status;comment:;"`
+	CreatedBy uint    `gorm:"column:created_by;comment:创建者"`
+	UpdatedBy uint    `gorm:"column:updated_by;comment:更新者"`
+	DeletedBy uint    `gorm:"column:deleted_by;comment:删除者"`
+	User      AppUser `json:"user" form:"user" gorm:"foreignKey:UserID"`
+	Agent     Agent   `json:"agent" form:"agent" gorm:"foreignKey:AgentID"`
 }
 
 // TableName Company 表名

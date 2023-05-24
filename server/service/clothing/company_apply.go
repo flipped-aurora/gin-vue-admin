@@ -61,7 +61,7 @@ func (companyApplyService *CompanyApplyService) UpdateCompanyApply(companyApply 
 // GetCompanyApply 根据id获取CompanyApply记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (companyApplyService *CompanyApplyService) GetCompanyApply(id uint) (companyApply clothing.CompanyApply, err error) {
-	err = global.GVA_DB.Preload("Company").Where("id = ?", id).First(&companyApply).Error
+	err = global.GVA_DB.Preload("Company").Preload("User").Where("id = ?", id).First(&companyApply).Error
 	return
 }
 

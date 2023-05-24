@@ -1,3 +1,8 @@
+ali:
+  appId: ""
+  privateKey: ""
+  aliPublicKey: ""
+  payNotifyURL: ""
 aliyun-oss:
   endpoint: yourEndpoint
   access-key-id: yourAccessKeyId
@@ -68,6 +73,9 @@ db-list:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+douyin:
+  key: ""
+  secret: ""
 email:
   to: xxx@qq.com
   port: 465
@@ -188,6 +196,23 @@ timer:
   - tableName: jwt_blacklists
     compareField: created_at
     interval: 168h
+txcloud:
+  secretId: ""
+  secretKey: ""
+  smsSdkAppId: ""
+  smsSign: ""
+  smsTemplate: ""
+wechat:
+  appID: ""
+  appSecret: ""
+  mchID: ""
+  mchCertificateSerialNumber: ""
+  mchAPIv3Key: ""
+  mchAPIv2Key: ""
+  payNotifyUrl: ""
+  refundNotifyUrl: ""
+  getAccessTokenAccount: 0
+  miniprogramState: ""
 zap:
   level: info
   prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'

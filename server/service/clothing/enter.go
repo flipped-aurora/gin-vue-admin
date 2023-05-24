@@ -21,4 +21,6 @@ type ServiceGroup struct {
 	CompanyApplyService
 	JobApplyService
 	AgentService
+	RechargeOptionService
+	OrderService
 }

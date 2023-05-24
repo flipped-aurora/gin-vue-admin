@@ -1,0 +1,66 @@
+linters:
+  # please, do not use `enable-all`: it's deprecated and will be removed soon.
+  # inverted configuration with `enable-all` and `disable` is not scalable during updates of golangci-lint
+  disable-all: true
+  enable:
+    - bodyclose
+    - deadcode
+    - depguard
+    - dogsled
+    - dupl
+    - errcheck
+    - funlen
+    - goconst
+      # - gocritic
+    - gocyclo
+    - gofmt
+    - goimports
+    - golint
+    - goprintffuncname
+    - gosimple
+    - govet
+    - ineffassign
+    - interfacer
+    - misspell
+    - nolintlint
+    - rowserrcheck
+    - scopelint
+    - staticcheck
+    - structcheck
+    - stylecheck
+    - typecheck
+    - unconvert
+    - unparam
+    - unused
+    - varcheck
+    - whitespace
+
+issues:
+  include:
+    - EXC0002 # disable excluding of issues about comments from golint
+  exclude-rules:
+    - linters:
+        - stylecheck
+      text: "ST1000:"
+  # Excluding configuration per-path, per-linter, per-text and per-source
+    - path: _test\.go
+      linters:
+        - gomnd
+
+    # https://github.com/go-critic/go-critic/issues/926
+    - linters:
+        - gocritic
+      text: "unnecessaryDefer:"
+
+linters-settings:
+  funlen:
+    lines: 66
+    statements: 40
+
+#issues:
+#  include:
+#  - EXC0002 # disable excluding of issues about comments from golint
+#  exclude-rules:
+#    - linters:
+#       - stylecheck
+#      text: "ST1000:"

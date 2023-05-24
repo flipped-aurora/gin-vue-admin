@@ -14,15 +14,15 @@ type CompanyService struct {
 
 // CreateCompany 创建Company记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (companyService *CompanyService) CreateCompany(companyName string, userID uint) (err error) {
+func (companyService *CompanyService) CreateCompany(companyName string, userID, agentID uint) (err error) {
 	db := global.GVA_DB
 	tx := db.Begin()
 	defer tx.Commit()
 	var company clothing.Company
 	company.Name = companyName
 	company.UserID = userID
-	status := new(int)
-	*status = 1
+	status := new(bool)
+	*status = true
 	company.Status = status
 	if err = global.GVA_DB.Create(&company).Error; err != nil {
 		tx.Rollback()
@@ -35,6 +35,9 @@ func (companyService *CompanyService) CreateCompany(companyName string, userID u
 	if err = global.GVA_DB.Create(&userRole).Error; err != nil {
 		tx.Rollback()
 		return err
+	}
+	if agentID > 0 {
+		global.GVA_DB.Model(&clothing.Agent{}).Where("id = ?", agentID).Update("member_count", gorm.Expr("member_count + ?", 1))
 	}
 	return err
 }
@@ -79,7 +82,7 @@ func (companyService *CompanyService) UpdateCompany(company clothing.Company) (e
 // GetCompany 根据id获取Company记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (companyService *CompanyService) GetCompany(id uint) (company clothing.Company, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&company).Error
+	err = global.GVA_DB.Preload("User").Preload("Agent").Where("id = ?", id).First(&company).Error
 	return
 }
 
@@ -106,7 +109,7 @@ func (companyService *CompanyService) GetCompanyInfoList(info clothingReq.Compan
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&companys).Error
+	err = db.Preload("User").Preload("Agent").Limit(limit).Offset(offset).Find(&companys).Error
 	return companys, total, err
 }
 

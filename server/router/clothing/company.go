@@ -17,7 +17,7 @@ func (s *CompanyRouter) InitCompanyRouter(Router *gin.RouterGroup) {
 	h5CompanyRouterWithoutRecord := Router.Group(global.GetAppApi() + "company")
 	var companyApi = v1.ApiGroupApp.ClothingApiGroup.CompanyApi
 	{
-		// companyRouter.POST("createCompany", companyApi.CreateCompany)   // 新建Company
+		companyRouter.POST("createCompany", companyApi.CreateCompany)             // 新建Company
 		companyRouter.DELETE("deleteCompany", companyApi.DeleteCompany)           // 删除Company
 		companyRouter.DELETE("deleteCompanyByIds", companyApi.DeleteCompanyByIds) // 批量删除Company
 		companyRouter.PUT("updateCompany", companyApi.UpdateCompany)              // 更新Company

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
-      <el-form-item label="创建时间">
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
+      <el-form-item label="创建时间" prop="createdAt">
       <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
        —
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
@@ -231,6 +231,20 @@ const rule = reactive({
                }],
             {{- end }}
     {{- end }}
+})
+
+const searchRule = reactive({
+  createdAt: [
+    { validator: (rule, value, callback) => {
+      if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
+        callback(new Error('请填写结束时间'))
+      } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
+        callback(new Error('请填写开始时间'))
+      } else {
+        callback()
+      }
+    }, trigger: 'change' }
+  ],
 })
 
 const elFormRef = ref()

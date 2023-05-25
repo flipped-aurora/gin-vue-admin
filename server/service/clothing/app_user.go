@@ -175,6 +175,13 @@ func (appUserService *AppUserService) GetAppUserList(info clothingReq.UserFilter
 		global.GVA_DB.Model(&clothing.TeamUser{}).Where("team_id = ?", info.TeamID).Pluck("user_id", &userIDs)
 		db = db.Where("id in ?", userIDs)
 	}
+	if info.ExcludeTeamID != 0 {
+		userIDs := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.TeamUser{}).Where("team_id = ?", info.ExcludeTeamID).Pluck("user_id", &userIDs)
+		if len(userIDs) > 0 {
+			db = db.Where("id not in ?", userIDs)
+		}
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

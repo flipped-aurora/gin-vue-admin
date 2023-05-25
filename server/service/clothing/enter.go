@@ -23,4 +23,6 @@ type ServiceGroup struct {
 	AgentService
 	RechargeOptionService
 	OrderService
+	WechatService
+	AliService
 }

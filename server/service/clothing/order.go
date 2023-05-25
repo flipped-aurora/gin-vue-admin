@@ -62,6 +62,11 @@ func (orderService *OrderService) GetOrder(id uint) (order clothing.Order, err e
 	return
 }
 
+func (orderService *OrderService) GetOrderByOrderNo(orderNo string) (order clothing.Order, err error) {
+	err = global.GVA_DB.Where("order_no = ?", orderNo).First(&order).Error
+	return
+}
+
 // GetOrderInfoList 分页获取Order记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (orderService *OrderService) GetOrderInfoList(info clothingReq.OrderSearch) (list []clothing.Order, total int64, err error) {

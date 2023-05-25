@@ -61,7 +61,7 @@ func (teamApplyService *TeamApplyService) UpdateTeamApply(teamApply clothing.Tea
 // GetTeamApply 根据id获取TeamApply记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teamApplyService *TeamApplyService) GetTeamApply(id uint) (teamApply clothing.TeamApply, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&teamApply).Error
+	err = global.GVA_DB.Preload("Team").Preload("User").Where("id = ?", id).First(&teamApply).Error
 	return
 }
 
@@ -82,7 +82,7 @@ func (teamApplyService *TeamApplyService) GetTeamApplyInfoList(info clothingReq.
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&teamApplys).Error
+	err = db.Preload("Team").Preload("User").Limit(limit).Offset(offset).Find(&teamApplys).Error
 	return teamApplys, total, err
 }
 

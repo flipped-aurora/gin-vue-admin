@@ -62,7 +62,7 @@ func (jobApplyService *JobApplyService) UpdateJobApply(jobApply clothing.JobAppl
 // GetJobApply 根据id获取JobApply记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (jobApplyService *JobApplyService) GetJobApply(id uint) (jobApply clothing.JobApply, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&jobApply).Error
+	err = global.GVA_DB.Preload("Team").Preload("Process.Style").Preload("User").Preload("CroppingRecord.Style").Where("id = ?", id).First(&jobApply).Error
 	return
 }
 
@@ -89,7 +89,7 @@ func (jobApplyService *JobApplyService) GetJobApplyInfoList(info clothingReq.Job
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&jobApplys).Error
+	err = db.Preload("Team").Preload("Process.Style").Preload("User").Preload("CroppingRecord.Style").Limit(limit).Offset(offset).Find(&jobApplys).Error
 	return jobApplys, total, err
 }
 
@@ -129,6 +129,9 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 		job.ProcessID = process.ID
 		job.ProcessName = process.Name
 		job.Price = process.Price
+	}
+	if err := global.GVA_DB.Model(&apply).Update("status", status).Error; err != nil {
+		return err
 	}
 	if err := global.GVA_DB.Model(&cropping).Update("step", enum.CroppingHandling).Error; err != nil {
 		return err

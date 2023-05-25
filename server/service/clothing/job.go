@@ -70,7 +70,7 @@ func (jobService *JobService) AuditApply(job clothing.Job, realQuantity uint) (e
 // GetJob 根据id获取Job记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (jobService *JobService) GetJob(id uint) (job clothing.Job, err error) {
-	err = global.GVA_DB.Preload("Team").Where("id = ?", id).First(&job).Error
+	err = global.GVA_DB.Preload("Team").Preload("Process.Style").Preload("User").Preload("CroppingRecord.Style").Where("id = ?", id).First(&job).Error
 	return
 }
 
@@ -103,7 +103,7 @@ func (jobService *JobService) GetJobInfoList(info clothingReq.JobSearch) (list [
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&jobs).Error
+	err = db.Preload("Team").Preload("Process.Style").Preload("User").Preload("CroppingRecord.Style").Limit(limit).Offset(offset).Find(&jobs).Error
 	return jobs, total, err
 }
 
@@ -154,10 +154,12 @@ func (jobService *JobService) JobAuditOpt(job clothing.Job, status bool) (err er
 		if err != nil {
 			return err
 		}
-		err = global.GVA_DB.Model(&clothing.UserWallet{}).Where("user_id = ? and company_id = ?", job.UserID, job.Team.CompanyID).
+		var wallet clothing.UserWallet
+		global.GVA_DB.Where("user_id = ? and company_id = ?", job.UserID, job.Team.CompanyID).FirstOrCreate(&wallet)
+		err = global.GVA_DB.Model(&wallet).
 			Updates(map[string]interface{}{
-				"wages":        gorm.Expr("wages + ?", job.RealIncome),
-				"pendingWages": gorm.Expr("pendingWages + ?", job.RealIncome),
+				"wages":         gorm.Expr("wages + ?", job.RealIncome),
+				"pending_wages": gorm.Expr("pending_wages + ?", job.RealIncome),
 			}).Error
 	} else {
 		err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{"step": enum.CroppingHandling, "updated_by": job.UpdatedBy}).Error

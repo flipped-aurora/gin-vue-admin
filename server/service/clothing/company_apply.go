@@ -99,6 +99,7 @@ func (companyApplyService *CompanyApplyService) JoinCompany(roleID uint, userID 
 			wallet.CompanyID = company.ID
 			wallet.UserID = userID
 			err = global.GVA_DB.Create(&wallet).Error
+			global.GVA_DB.Model(&company).Update("clerk_count", gorm.Expr("clerk_count + ?", 1))
 		}
 	}
 	return err

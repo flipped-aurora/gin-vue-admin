@@ -179,6 +179,10 @@ func (jobApi *JobApi) JobAuditApply(c *gin.Context) {
 		response.FailWithMessage("找不到工单", c)
 		return
 	}
+	if utils.GetUserID(c) != oJob.UserID {
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	oJob.UpdatedBy = utils.GetUserID(c)
 	if err := jobService.AuditApply(oJob, job.RealQuantity); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
@@ -207,6 +211,10 @@ func (jobApi *JobApi) JobAuditOpt(c *gin.Context) {
 		return
 	}
 	oJob.UpdatedBy = utils.GetUserID(c)
+	if utils.GetUserID(c) != oJob.Team.UserID {
+		response.FailWithMessage("权限不足", c)
+		return
+	}
 	if err := jobService.JobAuditOpt(oJob, job.Status); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)

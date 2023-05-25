@@ -76,6 +76,7 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 	status := new(int)
 	*status = 0
 	jobApply.Status = status
+	jobApply.Quantity = int(croppingRecord.Quantity)
 	if err := jobApplyService.CreateJobApply(&jobApply); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)

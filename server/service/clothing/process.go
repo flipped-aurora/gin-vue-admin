@@ -58,7 +58,7 @@ func (processService *ProcessService) UpdateProcess(process clothing.Process) (e
 // GetProcess 根据id获取Process记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (processService *ProcessService) GetProcess(id uint) (process clothing.Process, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&process).Error
+	err = global.GVA_DB.Preload("Style").Where("id = ?", id).First(&process).Error
 	return
 }
 
@@ -82,6 +82,6 @@ func (processService *ProcessService) GetProcessInfoList(info clothingReq.Proces
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&processs).Error
+	err = db.Preload("Style").Limit(limit).Offset(offset).Find(&processs).Error
 	return processs, total, err
 }

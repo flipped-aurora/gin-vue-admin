@@ -58,7 +58,7 @@ func (userWalletService *UserWalletService) UpdateUserWallet(userWallet clothing
 // GetUserWallet 根据id获取UserWallet记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (userWalletService *UserWalletService) GetUserWallet(id uint) (userWallet clothing.UserWallet, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&userWallet).Error
+	err = global.GVA_DB.Preload("User").Preload("Company").Where("id = ?", id).First(&userWallet).Error
 	return
 }
 
@@ -90,6 +90,6 @@ func (userWalletService *UserWalletService) GetUserWalletInfoList(info clothingR
 		return
 	}
 
-	err = db.Limit(limit).Preload("User").Preload("Company").Offset(offset).Find(&userWallets).Error
+	err = db.Preload("User").Preload("Company").Limit(limit).Preload("User").Preload("Company").Offset(offset).Find(&userWallets).Error
 	return userWallets, total, err
 }

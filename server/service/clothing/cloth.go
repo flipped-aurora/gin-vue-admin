@@ -58,7 +58,7 @@ func (clothService *ClothService) UpdateCloth(cloth clothing.Cloth) (err error) 
 // GetCloth 根据id获取Cloth记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (clothService *ClothService) GetCloth(id uint) (cloth clothing.Cloth, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&cloth).Error
+	err = global.GVA_DB.Preload("Style").Where("id = ?", id).First(&cloth).Error
 	return
 }
 
@@ -88,6 +88,6 @@ func (clothService *ClothService) GetClothInfoList(info clothingReq.ClothSearch)
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&cloths).Error
+	err = db.Preload("Style").Limit(limit).Offset(offset).Find(&cloths).Error
 	return cloths, total, err
 }

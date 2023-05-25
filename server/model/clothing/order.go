@@ -19,6 +19,7 @@ type Order struct {
 	PayStatus  int        `json:"payStatus" form:"payStatus" gorm:"column:pay_status;comment:;"`
 	Day        int        `json:"day" form:"day" gorm:"column:day;comment:;"`
 	ClerkCount int        `json:"clerkCount" form:"clerkCount" gorm:"column:clerk_count;comment:;"`
+	PayType    int        `json:"payType" form:"payType" gorm:"column:pay_type"`
 	PayAt      *time.Time `json:"payAt" form:"payAt" gorm:"column:pay_at;comment:;"`
 	CreatedBy  uint       `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy  uint       `gorm:"column:updated_by;comment:更新者"`

@@ -1,6 +1,7 @@
 package clothing
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -14,6 +15,10 @@ type StyleService struct {
 // CreateStyle 创建Style记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (styleService *StyleService) CreateStyle(style *clothing.Style) (err error) {
+	var s clothing.Style
+	if err := global.GVA_DB.Where("name = ? and company_id = ?", style.Name, style.CompanyID).First(&s).Error; err == nil {
+		return errors.New("款式已存在")
+	}
 	err = global.GVA_DB.Create(style).Error
 	return err
 }

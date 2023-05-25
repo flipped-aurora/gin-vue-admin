@@ -39,9 +39,10 @@ type CheckExist struct {
 
 type UserFilter struct {
 	request.PageInfo
-	CompanyID int    `json:"companyID" form:"companyID"` // 公司id
-	TeamID    int    `json:"teamID" form:"teamID"`       // 组id
-	Nickname  string `json:"nickname" form:"nickname"`   // 昵称
-	Username  string `json:"username" form:"username"`   // 用户名
-	PhoneNum  string `json:"phoneNum" form:"phoneNum"`   // 手机号
+	CompanyID     int    `json:"companyID" form:"companyID"` // 公司id
+	TeamID        int    `json:"teamID" form:"teamID"`       // 组id
+	Nickname      string `json:"nickname" form:"nickname"`   // 昵称
+	Username      string `json:"username" form:"username"`   // 用户名
+	PhoneNum      string `json:"phoneNum" form:"phoneNum"`   // 手机号
+	ExcludeTeamID uint   `json:"excludeTeamId" form:"excludeTeamId"`
 }

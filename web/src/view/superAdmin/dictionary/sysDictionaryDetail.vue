@@ -94,6 +94,8 @@
             placeholder="请输入字典值"
             clearable
             :style="{width: '100%'}"
+            min="-2147483648"
+            max="2147483647"
           />
         </el-form-item>
         <el-form-item label="启用状态" prop="status" required>

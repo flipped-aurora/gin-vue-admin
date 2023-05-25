@@ -177,6 +177,7 @@ const tableData = ref([])
 const searchInfo = ref({ sysDictionaryID: Number(route.params.id) })
 const onReset = () => {
   searchInfo.value = { sysDictionaryID: Number(route.params.id) }
+  getTableData()
 }
 
 // 条件搜索前端看此方法

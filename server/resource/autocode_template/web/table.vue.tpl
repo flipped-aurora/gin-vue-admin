@@ -29,7 +29,7 @@
             </el-select>
             </el-form-item>
             {{- else}}
-        <el-form-item label="{{.FieldDesc}}">
+        <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
 
 
         {{- if eq .FieldType "float64" "int"}}
@@ -48,9 +48,9 @@
           {{- end}}
         {{- else if eq .FieldType "time.Time"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="搜索条件（起）"></el-date-picker>
+            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="搜索条件（起）" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
             —
-            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="搜索条件（止）"></el-date-picker>
+            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="搜索条件（止）" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
            {{- else}}
            <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" placeholder="搜索条件"></el-date-picker>
           {{- end}}
@@ -247,6 +247,23 @@ const searchRule = reactive({
       }
     }, trigger: 'change' }
   ],
+  {{- range .Fields }}
+    {{- if .FieldSearchType}} 
+      {{- if eq .FieldType "time.Time" }}
+        {{.FieldJson }} : [{ validator: (rule, value, callback) => {
+        if (searchInfo.value.start{{.FieldName}} && !searchInfo.value.end{{.FieldName}}) {
+          callback(new Error('请填写结束时间'))
+        } else if (!searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}}) {
+          callback(new Error('请填写开始时间'))
+        } else if (searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}} && (searchInfo.value.start{{.FieldName}}.getTime() === searchInfo.value.end{{.FieldName}}.getTime() || searchInfo.value.start{{.FieldName}}.getTime() > searchInfo.value.end{{.FieldName}}.getTime())) {
+          callback(new Error('开始时间应当早于结束时间'))
+        } else {
+          callback()
+        }
+      }, trigger: 'change' }],
+      {{- end }}
+    {{- end }}
+  {{- end }}
 })
 
 const elFormRef = ref()

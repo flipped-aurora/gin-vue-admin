@@ -69,7 +69,7 @@
           />
         </el-form-item>
         <el-form-item label="角色ID" prop="authorityId">
-          <el-input v-model="form.authorityId" :disabled="dialogType==='edit'" autocomplete="off" />
+          <el-input v-model="form.authorityId" :disabled="dialogType==='edit'" autocomplete="off" maxlength="15" />
         </el-form-item>
         <el-form-item label="角色姓名" prop="authorityName">
           <el-input v-model="form.authorityName" autocomplete="off" />

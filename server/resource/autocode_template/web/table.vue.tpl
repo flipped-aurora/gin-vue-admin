@@ -3,9 +3,9 @@
     <div class="gva-search-box">
       <el-form :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
       <el-form-item label="创建时间" prop="createdAt">
-      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
+      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"></el-date-picker>
        —
-      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
+      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
@@ -240,6 +240,8 @@ const searchRule = reactive({
         callback(new Error('请填写结束时间'))
       } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
         callback(new Error('请填写开始时间'))
+      } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
+        callback(new Error('开始时间应当早于结束时间'))
       } else {
         callback()
       }
@@ -248,7 +250,7 @@ const searchRule = reactive({
 })
 
 const elFormRef = ref()
-
+const elSearchFormRef = ref()
 
 // =========== 表格控制部分 ===========
 const page = ref(1)
@@ -274,13 +276,16 @@ const onReset = () => {
 
 // 搜索
 const onSubmit = () => {
-  page.value = 1
-  pageSize.value = 10
-{{- range .Fields}}{{- if eq .FieldType "bool" }}
-  if (searchInfo.value.{{.FieldJson}} === ""){
-      searchInfo.value.{{.FieldJson}}=null
-  }{{ end }}{{ end }}
-  getTableData()
+  elSearchFormRef.value?.validate(async(valid) => {
+    if (!valid) return
+    page.value = 1
+    pageSize.value = 10
+    {{- range .Fields}}{{- if eq .FieldType "bool" }}
+    if (searchInfo.value.{{.FieldJson}} === ""){
+        searchInfo.value.{{.FieldJson}}=null
+    }{{ end }}{{ end }}
+    getTableData()
+  })
 }
 
 // 分页

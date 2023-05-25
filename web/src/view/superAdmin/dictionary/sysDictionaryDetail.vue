@@ -6,7 +6,7 @@
           <el-input v-model="searchInfo.label" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="字典值">
-          <el-input v-model="searchInfo.value" placeholder="搜索条件" />
+          <el-input-number v-model="searchInfo.value" placeholder="搜索条件" min="-2147483648" max="2147483647"/>
         </el-form-item>
         <el-form-item label="启用状态" prop="status">
           <el-select v-model="searchInfo.status" placeholder="请选择">

@@ -253,16 +253,9 @@ const closeDialog = () => {
 // 确定弹窗
 
 const enterDialog = () => {
-  form.value.authorityId = Number(form.value.authorityId)
-  if (form.value.authorityId === 0) {
-    ElMessage({
-      type: 'error',
-      message: '角色id不能为0'
-    })
-    return false
-  }
   authorityForm.value.validate(async valid => {
     if (valid) {
+      form.value.authorityId = Number(form.value.authorityId)
       switch (dialogType.value) {
         case 'add':
           {

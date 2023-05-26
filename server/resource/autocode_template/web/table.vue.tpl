@@ -244,7 +244,12 @@ const rule = reactive({
                    required: true,
                    message: '{{ .ErrorText }}',
                    trigger: ['input','blur'],
-               }],
+               },
+               {
+                   whitespace: true,
+                   message: '不能只输入空格',
+                   trigger: ['input', 'blur'],
+              }],
             {{- end }}
     {{- end }}
 })

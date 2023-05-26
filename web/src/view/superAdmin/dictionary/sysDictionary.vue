@@ -145,7 +145,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      title="弹窗操作"
+      title="type==='create'?'添加字典':'修改字典'"
     >
       <el-form
         ref="dialogForm"

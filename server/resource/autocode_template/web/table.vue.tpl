@@ -148,7 +148,7 @@
             />
         </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="type==='create'?'添加':'修改'">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >

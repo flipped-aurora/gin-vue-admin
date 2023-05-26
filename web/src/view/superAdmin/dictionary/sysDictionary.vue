@@ -80,7 +80,7 @@
 
         <el-table-column align="left" label="描述" prop="desc" width="280" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" label="操作">
           <template #default="scope">
             <el-button
 

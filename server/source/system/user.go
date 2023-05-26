@@ -79,7 +79,7 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 	if err = db.Model(&entities[0]).Association("Authorities").Replace(authorityEntities); err != nil {
 		return next, err
 	}
-	if err = db.Model(&entities[1]).Association("Authorities").Replace(authorityEntities[:1]); err != nil {
+	if err = db.Model(&entities[1]).Association("Authorities").Replace(authorityEntities[1:2]); err != nil {
 		return next, err
 	}
 	return next, err

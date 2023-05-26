@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="type==='create'?'添加字典项':'修改字典项'">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加字典项':'修改字典项'">
       <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
         <el-form-item label="展示值" prop="label">
           <el-input

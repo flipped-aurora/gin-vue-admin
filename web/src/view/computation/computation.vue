@@ -7,25 +7,6 @@
        —
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
       </el-form-item>
-        <el-form-item label="用户名">
-         <el-input v-model="searchInfo.userName" placeholder="搜索条件" />
-
-        </el-form-item>
-        <el-form-item label="昵称">
-         <el-input v-model="searchInfo.nickname" placeholder="搜索条件" />
-
-        </el-form-item>
-        <el-form-item label="工资">
-            
-            <el-input v-model.number="searchInfo.startWages" placeholder="搜索条件（起）" />
-            —
-            <el-input v-model.number="searchInfo.endWages" placeholder="搜索条件（止）" />
-
-        </el-form-item>
-        <el-form-item label="手机号">
-         <el-input v-model="searchInfo.phoneNum" placeholder="搜索条件" />
-
-        </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
           <el-button icon="refresh" @click="onReset">重置</el-button>
@@ -35,7 +16,7 @@
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
-            <!-- <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+            <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin-top: 8px;">
                 <el-button type="primary" link @click="deleteVisible = false">取消</el-button>
@@ -44,7 +25,7 @@
             <template #reference>
                 <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
             </template>
-            </el-popover> -->
+            </el-popover>
         </div>
         <el-table
         ref="multipleTable"
@@ -53,30 +34,28 @@
         :data="tableData"
         row-key="ID"
         @selection-change="handleSelectionChange"
-        @sort-change="sortChange"
         >
         <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="用户名" prop="username" width="120" />
-<!--        <el-table-column align="left" label="密码" prop="password" width="120" />-->
-        <el-table-column align="left" label="昵称" prop="nickname" width="120" />
-<!--        <el-table-column sortable align="left" label="工资" prop="wages" width="120" />-->
-<!--        <el-table-column align="left" label="状态" prop="status" width="120">-->
-<!--            <template #default="scope">-->
-<!--            {{ filterDict(scope.row.status,statusOptions) }}-->
-<!--            </template>-->
-<!--        </el-table-column>-->
-        <el-table-column align="left" label="手机号" prop="phoneNum" width="120" />
-<!--        <el-table-column align="left" label="openID" prop="openID" width="120" />-->
-<!--        <el-table-column align="left" label="unionID" prop="unionID" width="120" />-->
-<!--        <el-table-column align="left" label="按钮组">-->
-<!--            <template #default="scope">-->
-<!--            <el-button type="primary" link icon="edit" class="table-button" @click="updateAppUserFunc(scope.row)">变更</el-button>-->
-<!--            &lt;!&ndash; <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button> &ndash;&gt;-->
-<!--            </template>-->
-<!--        </el-table-column>-->
+        <el-table-column align="left" label="布料宽" prop="clothWidth" width="120" />
+        <el-table-column align="left" label="斜条长度" prop="barLength" width="120" />
+        <el-table-column align="left" label="斜条宽" prop="barWidth" width="120" />
+        <el-table-column align="left" label="件数" prop="countNum" width="120" />
+        <el-table-column align="left" label="单根协调长度45" prop="barLength45" width="120" />
+        <el-table-column align="left" label="90" prop="barLength90" width="120" />
+        <el-table-column align="left" label="180" prop="barLength180" width="120" />
+        <el-table-column align="left" label="所需总布料长度45" prop="clothLength45" width="120" />
+        <el-table-column align="left" label="90" prop="clothLength90" width="120" />
+        <el-table-column align="left" label="180" prop="clothLength180" width="120" />
+        <el-table-column align="left" label="用户id" prop="userID" width="120" />
+        <el-table-column align="left" label="按钮组">
+            <template #default="scope">
+            <el-button type="primary" link icon="edit" class="table-button" @click="updateComputationFunc(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            </template>
+        </el-table-column>
         </el-table>
         <div class="gva-pagination">
             <el-pagination
@@ -92,32 +71,39 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-         <el-form-item label="用户名:"  prop="username" >
-          <el-input v-model="formData.username" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="布料宽:"  prop="clothWidth" >
+          <el-input-number v-model="formData.clothWidth"  style="width:100%" :precision="2" :clearable="true"  />
         </el-form-item>
-         <el-form-item label="密码:"  prop="password" >
-          <el-input v-model="formData.password" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="斜条长度:"  prop="barLength" >
+          <el-input-number v-model="formData.barLength"  style="width:100%" :precision="2" :clearable="true"  />
         </el-form-item>
-        <el-form-item label="昵称:"  prop="nickname" >
-          <el-input v-model="formData.nickname" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="斜条宽:"  prop="barWidth" >
+          <el-input-number v-model="formData.barWidth"  style="width:100%" :precision="2" :clearable="true"  />
         </el-form-item>
-        <!-- <el-form-item label="工资:"  prop="wages" >
-          <el-input-number v-model="formData.wages"  style="width:100%" :precision="2" :clearable="true"  />
-        </el-form-item> -->
-<!--        <el-form-item label="状态:"  prop="status" >
-          <el-select v-model="formData.status" placeholder="请选择" style="width:100%" :clearable="true" >
-            <el-option v-for="(item,key) in statusOptions" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>-->
-        <el-form-item label="手机号:"  prop="phoneNum" >
-          <el-input v-model="formData.phoneNum" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="件数:"  prop="countNum" >
+          <el-input v-model.number="formData.countNum" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <!-- <el-form-item label="openID:"  prop="openID" >
-          <el-input v-model="formData.openID" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="单根协调长度45:"  prop="barLength45" >
+          <el-input-number v-model="formData.barLength45"  style="width:100%" :precision="2" :clearable="true"  />
         </el-form-item>
-        <el-form-item label="unionID:"  prop="unionID" >
-          <el-input v-model="formData.unionID" :clearable="true"  placeholder="请输入" />
-        </el-form-item> -->
+        <el-form-item label="90:"  prop="barLength90" >
+          <el-input-number v-model="formData.barLength90"  style="width:100%" :precision="2" :clearable="true"  />
+        </el-form-item>
+        <el-form-item label="180:"  prop="barLength180" >
+          <el-input-number v-model="formData.barLength180"  style="width:100%" :precision="2" :clearable="true"  />
+        </el-form-item>
+        <el-form-item label="所需总布料长度45:"  prop="clothLength45" >
+          <el-input-number v-model="formData.clothLength45"  style="width:100%" :precision="2" :clearable="true"  />
+        </el-form-item>
+        <el-form-item label="90:"  prop="clothLength90" >
+          <el-input-number v-model="formData.clothLength90"  style="width:100%" :precision="2" :clearable="true"  />
+        </el-form-item>
+        <el-form-item label="180:"  prop="clothLength180" >
+          <el-input-number v-model="formData.clothLength180"  style="width:100%" :precision="2" :clearable="true"  />
+        </el-form-item>
+        <el-form-item label="用户id:"  prop="userID" >
+          <el-input v-model.number="formData.userID" :clearable="true" placeholder="请输入" />
+        </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -131,19 +117,19 @@
 
 <script>
 export default {
-  name: 'AppUser'
+  name: 'Computation'
 }
 </script>
 
 <script setup>
 import {
-  createAppUser,
-  deleteAppUser,
-  deleteAppUserByIds,
-  updateAppUser,
-  findAppUser,
-  getAppUserList
-} from '@/api/appUser'
+  createComputation,
+  deleteComputation,
+  deleteComputationByIds,
+  updateComputation,
+  findComputation,
+  getComputationList
+} from '@/api/computation'
 
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
@@ -151,16 +137,18 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
 // 自动化生成的字典（可能为空）以及字段
-const statusOptions = ref([])
 const formData = ref({
-        userName: '',
-        password: '',
-        nickname: '',
-        wages: 0,
-        status: undefined,
-        phoneNum: '',
-        openID: '',
-        unionID: '',
+        clothWidth: 0,
+        barLength: 0,
+        barWidth: 0,
+        countNum: 0,
+        barLength45: 0,
+        barLength90: 0,
+        barLength180: 0,
+        clothLength45: 0,
+        clothLength90: 0,
+        clothLength180: 0,
+        userID: 0,
         })
 
 // 验证规则
@@ -176,12 +164,6 @@ const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
-// 排序
-const sortChange = ({ prop, order }) => {
-  searchInfo.value.sort = prop
-  searchInfo.value.order = order
-  getTableData()
-}
 
 // 重置
 const onReset = () => {
@@ -210,7 +192,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getAppUserList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getComputationList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -225,7 +207,6 @@ getTableData()
 
 // 获取需要的字典 可能为空 按需保留
 const setOptions = async () =>{
-    statusOptions.value = await getDictFunc('status')
 }
 
 // 获取需要的字典 可能为空 按需保留
@@ -246,7 +227,7 @@ const deleteRow = (row) => {
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-            deleteAppUserFunc(row)
+            deleteComputationFunc(row)
         })
     }
 
@@ -268,7 +249,7 @@ const onDelete = async() => {
         multipleSelection.value.map(item => {
           ids.push(item.ID)
         })
-      const res = await deleteAppUserByIds({ ids })
+      const res = await deleteComputationByIds({ ids })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
@@ -286,19 +267,19 @@ const onDelete = async() => {
 const type = ref('')
 
 // 更新行
-const updateAppUserFunc = async(row) => {
-    const res = await findAppUser({ ID: row.ID })
+const updateComputationFunc = async(row) => {
+    const res = await findComputation({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.reappUser
+        formData.value = res.data.recomputation
         dialogFormVisible.value = true
     }
 }
 
 
 // 删除行
-const deleteAppUserFunc = async (row) => {
-    const res = await deleteAppUser({ ID: row.ID })
+const deleteComputationFunc = async (row) => {
+    const res = await deleteComputation({ ID: row.ID })
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
@@ -324,14 +305,17 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-        userName: '',
-        password: '',
-        nickname: '',
-        wages: 0,
-        status: undefined,
-        phoneNum: '',
-        openID: '',
-        unionID: '',
+        clothWidth: 0,
+        barLength: 0,
+        barWidth: 0,
+        countNum: 0,
+        barLength45: 0,
+        barLength90: 0,
+        barLength180: 0,
+        clothLength45: 0,
+        clothLength90: 0,
+        clothLength180: 0,
+        userID: 0,
         }
 }
 // 弹窗确定
@@ -341,13 +325,13 @@ const enterDialog = async () => {
               let res
               switch (type.value) {
                 case 'create':
-                  res = await createAppUser(formData.value)
+                  res = await createComputation(formData.value)
                   break
                 case 'update':
-                  res = await updateAppUser(formData.value)
+                  res = await updateComputation(formData.value)
                   break
                 default:
-                  res = await createAppUser(formData.value)
+                  res = await createComputation(formData.value)
                   break
               }
               if (res.code === 0) {

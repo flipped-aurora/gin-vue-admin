@@ -1,6 +1,7 @@
 package clothing
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -154,6 +155,32 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 		return
 	}
 	userID := utils.GetUserID(c)
+	workJoin := func(roleID uint) error {
+		if team, err := teamService.GetTeam(joinCompany.TeamID); err != nil {
+			return errors.New("组不存在")
+		} else {
+			if _, err := companyService.GetCompany(team.CompanyID); err != nil {
+				return errors.New("公司不存在")
+			} else {
+				var teamApply clothing.TeamApply
+				teamApply.TeamID = team.ID
+				teamApply.UserID = userID
+				teamApply.RoleID = roleID
+				status := new(int)
+				*status = 0
+				teamApply.Status = status
+				if err := teamApplyService.CreateTeamApply(&teamApply); err != nil {
+					global.GVA_LOG.Sugar().Error(err)
+					return errors.New("操作失败")
+				}
+				if err := msgBoxService.SendMsg(userID, team.UserID, enum.WorkerApply, teamApply.ID); err != nil {
+					global.GVA_LOG.Sugar().Error(err)
+					return errors.New("操作失败")
+				}
+			}
+		}
+		return nil
+	}
 	switch joinCompany.RoleID {
 	case enum.Boss:
 		if _, err := companyService.GetCompanyByName(joinCompany.Remark); err == nil {
@@ -216,44 +243,16 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 			}
 		}
 	case enum.Worker:
-		if team, err := teamService.GetTeam(joinCompany.TeamID); err != nil {
-			response.FailWithMessage("组不存在", c)
+		if err := workJoin(enum.Worker); err != nil {
+			global.GVA_LOG.Sugar().Error(err)
+			response.FailWithMessage(err.Error(), c)
 			return
-		} else {
-			if company, err := companyService.GetCompany(team.CompanyID); err != nil {
-				response.FailWithMessage("公司不存在", c)
-				return
-			} else {
-				if err := companyApplyService.JoinCompany(enum.Worker, userID, company); err != nil {
-					global.GVA_LOG.Sugar().Error(err)
-					response.FailWithMessage("加入公司失败", c)
-					return
-				}
-				var wallet clothing.UserWallet
-				wallet.CompanyID = company.ID
-				wallet.UserID = userID
-				if err := userWalletService.CreateUserWallet(&wallet); err != nil {
-					global.GVA_LOG.Sugar().Error(err)
-					response.FailWithMessage("创建钱包失败", c)
-					return
-				}
-				var teamApply clothing.TeamApply
-				teamApply.TeamID = team.ID
-				teamApply.UserID = userID
-				status := new(int)
-				*status = 0
-				teamApply.Status = status
-				if err := teamApplyService.CreateTeamApply(&teamApply); err != nil {
-					global.GVA_LOG.Sugar().Error(err)
-					response.FailWithMessage("操作失败", c)
-					return
-				}
-				if err := msgBoxService.SendMsg(userID, team.UserID, enum.WorkerApply, teamApply.ID); err != nil {
-					global.GVA_LOG.Sugar().Error(err)
-					response.FailWithMessage("操作失败", c)
-					return
-				}
-			}
+		}
+	case enum.FlowWorker:
+		if err := workJoin(enum.FlowWorker); err != nil {
+			global.GVA_LOG.Sugar().Error(err)
+			response.FailWithMessage(err.Error(), c)
+			return
 		}
 	default:
 		response.FailWithMessage("未定义的角色类型", c)

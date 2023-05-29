@@ -22,4 +22,5 @@ type ApiGroup struct {
 	AgentApi
 	RechargeOptionApi
 	OrderApi
+	ComputationApi
 }

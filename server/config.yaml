@@ -42,7 +42,7 @@ captcha:
   open-captcha: 0
   open-captcha-timeout: 3600
 cors:
-  mode: strict-whitelist
+  mode: allow-all
   whitelist:
   - allow-origin: example1.com
     allow-methods: POST, GET

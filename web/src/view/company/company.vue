@@ -52,23 +52,28 @@
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column align="left" label="公司名" prop="name" width="120" />
-        <el-table-column align="left" label="老板" prop="user.username" width="120" />
-<!--        <el-table-column align="left" label="状态" prop="status" width="120">-->
-<!--          <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>-->
-<!--        </el-table-column>-->
-<!--        <el-table-column align="left" label="按钮组">-->
-<!--          <template #default="scope">-->
-<!--            <el-button-->
-<!--              type="primary"-->
-<!--              link-->
-<!--              icon="edit"-->
-<!--              class="table-button"-->
-<!--              @click="updateCompanyFunc(scope.row)"-->
-<!--            >变更-->
-<!--            </el-button>-->
-<!--            &lt;!&ndash; <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button> &ndash;&gt;-->
-<!--          </template>-->
-<!--        </el-table-column>-->
+        <el-table-column align="left" label="老板用户名" prop="user.username" width="120" />
+          <el-table-column align="left" label="手机号" prop="user.phoneNum" width="120" />
+          <el-table-column align="left" label="职员数量" prop="clerkCount" width="120" />
+          <el-table-column align="left" label="职员数量上限" prop="clerkCountLimit" width="120" />
+          <el-table-column align="left" label="到期时间" prop="expirationAt" width="120" />
+          <el-table-column align="left" label="汇率" prop="expirationAt" width="120" />
+        <el-table-column align="left" label="状态" prop="status" width="120">
+          <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
+        </el-table-column>
+        <el-table-column align="left" label="按钮组">
+          <template #default="scope">
+            <el-button
+              type="primary"
+              link
+              icon="edit"
+              class="table-button"
+              @click="updateCompanyFunc(scope.row)"
+            >变更
+            </el-button>
+            <!-- <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button> -->
+          </template>
+        </el-table-column>
       </el-table>
       <div class="gva-pagination">
         <el-pagination
@@ -87,8 +92,29 @@
         <el-form-item label="公司名:" prop="name">
           <el-input v-model="formData.name" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="代理人" prop="agent">
+          <el-form-item label="老板" prop="agent.name">
+              <el-select
+                      :disabled="type == 'update'"
+                      v-model="formData.userID"
+                      class="full-width-input"
+                      :remote-method="remoteMethod2"
+                      :loading="loading"
+                      clearable
+                      filterable
+                      remote
+              >
+                  <el-option
+                          v-for="(item, index) in userList"
+                          :key="index"
+                          :label="item.username+'('+item.phoneNum+')'"
+                          :value="item.ID"
+                          :disabled="item.disabled"
+                  />
+              </el-select>
+          </el-form-item>
+        <el-form-item label="代理人" prop="agent.name">
           <el-select
+            :disabled="type == 'update'"
             v-model="formData.agentID"
             class="full-width-input"
             :remote-method="remoteMethod"
@@ -147,6 +173,10 @@ import {
   getAgentList
 } from '@/api/agent'
 
+import {
+  getAppUserList
+} from '@/api/appUser'
+
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -159,6 +189,7 @@ const formData = ref({
   status: undefined,
 })
 const agentList = ref([])
+const userList = ref([])
 const loading = ref(false)
 const remoteMethod = (query) => {
   if (query) {
@@ -172,6 +203,20 @@ const remoteMethod = (query) => {
   } else {
     agentList.value = []
   }
+}
+
+const remoteMethod2 = (query) => {
+    if (query) {
+        loading.value = true
+        setTimeout(async () => {
+            loading.value = false
+            const list = await getAppUserList({ name: query })
+            console.log(list)
+            userList.value = list.data.list
+        },200)
+    } else {
+        userList.value = []
+    }
 }
 
 // 验证规则

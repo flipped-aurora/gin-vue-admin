@@ -28,6 +28,15 @@ type JobList struct {
 	Jobs       []PostJob `json:"jobs"`
 }
 
+type JobAuditApply struct {
+	ID           uint `json:"id"`
+	Type         int  `json:"type"`
+	TeamID       uint `json:"teamID"`
+	StyleID      uint `json:"styleID"`
+	ProcessID    uint `json:"processID"`
+	RealQuantity uint `json:"realQuantity"`
+}
+
 type JobAuditOpt struct {
 	ID     uint `json:"id"`
 	Status bool `json:"status"`

@@ -94,6 +94,21 @@ func (teamApplyService *TeamApplyService) OptApply(apply clothing.TeamApply, sta
 		err = global.GVA_DB.Model(&apply).Update("status", enum.ApplyReject).Error
 		return
 	}
+	var role clothing.UserRole
+	role.RoleID = apply.RoleID
+	role.UserID = apply.UserID
+	role.CompanyID = team.CompanyID
+	err = global.GVA_DB.Where(&role).First(&role).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		err = global.GVA_DB.Create(&role).Error
+		if err == nil {
+			var wallet clothing.UserWallet
+			wallet.CompanyID = team.CompanyID
+			wallet.UserID = apply.UserID
+			err = global.GVA_DB.Create(&wallet).Error
+			global.GVA_DB.Model(&clothing.Company{}).Where("id = ?", team.CompanyID).Update("clerk_count", gorm.Expr("clerk_count + ?", 1))
+		}
+	}
 	var teamUser clothing.TeamUser
 	teamUser.TeamID = team.ID
 	teamUser.UserID = apply.UserID

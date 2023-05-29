@@ -24,6 +24,7 @@ func Routers() *gin.Engine {
 	Router.GET(global.GVA_CONFIG.System.RouterPrefix+"/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	global.GVA_LOG.Info("register swagger handler")
 
+	Router.Use(middleware.CorsByRules())
 	PublicGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
 	{
 
@@ -81,6 +82,7 @@ func Routers() *gin.Engine {
 		clothingRouter.InitAgentRouter(PrivateGroup)
 		clothingRouter.InitRechargeOptionRouter(PrivateGroup)
 		clothingRouter.InitOrderRouter(PrivateGroup)
+		clothingRouter.InitComputationRouter(PrivateGroup)
 
 	}
 

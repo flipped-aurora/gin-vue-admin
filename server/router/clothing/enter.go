@@ -22,4 +22,5 @@ type RouterGroup struct {
 	AgentRouter
 	RechargeOptionRouter
 	OrderRouter
+	ComputationRouter
 }

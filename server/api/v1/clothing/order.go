@@ -198,7 +198,7 @@ func (orderApi *OrderApi) PayOrder(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	var result interface{}
+	//var result interface{}
 	Description := "合伙人资格"
 	Attach := "合伙人资格购买"
 	global.GVA_LOG.Sugar().Info("支付方式：", payOrderReq.PayType)
@@ -211,7 +211,7 @@ func (orderApi *OrderApi) PayOrder(c *gin.Context) {
 			return
 		}
 		order.PayNo = *createOrder.PrepayId
-		result = createOrder
+		//result = createOrder
 	case enum.WechatH5:
 
 	case enum.WechatApp:

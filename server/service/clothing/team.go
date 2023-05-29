@@ -60,7 +60,7 @@ func (teamService *TeamService) UpdateTeam(team clothing.Team) (err error) {
 // GetTeam 根据id获取Team记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (teamService *TeamService) GetTeam(id uint) (team clothing.Team, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&team).Error
+	err = global.GVA_DB.Preload("Company").Where("id = ?", id).First(&team).Error
 	return
 }
 
@@ -89,7 +89,7 @@ func (teamService *TeamService) GetTeamInfoList(info clothingReq.TeamSearch) (li
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&teams).Error
+	err = db.Preload("Company").Limit(limit).Offset(offset).Find(&teams).Error
 	return teams, total, err
 }
 

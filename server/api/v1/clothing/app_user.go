@@ -29,7 +29,7 @@ func (appUserApi *AppUserApi) CreateAppUser(c *gin.Context) {
 		return
 	}
 	appUser.CreatedBy = utils.GetUserID(c)
-	if err := appUserService.CreateAppUser(&appUser); err != nil {
+	if _, err := appUserService.Register(appUser); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {

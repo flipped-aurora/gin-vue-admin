@@ -167,28 +167,57 @@ func (jobApi *JobApi) PostJobList(c *gin.Context) {
 }
 
 func (jobApi *JobApi) JobAuditApply(c *gin.Context) {
-	var job clothing.Job
+	var job clothingReq.JobAuditApply
 	err := c.ShouldBindJSON(&job)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	job.UpdatedBy = utils.GetUserID(c)
-	oJob, err := jobService.GetJob(job.ID)
-	if err != nil {
-		response.FailWithMessage("找不到工单", c)
-		return
-	}
-	if utils.GetUserID(c) != oJob.UserID {
-		response.FailWithMessage("权限不足", c)
-		return
+	var oJob clothing.Job
+	if job.Type == 0 {
+		oJob, err = jobService.GetJob(job.ID)
+		if err != nil {
+			response.FailWithMessage("找不到工单", c)
+			return
+		}
+		if utils.GetUserID(c) != oJob.UserID {
+			response.FailWithMessage("权限不足", c)
+			return
+		}
+	} else {
+		var process clothing.Process
+		if err := global.GVA_DB.First(&process, job.ProcessID).Error; err != nil {
+			response.FailWithMessage("工序不存在", c)
+			return
+		}
+		oJob.JobType = enum.Process
+		oJob.CroppingID = 0
+		oJob.UserID = utils.GetUserID(c)
+		oJob.TeamID = job.TeamID
+		oJob.Step = enum.CroppingHandling
+		oJob.Quantity = int(job.RealQuantity)
+		oJob.Income = process.Price * float64(job.RealQuantity)
+		oJob.UpdatedBy = utils.GetUserID(c)
+		oJob.CreatedBy = utils.GetUserID(c)
+		oJob.ProcessID = process.ID
+		oJob.ProcessName = process.Name
+		oJob.Price = process.Price
+		if err := global.GVA_DB.Create(&oJob).Error; err != nil {
+			response.FailWithMessage("服务器错误", c)
+			return
+		}
+		oJob, err = jobService.GetJob(oJob.ID)
+		if err != nil {
+			response.FailWithMessage("找不到工单", c)
+			return
+		}
 	}
 	oJob.UpdatedBy = utils.GetUserID(c)
 	if err := jobService.AuditApply(oJob, job.RealQuantity); err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
-		err := msgBoxService.SendMsg(job.UpdatedBy, job.Team.UserID, enum.JobComplete, oJob.ID)
+		err := msgBoxService.SendMsg(oJob.UpdatedBy, oJob.Team.UserID, enum.JobComplete, oJob.ID)
 		if err != nil {
 			global.GVA_LOG.Error("创建失败!", zap.Error(err))
 			response.FailWithMessage("创建失败", c)

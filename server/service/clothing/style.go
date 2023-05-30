@@ -56,7 +56,10 @@ func (styleService *StyleService) DeleteStyleByIds(ids request.IdsReq, deleted_b
 // UpdateStyle 更新Style记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (styleService *StyleService) UpdateStyle(style clothing.Style) (err error) {
-	err = global.GVA_DB.Save(&style).Error
+	err = global.GVA_DB.Model(&style).Updates(map[string]interface{}{
+		"name":  style.Name,
+		"price": style.Price,
+	}).Error
 	return err
 }
 

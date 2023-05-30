@@ -26,4 +26,5 @@ type ServiceGroup struct {
 	WechatService
 	AliService
 	ComputationService
+	SizeListService
 }

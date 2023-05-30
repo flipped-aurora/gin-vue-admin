@@ -58,12 +58,12 @@ func (orderService *OrderService) UpdateOrder(order clothing.Order) (err error) 
 // GetOrder 根据id获取Order记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (orderService *OrderService) GetOrder(id uint) (order clothing.Order, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&order).Error
+	err = global.GVA_DB.Preload("User").Preload("Company").Where("id = ?", id).First(&order).Error
 	return
 }
 
 func (orderService *OrderService) GetOrderByOrderNo(orderNo string) (order clothing.Order, err error) {
-	err = global.GVA_DB.Where("order_no = ?", orderNo).First(&order).Error
+	err = global.GVA_DB.Preload("User").Preload("Company").Where("order_no = ?", orderNo).First(&order).Error
 	return
 }
 
@@ -93,6 +93,6 @@ func (orderService *OrderService) GetOrderInfoList(info clothingReq.OrderSearch)
 		return
 	}
 
-	err = db.Limit(limit).Offset(offset).Find(&orders).Error
+	err = db.Preload("User").Preload("Company").Limit(limit).Offset(offset).Find(&orders).Error
 	return orders, total, err
 }

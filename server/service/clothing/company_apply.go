@@ -106,6 +106,9 @@ func (companyApplyService *CompanyApplyService) JoinCompany(roleID uint, userID 
 }
 
 func (companyApplyService *CompanyApplyService) OptApply(apply clothing.CompanyApply, status int, company clothing.Company) (err error) {
+	if !company.CheckLimit() {
+		return errors.New("名额不足或会员已到期")
+	}
 	if apply.Status != nil && *apply.Status != enum.ApplyPending {
 		return errors.New("已处理")
 	}

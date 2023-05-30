@@ -11,6 +11,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"time"
 )
 
 type OrderApi struct {
@@ -198,7 +199,7 @@ func (orderApi *OrderApi) PayOrder(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	//var result interface{}
+	var result interface{}
 	Description := "合伙人资格"
 	Attach := "合伙人资格购买"
 	global.GVA_LOG.Sugar().Info("支付方式：", payOrderReq.PayType)
@@ -211,14 +212,49 @@ func (orderApi *OrderApi) PayOrder(c *gin.Context) {
 			return
 		}
 		order.PayNo = *createOrder.PrepayId
-		//result = createOrder
+		result = createOrder
 	case enum.WechatH5:
-
+		createOrder, err := wechatService.CreateH5Order(global.GVA_CONFIG.Wechat.AppID, Description, Attach, order)
+		if err != nil {
+			global.GVA_LOG.Error("调起微信支付失败!", zap.Error(err))
+			response.FailWithMessage("调起微信支付失败", c)
+			return
+		}
+		order.PayNo = *createOrder.H5Url
+		result = *createOrder.H5Url
 	case enum.WechatApp:
-
+		createOrder, err := wechatService.CreateAppOrder(global.GVA_CONFIG.Wechat.AppID, Description, Attach, order)
+		if err != nil {
+			global.GVA_LOG.Error("调起微信支付失败!", zap.Error(err))
+			response.FailWithMessage("调起微信支付失败", c)
+			return
+		}
+		order.PayNo = *createOrder.PrepayId
+		result = createOrder
 	case enum.AliH5:
-
+		h5Order, err := aliService.CreateH5Order(Description, order)
+		if err != nil {
+			global.GVA_LOG.Error("调起支付宝支付失败!", zap.Error(err))
+			response.FailWithMessage("调起支付宝支付失败", c)
+			return
+		}
+		result = h5Order
 	case enum.AliApp:
-
+		appOrder, err := aliService.CreateAppOrder(Description, order)
+		if err != nil {
+			global.GVA_LOG.Error("调起支付宝支付失败!", zap.Error(err))
+			response.FailWithMessage("调起支付宝支付失败", c)
+			return
+		}
+		result = appOrder
 	}
+	global.GVA_LOG.Sugar().Info(result)
+	order.PayType = payOrderReq.PayType
+	now := time.Now()
+	order.PayAt = &now
+	if err := orderService.UpdateOrder(order); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithData(result, c)
 }

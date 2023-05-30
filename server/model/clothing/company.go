@@ -28,3 +28,13 @@ type Company struct {
 func (Company) TableName() string {
 	return "company"
 }
+
+func (c *Company) CheckLimit() bool {
+	if c.ClerkCount >= c.ClerkCountLimit {
+		return false
+	}
+	if c.ExpirationAt.Sub(time.Now()) <= 0 {
+		return false
+	}
+	return true
+}

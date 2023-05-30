@@ -23,4 +23,5 @@ type ApiGroup struct {
 	RechargeOptionApi
 	OrderApi
 	ComputationApi
+	SizeListApi
 }

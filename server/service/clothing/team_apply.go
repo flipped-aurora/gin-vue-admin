@@ -87,6 +87,9 @@ func (teamApplyService *TeamApplyService) GetTeamApplyInfoList(info clothingReq.
 }
 
 func (teamApplyService *TeamApplyService) OptApply(apply clothing.TeamApply, status int, team clothing.Team) (err error) {
+	if !team.Company.CheckLimit() {
+		return errors.New("名额不足或会员已到期")
+	}
 	if apply.Status != nil && *apply.Status != enum.ApplyPending {
 		return errors.New("已处理")
 	}

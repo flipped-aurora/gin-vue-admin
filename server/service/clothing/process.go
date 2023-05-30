@@ -51,7 +51,12 @@ func (processService *ProcessService) DeleteProcessByIds(ids request.IdsReq, del
 // UpdateProcess 更新Process记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (processService *ProcessService) UpdateProcess(process clothing.Process) (err error) {
-	err = global.GVA_DB.Save(&process).Error
+	err = global.GVA_DB.Model(&process).Updates(map[string]interface{}{
+		"style_id": process.StyleID,
+		"name":     process.Name,
+		"price":    process.Price,
+		"percent":  process.Percent,
+	}).Error
 	return err
 }
 

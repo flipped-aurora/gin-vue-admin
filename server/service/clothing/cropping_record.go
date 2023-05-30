@@ -14,6 +14,10 @@ type CroppingRecordService struct {
 // CreateCroppingRecord 创建CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (croppingRecordService *CroppingRecordService) CreateCroppingRecord(croppingRecord *clothing.CroppingRecord) (err error) {
+	for _, list := range croppingRecord.SizeList {
+		croppingRecord.Quantity += list.Quantity
+	}
+	croppingRecord.Usage = croppingRecord.Length / float64(croppingRecord.Quantity)
 	err = global.GVA_DB.Create(croppingRecord).Error
 	return err
 }
@@ -51,14 +55,19 @@ func (croppingRecordService *CroppingRecordService) DeleteCroppingRecordByIds(id
 // UpdateCroppingRecord 更新CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (croppingRecordService *CroppingRecordService) UpdateCroppingRecord(croppingRecord clothing.CroppingRecord) (err error) {
-	err = global.GVA_DB.Save(&croppingRecord).Error
+	global.GVA_DB.Where("cropping_record_id = ?", croppingRecord.ID).Unscoped().Delete(&clothing.SizeList{})
+	for _, list := range croppingRecord.SizeList {
+		croppingRecord.Quantity += list.Quantity
+	}
+	croppingRecord.Usage = croppingRecord.Length / float64(croppingRecord.Quantity)
+	err = global.GVA_DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&croppingRecord).Error
 	return err
 }
 
 // GetCroppingRecord 根据id获取CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (croppingRecordService *CroppingRecordService) GetCroppingRecord(id uint) (croppingRecord clothing.CroppingRecord, err error) {
-	err = global.GVA_DB.Preload("Style").Where("id = ?", id).First(&croppingRecord).Error
+	err = global.GVA_DB.Preload("Style").Preload("SizeList").Where("id = ?", id).First(&croppingRecord).Error
 	return
 }
 
@@ -85,6 +94,6 @@ func (croppingRecordService *CroppingRecordService) GetCroppingRecordInfoList(in
 		return
 	}
 
-	err = db.Preload("Style").Limit(limit).Offset(offset).Find(&croppingRecords).Error
+	err = db.Preload("Style").Preload("SizeList").Limit(limit).Offset(offset).Find(&croppingRecords).Error
 	return croppingRecords, total, err
 }

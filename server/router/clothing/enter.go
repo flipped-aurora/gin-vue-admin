@@ -23,4 +23,5 @@ type RouterGroup struct {
 	RechargeOptionRouter
 	OrderRouter
 	ComputationRouter
+	SizeListRouter
 }

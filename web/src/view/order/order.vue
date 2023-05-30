@@ -54,8 +54,8 @@
         </el-table-column>
         <el-table-column align="left" label="订单号" prop="orderNo" width="120" />
         <el-table-column align="left" label="支付单号" prop="payNo" width="120" />
-        <el-table-column align="left" label="公司id" prop="companyID" width="120" />
-        <el-table-column align="left" label="用户id" prop="userID" width="120" />
+        <el-table-column align="left" label="公司" prop="company.name" width="120" />
+        <el-table-column align="left" label="用户" prop="user.username" width="120" />
         <el-table-column align="left" label="价格" prop="price" width="120" />
         <el-table-column align="left" label="实付金额" prop="amount" width="120" />
         <el-table-column align="left" label="订单状态" prop="status" width="120">

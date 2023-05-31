@@ -28,7 +28,7 @@ Gin-Vue-Admin是一个全栈自动化代码的开源项目，其持续开发完�
 </p>
 <p align="center">
   <a target="_blank" href="https://www.mingdao.com?s=utm_84&utm_source=gin-vue-admin&utm_medium=banner&utm_campaign=github&utm_content=IT%E8%B5%8B%E8%83%BD%E4%B8%9A%E5%8A%A1">
-  <img alt="special sponsor appwrite" src="https://github.com/flipped-aurora/gin-vue-admin/assets/29840023/96aa9251-aa6b-4caa-b4aa-39c4e5126f9b" width="300">
+  <img alt="special sponsor appwrite" src="https://gin-vue-admin.com/guanwang/mingdao.png" width="300">
   </a>
 </p>
 						       

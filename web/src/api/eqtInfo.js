@@ -65,6 +65,39 @@ export const updateEqtInfo = (data) => {
 }
 
 // @Tags EqtInfo
+// @Summary 更新EqtInfo预约状态
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.EqtInfo true "开放预约"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /eqtInfo/updateEqtInfo [put]
+export const updateEqtStatusOpen = (data) => {
+  return service({
+    url: '/eqtInfo/UpdateEqtStatusOpen',
+    method: 'put',
+    data
+  })
+}
+
+// @Tags EqtInfo
+// @Summary 更新EqtInfo预约状态
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body model.EqtInfo true "关闭预约"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /eqtInfo/updateEqtInfo [put]
+export const updateEqtStatusClose = (data) => {
+  return service({
+    url: '/eqtInfo/UpdateEqtStatusClose',
+    method: 'put',
+    data
+  })
+}
+
+
+// @Tags EqtInfo
 // @Summary 用id查询EqtInfo
 // @Security ApiKeyAuth
 // @accept application/json

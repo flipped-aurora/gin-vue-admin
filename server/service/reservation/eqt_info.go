@@ -55,6 +55,28 @@ func (eqtInfoService *EqtInfoService) UpdateEqtInfo(eqtInfo reservation.EqtInfo)
 	return err
 }
 
+// UpdateEqtStatus 更新设备的预约状态为开放
+func (eqtInfoService *EqtInfoService) UpdateEqtStatusOpen(ids request.IdsReq, update_by uint) (err error) {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&reservation.EqtInfo{}).Where("id in ?", ids.Ids).Updates(map[string]interface{}{"EqtStatus": 0, "updated_by": update_by}).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}
+
+// UpdateEqtStatus 更新设备的预约状态为关闭
+func (eqtInfoService *EqtInfoService) UpdateEqtStatusClose(ids request.IdsReq, update_by uint) (err error) {
+	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Model(&reservation.EqtInfo{}).Where("id in ?", ids.Ids).Updates(map[string]interface{}{"EqtStatus": 1, "updated_by": update_by}).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+	return err
+}
+
 // GetEqtInfo 根据id获取EqtInfo记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (eqtInfoService *EqtInfoService) GetEqtInfo(id uint) (eqtInfo reservation.EqtInfo, err error) {

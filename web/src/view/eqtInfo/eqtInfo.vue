@@ -44,6 +44,26 @@
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <el-popover v-model:visible="openEqtVisible" placement="top" width="160">
+            <p>确定要开放预约吗？</p>
+            <div style="text-align: right; margin-top: 8px;">
+                <el-button type="primary" link @click="openEqtVisible = false">取消</el-button>
+                <el-button type="primary" @click="onOpenEqt">确定</el-button>
+            </div>
+            <template #reference>
+                <el-button icon="CircleCheckFilled" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="openEqtVisible = true">开放预约</el-button>
+            </template>
+            </el-popover>
+            <el-popover v-model:visible="closeEqtVisible" placement="top" width="160">
+            <p>确定要关闭预约吗？</p>
+            <div style="text-align: right; margin-top: 8px;">
+                <el-button type="primary" link @click="closeEqtVisible = false">取消</el-button>
+                <el-button type="primary" @click="onCloseEqt">确定</el-button>
+            </div>
+            <template #reference>
+                <el-button icon="CircleCheckFilled" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="closeEqtVisible = true">关闭预约</el-button>
+            </template>
+            </el-popover>
             <el-popover v-model:visible="deleteVisible" placement="top" width="160">
             <p>确定要删除吗？</p>
             <div style="text-align: right; margin-top: 8px;">
@@ -165,7 +185,9 @@ import {
   deleteEqtInfoByIds,
   updateEqtInfo,
   findEqtInfo,
-  getEqtInfoList
+  getEqtInfoList,
+  updateEqtStatusOpen,
+  updateEqtStatusClose
 } from '@/api/eqtInfo'
 
 // 全量引入格式化工具 请按需保留
@@ -297,7 +319,6 @@ const deleteRow = (row) => {
         })
     }
 
-
 // 批量删除控制标记
 const deleteVisible = ref(false)
 
@@ -329,6 +350,61 @@ const onDelete = async() => {
       }
     }
 
+// 开启预约批量删除控制标记
+const openEqtVisible = ref(false)
+
+// 多选开启预约
+const onOpenEqt = async() => {
+      const ids = []
+      if (multipleSelection.value.length === 0) {
+        ElMessage({
+          type: 'warning',
+          message: '请选择要开放的数据'
+        })
+        return
+      }
+      multipleSelection.value &&
+        multipleSelection.value.map(item => {
+          ids.push(item.ID)
+        })
+      const res = await updateEqtStatusOpen({ ids })
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: '开放成功'
+        })
+        openEqtVisible.value = false
+        getTableData()
+      }
+    }
+
+// 开启预约批量删除控制标记
+const closeEqtVisible = ref(false)
+
+// 多选开启预约
+const onCloseEqt = async() => {
+      const ids = []
+      if (multipleSelection.value.length === 0) {
+        ElMessage({
+          type: 'warning',
+          message: '请选择要关闭预约的数据'
+        })
+        return
+      }
+      multipleSelection.value &&
+        multipleSelection.value.map(item => {
+          ids.push(item.ID)
+        })
+      const res = await updateEqtStatusClose({ ids })
+      if (res.code === 0) {
+        ElMessage({
+          type: 'success',
+          message: '关闭成功'
+        })
+        openEqtVisible.value = false
+        getTableData()
+      }
+    }
 // 行为控制标记（弹窗内部需要增还是改）
 const type = ref('')
 

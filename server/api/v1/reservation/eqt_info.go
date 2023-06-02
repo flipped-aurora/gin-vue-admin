@@ -139,6 +139,56 @@ func (eqtInfoApi *EqtInfoApi) UpdateEqtInfo(c *gin.Context) {
 	}
 }
 
+// UpdateEqtStatusOpen 更新是否开放预约
+// @Tags EqtInfo
+// @Summary EqtStatus
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body reservation.EqtInfo true "开放预约"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /eqtInfo/UpdateEqtStatus [put]
+func (eqtInfoApi *EqtInfoApi) UpdateEqtStatusOpen(c *gin.Context) {
+	var IDS request.IdsReq
+	err := c.ShouldBindJSON(&IDS)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	update_By := utils.GetUserID(c)
+	if err := eqtInfoService.UpdateEqtStatusOpen(IDS, update_By); err != nil {
+		global.GVA_LOG.Error("批量开放失败!", zap.Error(err))
+		response.FailWithMessage("批量开放失败", c)
+	} else {
+		response.OkWithMessage("批量开放成功", c)
+	}
+}
+
+// UpdateEqtStatusClose 更新是否开放预约
+// @Tags EqtInfo
+// @Summary EqtStatus
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body reservation.EqtInfo true "关闭预约"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /eqtInfo/UpdateEqtStatus [put]
+func (eqtInfoApi *EqtInfoApi) UpdateEqtStatusClose(c *gin.Context) {
+	var IDS request.IdsReq
+	err := c.ShouldBindJSON(&IDS)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	update_By := utils.GetUserID(c)
+	if err := eqtInfoService.UpdateEqtStatusClose(IDS, update_By); err != nil {
+		global.GVA_LOG.Error("批量关闭失败!", zap.Error(err))
+		response.FailWithMessage("批量关闭失败", c)
+	} else {
+		response.OkWithMessage("批量关闭失败", c)
+	}
+}
+
 // FindEqtInfo 用id查询EqtInfo
 // @Tags EqtInfo
 // @Summary 用id查询EqtInfo

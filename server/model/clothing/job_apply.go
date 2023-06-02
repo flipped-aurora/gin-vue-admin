@@ -14,6 +14,7 @@ type JobApply struct {
 	ProcessID      uint           `json:"processID" form:"processID" gorm:"column:process_id;comment:;"`
 	ProcessName    string         `json:"processName" form:"processName" gorm:"column:process_name;comment:;"`
 	Price          float64        `json:"price" form:"price" gorm:"column:price;type:decimal(10,2);comment:;"`
+	Size           string         `json:"size" form:"size" gorm:"column:size;comment:;"`
 	Quantity       int            `json:"quantity" form:"quantity" gorm:"column:quantity;comment:;"`
 	JobType        int            `json:"jobType" form:"jobType" gorm:"column:job_type;comment:;"`
 	Status         *int           `json:"status" form:"status" gorm:"column:status;comment:;"`

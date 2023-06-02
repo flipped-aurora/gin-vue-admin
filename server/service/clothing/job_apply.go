@@ -2,8 +2,6 @@ package clothing
 
 import (
 	"errors"
-	"fmt"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -94,15 +92,18 @@ func (jobApplyService *JobApplyService) GetJobApplyInfoList(info clothingReq.Job
 }
 
 func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status int) (err error) {
+	rejectF := func(croppingRecord *clothing.CroppingRecord, process *clothing.Process, apply *clothing.JobApply) {
+		global.GVA_DB.Model(&apply).Update("status", enum.ApplyReject)
+		switch apply.JobType {
+		case enum.Process:
+			global.GVA_DB.Model(&clothing.Inventory{}).Where("cropping_record_id = ? and process_id = ? and size = ?", croppingRecord.ID, process.ID, apply.Size).Update("margin", gorm.Expr("margin + ?", apply.Quantity))
+		case enum.Whole:
+			global.GVA_DB.Model(&clothing.SizeList{}).Where("cropping_record_id = ? and size = ?", croppingRecord.ID, apply.Size).Update("margin", gorm.Expr("margin + ?", apply.Quantity))
+		}
+	}
 	if apply.Status != nil && *apply.Status != enum.ApplyPending {
 		return errors.New("已处理")
 	}
-	if status == enum.ApplyReject {
-		err = global.GVA_DB.Model(&apply).Update("status", enum.ApplyReject).Error
-		return
-	}
-	global.GVA_KEYLOCK.Lock(fmt.Sprintf("%d-Cropping", apply.CroppingID))
-	defer global.GVA_KEYLOCK.Unlock(fmt.Sprintf("%d-Cropping", apply.CroppingID))
 	var cropping clothing.CroppingRecord
 	if err := global.GVA_DB.Preload("Style").First(&cropping, apply.CroppingID).Error; err != nil {
 		return errors.New("裁剪单不存在")
@@ -111,20 +112,22 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 	switch apply.JobType {
 	case enum.Whole:
 		// 整件
-		if cropping.Step != enum.CroppingPending {
+		if cropping.Step != enum.CroppingPending || status == enum.ApplyReject {
+			rejectF(&cropping, nil, &apply)
 			return errors.New("裁剪单已处理中")
 		}
 		job.ProcessID = 0
 		job.ProcessName = "成衣"
 		job.Price = cropping.Style.Price
 	case enum.Process:
-		// 工序
-		if cropping.Step == enum.CroppingComplete {
-			return errors.New("裁剪单已完成")
-		}
 		var process clothing.Process
 		if err := global.GVA_DB.First(&process, apply.ProcessID).Error; err != nil {
 			return errors.New("工序不存在")
+		}
+		// 工序
+		if cropping.Step == enum.CroppingComplete || status == enum.ApplyReject {
+			rejectF(&cropping, &process, &apply)
+			return errors.New("裁剪单已完成")
 		}
 		job.ProcessID = process.ID
 		job.ProcessName = process.Name

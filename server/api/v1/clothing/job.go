@@ -82,6 +82,22 @@ func (jobApi *JobApi) UpdateJob(c *gin.Context) {
 	}
 }
 
+func (jobApi *JobApi) ChangeWorker(c *gin.Context) {
+	var job clothing.Job
+	err := c.ShouldBindJSON(&job)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	job.UpdatedBy = utils.GetUserID(c)
+	if err := jobService.ChangeWorker(job); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}
+
 // FindJob 用id查询Job
 // @Tags Job
 // @Summary 用id查询Job

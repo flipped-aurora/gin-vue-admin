@@ -57,6 +57,11 @@ func (jobService *JobService) UpdateJob(job clothing.Job) (err error) {
 	return err
 }
 
+func (jobService *JobService) ChangeWorker(job clothing.Job) (err error) {
+	err = global.GVA_DB.Model(&job).Update("user_id", job.UserID).Error
+	return err
+}
+
 func (jobService *JobService) AuditApply(job clothing.Job, realQuantity uint) (err error) {
 	err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{
 		"real_quantity": realQuantity,
@@ -108,33 +113,40 @@ func (jobService *JobService) GetJobInfoList(info clothingReq.JobSearch) (list [
 }
 
 func (jobService *JobService) PostJob(cropping clothing.CroppingRecord, data clothingReq.JobList) error {
+	var temp bool
 	for _, j := range data.Jobs {
 		var job clothing.Job
-		if err := global.GVA_DB.Where("cropping_id = ? and process_id = ?", data.CroppingID, j.ProcessID).First(&job).Error; err == nil {
-			global.GVA_LOG.Sugar().Error("job 已存在:", job)
-			continue
-		}
 		if j.ProcessID == 0 {
-			if cropping.Step != enum.CroppingPending {
-				return errors.New("裁剪单已处理中")
-			}
 			job.JobType = enum.Whole
 			job.ProcessName = "成衣"
 			job.Price = cropping.Style.Price
-		} else {
-			if cropping.Step == enum.CroppingComplete {
-				return errors.New("裁剪单已完成")
+			var s clothing.SizeList
+			global.GVA_DB.Where("cropping_record_id = ? and size = ?", cropping.ID, j.Size).First(&s)
+			if s.Margin < j.Quantity {
+				temp = true
+				continue
+			} else {
+				global.GVA_DB.Model(&s).Update("margin", gorm.Expr("margin - ?", j.Quantity))
 			}
+		} else {
 			job.JobType = enum.Process
 			var process clothing.Process
 			if err := global.GVA_DB.First(&process, j.ProcessID).Error; err != nil {
-				global.GVA_LOG.Sugar().Error(err)
+				temp = true
 				continue
+			}
+			var i clothing.Inventory
+			global.GVA_DB.Where("cropping_record_id = ? and process_id = ? and size = ?", cropping.ID, process.ID, j.Size).First(&i)
+			if int(i.Margin) < job.Quantity {
+				temp = true
+				continue
+			} else {
+				global.GVA_DB.Model(&i).Update("margin", gorm.Expr("margin - ?", j.Quantity))
 			}
 			job.ProcessName = process.Name
 			job.Price = process.Price
 		}
-		job.Quantity = int(cropping.Quantity)
+		job.Quantity = int(j.Quantity)
 		job.CroppingID = data.CroppingID
 		job.UserID = j.UserID
 		job.Income = float64(job.Quantity) * job.Price
@@ -144,6 +156,9 @@ func (jobService *JobService) PostJob(cropping clothing.CroppingRecord, data clo
 	}
 	if err := global.GVA_DB.Model(&cropping).Update("step", enum.CroppingHandling).Error; err != nil {
 		return err
+	}
+	if temp {
+		return errors.New("部分分配失败")
 	}
 	return nil
 }

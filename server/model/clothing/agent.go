@@ -8,7 +8,7 @@ import (
 // Agent 结构体
 type Agent struct {
 	global.GVA_MODEL
-	Name        string `json:"name" form:"name" gorm:"column:name;comment:;unique;"`
+	Name        string `json:"name" form:"name" gorm:"column:name;comment:;"`
 	MemberCount uint   `json:"memberCount" form:"memberCount" gorm:"column:member_count;comment:;"`
 	CreatedBy   uint   `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy   uint   `gorm:"column:updated_by;comment:更新者"`

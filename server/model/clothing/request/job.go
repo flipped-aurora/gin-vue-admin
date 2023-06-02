@@ -18,8 +18,10 @@ type JobFilter struct {
 }
 
 type PostJob struct {
-	UserID    uint `json:"userId"`
-	ProcessID uint `json:"processId"`
+	UserID    uint   `json:"userId"`
+	ProcessID uint   `json:"processId"`
+	Size      string `json:"size"`
+	Quantity  uint   `json:"quantity"`
 }
 
 type JobList struct {

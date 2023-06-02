@@ -24,4 +24,5 @@ type ApiGroup struct {
 	OrderApi
 	ComputationApi
 	SizeListApi
+	InventoryApi
 }

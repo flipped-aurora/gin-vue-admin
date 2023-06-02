@@ -11,7 +11,7 @@ type Company struct {
 	global.GVA_MODEL
 	UserID          uint       `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
 	AgentID         uint       `json:"agentID" form:"agentID" gorm:"column:agent_id;comment:;"`
-	Name            string     `json:"name" form:"name" gorm:"column:name;comment:;unique;"`
+	Name            string     `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Status          *bool      `json:"status" form:"status" gorm:"column:status;comment:;"`
 	ClerkCount      int        `json:"clerkCount" form:"clerkCount" gorm:"column:clerk_count;comment:职员数量;"`
 	ClerkCountLimit int        `json:"clerkCountLimit" form:"clerkCountLimit" gorm:"column:clerk_count_limit;comment:职员数量上限"`

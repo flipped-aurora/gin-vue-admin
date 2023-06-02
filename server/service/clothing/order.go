@@ -1,11 +1,14 @@
 package clothing
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"gorm.io/gorm"
+	"time"
 )
 
 type OrderService struct {
@@ -95,4 +98,27 @@ func (orderService *OrderService) GetOrderInfoList(info clothingReq.OrderSearch)
 
 	err = db.Preload("User").Preload("Company").Limit(limit).Offset(offset).Find(&orders).Error
 	return orders, total, err
+}
+
+func (orderService *OrderService) PaySuccess(order clothing.Order, payNo string, payTime time.Time) (err error) {
+	if order.PayStatus != enum.Pending || order.Status != enum.Pending {
+		return errors.New("order processed")
+	}
+	if err := global.GVA_DB.Model(&order).Updates(map[string]interface{}{
+		"pay_no":     payNo,
+		"pay_at":     payTime,
+		"pay_status": enum.Success,
+		"status":     enum.Success,
+	}).Error; err != nil {
+		global.GVA_LOG.Sugar().Error(err)
+		return err
+	}
+	var expirationAt time.Time
+	if order.Company.ExpirationAt.Sub(time.Now()).Seconds() < 0 {
+		expirationAt = time.Now().AddDate(0, 0, order.Day)
+	} else {
+		expirationAt = order.Company.ExpirationAt.AddDate(0, 0, order.Day)
+	}
+	err = global.GVA_DB.Model(&order.Company).Update("expiration_at", expirationAt.Format("2006-01-02")).Error
+	return err
 }

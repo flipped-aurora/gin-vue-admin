@@ -84,6 +84,7 @@ func Routers() *gin.Engine {
 		clothingRouter.InitOrderRouter(PrivateGroup)
 		clothingRouter.InitComputationRouter(PrivateGroup)
 		clothingRouter.InitSizeListRouter(PrivateGroup)
+		clothingRouter.InitInventoryRouter(PrivateGroup)
 
 	}
 

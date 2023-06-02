@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"gorm.io/gorm"
 )
 
@@ -14,11 +15,38 @@ type CroppingRecordService struct {
 // CreateCroppingRecord 创建CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (croppingRecordService *CroppingRecordService) CreateCroppingRecord(croppingRecord *clothing.CroppingRecord) (err error) {
+	m := make(map[string]uint, 0)
 	for _, list := range croppingRecord.SizeList {
 		croppingRecord.Quantity += list.Quantity
+		if _, ok := m[list.Size]; !ok {
+			m[list.Size] = list.Quantity
+		} else {
+			m[list.Size] += list.Quantity
+		}
 	}
+	p := make([]clothing.Process, 0) // 工序
+	global.GVA_DB.Where("style_id = ?", croppingRecord.StyleID).Find(&p)
+	i := make([]clothing.Inventory, 0)       // 库存
+	sizeList := make([]clothing.SizeList, 0) // 尺码
+	for s, u := range m {
+		sizeList = append(sizeList, clothing.SizeList{
+			Size:     s,
+			Quantity: u,
+			Margin:   u,
+		})
+		for _, process := range p {
+			i = append(i, clothing.Inventory{
+				ProcessID: process.ID,
+				Size:      s,
+				Total:     u,
+				Margin:    u,
+			})
+		}
+	}
+	croppingRecord.SizeList = sizeList
+	croppingRecord.Inventory = i
 	croppingRecord.Usage = croppingRecord.Length / float64(croppingRecord.Quantity)
-	err = global.GVA_DB.Create(croppingRecord).Error
+	err = global.GVA_DB.Create(&croppingRecord).Error
 	return err
 }
 
@@ -55,10 +83,51 @@ func (croppingRecordService *CroppingRecordService) DeleteCroppingRecordByIds(id
 // UpdateCroppingRecord 更新CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (croppingRecordService *CroppingRecordService) UpdateCroppingRecord(croppingRecord clothing.CroppingRecord) (err error) {
+	global.GVA_DB.Where("cropping_record_id = ?", croppingRecord.ID).Unscoped().Delete(&clothing.Inventory{})
 	global.GVA_DB.Where("cropping_record_id = ?", croppingRecord.ID).Unscoped().Delete(&clothing.SizeList{})
+	jobs := make([]clothing.Job, 0)
+	global.GVA_DB.Preload("Team").Where("cropping_id = ?", croppingRecord.ID).Find(&jobs)
+	for _, job := range jobs {
+		if job.Step == enum.CroppingComplete {
+			var wallet clothing.UserWallet
+			global.GVA_DB.Where("user_id = ? and company_id = ?", job.UserID, job.Team.CompanyID).FirstOrCreate(&wallet)
+			err = global.GVA_DB.Model(&wallet).
+				Updates(map[string]interface{}{
+					"wages":         gorm.Expr("wages - ?", job.RealIncome),
+					"pending_wages": gorm.Expr("pending_wages - ?", job.RealIncome),
+				}).Error
+		}
+	}
+	m := make(map[string]uint, 0)
 	for _, list := range croppingRecord.SizeList {
 		croppingRecord.Quantity += list.Quantity
+		if _, ok := m[list.Size]; !ok {
+			m[list.Size] = list.Quantity
+		} else {
+			m[list.Size] += list.Quantity
+		}
 	}
+	p := make([]clothing.Process, 0) // 工序
+	global.GVA_DB.Where("style_id = ?", croppingRecord.StyleID).Find(&p)
+	i := make([]clothing.Inventory, 0)       // 库存
+	sizeList := make([]clothing.SizeList, 0) // 尺码
+	for s, u := range m {
+		sizeList = append(sizeList, clothing.SizeList{
+			Size:     s,
+			Quantity: u,
+			Margin:   u,
+		})
+		for _, process := range p {
+			i = append(i, clothing.Inventory{
+				ProcessID: process.ID,
+				Size:      s,
+				Total:     u,
+				Margin:    u,
+			})
+		}
+	}
+	croppingRecord.SizeList = sizeList
+	croppingRecord.Inventory = i
 	croppingRecord.Usage = croppingRecord.Length / float64(croppingRecord.Quantity)
 	err = global.GVA_DB.Session(&gorm.Session{FullSaveAssociations: true}).Updates(&croppingRecord).Error
 	return err

@@ -11,6 +11,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"net/http"
 	"time"
 )
 
@@ -257,4 +258,53 @@ func (orderApi *OrderApi) PayOrder(c *gin.Context) {
 		return
 	}
 	response.OkWithData(result, c)
+}
+
+func (orderApi *OrderApi) AliNotify(c *gin.Context) {
+	OutTradeNo, TradeNo, err := aliService.PayNotify(c)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		c.JSON(http.StatusOK, "fail")
+		return
+	} else {
+		order, err := orderService.GetOrderByOrderNo(OutTradeNo)
+		if err != nil {
+			global.GVA_LOG.Error("获取失败!", zap.Error(err))
+			c.JSON(http.StatusOK, "fail")
+			return
+		}
+		//2023-02-09T13:58:20+08:00
+		successTime := time.Now()
+		if err := orderService.PaySuccess(order, TradeNo, successTime); err != nil {
+			global.GVA_LOG.Error("获取失败!", zap.Error(err))
+			c.JSON(http.StatusOK, "fail")
+			return
+		}
+	}
+	c.JSON(http.StatusOK, "success")
+}
+
+func (orderApi *OrderApi) WechatNotify(c *gin.Context) {
+	transaction, err := wechatService.WxPayCallback(c)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		if *transaction.TradeState == "SUCCESS" {
+			order, err := orderService.GetOrderByOrderNo(*transaction.OutTradeNo)
+			if err != nil {
+				global.GVA_LOG.Error("获取失败!", zap.Error(err))
+				response.FailWithMessage("获取失败", c)
+				return
+			}
+			//2023-02-09T13:58:20+08:00
+			successTime, _ := time.Parse("2006-01-02T15:04:05-07:00", *transaction.SuccessTime)
+			if err := orderService.PaySuccess(order, *transaction.TransactionId, successTime); err != nil {
+				global.GVA_LOG.Error("获取失败!", zap.Error(err))
+				response.FailWithMessage("获取失败", c)
+				return
+			}
+		}
+		response.OkWithData(transaction, c)
+	}
 }

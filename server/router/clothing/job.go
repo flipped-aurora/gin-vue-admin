@@ -32,5 +32,6 @@ func (s *JobRouter) InitJobRouter(Router *gin.RouterGroup) {
 		h5JobRouterWithoutRecord.POST("postJobList", jobApi.PostJobList)    // 组长分配工作
 		h5JobRouterWithoutRecord.PUT("jobAuditApply", jobApi.JobAuditApply) // 工单审批申请
 		h5JobRouterWithoutRecord.PUT("jobAuditOpt", jobApi.JobAuditOpt)     // 审批工单
+		h5JobRouterWithoutRecord.PUT("changeWorker", jobApi.ChangeWorker)   // 审批工单
 	}
 }

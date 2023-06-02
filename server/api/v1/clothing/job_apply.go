@@ -1,6 +1,7 @@
 package clothing
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
@@ -11,6 +12,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 type JobApplyApi struct {
@@ -40,6 +42,8 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 		response.FailWithMessage("裁剪单不存在", c)
 		return
 	}
+	global.GVA_KEYLOCK.Lock(fmt.Sprintf("cropping-%d", croppingRecord.ID))
+	defer global.GVA_KEYLOCK.Unlock(fmt.Sprintf("cropping-%d", croppingRecord.ID))
 	jobApply.CreatedBy = utils.GetUserID(c)
 	jobApply.UserID = utils.GetUserID(c)
 	if !userRoleService.CheckStaff(jobApply.CreatedBy, croppingRecord.CompanyID) {
@@ -63,6 +67,15 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 		}
 		jobApply.ProcessName = process.Name
 		jobApply.Price = process.Price
+		var i clothing.Inventory
+		global.GVA_DB.Where("cropping_record_id = ? and process_id = ? and size = ?", croppingRecord.ID, process.ID, jobApply.Size).First(&i)
+		if int(i.Margin) < jobApply.Quantity {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("库存不足", c)
+			return
+		} else {
+			global.GVA_DB.Model(&i).Update("margin", gorm.Expr("margin - ?", jobApply.Quantity))
+		}
 	case enum.Whole:
 		style, err := styleService.GetStyle(croppingRecord.StyleID)
 		if err != nil {
@@ -72,11 +85,19 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 		}
 		jobApply.ProcessName = "成衣"
 		jobApply.Price = style.Price
+		var s clothing.SizeList
+		global.GVA_DB.Where("cropping_record_id = ? and size = ?", croppingRecord.ID, jobApply.Size).First(&s)
+		if int(s.Margin) < jobApply.Quantity {
+			global.GVA_LOG.Error("创建失败!", zap.Error(err))
+			response.FailWithMessage("库存不足", c)
+			return
+		} else {
+			global.GVA_DB.Model(&s).Update("margin", gorm.Expr("margin - ?", jobApply.Quantity))
+		}
 	}
 	status := new(int)
 	*status = 0
 	jobApply.Status = status
-	jobApply.Quantity = int(croppingRecord.Quantity)
 	if err := jobApplyService.CreateJobApply(&jobApply); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
@@ -215,6 +236,8 @@ func (jobApplyApi *JobApplyApi) OptApply(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 		return
 	}
+	global.GVA_KEYLOCK.Lock(fmt.Sprintf("cropping-%d", apply.CroppingID))
+	defer global.GVA_KEYLOCK.Unlock(fmt.Sprintf("cropping-%d", apply.CroppingID))
 	team, err := teamService.GetTeam(apply.TeamID)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))

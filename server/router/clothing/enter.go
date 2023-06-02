@@ -24,4 +24,5 @@ type RouterGroup struct {
 	OrderRouter
 	ComputationRouter
 	SizeListRouter
+	InventoryRouter
 }

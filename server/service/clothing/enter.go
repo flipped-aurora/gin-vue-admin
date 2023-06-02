@@ -27,4 +27,5 @@ type ServiceGroup struct {
 	AliService
 	ComputationService
 	SizeListService
+	InventoryService
 }

@@ -212,3 +212,20 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 	}
 	response.OkWithMessage("删除成功", c)
 }
+
+// FreshCasbin
+// @Tags      SysApi
+// @Summary   刷新casbin缓存
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "刷新成功"
+// @Router    /api/freshCasbin [get]
+func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
+	err := apiService.FreshCasbin()
+	if err != nil {
+		global.GVA_LOG.Error("刷新失败!", zap.Error(err))
+		response.FailWithMessage("刷新失败", c)
+		return
+	}
+	response.OkWithMessage("刷新成功", c)
+}

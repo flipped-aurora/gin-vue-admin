@@ -133,9 +133,3 @@ require (
 	modernc.org/memory v1.0.7 // indirect
 	modernc.org/sqlite v1.16.0 // indirect
 )
-
-require (
-	github.com/baiyubin/aliyun-sts-go-sdk v0.0.0-20180326062324-cfa1a18b161f // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0 // indirect
-)

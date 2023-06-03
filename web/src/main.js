@@ -4,8 +4,6 @@ import 'element-plus/es/components/notification/style/css'
 import 'element-plus/es/components/message-box/style/css'
 import './style/element_visiable.scss'
 import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
-// import zhCn from 'element-plus/es/locale/lang/zh-cn'
 // 引入gin-vue-admin前端初始化相关内容
 import './core/gin-vue-admin'
 // 引入封装的router
@@ -45,7 +43,6 @@ app
   .use(auth)
   .use(router)
   .use(i18n)
-  .use(ElementPlus, { i18n: (key, value) => i18n.t(key, value) })
   .mount('#app')
 
 export default app

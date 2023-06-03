@@ -16,6 +16,7 @@
         "echarts": "5.3.2",
         "element-plus": "^2.3.4",
         "highlight.js": "^10.6.0",
+        "js-cookie": "^3.0.5",
         "marked": "^2.0.0",
         "mitt": "^3.0.0",
         "nprogress": "^0.2.0",
@@ -26,8 +27,8 @@
         "screenfull": "^5.0.2",
         "spark-md5": "^3.0.1",
         "vue": "^3.2.47",
-        "vue-router": "^4.0.0-0",
         "vue-i18n": "^9.2.2",
+        "vue-router": "^4.0.0-0"
     },
     "devDependencies": {
         "@vitejs/plugin-legacy": "^4.0.2",
@@ -37,8 +38,6 @@
         "@vue/cli-plugin-router": "~4.5.0",
         "@vue/cli-plugin-vuex": "~4.5.0",
         "@vue/cli-service": "~4.5.0",
-        "@intlify/vite-plugin-vue-i18n": "^6.0.1",
-        "@intlify/vue-i18n-loader": "^4.2.0",
         "@vue/compiler-sfc": "^3.1.5",
         "babel-eslint": "^10.1.0",
         "babel-plugin-import": "^1.13.3",

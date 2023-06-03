@@ -13,7 +13,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	uuid "github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -32,7 +32,7 @@ func (h PgsqlInitHandler) WriteConfig(ctx context.Context) error {
 	}
 	global.GVA_CONFIG.System.DbType = "pgsql"
 	global.GVA_CONFIG.Pgsql = c
-	global.GVA_CONFIG.JWT.SigningKey = uuid.NewV4().String()
+	global.GVA_CONFIG.JWT.SigningKey = uuid.Must(uuid.NewV4()).String()
 	cs := utils.StructToMap(global.GVA_CONFIG)
 	for k, v := range cs {
 		global.GVA_VP.Set(k, v)

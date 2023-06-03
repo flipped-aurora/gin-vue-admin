@@ -79,6 +79,13 @@ export const useUserStore = defineStore('user', () => {
         })
         await router.replace({ name: userInfo.value.authority.defaultRouter })
         loadingInstance.value.close()
+
+        const isWin = ref(/windows/i.test(navigator.userAgent))
+        if (isWin.value) {
+          window.localStorage.setItem('osType', 'WIN')
+        } else {
+          window.localStorage.setItem('osType', 'MAC')
+        }
         return true
       }
     } catch (e) {

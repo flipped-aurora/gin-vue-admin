@@ -40,6 +40,16 @@
             <el-button icon="delete" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">删除</el-button>
           </template>
         </el-popover>
+        <el-popover v-model="freshVisible" placement="top" width="160">
+          <p>确定要刷新Casbin缓存吗？</p>
+          <div style="text-align: right; margin-top: 8px;">
+            <el-button type="primary" link @click="freshVisible = false">取消</el-button>
+            <el-button type="primary" @click="onFresh">确定</el-button>
+          </div>
+          <template #reference>
+            <el-button icon="Refresh" style="margin-left: 10px;" @click="freshVisible = true">刷新缓存</el-button>
+          </template>
+        </el-popover>
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
         <el-table-column
@@ -137,7 +147,8 @@ import {
   createApi,
   updateApi,
   deleteApi,
-  deleteApisByIds
+  deleteApisByIds,
+  freshCasbin
 } from '@/api/api'
 import { toSQLLine } from '@/utils/stringFun'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -266,6 +277,17 @@ const onDelete = async() => {
     deleteVisible.value = false
     getTableData()
   }
+}
+const freshVisible = ref(false)
+const onFresh = async() => {
+  const res = await freshCasbin()
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+  }
+  freshVisible.value = false
 }
 
 // 弹窗相关

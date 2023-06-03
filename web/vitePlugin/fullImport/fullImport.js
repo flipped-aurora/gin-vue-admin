@@ -15,7 +15,6 @@ export default function fullImportPlugin() {
         code = code.replace(`import { createApp } from 'vue'`, ($1) => $1 + `\nimport ${name} from 'element-plus'`)
         code = code.replace(`import './style/element_visiable.scss'`, ($1) => $1 + `\nimport 'element-plus/theme-chalk/src/index.scss'`)
         code = code.replace('.mount(', ($1) => `.use(${name})` + $1)
-        console.log(code)
         return code
       }
       return code

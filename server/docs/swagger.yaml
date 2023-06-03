@@ -1617,6 +1617,25 @@ paths:
       summary: 删除选中Api
       tags:
       - SysApi
+  /api/freshCasbin:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刷新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: 刷新casbin缓存
+      tags:
+      - SysApi
   /api/getAllApis:
     post:
       consumes:

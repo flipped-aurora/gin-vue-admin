@@ -21,6 +21,17 @@
 [声明式API版](https://github.com/flipped-aurora/gin-vue-admin/tree/v2.4.x) | 
 [声明式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev)
 
+## 赞助商
+Gin-Vue-Admin是一个全栈自动化代码的开源项目，其持续开发完全得益于这些令人敬畏的赞助的支持。如果你想加入他们，请考虑<a target="_blank" href="https://gin-vue-admin.com/empower/index.html#%E5%85%B6%E4%BB%96%E6%9C%8D%E5%8A%A1">赞助Gin-Vue-Admin</a>的开发。
+<p align="center">
+  <h3 align="center">Sponsor</h3>
+</p>
+<p align="center">
+  <a target="_blank" href="https://www.mingdao.com?s=utm_84&utm_source=gin-vue-admin&utm_medium=banner&utm_campaign=github&utm_content=IT%E8%B5%8B%E8%83%BD%E4%B8%9A%E5%8A%A1">
+  <img alt="special sponsor appwrite" src="https://gin-vue-admin.com/guanwang/mingdao.png" width="300">
+  </a>
+</p>
+						       
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 
@@ -314,7 +325,7 @@ swag init
 	- 前端文件参考: [web/src/view/superAdmin/api/api.vue](https://github.com/flipped-aurora/gin-vue-admin/blob/master/web/src/view/superAdmin/api/api.vue)
     - 后台文件参考: [server/router/sys_api.go](https://github.com/flipped-aurora/gin-vue-admin/blob/master/server/router/sys_api.go)
 - 多点登录限制：需要在`config.yaml`中把`system`中的`use-multipoint`修改为true(需要自行配置Redis和Config中的Redis参数，测试阶段，有bug请及时反馈)。
-- 分片长传：提供文件分片上传和大文件分片上传功能示例。
+- 分片上传：提供文件分片上传和大文件分片上传功能示例。
 - 表单生成器：表单生成器借助 [@Variant Form](https://github.com/vform666/variant-form) 。
 - 代码生成器：后台基础逻辑以及简单curd的代码生成器。
 

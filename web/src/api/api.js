@@ -130,3 +130,17 @@ export const deleteApisByIds = (data) => {
     data
   })
 }
+
+// FreshCasbin
+// @Tags      SysApi
+// @Summary   刷新casbin缓存
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "刷新成功"
+// @Router    /api/freshCasbin [get]
+export const freshCasbin = () => {
+  return service({
+    url: '/api/freshCasbin',
+    method: 'get'
+  })
+}

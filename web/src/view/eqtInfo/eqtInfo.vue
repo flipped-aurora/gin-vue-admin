@@ -172,6 +172,133 @@
   </div>
 </template>
 
+<!-- <template>
+  <div>
+    <div class="gva-search-box">
+      <el-form :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
+      <el-form-item label="创建时间">
+      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
+       —
+      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
+      </el-form-item>
+           <el-form-item label="设备类型" prop="eqtClass">
+            <el-select v-model="searchInfo.eqtClass" clearable placeholder="请选择" @clear="()=>{searchInfo.eqtClass=undefined}">
+              <el-option v-for="(item,key) in eqtClassOptions" :key="key" :label="item.label" :value="item.value" />
+            </el-select>
+            </el-form-item>
+        <el-form-item label="设备名">
+         <el-input v-model="searchInfo.eqtName" placeholder="搜索条件" />
+
+        </el-form-item>
+        <el-form-item label="设备型号">
+         <el-input v-model="searchInfo.eqtModel" placeholder="搜索条件" />
+
+        </el-form-item>
+           <el-form-item label="设备状态" prop="eqtStatus">
+            <el-select v-model="searchInfo.eqtStatus" clearable placeholder="请选择" @clear="()=>{searchInfo.eqtStatus=undefined}">
+              <el-option v-for="(item,key) in reservationStatusOptions" :key="key" :label="item.label" :value="item.value" />
+            </el-select>
+            </el-form-item>
+           <el-form-item label="库存状态" prop="eqtStockStatus">
+            <el-select v-model="searchInfo.eqtStockStatus" clearable placeholder="请选择" @clear="()=>{searchInfo.eqtStockStatus=undefined}">
+              <el-option v-for="(item,key) in eqtStockOptions" :key="key" :label="item.label" :value="item.value" />
+            </el-select>
+            </el-form-item>
+        <el-form-item label="当前科室">
+            
+             <el-input v-model.number="searchInfo.currentDept" placeholder="搜索条件" />
+
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
+          <el-button icon="refresh" @click="onReset">重置</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
+    <div class="gva-card-box">
+      <el-row :gutter="20">
+        <el-col :span="8" v-for="(item, index) in tableData" :key="index">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <span>{{ formatDate(item.eqtName) }}</span>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="updateEqtInfoFunc(item)">
+                <i class="el-icon-edit"></i>
+              </el-button>
+              <el-button style="float: right; padding: 3px 0" type="text" @click="deleteRow(item)">
+                <i class="el-icon-delete"></i>
+              </el-button>
+            </div>
+            <div class="text item">
+              <p>设备类型: {{ filterDict(item.eqtClass,eqtClassOptions) }}</p>
+              <p>设备卡片码: {{ item.eqtCardNo }}</p>
+              <p>SN号: {{ item.eqtSn }}</p>
+              <p>设备名: {{ item.eqtName }}</p>
+              <p>设备型号: {{ item.eqtModel }}</p>
+              <p>设备状态: {{ filterDict(item.eqtStatus,reservationStatusOptions) }}</p>
+              <p>设备库存状态: {{ filterDict(item.eqtStockStatus,eqtStockOptions) }}</p>
+              <p>当前科室: {{ item.currentDept }}</p>
+              <p>服务时间: {{ formatDate(item.serviceTime) }}</p>
+            </div>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+
+    <div class="gva-pagination">
+      <el-pagination
+        layout="total, sizes, prev, pager, next, jumper"
+        :current-page="page"
+        :page-size="pageSize"
+        :page-sizes="[10, 30, 50, 100]"
+        :total="total"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+      />
+    </div>
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="添加设备">
+      <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
+        <el-form-item label="类型:"  prop="eqtClass" >
+          <el-select v-model="formData.eqtClass" placeholder="请选择" style="width:100%" :clearable="true" >
+            <el-option v-for="(item,key) in eqtClassOptions" :key="key" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="卡片码:"  prop="eqtCardNo" >
+          <el-input v-model="formData.eqtCardNo" :clearable="true"  placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="SN号:"  prop="eqtSn" >
+          <el-input v-model="formData.eqtSn" :clearable="true"  placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="设备名:"  prop="eqtName" >
+          <el-input v-model="formData.eqtName" :clearable="true"  placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="型号:"  prop="eqtModel" >
+          <el-input v-model="formData.eqtModel" :clearable="true"  placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="状态:"  prop="eqtStatus" >
+          <el-select v-model="formData.eqtStatus" placeholder="请选择" style="width:100%" :clearable="true" >
+            <el-option v-for="(item,key) in reservationStatusOptions" :key="key" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="库存:"  prop="eqtStockStatus" >
+          <el-select v-model="formData.eqtStockStatus" placeholder="请选择" style="width:100%" :clearable="true" >
+            <el-option v-for="(item,key) in eqtStockOptions" :key="key" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="serviceTime:"  prop="serviceTime" >
+          <el-date-picker v-model="formData.serviceTime" type="date" style="width:100%" placeholder="选择日期" :clearable="true"  />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="closeDialog">取 消</el-button>
+          <el-button type="primary" @click="enterDialog">确 定</el-button>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
+</template> -->
+
+
 <script>
 export default {
   name: 'EqtInfo'

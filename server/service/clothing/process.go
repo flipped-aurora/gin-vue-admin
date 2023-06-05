@@ -82,6 +82,9 @@ func (processService *ProcessService) GetProcessInfoList(info clothingReq.Proces
 	if info.StyleID != 0 {
 		db = db.Where("style_id = ?", info.StyleID)
 	}
+	if info.Type != 0 {
+		db = db.Where("type = ?", info.Type)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

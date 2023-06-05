@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
+	response2 "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
@@ -157,15 +158,19 @@ func (croppingRecordApi *CroppingRecordApi) GetCroppingRecordList(c *gin.Context
 		response.FailWithMessage("权限不足", c)
 		return
 	}
-	if list, total, err := croppingRecordService.GetCroppingRecordInfoList(pageInfo); err != nil {
+	if list, total, quantity, margin, err := croppingRecordService.GetCroppingRecordInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
-		response.OkWithDetailed(response.PageResult{
-			List:     list,
-			Total:    total,
-			Page:     pageInfo.Page,
-			PageSize: pageInfo.PageSize,
+		response.OkWithDetailed(response2.CroppingRecordPageResult{
+			PageResult: response.PageResult{
+				List:     list,
+				Total:    total,
+				Page:     pageInfo.Page,
+				PageSize: pageInfo.PageSize,
+			},
+			Quantity: quantity,
+			Margin:   margin,
 		}, "获取成功", c)
 	}
 }

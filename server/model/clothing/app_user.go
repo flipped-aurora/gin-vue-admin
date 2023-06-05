@@ -31,11 +31,13 @@ type CompanyRole struct {
 	RoleName    string `json:"roleName"`
 	CompanyID   uint   `json:"companyID"`
 	CompanyName string `json:"companyName"`
+	TeamID      uint   `json:"teamID"`
+	TeamName    string `json:"teamName"`
 }
 
 func (u *AppUser) GetRoles() []CompanyRole {
 	roles := make([]UserRole, 0)
-	global.GVA_DB.Preload("Role").Preload("Company").Where("user_id = ?", u.ID).Find(&roles)
+	global.GVA_DB.Preload("Role").Preload("Company").Preload("Team").Where("user_id = ?", u.ID).Find(&roles)
 	res := make([]CompanyRole, len(roles))
 	for i, v := range roles {
 		res[i] = CompanyRole{
@@ -43,6 +45,8 @@ func (u *AppUser) GetRoles() []CompanyRole {
 			RoleName:    v.Role.Name,
 			CompanyID:   v.Company.ID,
 			CompanyName: v.Company.Name,
+			TeamID:      v.Team.ID,
+			TeamName:    v.Team.Name,
 		}
 	}
 	return res

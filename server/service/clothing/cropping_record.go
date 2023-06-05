@@ -142,7 +142,7 @@ func (croppingRecordService *CroppingRecordService) GetCroppingRecord(id uint) (
 
 // GetCroppingRecordInfoList 分页获取CroppingRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (croppingRecordService *CroppingRecordService) GetCroppingRecordInfoList(info clothingReq.CroppingRecordSearch) (list []clothing.CroppingRecord, total int64, err error) {
+func (croppingRecordService *CroppingRecordService) GetCroppingRecordInfoList(info clothingReq.CroppingRecordSearch) (list []clothing.CroppingRecord, total, quantity, margin int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
@@ -162,7 +162,21 @@ func (croppingRecordService *CroppingRecordService) GetCroppingRecordInfoList(in
 	if err != nil {
 		return
 	}
-
+	ids := make([]uint, 0)
+	db2 := db
+	err = db2.Debug().Pluck("id", &ids).Error
+	if err != nil {
+		return
+	}
+	type sumRes struct {
+		Quantity int64 `json:"quantity"`
+		Margin   int64 `json:"margin"`
+	}
+	var s sumRes
+	err = global.GVA_DB.Model(&clothing.SizeList{}).Where("cropping_record_id IN ?", ids).Select("sum(quantity) as quantity,sum(margin) as margin").Scan(&s).Error
+	if err != nil {
+		return
+	}
 	err = db.Preload("Style").Preload("SizeList").Limit(limit).Offset(offset).Find(&croppingRecords).Error
-	return croppingRecords, total, err
+	return croppingRecords, total, s.Quantity, s.Margin, err
 }

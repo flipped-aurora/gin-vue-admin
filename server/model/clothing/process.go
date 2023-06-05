@@ -9,6 +9,7 @@ import (
 type Process struct {
 	global.GVA_MODEL
 	StyleID   uint    `json:"styleID" form:"styleID" gorm:"column:style_id;comment:;"`
+	Type      int     `json:"type" form:"type" gorm:"column:type;comment:;default:1;"`
 	Name      string  `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Price     float64 `json:"price" form:"price" gorm:"column:price;type:decimal(10,2);comment:;"`
 	Percent   float64 `json:"percent" form:"percent" gorm:"column:percent;type:decimal(10,2);comment:;"`

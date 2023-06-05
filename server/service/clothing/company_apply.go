@@ -86,10 +86,11 @@ func (companyApplyService *CompanyApplyService) GetCompanyApplyInfoList(info clo
 	return companyApplys, total, err
 }
 
-func (companyApplyService *CompanyApplyService) JoinCompany(roleID uint, userID uint, company clothing.Company) (err error) {
+func (companyApplyService *CompanyApplyService) JoinCompany(roleID, userID, teamID uint, company clothing.Company) (err error) {
 	var role clothing.UserRole
 	role.RoleID = roleID
 	role.UserID = userID
+	role.TeamID = teamID
 	role.CompanyID = company.ID
 	err = global.GVA_DB.Where(&role).First(&role).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -118,7 +119,7 @@ func (companyApplyService *CompanyApplyService) OptApply(apply clothing.CompanyA
 	}
 	switch apply.RoleID {
 	case enum.Tailor:
-		err = companyApplyService.JoinCompany(enum.Tailor, apply.UserID, company)
+		err = companyApplyService.JoinCompany(enum.Tailor, apply.UserID, 0, company)
 	case enum.GroupLeader:
 		var team clothing.Team
 		team.CompanyID = company.ID
@@ -126,7 +127,7 @@ func (companyApplyService *CompanyApplyService) OptApply(apply clothing.CompanyA
 		team.Name = apply.Remark
 		err = global.GVA_DB.Create(&team).Error
 		if err == nil {
-			if err = companyApplyService.JoinCompany(enum.GroupLeader, apply.UserID, company); err == nil {
+			if err = companyApplyService.JoinCompany(enum.GroupLeader, apply.UserID, team.ID, company); err == nil {
 				var teamUser clothing.TeamUser
 				teamUser.TeamID = team.ID
 				teamUser.UserID = apply.UserID

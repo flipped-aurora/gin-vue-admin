@@ -76,6 +76,9 @@ func (jobApplyApi *JobApplyApi) CreateJobApply(c *gin.Context) {
 		} else {
 			global.GVA_DB.Model(&i).Update("margin", gorm.Expr("margin - ?", jobApply.Quantity))
 		}
+		var min int64
+		global.GVA_DB.Where("cropping_record_id = ? and process_id = ? and size = ?", croppingRecord.ID, process.ID, jobApply.Size).Select("min(margin)").Scan(&min)
+		global.GVA_DB.Model(&clothing.SizeList{}).Where("cropping_record_id = ? and size = ?", croppingRecord.ID, jobApply.Size).Update("margin", min)
 	case enum.Whole:
 		style, err := styleService.GetStyle(croppingRecord.StyleID)
 		if err != nil {

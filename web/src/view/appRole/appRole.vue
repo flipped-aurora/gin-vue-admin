@@ -15,17 +15,17 @@
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <!-- <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
-            <el-popover v-model:visible="deleteVisible" placement="top" width="160">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="deleteVisible = false">取消</el-button>
-                <el-button type="primary" @click="onDelete">确定</el-button>
-            </div>
-            <template #reference>
-                <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
-            </template>
-            </el-popover> -->
+<!--            <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>-->
+<!--            <el-popover v-model:visible="deleteVisible" placement="top" width="160">-->
+<!--            <p>确定要删除吗？</p>-->
+<!--            <div style="text-align: right; margin-top: 8px;">-->
+<!--                <el-button type="primary" link @click="deleteVisible = false">取消</el-button>-->
+<!--                <el-button type="primary" @click="onDelete">确定</el-button>-->
+<!--            </div>-->
+<!--            <template #reference>-->
+<!--                <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>-->
+<!--            </template>-->
+<!--            </el-popover>-->
         </div>
         <el-table
         ref="multipleTable"

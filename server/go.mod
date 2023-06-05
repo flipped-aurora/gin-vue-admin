@@ -8,7 +8,7 @@ require (
 	github.com/casbin/casbin/v2 v2.68.0
 	github.com/casbin/gorm-adapter/v3 v3.7.3
 	github.com/flipped-aurora/ws v1.0.2
-	github.com/fsnotify/fsnotify v1.5.1
+	github.com/fsnotify/fsnotify v1.4.9
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.9.0
 	github.com/go-redis/redis/v8 v8.11.5
@@ -130,6 +130,6 @@ require (
 	gorm.io/plugin/dbresolver v1.1.0 // indirect
 	modernc.org/libc v1.15.1 // indirect
 	modernc.org/mathutil v1.4.1 // indirect
-	modernc.org/memory v1.0.7 // indirect; indirec
+	modernc.org/memory v1.0.7 // indirect
 	modernc.org/sqlite v1.16.0 // indirect
 )

@@ -29,8 +29,8 @@ import Screenfull from '@/view/layout/screenfull/index.vue'
 import { emitter } from '@/utils/bus.js'
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 const reload = ref(false)
 const handleReload = () => {
   reload.value = true

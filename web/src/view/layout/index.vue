@@ -72,7 +72,7 @@
                                   </div>
                                 </div>
                               </el-dropdown-item>
-                              <el-dropdown-item icon="avatar" @click="toPerson">>{{ t('layout.personalInfo') }}</el-dropdown-item>
+                              <el-dropdown-item icon="avatar" @click="toPerson">{{ t('layout.personalInfo') }}</el-dropdown-item>
                               <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">{{ t('layout.logout') }}</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>

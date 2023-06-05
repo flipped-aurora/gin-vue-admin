@@ -8,7 +8,6 @@ import * as path from 'path'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
-import vueI18n from '@intlify/vite-plugin-vue-i18n' // added by mohamed hassan to support multilanguage
 
 import GvaPosition from './vitePlugin/gvaPosition'
 import GvaPositionServer from './vitePlugin/codeServer'
@@ -75,11 +74,6 @@ export default ({
     esbuild,
     optimizeDeps,
     plugins: [
-      // added by mohamed hassan to support multilangauge
-      vueI18n({
-        include: path.resolve(__dirname, './src/locales/**'),
-        compositionOnly: true
-      }), // end of adding by mohamed hassan to support multilangauge
       GvaPositionServer(),
       GvaPosition(),
       legacyPlugin({

@@ -28,6 +28,7 @@ func (a *AuthorityMenuApi) GetMenu(c *gin.Context) {
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
+		return
 	}
 	if menus == nil {
 		menus = []system.SysMenu{}

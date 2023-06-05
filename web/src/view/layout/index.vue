@@ -62,7 +62,17 @@
                                   </span>
                                 </el-dropdown-item>
                               </template>
-                              <el-dropdown-item icon="avatar" @click="toPerson">{{ t('layout.personalInfo') }}</el-dropdown-item>
+                              <el-dropdown-item icon="avatar">
+                                <div class="command-box" style="display: flex" @click="handleCommand">
+                                  <div>指令菜单</div>
+                                  <div style="margin-left: 8px">
+                                    <span class="button">{{ first }}</span>
+                                    +
+                                    <span class="button">K</span>
+                                  </div>
+                                </div>
+                              </el-dropdown-item>
+                              <el-dropdown-item icon="avatar" @click="toPerson">>{{ t('layout.personalInfo') }}</el-dropdown-item>
                               <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">{{ t('layout.logout') }}</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>
@@ -96,6 +106,7 @@
         </router-view>
         <BottomInfo />
         <setting />
+        <CommandMenu ref="command"/>
       </el-main>
     </el-container>
 
@@ -114,6 +125,7 @@ import HistoryComponent from '@/view/layout/aside/historyComponent/history.vue'
 import Search from '@/view/layout/search/search.vue'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import CustomPic from '@/components/customPic/index.vue'
+import CommandMenu from '@/components/commandMenu/index.vue'
 import Setting from './setting/index.vue'
 import { setUserAuthority } from '@/api/user'
 import { emitter } from '@/utils/bus.js'
@@ -134,8 +146,26 @@ const isCollapse = ref(false)
 const isSider = ref(true)
 const isMobile = ref(false)
 
+const first = ref('')
+const dialogVisible = ref(false)
 const initPage = () => {
-  const screenWidth = document.body.clientWidth
+  // 判断当前用户的操作系统
+  if(window.localStorage.getItem('osType') === 'WIN') {
+    first.value = 'Ctrl'
+  } else {
+    first.value = '⌘'
+  }
+  // 当用户同时按下ctrl和k键的时候
+  const handleKeyDown = (e) => {
+    if (e.ctrlKey && e.key === 'k') {
+      // 阻止浏览器默认事件
+      e.preventDefault();
+      handleCommand()
+    }
+  }
+  window.addEventListener('keydown', handleKeyDown);
+
+    const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {
     isMobile.value = true
     isSider.value = false
@@ -152,6 +182,11 @@ const initPage = () => {
 }
 
 initPage()
+
+const command = ref()
+const handleCommand = () => {
+  command.value.open()
+}
 
 const loadingFlag = ref(false)
 onMounted(() => {
@@ -249,4 +284,20 @@ const changeShadow = () => {
 
 <style lang="scss">
 @import '@/style/mobile.scss';
+.button {
+  font-size: 12px;
+  color: #666;
+  background:	rgb(250,250,250);
+  width: 25px!important;
+  padding: 4px 8px !important;
+  border: 1px solid #eaeaea;
+  margin-right: 4px;
+  border-radius: 4px;
+}
+:deep .el-overlay {
+  background-color: hsla(0,0%,100%,.9) !important;
+}
+.command-box{
+
+}
 </style>

@@ -94,7 +94,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, global.Translate("sys_user.loginSuccess"), c)
 		return
 	}
@@ -108,8 +108,8 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
-		}, "sys_user.loginSuccess", c)
+			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
+		}, global.Translate("sys_user.loginSuccess"), c)
 	} else if err != nil {
 		global.GVA_LOG.Error(global.Translate("sys_user.loginStatusFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("sys_user.loginStatusFailErr"), c)
@@ -127,7 +127,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
-			ExpiresAt: claims.StandardClaims.ExpiresAt * 1000,
+			ExpiresAt: claims.RegisteredClaims.ExpiresAt.Unix() * 1000,
 		}, global.Translate("sys_user.loginSuccess"), c)
 	}
 }
@@ -268,7 +268,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		c.Header("new-token", token)
-		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt, 10))
+		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
 		response.OkWithMessage(global.Translate("general.modifySuccess"), c)
 	}
 }

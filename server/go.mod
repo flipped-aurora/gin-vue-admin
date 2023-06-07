@@ -32,6 +32,7 @@ require (
 	github.com/satori/go.uuid v1.2.0
 	github.com/shirou/gopsutil/v3 v3.22.5
 	github.com/sirupsen/logrus v1.4.2
+	github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e
 	github.com/songzhibin97/gkit v1.2.7
 	github.com/spf13/cast v1.3.1
 	github.com/spf13/viper v1.7.0

@@ -29,5 +29,6 @@ func (s *CompanyRouter) InitCompanyRouter(Router *gin.RouterGroup) {
 	{
 		h5CompanyRouterWithoutRecord.GET("getCompanyList", companyApi.GetCompanyList) // 获取Company列表
 		h5CompanyRouterWithoutRecord.POST("joinCompany", companyApi.JoinCompany)      // 加入公司
+		h5CompanyRouterWithoutRecord.POST("createQrCode", companyApi.CreateQrCode)    // 加入公司
 	}
 }

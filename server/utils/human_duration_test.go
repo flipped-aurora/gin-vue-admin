@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"fmt"
+	"path"
+	"strings"
 	"testing"
 	"time"
 )
@@ -46,4 +49,20 @@ func TestParseDuration(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestName(t *testing.T) {
+	f := "/dir/file.txt"
+	fmt.Println(f)
+	ext := path.Ext(f)
+	fmt.Println(ext)
+	fmt.Println(strings.TrimSuffix(f, ext))
+	fmt.Println(path.Split(f))
+	fmt.Println(path.Dir(f))
+	fmt.Println(path.Base(f))
+	fmt.Println(path.Clean(f))
+	fmt.Println(path.IsAbs(f))
+	fmt.Println(path.Join(f, "test"))
+	fmt.Println(path.Match(f, "test"))
+
 }

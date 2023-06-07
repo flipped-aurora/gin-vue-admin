@@ -1,12 +1,20 @@
 package clothing
 
 import (
+	"bytes"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/upload"
+	goqrcode "github.com/skip2/go-qrcode"
 	"gorm.io/gorm"
+	"time"
 )
 
 type CompanyService struct {
@@ -117,4 +125,46 @@ func (companyService *CompanyService) GetCompanyByName(name string) (clothing.Co
 	var company clothing.Company
 	err := global.GVA_DB.Where("name = ?", name).First(&company).Error
 	return company, err
+}
+
+func (companyService *CompanyService) CreateQrCode(company clothing.Company) (url string, err error) {
+	type companyObj struct {
+		ID           uint       `json:"ID" form:"ID"`
+		UserID       uint       `json:"userID" form:"userID"`
+		Name         string     `json:"name" form:"name"`
+		ExpirationAt *time.Time `json:"expirationAt" form:"expirationAt"`
+	}
+	if company.ExpirationAt == nil || time.Now().Sub(*company.ExpirationAt) > 0 {
+		return "", errors.New("会员已过期")
+	}
+	expirationAt := time.Now().AddDate(0, 0, 7)
+	if expirationAt.Sub(*company.ExpirationAt).Seconds() > 0 {
+		expirationAt = *company.ExpirationAt
+	}
+	obj := companyObj{
+		ID:           company.ID,
+		UserID:       company.UserID,
+		Name:         company.Name,
+		ExpirationAt: &expirationAt,
+	}
+	b, err := json.Marshal(obj)
+	if err != nil {
+		return "", err
+	}
+	global.GVA_LOG.Sugar().Info(string(b))
+	encodeString := base64.StdEncoding.EncodeToString(b)
+	data, err := goqrcode.Encode(encodeString, goqrcode.Medium, 256)
+	oss := new(upload.Local)
+	stream := bytes.NewBuffer(data)
+	pic := fmt.Sprintf("qrcode/%d/%d.png", company.ID, company.ID)
+	url, _, err = oss.Put(pic, stream)
+	if err != nil {
+		global.GVA_LOG.Sugar().Error(err)
+		return "", err
+	}
+	global.GVA_DB.Model(&company).Updates(map[string]interface{}{
+		"qr_code":               url,
+		"qr_code_expiration_at": expirationAt,
+	})
+	return url, nil
 }

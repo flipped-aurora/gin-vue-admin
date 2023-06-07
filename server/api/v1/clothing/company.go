@@ -260,3 +260,22 @@ func (companyApi *CompanyApi) JoinCompany(c *gin.Context) {
 	}
 	response.Ok(c)
 }
+
+func (companyApi *CompanyApi) CreateQrCode(c *gin.Context) {
+	var company clothing.Company
+	err := c.ShouldBindJSON(&company)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	company, err = companyService.GetCompany(company.ID)
+	if company.UserID != utils.GetUserID(c) {
+		response.FailWithMessage("权限不足", c)
+		return
+	}
+	if url, err := companyService.CreateQrCode(company); err != nil {
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		response.OkWithData(url, c)
+	}
+}

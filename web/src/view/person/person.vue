@@ -4,25 +4,7 @@
       <el-col :span="6">
         <div class="fl-left avatar-box">
           <div class="user-card">
-            <div
-              class="user-headpic-update"
-              :style="{
-                'background-image': `url(${
-                  userStore.userInfo.headerImg &&
-                  userStore.userInfo.headerImg.slice(0, 4) !== 'http'
-                    ? path + userStore.userInfo.headerImg
-                    : userStore.userInfo.headerImg
-                })`,
-                'background-repeat': 'no-repeat',
-                'background-size': 'cover',
-              }"
-            >
-              <span class="update" @click="openChooseImg">
-                <el-icon>
-                  <edit />
-                </el-icon>
-                重新上传</span>
-            </div>
+            <SelectImage v-model="userStore.userInfo.headerImg" />
             <div class="user-personality">
               <p v-if="!editFlag" class="nickName">
                 {{ userStore.userInfo.nickName }}
@@ -129,8 +111,6 @@
       </el-col>
     </el-row>
 
-    <ChooseImg ref="chooseImgRef" @enter-img="enterImg" />
-
     <el-dialog
       v-model="showPassword"
       title="修改密码"
@@ -231,13 +211,12 @@ export default {
 </script>
 
 <script setup>
-import ChooseImg from '@/components/chooseImg/index.vue'
 import { setSelfInfo, changePassword } from '@/api/user.js'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import SelectImage from '@/components/selectImage/selectImage.vue'
 
-const path = ref(import.meta.env.VITE_BASE_API + '/')
 const activeName = ref('second')
 const rules = reactive({
   password: [
@@ -297,21 +276,16 @@ const clearPassword = () => {
   modifyPwdForm.value.clearValidate()
 }
 
-const chooseImgRef = ref(null)
-const openChooseImg = () => {
-  chooseImgRef.value.open()
-}
-
-const enterImg = async(url) => {
-  const res = await setSelfInfo({ headerImg: url })
+watch(() => userStore.userInfo.headerImg, async(val) => {
+  const res = await setSelfInfo({ headerImg: val })
   if (res.code === 0) {
-    userStore.ResetUserInfo({ headerImg: url })
+    userStore.ResetUserInfo({ headerImg: val })
     ElMessage({
       type: 'success',
       message: '设置成功',
     })
   }
-}
+})
 
 const openEdit = () => {
   nickName.value = userStore.userInfo.nickName

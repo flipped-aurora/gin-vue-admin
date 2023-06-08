@@ -1,4 +1,17 @@
 <template>
+  <div
+    class="update-image"
+    :style="{
+      'background-image': `url(${getUrl(modelValue)})`,
+    }"
+  >
+    <span class="update" @click="openChooseImg">
+      <el-icon>
+        <edit />
+      </el-icon>
+      重新上传</span>
+  </div>
+
   <el-drawer v-model="drawer" title="媒体库" size="650px">
     <warning-bar
       title="点击“文件名/备注”可以编辑文件名或者备注内容。"
@@ -32,7 +45,7 @@
           <el-image
             :key="key"
             :src="getUrl(item.url)"
-            @click="chooseImg(item.url,target,targetKey)"
+            @click="chooseImg(item.url)"
           >
             <template #error>
               <div class="header-img-box-list">
@@ -59,13 +72,14 @@
 </template>
 
 <script setup>
+
 import { getUrl } from '@/utils/image'
 import { ref } from 'vue'
 import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -75,56 +89,27 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(20)
 
+const props = defineProps({
+  modelValue: {
+    type: String,
+    default: ''
+  },
+})
+
+console.log(props)
+
+const emits = defineEmits(['update:modelValue'])
+
 // 分页
 const handleSizeChange = (val) => {
   pageSize.value = val
-  open()
+  openChooseImg()
 }
 
 const handleCurrentChange = (val) => {
   page.value = val
-  open()
+  openChooseImg()
 }
-
-const emit = defineEmits(['enterImg'])
-defineProps({
-  target: {
-    type: Object,
-    default: null,
-  },
-  targetKey: {
-    type: String,
-    default: '',
-  },
-})
-
-const drawer = ref(false)
-const picList = ref([])
-
-const chooseImg = (url, target, targetKey) => {
-  if (target && targetKey) {
-    target[targetKey] = url
-  }
-  emit('enterImg', url)
-  drawer.value = false
-}
-
-const open = async() => {
-  const res = await getFileList({ page: page.value, pageSize: pageSize.value, ...search.value })
-  if (res.code === 0) {
-    picList.value = res.data.list
-    total.value = res.data.total
-    page.value = res.data.page
-    pageSize.value = res.data.pageSize
-    drawer.value = true
-  }
-}
-
-/**
- * 编辑文件名或者备注
- * @param row
- * @returns {Promise<void>}
- */
 const editFileNameFunc = async(row) => {
   ElMessageBox.prompt('请输入文件名或者备注', '编辑', {
     confirmButtonText: '确定',
@@ -141,7 +126,7 @@ const editFileNameFunc = async(row) => {
         type: 'success',
         message: '编辑成功!',
       })
-      open()
+      openChooseImg()
     }
   }).catch(() => {
     ElMessage({
@@ -151,10 +136,65 @@ const editFileNameFunc = async(row) => {
   })
 }
 
-defineExpose({ open })
+const drawer = ref(false)
+const picList = ref([])
+
+const chooseImg = (url) => {
+  emits('update:modelValue', url)
+  drawer.value = false
+}
+const openChooseImg = async() => {
+  const res = await getFileList({ page: page.value, pageSize: pageSize.value, ...search.value })
+  if (res.code === 0) {
+    picList.value = res.data.list
+    total.value = res.data.total
+    page.value = res.data.page
+    pageSize.value = res.data.pageSize
+    drawer.value = true
+  }
+}
+
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
+.update-image {
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+   background-repeat: no-repeat;
+   background-size: cover;
+  &:hover {
+    color: #fff;
+
+    background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.15) 0%,
+            rgba(0, 0, 0, 0.15) 100%
+    ),
+    radial-gradient(
+            at top center,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(0, 0, 0, 0.4) 120%
+    )
+    #989898;
+    background-blend-mode: multiply, multiply;
+    background-size: cover;
+    .update {
+      color: #fff;
+    }
+  }
+  .update {
+    height: 120px;
+    width: 120px;
+    text-align: center;
+    color: transparent;
+  }
+}
+
 .upload-btn-media-library {
   margin-left: 20px;
 }
@@ -195,5 +235,4 @@ defineExpose({ open })
     }
   }
 }
-
 </style>

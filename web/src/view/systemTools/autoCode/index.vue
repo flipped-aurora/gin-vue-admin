@@ -146,11 +146,11 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" @click="editAndAddField()">新增Field</el-button>
+        <el-button type="primary" @click="editAndAddField()">新增字段</el-button>
       </div>
       <el-table :data="form.fields">
         <el-table-column align="left" type="index" label="序列" width="60" />
-        <el-table-column align="left" prop="fieldName" label="Field名" width="160">
+        <el-table-column align="left" prop="fieldName" label="字段名称" width="160">
           <template #default="{row}">
             <el-input v-model="row.fieldName" />
           </template>
@@ -166,17 +166,17 @@
         <el-table-column align="left" prop="sort" label="排序">
           <template #default="{row}"> <el-checkbox v-model="row.sort" /> </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldJson" width="160px" label="FieldJson">
+        <el-table-column align="left" prop="fieldJson" width="160px" label="字段Json">
           <template #default="{row}">
             <el-input v-model="row.fieldJson" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldType" label="Field数据类型" width="160">
+        <el-table-column align="left" prop="fieldType" label="字段类型" width="160">
           <template #default="{row}">
             <el-select
               v-model="row.fieldType"
               style="width:100%"
-              placeholder="请选择field数据类型"
+              placeholder="请选择字段类型"
               clearable
             >
               <el-option
@@ -208,7 +208,7 @@
             <el-select
               v-model="row.fieldSearchType"
               style="width:100%"
-              placeholder="请选择Field查询条件"
+              placeholder="请选择字段查询条件"
               clearable
             >
               <el-option

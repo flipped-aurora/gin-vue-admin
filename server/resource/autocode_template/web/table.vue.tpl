@@ -169,7 +169,7 @@
             </el-select>
       {{- end }}
       {{- if eq .FieldType "picture" }}
-            <SelectImage v-model="formData.{{ .FieldJson }}" />
+            <SelectImage v-model="getUrl(formData.{{ .FieldJson }})" />
       {{- end }}
         </el-form-item>
       {{- end }}
@@ -200,8 +200,9 @@ import {
   get{{.StructName}}List
 } from '@/api/{{.PackageName}}'
 
-{{- if eq .FieldType "picture" }}
+{{- if .HasPic }}
 // 图片选择组件
+import { getUrl } from '@/utils/image'
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
 

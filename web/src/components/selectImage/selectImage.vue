@@ -20,14 +20,14 @@
       <upload-common
         v-model:imageCommon="imageCommon"
         class="upload-btn-media-library"
-        @on-success="open"
+        @on-success="getImageList"
       />
       <upload-image
         v-model:imageUrl="imageUrl"
         :file-size="512"
         :max-w-h="1080"
         class="upload-btn-media-library"
-        @on-success="open"
+        @on-success="getImageList"
       />
       <el-form ref="searchForm" :inline="true" :model="search">
         <el-form-item label="">
@@ -35,7 +35,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" icon="search" @click="open">查询</el-button>
+          <el-button type="primary" icon="search" @click="getImageList">查询</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -103,12 +103,12 @@ const emits = defineEmits(['update:modelValue'])
 // 分页
 const handleSizeChange = (val) => {
   pageSize.value = val
-  openChooseImg()
+  getImageList()
 }
 
 const handleCurrentChange = (val) => {
   page.value = val
-  openChooseImg()
+  getImageList()
 }
 const editFileNameFunc = async(row) => {
   ElMessageBox.prompt('请输入文件名或者备注', '编辑', {
@@ -126,7 +126,7 @@ const editFileNameFunc = async(row) => {
         type: 'success',
         message: '编辑成功!',
       })
-      openChooseImg()
+      getImageList()
     }
   }).catch(() => {
     ElMessage({
@@ -144,13 +144,17 @@ const chooseImg = (url) => {
   drawer.value = false
 }
 const openChooseImg = async() => {
+  await getImageList()
+  drawer.value = true
+}
+
+const getImageList = async() => {
   const res = await getFileList({ page: page.value, pageSize: pageSize.value, ...search.value })
   if (res.code === 0) {
     picList.value = res.data.list
     total.value = res.data.total
     page.value = res.data.page
     pageSize.value = res.data.pageSize
-    drawer.value = true
   }
 }
 
@@ -161,10 +165,10 @@ const openChooseImg = async() => {
   width: 120px;
   height: 120px;
   line-height: 120px;
-  margin: 0 auto;
   display: flex;
   justify-content: center;
   border-radius: 20px;
+  border: 1px dashed #ccc;
    background-repeat: no-repeat;
    background-size: cover;
   &:hover {

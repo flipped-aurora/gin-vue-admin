@@ -109,6 +109,12 @@
          <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" width="180">
             <template #default="scope">{{"{{"}} formatDate(scope.row.{{.FieldJson}}) {{"}}"}}</template>
          </el-table-column>
+          {{- else if eq .FieldType "picture" }}
+          <el-table-column label="{{.FieldDesc}}" width="200">
+              <template #default="scope">
+                <el-image style="width: 100px; height: 100px" :src="scope.row.{{.FieldJson}}" fit="cover"/>
+              </template>
+          </el-table-column>
         {{- else }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
@@ -162,6 +168,9 @@
                <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
             </el-select>
       {{- end }}
+      {{- if eq .FieldType "picture" }}
+            <SelectImage v-model="formData.{{ .FieldJson }}" />
+      {{- end }}
         </el-form-item>
       {{- end }}
       </el-form>
@@ -190,6 +199,11 @@ import {
   find{{.StructName}},
   get{{.StructName}}List
 } from '@/api/{{.PackageName}}'
+
+{{- if eq .FieldType "picture" }}
+// 图片选择组件
+import SelectImage from '@/components/selectImage/selectImage.vue'
+{{- end }}
 
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'

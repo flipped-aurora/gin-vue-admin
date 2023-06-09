@@ -1,4 +1,4 @@
-import { login, getUserInfo, setSelfInfo } from '@/api/user'
+import { getUserInfo, setSelfInfo } from '@/api/user'
 import { jsonInBlacklist } from '@/api/jwt'
 import router from '@/router/index'
 import { ElLoading, ElMessage } from 'element-plus'
@@ -49,13 +49,13 @@ export const useUserStore = defineStore('user', () => {
     return res
   }
   /* 登录*/
-  const LoginIn = async(loginInfo) => {
+  const LoginIn = async(loginInfo, provider) => {
     loadingInstance.value = ElLoading.service({
       fullscreen: true,
       text: '登录中，请稍候...',
     })
     try {
-      const res = await login(loginInfo)
+      const res = await provider(loginInfo)
       if (res.code === 0) {
         setUserInfo(res.data.user)
         setToken(res.data.token)

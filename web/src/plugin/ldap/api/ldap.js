@@ -4,9 +4,9 @@ import service from '@/utils/request'
 // @Param data body {username:"string",password:"string"}
 // @Router /ldap/login [post]
 export const ldapLogin = (data) => {
-    return service({
-        url: '/ldap/login',
-        method: 'post',
-        data: data
-    })
+  return service({
+    url: '/ldap/login',
+    method: 'post',
+    data: data
+  })
 }

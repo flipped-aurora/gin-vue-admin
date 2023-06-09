@@ -4,72 +4,72 @@
       <div class="login_panel_form">
         <div class="login_panel_form_title">
           <img
-              class="login_panel_form_title_logo"
-              :src="$GIN_VUE_ADMIN.appLogo"
-              alt
+            class="login_panel_form_title_logo"
+            :src="$GIN_VUE_ADMIN.appLogo"
+            alt
           >
           <p class="login_panel_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
         </div>
         <el-form
-            ref="loginForm"
-            :model="loginFormData"
-            :rules="rules"
-            :validate-on-rule-change="false"
-            @keyup.enter="submitForm"
+          ref="loginForm"
+          :model="loginFormData"
+          :rules="rules"
+          :validate-on-rule-change="false"
+          @keyup.enter="submitForm"
         >
           <el-form-item prop="username">
             <el-input
-                v-model="loginFormData.username"
-                size="large"
-                placeholder="请输入用户名"
-                suffix-icon="user"
+              v-model="loginFormData.username"
+              size="large"
+              placeholder="请输入用户名"
+              suffix-icon="user"
             />
           </el-form-item>
           <el-form-item prop="password">
             <el-input
-                v-model="loginFormData.password"
-                show-password
-                size="large"
-                type="password"
-                placeholder="请输入密码"
+              v-model="loginFormData.password"
+              show-password
+              size="large"
+              type="password"
+              placeholder="请输入密码"
             />
           </el-form-item>
           <el-form-item v-if="loginFormData.openCaptcha" prop="captcha">
             <div class="vPicBox">
               <el-input
-                  v-model="loginFormData.captcha"
-                  placeholder="请输入验证码"
-                  size="large"
-                  style="flex:1;padding-right: 20px;"
+                v-model="loginFormData.captcha"
+                placeholder="请输入验证码"
+                size="large"
+                style="flex:1;padding-right: 20px;"
               />
               <div class="vPic">
                 <img
-                    v-if="picPath"
-                    :src="picPath"
-                    alt="请输入验证码"
-                    @click="loginVerify()"
+                  v-if="picPath"
+                  :src="picPath"
+                  alt="请输入验证码"
+                  @click="loginVerify()"
                 >
               </div>
             </div>
           </el-form-item>
           <el-form-item>
             <el-button
-                type="primary"
-                style="width: 30%"
-                size="large"
-                @click="checkInit"
+              type="primary"
+              style="width: 30%"
+              size="large"
+              @click="checkInit"
             >前往初始化</el-button>
             <el-button
-                type="primary"
-                size="large"
-                style="width: 30%"
-                @click="submitForm"
+              type="primary"
+              size="large"
+              style="width: 30%"
+              @click="submitForm"
             >登 录</el-button>
             <el-button
-                type="primary"
-                size="large"
-                style="width: 30%"
-                @click="submitLdapForm"
+              type="primary"
+              size="large"
+              style="width: 30%"
+              @click="submitLdapForm"
             >LDAP登 录</el-button>
           </el-form-item>
         </el-form>
@@ -84,8 +84,8 @@
             <img src="@/assets/kefu.png" class="link-icon" alt="客服">
           </a>
           <a
-              href="https://github.com/flipped-aurora/gin-vue-admin"
-              target="_blank"
+            href="https://github.com/flipped-aurora/gin-vue-admin"
+            target="_blank"
           >
             <img src="@/assets/github.png" class="link-icon" alt="github">
           </a>

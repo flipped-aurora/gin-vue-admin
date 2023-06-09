@@ -102,7 +102,7 @@ export default {
 </script>
 
 <script setup>
-import { captcha } from '@/api/user'
+import { login, captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
 import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
 import { reactive, ref } from 'vue'
@@ -164,13 +164,13 @@ const rules = reactive({
 })
 
 const userStore = useUserStore()
-const login = async() => {
-  return await userStore.LoginIn(loginFormData)
+const loginByAccount = async() => {
+  return await userStore.LoginIn(loginFormData, login)
 }
 const submitForm = () => {
   loginForm.value.validate(async(v) => {
     if (v) {
-      const flag = await login()
+      const flag = await loginByAccount()
       if (!flag) {
         loginVerify()
       }

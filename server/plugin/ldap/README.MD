@@ -98,15 +98,26 @@ docker exec ldap-service ldapsearch -x -H ldap://localhost -b dc=example,dc=org 
 登陆名：cn=admin,dc=example,dc=org
 密码：admin
 
-### 6. web快速调试
-    前往GVA主程序下的 web/src/router/index.js, 更改登陆页的路由即可
+### 6. web 调试
+    1. 前往GVA主程序下的 web/src/router/index.js, 更改登陆页的路由即可
     {
         path: '/login',
         name: 'Login',
         // component: () => import('@/view/login/index.vue')
         component: () => import('@/plugin/ldap/view/index.vue')
     }
-
+    
+    2. 为了复用登陆逻辑需要修改： web/src/pinia/modules/user.js
+    根据不同的登陆提供者处理登陆逻辑    
+    const LoginIn = async(loginInfo, provider) => {
+        loadingInstance.value = ElLoading.service({
+          fullscreen: true,
+          text: '登录中，请稍候...',
+        })
+        try {
+          const res = await provider(loginInfo)
+    
+   
 ### api插入语句
 
 ```sql

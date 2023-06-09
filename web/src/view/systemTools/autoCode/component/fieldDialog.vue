@@ -173,18 +173,12 @@ const typeOptions = ref([
     value: 'picture',
   },
   {
+    label: '文件（json字符串）',
+    value: 'file',
+  },
+  {
     label: '多图片（开发中）',
     value: 'pictures',
-    disabled: true
-  },
-  {
-    label: '文件（开发中）',
-    value: 'file',
-    disabled: true
-  },
-  {
-    label: '多文件（开发中）',
-    value: 'files',
     disabled: true
   }
 ])

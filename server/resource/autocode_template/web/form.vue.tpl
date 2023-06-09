@@ -65,6 +65,9 @@ import { ref, reactive } from 'vue'
 {{- if .HasPic }}
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
+{{- if .HasFile }}
+import SelectFile from '@/components/selectFile/selectFile.vue'
+{{- end }}
 const route = useRoute()
 const router = useRouter()
 

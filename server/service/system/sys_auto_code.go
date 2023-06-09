@@ -144,6 +144,9 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
 		}
+		if autoCode.Fields[i].FieldType == "file" {
+			autoCode.HasFile = true
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -236,6 +239,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "file" {
+			autoCode.HasFile = true
 		}
 	}
 	// 增加判断: 重复创建struct

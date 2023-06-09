@@ -89,14 +89,12 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(20)
 
-const props = defineProps({
+defineProps({
   modelValue: {
     type: String,
     default: ''
   },
 })
-
-console.log(props)
 
 const emits = defineEmits(['update:modelValue'])
 

@@ -115,6 +115,14 @@
                 <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
+           {{- else if eq .FieldType "file" }}
+                    <el-table-column label="{{.FieldDesc}}" width="200">
+                        <template #default="scope">
+                             <div class="file-list">
+                               <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid">{{"{{"}}file.name{{"}}"}}</el-tag>
+                             </div>
+                        </template>
+                    </el-table-column>
         {{- else }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
@@ -138,7 +146,7 @@
             />
         </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作" destroy-on-close>
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
@@ -170,6 +178,9 @@
       {{- end }}
       {{- if eq .FieldType "picture" }}
             <SelectImage v-model="formData.{{ .FieldJson }}" />
+      {{- end }}
+      {{- if eq .FieldType "file" }}
+            <SelectFile v-model="formData.{{ .FieldJson }}" />
       {{- end }}
         </el-form-item>
       {{- end }}
@@ -204,6 +215,12 @@ import {
 // 图片选择组件
 import { getUrl } from '@/utils/image'
 import SelectImage from '@/components/selectImage/selectImage.vue'
+{{- end }}
+
+{{- if .HasFile }}
+// 文件选择组件
+import { getUrl } from '@/utils/image'
+import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
@@ -459,7 +476,19 @@ const enterDialog = async () => {
               }
       })
 }
+{{if eq .FieldType "file"}}
+const downloadFile = (url) => {
+    window.open(getUrl(url), '_blank')
+}
+{{end}}
 </script>
 
 <style>
+{{if eq .FieldType "file"}}
+.file-list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+{{end}}
 </style>

@@ -72,3 +72,17 @@ func GetUserInfo(c *gin.Context) *systemReq.CustomClaims {
 		return waitUse
 	}
 }
+
+// GetUserName 从Gin的Context中获取从jwt解析出来的用户名
+func GetUserName(c *gin.Context) string {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetClaims(c); err != nil {
+			return ""
+		} else {
+			return cl.Username
+		}
+	} else {
+		waitUse := claims.(*systemReq.CustomClaims)
+		return waitUse.Username
+	}
+}

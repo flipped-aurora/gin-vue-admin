@@ -112,7 +112,7 @@
           {{- else if eq .FieldType "picture" }}
           <el-table-column label="{{.FieldDesc}}" width="200">
               <template #default="scope">
-                <el-image style="width: 100px; height: 100px" :src="scope.row.{{.FieldJson}}" fit="cover"/>
+                <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
         {{- else }}
@@ -169,7 +169,7 @@
             </el-select>
       {{- end }}
       {{- if eq .FieldType "picture" }}
-            <SelectImage v-model="getUrl(formData.{{ .FieldJson }})" />
+            <SelectImage v-model="formData.{{ .FieldJson }}" />
       {{- end }}
         </el-form-item>
       {{- end }}

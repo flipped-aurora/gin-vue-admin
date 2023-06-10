@@ -476,7 +476,7 @@ const enterDialog = async () => {
               }
       })
 }
-{{if eq .FieldType "file"}}
+{{if .HasFile }}
 const downloadFile = (url) => {
     window.open(getUrl(url), '_blank')
 }
@@ -484,7 +484,7 @@ const downloadFile = (url) => {
 </script>
 
 <style>
-{{if eq .FieldType "file"}}
+{{if .HasFile }}
 .file-list{
   display: flex;
   flex-wrap: wrap;

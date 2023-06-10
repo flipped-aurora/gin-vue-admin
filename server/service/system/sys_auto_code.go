@@ -1,6 +1,7 @@
 package system
 
 import (
+	"archive/zip"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -141,6 +142,12 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
 		}
+		if autoCode.Fields[i].FieldType == "picture" {
+			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "file" {
+			autoCode.HasFile = true
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -230,6 +237,12 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
+		}
+		if autoCode.Fields[i].FieldType == "picture" {
+			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "file" {
+			autoCode.HasFile = true
 		}
 	}
 	// 增加判断: 重复创建struct
@@ -767,4 +780,127 @@ func skipMacSpecialDocument(src string) (bool, error) {
 		return true, nil
 	}
 	return false, nil
+}
+
+func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string, err error) {
+	if plugName == "" {
+		return "", errors.New("插件名称不能为空")
+	}
+
+	// 防止路径穿越
+	plugName = filepath.Clean(plugName)
+
+	webPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", plugName)
+	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", plugName)
+	// 创建一个新的zip文件
+
+	// 判断目录是否存在
+	_, err = os.Stat(webPath)
+	if err != nil {
+		return "", errors.New("web路径不存在")
+	}
+	_, err = os.Stat(serverPath)
+	if err != nil {
+		return "", errors.New("server路径不存在")
+	}
+
+	fileName := plugName + ".zip"
+	// 创建一个新的zip文件
+	zipFile, err := os.Create(fileName)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer zipFile.Close()
+
+	// 创建一个zip写入器
+	zipWriter := zip.NewWriter(zipFile)
+	defer zipWriter.Close()
+
+	// 遍历webPath目录并将所有非隐藏文件添加到zip归档中
+	err = filepath.Walk(webPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// 跳过隐藏文件和目录
+		if strings.HasPrefix(info.Name(), ".") || info.IsDir() {
+			return nil
+		}
+
+		// 创建一个新的文件头
+		header, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		// 将文件头的名称设置为文件的相对路径
+		rel, _ := filepath.Rel(webPath, path)
+		header.Name = filepath.Join(plugName, "web", "plugin", plugName, rel)
+
+		// 将文件添加到zip归档中
+		writer, err := zipWriter.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+
+		// 打开文件并将其内容复制到zip归档中
+		file, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		_, err = io.Copy(writer, file)
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+	if err != nil {
+		return
+	}
+
+	// 遍历serverPath目录并将所有非隐藏文件添加到zip归档中
+	err = filepath.Walk(serverPath, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+
+		// 跳过隐藏文件和目录
+		if strings.HasPrefix(info.Name(), ".") || info.IsDir() {
+			return nil
+		}
+
+		// 创建一个新的文件头
+		header, err := zip.FileInfoHeader(info)
+		if err != nil {
+			return err
+		}
+
+		// 将文件头的名称设置为文件的相对路径
+		rel, _ := filepath.Rel(serverPath, path)
+		header.Name = filepath.Join(plugName, "server", "plugin", plugName, rel)
+		// 将文件添加到zip归档中
+		writer, err := zipWriter.CreateHeader(header)
+		if err != nil {
+			return err
+		}
+
+		// 打开文件并将其内容复制到zip归档中
+		file, err := os.Open(path)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+		_, err = io.Copy(writer, file)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return
+	}
+	return filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fileName), nil
 }

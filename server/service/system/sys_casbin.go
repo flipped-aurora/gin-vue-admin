@@ -36,10 +36,6 @@ func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos [
 	if !success {
 		return errors.New("存在相同api,添加失败,请联系管理员")
 	}
-	err := e.InvalidateCache()
-	if err != nil {
-		return err
-	}
 	return nil
 }
 
@@ -55,7 +51,7 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 		"v2": newMethod,
 	}).Error
 	e := casbinService.Casbin()
-	err = e.InvalidateCache()
+	err = e.LoadPolicy()
 	if err != nil {
 		return err
 	}

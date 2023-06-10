@@ -132,3 +132,11 @@ export const installPlug = (data) => {
     data
   })
 }
+
+export const pubPlug = (params) => {
+  return service({
+    url: '/autoCode/pubPlug',
+    method: 'post',
+    params
+  })
+}

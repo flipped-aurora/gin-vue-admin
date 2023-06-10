@@ -108,80 +108,25 @@ const props = defineProps({
     default: function() {
       return {}
     }
-  }
+  },
+  typeOptions: {
+    type: Array,
+    default: function() {
+      return []
+    }
+  },
+  typeSearchOptions: {
+    type: Array,
+    default: function() {
+      return []
+    }
+  },
 })
 
 const middleDate = ref({})
 const dictOptions = ref([])
-const typeSearchOptions = ref([
-  {
-    label: '=',
-    value: '='
-  },
-  {
-    label: '<>',
-    value: '<>'
-  },
-  {
-    label: '>',
-    value: '>'
-  },
-  {
-    label: '<',
-    value: '<'
-  },
-  {
-    label: 'LIKE',
-    value: 'LIKE'
-  },
-  {
-    label: 'BETWEEN',
-    value: 'BETWEEN'
-  },
-  {
-    label: 'NOT BETWEEN',
-    value: 'NOT BETWEEN'
-  }
-])
-const typeOptions = ref([
-  {
-    label: '字符串',
-    value: 'string'
-  },
-  {
-    label: '整型',
-    value: 'int'
-  },
-  {
-    label: '布尔值',
-    value: 'bool'
-  },
-  {
-    label: '浮点型',
-    value: 'float64'
-  },
-  {
-    label: '时间',
-    value: 'time.Time'
-  },
-  {
-    label: '枚举',
-    value: 'enum'
-  },
-  {
-    label: '单图片（字符串）',
-    value: 'picture',
-  },
-  {
-    label: '文件（json字符串）',
-    value: 'file',
-  },
-  {
-    label: '多图片（开发中）',
-    value: 'pictures',
-    disabled: true
-  }
-])
+
+
 const rules = ref({
   fieldName: [
     { required: true, message: '请输入字段英文名', trigger: 'blur' }

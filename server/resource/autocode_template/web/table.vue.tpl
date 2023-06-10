@@ -229,7 +229,7 @@ import {
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'
-{{- end}
+{{- end }}
 {{- if .HasPic }}
 // 图片选择组件
 import SelectImage from '@/components/selectImage/selectImage.vue'

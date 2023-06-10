@@ -6,7 +6,7 @@
           <el-input v-model="searchInfo.label" placeholder="搜索条件" />
         </el-form-item>
         <el-form-item label="字典值">
-          <el-input v-model="searchInfo.value" placeholder="搜索条件" />
+          <el-input-number v-model="searchInfo.value" placeholder="搜索条件" min="-2147483648" max="2147483647"/>
         </el-form-item>
         <el-form-item label="启用状态" prop="status">
           <el-select v-model="searchInfo.status" placeholder="请选择">
@@ -46,7 +46,7 @@
 
         <el-table-column align="left" label="排序标记" prop="sort" width="120" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" label="操作">
           <template #default="scope">
             <el-button type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加字典项':'修改字典项'">
       <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
         <el-form-item label="展示值" prop="label">
           <el-input
@@ -94,6 +94,8 @@
             placeholder="请输入字典值"
             clearable
             :style="{width: '100%'}"
+            min="-2147483648"
+            max="2147483647"
           />
         </el-form-item>
         <el-form-item label="启用状态" prop="status" required>
@@ -177,6 +179,7 @@ const tableData = ref([])
 const searchInfo = ref({ sysDictionaryID: Number(route.params.id) })
 const onReset = () => {
   searchInfo.value = { sysDictionaryID: Number(route.params.id) }
+  getTableData()
 }
 
 // 条件搜索前端看此方法

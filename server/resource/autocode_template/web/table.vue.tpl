@@ -227,15 +227,16 @@ import {
   get{{.StructName}}List
 } from '@/api/{{.PackageName}}'
 
+{{- if or .HasPic .HasFile}}
+import { getUrl } from '@/utils/image'
+{{- end}
 {{- if .HasPic }}
 // 图片选择组件
-import { getUrl } from '@/utils/image'
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
 
 {{- if .HasFile }}
 // 文件选择组件
-import { getUrl } from '@/utils/image'
 import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 

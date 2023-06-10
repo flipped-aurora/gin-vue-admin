@@ -80,7 +80,7 @@
 
         <el-table-column align="left" label="描述" prop="desc" width="280" />
 
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" label="操作">
           <template #default="scope">
             <el-button
 
@@ -145,7 +145,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      title="弹窗操作"
+      :title="type==='create'?'添加字典':'修改字典'"
     >
       <el-form
         ref="dialogForm"

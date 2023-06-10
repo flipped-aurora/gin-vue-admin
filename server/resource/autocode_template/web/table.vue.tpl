@@ -1,11 +1,19 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo" class="demo-form-inline" @keyup.enter="onSubmit">
-      <el-form-item label="创建时间">
-      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始时间"></el-date-picker>
+      <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
+      <el-form-item label="创建日期" prop="createdAt">
+      <template #label>
+        <span>
+          创建日期
+          <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+            <el-icon><QuestionFilled /></el-icon>
+          </el-tooltip>
+        </span>
+      </template>
+      <el-date-picker v-model="searchInfo.startCreatedAt" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"></el-date-picker>
        —
-      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束时间"></el-date-picker>
+      <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
@@ -29,7 +37,7 @@
             </el-select>
             </el-form-item>
             {{- else}}
-        <el-form-item label="{{.FieldDesc}}">
+        <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
 
 
         {{- if eq .FieldType "float64" "int"}}
@@ -48,9 +56,17 @@
           {{- end}}
         {{- else if eq .FieldType "time.Time"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="搜索条件（起）"></el-date-picker>
+            <template #label>
+            <span>
+              {{.FieldDesc}}
+              <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+                <el-icon><QuestionFilled /></el-icon>
+              </el-tooltip>
+            </span>
+          </template>
+            <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
             —
-            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="搜索条件（止）"></el-date-picker>
+            <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
            {{- else}}
            <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" placeholder="搜索条件"></el-date-picker>
           {{- end}}
@@ -127,7 +143,7 @@
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="按钮组">
+        <el-table-column align="left" label="操作">
             <template #default="scope">
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
@@ -146,7 +162,7 @@
             />
         </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作" destroy-on-close>
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加':'修改'" destroy-on-close>
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
     {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
@@ -260,13 +276,51 @@ const rule = reactive({
                    required: true,
                    message: '{{ .ErrorText }}',
                    trigger: ['input','blur'],
-               }],
+               },
+               {
+                   whitespace: true,
+                   message: '不能只输入空格',
+                   trigger: ['input', 'blur'],
+              }],
             {{- end }}
     {{- end }}
 })
 
-const elFormRef = ref()
+const searchRule = reactive({
+  createdAt: [
+    { validator: (rule, value, callback) => {
+      if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
+        callback(new Error('请填写结束日期'))
+      } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
+        callback(new Error('请填写开始日期'))
+      } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
+        callback(new Error('开始日期应当早于结束日期'))
+      } else {
+        callback()
+      }
+    }, trigger: 'change' }
+  ],
+  {{- range .Fields }}
+    {{- if .FieldSearchType}} 
+      {{- if eq .FieldType "time.Time" }}
+        {{.FieldJson }} : [{ validator: (rule, value, callback) => {
+        if (searchInfo.value.start{{.FieldName}} && !searchInfo.value.end{{.FieldName}}) {
+          callback(new Error('请填写结束日期'))
+        } else if (!searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}}) {
+          callback(new Error('请填写开始日期'))
+        } else if (searchInfo.value.start{{.FieldName}} && searchInfo.value.end{{.FieldName}} && (searchInfo.value.start{{.FieldName}}.getTime() === searchInfo.value.end{{.FieldName}}.getTime() || searchInfo.value.start{{.FieldName}}.getTime() > searchInfo.value.end{{.FieldName}}.getTime())) {
+          callback(new Error('开始日期应当早于结束日期'))
+        } else {
+          callback()
+        }
+      }, trigger: 'change' }],
+      {{- end }}
+    {{- end }}
+  {{- end }}
+})
 
+const elFormRef = ref()
+const elSearchFormRef = ref()
 
 // =========== 表格控制部分 ===========
 const page = ref(1)
@@ -292,13 +346,16 @@ const onReset = () => {
 
 // 搜索
 const onSubmit = () => {
-  page.value = 1
-  pageSize.value = 10
-{{- range .Fields}}{{- if eq .FieldType "bool" }}
-  if (searchInfo.value.{{.FieldJson}} === ""){
-      searchInfo.value.{{.FieldJson}}=null
-  }{{ end }}{{ end }}
-  getTableData()
+  elSearchFormRef.value?.validate(async(valid) => {
+    if (!valid) return
+    page.value = 1
+    pageSize.value = 10
+    {{- range .Fields}}{{- if eq .FieldType "bool" }}
+    if (searchInfo.value.{{.FieldJson}} === ""){
+        searchInfo.value.{{.FieldJson}}=null
+    }{{ end }}{{ end }}
+    getTableData()
+  })
 }
 
 // 分页

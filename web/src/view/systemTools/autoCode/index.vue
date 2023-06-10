@@ -269,7 +269,7 @@
     </div>
     <!-- 组件弹窗 -->
     <el-dialog v-model="dialogFlag" width="70%" title="组件内容">
-      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
+      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" :typeOptions="typeOptions"/>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取 消</el-button>
@@ -286,7 +286,7 @@
           <el-button type="primary" @click="copy">复制</el-button>
         </div>
       </template>
-      <PreviewCodeDialog v-if="previewFlag" ref="previewNode" :preview-code="preViewCode" />
+      <PreviewCodeDialog v-if="previewFlag" ref="previewNode" :typeSearchOptions="typeSearchOptions" :preview-code="preViewCode" />
       <template #footer>
         <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
           <el-button type="primary" @click="previewFlag = false">确 定</el-button>
@@ -332,6 +332,19 @@ const typeOptions = ref([
   {
     label: '枚举',
     value: 'enum'
+  },
+  {
+    label: '单图片（字符串）',
+    value: 'picture',
+  },
+  {
+    label: '文件（json字符串）',
+    value: 'file',
+  },
+  {
+    label: '多图片（开发中）',
+    value: 'pictures',
+    disabled: true
   }
 ])
 

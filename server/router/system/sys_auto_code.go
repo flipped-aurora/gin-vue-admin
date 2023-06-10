@@ -21,5 +21,6 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup) {
 		autoCodeRouter.POST("delPackage", autoCodeApi.DelPackage)       // 删除package包
 		autoCodeRouter.POST("createPlug", autoCodeApi.AutoPlug)         // 自动插件包模板
 		autoCodeRouter.POST("installPlugin", autoCodeApi.InstallPlugin) // 自动安装插件
+		autoCodeRouter.POST("pubPlug", autoCodeApi.PubPlug)             // 打包插件
 	}
 }

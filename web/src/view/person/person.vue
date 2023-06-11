@@ -4,7 +4,9 @@
       <el-col :span="6">
         <div class="fl-left avatar-box">
           <div class="user-card">
-            <SelectImage v-model="userStore.userInfo.headerImg" />
+            <div class="header-box">
+              <SelectImage v-model="userStore.userInfo.headerImg" />
+            </div>
             <div class="user-personality">
               <p v-if="!editFlag" class="nickName">
                 {{ userStore.userInfo.nickName }}
@@ -531,5 +533,9 @@ const changeEmail = async() => {
 .code-box{
   display: flex;
   justify-content: space-between;
+}
+.header-box{
+  display: flex;
+  justify-content: center;
 }
 </style>

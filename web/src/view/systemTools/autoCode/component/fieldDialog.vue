@@ -126,7 +126,6 @@ const props = defineProps({
 const middleDate = ref({})
 const dictOptions = ref([])
 
-
 const rules = ref({
   fieldName: [
     { required: true, message: '请输入字段英文名', trigger: 'blur' }

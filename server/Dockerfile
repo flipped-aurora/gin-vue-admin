@@ -2,12 +2,11 @@ FROM golang:1.18-alpine as build-stage
 
 WORKDIR /gva-server
 
-ENV GO111MODULE=on
 ENV GOPROXY=https://goproxy.cn,direct
 ENV CGO_ENABLED=0
 
 COPY go.mod go.sum ./
-RUN go env && go mod tidy
+RUN go mod download
 
 COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build \

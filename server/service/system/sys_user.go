@@ -9,7 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-	uuid "github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 	"gorm.io/gorm"
 )
 
@@ -28,7 +28,7 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 	}
 	// 否则 附加uuid 密码hash加密 注册
 	u.Password = utils.BcryptHash(u.Password)
-	u.UUID = uuid.NewV4()
+	u.UUID = uuid.Must(uuid.NewV4())
 	err = global.GVA_DB.Create(&u).Error
 	return u, err
 }

@@ -27,6 +27,8 @@ type AutoCodeStruct struct {
 	PackageT           string   `json:"-"`
 	NeedValid          bool     `json:"-"`
 	NeedSort           bool     `json:"-"`
+	HasPic             bool     `json:"-"`
+	HasFile            bool     `json:"-"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {

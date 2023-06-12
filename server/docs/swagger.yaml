@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   config.AliyunOSS:
     properties:
@@ -100,6 +99,12 @@ definitions:
       key-long:
         description: 验证码长度
         type: integer
+      open-captcha:
+        description: 防爆破验证码开启此数，0代表每次登录都需要验证码，其他数字代表错误密码此数，如3代表错误三次后出现验证码
+        type: integer
+      open-captcha-timeout:
+        description: 防爆破验证码超时时间，单位：s(秒)
+        type: integer
     type: object
   config.Detail:
     properties:
@@ -111,30 +116,6 @@ definitions:
         type: string
       tableName:
         description: 需要清理的表名
-        type: string
-    type: object
-  config.Email:
-    properties:
-      from:
-        description: 收件人
-        type: string
-      host:
-        description: 服务器地址
-        type: string
-      is-ssl:
-        description: 是否SSL
-        type: boolean
-      nickname:
-        description: 昵称
-        type: string
-      port:
-        description: 端口
-        type: integer
-      secret:
-        description: 密钥
-        type: string
-      to:
-        description: 收件人:多个以英文逗号分隔
         type: string
     type: object
   config.Excel:
@@ -179,13 +160,17 @@ definitions:
         description: 本地文件存储路径
         type: string
     type: object
-  config.Mysql:
+  config.Mssql:
     properties:
       config:
         description: 高级配置
         type: string
       db-name:
         description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
         type: string
       log-mode:
         description: 是否开启Gorm全局日志
@@ -208,6 +193,98 @@ definitions:
       port:
         description: :端口
         type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
+  config.Mysql:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
+  config.Oracle:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       username:
         description: 数据库用户名
         type: string
@@ -220,6 +297,10 @@ definitions:
       db-name:
         description: 数据库名
         type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
@@ -241,6 +322,12 @@ definitions:
       port:
         description: :端口
         type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       username:
         description: 数据库用户名
         type: string
@@ -286,21 +373,23 @@ definitions:
       aliyun-oss:
         $ref: '#/definitions/config.AliyunOSS'
       autocode:
-        $ref: '#/definitions/config.Autocode'
+        allOf:
+        - $ref: '#/definitions/config.Autocode'
         description: auto
       aws-s3:
         $ref: '#/definitions/config.AwsS3'
       captcha:
         $ref: '#/definitions/config.Captcha'
       cors:
-        $ref: '#/definitions/config.CORS'
+        allOf:
+        - $ref: '#/definitions/config.CORS'
         description: 跨域配置
       db-list:
         items:
           $ref: '#/definitions/config.SpecializedDB'
         type: array
       email:
-        $ref: '#/definitions/config.Email'
+        $ref: '#/definitions/github_com_flipped-aurora_gin-vue-admin_server_config.Email'
       excel:
         $ref: '#/definitions/config.Excel'
       hua-wei-obs:
@@ -308,11 +397,17 @@ definitions:
       jwt:
         $ref: '#/definitions/config.JWT'
       local:
-        $ref: '#/definitions/config.Local'
+        allOf:
+        - $ref: '#/definitions/config.Local'
         description: oss
+      mssql:
+        $ref: '#/definitions/config.Mssql'
       mysql:
-        $ref: '#/definitions/config.Mysql'
+        allOf:
+        - $ref: '#/definitions/config.Mysql'
         description: gorm
+      oracle:
+        $ref: '#/definitions/config.Oracle'
       pgsql:
         $ref: '#/definitions/config.Pgsql'
       qiniu:
@@ -340,6 +435,10 @@ definitions:
         type: string
       disable:
         type: boolean
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
       log-mode:
         description: 是否开启Gorm全局日志
         type: string
@@ -361,6 +460,12 @@ definitions:
       port:
         description: :端口
         type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       type:
         type: string
       username:
@@ -384,6 +489,8 @@ definitions:
         type: integer
       oss-type:
         description: Oss类型
+        type: string
+      router-prefix:
         type: string
       use-multipoint:
         description: 多点登录拦截
@@ -468,7 +575,8 @@ definitions:
         description: 主键ID
         type: integer
       sysUser:
-        $ref: '#/definitions/system.SysUser'
+        allOf:
+        - $ref: '#/definitions/system.SysUser'
         description: 管理详情
       sysUserAuthorityID:
         description: 管理角色ID
@@ -548,15 +656,29 @@ definitions:
         description: 文件地址
         type: string
     type: object
-  example.ExcelInfo:
+  github_com_flipped-aurora_gin-vue-admin_server_config.Email:
     properties:
-      fileName:
-        description: 文件名
+      from:
+        description: 收件人
         type: string
-      infoList:
-        items:
-          $ref: '#/definitions/system.SysBaseMenu'
-        type: array
+      host:
+        description: 服务器地址
+        type: string
+      is-ssl:
+        description: 是否SSL
+        type: boolean
+      nickname:
+        description: 昵称
+        type: string
+      port:
+        description: 端口
+        type: integer
+      secret:
+        description: 密钥
+        type: string
+      to:
+        description: 收件人:多个以英文逗号分隔
+        type: string
     type: object
   request.AddMenuAuthorityInfo:
     properties:
@@ -671,20 +793,31 @@ definitions:
   request.Register:
     properties:
       authorityId:
-        type: integer
+        example: int 角色id
+        type: string
       authorityIds:
-        items:
-          type: integer
-        type: array
+        example: '[]uint 角色id'
+        type: string
+      email:
+        example: 电子邮箱
+        type: string
       enable:
-        type: integer
+        example: int 是否启用
+        type: string
       headerImg:
+        example: 头像链接
         type: string
       nickName:
+        example: 昵称
         type: string
       passWord:
+        example: 密码
+        type: string
+      phone:
+        example: 电话号码
         type: string
       userName:
+        example: 用户名
         type: string
     type: object
   request.RollBack:
@@ -817,8 +950,7 @@ definitions:
     type: object
   response.PageResult:
     properties:
-      list:
-        type: object
+      list: {}
       page:
         type: integer
       pageSize:
@@ -837,8 +969,7 @@ definitions:
     properties:
       code:
         type: integer
-      data:
-        type: object
+      data: {}
       msg:
         type: string
     type: object
@@ -892,6 +1023,8 @@ definitions:
         type: string
       captchaLength:
         type: integer
+      openCaptcha:
+        type: boolean
       picPath:
         type: string
     type: object
@@ -926,6 +1059,9 @@ definitions:
       autoMoveFile:
         description: 是否自动移动文件
         type: boolean
+      businessDB:
+        description: 业务数据库
+        type: string
       description:
         description: Struct中文名称
         type: string
@@ -988,6 +1124,29 @@ definitions:
       require:
         description: 是否必填
         type: boolean
+      sort:
+        description: 是否增加排序
+        type: boolean
+    type: object
+  system.Meta:
+    properties:
+      activeName:
+        type: string
+      closeTab:
+        description: 自动关闭tab
+        type: boolean
+      defaultMenu:
+        description: 是否是基础路由（开发中）
+        type: boolean
+      icon:
+        description: 菜单图标
+        type: string
+      keepAlive:
+        description: 是否缓存
+        type: boolean
+      title:
+        description: 菜单名
+        type: string
     type: object
   system.SysApi:
     properties:
@@ -1076,34 +1235,26 @@ definitions:
         items:
           $ref: '#/definitions/system.SysBaseMenu'
         type: array
-      closeTab:
-        description: 自动关闭tab
-        type: boolean
       component:
         description: 对应前端文件路径
         type: string
       createdAt:
         description: 创建时间
         type: string
-      defaultMenu:
-        description: 是否是基础路由（开发中）
-        type: boolean
       hidden:
         description: 是否在列表隐藏
         type: boolean
-      icon:
-        description: 菜单图标
-        type: string
       id:
         description: 主键ID
         type: integer
-      keepAlive:
-        description: 是否缓存
-        type: boolean
       menuBtn:
         items:
           $ref: '#/definitions/system.SysBaseMenuBtn'
         type: array
+      meta:
+        allOf:
+        - $ref: '#/definitions/system.Meta'
+        description: 附加属性
       name:
         description: 路由name
         type: string
@@ -1120,9 +1271,6 @@ definitions:
       sort:
         description: 排序标记
         type: integer
-      title:
-        description: 菜单名
-        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -1237,36 +1385,28 @@ definitions:
         items:
           $ref: '#/definitions/system.SysMenu'
         type: array
-      closeTab:
-        description: 自动关闭tab
-        type: boolean
       component:
         description: 对应前端文件路径
         type: string
       createdAt:
         description: 创建时间
         type: string
-      defaultMenu:
-        description: 是否是基础路由（开发中）
-        type: boolean
       hidden:
         description: 是否在列表隐藏
         type: boolean
-      icon:
-        description: 菜单图标
-        type: string
       id:
         description: 主键ID
         type: integer
-      keepAlive:
-        description: 是否缓存
-        type: boolean
       menuBtn:
         items:
           $ref: '#/definitions/system.SysBaseMenuBtn'
         type: array
       menuId:
         type: string
+      meta:
+        allOf:
+        - $ref: '#/definitions/system.Meta'
+        description: 附加属性
       name:
         description: 路由name
         type: string
@@ -1283,9 +1423,6 @@ definitions:
       sort:
         description: 排序标记
         type: integer
-      title:
-        description: 菜单名
-        type: string
       updatedAt:
         description: 更新时间
         type: string
@@ -1478,6 +1615,25 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除选中Api
+      tags:
+      - SysApi
+  /api/freshCasbin:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 刷新成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: 刷新casbin缓存
       tags:
       - SysApi
   /api/getAllApis:
@@ -2212,7 +2368,7 @@ paths:
       - application/json
       responses:
         "200":
-          description: 生成验证码,返回包括随机数id,base64,验证码长度
+          description: 生成验证码,返回包括随机数id,base64,验证码长度,是否开启验证码
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
@@ -2515,95 +2671,6 @@ paths:
       summary: 发送邮件
       tags:
       - System
-  /excel/downloadTemplate:
-    get:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 模板名称
-        in: query
-        name: fileName
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: ""
-      security:
-      - ApiKeyAuth: []
-      summary: 下载模板
-      tags:
-      - excel
-  /excel/exportExcel:
-    post:
-      consumes:
-      - application/json
-      parameters:
-      - description: 导出Excel文件信息
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/example.ExcelInfo'
-      produces:
-      - application/octet-stream
-      responses:
-        "200":
-          description: ""
-      security:
-      - ApiKeyAuth: []
-      summary: 导出Excel
-      tags:
-      - excel
-  /excel/importExcel:
-    post:
-      consumes:
-      - multipart/form-data
-      parameters:
-      - description: 导入Excel文件
-        in: formData
-        name: file
-        required: true
-        type: file
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 导入Excel文件
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 导入Excel文件
-      tags:
-      - excel
-  /excel/loadExcel:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: 加载Excel数据,返回包括列表,总数,页码,每页数量
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/response.PageResult'
-                msg:
-                  type: string
-              type: object
-      security:
-      - ApiKeyAuth: []
-      summary: 加载Excel数据
-      tags:
-      - excel
   /fileUploadAndDownload/breakpointContinue:
     post:
       consumes:

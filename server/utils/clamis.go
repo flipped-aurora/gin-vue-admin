@@ -4,7 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/satori/go.uuid"
+	"github.com/gofrs/uuid"
 )
 
 func GetClaims(c *gin.Context) (*systemReq.CustomClaims, error) {
@@ -70,5 +70,19 @@ func GetUserInfo(c *gin.Context) *systemReq.CustomClaims {
 	} else {
 		waitUse := claims.(*systemReq.CustomClaims)
 		return waitUse
+	}
+}
+
+// GetUserName 从Gin的Context中获取从jwt解析出来的用户名
+func GetUserName(c *gin.Context) string {
+	if claims, exists := c.Get("claims"); !exists {
+		if cl, err := GetClaims(c); err != nil {
+			return ""
+		} else {
+			return cl.Username
+		}
+	} else {
+		waitUse := claims.(*systemReq.CustomClaims)
+		return waitUse.Username
 	}
 }

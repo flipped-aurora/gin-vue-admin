@@ -43,8 +43,6 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		return ctx, system.ErrMissingDBContext
 	}
 	entities := []sysModel.SysApi{
-		{ApiGroup: "base", Method: "POST", Path: "/base/login", Description: "用户登录(必选)"},
-
 		{ApiGroup: "jwt", Method: "POST", Path: "/jwt/jsonInBlacklist", Description: "jwt加入黑名单(退出，必选)"},
 
 		{ApiGroup: "系统用户", Method: "DELETE", Path: "/user/deleteUser", Description: "删除用户"},
@@ -113,6 +111,7 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "代码生成器", Method: "GET", Path: "/autoCode/getColumn", Description: "获取所选table的所有字段"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/createPlug", Description: "自动创建插件包"},
 		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/installPlugin", Description: "安装插件"},
+		{ApiGroup: "代码生成器", Method: "POST", Path: "/autoCode/pubPlug", Description: "打包插件"},
 
 		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/createPackage", Description: "生成包(package)"},
 		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/getPackage", Description: "获取所有包(package)"},

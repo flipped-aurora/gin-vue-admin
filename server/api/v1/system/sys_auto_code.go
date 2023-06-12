@@ -262,7 +262,7 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 // @Produce   application/json
 // @Param     plug  formData  file                                              true  "this is a test file"
 // @Success   200   {object}  response.Response{data=[]interface{},msg=string}  "安装插件成功"
-// @Router    /autoCode/createPlug [post]
+// @Router    /autoCode/installPlugin [post]
 func (autoApi *AutoCodeApi) InstallPlugin(c *gin.Context) {
 	header, err := c.FormFile("plug")
 	if err != nil {
@@ -291,4 +291,25 @@ func (autoApi *AutoCodeApi) InstallPlugin(c *gin.Context) {
 			"code": server,
 			"msg":  serverStr,
 		}}, c)
+}
+
+// PubPlug
+// @Tags      AutoCode
+// @Summary   打包插件
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysAutoCode                                         true  "打包插件"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
+// @Router    /autoCode/pubPlug [get]
+func (autoApi *AutoCodeApi) PubPlug(c *gin.Context) {
+	plugName := c.Query("plugName")
+	snake := strings.ToLower(plugName)
+	zipPath, err := autoCodeService.PubPlug(snake)
+	if err != nil {
+		global.GVA_LOG.Error("打包失败!", zap.Error(err))
+		response.FailWithMessage("打包失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage(fmt.Sprintf("打包成功,文件路径为:%s", zipPath), c)
 }

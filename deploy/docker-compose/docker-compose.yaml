@@ -2,12 +2,6 @@ version: "3"
 
 name: gin-vue-admin
 
-# 声明一个名为gva-network的networks。容器之间通过container_name进行连接。
-networks:
-  gva-network:
-    driver: bridge
-
-# 设置mysql，redis持久化保存
 volumes:
   mysql:
   redis:
@@ -20,11 +14,9 @@ services:
     container_name: gva-web
     restart: unless-stopped
     ports:
-      - '8080:8080'
+      - 8080:8080
     depends_on:
       - server
-    networks:
-      - gva-network
 
   server:
     build:
@@ -33,38 +25,29 @@ services:
     container_name: gva-server
     restart: unless-stopped
     ports:
-      - '8888:8888'
+      - 8888:8888
     depends_on:
       - mysql
       - redis
-    links:
-      - mysql
-      - redis
-    networks:
-      - gva-network
 
   mysql:
     image: mysql:8
-    container_name: gva-mysql # web初始化时host填该值
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci #设置utf8字符集
+    container_name: gva-mysql # web初始化：主机名称
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     restart: unless-stopped
     ports:
-      - "13306:3306"  # host物理直接映射端口为13306
+      - 13306:3306
     environment:
-      MYSQL_DATABASE: ${MYSQL_DATABASE:-gva} # 初始化启动时要创建的数据库的名称
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root} # 使用root用户，与web初始化默认值
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-gva} # web初始化：数据库的名称
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-root} # web初始化：root密码
     volumes:
       - mysql:/var/lib/mysql
-    networks:
-      - gva-network
 
   redis:
     image: redis:6-alpine
-    container_name: gva-redis # 容器名
+    container_name: gva-redis
     restart: unless-stopped
     ports:
-      - '16379:6379'
+      - 16379:6379
     volumes:
       - redis:/data
-    networks:
-      - gva-network

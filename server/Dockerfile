@@ -1,6 +1,7 @@
+# stage 1: build
 FROM golang:1.18-alpine as build-stage
 
-WORKDIR /gva-server
+WORKDIR /build
 
 ENV GOPROXY=https://goproxy.cn,direct
 ENV CGO_ENABLED=0
@@ -10,17 +11,19 @@ RUN go mod download
 
 COPY . .
 RUN --mount=type=cache,target=/root/.cache/go-build \
-    go build -o app .
+    go build -o server .
 
+# stage 2: distribute
 FROM alpine:latest
 
 LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
 
-WORKDIR /gva-server
+WORKDIR /app
 
-COPY --from=build-stage /gva-server/app ./
-COPY --from=build-stage /gva-server/resource ./resource/
-COPY --from=build-stage /gva-server/config.docker.yaml ./
+COPY --from=build-stage /build/server ./
+COPY --from=build-stage /build/resource ./resource/
+COPY --from=build-stage /build/config.docker.yaml ./
 
 EXPOSE 8888
-ENTRYPOINT ./app -c config.docker.yaml
+
+ENTRYPOINT ./server -c config.docker.yaml

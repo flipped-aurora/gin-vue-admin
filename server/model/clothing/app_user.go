@@ -27,12 +27,13 @@ func (AppUser) TableName() string {
 }
 
 type CompanyRole struct {
-	RoleID      uint   `json:"role_ID"`
-	RoleName    string `json:"roleName"`
-	CompanyID   uint   `json:"companyID"`
-	CompanyName string `json:"companyName"`
-	TeamID      uint   `json:"teamID"`
-	TeamName    string `json:"teamName"`
+	RoleID      uint    `json:"role_ID"`
+	RoleName    string  `json:"roleName"`
+	CompanyID   uint    `json:"companyID"`
+	CompanyName string  `json:"companyName"`
+	TeamID      uint    `json:"teamID"`
+	TeamName    string  `json:"teamName"`
+	BeanRate    float64 `json:"beanRate"`
 }
 
 func (u *AppUser) GetRoles() []CompanyRole {
@@ -47,6 +48,7 @@ func (u *AppUser) GetRoles() []CompanyRole {
 			CompanyName: v.Company.Name,
 			TeamID:      v.Team.ID,
 			TeamName:    v.Team.Name,
+			BeanRate:    v.Company.BeanRate,
 		}
 	}
 	return res

@@ -29,3 +29,6 @@ yarn-error.log*
 *.iml
 web/.pnpm-debug.log
 web/pnpm-lock.yaml
+server/server
+/server/uploads/
+web/dist.zip

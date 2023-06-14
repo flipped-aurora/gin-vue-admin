@@ -57,13 +57,13 @@
         </el-table-column>
         <el-table-column align="left" label="请求IP" prop="ip" width="120" />
         <el-table-column align="left" label="请求方法" prop="method" width="120" />
-        <el-table-column align="left" label="请求路径" prop="path" width="240" />
+        <el-table-column align="left" label="请求路径" prop="path" min-width="240" />
         <el-table-column align="left" label="请求" prop="path" width="80">
           <template #default="scope">
             <div>
-              <el-popover v-if="scope.row.body" placement="left-start" trigger="click">
+              <el-popover v-if="scope.row.body" placement="left-start" trigger="click" width="445">
                 <div class="popover-box">
-                  <pre>{{ fmtBody(scope.row.body) }}</pre>
+                  <pre style="overflow-x: scroll">{{ fmtBody(scope.row.body) }}</pre>
                 </div>
                 <template #reference>
                   <el-icon style="cursor: pointer;"><warning /></el-icon>
@@ -77,9 +77,9 @@
         <el-table-column align="left" label="响应" prop="path" width="80">
           <template #default="scope">
             <div>
-              <el-popover v-if="scope.row.resp" placement="left-start" trigger="click">
+              <el-popover v-if="scope.row.resp" placement="left-start" trigger="click" width="445">
                 <div class="popover-box">
-                  <pre>{{ fmtBody(scope.row.resp) }}</pre>
+                  <pre style="overflow-x: scroll">{{ fmtBody(scope.row.resp) }}</pre>
                 </div>
                 <template #reference>
                   <el-icon style="cursor: pointer;"><warning /></el-icon>
@@ -247,9 +247,15 @@ export default {
 .popover-box {
   background: #112435;
   color: #f08047;
-  height: 600px;
+  max-height: 600px;
   width: 420px;
   overflow: auto;
+}
+.popover-box pre::-webkit-scrollbar-thumb {
+  background: #b6b6b6;
+}
+.popover-box pre::-webkit-scrollbar-thumb:hover {
+  background: #8a8a8a;
 }
 .popover-box::-webkit-scrollbar {
   display: none; /* Chrome Safari */

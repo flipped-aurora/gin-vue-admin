@@ -173,3 +173,27 @@ func (teamApi *TeamApi) JoinTeam(c *gin.Context) {
 	}
 	response.Ok(c)
 }
+
+func (teamApi *TeamApi) DeleteMember(c *gin.Context) {
+	var req clothingReq.JoinTeam
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	userID := utils.GetUserID(c)
+	team, err := teamService.GetTeam(req.TeamID)
+	if err != nil {
+		response.FailWithMessage("组不存在", c)
+		return
+	}
+	if team.UserID != userID {
+		response.FailWithMessage("权限不足", c)
+		return
+	}
+	if err := teamService.DeleteTeamMember(team, req.UserID); err != nil {
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		response.Ok(c)
+	}
+}

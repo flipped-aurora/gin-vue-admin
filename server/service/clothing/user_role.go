@@ -98,7 +98,7 @@ func (userRoleService *UserRoleService) CheckStaff(userID, companyID uint) (pass
 // 检查是否管理层
 func (userRoleService *UserRoleService) CheckManager(userID, companyID uint) (pass bool) {
 	var userRole clothing.UserRole
-	if err := global.GVA_DB.Where("user_id = ? and company_id = ? and role_id in ?", userID, companyID, []int{enum.Boss, enum.Tailor}).First(&userRole).Error; err == nil {
+	if err := global.GVA_DB.Where("user_id = ? and company_id = ? and role_id in ?", userID, companyID, []int{enum.Boss, enum.GroupLeader}).First(&userRole).Error; err == nil {
 		return true
 	}
 	return

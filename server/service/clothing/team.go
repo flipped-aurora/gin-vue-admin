@@ -108,3 +108,8 @@ func (teamService *TeamService) JoinTeam(userID uint, team clothing.Team) (err e
 	}
 	return err
 }
+
+func (teamService *TeamService) DeleteTeamMember(team clothing.Team, userID uint) (err error) {
+	err = global.GVA_DB.Where("team_id = ? AND user_id", team.ID, userID).Delete(&clothing.TeamUser{}).Error
+	return
+}

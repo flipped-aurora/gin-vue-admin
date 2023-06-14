@@ -2,12 +2,14 @@ package clothing
 
 import (
 	"errors"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"gorm.io/gorm"
+	"time"
 )
 
 type JobService struct {
@@ -95,13 +97,16 @@ func (jobService *JobService) GetJobInfoList(info clothingReq.JobSearch) (list [
 		db = db.Where("cropping_id = ?", info.CroppingID)
 	}
 	if info.TeamID > 0 {
-		db = db.Where("team_id = ?", info.CroppingID)
+		db = db.Where("team_id = ?", info.TeamID)
 	}
 	if info.Step != 0 {
 		db = db.Where("step = ?", info.Step)
 	}
 	if info.UserID > 0 {
 		db = db.Where("user_id = ?", info.UserID)
+	}
+	if len(info.Size) > 0 {
+		db = db.Where("size = ?", info.Size)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
@@ -148,7 +153,9 @@ func (jobService *JobService) PostJob(cropping clothing.CroppingRecord, data clo
 		}
 		job.Quantity = int(j.Quantity)
 		job.CroppingID = data.CroppingID
+		job.CompanyID = cropping.CompanyID
 		job.UserID = j.UserID
+		job.Size = j.Size
 		job.Income = float64(job.Quantity) * job.Price
 		job.Step = enum.CroppingHandling
 		job.TeamID = data.TeamID
@@ -165,7 +172,7 @@ func (jobService *JobService) PostJob(cropping clothing.CroppingRecord, data clo
 
 func (jobService *JobService) JobAuditOpt(job clothing.Job, status bool) (err error) {
 	if status {
-		err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{"step": enum.CroppingComplete, "updated_by": job.UpdatedBy}).Error
+		err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{"step": enum.CroppingComplete, "updated_by": job.UpdatedBy, "complete_at": time.Now()}).Error
 		if err != nil {
 			return err
 		}
@@ -179,5 +186,41 @@ func (jobService *JobService) JobAuditOpt(job clothing.Job, status bool) (err er
 	} else {
 		err = global.GVA_DB.Model(&job).Updates(map[string]interface{}{"step": enum.CroppingHandling, "updated_by": job.UpdatedBy}).Error
 	}
+	return
+}
+
+func (jobService *JobService) GetWagesDetail(info clothingReq.JobSearch) (list []clothing.Job, total int64, err error) {
+	if info.CompanyID == 0 && info.UserID == 0 {
+		err = errors.New("缺少参数")
+		return
+	}
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&clothing.Job{}).Joins("join app_user on app_user.id = job.user_id").Where("job.step = ? AND job.is_cancel = ?", enum.CroppingComplete, false)
+	if info.Keyword != "" {
+		db = db.Where("app_user.username like ? or app_user.nickname like ? app_user.phone_num like ?", fmt.Sprintf("%%%s%%", info.Keyword), fmt.Sprintf("%%%s%%", info.Keyword), fmt.Sprintf("%%%s%%", info.Keyword))
+	}
+	if info.StartCreatedAt != nil {
+		db = db.Where("job.complete_at >= ?", *info.StartCreatedAt)
+	}
+	if info.EndCreatedAt != nil {
+		db = db.Where("job.complete_at <= ?", *info.EndCreatedAt)
+	}
+	if info.CompanyID > 0 {
+		db = db.Where("job.company_id = ?", info.CompanyID)
+	}
+	if info.TeamID > 0 {
+		db = db.Where("job.team_id = ?", info.TeamID)
+	}
+	if info.UserID > 0 {
+		db = db.Where("job.user_id = ?", info.UserID)
+	}
+
+	db = db.Select("job.user_id,job.company_id,sum(job.real_income) as real_income").Group("user_id,company_id").Having("sum(job.real_income) >= ?", info.Coin)
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Preload("User").Preload("Company").Limit(limit).Offset(offset).Find(&list).Error
 	return
 }

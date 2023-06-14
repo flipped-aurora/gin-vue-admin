@@ -27,7 +27,8 @@ func (s *TeamRouter) InitTeamRouter(Router *gin.RouterGroup) {
 		teamRouterWithoutRecord.GET("getTeamList", teamApi.GetTeamList) // 获取Team列表
 	}
 	{
-		h5TeamRouterWithoutRecord.GET("getTeamList", teamApi.GetTeamList) // 获取Team列表
-		h5TeamRouterWithoutRecord.POST("joinTeam", teamApi.JoinTeam)      // 组长拉用户进组
+		h5TeamRouterWithoutRecord.GET("getTeamList", teamApi.GetTeamList)      // 获取Team列表
+		h5TeamRouterWithoutRecord.POST("joinTeam", teamApi.JoinTeam)           // 组长拉用户进组
+		h5TeamRouterWithoutRecord.DELETE("deleteMember", teamApi.DeleteMember) // 组长拉用户进组
 	}
 }

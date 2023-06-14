@@ -79,7 +79,7 @@ func (appUserService *AppUserService) GetAppUserInfoList(info clothingReq.AppUse
 		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	if info.Username != "" {
-		db = db.Where("user_name LIKE ?", "%"+info.Username+"%")
+		db = db.Where("username LIKE ?", "%"+info.Username+"%")
 	}
 	if info.Nickname != "" {
 		db = db.Where("nickname LIKE ?", "%"+info.Nickname+"%")
@@ -157,13 +157,21 @@ func (appUserService *AppUserService) GetAppUserList(info clothingReq.UserFilter
 	var appUsers []clothing.AppUser
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Username != "" {
-		db = db.Where("user_name LIKE ?", "%"+info.Username+"%")
+		db = db.Where("username LIKE ?", "%"+info.Username+"%")
 	}
 	if info.Nickname != "" {
 		db = db.Where("nickname LIKE ?", "%"+info.Nickname+"%")
 	}
 	if info.PhoneNum != "" {
 		db = db.Where("phone_num = ?", info.PhoneNum)
+	}
+	if info.Keyword != "" {
+		db = db.Where("username LIKE ? or nickname LIKE ? or phone_num LIKE ?", "%"+info.Keyword+"%", "%"+info.Keyword+"%", "%"+info.Keyword+"%")
+	}
+	if info.RoleID != 0 && info.CompanyID != 0 {
+		ids := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.UserRole{}).Where("role_id = ? and company_id = ?", info.RoleID, info.CompanyID).Pluck("user_id", &ids)
+		db = db.Where("id in ?", ids)
 	}
 	if info.CompanyID != 0 {
 		userIDs := make([]uint, 0)

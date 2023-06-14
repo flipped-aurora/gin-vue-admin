@@ -168,3 +168,49 @@ func (companyService *CompanyService) CreateQrCode(company clothing.Company) (ur
 	})
 	return url, nil
 }
+
+func (companyService *CompanyService) DeleteStaff(company clothing.Company, userID uint) (err error) {
+	db := global.GVA_DB.Begin()
+	defer db.Commit()
+	var userRole clothing.UserRole
+	err = global.GVA_DB.Where("company_id = ? AND user_id = ?", company.ID, userID).First(&userRole).Error
+	if err != nil {
+		return
+	}
+	if userRole.RoleID == enum.GroupLeader {
+		var team clothing.Team
+		err = global.GVA_DB.Where("company_id = ? AND user_id = ?", company.ID, userID).First(&team).Error
+		if err != nil {
+			return
+		}
+		err = db.Where("team_id = ?", team.ID).Delete(&clothing.TeamUser{}).Error
+		if err != nil {
+			db.Rollback()
+			return
+		}
+		err = db.Delete(&team).Error
+		if err != nil {
+			db.Rollback()
+			return
+		}
+	} else {
+		teamIds := make([]uint, 0)
+		global.GVA_DB.Model(&clothing.Team{}).Where("company_id = ?", company.ID).Pluck("id", teamIds)
+		err = db.Where("team_id in ? AND user_id = ?", teamIds, userID).Error
+		if err != nil {
+			db.Rollback()
+			return
+		}
+	}
+	err = db.Delete(&userRole).Error
+	if err != nil {
+		db.Rollback()
+		return
+	}
+	err = db.Model(&company).Update("clerk_count", gorm.Expr("clerk_count - ?", 1)).Error
+	if err != nil {
+		db.Rollback()
+		return
+	}
+	return
+}

@@ -142,6 +142,7 @@ func (jobApplyService *JobApplyService) OptApply(apply clothing.JobApply, status
 	job.JobType = apply.JobType
 	job.CroppingID = apply.CroppingID
 	job.UserID = apply.UserID
+	job.CompanyID = cropping.CompanyID
 	job.TeamID = apply.TeamID
 	job.Step = enum.CroppingHandling
 	job.Quantity = int(cropping.Quantity)

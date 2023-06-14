@@ -20,3 +20,8 @@ type JoinCompany struct {
 	CompanyID uint   `json:"companyID" form:"companyID"`
 	TeamID    uint   `json:"teamID" form:"teamID"`
 }
+
+type DeleteStaff struct {
+	CompanyID uint `json:"companyID" form:"companyID"`
+	UserID    uint `json:"userID" form:"userID"`
+}

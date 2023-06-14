@@ -267,3 +267,58 @@ func (jobApi *JobApi) JobAuditOpt(c *gin.Context) {
 		response.OkWithMessage("更新成功", c)
 	}
 }
+
+func (jobApi *JobApi) GetWagesDetail(c *gin.Context) {
+	var pageInfo clothingReq.JobSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if list, total, err := jobService.GetWagesDetail(pageInfo); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		type wage struct {
+			UserID    uint `json:"UserID"`
+			CompanyID uint `json:"companyID"`
+			User      struct {
+				Username string `json:"username"`
+				Nickname string `json:"nickname"`
+				PhoneNum string `json:"phoneNum"`
+			}
+			Company struct {
+				Name string `json:"name"`
+			}
+			Amount float64 `json:"amount"`
+		}
+		r := make([]wage, len(list))
+		for i, job := range list {
+			r[i] = wage{
+				UserID:    job.UserID,
+				CompanyID: job.CompanyID,
+				User: struct {
+					Username string `json:"username"`
+					Nickname string `json:"nickname"`
+					PhoneNum string `json:"phoneNum"`
+				}{
+					Username: job.User.Username,
+					Nickname: job.User.Nickname,
+					PhoneNum: job.User.PhoneNum,
+				},
+				Company: struct {
+					Name string `json:"name"`
+				}{
+					Name: job.Company.Name,
+				},
+				Amount: job.RealIncome,
+			}
+		}
+		response.OkWithDetailed(response.PageResult{
+			List:     r,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
+}

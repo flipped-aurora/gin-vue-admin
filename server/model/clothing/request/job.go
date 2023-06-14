@@ -10,6 +10,8 @@ type JobSearch struct {
 	clothing.Job
 	StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
 	EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+	Keyword        string     `json:"keyword" form:"keyword"`
+	Coin           float64    `json:"coin" form:"coin"`
 	request.PageInfo
 }
 

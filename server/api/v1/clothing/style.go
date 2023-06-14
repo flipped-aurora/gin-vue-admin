@@ -43,7 +43,7 @@ func (styleApi *StyleApi) CreateStyle(c *gin.Context) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithData(style, c)
 	}
 }
 

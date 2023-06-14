@@ -279,3 +279,26 @@ func (companyApi *CompanyApi) CreateQrCode(c *gin.Context) {
 		response.OkWithData(url, c)
 	}
 }
+
+func (companyApi *CompanyApi) DeleteStaff(c *gin.Context) {
+	var req clothingReq.DeleteStaff
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	company, err := companyService.GetCompany(req.CompanyID)
+	if company.UserID != utils.GetUserID(c) {
+		response.FailWithMessage("权限不足", c)
+		return
+	}
+	if company.UserID == req.UserID {
+		response.FailWithMessage("不能删除老板", c)
+		return
+	}
+	if err := companyService.DeleteStaff(company, req.UserID); err != nil {
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		response.Ok(c)
+	}
+}

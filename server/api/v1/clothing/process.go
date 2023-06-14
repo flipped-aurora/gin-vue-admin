@@ -27,13 +27,12 @@ var processService = service.ServiceGroupApp.ClothingServiceGroup.ProcessService
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /process/createProcess [post]
 func (processApi *ProcessApi) CreateProcess(c *gin.Context) {
-	var process clothing.Process
+	var process clothingReq.CreateProcess
 	err := c.ShouldBindJSON(&process)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	process.CreatedBy = utils.GetUserID(c)
 	style, err := styleService.GetStyle(process.StyleID)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
@@ -45,7 +44,7 @@ func (processApi *ProcessApi) CreateProcess(c *gin.Context) {
 		response.FailWithMessage("权限不足", c)
 		return
 	}
-	if err := processService.CreateProcess(&process); err != nil {
+	if err := processService.CreateProcessBatch(process); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {

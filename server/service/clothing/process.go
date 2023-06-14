@@ -18,6 +18,21 @@ func (processService *ProcessService) CreateProcess(process *clothing.Process) (
 	return err
 }
 
+func (processService *ProcessService) CreateProcessBatch(process clothingReq.CreateProcess) (err error) {
+	e := make([]clothing.Process, 0)
+	for _, s := range process.Detail {
+		e = append(e, clothing.Process{
+			StyleID: process.StyleID,
+			Type:    process.Type,
+			Name:    s.Name,
+			Price:   s.Price,
+			Percent: s.Percent,
+		})
+	}
+	err = global.GVA_DB.Create(&e).Error
+	return
+}
+
 // DeleteProcess 删除Process记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (processService *ProcessService) DeleteProcess(process clothing.Process) (err error) {

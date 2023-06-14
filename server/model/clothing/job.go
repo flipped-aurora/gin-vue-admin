@@ -3,11 +3,13 @@ package clothing
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"time"
 )
 
 // Job 结构体
 type Job struct {
 	global.GVA_MODEL
+	CompanyID      uint           `json:"companyID" form:"companyID" gorm:"column:company_id;comment:;"`
 	CroppingID     uint           `json:"croppingID" form:"croppingID" gorm:"column:cropping_id;comment:;"`
 	UserID         uint           `json:"userID" form:"userID" gorm:"column:user_id;comment:;"`
 	TeamID         uint           `json:"teamID" form:"teamID" gorm:"column:team_id;comment:;"`
@@ -22,6 +24,7 @@ type Job struct {
 	Step           uint           `json:"step" form:"step" gorm:"column:step;comment:;"`
 	JobType        int            `json:"jobType" form:"jobType" gorm:"column:job_type;comment:;"`
 	IsCancel       bool           `json:"isCancel" form:"isCancel" gorm:"column:is_cancel;default:0;"`
+	CompleteAt     *time.Time     `json:"completeAt" form:"completeAt" gorm:"column:complete_at;comment:完成时间"`
 	CreatedBy      uint           `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy      uint           `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy      uint           `gorm:"column:deleted_by;comment:删除者"`
@@ -29,6 +32,7 @@ type Job struct {
 	Process        Process        `json:"process" gorm:"foreignKey:ProcessID;"`
 	User           AppUser        `json:"user" gorm:"foreignKey:UserID;"`
 	CroppingRecord CroppingRecord `json:"croppingRecord" gorm:"foreignKey:CroppingID;"`
+	Company        Company        `json:"company" form:"company" gorm:"foreignKey:CompanyID"`
 }
 
 // TableName Job 表名

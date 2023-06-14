@@ -2,7 +2,9 @@
 package clothing
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"gorm.io/gorm"
 	"time"
 )
 
@@ -39,4 +41,11 @@ func (c *Company) CheckLimit() bool {
 		return false
 	}
 	return true
+}
+
+func (c *Company) AfterFind(tx *gorm.DB) (err error) {
+	if len(global.GVA_CONFIG.System.Host) > 0 {
+		c.QrCode = fmt.Sprintf("%s/%s", global.GVA_CONFIG.System.Host, c.QrCode)
+	}
+	return
 }

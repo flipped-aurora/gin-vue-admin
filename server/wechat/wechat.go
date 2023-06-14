@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/wechat/wechat-2"
 	"github.com/flipped-aurora/gin-vue-admin/server/wechat/wechat-2/cache"
 	"github.com/flipped-aurora/gin-vue-admin/server/wechat/wechat-2/miniprogram/config"
+	offConfig "github.com/flipped-aurora/gin-vue-admin/server/wechat/wechat-2/officialaccount/config"
 	"github.com/wechatpay-apiv3/wechatpay-go/core"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/auth/verifiers"
 	"github.com/wechatpay-apiv3/wechatpay-go/core/downloader"
@@ -96,4 +97,23 @@ func pay() {
 	// 3. 使用证书访问器初始化 `notify.Handler`
 	handler := notify.NewNotifyHandler(mchAPIv3Key, verifiers.NewSHA256WithRSAVerifier(certificateVisitor))
 	global.GVA_WECHAT_PAY_HANDLER = handler
+}
+
+func official(wc *wechat.Wechat) {
+	redisCfg := global.GVA_CONFIG.Redis
+	redisOpts := &cache.RedisOpts{
+		Host:        redisCfg.Addr,     // redis host
+		Password:    redisCfg.Password, //redis password
+		Database:    redisCfg.DB,       // redis db
+		MaxActive:   10,                // 连接池最大活跃连接数
+		MaxIdle:     10,                //连接池最大空闲连接数
+		IdleTimeout: 60,                //空闲连接超时时间，单位：second
+	}
+	redisCache := cache.NewRedis(context.Background(), redisOpts)
+	cfg := &offConfig.Config{
+		AppID:     global.GVA_CONFIG.Wechat.AppID,
+		AppSecret: global.GVA_CONFIG.Wechat.AppSecret,
+		Cache:     redisCache,
+	}
+	wc.GetOfficialAccount(cfg)
 }

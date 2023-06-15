@@ -85,7 +85,7 @@ hua-wei-obs:
   access-key: you-access-key
   secret-key: you-secret-key
 jwt:
-  signing-key: 4a790666-0ea9-427f-87cf-fc942b4af03f
+  signing-key: f7a63db3-dd79-484a-84f1-4793da78a133
   expires-time: 7d
   buffer-time: 1d
   issuer: qmPlus
@@ -110,9 +110,9 @@ mysql:
   path: 127.0.0.1
   port: "3306"
   config: charset=utf8mb4&parseTime=True&loc=Local
-  db-name: gva
+  db-name: ""
   username: root
-  password:
+  password: ""
   prefix: ""
   singular: false
   engine: ""
@@ -148,6 +148,18 @@ pgsql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+qiniu:
+  zone: ZoneHuaDong
+  bucket: ""
+  img-path: ""
+  use-https: false
+  access-key: ""
+  secret-key: ""
+  use-cdn-domains: false
+redis:
+  db: 79
+  addr: 127.0.0.1:63
+  password: ""
 sqlite:
   path: ""
   port: ""
@@ -160,24 +172,12 @@ sqlite:
   engine: ""
   max-idle-conns: 10
   max-open-conns: 100
-  log-mode: ""
+  log-mode: error
   log-zap: false
-qiniu:
-  zone: ZoneHuaDong
-  bucket: ""
-  img-path: ""
-  use-https: false
-  access-key: ""
-  secret-key: ""
-  use-cdn-domains: false
-redis:
-  db: 0
-  addr: 127.0.0.1:6379
-  password: ""
 system:
   env: public
   addr: 8888
-  db-type: mysql
+  db-type: sqlite
   oss-type: local
   use-multipoint: false
   use-redis: false

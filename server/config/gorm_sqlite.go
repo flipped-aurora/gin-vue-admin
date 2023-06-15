@@ -5,7 +5,7 @@ type Sqlite struct {
 }
 
 func (s *Sqlite) Dsn() string {
-	return s.Path
+	return s.Path + "\\" + s.Dbname + ".db"
 }
 
 func (s *Sqlite) GetLogMode() string {

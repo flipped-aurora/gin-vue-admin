@@ -27,12 +27,13 @@ func (s *JobRouter) InitJobRouter(Router *gin.RouterGroup) {
 		jobRouterWithoutRecord.GET("getJobList", jobApi.GetJobList) // 获取Job列表
 	}
 	{
-		h5JobRouterWithoutRecord.GET("findJob", jobApi.FindJob)               // 根据ID获取Job
-		h5JobRouterWithoutRecord.GET("getJobList", jobApi.GetJobList)         // 获取Job列表
-		h5JobRouterWithoutRecord.POST("postJobList", jobApi.PostJobList)      // 组长分配工作
-		h5JobRouterWithoutRecord.PUT("jobAuditApply", jobApi.JobAuditApply)   // 工单审批申请
-		h5JobRouterWithoutRecord.PUT("jobAuditOpt", jobApi.JobAuditOpt)       // 审批工单
-		h5JobRouterWithoutRecord.PUT("changeWorker", jobApi.ChangeWorker)     // 审批工单
-		h5JobRouterWithoutRecord.GET("getWagesDetail", jobApi.GetWagesDetail) // 审批工单
+		h5JobRouterWithoutRecord.GET("findJob", jobApi.FindJob)                           // 根据ID获取Job
+		h5JobRouterWithoutRecord.GET("getJobList", jobApi.GetJobList)                     // 获取Job列表
+		h5JobRouterWithoutRecord.POST("postJobList", jobApi.PostJobList)                  // 组长分配工作
+		h5JobRouterWithoutRecord.PUT("jobAuditApply", jobApi.JobAuditApply)               // 工单审批申请
+		h5JobRouterWithoutRecord.PUT("jobAuditOpt", jobApi.JobAuditOpt)                   // 审批工单
+		h5JobRouterWithoutRecord.PUT("changeWorker", jobApi.ChangeWorker)                 // 审批工单
+		h5JobRouterWithoutRecord.GET("getWagesDetail", jobApi.GetWagesDetail)             // 审批工单
+		h5JobRouterWithoutRecord.GET("getJobGroupByProcess", jobApi.GetJobGroupByProcess) // 审批工单
 	}
 }

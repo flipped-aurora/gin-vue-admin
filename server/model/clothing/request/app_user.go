@@ -44,6 +44,6 @@ type UserFilter struct {
 	Nickname      string `json:"nickname" form:"nickname"`   // 昵称
 	Username      string `json:"username" form:"username"`   // 用户名
 	PhoneNum      string `json:"phoneNum" form:"phoneNum"`   // 手机号
-	ExcludeTeamID uint   `json:"excludeTeamId" form:"excludeTeamId"`
+	ExcludeTeamID uint   `json:"excludeTeamID" form:"excludeTeamID"`
 	RoleID        uint   `json:"roleID" form:"roleID"`
 }

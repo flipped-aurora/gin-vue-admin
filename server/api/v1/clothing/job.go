@@ -151,6 +151,23 @@ func (jobApi *JobApi) GetJobList(c *gin.Context) {
 	}
 }
 
+func (jobApi *JobApi) GetJobGroupByProcess(c *gin.Context) {
+	var pageInfo clothingReq.JobSearch
+	err := c.ShouldBindQuery(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, err := jobService.GetJobList(pageInfo.CroppingID, pageInfo.Size)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(list, "获取成功", c)
+	}
+
+}
+
 func (jobApi *JobApi) PostJobList(c *gin.Context) {
 	var data clothingReq.JobList
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -280,16 +297,20 @@ func (jobApi *JobApi) GetWagesDetail(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		type wage struct {
-			UserID    uint `json:"UserID"`
+			UserID    uint `json:"userID"`
 			CompanyID uint `json:"companyID"`
+			TeamID    uint `json:"teamID"`
 			User      struct {
 				Username string `json:"username"`
 				Nickname string `json:"nickname"`
 				PhoneNum string `json:"phoneNum"`
-			}
+			} `json:"user"`
 			Company struct {
 				Name string `json:"name"`
-			}
+			} `json:"company"`
+			Team struct {
+				Name string `json:"name"`
+			} `json:"team"`
 			Amount float64 `json:"amount"`
 		}
 		r := make([]wage, len(list))
@@ -297,6 +318,7 @@ func (jobApi *JobApi) GetWagesDetail(c *gin.Context) {
 			r[i] = wage{
 				UserID:    job.UserID,
 				CompanyID: job.CompanyID,
+				TeamID:    job.TeamID,
 				User: struct {
 					Username string `json:"username"`
 					Nickname string `json:"nickname"`
@@ -310,6 +332,11 @@ func (jobApi *JobApi) GetWagesDetail(c *gin.Context) {
 					Name string `json:"name"`
 				}{
 					Name: job.Company.Name,
+				},
+				Team: struct {
+					Name string `json:"name"`
+				}{
+					Name: job.Team.Name,
 				},
 				Amount: job.RealIncome,
 			}

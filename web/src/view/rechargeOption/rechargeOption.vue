@@ -39,8 +39,10 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="天数" prop="day" width="120" />
+        <el-table-column align="left" label="月数" prop="month" width="120" />
+        <el-table-column align="left" label="时间展示" prop="timeShow" width="120" />
         <el-table-column align="left" label="职员数量" prop="clerkCount" width="120" />
+        <el-table-column align="left" label="规模展示" prop="countShow" width="120" />
         <el-table-column align="left" label="价格" prop="price" width="120" />
         <el-table-column align="left" label="实付金额" prop="amount" width="120" />
         <el-table-column align="left" label="按钮组">
@@ -64,12 +66,18 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="弹窗操作">
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        <el-form-item label="天数:"  prop="day" >
-          <el-input v-model.number="formData.day" :clearable="true" placeholder="请输入" />
+        <el-form-item label="月数:"  prop="month" >
+          <el-input v-model.number="formData.month" :clearable="true" placeholder="请输入" />
         </el-form-item>
+          <el-form-item label="时间展示:"  prop="timeShow" >
+              <el-input v-model="formData.timeShow" :clearable="true" placeholder="请输入" />
+          </el-form-item>
         <el-form-item label="职员数量:"  prop="clerkCount" >
           <el-input v-model.number="formData.clerkCount" :clearable="true" placeholder="请输入" />
         </el-form-item>
+          <el-form-item label="规模展示:"  prop="countShow" >
+              <el-input v-model="formData.countShow" :clearable="true" placeholder="请输入" />
+          </el-form-item>
         <el-form-item label="价格:"  prop="price" >
           <el-input-number v-model="formData.price"  style="width:100%" :precision="2" :clearable="true"  />
         </el-form-item>

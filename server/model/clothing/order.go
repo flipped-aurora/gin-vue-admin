@@ -17,7 +17,7 @@ type Order struct {
 	Amount     float64    `json:"amount" form:"amount" gorm:"column:amount;comment:;type:decimal(10,2);"`
 	Status     int        `json:"status" form:"status" gorm:"column:status;comment:;"`
 	PayStatus  int        `json:"payStatus" form:"payStatus" gorm:"column:pay_status;comment:;"`
-	Day        int        `json:"day" form:"day" gorm:"column:day;comment:;"`
+	Month      int        `json:"month" form:"month" gorm:"column:month;comment:;"`
 	ClerkCount int        `json:"clerkCount" form:"clerkCount" gorm:"column:clerk_count;comment:;"`
 	PayType    int        `json:"payType" form:"payType" gorm:"column:pay_type"`
 	PayAt      *time.Time `json:"payAt" form:"payAt" gorm:"column:pay_at;comment:;"`

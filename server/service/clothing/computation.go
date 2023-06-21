@@ -89,7 +89,7 @@ func (computationService *ComputationService) DoComputation(computation *clothin
 	computation.BarLength90 = computation.ClothWidth
 	computation.BarLength180 = computation.BarLength
 	computation.ClothLength45 = computation.BarLength / computation.BarLength45 * computation.BarWidth * float64(computation.CountNum)
-	computation.ClothLength90 = computation.BarLength90 * float64(computation.CountNum)
+	computation.ClothLength90 = computation.BarWidth * float64(computation.CountNum)
 	computation.ClothLength180 = float64(computation.CountNum) / (computation.ClothWidth / computation.BarWidth) * computation.BarLength180
 	err = global.GVA_DB.Create(computation).Error
 	return err

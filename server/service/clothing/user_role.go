@@ -103,3 +103,11 @@ func (userRoleService *UserRoleService) CheckManager(userID, companyID uint) (pa
 	}
 	return
 }
+
+func (userRoleService *UserRoleService) CheckTailor(userID, companyID uint) (pass bool) {
+	var userRole clothing.UserRole
+	if err := global.GVA_DB.Where("user_id = ? and company_id = ? and role_id in ?", userID, companyID, []int{enum.Tailor}).First(&userRole).Error; err == nil {
+		return true
+	}
+	return
+}

@@ -16,7 +16,7 @@ func NewAli() {
 	client, err := alipay.NewClient(global.GVA_CONFIG.Ali.AppId, global.GVA_CONFIG.Ali.PrivateKey, true)
 	if err != nil {
 		global.GVA_LOG.Sugar().Error("初始化支付宝失败", err)
-		//panic(err)
+		panic(err)
 		return
 	}
 

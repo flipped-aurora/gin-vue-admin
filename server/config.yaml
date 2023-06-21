@@ -1,8 +1,8 @@
 ali:
-  appId: ""
-  privateKey: ""
-  aliPublicKey: ""
-  payNotifyURL: ""
+  appId: "2021004101631146"
+  privateKey: MIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQClenK/wddRy6t/uiL4BKoBjrdxO6mQWBUJHEMqPJ0GEiM3HO6zP+N+Ssrfh4rD3ggOnNSrmzCUNAKrMpiffumhBGWsJreAM0zESvCozR2djuZVNHs+TgVHQFBLrEJtJhwUubgLyKPZCM9BM/If4mJTQfCD+/jYBGowQCjkywoDBBjvJR1WZibX4bR06Lm5YoPw+DZKbWDVnT9NPurZ1Ke0wewMwvSBoymLiu3E123LudWR57i3Dc7ZZtEwCrDH6mu+q/VOUFW3n43KfxiUMDLsTDJT676xN5De5eoyOJB4CbgYfbsmiXzddhxAVxq/iJy8k0kDvYjzvKWsph3JmUlhAgMBAAECggEABwMGQ7vZ/NxNew8PFkVUUtaSTVkC2VvyID2zVuHUoYI5PcebEbteT2ap7AjZR21sF/prRI5B47XEey6cqv18ttbx2/aUBfmmghbO1chDPf7lIa0kn8I8lQVTobE961QXEoXAF7e7waGO7qtd0h4MnoyHvX/6zmR5f2voj7FOzkvXtOp/seLxWdZVRQpn7KdUZJeHMlaDkqyVvWz0bVQ4OgtdBATXgBbIoP0jMDZj6LAuIYG0mZqyF4DOKKVUcLs9Byr1iG0b5gQIGR/8y6VdjAX6xqJWG0c2hyM5suwqeoTeB1h+8d0LOyBq/TpNSLqpLitCrVwIhmYZ2nS5CFSkMQKBgQDQcq0nnz8CoWPrzr2EndPxUKgETG8bAkwJz4qekdRIfcjNoKdpH/3g+v+PfwU3l+PaOp6kQ6DEDkFw+BZJnxwByyFvNZ/AczHIDUGaKDf7lixh7tzZ+o10C6OxDA3ukPASmInU+ZdSS+avO41hufSda8IpWPoeJ/yLTZVuKrrKJQKBgQDLOlo4PPKqdKdZh96asN/gWJmYPRM1B8GjMPEP35ZmMk83ACvQQCfvz4djT4ocebRZxKIHhC0vdxT/eVyQoyqfMoFVM9NOpDdfTmzK4Kl4wKR86Pc5vpAiUvVykTTrlpcPlgdqbdiHqRmaCb07ADyFdjQlO7TFMLp02LKE7wI3jQKBgQDOz1gYnZiohXNbu+ywLN7g50MrsKHzTB4hBbbkiI7ztUiLKz+tvz3l/2Ga/00v0RURqWNIWoigu/wVly6VsLTa2qy7Z5quGBxl/TD/P7P7ew1hxNl9s2awofOwbuNLtKVb7deiZFfMIN4pMY6eTR7zKLykxVCypr2bgEgn22EjuQKBgQCD0aSlZ7sLH0FRTFTyR5nfPfjai3sC4bYS8PLble5K+YTyKvVATezZmuW5X+U4lSSLOYTTlUNtzzLahtCorH0/55WGO2hrUQ7tjcP5UAH85g+LSdzaIqYA7YhxOIh36ySuomTK/tb9H40QohKQy5V2B/bI09JsOTAoDEq2+QSaHQKBgQCbzwDyKx9OSukYbwxbdlzmlN0lkYRbB1wYFjwCvawqpn5/7LSV7rIv1KzHNPJp73IVlMgP6LOnvIqFFNhreiMTe87UfOhswW7fJs1hUEYV8F8o5defqxtS8dAUHvaFS/fZ6/eR+nLlGtGBfj4O4wgksjMRMvHUzWhqZwzVUEqT4Q==
+  aliPublicKey:
+  payNotifyURL: https://api.ruiruicaikuai.com/api/ali/aliNotify
 aliyun-oss:
   endpoint: yourEndpoint
   access-key-id: yourAccessKeyId
@@ -12,7 +12,7 @@ aliyun-oss:
   base-path: yourBasePath
 autocode:
   transfer-restart: true
-  root: d:\project\gin-vue-admin
+  root: D:\project\clothing
   server: /server
   server-api: /api/v1/%s
   server-plug: /plugin/%s
@@ -93,7 +93,7 @@ hua-wei-obs:
   access-key: you-access-key
   secret-key: you-secret-key
 jwt:
-  signing-key: 307364e6-82b6-40fe-bd9e-a13303440aed
+  signing-key: b84badd0-4e04-4ee9-a914-a38116489b6a
   expires-time: 7d
   buffer-time: 1d
   issuer: qmPlus
@@ -168,9 +168,10 @@ redis:
   db: 0
   addr: 127.0.0.1:6379
   password: ""
+  prefix: ""
 system:
   env: public
-  addr: 8888
+  addr: 8889
   db-type: mysql
   oss-type: local
   use-multipoint: false
@@ -178,6 +179,7 @@ system:
   iplimit-count: 15000
   iplimit-time: 3600
   router-prefix: ""
+  host: ""
 tencent-cos:
   bucket: xxxxx-10005608
   region: ap-shanghai
@@ -203,8 +205,8 @@ txcloud:
   smsSign: ""
   smsTemplate: ""
 wechat:
-  appID: ""
-  appSecret: ""
+  appID: "wx3ae5179266ede20f"
+  appSecret: "d6bb8d192726c6e8f4ea1c2c3cc45065"
   mchID: ""
   mchCertificateSerialNumber: ""
   mchAPIv3Key: ""

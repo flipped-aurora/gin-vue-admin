@@ -49,6 +49,8 @@ func (orderApi *OrderApi) CreateOrder(c *gin.Context) {
 	order.UserID = utils.GetUserID(c)
 	order.Price = option.Price
 	order.Amount = option.Amount
+	order.Month = option.Month
+	order.ClerkCount = option.ClerkCount
 	order.Status = enum.Pending
 	order.PayStatus = enum.Pending
 	order.CreatedBy = utils.GetUserID(c)
@@ -56,7 +58,7 @@ func (orderApi *OrderApi) CreateOrder(c *gin.Context) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		response.OkWithData(order, c)
 	}
 }
 
@@ -201,8 +203,8 @@ func (orderApi *OrderApi) PayOrder(c *gin.Context) {
 		return
 	}
 	var result interface{}
-	Description := "合伙人资格"
-	Attach := "合伙人资格购买"
+	Description := "购买会员"
+	Attach := "购买会员"
 	global.GVA_LOG.Sugar().Info("支付方式：", payOrderReq.PayType)
 	switch payOrderReq.PayType {
 	case enum.WechatJSAPI:

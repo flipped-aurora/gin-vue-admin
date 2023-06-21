@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing"
 	clothingReq "github.com/flipped-aurora/gin-vue-admin/server/model/clothing/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/clothing/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/enum"
 	"gorm.io/gorm"
@@ -87,7 +88,7 @@ func (jobService *JobService) GetJobInfoList(info clothingReq.JobSearch) (list [
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&clothing.Job{})
+	db := global.GVA_DB.Model(&clothing.Job{}).Order("process_id, step")
 	var jobs []clothing.Job
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
@@ -115,6 +116,50 @@ func (jobService *JobService) GetJobInfoList(info clothingReq.JobSearch) (list [
 
 	err = db.Preload("Team").Preload("Process.Style").Preload("User").Preload("CroppingRecord.Style").Limit(limit).Offset(offset).Find(&jobs).Error
 	return jobs, total, err
+}
+
+func (jobService *JobService) GetJobList(croppingID uint, size string) (list []response.JobGroupByProcessResponse, err error) {
+	var cropping clothing.CroppingRecord
+	err = global.GVA_DB.First(&cropping, croppingID).Error
+	if err != nil {
+		return
+	}
+	process := make([]clothing.Process, 0)
+	err = global.GVA_DB.Preload("Style").Where("style_id = ?", cropping.StyleID).Find(&process).Error
+	if err != nil {
+		return
+	}
+	db := global.GVA_DB.Model(&clothing.Job{}).Order("process_id, step")
+	var jobs []clothing.Job
+	db = db.Where("cropping_id = ?", croppingID)
+	db = db.Where("size = ?", size)
+	db.Preload("Team").Preload("Process").Preload("User").Preload("CroppingRecord").Find(&jobs)
+	m := make(map[uint]response.JobGroupByProcessResponse, 0)
+	for _, j := range jobs {
+		if v, ok := m[j.ProcessID]; ok {
+			v.Jobs = append(v.Jobs, j)
+			m[j.ProcessID] = v
+		} else {
+			job := make([]clothing.Job, 0)
+			job = append(job, j)
+			m[j.ProcessID] = response.JobGroupByProcessResponse{
+				Jobs: job,
+			}
+		}
+	}
+	res := make([]response.JobGroupByProcessResponse, 0)
+	for _, c := range process {
+		if v, ok := m[c.ID]; ok {
+			v.Process = c
+			res = append(res, v)
+		} else {
+			res = append(res, response.JobGroupByProcessResponse{
+				Process: c,
+				Jobs:    make([]clothing.Job, 0),
+			})
+		}
+	}
+	return res, err
 }
 
 func (jobService *JobService) PostJob(cropping clothing.CroppingRecord, data clothingReq.JobList) error {
@@ -216,11 +261,11 @@ func (jobService *JobService) GetWagesDetail(info clothingReq.JobSearch) (list [
 		db = db.Where("job.user_id = ?", info.UserID)
 	}
 
-	db = db.Select("job.user_id,job.company_id,sum(job.real_income) as real_income").Group("user_id,company_id").Having("sum(job.real_income) >= ?", info.Coin)
+	db = db.Select("job.user_id,job.company_id,sum(job.real_income) as real_income").Group("user_id,company_id,team_id").Having("sum(job.real_income) >= ?", info.Coin)
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	err = db.Preload("User").Preload("Company").Limit(limit).Offset(offset).Find(&list).Error
+	err = db.Preload("User").Preload("Company").Preload(" Team").Limit(limit).Offset(offset).Find(&list).Error
 	return
 }

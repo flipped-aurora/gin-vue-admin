@@ -34,7 +34,7 @@ func (clothApi *ClothApi) CreateCloth(c *gin.Context) {
 		return
 	}
 	cloth.CreatedBy = utils.GetUserID(c)
-	if !userRoleService.CheckManager(utils.GetUserID(c), cloth.CompanyID) {
+	if !userRoleService.CheckTailor(utils.GetUserID(c), cloth.CompanyID) {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("权限不足", c)
 		return

@@ -115,10 +115,13 @@ func (orderService *OrderService) PaySuccess(order clothing.Order, payNo string,
 	}
 	var expirationAt time.Time
 	if order.Company.ExpirationAt.Sub(time.Now()).Seconds() < 0 {
-		expirationAt = time.Now().AddDate(0, 0, order.Day)
+		expirationAt = time.Now().AddDate(0, order.Month, 0)
 	} else {
-		expirationAt = order.Company.ExpirationAt.AddDate(0, 0, order.Day)
+		expirationAt = order.Company.ExpirationAt.AddDate(0, order.Month, 0)
 	}
-	err = global.GVA_DB.Model(&order.Company).Update("expiration_at", expirationAt.Format("2006-01-02")).Error
+	err = global.GVA_DB.Model(&order.Company).Updates(map[string]interface{}{
+		"expiration_at":     expirationAt.Format("2006-01-02"),
+		"clerk_count_limit": order.ClerkCount,
+	}).Error
 	return err
 }

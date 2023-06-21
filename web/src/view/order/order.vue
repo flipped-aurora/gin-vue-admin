@@ -68,7 +68,7 @@
             {{ filterDict(scope.row.payStatus,payStatusOptions) }}
             </template>
         </el-table-column>
-        <el-table-column align="left" label="天数" prop="day" width="120" />
+        <el-table-column align="left" label="月数" prop="month" width="120" />
         <el-table-column align="left" label="职员数量" prop="clerkCount" width="120" />
          <el-table-column align="left" label="支付时间" width="180">
             <template #default="scope">{{ formatDate(scope.row.payAt) }}</template>

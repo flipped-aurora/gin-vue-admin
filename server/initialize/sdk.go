@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"context"
+	"github.com/flipped-aurora/gin-vue-admin/server/ali"
 	"github.com/flipped-aurora/gin-vue-admin/server/douyin"
 	"github.com/flipped-aurora/gin-vue-admin/server/douyin/open/config"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -10,7 +11,7 @@ import (
 
 func InitSDK() {
 	//wechat.NewWechat()
-	//ali.NewAli()
+	ali.NewAli()
 	//NewDouyin()
 }
 

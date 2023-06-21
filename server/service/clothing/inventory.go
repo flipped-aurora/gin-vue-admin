@@ -63,6 +63,9 @@ func (inventoryService *InventoryService) GetInventoryInfoList(info clothingReq.
 	if info.CroppingRecordID != 0 {
 		db = db.Where("cropping_record_id = ?", info.CroppingRecordID)
 	}
+	if info.ProcessID != 0 {
+		db = db.Where("process_id = ?", info.ProcessID)
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

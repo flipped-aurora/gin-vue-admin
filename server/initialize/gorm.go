@@ -11,6 +11,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// Gorm 初始化数据库并产生数据库全局变量
+// Author SliverHorn
 func Gorm() *gorm.DB {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
@@ -28,10 +30,12 @@ func Gorm() *gorm.DB {
 	}
 }
 
+// RegisterTables 注册数据库表专用
+// Author SliverHorn
 func RegisterTables() {
 	db := global.GVA_DB
 	err := db.AutoMigrate(
-
+		// 系统模块表
 		system.SysApi{},
 		system.SysUser{},
 		system.SysBaseMenu{},

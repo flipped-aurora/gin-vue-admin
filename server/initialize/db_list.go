@@ -23,8 +23,6 @@ func DBList() {
 			dbMap[info.AliasName] = GormPgSqlByConfig(config.Pgsql{GeneralDB: info.GeneralDB})
 		case "oracle":
 			dbMap[info.AliasName] = GormOracleByConfig(config.Oracle{GeneralDB: info.GeneralDB})
-		case "sqlite":
-			dbMap[info.AliasName] = GormSqliteByConfig(config.Sqlite{GeneralDB: info.GeneralDB})
 		default:
 			continue
 		}

@@ -21,7 +21,7 @@
         <el-table-column align="left" label="姓名" prop="customerName" width="120" />
         <el-table-column align="left" label="电话" prop="customerPhoneData" width="120" />
         <el-table-column align="left" label="接入人ID" prop="sysUserId" width="120" />
-        <el-table-column align="left" label="按钮组" min-width="160">
+        <el-table-column align="left" label="操作" min-width="160">
           <template #default="scope">
             <el-button type="primary" link icon="edit" @click="updateCustomer(scope.row)">变更</el-button>
             <el-popover v-model="scope.row.visible" placement="top" width="160">

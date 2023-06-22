@@ -229,6 +229,7 @@ func (menuService *MenuService) UserAuthorityDefaultRouter(user *system.SysUser)
 	}
 	var am system.SysBaseMenu
 	err = global.GVA_DB.First(&am, "name = ? and id in (?)", user.Authority.DefaultRouter, menuIds).Error
+	user.Authority.DefaultRouter = am.Name
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		user.Authority.DefaultRouter = "404"
 	}

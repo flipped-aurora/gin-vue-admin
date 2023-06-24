@@ -795,11 +795,11 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 	// 创建一个新的zip文件
 
 	// 判断目录是否存在
-	_, err = os.Stat(webPath)
+	webInfo, err := os.Stat(webPath)
 	if err != nil {
 		return "", errors.New("web路径不存在")
 	}
-	_, err = os.Stat(serverPath)
+	serverInfo, err := os.Stat(serverPath)
 	if err != nil {
 		return "", errors.New("server路径不存在")
 	}
@@ -817,14 +817,33 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 	zipWriter := zip.NewWriter(zipFile)
 	defer zipWriter.Close()
 
+	// 创建一个新的文件头
+	webHeader, err := zip.FileInfoHeader(webInfo)
+	if err != nil {
+		return
+	}
+
+	// 创建一个新的文件头
+	serverHeader, err := zip.FileInfoHeader(serverInfo)
+	if err != nil {
+		return
+	}
+
+	webHeader.Name = filepath.Join(plugName, "web", "plugin")
+	serverHeader.Name = filepath.Join(plugName, "server", "plugin")
+
+	// 将文件添加到zip归档中
+	_, err = zipWriter.CreateHeader(serverHeader)
+	_, err = zipWriter.CreateHeader(webHeader)
+
 	// 遍历webPath目录并将所有非隐藏文件添加到zip归档中
 	err = filepath.Walk(webPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 
-		// 跳过隐藏文件和目录
-		if strings.HasPrefix(info.Name(), ".") || info.IsDir() {
+		// 跳过隐藏文件
+		if strings.HasPrefix(info.Name(), ".") {
 			return nil
 		}
 
@@ -842,6 +861,10 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 		writer, err := zipWriter.CreateHeader(header)
 		if err != nil {
 			return err
+		}
+
+		if info.IsDir() {
+			return nil
 		}
 
 		// 打开文件并将其内容复制到zip归档中
@@ -867,7 +890,7 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 		}
 
 		// 跳过隐藏文件和目录
-		if strings.HasPrefix(info.Name(), ".") || info.IsDir() {
+		if strings.HasPrefix(info.Name(), ".") {
 			return nil
 		}
 
@@ -884,6 +907,10 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 		writer, err := zipWriter.CreateHeader(header)
 		if err != nil {
 			return err
+		}
+
+		if info.IsDir() {
+			return nil
 		}
 
 		// 打开文件并将其内容复制到zip归档中

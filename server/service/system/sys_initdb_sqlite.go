@@ -7,9 +7,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/glebarez/sqlite"
 	"github.com/gofrs/uuid"
 	"github.com/gookit/color"
-	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"path/filepath"
 )

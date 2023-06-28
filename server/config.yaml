@@ -105,6 +105,17 @@ mssql:
   max-open-conns: 100
   log-mode: ""
   log-zap: false
+sqlite:
+  path: ""
+  port: ""
+  config: ""
+  db-name: ""
+  username: ""
+  password: ""
+  max-idle-conns: 10
+  max-open-conns: 100
+  log-mode: ""
+  log-zap: false
 db-list:
   - disable: true # 是否禁用
     type: "" # 数据库的类型,目前支持mysql、pgsql、mssql、oracle

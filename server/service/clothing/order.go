@@ -76,7 +76,7 @@ func (orderService *OrderService) GetOrderInfoList(info clothingReq.OrderSearch)
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := global.GVA_DB.Model(&clothing.Order{})
+	db := global.GVA_DB.Model(&clothing.Order{}).Order("id desc")
 	var orders []clothing.Order
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {

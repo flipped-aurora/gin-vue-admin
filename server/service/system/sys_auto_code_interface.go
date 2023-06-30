@@ -19,13 +19,14 @@ func (autoCodeService *AutoCodeService) Database(businessDB string) Database {
 			return AutoCodeMysql
 		case "pgsql":
 			return AutoCodePgsql
+		case "sqlite":
+			return AutoCodeSqlite
 		default:
 			return AutoCodeMysql
 		}
 	} else {
 		for _, info := range global.GVA_CONFIG.DBList {
 			if info.AliasName == businessDB {
-
 				switch info.Type {
 				case "mysql":
 					return AutoCodeMysql
@@ -35,6 +36,8 @@ func (autoCodeService *AutoCodeService) Database(businessDB string) Database {
 					return AutoCodePgsql
 				case "oracle":
 					return AutoCodeOracle
+				case "sqlite":
+					return AutoCodeSqlite
 				default:
 					return AutoCodeMysql
 				}

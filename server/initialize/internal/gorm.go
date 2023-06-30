@@ -29,7 +29,7 @@ func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
 		},
 		DisableForeignKeyConstraintWhenMigrating: true,
 	}
-	_default := logger.New(NewWriter(log.New(os.Stdout, "\r\n", log.LstdFlags)), logger.Config{
+	_default := logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
 		SlowThreshold: 200 * time.Millisecond,
 		LogLevel:      logger.Warn,
 		Colorful:      true,

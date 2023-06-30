@@ -15,7 +15,6 @@ type autoCodeOracle struct{}
 func (s *autoCodeOracle) GetDB(businessDB string) (data []response.Db, err error) {
 	var entities []response.Db
 	sql := `SELECT lower(username) AS "database" FROM all_users`
-
 	err = global.GVA_DBList[businessDB].Raw(sql).Scan(&entities).Error
 	return entities, err
 }

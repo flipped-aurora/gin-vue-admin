@@ -1,15 +1,22 @@
 <template>
   <div id="userLayout">
+
     <div class="login_panel">
+
+      <div class="login_panel_f">
+        <div class="oblique"></div>
+    <!-- 分割斜块 -->
       <div class="login_panel_form">
-        <div class="login_panel_form_title">
-          <img
-            class="login_panel_form_title_logo"
+        <div class="login_panel_form_title_logo">
+          <img class="login_panel_form_title_logo_img"
             :src="$GIN_VUE_ADMIN.appLogo"
             alt
-          >
-          <p class="login_panel_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
+          ></div>
+          <div class="login_panel_form_title">
+          <p class="login_panel_form_title_t">{{ $GIN_VUE_ADMIN.appName }}</p>
+          <p class="login_panel_form_title_p">A management platform using Golang and Vue</p>
         </div>
+        <div class="login_form">
         <el-form
           ref="loginForm"
           :model="loginFormData"
@@ -55,21 +62,25 @@
           <el-form-item>
             <el-button
               type="primary"
-              style="width: 46%"
               size="large"
-              @click="checkInit"
-            >前往初始化</el-button>
-            <el-button
-              type="primary"
-              size="large"
-              style="width: 46%; margin-left: 8%"
+              style="width: 100%;"
               @click="submitForm"
             >登 录</el-button>
           </el-form-item>
+          <el-form-item>
+            <el-button
+              type="primary"
+              style="width: 100%"
+              size="large"
+              @click="checkInit"
+            >前往初始化</el-button>
+
+            
+          </el-form-item>
         </el-form>
-      </div>
-      <div class="login_panel_right" />
-      <div class="login_panel_foot">
+        </div>
+        <div class="login_panel_foot">
+
         <div class="links">
           <a href="http://doc.henrongyi.top/" target="_blank">
             <img src="@/assets/docs.png" class="link-icon" alt="文档">
@@ -86,11 +97,18 @@
           <a href="https://space.bilibili.com/322210472" target="_blank">
             <img src="@/assets/video.png" class="link-icon" alt="视频站">
           </a>
+
         </div>
         <div class="copyright">
           <BottomInfo />
         </div>
       </div>
+     
+     
+      </div>
+    </div>
+
+      <div class="login_panel_right"><img class="login_panel_img" src="@/assets/login_right_banner.jpg" alt="banner"></div>
     </div>
   </div>
 </template>
@@ -205,5 +223,5 @@ const checkInit = async() => {
 </script>
 
 <style lang="scss" scoped>
-@import "@/style/newLogin.scss";
+@import "@/style/7beLogin.scss";
 </style>

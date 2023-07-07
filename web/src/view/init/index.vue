@@ -53,6 +53,9 @@
           <el-form-item label="dbPath" v-if="form.dbType === 'sqlite'">
             <el-input v-model="form.dbPath" placeholder="请输入sqlite数据库文件存放路径"></el-input>
           </el-form-item>
+          <el-form-item label="useTls">
+            <el-checkbox v-model="form.useTls" placeholder="是否开启TLS"/>
+          </el-form-item>
           <el-form-item>
             <div style="text-align: right">
               <el-button type="primary" @click="onSubmit">立即初始化</el-button>

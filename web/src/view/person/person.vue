@@ -33,28 +33,40 @@
                   </el-icon>
                   {{ userStore.userInfo.nickName }}
                 </li>
-                <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="bottom">
+                <!-- <el-tooltip class="item" effect="light" content="**" placement="bottom">
                   <li>
                     <el-icon>
                       <data-analysis />
                     </el-icon>
-                    北京反转极光科技有限公司-技术部-前端事业群
+                    **
                   </li>
-                </el-tooltip>
+                </el-tooltip> -->
+                <li>
+                  <el-icon>
+                    <data-analysis />
+                  </el-icon>
+                  未知
+                </li>
                 <li>
                   <el-icon>
                     <video-camera />
                   </el-icon>
                   中国·深圳市·南山区
                 </li>
-                <el-tooltip class="item" effect="light" content="GoLang/Python/Sdn" placement="top">
+                <!-- <el-tooltip class="item" effect="light" content="GoLang/Python/Sdn" placement="top">
                   <li>
                     <el-icon>
                       <medal />
                     </el-icon>
                     GoLang/Python/Sdn
                   </li>
-                </el-tooltip>
+                </el-tooltip> -->
+                <li>
+                  <el-icon>
+                    <medal />
+                  </el-icon>
+                  GoLang/Python/Sdn
+                </li>
               </ul>
             </div>
           </div>

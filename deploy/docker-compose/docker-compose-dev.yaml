@@ -20,7 +20,7 @@ services:
     hostname: gva-web           #可以通过容器名访问
     restart: always
     ports:
-      - '8080:8080'
+      - '28080:28080'
     depends_on:
       - server
     working_dir: /web       # 如果docker 设置了workdir 则此处不需要设置
@@ -39,7 +39,7 @@ services:
     hostname: gva-server
     restart: always
     ports:
-      - '8888:8888'
+      - '28888:28888'
     depends_on:
       - mysql
       - redis

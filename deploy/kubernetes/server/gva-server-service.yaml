@@ -14,8 +14,8 @@ spec:
     app: gva-server
     version: gva-vue3
   ports:
-    - port: 8888
+    - port: 28888
       name: http
-      targetPort: 8888
+      targetPort: 28888
   type: ClusterIP
 #  type: NodePort

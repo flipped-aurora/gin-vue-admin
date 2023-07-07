@@ -26,7 +26,7 @@ spec:
           image: registry.cn-hangzhou.aliyuncs.com/gva/server:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8888
+            - containerPort: 28888
               name: http
           volumeMounts:
             - mountPath: /go/src/github.com/flipped-aurora/gin-vue-admin/server/config.docker.yaml
@@ -46,7 +46,7 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             tcpSocket:
-              port: 8888
+              port: 28888
             timeoutSeconds: 1
           readinessProbe:
             failureThreshold: 3
@@ -54,14 +54,14 @@ spec:
             periodSeconds: 5
             successThreshold: 1
             tcpSocket:
-              port: 8888
+              port: 28888
             timeoutSeconds: 1
           startupProbe:
             failureThreshold: 40
             periodSeconds: 5
             successThreshold: 1
             tcpSocket:
-              port: 8888
+              port: 28888
             timeoutSeconds: 1
       #imagePullSecrets:
       #  - name: docker-registry

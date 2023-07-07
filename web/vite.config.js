@@ -51,7 +51,7 @@ export default ({
     },
     server: {
       // 如果使用docker-compose开发模式，设置为false
-      open: true,
+      open: false,
       port: process.env.VITE_CLI_PORT,
       proxy: {
         // 把key的路径代理到target位置
@@ -98,11 +98,11 @@ export default ({
     config.plugins.push(AutoImport({
       resolvers: [ElementPlusResolver()]
     }),
-    Components({
-      resolvers: [ElementPlusResolver({
-        importStyle: 'sass'
-      })]
-    }))
+      Components({
+        resolvers: [ElementPlusResolver({
+          importStyle: 'sass'
+        })]
+      }))
   }
   return config
 }

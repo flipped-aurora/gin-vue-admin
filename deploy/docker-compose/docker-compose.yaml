@@ -21,7 +21,7 @@ services:
     container_name: gva-web
     restart: always
     ports:
-      - '8080:8080'
+      - '28080:28080'
     depends_on:
       - server
     command: [ 'nginx-debug', '-g', 'daemon off;' ]
@@ -36,7 +36,7 @@ services:
     container_name: gva-server
     restart: always
     ports:
-      - '8888:8888'
+      - '28888:28888'
     depends_on:
       - mysql
       - redis

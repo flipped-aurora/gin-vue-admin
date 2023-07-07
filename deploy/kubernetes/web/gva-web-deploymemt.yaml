@@ -26,11 +26,11 @@ spec:
           image: registry.cn-hangzhou.aliyuncs.com/gva/web:latest
           imagePullPolicy: Always
           ports:
-            - containerPort: 8080
+            - containerPort: 28080
               name: http
           readinessProbe:
             tcpSocket:
-              port: 8080
+              port: 28080
             initialDelaySeconds: 10
             periodSeconds: 10
             successThreshold: 1

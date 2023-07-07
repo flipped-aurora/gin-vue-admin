@@ -14,8 +14,8 @@ spec:
   type: ClusterIP
   ports:
     - name: http
-      port: 8080
-      targetPort: 8080
+      port: 28080
+      targetPort: 28080
   selector:
     app: gva-web
     version: gva-vue3

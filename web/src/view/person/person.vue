@@ -33,12 +33,7 @@
                   </el-icon>
                   {{ userStore.userInfo.nickName }}
                 </li>
-                <el-tooltip
-                  class="item"
-                  effect="light"
-                  content="北京反转极光科技有限公司-技术部-前端事业群"
-                  placement="top"
-                >
+                <el-tooltip class="item" effect="light" content="北京反转极光科技有限公司-技术部-前端事业群" placement="bottom">
                   <li>
                     <el-icon>
                       <data-analysis />
@@ -50,19 +45,14 @@
                   <el-icon>
                     <video-camera />
                   </el-icon>
-                  中国·北京市·朝阳区
+                  中国·深圳市·南山区
                 </li>
-                <el-tooltip
-                  class="item"
-                  effect="light"
-                  content="GoLang/JavaScript/Vue/Gorm"
-                  placement="top"
-                >
+                <el-tooltip class="item" effect="light" content="GoLang/Python/Sdn" placement="top">
                   <li>
                     <el-icon>
                       <medal />
                     </el-icon>
-                    GoLang/JavaScript/Vue/Gorm
+                    GoLang/Python/Sdn
                   </li>
                 </el-tooltip>
               </ul>
@@ -100,10 +90,7 @@
                   <p class="title">修改密码</p>
                   <p class="desc">
                     修改个人密码
-                    <a
-                      href="javascript:void(0)"
-                      @click="showPassword = true"
-                    >修改密码</a>
+                    <a href="javascript:void(0)" @click="showPassword = true">修改密码</a>
                   </p>
                 </li>
               </ul>
@@ -113,18 +100,8 @@
       </el-col>
     </el-row>
 
-    <el-dialog
-      v-model="showPassword"
-      title="修改密码"
-      width="360px"
-      @close="clearPassword"
-    >
-      <el-form
-        ref="modifyPwdForm"
-        :model="pwdModify"
-        :rules="rules"
-        label-width="80px"
-      >
+    <el-dialog v-model="showPassword" title="修改密码" width="360px" @close="clearPassword">
+      <el-form ref="modifyPwdForm" :model="pwdModify" :rules="rules" label-width="80px">
         <el-form-item :minlength="6" label="原密码" prop="password">
           <el-input v-model="pwdModify.password" show-password />
         </el-form-item>
@@ -137,15 +114,8 @@
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button
-
-            @click="showPassword = false"
-          >取 消</el-button>
-          <el-button
-
-            type="primary"
-            @click="savePassword"
-          >确 定</el-button>
+          <el-button @click="showPassword = false">取 消</el-button>
+          <el-button type="primary" @click="savePassword">确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -158,21 +128,15 @@
         <el-form-item label="验证码" label-width="120px">
           <div class="code-box">
             <el-input v-model="phoneForm.code" autocomplete="off" placeholder="请自行设计短信服务，此处为模拟随便写" style="width:300px" />
-            <el-button type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-button type="primary" :disabled="time > 0" @click="getCode">{{ time > 0 ? `(${time}s)后重新获取` : '获取验证码'
+            }}</el-button>
           </div>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button
-
-            @click="closeChangePhone"
-          >取消</el-button>
-          <el-button
-            type="primary"
-
-            @click="changePhone"
-          >更改</el-button>
+          <el-button @click="closeChangePhone">取消</el-button>
+          <el-button type="primary" @click="changePhone">更改</el-button>
         </span>
       </template>
     </el-dialog>
@@ -185,21 +149,15 @@
         <el-form-item label="验证码" label-width="120px">
           <div class="code-box">
             <el-input v-model="emailForm.code" placeholder="请自行设计邮件服务，此处为模拟随便写" autocomplete="off" style="width:300px" />
-            <el-button type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-button type="primary" :disabled="emailTime > 0" @click="getEmailCode">{{
+              emailTime > 0 ? `(${emailTime}s)后重新获取` : '获取验证码' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button
-
-            @click="closeChangeEmail"
-          >取消</el-button>
-          <el-button
-            type="primary"
-
-            @click="changeEmail"
-          >更改</el-button>
+          <el-button @click="closeChangeEmail">取消</el-button>
+          <el-button type="primary" @click="changeEmail">更改</el-button>
         </span>
       </template>
     </el-dialog>
@@ -251,7 +209,7 @@ const showPassword = ref(false)
 const pwdModify = ref({})
 const nickName = ref('')
 const editFlag = ref(false)
-const savePassword = async() => {
+const savePassword = async () => {
   modifyPwdForm.value.validate((valid) => {
     if (valid) {
       changePassword({
@@ -278,7 +236,7 @@ const clearPassword = () => {
   modifyPwdForm.value.clearValidate()
 }
 
-watch(() => userStore.userInfo.headerImg, async(val) => {
+watch(() => userStore.userInfo.headerImg, async (val) => {
   const res = await setSelfInfo({ headerImg: val })
   if (res.code === 0) {
     userStore.ResetUserInfo({ headerImg: val })
@@ -299,7 +257,7 @@ const closeEdit = () => {
   editFlag.value = false
 }
 
-const enterEdit = async() => {
+const enterEdit = async () => {
   const res = await setSelfInfo({
     nickName: nickName.value
   })
@@ -325,7 +283,7 @@ const phoneForm = reactive({
   code: ''
 })
 
-const getCode = async() => {
+const getCode = async () => {
   time.value = 60
   let timer = setInterval(() => {
     time.value--
@@ -342,7 +300,7 @@ const closeChangePhone = () => {
   phoneForm.code = ''
 }
 
-const changePhone = async() => {
+const changePhone = async () => {
   const res = await setSelfInfo({ phone: phoneForm.phone })
   if (res.code === 0) {
     ElMessage.success('修改成功')
@@ -358,7 +316,7 @@ const emailForm = reactive({
   code: ''
 })
 
-const getEmailCode = async() => {
+const getEmailCode = async () => {
   emailTime.value = 60
   let timer = setInterval(() => {
     emailTime.value--
@@ -375,7 +333,7 @@ const closeChangeEmail = () => {
   emailForm.code = ''
 }
 
-const changeEmail = async() => {
+const changeEmail = async () => {
   const res = await setSelfInfo({ email: emailForm.email })
   if (res.code === 0) {
     ElMessage.success('修改成功')
@@ -394,9 +352,11 @@ const changeEmail = async() => {
   position: relative;
   overflow: hidden;
 }
+
 .avatar-uploader .el-upload:hover {
   border-color: #409eff;
 }
+
 .avatar-uploader-icon {
   font-size: 28px;
   color: #8c939d;
@@ -405,15 +365,18 @@ const changeEmail = async() => {
   line-height: 178px;
   text-align: center;
 }
+
 .avatar {
   width: 178px;
   height: 178px;
   display: block;
 }
+
 .avatar-box {
   box-shadow: -2px 0 20px -16px;
   width: 80%;
   height: 100%;
+
   .user-card {
     min-height: calc(90vh - 200px);
     padding: 30px 20px;
@@ -421,43 +384,53 @@ const changeEmail = async() => {
     background-color: #fff;
     border-radius: 8px;
     flex-shrink: 0;
+
     .el-avatar {
       border-radius: 50%;
     }
+
     .user-personality {
       padding: 24px 0;
       text-align: center;
+
       p {
         font-size: 16px;
       }
+
       .nickName {
         display: flex;
         justify-content: center;
         align-items: center;
         font-size: 26px;
       }
+
       .person-info {
         margin-top: 6px;
         font-size: 14px;
         color: #999;
       }
     }
+
     .user-information {
       width: 100%;
       height: 100%;
       text-align: left;
+
       ul {
         display: inline-block;
         height: 100%;
         width: 100%;
+
         li {
           width: 100%;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+
           i {
             margin-right: 8px;
           }
+
           padding: 20px 0;
           font-size: 16px;
           font-weight: 400;
@@ -467,10 +440,12 @@ const changeEmail = async() => {
     }
   }
 }
+
 .user-addcount {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
+
   ul {
     li {
       .title {
@@ -478,22 +453,27 @@ const changeEmail = async() => {
         font-size: 18px;
         color: #696969;
       }
+
       .desc {
         font-size: 16px;
         padding: 0 10px 20px 10px;
         color: #a9a9a9;
+
         a {
           color: rgb(64, 158, 255);
           float: right;
         }
       }
+
       border-bottom: 2px solid #f0f2f5;
-      &:last-child{
+
+      &:last-child {
         border-bottom: none;
       }
     }
   }
 }
+
 .user-headpic-update {
   width: 120px;
   height: 120px;
@@ -502,24 +482,22 @@ const changeEmail = async() => {
   display: flex;
   justify-content: center;
   border-radius: 20px;
+
   &:hover {
     color: #fff;
-    background: linear-gradient(
-        to bottom,
+    background: linear-gradient(to bottom,
         rgba(255, 255, 255, 0.15) 0%,
-        rgba(0, 0, 0, 0.15) 100%
-      ),
-      radial-gradient(
-          at top center,
-          rgba(255, 255, 255, 0.4) 0%,
-          rgba(0, 0, 0, 0.4) 120%
-        )
-        #989898;
+        rgba(0, 0, 0, 0.15) 100%),
+      radial-gradient(at top center,
+        rgba(255, 255, 255, 0.4) 0%,
+        rgba(0, 0, 0, 0.4) 120%) #989898;
     background-blend-mode: multiply, multiply;
+
     .update {
       color: #fff;
     }
   }
+
   .update {
     height: 120px;
     width: 120px;
@@ -527,14 +505,17 @@ const changeEmail = async() => {
     color: transparent;
   }
 }
+
 .pointer {
   cursor: pointer;
 }
-.code-box{
+
+.code-box {
   display: flex;
   justify-content: space-between;
 }
-.header-box{
+
+.header-box {
   display: flex;
   justify-content: center;
 }

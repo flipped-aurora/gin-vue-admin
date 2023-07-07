@@ -414,6 +414,8 @@ definitions:
         $ref: '#/definitions/config.Qiniu'
       redis:
         $ref: '#/definitions/config.Redis'
+      sqlite:
+        $ref: '#/definitions/config.Sqlite'
       system:
         $ref: '#/definitions/config.System'
       tencent-cos:
@@ -468,6 +470,49 @@ definitions:
         type: boolean
       type:
         type: string
+      username:
+        description: 数据库用户名
+        type: string
+    type: object
+  config.Sqlite:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        description: 服务器地址:端口
+        type: string
+      port:
+        description: :端口
+        type: string
+      prefix:
+        description: 全局表前缀，单独定义TableName则不生效
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
       username:
         description: 数据库用户名
         type: string
@@ -744,6 +789,9 @@ definitions:
       dbName:
         description: 数据库名
         type: string
+      dbPath:
+        description: sqlite数据库文件路径
+        type: string
       dbType:
         description: 数据库类型
         type: string
@@ -761,7 +809,6 @@ definitions:
         type: string
     required:
     - dbName
-    - userName
     type: object
   request.Login:
     properties:
@@ -2034,32 +2081,32 @@ paths:
   /autoCode/createPlug:
     post:
       consumes:
-      - multipart/form-data
+      - application/json
       parameters:
-      - description: this is a test file
-        in: formData
-        name: plug
+      - description: 创建插件模板
+        in: body
+        name: data
         required: true
-        type: file
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
       produces:
       - application/json
       responses:
         "200":
-          description: 安装插件成功
+          description: 创建插件模板成功
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items:
-                    type: object
-                  type: array
+                  additionalProperties: true
+                  type: object
                 msg:
                   type: string
               type: object
       security:
       - ApiKeyAuth: []
-      summary: 安装插件
+      summary: 创建插件模板
       tags:
       - AutoCode
   /autoCode/createTemp:
@@ -2301,6 +2348,37 @@ paths:
       summary: 获取当前数据库所有表
       tags:
       - AutoCode
+  /autoCode/installPlugin:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: this is a test file
+        in: formData
+        name: plug
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 安装插件成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    type: object
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 安装插件
+      tags:
+      - AutoCode
   /autoCode/preview:
     post:
       consumes:
@@ -2330,6 +2408,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 预览创建后的代码
+      tags:
+      - AutoCode
+  /autoCode/pubPlug:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 打包插件
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 打包插件成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 打包插件
       tags:
       - AutoCode
   /autoCode/rollback:

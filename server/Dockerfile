@@ -20,5 +20,5 @@ COPY --from=0 /go/src/github.com/flipped-aurora/gin-vue-admin/server/server ./
 COPY --from=0 /go/src/github.com/flipped-aurora/gin-vue-admin/server/resource ./resource/
 COPY --from=0 /go/src/github.com/flipped-aurora/gin-vue-admin/server/config.docker.yaml ./
 
-EXPOSE 8888
+EXPOSE 28888
 ENTRYPOINT ./server -c config.docker.yaml

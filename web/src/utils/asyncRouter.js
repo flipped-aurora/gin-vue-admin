@@ -9,8 +9,6 @@ export const asyncRouterHandle = (asyncRouter) => {
       } else if (item.component.split('/')[0] === 'plugin') {
         item.component = dynamicImport(pluginModules, item.component)
       }
-    } else {
-      delete item['component']
     }
     if (item.children) {
       asyncRouterHandle(item.children)

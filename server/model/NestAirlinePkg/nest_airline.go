@@ -8,7 +8,7 @@ import (
 // NestAirline 结构体
 type NestAirline struct {
 	global.GVA_MODEL
-	Missionid             string `json:"missionid" form:"missionid" gorm:"column:missionid;comment:;"`
+	Missionid             string `json:"missionid" form:"missionid" gorm:"primary_key;column:missionid;comment:;"`
 	Name                  string `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Type                  string `json:"type" form:"type" gorm:"column:type;comment:;"`
 	AutoFlightSpeed       *int   `json:"autoFlightSpeed" form:"autoFlightSpeed" gorm:"column:auto_flight_speed;comment:;"`

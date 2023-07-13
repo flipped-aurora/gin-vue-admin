@@ -1,6 +1,7 @@
 package NestAirlinePkg
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg"
@@ -66,8 +67,11 @@ func (NtAirlineApi *NestAirlineApi) CreateNestAirlineByParam(c *gin.Context) {
 			code := paramObj["code"].(float64)
 			if code == 10003 {
 				if _, ok := paramObj["param"]; ok {
-					NtAirline.Param = fmt.Sprintf("%v", paramObj["param"])
 					paramJson := paramObj["param"].(map[string]interface{})
+					paramJsonStr, BindJSONErr := json.Marshal(paramObj)
+					if BindJSONErr == nil {
+						NtAirline.Param = fmt.Sprintf("%v", string(paramJsonStr))
+					}
 					if _, ok := paramJson["missionID"]; ok {
 						NtAirline.Missionid = paramJson["missionID"].(string)
 					}
@@ -106,13 +110,30 @@ func (NtAirlineApi *NestAirlineApi) CreateNestAirlineByParam(c *gin.Context) {
 
 			}
 		}
+	} else {
+		response.FailWithMessage("缺少param参数", c)
+		return
 	}
 	NtAirline.CreatedBy = utils.GetUserID(c)
-	if err := NtAirlineService.CreateNestAirline(&NtAirline); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
-	} else {
-		response.OkWithMessage("创建成功", c)
+	if NtAirline.Missionid != "" {
+		res, qyrErr := NtAirlineService.GetNestAirlineBymissionId(NtAirline.Missionid)
+		if qyrErr != nil {
+			if err := NtAirlineService.CreateNestAirline(&NtAirline); err != nil {
+				global.GVA_LOG.Error("创建失败!", zap.Error(err))
+				response.FailWithMessage("创建失败", c)
+			} else {
+				response.OkWithMessage("创建成功", c)
+			}
+		} else {
+			//missionid重复,做更新操作
+			NtAirline.ID = res.ID
+			if err := NtAirlineService.UpdateNestAirline(NtAirline); err != nil {
+				global.GVA_LOG.Error("更新失败!", zap.Error(err))
+				response.FailWithMessage("更新失败", c)
+			} else {
+				response.OkWithMessage("更新成功", c)
+			}
+		}
 	}
 }
 

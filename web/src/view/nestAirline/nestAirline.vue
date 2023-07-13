@@ -55,7 +55,7 @@
         <el-table-column align="left" label="结束模式" prop="finishAction" width="120" />
         <el-table-column align="left" label="路径模式" prop="flightPathMode" width="120" />
         <el-table-column align="left" label="朝向模式" prop="headingMode" width="120" />
-        <el-table-column align="left" label="参数json体" prop="param" width="120" />
+        <!-- <el-table-column align="left" label="param" prop="param" width="120" /> -->
         <el-table-column align="left" label="安全" prop="safealt" width="120" />
         <el-table-column align="left" label="kml" prop="kml" width="120" />
         <el-table-column align="left" label="gps" prop="gps" width="120" />

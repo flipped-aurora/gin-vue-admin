@@ -11,12 +11,12 @@ type NestAirline struct {
 	Missionid             string `json:"missionid" form:"missionid" gorm:"column:missionid;comment:;"`
 	Name                  string `json:"name" form:"name" gorm:"column:name;comment:;"`
 	Type                  string `json:"type" form:"type" gorm:"column:type;comment:;"`
-	AutoFlightSpeed       string `json:"autoFlightSpeed" form:"autoFlightSpeed" gorm:"column:auto_flight_speed;comment:;"`
+	AutoFlightSpeed       *int   `json:"autoFlightSpeed" form:"autoFlightSpeed" gorm:"column:auto_flight_speed;comment:;"`
 	GotoFirstWaypointMode *int   `json:"gotoFirstWaypointMode" form:"gotoFirstWaypointMode" gorm:"column:goto_first_waypoint_mode;comment:;"`
-	FinishAction          string `json:"finishAction" form:"finishAction" gorm:"column:finish_action;comment:;"`
+	FinishAction          *int   `json:"finishAction" form:"finishAction" gorm:"column:finish_action;comment:;"`
 	FlightPathMode        *int   `json:"flightPathMode" form:"flightPathMode" gorm:"column:flight_path_mode;comment:;"`
 	HeadingMode           *int   `json:"headingMode" form:"headingMode" gorm:"column:heading_mode;comment:;"`
-	Param                 string `json:"param" form:"param" gorm:"column:param;comment:;"`
+	Param                 string `json:"param" form:"param" gorm:"column:param;comment:;type:longtext"`
 	Safealt               string `json:"safealt" form:"safealt" gorm:"column:safealt;comment:;"`
 	Kml                   string `json:"kml" form:"kml" gorm:"column:kml;comment:;"`
 	Gps                   string `json:"gps" form:"gps" gorm:"column:gps;comment:;"`

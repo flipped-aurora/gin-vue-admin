@@ -7,6 +7,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/NestExecRecordPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestInfo"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg"
 	"go.uber.org/zap"
@@ -52,7 +54,7 @@ func RegisterTables() {
 		example.ExaFile{},
 		example.ExaCustomer{},
 		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{}, NestInfo.NestInfo{}, Nestrolepkg.NestRole{},
+		example.ExaFileUploadAndDownload{}, NestInfo.NestInfo{}, Nestrolepkg.NestRole{}, NestAirlinePkg.NestAirline{}, NestExecRecordPkg.NestExecRecord{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))

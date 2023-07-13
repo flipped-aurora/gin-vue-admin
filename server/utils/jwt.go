@@ -27,6 +27,12 @@ func NewJWT() *JWT {
 	}
 }
 
+func NewTLJWT() *JWT {
+	return &JWT{
+		[]byte(global.GVA_CONFIG.TLJWT.SigningKey),
+	}
+}
+
 func (j *JWT) CreateClaims(baseClaims request.BaseClaims) request.CustomClaims {
 	bf, _ := ParseDuration(global.GVA_CONFIG.JWT.BufferTime)
 	ep, _ := ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)

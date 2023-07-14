@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/router/FlyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/NestAirlinePkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/NestExecRecordPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/NestInfo"
@@ -16,6 +17,7 @@ type RouterGroup struct {
 	Nestrolepkg       nestrolepkg.RouterGroup
 	NestAirlinePkg    NestAirlinePkg.RouterGroup
 	NestExecRecordPkg NestExecRecordPkg.RouterGroup
+	FlyResultPkg      FlyResultPkg.RouterGroup
 }
 
 var RouterGroupApp = new(RouterGroup)

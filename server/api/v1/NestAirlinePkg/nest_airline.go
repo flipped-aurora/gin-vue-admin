@@ -1,8 +1,6 @@
 package NestAirlinePkg
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg"
 	NestAirlinePkgReq "github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg/request"
@@ -41,99 +39,6 @@ func (NtAirlineApi *NestAirlineApi) CreateNestAirline(c *gin.Context) {
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
-	}
-}
-
-// CreateNestAirlineByParam 创建NestExecRecord
-// @Tags NestAirline
-// @Summary 创建NestAirline
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body NestAirlinePkg.NestAirline true "创建NestAirline"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
-// @Router /NtAirline/createNestAirline [post]
-func (NtAirlineApi *NestAirlineApi) CreateNestAirlineByParam(c *gin.Context) {
-	paramInterface := make(map[string]interface{})
-	BindJSONErr := c.ShouldBindJSON(&paramInterface)
-	var NtAirline NestAirlinePkg.NestAirline
-	if BindJSONErr != nil {
-		response.FailWithMessage(BindJSONErr.Error(), c)
-		return
-	}
-	if _, ok := paramInterface["param"]; ok {
-		paramObj := paramInterface["param"].(map[string]interface{})
-		if _, ok := paramObj["code"]; ok {
-			code := paramObj["code"].(float64)
-			if code == 10003 {
-				if _, ok := paramObj["param"]; ok {
-					paramJson := paramObj["param"].(map[string]interface{})
-					paramJsonStr, BindJSONErr := json.Marshal(paramObj)
-					if BindJSONErr == nil {
-						NtAirline.Param = fmt.Sprintf("%v", string(paramJsonStr))
-					}
-					if _, ok := paramJson["missionID"]; ok {
-						NtAirline.Missionid = paramJson["missionID"].(string)
-					}
-					if _, ok := paramJson["name"]; ok {
-						NtAirline.Name = paramJson["name"].(string)
-					}
-					if _, ok := paramJson["autoFlightSpeed"]; ok {
-						autoFlightSpeedf := paramJson["autoFlightSpeed"].(float64)
-						i := int(autoFlightSpeedf)
-						NtAirline.AutoFlightSpeed = &i
-					}
-					if _, ok := paramJson["gotoFirstWaypointMode"]; ok {
-						gotoFirstWaypointModef := paramJson["gotoFirstWaypointMode"].(float64)
-						i := int(gotoFirstWaypointModef)
-						NtAirline.GotoFirstWaypointMode = &i
-					}
-					if _, ok := paramJson["finishAction"]; ok {
-						finishActionf := paramJson["finishAction"].(float64)
-						i := int(finishActionf)
-						NtAirline.FinishAction = &i
-					}
-					if _, ok := paramJson["headingMode"]; ok {
-						headingModef := paramJson["headingMode"].(float64)
-						i := int(headingModef)
-						NtAirline.HeadingMode = &i
-					}
-					if _, ok := paramJson["flightPathMode"]; ok {
-						flightPathModef := paramJson["flightPathMode"].(float64)
-						i := int(flightPathModef)
-						NtAirline.FlightPathMode = &i
-					}
-					if _, ok := paramJson["clearHomeLocation"]; ok {
-						NtAirline.ClearHomeLocation = paramJson["clearHomeLocation"].(string)
-					}
-				}
-
-			}
-		}
-	} else {
-		response.FailWithMessage("缺少param参数", c)
-		return
-	}
-	NtAirline.CreatedBy = utils.GetUserID(c)
-	if NtAirline.Missionid != "" {
-		res, qyrErr := NtAirlineService.GetNestAirlineBymissionId(NtAirline.Missionid)
-		if qyrErr != nil {
-			if err := NtAirlineService.CreateNestAirline(&NtAirline); err != nil {
-				global.GVA_LOG.Error("创建失败!", zap.Error(err))
-				response.FailWithMessage("创建失败", c)
-			} else {
-				response.OkWithMessage("创建成功", c)
-			}
-		} else {
-			//missionid重复,做更新操作
-			NtAirline.ID = res.ID
-			if err := NtAirlineService.UpdateNestAirline(NtAirline); err != nil {
-				global.GVA_LOG.Error("更新失败!", zap.Error(err))
-				response.FailWithMessage("更新失败", c)
-			} else {
-				response.OkWithMessage("更新成功", c)
-			}
-		}
 	}
 }
 

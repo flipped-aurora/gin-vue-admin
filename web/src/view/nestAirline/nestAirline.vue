@@ -55,7 +55,7 @@
         <el-table-column align="left" label="结束模式" prop="finishAction" width="120" />
         <el-table-column align="left" label="路径模式" prop="flightPathMode" width="120" />
         <el-table-column align="left" label="朝向模式" prop="headingMode" width="120" />
-        <!-- <el-table-column align="left" label="param" prop="param" width="120" /> -->
+        <el-table-column align="left" label="参数json体" prop="param" width="120" />
         <el-table-column align="left" label="安全" prop="safealt" width="120" />
         <el-table-column align="left" label="kml" prop="kml" width="120" />
         <el-table-column align="left" label="gps" prop="gps" width="120" />
@@ -65,6 +65,8 @@
         <el-table-column align="left" label="制作单位" prop="productionUnit" width="120" />
         <el-table-column align="left" label="isactive" prop="isActive" width="120" />
         <el-table-column align="left" label="固定返航点" prop="fixedReturnPoint" width="120" />
+        <el-table-column align="left" label="机巢id" prop="nestId" width="120" />
+        <el-table-column align="left" label="备注" prop="remark" width="120" />
         <el-table-column align="left" label="操作">
             <template #default="scope">
             <el-button type="primary" link icon="edit" class="table-button" @click="updateNestAirlineFunc(scope.row)">变更</el-button>
@@ -96,13 +98,13 @@
           <el-input v-model="formData.type" :clearable="true"  placeholder="请输入" />
         </el-form-item>
         <el-form-item label="自动飞行速度:"  prop="autoFlightSpeed" >
-          <el-input v-model="formData.autoFlightSpeed" :clearable="true"  placeholder="请输入" />
+          <el-input v-model.number="formData.autoFlightSpeed" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="起飞模式:"  prop="gotoFirstWaypointMode" >
           <el-input v-model.number="formData.gotoFirstWaypointMode" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="结束模式:"  prop="finishAction" >
-          <el-input v-model="formData.finishAction" :clearable="true"  placeholder="请输入" />
+          <el-input v-model.number="formData.finishAction" :clearable="true" placeholder="请输入" />
         </el-form-item>
         <el-form-item label="路径模式:"  prop="flightPathMode" >
           <el-input v-model.number="formData.flightPathMode" :clearable="true" placeholder="请输入" />
@@ -110,7 +112,7 @@
         <el-form-item label="朝向模式:"  prop="headingMode" >
           <el-input v-model.number="formData.headingMode" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="param:"  prop="param" >
+        <el-form-item label="参数json体:"  prop="param" >
           <el-input v-model="formData.param" :clearable="true"  placeholder="请输入" />
         </el-form-item>
         <el-form-item label="安全:"  prop="safealt" >
@@ -139,6 +141,12 @@
         </el-form-item>
         <el-form-item label="固定返航点:"  prop="fixedReturnPoint" >
           <el-input v-model="formData.fixedReturnPoint" :clearable="true"  placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="机巢id:"  prop="nestId" >
+          <el-input v-model="formData.nestId" :clearable="true"  placeholder="请输入" />
+        </el-form-item>
+        <el-form-item label="备注:"  prop="remark" >
+          <el-input v-model="formData.remark" :clearable="true"  placeholder="请输入" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -192,6 +200,8 @@ const formData = ref({
         productionUnit: '',
         isActive: '',
         fixedReturnPoint: '',
+        nestId: '',
+        remark: '',
         })
 
 // 验证规则
@@ -385,6 +395,8 @@ const closeDialog = () => {
         productionUnit: '',
         isActive: '',
         fixedReturnPoint: '',
+        nestId: '',
+        remark: '',
         }
 }
 // 弹窗确定

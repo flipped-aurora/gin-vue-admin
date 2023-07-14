@@ -12,13 +12,13 @@
           <el-input v-model="formData.type" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="自动飞行速度:" prop="autoFlightSpeed">
-          <el-input v-model="formData.autoFlightSpeed" :clearable="true" placeholder="请输入" />
+          <el-input v-model.number="formData.autoFlightSpeed" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="起飞模式:" prop="gotoFirstWaypointMode">
           <el-input v-model.number="formData.gotoFirstWaypointMode" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="结束模式:" prop="finishAction">
-          <el-input v-model="formData.finishAction" :clearable="true" placeholder="请输入" />
+          <el-input v-model.number="formData.finishAction" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="路径模式:" prop="flightPathMode">
           <el-input v-model.number="formData.flightPathMode" :clearable="true" placeholder="请输入" />
@@ -26,7 +26,7 @@
         <el-form-item label="朝向模式:" prop="headingMode">
           <el-input v-model.number="formData.headingMode" :clearable="true" placeholder="请输入" />
        </el-form-item>
-        <el-form-item label="param:" prop="param">
+        <el-form-item label="参数json体:" prop="param">
           <el-input v-model="formData.param" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="安全:" prop="safealt">
@@ -55,6 +55,12 @@
        </el-form-item>
         <el-form-item label="固定返航点:" prop="fixedReturnPoint">
           <el-input v-model="formData.fixedReturnPoint" :clearable="true" placeholder="请输入" />
+       </el-form-item>
+        <el-form-item label="机巢id:" prop="nestId">
+          <el-input v-model="formData.nestId" :clearable="true" placeholder="请输入" />
+       </el-form-item>
+        <el-form-item label="备注:" prop="remark">
+          <el-input v-model="formData.remark" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="save">保存</el-button>
@@ -106,6 +112,8 @@ const formData = ref({
             productionUnit: '',
             isActive: '',
             fixedReturnPoint: '',
+            nestId: '',
+            remark: '',
         })
 // 验证规则
 const rule = reactive({

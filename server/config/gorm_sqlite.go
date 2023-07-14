@@ -1,11 +1,15 @@
 package config
 
+import (
+	"path/filepath"
+)
+
 type Sqlite struct {
 	GeneralDB `yaml:",inline" mapstructure:",squash"`
 }
 
 func (s *Sqlite) Dsn() string {
-	return s.Path + "\\" + s.Dbname + ".db"
+	return filepath.Join(s.Path, s.Dbname+".db")
 }
 
 func (s *Sqlite) GetLogMode() string {

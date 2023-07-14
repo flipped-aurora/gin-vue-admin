@@ -9,7 +9,7 @@
       <img v-else :src="noAvatar" class="avatar">
     </template>
     <template v-if="picType === 'file'">
-      <img :src="file" class="file">
+      <el-image :src="file" class="file" :preview-src-list="previewSrcList" :preview-teleported="true"/>
     </template>
   </span>
 </template>
@@ -34,6 +34,10 @@ const props = defineProps({
     type: String,
     required: false,
     default: ''
+  },
+  preview: {
+    type: Boolean,
+    default: false
   }
 })
 
@@ -61,6 +65,7 @@ const file = computed(() => {
   }
   return props.picSrc
 })
+const previewSrcList = computed(() => props.preview ? [file.value] : [])
 
 </script>
 

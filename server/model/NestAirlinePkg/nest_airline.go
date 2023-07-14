@@ -10,7 +10,7 @@ type NestAirline struct {
 	global.GVA_MODEL
 	Missionid             string `json:"missionid" form:"missionid" gorm:"column:missionid;comment:;"`
 	Name                  string `json:"name" form:"name" gorm:"column:name;comment:;"`
-	Type                  string `json:"type" form:"type" gorm:"column:type;comment:;"`
+	Type                  *int   `json:"type" form:"type" gorm:"column:type;comment:;"`
 	AutoFlightSpeed       *int   `json:"autoFlightSpeed" form:"autoFlightSpeed" gorm:"column:auto_flight_speed;comment:;"`
 	GotoFirstWaypointMode *int   `json:"gotoFirstWaypointMode" form:"gotoFirstWaypointMode" gorm:"column:goto_first_waypoint_mode;comment:;"`
 	FinishAction          *int   `json:"finishAction" form:"finishAction" gorm:"column:finish_action;comment:;"`

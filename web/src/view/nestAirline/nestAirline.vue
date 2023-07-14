@@ -184,7 +184,7 @@ import { ref, reactive } from 'vue'
 const formData = ref({
         missionid: '',
         name: '',
-        type: '',
+        type: 0,
         autoFlightSpeed: 0,
         gotoFirstWaypointMode: 0,
         finishAction: 0,
@@ -379,7 +379,7 @@ const closeDialog = () => {
     formData.value = {
         missionid: '',
         name: '',
-        type: '',
+        type: 0,
         autoFlightSpeed: 0,
         gotoFirstWaypointMode: 0,
         finishAction: 0,

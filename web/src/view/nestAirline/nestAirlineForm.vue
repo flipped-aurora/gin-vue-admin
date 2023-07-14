@@ -96,7 +96,7 @@ const type = ref('')
 const formData = ref({
             missionid: '',
             name: '',
-            type: '',
+            type: 0,
             autoFlightSpeed: 0,
             gotoFirstWaypointMode: 0,
             finishAction: 0,

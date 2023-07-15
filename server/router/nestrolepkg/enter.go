@@ -1,4 +1,4 @@
-package nestrolepkg
+package Nestrolepkg
 
 type RouterGroup struct {
 	NestRoleRouter

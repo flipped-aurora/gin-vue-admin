@@ -1,13 +1,11 @@
 package Nestrolepkg
 
 import (
-	"fmt"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg"
+	nestrolepkgReq "github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	nestrolepkgReq "github.com/flipped-aurora/gin-vue-admin/server/model/nestrolepkg/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
@@ -175,20 +173,24 @@ func (nestroleApi *NestRoleApi) GetNestRoleList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	user, err := utils.GetClaims(c)
+	userClaims, err := utils.GetClaims(c)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
-		response.FailWithMessage("获取失败", c)
+		global.GVA_LOG.Error("获取userClaims失败!", zap.Error(err))
+		response.FailWithMessage("获取userClaims失败", c)
+		return
 	}
+	user, err := service.ServiceGroupApp.SystemServiceGroup.UserService.FindUserByIdWithAuth(int(userClaims.BaseClaims.ID))
+	if err != nil {
+		global.GVA_LOG.Error("获取user失败!", zap.Error(err))
+		response.FailWithMessage("获取user失败", c)
+		return
+	}
+	var authIDs []uint
+	for _, item := range user.Authorities {
+		authIDs = append(authIDs, item.AuthorityId)
+	}
+	pageInfo.AuthID = authIDs
 
-	if user.AuthorityId != 888 {
-		// var authority []system.SysAuthority
-		// err = db.Where("authority_id = ?", user.AuthorityId).Find(&authority).Error
-		// for k := range authority {
-		// 	err = authorityService.findChildrenAuthority(&authority[k])
-		// }
-		pageInfo.RoleidSearch = fmt.Sprintf("%d", user.AuthorityId)
-	}
 	if list, total, err := nestroleService.GetNestRoleInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)

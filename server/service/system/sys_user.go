@@ -219,6 +219,12 @@ func (userService *UserService) FindUserById(id int) (user *system.SysUser, err 
 	return &u, err
 }
 
+func (userService *UserService) FindUserByIdWithAuth(id int) (user *system.SysUser, err error) {
+	var u system.SysUser
+	err = global.GVA_DB.Preload("Authorities").Preload("Authority").Where("`id` = ?", id).First(&u).Error
+	return &u, err
+}
+
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: FindUserByUuid
 //@description: 通过uuid获取用户信息

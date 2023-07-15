@@ -218,3 +218,21 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 	}
 	return err
 }
+
+func (authorityService *AuthorityService) FindChildrenAuthorityByParentID(id uint) (ids []uint, err error) {
+	var auth []system.SysAuthority
+	var result []uint
+	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", id).Find(&auth).Error
+	if len(auth) > 0 {
+		for _, k := range auth {
+			cr, _ := authorityService.FindChildrenAuthorityByParentID(k.AuthorityId)
+			if len(cr) > 0 {
+				result = append(result, cr...)
+			}
+		}
+		for _, item := range auth {
+			result = append(result, item.AuthorityId)
+		}
+	}
+	return result, err
+}

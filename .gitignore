@@ -31,3 +31,5 @@ web/.pnpm-debug.log
 web/pnpm-lock.yaml
 
 *.exe
+
+rm_file

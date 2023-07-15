@@ -3,6 +3,7 @@ package initialize
 import (
 	"net/http"
 
+	v1 "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
 	"github.com/flipped-aurora/gin-vue-admin/server/docs"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
@@ -45,6 +46,7 @@ func Routers() *gin.Engine {
 		PublicGroup.GET("/health", func(c *gin.Context) {
 			c.JSON(http.StatusOK, "ok")
 		})
+		PublicGroup.POST("/getGvaToken", v1.ApiGroupApp.UserTeemlinkPkgApiGroup.GetGvaToken)
 	}
 	{
 		systemRouter.InitBaseRouter(PublicGroup) // 注册基础功能路由 不做鉴权
@@ -87,6 +89,10 @@ func Routers() *gin.Engine {
 	{
 		NestExecRecordPkgRouter := router.RouterGroupApp.NestExecRecordPkg
 		NestExecRecordPkgRouter.InitNestExecRecordRouter(PrivateGroup)
+	}
+	{
+		UserTeemlinkPkgRouter := router.RouterGroupApp.UserTeemlinkPkg
+		UserTeemlinkPkgRouter.InitUserTeemlinkRouter(PrivateGroup)
 	}
 
 	global.GVA_LOG.Info("router register success")

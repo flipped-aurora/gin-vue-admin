@@ -42,26 +42,11 @@ func JWTAuth() gin.HandlerFunc {
 				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
 				c.Abort()
 				return
-			} else if errors.Is(err, utils.TokenInvalid) { //Stephen: 验证是不是天翎的token
-				j = utils.NewTLJWT()
-				claims, err = j.ParseToken(token)
-				if err != nil {
-					if errors.Is(err, utils.TokenExpired) {
-						response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
-						c.Abort()
-						return
-					}
-					response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
-					c.Abort()
-					return
-				}
-			} else {
-				response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
-				c.Abort()
-				return
 			}
+			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+			c.Abort()
+			return
 		}
-
 		// 已登录用户被管理员禁用 需要使该用户的jwt失效 此处比较消耗性能 如果需要 请自行打开
 		// 用户被删除的逻辑 需要优化 此处比较消耗性能 如果需要 请自行打开
 

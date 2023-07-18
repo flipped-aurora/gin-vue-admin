@@ -16,7 +16,7 @@ type NestAirline struct {
 	FinishAction          *int   `json:"finishAction" form:"finishAction" gorm:"column:finish_action;comment:;"`
 	FlightPathMode        *int   `json:"flightPathMode" form:"flightPathMode" gorm:"column:flight_path_mode;comment:;"`
 	HeadingMode           *int   `json:"headingMode" form:"headingMode" gorm:"column:heading_mode;comment:;"`
-	Param                 string `json:"param" form:"param" gorm:"column:param;comment:;"`
+	Param                 string `json:"param" form:"param" gorm:"type:longtext;column:param;comment:;"`
 	Safealt               string `json:"safealt" form:"safealt" gorm:"column:safealt;comment:;"`
 	Kml                   string `json:"kml" form:"kml" gorm:"column:kml;comment:;"`
 	Gps                   string `json:"gps" form:"gps" gorm:"column:gps;comment:;"`

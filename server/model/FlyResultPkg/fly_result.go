@@ -9,8 +9,8 @@ import (
 // FlyResult 结构体
 type FlyResult struct {
 	global.GVA_MODEL
-	ExecuteId  string     `json:"executeId" form:"executeId" gorm:"column:execute_id;comment:;"`
-	FileName   string     `json:"fileName" form:"fileName" gorm:"column:file_name;comment:;"`
+	ExecuteId  string     `json:"executeId" form:"executeId" gorm:"column:execute_id;comment:;unique_index:E_F"`
+	FileName   string     `json:"fileName" form:"fileName" gorm:"column:file_name;comment:;unique_index:E_F"`
 	FileOrder  *int       `json:"fileOrder" form:"fileOrder" gorm:"column:file_order;comment:;"`
 	Type       *int       `json:"type" form:"type" gorm:"column:type;comment:;"`
 	Location   string     `json:"location" form:"location" gorm:"column:location;comment:;"`

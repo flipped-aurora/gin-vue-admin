@@ -82,3 +82,21 @@ func (NtAirlineService *NestAirlineService) GetNestAirlineInfoList(info NestAirl
 	err = db.Limit(limit).Offset(offset).Find(&NtAirlines).Error
 	return NtAirlines, total, err
 }
+
+// NoPageGetNestAirlineInfoList 不分页获取NestAirline记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (NtAirlineService *NestAirlineService) NoPageGetNestAirlineInfoList() (list []map[string]interface{}, err error) {
+	// 创建db
+	db := global.GVA_DB.Model(&NestAirlinePkg.NestAirline{})
+	//var NtAirlines []NestAirlinePkg.NestAirline
+	NtAirlines := make([]map[string]interface{}, 0, 0)
+	err = db.Order("created_at desc").Find(&NtAirlines).Error
+	return NtAirlines, err
+}
+
+// GetNestAirlineByMIssionId 根据missionid获取NestAirline记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (NtAirlineService *NestAirlineService) GetNestAirlineByMIssionId(missionId string) (NtAirline NestAirlinePkg.NestAirline, err error) {
+	err = global.GVA_DB.Where("missionid = ?", missionId).First(&NtAirline).Error
+	return
+}

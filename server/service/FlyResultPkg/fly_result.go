@@ -82,3 +82,17 @@ func (FlyRtService *FlyResultService) GetFlyResultInfoList(info FlyResultPkgReq.
 	err = db.Limit(limit).Offset(offset).Find(&FlyRts).Error
 	return FlyRts, total, err
 }
+
+// NoPageGetFlyResultInfoList 不分页获取FlyResult记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (FlyRtService *FlyResultService) NoPageGetFlyResultInfoList() (list []map[string]interface{}, err error) {
+	// 创建db
+	db := global.GVA_DB.Model(&FlyResultPkg.FlyResult{})
+	//var FlyRts []FlyResultPkg.FlyResult
+	FlyRts := make([]map[string]interface{}, 0, 0)
+	if err != nil {
+		return
+	}
+	err = db.Order("file_order asc").Find(&FlyRts).Error
+	return FlyRts, err
+}

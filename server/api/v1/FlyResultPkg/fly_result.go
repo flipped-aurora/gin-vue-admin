@@ -10,11 +10,14 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"path"
 )
 
 type FlyResultApi struct {
 }
 
+var NestAirlineService = service.ServiceGroupApp.NestAirlinePkgServiceGroup.NestAirlineService
+var NestExecRecordService = service.ServiceGroupApp.NestExecRecordPkgServiceGroup.NestExecRecordService
 var FlyRtService = service.ServiceGroupApp.FlyResultPkgServiceGroup.FlyResultService
 
 // CreateFlyResult 创建FlyResult
@@ -168,4 +171,70 @@ func (FlyRtApi *FlyResultApi) GetFlyResultList(c *gin.Context) {
 			PageSize: pageInfo.PageSize,
 		}, "获取成功", c)
 	}
+}
+
+// QueryAirlineRecordFlyResult 查询航线下所有作业记录及成果
+// @Tags FlyResult
+// @Summary 查询航线下所有作业记录及成果
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query FlyResultPkgReq.FlyResultSearch true "查询航线下所有作业记录及成果"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /FlyRt/getFlyResultList [get]
+func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
+	//获取航线列表
+	airlineList, err := NestAirlineService.NoPageGetNestAirlineInfoList()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	}
+	//获取记录列表
+	recordList, err := NestExecRecordService.NoPageGetNestExecRecordInfoList()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	}
+	//获取成果列表
+	resultList, err := FlyRtService.NoPageGetFlyResultInfoList()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	}
+	for _, record := range recordList {
+		for _, result := range resultList {
+			if result["execute_id"] != nil && result["file_name"] != nil {
+				result["file_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join("", result["execute_id"].(string), result["file_name"].(string))
+			} else {
+				result["file_link"] = ""
+			}
+			if _, exist := record["fly_result_arr"]; !exist {
+				resArr := make([]map[string]interface{}, 0, 0)
+				record["fly_result_arr"] = resArr
+			}
+			if record["execute_id"] == result["execute_id"] {
+				if _, exist := record["fly_result_arr"]; exist {
+					record["fly_result_arr"] = append(record["fly_result_arr"].([]map[string]interface{}), result)
+				}
+			}
+		}
+	}
+
+	for _, airline := range airlineList {
+		for _, record := range recordList {
+			if _, exist := airline["exec_record_arr"]; !exist {
+				resArr := make([]map[string]interface{}, 0, 0)
+				airline["exec_record_arr"] = resArr
+			}
+			if airline["missionid"] == record["missionid"] {
+				if _, exist := airline["exec_record_arr"]; exist {
+					if _, ok := airline["task_max_new_time"]; !ok {
+						airline["task_max_new_time"] = record["execute_at"]
+					}
+					airline["exec_record_arr"] = append(airline["exec_record_arr"].([]map[string]interface{}), record)
+				}
+			}
+		}
+	}
+	response.OkWithData(gin.H{"airlineList": airlineList}, c)
 }

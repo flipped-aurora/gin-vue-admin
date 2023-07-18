@@ -26,7 +26,7 @@
         <el-form-item label="朝向模式:" prop="headingMode">
           <el-input v-model.number="formData.headingMode" :clearable="true" placeholder="请输入" />
        </el-form-item>
-        <el-form-item label="参数json体:" prop="param">
+        <el-form-item label="param:" prop="param">
           <el-input v-model="formData.param" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="安全:" prop="safealt">

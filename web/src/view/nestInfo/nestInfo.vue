@@ -94,7 +94,7 @@
           align="left"
           label="机巢id"
           prop="nestid"
-          width="120"
+          width="300"
         />
         <el-table-column
           align="left"
@@ -106,27 +106,27 @@
           align="left"
           label="机巢坐标"
           prop="nestLocation"
-          width="120"
+          width="190"
         />
         <el-table-column
           align="left"
           label="飞机推流地址"
           prop="aircraftVideoPushURL"
-          width="120"
+          width="340"
         />
         <el-table-column
           align="left"
           label="飞机推流播放地址"
           prop="aircraftVideoURL"
-          width="120"
+          width="360"
         />
         <el-table-column
           align="left"
           label="机巢监控播放地址"
           prop="nestVideoURL"
-          width="120"
+          width="360"
         />
-        <el-table-column align="left" label="操作">
+        <el-table-column align="left" label="操作" width="200" fixed="right">
           <template #default="scope">
             <el-button
               type="primary"
@@ -541,7 +541,6 @@ const enterDialog = async () => {
 };
 </script>
 
-<style></style>
 
 <style lang="scss">
   .el-input-number.full-width-input,

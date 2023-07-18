@@ -2,9 +2,10 @@ package middleware
 
 import (
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
 	"strconv"
 	"time"
+
+	"github.com/golang-jwt/jwt/v4"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
@@ -46,7 +47,6 @@ func JWTAuth() gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-
 		// 已登录用户被管理员禁用 需要使该用户的jwt失效 此处比较消耗性能 如果需要 请自行打开
 		// 用户被删除的逻辑 需要优化 此处比较消耗性能 如果需要 请自行打开
 

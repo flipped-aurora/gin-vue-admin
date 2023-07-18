@@ -1,6 +1,8 @@
 package Nestrolepkg
 
 import (
+	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -172,6 +174,20 @@ func (nestroleApi *NestRoleApi) GetNestRoleList(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
+	}
+	user, err := utils.GetClaims(c)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	}
+
+	if user.AuthorityId != 888 {
+		// var authority []system.SysAuthority
+		// err = db.Where("authority_id = ?", user.AuthorityId).Find(&authority).Error
+		// for k := range authority {
+		// 	err = authorityService.findChildrenAuthority(&authority[k])
+		// }
+		pageInfo.RoleidSearch = fmt.Sprintf("%d", user.AuthorityId)
 	}
 	if list, total, err := nestroleService.GetNestRoleInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))

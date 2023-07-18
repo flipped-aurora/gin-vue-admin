@@ -1,6 +1,8 @@
 package Nestrolepkg
 
 import (
+	"strings"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	nestrolepkg "github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -75,7 +77,7 @@ func (nestroleService *NestRoleService) GetNestRoleInfoList(info nestrolepkgReq.
 		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	if info.RoleidSearch != "" {
-		db = db.Where("roleid IN (?)", info.RoleidSearch)
+		db = db.Where("roleid IN ?", strings.Split(info.RoleidSearch, ","))
 	}
 	if info.Nestid != "" {
 		db = db.Where("nestid LIKE ?", "%"+info.Nestid+"%")

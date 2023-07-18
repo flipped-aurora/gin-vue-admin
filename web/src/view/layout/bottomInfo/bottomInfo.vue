@@ -27,8 +27,16 @@ export default {
   color: #888;
   height: 30px;
   line-height: 12px;
+  font-weight: 200;
+  .el-divider{
+    width: 200px;
+    border:none;
+  }
   a {
-    color: #888;
+    color: #1a2652;
+    font-weight: 600;
+    font-style: italic;
+    font-size: 12px;
   }
   div {
     display: flex;

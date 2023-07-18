@@ -40,7 +40,6 @@ func GormOracleByConfig(m config.Oracle) *gorm.DB {
 	oracleConfig := mysql.Config{
 		DSN:               m.Dsn(), // DSN data source name
 		DefaultStringSize: 191,     // string 类型字段的默认长度
-
 	}
 	if db, err := gorm.Open(mysql.New(oracleConfig), internal.Gorm.Config(m.Prefix, m.Singular)); err != nil {
 		panic(err)

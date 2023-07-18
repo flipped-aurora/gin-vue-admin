@@ -32,22 +32,26 @@
               <el-option key="pgsql" label="pgsql" value="pgsql" />
               <el-option key="oracle" label="oracle" value="oracle" />
               <el-option key="mssql" label="mssql" value="mssql" />
+              <el-option key="sqlite" label="sqlite" value="sqlite"/>
             </el-select>
           </el-form-item>
-          <el-form-item label="host">
+          <el-form-item label="host" v-if="form.dbType !== 'sqlite'">
             <el-input v-model="form.host" placeholder="请输入数据库链接" />
           </el-form-item>
-          <el-form-item label="port">
+          <el-form-item label="port" v-if="form.dbType !== 'sqlite'">
             <el-input v-model="form.port" placeholder="请输入数据库端口" />
           </el-form-item>
-          <el-form-item label="userName">
+          <el-form-item label="userName" v-if="form.dbType !== 'sqlite'">
             <el-input v-model="form.userName" placeholder="请输入数据库用户名" />
           </el-form-item>
-          <el-form-item label="password">
+          <el-form-item label="password" v-if="form.dbType !== 'sqlite'">
             <el-input v-model="form.password" placeholder="请输入数据库密码（没有则为空）" />
           </el-form-item>
           <el-form-item label="dbName">
             <el-input v-model="form.dbName" placeholder="请输入数据库名称" />
+          </el-form-item>
+          <el-form-item label="dbPath" v-if="form.dbType === 'sqlite'">
+            <el-input v-model="form.dbPath" placeholder="请输入sqlite数据库文件存放路径"></el-input>
           </el-form-item>
           <el-form-item>
             <div style="text-align: right">
@@ -93,7 +97,9 @@ const form = reactive({
   userName: 'root',
   password: '',
   dbName: 'gva',
+  dbPath: ''
 })
+
 const changeDB = (val) => {
   switch (val) {
     case 'mysql':
@@ -104,6 +110,7 @@ const changeDB = (val) => {
         userName: 'root',
         password: '',
         dbName: 'gva',
+        dbPath: ''
       })
       break
     case 'pgsql':
@@ -114,6 +121,7 @@ const changeDB = (val) => {
         userName: 'postgres',
         password: '',
         dbName: 'gva',
+        dbPath: ''
       })
       break
     case 'oracle':
@@ -124,6 +132,7 @@ const changeDB = (val) => {
         userName: 'oracle',
         password: '',
         dbName: 'gva',
+        dbPath: ''
       })
       break
     case 'mssql':
@@ -134,6 +143,18 @@ const changeDB = (val) => {
         userName: 'mssql',
         password: '',
         dbName: 'gva',
+        dbPath: ''
+      })
+      break
+    case 'sqlite':
+      Object.assign(form, {
+        dbType: 'sqlite',
+        host: '',
+        port: '',
+        userName: '',
+        password: '',
+        dbName: 'gva',
+        dbPath: ''
       })
       break
     default:
@@ -144,6 +165,7 @@ const changeDB = (val) => {
         userName: 'root',
         password: '',
         dbName: 'gva',
+        dbPath: ''
       })
   }
 }

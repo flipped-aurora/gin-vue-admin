@@ -23,6 +23,8 @@ func Gorm() *gorm.DB {
 		return GormOracle()
 	case "mssql":
 		return GormMssql()
+	case "sqlite":
+		return GormSqlite()
 	default:
 		return GormMysql()
 	}

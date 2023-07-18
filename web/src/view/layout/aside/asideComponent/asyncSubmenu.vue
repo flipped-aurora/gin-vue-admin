@@ -75,11 +75,12 @@ watch(() => props.theme, () => {
   .is-active:not(.is-opened){
   ::v-deep(.el-sub-menu__title) .gva-subMenu{
       flex:1;
-      height: 100%;
-      line-height: 44px;
+      height: 38;
+      line-height: 38px;
       background: v-bind(activeBackground) !important;
-      border-radius: 4px;
-      box-shadow: 0 0 2px 1px v-bind(activeBackground) !important;
+      border-radius: 8px;
+      box-shadow: -3.9765625px 12.00390625px 25px -11px v-bind(activeBackground) !important;
+      z-index: 9999;
       i{
         color: v-bind(activeText);
       }

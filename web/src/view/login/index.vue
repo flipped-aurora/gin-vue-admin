@@ -13,7 +13,7 @@
             alt
           ></div>
           <div class="login_panel_form_title">
-          <p class="login_panel_form_title_t">{{ $GIN_VUE_ADMIN.appName }}</p>
+          <p class="login_panel_form_title_t ">{{ $GIN_VUE_ADMIN.appName }}</p>
           <p class="login_panel_form_title_p">A management platform using Golang and Vue</p>
         </div>
         <div class="login_form">
@@ -75,7 +75,7 @@
               @click="checkInit"
             >前往初始化</el-button>
 
-            
+
           </el-form-item>
         </el-form>
         </div>
@@ -103,8 +103,8 @@
           <BottomInfo />
         </div>
       </div>
-     
-     
+
+
       </div>
     </div>
 

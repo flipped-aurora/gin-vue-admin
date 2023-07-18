@@ -1,6 +1,6 @@
 /*
   Made with passion by 7be
-  © 2023, 7be Design. 
+  © 2023, 7be Design.
 */
 #userLayout {
   margin: 0;
@@ -83,14 +83,9 @@
         }
 
         .login_panel_form_title {
-          margin-bottom: 35px;
-
-
-
+          @apply mb-9;
           .login_panel_form_title_t {
-            text-align: center;
-            font-size: 30px;
-            font-weight: 600;
+            @apply text-center text-4xl font-bold;
           }
 
           .login_panel_form_title_p {

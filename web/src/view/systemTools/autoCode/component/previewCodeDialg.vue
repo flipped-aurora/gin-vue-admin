@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import {marked} from 'marked'
+import marked from 'marked'
 import hljs from 'highlight.js'
 import 'highlight.js/styles/atom-one-dark.css'
 import { ElMessage } from 'element-plus'
@@ -39,7 +39,7 @@ onMounted(() => {
     smartLists: true,
     smartypants: false,
     xhtml: false,
-    langPrefix:"hljs language-"
+    langPrefix: 'hljs language-'
   })
   for (const key in props.previewCode) {
     if (activeName.value === '') {

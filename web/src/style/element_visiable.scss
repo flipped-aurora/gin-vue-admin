@@ -44,6 +44,12 @@
     border-radius: 2px;
 }
 
+.multiple-img-box{
+    display: flex;
+    gap:8px;
+    flex-wrap: wrap;
+}
+
 .gva-table-box {
     padding: 24px;
     background-color: #fff;

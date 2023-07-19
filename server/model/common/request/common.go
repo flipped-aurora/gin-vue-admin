@@ -1,5 +1,11 @@
 package request
 
+import "time"
+
+const TimeFormat = "2006-01-02 15:04:05"
+
+type LocalTime time.Time
+
 // PageInfo Paging common input parameter structure
 type PageInfo struct {
 	Page     int    `json:"page" form:"page"`         // 页码

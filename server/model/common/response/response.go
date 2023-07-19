@@ -34,6 +34,10 @@ func OkWithMessage(message string, c *gin.Context) {
 	Result(SUCCESS, map[string]interface{}{}, message, c)
 }
 
+func OkWithMessageRes(message string, data map[string]uint, c *gin.Context) {
+	Result(SUCCESS, data, message, c)
+}
+
 func OkWithData(data interface{}, c *gin.Context) {
 	Result(SUCCESS, data, "查询成功", c)
 }

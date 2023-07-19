@@ -8,15 +8,15 @@ import (
 // NestAirline 结构体
 type NestAirline struct {
 	global.GVA_MODEL
-	Missionid             string `json:"missionid" form:"missionid" gorm:"primary_key;column:missionid;comment:;"`
+	Missionid             string `json:"missionid" form:"missionid" gorm:"column:missionid;comment:;"`
 	Name                  string `json:"name" form:"name" gorm:"column:name;comment:;"`
-	Type                  string `json:"type" form:"type" gorm:"column:type;comment:;"`
+	Type                  *int   `json:"type" form:"type" gorm:"column:type;comment:;"`
 	AutoFlightSpeed       *int   `json:"autoFlightSpeed" form:"autoFlightSpeed" gorm:"column:auto_flight_speed;comment:;"`
 	GotoFirstWaypointMode *int   `json:"gotoFirstWaypointMode" form:"gotoFirstWaypointMode" gorm:"column:goto_first_waypoint_mode;comment:;"`
 	FinishAction          *int   `json:"finishAction" form:"finishAction" gorm:"column:finish_action;comment:;"`
 	FlightPathMode        *int   `json:"flightPathMode" form:"flightPathMode" gorm:"column:flight_path_mode;comment:;"`
 	HeadingMode           *int   `json:"headingMode" form:"headingMode" gorm:"column:heading_mode;comment:;"`
-	Param                 string `json:"param" form:"param" gorm:"column:param;comment:;type:longtext"`
+	Param                 string `json:"param" form:"param" gorm:"type:longtext;column:param;comment:;"`
 	Safealt               string `json:"safealt" form:"safealt" gorm:"column:safealt;comment:;"`
 	Kml                   string `json:"kml" form:"kml" gorm:"column:kml;comment:;"`
 	Gps                   string `json:"gps" form:"gps" gorm:"column:gps;comment:;"`
@@ -26,6 +26,8 @@ type NestAirline struct {
 	ProductionUnit        string `json:"productionUnit" form:"productionUnit" gorm:"column:production_unit;comment:;"`
 	IsActive              string `json:"isActive" form:"isActive" gorm:"column:is_active;comment:;"`
 	FixedReturnPoint      string `json:"fixedReturnPoint" form:"fixedReturnPoint" gorm:"column:fixed_return_point;comment:;"`
+	NestId                string `json:"nestId" form:"nestId" gorm:"column:nest_id;comment:;"`
+	Remark                string `json:"remark" form:"remark" gorm:"column:remark;comment:;"`
 	CreatedBy             uint   `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy             uint   `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy             uint   `gorm:"column:deleted_by;comment:删除者"`

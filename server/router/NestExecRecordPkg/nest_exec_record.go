@@ -15,10 +15,11 @@ func (s *NestExecRecordRouter) InitNestExecRecordRouter(Router *gin.RouterGroup)
 	NtERecordRouterWithoutRecord := Router.Group("NtERecord")
 	var NtERecordApi = v1.ApiGroupApp.NestExecRecordPkgApiGroup.NestExecRecordApi
 	{
-		NtERecordRouter.POST("createNestExecRecord", NtERecordApi.CreateNestExecRecord)             // 新建NestExecRecord
-		NtERecordRouter.DELETE("deleteNestExecRecord", NtERecordApi.DeleteNestExecRecord)           // 删除NestExecRecord
-		NtERecordRouter.DELETE("deleteNestExecRecordByIds", NtERecordApi.DeleteNestExecRecordByIds) // 批量删除NestExecRecord
-		NtERecordRouter.PUT("updateNestExecRecord", NtERecordApi.UpdateNestExecRecord)              // 更新NestExecRecord
+		NtERecordRouter.POST("createNestExecRecord", NtERecordApi.CreateNestExecRecord)                      // 新建NestExecRecord
+		NtERecordRouter.DELETE("deleteNestExecRecord", NtERecordApi.DeleteNestExecRecord)                    // 删除NestExecRecord
+		NtERecordRouter.DELETE("deleteNestExecRecordByIds", NtERecordApi.DeleteNestExecRecordByIds)          // 批量删除NestExecRecord
+		NtERecordRouter.PUT("updateNestExecRecord", NtERecordApi.UpdateNestExecRecord)                       // 更新NestExecRecord
+		NtERecordRouter.PUT("updateNestExecRecordWithAirline", NtERecordApi.UpdateNestExecRecordWithAirline) // 更新NestExecRecord及关联的航线数据
 	}
 	{
 		NtERecordRouterWithoutRecord.GET("findNestExecRecord", NtERecordApi.FindNestExecRecord)       // 根据ID获取NestExecRecord

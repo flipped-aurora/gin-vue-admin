@@ -16,6 +16,7 @@ type NestExecRecordApi struct {
 }
 
 var NtERecordService = service.ServiceGroupApp.NestExecRecordPkgServiceGroup.NestExecRecordService
+var NestAirlineService = service.ServiceGroupApp.NestAirlinePkgServiceGroup.NestAirlineService
 
 // CreateNestExecRecord 创建NestExecRecord
 // @Tags NestExecRecord
@@ -33,12 +34,23 @@ func (NtERecordApi *NestExecRecordApi) CreateNestExecRecord(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	//如果航线名称为空则根据missionid查询航线名称
+	if NtERecord.MissionName == "" && NtERecord.Missionid != "" {
+		airline, getErr := NestAirlineService.GetNestAirlineByMIssionId(NtERecord.Missionid)
+		if getErr != nil {
+			NtERecord.MissionName = airline.Name
+		}
+	}
+
 	NtERecord.CreatedBy = utils.GetUserID(c)
 	if err := NtERecordService.CreateNestExecRecord(&NtERecord); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
-		response.OkWithMessage("创建成功", c)
+		//因业务需要增加主键id返回
+		m := make(map[string]uint)
+		m["id"] = NtERecord.ID
+		response.OkWithMessageRes("创建成功", m, c)
 	}
 }
 
@@ -107,6 +119,39 @@ func (NtERecordApi *NestExecRecordApi) UpdateNestExecRecord(c *gin.Context) {
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
+	}
+	NtERecord.UpdatedBy = utils.GetUserID(c)
+	if err := NtERecordService.UpdateNestExecRecord(NtERecord); err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}
+
+// UpdateNestExecRecord 更新NestExecRecord及关联的航线数据
+// @Tags NestExecRecord
+// @Summary 更新NestExecRecord及关联的航线数据
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body NestExecRecordPkg.NestExecRecord true "更新NestExecRecord"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
+// @Router /NtERecord/updateNestExecRecord [put]
+func (NtERecordApi *NestExecRecordApi) UpdateNestExecRecordWithAirline(c *gin.Context) {
+	var NtERecord NestExecRecordPkg.NestExecRecord
+	err := c.ShouldBindJSON(&NtERecord)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if NtERecord.Missionid != "" {
+		airlineRes, getErr := NestAirlineService.GetNestAirlineByMIssionId(NtERecord.Missionid)
+		if getErr != nil {
+			//todo add nest_exec_record query airline msg exception
+		} else {
+			NtERecord.MissionName = airlineRes.Name
+		}
 	}
 	NtERecord.UpdatedBy = utils.GetUserID(c)
 	if err := NtERecordService.UpdateNestExecRecord(NtERecord); err != nil {

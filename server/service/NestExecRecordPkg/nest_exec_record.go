@@ -82,3 +82,13 @@ func (NtERecordService *NestExecRecordService) GetNestExecRecordInfoList(info Ne
 	err = db.Limit(limit).Offset(offset).Find(&NtERecords).Error
 	return NtERecords, total, err
 }
+
+// NoPageGetNestExecRecordInfoList 不分页获取NestExecRecord记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (NtERecordService *NestExecRecordService) NoPageGetNestExecRecordInfoList() (list []map[string]interface{}, err error) {
+	// 创建db
+	db := global.GVA_DB.Model(&NestExecRecordPkg.NestExecRecord{})
+	NtERecords := make([]map[string]interface{}, 0, 0)
+	err = db.Order("execute_at desc").Where("execute_at <> '' and status = 3").Find(&NtERecords).Error
+	return NtERecords, err
+}

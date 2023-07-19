@@ -7,13 +7,14 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/model/FlyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestExecRecordPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestInfo"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/UserTeemlinkPkg"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/UserTeemlinkPkg"
 )
 
 func Gorm() *gorm.DB {
@@ -55,7 +56,7 @@ func RegisterTables() {
 		example.ExaFile{},
 		example.ExaCustomer{},
 		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{}, NestInfo.NestInfo{}, Nestrolepkg.NestRole{}, NestAirlinePkg.NestAirline{}, NestExecRecordPkg.NestExecRecord{}, UserTeemlinkPkg.UserTeemlink{},
+		example.ExaFileUploadAndDownload{}, NestInfo.NestInfo{}, Nestrolepkg.NestRole{}, NestExecRecordPkg.NestExecRecord{}, NestAirlinePkg.NestAirline{}, FlyResultPkg.FlyResult{}, UserTeemlinkPkg.UserTeemlink{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))

@@ -26,7 +26,7 @@
         <el-form-item label="作业ID:" prop="executeId">
           <el-input v-model="formData.executeId" :clearable="true" placeholder="请输入" />
        </el-form-item>
-        <el-form-item label="作作业人:" prop="executeAt">
+        <el-form-item label="作业时间:" prop="executeAt">
           <el-input v-model="formData.executeAt" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="飞行秒:" prop="flyInSecond">
@@ -67,15 +67,15 @@ const router = useRouter()
 
 const type = ref('')
 const formData = ref({
-            status: '',
-            createdBy: '',
+            status: 0,
+            createdBy: 0,
             copyTo: '',
             missionName: '',
             missionid: '',
             planAt: new Date(),
             type: '',
             executeId: '',
-            executeAt: '',
+            executeAt: new Date(),
             flyInSecond: 0,
             panoramaLink: '',
         })

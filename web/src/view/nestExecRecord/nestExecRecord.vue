@@ -57,7 +57,7 @@
          </el-table-column>
         <el-table-column align="left" label="类型" prop="type" width="120" />
         <el-table-column align="left" label="作业ID" prop="executeId" width="120" />
-        <el-table-column align="left" label="作作业人" prop="executeAt" width="120" />
+        <el-table-column align="left" label="作业时间" prop="executeAt" width="120" />
         <el-table-column align="left" label="飞行秒" prop="flyInSecond" width="120" />
         <el-table-column align="left" label="全景链接" prop="panoramaLink" width="120" />
         <el-table-column align="left" label="操作">
@@ -105,8 +105,8 @@
         <el-form-item label="作业ID:"  prop="executeId" >
           <el-input v-model="formData.executeId" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="作作业人:"  prop="executeAt" >
-          <el-input v-model="formData.executeAt" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="作业时间:"  prop="executeAt" >
+           <el-date-picker v-model="formData.executeAt" type="date" style="width:100%" placeholder="选择日期" :clearable="true"  />
         </el-form-item>
         <el-form-item label="飞行秒:"  prop="flyInSecond" >
           <el-input v-model.number="formData.flyInSecond" :clearable="true" placeholder="请输入" />
@@ -148,15 +148,15 @@ import { ref, reactive } from 'vue'
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
-        status: '',
-        createdBy: '',
+        status: 0,
+        createdBy: 0,
         copyTo: '',
         missionName: '',
         missionid: '',
         planAt: new Date(),
         type: '',
         executeId: '',
-        executeAt: '',
+        executeAt: new Date(),
         flyInSecond: 0,
         panoramaLink: '',
         })
@@ -334,15 +334,15 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-        status: '',
-        createdBy: '',
+        status: 0,
+        createdBy: 0,
         copyTo: '',
         missionName: '',
         missionid: '',
         planAt: new Date(),
         type: '',
         executeId: '',
-        executeAt: '',
+        executeAt: new Date(),
         flyInSecond: 0,
         panoramaLink: '',
         }

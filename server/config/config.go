@@ -30,4 +30,7 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+
+	//文件服务器配置
+	FileServer FileServer `mapstructure:"file-server" json:"file-server" yaml:"file-server"`
 }

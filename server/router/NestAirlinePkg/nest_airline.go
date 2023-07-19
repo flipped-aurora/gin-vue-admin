@@ -15,11 +15,10 @@ func (s *NestAirlineRouter) InitNestAirlineRouter(Router *gin.RouterGroup) {
 	NtAirlineRouterWithoutRecord := Router.Group("NtAirline")
 	var NtAirlineApi = v1.ApiGroupApp.NestAirlinePkgApiGroup.NestAirlineApi
 	{
-		NtAirlineRouter.POST("createNestAirline", NtAirlineApi.CreateNestAirline)               // 新建NestAirline
-		NtAirlineRouter.POST("createNestAirlineByParam", NtAirlineApi.CreateNestAirlineByParam) // 根据param参数新建NestAirline
-		NtAirlineRouter.DELETE("deleteNestAirline", NtAirlineApi.DeleteNestAirline)             // 删除NestAirline
-		NtAirlineRouter.DELETE("deleteNestAirlineByIds", NtAirlineApi.DeleteNestAirlineByIds)   // 批量删除NestAirline
-		NtAirlineRouter.PUT("updateNestAirline", NtAirlineApi.UpdateNestAirline)                // 更新NestAirline
+		NtAirlineRouter.POST("createNestAirline", NtAirlineApi.CreateNestAirline)             // 新建NestAirline
+		NtAirlineRouter.DELETE("deleteNestAirline", NtAirlineApi.DeleteNestAirline)           // 删除NestAirline
+		NtAirlineRouter.DELETE("deleteNestAirlineByIds", NtAirlineApi.DeleteNestAirlineByIds) // 批量删除NestAirline
+		NtAirlineRouter.PUT("updateNestAirline", NtAirlineApi.UpdateNestAirline)              // 更新NestAirline
 	}
 	{
 		NtAirlineRouterWithoutRecord.GET("findNestAirline", NtAirlineApi.FindNestAirline)       // 根据ID获取NestAirline

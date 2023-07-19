@@ -179,17 +179,22 @@ func (nestroleApi *NestRoleApi) GetNestRoleList(c *gin.Context) {
 		response.FailWithMessage("获取userClaims失败", c)
 		return
 	}
-	user, err := service.ServiceGroupApp.SystemServiceGroup.UserService.FindUserByIdWithAuth(int(userClaims.BaseClaims.ID))
+	// user, err := service.ServiceGroupApp.SystemServiceGroup.UserService.FindUserByIdWithAuth(int(userClaims.BaseClaims.ID))
+	// if err != nil {
+	// 	global.GVA_LOG.Error("获取user失败!", zap.Error(err))
+	// 	response.FailWithMessage("获取user失败", c)
+	// 	return
+	// }
+	// var authIDs []uint
+	// for _, item := range user.Authorities {
+	// 	authIDs = append(authIDs, item.AuthorityId)
+	// }
+	pageInfo.AuthID, err = service.ServiceGroupApp.SystemServiceGroup.UserService.GetUserAuthorities(userClaims.BaseClaims.ID)
 	if err != nil {
-		global.GVA_LOG.Error("获取user失败!", zap.Error(err))
-		response.FailWithMessage("获取user失败", c)
+		global.GVA_LOG.Error("获取用户所属角色失败!", zap.Error(err))
+		response.FailWithMessage("获取用户所属角色失败", c)
 		return
 	}
-	var authIDs []uint
-	for _, item := range user.Authorities {
-		authIDs = append(authIDs, item.AuthorityId)
-	}
-	pageInfo.AuthID = authIDs
 
 	if list, total, err := nestroleService.GetNestRoleInfoList(pageInfo); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))

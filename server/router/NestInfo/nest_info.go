@@ -23,6 +23,7 @@ func (s *NestInfoRouter) InitNestInfoRouter(Router *gin.RouterGroup) {
 	{
 		nestinfoRouterWithoutRecord.GET("findNestInfo", nestinfoApi.FindNestInfo)       // 根据ID获取NestInfo
 		nestinfoRouterWithoutRecord.GET("getNestInfoList", nestinfoApi.GetNestInfoList) // 获取NestInfo列表
-		nestinfoRouterWithoutRecord.GET("getAllUserList", nestinfoApi.GetAllUserList)   // 获取NestInfo列表
+		nestinfoRouterWithoutRecord.GET("getAllUserList", nestinfoApi.GetAllUserList)
+		nestinfoRouterWithoutRecord.GET("getNestInfoInfoListWithUser", nestinfoApi.GetNestInfoInfoListWithUser)
 	}
 }

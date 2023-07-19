@@ -8,7 +8,6 @@ import (
 	nestrolepkg "github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg"
 	nestrolepkgReq "github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"gorm.io/gorm"
 )
@@ -73,14 +72,15 @@ func (nestroleService *NestRoleService) GetNestRoleInfoList(info nestrolepkgReq.
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	//Stephen: 检查角色权限
-	var authIDList []uint
-	for _, authID := range info.AuthID {
-		authIDList = append(authIDList, authID)
-		r, _ := system.AuthorityServiceApp.FindChildrenAuthorityByParentID(authID)
-		if len(r) > 0 {
-			authIDList = append(authIDList, r...)
-		}
-	}
+	// var authIDList []uint
+	// for _, authID := range info.AuthID {
+	// 	authIDList = append(authIDList, authID)
+	// 	r, _ := system.AuthorityServiceApp.FindChildrenAuthorityByParentID(authID)
+	// 	if len(r) > 0 {
+	// 		authIDList = append(authIDList, r...)
+	// 	}
+	// }
+	authIDList := info.AuthID
 	var tmpRoleIDSearch []string
 	if !utils.UintArrContains(authIDList, 888) {
 		if info.RoleidSearch != "" {

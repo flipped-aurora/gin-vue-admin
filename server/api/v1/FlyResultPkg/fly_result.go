@@ -11,7 +11,11 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"io/ioutil"
+	"log"
+	"os"
 	"path"
+	"strings"
 )
 
 type FlyResultApi struct {
@@ -88,6 +92,17 @@ func (FlyRtApi *FlyResultApi) DeleteFlyResultByIds(c *gin.Context) {
 		return
 	}
 	deletedBy := utils.GetUserID(c)
+	//清空作业记录的全景链接
+	if len(IDS.RecordIds) > 0 {
+		for _, rId := range IDS.RecordIds {
+			record, GetNErr := NestExecRecordService.GetNestExecRecord(uint(rId))
+			if GetNErr == nil {
+				record.PanoramaLink = ""
+				record.ID = uint(rId)
+				NestExecRecordService.UpdateNestExecRecord(record)
+			}
+		}
+	}
 	if err := FlyRtService.DeleteFlyResultByIds(IDS, deletedBy); err != nil {
 		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
@@ -214,8 +229,15 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 		videoCount := 0
 		for _, result := range resultList {
 			if result["execute_id"] != nil && result["file_name"] != nil {
-				result["file_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join("", result["execute_id"].(string), result["file_name"].(string))
-				result["file_thumbnails_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join(result["execute_id"].(string), global.GVA_CONFIG.FileServer.ThumbnailsImgLink, result["file_name"].(string))
+				fileName := result["file_name"].(string)
+				if result["type"] == 1 {
+					result["file_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join("", result["execute_id"].(string), fileName)
+					result["file_thumbnails_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join(result["execute_id"].(string), global.GVA_CONFIG.FileServer.ThumbnailsImgLink, fileName)
+				} else {
+					result["file_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join("", result["execute_id"].(string), fileName)
+					result["file_thumbnails_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join(result["execute_id"].(string), global.GVA_CONFIG.FileServer.ThumbnailsImgLink, strings.Replace(fileName, ".MP4", ".jpg", -1))
+				}
+
 			} else {
 				result["file_link"] = ""
 				result["file_thumbnails_link"] = ""
@@ -230,10 +252,10 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 				}
 
 				if result["type"] != nil {
-					if *result["type"].(*int) == 0 {
+					if *result["type"].(*int) == 1 {
 						//照片
 						imgCount += 1
-					} else if *result["type"].(*int) == 1 {
+					} else if *result["type"].(*int) == 2 {
 						//视频
 						videoCount += 1
 					}
@@ -261,7 +283,7 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 					airline["exec_record_arr"] = append(airline["exec_record_arr"].([]map[string]interface{}), record)
 				}
 
-				if record["panorama_link"] != nil {
+				if record["panorama_link"].(string) != "" {
 					panoramaCount += 1
 				}
 				if record["img_count"] != nil {
@@ -277,4 +299,43 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 		airline["video_count"] = videoCount
 	}
 	response.OkWithData(gin.H{"airlineList": airlineList}, c)
+}
+
+// DataresultDownload 数据成果打包下载
+// @Tags FlyResult
+// @Summary 数据成果打包下载
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query FlyResultPkgReq.FlyResultSearch true "数据成果打包下载"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /FlyRt/getFlyResultList [get]
+func (FlyRtApi *FlyResultApi) DataResultDownload(c *gin.Context) {
+	var Reqs request.IdsReq
+	err := c.ShouldBindJSON(&Reqs)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if len(Reqs.DataPaths) > 0 {
+		fileList := make([]string, 0, 0)
+		for _, rPath := range Reqs.DataPaths {
+			if rPath != "" && global.GVA_CONFIG.FileServer.FlyRecordPath != "" {
+				completePath := path.Join(global.GVA_CONFIG.FileServer.FlyRecordPath, rPath)
+				fileList = append(fileList, completePath)
+			}
+		}
+		if zipErr := utils.ZipFiles("./result.zip", fileList, global.GVA_CONFIG.FileServer.FlyRecordPath, ""); err != nil {
+			log.Println(zipErr.Error())
+		} else {
+			fileBytes, readErr := ioutil.ReadFile("./result.zip")
+			if readErr != nil {
+				response.FailWithMessage("解压文件失败!", c)
+			} else {
+				c.Header("Content-Disposition", "attachment; filename="+"result.zip") //添加此header触发http下载动作
+				c.Data(200, "application/octet-stream", fileBytes)
+				os.Remove("./result.zip")
+			}
+		}
+	}
 }

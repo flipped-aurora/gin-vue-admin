@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/FlyResultPkg"
 	FlyResultPkgReq "github.com/flipped-aurora/gin-vue-admin/server/model/FlyResultPkg/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
@@ -183,8 +184,15 @@ func (FlyRtApi *FlyResultApi) GetFlyResultList(c *gin.Context) {
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
 // @Router /FlyRt/getFlyResultList [get]
 func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
+	var NtAirline NestAirlinePkg.NestAirline
+	err := c.ShouldBindQuery(&NtAirline)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
 	//获取航线列表
-	airlineList, err := NestAirlineService.NoPageGetNestAirlineInfoList()
+	airlineList, err := NestAirlineService.NoPageGetNestAirlineInfoList(NtAirline.NestId)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -202,11 +210,15 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	}
 	for _, record := range recordList {
+		imgCount := 0
+		videoCount := 0
 		for _, result := range resultList {
 			if result["execute_id"] != nil && result["file_name"] != nil {
 				result["file_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join("", result["execute_id"].(string), result["file_name"].(string))
+				result["file_thumbnails_link"] = global.GVA_CONFIG.FileServer.MainLink + "\\" + path.Join(result["execute_id"].(string), global.GVA_CONFIG.FileServer.ThumbnailsImgLink, result["file_name"].(string))
 			} else {
 				result["file_link"] = ""
+				result["file_thumbnails_link"] = ""
 			}
 			if _, exist := record["fly_result_arr"]; !exist {
 				resArr := make([]map[string]interface{}, 0, 0)
@@ -216,11 +228,26 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 				if _, exist := record["fly_result_arr"]; exist {
 					record["fly_result_arr"] = append(record["fly_result_arr"].([]map[string]interface{}), result)
 				}
+
+				if result["type"] != nil {
+					if *result["type"].(*int) == 0 {
+						//照片
+						imgCount += 1
+					} else if *result["type"].(*int) == 1 {
+						//视频
+						videoCount += 1
+					}
+				}
 			}
 		}
+		record["img_count"] = imgCount
+		record["video_count"] = videoCount
 	}
 
 	for _, airline := range airlineList {
+		panoramaCount := 0
+		imgCount := 0
+		videoCount := 0
 		for _, record := range recordList {
 			if _, exist := airline["exec_record_arr"]; !exist {
 				resArr := make([]map[string]interface{}, 0, 0)
@@ -233,8 +260,21 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 					}
 					airline["exec_record_arr"] = append(airline["exec_record_arr"].([]map[string]interface{}), record)
 				}
+
+				if record["panorama_link"] != nil {
+					panoramaCount += 1
+				}
+				if record["img_count"] != nil {
+					imgCount = imgCount + record["img_count"].(int)
+				}
+				if record["video_count"] != nil {
+					videoCount = videoCount + record["video_count"].(int)
+				}
 			}
 		}
+		airline["panorama_count"] = panoramaCount
+		airline["img_count"] = imgCount
+		airline["video_count"] = videoCount
 	}
 	response.OkWithData(gin.H{"airlineList": airlineList}, c)
 }

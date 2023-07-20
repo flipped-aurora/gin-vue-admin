@@ -9,7 +9,7 @@ import (
 // NestExecRecord 结构体
 type NestExecRecord struct {
 	global.GVA_MODEL
-	Status       *int       `json:"status" form:"status" gorm:"column:status;comment:;"`
+	Status       *int       `json:"status" form:"status" gorm:"column:status;comment:0－计划1－执行准备2－执行中3－执行完毕4－执行失败5－数据下载中6－数据下载完毕7－数据下载异常;"`
 	Creator      string     `json:"creator" form:"creator" gorm:"column:creator;comment:;"`
 	CopyTo       string     `json:"copyTo" form:"copyTo" gorm:"column:copy_to;comment:;"`
 	MissionName  string     `json:"missionName" form:"missionName" gorm:"column:mission_name;comment:;"`

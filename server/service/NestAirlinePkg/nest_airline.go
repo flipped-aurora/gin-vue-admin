@@ -85,12 +85,17 @@ func (NtAirlineService *NestAirlineService) GetNestAirlineInfoList(info NestAirl
 
 // NoPageGetNestAirlineInfoList 不分页获取NestAirline记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (NtAirlineService *NestAirlineService) NoPageGetNestAirlineInfoList() (list []map[string]interface{}, err error) {
+func (NtAirlineService *NestAirlineService) NoPageGetNestAirlineInfoList(nestId string) (list []map[string]interface{}, err error) {
 	// 创建db
 	db := global.GVA_DB.Model(&NestAirlinePkg.NestAirline{})
 	//var NtAirlines []NestAirlinePkg.NestAirline
 	NtAirlines := make([]map[string]interface{}, 0, 0)
-	err = db.Order("created_at desc").Find(&NtAirlines).Error
+	if nestId != "" {
+		err = db.Where("nest_id = ?", nestId).Order("created_at desc").Find(&NtAirlines).Error
+	} else {
+		err = db.Order("created_at desc").Find(&NtAirlines).Error
+	}
+
 	return NtAirlines, err
 }
 

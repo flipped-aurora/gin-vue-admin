@@ -65,7 +65,10 @@ export const useUserStore = defineStore('user', () => {
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
-        await router.replace({ name: userInfo.value.authority.defaultRouter })
+        const routeName = userInfo.value.authority.defaultRouter
+        if(routeName.indexOf("http") === -1 && routeName.indexOf("https") === -1 ) {
+          await router.replace({ name: userInfo.value.authority.defaultRouter })
+        }
         loadingInstance.value.close()
 
         const isWin = ref(/windows/i.test(navigator.userAgent))
@@ -73,6 +76,9 @@ export const useUserStore = defineStore('user', () => {
           window.localStorage.setItem('osType', 'WIN')
         } else {
           window.localStorage.setItem('osType', 'MAC')
+        }
+        if(routeName.indexOf("http") !== -1 || routeName.indexOf("https") !== -1 ) {
+          window.location.href = routeName
         }
         return true
       }

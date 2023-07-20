@@ -509,81 +509,36 @@ li {
 }
 
 // 导航
+
+.el-button{
+    @apply font-sans
+}
 #app {
-    .pd-lr-15 {
-        padding: 0 15px;
-    }
-    .height-full {
-        height: 100%;
-    }
-    .width-full {
-        width: 100%;
-    }
-    .dp-flex {
-        display: flex;
-    }
-    .justify-content-center {
-        justify-content: center;
-    }
-    .align-items {
-        align-items: center;
-    }
-    .pd-0 {
-        padding: 0;
-    }
     .el-container {
-        position: relative;
-        height: 100%;
-        width: 100%;
+        @apply relative h-full w-full;
     }
     .el-container.mobile.openside {
-        position: fixed;
-        top: 0;
+        @apply fixed top-0;
     }
     .gva-aside {
-        -webkit-transition: width .2s;
-        transition: width .2s;
-        width: $width-aside;
-        height: 100%;
-        position: fixed;
-        font-size: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1001;
-        overflow: hidden;
+        @apply fixed top-0 bottom-0 left-0 z-[1001] overflow-hidden w-aside h-full font-[0px] transition-all duration-200 ease-in-out;
         .el-menu {
-            border-right: none;
+            @apply border-r-0;
         }
         .tilte {
-            min-height: $height-aside-tilte;
-            line-height: $height-aside-tilte;
-            text-align: center;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            @apply h-12 py-3 text-center transition-all duration-200 ease-in-out flex items-center justify-center;
             .logoimg {
-                width: $width-aside-img;
-                height: $height-aside-img;
-                background: #fff;
-                border-radius: 50%;
-                padding: 3px;
+                @apply h-8 w-8 bg-white rounded-full p-1;
             }
             .tit-text {
-                display: inline-block;
-                color: #fff;
-                font-weight: 600;
-                font-size: 20px;
-                padding-left: 10px;
+                @apply text-white font-bold text-2xl pl-2.5;
             }
         }
     }
     .aside {
         .el-menu--collapse {
             >.el-menu-item {
-                display: flex;
-                justify-content: center;
+                @apply flex justify-center;
             }
         }
         .el-sub-menu {
@@ -591,13 +546,13 @@ li {
                 .is-active {
                     // 关闭三级菜单二级菜单样式
                     ul {
-                        border: none;
+                        @apply border-0;
                     }
                 }
                 // 关闭三级菜单二级菜单样式
                 .is-active.is-opened {
                     ul {
-                        border: none;
+                        @apply border-0;
                     }
                 }
             }
@@ -605,51 +560,35 @@ li {
     }
     .hideside {
         .aside {
-            width: $width-hideside-aside;
+            @apply w-16;
         }
     }
     .mobile.hideside {
         .gva-aside {
-            -webkit-transition-duration: .2s;
-            transition-duration: .2s;
-            -webkit-transform: translate3d(-210px, 0, 0);
-            transform: translate3d(-220px, 0, 0);
+            @apply transition-all duration-200;
         }
     }
     .mobile {
         .gva-aside {
-            -webkit-transition: -webkit-transform .28s;
-            transition: -webkit-transform .28s;
-            transition: transform .28s;
-            transition: transform .28s, -webkit-transform .28s;
-            width: $width-mobile-aside;
+            @apply transition-all duration-200 w-52;
         }
     }
     .main-cont.el-main {
-        min-height: 100%;
-        margin-left: $width-aside;
-        position: relative;
+        @apply min-h-full ml-aside relative;
     }
     .hideside {
         .main-cont.el-main {
-            margin-left: 54px;
+            @apply ml-16;
         }
     }
     .mobile {
         .main-cont.el-main {
-            margin-left: 0px;
+            @apply ml-0;
         }
     }
     .openside.mobile {
         .shadowBg {
-            background: #000;
-            opacity: .3;
-            width: 100%;
-            top: 0;
-            height: 100%;
-            position: absolute;
-            z-index: 999;
-            left: 0;
+            @apply bg-black opacity-30 absolute top-0 left-0 z-[999];
         }
     }
 }
@@ -657,104 +596,85 @@ li {
 //   layout
 .layout-cont {
     .main-cont {
-        position: relative;
+        @apply relative;
         &.el-main {
-            background-color: $bg-main;
-            padding: 0;
+            @apply bg-base p-0;
         }
     }
 }
 
 .admin-box {
-    min-height: calc(100vh - 200px);
-    padding: 12px 16px;
-    margin: 100px 2px 20px;
+    @apply min-h-base py-3 px-4 mt-28 ml-0.5 mr-5;
     .el-table--border {
-        border-radius: 4px;
-        margin-bottom: 14px;
+        @apply rounded mb-3.5;
     }
     .el-table {
-        thead {
-            color: $color-table-thead;
-        }
         th {
-            padding: 6px 0;
+            @apply py-2 px-0;
             .cell {
-                color: rgba($color: #000000, $alpha: 0.85);
-                font-size: 14px;
-                line-height: 40px;
-                min-height: 40px;
+                @apply text-gray-700 text-base font-bold leading-10;
             }
         }
         td {
-            padding: 6px 0;
+            @apply py-2 px-0;
             .cell {
-                min-height: 40px;
-                line-height: 40px;
-                color: rgba($color: #000000, $alpha: 0.65);
+                @apply text-gray-600 text-base leading-10;
             }
         }
         td.is-leaf {
-            border-bottom: 1px solid #e8e8e8;
+            @apply border-b border-gray-200;
         }
         th.is-leaf {
-            background: #F7FBFF;
-            border-bottom: none;
+            @apply border-b-0 border-gray-100;
         }
     }
     .el-pagination {
-        padding: 20px 0 0 0;
+        @apply mt-3.5;
     }
     .upload-demo,
     .upload {
-        padding: 0;
+        @apply p-0;
     }
     .edit_container,
     .edit {
-        padding: 0;
+        @apply p-0;
     }
     .el-input {
         .el-input__suffix {
-            margin-top: -3px;
+            @apply -mt-1;
         }
         &.is-disabled {
             .el-input__suffix {
-                margin-top: 0px;
+                @apply mt-0;
             }
         }
     }
     .el-cascader {
         .el-input {
             .el-input__suffix {
-                margin-top: 0px;
+                @apply mt-0;
             }
         }
     }
     .el-input__inner {
-        border-color: rgba($color: #000000, $alpha: 0.15);
-        height: 32px;
-        border-radius: 2px;
+        @apply h-9 rounded border-gray-100;
     }
 }
 
 .admin-box:after,
 .admin-box:before {
-    content: "";
-    display: block;
-    clear: both;
+    @apply block clear-both content-[''];
 }
 
 .button-box {
-    background: $white-bg;
-    border: none;
-    padding: 0 0 10px 0px;
+    @apply border-0 bg-white pb-2.5;
 }
 
 // table
 .has-gutter {
     tr {
         th {
-            background-color: #fafafa;
+            @apply bg-gray-50;
         }
     }
 }
@@ -763,7 +683,7 @@ li {
     .el-table__body {
         tr.el-table__row--striped {
             td {
-                background: #fff !important;
+                @apply bg-white;
             }
         }
     }
@@ -771,74 +691,57 @@ li {
 
 .el-table th,
 .el-table tr {
-    background-color: #ffffff;
+    @apply bg-white;
 }
 
 .el-pagination {
     .btn-prev,
     .btn-next {
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        @apply border border-solid border-gray-200 rounded;
     }
     .el-pager {
         li {
-            color: #666;
-            font-size: 12px;
-            margin: 0 5px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            @apply text-gray-600 border-solid text-sm mx-1.5 border border-gray-200 rounded;
         }
     }
-    padding: 20px 0 !important;
+    @apply py-5;
 }
 
 .el-row {
-    padding: 10px 0;
+    @apply py-2.5 px-0;
     .el-col>label {
-        line-height: 30px;
-        text-align: right;
-        width: 80%;
-        padding-right: 15px;
-        display: inline-block;
+        @apply leading-8 text-right w-4/5 pr-4 inline-block;
     }
     .line {
-        line-height: 30px;
-        text-align: center;
+        @apply leading-8 text-center;
     }
 }
 
 .edit_container {
-    background-color: $white-bg;
-    padding: 15px;
+    @apply bg-white p-4;
     .el-button {
-        margin: 15px 0;
+        @apply my-4
     }
 }
 
 .edit {
-    background-color: $white-bg;
+    @apply bg-white;
     .el-button {
-        margin: 15px 0;
+        @apply my-4
     }
 }
 
 .el-container {
     .tips {
-        margin-top: 10px;
-        font-size: 14px;
-        font-weight: 400;
-        color: #606266;
+        @apply mt-2.5 text-base font-sans text-gray-600;
     }
 }
 
 .el-container.layout-cont {
     .main-cont.el-main {
-        background-color: $bg-main;
+        @apply bg-base;
         .menu-total {
-            cursor: pointer;
-            font-size: 24px;
-            color: #000000;
-            margin-top: 16px;
+            @apply cursor-pointer text-2xl text-gray-900 mt-4;
         }
     }
 }
@@ -846,28 +749,20 @@ li {
 .el-container.layout-cont {
     .main-cont {
         .router-history {
-            // box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
-            background: #fff;
-            padding: 0 6px;
-            border-top: 1px solid $border-color;
-            padding: 0;
+            @apply bg-white border-t border-solid border-gray-100 border-0;
             .el-tabs__header {
-                margin: 0px 0 0 0;
+                @apply m-0;
                 .el-tabs__item {
-                    height: $height-nav-scroll;
-                    height: $height-nav-scroll;
-                    border: none;
-                    border-left: 1px solid $border-color;
-                    border-right: 1px solid $border-color;
+                    @apply h-[40px] border-y-0 border-l border-r border-solid border-gray-100;
                     +.el-tabs__item {
-                        border-left: 0px solid $border-color;
+                        @apply border-l-0;
                     }
                 }
                 .el-tabs__item.is-active {
-                    background-color: rgba(64, 158, 255, .08);
+                    @apply bg-sky-50;
                 }
                 .el-tabs__nav {
-                    border: none;
+                    @apply border-0
                 }
             }
         }
@@ -876,41 +771,27 @@ li {
 
 .el-table__row {
     .el-button.el-button--text.el-button--small {
-        position: relative;
+        @apply relative;
     }
-    // .el-button.el-button--text.el-button--small::after {
-    //     content: '';
-    //     position: absolute;
-    //     width: 1px;
-    //     height: 50%;
-    //     top: 5px;
-    //     margin-left: 15px;
-    //     background-color: #e8e8e8;
-    // }
     .cell {
         button:last-child::after {
-            content: '' !important;
-            position: absolute !important;
-            width: 0px !important;
+            @apply content-[""] absolute w-0;
         }
     }
 }
 
 .clear:after,
 .clear:before {
-    content: "";
-    display: block;
-    clear: both;
+    @apply block clear-both content-[''];
 }
 
 .el-table--striped .el-table__body tr.el-table__row--level-1 td:first-child {
     .cell {
         .el-table__indent {
-            border-right: 1.5px solid #ccc;
-            margin-left: 6px;
+            @apply border-r border-solid border-gray-200 ml-1.5;
         }
         .el-table__placeholder {
-            width: 10px;
+            @apply w-2.5;
         }
     }
 }
@@ -918,20 +799,15 @@ li {
 .el-table--striped .el-table__body tr.el-table__row--level-2 td:first-child {
     .cell {
         .el-table__indent {
-            border-right: 1.5px solid #ccc;
-            margin-left: 6px;
+            @apply border-r border-solid border-gray-200 ml-1.5;
         }
         .el-table__placeholder {
-            width: 10px;
+            @apply w-2.5;
         }
     }
 }
 
-$headerHigh: 52px;
 $mainHight: 100vh;
-.dropdown-group {
-    min-width: 100px;
-}
 
 .topfix {
     position: fixed;
@@ -1068,9 +944,6 @@ $mainHight: 100vh;
         vertical-align: middle;
         box-sizing: border-box;
         color: rgba($color: #000000, $alpha: 0.65);
-    }
-    .dropdown-group {
-        min-width: 100px;
     }
     .user-box {
         cursor: pointer;

@@ -19,7 +19,7 @@
             <el-row>
               <el-col>
                 <el-header class="header-cont">
-                  <el-row class="pd-0">
+                  <el-row class="p-0">
                     <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
                       <div class="menu-total" @click="totalCollapse">
                         <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
@@ -39,7 +39,7 @@
                       <div class="right-box">
                         <Search />
                         <el-dropdown>
-                          <div class="dp-flex justify-content-center align-items height-full width-full">
+                          <div class="flex justify-center items-center h-full w-full">
                             <span class="header-avatar" style="cursor: pointer">
                               <CustomPic />
                               <span v-show="!isMobile" style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
@@ -49,7 +49,7 @@
                             </span>
                           </div>
                           <template #dropdown>
-                            <el-dropdown-menu class="dropdown-group">
+                            <el-dropdown-menu>
                               <el-dropdown-item>
                                 <span style="font-weight: 600;">
                                   当前角色：{{ userStore.userInfo.authority.authorityName }}

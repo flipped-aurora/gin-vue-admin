@@ -219,6 +219,12 @@ func (userService *UserService) FindUserById(id int) (user *system.SysUser, err 
 	return &u, err
 }
 
+func (userService *UserService) FindUserByIdWithAuth(id uint) (user *system.SysUser, err error) {
+	var u system.SysUser
+	err = global.GVA_DB.Preload("Authorities").Preload("Authority").Where("`id` = ?", id).First(&u).Error
+	return &u, err
+}
+
 //@author: [SliverHorn](https://github.com/SliverHorn)
 //@function: FindUserByUuid
 //@description: 通过uuid获取用户信息
@@ -242,4 +248,43 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 func (userService *UserService) ResetPassword(ID uint) (err error) {
 	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
 	return err
+}
+
+func (userService *UserService) GetUserAuthorities(userid uint) ([]uint, error) {
+	user, err := userService.FindUserByIdWithAuth(userid)
+	if err != nil {
+		return nil, err
+	}
+	var authIDs []uint
+	for _, item := range user.Authorities {
+		authIDs = append(authIDs, item.AuthorityId)
+	}
+
+	var authIDList []uint
+	for _, authID := range authIDs {
+		authIDList = append(authIDList, authID)
+		r, _ := FindChildrenAuthorityByParentID(authID)
+		if len(r) > 0 {
+			authIDList = append(authIDList, r...)
+		}
+	}
+	return authIDList, nil
+}
+
+func FindChildrenAuthorityByParentID(id uint) (ids []uint, err error) {
+	var auth []system.SysAuthority
+	var result []uint
+	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", id).Find(&auth).Error
+	if len(auth) > 0 {
+		for _, k := range auth {
+			cr, _ := FindChildrenAuthorityByParentID(k.AuthorityId)
+			if len(cr) > 0 {
+				result = append(result, cr...)
+			}
+		}
+		for _, item := range auth {
+			result = append(result, item.AuthorityId)
+		}
+	}
+	return result, err
 }

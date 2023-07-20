@@ -1,11 +1,16 @@
 package NestInfo
 
 import (
+	"encoding/json"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestInfo"
 	NestInfoReq "github.com/flipped-aurora/gin-vue-admin/server/model/NestInfo/request"
+	NestRoleReq "github.com/flipped-aurora/gin-vue-admin/server/model/Nestrolepkg/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/Nestrolepkg"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"gorm.io/gorm"
 )
 
@@ -93,4 +98,29 @@ func (nestinfoService *NestInfoService) GetAllUserList() (list []system.SysUser,
 	}
 	err = db.Preload("Authorities").Preload("Authority").Find(&userList).Error
 	return userList, total, err
+}
+
+func (nestinfoService *NestInfoService) GetNestInfoInfoListWithUser() (list []NestInfo.NestInfo, total int64, err error) {
+	nestroleservice := new(Nestrolepkg.NestRoleService)
+	nestroleSearch := NestRoleReq.NestRoleSearch{}
+	nestroleSearch.Page = 1
+	nestroleSearch.PageSize = 9999
+	nestRoleList, _, _ := nestroleservice.GetNestRoleInfoList(nestroleSearch)
+	var nestIDList []string
+	for _, item := range nestRoleList {
+		var nestIDListStr []string
+		json.Unmarshal([]byte(item.Nestid), &nestIDListStr)
+		// nestIDListStr := strings.Split(item.Nestid, ",")
+		for _, id := range nestIDListStr {
+			if !utils.StringArrContains(nestIDList, id) {
+				nestIDList = append(nestIDList, id)
+			}
+		}
+	}
+
+	db := global.GVA_DB.Model(&NestInfo.NestInfo{})
+	db.Where("nestid IN ?", nestIDList)
+	var nestinfos []NestInfo.NestInfo
+	err = db.Find(&nestinfos).Error
+	return nestinfos, total, err
 }

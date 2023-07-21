@@ -74,6 +74,18 @@ func (NtERecordService *NestExecRecordService) GetNestExecRecordInfoList(info Ne
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
 		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
+	if info.NestId != "" {
+		db = db.Where("nest_id = ?", info.NestId)
+	}
+	if info.ExecuteId != "" {
+		db = db.Where("execute_id = ?", info.ExecuteId)
+	}
+	if info.Status != nil {
+		db = db.Where("status = ?", info.Status)
+		if *info.Status == 3 {
+			db = db.Order("execute_at desc")
+		}
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return

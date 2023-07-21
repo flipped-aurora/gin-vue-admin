@@ -21,6 +21,7 @@ type NestExecRecord struct {
 	FlyInSecond  *int       `json:"flyInSecond" form:"flyInSecond" gorm:"column:fly_in_second;comment:;"`
 	PanoramaLink string     `json:"panoramaLink" form:"panoramaLink" gorm:"column:panorama_link;comment:;"`
 	ErrMsg       string     `json:"err_msg" form:"err_msg" gorm:"type:longtext;column:err_msg;comment:;"`
+	NestId       string     `json:"nestId" form:"nestId" gorm:"column:nest_id;comment:;"`
 	CreatedBy    uint       `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy    uint       `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy    uint       `gorm:"column:deleted_by;comment:删除者"`

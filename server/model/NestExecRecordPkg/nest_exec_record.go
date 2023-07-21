@@ -9,7 +9,7 @@ import (
 // NestExecRecord 结构体
 type NestExecRecord struct {
 	global.GVA_MODEL
-	Status       *int       `json:"status" form:"status" gorm:"column:status;comment:;"`
+	Status       *int       `json:"status" form:"status" gorm:"column:status;comment:0－计划1－执行准备2－执行中3－执行完毕4－执行失败5－数据下载中6－数据下载完毕7－数据下载异常;"`
 	Creator      string     `json:"creator" form:"creator" gorm:"column:creator;comment:;"`
 	CopyTo       string     `json:"copyTo" form:"copyTo" gorm:"column:copy_to;comment:;"`
 	MissionName  string     `json:"missionName" form:"missionName" gorm:"column:mission_name;comment:;"`
@@ -21,6 +21,7 @@ type NestExecRecord struct {
 	FlyInSecond  *int       `json:"flyInSecond" form:"flyInSecond" gorm:"column:fly_in_second;comment:;"`
 	PanoramaLink string     `json:"panoramaLink" form:"panoramaLink" gorm:"column:panorama_link;comment:;"`
 	ErrMsg       string     `json:"err_msg" form:"err_msg" gorm:"type:longtext;column:err_msg;comment:;"`
+	NestId       string     `json:"nestId" form:"nestId" gorm:"column:nest_id;comment:;"`
 	CreatedBy    uint       `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy    uint       `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy    uint       `gorm:"column:deleted_by;comment:删除者"`

@@ -24,5 +24,6 @@ func (s *FlyResultRouter) InitFlyResultRouter(Router *gin.RouterGroup) {
 		FlyRtRouterWithoutRecord.GET("findFlyResult", FlyRtApi.FindFlyResult)                             // 根据ID获取FlyResult
 		FlyRtRouterWithoutRecord.GET("getFlyResultList", FlyRtApi.GetFlyResultList)                       // 获取FlyResult列表
 		FlyRtRouterWithoutRecord.GET("queryAirlineRecordFlyResult", FlyRtApi.QueryAirlineRecordFlyResult) // 查询航线下所有作业记录及成果
+		FlyRtRouterWithoutRecord.POST("dataResultDownload", FlyRtApi.DataResultDownload)                  // 数据成果打包下载
 	}
 }

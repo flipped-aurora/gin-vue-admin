@@ -3,7 +3,7 @@
  */
 
 const config = {
-  appName: 'BailiNest-Console',
+  appName: '智航巡飞平台',
   appLogo: 'https://www.gin-vue-admin.com/img/logo.png',
   showViteLogo: true
 }

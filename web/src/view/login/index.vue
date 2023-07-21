@@ -9,6 +9,7 @@
             alt
           >
           <p class="login_panel_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
+          <!-- <p class="login_panel_form_title_p">智航巡飞平台</p> -->
         </div>
         <el-form
           ref="loginForm"
@@ -52,17 +53,17 @@
               </div>
             </div>
           </el-form-item>
-          <el-form-item>
-            <el-button
+          <el-form-item >
+            <!-- <el-button
               type="primary"
               style="width: 46%"
               size="large"
               @click="checkInit"
-            >前往初始化</el-button>
+            >前往初始化</el-button> -->
             <el-button
               type="primary"
               size="large"
-              style="width: 46%; margin-left: 8%"
+              style="width: 100%;"
               @click="submitForm"
             >登 录</el-button>
           </el-form-item>
@@ -70,7 +71,7 @@
       </div>
       <div class="login_panel_right" />
       <div class="login_panel_foot">
-        <div class="links">
+        <!-- <div class="links">
           <a href="http://doc.henrongyi.top/" target="_blank">
             <img src="@/assets/docs.png" class="link-icon" alt="文档">
           </a>
@@ -86,7 +87,7 @@
           <a href="https://space.bilibili.com/322210472" target="_blank">
             <img src="@/assets/video.png" class="link-icon" alt="视频站">
           </a>
-        </div>
+        </div> -->
         <div class="copyright">
           <BottomInfo />
         </div>

@@ -90,6 +90,14 @@ export const findNestInfo = (params) => {
 // @Router /nestinfo/getNestInfoList [get]
 export const getNestInfoList = (params) => {
   return service({
+    url: '/nestinfo/getNestInfoInfoListWithUser',
+    method: 'get',
+    params
+  })
+}
+
+export const getAllNestInfoList = (params) => {
+  return service({
     url: '/nestinfo/getNestInfoList',
     method: 'get',
     params

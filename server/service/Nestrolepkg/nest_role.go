@@ -80,6 +80,7 @@ func (nestroleService *NestRoleService) GetNestRoleInfoList(info nestrolepkgReq.
 	// 		authIDList = append(authIDList, r...)
 	// 	}
 	// }
+
 	authIDList := info.AuthID
 	var tmpRoleIDSearch []string
 	if !utils.UintArrContains(authIDList, 888) {

@@ -200,7 +200,7 @@ func (NestInfoApi *NestInfoApi) GetAllUserList(c *gin.Context) {
 }
 
 func (NestInfoApi *NestInfoApi) GetNestInfoInfoListWithUser(c *gin.Context) {
-	if list, total, err := nestinfoService.GetNestInfoInfoListWithUser(); err != nil {
+	if list, total, err := nestinfoService.GetNestInfoInfoListWithUser(c); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

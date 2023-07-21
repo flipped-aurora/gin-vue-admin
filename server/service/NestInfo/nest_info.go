@@ -10,7 +10,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/Nestrolepkg"
+	serviceSystem "github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -100,12 +102,36 @@ func (nestinfoService *NestInfoService) GetAllUserList() (list []system.SysUser,
 	return userList, total, err
 }
 
-func (nestinfoService *NestInfoService) GetNestInfoInfoListWithUser() (list []NestInfo.NestInfo, total int64, err error) {
+func (nestinfoService *NestInfoService) GetNestInfoInfoListWithUser(c *gin.Context) (list []NestInfo.NestInfo, total int64, err error) {
+	nestIDList, err := nestinfoService.GetNestIDListByUser(c)
+	if err != nil {
+		return nil, 0, err
+	}
+	db := global.GVA_DB.Model(&NestInfo.NestInfo{})
+	db.Where("nestid IN ?", nestIDList)
+	var nestinfos []NestInfo.NestInfo
+	err = db.Find(&nestinfos).Error
+	return nestinfos, total, err
+}
+
+func (nestinfoService *NestInfoService) GetNestIDListByUser(c *gin.Context) (list []string, err error) {
+	user, err := utils.GetClaims(c)
+	if err != nil {
+		return
+	}
+	us := new(serviceSystem.UserService)
 	nestroleservice := new(Nestrolepkg.NestRoleService)
 	nestroleSearch := NestRoleReq.NestRoleSearch{}
 	nestroleSearch.Page = 1
 	nestroleSearch.PageSize = 9999
-	nestRoleList, _, _ := nestroleservice.GetNestRoleInfoList(nestroleSearch)
+	nestroleSearch.AuthID, err = us.GetUserAuthorities(user.BaseClaims.ID)
+	if err != nil {
+		return
+	}
+	nestRoleList, _, err := nestroleservice.GetNestRoleInfoList(nestroleSearch)
+	if err != nil {
+		return
+	}
 	var nestIDList []string
 	for _, item := range nestRoleList {
 		var nestIDListStr []string
@@ -117,10 +143,5 @@ func (nestinfoService *NestInfoService) GetNestInfoInfoListWithUser() (list []Ne
 			}
 		}
 	}
-
-	db := global.GVA_DB.Model(&NestInfo.NestInfo{})
-	db.Where("nestid IN ?", nestIDList)
-	var nestinfos []NestInfo.NestInfo
-	err = db.Find(&nestinfos).Error
-	return nestinfos, total, err
+	return nestIDList, nil
 }

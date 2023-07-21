@@ -37,7 +37,7 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 
 	var oc bool
 	if openCaptcha == 0 || openCaptcha < interfaceToInt(v) {
-		oc = true
+		oc = false
 	}
 	// 字符,公式,验证码配置
 	// 生成默认数字的driver

@@ -1,16 +1,14 @@
 <template>
-  <div class="bottom-info">
-    <div>
-      <span>Powered by</span>
-      <span>
-        <a href="https://github.com/flipped-aurora/gin-vue-admin">{{ $GIN_VUE_ADMIN.appName }}</a>
-      </span>
-      <el-divider direction="vertical" />
-      <span>Copyright</span>
-      <span>
-        <a href="https://github.com/flipped-aurora">flipped-aurora团队</a>
-      </span>
-    </div>
+  <div class="flex gap-4 items-center text-sm text-gray-500 justify-center">
+    <span>Powered by</span>
+    <span>
+      <a class="text-gray-800 font-bold" href="https://github.com/flipped-aurora/gin-vue-admin">{{ $GIN_VUE_ADMIN.appName }}</a>
+    </span>
+    <slot />
+    <span>Copyright</span>
+    <span>
+      <a class="text-gray-800 font-bold" href="https://github.com/flipped-aurora">flipped-aurora团队</a>
+    </span>
   </div>
 </template>
 
@@ -22,28 +20,3 @@ export default {
 }
 </script>
 
-<style lang="scss">
-.bottom-info {
-  color: #888;
-  height: 30px;
-  line-height: 12px;
-  font-weight: 200;
-  .el-divider{
-    width: 200px;
-    border:none;
-  }
-  a {
-    color: #1a2652;
-    font-weight: 600;
-    font-style: italic;
-    font-size: 12px;
-  }
-  div {
-    display: flex;
-    justify-content: center;
-    span{
-      margin: 0 3px;
-    }
-  }
-}
-</style>

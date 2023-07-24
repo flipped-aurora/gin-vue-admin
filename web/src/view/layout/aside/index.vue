@@ -1,5 +1,5 @@
 <template>
-  <div :style="{ background: userStore.sideMode }">
+  <div :style="{ background: userStore.sideMode }" class="h-full flex-none border-r shadow-sm w-full">
     <el-scrollbar style="height: calc(100vh - 60px)">
       <transition
         :duration="{ enter: 800, leave: 100 }"
@@ -12,7 +12,7 @@
           :default-active="active"
           :background-color="theme.background"
           :active-text-color="theme.active"
-          class="el-menu-vertical"
+          class="gva-menu"
           unique-opened
           @select="selectMenuItem"
         >
@@ -39,8 +39,7 @@ export default {
 
 <script setup>
 import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
-import { emitter } from '@/utils/bus.js'
-import { ref, watch, onUnmounted } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
@@ -81,6 +80,13 @@ const getTheme = () => {
 getTheme()
 
 const active = ref('')
+
+defineProps({
+  isCollapse: Boolean,
+})
+
+// const emit = defineEmits(['update:isCollapse'])
+
 watch(() => route, () => {
   active.value = route.meta.activeName || route.name
 }, { deep: true })
@@ -89,24 +95,11 @@ watch(() => userStore.sideMode, () => {
   getTheme()
 })
 
-const isCollapse = ref(false)
 const initPage = () => {
   active.value = route.meta.activeName || route.name
-  const screenWidth = document.body.clientWidth
-  if (screenWidth < 1000) {
-    isCollapse.value = !isCollapse.value
-  }
-
-  emitter.on('collapse', (item) => {
-    isCollapse.value = item
-  })
 }
 
 initPage()
-
-onUnmounted(() => {
-  emitter.off('collapse')
-})
 
 const selectMenuItem = (index, _, ele, aaa) => {
   const query = {}
@@ -139,6 +132,9 @@ const selectMenuItem = (index, _, ele, aaa) => {
   .el-scrollbar__view {
     height: 100%;
   }
+}
+.el-menu{
+  border-right: 0;
 }
 .menu-info {
   .menu-contorl {

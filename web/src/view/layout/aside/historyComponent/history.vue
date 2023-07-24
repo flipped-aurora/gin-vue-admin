@@ -1,5 +1,5 @@
 ﻿<template>
-  <div class="router-history">
+  <div class="bg-white h-12">
     <el-tabs
       v-model="activeValue"
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"

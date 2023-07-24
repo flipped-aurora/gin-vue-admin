@@ -1,100 +1,91 @@
 <template>
-  <el-container class="layout-cont">
-    <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
+  <el-container class=" h-screen overflow-hidden">
+    <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']" class="flex items-center">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click="changeShadow()" />
-      <el-aside class="main-cont main-left gva-aside">
-        <div class="tilte" :style="{background: backgroundColor}">
-          <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
-          <div v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
+      <el-aside :class="[isSider?'w-72':'w-20',isMobile ? 'mobile': '']">
+        <div class="w-full h-24 flex items-center justify-center" :style="{background: backgroundColor}">
+          <img alt class=" w-16" :src="$GIN_VUE_ADMIN.appLogo">
+          <div v-if="isSider" class=" font-mono text-2xl font-bold" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
-        <Aside class="aside" />
+        <Aside :is-collapse="isCollapse" />
       </el-aside>
       <!-- 分块滑动功能 -->
-      <el-main class="main-cont main-right">
-        <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
-          <div
-            :style="{width: `calc(100% - ${isMobile?'0px':isCollapse?'54px':'220px'})`}"
-            class="topfix"
-          >
-            <el-row>
-              <el-col>
-                <el-header class="header-cont">
-                  <el-row class="p-0">
-                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
-                      <div class="menu-total" @click="totalCollapse">
-                        <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
-                        <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
-                      </div>
-                    </el-col>
-                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
-                      <!-- 修改为手机端不显示顶部标签 -->
-                      <el-breadcrumb v-show="!isMobile" class="breadcrumb">
-                        <el-breadcrumb-item
-                          v-for="item in matched.slice(1,matched.length)"
-                          :key="item.path"
-                        >{{ fmtTitle(item.meta.title,route) }}</el-breadcrumb-item>
-                      </el-breadcrumb>
-                    </el-col>
-                    <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
-                      <div class="right-box">
-                        <Search />
-                        <el-dropdown>
-                          <div class="flex justify-center items-center h-full w-full">
-                            <span class="header-avatar" style="cursor: pointer">
-                              <CustomPic />
-                              <span v-show="!isMobile" style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
-                              <el-icon>
-                                <arrow-down />
-                              </el-icon>
+      <el-main class="flex-1 w-0 h-screen overflow-hidden m-2">
+        <div class="rounded-sm mt-2 h-32 overflow-hidden">
+          <el-header class="bg-white border-b">
+            <el-row class="p-0 flex items-center w-full justify-between h-full ">
+              <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
+                <div class="mx-2" @click="totalCollapse">
+                  <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
+                  <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
+                </div>
+              </el-col>
+              <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
+                <!-- 修改为手机端不显示顶部标签 -->
+                <el-breadcrumb v-show="!isMobile" class="ml-12">
+                  <el-breadcrumb-item
+                    v-for="item in matched.slice(1,matched.length)"
+                    :key="item.path"
+                  >{{ fmtTitle(item.meta.title,route) }}</el-breadcrumb-item>
+                </el-breadcrumb>
+              </el-col>
+              <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
+                <div class="flex items-center justify-end">
+                  <Search />
+                  <el-dropdown>
+                    <div class="flex justify-center items-center h-full w-full">
+                      <span class="header-avatar" style="cursor: pointer">
+                        <CustomPic />
+                        <span v-show="!isMobile" style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
+                        <el-icon>
+                          <arrow-down />
+                        </el-icon>
+                      </span>
+                    </div>
+                    <template #dropdown>
+                      <el-dropdown-menu>
+                        <el-dropdown-item>
+                          <span style="font-weight: 600;">
+                            当前角色：{{ userStore.userInfo.authority.authorityName }}
+                          </span>
+                        </el-dropdown-item>
+                        <template v-if="userStore.userInfo.authorities">
+                          <el-dropdown-item v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
+                            <span>
+                              切换为：{{ item.authorityName }}
                             </span>
+                          </el-dropdown-item>
+                        </template>
+                        <el-dropdown-item icon="avatar">
+                          <div class="command-box" style="display: flex" @click="handleCommand">
+                            <div>指令菜单</div>
+                            <div style="margin-left: 8px">
+                              <span class="button">{{ first }}</span>
+                              +
+                              <span class="button">K</span>
+                            </div>
                           </div>
-                          <template #dropdown>
-                            <el-dropdown-menu>
-                              <el-dropdown-item>
-                                <span style="font-weight: 600;">
-                                  当前角色：{{ userStore.userInfo.authority.authorityName }}
-                                </span>
-                              </el-dropdown-item>
-                              <template v-if="userStore.userInfo.authorities">
-                                <el-dropdown-item v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
-                                  <span>
-                                    切换为：{{ item.authorityName }}
-                                  </span>
-                                </el-dropdown-item>
-                              </template>
-                              <el-dropdown-item icon="avatar">
-                                <div class="command-box" style="display: flex" @click="handleCommand">
-                                  <div>指令菜单</div>
-                                  <div style="margin-left: 8px">
-                                    <span class="button">{{ first }}</span>
-                                    +
-                                    <span class="button">K</span>
-                                  </div>
-                                </div>
-                              </el-dropdown-item>
-                              <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
-                              <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">登 出</el-dropdown-item>
-                            </el-dropdown-menu>
-                          </template>
-                        </el-dropdown>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </el-header>
+                        </el-dropdown-item>
+                        <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
+                        <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">登 出</el-dropdown-item>
+                      </el-dropdown-menu>
+                    </template>
+                  </el-dropdown>
+                </div>
               </el-col>
             </el-row>
-            <!-- 当前面包屑用路由自动生成可根据需求修改 -->
-            <!--
+          </el-header>
+          <!-- 当前面包屑用路由自动生成可根据需求修改 -->
+          <!--
             :to="{ path: item.path }" 暂时注释不用-->
-            <HistoryComponent ref="layoutHistoryComponent" />
-          </div>
-        </transition>
+          <HistoryComponent ref="layoutHistoryComponent" />
+        </div>
         <router-view
           v-if="reloadFlag"
           v-slot="{ Component }"
           v-loading="loadingFlag"
           element-loading-text="正在加载中"
-          class="admin-box"
+          class="body overflow-auto "
         >
           <div>
             <transition mode="out-in" name="el-fade-in-linear">
@@ -106,7 +97,7 @@
         </router-view>
         <BottomInfo />
         <setting />
-        <CommandMenu ref="command"/>
+        <CommandMenu ref="command" />
       </el-main>
     </el-container>
 
@@ -147,7 +138,7 @@ const first = ref('')
 const dialogVisible = ref(false)
 const initPage = () => {
   // 判断当前用户的操作系统
-  if(window.localStorage.getItem('osType') === 'WIN') {
+  if (window.localStorage.getItem('osType') === 'WIN') {
     first.value = 'Ctrl'
   } else {
     first.value = '⌘'
@@ -156,13 +147,13 @@ const initPage = () => {
   const handleKeyDown = (e) => {
     if (e.ctrlKey && e.key === 'k') {
       // 阻止浏览器默认事件
-      e.preventDefault();
+      e.preventDefault()
       handleCommand()
     }
   }
-  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keydown', handleKeyDown)
 
-    const screenWidth = document.body.clientWidth
+  const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {
     isMobile.value = true
     isSider.value = false
@@ -188,7 +179,6 @@ const handleCommand = () => {
 const loadingFlag = ref(false)
 onMounted(() => {
   // 挂载一些通用的事件
-  emitter.emit('collapse', isCollapse.value)
   emitter.emit('mobile', isMobile.value)
   emitter.on('reload', reload)
   emitter.on('showLoading', () => {
@@ -200,7 +190,6 @@ onMounted(() => {
   window.onresize = () => {
     return (() => {
       initPage()
-      emitter.emit('collapse', isCollapse.value)
       emitter.emit('mobile', isMobile.value)
     })()
   }
@@ -266,7 +255,6 @@ const totalCollapse = () => {
   isCollapse.value = !isCollapse.value
   isSider.value = !isCollapse.value
   isShadowBg.value = !isCollapse.value
-  emitter.emit('collapse', isCollapse.value)
 }
 
 const toPerson = () => {
@@ -294,7 +282,29 @@ const changeShadow = () => {
 :deep .el-overlay {
   background-color: hsla(0,0%,100%,.9) !important;
 }
-.command-box{
 
+.el-main{
+  padding: 0 !important;
+}
+
+.dark{
+  background-color: #191a23 !important;
+  color: #fff !important;
+}
+.light{
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.body{
+  height: calc(100vh - 11rem);
+}
+
+:deep .el-menu--collapse{
+  width: auto ;
+}
+
+:deep .el-sub-menu .el-sub-menu__title{
+  padding: 0;
 }
 </style>

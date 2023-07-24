@@ -1,17 +1,17 @@
 <template>
-  <div class="search-component">
+  <div class="flex items-center text-2xl ">
     <div
-      class="user-box"
+      class="mx-2"
     >
       <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
     </div>
     <div
-      class="user-box"
+      class="mx-2"
     >
       <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
     </div>
     <div
-      class="user-box"
+      class="mx-2"
     >
       <div class="service gvaIcon-customer-service" @click="toService" />
     </div>

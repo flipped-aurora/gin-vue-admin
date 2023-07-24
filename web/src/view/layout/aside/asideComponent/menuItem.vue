@@ -86,6 +86,8 @@ watch(() => props.theme, () => {
 }
 
 .el-menu--collapse{
+  width: auto;
+  margin: 0;
   .el-menu-item.is-active{
     color: #fff;
     background-color:v-bind(activeBackground) ;
@@ -118,6 +120,7 @@ watch(() => props.theme, () => {
     }
   }
 }
+
 
 .el-menu-item:hover{
   .gva-menu-item{

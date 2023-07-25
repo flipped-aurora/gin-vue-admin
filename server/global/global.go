@@ -12,7 +12,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )

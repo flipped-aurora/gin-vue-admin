@@ -5,7 +5,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 
-	"github.com/go-redis/redis/v8"
+	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
 

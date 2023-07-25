@@ -66,10 +66,9 @@ watch(() => props.theme, () => {
 
 <style lang="scss" scoped>
 .el-sub-menu{
+  width: 100%;
   ::v-deep(.el-sub-menu__title){
       color: v-bind(normalText);
-      padding: 0 1rem !important;
-      width: calc(100% - 8px) !important;
   }
 }
 
@@ -94,20 +93,6 @@ watch(() => props.theme, () => {
 
 .gva-subMenu {
   padding-left: 4px;
-}
-
-</style>
-
-<style lang="scss" >
-.el-menu--collapse {
-  .gva-subMenu {
-    padding-left: 0;
-  }
-  .el-sub-menu__title {
-    padding: 0 1rem !important;
-    width: calc(100% - 8px) !important;
-    margin-right: 0;
-  }
 }
 
 </style>

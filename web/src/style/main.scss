@@ -9,6 +9,7 @@
 
 @import '@/style/basics.scss';
 @import '@/style/iconfont.css';
+
 html {
     line-height: 1.15;
     /* 1 */
@@ -510,45 +511,56 @@ li {
 
 // 导航
 
-.el-button{
+.el-button {
     @apply font-sans
 }
+
 #app {
     .el-container {
         @apply relative h-full w-full;
     }
+
     .el-container.mobile.openside {
         @apply fixed top-0;
     }
+
     .gva-aside {
         @apply fixed top-0 bottom-0 left-0 z-[1001] overflow-hidden w-aside h-full font-[0px] transition-all duration-200 ease-in-out;
+
         .el-menu {
             @apply border-r-0;
         }
+
         .tilte {
             @apply h-12 py-3 text-center transition-all duration-200 ease-in-out flex items-center justify-center;
+
             .logoimg {
                 @apply h-8 w-8 bg-white rounded-full p-1;
             }
+
             .tit-text {
                 @apply text-white font-bold text-2xl pl-2.5;
             }
         }
     }
+
     .aside {
         .el-menu--collapse {
             >.el-menu-item {
                 @apply flex justify-center;
             }
         }
+
         .el-sub-menu {
             .el-menu {
                 .is-active {
+
                     // 关闭三级菜单二级菜单样式
                     ul {
                         @apply border-0;
                     }
                 }
+
                 // 关闭三级菜单二级菜单样式
                 .is-active.is-opened {
                     ul {
@@ -558,34 +570,41 @@ li {
             }
         }
     }
+
     .hideside {
         .aside {
             @apply w-16;
         }
     }
+
     .mobile.hideside {
         .gva-aside {
             @apply transition-all duration-200;
         }
     }
+
     .mobile {
         .gva-aside {
             @apply transition-all duration-200 w-52;
         }
     }
+
     .main-cont.el-main {
         @apply min-h-full ml-aside relative;
     }
+
     .hideside {
         .main-cont.el-main {
             @apply ml-16;
         }
     }
+
     .mobile {
         .main-cont.el-main {
             @apply ml-0;
         }
     }
+
     .openside.mobile {
         .shadowBg {
             @apply bg-black opacity-30 absolute top-0 left-0 z-[999];
@@ -597,6 +616,7 @@ li {
 .layout-cont {
     .main-cont {
         @apply relative;
+
         &.el-main {
             @apply bg-base p-0;
         }
@@ -605,50 +625,63 @@ li {
 
 .admin-box {
     @apply min-h-base py-3 px-4 mt-28 ml-0.5 mr-5;
+
     .el-table--border {
         @apply rounded mb-3.5;
     }
+
     .el-table {
         th {
             @apply py-2 px-0;
+
             .cell {
                 @apply text-gray-700 text-base font-bold leading-10;
             }
         }
+
         td {
             @apply py-2 px-0;
+
             .cell {
                 @apply text-gray-600 text-base leading-10;
             }
         }
+
         td.is-leaf {
             @apply border-b border-gray-200;
         }
+
         th.is-leaf {
             @apply border-b-0 border-gray-100;
         }
     }
+
     .el-pagination {
         @apply mt-3.5;
     }
+
     .upload-demo,
     .upload {
         @apply p-0;
     }
+
     .edit_container,
     .edit {
         @apply p-0;
     }
+
     .el-input {
         .el-input__suffix {
             @apply -mt-1;
         }
+
         &.is-disabled {
             .el-input__suffix {
                 @apply mt-0;
             }
         }
     }
+
     .el-cascader {
         .el-input {
             .el-input__suffix {
@@ -656,6 +689,7 @@ li {
             }
         }
     }
+
     .el-input__inner {
         @apply h-9 rounded border-gray-100;
     }
@@ -695,23 +729,28 @@ li {
 }
 
 .el-pagination {
+
     .btn-prev,
     .btn-next {
         @apply border border-solid border-gray-200 rounded;
     }
+
     .el-pager {
         li {
             @apply text-gray-600 border-solid text-sm mx-1.5 border border-gray-200 rounded;
         }
     }
+
     @apply py-5;
 }
 
 .el-row {
     @apply py-2.5 px-0;
+
     .el-col>label {
         @apply leading-8 text-right w-4/5 pr-4 inline-block;
     }
+
     .line {
         @apply leading-8 text-center;
     }
@@ -719,6 +758,7 @@ li {
 
 .edit_container {
     @apply bg-white p-4;
+
     .el-button {
         @apply my-4
     }
@@ -726,6 +766,7 @@ li {
 
 .edit {
     @apply bg-white;
+
     .el-button {
         @apply my-4
     }
@@ -740,6 +781,7 @@ li {
 .el-container.layout-cont {
     .main-cont.el-main {
         @apply bg-base;
+
         .menu-total {
             @apply cursor-pointer text-2xl text-gray-900 mt-4;
         }
@@ -750,17 +792,22 @@ li {
     .main-cont {
         .router-history {
             @apply bg-white border-t border-solid border-gray-100 border-0;
+
             .el-tabs__header {
                 @apply m-0;
+
                 .el-tabs__item {
                     @apply h-[40px] border-y-0 border-l border-r border-solid border-gray-100;
+
                     +.el-tabs__item {
                         @apply border-l-0;
                     }
                 }
+
                 .el-tabs__item.is-active {
                     @apply bg-sky-50;
                 }
+
                 .el-tabs__nav {
                     @apply border-0
                 }
@@ -773,6 +820,7 @@ li {
     .el-button.el-button--text.el-button--small {
         @apply relative;
     }
+
     .cell {
         button:last-child::after {
             @apply content-[""] absolute w-0;
@@ -790,6 +838,7 @@ li {
         .el-table__indent {
             @apply border-r border-solid border-gray-200 ml-1.5;
         }
+
         .el-table__placeholder {
             @apply w-2.5;
         }
@@ -801,6 +850,7 @@ li {
         .el-table__indent {
             @apply border-r border-solid border-gray-200 ml-1.5;
         }
+
         .el-table__placeholder {
             @apply w-2.5;
         }
@@ -811,8 +861,10 @@ $mainHight: 100vh;
 
 .topfix {
     @apply fixed top-0 box-border z-[999];
+
     >.el-row {
         @apply p-0;
+
         .el-col-lg-14 {
             @apply h-16;
         }
@@ -822,67 +874,87 @@ $mainHight: 100vh;
 .layout-cont {
     .right-box {
         @apply pt-4 flex justify-end items-center;
+
         img {
             @apply align-middle rounded-xl border border-solid border-gray-200;
         }
     }
+
     .header-cont {
         @apply h-16 py-0 px-4 bg-white;
     }
+
     .main-cont {
         @apply h-screen overflow-visible relative;
+
         .breadcrumb {
             @apply h-16 leading-normal inline-block p-0 ml-12 text-base;
+
             .el-breadcrumb__item {
                 .el-breadcrumb__inner {
                     @apply text-gray-600;
                 }
             }
+
             .el-breadcrumb__item:nth-last-child(1) {
                 .el-breadcrumb__inner {
                     @apply text-gray-800;
                 }
             }
         }
+
         &.el-main {
             @apply bg-white overflow-auto;
         }
+
         .menu-total {
             @apply ml-1.5 cursor-pointer float-left mt-2.5 w-8 h-8 leading-normal text-3xl;
         }
+
         .aside {
             @apply overflow-auto;
+
             &::-webkit-scrollbar {
                 @apply hidden;
             }
         }
+
         .el-menu-vertical {
             @apply h-[calc(100vh-60px)];
+
             &:not(.el-menu--collapse) {
                 @apply w-56;
             }
         }
+
         .el-menu--collapse {
             @apply w-16;
+
             li {
+
                 .el-tooltip,
                 .el-sub-menu__title {
                     @apply px-0 py-4;
                 }
             }
         }
+
         &::-webkit-scrollbar {
             @apply hidden;
         }
+
         &.main-left {
-          @apply w-auto;
+            @apply w-auto;
         }
+
         &.main-right {
             .admin-title {
                 @apply text-base float-left ml-5 align-middle;
+
                 img {
                     @apply align-middle;
                 }
+
                 &.collapse {
                     @apply w-14
                 }
@@ -897,15 +969,19 @@ $mainHight: 100vh;
 
 .search-component {
     @apply inline-flex overflow-hidden text-center;
+
     .el-input__inner {
         @apply border-0 border-b border-solid border-gray-500;
     }
+
     .el-dropdown-link {
         @apply cursor-pointer;
     }
+
     .search-icon {
         @apply text-lg inline-block align-middle box-border text-gray-800;
     }
+
     .user-box {
         @applt cursor-pointer mr-6 text-gray-800;
     }
@@ -923,6 +999,7 @@ $mainHight: 100vh;
 
 .gva-btn-list {
     @apply mb-3 flex;
+
     .el-button+.el-button {
         @apply ml-3;
     }

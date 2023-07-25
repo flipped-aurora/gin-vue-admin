@@ -3,16 +3,13 @@
     <div class="dashboard-line-title">
       访问趋势
     </div>
-    <div
-      ref="echart"
-      class="dashboard-line"
-    />
+    <div id="echarts" class="dashboard-line" />
   </div>
 </template>
 <script setup>
 import * as echarts from 'echarts'
 import { nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
-// import 'echarts/theme/macarons'
+import { useWindowSize } from '@/utils/useWindowResize'
 
 var dataAxis = []
 for (var i = 1; i < 13; i++) {
@@ -40,14 +37,20 @@ for (var i = 0; i < data.length; i++) {
   dataShadow.push(yMax)
 }
 
-const chart = shallowRef(null)
-const echart = ref(null)
+let chart = null
+
 const initChart = () => {
-  chart.value = echarts.init(echart.value /* 'macarons' */)
-  setOptions()
+  nextTick(() => {
+    if (chart) {
+      chart?.dispose()
+    }
+    chart = null
+    chart = echarts.init(document.querySelector('#echarts'))
+    setOptions()
+  })
 }
 const setOptions = () => {
-  chart.value.setOption({
+  chart.setOption({
     grid: {
       left: '40',
       right: '20',
@@ -100,18 +103,18 @@ const setOptions = () => {
     ],
   })
 }
-
-onMounted(async() => {
-  await nextTick()
-  initChart()
+useWindowSize(() => {
+  window.requestAnimationFrame(() => {
+    initChart()
+  })
 })
 
 onUnmounted(() => {
-  if (!chart.value) {
+  if (!chart) {
     return
   }
-  chart.value.dispose()
-  chart.value = null
+  chart.dispose()
+  chart = null
 })
 </script>
 <style lang="scss" scoped>
@@ -121,6 +124,7 @@ onUnmounted(() => {
     height: 360px;
     width: 100%;
   }
+
   .dashboard-line-title {
     font-weight: 600;
     margin-bottom: 12px;

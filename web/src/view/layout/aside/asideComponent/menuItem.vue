@@ -103,6 +103,7 @@ watch(() => props.theme, () => {
 
 .el-menu-item{
   color: v-bind(normalText);
+  @apply flex items-center justify-center;
 }
 
 .el-menu-item.is-active{
@@ -120,7 +121,6 @@ watch(() => props.theme, () => {
     }
   }
 }
-
 
 .el-menu-item:hover{
   .gva-menu-item{

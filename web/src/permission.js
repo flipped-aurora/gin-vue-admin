@@ -14,6 +14,7 @@ const getRouter = async(userStore) => {
   asyncRouters.forEach(asyncRouter => {
     router.addRoute(asyncRouter)
   })
+  console.log(asyncRouters)
 }
 
 async function handleKeepAlive(to) {
@@ -51,7 +52,13 @@ router.beforeEach(async(to, from) => {
       }
       // token 可以解析但是却是不存在的用户 id 或角色 id 会导致无限调用
       if (userStore.userInfo?.authority?.defaultRouter != null) {
-        return { name: userStore.userInfo.authority.defaultRouter }
+        console.log("user router", userStore.userInfo.authority.defaultRouter)
+        const routeName = userStore.userInfo.authority.defaultRouter
+        if(routeName.indexOf("http") === -1 && routeName.indexOf("https") === -1 ) {
+          return { name: userStore.userInfo.authority.defaultRouter }
+        } else {
+          window.location.href = userStore.userInfo.authority.defaultRouter 
+        }
       } else {
         // 强制退出账号
         userStore.ClearStorage()

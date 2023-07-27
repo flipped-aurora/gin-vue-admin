@@ -1,9 +1,6 @@
 package system
 
 import (
-	"strconv"
-	"time"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -11,10 +8,11 @@ import (
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
+	"strconv"
+	"time"
 )
 
 // Login

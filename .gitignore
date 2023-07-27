@@ -22,6 +22,11 @@ yarn-error.log*
 *.sln
 *.sw?
 
+yarn.*
+npm.*
+
+.yarn-*
+
 /server/log/
 /server/gva
 /server/latest_log

@@ -16,7 +16,8 @@
         "echarts": "5.4.3",
         "element-plus": "^2.3.8",
         "highlight.js": "^11.8.0",
-        "marked": "^5.1.1",
+
+        "marked": "4.3.0",
         "mitt": "^3.0.1",
         "nprogress": "^0.2.0",
         "path": "^0.12.7",

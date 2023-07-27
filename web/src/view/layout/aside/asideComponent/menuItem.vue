@@ -86,20 +86,33 @@ watch(() => props.theme, () => {
 }
 
 .el-menu--collapse{
+  width: auto;
+  margin: 0;
   .el-menu-item.is-active{
-    color: v-bind(activeBackground);
+    color: #fff;
+    background-color:v-bind(activeBackground) ;
+    border-radius: 10px;
+    width:40px;
+    height: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: -0.9765625px 4.015625px 15px -2px v-bind(activeBackground) !important;
+    z-index: 9998;
   }
 }
 
 .el-menu-item{
   color: v-bind(normalText);
+  @apply flex items-center justify-center;
 }
 
 .el-menu-item.is-active{
   .gva-menu-item{
     background: v-bind(activeBackground) !important;
-    border-radius: 4px;
-    box-shadow: 0 0 2px 1px v-bind(activeBackground) !important;
+    height: 38px;
+    border-radius: 8px;
+    box-shadow: -3.9765625px 12.00390625px 25px -11px v-bind(activeBackground) !important;
+    z-index: 9999;
     i{
       color: v-bind(activeText);
     }
@@ -112,7 +125,7 @@ watch(() => props.theme, () => {
 .el-menu-item:hover{
   .gva-menu-item{
     background: v-bind(hoverBackground);
-    border-radius: 4px;
+    border-radius: 8px;
     box-shadow: 0 0 2px 1px v-bind(hoverBackground);
     color: v-bind(hoverText);
   }

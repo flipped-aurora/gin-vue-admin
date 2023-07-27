@@ -91,5 +91,5 @@ export default class ImageCompress {
   }
 }
 
-const path = import.meta.env.VITE_BASE_API + '/'
+const path = import.meta.env.VITE_IMAGE_PATH + '/'
 export const getUrl = (url) => url && url.slice(0, 4) !== 'http' ? path + url : url

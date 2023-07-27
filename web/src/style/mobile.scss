@@ -1,77 +1,68 @@
 @import '@/style/basics.scss';
-@media screen and (min-width: 320px)and (max-width: 750px) {
+@media screen and (min-width: 320px) and (max-width: 750px) {
     .el-header {
-        padding: 0 $padding-xs;
+        @apply px-0 py-1.5;
     }
     .layout-cont {
         .main-cont {
             .breadcrumb {
-                padding: 0 $padding-xs;
+                @apply px-0 py-1.5;
             }
         }
     }
     .layout-cont {
         .right-box {
-            margin-right: $margin-xs;
+            @apply mr-1.5;
         }
     }
     .el-main {
         .admin-box {
-            margin-left: 0;
-            margin-right: 0;
+            @apply mx-0;
         }
         .big.admin-box {
-            padding: 0;
+            @apply p-0;
         }
         .big {
             .bottom {
                 .chart-player {
-                    height: auto!important;
-                    margin-bottom: 15px;
+                    @apply h-auto mb-4;
                 }
                 .todoapp {
-                    background-color: #fff;
-                    padding-bottom: 10px;
+                    @apply bg-white pb-2.5;
                 }
             }
         }
     }
     .card .car-left,
     .card .car-right {
-        width: 100%;
-        height: 100%;
+        @apply w-full h-full;
     }
     .card {
-        padding-left: $padding-xs;
-        padding-right: $padding-xs;
+        @apply px-1.5;
     }
     .card {
         .text {
-            width: 100%;
+            @apply w-full;
             h4 {
-                white-space: break-spaces;
+                @apply whitespace-break-spaces;
             }
         }
     }
     .shadow {
-        margin-left: 4px;
-        margin-right: 4px;
+        @apply mx-1;
         .grid-content {
-            margin-bottom: 10px;
-            padding: 0;
+            @apply mb-2.5 p-0;
         }
     }
     .el-dialog {
-        width: 90%;
+        @apply w-5/6;
     }
     .el-transfer {
         .el-transfer-panel {
-            width: 40%;
-            display: inline-block;
+            @apply w-2/5 inline-block;
         }
         .el-transfer__buttons {
-            padding: 0 5px;
-            display: inline-block;
+            @apply px-0 py-1.5 inline-block;
         }
     }
 }

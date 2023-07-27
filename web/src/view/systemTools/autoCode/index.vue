@@ -280,7 +280,7 @@
 
     <el-dialog v-model="previewFlag">
       <template #header>
-        <div class="previewCodeTool">
+        <div class="flex items-center px-2">
           <p>操作栏：</p>
           <el-button type="primary" @click="selectText">全选</el-button>
           <el-button type="primary" @click="copy">复制</el-button>
@@ -718,11 +718,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .previewCodeTool {
-    display: flex;
-    align-items: center;
-    padding: 5px 0;
-  }
 .button-box {
   padding: 10px 20px;
   .el-button {

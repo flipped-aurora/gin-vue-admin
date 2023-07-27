@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-gray-100 h-screen overflow-hidden font-sans">
     <el-config-provider :locale="zhCn">
       <router-view />
     </el-config-provider>
@@ -18,14 +18,9 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 </script>
 <style lang="scss">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 // 引入初始化样式
-#app {
-  background: #eee;
-  height: 100vh;
-  overflow: hidden;
-  font-weight: 400 !important;
-}
-.el-button{
-  font-weight: 400 !important;
-}
+
 </style>

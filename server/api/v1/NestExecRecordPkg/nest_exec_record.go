@@ -36,7 +36,7 @@ func (NtERecordApi *NestExecRecordApi) CreateNestExecRecord(c *gin.Context) {
 	}
 	//如果航线名称为空则根据missionid查询航线名称
 	if NtERecord.MissionName == "" && NtERecord.Missionid != "" {
-		airline, getErr := NestAirlineService.GetNestAirlineByMIssionId(NtERecord.Missionid)
+		airline, getErr := NestAirlineService.GetNestAirlineByMIssionId(NtERecord.Missionid, c)
 		if getErr != nil {
 			NtERecord.MissionName = airline.Name
 		}
@@ -146,7 +146,7 @@ func (NtERecordApi *NestExecRecordApi) UpdateNestExecRecordWithAirline(c *gin.Co
 		return
 	}
 	if NtERecord.Missionid != "" {
-		airlineRes, getErr := NestAirlineService.GetNestAirlineByMIssionId(NtERecord.Missionid)
+		airlineRes, getErr := NestAirlineService.GetNestAirlineByMIssionId(NtERecord.Missionid, c)
 		if getErr != nil {
 			//todo add nest_exec_record query airline msg exception
 		} else {
@@ -202,7 +202,7 @@ func (NtERecordApi *NestExecRecordApi) GetNestExecRecordList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if list, total, err := NtERecordService.GetNestExecRecordInfoList(pageInfo); err != nil {
+	if list, total, err := NtERecordService.GetNestExecRecordInfoList(pageInfo, c); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

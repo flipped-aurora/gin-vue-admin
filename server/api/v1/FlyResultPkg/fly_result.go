@@ -176,7 +176,7 @@ func (FlyRtApi *FlyResultApi) GetFlyResultList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if list, total, err := FlyRtService.GetFlyResultInfoList(pageInfo); err != nil {
+	if list, total, err := FlyRtService.GetFlyResultInfoList(pageInfo, c); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
@@ -207,19 +207,19 @@ func (FlyRtApi *FlyResultApi) QueryAirlineRecordFlyResult(c *gin.Context) {
 	}
 
 	//获取航线列表
-	airlineList, err := NestAirlineService.NoPageGetNestAirlineInfoList(NtAirline.NestId)
+	airlineList, err := NestAirlineService.NoPageGetNestAirlineInfoList(NtAirline.NestId, c)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	}
 	//获取记录列表
-	recordList, err := NestExecRecordService.NoPageGetNestExecRecordInfoList()
+	recordList, err := NestExecRecordService.NoPageGetNestExecRecordInfoList(c)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	}
 	//获取成果列表
-	resultList, err := FlyRtService.NoPageGetFlyResultInfoList()
+	resultList, err := FlyRtService.NoPageGetFlyResultInfoList(c)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)

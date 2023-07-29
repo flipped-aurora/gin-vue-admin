@@ -5,6 +5,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestExecRecordPkg"
 	NestExecRecordPkgReq "github.com/flipped-aurora/gin-vue-admin/server/model/NestExecRecordPkg/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/service/NestInfo"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
@@ -64,12 +66,18 @@ func (NtERecordService *NestExecRecordService) GetNestExecRecord(id uint) (NtERe
 
 // GetNestExecRecordInfoList 分页获取NestExecRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (NtERecordService *NestExecRecordService) GetNestExecRecordInfoList(info NestExecRecordPkgReq.NestExecRecordSearch) (list []NestExecRecordPkg.NestExecRecord, total int64, err error) {
+func (NtERecordService *NestExecRecordService) GetNestExecRecordInfoList(info NestExecRecordPkgReq.NestExecRecordSearch, c *gin.Context) (list []NestExecRecordPkg.NestExecRecord, total int64, err error) {
+	nestInfoService := new(NestInfo.NestInfoService)
+	nestIDList, err := nestInfoService.GetNestIDListByUser(c)
+	if err != nil {
+		return
+	}
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&NestExecRecordPkg.NestExecRecord{})
 	var NtERecords []NestExecRecordPkg.NestExecRecord
+	db.Where("nest_id in ?", nestIDList)
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
 		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
@@ -97,10 +105,16 @@ func (NtERecordService *NestExecRecordService) GetNestExecRecordInfoList(info Ne
 
 // NoPageGetNestExecRecordInfoList 不分页获取NestExecRecord记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (NtERecordService *NestExecRecordService) NoPageGetNestExecRecordInfoList() (list []map[string]interface{}, err error) {
+func (NtERecordService *NestExecRecordService) NoPageGetNestExecRecordInfoList(c *gin.Context) (list []map[string]interface{}, err error) {
+	nestInfoService := new(NestInfo.NestInfoService)
+	nestIDList, err := nestInfoService.GetNestIDListByUser(c)
+	if err != nil {
+		return
+	}
 	// 创建db
 	db := global.GVA_DB.Model(&NestExecRecordPkg.NestExecRecord{})
+	db.Where("nest_id in ?", nestIDList)
 	NtERecords := make([]map[string]interface{}, 0, 0)
-	err = db.Order("execute_at desc").Where("execute_at <> '' and status = 3").Find(&NtERecords).Error
+	err = db.Order("execute_at desc").Where("execute_at <> ''").Find(&NtERecords).Error
 	return NtERecords, err
 }

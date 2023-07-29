@@ -47,32 +47,26 @@
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="航线id" prop="missionid" width="120" />
-        <el-table-column align="left" label="航线名称" prop="name" width="120" />
-        <el-table-column align="left" label="航线类型" prop="type" width="120" />
-        <el-table-column align="left" label="自动飞行速度" prop="autoFlightSpeed" width="120" />
-        <el-table-column align="left" label="起飞模式" prop="gotoFirstWaypointMode" width="120" />
-        <el-table-column align="left" label="结束模式" prop="finishAction" width="120" />
-        <el-table-column align="left" label="路径模式" prop="flightPathMode" width="120" />
-        <el-table-column align="left" label="朝向模式" prop="headingMode" width="120" />
-        <!-- <el-table-column align="left" label="参数体" prop="param" width="120" /> -->
-        <el-table-column align="left" label="安全" prop="safealt" width="120" />
-        <el-table-column align="left" label="kml" prop="kml" width="120" />
-        <el-table-column align="left" label="gps" prop="gps" width="120" />
-        <el-table-column align="left" label="站点id" prop="station" width="120" />
-        <el-table-column align="left" label="明确定位" prop="clearHomeLocation" width="120" />
-        <el-table-column align="left" label="制作人" prop="producer" width="120" />
-        <el-table-column align="left" label="制作单位" prop="productionUnit" width="120" />
-        <el-table-column align="left" label="isactive" prop="isActive" width="120" />
-        <el-table-column align="left" label="固定返航点" prop="fixedReturnPoint" width="120" />
-        <el-table-column align="left" label="机巢id" prop="nestId" width="120" />
-        <el-table-column align="left" label="备注" prop="remark" width="120" />
-        <el-table-column align="left" label="返航高度" prop="goHomeHeight" width="120" />
-        <el-table-column align="left" label="预估距离" prop="execDistance" width="120" />
-        <el-table-column align="left" label="预估执行时间" prop="execTimeSpend" width="120" />
+        <el-table-column align="left" label="名称" prop="name" width="120" />
+         <el-table-column align="left" label="拍摄时间" width="180">
+            <template #default="scope">{{ formatDate(scope.row.photographyCreatetime) }}</template>
+         </el-table-column>
+        <el-table-column align="left" label="上传人" prop="uploadBy" width="120" />
+        <el-table-column align="left" label="类型" prop="type" width="120" />
+                    <el-table-column label="航拍文件" width="200">
+                        <template #default="scope">
+                             <div class="file-list">
+                               <el-tag v-for="file in scope.row.aerialPhotographyFile" :key="file.uid">{{file.name}}</el-tag>
+                             </div>
+                        </template>
+                    </el-table-column>
+        <el-table-column align="left" label="状态" prop="status" width="120" />
+        <el-table-column align="left" label="坐标" prop="position" width="120" />
+        <el-table-column align="left" label="是否加载" prop="loadOrNot" width="120" />
+        <el-table-column align="left" label="机巢id集" prop="nestIds" width="120" />
         <el-table-column align="left" label="操作">
             <template #default="scope">
-            <el-button type="primary" link icon="edit" class="table-button" @click="updateNestAirlineFunc(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="edit" class="table-button" @click="updateAerialPhotographyResultFunc(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
@@ -91,75 +85,33 @@
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加':'修改'" destroy-on-close>
       <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        <el-form-item label="航线id:"  prop="missionid" >
-          <el-input v-model="formData.missionid" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="航线名称:"  prop="name" >
+        <el-form-item label="名称:"  prop="name" >
           <el-input v-model="formData.name" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="航线类型:"  prop="type" >
-          <el-input v-model="formData.type" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="拍摄时间:"  prop="photographyCreatetime" >
+          <el-date-picker v-model="formData.photographyCreatetime" type="date" style="width:100%" placeholder="选择日期" :clearable="true"  />
         </el-form-item>
-        <el-form-item label="自动飞行速度:"  prop="autoFlightSpeed" >
-          <el-input v-model.number="formData.autoFlightSpeed" :clearable="true" placeholder="请输入" />
+        <el-form-item label="上传人:"  prop="uploadBy" >
+          <el-input v-model="formData.uploadBy" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="起飞模式:"  prop="gotoFirstWaypointMode" >
-          <el-input v-model.number="formData.gotoFirstWaypointMode" :clearable="true" placeholder="请输入" />
+        <el-form-item label="类型:"  prop="type" >
+          <el-input v-model.number="formData.type" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="结束模式:"  prop="finishAction" >
-          <el-input v-model.number="formData.finishAction" :clearable="true" placeholder="请输入" />
+        <el-form-item label="航拍文件:"  prop="aerialPhotographyFile" >
+            <SelectFile v-model="formData.aerialPhotographyFile" />
         </el-form-item>
-        <el-form-item label="路径模式:"  prop="flightPathMode" >
-          <el-input v-model.number="formData.flightPathMode" :clearable="true" placeholder="请输入" />
+        <el-form-item label="状态:"  prop="status" >
+          <el-input v-model.number="formData.status" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="朝向模式:"  prop="headingMode" >
-          <el-input v-model.number="formData.headingMode" :clearable="true" placeholder="请输入" />
+        <el-form-item label="坐标:"  prop="position" >
+          <el-input v-model="formData.position" :clearable="true"  placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="参数体:"  prop="param" >
-          <el-input v-model="formData.param" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="是否加载:"  prop="loadOrNot" >
+          <el-input v-model.number="formData.loadOrNot" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="安全:"  prop="safealt" >
-          <el-input v-model="formData.safealt" :clearable="true"  placeholder="请输入" />
+        <el-form-item label="机巢id集:"  prop="nestIds" >
+          <el-input v-model="formData.nestIds" :clearable="true" placeholder="请输入" />
         </el-form-item>
-        <el-form-item label="kml:"  prop="kml" >
-          <el-input v-model="formData.kml" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="gps:"  prop="gps" >
-          <el-input v-model="formData.gps" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="站点id:"  prop="station" >
-          <el-input v-model="formData.station" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="明确定位:"  prop="clearHomeLocation" >
-          <el-input v-model="formData.clearHomeLocation" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="制作人:"  prop="producer" >
-          <el-input v-model="formData.producer" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="制作单位:"  prop="productionUnit" >
-          <el-input v-model="formData.productionUnit" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="isactive:"  prop="isActive" >
-          <el-input v-model="formData.isActive" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="固定返航点:"  prop="fixedReturnPoint" >
-          <el-input v-model="formData.fixedReturnPoint" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="机巢id:"  prop="nestId" >
-          <el-input v-model="formData.nestId" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="备注:"  prop="remark" >
-          <el-input v-model="formData.remark" :clearable="true"  placeholder="请输入" />
-        </el-form-item>
-        <el-form-item label="返航高度:"  prop="goHomeHeight" >
-          <el-input-number v-model="formData.goHomeHeight"  style="width:100%" :precision="2" :clearable="true"  />
-        </el-form-item>
-         <el-form-item label="预估距离:" prop="execDistance">
-          <el-input-number v-model="formData.execDistance" style="width:100%" :precision="0" :clearable="true"></el-input-number>
-       </el-form-item>
-       <el-form-item label="预估执行时间:" prop="execTimeSpend">
-          <el-input-number v-model="formData.execTimeSpend" style="width:100%" :precision="0" :clearable="true"></el-input-number>
-       </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
@@ -173,19 +125,22 @@
 
 <script>
 export default {
-  name: 'NestAirline'
+  name: 'AerialPhotographyResult'
 }
 </script>
 
 <script setup>
 import {
-  createNestAirline,
-  deleteNestAirline,
-  deleteNestAirlineByIds,
-  updateNestAirline,
-  findNestAirline,
-  getNestAirlineList
-} from '@/api/nestAirline'
+  createAerialPhotographyResult,
+  deleteAerialPhotographyResult,
+  deleteAerialPhotographyResultByIds,
+  updateAerialPhotographyResult,
+  findAerialPhotographyResult,
+  getAerialPhotographyResultList
+} from '@/api/aerialPhotographyResult'
+import { getUrl } from '@/utils/image'
+// 文件选择组件
+import SelectFile from '@/components/selectFile/selectFile.vue'
 
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
@@ -194,29 +149,14 @@ import { ref, reactive } from 'vue'
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
-        missionid: '',
         name: '',
+        photographyCreatetime: new Date(),
+        uploadBy: '',
         type: 0,
-        autoFlightSpeed: 0,
-        gotoFirstWaypointMode: 0,
-        finishAction: 0,
-        flightPathMode: 0,
-        headingMode: 0,
-        param: '',
-        safealt: '',
-        kml: '',
-        gps: '',
-        station: '',
-        clearHomeLocation: '',
-        producer: '',
-        productionUnit: '',
-        isActive: '',
-        fixedReturnPoint: '',
-        nestId: '',
-        remark: '',
-        goHomeHeight: 0,
-        execDistance: 0,
-        execTimeSpend: 0,
+        status: 0,
+        position: '',
+        loadOrNot: 0,
+        nestIds: '',
         })
 
 // 验证规则
@@ -279,7 +219,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getNestAirlineList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getAerialPhotographyResultList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -314,7 +254,7 @@ const deleteRow = (row) => {
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-            deleteNestAirlineFunc(row)
+            deleteAerialPhotographyResultFunc(row)
         })
     }
 
@@ -336,7 +276,7 @@ const onDelete = async() => {
         multipleSelection.value.map(item => {
           ids.push(item.ID)
         })
-      const res = await deleteNestAirlineByIds({ ids })
+      const res = await deleteAerialPhotographyResultByIds({ ids })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
@@ -354,19 +294,19 @@ const onDelete = async() => {
 const type = ref('')
 
 // 更新行
-const updateNestAirlineFunc = async(row) => {
-    const res = await findNestAirline({ ID: row.ID })
+const updateAerialPhotographyResultFunc = async(row) => {
+    const res = await findAerialPhotographyResult({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.reNtAirline
+        formData.value = res.data.reALPhotographyResult
         dialogFormVisible.value = true
     }
 }
 
 
 // 删除行
-const deleteNestAirlineFunc = async (row) => {
-    const res = await deleteNestAirline({ ID: row.ID })
+const deleteAerialPhotographyResultFunc = async (row) => {
+    const res = await deleteAerialPhotographyResult({ ID: row.ID })
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
@@ -392,29 +332,13 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-        missionid: '',
         name: '',
+        photographyCreatetime: new Date(),
+        uploadBy: '',
         type: 0,
-        autoFlightSpeed: 0,
-        gotoFirstWaypointMode: 0,
-        finishAction: 0,
-        flightPathMode: 0,
-        headingMode: 0,
-        param: '',
-        safealt: '',
-        kml: '',
-        gps: '',
-        station: '',
-        clearHomeLocation: '',
-        producer: '',
-        productionUnit: '',
-        isActive: '',
-        fixedReturnPoint: '',
-        nestId: '',
-        remark: '',
-        execDistance: 0,
-        execTimeSpend: 0,
-        goHomeHeight: 0,
+        status: 0,
+        position: '',
+        loadOrNot: 0,
         }
 }
 // 弹窗确定
@@ -424,13 +348,13 @@ const enterDialog = async () => {
               let res
               switch (type.value) {
                 case 'create':
-                  res = await createNestAirline(formData.value)
+                  res = await createAerialPhotographyResult(formData.value)
                   break
                 case 'update':
-                  res = await updateNestAirline(formData.value)
+                  res = await updateAerialPhotographyResult(formData.value)
                   break
                 default:
-                  res = await createNestAirline(formData.value)
+                  res = await createAerialPhotographyResult(formData.value)
                   break
               }
               if (res.code === 0) {
@@ -444,8 +368,18 @@ const enterDialog = async () => {
       })
 }
 
+const downloadFile = (url) => {
+    window.open(getUrl(url), '_blank')
+}
+
 </script>
 
 <style>
+
+.file-list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
 
 </style>

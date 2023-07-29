@@ -26,7 +26,7 @@
         <el-form-item label="朝向模式:" prop="headingMode">
           <el-input v-model.number="formData.headingMode" :clearable="true" placeholder="请输入" />
        </el-form-item>
-        <el-form-item label="param:" prop="param">
+        <el-form-item label="参数体:" prop="param">
           <el-input v-model="formData.param" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="安全:" prop="safealt">
@@ -61,6 +61,15 @@
        </el-form-item>
         <el-form-item label="备注:" prop="remark">
           <el-input v-model="formData.remark" :clearable="true" placeholder="请输入" />
+       </el-form-item>
+        <el-form-item label="返航高度:" prop="goHomeHeight">
+          <el-input-number v-model="formData.goHomeHeight" :precision="2" :clearable="true"></el-input-number>
+       </el-form-item>
+       <el-form-item label="预估距离:" prop="execDistance">
+          <el-input-number v-model="formData.execDistance" :precision="0" :clearable="true"></el-input-number>
+       </el-form-item>
+       <el-form-item label="预估执行时间:" prop="execTimeSpend">
+          <el-input-number v-model="formData.execTimeSpend" :precision="0" :clearable="true"></el-input-number>
        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="save">保存</el-button>
@@ -114,6 +123,9 @@ const formData = ref({
             fixedReturnPoint: '',
             nestId: '',
             remark: '',
+            goHomeHeight: 0,
+            execDistance: 0,
+            execTimeSpend: 0,
         })
 // 验证规则
 const rule = reactive({

@@ -8,6 +8,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/FlyResultPkg"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/model/AerialPhotographyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestAirlinePkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestExecRecordPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/NestInfo"
@@ -56,7 +58,7 @@ func RegisterTables() {
 		example.ExaFile{},
 		example.ExaCustomer{},
 		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{}, NestInfo.NestInfo{}, Nestrolepkg.NestRole{}, NestExecRecordPkg.NestExecRecord{}, NestAirlinePkg.NestAirline{}, FlyResultPkg.FlyResult{}, UserTeemlinkPkg.UserTeemlink{},
+		example.ExaFileUploadAndDownload{}, NestInfo.NestInfo{}, Nestrolepkg.NestRole{}, NestExecRecordPkg.NestExecRecord{}, FlyResultPkg.FlyResult{}, UserTeemlinkPkg.UserTeemlink{}, NestAirlinePkg.NestAirline{}, AerialPhotographyResultPkg.AerialPhotographyResult{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))

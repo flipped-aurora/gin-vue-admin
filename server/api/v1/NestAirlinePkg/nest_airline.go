@@ -157,7 +157,7 @@ func (NtAirlineApi *NestAirlineApi) GetNestAirlineList(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if list, total, err := NtAirlineService.GetNestAirlineInfoList(pageInfo); err != nil {
+	if list, total, err := NtAirlineService.GetNestAirlineInfoList(pageInfo, c); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

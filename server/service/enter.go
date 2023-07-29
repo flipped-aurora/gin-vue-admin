@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/service/AerialPhotographyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/FlyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/NestAirlinePkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/NestExecRecordPkg"
@@ -12,14 +13,15 @@ import (
 )
 
 type ServiceGroup struct {
-	SystemServiceGroup            system.ServiceGroup
-	ExampleServiceGroup           example.ServiceGroup
-	NestInfoServiceGroup          NestInfo.ServiceGroup
-	NestrolepkgServiceGroup       Nestrolepkg.ServiceGroup
-	NestAirlinePkgServiceGroup    NestAirlinePkg.ServiceGroup
-	NestExecRecordPkgServiceGroup NestExecRecordPkg.ServiceGroup
-	FlyResultPkgServiceGroup      FlyResultPkg.ServiceGroup
-	UserTeemlinkPkgServiceGroup   UserTeemlinkPkg.ServiceGroup
+	SystemServiceGroup                     system.ServiceGroup
+	ExampleServiceGroup                    example.ServiceGroup
+	NestInfoServiceGroup                   NestInfo.ServiceGroup
+	NestrolepkgServiceGroup                Nestrolepkg.ServiceGroup
+	NestAirlinePkgServiceGroup             NestAirlinePkg.ServiceGroup
+	NestExecRecordPkgServiceGroup          NestExecRecordPkg.ServiceGroup
+	FlyResultPkgServiceGroup               FlyResultPkg.ServiceGroup
+	UserTeemlinkPkgServiceGroup            UserTeemlinkPkg.ServiceGroup
+	AerialPhotographyResultPkgServiceGroup AerialPhotographyResultPkg.ServiceGroup
 }
 
 var ServiceGroupApp = new(ServiceGroup)

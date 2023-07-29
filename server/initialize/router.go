@@ -80,14 +80,21 @@ func Routers() *gin.Engine {
 
 	}
 	{
-		NestAirlinePkgRouter := router.RouterGroupApp.NestAirlinePkg
-		NestAirlinePkgRouter.InitNestAirlineRouter(PrivateGroup)
+
 	}
 	{
 		FlyResultPkgRouter := router.RouterGroupApp.FlyResultPkg
 		FlyResultPkgRouter.InitFlyResultRouter(PrivateGroup)
 		UserTeemlinkPkgRouter := router.RouterGroupApp.UserTeemlinkPkg
 		UserTeemlinkPkgRouter.InitUserTeemlinkRouter(PrivateGroup)
+	}
+	{
+		NestAirlinePkgRouter := router.RouterGroupApp.NestAirlinePkg
+		NestAirlinePkgRouter.InitNestAirlineRouter(PrivateGroup)
+	}
+	{
+		AerialPhotographyResultPkgRouter := router.RouterGroupApp.AerialPhotographyResultPkg
+		AerialPhotographyResultPkgRouter.InitAerialPhotographyResultRouter(PrivateGroup)
 	}
 
 	global.GVA_LOG.Info("router register success")

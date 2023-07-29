@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/AerialPhotographyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/FlyResultPkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/NestAirlinePkg"
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1/NestExecRecordPkg"
@@ -12,14 +13,15 @@ import (
 )
 
 type ApiGroup struct {
-	SystemApiGroup            system.ApiGroup
-	ExampleApiGroup           example.ApiGroup
-	NestInfoApiGroup          NestInfo.ApiGroup
-	NestrolepkgApiGroup       Nestrolepkg.ApiGroup
-	NestAirlinePkgApiGroup    NestAirlinePkg.ApiGroup
-	NestExecRecordPkgApiGroup NestExecRecordPkg.ApiGroup
-	FlyResultPkgApiGroup      FlyResultPkg.ApiGroup
-	UserTeemlinkPkgApiGroup   UserTeemlinkPkg.ApiGroup
+	SystemApiGroup                     system.ApiGroup
+	ExampleApiGroup                    example.ApiGroup
+	NestInfoApiGroup                   NestInfo.ApiGroup
+	NestrolepkgApiGroup                Nestrolepkg.ApiGroup
+	NestAirlinePkgApiGroup             NestAirlinePkg.ApiGroup
+	NestExecRecordPkgApiGroup          NestExecRecordPkg.ApiGroup
+	FlyResultPkgApiGroup               FlyResultPkg.ApiGroup
+	UserTeemlinkPkgApiGroup            UserTeemlinkPkg.ApiGroup
+	AerialPhotographyResultPkgApiGroup AerialPhotographyResultPkg.ApiGroup
 }
 
 var ApiGroupApp = new(ApiGroup)

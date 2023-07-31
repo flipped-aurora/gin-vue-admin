@@ -1,5 +1,24 @@
 import service from '@/utils/request'
 
+// @Tags nestinfo
+// @Summary 根据id获取机槽信息，id为空获取全部机槽信息
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body nestIds true "获取nestinfo"
+// @Success 200 {string} string "{"code":0,"data":[],msg:"查询成功"}"
+// @Router /nestinfo/findNestInfoByNestIds [get]
+export const findNestInfoByNestIds = () => {
+  return service({
+    url: '/nestinfo/findNestInfoByNestIds',
+    method: 'post',
+    data: {
+      nestIds: []
+    }
+
+  })
+}
+
 // @Tags AerialPhotographyResult
 // @Summary 创建AerialPhotographyResult
 // @Security ApiKeyAuth

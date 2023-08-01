@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	ast2 "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"io"
 	"mime/multipart"
 	"os"
@@ -13,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	ast2 "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 	cp "github.com/otiai10/copy"
@@ -469,37 +470,37 @@ func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) 
 		{
 			Path:        "/" + a.Abbreviation + "/" + "create" + a.StructName,
 			Description: "新增" + a.Description,
-			ApiGroup:    a.Abbreviation,
+			ApiGroup:    a.Description,
 			Method:      "POST",
 		},
 		{
 			Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName,
 			Description: "删除" + a.Description,
-			ApiGroup:    a.Abbreviation,
+			ApiGroup:    a.Description,
 			Method:      "DELETE",
 		},
 		{
 			Path:        "/" + a.Abbreviation + "/" + "delete" + a.StructName + "ByIds",
 			Description: "批量删除" + a.Description,
-			ApiGroup:    a.Abbreviation,
+			ApiGroup:    a.Description,
 			Method:      "DELETE",
 		},
 		{
 			Path:        "/" + a.Abbreviation + "/" + "update" + a.StructName,
 			Description: "更新" + a.Description,
-			ApiGroup:    a.Abbreviation,
+			ApiGroup:    a.Description,
 			Method:      "PUT",
 		},
 		{
 			Path:        "/" + a.Abbreviation + "/" + "find" + a.StructName,
 			Description: "根据ID获取" + a.Description,
-			ApiGroup:    a.Abbreviation,
+			ApiGroup:    a.Description,
 			Method:      "GET",
 		},
 		{
 			Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
 			Description: "获取" + a.Description + "列表",
-			ApiGroup:    a.Abbreviation,
+			ApiGroup:    a.Description,
 			Method:      "GET",
 		},
 	}

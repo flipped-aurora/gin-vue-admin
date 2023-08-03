@@ -111,7 +111,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Build-go
         run: |
-          cd server/ && go mod tidy && go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
+          cd server/ && go mod tidy && CGO_ENABLED=0 go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
       - name: restart
         env:
           KEY: ${{ secrets.KEY }}
@@ -220,7 +220,7 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: Build-go
         run: |
-          cd server/ && go mod tidy && go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
+          cd server/ && go mod tidy && CGO_ENABLED=0 go build && mkdir ../web/ser && mv server ../web/ser/ && cd ../web/ser/ && ls -s 
       - name: restart
         env:
           KEY: ${{ secrets.KEY }}

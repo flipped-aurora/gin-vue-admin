@@ -354,7 +354,9 @@
 				"details" : "详情",
 				"enterDictName" : "请输入字典名（中)",
 				"enterDictNameEn" : "请输入字典名（英)",
-				"enterDescription" : "请输入描述"
+				"enterDescription" : "请输入描述",
+				"addDictionary" : "添加字典",
+				"editDictionary" : "修改字典"
 			},
 			"sysDictionaryDetail" : {
 				"displayValue" : "展示值",
@@ -362,7 +364,9 @@
 				"enabledStatus" : "启用状态",
 				"addDictEntry" : "新增字典项",
 				"enterDisplayValue" : "请输入展示值",
-				"enterDictValue" : "请输入字典值"
+				"enterDictValue" : "请输入字典值",
+				"addDictionaryItem" : "添加字典项",
+				"editDictionaryItem" : "修改字典项"
 			}
 		},
 		"operation" : {

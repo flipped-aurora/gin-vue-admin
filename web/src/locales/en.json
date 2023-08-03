@@ -354,7 +354,9 @@
 				"details" : "Details",
 				"enterDictName" : "Please enter a dictionary name (Medium)",
 				"enterDictNameEn" : "Please enter a dictionary name (English)",
-				"enterDescription" : "Please enter a description"
+				"enterDescription" : "Please enter a description",
+				"addDictionary" : "Add Dictionary",
+				"editDictionary" : "Edit Dictionary"
 			},
 			"sysDictionaryDetail" : {
 				"displayValue" : "Display value",
@@ -362,7 +364,9 @@
 				"enabledStatus" : "Enabled status",
 				"addDictEntry" : "Add dictionary entry",
 				"enterDisplayValue" : "Please enter a display value",
-				"enterDictValue" : "Please enter a dictionary value"
+				"enterDictValue" : "Please enter a dictionary value",
+				"addDictionaryItem" : "Add Dictionary Item",
+				"editDictionaryItem" : "Edit Dictionary Item"
 			}
 		},
 		"operation" : {

@@ -37,7 +37,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	%s gin-vue-admin
-	%s: v2.5.5
+	%s: v2.5.6
     加群方式:微信号：shouzi_1994 QQ群：622360840
 	插件市场:https://plugin.gin-vue-admin.com
 	GVA讨论社区:https://support.qq.com/products/371961

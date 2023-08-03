@@ -145,7 +145,7 @@
     <el-dialog
       v-model="dialogFormVisible"
       :before-close="closeDialog"
-      :title="t('general.popUpOperation')"
+      :title="type==='create'?t('view.dictionary.sysDictionary.addDictionary'):t('view.dictionary.sysDictionary.editDictionary')"
     >
       <el-form
         ref="dialogForm"

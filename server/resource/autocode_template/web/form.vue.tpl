@@ -30,7 +30,10 @@
           <el-option v-for="item in [{{ .DataTypeLong }}]" :key="item" :label="item" :value="item" />
         </el-select>
       {{- end }}
-        </el-form-item>
+       {{- if eq .FieldType "picture" }}
+          <SelectImage v-model="formData.{{ .FieldJson }}" />
+       {{- end }}
+       </el-form-item>
       {{- end }}
         <el-form-item>
           <el-button type="primary" @click="save">{{ "{{ t('general.save') }}" }}</el-button>
@@ -63,6 +66,12 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
+{{- if .HasPic }}
+import SelectImage from '@/components/selectImage/selectImage.vue'
+{{- end }}
+{{- if .HasFile }}
+import SelectFile from '@/components/selectFile/selectFile.vue'
+{{- end }}
 const route = useRoute()
 const router = useRouter()
 

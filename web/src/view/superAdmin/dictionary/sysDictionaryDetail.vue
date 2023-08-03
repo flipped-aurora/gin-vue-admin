@@ -6,7 +6,7 @@
           <el-input v-model="searchInfo.label" :placeholder="t('general.searchCriteria')" />
         </el-form-item>
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.dictValue')">
-          <el-input v-model="searchInfo.value" :placeholder="t('general.searchCriteria')" />
+          <el-input v-model="searchInfo.value" :placeholder="t('general.searchCriteria')" min="-2147483648" max="2147483647" />
         </el-form-item>
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status">
           <el-select v-model="searchInfo.status" :placeholder="t('general.pleaseSelect')">
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="t('general.popUpOperation')">
+    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?t('view.dictionary.sysDictionaryDetail.addDictionaryItem'):t('view.dictionary.sysDictionaryDetail.editDictionaryItem')">
       <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.displayValue')" prop="label">
           <el-input
@@ -94,6 +94,8 @@
             :placeholder="t('view.dictionary.sysDictionaryDetail.enterDictValue')"
             clearable
             :style="{width: '100%'}"
+            min="-2147483648"
+            max="2147483647"
           />
         </el-form-item>
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status" required>
@@ -181,6 +183,7 @@ const tableData = ref([])
 const searchInfo = ref({ sysDictionaryID: Number(route.params.id) })
 const onReset = () => {
   searchInfo.value = { sysDictionaryID: Number(route.params.id) }
+  getTableData()
 }
 
 // 条件搜索前端看此方法

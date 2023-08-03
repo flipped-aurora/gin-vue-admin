@@ -166,7 +166,7 @@
         <el-table-column align="left" prop="sort" label="排序">
           <template #default="{row}"> <el-checkbox v-model="row.sort" /> </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldJson" width="160px" label="FieldJson">
+        <el-table-column align="left" prop="fieldJson" width="160px" label="字段Json">
           <template #default="{row}">
             <el-input v-model="row.fieldJson" />
           </template>
@@ -176,7 +176,7 @@
             <el-select
               v-model="row.fieldType"
               style="width:100%"
-              placeholder="请选择field数据类型"
+              placeholder="请选择字段类型"
               clearable
             >
               <el-option
@@ -208,7 +208,7 @@
             <el-select
               v-model="row.fieldSearchType"
               style="width:100%"
-              placeholder="请选择Field查询条件"
+              placeholder="请选择字段查询条件"
               clearable
             >
               <el-option
@@ -268,7 +268,7 @@
     </div>
     <!-- 组件弹窗 -->
     <el-dialog v-model="dialogFlag" width="70%" :title="t('autoCode.componentContent')">
-      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" />
+      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" :typeOptions="typeOptions" :typeSearchOptions="typeSearchOptions" />
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
@@ -340,6 +340,19 @@ const typeOptions = ref([
   {
     label: '枚举',
     value: 'enum'
+  },
+  {
+    label: '单图片（字符串）',
+    value: 'picture',
+  },
+  {
+    label: '文件（json字符串）',
+    value: 'file',
+  },
+  {
+    label: '多图片（开发中）',
+    value: 'pictures',
+    disabled: true
   }
 ])
 

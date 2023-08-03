@@ -40,6 +40,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
+            :disabled="item.disabled"
           />
         </el-select>
       </el-form-item>
@@ -58,10 +59,7 @@
             :key="item.value"
             :label="item.label"
             :value="item.value"
-            :disabled="
-              (middleDate.fieldType!=='string'&&item.value==='LIKE')||
-                ((middleDate.fieldType!=='int'&&middleDate.fieldType!=='time.Time'&&middleDate.fieldType!=='float64')&&(item.value==='BETWEEN' || item.value==='NOT BETWEEN'))
-            "
+            :disabled="canSelect(item.value)"
           />
         </el-select>
       </el-form-item>
@@ -114,67 +112,24 @@ const props = defineProps({
     default: function() {
       return {}
     }
-  }
+  },
+  typeOptions: {
+    type: Array,
+    default: function() {
+      return []
+    }
+  },
+  typeSearchOptions: {
+    type: Array,
+    default: function() {
+      return []
+    }
+  },
 })
 
 const middleDate = ref({})
 const dictOptions = ref([])
-const typeSearchOptions = ref([
-  {
-    label: '=',
-    value: '='
-  },
-  {
-    label: '<>',
-    value: '<>'
-  },
-  {
-    label: '>',
-    value: '>'
-  },
-  {
-    label: '<',
-    value: '<'
-  },
-  {
-    label: 'LIKE',
-    value: 'LIKE'
-  },
-  {
-    label: 'BETWEEN',
-    value: 'BETWEEN'
-  },
-  {
-    label: 'NOT BETWEEN',
-    value: 'NOT BETWEEN'
-  }
-])
-const typeOptions = ref([
-  {
-    label: t('fieldDialog.string'),
-    value: 'string'
-  },
-  {
-    label: t('fieldDialog.integer'),
-    value: 'int'
-  },
-  {
-    label: t('fieldDialog.boolean'),
-    value: 'bool'
-  },
-  {
-    label: t('fieldDialog.float'),
-    value: 'float64'
-  },
-  {
-    label: t('fieldDialog.time'),
-    value: 'time.Time'
-  },
-  {
-    label: '枚举',
-    value: 'enum'
-  }
-])
+
 const rules = ref({
   fieldName: [
     { required: true, message: t('fieldDialog.entFieldName'), trigger: 'blur' }
@@ -208,6 +163,18 @@ init()
 const autoFill = () => {
   middleDate.value.fieldJson = toLowerCase(middleDate.value.fieldName)
   middleDate.value.columnName = toSQLLine(middleDate.value.fieldJson)
+}
+
+const canSelect = (item) => {
+  const fieldType = middleDate.value.fieldType
+  if (fieldType !== 'string' && item === 'LIKE') {
+    return true
+  }
+
+  if ((fieldType !== 'int' && fieldType !== 'time.Time' && fieldType !== 'float64') && (item === 'BETWEEN' || item === 'NOT BETWEEN')) {
+    return true
+  }
+  return false
 }
 
 const clearOther = () => {

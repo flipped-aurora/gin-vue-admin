@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!multiple"
     class="update-image"
     :style="{
       'background-image': `url(${getUrl(modelValue)})`,
@@ -10,6 +11,29 @@
         <edit />
       </el-icon>
       重新上传</span>
+  </div>
+  <div v-else class="multiple-img">
+    <div
+      v-for="(item, index) in multipleValue"
+      :key="index"
+      class="update-image"
+      :style="{
+        'background-image': `url(${getUrl(item)})`,
+      }"
+    >
+      <span class="update" @click="deleteImg(index)">
+        <el-icon>
+          <delete />
+        </el-icon>
+        删除图片</span>
+    </div>
+    <div class="add-image">
+      <span class="update" @click="openChooseImg">
+        <el-icon>
+          <folder-add />
+        </el-icon>
+        上传图片</span>
+    </div>
   </div>
 
   <el-drawer v-model="drawer" title="媒体库" size="650px">
@@ -74,12 +98,13 @@
 <script setup>
 
 import { getUrl } from '@/utils/image'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { Delete, FolderAdd } from '@element-plus/icons-vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -89,14 +114,31 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(20)
 
-defineProps({
+const props = defineProps({
   modelValue: {
-    type: String,
+    type: [String, Array],
     default: ''
   },
+  multiple: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const multipleValue = ref([])
+
+onMounted(() => {
+  if (props.multiple) {
+    multipleValue.value = props.modelValue
+  }
 })
 
 const emits = defineEmits(['update:modelValue'])
+
+const deleteImg = (index) => {
+  multipleValue.value.splice(index, 1)
+  emits('update:modelValue', multipleValue.value)
+}
 
 // 分页
 const handleSizeChange = (val) => {
@@ -138,7 +180,12 @@ const drawer = ref(false)
 const picList = ref([])
 
 const chooseImg = (url) => {
-  emits('update:modelValue', url)
+  if (props.multiple) {
+    multipleValue.value.push(url)
+    emits('update:modelValue', multipleValue.value)
+  } else {
+    emits('update:modelValue', url)
+  }
   drawer.value = false
 }
 const openChooseImg = async() => {
@@ -159,7 +206,26 @@ const getImageList = async() => {
 </script>
 
 <style scoped lang="scss">
+
+.multiple-img{
+  display: flex;
+  gap:8px;
+}
+
+.add-image{
+  width: 120px;
+  height: 120px;
+  line-height: 120px;
+  display: flex;
+  justify-content: center;
+  border-radius: 20px;
+  border: 1px dashed #ccc;
+  background-size: cover;
+  cursor: pointer;
+}
+
 .update-image {
+  cursor: pointer;
   width: 120px;
   height: 120px;
   line-height: 120px;
@@ -171,7 +237,6 @@ const getImageList = async() => {
    background-size: cover;
   &:hover {
     color: #fff;
-
     background: linear-gradient(
             to bottom,
             rgba(255, 255, 255, 0.15) 0%,

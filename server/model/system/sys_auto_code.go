@@ -29,6 +29,7 @@ type AutoCodeStruct struct {
 	NeedSort           bool     `json:"-"`
 	HasPic             bool     `json:"-"`
 	HasFile            bool     `json:"-"`
+	NeedJSON           bool     `json:"-"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {

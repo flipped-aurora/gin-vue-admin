@@ -21,17 +21,6 @@
 [声明式API版](https://github.com/flipped-aurora/gin-vue-admin/tree/v2.4.x) | 
 [声明式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev)
 
-## 赞助商
-Gin-Vue-Admin是一个全栈自动化代码的开源项目，其持续开发完全得益于这些令人敬畏的赞助的支持。如果你想加入他们，请考虑<a target="_blank" href="https://gin-vue-admin.com/empower/index.html#%E5%85%B6%E4%BB%96%E6%9C%8D%E5%8A%A1">赞助Gin-Vue-Admin</a>的开发。
-<p align="center">
-  <h3 align="center">Sponsor</h3>
-</p>
-<p align="center">
-  <a target="_blank" href="https://www.mingdao.com?s=utm_84&utm_source=gin-vue-admin&utm_medium=banner&utm_campaign=github&utm_content=IT%E8%B5%8B%E8%83%BD%E4%B8%9A%E5%8A%A1">
-  <img alt="special sponsor appwrite" src="https://gin-vue-admin.com/guanwang/mingdao.png" width="300">
-  </a>
-</p>
-						       
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
 

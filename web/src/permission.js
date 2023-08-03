@@ -51,7 +51,11 @@ router.beforeEach(async(to, from) => {
       }
       // token 可以解析但是却是不存在的用户 id 或角色 id 会导致无限调用
       if (userStore.userInfo?.authority?.defaultRouter != null) {
-        return { name: userStore.userInfo.authority.defaultRouter }
+        if (router.hasRoute(userStore.userInfo.authority.defaultRouter)) {
+          return { name: userStore.userInfo.authority.defaultRouter }
+        } else {
+          return { path: '/layout/404' }
+        }
       } else {
         // 强制退出账号
         userStore.ClearStorage()
@@ -72,7 +76,11 @@ router.beforeEach(async(to, from) => {
       if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
         await getRouter(userStore)
         if (userStore.token) {
-          return { ...to, replace: true }
+          if (router.hasRoute(userStore.userInfo.authority.defaultRouter)) {
+            return { ...to, replace: true }
+          } else {
+            return { path: '/layout/404' }
+          }
         } else {
           return {
             name: 'Login',

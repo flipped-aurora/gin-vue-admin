@@ -8,20 +8,20 @@ const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
 const nameMap = {}
 
-const formatRouter = (routes, routeMap) => {
+const formatRouter = (routes, routeMap, parent) => {
   routes && routes.forEach(item => {
+    item.parent = parent
     item.meta.btns = item.btns
     item.meta.hidden = item.hidden
     if (item.meta.defaultMenu === true) {
-      notLayoutRouterArr.push({
-        ...item,
-        path: `/${item.path}`,
-      })
-    } else {
-      routeMap[item.name] = item
-      if (item.children && item.children.length > 0) {
-        formatRouter(item.children, routeMap)
+      if (!parent) {
+        item = { ...item, path: `/${item.path}` }
+        notLayoutRouterArr.push(item)
       }
+    }
+    routeMap[item.name] = item
+    if (item.children && item.children.length > 0) {
+      formatRouter(item.children, routeMap, item)
     }
   })
 }
@@ -58,7 +58,7 @@ export const useRouterStore = defineStore('router', () => {
   const asyncRouters = ref([])
   const routeMap = ({})
   // 从后台获取动态路由
-  const SetAsyncRouter = async () => {
+  const SetAsyncRouter = async() => {
     asyncRouterFlag.value++
     const baseRouter = [{
       path: '/layout',

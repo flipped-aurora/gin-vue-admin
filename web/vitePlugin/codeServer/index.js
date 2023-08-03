@@ -31,7 +31,7 @@ export default function GvaPositionServer() {
                 )
               } else {
                 child_process.exec(
-                  `webstorm64  --line ${linePath} ${filePath}`
+                  `webstorm --line ${linePath} ${filePath}`
                 )
               }
             } else {

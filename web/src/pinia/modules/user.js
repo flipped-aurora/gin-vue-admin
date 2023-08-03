@@ -77,7 +77,13 @@ export const useUserStore = defineStore('user', () => {
         asyncRouters.forEach(asyncRouter => {
           router.addRoute(asyncRouter)
         })
-        await router.replace({ name: userInfo.value.authority.defaultRouter })
+
+        if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
+          ElMessage.error("请联系管理员进行授权")
+        } else {
+          await router.replace({ name: userInfo.value.authority.defaultRouter })
+        }
+
         loadingInstance.value.close()
 
         const isWin = ref(/windows/i.test(navigator.userAgent))

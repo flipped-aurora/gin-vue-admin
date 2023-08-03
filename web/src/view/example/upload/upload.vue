@@ -33,7 +33,7 @@
       <el-table :data="tableData">
         <el-table-column align="left" label="预览" width="100">
           <template #default="scope">
-            <CustomPic pic-type="file" :pic-src="scope.row.url" />
+            <CustomPic pic-type="file" :pic-src="scope.row.url" preview/>
           </template>
         </el-table-column>
         <el-table-column align="left" :label="t('general.createdAt')" prop="UpdatedAt" width="180">

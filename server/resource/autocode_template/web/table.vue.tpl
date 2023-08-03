@@ -131,6 +131,14 @@
                 <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
+           {{- else if eq .FieldType "pictures" }}
+           <el-table-column label="{{.FieldDesc}}" width="200">
+              <template #default="scope">
+                 <div class="multiple-img-box">
+                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
+                </div>
+              </template>
+           </el-table-column>
            {{- else if eq .FieldType "file" }}
                     <el-table-column label="{{.FieldDesc}}" width="200">
                         <template #default="scope">
@@ -194,6 +202,9 @@
       {{- end }}
       {{- if eq .FieldType "picture" }}
             <SelectImage v-model="formData.{{ .FieldJson }}" />
+      {{- end }}
+      {{- if eq .FieldType "pictures" }}
+            <SelectImage v-model="formData.{{ .FieldJson }}" multiple />
       {{- end }}
       {{- if eq .FieldType "file" }}
             <SelectFile v-model="formData.{{ .FieldJson }}" />
@@ -270,6 +281,15 @@ const formData = ref({
         {{- if eq .FieldType "float64" }}
         {{.FieldJson}}: 0,
         {{- end }}
+        {{- if eq .FieldType "picture" }}
+        {{.FieldJson}}: "",
+        {{- end }}
+        {{- if eq .FieldType "pictures" }}
+        {{.FieldJson}}: [],
+        {{- end }}
+        {{- if eq .FieldType "file" }}
+        {{.FieldJson}}: [],
+        {{- end }}
         {{- end }}
         })
 
@@ -282,11 +302,14 @@ const rule = reactive({
                    message: '{{ .ErrorText }}',
                    trigger: ['input','blur'],
                },
+               {{- if eq .FieldType "string" }}
                {
                    whitespace: true,
                    message: '不能只输入空格',
                    trigger: ['input', 'blur'],
-              }],
+              }
+              {{- end }}
+              ],
             {{- end }}
     {{- end }}
 })

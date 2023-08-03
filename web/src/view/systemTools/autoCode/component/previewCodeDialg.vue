@@ -11,7 +11,7 @@
 <script setup>
 import { marked } from 'marked'
 import hljs from 'highlight.js'
-import 'highlight.js/styles/atelier-plateau-light.css'
+import 'highlight.js/styles/atom-one-dark.css'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
@@ -41,7 +41,8 @@ onMounted(() => {
     sanitize: false,
     smartLists: true,
     smartypants: false,
-    xhtml: false
+    xhtml: false,
+    langPrefix: 'hljs language-'
   })
   for (const key in props.previewCode) {
     if (activeName.value === '') {

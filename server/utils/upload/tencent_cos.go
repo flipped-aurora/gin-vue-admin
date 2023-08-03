@@ -22,8 +22,8 @@ func (*TencentCOS) UploadFile(file *multipart.FileHeader) (string, string, error
 	client := NewClient()
 	f, openError := file.Open()
 	if openError != nil {
-		global.GVA_LOG.Error("function file.Open() Filed", zap.Any("err", openError.Error()))
-		return "", "", errors.New("function file.Open() Filed, err:" + openError.Error())
+		global.GVA_LOG.Error("function file.Open() failed", zap.Any("err", openError.Error()))
+		return "", "", errors.New("function file.Open() failed, err:" + openError.Error())
 	}
 	defer f.Close() // 创建文件 defer 关闭
 	fileKey := fmt.Sprintf("%d%s", time.Now().Unix(), file.Filename)
@@ -41,8 +41,8 @@ func (*TencentCOS) DeleteFile(key string) error {
 	name := global.GVA_CONFIG.TencentCOS.PathPrefix + "/" + key
 	_, err := client.Object.Delete(context.Background(), name)
 	if err != nil {
-		global.GVA_LOG.Error("function bucketManager.Delete() Filed", zap.Any("err", err.Error()))
-		return errors.New("function bucketManager.Delete() Filed, err:" + err.Error())
+		global.GVA_LOG.Error("function bucketManager.Delete() failed", zap.Any("err", err.Error()))
+		return errors.New("function bucketManager.Delete() failed, err:" + err.Error())
 	}
 	return nil
 }

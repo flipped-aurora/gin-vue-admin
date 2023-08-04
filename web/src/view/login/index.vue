@@ -6,7 +6,7 @@
       <div class="md:w-3/5 w-10/12 h-full flex items-center justify-evenly">
         <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-52" />
         <!-- 分割斜块 -->
-        <div class="z-[999] pt-24 pb-10 md:w-96 w-full  rounded-lg flex flex-col justify-between box-border">
+        <div class="z-[999] pt-12 pb-10 md:w-96 w-full  rounded-lg flex flex-col justify-between box-border">
           <div>
             <div class="flex items-center justify-center">
               <img class="w-24" :src="$GIN_VUE_ADMIN.appLogo" alt>
@@ -23,10 +23,10 @@
               :validate-on-rule-change="false"
               @keyup.enter="submitForm"
             >
-              <el-form-item prop="username" class="mb-9">
+              <el-form-item prop="username" class="mb-6">
                 <el-input v-model="loginFormData.username" size="large" placeholder="请输入用户名" suffix-icon="user" />
               </el-form-item>
-              <el-form-item prop="password" class="mb-9">
+              <el-form-item prop="password" class="mb-6">
                 <el-input
                   v-model="loginFormData.password"
                   show-password
@@ -35,7 +35,7 @@
                   placeholder="请输入密码"
                 />
               </el-form-item>
-              <el-form-item v-if="loginFormData.openCaptcha" prop="captcha" class="mb-9">
+              <el-form-item v-if="loginFormData.openCaptcha" prop="captcha" class="mb-6">
                 <div class="flex w-full justify-between">
                   <el-input v-model="loginFormData.captcha" placeholder="请输入验证码" size="large" class="flex-1 mr-5" />
                   <div class="w-1/3 h-11 bg-[#c3d4f2] rounded">
@@ -43,11 +43,11 @@
                   </div>
                 </div>
               </el-form-item>
-              <el-form-item class="mb-9">
+              <el-form-item class="mb-6">
                 <el-button class="shadow shadow-blue-600 h-11 w-full" type="primary" size="large" @click="submitForm">登
                   录</el-button>
               </el-form-item>
-              <el-form-item class="mb-9">
+              <el-form-item class="mb-6">
                 <el-button
                   class="shadow shadow-blue-600 h-11 w-full"
                   type="primary"

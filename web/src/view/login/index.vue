@@ -1,97 +1,88 @@
 <template>
-  <div id="userLayout">
-    <div class="login_panel">
-      <div class="login_panel_form">
-        <div class="login_panel_form_title">
-          <img
-            class="login_panel_form_title_logo"
-            :src="$GIN_VUE_ADMIN.appLogo"
-            alt
-          >
-          <p class="login_panel_form_title_p">{{ $GIN_VUE_ADMIN.appName }}</p>
-        </div>
-        <el-form
-          ref="loginForm"
-          :model="loginFormData"
-          :rules="rules"
-          :validate-on-rule-change="false"
-          @keyup.enter="submitForm"
-        >
-          <el-form-item prop="username">
-            <el-input
-              v-model="loginFormData.username"
-              size="large"
-              placeholder="请输入用户名"
-              suffix-icon="user"
-            />
-          </el-form-item>
-          <el-form-item prop="password">
-            <el-input
-              v-model="loginFormData.password"
-              show-password
-              size="large"
-              type="password"
-              placeholder="请输入密码"
-            />
-          </el-form-item>
-          <el-form-item v-if="loginFormData.openCaptcha" prop="captcha">
-            <div class="vPicBox">
-              <el-input
-                v-model="loginFormData.captcha"
-                placeholder="请输入验证码"
-                size="large"
-                style="flex:1;padding-right: 20px;"
-              />
-              <div class="vPic">
-                <img
-                  v-if="picPath"
-                  :src="picPath"
-                  alt="请输入验证码"
-                  @click="loginVerify()"
-                >
-              </div>
+  <div id="userLayout" class="w-full h-full relative">
+    <div
+      class="rounded-lg flex items-center justify-evenly w-full h-full bg-white md:w-screen md:h-screen md:bg-[#194bfb]"
+    >
+      <div class="md:w-3/5 w-10/12 h-full flex items-center justify-evenly">
+        <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-52" />
+        <!-- 分割斜块 -->
+        <div class="z-[999] pt-12 pb-10 md:w-96 w-full  rounded-lg flex flex-col justify-between box-border">
+          <div>
+            <div class="flex items-center justify-center">
+              <img class="w-24" :src="$GIN_VUE_ADMIN.appLogo" alt>
             </div>
-          </el-form-item>
-          <el-form-item>
-            <el-button
-              type="primary"
-              style="width: 46%"
-              size="large"
-              @click="checkInit"
-            >前往初始化</el-button>
-            <el-button
-              type="primary"
-              size="large"
-              style="width: 46%; margin-left: 8%"
-              @click="submitForm"
-            >登 录</el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-      <div class="login_panel_right" />
-      <div class="login_panel_foot">
-        <div class="links">
-          <a href="http://doc.henrongyi.top/" target="_blank">
-            <img src="@/assets/docs.png" class="link-icon" alt="文档">
-          </a>
-          <a href="https://support.qq.com/product/371961" target="_blank">
-            <img src="@/assets/kefu.png" class="link-icon" alt="客服">
-          </a>
-          <a
-            href="https://github.com/flipped-aurora/gin-vue-admin"
-            target="_blank"
-          >
-            <img src="@/assets/github.png" class="link-icon" alt="github">
-          </a>
-          <a href="https://space.bilibili.com/322210472" target="_blank">
-            <img src="@/assets/video.png" class="link-icon" alt="视频站">
-          </a>
+            <div class="mb-9">
+              <p class="text-center text-4xl font-bold">{{ $GIN_VUE_ADMIN.appName }}</p>
+              <p class="text-center text-sm font-normal text-gray-500 mt-2.5">A management platform using Golang and Vue
+              </p>
+            </div>
+            <el-form
+              ref="loginForm"
+              :model="loginFormData"
+              :rules="rules"
+              :validate-on-rule-change="false"
+              @keyup.enter="submitForm"
+            >
+              <el-form-item prop="username" class="mb-6">
+                <el-input v-model="loginFormData.username" size="large" placeholder="请输入用户名" suffix-icon="user" />
+              </el-form-item>
+              <el-form-item prop="password" class="mb-6">
+                <el-input
+                  v-model="loginFormData.password"
+                  show-password
+                  size="large"
+                  type="password"
+                  placeholder="请输入密码"
+                />
+              </el-form-item>
+              <el-form-item v-if="loginFormData.openCaptcha" prop="captcha" class="mb-6">
+                <div class="flex w-full justify-between">
+                  <el-input v-model="loginFormData.captcha" placeholder="请输入验证码" size="large" class="flex-1 mr-5" />
+                  <div class="w-1/3 h-11 bg-[#c3d4f2] rounded">
+                    <img v-if="picPath" class="w-full h-full" :src="picPath" alt="请输入验证码" @click="loginVerify()">
+                  </div>
+                </div>
+              </el-form-item>
+              <el-form-item class="mb-6">
+                <el-button class="shadow shadow-blue-600 h-11 w-full" type="primary" size="large" @click="submitForm">登
+                  录</el-button>
+              </el-form-item>
+              <el-form-item class="mb-6">
+                <el-button
+                  class="shadow shadow-blue-600 h-11 w-full"
+                  type="primary"
+                  size="large"
+                  @click="checkInit"
+                >前往初始化</el-button>
+
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
-        <div class="copyright">
-          <BottomInfo />
-        </div>
       </div>
+      <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]"><img
+        class="h-full"
+        src="@/assets/login_right_banner.jpg"
+        alt="banner"
+      ></div>
     </div>
+
+    <BottomInfo class="left-0 right-0 absolute bottom-3 mx-auto  w-full z-20">
+      <div class="links items-center justify-center gap-2 hidden md:flex">
+        <a href="http://doc.henrongyi.top/" target="_blank">
+          <img src="@/assets/docs.png" class="w-8 h-8" alt="文档">
+        </a>
+        <a href="https://support.qq.com/product/371961" target="_blank">
+          <img src="@/assets/kefu.png" class="w-8 h-8" alt="客服">
+        </a>
+        <a href="https://github.com/flipped-aurora/gin-vue-admin" target="_blank">
+          <img src="@/assets/github.png" class="w-8 h-8" alt="github">
+        </a>
+        <a href="https://space.bilibili.com/322210472" target="_blank">
+          <img src="@/assets/video.png" class="w-8 h-8" alt="视频站">
+        </a>
+      </div>
+    </BottomInfo>
   </div>
 </template>
 
@@ -203,7 +194,3 @@ const checkInit = async() => {
 }
 
 </script>
-
-<style lang="scss" scoped>
-@import "@/style/newLogin.scss";
-</style>

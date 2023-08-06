@@ -29,7 +29,10 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
+        <div class="gva-btn-list flex items-center gap-3">
+          <el-button type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
+          <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=7&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
+        </div>
         <el-popover v-model="deleteVisible" placement="top" width="160">
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">
@@ -154,6 +157,8 @@ import { toSQLLine } from '@/utils/stringFun'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import {VideoCameraFilled} from "@element-plus/icons-vue";
+import { toDoc } from '@/utils/doc'
 
 const methodFilter = (value) => {
   const target = methodOptions.value.filter(item => item.value === value)[0]

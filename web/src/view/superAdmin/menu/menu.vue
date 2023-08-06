@@ -1,8 +1,9 @@
 <template>
   <div>
     <div class="gva-table-box">
-      <div class="gva-btn-list">
+      <div class="gva-btn-list flex items-center gap-3">
         <el-button type="primary" icon="plus" @click="addMenu('0')">新增根菜单</el-button>
+        <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -162,11 +163,14 @@
         </el-form-item>
       </el-form>
       <div>
-        <el-button
-          type="primary"
-          icon="edit"
-          @click="addParameter(form)"
-        >新增菜单参数</el-button>
+        <div class="flex items-center gap-2">
+          <el-button
+            type="primary"
+            icon="edit"
+            @click="addParameter(form)"
+          >新增菜单参数</el-button>
+          <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
+        </div>
         <el-table :data="form.parameters" style="width: 100%;margin-top: 12px;">
           <el-table-column align="left" prop="type" label="参数类型" width="180">
             <template #default="scope">
@@ -204,12 +208,18 @@
           </el-table-column>
         </el-table>
 
-        <el-button
-          style="margin-top:12px"
-          type="primary"
-          icon="edit"
-          @click="addBtn(form)"
-        >新增可控按钮</el-button>
+        <div class="flex items-center gap-2 mt-3">
+          <el-button
+              type="primary"
+              icon="edit"
+              @click="addBtn(form)"
+          >新增可控按钮
+          </el-button>
+          <el-icon class="cursor-pointer" @click="toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')"><QuestionFilled /></el-icon>
+          <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=11&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
+        </div>
+
+
         <el-table :data="form.menuBtn" style="width: 100%;margin-top: 12px;">
           <el-table-column align="left" prop="name" label="按钮名称" width="180">
             <template #default="scope">
@@ -262,6 +272,9 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import {QuestionFilled, VideoCameraFilled} from "@element-plus/icons-vue";
+
+import { toDoc } from '@/utils/doc'
 
 const rules = reactive({
   path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],

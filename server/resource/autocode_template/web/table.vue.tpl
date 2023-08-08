@@ -139,6 +139,12 @@
                 </div>
               </template>
            </el-table-column>
+           {{- else if eq .FieldType "richtext" }}
+                      <el-table-column label="{{.FieldDesc}}" width="200">
+                         <template #default="scope">
+                            [富文本内容]
+                         </template>
+                      </el-table-column>
            {{- else if eq .FieldType "file" }}
                     <el-table-column label="{{.FieldDesc}}" width="200">
                         <template #default="scope">
@@ -179,6 +185,9 @@
       {{- end }}
       {{- if eq .FieldType "string" }}
           <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入" />
+      {{- end }}
+      {{- if eq .FieldType "richtext" }}
+          <RichEdit v-model="formData.{{.FieldJson}}"/>
       {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType}}
@@ -245,6 +254,12 @@ import { getUrl } from '@/utils/image'
 // 图片选择组件
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
+
+{{- if .HasRichText }}
+// 富文本组件
+import RichEdit from '@/components/richtext/edit.vue'
+{{- end }}
+
 
 {{- if .HasFile }}
 // 文件选择组件

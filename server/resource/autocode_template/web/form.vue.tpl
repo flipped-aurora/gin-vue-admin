@@ -10,6 +10,9 @@
       {{- if eq .FieldType "string" }}
           <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" placeholder="请输入" />
       {{- end }}
+      {{- if eq .FieldType "richtext" }}
+          <RichEdit v-model="formData.{{.FieldJson}}"/>
+      {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType }}
           <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" :clearable="{{.Clearable}}">
@@ -71,6 +74,12 @@ import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- if .HasFile }}
 import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
+
+{{- if .HasRichText }}
+// 富文本组件
+import RichEdit from '@/components/richtext/edit.vue'
+{{- end }}
+
 const route = useRoute()
 const router = useRouter()
 

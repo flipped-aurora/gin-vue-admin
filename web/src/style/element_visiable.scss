@@ -1,5 +1,4 @@
 @import '@/style/main.scss';
-@import '@/style/base.scss';
 @import '@/style/mobile.scss';
 
 #app {
@@ -48,12 +47,6 @@
     display: flex;
     gap:8px;
     flex-wrap: wrap;
-}
-
-.gva-table-box {
-    padding: 24px;
-    background-color: #fff;
-    border-radius: 2px;
 }
 
 .gva-pagination {

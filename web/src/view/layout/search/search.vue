@@ -1,20 +1,8 @@
 <template>
   <div class="search-component">
-    <div
-      class="user-box"
-    >
       <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
-    </div>
-    <div
-      class="user-box"
-    >
-      <Screenfull class="search-icon" :style="{cursor:'pointer'}" />
-    </div>
-    <div
-      class="user-box"
-    >
+      <Screenfull class="search-icon" />
       <div class="service gvaIcon-customer-service" @click="toService" />
-    </div>
   </div>
 </template>
 

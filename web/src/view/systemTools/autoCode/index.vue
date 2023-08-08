@@ -262,7 +262,7 @@
         </el-table-column>
       </el-table>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-content-flex-end auto-btn-list">
+      <div class="gva-btn-list justify-end auto-btn-list">
         <el-button type="primary" @click="enterForm(true)">预览代码</el-button>
         <el-button type="primary" @click="enterForm(false)">生成代码</el-button>
       </div>

@@ -19,14 +19,14 @@
             <el-row>
               <el-col>
                 <el-header class="header-cont">
-                  <el-row class="pd-0">
-                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" style="z-index:100">
-                      <div class="menu-total" @click="totalCollapse">
+                  <el-row class="p-0">
+                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" class="z-50 flex items-center pl-3">
+                      <div class="text-black cursor-pointer text-lg leading-5" @click="totalCollapse">
                         <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
                         <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
                       </div>
                     </el-col>
-                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1">
+                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1" class="flex items-center">
                       <!-- 修改为手机端不显示顶部标签 -->
                       <el-breadcrumb v-show="!isMobile" class="breadcrumb">
                         <el-breadcrumb-item
@@ -39,8 +39,8 @@
                       <div class="right-box">
                         <Search />
                         <el-dropdown>
-                          <div class="dp-flex justify-content-center align-items height-full width-full">
-                            <span class="header-avatar" style="cursor: pointer">
+                          <div class="flex justify-center items-center h-full w-full">
+                            <span class="cursor-pointer flex justify-center items-center">
                               <CustomPic />
                               <span v-show="!isMobile" style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
                               <el-icon>

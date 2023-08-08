@@ -727,13 +727,7 @@ export default {
     align-items: center;
     padding: 5px 0;
   }
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    margin-right: 20px;
-    float: right;
-  }
-}
+
 .auto-btn-list{
   margin-top: 16px;
 }

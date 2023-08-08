@@ -28,7 +28,6 @@
       </el-form>
     </div>
     <div class="gva-table-box">
-      <div class="gva-btn-list">
         <div class="gva-btn-list">
           <el-button type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
           <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=7&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
@@ -39,7 +38,7 @@
               <el-button type="primary" @click="onDelete">确定</el-button>
             </div>
             <template #reference>
-              <el-button icon="delete" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">删除</el-button>
+              <el-button icon="delete" :disabled="!apis.length" @click="deleteVisible = true">删除</el-button>
             </template>
           </el-popover>
           <el-popover v-model="freshVisible" placement="top" width="160">
@@ -49,10 +48,9 @@
               <el-button type="primary" @click="onFresh">确定</el-button>
             </div>
             <template #reference>
-              <el-button icon="Refresh" style="margin-left: 10px;" @click="freshVisible = true">刷新缓存</el-button>
+              <el-button icon="Refresh" @click="freshVisible = true">刷新缓存</el-button>
             </template>
           </el-popover>
-        </div>
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
         <el-table-column
@@ -406,12 +404,6 @@ const deleteApiFunc = async(row) => {
 </script>
 
 <style scoped lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
 .warning {
   color: #dc143c;
 }

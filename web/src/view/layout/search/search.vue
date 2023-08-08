@@ -2,7 +2,7 @@
   <div class="search-component">
       <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
       <Screenfull class="search-icon" />
-      <div class="service gvaIcon-customer-service" @click="toService" />
+      <div class="gvaIcon gvaIcon-customer-service" @click="toService" />
   </div>
 </template>
 
@@ -30,32 +30,24 @@ const toService = () => {
 
 </script>
 <style scoped lang="scss">
+
+.search-component {
+  @apply inline-flex overflow-hidden text-center gap-5 mr-5;
+  div{
+    @apply cursor-pointer;
+  }
+  .el-input__inner {
+    @apply border-b border-solid border-gray-300;
+  }
+  .el-dropdown-link {
+    @apply cursor-pointer;
+  }
+}
+
 .reload {
   font-size: 18px;
 }
 
-.transition-box {
-  overflow: hidden;
-  width: 160px;
-  margin-right: 32px;
-  text-align: center;
-
-  ::v-deep(.el-input__wrapper) {
-    .el-input__inner {
-      border-bottom: 1px solid var(--el-color-info-light-7);
-    }
-
-    box-shadow: none !important;
-  }
-
-  ::v-deep(.el-select .el-input .el-input__wrapper.is-focus) {
-    box-shadow: none !important;
-  }
-
-  ::v-deep(.el-select .el-input.is-focus .el-input__wrapper) {
-    box-shadow: none !important;
-  }
-}
 
 .reloading{
   animation:turn 0.5s linear infinite;
@@ -83,19 +75,4 @@ const toService = () => {
   }
 }
 
-.service {
-  font-family: "gvaIcon", serif !important;
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 800;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-//小屏幕不显示
-@media (max-width: 750px) {
-  .service {
-    display: none;
-  }
-}
 </style>

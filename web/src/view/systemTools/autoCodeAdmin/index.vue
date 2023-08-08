@@ -173,12 +173,7 @@ const goAutoCode = (row) => {
 </script>
 
 <style scoped lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
+
 .el-tag--mini {
   margin-left: 5px;
 }

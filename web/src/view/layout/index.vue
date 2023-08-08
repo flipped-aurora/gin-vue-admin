@@ -2,9 +2,9 @@
   <el-container class="layout-cont">
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
       <el-row :class="[isShadowBg?'shadowBg':'']" @click="changeShadow()" />
-      <el-aside class="main-cont main-left gva-aside">
+      <el-aside class="main-cont gva-aside" :style="{width:asideWidth()}">
         <div class="tilte" :style="{background: backgroundColor}">
-          <img alt class="logoimg" :src="$GIN_VUE_ADMIN.appLogo">
+          <img alt class="w-9 h-9 p-1 bg-white rounded-full" :src="$GIN_VUE_ADMIN.appLogo">
           <div v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
         <Aside class="aside" />
@@ -13,8 +13,8 @@
       <el-main class="main-cont main-right">
         <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
           <div
-            :style="{width: `calc(100% - ${isMobile?'0px':isCollapse?'54px':'220px'})`}"
-            class="topfix"
+            :style="{width: `calc(100% - ${getAsideWidth()})`}"
+            class="fixed top-0 box-border z-50"
           >
             <el-row>
               <el-col>
@@ -35,8 +35,8 @@
                         >{{ fmtTitle(item.meta.title,route) }}</el-breadcrumb-item>
                       </el-breadcrumb>
                     </el-col>
-                    <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9">
-                      <div class="right-box">
+                    <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9" class="flex items-center justify-end">
+                      <div class="mr-1.5 flex items-center">
                         <Search />
                         <el-dropdown>
                           <div class="flex justify-center items-center h-full w-full">
@@ -49,9 +49,9 @@
                             </span>
                           </div>
                           <template #dropdown>
-                            <el-dropdown-menu class="dropdown-group">
+                            <el-dropdown-menu>
                               <el-dropdown-item>
-                                <span style="font-weight: 600;">
+                                <span class="font-bold">
                                   当前角色：{{ userStore.userInfo.authority.authorityName }}
                                 </span>
                               </el-dropdown-item>
@@ -211,6 +211,18 @@ onMounted(() => {
 
 const userStore = useUserStore()
 
+const asideWidth = ()=> {
+  if (isMobile.value) {
+    return isCollapse.value?'0px':'220px'
+  }
+  return isCollapse.value ? '54px' : '220px'
+}
+
+const getAsideWidth = () =>{
+  if(isMobile.value) return '0px'
+  return isCollapse.value?'54px':'220px'
+}
+
 const textColor = computed(() => {
   if (userStore.sideMode === 'dark') {
     return '#fff'
@@ -294,7 +306,5 @@ const changeShadow = () => {
 :deep .el-overlay {
   background-color: hsla(0,0%,100%,.9) !important;
 }
-.command-box{
 
-}
 </style>

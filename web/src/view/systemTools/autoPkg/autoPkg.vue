@@ -149,15 +149,3 @@ const deleteApiFunc = async(row) => {
 
 getTableData()
 </script>
-
-<style scoped lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
-.warning {
-  color: #dc143c;
-}
-</style>

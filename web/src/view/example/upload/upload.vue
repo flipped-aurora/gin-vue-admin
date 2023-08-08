@@ -7,27 +7,16 @@
       <div class="gva-btn-list">
         <upload-common
           v-model:imageCommon="imageCommon"
-          class="upload-btn"
           @on-success="getTableData"
         />
         <upload-image
           v-model:imageUrl="imageUrl"
           :file-size="512"
           :max-w-h="1080"
-          class="upload-btn"
           @on-success="getTableData"
         />
-
-        <el-form ref="searchForm" :inline="true" :model="search">
-          <el-form-item label="">
-            <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注" />
-          </el-form-item>
-
-          <el-form-item>
-            <el-button type="primary" icon="search" @click="getTableData">查询</el-button>
-          </el-form-item>
-        </el-form>
-
+        <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注" />
+        <el-button type="primary" icon="search" @click="getTableData">查询</el-button>
       </div>
 
       <el-table :data="tableData">
@@ -204,7 +193,4 @@ export default {
   cursor: pointer;
 }
 
-.upload-btn + .upload-btn {
-  margin-left: 12px;
-}
 </style>

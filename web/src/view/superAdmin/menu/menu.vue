@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gva-table-box">
-      <div class="gva-btn-list flex items-center gap-3">
+      <div class="gva-btn-list">
         <el-button type="primary" icon="plus" @click="addMenu('0')">新增根菜单</el-button>
         <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
       </div>

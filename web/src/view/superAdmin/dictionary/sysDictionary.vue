@@ -36,7 +36,7 @@
       </el-form>
     </div>
     <div class="gva-table-box">
-      <div class="gva-btn-list flex items-center gap-3">
+      <div class="gva-btn-list">
         <el-button
 
           type="primary"

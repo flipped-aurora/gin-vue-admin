@@ -1,10 +1,10 @@
 <template>
   <div
-    class="warning-bar"
-    :class="href&&'can-click'"
+    class="px-1.5 py-2 flex items-center bg-amber-50 rounded gap-2 mb-3 text-amber-500"
+    :class="href&&'cursor-pointer'"
     @click="open"
   >
-    <el-icon>
+    <el-icon class="text-xl">
       <warning-filled />
     </el-icon>
     <span>
@@ -31,26 +31,3 @@ const open = () => {
   }
 }
 </script>
-<style lang="scss" scoped>
-.warning-bar{
-    background-color: #FFF5ED;
-    font-size: 14px;
-    padding: 6px 14px;
-    display: flex;
-    align-items: center;
-    border-radius: 2px;
-    .el-icon{
-      font-size: 18px;
-      color: #ED6A0C;
-    }
-    margin-bottom: 12px;
-    span{
-        line-height: 22px;
-        color:#F67207;
-        margin-left: 8px;
-    }
-}
-.can-click{
-  cursor: pointer;
-}
-</style>

@@ -2,7 +2,7 @@
   <div class="authority">
     <warning-bar title="注：右上角头像下拉可切换角色" />
     <div class="gva-table-box">
-      <div class="gva-btn-list flex items-center gap-3">
+      <div class="gva-btn-list">
         <el-button type="primary" icon="plus" @click="addAuthority(0)">新增角色</el-button>
         <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=8&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
       </div>
@@ -394,7 +394,7 @@ export default {
 }
 .tree-content{
   margin-top: 10px;
-  height: calc(100vh - 148px);
+  height: calc(100vh - 158px);
   overflow: auto;
 }
 

@@ -2,7 +2,7 @@
   <div>
     <el-row>
       <el-col :span="6">
-        <div class="fl-left avatar-box">
+        <div class="float-left avatar-box">
           <div class="user-card">
             <div class="header-box">
               <SelectImage v-model="userStore.userInfo.headerImg" />

@@ -1,18 +1,18 @@
 @import '@/style/basics.scss';
 @media screen and (min-width: 320px)and (max-width: 750px) {
     .el-header {
-        padding: 0 $padding-xs;
+        @apply px-1.5;
     }
     .layout-cont {
         .main-cont {
             .breadcrumb {
-                padding: 0 $padding-xs;
+                @apply px-1.5;
             }
         }
     }
     .layout-cont {
         .right-box {
-            margin-right: $margin-xs;
+            @apply mr-1.5;
         }
     }
     .el-main {
@@ -42,8 +42,7 @@
         height: 100%;
     }
     .card {
-        padding-left: $padding-xs;
-        padding-right: $padding-xs;
+        @apply px-1.5;
     }
     .card {
         .text {

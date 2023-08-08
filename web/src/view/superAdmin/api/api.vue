@@ -29,30 +29,30 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <div class="gva-btn-list flex items-center gap-3">
+        <div class="gva-btn-list">
           <el-button type="primary" icon="plus" @click="openDialog('addApi')">新增</el-button>
           <el-icon  class="cursor-pointer" @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=7&vd_source=f2640257c21e3b547a790461ed94875e')"><VideoCameraFilled /></el-icon>
+          <el-popover v-model="deleteVisible" placement="top" width="160">
+            <p>确定要删除吗？</p>
+            <div style="text-align: right; margin-top: 8px;">
+              <el-button type="primary" link @click="deleteVisible = false">取消</el-button>
+              <el-button type="primary" @click="onDelete">确定</el-button>
+            </div>
+            <template #reference>
+              <el-button icon="delete" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">删除</el-button>
+            </template>
+          </el-popover>
+          <el-popover v-model="freshVisible" placement="top" width="160">
+            <p>确定要刷新Casbin缓存吗？</p>
+            <div style="text-align: right; margin-top: 8px;">
+              <el-button type="primary" link @click="freshVisible = false">取消</el-button>
+              <el-button type="primary" @click="onFresh">确定</el-button>
+            </div>
+            <template #reference>
+              <el-button icon="Refresh" style="margin-left: 10px;" @click="freshVisible = true">刷新缓存</el-button>
+            </template>
+          </el-popover>
         </div>
-        <el-popover v-model="deleteVisible" placement="top" width="160">
-          <p>确定要删除吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button type="primary" link @click="deleteVisible = false">取消</el-button>
-            <el-button type="primary" @click="onDelete">确定</el-button>
-          </div>
-          <template #reference>
-            <el-button icon="delete" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">删除</el-button>
-          </template>
-        </el-popover>
-        <el-popover v-model="freshVisible" placement="top" width="160">
-          <p>确定要刷新Casbin缓存吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button type="primary" link @click="freshVisible = false">取消</el-button>
-            <el-button type="primary" @click="onFresh">确定</el-button>
-          </div>
-          <template #reference>
-            <el-button icon="Refresh" style="margin-left: 10px;" @click="freshVisible = true">刷新缓存</el-button>
-          </template>
-        </el-popover>
       </div>
       <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
         <el-table-column

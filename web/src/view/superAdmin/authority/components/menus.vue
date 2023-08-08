@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="clearfix sticky-button">
-      <el-input v-model="filterText" class="fitler" placeholder="筛选" />
-      <el-button class="fl-right" type="primary" @click="relation">确 定</el-button>
+    <div class="sticky top-0.5 z-10 bg-white">
+      <el-input v-model="filterText" class="w-3/5" placeholder="筛选" />
+      <el-button class="float-right" type="primary" @click="relation">确 定</el-button>
     </div>
-    <div class="tree-content">
+    <div class="tree-content clear-both">
       <el-tree
         ref="menuTree"
         :data="menuTreeData"
@@ -216,10 +216,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "@/style/button.scss";
 .custom-tree-node{
   span+span{
-    margin-left: 12px;
+    @apply ml-3;
   }
 }
 </style>

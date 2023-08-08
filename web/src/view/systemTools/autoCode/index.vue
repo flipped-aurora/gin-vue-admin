@@ -314,6 +314,10 @@ const typeOptions = ref([
     value: 'string'
   },
   {
+    label: '富文本',
+    value: 'richtext'
+  },
+  {
     label: '整型',
     value: 'int'
   },
@@ -338,12 +342,12 @@ const typeOptions = ref([
     value: 'picture',
   },
   {
-    label: '文件（json字符串）',
-    value: 'file',
-  },
-  {
     label: '多图片（json字符串）',
     value: 'pictures',
+  },
+  {
+    label: '文件（json字符串）',
+    value: 'file',
   }
 ])
 

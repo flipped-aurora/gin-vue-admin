@@ -146,6 +146,9 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
 		}
+		if autoCode.Fields[i].FieldType == "richtext" {
+			autoCode.HasRichText = true
+		}
 		if autoCode.Fields[i].FieldType == "pictures" {
 			autoCode.HasPic = true
 			autoCode.NeedJSON = true
@@ -246,6 +249,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "richtext" {
+			autoCode.HasRichText = true
 		}
 		if autoCode.Fields[i].FieldType == "pictures" {
 			autoCode.NeedJSON = true

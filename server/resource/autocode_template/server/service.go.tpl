@@ -117,7 +117,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
         orderMap := make(map[string]bool)
        {{- range .Fields}}
             {{- if .Sort}}
-         	orderMap["{{.FieldJson}}"] = true
+         	orderMap["{{.ColumnName}}"] = true
          	{{- end}}
        {{- end}}
        if orderMap[info.Sort] {

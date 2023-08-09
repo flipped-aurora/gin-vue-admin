@@ -4,7 +4,7 @@
 </div>
 <div align=center>
 <img src="https://img.shields.io/badge/golang-1.18-blue"/>
-<img src="https://img.shields.io/badge/gin-1.1.1-lightBlue"/>
+<img src="https://img.shields.io/badge/gin-1.9.1-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-2.3.8-green"/>
 <img src="https://img.shields.io/badge/gorm-1.25.2-red"/>

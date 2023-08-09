@@ -5,10 +5,8 @@
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
-          <div class="gva-top-card-left-rows">
-            <el-row>
+            <el-row class="my-8 w-[500px]">
               <el-col :span="8" :xs="24" :sm="8">
-
                 <div class="flex items-center">
                   <el-icon class="dashboard-icon">
                     <sort />
@@ -33,7 +31,6 @@
                 </div>
               </el-col>
             </el-row>
-          </div>
           <div>
             <div class="gva-top-card-left-item">
               使用教学：
@@ -190,9 +187,6 @@ export default {
             &-dot {
               @apply mt-4 text-gray-600 text-lg;
             }
-            &-rows {
-              @apply mt-4 flex flex-col text-gray-600 w-[500px];
-            }
             &-item{
               +.gva-top-card-left-item{
                 margin-top: 24px;
@@ -232,34 +226,4 @@ export default {
   @apply flex items-center text-xl mr-2 text-blue-400;
 }
 
-
-//小屏幕不显示右侧，将登录框居中
-@media (max-width: 750px) {
-    .gva-card {
-      @apply px-5 py-2.5;
-        .gva-top-card {
-          @apply h-auto;
-            &-left {
-                &-title {
-                    font-size: 20px !important;
-                }
-                &-rows {
-                    margin-top: 15px;
-                    align-items: center;
-                }
-            }
-            &-right {
-                display: none;
-            }
-        }
-        .gva-middle-card {
-            &-item {
-                line-height: 20px;
-            }
-        }
-        .dashboard-icon {
-            font-size: 18px;
-        }
-    }
-}
 </style>

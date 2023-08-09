@@ -7,7 +7,6 @@
  * 2. Prevent adjustments of font size after orientation changes in iOS.
  */
 
-@import '@/style/basics.scss';
 @import '@/style/iconfont.css';
 html {
     line-height: 1.15;
@@ -517,31 +516,9 @@ li {
         @apply fixed top-0;
     }
     .gva-aside {
-        position: fixed;
-        font-size: 0;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 1001;
-        overflow: hidden;
+        @apply fixed top-0 left-0 z-[1001] overflow-hidden;
         .el-menu {
-            border-right: none;
-        }
-        .tilte {
-            @apply min-h-[60px];
-            text-align: center;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .tit-text {
-                display: inline-block;
-                color: #fff;
-                font-weight: 600;
-                font-size: 20px;
-                padding-left: 10px;
-            }
+            @apply border-r-0;
         }
     }
     .aside {
@@ -576,30 +553,18 @@ li {
 
     .mobile {
         .gva-aside {
-            width: $width-hideside-aside;
+            @apply w-[54px];
         }
     }
 
     .hideside {
         .main-cont.el-main {
-            margin-left: 54px;
+            @apply ml-[54px];
         }
     }
     .mobile {
         .main-cont.el-main {
-            margin-left: 0px;
-        }
-    }
-    .openside.mobile {
-        .shadowBg {
-            background: #000;
-            opacity: .3;
-            width: 100%;
-            top: 0;
-            height: 100%;
-            position: absolute;
-            z-index: 1001;
-            left: 0;
+            @apply ml-0;
         }
     }
 }
@@ -700,21 +665,6 @@ li {
                 .el-tooltip,
                 .el-sub-menu__title {
                     @apply px-4;
-                }
-            }
-        }
-
-        &.main-right {
-            .admin-title {
-                float: left;
-                font-size: 16px;
-                vertical-align: middle;
-                margin-left: 20px;
-                img {
-                    vertical-align: middle;
-                }
-                &.collapse {
-                    width: 53px;
                 }
             }
         }

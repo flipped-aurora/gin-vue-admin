@@ -77,7 +77,6 @@
     </div>
     <el-dialog
       v-model="addUserDialog"
-      custom-class="user-dialog"
       title="用户"
       :show-close="false"
       :close-on-press-escape="false"
@@ -403,43 +402,7 @@ const switchEnable = async(row) => {
 </script>
 
 <style lang="scss">
-.user-dialog {
   .header-img-box {
-  width: 200px;
-  height: 200px;
-  border: 1px dashed #ccc;
-  border-radius: 20px;
-  text-align: center;
-  line-height: 200px;
-  cursor: pointer;
-}
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-  }
-  .avatar-uploader-icon {
-    border: 1px dashed #d9d9d9 !important;
-    border-radius: 6px;
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-}
-.nickName{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.pointer{
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 2px;
-}
+    @apply w-52 h-52 border border-solid border-gray-300 rounded-xl flex justify-center items-center cursor-pointer;
+ }
 </style>

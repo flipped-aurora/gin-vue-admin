@@ -7,7 +7,7 @@
       label-width="120px"
       label-position="right"
       :rules="rules"
-      class="grid-form"
+      class="grid grid-cols-2"
     >
       <el-form-item label="字段名称" prop="fieldName">
         <el-input v-model="middleDate.fieldName" autocomplete="off" style="width:80%" />
@@ -187,9 +187,3 @@ export default {
   name: 'FieldDialog'
 }
 </script>
-<style scoped>
-.grid-form{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-</style>

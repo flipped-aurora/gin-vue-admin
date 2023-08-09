@@ -1,11 +1,11 @@
 <template>
   <el-container class="layout-cont">
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
-      <el-row :class="[isShadowBg?'shadowBg':'']" @click="changeShadow()" />
+      <el-row :class="[isShadowBg?'bg-black opacity-30 w-full h-full absolute top-0 left-0 z-[1001]':'']" @click="changeShadow()" />
       <el-aside class="main-cont gva-aside" :style="{width:asideWidth()}">
-        <div class="tilte" :style="{background: backgroundColor}">
+        <div class="min-h-[60px] text-center transition-all duration-300 flex items-center justify-center gap-2" :style="{background: backgroundColor}">
           <img alt class="w-9 h-9 p-1 bg-white rounded-full" :src="$GIN_VUE_ADMIN.appLogo">
-          <div v-if="isSider" class="tit-text" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
+          <div v-if="isSider" class="inline-flex text-white font-bold text-2xl" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
         <Aside class="aside" />
       </el-aside>
@@ -19,7 +19,7 @@
             <el-row>
               <el-col>
                 <el-header class="header-cont">
-                  <el-row class="p-0">
+                  <el-row class="p-0 h-full">
                     <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" class="z-50 flex items-center pl-3">
                       <div class="text-black cursor-pointer text-lg leading-5" @click="totalCollapse">
                         <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
@@ -292,7 +292,6 @@ const changeShadow = () => {
 </script>
 
 <style lang="scss">
-@import '@/style/mobile.scss';
 .button {
   font-size: 12px;
   color: #666;

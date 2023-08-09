@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="gva-table-box">
-      <el-form label-width="140px" class="plug-form">
+      <el-form label-width="140px" class="w-[680px]">
         <el-form-item label="插件名">
           <el-input v-model="form.plugName" placeholder="必填（英文大写字母开头）" @blur="titleCase" />
         </el-form-item>
@@ -205,18 +205,13 @@ const minkv = (arr, key) => {
 </script>
 
 <style lang="scss" scoped>
-        .plug-form{
-            width: 680px;
-        }
     .plug-row{
-        display: flex;
-        align-items: center;
-        width: 100%;
+      @apply flex items-center w-full;
         &+&{
-            margin-top: 12px;
+          @apply mt-3;
         }
         &>span{
-            margin-left: 8px;
+          @apply ml-2;
         }
     }
 </style>

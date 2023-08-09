@@ -171,13 +171,3 @@ const goAutoCode = (row) => {
 }
 
 </script>
-
-<style scoped lang="scss">
-
-.el-tag--mini {
-  margin-left: 5px;
-}
-.warning {
-  color: #dc143c;
-}
-</style>

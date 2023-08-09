@@ -89,8 +89,8 @@
           <el-select v-model="form.package" style="width:194px">
             <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
           </el-select>
-          <el-icon class="auto-icon" @click="getPkgs"><refresh /></el-icon>
-          <el-icon class="auto-icon" @click="goPkgs"><document-add /></el-icon>
+          <el-icon class="cursor-pointer ml-2 text-gray-600" @click="getPkgs"><refresh /></el-icon>
+          <el-icon class="cursor-pointer ml-2 text-gray-600" @click="goPkgs"><document-add /></el-icon>
         </el-form-item>
         <el-form-item label="业务库" prop="businessDB">
           <template #label>
@@ -262,7 +262,7 @@
         </el-table-column>
       </el-table>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-end auto-btn-list">
+      <div class="gva-btn-list justify-end mt-4">
         <el-button type="primary" @click="enterForm(true)">预览代码</el-button>
         <el-button type="primary" @click="enterForm(false)">生成代码</el-button>
       </div>
@@ -280,7 +280,7 @@
 
     <el-dialog v-model="previewFlag">
       <template #header>
-        <div class="previewCodeTool">
+        <div class="flex items-center py-1.5">
           <p>操作栏：</p>
           <el-button type="primary" @click="selectText">全选</el-button>
           <el-button type="primary" @click="copy">复制</el-button>
@@ -720,21 +720,3 @@ export default {
   name: 'AutoCode'
 }
 </script>
-
-<style scoped lang="scss">
-  .previewCodeTool {
-    display: flex;
-    align-items: center;
-    padding: 5px 0;
-  }
-
-.auto-btn-list{
-  margin-top: 16px;
-}
-.auto-icon{
-  margin-left: 6px;
-  color: #666;
-  cursor: pointer;
-}
-
-</style>

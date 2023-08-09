@@ -1,11 +1,9 @@
 <template>
-  <div class="previewCode">
     <el-tabs v-model="activeName">
       <el-tab-pane v-for="(item, key) in previewCode" :key="key" :label="key" :name="key">
-        <div :id="key" class="tab-info" />
+        <div :id="key" class="h-[50vh] bg-white px-5 overflow-y-scroll" />
       </el-tab-pane>
     </el-tabs>
-  </div>
 </template>
 
 <script setup>
@@ -81,14 +79,3 @@ export default {
 
 }
 </script>
-
-<style lang="scss">
-.previewCode {
-  .tab-info {
-    height: 50vh;
-    background: #fff;
-    padding: 0 20px;
-    overflow-y: scroll;
-  }
-}
-</style>

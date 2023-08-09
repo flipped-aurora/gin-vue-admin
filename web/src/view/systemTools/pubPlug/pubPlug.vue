@@ -1,7 +1,7 @@
 <template>
-  <div class="gva-plugin-pub">
+  <div class="p-5 bg-white">
     <WarningBar title="目前只支持标准插件（通过插件模板生成的标准目录插件），非标准插件请自行打包" />
-    <div class="plugin-pub-btn-list">
+    <div class="flex items-center gap-3">
       <el-input v-model="plugName" placeholder="插件模板处填写的【插件名】" />
       <el-button type="primary" @click="pubPlugin">打包插件</el-button>
     </div>
@@ -24,14 +24,3 @@ const pubPlugin = async() => {
 
 </script>
 
-<style lang="scss" scope>
-.gva-plugin-pub {
-  background-color: white;
-  padding: 20px;
-}
-.plugin-pub-btn-list{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-</style>

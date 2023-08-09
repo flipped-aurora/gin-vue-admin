@@ -371,7 +371,7 @@
         </el-collapse-item>
       </el-collapse>
     </el-form>
-    <div class="gva-btn-list">
+    <div class="mt-4">
       <el-button type="primary" @click="update">立即更新</el-button>
       <el-button type="primary" @click="reload">重启服务（开发中）</el-button>
     </div>
@@ -452,20 +452,9 @@ const email = async() => {
 
 <style lang="scss">
 .system {
-  background: #fff;
-  padding:36px;
-  border-radius: 2px;
+  @apply bg-white p-9 rounded;
   h2 {
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 16px;
-    box-shadow: -4px 0px 0px 0px #e7e8e8;
-  }
-  ::v-deep(.el-input-number__increase){
-    top:5px !important;
-  }
-  .gva-btn-list{
-    margin-top:16px;
+    @apply p-2.5 my-2.5 text-lg shadow;
   }
 }
 </style>

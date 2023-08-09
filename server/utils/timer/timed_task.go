@@ -35,10 +35,36 @@ func (t *timer) AddTaskByFunc(taskName string, spec string, task func(), option 
 	return id, err
 }
 
+// AddTaskByFuncWithSeconds 通过函数的方法使用WithSeconds添加任务
+func (t *timer) AddTaskByFuncWhithSecond(taskName string, spec string, task func(), option ...cron.Option) (cron.EntryID, error) {
+	t.Lock()
+	defer t.Unlock()
+	option = append(option, cron.WithSeconds())
+	if _, ok := t.taskList[taskName]; !ok {
+		t.taskList[taskName] = cron.New(option...)
+	}
+	id, err := t.taskList[taskName].AddFunc(spec, task)
+	t.taskList[taskName].Start()
+	return id, err
+}
+
 // AddTaskByJob 通过接口的方法添加任务
 func (t *timer) AddTaskByJob(taskName string, spec string, job interface{ Run() }, option ...cron.Option) (cron.EntryID, error) {
 	t.Lock()
 	defer t.Unlock()
+	if _, ok := t.taskList[taskName]; !ok {
+		t.taskList[taskName] = cron.New(option...)
+	}
+	id, err := t.taskList[taskName].AddJob(spec, job)
+	t.taskList[taskName].Start()
+	return id, err
+}
+
+// AddTaskByJobWithSeconds 通过接口的方法添加任务
+func (t *timer) AddTaskByJobWithSeconds(taskName string, spec string, job interface{ Run() }, option ...cron.Option) (cron.EntryID, error) {
+	t.Lock()
+	defer t.Unlock()
+	option = append(option, cron.WithSeconds())
 	if _, ok := t.taskList[taskName]; !ok {
 		t.taskList[taskName] = cron.New(option...)
 	}

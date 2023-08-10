@@ -2,32 +2,32 @@
   <div>
     <el-row>
       <el-col :span="6">
-        <div class="float-left avatar-box">
-          <div class="user-card">
+        <div class="float-left w-4/5 h-full bg-white p-8 rounded-lg shadow-lg">
+          <div class="user-card px-6 text-center bg-white shrink-0">
             <div class="header-box">
               <SelectImage v-model="userStore.userInfo.headerImg" />
             </div>
-            <div class="user-personality">
-              <p v-if="!editFlag" class="nickName">
+            <div class="py-6 text-center">
+              <p v-if="!editFlag" class="text-[26px] flex justify-center items-center">
                 {{ userStore.userInfo.nickName }}
-                <el-icon class="pointer" color="#66b1ff" @click="openEdit">
+                <el-icon class="cursor-pointer text-sm" color="#66b1ff" @click="openEdit">
                   <edit />
                 </el-icon>
               </p>
-              <p v-if="editFlag" class="nickName">
+              <p v-if="editFlag" class="flex justify-center items-center">
                 <el-input v-model="nickName" />
-                <el-icon class="pointer" color="#67c23a" @click="enterEdit">
+                <el-icon class="cursor-pointer" color="#67c23a" @click="enterEdit">
                   <check />
                 </el-icon>
-                <el-icon class="pointer" color="#f23c3c" @click="closeEdit">
+                <el-icon class="cursor-pointer" color="#f23c3c" @click="closeEdit">
                   <close />
                 </el-icon>
               </p>
-              <p class="person-info">这个家伙很懒，什么都没有留下</p>
+              <p class="text-[#999] mt-2 text-md">这个家伙很懒，什么都没有留下</p>
             </div>
-            <div class="user-information">
-              <ul>
-                <li>
+            <div class="w-full h-full text-left">
+              <ul class="inline-block h-full w-full">
+                <li class="w-full whitespace-nowrap overflow-hidden text-ellipsis py-5 text-[16px] text-[#606266]">
                   <el-icon>
                     <user />
                   </el-icon>
@@ -39,14 +39,14 @@
                   content="北京反转极光科技有限公司-技术部-前端事业群"
                   placement="top"
                 >
-                  <li>
+                  <li class="w-full whitespace-nowrap overflow-hidden text-ellipsis py-5 text-[16px] text-[#606266]">
                     <el-icon>
                       <data-analysis />
                     </el-icon>
                     北京反转极光科技有限公司-技术部-前端事业群
                   </li>
                 </el-tooltip>
-                <li>
+                <li class="w-full whitespace-nowrap overflow-hidden text-ellipsis py-5 text-[16px] text-[#606266]">
                   <el-icon>
                     <video-camera />
                   </el-icon>
@@ -58,7 +58,7 @@
                   content="GoLang/JavaScript/Vue/Gorm"
                   placement="top"
                 >
-                  <li>
+                  <li class="w-full whitespace-nowrap overflow-hidden text-ellipsis py-5 text-[16px] text-[#606266]">
                     <el-icon>
                       <medal />
                     </el-icon>
@@ -71,38 +71,39 @@
         </div>
       </el-col>
       <el-col :span="18">
-        <div class="user-addcount">
+        <div class="bg-white p-8 rounded-lg">
           <el-tabs v-model="activeName" @tab-click="handleClick">
             <el-tab-pane label="账号绑定" name="second">
               <ul>
-                <li>
-                  <p class="title">密保手机</p>
-                  <p class="desc">
+                <li class="borderd">
+                  <p class="pb-2.5 text-[18px] text-[#696969]">密保手机</p>
+                  <p class="pb-2.5 text-[16px] text-[#a9a9a9]">
                     已绑定手机:{{ userStore.userInfo.phone }}
-                    <a href="javascript:void(0)" @click="changePhoneFlag = true">立即修改</a>
+                    <a href="javascript:void(0)" @click="changePhoneFlag = true" class="float-right text-[#409EFF]">立即修改</a>
                   </p>
                 </li>
-                <li>
-                  <p class="title">密保邮箱</p>
-                  <p class="desc">
+                <li class="borderd pt-2.5">
+                  <p class="pb-2.5 text-[18px] text-[#696969]">密保邮箱</p>
+                  <p class="pb-2.5 text-[16px] text-[#a9a9a9]">
                     已绑定邮箱：{{ userStore.userInfo.email }}
-                    <a href="javascript:void(0)" @click="changeEmailFlag = true">立即修改</a>
+                    <a href="javascript:void(0)" @click="changeEmailFlag = true" class="float-right text-[#409EFF]">立即修改</a>
                   </p>
                 </li>
-                <li>
-                  <p class="title">密保问题</p>
-                  <p class="desc">
+                <li class="borderd pt-2.5">
+                  <p class="pb-2.5 text-[18px] text-[#696969]">密保问题</p>
+                  <p class="pb-2.5 text-[16px] text-[#a9a9a9]">
                     未设置密保问题
-                    <a href="javascript:void(0)">去设置</a>
+                    <a href="javascript:void(0)" class="float-right text-[#409EFF]">去设置</a>
                   </p>
                 </li>
-                <li>
-                  <p class="title">修改密码</p>
-                  <p class="desc">
+                <li class="borderd pt-2.5">
+                  <p class="pb-2.5 text-[18px] text-[#696969]">修改密码</p>
+                  <p class="pb-2.5 text-[16px] text-[#a9a9a9]">
                     修改个人密码
                     <a
                       href="javascript:void(0)"
                       @click="showPassword = true"
+                      class="float-right text-[#409EFF]"
                     >修改密码</a>
                   </p>
                 </li>
@@ -410,21 +411,21 @@ const changeEmail = async() => {
   height: 178px;
   display: block;
 }
-.avatar-box {
-  box-shadow: -2px 0 20px -16px;
-  width: 80%;
-  height: 100%;
-  .user-card {
-    min-height: calc(90vh - 200px);
-    padding: 30px 20px;
-    text-align: center;
-    background-color: #fff;
-    border-radius: 8px;
-    flex-shrink: 0;
-    .el-avatar {
-      border-radius: 50%;
-    }
-    .user-personality {
+//.avatar-box {
+  //box-shadow: -2px 0 20px -16px;
+  //width: 80%;
+  //height: 100%;
+  //.user-card {
+  //  min-height: calc(90vh - 200px);
+    //padding: 30px 20px;
+    //text-align: center;
+    //background-color: #fff;
+    //border-radius: 8px;
+    //flex-shrink: 0;
+    //.el-avatar {
+    //  border-radius: 50%;
+    //}
+/*    .user-personality {
       padding: 24px 0;
       text-align: center;
       p {
@@ -441,8 +442,8 @@ const changeEmail = async() => {
         font-size: 14px;
         color: #999;
       }
-    }
-    .user-information {
+    }*/
+    /*.user-information {
       width: 100%;
       height: 100%;
       text-align: left;
@@ -464,36 +465,40 @@ const changeEmail = async() => {
           color: #606266;
         }
       }
-    }
+    }*/
+  //}
+//}
+.borderd {
+  border-bottom: 2px solid #f0f2f5;
+  &:last-child{
+    border-bottom: none;
   }
-}
-.user-addcount {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  ul {
-    li {
-      .title {
-        padding: 10px;
-        font-size: 18px;
-        color: #696969;
-      }
-      .desc {
-        font-size: 16px;
-        padding: 0 10px 20px 10px;
-        color: #a9a9a9;
-        a {
-          color: rgb(64, 158, 255);
-          float: right;
-        }
-      }
-      border-bottom: 2px solid #f0f2f5;
-      &:last-child{
-        border-bottom: none;
-      }
+  //background-color: #fff;
+  //padding: 20px;
+  //border-radius: 8px;
+  //ul {
+    //li {
+      //.title {
+      //  padding: 10px;
+      //  font-size: 18px;
+      //  color: #696969;
+      //}
+      //.desc {
+      //  font-size: 16px;
+      //  padding: 0 10px 20px 10px;
+      //  color: #a9a9a9;
+      //  a {
+      //    color: rgb(64, 158, 255);
+      //    float: right;
+      //  }
+      //}
+      //border-bottom: 2px solid #f0f2f5;
+      //&:last-child{
+      //  border-bottom: none;
+      //}
     }
-  }
-}
+  //}
+//}
 .user-headpic-update {
   width: 120px;
   height: 120px;

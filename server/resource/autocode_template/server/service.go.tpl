@@ -132,3 +132,13 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }
+
+// Get{{.StructName}}InfoListAll 不分页获取{{.StructName}}记录
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoListAll() (list []{{.Package}}.{{.StructName}}, err error) {
+	// 创建db
+	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
+    var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
+
+	err = db.Find(&{{.Abbreviation}}s).Error
+	return  {{.Abbreviation}}s, err
+}

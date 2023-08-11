@@ -95,3 +95,17 @@ export const get{{.StructName}}List = (params) => {
     params
   })
 }
+
+// @Tags {{.StructName}}
+// @Summary 不分页获取{{.StructName}}列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /{{.Abbreviation}}/get{{.StructName}}ListAll [get]
+export const get{{.StructName}}ListAll = () => {
+  return service({
+    url: '/{{.Abbreviation}}/get{{.StructName}}ListAll',
+    method: 'get'
+  })
+}

@@ -6,3 +6,7 @@ type PageResult struct {
 	Page     int         `json:"page"`
 	PageSize int         `json:"pageSize"`
 }
+
+type ResultAll struct {
+	List interface{} `json:"list"`
+}

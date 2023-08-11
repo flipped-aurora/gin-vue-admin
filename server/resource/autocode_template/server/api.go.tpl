@@ -208,3 +208,22 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
         }, "获取成功", c)
     }
 }
+
+// Get{{.StructName}}ListAll 不分页获取{{.StructName}}列表
+// @Tags {{.StructName}}
+// @Summary 不分页获取{{.StructName}}列表
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /{{.Abbreviation}}/get{{.StructName}}ListAll [get]
+func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}ListAll(c *gin.Context) {
+	if list, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoListAll(); err != nil {
+	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
+        response.FailWithMessage("获取失败", c)
+    } else {
+        response.OkWithDetailed(response.ResultAll{
+            List:     list,
+        }, "获取成功", c)
+    }
+}

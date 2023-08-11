@@ -505,7 +505,13 @@ func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) 
 		},
 		{
 			Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "List",
-			Description: "获取" + a.Description + "列表",
+			Description: "分页获取" + a.Description + "列表",
+			ApiGroup:    a.Description,
+			Method:      "GET",
+		},
+		{
+			Path:        "/" + a.Abbreviation + "/" + "get" + a.StructName + "ListAll",
+			Description: "不分页获取" + a.Description + "列表",
 			ApiGroup:    a.Description,
 			Method:      "GET",
 		},

@@ -22,6 +22,7 @@ func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGrou
 	}
 	{
 		{{.Abbreviation}}RouterWithoutRecord.GET("find{{.StructName}}", {{.Abbreviation}}Api.Find{{.StructName}})        // 根据ID获取{{.StructName}}
-		{{.Abbreviation}}RouterWithoutRecord.GET("get{{.StructName}}List", {{.Abbreviation}}Api.Get{{.StructName}}List)  // 获取{{.StructName}}列表
+		{{.Abbreviation}}RouterWithoutRecord.GET("get{{.StructName}}List", {{.Abbreviation}}Api.Get{{.StructName}}List)  // 分页获取{{.StructName}}列表
+		{{.Abbreviation}}RouterWithoutRecord.GET("get{{.StructName}}ListAll", {{.Abbreviation}}Api.Get{{.StructName}}ListAll)  // 不分页获取{{.StructName}}列表
 	}
 }

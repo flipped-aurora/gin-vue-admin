@@ -253,7 +253,7 @@
                         <div class="fileBtn" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index">
                           <el-button type="primary" text bg @click="onDownloadFile(item.url)">
                             <el-icon style="margin-right: 5px"><Download /></el-icon>
-                            {{item.name}}
+                            {{"{{"}} item.name {{"}}"}}
                           </el-button>
                         </div>
                 {{- end }}

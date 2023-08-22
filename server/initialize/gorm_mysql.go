@@ -50,6 +50,9 @@ func GormMysqlByConfig(m config.Mysql) *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(m.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(m.MaxOpenConns)
+		
+		db = db.Debug()
+		
 		return db
 	}
 }

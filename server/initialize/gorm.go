@@ -9,10 +9,9 @@ import (
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/orderinfo"
 )
 
-// Gorm 初始化数据库并产生数据库全局变量
-// Author SliverHorn
 func Gorm() *gorm.DB {
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":
@@ -30,12 +29,11 @@ func Gorm() *gorm.DB {
 	}
 }
 
-// RegisterTables 注册数据库表专用
-// Author SliverHorn
 func RegisterTables() {
+	票务服务 := global.GetGlobalDBByDBName("票务服务")
 	db := global.GVA_DB
 	err := db.AutoMigrate(
-		// 系统模块表
+
 		system.SysApi{},
 		system.SysUser{},
 		system.SysBaseMenu{},
@@ -61,4 +59,5 @@ func RegisterTables() {
 		os.Exit(0)
 	}
 	global.GVA_LOG.Info("register table success")
+	票务服务.AutoMigrate(orderinfo.OrderInfo{})
 }

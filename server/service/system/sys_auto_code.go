@@ -12,17 +12,17 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
-
+	
 	ast2 "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
-
+	
 	"github.com/flipped-aurora/gin-vue-admin/server/resource/autocode_template/subcontract"
 	cp "github.com/otiai10/copy"
 	"go.uber.org/zap"
-
+	
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
+	
 	"gorm.io/gorm"
 )
 
@@ -70,7 +70,7 @@ func Init(Package string) {
 			structNameF: "%sService",
 		},
 	}
-
+	
 	packageInjectionMap = map[string]astInjectionMeta{
 		packageServiceName: {
 			path: filepath.Join(global.GVA_CONFIG.AutoCode.Root,
@@ -162,15 +162,15 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 	if err != nil {
 		return nil, err
 	}
-
+	
 	// 写入文件前，先创建文件夹
 	if err = utils.CreateDir(needMkdir...); err != nil {
 		return nil, err
 	}
-
+	
 	// 创建map
 	ret := make(map[string]string)
-
+	
 	// 生成map
 	for _, value := range dataList {
 		ext := ""
@@ -191,7 +191,7 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		}
 		builder := strings.Builder{}
 		builder.WriteString("```")
-
+		
 		if ext != "" && strings.Contains(ext, ".") {
 			builder.WriteString(strings.Replace(ext, ".", "", -1))
 		}
@@ -202,11 +202,11 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		}
 		builder.Write(data)
 		builder.WriteString("\n\n```")
-
+		
 		pathArr := strings.Split(value.autoCodePath, string(os.PathSeparator))
 		ret[pathArr[1]+"-"+pathArr[3]] = builder.String()
 		_ = f.Close()
-
+		
 	}
 	defer func() { // 移除中间文件
 		if err := os.RemoveAll(autoPath); err != nil {
@@ -223,7 +223,7 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 			DictTypeM[v.DictType] = ""
 		}
 	}
-
+	
 	for k := range DictTypeM {
 		autoCode.DictTypes = append(autoCode.DictTypes, k)
 	}
@@ -275,7 +275,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	if err = utils.CreateDir(needMkdir...); err != nil {
 		return err
 	}
-
+	
 	// 生成文件
 	for _, value := range dataList {
 		f, err := os.OpenFile(value.autoCodePath, os.O_CREATE|os.O_WRONLY, 0o755)
@@ -287,7 +287,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		}
 		_ = f.Close()
 	}
-
+	
 	defer func() { // 移除中间文件
 		if err := os.RemoveAll(autoPath); err != nil {
 			return
@@ -316,7 +316,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				return err
 			}
 		}
-
+		
 		{
 			// 在gorm.go 注入 自动迁移
 			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
@@ -324,7 +324,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			autoCode.BusinessDB = utils.MaheHump(autoCode.BusinessDB) // 这里将 数据库中间存在 - 的转换为驼峰
 			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, autoCode.BusinessDB, autoCode.StructName)
 		}
-
+		
 		{
 			// router.go 注入 自动迁移
 			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
@@ -546,6 +546,9 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 	}
 	// 生成 *Template, 填充 template 字段
 	for index, value := range dataList {
+		if index == 11 {
+			fmt.Println(value)
+		}
 		dataList[index].template, err = template.ParseFiles(value.locationPath)
 		if err != nil {
 			return nil, nil, nil, err
@@ -560,7 +563,7 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 			dataList[index].autoCodePath = autoPath + "readme.txt"
 			continue
 		}
-
+		
 		if lastSeparator := strings.LastIndex(trimBase, "/"); lastSeparator != -1 {
 			origFileName := strings.TrimSuffix(trimBase[lastSeparator+1:], ".tpl")
 			firstDot := strings.Index(origFileName, ".")
@@ -571,12 +574,12 @@ func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStr
 				} else {
 					fileName = autoCode.HumpPackageName + origFileName[firstDot:]
 				}
-
+				
 				dataList[index].autoCodePath = filepath.Join(autoPath, trimBase[:lastSeparator], autoCode.PackageName,
 					origFileName[:firstDot], fileName)
 			}
 		}
-
+		
 		if lastSeparator := strings.LastIndex(dataList[index].autoCodePath, string(os.PathSeparator)); lastSeparator != -1 {
 			needMkdir = append(needMkdir, dataList[index].autoCodePath[:lastSeparator])
 		}
@@ -643,14 +646,14 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 		if err != nil {
 			return err
 		}
-
+		
 		f, err := os.Create(s.path)
 		if err != nil {
 			return err
 		}
-
+		
 		defer f.Close()
-
+		
 		temp, err := template.New("").Parse(s.temp)
 		if err != nil {
 			return err
@@ -695,7 +698,7 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 			return err
 		}
 		defer f.Close()
-
+		
 		err = temp.Execute(f, plug)
 		if err != nil {
 			zap.L().Error("exec err", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
@@ -712,21 +715,21 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	if os.IsNotExist(err) {
 		os.Mkdir(GVAPLUGPINATH, os.ModePerm)
 	}
-
+	
 	src, err := file.Open()
 	if err != nil {
 		return -1, -1, err
 	}
 	defer src.Close()
-
+	
 	out, err := os.Create(GVAPLUGPINATH + file.Filename)
 	if err != nil {
 		return -1, -1, err
 	}
 	defer out.Close()
-
+	
 	_, err = io.Copy(out, src)
-
+	
 	paths, err := utils.Unzip(GVAPLUGPINATH+file.Filename, GVAPLUGPINATH)
 	paths = filterFile(paths)
 	var webIndex = -1
@@ -749,14 +752,14 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 		zap.L().Error("非标准插件，请按照文档自动迁移使用")
 		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
 	}
-
+	
 	if webIndex != -1 {
 		err = installation(paths[webIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
 	}
-
+	
 	if serverIndex != -1 {
 		err = installation(paths[serverIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
 	}
@@ -770,7 +773,7 @@ func installation(path string, formPath string, toPath string) error {
 		return errors.New("arr")
 	}
 	name := arr[ln-3]
-
+	
 	var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + formPath + "/" + path)
 	var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + toPath + "/plugin/")
 	_, err := os.Stat(to + name)
@@ -803,14 +806,14 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 	if plugName == "" {
 		return "", errors.New("插件名称不能为空")
 	}
-
+	
 	// 防止路径穿越
 	plugName = filepath.Clean(plugName)
-
+	
 	webPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", plugName)
 	serverPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", plugName)
 	// 创建一个新的zip文件
-
+	
 	// 判断目录是否存在
 	webInfo, err := os.Stat(webPath)
 	if err != nil {
@@ -820,7 +823,7 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 	if err != nil {
 		return "", errors.New("server路径不存在")
 	}
-
+	
 	fileName := plugName + ".zip"
 	// 创建一个新的zip文件
 	zipFile, err := os.Create(fileName)
@@ -829,61 +832,61 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 		return
 	}
 	defer zipFile.Close()
-
+	
 	// 创建一个zip写入器
 	zipWriter := zip.NewWriter(zipFile)
 	defer zipWriter.Close()
-
+	
 	// 创建一个新的文件头
 	webHeader, err := zip.FileInfoHeader(webInfo)
 	if err != nil {
 		return
 	}
-
+	
 	// 创建一个新的文件头
 	serverHeader, err := zip.FileInfoHeader(serverInfo)
 	if err != nil {
 		return
 	}
-
+	
 	webHeader.Name = filepath.Join(plugName, "web", "plugin")
 	serverHeader.Name = filepath.Join(plugName, "server", "plugin")
-
+	
 	// 将文件添加到zip归档中
 	_, err = zipWriter.CreateHeader(serverHeader)
 	_, err = zipWriter.CreateHeader(webHeader)
-
+	
 	// 遍历webPath目录并将所有非隐藏文件添加到zip归档中
 	err = filepath.Walk(webPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-
+		
 		// 跳过隐藏文件
 		if strings.HasPrefix(info.Name(), ".") {
 			return nil
 		}
-
+		
 		// 创建一个新的文件头
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
 			return err
 		}
-
+		
 		// 将文件头的名称设置为文件的相对路径
 		rel, _ := filepath.Rel(webPath, path)
 		header.Name = filepath.Join(plugName, "web", "plugin", plugName, rel)
-
+		
 		// 将文件添加到zip归档中
 		writer, err := zipWriter.CreateHeader(header)
 		if err != nil {
 			return err
 		}
-
+		
 		if info.IsDir() {
 			return nil
 		}
-
+		
 		// 打开文件并将其内容复制到zip归档中
 		file, err := os.Open(path)
 		if err != nil {
@@ -899,24 +902,24 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 	if err != nil {
 		return
 	}
-
+	
 	// 遍历serverPath目录并将所有非隐藏文件添加到zip归档中
 	err = filepath.Walk(serverPath, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-
+		
 		// 跳过隐藏文件和目录
 		if strings.HasPrefix(info.Name(), ".") {
 			return nil
 		}
-
+		
 		// 创建一个新的文件头
 		header, err := zip.FileInfoHeader(info)
 		if err != nil {
 			return err
 		}
-
+		
 		// 将文件头的名称设置为文件的相对路径
 		rel, _ := filepath.Rel(serverPath, path)
 		header.Name = filepath.Join(plugName, "server", "plugin", plugName, rel)
@@ -925,11 +928,11 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 		if err != nil {
 			return err
 		}
-
+		
 		if info.IsDir() {
 			return nil
 		}
-
+		
 		// 打开文件并将其内容复制到zip归档中
 		file, err := os.Open(path)
 		if err != nil {
@@ -940,7 +943,7 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 		if err != nil {
 			return err
 		}
-
+		
 		return nil
 	})
 	if err != nil {

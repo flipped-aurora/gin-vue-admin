@@ -80,8 +80,12 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor) => {
   editorRef.value = editor
-  valueHtml.value =props.modelValue
 }
+
+watch(()=>props.modelValue,()=>{
+  valueHtml.value = props.modelValue
+})
+
 </script>
 
 <style scoped lang="scss">

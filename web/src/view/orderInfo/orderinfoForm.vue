@@ -12,7 +12,7 @@
           <el-input v-model="formData.contactPhone" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="是否换乘:" prop="isTransfer">
-          <el-switch v-model="formData.isTransfer" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+          <el-input v-model.number="formData.isTransfer" :clearable="true" placeholder="请输入" />
        </el-form-item>
         <el-form-item label="是否占座:" prop="isOccupySeat">
           <el-input v-model.number="formData.isOccupySeat" :clearable="true" placeholder="请输入" />
@@ -62,7 +62,7 @@ const formData = ref({
             orderId: '',
             ticketNumber: '',
             contactPhone: '',
-            isTransfer: false,
+            isTransfer: 0,
             isOccupySeat: 0,
             completeStatus: 0,
             failReason: '',

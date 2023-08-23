@@ -6,30 +6,30 @@ aliyun-oss:
     bucket-url: yourBucketUrl
     base-path: yourBasePath
 autocode:
-    transfer-restart: true
-    root: /Users/leeprince/票务处项目/ticket_office/admin
+    server-model: /model/%s
+    server-router: /router/%s
     server: /server
     server-api: /api/v1/%s
     server-plug: /plugin/%s
     server-initialize: /initialize
-    server-model: /model/%s
-    server-request: /model/%s/request/
-    server-router: /router/%s
-    server-service: /service/%s
+    root: /Users/leeprince/票务处项目/ticket_office/admin
+    web-table: /view
     web: /web/src
+    server-service: /service/%s
+    server-request: /model/%s/request/
     web-api: /api
     web-form: /view
-    web-table: /view
+    transfer-restart: true
 aws-s3:
     bucket: xxxxx-10005608
     region: ap-shanghai
     endpoint: ""
-    s3-force-path-style: false
-    disable-ssl: false
     secret-id: your-secret-id
     secret-key: your-secret-key
     base-url: https://gin.vue.admin
     path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+    s3-force-path-style: false
+    disable-ssl: false
 captcha:
     key-long: 6
     img-width: 240
@@ -50,30 +50,30 @@ cors:
           expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
           allow-credentials: true
 db-list:
-    - disable: false
-      type: "mysql"
-      alias-name: "票务服务"
-      path: "127.0.0.1"
-      port: "3306"
-      config: ""
-      db-name: "ticket"
-      username: "root"
-      password: "leeprince"
-      prefix: ""
-      singular: false
+    - type: mysql
+      alias-name: 票务服务
+      prefix:
+      port: 3306
+      config: charset=utf8mb4&parseTime=True&loc=Local
+      db-name: ticket
+      username: root
+      password: leeprince
+      path: 127.0.0.1
       engine: ""
+      log-mode: ""
       max-idle-conns: 10
       max-open-conns: 100
-      log-mode: ""
+      singular: false
       log-zap: false
+      disable: false
 email:
     to: xxx@qq.com
-    port: 465
     from: xxx@163.com
     host: smtp.163.com
-    is-ssl: true
     secret: xxx
     nickname: test
+    port: 465
+    is-ssl: true
 excel:
     dir: ./resource/excel/
 hua-wei-obs:
@@ -83,7 +83,7 @@ hua-wei-obs:
     access-key: you-access-key
     secret-key: you-secret-key
 jwt:
-    signing-key: 0c8f183e-f134-4bf0-8d17-1f87281c6d6f
+    signing-key: 252959d4-0e4f-436c-ab71-4fe3e1809bef
     expires-time: 7d
     buffer-time: 1d
     issuer: qmPlus
@@ -91,97 +91,97 @@ local:
     path: uploads/file
     store-path: uploads/file
 mssql:
-    path: ""
+    prefix: ""
     port: ""
     config: ""
     db-name: ""
     username: ""
     password: ""
-    prefix: ""
-    singular: false
+    path: ""
     engine: ""
+    log-mode: ""
     max-idle-conns: 10
     max-open-conns: 100
-    log-mode: ""
+    singular: false
     log-zap: false
 mysql:
-    path: 127.0.0.1
+    prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
     db-name: gva
     username: root
     password: leeprince
-    prefix: ""
-    singular: false
+    path: 127.0.0.1
     engine: ""
+    log-mode: error
     max-idle-conns: 10
     max-open-conns: 100
-    log-mode: error
+    singular: false
     log-zap: false
 oracle:
-    path: ""
+    prefix: ""
     port: ""
     config: ""
     db-name: ""
     username: ""
     password: ""
-    prefix: ""
-    singular: false
+    path: ""
     engine: ""
+    log-mode: ""
     max-idle-conns: 10
     max-open-conns: 100
-    log-mode: ""
+    singular: false
     log-zap: false
 pgsql:
-    path: ""
+    prefix: ""
     port: ""
     config: ""
     db-name: ""
     username: ""
     password: ""
-    prefix: ""
-    singular: false
+    path: ""
     engine: ""
+    log-mode: ""
     max-idle-conns: 10
     max-open-conns: 100
-    log-mode: ""
+    singular: false
     log-zap: false
 qiniu:
     zone: ZoneHuaDong
     bucket: ""
     img-path: ""
-    use-https: false
     access-key: ""
     secret-key: ""
+    use-https: false
     use-cdn-domains: false
 redis:
-    db: 0
     addr: 127.0.0.1:6379
     password: ""
+    db: 0
 sqlite:
-    path: ""
+    prefix: ""
     port: ""
     config: ""
     db-name: ""
     username: ""
     password: ""
-    prefix: ""
-    singular: false
+    path: ""
     engine: ""
+    log-mode: ""
     max-idle-conns: 10
     max-open-conns: 100
-    log-mode: ""
+    singular: false
     log-zap: false
 system:
     env: public
-    addr: 8888
     db-type: mysql
     oss-type: local
-    use-multipoint: false
-    use-redis: false
+    router-prefix: ""
+    addr: 8888
     iplimit-count: 15000
     iplimit-time: 3600
-    router-prefix: ""
+    use-multipoint: false
+    use-redis: false
 tencent-cos:
     bucket: xxxxx-10005608
     region: ap-shanghai
@@ -190,9 +190,7 @@ tencent-cos:
     base-url: https://gin.vue.admin
     path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 timer:
-    start: true
     spec: '@daily'
-    with_seconds: false
     detail:
         - tableName: sys_operation_records
           compareField: created_at
@@ -200,6 +198,8 @@ timer:
         - tableName: jwt_blacklists
           compareField: created_at
           interval: 168h
+    start: true
+    with_seconds: false
 zap:
     level: info
     prefix: '[github.com/flipped-aurora/gin-vue-admin/server]'

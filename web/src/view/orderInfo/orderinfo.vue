@@ -66,9 +66,7 @@
         <el-table-column align="left" label="订单ID" prop="orderId" width="120" />
         <el-table-column align="left" label="订单取票号" prop="ticketNumber" width="120" />
         <el-table-column align="left" label="订单联系电话" prop="contactPhone" width="120" />
-        <el-table-column align="left" label="是否换乘" prop="isTransfer" width="120">
-            <template #default="scope">{{ formatBoolean(scope.row.isTransfer) }}</template>
-        </el-table-column>
+        <el-table-column align="left" label="是否换乘" prop="isTransfer" width="120" />
         <el-table-column align="left" label="是否占座" prop="isOccupySeat" width="120" />
         <el-table-column align="left" label="完成状态" prop="completeStatus" width="120" />
         <el-table-column align="left" label="出票失败原因" prop="failReason" width="120" />
@@ -79,8 +77,8 @@
                 <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
                 查看详情
             </el-button>
-            <el-button type="primary" link icon="edit" class="table-button" @click="updateOrderInfoFunc(scope.row)">变更</el-button>
-            <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button v-auth="btnAuth.orderListUpdate" type="primary" link icon="edit" class="table-button" @click="updateOrderInfoFunc(scope.row)">变更</el-button>
+            <el-button v-auth="btnAuth.orderListDelete" type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -109,7 +107,7 @@
               <el-input v-model="formData.contactPhone" :clearable="true"  placeholder="请输入" />
             </el-form-item>
             <el-form-item label="是否换乘:"  prop="isTransfer" >
-              <el-switch v-model="formData.isTransfer" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+              <el-input v-model.number="formData.isTransfer" :clearable="true" placeholder="请输入" />
             </el-form-item>
             <el-form-item label="是否占座:"  prop="isOccupySeat" >
               <el-input v-model.number="formData.isOccupySeat" :clearable="true" placeholder="请输入" />
@@ -179,7 +177,7 @@ import {
   deleteOrderInfoByIds,
   updateOrderInfo,
   findOrderInfo,
-  getOrderInfoList
+  getOrderInfoList,
 } from '@/api/orderinfo'
 
 // 全量引入格式化工具 请按需保留
@@ -187,12 +185,16 @@ import { getDictFunc, formatDate, formatBoolean, filterDict, ReturnArrImg, onDow
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
+// 按钮权限
+import { useBtnAuth } from '@/utils/btnAuth'
+const btnAuth = useBtnAuth()
+
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
         orderId: '',
         ticketNumber: '',
         contactPhone: '',
-        isTransfer: false,
+        isTransfer: 0,
         isOccupySeat: 0,
         completeStatus: 0,
         failReason: '',
@@ -241,9 +243,6 @@ const onSubmit = () => {
     if (!valid) return
     page.value = 1
     pageSize.value = 10
-    if (searchInfo.value.isTransfer === ""){
-        searchInfo.value.isTransfer=null
-    }
     getTableData()
   })
 }
@@ -394,7 +393,7 @@ const closeDetailShow = () => {
           orderId: '',
           ticketNumber: '',
           contactPhone: '',
-          isTransfer: false,
+          isTransfer: 0,
           isOccupySeat: 0,
           completeStatus: 0,
           failReason: '',
@@ -416,7 +415,7 @@ const closeDialog = () => {
         orderId: '',
         ticketNumber: '',
         contactPhone: '',
-        isTransfer: false,
+        isTransfer: 0,
         isOccupySeat: 0,
         completeStatus: 0,
         failReason: '',

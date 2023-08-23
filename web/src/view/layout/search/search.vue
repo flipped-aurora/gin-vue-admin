@@ -2,7 +2,8 @@
   <div class="search-component">
       <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
       <Screenfull class="search-icon" />
-      <div class="gvaIcon gvaIcon-customer-service" @click="toService" />
+      <!-- // prince@COMMENT  2023/8/24 00:33 -->
+      <!-- <div class="gvaIcon gvaIcon-customer-service" @click="toService" />-->
   </div>
 </template>
 

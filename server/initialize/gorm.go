@@ -2,14 +2,14 @@ package initialize
 
 import (
 	"os"
-
+	
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-
+	
+	"github.com/flipped-aurora/gin-vue-admin/server/model/orderinfo"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/orderinfo"
 )
 
 func Gorm() *gorm.DB {
@@ -30,10 +30,9 @@ func Gorm() *gorm.DB {
 }
 
 func RegisterTables() {
-	票务服务 := global.GetGlobalDBByDBName("票务服务")
 	db := global.GVA_DB
 	err := db.AutoMigrate(
-
+		
 		system.SysApi{},
 		system.SysUser{},
 		system.SysBaseMenu{},
@@ -48,7 +47,7 @@ func RegisterTables() {
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
 		system.SysChatGptOption{},
-
+		
 		example.ExaFile{},
 		example.ExaCustomer{},
 		example.ExaFileChunk{},
@@ -59,5 +58,7 @@ func RegisterTables() {
 		os.Exit(0)
 	}
 	global.GVA_LOG.Info("register table success")
+	
+	票务服务 := global.GetGlobalDBByDBName("票务服务")
 	票务服务.AutoMigrate(orderinfo.OrderInfo{})
 }

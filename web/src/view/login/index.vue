@@ -46,15 +46,18 @@
               <el-form-item class="mb-6">
                 <el-button class="shadow shadow-blue-600 h-11 w-full" type="primary" size="large" @click="submitForm">登 录</el-button>
               </el-form-item>
-              <el-form-item class="mb-6">
+              
+              <!-- // prince@COMMENT  2023/8/24 00:34 -->
+              <!-- <el-form-item class="mb-6">
                 <el-button
                   class="shadow shadow-blue-600 h-11 w-full"
                   type="primary"
                   size="large"
                   @click="checkInit"
                 >前往初始化</el-button>
-
-              </el-form-item>
+              </el-form-item>-->
+              
+              
             </el-form>
           </div>
         </div>

@@ -26,3 +26,29 @@ export const getDictFunc = async(type) => {
   const dicts = await getDict(type)
   return dicts
 }
+
+const path = import.meta.env.VITE_BASE_PATH + ':' + import.meta.env.VITE_SERVER_PORT + '/'
+export const ReturnArrImg = (arr) => {
+  let imgArr = []
+  if (arr instanceof Array){ // 如果是数组类型
+    for (let arrKey in arr) {
+      if (arr[arrKey].slice(0, 4) !== 'http'){
+        imgArr.push(path + arr[arrKey])
+      }else {
+        imgArr.push(arr[arrKey])
+      }
+    }
+  }else { // 如果不是数组类型
+    if (arr.slice(0, 4) !== 'http'){
+      imgArr.push(path + arr)
+    }else {
+      imgArr.push(arr)
+    }
+  }
+  return imgArr
+}
+
+export const onDownloadFile = (url) => {
+  window.open(path + url)
+
+}

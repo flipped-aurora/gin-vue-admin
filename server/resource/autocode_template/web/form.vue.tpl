@@ -77,7 +77,7 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 
 {{- if .HasRichText }}
 // 富文本组件
-import RichEdit from '@/components/richtext/edit.vue'
+import RichEdit from '@/components/richtext/rich-edit.vue'
 {{- end }}
 
 const route = useRoute()

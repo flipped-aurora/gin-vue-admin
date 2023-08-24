@@ -2,8 +2,8 @@ package request
 
 import (
 	"fmt"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/config"
+	"os"
 )
 
 type InitDB struct {
@@ -43,7 +43,8 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 // SqliteEmptyDsn sqlite 空数据库 建库链接
 // Author Kafumio
 func (i *InitDB) SqliteEmptyDsn() string {
-	return i.DBPath + "\\" + i.DBName + ".db"
+	separator := string(os.PathSeparator)
+	return i.DBPath + separator + i.DBName + ".db"
 }
 
 // ToMysqlConfig 转换 config.Mysql

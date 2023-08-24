@@ -12,7 +12,7 @@ RUN go env -w GO111MODULE=on \
 
 FROM alpine:latest
 
-LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
+LABEL MAINTAINER="leeprince@foxmail.com"
 
 WORKDIR /go/src/github.com/flipped-aurora/gin-vue-admin/server
 

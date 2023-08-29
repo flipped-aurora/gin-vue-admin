@@ -93,7 +93,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
     }
         {{- range .Fields}}
             {{- if .FieldSearchType}}
-                {{- if eq .FieldType "string" }}
+                {{- if or (eq .FieldType "string") (eq .FieldType "enum") }}
     if info.{{.FieldName}} != "" {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }

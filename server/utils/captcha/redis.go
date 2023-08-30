@@ -30,6 +30,7 @@ func (rs *RedisStore) UseWithCtx(ctx context.Context) base64Captcha.Store {
 func (rs *RedisStore) Set(id string, value string) error {
 	err := global.GVA_REDIS.Set(rs.Context, rs.PreKey+id, value, rs.Expiration).Err()
 	if err != nil {
+		global.GVA_LOG.Error("RedisStoreSetError!", zap.Error(err))
 		return err
 	}
 	return nil

@@ -107,9 +107,6 @@
         {{- end}}
         >
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
-            <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
-        </el-table-column>
         {{- range .Fields}}
         {{- if .DictType}}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
@@ -157,13 +154,16 @@
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
+        <el-table-column align="left" label="日期" width="180">
+            <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
+        </el-table-column>
         <el-table-column align="left" label="操作">
             <template #default="scope">
             <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
                 <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
-                查看详情
+                查看
             </el-button>
-            <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">编辑</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>

@@ -359,6 +359,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				autoCode.TableName,
 				idBf.String(),
 				autoCode.Package,
+				autoCode.BusinessDB,
 			)
 		} else {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
@@ -370,6 +371,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				autoCode.StructName,
 				idBf.String(),
 				autoCode.Package,
+				autoCode.BusinessDB,
 			)
 		}
 	}

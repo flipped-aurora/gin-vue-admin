@@ -11,7 +11,7 @@ import (
 )
 
 // 自动为 gorm.go 注册一个自动迁移
-func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
+func AddRegisterTablesAst(path, funcName, pk, varName, dbName, model string) {
 	modelPk := fmt.Sprintf("github.com/flipped-aurora/gin-vue-admin/server/model/%s", pk)
 	src, err := os.ReadFile(path)
 	if err != nil {
@@ -27,8 +27,8 @@ func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
 	if FuncNode != nil {
 		ast.Print(fileSet, FuncNode)
 	}
-	addDBVar(FuncNode.Body, dbName)
-	addAutoMigrate(FuncNode.Body, dbName, pk, model)
+	addDBVar(FuncNode.Body, varName, dbName)
+	addAutoMigrate(FuncNode.Body, varName, pk, model)
 	var out []byte
 	bf := bytes.NewBuffer(out)
 	printer.Fprint(bf, fileSet, astFile)
@@ -37,15 +37,16 @@ func AddRegisterTablesAst(path, funcName, pk, dbName, model string) {
 }
 
 // 增加一个 db库变量
-func addDBVar(astBody *ast.BlockStmt, dbName string) {
+func addDBVar(astBody *ast.BlockStmt, varName, dbName string) {
 	if dbName == "" {
 		return
 	}
 	dbStr := fmt.Sprintf("\"%s\"", dbName)
+
 	for i := range astBody.List {
 		if assignStmt, ok := astBody.List[i].(*ast.AssignStmt); ok {
 			if ident, ok := assignStmt.Lhs[0].(*ast.Ident); ok {
-				if ident.Name == dbName {
+				if ident.Name == varName {
 					return
 				}
 			}
@@ -54,7 +55,7 @@ func addDBVar(astBody *ast.BlockStmt, dbName string) {
 	assignNode := &ast.AssignStmt{
 		Lhs: []ast.Expr{
 			&ast.Ident{
-				Name: dbName,
+				Name: varName,
 			},
 		},
 		Tok: token.DEFINE,

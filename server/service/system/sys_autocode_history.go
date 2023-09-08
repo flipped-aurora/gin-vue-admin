@@ -30,7 +30,7 @@ var AutoCodeHistoryServiceApp = new(AutoCodeHistoryService)
 // RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string, Package string) error {
+func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string, Package string, BusinessDB string) error {
 	return global.GVA_DB.Create(&system.SysAutoCodeHistory{
 		Package:       Package,
 		RequestMeta:   meta,
@@ -40,6 +40,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta
 		StructCNName:  structCNName,
 		TableName:     tableName,
 		ApiIDs:        apiIds,
+		BusinessDB:    BusinessDB,
 	}).Error
 }
 

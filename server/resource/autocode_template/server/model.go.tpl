@@ -24,7 +24,7 @@ type {{.StructName}} struct {
       {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}"`
             {{- else }}
       {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}"`
-            {{- end }} {{- end }}
+            {{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }} {{- end }}
       {{- if .AutoCreateResource }}
       CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`
       UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`

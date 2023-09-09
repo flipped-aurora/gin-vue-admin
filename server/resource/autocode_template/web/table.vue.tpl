@@ -240,24 +240,28 @@
         <el-descriptions column="1" border>
         {{- range .Fields}}
                 <el-descriptions-item label="{{ .FieldDesc }}">
-            {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) }}
-                    {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
-            {{- else }}
-                {{- if eq .FieldType "picture" }}
+                {{- if .DictType}}
+                        {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+                {{- else if eq .FieldType "picture" }}
                         <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
-                {{- end }}
-                {{- if eq .FieldType "pictures" }}
+                {{- else if eq .FieldType "pictures" }}
                         <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
-                {{- end }}
-                {{- if eq .FieldType "file" }}
+                {{- else if eq .FieldType "file" }}
                         <div class="fileBtn" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index">
                           <el-button type="primary" text bg @click="onDownloadFile(item.url)">
                             <el-icon style="margin-right: 5px"><Download /></el-icon>
                             {{"{{"}} item.name {{"}}"}}
                           </el-button>
                         </div>
-                {{- end }}
-            {{- end }}
+                  {{- else if eq .FieldType "bool" }}
+                    {{"{{"}} formatBoolean(formData.{{.FieldJson}}) {{"}}"}}
+                   {{- else if eq .FieldType "time.Time" }}
+                      {{"{{"}} formatDate(formData.{{.FieldJson}}) {{"}}"}}
+                   {{- else if eq .FieldType "richtext" }}
+                        [富文本内容]
+                   {{- else}}
+                        {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+                   {{- end }}
                 </el-descriptions-item>
         {{- end }}
         </el-descriptions>

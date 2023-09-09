@@ -30,7 +30,8 @@ require (
 	github.com/songzhibin97/gkit v1.2.11
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
-	github.com/swaggo/gin-swagger v1.3.0
+	github.com/swaggo/files v1.0.1
+	github.com/swaggo/gin-swagger v1.6.0
 	github.com/swaggo/swag v1.16.1
 	github.com/tencentyun/cos-go-sdk-v5 v0.7.42
 	github.com/unrolled/secure v1.13.0

@@ -1,6 +1,7 @@
 package initialize
 
 import (
+	swaggerFiles "github.com/swaggo/files"
 	"net/http"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/docs"
@@ -9,7 +10,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/router"
 	"github.com/gin-gonic/gin"
 	ginSwagger "github.com/swaggo/gin-swagger"
-	"github.com/swaggo/gin-swagger/swaggerFiles"
 )
 
 // 初始化总路由

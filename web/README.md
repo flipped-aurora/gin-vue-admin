@@ -65,7 +65,6 @@ web
  │   │   └── newLogin.scss
  │   ├── utils                  -- 方法包库
  │   │   ├── asyncRouter.js     -- 动态路由相关
- │   │   ├── btnAuth.js         -- 动态权限按钮相关
  │   │   ├── bus.js             -- 全局mitt声明文件
  │   │   ├── date.js            -- 日期相关
  │   │   ├── dictionary.js      -- 获取字典方法 

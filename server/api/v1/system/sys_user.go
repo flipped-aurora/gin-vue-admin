@@ -49,7 +49,7 @@ func (b *BaseApi) Login(c *gin.Context) {
 
 	var oc bool = openCaptcha == 0 || openCaptcha < interfaceToInt(v)
 
-	if !oc || store.Verify(l.CaptchaId, l.Captcha, true) {
+	if !oc || (l.CaptchaId != "" && l.Captcha != "" && store.Verify(l.CaptchaId, l.Captcha, true)) {
 		u := &system.SysUser{Username: l.Username, Password: l.Password}
 		user, err := userService.Login(u)
 		if err != nil {

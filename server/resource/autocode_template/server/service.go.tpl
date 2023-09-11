@@ -93,7 +93,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
     }
         {{- range .Fields}}
             {{- if .FieldSearchType}}
-                {{- if eq .FieldType "string" }}
+                {{- if or (eq .FieldType "string") (eq .FieldType "enum") }}
     if info.{{.FieldName}} != "" {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }
@@ -129,6 +129,10 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
        }
     {{- end}}
 
-	err = db.Limit(limit).Offset(offset).Find(&{{.Abbreviation}}s).Error
+	if limit != 0 {
+       db = db.Limit(limit).Offset(offset)
+    }
+	
+	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }

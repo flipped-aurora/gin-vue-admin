@@ -39,6 +39,9 @@
        {{- if eq .FieldType "pictures" }}
            <SelectImage v-model="formData.{{ .FieldJson }}" multiple />
        {{- end }}
+       {{- if eq .FieldType "file" }}
+          <SelectFile v-model="formData.{{ .FieldJson }}" />
+       {{- end }}
        </el-form-item>
       {{- end }}
         <el-form-item>

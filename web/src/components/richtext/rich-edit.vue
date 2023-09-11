@@ -23,7 +23,7 @@ import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
 const basePath = import.meta.env.VITE_BASE_API
 
-import { onBeforeUnmount, ref, shallowRef, onMounted } from 'vue'
+import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
 import {useUserStore} from "@/pinia/modules/user";
@@ -80,8 +80,12 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor) => {
   editorRef.value = editor
-  valueHtml.value =props.modelValue
 }
+
+watch(()=>props.modelValue,()=>{
+  valueHtml.value = props.modelValue
+})
+
 </script>
 
 <style scoped lang="scss">

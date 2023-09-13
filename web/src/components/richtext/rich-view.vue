@@ -1,5 +1,5 @@
 <template>
-  <div class="border border-solid border-gray-100 h-80">
+  <div class="border border-solid border-gray-100 h-full">
     <Editor
         class="overflow-y-hidden mt-0.5"
         v-model="valueHtml"

@@ -40,6 +40,8 @@
 
         <el-table-column align="left" label="字典值" prop="value" width="120" />
 
+        <el-table-column align="left" label="扩展值" prop="extend" width="120" />
+
         <el-table-column align="left" label="启用状态" prop="status" width="120">
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
@@ -96,6 +98,14 @@
             :style="{width: '100%'}"
             min="-2147483648"
             max="2147483647"
+          />
+        </el-form-item>
+        <el-form-item label="扩展值" prop="extend">
+          <el-input
+              v-model="formData.extend"
+              placeholder="请输入扩展值"
+              clearable
+              :style="{width: '100%'}"
           />
         </el-form-item>
         <el-form-item label="启用状态" prop="status" required>

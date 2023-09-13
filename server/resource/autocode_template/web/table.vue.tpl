@@ -42,9 +42,9 @@
 
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="搜索条件（起）" />
+            <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
             —
-            <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="搜索条件（止）" />
+            <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
            {{- else}}
              {{- if .DictType}}
               <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >

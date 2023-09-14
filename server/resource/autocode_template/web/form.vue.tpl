@@ -53,18 +53,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: '{{.StructName}}'
-}
-</script>
-
 <script setup>
 import {
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
 } from '@/api/{{.PackageName}}'
+
+defineOptions({
+    name: '{{.StructName}}Form'
+})
 
 // 自动获取字典
 import { getDictFunc } from '@/utils/format'

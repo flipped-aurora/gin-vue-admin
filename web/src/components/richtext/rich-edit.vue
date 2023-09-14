@@ -1,20 +1,20 @@
 <template>
-    <div class="border border-solid border-gray-100 h-80">
-      <Toolbar
-          :editor="editorRef"
-          :defaultConfig="toolbarConfig"
-          mode="default"
-      />
-      <Editor
-          class="overflow-y-hidden mt-0.5"
-          style="height: 18rem;"
-          v-model="valueHtml"
-          :defaultConfig="editorConfig"
-          mode="default"
-          @onCreated="handleCreated"
-          @onChange="change"
-      />
-    </div>
+  <div class="border border-solid border-gray-100 h-full">
+    <Toolbar
+      :editor="editorRef"
+      :default-config="toolbarConfig"
+      mode="default"
+    />
+    <Editor
+      v-model="valueHtml"
+      class="overflow-y-hidden mt-0.5"
+      style="height: 18rem;"
+      :default-config="editorConfig"
+      mode="default"
+      @onCreated="handleCreated"
+      @onChange="change"
+    />
+  </div>
 </template>
 
 <script setup>
@@ -26,17 +26,17 @@ const basePath = import.meta.env.VITE_BASE_API
 import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
 
-import {useUserStore} from "@/pinia/modules/user";
-import {ElMessage} from "element-plus";
-import {getUrl} from "@/utils/image";
+import { useUserStore } from '@/pinia/modules/user'
+import { ElMessage } from 'element-plus'
+import { getUrl } from '@/utils/image'
 
 const userStore = useUserStore()
 
-const emits = defineEmits(['change','update:modelValue'])
+const emits = defineEmits(['change', 'update:modelValue'])
 
-const change = (editor) =>{
-  emits('change',editor)
-  emits('update:modelValue',valueHtml.value)
+const change = (editor) => {
+  emits('change', editor)
+  emits('update:modelValue', valueHtml.value)
 }
 
 const props = defineProps({
@@ -52,24 +52,23 @@ const valueHtml = ref('')
 const toolbarConfig = {}
 const editorConfig = {
   placeholder: '请输入内容...',
-  MENU_CONF:{}
+  MENU_CONF: {}
 }
 editorConfig.MENU_CONF['uploadImage'] = {
   fieldName: 'file',
   headers: {
-    "x-token": userStore.token,
+    'x-token': userStore.token,
   },
-  server:  basePath + '/fileUploadAndDownload/upload?noSave=1',
-  customInsert(res, insertFn){
-    if(res.code === 0){
+  server: basePath + '/fileUploadAndDownload/upload?noSave=1',
+  customInsert(res, insertFn) {
+    if (res.code === 0) {
       const urlPath = getUrl(res.data.file.url)
-      insertFn(urlPath,res.data.file.name)
+      insertFn(urlPath, res.data.file.name)
       return
     }
     ElMessage.error(res.msg)
   }
 }
-
 
 // 组件销毁时，也及时销毁编辑器
 onBeforeUnmount(() => {
@@ -82,7 +81,7 @@ const handleCreated = (editor) => {
   editorRef.value = editor
 }
 
-watch(()=>props.modelValue,()=>{
+watch(() => props.modelValue, () => {
   valueHtml.value = props.modelValue
 })
 

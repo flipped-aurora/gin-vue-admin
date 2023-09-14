@@ -6,13 +6,19 @@
       'background-image': `url(${getUrl(modelValue)})`,
     }"
   >
-    <span class="update" @click="openChooseImg">
+    <span
+      class="update"
+      @click="openChooseImg"
+    >
       <el-icon>
         <edit />
       </el-icon>
       重新上传</span>
   </div>
-  <div v-else class="multiple-img">
+  <div
+    v-else
+    class="multiple-img"
+  >
     <div
       v-for="(item, index) in multipleValue"
       :key="index"
@@ -21,14 +27,20 @@
         'background-image': `url(${getUrl(item)})`,
       }"
     >
-      <span class="update" @click="deleteImg(index)">
+      <span
+        class="update"
+        @click="deleteImg(index)"
+      >
         <el-icon>
           <delete />
         </el-icon>
         删除图片</span>
     </div>
     <div class="add-image">
-      <span class="update" @click="openChooseImg">
+      <span
+        class="update"
+        @click="openChooseImg"
+      >
         <el-icon>
           <folder-add />
         </el-icon>
@@ -36,7 +48,11 @@
     </div>
   </div>
 
-  <el-drawer v-model="drawer" title="媒体库" size="650px">
+  <el-drawer
+    v-model="drawer"
+    title="媒体库"
+    size="650px"
+  >
     <warning-bar
       title="点击“文件名/备注”可以编辑文件名或者备注内容。"
     />
@@ -53,18 +69,34 @@
         class="upload-btn-media-library"
         @on-success="getImageList"
       />
-      <el-form ref="searchForm" :inline="true" :model="search">
+      <el-form
+        ref="searchForm"
+        :inline="true"
+        :model="search"
+      >
         <el-form-item label="">
-          <el-input v-model="search.keyword" class="keyword" placeholder="请输入文件名或备注" />
+          <el-input
+            v-model="search.keyword"
+            class="keyword"
+            placeholder="请输入文件名或备注"
+          />
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" icon="search" @click="getImageList">查询</el-button>
+          <el-button
+            type="primary"
+            icon="search"
+            @click="getImageList"
+          >查询</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="media">
-      <div v-for="(item,key) in picList" :key="key" class="media-box">
+      <div
+        v-for="(item,key) in picList"
+        :key="key"
+        class="media-box"
+      >
         <div class="header-img-box-list">
           <el-image
             :key="key"
@@ -80,7 +112,10 @@
             </template>
           </el-image>
         </div>
-        <div class="img-title" @click="editFileNameFunc(item)">{{ item.name }}</div>
+        <div
+          class="img-title"
+          @click="editFileNameFunc(item)"
+        >{{ item.name }}</div>
       </div>
     </div>
     <el-pagination

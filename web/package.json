@@ -43,7 +43,7 @@
         "babel-plugin-import": "^1.13.6",
         "chalk": "^4.1.2",
         "dotenv": "^16.3.1",
-        "eslint": "^8.45.0",
+        "eslint": "^8.49.0",
         "eslint-plugin-vue": "^9.15.1",
         "sass": "^1.54.0",
         "terser": "^5.19.1",

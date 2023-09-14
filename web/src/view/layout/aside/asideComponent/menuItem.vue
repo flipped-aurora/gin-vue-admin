@@ -23,14 +23,13 @@
   </el-menu-item>
 </template>
 
-<script>
-export default {
-  name: 'MenuItem',
-}
-</script>
 
 <script setup>
 import { ref, watch } from 'vue'
+
+defineOptions({
+  name: 'MenuItem',
+})
 
 const props = defineProps({
   routerInfo: {

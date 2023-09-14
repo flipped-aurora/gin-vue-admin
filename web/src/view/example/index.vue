@@ -1,7 +1,10 @@
 <template>
   <div>
     <router-view v-slot="{ Component }">
-      <transition mode="out-in" name="el-fade-in-linear">
+      <transition
+        mode="out-in"
+        name="el-fade-in-linear"
+      >
         <keep-alive :include="routerStore.keepAliveRouters">
           <component :is="Component" />
         </keep-alive>
@@ -10,12 +13,10 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Example'
-}
-</script>
 <script setup>
 import { useRouterStore } from '@/pinia/modules/router'
 const routerStore = useRouterStore()
+defineOptions({
+  name: 'Example'
+})
 </script>

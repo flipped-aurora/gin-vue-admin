@@ -8,7 +8,10 @@
           </template>
           <div>
             <el-row>
-              <el-col :span="8" :offset="8">
+              <el-col
+                :span="8"
+                :offset="8"
+              >
                 <a href="https://github.com/flipped-aurora/gin-vue-admin">
                   <img
                     class="org-img dom-center"
@@ -55,7 +58,10 @@
           </template>
           <div>
             <el-row>
-              <el-col :span="8" :offset="8">
+              <el-col
+                :span="8"
+                :offset="8"
+              >
                 <a href="https://github.com/flipped-aurora">
                   <img
                     class="org-img dom-center"
@@ -65,11 +71,24 @@
                 </a>
               </el-col>
             </el-row>
-            <el-row style="margin-left: 40px" :gutter="20">
-              <el-col v-for="(item, index) in members" :key="index" :span="8">
+            <el-row
+              style="margin-left: 40px"
+              :gutter="20"
+            >
+              <el-col
+                v-for="(item, index) in members"
+                :key="index"
+                :span="8"
+              >
                 <a :href="item.html_url">
-                  <img class="avatar-img" :src="item.avatar_url">
-                  <a class="author-name" style="">{{ item.login }}</a>
+                  <img
+                    class="avatar-img"
+                    :src="item.avatar_url"
+                  >
+                  <a
+                    class="author-name"
+                    style=""
+                  >{{ item.login }}</a>
                 </a>
               </el-col>
             </el-row>
@@ -108,17 +127,15 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'About',
-}
-</script>
-
 <script setup>
 import { ref } from 'vue'
 import { Commits, Members } from '@/api/github'
 import { formatTimeToStr } from '@/utils/date'
 const page = ref(0)
+
+defineOptions({
+  name: 'About'
+})
 
 const loadMore = () => {
   page.value++

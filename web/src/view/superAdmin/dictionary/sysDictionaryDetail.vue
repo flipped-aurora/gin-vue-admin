@@ -1,28 +1,64 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo">
+      <el-form
+        :inline="true"
+        :model="searchInfo"
+      >
         <el-form-item label="展示值">
-          <el-input v-model="searchInfo.label" placeholder="搜索条件" />
+          <el-input
+            v-model="searchInfo.label"
+            placeholder="搜索条件"
+          />
         </el-form-item>
         <el-form-item label="字典值">
-          <el-input-number v-model="searchInfo.value" placeholder="搜索条件" min="-2147483648" max="2147483647"/>
+          <el-input-number
+            v-model="searchInfo.value"
+            placeholder="搜索条件"
+            min="-2147483648"
+            max="2147483647"
+          />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status">
-          <el-select v-model="searchInfo.status" placeholder="请选择">
-            <el-option key="true" label="是" value="true" />
-            <el-option key="false" label="否" value="false" />
+        <el-form-item
+          label="启用状态"
+          prop="status"
+        >
+          <el-select
+            v-model="searchInfo.status"
+            placeholder="请选择"
+          >
+            <el-option
+              key="true"
+              label="是"
+              value="true"
+            />
+            <el-option
+              key="false"
+              label="否"
+              value="false"
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button icon="refresh" @click="onReset">重置</el-button>
+          <el-button
+            type="primary"
+            icon="search"
+            @click="onSubmit"
+          >查询</el-button>
+          <el-button
+            icon="refresh"
+            @click="onReset"
+          >重置</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDialog">新增字典项</el-button>
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="openDialog"
+        >新增字典项</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -31,32 +67,90 @@
         tooltip-effect="dark"
         row-key="ID"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          align="left"
+          label="日期"
+          width="180"
+        >
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="展示值" prop="label" width="120" />
+        <el-table-column
+          align="left"
+          label="展示值"
+          prop="label"
+          width="120"
+        />
 
-        <el-table-column align="left" label="字典值" prop="value" width="120" />
+        <el-table-column
+          align="left"
+          label="字典值"
+          prop="value"
+          width="120"
+        />
 
-        <el-table-column align="left" label="启用状态" prop="status" width="120">
+        <el-table-column
+          align="left"
+          label="扩展值"
+          prop="extend"
+          width="120"
+        />
+
+        <el-table-column
+          align="left"
+          label="启用状态"
+          prop="status"
+          width="120"
+        >
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" label="排序标记" prop="sort" width="120" />
+        <el-table-column
+          align="left"
+          label="排序标记"
+          prop="sort"
+          width="120"
+        />
 
-        <el-table-column align="left" label="操作">
+        <el-table-column
+          align="left"
+          label="操作"
+        >
           <template #default="scope">
-            <el-button type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">变更</el-button>
-            <el-popover v-model="scope.row.visible" placement="top" width="160">
+            <el-button
+              type="primary"
+              link
+              icon="edit"
+              @click="updateSysDictionaryDetailFunc(scope.row)"
+            >变更</el-button>
+            <el-popover
+              v-model="scope.row.visible"
+              placement="top"
+              width="160"
+            >
               <p>确定要删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" @click="deleteSysDictionaryDetailFunc(scope.row)">确定</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  @click="scope.row.visible = false"
+                >取消</el-button>
+                <el-button
+                  type="primary"
+                  @click="deleteSysDictionaryDetailFunc(scope.row)"
+                >确定</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  icon="delete"
+                  @click="scope.row.visible = true"
+                >删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -76,9 +170,21 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加字典项':'修改字典项'">
-      <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
-        <el-form-item label="展示值" prop="label">
+    <el-dialog
+      v-model="dialogFormVisible"
+      :before-close="closeDialog"
+      :title="type==='create'?'添加字典项':'修改字典项'"
+    >
+      <el-form
+        ref="dialogForm"
+        :model="formData"
+        :rules="rules"
+        label-width="110px"
+      >
+        <el-form-item
+          label="展示值"
+          prop="label"
+        >
           <el-input
             v-model="formData.label"
             placeholder="请输入展示值"
@@ -86,7 +192,10 @@
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item label="字典值" prop="value">
+        <el-form-item
+          label="字典值"
+          prop="value"
+        >
           <el-input-number
             v-model.number="formData.value"
             step-strictly
@@ -98,28 +207,51 @@
             max="2147483647"
           />
         </el-form-item>
-        <el-form-item label="启用状态" prop="status" required>
-          <el-switch v-model="formData.status" active-text="开启" inactive-text="停用" />
+        <el-form-item
+          label="扩展值"
+          prop="extend"
+        >
+          <el-input
+            v-model="formData.extend"
+            placeholder="请输入扩展值"
+            clearable
+            :style="{width: '100%'}"
+          />
         </el-form-item>
-        <el-form-item label="排序标记" prop="sort">
-          <el-input-number v-model.number="formData.sort" placeholder="排序标记" />
+        <el-form-item
+          label="启用状态"
+          prop="status"
+          required
+        >
+          <el-switch
+            v-model="formData.status"
+            active-text="开启"
+            inactive-text="停用"
+          />
+        </el-form-item>
+        <el-form-item
+          label="排序标记"
+          prop="sort"
+        >
+          <el-input-number
+            v-model.number="formData.sort"
+            placeholder="排序标记"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >确 定</el-button>
         </div>
       </template>
     </el-dialog>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'SysDictionaryDetail'
-}
-</script>
 
 <script setup>
 import {
@@ -134,6 +266,10 @@ import { useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 const route = useRoute()
+
+defineOptions({
+  name: 'SysDictionaryDetail'
+})
 
 onBeforeRouteUpdate((to) => {
   if (to.name === 'dictionaryDetail') {

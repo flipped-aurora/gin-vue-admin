@@ -1,12 +1,12 @@
 <template>
-  <div class="border border-solid border-gray-100 h-80">
+  <div class="border border-solid border-gray-100 h-full">
     <Editor
-        class="overflow-y-hidden mt-0.5"
-        v-model="valueHtml"
-        :defaultConfig="editorConfig"
-        mode="default"
-        @onCreated="handleCreated"
-        @onChange="change"
+      v-model="valueHtml"
+      class="overflow-y-hidden mt-0.5"
+      :default-config="editorConfig"
+      mode="default"
+      @onCreated="handleCreated"
+      @onChange="change"
     />
   </div>
 </template>
@@ -14,17 +14,16 @@
 
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 
+import { onBeforeUnmount, ref, shallowRef, watch } from 'vue'
+import { Editor } from '@wangeditor/editor-for-vue'
 
-import {onBeforeUnmount, ref, shallowRef, watch} from 'vue'
-import {Editor} from '@wangeditor/editor-for-vue'
-
-import {useUserStore} from "@/pinia/modules/user";
+import { useUserStore } from '@/pinia/modules/user'
 
 const userStore = useUserStore()
 
 const emits = defineEmits(['change', 'update:modelValue'])
 const editorConfig = ref({
-  readOnly : true
+  readOnly: true
 })
 const change = (editor) => {
   emits('change', editor)
@@ -52,7 +51,7 @@ const handleCreated = (editor) => {
   editorRef.value = editor
 }
 
-watch(()=>props.modelValue,()=>{
+watch(() => props.modelValue, () => {
   valueHtml.value = props.modelValue
 })
 </script>

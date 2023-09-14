@@ -1,29 +1,49 @@
 <template>
   <span class="headerAvatar">
     <template v-if="picType === 'avatar'">
-      <el-avatar v-if="userStore.userInfo.headerImg" :size="30" :src="avatar" />
-      <el-avatar v-else :size="30" :src="noAvatar" />
+      <el-avatar
+        v-if="userStore.userInfo.headerImg"
+        :size="30"
+        :src="avatar"
+      />
+      <el-avatar
+        v-else
+        :size="30"
+        :src="noAvatar"
+      />
     </template>
     <template v-if="picType === 'img'">
-      <img v-if="userStore.userInfo.headerImg" :src="avatar" class="avatar">
-      <img v-else :src="noAvatar" class="avatar">
+      <img
+        v-if="userStore.userInfo.headerImg"
+        :src="avatar"
+        class="avatar"
+      >
+      <img
+        v-else
+        :src="noAvatar"
+        class="avatar"
+      >
     </template>
     <template v-if="picType === 'file'">
-      <el-image :src="file" class="file" :preview-src-list="previewSrcList" :preview-teleported="true"/>
+      <el-image
+        :src="file"
+        class="file"
+        :preview-src-list="previewSrcList"
+        :preview-teleported="true"
+      />
     </template>
   </span>
 </template>
-
-<script>
-export default {
-  name: 'CustomPic'
-}
-</script>
 
 <script setup>
 import noAvatarPng from '@/assets/noBody.png'
 import { useUserStore } from '@/pinia/modules/user'
 import { computed, ref } from 'vue'
+
+defineOptions({
+  name: 'CustomPic'
+})
+
 const props = defineProps({
   picType: {
     type: String,

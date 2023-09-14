@@ -1,17 +1,38 @@
 <template>
   <el-container class="layout-cont">
     <el-container :class="[isSider?'openside':'hideside',isMobile ? 'mobile': '']">
-      <el-row :class="[isShadowBg && isMobile?'bg-black opacity-30 w-full h-full absolute top-0 left-0 z-[1001]':'']" @click="changeShadow()" />
-      <el-aside class="main-cont gva-aside" :style="{width:asideWidth()}">
-        <div class="min-h-[60px] text-center transition-all duration-300 flex items-center justify-center gap-2" :style="{background: backgroundColor}">
-          <img alt class="w-9 h-9 p-1 bg-white rounded-full" :src="$GIN_VUE_ADMIN.appLogo">
-          <div v-if="isSider" class="inline-flex text-white font-bold text-2xl" :style="{color:textColor}">{{ $GIN_VUE_ADMIN.appName }}</div>
+      <el-row
+        :class="[isShadowBg && isMobile?'bg-black opacity-30 w-full h-full absolute top-0 left-0 z-[1001]':'']"
+        @click="changeShadow()"
+      />
+      <el-aside
+        class="main-cont gva-aside"
+        :style="{width:asideWidth()}"
+      >
+        <div
+          class="min-h-[60px] text-center transition-all duration-300 flex items-center justify-center gap-2"
+          :style="{background: backgroundColor}"
+        >
+          <img
+            alt
+            class="w-9 h-9 p-1 bg-white rounded-full"
+            :src="$GIN_VUE_ADMIN.appLogo"
+          >
+          <div
+            v-if="isSider"
+            class="inline-flex text-white font-bold text-2xl"
+            :style="{color:textColor}"
+          >{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>
         <Aside class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
       <el-main class="main-cont main-right">
-        <transition :duration="{ enter: 800, leave: 100 }" mode="out-in" name="el-fade-in-linear">
+        <transition
+          :duration="{ enter: 800, leave: 100 }"
+          mode="out-in"
+          name="el-fade-in-linear"
+        >
           <div
             :style="{width: `calc(100% - ${getAsideWidth()})`}"
             class="fixed top-0 box-border z-50"
@@ -20,29 +41,66 @@
               <el-col>
                 <el-header class="header-cont">
                   <el-row class="p-0 h-full">
-                    <el-col :xs="2" :lg="1" :md="1" :sm="1" :xl="1" class="z-50 flex items-center pl-3">
-                      <div class="text-black cursor-pointer text-lg leading-5" @click="totalCollapse">
-                        <div v-if="isCollapse" class="gvaIcon gvaIcon-arrow-double-right" />
-                        <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
+                    <el-col
+                      :xs="2"
+                      :lg="1"
+                      :md="1"
+                      :sm="1"
+                      :xl="1"
+                      class="z-50 flex items-center pl-3"
+                    >
+                      <div
+                        class="text-black cursor-pointer text-lg leading-5"
+                        @click="totalCollapse"
+                      >
+                        <div
+                          v-if="isCollapse"
+                          class="gvaIcon gvaIcon-arrow-double-right"
+                        />
+                        <div
+                          v-else
+                          class="gvaIcon gvaIcon-arrow-double-left"
+                        />
                       </div>
                     </el-col>
-                    <el-col :xs="10" :lg="14" :md="14" :sm="9" :xl="14" :pull="1" class="flex items-center">
+                    <el-col
+                      :xs="10"
+                      :lg="14"
+                      :md="14"
+                      :sm="9"
+                      :xl="14"
+                      :pull="1"
+                      class="flex items-center"
+                    >
                       <!-- 修改为手机端不显示顶部标签 -->
-                      <el-breadcrumb v-show="!isMobile" class="breadcrumb">
+                      <el-breadcrumb
+                        v-show="!isMobile"
+                        class="breadcrumb"
+                      >
                         <el-breadcrumb-item
                           v-for="item in matched.slice(1,matched.length)"
                           :key="item.path"
                         >{{ fmtTitle(item.meta.title,route) }}</el-breadcrumb-item>
                       </el-breadcrumb>
                     </el-col>
-                    <el-col :xs="12" :lg="9" :md="9" :sm="14" :xl="9" class="flex items-center justify-end">
+                    <el-col
+                      :xs="12"
+                      :lg="9"
+                      :md="9"
+                      :sm="14"
+                      :xl="9"
+                      class="flex items-center justify-end"
+                    >
                       <div class="mr-1.5 flex items-center">
                         <Search />
                         <el-dropdown>
                           <div class="flex justify-center items-center h-full w-full">
                             <span class="cursor-pointer flex justify-center items-center">
                               <CustomPic />
-                              <span v-show="!isMobile" style="margin-left: 5px">{{ userStore.userInfo.nickName }}</span>
+                              <span
+                                v-show="!isMobile"
+                                style="margin-left: 5px"
+                              >{{ userStore.userInfo.nickName }}</span>
                               <el-icon>
                                 <arrow-down />
                               </el-icon>
@@ -56,14 +114,22 @@
                                 </span>
                               </el-dropdown-item>
                               <template v-if="userStore.userInfo.authorities">
-                                <el-dropdown-item v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)" :key="item.authorityId" @click="changeUserAuth(item.authorityId)">
+                                <el-dropdown-item
+                                  v-for="item in userStore.userInfo.authorities.filter(i=>i.authorityId!==userStore.userInfo.authorityId)"
+                                  :key="item.authorityId"
+                                  @click="changeUserAuth(item.authorityId)"
+                                >
                                   <span>
                                     切换为：{{ item.authorityName }}
                                   </span>
                                 </el-dropdown-item>
                               </template>
                               <el-dropdown-item icon="avatar">
-                                <div class="command-box" style="display: flex" @click="handleCommand">
+                                <div
+                                  class="command-box"
+                                  style="display: flex"
+                                  @click="handleCommand"
+                                >
                                   <div>指令菜单</div>
                                   <div style="margin-left: 8px">
                                     <span class="button">{{ first }}</span>
@@ -72,8 +138,14 @@
                                   </div>
                                 </div>
                               </el-dropdown-item>
-                              <el-dropdown-item icon="avatar" @click="toPerson">个人信息</el-dropdown-item>
-                              <el-dropdown-item icon="reading-lamp" @click="userStore.LoginOut">登 出</el-dropdown-item>
+                              <el-dropdown-item
+                                icon="avatar"
+                                @click="toPerson"
+                              >个人信息</el-dropdown-item>
+                              <el-dropdown-item
+                                icon="reading-lamp"
+                                @click="userStore.LoginOut"
+                              >登 出</el-dropdown-item>
                             </el-dropdown-menu>
                           </template>
                         </el-dropdown>
@@ -95,10 +167,13 @@
           class="admin-box"
         >
           <div
-              v-loading="loadingFlag"
-              element-loading-text="正在加载中"
+            v-loading="loadingFlag"
+            element-loading-text="正在加载中"
           >
-            <transition mode="out-in" name="el-fade-in-linear">
+            <transition
+              mode="out-in"
+              name="el-fade-in-linear"
+            >
               <keep-alive :include="routerStore.keepAliveRouters">
                 <component :is="Component" />
               </keep-alive>
@@ -107,18 +182,12 @@
         </router-view>
         <BottomInfo />
         <setting />
-        <CommandMenu ref="command"/>
+        <CommandMenu ref="command" />
       </el-main>
     </el-container>
 
   </el-container>
 </template>
-
-<script>
-export default {
-  name: 'Layout',
-}
-</script>
 
 <script setup>
 import Aside from '@/view/layout/aside/index.vue'
@@ -136,6 +205,10 @@ import { useRouterStore } from '@/pinia/modules/router'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
 import { useUserStore } from '@/pinia/modules/user'
 
+defineOptions({
+  name: 'Layout',
+})
+
 const router = useRouter()
 const route = useRoute()
 const routerStore = useRouterStore()
@@ -148,7 +221,7 @@ const first = ref('')
 const dialogVisible = ref(false)
 const initPage = () => {
   // 判断当前用户的操作系统
-  if(window.localStorage.getItem('osType') === 'WIN') {
+  if (window.localStorage.getItem('osType') === 'WIN') {
     first.value = 'Ctrl'
   } else {
     first.value = '⌘'
@@ -157,13 +230,13 @@ const initPage = () => {
   const handleKeyDown = (e) => {
     if (e.ctrlKey && e.key === 'k') {
       // 阻止浏览器默认事件
-      e.preventDefault();
+      e.preventDefault()
       handleCommand()
     }
   }
-  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener('keydown', handleKeyDown)
 
-    const screenWidth = document.body.clientWidth
+  const screenWidth = document.body.clientWidth
   if (screenWidth < 1000) {
     isMobile.value = true
     isSider.value = false
@@ -212,16 +285,16 @@ onMounted(() => {
 
 const userStore = useUserStore()
 
-const asideWidth = ()=> {
+const asideWidth = () => {
   if (isMobile.value) {
-    return isCollapse.value?'0px':'220px'
+    return isCollapse.value ? '0px' : '220px'
   }
   return isCollapse.value ? '54px' : '220px'
 }
 
-const getAsideWidth = () =>{
-  if(isMobile.value) return '0px'
-  return isCollapse.value?'54px':'220px'
+const getAsideWidth = () => {
+  if (isMobile.value) return '0px'
+  return isCollapse.value ? '54px' : '220px'
 }
 
 const textColor = computed(() => {

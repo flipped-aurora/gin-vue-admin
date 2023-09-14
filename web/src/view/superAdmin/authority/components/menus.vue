@@ -1,8 +1,16 @@
 <template>
   <div>
     <div class="sticky top-0.5 z-10 bg-white">
-      <el-input v-model="filterText" class="w-3/5" placeholder="筛选" />
-      <el-button class="float-right" type="primary" @click="relation">确 定</el-button>
+      <el-input
+        v-model="filterText"
+        class="w-3/5"
+        placeholder="筛选"
+      />
+      <el-button
+        class="float-right"
+        type="primary"
+        @click="relation"
+      >确 定</el-button>
     </div>
     <div class="tree-content clear-both">
       <el-tree
@@ -46,21 +54,37 @@
         </template>
       </el-tree>
     </div>
-    <el-dialog v-model="btnVisible" title="分配按钮" destroy-on-close>
+    <el-dialog
+      v-model="btnVisible"
+      title="分配按钮"
+      destroy-on-close
+    >
       <el-table
         ref="btnTableRef"
         :data="btnData"
         row-key="ID"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="按钮名称" prop="name" />
-        <el-table-column label="按钮备注" prop="desc" />
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          label="按钮名称"
+          prop="name"
+        />
+        <el-table-column
+          label="按钮备注"
+          prop="desc"
+        />
       </el-table>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -75,6 +99,10 @@ import {
 import { getAuthorityBtnApi, setAuthorityBtnApi } from '@/api/authorityBtn'
 import { nextTick, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+
+defineOptions({
+  name: 'Menus'
+})
 
 const props = defineProps({
   row: {
@@ -206,13 +234,6 @@ watch(filterText, (val) => {
   menuTree.value.filter(val)
 })
 
-</script>
-
-<script>
-
-export default {
-  name: 'Menus'
-}
 </script>
 
 <style lang="scss" scoped>

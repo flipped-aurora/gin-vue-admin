@@ -1,21 +1,27 @@
 <template>
   <div class="search-component">
-      <div class="gvaIcon gvaIcon-refresh" :class="[reload ? 'reloading' : '']" @click="handleReload" />
-      <Screenfull class="search-icon" />
-      <div class="gvaIcon gvaIcon-customer-service" @click="toService" />
+    <div
+      class="gvaIcon gvaIcon-refresh"
+      :class="[reload ? 'reloading' : '']"
+      @click="handleReload"
+    />
+    <Screenfull class="search-icon" />
+    <div
+      class="gvaIcon gvaIcon-customer-service"
+      @click="toService"
+    />
   </div>
 </template>
-
-<script>
-export default {
-  name: 'BtnBox',
-}
-</script>
 
 <script setup>
 import Screenfull from '@/view/layout/screenfull/index.vue'
 import { emitter } from '@/utils/bus.js'
 import { ref } from 'vue'
+
+defineOptions({
+  name: 'BtnBox',
+})
+
 const reload = ref(false)
 const handleReload = () => {
   reload.value = true
@@ -47,7 +53,6 @@ const toService = () => {
 .reload {
   font-size: 18px;
 }
-
 
 .reloading{
   animation:turn 0.5s linear infinite;

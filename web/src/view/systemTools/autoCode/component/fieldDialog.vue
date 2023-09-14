@@ -9,25 +9,62 @@
       :rules="rules"
       class="grid grid-cols-2"
     >
-      <el-form-item label="字段名称" prop="fieldName">
-        <el-input v-model="middleDate.fieldName" autocomplete="off" style="width:80%" />
-        <el-button style="width:18%;margin-left:2%" @click="autoFill">
+      <el-form-item
+        label="字段名称"
+        prop="fieldName"
+      >
+        <el-input
+          v-model="middleDate.fieldName"
+          autocomplete="off"
+          style="width:80%"
+        />
+        <el-button
+          style="width:18%;margin-left:2%"
+          @click="autoFill"
+        >
           <span style="font-size: 12px">自动填充</span>
         </el-button>
       </el-form-item>
-      <el-form-item label="字段中文名" prop="fieldDesc">
-        <el-input v-model="middleDate.fieldDesc" autocomplete="off" />
+      <el-form-item
+        label="字段中文名"
+        prop="fieldDesc"
+      >
+        <el-input
+          v-model="middleDate.fieldDesc"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item label="字段JSON" prop="fieldJson">
-        <el-input v-model="middleDate.fieldJson" autocomplete="off" />
+      <el-form-item
+        label="字段JSON"
+        prop="fieldJson"
+      >
+        <el-input
+          v-model="middleDate.fieldJson"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item label="数据库字段名" prop="columnName">
-        <el-input v-model="middleDate.columnName" autocomplete="off" />
+      <el-form-item
+        label="数据库字段名"
+        prop="columnName"
+      >
+        <el-input
+          v-model="middleDate.columnName"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item label="数据库字段描述" prop="comment">
-        <el-input v-model="middleDate.comment" autocomplete="off" />
+      <el-form-item
+        label="数据库字段描述"
+        prop="comment"
+      >
+        <el-input
+          v-model="middleDate.comment"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item label="字段类型" prop="fieldType">
+      <el-form-item
+        label="字段类型"
+        prop="fieldType"
+      >
         <el-select
           v-model="middleDate.fieldType"
           style="width:100%"
@@ -44,10 +81,19 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'" prop="dataTypeLong">
-        <el-input v-model="middleDate.dataTypeLong" :placeholder="middleDate.fieldType === 'enum'?`例:'北京','天津'`:'数据库类型长度'" />
+      <el-form-item
+        :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'"
+        prop="dataTypeLong"
+      >
+        <el-input
+          v-model="middleDate.dataTypeLong"
+          :placeholder="middleDate.fieldType === 'enum'?`例:'北京','天津'`:'数据库类型长度'"
+        />
       </el-form-item>
-      <el-form-item label="字段查询条件" prop="fieldSearchType">
+      <el-form-item
+        label="字段查询条件"
+        prop="fieldSearchType"
+      >
         <el-select
           v-model="middleDate.fieldSearchType"
           style="width:100%"
@@ -63,7 +109,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="关联字典" prop="dictType">
+      <el-form-item
+        label="关联字典"
+        prop="dictType"
+      >
         <el-select
           v-model="middleDate.dictType"
           style="width:100%"
@@ -101,6 +150,10 @@ import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
+
+defineOptions({
+  name: 'FieldDialog'
+})
 
 const props = defineProps({
   dialogMiddle: {
@@ -179,11 +232,4 @@ const clearOther = () => {
 
 const fieldDialogFrom = ref(null)
 defineExpose({ fieldDialogFrom })
-</script>
-
-<script>
-
-export default {
-  name: 'FieldDialog'
-}
 </script>

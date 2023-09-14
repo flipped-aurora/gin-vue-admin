@@ -6,12 +6,27 @@
     :show-close="false"
   >
     <template #header>
-      <input v-model="searchInput" class="quick-input" placeholder="请输入你需要快捷到达的功能">
+      <input
+        v-model="searchInput"
+        class="quick-input"
+        placeholder="请输入你需要快捷到达的功能"
+      >
     </template>
 
-    <div v-for="(option,index) in options" :key="index">
-      <div v-if="option.children.length" class="quick-title">{{ option.label }}</div>
-      <div v-for="(item,key) in option.children" :key="index+'-'+key" class="quick-item" @click="item.func">
+    <div
+      v-for="(option,index) in options"
+      :key="index"
+    >
+      <div
+        v-if="option.children.length"
+        class="quick-title"
+      >{{ option.label }}</div>
+      <div
+        v-for="(item,key) in option.children"
+        :key="index+'-'+key"
+        class="quick-item"
+        @click="item.func"
+      >
         {{ item.label }}
       </div>
     </div>
@@ -24,16 +39,16 @@
   </el-dialog>
 </template>
 
-<script>
-export default {
-  name: 'CommandMenu',
-}
-</script>
 <script setup>
 import { reactive, ref, watch } from 'vue'
-import { useRouter,useRoute } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
 import { useUserStore } from '@/pinia/modules/user'
+
+defineOptions({
+  name: 'CommandMenu',
+})
+
 const router = useRouter()
 const route = useRouter()
 const userStore = useUserStore()

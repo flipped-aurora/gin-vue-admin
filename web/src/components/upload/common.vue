@@ -20,6 +20,10 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 
+defineOptions({
+  name: 'UploadCommon',
+})
+
 const emit = defineEmits(['on-success'])
 const path = ref(import.meta.env.VITE_BASE_API)
 
@@ -59,12 +63,3 @@ const uploadError = () => {
 
 </script>
 
-<script>
-
-export default {
-  name: 'UploadCommon',
-  methods: {
-
-  }
-}
-</script>

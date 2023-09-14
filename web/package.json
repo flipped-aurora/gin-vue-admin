@@ -40,6 +40,7 @@
         "@vue/cli-plugin-vuex": "~5.0.8",
         "@vue/cli-service": "~5.0.8",
         "@vue/compiler-sfc": "^3.3.4",
+        "babel-eslint": "^10.1.0",
         "babel-plugin-import": "^1.13.6",
         "chalk": "^4.1.2",
         "dotenv": "^16.3.1",

@@ -1,9 +1,17 @@
 <template>
-    <el-tabs v-model="activeName">
-      <el-tab-pane v-for="(item, key) in previewCode" :key="key" :label="key" :name="key">
-        <div :id="key" class="h-[50vh] bg-white px-5 overflow-y-scroll" />
-      </el-tab-pane>
-    </el-tabs>
+  <el-tabs v-model="activeName">
+    <el-tab-pane
+      v-for="(item, key) in previewCode"
+      :key="key"
+      :label="key"
+      :name="key"
+    >
+      <div
+        :id="key"
+        class="h-[50vh] bg-white px-5 overflow-y-scroll"
+      />
+    </el-tab-pane>
+  </el-tabs>
 </template>
 
 <script setup>
@@ -71,11 +79,4 @@ const copy = () => {
 
 defineExpose({ copy })
 
-</script>
-
-<script>
-
-export default {
-
-}
 </script>

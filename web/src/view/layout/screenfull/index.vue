@@ -1,19 +1,24 @@
 <template>
   <div @click="clickFull">
-    <div v-if="isShow" class="gvaIcon gvaIcon-fullscreen-expand" />
-    <div v-else class="gvaIcon gvaIcon-fullscreen-shrink" />
+    <div
+      v-if="isShow"
+      class="gvaIcon gvaIcon-fullscreen-expand"
+    />
+    <div
+      v-else
+      class="gvaIcon gvaIcon-fullscreen-shrink"
+    />
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Screenfull',
-}
-</script>
 
 <script setup>
 import screenfull from 'screenfull' // 引入screenfull
 import { onMounted, onUnmounted, ref } from 'vue'
+
+defineOptions({
+  name: 'Screenfull',
+})
+
 defineProps({
   width: {
     type: Number,

@@ -31,12 +31,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Aside',
-}
-</script>
-
 <script setup>
 import AsideComponent from '@/view/layout/aside/asideComponent/index.vue'
 import { emitter } from '@/utils/bus.js'
@@ -44,6 +38,10 @@ import { ref, watch, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { useRouterStore } from '@/pinia/modules/router'
+
+defineOptions({
+  name: 'Aside',
+})
 
 const route = useRoute()
 const router = useRouter()
@@ -111,7 +109,7 @@ onUnmounted(() => {
 const selectMenuItem = (index, _, ele, aaa) => {
   const query = {}
   const params = {}
- routerStore.routeMap[index]?.parameters &&
+  routerStore.routeMap[index]?.parameters &&
     routerStore.routeMap[index]?.parameters.forEach((item) => {
       if (item.type === 'query') {
         query[item.key] = item.value
@@ -119,12 +117,12 @@ const selectMenuItem = (index, _, ele, aaa) => {
         params[item.key] = item.value
       }
     })
- if (index === route.name) return
- if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
-   window.open(index)
- } else {
-   router.push({ name: index, query, params })
- }
+  if (index === route.name) return
+  if (index.indexOf('http://') > -1 || index.indexOf('https://') > -1) {
+    window.open(index)
+  } else {
+    router.push({ name: index, query, params })
+  }
 }
 </script>
 

@@ -8,18 +8,36 @@
               <SelectImage v-model="userStore.userInfo.headerImg" />
             </div>
             <div class="py-6 text-center">
-              <p v-if="!editFlag" class="text-3xl flex justify-center items-center gap-4">
+              <p
+                v-if="!editFlag"
+                class="text-3xl flex justify-center items-center gap-4"
+              >
                 {{ userStore.userInfo.nickName }}
-                <el-icon class="cursor-pointer text-sm" color="#66b1ff" @click="openEdit">
+                <el-icon
+                  class="cursor-pointer text-sm"
+                  color="#66b1ff"
+                  @click="openEdit"
+                >
                   <edit />
                 </el-icon>
               </p>
-              <p v-if="editFlag" class="flex justify-center items-center gap-4">
+              <p
+                v-if="editFlag"
+                class="flex justify-center items-center gap-4"
+              >
                 <el-input v-model="nickName" />
-                <el-icon class="cursor-pointer" color="#67c23a" @click="enterEdit">
+                <el-icon
+                  class="cursor-pointer"
+                  color="#67c23a"
+                  @click="enterEdit"
+                >
                   <check />
                 </el-icon>
-                <el-icon class="cursor-pointer" color="#f23c3c" @click="closeEdit">
+                <el-icon
+                  class="cursor-pointer"
+                  color="#f23c3c"
+                  @click="closeEdit"
+                >
                   <close />
                 </el-icon>
               </p>
@@ -72,28 +90,45 @@
       </div>
       <div class="col-span-9 ">
         <div class="bg-white h-full px-4 py-8 rounded-lg shadow-lg box-border">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
-            <el-tab-pane label="账号绑定" name="second">
+          <el-tabs
+            v-model="activeName"
+            @tab-click="handleClick"
+          >
+            <el-tab-pane
+              label="账号绑定"
+              name="second"
+            >
               <ul>
                 <li class="borderd">
                   <p class="pb-2.5 text-xl text-gray-600">密保手机</p>
                   <p class="pb-2.5 text-lg text-gray-400">
                     已绑定手机:{{ userStore.userInfo.phone }}
-                    <a href="javascript:void(0)" @click="changePhoneFlag = true" class="float-right text-blue-400">立即修改</a>
+                    <a
+                      href="javascript:void(0)"
+                      class="float-right text-blue-400"
+                      @click="changePhoneFlag = true"
+                    >立即修改</a>
                   </p>
                 </li>
                 <li class="borderd pt-2.5">
                   <p class="pb-2.5 text-xl text-gray-600">密保邮箱</p>
                   <p class="pb-2.5 text-lg text-gray-400">
                     已绑定邮箱：{{ userStore.userInfo.email }}
-                    <a href="javascript:void(0)" @click="changeEmailFlag = true" class="float-right text-blue-400">立即修改</a>
+                    <a
+                      href="javascript:void(0)"
+                      class="float-right text-blue-400"
+                      @click="changeEmailFlag = true"
+                    >立即修改</a>
                   </p>
                 </li>
                 <li class="borderd pt-2.5">
                   <p class="pb-2.5 text-xl text-gray-600">密保问题</p>
                   <p class="pb-2.5 text-lg text-gray-400">
                     未设置密保问题
-                    <a href="javascript:void(0)" class="float-right text-blue-400">去设置</a>
+                    <a
+                      href="javascript:void(0)"
+                      class="float-right text-blue-400"
+                    >去设置</a>
                   </p>
                 </li>
                 <li class="borderd pt-2.5">
@@ -102,8 +137,8 @@
                     修改个人密码
                     <a
                       href="javascript:void(0)"
-                      @click="showPassword = true"
                       class="float-right text-blue-400"
+                      @click="showPassword = true"
                     >修改密码</a>
                   </p>
                 </li>
@@ -126,14 +161,35 @@
         :rules="rules"
         label-width="80px"
       >
-        <el-form-item :minlength="6" label="原密码" prop="password">
-          <el-input v-model="pwdModify.password" show-password />
+        <el-form-item
+          :minlength="6"
+          label="原密码"
+          prop="password"
+        >
+          <el-input
+            v-model="pwdModify.password"
+            show-password
+          />
         </el-form-item>
-        <el-form-item :minlength="6" label="新密码" prop="newPassword">
-          <el-input v-model="pwdModify.newPassword" show-password />
+        <el-form-item
+          :minlength="6"
+          label="新密码"
+          prop="newPassword"
+        >
+          <el-input
+            v-model="pwdModify.newPassword"
+            show-password
+          />
         </el-form-item>
-        <el-form-item :minlength="6" label="确认密码" prop="confirmPassword">
-          <el-input v-model="pwdModify.confirmPassword" show-password />
+        <el-form-item
+          :minlength="6"
+          label="确认密码"
+          prop="confirmPassword"
+        >
+          <el-input
+            v-model="pwdModify.confirmPassword"
+            show-password
+          />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -151,15 +207,39 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="changePhoneFlag" title="绑定手机" width="600px">
+    <el-dialog
+      v-model="changePhoneFlag"
+      title="绑定手机"
+      width="600px"
+    >
       <el-form :model="phoneForm">
-        <el-form-item label="手机号" label-width="120px">
-          <el-input v-model="phoneForm.phone" placeholder="请输入手机号" autocomplete="off" />
+        <el-form-item
+          label="手机号"
+          label-width="120px"
+        >
+          <el-input
+            v-model="phoneForm.phone"
+            placeholder="请输入手机号"
+            autocomplete="off"
+          />
         </el-form-item>
-        <el-form-item label="验证码" label-width="120px">
+        <el-form-item
+          label="验证码"
+          label-width="120px"
+        >
           <div class="flex w-full gap-4">
-            <el-input class="flex-1"  v-model="phoneForm.code" autocomplete="off" placeholder="请自行设计短信服务，此处为模拟随便写" style="width:300px" />
-            <el-button type="primary" :disabled="time>0" @click="getCode">{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-input
+              v-model="phoneForm.code"
+              class="flex-1"
+              autocomplete="off"
+              placeholder="请自行设计短信服务，此处为模拟随便写"
+              style="width:300px"
+            />
+            <el-button
+              type="primary"
+              :disabled="time>0"
+              @click="getCode"
+            >{{ time>0?`(${time}s)后重新获取`:'获取验证码' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -178,15 +258,39 @@
       </template>
     </el-dialog>
 
-    <el-dialog v-model="changeEmailFlag" title="绑定邮箱" width="600px">
+    <el-dialog
+      v-model="changeEmailFlag"
+      title="绑定邮箱"
+      width="600px"
+    >
       <el-form :model="emailForm">
-        <el-form-item label="邮箱" label-width="120px">
-          <el-input v-model="emailForm.email" placeholder="请输入邮箱" autocomplete="off" />
+        <el-form-item
+          label="邮箱"
+          label-width="120px"
+        >
+          <el-input
+            v-model="emailForm.email"
+            placeholder="请输入邮箱"
+            autocomplete="off"
+          />
         </el-form-item>
-        <el-form-item label="验证码" label-width="120px">
+        <el-form-item
+          label="验证码"
+          label-width="120px"
+        >
           <div class="flex w-full gap-4">
-            <el-input class="flex-1" v-model="emailForm.code" placeholder="请自行设计邮件服务，此处为模拟随便写" autocomplete="off" style="width:300px" />
-            <el-button type="primary" :disabled="emailTime>0" @click="getEmailCode">{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
+            <el-input
+              v-model="emailForm.code"
+              class="flex-1"
+              placeholder="请自行设计邮件服务，此处为模拟随便写"
+              autocomplete="off"
+              style="width:300px"
+            />
+            <el-button
+              type="primary"
+              :disabled="emailTime>0"
+              @click="getEmailCode"
+            >{{ emailTime>0?`(${emailTime}s)后重新获取`:'获取验证码' }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -207,18 +311,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Person',
-}
-</script>
-
 <script setup>
 import { setSelfInfo, changePassword } from '@/api/user.js'
 import { reactive, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 import SelectImage from '@/components/selectImage/selectImage.vue'
+
+defineOptions({
+  name: 'Person',
+})
 
 const activeName = ref('second')
 const rules = reactive({

@@ -5,32 +5,44 @@
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
-            <el-row class="my-8 w-[500px]">
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex items-center">
-                  <el-icon class="dashboard-icon">
-                    <sort />
-                  </el-icon>
-                  今日流量 (1231231)
-                </div>
-              </el-col>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex items-center">
-                  <el-icon class="dashboard-icon">
-                    <avatar />
-                  </el-icon>
-                  总用户数 (24001)
-                </div>
-              </el-col>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex items-center">
-                  <el-icon class="dashboard-icon">
-                    <comment />
-                  </el-icon>
-                  好评率 (99%)
-                </div>
-              </el-col>
-            </el-row>
+          <el-row class="my-8 w-[500px]">
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <sort />
+                </el-icon>
+                今日流量 (1231231)
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <avatar />
+                </el-icon>
+                总用户数 (24001)
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <comment />
+                </el-icon>
+                好评率 (99%)
+              </div>
+            </el-col>
+          </el-row>
           <div>
             <div class="gva-top-card-left-item">
               使用教学：
@@ -50,7 +62,11 @@
             </div>
           </div>
         </div>
-        <img src="@/assets/dashboard.png" class="gva-top-card-right" alt>
+        <img
+          src="@/assets/dashboard.png"
+          class="gva-top-card-right"
+          alt
+        >
       </div>
     </div>
     <div class="gva-card-box">
@@ -66,9 +82,15 @@
             @click="toTarget(card.name)"
           >
             <div class="quick-entrance-item">
-              <div class="quick-entrance-item-icon" :style="{ backgroundColor: card.bg }">
+              <div
+                class="quick-entrance-item-icon"
+                :style="{ backgroundColor: card.bg }"
+              >
                 <el-icon>
-                  <component :is="card.icon" :style="{ color: card.color }" />
+                  <component
+                    :is="card.icon"
+                    :style="{ color: card.color }"
+                  />
                 </el-icon>
               </div>
               <p>{{ card.label }}</p>
@@ -79,13 +101,19 @@
     </div>
     <div class="gva-card-box">
       <div class="gva-card">
-         <div class="gva-card-title">数据统计</div>
+        <div class="gva-card-title">数据统计</div>
         <div class="p-4">
           <el-row :gutter="20">
-            <el-col :xs="24" :sm="18">
+            <el-col
+              :xs="24"
+              :sm="18"
+            >
               <echarts-line />
             </el-col>
-            <el-col :xs="24" :sm="6">
+            <el-col
+              :xs="24"
+              :sm="6"
+            >
               <dashboard-table />
             </el-col>
           </el-row>
@@ -101,6 +129,10 @@ import DashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWeatherInfo } from '@/view/dashboard/weather.js'
+
+defineOptions({
+  name: 'Dashboard'
+})
 
 const weatherInfo = useWeatherInfo()
 
@@ -155,11 +187,6 @@ const toTarget = (name) => {
   router.push({ name })
 }
 
-</script>
-<script>
-export default {
-  name: 'Dashboard'
-}
 </script>
 
 <style lang="scss" scoped>

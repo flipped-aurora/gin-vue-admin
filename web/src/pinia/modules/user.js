@@ -67,7 +67,7 @@ export const useUserStore = defineStore('user', () => {
         })
 
         if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-          ElMessage.error("请联系管理员进行授权")
+          ElMessage.error('请联系管理员进行授权')
         } else {
           await router.replace({ name: userInfo.value.authority.defaultRouter })
         }

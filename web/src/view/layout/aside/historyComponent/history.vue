@@ -48,11 +48,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HistoryComponent',
-}
-</script>
 
 <script setup>
 import { emitter } from '@/utils/bus.js'
@@ -60,6 +55,10 @@ import { computed, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
+
+defineOptions({
+  name: 'HistoryComponent',
+})
 
 const route = useRoute()
 const router = useRouter()

@@ -1,8 +1,14 @@
 <template>
-  <el-sub-menu ref="subMenu" :index="routerInfo.name">
+  <el-sub-menu
+    ref="subMenu"
+    :index="routerInfo.name"
+  >
 
     <template #title>
-      <div v-if="!isCollapse" class="gva-subMenu">
+      <div
+        v-if="!isCollapse"
+        class="gva-subMenu"
+      >
         <el-icon v-if="routerInfo.meta.icon">
           <component :is="routerInfo.meta.icon" />
         </el-icon>
@@ -19,14 +25,13 @@
   </el-sub-menu>
 </template>
 
-<script>
-export default {
-  name: 'AsyncSubmenu',
-}
-</script>
-
 <script setup>
 import { ref, watch } from 'vue'
+
+defineOptions({
+  name: 'AsyncSubmenu',
+})
+
 const props = defineProps({
   routerInfo: {
     default: function() {

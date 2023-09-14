@@ -1,9 +1,15 @@
 <template>
   <div>
-    <warning-bar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
+    <warning-bar
+      href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+    />
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
-      <el-collapse v-model="activeNames" style="margin-bottom:12px">
+      <el-collapse
+        v-model="activeNames"
+        style="margin-bottom:12px"
+      >
         <el-collapse-item name="1">
           <template #title>
             <div :style="{fontSize:'16px',paddingLeft:'20px'}">
@@ -13,14 +19,33 @@
               </el-icon>
             </div>
           </template>
-          <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
-            <el-form-item label="业务库" prop="selectDBtype">
+          <el-form
+            ref="getTableForm"
+            style="margin-top:24px"
+            :inline="true"
+            :model="dbform"
+            label-width="120px"
+          >
+            <el-form-item
+              label="业务库"
+              prop="selectDBtype"
+            >
               <template #label>
-                <el-tooltip content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）" placement="bottom" effect="light">
+                <el-tooltip
+                  content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）"
+                  placement="bottom"
+                  effect="light"
+                >
                   <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
-              <el-select v-model="dbform.businessDB" clearable style="width:194px" placeholder="选择业务库" @change="getDbFunc">
+              <el-select
+                v-model="dbform.businessDB"
+                clearable
+                style="width:194px"
+                placeholder="选择业务库"
+                @change="getDbFunc"
+              >
                 <el-option
                   v-for="item in dbList"
                   :key="item.aliasName"
@@ -35,8 +60,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label="数据库名" prop="structName">
-              <el-select v-model="dbform.dbName" clearable filterable placeholder="请选择数据库" @change="getTableFunc">
+            <el-form-item
+              label="数据库名"
+              prop="structName"
+            >
+              <el-select
+                v-model="dbform.dbName"
+                clearable
+                filterable
+                placeholder="请选择数据库"
+                @change="getTableFunc"
+              >
                 <el-option
                   v-for="item in dbOptions"
                   :key="item.database"
@@ -45,7 +79,10 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item label="表名" prop="structName">
+            <el-form-item
+              label="表名"
+              prop="structName"
+            >
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
@@ -61,7 +98,10 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="getColumnFunc">使用此表创建</el-button>
+              <el-button
+                type="primary"
+                @click="getColumnFunc"
+              >使用此表创建</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -69,32 +109,93 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
-        <el-form-item label="Struct名称" prop="structName">
-          <el-input v-model="form.structName" placeholder="首字母自动转换大写" />
+      <el-form
+        ref="autoCodeForm"
+        :rules="rules"
+        :model="form"
+        label-width="120px"
+        :inline="true"
+      >
+        <el-form-item
+          label="Struct名称"
+          prop="structName"
+        >
+          <el-input
+            v-model="form.structName"
+            placeholder="首字母自动转换大写"
+          />
         </el-form-item>
-        <el-form-item label="TableName" prop="tableName">
-          <el-input v-model="form.tableName" placeholder="指定表名（非必填）" />
+        <el-form-item
+          label="TableName"
+          prop="tableName"
+        >
+          <el-input
+            v-model="form.tableName"
+            placeholder="指定表名（非必填）"
+          />
         </el-form-item>
-        <el-form-item label="Struct简称" prop="abbreviation">
-          <el-input v-model="form.abbreviation" placeholder="简称会作为入参对象名和路由group" />
+        <el-form-item
+          label="Struct简称"
+          prop="abbreviation"
+        >
+          <el-input
+            v-model="form.abbreviation"
+            placeholder="简称会作为入参对象名和路由group"
+          />
         </el-form-item>
-        <el-form-item label="Struct中文名称" prop="description">
-          <el-input v-model="form.description" placeholder="中文描述作为自动api描述" />
+        <el-form-item
+          label="Struct中文名称"
+          prop="description"
+        >
+          <el-input
+            v-model="form.description"
+            placeholder="中文描述作为自动api描述"
+          />
         </el-form-item>
-        <el-form-item label="文件名称" prop="packageName">
-          <el-input v-model="form.packageName" placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)" @blur="toLowerCaseFunc(form,'packageName')" />
+        <el-form-item
+          label="文件名称"
+          prop="packageName"
+        >
+          <el-input
+            v-model="form.packageName"
+            placeholder="生成文件的默认名称(建议为驼峰格式,首字母小写,如sysXxxXxxx)"
+            @blur="toLowerCaseFunc(form,'packageName')"
+          />
         </el-form-item>
-        <el-form-item label="Package（包）" prop="package">
-          <el-select v-model="form.package" style="width:194px">
-            <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
+        <el-form-item
+          label="Package（包）"
+          prop="package"
+        >
+          <el-select
+            v-model="form.package"
+            style="width:194px"
+          >
+            <el-option
+              v-for="item in pkgs"
+              :key="item.ID"
+              :value="item.packageName"
+              :label="item.packageName"
+            />
           </el-select>
-          <el-icon class="cursor-pointer ml-2 text-gray-600" @click="getPkgs"><refresh /></el-icon>
-          <el-icon class="cursor-pointer ml-2 text-gray-600" @click="goPkgs"><document-add /></el-icon>
+          <el-icon
+            class="cursor-pointer ml-2 text-gray-600"
+            @click="getPkgs"
+          ><refresh /></el-icon>
+          <el-icon
+            class="cursor-pointer ml-2 text-gray-600"
+            @click="goPkgs"
+          ><document-add /></el-icon>
         </el-form-item>
-        <el-form-item label="业务库" prop="businessDB">
+        <el-form-item
+          label="业务库"
+          prop="businessDB"
+        >
           <template #label>
-            <el-tooltip content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))" placement="bottom" effect="light">
+            <el-tooltip
+              content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))"
+              placement="bottom"
+              effect="light"
+            >
               <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
             </el-tooltip>
           </template>
@@ -119,7 +220,11 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制" placement="bottom" effect="light">
+            <el-tooltip
+              content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
+              placement="bottom"
+              effect="light"
+            >
               <div> 创建资源标识 <el-icon><QuestionFilled /></el-icon> </div>
             </el-tooltip>
           </template>
@@ -127,7 +232,11 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：把自动生成的API注册进数据库" placement="bottom" effect="light">
+            <el-tooltip
+              content="注：把自动生成的API注册进数据库"
+              placement="bottom"
+              effect="light"
+            >
               <div> 自动创建API </div>
             </el-tooltip>
           </template>
@@ -135,7 +244,11 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：自动迁移生成的文件到yaml配置的对应位置" placement="bottom" effect="light">
+            <el-tooltip
+              content="注：自动迁移生成的文件到yaml配置的对应位置"
+              placement="bottom"
+              effect="light"
+            >
               <div> 自动移动文件 </div>
             </el-tooltip>
           </template>
@@ -146,32 +259,68 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" @click="editAndAddField()">新增字段</el-button>
+        <el-button
+          type="primary"
+          @click="editAndAddField()"
+        >新增字段</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column align="left" type="index" label="序列" width="60" />
-        <el-table-column align="left" prop="fieldName" label="字段名称" width="160">
+        <el-table-column
+          align="left"
+          type="index"
+          label="序列"
+          width="60"
+        />
+        <el-table-column
+          align="left"
+          prop="fieldName"
+          label="字段名称"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.fieldName" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldDesc" label="中文名" width="160">
+        <el-table-column
+          align="left"
+          prop="fieldDesc"
+          label="中文名"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.fieldDesc" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="require" label="必填">
+        <el-table-column
+          align="left"
+          prop="require"
+          label="必填"
+        >
           <template #default="{row}"> <el-checkbox v-model="row.require" /></template>
         </el-table-column>
-        <el-table-column align="left" prop="sort" label="排序">
+        <el-table-column
+          align="left"
+          prop="sort"
+          label="排序"
+        >
           <template #default="{row}"> <el-checkbox v-model="row.sort" /> </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldJson" width="160px" label="字段Json">
+        <el-table-column
+          align="left"
+          prop="fieldJson"
+          width="160px"
+          label="字段Json"
+        >
           <template #default="{row}">
             <el-input v-model="row.fieldJson" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldType" label="字段类型" width="160">
+        <el-table-column
+          align="left"
+          prop="fieldType"
+          label="字段类型"
+          width="160"
+        >
           <template #default="{row}">
             <el-select
               v-model="row.fieldType"
@@ -188,22 +337,42 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="dataTypeLong" label="数据库字段长度" width="160">
+        <el-table-column
+          align="left"
+          prop="dataTypeLong"
+          label="数据库字段长度"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.dataTypeLong" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="columnName" label="数据库字段" width="160">
+        <el-table-column
+          align="left"
+          prop="columnName"
+          label="数据库字段"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.columnName" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="comment" label="数据库字段描述" width="160">
+        <el-table-column
+          align="left"
+          prop="comment"
+          label="数据库字段描述"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.columnName" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldSearchType" label="搜索条件" width="130">
+        <el-table-column
+          align="left"
+          prop="fieldSearchType"
+          label="搜索条件"
+          width="130"
+        >
           <template #default="{row}">
             <el-select
               v-model="row.fieldSearchType"
@@ -225,7 +394,12 @@
           </template>
 
         </el-table-column>
-        <el-table-column align="left" label="操作" width="300" fixed="right">
+        <el-table-column
+          align="left"
+          label="操作"
+          width="300"
+          fixed="right"
+        >
           <template #default="scope">
             <el-button
 
@@ -248,14 +422,29 @@
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
             >下移</el-button>
-            <el-popover v-model="scope.row.visible" placement="top">
+            <el-popover
+              v-model="scope.row.visible"
+              placement="top"
+            >
               <p>确定删除吗？</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="scope.row.visible = false">取消</el-button>
-                <el-button type="primary" @click="deleteField(scope.$index)">确定</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  @click="scope.row.visible = false"
+                >取消</el-button>
+                <el-button
+                  type="primary"
+                  @click="deleteField(scope.$index)"
+                >确定</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">删除</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  icon="delete"
+                  @click="scope.row.visible = true"
+                >删除</el-button>
               </template>
             </el-popover>
           </template>
@@ -263,17 +452,36 @@
       </el-table>
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-end mt-4">
-        <el-button type="primary" @click="enterForm(true)">预览代码</el-button>
-        <el-button type="primary" @click="enterForm(false)">生成代码</el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(true)"
+        >预览代码</el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(false)"
+        >生成代码</el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
-    <el-dialog v-model="dialogFlag" width="70%" title="组件内容">
-      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" :typeOptions="typeOptions" :typeSearchOptions="typeSearchOptions" />
+    <el-dialog
+      v-model="dialogFlag"
+      width="70%"
+      title="组件内容"
+    >
+      <FieldDialog
+        v-if="dialogFlag"
+        ref="fieldDialogNode"
+        :dialog-middle="dialogMiddle"
+        :type-options="typeOptions"
+        :type-search-options="typeSearchOptions"
+      />
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -282,14 +490,30 @@
       <template #header>
         <div class="flex items-center py-1.5">
           <p>操作栏：</p>
-          <el-button type="primary" @click="selectText">全选</el-button>
-          <el-button type="primary" @click="copy">复制</el-button>
+          <el-button
+            type="primary"
+            @click="selectText"
+          >全选</el-button>
+          <el-button
+            type="primary"
+            @click="copy"
+          >复制</el-button>
         </div>
       </template>
-      <PreviewCodeDialog v-if="previewFlag" ref="previewNode" :preview-code="preViewCode" />
+      <PreviewCodeDialog
+        v-if="previewFlag"
+        ref="previewNode"
+        :preview-code="preViewCode"
+      />
       <template #footer>
-        <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
-          <el-button type="primary" @click="previewFlag = false">确 定</el-button>
+        <div
+          class="dialog-footer"
+          style="padding-top:14px;padding-right:14px"
+        >
+          <el-button
+            type="primary"
+            @click="previewFlag = false"
+          >确 定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -307,6 +531,10 @@ import { ref, getCurrentInstance, reactive, watch, toRaw } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
+
+defineOptions({
+  name: 'AutoCode'
+})
 
 const typeOptions = ref([
   {
@@ -712,11 +940,4 @@ watch(() => route.params.id, () => {
   }
 })
 
-</script>
-
-<script>
-
-export default {
-  name: 'AutoCode'
-}
 </script>

@@ -270,12 +270,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: '{{.StructName}}'
-}
-</script>
-
 <script setup>
 import {
   create{{.StructName}},
@@ -309,6 +303,10 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict, ReturnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+
+defineOptions({
+    name: '{{.StructName}}'
+})
 
 // 自动化生成的字典（可能为空）以及字段
     {{- range $index, $element := .DictTypes}}

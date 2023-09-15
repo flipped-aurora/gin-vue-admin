@@ -24,15 +24,39 @@
               </p>
             </div>
             <div style="padding-left: 92%; padding-bottom: 20px;">
-              <el-dropdown trigger="click" @command="handleSetLanguage">
+              <el-dropdown
+                trigger="click"
+                @command="handleSetLanguage"
+              >
                 <span class="el-dropdown-link">
-                  <img src="@/assets/language.svg" style="width: 30px; height: 30px;">
+                  <img
+                    src="@/assets/language.svg"
+                    style="width: 30px; height: 30px;"
+                  >
                 </span>
                 <template #dropdown>
                   <el-dropdown-menu>
-                    <el-dropdown-item :disabled="$i18n.locale==='en'" command="en"><img src="@/assets/flags/en.svg" class="img">English</el-dropdown-item>
-                    <el-dropdown-item :disabled="$i18n.locale==='zh'" command="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-dropdown-item>
-                    <el-dropdown-item :disabled="$i18n.locale==='ar'" command="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-dropdown-item>
+                    <el-dropdown-item
+                      :disabled="$i18n.locale==='en'"
+                      command="en"
+                    ><img
+                      src="@/assets/flags/en.svg"
+                      class="img"
+                    >English</el-dropdown-item>
+                    <el-dropdown-item
+                      :disabled="$i18n.locale==='zh'"
+                      command="zh"
+                    ><img
+                      src="@/assets/flags/zh.svg"
+                      class="img"
+                    >中文</el-dropdown-item>
+                    <el-dropdown-item
+                      :disabled="$i18n.locale==='ar'"
+                      command="ar"
+                    ><img
+                      src="@/assets/flags/ar.svg"
+                      class="img"
+                    >العربية</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
@@ -109,7 +133,7 @@
               </el-form-item>
             </el-form>
           </div>
-        </div>
+          enterDenterSQLitePathBName        </div>
       </div>
       <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]"><img
         class="h-full"
@@ -207,7 +231,7 @@ const loginVerify = () => {
     rules.captcha.push({
       max: ele.data.captchaLength,
       min: ele.data.captchaLength,
-      message: `请输入${ele.data.captchaLength}位验证码`,
+      message: `t('login.pleaseEnter') ${ele.data.captchaLength} t('login.verificationCode')`,
       trigger: 'blur',
     })
     picPath.value = ele.data.picPath

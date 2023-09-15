@@ -20,6 +20,7 @@ require (
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
 	github.com/lestrrat-go/file-rotatelogs v2.4.0+incompatible
 	github.com/mojocn/base64Captcha v1.3.5
+	github.com/nicksnyder/go-i18n/v2 v2.2.0
 	github.com/otiai10/copy v1.7.0
 	github.com/pkg/errors v0.9.1
 	github.com/qiniu/api.v7/v7 v7.4.1
@@ -44,7 +45,6 @@ require (
 	gorm.io/driver/sqlserver v1.5.1
 	gorm.io/gorm v1.25.2
 	nhooyr.io/websocket v1.8.7
-	github.com/nicksnyder/go-i18n/v2 v2.2.0
 )
 
 require (

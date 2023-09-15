@@ -28,14 +28,14 @@
               size="large"
               @click="goDoc"
             >
-            {{ t('init.readDocs') }}
+              {{ t('init.readDocs') }}
             </el-button>
             <el-button
               type="primary"
               size="large"
               @click="showNext"
             >
-            {{ t('init.confirm') }}
+              {{ t('init.confirm') }}
             </el-button>
           </p>
         </div>
@@ -53,24 +53,35 @@
         >
           <!-- added by mohamed hassan to support multilangauge -->
           <el-form-item :label="t('init.language')">
-            <el-select v-model="form.language"
-:placeholder="t('general.pleaseSelect')" @change="changeLanguage"
->
-              <el-option key="en"
-label="English" value="en"
-><img src="@/assets/flags/en.svg"
-class="img"
->English</el-option>
-              <el-option key="zh"
-label="中文" value="zh"
-><img src="@/assets/flags/zh.svg"
-class="img"
->中文</el-option>
-              <el-option key="ar"
-label="العربية" value="ar"
-><img src="@/assets/flags/ar.svg"
-class="img"
->العربية</el-option>
+            <el-select
+              v-model="form.language"
+              :placeholder="t('general.pleaseSelect')"
+              @change="changeLanguage"
+            >
+              <el-option
+                key="en"
+                label="English"
+                value="en"
+              ><img
+                src="@/assets/flags/en.svg"
+                class="img"
+              >English</el-option>
+              <el-option
+                key="zh"
+                label="中文"
+                value="zh"
+              ><img
+                src="@/assets/flags/zh.svg"
+                class="img"
+              >中文</el-option>
+              <el-option
+                key="ar"
+                label="العربية"
+                value="ar"
+              ><img
+                src="@/assets/flags/ar.svg"
+                class="img"
+              >العربية</el-option>
             </el-select>
           </el-form-item>
           <!-- end of adding -->
@@ -156,7 +167,7 @@ class="img"
           >
             <el-input
               v-model="form.dbPath"
-              placeholder="请输入sqlite数据库文件存放路径"
+              :placeholder="t('init.enterSQLitePath')"
             />
           </el-form-item>
           <el-form-item>

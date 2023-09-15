@@ -181,6 +181,7 @@
 		"enterDBAddress": "请输入数据库链接",
 		"enterDBHost": "",
 		"enterDBName": "请输入数据库名称",
+		"enterSQLitePath" : "请输入sqlite数据库文件存放路径",
 		"enterDBPassword": "请输入数据库密码（没有则为空）",
 		"enterDBPort": "请输入数据库端口",
 		"enterDBUser": "请输入数据库用户名",
@@ -189,7 +190,9 @@
 		"language": "语",
 		"note": "初始化须知",
 		"note1": "1.您需有用一定的VUE和GOLANG基础",
-		"note2": "2.请您确认是否已经阅读过官方文档",
+		"note2-1": "2.请您确认是否已经阅读过",
+		"note2-2": "官方文档",
+		"note2-3": "初始化视频",
 		"note3": "3.请您确认是否了解后续的配置流程",
 		"note4": "4.如果您使用mysql数据库，请确认数据库引擎为",
 		"note5": "注：开发组不为文档中书写过的内容提供无偿服务",
@@ -212,6 +215,7 @@
 		"errPassword": "请输入正确的密码",
 		"errUserName": "请输入正确的用户名",
 		"errVerificationCode": "验证码格式不正确",
+		"verificationCode" : "位验证码",
 		"init": "前往初始化",
 		"language": "Languages",
 		"login": "登 录"
@@ -361,10 +365,12 @@
 			"sysDictionaryDetail" : {
 				"displayValue" : "展示值",
 				"dictValue" : "字典值",
+				"extendedValue" : "扩展值",
 				"enabledStatus" : "启用状态",
 				"addDictEntry" : "新增字典项",
 				"enterDisplayValue" : "请输入展示值",
 				"enterDictValue" : "请输入字典值",
+				"enterExtendedValue" : "请输入扩展值",
 				"addDictionaryItem" : "添加字典项",
 				"editDictionaryItem" : "修改字典项"
 			}

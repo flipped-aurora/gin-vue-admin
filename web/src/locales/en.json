@@ -181,6 +181,7 @@
 		"enterDBAddress": "Please enter the database address",
 		"enterDBHost": "Please enter database host",
 		"enterDBName": "Please enter database name",
+		"enterSQLitePath" : "Please enter sqlite database file path",
 		"enterDBPassword": "Please enter the database password (empty if none)",
 		"enterDBPort": "Please enter database port",
 		"enterDBUser": "",
@@ -189,7 +190,9 @@
 		"language": "Language",
 		"note": "Initialization notice",
 		"note1": "1.You should be familiar with Vue And GoLang.",
-		"note2": "2.Please confirm that you have read the official documentation.",
+		"note2-1": "2.Please confirm that you have read ",
+		"note2-2": " the official documentation.",
+		"note2-3": "Initialization video",
 		"note3": "3.Please confirm that you understand the subsequent configuration process.",
 		"note4": "4.If you use a mysql database, please confirm that the database engine is ",
 		"note5": "Note: The development team does not provide free services for the content written in the document.",
@@ -212,6 +215,7 @@
 		"errPassword": "Please enter the correct password",
 		"errUserName": "Please enter the correct username",
 		"errVerificationCode": "Incorrect verification code",
+		"verificationCode" : "Verification code",
 		"init": "Go to initialization",
 		"language": "Languages",
 		"login": "Login"
@@ -361,10 +365,12 @@
 			"sysDictionaryDetail" : {
 				"displayValue" : "Display value",
 				"dictValue" : "Dictionary value",
+				"extendedValue" : "Extended value",
 				"enabledStatus" : "Enabled status",
 				"addDictEntry" : "Add dictionary entry",
 				"enterDisplayValue" : "Please enter a display value",
 				"enterDictValue" : "Please enter a dictionary value",
+				"enterExtendedValue" : "Please enter extended value", 
 				"addDictionaryItem" : "Add Dictionary Item",
 				"editDictionaryItem" : "Edit Dictionary Item"
 			}

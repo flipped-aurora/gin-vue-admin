@@ -133,7 +133,7 @@
               </el-form-item>
             </el-form>
           </div>
-          enterDenterSQLitePathBName        </div>
+        </div>
       </div>
       <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]"><img
         class="h-full"

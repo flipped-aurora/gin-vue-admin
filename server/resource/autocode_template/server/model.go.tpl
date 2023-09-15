@@ -7,7 +7,7 @@ import (
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 
-// {{.StructName}} 结构体
+// {{.Description}} 结构体  {{.StructName}}
 type {{.StructName}} struct {
       global.GVA_MODEL {{- range .Fields}}
             {{- if eq .FieldType "enum" }}
@@ -18,11 +18,13 @@ type {{.StructName}} struct {
       {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}"`
             {{- else if eq .FieldType "pictures" }}
       {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}"`
+            {{- else if eq .FieldType "richtext" }}
+      {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}type:text;"`
             {{- else if ne .FieldType "string" }}
       {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}"`
             {{- else }}
       {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}"`
-            {{- end }} {{- end }}
+            {{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }} {{- end }}
       {{- if .AutoCreateResource }}
       CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`
       UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
@@ -31,7 +33,7 @@ type {{.StructName}} struct {
 }
 
 {{ if .TableName }}
-// TableName {{.StructName}} 表名
+// TableName {{.Description}} {{.StructName}}自定义表名 {{.TableName}}
 func ({{.StructName}}) TableName() string {
   return "{{.TableName}}"
 }

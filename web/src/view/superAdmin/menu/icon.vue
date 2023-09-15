@@ -1,11 +1,21 @@
 <template>
   <div>
-    <span class="gva-icon" style="position: absolute; z-index: 9999; padding: 3px 10px 0; ">
+    <span
+      class="gva-icon"
+      style="position: absolute; z-index: 9999; padding: 3px 10px 0; "
+    >
       <el-icon>
         <component :is="metaData.icon" />
       </el-icon>
     </span>
-    <el-select v-model="metaData.icon" style="width:100%" clearable filterable class="gva-select" :placeholder="t('general.pleaseSelect')">
+    <el-select
+      v-model="metaData.icon"
+      style="width:100%"
+      clearable
+      filterable
+      class="gva-select"
+      :placeholder="t('general.pleaseSelect')"
+    >
       <el-option
         v-for="item in options"
         :key="item.key"
@@ -13,7 +23,11 @@
         :label="item.key"
         :value="item.key"
       >
-        <span class="gva-icon" style=" padding: 3px 0 0; " :class="item.label">
+        <span
+          class="gva-icon"
+          style=" padding: 3px 0 0; "
+          :class="item.label"
+        >
           <el-icon>
             <component :is="item.label" />
           </el-icon>
@@ -29,6 +43,10 @@ import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Icon',
+})
 
 const props = defineProps({
   meta: {
@@ -1165,12 +1183,6 @@ const options = reactive([
 const metaData = ref(props.meta)
 if (!metaData.value.icon) {
   metaData.value.icon = options[0].label
-}
-</script>
-
-<script>
-export default {
-  name: 'Icon',
 }
 </script>
 

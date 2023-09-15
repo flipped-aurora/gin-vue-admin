@@ -3,7 +3,15 @@
     <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="addAuthority(0)">{{ t('authority.addRole') }}</el-button>
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="addAuthority(0)"
+        >{{ t('authority.addRole') }}</el-button>
+        <el-icon
+          class="cursor-pointer"
+          @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=8&vd_source=f2640257c21e3b547a790461ed94875e')"
+        ><VideoCameraFilled /></el-icon>
       </div>
       <el-table
         :data="tableData"
@@ -11,9 +19,22 @@
         row-key="authorityId"
         style="width: 100%"
       >
-        <el-table-column :label="t('authority.roleID')" min-width="180" prop="authorityId" />
-        <el-table-column align="left" :label="t('authority.roleName')" min-width="180" prop="authorityName" />
-        <el-table-column align="left" :lable="t('general.operations')" width="460">
+        <el-table-column
+        :label="t('authority.roleID')"
+          min-width="180"
+          prop="authorityId"
+        />
+        <el-table-column
+          align="left"
+          :label="t('authority.roleName')"
+          min-width="180"
+          prop="authorityName"
+        />
+        <el-table-column
+          align="left"
+          :lable="t('general.operations')"
+          width="460"
+        >
           <template #default="scope">
             <el-button
               icon="setting"
@@ -55,9 +76,20 @@
       </el-table>
     </div>
     <!-- 新增角色弹窗 -->
-    <el-dialog v-model="dialogFormVisible" :title="dialogTitle">
-      <el-form ref="authorityForm" :model="form" :rules="rules" label-width="100px">
-        <el-form-item :label="t('authority.parentRole')" prop="parentId">
+    <el-dialog
+      v-model="dialogFormVisible"
+      :title="dialogTitle"
+    >
+      <el-form
+        ref="authorityForm"
+        :model="form"
+        :rules="rules"
+        label-width="80px"
+      >
+        <el-form-item
+        :label="t('authority.parentRole')"
+          prop="parentId"
+        >
           <el-cascader
             v-model="form.parentId"
             style="width:100%"
@@ -68,31 +100,71 @@
             filterable
           />
         </el-form-item>
-        <el-form-item :label="t('authority.roleID')" prop="authorityId">
-          <el-input v-model="form.authorityId" :disabled="dialogType==='edit'" autocomplete="off" maxlength="15"/>
+        <el-form-item
+        :label="t('authority.roleID')"
+          prop="authorityId"
+        >
+          <el-input
+            v-model="form.authorityId"
+            :disabled="dialogType==='edit'"
+            autocomplete="off"
+            maxlength="15"
+          />
         </el-form-item>
-        <el-form-item :label="t('authority.roleName')" prop="authorityName">
-          <el-input v-model="form.authorityName" autocomplete="off" />
+        <el-form-item
+        :label="t('authority.roleName')"
+          prop="authorityName"
+        >
+          <el-input
+            v-model="form.authorityName"
+            autocomplete="off"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
 
-    <el-drawer v-if="drawer" v-model="drawer" custom-class="auth-drawer" :with-header="false" size="40%" :title="t('authority.roleConfig')">
-      <el-tabs :before-leave="autoEnter" type="border-card">
+    <el-drawer
+      v-if="drawer"
+      v-model="drawer"
+      custom-class="auth-drawer"
+      :with-header="false"
+      size="40%"
+      :title="t('authority.roleConfig')"
+    >
+      <el-tabs
+        :before-leave="autoEnter"
+        type="border-card"
+      >
         <el-tab-pane :label="t('authority.roleMenu')">
-          <Menus ref="menus" :row="activeRow" @changeRow="changeRow" />
+          <Menus
+            ref="menus"
+            :row="activeRow"
+            @changeRow="changeRow"
+          />
         </el-tab-pane>
         <el-tab-pane :label="t('authority.roleAPI')">
-          <Apis ref="apis" :row="activeRow" @changeRow="changeRow" />
+          <Apis
+            ref="apis"
+            :row="activeRow"
+            @changeRow="changeRow"
+          />
         </el-tab-pane>
         <el-tab-pane :label="t('authority.resourcePermissions')">
-          <Datas ref="datas" :authority="tableData" :row="activeRow" @changeRow="changeRow" />
+          <Datas
+            ref="datas"
+            :authority="tableData"
+            :row="activeRow"
+            @changeRow="changeRow"
+          />
         </el-tab-pane>
       </el-tabs>
     </el-drawer>
@@ -115,9 +187,16 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+
+import { toDoc } from '@/utils/doc'
+import { VideoCameraFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Authority'
+})
 
 const mustUint = (rule, value, callback) => {
   if (!/^[0-9]*[1-9][0-9]*$/.test(value)) {
@@ -376,13 +455,6 @@ const editAuthority = (row) => {
 
 </script>
 
-<script>
-
-export default {
-  name: 'Authority'
-}
-</script>
-
 <style lang="scss">
 .authority {
   .el-input-number {
@@ -394,7 +466,7 @@ export default {
 }
 .tree-content{
   margin-top: 10px;
-  height: calc(100vh - 148px);
+  height: calc(100vh - 158px);
   overflow: auto;
 }
 

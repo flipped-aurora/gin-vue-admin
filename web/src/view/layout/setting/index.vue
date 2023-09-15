@@ -1,6 +1,11 @@
 <template>
   <div>
-    <el-button type="primary" class="drawer-container" icon="setting" @click="showSettingDrawer" />
+    <el-button
+      type="primary"
+      class="drawer-container"
+      icon="setting"
+      @click="showSettingDrawer"
+    />
     <el-drawer
       v-model="drawer"
       :title="t('system.systemConfig')"
@@ -11,9 +16,15 @@
         <div class="setting_card">
           <div class="setting_content">
             <div class="theme-box">
-              <div class="item" @click="changeMode('light')">
+              <div
+                class="item"
+                @click="changeMode('light')"
+              >
                 <div class="item-top">
-                  <el-icon v-if="userStore.mode === 'light'" class="check">
+                  <el-icon
+                    v-if="userStore.mode === 'light'"
+                    class="check"
+                  >
                     <check />
                   </el-icon>
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg">
@@ -22,9 +33,15 @@
                   {{ t('setting.simpleWhite') }}
                 </p>
               </div>
-              <div class="item" @click="changeMode('dark')">
+              <div
+                class="item"
+                @click="changeMode('dark')"
+              >
                 <div class="item-top">
-                  <el-icon v-if="userStore.mode === 'dark'" class="check">
+                  <el-icon
+                    v-if="userStore.mode === 'dark'"
+                    class="check"
+                  >
                     <check />
                   </el-icon>
                   <img src="https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg">
@@ -42,18 +59,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Setting',
-}
-</script>
-
 <script setup>
 import { ref } from 'vue'
 import { useUserStore } from '@/pinia/modules/user'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Setting',
+})
 
 const drawer = ref(false)
 const direction = ref('rtl')

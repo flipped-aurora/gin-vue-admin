@@ -5,34 +5,44 @@
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">{{ t('view.dashboard.title') }}</div>
           <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
-          <div class="gva-top-card-left-rows">
-            <el-row>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex-center">
-                  <el-icon class="dashboard-icon">
-                    <sort />
-                  </el-icon>
-                  {{ t('view.dashboard.todaysTraffic') }} (1231231)
-                </div>
-              </el-col>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex-center">
-                  <el-icon class="dashboard-icon">
-                    <avatar />
-                  </el-icon>
-                  {{ t('view.dashboard.totalNumberOfUsers') }} (24001)
-                </div>
-              </el-col>
-              <el-col :span="8" :xs="24" :sm="8">
-                <div class="flex-center">
-                  <el-icon class="dashboard-icon">
-                    <comment />
-                  </el-icon>
-                  {{ t('view.dashboard.positiveRatings') }} (99%)
-                </div>
-              </el-col>
-            </el-row>
-          </div>
+          <el-row class="my-8 w-[500px]">
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <sort />
+                </el-icon>
+                {{ t('view.dashboard.todaysTraffic') }} (1231231)
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <avatar />
+                </el-icon>
+                {{ t('view.dashboard.totalNumberOfUsers') }} (24001)
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <comment />
+                </el-icon>
+                {{ t('view.dashboard.positiveRatings') }} (99%)
+              </div>
+            </el-col>
+          </el-row>
           <div>
             <div class="gva-top-card-left-item">
               {{ t('view.dashboard.instructionalUse') }}
@@ -52,16 +62,16 @@
             </div>
           </div>
         </div>
-        <img src="@/assets/dashboard.png" class="gva-top-card-right" alt>
+        <img
+          src="@/assets/dashboard.png"
+          class="gva-top-card-right"
+          alt
+        >
       </div>
     </div>
     <div class="gva-card-box">
-      <el-card class="gva-card quick-entrance">
-        <template #header>
-          <div class="card-header">
-            <span>{{ t('view.dashboard.quickEntry') }}</span>
-          </div>
-        </template>
+      <div class="gva-card quick-entrance">
+        <div class="gva-card-title">{{ t('view.dashboard.quickEntry') }}</div>
         <el-row :gutter="20">
           <el-col
             v-for="(card, key) in toolCards"
@@ -72,29 +82,38 @@
             @click="toTarget(card.name)"
           >
             <div class="quick-entrance-item">
-              <div class="quick-entrance-item-icon" :style="{ backgroundColor: card.bg }">
+              <div
+                class="quick-entrance-item-icon"
+                :style="{ backgroundColor: card.bg }"
+              >
                 <el-icon>
-                  <component :is="card.icon" :style="{ color: card.color }" />
+                  <component
+                    :is="card.icon"
+                    :style="{ color: card.color }"
+                  />
                 </el-icon>
               </div>
               <p>{{ card.label }}</p>
             </div>
           </el-col>
         </el-row>
-      </el-card>
-    <!-- <div class="quick-entrance-title"></div> -->
+      </div>
     </div>
     <div class="gva-card-box">
       <div class="gva-card">
-        <div class="card-header">
-          <span>{{ t('view.dashboard.statistics') }}</span>
-        </div>
-        <div class="echart-box">
+        <div class="gva-card-title">{{ t('view.dashboard.statistics') }}</div>
+        <div class="p-4">
           <el-row :gutter="20">
-            <el-col :xs="24" :sm="18">
+            <el-col
+              :xs="24"
+              :sm="18"
+            >
               <echarts-line />
             </el-col>
-            <el-col :xs="24" :sm="6">
+            <el-col
+              :xs="24"
+              :sm="6"
+            >
               <dashboard-table />
             </el-col>
           </el-row>
@@ -113,6 +132,10 @@ import { useWeatherInfo } from '@/view/dashboard/weather.js'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Dashboard'
+})
 
 const weatherInfo = useWeatherInfo()
 
@@ -168,59 +191,31 @@ const toTarget = (name) => {
 }
 
 </script>
-<script>
-export default {
-  name: 'Dashboard'
-}
-</script>
 
 <style lang="scss" scoped>
-@mixin flex-center {
-    display: flex;
-    align-items: center;
-}
 .page {
-    background: #f0f2f5;
-    padding: 0;
+    @apply p-0;
     .gva-card-box{
-      padding: 12px 16px;
+      @apply p-4;
       &+.gva-card-box{
-        padding-top: 0px;
+        @apply pt-0;
       }
     }
     .gva-card {
-      box-sizing: border-box;
-        background-color: #fff;
-        border-radius: 2px;
-        height: auto;
-        padding: 26px 30px;
-        overflow: hidden;
-        box-shadow: 0 0 7px 1px rgba(0, 0, 0, 0.03);
+      @apply box-border bg-white rounded h-auto px-6 py-8 overflow-hidden shadow-sm;
+      .gva-card-title{
+        @apply pb-5 border-t-0 border-l-0 border-r-0 border-b border-solid border-gray-100;
+      }
     }
     .gva-top-card {
-        height: 260px;
-        @include flex-center;
-        justify-content: space-between;
-        color: #777;
+        @apply h-72 flex items-center justify-between text-gray-500;
         &-left {
-          height: 100%;
-          display: flex;
-          flex-direction: column;
+          @apply h-full flex flex-col w-auto;
             &-title {
-                font-size: 22px;
-                color: #343844;
+              @apply text-3xl text-gray-600;
             }
             &-dot {
-                font-size: 16px;
-                color: #6B7687;
-                margin-top: 24px;
-            }
-            &-rows {
-                // margin-top: 15px;
-                margin-top: 18px;
-                color: #6B7687;
-                width: 600px;
-                align-items: center;
+              @apply mt-4 text-gray-600 text-lg;
             }
             &-item{
               +.gva-top-card-left-item{
@@ -236,97 +231,29 @@ export default {
         }
     }
      ::v-deep(.el-card__header){
-          padding:0;
-          border-bottom: none;
+          @apply p-0  border-gray-200;
         }
         .card-header{
-          padding-bottom: 20px;
-          border-bottom: 1px solid #e8e8e8;
+          @apply pb-5 border-b border-solid border-gray-200 border-t-0 border-l-0 border-r-0;
         }
-    .quick-entrance-title {
-        height: 30px;
-        font-size: 22px;
-        color: #333;
-        width: 100%;
-        border-bottom: 1px solid #eee;
-    }
     .quick-entrance-items {
-        @include flex-center;
-        justify-content: center;
-        text-align: center;
-        color: #333;
+      @apply flex items-center justify-center text-center text-gray-800;
         .quick-entrance-item {
-          padding: 16px 28px;
-          margin-top: -16px;
-          margin-bottom: -16px;
-          border-radius: 4px;
-          transition: all 0.2s;
+          @apply px-8 py-6 flex items-center flex-col transition-all duration-100 ease-in-out rounded-lg cursor-pointer;
           &:hover{
-            box-shadow: 0px 0px 7px 0px rgba(217, 217, 217, 0.55);
+            @apply shadow-lg;
           }
-            cursor: pointer;
-            height: auto;
-            text-align: center;
-            // align-items: center;
             &-icon {
-                width: 50px;
-                height: 50px !important;
-                border-radius: 8px;
-                @include flex-center;
-                justify-content: center;
-                margin: 0 auto;
-                i {
-                    font-size: 24px;
-                }
+              @apply flex items-center h-16 w-16 rounded-lg justify-center mx-0 my-auto text-2xl;
             }
             p {
-                margin-top: 10px;
+                @apply mt-2.5;
             }
         }
-    }
-    .echart-box{
-      padding: 14px;
     }
 }
 .dashboard-icon {
-    font-size: 20px;
-    color: rgb(85, 160, 248);
-    width: 30px;
-    height: 30px;
-    margin-right: 10px;
-    @include flex-center;
-}
-.flex-center {
-    @include flex-center;
+  @apply flex items-center text-xl mr-2 text-blue-400;
 }
 
-//小屏幕不显示右侧，将登录框居中
-@media (max-width: 750px) {
-    .gva-card {
-        padding: 20px 10px !important;
-        .gva-top-card {
-            height: auto;
-            &-left {
-                &-title {
-                    font-size: 20px !important;
-                }
-                &-rows {
-                    margin-top: 15px;
-                    align-items: center;
-                }
-            }
-            &-right {
-                display: none;
-            }
-        }
-        .gva-middle-card {
-            &-item {
-                line-height: 20px;
-            }
-        }
-        .dashboard-icon {
-            font-size: 18px;
-        }
-    }
-}
 </style>

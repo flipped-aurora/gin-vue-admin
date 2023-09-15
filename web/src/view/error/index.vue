@@ -1,51 +1,35 @@
 <template>
   <div>
-    <div class="big">
-      <div class="inner">
+    <div class="w-full h-screen bg-gray-50 flex items-center justify-center">
+      <div class="flex flex-col items-center text-2xl gap-4">
         <img src="../../assets/notFound.png">
         <p>{{ t('error.message1') }}</p>
         <p style="font-size:18px;line-height:40px;">{{ t('error.message2') }}</p>
         <p>↓</p>
-        <img src="../../assets/qm.png" class="leftPic">
+        <img
+          src="../../assets/qm.png"
+          class="w-16 h-16 mt-20"
+        >
+        <el-button @click="toDashboard">返回首页</el-button>
       </div>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Error'
-
-}
-</script>
-
 <script setup>
+import { useUserStore } from '@/pinia/modules/user'
+import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
-</script>
 
-<style lang="scss">
-    .big{
-        width: 100%;
-        height: calc(100vh - 220px);
-        background-color: rgb(244,244,244);
-        position: relative;
-    }
-    .inner{
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .inner p {
-        text-align: center;
-        font-size: 24px;
-    }
-    .inner .leftPic{
-        width: 60px;
-        height: 60px;
-        margin-left: 44%;
-        margin-top: 20px;
-    }
-</style>
+defineOptions({
+  name: 'Error'
+})
+
+const userStore = useUserStore()
+const router = useRouter()
+const toDashboard = () => {
+  router.push({ name: userStore.userInfo.authority.defaultRouter })
+}
+</script>

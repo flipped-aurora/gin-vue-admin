@@ -4,9 +4,16 @@
       {{ t ("view.dashboard.dashboardTable.changeLog") }}
     </div>
     <div class="log">
-      <div v-for="(item,key) in dataTimeline" :key="key" class="log-item">
+      <div
+        v-for="(item,key) in dataTimeline"
+        :key="key"
+        class="log-item"
+      >
         <div class="flex-1 flex key-box">
-          <span class="key" :class="key<3&&'top'">{{ key+1 }}</span>
+          <span
+            class="key"
+            :class="key<3&&'top'"
+          >{{ key+1 }}</span>
         </div>
         <div class="flex-5 flex message">{{ item.message }}</div>
         <div class="flex-3 flex form">{{ item.from }}</div>
@@ -15,11 +22,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'DashboardTable',
-}
-</script>
 <script setup>
 import { Commits } from '@/api/github'
 import { formatTimeToStr } from '@/utils/date.js'
@@ -27,6 +29,10 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'DashboardTable',
+})
 
 const loading = ref(true)
 const dataTimeline = ref([])

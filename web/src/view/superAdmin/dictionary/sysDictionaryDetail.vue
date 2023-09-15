@@ -1,28 +1,64 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo">
+      <el-form
+        :inline="true"
+        :model="searchInfo"
+      >
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.displayValue')">
-          <el-input v-model="searchInfo.label" :placeholder="t('general.searchCriteria')" />
+          <el-input
+            v-model="searchInfo.label"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
         <el-form-item :label="t('view.dictionary.sysDictionaryDetail.dictValue')">
-          <el-input v-model="searchInfo.value" :placeholder="t('general.searchCriteria')" min="-2147483648" max="2147483647" />
+          <el-input-number
+            v-model="searchInfo.value"
+            :placeholder="t('general.searchCriteria')"
+            min="-2147483648"
+            max="2147483647"
+          />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status">
-          <el-select v-model="searchInfo.status" :placeholder="t('general.pleaseSelect')">
-            <el-option key="true" :label="t('general.yes')" value="true" />
-            <el-option key="false" :label="t('general.no')" value="false" />
+        <el-form-item
+          :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')"
+          prop="status"
+        >
+          <el-select
+            v-model="searchInfo.status"
+            :placeholder="t('general.pleaseSelect')"
+          >
+            <el-option
+              key="true"
+              :label="t('general.yes')"
+              value="true"
+            />
+            <el-option
+              key="false"
+              :label="t('general.no')"
+              value="false"
+            />
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
-          <el-button icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
+          <el-button
+            type="primary"
+            icon="search"
+            @click="onSubmit"
+          >{{ t('general.search') }}</el-button>
+          <el-button
+            icon="refresh"
+            @click="onReset"
+          >{{ t('general.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDialog">{{ t('view.dictionary.sysDictionaryDetail.addDictEntry') }}</el-button>
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="openDialog"
+        >{{ t('view.dictionary.sysDictionaryDetail.addDictEntry') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -31,32 +67,90 @@
         tooltip-effect="dark"
         row-key="ID"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column align="left" :label="t('general.createdAt')" width="180">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" :label="t('view.dictionary.sysDictionaryDetail.displayValue')" prop="label" width="120" />
+        <el-table-column
+          align="left"
+          :label="t('view.dictionary.sysDictionaryDetail.displayValue')"
+          prop="label"
+          width="120"
+        />
 
-        <el-table-column align="left" :label="t('view.dictionary.sysDictionaryDetail.dictValue')" prop="value" width="140" />
+        <el-table-column
+          align="left"
+          :label="t('view.dictionary.sysDictionaryDetail.dictValue')"
+          prop="value"
+          width="120"
+        />
 
-        <el-table-column align="left" :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status" width="120">
+        <el-table-column
+          align="left"
+          :label="t('view.dictionary.sysDictionaryDetail.extendedValue')"
+          prop="extend"
+          width="120"
+        />
+
+        <el-table-column
+          align="left"
+          :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')"
+          prop="status"
+          width="120"
+        >
           <template #default="scope">{{ formatBoolean(scope.row.status) }}</template>
         </el-table-column>
 
-        <el-table-column align="left" :label="t('general.order')" prop="sort" width="120" />
+        <el-table-column
+          align="left"
+          :label="t('general.order')"
+          prop="sort"
+          width="120"
+        />
 
-        <el-table-column align="left" :label="t('general.operations')">
+        <el-table-column
+          align="left"
+          :label="t('general.operations')"
+        >
           <template #default="scope">
-            <el-button type="primary" link icon="edit" @click="updateSysDictionaryDetailFunc(scope.row)">{{ t('general.change') }}</el-button>
-            <el-popover v-model="scope.row.visible" placement="top" width="160">
+            <el-button
+              type="primary"
+              link
+              icon="edit"
+              @click="updateSysDictionaryDetailFunc(scope.row)"
+            >{{ t('general.change') }}</el-button>
+            <el-popover
+              v-model="scope.row.visible"
+              placement="top"
+              width="160"
+            >
               <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" @click="deleteSysDictionaryDetailFunc(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  @click="scope.row.visible = false"
+                >{{ t('general.cancel') }}</el-button>
+                <el-button
+                  type="primary"
+                  @click="deleteSysDictionaryDetailFunc(scope.row)"
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  icon="delete"
+                  @click="scope.row.visible = true"
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -76,9 +170,21 @@
       </div>
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?t('view.dictionary.sysDictionaryDetail.addDictionaryItem'):t('view.dictionary.sysDictionaryDetail.editDictionaryItem')">
-      <el-form ref="dialogForm" :model="formData" :rules="rules" label-width="110px">
-        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.displayValue')" prop="label">
+    <el-dialog
+      v-model="dialogFormVisible"
+      :before-close="closeDialog"
+      :title="type==='create'?t('view.dictionary.sysDictionaryDetail.addDictionaryItem'):t('view.dictionary.sysDictionaryDetail.editDictionaryItem')"
+    >
+      <el-form
+        ref="dialogForm"
+        :model="formData"
+        :rules="rules"
+        label-width="110px"
+      >
+        <el-form-item
+          :label="t('view.dictionary.sysDictionaryDetail.displayValue')"
+          prop="label"
+        >
           <el-input
             v-model="formData.label"
             :placeholder="t('view.dictionary.sysDictionaryDetail.enterDisplayValue')"
@@ -86,7 +192,10 @@
             :style="{width: '100%'}"
           />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.dictValue')" prop="value">
+        <el-form-item
+          :label="t('view.dictionary.sysDictionaryDetail.dictValue')"
+          prop="value"
+        >
           <el-input-number
             v-model.number="formData.value"
             step-strictly
@@ -98,28 +207,50 @@
             max="2147483647"
           />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')" prop="status" required>
-          <el-switch v-model="formData.status" :active-text="t('general.enable')" :inactive-text="t('general.disable')" />
+        <el-form-item
+          :label="t('view.dictionary.sysDictionaryDetail.extendedValue')"
+          prop="extend"
+        >
+          <el-input
+            v-model="formData.extend"
+            :placeholder="t('view.dictionary.sysDictionaryDetail.enterExtendedValue')"
+            clearable
+            :style="{width: '100%'}"
+          />
         </el-form-item>
-        <el-form-item :label="t('general.order')" prop="sort">
-          <el-input-number v-model.number="formData.sort" :placeholder="t('view.dictionary.sysDictionaryDetail.enabledStatus')" />
+        <el-form-item
+          :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')"
+          prop="status"
+          required
+        >
+          <el-switch
+            v-model="formData.status"
+            :active-text="t('general.enable')"
+            :inactive-text="t('general.disable')"
+          />
+        </el-form-item>
+        <el-form-item
+          :label="t('general.order')"
+          prop="sort"
+        >
+          <el-input-number
+            v-model.number="formData.sort"
+            :placeholder="t('view.dictionary.sysDictionaryDetail.enabledStatus')"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'SysDictionaryDetail'
-}
-</script>
 
 <script setup>
 import {
@@ -138,6 +269,10 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 const route = useRoute()
+
+defineOptions({
+  name: 'SysDictionaryDetail'
+})
 
 onBeforeRouteUpdate((to) => {
   if (to.name === 'dictionaryDetail') {

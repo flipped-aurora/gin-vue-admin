@@ -1,18 +1,35 @@
 <template>
   <div>
     <div class="gva-search-box">
-      <el-form ref="searchForm" :inline="true" :model="searchInfo">
+      <el-form
+        ref="searchForm"
+        :inline="true"
+        :model="searchInfo"
+      >
         <el-form-item :label="t('view.api.path')">
-          <el-input v-model="searchInfo.path" :placeholder="t('view.api.path')" />
+          <el-input
+            v-model="searchInfo.path"
+            :placeholder="t('view.api.path')"
+          />
         </el-form-item>
         <el-form-item :label="t('general.description')">
-          <el-input v-model="searchInfo.description" :placeholder="t('general.description')" />
+          <el-input
+            v-model="searchInfo.description"
+            :placeholder="t('general.description')"
+          />
         </el-form-item>
         <el-form-item :label="t('view.api.apiGroup')">
-          <el-input v-model="searchInfo.apiGroup" :placeholder="t('view.api.apiGroup')" />
+          <el-input
+            v-model="searchInfo.apiGroup"
+            :placeholder="t('view.api.apiGroup')"
+          />
         </el-form-item>
         <el-form-item :label="t('general.request')">
-          <el-select v-model="searchInfo.method" clearable :placeholder="t('general.pleaseSelect')">
+          <el-select
+            v-model="searchInfo.method"
+            clearable
+            :placeholder="t('general.pleaseSelect')"
+          >
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -22,45 +39,123 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">{{ t('general.search') }}</el-button>
-          <el-button icon="refresh" @click="onReset">{{ t('general.reset') }}</el-button>
+          <el-button
+            type="primary"
+            icon="search"
+            @click="onSubmit"
+          >{{ t('general.search') }}</el-button>
+          <el-button
+            icon="refresh"
+            @click="onReset"
+          >{{ t('general.reset') }}</el-button>
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDialog('addApi')">{{ t('general.add') }}</el-button>
-        <el-popover v-model="deleteVisible" placement="top" width="160">
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="openDialog('addApi')"
+        >{{ t('general.add') }}</el-button>
+        <el-icon
+          class="cursor-pointer"
+          @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=7&vd_source=f2640257c21e3b547a790461ed94875e')"
+        ><VideoCameraFilled /></el-icon>
+        <el-popover
+          v-model="deleteVisible"
+          placement="top"
+          width="160"
+        >
           <p>{{ t('general.deleteConfirm') }}</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button type="primary" link @click="deleteVisible = false">{{ t('general.cancel') }}</el-button>
-            <el-button type="primary" @click="onDelete">{{ t('general.confirm') }}</el-button>
+            <el-button
+              type="primary"
+              link
+              @click="deleteVisible = false"
+            >{{ t('general.cancel') }}</el-button>
+            <el-button
+              type="primary"
+              @click="onDelete"
+            >{{ t('general.confirm') }}</el-button>
           </div>
           <template #reference>
-            <el-button icon="delete" :disabled="!apis.length" style="margin-left: 10px;" @click="deleteVisible = true">{{ t('general.delete') }}</el-button>
+            <el-button
+              icon="delete"
+              :disabled="!apis.length"
+              @click="deleteVisible = true"
+            >{{ t('general.delete') }}</el-button>
           </template>
         </el-popover>
-        <el-popover v-model="freshVisible" placement="top" width="160">
+        <el-popover
+          v-model="freshVisible"
+          placement="top"
+          width="160"
+        >
           <p>确定要刷新Casbin缓存吗？</p>
           <div style="text-align: right; margin-top: 8px;">
-            <el-button type="primary" link @click="freshVisible = false">取消</el-button>
-            <el-button type="primary" @click="onFresh">确定</el-button>
+            <el-button
+              type="primary"
+              link
+              @click="freshVisible = false"
+            >取消</el-button>
+            <el-button
+              type="primary"
+              @click="onFresh"
+            >确定</el-button>
           </div>
           <template #reference>
-            <el-button icon="Refresh" style="margin-left: 10px;" @click="freshVisible = true">刷新缓存</el-button>
+            <el-button
+              icon="Refresh"
+              @click="freshVisible = true"
+            >刷新缓存</el-button>
           </template>
         </el-popover>
       </div>
-      <el-table :data="tableData" @sort-change="sortChange" @selection-change="handleSelectionChange">
+      <el-table
+        :data="tableData"
+        @sort-change="sortChange"
+        @selection-change="handleSelectionChange"
+      >
         <el-table-column
           type="selection"
           width="55"
         />
-        <el-table-column align="left" label="ID" min-width="60" prop="ID" sortable="custom" />
-        <el-table-column align="left" :label="t('view.api.apiPath')" min-width="150" prop="path" sortable="custom" />
-        <el-table-column align="left" :label="t('view.api.apiGrouping')" min-width="150" prop="apiGroup" sortable="custom" />
-        <el-table-column align="left" :label="t('view.api.apiDescrpition')" min-width="150" prop="description" sortable="custom" />
-        <el-table-column align="left" :label="t('general.request')" min-width="150" prop="method" sortable="custom">
+        <el-table-column
+          align="left"
+          label="id"
+          min-width="60"
+          prop="ID"
+          sortable="custom"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.api.apiPath')"
+          min-width="150"
+          prop="path"
+          sortable="custom"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.api.apiGrouping')"
+          min-width="150"
+          prop="apiGroup"
+          sortable="custom"
+        />
+        <el-table-column
+          align="left"
+          :label="t('view.api.apiDescrpition')"
+          min-width="150"
+          prop="description"
+          sortable="custom"
+        />
+        <el-table-column
+          align="left"
+          :label="t('general.request')"
+          min-width="150"
+          prop="method"
+          sortable="custom"
+        >
           <template #default="scope">
             <div>
               {{ scope.row.method }} / {{ methodFilter(scope.row.method) }}
@@ -68,7 +163,12 @@
           </template>
         </el-table-column>
 
-        <el-table-column align="left" fixed="right" :label="t('general.operations')" width="200">
+        <el-table-column
+          align="left"
+          fixed="right"
+          :label="t('general.operations')"
+          width="200"
+        >
           <template #default="scope">
             <el-button
               icon="edit"
@@ -101,14 +201,36 @@
 
     </div>
 
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="dialogTitle">
+    <el-dialog
+      v-model="dialogFormVisible"
+      :before-close="closeDialog"
+      :title="dialogTitle"
+    >
       <warning-bar :title="t('view.api.newApiNote')" />
-      <el-form ref="apiForm" :model="form" :rules="rules" label-width="120px">
-        <el-form-item :label="t('view.api.path')" prop="path">
-          <el-input v-model="form.path" autocomplete="off" />
+      <el-form
+        ref="apiForm"
+        :model="form"
+        :rules="rules"
+        label-width="80px"
+      >
+        <el-form-item
+        :label="t('view.api.path')"
+          prop="path"
+        >
+          <el-input
+            v-model="form.path"
+            autocomplete="off"
+          />
         </el-form-item>
-        <el-form-item :label="t('general.request')" prop="method">
-          <el-select v-model="form.method" :placeholder="t('general.pleaseSelect')" style="width:100%">
+        <el-form-item
+          :label="t('general.request')"
+          prop="method"
+        >
+          <el-select
+            v-model="form.method"
+            :placeholder="t('general.pleaseSelect')"
+            style="width:100%"
+          >
             <el-option
               v-for="item in methodOptions"
               :key="item.value"
@@ -117,28 +239,37 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item :label="t('view.api.apiGrouping')" prop="apiGroup">
-          <el-input v-model="form.apiGroup" autocomplete="off" />
+        <el-form-item
+        :label="t('view.api.apiGrouping')"
+          prop="apiGroup"
+        >
+          <el-input
+            v-model="form.apiGroup"
+            autocomplete="off"
+          />
         </el-form-item>
-        <el-form-item :label="t('view.api.apiDescrpition')" prop="description">
-          <el-input v-model="form.description" autocomplete="off" />
+        <el-form-item
+        :label="t('view.api.apiDescrpition')"
+          prop="description"
+        >
+          <el-input
+            v-model="form.description"
+            autocomplete="off"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Api',
-}
-</script>
 
 <script setup>
 import {
@@ -154,9 +285,15 @@ import { toSQLLine } from '@/utils/stringFun'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { VideoCameraFilled } from '@element-plus/icons-vue'
+import { toDoc } from '@/utils/doc'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Api',
+})
 
 const methodFilter = (value) => {
   const target = methodOptions.value.filter(item => item.value === value)[0]
@@ -404,12 +541,6 @@ const deleteApiFunc = async(row) => {
 </script>
 
 <style scoped lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
 .warning {
   color: #dc143c;
 }

@@ -1,9 +1,15 @@
 <template>
   <div>
-    <warning-bar href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3" />
+    <warning-bar
+      href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+    />
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
-      <el-collapse v-model="activeNames" style="margin-bottom:12px">
+      <el-collapse
+        v-model="activeNames"
+        style="margin-bottom:12px"
+      >
         <el-collapse-item name="1">
           <template #title>
             <div :style="{fontSize:'16px',paddingLeft:'20px'}">
@@ -13,14 +19,33 @@
               </el-icon>
             </div>
           </template>
-          <el-form ref="getTableForm" style="margin-top:24px" :inline="true" :model="dbform" label-width="120px">
-            <el-form-item label="业务库" prop="selectDBtype">
+          <el-form
+            ref="getTableForm"
+            style="margin-top:24px"
+            :inline="true"
+            :model="dbform"
+            label-width="120px"
+          >
+            <el-form-item
+              label="业务库"
+              prop="selectDBtype"
+            >
               <template #label>
-                <el-tooltip content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）" placement="bottom" effect="light">
+                <el-tooltip
+                  content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）"
+                  placement="bottom"
+                  effect="light"
+                >
                   <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
-              <el-select v-model="dbform.businessDB" clearable style="width:194px" placeholder="选择业务库" @change="getDbFunc">
+              <el-select
+                v-model="dbform.businessDB"
+                clearable
+                style="width:194px"
+                placeholder="选择业务库"
+                @change="getDbFunc"
+              >
                 <el-option
                   v-for="item in dbList"
                   :key="item.aliasName"
@@ -35,8 +60,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item :label="t('autoCode.dbName')" prop="structName">
-              <el-select v-model="dbform.dbName" clearable filterable :placeholder="t('autoCode.selectDB')" @change="getTableFunc">
+            <el-form-item
+            :label="t('autoCode.dbName')"
+              prop="structName"
+            >
+              <el-select
+                v-model="dbform.dbName"
+                clearable
+                filterable
+                :placeholder="t('autoCode.selectDB')"
+                @change="getTableFunc"
+              >
                 <el-option
                   v-for="item in dbOptions"
                   :key="item.database"
@@ -45,7 +79,10 @@
                 />
               </el-select>
             </el-form-item>
-            <el-form-item :label="t('autoCode.tableName')" prop="structName">
+            <el-form-item
+            :label="t('autoCode.tableName')"
+              prop="structName"
+            >
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
@@ -61,7 +98,10 @@
               </el-select>
             </el-form-item>
             <el-form-item>
-              <el-button type="primary" @click="getColumnFunc">{{ t('autoCode.createUsingTable') }}</el-button>
+              <el-button
+                type="primary"
+                @click="getColumnFunc"
+              >{{ t('autoCode.createUsingTable') }}</el-button>
             </el-form-item>
           </el-form>
         </el-collapse-item>
@@ -69,32 +109,93 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <el-form ref="autoCodeForm" :rules="rules" :model="form" label-width="120px" :inline="true">
-        <el-form-item :label="t('autoCode.structName')" prop="structName">
-          <el-input v-model="form.structName" :placeholder="t('autoCode.structNameNote')" />
+      <el-form
+        ref="autoCodeForm"
+        :rules="rules"
+        :model="form"
+        label-width="120px"
+        :inline="true"
+      >
+        <el-form-item
+        :label="t('autoCode.structName')"
+          prop="structName"
+        >
+          <el-input
+            v-model="form.structName"
+            :placeholder="t('autoCode.structNameNote')"
+          />
         </el-form-item>
-        <el-form-item :label="t('autoCode.tableName')" prop="tableName">
-          <el-input v-model="form.tableName" :placeholder="t('autoCode.tableNameNote')" />
+        <el-form-item
+        :label="t('autoCode.tableName')"
+          prop="tableName"
+        >
+          <el-input
+            v-model="form.tableName"
+            :placeholder="t('autoCode.tableNameNote')"
+          />
         </el-form-item>
-        <el-form-item :label="t('autoCode.structAbbreviation')" prop="abbreviation">
-          <el-input v-model="form.abbreviation" :placeholder="t('autoCode.structAbbreviationNote')" />
+        <el-form-item
+        :label="t('autoCode.structAbbreviation')"
+          prop="abbreviation"
+        >
+          <el-input
+            v-model="form.abbreviation"
+            :placeholder="t('autoCode.structAbbreviationNote')"
+          />
         </el-form-item>
-        <el-form-item :label="t('autoCode.structChineseName')" prop="description">
-          <el-input v-model="form.description" :placeholder="t('autoCode.structChineseNameNote')" />
+        <el-form-item
+        :label="t('autoCode.structChineseName')"
+          prop="description"
+        >
+          <el-input
+            v-model="form.description"
+            :placeholder="t('autoCode.structChineseNameNote')"
+          />
         </el-form-item>
-        <el-form-item :label="t('autoCode.fileName')" prop="packageName">
-          <el-input v-model="form.packageName" :placeholder="t('autoCode.fileNameNote')" @blur="toLowerCaseFunc(form,'packageName')" />
+        <el-form-item
+        :label="t('autoCode.fileName')"
+          prop="packageName"
+        >
+          <el-input
+            v-model="form.packageName"
+            :placeholder="t('autoCode.fileNameNote')"
+            @blur="toLowerCaseFunc(form,'packageName')"
+          />
         </el-form-item>
-        <el-form-item label="Package（包）" prop="package">
-          <el-select v-model="form.package" style="width:194px">
-            <el-option v-for="item in pkgs" :key="item.ID" :value="item.packageName" :label="item.packageName" />
+        <el-form-item
+          label="Package（包）"
+          prop="package"
+        >
+          <el-select
+            v-model="form.package"
+            style="width:194px"
+          >
+            <el-option
+              v-for="item in pkgs"
+              :key="item.ID"
+              :value="item.packageName"
+              :label="item.packageName"
+            />
           </el-select>
-          <el-icon class="auto-icon" @click="getPkgs"><refresh /></el-icon>
-          <el-icon class="auto-icon" @click="goPkgs"><document-add /></el-icon>
+          <el-icon
+            class="cursor-pointer ml-2 text-gray-600"
+            @click="getPkgs"
+          ><refresh /></el-icon>
+          <el-icon
+            class="cursor-pointer ml-2 text-gray-600"
+            @click="goPkgs"
+          ><document-add /></el-icon>
         </el-form-item>
-        <el-form-item label="业务库" prop="businessDB">
+        <el-form-item
+          label="业务库"
+          prop="businessDB"
+        >
           <template #label>
-            <el-tooltip content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))" placement="bottom" effect="light">
+            <el-tooltip
+              content="注：需要提前到db-list自行配置多数据库，此项为空则会使用gva本库创建自动化代码(global.GVA_DB),填写后则会创建指定库的代码(global.MustGetGlobalDBByDBName(dbname))"
+              placement="bottom"
+              effect="light"
+            >
               <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
             </el-tooltip>
           </template>
@@ -119,7 +220,11 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制" placement="bottom" effect="light">
+            <el-tooltip
+              content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
+              placement="bottom"
+              effect="light"
+            >
               <div> 创建资源标识 <el-icon><QuestionFilled /></el-icon> </div>
             </el-tooltip>
           </template>
@@ -127,7 +232,11 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip :content="t('autoCode.autoAPIDBTip')" placement="bottom" effect="light">
+            <el-tooltip
+            :content="t('autoCode.autoAPIDBTip')"
+              placement="bottom"
+              effect="light"
+            >
               <div> {{ t('autoCode.autoAPIDBCreate') }} </div>
             </el-tooltip>
           </template>
@@ -135,7 +244,11 @@
         </el-form-item>
         <el-form-item>
           <template #label>
-            <el-tooltip :content="t('autoCode.autoMoveFilesTip')" placement="bottom" effect="light">
+            <el-tooltip
+            :content="t('autoCode.autoMoveFilesTip')"
+              placement="bottom"
+              effect="light"
+            >
               <div> {{ t('autoCode.autoMoveFiles') }} </div>
             </el-tooltip>
           </template>
@@ -146,32 +259,68 @@
     <!-- 组件列表 -->
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" @click="editAndAddField()">{{ t('autoCode.addField') }}</el-button>
+        <el-button
+          type="primary"
+          @click="editAndAddField()"
+        >{{ t('autoCode.addField') }}</el-button>
       </div>
       <el-table :data="form.fields">
-        <el-table-column align="left" type="index" :label="t('autoCode.fieldIndex')" width="60" />
-        <el-table-column align="left" prop="fieldName" :label="t('autoCode.fieldName')" width="160">
+        <el-table-column
+          align="left"
+          type="index"
+          :label="t('autoCode.fieldIndex')"
+          width="60"
+        />
+        <el-table-column
+          align="left"
+          prop="fieldName"
+          :label="t('autoCode.fieldName')"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.fieldName" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldDesc" :label="t('autoCode.fieldDesc')" width="160">
+        <el-table-column
+          align="left"
+          prop="fieldDesc"
+          :label="t('autoCode.fieldDesc')"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.fieldDesc" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="require" label="必填">
+        <el-table-column
+          align="left"
+          prop="require"
+          label="必填"
+        >
           <template #default="{row}"> <el-checkbox v-model="row.require" /></template>
         </el-table-column>
-        <el-table-column align="left" prop="sort" label="排序">
+        <el-table-column
+          align="left"
+          prop="sort"
+          label="排序"
+        >
           <template #default="{row}"> <el-checkbox v-model="row.sort" /> </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldJson" width="160px" label="字段Json">
+        <el-table-column
+          align="left"
+          prop="fieldJson"
+          width="160px"
+          label="字段Json"
+        >
           <template #default="{row}">
             <el-input v-model="row.fieldJson" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldType" :label="t('autoCode.fieldDataType')" width="160">
+        <el-table-column
+          align="left"
+          prop="fieldType"
+          :label="t('autoCode.fieldDataType')"
+          width="160"
+        >
           <template #default="{row}">
             <el-select
               v-model="row.fieldType"
@@ -188,22 +337,42 @@
             </el-select>
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="dataTypeLong" :label="t('autoCode.fieldLen')" width="160">
+        <el-table-column
+          align="left"
+          prop="dataTypeLong"
+          :label="t('autoCode.fieldLen')"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.dataTypeLong" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="columnName" :label="t('autoCode.columnName')" width="160">
+        <el-table-column
+          align="left"
+          prop="columnName"
+          :label="t('autoCode.columnName')"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.columnName" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="comment" :label="t('autoCode.comment')" width="160">
+        <el-table-column
+          align="left"
+          prop="comment"
+          :label="t('autoCode.comment')"
+          width="160"
+        >
           <template #default="{row}">
             <el-input v-model="row.columnName" />
           </template>
         </el-table-column>
-        <el-table-column align="left" prop="fieldSearchType" :label="t('general.searchCriteria')" width="130">
+        <el-table-column
+          align="left"
+          prop="fieldSearchType"
+          :label="t('general.searchCriteria')"
+          width="130"
+        >
           <template #default="{row}">
             <el-select
               v-model="row.fieldSearchType"
@@ -224,7 +393,12 @@
           </template>
 
         </el-table-column>
-        <el-table-column align="left" :lable="t('general.operations')" width="300" fixed="right">
+        <el-table-column
+          align="left"
+          :lable="t('general.operations')"
+          width="300"
+          fixed="right"
+        >
           <template #default="scope">
             <el-button
 
@@ -247,48 +421,98 @@
               :disabled="(scope.$index + 1) === form.fields.length"
               @click="moveDownField(scope.$index)"
             >{{ t('autoCode.moveDown') }}</el-button>
-            <el-popover v-model="scope.row.visible" placement="top">
+            <el-popover
+              v-model="scope.row.visible"
+              placement="top"
+            >
               <p>{{ t('autoCode.confirmDelete') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" @click="deleteField(scope.$index)">{{ t('general.confirm') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  @click="scope.row.visible = false"
+                >{{ t('general.cancel') }}</el-button>
+                <el-button
+                  type="primary"
+                  @click="deleteField(scope.$index)"
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  icon="delete"
+                  @click="scope.row.visible = true"
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
         </el-table-column>
       </el-table>
       <!-- 组件列表 -->
-      <div class="gva-btn-list justify-content-flex-end auto-btn-list">
-        <el-button type="primary" @click="enterForm(true)">{{ t('autoCode.codePreview') }}</el-button>
-        <el-button type="primary" @click="enterForm(false)">{{ t('autoCode.generateCode') }}</el-button>
+      <div class="gva-btn-list justify-end mt-4">
+        <el-button
+          type="primary"
+          @click="enterForm(true)"
+        >{{ t('autoCode.codePreview') }}</el-button>
+        <el-button
+          type="primary"
+          @click="enterForm(false)"
+        >{{ t('autoCode.generateCode') }}</el-button>
       </div>
     </div>
     <!-- 组件弹窗 -->
-    <el-dialog v-model="dialogFlag" width="70%" :title="t('autoCode.componentContent')">
-      <FieldDialog v-if="dialogFlag" ref="fieldDialogNode" :dialog-middle="dialogMiddle" :typeOptions="typeOptions" :typeSearchOptions="typeSearchOptions" />
+    <el-dialog
+      v-model="dialogFlag"
+      width="70%"
+      :title="t('autoCode.componentContent')"
+    >
+      <FieldDialog
+        v-if="dialogFlag"
+        ref="fieldDialogNode"
+        :dialog-middle="dialogMiddle"
+        :type-options="typeOptions"
+        :type-search-options="typeSearchOptions"
+      />
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
 
     <el-dialog v-model="previewFlag">
       <template #header>
-        <div class="previewCodeTool">
+        <div class="flex items-center py-1.5">
           <p>操作栏：</p>
-          <el-button type="primary" @click="selectText">{{ t('general.selectAll') }}</el-button>
-          <el-button type="primary" @click="copy">{{ t('autoCode.copy') }}</el-button>
+          <el-button
+            type="primary"
+            @click="selectText"
+          >{{ t('general.selectAll') }}</el-button>
+          <el-button
+            type="primary"
+            @click="copy"
+          >{{ t('autoCode.copy') }}</el-button>
         </div>
       </template>
-      <PreviewCodeDialog v-if="previewFlag" ref="preview" :preview-code="preViewCode" />
+      <PreviewCodeDialog
+        v-if="previewFlag"
+        ref="previewNode"
+        :preview-code="preViewCode"
+      />
       <template #footer>
-        <div class="dialog-footer" style="padding-top:14px;padding-right:14px">
-          <el-button type="primary" @click="previewFlag = false">{{ t('general.confirm') }}</el-button>
+        <div
+          class="dialog-footer"
+          style="padding-top:14px;padding-right:14px"
+        >
+          <el-button
+            type="primary"
+            @click="previewFlag = false"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -316,10 +540,18 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
+defineOptions({
+  name: 'AutoCode'
+})
+
 const typeOptions = ref([
   {
     label: '字符串',
     value: 'string'
+  },
+  {
+    label: '富文本',
+    value: 'richtext'
   },
   {
     label: '整型',
@@ -346,12 +578,12 @@ const typeOptions = ref([
     value: 'picture',
   },
   {
-    label: '文件（json字符串）',
-    value: 'file',
-  },
-  {
     label: '多图片（json字符串）',
     value: 'pictures',
+  },
+  {
+    label: '文件（json字符串）',
+    value: 'file',
   }
 ])
 
@@ -727,27 +959,3 @@ watch(() => route.params.id, () => {
 })
 
 </script>
-
-<style scoped lang="scss">
-  .previewCodeTool {
-    display: flex;
-    align-items: center;
-    padding: 5px 0;
-  }
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    margin-right: 20px;
-    float: right;
-  }
-}
-.auto-btn-list{
-  margin-top: 16px;
-}
-.auto-icon{
-  margin-left: 6px;
-  color: #666;
-  cursor: pointer;
-}
-
-</style>

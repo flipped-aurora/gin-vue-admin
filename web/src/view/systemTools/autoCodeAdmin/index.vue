@@ -2,12 +2,28 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="goAutoCode(null)">{{ t("general.add") }}</el-button>
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="goAutoCode(null)"
+        >{{ t("general.add") }}</el-button>
       </div>
       <el-table :data="tableData">
-        <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="id" width="60" prop="ID" />
-        <el-table-column align="left" :label="t('general.createdAt')" width="180">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          align="left"
+          label="id"
+          width="60"
+          prop="ID"
+        />
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column
@@ -53,13 +69,35 @@
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column align="left" :lable="t('general.operations')" min-width="240">
+        <el-table-column
+          align="left"
+          :lable="t('general.operations')"
+          min-width="240"
+        >
           <template #default="scope">
             <div>
-              <el-button type="primary" link :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,true)">{{ t("autoCodeAdmin.rollBackDeleteTable") }}</el-button>
-              <el-button type="primary" link :disabled="scope.row.flag === 1" @click="rollbackFunc(scope.row,false)">{{ t("autoCodeAdmin.rollBackWithoutDeleteTable") }}</el-button>
-              <el-button type="primary" link @click="goAutoCode(scope.row)">{{ t("autoCodeAdmin.reuse") }}</el-button>
-              <el-button type="primary" link @click="deleteRow(scope.row)">{{ t("general.delete") }}</el-button>
+              <el-button
+                type="primary"
+                link
+                :disabled="scope.row.flag === 1"
+                @click="rollbackFunc(scope.row,true)"
+              >{{ t("autoCodeAdmin.rollBackDeleteTable") }}</el-button>
+              <el-button
+                type="primary"
+                link
+                :disabled="scope.row.flag === 1"
+                @click="rollbackFunc(scope.row,false)"
+              >{{ t("autoCodeAdmin.rollBackWithoutDeleteTable") }}</el-button>
+              <el-button
+                type="primary"
+                link
+                @click="goAutoCode(scope.row)"
+              >{{ t("autoCodeAdmin.reuse") }}</el-button>
+              <el-button
+                type="primary"
+                link
+                @click="deleteRow(scope.row)"
+              >{{ t("general.delete") }}</el-button>
             </div>
           </template>
         </el-table-column>
@@ -79,13 +117,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  watch: {},
-  name: "AutoCodeAdmin",
-};
-</script>
-
 <script setup>
 import { getSysHistory, rollback, delSysHistory } from '@/api/autoCode.js'
 import { useRouter } from 'vue-router'
@@ -95,6 +126,10 @@ import { formatDate } from '@/utils/format'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'AutoCodeAdmin'
+})
 
 const router = useRouter()
 
@@ -192,18 +227,3 @@ const goAutoCode = (row) => {
   }
 }
 </script>
-
-<style scoped lang="scss">
-.button-box {
-  padding: 10px 20px;
-  .el-button {
-    float: right;
-  }
-}
-.el-tag--mini {
-  margin-left: 5px;
-}
-.warning {
-  color: #dc143c;
-}
-</style>

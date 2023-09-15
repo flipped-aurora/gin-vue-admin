@@ -18,16 +18,16 @@
   </component>
 </template>
 
-<script>
-export default {
-  name: 'AsideComponent',
-}
-</script>
 
 <script setup>
 import MenuItem from './menuItem.vue'
 import AsyncSubmenu from './asyncSubmenu.vue'
 import { computed } from 'vue'
+
+defineOptions({
+  name: 'AsideComponent',
+})
+
 const props = defineProps({
   routerInfo: {
     type: Object,

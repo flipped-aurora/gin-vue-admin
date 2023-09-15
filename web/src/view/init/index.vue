@@ -1,83 +1,183 @@
 <template>
-  <div class="init_page">
-    <div class="init_page_panel">
-      <div v-if="hello < 2" id="hello" :class="[hello < 1 ? 'slide-in-fwd-top' : 'slide-out-right']" class="hello">
-        <div>
-          <div class="hello_title">{{ $GIN_VUE_ADMIN.appName }}</div>
-          <p class="in-two a-fadeinT">{{ t('init.note') }}</p>
-          <p class="init_p">{{ t('init.note1') }}</p>
-          <p class="init_p">{{ t('init.note2') }}</p>
-          <p class="init_p">{{ t('init.note3') }}</p>
-          <p class="init_p">{{ t('init.note4') }}<span style="color: red">innoDB</span></p>
-          <p class="init_p">{{ t('init.note5') }}</p>
-          <p class="init_btn">
-            <el-button type="primary" @click="goDoc">
-              {{ t('init.readDocs') }}
+  <div class="rounded-lg  flex items-center justify-evenly w-full h-full relative bg-white md:w-screen md:h-screen md:bg-[#194bfb] overflow-hidden">
+    <div class="rounded-md w-full h-full flex items-center justify-center overflow-hidden">
+      <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-80" />
+      <div
+        v-if="!page.showForm"
+        :class="[page.showReadme ?'slide-out-right' :'slide-in-fwd-top' ]"
+      >
+        <div class=" text-lg">
+          <div class="font-sans text-4xl font-bold text-center mb-4">{{ $GIN_VUE_ADMIN.appName }}</div>
+          <p class="text-gray-600 mb-2">{{ t('init.note') }}</p>
+          <p class="text-gray-600 mb-2">{{ t('init.note1') }}</p>
+          <p class="text-gray-600 mb-2">{{ t('init.note2-1') }}<a
+            class="text-blue-600 font-bold"
+            href="https://www.gin-vue-admin.com"
+            target="_blank"
+          >{{ t('init.note2-2') }}</a> <a
+            class="text-blue-600 font-bold"
+            href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=2"
+            target="_blank"
+          >{{ t('init.note2-3') }}</a></p>
+          <p class="text-gray-600 mb-2">{{ t('init.note3') }}</p>
+          <p class="text-gray-600 mb-2">{{ t('init.note4') }}<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
+          <p class="text-gray-600 mb-2">{{ t('init.note5') }}</p>
+          <p class="flex items-center justify-between mt-8">
+            <el-button
+              type="primary"
+              size="large"
+              @click="goDoc"
+            >
+            {{ t('init.readDocs') }}
             </el-button>
-            <el-button type="primary" @click="showNext">
-              {{ t('init.confirm') }}
+            <el-button
+              type="primary"
+              size="large"
+              @click="showNext"
+            >
+            {{ t('init.confirm') }}
             </el-button>
           </p>
         </div>
       </div>
       <div
-        v-if="hello > 0 "
-        :class="[(hello > 0 && !out)? 'slide-in-left' : '' , out ? 'slide-out-right' : '']"
-        class="form"
+        v-if="page.showForm "
+        :class="[ page.showForm ? 'slide-in-left' : 'slide-out-right' ]"
+        class="w-96"
       >
-        <el-form ref="formRef" :model="form" label-width="130px">
+        <el-form
+          ref="formRef"
+          :model="form"
+          label-width="100px"
+          size="large"
+        >
           <!-- added by mohamed hassan to support multilangauge -->
           <el-form-item :label="t('init.language')">
-            <el-select v-model="form.language" :placeholder="t('general.pleaseSelect')" @change="changeLanguage">
-              <el-option key="en" label="English" value="en"><img src="@/assets/flags/en.svg" class="img">English</el-option>
-              <el-option key="zh" label="中文" value="zh"><img src="@/assets/flags/zh.svg" class="img">中文</el-option>
-              <el-option key="ar" label="العربية" value="ar"><img src="@/assets/flags/ar.svg" class="img">العربية</el-option>
+            <el-select v-model="form.language"
+:placeholder="t('general.pleaseSelect')" @change="changeLanguage"
+>
+              <el-option key="en"
+label="English" value="en"
+><img src="@/assets/flags/en.svg"
+class="img"
+>English</el-option>
+              <el-option key="zh"
+label="中文" value="zh"
+><img src="@/assets/flags/zh.svg"
+class="img"
+>中文</el-option>
+              <el-option key="ar"
+label="العربية" value="ar"
+><img src="@/assets/flags/ar.svg"
+class="img"
+>العربية</el-option>
             </el-select>
           </el-form-item>
           <!-- end of adding -->
           <el-form-item :label="t('init.dbType')">
-            <el-select v-model="form.dbType" :placeholder="t('general.pleaseSelect')" @change="changeDB">
-              <el-option key="mysql" label="mysql" value="mysql" />
-              <el-option key="pgsql" label="pgsql" value="pgsql" />
-              <el-option key="oracle" label="oracle" value="oracle" />
-              <el-option key="mssql" label="mssql" value="mssql" />
-              <el-option key="sqlite" label="sqlite" value="sqlite"/>
+            <el-select
+              v-model="form.dbType"
+              :placeholder="t('general.pleaseSelect')"
+              class="w-full"
+              @change="changeDB"
+            >
+              <el-option
+                key="mysql"
+                label="mysql"
+                value="mysql"
+              />
+              <el-option
+                key="pgsql"
+                label="pgsql"
+                value="pgsql"
+              />
+              <el-option
+                key="oracle"
+                label="oracle"
+                value="oracle"
+              />
+              <el-option
+                key="mssql"
+                label="mssql"
+                value="mssql"
+              />
+              <el-option
+                key="sqlite"
+                label="sqlite"
+                value="sqlite"
+              />
             </el-select>
           </el-form-item>
-          <el-form-item :label="t('init.dbHost')" v-if="form.dbType !== 'sqlite'">
-            <el-input v-model="form.host" :placeholder="t('init.enterDBHost')" />
+          <el-form-item
+            v-if="form.dbType !== 'sqlite'"
+            :label="t('init.dbHost')"
+          >
+            <el-input
+              v-model="form.host"
+              :placeholder="t('init.enterDBHost')"
+            />
           </el-form-item>
-          <el-form-item :label="t('init.dbPort')" v-if="form.dbType !== 'sqlite'">
-            <el-input v-model="form.port" :placeholder="t('init.enterDBPort')" />
+          <el-form-item
+            v-if="form.dbType !== 'sqlite'"
+            :label="t('init.dbPort')"
+          >
+            <el-input
+              v-model="form.port"
+              :placeholder="t('init.enterDBPort')"
+            />
           </el-form-item>
-          <el-form-item :label="t('init.dbUsername')" v-if="form.dbType !== 'sqlite'">
-            <el-input v-model="form.userName" :placeholder="t('init.enterDBUsername')" />
+          <el-form-item
+            v-if="form.dbType !== 'sqlite'"
+            :label="t('init.dbUsername')"
+          >
+            <el-input
+              v-model="form.userName"
+              :placeholder="t('init.enterDBUsername')"
+            />
           </el-form-item>
-          <el-form-item label="password" v-if="form.dbType !== 'sqlite'">
-            <el-input v-model="form.password" :placeholder="t('init.enterDBPassword')" />
+          <el-form-item
+            v-if="form.dbType !== 'sqlite'"
+            label="password"
+          >
+            <el-input
+              v-model="form.password"
+              :placeholder="t('init.enterDBPassword')"
+            />
           </el-form-item>
           <el-form-item :label="t('init.dbName')">
-            <el-input v-model="form.dbName" :placeholder="t('init.enterDBName')" />
+            <el-input
+              v-model="form.dbName"
+              :placeholder="t('init.enterDBName')"
+            />
           </el-form-item>
-          <el-form-item label="dbPath" v-if="form.dbType === 'sqlite'">
-            <el-input v-model="form.dbPath" placeholder="请输入sqlite数据库文件存放路径"></el-input>
+          <el-form-item
+            v-if="form.dbType === 'sqlite'"
+            label="dbPath"
+          >
+            <el-input
+              v-model="form.dbPath"
+              placeholder="请输入sqlite数据库文件存放路径"
+            />
           </el-form-item>
           <el-form-item>
             <div style="text-align: right">
-              <el-button type="primary" @click="onSubmit">{{ t('init.initNow') }}</el-button>
+              <el-button
+                type="primary"
+                @click="onSubmit"
+              >{{ t('init.initNow') }}</el-button>
             </div>
           </el-form-item>
         </el-form>
       </div>
     </div>
+
+    <div class="hidden md:block w-1/2 h-full float-right bg-[#194bfb]"><img
+      class="h-full"
+      src="@/assets/login_right_banner.jpg"
+      alt="banner"
+    ></div>
   </div>
 </template>
-
-<script>
-export default {
-  name: 'Init',
-}
-</script>
 
 <script setup>
 // @ts-ignore
@@ -91,11 +191,22 @@ const i18n = useI18n() // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
+defineOptions({
+  name: 'Init',
+})
+
 const router = useRouter()
 
-const hello = ref(0)
+const page = reactive({
+  showReadme: false,
+  showForm: false
+})
+
 const showNext = () => {
-  hello.value = hello.value + 1
+  page.showReadme = false
+  setTimeout(() => {
+    page.showForm = true
+  }, 20)
 }
 
 const goDoc = () => {
@@ -213,66 +324,11 @@ const changeLanguage = (val) => {
 </script>
 
 <style lang="scss" scoped>
+
 img {
   padding-right: 20px;
   width: 20px;
   height: 20px;
-}
-
-.init_page{
-  margin: 0;
-  padding: 0;
-  background-image: url('@/assets/login_background.jpg');
-  background-size: cover;
-  width: 100%;
-  height: 100%;
-  position: relative;
-  .init_page_panel {
-    position: absolute;
-    top: 3vh;
-    left: 2vw;
-    width: 96vw;
-    height: 94vh;
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    .hello {
-      position: absolute;
-      z-index: 2;
-      text-align: center;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      .hello_title {
-        font-size: 32px;
-        line-height: 98px;
-      }
-      .in-two {
-        font-size: 22px;
-      }
-      .init_p {
-        margin-top: 20px;
-        color: #777777;
-      }
-      .init_btn {
-        margin-top: 20px;
-      }
-    }
-    .form {
-      position: absolute;
-      z-index: 3;
-      margin-top: 60px;
-      width: 600px;
-      height: auto;
-      padding: 20px;
-      border-radius: 6px;
-    }
-  }
 }
 
 .slide-in-fwd-top {

@@ -1,10 +1,18 @@
 <template>
   <div>
-    <div class="clearfix sticky-button">
-      <el-input v-model="filterText" class="fitler" :placeholder="t('general.filter')" />
-      <el-button class="fl-right" type="primary" @click="relation">{{ t('general.confirm') }}</el-button>
+    <div class="sticky top-0.5 z-10 bg-white">
+      <el-input
+        v-model="filterText"
+        class="w-3/5"
+        :placeholder="t('general.filter')"
+      />
+      <el-button
+        class="float-right"
+        type="primary"
+        @click="relation"
+      >{{ t('general.confirm') }}</el-button>
     </div>
-    <div class="tree-content">
+    <div class="tree-content clear-both">
       <el-tree
         ref="menuTree"
         :data="menuTreeData"
@@ -46,21 +54,37 @@
         </template>
       </el-tree>
     </div>
-    <el-dialog v-model="btnVisible" :title="t('menus.assignButton')" destroy-on-close>
+    <el-dialog
+      v-model="btnVisible"
+      :title="t('menus.assignButton')"
+      destroy-on-close
+    >
       <el-table
         ref="btnTableRef"
         :data="btnData"
         row-key="ID"
         @selection-change="handleSelectionChange"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column label="按钮名称" prop="name" />
-        <el-table-column label="按钮备注" prop="desc" />
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          label="按钮名称"
+          prop="name"
+        />
+        <el-table-column
+          label="按钮备注"
+          prop="desc"
+        />
       </el-table>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -78,6 +102,10 @@ import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Menus'
+})
 
 const props = defineProps({
   row: {
@@ -212,18 +240,10 @@ watch(filterText, (val) => {
 
 </script>
 
-<script>
-
-export default {
-  name: 'Menus'
-}
-</script>
-
 <style lang="scss" scoped>
-@import "@/style/button.scss";
 .custom-tree-node{
   span+span{
-    margin-left: 12px;
+    @apply ml-3;
   }
 }
 </style>

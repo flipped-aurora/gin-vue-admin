@@ -42,9 +42,9 @@
 
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
-            <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="搜索条件（起）" />
+            <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
             —
-            <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="搜索条件（止）" />
+            <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
            {{- else}}
              {{- if .DictType}}
               <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
@@ -84,7 +84,7 @@
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}</el-button>
-            <el-popover v-model:visible="deleteVisible" placement="top" width="160">
+            <el-popover v-model:visible="deleteVisible" :disabled="!multipleSelection.length" placement="top" width="160">
             <p>{{" {{ t('general.deleteConfirm') }}" }}</p>
             <div style="text-align: right; margin-top: 8px;">
                 <el-button type="primary" link @click="deleteVisible = false">{{ "{{ t('general.cancel') }}" }}</el-button>
@@ -139,6 +139,12 @@
                 </div>
               </template>
            </el-table-column>
+           {{- else if eq .FieldType "richtext" }}
+                      <el-table-column label="{{.FieldDesc}}" width="200">
+                         <template #default="scope">
+                            [富文本内容]
+                         </template>
+                      </el-table-column>
            {{- else if eq .FieldType "file" }}
                     <el-table-column label="{{.FieldDesc}}" width="200">
                         <template #default="scope">
@@ -153,6 +159,10 @@
         {{- end }}
         <el-table-column align="left" :label="t('general.operations')">
             <template #default="scope">
+            <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
+                <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
+                查看详情
+            </el-button>
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ "{{ t('general.change') }}" }}</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">{{ "{{ t('general.delete') }}" }}</el-button>
             </template>
@@ -171,47 +181,52 @@
         </div>
     </div>
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加':'修改'" destroy-on-close>
-      <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-    {{- range .Fields}}
-        <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
-      {{- if eq .FieldType "bool" }}
-          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
-      {{- end }}
-      {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('general.pleaseEnter')" />
-      {{- end }}
-      {{- if eq .FieldType "int" }}
-      {{- if .DictType}}
-          <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('general.pleaseSelect')" style="width:100%" :clearable="{{.Clearable}}" >
-            <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
-      {{- else }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
-      {{- end }}
-      {{- end }}
-      {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" :placeholder="t('general.selectDate')" :clearable="{{.Clearable}}"  />
-      {{- end }}
-      {{- if eq .FieldType "float64" }}
-          <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
-      {{- end }}
-      {{- if eq .FieldType "enum" }}
-            <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}" >
-               <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
-            </el-select>
-      {{- end }}
-      {{- if eq .FieldType "picture" }}
-            <SelectImage v-model="formData.{{ .FieldJson }}" />
-      {{- end }}
-      {{- if eq .FieldType "pictures" }}
-            <SelectImage v-model="formData.{{ .FieldJson }}" multiple />
-      {{- end }}
-      {{- if eq .FieldType "file" }}
-            <SelectFile v-model="formData.{{ .FieldJson }}" />
-      {{- end }}
-        </el-form-item>
-      {{- end }}
-      </el-form>
+      <el-scrollbar height="500px">
+          <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
+        {{- range .Fields}}
+            <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+          {{- if eq .FieldType "bool" }}
+              <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
+          {{- end }}
+          {{- if eq .FieldType "string" }}
+              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('general.pleaseEnter')" />
+          {{- end }}
+          {{- if eq .FieldType "richtext" }}
+              <RichEdit v-model="formData.{{.FieldJson}}"/>
+          {{- end }}
+          {{- if eq .FieldType "int" }}
+          {{- if .DictType}}
+              <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}" >
+                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+          {{- else }}
+              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
+          {{- end }}
+          {{- end }}
+          {{- if eq .FieldType "time.Time" }}
+              <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" :placeholder="t('general.selectDate')" :clearable="{{.Clearable}}"  />
+          {{- end }}
+          {{- if eq .FieldType "float64" }}
+              <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
+          {{- end }}
+          {{- if eq .FieldType "enum" }}
+                <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}" >
+                   <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
+                </el-select>
+          {{- end }}
+          {{- if eq .FieldType "picture" }}
+                <SelectImage v-model="formData.{{ .FieldJson }}" />
+          {{- end }}
+          {{- if eq .FieldType "pictures" }}
+                <SelectImage v-model="formData.{{ .FieldJson }}" multiple />
+          {{- end }}
+          {{- if eq .FieldType "file" }}
+                <SelectFile v-model="formData.{{ .FieldJson }}" />
+          {{- end }}
+            </el-form-item>
+          {{- end }}
+          </el-form>
+      </el-scrollbar>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ "{{ t('general.close') }}" }}</el-button>
@@ -219,14 +234,41 @@
         </div>
       </template>
     </el-dialog>
+
+    <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情" destroy-on-close>
+      <el-scrollbar height="550px">
+        <el-descriptions column="1" border>
+        {{- range .Fields}}
+                <el-descriptions-item label="{{ .FieldDesc }}">
+                {{- if .DictType}}
+                        {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
+                {{- else if eq .FieldType "picture" }}
+                        <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
+                {{- else if eq .FieldType "pictures" }}
+                        <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
+                {{- else if eq .FieldType "file" }}
+                        <div class="fileBtn" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index">
+                          <el-button type="primary" text bg @click="onDownloadFile(item.url)">
+                            <el-icon style="margin-right: 5px"><Download /></el-icon>
+                            {{"{{"}} item.name {{"}}"}}
+                          </el-button>
+                        </div>
+                  {{- else if eq .FieldType "bool" }}
+                    {{"{{"}} formatBoolean(formData.{{.FieldJson}}) {{"}}"}}
+                   {{- else if eq .FieldType "time.Time" }}
+                      {{"{{"}} formatDate(formData.{{.FieldJson}}) {{"}}"}}
+                   {{- else if eq .FieldType "richtext" }}
+                        [富文本内容]
+                   {{- else}}
+                        {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+                   {{- end }}
+                </el-descriptions-item>
+        {{- end }}
+        </el-descriptions>
+      </el-scrollbar>
+    </el-dialog>
   </div>
 </template>
-
-<script>
-export default {
-  name: '{{.StructName}}'
-}
-</script>
 
 <script setup>
 import {
@@ -246,19 +288,29 @@ import { getUrl } from '@/utils/image'
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
 
+{{- if .HasRichText }}
+// 富文本组件
+import RichEdit from '@/components/richtext/rich-edit.vue'
+{{- end }}
+
+
 {{- if .HasFile }}
 // 文件选择组件
 import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
+import { getDictFunc, formatDate, formatBoolean, filterDict, ReturnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
+
+defineOptions({
+    name: '{{.StructName}}'
+})
 
 // 自动化生成的字典（可能为空）以及字段
     {{- range $index, $element := .DictTypes}}
@@ -329,7 +381,7 @@ const searchRule = reactive({
     }, trigger: 'change' }
   ],
   {{- range .Fields }}
-    {{- if .FieldSearchType}} 
+    {{- if .FieldSearchType}}
       {{- if eq .FieldType "time.Time" }}
         {{.FieldJson }} : [{ validator: (rule, value, callback) => {
         if (searchInfo.value.start{{.FieldName}} && !searchInfo.value.end{{.FieldName}}) {
@@ -506,6 +558,53 @@ const delete{{.StructName}}Func = async (row) => {
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
 
+
+// 查看详情控制标记
+const detailShow = ref(false)
+
+
+// 打开详情弹窗
+const openDetailShow = () => {
+  detailShow.value = true
+}
+
+
+// 打开详情
+const getDetails = async (row) => {
+  // 打开弹窗
+  const res = await find{{.StructName}}({ ID: row.ID })
+  if (res.code === 0) {
+    formData.value = res.data.re{{.Abbreviation}}
+    openDetailShow()
+  }
+}
+
+
+// 关闭详情弹窗
+const closeDetailShow = () => {
+  detailShow.value = false
+  formData.value = {
+      {{- range .Fields}}
+          {{- if eq .FieldType "bool" }}
+          {{.FieldJson}}: false,
+          {{- end }}
+          {{- if eq .FieldType "string" }}
+          {{.FieldJson}}: '',
+          {{- end }}
+          {{- if eq .FieldType "int" }}
+          {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+          {{- end }}
+          {{- if eq .FieldType "time.Time" }}
+          {{.FieldJson}}: new Date(),
+          {{- end }}
+          {{- if eq .FieldType "float64" }}
+          {{.FieldJson}}: 0,
+          {{- end }}
+          {{- end }}
+          }
+}
+
+
 // 打开弹窗
 const openDialog = () => {
     type.value = 'create'
@@ -574,6 +673,14 @@ const downloadFile = (url) => {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
+}
+
+.fileBtn{
+  margin-bottom: 10px;
+}
+
+.fileBtn:last-child{
+  margin-bottom: 0;
 }
 {{end}}
 </style>

@@ -4,21 +4,48 @@
       :title="t('view.dictionary.sysDictionary.dictNote')"
     />
     <div class="gva-search-box">
-      <el-form :inline="true" :model="searchInfo">
+      <el-form
+        :inline="true"
+        :model="searchInfo"
+      >
         <el-form-item :label="t('view.dictionary.sysDictionary.dictName')">
-          <el-input v-model="searchInfo.name" :placeholder="t('general.searchCriteria')" />
+          <el-input
+            v-model="searchInfo.name"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
         <el-form-item :label="t('view.dictionary.sysDictionary.dictNameEn')">
-          <el-input v-model="searchInfo.type" :placeholder="t('general.searchCriteria')" />
+          <el-input
+            v-model="searchInfo.type"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionary.status')" prop="status">
-          <el-select v-model="searchInfo.status" clear :placeholder="t('general.pleaseSelect')">
-            <el-option key="true" :label="t('general.yes')" value="true" />
-            <el-option key="false" :label="t('general.no')" value="false" />
+        <el-form-item
+        :label="t('view.dictionary.sysDictionary.status')"
+          prop="status"
+        >
+          <el-select
+            v-model="searchInfo.status"
+            clear
+            :placeholder="t('general.pleaseSelect')"
+          >
+            <el-option
+              key="true"
+              :placeholder="t('general.yes')"
+              value="true"
+            />
+            <el-option
+              key="false"
+              :placeholder="t('general.no')"
+              value="false"
+            />
           </el-select>
         </el-form-item>
         <el-form-item :label="t('general.description')">
-          <el-input v-model="searchInfo.desc" :placeholder="t('general.searchCriteria')" />
+          <el-input
+            v-model="searchInfo.desc"
+            :placeholder="t('general.searchCriteria')"
+          />
         </el-form-item>
         <el-form-item>
           <el-button
@@ -43,6 +70,10 @@
           icon="plus"
           @click="openDialog"
         >{{ t('general.add') }}</el-button>
+        <el-icon
+          class="cursor-pointer"
+          @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=12&vd_source=f2640257c21e3b547a790461ed94875e')"
+        ><VideoCameraFilled /></el-icon>
       </div>
       <el-table
         ref="multipleTable"
@@ -51,8 +82,15 @@
         tooltip-effect="dark"
         row-key="ID"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column align="left" :label="t('general.createdAt')" width="180">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
           <template #default="scope">{{
             formatDate(scope.row.CreatedAt)
           }}</template>
@@ -72,15 +110,28 @@
           width="200"
         />
 
-        <el-table-column align="left" :label="t('view.dictionary.sysDictionary.status')" prop="status" width="120">
+        <el-table-column
+          align="left"
+          :label="t('view.dictionary.sysDictionary.status')"
+          prop="status"
+          width="120"
+        >
           <template #default="scope">{{
             formatBoolean(scope.row.status)
           }}</template>
         </el-table-column>
 
-        <el-table-column align="left" :label="t('general.description')" prop="desc" width="280" />
+        <el-table-column
+          align="left"
+          :label="t('general.description')"
+          prop="desc"
+          width="280"
+        />
 
-        <el-table-column align="left" :label="t('general.operations')">
+        <el-table-column
+          align="left"
+          :label="t('general.operations')"
+        >
           <template #default="scope">
             <el-button
 
@@ -153,7 +204,10 @@
         :rules="rules"
         label-width="110px"
       >
-        <el-form-item :label="t('view.dictionary.sysDictionary.dictName')" prop="name">
+        <el-form-item
+        :label="t('view.dictionary.sysDictionary.dictName')"
+          prop="name"
+        >
           <el-input
             v-model="formData.name"
             :placeholder="t('view.dictionary.sysDictionary.enterDictName')"
@@ -161,7 +215,10 @@
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionary.dictNameEn')" prop="type">
+        <el-form-item
+        :label="t('view.dictionary.sysDictionary.dictNameEn')"
+          prop="type"
+        >
           <el-input
             v-model="formData.type"
             :placeholder="t('view.dictionary.sysDictionary.enterDictNameEn')"
@@ -169,14 +226,21 @@
             :style="{ width: '100%' }"
           />
         </el-form-item>
-        <el-form-item :label="t('view.dictionary.sysDictionary.status')" prop="status" required>
+        <el-form-item
+        :label="t('view.dictionary.sysDictionary.status')"
+          prop="status"
+          required
+        >
           <el-switch
             v-model="formData.status"
             :active-text="t('general.enable')"
             :inactive-text="t('general.disable')"
           />
         </el-form-item>
-        <el-form-item :label="t('general.description')" prop="desc">
+        <el-form-item
+        :label="t('general.description')"
+          prop="desc"
+        >
           <el-input
             v-model="formData.desc"
             :placeholder="t('view.dictionary.sysDictionary.enterDescription')"
@@ -199,12 +263,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'SysDictionary',
-}
-</script>
-
 <script setup>
 import {
   createSysDictionary,
@@ -218,9 +276,15 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
+import { toDoc } from '@/utils/doc'
+import { VideoCameraFilled } from '@element-plus/icons-vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'SysDictionary',
+})
 
 const router = useRouter()
 

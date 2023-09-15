@@ -3,7 +3,11 @@
     <warning-bar title="在资源权限中将此角色的资源权限清空 或者不包含创建者的角色 即可屏蔽此客户资源的显示" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="openDialog">{{ t('general.add') }}</el-button>
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="openDialog"
+        >{{ t('general.add') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -12,26 +16,73 @@
         tooltip-effect="dark"
         row-key="ID"
       >
-        <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="接入日期" width="180">
+        <el-table-column
+          type="selection"
+          width="55"
+        />
+        <el-table-column
+          align="left"
+          label="接入日期"
+          width="180"
+        >
           <template #default="scope">
             <span>{{ formatDate(scope.row.CreatedAt) }}</span>
           </template>
         </el-table-column>
-        <el-table-column align="left" label="姓名" prop="customerName" width="120" />
-        <el-table-column align="left" label="电话" prop="customerPhoneData" width="120" />
-        <el-table-column align="left" label="接入人ID" prop="sysUserId" width="120" />
-        <el-table-column align="left" :label="t('general.operations')" min-width="160">
+        <el-table-column
+          align="left"
+          label="姓名"
+          prop="customerName"
+          width="120"
+        />
+        <el-table-column
+          align="left"
+          label="电话"
+          prop="customerPhoneData"
+          width="120"
+        />
+        <el-table-column
+          align="left"
+          label="接入人ID"
+          prop="sysUserId"
+          width="120"
+        />
+        <el-table-column
+          align="left"
+          :label="t('general.operations')"
+          min-width="160"
+        >
           <template #default="scope">
-            <el-button type="primary" link icon="edit" @click="updateCustomer(scope.row)">{{ t('general.change') }}</el-button>
-            <el-popover v-model="scope.row.visible" placement="top" width="160">
+            <el-button
+              type="primary"
+              link
+              icon="edit"
+              @click="updateCustomer(scope.row)"
+            >{{ t('general.change') }}</el-button>
+            <el-popover
+              v-model="scope.row.visible"
+              placement="top"
+              width="160"
+            >
               <p>{{ t('general.deleteConfirm') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" @click="deleteCustomer(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  @click="scope.row.visible = false"
+                >>{{ t('general.cancel') }}</el-button>
+                <el-button
+                  type="primary"
+                  @click="deleteCustomer(scope.row)"
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete" @click="scope.row.visible = true">{{ t('general.delete') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  icon="delete"
+                  @click="scope.row.visible = true"
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
           </template>
@@ -49,19 +100,36 @@
         />
       </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" title="客户">
-      <el-form :inline="true" :model="form" label-width="80px">
+    <el-dialog
+      v-model="dialogFormVisible"
+      :before-close="closeDialog"
+      title="客户"
+    >
+      <el-form
+        :inline="true"
+        :model="form"
+        label-width="80px"
+      >
         <el-form-item label="客户名">
-          <el-input v-model="form.customerName" autocomplete="off" />
+          <el-input
+            v-model="form.customerName"
+            autocomplete="off"
+          />
         </el-form-item>
         <el-form-item label="客户电话">
-          <el-input v-model="form.customerPhoneData" autocomplete="off" />
+          <el-input
+            v-model="form.customerPhoneData"
+            autocomplete="off"
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -83,6 +151,10 @@ import { formatDate } from '@/utils/format'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Customer'
+})
 
 const form = ref({
   customerName: '',
@@ -173,13 +245,6 @@ const openDialog = () => {
   dialogFormVisible.value = true
 }
 
-</script>
-
-<script>
-
-export default {
-  name: 'Customer'
-}
 </script>
 
 <style></style>

@@ -3,35 +3,63 @@
     <warning-bar :title="t('authority.authorityNote')" />
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="addUser">{{ t('user.addUser') }}</el-button>
+        <el-button
+          type="primary"
+          icon="plus"
+          @click="addUser"
+        >{{ t('user.addUser') }}</el-button>
       </div>
-      <el-table :data="tableData">
-        <el-table-column align="left" :label="t('user.avatar')" min-width="50">
+      <el-table
+        :data="tableData"
+        row-key="ID"
+      >
+        <el-table-column
+          align="left"
+          :label="t('user.avatar')"
+          min-width="75"
+        >
           <template #default="scope">
-            <CustomPic style="margin-top:8px" :pic-src="scope.row.headerImg" />
+            <CustomPic
+              style="margin-top:8px"
+              :pic-src="scope.row.headerImg"
+            />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="UUID" min-width="250" prop="uuid" />
-        <el-table-column align="left" :label="t('user.userName')" min-width="150" prop="userName" />
-        <el-table-column align="left" :label="t('user.nickName')" min-width="100" prop="nickName">
-          <template #default="scope">
-            <p v-if="!scope.row.editFlag" class="nickName">{{ scope.row.nickName }}
-              <el-icon class="pointer" color="#66b1ff" @click="openEidt(scope.row)">
-                <edit />
-              </el-icon>
-            </p>
-            <p v-if="scope.row.editFlag" class="nickName">
-              <el-input v-model="scope.row.nickName" />
-              <el-icon class="pointer" color="#67c23a" @click="enterEdit(scope.row)">
-                <check />
-              </el-icon>
-              <el-icon class="pointer" color="#f23c3c" @click="closeEdit(scope.row)">
-                <close />
-              </el-icon>
-            </p>
-          </template>
-        </el-table-column>
-        <el-table-column align="left" :label="t('user.userRole')" min-width="150">
+        <el-table-column
+          align="left"
+          label="ID"
+          min-width="50"
+          prop="ID"
+        />
+        <el-table-column
+          align="left"
+          :label="t('user.userName')"
+          min-width="150"
+          prop="userName"
+        />
+        <el-table-column
+          align="left"
+          :label="t('user.nickName')"
+          min-width="150"
+          prop="nickName"
+        />
+        <el-table-column
+          align="left"
+          label="手机号"
+          min-width="180"
+          prop="phone"
+        />
+        <el-table-column
+          align="left"
+          label="邮箱"
+          min-width="180"
+          prop="email"
+        />
+        <el-table-column
+          align="left"
+          label="用户角色"
+          min-width="200"
+        >
           <template #default="scope">
             <el-cascader
               v-model="scope.row.authorityIds"
@@ -45,7 +73,11 @@
             />
           </template>
         </el-table-column>
-        <el-table-column align="left" label="启用" min-width="150">
+        <el-table-column
+          align="left"
+          label="启用"
+          min-width="150"
+        >
           <template #default="scope">
             <el-switch
               v-model="scope.row.enable"
@@ -56,20 +88,50 @@
             />
           </template>
         </el-table-column>
-        <el-table-column align="left" :label="t('general.operations')" min-width="150">
+
+        <el-table-column
+          :label="t('general.operations')"
+          min-width="250"
+          fixed="right"
+        >
           <template #default="scope">
-            <el-popover v-model="scope.row.visible" placement="top" width="160">
+            <el-popover
+              v-model="scope.row.visible"
+              placement="top"
+              width="160"
+            >
               <p>{{ t('user.deleteUserConfrim') }}</p>
               <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="scope.row.visible = false">{{ t('general.cancel') }}</el-button>
-                <el-button type="primary" @click="deleteUserFunc(scope.row)">{{ t('general.confirm') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  @click="scope.row.visible = false"
+                >{{ t('general.cancel') }}</el-button>
+                <el-button
+                  type="primary"
+                  @click="deleteUserFunc(scope.row)"
+                >{{ t('general.confirm') }}</el-button>
               </div>
               <template #reference>
-                <el-button type="primary" link icon="delete">{{ t('general.delete') }}</el-button>
+                <el-button
+                  type="primary"
+                  link
+                  icon="delete"
+                >{{ t('general.delete') }}</el-button>
               </template>
             </el-popover>
-            <el-button type="primary" link icon="edit" @click="openEdit(scope.row)">{{ t('general.edit') }}</el-button>
-            <el-button type="primary" link icon="magic-stick" @click="resetPasswordFunc(scope.row)">{{ t('user.resetPassword') }}</el-button>
+            <el-button
+              type="primary"
+              link
+              icon="edit"
+              @click="openEdit(scope.row)"
+            >{{ t('general.edit') }}</el-button>
+            <el-button
+              type="primary"
+              link
+              icon="magic-stick"
+              @click="resetPasswordFunc(scope.row)"
+            >{{ t('user.resetPassword') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -87,30 +149,54 @@
     </div>
     <el-dialog
       v-model="addUserDialog"
-      custom-class="user-dialog"
       :title="t('user.addUser')"
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
       <div style="height:60vh;overflow:auto;padding:0 12px;">
-        <el-form ref="userForm" :rules="rules" :model="userInfo" label-width="80px">
-          <el-form-item v-if="dialogFlag === 'add'" :label="t('user.userName')" prop="userName">
+        <el-form
+          ref="userForm"
+          :rules="rules"
+          :model="userInfo"
+          label-width="80px"
+        >
+          <el-form-item
+            v-if="dialogFlag === 'add'"
+            :label="t('user.userName')"
+            prop="userName"
+          >
             <el-input v-model="userInfo.userName" />
           </el-form-item>
-          <el-form-item v-if="dialogFlag === 'add'" :label="t('user.password')" prop="password">
+          <el-form-item
+            v-if="dialogFlag === 'add'"
+            :label="t('user.password')"
+            prop="password"
+          >
             <el-input v-model="userInfo.password" />
           </el-form-item>
-          <el-form-item :label="t('user.nickName')" prop="nickName">
+          <el-form-item
+            :label="t('user.nickName')"
+            prop="nickName"
+          >
             <el-input v-model="userInfo.nickName" />
           </el-form-item>
-          <el-form-item :label="t('user.phone')" prop="phone">
+          <el-form-item
+            :label="t('user.phone')"
+            prop="phone"
+          >
             <el-input v-model="userInfo.phone" />
           </el-form-item>
-          <el-form-item :label="t('user.email')" prop="email">
+          <el-form-item
+            :label="t('user.email')"
+            prop="email"
+          >
             <el-input v-model="userInfo.email" />
           </el-form-item>
-          <el-form-item :label="t('user.userRole')" prop="authorityId">
+          <el-form-item
+            :label="t('user.userRole')"
+            prop="authorityId"
+          >
             <el-cascader
               v-model="userInfo.authorityIds"
               style="width:100%"
@@ -120,7 +206,10 @@
               :clearable="false"
             />
           </el-form-item>
-          <el-form-item label="启用" prop="disabled">
+          <el-form-item
+            label="启用"
+            prop="disabled"
+          >
             <el-switch
               v-model="userInfo.enable"
               inline-prompt
@@ -128,10 +217,24 @@
               :inactive-value="2"
             />
           </el-form-item>
-          <el-form-item :label="t('user.avatar')" label-width="80px">
-            <div style="display:inline-block" @click="openHeaderChange">
-              <img v-if="userInfo.headerImg" alt="头像" class="header-img-box" :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg">
-              <div v-else class="header-img-box">{{ t('user.mediaLibrary') }}</div>
+          <el-form-item
+            :label="t('user.avatar')"
+            label-width="80px"
+          >
+            <div
+              style="display:inline-block"
+              @click="openHeaderChange"
+            >
+              <img
+                v-if="userInfo.headerImg"
+                alt="头像"
+                class="header-img-box"
+                :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg"
+              >
+              <div
+                v-else
+                class="header-img-box"
+              >{{ t('user.mediaLibrary') }}</div>
             </div>
           </el-form-item>
         </el-form>
@@ -139,19 +242,20 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
-          <el-button type="primary" @click="enterAddUserDialog">{{ t('general.confirm') }}</el-button>
+          <el-button
+            type="primary"
+            @click="enterAddUserDialog"
+          >{{ t('general.confirm') }}</el-button>
         </div>
       </template>
     </el-dialog>
-    <ChooseImg ref="chooseImg" :target="userInfo" :target-key="`headerImg`" />
+    <ChooseImg
+      ref="chooseImg"
+      :target="userInfo"
+      :target-key="`headerImg`"
+    />
   </div>
 </template>
-
-<script>
-export default {
-  name: 'User',
-}
-</script>
 
 <script setup>
 import {
@@ -172,6 +276,10 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'User',
+})
 
 const path = ref(import.meta.env.VITE_BASE_API + '/')
 // 初始化相关
@@ -440,43 +548,7 @@ const switchEnable = async(row) => {
 </script>
 
 <style lang="scss">
-.user-dialog {
   .header-img-box {
-  width: 200px;
-  height: 200px;
-  border: 1px dashed #ccc;
-  border-radius: 20px;
-  text-align: center;
-  line-height: 200px;
-  cursor: pointer;
-}
-  .avatar-uploader .el-upload:hover {
-    border-color: #409eff;
-  }
-  .avatar-uploader-icon {
-    border: 1px dashed #d9d9d9 !important;
-    border-radius: 6px;
-    font-size: 28px;
-    color: #8c939d;
-    width: 178px;
-    height: 178px;
-    line-height: 178px;
-    text-align: center;
-  }
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-}
-.nickName{
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.pointer{
-  cursor: pointer;
-  font-size: 16px;
-  margin-left: 2px;
-}
+    @apply w-52 h-52 border border-solid border-gray-300 rounded-xl flex justify-center items-center cursor-pointer;
+ }
 </style>

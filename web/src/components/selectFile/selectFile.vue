@@ -21,6 +21,10 @@ import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 
+defineOptions({
+  name: 'UploadCommon',
+})
+
 const props = defineProps({
   modelValue: {
     type: Array,
@@ -63,12 +67,3 @@ const uploadError = () => {
 
 </script>
 
-<script>
-
-export default {
-  name: 'UploadCommon',
-  methods: {
-
-  }
-}
-</script>

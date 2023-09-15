@@ -1,14 +1,14 @@
 <template>
   <div />
 </template>
-<script>
-import { useRouter } from 'vue-router'
-export default {
-  name: 'Reload'
-}
-</script>
 
 <script setup>
+import { useRouter } from 'vue-router'
+
+defineOptions({
+  name: 'Reload'
+})
+
 const router = useRouter()
 router.go(-1)
 </script>

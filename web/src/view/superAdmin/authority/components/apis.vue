@@ -1,13 +1,21 @@
 <template>
   <div>
-    <div class="clearfix sticky-button">
-      <el-input v-model="filterText" class="fitler" :placeholder="t('general.filter')" />
-      <el-button class="fl-right" type="primary" @click="authApiEnter">{{ t('general.confirm') }}</el-button>
+    <div class="sticky top-0.5 z-10 bg-white">
+      <el-input
+        v-model="filterText"
+        class="w-3/5"
+        :placeholder="t('general.filter')"
+      />
+      <el-button
+        class="float-right"
+        type="primary"
+        @click="authApiEnter"
+      >{{ t('general.confirm') }}</el-button>
     </div>
     <div class="tree-content">
       <el-tree
         ref="apiTree"
-        :data="apiTreeData"
+        :data="apiTreeData"确 定
         :default-checked-keys="apiTreeIds"
         :props="apiDefaultProps"
         default-expand-all
@@ -20,11 +28,6 @@
     </div>
   </div>
 </template>
-<script>
-export default {
-  name: 'Apis',
-}
-</script>
 
 <script setup>
 import { getAllApis } from '@/api/api'
@@ -34,6 +37,10 @@ import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Apis',
+})
 
 const props = defineProps({
   row: {
@@ -138,6 +145,3 @@ watch(filterText, (val) => {
 
 </script>
 
-<style lang="scss" scoped>
-@import "@/style/button.scss";
-</style>

@@ -48,11 +48,6 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: 'HistoryComponent',
-}
-</script>
 
 <script setup>
 import { emitter } from '@/utils/bus.js'
@@ -64,6 +59,10 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
+
+defineOptions({
+  name: 'HistoryComponent',
+})
 
 const route = useRoute()
 const router = useRouter()

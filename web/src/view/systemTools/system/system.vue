@@ -1,12 +1,22 @@
 <template>
   <div class="system">
-    <el-form ref="form" :model="config" label-width="240px">
+    <el-form
+      ref="form"
+      :model="config"
+      label-width="240px"
+    >
       <!--  System start  -->
       <el-collapse v-model="activeNames">
-        <el-collapse-item :title="t('view.systemTools.system.systemConfig')" name="1">
+        <el-collapse-item
+          :title="t('view.systemTools.system.systemConfig')"
+          name="1"
+        >
           <el-form-item :label="t('view.systemTools.system.envValue')">
             <!-- <el-input v-model="config.system.env" />-->
-            <el-select v-model="config.system.env" style="width:100%">
+            <el-select
+              v-model="config.system.env"
+              style="width:100%"
+            >
               <el-option value="public" />
               <el-option value="develop" />
             </el-select>
@@ -15,13 +25,19 @@
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.dbType')">
-            <el-select v-model="config.system['db-type']" style="width:100%">
+            <el-select
+              v-model="config.system['db-type']"
+              style="width:100%"
+            >
               <el-option value="mysql" />
               <el-option value="pgsql" />
             </el-select>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.ossType')">
-            <el-select v-model="config.system['oss-type']" style="width:100%">
+            <el-select
+              v-model="config.system['oss-type']"
+              style="width:100%"
+            >
               <el-option value="local" />
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
@@ -50,7 +66,10 @@
             </el-form-item>
           </el-tooltip>
         </el-collapse-item>
-        <el-collapse-item :title="t('view.systemTools.system.jwtSignature')" name="2">
+        <el-collapse-item
+          :title="t('view.systemTools.system.jwtSignature')"
+          name="2"
+        >
           <el-form-item :label="t('view.systemTools.system.jwtSignature')">
             <el-input v-model="config.jwt['signing-key']" />
           </el-form-item>
@@ -64,7 +83,10 @@
             <el-input v-model="config.jwt.issuer" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item :title="t('view.systemTools.system.zapLogConfig')" name="3">
+        <el-collapse-item
+          :title="t('view.systemTools.system.zapLogConfig')"
+          name="3"
+        >
           <el-form-item :label="t('view.systemTools.system.level')">
             <el-input v-model.number="config.zap.level" />
           </el-form-item>
@@ -93,7 +115,10 @@
             <el-checkbox v-model="config.zap['log-in-console']" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item :title="t('view.systemTools.system.redisAdminDBConfig')" name="4">
+        <el-collapse-item
+          :title="t('view.systemTools.system.redisAdminDBConfig')"
+          name="4"
+        >
           <el-form-item label="库">
             <el-input v-model.number="config.redis.db" />
           </el-form-item>
@@ -105,9 +130,15 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item :title="t('view.systemTools.system.emailConfig')" name="5">
+        <el-collapse-item
+          :title="t('view.systemTools.system.emailConfig')"
+          name="5"
+        >
           <el-form-item :label="t('view.systemTools.system.recipientEmail')">
-            <el-input v-model="config.email.to" :placeholder="t('view.systemTools.system.emailNote')" />
+            <el-input
+              v-model="config.email.to"
+              :placeholder="t('view.systemTools.system.emailNote')"
+            />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.port')">
             <el-input v-model.number="config.email.port" />
@@ -128,7 +159,10 @@
             <el-button @click="email">{{ t('view.systemTools.system.testEmail') }}</el-button>
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item :title="t('view.systemTools.system.verCodeConfig')" name="7">
+        <el-collapse-item
+          :title="t('view.systemTools.system.verCodeConfig')"
+          name="7"
+        >
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
           </el-form-item>
@@ -139,7 +173,10 @@
             <el-input v-model.number="config.captcha['img-height']" />
           </el-form-item>
         </el-collapse-item>
-        <el-collapse-item :title="t('view.systemTools.system.dbConfig')" name="9">
+        <el-collapse-item
+          :title="t('view.systemTools.system.dbConfig')"
+          name="9"
+        >
           <template v-if="config.system['db-type'] === 'mysql'">
             <el-form-item label="用户名">
               <el-input v-model="config.mysql.username" />
@@ -212,7 +249,10 @@
           </template>
         </el-collapse-item>
 
-        <el-collapse-item :title="t('view.systemTools.system.ossConfig')" name="10">
+        <el-collapse-item
+          :title="t('view.systemTools.system.ossConfig')"
+          name="10"
+        >
           <template v-if="config.system['oss-type'] === 'local'">
             <h2>{{ t('view.systemTools.system.localFileConfig') }}</h2>
             <el-form-item :label="t('view.systemTools.system.localFilePath')">
@@ -303,18 +343,27 @@
 
         </el-collapse-item>
 
-        <el-collapse-item :title="t('view.systemTools.system.excelUploadConfig')" name="11">
+        <el-collapse-item
+          :title="t('view.systemTools.system.excelUploadConfig')"
+          name="11"
+        >
           <el-form-item :label="t('view.systemTools.system.excelDir')">
             <el-input v-model="config.excel.dir" />
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item :title="t('view.systemTools.system.autoCodeConfig')" name="12">
+        <el-collapse-item
+          :title="t('view.systemTools.system.autoCodeConfig')"
+          name="12"
+        >
           <el-form-item :label="t('view.systemTools.system.autoRestart')">
             <el-checkbox v-model="config.autocode['transfer-restart']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.projectRootPath')">
-            <el-input v-model="config.autocode.root" disabled />
+            <el-input
+              v-model="config.autocode.root"
+              disabled
+            />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendCodePath')">
             <el-input v-model="config.autocode['transfer-restart']" />
@@ -351,7 +400,10 @@
           </el-form-item>
         </el-collapse-item>
 
-        <el-collapse-item :title="t('view.systemTools.system.timedTask')" name="13">
+        <el-collapse-item
+          :title="t('view.systemTools.system.timedTask')"
+          name="13"
+        >
           <el-form-item :label="t('view.systemTools.system.startEnableDisable')">
             <el-checkbox v-model="config.timer['start']" />
           </el-form-item>
@@ -359,15 +411,24 @@
             <el-input v-model="config.timer.spec" />
           </el-form-item>
           <template v-for="(item,k) in config.timer.detail">
-            <div v-for="(_,k2) in item" :key="k2">
-              <el-form-item :key="k+k2" :label="k2">
+            <div
+              v-for="(_,k2) in item"
+              :key="k2"
+            >
+              <el-form-item
+                :key="k+k2"
+                :label="k2"
+              >
                 <el-input v-model="item[k2]" />
               </el-form-item>
             </div>
           </template>
         </el-collapse-item>
 
-        <el-collapse-item :title="t('view.systemTools.system.i18n')" name="14">
+        <el-collapse-item
+          :title="t('view.systemTools.system.i18n')"
+          name="14"
+        >
           <el-form-item :label="t('view.systemTools.system.langFilesPath')">
             <el-input v-model="config.language.dir" />
           </el-form-item>
@@ -377,18 +438,19 @@
         </el-collapse-item>
       </el-collapse>
     </el-form>
-    <div class="gva-btn-list">
-      <el-button type="primary" @click="update">{{ t('view.systemTools.system.updateNow') }}</el-button>
-      <el-button type="primary" @click="reload">{{ t('view.systemTools.system.restartService') }}</el-button>
+    <div class="mt-4">
+      <el-button
+        type="primary"
+        @click="update"
+      >{{ t('view.systemTools.system.updateNow') }}</el-button>
+      <el-button
+        type="primary"
+        @click="reload"
+      >{{ t('view.systemTools.system.restartService') }}</el-button>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'Config'
-}
-</script>
 <script setup>
 import { getSystemConfig, setSystemConfig } from '@/api/system'
 import { emailTest } from '@/api/email'
@@ -397,6 +459,10 @@ import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'Config'
+})
 
 const activeNames = reactive([])
 const config = ref({
@@ -462,20 +528,9 @@ const email = async() => {
 
 <style lang="scss">
 .system {
-  background: #fff;
-  padding:36px;
-  border-radius: 2px;
+  @apply bg-white p-9 rounded;
   h2 {
-    padding: 10px;
-    margin: 10px 0;
-    font-size: 16px;
-    box-shadow: -4px 0px 0px 0px #e7e8e8;
-  }
-  ::v-deep(.el-input-number__increase){
-    top:5px !important;
-  }
-  .gva-btn-list{
-    margin-top:16px;
+    @apply p-2.5 my-2.5 text-lg shadow;
   }
 }
 </style>

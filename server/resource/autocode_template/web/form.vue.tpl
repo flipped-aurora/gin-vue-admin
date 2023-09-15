@@ -10,6 +10,9 @@
       {{- if eq .FieldType "string" }}
           <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
       {{- end }}
+      {{- if eq .FieldType "richtext" }}
+          <RichEdit v-model="formData.{{.FieldJson}}"/>
+      {{- end }}
       {{- if eq .FieldType "int" }}
       {{- if .DictType }}
           <el-select v-model="formData.{{ .FieldJson }}" placeholder="t('general.pleaseSelect')" :clearable="{{.Clearable}}">
@@ -36,6 +39,9 @@
        {{- if eq .FieldType "pictures" }}
            <SelectImage v-model="formData.{{ .FieldJson }}" multiple />
        {{- end }}
+       {{- if eq .FieldType "file" }}
+          <SelectFile v-model="formData.{{ .FieldJson }}" />
+       {{- end }}
        </el-form-item>
       {{- end }}
         <el-form-item>
@@ -47,18 +53,16 @@
   </div>
 </template>
 
-<script>
-export default {
-  name: '{{.StructName}}'
-}
-</script>
-
 <script setup>
 import {
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
 } from '@/api/{{.PackageName}}'
+
+defineOptions({
+    name: '{{.StructName}}Form'
+})
 
 // 自动获取字典
 import { getDictFunc } from '@/utils/format'
@@ -75,6 +79,12 @@ import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- if .HasFile }}
 import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
+
+{{- if .HasRichText }}
+// 富文本组件
+import RichEdit from '@/components/richtext/rich-edit.vue'
+{{- end }}
+
 const route = useRoute()
 const router = useRouter()
 

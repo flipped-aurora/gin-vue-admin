@@ -7,27 +7,64 @@
       label-width="120px"
       label-position="right"
       :rules="rules"
-      class="grid-form"
+      class="grid grid-cols-2"
     >
-      <el-form-item :label="t('autoCode.fieldName')" prop="fieldName">
-        <el-input v-model="middleDate.fieldName" autocomplete="off" style="width:80%" />
-        <el-button style="width:18%;margin-left:2%" @click="autoFill">
+      <el-form-item
+        :label="t('autoCode.fieldName')"
+        prop="fieldName"
+      >
+        <el-input
+          v-model="middleDate.fieldName"
+          autocomplete="off"
+          style="width:80%"
+        />
+        <el-button
+          style="width:18%;margin-left:2%"
+          @click="autoFill"
+        >
           <span style="font-size: 12px">{{ t('fieldDialog.autoFill') }}</span>
         </el-button>
       </el-form-item>
-      <el-form-item :label="t('autoCode.fieldDesc')" prop="fieldDesc">
-        <el-input v-model="middleDate.fieldDesc" autocomplete="off" />
+      <el-form-item
+        :label="t('autoCode.fieldDesc')"
+        prop="fieldDesc"
+      >
+        <el-input
+          v-model="middleDate.fieldDesc"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item :label="t('autoCode.fieldJson')" prop="fieldJson">
-        <el-input v-model="middleDate.fieldJson" autocomplete="off" />
+      <el-form-item
+        :label="t('autoCode.fieldJson')"
+        prop="fieldJson"
+      >
+        <el-input
+          v-model="middleDate.fieldJson"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item :label="t('autoCode.columnName')" prop="columnName">
-        <el-input v-model="middleDate.columnName" autocomplete="off" />
+      <el-form-item
+        :label="t('autoCode.columnName')"
+        prop="columnName"
+      >
+        <el-input
+          v-model="middleDate.columnName"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item :label="t('autoCode.comment')" prop="comment">
-        <el-input v-model="middleDate.comment" autocomplete="off" />
+      <el-form-item
+        :label="t('autoCode.comment')"
+        prop="comment"
+      >
+        <el-input
+          v-model="middleDate.comment"
+          autocomplete="off"
+        />
       </el-form-item>
-      <el-form-item :label="t('autoCode.fieldDataType')" prop="fieldType">
+      <el-form-item
+        :label="t('autoCode.fieldDataType')"
+        prop="fieldType"
+      >
         <el-select
           v-model="middleDate.fieldType"
           style="width:100%"
@@ -44,10 +81,19 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'" prop="dataTypeLong">
-        <el-input v-model="middleDate.dataTypeLong" :placeholder="middleDate.fieldType === 'enum'?`例:'北京','天津'`:'数据库类型长度'" />
+      <el-form-item
+        :label="middleDate.fieldType === 'enum' ? '枚举值' : '类型长度'"
+        prop="dataTypeLong"
+      >
+        <el-input
+          v-model="middleDate.dataTypeLong"
+          :placeholder="middleDate.fieldType === 'enum'?`例:'北京','天津'`:'数据库类型长度'"
+        />
       </el-form-item>
-      <el-form-item :label="t('general.searchCriteria')" prop="fieldSearchType">
+      <el-form-item
+        :label="t('general.searchCriteria')"
+        prop="fieldSearchType"
+      >
         <el-select
           v-model="middleDate.fieldSearchType"
           style="width:100%"
@@ -63,8 +109,10 @@
           />
         </el-select>
       </el-form-item>
-
-      <el-form-item :label="t('fieldDialog.associativeDictionary')" prop="dictType">
+      <el-form-item
+        :label="t('fieldDialog.associativeDictionary')"
+        prop="dictType"
+      >
         <el-select
           v-model="middleDate.dictType"
           style="width:100%"
@@ -105,6 +153,10 @@ import { ref } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+defineOptions({
+  name: 'FieldDialog'
+})
 
 const props = defineProps({
   dialogMiddle: {
@@ -185,16 +237,3 @@ const clearOther = () => {
 const fieldDialogFrom = ref(null)
 defineExpose({ fieldDialogFrom })
 </script>
-
-<script>
-
-export default {
-  name: 'FieldDialog'
-}
-</script>
-<style scoped>
-.grid-form{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-</style>

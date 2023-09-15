@@ -1,6 +1,4 @@
 @import '@/style/main.scss';
-@import '@/style/base.scss';
-@import '@/style/mobile.scss';
 
 #app {
     .el-button {
@@ -9,111 +7,30 @@
     }
 }
 
-::-webkit-scrollbar-track-piece {
-    background-color: #f8f8f8;
-}
-
 ::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: #dddddd;
-    background-clip: padding-box;
-    min-height: 28px;
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background-color: #bbb;
+    @apply hidden;
 }
 
 
 .gva-search-box {
-    padding: 24px;
-    padding-bottom: 2px;
-    background-color: #fff;
-    border-radius: 2px;
-    margin-bottom: 12px;
+    @apply p-6 pb-0.5 bg-white rounded mb-3;
 }
 
 .gva-form-box {
-    padding: 24px;
-    background-color: #fff;
-    border-radius: 2px;
-}
-
-.multiple-img-box{
-    display: flex;
-    gap:8px;
-    flex-wrap: wrap;
-}
-
-.gva-table-box {
-    padding: 24px;
-    background-color: #fff;
-    border-radius: 2px;
+    @apply p-6 bg-white rounded;
 }
 
 .gva-pagination {
-    display: flex;
-    justify-content: flex-end;
+    @apply flex justify-end;
     .el-pagination__editor {
         .el-input__inner {
-            height: 32px;
+            @apply h-8;
         }
     }
-    .el-pagination__total {
-        line-height: 32px !important;
-    }
-    //小屏幕不显示
-    @media (max-width: 750px) {
-        .el-pagination__sizes{
-            display: none !important;
-        }
-    }
-    .btn-prev {
-        padding-right: 6px;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 32px;
-        height: 32px;
-    }
-    .number {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 32px;
-        height: 32px;
-    }
-    .btn-quicknext {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        width: 32px;
-        height: 32px;
-    }
-    .btn-next {
-        padding-left: 6px;
-        width: 32px;
-        height: 32px;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-    }
-    // 兼容久版用户升级
-    .active {
-        background: var(--el-color-primary);
-        border-radius: 2px;
-        color: #ffffff !important;
-    }
-    // end
 
     .is-active {
+        @apply rounded text-white;
         background: var(--el-color-primary);
-        border-radius: 2px;
         color: #ffffff !important;
     }
 }

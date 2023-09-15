@@ -20,6 +20,10 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 
+defineOptions({
+  name: 'UploadImage',
+})
+
 const emit = defineEmits(['on-success'])
 const props = defineProps({
   imageUrl: {
@@ -64,16 +68,6 @@ const handleImageSuccess = (res) => {
   }
 }
 
-</script>
-
-<script>
-
-export default {
-  name: 'UploadImage',
-  methods: {
-
-  }
-}
 </script>
 
 <style lang="scss" scoped>

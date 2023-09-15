@@ -146,6 +146,9 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
 		}
+		if autoCode.Fields[i].FieldType == "richtext" {
+			autoCode.HasRichText = true
+		}
 		if autoCode.Fields[i].FieldType == "pictures" {
 			autoCode.HasPic = true
 			autoCode.NeedJSON = true
@@ -247,6 +250,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
 		}
+		if autoCode.Fields[i].FieldType == "richtext" {
+			autoCode.HasRichText = true
+		}
 		if autoCode.Fields[i].FieldType == "pictures" {
 			autoCode.NeedJSON = true
 			autoCode.HasPic = true
@@ -315,8 +321,8 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			// 在gorm.go 注入 自动迁移
 			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
-			autoCode.BusinessDB = utils.MaheHump(autoCode.BusinessDB) // 这里将 数据库中间存在 - 的转换为驼峰
-			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, autoCode.BusinessDB, autoCode.StructName)
+			varDB := utils.MaheHump(autoCode.BusinessDB)
+			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
 		}
 
 		{
@@ -353,6 +359,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				autoCode.TableName,
 				idBf.String(),
 				autoCode.Package,
+				autoCode.BusinessDB,
 			)
 		} else {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
@@ -364,6 +371,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				autoCode.StructName,
 				idBf.String(),
 				autoCode.Package,
+				autoCode.BusinessDB,
 			)
 		}
 	}

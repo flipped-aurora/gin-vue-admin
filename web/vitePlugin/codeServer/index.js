@@ -1,15 +1,4 @@
 const child_process = require('child_process')
-import * as dotenv from 'dotenv'
-import * as fs from 'fs'
-
-const NODE_ENV = process.env.NODE_ENV || 'development'
-const envFiles = [`.env.${NODE_ENV}`]
-for (const file of envFiles) {
-  const envConfig = dotenv.parse(fs.readFileSync(file))
-  for (const k in envConfig) {
-    process.env[k] = envConfig[k]
-  }
-}
 
 export default function GvaPositionServer() {
   return {

@@ -7,7 +7,7 @@ import (
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 
-// {{.StructName}} 结构体
+// {{.Description}} 结构体  {{.StructName}}
 type {{.StructName}} struct {
       global.GVA_MODEL {{- range .Fields}}
             {{- if eq .FieldType "enum" }}
@@ -33,7 +33,7 @@ type {{.StructName}} struct {
 }
 
 {{ if .TableName }}
-// TableName {{.StructName}} 表名
+// TableName {{.Description}} {{.StructName}}自定义表名 {{.TableName}}
 func ({{.StructName}}) TableName() string {
   return "{{.TableName}}"
 }

@@ -15,7 +15,7 @@
     <div class="tree-content">
       <el-tree
         ref="apiTree"
-        :data="apiTreeData"确 定
+        :data="apiTreeData"
         :default-checked-keys="apiTreeIds"
         :props="apiDefaultProps"
         default-expand-all

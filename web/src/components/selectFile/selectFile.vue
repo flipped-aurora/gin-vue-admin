@@ -45,6 +45,7 @@ watch(fileList.value, (val) => {
   console.log(val)
   emits('update:modelValue', val)
 })
+
 watch(
     () => props.modelValue,
     value => {

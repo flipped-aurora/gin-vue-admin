@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-upload
-      multiple
-      :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
-      :headers="{ 'x-token': userStore.token }"
-      :on-error="uploadError"
-      :on-success="uploadSuccess"
-      :show-file-list="true"
-      :file-list="fileList"
-      class="upload-btn"
+        multiple
+        :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
+        :headers="{ 'x-token': userStore.token }"
+        :on-error="uploadError"
+        :on-success="uploadSuccess"
+        :show-file-list="true"
+        :file-list="fileList"
+        class="upload-btn"
     >
       <el-button type="primary">上传文件</el-button>
     </el-upload>
@@ -17,9 +17,9 @@
 
 <script setup>
 
-import { ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/pinia/modules/user'
+import {ref, watch} from 'vue'
+import {ElMessage} from 'element-plus'
+import {useUserStore} from '@/pinia/modules/user'
 
 defineOptions({
   name: 'UploadCommon',
@@ -45,9 +45,17 @@ watch(fileList.value, (val) => {
   console.log(val)
   emits('update:modelValue', val)
 })
+watch(
+    () => props.modelValue,
+    value => {
+      fileList.value = value
+      emits('update:modelValue', val)
 
+    },
+    {immediate: true}
+)
 const uploadSuccess = (res) => {
-  const { data } = res
+  const {data} = res
   if (data.file) {
     fileList.value.push({
       name: data.file.name,

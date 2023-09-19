@@ -50,8 +50,6 @@ watch(
     () => props.modelValue,
     value => {
       fileList.value = value
-      emits('update:modelValue', val)
-
     },
     {immediate: true}
 )

@@ -4,16 +4,37 @@
     class="update-image"
     :style="{
       'background-image': `url(${getUrl(modelValue)})`,
+      'position': 'relative',
     }"
   >
+      <el-icon :size="32" v-if="isVideoExt(modelValue || '')" class="video video-icon" style=""><VideoPlay /></el-icon>
+      <video v-if="isVideoExt(modelValue || '')"
+            class="avatar video-avatar video"
+            muted preload="metadata"
+            @click="openChooseImg"
+            style="">
+        <source :src="getUrl(modelValue) + '#t=1'"/>
+      </video>
     <span
       class="update"
       @click="openChooseImg"
+      style="position: absolute;"
+      v-if="modelValue"
     >
       <el-icon>
-        <edit />
+        <delete />
       </el-icon>
-      重新上传</span>
+      删除</span>
+    <span
+      class="update"
+      @click="openChooseImg"
+      style="position: absolute;"
+      v-else
+    >
+      <el-icon>
+        <plus />
+      </el-icon>
+      上传</span>
   </div>
   <div
     v-else
@@ -25,16 +46,25 @@
       class="update-image"
       :style="{
         'background-image': `url(${getUrl(item)})`,
+        'position': 'relative',
       }"
     >
+      <el-icon :size="32" v-if="isVideoExt(item || '')" class="video video-icon"><VideoPlay /></el-icon>
+      <video v-if="isVideoExt(item || '')"
+            class="avatar video-avatar video"
+            muted preload="metadata"
+            @click="deleteImg(index)">
+        <source :src="getUrl(item) + '#t=1'"/>
+      </video>
       <span
         class="update"
         @click="deleteImg(index)"
+        style="position: absolute;"
       >
         <el-icon>
           <delete />
         </el-icon>
-        删除图片</span>
+        删除</span>
     </div>
     <div class="add-image">
       <span
@@ -42,9 +72,9 @@
         @click="openChooseImg"
       >
         <el-icon>
-          <folder-add />
+          <Plus />
         </el-icon>
-        上传图片</span>
+        上传</span>
     </div>
   </div>
 
@@ -102,11 +132,21 @@
             :key="key"
             :src="getUrl(item.url)"
             @click="chooseImg(item.url)"
+            fit="cover"
+            style="width: 100%;height: 100%;"
           >
             <template #error>
-              <div class="header-img-box-list">
-                <el-icon>
-                  <picture />
+              <el-icon :size="32" v-if="isVideoExt(item.url || '')" class="video video-icon"><VideoPlay /></el-icon>
+              <video v-if="isVideoExt(item.url || '')"
+                    class="avatar video-avatar video"
+                    muted preload="metadata"
+                    @click="chooseImg(item.url)">
+                <source :src="getUrl(item.url) + '#t=1'"/>
+                您的浏览器不支持视频播放
+              </video>
+              <div class="header-img-box-list" v-else>
+                <el-icon class="lost-image">
+                  <icon-picture />
                 </el-icon>
               </div>
             </template>
@@ -132,14 +172,14 @@
 
 <script setup>
 
-import { getUrl } from '@/utils/image'
+import { getUrl, isVideoExt } from '@/utils/image'
 import { onMounted, ref } from 'vue'
 import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Delete, FolderAdd } from '@element-plus/icons-vue'
+import { Delete, FolderAdd, Plus, Picture as IconPicture } from '@element-plus/icons-vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -224,6 +264,11 @@ const chooseImg = (url) => {
   drawer.value = false
 }
 const openChooseImg = async() => {
+
+  if(props.modelValue && !props.multiple) {
+      emits('update:modelValue', '')
+      return
+  }
   await getImageList()
   drawer.value = true
 }
@@ -245,6 +290,8 @@ const getImageList = async() => {
 .multiple-img{
   display: flex;
   gap:8px;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .add-image{
@@ -270,6 +317,7 @@ const getImageList = async() => {
   border: 1px dashed #ccc;
    background-repeat: no-repeat;
    background-size: cover;
+   position: relative;
   &:hover {
     color: #fff;
     background: linear-gradient(
@@ -288,12 +336,23 @@ const getImageList = async() => {
     .update {
       color: #fff;
     }
+    .video {
+      opacity: 0.2;
+    }
+  }
+
+  .video-icon {
+    position: absolute; left: calc(50% - 16px); top: calc(50% - 16px);
+  }
+  video {
+    object-fit: cover; max-width:100%; border-radius: 20px;
   }
   .update {
     height: 120px;
     width: 120px;
     text-align: center;
     color: transparent;
+    position: absolute;
   }
 }
 
@@ -333,6 +392,16 @@ const getImageList = async() => {
         vertical-align: middle;
         width: unset;
         height: unset;
+      }
+
+      .el-image {
+        position: relative;
+      }
+      .video-icon {
+        position: absolute; left: calc(50% - 16px); top: calc(50% - 16px);
+      }
+      video {
+        object-fit: cover; max-width:100%; min-height: 100%; border-radius: 8px;
       }
     }
   }

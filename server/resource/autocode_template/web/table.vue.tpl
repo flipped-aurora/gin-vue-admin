@@ -147,7 +147,7 @@
                   muted
                   preload="metadata"
                   >
-                    <source :src="getUrl(scope.row.{{.FieldJson}})" + '#t=1'">
+                    <source :src="getUrl(scope.row.{{.FieldJson}}) + '#t=1'">
                   </video>
               </template>
            </el-table-column>
@@ -233,15 +233,14 @@
                 />
           {{- end }}
           {{- if eq .FieldType "pictures" }}
-                <SelectImage v-model="formData.{{ .FieldJson }}"
+                <SelectImage
                  multiple
                  v-model="formData.{{ .FieldJson }}"
                  file-type="image"
                  />
           {{- end }}
           {{- if eq .FieldType "video" }}
-                <SelectImage v-model="formData.{{ .FieldJson }}"
-                multiple
+                <SelectImage
                 v-model="formData.{{ .FieldJson }}"
                 file-type="video"
                 />
@@ -276,7 +275,7 @@
                               muted
                               preload="metadata"
                             >
-                            <source :src="getUrl(formData.{{ .FieldJson }})" + '#t=1'">
+                            <source :src="getUrl(formData.{{ .FieldJson }}) + '#t=1'">
                         </video>
                 {{- else if eq .FieldType "pictures" }}
                         <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />

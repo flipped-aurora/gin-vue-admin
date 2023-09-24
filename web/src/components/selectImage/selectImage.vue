@@ -35,8 +35,7 @@
       删除</span>
     <span
       v-else
-      class="update"
-      style="position: absolute;"
+      class="update text-gray-600"
       @click="openChooseImg"
     >
       <el-icon>
@@ -83,7 +82,7 @@
     </div>
     <div class="add-image">
       <span
-        class="update"
+        class="update  text-gray-600"
         @click="openChooseImg"
       >
         <el-icon>

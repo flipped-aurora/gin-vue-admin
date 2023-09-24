@@ -146,6 +146,9 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "picture" {
 			autoCode.HasPic = true
 		}
+		if autoCode.Fields[i].FieldType == "video" {
+			autoCode.HasPic = true
+		}
 		if autoCode.Fields[i].FieldType == "richtext" {
 			autoCode.HasRichText = true
 		}
@@ -248,6 +251,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			autoCode.NeedSort = true
 		}
 		if autoCode.Fields[i].FieldType == "picture" {
+			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "video" {
 			autoCode.HasPic = true
 		}
 		if autoCode.Fields[i].FieldType == "richtext" {

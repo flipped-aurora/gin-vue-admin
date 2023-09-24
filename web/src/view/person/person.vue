@@ -5,7 +5,10 @@
         <div class="w-full h-full bg-white px-4 py-8 rounded-lg shadow-lg box-border">
           <div class="user-card px-6 text-center bg-white shrink-0">
             <div class="flex justify-center">
-              <SelectImage v-model="userStore.userInfo.headerImg" />
+              <SelectImage
+                v-model="userStore.userInfo.headerImg"
+                file-type="image"
+              />
             </div>
             <div class="py-6 text-center">
               <p

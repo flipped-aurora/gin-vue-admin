@@ -574,6 +574,10 @@ const typeOptions = ref([
     value: 'pictures',
   },
   {
+    label: '视频（字符串）',
+    value: 'video',
+  },
+  {
     label: '文件（json字符串）',
     value: 'file',
   }

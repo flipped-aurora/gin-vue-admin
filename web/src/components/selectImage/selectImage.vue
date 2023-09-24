@@ -7,29 +7,37 @@
       'position': 'relative',
     }"
   >
-      <el-icon :size="32" v-if="isVideoExt(modelValue || '')" class="video video-icon" style=""><VideoPlay /></el-icon>
-      <video v-if="isVideoExt(modelValue || '')"
-            class="avatar video-avatar video"
-            muted preload="metadata"
-            @click="openChooseImg"
-            style="">
-        <source :src="getUrl(modelValue) + '#t=1'"/>
-      </video>
-    <span
-      class="update"
+    <el-icon
+      v-if="isVideoExt(modelValue || '')"
+      :size="32"
+      class="video video-icon"
+      style=""
+    ><VideoPlay /></el-icon>
+    <video
+      v-if="isVideoExt(modelValue || '')"
+      class="avatar video-avatar video"
+      muted
+      preload="metadata"
+      style=""
       @click="openChooseImg"
-      style="position: absolute;"
+    >
+      <source :src="getUrl(modelValue) + '#t=1'">
+    </video>
+    <span
       v-if="modelValue"
+      class="update"
+      style="position: absolute;"
+      @click="openChooseImg"
     >
       <el-icon>
         <delete />
       </el-icon>
       删除</span>
     <span
-      class="update"
-      @click="openChooseImg"
-      style="position: absolute;"
       v-else
+      class="update"
+      style="position: absolute;"
+      @click="openChooseImg"
     >
       <el-icon>
         <plus />
@@ -49,17 +57,24 @@
         'position': 'relative',
       }"
     >
-      <el-icon :size="32" v-if="isVideoExt(item || '')" class="video video-icon"><VideoPlay /></el-icon>
-      <video v-if="isVideoExt(item || '')"
-            class="avatar video-avatar video"
-            muted preload="metadata"
-            @click="deleteImg(index)">
-        <source :src="getUrl(item) + '#t=1'"/>
+      <el-icon
+        v-if="isVideoExt(item || '')"
+        :size="32"
+        class="video video-icon"
+      ><VideoPlay /></el-icon>
+      <video
+        v-if="isVideoExt(item || '')"
+        class="avatar video-avatar video"
+        muted
+        preload="metadata"
+        @click="deleteImg(index)"
+      >
+        <source :src="getUrl(item) + '#t=1'">
       </video>
       <span
         class="update"
-        @click="deleteImg(index)"
         style="position: absolute;"
+        @click="deleteImg(index)"
       >
         <el-icon>
           <delete />
@@ -131,20 +146,30 @@
           <el-image
             :key="key"
             :src="getUrl(item.url)"
-            @click="chooseImg(item.url)"
             fit="cover"
             style="width: 100%;height: 100%;"
+            @click="chooseImg(item.url)"
           >
             <template #error>
-              <el-icon :size="32" v-if="isVideoExt(item.url || '')" class="video video-icon"><VideoPlay /></el-icon>
-              <video v-if="isVideoExt(item.url || '')"
-                    class="avatar video-avatar video"
-                    muted preload="metadata"
-                    @click="chooseImg(item.url)">
-                <source :src="getUrl(item.url) + '#t=1'"/>
+              <el-icon
+                v-if="isVideoExt(item.url || '')"
+                :size="32"
+                class="video video-icon"
+              ><VideoPlay /></el-icon>
+              <video
+                v-if="isVideoExt(item.url || '')"
+                class="avatar video-avatar video"
+                muted
+                preload="metadata"
+                @click="chooseImg(item.url)"
+              >
+                <source :src="getUrl(item.url) + '#t=1'">
                 您的浏览器不支持视频播放
               </video>
-              <div class="header-img-box-list" v-else>
+              <div
+                v-else
+                class="header-img-box-list"
+              >
                 <el-icon class="lost-image">
                   <icon-picture />
                 </el-icon>
@@ -197,6 +222,10 @@ const props = defineProps({
   multiple: {
     type: Boolean,
     default: false
+  },
+  fileType: {
+    type: String,
+    default: ''
   }
 })
 
@@ -254,7 +283,30 @@ const editFileNameFunc = async(row) => {
 const drawer = ref(false)
 const picList = ref([])
 
+const imageTypeList = ['png', 'jpg', 'jpge', 'gif', 'bmp', 'webp']
+const videoTyteList = ['mp4', 'avi', 'rmvb', 'rm', 'asf', 'divx', 'mpg', 'mpeg', 'mpe', 'wmv', 'mkv', 'vob']
+
+const listObj = {
+  image: imageTypeList,
+  video: videoTyteList
+}
+
 const chooseImg = (url) => {
+  console.log(url)
+  if (props.fileType) {
+    const typeSuccess = listObj[props.fileType].some(item => {
+      if (url.includes(item)) {
+        return true
+      }
+    })
+    if (!typeSuccess) {
+      ElMessage({
+        type: 'error',
+        message: '当前类型不支持使用'
+      })
+      return
+    }
+  }
   if (props.multiple) {
     multipleValue.value.push(url)
     emits('update:modelValue', multipleValue.value)
@@ -264,10 +316,9 @@ const chooseImg = (url) => {
   drawer.value = false
 }
 const openChooseImg = async() => {
-
-  if(props.modelValue && !props.multiple) {
-      emits('update:modelValue', '')
-      return
+  if (props.modelValue && !props.multiple) {
+    emits('update:modelValue', '')
+    return
   }
   await getImageList()
   drawer.value = true

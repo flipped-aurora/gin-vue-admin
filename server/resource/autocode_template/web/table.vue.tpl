@@ -139,6 +139,18 @@
                 </div>
               </template>
            </el-table-column>
+           {{- else if eq .FieldType "video" }}
+           <el-table-column label="{{.FieldDesc}}" width="200">
+              <template #default="scope">
+               <video
+                  style="width: 100px; height: 100px"
+                  muted
+                  preload="metadata"
+                  >
+                    <source :src="getUrl(scope.row.{{.FieldJson}})" + '#t=1'">
+                  </video>
+              </template>
+           </el-table-column>
            {{- else if eq .FieldType "richtext" }}
                       <el-table-column label="{{.FieldDesc}}" width="200">
                          <template #default="scope">
@@ -215,11 +227,25 @@
                 </el-select>
           {{- end }}
           {{- if eq .FieldType "picture" }}
-                <SelectImage v-model="formData.{{ .FieldJson }}" />
+                <SelectImage
+                 v-model="formData.{{ .FieldJson }}"
+                 file-type="image"
+                />
           {{- end }}
           {{- if eq .FieldType "pictures" }}
-                <SelectImage v-model="formData.{{ .FieldJson }}" multiple />
+                <SelectImage v-model="formData.{{ .FieldJson }}"
+                 multiple
+                 v-model="formData.{{ .FieldJson }}"
+                 file-type="image"
+                 />
           {{- end }}
+          {{- if eq .FieldType "video" }}
+                <SelectImage v-model="formData.{{ .FieldJson }}"
+                multiple
+                v-model="formData.{{ .FieldJson }}"
+                file-type="video"
+                />
+           {{- end }}
           {{- if eq .FieldType "file" }}
                 <SelectFile v-model="formData.{{ .FieldJson }}" />
           {{- end }}
@@ -244,6 +270,14 @@
                         {{"{{"}} filterDict(formData.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
                 {{- else if eq .FieldType "picture" }}
                         <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
+                {{- else if eq .FieldType "video" }}
+                        <video
+                              style="width: 50px; height: 50px"
+                              muted
+                              preload="metadata"
+                            >
+                            <source :src="getUrl(formData.{{ .FieldJson }})" + '#t=1'">
+                        </video>
                 {{- else if eq .FieldType "pictures" }}
                         <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
                 {{- else if eq .FieldType "file" }}
@@ -332,6 +366,9 @@ const formData = ref({
         {{- if eq .FieldType "picture" }}
         {{.FieldJson}}: "",
         {{- end }}
+        {{- if eq .FieldType "video" }}
+        {{.FieldJson}}: "",
+        {{- end }}
         {{- if eq .FieldType "pictures" }}
         {{.FieldJson}}: [],
         {{- end }}
@@ -340,6 +377,7 @@ const formData = ref({
         {{- end }}
         {{- end }}
         })
+
 
 // 验证规则
 const rule = reactive({

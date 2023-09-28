@@ -17,7 +17,7 @@ import (
 func Routers() *gin.Engine {
 	
 	// 设置为发布模式
-	if global.GvaConfig.System.Env == "public" {
+	if global.GVA_CONFIG.System.Env == "public" {
 		gin.SetMode(gin.ReleaseMode) //DebugMode ReleaseMode TestMode
 	}
 	Router := gin.New()

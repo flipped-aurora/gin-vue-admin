@@ -79,6 +79,7 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor) => {
   editorRef.value = editor
+  valueHtml.value = props.modelValue
 }
 
 watch(() => props.modelValue, () => {

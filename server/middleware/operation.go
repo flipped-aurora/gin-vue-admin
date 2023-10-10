@@ -23,10 +23,11 @@ import (
 var operationRecordService = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 
 var respPool sync.Pool
+var bufferSize = 1024
 
 func init() {
 	respPool.New = func() interface{} {
-		return make([]byte, 1024)
+		return make([]byte, bufferSize)
 	}
 }
 
@@ -56,7 +57,7 @@ func OperationRecord() gin.HandlerFunc {
 			body, _ = json.Marshal(&m)
 		}
 		claims, _ := utils.GetClaims(c)
-		if claims.BaseClaims.ID != 0 {
+		if claims != nil && claims.BaseClaims.ID != 0 {
 			userId = int(claims.BaseClaims.ID)
 		} else {
 			id, err := strconv.Atoi(c.Request.Header.Get("x-user-id"))
@@ -76,12 +77,12 @@ func OperationRecord() gin.HandlerFunc {
 
 		// 上传文件时候 中间件日志进行裁断操作
 		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data") {
-			if len(record.Body) > 1024 {
+			if len(record.Body) > bufferSize {
 				// 截断
 				newBody := respPool.Get().([]byte)
 				copy(newBody, record.Body)
 				record.Body = string(newBody)
-				defer respPool.Put(newBody[:0])
+				defer respPool.Put(newBody)
 			}
 		}
 
@@ -109,12 +110,12 @@ func OperationRecord() gin.HandlerFunc {
 			strings.Contains(c.Writer.Header().Get("Content-Type"), "application/download") ||
 			strings.Contains(c.Writer.Header().Get("Content-Disposition"), "attachment") ||
 			strings.Contains(c.Writer.Header().Get("Content-Transfer-Encoding"), "binary") {
-			if len(record.Resp) > 1024 {
+			if len(record.Resp) > bufferSize {
 				// 截断
 				newBody := respPool.Get().([]byte)
 				copy(newBody, record.Resp)
 				record.Resp = string(newBody)
-				defer respPool.Put(newBody[:0])
+				defer respPool.Put(newBody)
 			}
 		}
 

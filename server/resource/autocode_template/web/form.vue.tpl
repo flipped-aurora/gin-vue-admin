@@ -99,6 +99,9 @@ const formData = ref({
             {{- if eq .FieldType "string" }}
             {{.FieldJson}}: '',
             {{- end }}
+            {{- if eq .FieldType "richtext" }}
+            {{.FieldJson}}: '',
+            {{- end }}
             {{- if eq .FieldType "int" }}
             {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
             {{- end }}

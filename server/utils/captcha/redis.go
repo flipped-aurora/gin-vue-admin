@@ -13,6 +13,7 @@ func NewDefaultRedisStore() *RedisStore {
 	return &RedisStore{
 		Expiration: time.Second * 180,
 		PreKey:     "CAPTCHA_",
+		Context:    context.TODO(),
 	}
 }
 

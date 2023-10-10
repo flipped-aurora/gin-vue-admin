@@ -20,7 +20,7 @@
           >
           <div
             v-if="isSider"
-            class="inline-flex text-white font-bold text-2xl"
+            class="inline-flex font-bold text-2xl"
             :style="{color:textColor}"
           >{{ $GIN_VUE_ADMIN.appName }}</div>
         </div>

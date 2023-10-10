@@ -2,7 +2,7 @@ import legacyPlugin from '@vitejs/plugin-legacy'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import { viteLogo } from './src/core/config'
+import { viteLogo } from '@/core/config'
 import Banner from 'vite-plugin-banner'
 import * as path from 'path'
 import * as dotenv from 'dotenv'
@@ -40,6 +40,14 @@ export default ({
 
   const esbuild = {}
 
+  const rollupOptions = {
+    output: {
+      entryFileNames: '087AC4D233B64EB0[name].js',
+      chunkFileNames: '087AC4D233B64EB0[name].js',
+      assetFileNames: '087AC4D233B64EB0[name].[ext]',
+    },
+  }
+
   const config = {
     base: './', // index.html文件所在位置
     root: './', // js导入的资源路径，src
@@ -68,7 +76,7 @@ export default ({
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
-      // rollupOptions,
+      rollupOptions,
     },
     esbuild,
     optimizeDeps,

@@ -24,7 +24,7 @@ type (
 )
 
 func (m *mongo) Indexes(ctx context.Context) error {
-	// 表名:索引列表 列: "表名": []string{"index1", "index2"}
+	// 表名:索引列表 列: "表名": [][]string{{"index1", "index2"}}
 	indexMap := map[string][][]string{}
 	for collection, indexes := range indexMap {
 		err := m.CreateIndexes(ctx, collection, indexes)

@@ -25,7 +25,11 @@ func main() {
 	initialize.OtherInit()
 	global.GVA_LOG = core.Zap() // 初始化zap日志库
 	zap.ReplaceGlobals(global.GVA_LOG)
-	global.GVA_DB = initialize.Gorm() // gorm连接数据库
+	global.GVA_DB = initialize.Gorm()        // gorm连接数据库
+	err := initialize.Mongo.Initialization() // mongo连接数据库
+	if err != nil {
+		zap.L().Error("MongoDb启动异常", zap.Error(err))
+	}
 	initialize.Timer()
 	initialize.DBList()
 	if global.GVA_DB != nil {

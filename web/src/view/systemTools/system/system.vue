@@ -131,6 +131,57 @@
         </el-collapse-item>
 
         <el-collapse-item
+          title="Mongo 数据库配置"
+          name="14"
+        >
+          <el-form-item label="collection name(表名,一般不写)">
+            <el-input v-model="config.mongo.coll" />
+          </el-form-item>
+          <el-form-item label="mongodb options">
+            <el-input v-model="config.mongo.options" />
+          </el-form-item>
+          <el-form-item label="database name(数据库名)">
+            <el-input v-model="config.mongo.database" />
+          </el-form-item>
+          <el-form-item label="用户名">
+            <el-input v-model="config.mongo.username" />
+          </el-form-item>
+          <el-form-item label="密码">
+            <el-input v-model="config.mongo.password" />
+          </el-form-item>
+          <el-form-item label="最小连接池">
+            <el-input v-model="config.mongo['min-pool-size']" />
+          </el-form-item>
+          <el-form-item label="最大连接池">
+            <el-input v-model="config.mongo['max-pool-size']" />
+          </el-form-item>
+          <el-form-item label="socket超时时间">
+            <el-input v-model="config.mongo['socket-timeout-ms']" />
+          </el-form-item>
+          <el-form-item label="连接超时时间">
+            <el-input v-model="config.mongo['socket-timeout-ms']" />
+          </el-form-item>
+          <el-form-item label="是否开启zap日志">
+            <el-checkbox v-model="config.mongo['is-zap']" />
+          </el-form-item>
+          <el-form-item label="hosts">
+            <template v-for="(item,k) in config.mongo.hosts">
+            <div
+              v-for="(_,k2) in item"
+              :key="k2"
+            >
+              <el-form-item
+                :key="k+k2"
+                :label="k2"
+              >
+                <el-input v-model="item[k2]" />
+              </el-form-item>
+            </div>
+          </template>
+          </el-form-item>
+        </el-collapse-item>
+
+        <el-collapse-item
           title="邮箱配置"
           name="5"
         >
@@ -464,6 +515,24 @@ const config = ref({
   excel: {},
   autocode: {},
   redis: {},
+  mongo: {
+    coll: '',
+    options: '',
+    database: '',
+    username: '',
+    password: '',
+    'min-pool-size': '',
+    'max-pool-size': '',
+    'socket-timeout-ms': '',
+    'connect-timeout-ms': '',
+    'is-zap': '',
+    hosts: [
+      {
+        host: '',
+        port: ''
+      }
+    ]
+  },
   qiniu: {},
   'tencent-cos': {},
   'aliyun-oss': {},

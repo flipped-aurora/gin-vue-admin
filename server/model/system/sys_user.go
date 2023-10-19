@@ -26,3 +26,11 @@ type SysUser struct {
 func (SysUser) TableName() string {
 	return "sys_users"
 }
+
+func (user *SysUser) GetAuthoritiesIdList() []uint {
+	AuthorityIdsList := []uint{}
+	for _, v := range user.Authorities {
+		AuthorityIdsList = append(AuthorityIdsList, v.AuthorityId)
+	}
+	return AuthorityIdsList
+}

@@ -101,8 +101,8 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 //@param: uuid uuid.UUID, authorityId string
 //@return: err error
 
-func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err error) {
-	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
+func (userService *UserService) SetUserAuthority(id uint, authorityId []uint) (err error) {
+	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id in (?)", id, authorityId).First(&system.SysUserAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}

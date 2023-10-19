@@ -82,7 +82,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		ID:          user.ID,
 		NickName:    user.NickName,
 		Username:    user.Username,
-		AuthorityId: user.AuthorityId,
+		AuthorityId: user.GetAuthoritiesIdList(),
 	})
 	token, err := j.CreateToken(claims)
 	if err != nil {
@@ -254,7 +254,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 		return
 	}
 	userID := utils.GetUserID(c)
-	err = userService.SetUserAuthority(userID, sua.AuthorityId)
+	err = userService.SetUserAuthority(userID, []uint{sua.AuthorityId})
 	if err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
@@ -262,7 +262,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	}
 	claims := utils.GetUserInfo(c)
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
-	claims.AuthorityId = sua.AuthorityId
+	claims.AuthorityId = []uint{sua.AuthorityId}
 	if token, err := j.CreateToken(*claims); err != nil {
 		global.GVA_LOG.Error("修改失败!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)

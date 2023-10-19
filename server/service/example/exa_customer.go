@@ -60,22 +60,28 @@ func (exa *CustomerService) GetExaCustomer(id uint) (customer example.ExaCustome
 //@param: sysUserAuthorityID string, info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID uint, info request.PageInfo) (list interface{}, total int64, err error) {
+func (exa *CustomerService) GetCustomerInfoList(sysUserAuthorityID []uint, info request.PageInfo) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	db := global.GVA_DB.Model(&example.ExaCustomer{})
-	var a system.SysAuthority
-	a.AuthorityId = sysUserAuthorityID
-	auth, err := systemService.AuthorityServiceApp.GetAuthorityInfo(a)
-	if err != nil {
-		return
-	}
+
 	var dataId []uint
-	for _, v := range auth.DataAuthorityId {
-		dataId = append(dataId, v.AuthorityId)
-	}
 	var CustomerList []example.ExaCustomer
-	err = db.Where("sys_user_authority_id in ?", dataId).Count(&total).Error
+
+	for _, v := range sysUserAuthorityID {
+
+		var a system.SysAuthority
+		a.AuthorityId = v
+		auth, err := systemService.AuthorityServiceApp.GetAuthorityInfo(a)
+		if err != nil {
+			return CustomerList, total, err
+		}
+		for _, v := range auth.DataAuthorityId {
+			dataId = append(dataId, v.AuthorityId)
+		}
+	}
+
+	err = db.Where("sys_user_authority_id in (?)", dataId).Count(&total).Error
 	if err != nil {
 		return CustomerList, total, err
 	} else {

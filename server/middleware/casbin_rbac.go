@@ -23,15 +23,21 @@ func CasbinHandler() gin.HandlerFunc {
 			obj := strings.TrimPrefix(path, global.GVA_CONFIG.System.RouterPrefix)
 			// 获取请求方法
 			act := c.Request.Method
-			// 获取用户的角色
-			sub := strconv.Itoa(int(waitUse.AuthorityId))
 			e := casbinService.Casbin() // 判断策略中是否存在
-			success, _ := e.Enforce(sub, obj, act)
-			if !success {
-				response.FailWithDetailed(gin.H{}, "权限不足", c)
-				c.Abort()
-				return
+
+			for _, v := range waitUse.AuthorityId {
+				// 获取用户的角色
+				sub := strconv.Itoa(int(v))
+				success, _ := e.Enforce(sub, obj, act)
+				if success {
+					c.Next()
+					return
+				}
 			}
+
+			response.FailWithDetailed(gin.H{}, "权限不足", c)
+			c.Abort()
+			return
 		}
 		c.Next()
 	}

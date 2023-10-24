@@ -277,6 +277,12 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		return err
 	}
 	meta, _ := json.Marshal(autoCode)
+
+	// 增加判断：Package不为空
+	if autoCode.Package == "" {
+		return errors.New("Package为空\n")
+	}
+
 	// 写入文件前，先创建文件夹
 	if err = utils.CreateDir(needMkdir...); err != nil {
 		return err

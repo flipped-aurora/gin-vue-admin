@@ -204,7 +204,7 @@ const init = async() => {
     pageSize: 999999
   })
 
-  dictOptions.value = dictRes.data.list
+  dictOptions.value = dictRes.data
 }
 init()
 

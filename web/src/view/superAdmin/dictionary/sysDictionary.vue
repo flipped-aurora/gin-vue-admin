@@ -14,49 +14,54 @@
             新增
           </el-button>
         </div>
-        <div
-          v-for="dictionary in dictionaryData"
-          :key="dictionary.ID"
-          class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 hover:text-gray-800 group bg-gray-50"
-          :class="selectID === dictionary.ID && 'active'"
-          @click="toDetail(dictionary)"
+        <el-scrollbar
+          class="mt-4"
+          style="height: calc(100vh - 300px)"
         >
-          <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>
-          <div>
-            <el-icon
-              class="group-hover:text-blue-500"
-              :class="selectID === dictionary.ID ? 'text-white-800':'text-blue-500'"
-              @click.stop="updateSysDictionaryFunc(dictionary)"
-            >
-              <Edit />
-            </el-icon>
-            <el-popover
-              placement="top"
-              width="160"
-            >
-              <p>确定要删除吗？</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="dictionary.visible = false"
-                >取消</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteSysDictionaryFunc(dictionary)"
-                >确定</el-button>
-              </div>
-              <template #reference>
-                <el-icon
-                  class="ml-2 group-hover:text-red-500"
-                  :class="selectID === dictionary.ID ? 'text-white-800':'text-red-500'"
-                >
-                  <Delete />
-                </el-icon>
-              </template>
-            </el-popover>
+          <div
+            v-for="dictionary in dictionaryData"
+            :key="dictionary.ID"
+            class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 hover:text-gray-800 group bg-gray-50"
+            :class="selectID === dictionary.ID && 'active'"
+            @click="toDetail(dictionary)"
+          >
+            <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>
+            <div>
+              <el-icon
+                class="group-hover:text-blue-500"
+                :class="selectID === dictionary.ID ? 'text-white-800':'text-blue-500'"
+                @click.stop="updateSysDictionaryFunc(dictionary)"
+              >
+                <Edit />
+              </el-icon>
+              <el-popover
+                placement="top"
+                width="160"
+              >
+                <p>确定要删除吗？</p>
+                <div style="text-align: right; margin-top: 8px;">
+                  <el-button
+                    type="primary"
+                    link
+                    @click="dictionary.visible = false"
+                  >取消</el-button>
+                  <el-button
+                    type="primary"
+                    @click="deleteSysDictionaryFunc(dictionary)"
+                  >确定</el-button>
+                </div>
+                <template #reference>
+                  <el-icon
+                    class="ml-2 group-hover:text-red-500"
+                    :class="selectID === dictionary.ID ? 'text-white-800':'text-red-500'"
+                  >
+                    <Delete />
+                  </el-icon>
+                </template>
+              </el-popover>
+            </div>
           </div>
-        </div>
+        </el-scrollbar>
       </div>
       <div class="flex-1 bg-white">
         <sysDictionaryDetail :sys-dictionary-i-d="selectID" />

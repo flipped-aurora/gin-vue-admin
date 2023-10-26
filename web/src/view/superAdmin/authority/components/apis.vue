@@ -13,18 +13,20 @@
       >确 定</el-button>
     </div>
     <div class="tree-content">
-      <el-tree
-        ref="apiTree"
-        :data="apiTreeData"
-        :default-checked-keys="apiTreeIds"
-        :props="apiDefaultProps"
-        default-expand-all
-        highlight-current
-        node-key="onlyId"
-        show-checkbox
-        :filter-node-method="filterNode"
-        @check="nodeChange"
-      />
+      <el-scrollbar>
+        <el-tree
+          ref="apiTree"
+          :data="apiTreeData"
+          :default-checked-keys="apiTreeIds"
+          :props="apiDefaultProps"
+          default-expand-all
+          highlight-current
+          node-key="onlyId"
+          show-checkbox
+          :filter-node-method="filterNode"
+          @check="nodeChange"
+        />
+      </el-scrollbar>
     </div>
   </div>
 </template>

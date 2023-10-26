@@ -1,14 +1,16 @@
 <template>
   <div>
     <el-upload
-        multiple
-        :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
-        :headers="{ 'x-token': userStore.token }"
-        :on-error="uploadError"
-        :on-success="uploadSuccess"
-        :show-file-list="true"
-        :file-list="fileList"
-        class="upload-btn"
+      multiple
+      :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
+      :headers="{ 'x-token': userStore.token }"
+      :on-error="uploadError"
+      :on-success="uploadSuccess"
+      :show-file-list="true"
+      :file-list="fileList"
+      :limit="limit"
+      :accept="accept"
+      class="upload-btn"
     >
       <el-button type="primary">上传文件</el-button>
     </el-upload>
@@ -17,9 +19,9 @@
 
 <script setup>
 
-import {ref, watch} from 'vue'
-import {ElMessage} from 'element-plus'
-import {useUserStore} from '@/pinia/modules/user'
+import { ref, watch } from 'vue'
+import { ElMessage } from 'element-plus'
+import { useUserStore } from '@/pinia/modules/user'
 
 defineOptions({
   name: 'UploadCommon',
@@ -29,7 +31,15 @@ const props = defineProps({
   modelValue: {
     type: Array,
     default: () => []
-  }
+  },
+  limit: {
+    type: Number,
+    default: 3
+  },
+  accept: {
+    type: String,
+    default: ''
+  },
 })
 
 const path = ref(import.meta.env.VITE_BASE_API)
@@ -47,14 +57,14 @@ watch(fileList.value, (val) => {
 })
 
 watch(
-    () => props.modelValue,
-    value => {
-      fileList.value = value
-    },
-    {immediate: true}
+  () => props.modelValue,
+  value => {
+    fileList.value = value
+  },
+  { immediate: true }
 )
 const uploadSuccess = (res) => {
-  const {data} = res
+  const { data } = res
   if (data.file) {
     fileList.value.push({
       name: data.file.name,

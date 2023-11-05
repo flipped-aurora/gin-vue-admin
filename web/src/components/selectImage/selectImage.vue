@@ -242,7 +242,6 @@ const props = defineProps({
     default: 0
   }
 })
-
 const multipleValue = ref([])
 
 onMounted(() => {

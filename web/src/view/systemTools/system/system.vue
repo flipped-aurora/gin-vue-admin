@@ -217,7 +217,7 @@
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
           </el-form-item>
-          <el-form-item label="平台宽度">
+          <el-form-item label="图片宽度">
             <el-input v-model.number="config.captcha['img-width']" />
           </el-form-item>
           <el-form-item label="图片高度">

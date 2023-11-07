@@ -7,7 +7,7 @@
       <a
         class="text-gray-800 font-bold"
         href="https://github.com/flipped-aurora/gin-vue-admin"
-      >{{ $GIN_VUE_ADMIN.appName }}</a>
+      >Gin-Vue-Admin</a>
     </span>
     <slot />
     <span>Copyright</span>

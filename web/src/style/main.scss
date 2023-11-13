@@ -587,8 +587,9 @@ li {
             }
         }
         .is-leaf {
+            @apply border-b border-t-0 border-l-0 border-solid border-gray-50;
+            border-right:var(--el-table-border);
             background: #F7FBFF !important;
-            @apply border-b border-t-0 border-l-0 border-r-0 border-solid border-gray-50;
         }
     }
 }

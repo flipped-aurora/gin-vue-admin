@@ -32,21 +32,18 @@
           align="left"
           label="展示值"
           prop="label"
-          width="120"
         />
 
         <el-table-column
           align="left"
           label="字典值"
           prop="value"
-          width="120"
         />
 
         <el-table-column
           align="left"
           label="扩展值"
           prop="extend"
-          width="120"
         />
 
         <el-table-column
@@ -68,6 +65,7 @@
         <el-table-column
           align="left"
           label="操作"
+          width="180"
         >
           <template #default="scope">
             <el-button

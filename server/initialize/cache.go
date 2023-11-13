@@ -5,8 +5,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
-func Cache() {
-	c, err := cache.Create()
+func InitCache() {
+	c, err := cache.Create(global.GVA_CONFIG.Cache)
 	if err != nil {
 		panic(err)
 	}

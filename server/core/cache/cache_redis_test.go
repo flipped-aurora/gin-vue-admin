@@ -2,19 +2,23 @@ package cache
 
 import (
 	"context"
-	"reflect"
+	"github.com/redis/go-redis/v9"
 	"testing"
 	"time"
+)
 
-	"github.com/redis/go-redis/v9"
+var (
+	rds = redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6379",
+	})
+	ctx = context.Background()
+	cr  = &CacheRedis{rds: rds}
 )
 
 func TestCacheRedis_Decr(t *testing.T) {
-
-	rds := redis.NewClient(&redis.Options{
-		Addr: "127.0.0.1:6379",
-	})
-	ctx := context.Background()
+	cr.Set(context.Background(), "decr_name", "0")
+	cr.Delete(context.Background(), "decr_not_found")
+	cr.Set(ctx, "str", "str1")
 
 	type fields struct {
 		redis *redis.Client
@@ -34,30 +38,32 @@ func TestCacheRedis_Decr(t *testing.T) {
 		{
 			name:    "decr",
 			fields:  fields{redis: rds},
-			args:    args{ctx: ctx, key: "name1"},
+			args:    args{ctx: ctx, key: "decr_name"},
 			want:    -1,
-			wantErr: true,
+			wantErr: false,
 		},
 		{
 			name:    "decr",
 			fields:  fields{redis: rds},
-			args:    args{ctx: ctx, key: "name1"},
+			args:    args{ctx: ctx, key: "decr_name"},
 			want:    -2,
-			wantErr: true,
+			wantErr: false,
 		},
 		{
-			name:    "decr",
+			name:    "empty",
 			fields:  fields{redis: rds},
-			args:    args{ctx: ctx, key: "name1"},
-			want:    -3,
+			args:    args{ctx: ctx, key: "decr_not_found"},
+			want:    -1,
+			wantErr: false,
+		},
+		{
+			name:    "string",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "str"},
+			want:    0,
 			wantErr: true,
 		},
 	}
-
-	init := &CacheRedis{
-		rds: rds,
-	}
-	init.Delete(context.Background(), "name1")
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -78,6 +84,8 @@ func TestCacheRedis_Decr(t *testing.T) {
 }
 
 func TestCacheRedis_Delete(t *testing.T) {
+	cr.Set(ctx, "exits_name", "zhangsan")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -91,7 +99,18 @@ func TestCacheRedis_Delete(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exits",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exits_name"},
+			wantErr: false,
+		},
+		{
+			name:    "not_exits",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exits_name1"},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -106,6 +125,9 @@ func TestCacheRedis_Delete(t *testing.T) {
 }
 
 func TestCacheRedis_Exist(t *testing.T) {
+	cr.Set(ctx, "exist_str", "hello")
+	cr.Delete(ctx, "not_exist_str")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -120,7 +142,20 @@ func TestCacheRedis_Exist(t *testing.T) {
 		want    bool
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_str"},
+			want:    true,
+			wantErr: false,
+		},
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exist_str"},
+			want:    false,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -140,6 +175,9 @@ func TestCacheRedis_Exist(t *testing.T) {
 }
 
 func TestCacheRedis_Expire(t *testing.T) {
+	cr.Set(ctx, "exist_expire", "world")
+	cr.Delete(ctx, "not_exist_expire")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -155,7 +193,20 @@ func TestCacheRedis_Expire(t *testing.T) {
 		want    bool
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_expire", expiration: time.Second * 10},
+			want:    true,
+			wantErr: false,
+		},
+		{
+			name:    "not_exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exist_expire", expiration: time.Second * 10},
+			want:    false,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -175,6 +226,9 @@ func TestCacheRedis_Expire(t *testing.T) {
 }
 
 func TestCacheRedis_Get(t *testing.T) {
+	cr.Set(ctx, "exist_get", "world")
+	cr.Delete(ctx, "not_exist_get")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -189,7 +243,20 @@ func TestCacheRedis_Get(t *testing.T) {
 		want    string
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_get"},
+			want:    "world",
+			wantErr: false,
+		},
+		{
+			name:    "not_exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exist_get"},
+			want:    "",
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -209,6 +276,10 @@ func TestCacheRedis_Get(t *testing.T) {
 }
 
 func TestCacheRedis_Incr(t *testing.T) {
+	cr.Set(context.Background(), "incr_name", "0")
+	cr.Delete(context.Background(), "incr_not_found")
+	cr.Set(ctx, "str", "str1")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -223,7 +294,34 @@ func TestCacheRedis_Incr(t *testing.T) {
 		want    int64
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "incr",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "incr_name"},
+			want:    1,
+			wantErr: false,
+		},
+		{
+			name:    "incr",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "incr_name"},
+			want:    2,
+			wantErr: false,
+		},
+		{
+			name:    "empty",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "incr_not_found"},
+			want:    1,
+			wantErr: false,
+		},
+		{
+			name:    "string",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "str"},
+			want:    0,
+			wantErr: true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -243,6 +341,9 @@ func TestCacheRedis_Incr(t *testing.T) {
 }
 
 func TestCacheRedis_Set(t *testing.T) {
+	cr.Set(ctx, "exist_set", "world")
+	cr.Delete(ctx, "not_exist_set")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -257,7 +358,18 @@ func TestCacheRedis_Set(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_set", value: "world"},
+			wantErr: false,
+		},
+		{
+			name:    "not_exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exist_set", value: "world"},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -272,6 +384,9 @@ func TestCacheRedis_Set(t *testing.T) {
 }
 
 func TestCacheRedis_SetEx(t *testing.T) {
+	cr.Set(ctx, "exist_setex", "world")
+	cr.Delete(ctx, "not_exist_setex")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -287,7 +402,18 @@ func TestCacheRedis_SetEx(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_setex", value: "world", expiration: time.Second * 20},
+			wantErr: false,
+		},
+		{
+			name:    "not_exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exist_setex", value: "world", expiration: time.Second * 20},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -302,6 +428,10 @@ func TestCacheRedis_SetEx(t *testing.T) {
 }
 
 func TestCacheRedis_Ttl(t *testing.T) {
+	cr.Set(ctx, "exist_durable_ttl", "world")
+	cr.SetEx(ctx, "exist_ttl", "world", time.Second*20)
+	cr.Delete(ctx, "not_exist_ttl")
+
 	type fields struct {
 		redis *redis.Client
 	}
@@ -316,7 +446,27 @@ func TestCacheRedis_Ttl(t *testing.T) {
 		want    int
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_ttl"},
+			want:    20,
+			wantErr: false,
+		},
+		{
+			name:    "not_exist",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "not_exist_ttl"},
+			want:    -2,
+			wantErr: false,
+		},
+		{
+			name:    "exist_durable",
+			fields:  fields{redis: rds},
+			args:    args{ctx: ctx, key: "exist_durable_ttl"},
+			want:    -1,
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -330,26 +480,6 @@ func TestCacheRedis_Ttl(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("Ttl() got = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestNewCacheRedis(t *testing.T) {
-	type args struct {
-		client *redis.Client
-	}
-	tests := []struct {
-		name string
-		args args
-		want *CacheRedis
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := NewCacheRedis(tt.args.client); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewCacheRedis() = %v, want %v", got, tt.want)
 			}
 		})
 	}

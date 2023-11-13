@@ -4,24 +4,21 @@ import (
 	"context"
 	"errors"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"github.com/redis/go-redis/v9"
 )
 
-type CreateCacheError error
-
-func Create() (ICache, error) {
-	mode := global.GVA_CONFIG.Cache.Model
-	if len(mode) == 0 {
-		return nil, CreateCacheError(errors.New("mode not found"))
+func Create(c config.Cache) (ICache, error) {
+	if len(c.Mode) == 0 {
+		return nil, errors.New("mode not found")
 	}
 
-	switch mode {
-	case "rds":
-		redisCfg := global.GVA_CONFIG.Cache.Redis
+	switch c.Mode {
+	case "redis":
+		redisCfg := c.Redis
 		return createRedis(redisCfg.Addr, redisCfg.Password, redisCfg.DB)
 	default:
-		return nil, CreateCacheError(errors.New("mode not found"))
+		return nil, errors.New("mode not found")
 	}
 }
 

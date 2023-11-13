@@ -1,6 +1,7 @@
 package global
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/core/cache"
 	"github.com/qiniu/qmgo"
 	"sync"
 
@@ -32,6 +33,8 @@ var (
 
 	BlackCache local_cache.Cache
 	lock       sync.RWMutex
+
+	GVA_CACHE cache.ICache
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db

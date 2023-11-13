@@ -25,6 +25,10 @@ func RunWindowsServer() {
 			zap.L().Error(fmt.Sprintf("%+v", err))
 		}
 	}
+	// 初始化cache服务
+	if global.GVA_CONFIG.System.UseCache {
+		initialize.Cache()
+	}
 	// 从db加载jwt数据
 	if global.GVA_DB != nil {
 		system.LoadAll()

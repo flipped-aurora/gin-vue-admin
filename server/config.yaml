@@ -57,6 +57,7 @@ system:
   oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
   use-redis: false # 使用redis
   use-mongo: false     # 使用mongo
+  use-cache: false     # 使用cache
   use-multipoint: false
   # IP限制次数 一个小时15000次
   iplimit-count: 15000
@@ -252,3 +253,11 @@ cors:
       allow-methods: GET, POST
       expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
       allow-credentials: true # 布尔值
+
+# 缓存配置
+cache:
+  mode: redis # 使用redis做缓存
+  redis:
+    db: 0
+    addr: 127.0.0.1:6379
+    password: ""

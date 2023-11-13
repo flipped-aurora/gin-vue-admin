@@ -30,4 +30,6 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	// 缓存配置
+	Cache Cache `mapstructure:"cache" json:"cache" yaml:"cache"`
 }

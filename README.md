@@ -362,7 +362,13 @@ swag init
 |  :---:  | 
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-添加微信，备注"加入gin-vue-admin交流群"
+防止广告进群，添加微信，输入以下代码执行结果（请勿转码为string）
+
+```
+str := "5Yqg5YWlR1ZB5Lqk5rWB576k"
+decodeBytes, err := base64.StdEncoding.DecodeString(str)
+fmt.Println(decodeBytes, err)
+```
 
 ### [关于我们](https://www.gin-vue-admin.com/about/join.html)
 

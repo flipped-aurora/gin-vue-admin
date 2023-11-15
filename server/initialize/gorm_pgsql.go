@@ -21,7 +21,7 @@ func GormPgSql() *gorm.DB {
 		PreferSimpleProtocol: false,
 	}
 	if db, err := gorm.Open(postgres.New(pgsqlConfig), internal.Gorm.Config(p.Prefix, p.Singular)); err != nil {
-		return nil
+		panic(err)
 	} else {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(p.MaxIdleConns)

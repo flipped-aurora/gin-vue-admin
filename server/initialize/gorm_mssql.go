@@ -48,7 +48,7 @@ func GormMssqlByConfig(m config.Mssql) *gorm.DB {
 		DefaultStringSize:         191,     // string 类型字段的默认长度
 	}
 	if db, err := gorm.Open(sqlserver.New(mssqlConfig), internal.Gorm.Config(m.Prefix, m.Singular)); err != nil {
-		return nil
+		panic(err)
 	} else {
 		db.InstanceSet("gorm:table_options", "ENGINE=InnoDB")
 		sqlDB, _ := db.DB()

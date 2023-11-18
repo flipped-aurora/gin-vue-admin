@@ -2,6 +2,8 @@ package system
 
 import (
 	"errors"
+	"github.com/casbin/casbin/v2"
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"strconv"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -24,12 +26,56 @@ type AuthorityService struct{}
 var AuthorityServiceApp = new(AuthorityService)
 
 func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
-	var authorityBox system.SysAuthority
-	if !errors.Is(global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
+
+	if err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error; !errors.Is(err, gorm.ErrRecordNotFound) {
 		return auth, ErrRoleExistence
 	}
-	err = global.GVA_DB.Create(&auth).Error
-	return auth, err
+
+	e := global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
+		if err = tx.Create(&auth).Error; err != nil {
+			return err
+		}
+
+		auth.SysBaseMenus = systemReq.DefaultMenu()
+		if err = tx.Model(&auth).Association("SysBaseMenus").Replace(&auth.SysBaseMenus); err != nil {
+			return err
+		}
+
+		casbinInfos := systemReq.DefaultCasbin()
+		authorityId := strconv.Itoa(int(auth.AuthorityId))
+		rules := [][]string{}
+		//做权限去重处理
+		deduplicateMap := make(map[string]bool)
+		for _, v := range casbinInfos {
+			key := authorityId + v.Path + v.Method
+			if _, ok := deduplicateMap[key]; !ok {
+				deduplicateMap[key] = true
+				rules = append(rules, []string{authorityId, v.Path, v.Method})
+			}
+		}
+		var sce *casbin.SyncedEnforcer
+		if sce, err = CasbinServiceApp.CasbinWithDB(tx); err != nil {
+			return err
+		}
+
+		var success bool
+		if _, err = sce.RemoveFilteredPolicy(0, authorityId); err != nil {
+			// errors.New("从当前策略中删除授权规则失败！")
+			return err
+		}
+
+		if success, err = sce.AddPolicies(rules); err != nil || !success {
+			if err != nil {
+				return err
+			}
+			return errors.New("存在相同api,添加失败,请联系管理员！")
+		}
+
+		return nil
+	})
+
+	return auth, e
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -101,7 +147,7 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 //@param: auth *model.SysAuthority
 //@return: err error
 
-func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthority) (err error) {
+func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthority) error {
 	if errors.Is(global.GVA_DB.Debug().Preload("Users").First(&auth).Error, gorm.ErrRecordNotFound) {
 		return errors.New("该角色不存在")
 	}
@@ -114,35 +160,44 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 	if !errors.Is(global.GVA_DB.Where("parent_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("此角色存在子角色不允许删除")
 	}
-	db := global.GVA_DB.Preload("SysBaseMenus").Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(auth)
-	err = db.Unscoped().Delete(auth).Error
-	if err != nil {
-		return
-	}
-	if len(auth.SysBaseMenus) > 0 {
-		err = global.GVA_DB.Model(auth).Association("SysBaseMenus").Delete(auth.SysBaseMenus)
-		if err != nil {
-			return
+
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var err error
+		if err = tx.Preload("SysBaseMenus").Preload("DataAuthorityId").Where("authority_id = ?", auth.AuthorityId).First(auth).Unscoped().Delete(auth).Error; err != nil {
+			return err
 		}
-		// err = db.Association("SysBaseMenus").Delete(&auth)
-	}
-	if len(auth.DataAuthorityId) > 0 {
-		err = global.GVA_DB.Model(auth).Association("DataAuthorityId").Delete(auth.DataAuthorityId)
-		if err != nil {
-			return
+
+		if len(auth.SysBaseMenus) > 0 {
+			if err = tx.Model(auth).Association("SysBaseMenus").Delete(auth.SysBaseMenus); err != nil {
+				return err
+			}
+			// err = db.Association("SysBaseMenus").Delete(&auth)
 		}
-	}
-	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error
-	if err != nil {
-		return
-	}
-	err = global.GVA_DB.Delete(&[]system.SysAuthorityBtn{}, "authority_id = ?", auth.AuthorityId).Error
-	if err != nil {
-		return
-	}
-	authorityId := strconv.Itoa(int(auth.AuthorityId))
-	CasbinServiceApp.ClearCasbin(0, authorityId)
-	return err
+		if len(auth.DataAuthorityId) > 0 {
+			if err = tx.Model(auth).Association("DataAuthorityId").Delete(auth.DataAuthorityId); err != nil {
+				return err
+			}
+		}
+
+		if err = tx.Delete(&system.SysUserAuthority{}, "sys_authority_authority_id = ?", auth.AuthorityId).Error; err != nil {
+			return err
+		}
+		if err = tx.Where("authority_id = ?", auth.AuthorityId).Delete(&[]system.SysAuthorityBtn{}).Error; err != nil {
+			return err
+		}
+
+		authorityId := strconv.Itoa(int(auth.AuthorityId))
+		var sce *casbin.SyncedEnforcer
+		if sce, err = CasbinServiceApp.CasbinWithDB(tx); err != nil {
+			return err
+		}
+
+		if _, err = sce.RemoveFilteredPolicy(0, authorityId); err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

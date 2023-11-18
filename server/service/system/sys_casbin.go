@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"gorm.io/gorm"
 	"strconv"
 	"sync"
 
@@ -138,4 +139,49 @@ func (casbinService *CasbinService) Casbin() *casbin.SyncedCachedEnforcer {
 		_ = syncedCachedEnforcer.LoadPolicy()
 	})
 	return syncedCachedEnforcer
+}
+
+func (casbinService *CasbinService) CasbinWithDB(db *gorm.DB) (*casbin.SyncedEnforcer, error) {
+	var a *gormadapter.Adapter
+	var m model.Model
+	var s *casbin.SyncedEnforcer
+	var err error
+	var text = `
+			[request_definition]
+			r = sub, obj, act
+			
+			[policy_definition]
+			p = sub, obj, act
+			
+			[role_definition]
+			g = _, _
+			
+			[policy_effect]
+			e = some(where (p.eft == allow))
+			
+			[matchers]
+			m = r.sub == p.sub && keyMatch2(r.obj,p.obj) && r.act == p.act
+			`
+
+	if a, err = gormadapter.NewAdapterByDB(db); err != nil {
+		zap.L().Error("适配数据库失败请检查casbin表是否为InnoDB引擎!", zap.Error(err))
+		return nil, err
+	}
+
+	if m, err = model.NewModelFromString(text); err != nil {
+		zap.L().Error("字符串加载模型失败!", zap.Error(err))
+		return nil, err
+	}
+
+	if s, err = casbin.NewSyncedEnforcer(m, a); err != nil {
+		zap.L().Error("通过文件或 DB 创建执行器失败!", zap.Error(err))
+		return nil, err
+	}
+
+	if err = s.LoadPolicy(); err != nil {
+		zap.L().Error("从持久层中加载policy规则失败!", zap.Error(err))
+		return nil, err
+	}
+
+	return s, nil
 }

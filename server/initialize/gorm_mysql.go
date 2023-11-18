@@ -23,7 +23,7 @@ func GormMysql() *gorm.DB {
 		SkipInitializeWithVersion: false,   // 根据版本自动配置
 	}
 	if db, err := gorm.Open(mysql.New(mysqlConfig), internal.Gorm.Config(m.Prefix, m.Singular)); err != nil {
-		panic(err)
+		return nil
 	} else {
 		db.InstanceSet("gorm:table_options", "ENGINE="+m.Engine)
 		sqlDB, _ := db.DB()

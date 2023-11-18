@@ -1,12 +1,11 @@
 package global
 
 import (
-	"github.com/qiniu/qmgo"
 	"sync"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/timer"
-	"github.com/songzhibin97/gkit/cache/local_cache"
+	"github.com/qiniu/qmgo"
 
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/timer"
 	"golang.org/x/sync/singleflight"
 
 	"go.uber.org/zap"
@@ -30,7 +29,7 @@ var (
 	GVA_Timer               timer.Timer = timer.NewTimerTask()
 	GVA_Concurrency_Control             = &singleflight.Group{}
 
-	BlackCache local_cache.Cache
+	BlackCache IBlackCache
 	lock       sync.RWMutex
 )
 

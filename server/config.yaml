@@ -6,6 +6,7 @@ jwt:
   expires-time: 7d
   buffer-time: 1d
   issuer: qmPlus
+  cache-type: "local"
 # zap logger configuration
 zap:
   level: info

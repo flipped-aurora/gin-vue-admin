@@ -140,7 +140,10 @@ db-list:
     path: ""
     port: ""
     config: ""
-	@@ -147,108 +133,122 @@ db-list:
+    db-name: ""
+    username: ""
+    password: ""
+    max-idle-conns: 10
     max-open-conns: 100
     log-mode: ""
     log-zap: false

@@ -65,7 +65,7 @@ func Viper(path ...string) *viper.Viper {
 		}
 	})
 	if err = v.Unmarshal(&global.GVA_CONFIG); err != nil {
-		fmt.Println(err)
+		panic(err)
 	}
 
 	// root 适配性 根据root位置去找到对应迁移位置,保证root路径有效

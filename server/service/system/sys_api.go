@@ -182,15 +182,3 @@ func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 	}
 	return err
 }
-
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: DeleteApis
-//@description: 删除选中API
-//@param: apis []model.SysApi
-//@return: err error
-
-func (apiService *ApiService) FreshCasbin() (err error) {
-	e := CasbinServiceApp.Casbin()
-	err = e.LoadPolicy()
-	return err
-}

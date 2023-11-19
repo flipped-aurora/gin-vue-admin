@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-	"github.com/casbin/casbin/v2"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"strconv"
 
@@ -41,38 +40,13 @@ func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthori
 		if err = tx.Model(&auth).Association("SysBaseMenus").Replace(&auth.SysBaseMenus); err != nil {
 			return err
 		}
-
 		casbinInfos := systemReq.DefaultCasbin()
 		authorityId := strconv.Itoa(int(auth.AuthorityId))
 		rules := [][]string{}
-		//做权限去重处理
-		deduplicateMap := make(map[string]bool)
 		for _, v := range casbinInfos {
-			key := authorityId + v.Path + v.Method
-			if _, ok := deduplicateMap[key]; !ok {
-				deduplicateMap[key] = true
-				rules = append(rules, []string{authorityId, v.Path, v.Method})
-			}
+			rules = append(rules, []string{authorityId, v.Path, v.Method})
 		}
-		var sce *casbin.SyncedEnforcer
-		if sce, err = CasbinServiceApp.CasbinWithDB(tx); err != nil {
-			return err
-		}
-
-		var success bool
-		if _, err = sce.RemoveFilteredPolicy(0, authorityId); err != nil {
-			// errors.New("从当前策略中删除授权规则失败！")
-			return err
-		}
-
-		if success, err = sce.AddPolicies(rules); err != nil || !success {
-			if err != nil {
-				return err
-			}
-			return errors.New("存在相同api,添加失败,请联系管理员！")
-		}
-
-		return nil
+		return CasbinServiceApp.AddPolicies(tx, rules)
 	})
 
 	return auth, e
@@ -187,12 +161,8 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 		}
 
 		authorityId := strconv.Itoa(int(auth.AuthorityId))
-		var sce *casbin.SyncedEnforcer
-		if sce, err = CasbinServiceApp.CasbinWithDB(tx); err != nil {
-			return err
-		}
 
-		if _, err = sce.RemoveFilteredPolicy(0, authorityId); err != nil {
+		if err = CasbinServiceApp.RemoveFilteredPolicy(tx, authorityId); err != nil {
 			return err
 		}
 

@@ -5,7 +5,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
@@ -25,26 +24,31 @@ type AuthorityApi struct{}
 // @Success   200   {object}  response.Response{data=systemRes.SysAuthorityResponse,msg=string}  "创建角色,返回包括系统角色详情"
 // @Router    /authority/createAuthority [post]
 func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
-	var authority system.SysAuthority
-	err := c.ShouldBindJSON(&authority)
-	if err != nil {
+	var authority, authBack system.SysAuthority
+	var err error
+
+	if err = c.ShouldBindJSON(&authority); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	err = utils.Verify(authority, utils.AuthorityVerify)
-	if err != nil {
+	if err = utils.Verify(authority, utils.AuthorityVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if authBack, err := authorityService.CreateAuthority(authority); err != nil {
+
+	if authBack, err = authorityService.CreateAuthority(authority); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
-	} else {
-		_ = menuService.AddMenuAuthority(systemReq.DefaultMenu(), authority.AuthorityId)
-		_ = casbinService.UpdateCasbin(authority.AuthorityId, systemReq.DefaultCasbin())
-		response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
+		return
 	}
+	err = casbinService.FreshCasbin()
+	if err != nil {
+		global.GVA_LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
+		response.FailWithMessage("创建成功，权限刷新失败。"+err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(systemRes.SysAuthorityResponse{Authority: authBack}, "创建成功", c)
 }
 
 // CopyAuthority
@@ -93,22 +97,22 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 // @Router    /authority/deleteAuthority [post]
 func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	var authority system.SysAuthority
-	err := c.ShouldBindJSON(&authority)
-	if err != nil {
+	var err error
+	if err = c.ShouldBindJSON(&authority); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = utils.Verify(authority, utils.AuthorityIdVerify)
-	if err != nil {
+	if err = utils.Verify(authority, utils.AuthorityIdVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = authorityService.DeleteAuthority(&authority)
-	if err != nil { // 删除角色之前需要判断是否有用户正在使用此角色
+	// 删除角色之前需要判断是否有用户正在使用此角色
+	if err = authorityService.DeleteAuthority(&authority); err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}
+	_ = casbinService.FreshCasbin()
 	response.OkWithMessage("删除成功", c)
 }
 

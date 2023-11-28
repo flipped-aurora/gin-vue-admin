@@ -2,12 +2,16 @@ package initialize
 
 import (
 	"context"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/pkg/errors"
 	"github.com/qiniu/qmgo"
 	"github.com/qiniu/qmgo/options"
 	"go.mongodb.org/mongo-driver/bson"
+	option "go.mongodb.org/mongo-driver/mongo/options"
+	"sort"
 	"strings"
 )
 
@@ -82,6 +86,7 @@ func (m *mongo) CreateIndexes(ctx context.Context, name string, indexes [][]stri
 	length := len(indexes)
 	indexMap1 := make(map[string][]string, length)
 	for i := 0; i < length; i++ {
+		sort.Strings(indexes[i]) // 对索引key进行排序, 在使用bson.M搜索时, bson会自动按照key的字母顺序进行排序
 		length1 := len(indexes[i])
 		keys := make([]string, 0, length1)
 		for j := 0; j < length1; j++ {
@@ -121,7 +126,22 @@ func (m *mongo) CreateIndexes(ctx context.Context, name string, indexes [][]stri
 		if o2 {
 			continue
 		} // 索引存在
-		err = global.GVA_MONGO.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{Key: v1})
+		if len(fmt.Sprintf("%s.%s.$%s", collection.Name(), name, v1)) > 127 {
+			err = global.GVA_MONGO.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{
+				Key:          v1,
+				IndexOptions: option.Index().SetName(utils.MD5V([]byte(k1))),
+				// IndexOptions: option.Index().SetName(utils.MD5V([]byte(k1))).SetExpireAfterSeconds(86400), // SetExpireAfterSeconds(86400) 设置索引过期时间, 86400 = 1天
+			})
+			if err != nil {
+				return errors.Wrapf(err, "创建索引[%s]失败!", k1)
+			}
+			return nil
+		}
+		err = global.GVA_MONGO.Database.Collection(name).CreateOneIndex(ctx, options.IndexModel{
+			Key:          v1,
+			IndexOptions: option.Index().SetExpireAfterSeconds(86400),
+			// IndexOptions: option.Index().SetName(utils.MD5V([]byte(k1))).SetExpireAfterSeconds(86400), // SetExpireAfterSeconds(86400) 设置索引过期时间(秒), 86400 = 1天
+		})
 		if err != nil {
 			return errors.Wrapf(err, "创建索引[%s]失败!", k1)
 		}

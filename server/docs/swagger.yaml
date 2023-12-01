@@ -160,6 +160,53 @@ definitions:
         description: 本地文件存储路径
         type: string
     type: object
+  config.Mongo:
+    properties:
+      coll:
+        description: collection name
+        type: string
+      connect-timeout-ms:
+        description: 连接超时时间
+        type: integer
+      database:
+        description: database name
+        type: string
+      hosts:
+        description: 主机列表
+        items:
+          $ref: '#/definitions/config.MongoHost'
+        type: array
+      is-zap:
+        description: 是否开启zap日志
+        type: boolean
+      max-pool-size:
+        description: 最大连接池
+        type: integer
+      min-pool-size:
+        description: 最小连接池
+        type: integer
+      options:
+        description: mongodb options
+        type: string
+      password:
+        description: 密码
+        type: string
+      socket-timeout-ms:
+        description: socket超时时间
+        type: integer
+      username:
+        description: 用户名
+        type: string
+    type: object
+  config.MongoHost:
+    properties:
+      host:
+        description: ip地址
+        type: string
+      port:
+        description: 端口
+        type: string
+    type: object
   config.Mssql:
     properties:
       config:
@@ -188,19 +235,16 @@ definitions:
         description: 数据库密码
         type: string
       path:
-        description: 服务器地址:端口
         type: string
       port:
-        description: :端口
         type: string
       prefix:
-        description: 全局表前缀，单独定义TableName则不生效
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库用户名
+        description: 数据库密码
         type: string
     type: object
   config.Mysql:
@@ -231,19 +275,16 @@ definitions:
         description: 数据库密码
         type: string
       path:
-        description: 服务器地址:端口
         type: string
       port:
-        description: :端口
         type: string
       prefix:
-        description: 全局表前缀，单独定义TableName则不生效
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库用户名
+        description: 数据库密码
         type: string
     type: object
   config.Oracle:
@@ -274,19 +315,16 @@ definitions:
         description: 数据库密码
         type: string
       path:
-        description: 服务器地址:端口
         type: string
       port:
-        description: :端口
         type: string
       prefix:
-        description: 全局表前缀，单独定义TableName则不生效
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库用户名
+        description: 数据库密码
         type: string
     type: object
   config.Pgsql:
@@ -317,19 +355,16 @@ definitions:
         description: 数据库密码
         type: string
       path:
-        description: 服务器地址:端口
         type: string
       port:
-        description: :端口
         type: string
       prefix:
-        description: 全局表前缀，单独定义TableName则不生效
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库用户名
+        description: 数据库密码
         type: string
     type: object
   config.Qiniu:
@@ -400,6 +435,8 @@ definitions:
         allOf:
         - $ref: '#/definitions/config.Local'
         description: oss
+      mongo:
+        $ref: '#/definitions/config.Mongo'
       mssql:
         $ref: '#/definitions/config.Mssql'
       mysql:
@@ -414,6 +451,8 @@ definitions:
         $ref: '#/definitions/config.Qiniu'
       redis:
         $ref: '#/definitions/config.Redis'
+      sqlite:
+        $ref: '#/definitions/config.Sqlite'
       system:
         $ref: '#/definitions/config.System'
       tencent-cos:
@@ -455,13 +494,10 @@ definitions:
         description: 数据库密码
         type: string
       path:
-        description: 服务器地址:端口
         type: string
       port:
-        description: :端口
         type: string
       prefix:
-        description: 全局表前缀，单独定义TableName则不生效
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
@@ -469,7 +505,47 @@ definitions:
       type:
         type: string
       username:
-        description: 数据库用户名
+        description: 数据库密码
+        type: string
+    type: object
+  config.Sqlite:
+    properties:
+      config:
+        description: 高级配置
+        type: string
+      db-name:
+        description: 数据库名
+        type: string
+      engine:
+        default: InnoDB
+        description: 数据库引擎，默认InnoDB
+        type: string
+      log-mode:
+        description: 是否开启Gorm全局日志
+        type: string
+      log-zap:
+        description: 是否通过zap写入日志文件
+        type: boolean
+      max-idle-conns:
+        description: 空闲中的最大连接数
+        type: integer
+      max-open-conns:
+        description: 打开到数据库的最大连接数
+        type: integer
+      password:
+        description: 数据库密码
+        type: string
+      path:
+        type: string
+      port:
+        type: string
+      prefix:
+        type: string
+      singular:
+        description: 是否开启全局禁用复数，true表示开启
+        type: boolean
+      username:
+        description: 数据库密码
         type: string
     type: object
   config.System:
@@ -492,6 +568,9 @@ definitions:
         type: string
       router-prefix:
         type: string
+      use-mongo:
+        description: 使用redis
+        type: boolean
       use-multipoint:
         description: 多点登录拦截
         type: boolean
@@ -659,25 +738,25 @@ definitions:
   github_com_flipped-aurora_gin-vue-admin_server_config.Email:
     properties:
       from:
-        description: 收件人
+        description: 发件人  你自己要发邮件的邮箱
         type: string
       host:
-        description: 服务器地址
+        description: 服务器地址 例如 smtp.qq.com  请前往QQ或者你要发邮件的邮箱查看其smtp协议
         type: string
       is-ssl:
-        description: 是否SSL
+        description: 是否SSL   是否开启SSL
         type: boolean
       nickname:
-        description: 昵称
+        description: 昵称    发件人昵称 通常为自己的邮箱
         type: string
       port:
-        description: 端口
+        description: 端口     请前往QQ或者你要发邮件的邮箱查看其smtp协议 大多为 465
         type: integer
       secret:
-        description: 密钥
+        description: 密钥    用于登录的密钥 最好不要用邮箱密码 去邮箱smtp申请一个用于登录的密钥
         type: string
       to:
-        description: 收件人:多个以英文逗号分隔
+        description: 收件人:多个以英文逗号分隔 例：a@qq.com b@qq.com 正式开发中请把此项目作为参数使用
         type: string
     type: object
   request.AddMenuAuthorityInfo:
@@ -744,6 +823,9 @@ definitions:
       dbName:
         description: 数据库名
         type: string
+      dbPath:
+        description: sqlite数据库文件路径
+        type: string
       dbType:
         description: 数据库类型
         type: string
@@ -761,7 +843,6 @@ definitions:
         type: string
     required:
     - dbName
-    - userName
     type: object
   request.Login:
     properties:
@@ -1348,6 +1429,9 @@ definitions:
     properties:
       createdAt:
         description: 创建时间
+        type: string
+      extend:
+        description: 扩展值
         type: string
       id:
         description: 主键ID
@@ -2034,32 +2118,32 @@ paths:
   /autoCode/createPlug:
     post:
       consumes:
-      - multipart/form-data
+      - application/json
       parameters:
-      - description: this is a test file
-        in: formData
-        name: plug
+      - description: 创建插件模板
+        in: body
+        name: data
         required: true
-        type: file
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
       produces:
       - application/json
       responses:
         "200":
-          description: 安装插件成功
+          description: 创建插件模板成功
           schema:
             allOf:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  items:
-                    type: object
-                  type: array
+                  additionalProperties: true
+                  type: object
                 msg:
                   type: string
               type: object
       security:
       - ApiKeyAuth: []
-      summary: 安装插件
+      summary: 创建插件模板
       tags:
       - AutoCode
   /autoCode/createTemp:
@@ -2301,6 +2385,37 @@ paths:
       summary: 获取当前数据库所有表
       tags:
       - AutoCode
+  /autoCode/installPlugin:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: this is a test file
+        in: formData
+        name: plug
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 安装插件成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    type: object
+                  type: array
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 安装插件
+      tags:
+      - AutoCode
   /autoCode/preview:
     post:
       consumes:
@@ -2330,6 +2445,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 预览创建后的代码
+      tags:
+      - AutoCode
+  /autoCode/pubPlug:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 打包插件
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysAutoCode'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 打包插件成功
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 打包插件
       tags:
       - AutoCode
   /autoCode/rollback:
@@ -3276,47 +3422,6 @@ paths:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: 创建时间
-        in: query
-        name: createdAt
-        type: string
-      - description: 描述
-        in: query
-        name: desc
-        type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
-      - description: 关键字
-        in: query
-        name: keyword
-        type: string
-      - description: 字典名（中）
-        in: query
-        name: name
-        type: string
-      - description: 页码
-        in: query
-        name: page
-        type: integer
-      - description: 每页大小
-        in: query
-        name: pageSize
-        type: integer
-      - description: 状态
-        in: query
-        name: status
-        type: boolean
-      - description: 字典名（英）
-        in: query
-        name: type
-        type: string
-      - description: 更新时间
-        in: query
-        name: updatedAt
-        type: string
       produces:
       - application/json
       responses:
@@ -3429,6 +3534,10 @@ paths:
         in: query
         name: createdAt
         type: string
+      - description: 扩展值
+        in: query
+        name: extend
+        type: string
       - description: 主键ID
         in: query
         name: id
@@ -3485,6 +3594,10 @@ paths:
       - description: 创建时间
         in: query
         name: createdAt
+        type: string
+      - description: 扩展值
+        in: query
+        name: extend
         type: string
       - description: 主键ID
         in: query

@@ -911,7 +911,7 @@ const docTemplate = `{
                     }
                 ],
                 "consumes": [
-                    "multipart/form-data"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
@@ -919,19 +919,21 @@ const docTemplate = `{
                 "tags": [
                     "AutoCode"
                 ],
-                "summary": "安装插件",
+                "summary": "创建插件模板",
                 "parameters": [
                     {
-                        "type": "file",
-                        "description": "this is a test file",
-                        "name": "plug",
-                        "in": "formData",
-                        "required": true
+                        "description": "创建插件模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysAutoCode"
+                        }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "安装插件成功",
+                        "description": "创建插件模板成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -941,10 +943,8 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object"
-                                            }
+                                            "type": "object",
+                                            "additionalProperties": true
                                         },
                                         "msg": {
                                             "type": "string"
@@ -1378,6 +1378,60 @@ const docTemplate = `{
                 }
             }
         },
+        "/autoCode/installPlugin": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AutoCode"
+                ],
+                "summary": "安装插件",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "this is a test file",
+                        "name": "plug",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "安装插件成功",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/autoCode/preview": {
             "post": {
                 "security": [
@@ -1409,6 +1463,60 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "预览创建后的代码",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/autoCode/pubPlug": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "AutoCode"
+                ],
+                "summary": "打包插件",
+                "parameters": [
+                    {
+                        "description": "打包插件",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysAutoCode"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "打包插件成功",
                         "schema": {
                             "allOf": [
                                 {
@@ -3101,68 +3209,6 @@ const docTemplate = `{
                     "SysDictionary"
                 ],
                 "summary": "分页获取SysDictionary列表",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "创建时间",
-                        "name": "createdAt",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "描述",
-                        "name": "desc",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "关键字",
-                        "name": "keyword",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "字典名（中）",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "每页大小",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "boolean",
-                        "description": "状态",
-                        "name": "status",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "字典名（英）",
-                        "name": "type",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "更新时间",
-                        "name": "updatedAt",
-                        "in": "query"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量",
@@ -3363,6 +3409,12 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
+                        "type": "string",
+                        "description": "扩展值",
+                        "name": "extend",
+                        "in": "query"
+                    },
+                    {
                         "type": "integer",
                         "description": "主键ID",
                         "name": "id",
@@ -3453,6 +3505,12 @@ const docTemplate = `{
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "扩展值",
+                        "name": "extend",
                         "in": "query"
                     },
                     {
@@ -4901,6 +4959,71 @@ const docTemplate = `{
                 }
             }
         },
+        "config.Mongo": {
+            "type": "object",
+            "properties": {
+                "coll": {
+                    "description": "collection name",
+                    "type": "string"
+                },
+                "connect-timeout-ms": {
+                    "description": "连接超时时间",
+                    "type": "integer"
+                },
+                "database": {
+                    "description": "database name",
+                    "type": "string"
+                },
+                "hosts": {
+                    "description": "主机列表",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.MongoHost"
+                    }
+                },
+                "is-zap": {
+                    "description": "是否开启zap日志",
+                    "type": "boolean"
+                },
+                "max-pool-size": {
+                    "description": "最大连接池",
+                    "type": "integer"
+                },
+                "min-pool-size": {
+                    "description": "最小连接池",
+                    "type": "integer"
+                },
+                "options": {
+                    "description": "mongodb options",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "密码",
+                    "type": "string"
+                },
+                "socket-timeout-ms": {
+                    "description": "socket超时时间",
+                    "type": "integer"
+                },
+                "username": {
+                    "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "config.MongoHost": {
+            "type": "object",
+            "properties": {
+                "host": {
+                    "description": "ip地址",
+                    "type": "string"
+                },
+                "port": {
+                    "description": "端口",
+                    "type": "string"
+                }
+            }
+        },
         "config.Mssql": {
             "type": "object",
             "properties": {
@@ -4938,15 +5061,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "port": {
-                    "description": ":端口",
                     "type": "string"
                 },
                 "prefix": {
-                    "description": "全局表前缀，单独定义TableName则不生效",
                     "type": "string"
                 },
                 "singular": {
@@ -4954,7 +5074,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "username": {
-                    "description": "数据库用户名",
+                    "description": "数据库密码",
                     "type": "string"
                 }
             }
@@ -4996,15 +5116,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "port": {
-                    "description": ":端口",
                     "type": "string"
                 },
                 "prefix": {
-                    "description": "全局表前缀，单独定义TableName则不生效",
                     "type": "string"
                 },
                 "singular": {
@@ -5012,7 +5129,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "username": {
-                    "description": "数据库用户名",
+                    "description": "数据库密码",
                     "type": "string"
                 }
             }
@@ -5054,15 +5171,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "port": {
-                    "description": ":端口",
                     "type": "string"
                 },
                 "prefix": {
-                    "description": "全局表前缀，单独定义TableName则不生效",
                     "type": "string"
                 },
                 "singular": {
@@ -5070,7 +5184,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "username": {
-                    "description": "数据库用户名",
+                    "description": "数据库密码",
                     "type": "string"
                 }
             }
@@ -5112,15 +5226,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "port": {
-                    "description": ":端口",
                     "type": "string"
                 },
                 "prefix": {
-                    "description": "全局表前缀，单独定义TableName则不生效",
                     "type": "string"
                 },
                 "singular": {
@@ -5128,7 +5239,7 @@ const docTemplate = `{
                     "type": "boolean"
                 },
                 "username": {
-                    "description": "数据库用户名",
+                    "description": "数据库密码",
                     "type": "string"
                 }
             }
@@ -5237,6 +5348,9 @@ const docTemplate = `{
                         }
                     ]
                 },
+                "mongo": {
+                    "$ref": "#/definitions/config.Mongo"
+                },
                 "mssql": {
                     "$ref": "#/definitions/config.Mssql"
                 },
@@ -5259,6 +5373,9 @@ const docTemplate = `{
                 },
                 "redis": {
                     "$ref": "#/definitions/config.Redis"
+                },
+                "sqlite": {
+                    "$ref": "#/definitions/config.Sqlite"
                 },
                 "system": {
                     "$ref": "#/definitions/config.System"
@@ -5317,15 +5434,12 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "path": {
-                    "description": "服务器地址:端口",
                     "type": "string"
                 },
                 "port": {
-                    "description": ":端口",
                     "type": "string"
                 },
                 "prefix": {
-                    "description": "全局表前缀，单独定义TableName则不生效",
                     "type": "string"
                 },
                 "singular": {
@@ -5336,7 +5450,62 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "username": {
-                    "description": "数据库用户名",
+                    "description": "数据库密码",
+                    "type": "string"
+                }
+            }
+        },
+        "config.Sqlite": {
+            "type": "object",
+            "properties": {
+                "config": {
+                    "description": "高级配置",
+                    "type": "string"
+                },
+                "db-name": {
+                    "description": "数据库名",
+                    "type": "string"
+                },
+                "engine": {
+                    "description": "数据库引擎，默认InnoDB",
+                    "type": "string",
+                    "default": "InnoDB"
+                },
+                "log-mode": {
+                    "description": "是否开启Gorm全局日志",
+                    "type": "string"
+                },
+                "log-zap": {
+                    "description": "是否通过zap写入日志文件",
+                    "type": "boolean"
+                },
+                "max-idle-conns": {
+                    "description": "空闲中的最大连接数",
+                    "type": "integer"
+                },
+                "max-open-conns": {
+                    "description": "打开到数据库的最大连接数",
+                    "type": "integer"
+                },
+                "password": {
+                    "description": "数据库密码",
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "port": {
+                    "type": "string"
+                },
+                "prefix": {
+                    "type": "string"
+                },
+                "singular": {
+                    "description": "是否开启全局禁用复数，true表示开启",
+                    "type": "boolean"
+                },
+                "username": {
+                    "description": "数据库密码",
                     "type": "string"
                 }
             }
@@ -5368,6 +5537,10 @@ const docTemplate = `{
                 },
                 "router-prefix": {
                     "type": "string"
+                },
+                "use-mongo": {
+                    "description": "使用redis",
+                    "type": "boolean"
                 },
                 "use-multipoint": {
                     "description": "多点登录拦截",
@@ -5608,31 +5781,31 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "from": {
-                    "description": "收件人",
+                    "description": "发件人  你自己要发邮件的邮箱",
                     "type": "string"
                 },
                 "host": {
-                    "description": "服务器地址",
+                    "description": "服务器地址 例如 smtp.qq.com  请前往QQ或者你要发邮件的邮箱查看其smtp协议",
                     "type": "string"
                 },
                 "is-ssl": {
-                    "description": "是否SSL",
+                    "description": "是否SSL   是否开启SSL",
                     "type": "boolean"
                 },
                 "nickname": {
-                    "description": "昵称",
+                    "description": "昵称    发件人昵称 通常为自己的邮箱",
                     "type": "string"
                 },
                 "port": {
-                    "description": "端口",
+                    "description": "端口     请前往QQ或者你要发邮件的邮箱查看其smtp协议 大多为 465",
                     "type": "integer"
                 },
                 "secret": {
-                    "description": "密钥",
+                    "description": "密钥    用于登录的密钥 最好不要用邮箱密码 去邮箱smtp申请一个用于登录的密钥",
                     "type": "string"
                 },
                 "to": {
-                    "description": "收件人:多个以英文逗号分隔",
+                    "description": "收件人:多个以英文逗号分隔 例：a@qq.com b@qq.com 正式开发中请把此项目作为参数使用",
                     "type": "string"
                 }
             }
@@ -5728,12 +5901,15 @@ const docTemplate = `{
         "request.InitDB": {
             "type": "object",
             "required": [
-                "dbName",
-                "userName"
+                "dbName"
             ],
             "properties": {
                 "dbName": {
                     "description": "数据库名",
+                    "type": "string"
+                },
+                "dbPath": {
+                    "description": "sqlite数据库文件路径",
                     "type": "string"
                 },
                 "dbType": {
@@ -6603,6 +6779,10 @@ const docTemplate = `{
                     "description": "创建时间",
                     "type": "string"
                 },
+                "extend": {
+                    "description": "扩展值",
+                    "type": "string"
+                },
                 "id": {
                     "description": "主键ID",
                     "type": "integer"
@@ -6873,8 +7053,6 @@ var SwaggerInfo = &swag.Spec{
 	Description:      "This is a sample Server pets",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
-	LeftDelim:        "{{",
-	RightDelim:       "}}",
 }
 
 func init() {

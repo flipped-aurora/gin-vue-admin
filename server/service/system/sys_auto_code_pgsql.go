@@ -3,10 +3,6 @@ package system
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
-	"github.com/pkg/errors"
-	"gorm.io/driver/postgres"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
 )
 
 var AutoCodePgsql = new(autoCodePgsql)
@@ -34,9 +30,10 @@ func (a *autoCodePgsql) GetDB(businessDB string) (data []response.Db, err error)
 func (a *autoCodePgsql) GetTables(businessDB string, dbName string) (data []response.Table, err error) {
 	var entities []response.Table
 	sql := `select table_name as table_name from information_schema.tables where table_catalog = ? and table_schema = ?`
-	db, _err := gorm.Open(postgres.Open(global.GVA_CONFIG.Pgsql.LinkDsn(dbName)), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
-	if _err != nil {
-		return nil, errors.Wrapf(err, "[pgsql] 连接 数据库(%s)的表失败!", dbName)
+
+	db := global.GVA_DB
+	if businessDB != "" {
+		db = global.GVA_DBList[businessDB]
 	}
 
 	err = db.Raw(sql, dbName, "public").Scan(&entities).Error
@@ -97,12 +94,13 @@ WHERE
  AND TABLE_NAME = ?;
 	`
 	var entities []response.Column
-	db, _err := gorm.Open(postgres.Open(global.GVA_CONFIG.Pgsql.LinkDsn(dbName)), &gorm.Config{Logger: logger.Default.LogMode(logger.Info)})
-	if _err != nil {
-		return nil, errors.Wrapf(err, "[pgsql] 连接 数据库(%s)的表(%s)失败!", dbName, tableName)
-	}
 	//sql = strings.ReplaceAll(sql, "@table_catalog", dbName)
 	//sql = strings.ReplaceAll(sql, "@table_name", tableName)
+	db := global.GVA_DB
+	if businessDB != "" {
+		db = global.GVA_DBList[businessDB]
+	}
+
 	err = db.Raw(sql, dbName, tableName).Scan(&entities).Error
 	return entities, err
 }

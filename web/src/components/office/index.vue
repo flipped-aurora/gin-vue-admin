@@ -46,7 +46,7 @@ watch(
   val => {
     fileUrl.value = val
     const fileExt = val.split('.')[1] || ''
-    const image = ['png', 'jpg', 'jpge', 'gif']
+    const image = ['png', 'jpg', 'jpeg', 'gif']
     ext.value = image.includes(fileExt) ? 'image' : fileExt
   },
   { immediate: true }

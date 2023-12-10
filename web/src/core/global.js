@@ -33,6 +33,11 @@ const registerIcons = async(app) => {
     const response = await fetch(path)
     const svgContent = await response.text()
     const iconName = path.split('/').pop().replace(/\.svg$/, '')
+    // 如果iconName带空格则不加入到图标库中并且提示名称不合法
+    if (iconName.indexOf(' ') !== -1) {
+      console.error(`icon ${iconName}.svg includes whitespace`)
+      continue
+    }
     const iconComponent = createIconComponent(svgContent)
     config.logs.push({
       'key': iconName,

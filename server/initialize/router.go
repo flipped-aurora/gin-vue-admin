@@ -82,6 +82,12 @@ func Routers() *gin.Engine {
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 
 	}
+	{
+		shopRouter := router.RouterGroupApp.Shop
+		shopRouter.InitShopOrdersRouter(PrivateGroup)
+		shopRouter.InitShopGoodsRouter(PrivateGroup)
+		shopRouter.InitShopQrcodeRecode(PublicGroup) //获取二维码地址 不鉴权
+	}
 
 	global.GVA_LOG.Info("router register success")
 	return Router

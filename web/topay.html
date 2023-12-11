@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>支付</title>
+    <style scoped>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            background-color: #F7F7F9;
+        }
+
+        #toyPre {
+            padding: 20px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .top-box {
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: antiquewhite;
+        }
+
+        .head {
+            padding: 30px 13px 13px;
+            display: flex;
+            align-items: center;
+            height: 60px;
+            background-image: url('https://wei.hxt5.com/image/game/toypay.png');
+            background-size: 100% 100%;
+        }
+
+        .he-left {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+
+        .he-right {
+            margin-left: 10px;
+        }
+
+        .title1 {
+            font-weight: bold;
+        }
+
+        .title2 {
+            font-size: 13px;
+            color: #9ab0ba;
+        }
+
+        .content {
+            padding: 20px 13px;
+            background-color: white;
+        }
+
+        .money {
+            margin-top: 10px;
+            display: flex;
+            color: #333333;
+            font-size: 25px;
+            border: 2px solid #cacaac;
+            border-radius: 8px;
+            padding: 5px;
+        }
+
+        input[type="number"] {
+            border: none;
+            outline: none;
+            font-size: 25px;
+            margin-left: 5px;
+            width: 100%;
+        }
+
+        .number {
+            font-size: 50px;
+            line-height: 50px;
+        }
+
+        .button-box {
+            width: 90%;
+            margin: 60px auto 0 auto;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 13px 0;
+            font-size: 17px;
+            color: white;
+            border-radius: 8px;
+            text-align: center;
+            background-color: #05c160;
+            border: none;
+            display: none;
+        }
+
+        #zfb {
+            background-color: #2ea4fc;
+        }
+    </style>
+
+</head>
+
+<body>
+    <script src="./jquery-3.2.1.min.js"></script>
+    <!-- <script src="https://s.yoyo51.net/Public/jquery/js/jquery-3.2.1.min.js"></script> -->
+    <script src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script src="https://gw.alipayobjects.com/as/g/h5-lib/alipayjsapi/3.1.1/alipayjsapi.min.js"></script>
+
+    <div id="toyPre">
+        <div class="top-box">
+            <div class="head">
+            </div>
+            <div class="content">
+                <p style="font-size: 12px;">金额</p>
+                <div class="money">
+                    <p>￥</p>
+                    <input type="number" id="inputPrice" min="0" step="0.01">
+                </div>
+            </div>
+        </div>
+        <div class="button-box">
+            <button type="button" class="btn" id="wx">微信支付</button>
+            <button type="button" class="btn" id="zfb">支付宝支付</button>
+        </div>
+    </div>
+    <script>
+        var url;//储存地址栏？后的字符串
+        var urlData;//储存处理url后得到的对象
+
+        $('#wx').on('touchend', function () {
+            getHuiLian()
+        })
+        $('#zfb').on('touchend', function () {
+            getHuiLian()
+        })
+
+        // 监听输入金额变化事件
+        $('#inputPrice').on('input', function () {
+            var price = $(this).val();
+            urlData.money = price * 100
+            $('#price').text(price);
+        });
+
+        // 获取预支付参数
+        function getHuiLian() {
+            var params = urlData
+            $.ajax({
+                type: 'GET',
+                data: params,
+                dataType: 'json',
+                url: getUrl(params),
+                success: function (res) {
+                    if (urlData.openId) {
+                        initWxPay(res);
+                    } else if (urlData.ailopenId) {
+                        initaliPay(res)
+                    }
+                },
+                fail: function (res) {
+                    alert('获取预支付参数失败');
+                },
+
+            })
+        };
+        //获取请求地址
+        function getUrl(params) {
+            if (params.hasOwnProperty('openId')) {
+                return '/api/wxpay/topayjsapi';
+            } else if (params.hasOwnProperty('ailopenId')) {
+                return '/api/alipay/topayjsapi';
+            } else {
+                return '/default_url';
+            }
+        }
+        // 初始化微信JS支付
+        function initWxPay(wxPayParams) {
+            // 注册微信JS支付的配置信息
+            wx.config({
+                appId: wxPayParams.appId,
+                timestamp: wxPayParams.timeStamp,
+                nonceStr: wxPayParams.nonceStr,
+                signature: 'SIGNATURE',
+                jsApiList: ['chooseWXPay']
+            });
+            pay(wxPayParams)
+            // 配置失败的回调函数
+            wx.error(function (res) {
+                alert('微信JS支付配置失败');
+            });
+        }
+        // 调起微信支付
+        function pay(wxPayParams) {
+            wx.chooseWXPay({
+                timestamp: wxPayParams.timeStamp,
+                nonceStr: wxPayParams.nonceStr,
+                package: wxPayParams.package,
+                signType: wxPayParams.signType,
+                paySign: wxPayParams.paySign,
+                success: function (res) {
+                    alert('支付成功');
+                    WeixinJSBridge.invoke('closeWindow', {}, function(res){});
+                },
+                cancel: function (res) {
+                    alert('取消支付');
+                },
+                fail: function (res) {
+                    alert('支付失败');
+                }
+            });
+        };
+        // 调起支付宝支付
+        function initaliPay(params) {
+            if (window.AlipayJSBridge) {
+                window.AlipayJSBridge.call(
+                    "tradePay",
+                    {
+                        tradeNO: params.data
+                    },
+                    data => {
+                        if ("9000" == data.resultCode) {
+                            alert('支付成功')
+                            window.AlipayJSBridge.call("closeWebview");
+                        } else if (data.resultCode == '6001') {
+                            // 用户取消支付
+                            alert('支付已取消');
+                        } else {
+                            // 支付失败
+                            alert('支付失败');
+                        }
+                    }
+                );
+            } else {
+                document.addEventListener(
+                    "AlipayJSBridgeReady",
+                    () => {
+                        window.AlipayJSBridge.call(
+                            "tradePay",
+                            {
+                                tradeNO: params.data
+                            },
+                            data => {
+                                alert(JSON.stringify(data));
+                                if ("9000" == data.resultCode) {
+                                    window.AlipayJSBridge.call("closeWebview");
+                                } else if (data.resultCode == '6001') {
+                                    // 用户取消支付
+                                    alert('支付已取消');
+                                } else {
+                                    // 支付失败
+                                    alert('支付失败');
+                                }
+                            }
+                        );
+                    },
+                    false
+                );
+            }
+        };
+
+        // 页面加载完成后调用初始化函数
+        window.onload = function () {
+            // 在页面加载完成后，给输入框设置焦点
+            document.getElementById('inputPrice').focus();
+            const queryString = window.location.search;
+            const params = new URLSearchParams(queryString);
+            const myObject = {};
+            for (const [key, value] of params.entries()) {
+                myObject[key] = value;
+            }
+            urlData = myObject
+            if (urlData.openId) {
+                // alert('openId')
+                $('#wx').css('display', 'block')
+                $('#zfb').css('display', 'none')
+            } else if (urlData.ailopenId) {
+                // alert('userId')
+                $('#zfb').css('display', 'block')
+                $('#wx').css('display', 'none')
+            } else {
+                alert('请使用支付宝或微信扫码')
+            }
+        };
+    </script>
+</body>
+
+</html>

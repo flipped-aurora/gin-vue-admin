@@ -68,7 +68,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 	if info.Label != "" {
 		db = db.Where("label LIKE ?", "%"+info.Label+"%")
 	}
-	if info.Value != 0 {
+	if info.Value != "" {
 		db = db.Where("value = ?", info.Value)
 	}
 	if info.Status != nil {

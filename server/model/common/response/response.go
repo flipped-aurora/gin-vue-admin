@@ -1,15 +1,33 @@
 package response
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
+
+type ResQueryOrder struct {
+	Code        int    `json:"code"`
+	TradeStatus string `json:"tradeStatus"`
+	Status      string `json:"status"`
+	Timestamp   string `json:"timestamp"`
+}
 
 type Response struct {
 	Code int         `json:"code"`
 	Data interface{} `json:"data"`
 	Msg  string      `json:"msg"`
+}
+
+type Responsewx struct {
+	Code       int         `json:"code"`
+	Data       interface{} `json:"data"`
+	Msg        string      `json:"msg"`
+	ServerTime string      `json:"ServerTime"`
+}
+
+type ResponseWx struct {
+	Code string `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 const (
@@ -24,6 +42,28 @@ func Result(code int, data interface{}, msg string, c *gin.Context) {
 		data,
 		msg,
 	})
+}
+
+func ResultWxFail(code string, msg string, c *gin.Context) {
+	// 开始时间
+	c.JSON(http.StatusBadRequest, ResponseWx{
+		code,
+		msg,
+	})
+}
+
+func ResultWx(code int, data interface{}, msg, ServerTime string, c *gin.Context) {
+	// 开始时间
+	c.JSON(http.StatusOK, Responsewx{
+		code,
+		data,
+		msg,
+		ServerTime,
+	})
+}
+
+func ResultWxOK(c *gin.Context) {
+	c.Status(http.StatusOK)
 }
 
 func Ok(c *gin.Context) {
@@ -52,4 +92,36 @@ func FailWithMessage(message string, c *gin.Context) {
 
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
 	Result(ERROR, data, message, c)
+}
+
+func FailWxCall(cede string, message string, c *gin.Context) {
+	ResultWxFail(cede, message, c)
+}
+
+func OkWxCall(c *gin.Context) {
+	ResultWxOK(c)
+}
+
+func WxQrCode(data interface{}, message, serverTime string, c *gin.Context) {
+	ResultWx(SUCCESS, data, message, serverTime, c)
+}
+
+func OkMhtQueryOrder(code int, tradeStatus, status, time string, c *gin.Context) {
+	//{"code":0,"tradeStatus":"支付成功","status":"S","timestamp":"1699067811355"}
+	c.JSON(http.StatusOK, ResQueryOrder{
+		Code:        code,
+		TradeStatus: tradeStatus,
+		Status:      status,
+		Timestamp:   time,
+	})
+}
+
+func FailMhtQueryOrder(code int, tradeStatus, status, time string, c *gin.Context) {
+	//{"code":0,"tradeStatus":"支付成功","status":"S","timestamp":"1699067811355"}
+	c.JSON(http.StatusOK, ResQueryOrder{
+		Code:        code,
+		TradeStatus: tradeStatus,
+		Status:      status,
+		Timestamp:   time,
+	})
 }

@@ -12,6 +12,7 @@ require (
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.9.1
 	github.com/glebarez/sqlite v1.8.0
+	github.com/go-pay/gopay v1.5.98
 	github.com/go-sql-driver/mysql v1.7.1
 	github.com/gofrs/uuid/v5 v5.0.0
 	github.com/golang-jwt/jwt/v4 v4.5.0
@@ -27,6 +28,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sashabaranov/go-openai v1.14.1
 	github.com/shirou/gopsutil/v3 v3.23.6
+	github.com/shopspring/decimal v1.3.1
 	github.com/songzhibin97/gkit v1.2.11
 	github.com/spf13/viper v1.16.0
 	github.com/stretchr/testify v1.8.4
@@ -37,10 +39,9 @@ require (
 	github.com/unrolled/secure v1.13.0
 	go.mongodb.org/mongo-driver v1.12.1
 	go.uber.org/zap v1.24.0
-	golang.org/x/crypto v0.10.0
+	golang.org/x/crypto v0.15.0
 	golang.org/x/sync v0.3.0
-	golang.org/x/text v0.11.0
-	gorm.io/datatypes v1.2.0
+	golang.org/x/text v0.14.0
 	gorm.io/driver/mysql v1.5.1
 	gorm.io/driver/postgres v1.5.2
 	gorm.io/driver/sqlserver v1.5.1
@@ -124,7 +125,7 @@ require (
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/image v0.5.0 // indirect
 	golang.org/x/net v0.10.0 // indirect
-	golang.org/x/sys v0.10.0 // indirect
+	golang.org/x/sys v0.14.0 // indirect
 	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect

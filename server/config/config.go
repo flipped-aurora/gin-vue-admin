@@ -1,5 +1,10 @@
 package config
 
+import (
+	ali "github.com/flipped-aurora/gin-vue-admin/server/plugin/alipay/config"
+	wx "github.com/flipped-aurora/gin-vue-admin/server/plugin/wxpay/config"
+)
+
 type Server struct {
 	JWT     JWT     `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
 	Zap     Zap     `mapstructure:"zap" json:"zap" yaml:"zap"`
@@ -29,4 +34,10 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+
+	//wxpay
+	WxPay wx.WxPay `mapstructure:"wxpay" json:"wxpay" yaml:"wxpay"`
+
+	//alipay
+	AliPay ali.Alipay `mapstructure:"alipay" json:"alipay" yaml:"alipay"`
 }

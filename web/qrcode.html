@@ -1,0 +1,44 @@
+<!DOCTYPE html>  
+<html lang="en">  
+<head>  
+  <meta charset="UTF-8">  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <title>生成二维码</title>  
+  <style>  
+    #qrCodeImage {  
+      width: 200px;  
+      height: 200px;  
+      margin-top: 10px;  
+    }  
+  </style>  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>  
+  <script>  
+    $(document).ready(function() {  
+      $('#generateButton').on('click', function() {  
+        var patternId = 3;  
+        var macid = 'ZZ9KDT845Z';  
+        $.ajax({  
+          url: 'YOUR_SERVER_URL', // 替换为你的服务器URL  
+          type: 'POST',  
+          data: { patternId: patternId, macid: macid },  
+          success: function(response) {  
+            if (response.success) {  
+              $('#qrCodeImage').attr('src', response.url);  
+            } else {  
+              alert('生成二维码失败：' + response.message);  
+            }  
+          },  
+          error: function(xhr, status, error) {  
+            console.error('请求失败：', error);  
+          }  
+        });  
+      });  
+    });  
+  </script>  
+</head>  
+<body>  
+  <h1>生成二维码</h1>  
+  <button id="generateButton">生成二维码</button>  
+  <img id="qrCodeImage" alt="QR Code">  
+</body>  
+</html>

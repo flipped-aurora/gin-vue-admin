@@ -44,6 +44,9 @@ router.beforeEach(async(to, from) => {
   const token = userStore.token
   // 在白名单中的判断情况
   document.title = getPageTitle(to.meta.title, to)
+  if(to.meta.client) {
+    return true
+  }
   if (whiteList.indexOf(to.name) > -1) {
     if (token) {
       if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {

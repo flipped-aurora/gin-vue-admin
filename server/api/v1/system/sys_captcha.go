@@ -1,7 +1,6 @@
 package system
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -37,7 +36,6 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 	}
 
 	var oc bool
-	fmt.Println(openCaptcha, interfaceToInt(v))
 	if openCaptcha == 0 || openCaptcha < interfaceToInt(v) {
 		oc = true
 	}

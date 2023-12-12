@@ -1,6 +1,7 @@
 package system
 
 import (
+	"context"
 	"strconv"
 	"time"
 
@@ -378,6 +379,10 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)
 		return
+	}
+	if dr, err := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime); err == nil && global.GVA_REDIS != nil {
+		// 更新用户时需更新用户的禁用状态
+		global.GVA_REDIS.Set(context.Background(), strconv.Itoa(int(user.ID))+".user.enable", user.Enable, dr)
 	}
 	response.OkWithMessage("设置成功", c)
 }

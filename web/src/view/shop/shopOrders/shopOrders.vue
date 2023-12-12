@@ -36,19 +36,26 @@
           <el-input v-model="searchInfo.TransactionId" placeholder="搜索条件" />
 
         </el-form-item>
-        <el-form-item label="交易类型" prop="TradeType">
+        <!-- <el-form-item label="交易类型" prop="TradeType">
           <el-input v-model="searchInfo.TradeType" placeholder="搜索条件" />
 
-        </el-form-item>
-        <el-form-item label="OPENID" prop="OpenId">
-          <el-input v-model="searchInfo.OpenId" placeholder="搜索条件" />
+        </el-form-item> -->
+        <el-form-item label="交易状态" prop="TradeState">
+          <el-select v-model="searchInfo.TradeState" clearable placeholder="请选择"
+            @clear="() => { searchInfo.TradeState = undefined }">
+            <el-option v-for="(item, key) in TradeStateOptions" :key="key" :label="item.label" :value="item.value" />
+          </el-select>
 
         </el-form-item>
-        <el-form-item label="订单金额" prop="Total">
+        <!-- <el-form-item label="OPENID" prop="OpenId">
+          <el-input v-model="searchInfo.OpenId" placeholder="搜索条件" />
+
+        </el-form-item> -->
+        <!-- <el-form-item label="订单金额" prop="Total">
 
           <el-input v-model.number="searchInfo.Total" placeholder="搜索条件" />
 
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="支付金额" prop="PayerTotal">
 
           <el-input v-model.number="searchInfo.PayerTotal" placeholder="搜索条件" />
@@ -92,14 +99,14 @@
       <el-table ref="multipleTable" style="width: 100%" tooltip-effect="dark" :data="tableData" row-key="ID" 
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" label="日期" width="160">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <!-- <el-table-column align="left" label="APPID" prop="AppId" width="120" /> -->
-        <el-table-column align="left" label="商户号" prop="MchId" width="160" />
+        <!-- <el-table-column align="left" label="商户号" prop="MchId" width="160" /> -->
         <el-table-column align="left" label="商户订单" prop="OutTradeNo" width="220" />
-        <el-table-column align="left" label="支付订单" prop="TransactionId" width="250" />
-        <el-table-column align="left" label="交易类型" prop="TradeType" width="120" />
+        <!-- <el-table-column align="left" label="支付订单" prop="TransactionId" width="250" /> -->
+        <!-- <el-table-column align="left" label="交易类型" prop="TradeType" width="120" /> -->
         <el-table-column align="left" label="交易状态" prop="TradeState" width="120">
           <template #default="scope">
             {{ filterDict(scope.row.TradeState, TradeStateOptions) }}
@@ -107,19 +114,19 @@
         </el-table-column>
         <!-- <el-table-column align="left" label="银行类型" prop="BankType" width="120" />
         <el-table-column align="left" label="附加数据" prop="Attach" width="120" /> -->
-        <el-table-column align="left" label="支付时间" width="180">
+        <!-- <el-table-column align="left" label="支付时间" width="180">
           <template #default="scope">{{ formatDate(scope.row.SuccessTime) }}</template>
-        </el-table-column>
+        </el-table-column> -->
         <!-- <el-table-column align="left" label="OPENID" prop="OpenId" width="120" /> -->
         <!-- <el-table-column align="left" label="sub_appid" prop="SubOpenId" width="120" /> -->
         <el-table-column align="left" label="订单金额" prop="Total" width="120" />
         <el-table-column align="left" label="支付金额" prop="PayerTotal" width="120" />
-        <el-table-column align="left" label="用户ID" prop="UserId" width="120" />
+        <!-- <el-table-column align="left" label="用户ID" prop="UserId" width="120" />
         <el-table-column align="left" label="地址ID" prop="AddrId" width="120" />
         <el-table-column align="left" label="商品ID" prop="GoodsId" width="120" />
         <el-table-column align="left" label="店铺ID" prop="ShopID" width="120" />
-        <el-table-column align="left" label="配送ID" prop="TransportId" width="120" />
-        <el-table-column align="left" label="结束时间" width="180">
+        <el-table-column align="left" label="配送ID" prop="TransportId" width="120" /> -->
+        <el-table-column align="left" label="结束时间" width="160">
           <template #default="scope">{{ formatDate(scope.row.Endtime) }}</template>
         </el-table-column>
         <el-table-column align="left" label="商品标题" prop="GoodsTitle" width="220" />
@@ -132,7 +139,7 @@
           </template>
         </el-table-column>
         <el-table-column align="left" label="设备ID" prop="DeviceId" width="120" />
-        <el-table-column align="left" label="操作" min-width="240">
+        <el-table-column align="left" label="操作" min-width="180">
           <template #default="scope">
             <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
               <el-icon style="margin-right: 5px">
@@ -140,9 +147,9 @@
               </el-icon>
               查看详情
             </el-button>
-            <el-button type="primary" link icon="edit" class="table-button"
-              @click="updateShopOrdersFunc(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="edit" class="table-button" @click="updateShopOrdersFunc(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button type="primary" link icon="edit" class="table-button" @click="RefundShopOrdersFunc(scope.row)">退款</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -343,6 +350,7 @@ import {
   deleteShopOrdersByIds,
   updateShopOrders,
   findShopOrders,
+  RefundShopOrders,
   getShopOrdersList
 } from '@/api/shopOrders'
 
@@ -535,6 +543,18 @@ const updateShopOrdersFunc = async (row) => {
   }
 }
 
+// 退款订单
+const RefundShopOrdersFunc = async (row) => {
+  const res = await RefundShopOrders({ OutTradeNo: row.OutTradeNo})
+  type.value = 'update'
+  if (res.code === 0) {
+     ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+    getTableData()
+  }
+}
 
 // 删除行
 const deleteShopOrdersFunc = async (row) => {

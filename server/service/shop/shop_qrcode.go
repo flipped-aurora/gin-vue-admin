@@ -6,6 +6,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/shop"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/shop/request"
+	alipay "github.com/flipped-aurora/gin-vue-admin/server/plugin/alipay/service"
+	wxpay "github.com/flipped-aurora/gin-vue-admin/server/plugin/wxpay/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/go-pay/gopay"
 )
@@ -60,4 +62,33 @@ func (ShopQrcodeService *ShopQrcodeService) ServiceQueryOrders(req *request.Requ
 	} else {
 		return 9, errors.New("支付状态异常")
 	}
+}
+
+// ServiceUserRefund 棉花糖根据订单号自动退款
+func (ShopQrcodeService *ShopQrcodeService) ServiceUserRefund(tradeNo string) (err error) {
+	//从数据库把商品信息取出来
+	var orders = shop.ShopOrders{}
+	err = global.GVA_DB.Where("OutTradeNo = ? ", tradeNo).First(&orders).Error
+	if err != nil {
+		return errors.New("商品信息错误")
+	}
+	if orders.TradeState != utils.SUCCESS {
+		return errors.New("支付状态异常")
+	}
+
+	if orders.PayMent == utils.Wxpay { //微信退款
+		_, err = wxpay.ServiceGroupApp.PlugServerRefunds(orders.OutTradeNo)
+	} else if orders.PayMent == utils.Alipay { //支付宝退款
+		_, err = alipay.ServiceGroupApp.PlugServiceRefund(orders.OutTradeNo)
+	} else {
+		return errors.New("请求参数有误：" + tradeNo)
+	}
+	if err != nil {
+		return err
+	}
+	if orders.TradeState != utils.REFUND {
+		return errors.New("更新数据库失败,订单号：" + tradeNo)
+	}
+	return nil
+
 }

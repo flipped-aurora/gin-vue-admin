@@ -166,3 +166,32 @@ func (shopOrdersApi *ShopOrdersApi) GetShopOrdersList(c *gin.Context) {
 		return
 	}
 }
+
+// RefundShopOrders 用订单号退款
+// @Tags ShopOrders
+// @Summary 用订单号退款
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query shop.ShopOrders true "用订单号退款"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Router /shopOrders/findShopOrders [get]
+func (shopOrdersApi *ShopOrdersApi) RefundShopOrders(c *gin.Context) {
+	var shopOrders shop.ShopOrders
+	err := c.ShouldBindQuery(&shopOrders)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if len(shopOrders.OutTradeNo) <= 0 {
+		response.FailWithMessage("参数有误", c)
+		return
+	}
+	order, err := shopOrdersService.RefundShopOrders(shopOrders.OutTradeNo)
+	if err != nil {
+		global.GVA_LOG.Error("退款失败!", zap.Error(err))
+		response.FailWithMessage("退款失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"reshopOrders": order}, "退款成功", c)
+	}
+}

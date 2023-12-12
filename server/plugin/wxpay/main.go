@@ -65,5 +65,5 @@ func PayInitialize() {
 }
 
 func (*WxPayPlugin) RouterPath() string {
-	return "api/wxpay"
+	return "wxpay"
 }

@@ -10,9 +10,8 @@ type AlipayRouter struct {
 }
 
 func (s *AlipayRouter) InitAlipayRouter(Router *gin.RouterGroup) {
-	PublicGroup := Router.Group("")  //fmt.Println("无鉴权插件安装==》", PublicGroup)
-	PrivateGroup := Router.Group("") //fmt.Println("鉴权插件安装==》", PrivateGroup)
-	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	PublicGroup := Router.Group("")                                                            //fmt.Println("无鉴权插件安装==》", PublicGroup)
+	PrivateGroup := Router.Group("").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler()) //fmt.Println("鉴权插件安装==》", PrivateGroup)
 	//plugRouter := Router
 	plugApi := api.ApiGroupApp.AlipayApi
 	{

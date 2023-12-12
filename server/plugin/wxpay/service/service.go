@@ -17,30 +17,6 @@ import (
 
 type PayService struct{}
 
-// PlugServiceGetCode  JsApi用户授权获取code
-//func (e *PayService) PlugServiceGetCode(req *request.JsapiGetToken) string {
-//	var cfg = global.GlobalConfig
-//	st := fmt.Sprintf("%s/wxpay/gettoken?attach=%s", cfg.Load, req.Attach)
-//	encodedStr := url.QueryEscape(st)
-//	aToken := fmt.Sprintf(Urlstr, cfg.AppID, encodedStr)
-//	return aToken
-//}
-
-// PlugServiceGetToken  JsApi用户授权获取token 成功返回openid
-//func (e *PayService) PlugServiceGetToken(req *request.JsapiGetToken) (string, error) {
-//	sprintf := fmt.Sprintf(TokenUrl, global.GlobalConfig.AppID, global.GlobalConfig.Secret, req.Code)
-//
-//	str := utils.HttpGet(sprintf)
-//	//str := `{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN","openid":"ovDTtjpt9FURG7ZUK80c6bMurQ0w","scope":"SCOPE","is_snapshotuser":1,"unionid":"UNIONID"}`
-//	var token AccessToken
-//	err := json.Unmarshal([]byte(str), &token)
-//	if err != nil {
-//		fmt.Println("解析JSON时出错：", err)
-//		return "", err
-//	}
-//	return token.OpenID, nil
-//}
-
 // PlugServiceJsApi JsApi下单
 func (e *PayService) PlugServiceJsApi(req *request.Jsapi) (*wechat.JSAPIPayParams, error) {
 	var cfg = global.GlobalConfig
@@ -51,19 +27,22 @@ func (e *PayService) PlugServiceJsApi(req *request.Jsapi) (*wechat.JSAPIPayParam
 	if err != nil {
 		return nil, err
 	}
-	if orders.TradeState == utils.SUCCESS || orders.TradeState == utils.TRADE_SUCCESS {
+	if orders.TradeState == wechat.TradeStateSuccess {
 		return nil, errors.New("订单已支付")
 	}
 	//生成微信下单body数据
 	bm := WxJsapiBody(cfg.AppID, cfg.MchID, tradeNo, orders.GoodsTitle, cfg.NotifyUrl, req.Attach, req.OpenId, *orders.Total) //数据组装
-	paid, err := global.WxClient.V3TransactionJsapi(context.Background(), bm)
-	if paid.Code != wechat.Success {
-		return nil, errors.New(paid.Error)
+	Jsapi, err := global.WxClient.V3TransactionJsapi(context.Background(), bm)
+	if err != nil {
+		return nil, err
+	}
+	if Jsapi.Code != wechat.Success {
+		return nil, errors.New(Jsapi.Error)
 	}
 	if err != nil {
-		return nil, errors.New(paid.Error)
+		return nil, errors.New(Jsapi.Error)
 	}
-	jsapi, err := global.WxClient.PaySignOfJSAPI(cfg.AppID, paid.Response.PrepayId)
+	jsapi, err := global.WxClient.PaySignOfJSAPI(cfg.AppID, Jsapi.Response.PrepayId)
 	if err != nil {
 		return nil, err
 	}
@@ -77,17 +56,17 @@ func (e *PayService) PlugServiceToPayJsApi(req *request.ToPayJsapi) (*wechat.JSA
 	title := "云南串先生扫码付"
 	//生成微信下单body数据
 	bm := WxJsapiBody(cfg.AppID, cfg.MchID, tradeNo, title, cfg.NotifyUrl, "", req.OpenId, req.Money) //数据组装
-	paid, err := global.WxClient.V3TransactionJsapi(context.Background(), bm)
-	if paid.Code != wechat.Success {
-		return nil, errors.New(paid.Error)
+	Jsapi, err := global.WxClient.V3TransactionJsapi(context.Background(), bm)
+	if Jsapi.Code != wechat.Success {
+		return nil, errors.New(Jsapi.Error)
 	}
 	if err != nil {
-		return nil, errors.New(paid.Error)
+		return nil, errors.New(Jsapi.Error)
 	}
 	var orders = shop.ShopOrders{}
 	orders.OpenId = req.OpenId
 	orders.Total = &req.Money
-	orders.TradeState = utils.NOTPAY
+	orders.TradeState = wechat.TradeStateNoPay
 	orders.GoodsTitle = title
 	orders.PayMent = utils.Wxpay
 	orders.GoodsPrice = &req.Money
@@ -100,7 +79,7 @@ func (e *PayService) PlugServiceToPayJsApi(req *request.ToPayJsapi) (*wechat.JSA
 		return nil, errors.New("内部错误，请检查参数")
 	}
 
-	jsapi, err := global.WxClient.PaySignOfJSAPI(cfg.AppID, paid.Response.PrepayId)
+	jsapi, err := global.WxClient.PaySignOfJSAPI(cfg.AppID, Jsapi.Response.PrepayId)
 	if err != nil {
 		return nil, err
 	}
@@ -218,14 +197,13 @@ func (e *PayService) PlugServiceCloseOrder(tradeNo string) (res string, err erro
 }
 
 // 微信退款
-func (e *PayService) PlugServerRefunds(tradeNo string) (in int64, err error) {
-	var order = &shop.ShopOrders{}
-	err = glog.GVA_DB.Where("outtradeno = ? and TradeState = ?", tradeNo, utils.SUCCESS).Find(order).Error
+func (e *PayService) PlugServerRefunds(tradeNo string) (order *shop.ShopOrders, err error) {
+	err = glog.GVA_DB.Where("outtradeno = ? and TradeState = ?", tradeNo, wechat.TradeStateSuccess).Find(&order).Error
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	if len(order.OpenId) == 0 {
-		return 0, errors.New("订单不存在")
+		return nil, errors.New("订单不存在或参数有误")
 	}
 
 	bm := make(gopay.BodyMap)
@@ -238,17 +216,17 @@ func (e *PayService) PlugServerRefunds(tradeNo string) (in int64, err error) {
 		})
 	rsp, err := global.WxClient.V3Refund(context.Background(), bm)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	if rsp.Code != wechat.Success {
-		return 0, errors.New(rsp.Error)
+		return nil, errors.New(rsp.Error)
 	}
 	t := time.Now()
 	order.Endtime = &t
 	order.TradeState = wechat.TradeStateRefund
-	result := glog.GVA_DB.Where("outtradeno = ?", tradeNo).Updates(order)
-	if result.Error != nil {
-		return 0, err
+	err = glog.GVA_DB.Where("outtradeno = ?", tradeNo).Updates(order).Error
+	if err != nil {
+		return nil, err
 	}
-	return result.RowsAffected, nil
+	return order, nil
 }

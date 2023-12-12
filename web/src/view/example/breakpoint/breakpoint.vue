@@ -136,7 +136,6 @@ const choseFile = async(e) => {
         ElMessage.success('文件已秒传')
       }
       waitNum.value = waitUpLoad.value.length // 记录长度用于百分比展示
-      console.log(waitNum.value)
     }
   } else {
     limitFileSize.value = true

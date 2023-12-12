@@ -1,17 +1,16 @@
 package shop
 
 import (
-	"errors"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/shop/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-pay/gopay/wechat/v3"
 	"go.uber.org/zap"
 	"net/http"
+	"net/url"
 	"strconv"
 	"strings"
 	"time"
@@ -35,34 +34,42 @@ var shopQrcodeService = service.ServiceGroupApp.ShopServiceGroup.ShopQrcodeServi
 // @Produce application/json
 // @Param data body shop.ShopQrcodeRouter true "支付预下单"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功","serverTime":"2023-12-06 23:03:00"}
-// @Router /api/pay/createShopOrders [post]
+// @Router /api/mht/createShopOrders [post]
 func (shopQrcodeApi *ShopQrcodeApi) CreateShopQrcode(c *gin.Context) {
-	//{ts=1699067732226, key=658241451, patternId=3, macid=ZZ9KDT845Z}
+	//ts=1702434294592&amp;key=539000891&amp;patternId=13&amp;macid=ZZ9KDT845Z
 	body, err := c.GetRawData() //获取请求参数body原始数据
 	if err != nil {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("请求参数有误")))
+		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
-	if len(body) <= 1 {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("请求参数有误")))
+	//替换请求里面的多余参数
+	str := strings.ReplaceAll(string(body), "&amp;", "&")
+	// 将字符串转换为 map 格式
+	query, err := url.ParseQuery(str)
+	if err != nil {
+		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
-	var strbody *request.RequestMhtData //解析棉花糖机器请求参数
-	strbody = utils.ParseRequest(string(body))
-	if strbody.PatternId == "" || strbody.Macid == "" {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("解析请求错误")))
+	//var plug request.RequestMhtData
+	plug := request.RequestMhtData{
+		Macid:     query.Get("macid"),
+		PatternId: query.Get("patternId"),
+	}
+
+	if plug.PatternId == "" || plug.Macid == "" {
+		global.GVA_LOG.Error("失败!", zap.String("参数", "CreateShopQrcode的macid或者patternid为空"))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
-	if url, err := shopQrcodeService.ServiceCreateOrders(strbody); err != nil {
-		global.GVA_LOG.Error("预下单失败", zap.Error(err))
+	if urls, err := shopQrcodeService.ServiceCreateOrders(&plug); err != nil {
+		global.GVA_LOG.Error("失败", zap.Error(err))
 		response.FailWithMessage("预下单失败,请检查参数", c)
 	} else {
 		//global.GVA_REDIS.Set(context.Background(), "", url, timer)
 		ts := time.Now().Format(time.DateTime)
-		response.WxQrCode(url, wechat.TradeStateSuccess, ts, c)
+		response.WxQrCode(urls, wechat.TradeStateSuccess, ts, c)
 	}
 }
 
@@ -74,18 +81,17 @@ func (shopQrcodeApi *ShopQrcodeApi) CreateShopQrcode(c *gin.Context) {
 // @Produce application/json
 // @Param data body shop.ShopQrcodeRouter true "跳转"
 // @Success 302
-// @Router /api/pay/openId [post]
+// @Router /api/mht/openId [post]
 func (shopQrcodeApi *ShopQrcodeApi) GetOpenId(c *gin.Context) {
-	//{ts=1699067732226, key=658241451, patternId=3, macid=ZZ9KDT845Z}
 	var plug *request.Attach
 	err := c.ShouldBindQuery(&plug)
 	if err != nil {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("请求参数有误")))
+		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
 	if plug.Attach == "" {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("请求参数有误")))
+		global.GVA_LOG.Error("失败!", zap.String("Attach为空", plug.Attach))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
@@ -113,29 +119,30 @@ func (shopQrcodeApi *ShopQrcodeApi) GetOpenId(c *gin.Context) {
 // @Produce application/json
 // @Param data body shop.ShopQrcodeRouter true "支付预下单"
 // @Success 302 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router /api/pay/QueryOrder [post]
+// @Router /api/mht/QueryOrder [post]
 func (shopQrcodeApi *ShopQrcodeApi) QueryOrder(c *gin.Context) {
-	//{ts=1699067732664, hlMerchantId=1369596012470, key=625031257, outTreadNo=569621434041902, macid=ZZ9KDT845Z, agencyNo=1226862}
-	ts := strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
+	//ts=1702434294592&amp;key=539000891&amp;patternId=13&amp;macid=ZZ9KDT845Z
 	body, err := c.GetRawData() //获取请求参数body原始数据
 	if err != nil {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("请求参数有误")))
+		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
-	if len(body) <= 1 {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("请求参数有误")))
+	//替换请求里面的多余参数
+	str := strings.ReplaceAll(string(body), "&amp;", "&")
+	// 将字符串转换为 map 格式
+	query, err := url.ParseQuery(str)
+	if err != nil {
+		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("请求参数有误", c)
 		return
 	}
-	var strbody *request.RequestMhtData //解析棉花糖机器请求参数
-	strbody = utils.ParseRequest(string(body))
-	if strbody.OutTreadNo == "" {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New("解析请求错误")))
-		response.FailWithMessage("请求参数有误", c)
-		return
+	//var plug request.RequestMhtData
+	plug := request.RequestMhtData{
+		OutTreadNo: query.Get("outTreadNo"),
 	}
-	if n, err := shopQrcodeService.ServiceQueryOrders(strbody); err != nil {
+	ts := strconv.FormatInt(time.Now().UnixNano()/int64(time.Millisecond), 10)
+	if n, err := shopQrcodeService.ServiceQueryOrders(&plug); err != nil {
 		global.GVA_LOG.Error("查询订单失败", zap.Error(err))
 		response.FailMhtQueryOrder(n, "订单还未支付", "F", ts, c)
 	} else {
@@ -168,5 +175,30 @@ func (shopQrcodeApi *ShopQrcodeApi) ToTayGetOpenId(c *gin.Context) {
 		locat := fmt.Sprintf("/wxpay.html")
 		c.Redirect(http.StatusFound, locat)
 		return
+	}
+}
+
+// UserRefund
+// @Tags Qrcode
+// @Summary 棉花糖用户自定退款
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body shop.ShopQrcodeRouter true "支付预下单"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"退款成功"}"
+// @Router /api/mht/userRefund [post]
+func (shopQrcodeApi *ShopQrcodeApi) UserRefund(c *gin.Context) {
+	tradeNo := c.Param("OutTradeNo")
+	if len(tradeNo) == 0 {
+		global.GVA_LOG.Error("失败!", zap.String("参数有误", tradeNo))
+		response.FailWithMessage("请求参数有误", c)
+		return
+	}
+
+	if err := shopQrcodeService.ServiceUserRefund(tradeNo); err != nil {
+		global.GVA_LOG.Error("退款失败", zap.Error(err))
+		response.FailWithMessage("退款失败", c)
+	} else {
+		response.OkWithMessage("退款成功", c)
 	}
 }

@@ -10,9 +10,8 @@ type PayRouter struct {
 }
 
 func (s *PayRouter) InitPayRouter(Router *gin.RouterGroup) {
-	PublicGroup := Router.Group("")  //fmt.Println("无鉴权插件安装==》", PublicGroup)
-	PrivateGroup := Router.Group("") //fmt.Println("鉴权插件安装==》", PrivateGroup)
-	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
+	PublicGroup := Router.Group("")                                                            //fmt.Println("无鉴权插件安装==》", PublicGroup)
+	PrivateGroup := Router.Group("").Use(middleware.JWTAuth()).Use(middleware.CasbinHandler()) //fmt.Println("鉴权插件安装==》", PrivateGroup)
 	plugApi := wxapi.WxApiGroupApp.WxPay
 	{
 		PublicGroup.GET("native", plugApi.WxApiNativeCode)            //微信Native预下单

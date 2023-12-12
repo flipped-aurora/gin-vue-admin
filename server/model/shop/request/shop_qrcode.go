@@ -1,13 +1,13 @@
 package request
 
 type RequestMhtData struct {
-	Ts           string `json:"ts"`
-	Key          string `json:"key"`
-	PatternId    string `json:"patternId"`
-	Macid        string `json:"macid"`
-	AgencyNo     string `json:"agencyNo"`
-	HlMerchantId string `json:"hlMerchantId"`
-	OutTreadNo   string `json:"outTreadNo"`
+	Ts           string `form:"ts" json:"ts"`
+	Key          string `form:"key" json:"key"`
+	PatternId    string `form:"patternId" json:"patternId"`
+	Macid        string `form:"macid" json:"macid"`
+	AgencyNo     string `form:"agencyNo" json:"agencyNo"`
+	HlMerchantId string `form:"hlMerchantId" json:"hlMerchantId"`
+	OutTreadNo   string `form:"outTreadNo" json:"outTreadNo"`
 }
 
 // Attach 棉花糖机请求参数

@@ -37,12 +37,10 @@ func (p *WxPay) WxApiGetCode(c *gin.Context) {
 		response.FailWithMessage("请求参数错误", c)
 		return
 	}
-	//-----------------
 	var cfg = global.GVA_CONFIG.WxPay
 	st := fmt.Sprintf("%s/api/wxpay/gettoken?attach=%s", cfg.Load, plug.Attach)
 	encodedStr := url.QueryEscape(st)
 	aToken := fmt.Sprintf(Urlstr, cfg.AppID, encodedStr)
-	//-----
 	c.Redirect(http.StatusFound, aToken)
 	return
 }
@@ -61,13 +59,9 @@ func (p *WxPay) WxApiGetToken(c *gin.Context) {
 		response.FailWithMessage("请求参数错误", c)
 		return
 	}
-	//openid, err := service.ServiceGroupApp.PlugServiceGetToken(plug)
 	cfg := global.GVA_CONFIG.WxPay
 	sprintf := fmt.Sprintf(TokenUrl, cfg.AppID, cfg.Secret, plug.Code)
-
 	str := utils.HttpGet(sprintf)
-	//str := `{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN","openid":"ovDTtjpt9FURG7ZUK80c6bMurQ0w","scope":"SCOPE","is_snapshotuser":1,"unionid":"UNIONID"}`
-	//str := `{"access_token":"ACCESS_TOKEN","expires_in":7200,"refresh_token":"REFRESH_TOKEN","openid":"ovDTtjpt9FURG7ZUK80c6bMurQ0w","scope":"SCOPE","is_snapshotuser":1,"unionid":"UNIONID"}`
 	var token AccessToken
 	err = json.Unmarshal([]byte(str), &token)
 	if err != nil {
@@ -77,7 +71,7 @@ func (p *WxPay) WxApiGetToken(c *gin.Context) {
 	}
 
 	if token.OpenID == "" {
-		global.GVA_LOG.Error("获取openid失败", zap.Error(err))
+		global.GVA_LOG.Error("获取openid失败", zap.String("错误", "openid为空"))
 		response.FailWithMessage("获取openid失败", c)
 		return
 	}
@@ -129,7 +123,7 @@ func (p *WxPay) WxApiToPayToken(c *gin.Context) {
 	}
 
 	if token.OpenID == "" {
-		global.GVA_LOG.Error("获取openid失败", zap.Error(err))
+		global.GVA_LOG.Error("获取openid失败", zap.String("错误", "openid为空"))
 		response.FailWithMessage("获取openid失败", c)
 		return
 	}
@@ -214,7 +208,7 @@ func (p *WxPay) WxApiToPayJsApi(c *gin.Context) {
 		return
 	}
 	if plug.Money <= 0 {
-		global.GVA_LOG.Error("参数绑定失败", zap.Error(err))
+		global.GVA_LOG.Error("参数绑定失败", zap.String("错误", "money小于等于0"))
 		response.FailWithMessage("请求参数错误", c)
 		return
 	}
@@ -240,30 +234,30 @@ func (p *WxPay) WxApiNativeNotifyUrl(c *gin.Context) {
 	//这里解析微信回调到结构体  下面简单判断一下是不是无效请求
 	s, err := wechat.V3ParseNotify(c.Request)
 	if err != nil {
-		global.GVA_LOG.Error("微信回调接口失败!", zap.Error(errors.New("参数有问题，请检查")))
+		global.GVA_LOG.Error("微信回调接口失败!", zap.Error(err))
 		response.FailWxCall("FAIL", "失败", c)
 		return
 	}
 	if s.Id == "" {
-		global.GVA_LOG.Error("微信回调接口失败!", zap.Error(errors.New("参数有问题，请检查")))
+		global.GVA_LOG.Error("微信回调接口失败!", zap.String("失败", "id参数为空，请检查"))
 		response.FailWxCall("FAIL", "失败", c)
 		return
 	}
 	if s.EventType == "" {
-		global.GVA_LOG.Error("微信回调接口失败!", zap.Error(errors.New("参数有问题，请检查")))
+		global.GVA_LOG.Error("微信回调接口失败!", zap.String("失败", "EventType参数为空，请检查"))
 		response.FailWxCall("FAIL", "失败", c)
 		return
 	}
+
 	res := service.ServiceGroupApp.PlugServiceNotify(s)
 	if res.Code == "" { //这里先判断是否为nil 不然会报指针错误
-		global.GVA_LOG.Error("微信回调接口失败!", zap.Error(errors.New("参数有问题，请检查")))
+		global.GVA_LOG.Error("微信回调接口失败!", zap.String("失败", "Code参数为空，请检查"))
 		response.FailWxCall("FAIL", "失败", c)
 		return
 	}
 	if res.Code == "FAIL" {
-		global.GVA_LOG.Error("微信回调接口失败!", zap.Error(errors.New(res.Message)))
+		global.GVA_LOG.Error("微信回调接口失败!", zap.String("失败", "回调返回FAIL，请检查"))
 		response.FailWxCall(res.Code, res.Message, c)
-
 		return
 	}
 	if res.Code == "OK" {
@@ -274,7 +268,7 @@ func (p *WxPay) WxApiNativeNotifyUrl(c *gin.Context) {
 
 // WxApiNativeQueryOrder
 // @Tags WxPay
-// @Summary 微信订单查询接口 Native支付
+// @Summary 微信订单查询接口
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
 // @Router /wxpay/queryorder [get]
@@ -299,7 +293,7 @@ func (p *WxPay) WxApiNativeQueryOrder(c *gin.Context) {
 
 // WxApiNativeCloseOrder
 // @Tags WxPay
-// @Summary 微信关闭订单 Native支付
+// @Summary 微信关闭订单
 // @Produce  application/json
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"发送成功"}"
 // @Router /wxpay/CloseOrder [get]
@@ -318,7 +312,7 @@ func (p *WxPay) WxApiNativeCloseOrder(c *gin.Context) {
 		return
 	}
 	if str != "" {
-		global.GVA_LOG.Error(str, zap.Error(err))
+		global.GVA_LOG.Error(str, zap.String("失败", str))
 		response.FailWithMessage(str, c)
 		return
 	} else {
@@ -341,15 +335,15 @@ func (p *WxPay) WxApiNativeRefunds(c *gin.Context) {
 		response.FailWithMessage("订单退款绑定数据失败", c)
 		return
 	}
-	n, err := service.ServiceGroupApp.PlugServerRefunds(plug.OrderId)
+	order, err := service.ServiceGroupApp.PlugServerRefunds(plug.OrderId)
 	if err != nil {
 		global.GVA_LOG.Error("微信退款失败", zap.Error(err))
 		response.FailWithMessage("微信退款失败", c)
 		return
 	}
-	if n != 0 {
-		global.GVA_LOG.Error("账户更新数据条数为0", zap.Error(errors.New("账户更新数据条数为0")))
-		response.FailWithMessage("微信退款失败", c)
+	if order.TradeState != utils.NOTPAY {
+		global.GVA_LOG.Error("订单状态异常", zap.Error(errors.New("TradeState字段值异常")))
+		response.FailWithMessage("订单状态异常", c)
 		return
 	}
 	response.Ok(c)

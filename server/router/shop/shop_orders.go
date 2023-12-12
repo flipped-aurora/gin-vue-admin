@@ -19,6 +19,7 @@ func (s *ShopOrdersRouter) InitShopOrdersRouter(Router *gin.RouterGroup) {
 		shopOrdersRouter.DELETE("deleteShopOrders", shopOrdersApi.DeleteShopOrders)           // 删除shopOrders表
 		shopOrdersRouter.DELETE("deleteShopOrdersByIds", shopOrdersApi.DeleteShopOrdersByIds) // 批量删除shopOrders表
 		shopOrdersRouter.PUT("updateShopOrders", shopOrdersApi.UpdateShopOrders)              // 更新shopOrders表
+		shopOrdersRouter.PUT("refundOrder", shopOrdersApi.RefundShopOrders)                   // 更新shopOrders表-退款
 	}
 	{
 		shopOrdersRouterWithoutRecord.GET("findShopOrders", shopOrdersApi.FindShopOrders)       // 根据ID获取shopOrders表

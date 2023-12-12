@@ -36,7 +36,7 @@ func (A *AliPayService) PlugServiceJsPay(req *alireq.ResAuthJsApi) (aliRsp *alip
 	if err != nil {
 		return nil, err
 	}
-	if orders.TradeState == utils.SUCCESS || orders.TradeState == utils.TRADE_SUCCESS {
+	if orders.TradeState == utils.SUCCESS {
 		return nil, errors.New("订单已支付")
 	}
 
@@ -61,8 +61,7 @@ func (A *AliPayService) PlugServiceJsPay(req *alireq.ResAuthJsApi) (aliRsp *alip
 		return nil, err
 	}
 	if paystr.Response.TradeNo == "" {
-		err = errors.New("返回交易号为空")
-		global.GVA_LOG.Error("失败!", zap.Error(err))
+		global.GVA_LOG.Error("失败!", zap.Error(errors.New("返回交易号为空")))
 		return nil, err
 	}
 	return paystr, nil
@@ -94,8 +93,7 @@ func (A *AliPayService) PlugServiceToJsPay(req *alireq.ResAuthJsApi) (aliRsp *al
 		return nil, err
 	}
 	if paystr.Response.TradeNo == "" {
-		err = errors.New("返回交易号为空")
-		global.GVA_LOG.Error("失败!", zap.Error(err))
+		global.GVA_LOG.Error("失败!", zap.Error(errors.New("返回交易号为空")))
 		return nil, err
 	}
 	var orders = shop.ShopOrders{}
@@ -135,7 +133,11 @@ func (A *AliPayService) PlugServiceNotify(req *gopay.BodyMap) error {
 		return errors.New("获取支付金额错误")
 	}
 	order.Total = m //订单金额
-	order.TradeState = req.Get("trade_status")
+	if req.Get("trade_status") == utils.TRADE_SUCCESS {
+		order.TradeState = utils.SUCCESS
+	} else {
+		order.TradeState = req.Get("trade_status")
+	}
 	order.TradeType = "JSAPI"
 	order.OpenId = req.Get("buyer_open_id")
 	t1 := time.Now()
@@ -153,32 +155,38 @@ func (A *AliPayService) PlugServiceNotify(req *gopay.BodyMap) error {
 	}
 }
 
-// PlugServiceRefund SUCCESS:支付成功, REFUND:转入退款, NOTPAY:未支付, CLOSED:已关闭, REVOKED:已撤销, USERPAYING:支付中, PAYERROR:支付失败,WAIT_BUYER_PAY:交易创建,TRADE_CLOSED:交易超时,TRADE_SUCCESS:支付成功,TRADE_FINISHED:交易结束
-// PlugServiceRefund 退款
-func (A *AliPayService) PlugServiceRefund(tradeNo *alireq.ReqTradeNo) (aliRsp *alipay.TradeRefundResponse, err error) {
-	var order *shop.ShopOrders
-	err = global.GVA_DB.Where("OutTradeNo = ? and TradeState = ?", tradeNo.OutTradeNo, utils.TRADE_SUCCESS).First(&order).Error
+// PlugServiceRefund 订单退款
+// SUCCESS:支付成功, REFUND:转入退款, NOTPAY:未支付, CLOSED:已关闭, REVOKED:已撤销, USERPAYING:支付中, PAYERROR:支付失败,WAIT_BUYER_PAY:交易创建,TRADE_CLOSED:交易超时,TRADE_SUCCESS:支付成功,TRADE_FINISHED:交易结束
+func (A *AliPayService) PlugServiceRefund(tradeNo string) (order *shop.ShopOrders, err error) {
+	err = global.GVA_DB.Where("OutTradeNo = ? and TradeState = ?", tradeNo, utils.SUCCESS).First(&order).Error
 	if err != nil {
 		return nil, err
 	}
+	if order.PayerTotal == nil {
+		return nil, errors.New("订单不存在或参数有误")
+	}
 	if len(order.OpenId) == 0 {
-		return nil, errors.New("订单不存在")
+		return nil, errors.New("订单不存在或参数有误")
 	}
 	// 请求参数
 	//数据库以分为单位，需要除以100
 	money := float64(*order.PayerTotal)
 	amount := decimal.NewFromFloat(money).Div(decimal.NewFromFloat(100))
 	bm := make(gopay.BodyMap)
-	bm.Set("out_trade_no", tradeNo.OutTradeNo).
+	bm.Set("out_trade_no", tradeNo).
 		Set("refund_amount", amount)
 
-	// 发起退款请求
-	aliRsp, err = ali.Client.TradeRefund(context.Background(), bm)
+	//发起退款请求
+	aliRsp, err := ali.Client.TradeRefund(context.Background(), bm)
 	if err != nil {
 		if bizErr, ok := alipay.IsBizError(err); ok {
 			return nil, bizErr
 		}
 		return nil, err
+	}
+	// 退款成功判断说明：接口返回fund_change=Y为退款成功，fund_change=N或无此字段值返回时需通过退款查询接口进一步确认退款状态
+	if aliRsp.Response.FundChange != "Y" {
+		return nil, errors.New(aliRsp.Response.Msg)
 	}
 	order.TradeState = utils.REFUND //退款标记
 	t := time.Now()
@@ -187,5 +195,5 @@ func (A *AliPayService) PlugServiceRefund(tradeNo *alireq.ReqTradeNo) (aliRsp *a
 	if err != nil {
 		return nil, err
 	}
-	return aliRsp, nil
+	return order, nil
 }

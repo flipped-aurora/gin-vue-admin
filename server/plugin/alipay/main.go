@@ -30,7 +30,7 @@ func (*AlipayPlugin) Register(group *gin.RouterGroup) {
 }
 
 func (*AlipayPlugin) RouterPath() string {
-	return "api/alipay"
+	return "alipay"
 }
 
 func AliPayInitialize() {

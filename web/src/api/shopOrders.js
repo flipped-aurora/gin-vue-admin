@@ -80,6 +80,22 @@ export const findShopOrders = (params) => {
   })
 }
 
+// @Tags OrderRefund
+// @Summary 根据ID查订单退款
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query model.OrderRefund true "根据ID查订单退款"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
+// @Router /shopOrders/RefundOrders [get]
+export const RefundShopOrders = (params) => {
+  return service({
+    url: '/shopOrders/refundOrder',
+    method: 'put',
+    params
+  })
+}
+
 // @Tags ShopOrders
 // @Summary 分页获取shopOrders表列表
 // @Security ApiKeyAuth

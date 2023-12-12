@@ -1,10 +1,13 @@
 package shop
 
 import (
+	"errors"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/shop"
 	shopReq "github.com/flipped-aurora/gin-vue-admin/server/model/shop/request"
+	alipay "github.com/flipped-aurora/gin-vue-admin/server/plugin/alipay/service"
+	wxpay "github.com/flipped-aurora/gin-vue-admin/server/plugin/wxpay/service"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
@@ -48,6 +51,31 @@ func (shopOrdersService *ShopOrdersService) GetShopOrders(id uint) (shopOrders s
 	return
 }
 
+// RefundShopOrders 根据OutTradeNo退款
+// Author [piexlmax](https://github.com/piexlmax)
+func (shopOrdersService *ShopOrdersService) RefundShopOrders(tradeNo string) (order *shop.ShopOrders, err error) {
+	//从数据库把商品信息取出来
+	var shopOrders *shop.ShopOrders
+	err = global.GVA_DB.Where("OutTradeNo = ? ", tradeNo).First(&shopOrders).Error
+	if err != nil {
+		return nil, errors.New("商品信息错误")
+	}
+	if shopOrders.PayMent == utils.Wxpay { //微信退款
+		order, err = wxpay.ServiceGroupApp.PlugServerRefunds(tradeNo)
+	} else if shopOrders.PayMent == utils.Alipay { //支付宝退款
+		order, err = alipay.ServiceGroupApp.PlugServiceRefund(tradeNo)
+	} else {
+		return nil, errors.New("请求参数有误：" + tradeNo)
+	}
+	if err != nil {
+		return nil, err
+	}
+	if order.TradeState != utils.REFUND {
+		return nil, errors.New("更新数据库失败,订单号：" + tradeNo)
+	}
+	return order, nil
+}
+
 // GetShopOrdersInfoList 分页获取shopOrders表记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (shopOrdersService *ShopOrdersService) GetShopOrdersInfoList(info shopReq.ShopOrdersSearch) (list []shop.ShopOrders, total int64, err error) {
@@ -72,15 +100,15 @@ func (shopOrdersService *ShopOrdersService) GetShopOrdersInfoList(info shopReq.S
 	if info.TransactionId != "" {
 		db = db.Where("TransactionId = ?", info.TransactionId)
 	}
-	if info.TradeType != "" {
-		db = db.Where("TradeType = ?", info.TradeType)
+	if info.TradeState != "" {
+		db = db.Where("TradeState = ?", info.TradeState)
 	}
-	if info.OpenId != "" {
-		db = db.Where("OpenId = ?", info.OpenId)
-	}
-	if info.Total != nil {
-		db = db.Where("Total = ?", info.Total)
-	}
+	//if info.OpenId != "" {
+	//	db = db.Where("OpenId = ?", info.OpenId)
+	//}
+	//if info.Total != nil {
+	//	db = db.Where("Total = ?", info.Total)
+	//}
 	if info.PayerTotal != nil {
 		db = db.Where("PayerTotal = ?", info.PayerTotal)
 	}

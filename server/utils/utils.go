@@ -6,15 +6,13 @@ import (
 	"errors"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/shop"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/shop/request"
 	"github.com/go-pay/gopay"
 	"github.com/go-pay/gopay/wechat/v3"
 	"io"
 	"net/http"
-	"os"
 	"strconv"
 	"strings"
-	"sync/atomic"
+	"sync"
 	"time"
 )
 
@@ -37,31 +35,35 @@ const (
 	Alipay = "2"
 )
 
-var num int64
+var (
+	lastTimestamp int64  // 上次生成订单号的时间戳
+	counter       uint32 // 当前时间戳内已经生成的订单数
+	//nodeID        uint32     = 1 // 全局唯一节点 ID（示例值，根据实际情况进行赋值）
+	mutex sync.Mutex // 互斥锁
+)
 
-// 生成24位订单号
-// 前面17位代表时间精确到毫秒，中间3位代表进程id，最后4位代表序号
+// GetOrderNumber 生成订单号15位
 func GetOrderNumber() string {
-	t := time.Now()
-	s := t.Format("20060102150405")
-	m := t.UnixNano()/1e6 - t.UnixNano()/1e9*1e3
-	ms := sup(m, 3)
-	p := os.Getpid() % 1000
-	ps := sup(int64(p), 3)
-	i := atomic.AddInt64(&num, 1)
-	r := i % 10000
-	rs := sup(r, 4)
-	n := fmt.Sprintf("%s%s%s%s", s, ms, ps, rs)
-	return n
-}
+	timestamp := time.Now().Unix() // 获取当前时间戳
 
-// 对长度不足n的数字前面补0
-func sup(i int64, n int) string {
-	m := fmt.Sprintf("%d", i)
-	for len(m) < n {
-		m = fmt.Sprintf("0%s", m)
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	if timestamp < lastTimestamp {
+		panic("Clock moved backwards")
 	}
-	return m
+
+	if timestamp > lastTimestamp {
+		lastTimestamp = timestamp
+		counter = 0
+	} else {
+		counter++
+		if counter >= 9999 {
+			time.Sleep(time.Millisecond) // 如果当前时间戳内的订单数达到上限，则等待一段时间
+		}
+	}
+	orderNumber := fmt.Sprintf("5%d%04d", lastTimestamp, counter)
+	return orderNumber
 }
 
 // SetOrderData 组装数据 注意：js下单需要openid  native不需要
@@ -75,6 +77,7 @@ func SetOrderData(appID, mchID, attach, callUrl, openid string) (res *shop.ShopO
 	return &order
 }
 
+// SetNotifyData 微信设置订单数据
 func SetNotifyData(order *shop.ShopOrders, decode *wechat.V3DecryptResult) {
 	order.TransactionId = decode.TransactionId
 	order.TradeType = decode.TradeType
@@ -136,6 +139,7 @@ func HttpGet(url string) string {
 	return string(body)
 }
 
+// ReplaceAttach 处理棉花糖机器的附加参数
 func ReplaceAttach(s string) (str *gopay.BodyMap, arr error) {
 	attach := strings.Replace(s, "?attach=null", "", 1) //有多余数据 字符串替换处理一下
 	arrstr := strings.Split(attach, ",")                //把字符串用逗号分割
@@ -151,45 +155,4 @@ func ReplaceAttach(s string) (str *gopay.BodyMap, arr error) {
 	m.Set("agencyNo", arrstr[4])
 	m.Set("hlMerchantId", arrstr[5])
 	return &m, nil
-}
-
-// {ts=1699067732664, hlMerchantId=1369596012470, key=625031257, outTreadNo=569621434041902, macid=ZZ9KDT845Z, agencyNo=1226862}
-func ParseRequest(str string) (s *request.RequestMhtData) {
-	// 去除大括号
-	str = strings.TrimLeft(str, "{")
-	str = strings.TrimRight(str, "}")
-	// 按逗号分割字符串
-	pairs := strings.Split(str, ",")
-	// 初始化结构体实例
-	data := &request.RequestMhtData{}
-	// 提取键值对并填充到结构体中
-	for _, pair := range pairs {
-		pair = strings.TrimSpace(pair)
-		if pair != "" {
-			parts := strings.Split(pair, "=")
-			if len(parts) != 2 {
-				continue
-			}
-			key := parts[0]
-			value := parts[1]
-			switch key {
-			case "ts":
-				data.Ts = value
-			case "hlMerchantId":
-				data.HlMerchantId = value
-			case "key":
-				data.Key = value
-			case "outTreadNo":
-				data.OutTreadNo = value
-			case "macid":
-				data.Macid = value
-			case "agencyNo":
-				data.AgencyNo = value
-			case "patternId":
-				data.PatternId = value
-			}
-		}
-	}
-	// 打印解析后的数据
-	return data
 }

@@ -9,6 +9,7 @@ import (
 	ali "github.com/flipped-aurora/gin-vue-admin/server/plugin/alipay/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/alipay/model/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/alipay/service"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-pay/gopay"
 	"github.com/go-pay/gopay/alipay"
@@ -36,7 +37,7 @@ func (p *AlipayApi) ApiGetCode(c *gin.Context) {
 	var str string
 	err := c.ShouldBindQuery(&plug)
 	if err != nil {
-		global.GVA_LOG.Error("失败", zap.Error(errors.New("请求参数错误")))
+		global.GVA_LOG.Error("失败", zap.Error(err))
 		response.FailWithMessage("请求参数错误", c)
 		return
 	}
@@ -63,7 +64,7 @@ func (p *AlipayApi) ApiGetToken(c *gin.Context) {
 	var plug *request.ResAuthToken
 	err := c.ShouldBindQuery(&plug)
 	if err != nil {
-		global.GVA_LOG.Error("失败", zap.Error(errors.New("获取参数失败")))
+		global.GVA_LOG.Error("失败", zap.Error(err))
 		response.FailWithMessage("获取参数失败", c)
 		return
 	}
@@ -118,7 +119,7 @@ func (p *AlipayApi) ApiToPayGetToken(c *gin.Context) {
 	var plug *request.ResAuthToken
 	err := c.ShouldBindQuery(&plug)
 	if err != nil {
-		global.GVA_LOG.Error("失败", zap.Error(errors.New("获取参数失败")))
+		global.GVA_LOG.Error("失败", zap.Error(err))
 		response.FailWithMessage("获取参数失败", c)
 		return
 	}
@@ -156,7 +157,6 @@ func (p *AlipayApi) ApiPayJsapi(c *gin.Context) {
 		response.FailWithMessage("失败", c)
 		return
 	}
-	fmt.Println("jsapi:", plug.Money)
 	if res, err := service.ServiceGroupApp.PlugServiceJsPay(plug); err != nil {
 		global.GVA_LOG.Error("失败!", zap.Error(err))
 		response.FailWithMessage("失败", c)
@@ -222,7 +222,6 @@ func (p *AlipayApi) ApiNotify(c *gin.Context) {
 	}
 	if err := service.ServiceGroupApp.PlugServiceNotify(&bodyMap); err != nil {
 		global.GVA_LOG.Error("失败!", zap.Error(err))
-		response.FailWithMessage("fail", c)
 		c.String(http.StatusBadRequest, "fail")
 		return
 	} else {
@@ -241,21 +240,21 @@ func (p *AlipayApi) ApiRefunds(c *gin.Context) {
 	var plug *request.ReqTradeNo
 	err := c.ShouldBindQuery(&plug)
 	if err != nil {
-		global.GVA_LOG.Error("失败!", zap.Error(err))
-		response.FailWithMessage("失败", c)
+		global.GVA_LOG.Error("支付宝订单退款绑定数据失败!", zap.Error(err))
+		response.FailWithMessage("订单退款绑定数据失败", c)
 		return
 	}
-	alires, err := service.ServiceGroupApp.PlugServiceRefund(plug)
+	order, err := service.ServiceGroupApp.PlugServiceRefund(plug.OutTradeNo)
 	if err != nil {
-		global.GVA_LOG.Error("失败!", zap.Error(err))
-		response.FailWithMessage("失败", c)
-		return
-	} else if alires.Response.Code == "10000" {
-		response.Ok(c)
-		return
-	} else {
-		global.GVA_LOG.Error("失败!", zap.Error(errors.New(alires.Response.SubMsg)))
-		response.FailWithMessage("失败", c)
+		global.GVA_LOG.Error("支付宝退款失败!", zap.Error(err))
+		response.FailWithMessage("支付宝退款失败", c)
 		return
 	}
+	if order.TradeState != utils.REFUND {
+		global.GVA_LOG.Error("订单状态异常", zap.Error(errors.New("TradeState字段值异常")))
+		response.FailWithMessage("订单状态异常", c)
+		return
+	}
+	response.Ok(c)
+	return
 }

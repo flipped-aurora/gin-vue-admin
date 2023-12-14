@@ -38,7 +38,7 @@ func (autoApi *AutoCodeApi) PreviewTemp(c *gin.Context) {
 	a.PackageT = utils.FirstUpper(a.Package)
 	autoCode, err := autoCodeService.PreviewTemp(a)
 	if err != nil {
-		global.GVA_LOG.Error("预览失败!", zap.Error(err))
+		global.LOG.Error("预览失败!", zap.Error(err))
 		response.FailWithMessage("预览失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
@@ -65,7 +65,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	var apiIds []uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
-			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
+			global.LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
 			c.Writer.Header().Add("success", "false")
 			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
 			return
@@ -105,7 +105,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbs, err := autoCodeService.Database(businessDB).GetDB(businessDB)
 	var dbList []map[string]interface{}
-	for _, db := range global.GVA_CONFIG.DBList {
+	for _, db := range global.CONFIG.DBList {
 		var item = make(map[string]interface{})
 		item["aliasName"] = db.AliasName
 		item["dbName"] = db.Dbname
@@ -114,7 +114,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 		dbList = append(dbList, item)
 	}
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"dbs": dbs, "dbList": dbList}, "获取成功", c)
@@ -130,11 +130,11 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前数据库所有表"
 // @Router    /autoCode/getTables [get]
 func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
-	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	dbName := c.DefaultQuery("dbName", global.CONFIG.Mysql.Dbname)
 	businessDB := c.Query("businessDB")
 	tables, err := autoCodeService.Database(businessDB).GetTables(businessDB, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("查询table失败!", zap.Error(err))
+		global.LOG.Error("查询table失败!", zap.Error(err))
 		response.FailWithMessage("查询table失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"tables": tables}, "获取成功", c)
@@ -151,11 +151,11 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 // @Router    /autoCode/getColumn [get]
 func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	businessDB := c.Query("businessDB")
-	dbName := c.DefaultQuery("dbName", global.GVA_CONFIG.Mysql.Dbname)
+	dbName := c.DefaultQuery("dbName", global.CONFIG.Mysql.Dbname)
 	tableName := c.Query("tableName")
 	columns, err := autoCodeService.Database(businessDB).GetColumn(businessDB, tableName, dbName)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"columns": columns}, "获取成功", c)
@@ -181,7 +181,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
 
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -199,7 +199,7 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
 	pkgs, err := autoCodeService.GetPackage()
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"pkgs": pkgs}, "获取成功", c)
@@ -220,7 +220,7 @@ func (autoApi *AutoCodeApi) DelPackage(c *gin.Context) {
 	_ = c.ShouldBindJSON(&a)
 	err := autoCodeService.DelPackage(a)
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -247,7 +247,7 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 	a.NeedModel = a.HasRequest || a.HasResponse
 	err = autoCodeService.CreatePlug(a)
 	if err != nil {
-		global.GVA_LOG.Error("预览失败!", zap.Error(err))
+		global.LOG.Error("预览失败!", zap.Error(err))
 		response.FailWithMessage("预览失败", c)
 		return
 	}
@@ -307,7 +307,7 @@ func (autoApi *AutoCodeApi) PubPlug(c *gin.Context) {
 	snake := strings.ToLower(plugName)
 	zipPath, err := autoCodeService.PubPlug(snake)
 	if err != nil {
-		global.GVA_LOG.Error("打包失败!", zap.Error(err))
+		global.LOG.Error("打包失败!", zap.Error(err))
 		response.FailWithMessage("打包失败"+err.Error(), c)
 		return
 	}

@@ -9,7 +9,7 @@ import (
 
 // {{.Description}} 结构体  {{.StructName}}
 type {{.StructName}} struct {
-      global.GVA_MODEL {{- range .Fields}}
+      global.MODEL {{- range .Fields}}
             {{- if eq .FieldType "enum" }}
       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};type:enum({{.DataTypeLong}});comment:{{.Comment}};"`
             {{- else if eq .FieldType "picture" }}

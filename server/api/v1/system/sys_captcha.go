@@ -27,8 +27,8 @@ type BaseApi struct{}
 // @Router    /base/captcha [post]
 func (b *BaseApi) Captcha(c *gin.Context) {
 	// 判断验证码是否开启
-	openCaptcha := global.GVA_CONFIG.Captcha.OpenCaptcha               // 是否开启防爆次数
-	openCaptchaTimeOut := global.GVA_CONFIG.Captcha.OpenCaptchaTimeOut // 缓存超时时间
+	openCaptcha := global.CONFIG.Captcha.OpenCaptcha               // 是否开启防爆次数
+	openCaptchaTimeOut := global.CONFIG.Captcha.OpenCaptchaTimeOut // 缓存超时时间
 	key := c.ClientIP()
 	v, ok := global.BlackCache.Get(key)
 	if !ok {
@@ -41,19 +41,19 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 	}
 	// 字符,公式,验证码配置
 	// 生成默认数字的driver
-	driver := base64Captcha.NewDriverDigit(global.GVA_CONFIG.Captcha.ImgHeight, global.GVA_CONFIG.Captcha.ImgWidth, global.GVA_CONFIG.Captcha.KeyLong, 0.7, 80)
+	driver := base64Captcha.NewDriverDigit(global.CONFIG.Captcha.ImgHeight, global.CONFIG.Captcha.ImgWidth, global.CONFIG.Captcha.KeyLong, 0.7, 80)
 	// cp := base64Captcha.NewCaptcha(driver, store.UseWithCtx(c))   // v8下使用redis
 	cp := base64Captcha.NewCaptcha(driver, store)
 	id, b64s, err := cp.Generate()
 	if err != nil {
-		global.GVA_LOG.Error("验证码获取失败!", zap.Error(err))
+		global.LOG.Error("验证码获取失败!", zap.Error(err))
 		response.FailWithMessage("验证码获取失败", c)
 		return
 	}
 	response.OkWithDetailed(systemRes.SysCaptchaResponse{
 		CaptchaId:     id,
 		PicPath:       b64s,
-		CaptchaLength: global.GVA_CONFIG.Captcha.KeyLong,
+		CaptchaLength: global.CONFIG.Captcha.KeyLong,
 		OpenCaptcha:   oc,
 	}, "验证码获取成功", c)
 }

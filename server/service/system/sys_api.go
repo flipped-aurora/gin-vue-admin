@@ -22,10 +22,10 @@ type ApiService struct{}
 var ApiServiceApp = new(ApiService)
 
 func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
-	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
+	if !errors.Is(global.DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同api")
 	}
-	return global.GVA_DB.Create(&api).Error
+	return global.DB.Create(&api).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -36,11 +36,11 @@ func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 
 func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	var entity system.SysApi
-	err = global.GVA_DB.Where("id = ?", api.ID).First(&entity).Error // 根据id查询api记录
-	if errors.Is(err, gorm.ErrRecordNotFound) {                      // api记录不存在
+	err = global.DB.Where("id = ?", api.ID).First(&entity).Error // 根据id查询api记录
+	if errors.Is(err, gorm.ErrRecordNotFound) {                  // api记录不存在
 		return err
 	}
-	err = global.GVA_DB.Delete(&entity).Error
+	err = global.DB.Delete(&entity).Error
 	if err != nil {
 		return err
 	}
@@ -60,7 +60,7 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.PageInfo, order string, desc bool) (list interface{}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
-	db := global.GVA_DB.Model(&system.SysApi{})
+	db := global.DB.Model(&system.SysApi{})
 	var apiList []system.SysApi
 
 	if api.Path != "" {
@@ -120,7 +120,7 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 //@return:  apis []model.SysApi, err error
 
 func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
-	err = global.GVA_DB.Find(&apis).Error
+	err = global.DB.Find(&apis).Error
 	return
 }
 
@@ -131,7 +131,7 @@ func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
 //@return: api model.SysApi, err error
 
 func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
+	err = global.DB.Where("id = ?", id).First(&api).Error
 	return
 }
 
@@ -143,9 +143,9 @@ func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) 
 
 func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 	var oldA system.SysApi
-	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
+	err = global.DB.Where("id = ?", api.ID).First(&oldA).Error
 	if oldA.Path != api.Path || oldA.Method != api.Method {
-		if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
+		if !errors.Is(global.DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
 			return errors.New("存在相同api路径")
 		}
 	}
@@ -156,7 +156,7 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 		if err != nil {
 			return err
 		} else {
-			err = global.GVA_DB.Save(&api).Error
+			err = global.DB.Save(&api).Error
 		}
 	}
 	return err
@@ -170,7 +170,7 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 
 func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
 	var apis []system.SysApi
-	err = global.GVA_DB.Find(&apis, "id in ?", ids.Ids).Delete(&apis).Error
+	err = global.DB.Find(&apis, "id in ?", ids.Ids).Delete(&apis).Error
 	if err != nil {
 		return err
 	} else {

@@ -54,7 +54,7 @@ func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos [
 //@return: error
 
 func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath string, oldMethod string, newMethod string) error {
-	err := global.GVA_DB.Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
+	err := global.DB.Model(&gormadapter.CasbinRule{}).Where("v1 = ? AND v2 = ?", oldPath, oldMethod).Updates(map[string]interface{}{
 		"v1": newPath,
 		"v2": newMethod,
 	}).Error
@@ -158,7 +158,7 @@ var (
 
 func (casbinService *CasbinService) Casbin() *casbin.SyncedCachedEnforcer {
 	once.Do(func() {
-		a, err := gormadapter.NewAdapterByDB(global.GVA_DB)
+		a, err := gormadapter.NewAdapterByDB(global.DB)
 		if err != nil {
 			zap.L().Error("适配数据库失败请检查casbin表是否为InnoDB引擎!", zap.Error(err))
 			return

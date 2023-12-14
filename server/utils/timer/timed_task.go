@@ -1,11 +1,12 @@
 package timer
 
 import (
-	"github.com/robfig/cron/v3"
 	"sync"
+
+	"github.com/robfig/cron/v3"
 )
 
-type GVA_Timer interface {
+type TIMER interface {
 	Timer
 	FindTaskList() map[string]*taskManager
 	AddTaskByFuncWithSecond(taskName string, spec string, fun func(), Desc string, option ...cron.Option) (cron.EntryID, error)
@@ -188,6 +189,6 @@ func (t *timer) Close() {
 	}
 }
 
-func NewTimerTask() GVA_Timer {
+func NewTimerTask() TIMER {
 	return &timer{taskList: make(map[string]*taskManager)}
 }

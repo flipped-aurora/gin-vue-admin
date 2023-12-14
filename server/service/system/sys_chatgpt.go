@@ -19,7 +19,7 @@ func (chat *ChatGptService) CreateSK(option system.SysChatGptOption) error {
 	_, err := chat.GetSK()
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return global.GVA_DB.Create(option).Error
+			return global.DB.Create(option).Error
 		}
 		return err
 	}
@@ -27,7 +27,7 @@ func (chat *ChatGptService) CreateSK(option system.SysChatGptOption) error {
 }
 
 func (chat *ChatGptService) GetSK() (option system.SysChatGptOption, err error) {
-	err = global.GVA_DB.First(&option).Error
+	err = global.DB.First(&option).Error
 	return
 }
 
@@ -36,7 +36,7 @@ func (chat *ChatGptService) DeleteSK() error {
 	if err != nil {
 		return err
 	}
-	return global.GVA_DB.Delete(option, "sk = ?", option.SK).Error
+	return global.DB.Delete(option, "sk = ?", option.SK).Error
 }
 
 func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, results []map[string]interface{}, err error) {
@@ -45,7 +45,7 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 	}
 	var tablesInfo []system.ChatField
 	var tableName string
-	global.GVA_DB.Table("information_schema.columns").Where("TABLE_SCHEMA = ?", req.DBName).Scan(&tablesInfo)
+	global.DB.Table("information_schema.columns").Where("TABLE_SCHEMA = ?", req.DBName).Scan(&tablesInfo)
 
 	var tablesMap = make(map[string]bool)
 	for i := range tablesInfo {
@@ -74,7 +74,7 @@ func (chat *ChatGptService) GetTable(req request.ChatGptRequest) (sql string, re
 	if err != nil {
 		return "", nil, err
 	}
-	err = global.GVA_DB.Raw(sql).Scan(&results).Error
+	err = global.DB.Raw(sql).Scan(&results).Error
 	return sql, results, err
 }
 

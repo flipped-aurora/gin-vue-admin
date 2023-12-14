@@ -7,13 +7,13 @@
     例：
     本插件可以采用gva的配置文件 也可以直接写死内容作为配置 建议为gva添加配置文件结构 然后将配置传入
 	PluginInit(PrivateGroup, email.CreateEmailPlug(
-		global.GVA_CONFIG.Email.To,
-		global.GVA_CONFIG.Email.From,
-		global.GVA_CONFIG.Email.Host,
-		global.GVA_CONFIG.Email.Secret,
-		global.GVA_CONFIG.Email.Nickname,
-		global.GVA_CONFIG.Email.Port,
-		global.GVA_CONFIG.Email.IsSSL,
+		global.CONFIG.Email.To,
+		global.CONFIG.Email.From,
+		global.CONFIG.Email.Host,
+		global.CONFIG.Email.Secret,
+		global.CONFIG.Email.Nickname,
+		global.CONFIG.Email.Port,
+		global.CONFIG.Email.IsSSL,
 		))
 
     同样也可以再传入时写死
@@ -22,7 +22,7 @@
     "a@qq.com",
     "b@qq.com",
     "smtp.qq.com",
-    "global.GVA_CONFIG.Email.Secret",
+    "global.CONFIG.Email.Secret",
     "登录密钥",
     465,
     true,

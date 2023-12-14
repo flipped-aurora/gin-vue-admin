@@ -8,11 +8,11 @@ import (
 )
 
 func OtherInit() {
-	dr, err := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
+	dr, err := utils.ParseDuration(global.CONFIG.JWT.ExpiresTime)
 	if err != nil {
 		panic(err)
 	}
-	_, err = utils.ParseDuration(global.GVA_CONFIG.JWT.BufferTime)
+	_, err = utils.ParseDuration(global.CONFIG.JWT.BufferTime)
 	if err != nil {
 		panic(err)
 	}

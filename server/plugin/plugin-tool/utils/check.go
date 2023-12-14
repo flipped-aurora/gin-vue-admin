@@ -14,12 +14,12 @@ func RegisterApis(apis ...system.SysApi) {
 	for i := range apis {
 		apiPaths = append(apiPaths, apis[i].Path)
 	}
-	global.GVA_DB.Find(&[]system.SysApi{}, "path in (?)", apiPaths).Count(&count)
+	global.DB.Find(&[]system.SysApi{}, "path in (?)", apiPaths).Count(&count)
 	if count > 0 {
 		fmt.Println("插件已安装或存在同名路由")
 		return
 	}
-	err := global.GVA_DB.Create(&apis).Error
+	err := global.DB.Create(&apis).Error
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -33,13 +33,13 @@ func RegisterMenus(menus ...system.SysBaseMenu) {
 	for i := range menus {
 		menuNames = append(menuNames, menus[i].Name)
 	}
-	global.GVA_DB.Find(&[]system.SysBaseMenu{}, "name in (?)", menuNames).Count(&count)
+	global.DB.Find(&[]system.SysBaseMenu{}, "name in (?)", menuNames).Count(&count)
 	if count > 0 {
 		fmt.Println("插件已安装或存在同名菜单")
 		return
 	}
 	parentMenu.ParentId = "0"
-	err := global.GVA_DB.Create(&parentMenu).Error
+	err := global.DB.Create(&parentMenu).Error
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -47,7 +47,7 @@ func RegisterMenus(menus ...system.SysBaseMenu) {
 		pid := strconv.Itoa(int(parentMenu.ID))
 		otherMenus[i].ParentId = pid
 	}
-	err = global.GVA_DB.Create(&otherMenus).Error
+	err = global.DB.Create(&otherMenus).Error
 	if err != nil {
 		fmt.Println(err)
 	}

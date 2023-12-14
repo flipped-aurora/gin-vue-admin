@@ -7,7 +7,7 @@ import (
 
 // 如果含有time.Time 请自行import time包
 type SysDictionary struct {
-	global.GVA_MODEL
+	global.MODEL
 	Name                 string                `json:"name" form:"name" gorm:"column:name;comment:字典名（中）"`   // 字典名（中）
 	Type                 string                `json:"type" form:"type" gorm:"column:type;comment:字典名（英）"`   // 字典名（英）
 	Status               *bool                 `json:"status" form:"status" gorm:"column:status;comment:状态"` // 状态

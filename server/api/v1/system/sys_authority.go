@@ -38,13 +38,13 @@ func (a *AuthorityApi) CreateAuthority(c *gin.Context) {
 	}
 
 	if authBack, err = authorityService.CreateAuthority(authority); err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
 		return
 	}
 	err = casbinService.FreshCasbin()
 	if err != nil {
-		global.GVA_LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
+		global.LOG.Error("创建成功，权限刷新失败。", zap.Error(err))
 		response.FailWithMessage("创建成功，权限刷新失败。"+err.Error(), c)
 		return
 	}
@@ -79,7 +79,7 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 	}
 	authBack, err := authorityService.CopyAuthority(copyInfo)
 	if err != nil {
-		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
+		global.LOG.Error("拷贝失败!", zap.Error(err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
 		return
 	}
@@ -108,7 +108,7 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 	}
 	// 删除角色之前需要判断是否有用户正在使用此角色
 	if err = authorityService.DeleteAuthority(&authority); err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}
@@ -139,7 +139,7 @@ func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 	}
 	authority, err := authorityService.UpdateAuthority(auth)
 	if err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败"+err.Error(), c)
 		return
 	}
@@ -169,7 +169,7 @@ func (a *AuthorityApi) GetAuthorityList(c *gin.Context) {
 	}
 	list, total, err := authorityService.GetAuthorityInfoList(pageInfo)
 	if err != nil {
-		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		global.LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败"+err.Error(), c)
 		return
 	}
@@ -204,7 +204,7 @@ func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
 	}
 	err = authorityService.SetDataAuthority(auth)
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		global.LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败"+err.Error(), c)
 		return
 	}

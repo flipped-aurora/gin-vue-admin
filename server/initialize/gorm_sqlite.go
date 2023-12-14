@@ -10,7 +10,7 @@ import (
 
 // GormSqlite 初始化Sqlite数据库
 func GormSqlite() *gorm.DB {
-	s := global.GVA_CONFIG.Sqlite
+	s := global.CONFIG.Sqlite
 	if s.Dbname == "" {
 		return nil
 	}

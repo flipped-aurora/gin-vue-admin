@@ -6,7 +6,7 @@ import (
 )
 
 type SysUser struct {
-	global.GVA_MODEL
+	global.MODEL
 	UUID        uuid.UUID      `json:"uuid" gorm:"index;comment:用户UUID"`                                                     // 用户UUID
 	Username    string         `json:"userName" gorm:"index;comment:用户登录名"`                                                  // 用户登录名
 	Password    string         `json:"-"  gorm:"comment:用户登录密码"`                                                             // 用户登录密码

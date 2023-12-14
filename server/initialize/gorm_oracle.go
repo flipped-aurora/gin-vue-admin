@@ -14,7 +14,7 @@ import (
 // GormOracle 初始化oracle数据库
 // 如果需要Oracle库 放开import里的注释 把下方 mysql.Config 改为 oracle.Config ;  mysql.New 改为 oracle.New
 func GormOracle() *gorm.DB {
-	m := global.GVA_CONFIG.Oracle
+	m := global.CONFIG.Oracle
 	if m.Dbname == "" {
 		return nil
 	}

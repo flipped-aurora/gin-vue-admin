@@ -21,17 +21,17 @@ import (
 // @name                        x-token
 // @BasePath                    /
 func main() {
-	global.GVA_VP = core.Viper() // 初始化Viper
+	global.VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
-	global.GVA_LOG = core.Zap() // 初始化zap日志库
-	zap.ReplaceGlobals(global.GVA_LOG)
-	global.GVA_DB = initialize.Gorm() // gorm连接数据库
+	global.LOG = core.Zap() // 初始化zap日志库
+	zap.ReplaceGlobals(global.LOG)
+	global.DB = initialize.Gorm() // gorm连接数据库
 	initialize.Timer()
 	initialize.DBList()
-	if global.GVA_DB != nil {
+	if global.DB != nil {
 		initialize.RegisterTables() // 初始化表
 		// 程序结束前关闭数据库链接
-		db, _ := global.GVA_DB.DB()
+		db, _ := global.DB.DB()
 		defer db.Close()
 	}
 	core.RunWindowsServer()

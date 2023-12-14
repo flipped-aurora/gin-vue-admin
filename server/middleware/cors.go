@@ -31,7 +31,7 @@ func Cors() gin.HandlerFunc {
 // CorsByRules 按照配置处理跨域请求
 func CorsByRules() gin.HandlerFunc {
 	// 放行全部
-	if global.GVA_CONFIG.Cors.Mode == "allow-all" {
+	if global.CONFIG.Cors.Mode == "allow-all" {
 		return Cors()
 	}
 	return func(c *gin.Context) {
@@ -49,7 +49,7 @@ func CorsByRules() gin.HandlerFunc {
 		}
 
 		// 严格白名单模式且未通过检查，直接拒绝处理请求
-		if whitelist == nil && global.GVA_CONFIG.Cors.Mode == "strict-whitelist" && !(c.Request.Method == "GET" && c.Request.URL.Path == "/health") {
+		if whitelist == nil && global.CONFIG.Cors.Mode == "strict-whitelist" && !(c.Request.Method == "GET" && c.Request.URL.Path == "/health") {
 			c.AbortWithStatus(http.StatusForbidden)
 		} else {
 			// 非严格白名单模式，无论是否通过检查均放行所有 OPTIONS 方法
@@ -64,7 +64,7 @@ func CorsByRules() gin.HandlerFunc {
 }
 
 func checkCors(currentOrigin string) *config.CORSWhitelist {
-	for _, whitelist := range global.GVA_CONFIG.Cors.Whitelist {
+	for _, whitelist := range global.CONFIG.Cors.Whitelist {
 		// 遍历配置中的跨域头，寻找匹配项
 		if currentOrigin == whitelist.AllowOrigin {
 			return &whitelist

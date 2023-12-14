@@ -16,7 +16,7 @@ func (chat *ChatGptApi) CreateSK(c *gin.Context) {
 	c.ShouldBindJSON(&option)
 	err := chatGptService.CreateSK(option)
 	if err != nil {
-		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败"+err.Error(), c)
 		return
 	}
@@ -41,7 +41,7 @@ func (chat *ChatGptApi) GetSK(c *gin.Context) {
 func (chat *ChatGptApi) DeleteSK(c *gin.Context) {
 	err := chatGptService.DeleteSK()
 	if err != nil {
-		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败"+err.Error(), c)
 		return
 	}
@@ -57,7 +57,7 @@ func (chat *ChatGptApi) GetTable(c *gin.Context) {
 	}
 	sql, results, err := chatGptService.GetTable(req)
 	if err != nil {
-		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithDetailed(gin.H{
 			"sql":     sql,
 			"results": results,

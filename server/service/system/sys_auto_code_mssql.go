@@ -18,9 +18,9 @@ func (s *autoCodeMssql) GetDB(businessDB string) (data []response.Db, err error)
 	var entities []response.Db
 	sql := "select name AS 'database' from sysdatabases;"
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql).Scan(&entities).Error
+		err = global.DB.Raw(sql).Scan(&entities).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql).Scan(&entities).Error
+		err = global.DBList[businessDB].Raw(sql).Scan(&entities).Error
 	}
 	return entities, err
 }
@@ -33,9 +33,9 @@ func (s *autoCodeMssql) GetTables(businessDB string, dbName string) (data []resp
 
 	sql := fmt.Sprintf(`select name as 'table_name' from %s.DBO.sysobjects where xtype='U'`, dbName)
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql).Scan(&entities).Error
+		err = global.DB.Raw(sql).Scan(&entities).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql).Scan(&entities).Error
+		err = global.DBList[businessDB].Raw(sql).Scan(&entities).Error
 	}
 
 	return entities, err
@@ -50,9 +50,9 @@ func (s *autoCodeMssql) GetColumn(businessDB string, tableName string, dbName st
 	 from %s.DBO.syscolumns sc,systypes st where sc.xtype=st.xtype and st.usertype=0 and sc.id in (select id from %s.DBO.sysobjects where xtype='U' and name='%s');`, dbName, dbName, tableName)
 
 	if businessDB == "" {
-		err = global.GVA_DB.Raw(sql).Scan(&entities).Error
+		err = global.DB.Raw(sql).Scan(&entities).Error
 	} else {
-		err = global.GVA_DBList[businessDB].Raw(sql).Scan(&entities).Error
+		err = global.DBList[businessDB].Raw(sql).Scan(&entities).Error
 	}
 
 	return entities, err

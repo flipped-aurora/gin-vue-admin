@@ -23,7 +23,7 @@ func RollGormBack(pk, model string) {
 	// 首先分析存在多少个ttt作为调用方的node块
 	// 如果多个 仅仅删除对应块即可
 	// 如果单个 那么还需要剔除import
-	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm.go")
+	path := filepath.Join(global.CONFIG.AutoCode.Root, global.CONFIG.AutoCode.Server, "initialize", "gorm.go")
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
@@ -100,7 +100,7 @@ func RollRouterBack(pk, model string) {
 	// 首先抓到所有的代码块结构 {}
 	// 分析结构中是否存在一个变量叫做 pk+Router
 	// 然后获取到代码块指针 对内部需要回滚的代码进行剔除
-	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router.go")
+	path := filepath.Join(global.CONFIG.AutoCode.Root, global.CONFIG.AutoCode.Server, "initialize", "router.go")
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)

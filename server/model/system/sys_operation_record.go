@@ -9,7 +9,7 @@ import (
 
 // 如果含有time.Time 请自行import time包
 type SysOperationRecord struct {
-	global.GVA_MODEL
+	global.MODEL
 	Ip           string        `json:"ip" form:"ip" gorm:"column:ip;comment:请求ip"`                                   // 请求ip
 	Method       string        `json:"method" form:"method" gorm:"column:method;comment:请求方法"`                       // 请求方法
 	Path         string        `json:"path" form:"path" gorm:"column:path;comment:请求路径"`                             // 请求路径

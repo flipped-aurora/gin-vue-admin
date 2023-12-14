@@ -55,7 +55,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
     	}
     {{- end }}
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}(&{{.Abbreviation}}); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+        global.LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -82,7 +82,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
     {{.Abbreviation}}.DeletedBy = utils.GetUserID(c)
         {{- end }}
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.Abbreviation}}); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+        global.LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -109,7 +109,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
     deletedBy := utils.GetUserID(c)
         {{- end }}
 	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(IDS{{- if .AutoCreateResource }},deletedBy{{- end }}); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+        global.LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -149,7 +149,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
      }
     {{- end }}
 	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+        global.LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -173,7 +173,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Conte
 		return
 	}
 	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}({{.Abbreviation}}.ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+        global.LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"re{{.Abbreviation}}": re{{.Abbreviation}}}, c)
@@ -197,7 +197,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
 		return
 	}
 	if list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
+	    global.LOG.Error("获取失败!", zap.Error(err))
         response.FailWithMessage("获取失败", c)
     } else {
         response.OkWithDetailed(response.PageResult{

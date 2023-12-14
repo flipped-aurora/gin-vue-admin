@@ -20,13 +20,7 @@ func NewWriter(w logger.Writer) *writer {
 // Printf 格式化打印日志
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (w *writer) Printf(message string, data ...interface{}) {
-	var logZap bool
-	switch global.CONFIG.System.DbType {
-	case "mysql":
-		logZap = global.CONFIG.Mysql.LogZap
-	case "pgsql":
-		logZap = global.CONFIG.Pgsql.LogZap
-	}
+	var logZap bool = global.CONFIG.Mysql.LogZap
 	if logZap {
 		global.LOG.Info(fmt.Sprintf(message+"\n", data...))
 	} else {

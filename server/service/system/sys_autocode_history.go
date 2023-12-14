@@ -87,7 +87,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 	}
 	// 删除表
 	if info.DeleteTable {
-		if err = AutoCodeServiceApp.DropTable(md.BusinessDB, md.TableName); err != nil {
+		if err = AutoCodeServiceApp.DropTable(md.TableName); err != nil {
 			global.LOG.Error("ClearTag DropTable:", zap.Error(err))
 		}
 	}

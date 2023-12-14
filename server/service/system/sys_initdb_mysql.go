@@ -30,7 +30,6 @@ func (h MysqlInitHandler) WriteConfig(ctx context.Context) error {
 	if !ok {
 		return errors.New("mysql config invalid")
 	}
-	global.CONFIG.System.DbType = "mysql"
 	global.CONFIG.Mysql = c
 	global.CONFIG.JWT.SigningKey = uuid.Must(uuid.NewV4()).String()
 	cs := utils.StructToMap(global.CONFIG)

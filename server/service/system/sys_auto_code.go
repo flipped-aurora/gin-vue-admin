@@ -425,12 +425,8 @@ func (autoCodeService *AutoCodeService) GetAllTplFile(pathName string, fileList 
 // @param: tableName string, dbName string
 // @return: err error, Columns []request.ColumnReq
 
-func (autoCodeService *AutoCodeService) DropTable(BusinessDb, tableName string) error {
-	if BusinessDb != "" {
-		return global.MustGetGlobalDBByDBName(BusinessDb).Exec("DROP TABLE " + tableName).Error
-	} else {
-		return global.DB.Exec("DROP TABLE " + tableName).Error
-	}
+func (autoCodeService *AutoCodeService) DropTable(tableName string) error {
+	return global.DB.Exec("DROP TABLE " + tableName).Error
 }
 
 // @author: [SliverHorn](https://github.com/SliverHorn)

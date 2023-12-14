@@ -30,7 +30,6 @@ func Routers() *gin.Engine {
 
 	InstallPlugin(Router) // 安装插件
 	systemRouter := router.RouterGroupApp.System
-	exampleRouter := router.RouterGroupApp.Example
 	// 如果想要不使用nginx代理前端网页，可以修改 web/.env.production 下的
 	// VUE_APP_BASE_API = /
 	// VUE_APP_BASE_PATH = http://localhost
@@ -78,9 +77,6 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup) // 字典详情管理
 		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)  // 字典详情管理
 		systemRouter.InitChatGptRouter(PrivateGroup)             // chatGpt接口
-
-		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
-		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 
 	}
 

@@ -5,7 +5,6 @@ import (
 
 	adapter "github.com/casbin/gorm-adapter/v3"
 	"gorm.io/gorm"
-	"kirer.cn/server/model/example"
 	sysModel "kirer.cn/server/model/system"
 	"kirer.cn/server/service/system"
 )
@@ -52,11 +51,6 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		sysModel.SysChatGptOption{},
 
 		adapter.CasbinRule{},
-
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
 	}
 	for _, t := range tables {
 		_ = db.AutoMigrate(&t)
@@ -87,11 +81,6 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 		sysModel.SysAutoCode{},
 		sysModel.SysChatGptOption{},
 		adapter.CasbinRule{},
-
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
 	}
 	yes := true
 	for _, t := range tables {

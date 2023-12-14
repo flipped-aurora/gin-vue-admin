@@ -4,7 +4,6 @@ import (
 	"os"
 
 	"kirer.cn/server/global"
-	"kirer.cn/server/model/example"
 	"kirer.cn/server/model/system"
 
 	"go.uber.org/zap"
@@ -50,11 +49,6 @@ func RegisterTables() {
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
 		system.SysChatGptOption{},
-
-		example.ExaFile{},
-		example.ExaCustomer{},
-		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
 	)
 	if err != nil {
 		global.LOG.Error("register table failed", zap.Error(err))

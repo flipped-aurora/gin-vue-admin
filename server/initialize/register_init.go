@@ -1,7 +1,6 @@
 package initialize
 
 import (
-	_ "kirer.cn/server/source/example"
 	_ "kirer.cn/server/source/system"
 )
 

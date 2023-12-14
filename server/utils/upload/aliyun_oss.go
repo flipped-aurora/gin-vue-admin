@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go.uber.org/zap"
+	"kirer.cn/server/global"
 )
 
 type AliyunOSS struct{}

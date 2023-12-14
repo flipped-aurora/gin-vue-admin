@@ -1,14 +1,15 @@
 package internal
 
 import (
-	"gorm.io/gorm/schema"
 	"log"
 	"os"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"gorm.io/gorm/schema"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"kirer.cn/server/global"
 )
 
 type DBBASE interface {

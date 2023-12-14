@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
+	"kirer.cn/server/global"
+	"kirer.cn/server/utils"
 )
 
 type Local struct{}

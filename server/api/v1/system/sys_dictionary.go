@@ -1,11 +1,11 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/common/response"
+	"kirer.cn/server/model/system"
 )
 
 type DictionaryApi struct{}

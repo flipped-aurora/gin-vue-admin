@@ -4,12 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"strings"
+
 	"github.com/sashabaranov/go-openai"
 	"gorm.io/gorm"
-	"strings"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/system"
+	"kirer.cn/server/model/system/request"
 )
 
 type ChatGptService struct{}

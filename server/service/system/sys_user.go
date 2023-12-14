@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gofrs/uuid/v5"
 	"gorm.io/gorm"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/common/request"
+	"kirer.cn/server/model/system"
+	"kirer.cn/server/utils"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)

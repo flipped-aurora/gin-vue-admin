@@ -1,6 +1,6 @@
 package system
 
-import "github.com/flipped-aurora/gin-vue-admin/server/service"
+import "kirer.cn/server/service"
 
 type ApiGroup struct {
 	DBApi

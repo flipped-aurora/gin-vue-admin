@@ -1,12 +1,12 @@
 package api
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	email_response "github.com/flipped-aurora/gin-vue-admin/server/plugin/email/model/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email/service"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/common/response"
+	email_response "kirer.cn/server/plugin/email/model/response"
+	"kirer.cn/server/plugin/email/service"
 )
 
 type EmailApi struct{}

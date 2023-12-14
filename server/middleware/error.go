@@ -8,9 +8,9 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"kirer.cn/server/global"
 )
 
 // GinRecovery recover掉项目可能出现的panic，并使用zap记录相关日志

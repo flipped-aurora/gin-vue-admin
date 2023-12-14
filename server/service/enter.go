@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/service/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+	"kirer.cn/server/service/example"
+	"kirer.cn/server/service/system"
 )
 
 type ServiceGroup struct {

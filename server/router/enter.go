@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/router/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/router/system"
+	"kirer.cn/server/router/example"
+	"kirer.cn/server/router/system"
 )
 
 type RouterGroup struct {

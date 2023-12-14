@@ -1,4 +1,4 @@
-# github.com/flipped-aurora/gin-vue-admin/server Global Configuration
+# kirer.cn/server Global Configuration
 
 # jwt configuration
 jwt:
@@ -10,7 +10,7 @@ jwt:
 zap:
   level: info
   format: console
-  prefix: "[github.com/flipped-aurora/gin-vue-admin/server]"
+  prefix: "[kirer.cn/server]"
   director: log
   show-line: true
   encode-level: LowercaseColorLevelEncoder
@@ -165,7 +165,7 @@ tencent-cos:
   secret-id: your-secret-id
   secret-key: your-secret-key
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: kirer.cn/server
 
 # aws s3 configuration (minio compatible)
 aws-s3:
@@ -177,7 +177,7 @@ aws-s3:
   secret-id: your-secret-id
   secret-key: your-secret-key
   base-url: https://gin.vue.admin
-  path-prefix: github.com/flipped-aurora/gin-vue-admin/server
+  path-prefix: kirer.cn/server
 
 # huawei obs configuration
 hua-wei-obs:

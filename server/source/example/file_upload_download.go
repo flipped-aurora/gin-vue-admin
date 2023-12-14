@@ -2,10 +2,11 @@ package example
 
 import (
 	"context"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"kirer.cn/server/model/example"
+	"kirer.cn/server/service/system"
 )
 
 const initOrderExaFile = system.InitOrderInternal + 1

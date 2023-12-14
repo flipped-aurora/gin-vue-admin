@@ -1,8 +1,8 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/gofrs/uuid/v5"
+	"kirer.cn/server/global"
 )
 
 type SysUser struct {

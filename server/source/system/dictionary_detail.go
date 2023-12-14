@@ -3,10 +3,11 @@ package system
 import (
 	"context"
 	"fmt"
-	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
+
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	sysModel "kirer.cn/server/model/system"
+	"kirer.cn/server/service/system"
 )
 
 const initOrderDictDetail = initOrderDict + 1

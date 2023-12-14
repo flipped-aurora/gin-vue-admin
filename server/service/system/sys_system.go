@@ -1,11 +1,11 @@
 package system
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"go.uber.org/zap"
+	"kirer.cn/server/config"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/system"
+	"kirer.cn/server/utils"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)

@@ -6,8 +6,8 @@ import (
 
 	jwt "github.com/golang-jwt/jwt/v4"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/system/request"
 )
 
 type JWT struct {

@@ -1,11 +1,11 @@
 package initialize
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize/internal"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
+	"kirer.cn/server/config"
+	"kirer.cn/server/global"
+	"kirer.cn/server/initialize/internal"
 )
 
 // GormSqlite 初始化Sqlite数据库

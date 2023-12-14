@@ -1,8 +1,8 @@
 package system
 
 import (
-	v1 "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
 	"github.com/gin-gonic/gin"
+	v1 "kirer.cn/server/api/v1"
 )
 
 type AutoCodeRouter struct{}

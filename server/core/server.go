@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
-	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"go.uber.org/zap"
+	"kirer.cn/server/global"
+	"kirer.cn/server/initialize"
+	"kirer.cn/server/service/system"
 )
 
 type server interface {

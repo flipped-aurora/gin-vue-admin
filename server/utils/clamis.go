@@ -1,10 +1,10 @@
 package utils
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
 	"github.com/gofrs/uuid/v5"
+	"kirer.cn/server/global"
+	systemReq "kirer.cn/server/model/system/request"
 )
 
 func GetClaims(c *gin.Context) (*systemReq.CustomClaims, error) {

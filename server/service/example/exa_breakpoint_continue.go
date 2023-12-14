@@ -3,9 +3,9 @@ package example
 import (
 	"errors"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/example"
 	"gorm.io/gorm"
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/example"
 )
 
 type FileUploadAndDownloadService struct{}

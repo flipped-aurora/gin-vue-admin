@@ -2,16 +2,17 @@ package middleware
 
 import (
 	"errors"
-	"github.com/golang-jwt/jwt/v4"
 	"strconv"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/golang-jwt/jwt/v4"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"kirer.cn/server/utils"
+
+	"kirer.cn/server/global"
+	"kirer.cn/server/model/common/response"
+	"kirer.cn/server/model/system"
+	"kirer.cn/server/service"
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"

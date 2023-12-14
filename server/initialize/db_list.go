@@ -1,9 +1,9 @@
 package initialize
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"gorm.io/gorm"
+	"kirer.cn/server/config"
+	"kirer.cn/server/global"
 )
 
 const sys = "system"

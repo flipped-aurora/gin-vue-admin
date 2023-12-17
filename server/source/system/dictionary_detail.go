@@ -55,40 +55,48 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	}
 
 	dicts[1].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: "smallint", Value: 1, Status: &True, Sort: 1},
-		{Label: "mediumint", Value: 2, Status: &True, Sort: 2},
-		{Label: "int", Value: 3, Status: &True, Sort: 3},
-		{Label: "bigint", Value: 4, Status: &True, Sort: 4},
+		{Label: "smallint", Value: 1, Status: &True, Extend: "mysql", Sort: 1},
+		{Label: "mediumint", Value: 2, Status: &True, Extend: "mysql", Sort: 2},
+		{Label: "int", Value: 3, Status: &True, Extend: "mysql", Sort: 3},
+		{Label: "bigint", Value: 4, Status: &True, Extend: "mysql", Sort: 4},
+		{Label: "int2", Value: 5, Status: &True, Extend: "pgsql", Sort: 5},
+		{Label: "int4", Value: 6, Status: &True, Extend: "pgsql", Sort: 6},
+		{Label: "int6", Value: 7, Status: &True, Extend: "pgsql", Sort: 7},
+		{Label: "int8", Value: 8, Status: &True, Extend: "pgsql", Sort: 8},
 	}
 
 	dicts[2].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
 		{Label: "date", Status: &True},
-		{Label: "time", Value: 1, Status: &True, Sort: 1},
-		{Label: "year", Value: 2, Status: &True, Sort: 2},
-		{Label: "datetime", Value: 3, Status: &True, Sort: 3},
-		{Label: "timestamp", Value: 5, Status: &True, Sort: 5},
+		{Label: "time", Value: 1, Status: &True, Extend: "mysql", Sort: 1},
+		{Label: "year", Value: 2, Status: &True, Extend: "mysql", Sort: 2},
+		{Label: "datetime", Value: 3, Status: &True, Extend: "mysql", Sort: 3},
+		{Label: "timestamp", Value: 5, Status: &True, Extend: "mysql", Sort: 5},
+		{Label: "timestamptz", Value: 6, Status: &True, Extend: "pgsql", Sort: 5},
 	}
 	dicts[3].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
 		{Label: "float", Status: &True},
-		{Label: "double", Value: 1, Status: &True, Sort: 1},
-		{Label: "decimal", Value: 2, Status: &True, Sort: 2},
+		{Label: "double", Value: 1, Status: &True, Extend: "mysql", Sort: 1},
+		{Label: "decimal", Value: 2, Status: &True, Extend: "mysql", Sort: 2},
+		{Label: "numeric", Value: 3, Status: &True, Extend: "pgsql", Sort: 3},
+		{Label: "smallserial", Value: 4, Status: &True, Extend: "pgsql", Sort: 4},
 	}
 
 	dicts[4].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
 		{Label: "char", Status: &True},
-		{Label: "varchar", Value: 1, Status: &True, Sort: 1},
-		{Label: "tinyblob", Value: 2, Status: &True, Sort: 2},
-		{Label: "tinytext", Value: 3, Status: &True, Sort: 3},
-		{Label: "text", Value: 4, Status: &True, Sort: 4},
-		{Label: "blob", Value: 5, Status: &True, Sort: 5},
-		{Label: "mediumblob", Value: 6, Status: &True, Sort: 6},
-		{Label: "mediumtext", Value: 7, Status: &True, Sort: 7},
-		{Label: "longblob", Value: 8, Status: &True, Sort: 8},
-		{Label: "longtext", Value: 9, Status: &True, Sort: 9},
+		{Label: "varchar", Value: 1, Status: &True, Extend: "mysql", Sort: 1},
+		{Label: "tinyblob", Value: 2, Status: &True, Extend: "mysql", Sort: 2},
+		{Label: "tinytext", Value: 3, Status: &True, Extend: "mysql", Sort: 3},
+		{Label: "text", Value: 4, Status: &True, Extend: "mysql", Sort: 4},
+		{Label: "blob", Value: 5, Status: &True, Extend: "mysql", Sort: 5},
+		{Label: "mediumblob", Value: 6, Status: &True, Extend: "mysql", Sort: 6},
+		{Label: "mediumtext", Value: 7, Status: &True, Extend: "mysql", Sort: 7},
+		{Label: "longblob", Value: 8, Status: &True, Extend: "mysql", Sort: 8},
+		{Label: "longtext", Value: 9, Status: &True, Extend: "mysql", Sort: 9},
 	}
 
 	dicts[5].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: "tinyint", Status: &True},
+		{Label: "tinyint", Value: 1, Extend: "mysql", Status: &True},
+		{Label: "bool", Value: 2, Extend: "pgsql", Status: &True},
 	}
 	for _, dict := range dicts {
 		if err := db.Model(&dict).Association("SysDictionaryDetails").

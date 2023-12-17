@@ -78,7 +78,7 @@
         >
           <template #default="scope">
             <el-tag
-              :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
+              :type="scope.row.tag === 'jpg' ? 'info' : 'success'"
               disable-transitions
             >{{ scope.row.tag }}
             </el-tag>

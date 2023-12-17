@@ -76,16 +76,19 @@ captcha:
 # mysql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
 mysql:
-  path: ""
-  port: ""
-  config: ""
-  db-name: ""
-  username: ""
-  password: ""
-  max-idle-conns: 10
-  max-open-conns: 100
-  log-mode: ""
-  log-zap: false
+    prefix: ""
+    port: "3306"
+    config: charset=utf8mb4&parseTime=True&loc=Local
+    db-name: gva
+    username: root
+    password: root
+    path: 127.0.0.1
+    engine: ""
+    log-mode: error
+    max-idle-conns: 10
+    max-open-conns: 100
+    singular: false
+    log-zap: false
 
 # pgsql connect configuration
 # 未初始化之前请勿手动修改数据库信息！！！如果一定要手动初始化请看（https://gin-vue-admin.com/docs/first_master）
@@ -240,3 +243,23 @@ cors:
       allow-methods: GET, POST
       expose-headers: Content-Length, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Content-Type
       allow-credentials: true # 布尔值
+#支付插件配置
+wxpay:
+  mchid: 1658061169
+  appid: wx3665ab0c08497da0
+  secret: 8a39ec7e958249b6d8d9ec2d24a41081
+  mchcertificateserialnumber: 4A292948DF32E034979EF2398C16E5DC721AD63D
+  mchapiv3key: 058a3db4acec6c366252c6a56b164355
+  pempath: E:/Cert/wx/apiclient_key.pem
+  notifyurl: http://candy.wenjinedu.com/api/wxpay/notify
+  load: http://candy.wenjinedu.com
+alipay:
+  appid: 2021004125696145
+  encryptKey: vlcKezOw/m28avXgX4vWYA==
+  privatekey: MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCZK46qkgsw+b2VkpYhntFKYO0fRF0bsL/TSGMI0upAupW80CP4vfjJqX5LfrsaYvqy9er4VQGKw4O3HNZ4GcR7Amu94Qf7L8vrH5TQP05gtvcBCC5RHW6u32d9FOYiMzYrRSLFnhn6UsZvR0DPklhLzy0vtk1IHDrcnWuxgaHjUlhVck4YAcMuP29F9lTf/VAh4j8A6co1TZ3J8kmFaFhGePauwYWQiRhX4rPPt36gv7HyttRFhn5c1p+B67k3TrFR9gW34ob+CKzQR7WdsXgSDHAGrfY29n4bI7lteUj/r5MCByHYiQEABJLanD5KvcA/7GGN8uYI+HkK2skwVBXHAgMBAAECggEAeBZ0VjsGVzGWeAxjdJyFzmDLyDXbIfijjM02CBcE3hbriwtNCJo40jL29822d+ueTm0L+gL7oIXFYO1VIPhi2WZ+fnJNxZwlroQmMldP5ffNFJwLZEFFJAm3o5OdErdAAxDDQFjCWUZImbotkBBW9ajK7ptpX93yMEGjy5mtCQGtFuV1dKis5ivjtw15GHWilb32ny0FAGGfvl9F3M6MOy6jYlu/bcRiQzJK7dh84ngd18PWCEiV7PeInhchQwt6ePapUY5tMBXSipxly+EM0112UYDH9QiyNP4Ie+EPK/8GarvJOBo6p9xBikz9fm7E+MT3VVLLRM1Fpvx5DQTtIQKBgQDsrz5780OKMER70q8RnB3Lcp++z70Q9xDuuCIMkeH2ai3gObN+gFr1/wW60+mu8oLce06TV9VTgel1rsr2+cUqRGu+S/YJKAdSdcA3KpIWyr3wB8G0Ls22SQJRF93h0ci+6hOUiunB0heQRQg0JGqnEhd8aHzr1XHiN4wD0p/raQKBgQClq4z44p4RspMKeUf1pDJywu1Xdg/GjwvyTPVGd5BDD7TKBiIoN8AgBHr4Z6xleS5kxIPG3J6h2rrVmJPNlEZyyu5m1C84et08+dQMvhT2p81cUVq3zdz+ZfvVb+A+OsZhuzXETukFUIxWNEqcl4+OccpVBvVpUXyNdRoZF0jBrwKBgE3/Liswrlgysc7QTisSdGsgGe6KjPazRJw2h9n2lS1cLkQPH8yXReJ9KQk5Xm/tsRwxcmJx9nXvgNzsPiyHgOb95zet1qWL0GXnMfG8EKp8I32fQME9D0N76cyJffA17t6jStKPuJrLvkInzZ1JRvBJsP2pfUlGbKIsxfJYjaTJAoGADWchkokS7K+bwb8qGS9dfXdTqD2+7PtppgKf3UGTBDnjEG0KmmJYQr7aC/qnMdZp8HENkCsNEl8Vum4Llxgl0uej/eGwqEsYVvSHOTivjXzp2kwioLgg5tvtUckpRR+QKRvyL52KsIlhsR+t4ZlJXebKzbIwbILRJsiQgfMmSbUCgYEA4d3HbP4jSBqBMdmozgi5LVdb47L2Nm3tURqI8jVxAKIz/vqmodwrtqIPjj8CMcTuSIc46+xpdAOV1Xe40Ju7Lfhiv9TXaB5Yb5QSVfRsQXjLrT7tjSCldwQ3N4nyuTV9GkC1b52ZEtgjFtwp5hsJg4TUDV3L/8hytQeLxCpf+Ts=
+  alipaypublicContentrsa2: E:/Cert/alipay/alipayCertPublicKey_RSA2.crt
+  alipayrootcontent: E:/Cert/alipay/alipayRootCert.crt
+  apppubliccontent: E:/Cert/alipay/appCertPublicKey_2021004125696145.crt
+  alinotifyurl: http://candy.wenjinedu.com/api/alipay/notify
+  returnurl: http://baidu.com
+  load: http://candy.wenjinedu.com

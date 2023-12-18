@@ -436,7 +436,7 @@ const userInfo = ref({
 })
 
 const rules = ref({
-  username: [
+  userName: [
     { required: true, message: t('user.userNameNote'), trigger: 'blur' },
     { min: 5, message: t('user.userNameLenNote'), trigger: 'blur' }
   ],

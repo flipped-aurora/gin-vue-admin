@@ -497,6 +497,7 @@ const dialogFlag = ref('add')
 
 const addUser = () => {
   addUserDialog.value = true
+  dialogFlag.value = 'add'
 }
 
 const tempAuth = {}

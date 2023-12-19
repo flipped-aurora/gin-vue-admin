@@ -33,7 +33,7 @@ var shopQrcodeService = service.ServiceGroupApp.ShopServiceGroup.ShopQrcodeServi
 // @accept application/json
 // @Produce application/json
 // @Param data body shop.ShopQrcodeRouter true "支付预下单"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功","serverTime":"2023-12-06 23:03:00"}
+// @Success 200 {string} map {"success":true,"data":{},"msg":"创建成功","serverTime":"2023-12-06 23:03:00"}
 // @Router /api/mht/createShopOrders [post]
 func (shopQrcodeApi *ShopQrcodeApi) CreateShopQrcode(c *gin.Context) {
 	//ts=1702434294592&amp;key=539000891&amp;patternId=13&amp;macid=ZZ9KDT845Z

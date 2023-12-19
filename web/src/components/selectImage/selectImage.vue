@@ -296,7 +296,7 @@ const editFileNameFunc = async(row) => {
 const drawer = ref(false)
 const picList = ref([])
 
-const imageTypeList = ['png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp']
+const imageTypeList = ['png', 'jpg', 'jpge', 'gif', 'bmp', 'webp']
 const videoTyteList = ['mp4', 'avi', 'rmvb', 'rm', 'asf', 'divx', 'mpg', 'mpeg', 'mpe', 'wmv', 'mkv', 'vob']
 
 const listObj = {

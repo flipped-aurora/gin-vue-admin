@@ -1,6 +1,6 @@
 module github.com/flipped-aurora/gin-vue-admin/server
 
-go 1.18
+go 1.20
 
 require (
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible

@@ -436,7 +436,7 @@ const userInfo = ref({
 })
 
 const rules = ref({
-  username: [
+  userName: [
     { required: true, message: t('user.userNameNote'), trigger: 'blur' },
     { min: 5, message: t('user.userNameLenNote'), trigger: 'blur' }
   ],
@@ -497,6 +497,7 @@ const dialogFlag = ref('add')
 
 const addUser = () => {
   addUserDialog.value = true
+  dialogFlag.value = 'add'
 }
 
 const tempAuth = {}

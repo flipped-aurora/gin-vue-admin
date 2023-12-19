@@ -47,7 +47,7 @@ func (z *Zap) TransportLevel() zapcore.Level {
 	case "warn":
 		return zapcore.WarnLevel
 	case "error":
-		return zapcore.WarnLevel
+		return zapcore.ErrorLevel
 	case "dpanic":
 		return zapcore.DPanicLevel
 	case "panic":

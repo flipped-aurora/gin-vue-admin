@@ -7,7 +7,9 @@
         name="el-fade-in-linear"
       >
         <keep-alive :include="routerStore.keepAliveRouters">
-          <component :is="Component" />
+          <div>
+            <component :is="Component" />
+          </div>
         </keep-alive>
       </transition>
     </router-view>

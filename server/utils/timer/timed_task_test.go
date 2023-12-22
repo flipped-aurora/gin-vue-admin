@@ -28,7 +28,7 @@ func TestNewTimerTask(t *testing.T) {
 	{
 		_, err := tm.AddTaskByFunc("func", "@every 1s", mockFunc, "测试mockfunc")
 		assert.Nil(t, err)
-		_, ok := _tm.taskList["func"]
+		_, ok := _tm.cronList["func"]
 		if !ok {
 			t.Error("no find func")
 		}
@@ -37,7 +37,7 @@ func TestNewTimerTask(t *testing.T) {
 	{
 		_, err := tm.AddTaskByJob("job", "@every 1s", job, "测试job mockfunc")
 		assert.Nil(t, err)
-		_, ok := _tm.taskList["job"]
+		_, ok := _tm.cronList["job"]
 		if !ok {
 			t.Error("no find job")
 		}
@@ -65,7 +65,7 @@ func TestNewTimerTask(t *testing.T) {
 		}
 	}
 	{
-		a := tm.FindTaskList()
+		a := tm.FindCronList()
 		b, c := tm.FindCron("job")
 		fmt.Println(a, b, c)
 	}

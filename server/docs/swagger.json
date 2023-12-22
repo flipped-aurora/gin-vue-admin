@@ -1,10 +1,10 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample Server pets",
-        "title": "Swagger Example API",
+        "description": "使用gin+vue进行极速开发的全栈开发基础平台",
+        "title": "Gin-Vue-Admin Swagger API接口文档",
         "contact": {},
-        "version": "0.0.1"
+        "version": "v2.5.7"
     },
     "paths": {
         "/api/createApi": {
@@ -1790,6 +1790,12 @@
                 "summary": "获取单一客户信息",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -1805,12 +1811,6 @@
                         "type": "string",
                         "description": "客户手机号",
                         "name": "customerPhoneData",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -3115,6 +3115,12 @@
                 "summary": "用id查询SysDictionary",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -3124,12 +3130,6 @@
                         "type": "string",
                         "description": "描述",
                         "name": "desc",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -3394,6 +3394,12 @@
                 "summary": "用id查询SysDictionaryDetail",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -3403,12 +3409,6 @@
                         "type": "string",
                         "description": "扩展值",
                         "name": "extend",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -3493,6 +3493,12 @@
                 "summary": "分页获取SysDictionaryDetail列表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "创建时间",
                         "name": "createdAt",
@@ -3502,12 +3508,6 @@
                         "type": "string",
                         "description": "扩展值",
                         "name": "extend",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -3809,6 +3809,12 @@
                 "summary": "用id查询SysOperationRecord",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "代理",
                         "name": "agent",
@@ -3830,12 +3836,6 @@
                         "type": "string",
                         "description": "错误信息",
                         "name": "error_message",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -3932,6 +3932,12 @@
                 "summary": "分页获取SysOperationRecord列表",
                 "parameters": [
                     {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "代理",
                         "name": "agent",
@@ -3953,12 +3959,6 @@
                         "type": "string",
                         "description": "错误信息",
                         "name": "error_message",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "主键ID",
-                        "name": "id",
                         "in": "query"
                     },
                     {
@@ -4871,23 +4871,6 @@
                 }
             }
         },
-        "config.Detail": {
-            "type": "object",
-            "properties": {
-                "compareField": {
-                    "description": "需要比较时间的字段",
-                    "type": "string"
-                },
-                "interval": {
-                    "description": "时间间隔",
-                    "type": "string"
-                },
-                "tableName": {
-                    "description": "需要清理的表名",
-                    "type": "string"
-                }
-            }
-        },
         "config.Excel": {
             "type": "object",
             "properties": {
@@ -5374,9 +5357,6 @@
                 "tencent-cos": {
                     "$ref": "#/definitions/config.TencentCOS"
                 },
-                "timer": {
-                    "$ref": "#/definitions/config.Timer"
-                },
                 "zap": {
                     "$ref": "#/definitions/config.Zap"
                 }
@@ -5566,29 +5546,6 @@
                 }
             }
         },
-        "config.Timer": {
-            "type": "object",
-            "properties": {
-                "detail": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/config.Detail"
-                    }
-                },
-                "spec": {
-                    "description": "CRON表达式",
-                    "type": "string"
-                },
-                "start": {
-                    "description": "是否启用",
-                    "type": "boolean"
-                },
-                "with_seconds": {
-                    "description": "是否精确到秒",
-                    "type": "boolean"
-                }
-            }
-        },
         "config.Zap": {
             "type": "object",
             "properties": {
@@ -5633,6 +5590,10 @@
         "example.ExaCustomer": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -5644,10 +5605,6 @@
                 "customerPhoneData": {
                     "description": "客户手机号",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "sysUser": {
                     "description": "管理详情",
@@ -5674,6 +5631,10 @@
         "example.ExaFile": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "chunkTotal": {
                     "type": "integer"
                 },
@@ -5696,10 +5657,6 @@
                 "filePath": {
                     "type": "string"
                 },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
                 "isFinish": {
                     "type": "boolean"
                 },
@@ -5712,6 +5669,10 @@
         "example.ExaFileChunk": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -5725,10 +5686,6 @@
                 "fileChunkPath": {
                     "type": "string"
                 },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
-                },
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
@@ -5738,13 +5695,13 @@
         "example.ExaFileUploadAndDownload": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "key": {
                     "description": "编号",
@@ -6020,6 +5977,10 @@
         "request.SearchApiParams": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "apiGroup": {
                     "description": "api组",
                     "type": "string"
@@ -6035,10 +5996,6 @@
                 "description": {
                     "description": "api中文描述",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "keyword": {
                     "description": "关键字",
@@ -6487,6 +6444,10 @@
         "system.SysApi": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "apiGroup": {
                     "description": "api组",
                     "type": "string"
@@ -6498,10 +6459,6 @@
                 "description": {
                     "description": "api中文描述",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "method": {
                     "description": "方法:创建POST(默认)|查看GET|更新PUT|删除DELETE",
@@ -6570,16 +6527,16 @@
         "system.SysAutoCode": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
                 },
                 "desc": {
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "label": {
                     "type": "string"
@@ -6596,6 +6553,10 @@
         "system.SysBaseMenu": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "authoritys": {
                     "type": "array",
                     "items": {
@@ -6619,10 +6580,6 @@
                 "hidden": {
                     "description": "是否在列表隐藏",
                     "type": "boolean"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "menuBtn": {
                     "type": "array",
@@ -6669,16 +6626,16 @@
         "system.SysBaseMenuBtn": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
                 },
                 "desc": {
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "name": {
                     "type": "string"
@@ -6695,13 +6652,13 @@
         "system.SysBaseMenuParameter": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "key": {
                     "description": "地址栏携带参数的key",
@@ -6727,6 +6684,10 @@
         "system.SysDictionary": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -6734,10 +6695,6 @@
                 "desc": {
                     "description": "描述",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "name": {
                     "description": "字典名（中）",
@@ -6766,6 +6723,10 @@
         "system.SysDictionaryDetail": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -6773,10 +6734,6 @@
                 "extend": {
                     "description": "扩展值",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "label": {
                     "description": "展示值",
@@ -6807,6 +6764,10 @@
         "system.SysMenu": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "authoritys": {
                     "type": "array",
                     "items": {
@@ -6836,10 +6797,6 @@
                 "hidden": {
                     "description": "是否在列表隐藏",
                     "type": "boolean"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "menuBtn": {
                     "type": "array",
@@ -6889,6 +6846,10 @@
         "system.SysOperationRecord": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "agent": {
                     "description": "代理",
                     "type": "string"
@@ -6904,10 +6865,6 @@
                 "error_message": {
                     "description": "错误信息",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "ip": {
                     "description": "请求ip",
@@ -6949,6 +6906,10 @@
         "system.SysUser": {
             "type": "object",
             "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
                 "activeColor": {
                     "description": "活跃颜色",
                     "type": "string"
@@ -6985,10 +6946,6 @@
                 "headerImg": {
                     "description": "用户头像",
                     "type": "string"
-                },
-                "id": {
-                    "description": "主键ID",
-                    "type": "integer"
                 },
                 "nickName": {
                     "description": "用户昵称",

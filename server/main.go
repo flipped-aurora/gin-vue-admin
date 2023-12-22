@@ -13,9 +13,9 @@ import (
 //go:generate go mod tidy
 //go:generate go mod download
 
-// @title                       Swagger Example API
-// @version                     0.0.1
-// @description                 This is a sample Server pets
+// @title                       Gin-Vue-Admin Swagger API接口文档
+// @version                     v2.5.7
+// @description                 使用gin+vue进行极速开发的全栈开发基础平台
 // @securityDefinitions.apikey  ApiKeyAuth
 // @in                          header
 // @name                        x-token

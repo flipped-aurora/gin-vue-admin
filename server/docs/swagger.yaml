@@ -106,18 +106,6 @@ definitions:
         description: 防爆破验证码超时时间，单位：s(秒)
         type: integer
     type: object
-  config.Detail:
-    properties:
-      compareField:
-        description: 需要比较时间的字段
-        type: string
-      interval:
-        description: 时间间隔
-        type: string
-      tableName:
-        description: 需要清理的表名
-        type: string
-    type: object
   config.Excel:
     properties:
       dir:
@@ -457,8 +445,6 @@ definitions:
         $ref: '#/definitions/config.System'
       tencent-cos:
         $ref: '#/definitions/config.TencentCOS'
-      timer:
-        $ref: '#/definitions/config.Timer'
       zap:
         $ref: '#/definitions/config.Zap'
     type: object
@@ -593,22 +579,6 @@ definitions:
       secret-key:
         type: string
     type: object
-  config.Timer:
-    properties:
-      detail:
-        items:
-          $ref: '#/definitions/config.Detail'
-        type: array
-      spec:
-        description: CRON表达式
-        type: string
-      start:
-        description: 是否启用
-        type: boolean
-      with_seconds:
-        description: 是否精确到秒
-        type: boolean
-    type: object
   config.Zap:
     properties:
       director:
@@ -641,6 +611,9 @@ definitions:
     type: object
   example.ExaCustomer:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
@@ -650,9 +623,6 @@ definitions:
       customerPhoneData:
         description: 客户手机号
         type: string
-      id:
-        description: 主键ID
-        type: integer
       sysUser:
         allOf:
         - $ref: '#/definitions/system.SysUser'
@@ -669,6 +639,9 @@ definitions:
     type: object
   example.ExaFile:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       chunkTotal:
         type: integer
       createdAt:
@@ -684,9 +657,6 @@ definitions:
         type: string
       filePath:
         type: string
-      id:
-        description: 主键ID
-        type: integer
       isFinish:
         type: boolean
       updatedAt:
@@ -695,6 +665,9 @@ definitions:
     type: object
   example.ExaFileChunk:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
@@ -704,21 +677,18 @@ definitions:
         type: integer
       fileChunkPath:
         type: string
-      id:
-        description: 主键ID
-        type: integer
       updatedAt:
         description: 更新时间
         type: string
     type: object
   example.ExaFileUploadAndDownload:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
-      id:
-        description: 主键ID
-        type: integer
       key:
         description: 编号
         type: string
@@ -912,6 +882,9 @@ definitions:
     type: object
   request.SearchApiParams:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       apiGroup:
         description: api组
         type: string
@@ -924,9 +897,6 @@ definitions:
       description:
         description: api中文描述
         type: string
-      id:
-        description: 主键ID
-        type: integer
       keyword:
         description: 关键字
         type: string
@@ -1231,6 +1201,9 @@ definitions:
     type: object
   system.SysApi:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       apiGroup:
         description: api组
         type: string
@@ -1240,9 +1213,6 @@ definitions:
       description:
         description: api中文描述
         type: string
-      id:
-        description: 主键ID
-        type: integer
       method:
         description: 方法:创建POST(默认)|查看GET|更新PUT|删除DELETE
         type: string
@@ -1290,14 +1260,14 @@ definitions:
     type: object
   system.SysAutoCode:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
       desc:
         type: string
-      id:
-        description: 主键ID
-        type: integer
       label:
         type: string
       packageName:
@@ -1308,6 +1278,9 @@ definitions:
     type: object
   system.SysBaseMenu:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       authoritys:
         items:
           $ref: '#/definitions/system.SysAuthority'
@@ -1325,9 +1298,6 @@ definitions:
       hidden:
         description: 是否在列表隐藏
         type: boolean
-      id:
-        description: 主键ID
-        type: integer
       menuBtn:
         items:
           $ref: '#/definitions/system.SysBaseMenuBtn'
@@ -1358,14 +1328,14 @@ definitions:
     type: object
   system.SysBaseMenuBtn:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
       desc:
         type: string
-      id:
-        description: 主键ID
-        type: integer
       name:
         type: string
       sysBaseMenuID:
@@ -1376,12 +1346,12 @@ definitions:
     type: object
   system.SysBaseMenuParameter:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
-      id:
-        description: 主键ID
-        type: integer
       key:
         description: 地址栏携带参数的key
         type: string
@@ -1399,15 +1369,15 @@ definitions:
     type: object
   system.SysDictionary:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
       desc:
         description: 描述
         type: string
-      id:
-        description: 主键ID
-        type: integer
       name:
         description: 字典名（中）
         type: string
@@ -1427,15 +1397,15 @@ definitions:
     type: object
   system.SysDictionaryDetail:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       createdAt:
         description: 创建时间
         type: string
       extend:
         description: 扩展值
         type: string
-      id:
-        description: 主键ID
-        type: integer
       label:
         description: 展示值
         type: string
@@ -1457,6 +1427,9 @@ definitions:
     type: object
   system.SysMenu:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       authoritys:
         items:
           $ref: '#/definitions/system.SysAuthority'
@@ -1478,9 +1451,6 @@ definitions:
       hidden:
         description: 是否在列表隐藏
         type: boolean
-      id:
-        description: 主键ID
-        type: integer
       menuBtn:
         items:
           $ref: '#/definitions/system.SysBaseMenuBtn'
@@ -1513,6 +1483,9 @@ definitions:
     type: object
   system.SysOperationRecord:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       agent:
         description: 代理
         type: string
@@ -1525,9 +1498,6 @@ definitions:
       error_message:
         description: 错误信息
         type: string
-      id:
-        description: 主键ID
-        type: integer
       ip:
         description: 请求ip
         type: string
@@ -1557,6 +1527,9 @@ definitions:
     type: object
   system.SysUser:
     properties:
+      ID:
+        description: 主键ID
+        type: integer
       activeColor:
         description: 活跃颜色
         type: string
@@ -1584,9 +1557,6 @@ definitions:
       headerImg:
         description: 用户头像
         type: string
-      id:
-        description: 主键ID
-        type: integer
       nickName:
         description: 用户昵称
         type: string
@@ -1613,9 +1583,9 @@ definitions:
     type: object
 info:
   contact: {}
-  description: This is a sample Server pets
-  title: Swagger Example API
-  version: 0.0.1
+  description: 使用gin+vue进行极速开发的全栈开发基础平台
+  title: Gin-Vue-Admin Swagger API接口文档
+  version: v2.5.7
 paths:
   /api/createApi:
     post:
@@ -2645,6 +2615,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -2657,10 +2631,6 @@ paths:
         in: query
         name: customerPhoneData
         type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
       - description: 管理角色ID
         in: query
         name: sysUserAuthorityID
@@ -3370,6 +3340,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -3378,10 +3352,6 @@ paths:
         in: query
         name: desc
         type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
       - description: 字典名（中）
         in: query
         name: name
@@ -3530,6 +3500,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -3538,10 +3512,6 @@ paths:
         in: query
         name: extend
         type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
       - description: 展示值
         in: query
         name: label
@@ -3591,6 +3561,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
       - description: 创建时间
         in: query
         name: createdAt
@@ -3599,10 +3573,6 @@ paths:
         in: query
         name: extend
         type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
       - description: 关键字
         in: query
         name: keyword
@@ -3775,6 +3745,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
       - description: 代理
         in: query
         name: agent
@@ -3791,10 +3765,6 @@ paths:
         in: query
         name: error_message
         type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
       - description: 请求ip
         in: query
         name: ip
@@ -3852,6 +3822,10 @@ paths:
       consumes:
       - application/json
       parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
       - description: 代理
         in: query
         name: agent
@@ -3868,10 +3842,6 @@ paths:
         in: query
         name: error_message
         type: string
-      - description: 主键ID
-        in: query
-        name: id
-        type: integer
       - description: 请求ip
         in: query
         name: ip

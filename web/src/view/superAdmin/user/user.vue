@@ -96,7 +96,7 @@
         >
           <template #default="scope">
             <el-popover
-              v-model="scope.row.visible"
+              v-model:visible="scope.row.visible"
               placement="top"
               width="160"
             >

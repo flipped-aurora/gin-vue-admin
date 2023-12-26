@@ -198,8 +198,6 @@ func (t *timer) RemoveTask(cronName string, id int) {
 
 // RemoveTaskByName 从cronName 使用taskName 删除指定任务
 func (t *timer) RemoveTaskByName(cronName string, taskName string) {
-	t.Lock()
-	defer t.Unlock()
 	fTask, ok := t.FindTask(cronName, taskName)
 	if !ok {
 		return

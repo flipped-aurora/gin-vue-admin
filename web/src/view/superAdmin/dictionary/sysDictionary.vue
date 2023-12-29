@@ -35,6 +35,7 @@
                 <Edit />
               </el-icon>
               <el-popover
+                v-model:visible="dictionary.visible"
                 placement="top"
                 width="160"
               >

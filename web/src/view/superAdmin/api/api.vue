@@ -111,6 +111,7 @@
             >刷新缓存</el-button>
           </template>
         </el-popover>
+        <ExportExcel template-id="api" />
       </div>
       <el-table
         :data="tableData"
@@ -283,6 +284,7 @@ import {
 } from '@/api/api'
 import { toSQLLine } from '@/utils/stringFun'
 import WarningBar from '@/components/warningBar/warningBar.vue'
+import ExportExcel from "@/components/exportExcel/exportExcel.vue";
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { VideoCameraFilled } from '@element-plus/icons-vue'

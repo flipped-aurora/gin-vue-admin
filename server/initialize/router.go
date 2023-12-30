@@ -63,21 +63,21 @@ func Routers() *gin.Engine {
 	PrivateGroup := Router.Group(global.GVA_CONFIG.System.RouterPrefix)
 	PrivateGroup.Use(middleware.JWTAuth()).Use(middleware.CasbinHandler())
 	{
-		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)    // 注册功能api路由
-		systemRouter.InitJwtRouter(PrivateGroup)                 // jwt相关路由
-		systemRouter.InitUserRouter(PrivateGroup)                // 注册用户路由
-		systemRouter.InitMenuRouter(PrivateGroup)                // 注册menu路由
-		systemRouter.InitSystemRouter(PrivateGroup)              // system相关路由
-		systemRouter.InitCasbinRouter(PrivateGroup)              // 权限相关路由
-		systemRouter.InitAutoCodeRouter(PrivateGroup)            // 创建自动化代码
-		systemRouter.InitAuthorityRouter(PrivateGroup)           // 注册角色路由
-		systemRouter.InitSysDictionaryRouter(PrivateGroup)       // 字典管理
-		systemRouter.InitAutoCodeHistoryRouter(PrivateGroup)     // 自动化代码历史
-		systemRouter.InitSysOperationRecordRouter(PrivateGroup)  // 操作记录
-		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup) // 字典详情管理
-		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)  // 字典详情管理
-		systemRouter.InitChatGptRouter(PrivateGroup)             // chatGpt接口
-
+		systemRouter.InitApiRouter(PrivateGroup, PublicGroup)       // 注册功能api路由
+		systemRouter.InitJwtRouter(PrivateGroup)                    // jwt相关路由
+		systemRouter.InitUserRouter(PrivateGroup)                   // 注册用户路由
+		systemRouter.InitMenuRouter(PrivateGroup)                   // 注册menu路由
+		systemRouter.InitSystemRouter(PrivateGroup)                 // system相关路由
+		systemRouter.InitCasbinRouter(PrivateGroup)                 // 权限相关路由
+		systemRouter.InitAutoCodeRouter(PrivateGroup)               // 创建自动化代码
+		systemRouter.InitAuthorityRouter(PrivateGroup)              // 注册角色路由
+		systemRouter.InitSysDictionaryRouter(PrivateGroup)          // 字典管理
+		systemRouter.InitAutoCodeHistoryRouter(PrivateGroup)        // 自动化代码历史
+		systemRouter.InitSysOperationRecordRouter(PrivateGroup)     // 操作记录
+		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)    // 字典详情管理
+		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)     // 字典详情管理
+		systemRouter.InitChatGptRouter(PrivateGroup)                // chatGpt接口
+		systemRouter.InitSysExportTemplateRouter(PrivateGroup)      // 导出模板
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由
 

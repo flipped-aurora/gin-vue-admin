@@ -19,7 +19,10 @@ type JwtApi struct{}
 // @Success   200  {object}  response.Response{msg=string}  "jwt加入黑名单"
 // @Router    /jwt/jsonInBlacklist [post]
 func (j *JwtApi) JsonInBlacklist(c *gin.Context) {
-	token := c.Request.Header.Get("x-token")
+	token, _ := c.Cookie("x-token")
+	if token == "" {
+		token = c.Request.Header.Get("x-token")
+	}
 	jwt := system.JwtBlacklist{Jwt: token}
 	err := jwtService.JsonInBlacklist(jwt)
 	if err != nil {

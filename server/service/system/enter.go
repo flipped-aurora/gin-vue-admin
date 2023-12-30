@@ -17,4 +17,5 @@ type ServiceGroup struct {
 	DictionaryDetailService
 	AuthorityBtnService
 	ChatGptService
+	SysExportTemplateService
 }

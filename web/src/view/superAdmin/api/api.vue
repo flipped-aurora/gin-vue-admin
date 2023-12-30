@@ -111,7 +111,6 @@
             >刷新缓存</el-button>
           </template>
         </el-popover>
-        <ExportExcel template-id="api" />
       </div>
       <el-table
         :data="tableData"

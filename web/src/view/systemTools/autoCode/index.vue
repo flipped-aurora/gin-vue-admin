@@ -816,19 +816,18 @@ const enterForm = async(isPreview) => {
         const data = await createTemp(form.value)
         if (data.headers?.success === 'false') {
           return
-        } else {
-          if (form.value.autoMoveFile) {
-            ElMessage({
-              type: 'success',
-              message: '自动化代码创建成功，自动移动成功'
-            })
-            return
-          }
+        }
+        if (form.value.autoMoveFile) {
           ElMessage({
             type: 'success',
-            message: '自动化代码创建成功，正在下载'
+            message: '自动化代码创建成功，自动移动成功'
           })
+          return
         }
+        ElMessage({
+          type: 'success',
+          message: '自动化代码创建成功，正在下载'
+        })
         const blob = new Blob([data])
         const fileName = 'ginvueadmin.zip'
         if ('download' in document.createElement('a')) {

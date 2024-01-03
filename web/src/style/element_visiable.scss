@@ -1,10 +1,8 @@
 @import '@/style/main.scss';
 
-#app {
-    .el-button {
-        font-weight: 400;
-        border-radius: 2px;
-    }
+.el-button {
+    font-weight: 400;
+    border-radius: 2px;
 }
 
 ::-webkit-scrollbar {

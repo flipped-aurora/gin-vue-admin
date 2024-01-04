@@ -22,9 +22,9 @@ func Routers() *gin.Engine {
 	}
 
 	Router := gin.New()
-
+	Router.Use(gin.Recovery())
 	if global.GVA_CONFIG.System.Env != "public" {
-		Router.Use(gin.Logger(), gin.Recovery())
+		Router.Use(gin.Logger())
 	}
 
 	InstallPlugin(Router) // 安装插件

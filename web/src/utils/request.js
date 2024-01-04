@@ -3,7 +3,6 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
 import { emitter } from '@/utils/bus.js'
 import router from '@/router/index'
-import cookie from 'js-cookie'
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,

@@ -1,6 +1,7 @@
 package system
 
 import (
+	"github.com/redis/go-redis/v9"
 	"net"
 	"strconv"
 	"time"
@@ -14,7 +15,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/gin-gonic/gin"
-	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
 )
 
@@ -174,7 +174,47 @@ func (b *BaseApi) Register(c *gin.Context) {
 	userReturn, err := userService.Register(*user)
 	if err != nil {
 		global.GVA_LOG.Error("注册失败!", zap.Error(err))
-		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册失败", c)
+		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, err.Error(), c)
+		return
+	}
+	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
+}
+
+// RegisterRegularUser
+// @Tags     SysUser
+// @Summary  用户注册账号 管理员新增普通账号
+// @Produce   application/json
+// @Param    data  body      systemReq.RegisterRegular                                      true  "用户名, 昵称, 密码, 角色ID，手机号，邮箱"
+// @Success  200   {object}  response.Response{data=systemRes.SysUserResponse,msg=string}  "用户注册/管理员新增账号,返回包括用户信息"
+// @Router   /user/register [post]
+func (b *BaseApi) RegisterRegularUser(c *gin.Context) {
+	var r systemReq.RegisterRegular
+	err := c.ShouldBindJSON(&r)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	//验证输入信息是否符合要求
+	err = utils.Verify(r, utils.RegisterRegularVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	//直接设置普通用户注册的角色，以便和管理员注册区分，且复用service 注册方法
+	var authorities []system.SysAuthority
+	authorities = append(authorities, system.SysAuthority{
+		AuthorityId: 333,
+	})
+	//for _, v := range r.AuthorityIds {
+	//	authorities = append(authorities, system.SysAuthority{
+	//		AuthorityId: v,
+	//	})
+	//}
+	user := &system.SysUser{Username: r.Username, NickName: r.NickName, Password: r.Password, HeaderImg: r.HeaderImg, AuthorityId: 333, Authorities: authorities, Enable: 1, Phone: r.Phone, Email: r.Email, Province: r.Province, City: r.City, Organization: r.Organization, CyberCoin: 0}
+	userReturn, err := userService.Register(*user)
+	if err != nil {
+		global.GVA_LOG.Error("注册失败!", zap.Error(err))
+		response.FailWithDetailed(systemRes.SysUserResponse{User: userReturn}, err.Error(), c)
 		return
 	}
 	response.OkWithDetailed(systemRes.SysUserResponse{User: userReturn}, "注册成功", c)
@@ -233,6 +273,76 @@ func (b *BaseApi) GetUserList(c *gin.Context) {
 		return
 	}
 	list, total, err := userService.GetUserInfoList(pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     list,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
+	}, "获取成功", c)
+}
+
+// GetAdminUserList
+// @Tags      SysUser
+// @Summary   分页获取管理员用户列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.PageInfo                                        true  "页码, 每页大小"
+// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取管理员用户列表,返回包括列表,总数,页码,每页数量"
+// @Router    /user/getAdminUserList [post]
+func (b *BaseApi) GetAdminUserList(c *gin.Context) {
+	var pageInfo request.PageInfo
+	err := c.ShouldBindJSON(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(pageInfo, utils.PageInfoVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := userService.GetAdminUserInfoList(pageInfo)
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithDetailed(response.PageResult{
+		List:     list,
+		Total:    total,
+		Page:     pageInfo.Page,
+		PageSize: pageInfo.PageSize,
+	}, "获取成功", c)
+}
+
+// GetRegularUserList
+// @Tags      SysUser
+// @Summary   分页获取普通用户列表
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.PageInfo                                        true  "页码, 每页大小"
+// @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取管理员用户列表,返回包括列表,总数,页码,每页数量"
+// @Router    /user/getRegularUserList [post]
+func (b *BaseApi) GetRegularUserList(c *gin.Context) {
+	var pageInfo request.PageInfo
+	err := c.ShouldBindJSON(&pageInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(pageInfo, utils.PageInfoVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	list, total, err := userService.GetRegularUserInfoList(pageInfo)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -340,7 +450,42 @@ func (b *BaseApi) DeleteUser(c *gin.Context) {
 	err = userService.DeleteUser(reqId.ID)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	response.OkWithMessage("删除成功", c)
+}
+
+// DeleteRegularUser
+// @Tags      SysUser
+// @Summary   删除普通用户
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.GetById                true  "用户ID"
+// @Success   200   {object}  response.Response{msg=string}  "删除普通用户"
+// @Router    /user/deleteRegularUser [delete]
+func (b *BaseApi) DeleteRegularUser(c *gin.Context) {
+	var reqId request.GetById
+	err := c.ShouldBindJSON(&reqId)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(reqId, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	jwtId := utils.GetUserID(c)
+	if jwtId == uint(reqId.ID) {
+		response.FailWithMessage("删除失败, 自杀失败", c)
+		return
+	}
+	err = userService.DeleteRegularUser(reqId.ID)
+	if err != nil {
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	response.OkWithMessage("删除成功", c)
@@ -380,12 +525,15 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		GVA_MODEL: global.GVA_MODEL{
 			ID: user.ID,
 		},
-		NickName:  user.NickName,
-		HeaderImg: user.HeaderImg,
-		Phone:     user.Phone,
-		Email:     user.Email,
-		SideMode:  user.SideMode,
-		Enable:    user.Enable,
+		NickName:     user.NickName,
+		HeaderImg:    user.HeaderImg,
+		Phone:        user.Phone,
+		Email:        user.Email,
+		Province:     user.Province,
+		City:         user.City,
+		Organization: user.Organization,
+		SideMode:     user.SideMode,
+		Enable:       user.Enable,
 	})
 	if err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
@@ -393,6 +541,50 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("设置成功", c)
+}
+
+// SetUserCyberCoin
+// @Tags      SysUser
+// @Summary   设置用户积分
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysUser                                             true  "ID, 用户名, 昵称, 头像链接"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户积分"
+// @Router    /user/setUserCyberCoin [put]
+func (b *BaseApi) SetUserCyberCoin(c *gin.Context) {
+	var user systemReq.ChangeUserCyberCoin
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = utils.Verify(user, utils.IdVerify)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	//if len(user.AuthorityIds) != 0 {
+	//	err = userService.SetUserAuthorities(user.ID, user.AuthorityIds)
+	//	if err != nil {
+	//		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+	//		response.FailWithMessage("设置失败", c)
+	//		return
+	//	}
+	//}
+	err = userService.SetUserInfo(system.SysUser{
+		GVA_MODEL: global.GVA_MODEL{
+			ID: user.ID,
+		},
+		CyberCoin: user.CyberCoin,
+	})
+	if err != nil {
+		global.GVA_LOG.Error("积分修改失败!", zap.Error(err))
+		response.FailWithMessage("积分修改失败", c)
+		return
+	}
+	response.OkWithMessage("积分修改成功", c)
 }
 
 // SetSelfInfo
@@ -405,7 +597,7 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户信息"
 // @Router    /user/SetSelfInfo [put]
 func (b *BaseApi) SetSelfInfo(c *gin.Context) {
-	var user systemReq.ChangeUserInfo
+	var user systemReq.ChangeSelfInfo
 	err := c.ShouldBindJSON(&user)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -416,12 +608,14 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		GVA_MODEL: global.GVA_MODEL{
 			ID: user.ID,
 		},
-		NickName:  user.NickName,
-		HeaderImg: user.HeaderImg,
-		Phone:     user.Phone,
-		Email:     user.Email,
-		SideMode:  user.SideMode,
-		Enable:    user.Enable,
+		NickName:     user.NickName,
+		HeaderImg:    user.HeaderImg,
+		Phone:        user.Phone,
+		Email:        user.Email,
+		Province:     user.Province,
+		City:         user.City,
+		Organization: user.Organization,
+		SideMode:     user.SideMode,
 	})
 	if err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
@@ -466,6 +660,30 @@ func (b *BaseApi) ResetPassword(c *gin.Context) {
 		return
 	}
 	err = userService.ResetPassword(user.ID)
+	if err != nil {
+		global.GVA_LOG.Error("重置失败!", zap.Error(err))
+		response.FailWithMessage("重置失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("重置成功", c)
+}
+
+// ResetRegularPassword
+// @Tags      SysUser
+// @Summary   重置普通用户密码
+// @Security  ApiKeyAuth
+// @Produce  application/json
+// @Param     data  body      system.SysUser                 true  "ID"
+// @Success   200   {object}  response.Response{msg=string}  "重置普通用户密码"
+// @Router    /user/ResetRegularPassword [post]
+func (b *BaseApi) ResetRegularPassword(c *gin.Context) {
+	var user system.SysUser
+	err := c.ShouldBindJSON(&user)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = userService.ResetRegularPassword(user.ID)
 	if err != nil {
 		global.GVA_LOG.Error("重置失败!", zap.Error(err))
 		response.FailWithMessage("重置失败"+err.Error(), c)

@@ -57,6 +57,12 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 			AuthorityId: 888,
 			Phone:       "17611111111",
 			Email:       "333333333@qq.com",
+			ActiveColor: "#1890ff",
+			BaseColor:   "#fff",
+			SideMode:    "dark",
+			Province:    "广东省",
+			City:        "深圳市",
+			CyberCoin:   100,
 		},
 		{
 			UUID:        uuid.Must(uuid.NewV4()),
@@ -66,7 +72,14 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 			HeaderImg:   "https:///qmplusimg.henrongyi.top/1572075907logo.png",
 			AuthorityId: 9528,
 			Phone:       "17611111111",
-			Email:       "333333333@qq.com"},
+			Email:       "333333333@qq.com",
+			ActiveColor: "#1890ff",
+			BaseColor:   "#fff",
+			SideMode:    "dark",
+			Province:    "山东省",
+			City:        "济南市",
+			CyberCoin:   100,
+		},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysUser{}.TableName()+"表数据初始化失败!")

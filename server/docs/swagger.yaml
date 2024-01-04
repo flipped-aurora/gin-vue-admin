@@ -871,6 +871,40 @@ definitions:
         example: 用户名
         type: string
     type: object
+  request.RegisterRegular:
+    properties:
+      city:
+        example: 城市
+        type: string
+      email:
+        example: 电子邮箱
+        type: string
+      headerImg:
+        example: 头像链接
+        type: string
+      nickName:
+        example: 昵称
+        type: string
+      organization:
+        example: 单位
+        type: string
+      passWord:
+        example: 密码
+        type: string
+      phone:
+        description: |-
+          AuthorityId  uint   `json:"authorityId" swaggertype:"string" example:"int 角色id"`
+          Enable       int    `json:"enable" swaggertype:"string" example:"int 是否启用"`
+          AuthorityIds []uint `json:"authorityIds" swaggertype:"string" example:"[]uint 角色id"`
+        example: 电话号码
+        type: string
+      province:
+        example: 省份
+        type: string
+      userName:
+        example: 用户名
+        type: string
+    type: object
   request.RollBack:
     properties:
       deleteTable:
@@ -1425,6 +1459,30 @@ definitions:
         description: 字典值
         type: integer
     type: object
+  system.SysExportTemplate:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      name:
+        description: 模板名称
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+      templateID:
+        description: 模板标识
+        type: string
+      templateInfo:
+        description: 模板信息
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
   system.SysMenu:
     properties:
       ID:
@@ -1545,9 +1603,15 @@ definitions:
       baseColor:
         description: 基础颜色
         type: string
+      city:
+        description: 用户所在城市
+        type: string
       createdAt:
         description: 创建时间
         type: string
+      cyberCoin:
+        description: 用户积分
+        type: integer
       email:
         description: 用户邮箱
         type: string
@@ -1560,8 +1624,14 @@ definitions:
       nickName:
         description: 用户昵称
         type: string
+      organization:
+        description: 用户所在单位
+        type: string
       phone:
         description: 用户手机号
+        type: string
+      province:
+        description: 用户所在省份
         type: string
       sideMode:
         description: 用户侧边主题
@@ -3656,6 +3726,218 @@ paths:
       summary: 更新SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysExportTemplate/createSysExportTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/deleteSysExportTemplate:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/deleteSysExportTemplateByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/exportExcel:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 导出表格
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/findSysExportTemplate:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 模板名称
+        in: query
+        name: name
+        type: string
+      - description: 表名称
+        in: query
+        name: tableName
+        type: string
+      - description: 模板标识
+        in: query
+        name: templateID
+        type: string
+      - description: 模板信息
+        in: query
+        name: templateInfo
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/getSysExportTemplateList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - description: 模板名称
+        in: query
+        name: name
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 表名称
+        in: query
+        name: tableName
+        type: string
+      - description: 模板标识
+        in: query
+        name: templateID
+        type: string
+      - description: 模板信息
+        in: query
+        name: templateInfo
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取导出模板列表
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/updateSysExportTemplate:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新导出模板
+      tags:
+      - SysExportTemplate
   /sysOperationRecord/createSysOperationRecord:
     post:
       consumes:
@@ -3993,6 +4275,32 @@ paths:
       summary: 设置配置文件内容
       tags:
       - System
+  /user/ResetRegularPassword:
+    post:
+      parameters:
+      - description: ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 重置普通用户密码
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 重置普通用户密码
+      tags:
+      - SysUser
   /user/SetSelfInfo:
     put:
       consumes:
@@ -4076,6 +4384,34 @@ paths:
       summary: 用户修改密码
       tags:
       - SysUser
+  /user/deleteRegularUser:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.GetById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 删除普通用户
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 删除普通用户
+      tags:
+      - SysUser
   /user/deleteUser:
     delete:
       consumes:
@@ -4102,6 +4438,66 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 删除用户
+      tags:
+      - SysUser
+  /user/getAdminUserList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.PageInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取管理员用户列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取管理员用户列表
+      tags:
+      - SysUser
+  /user/getRegularUserList:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 页码, 每页大小
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.PageInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 分页获取管理员用户列表,返回包括列表,总数,页码,每页数量
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.PageResult'
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取普通用户列表
       tags:
       - SysUser
   /user/getUserInfo:
@@ -4156,6 +4552,32 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 分页获取用户列表
+      tags:
+      - SysUser
+  /user/register:
+    post:
+      parameters:
+      - description: 用户名, 昵称, 密码, 角色ID，手机号，邮箱
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterRegular'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 用户注册/管理员新增账号,返回包括用户信息
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.SysUserResponse'
+                msg:
+                  type: string
+              type: object
+      summary: 用户注册账号 管理员新增普通账号
       tags:
       - SysUser
   /user/resetPassword:
@@ -4238,6 +4660,37 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 更改用户权限
+      tags:
+      - SysUser
+  /user/setUserCyberCoin:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: ID, 用户名, 昵称, 头像链接
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 设置用户积分
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  additionalProperties: true
+                  type: object
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: 设置用户积分
       tags:
       - SysUser
   /user/setUserInfo:

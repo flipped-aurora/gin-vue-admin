@@ -26,6 +26,12 @@ func (userService *UserService) Register(u system.SysUser) (userInter system.Sys
 	if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
 		return userInter, errors.New("用户名已注册")
 	}
+	if !errors.Is(global.GVA_DB.Where("phone = ?", u.Phone).First(&user).Error, gorm.ErrRecordNotFound) { // 判断手机号是否注册
+		return userInter, errors.New("手机号已注册")
+	}
+	if !errors.Is(global.GVA_DB.Where("email = ?", u.Email).First(&user).Error, gorm.ErrRecordNotFound) { // 判断邮箱是否注册
+		return userInter, errors.New("邮箱已注册")
+	}
 	// 否则 附加uuid 密码hash加密 注册
 	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.Must(uuid.NewV4())
@@ -95,6 +101,44 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 	return userList, total, err
 }
 
+//@author: XG
+//@function: GetAdminUserInfoList
+//@description: 分页获取数据
+//@param: info request.PageInfo
+//@return: err error, list interface{}, total int64
+
+func (userService *UserService) GetAdminUserInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&system.SysUser{})
+	var userList []system.SysUser
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Where("authority_id >= ?", 666).Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
+	return userList, total, err
+}
+
+//@author: XG
+//@function: GetUserInfoList
+//@description: 分页获取普通用户数据
+//@param: info request.PageInfo
+//@return: err error, list interface{}, total int64
+
+func (userService *UserService) GetRegularUserInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
+	limit := info.PageSize
+	offset := info.PageSize * (info.Page - 1)
+	db := global.GVA_DB.Model(&system.SysUser{})
+	var userList []system.SysUser
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	err = db.Where("authority_id = ?", 333).Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
+	return userList, total, err
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: SetUserAuthority
 //@description: 设置一个用户的权限
@@ -149,6 +193,34 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 
 func (userService *UserService) DeleteUser(id int) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id = ?", id).Delete(&system.SysUser{}).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+//@author: XG
+//@function: DeleteUser
+//@description: 删除普通用户
+//@param: id float64
+//@return: err error
+
+func (userService *UserService) DeleteRegularUser(id int) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		// 如果userId 在user表中对应的authority_id 小于要删除的id对应的authority_id 则不允许删除
+		var userIng system.SysUser
+		if err := tx.Where("id = ?", id).First(&userIng).Error; err != nil {
+			return err
+		}
+		//只能删除用户权限ID为333的用户
+		if userIng.AuthorityId != 333 {
+			return errors.New("权限不足")
+		}
+
 		if err := tx.Where("id = ?", id).Delete(&system.SysUser{}).Error; err != nil {
 			return err
 		}
@@ -241,7 +313,41 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 //@param: ID uint
 //@return: err error
 
-func (userService *UserService) ResetPassword(ID uint) (err error) {
-	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
-	return err
+//func (userService *UserService) ResetPassword(ID uint) (err error) {
+//	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", ID).Update("password", utils.BcryptHash("123456")).Error
+//	return err
+//}
+
+func (userService *UserService) ResetPassword(id uint) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		//更新user表中id=id的密码为123456的用户
+		if err := tx.Where("id = ?", id).First(&system.SysUser{}).Update("password", utils.BcryptHash("123456")).Error; err != nil {
+			return err
+		}
+		return nil
+	})
+}
+
+//@author: XG
+//@function: resetRegularPassword
+//@description: 修改普通用户密码
+//@param: ID uint
+//@return: err error
+
+func (userService *UserService) ResetRegularPassword(id uint) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var userIng system.SysUser
+		if err := tx.Where("id = ?", id).First(&userIng).Error; err != nil {
+			return err
+		}
+		//只能重置用户权限ID为333的用户
+		if userIng.AuthorityId != 333 {
+			return errors.New("权限不足")
+		}
+		//更新user表中id=id的密码为123456的用户
+		if err := tx.Where("id = ?", id).First(&system.SysUser{}).Update("password", utils.BcryptHash("123456")).Error; err != nil {
+			return err
+		}
+		return nil
+	})
 }

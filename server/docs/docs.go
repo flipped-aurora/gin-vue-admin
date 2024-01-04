@@ -3648,6 +3648,348 @@ const docTemplate = `{
                 }
             }
         },
+        "/sysExportTemplate/createSysExportTemplate": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "创建导出模板",
+                "parameters": [
+                    {
+                        "description": "创建导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysExportTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/deleteSysExportTemplate": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "删除导出模板",
+                "parameters": [
+                    {
+                        "description": "删除导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysExportTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/deleteSysExportTemplateByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "批量删除导出模板",
+                "parameters": [
+                    {
+                        "description": "批量删除导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/exportExcel": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "导出表格",
+                "responses": {}
+            }
+        },
+        "/sysExportTemplate/findSysExportTemplate": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "用id查询导出模板",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板标识",
+                        "name": "templateID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板信息",
+                        "name": "templateInfo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/getSysExportTemplateList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "分页获取导出模板列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "endCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "startCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板标识",
+                        "name": "templateID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板信息",
+                        "name": "templateInfo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/updateSysExportTemplate": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "更新导出模板",
+                "parameters": [
+                    {
+                        "description": "更新导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysExportTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/sysOperationRecord/createSysOperationRecord": {
             "post": {
                 "security": [
@@ -4223,6 +4565,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/ResetRegularPassword": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "重置普通用户密码",
+                "parameters": [
+                    {
+                        "description": "ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "重置普通用户密码",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/SetSelfInfo": {
             "put": {
                 "security": [
@@ -4369,6 +4758,56 @@ const docTemplate = `{
                 }
             }
         },
+        "/user/deleteRegularUser": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "删除普通用户",
+                "parameters": [
+                    {
+                        "description": "用户ID",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.GetById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "删除普通用户",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/user/deleteUser": {
             "delete": {
                 "security": [
@@ -4408,6 +4847,112 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getAdminUserList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "分页获取管理员用户列表",
+                "parameters": [
+                    {
+                        "description": "页码, 每页大小",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.PageInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "分页获取管理员用户列表,返回包括列表,总数,页码,每页数量",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/getRegularUserList": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "分页获取普通用户列表",
+                "parameters": [
+                    {
+                        "description": "页码, 每页大小",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.PageInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "分页获取管理员用户列表,返回包括列表,总数,页码,每页数量",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.PageResult"
+                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -4503,6 +5048,51 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/response.PageResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/register": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "用户注册账号 管理员新增普通账号",
+                "parameters": [
+                    {
+                        "description": "用户名, 昵称, 密码, 角色ID，手机号，邮箱",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterRegular"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "用户注册/管理员新增账号,返回包括用户信息",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.SysUserResponse"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -4651,6 +5241,60 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/user/setUserCyberCoin": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysUser"
+                ],
+                "summary": "设置用户积分",
+                "parameters": [
+                    {
+                        "description": "ID, 用户名, 昵称, 头像链接",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "设置用户积分",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "additionalProperties": true
+                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -5969,6 +6613,48 @@ const docTemplate = `{
                 }
             }
         },
+        "request.RegisterRegular": {
+            "type": "object",
+            "properties": {
+                "city": {
+                    "type": "string",
+                    "example": "城市"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "电子邮箱"
+                },
+                "headerImg": {
+                    "type": "string",
+                    "example": "头像链接"
+                },
+                "nickName": {
+                    "type": "string",
+                    "example": "昵称"
+                },
+                "organization": {
+                    "type": "string",
+                    "example": "单位"
+                },
+                "passWord": {
+                    "type": "string",
+                    "example": "密码"
+                },
+                "phone": {
+                    "description": "AuthorityId  uint   ` + "`" + `json:\"authorityId\" swaggertype:\"string\" example:\"int 角色id\"` + "`" + `\nEnable       int    ` + "`" + `json:\"enable\" swaggertype:\"string\" example:\"int 是否启用\"` + "`" + `\nAuthorityIds []uint ` + "`" + `json:\"authorityIds\" swaggertype:\"string\" example:\"[]uint 角色id\"` + "`" + `",
+                    "type": "string",
+                    "example": "电话号码"
+                },
+                "province": {
+                    "type": "string",
+                    "example": "省份"
+                },
+                "userName": {
+                    "type": "string",
+                    "example": "用户名"
+                }
+            }
+        },
         "request.RollBack": {
             "type": "object",
             "properties": {
@@ -6769,6 +7455,39 @@ const docTemplate = `{
                 }
             }
         },
+        "system.SysExportTemplate": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "name": {
+                    "description": "模板名称",
+                    "type": "string"
+                },
+                "tableName": {
+                    "description": "表名称",
+                    "type": "string"
+                },
+                "templateID": {
+                    "description": "模板标识",
+                    "type": "string"
+                },
+                "templateInfo": {
+                    "description": "模板信息",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
         "system.SysMenu": {
             "type": "object",
             "properties": {
@@ -6939,9 +7658,17 @@ const docTemplate = `{
                     "description": "基础颜色",
                     "type": "string"
                 },
+                "city": {
+                    "description": "用户所在城市",
+                    "type": "string"
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
+                },
+                "cyberCoin": {
+                    "description": "用户积分",
+                    "type": "integer"
                 },
                 "email": {
                     "description": "用户邮箱",
@@ -6959,8 +7686,16 @@ const docTemplate = `{
                     "description": "用户昵称",
                     "type": "string"
                 },
+                "organization": {
+                    "description": "用户所在单位",
+                    "type": "string"
+                },
                 "phone": {
                     "description": "用户手机号",
+                    "type": "string"
+                },
+                "province": {
+                    "description": "用户所在省份",
                     "type": "string"
                 },
                 "sideMode": {

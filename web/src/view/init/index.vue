@@ -182,7 +182,6 @@ const showNext = () => {
 }
 
 const goDoc = () => {
-  window.open('https://www.gin-vue-admin.com/guide/start-quickly/env.html')
 }
 
 const out = ref(false)

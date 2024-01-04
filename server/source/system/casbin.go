@@ -152,11 +152,6 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/getAuthorityBtn", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/canRemoveAuthorityBtn", V2: "POST"},
 
-		{Ptype: "p", V0: "888", V1: "/chatGpt/getTable", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/chatGpt/createSK", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/chatGpt/getSK", V2: "GET"},
-		{Ptype: "p", V0: "888", V1: "/chatGpt/deleteSK", V2: "DELETE"},
-
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/createSysExportTemplate", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/deleteSysExportTemplate", V2: "DELETE"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/deleteSysExportTemplateByIds", V2: "DELETE"},

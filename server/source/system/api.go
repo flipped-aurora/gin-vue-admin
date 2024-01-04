@@ -151,11 +151,6 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/getAuthorityBtn", Description: "获取已有按钮权限"},
 		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/canRemoveAuthorityBtn", Description: "删除按钮"},
 
-		{ApiGroup: "万用表格", Method: "POST", Path: "/chatGpt/getTable", Description: "通过gpt获取内容"},
-		{ApiGroup: "万用表格", Method: "POST", Path: "/chatGpt/createSK", Description: "录入sk"},
-		{ApiGroup: "万用表格", Method: "GET", Path: "/chatGpt/getSK", Description: "获取sk"},
-		{ApiGroup: "万用表格", Method: "DELETE", Path: "/chatGpt/deleteSK", Description: "删除sk"},
-
 		{ApiGroup: "导出模板", Method: "POST", Path: "/sysExportTemplate/createSysExportTemplate", Description: "新增导出模板"},
 		{ApiGroup: "导出模板", Method: "DELETE", Path: "/sysExportTemplate/deleteSysExportTemplate", Description: "删除导出模板"},
 		{ApiGroup: "导出模板", Method: "DELETE", Path: "/sysExportTemplate/deleteSysExportTemplateByIds", Description: "批量删除导出模板"},

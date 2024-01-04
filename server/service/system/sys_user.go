@@ -289,7 +289,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 
 func (userService *UserService) FindUserById(id int) (user *system.SysUser, err error) {
 	var u system.SysUser
-	err = global.GVA_DB.Where("`id` = ?", id).First(&u).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&u).Error
 	return &u, err
 }
 
@@ -301,7 +301,7 @@ func (userService *UserService) FindUserById(id int) (user *system.SysUser, err 
 
 func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUser, err error) {
 	var u system.SysUser
-	if err = global.GVA_DB.Where("`uuid` = ?", uuid).First(&u).Error; err != nil {
+	if err = global.GVA_DB.Where("uuid = ?", uuid).First(&u).Error; err != nil {
 		return &u, errors.New("用户不存在")
 	}
 	return &u, nil

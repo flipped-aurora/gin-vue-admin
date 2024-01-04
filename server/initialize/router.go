@@ -22,9 +22,9 @@ func Routers() *gin.Engine {
 	}
 
 	Router := gin.New()
-
+	Router.Use(gin.Recovery())
 	if global.GVA_CONFIG.System.Env != "public" {
-		Router.Use(gin.Logger(), gin.Recovery())
+		Router.Use(gin.Logger())
 	}
 
 	InstallPlugin(Router) // 安装插件
@@ -76,7 +76,6 @@ func Routers() *gin.Engine {
 		systemRouter.InitSysOperationRecordRouter(PrivateGroup)     // 操作记录
 		systemRouter.InitSysDictionaryDetailRouter(PrivateGroup)    // 字典详情管理
 		systemRouter.InitAuthorityBtnRouterRouter(PrivateGroup)     // 字典详情管理
-		systemRouter.InitChatGptRouter(PrivateGroup)                // chatGpt接口
 		systemRouter.InitSysExportTemplateRouter(PrivateGroup)      // 导出模板
 		exampleRouter.InitCustomerRouter(PrivateGroup)              // 客户路由
 		exampleRouter.InitFileUploadAndDownloadRouter(PrivateGroup) // 文件上传下载功能路由

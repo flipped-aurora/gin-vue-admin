@@ -5,6 +5,7 @@ import { ElLoading, ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
+import cookie from 'js-cookie'
 
 export const useUserStore = defineStore('user', () => {
   const loadingInstance = ref(null)
@@ -18,7 +19,7 @@ export const useUserStore = defineStore('user', () => {
     activeColor: 'var(--el-color-primary)',
     baseColor: '#fff'
   })
-  const token = ref(window.localStorage.getItem('token') || '')
+  const token = ref(window.localStorage.getItem('token') || cookie.get('x-token') || '')
   const setUserInfo = (val) => {
     userInfo.value = val
   }

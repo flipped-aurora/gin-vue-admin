@@ -151,7 +151,7 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 
 import sysDictionaryDetail from './sysDictionaryDetail.vue'
-import { Edit, Plus } from '@element-plus/icons-vue'
+import { Edit } from '@element-plus/icons-vue'
 
 defineOptions({
   name: 'SysDictionary',

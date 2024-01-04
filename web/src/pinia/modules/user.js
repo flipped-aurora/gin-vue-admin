@@ -92,9 +92,7 @@ export const useUserStore = defineStore('user', () => {
   const LoginOut = async() => {
     const res = await jsonInBlacklist()
     if (res.code === 0) {
-      token.value = ''
-      sessionStorage.clear()
-      localStorage.clear()
+      await ClearStorage()
       router.push({ name: 'Login', replace: true })
       window.location.reload()
     }
@@ -104,6 +102,7 @@ export const useUserStore = defineStore('user', () => {
     token.value = ''
     sessionStorage.clear()
     localStorage.clear()
+    cookie.remove('x-token')
   }
   /* 设置侧边栏模式*/
   const changeSideMode = async(data) => {

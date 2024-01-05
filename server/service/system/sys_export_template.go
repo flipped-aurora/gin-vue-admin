@@ -9,6 +9,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/xuri/excelize/v2"
+	"gorm.io/gorm"
+	"mime/multipart"
 	"strings"
 )
 
@@ -84,7 +86,7 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 	return sysExportTemplates, total, err
 }
 
-// GetSysExportTemplateInfoList 导出Excel
+// ExportExcel 导出Excel
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
@@ -145,4 +147,98 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 
 	return file, template.Name, nil
+}
+
+// ExportTemplate 导出Excel模板
+// Author [piexlmax](https://github.com/piexlmax)
+func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templateID string) (file *bytes.Buffer, name string, err error) {
+	var template system.SysExportTemplate
+	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	if err != nil {
+		return nil, "", err
+	}
+	f := excelize.NewFile()
+	defer func() {
+		if err := f.Close(); err != nil {
+			fmt.Println(err)
+		}
+	}()
+	// Create a new sheet.
+	index, err := f.NewSheet("Sheet1")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var templateInfoMap = make(map[string]string)
+	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
+	if err != nil {
+		return nil, "", err
+	}
+	var tableTitle []string
+	for key := range templateInfoMap {
+		tableTitle = append(tableTitle, templateInfoMap[key])
+	}
+	var rows [][]string
+	rows = append(rows, tableTitle)
+
+	f.SetActiveSheet(index)
+	file, err = f.WriteToBuffer()
+	if err != nil {
+		return nil, "", err
+	}
+
+	return file, template.Name, nil
+}
+
+// ImportExcel 导入Excel
+// Author [piexlmax](https://github.com/piexlmax)
+func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID string, file *multipart.FileHeader) (err error) {
+	var template system.SysExportTemplate
+	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	if err != nil {
+		return err
+	}
+
+	src, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer src.Close()
+
+	f, err := excelize.OpenReader(src)
+	if err != nil {
+		return err
+	}
+
+	rows, err := f.GetRows("Sheet1")
+	if err != nil {
+		return err
+	}
+
+	var templateInfoMap = make(map[string]string)
+	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
+	if err != nil {
+		return err
+	}
+
+	var titleKeyMap = make(map[string]string)
+	for key, title := range templateInfoMap {
+		titleKeyMap[title] = key
+	}
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		excelTitle := rows[0]
+		values := rows[1:]
+		for _, row := range values {
+			var item = make(map[string]interface{})
+			for ii, value := range row {
+				key := titleKeyMap[excelTitle[ii]]
+				item[key] = value
+			}
+			cErr := tx.Table(template.TableName).Create(&item).Error
+			if cErr != nil {
+				return cErr
+			}
+		}
+		return nil
+	})
 }

@@ -272,6 +272,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	} else {
 		c.Header("new-token", token)
 		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
+		utils.SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
 		response.OkWithMessage("修改成功", c)
 	}
 }

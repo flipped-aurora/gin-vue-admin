@@ -25,11 +25,14 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['on-success'])
+
 const url = `${baseUrl}/sysExportTemplate/importExcel?templateID=${props.templateId}`
 
 const handleSuccess = (res) => {
   if (res.code === 200) {
     ElMessage.success('导入成功')
+    emit('on-success')
   } else {
     ElMessage.error(res.msg)
   }

@@ -1,14 +1,14 @@
 <template>
   <el-upload
-      :action="url"
-      :show-file-list="false"
-      :on-success="handleSuccess"
-      :multiple="false"
+    :action="url"
+    :show-file-list="false"
+    :on-success="handleSuccess"
+    :multiple="false"
   >
-  <el-button
-    type="primary"
-    icon="upload"
-  >导入</el-button>
+    <el-button
+      type="primary"
+      icon="upload"
+    >导入</el-button>
   </el-upload>
 
 </template>

@@ -3,7 +3,6 @@
     <el-upload
       :action="`${path}/fileUploadAndDownload/upload`"
       :before-upload="checkFile"
-      :headers="{ 'x-token': userStore.token }"
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="false"

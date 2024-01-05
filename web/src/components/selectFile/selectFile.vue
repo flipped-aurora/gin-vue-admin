@@ -3,7 +3,6 @@
     <el-upload
       multiple
       :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
-      :headers="{ 'x-token': userStore.token }"
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="true"

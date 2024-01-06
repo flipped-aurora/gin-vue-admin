@@ -75,15 +75,6 @@ func (b *BaseApi) Login(c *gin.Context) {
 	response.FailWithMessage("验证码错误", c)
 }
 
-func (b *BaseApi) SetCookie(c *gin.Context, token string, claims systemReq.CustomClaims) {
-	// 增加cookie x-token 向来源的web添加
-	host, _, err := net.SplitHostPort(c.Request.Host)
-	if err != nil {
-		host = c.Request.Host
-	}
-	c.SetCookie("x-token", token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()), "/", host, false, true)
-}
-
 // TokenNext 登录以后签发jwt
 func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 	j := &utils.JWT{SigningKey: []byte(global.GVA_CONFIG.JWT.SigningKey)} // 唯一签名
@@ -101,7 +92,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 		return
 	}
 	if !global.GVA_CONFIG.System.UseMultipoint {
-		b.SetCookie(c, token, claims)
+		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
@@ -116,7 +107,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
-		b.SetCookie(c, token, claims)
+		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
@@ -136,7 +127,7 @@ func (b *BaseApi) TokenNext(c *gin.Context, user system.SysUser) {
 			response.FailWithMessage("设置登录状态失败", c)
 			return
 		}
-		b.SetCookie(c, token, claims)
+		utils.SetToken(c, token, int(claims.RegisteredClaims.ExpiresAt.Unix()-time.Now().Unix()))
 		response.OkWithDetailed(systemRes.LoginResponse{
 			User:      user,
 			Token:     token,
@@ -392,6 +383,7 @@ func (b *BaseApi) SetUserAuthority(c *gin.Context) {
 	} else {
 		c.Header("new-token", token)
 		c.Header("new-expires-at", strconv.FormatInt(claims.ExpiresAt.Unix(), 10))
+		utils.SetToken(c, token, int((claims.ExpiresAt.Unix()-time.Now().Unix())/60))
 		response.OkWithMessage("修改成功", c)
 	}
 }

@@ -117,8 +117,7 @@ service.interceptors.response.use(
         })
           .then(() => {
             const userStore = useUserStore()
-            userStore.token = ''
-            localStorage.clear()
+            userStore.ClearStorage()
             router.push({ name: 'Login', replace: true })
           })
         break

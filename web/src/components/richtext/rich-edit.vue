@@ -56,9 +56,6 @@ const editorConfig = {
 }
 editorConfig.MENU_CONF['uploadImage'] = {
   fieldName: 'file',
-  headers: {
-    'x-token': userStore.token,
-  },
   server: basePath + '/fileUploadAndDownload/upload?noSave=1',
   customInsert(res, insertFn) {
     if (res.code === 0) {

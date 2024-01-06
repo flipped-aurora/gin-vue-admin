@@ -3,7 +3,6 @@ package middleware
 import (
 	"errors"
 	"github.com/golang-jwt/jwt/v4"
-	"net"
 	"strconv"
 	"time"
 
@@ -23,10 +22,7 @@ var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
-		token, _ := c.Cookie("x-token")
-		if token == "" {
-			token = c.Request.Header.Get("x-token")
-		}
+		token := utils.GetToken(c)
 		if token == "" {
 			response.FailWithDetailed(gin.H{"reload": true}, "未登录或非法访问", c)
 			c.Abort()
@@ -34,6 +30,7 @@ func JWTAuth() gin.HandlerFunc {
 		}
 		if jwtService.IsBlacklist(token) {
 			response.FailWithDetailed(gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
+			utils.ClearToken(c)
 			c.Abort()
 			return
 		}
@@ -43,10 +40,12 @@ func JWTAuth() gin.HandlerFunc {
 		if err != nil {
 			if errors.Is(err, utils.TokenExpired) {
 				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
+				utils.ClearToken(c)
 				c.Abort()
 				return
 			}
 			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+			utils.ClearToken(c)
 			c.Abort()
 			return
 		}
@@ -66,12 +65,7 @@ func JWTAuth() gin.HandlerFunc {
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt.Unix(), 10))
-			// 增加cookie x-token
-			host, _, err := net.SplitHostPort(c.Request.Host)
-			if err != nil {
-				host = c.Request.Host
-			}
-			c.SetCookie("x-token", newToken, int(dr.Seconds()), "/", host, false, true)
+			utils.SetToken(c, newToken, int(dr.Seconds()))
 			if global.GVA_CONFIG.System.UseMultipoint {
 				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.Username)
 				if err != nil {

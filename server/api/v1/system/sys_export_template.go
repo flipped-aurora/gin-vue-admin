@@ -204,3 +204,53 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 		c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", file.Bytes())
 	}
 }
+
+// ExportExcel 导出表格模板
+// @Tags SysExportTemplate
+// @Summary 导出表格模板
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Router /sysExportTemplate/exportExcel [get]
+func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context) {
+	templateID := c.Query("templateID")
+	if templateID == "" {
+		response.FailWithMessage("模板ID不能为空", c)
+		return
+	}
+	if file, name, err := sysExportTemplateService.ExportTemplate(templateID); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		c.Header("Content-Disposition", fmt.Sprintf("attachment; filename=%s", name+"模板.xlsx")) // 对下载的文件重命名
+		c.Header("success", "true")
+		c.Data(http.StatusOK, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", file.Bytes())
+	}
+}
+
+// ExportExcel 导入表格
+// @Tags SysImportTemplate
+// @Summary 导入表格
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Router /sysExportTemplate/importExcel [post]
+func (sysExportTemplateApi *SysExportTemplateApi) ImportExcel(c *gin.Context) {
+	templateID := c.Query("templateID")
+	if templateID == "" {
+		response.FailWithMessage("模板ID不能为空", c)
+		return
+	}
+	file, err := c.FormFile("file")
+	if err != nil {
+		global.GVA_LOG.Error("文件获取失败!", zap.Error(err))
+		response.FailWithMessage("文件获取失败", c)
+		return
+	}
+	if err := sysExportTemplateService.ImportExcel(templateID, file); err != nil {
+		global.GVA_LOG.Error(err.Error(), zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		response.OkWithMessage("导入成功", c)
+	}
+}

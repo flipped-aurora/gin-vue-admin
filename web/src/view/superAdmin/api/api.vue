@@ -111,8 +111,6 @@
             >刷新缓存</el-button>
           </template>
         </el-popover>
-        <ExportTemplate template-id="apis"></ExportTemplate>
-        <ImportExcel template-id="apis" @on-success="getTableData"></ImportExcel>
       </div>
       <el-table
         :data="tableData"
@@ -289,9 +287,6 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { VideoCameraFilled } from '@element-plus/icons-vue'
 import { toDoc } from '@/utils/doc'
-
-import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
-import ImportExcel from '@/components/exportExcel/importExcel.vue'
 
 defineOptions({
   name: 'Api',

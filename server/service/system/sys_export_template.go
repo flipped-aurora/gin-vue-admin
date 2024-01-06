@@ -178,9 +178,12 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 	for key := range templateInfoMap {
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
-	var rows [][]string
-	rows = append(rows, tableTitle)
-
+	for i := range tableTitle {
+		fErr := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", string('A'+i), 1), tableTitle[i])
+		if fErr != nil {
+			return nil, "", fErr
+		}
+	}
 	f.SetActiveSheet(index)
 	file, err = f.WriteToBuffer()
 	if err != nil {

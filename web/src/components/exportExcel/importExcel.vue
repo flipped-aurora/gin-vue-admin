@@ -30,7 +30,7 @@ const emit = defineEmits(['on-success'])
 const url = `${baseUrl}/sysExportTemplate/importExcel?templateID=${props.templateId}`
 
 const handleSuccess = (res) => {
-  if (res.code === 200) {
+  if (res.code === 0) {
     ElMessage.success('导入成功')
     emit('on-success')
   } else {

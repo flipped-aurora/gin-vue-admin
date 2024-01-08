@@ -25,7 +25,6 @@ type AutoCodeStruct struct {
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`
-	NeedValid          bool     `json:"-"`
 	NeedSort           bool     `json:"-"`
 	HasPic             bool     `json:"-"`
 	HasRichText        bool     `json:"-"`

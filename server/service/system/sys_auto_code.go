@@ -137,9 +137,6 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
 		}
-		if autoCode.Fields[i].Require {
-			autoCode.NeedValid = true
-		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
 		}
@@ -243,9 +240,6 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
-		}
-		if autoCode.Fields[i].Require {
-			autoCode.NeedValid = true
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true

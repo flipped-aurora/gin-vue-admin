@@ -21,6 +21,7 @@ import (
 // @name                        x-token
 // @BasePath                    /
 func main() {
+	//11
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
 	global.GVA_LOG = core.Zap() // 初始化zap日志库

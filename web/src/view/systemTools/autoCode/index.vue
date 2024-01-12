@@ -380,7 +380,7 @@
           width="160"
         >
           <template #default="{row}">
-            <el-input v-model="row.columnName" />
+            <el-input v-model="row.comment" />
           </template>
         </el-table-column>
         <el-table-column

@@ -24,11 +24,11 @@ export const create{{.StructName}} = (data) => {
 // @Param data body model.{{.StructName}} true "删除{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
-export const delete{{.StructName}} = (data) => {
+export const delete{{.StructName}} = (params) => {
   return service({
     url: '/{{.Abbreviation}}/delete{{.StructName}}',
     method: 'delete',
-    data
+    params
   })
 }
 
@@ -40,11 +40,11 @@ export const delete{{.StructName}} = (data) => {
 // @Param data body request.IdsReq true "批量删除{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
-export const delete{{.StructName}}ByIds = (data) => {
+export const delete{{.StructName}}ByIds = (params) => {
   return service({
     url: '/{{.Abbreviation}}/delete{{.StructName}}ByIds',
     method: 'delete',
-    data
+    params
   })
 }
 

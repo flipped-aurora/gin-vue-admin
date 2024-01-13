@@ -3,7 +3,6 @@ package {{.Package}}
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
     {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
@@ -29,38 +28,38 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{
 
 // Delete{{.StructName}} 删除{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}(id string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
-	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id = ?", {{.Abbreviation}}.ID).Update("deleted_by", {{.Abbreviation}}.DeletedBy).Error; err != nil {
+	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id = ?", id).Update("deleted_by", userID).Error; err != nil {
               return err
         }
-        if err = tx.Delete(&{{.Abbreviation}}).Error; err != nil {
+        if err = tx.Delete(&{{.Package}}.{{.StructName}}{},"id = ?",id).Error; err != nil {
               return err
         }
         return nil
 	})
     {{- else }}
-	err = {{$db}}.Delete(&{{.Abbreviation}}).Error
+	err = {{$db}}.Delete(&{{.Package}}.{{.StructName}}{},"id = ?",id).Error
 	{{- end }}
 	return err
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids request.IdsReq{{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds(ids []string{{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
-	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id in ?", ids.Ids).Update("deleted_by", deleted_by).Error; err != nil {
+	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("id in ?", ids).Update("deleted_by", deleted_by).Error; err != nil {
             return err
         }
-        if err := tx.Where("id in ?", ids.Ids).Delete(&{{.Package}}.{{.StructName}}{}).Error; err != nil {
+        if err := tx.Where("id in ?", ids).Delete(&{{.Package}}.{{.StructName}}{}).Error; err != nil {
             return err
         }
         return nil
     })
     {{- else}}
-	err = {{$db}}.Delete(&[]{{.Package}}.{{.StructName}}{},"id in ?",ids.Ids).Error
+	err = {{$db}}.Delete(&[]{{.Package}}.{{.StructName}}{},"id in ?",ids).Error
     {{- end}}
 	return err
 }
@@ -74,7 +73,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.
 
 // Get{{.StructName}} 根据id获取{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id uint) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}(id string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
 	err = {{$db}}.Where("id = ?", id).First(&{{.Abbreviation}}).Error
 	return
 }
@@ -93,7 +92,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
     }
         {{- range .Fields}}
             {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "string") (eq .FieldType "enum") }}
+                {{- if or (eq .FieldType "string") (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "richtext") }}
     if info.{{.FieldName}} != "" {
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
     }

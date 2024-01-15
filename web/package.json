@@ -14,6 +14,7 @@
         "@vue-office/docx": "^1.3.0",
         "@vue-office/excel": "^1.4.5",
         "@vue-office/pdf": "^1.5.3",
+        "@vueuse/core": "^10.7.2",
         "@wangeditor/editor": "^5.1.23",
         "@wangeditor/editor-for-vue": "^5.1.12",
         "axios": "^1.4.0",

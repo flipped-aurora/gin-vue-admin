@@ -11,9 +11,8 @@
 </template>
 <script setup>
 import * as echarts from 'echarts'
-import { nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
-// import 'echarts/theme/macarons'
-
+import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { useWindowResize } from '@/hooks/use-windows-resize'
 var dataAxis = []
 for (var i = 1; i < 13; i++) {
   dataAxis.push(`${i}月`)
@@ -35,19 +34,29 @@ var data = [
 var yMax = 500
 var dataShadow = []
 
-// eslint-disable-next-line no-redeclare
-for (var i = 0; i < data.length; i++) {
+for (let i = 0; i < data.length; i++) {
   dataShadow.push(yMax)
 }
 
-const chart = shallowRef(null)
+let chart = null
 const echart = ref(null)
+
+useWindowResize(() => {
+  if (!chart) {
+    return
+  }
+  chart.resize()
+})
+
 const initChart = () => {
-  chart.value = echarts.init(echart.value /* 'macarons' */)
+  if (chart) {
+    chart = null
+  }
+  chart = echarts.init(echart.value)
   setOptions()
 }
 const setOptions = () => {
-  chart.value.setOption({
+  chart.setOption({
     grid: {
       left: '40',
       right: '20',
@@ -107,11 +116,11 @@ onMounted(async() => {
 })
 
 onUnmounted(() => {
-  if (!chart.value) {
+  if (!chart) {
     return
   }
-  chart.value.dispose()
-  chart.value = null
+  chart.dispose()
+  chart = null
 })
 </script>
 <style lang="scss" scoped>

@@ -3,6 +3,7 @@ import { h } from 'vue'
 
 // 统一导入el-icon图标
 import * as ElIconModules from '@element-plus/icons-vue'
+import svgIcon from '@/components/svgIcon/svgIcon.vue'
 // 导入转换图标名称的函数
 
 const createIconComponent = (svgContent) => ({
@@ -19,10 +20,9 @@ const createIconComponent = (svgContent) => ({
   },
   render() {
     const { className } = this
-    return h('span', {
+    return h('svgIcon', {
       class: className,
-      ariaHidden: true,
-      innerHTML: svgContent,
+      name: svgContent,
     })
   },
 })
@@ -52,6 +52,7 @@ export const register = (app) => {
   for (const iconName in ElIconModules) {
     app.component(iconName, ElIconModules[iconName])
   }
+  app.component("svgIcon",svgIcon)
   registerIcons(app)
   app.config.globalProperties.$GIN_VUE_ADMIN = config
 }

@@ -1,5 +1,4 @@
 import { readFileSync, readdirSync } from 'fs'
-let idPerfix = ''
 const svgTitle = /<svg([^>+].*?)>/
 const clearHeightWidth = /(width|height)="([^>+].*?)"/g
 const hasViewBox = /(viewBox="[^>+].*?")/g
@@ -32,7 +31,7 @@ function findSvgFile(dir) {
           if (!hasViewBox.test($2)) {
             content += `viewBox="0 0 ${width} ${height}"`
           }
-          return `<symbol id="${idPerfix}-${dirent.name.replace('.svg', '')}" ${content}>`
+          return `<symbol id="${dirent.name.replace('.svg', '')}" ${content}>`
         })
         .replace('</svg>', '</symbol>')
       svgRes.push(svg)
@@ -40,9 +39,8 @@ function findSvgFile(dir) {
   }
   return svgRes
 }
-export const svgBuilder = (path, perfix = 'icon') => {
+export const svgBuilder = (path) => {
   if (path === '') return
-  idPerfix = perfix
   const res = findSvgFile(path)
   // console.log(res.length)
   // const res = []

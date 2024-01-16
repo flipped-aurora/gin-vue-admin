@@ -2,10 +2,9 @@
   <svg
     :class="svgClass"
     v-bind="$attrs"
-    :style="{ color: color }"
   >
     <use
-      :xlink:href="iconName"
+      :xlink:href="'#'+name"
       rel="external nofollow"
     />
   </svg>
@@ -16,16 +15,12 @@ const props = defineProps({
   name: {
     type: String,
     required: true
-  },
-  color: {
-    type: String,
-    default: ''
   }
 })
-const iconName = computed(() => `#icon-${props.name}`)
+
 const svgClass = computed(() => {
   if (props.name) {
-    return `svg-icon ${iconName.value}`
+    return `svg-icon ${props.name}`
   }
   return 'svg-icon'
 })

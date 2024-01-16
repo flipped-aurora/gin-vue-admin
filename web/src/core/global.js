@@ -6,7 +6,7 @@ import * as ElIconModules from '@element-plus/icons-vue'
 import svgIcon from '@/components/svgIcon/svgIcon.vue'
 // 导入转换图标名称的函数
 
-const createIconComponent = (svgContent) => ({
+const createIconComponent = (name) => ({
   name: 'SvgIcon',
   props: {
     iconClass: {
@@ -20,9 +20,9 @@ const createIconComponent = (svgContent) => ({
   },
   render() {
     const { className } = this
-    return h('svgIcon', {
+    return h(svgIcon, {
       class: className,
-      name: svgContent,
+      name: name,
     })
   },
 })
@@ -30,15 +30,16 @@ const createIconComponent = (svgContent) => ({
 const registerIcons = async(app) => {
   const iconModules = import.meta.glob('@/assets/icons/**/*.svg')
   for (const path in iconModules) {
-    const response = await fetch(path)
-    const svgContent = await response.text()
+    const module = await iconModules[path]()
+    const svgContent = module.default
     const iconName = path.split('/').pop().replace(/\.svg$/, '')
     // 如果iconName带空格则不加入到图标库中并且提示名称不合法
+    console.log(iconName)
     if (iconName.indexOf(' ') !== -1) {
       console.error(`icon ${iconName}.svg includes whitespace`)
       continue
     }
-    const iconComponent = createIconComponent(svgContent)
+    const iconComponent = createIconComponent(iconName)
     config.logs.push({
       'key': iconName,
       'label': iconName,

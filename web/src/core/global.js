@@ -8,20 +8,8 @@ import svgIcon from '@/components/svgIcon/svgIcon.vue'
 
 const createIconComponent = (name) => ({
   name: 'SvgIcon',
-  props: {
-    iconClass: {
-      type: String,
-      default: '',
-    },
-    className: {
-      type: String,
-      default: '',
-    },
-  },
   render() {
-    const { className } = this
     return h(svgIcon, {
-      class: className,
       name: name,
     })
   },
@@ -30,8 +18,6 @@ const createIconComponent = (name) => ({
 const registerIcons = async(app) => {
   const iconModules = import.meta.glob('@/assets/icons/**/*.svg')
   for (const path in iconModules) {
-    const module = await iconModules[path]()
-    const svgContent = module.default
     const iconName = path.split('/').pop().replace(/\.svg$/, '')
     // 如果iconName带空格则不加入到图标库中并且提示名称不合法
     console.log(iconName)
@@ -53,7 +39,7 @@ export const register = (app) => {
   for (const iconName in ElIconModules) {
     app.component(iconName, ElIconModules[iconName])
   }
-  app.component("svgIcon",svgIcon)
+  app.component('SvgIcon', svgIcon)
   registerIcons(app)
   app.config.globalProperties.$GIN_VUE_ADMIN = config
 }

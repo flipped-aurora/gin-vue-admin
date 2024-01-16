@@ -2,6 +2,7 @@
   <svg
     :class="svgClass"
     v-bind="$attrs"
+    :color="color"
   >
     <use
       :xlink:href="'#'+name"
@@ -15,6 +16,10 @@ const props = defineProps({
   name: {
     type: String,
     required: true
+  },
+  color: {
+    type: String,
+    default: 'currentColor'
   }
 })
 

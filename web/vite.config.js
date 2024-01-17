@@ -82,8 +82,8 @@ export default ({
     esbuild,
     optimizeDeps,
     plugins: [
-      GvaPositionServer(),
-      GvaPosition(),
+      process.env.VITE_POSITION === 'open' && GvaPositionServer(),
+      process.env.VITE_POSITION === 'open' && GvaPosition(),
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
       }),

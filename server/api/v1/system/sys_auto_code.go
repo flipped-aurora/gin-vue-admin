@@ -304,8 +304,7 @@ func (autoApi *AutoCodeApi) InstallPlugin(c *gin.Context) {
 // @Router    /autoCode/pubPlug [get]
 func (autoApi *AutoCodeApi) PubPlug(c *gin.Context) {
 	plugName := c.Query("plugName")
-	snake := strings.ToLower(plugName)
-	zipPath, err := autoCodeService.PubPlug(snake)
+	zipPath, err := autoCodeService.PubPlug(plugName)
 	if err != nil {
 		global.GVA_LOG.Error("打包失败!", zap.Error(err))
 		response.FailWithMessage("打包失败"+err.Error(), c)

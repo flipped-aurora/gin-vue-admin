@@ -8,6 +8,7 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -739,36 +740,44 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	paths = filterFile(paths)
 	var webIndex = -1
 	var serverIndex = -1
+	webPlugin := ""
+	serverPlugin := ""
+
 	for i := range paths {
 		paths[i] = filepath.ToSlash(paths[i])
 		pathArr := strings.Split(paths[i], "/")
 		ln := len(pathArr)
-		if ln < 2 {
+
+		if ln < 4 {
 			continue
 		}
-		if pathArr[ln-2] == "server" && pathArr[ln-1] == "plugin" {
-			serverIndex = i
+		if pathArr[2]+"/"+pathArr[3] == `server/plugin` && len(serverPlugin) == 0 {
+			serverPlugin = path.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
 		}
-		if pathArr[ln-2] == "web" && pathArr[ln-1] == "plugin" {
-			webIndex = i
+		if pathArr[2]+"/"+pathArr[3] == `web/plugin` && len(webPlugin) == 0 {
+			webPlugin = path.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
 		}
 	}
-	if webIndex == -1 && serverIndex == -1 {
+	if len(serverPlugin) == 0 && len(webPlugin) == 0 {
 		zap.L().Error("非标准插件，请按照文档自动迁移使用")
 		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
 	}
 
-	if webIndex != -1 {
-		err = installation(paths[webIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+	if len(serverPlugin) != 0 {
+		err = installation(serverPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
 	}
 
-	if serverIndex != -1 {
-		err = installation(paths[serverIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+	if len(webPlugin) != 0 {
+		err = installation(webPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+		if err != nil {
+			return webIndex, serverIndex, err
+		}
 	}
-	return webIndex, serverIndex, err
+
+	return 1, 1, err
 }
 
 func installation(path string, formPath string, toPath string) error {

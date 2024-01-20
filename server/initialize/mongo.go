@@ -54,8 +54,9 @@ func (m *mongo) Initialization() error {
 		SocketTimeoutMS:  &global.GVA_CONFIG.Mongo.SocketTimeoutMs,
 		ConnectTimeoutMS: &global.GVA_CONFIG.Mongo.ConnectTimeoutMs,
 		Auth: &qmgo.Credential{
-			Username: global.GVA_CONFIG.Mongo.Username,
-			Password: global.GVA_CONFIG.Mongo.Password,
+			Username:   global.GVA_CONFIG.Mongo.Username,
+			Password:   global.GVA_CONFIG.Mongo.Password,
+			AuthSource: global.GVA_CONFIG.Mongo.AuthSource,
 		},
 	}, opts...)
 	if err != nil {

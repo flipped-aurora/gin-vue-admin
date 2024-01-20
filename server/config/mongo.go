@@ -11,6 +11,7 @@ type Mongo struct {
 	Database         string       `json:"database" yaml:"database" mapstructure:"database"`                               // database name
 	Username         string       `json:"username" yaml:"username" mapstructure:"username"`                               // 用户名
 	Password         string       `json:"password" yaml:"password" mapstructure:"password"`                               // 密码
+	AuthSource       string       `json:"auth-source" yaml:"auth-source" mapstructure:"auth-source"`                      // 验证数据库
 	MinPoolSize      uint64       `json:"min-pool-size" yaml:"min-pool-size" mapstructure:"min-pool-size"`                // 最小连接池
 	MaxPoolSize      uint64       `json:"max-pool-size" yaml:"max-pool-size" mapstructure:"max-pool-size"`                // 最大连接池
 	SocketTimeoutMs  int64        `json:"socket-timeout-ms" yaml:"socket-timeout-ms" mapstructure:"socket-timeout-ms"`    // socket超时时间

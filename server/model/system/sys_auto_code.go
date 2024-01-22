@@ -23,7 +23,8 @@ type AutoCodeStruct struct {
 	GvaModel           bool     `json:"gvaModel"`           // 是否使用gva默认Model
 	Fields             []*Field `json:"fields"`
 	PrimaryField       *Field   `json:"primaryField"`
-	HasTimer           bool
+	HasTimer           bool     `json:"-"`
+	HasSearchTimer     bool     `json:"-"`
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`

@@ -2,7 +2,7 @@ package request
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	{{ if .HasTimer }}"time"{{ end }}
+	{{ if .HasSearchTimer }}"time"{{ end }}
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 

@@ -47,7 +47,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []{{.PrimaryField.FieldType}}{{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
 	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
@@ -87,9 +87,11 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
     var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
+{{- if .GvaModel }}
     if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
      db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
     }
+{{- end }}
         {{- range .Fields}}
             {{- if .FieldSearchType}}
                 {{- if or (eq .FieldType "string") (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "richtext") }}

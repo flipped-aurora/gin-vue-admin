@@ -7,8 +7,10 @@ import (
 )
 
 type {{.StructName}}Search struct{
-    StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
-    EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+    {{ if .GvaModel }}
+        StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
+        EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+    {{ end }}
     {{- range .Fields}}
         {{- if ne .FieldSearchType ""}}
             {{- if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}

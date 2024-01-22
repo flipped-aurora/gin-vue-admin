@@ -2,14 +2,15 @@
 package {{.Package}}
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	{{ if .GvaModel }}"github.com/flipped-aurora/gin-vue-admin/server/global"{{ end }}
 	{{ if .HasTimer }}"time"{{ end }}
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 
 // {{.Description}} 结构体  {{.StructName}}
 type {{.StructName}} struct {
-      global.GVA_MODEL {{- range .Fields}}
+{{ if .GvaModel }} global.GVA_MODEL {{ end }}
+      {{- range .Fields}}
             {{- if eq .FieldType "enum" }}
       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"column:{{.ColumnName}};type:enum({{.DataTypeLong}});comment:{{.Comment}};" {{- if .Require -}}binding:"required"{{- end -}}`
             {{- else if eq .FieldType "picture" }}

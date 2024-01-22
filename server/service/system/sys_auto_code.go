@@ -158,6 +158,21 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 			autoCode.HasFile = true
 			autoCode.NeedJSON = true
 		}
+
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
+		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
@@ -261,6 +276,20 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		if autoCode.Fields[i].FieldType == "file" {
 			autoCode.NeedJSON = true
 			autoCode.HasFile = true
+		}
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
 		}
 	}
 	// 增加判断: 重复创建struct

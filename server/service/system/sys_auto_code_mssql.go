@@ -45,8 +45,30 @@ func (s *autoCodeMssql) GetTables(businessDB string, dbName string) (data []resp
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodeMssql) GetColumn(businessDB string, tableName string, dbName string) (data []response.Column, err error) {
 	var entities []response.Column
-	sql := fmt.Sprintf(`select sc.name as column_name,st.name as data_type, sc.length as data_type_long
-	 from %s.DBO.syscolumns sc,systypes st where sc.xtype=st.xtype and st.usertype=0 and sc.id in (select id from %s.DBO.sysobjects where xtype='U' and name='%s');`, dbName, dbName, tableName)
+	sql := fmt.Sprintf(`
+SELECT 
+    sc.name AS column_name,
+    st.name AS data_type, 
+    sc.length AS data_type_long,
+    CASE 
+        WHEN pk.index_id IS NOT NULL THEN 1
+        ELSE 0
+    END AS primary_key
+FROM 
+    %s.DBO.syscolumns sc
+JOIN 
+    systypes st ON sc.xtype=st.xtype
+LEFT JOIN 
+    %s.DBO.sysobjects so ON so.name='%s' AND so.xtype='U'
+LEFT JOIN 
+    %s.DBO.sysindexes si ON si.id = so.id AND si.indid < 2
+LEFT JOIN 
+    %s.DBO.sysindexkeys sik ON sik.id = si.id AND sik.indid = si.indid AND sik.colid = sc.colid
+LEFT JOIN 
+    %s.DBO.syskeyconstraints pk ON pk.constid = sik.constid
+WHERE 
+    st.usertype=0 AND sc.id = so.id
+`, dbName, dbName, tableName, dbName, dbName, dbName)
 
 	if businessDB == "" {
 		err = global.GVA_DB.Raw(sql).Scan(&entities).Error

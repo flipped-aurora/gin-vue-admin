@@ -3,7 +3,7 @@ package {{.Package}}
 
 import (
 	{{ if .GvaModel }}"github.com/flipped-aurora/gin-vue-admin/server/global"{{ end }}
-	{{ if or .HasTimer .GvaModel }}"time"{{ end }}
+	{{ if or .HasTimer }}"time"{{ end }}
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 

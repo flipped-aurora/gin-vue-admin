@@ -20,8 +20,11 @@ type AutoCodeStruct struct {
 	AutoCreateResource bool     `json:"autoCreateResource"` // 是否自动创建资源标识
 	AutoMoveFile       bool     `json:"autoMoveFile"`       // 是否自动移动文件
 	BusinessDB         string   `json:"businessDB"`         // 业务数据库
-	Fields             []*Field `json:"fields,omitempty"`
-	HasTimer           bool
+	GvaModel           bool     `json:"gvaModel"`           // 是否使用gva默认Model
+	Fields             []*Field `json:"fields"`
+	PrimaryField       *Field   `json:"primaryField"`
+	HasTimer           bool     `json:"-"`
+	HasSearchTimer     bool     `json:"-"`
 	DictTypes          []string `json:"-"`
 	Package            string   `json:"package"`
 	PackageT           string   `json:"-"`
@@ -67,6 +70,7 @@ type Field struct {
 	ErrorText       string `json:"errorText"`       // 校验失败文字
 	Clearable       bool   `json:"clearable"`       // 是否可清空
 	Sort            bool   `json:"sort"`            // 是否增加排序
+	PrimaryKey      bool   `json:"primaryKey"`      // 是否主键
 }
 
 var ErrAutoMove error = errors.New("创建代码成功并移动文件成功")

@@ -2,13 +2,15 @@ package request
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
-	"time"
+	{{ if or .HasSearchTimer .GvaModel}}"time"{{ end }}
 	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 
 type {{.StructName}}Search struct{
-    StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
-    EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+    {{ if .GvaModel }}
+        StartCreatedAt *time.Time `json:"startCreatedAt" form:"startCreatedAt"`
+        EndCreatedAt   *time.Time `json:"endCreatedAt" form:"endCreatedAt"`
+    {{ end }}
     {{- range .Fields}}
         {{- if ne .FieldSearchType ""}}
             {{- if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}

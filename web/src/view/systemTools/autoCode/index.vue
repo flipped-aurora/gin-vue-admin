@@ -8,13 +8,13 @@
     <div class="gva-search-box">
       <el-collapse
         v-model="activeNames"
-        style="margin-bottom:12px"
+        class="mb-3"
       >
         <el-collapse-item name="1">
           <template #title>
-            <div :style="{fontSize:'16px',paddingLeft:'20px'}">
+            <div class="text-xl pl-4 flex items-center">
               点这里从现有数据库创建代码
-              <el-icon class="header-icon ">
+              <el-icon>
                 <pointer />
               </el-icon>
             </div>
@@ -42,7 +42,7 @@
               <el-select
                 v-model="dbform.businessDB"
                 clearable
-                style="width:194px"
+                class="w-56"
                 placeholder="选择业务库"
                 @change="getDbFunc"
               >
@@ -67,7 +67,7 @@
               <el-select
                 v-model="dbform.dbName"
                 clearable
-                style="width:194px"
+                class="w-56"
                 filterable
                 placeholder="请选择数据库"
                 @change="getTableFunc"
@@ -87,7 +87,7 @@
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
-                style="width:194px"
+                class="w-56"
                 filterable
                 placeholder="请选择表"
               >
@@ -186,7 +186,7 @@
         >
           <el-select
             v-model="form.package"
-            style="width:194px"
+            class="w-56"
           >
             <el-option
               v-for="item in pkgs"
@@ -219,7 +219,7 @@
           </template>
           <el-select
             v-model="form.businessDB"
-            style="width:194px"
+            class="w-56"
             placeholder="选择业务库"
           >
             <el-option
@@ -235,6 +235,21 @@
               </div>
             </el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item>
+          <template #label>
+            <el-tooltip
+              content="注：会自动在结构体global.Model其中包含主键和软删除相关操作配置"
+              placement="bottom"
+              effect="light"
+            >
+              <div> 使用GVA结构 <el-icon><QuestionFilled /></el-icon> </div>
+            </el-tooltip>
+          </template>
+          <el-checkbox
+            v-model="form.gvaModel"
+            @change="useGva"
+          />
         </el-form-item>
         <el-form-item>
           <template #label>
@@ -289,6 +304,17 @@
           label="序列"
           width="60"
         />
+
+        <el-table-column
+          align="left"
+          type="index"
+          label="主键"
+          width="60"
+        >
+          <template #default="{row}">
+            <el-checkbox v-model="row.primaryKey" />
+          </template>
+        </el-table-column>
         <el-table-column
           align="left"
           prop="fieldName"
@@ -547,12 +573,13 @@ import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi
 import { getDict } from '@/utils/dictionary'
 import { ref, getCurrentInstance, reactive, watch, toRaw } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 
 defineOptions({
   name: 'AutoCode'
 })
+const gormModelList = ['id', 'created_at', 'updated_at', 'deleted_at']
 
 const typeOptions = ref([
   {
@@ -644,6 +671,7 @@ const fieldTemplate = {
   require: false,
   sort: false,
   errorText: '',
+  primaryKey: false,
   clearable: true,
   fieldSearchType: '',
   dictType: ''
@@ -670,6 +698,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoMoveFile: true,
+  gvaModel: true,
   autoCreateResource: false,
   fields: []
 })
@@ -698,6 +727,26 @@ const dialogMiddle = ref({})
 const bk = ref({})
 const dialogFlag = ref(false)
 const previewFlag = ref(false)
+
+const useGva = (e) => {
+  if (e && form.value.fields.length) {
+    ElMessageBox.confirm(
+      '如果您开启GVA默认结构，会自动添加ID,CreatedAt,UpdatedAt,DeletedAt字段，此行为将自动清除您目前在下方创建的重名字段，是否继续？',
+      '注意',
+      {
+        confirmButtonText: '继续',
+        cancelButtonText: '取消',
+        type: 'warning',
+      }
+    )
+      .then(() => {
+        form.value.fields = form.value.fields.filter(item => !gormModelList.some(gormfd => gormfd === item.columnName))
+      })
+      .catch(() => {
+        form.value.gvaModel = false
+      })
+  }
+}
 
 const toLowerCaseFunc = (form, key) => {
   form[key] = toLowerCase(form[key])
@@ -772,6 +821,15 @@ const enterForm = async(isPreview) => {
     })
     return false
   }
+
+  if (!form.value.gvaModel && form.value.fields.every(item => !item.primaryKey)) {
+    ElMessage({
+      type: 'error',
+      message: '您至少需要创建一个主键才能保证自动化代码的可行性'
+    })
+    return false
+  }
+
   if (
     form.value.fields.some(item => item.fieldName === form.value.structName)
   ) {
@@ -875,7 +933,6 @@ const getTableFunc = async() => {
 }
 
 const getColumnFunc = async() => {
-  const gormModelList = ['id', 'created_at', 'updated_at', 'deleted_at']
   const res = await getColumn(dbform.value)
   if (res.code === 0) {
     let dbtype = ''
@@ -895,7 +952,7 @@ const getColumnFunc = async() => {
     form.value.fields = []
     res.data.columns &&
           res.data.columns.forEach(item => {
-            if (!gormModelList.some(gormfd => gormfd === item.columnName)) {
+            if (!form.value.gvaModel || (!gormModelList.some(gormfd => gormfd === item.columnName))) {
               const fbHump = toHump(item.columnName)
               form.value.fields.push({
                 fieldName: toUpperCase(fbHump),
@@ -903,6 +960,7 @@ const getColumnFunc = async() => {
                 fieldType: fdMap.value[item.dataType],
                 dataType: item.dataType,
                 fieldJson: fbHump,
+                primaryKey: item.primaryKey,
                 dataTypeLong: item.dataTypeLong && item.dataTypeLong.split(',')[0],
                 columnName: dbtype === 'oracle' ? item.columnName.toUpperCase() : item.columnName,
                 comment: item.columnComment,

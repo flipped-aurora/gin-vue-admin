@@ -137,6 +137,9 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
+			if autoCode.Fields[i].FieldSearchType != "" {
+				autoCode.HasSearchTimer = true
+			}
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
@@ -157,6 +160,21 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "file" {
 			autoCode.HasFile = true
 			autoCode.NeedJSON = true
+		}
+
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
 		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
@@ -241,6 +259,9 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
+			if autoCode.Fields[i].FieldSearchType != "" {
+				autoCode.HasSearchTimer = true
+			}
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
@@ -261,6 +282,20 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		if autoCode.Fields[i].FieldType == "file" {
 			autoCode.NeedJSON = true
 			autoCode.HasFile = true
+		}
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
 		}
 	}
 	// 增加判断: 重复创建struct

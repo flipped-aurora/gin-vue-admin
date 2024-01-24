@@ -738,9 +738,9 @@ const moveDownField = (index) => {
   form.value.fields.splice(index, 0, oldDownField)
 }
 
-const currentInstance = getCurrentInstance()
+const fieldDialogNode = ref(null)
 const enterDialog = () => {
-  currentInstance.refs.fieldDialogNode.fieldDialogFrom.validate(valid => {
+  fieldDialogNode.value.fieldDialogFrom.validate(valid => {
     if (valid) {
       dialogMiddle.value.fieldName = toUpperCase(
         dialogMiddle.value.fieldName

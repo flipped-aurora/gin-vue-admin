@@ -2,6 +2,7 @@
   <div>
     <div class="gva-search-box">
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline" :rules="searchRule" @keyup.enter="onSubmit">
+      {{- if .GvaModel }}
       <el-form-item label="创建日期" prop="createdAt">
       <template #label>
         <span>
@@ -15,6 +16,7 @@
        —
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
+      {{ end -}}
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
             <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
@@ -100,16 +102,18 @@
         style="width: 100%"
         tooltip-effect="dark"
         :data="tableData"
-        row-key="ID"
+        row-key="{{.PrimaryField.FieldJson}}"
         @selection-change="handleSelectionChange"
         {{- if .NeedSort}}
         @sort-change="sortChange"
         {{- end}}
         >
         <el-table-column type="selection" width="55" />
+        {{ if .GvaModel }}
         <el-table-column align="left" label="日期" width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
+        {{ end }}
         {{- range .Fields}}
         {{- if .DictType}}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
@@ -169,7 +173,7 @@
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
-        <el-table-column align="left" label="操作" min-width="120">
+        <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
             <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
                 <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
@@ -536,7 +540,7 @@ const deleteVisible = ref(false)
 
 // 多选删除
 const onDelete = async() => {
-      const ids = []
+      const {{.PrimaryField.FieldJson}}s = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
@@ -546,15 +550,15 @@ const onDelete = async() => {
       }
       multipleSelection.value &&
         multipleSelection.value.map(item => {
-          ids.push(item.ID)
+          {{.PrimaryField.FieldJson}}s.push(item.{{.PrimaryField.FieldJson}})
         })
-      const res = await delete{{.StructName}}ByIds({ ids })
+      const res = await delete{{.StructName}}ByIds({ {{.PrimaryField.FieldJson}}s })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
           message: '删除成功'
         })
-        if (tableData.value.length === ids.length && page.value > 1) {
+        if (tableData.value.length === {{.PrimaryField.FieldJson}}s.length && page.value > 1) {
           page.value--
         }
         deleteVisible.value = false
@@ -567,7 +571,7 @@ const type = ref('')
 
 // 更新行
 const update{{.StructName}}Func = async(row) => {
-    const res = await find{{.StructName}}({ ID: row.ID })
+    const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
     type.value = 'update'
     if (res.code === 0) {
         formData.value = res.data.re{{.Abbreviation}}
@@ -578,7 +582,7 @@ const update{{.StructName}}Func = async(row) => {
 
 // 删除行
 const delete{{.StructName}}Func = async (row) => {
-    const res = await delete{{.StructName}}({ ID: row.ID })
+    const res = await delete{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
@@ -608,7 +612,7 @@ const openDetailShow = () => {
 // 打开详情
 const getDetails = async (row) => {
   // 打开弹窗
-  const res = await find{{.StructName}}({ ID: row.ID })
+  const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
   if (res.code === 0) {
     formData.value = res.data.re{{.Abbreviation}}
     openDetailShow()

@@ -57,11 +57,11 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Context) {
-	id := c.Query("ID")
+	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")
 		{{- if .AutoCreateResource }}
     	userID := utils.GetUserID(c)
         {{- end }}
-	if err := {{.Abbreviation}}Service.Delete{{.StructName}}(id{{- if .AutoCreateResource -}},userID{{- end -}}); err != nil {
+	if err := {{.Abbreviation}}Service.Delete{{.StructName}}({{.PrimaryField.FieldJson}} {{- if .AutoCreateResource -}},userID{{- end -}}); err != nil {
         global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
@@ -75,15 +75,14 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}(c *gin.Con
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body request.IdsReq true "批量删除{{.Description}}"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
 // @Router /{{.Abbreviation}}/delete{{.StructName}}ByIds [delete]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gin.Context) {
-	ids := c.QueryArray("ids[]")
+	{{.PrimaryField.FieldJson}}s := c.QueryArray("{{.PrimaryField.FieldJson}}s[]")
     	{{- if .AutoCreateResource }}
     userID := utils.GetUserID(c)
         {{- end }}
-	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds(ids{{- if .AutoCreateResource }},userID{{- end }}); err != nil {
+	if err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s{{- if .AutoCreateResource }},userID{{- end }}); err != nil {
         global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
@@ -129,8 +128,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"查询成功"}"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
-	id := c.Query("ID")
-	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}(id); err != nil {
+	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")
+	if re{{.Abbreviation}}, err := {{.Abbreviation}}Service.Get{{.StructName}}({{.PrimaryField.FieldJson}}); err != nil {
         global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {

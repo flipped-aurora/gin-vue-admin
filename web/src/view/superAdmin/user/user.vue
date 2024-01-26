@@ -236,6 +236,11 @@
                 v-else
                 class="header-img-box"
               >从媒体库选择</div>
+              <ChooseImg
+                ref="chooseImg"
+                :target="userInfo"
+                :target-key="`headerImg`"
+              />
             </div>
           </el-form-item>
 
@@ -253,14 +258,8 @@
         </div>
       </template>
     </el-dialog>
-    <ChooseImg
-      ref="chooseImg"
-      :target="userInfo"
-      :target-key="`headerImg`"
-    />
   </div>
 </template>
-
 
 <script setup>
 

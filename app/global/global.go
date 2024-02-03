@@ -26,8 +26,8 @@ type aliyunOSSConfig struct {
 
 var AliyunOSS = aliyunOSSConfig{
 	Endpoint:        "oss-cn-guangzhou.aliyuncs.com",
-	AccessKeyId:     "LTAI5tPV5EHihghq4QMu6NRY",
-	AccessKeySecret: "49dUJAvg5P9yCGrlIBpUtXVo8c6Rcx",
+	AccessKeyId:     "",
+	AccessKeySecret: "",
 	BucketName:      "jk-competition",
 	BucketUrl:       "https://jk-competition.oss-cn-guangzhou.aliyuncs.com",
 	BasePath:        "picture",

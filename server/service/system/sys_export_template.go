@@ -134,7 +134,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 	for i, row := range rows {
 		for j, colCell := range row {
-			err := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", string('A'+j), i+1), colCell)
+			err := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", getColumnName(j), i+1), colCell)
 			if err != nil {
 				return nil, "", err
 			}
@@ -179,7 +179,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
 	for i := range tableTitle {
-		fErr := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", string('A'+i), 1), tableTitle[i])
+		fErr := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", getColumnName(i), 1), tableTitle[i])
 		if fErr != nil {
 			return nil, "", fErr
 		}
@@ -244,4 +244,14 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 		}
 		return nil
 	})
+}
+
+func getColumnName(n int) string {
+	columnName := ""
+	for n > 0 {
+		n--
+		columnName = string(rune('A'+n%26)) + columnName
+		n /= 26
+	}
+	return columnName
 }

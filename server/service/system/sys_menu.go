@@ -64,7 +64,7 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[st
 		btnMap[v.SysMenuID][v.SysBaseMenuBtn.Name] = authorityId
 	}
 	for _, v := range allMenus {
-		v.Btns = btnMap[v.ID]
+		v.Btns = btnMap[v.SysBaseMenu.ID]
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
 	return treeMap, err

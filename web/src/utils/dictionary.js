@@ -7,13 +7,20 @@ export const getDict = async(type) => {
 }
 
 //  字典文字展示方法
-export const showDictLabel = (dict, code) => {
+export const showDictLabel = (
+  dict,
+  code,
+  keyCode = 'value',
+  valueCode = 'label'
+) => {
   if (!dict) {
     return ''
   }
   const dictMap = {}
   dict.forEach(item => {
-    dictMap[item.value] = item.label
+    if (Reflect.has(item, keyCode) && Reflect.has(item, valueCode)) {
+      dictMap[item[keyCode]] = item[valueCode]
+    }
   })
-  return dictMap[code]
+  return Reflect.has(dictMap, code) ? dictMap[code] : ''
 }

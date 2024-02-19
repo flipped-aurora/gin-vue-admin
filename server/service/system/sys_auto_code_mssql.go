@@ -46,28 +46,28 @@ func (s *autoCodeMssql) GetTables(businessDB string, dbName string) (data []resp
 func (s *autoCodeMssql) GetColumn(businessDB string, tableName string, dbName string) (data []response.Column, err error) {
 	var entities []response.Column
 	sql := fmt.Sprintf(`
-SELECT 
+SELECT
     sc.name AS column_name,
-    st.name AS data_type, 
-    sc.length AS data_type_long,
-    CASE 
-        WHEN pk.index_id IS NOT NULL THEN 1
+    st.name AS data_type,
+    sc.max_length AS data_type_long,
+    CASE
+        WHEN pk.object_id IS NOT NULL THEN 1
         ELSE 0
     END AS primary_key
-FROM 
-    %s.DBO.syscolumns sc
-JOIN 
-    systypes st ON sc.xtype=st.xtype
-LEFT JOIN 
-    %s.DBO.sysobjects so ON so.name='%s' AND so.xtype='U'
-LEFT JOIN 
-    %s.DBO.sysindexes si ON si.id = so.id AND si.indid < 2
-LEFT JOIN 
-    %s.DBO.sysindexkeys sik ON sik.id = si.id AND sik.indid = si.indid AND sik.colid = sc.colid
-LEFT JOIN 
-    %s.DBO.syskeyconstraints pk ON pk.constid = sik.constid
-WHERE 
-    st.usertype=0 AND sc.id = so.id
+FROM
+    %s.sys.columns sc
+JOIN
+    sys.types st ON sc.user_type_id=st.user_type_id
+LEFT JOIN
+    %s.sys.objects so ON so.name='%s' AND so.type='U'
+LEFT JOIN
+    %s.sys.indexes si ON si.object_id = so.object_id AND si.is_primary_key = 1
+LEFT JOIN
+    %s.sys.index_columns sic ON sic.object_id = si.object_id AND sic.index_id = si.index_id AND sic.column_id = sc.column_id
+LEFT JOIN
+    %s.sys.key_constraints pk ON pk.object_id = si.object_id
+WHERE
+    st.is_user_defined=0 AND sc.object_id = so.object_id
 `, dbName, dbName, tableName, dbName, dbName, dbName)
 
 	if businessDB == "" {

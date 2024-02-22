@@ -141,7 +141,6 @@ export const useUserStore = defineStore('user', () => {
 
   watch(() => token.value, () => {
     window.localStorage.setItem('token', token.value)
-    cookie.set('x-token', token.value)
   })
 
   return {

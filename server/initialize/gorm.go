@@ -9,6 +9,7 @@ import (
 
 	"go.uber.org/zap"
 	"gorm.io/gorm"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
 )
 
 func Gorm() *gorm.DB {
@@ -50,7 +51,7 @@ func RegisterTables() {
 		example.ExaFile{},
 		example.ExaCustomer{},
 		example.ExaFileChunk{},
-		example.ExaFileUploadAndDownload{},
+		example.ExaFileUploadAndDownload{}, cinema.CinemaFilm{}, cinema.CinemaOrder{}, cinema.CinemaSeat{},
 	)
 	if err != nil {
 		global.GVA_LOG.Error("register table failed", zap.Error(err))

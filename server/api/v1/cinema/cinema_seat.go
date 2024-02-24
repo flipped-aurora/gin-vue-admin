@@ -2,7 +2,6 @@ package cinema
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
 	cinemaReq "github.com/flipped-aurora/gin-vue-admin/server/model/cinema/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
@@ -21,7 +20,7 @@ var cinemaSeatService = service.ServiceGroupApp.CinemaServiceGroup.CinemaSeatSer
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body cinema.CinemaSeat true "创建cinemaSeat表"
+// @Param data body cinemaReq.CinemaSeatCreate true "创建cinemaSeat表"
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /cinemaSeat/createCinemaSeat [post]
 func (cinemaSeatApi *CinemaSeatApi) CreateCinemaSeat(c *gin.Context) {
@@ -34,7 +33,7 @@ func (cinemaSeatApi *CinemaSeatApi) CreateCinemaSeat(c *gin.Context) {
 
 	if err := cinemaSeatService.CreateCinemaSeat(&cinemaSeat); err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
-		response.FailWithMessage("创建失败", c)
+		response.FailWithMessage("创建失败:"+err.Error(), c)
 	} else {
 		response.OkWithMessage("创建成功", c)
 	}
@@ -56,49 +55,6 @@ func (cinemaSeatApi *CinemaSeatApi) DeleteCinemaSeat(c *gin.Context) {
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
-	}
-}
-
-// DeleteCinemaSeatByIds 批量删除cinemaSeat表
-// @Tags CinemaSeat
-// @Summary 批量删除cinemaSeat表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"批量删除成功"}"
-// @Router /cinemaSeat/deleteCinemaSeatByIds [delete]
-func (cinemaSeatApi *CinemaSeatApi) DeleteCinemaSeatByIds(c *gin.Context) {
-	IDs := c.QueryArray("IDs[]")
-	if err := cinemaSeatService.DeleteCinemaSeatByIds(IDs); err != nil {
-		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
-		response.FailWithMessage("批量删除失败", c)
-	} else {
-		response.OkWithMessage("批量删除成功", c)
-	}
-}
-
-// UpdateCinemaSeat 更新cinemaSeat表
-// @Tags CinemaSeat
-// @Summary 更新cinemaSeat表
-// @Security ApiKeyAuth
-// @accept application/json
-// @Produce application/json
-// @Param data body cinema.CinemaSeat true "更新cinemaSeat表"
-// @Success 200 {string} string "{"success":true,"data":{},"msg":"更新成功"}"
-// @Router /cinemaSeat/updateCinemaSeat [put]
-func (cinemaSeatApi *CinemaSeatApi) UpdateCinemaSeat(c *gin.Context) {
-	var cinemaSeat cinema.CinemaSeat
-	err := c.ShouldBindJSON(&cinemaSeat)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-
-	if err := cinemaSeatService.UpdateCinemaSeat(cinemaSeat); err != nil {
-		global.GVA_LOG.Error("更新失败!", zap.Error(err))
-		response.FailWithMessage("更新失败", c)
-	} else {
-		response.OkWithMessage("更新成功", c)
 	}
 }
 

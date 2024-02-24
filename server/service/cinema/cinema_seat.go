@@ -1,6 +1,7 @@
 package cinema
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
 	cinemaReq "github.com/flipped-aurora/gin-vue-admin/server/model/cinema/request"
@@ -13,11 +14,11 @@ type CinemaSeatService struct {
 // CreateCinemaSeat 创建cinemaSeat表记录
 func (cinemaSeatService *CinemaSeatService) CreateCinemaSeat(req *cinemaReq.CinemaSeatCreate) (err error) {
 	// 判断是否有重复数据
+	tx := global.GVA_DB
 	for _, v := range req.Positions {
 		var count int64
-		var seat cinema.CinemaSeat
-		err = global.GVA_DB.Model(&seat).Where("film_id = ? AND date = ? AND position = ?", req.FilmId, req.Date, v).Count(&count).Error
-		if err == nil {
+		err = tx.Model(cinema.CinemaSeat{}).Where("film_id = ? AND date = ? AND position = ?", req.FilmId, req.Date, v).Count(&count).Error
+		if err != nil {
 			return err
 		}
 		if count > 0 {
@@ -26,11 +27,11 @@ func (cinemaSeatService *CinemaSeatService) CreateCinemaSeat(req *cinemaReq.Cine
 		}
 	}
 	var film cinema.CinemaFilm
-	err = global.GVA_DB.First(&film, req.FilmId).Error
+	err = tx.First(&film, req.FilmId).Error
 	if err != nil {
 		return err
 	}
-	tx := global.GVA_DB.Begin()
+	tx = tx.Begin()
 	defer func() {
 		if err != nil {
 			tx.Rollback()
@@ -43,15 +44,14 @@ func (cinemaSeatService *CinemaSeatService) CreateCinemaSeat(req *cinemaReq.Cine
 			FilmId:   &req.FilmId,
 			Date:     req.Date,
 			Position: v,
-			Status:   new(bool),
 		}
-		err = tx.Create(&seat).Error
+		err := tx.Create(&seat).Error
 		if err != nil {
 			return err
 		}
 		filmId := int(film.ID)
 		seatId := int(seat.ID)
-		insertOrder := &cinema.CinemaOrder{
+		insertOrder := cinema.CinemaOrder{
 			FilmId:    &filmId,
 			FilmHall:  film.Hall,
 			FilmSeat:  v,
@@ -60,31 +60,25 @@ func (cinemaSeatService *CinemaSeatService) CreateCinemaSeat(req *cinemaReq.Cine
 			PlayTime:  film.PlayTime,
 			FilmPrice: film.Price,
 			SeatId:    &seatId,
-			Status:    new(bool),
+			Status:    1,
 		}
-		err = tx.Create(insertOrder).Error
+		err = tx.Create(&insertOrder).Error
 		if err != nil {
 			return err
 		}
 	}
-
-	return err
+	return nil
 }
 
 // DeleteCinemaSeat 删除cinemaSeat表记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (cinemaSeatService *CinemaSeatService) DeleteCinemaSeat(ID string) (err error) {
-	tx := global.GVA_DB.Begin()
-	defer func() {
-		if err != nil {
-			tx.Rollback()
-		} else {
-			tx.Commit()
-		}
-	}()
-
-	err = tx.Delete(&cinema.CinemaSeat{}, "id = ?", ID).Error
-	err = tx.Model(&cinema.CinemaOrder{}).Where("seat_id = ? ", ID).Update("status", 2).Error
+	fmt.Println(ID)
+	err = global.GVA_DB.Delete(&cinema.CinemaSeat{}, "id = ?", ID).Error
+	if err != nil {
+		return err
+	}
+	err = global.GVA_DB.Model(&cinema.CinemaOrder{}).Where("seat_id = ? ", ID).Update("status", 2).Error
 	return err
 }
 
@@ -92,13 +86,6 @@ func (cinemaSeatService *CinemaSeatService) DeleteCinemaSeat(ID string) (err err
 // Author [piexlmax](https://github.com/piexlmax)
 func (cinemaSeatService *CinemaSeatService) DeleteCinemaSeatByIds(IDs []string) (err error) {
 	err = global.GVA_DB.Delete(&[]cinema.CinemaSeat{}, "id in ?", IDs).Error
-	return err
-}
-
-// UpdateCinemaSeat 更新cinemaSeat表记录
-// Author [piexlmax](https://github.com/piexlmax)
-func (cinemaSeatService *CinemaSeatService) UpdateCinemaSeat(cinemaSeat cinema.CinemaSeat) (err error) {
-	err = global.GVA_DB.Save(&cinemaSeat).Error
 	return err
 }
 
@@ -130,6 +117,6 @@ func (cinemaSeatService *CinemaSeatService) GetCinemaSeatInfoList(info cinemaReq
 		db = db.Limit(limit).Offset(offset)
 	}
 
-	err = db.Find(&cinemaSeats).Error
+	err = db.Order("id DESC").Find(&cinemaSeats).Error
 	return cinemaSeats, total, err
 }

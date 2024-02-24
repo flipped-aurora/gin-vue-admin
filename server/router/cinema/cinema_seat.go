@@ -17,11 +17,9 @@ func (s *CinemaSeatRouter) InitCinemaSeatRouter(Router *gin.RouterGroup) {
 	{
 		cinemaSeatRouter.POST("createCinemaSeat", cinemaSeatApi.CreateCinemaSeat)   // 新建cinemaSeat表
 		cinemaSeatRouter.DELETE("deleteCinemaSeat", cinemaSeatApi.DeleteCinemaSeat) // 删除cinemaSeat表
-		cinemaSeatRouter.DELETE("deleteCinemaSeatByIds", cinemaSeatApi.DeleteCinemaSeatByIds) // 批量删除cinemaSeat表
-		cinemaSeatRouter.PUT("updateCinemaSeat", cinemaSeatApi.UpdateCinemaSeat)    // 更新cinemaSeat表
 	}
 	{
-		cinemaSeatRouterWithoutRecord.GET("findCinemaSeat", cinemaSeatApi.FindCinemaSeat)        // 根据ID获取cinemaSeat表
-		cinemaSeatRouterWithoutRecord.GET("getCinemaSeatList", cinemaSeatApi.GetCinemaSeatList)  // 获取cinemaSeat表列表
+		cinemaSeatRouterWithoutRecord.GET("findCinemaSeat", cinemaSeatApi.FindCinemaSeat)       // 根据ID获取cinemaSeat表
+		cinemaSeatRouterWithoutRecord.GET("getCinemaSeatList", cinemaSeatApi.GetCinemaSeatList) // 获取cinemaSeat表列表
 	}
 }

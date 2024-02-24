@@ -69,6 +69,6 @@ func (cinemaOrderService *CinemaOrderService) GetCinemaOrderInfoList(info cinema
 		db = db.Limit(limit).Offset(offset)
 	}
 
-	err = db.Find(&cinemaOrders).Error
+	err = db.Order("id desc").Find(&cinemaOrders).Error
 	return cinemaOrders, total, err
 }

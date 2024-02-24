@@ -1,10 +1,12 @@
 <template>
   <div>
     <div class="gva-form-box">
-      <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
-        <el-form-item label="影厅:" prop="hall">
-          <el-input v-model.number="formData.hall" :clearable="true" placeholder="请输入" />
-       </el-form-item>
+      <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="100px">
+       <el-form-item label="影厅1" prop="hall">
+          <el-select v-model="formData.hall" placeholder="选择影厅" >
+              <el-option v-for="dict in hallOptions" :key="dict.value" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
         <el-form-item label="电影名字:" prop="name">
           <el-input v-model="formData.name" :clearable="true" placeholder="请输入" />
        </el-form-item>
@@ -12,7 +14,7 @@
           <el-input-number v-model="formData.price" :precision="2" :clearable="true"></el-input-number>
        </el-form-item>
         <el-form-item label="播放时间:" prop="playTime">
-          <el-date-picker v-model="formData.playTime" type="date" placeholder="选择日期" :clearable="true"></el-date-picker>
+          <el-date-picker v-model="formData.playTime" type="date" placeholder="选择日期" :format="'HH:mm'" value-format="HH:mm:ss"  :clearable="true"></el-date-picker>
        </el-form-item>
         <el-form-item label="电影票类型:" prop="type">
           <el-input v-model="formData.type" :clearable="true" placeholder="请输入" />

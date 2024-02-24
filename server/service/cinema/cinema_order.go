@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
 	cinemaReq "github.com/flipped-aurora/gin-vue-admin/server/model/cinema/request"
+	"time"
 )
 
 type CinemaOrderService struct {
@@ -71,4 +72,19 @@ func (cinemaOrderService *CinemaOrderService) GetCinemaOrderInfoList(info cinema
 
 	err = db.Order("id desc").Find(&cinemaOrders).Error
 	return cinemaOrders, total, err
+}
+
+// GetCinemaOrderStatistics 获取cinemaOrder
+func (cinemaOrderService *CinemaOrderService) GetCinemaOrderStatistics() (cinemaOrderStatistics []cinema.StatisticsOrder, err error) {
+	db := global.GVA_DB.Model(&cinema.CinemaOrder{})
+	var cinemaOrderStats []cinema.StatisticsOrder // 最近一个月的订单统计
+	// 查询最近一个月的订单统计
+	err = db.Select("date(created_at) as date, sum(film_price) as totalPrice, count(*) as totalCount").
+		Where("created_at >= ?", time.Now().AddDate(0, 0, -30)).
+		Group("date(created_at)").Find(&cinemaOrderStats).Error
+
+	if err != nil {
+		return nil, err
+	}
+	return cinemaOrderStats, nil
 }

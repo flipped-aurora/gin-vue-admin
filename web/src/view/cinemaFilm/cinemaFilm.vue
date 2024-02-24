@@ -50,28 +50,19 @@
       <el-table ref="multipleTable" style="width: 100%" tooltip-effect="dark" :data="tableData" row-key="ID"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="55" />
-
-        <!-- <el-table-column align="left" label="日期" width="180">
-          <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
-        </el-table-column> -->
-
-        <el-table-column align="left" label="影厅" prop="hall" width="120" />
-        <el-table-column align="left" label="电影名字" prop="name" width="120" />
-        <el-table-column align="left" label="价格" prop="price" width="120" />
-        <el-table-column align="left" label="播放时间" width="180" >
+        <el-table-column align="center" label="影厅" prop="hall" width="120" />
+        <el-table-column align="center" label="电影名字" prop="name" width="120" />
+        <el-table-column align="center" label="价格" prop="price" width="120" />
+        <el-table-column align="center" label="播放时间" width="180">
           <template #default="scope">{{ scope.row.playTime }}</template>
         </el-table-column>
-        <el-table-column align="left" label="电影票类型" prop="type" width="120" />
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+        <el-table-column align="center" label="电影票类型" prop="type" width="120" />
+        <el-table-column align="center" label="操作" fixed="right" min-width="240">
           <template #default="scope">
-            <!-- <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
-              <el-icon style="margin-right: 5px">
-                <InfoFilled />
-              </el-icon>
-              查看详情
-            </el-button> -->
             <el-button type="primary" link icon="edit" class="table-button"
               @click="updateCinemaFilmFunc(scope.row)">变更</el-button>
+            <el-button type="primary" link icon="edit" class="table-button"
+              @click="copyCinemaFilmFunc(scope.row)">复制</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
           </template>
         </el-table-column>
@@ -82,7 +73,7 @@
           @size-change="handleSizeChange" />
       </div>
     </div>
-    
+
     <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type === 'create' ? '添加' : '修改'"
       destroy-on-close>
       <el-scrollbar height="500px">
@@ -112,29 +103,6 @@
           <el-button type="primary" @click="enterDialog">确 定</el-button>
         </div>
       </template>
-    </el-dialog>
-
-    <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情"
-      destroy-on-close>
-      <el-scrollbar height="550px">
-        <el-descriptions column="1" border>
-          <el-descriptions-item label="影厅">
-            {{ formData.hall }}
-          </el-descriptions-item>
-          <el-descriptions-item label="电影名字">
-            {{ formData.name }}
-          </el-descriptions-item>
-          <el-descriptions-item label="价格">
-            {{ formData.price }}
-          </el-descriptions-item>
-          <el-descriptions-item label="播放时间">
-            {{  forformData.playTime }}
-          </el-descriptions-item>
-          <el-descriptions-item label="电影票类型">
-            {{ formData.type }}
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-scrollbar>
     </el-dialog>
   </div>
 </template>
@@ -269,7 +237,6 @@ const setOptions = async () => {
 // 获取需要的字典 可能为空 按需保留
 setOptions()
 
-
 // 多选数据
 const multipleSelection = ref([])
 // 多选
@@ -287,7 +254,6 @@ const deleteRow = (row) => {
     deleteCinemaFilmFunc(row)
   })
 }
-
 
 // 批量删除控制标记
 const deleteVisible = ref(false)
@@ -333,6 +299,14 @@ const updateCinemaFilmFunc = async (row) => {
   }
 }
 
+const copyCinemaFilmFunc = async (row) => {
+  const res = await findCinemaFilm({ ID: row.ID })
+  type.value = 'create'
+  if (res.code === 0) {
+    formData.value = res.data.recinemaFilm
+    dialogFormVisible.value = true
+  }
+}
 
 // 删除行
 const deleteCinemaFilmFunc = async (row) => {
@@ -352,41 +326,6 @@ const deleteCinemaFilmFunc = async (row) => {
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
 
-
-// 查看详情控制标记
-const detailShow = ref(false)
-
-
-// 打开详情弹窗
-const openDetailShow = () => {
-  detailShow.value = true
-}
-
-
-// 打开详情
-const getDetails = async (row) => {
-  // 打开弹窗
-  const res = await findCinemaFilm({ ID: row.ID })
-  if (res.code === 0) {
-    formData.value = res.data.recinemaFilm
-    openDetailShow()
-  }
-}
-
-
-// 关闭详情弹窗
-const closeDetailShow = () => {
-  detailShow.value = false
-  formData.value = {
-    hall: 0,
-    name: '',
-    price: 0,
-    playTime: new Date(),
-    type: '',
-  }
-}
-
-
 // 打开弹窗
 const openDialog = () => {
   type.value = 'create'
@@ -400,7 +339,7 @@ const closeDialog = () => {
     hall: 0,
     name: '',
     price: 0,
-    playTime: new Date(),
+    playTime: '',
     type: '',
   }
 }

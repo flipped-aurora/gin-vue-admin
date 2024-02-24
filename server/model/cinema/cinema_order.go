@@ -19,6 +19,12 @@ type CinemaOrder struct {
 	Status    int      `json:"status" form:"status" gorm:"column:status;comment:状态 1. 正常 0.退款;"`        //状态 1. 正常 0.退款
 }
 
+type StatisticsOrder struct {
+	TotalPrice float64 `json:"totalPrice" gorm:"column:totalPrice"`
+	Day        string  `json:"day" gorm:"column:date"`
+	TotalCount int     `json:"totalCount" gorm:"column:totalCount"`
+}
+
 // TableName cinemaOrder表 CinemaOrder自定义表名 cinema_order
 func (CinemaOrder) TableName() string {
 	return "cinema_order"

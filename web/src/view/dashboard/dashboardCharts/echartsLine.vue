@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard-line-box">
     <div class="dashboard-line-title">
-      访问趋势
+      购买统计图
     </div>
     <div
       ref="echart"
@@ -15,7 +15,7 @@ import { nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useWindowResize } from '@/hooks/use-windows-resize'
 var dataAxis = []
 for (var i = 1; i < 13; i++) {
-  dataAxis.push(`${i}月`)
+  dataAxis.push(`${i}天`)
 }
 var data = [
   220,

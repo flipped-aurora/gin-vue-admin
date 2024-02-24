@@ -14,6 +14,7 @@ func (s *CinemaOrderRouter) InitCinemaOrderRouter(Router *gin.RouterGroup) {
 	var cinemaOrderApi = v1.ApiGroupApp.CinemaApiGroup.CinemaOrderApi
 	{
 		cinemaOrderRouterWithoutRecord.GET("findCinemaOrder", cinemaOrderApi.FindCinemaOrder)       // 根据ID获取cinemaOrder表
+		cinemaOrderRouterWithoutRecord.GET("getStatistics", cinemaOrderApi.GetStatistics)           // 根据ID获取cinemaOrder表
 		cinemaOrderRouterWithoutRecord.GET("getCinemaOrderList", cinemaOrderApi.GetCinemaOrderList) // 获取cinemaOrder表列表
 	}
 }

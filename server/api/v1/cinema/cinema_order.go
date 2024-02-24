@@ -61,3 +61,20 @@ func (cinemaOrderApi *CinemaOrderApi) GetCinemaOrderList(c *gin.Context) {
 		}, "获取成功", c)
 	}
 }
+
+// GetStatistics 统计数据
+// @Tags CinemaOrder
+// @Summary cinemaOrder表统计数据
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /cinemaOrder/getStatistics [get]
+func (cinemaOrderApi *CinemaOrderApi) GetStatistics(c *gin.Context) {
+	if data, err := cinemaOrderService.GetCinemaOrderStatistics(); err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithData(gin.H{"data": data}, c)
+	}
+}

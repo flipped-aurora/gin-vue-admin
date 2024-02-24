@@ -823,6 +823,24 @@ definitions:
         description: 密码
         type: string
     type: object
+  request.CinemaFilmCreate:
+    properties:
+      hall:
+        type: integer
+      name:
+        type: string
+      playTime:
+        type: string
+      price:
+        type: number
+      type:
+        type: string
+    required:
+    - hall
+    - name
+    - playTime
+    - price
+    type: object
   request.CinemaSeatCreate:
     properties:
       date:
@@ -2695,7 +2713,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/cinema.CinemaFilm'
+          $ref: '#/definitions/request.CinemaFilmCreate'
       produces:
       - application/json
       responses:
@@ -2965,6 +2983,22 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 分页获取cinemaOrder表列表
+      tags:
+      - CinemaOrder
+  /cinemaOrder/getStatistics:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: cinemaOrder表统计数据
       tags:
       - CinemaOrder
   /cinemaSeat/createCinemaSeat:

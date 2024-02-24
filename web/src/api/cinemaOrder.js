@@ -95,3 +95,19 @@ export const getCinemaOrderList = (params) => {
     params
   })
 }
+
+// @Tags CinemaOrder
+// @Summary cinemaOrder表统计数据
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query true "分页获取cinemaOrder表列表"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /cinemaOrder/getStatistics [get]
+export const getStatistics = (params) => {
+  return service({
+    url: '/cinemaOrder/getStatistics',
+    method: 'get',
+    params
+  })
+}

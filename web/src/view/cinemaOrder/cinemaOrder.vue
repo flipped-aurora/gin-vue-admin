@@ -34,15 +34,15 @@
     </div>
     <div class="gva-table-box">
       <el-table ref="multipleTable" style="width: 100%" tooltip-effect="dark" :data="tableData">
-        <el-table-column align="left" label="电影" prop="filmName" width="120" />
-        <el-table-column align="left" label="价格" prop="filmPrice" width="120" />
-        <el-table-column align="left" label="收入|退款" prop="status" width="120">
+        <el-table-column align="center" label="电影" prop="filmName" width="120" />
+        <el-table-column align="center" label="价格" prop="filmPrice" width="120" />
+        <el-table-column align="center" label="收入|退款" prop="status" width="120">
           <template #default="scope">{{ scope.row.status == 1 ? "收入" : "退款" }}</template>
         </el-table-column>
-        <el-table-column align="left" label="打印时间" width="180">
+        <el-table-column align="center" label="打印时间" width="180">
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
-        <el-table-column align="left" label="操作" fixed="right" min-width="240">
+        <el-table-column align="center" label="操作" fixed="right" min-width="240">
           <template #default="scope">
             <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
               <el-icon style="margin-right: 5px">
@@ -65,19 +65,19 @@
       destroy-on-close>
       <el-scrollbar height="550px">
         <el-descriptions column="1" border>
-          <el-descriptions-item label="座位ID">
+          <!-- <el-descriptions-item label="座位ID">
             {{ formData.seatId }}
-          </el-descriptions-item>
-          <el-descriptions-item label="电影院">
+          </el-descriptions-item> -->
+          <!-- <el-descriptions-item label="电影">
             {{ formData.filmId }}
-          </el-descriptions-item>
+          </el-descriptions-item> -->
           <el-descriptions-item label="影厅">
-            {{ formData.filmHall }}
+            {{ formData.filmHall + "号厅" }}
           </el-descriptions-item>
           <el-descriptions-item label="选座">
             {{ formData.filmSeat }}
           </el-descriptions-item>
-          <el-descriptions-item label="电影价格">
+          <el-descriptions-item label="电影名称">
             {{ formData.filmName }}
           </el-descriptions-item>
           <el-descriptions-item label="电影类型">

@@ -11,7 +11,14 @@ type CinemaFilmService struct {
 
 // CreateCinemaFilm 创建cinemaFilm表记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (cinemaFilmService *CinemaFilmService) CreateCinemaFilm(cinemaFilm *cinema.CinemaFilm) (err error) {
+func (cinemaFilmService *CinemaFilmService) CreateCinemaFilm(req *cinemaReq.CinemaFilmCreate) (err error) {
+	cinemaFilm := &cinema.CinemaFilm{
+		Hall:     req.Hall,
+		Name:     req.Name,
+		Price:    req.Price,
+		PlayTime: req.PlayTime,
+		Type:     req.Type,
+	}
 	err = global.GVA_DB.Create(cinemaFilm).Error
 	return err
 }

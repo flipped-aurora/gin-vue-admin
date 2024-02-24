@@ -1803,7 +1803,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/cinema.CinemaFilm"
+                            "$ref": "#/definitions/request.CinemaFilmCreate"
                         }
                     }
                 ],
@@ -2221,6 +2221,33 @@ const docTemplate = `{
                         "in": "query"
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/cinemaOrder/getStatistics": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "CinemaOrder"
+                ],
+                "summary": "cinemaOrder表统计数据",
                 "responses": {
                     "200": {
                         "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
@@ -6906,6 +6933,32 @@ const docTemplate = `{
                 },
                 "password": {
                     "description": "密码",
+                    "type": "string"
+                }
+            }
+        },
+        "request.CinemaFilmCreate": {
+            "type": "object",
+            "required": [
+                "hall",
+                "name",
+                "playTime",
+                "price"
+            ],
+            "properties": {
+                "hall": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "playTime": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "type": {
                     "type": "string"
                 }
             }

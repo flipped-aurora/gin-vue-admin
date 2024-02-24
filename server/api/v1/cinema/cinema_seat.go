@@ -2,19 +2,18 @@ package cinema
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
-    cinemaReq "github.com/flipped-aurora/gin-vue-admin/server/model/cinema/request"
-    "github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-    "github.com/flipped-aurora/gin-vue-admin/server/service"
-    "github.com/gin-gonic/gin"
-    "go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
+	cinemaReq "github.com/flipped-aurora/gin-vue-admin/server/model/cinema/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 type CinemaSeatApi struct {
 }
 
 var cinemaSeatService = service.ServiceGroupApp.CinemaServiceGroup.CinemaSeatService
-
 
 // CreateCinemaSeat 创建cinemaSeat表
 // @Tags CinemaSeat
@@ -26,7 +25,7 @@ var cinemaSeatService = service.ServiceGroupApp.CinemaServiceGroup.CinemaSeatSer
 // @Success 200 {string} string "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router /cinemaSeat/createCinemaSeat [post]
 func (cinemaSeatApi *CinemaSeatApi) CreateCinemaSeat(c *gin.Context) {
-	var cinemaSeat cinema.CinemaSeat
+	var cinemaSeat cinemaReq.CinemaSeatCreate
 	err := c.ShouldBindJSON(&cinemaSeat)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -34,7 +33,7 @@ func (cinemaSeatApi *CinemaSeatApi) CreateCinemaSeat(c *gin.Context) {
 	}
 
 	if err := cinemaSeatService.CreateCinemaSeat(&cinemaSeat); err != nil {
-        global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)
 	} else {
 		response.OkWithMessage("创建成功", c)
@@ -53,7 +52,7 @@ func (cinemaSeatApi *CinemaSeatApi) CreateCinemaSeat(c *gin.Context) {
 func (cinemaSeatApi *CinemaSeatApi) DeleteCinemaSeat(c *gin.Context) {
 	ID := c.Query("ID")
 	if err := cinemaSeatService.DeleteCinemaSeat(ID); err != nil {
-        global.GVA_LOG.Error("删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
 	} else {
 		response.OkWithMessage("删除成功", c)
@@ -71,7 +70,7 @@ func (cinemaSeatApi *CinemaSeatApi) DeleteCinemaSeat(c *gin.Context) {
 func (cinemaSeatApi *CinemaSeatApi) DeleteCinemaSeatByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
 	if err := cinemaSeatService.DeleteCinemaSeatByIds(IDs); err != nil {
-        global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
+		global.GVA_LOG.Error("批量删除失败!", zap.Error(err))
 		response.FailWithMessage("批量删除失败", c)
 	} else {
 		response.OkWithMessage("批量删除成功", c)
@@ -96,7 +95,7 @@ func (cinemaSeatApi *CinemaSeatApi) UpdateCinemaSeat(c *gin.Context) {
 	}
 
 	if err := cinemaSeatService.UpdateCinemaSeat(cinemaSeat); err != nil {
-        global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
 		response.OkWithMessage("更新成功", c)
@@ -115,7 +114,7 @@ func (cinemaSeatApi *CinemaSeatApi) UpdateCinemaSeat(c *gin.Context) {
 func (cinemaSeatApi *CinemaSeatApi) FindCinemaSeat(c *gin.Context) {
 	ID := c.Query("ID")
 	if recinemaSeat, err := cinemaSeatService.GetCinemaSeat(ID); err != nil {
-        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
 		response.OkWithData(gin.H{"recinemaSeat": recinemaSeat}, c)
@@ -139,14 +138,14 @@ func (cinemaSeatApi *CinemaSeatApi) GetCinemaSeatList(c *gin.Context) {
 		return
 	}
 	if list, total, err := cinemaSeatService.GetCinemaSeatInfoList(pageInfo); err != nil {
-	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
-        response.FailWithMessage("获取失败", c)
-    } else {
-        response.OkWithDetailed(response.PageResult{
-            List:     list,
-            Total:    total,
-            Page:     pageInfo.Page,
-            PageSize: pageInfo.PageSize,
-        }, "获取成功", c)
-    }
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(response.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, "获取成功", c)
+	}
 }

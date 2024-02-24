@@ -71,14 +71,18 @@ func OperationRecord() gin.HandlerFunc {
 			Method: c.Request.Method,
 			Path:   c.Request.URL.Path,
 			Agent:  c.Request.UserAgent(),
-			Body:   string(body),
+			Body:   "",
 			UserID: userId,
 		}
 
 		// 上传文件时候 中间件日志进行裁断操作
 		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data") {
-			if len(record.Body) > bufferSize {
-				record.Body = "[文件]"
+			record.Body = "[文件]"
+		} else {
+			if len(body) > bufferSize {
+				record.Body = "[超出记录长度]"
+			} else {
+				record.Body = string(body)
 			}
 		}
 

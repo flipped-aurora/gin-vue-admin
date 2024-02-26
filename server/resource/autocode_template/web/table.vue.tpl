@@ -139,7 +139,7 @@
            <el-table-column label="{{.FieldDesc}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
-                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
+                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
                 </div>
               </template>
            </el-table-column>

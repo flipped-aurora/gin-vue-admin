@@ -103,6 +103,7 @@ func Routers() *gin.Engine {
 		cinemaRouter.InitCinemaFilmRouter(PrivateGroup)
 		cinemaRouter.InitCinemaOrderRouter(PrivateGroup)
 		cinemaRouter.InitCinemaSeatRouter(PrivateGroup)
+		cinemaRouter.InitCinemaStatisticsRouter(PrivateGroup)
 	}
 
 	global.GVA_LOG.Info("router register success")

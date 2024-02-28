@@ -4,4 +4,5 @@ type ServiceGroup struct {
 	CinemaFilmService
 	CinemaOrderService
 	CinemaSeatService
+	CinemaStatisticsService
 }

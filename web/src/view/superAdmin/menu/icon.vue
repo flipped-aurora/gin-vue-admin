@@ -1175,7 +1175,9 @@ const options = reactive([
 ])
 const metaData = ref(props.meta)
 if (!metaData.value.icon) {
-  metaData.value.icon = options[0].label
+  // metaData.value.icon = options[0].label
+  // 传参无icon则显示空即可，否则默认会加一个aim的icon
+  metaData.value.icon = ''
 }
 
 </script>

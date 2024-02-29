@@ -50,7 +50,7 @@
 
 <script setup>
 import { emitter } from '@/utils/bus.js'
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
@@ -296,6 +296,24 @@ const initPage = () => {
     const currentSearchParams = new URLSearchParams(data).toString()
     window.history.replaceState({}, '', `${currentUrl}?${currentSearchParams}`)
     sessionStorage.setItem('historys', JSON.stringify(historys.value))
+  })
+
+  emitter.on('switchTab', async(data) => {
+    const index = historys.value.findIndex((item) => item.name === data.name)
+    if (index < 0) {
+      return
+    }
+    for (const key in data.query) {
+      data.query[key] = String(data.query[key])
+    }
+    for (const key in data.params) {
+      data.query[key] = String(data.query[key])
+    }
+
+    historys.value[index].query = data.query || {}
+    historys.value[index].params = data.params || {}
+    await nextTick()
+    router.push(historys.value[index])
   })
   const initHistorys = [
     {

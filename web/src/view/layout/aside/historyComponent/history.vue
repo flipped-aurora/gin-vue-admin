@@ -10,9 +10,9 @@
     >
       <el-tab-pane
         v-for="item in historys"
-        :key="name(item)"
+        :key="getFmtString(item)"
         :label="item.meta.title"
-        :name="name(item)"
+        :name="getFmtString(item)"
         :tab="item"
         class="gva-tab"
       >
@@ -20,13 +20,13 @@
           <span
             :tab="item"
             :style="{
-              color: activeValue === name(item) ? userStore.activeColor : '#333',
+              color: activeValue === getFmtString(item) ? userStore.activeColor : '#333',
             }"
           ><i
              class="dot"
              :style="{
                backgroundColor:
-                 activeValue === name(item) ? userStore.activeColor : '#ddd',
+                 activeValue === getFmtString(item) ? userStore.activeColor : '#ddd',
              }"
            />
             {{ fmtTitle(item.meta.title,item) }}</span>
@@ -47,7 +47,6 @@
     </ul>
   </div>
 </template>
-
 
 <script setup>
 import { emitter } from '@/utils/bus.js'
@@ -72,12 +71,6 @@ const activeValue = ref('')
 const contextMenuVisible = ref(false)
 
 const userStore = useUserStore()
-
-const name = (item) => {
-  return (
-    item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
-  )
-}
 
 const left = ref(0)
 const top = ref(0)
@@ -280,7 +273,7 @@ watch(() => historys.value, () => {
 const initPage = () => {
   // 全局监听 关闭当前页面函数
   emitter.on('closeThisPage', () => {
-    removeTab(name(route))
+    removeTab(getFmtString(route))
   })
   // 全局监听 关闭所有页面函数
   emitter.on('closeAllPage', () => {

@@ -301,7 +301,7 @@ const initPage = () => {
     activeValue.value = getFmtString(historys.value[index])
     const currentUrl = window.location.href.split('?')[0]
     const currentSearchParams = new URLSearchParams(data).toString()
-    window.history.pushState({}, '', `${currentUrl}?${currentSearchParams}`)
+    window.history.replaceState({}, '', `${currentUrl}?${currentSearchParams}`)
     sessionStorage.setItem('historys', JSON.stringify(historys.value))
   })
   const initHistorys = [

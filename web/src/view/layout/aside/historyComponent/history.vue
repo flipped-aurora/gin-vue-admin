@@ -292,6 +292,18 @@ const initPage = () => {
   emitter.on('collapse', (data) => {
     isCollapse.value = data
   })
+
+  emitter.on('setQuery', (data) => {
+    const index = historys.value.findIndex(
+      (item) => getFmtString(item) === activeValue.value
+    )
+    historys.value[index].query = data
+    activeValue.value = getFmtString(historys.value[index])
+    const currentUrl = window.location.href.split('?')[0]
+    const currentSearchParams = new URLSearchParams(data).toString()
+    window.history.pushState({}, '', `${currentUrl}?${currentSearchParams}`)
+    sessionStorage.setItem('historys', JSON.stringify(historys.value))
+  })
   const initHistorys = [
     {
       name: defaultRouter.value,
@@ -302,6 +314,7 @@ const initPage = () => {
       params: {},
     },
   ]
+  setTab(route)
   historys.value =
       JSON.parse(sessionStorage.getItem('historys')) || initHistorys
   if (!window.sessionStorage.getItem('activeValue')) {
@@ -309,7 +322,6 @@ const initPage = () => {
   } else {
     activeValue.value = window.sessionStorage.getItem('activeValue')
   }
-  setTab(route)
   if (window.sessionStorage.getItem('needCloseAll') === 'true') {
     closeAll()
     window.sessionStorage.removeItem('needCloseAll')

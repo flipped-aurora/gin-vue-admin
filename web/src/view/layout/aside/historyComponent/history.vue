@@ -307,7 +307,7 @@ const initPage = () => {
       data.query[key] = String(data.query[key])
     }
     for (const key in data.params) {
-      data.query[key] = String(data.query[key])
+      data.params[key] = String(data.params[key])
     }
 
     historys.value[index].query = data.query || {}

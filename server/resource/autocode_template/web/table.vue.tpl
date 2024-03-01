@@ -452,7 +452,22 @@ const searchInfo = ref({})
 {{- if .NeedSort}}
 // 排序
 const sortChange = ({ prop, order }) => {
-  searchInfo.value.sort = prop
+  const sortMap = {
+    {{- range .Fields}}
+      {{- if and .Sort}}
+        {{- if not (eq .ColumnName "")}}
+            {{.FieldJson}}: '{{.ColumnName}}',
+        {{- end}}
+      {{- end}}
+    {{- end}}
+  }
+
+  let sort = sortMap[prop]
+  if(!sort){
+   sort = prop.replace(/[A-Z]/g, match => _${match.toLowerCase()})
+  }
+
+  searchInfo.value.sort = sort
   searchInfo.value.order = order
   getTableData()
 }

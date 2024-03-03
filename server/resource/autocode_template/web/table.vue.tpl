@@ -266,7 +266,7 @@
 
     <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情" destroy-on-close>
       <el-scrollbar height="550px">
-        <el-descriptions column="1" border>
+        <el-descriptions :column="1" border>
         {{- range .Fields}}
                 <el-descriptions-item label="{{ .FieldDesc }}">
                 {{- if .DictType}}

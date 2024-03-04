@@ -49,8 +49,7 @@ import {
 } from '@/api/cinemaFilm'
 
 // 全量引入格式化工具 请按需保留
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, watch } from 'vue'
 import SeatSelect from './cinemaSeatSelect.vue'
 
 defineOptions({
@@ -90,7 +89,6 @@ const getFilms = async () => {
   }
 }
 
-getFilms()
 // 监听影厅
 watch(() => searchInfo.value.hall, (v) => {
   filmOptions.value = []
@@ -106,11 +104,16 @@ const getSeats = async () => {
     seatInfo.value = seatList.data.list.map(item => {
       return item.position
     })
-    console.log('seatInfo', seatInfo.value)
   }
 }
 
 watch(() => searchInfo.value.filmId, (v) => {
+  if (v === '') return
+  getSeats()
+}, { immediate: true })
+
+watch(() => searchInfo.value.date, (v) => {
+  if (v === '') return
   getSeats()
 }, { immediate: true })
 

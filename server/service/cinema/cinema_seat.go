@@ -15,9 +15,11 @@ type CinemaSeatService struct {
 func (cinemaSeatService *CinemaSeatService) CreateCinemaSeat(req *cinemaReq.CinemaSeatCreate) (err error) {
 	// 判断是否有重复数据
 	tx := global.GVA_DB
+	// 日期格式化
+	date := req.Date.Format("2006-01-02")
 	for _, v := range req.Positions {
 		var count int64
-		err = tx.Model(cinema.CinemaSeat{}).Where("film_id = ? AND date = ? AND position = ?", req.FilmId, req.Date, v).Count(&count).Error
+		err = tx.Model(cinema.CinemaSeat{}).Where("film_id = ? AND date = ? AND position = ?", req.FilmId, date, v).Count(&count).Error
 		if err != nil {
 			return err
 		}
@@ -42,7 +44,7 @@ func (cinemaSeatService *CinemaSeatService) CreateCinemaSeat(req *cinemaReq.Cine
 	for _, v := range req.Positions {
 		seat := cinema.CinemaSeat{
 			FilmId:   &req.FilmId,
-			Date:     req.Date,
+			Date:     date,
 			Position: v,
 		}
 		err := tx.Create(&seat).Error
@@ -105,8 +107,15 @@ func (cinemaSeatService *CinemaSeatService) GetCinemaSeatInfoList(info cinemaReq
 	db := global.GVA_DB.Model(&cinema.CinemaSeat{})
 	var cinemaSeats []cinema.CinemaSeat
 	// 如果有条件搜索 下方会自动创建搜索语句
-	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+	if info.FilmId != 0 {
+		db = db.Where("film_id = ?", info.FilmId)
+	} else {
+		return cinemaSeats, total, err
+	}
+
+	if info.Date != nil {
+		date := info.Date.Format("2006-01-02")
+		db = db.Where("date = ?", date)
 	}
 	err = db.Count(&total).Error
 	if err != nil {

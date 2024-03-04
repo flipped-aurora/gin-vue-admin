@@ -111,7 +111,7 @@ watch(()=>props.seatInfo,(v)=>{
    const tempMap = seat[props.hallId]
    for (let i = 0; i < props.seatInfo.length; i++) {
     const [row, col] = props.seatInfo[i].split('-')
-    tempMap[row - 1][col - 1].status = 3
+    tempMap[row][col].status = 3
    }
    setSeatMap(tempMap)
 }, {immediate:true})

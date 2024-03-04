@@ -26,6 +26,7 @@
       <SeatSelect 
         :propFilmOptions="filmOptions"
          :filmId="searchInfo.filmId"
+         :seatInfo="seatInfo"
          :hallId="searchInfo.hall" 
          @printSeatSave="printSeatSave" 
          @printSeatDel="printSeatDel"/>
@@ -67,9 +68,11 @@ const hallOptions = ref([
 ])
 
 const filmOptions = ref([])
+const seatInfo = ref([])
 const elSearchFormRef = ref()
 const searchInfo = ref({
   date: new Date(),
+  filmId: '',
   hall: 1,
 })
 
@@ -92,16 +95,32 @@ getFilms()
 watch(() => searchInfo.value.hall, (v) => {
   filmOptions.value = []
   searchInfo.value.filmId = ''
+  seatInfo.value = []
   getFilms()
+}, { immediate: true })
+
+// 获取座位
+const getSeats = async () => {
+  const seatList = await getCinemaSeatList({ page: 1, pageSize: 100, ...searchInfo.value })
+  if (seatList.code === 0) {
+    seatInfo.value = seatList.data.list.map(item => {
+      return item.position
+    })
+    console.log('seatInfo', seatInfo.value)
+  }
+}
+
+watch(() => searchInfo.value.filmId, (v) => {
+  getSeats()
 }, { immediate: true })
 
 const printSeatSave = async (seats)=>{
   try {
     console.log('save_seats', seats)
-    const params={
-      filmId: searchInfo.value.film,
+    const params = {
+      filmId: searchInfo.value.filmId,
       date: searchInfo.value.date,
-      position: seats
+      positions: seats
     }
     await createCinemaSeat(params)
   } catch (error) {

@@ -54,6 +54,7 @@ import {
   hallSeat6,
   hallSeat7,
 } from './contant';
+
 import SingleSeat from './../../components/singleSeat/index.vue'
 import CoupleSeat from './../../components/coupleSeat/index.vue'
 import EasyPrint from './../../components/easyPrint/index.vue'
@@ -62,6 +63,7 @@ const { confirm } = Modal
 const props=defineProps<{
   filmId:any
   hallId:any
+  seatInfo: any
   propFilmOptions: any
 }>()
 
@@ -94,6 +96,7 @@ const setInfo = (val)=> info.value = val
 let tempTotalNum = parseInt(storage.get("totalPriceNum"));
 
 const emits = defineEmits(['printSeatSave', 'printSeatDel'])
+
 watch(()=>props.hallId,(v)=>{
   setHall(v)
 }, {immediate:true})
@@ -103,16 +106,26 @@ watch(()=>props.filmId,(v)=>{
 watch(()=>props.propFilmOptions,(v)=>{
   setFilmOptions(v)
 }, {immediate:true})
+watch(()=>props.seatInfo,(v)=>{
+   console.log(props.seatInfo)
+   const tempMap = seat[props.hallId]
+   for (let i = 0; i < props.seatInfo.length; i++) {
+    const [row, col] = props.seatInfo[i].split('-')
+    tempMap[row - 1][col - 1].status = 3
+   }
+   setSeatMap(tempMap)
+}, {immediate:true})
+
 const handleClickSingle = (indexRow: number, indexCol: number) => {
     if (!hall.value || !film.value) {
       message.info('请先选择电影场次！');
       return;
     }
+
     const tempMap = JSON.parse(JSON.stringify(seatMap.value));
     if (tempMap[indexRow][indexCol].status === 1) {
       tempMap[indexRow][indexCol].status = 2;
       setSeatMap(tempMap);
-storage.set(film.value, JSON.stringify(tempMap));
       return;
     }
     if (tempMap[indexRow][indexCol].status === 2) {
@@ -128,18 +141,18 @@ storage.set(film.value, JSON.stringify(tempMap));
       ).then(()=>{
         tempMap[indexRow][indexCol].status = 1;
           setSeatMap(tempMap);
-          storage.set(film.value, JSON.stringify(tempMap));
-        emits('printSeatDel', tempMap[indexRow][indexCol])
+          emits('printSeatDel', tempMap[indexRow][indexCol])
       });
     }
   };
 
   
   const handleAfterPrint = (seats: any[]) => {
-    emits('printSeatSave', seats)
+    var postions = seats.map((item) => {
+      return item[0] +  "-"  + item[1];
+    });
+    emits('printSeatSave', postions)
     let tempMap = JSON.parse(JSON.stringify(seatMap.value));
-    // 将 storage 中的数据 转成 number 类型
-    let tempTotalNum = parseInt(storage.get("totalPriceNum")) || 0;
     seats.forEach((seat) => {
       tempMap = tempMap.map((row, rowIndex) =>
         row.map((col, colIndex) => {
@@ -156,53 +169,32 @@ storage.set(film.value, JSON.stringify(tempMap));
       );
     });
     setSeatMap(tempMap);
-    tempTotalNum = tempTotalNum + seats.length;
-    setTotalNum(tempTotalNum);
-    storage.set("totalPriceNum", tempTotalNum);
-    storage.set(film, JSON.stringify(tempMap));
-
   }
 
-  const handleResetSeat = () => {
-    confirm(
-        '确认清除所有场次的已选座位吗？',
-        '提示',
-      ).then(()=>{
-        const storageList = storage.get('movieList');
-        if (!storageList) return;
-        const movieList = JSON.parse(storageList);
-        movieList.forEach((item: any) => {
-          const emptySeat = seat[item.hall];
-          storage.set(item.key, JSON.stringify(emptySeat));
-        });
-        setC((v) => v + 1);
-      });
-  }
-
-  watch(()=>c.value,()=>{
-    const storageList = storage.get('movieList');
-    if (!storageList) return;
-    const movieList = JSON.parse(storageList);
-    const fOptions: Record<string, any[]> = {};
-    movieList.forEach((item: any) => {
-      if (fOptions[item.hall]) {
-        fOptions[item.hall].push({
-          value: item.key,
-          label: `${item.name}  (${item.time})`,
-          info: item,
-        });
-      } else {
-        fOptions[item.hall] = [
-          {
-            value: item.key,
-            label: `${item.name}  (${item.time})`,
-            info: item,
-          },
-        ];
-      }
-    });
-    setFilmOptions(fOptions);
-  }, {immediate:true})
+  // watch(()=>c.value,()=>{
+  //   const storageList = storage.get('movieList');
+  //   if (!storageList) return;
+  //   const movieList = JSON.parse(storageList);
+  //   const fOptions: Record<string, any[]> = {};
+  //   movieList.forEach((item: any) => {
+  //     if (fOptions[item.hall]) {
+  //       fOptions[item.hall].push({
+  //         value: item.key,
+  //         label: `${item.name}  (${item.time})`,
+  //         info: item,
+  //       });
+  //     } else {
+  //       fOptions[item.hall] = [
+  //         {
+  //           value: item.key,
+  //           label: `${item.name}  (${item.time})`,
+  //           info: item,
+  //         },
+  //       ];
+  //     }
+  //   });
+  //   setFilmOptions(fOptions);
+  // }, {immediate:true})
 
   watch(()=>seatMap.value,()=>{
     const tempSelected: any[] = [];
@@ -222,7 +214,7 @@ storage.set(film.value, JSON.stringify(tempMap));
 
   watch(()=>[film.value, c.value],()=>{
     if (!hall.value) return;
-        if (film.value === '') {
+    if (film.value === '') {
       setSeatMap(seat[hall.value]);
     } else {
       if (filmOptions.value?.length) {
@@ -232,7 +224,6 @@ storage.set(film.value, JSON.stringify(tempMap));
       const hallSeat = JSON.parse(storage.get(film.value));
       setSeatMap(hallSeat);
       }
-
     }
   },{immediate:true})
 </script>

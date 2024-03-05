@@ -4,12 +4,12 @@
       <el-form ref="elSearchFormRef" :inline="true" :model="searchInfo" class="demo-form-inline">
         <el-form-item label="影厅" prop="hall" @click="getFilms">
           <el-select v-model="searchInfo.hall" placeholder="选择影厅" style="width: 200px;">
-            <el-option v-for="dict in hallOptions" :key="dict.value" :label="dict.label" :value="dict.value" />
+            <el-option v-for="dict in hallOptions" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
         <el-form-item label="电影" prop="filmId">
-          <el-select v-model="searchInfo.filmId" placeholder="选择电影" style="width: 200px;">
-            <el-option v-for="dict in filmOptions" :key="dict.value" :label="dict.label" :value="dict.value" />
+          <el-select v-model="searchInfo.filmId" placeholder="选择电影"  style="width: 200px;">
+            <el-option v-for="dict in filmOptions" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
         <!-- // 默认时间是当天 -->
@@ -23,13 +23,14 @@
       </el-form>
     </div>
     <div class="gva-table-box">
-      <SeatSelect 
+      <SeatSelect
         :propFilmOptions="filmOptions"
-         :filmId="searchInfo.filmId"
-         :seatInfo="seatInfo"
-         :hallId="searchInfo.hall" 
-         @printSeatSave="printSeatSave" 
-         @printSeatDel="printSeatDel"/>
+        :filmId="String(searchInfo.filmId)"
+        :seatInfo="seatInfo"
+        :hallId="searchInfo.hall" 
+        @printSeatSave="printSeatSave"
+        @printSeatDel="printSeatDel"
+      />
     </div>
   </div>
 </template>
@@ -38,9 +39,6 @@
 import {
   createCinemaSeat,
   deleteCinemaSeat,
-  deleteCinemaSeatByIds,
-  updateCinemaSeat,
-  findCinemaSeat,
   getCinemaSeatList
 } from '@/api/cinemaSeat'
 
@@ -101,6 +99,10 @@ watch(() => searchInfo.value.hall, (v) => {
 const getSeats = async () => {
   const seatList = await getCinemaSeatList({ page: 1, pageSize: 100, ...searchInfo.value })
   if (seatList.code === 0) {
+    if (seatList.data.list === null) {
+      seatInfo.value = []
+      return
+    }
     seatInfo.value = seatList.data.list.map(item => {
       return item.position
     })
@@ -121,7 +123,7 @@ const printSeatSave = async (seats)=>{
   try {
     console.log('save_seats', seats)
     const params = {
-      filmId: searchInfo.value.filmId,
+      filmId: searchInfo.value.film,
       date: searchInfo.value.date,
       positions: seats
     }

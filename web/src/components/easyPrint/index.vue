@@ -10,7 +10,6 @@ import {ElMessage as message} from 'element-plus'
 import ticketPanel from './panel';
 import converResDataToPrintData from './adapter';
 import * as print from 'vue-plugin-hiprint'
-console.log(print, 'ppp')
 const { hiprint } = print
 
 hiprint.init();

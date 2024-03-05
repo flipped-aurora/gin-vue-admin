@@ -11,7 +11,7 @@
 </template>
 <script lang='ts' setup>
 interface Props {
-  name: string;
+  name: Array<number>;
   status: string;
 }
 const props=defineProps<Props>()

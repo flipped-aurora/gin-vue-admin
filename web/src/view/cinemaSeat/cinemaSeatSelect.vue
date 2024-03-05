@@ -14,11 +14,11 @@
               ></SingleSeat>
             </el-col>
           </div>
-          <div v-else  @click="() => handleClickSingle(indexRow, indexCol)">
+          <div v-else @click="() => handleClickSingle(indexRow, indexCol)">
             <el-col>
               <CoupleSeat
                 :name="col.number"
-                :status="col.status"
+                :status="String(col.status)"
               ></CoupleSeat>
             </el-col>
           </div>
@@ -60,40 +60,34 @@ import CoupleSeat from './../../components/coupleSeat/index.vue'
 import EasyPrint from './../../components/easyPrint/index.vue'
 const { confirm } = Modal
 
-const props=defineProps<{
-  filmId:any
-  hallId:any
-  seatInfo: any
-  propFilmOptions: any
-}>()
+const props = defineProps({
+  filmId: String,
+  hallId: Number,
+  seatInfo: Object,
+  propFilmOptions: Array,
+});
 
 const hall = ref(1)
-const film = ref('')
+const filmId = ref('')
 const seatMap = ref([])
 const selectedSeat = ref([])
 const filmOptions = ref([])
-const totalNum = ref([])
-const c = ref(1)
 const info = ref({})
-  const seat = {
-    1: hallSeat1,
-    2: hallSeat2,
-    3: hallSeat3,
-    4: hallSeat4,
-    5: hallSeat5,
-    6: hallSeat6,
-    7: hallSeat7,
-  };
+const seat = {
+  1: hallSeat1,
+  2: hallSeat2,
+  3: hallSeat3,
+  4: hallSeat4,
+  5: hallSeat5,
+  6: hallSeat6,
+  7: hallSeat7,
+};
 const setHall = (val)=> hall.value = val
-const setFilm = (val)=> film.value = val
+const setFilmId = (val)=> filmId.value = val
 const setSeatMap = (val)=> seatMap.value = val
 const setSelectedSeats = (val)=> selectedSeat.value = val
 const setFilmOptions = (val)=> filmOptions.value = val
-const setTotalNum = (val)=> totalNum.value = val
-const setC = (val)=> c.value = val
 const setInfo = (val)=> info.value = val
-
-let tempTotalNum = parseInt(storage.get("totalPriceNum"));
 
 const emits = defineEmits(['printSeatSave', 'printSeatDel'])
 
@@ -101,28 +95,44 @@ watch(()=>props.hallId,(v)=>{
   setHall(v)
 }, {immediate:true})
 watch(()=>props.filmId,(v)=>{
-  setFilm(v)
+  setFilmId(v)
 }, {immediate:true})
 watch(()=>props.propFilmOptions,(v)=>{
   setFilmOptions(v)
 }, {immediate:true})
 watch(()=>props.seatInfo,(v)=>{
-   console.log(props.seatInfo)
-   const tempMap = seat[props.hallId]
-   for (let i = 0; i < props.seatInfo.length; i++) {
-    const [row, col] = props.seatInfo[i].split('-')
-    tempMap[row][col].status = 3
+  let tempMap = JSON.parse(JSON.stringify(seat[props.hallId])); 
+  for (let i = 0; i < props.seatInfo.length; i++) {
+    let [row, col] = props.seatInfo[i].split('-')
+    tempMap[row-1].forEach((item: any) => {
+       if (item.type === "single") {
+          if (item.number.toString() === col) {
+            item.status = 3
+          }
+       }
+       if (item.type === "couple") {
+         if (item.number.toString().includes(col)) {
+            item.status = 3
+         }
+       }
+     });
    }
    setSeatMap(tempMap)
+   if (filmId.value != "") {
+      let selectedFilmInfo = filmOptions.value.find(item => item.value.toString() === filmId.value);
+      if (selectedFilmInfo) {
+        setInfo(selectedFilmInfo)
+      }
+   }
 }, {immediate:true})
 
 const handleClickSingle = (indexRow: number, indexCol: number) => {
-    if (!hall.value || !film.value) {
+    if (!hall.value || !filmId.value) {
       message.info('请先选择电影场次！');
       return;
     }
 
-    const tempMap = JSON.parse(JSON.stringify(seatMap.value));
+    let tempMap = JSON.parse(JSON.stringify(seatMap.value));
     if (tempMap[indexRow][indexCol].status === 1) {
       tempMap[indexRow][indexCol].status = 2;
       setSeatMap(tempMap);
@@ -142,6 +152,8 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
         tempMap[indexRow][indexCol].status = 1;
           setSeatMap(tempMap);
           emits('printSeatDel', tempMap[indexRow][indexCol])
+      },() => {
+          console.log("取消打印")
       });
     }
   };
@@ -197,7 +209,7 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
   // }, {immediate:true})
 
   watch(()=>seatMap.value,()=>{
-    const tempSelected: any[] = [];
+    let tempSelected: any[] = [];
     seatMap.value.forEach((row, rowIndex) => {
       row.forEach((col) => {
         if (col.status === 2 && col.type === 'single') {
@@ -212,20 +224,20 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
     setSelectedSeats(tempSelected);
   })
 
-  watch(()=>[film.value, c.value],()=>{
-    if (!hall.value) return;
-    if (film.value === '') {
-      setSeatMap(seat[hall.value]);
-    } else {
-      if (filmOptions.value?.length) {
-      setInfo(
-        filmOptions.value?.filter((item) => item.value === film.value)?.[0].info,
-      );
-      const hallSeat = JSON.parse(storage.get(film.value));
-      setSeatMap(hallSeat);
-      }
-    }
-  },{immediate:true})
+  // watch(()=>[film.value, c.value],()=>{
+  //   if (!hall.value) return;
+  //   if (film.value === '') {
+  //     setSeatMap(seat[hall.value]);
+  //   } else {
+  //     if (filmOptions.value?.length) {
+  //     setInfo(
+  //       filmOptions.value?.filter((item) => item.value === film.value)?.[0].info,
+  //     );
+  //     const hallSeat = JSON.parse(storage.get(film.value));
+  //     setSeatMap(hallSeat);
+  //     }
+  //   }
+  // },{immediate:true})
 </script>
 <style lang='scss' scoped>
 .container {

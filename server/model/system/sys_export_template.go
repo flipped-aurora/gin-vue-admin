@@ -14,7 +14,7 @@ type SysExportTemplate struct {
 	TemplateInfo string      `json:"templateInfo" form:"templateInfo" gorm:"column:template_info;type:text;"` //模板信息
 	Limit        int         `json:"limit" form:"limit" gorm:"column:limit;comment:导出限制"`
 	Order        string      `json:"order" form:"order" gorm:"column:order;comment:排序"`
-	Conditions   []Condition `json:"condition" form:"condition" gorm:"foreignKey:TemplateID;references:TemplateID;comment:条件"`
+	Conditions   []Condition `json:"conditions" form:"conditions" gorm:"foreignKey:TemplateID;references:TemplateID;comment:条件"`
 }
 
 type Condition struct {
@@ -23,4 +23,8 @@ type Condition struct {
 	From       string `json:"from" form:"from" gorm:"column:from;comment:条件取的key"`
 	Column     string `json:"column" form:"column" gorm:"column:column;comment:作为查询条件的字段"`
 	Operator   string `json:"operator" form:"operator" gorm:"column:operator;comment:操作符"`
+}
+
+func (Condition) TableName() string {
+	return "sys_export_template_condition"
 }

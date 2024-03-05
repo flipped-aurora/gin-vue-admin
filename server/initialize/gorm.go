@@ -46,6 +46,7 @@ func RegisterTables() {
 		system.SysAuthorityBtn{},
 		system.SysAutoCode{},
 		system.SysExportTemplate{},
+		system.Condition{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

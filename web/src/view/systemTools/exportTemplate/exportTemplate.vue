@@ -169,15 +169,6 @@
             <el-button
               type="primary"
               link
-              class="table-button"
-              @click="getDetails(scope.row)"
-            >
-              <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
-              查看详情
-            </el-button>
-            <el-button
-              type="primary"
-              link
               icon="edit"
               class="table-button"
               @click="updateSysExportTemplateFunc(scope.row)"
@@ -254,14 +245,13 @@
             <el-input
               v-model="formData.templateInfo"
               type="textarea"
-              :rows="16"
+              :rows="12"
               :clearable="true"
               :placeholder="templatePlaceholder"
             />
           </el-form-item>
           <el-form-item
-            label="导出限制:"
-            prop="templateInfo"
+            label="最大导出条数:"
           >
             <el-input-number
               v-model="formData.limit"
@@ -272,7 +262,6 @@
           </el-form-item>
           <el-form-item
             label="排序条件:"
-            prop="templateInfo"
           >
             <el-input
               v-model="formData.order"
@@ -281,8 +270,45 @@
           </el-form-item>
           <el-form-item
             label="导出条件:"
-            prop="templateInfo"
-          />
+          >
+            <div
+              v-for="(condition,key) in formData.conditions"
+              :key="key"
+              class="flex gap-4 w-full mb-2"
+            >
+              <el-input
+                v-model="condition.from"
+                placeholder="需要从查询条件取的json key"
+              />
+              <el-input
+                v-model="condition.column"
+                placeholder="表对应的column"
+              />
+              <el-select
+                v-model="condition.operator"
+                placeholder="请选择查询条件"
+              >
+                <el-option
+                  v-for="item in typeSearchOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+              <el-button
+                type="danger"
+                icon="delete"
+                @click="() => formData.conditions.splice(key, 1)"
+              >删除</el-button>
+            </div>
+            <div class="flex justify-end w-full">
+              <el-button
+                type="primary"
+                icon="plus"
+                @click="addCondition"
+              >添加条件</el-button>
+            </div>
+          </el-form-item>
         </el-form>
       </el-scrollbar>
       <template #footer>
@@ -294,35 +320,6 @@
           >确 定</el-button>
         </div>
       </template>
-    </el-dialog>
-
-    <el-dialog
-      v-model="detailShow"
-      style="width: 800px"
-      lock-scroll
-      :before-close="closeDetailShow"
-      title="查看详情"
-      destroy-on-close
-    >
-      <el-scrollbar height="550px">
-        <el-descriptions
-          column="1"
-          border
-        >
-          <el-descriptions-item label="模板名称">
-            {{ formData.name }}
-          </el-descriptions-item>
-          <el-descriptions-item label="表名称">
-            {{ formData.tableName }}
-          </el-descriptions-item>
-          <el-descriptions-item label="模板标识">
-            {{ formData.templateID }}
-          </el-descriptions-item>
-          <el-descriptions-item label="模板信息">
-            {{ formData.templateInfo }}
-          </el-descriptions-item>
-        </el-descriptions>
-      </el-scrollbar>
     </el-dialog>
   </div>
 </template>
@@ -353,7 +350,8 @@ const templatePlaceholder = `模板信息格式：key标识数据库column列名
   "table_name2":"第二列",
   "table_name3":"第三列",
   "table_name4":"第四列",
-}`
+}
+`
 
 // 自动化生成的字典（可能为空）以及字段
 const formData = ref({
@@ -361,7 +359,49 @@ const formData = ref({
   tableName: '',
   templateID: '',
   templateInfo: '',
+  limit: 0,
+  order: '',
+  conditions: [],
 })
+
+const typeSearchOptions = ref([
+  {
+    label: '=',
+    value: '='
+  },
+  {
+    label: '<>',
+    value: '<>'
+  },
+  {
+    label: '>',
+    value: '>'
+  },
+  {
+    label: '<',
+    value: '<'
+  },
+  {
+    label: 'LIKE',
+    value: 'LIKE'
+  },
+  {
+    label: 'BETWEEN',
+    value: 'BETWEEN'
+  },
+  {
+    label: 'NOT BETWEEN',
+    value: 'NOT BETWEEN'
+  }
+])
+
+const addCondition = () => {
+  formData.value.conditions.push({
+    from: '',
+    column: '',
+    operator: ''
+  })
+}
 
 // 验证规则
 const rule = reactive({
@@ -545,6 +585,9 @@ const updateSysExportTemplateFunc = async(row) => {
   type.value = 'update'
   if (res.code === 0) {
     formData.value = res.data.resysExportTemplate
+    if (!formData.value.conditions) {
+      formData.value.conditions = []
+    }
     dialogFormVisible.value = true
   }
 }
@@ -567,35 +610,6 @@ const deleteSysExportTemplateFunc = async(row) => {
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
 
-// 查看详情控制标记
-const detailShow = ref(false)
-
-// 打开详情弹窗
-const openDetailShow = () => {
-  detailShow.value = true
-}
-
-// 打开详情
-const getDetails = async(row) => {
-  // 打开弹窗
-  const res = await findSysExportTemplate({ ID: row.ID })
-  if (res.code === 0) {
-    formData.value = res.data.resysExportTemplate
-    openDetailShow()
-  }
-}
-
-// 关闭详情弹窗
-const closeDetailShow = () => {
-  detailShow.value = false
-  formData.value = {
-    name: '',
-    tableName: '',
-    templateID: '',
-    templateInfo: '',
-  }
-}
-
 // 打开弹窗
 const openDialog = () => {
   type.value = 'create'
@@ -610,6 +624,9 @@ const closeDialog = () => {
     tableName: '',
     templateID: '',
     templateInfo: '',
+    limit: 0,
+    order: '',
+    conditions: [],
   }
 }
 // 弹窗确定
@@ -625,18 +642,30 @@ const enterDialog = async() => {
     return
   }
 
+  const reqData = JSON.parse(JSON.stringify(formData.value))
+  for (let i = 0; i < reqData.conditions.length; i++) {
+    if (!reqData.conditions[i].from || !reqData.conditions[i].column || !reqData.conditions[i].operator) {
+      ElMessage({
+        type: 'error',
+        message: '请填写完整的导出条件'
+      })
+      return
+    }
+    reqData.conditions[i].templateID = reqData.templateID
+  }
+
   elFormRef.value?.validate(async(valid) => {
     if (!valid) return
     let res
     switch (type.value) {
       case 'create':
-        res = await createSysExportTemplate(formData.value)
+        res = await createSysExportTemplate(reqData)
         break
       case 'update':
-        res = await updateSysExportTemplate(formData.value)
+        res = await updateSysExportTemplate(reqData)
         break
       default:
-        res = await createSysExportTemplate(formData.value)
+        res = await createSysExportTemplate(reqData)
         break
     }
     if (res.code === 0) {

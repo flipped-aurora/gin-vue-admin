@@ -29,6 +29,7 @@
             v-model="searchInfo.method"
             clearable
             placeholder="请选择"
+            class="w-40"
           >
             <el-option
               v-for="item in methodOptions"
@@ -111,6 +112,11 @@
             >刷新缓存</el-button>
           </template>
         </el-popover>
+
+        <ExportExcel
+          template-id="apis"
+          :condition="searchInfo"
+        />
       </div>
       <el-table
         :data="tableData"
@@ -287,6 +293,7 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { VideoCameraFilled } from '@element-plus/icons-vue'
 import { toDoc } from '@/utils/doc'
+import ExportExcel from '@/components/exportExcel/exportExcel.vue'
 
 defineOptions({
   name: 'Api',

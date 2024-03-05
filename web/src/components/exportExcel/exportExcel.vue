@@ -11,6 +11,10 @@ const props = defineProps({
   templateId: {
     type: String,
     required: true
+  },
+  condition: {
+    type: Object,
+    default: () => ({})
   }
 })
 
@@ -22,7 +26,11 @@ const exportExcelFunc = async() => {
     return
   }
   const baseUrl = import.meta.env.VITE_BASE_API
-  const url = `${baseUrl}/sysExportTemplate/exportExcel?templateID=${props.templateId}`
+  const params = Object.entries(props.condition)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&')
+  const url = `${baseUrl}/sysExportTemplate/exportExcel?templateID=${props.templateId}${params ? '&' + params : ''}`
+
   window.open(url, '_blank')
 }
 </script>

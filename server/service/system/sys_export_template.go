@@ -11,6 +11,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"mime/multipart"
+	"net/url"
 	"strings"
 )
 
@@ -41,14 +42,31 @@ func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplat
 // UpdateSysExportTemplate 更新导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
-	err = global.GVA_DB.Save(&sysExportTemplate).Error
-	return err
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		conditions := sysExportTemplate.Conditions
+		e := tx.Delete(&[]system.Condition{}, "template_id = ?", sysExportTemplate.TemplateID).Error
+		if e != nil {
+			return e
+		}
+		sysExportTemplate.Conditions = nil
+		e = tx.Updates(&sysExportTemplate).Error
+		if e != nil {
+			return e
+		}
+		if len(conditions) > 0 {
+			for i := range conditions {
+				conditions[i].ID = 0
+			}
+			e = tx.Create(&conditions).Error
+		}
+		return e
+	})
 }
 
 // GetSysExportTemplate 根据id获取导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplate(id uint) (sysExportTemplate system.SysExportTemplate, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&sysExportTemplate).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("Conditions").First(&sysExportTemplate).Error
 	return
 }
 
@@ -88,9 +106,9 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 
 // ExportExcel 导出Excel
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string) (file *bytes.Buffer, name string, err error) {
+func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.Preload("Conditions").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -119,7 +137,27 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 	selects := strings.Join(columns, ", ")
 	var tableMap []map[string]interface{}
-	err = global.GVA_DB.Select(selects).Table(template.TableName).Find(&tableMap).Error
+	db := global.GVA_DB.Select(selects).Table(template.TableName)
+
+	if len(template.Conditions) > 0 {
+		for _, condition := range template.Conditions {
+			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
+			value := values.Get(condition.From)
+			if value != "" {
+				if condition.Operator == "LIKE" {
+					value = "%" + value + "%"
+				}
+				db = db.Where(sql, value)
+			}
+		}
+	}
+	if template.Limit != 0 {
+		db = db.Limit(template.Limit)
+	}
+	if template.Order != "" {
+		db = db.Order(template.Order)
+	}
+	err = db.Find(&tableMap).Error
 	if err != nil {
 		return nil, "", err
 	}

@@ -35,8 +35,8 @@ const onprint=()=> {
     message.info('好像还没有选择数据');
     return;
   }
+  console.log(props.hall, props.info, props.printList)
   hiprintTemplate.printByHtml(previewDiv.value);
-  console.log('props.printList',props.printList)
   handleAfterPrint(props.printList);
 }
 
@@ -45,7 +45,7 @@ watch(()=>printData.value,()=>{
   setPreviewDiv(previewDom);
 })
 watch(()=>props.printList,()=>{
-  setPrintData(converResDataToPrintData(props.printList,props.info));
+  setPrintData(converResDataToPrintData(props.printList,props.info.info));
 })
 </script>
 <style lang='scss' scoped></style>

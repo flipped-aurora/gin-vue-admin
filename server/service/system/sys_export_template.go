@@ -11,6 +11,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"mime/multipart"
+	"net/url"
 	"strings"
 )
 
@@ -88,7 +89,7 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 
 // ExportExcel 导出Excel
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string) (file *bytes.Buffer, name string, err error) {
+func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
 	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
 	if err != nil {
@@ -119,7 +120,25 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 	selects := strings.Join(columns, ", ")
 	var tableMap []map[string]interface{}
-	err = global.GVA_DB.Select(selects).Table(template.TableName).Find(&tableMap).Error
+	db := global.GVA_DB.Select(selects).Table(template.TableName)
+
+	if len(template.Conditions) > 0 {
+		for _, condition := range template.Conditions {
+			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
+			value := values.Get(condition.From)
+			if condition.Operator == "LIKE" {
+				value = "%" + value + "%"
+			}
+			db = db.Where(sql, value)
+		}
+	}
+	if template.Limit != 0 {
+		db = db.Limit(template.Limit)
+	}
+	if template.Order != "" {
+		db = db.Order(template.Order)
+	}
+	err = db.Find(&tableMap).Error
 	if err != nil {
 		return nil, "", err
 	}

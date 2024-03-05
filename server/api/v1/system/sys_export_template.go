@@ -191,11 +191,12 @@ func (sysExportTemplateApi *SysExportTemplateApi) GetSysExportTemplateList(c *gi
 // @Router /sysExportTemplate/exportExcel [get]
 func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 	templateID := c.Query("templateID")
+	queryParams := c.Request.URL.Query()
 	if templateID == "" {
 		response.FailWithMessage("模板ID不能为空", c)
 		return
 	}
-	if file, name, err := sysExportTemplateService.ExportExcel(templateID); err != nil {
+	if file, name, err := sysExportTemplateService.ExportExcel(templateID, queryParams); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

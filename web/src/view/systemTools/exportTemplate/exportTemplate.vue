@@ -259,6 +259,30 @@
               :placeholder="templatePlaceholder"
             />
           </el-form-item>
+          <el-form-item
+            label="导出限制:"
+            prop="templateInfo"
+          >
+            <el-input-number
+              v-model="formData.limit"
+              :step="1"
+              :step-strictly="true"
+              :precision="0"
+            />
+          </el-form-item>
+          <el-form-item
+            label="排序条件:"
+            prop="templateInfo"
+          >
+            <el-input
+              v-model="formData.order"
+              placeholder="例:id desc"
+            />
+          </el-form-item>
+          <el-form-item
+            label="导出条件:"
+            prop="templateInfo"
+          />
         </el-form>
       </el-scrollbar>
       <template #footer>

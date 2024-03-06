@@ -16,7 +16,7 @@ var casbinService = service.ServiceGroupApp.SystemServiceGroup.CasbinService
 // CasbinHandler 拦截器
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if global.GVA_CONFIG.System.Env != "develop" {
+		if gin.Mode() != gin.DebugMode {
 			waitUse, _ := utils.GetClaims(c)
 			//获取请求的PATH
 			path := c.Request.URL.Path

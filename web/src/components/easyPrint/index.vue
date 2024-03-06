@@ -14,9 +14,11 @@ const { hiprint } = print
 
 hiprint.init();
 const props = defineProps<{
-  hall:any
-  info: any
-  printList: any
+  hall: any,
+  info: any,
+  source: String,
+  printList: any,
+  reprint: any
 }>()
 
 const emits = defineEmits(['handleAfterPrint'])
@@ -40,12 +42,21 @@ const onprint=()=> {
   handleAfterPrint(props.printList);
 }
 
+watch(()=>props.reprint,()=> {
+  let previewDom = hiprintTemplate.getSimpleHtml(converResDataToPrintData(props.reprint,props.info.info, props.source));
+  console.log(previewDom)
+  hiprintTemplate.printByHtml(previewDom);
+})
+
+
 watch(()=>printData.value,()=>{
   const previewDom = hiprintTemplate.getSimpleHtml(printData.value);
   setPreviewDiv(previewDom);
 })
+
 watch(()=>props.printList,()=>{
-  setPrintData(converResDataToPrintData(props.printList,props.info.info));
+  setPrintData(converResDataToPrintData(props.printList,props.info.info, props.source));
 })
+
 </script>
 <style lang='scss' scoped></style>

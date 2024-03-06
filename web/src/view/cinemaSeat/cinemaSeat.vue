@@ -16,6 +16,12 @@
         <el-form-item label="打印日期" prop="date">
           <el-date-picker v-model="searchInfo.date" type="date" placeholder="打印日期" />
         </el-form-item>
+
+        <el-form-item label="来源" prop="source">
+          <el-select v-model="searchInfo.source" placeholder="选择来源" style="width: 200px;">
+            <el-option v-for="dict in sourceOptions" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
         <!-- <el-form-item>
           <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
           <el-button icon="refresh" @click="onReset">重置</el-button>
@@ -26,6 +32,7 @@
       <SeatSelect
         :propFilmOptions="filmOptions"
         :filmId="String(searchInfo.filmId)"
+        :source="searchInfo.source"
         :seatInfo="seatInfo"
         :hallId="searchInfo.hall" 
         @printSeatSave="printSeatSave"
@@ -64,6 +71,13 @@ const hallOptions = ref([
   { label: '7号厅', value: 7 },
 ])
 
+const sourceOptions = ref([
+  { label: '抖音票', value: '抖音票' },
+  { label: '现金票', value: '现金票' },
+  { label: '微信票', value: '微信票' },
+  { label: '微信票', value: '支付宝票' },
+])
+
 const filmOptions = ref([])
 const seatInfo = ref([])
 const elSearchFormRef = ref()
@@ -95,6 +109,12 @@ watch(() => searchInfo.value.hall, (v) => {
   getFilms()
 }, { immediate: true })
 
+// watch(() => searchInfo.value.source, (v) => {
+//   filmOptions.value.forEach(item => {
+//     item.type = v
+//   })
+// }, { immediate: true })
+
 // 获取座位
 const getSeats = async () => {
   const seatList = await getCinemaSeatList({ page: 1, pageSize: 100, ...searchInfo.value })
@@ -123,6 +143,7 @@ const printSeatSave = async (seats)=>{
     const params = {
       filmId: searchInfo.value.filmId,
       date: searchInfo.value.date,
+      type: searchInfo.value.source,
       positions: seats
     }
     await createCinemaSeat(params)

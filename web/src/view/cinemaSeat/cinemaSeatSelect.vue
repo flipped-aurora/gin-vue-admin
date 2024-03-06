@@ -38,12 +38,12 @@
               </div>
         </div>
       </div>
-      <EasyPrint :printList="selectedSeat" :hall="hall" :info="info" @handleAfterPrint="handleAfterPrint" />
+      <EasyPrint :printList="selectedSeat" :hall="hall" :info="info" :source="source" :reprint="reprint" @handleAfterPrint="handleAfterPrint" />
     </div>
 </template>
 <script lang='ts' setup>
 import { ref, watch } from 'vue'
-import { ElMessageBox as Modal, ElMessage as message } from 'element-plus'
+import { Action, ElMessageBox as Modal, ElMessage as message } from 'element-plus'
 import { storage } from '@/utils/storage';
 import {
   hallSeat1,
@@ -61,6 +61,7 @@ import EasyPrint from './../../components/easyPrint/index.vue'
 const { confirm } = Modal
 
 const props = defineProps({
+  source: String,
   filmId: String,
   hallId: Number,
   seatInfo: Object,
@@ -68,11 +69,13 @@ const props = defineProps({
 });
 
 const hall = ref(1)
+const source = ref('')
 const filmId = ref('')
 const seatMap = ref([])
 const selectedSeat = ref([])
 const filmOptions = ref([])
 const info = ref({})
+const reprint = ref('')
 const seat = {
   1: hallSeat1,
   2: hallSeat2,
@@ -82,12 +85,14 @@ const seat = {
   6: hallSeat6,
   7: hallSeat7,
 };
+const setSource = (val)=> source.value = val
 const setHall = (val)=> hall.value = val
 const setFilmId = (val)=> filmId.value = val
 const setSeatMap = (val)=> seatMap.value = val
 const setSelectedSeats = (val)=> selectedSeat.value = val
 const setFilmOptions = (val)=> filmOptions.value = val
 const setInfo = (val)=> info.value = val
+const setReprint = (val)=> reprint.value = val
 
 const emits = defineEmits(['printSeatSave', 'printSeatDel'])
 
@@ -99,6 +104,9 @@ watch(()=>props.filmId,(v)=>{
 }, {immediate:true})
 watch(()=>props.propFilmOptions,(v)=>{
   setFilmOptions(v)
+}, {immediate:true})
+watch(()=>props.source,(v)=>{
+  setSource(v)
 }, {immediate:true})
 watch(()=>props.seatInfo,(v)=>{
   let tempMap = JSON.parse(JSON.stringify(seat[props.hallId])); 
@@ -146,14 +154,23 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
 
     if (tempMap[indexRow][indexCol].status === 3) {
       confirm(
-        '该座位已出票，确认取消锁定该座位吗？',
+        '该座位已出票，请选择退票或者重新打印？',
         '提示',
+        {
+          distinguishCancelAndClose: true,
+          confirmButtonText: '退票',
+          cancelButtonText: '重新打印',
+        },
       ).then(()=>{
-        tempMap[indexRow][indexCol].status = 1;
+          tempMap[indexRow][indexCol].status = 1;
           setSeatMap(tempMap);
           emits('printSeatDel', `${indexRow + 1}-${indexCol + 1}`)
-      },() => {
-          console.log("取消打印")
+      }).catch((action: Action)=>{
+        if (action === 'cancel') {
+          let tempSelected: any[] = [];
+          tempSelected.push([indexRow + 1, indexCol+1]);
+          setReprint(tempSelected)
+        }
       });
     }
   };

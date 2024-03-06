@@ -14,7 +14,7 @@
         </el-form-item>
         <!-- // 默认时间是当天 -->
         <el-form-item label="打印日期" prop="date">
-          <el-date-picker v-model="searchInfo.date" type="date" placeholder="打印日期" />
+          <el-date-picker v-model="searchInfo.date" format="YYYY-MM-DD" value-format="YYYY-MM-DD" placeholder="打印日期" />
         </el-form-item>
 
         <el-form-item label="来源" prop="source">
@@ -22,10 +22,6 @@
             <el-option v-for="dict in sourceOptions" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
-        <!-- <el-form-item>
-          <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
-          <el-button icon="refresh" @click="onReset">重置</el-button>
-        </el-form-item> -->
       </el-form>
     </div>
     <div class="gva-table-box">
@@ -82,7 +78,7 @@ const filmOptions = ref([])
 const seatInfo = ref([])
 const elSearchFormRef = ref()
 const searchInfo = ref({
-  date: new Date(),
+  date: new Date().toISOString().split('T')[0],
   filmId: '',
   hall: 1,
 })
@@ -109,14 +105,9 @@ watch(() => searchInfo.value.hall, (v) => {
   getFilms()
 }, { immediate: true })
 
-// watch(() => searchInfo.value.source, (v) => {
-//   filmOptions.value.forEach(item => {
-//     item.type = v
-//   })
-// }, { immediate: true })
-
 // 获取座位
 const getSeats = async () => {
+  if (searchInfo.value.filmId === '' || searchInfo.value.date === '') return
   const seatList = await getCinemaSeatList({ page: 1, pageSize: 100, ...searchInfo.value })
   if (seatList.code === 0) {
     if (seatList.data.list === null) {
@@ -133,7 +124,7 @@ watch(() => searchInfo.value.filmId, (v) => {
 }, { immediate: true })
 
 watch(() => searchInfo.value.date, (v) => {
-  if (v === '') return
+  if (v === '') searchInfo.value.date = new Date
   getSeats()
 }, { immediate: true })
 

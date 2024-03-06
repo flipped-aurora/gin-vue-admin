@@ -103,7 +103,7 @@ watch(()=>props.propFilmOptions,(v)=>{
 watch(()=>props.seatInfo,(v)=>{
   let tempMap = JSON.parse(JSON.stringify(seat[props.hallId])); 
   for (let i = 0; i < props.seatInfo.length; i++) {
-    let [row, col] = props.seatInfo[i].split('-')
+    let [row, col] = props.seatInfo[i].position.split('-')
     tempMap[row-1].forEach((item: any) => {
        if (item.type === "single") {
           if (item.number.toString() === col) {
@@ -151,14 +151,14 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
       ).then(()=>{
         tempMap[indexRow][indexCol].status = 1;
           setSeatMap(tempMap);
-          emits('printSeatDel', tempMap[indexRow][indexCol])
+          emits('printSeatDel', `${indexRow + 1}-${indexCol + 1}`)
       },() => {
           console.log("取消打印")
       });
     }
   };
 
-  
+  // 打印后的回调
   const handleAfterPrint = (seats: any[]) => {
     var postions = seats.map((item) => {
       return item[0] +  "-"  + item[1];
@@ -183,31 +183,6 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
     setSeatMap(tempMap);
   }
 
-  // watch(()=>c.value,()=>{
-  //   const storageList = storage.get('movieList');
-  //   if (!storageList) return;
-  //   const movieList = JSON.parse(storageList);
-  //   const fOptions: Record<string, any[]> = {};
-  //   movieList.forEach((item: any) => {
-  //     if (fOptions[item.hall]) {
-  //       fOptions[item.hall].push({
-  //         value: item.key,
-  //         label: `${item.name}  (${item.time})`,
-  //         info: item,
-  //       });
-  //     } else {
-  //       fOptions[item.hall] = [
-  //         {
-  //           value: item.key,
-  //           label: `${item.name}  (${item.time})`,
-  //           info: item,
-  //         },
-  //       ];
-  //     }
-  //   });
-  //   setFilmOptions(fOptions);
-  // }, {immediate:true})
-
   watch(()=>seatMap.value,()=>{
     let tempSelected: any[] = [];
     seatMap.value.forEach((row, rowIndex) => {
@@ -223,21 +198,6 @@ const handleClickSingle = (indexRow: number, indexCol: number) => {
     });
     setSelectedSeats(tempSelected);
   })
-
-  // watch(()=>[film.value, c.value],()=>{
-  //   if (!hall.value) return;
-  //   if (film.value === '') {
-  //     setSeatMap(seat[hall.value]);
-  //   } else {
-  //     if (filmOptions.value?.length) {
-  //     setInfo(
-  //       filmOptions.value?.filter((item) => item.value === film.value)?.[0].info,
-  //     );
-  //     const hallSeat = JSON.parse(storage.get(film.value));
-  //     setSeatMap(hallSeat);
-  //     }
-  //   }
-  // },{immediate:true})
 </script>
 <style lang='scss' scoped>
 .container {

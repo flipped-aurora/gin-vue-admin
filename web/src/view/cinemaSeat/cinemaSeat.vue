@@ -103,9 +103,7 @@ const getSeats = async () => {
       seatInfo.value = []
       return
     }
-    seatInfo.value = seatList.data.list.map(item => {
-      return item.position
-    })
+    seatInfo.value = seatList.data.list
   }
 }
 
@@ -123,7 +121,7 @@ const printSeatSave = async (seats)=>{
   try {
     console.log('save_seats', seats)
     const params = {
-      filmId: searchInfo.value.film,
+      filmId: searchInfo.value.filmId,
       date: searchInfo.value.date,
       positions: seats
     }
@@ -136,7 +134,8 @@ const printSeatSave = async (seats)=>{
 const printSeatDel = async (seat)=>{
   try {
     console.log('del_seats', seat)
-    await deleteCinemaSeat({ seatId: seat.ID })
+    seat = seatInfo.value.find(item => item.position === seat)
+    await deleteCinemaSeat({ ID: seat.ID })
   } catch (error) {
     console.log('del_seats_error', error)
   }

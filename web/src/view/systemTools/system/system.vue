@@ -11,16 +11,6 @@
           title="系统配置"
           name="1"
         >
-          <el-form-item label="环境值">
-            <!-- <el-input v-model="config.system.env" />-->
-            <el-select
-              v-model="config.system.env"
-              style="width:100%"
-            >
-              <el-option value="public" />
-              <el-option value="develop" />
-            </el-select>
-          </el-form-item>
           <el-form-item label="端口值">
             <el-input v-model.number="config.system.addr" />
           </el-form-item>

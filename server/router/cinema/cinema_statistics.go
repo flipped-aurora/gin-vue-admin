@@ -13,6 +13,7 @@ func (s *CinemaStatisticsRouter) InitCinemaStatisticsRouter(Router *gin.RouterGr
 	cinemaStatisticsRouterWithoutRecord := Router.Group("cinemaStatistics")
 	var cinemaStatisticsApi = v1.ApiGroupApp.CinemaApiGroup.CinemaStatisticsApi
 	{
-		cinemaStatisticsRouterWithoutRecord.GET("getCinemaStatisticsList", cinemaStatisticsApi.GetCinemaStatisticsList) // 获取cinemaStatistics表列表
+		cinemaStatisticsRouterWithoutRecord.GET("getCinemaStatisticsList", cinemaStatisticsApi.GetCinemaStatisticsList)   // 获取cinemaStatistics表列表
+		cinemaStatisticsRouterWithoutRecord.GET("getCinemaStatisticsToday", cinemaStatisticsApi.GetCinemaStatisticsToday) // 获取cinemaStatistics表列表
 	}
 }

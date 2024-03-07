@@ -5,6 +5,32 @@
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
+          <el-row class="my-8 w-[500px]">
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <sort />
+                </el-icon>
+                今日收入 {{ todayData.price }}
+              </div>
+            </el-col>
+            <el-col
+              :span="8"
+              :xs="24"
+              :sm="8"
+            >
+              <div class="flex items-center">
+                <el-icon class="dashboard-icon">
+                  <avatar />
+                </el-icon>
+                今日打票数 {{ todayData.total }}
+              </div>
+            </el-col>
+          </el-row>
         </div>
         <img
           src="@/assets/dashboard.png"
@@ -21,19 +47,28 @@ import EchartsLine from '@/view/dashboard/dashboardCharts/echartsLine.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWeatherInfo } from '@/view/dashboard/weather.js'
-
+import { getCinemaStatisticsToday } from '@/api/cinemaStatistics'
 defineOptions({
   name: 'Dashboard'
 })
 
 const weatherInfo = useWeatherInfo()
-
+const todayData = ref([])
 const router = useRouter()
 
 const toTarget = (name) => {
   router.push({ name })
 }
 
+const getTodayData = async () => {
+  const table = await getCinemaStatisticsToday()
+  if (table.code === 0) {
+    todayData.value.price = table.data.statistics.price
+    todayData.value.total = table.data.statistics.total
+  }
+}
+
+getTodayData()
 </script>
 
 <style lang="scss" scoped>

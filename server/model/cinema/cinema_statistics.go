@@ -15,6 +15,11 @@ type CinemaStatistics struct {
 	RefundTotal *int     `json:"refund_total" form:"refund_total" gorm:"column:refund_total;comment:退票数;size:10;"`  //退票数
 }
 
+type CinemaStatisticsToday struct {
+	Price *float64 `json:"price" form:"price" gorm:"column:price;comment:总金额;size:22;"` //总金额
+	Total *int     `json:"total" form:"total" gorm:"column:total;comment:总票数;size:10;"`
+}
+
 // TableName cinemaStatistics表 CinemaStatistics自定义表名 cinema_statistics
 func (CinemaStatistics) TableName() string {
 	return "cinema_statistics"

@@ -42,3 +42,21 @@ func (cinemaStatisticsApi *CinemaStatisticsApi) GetCinemaStatisticsList(c *gin.C
 		}, "获取成功", c)
 	}
 }
+
+// GetCinemaStatisticsToday 获取今日数据
+// @Tags GetCinemaStatisticsToday
+// @Summary 获取今日数据
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /cinemaStatistics/getCinemaStatisticsToday [get]
+func (cinemaStatisticsApi *CinemaStatisticsApi) GetCinemaStatisticsToday(c *gin.Context) {
+	if today, err := cinemaStatisticsService.GetCinemaStatisticsToday(); err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败", c)
+	} else {
+		response.OkWithData(gin.H{"statistics": today}, c)
+	}
+}

@@ -4,6 +4,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
 	cinemaReq "github.com/flipped-aurora/gin-vue-admin/server/model/cinema/request"
+	"time"
 )
 
 type CinemaStatisticsService struct {
@@ -32,4 +33,11 @@ func (cinemaStatisticsService *CinemaStatisticsService) GetCinemaStatisticsInfoL
 
 	err = db.Find(&cinemaStatistics).Error
 	return cinemaStatistics, total, err
+}
+
+func (cinemaStatisticsService *CinemaStatisticsService) GetCinemaStatisticsToday() (today cinema.CinemaStatisticsToday, err error) {
+	db := global.GVA_DB.Model(&cinema.CinemaOrder{})
+	err = db.Select("SUM(CASE WHEN status = 1 THEN film_price ELSE 0 END) AS price, SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS total").
+		Where("created_at >= ?", time.Now().Format("2006-01-02")).Find(&today).Error
+	return today, err
 }

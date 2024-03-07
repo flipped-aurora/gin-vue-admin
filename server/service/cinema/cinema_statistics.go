@@ -16,10 +16,10 @@ func (cinemaStatisticsService *CinemaStatisticsService) GetCinemaStatisticsInfoL
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
 	db := global.GVA_DB.Model(&cinema.CinemaStatistics{})
-	var cinemaStatisticss []cinema.CinemaStatistics
+	var cinemaStatistics []cinema.CinemaStatistics
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.StartCreatedAt != nil && info.EndCreatedAt != nil {
-		db = db.Where("created_at BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
+		db = db.Where("date BETWEEN ? AND ?", info.StartCreatedAt, info.EndCreatedAt)
 	}
 	err = db.Count(&total).Error
 	if err != nil {
@@ -30,6 +30,6 @@ func (cinemaStatisticsService *CinemaStatisticsService) GetCinemaStatisticsInfoL
 		db = db.Limit(limit).Offset(offset)
 	}
 
-	err = db.Find(&cinemaStatisticss).Error
-	return cinemaStatisticss, total, err
+	err = db.Find(&cinemaStatistics).Error
+	return cinemaStatistics, total, err
 }

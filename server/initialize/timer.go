@@ -3,7 +3,6 @@ package initialize
 import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/task"
-
 	"github.com/robfig/cron/v3"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -25,13 +24,15 @@ func Timer() {
 		}
 
 		// 其他定时任务定在这里 参考上方使用方法
-
-		//_, err := global.GVA_Timer.AddTaskByFunc("定时任务标识", "corn表达式", func() {
-		//	具体执行内容...
-		//  ......
-		//}, option...)
-		//if err != nil {
-		//	fmt.Println("add timer error:", err)
-		//}
+		_, err = global.GVA_Timer.AddTaskByFunc("DailyStatistics", "@daily", func() {
+			err := task.StatisticsOrder(global.GVA_DB)
+			if err != nil {
+				fmt.Println("StatisticsOrder error:", err)
+			}
+		}, "每日统计订单", option...)
+		if err != nil {
+			fmt.Println("StatisticsOrder error:", err)
+		}
 	}()
+
 }

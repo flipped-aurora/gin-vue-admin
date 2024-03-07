@@ -1,0 +1,36 @@
+package task
+
+import (
+	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/cinema"
+	"gorm.io/gorm"
+	"time"
+)
+
+//@author: lsk
+//@function: StatisticsOrder
+//@description: 每日统计昨日数据
+//@return: error
+
+func StatisticsOrder(db *gorm.DB) error {
+
+	today := time.Now().Format("2006-01-02")
+	yesterday := time.Now().Add(-24 * time.Hour).Format("2006-01-02")
+	var order cinema.CinemaOrder
+	var statistics cinema.CinemaStatistics
+	// 统计昨日订单数据
+	err := db.Model(&order).Select("DATE(created_at) AS date,"+
+		"SUM(CASE WHEN status = 1 THEN film_price ELSE 0 END) AS price,"+
+		"SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS total,"+
+		"SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) AS refund_total,"+
+		"SUM(CASE WHEN status = 2 THEN film_price ELSE 0 END) AS refund_price").Where("created_at BETWEEN ? AND ?", yesterday, today).Find(&statistics).Error
+	if err != nil {
+		return err
+	}
+	fmt.Println(statistics)
+	err = db.Model(statistics).Create(&statistics).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}

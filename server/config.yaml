@@ -123,10 +123,10 @@ mysql:
     prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
-    db-name: gvn
-    username: gvn
-    password: 2ssJZMs8fiRnxEEc
-    path: 127.0.0.1
+    db-name: gva
+    username: gva
+    password: 4Yj7AJeHZyLpWYRK
+    path: 60.204.233.208
     engine: ""
     log-mode: error
     max-idle-conns: 10

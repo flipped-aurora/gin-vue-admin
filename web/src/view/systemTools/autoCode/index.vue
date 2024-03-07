@@ -42,7 +42,6 @@
               <el-select
                 v-model="dbform.businessDB"
                 clearable
-                class="w-56"
                 placeholder="选择业务库"
                 @change="getDbFunc"
               >
@@ -67,7 +66,6 @@
               <el-select
                 v-model="dbform.dbName"
                 clearable
-                class="w-56"
                 filterable
                 placeholder="请选择数据库"
                 @change="getTableFunc"
@@ -87,7 +85,6 @@
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
-                class="w-56"
                 filterable
                 placeholder="请选择表"
               >
@@ -186,7 +183,6 @@
         >
           <el-select
             v-model="form.package"
-            class="w-56"
           >
             <el-option
               v-for="item in pkgs"
@@ -219,7 +215,6 @@
           </template>
           <el-select
             v-model="form.businessDB"
-            class="w-56"
             placeholder="选择业务库"
           >
             <el-option

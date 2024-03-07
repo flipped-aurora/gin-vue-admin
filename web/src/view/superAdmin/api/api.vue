@@ -29,7 +29,6 @@
             v-model="searchInfo.method"
             clearable
             placeholder="请选择"
-            class="w-40"
           >
             <el-option
               v-for="item in methodOptions"

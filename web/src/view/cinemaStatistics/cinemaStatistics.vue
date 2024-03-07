@@ -30,12 +30,11 @@
     <div class="gva-table-box">
     </div>
     <el-table style="width: 100%" tooltip-effect="dark" :data="tableData">
-      <el-table-column align="center" label="日期" width="180">
-        <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
-      </el-table-column>
-      <el-table-column align="center" label="时间" prop="date" width="120" />
-      <el-table-column align="center" label="价格" prop="price" width="120" />
-      <el-table-column align="center" label="总票数" prop="total" width="120" />
+      <el-table-column align="center" label="统计日期" prop="date" width="240" />
+      <el-table-column align="center" label="当日收入金额" prop="price" width="240" />
+      <el-table-column align="center" label="当日打票" prop="total" width="240" />
+      <el-table-column align="center" label="当日退票金额" prop="refund_price" width="240" />
+      <el-table-column align="center" label="当日退票" prop="refund_total" width="240" />
     </el-table>
     <div class="gva-pagination">
       <el-pagination layout="total, sizes, prev, pager, next, jumper" :current-page="page" :page-size="pageSize"

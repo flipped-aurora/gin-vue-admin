@@ -69,9 +69,10 @@ const hallOptions = ref([
 
 const sourceOptions = ref([
   { label: '抖音票', value: '抖音票' },
+  { label: '会员卡', value: '会员卡' },
+  { label: '兑换券', value: '兑换券' },
   { label: '现金票', value: '现金票' },
-  { label: '微信票', value: '微信票' },
-  { label: '微信票', value: '支付宝票' },
+  { label: '银行卡', value: '银行卡' },
 ])
 
 const filmOptions = ref([])

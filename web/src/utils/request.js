@@ -80,7 +80,7 @@ service.interceptors.response.use(
       })
       if (response.data.data && response.data.data.reload) {
         userStore.token = ''
-        localStorage.clear()
+        window.localStorage.removeItem('token')
         router.push({ name: 'Login', replace: true })
       }
       return response.data.msg ? response.data : response

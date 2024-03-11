@@ -66,6 +66,7 @@
           v-model="deleteVisible"
           placement="top"
           width="160"
+          trigger="click"
         >
           <p>确定要删除吗？</p>
           <div style="text-align: right; margin-top: 8px;">

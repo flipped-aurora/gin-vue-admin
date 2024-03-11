@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"go.uber.org/zap"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
@@ -21,6 +23,7 @@ import (
 // @name                        x-token
 // @BasePath                    /
 func main() {
+	fmt.Println("修改git")
 	global.GVA_VP = core.Viper() // 初始化Viper
 	initialize.OtherInit()
 	global.GVA_LOG = core.Zap() // 初始化zap日志库

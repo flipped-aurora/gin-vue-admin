@@ -251,7 +251,7 @@
             />
           </el-form-item>
           <el-form-item
-            label="最大导出条数:"
+            label="默认导出条数:"
           >
             <el-input-number
               v-model="formData.limit"
@@ -261,7 +261,7 @@
             />
           </el-form-item>
           <el-form-item
-            label="排序条件:"
+            label="默认排序条件:"
           >
             <el-input
               v-model="formData.order"

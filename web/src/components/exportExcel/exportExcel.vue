@@ -15,6 +15,18 @@ const props = defineProps({
   condition: {
     type: Object,
     default: () => ({})
+  },
+  limit: {
+    type: Number,
+    default: 0
+  },
+  offset: {
+    type: Number,
+    default: 0
+  },
+  order: {
+    type: String,
+    default: ''
   }
 })
 
@@ -26,7 +38,17 @@ const exportExcelFunc = async() => {
     return
   }
   const baseUrl = import.meta.env.VITE_BASE_API
-  const params = Object.entries(props.condition)
+  const paramsCopy = JSON.parse(JSON.stringify(props.condition))
+  if (props.limit) {
+    paramsCopy.limit = props.limit
+  }
+  if (props.offset) {
+    paramsCopy.offset = props.offset
+  }
+  if (props.order) {
+    paramsCopy.order = props.order
+  }
+  const params = Object.entries(paramsCopy)
     .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
     .join('&')
   const url = `${baseUrl}/sysExportTemplate/exportExcel?templateID=${props.templateId}${params ? '&' + params : ''}`

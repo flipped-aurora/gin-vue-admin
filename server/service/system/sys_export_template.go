@@ -12,6 +12,7 @@ import (
 	"gorm.io/gorm"
 	"mime/multipart"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -151,12 +152,38 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 			}
 		}
 	}
-	if template.Limit != 0 {
+	// 通过参数传入limit
+	limit := values.Get("limit")
+	if limit != "" {
+		l, e := strconv.Atoi(limit)
+		if e == nil {
+			db = db.Limit(l)
+		}
+	}
+	// 模板的默认limit
+	if limit == "" && template.Limit != 0 {
 		db = db.Limit(template.Limit)
 	}
-	if template.Order != "" {
+
+	// 通过参数传入offset
+	offset := values.Get("offset")
+	if offset != "" {
+		o, e := strconv.Atoi(offset)
+		if e == nil {
+			db = db.Offset(o)
+		}
+	}
+
+	// 通过参数传入order
+	order := values.Get("order")
+	if order != "" {
+		db = db.Order(order)
+	}
+	// 模板的默认order
+	if order == "" && template.Order != "" {
 		db = db.Order(template.Order)
 	}
+
 	err = db.Find(&tableMap).Error
 	if err != nil {
 		return nil, "", err

@@ -1,208 +1,209 @@
 <template>
-  <div
-    v-if="!multiple"
-    class="update-image"
-    :style="{
-      'background-image': `url(${getUrl(modelValue)})`,
-      'position': 'relative',
-    }"
-  >
-    <el-icon
-      v-if="isVideoExt(modelValue || '')"
-      :size="32"
-      class="video video-icon"
-      style=""
-    >
-      <VideoPlay />
-    </el-icon>
-    <video
-      v-if="isVideoExt(modelValue || '')"
-      class="avatar video-avatar video"
-      muted
-      preload="metadata"
-      style=""
-      @click="openChooseImg"
-    >
-      <source :src="getUrl(modelValue) + '#t=1'">
-    </video>
-    <span
-      v-if="modelValue"
-      class="update"
-      style="position: absolute;"
-      @click="openChooseImg"
-    >
-      <el-icon>
-        <delete />
-      </el-icon>
-      删除</span>
-    <span
-      v-else
-      class="update text-gray-600"
-      @click="openChooseImg"
-    >
-      <el-icon>
-        <plus />
-      </el-icon>
-      上传</span>
-  </div>
-  <div
-    v-else
-    class="multiple-img"
-  >
+  <div>
     <div
-      v-for="(item, index) in multipleValue"
-      :key="index"
+      v-if="!multiple"
       class="update-image"
       :style="{
-        'background-image': `url(${getUrl(item)})`,
+        'background-image': `url(${getUrl(model)})`,
         'position': 'relative',
       }"
     >
       <el-icon
-        v-if="isVideoExt(item || '')"
+        v-if="isVideoExt(model || '')"
         :size="32"
         class="video video-icon"
+        style=""
       >
         <VideoPlay />
       </el-icon>
       <video
-        v-if="isVideoExt(item || '')"
+        v-if="isVideoExt(model || '')"
         class="avatar video-avatar video"
         muted
         preload="metadata"
-        @click="deleteImg(index)"
+        style=""
+        @click="openChooseImg"
       >
-        <source :src="getUrl(item) + '#t=1'">
+        <source :src="getUrl(model) + '#t=1'">
       </video>
       <span
+        v-if="model"
         class="update"
         style="position: absolute;"
-        @click="deleteImg(index)"
+        @click="openChooseImg"
       >
         <el-icon>
           <delete />
         </el-icon>
         删除</span>
-    </div>
-    <div
-      v-if="!maxUpdateCount || maxUpdateCount>multipleValue.length"
-      class="add-image"
-    >
       <span
-        class="update  text-gray-600"
+        v-else
+        class="update text-gray-600"
         @click="openChooseImg"
       >
         <el-icon>
-          <Plus />
+          <plus />
         </el-icon>
         上传</span>
     </div>
-  </div>
-
-  <el-drawer
-    v-model="drawer"
-    title="媒体库"
-    size="650px"
-  >
-    <warning-bar
-      title="点击“文件名/备注”可以编辑文件名或者备注内容。"
-    />
-    <div class="gva-btn-list">
-      <upload-common
-        v-model:imageCommon="imageCommon"
-        class="upload-btn-media-library"
-        @on-success="getImageList"
-      />
-      <upload-image
-        v-model:imageUrl="imageUrl"
-        :file-size="512"
-        :max-w-h="1080"
-        class="upload-btn-media-library"
-        @on-success="getImageList"
-      />
-      <el-form
-        ref="searchForm"
-        :inline="true"
-        :model="search"
-      >
-        <el-form-item label="">
-          <el-input
-            v-model="search.keyword"
-            class="keyword"
-            placeholder="请输入文件名或备注"
-          />
-        </el-form-item>
-
-        <el-form-item>
-          <el-button
-            type="primary"
-            icon="search"
-            @click="getImageList"
-          >查询
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-    <div class="media">
+    <div
+      v-else
+      class="multiple-img"
+    >
       <div
-        v-for="(item,key) in picList"
-        :key="key"
-        class="media-box"
+        v-for="(item, index) in multipleValue"
+        :key="index"
+        class="update-image"
+        :style="{
+          'background-image': `url(${getUrl(item)})`,
+          'position': 'relative',
+        }"
       >
-        <div class="header-img-box-list">
-          <el-image
-            :key="key"
-            :src="getUrl(item.url)"
-            fit="cover"
-            style="width: 100%;height: 100%;"
-            @click="chooseImg(item.url)"
-          >
-            <template #error>
-              <el-icon
-                v-if="isVideoExt(item.url || '')"
-                :size="32"
-                class="video video-icon"
-              >
-                <VideoPlay />
-              </el-icon>
-              <video
-                v-if="isVideoExt(item.url || '')"
-                class="avatar video-avatar video"
-                muted
-                preload="metadata"
-                @click="chooseImg(item.url)"
-              >
-                <source :src="getUrl(item.url) + '#t=1'">
-                您的浏览器不支持视频播放
-              </video>
-              <div
-                v-else
-                class="header-img-box-list"
-              >
-                <el-icon class="lost-image">
-                  <icon-picture />
-                </el-icon>
-              </div>
-            </template>
-          </el-image>
-        </div>
-        <div
-          class="img-title"
-          @click="editFileNameFunc(item)"
-        >{{ item.name }}
-        </div>
+        <el-icon
+          v-if="isVideoExt(item || '')"
+          :size="32"
+          class="video video-icon"
+        >
+          <VideoPlay />
+        </el-icon>
+        <video
+          v-if="isVideoExt(item || '')"
+          class="avatar video-avatar video"
+          muted
+          preload="metadata"
+          @click="deleteImg(index)"
+        >
+          <source :src="getUrl(item) + '#t=1'">
+        </video>
+        <span
+          class="update"
+          style="position: absolute;"
+          @click="deleteImg(index)"
+        >
+          <el-icon>
+            <delete />
+          </el-icon>
+          删除</span>
+      </div>
+      <div
+        v-if="!maxUpdateCount || maxUpdateCount>multipleValue.length"
+        class="add-image"
+      >
+        <span
+          class="update  text-gray-600"
+          @click="openChooseImg"
+        >
+          <el-icon>
+            <Plus />
+          </el-icon>
+          上传</span>
       </div>
     </div>
-    <el-pagination
-      :current-page="page"
-      :page-size="pageSize"
-      :total="total"
-      :style="{'justify-content':'center'}"
-      layout="total, prev, pager, next, jumper"
-      @current-change="handleCurrentChange"
-      @size-change="handleSizeChange"
-    />
-  </el-drawer>
+    <el-drawer
+      v-model="drawer"
+      title="媒体库"
+      size="650px"
+    >
+      <warning-bar
+        title="点击“文件名/备注”可以编辑文件名或者备注内容。"
+      />
+      <div class="gva-btn-list">
+        <upload-common
+          :image-common="imageCommon"
+          class="upload-btn-media-library"
+          @on-success="getImageList"
+        />
+        <upload-image
+          :image-url="imageUrl"
+          :file-size="512"
+          :max-w-h="1080"
+          class="upload-btn-media-library"
+          @on-success="getImageList"
+        />
+        <el-form
+          ref="searchForm"
+          :inline="true"
+          :model="search"
+        >
+          <el-form-item label="">
+            <el-input
+              v-model="search.keyword"
+              class="keyword"
+              placeholder="请输入文件名或备注"
+            />
+          </el-form-item>
+
+          <el-form-item>
+            <el-button
+              type="primary"
+              icon="search"
+              @click="getImageList"
+            >查询
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+      <div class="media">
+        <div
+          v-for="(item,key) in picList"
+          :key="key"
+          class="media-box"
+        >
+          <div class="header-img-box-list">
+            <el-image
+              :key="key"
+              :src="getUrl(item.url)"
+              fit="cover"
+              style="width: 100%;height: 100%;"
+              @click="chooseImg(item.url)"
+            >
+              <template #error>
+                <el-icon
+                  v-if="isVideoExt(item.url || '')"
+                  :size="32"
+                  class="video video-icon"
+                >
+                  <VideoPlay />
+                </el-icon>
+                <video
+                  v-if="isVideoExt(item.url || '')"
+                  class="avatar video-avatar video"
+                  muted
+                  preload="metadata"
+                  @click="chooseImg(item.url)"
+                >
+                  <source :src="getUrl(item.url) + '#t=1'">
+                  您的浏览器不支持视频播放
+                </video>
+                <div
+                  v-else
+                  class="header-img-box-list"
+                >
+                  <el-icon class="lost-image">
+                    <icon-picture />
+                  </el-icon>
+                </div>
+              </template>
+            </el-image>
+          </div>
+          <div
+            class="img-title"
+            @click="editFileNameFunc(item)"
+          >{{ item.name }}
+          </div>
+        </div>
+      </div>
+      <el-pagination
+        :current-page="page"
+        :page-size="pageSize"
+        :total="total"
+        :style="{'justify-content':'center'}"
+        layout="total, prev, pager, next, jumper"
+        @current-change="handleCurrentChange"
+        @size-change="handleSizeChange"
+      />
+    </el-drawer>
+  </div>
 </template>
 
 <script setup>
@@ -214,7 +215,7 @@ import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Delete, FolderAdd, Plus, Picture as IconPicture } from '@element-plus/icons-vue'
+import { Delete, Plus, Picture as IconPicture } from '@element-plus/icons-vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -224,11 +225,9 @@ const page = ref(1)
 const total = ref(0)
 const pageSize = ref(20)
 
+const model = defineModel({ type: [String, Array] })
+
 const props = defineProps({
-  modelValue: {
-    type: [String, Array],
-    default: ''
-  },
   multiple: {
     type: Boolean,
     default: false
@@ -246,15 +245,12 @@ const multipleValue = ref([])
 
 onMounted(() => {
   if (props.multiple) {
-    multipleValue.value = props.modelValue
+    multipleValue.value = model.value
   }
 })
-
-const emits = defineEmits(['update:modelValue'])
-
 const deleteImg = (index) => {
   multipleValue.value.splice(index, 1)
-  emits('update:modelValue', multipleValue.value)
+  model.value = multipleValue.value
 }
 
 // 分页
@@ -322,15 +318,15 @@ const chooseImg = (url) => {
   }
   if (props.multiple) {
     multipleValue.value.push(url)
-    emits('update:modelValue', multipleValue.value)
+    model.value = multipleValue.value
   } else {
-    emits('update:modelValue', url)
+    model.value = url
   }
   drawer.value = false
 }
 const openChooseImg = async() => {
-  if (props.modelValue && !props.multiple) {
-    emits('update:modelValue', '')
+  if (model.value && !props.multiple) {
+    model.value = ''
     return
   }
   await getImageList()

@@ -95,31 +95,12 @@
           fixed="right"
         >
           <template #default="scope">
-            <el-popover
-              v-model:visible="scope.row.visible"
-              placement="top"
-              width="160"
-            >
-              <p>确定要删除此用户吗</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="scope.row.visible = false"
-                >取消</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteUserFunc(scope.row)"
-                >确定</el-button>
-              </div>
-              <template #reference>
-                <el-button
-                  type="primary"
-                  link
-                  icon="delete"
-                >删除</el-button>
-              </template>
-            </el-popover>
+            <el-button
+                type="primary"
+                link
+                icon="delete"
+                @click="deleteUserFunc(scope.row)"
+            >删除</el-button>
             <el-button
               type="primary"
               link
@@ -390,12 +371,17 @@ const setOptions = (authData) => {
 }
 
 const deleteUserFunc = async(row) => {
-  const res = await deleteUser({ id: row.ID })
-  if (res.code === 0) {
-    ElMessage.success('删除成功')
-    row.visible = false
-    await getTableData()
-  }
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async () => {
+    const res = await deleteUser({ id: row.ID })
+    if (res.code === 0) {
+      ElMessage.success('删除成功')
+      await getTableData()
+    }
+  })
 }
 
 // 弹窗相关

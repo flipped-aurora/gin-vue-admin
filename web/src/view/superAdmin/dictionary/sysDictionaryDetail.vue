@@ -74,32 +74,12 @@
               icon="edit"
               @click="updateSysDictionaryDetailFunc(scope.row)"
             >变更</el-button>
-            <el-popover
-              v-model:visible="scope.row.visible"
-              placement="top"
-              width="160"
-            >
-              <p>确定要删除吗？</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="scope.row.visible = false"
-                >取消</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteSysDictionaryDetailFunc(scope.row)"
-                >确定</el-button>
-              </div>
-              <template #reference>
-                <el-button
-                  type="primary"
-                  link
-                  icon="delete"
-                  @click="scope.row.visible = true"
-                >删除</el-button>
-              </template>
-            </el-popover>
+            <el-button
+              type="primary"
+              link
+              icon="delete"
+              @click="deleteSysDictionaryDetailFunc(scope.row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -208,7 +188,7 @@ import {
   getSysDictionaryDetailList
 } from '@/api/sysDictionaryDetail' // 此处请自行替换地址
 import { ref, watch } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { formatBoolean, formatDate } from '@/utils/format'
 
 defineOptions({
@@ -307,18 +287,23 @@ const closeDialog = () => {
   }
 }
 const deleteSysDictionaryDetailFunc = async(row) => {
-  row.visible = false
-  const res = await deleteSysDictionaryDetail({ ID: row.ID })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '删除成功'
-    })
-    if (tableData.value.length === 1 && page.value > 1) {
-      page.value--
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await deleteSysDictionaryDetail({ ID: row.ID })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      if (tableData.value.length === 1 && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    getTableData()
-  }
+  })
 }
 
 const dialogForm = ref(null)

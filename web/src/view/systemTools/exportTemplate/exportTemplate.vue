@@ -89,33 +89,13 @@
           icon="plus"
           @click="openDialog"
         >新增</el-button>
-        <el-popover
-          v-model:visible="deleteVisible"
+
+        <el-button
+          icon="delete"
+          style="margin-left: 10px;"
           :disabled="!multipleSelection.length"
-          placement="top"
-          width="160"
-        >
-          <p>确定要删除吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="deleteVisible = false"
-            >取消</el-button>
-            <el-button
-              type="primary"
-              @click="onDelete"
-            >确定</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="delete"
-              style="margin-left: 10px;"
-              :disabled="!multipleSelection.length"
-              @click="deleteVisible = true"
-            >删除</el-button>
-          </template>
-        </el-popover>
+          @click="onDelete"
+        >删除</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -545,35 +525,38 @@ const deleteRow = (row) => {
   })
 }
 
-// 批量删除控制标记
-const deleteVisible = ref(false)
 
 // 多选删除
 const onDelete = async() => {
-  const ids = []
-  if (multipleSelection.value.length === 0) {
-    ElMessage({
-      type: 'warning',
-      message: '请选择要删除的数据'
-    })
-    return
-  }
-  multipleSelection.value &&
-        multipleSelection.value.map(item => {
-          ids.push(item.ID)
-        })
-  const res = await deleteSysExportTemplateByIds({ ids })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '删除成功'
-    })
-    if (tableData.value.length === ids.length && page.value > 1) {
-      page.value--
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const ids = []
+    if (multipleSelection.value.length === 0) {
+      ElMessage({
+        type: 'warning',
+        message: '请选择要删除的数据'
+      })
+      return
     }
-    deleteVisible.value = false
-    getTableData()
-  }
+    multipleSelection.value &&
+    multipleSelection.value.map(item => {
+      ids.push(item.ID)
+    })
+    const res = await deleteSysExportTemplateByIds({ ids })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      if (tableData.value.length === ids.length && page.value > 1) {
+        page.value--
+      }
+      getTableData()
+    }
+  })
 }
 
 // 行为控制标记（弹窗内部需要增还是改）

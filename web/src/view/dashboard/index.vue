@@ -137,9 +137,6 @@ defineOptions({
 
 const weatherInfo = useWeatherInfo()
 
-const testImg = ref('')
-const testImgs = ref([])
-
 const toolCards = ref([
   {
     label: '用户管理',

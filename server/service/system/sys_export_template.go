@@ -123,7 +123,6 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		columns = append(columns, key)
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
-
 	selects := strings.Join(columns, ", ")
 	var tableMap []map[string]interface{}
 	err = global.GVA_DB.Select(selects).Table(template.TableName).Find(&tableMap).Error

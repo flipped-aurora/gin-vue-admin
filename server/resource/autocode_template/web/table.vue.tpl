@@ -455,7 +455,7 @@ const sortChange = ({ prop, order }) => {
 
   let sort = sortMap[prop]
   if(!sort){
-   sort = prop.replace(/[A-Z]/g, match => _${match.toLowerCase()})
+   sort = prop.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`)
   }
 
   searchInfo.value.sort = sort

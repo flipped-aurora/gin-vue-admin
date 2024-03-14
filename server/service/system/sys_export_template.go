@@ -11,6 +11,7 @@ import (
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"mime/multipart"
+	"sort"
 	"strings"
 )
 
@@ -111,12 +112,18 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	if err != nil {
 		return nil, "", err
 	}
+	var keys []string
+	for key := range templateInfoMap {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys) // 对keys进行排序，保证每次导出的顺序是一致的
 	var columns []string
 	var tableTitle []string
-	for key := range templateInfoMap {
+	for _, key := range keys {
 		columns = append(columns, key)
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
+
 	selects := strings.Join(columns, ", ")
 	var tableMap []map[string]interface{}
 	err = global.GVA_DB.Select(selects).Table(template.TableName).Find(&tableMap).Error

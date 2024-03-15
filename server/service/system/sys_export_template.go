@@ -135,7 +135,6 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	for key := range templateInfoMap {
 		keys = append(keys, key)
 	}
-	sort.Strings(keys) // 对keys进行排序
 	var columns []string
 	var tableTitle []string
 	for _, key := range keys {

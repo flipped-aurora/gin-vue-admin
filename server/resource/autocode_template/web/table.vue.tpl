@@ -187,9 +187,18 @@
             />
         </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加':'修改'" destroy-on-close>
-      <el-scrollbar height="500px">
-          <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
+    <el-drawer size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
+       <template #title>
+              <div class="flex justify-between items-center">
+                <span class="text-lg">{{"{{"}}type==='create'?'添加':'修改'{{"}}"}}</span>
+                <div>
+                  <el-button type="primary" @click="enterDialog">确 定</el-button>
+                  <el-button @click="closeDialog">取 消</el-button>
+                </div>
+              </div>
+            </template>
+
+          <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
         {{- range .Fields}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
           {{- if eq .FieldType "bool" }}
@@ -246,17 +255,14 @@
             </el-form-item>
           {{- end }}
           </el-form>
-      </el-scrollbar>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
 
-    <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情" destroy-on-close>
-      <el-scrollbar height="550px">
+    <el-drawer size="800" v-model="detailShow" :before-close="closeDetailShow" title="查看详情" destroy-on-close>
+          <template #title>
+             <div class="flex justify-between items-center">
+               <span class="text-lg">查看详情</span>
+             </div>
+         </template>
         <el-descriptions :column="1" border>
         {{- range .Fields}}
                 <el-descriptions-item label="{{ .FieldDesc }}">
@@ -293,8 +299,7 @@
                 </el-descriptions-item>
         {{- end }}
         </el-descriptions>
-      </el-scrollbar>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 

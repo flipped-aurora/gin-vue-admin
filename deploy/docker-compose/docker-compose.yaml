@@ -38,8 +38,10 @@ services:
     ports:
       - '8888:8888'
     depends_on:
-      - mysql
-      - redis
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     links:
       - mysql
       - redis
@@ -59,6 +61,11 @@ services:
       MYSQL_DATABASE: 'qmPlus' # 初始化启动时要创建的数据库的名称
       MYSQL_USER: 'gva'
       MYSQL_PASSWORD: 'Aa@6447985'
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "gva", "-pAa@6447985"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     volumes:
       - mysql:/var/lib/mysql
     networks:
@@ -71,6 +78,11 @@ services:
     restart: always
     ports:
       - '16379:6379'
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     volumes:
       - redis:/data
     networks:

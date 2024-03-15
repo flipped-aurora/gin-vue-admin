@@ -12,6 +12,7 @@ import (
 	"gorm.io/gorm"
 	"mime/multipart"
 	"net/url"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -130,9 +131,13 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	if err != nil {
 		return nil, "", err
 	}
+	var keys []string
+	for key := range templateInfoMap {
+		keys = append(keys, key)
+	}
 	var columns []string
 	var tableTitle []string
-	for key := range templateInfoMap {
+	for _, key := range keys {
 		columns = append(columns, key)
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}

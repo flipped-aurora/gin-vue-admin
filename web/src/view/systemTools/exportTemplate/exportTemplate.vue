@@ -118,6 +118,16 @@
         </el-table-column>
         <el-table-column
           align="left"
+          label="数据库"
+          prop="name"
+          width="120"
+        >
+          <template #defalut="scope">
+            <span>{{ scope.row.dbNname || "GVA库" }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="left"
           label="模板名称"
           prop="name"
           width="120"
@@ -188,6 +198,40 @@
           :rules="rule"
           label-width="100px"
         >
+
+          <el-form-item
+            label="业务库"
+            prop="dbName"
+          >
+            <template #label>
+              <el-tooltip
+                content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。"
+                placement="bottom"
+                effect="light"
+              >
+                <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
+              </el-tooltip>
+            </template>
+            <el-select
+              v-model="formData.dbName"
+              clearable
+              placeholder="选择业务库"
+            >
+              <el-option
+                v-for="item in dbList"
+                :key="item.aliasName"
+                :value="item.aliasName"
+                :label="item.aliasName"
+                :disabled="item.disable"
+              >
+                <div>
+                  <span>{{ item.aliasName }}</span>
+                  <span style="float:right;color:#8492a6;font-size:13px">{{ item.dbName }}</span>
+                </div>
+              </el-option>
+            </el-select>
+          </el-form-item>
+
           <el-form-item
             label="模板名称:"
             prop="name"
@@ -319,6 +363,7 @@ import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
+import { getDB } from '@/api/autoCode'
 
 defineOptions({
   name: 'ExportTemplate'
@@ -456,6 +501,16 @@ const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
+const dbList = ref([])
+
+const getDbFunc = async() => {
+  const res = await getDB()
+  if (res.code === 0) {
+    dbList.value = res.data.dbList
+  }
+}
+
+getDbFunc()
 
 // 重置
 const onReset = () => {
@@ -524,7 +579,6 @@ const deleteRow = (row) => {
     deleteSysExportTemplateFunc(row)
   })
 }
-
 
 // 多选删除
 const onDelete = async() => {

@@ -142,7 +142,11 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	}
 	selects := strings.Join(columns, ", ")
 	var tableMap []map[string]interface{}
-	db := global.GVA_DB.Select(selects).Table(template.TableName)
+	db := global.GVA_DB
+	if template.DBName != "" {
+		db = global.MustGetGlobalDBByDBName(template.DBName)
+	}
+	db = db.Select(selects).Table(template.TableName)
 
 	if len(template.Conditions) > 0 {
 		for _, condition := range template.Conditions {
@@ -297,7 +301,13 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 	for key, title := range templateInfoMap {
 		titleKeyMap[title] = key
 	}
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
+	db := global.GVA_DB
+	if template.DBName != "" {
+		db = global.MustGetGlobalDBByDBName(template.DBName)
+	}
+
+	return db.Transaction(func(tx *gorm.DB) error {
 		excelTitle := rows[0]
 		values := rows[1:]
 		for _, row := range values {

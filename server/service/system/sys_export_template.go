@@ -8,6 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"mime/multipart"
@@ -126,14 +127,16 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		return
 	}
 	var templateInfoMap = make(map[string]string)
+	columns, err := utils.GetJSONKeys(template.TemplateInfo)
+	if err != nil {
+		return nil, "", err
+	}
 	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
 	if err != nil {
 		return nil, "", err
 	}
-	var columns []string
 	var tableTitle []string
-	for key := range templateInfoMap {
-		columns = append(columns, key)
+	for _, key := range columns {
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
 	selects := strings.Join(columns, ", ")

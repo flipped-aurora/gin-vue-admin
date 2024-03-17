@@ -443,31 +443,6 @@
             <el-input v-model="config.autocode['web-table']" />
           </el-form-item>
         </el-collapse-item>
-
-        <el-collapse-item
-          title="Timer(定时任务)"
-          name="13"
-        >
-          <el-form-item label="Start（是否启用）">
-            <el-checkbox v-model="config.timer['start']" />
-          </el-form-item>
-          <el-form-item label="Spec(CRON表达式)">
-            <el-input v-model="config.timer.spec" />
-          </el-form-item>
-          <template v-for="(item,k) in config.timer.detail">
-            <div
-              v-for="(_,k2) in item"
-              :key="k2"
-            >
-              <el-form-item
-                :key="k+k2"
-                :label="k2"
-              >
-                <el-input v-model="item[k2]" />
-              </el-form-item>
-            </div>
-          </template>
-        </el-collapse-item>
       </el-collapse>
     </el-form>
     <div class="mt-4">

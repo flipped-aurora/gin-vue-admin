@@ -123,15 +123,11 @@
           label="字典值"
           prop="value"
         >
-          <el-input-number
-            v-model.number="formData.value"
-            step-strictly
-            :step="1"
+          <el-input
+            v-model="formData.value"
             placeholder="请输入字典值"
             clearable
             :style="{width: '100%'}"
-            min="-2147483648"
-            max="2147483647"
           />
         </el-form-item>
         <el-form-item

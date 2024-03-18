@@ -51,6 +51,10 @@
        {{- if eq .FieldType "file" }}
           <SelectFile v-model="formData.{{ .FieldJson }}" />
        {{- end }}
+       {{- if eq .FieldType "json" }}
+          // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
+          {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+       {{- end }}
        </el-form-item>
       {{- end }}
         <el-form-item>
@@ -128,6 +132,9 @@ const formData = ref({
             {{- end }}
             {{- if eq .FieldType "file" }}
             {{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "json" }}
+            {{.FieldJson}}: {},
             {{- end }}
         {{- end }}
         })

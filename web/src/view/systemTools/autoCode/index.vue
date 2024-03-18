@@ -418,6 +418,7 @@
               style="width:100%"
               placeholder="请选择字段查询条件"
               clearable
+              :disabled="row.fieldType!=='json'"
             >
               <el-option
                 v-for="item in typeSearchOptions"
@@ -601,6 +602,10 @@ const typeOptions = ref([
   {
     label: '文件（json字符串）',
     value: 'file',
+  },
+  {
+    label: 'JSON',
+    value: 'json',
   }
 ])
 

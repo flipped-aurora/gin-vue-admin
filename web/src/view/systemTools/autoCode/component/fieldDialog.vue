@@ -96,6 +96,7 @@
       >
         <el-select
           v-model="middleDate.fieldSearchType"
+          :disabled="middleDate.fieldType === 'json'"
           style="width:100%"
           placeholder="请选择字段查询条件"
           clearable

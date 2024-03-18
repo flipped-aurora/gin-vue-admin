@@ -8,7 +8,13 @@
           <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
-          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}" placeholder="请输入" />
+      {{- if .DictType}}
+           <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+              <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+           </el-select>
+      {{- else }}
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入{{.FieldDesc}}" />
+      {{- end }}
       {{- end }}
       {{- if eq .FieldType "richtext" }}
           <RichEdit v-model="formData.{{.FieldJson}}"/>

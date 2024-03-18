@@ -40,8 +40,6 @@
             </el-form-item>
             {{- else}}
         <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-
-
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
@@ -205,7 +203,13 @@
               <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
           {{- end }}
           {{- if eq .FieldType "string" }}
+          {{- if .DictType}}
+              <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+          {{- else }}
               <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入{{.FieldDesc}}" />
+          {{- end }}
           {{- end }}
           {{- if eq .FieldType "richtext" }}
               <RichEdit v-model="formData.{{.FieldJson}}"/>

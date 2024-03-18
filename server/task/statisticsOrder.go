@@ -18,10 +18,10 @@ func StatisticsOrder(db *gorm.DB) error {
 	var statistics cinema.CinemaStatistics
 	// 统计昨日订单数据
 	err := db.Model(&order).Select(
-		"SUM(CASE WHEN status = 1 THEN film_price ELSE 0 END) AS price,"+
-			"SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS total,"+
-			"SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END) AS refund_total,"+
-			"SUM(CASE WHEN status = 2 THEN film_price ELSE 0 END) AS refund_price").Where("created_at BETWEEN ? AND ?", yesterday, today).Find(&statistics).Error
+		"COALESCE(SUM(CASE WHEN status = 1 THEN film_price ELSE 0 END), 0) AS price,"+
+			"COALESCE(SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END), 0)  AS total,"+
+			"COALESCE(SUM(CASE WHEN status = 2 THEN 1 ELSE 0 END), 0)  AS refund_total,"+
+			"COALESCE(SUM(CASE WHEN status = 2 THEN film_price ELSE 0 END), 0)  AS refund_price").Where("created_at BETWEEN ? AND ?", yesterday, today).Find(&statistics).Error
 	if err != nil {
 		return err
 	}

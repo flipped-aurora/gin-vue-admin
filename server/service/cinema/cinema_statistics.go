@@ -31,13 +31,13 @@ func (cinemaStatisticsService *CinemaStatisticsService) GetCinemaStatisticsInfoL
 		db = db.Limit(limit).Offset(offset)
 	}
 
-	err = db.Find(&cinemaStatistics).Error
+	err = db.Order("id DESC").Find(&cinemaStatistics).Error
 	return cinemaStatistics, total, err
 }
 
 func (cinemaStatisticsService *CinemaStatisticsService) GetCinemaStatisticsToday() (today cinema.CinemaStatisticsToday, err error) {
 	db := global.GVA_DB.Model(&cinema.CinemaOrder{})
-	err = db.Select("SUM(CASE WHEN status = 1 THEN film_price ELSE 0 END) AS price, SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) AS total").
+	err = db.Select("COALESCE(SUM(CASE WHEN status = 1 THEN film_price ELSE 0 END), 0) AS price, COALESCE(SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END), 0) AS total").
 		Where("created_at >= ?", time.Now().Format("2006-01-02")).Find(&today).Error
 	return today, err
 }

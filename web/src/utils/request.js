@@ -1,8 +1,8 @@
 import axios from 'axios' // 引入axios
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
-import { emitter } from '@/utils/bus.js'
 import router from '@/router/index'
+import { ElLoading } from 'element-plus'
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
@@ -10,14 +10,19 @@ const service = axios.create({
 })
 let activeAxios = 0
 let timer
-const showLoading = () => {
+let loadingInstance
+const showLoading = (ref) => {
+  const loadDom = document.getElementById('gva-base-load-dom')
   activeAxios++
   if (timer) {
     clearTimeout(timer)
   }
   timer = setTimeout(() => {
     if (activeAxios > 0) {
-      emitter.emit('showLoading')
+      loadingInstance = ElLoading.service({
+        target: ref || loadDom,
+        lock: true,
+      })
     }
   }, 400)
 }
@@ -26,14 +31,14 @@ const closeLoading = () => {
   activeAxios--
   if (activeAxios <= 0) {
     clearTimeout(timer)
-    emitter.emit('closeLoading')
+    loadingInstance && loadingInstance.close()
   }
 }
 // http request 拦截器
 service.interceptors.request.use(
   config => {
     if (!config.donNotShowLoading) {
-      showLoading()
+      showLoading(config.loadingRef)
     }
     const userStore = useUserStore()
     config.headers = {

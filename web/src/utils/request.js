@@ -11,7 +11,9 @@ const service = axios.create({
 let activeAxios = 0
 let timer
 let loadingInstance
-const showLoading = (ref) => {
+const showLoading = (option = {
+  target: null,
+}) => {
   const loadDom = document.getElementById('gva-base-load-dom')
   activeAxios++
   if (timer) {
@@ -19,10 +21,8 @@ const showLoading = (ref) => {
   }
   timer = setTimeout(() => {
     if (activeAxios > 0) {
-      loadingInstance = ElLoading.service({
-        target: ref || loadDom,
-        lock: true,
-      })
+      if (!option.target) option.target = loadDom
+      loadingInstance = ElLoading.service(option)
     }
   }, 400)
 }
@@ -38,7 +38,7 @@ const closeLoading = () => {
 service.interceptors.request.use(
   config => {
     if (!config.donNotShowLoading) {
-      showLoading(config.loadingRef)
+      showLoading(config.loadingOption)
     }
     const userStore = useUserStore()
     config.headers = {

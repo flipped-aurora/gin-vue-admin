@@ -167,8 +167,7 @@
           class="admin-box"
         >
           <div
-            v-loading="loadingFlag"
-            element-loading-text="正在加载中"
+            id="gva-base-load-dom"
           >
             <transition
               mode="out-in"
@@ -218,7 +217,6 @@ const isSider = ref(true)
 const isMobile = ref(false)
 
 const first = ref('')
-const dialogVisible = ref(false)
 const initPage = () => {
   // 判断当前用户的操作系统
   if (window.localStorage.getItem('osType') === 'WIN') {
@@ -259,18 +257,11 @@ const handleCommand = () => {
   command.value.open()
 }
 
-const loadingFlag = ref(false)
 onMounted(() => {
   // 挂载一些通用的事件
   emitter.emit('collapse', isCollapse.value)
   emitter.emit('mobile', isMobile.value)
   emitter.on('reload', reload)
-  emitter.on('showLoading', () => {
-    loadingFlag.value = true
-  })
-  emitter.on('closeLoading', () => {
-    loadingFlag.value = false
-  })
   window.onresize = () => {
     return (() => {
       initPage()

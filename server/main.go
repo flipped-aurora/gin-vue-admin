@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/core"

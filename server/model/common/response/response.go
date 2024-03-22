@@ -53,3 +53,17 @@ func FailWithMessage(message string, c *gin.Context) {
 func FailWithDetailed(data interface{}, message string, c *gin.Context) {
 	Result(ERROR, data, message, c)
 }
+
+// 参数错误
+func Fail500Error(c *gin.Context) {
+	c.HTML(http.StatusInternalServerError, "500.html", gin.H{
+		"title": "500",
+	})
+}
+
+// 404 错误
+func Fail404Error(c *gin.Context) {
+	c.HTML(http.StatusInternalServerError, "404.html", gin.H{
+		"title": "页面走丢了~~~",
+	})
+}

@@ -29,4 +29,7 @@ type Server struct {
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+
+	// 默认站点
+	Website Website `mapstructure:"website" json:"website" yaml:"website"`
 }

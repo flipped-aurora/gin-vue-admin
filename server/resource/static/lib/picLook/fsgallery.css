@@ -1,0 +1,48 @@
+.fs_gallery {
+	background: rgba(0, 0, 0, 0.9); left: 0px; top: 0px; right: 0px; bottom: 0px; position: fixed; z-index: 1000000;
+}
+.fs_gallery_close {
+	top: 20px; width: 25px; height: 25px; text-align: center; right: 20px; color: rgb(204, 204, 204); line-height: 23px; font-size: 34px; position: absolute; z-index: 1002; cursor: pointer;
+}
+.fs_gallery_close::before {
+	content: "x";
+}
+.fs_gallery_close:hover {
+	color: rgb(255, 255, 255);
+}
+.fs_gallery_prev {
+	width: 80px; color: rgb(204, 204, 204); font-size: 30px; position: absolute; z-index: 1001; cursor: pointer;
+}
+.fs_gallery_next {
+	width: 80px; color: rgb(204, 204, 204); font-size: 30px; position: absolute; z-index: 1001; cursor: pointer;
+}
+.fs_gallery_prev:hover {
+	background: rgba(0, 0, 0, 0.1); color: rgb(255, 255, 255);
+}
+.fs_gallery_next:hover {
+	background: rgba(0, 0, 0, 0.1); color: rgb(255, 255, 255);
+}
+.fs_gallery_prev {
+	left: 0px; top: 0px; bottom: 0px;
+}
+.fs_gallery_next {
+	top: 0px; right: 0px; bottom: 0px;
+}
+.fs_gallery_prev::before {
+	left: 35px; top: 50%; height: 30px; margin-top: -30px; position: absolute; content: "<";
+}
+.fs_gallery_next::before {
+	left: 35px; top: 50%; height: 30px; margin-top: -30px; position: absolute; content: ">";
+}
+.fs_gallery_shuft {
+	width: 9999999px; position: relative;
+}
+.fs_gallery_shuft::after {
+	clear: both; display: block; content: "";
+}
+.fs_gallery_shuft_item {
+	background-position: center; float: left; position: relative; background-repeat: no-repeat;
+}
+.fs_gallery_shuft_item img {
+	left: 50%; top: 50%; position: absolute; box-shadow: 0px 0px 8px rgba(0,0,0,0.8);
+}

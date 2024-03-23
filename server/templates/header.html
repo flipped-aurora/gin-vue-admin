@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <title>{{.title}}</title>
+  <meta charset="utf-8">
+  <meta name="keywords" content="{{.keywords}}">
+  <meta name="description" content="{{.description}}">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+  <meta name="renderer" content="webkit">
+  <meta name="format-detection" content="telephone=no">
+  <meta http-equiv="Cache-Control" content="no-siteapp"/>
+  <link rel="stylesheet" href="/static/lib/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/static/lib/css/animate.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/static/lib/css/common.css">
+  <link rel="stylesheet" type="text/css" href="/static/lib/swiper/swiper.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/lib/css/main.css">
+  <link rel="stylesheet" type="text/css" href="/static/lib/css/device.css">
+  <!--[if lt IE 9]>
+  <script src="/static/lib/html_js/html5shiv.min.js"></script>
+  <script type="text/javascript" src="/static/lib/html_js/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <!--header start-->
+  <header class="ui_box header">
+    <div class="w1500">
+      <div class="logotop">
+        <a href="/" class="logo fl"><img src="/{{.logo}}" alt="" title=""></a>
+        <div class="i_bcss fr">
+        <div class="i_bcss_t">&nbsp;</div>
+        <div class="i_bcss_c">
+          <input type="text" class="ipt1 fl" placeholder="请输入搜索内容">
+          <input type="submit" class="ipt2 fl" value="">
+        </div>
+      </div>
+        {{$category := category 0 .siteid }}
+        <div class="i_logo_ul fr">
+        <ul class="nav_menu">
+         {{range $v := $category }}
+            <li>
+              <a href="{{$v.Url}}" class="a_nav bigzm {{if eq $v.ID $.ID}}active1{{end}}">{{$v.Name}}</a>
+              {{if $v.Children}} 
+              <dl>
+                {{range $v1 := $v.Children}}
+                  <dd>
+                    <a href="{{$v1.Url}}">{{$v1.Name}}</a>
+                  </dd>
+                {{end}}
+              </dl>
+              {{end}}
+            </li>
+         {{end}}
+       </ul>
+     </div>
+         <div class="clearboth"></div>
+      </div>
+    </div>
+  </header>
+  <!--手机端导航start-->
+  <div class="phone_nav">
+          <div class="phone_logo">
+              <a href="/" class="p1">
+                  <img src="/{{.logo}}" alt="" title="">
+              </a>
+          </div>
+          <div class="i_ssbn">
+             <span>&nbsp;</span>
+            <div class="i_ssbn_div">
+             <input type="text" class="ipt1 fl" placeholder="请输入搜索内容">
+             <input type="submit"  class="ipt2 fl" value="">
+            </div>
+          </div>
+          <div class="nav_but_box"><span class="nav_but"></span></div>
+          <div class="nav_main">
+              <ul>
+                {{range $v := $category }}
+                    <li>
+                      <a href="{{$v.Url}}" class="a_nav bigzm {{if eq $v.ID $.ID}}active1{{end}}">{{$v.Name}}</a>
+                      {{if $v.Children}}
+                      <b></b>
+                      <ul class="ul">
+                        {{range $v1 := $v.Children}}
+                        <li>
+                            <a href="{{$v1.Url}}">{{$v1.Name}}</a>
+                        </li>
+                        {{end}}
+                      </ul>
+                      {{end}}
+                    </li>
+                {{end}}
+              </ul>
+          </div>
+      </div>
+  <!--手机端导航end-->
+  <!--header end-->

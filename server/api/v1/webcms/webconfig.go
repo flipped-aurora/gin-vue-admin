@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/webcms"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -82,8 +83,9 @@ func (w *WebconfigApi) ChangeWebconfig(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	global.GVA_CONFIG.Website.Siteid = siteid
-
+	session := sessions.Default(c)
+	session.Set("siteid", siteid)
+	session.Save()
 	response.Ok(c)
 
 }

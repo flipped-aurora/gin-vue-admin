@@ -1,0 +1,88 @@
+{{template "header.html" .}}
+<!--banner start-->
+<div class="n_banner" style="background-image:url({{.info.CateThumb}});">
+  <img src="{{.info.CateThumb}}">
+  <div class="n_banner_text">
+    <div class="w1500">
+      <div class="n_banner_text_c bigzm">
+        <h1>{{.info.Name}}</h1>
+        {{.info.Short}}<br>
+      </div>
+    </div>
+  </div>
+</div>
+<!--banner end-->
+<!--content start-->
+<section class="ui_box n_bg1">
+  <div class="w1500">
+     <div class="n_box1 set_box_wrap">
+       <div class="n_box1_l">
+         <div class="n_box1_l_t">
+           <div class="n_box1_l_t_c">
+            <a href="/">{{if eq .siteid 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
+           </div>
+         </div>
+         
+       </div>
+     </div>
+ </div>
+</section>
+<div class="n_box3">
+  <div class="w1500">
+    <div class="n_box1_r_t">
+      {{.info.Name}}
+     </div>
+     <div class="n_box1_r_c">
+       <div class="n_box2">
+         <a href="" class="activetop">全部</a>
+         {{range $v := category .info.ID .siteid }}
+          <a href="{{$v.Url}}">{{$v.Name}}</a>
+         {{end}}
+         <div class="clearboth"></div>
+       </div>
+       <ul class="n_box3_c fl">
+        {{range $item := .contentlist }}
+          <li>
+            <a href="{{$item.Url}}" class="div fl Amplification">
+                <div class="a_img fl">
+                  <img src="{{$item.Thumb}}">
+                </div>
+                <div class="a_text fl">
+                  <div class="a_text_t">
+                    {{$item.Title}}
+                  </div>
+                  <div class="a_text_c">
+                    {{$item.Desc | safe}}
+                  </div>
+                </div>
+                <div class="clearboth"></div>
+              </a>
+              <div class="clearboth"></div>
+          </li>
+         {{end}}
+       </ul>
+       <div class="clearboth"></div>
+       {{$pageinfo :=  paginator .page 12 .total}}
+       {{if gt .total 0}}
+       <div class="n_box4 set_box_wrap">
+        <a class="a_left" href="?page={{$pageinfo.firstpage}}&type={{$.templetype}}">上一页</a>
+        <span class="a_cen">
+          {{range $v := $pageinfo.pages}}
+            {{if eq $v $pageinfo.currpage}}
+              <span>{{$v}}</span>
+            {{else}}
+              <a href="?page={{$v}}&type={{$.templetype}}">{{$v}}</a>
+            {{end}}
+          {{end}}
+        </span>
+        <a class="a_right" href="?page={{$pageinfo.lastpage}}&type={{$.templetype}}">下一页</a>
+       </div>
+       {{end}}
+     </div>
+    
+    
+  </div>
+</div>
+<!--content end-->
+ <!--footer start-->
+ {{template "footer.html" .}}

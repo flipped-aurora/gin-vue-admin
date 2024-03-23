@@ -1,0 +1,333 @@
+{{template "header.html" .}}
+
+<!--banner start-->
+<div id="banner">
+  <div class="sctb1">&nbsp;</div>
+  <div class="swiper-container banner-swiper">
+        <div class="swiper-wrapper">
+          {{range $v := .siteid | getswiper}}
+            <a href="{{$v.Url}}" class="swiper-slide">
+                <div class="pc_banner"  style="background-image:url({{$v.Thumb}});">
+                  <img src="{{$v.Thumb}}" alt="{{$v.Title}}">
+                </div>
+                <div class="wap_banner" style="background-image:url({{$v.WapThumb}});">
+                <img src="{{$v.WapThumb}}" alt="">
+                </div>
+            </a>
+          {{end}}
+        </div>
+        <!-- Add Navigation -->
+        <div class="swiper-pagination banner-pagination"></div>
+        <!-- Add Arrows -->
+        <div class="swiper-button-next banner_next"></div>
+        <div class="swiper-button-prev banner_prev"></div>
+      </div>
+        </div>
+<!--banner end-->
+
+<!--content start-->
+<section class="ui_box">
+  <div class="w1500">
+    <div class="i_news">
+      <div class="i_news_t">
+         <div class="frame_content_box1_l fl">
+            <div class="swiper-container hd-swiper">
+            <div class="swiper-wrapper">
+               <a href="" class="swiper-slide">
+                   <img src="/static/lib/images/img1.jpg">
+                   <div class="a_text">这里是推荐的新闻标题展示处。可多张滚动 展示...</div>
+              </a>
+              <a class="swiper-slide">
+                   <img src="/static/lib/images/img1.jpg">
+                   <div class="a_text">1这里是推荐的新闻标题展示处。可多张滚动 展示...</div>
+              </a>
+              <a class="swiper-slide">
+                   <img src="/static/lib/images/img1.jpg">
+                   <div class="a_text">2这里是推荐的新闻标题展示处。可多张滚动 展示...</div>
+              </a>
+                
+            </div>
+            <!-- Add Navigation -->
+            <div class="swiper-pagination hd-pagination"></div>
+            <div class="swiper-button-next hd_next"></div>
+        <div class="swiper-button-prev hd_prev"></div>
+          </div>
+      
+         </div>
+         <div class="frame_content_box1_r fr">
+           <div class="frame_content_box1_r_t">
+             <a href="javascript:void(0);">企业动态</a>
+             <a href="javascript:void(0);">行业动态</a>
+             <div class="clearboth"></div>
+           </div>
+           <div class="frame_content_box1_r_c">
+             <div class="frame_content_box1_r_con">
+               <ul class="fl frame_content_box1_r_ul">
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+               </ul>
+               <div class="clearboth"></div>
+             </div>
+             <div class="frame_content_box1_r_con">
+               <ul class="fl frame_content_box1_r_ul">
+                 <li>
+                   <a href="">1于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+                 <li>
+                   <a href="">于成都市青羊区日月大道一段978号2栋1单元914-918 号，已通过IS09001质量管理体系认证、IS014001环境管理..</a>
+                 </li>
+               </ul>
+               <div class="clearboth"></div>
+             </div>
+           </div>           
+         </div>
+         <div class="clearboth"></div>
+         
+      </div>
+      <a href="" class="i_news_c">
+        <img src="/static/lib/images/ggw.jpg">
+      </a>
+    </div>
+  </div>
+</section>
+<section class="ui_box i_bg2" style="background-image:url(/static/lib/images/bg1.jpg);">
+  <div class="w1500">
+    <div class="i_xmcg">
+      <div class="i_xmcg_t set_box_wrap">
+        <div class="s1">项目成果</div>
+        <a href="" class="s2">更多+</a>
+      </div>
+      <div class="i_xmcg_c">
+        <div class="swiper-container project_swiper">
+            <div class="swiper-wrapper">
+               <div class="swiper-slide">
+                 <a href="" class="div fl Amplification">
+                  <div class="a_img fl">
+                    <img src="/static/lib/images/img2.jpg">
+                    <div class="a_address">成都市</div>
+                  </div>
+                  <div class="a_text fl">
+                    <div class="a_text_t">
+                     汶川县三江水库工程
+                    </div>
+                    <div class="a_text_c">
+                      该工程位于汶川县三江镇境内，属小（1） 型 水 库 ， 总 库 容798万m³， 兴 利 库容420万m³，该水库工程任务为城乡供
+                    </div>
+                  </div>
+                  <div class="clearboth"></div>
+                </a>
+                <div class="clearboth"></div>
+               </div>
+                  <div class="swiper-slide">
+                 <a href="" class="div fl Amplification">
+                  <div class="a_img fl">
+                    <img src="/static/lib/images/img2.jpg">
+                    <div class="a_address">成都市</div>
+                  </div>
+                  <div class="a_text fl">
+                    <div class="a_text_t">
+                     汶川县三江水库工程
+                    </div>
+                    <div class="a_text_c">
+                      该工程位于汶川县三江镇境内，属小（1） 型 水 库 ， 总 库 容798万m³， 兴 利 库容420万m³，该水库工程任务为城乡供
+                    </div>
+                  </div>
+                  <div class="clearboth"></div>
+                </a>
+                <div class="clearboth"></div>
+               </div>
+                <div class="swiper-slide">
+                 <a href="" class="div fl Amplification">
+                  <div class="a_img fl">
+                    <img src="/static/lib/images/img2.jpg">
+                    <div class="a_address">成都市</div>
+                  </div>
+                  <div class="a_text fl">
+                    <div class="a_text_t">
+                     汶川县三江水库工程
+                    </div>
+                    <div class="a_text_c">
+                      该工程位于汶川县三江镇境内，属小（1） 型 水 库 ， 总 库 容798万m³， 兴 利 库容420万m³，该水库工程任务为城乡供
+                    </div>
+                  </div>
+                  <div class="clearboth"></div>
+                </a>
+                <div class="clearboth"></div>
+               </div>
+                 <div class="swiper-slide">
+                 <a href="" class="div fl Amplification">
+                  <div class="a_img fl">
+                    <img src="/static/lib/images/img2.jpg">
+                    <div class="a_address">成都市</div>
+                  </div>
+                  <div class="a_text fl">
+                    <div class="a_text_t">
+                     汶川县三江水库工程
+                    </div>
+                    <div class="a_text_c">
+                      该工程位于汶川县三江镇境内，属小（1） 型 水 库 ， 总 库 容798万m³， 兴 利 库容420万m³，该水库工程任务为城乡供
+                    </div>
+                  </div>
+                  <div class="clearboth"></div>
+                </a>
+                <div class="clearboth"></div>
+               </div>
+                <div class="swiper-slide">
+                 <a href="" class="div fl Amplification">
+                  <div class="a_img fl">
+                    <img src="/static/lib/images/img2.jpg">
+                    <div class="a_address">成都市</div>
+                  </div>
+                  <div class="a_text fl">
+                    <div class="a_text_t">
+                     汶川县三江水库工程
+                    </div>
+                    <div class="a_text_c">
+                      该工程位于汶川县三江镇境内，属小（1） 型 水 库 ， 总 库 容798万m³， 兴 利 库容420万m³，该水库工程任务为城乡供
+                    </div>
+                  </div>
+                  <div class="clearboth"></div>
+                </a>
+                <div class="clearboth"></div>
+               </div>
+                <div class="swiper-slide">
+                 <a href="" class="div fl Amplification">
+                  <div class="a_img fl">
+                    <img src="/static/lib/images/img2.jpg">
+                    <div class="a_address">成都市</div>
+                  </div>
+                  <div class="a_text fl">
+                    <div class="a_text_t">
+                     汶川县三江水库工程
+                    </div>
+                    <div class="a_text_c">
+                      该工程位于汶川县三江镇境内，属小（1） 型 水 库 ， 总 库 容798万m³， 兴 利 库容420万m³，该水库工程任务为城乡供
+                    </div>
+                  </div>
+                  <div class="clearboth"></div>
+                </a>
+                <div class="clearboth"></div>
+               </div>
+                 </div>   
+                <!-- Add Scroll Bar -->
+                <!--<div class="swiper-pagination project_pagination"></div>-->
+                
+           </div>
+           <div class="swiper-button-next project_next"></div>
+           <div class="swiper-button-prev project_prev"></div>
+        
+        
+      
+      </div>
+      
+      
+    </div>
+</div>
+</section>
+<section class="ui_box">
+  <div class="w1500">
+    <div class="i_ryzz">
+      <div class="i_xmcg_t set_box_wrap">
+        <div class="s1">荣誉资质</div>
+        <a href="" class="s2">更多+</a>
+      </div>
+      <div class="i_ryzz_t gallery">
+        <div class="cx_content1" id="demo">
+              <div  id="indemo">
+                <div id="demo1">
+                  <div class="newc">
+                      <a href="" class="div">
+                        <div class="a_img"><img src="/static/lib/images/img3.jpg"></div>
+                        <div class="a_text">水利行业(河道整治 )专业乙级</div>
+                      </a>
+                  </div>
+                  <div class="newc">
+                      <a href="" class="div">
+                        <div class="a_img"><img src="/static/lib/images/img3.jpg"></div>
+                        <div class="a_text">工程勘察专业类(工程测量、水文地质）乙级、岩土工程勘察丙级</div>
+                      </a>
+                  </div>
+                   <div class="newc">
+                      <a href="" class="div">
+                        <div class="a_img"><img src="/static/lib/images/img3.jpg"></div>
+                        <div class="a_text">水利行业(河道整治 )专业乙级</div>
+                      </a>
+                  </div>
+                  <div class="newc">
+                      <a href="" class="div">
+                        <div class="a_img"><img src="/static/lib/images/img3.jpg"></div>
+                        <div class="a_text">工程勘察专业类(工程测量、水文地质）乙级、岩土工程勘察丙级</div>
+                      </a>
+                  </div>
+                  <div class="newc">
+                      <a href="" class="div">
+                        <div class="a_img"><img src="/static/lib/images/img3.jpg"></div>
+                        <div class="a_text">水利行业(河道整治 )专业乙级</div>
+                      </a>
+                  </div>
+                </div>
+                <div id="demo2"><!--这个div不能删除 -->
+                  <div class="newc"><a href="" target="_blank"></a></div>
+                  <div class="newc"><a href="" target="_blank"></a></div>
+                  <div class="newc"><a href="" target="_blank"></a></div>
+                  <div class="newc"><a href="" target="_blank"></a></div>
+                  <div class="newc"><a href="" target="_blank"></a></div>
+                </div>
+              </div>
+              </div>
+
+      </div>
+      
+    </div>
+</div>
+</section>
+<!--content end-->
+ <!--footer start-->
+ {{template "footer.html" .}}
+<script type="text/javascript">
+  $(function(){
+	 //首页调用
+	 dlhd_dgg.index();
+	 
+	  })
+</script>

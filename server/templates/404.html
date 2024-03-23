@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+</head>
+<style>
+    body {
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        color: #676a6c;
+        overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 100;
+    }
+    .h1, .h2, .h3, h1, h2, h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .gray-bg {
+        background-color: #f3f3f4;
+    }
+    .fadeInDown {
+        animation-name: fadeInDown;
+    }
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        z-index: 100;
+    }
+    .middle-box {
+        max-width: 400px;
+        z-index: 100;
+        margin: 0 auto;
+        padding-top: 40px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .lockscreen.middle-box {
+        width: 200px;
+        padding-top: 110px;
+    }
+
+    .loginscreen.middle-box {
+        width: 300px;
+    }
+    .middle-box h1 {
+        font-size: 170px;
+    }
+    .loginColumns {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 100px 20px 20px 20px;
+    }
+    .font-bold {
+        font-weight: 600;
+    }
+    .m-t {
+        margin-top: 15px;
+    }
+</style>
+<body class="gray-bg">
+    <div class="middle-box text-center animated fadeInDown">
+        <h1>404</h1>
+        <h3 class="font-bold">页面未找到！</h3>
+        <div class="error-desc">
+            抱歉，页面好像去火星了~
+        </div>
+    </div>
+</body>
+
+</html>

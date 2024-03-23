@@ -9,6 +9,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/router"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -37,6 +39,11 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 func Routers() *gin.Engine {
 	Router := gin.New()
 	Router.Use(gin.Recovery())
+
+	// 载入session
+	store := cookie.NewStore([]byte("gin-cms-admin"))
+	Router.Use(sessions.Sessions("mysession", store))
+
 	// gin.SetMode(gin.ReleaseMode)
 	if gin.Mode() == gin.DebugMode {
 		Router.Use(gin.Logger())

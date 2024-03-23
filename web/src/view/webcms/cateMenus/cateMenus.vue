@@ -92,7 +92,7 @@
         </el-form-item>
         <el-form-item label="栏目类型:"   prop="cateType" style="width:30%">
           <el-radio-group v-model="formData.cateType" >
-            <el-radio v-for="(item,index) in cateType" :key="index" :label="item.value">{{ item.label }}</el-radio>
+            <el-radio v-for="(item,index) in cateType" :key="index" value="item.value">{{ item.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item  style="width:30%"></el-form-item>
@@ -143,7 +143,7 @@
         </el-form-item>
         <el-form-item label="列表排序:"  prop="orderType" style="width:23%">
           <el-radio-group v-model="formData.orderType" >
-            <el-radio v-for="(item,index) in ordertype" :key="index" :label="item.value">{{ item.label }}</el-radio>
+            <el-radio v-for="(item,index) in ordertype" :key="index" :value="item.value">{{ item.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="每页数量:"  prop="pageSize" style="width:12%">
@@ -290,6 +290,7 @@ const getTableData = async() => {
     pageSize.value = table.data.pageSize
   }
   cateType.value = await getDict('catetype')
+  console.log(cateType.value)
   ordertype.value = await getDict('ordertype')
   // 获取模型列表
   const modellist = await getModelList()

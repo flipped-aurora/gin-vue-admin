@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+</head>
+<style>
+    body {
+        font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 13px;
+        color: #676a6c;
+        overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+        font-weight: 100;
+    }
+    .h1, .h2, .h3, h1, h2, h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .gray-bg {
+        background-color: #f3f3f4;
+    }
+    .fadeInDown {
+        animation-name: fadeInDown;
+    }
+    .animated {
+        -webkit-animation-duration: 1s;
+        animation-duration: 1s;
+        -webkit-animation-fill-mode: both;
+        animation-fill-mode: both;
+        z-index: 100;
+    }
+    .middle-box {
+        max-width: 400px;
+        z-index: 100;
+        margin: 0 auto;
+        padding-top: 40px;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .lockscreen.middle-box {
+        width: 200px;
+        padding-top: 110px;
+    }
+
+    .loginscreen.middle-box {
+        width: 300px;
+    }
+    .middle-box h1 {
+        font-size: 170px;
+    }
+    .loginColumns {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 100px 20px 20px 20px;
+    }
+    .font-bold {
+        font-weight: 600;
+    }
+    .m-t {
+        margin-top: 15px;
+    }
+    .btn {
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        background-color: #18a689;
+        border-color: #18a689;
+        color: #FFFFFF;
+    }
+</style>
+<body class="gray-bg">
+    <div class="middle-box text-center animated fadeInDown">
+        <h1>500</h1>
+        <h3 class="font-bold">服务器内部错误！</h3>
+        <div class="error-desc">
+            服务器好像出错了...
+            您可以返回主页看看
+            <br>
+            <a href="/" class="btn btn-primary m-t">首页</a>
+        </div>
+    </div>
+</body>
+
+</html>

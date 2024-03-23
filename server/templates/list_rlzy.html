@@ -1,0 +1,75 @@
+{{template "header.html" .}}
+<!--banner start-->
+<div class="n_banner" style="background-image:url({{.parentinfo.CateThumb}});">
+  <img src="{{.parentinfo.CateThumb}}">
+  <div class="n_banner_text">
+    <div class="w1500">
+      <div class="n_banner_text_c bigzm">
+        <h1>{{.parentinfo.Name}}</h1>
+        {{.parentinfo.Short}}<br>
+      </div>
+    </div>
+  </div>
+</div>
+<!--banner end-->
+<!--content start-->
+<section class="ui_box n_bg1">
+  <div class="w1500">
+     <div class="n_box1 set_box_wrap">
+       <div class="n_box1_l">
+         <div class="n_box1_l_t">
+           <div class="n_box1_l_t_c">
+            <a href="/">{{if eq .siteid 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
+           </div>
+         </div>
+         
+       </div>
+     </div>
+ </div>
+</section>
+<div class="n_box3">
+  <div class="w1500">
+    <div class="n_box1_r_t">
+      {{.info.Name}}
+     </div>
+     <div class="n_box1_r_c">
+       <dl class="a_careers_c">
+              <dt>
+                <div class="fl s1">招聘职位</div>
+                <div class="fl s2">招聘人数</div>
+                <div class="fl s3">工作地点 </div>
+                 <div class="fl s4">发布日期</div>
+                <div class="clearboth"></div>
+              </dt>
+              {{range $item := .contentlist }}
+                <dd>
+                  <div class="div fl">
+                    <div class="fl s1">{{$item.Job}}</div>
+                    <div class="fl s2">{{$item.Count}}</div>
+                    <div class="fl s3">{{$item.Address}}</div>
+                    <div class="fl s4">{{$item.CreatedAt.Format "2006年"}}</div>
+                    <div class="clearboth"></div>
+                      </div>
+                  <div class="div_l fl">
+                    {{$item.Content | safe}}
+                  </div>
+                  <div class="clearboth"></div>
+                </dd>
+              {{end}}
+            </dl>
+       
+     </div>
+    
+    
+  </div>
+</div>
+<!--content end-->
+ <!--footer start-->
+ {{template "footer.html" .}}
+<script type="text/javascript">
+  $(function(){
+	 //人才招聘调用
+	 dlhd_dgg.resources();
+	 
+	  })
+</script>

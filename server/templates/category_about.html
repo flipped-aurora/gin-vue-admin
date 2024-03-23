@@ -1,0 +1,69 @@
+{{template "header.html" .}}
+<!--banner start-->
+<div class="n_banner" style="background-image:url(/{{.info.CateThumb}});">
+  <img src="/{{.info.CateThumb}}">
+  <div class="n_banner_text">
+    <div class="w1500">
+      <div class="n_banner_text_c bigzm">
+        <h1>{{.info.Name}}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<!--banner end-->
+<!--phone内页导航start-->
+<section class="a_zxlmenu">
+  <div class="a_zxlmenu_t">{{.parentinfo.Name}}</div>
+        <ul class="fl a_zxlmenu_c">
+          {{range $v := category .info.ID .siteid }}
+            <li>
+            <a href="{{$v.Url}}" class="aone">{{$v.Name}}</a>
+            </li>
+          {{end}}
+          
+        </ul>
+        <div class="clearboth"></div>
+</section>
+<!--phone内页导航end-->
+<!--content start-->
+<section class="ui_box n_bg1" style="background-image:url(/static/lib/images/bg2.jpg);">
+  <div class="w1500">
+     <div class="n_box1 set_box_wrap">
+       <div class="n_box1_l">
+         <div class="n_box1_l_t">
+           <div class="n_box1_l_t_c">
+            <a href="/">{{if eq .siteid 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
+           </div>
+         </div>
+         <div class="n_box1_l_c">
+           <div class="n_box1_l_c_t bigzm">
+            {{.info.Name}}
+           </div>
+           <ul class="n_box1_l_c_ul fl">
+            {{range $v := category .info.ID .siteid }} 
+              <li>
+               <a href="{{$v.Url}}" {{if eq $v.ID $.info.ID}}class="activeleft"{{end}}>{{$v.Name}}</a>
+              </li>
+             {{end}}
+           </ul>
+           <div class="clearboth"></div>
+         </div>
+       </div>
+       <div class="n_box1_r">
+         <div class="n_box1_r_t">
+          {{.info.Name}}
+         </div>
+         <div class="n_box1_r_c">
+           <div class="n_about">
+            {{.info.Desc | safe}}
+           </div>
+         </div>
+         
+       </div>
+     </div>
+  </div>
+</section>
+
+<!--content end-->
+ <!--footer start-->
+ {{template "footer.html" .}}

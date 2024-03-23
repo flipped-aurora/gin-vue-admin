@@ -55,7 +55,7 @@ func (classService *ClassService) GetClassByCatid(catid uint) (class []webcms.Cl
 
 // GetClassInfoList 分页获取Class记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (classService *ClassService) GetClassInfoList(info webcmsReq.ClassSearch, siteid string) (list []webcms.Class, total int64, err error) {
+func (classService *ClassService) GetClassInfoList(info webcmsReq.ClassSearch, siteid any) (list []webcms.Class, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

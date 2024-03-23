@@ -142,13 +142,13 @@
         
         </el-form-item>
         <el-form-item label="详细信息:"  prop="productDetails" style="width: 100%;">
-          <Wangeditor  @update:content="formData.productDetails = $event" :content="formData.productDetails" :height="'300px'"/>
+          <!-- <Wangeditor  @update:content="formData.productDetails = $event" :content="formData.productDetails" :height="'300px'"/> -->
         </el-form-item>
-        <!-- <el-form-item label="条款:"  prop="productClause" style="width: 100%;">
-          <Wangeditor  @update:content="formData.productClause = $event" :content="formData.productClause"/>
-        </el-form-item> -->
+        <el-form-item label="条款:"  prop="productClause" style="width: 100%;">
+          <!-- <Wangeditor  @update:content="formData.productClause = $event" :content="formData.productClause"/> -->
+        </el-form-item>
         <el-form-item label="产品简介:"  prop="desc" style="width: 100%;">
-          <Wangeditor  @update:content="formData.desc = $event" :content="formData.desc"/>
+          <!-- <Wangeditor  @update:content="formData.desc = $event" :content="formData.desc"/> -->
         </el-form-item>
         <el-form-item label="是否显示:"  prop="enable" >
           <el-switch v-model="formData.enable" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
@@ -199,7 +199,7 @@ import {
 import Menus from '@/view/webcms/course/components/menus.vue'
 import CustomPic from '@/components/customPic/index.vue'
 import ChooseImg from '@/components/chooseImg/index.vue'
-import Wangeditor from '@/components/wangeditor/index.vue'
+// import Wangeditor from '@/components/wangeditor/index.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict } from '@/utils/format'
 import { ElMessage, ElMessageBox} from 'element-plus'
 import { ref, reactive,watch } from 'vue'

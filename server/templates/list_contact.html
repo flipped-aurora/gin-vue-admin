@@ -1,0 +1,133 @@
+{{template "header.html" .}}
+<!--header end-->
+<!--banner start-->
+<div class="n_banner" style="background-image:url({{.info.CateThumb}});">
+  <img src="{{.info.CateThumb}}">
+  <div class="n_banner_text">
+    <div class="w1500">
+      <div class="n_banner_text_c bigzm">
+        <h1>{{.info.Name}}</h1>
+        {{.info.Short}}<br>
+      </div>
+    </div>
+  </div>
+</div>
+<!--banner end-->
+<!--content start-->
+<section class="ui_box n_bg1">
+  <div class="w1500">
+     <div class="n_box1 set_box_wrap">
+       <div class="n_box1_l">
+         <div class="n_box1_l_t">
+           <div class="n_box1_l_t_c">
+            <a href="/">{{if eq .siteid 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
+           </div>
+         </div>
+         
+       </div>
+     </div>
+ </div>
+</section>
+<div class="n_box3">
+  <div class="w1500">
+    <div class="n_contact">
+        <div class="n_contact_l fl">
+          <div class="n_contact_l_t bigzm">
+            {{.info.Short}}<br>
+            <span>{{.info.Name}}</span>
+          </div>
+          <div class="div_l_c">
+            <table cellpadding="0" cellspacing="0" border="0" width="100%">
+              <tr>
+                <td width="58">
+                  <img src="/static/lib/images/p1.png">
+                </td>
+                <td>
+                  <span class="s1">电话</span><br>
+                  <span class="s2">028-85593003</span>
+                </td>
+              </tr>
+              <tr>
+                <td width="58">
+                  <img src="/static/lib/images/p2.png">
+                </td>
+                <td>
+                  <span class="s1">邮箱</span><br>
+                  374***925@qq.com
+                </td>
+              </tr>
+              <tr>
+                <td width="58">
+                  <img src="/static/lib/images/p3.png">
+                </td>
+                <td>
+                  <span class="s1">地址</span><br>
+                 成都市青羊区日月大道一段978号 
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="n_contact_r fr" id="map">
+          <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=hhKi5mVbjmdDD5rAWtGkCjuD"></script>
+        </div>
+        <div class="clearboth"></div>
+      </div>
+     
+    
+    
+  </div>
+</div>
+<section class="ui_box n_bg1" style="background-image:url(/static/lib/images/bg4.jpg);">
+  <div class="w1500">
+    <div class="inner_messages">
+        <div class="n_contact_l_t bigzm active">
+            Message<br>
+            <span>在线留言</span>
+          </div>
+         <div class="n_box11_c">
+         <ul class="n_box11_com fl">
+           <li>
+             <dl class="fl">
+               <dd>
+                 <div class="fl s1">姓名： </div>
+                 <input type="text" class="fr ipt1" placeholder="输入您的姓名">
+                 <div class="clearboth"></div>
+               </dd>
+               <dd>
+                 <div class="fl s1">电话： </div>
+                 <input type="text" class="fr ipt1" placeholder="输入您的手机号码">
+                 <div class="clearboth"></div>
+               </dd>
+               <dd>
+                 <div class="fl s1">邮箱： </div>
+                 <input type="text" class="fr ipt1" placeholder="输入您的邮箱">
+                 <div class="clearboth"></div>
+               </dd>
+             </dl>
+             <div class="clearboth"></div>
+           </li>
+           <li>
+           <div class="fl s2">留言： </div>
+            <textarea class="ipt2 fr" placeholder="输入您的留言内容"></textarea>
+            <div class="clearboth"></div>
+           </li>
+           <li  class="twobox">
+            <input type="submit" class="ipt3 fr" value="提交留言 >">
+           </li>
+         </ul>
+         <div class="clearboth"></div>
+       </div>
+      </div>
+  </div>
+</section>
+<!--content end-->
+ <!--footer start-->
+ {{template "footer.html" .}}
+<script type="text/javascript">
+  $(function(){
+	 //联系我们调用
+	 dlhd_dgg.map('map','103.981256','30.681858');
+	 
+	  })
+</script>

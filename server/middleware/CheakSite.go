@@ -6,6 +6,7 @@ import (
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/webcms"
+	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -13,16 +14,18 @@ import (
 func CheckSite() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 获取配置文件siteid
-		var siteid any
-		siteid = global.GVA_CONFIG.Website.Siteid
+		session := sessions.Default(c)
+		siteid := session.Get("siteid")
 		// 未有获取到数据 重新查询表第一条数据 并保存数据
 		var webconfig map[string]any
-		if siteid == 0 {
+		if siteid == nil {
 			err := global.GVA_DB.Model(webcms.Webconfig{}).First(&webconfig).Error
 			if err != nil {
 				global.GVA_LOG.Error("获取默认站点信息失败!", zap.Error(err))
 			}
 			siteid = webconfig["id"]
+			session.Set("siteid", siteid)
+			session.Save()
 		}
 		err := global.GVA_DB.Model(webcms.Webconfig{}).Where("id", siteid).Find(&webconfig).Error
 		if err != nil {
@@ -55,7 +58,7 @@ func HomeCheckSite() gin.HandlerFunc {
 			})
 			c.Abort()
 		} else {
-			c.Set("siteid", siteinfo.ID)
+			c.Set("siteinfo", siteinfo)
 			c.Next()
 		}
 		c.Next()

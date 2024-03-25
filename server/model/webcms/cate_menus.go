@@ -17,14 +17,14 @@ type CateMenus struct {
 	Sort         *int   `json:"sort" form:"sort" gorm:"column:sort;comment:排序标记;size:19;"`
 	Islink       string `json:"islink" form:"islink" gorm:"column:islink;comment:排序标记;size:191;"`
 	ModeType     int    `json:"modeType" form:"modeType" gorm:"column:mode_type;comment:模型管理 1 产品管理 2 文章管理;size:1;"`
-	CateType     int    `json:"cateType" form:"cateType" gorm:"column:cate_type;comment:栏目类型 1 封面 2 列表 3 链接;size:19;"`
+	CateType     string `json:"cateType" form:"cateType" gorm:"column:cate_type;comment:栏目类型 1 封面 2 列表 3 链接;size:191;"`
 	ListTemplate string `json:"listTemplate" form:"listTemplate" gorm:"column:list_template;comment:列表页模板;size:191;"`
 	ShowTemplate string `json:"showTemplate" form:"showTemplate" gorm:"column:show_template;comment:内容页模板;size:191;"`
 	CateThumb    string `json:"cateThumb" form:"cateThumb" gorm:"column:cate_thumb;comment:封面缩略图;size:191;"`
 	ListThumb    string `json:"listThumb" form:"listThumb" gorm:"column:list_thumb;comment:列表缩略图;size:191;"`
 	Desc         string `json:"desc" form:"desc" gorm:"column:desc;comment:栏目简介;type:text;"`
 	IsJump       bool   `json:"isJump" form:"isJump" gorm:"column:isjump;comment:是否跳转子栏目;"`
-	OrderType    int    `json:"orderType" form:"orderType" gorm:"column:order_type;comment:排序方式 1 升序 2 降序;size:4;default:1;"`
+	OrderType    string `json:"orderType" form:"orderType" gorm:"column:order_type;comment:排序方式 1 升序 2 降序;default:1;"`
 	PgSize       int    `json:"pageSize" form:"pageSize" gorm:"column:page_size;comment:每页数量;size:5;default:10;"`
 	Url          string `json:"url"  gorm:"-"`
 

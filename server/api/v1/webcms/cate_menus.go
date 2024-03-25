@@ -144,11 +144,11 @@ func (cateMenusApi *CateMenusApi) FindCateMenus(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if recateMenus, err := cateMenusService.GetCateMenus(cateMenus.ID); err != nil {
+	if cateMenus, err := cateMenusService.GetCateMenus(cateMenus.ID); err != nil {
 		global.GVA_LOG.Error("查询失败!", zap.Error(err))
 		response.FailWithMessage("查询失败", c)
 	} else {
-		response.OkWithData(gin.H{"recateMenus": recateMenus}, c)
+		response.OkWithData(gin.H{"cateMenus": cateMenus}, c)
 	}
 }
 

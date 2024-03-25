@@ -49,7 +49,7 @@ func (swiperService *SwiperService) GetSwiper(id uint) (swiper webcms.Swiper, er
 
 // GetSwiperInfoList 分页获取Swiper记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (swiperService *SwiperService) GetSwiperInfoList(info webcmsReq.SwiperSearch, siteid string) (list []webcms.Swiper, total int64, err error) {
+func (swiperService *SwiperService) GetSwiperInfoList(info webcmsReq.SwiperSearch, siteid any) (list []webcms.Swiper, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db

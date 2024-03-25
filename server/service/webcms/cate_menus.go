@@ -48,9 +48,9 @@ func (cateMenusService *CateMenusService) UpdateCateMenus(cateMenus webcms.CateM
 func (cateMenusService *CateMenusService) GetCateMenus(id uint) (cateMenus webcms.CateMenus, err error) {
 	err = global.GVA_DB.Where("id = ?", id).First(&cateMenus).Error
 	switch cateMenus.CateType {
-	case 1:
+	case "1":
 		cateMenus.Url = fmt.Sprint("/category/", cateMenus.ID)
-	case 2:
+	case "2":
 		cateMenus.Url = fmt.Sprint("/list/", cateMenus.ID)
 	default:
 		cateMenus.Url = cateMenus.Islink
@@ -85,9 +85,9 @@ func (cateMenusService *CateMenusService) getBaseMenuTreeMap(siteinfo map[string
 	err = global.GVA_DB.Where("siteid", siteinfo["id"]).Order("sort").Find(&allMenus).Error
 	for _, v := range allMenus {
 		switch v.CateType {
-		case 1:
+		case "1":
 			v.Url = fmt.Sprint(siteinfo["siteUrl"], "category/", v.ID)
-		case 2:
+		case "2":
 			v.Url = fmt.Sprint(siteinfo["siteUrl"], "list/", v.ID)
 		default:
 			v.Url = v.Islink
@@ -102,9 +102,9 @@ func (cateMenusService *CateMenusService) GetCateMenusListByPid(pid uint) (list 
 	err = global.GVA_DB.Where("parent_id = ?", pid).Where("hidden = ?", 0).Order("sort").Find(&list).Error
 	for k, v := range list {
 		switch v.CateType {
-		case 1:
+		case "1":
 			list[k].Url = fmt.Sprint("/category/", v.ID)
-		case 2:
+		case "2":
 			list[k].Url = fmt.Sprint("/list/", v.ID)
 		default:
 			list[k].Url = v.Islink
@@ -130,9 +130,9 @@ func (cateMenusService *CateMenusService) getBaseMenuTreeMap2(siteid int) (treeM
 	err = global.GVA_DB.Where("hidden = ?", 0).Where("siteid", siteid).Order("sort").Find(&allMenus).Error
 	for _, v := range allMenus {
 		switch v.CateType {
-		case 1:
+		case "1":
 			v.Url = fmt.Sprint("/category/", v.ID)
-		case 2:
+		case "2":
 			v.Url = fmt.Sprint("/list/", v.ID)
 		default:
 			v.Url = v.Islink

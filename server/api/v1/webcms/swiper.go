@@ -175,7 +175,7 @@ func (swiperApi *SwiperApi) GetSwiperList(c *gin.Context) {
 		return
 	}
 	// 获取站点id
-	siteinfo := c.GetStringMapString("siteinfo")
+	siteinfo := c.GetStringMap("siteinfo")
 	if list, total, err := swiperService.GetSwiperInfoList(pageInfo, siteinfo["id"]); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)

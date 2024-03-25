@@ -92,12 +92,12 @@
         </el-form-item>
         <el-form-item label="栏目类型:"   prop="cateType" style="width:30%">
           <el-radio-group v-model="formData.cateType" >
-            <el-radio v-for="(item,index) in cateType" :key="index" value="item.value">{{ item.label }}</el-radio>
+            <el-radio v-for="(item,index) in cateType" :key="index" :value="item.value">{{ item.label }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item  style="width:30%"></el-form-item>
         
-        <el-form-item label="列表页模板:" v-if="formData.cateType != 3"  prop="listTemplate" style="width:30%">
+        <el-form-item label="列表页模板:" v-if="formData.cateType != '3'"  prop="listTemplate" style="width:30%">
           <el-select v-model="formData.listTemplate"  placeholder="选择模板">
             <el-option
               v-for="item in templateList"
@@ -107,7 +107,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="内容页模板:" v-if="formData.cateType != 3"  prop="showTemplate" style="width:30%">
+        <el-form-item label="内容页模板:" v-if="formData.cateType != '3'"  prop="showTemplate" style="width:30%">
           <el-select v-model="formData.showTemplate"  placeholder="选择模板">
             <el-option
               v-for="item in templateList"
@@ -117,7 +117,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="外链地址" v-if="formData.cateType == 3"  prop="islink" style="width:40%">
+        <el-form-item label="外链地址" v-if="formData.cateType == '3'"  prop="islink" style="width:40%">
           <el-input v-model="formData.islink" :clearable="true"  placeholder="请输入" />
         </el-form-item>
         <br>
@@ -206,13 +206,13 @@ const formData = ref({
   sort: 0,
   islink: '#',
   modeType: 1,
-  cateType: 1,
+  cateType: "1",
   listTemplate:'',
   showTemplate:'',
   cateThumb:'',
   listThumb :'',
   desc: '',
-  orderType: 1,
+  orderType: "1",
   pageSize: 10,
 })
 
@@ -290,7 +290,6 @@ const getTableData = async() => {
     pageSize.value = table.data.pageSize
   }
   cateType.value = await getDict('catetype')
-  console.log(cateType.value)
   ordertype.value = await getDict('ordertype')
   // 获取模型列表
   const modellist = await getModelList()
@@ -360,7 +359,7 @@ const updateCateMenusFunc = async(row) => {
     const res = await findCateMenus({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.recateMenus
+        formData.value = res.data.cateMenus
         dialogFormVisible.value = true
         setOptions()
         // 获取模板文件列表
@@ -461,13 +460,13 @@ const closeDialog = () => {
         sort: 0,
         islink: '#',
         modeType: 1,
-        cateType: 1,
+        cateType: "1",
         listTemplate:'',
         showTemplate:'',
         cateThumb:'',
         listThumb :'',
         desc: '',
-        orderType: 1,
+        orderType: "1",
         pageSize: 10,
     }
 }

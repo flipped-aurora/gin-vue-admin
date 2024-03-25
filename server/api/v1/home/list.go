@@ -97,7 +97,7 @@ func (l *ListApi) ContentLists(catid, page, num int) (info webcms.CateMenus, con
 	}
 
 	// 排序方式
-	if info.OrderType == 1 {
+	if info.OrderType == "1" {
 		// 升序
 		pageInfo.OrderType = "id ASC"
 	} else {

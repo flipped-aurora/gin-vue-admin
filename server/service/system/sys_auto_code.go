@@ -8,7 +8,6 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
-	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -787,10 +786,10 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 			continue
 		}
 		if pathArr[2]+"/"+pathArr[3] == `server/plugin` && len(serverPlugin) == 0 {
-			serverPlugin = path.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
+			serverPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
 		}
 		if pathArr[2]+"/"+pathArr[3] == `web/plugin` && len(webPlugin) == 0 {
-			webPlugin = path.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
+			webPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
 		}
 	}
 	if len(serverPlugin) == 0 && len(webPlugin) == 0 {

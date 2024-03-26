@@ -17,19 +17,19 @@ import (
 type HomeApi struct{}
 
 var (
-	webconfigService = service.ServiceGroupApp.WebcmsServiceGroup.WebconfigService
-	linksService     = service.ServiceGroupApp.WebcmsServiceGroup.LinksService
-	homeService      = service.ServiceGroupApp.HomeServiceGroup.HomeService
-	swiperService    = service.ServiceGroupApp.WebcmsServiceGroup.SwiperService
+	linksService = service.ServiceGroupApp.WebcmsServiceGroup.LinksService
+	homeService  = service.ServiceGroupApp.HomeServiceGroup.HomeService
 )
 
 func (h *HomeApi) Home(c *gin.Context) {
 	// 获取站点id
-	siteid := c.GetInt("siteid")
+	siteinfo := c.GetStringMap("siteinfo")
 	links, err := linksService.GetLinksinfo()
 	if err != nil {
 		global.GVA_LOG.Error("提交失败!", zap.Error(err))
 	}
+	fmt.Println(siteinfo)
+	siteid := int(siteinfo["id"].(uint64))
 	webconfig := getwebcommon(siteid)
 	webconfig["title"] = fmt.Sprint("首页", "-", webconfig["company"])
 	webconfig["links"] = links

@@ -49,9 +49,9 @@ func HomeCheckSite() gin.HandlerFunc {
 
 		// fmt.Println(url, "1111")
 		//获取站点信息
-		siteinfo := webcms.Webconfig{}
+		var webconfig map[string]any
 		// 查不到站点 跳转404
-		err := global.GVA_DB.Table("webconfig").Where("site_url = ?", url).First(&siteinfo).Error
+		err := global.GVA_DB.Table("webconfig").Where("site_url = ?", url).Find(&webconfig).Error
 		if err != nil {
 			global.GVA_LOG.Error("查不到站点 跳转404", zap.Error(err))
 			c.HTML(http.StatusOK, "404.html", gin.H{
@@ -59,8 +59,8 @@ func HomeCheckSite() gin.HandlerFunc {
 			})
 			c.Abort()
 		} else {
-			global.BlackCache.Set(fmt.Sprint("webconfig:", siteinfo.ID), siteinfo, -1)
-			c.Set("siteinfo", siteinfo)
+			global.BlackCache.Set(fmt.Sprint("webconfig:", webconfig["id"]), webconfig, -1)
+			c.Set("siteinfo", webconfig)
 			c.Next()
 		}
 		c.Next()

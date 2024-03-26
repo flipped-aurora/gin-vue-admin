@@ -33,8 +33,10 @@ func getwebcommon(siteid int) gin.H {
 
 // 获取getwebconfig 参数
 func getwebconfig(siteid int) map[string]string {
-	res, _ := global.BlackCache.Get(fmt.Sprint("webconfig:", siteid))
-	if res != nil {
+	fmt.Println(siteid)
+	res, ok := global.BlackCache.Get(fmt.Sprint("webconfig:", siteid))
+	fmt.Println(res)
+	if !ok {
 		global.GVA_LOG.Error("获取参数失败!")
 		return nil
 	} else {

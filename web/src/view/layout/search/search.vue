@@ -58,7 +58,7 @@ const selectsite = ref({})
 const getsitelist = async() => {
   const data = await getWebconfig()
   sitelist.value = data.data.list
-  selectsite.value = sitelist.value.find((item)=>data.data.siteid == data.data.siteid)
+  selectsite.value = sitelist.value.find((item) =>item.id == data.data.siteid)
 }
 getsitelist()
 
@@ -86,6 +86,9 @@ const changeSite = async (siteid) => {
   .el-dropdown-link {
     @apply cursor-pointer;
   }
+}
+:deep(.el-tooltip__trigger:focus-visible) {
+      outline: unset;
 }
 
 .reload {

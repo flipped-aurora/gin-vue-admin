@@ -201,7 +201,7 @@ const updateConfig = async() => {
 </script>
 <style>
 .header-img-box {
-  min-width: 200px;
+  width: 200px;
   width: 100%;
   /* height: 200px; */
   border: 1px dashed #ccc;

@@ -1,7 +1,6 @@
 package home
 
 import (
-	"context"
 	"fmt"
 	"time"
 
@@ -34,12 +33,12 @@ func getwebcommon(siteid int) gin.H {
 
 // 获取getwebconfig 参数
 func getwebconfig(siteid int) map[string]string {
-	res := global.GVA_REDIS.HGetAll(context.Background(), fmt.Sprint("webconfig:", siteid))
-	if res.Err() != nil {
-		global.GVA_LOG.Error("获取参数失败!", zap.Error(res.Err()))
+	res, _ := global.BlackCache.Get(fmt.Sprint("webconfig:", siteid))
+	if res != nil {
+		global.GVA_LOG.Error("获取参数失败!")
 		return nil
 	} else {
-		return res.Val()
+		return res.(map[string]string)
 	}
 }
 

@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -58,6 +59,7 @@ func HomeCheckSite() gin.HandlerFunc {
 			})
 			c.Abort()
 		} else {
+			global.BlackCache.Set(fmt.Sprint("webconfig:", siteinfo.ID), siteinfo, -1)
 			c.Set("siteinfo", siteinfo)
 			c.Next()
 		}

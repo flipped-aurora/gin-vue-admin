@@ -32,7 +32,7 @@ func (w *WebconfigApi) CreateWebconfig(c *gin.Context) {
 }
 
 func (w *WebconfigApi) GetWebconfig(c *gin.Context) {
-	siteinfo := c.GetStringMapString("siteinfo")
+	siteinfo := c.GetStringMap("siteinfo")
 
 	if list, err := webconfigService.GetWebconfig(); err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))

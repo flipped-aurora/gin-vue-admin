@@ -370,5 +370,7 @@ const changeShadow = () => {
 :deep .el-overlay {
   background-color: hsla(0,0%,100%,.9) !important;
 }
-
+.el-tooltip__trigger:focus-visible {
+      outline: unset;
+}
 </style>

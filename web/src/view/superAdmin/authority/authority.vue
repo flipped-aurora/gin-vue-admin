@@ -401,7 +401,6 @@ const setOptions = () => {
   setAuthorityOptions(tableData.value, AuthorityOption.value, false)
 }
 const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
-  form.value.authorityId = String(form.value.authorityId)
   AuthorityData &&
         AuthorityData.forEach(item => {
           if (item.children && item.children.length) {

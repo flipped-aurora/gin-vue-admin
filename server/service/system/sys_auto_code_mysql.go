@@ -44,21 +44,32 @@ func (s *autoCodeMysql) GetTables(businessDB string, dbName string) (data []resp
 func (s *autoCodeMysql) GetColumn(businessDB string, tableName string, dbName string) (data []response.Column, err error) {
 	var entities []response.Column
 	sql := `
-	SELECT COLUMN_NAME        column_name,
-       DATA_TYPE          data_type,
-       CASE DATA_TYPE
-           WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH
-           WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH
-           WHEN 'double' THEN CONCAT_WS(',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE)
-           WHEN 'decimal' THEN CONCAT_WS(',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE)
-           WHEN 'int' THEN c.NUMERIC_PRECISION
-           WHEN 'bigint' THEN c.NUMERIC_PRECISION
-           ELSE '' END AS data_type_long,
-       COLUMN_COMMENT     column_comment
-	FROM INFORMATION_SCHEMA.COLUMNS c
-	WHERE table_name = ?
-	  AND table_schema = ?
-	`
+	SELECT 
+    c.COLUMN_NAME column_name,
+    c.DATA_TYPE data_type,
+    CASE c.DATA_TYPE
+        WHEN 'longtext' THEN c.CHARACTER_MAXIMUM_LENGTH
+        WHEN 'varchar' THEN c.CHARACTER_MAXIMUM_LENGTH
+        WHEN 'double' THEN CONCAT_WS(',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE)
+        WHEN 'decimal' THEN CONCAT_WS(',', c.NUMERIC_PRECISION, c.NUMERIC_SCALE)
+        WHEN 'int' THEN c.NUMERIC_PRECISION
+        WHEN 'bigint' THEN c.NUMERIC_PRECISION
+        ELSE '' 
+    END AS data_type_long,
+    c.COLUMN_COMMENT column_comment,
+    CASE WHEN kcu.COLUMN_NAME IS NOT NULL THEN 1 ELSE 0 END AS primary_key
+FROM 
+    INFORMATION_SCHEMA.COLUMNS c
+LEFT JOIN 
+    INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu 
+ON 
+    c.TABLE_SCHEMA = kcu.TABLE_SCHEMA 
+    AND c.TABLE_NAME = kcu.TABLE_NAME 
+    AND c.COLUMN_NAME = kcu.COLUMN_NAME 
+    AND kcu.CONSTRAINT_NAME = 'PRIMARY'
+WHERE 
+    c.TABLE_NAME = ? 
+    AND c.TABLE_SCHEMA = ?;`
 	if businessDB == "" {
 		err = global.GVA_DB.Raw(sql, tableName, dbName).Scan(&entities).Error
 	} else {

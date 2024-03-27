@@ -13,4 +13,5 @@ type Column struct {
 	ColumnName    string `json:"columnName" gorm:"column:column_name"`
 	DataTypeLong  string `json:"dataTypeLong" gorm:"column:data_type_long"`
 	ColumnComment string `json:"columnComment" gorm:"column:column_comment"`
+	PrimaryKey    bool   `json:"primaryKey" gorm:"column:primary_key"`
 }

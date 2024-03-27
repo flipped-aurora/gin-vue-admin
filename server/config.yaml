@@ -30,6 +30,7 @@ mongo:
   database: ''
   username: ''
   password: ''
+  auth-source: ''
   min-pool-size: 0
   max-pool-size: 100
   socket-timeout-ms: 0

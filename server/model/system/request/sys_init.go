@@ -47,6 +47,10 @@ func (i *InitDB) SqliteEmptyDsn() string {
 	return i.DBPath + separator + i.DBName + ".db"
 }
 
+func (i *InitDB) MssqlEmptyDsn() string {
+	return "sqlserver://" + i.UserName + ":" + i.Password + "@" + i.Host + ":" + i.Port + "?database=" + i.DBName + "&encrypt=disable"
+}
+
 // ToMysqlConfig 转换 config.Mysql
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (i *InitDB) ToMysqlConfig() config.Mysql {
@@ -87,6 +91,22 @@ func (i *InitDB) ToPgsqlConfig() config.Pgsql {
 // Author [Kafumio](https://github.com/Kafumio)
 func (i *InitDB) ToSqliteConfig() config.Sqlite {
 	return config.Sqlite{
+		GeneralDB: config.GeneralDB{
+			Path:         i.DBPath,
+			Port:         i.Port,
+			Dbname:       i.DBName,
+			Username:     i.UserName,
+			Password:     i.Password,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogMode:      "error",
+			Config:       "",
+		},
+	}
+}
+
+func (i *InitDB) ToMssqlConfig() config.Mssql {
+	return config.Mssql{
 		GeneralDB: config.GeneralDB{
 			Path:         i.DBPath,
 			Port:         i.Port,

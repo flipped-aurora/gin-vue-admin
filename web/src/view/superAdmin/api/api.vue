@@ -62,55 +62,15 @@
           class="cursor-pointer"
           @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=7&vd_source=f2640257c21e3b547a790461ed94875e')"
         ><VideoCameraFilled /></el-icon>
-        <el-popover
-          v-model="deleteVisible"
-          placement="top"
-          width="160"
-        >
-          <p>确定要删除吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="deleteVisible = false"
-            >取消</el-button>
-            <el-button
-              type="primary"
-              @click="onDelete"
-            >确定</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="delete"
-              :disabled="!apis.length"
-              @click="deleteVisible = true"
-            >删除</el-button>
-          </template>
-        </el-popover>
-        <el-popover
-          v-model="freshVisible"
-          placement="top"
-          width="160"
-        >
-          <p>确定要刷新Casbin缓存吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="freshVisible = false"
-            >取消</el-button>
-            <el-button
-              type="primary"
-              @click="onFresh"
-            >确定</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="Refresh"
-              @click="freshVisible = true"
-            >刷新缓存</el-button>
-          </template>
-        </el-popover>
+        <el-button
+          icon="delete"
+          :disabled="!apis.length"
+          @click="onDelete"
+        >删除</el-button>
+        <el-button
+          icon="Refresh"
+          @click="onFresh"
+        >刷新缓存</el-button>
       </div>
       <el-table
         :data="tableData"
@@ -399,32 +359,40 @@ const handleSelectionChange = (val) => {
   apis.value = val
 }
 
-const deleteVisible = ref(false)
 const onDelete = async() => {
-  const ids = apis.value.map(item => item.ID)
-  const res = await deleteApisByIds({ ids })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: res.msg
-    })
-    if (tableData.value.length === ids.length && page.value > 1) {
-      page.value--
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const ids = apis.value.map(item => item.ID)
+    const res = await deleteApisByIds({ ids })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+      if (tableData.value.length === ids.length && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    deleteVisible.value = false
-    getTableData()
-  }
+  })
 }
-const freshVisible = ref(false)
 const onFresh = async() => {
-  const res = await freshCasbin()
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: res.msg
-    })
-  }
-  freshVisible.value = false
+  ElMessageBox.confirm('确定要刷新缓存吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await freshCasbin()
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+    }
+  })
 }
 
 // 弹窗相关

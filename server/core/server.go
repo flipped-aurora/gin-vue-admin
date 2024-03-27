@@ -2,8 +2,6 @@ package core
 
 import (
 	"fmt"
-	"time"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/initialize"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
@@ -35,15 +33,13 @@ func RunWindowsServer() {
 
 	address := fmt.Sprintf(":%d", global.GVA_CONFIG.System.Addr)
 	s := initServer(address, Router)
-	// 保证文本顺序输出
-	// In order to ensure that the text order output can be deleted
-	time.Sleep(10 * time.Microsecond)
+
 	global.GVA_LOG.Info("server run success on ", zap.String("address", address))
 
 	fmt.Printf(`
 	欢迎使用 gin-vue-admin
-	当前版本:v2.5.9
-    加群方式:微信号：shouzi_1994 QQ群：622360840
+	当前版本:v2.6.1
+    加群方式:微信号：shouzi_1994 QQ群：470239250
 	插件市场:https://plugin.gin-vue-admin.com
 	GVA讨论社区:https://support.qq.com/products/371961
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html

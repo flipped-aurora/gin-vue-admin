@@ -21,7 +21,8 @@ export const useDictionaryStore = defineStore('dictionary', () => {
         res.data.resysDictionary.sysDictionaryDetails && res.data.resysDictionary.sysDictionaryDetails.forEach(item => {
           dict.push({
             label: item.label,
-            value: item.value
+            value: item.value,
+            extend: item.extend
           })
         })
         dictionaryRes[res.data.resysDictionary.type] = dict

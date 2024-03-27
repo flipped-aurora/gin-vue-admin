@@ -38,33 +38,11 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-
-        <el-popover
-          v-model="deleteVisible"
-          placement="top"
-          width="160"
-        >
-          <p>确定要删除吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="deleteVisible = false"
-            >取消</el-button>
-            <el-button
-              type="primary"
-              @click="onDelete"
-            >确定</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="delete"
-              style="margin-left: 10px;"
-              :disabled="!multipleSelection.length"
-              @click="deleteVisible = true"
-            >删除</el-button>
-          </template>
-        </el-popover>
+        <el-button
+          icon="delete"
+          :disabled="!multipleSelection.length"
+          @click="onDelete"
+        >删除</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -136,7 +114,6 @@
               <el-popover
                 v-if="scope.row.body"
                 placement="left-start"
-                trigger="click"
               >
                 <div class="popover-box">
                   <pre>{{ fmtBody(scope.row.body) }}</pre>
@@ -161,7 +138,6 @@
               <el-popover
                 v-if="scope.row.resp"
                 placement="left-start"
-                trigger="click"
               >
                 <div class="popover-box">
                   <pre>{{ fmtBody(scope.row.resp) }}</pre>
@@ -179,32 +155,12 @@
           label="操作"
         >
           <template #default="scope">
-            <el-popover
-              v-model="scope.row.visible"
-              placement="top"
-              width="160"
-            >
-              <p>确定要删除吗？</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="scope.row.visible = false"
-                >取消</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteSysOperationRecordFunc(scope.row)"
-                >确定</el-button>
-              </div>
-              <template #reference>
-                <el-button
-                  icon="delete"
-                  type="primary"
-                  link
-                  @click="scope.row.visible = true"
-                >删除</el-button>
-              </template>
-            </el-popover>
+            <el-button
+              icon="delete"
+              type="primary"
+              link
+              @click="deleteSysOperationRecordFunc(scope.row)"
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -231,7 +187,7 @@ import {
 } from '@/api/sysOperationRecord' // 此处请自行替换地址
 import { formatDate } from '@/utils/format'
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 
 defineOptions({
   name: 'SysOperationRecord'
@@ -283,43 +239,52 @@ const getTableData = async() => {
 
 getTableData()
 
-const deleteVisible = ref(false)
 const multipleSelection = ref([])
 const handleSelectionChange = (val) => {
   multipleSelection.value = val
 }
 const onDelete = async() => {
-  const ids = []
-  multipleSelection.value &&
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const ids = []
+    multipleSelection.value &&
         multipleSelection.value.forEach(item => {
           ids.push(item.ID)
         })
-  const res = await deleteSysOperationRecordByIds({ ids })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '删除成功'
-    })
-    if (tableData.value.length === ids.length && page.value > 1) {
-      page.value--
+    const res = await deleteSysOperationRecordByIds({ ids })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      if (tableData.value.length === ids.length && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    deleteVisible.value = false
-    getTableData()
-  }
+  })
 }
 const deleteSysOperationRecordFunc = async(row) => {
-  row.visible = false
-  const res = await deleteSysOperationRecord({ ID: row.ID })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: '删除成功'
-    })
-    if (tableData.value.length === 1 && page.value > 1) {
-      page.value--
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await deleteSysOperationRecord({ ID: row.ID })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      if (tableData.value.length === 1 && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    getTableData()
-  }
+  })
 }
 const fmtBody = (value) => {
   try {

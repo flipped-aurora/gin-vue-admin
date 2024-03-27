@@ -96,6 +96,7 @@
       >
         <el-select
           v-model="middleDate.fieldSearchType"
+          :disabled="middleDate.fieldType === 'json'"
           style="width:100%"
           placeholder="请选择字段查询条件"
           clearable
@@ -116,7 +117,7 @@
         <el-select
           v-model="middleDate.dictType"
           style="width:100%"
-          :disabled="middleDate.fieldType!=='int'"
+          :disabled="middleDate.fieldType!=='int'&&middleDate.fieldType!=='string'"
           placeholder="请选择字典"
           clearable
         >
@@ -127,6 +128,9 @@
             :value="item.type"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item label="主键">
+        <el-checkbox v-model="middleDate.primaryKey" />
       </el-form-item>
       <el-form-item label="是否排序">
         <el-switch v-model="middleDate.sort" />

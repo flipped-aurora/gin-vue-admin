@@ -45,8 +45,30 @@ func (s *autoCodeMssql) GetTables(businessDB string, dbName string) (data []resp
 // Author [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodeMssql) GetColumn(businessDB string, tableName string, dbName string) (data []response.Column, err error) {
 	var entities []response.Column
-	sql := fmt.Sprintf(`select sc.name as column_name,st.name as data_type, sc.length as data_type_long
-	 from %s.DBO.syscolumns sc,systypes st where sc.xtype=st.xtype and st.usertype=0 and sc.id in (select id from %s.DBO.sysobjects where xtype='U' and name='%s');`, dbName, dbName, tableName)
+	sql := fmt.Sprintf(`
+SELECT
+    sc.name AS column_name,
+    st.name AS data_type,
+    sc.max_length AS data_type_long,
+    CASE
+        WHEN pk.object_id IS NOT NULL THEN 1
+        ELSE 0
+    END AS primary_key
+FROM
+    %s.sys.columns sc
+JOIN
+    sys.types st ON sc.user_type_id=st.user_type_id
+LEFT JOIN
+    %s.sys.objects so ON so.name='%s' AND so.type='U'
+LEFT JOIN
+    %s.sys.indexes si ON si.object_id = so.object_id AND si.is_primary_key = 1
+LEFT JOIN
+    %s.sys.index_columns sic ON sic.object_id = si.object_id AND sic.index_id = si.index_id AND sic.column_id = sc.column_id
+LEFT JOIN
+    %s.sys.key_constraints pk ON pk.object_id = si.object_id
+WHERE
+    st.is_user_defined=0 AND sc.object_id = so.object_id
+`, dbName, dbName, tableName, dbName, dbName, dbName)
 
 	if businessDB == "" {
 		err = global.GVA_DB.Raw(sql).Scan(&entities).Error

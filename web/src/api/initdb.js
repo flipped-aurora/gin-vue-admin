@@ -9,7 +9,8 @@ export const initDB = (data) => {
   return service({
     url: '/init/initdb',
     method: 'post',
-    data
+    data,
+    donNotShowLoading: true
   })
 }
 

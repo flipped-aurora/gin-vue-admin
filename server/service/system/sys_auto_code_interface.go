@@ -19,6 +19,10 @@ func (autoCodeService *AutoCodeService) Database(businessDB string) Database {
 			return AutoCodeMysql
 		case "pgsql":
 			return AutoCodePgsql
+		case "mssql":
+			return AutoCodeMssql
+		case "oracle":
+			return AutoCodeOracle
 		case "sqlite":
 			return AutoCodeSqlite
 		default:

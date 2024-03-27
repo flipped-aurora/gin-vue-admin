@@ -33,3 +33,10 @@
     }
 }
 
+
+.el-drawer__header{
+    margin-bottom: 0 !important;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+    @apply border-0 border-b border-solid border-gray-200;
+}

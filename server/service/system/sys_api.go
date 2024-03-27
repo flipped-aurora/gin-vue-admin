@@ -144,8 +144,15 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 	var oldA system.SysApi
 	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
 	if oldA.Path != api.Path || oldA.Method != api.Method {
-		if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
-			return errors.New("存在相同api路径")
+		var duplicateApi system.SysApi
+		if err := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&duplicateApi).Error; err != nil {
+			if !errors.Is(err, gorm.ErrRecordNotFound) {
+				return err
+			}
+		} else {
+			if duplicateApi.ID != api.ID {
+				return errors.New("存在相同api路径")
+			}
 		}
 	}
 	if err != nil {

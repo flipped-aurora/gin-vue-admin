@@ -9,12 +9,12 @@
     />
     <div class="gva-btn-list">
       <upload-common
-        v-model:imageCommon="imageCommon"
+        :image-common="imageCommon"
         class="upload-btn-media-library"
         @on-success="open"
       />
       <upload-image
-        v-model:imageUrl="imageUrl"
+        :image-url="imageUrl"
         :file-size="512"
         :max-w-h="1080"
         class="upload-btn-media-library"

@@ -1,39 +1,44 @@
 import axios from 'axios' // 引入axios
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
-import { emitter } from '@/utils/bus.js'
 import router from '@/router/index'
+import { ElLoading } from 'element-plus'
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_API,
   timeout: 99999
 })
-let acitveAxios = 0
+let activeAxios = 0
 let timer
-const showLoading = () => {
-  acitveAxios++
+let loadingInstance
+const showLoading = (option = {
+  target: null,
+}) => {
+  const loadDom = document.getElementById('gva-base-load-dom')
+  activeAxios++
   if (timer) {
     clearTimeout(timer)
   }
   timer = setTimeout(() => {
-    if (acitveAxios > 0) {
-      emitter.emit('showLoading')
+    if (activeAxios > 0) {
+      if (!option.target) option.target = loadDom
+      loadingInstance = ElLoading.service(option)
     }
   }, 400)
 }
 
 const closeLoading = () => {
-  acitveAxios--
-  if (acitveAxios <= 0) {
+  activeAxios--
+  if (activeAxios <= 0) {
     clearTimeout(timer)
-    emitter.emit('closeLoading')
+    loadingInstance && loadingInstance.close()
   }
 }
 // http request 拦截器
 service.interceptors.request.use(
   config => {
     if (!config.donNotShowLoading) {
-      showLoading()
+      showLoading(config.loadingOption)
     }
     const userStore = useUserStore()
     config.headers = {
@@ -78,11 +83,6 @@ service.interceptors.response.use(
         message: response.data.msg || decodeURI(response.headers.msg),
         type: 'error'
       })
-      if (response.data.data && response.data.data.reload) {
-        userStore.token = ''
-        localStorage.clear()
-        router.push({ name: 'Login', replace: true })
-      }
       return response.data.msg ? response.data : response
     }
   },
@@ -131,6 +131,22 @@ service.interceptors.response.use(
           confirmButtonText: '我知道了',
           cancelButtonText: '取消'
         })
+        break
+      case 401:
+        ElMessageBox.confirm(`
+          <p>无效的令牌</p>
+          <p>错误码:<span style="color:red"> 401 </span>错误信息:${error}</p>
+          `, '身份信息', {
+          dangerouslyUseHTMLString: true,
+          distinguishCancelAndClose: true,
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消'
+        })
+          .then(() => {
+            const userStore = useUserStore()
+            userStore.ClearStorage()
+            router.push({ name: 'Login', replace: true })
+          })
         break
     }
 

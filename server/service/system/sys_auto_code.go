@@ -136,6 +136,9 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
+			if autoCode.Fields[i].FieldSearchType != "" {
+				autoCode.HasSearchTimer = true
+			}
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
@@ -156,6 +159,21 @@ func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStru
 		if autoCode.Fields[i].FieldType == "file" {
 			autoCode.HasFile = true
 			autoCode.NeedJSON = true
+		}
+
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
 		}
 	}
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
@@ -235,11 +253,14 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 // @param: model.AutoCodeStruct
 // @return: err error
 
-func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, ids ...uint) (err error) {
+func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, menuID uint, ids ...uint) (err error) {
 	makeDictTypes(&autoCode)
 	for i := range autoCode.Fields {
 		if autoCode.Fields[i].FieldType == "time.Time" {
 			autoCode.HasTimer = true
+			if autoCode.Fields[i].FieldSearchType != "" {
+				autoCode.HasSearchTimer = true
+			}
 		}
 		if autoCode.Fields[i].Sort {
 			autoCode.NeedSort = true
@@ -260,6 +281,20 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		if autoCode.Fields[i].FieldType == "file" {
 			autoCode.NeedJSON = true
 			autoCode.HasFile = true
+		}
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
 		}
 	}
 	// 增加判断: 重复创建struct
@@ -354,7 +389,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			return err
 		}
 	}
-	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql {
+	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql || autoCode.AutoCreateMenuToSql {
 		if autoCode.TableName != "" {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
 				string(meta),
@@ -366,6 +401,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				idBf.String(),
 				autoCode.Package,
 				autoCode.BusinessDB,
+				menuID,
 			)
 		} else {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
@@ -378,6 +414,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 				idBf.String(),
 				autoCode.Package,
 				autoCode.BusinessDB,
+				menuID,
 			)
 		}
 	}
@@ -532,6 +569,21 @@ func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) 
 		return nil
 	})
 	return ids, err
+}
+
+func (autoCodeService *AutoCodeService) AutoCreateMenu(a *system.AutoCodeStruct) (id uint, err error) {
+	var menu system.SysBaseMenu
+	err = global.GVA_DB.First(&menu, "name = ?", a.Abbreviation).Error
+	if err == nil {
+		return 0, errors.New("存在相同的菜单路由，请关闭自动创建菜单功能")
+	}
+	menu.ParentId = "0"
+	menu.Name = a.Abbreviation
+	menu.Path = a.Abbreviation
+	menu.Meta.Title = a.Description
+	menu.Component = fmt.Sprintf("view/%s/%s.vue", a.PackageName, a.PackageName)
+	err = global.GVA_DB.Create(&menu).Error
+	return menu.ID, err
 }
 
 func (autoCodeService *AutoCodeService) getNeedList(autoCode *system.AutoCodeStruct) (dataList []tplData, fileList []string, needMkdir []string, err error) {
@@ -739,36 +791,44 @@ func (autoCodeService *AutoCodeService) InstallPlugin(file *multipart.FileHeader
 	paths = filterFile(paths)
 	var webIndex = -1
 	var serverIndex = -1
+	webPlugin := ""
+	serverPlugin := ""
+
 	for i := range paths {
 		paths[i] = filepath.ToSlash(paths[i])
 		pathArr := strings.Split(paths[i], "/")
 		ln := len(pathArr)
-		if ln < 2 {
+
+		if ln < 4 {
 			continue
 		}
-		if pathArr[ln-2] == "server" && pathArr[ln-1] == "plugin" {
-			serverIndex = i
+		if pathArr[2]+"/"+pathArr[3] == `server/plugin` && len(serverPlugin) == 0 {
+			serverPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
 		}
-		if pathArr[ln-2] == "web" && pathArr[ln-1] == "plugin" {
-			webIndex = i
+		if pathArr[2]+"/"+pathArr[3] == `web/plugin` && len(webPlugin) == 0 {
+			webPlugin = filepath.Join(pathArr[0], pathArr[1], pathArr[2], pathArr[3])
 		}
 	}
-	if webIndex == -1 && serverIndex == -1 {
+	if len(serverPlugin) == 0 && len(webPlugin) == 0 {
 		zap.L().Error("非标准插件，请按照文档自动迁移使用")
 		return webIndex, serverIndex, errors.New("非标准插件，请按照文档自动迁移使用")
 	}
 
-	if webIndex != -1 {
-		err = installation(paths[webIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+	if len(serverPlugin) != 0 {
+		err = installation(serverPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
 		if err != nil {
 			return webIndex, serverIndex, err
 		}
 	}
 
-	if serverIndex != -1 {
-		err = installation(paths[serverIndex], global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Server)
+	if len(webPlugin) != 0 {
+		err = installation(webPlugin, global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.Web)
+		if err != nil {
+			return webIndex, serverIndex, err
+		}
 	}
-	return webIndex, serverIndex, err
+
+	return 1, 1, err
 }
 
 func installation(path string, formPath string, toPath string) error {

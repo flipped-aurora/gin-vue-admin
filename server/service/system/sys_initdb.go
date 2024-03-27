@@ -15,6 +15,7 @@ const (
 	Mysql           = "mysql"
 	Pgsql           = "pgsql"
 	Sqlite          = "sqlite"
+	Mssql           = "mssql"
 	InitSuccess     = "\n[%v] --> 初始数据成功!\n"
 	InitDataExist   = "\n[%v] --> %v 的初始数据已存在!\n"
 	InitDataFailed  = "\n[%v] --> %v 初始数据失败! \nerr: %+v\n"
@@ -106,6 +107,9 @@ func (initDBService *InitDBService) InitDB(conf request.InitDB) (err error) {
 	case "sqlite":
 		initHandler = NewSqliteInitHandler()
 		ctx = context.WithValue(ctx, "dbtype", "sqlite")
+	case "mssql":
+		initHandler = NewMssqlInitHandler()
+		ctx = context.WithValue(ctx, "dbtype", "mssql")
 	default:
 		initHandler = NewMysqlInitHandler()
 		ctx = context.WithValue(ctx, "dbtype", "mysql")

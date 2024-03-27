@@ -10,9 +10,9 @@
     >
       <el-tab-pane
         v-for="item in historys"
-        :key="name(item)"
+        :key="getFmtString(item)"
         :label="item.meta.title"
-        :name="name(item)"
+        :name="getFmtString(item)"
         :tab="item"
         class="gva-tab"
       >
@@ -20,13 +20,13 @@
           <span
             :tab="item"
             :style="{
-              color: activeValue === name(item) ? userStore.activeColor : '#333',
+              color: activeValue === getFmtString(item) ? userStore.activeColor : '#333',
             }"
           ><i
              class="dot"
              :style="{
                backgroundColor:
-                 activeValue === name(item) ? userStore.activeColor : '#ddd',
+                 activeValue === getFmtString(item) ? userStore.activeColor : '#ddd',
              }"
            />
             {{ fmtTitle(item.meta.title,item) }}</span>
@@ -48,10 +48,9 @@
   </div>
 </template>
 
-
 <script setup>
 import { emitter } from '@/utils/bus.js'
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, onUnmounted, ref, watch, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 import { fmtTitle } from '@/utils/fmtRouterTitle'
@@ -72,12 +71,6 @@ const activeValue = ref('')
 const contextMenuVisible = ref(false)
 
 const userStore = useUserStore()
-
-const name = (item) => {
-  return (
-    item.name + JSON.stringify(item.query) + JSON.stringify(item.params)
-  )
-}
 
 const left = ref(0)
 const top = ref(0)
@@ -280,7 +273,7 @@ watch(() => historys.value, () => {
 const initPage = () => {
   // 全局监听 关闭当前页面函数
   emitter.on('closeThisPage', () => {
-    removeTab(name(route))
+    removeTab(getFmtString(route))
   })
   // 全局监听 关闭所有页面函数
   emitter.on('closeAllPage', () => {
@@ -292,6 +285,36 @@ const initPage = () => {
   emitter.on('collapse', (data) => {
     isCollapse.value = data
   })
+
+  emitter.on('setQuery', (data) => {
+    const index = historys.value.findIndex(
+      (item) => getFmtString(item) === activeValue.value
+    )
+    historys.value[index].query = data
+    activeValue.value = getFmtString(historys.value[index])
+    const currentUrl = window.location.href.split('?')[0]
+    const currentSearchParams = new URLSearchParams(data).toString()
+    window.history.replaceState({}, '', `${currentUrl}?${currentSearchParams}`)
+    sessionStorage.setItem('historys', JSON.stringify(historys.value))
+  })
+
+  emitter.on('switchTab', async(data) => {
+    const index = historys.value.findIndex((item) => item.name === data.name)
+    if (index < 0) {
+      return
+    }
+    for (const key in data.query) {
+      data.query[key] = String(data.query[key])
+    }
+    for (const key in data.params) {
+      data.params[key] = String(data.params[key])
+    }
+
+    historys.value[index].query = data.query || {}
+    historys.value[index].params = data.params || {}
+    await nextTick()
+    router.push(historys.value[index])
+  })
   const initHistorys = [
     {
       name: defaultRouter.value,
@@ -302,6 +325,7 @@ const initPage = () => {
       params: {},
     },
   ]
+  setTab(route)
   historys.value =
       JSON.parse(sessionStorage.getItem('historys')) || initHistorys
   if (!window.sessionStorage.getItem('activeValue')) {
@@ -309,7 +333,6 @@ const initPage = () => {
   } else {
     activeValue.value = window.sessionStorage.getItem('activeValue')
   }
-  setTab(route)
   if (window.sessionStorage.getItem('needCloseAll') === 'true') {
     closeAll()
     window.sessionStorage.removeItem('needCloseAll')

@@ -129,6 +129,7 @@ import DashboardTable from '@/view/dashboard/dashboardTable/dashboardTable.vue'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWeatherInfo } from '@/view/dashboard/weather.js'
+import SelectImage from '@/components/selectImage/selectImage.vue'
 
 defineOptions({
   name: 'Dashboard'

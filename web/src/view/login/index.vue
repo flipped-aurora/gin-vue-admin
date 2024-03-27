@@ -183,18 +183,17 @@ const checkPassword = (rule, value, callback) => {
 }
 
 // 获取验证码
-const loginVerify = () => {
-  captcha({}).then(async(ele) => {
-    rules.captcha.push({
-      max: ele.data.captchaLength,
-      min: ele.data.captchaLength,
-      message: `请输入${ele.data.captchaLength}位验证码`,
-      trigger: 'blur',
-    })
-    picPath.value = ele.data.picPath
-    loginFormData.captchaId = ele.data.captchaId
-    loginFormData.openCaptcha = ele.data.openCaptcha
+const loginVerify = async() => {
+  const ele = await captcha()
+  rules.captcha.push({
+    max: ele.data.captchaLength,
+    min: ele.data.captchaLength,
+    message: `请输入${ele.data.captchaLength}位验证码`,
+    trigger: 'blur',
   })
+  picPath.value = ele.data.picPath
+  loginFormData.captchaId = ele.data.captchaId
+  loginFormData.openCaptcha = ele.data.openCaptcha
 }
 loginVerify()
 

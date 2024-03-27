@@ -691,3 +691,11 @@ li {
 .gva-customer-icon{
     @apply w-4 h-4;
 }
+
+.el-form--inline {
+    .el-form-item {
+        & > .el-input, .el-cascader, .el-select, .el-date-editor, .el-autocomplete {
+            @apply w-52;
+        }
+    }
+}

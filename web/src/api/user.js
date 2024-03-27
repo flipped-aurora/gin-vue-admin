@@ -15,11 +15,10 @@ export const login = (data) => {
 // @Produce  application/json
 // @Param data body {username:"string",password:"string"}
 // @Router /base/captcha [post]
-export const captcha = (data) => {
+export const captcha = () => {
   return service({
     url: '/base/captcha',
-    method: 'post',
-    data: data
+    method: 'post'
   })
 }
 

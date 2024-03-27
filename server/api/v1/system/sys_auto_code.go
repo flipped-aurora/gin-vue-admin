@@ -74,7 +74,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
-	if a.AutoCreateApiToSql {
+	if a.AutoCreateMenuToSql {
 		if id, err := autoCodeService.AutoCreateMenu(&a); err != nil {
 			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
 			c.Writer.Header().Add("success", "false")

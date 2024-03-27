@@ -389,7 +389,7 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			return err
 		}
 	}
-	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql {
+	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql || autoCode.AutoCreateMenuToSql {
 		if autoCode.TableName != "" {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
 				string(meta),
@@ -573,10 +573,11 @@ func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) 
 
 func (autoCodeService *AutoCodeService) AutoCreateMenu(a *system.AutoCodeStruct) (id uint, err error) {
 	var menu system.SysBaseMenu
-	err = global.GVA_DB.First(&menu, "name = ?", menu.Name).Error
+	err = global.GVA_DB.First(&menu, "name = ?", a.Abbreviation).Error
 	if err == nil {
 		return 0, errors.New("存在相同的菜单路由，请关闭自动创建菜单功能")
 	}
+	menu.ParentId = "0"
 	menu.Name = a.Abbreviation
 	menu.Path = a.Abbreviation
 	menu.Meta.Title = a.Description

@@ -231,6 +231,7 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <div>
         <el-form-item>
           <template #label>
             <el-tooltip
@@ -265,10 +266,22 @@
               placement="bottom"
               effect="light"
             >
-              <div> 自动创建API </div>
+              <div> 自动创建API <el-icon><QuestionFilled /></el-icon> </div>
             </el-tooltip>
           </template>
           <el-checkbox v-model="form.autoCreateApiToSql" />
+        </el-form-item>
+        <el-form-item>
+          <template #label>
+            <el-tooltip
+                content="注：把自动生成的菜单注册进数据库"
+                placement="bottom"
+                effect="light"
+            >
+              <div> 自动创建菜单 <el-icon><QuestionFilled /></el-icon></div>
+            </el-tooltip>
+          </template>
+          <el-checkbox v-model="form.autoCreateMenuToSql" />
         </el-form-item>
         <el-form-item>
           <template #label>
@@ -277,11 +290,12 @@
               placement="bottom"
               effect="light"
             >
-              <div> 自动移动文件 </div>
+              <div> 自动移动文件 <el-icon><QuestionFilled /></el-icon></div>
             </el-tooltip>
           </template>
           <el-checkbox v-model="form.autoMoveFile" />
         </el-form-item>
+        </div>
       </el-form>
     </div>
     <!-- 组件列表 -->
@@ -678,6 +692,7 @@ const form = ref({
   description: '',
   businessDB: '',
   autoCreateApiToSql: true,
+  autoCreateMenuToSql: true,
   autoMoveFile: true,
   gvaModel: true,
   autoCreateResource: false,

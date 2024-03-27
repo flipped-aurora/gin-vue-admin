@@ -83,11 +83,6 @@ service.interceptors.response.use(
         message: response.data.msg || decodeURI(response.headers.msg),
         type: 'error'
       })
-      if (response.data.data && response.data.data.reload) {
-        userStore.token = ''
-        window.localStorage.removeItem('token')
-        router.push({ name: 'Login', replace: true })
-      }
       return response.data.msg ? response.data : response
     }
   },
@@ -136,6 +131,22 @@ service.interceptors.response.use(
           confirmButtonText: '我知道了',
           cancelButtonText: '取消'
         })
+        break
+      case 401:
+        ElMessageBox.confirm(`
+          <p>无效的令牌</p>
+          <p>错误码:<span style="color:red"> 401 </span>错误信息:${error}</p>
+          `, '身份信息', {
+          dangerouslyUseHTMLString: true,
+          distinguishCancelAndClose: true,
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消'
+        })
+          .then(() => {
+            const userStore = useUserStore()
+            userStore.ClearStorage()
+            router.push({ name: 'Login', replace: true })
+          })
         break
     }
 

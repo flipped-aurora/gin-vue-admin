@@ -63,6 +63,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	}
 	a.Pretreatment()
 	var apiIds []uint
+	var menuId uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
 			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
@@ -73,8 +74,17 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
+	if a.AutoCreateApiToSql {
+		if id, err := autoCodeService.AutoCreateMenu(&a); err != nil {
+			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
+			c.Writer.Header().Add("success", "false")
+			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
+		} else {
+			menuId = id
+		}
+	}
 	a.PackageT = utils.FirstUpper(a.Package)
-	err := autoCodeService.CreateTemp(a, apiIds...)
+	err := autoCodeService.CreateTemp(a, menuId, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.ErrAutoMove) {
 			c.Writer.Header().Add("success", "true")

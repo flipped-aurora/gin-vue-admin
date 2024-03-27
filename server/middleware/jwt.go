@@ -58,7 +58,6 @@ func JWTAuth() gin.HandlerFunc {
 		//	c.Abort()
 		//}
 		c.Set("claims", claims)
-		c.Next()
 		if claims.ExpiresAt.Unix()-time.Now().Unix() < claims.BufferTime {
 			dr, _ := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
 			claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(dr))
@@ -77,6 +76,14 @@ func JWTAuth() gin.HandlerFunc {
 				// 无论如何都要记录当前的活跃状态
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
 			}
+		}
+		c.Next()
+
+		if newToken, exists := c.Get("new-token"); exists {
+			c.Header("new-token", newToken.(string))
+		}
+		if newExpiresAt, exists := c.Get("new-expires-at"); exists {
+			c.Header("new-expires-at", newExpiresAt.(string))
 		}
 	}
 }

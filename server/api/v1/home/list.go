@@ -38,8 +38,6 @@ func (l *ListApi) List(c *gin.Context) {
 		response.Fail404Error(c)
 		return
 	}
-	// 获取站点id
-	siteid := c.GetInt("siteid")
 	info, contentlist, err := l.ContentLists(catid, page, 0)
 	if err != nil {
 		global.GVA_LOG.Error("获取模型列表 err:", zap.Error(err))
@@ -55,7 +53,8 @@ func (l *ListApi) List(c *gin.Context) {
 			return
 		}
 	}
-	res := getwebcommon(siteid)
+	// 获取站点信息
+	res := c.GetStringMap("siteinfo")
 	res["title"] = fmt.Sprint(info.Name, "-", res["company"])
 	res["info"] = info
 	res["parentinfo"] = parentinfo

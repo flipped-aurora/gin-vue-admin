@@ -1,9 +1,9 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/webcms"
@@ -47,21 +47,24 @@ func HomeCheckSite() gin.HandlerFunc {
 		}
 		url := strings.Join([]string{scheme, host, "/"}, "")
 
-		// fmt.Println(url, "1111")
 		//获取站点信息
-		var webconfig map[string]any
-		// 查不到站点 跳转404
-		err := global.GVA_DB.Table("webconfig").Where("site_url = ?", url).Find(&webconfig).Error
-		if err != nil {
-			global.GVA_LOG.Error("查不到站点 跳转404", zap.Error(err))
-			c.HTML(http.StatusOK, "404.html", gin.H{
-				"title": "404",
-			})
-			c.Abort()
+		res, ok := global.BlackCache.Get(url)
+		if !ok {
+			var webconfig map[string]any
+			// 查不到站点 跳转404
+			err := global.GVA_DB.Table("webconfig").Where("site_url = ?", url).Find(&webconfig).Error
+			if err != nil {
+				global.GVA_LOG.Error("查不到站点 跳转404", zap.Error(err))
+				c.HTML(http.StatusOK, "404.html", gin.H{
+					"title": "404",
+				})
+				c.Abort()
+			} else {
+				global.BlackCache.Set(url, webconfig, 2*time.Hour)
+				c.Set("siteinfo", webconfig)
+			}
 		} else {
-			global.BlackCache.Set(fmt.Sprint("webconfig:", webconfig["id"]), webconfig, -1)
-			c.Set("siteinfo", webconfig)
-			c.Next()
+			c.Set("siteinfo", res)
 		}
 		c.Next()
 	}

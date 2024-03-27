@@ -16,7 +16,7 @@
 <section class="a_zxlmenu">
   <div class="a_zxlmenu_t">{{.info.Name}}</div>
         <ul class="fl a_zxlmenu_c">
-          {{range $v := category .info.ID .siteid }}
+          {{range $v := category .info.ID .id }}
             <li>
             <a href="{{$v.Url}}" class="aone">{{$v.Name}}</a>
             </li>
@@ -32,7 +32,7 @@
        <div class="n_box1_l">
          <div class="n_box1_l_t">
            <div class="n_box1_l_t_c">
-            <a href="/">{{if eq .siteid 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
+            <a href="/">{{if eq .id 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
            </div>
          </div>
          <div class="n_box1_l_c">
@@ -41,7 +41,7 @@
             {{.info.Short}}
            </div>
            <ul class="n_box1_l_c_ul fl">
-            {{range $v := category .info.ID .siteid }} 
+            {{range $v := category .info.ID .id }} 
               <li>
                <a href="{{$v.Url}}">{{$v.Name}}</a>
               </li>
@@ -59,7 +59,7 @@
             {{.info.Desc | safe}}
           </div>
            <ul class="n_box2_uls fl">
-            {{range $v := category .info.ID .siteid }}
+            {{range $v := category .info.ID .id }}
             <li>
                <a href="{{$v.Url}}" class="div Amplification">
                  <div class="a_img fl">

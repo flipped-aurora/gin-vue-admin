@@ -17,8 +17,6 @@ import (
 var (
 	cateMenusService = service.ServiceGroupApp.WebcmsServiceGroup.CateMenusService
 	courseService    = service.ServiceGroupApp.WebcmsServiceGroup.CourseService
-	classService     = service.ServiceGroupApp.WebcmsServiceGroup.ClassService
-	webconfigService = service.ServiceGroupApp.WebcmsServiceGroup.WebconfigService
 	swiperService    = service.ServiceGroupApp.WebcmsServiceGroup.SwiperService
 	listApi          = v1.ApiGroupApp.HomeApiGroup.ListApi
 )
@@ -49,7 +47,7 @@ func getcateinfo(catid int) (info webcms.CateMenus) {
 }
 
 // 获取banner 图
-func getswiper(siteid int) (list []webcms.Swiper) {
+func getswiper(siteid uint64) (list []webcms.Swiper) {
 	list = swiperService.GetSwiperList(siteid)
 	return
 }
@@ -84,7 +82,7 @@ func uinttoint(param uint) int {
 }
 
 // 获取栏目列表
-func category(pid uint, siteid int) (list []webcms.CateMenus) {
+func category(pid uint, siteid uint64) (list []webcms.CateMenus) {
 	if pid == 0 {
 		list, _ = cateMenusService.GetCateMenusInfoList2(siteid)
 	} else {

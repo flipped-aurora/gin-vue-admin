@@ -16,7 +16,7 @@
 <section class="a_zxlmenu">
   <div class="a_zxlmenu_t">{{.parentinfo.Name}}</div>
       <ul class="fl a_zxlmenu_c">
-        {{range $v := category .parentinfo.ID .siteid }}
+        {{range $v := category .parentinfo.ID .id }}
           <li>
           <a href="{{$v.Url}}" class="aone">{{$v.Name}}</a>
           </li>
@@ -32,7 +32,7 @@
        <div class="n_box1_l">
          <div class="n_box1_l_t">
            <div class="n_box1_l_t_c">
-            <a href="/">{{if eq .siteid 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
+            <a href="/">{{if eq .id 1}}首页{{else}}HOME{{end}}</a>{{catpos .info.ID " > " | safe}}
            </div>
          </div>
          <div class="n_box1_l_c">
@@ -40,7 +40,7 @@
             {{.parentinfo.Name}}
            </div>
            <ul class="n_box1_l_c_ul fl">
-            {{range $v := category .parentinfo.ParentId .siteid }}
+            {{range $v := category .parentinfo.ParentId .id }}
               <li>
                 <a href="{{$v.Url}}" {{if eq $v.ID $.info.ParentId}}class="activeleft"{{end}}>{{$v.Name}}</a>
               </li>
@@ -55,7 +55,7 @@
          </div>
          <div class="n_box1_r_c">
            <div class="n_box2">
-            {{range $v := category .parentinfo.ID .siteid }}
+            {{range $v := category .parentinfo.ID .id }}
               <a href="{{$v.Url}}" {{if eq $v.ID $.info.ID}}class="activetop"{{end}}>{{$v.Name}}</a>
             {{end}}
              <div class="clearboth"></div>

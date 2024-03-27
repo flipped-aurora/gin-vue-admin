@@ -2,7 +2,7 @@ package webcms
 
 // Class 结构体
 type Webconfig struct {
-	ID          int    `json:"id" gorm:"primarykey"` // 主键ID
+	ID          uint64 `json:"id" gorm:"primarykey"` // 主键ID
 	Logo        string `json:"logo" form:"logo" gorm:"column:logo;comment:网站logo;size:191;"`
 	HotLine     string `json:"hotLine" form:"hotLine" gorm:"column:hot_line;comment:网站热线;size:191;"`
 	Phone       string `json:"phone" form:"phone" gorm:"column:phone;comment:手机号码;size:32;"`

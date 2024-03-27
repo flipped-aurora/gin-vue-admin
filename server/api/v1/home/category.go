@@ -25,8 +25,6 @@ func (h *CategoryApi) Category(c *gin.Context) {
 		response.Fail404Error(c)
 		return
 	}
-	// 获取站点id
-	siteid := c.GetInt("siteid")
 	// 获取栏目信息
 	info, err := catemenusService.GetCateMenus(uint(id))
 	if err != nil {
@@ -59,7 +57,9 @@ func (h *CategoryApi) Category(c *gin.Context) {
 			return
 		}
 	}
-	res := getwebcommon(siteid)
+	// 获取站点信息
+	siteinfo := c.GetStringMap("siteinfo")
+	res := getwebcommon(siteinfo["site_url"].(string))
 	res["title"] = fmt.Sprint(info.Name, "-", res["company"])
 	res["info"] = info
 	res["parentinfo"] = parentinfo

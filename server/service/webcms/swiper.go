@@ -70,7 +70,7 @@ func (swiperService *SwiperService) GetSwiperInfoList(info webcmsReq.SwiperSearc
 
 // GetSwiperList 获取Swiper记录
 // Author [piexlmax](https://github.com/piexlmax)
-func (swiperService *SwiperService) GetSwiperList(siteid int) (list []webcms.Swiper) {
+func (swiperService *SwiperService) GetSwiperList(siteid uint64) (list []webcms.Swiper) {
 	// 创建db
 	db := global.GVA_DB.Model(&webcms.Swiper{}).Where("siteid", siteid)
 	var swipers []webcms.Swiper

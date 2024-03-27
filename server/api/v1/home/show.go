@@ -36,9 +36,6 @@ func (l *ShowApi) Show(c *gin.Context) {
 		response.Fail404Error(c)
 		return
 	}
-	// 获取站点id
-	siteid := c.GetInt("siteid")
-
 	// 获取栏目信息
 	cateinfo, err := catemenusService.GetCateMenus(uint(catId))
 	if err != nil {
@@ -61,7 +58,8 @@ func (l *ShowApi) Show(c *gin.Context) {
 			return
 		}
 	}
-	res := getwebcommon(siteid)
+	// 获取站点信息
+	res := c.GetStringMap("siteinfo")
 	// 通过栏目模型进行数据获取
 	modetype := cateinfo.ModeType
 	showinfo, err := ShowService.GetInfoById(modetype, uint(showId))

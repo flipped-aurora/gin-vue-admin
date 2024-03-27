@@ -1,6 +1,10 @@
 package webcms
 
 import (
+	"encoding/json"
+	"fmt"
+	"time"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/webcms"
@@ -71,6 +75,13 @@ func (w *WebconfigApi) SetWebconfig(c *gin.Context) {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 	} else {
+		// 更新缓存
+		webconfigbypte, _ := json.Marshal(webconfig)
+		var webconfigmap map[string]any
+		json.Unmarshal(webconfigbypte, &webconfigmap)
+		global.BlackCache.Set(webconfig.SiteUrl, webconfigmap, 2*time.Hour)
+		fmt.Printf("%T", webconfigmap["site_url"])
+		c.Set("siteinfo", webconfigmap)
 		response.Ok(c)
 	}
 }

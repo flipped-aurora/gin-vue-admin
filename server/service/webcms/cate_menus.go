@@ -114,7 +114,7 @@ func (cateMenusService *CateMenusService) GetCateMenusListByPid(pid uint) (list 
 }
 
 // 获取全部栏目
-func (cateMenusService *CateMenusService) GetCateMenusInfoList2(siteid int) (list []webcms.CateMenus, err error) {
+func (cateMenusService *CateMenusService) GetCateMenusInfoList2(siteid uint64) (list []webcms.CateMenus, err error) {
 	var cateMenuss []webcms.CateMenus
 	treeMap, err := cateMenusService.getBaseMenuTreeMap2(siteid)
 	cateMenuss = treeMap[0]
@@ -124,7 +124,7 @@ func (cateMenusService *CateMenusService) GetCateMenusInfoList2(siteid int) (lis
 	return cateMenuss, err
 }
 
-func (cateMenusService *CateMenusService) getBaseMenuTreeMap2(siteid int) (treeMap map[uint][]webcms.CateMenus, err error) {
+func (cateMenusService *CateMenusService) getBaseMenuTreeMap2(siteid uint64) (treeMap map[uint][]webcms.CateMenus, err error) {
 	var allMenus []webcms.CateMenus
 	treeMap = make(map[uint][]webcms.CateMenus)
 	err = global.GVA_DB.Where("hidden = ?", 0).Where("siteid", siteid).Order("sort").Find(&allMenus).Error

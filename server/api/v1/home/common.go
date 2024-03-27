@@ -1,7 +1,6 @@
 package home
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -20,11 +19,9 @@ var (
 )
 
 // 获取公共参数
-func getwebcommon(siteid int) gin.H {
-	res := gin.H{
-		"siteid": siteid,
-	}
-	webconfig := getwebconfig(siteid)
+func getwebcommon(siteurl string) gin.H {
+	webconfig := getwebconfig(siteurl)
+	res := gin.H{}
 	for k, v := range webconfig {
 		res[k] = v
 	}
@@ -32,15 +29,13 @@ func getwebcommon(siteid int) gin.H {
 }
 
 // 获取getwebconfig 参数
-func getwebconfig(siteid int) map[string]string {
-	fmt.Println(siteid)
-	res, ok := global.BlackCache.Get(fmt.Sprint("webconfig:", siteid))
-	fmt.Println(res)
+func getwebconfig(siteurl string) map[string]any {
+	res, ok := global.BlackCache.Get(siteurl)
 	if !ok {
 		global.GVA_LOG.Error("获取参数失败!")
 		return nil
 	} else {
-		return res.(map[string]string)
+		return res.(map[string]any)
 	}
 }
 

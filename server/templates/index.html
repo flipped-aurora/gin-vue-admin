@@ -5,7 +5,7 @@
   <div class="sctb1">&nbsp;</div>
   <div class="swiper-container banner-swiper">
         <div class="swiper-wrapper">
-          {{range $v := .siteid | getswiper}}
+          {{range $v := .id | getswiper}}
             <a href="{{$v.Url}}" class="swiper-slide">
                 <div class="pc_banner"  style="background-image:url({{$v.Thumb}});">
                   <img src="{{$v.Thumb}}" alt="{{$v.Title}}">

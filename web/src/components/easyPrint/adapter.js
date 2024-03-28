@@ -1,4 +1,4 @@
-function converResDataToPrintData(responseData, info, source) {
+function converResDataToPrintData(responseData, info, source, printDate) {
   const currentDate = new Date() // 获取当前时间
   const year = currentDate.getFullYear().toString() // 获取年份
   const month = (currentDate.getMonth() + 1).toString().padStart(2, '0') // 获取月份（注意要加上1）
@@ -6,13 +6,12 @@ function converResDataToPrintData(responseData, info, source) {
   const hours = currentDate.getHours().toString().padStart(2, '0') // 获取小时（两位）
   const minutes = currentDate.getMinutes().toString().padStart(2, '0') // 获取分钟（两位）
   const formattedDate = `${year}-${month}-${day}` // 组合成指定格式的字符串
-
   const printData = []
 
   responseData.map((item) => {
     const printItem = {}
     printItem.hall = info.hall + '号厅' || ''
-    printItem.today = formattedDate + ' ' + info.playTime
+    printItem.today = printDate + ' ' + info.playTime
     printItem.filmName = info.name
     printItem.seat = item[0] + '排' + item[1] + '座'
     printItem.type = source

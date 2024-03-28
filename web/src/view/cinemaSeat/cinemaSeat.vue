@@ -31,6 +31,7 @@
         :source="searchInfo.source"
         :seatInfo="seatInfo"
         :hallId="searchInfo.hall" 
+        :printDate="searchInfo.date"
         @printSeatSave="printSeatSave"
         @printSeatDel="printSeatDel"
       />
@@ -107,7 +108,7 @@ watch(() => searchInfo.value.hall, (v) => {
 }, { immediate: true })
 
 // 获取座位
-const getSeats = async () => {
+const getSeats = async() => {
   if (searchInfo.value.filmId === '' || searchInfo.value.date === '') return
   const seatList = await getCinemaSeatList({ page: 1, pageSize: 100, ...searchInfo.value })
   if (seatList.code === 0) {
@@ -125,11 +126,11 @@ watch(() => searchInfo.value.filmId, (v) => {
 }, { immediate: true })
 
 watch(() => searchInfo.value.date, (v) => {
-  if (v === '') searchInfo.value.date = new Date
+  if (v === '') searchInfo.value.date = new Date()
   getSeats()
 }, { immediate: true })
 
-const printSeatSave = async (seats)=>{
+const printSeatSave = async(seats) => {
   try {
     console.log('save_seats', seats)
     const params = {
@@ -144,7 +145,7 @@ const printSeatSave = async (seats)=>{
   }
 }
 
-const printSeatDel = async (seat)=>{
+const printSeatDel = async(seat) => {
   try {
     console.log('del_seats', seat)
     seat = seatInfo.value.find(item => item.position === seat)

@@ -38,7 +38,7 @@
               </div>
         </div>
       </div>
-      <EasyPrint :printList="selectedSeat" :hall="hall" :info="info" :source="source" :reprint="reprint" @handleAfterPrint="handleAfterPrint" />
+      <EasyPrint :printList="selectedSeat" :hall="hall" :info="info" :source="source" :reprint="reprint" :printDate="printDate" @handleAfterPrint="handleAfterPrint" />
     </div>
 </template>
 <script lang='ts' setup>
@@ -66,6 +66,7 @@ const props = defineProps({
   hallId: Number,
   seatInfo: Object,
   propFilmOptions: Array,
+  printDate: String,
 });
 
 const hall = ref(1)

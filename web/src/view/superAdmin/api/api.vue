@@ -161,11 +161,25 @@
 
     </div>
 
-    <el-dialog
+    <el-drawer
       v-model="dialogFormVisible"
+      size="60%"
       :before-close="closeDialog"
-      :title="dialogTitle"
+      :show-close="false"
     >
+      <template #title>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ dialogTitle }}</span>
+          <div>
+            <el-button @click="closeDialog">取 消</el-button>
+            <el-button
+              type="primary"
+              @click="enterDialog"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
+
       <warning-bar title="新增API，需要在角色管理内配置权限才可使用" />
       <el-form
         ref="apiForm"
@@ -218,16 +232,7 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 

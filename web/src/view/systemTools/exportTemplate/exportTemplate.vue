@@ -184,167 +184,172 @@
         />
       </div>
     </div>
-    <el-dialog
+    <el-drawer
       v-model="dialogFormVisible"
+      size="60%"
       :before-close="closeDialog"
       :title="type==='create'?'添加':'修改'"
+      :show-close="false"
       destroy-on-close
     >
-      <el-scrollbar height="500px">
-        <el-form
-          ref="elFormRef"
-          :model="formData"
-          label-position="right"
-          :rules="rule"
-          label-width="100px"
-        >
 
-          <el-form-item
-            label="业务库"
-            prop="dbName"
-          >
-            <template #label>
-              <el-tooltip
-                content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。"
-                placement="bottom"
-                effect="light"
-              >
-                <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
-              </el-tooltip>
-            </template>
-            <el-select
-              v-model="formData.dbName"
-              clearable
-              placeholder="选择业务库"
-            >
-              <el-option
-                v-for="item in dbList"
-                :key="item.aliasName"
-                :value="item.aliasName"
-                :label="item.aliasName"
-                :disabled="item.disable"
-              >
-                <div>
-                  <span>{{ item.aliasName }}</span>
-                  <span style="float:right;color:#8492a6;font-size:13px">{{ item.dbName }}</span>
-                </div>
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item
-            label="模板名称:"
-            prop="name"
-          >
-            <el-input
-              v-model="formData.name"
-              :clearable="true"
-              placeholder="请输入模板名称"
-            />
-          </el-form-item>
-          <el-form-item
-            label="表名称:"
-            prop="tableName"
-          >
-            <el-input
-              v-model="formData.tableName"
-              :clearable="true"
-              placeholder="请输入要导出的表名称"
-            />
-          </el-form-item>
-          <el-form-item
-            label="模板标识:"
-            prop="templateID"
-          >
-            <el-input
-              v-model="formData.templateID"
-              :clearable="true"
-              placeholder="模板标识为前端组件需要挂在的标识属性"
-            />
-          </el-form-item>
-          <el-form-item
-            label="模板信息:"
-            prop="templateInfo"
-          >
-            <el-input
-              v-model="formData.templateInfo"
-              type="textarea"
-              :rows="12"
-              :clearable="true"
-              :placeholder="templatePlaceholder"
-            />
-          </el-form-item>
-          <el-form-item
-            label="默认导出条数:"
-          >
-            <el-input-number
-              v-model="formData.limit"
-              :step="1"
-              :step-strictly="true"
-              :precision="0"
-            />
-          </el-form-item>
-          <el-form-item
-            label="默认排序条件:"
-          >
-            <el-input
-              v-model="formData.order"
-              placeholder="例:id desc"
-            />
-          </el-form-item>
-          <el-form-item
-            label="导出条件:"
-          >
-            <div
-              v-for="(condition,key) in formData.conditions"
-              :key="key"
-              class="flex gap-4 w-full mb-2"
-            >
-              <el-input
-                v-model="condition.from"
-                placeholder="需要从查询条件取的json key"
-              />
-              <el-input
-                v-model="condition.column"
-                placeholder="表对应的column"
-              />
-              <el-select
-                v-model="condition.operator"
-                placeholder="请选择查询条件"
-              >
-                <el-option
-                  v-for="item in typeSearchOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-              <el-button
-                type="danger"
-                icon="delete"
-                @click="() => formData.conditions.splice(key, 1)"
-              >删除</el-button>
-            </div>
-            <div class="flex justify-end w-full">
-              <el-button
+      <template #title>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{type==='create'?'添加':'修改'}}</span>
+          <div>
+            <el-button @click="closeDialog">取 消</el-button>
+            <el-button
                 type="primary"
-                icon="plus"
-                @click="addCondition"
-              >添加条件</el-button>
-            </div>
-          </el-form-item>
-        </el-form>
-      </el-scrollbar>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
+                @click="enterDialog"
+            >确 定</el-button>
+          </div>
         </div>
       </template>
-    </el-dialog>
+
+      <el-form
+        ref="elFormRef"
+        :model="formData"
+        label-position="right"
+        :rules="rule"
+        label-width="100px"
+      >
+
+        <el-form-item
+          label="业务库"
+          prop="dbName"
+        >
+          <template #label>
+            <el-tooltip
+              content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。"
+              placement="bottom"
+              effect="light"
+            >
+              <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
+            </el-tooltip>
+          </template>
+          <el-select
+            v-model="formData.dbName"
+            clearable
+            placeholder="选择业务库"
+          >
+            <el-option
+              v-for="item in dbList"
+              :key="item.aliasName"
+              :value="item.aliasName"
+              :label="item.aliasName"
+              :disabled="item.disable"
+            >
+              <div>
+                <span>{{ item.aliasName }}</span>
+                <span style="float:right;color:#8492a6;font-size:13px">{{ item.dbName }}</span>
+              </div>
+            </el-option>
+          </el-select>
+        </el-form-item>
+
+        <el-form-item
+          label="模板名称:"
+          prop="name"
+        >
+          <el-input
+            v-model="formData.name"
+            :clearable="true"
+            placeholder="请输入模板名称"
+          />
+        </el-form-item>
+        <el-form-item
+          label="表名称:"
+          prop="tableName"
+        >
+          <el-input
+            v-model="formData.tableName"
+            :clearable="true"
+            placeholder="请输入要导出的表名称"
+          />
+        </el-form-item>
+        <el-form-item
+          label="模板标识:"
+          prop="templateID"
+        >
+          <el-input
+            v-model="formData.templateID"
+            :clearable="true"
+            placeholder="模板标识为前端组件需要挂在的标识属性"
+          />
+        </el-form-item>
+        <el-form-item
+          label="模板信息:"
+          prop="templateInfo"
+        >
+          <el-input
+            v-model="formData.templateInfo"
+            type="textarea"
+            :rows="12"
+            :clearable="true"
+            :placeholder="templatePlaceholder"
+          />
+        </el-form-item>
+        <el-form-item
+          label="默认导出条数:"
+        >
+          <el-input-number
+            v-model="formData.limit"
+            :step="1"
+            :step-strictly="true"
+            :precision="0"
+          />
+        </el-form-item>
+        <el-form-item
+          label="默认排序条件:"
+        >
+          <el-input
+            v-model="formData.order"
+            placeholder="例:id desc"
+          />
+        </el-form-item>
+        <el-form-item
+          label="导出条件:"
+        >
+          <div
+            v-for="(condition,key) in formData.conditions"
+            :key="key"
+            class="flex gap-4 w-full mb-2"
+          >
+            <el-input
+              v-model="condition.from"
+              placeholder="需要从查询条件取的json key"
+            />
+            <el-input
+              v-model="condition.column"
+              placeholder="表对应的column"
+            />
+            <el-select
+              v-model="condition.operator"
+              placeholder="请选择查询条件"
+            >
+              <el-option
+                v-for="item in typeSearchOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+            <el-button
+              type="danger"
+              icon="delete"
+              @click="() => formData.conditions.splice(key, 1)"
+            >删除</el-button>
+          </div>
+          <div class="flex justify-end w-full">
+            <el-button
+              type="primary"
+              icon="plus"
+              @click="addCondition"
+            >添加条件</el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 

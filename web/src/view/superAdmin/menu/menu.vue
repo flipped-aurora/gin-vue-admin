@@ -124,11 +124,25 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog
+    <el-drawer
       v-model="dialogFormVisible"
+      size="60%"
       :before-close="handleClose"
-      :title="dialogTitle"
+      :show-close="false"
     >
+      <template #title>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ dialogTitle }}</span>
+          <div>
+            <el-button @click="closeDialog">取 消</el-button>
+            <el-button
+              type="primary"
+              @click="enterDialog"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
+
       <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
       <el-form
         v-if="dialogFormVisible"
@@ -478,16 +492,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 

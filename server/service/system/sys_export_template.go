@@ -15,7 +15,6 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-	"time"
 )
 
 type SysExportTemplateService struct {
@@ -316,14 +315,17 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 				key := titleKeyMap[excelTitle[ii]]
 				item[key] = value
 			}
-			needCreated := tx.Migrator().HasColumn(template.TableName, "created_at")
-			needUpdated := tx.Migrator().HasColumn(template.TableName, "updated_at")
-			if item["created_at"] == nil && needCreated {
-				item["created_at"] = time.Now()
-			}
-			if item["updated_at"] == nil && needUpdated {
-				item["updated_at"] = time.Now()
-			}
+
+			// 此处需要等待gorm修复HasColumn中的painc问题
+			//needCreated := tx.Migrator().HasColumn(template.TableName, "created_at")
+			//needUpdated := tx.Migrator().HasColumn(template.TableName, "updated_at")
+			//
+			//if item["created_at"] == nil && needCreated {
+			//	item["created_at"] = time.Now()
+			//}
+			//if item["updated_at"] == nil && needUpdated {
+			//	item["updated_at"] = time.Now()
+			//}
 
 			cErr := tx.Table(template.TableName).Create(&item).Error
 			if cErr != nil {

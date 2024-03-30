@@ -71,6 +71,17 @@
           icon="Refresh"
           @click="onFresh"
         >刷新缓存</el-button>
+        <ExportTemplate
+          template-id="api"
+        />
+        <ExportExcel
+          template-id="api"
+          :limit="9999"
+        />
+        <ImportExcel
+          template-id="api"
+          @on-success="getTableData"
+        />
       </div>
       <el-table
         :data="tableData"
@@ -252,6 +263,9 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { VideoCameraFilled } from '@element-plus/icons-vue'
 import { toDoc } from '@/utils/doc'
+import ExportExcel from '@/components/exportExcel/exportExcel.vue'
+import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
+import ImportExcel from '@/components/exportExcel/importExcel.vue'
 
 defineOptions({
   name: 'Api',

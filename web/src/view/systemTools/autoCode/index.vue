@@ -66,7 +66,6 @@
               <el-select
                 v-model="dbform.dbName"
                 clearable
-                style="width:194px"
                 filterable
                 placeholder="请选择数据库"
                 @change="getTableFunc"
@@ -86,7 +85,6 @@
               <el-select
                 v-model="dbform.tableName"
                 :disabled="!dbform.dbName"
-                style="width:194px"
                 filterable
                 placeholder="请选择表"
               >

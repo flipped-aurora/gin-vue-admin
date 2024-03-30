@@ -19,9 +19,17 @@ zap:
 
 # redis configuration
 redis:
-  db: 0
+  #是否使用redis集群模式
+  useCluster: false
+  #使用集群模式addr和db默认无效
   addr: 127.0.0.1:6379
   password: ""
+  db: 0
+  clusterAddrs:
+    - "172.21.0.3:7000"
+    - "172.21.0.4:7001"
+    - "172.21.0.2:7002"
+
 
 # mongo configuration
 mongo:

@@ -31,7 +31,6 @@ export const useUserStore = defineStore('user', () => {
   const NeedInit = () => {
     token.value = ''
     window.localStorage.removeItem('token')
-    localStorage.clear()
     router.push({ name: 'Init', replace: true })
   }
 
@@ -101,7 +100,7 @@ export const useUserStore = defineStore('user', () => {
   const ClearStorage = async() => {
     token.value = ''
     sessionStorage.clear()
-    localStorage.clear()
+    window.localStorage.removeItem('token')
     cookie.remove('x-token')
   }
   /* 设置侧边栏模式*/

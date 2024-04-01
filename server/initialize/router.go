@@ -33,15 +33,9 @@ func (fs justFilesFilesystem) Open(name string) (http.File, error) {
 // 初始化总路由
 
 func Routers() *gin.Engine {
-
-	// 设置为发布模式
-	if global.GVA_CONFIG.System.Env == "public" {
-		gin.SetMode(gin.ReleaseMode) //DebugMode ReleaseMode TestMode
-	}
-
 	Router := gin.New()
 	Router.Use(gin.Recovery())
-	if global.GVA_CONFIG.System.Env != "public" {
+	if gin.Mode() == gin.DebugMode {
 		Router.Use(gin.Logger())
 	}
 

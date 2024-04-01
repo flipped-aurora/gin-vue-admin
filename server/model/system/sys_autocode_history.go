@@ -14,6 +14,7 @@ type SysAutoCodeHistory struct {
 	Package       string `json:"package"`
 	BusinessDB    string `json:"businessDB"`
 	TableName     string `json:"tableName"`
+	MenuID        uint   `json:"menuID"`
 	RequestMeta   string `gorm:"type:text" json:"requestMeta,omitempty"`   // 前端传入的结构化信息
 	AutoCodePath  string `gorm:"type:text" json:"autoCodePath,omitempty"`  // 其他meta信息 path;path
 	InjectionMeta string `gorm:"type:text" json:"injectionMeta,omitempty"` // 注入的内容 RouterPath@functionName@RouterString;

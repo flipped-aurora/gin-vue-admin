@@ -19,12 +19,12 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> 当前版本:v2.6.0`
+        `> 当前版本:v2.6.2`
       )
     )
     console.log(
       chalk.green(
-        `> 加群方式:微信：shouzi_1994 QQ群：622360840`
+        `> 加群方式:微信：shouzi_1994 QQ群：470239250`
       )
     )
     console.log(

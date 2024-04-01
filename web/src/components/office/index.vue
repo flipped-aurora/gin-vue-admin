@@ -33,16 +33,12 @@ import Excel from '@/components/office/excel.vue'
 
 const path = ref(import.meta.env.VITE_BASE_API)
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: () => ''
-  }
-})
+const model = defineModel({ type: String})
+
 const fileUrl = ref('')
 const ext = ref('')
 watch(
-  () => props.modelValue,
+  () => model,
   val => {
     fileUrl.value = val
     const fileExt = val.split('.')[1] || ''

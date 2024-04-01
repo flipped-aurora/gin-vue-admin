@@ -16,6 +16,8 @@ type BaseMenuService struct{}
 //@param: id float64
 //@return: err error
 
+var BaseMenuServiceApp = new(BaseMenuService)
+
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
 	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
 	if err != nil {

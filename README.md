@@ -331,10 +331,7 @@ swag init
 
 ### 7.1 技术群
 
-### QQ交流群：622360840
-| QQ 群 |
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+### QQ交流群：470239250
 
 ### 微信交流群
 | 微信 |

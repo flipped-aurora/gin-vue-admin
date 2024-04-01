@@ -107,7 +107,7 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 
 			err = db.Order(OrderStr).Find(&apiList).Error
 		} else {
-			err = db.Order("api_group").Find(&apiList).Error
+			err = db.Order("id desc").Find(&apiList).Error
 		}
 	}
 	return apiList, total, err

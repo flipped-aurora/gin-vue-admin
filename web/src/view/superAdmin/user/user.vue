@@ -95,31 +95,12 @@
           fixed="right"
         >
           <template #default="scope">
-            <el-popover
-              v-model:visible="scope.row.visible"
-              placement="top"
-              width="160"
-            >
-              <p>确定要删除此用户吗</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="scope.row.visible = false"
-                >取消</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteUserFunc(scope.row)"
-                >确定</el-button>
-              </div>
-              <template #reference>
-                <el-button
-                  type="primary"
-                  link
-                  icon="delete"
-                >删除</el-button>
-              </template>
-            </el-popover>
+            <el-button
+              type="primary"
+              link
+              icon="delete"
+              @click="deleteUserFunc(scope.row)"
+            >删除</el-button>
             <el-button
               type="primary"
               link
@@ -148,116 +129,116 @@
         />
       </div>
     </div>
-    <el-dialog
+    <el-drawer
       v-model="addUserDialog"
-      title="用户"
+      size="60%"
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
-      <div style="height:60vh;overflow:auto;padding:0 12px;">
-        <el-form
-          ref="userForm"
-          :rules="rules"
-          :model="userInfo"
-          label-width="80px"
-        >
-          <el-form-item
-            v-if="dialogFlag === 'add'"
-            label="用户名"
-            prop="userName"
-          >
-            <el-input v-model="userInfo.userName" />
-          </el-form-item>
-          <el-form-item
-            v-if="dialogFlag === 'add'"
-            label="密码"
-            prop="password"
-          >
-            <el-input v-model="userInfo.password" />
-          </el-form-item>
-          <el-form-item
-            label="昵称"
-            prop="nickName"
-          >
-            <el-input v-model="userInfo.nickName" />
-          </el-form-item>
-          <el-form-item
-            label="手机号"
-            prop="phone"
-          >
-            <el-input v-model="userInfo.phone" />
-          </el-form-item>
-          <el-form-item
-            label="邮箱"
-            prop="email"
-          >
-            <el-input v-model="userInfo.email" />
-          </el-form-item>
-          <el-form-item
-            label="用户角色"
-            prop="authorityId"
-          >
-            <el-cascader
-              v-model="userInfo.authorityIds"
-              style="width:100%"
-              :options="authOptions"
-              :show-all-levels="false"
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false"
-            />
-          </el-form-item>
-          <el-form-item
-            label="启用"
-            prop="disabled"
-          >
-            <el-switch
-              v-model="userInfo.enable"
-              inline-prompt
-              :active-value="1"
-              :inactive-value="2"
-            />
-          </el-form-item>
-          <el-form-item
-            label="头像"
-            label-width="80px"
-          >
-            <div
-              style="display:inline-block"
-              @click="openHeaderChange"
-            >
-              <img
-                v-if="userInfo.headerImg"
-                alt="头像"
-                class="header-img-box"
-                :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg"
-              >
-              <div
-                v-else
-                class="header-img-box"
-              >从媒体库选择</div>
-              <ChooseImg
-                ref="chooseImg"
-                :target="userInfo"
-                :target-key="`headerImg`"
-              />
-            </div>
-          </el-form-item>
-
-        </el-form>
-
-      </div>
-
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeAddUserDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterAddUserDialog"
-          >确 定</el-button>
+      <template #title>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">用户</span>
+          <div>
+            <el-button @click="closeAddUserDialog">取 消</el-button>
+            <el-button
+              type="primary"
+              @click="enterAddUserDialog"
+            >确 定</el-button>
+          </div>
         </div>
       </template>
-    </el-dialog>
+
+      <el-form
+        ref="userForm"
+        :rules="rules"
+        :model="userInfo"
+        label-width="80px"
+      >
+        <el-form-item
+          v-if="dialogFlag === 'add'"
+          label="用户名"
+          prop="userName"
+        >
+          <el-input v-model="userInfo.userName" />
+        </el-form-item>
+        <el-form-item
+          v-if="dialogFlag === 'add'"
+          label="密码"
+          prop="password"
+        >
+          <el-input v-model="userInfo.password" />
+        </el-form-item>
+        <el-form-item
+          label="昵称"
+          prop="nickName"
+        >
+          <el-input v-model="userInfo.nickName" />
+        </el-form-item>
+        <el-form-item
+          label="手机号"
+          prop="phone"
+        >
+          <el-input v-model="userInfo.phone" />
+        </el-form-item>
+        <el-form-item
+          label="邮箱"
+          prop="email"
+        >
+          <el-input v-model="userInfo.email" />
+        </el-form-item>
+        <el-form-item
+          label="用户角色"
+          prop="authorityId"
+        >
+          <el-cascader
+            v-model="userInfo.authorityIds"
+            style="width:100%"
+            :options="authOptions"
+            :show-all-levels="false"
+            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :clearable="false"
+          />
+        </el-form-item>
+        <el-form-item
+          label="启用"
+          prop="disabled"
+        >
+          <el-switch
+            v-model="userInfo.enable"
+            inline-prompt
+            :active-value="1"
+            :inactive-value="2"
+          />
+        </el-form-item>
+        <el-form-item
+          label="头像"
+          label-width="80px"
+        >
+          <div
+            style="display:inline-block"
+            @click="openHeaderChange"
+          >
+            <img
+              v-if="userInfo.headerImg"
+              alt="头像"
+              class="header-img-box"
+              :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg"
+            >
+            <div
+              v-else
+              class="header-img-box"
+            >从媒体库选择</div>
+            <ChooseImg
+              ref="chooseImg"
+              :target="userInfo"
+              :target-key="`headerImg`"
+            />
+          </div>
+        </el-form-item>
+
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 
@@ -390,12 +371,17 @@ const setOptions = (authData) => {
 }
 
 const deleteUserFunc = async(row) => {
-  const res = await deleteUser({ id: row.ID })
-  if (res.code === 0) {
-    ElMessage.success('删除成功')
-    row.visible = false
-    await getTableData()
-  }
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await deleteUser({ id: row.ID })
+    if (res.code === 0) {
+      ElMessage.success('删除成功')
+      await getTableData()
+    }
+  })
 }
 
 // 弹窗相关

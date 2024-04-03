@@ -5,7 +5,7 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
-	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -27,7 +27,7 @@ type Local struct{}
 
 func (*Local) UploadFile(file *multipart.FileHeader) (string, string, error) {
 	// 读取文件后缀
-	ext := path.Ext(file.Filename)
+	ext := filepath.Ext(file.Filename)
 	// 读取文件名并加密
 	name := strings.TrimSuffix(file.Filename, ext)
 	name = utils.MD5V([]byte(name))

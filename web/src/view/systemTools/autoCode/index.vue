@@ -573,6 +573,8 @@ defineOptions({
 })
 const gormModelList = ['id', 'created_at', 'updated_at', 'deleted_at']
 
+const dataModelList = ['created_by', 'updated_by', 'deleted_by']
+
 const typeOptions = ref([
   {
     label: '字符串',
@@ -955,7 +957,7 @@ const getColumnFunc = async() => {
     form.value.fields = []
     res.data.columns &&
           res.data.columns.forEach(item => {
-            if (!form.value.gvaModel || (!gormModelList.some(gormfd => gormfd === item.columnName))) {
+            if (needAppend(item)) {
               const fbHump = toHump(item.columnName)
               form.value.fields.push({
                 fieldName: toUpperCase(fbHump),
@@ -977,6 +979,18 @@ const getColumnFunc = async() => {
           })
   }
 }
+
+const needAppend = (item) => {
+  let isAppend = true
+  if (form.value.gvaModel && gormModelList.some(gormfd => gormfd === item.columnName)) {
+    isAppend = false
+  }
+  if (form.value.autoCreateResource && dataModelList.some(datafd => datafd === item.columnName)) {
+    isAppend = false
+  }
+  return isAppend
+}
+
 const setFdMap = async() => {
   const fdTypes = ['string', 'int', 'bool', 'float64', 'time.Time']
   fdTypes.forEach(async fdtype => {

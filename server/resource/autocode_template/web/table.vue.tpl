@@ -327,7 +327,7 @@ import {
   update{{.StructName}},
   find{{.StructName}},
   get{{.StructName}}List
-} from '@/api/{{.PackageName}}'
+} from '@/api/{{.Package}}/{{.PackageName}}'
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'

@@ -41,6 +41,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta
 		TableName:     tableName,
 		ApiIDs:        apiIds,
 		BusinessDB:    BusinessDB,
+		MenuID:        menuID,
 	}).Error
 }
 

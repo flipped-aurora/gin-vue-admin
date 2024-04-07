@@ -498,13 +498,13 @@ func (autoCodeService *AutoCodeService) addAutoMoveFile(data *tplData) {
 	} else if strings.Contains(fileSlice[1], "web") {
 		if strings.Contains(fileSlice[n-1], "js") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WApi, base)
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WApi, data.autoPackage, base)
 		} else if strings.Contains(fileSlice[n-2], "form") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WForm, filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WForm, data.autoPackage, filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), strings.TrimSuffix(base, filepath.Ext(base))+"Form.vue")
 		} else if strings.Contains(fileSlice[n-2], "table") {
 			data.autoMoveFilePath = filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WTable, filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)
+				global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WTable, data.autoPackage, filepath.Base(filepath.Dir(filepath.Dir(data.autoCodePath))), base)
 		}
 	}
 }
@@ -581,7 +581,7 @@ func (autoCodeService *AutoCodeService) AutoCreateMenu(a *system.AutoCodeStruct)
 	menu.Name = a.Abbreviation
 	menu.Path = a.Abbreviation
 	menu.Meta.Title = a.Description
-	menu.Component = fmt.Sprintf("view/%s/%s.vue", a.PackageName, a.PackageName)
+	menu.Component = fmt.Sprintf("view/%s/%s/%s.vue", a.Package, a.PackageName, a.PackageName)
 	err = global.GVA_DB.Create(&menu).Error
 	return menu.ID, err
 }
@@ -694,6 +694,19 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 		name: packageAPIName,
 		temp: string(subcontract.API),
 	}}
+
+	webTemp := []string{
+		filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WApi),
+		filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, global.GVA_CONFIG.AutoCode.WForm),
+	}
+
+	for _, s := range webTemp {
+		err := os.MkdirAll(filepath.Join(s, packageName), 0755)
+		if err != nil {
+			return err
+		}
+	}
+
 	for i, s := range pendingTemp {
 		pendingTemp[i].path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, filepath.Clean(fmt.Sprintf(s.path, packageName)))
 	}

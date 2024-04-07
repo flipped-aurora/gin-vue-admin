@@ -24,9 +24,12 @@ type Server struct {
 	HuaWeiObs  HuaWeiObs  `mapstructure:"hua-wei-obs" json:"hua-wei-obs" yaml:"hua-wei-obs"`
 	TencentCOS TencentCOS `mapstructure:"tencent-cos" json:"tencent-cos" yaml:"tencent-cos"`
 	AwsS3      AwsS3      `mapstructure:"aws-s3" json:"aws-s3" yaml:"aws-s3"`
+	// minio 配置
+	Minio Minio `mapstructure:"minio" json:"minio" yaml:"minio"`
 
 	Excel Excel `mapstructure:"excel" json:"excel" yaml:"excel"`
 
 	// 跨域配置
 	Cors CORS `mapstructure:"cors" json:"cors" yaml:"cors"`
+	
 }

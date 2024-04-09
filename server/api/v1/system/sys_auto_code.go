@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/url"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -253,6 +254,11 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	if strings.Contains(a.PlugName, string(filepath.Separator)) {
+		response.FailWithMessage("插件名称不能包含"+string(filepath.Separator), c)
+		return
+	}
+
 	a.Snake = strings.ToLower(a.PlugName)
 	a.NeedModel = a.HasRequest || a.HasResponse
 	err = autoCodeService.CreatePlug(a)

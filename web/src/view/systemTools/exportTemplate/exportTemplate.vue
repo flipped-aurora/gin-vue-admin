@@ -195,12 +195,12 @@
 
       <template #title>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{type==='create'?'添加':'修改'}}</span>
+          <span class="text-lg">{{ type==='create'?'添加':'修改' }}</span>
           <div>
             <el-button @click="closeDialog">取 消</el-button>
             <el-button
-                type="primary"
-                @click="enterDialog"
+              type="primary"
+              @click="enterDialog"
             >确 定</el-button>
           </div>
         </div>
@@ -277,6 +277,55 @@
             placeholder="模板标识为前端组件需要挂在的标识属性"
           />
         </el-form-item>
+
+        <el-form-item
+          label="关联条件:"
+        >
+          <div
+            v-for="(join,key) in formData.joinTemplate"
+            :key="key"
+            class="flex gap-4 w-full mb-2"
+          >
+            <el-select
+              v-model="join.joins"
+              placeholder="请选择关联方式"
+            >
+              <el-option
+                label="LEFT JOIN"
+                value="LEFT JOIN"
+              />
+              <el-option
+                label="INNER JOIN"
+                value="INNER JOIN"
+              />
+              <el-option
+                label="RIGHT JOIN"
+                value="RIGHT JOIN"
+              />
+            </el-select>
+            <el-input
+                v-model="join.table"
+                placeholder="请输入关联表"
+            />
+            <el-input
+              v-model="join.on"
+              placeholder="关联条件 table1.a = table2.b"
+            />
+            <el-button
+              type="danger"
+              icon="delete"
+              @click="() => formData.joinTemplate.splice(key, 1)"
+            >删除</el-button>
+          </div>
+          <div class="flex justify-end w-full">
+            <el-button
+              type="primary"
+              icon="plus"
+              @click="addJoin"
+            >添加条件</el-button>
+          </div>
+        </el-form-item>
+
         <el-form-item
           label="模板信息:"
           prop="templateInfo"
@@ -374,13 +423,15 @@ defineOptions({
   name: 'ExportTemplate'
 })
 
-const templatePlaceholder = `模板信息格式：key标识数据库column列名称，value标识导出excel列名称，如下：
+const templatePlaceholder = `模板信息格式：key标识数据库column列名称（在join模式下需要写为 table.column），value标识导出excel列名称，如下：
 {
-  "table_name1":"第一列",
-  "table_name2":"第二列",
-  "table_name3":"第三列",
-  "table_name4":"第四列",
+  "table_column1":"第一列",
+  "table_column2":"第二列",
+  "table_column3":"第三列",
+  "table_column4":"第四列",
 }
+如果增加了JOINS导出key应该列为 {table_name1.table_column1:"第一列",table_name2.table_column2:"第二列"}
+JOINS模式下不支持导入
 `
 
 // 自动化生成的字典（可能为空）以及字段
@@ -392,6 +443,7 @@ const formData = ref({
   limit: 0,
   order: '',
   conditions: [],
+  joinTemplate: []
 })
 
 const typeSearchOptions = ref([
@@ -430,6 +482,14 @@ const addCondition = () => {
     from: '',
     column: '',
     operator: ''
+  })
+}
+
+const addJoin = () => {
+  formData.value.joinTemplate.push({
+    joins: 'LEFT JOIN',
+    table: '',
+    on: ''
   })
 }
 
@@ -630,6 +690,9 @@ const updateSysExportTemplateFunc = async(row) => {
     if (!formData.value.conditions) {
       formData.value.conditions = []
     }
+    if (!formData.value.joinTemplate) {
+      formData.value.joinTemplate = []
+    }
     dialogFormVisible.value = true
   }
 }
@@ -669,6 +732,7 @@ const closeDialog = () => {
     limit: 0,
     order: '',
     conditions: [],
+    joinTemplate: [],
   }
 }
 // 弹窗确定
@@ -694,6 +758,17 @@ const enterDialog = async() => {
       return
     }
     reqData.conditions[i].templateID = reqData.templateID
+  }
+
+  for (let i = 0; i < reqData.joinTemplate.length; i++) {
+    if (!reqData.joinTemplate[i].joins || !reqData.joinTemplate[i].on) {
+      ElMessage({
+        type: 'error',
+        message: '请填写完整的关联'
+      })
+      return
+    }
+    reqData.joinTemplate[i].templateID = reqData.templateID
   }
 
   elFormRef.value?.validate(async(valid) => {

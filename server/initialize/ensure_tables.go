@@ -50,6 +50,7 @@ func (e *ensureTables) MigrateTable(ctx context.Context) (context.Context, error
 		sysModel.SysAutoCode{},
 		sysModel.SysExportTemplate{},
 		sysModel.Condition{},
+		sysModel.JoinTemplate{},
 
 		adapter.CasbinRule{},
 
@@ -87,6 +88,7 @@ func (e *ensureTables) TableCreated(ctx context.Context) bool {
 		sysModel.SysAutoCode{},
 		sysModel.SysExportTemplate{},
 		sysModel.Condition{},
+		sysModel.JoinTemplate{},
 
 		adapter.CasbinRule{},
 

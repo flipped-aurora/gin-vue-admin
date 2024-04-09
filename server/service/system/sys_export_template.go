@@ -51,6 +51,14 @@ func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplat
 			return e
 		}
 		sysExportTemplate.Conditions = nil
+
+		joins := sysExportTemplate.JoinTemplate
+		e = tx.Delete(&[]system.JoinTemplate{}, "template_id = ?", sysExportTemplate.TemplateID).Error
+		if e != nil {
+			return e
+		}
+		sysExportTemplate.JoinTemplate = nil
+
 		e = tx.Updates(&sysExportTemplate).Error
 		if e != nil {
 			return e
@@ -61,6 +69,12 @@ func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplat
 			}
 			e = tx.Create(&conditions).Error
 		}
+		if len(joins) > 0 {
+			for i := range joins {
+				joins[i].ID = 0
+			}
+			e = tx.Create(&joins).Error
+		}
 		return e
 	})
 }
@@ -68,7 +82,7 @@ func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplat
 // GetSysExportTemplate 根据id获取导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplate(id uint) (sysExportTemplate system.SysExportTemplate, err error) {
-	err = global.GVA_DB.Where("id = ?", id).Preload("Conditions").First(&sysExportTemplate).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("JoinTemplate").Preload("Conditions").First(&sysExportTemplate).Error
 	return
 }
 
@@ -110,7 +124,7 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.Preload("Conditions").First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -145,6 +159,13 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	if template.DBName != "" {
 		db = global.MustGetGlobalDBByDBName(template.DBName)
 	}
+
+	if len(template.JoinTemplate) > 0 {
+		for _, join := range template.JoinTemplate {
+			db = db.Joins(join.JOINS + "`" + join.Table + "`" + " ON " + join.ON)
+		}
+	}
+
 	db = db.Select(selects).Table(template.TableName)
 
 	if len(template.Conditions) > 0 {
@@ -191,7 +212,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		db = db.Order(template.Order)
 	}
 
-	err = db.Find(&tableMap).Error
+	err = db.Debug().Find(&tableMap).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -200,6 +221,12 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	for _, table := range tableMap {
 		var row []string
 		for _, column := range columns {
+			if len(template.JoinTemplate) > 0 {
+				columnArr := strings.Split(column, ".")
+				if len(columnArr) > 1 {
+					column = strings.Split(column, ".")[1]
+				}
+			}
 			row = append(row, fmt.Sprintf("%v", table[column]))
 		}
 		rows = append(rows, row)

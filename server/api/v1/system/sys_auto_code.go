@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/url"
 	"os"
-	"path/filepath"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -189,6 +188,12 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	// PackageName可能导致路径穿越的问题 / 和 \ 都要防止
+	if strings.Contains(a.PackageName, "\\") || strings.Contains(a.PackageName, "/") || strings.Contains(a.PackageName, "..") {
+		response.FailWithMessage("包名不合法", c)
+		return
+	}
+
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
 
@@ -254,8 +259,8 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if strings.Contains(a.PlugName, string(filepath.Separator)) {
-		response.FailWithMessage("插件名称不能包含"+string(filepath.Separator), c)
+	if strings.Contains(a.PlugName, "\\") || strings.Contains(a.PlugName, "/") || strings.Contains(a.PlugName, "..") {
+		response.FailWithMessage("插件名称不合法", c)
 		return
 	}
 

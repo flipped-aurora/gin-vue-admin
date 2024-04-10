@@ -165,3 +165,19 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
         }, "获取成功", c)
     }
 }
+
+// Get{{.StructName}}Public 不需要鉴权的{{.Description}}接口
+// @Tags {{.StructName}}
+// @Summary 不需要鉴权的{{.Description}}接口
+// @accept application/json
+// @Produce application/json
+// @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.Description}}列表"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /{{.Abbreviation}}/get{{.StructName}}List [get]
+func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}Public(c *gin.Context) {
+    // 此接口不需要鉴权
+    // 示例为返回了一个固定的消息接口，一般本接口用于C端服务，需要自己实现业务逻辑
+    response.OkWithDetailed(gin.H{
+       "info": "不需要鉴权的{{.Description}}接口信息",
+    }, "获取成功", c)
+}

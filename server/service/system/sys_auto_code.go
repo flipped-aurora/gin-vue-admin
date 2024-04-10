@@ -29,7 +29,8 @@ import (
 const (
 	autoPath           = "autocode_template/"
 	autocodePath       = "resource/autocode_template"
-	plugPath           = "resource/plug_template"
+	plugServerPath     = "resource/plug_template/server"
+	plugWebPath        = "resource/plug_template/web"
 	packageService     = "service/%s/enter.go"
 	packageServiceName = "service"
 	packageRouter      = "router/%s/enter.go"
@@ -749,7 +750,19 @@ func (autoCodeService *AutoCodeService) CreatePackageTemp(packageName string) er
 func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) error {
 	// 检查列表参数是否有效
 	plug.CheckList()
-	tplFileList, _ := autoCodeService.GetAllTplFile(plugPath, nil)
+	err := autoCodeService.createPluginServer(plug)
+	if err != nil {
+		return err
+	}
+	err = autoCodeService.createPluginWeb(plug)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (autoCodeService *AutoCodeService) createPluginServer(plug system.AutoPlugReq) error {
+	tplFileList, _ := autoCodeService.GetAllTplFile(plugServerPath, nil)
 	for _, tpl := range tplFileList {
 		temp, err := template.ParseFiles(tpl)
 		if err != nil {
@@ -757,11 +770,41 @@ func (autoCodeService *AutoCodeService) CreatePlug(plug system.AutoPlugReq) erro
 			return err
 		}
 		pathArr := strings.SplitAfter(tpl, "/")
-		if strings.Index(pathArr[2], "tpl") < 0 {
-			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[2]))
+		if strings.Index(pathArr[3], "tpl") < 0 {
+			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[3]))
 			os.MkdirAll(dirPath, 0755)
 		}
-		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugPath):len(tpl)-4]))
+		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugServerPath):len(tpl)-4]))
+		f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
+		if err != nil {
+			zap.L().Error("open file", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
+		}
+		defer f.Close()
+
+		err = temp.Execute(f, plug)
+		if err != nil {
+			zap.L().Error("exec err", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))
+			return err
+		}
+	}
+	return nil
+}
+
+func (autoCodeService *AutoCodeService) createPluginWeb(plug system.AutoPlugReq) error {
+	tplFileList, _ := autoCodeService.GetAllTplFile(plugWebPath, nil)
+	for _, tpl := range tplFileList {
+		temp, err := template.ParseFiles(tpl)
+		if err != nil {
+			zap.L().Error("parse err", zap.String("tpl", tpl), zap.Error(err))
+			return err
+		}
+		pathArr := strings.SplitAfter(tpl, "/")
+		if strings.Index(pathArr[3], "tpl") < 0 {
+			dirPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+pathArr[3]))
+			os.MkdirAll(dirPath, 0755)
+		}
+		file := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, fmt.Sprintf(global.GVA_CONFIG.AutoCode.SPlug, plug.Snake+"/"+tpl[len(plugWebPath):len(tpl)-4]))
 		f, err := os.OpenFile(file, os.O_WRONLY|os.O_CREATE, 0666)
 		if err != nil {
 			zap.L().Error("open file", zap.String("tpl", tpl), zap.Error(err), zap.Any("plug", plug))

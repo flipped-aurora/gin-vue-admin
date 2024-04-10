@@ -38,6 +38,7 @@
             </span>
             <span>
               <el-select
+                class="w-32"
                 v-model="i.type"
                 placeholder="type 必填"
               >
@@ -106,6 +107,7 @@
             <span>
               <el-select
                 v-model="i.type"
+                class="w-32"
                 placeholder="type 必填"
               >
                 <el-option
@@ -173,6 +175,7 @@
             <span>
               <el-select
                 v-model="i.type"
+                class="w-32"
                 placeholder="type 必填"
               >
                 <el-option

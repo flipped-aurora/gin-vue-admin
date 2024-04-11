@@ -19,39 +19,37 @@ type BaseMenuService struct{}
 var BaseMenuServiceApp = new(BaseMenuService)
 
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
-	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
+	err = global.GVA_DB.First(&system.SysBaseMenu{}, "parent_id = ?", id).Error
 	if err != nil {
-		global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-			var menu system.SysBaseMenu
-			err = global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Error
+		return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
+			err = tx.Delete(&system.SysBaseMenu{}, "id = ?", id).Error
 			if err != nil {
 				return err
 			}
-			global.GVA_DB.Delete((&menu))
-			err = global.GVA_DB.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
+
+			err = tx.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
 			if err != nil {
 				return err
 			}
-			err = global.GVA_DB.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
+
+			err = tx.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
 			if err != nil {
 				return err
 			}
-			err = global.GVA_DB.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
+			err = tx.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
 			if err != nil {
 				return err
 			}
-			if len(menu.SysAuthoritys) > 0 {
-				err = global.GVA_DB.Model(&menu).Association("SysAuthoritys").Delete(&menu.SysAuthoritys)
-			}
+
+			err = tx.Delete(&system.SysAuthorityMenu{}, "sys_base_menu_id = ?", id).Error
 			if err != nil {
 				return err
 			}
 			return nil
 		})
-	} else {
-		return errors.New("此菜单存在子菜单不可删除")
 	}
-	return err
+	return errors.New("此菜单存在子菜单不可删除")
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

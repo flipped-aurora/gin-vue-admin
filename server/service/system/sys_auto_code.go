@@ -578,7 +578,7 @@ func (autoCodeService *AutoCodeService) AutoCreateMenu(a *system.AutoCodeStruct)
 	if err == nil {
 		return 0, errors.New("存在相同的菜单路由，请关闭自动创建菜单功能")
 	}
-	menu.ParentId = "0"
+	menu.ParentId = 0
 	menu.Name = a.Abbreviation
 	menu.Path = a.Abbreviation
 	menu.Meta.Title = a.Description

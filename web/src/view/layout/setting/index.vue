@@ -8,7 +8,7 @@
     />
     <el-drawer
       v-model="drawer"
-      title="系统配置"
+      header="系统配置"
       :direction="direction"
       :before-close="handleClose"
     >

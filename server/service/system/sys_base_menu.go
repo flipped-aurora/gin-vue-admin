@@ -2,6 +2,7 @@ package system
 
 import (
 	"errors"
+	"strconv"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -19,7 +20,7 @@ type BaseMenuService struct{}
 var BaseMenuServiceApp = new(BaseMenuService)
 
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
-	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
+	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("parent_id = ?", strconv.Itoa(id)).First(&system.SysBaseMenu{}).Error
 	if err != nil {
 		var menu system.SysBaseMenu
 		db := global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)

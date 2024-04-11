@@ -70,7 +70,7 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	}
 	var baseMenu []system.SysBaseMenu
 	for _, v := range menus {
-		intNum, _ := strconv.Atoi(v.MenuId)
+		intNum := v.MenuId
 		v.SysBaseMenu.ID = uint(intNum)
 		baseMenu = append(baseMenu, v.SysBaseMenu)
 	}

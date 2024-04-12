@@ -118,7 +118,7 @@ func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthori
 		global.GVA_LOG.Debug(err.Error())
 		return system.SysAuthority{}, errors.New("查询角色数据失败")
 	}
-	global.GVA_DB.Model(&oldAuthority).Updates(&auth)
+	err := global.GVA_DB.Model(&oldAuthority).Updates(&auth).Error
 	return auth, err
 }
 

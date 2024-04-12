@@ -63,13 +63,17 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 		"Status": sysDictionary.Status,
 		"Desc":   sysDictionary.Desc,
 	}
-	db := global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict)
+	err = global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict).Error
+	if err != nil {
+		global.GVA_LOG.Debug(err.Error())
+		return errors.New("查询字典数据失败")
+	}
 	if dict.Type != sysDictionary.Type {
 		if !errors.Is(global.GVA_DB.First(&system.SysDictionary{}, "type = ?", sysDictionary.Type).Error, gorm.ErrRecordNotFound) {
 			return errors.New("存在相同的type，不允许创建")
 		}
 	}
-	err = db.Updates(sysDictionaryMap).Error
+	err = global.GVA_DB.Model(&dict).Updates(sysDictionaryMap).Error
 	return err
 }
 

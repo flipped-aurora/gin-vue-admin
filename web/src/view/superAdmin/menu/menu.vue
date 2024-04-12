@@ -5,7 +5,7 @@
         <el-button
           type="primary"
           icon="plus"
-          @click="addMenu('0')"
+          @click="addMenu(0)"
         >新增根菜单</el-button>
         <el-icon
           class="cursor-pointer"

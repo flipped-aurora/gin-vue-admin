@@ -118,7 +118,13 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 
 func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		TxErr := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
+		var user system.SysUser
+		TxErr := tx.Where("id = ?", id).First(&user).Error
+		if TxErr != nil {
+			global.GVA_LOG.Debug(TxErr.Error())
+			return errors.New("查询用户数据失败")
+		}
+		TxErr = tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 		if TxErr != nil {
 			return TxErr
 		}
@@ -132,7 +138,7 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 		if TxErr != nil {
 			return TxErr
 		}
-		TxErr = tx.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityIds[0]).Error
+		TxErr = tx.Model(&user).Update("authority_id", authorityIds[0]).Error
 		if TxErr != nil {
 			return TxErr
 		}

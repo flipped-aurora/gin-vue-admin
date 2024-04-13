@@ -336,6 +336,7 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 	return db.Transaction(func(tx *gorm.DB) error {
 		excelTitle := rows[0]
 		values := rows[1:]
+		items := make([]map[string]interface{}, len(values))
 		for _, row := range values {
 			var item = make(map[string]interface{})
 			for ii, value := range row {
@@ -354,12 +355,10 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 			//	item["updated_at"] = time.Now()
 			//}
 
-			cErr := tx.Table(template.TableName).Create(&item).Error
-			if cErr != nil {
-				return cErr
-			}
+			items = append(items, item)
 		}
-		return nil
+		cErr := tx.Table(template.TableName).CreateInBatches(&items, 1000).Error
+		return cErr
 	})
 }
 

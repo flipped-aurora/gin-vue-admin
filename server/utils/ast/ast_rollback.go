@@ -111,7 +111,15 @@ func RollRouterBack(pk, model string) {
 	}
 
 	var block *ast.BlockStmt
+	var routerStmt *ast.FuncDecl
+
 	ast.Inspect(astFile, func(node ast.Node) bool {
+		if n, ok := node.(*ast.FuncDecl); ok {
+			if n.Name.Name == "Routers" {
+				routerStmt = n
+			}
+		}
+
 		if n, ok := node.(*ast.BlockStmt); ok {
 			ast.Inspect(n, func(bNode ast.Node) bool {
 				if in, ok := bNode.(*ast.Ident); ok {
@@ -146,7 +154,15 @@ func RollRouterBack(pk, model string) {
 	if len(block.List) == 1 {
 		// 说明这个块就没任何意义了
 		block.List = nil
-		// TODO 删除空的{}
+	}
+
+	for i, n := range routerStmt.Body.List {
+		if n, ok := n.(*ast.BlockStmt); ok {
+			if n.List == nil {
+				routerStmt.Body.List = append(append([]ast.Stmt{}, routerStmt.Body.List[:i]...), routerStmt.Body.List[i+1:]...)
+				i--
+			}
+		}
 	}
 
 	var out []byte

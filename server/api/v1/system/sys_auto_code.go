@@ -1,10 +1,13 @@
 package system
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"net/url"
 	"os"
+	"path/filepath"
+	"regexp"
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -101,7 +104,125 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 		c.File("./ginvueadmin.zip")
 		_ = os.Remove("./ginvueadmin.zip")
 	}
+	// 屎山代码临时用 start 莫介意
+	if a.AutoKeepCode {
+		// 从 records 表中获取被删除的代码文件的路径和文件名
+		rows, err := global.RecordDB.Query("SELECT path, file FROM records")
+		if err != nil {
+			global.GVA_LOG.Error("查询记录失败!", zap.Error(err))
+			response.FailWithMessage("查询记录失败", c)
+			return
+		}
+		defer rows.Close()
+
+		for rows.Next() {
+			var srcFile, file string
+			if err := rows.Scan(&srcFile, &file); err != nil {
+				global.GVA_LOG.Error("读取记录失败!", zap.Error(err))
+				response.FailWithMessage("读取记录失败", c)
+				return
+			}
+
+			// destFile 是新创建的文件的路径
+			destFile := filepath.Join(global.GVA_CONFIG.AutoCode.Root, file)
+
+			// 检查新文件的路径是否存在
+			if _, err := os.Stat(destFile); err == nil {
+				if err := extractAndAppendCodeBlocks(srcFile, destFile); err != nil {
+					global.GVA_LOG.Error("提取代码块失败!", zap.Error(err))
+					response.FailWithMessage("提取代码块失败", c)
+					return
+				}
+
+				// 删除数据库中的记录
+				_, err = global.RecordDB.Exec("DELETE FROM records WHERE path = ? AND file = ?", srcFile, file)
+				if err != nil {
+					global.GVA_LOG.Error("删除记录失败!", zap.Error(err))
+					response.FailWithMessage("删除记录失败", c)
+					return
+				}
+			}
+		}
+	}
+	// 屎山代码临时用 end 莫介意
 }
+
+// 屎山代码临时用 start 莫介意
+// 提取rm_file(删除文件存放)代码文件中的标记代码段,添加到目标文件末尾,如果目标文件不存在则自动创建
+func extractAndAppendCodeBlocks(srcFile, destFile string) error {
+
+	source, err := os.Open(srcFile)
+	if err != nil {
+		return err
+	}
+	defer source.Close()
+
+	// 检查目标文件是否存在，如果不存在则创建
+	dest, err := os.OpenFile(destFile, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer dest.Close()
+
+	scanner := bufio.NewScanner(source)
+	writer := bufio.NewWriter(dest)
+	defer writer.Flush()
+
+	keepWriting := false
+	nestCount := 0
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		trimmedLine := strings.TrimSpace(line)
+
+		if isStartTag(trimmedLine) {
+			nestCount++
+			if nestCount == 1 {
+				keepWriting = true
+			}
+		}
+
+		if keepWriting {
+			_, err = writer.WriteString(line + "\n")
+			if err != nil {
+				return err
+			}
+		}
+
+		if isEndTag(trimmedLine) {
+			if nestCount > 0 {
+				nestCount--
+			}
+			if nestCount == 0 {
+				keepWriting = false
+			}
+		}
+	}
+
+	if err := scanner.Err(); err != nil {
+		return err
+	}
+
+	if nestCount != 0 {
+		return errors.New("发现未匹配的标签")
+	}
+
+	return nil
+}
+
+// isStartTag 检查一行是否包含开始标签。
+func isStartTag(line string) bool {
+	match, _ := regexp.MatchString(`^\s*//\s*@gvastartkeep\s*$`, line)
+	return match
+}
+
+// isEndTag 检查一行是否包含结束标签。
+func isEndTag(line string) bool {
+	match, _ := regexp.MatchString(`^\s*//\s*@gvaendkeep\s*$`, line)
+	return match
+}
+
+// 屎山代码临时用 end 莫介意
 
 // GetDB
 // @Tags      AutoCode

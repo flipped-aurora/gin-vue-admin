@@ -1,10 +1,12 @@
 package system
 
 import (
+	"database/sql"
 	"errors"
 	"fmt"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"log"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -117,6 +119,45 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 			fmt.Println("文件已存在:", nPath)
 			nPath += fmt.Sprintf("_%d", time.Now().Nanosecond())
 		}
+		// 屎山代码临时用 start 莫介意
+		parts := strings.Split(path, "gin-vue-admin")
+		//从gin-vue-admin文件开始 例如serve\
+		FilePath := strings.TrimPrefix(parts[1], "\\")
+		//rootServeFilePath := filepath.Join(filepath.Base(filepath.Dir(filepath.Dir(filepath.Dir(filepath.Dir(path))))), filepath.Base(filepath.Dir(filepath.Dir(filepath.Dir(path)))), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
+		fmt.Println("rootServeFilePath", FilePath)
+		stmt, err := global.RecordDB.Prepare("SELECT path FROM records WHERE file = ?")
+		if err != nil {
+			log.Fatal(err)
+		}
+		row := stmt.QueryRow(FilePath)
+
+		var existingPath string
+		err = row.Scan(&existingPath)
+
+		if err == sql.ErrNoRows {
+			// 插入新的记录
+			stmt, err = global.RecordDB.Prepare("INSERT INTO records (path, file, UPDATE_TIME) VALUES (?, ?, ?)")
+			if err != nil {
+				log.Fatal(err)
+			}
+			_, err = stmt.Exec(nPath, FilePath, time.Now())
+			if err != nil {
+				log.Fatal(err)
+			}
+		} else if err != nil {
+			log.Fatal(err)
+		} else {
+			// 更新已有的记录
+			stmt, err = global.RecordDB.Prepare("UPDATE records SET path = ?, UPDATE_TIME = ? WHERE file = ?")
+			if err != nil {
+				log.Fatal(err)
+			}
+			_, err = stmt.Exec(nPath, time.Now(), FilePath)
+			if err != nil {
+				log.Fatal(err)
+			}
+		}
+		// 屎山代码临时用 end 莫介意
 		err = utils.FileMove(path, nPath)
 		if err != nil {
 			global.GVA_LOG.Error("file move err ", zap.Error(err))

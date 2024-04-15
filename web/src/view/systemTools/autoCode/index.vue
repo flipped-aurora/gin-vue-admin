@@ -295,6 +295,21 @@
             </template>
             <el-checkbox v-model="form.autoMoveFile" />
           </el-form-item>
+          <el-form-item>
+            <template #label>
+              <el-tooltip
+                  content="注：该功能还在测试阶段请开发者酌情使用。v1.0.0保留后端@gvakeep 和 @gvaendkeep之间的代码片段默认添加到新文件的最后中"
+                  placement="bottom" effect="light"
+              >
+                <div>保留代码(测试
+                  <el-icon>
+                    <QuestionFilled/>
+                  </el-icon>
+                </div>
+              </el-tooltip>
+            </template>
+            <el-checkbox v-model="form.autoKeepCode"/>
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -697,6 +712,7 @@ const form = ref({
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
   autoMoveFile: true,
+  autoKeepCode: false,
   gvaModel: true,
   autoCreateResource: false,
   fields: []

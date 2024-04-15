@@ -1,8 +1,11 @@
 package main
 
 import (
+	"database/sql"
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
+	"log"
+	"path/filepath"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -35,5 +38,23 @@ func main() {
 		db, _ := global.GVA_DB.DB()
 		defer db.Close()
 	}
+
+	// 屎山代码临时用 start 莫介意
+	defer global.RecordDB.Close()
+	rootPath := global.GVA_CONFIG.AutoCode.Root
+	rmFilePathRecord := filepath.Join(rootPath, "rm_file", "rm_record.db")
+	record_db, err := sql.Open("sqlite3", rmFilePathRecord)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_, err = record_db.Exec("CREATE TABLE IF NOT EXISTS records (path TEXT, file TEXT, UPDATE_TIME DATETIME)")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	global.RecordDB = record_db
+	// 屎山代码临时用 end 莫介意
+
 	core.RunWindowsServer()
 }

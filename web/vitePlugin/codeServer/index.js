@@ -11,8 +11,9 @@ export default function GvaPositionServer() {
             req._parsedUrl.query && req._parsedUrl.query.split('=')[1]
           if (path && path !== 'null') {
             if (process.env.VITE_EDITOR === 'webstorm') {
-              const linePath = path.split(':')[1]
-              const filePath = path.split(':')[0]
+              const lastColonIndex = path.lastIndexOf(':')
+              const linePath = path.substring(lastColonIndex + 1)
+              const filePath = path.substring(0, lastColonIndex)
               const platform = os()
               if (platform === 'win32') {
                 child_process.exec(

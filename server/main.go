@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	_ "github.com/mattn/go-sqlite3"
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
 	"log"

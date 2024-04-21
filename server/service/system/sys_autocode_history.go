@@ -119,7 +119,6 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 			fmt.Println("文件已存在:", delteSavePath)
 			delteSavePath += fmt.Sprintf("_%d", time.Now().Nanosecond())
 		}
-		// 屎山代码临时用 start 莫介意
 		parts := strings.Split(path, "gin-vue-admin")
 		//从gin-vue-admin文件开始 例如serve\
 		FilePath := strings.TrimPrefix(parts[1], "\\")
@@ -145,7 +144,6 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 				log.Fatal(err)
 			}
 		}
-		// 屎山代码临时用 end 莫介意
 		err = utils.FileMove(path, delteSavePath)
 		if err != nil {
 			global.GVA_LOG.Error("file move err ", zap.Error(err))

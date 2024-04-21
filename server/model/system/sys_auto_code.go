@@ -10,33 +10,31 @@ import (
 
 // AutoCodeStruct 初始版本自动化代码工具
 type AutoCodeStruct struct {
-	StructName          string `json:"structName"`          // Struct名称
-	TableName           string `json:"tableName"`           // 表名
-	PackageName         string `json:"packageName"`         // 文件名称
-	HumpPackageName     string `json:"humpPackageName"`     // go文件名称
-	Abbreviation        string `json:"abbreviation"`        // Struct简称
-	Description         string `json:"description"`         // Struct中文名称
-	AutoCreateApiToSql  bool   `json:"autoCreateApiToSql"`  // 是否自动创建api
-	AutoCreateMenuToSql bool   `json:"autoCreateMenuToSql"` // 是否自动创建menu
-	AutoCreateResource  bool   `json:"autoCreateResource"`  // 是否自动创建资源标识
-	// 屎山代码临时用 start 莫介意
-	AutoKeepCode bool `json:"autoKeepCode"` // 是否自动保留代码
-	// 屎山代码临时用 end 莫介意
-	AutoMoveFile   bool     `json:"autoMoveFile"` // 是否自动移动文件
-	BusinessDB     string   `json:"businessDB"`   // 业务数据库
-	GvaModel       bool     `json:"gvaModel"`     // 是否使用gva默认Model
-	Fields         []*Field `json:"fields"`
-	PrimaryField   *Field   `json:"primaryField"`
-	HasTimer       bool     `json:"-"`
-	HasSearchTimer bool     `json:"-"`
-	DictTypes      []string `json:"-"`
-	Package        string   `json:"package"`
-	PackageT       string   `json:"-"`
-	NeedSort       bool     `json:"-"`
-	HasPic         bool     `json:"-"`
-	HasRichText    bool     `json:"-"`
-	HasFile        bool     `json:"-"`
-	NeedJSON       bool     `json:"-"`
+	StructName          string   `json:"structName"`          // Struct名称
+	TableName           string   `json:"tableName"`           // 表名
+	PackageName         string   `json:"packageName"`         // 文件名称
+	HumpPackageName     string   `json:"humpPackageName"`     // go文件名称
+	Abbreviation        string   `json:"abbreviation"`        // Struct简称
+	Description         string   `json:"description"`         // Struct中文名称
+	AutoCreateApiToSql  bool     `json:"autoCreateApiToSql"`  // 是否自动创建api
+	AutoCreateMenuToSql bool     `json:"autoCreateMenuToSql"` // 是否自动创建menu
+	AutoCreateResource  bool     `json:"autoCreateResource"`  // 是否自动创建资源标识
+	AutoKeepCode        bool     `json:"autoKeepCode"`        // 是否自动保留代码
+	AutoMoveFile        bool     `json:"autoMoveFile"`        // 是否自动移动文件
+	BusinessDB          string   `json:"businessDB"`          // 业务数据库
+	GvaModel            bool     `json:"gvaModel"`            // 是否使用gva默认Model
+	Fields              []*Field `json:"fields"`
+	PrimaryField        *Field   `json:"primaryField"`
+	HasTimer            bool     `json:"-"`
+	HasSearchTimer      bool     `json:"-"`
+	DictTypes           []string `json:"-"`
+	Package             string   `json:"package"`
+	PackageT            string   `json:"-"`
+	NeedSort            bool     `json:"-"`
+	HasPic              bool     `json:"-"`
+	HasRichText         bool     `json:"-"`
+	HasFile             bool     `json:"-"`
+	NeedJSON            bool     `json:"-"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {

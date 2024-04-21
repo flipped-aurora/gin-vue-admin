@@ -104,7 +104,6 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 		c.File("./ginvueadmin.zip")
 		_ = os.Remove("./ginvueadmin.zip")
 	}
-	// 屎山代码临时用 start 莫介意
 	if a.AutoKeepCode {
 		var records []system.RecordsDeleteCode
 		result := global.GVA_DB.Table("records").Select("path", "file", "update_time").Find(&records)
@@ -138,10 +137,8 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			}
 		}
 	}
-	// 屎山代码临时用 end 莫介意
 }
 
-// 屎山代码临时用 start 莫介意
 // 提取rm_file(删除文件存放)代码文件中的标记代码段,添加到目标文件末尾,如果目标文件不存在则自动创建
 func extractAndAppendCodeBlocks(srcFile, destFile string) error {
 
@@ -215,8 +212,6 @@ func isEndTag(line string) bool {
 	match, _ := regexp.MatchString(`^\s*//\s*@gvaendkeep\s*$`, line)
 	return match
 }
-
-// 屎山代码临时用 end 莫介意
 
 // GetDB
 // @Tags      AutoCode

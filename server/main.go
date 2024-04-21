@@ -1,13 +1,8 @@
 package main
 
 import (
-	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
 	_ "go.uber.org/automaxprocs"
 	"go.uber.org/zap"
-	"log"
-	"os"
-	"path/filepath"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/core"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"

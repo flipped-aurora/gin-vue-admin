@@ -106,26 +106,21 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	}
 	// 屎山代码临时用 start 莫介意
 	if a.AutoKeepCode {
+		var records []system.RecordsDeleteCode
+		result := global.GVA_DB.Table("records").Select("path", "file", "update_time").Find(&records)
 		// 从 records 表中获取被删除的代码文件的路径和文件名
-		rows, err := global.RecordDB.Query("SELECT path, file FROM records")
-		if err != nil {
-			global.GVA_LOG.Error("查询记录失败!", zap.Error(err))
-			response.FailWithMessage("查询记录失败", c)
+		if result.Error != nil {
+			global.GVA_LOG.Error("无任何删除记录!", zap.Error(result.Error))
+			response.FailWithMessage("无任何删除记录", c)
 			return
 		}
-		defer rows.Close()
 
-		for rows.Next() {
-			var srcFile, file string
-			if err := rows.Scan(&srcFile, &file); err != nil {
-				global.GVA_LOG.Error("读取记录失败!", zap.Error(err))
-				response.FailWithMessage("读取记录失败", c)
-				return
-			}
+		for _, record := range records {
+			srcFile := record.Path
+			file := record.File
 
 			// destFile 是新创建的文件的路径
 			destFile := filepath.Join(global.GVA_CONFIG.AutoCode.Root, file)
-
 			// 检查新文件的路径是否存在
 			if _, err := os.Stat(destFile); err == nil {
 				if err := extractAndAppendCodeBlocks(srcFile, destFile); err != nil {
@@ -133,11 +128,10 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 					response.FailWithMessage("提取代码块失败", c)
 					return
 				}
-
 				// 删除数据库中的记录
-				_, err = global.RecordDB.Exec("DELETE FROM records WHERE path = ? AND file = ?", srcFile, file)
-				if err != nil {
-					global.GVA_LOG.Error("删除记录失败!", zap.Error(err))
+				result := global.GVA_DB.Where("path = ? AND file = ?", srcFile, file).Delete(&system.RecordsDeleteCode{})
+				if result.Error != nil {
+					global.GVA_LOG.Error("删除记录失败!", zap.Error(result.Error))
 					response.FailWithMessage("删除记录失败", c)
 					return
 				}

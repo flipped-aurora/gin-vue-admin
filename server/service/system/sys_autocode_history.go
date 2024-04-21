@@ -1,11 +1,11 @@
 package system
 
 import (
-	"database/sql"
 	"errors"
 	"fmt"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"gorm.io/gorm"
 	"log"
 	"path/filepath"
 	"strconv"
@@ -112,53 +112,41 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		}
 
 		// 迁移
-		nPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+		delteSavePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			"rm_file", time.Now().Format("20060102"), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
 		// 判断目标文件是否存在
-		for utils.FileExist(nPath) {
-			fmt.Println("文件已存在:", nPath)
-			nPath += fmt.Sprintf("_%d", time.Now().Nanosecond())
+		for utils.FileExist(delteSavePath) {
+			fmt.Println("文件已存在:", delteSavePath)
+			delteSavePath += fmt.Sprintf("_%d", time.Now().Nanosecond())
 		}
 		// 屎山代码临时用 start 莫介意
 		parts := strings.Split(path, "gin-vue-admin")
 		//从gin-vue-admin文件开始 例如serve\
 		FilePath := strings.TrimPrefix(parts[1], "\\")
-		//rootServeFilePath := filepath.Join(filepath.Base(filepath.Dir(filepath.Dir(filepath.Dir(filepath.Dir(path))))), filepath.Base(filepath.Dir(filepath.Dir(filepath.Dir(path)))), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
-		fmt.Println("rootServeFilePath", FilePath)
-		stmt, err := global.RecordDB.Prepare("SELECT path FROM records WHERE file = ?")
-		if err != nil {
-			log.Fatal(err)
-		}
-		row := stmt.QueryRow(FilePath)
-
-		var existingPath string
-		err = row.Scan(&existingPath)
-
-		if err == sql.ErrNoRows {
-			// 插入新的记录
-			stmt, err = global.RecordDB.Prepare("INSERT INTO records (path, file, UPDATE_TIME) VALUES (?, ?, ?)")
-			if err != nil {
-				log.Fatal(err)
+		var record system.RecordsDeleteCode
+		result := global.GVA_DB.Table("records").Where("file = ?", FilePath).First(&record)
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			record = system.RecordsDeleteCode{
+				Path:       delteSavePath,
+				File:       FilePath,
+				UpdateTime: time.Now(),
 			}
-			_, err = stmt.Exec(nPath, FilePath, time.Now())
-			if err != nil {
-				log.Fatal(err)
+			if err := global.GVA_DB.Create(&record).Error; err != nil {
+				log.Fatal()
 			}
-		} else if err != nil {
-			log.Fatal(err)
+
+		} else if result.Error != nil {
+			log.Fatal(result.Error)
 		} else {
-			// 更新已有的记录
-			stmt, err = global.RecordDB.Prepare("UPDATE records SET path = ?, UPDATE_TIME = ? WHERE file = ?")
-			if err != nil {
-				log.Fatal(err)
-			}
-			_, err = stmt.Exec(nPath, time.Now(), FilePath)
-			if err != nil {
+			//更新已有记录
+			record.Path = delteSavePath
+			record.UpdateTime = time.Now()
+			if err := global.GVA_DB.Model(&system.RecordsDeleteCode{}).Where("file = ?", FilePath).Updates(&record).Error; err != nil {
 				log.Fatal(err)
 			}
 		}
 		// 屎山代码临时用 end 莫介意
-		err = utils.FileMove(path, nPath)
+		err = utils.FileMove(path, delteSavePath)
 		if err != nil {
 			global.GVA_LOG.Error("file move err ", zap.Error(err))
 		}

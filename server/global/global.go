@@ -1,7 +1,6 @@
 package global
 
 import (
-	"database/sql"
 	"github.com/qiniu/qmgo"
 	"sync"
 
@@ -33,10 +32,6 @@ var (
 
 	BlackCache local_cache.Cache
 	lock       sync.RWMutex
-
-	// 屎山代码临时用 start 莫介意
-	RecordDB *sql.DB
-	// 屎山代码临时用 end 莫介意
 )
 
 // GetGlobalDBByDBName 通过名称获取db list中的db

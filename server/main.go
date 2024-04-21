@@ -36,27 +36,5 @@ func main() {
 		defer db.Close()
 	}
 
-	// 屎山代码临时用 start 莫介意
-	defer global.RecordDB.Close()
-	rootPath := global.GVA_CONFIG.AutoCode.Root
-	rmFilePath := filepath.Join(rootPath, "rm_file")
-	// 创建所有必要的父目录
-	if err := os.MkdirAll(rmFilePath, 0755); err != nil {
-		log.Fatal(err)
-	}
-	rmFilePathRecord := filepath.Join(rootPath, "rm_file", "rm_record.db")
-	record_db, err := sql.Open("sqlite3", rmFilePathRecord)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	_, err = record_db.Exec("CREATE TABLE IF NOT EXISTS records (path TEXT, file TEXT, UPDATE_TIME DATETIME)")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	global.RecordDB = record_db
-	// 屎山代码临时用 end 莫介意
-
 	core.RunWindowsServer()
 }

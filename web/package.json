@@ -30,10 +30,11 @@
         "pinia": "^2.1.4",
         "qs": "^6.11.2",
         "screenfull": "^6.0.2",
+        "sortablejs": "^1.15.2",
         "spark-md5": "^3.0.2",
         "tailwindcss": "^3.3.3",
         "vue": "^3.4.21",
-        "vue-router": "^4.2.4"
+        "vuedraggable": "^4.1.0"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.22.9",

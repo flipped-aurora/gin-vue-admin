@@ -193,7 +193,7 @@
       destroy-on-close
     >
 
-      <template #title>
+      <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ type==='create'?'添加':'修改' }}</span>
           <div>

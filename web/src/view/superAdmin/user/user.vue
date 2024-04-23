@@ -136,7 +136,7 @@
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
-      <template #title>
+      <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">用户</span>
           <div>

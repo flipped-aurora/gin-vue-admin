@@ -192,7 +192,7 @@
         </div>
     </div>
     <el-drawer size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
-       <template #title>
+       <template #header>
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'添加':'修改'{{"}}"}}</span>
                 <div>
@@ -271,8 +271,8 @@
           </el-form>
     </el-drawer>
 
-    <el-drawer size="800" v-model="detailShow" :before-close="closeDetailShow" title="查看详情" destroy-on-close>
-          <template #title>
+    <el-drawer size="800" v-model="detailShow" :before-close="closeDetailShow" destroy-on-close>
+          <template #header>
              <div class="flex justify-between items-center">
                <span class="text-lg">查看详情</span>
              </div>

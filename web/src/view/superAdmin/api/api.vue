@@ -178,7 +178,7 @@
       :before-close="closeDialog"
       :show-close="false"
     >
-      <template #title>
+      <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ dialogTitle }}</span>
           <div>

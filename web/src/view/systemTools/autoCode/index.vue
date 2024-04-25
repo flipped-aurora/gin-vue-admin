@@ -385,6 +385,13 @@
           </el-table-column>
           <el-table-column
             align="left"
+            prop="front"
+            label="前端可见"
+          >
+            <template #default="{row}"> <el-checkbox v-model="row.front" /> </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
             prop="fieldJson"
             width="160px"
             label="字段Json"
@@ -443,6 +450,16 @@
           >
             <template #default="{row}">
               <el-input v-model="row.comment" />
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="left"
+            prop="comment"
+            label="前端class"
+            width="160"
+          >
+            <template #default="{row}">
+              <el-input v-model="row.class" />
             </template>
           </el-table-column>
           <el-table-column
@@ -702,6 +719,8 @@ const fieldTemplate = {
   defaultValue: '',
   require: false,
   sort: false,
+  front: true,
+  class: '',
   errorText: '',
   primaryKey: false,
   clearable: true,
@@ -990,7 +1009,8 @@ const getColumnFunc = async() => {
                 errorText: '',
                 clearable: true,
                 fieldSearchType: '',
-                dictType: ''
+                dictType: '',
+                front: true
               })
             }
           })

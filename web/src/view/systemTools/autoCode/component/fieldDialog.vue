@@ -135,9 +135,6 @@
           placeholder="请输入默认值"
         />
       </el-form-item>
-      <el-form-item label="前端class">
-        <el-input v-model="middleDate.class" />
-      </el-form-item>
       <el-form-item label="主键">
         <el-checkbox v-model="middleDate.primaryKey" />
       </el-form-item>

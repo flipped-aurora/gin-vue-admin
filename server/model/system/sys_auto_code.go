@@ -69,7 +69,6 @@ type Field struct {
 	FieldSearchType string `json:"fieldSearchType"` // 搜索条件
 	DictType        string `json:"dictType"`        // 字典
 	Front           bool   `json:"front"`           // 是否前端可见
-	Class           string `json:"class"`           // 前端样式类
 	Require         bool   `json:"require"`         // 是否必填
 	DefaultValue    string `json:"defaultValue"`    // 是否必填
 	ErrorText       string `json:"errorText"`       // 校验失败文字

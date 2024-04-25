@@ -454,16 +454,6 @@
           </el-table-column>
           <el-table-column
             align="left"
-            prop="comment"
-            label="前端class"
-            width="160"
-          >
-            <template #default="{row}">
-              <el-input v-model="row.class" />
-            </template>
-          </el-table-column>
-          <el-table-column
-            align="left"
             prop="fieldSearchType"
             label="搜索条件"
             width="130"
@@ -720,7 +710,6 @@ const fieldTemplate = {
   require: false,
   sort: false,
   front: true,
-  class: '',
   errorText: '',
   primaryKey: false,
   clearable: true,

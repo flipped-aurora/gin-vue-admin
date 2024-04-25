@@ -229,6 +229,17 @@ hua-wei-obs:
   access-key: you-access-key
   secret-key: you-secret-key
 
+# minio oss configuration
+minio:
+    access_key: ""
+    domain: 
+    end_point: 
+    path: 
+    prefix: 
+    token: ""
+    use_ssl: true
+    secret_key: ""
+
 # excel configuration
 excel:
   dir: ./resource/excel/

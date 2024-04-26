@@ -95,6 +95,7 @@
         @selection-change="handleSelectionChange"
         {{- if .NeedSort}}
         @sort-change="sortChange"
+        border  resizeable
         {{- end}}
         >
         <el-table-column type="selection" width="55" />

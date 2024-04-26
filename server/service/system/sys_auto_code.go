@@ -133,50 +133,7 @@ var AutoCodeServiceApp = new(AutoCodeService)
 // @return: map[string]string, error
 
 func (autoCodeService *AutoCodeService) PreviewTemp(autoCode system.AutoCodeStruct) (map[string]string, error) {
-	makeDictTypes(&autoCode)
-	for i := range autoCode.Fields {
-		if autoCode.Fields[i].FieldType == "time.Time" {
-			autoCode.HasTimer = true
-			if autoCode.Fields[i].FieldSearchType != "" {
-				autoCode.HasSearchTimer = true
-			}
-		}
-		if autoCode.Fields[i].Sort {
-			autoCode.NeedSort = true
-		}
-		if autoCode.Fields[i].FieldType == "picture" {
-			autoCode.HasPic = true
-		}
-		if autoCode.Fields[i].FieldType == "video" {
-			autoCode.HasPic = true
-		}
-		if autoCode.Fields[i].FieldType == "richtext" {
-			autoCode.HasRichText = true
-		}
-		if autoCode.Fields[i].FieldType == "pictures" {
-			autoCode.HasPic = true
-			autoCode.NeedJSON = true
-		}
-		if autoCode.Fields[i].FieldType == "file" {
-			autoCode.HasFile = true
-			autoCode.NeedJSON = true
-		}
-
-		if autoCode.GvaModel {
-			autoCode.PrimaryField = &system.Field{
-				FieldName:    "ID",
-				FieldType:    "uint",
-				FieldDesc:    "ID",
-				FieldJson:    "ID",
-				DataTypeLong: "20",
-				Comment:      "主键ID",
-				ColumnName:   "id",
-			}
-		}
-		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
-			autoCode.PrimaryField = autoCode.Fields[i]
-		}
-	}
+	fmtField(&autoCode)
 	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return nil, err
@@ -255,49 +212,7 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 // @return: err error
 
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, menuID uint, ids ...uint) (err error) {
-	makeDictTypes(&autoCode)
-	for i := range autoCode.Fields {
-		if autoCode.Fields[i].FieldType == "time.Time" {
-			autoCode.HasTimer = true
-			if autoCode.Fields[i].FieldSearchType != "" {
-				autoCode.HasSearchTimer = true
-			}
-		}
-		if autoCode.Fields[i].Sort {
-			autoCode.NeedSort = true
-		}
-		if autoCode.Fields[i].FieldType == "picture" {
-			autoCode.HasPic = true
-		}
-		if autoCode.Fields[i].FieldType == "video" {
-			autoCode.HasPic = true
-		}
-		if autoCode.Fields[i].FieldType == "richtext" {
-			autoCode.HasRichText = true
-		}
-		if autoCode.Fields[i].FieldType == "pictures" {
-			autoCode.NeedJSON = true
-			autoCode.HasPic = true
-		}
-		if autoCode.Fields[i].FieldType == "file" {
-			autoCode.NeedJSON = true
-			autoCode.HasFile = true
-		}
-		if autoCode.GvaModel {
-			autoCode.PrimaryField = &system.Field{
-				FieldName:    "ID",
-				FieldType:    "uint",
-				FieldDesc:    "ID",
-				FieldJson:    "ID",
-				DataTypeLong: "20",
-				Comment:      "主键ID",
-				ColumnName:   "id",
-			}
-		}
-		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
-			autoCode.PrimaryField = autoCode.Fields[i]
-		}
-	}
+	fmtField(&autoCode)
 	// 增加判断: 重复创建struct
 	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.BusinessDB, autoCode.StructName, autoCode.Package) {
 		return RepeatErr
@@ -1029,4 +944,59 @@ func (autoCodeService *AutoCodeService) doZip(zipWriter *zip.Writer, serverPath,
 		return nil
 	})
 	return err
+}
+
+func fmtField(autoCode *system.AutoCodeStruct) {
+	makeDictTypes(autoCode)
+	for i := range autoCode.Fields {
+
+		if autoCode.Fields[i].Front {
+			autoCode.FrontFields = append(autoCode.FrontFields, autoCode.Fields[i])
+		}
+
+		if autoCode.Fields[i].FieldType == "time.Time" {
+			autoCode.HasTimer = true
+			if autoCode.Fields[i].FieldSearchType != "" {
+				autoCode.HasSearchTimer = true
+			}
+		}
+		if autoCode.Fields[i].Sort {
+			autoCode.NeedSort = true
+		}
+		if autoCode.Fields[i].FieldType == "picture" {
+			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "video" {
+			autoCode.HasPic = true
+		}
+		if autoCode.Fields[i].FieldType == "richtext" {
+			autoCode.HasRichText = true
+		}
+		if autoCode.Fields[i].FieldType == "pictures" {
+			autoCode.HasPic = true
+			autoCode.NeedJSON = true
+		}
+		if autoCode.Fields[i].FieldType == "json" {
+			autoCode.NeedJSON = true
+		}
+		if autoCode.Fields[i].FieldType == "file" {
+			autoCode.HasFile = true
+			autoCode.NeedJSON = true
+		}
+
+		if autoCode.GvaModel {
+			autoCode.PrimaryField = &system.Field{
+				FieldName:    "ID",
+				FieldType:    "uint",
+				FieldDesc:    "ID",
+				FieldJson:    "ID",
+				DataTypeLong: "20",
+				Comment:      "主键ID",
+				ColumnName:   "id",
+			}
+		}
+		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
+			autoCode.PrimaryField = autoCode.Fields[i]
+		}
+	}
 }

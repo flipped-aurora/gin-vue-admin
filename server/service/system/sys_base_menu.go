@@ -75,7 +75,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	upDateMap["sort"] = menu.Sort
 
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		db := tx.Where("id = ?", menu.ID).Find(&oldMenu)
+		tx.Where("id = ?", menu.ID).Find(&oldMenu)
 		if oldMenu.Name != menu.Name {
 			if !errors.Is(tx.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 				global.GVA_LOG.Debug("存在相同name修改失败")
@@ -114,7 +114,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 			}
 		}
 
-		txErr = db.Updates(upDateMap).Error
+		txErr = tx.Model(&oldMenu).Updates(upDateMap).Error
 		if txErr != nil {
 			global.GVA_LOG.Debug(txErr.Error())
 			return txErr

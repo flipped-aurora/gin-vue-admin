@@ -48,6 +48,7 @@ func RegisterTables() {
 		system.SysExportTemplate{},
 		system.Condition{},
 		system.JoinTemplate{},
+		system.RecordsDeleteCode{},
 
 		example.ExaFile{},
 		example.ExaCustomer{},

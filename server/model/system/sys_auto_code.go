@@ -34,6 +34,7 @@ type AutoCodeStruct struct {
 	HasRichText         bool     `json:"-"`
 	HasFile             bool     `json:"-"`
 	NeedJSON            bool     `json:"-"`
+	FrontFields         []*Field `json:"-"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {
@@ -67,6 +68,7 @@ type Field struct {
 	ColumnName      string `json:"columnName"`      // 数据库字段
 	FieldSearchType string `json:"fieldSearchType"` // 搜索条件
 	DictType        string `json:"dictType"`        // 字典
+	Front           bool   `json:"front"`           // 是否前端可见
 	Require         bool   `json:"require"`         // 是否必填
 	DefaultValue    string `json:"defaultValue"`    // 是否必填
 	ErrorText       string `json:"errorText"`       // 校验失败文字

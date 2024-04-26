@@ -67,7 +67,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
 // Update{{.StructName}} 更新{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
-	err = {{$db}}.Save(&{{.Abbreviation}}).Error
+	err = {{$db}}.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 

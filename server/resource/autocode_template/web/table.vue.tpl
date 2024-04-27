@@ -109,6 +109,7 @@
           <template #default="scope">
           {{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}
          </template>
+         </el-table-column>
         {{- else if .DictType}}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
@@ -369,6 +370,7 @@ const formData = ref({
       dataSource.value = res.data
     }
   }
+  getDataSourceFunc()
 {{- end }}
 
 

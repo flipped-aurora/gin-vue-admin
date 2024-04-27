@@ -140,8 +140,11 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 
 {{- if .HasDataSource }}
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
+	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
-       {{$db}}.Table("{{$value.Table}}").Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&res["{{$key}}"])
+	   {{$key}} := make([]map[string]any, 0)
+       {{$db}}.Table("{{$value.Table}}").Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&{{$key}})
+	   res["{{$key}}"] = {{$key}}
 	{{- end }}
 	return
 }

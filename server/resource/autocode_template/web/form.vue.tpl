@@ -164,6 +164,7 @@ const elFormRef = ref()
       dataSource.value = res.data
     }
   }
+  getDataSourceFunc()
 {{- end }}
 
 // 初始化方法

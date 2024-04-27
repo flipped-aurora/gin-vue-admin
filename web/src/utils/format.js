@@ -24,7 +24,7 @@ export const filterDict = (value, options) => {
 
 export const filterDataSource = (dataSource, value) => {
   const rowLabel = dataSource && dataSource.find(item => item.value === value)
-  return rowLabel.label
+  return rowLabel?.label
 }
 
 export const getDictFunc = async(type) => {

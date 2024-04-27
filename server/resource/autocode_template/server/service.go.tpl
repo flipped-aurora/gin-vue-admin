@@ -137,3 +137,12 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }
+
+{{- if .HasDataSource }}
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
+	{{range $key, $value := .DataSourceMap}}
+       {{$db}}.Table("{{$value.Table}}").Select("{{$value.Label}} as label,{{$value.Value}} as value").Scan(&res["{{$key}}"])
+	{{- end }}
+	return
+}
+{{- end }}

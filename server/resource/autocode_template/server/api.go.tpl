@@ -166,6 +166,25 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
     }
 }
 
+{{- if .HasDataSource }}
+// Get{{.StructName}}DataSource 获取{{.StructName}}的数据源
+// @Tags {{.StructName}}
+// @Summary 获取{{.StructName}}的数据源
+// @accept application/json
+// @Produce application/json
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"获取成功"}"
+// @Router /{{.Abbreviation}}/get{{.StructName}}DataSource [get]
+func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}DataSource(c *gin.Context) {
+    // 此接口为获取数据源定义的数据
+   if dataSource, err := {{.Abbreviation}}Service.Get{{.StructName}}DataSource(); err != nil {
+        global.GVA_LOG.Error("查询失败!", zap.Error(err))
+   		response.FailWithMessage("查询失败", c)
+   	} else {
+   		response.OkWithData(dataSource, c)
+   	}
+}
+{{- end }}
+
 // Get{{.StructName}}Public 不需要鉴权的{{.Description}}接口
 // @Tags {{.StructName}}
 // @Summary 不需要鉴权的{{.Description}}接口

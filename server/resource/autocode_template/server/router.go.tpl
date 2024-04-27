@@ -27,6 +27,9 @@ func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGrou
 		{{.Abbreviation}}RouterWithoutRecord.GET("get{{.StructName}}List", {{.Abbreviation}}Api.Get{{.StructName}}List)  // 获取{{.Description}}列表
 	}
 	{
+	{{- if .HasDataSource}}
+	    {{.Abbreviation}}RouterWithoutAuth.GET("get{{.StructName}}DataSource", {{.Abbreviation}}Api.Get{{.StructName}}DataSource)  // 获取{{.Description}}数据源
+	{{- end}}
 	    {{.Abbreviation}}RouterWithoutAuth.GET("get{{.StructName}}Public", {{.Abbreviation}}Api.Get{{.StructName}}Public)  // 获取{{.Description}}列表
 	}
 }

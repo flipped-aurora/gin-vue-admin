@@ -110,38 +110,25 @@
       <div class="gva-btn-list">
         <upload-common
           :image-common="imageCommon"
-          class="upload-btn-media-library"
           @on-success="getImageList"
         />
         <upload-image
           :image-url="imageUrl"
           :file-size="512"
           :max-w-h="1080"
-          class="upload-btn-media-library"
           @on-success="getImageList"
         />
-        <el-form
-          ref="searchForm"
-          :inline="true"
-          :model="search"
-        >
-          <el-form-item label="">
-            <el-input
-              v-model="search.keyword"
-              class="keyword"
-              placeholder="请输入文件名或备注"
-            />
-          </el-form-item>
-
-          <el-form-item>
-            <el-button
-              type="primary"
-              icon="search"
-              @click="getImageList"
-            >查询
-            </el-button>
-          </el-form-item>
-        </el-form>
+        <el-input
+          v-model="search.keyword"
+          class="keyword"
+          placeholder="请输入文件名或备注"
+        />
+        <el-button
+          type="primary"
+          icon="search"
+          @click="getImageList"
+        >查询
+        </el-button>
       </div>
       <div class="media">
         <div
@@ -424,18 +411,12 @@ const getImageList = async() => {
   }
 }
 
-.upload-btn-media-library {
-  margin-left: 20px;
-}
-
 .media {
   display: flex;
   flex-wrap: wrap;
-
+  gap: 12px;
   .media-box {
     width: 120px;
-    margin-left: 20px;
-
     .img-title {
       white-space: nowrap;
       overflow: hidden;

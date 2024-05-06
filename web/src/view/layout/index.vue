@@ -30,14 +30,14 @@
         <Aside v-model:collapse="isCollapse" class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
-      <el-main class="main-cont main-right h-full flex flex-col">
+      <el-main class="main-cont main-right h-full">
         <transition
           :duration="{ enter: 800, leave: 100 }"
           mode="out-in"
           name="el-fade-in-linear"
         >
           <div
-            class="w-full h-28  sticky top-0 z-50"
+            class="w-full h-28"
           >
             <el-header class="header-cont">
               <el-row class="p-0 h-full">
@@ -168,16 +168,18 @@
             <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
-        <router-view v-if="reloadFlag" v-slot="{ Component }" >
-          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-gray-700 flex-1">
-            <transition mode="out-in" name="el-fade-in-linear">
-              <keep-alive :include="routerStore.keepAliveRouters">
-                <component :is="Component" />
-              </keep-alive>
-            </transition>
-          </div>
-        </router-view>
-        <BottomInfo />
+        <div class="h-[calc(100vh-98px)] overflow-auto">
+          <router-view v-if="reloadFlag" v-slot="{ Component }">
+            <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-gray-700 min-h-[calc(100vh-144px)] overflow-hidden">
+              <transition mode="out-in" name="el-fade-in-linear">
+                <keep-alive :include="routerStore.keepAliveRouters">
+                  <component :is="Component" />
+                </keep-alive>
+              </transition>
+            </div>
+          </router-view>
+          <BottomInfo />
+        </div>
         <CommandMenu ref="command" />
       </el-main>
     </el-container>

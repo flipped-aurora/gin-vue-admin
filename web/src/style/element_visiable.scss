@@ -189,12 +189,6 @@
         .aside {
             @apply overflow-auto;
         }
-        .el-menu-vertical {
-            @apply h-[calc(100vh-60px)];
-            &:not(.el-menu--collapse) {
-                @apply w-[220px];
-            }
-        }
         .el-menu--collapse {
             @apply w-[54px];
             li {

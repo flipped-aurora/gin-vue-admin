@@ -176,10 +176,6 @@
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
-            <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
-                <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
-                查看详情
-            </el-button>
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>

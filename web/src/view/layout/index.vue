@@ -42,38 +42,38 @@
             <el-header class="header-cont">
               <el-row class="p-0 h-full">
                 <el-col
-                    :xs="2"
-                    :lg="1"
-                    :md="1"
-                    :sm="1"
-                    :xl="1"
-                    class="z-50 flex items-center pl-3"
+                  :xs="2"
+                  :lg="1"
+                  :md="1"
+                  :sm="1"
+                  :xl="1"
+                  class="z-50 flex items-center pl-3"
                 >
                   <div
-                      class="text-black dark:text-gray-100 cursor-pointer text-lg leading-5"
-                      @click="totalCollapse"
+                    class="text-black dark:text-gray-100 cursor-pointer text-lg leading-5"
+                    @click="totalCollapse"
                   >
                     <div
-                        v-if="isCollapse"
-                        class="gvaIcon gvaIcon-arrow-double-right"
+                      v-if="isCollapse"
+                      class="gvaIcon gvaIcon-arrow-double-right"
                     />
                     <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
                   </div>
                 </el-col>
                 <el-col
-                    :xs="10"
-                    :lg="14"
-                    :md="14"
-                    :sm="9"
-                    :xl="14"
-                    :pull="1"
-                    class="flex items-center"
+                  :xs="10"
+                  :lg="14"
+                  :md="14"
+                  :sm="9"
+                  :xl="14"
+                  :pull="1"
+                  class="flex items-center"
                 >
                   <!-- 修改为手机端不显示顶部标签 -->
                   <el-breadcrumb v-show="!isMobile" class="breadcrumb">
                     <el-breadcrumb-item
-                        v-for="item in matched.slice(1, matched.length)"
-                        :key="item.path"
+                      v-for="item in matched.slice(1, matched.length)"
+                      :key="item.path"
                     >
                       {{
                         fmtTitle(item.meta.title, route)
@@ -82,61 +82,61 @@
                   </el-breadcrumb>
                 </el-col>
                 <el-col
-                    :xs="12"
-                    :lg="9"
-                    :md="9"
-                    :sm="14"
-                    :xl="9"
-                    class="flex items-center justify-end"
+                  :xs="12"
+                  :lg="9"
+                  :md="9"
+                  :sm="14"
+                  :xl="9"
+                  class="flex items-center justify-end"
                 >
                   <div class="mr-1.5 flex items-center">
                     <Search />
                     <el-dropdown>
                       <div
-                          class="flex justify-center items-center h-full w-full"
+                        class="flex justify-center items-center h-full w-full"
                       >
-                            <span
-                                class="cursor-pointer flex justify-center items-center text-black dark:text-gray-100"
-                            >
-                              <CustomPic />
-                              <span
-                                  v-show="!isMobile"
-                                  style="margin-left: 5px"
-                              >{{ userStore.userInfo.nickName }}</span>
-                              <el-icon>
-                                <arrow-down />
-                              </el-icon>
-                            </span>
+                        <span
+                          class="cursor-pointer flex justify-center items-center text-black dark:text-gray-100"
+                        >
+                          <CustomPic />
+                          <span
+                            v-show="!isMobile"
+                            style="margin-left: 5px"
+                          >{{ userStore.userInfo.nickName }}</span>
+                          <el-icon>
+                            <arrow-down />
+                          </el-icon>
+                        </span>
                       </div>
                       <template #dropdown>
                         <el-dropdown-menu>
                           <el-dropdown-item>
-                                <span class="font-bold">
-                                  当前角色：{{
-                                    userStore.userInfo.authority.authorityName
-                                  }}
-                                </span>
+                            <span class="font-bold">
+                              当前角色：{{
+                                userStore.userInfo.authority.authorityName
+                              }}
+                            </span>
                           </el-dropdown-item>
                           <template v-if="userStore.userInfo.authorities">
                             <el-dropdown-item
-                                v-for="item in userStore.userInfo.authorities.filter(
-                                    (i) =>
-                                      i.authorityId !==
-                                      userStore.userInfo.authorityId
-                                  )"
-                                :key="item.authorityId"
-                                @click="changeUserAuth(item.authorityId)"
+                              v-for="item in userStore.userInfo.authorities.filter(
+                                (i) =>
+                                  i.authorityId !==
+                                  userStore.userInfo.authorityId
+                              )"
+                              :key="item.authorityId"
+                              @click="changeUserAuth(item.authorityId)"
                             >
-                                  <span>
-                                    切换为：{{ item.authorityName }}
-                                  </span>
+                              <span>
+                                切换为：{{ item.authorityName }}
+                              </span>
                             </el-dropdown-item>
                           </template>
                           <el-dropdown-item icon="avatar">
                             <div
-                                class="command-box"
-                                style="display: flex"
-                                @click="handleCommand"
+                              class="command-box"
+                              style="display: flex"
+                              @click="handleCommand"
                             >
                               <div>指令菜单</div>
                               <div style="margin-left: 8px">
@@ -150,8 +150,8 @@
                             个人信息
                           </el-dropdown-item>
                           <el-dropdown-item
-                              icon="reading-lamp"
-                              @click="userStore.LoginOut"
+                            icon="reading-lamp"
+                            @click="userStore.LoginOut"
                           >
                             登 出
                           </el-dropdown-item>
@@ -275,31 +275,6 @@ const asideWidth = () => {
   }
   return isCollapse.value ? "54px" : "220px";
 };
-
-const getAsideWidth = () => {
-  if (isMobile.value) return "0px";
-  return isCollapse.value ? "54px" : "220px";
-};
-
-const textColor = computed(() => {
-  if (userStore.sideMode === "dark") {
-    return "#fff";
-  } else if (userStore.sideMode === "light") {
-    return "#191a23";
-  } else {
-    return userStore.baseColor;
-  }
-});
-
-const backgroundColor = computed(() => {
-  if (userStore.sideMode === "dark") {
-    return "#191a23";
-  } else if (userStore.sideMode === "light") {
-    return "#fff";
-  } else {
-    return userStore.sideMode;
-  }
-});
 
 const matched = computed(() => route.meta.matched);
 

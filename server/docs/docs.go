@@ -6918,10 +6918,6 @@ const docTemplate = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "activeColor": {
-                    "description": "活跃颜色",
-                    "type": "string"
-                },
                 "authorities": {
                     "type": "array",
                     "items": {

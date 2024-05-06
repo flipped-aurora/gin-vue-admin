@@ -19,9 +19,9 @@
         <template #label>
           <span
             :tab="item"
-            :class="activeValue === getFmtString(item) ? userStore.activeColor : 'text-gray-300 dark:text-gray-600 '"
+            :class="activeValue === getFmtString(item) ? 'text-gva-active' : 'text-gray-600 dark:text-gray-300 '"
           ><i
-             :class="activeValue === getFmtString(item) ? userStore.activeColor : 'text-gray-300 dark:text-gray-600'"
+             :class="activeValue === getFmtString(item) ? 'text-gva-active' : 'text-gray-600 dark:text-gray-300'"
            />
             {{ fmtTitle(item.meta.title,item) }}</span>
         </template>

@@ -9,7 +9,10 @@ module.exports = {
     extend: {
       backgroundColor: {
         "main": "#F5F5F5",
-      }
+      },
+      textColor: {
+        "gva-active": "var(--el-color-primary)",
+      },
     },
   },
   darkMode: "class",

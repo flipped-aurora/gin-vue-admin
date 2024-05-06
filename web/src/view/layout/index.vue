@@ -37,7 +37,7 @@
           name="el-fade-in-linear"
         >
           <div
-            class="w-full  h-28"
+            class="w-full h-28  sticky top-0 z-50"
           >
             <el-header class="header-cont">
               <el-row class="p-0 h-full">
@@ -169,7 +169,7 @@
           </div>
         </transition>
         <router-view v-if="reloadFlag" v-slot="{ Component }" >
-          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-gray-700 flex-1 px-1">
+          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-gray-700 flex-1">
             <transition mode="out-in" name="el-fade-in-linear">
               <keep-alive :include="routerStore.keepAliveRouters">
                 <component :is="Component" />

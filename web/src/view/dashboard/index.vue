@@ -2,9 +2,9 @@
   <div class="page bg-transparent">
     <div class="gva-card-box">
       <div class="gva-card gva-top-card ">
-        <div class="gva-top-card-left">
-          <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
-          <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
+        <div class="h-full flex flex-col w-auto">
+          <div class="text-3xl">早安，管理员，请开始一天的工作吧</div>
+          <div class="mt-4 text-gray-600 text-lg">{{ weatherInfo }}</div>
           <el-row class="my-8 w-[500px]">
             <el-col
               :span="8"
@@ -209,12 +209,6 @@ const toTarget = (name) => {
         @apply h-72 flex items-center justify-between text-gray-500;
         &-left {
           @apply h-full flex flex-col w-auto;
-            &-title {
-              @apply text-3xl ;
-            }
-            &-dot {
-              @apply mt-4 text-gray-600 text-lg;
-            }
             &-item{
               +.gva-top-card-left-item{
                 margin-top: 24px;

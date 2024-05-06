@@ -1,5 +1,5 @@
 <template>
-  <div class="commit-table">
+  <div class="commit-table text-slate-700 dark:text-slate-400 dark:bg-slate-800">
     <div class="commit-table-title">
       更新日志
     </div>
@@ -9,14 +9,14 @@
         :key="key"
         class="log-item"
       >
-        <div class="flex-1 flex key-box">
+        <div class="flex  items-center  line-clamp-1 ">
           <span
-            class="key"
-            :class="key<3&&'top'"
-          >{{ key+1 }}</span>
+            class="rounded-full w-2 h-2 bg-gray-300 dark:bg-gray-600 text-xs text-gray-300 dark:text-gray-600 mr-1"
+            :class="key<3&&' bg-blue-300 dark:bg-blue-700'"
+          ></span>
         </div>
-        <div class="flex-5 flex message">{{ item.message }}</div>
-        <div class="flex-3 flex form">{{ item.from }}</div>
+        <div class=" flex-1 message">{{ item.message }}</div>
+        <div class=" ml-1 ">{{ item.from }}</div>
       </div>
     </div>
   </div>
@@ -55,7 +55,6 @@ loadCommits()
 
 <style lang="scss" scoped>
 .commit-table{
-    background-color: #fff;
     height: 400px;
     &-title{
         font-weight: 600;
@@ -70,27 +69,16 @@ loadCommits()
           justify-content: center;
         }
         .key{
-          &.top{
-            background: #314659;
-            color: #FFFFFF;;
-          }
+
           display: inline-flex;
           justify-content: center;
           align-items: center;
           width: 20px;
           height: 20px;
           border-radius: 50%;
-          background: #F0F2F5;
           text-align: center;
-          color:rgba($color: #000000, $alpha: 0.65)
         }
-        .message{
-          color: rgba(0, 0, 0, 0.65);
-        }
-        .form{
-          color: rgba(0, 0, 0, 0.65);
-          margin-left: 12px;
-        }
+
         .flex{
           line-height: 20px;
           overflow: hidden;

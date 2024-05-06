@@ -48,7 +48,7 @@
         th {
             @apply px-0 py-2;
             .cell {
-                @apply leading-[40px] text-gray-700;
+                @apply leading-[40px] text-gray-700 dark:text-gray-300;
             }
         }
         td {
@@ -144,8 +144,9 @@
 }
 
 .el-container.layout-cont {
+    @apply bg-gray-50 text-slate-700 dark:text-slate-500  dark:bg-slate-800;
     .header-cont {
-        @apply px-4 h-16 bg-white;
+        @apply px-4 h-16 bg-white  dark:bg-slate-800;
     }
 
 
@@ -159,22 +160,22 @@
             @apply h-16 flex items-center p-0 ml-12 text-lg;
             .el-breadcrumb__item {
                 .el-breadcrumb__inner {
-                    @apply text-gray-600;
+                    @apply text-black dark:text-gray-100;
                 }
             }
             .el-breadcrumb__item:nth-last-child(1) {
                 .el-breadcrumb__inner {
-                    @apply text-gray-600;
+                    @apply text-black dark:text-gray-100;
                 }
             }
         }
 
         .router-history {
-            @apply bg-white p-0 border-t border-l-0 border-r-0 border-b-0 border-solid border-gray-100;
+            @apply bg-white dark:bg-slate-800 dark:border-gray-600 p-0 border-t border-l-0 border-r-0 border-b-0 border-solid border-gray-100 ;
             .el-tabs__header {
                 @apply m-0;
                 .el-tabs__item{
-                    @apply border-solid border-r border-t-0 border-gray-100 border-b-0 border-l-0;
+                    @apply border-solid border-r border-t-0 border-gray-100 dark:border-gray-600 border-b-0 border-l-0 ;
                 }
                 .el-tabs__item.is-active {
                     @apply bg-blue-500 bg-opacity-5;
@@ -204,4 +205,12 @@
             }
         }
     }
+}
+
+
+
+html.dark {
+    /* 自定义深色背景颜色 */
+    --el-bg-color: rgb(30 ,41 ,59);
+    --el-bg-color-overlay: rgba(30 ,41 ,59, 0.8);
 }

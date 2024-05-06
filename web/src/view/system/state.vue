@@ -232,6 +232,6 @@ onUnmounted(() => {
 <style>
 
 .card_item {
-  @apply h-80 text-xl;
+  @apply h-80 text-xl p-6  bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-800 rounded m-2;;
 }
 </style>

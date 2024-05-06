@@ -19,15 +19,9 @@
         <template #label>
           <span
             :tab="item"
-            :style="{
-              color: activeValue === getFmtString(item) ? userStore.activeColor : '#333',
-            }"
+            :class="activeValue === getFmtString(item) ? userStore.activeColor : 'text-gray-300 dark:text-gray-600 '"
           ><i
-             class="dot"
-             :style="{
-               backgroundColor:
-                 activeValue === getFmtString(item) ? userStore.activeColor : '#ddd',
-             }"
+             :class="activeValue === getFmtString(item) ? userStore.activeColor : 'text-gray-300 dark:text-gray-600'"
            />
             {{ fmtTitle(item.meta.title,item) }}</span>
         </template>
@@ -38,12 +32,20 @@
     <ul
       v-show="contextMenuVisible"
       :style="{ left: left + 'px', top: top + 'px' }"
-      class="contextmenu"
+      class="contextmenu bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-800"
     >
-      <li @click="closeAll">关闭所有</li>
-      <li @click="closeLeft">关闭左侧</li>
-      <li @click="closeRight">关闭右侧</li>
-      <li @click="closeOther">关闭其他</li>
+      <li @click="closeAll">
+        关闭所有
+      </li>
+      <li @click="closeLeft">
+        关闭左侧
+      </li>
+      <li @click="closeRight">
+        关闭右侧
+      </li>
+      <li @click="closeOther">
+        关闭其他
+      </li>
     </ul>
   </div>
 </template>
@@ -93,16 +95,8 @@ const openContextMenu = (e) => {
   }
   if (id) {
     contextMenuVisible.value = true
-    let width
-    if (isCollapse.value) {
-      width = 54
-    } else {
-      width = 220
-    }
-    if (isMobile.value) {
-      width = 0
-    }
-    left.value = e.clientX - width
+
+    left.value = e.clientX
     top.value = e.clientY + 10
     rightActive.value = id.substring(4)
   }
@@ -350,15 +344,12 @@ onUnmounted(() => {
 .contextmenu {
   width: 100px;
   margin: 0;
-  border: 1px solid #ccc;
-  background: #fff;
   z-index: 3000;
   position: absolute;
   list-style-type: none;
   padding: 5px 0;
   border-radius: 4px;
   font-size: 14px;
-  color: #333;
   box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
 }
 .el-tabs__item .el-icon-close {
@@ -379,7 +370,7 @@ onUnmounted(() => {
   padding: 7px 16px;
 }
 .contextmenu li:hover {
-  background: #f2f2f2;
   cursor: pointer;
+  @apply bg-gray-100 dark:bg-gray-700;
 }
 </style>

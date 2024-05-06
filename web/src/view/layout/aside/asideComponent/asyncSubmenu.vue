@@ -7,7 +7,7 @@
     <template #title>
       <div
         v-if="!isCollapse"
-        class="gva-subMenu"
+        class="gva-subMenu text-slate-700 dark:text-slate-300"
       >
         <el-icon v-if="routerInfo.meta.icon">
           <component :is="routerInfo.meta.icon" />

@@ -1,5 +1,5 @@
 <template>
-  <el-container class="layout-cont">
+  <el-container class="layout-cont bg-gray-50 text-slate-700 dark:text-slate-500  dark:bg-slate-800">
     <el-container
       :class="[isSider ? 'openside' : 'hideside', isMobile ? 'mobile' : '']"
     >
@@ -13,8 +13,7 @@
       />
       <el-aside class="main-cont gva-aside" :style="{ width: asideWidth() }">
         <div
-          class="min-h-[60px] text-center transition-all duration-300 flex items-center justify-center gap-2"
-          :style="{ background: backgroundColor }"
+          class="min-h-[60px] text-center transition-all duration-300 flex items-center justify-center gap-2 bg-white text-slate-700 dark:text-slate-300  dark:bg-slate-800"
         >
           <img
             alt
@@ -24,7 +23,6 @@
           <div
             v-if="isSider"
             class="inline-flex font-bold text-2xl"
-            :style="{ color: textColor }"
           >
             {{ $GIN_VUE_ADMIN.appName }}
           </div>
@@ -32,151 +30,146 @@
         <Aside v-model:collapse="isCollapse" class="aside" />
       </el-aside>
       <!-- 分块滑动功能 -->
-      <el-main class="main-cont main-right">
+      <el-main class="main-cont main-right h-full flex flex-col">
         <transition
           :duration="{ enter: 800, leave: 100 }"
           mode="out-in"
           name="el-fade-in-linear"
         >
           <div
-            :style="{ width: `calc(100% - ${getAsideWidth()})` }"
-            class="fixed top-0 box-border z-50"
+            class="w-full  h-28"
           >
-            <el-row>
-              <el-col>
-                <el-header class="header-cont">
-                  <el-row class="p-0 h-full">
-                    <el-col
-                      :xs="2"
-                      :lg="1"
-                      :md="1"
-                      :sm="1"
-                      :xl="1"
-                      class="z-50 flex items-center pl-3"
+            <el-header class="header-cont">
+              <el-row class="p-0 h-full">
+                <el-col
+                    :xs="2"
+                    :lg="1"
+                    :md="1"
+                    :sm="1"
+                    :xl="1"
+                    class="z-50 flex items-center pl-3"
+                >
+                  <div
+                      class="text-black dark:text-gray-100 cursor-pointer text-lg leading-5"
+                      @click="totalCollapse"
+                  >
+                    <div
+                        v-if="isCollapse"
+                        class="gvaIcon gvaIcon-arrow-double-right"
+                    />
+                    <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
+                  </div>
+                </el-col>
+                <el-col
+                    :xs="10"
+                    :lg="14"
+                    :md="14"
+                    :sm="9"
+                    :xl="14"
+                    :pull="1"
+                    class="flex items-center"
+                >
+                  <!-- 修改为手机端不显示顶部标签 -->
+                  <el-breadcrumb v-show="!isMobile" class="breadcrumb">
+                    <el-breadcrumb-item
+                        v-for="item in matched.slice(1, matched.length)"
+                        :key="item.path"
                     >
+                      {{
+                        fmtTitle(item.meta.title, route)
+                      }}
+                    </el-breadcrumb-item>
+                  </el-breadcrumb>
+                </el-col>
+                <el-col
+                    :xs="12"
+                    :lg="9"
+                    :md="9"
+                    :sm="14"
+                    :xl="9"
+                    class="flex items-center justify-end"
+                >
+                  <div class="mr-1.5 flex items-center">
+                    <Search />
+                    <el-dropdown>
                       <div
-                        class="text-black cursor-pointer text-lg leading-5"
-                        @click="totalCollapse"
+                          class="flex justify-center items-center h-full w-full"
                       >
-                        <div
-                          v-if="isCollapse"
-                          class="gvaIcon gvaIcon-arrow-double-right"
-                        />
-                        <div v-else class="gvaIcon gvaIcon-arrow-double-left" />
-                      </div>
-                    </el-col>
-                    <el-col
-                      :xs="10"
-                      :lg="14"
-                      :md="14"
-                      :sm="9"
-                      :xl="14"
-                      :pull="1"
-                      class="flex items-center"
-                    >
-                      <!-- 修改为手机端不显示顶部标签 -->
-                      <el-breadcrumb v-show="!isMobile" class="breadcrumb">
-                        <el-breadcrumb-item
-                          v-for="item in matched.slice(1, matched.length)"
-                          :key="item.path"
-                        >
-                          {{
-                            fmtTitle(item.meta.title, route)
-                          }}
-                        </el-breadcrumb-item>
-                      </el-breadcrumb>
-                    </el-col>
-                    <el-col
-                      :xs="12"
-                      :lg="9"
-                      :md="9"
-                      :sm="14"
-                      :xl="9"
-                      class="flex items-center justify-end"
-                    >
-                      <div class="mr-1.5 flex items-center">
-                        <Search />
-                        <el-dropdown>
-                          <div
-                            class="flex justify-center items-center h-full w-full"
-                          >
                             <span
-                              class="cursor-pointer flex justify-center items-center"
+                                class="cursor-pointer flex justify-center items-center text-black dark:text-gray-100"
                             >
                               <CustomPic />
                               <span
-                                v-show="!isMobile"
-                                style="margin-left: 5px"
+                                  v-show="!isMobile"
+                                  style="margin-left: 5px"
                               >{{ userStore.userInfo.nickName }}</span>
                               <el-icon>
                                 <arrow-down />
                               </el-icon>
                             </span>
-                          </div>
-                          <template #dropdown>
-                            <el-dropdown-menu>
-                              <el-dropdown-item>
+                      </div>
+                      <template #dropdown>
+                        <el-dropdown-menu>
+                          <el-dropdown-item>
                                 <span class="font-bold">
                                   当前角色：{{
                                     userStore.userInfo.authority.authorityName
                                   }}
                                 </span>
-                              </el-dropdown-item>
-                              <template v-if="userStore.userInfo.authorities">
-                                <el-dropdown-item
-                                  v-for="item in userStore.userInfo.authorities.filter(
+                          </el-dropdown-item>
+                          <template v-if="userStore.userInfo.authorities">
+                            <el-dropdown-item
+                                v-for="item in userStore.userInfo.authorities.filter(
                                     (i) =>
                                       i.authorityId !==
                                       userStore.userInfo.authorityId
                                   )"
-                                  :key="item.authorityId"
-                                  @click="changeUserAuth(item.authorityId)"
-                                >
+                                :key="item.authorityId"
+                                @click="changeUserAuth(item.authorityId)"
+                            >
                                   <span>
                                     切换为：{{ item.authorityName }}
                                   </span>
-                                </el-dropdown-item>
-                              </template>
-                              <el-dropdown-item icon="avatar">
-                                <div
-                                  class="command-box"
-                                  style="display: flex"
-                                  @click="handleCommand"
-                                >
-                                  <div>指令菜单</div>
-                                  <div style="margin-left: 8px">
-                                    <span class="button">{{ first }}</span>
-                                    +
-                                    <span class="button">K</span>
-                                  </div>
-                                </div>
-                              </el-dropdown-item>
-                              <el-dropdown-item icon="avatar" @click="toPerson">
-                                个人信息
-                              </el-dropdown-item>
-                              <el-dropdown-item
-                                icon="reading-lamp"
-                                @click="userStore.LoginOut"
-                              >
-                                登 出
-                              </el-dropdown-item>
-                            </el-dropdown-menu>
+                            </el-dropdown-item>
                           </template>
-                        </el-dropdown>
-                      </div>
-                    </el-col>
-                  </el-row>
-                </el-header>
-              </el-col>
-            </el-row>
+                          <el-dropdown-item icon="avatar">
+                            <div
+                                class="command-box"
+                                style="display: flex"
+                                @click="handleCommand"
+                            >
+                              <div>指令菜单</div>
+                              <div style="margin-left: 8px">
+                                <span class="button">{{ first }}</span>
+                                +
+                                <span class="button">K</span>
+                              </div>
+                            </div>
+                          </el-dropdown-item>
+                          <el-dropdown-item icon="avatar" @click="toPerson">
+                            个人信息
+                          </el-dropdown-item>
+                          <el-dropdown-item
+                              icon="reading-lamp"
+                              @click="userStore.LoginOut"
+                          >
+                            登 出
+                          </el-dropdown-item>
+                        </el-dropdown-menu>
+                      </template>
+                    </el-dropdown>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-header>
             <!-- 当前面包屑用路由自动生成可根据需求修改 -->
             <!--
             :to="{ path: item.path }" 暂时注释不用-->
             <HistoryComponent ref="layoutHistoryComponent" />
           </div>
         </transition>
-        <router-view v-if="reloadFlag" v-slot="{ Component }" class="admin-box">
-          <div id="gva-base-load-dom">
+        <router-view v-if="reloadFlag" v-slot="{ Component }" >
+          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-gray-700 flex-1 px-1">
             <transition mode="out-in" name="el-fade-in-linear">
               <keep-alive :include="routerStore.keepAliveRouters">
                 <component :is="Component" />
@@ -185,7 +178,6 @@
           </div>
         </router-view>
         <BottomInfo />
-        <setting />
         <CommandMenu ref="command" />
       </el-main>
     </el-container>
@@ -199,7 +191,6 @@ import Search from "@/view/layout/search/search.vue";
 import BottomInfo from "@/view/layout/bottomInfo/bottomInfo.vue";
 import CustomPic from "@/components/customPic/index.vue";
 import CommandMenu from "@/components/commandMenu/index.vue";
-import Setting from "./setting/index.vue";
 import { setUserAuthority } from "@/api/user";
 import { emitter } from "@/utils/bus.js";
 import { computed, ref, onMounted, nextTick, provide, watchEffect } from "vue";
@@ -399,16 +390,13 @@ provide("theme", theme);
 <style lang="scss">
 .button {
   font-size: 12px;
-  color: #666;
-  background: rgb(250, 250, 250);
   width: 25px !important;
   padding: 4px 8px !important;
-  border: 1px solid #eaeaea;
   margin-right: 4px;
   border-radius: 4px;
 }
 
-:deep .el-overlay {
-  background-color: hsla(0, 0%, 100%, 0.9) !important;
-}
+//:deep .el-overlay {
+//  background-color: hsla(0, 0%, 100%, 0.9) !important;
+//}
 </style>

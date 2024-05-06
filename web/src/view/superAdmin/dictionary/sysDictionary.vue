@@ -3,8 +3,8 @@
     <warning-bar
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <div class="dict-box flex gap-4">
-      <div class="w-64 bg-white p-4">
+    <div class=" flex gap-4">
+      <div class="w-64 bg-white  text-slate-700 dark:text-slate-400  dark:bg-slate-800 rounded p-4">
         <div class="flex justify-between items-center">
           <span class="text font-bold">字典列表</span>
           <el-button
@@ -21,8 +21,8 @@
           <div
             v-for="dictionary in dictionaryData"
             :key="dictionary.ID"
-            class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 hover:text-gray-800 group bg-gray-50"
-            :class="selectID === dictionary.ID && 'active'"
+            class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 dark:hover:bg-blue-900 hover:text-gray-800 group bg-gray-50   text-slate-700 dark:text-slate-400  dark:bg-slate-800"
+            :class="selectID === dictionary.ID && 'bg-blue-500 text-white dark:bg-blue-700 dark:text-gray-400 '"
             @click="toDetail(dictionary)"
           >
             <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>
@@ -45,7 +45,7 @@
           </div>
         </el-scrollbar>
       </div>
-      <div class="flex-1 bg-white">
+      <div class="flex-1 bg-white  text-slate-700 dark:text-slate-400  dark:bg-slate-800">
         <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
       </div>
     </div>

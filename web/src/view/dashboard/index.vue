@@ -1,7 +1,7 @@
 <template>
-  <div class="page">
+  <div class="page bg-transparent">
     <div class="gva-card-box">
-      <div class="gva-card gva-top-card">
+      <div class="gva-card gva-top-card ">
         <div class="gva-top-card-left">
           <div class="gva-top-card-left-title">早安，管理员，请开始一天的工作吧</div>
           <div class="gva-top-card-left-dot">{{ weatherInfo }}</div>
@@ -192,7 +192,7 @@ const toTarget = (name) => {
 
 <style lang="scss" scoped>
 .page {
-    @apply p-0;
+  @apply p-0;
     .gva-card-box{
       @apply p-4;
       &+.gva-card-box{
@@ -200,9 +200,9 @@ const toTarget = (name) => {
       }
     }
     .gva-card {
-      @apply box-border bg-white rounded h-auto px-6 py-8 overflow-hidden shadow-sm;
+      @apply box-border bg-white text-slate-700 dark:text-slate-200  dark:bg-slate-800  rounded h-auto px-6 py-8 overflow-hidden shadow-sm;
       .gva-card-title{
-        @apply pb-5 border-t-0 border-l-0 border-r-0 border-b border-solid border-gray-100;
+        @apply pb-5 border-t-0 border-l-0 border-r-0 border-b border-solid border-gray-100 dark:border-gray-600;
       }
     }
     .gva-top-card {
@@ -210,7 +210,7 @@ const toTarget = (name) => {
         &-left {
           @apply h-full flex flex-col w-auto;
             &-title {
-              @apply text-3xl text-gray-600;
+              @apply text-3xl ;
             }
             &-dot {
               @apply mt-4 text-gray-600 text-lg;
@@ -229,13 +229,13 @@ const toTarget = (name) => {
         }
     }
      ::v-deep(.el-card__header){
-          @apply p-0  border-gray-200;
+          @apply p-0  border-gray-200 dark:border-gray-600;
         }
         .card-header{
-          @apply pb-5 border-b border-solid border-gray-200 border-t-0 border-l-0 border-r-0;
+          @apply pb-5 border-b dark:border-gray-600 border-solid border-gray-200 border-t-0 border-l-0 border-r-0;
         }
     .quick-entrance-items {
-      @apply flex items-center justify-center text-center text-gray-800;
+      @apply flex items-center justify-center text-center ;
         .quick-entrance-item {
           @apply px-8 py-6 flex items-center flex-col transition-all duration-100 ease-in-out rounded-lg cursor-pointer;
           &:hover{

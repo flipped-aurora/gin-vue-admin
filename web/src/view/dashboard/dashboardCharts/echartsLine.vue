@@ -126,7 +126,6 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .dashboard-line-box {
   .dashboard-line {
-    background-color: #fff;
     height: 360px;
     width: 100%;
   }

@@ -2,7 +2,7 @@
   <el-menu-item :index="routerInfo.name">
     <template v-if="isCollapse">
       <el-tooltip
-        class="box-item"
+        class="box-item text-slate-700 dark:text-slate-200"
         effect="light"
         :content="routerInfo.meta.title"
         placement="right"
@@ -13,11 +13,11 @@
       </el-tooltip>
     </template>
     <template v-else>
-      <div class="gva-menu-item">
+      <div class="gva-menu-item text-slate-700 dark:text-slate-200">
         <el-icon v-if="routerInfo.meta.icon">
           <component :is="routerInfo.meta.icon" />
         </el-icon>
-        <span class="gva-menu-item-title">{{ routerInfo.meta.title }}</span>
+        <span >{{ routerInfo.meta.title }}</span>
       </div>
     </template>
   </el-menu-item>

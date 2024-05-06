@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="mt-2">
     <el-row :gutter="10">
       <el-col :span="12">
         <el-card>
@@ -71,27 +71,24 @@
                 </a>
               </el-col>
             </el-row>
-            <el-row
-              style="margin-left: 40px"
-              :gutter="20"
-            >
-              <el-col
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-4">
+              <div
                 v-for="(item, index) in members"
                 :key="index"
                 :span="8"
               >
-                <a :href="item.html_url">
+                <a :href="item.html_url" class="flex items-center">
                   <img
-                    class="avatar-img"
+                    class="w-8 h-8 rounded-full"
                     :src="item.avatar_url"
                   >
                   <a
-                    class="author-name"
+                    class=" text-blue-700 ml-2 text-xl  font-bold  font-sans  "
                     style=""
                   >{{ item.login }}</a>
                 </a>
-              </el-col>
-            </el-row>
+              </div>
+            </div>
           </div>
         </el-card>
       </el-col>
@@ -120,7 +117,9 @@
             type="primary"
             link
             @click="loadMore"
-          >Load more</el-button>
+          >
+            Load more
+          </el-button>
         </el-card>
       </el-col>
     </el-row>
@@ -191,15 +190,6 @@ loadMembers()
   width: 150px;
 }
 
-.author-name {
-  float: left;
-  line-height: 65px !important;
-  margin-left: 10px;
-  color: darkblue;
-  line-height: 100px;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-}
 
 .dom-center {
   margin-left: 50%;

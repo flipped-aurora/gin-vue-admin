@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-gray-50 text-slate-700 dark:text-slate-500  dark:bg-slate-800">
     <el-config-provider :locale="zhCn">
       <router-view />
     </el-config-provider>
@@ -22,7 +22,6 @@ defineOptions({
 @tailwind utilities;
 // 引入初始化样式
 #app {
-  background: #eee;
   height: 100vh;
   overflow: hidden;
   font-weight: 400 !important;
@@ -30,4 +29,5 @@ defineOptions({
 .el-button{
   font-weight: 400 !important;
 }
+
 </style>

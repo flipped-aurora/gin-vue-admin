@@ -1,29 +1,29 @@
 <template>
   <div>
     <el-button
-      type="primary"
-      class="drawer-container"
-      icon="setting"
-      @click="showSettingDrawer"
+        type="primary"
+        class="drawer-container"
+        icon="setting"
+        @click="showSettingDrawer"
     />
     <el-drawer
-      v-model="drawer"
-      title="系统配置"
-      :direction="direction"
-      :before-close="handleClose"
+        v-model="drawer"
+        title="系统配置"
+        :direction="direction"
+        :before-close="handleClose"
     >
       <div class="setting_body">
         <div class="setting_card">
           <div class="setting_content">
             <div class="theme-box">
               <div
-                class="item"
-                @click="changeMode('light')"
+                  class="item"
+                  @click="changeMode('light')"
               >
                 <div class="item-top">
                   <el-icon
-                    v-if="userStore.mode === 'light'"
-                    class="check"
+                      v-if="userStore.mode === 'light'"
+                      class="check"
                   >
                     <check />
                   </el-icon>
@@ -34,13 +34,13 @@
                 </p>
               </div>
               <div
-                class="item"
-                @click="changeMode('dark')"
+                  class="item"
+                  @click="changeMode('dark')"
               >
                 <div class="item-top">
                   <el-icon
-                    v-if="userStore.mode === 'dark'"
-                    class="check"
+                      v-if="userStore.mode === 'dark'"
+                      class="check"
                   >
                     <check />
                   </el-icon>
@@ -92,10 +92,10 @@ const changeMode = (e) => {
 .drawer-container {
   transition: all 0.2s;
   &:hover{
-    right: 0
+    right: 4px
   }
   position: fixed;
-  right: -20px;
+  right: -10px;
   bottom: 15%;
   height: 40px;
   width: 40px;
@@ -104,7 +104,7 @@ const changeMode = (e) => {
   justify-content: center;
   z-index: 999;
   color: #fff;
-  border-radius: 4px 0 0 4px;
+  border-radius: 4px;
   cursor: pointer;
   -webkit-box-shadow: inset 0 0 6px rgba(0 ,0 ,0, 10%);
 }
@@ -118,7 +118,7 @@ const changeMode = (e) => {
     display: flex;
     flex-direction: column;
     >.theme-box{
-     display: flex;
+      display: flex;
     }
     >.color-box{
       div{

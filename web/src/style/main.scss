@@ -508,7 +508,10 @@ li {
 }
 
 .gva-table-box {
-    @apply p-6  bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-800 rounded m-2;
+    @apply p-6  bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded m-2;
+    .el-table{
+       @apply  bg-white  dark:bg-slate-900
+    }
 }
 
 .gva-btn-list {

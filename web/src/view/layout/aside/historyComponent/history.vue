@@ -4,6 +4,7 @@
       v-model="activeValue"
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
+      class="bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-900"
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
@@ -32,7 +33,7 @@
     <ul
       v-show="contextMenuVisible"
       :style="{ left: left + 'px', top: top + 'px' }"
-      class="contextmenu bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-800"
+      class="contextmenu bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-900"
     >
       <li @click="closeAll">
         关闭所有

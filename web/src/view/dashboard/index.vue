@@ -2,10 +2,12 @@
   <div class="page bg-transparent">
     <div class="gva-card-box">
       <div class="gva-card gva-top-card ">
-        <div class="h-full flex flex-col w-auto">
-          <div class="text-3xl">早安，管理员，请开始一天的工作吧</div>
-          <div class="mt-4 text-gray-600 text-lg">{{ weatherInfo }}</div>
-          <el-row class="my-8 w-[500px]">
+        <div class="h-full flex flex-col w-auto justify-between">
+          <div class="text-2xl">
+            <span>早安，管理员，请开始一天的工作吧</span>
+            <div class="text-gray-600 text-base mt-2">{{ weatherInfo }}</div>
+          </div>
+          <el-row class="w-[500px] text-sm">
             <el-col
               :span="8"
               :xs="24"
@@ -43,8 +45,8 @@
               </div>
             </el-col>
           </el-row>
-          <div>
-            <div class="gva-top-card-left-item">
+          <div class="flex flex-col gap-4">
+            <div>
               使用教学：
               <a
                 style="color:#409EFF"
@@ -72,7 +74,7 @@
     <div class="gva-card-box">
       <div class="gva-card quick-entrance">
         <div class="gva-card-title">快捷入口</div>
-        <el-row :gutter="20">
+        <el-row :gutter="16">
           <el-col
             v-for="(card, key) in toolCards"
             :key="key"
@@ -194,27 +196,21 @@ const toTarget = (name) => {
 .page {
   @apply p-0;
     .gva-card-box{
-      @apply p-4;
+      @apply p-2;
       &+.gva-card-box{
         @apply pt-0;
       }
     }
     .gva-card {
-      @apply box-border bg-white text-slate-700 dark:text-slate-200  dark:bg-slate-900  rounded h-auto px-6 py-8 overflow-hidden shadow-sm;
+      @apply box-border bg-white text-slate-700 dark:text-slate-200  dark:bg-slate-900  rounded h-auto p-4 overflow-hidden shadow-sm;
       .gva-card-title{
-        @apply pb-5 border-t-0 border-l-0 border-r-0 border-b border-solid border-gray-100 dark:border-gray-600;
+        @apply pb-2 border-t-0 border-l-0 border-r-0 border-b border-solid border-gray-100 dark:border-gray-600;
       }
     }
     .gva-top-card {
         @apply h-72 flex items-center justify-between text-gray-500;
         &-left {
           @apply h-full flex flex-col w-auto;
-            &-item{
-              +.gva-top-card-left-item{
-                margin-top: 24px;
-              }
-              margin-top: 14px;
-            }
         }
         &-right {
             height: 600px;

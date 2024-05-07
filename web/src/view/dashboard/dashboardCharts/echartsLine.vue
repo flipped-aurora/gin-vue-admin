@@ -16,7 +16,7 @@ import { useWindowResize } from '@/hooks/use-windows-resize'
 import { useAppStore } from "@/pinia"
 import { storeToRefs } from "pinia"
 const appStore = useAppStore()
-const { primaryColor , grey, weakness } = storeToRefs(appStore)
+const { config } = storeToRefs(appStore)
 var dataAxis = []
 for (var i = 1; i < 13; i++) {
   dataAxis.push(`${i}月`)
@@ -102,11 +102,11 @@ const setOptions = () => {
         barWidth: '40%',
         itemStyle: {
           borderRadius: [5, 5, 0, 0],
-          color: primaryColor.value,
+          color: config.value.primaryColor,
         },
         emphasis: {
           itemStyle: {
-            color: primaryColor.value,
+            color: config.value.primaryColor,
           },
         },
         data: data,
@@ -117,7 +117,8 @@ const setOptions = () => {
 
 
 watchEffect(()=>{
-  if(primaryColor.value){
+  console.log(config)
+  if(config.value.primaryColor){
     setOptions()
   }
 })

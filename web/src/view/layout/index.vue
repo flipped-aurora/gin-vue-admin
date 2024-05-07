@@ -5,16 +5,18 @@
       <gva-aside />
       <div class="flex-1  w-0 h-full">
         <gva-tabs v-if="config.showTabs" />
-        <router-view v-if="reloadFlag" v-slot="{ Component }">
-          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-slate-800 p-1  overflow-auto" :class="config.showTabs? 'gva-container2' :'gva-container pt-1'">
-            <transition mode="out-in" name="el-fade-in-linear">
-              <keep-alive :include="routerStore.keepAliveRouters">
-                <component :is="Component" />
-              </keep-alive>
-            </transition>
-          </div>
-        </router-view>
-        <BottomInfo />
+        <div class="overflow-auto" :class="config.showTabs? 'gva-container2' :'gva-container pt-1'">
+          <router-view v-if="reloadFlag" v-slot="{ Component }">
+            <div id="gva-base-load-dom" class="gva-body-h bg-gray-50 dark:bg-slate-800">
+              <transition mode="out-in" name="el-fade-in-linear">
+                <keep-alive :include="routerStore.keepAliveRouters">
+                  <component :is="Component" />
+                </keep-alive>
+              </transition>
+            </div>
+          </router-view>
+          <BottomInfo />
+        </div>
       </div>
     </div>
   </div>
@@ -80,10 +82,15 @@ const reload = async () => {
 </script>
 
 <style lang="scss">
+
+.gva-body-h{
+  min-height: calc(100% - 3rem);
+}
+
 .gva-container{
-  height: calc(100% - 4rem);
+  height: calc(100% - 2.5rem);
 }
 .gva-container2{
-  height: calc(100% - 7rem);
+  height: calc(100% - 4.5rem);
 }
 </style>

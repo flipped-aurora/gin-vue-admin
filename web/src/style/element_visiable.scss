@@ -47,10 +47,12 @@
 
 
 .el-table {
-    th {
-        @apply  dark:bg-slate-900;
-        .cell {
-            @apply leading-[36px] text-gray-700 dark:text-gray-200;
+    tr{
+        th {
+            @apply  dark:bg-slate-900;
+            .cell {
+                @apply leading-[36px] text-gray-700 dark:text-gray-200;
+            }
         }
     }
     .el-table__row {
@@ -61,8 +63,13 @@
             }
         }
     }
-    .is-leaf {
-        @apply dark:bg-slate-900;
+    tr{
+        th{
+            &.is-leaf {
+                @apply dark:bg-slate-900;
+            }
+        }
+
     }
 }
 
@@ -81,7 +88,11 @@
         }
     }
 }
-
+.el-menu{
+    li{
+        @apply my-1;
+    }
+}
 .el-menu-item{
     border-radius: 2px;
     &.is-active{

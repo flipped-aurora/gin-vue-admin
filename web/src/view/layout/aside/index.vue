@@ -45,7 +45,7 @@
 
 <script setup>
 import AsideComponent from "@/view/layout/aside/asideComponent/index.vue";
-import { ref, provide, watchEffect, inject , computed} from "vue";
+import { ref, provide, watchEffect, computed} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useRouterStore } from "@/pinia/modules/router";
 import { useAppStore } from "@/pinia"

@@ -2,13 +2,14 @@
   <el-sub-menu
     ref="subMenu"
     :index="routerInfo.name"
+    class="gva-sub-menu"
   >
     <template #title>
       <div
         v-if="!isCollapse"
         class="flex items-center "
         :style="{
-          height : config.layout_side_item_height+ 'px',
+          height : sideHeight,
         }"
       >
         <el-icon v-if="routerInfo.meta.icon">
@@ -28,7 +29,7 @@
 </template>
 
 <script setup>
-import { inject } from 'vue'
+import { inject,computed } from 'vue'
 import { useAppStore } from '@/pinia'
 import { storeToRefs } from 'pinia'
 const appStore = useAppStore()
@@ -51,10 +52,14 @@ const isCollapse = inject('isCollapse', {
   default: false,
 })
 
+const sideHeight = computed(() => config.value.layout_side_item_height + 'px')
+
 </script>
 
 <style lang="scss">
-.el-sub-menu__title{
-  @apply h-14;
+.gva-sub-menu{
+  .el-sub-menu__title{
+    height: v-bind('sideHeight');
+  }
 }
 </style>

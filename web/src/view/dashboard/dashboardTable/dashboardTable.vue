@@ -7,16 +7,22 @@
       <div
         v-for="(item,key) in dataTimeline"
         :key="key"
-        class="log-item"
+        class="flex mt-2 leading-7"
       >
-        <div class="flex  items-center  line-clamp-1 ">
+        <div class="flex items-center justify-between line-clamp-1">
           <span
             class="rounded-full w-2 h-2 bg-gray-300 dark:bg-gray-600 text-xs text-gray-300 dark:text-gray-600 mr-1"
-            :class="key<3&&' bg-blue-300 dark:bg-blue-700'"
-          ></span>
+            :class="key<3&&'bg-blue-300 dark:bg-blue-700'"
+          />
         </div>
-        <div class=" flex-1 message">{{ item.message }}</div>
-        <div class=" ml-1 ">{{ item.from }}</div>
+        <div class="flex-1 w-20">
+          <div class="overflow-ellipsis overflow-hidden whitespace-nowrap">
+            {{ item.message }}
+          </div>
+        </div>
+        <div class="ml-1 flex-none w-24">
+          {{ item.from }}
+        </div>
       </div>
     </div>
   </div>
@@ -60,48 +66,6 @@ loadCommits()
     &-title{
         font-weight: 600;
         margin-bottom: 12px;
-    }
-    .log{
-      &-item{
-        display: flex;
-        justify-content: space-between;
-        margin-top: 14px;
-        .key-box{
-          justify-content: center;
-        }
-        .key{
-
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          text-align: center;
-        }
-
-        .flex{
-          line-height: 20px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-        .flex-1{
-          flex:1;
-        }
-        .flex-2{
-          flex:2;
-        }
-        .flex-3{
-          flex:3;
-        }
-        .flex-4{
-          flex:4;
-        }
-        .flex-5{
-          flex:5;
-        }
-      }
     }
 }
 </style>

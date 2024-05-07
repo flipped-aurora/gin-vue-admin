@@ -363,7 +363,7 @@ $base-tag-item-height : 4rem;
   ::v-deep(.el-tabs__header) {
     border-bottom: 0;
   }
-  :deep(.el-tabs__item){
+  ::v-deep(.el-tabs__item){
     box-sizing: border-box;
     border: 1px solid var(--el-border-color-darker);
     border-radius: 2px;
@@ -371,11 +371,18 @@ $base-tag-item-height : 4rem;
     margin-left: 2px;
     transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
     height: 34px;
-
     &.is-active {
       border: 1px solid var(--el-color-primary);
     }
   }
+  ::v-deep(.el-tabs__item):first-child{
+    border: 1px solid var(--el-border-color-darker);
+    &.is-active {
+      border: 1px solid var(--el-color-primary);
+    }
+  }
+
 }
+
 
 </style>

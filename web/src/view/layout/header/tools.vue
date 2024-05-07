@@ -41,15 +41,14 @@
         <Refresh />
       </el-icon>
     </el-tooltip>
-
     <el-tooltip
       class=""
       effect="dark"
       content="切换主题"
       placement="bottom"
-      :disabled="config.theme === 'auto'"
+      :disabled="appStore.theme === 'auto'"
     >
-      <el-icon v-if="theme === 'dark'" class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer border-solid" @click="appStore.toggleTheme(false )">
+      <el-icon v-if="appStore.theme === 'dark'" class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer border-solid" @click="appStore.toggleTheme(false )">
         <Sunny />
       </el-icon>
       <el-icon v-else class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleTheme(true)">
@@ -63,12 +62,10 @@
 
 <script setup>
 import { useAppStore } from "@/pinia"
-import { storeToRefs } from "pinia"
 import GvaSetting from "@/view/layout/setting/index.vue"
 import { ref } from "vue"
 import { emitter } from "@/utils/bus.js";
 const appStore = useAppStore()
-const { theme, config } = storeToRefs(appStore)
 const showSettingDrawer = ref(false)
 const showRefreshAnmite = ref(false)
 const toggleRefresh = () =>{

@@ -9,9 +9,9 @@ export const useAppStore = defineStore('app', () => {
   const config = reactive({
     weakness: false,
     grey: false,
-    primaryColor: '#1890ff',
+    primaryColor: '#79B6E7',
     showTabs: true,
-    darkMode: 'auto',
+    darkMode: 'light',
 
     layout_side_width : 256,
     layout_side_collapsed_width : 80,
@@ -29,7 +29,7 @@ export const useAppStore = defineStore('app', () => {
 
 
   watchEffect(() =>{
-    if ( theme.value === 'dark'){
+    if (theme.value === 'dark'){
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
       localStorage.setItem('theme', 'dark');
@@ -41,9 +41,9 @@ export const useAppStore = defineStore('app', () => {
   })
 
   const toggleTheme = (dark) => {
-    if(config.darkMode === 'auto'){
-        return
-    }
+    // if(config.darkMode === 'auto'){
+    //     return
+    // }
     if (dark) {
       theme.value = 'dark';
     } else {
@@ -85,9 +85,10 @@ export const useAppStore = defineStore('app', () => {
   const toggleDarkMode = (e) => {
     config.darkMode = e
     localStorage.setItem('darkMode', e)
-    if(e === 'auto'){
-      toggleDarkModeAuto()
-    }else if(e === 'dark'){
+    // if(e === 'auto'){
+    //   toggleDarkModeAuto()
+    // }else
+    if(e === 'dark'){
       toggleTheme(true)
     }else{
       toggleTheme(false)

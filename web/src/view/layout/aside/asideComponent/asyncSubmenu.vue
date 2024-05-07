@@ -7,6 +7,7 @@
     <template #title>
       <div
         v-if="!isCollapse"
+        class="flex items-center h-14"
       >
         <el-icon v-if="routerInfo.meta.icon">
           <component :is="routerInfo.meta.icon" />
@@ -55,6 +56,6 @@ const isCollapse = inject('isCollapse', {
 
 <style lang="scss">
 .el-sub-menu__title{
-  @apply h-12;
+  @apply h-14;
 }
 </style>

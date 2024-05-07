@@ -508,10 +508,7 @@ li {
 }
 
 .gva-table-box {
-    @apply p-6  bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded m-2;
-    .el-table{
-       @apply  bg-white  dark:bg-slate-900
-    }
+    @apply p-6  bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded m-2;
 }
 
 .gva-btn-list {
@@ -526,16 +523,15 @@ li {
     @apply w-4 h-4;
 }
 
-
 ::-webkit-scrollbar {
     @apply hidden;
 }
 
 
 .gva-search-box {
-    @apply p-6 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-800 rounded m-2;
+    @apply p-6 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded m-2;
 }
 
 .gva-form-box {
-    @apply p-6 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-800 rounded m-2;
+    @apply p-6 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded m-2;
 }

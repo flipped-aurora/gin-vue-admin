@@ -42,26 +42,23 @@
 }
 
 
-.admin-box {
-    @apply min-h-[calc(100vh-200px)] px-3 py-4 mt-28 mb-4 mx-1;
-    .el-table {
-        th {
-            @apply px-0 py-2;
-            .cell {
-                @apply leading-[40px] text-gray-700 dark:text-gray-300;
-            }
+.el-table {
+    th {
+        @apply  dark:bg-slate-900;
+        .cell {
+            @apply leading-[36px] text-gray-700 dark:text-gray-200;
         }
+    }
+    .el-table__row {
         td {
-            @apply px-0 py-2;
+            @apply dark:bg-slate-900;
             .cell {
-                @apply leading-[40px] text-gray-600;
+                @apply leading-[32px] text-gray-600 dark:text-gray-300;
             }
         }
-        .is-leaf {
-            @apply border-b border-t-0 border-l-0 border-solid border-gray-50;
-            border-right:var(--el-table-border);
-            background: #F7FBFF !important;
-        }
+    }
+    .is-leaf {
+        @apply dark:bg-slate-900;
     }
 }
 

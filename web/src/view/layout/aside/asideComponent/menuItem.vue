@@ -1,5 +1,5 @@
 <template>
-  <el-menu-item :index="routerInfo.name" class="h-12">
+  <el-menu-item :index="routerInfo.name" class="h-14">
     <el-icon v-if="routerInfo.meta.icon">
       <component :is="routerInfo.meta.icon" />
     </el-icon>

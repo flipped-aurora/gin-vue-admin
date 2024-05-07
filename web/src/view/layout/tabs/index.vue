@@ -373,7 +373,7 @@ $base-tag-item-height : 4rem;
     height: 34px;
 
     &.is-active {
-      border: 1px solid #409eff;
+      border: 1px solid var(--el-color-primary);
     }
   }
 }

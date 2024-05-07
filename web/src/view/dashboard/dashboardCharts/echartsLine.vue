@@ -11,8 +11,12 @@
 </template>
 <script setup>
 import * as echarts from 'echarts'
-import { nextTick, onMounted, onUnmounted, ref } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watchEffect } from 'vue'
 import { useWindowResize } from '@/hooks/use-windows-resize'
+import { useAppStore } from "@/pinia"
+import { storeToRefs } from "pinia"
+const appStore = useAppStore()
+const { primaryColor , grey, weakness } = storeToRefs(appStore)
 var dataAxis = []
 for (var i = 1; i < 13; i++) {
   dataAxis.push(`${i}月`)
@@ -56,6 +60,7 @@ const initChart = () => {
   setOptions()
 }
 const setOptions = () => {
+  if(!chart) return
   chart.setOption({
     grid: {
       left: '40',
@@ -97,11 +102,11 @@ const setOptions = () => {
         barWidth: '40%',
         itemStyle: {
           borderRadius: [5, 5, 0, 0],
-          color: '#188df0',
+          color: primaryColor.value,
         },
         emphasis: {
           itemStyle: {
-            color: '#188df0',
+            color: primaryColor.value,
           },
         },
         data: data,
@@ -109,6 +114,13 @@ const setOptions = () => {
     ],
   })
 }
+
+
+watchEffect(()=>{
+  if(primaryColor.value){
+    setOptions()
+  }
+})
 
 onMounted(async() => {
   await nextTick()

@@ -1,6 +1,14 @@
 
 @import '@/style/iconfont.css';
 
+.html-grey{
+    filter: grayscale(100%);
+}
+
+.html-weakenss{
+    filter: invert(80%);
+}
+
 .gva-table-box {
     @apply p-6  bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded m-2;
 }

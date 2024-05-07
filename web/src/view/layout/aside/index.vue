@@ -1,7 +1,10 @@
 <template>
   <div
     class=" relative h-full  bg-white text-slate-700 dark:text-slate-500 dark:bg-slate-900 border-r  shadow dark:shadow-gray-700"
-    :class="isCollapse ? 'w-16' : ' w-64 px-2'"
+    :class="isCollapse ? '' : '  px-2'"
+    :style="{
+      width : layoutSideWidth + 'px',
+    }"
   >
     <transition
       :duration="{ enter: 800, leave: 100 }"
@@ -42,13 +45,14 @@
 
 <script setup>
 import AsideComponent from "@/view/layout/aside/asideComponent/index.vue";
-import { ref, provide, watchEffect } from "vue";
+import { ref, provide, watchEffect, inject , computed} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useRouterStore } from "@/pinia/modules/router";
 import { useAppStore } from "@/pinia"
 import { storeToRefs } from "pinia"
 const appStore = useAppStore()
-const { device } = storeToRefs(appStore)
+const { device, config } = storeToRefs(appStore)
+
 defineOptions({
   name: "GvaAside",
 });
@@ -57,7 +61,13 @@ const router = useRouter();
 const routerStore = useRouterStore();
 const isCollapse = ref(false)
 const active = ref("");
-
+const layoutSideWidth = computed(() =>{
+  if (!isCollapse.value) {
+    return config.value.layout_side_width
+  }else{
+    return config.value.layout_side_collapsed_width
+  }
+})
 watchEffect(() => {
   active.value = route.meta.activeName || route.name;
 });
@@ -71,6 +81,8 @@ watchEffect(() =>{
 })
 
 provide("isCollapse", isCollapse);
+
+
 
 const selectMenuItem = (index, _, ele, aaa) => {
   const query = {};

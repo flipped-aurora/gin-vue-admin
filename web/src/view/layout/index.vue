@@ -1,12 +1,12 @@
 <template>
   <div class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen">
-    <gva-header></gva-header>
+    <gva-header />
     <div class="flex flex-row w-full gva-container  pt-16">
-      <gva-aside v-model:collapse="isCollapse" />
+      <gva-aside />
       <div class="flex-1  w-0 h-full">
-        <gva-tabs></gva-tabs>
+        <gva-tabs v-if="config.showTabs" />
         <router-view v-if="reloadFlag" v-slot="{ Component }">
-          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-slate-800 p-1 gva-container2 overflow-auto">
+          <div id="gva-base-load-dom" class="bg-gray-50 dark:bg-slate-800 p-1  overflow-auto" :class="config.showTabs? 'gva-container2' :'gva-container pt-1'">
             <transition mode="out-in" name="el-fade-in-linear">
               <keep-alive :include="routerStore.keepAliveRouters">
                 <component :is="Component" />
@@ -27,10 +27,14 @@ import useResponsive  from "@/hooks/responsive";
 import GvaTabs from "./tabs/index.vue"
 import BottomInfo from "@/view/layout/bottomInfo/bottomInfo.vue";
 import { emitter } from "@/utils/bus.js";
-import { computed, ref, onMounted, nextTick} from "vue";
+import { ref, onMounted, nextTick, provide} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useRouterStore } from "@/pinia/modules/router";
 import { useUserStore } from "@/pinia/modules/user";
+import { useAppStore } from '@/pinia'
+import { storeToRefs } from 'pinia'
+const appStore = useAppStore()
+const { config } = storeToRefs(appStore)
 
 defineOptions({
   name: "GvaLayout",
@@ -51,9 +55,6 @@ onMounted(() => {
 });
 
 const userStore = useUserStore();
-
-
-
 
 const reloadFlag = ref(true);
 let reloadTimer = null;

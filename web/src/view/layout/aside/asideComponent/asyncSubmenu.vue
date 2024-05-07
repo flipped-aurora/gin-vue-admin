@@ -3,11 +3,13 @@
     ref="subMenu"
     :index="routerInfo.name"
   >
-
     <template #title>
       <div
         v-if="!isCollapse"
-        class="flex items-center h-[2.8rem]"
+        class="flex items-center "
+        :style="{
+          height : config.layout_side_item_height+ 'px',
+        }"
       >
         <el-icon v-if="routerInfo.meta.icon">
           <component :is="routerInfo.meta.icon" />
@@ -27,6 +29,10 @@
 
 <script setup>
 import { inject } from 'vue'
+import { useAppStore } from '@/pinia'
+import { storeToRefs } from 'pinia'
+const appStore = useAppStore()
+const { config } = storeToRefs(appStore)
 
 defineOptions({
   name: 'AsyncSubmenu',
@@ -39,13 +45,6 @@ defineOptions({
     },
     type: Object
   },
-
-  theme: {
-    default: function() {
-      return {}
-    },
-    type: Object
-  }
 })
 
 const isCollapse = inject('isCollapse', {

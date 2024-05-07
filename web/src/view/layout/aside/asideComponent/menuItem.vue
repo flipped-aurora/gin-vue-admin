@@ -1,5 +1,7 @@
 <template>
-  <el-menu-item :index="routerInfo.name" class="h-[2.8rem]">
+  <el-menu-item :index="routerInfo.name" :style="{
+    height : config.layout_side_item_height+ 'px',
+  }">
     <el-icon v-if="routerInfo.meta.icon">
       <component :is="routerInfo.meta.icon" />
     </el-icon>
@@ -12,6 +14,10 @@
 
 <script setup>
 import { inject } from 'vue'
+import { useAppStore } from '@/pinia'
+import { storeToRefs } from 'pinia'
+const appStore = useAppStore()
+const { config } = storeToRefs(appStore)
 
 defineOptions({
   name: 'MenuItem',

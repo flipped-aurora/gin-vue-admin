@@ -1,64 +1,76 @@
 <template>
-  <div class="bg-white text-slate-700 dark:text-slate-500 dark:bg-slate-800">
-    <el-scrollbar style="height: calc(100vh - 60px)">
-      <transition
-        :duration="{ enter: 800, leave: 100 }"
-        mode="out-in"
-        name="el-fade-in-linear"
+  <div
+    class=" relative h-full  bg-white text-slate-700 dark:text-slate-500 dark:bg-slate-900 border-r  shadow dark:shadow-gray-700"
+    :class="isCollapse ? 'w-16' : ' w-64 px-2'"
+  >
+    <transition
+      :duration="{ enter: 800, leave: 100 }"
+      mode="out-in"
+      name="el-fade-in-linear"
+    >
+      <el-menu
+        :collapse="isCollapse"
+        :collapse-transition="false"
+        :default-active="active"
+        class="border-r-0 w-full"
+        unique-opened
+        @select="selectMenuItem"
       >
-        <el-menu
-          :collapse="isCollapse"
-          :collapse-transition="false"
-          :default-active="active"
-          class="bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-800"
-          unique-opened
-          @select="selectMenuItem"
-        >
-          <template v-for="item in routerStore.asyncRouters[0].children">
-            <aside-component
-              v-if="!item.hidden"
-              :key="item.name"
-              :is-collapse="isCollapse"
-              :router-info="item"
-              :theme="theme"
-            />
-          </template>
-        </el-menu>
-      </transition>
-    </el-scrollbar>
+        <template v-for="item in routerStore.asyncRouters[0].children">
+          <aside-component
+            v-if="!item.hidden"
+            :key="item.name"
+            :router-info="item"
+          />
+        </template>
+      </el-menu>
+    </transition>
+    <div
+      class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer "
+      :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
+      @click="toggleCollapse"
+    >
+      <el-icon v-if="!isCollapse">
+        <DArrowLeft />
+      </el-icon>
+      <el-icon v-else>
+        <DArrowRight />
+      </el-icon>
+    </div>
   </div>
 </template>
 
 <script setup>
 import AsideComponent from "@/view/layout/aside/asideComponent/index.vue";
-import { ref, inject, watchEffect } from "vue";
+import { ref, provide, watchEffect } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useRouterStore } from "@/pinia/modules/router";
-
+import { useAppStore } from "@/pinia"
+import { storeToRefs } from "pinia"
+const appStore = useAppStore()
+const { device } = storeToRefs(appStore)
 defineOptions({
-  name: "Aside",
+  name: "GvaAside",
 });
 const route = useRoute();
 const router = useRouter();
 const routerStore = useRouterStore();
-const isCollapse = defineModel("collapse", {
-  type: Boolean,
-});
-
-const theme = inject("theme", {
-  background: "#fff",
-  activeBackground: "var(--el-color-primary)",
-  activeText: "#fff",
-  normalText: "#333",
-  hoverBackground: "rgba(64, 158, 255, 0.08)",
-  hoverText: "#333",
-  subBackgroundActive: "var(--el-color-primary)",
-});
+const isCollapse = ref(false)
 const active = ref("");
 
 watchEffect(() => {
   active.value = route.meta.activeName || route.name;
 });
+
+watchEffect(() =>{
+  if (device.value === 'mobile') {
+    isCollapse.value = true
+  }else{
+    isCollapse.value = false
+  }
+})
+
+provide("isCollapse", isCollapse);
 
 const selectMenuItem = (index, _, ele, aaa) => {
   const query = {};
@@ -78,25 +90,13 @@ const selectMenuItem = (index, _, ele, aaa) => {
     router.push({ name: index, query, params });
   }
 };
+
+const toggleCollapse = () => {
+  isCollapse.value = !isCollapse.value;
+};
+
 </script>
 
 <style lang="scss">
-.el-sub-menu__title:hover,
-.el-menu-item:hover {
-  background: transparent;
-}
 
-.el-scrollbar {
-  .el-scrollbar__view {
-    height: 100%;
-  }
-}
-.menu-info {
-  .menu-contorl {
-    line-height: 52px;
-    font-size: 20px;
-    display: table-cell;
-    vertical-align: middle;
-  }
-}
 </style>

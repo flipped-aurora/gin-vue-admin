@@ -1,5 +1,5 @@
 <template>
-  <div class="commit-table text-slate-700 dark:text-slate-400 dark:bg-slate-800">
+  <div class="commit-table text-slate-700 dark:text-slate-400 dark:bg-slate-900">
     <div class="commit-table-title">
       更新日志
     </div>

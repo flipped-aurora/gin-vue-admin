@@ -11,7 +11,7 @@
       content="搜索"
       placement="bottom"
     >
-      <el-icon class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer">
+      <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
         <Search />
       </el-icon>
     </el-tooltip>
@@ -22,7 +22,7 @@
       content="刷新"
       placement="bottom"
     >
-      <el-icon class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer"
+      <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid"
                :class="showRefreshAnmite ? 'animate-spin' : ''"
                @click="toggleRefresh">
         <Refresh />
@@ -35,10 +35,10 @@
       content="切换主题"
       placement="bottom"
     >
-      <el-icon v-if="theme === 'dark'" class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer" @click="appStore.toggleTheme(false , $event)">
+      <el-icon v-if="theme === 'dark'" class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer border-solid" @click="appStore.toggleTheme(false , $event)">
         <Sunny />
       </el-icon>
-      <el-icon v-else class="w-8 h-8 shadow rounded-full border border-gray-600 cursor-pointer" @click="appStore.toggleTheme(true, $event)">
+      <el-icon v-else class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleTheme(true, $event)">
         <Moon />
       </el-icon>
     </el-tooltip>

@@ -1,10 +1,14 @@
-﻿<template>
-  <div class="router-history">
+<!--
+    @auther: bypanghu<bypanghu@163.com>
+    @date: 2024/5/7
+!-->
+<template>
+  <div class="gva-tabs">
     <el-tabs
       v-model="activeValue"
       :closable="!(historys.length === 1 && $route.name === defaultRouter)"
       type="card"
-      class="bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-900"
+      class=" bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-900"
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
@@ -15,7 +19,7 @@
         :label="item.meta.title"
         :name="getFmtString(item)"
         :tab="item"
-        class="gva-tab"
+        class="border-none "
       >
         <template #label>
           <span
@@ -83,8 +87,8 @@ const rightActive = ref('')
 const defaultRouter = computed(() => userStore.userInfo.authority.defaultRouter)
 const openContextMenu = (e) => {
   if (
-    historys.value.length === 1 &&
-        route.name === defaultRouter.value
+      historys.value.length === 1 &&
+      route.name === defaultRouter.value
   ) {
     return false
   }
@@ -126,7 +130,7 @@ const closeLeft = () => {
     return getFmtString(item) === rightActive.value
   })
   const activeIndex = historys.value.findIndex(
-    (item) => getFmtString(item) === activeValue.value
+      (item) => getFmtString(item) === activeValue.value
   )
   historys.value.splice(0, rightIndex)
   if (rightIndex > activeIndex) {
@@ -143,7 +147,7 @@ const closeRight = () => {
     return getFmtString(item) === rightActive.value
   })
   const activeIndex = historys.value.findIndex(
-    (item) => getFmtString(item) === activeValue.value
+      (item) => getFmtString(item) === activeValue.value
   )
   historys.value.splice(leftIndex + 1, historys.value.length)
   if (leftIndex < activeIndex) {
@@ -208,7 +212,7 @@ const changeTab = (TabsPaneContext) => {
 }
 const removeTab = (tab) => {
   const index = historys.value.findIndex(
-    (item) => getFmtString(item) === tab
+      (item) => getFmtString(item) === tab
   )
   if (getFmtString(route) === tab) {
     if (historys.value.length === 1) {
@@ -283,7 +287,7 @@ const initPage = () => {
 
   emitter.on('setQuery', (data) => {
     const index = historys.value.findIndex(
-      (item) => getFmtString(item) === activeValue.value
+        (item) => getFmtString(item) === activeValue.value
     )
     historys.value[index].query = data
     activeValue.value = getFmtString(historys.value[index])
@@ -341,37 +345,37 @@ onUnmounted(() => {
 })
 </script>
 
-<style lang="scss">
-.contextmenu {
-  width: 100px;
-  margin: 0;
-  z-index: 3000;
-  position: absolute;
-  list-style-type: none;
-  padding: 5px 0;
-  border-radius: 4px;
-  font-size: 14px;
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.2);
-}
-.el-tabs__item .el-icon-close {
-  color: initial !important;
-}
-.el-tabs__item .dot {
-  content: "";
-  width: 9px;
-  height: 9px;
-  margin-right: 8px;
-  display: inline-block;
-  border-radius: 50%;
-  transition: background-color 0.2s;
+<style lang="scss" scoped>
+$base-tag-item-height : 4rem;
+
+.gva-tabs {
+  ::v-deep(.el-tabs--card > .el-tabs__header){
+    border:none;
+  }
+  ::v-deep(.el-tabs__nav-scroll) {
+    padding: 4px 4px;
+  }
+
+  ::v-deep(.el-tabs__nav) {
+    border: 0;
+  }
+
+  ::v-deep(.el-tabs__header) {
+    border-bottom: 0;
+  }
+  :deep(.el-tabs__item){
+    box-sizing: border-box;
+    border: 1px solid var(--el-border-color-darker);
+    border-radius: 2px;
+    margin-right: 5px;
+    margin-left: 2px;
+    transition: padding 0.3s cubic-bezier(0.645, 0.045, 0.355, 1) !important;
+    height: 34px;
+
+    &.is-active {
+      border: 1px solid #409eff;
+    }
+  }
 }
 
-.contextmenu li {
-  margin: 0;
-  padding: 7px 16px;
-}
-.contextmenu li:hover {
-  cursor: pointer;
-  @apply bg-gray-100 dark:bg-gray-700;
-}
 </style>

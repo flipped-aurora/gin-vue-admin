@@ -200,7 +200,7 @@ const toTarget = (name) => {
       }
     }
     .gva-card {
-      @apply box-border bg-white text-slate-700 dark:text-slate-200  dark:bg-slate-800  rounded h-auto px-6 py-8 overflow-hidden shadow-sm;
+      @apply box-border bg-white text-slate-700 dark:text-slate-200  dark:bg-slate-900  rounded h-auto px-6 py-8 overflow-hidden shadow-sm;
       .gva-card-title{
         @apply pb-5 border-t-0 border-l-0 border-r-0 border-b border-solid border-gray-100 dark:border-gray-600;
       }

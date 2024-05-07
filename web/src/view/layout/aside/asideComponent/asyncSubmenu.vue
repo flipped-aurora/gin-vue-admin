@@ -7,7 +7,7 @@
     <template #title>
       <div
         v-if="!isCollapse"
-        class="flex items-center h-14"
+        class="flex items-center h-[2.8rem]"
       >
         <el-icon v-if="routerInfo.meta.icon">
           <component :is="routerInfo.meta.icon" />

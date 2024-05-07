@@ -4,7 +4,7 @@
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
     <div class=" flex gap-4">
-      <div class="w-64 bg-white  text-slate-700 dark:text-slate-400  dark:bg-slate-800 rounded p-4">
+      <div class="w-64 bg-white  text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded p-4">
         <div class="flex justify-between items-center">
           <span class="text font-bold">字典列表</span>
           <el-button
@@ -45,7 +45,7 @@
           </div>
         </el-scrollbar>
       </div>
-      <div class="flex-1 bg-white  text-slate-700 dark:text-slate-400  dark:bg-slate-800">
+      <div class="flex-1 bg-white  text-slate-700 dark:text-slate-400  dark:bg-slate-900">
         <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
       </div>
     </div>

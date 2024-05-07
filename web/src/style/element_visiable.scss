@@ -1,4 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import '@/style/main.scss';
+@import "@/style/reset";
 
 .el-button {
     font-weight: 400;
@@ -94,6 +98,11 @@
     .el-sub-menu__title{
         color: var(--el-color-primary) !important;
     }
+}
+
+.el-sub-menu__title.el-tooltip__trigger,
+.el-menu-item .el-menu-tooltip__trigger{
+    justify-content: center;
 }
 
 html.dark {

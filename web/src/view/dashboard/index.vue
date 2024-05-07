@@ -2,11 +2,11 @@
   <div class="page bg-transparent">
     <div class="gva-card-box">
       <div class="gva-card gva-top-card ">
-        <div class="h-full flex flex-col w-auto justify-between">
+        <div class="h-full flex flex-col w-auto justify-around">
           <div class="text-2xl">
             <span>早安，管理员，请开始一天的工作吧</span>
-            <div class="text-gray-600 text-base mt-2">{{ weatherInfo }}</div>
           </div>
+          <div class="text-gray-600 text-base -mt-4">{{ weatherInfo }}</div>
           <el-row class="w-[500px] text-sm">
             <el-col
               :span="8"

@@ -7,7 +7,7 @@
       <gva-chart :type="2" title="新增客户" />
     </gva-card>
     <gva-card custom-class="col-span-1 lg:col-span-2 h-32">
-      <gva-chart :type="3" title="解决数量"/>
+      <gva-chart :type="3" title="解决数量" />
     </gva-card>
     <gva-card title="快捷功能" show-action custom-class="col-start-1 md:col-start-3 lg:col-start-7 row-span-2 h-38">
       <gva-quick-link />

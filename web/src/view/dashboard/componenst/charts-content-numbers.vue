@@ -3,7 +3,6 @@
     https://github.com/arco-design/arco-design-pro-vue/blob/main/arco-design-pro-vite/src/views/dashboard/workplace/components/content-chart.vue
     @auther: bypanghu<bypanghu@163.com>
     @date: 2024/5/8
-    @desc: 人数统计图表
 !-->
 
 <template>

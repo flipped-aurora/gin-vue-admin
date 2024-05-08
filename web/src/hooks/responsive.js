@@ -1,3 +1,6 @@
+// 本组件参考 arco-pro 的实现
+// https://github.com/arco-design/arco-design-pro-vue/blob/main/arco-design-pro-vite/src/hooks/responsive.ts
+
 import { onMounted, onBeforeMount, onBeforeUnmount } from 'vue';
 import { useDebounceFn } from '@vueuse/core';
 import { useAppStore } from '@/pinia';

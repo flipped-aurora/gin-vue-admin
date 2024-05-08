@@ -22,7 +22,7 @@
             v-for="dictionary in dictionaryData"
             :key="dictionary.ID"
             class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 dark:hover:bg-blue-900 bg-gray-50 dark:bg-gray-800 gap-4"
-            :class="selectID === dictionary.ID ? 'text-gva-active':'text-slate-700 dark:text-slate-50'"
+            :class="selectID === dictionary.ID ? 'text-active':'text-slate-700 dark:text-slate-50'"
             @click="toDetail(dictionary)"
           >
             <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>

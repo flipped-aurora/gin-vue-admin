@@ -11,8 +11,11 @@ module.exports = {
         "main": "#F5F5F5",
       },
       textColor: {
-        "gva-active": "var(--el-color-primary)",
+        "active": "var(--el-color-primary)",
       },
+      borderColor: {
+        "table-border": "var(--el-border-color-lighter)",
+      }
     },
   },
   darkMode: "class",

@@ -14,7 +14,7 @@
       <div class="text-lg font-bold">
         {{ title }}
       </div>
-      <div v-if="showAction" class="text-sm  text-gva-active">
+      <div v-if="showAction" class="text-sm  text-active">
         查看更多
       </div>
     </div>

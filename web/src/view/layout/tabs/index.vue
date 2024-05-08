@@ -24,9 +24,9 @@
         <template #label>
           <span
             :tab="item"
-            :class="activeValue === getFmtString(item) ? 'text-gva-active' : 'text-gray-600 dark:text-slate-400 '"
+            :class="activeValue === getFmtString(item) ? 'text-active' : 'text-gray-600 dark:text-slate-400 '"
           ><i
-             :class="activeValue === getFmtString(item) ? 'text-gva-active' : 'text-gray-600 dark:text-slate-400'"
+             :class="activeValue === getFmtString(item) ? 'text-active' : 'text-gray-600 dark:text-slate-400'"
            />
             {{ fmtTitle(item.meta.title,item) }}</span>
         </template>

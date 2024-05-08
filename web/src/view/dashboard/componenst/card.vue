@@ -11,10 +11,10 @@
     ]"
   >
     <div v-if="title" class="flex justify-between items-center">
-      <div class="text-lg font-bold">
+      <div class="text-base font-bold">
         {{ title }}
       </div>
-      <div v-if="showAction" class="text-sm  text-active">
+      <div v-if="showAction" class="text-sm text-active cursor-pointer">
         查看更多
       </div>
     </div>

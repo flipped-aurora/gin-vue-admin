@@ -6,21 +6,19 @@
 <template>
   <div class="">
     <div class="flex items-center justify-between mb-2">
-      <div v-if="title" class=" font-bold">
+      <div v-if="title" class="font-bold">
         {{ title }}
       </div>
       <slot v-else name="title" />
     </div>
     <div class=" w-full relative">
       <div v-if="type !== 4">
-        <div class="mt-4 text-gray-600  text-2xl font-mono">
+        <div class="mt-4 text-gray-600 text-3xl font-mono">
           <el-statistic :value="268500" />
         </div>
         <div class="mt-2 text-green-600 text-sm font-bold font-mono">
           +80% <el-icon><TopRight /></el-icon>
         </div>
-
-
       </div>
       <div class=" absolute top-0 right-2 w-[50%] h-20">
         <charts-people-number v-if="type === 1" :data="data[0]" height="100%" />

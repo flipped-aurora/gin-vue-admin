@@ -5,11 +5,11 @@
 
 <template>
   <el-scrollbar>
-    <div v-for="(item , index) in notices" :key="index" class="flex items-center mb-1">
+    <div v-for="(item , index) in notices" :key="index" class="flex items-center mb-1.5 gap-3">
       <el-tag :type="item.type" size="small">
         {{ item.typeTitle }}
       </el-tag>
-      <div class="ml-2 text-xs text-gray-700 dark:text-gray-300 line-clamp-1">
+      <div class="text-xs text-gray-700 dark:text-gray-300 line-clamp-1">
         {{ item.title }}
       </div>
     </div>

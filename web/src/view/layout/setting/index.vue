@@ -32,6 +32,10 @@
         </div>
         <div class="mt-2 text-sm p-2">
           <div class="flex items-center justify-between">
+            <div>展示水印</div>
+            <el-switch v-model="config.show_watermark" @change="appStore.toggleConfigWatermark" />
+          </div>
+          <div class="flex items-center justify-between">
             <div>灰色模式</div>
             <el-switch v-model="config.grey" @change="appStore.toggleGrey" />
           </div>

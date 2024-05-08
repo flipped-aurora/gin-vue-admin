@@ -1,5 +1,6 @@
 <template>
   <div class="bg-gray-50 text-slate-700 dark:text-slate-500 dark:bg-slate-800 w-screen h-screen">
+    <el-watermark v-if="config.show_watermark" :font="font" class="absolute inset-0 z-[999] pointer-events-none" :content="userStore.userInfo.nickName" />
     <gva-header />
     <div class="flex flex-row w-full gva-container  pt-16">
       <gva-aside />
@@ -29,20 +30,28 @@ import useResponsive  from "@/hooks/responsive";
 import GvaTabs from "./tabs/index.vue"
 import BottomInfo from "@/view/layout/bottomInfo/bottomInfo.vue";
 import { emitter } from "@/utils/bus.js";
-import { ref, onMounted, nextTick, provide} from "vue";
+import { ref, onMounted, nextTick, reactive, watchEffect} from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { useRouterStore } from "@/pinia/modules/router";
 import { useUserStore } from "@/pinia/modules/user";
 import { useAppStore } from '@/pinia'
 import { storeToRefs } from 'pinia'
 const appStore = useAppStore()
-const { config } = storeToRefs(appStore)
+const { config, theme } = storeToRefs(appStore)
 
 defineOptions({
   name: "GvaLayout",
 });
 
 useResponsive(true)
+const font = reactive({
+  color: 'rgba(0, 0, 0, .15)',
+})
+
+watchEffect(()=>{
+  font.color = theme.value === 'dark' ? 'rgba(255,255,255, .15)'  : 'rgba(0, 0, 0, .15)'
+
+})
 
 const router = useRouter();
 const route = useRoute();
@@ -83,14 +92,5 @@ const reload = async () => {
 
 <style lang="scss">
 
-.gva-body-h{
-  min-height: calc(100% - 3rem);
-}
 
-.gva-container{
-  height: calc(100% - 2.5rem);
-}
-.gva-container2{
-  height: calc(100% - 4.5rem);
-}
 </style>

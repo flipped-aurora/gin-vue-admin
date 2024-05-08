@@ -2,7 +2,7 @@
   <el-sub-menu
     ref="subMenu"
     :index="routerInfo.name"
-    class="gva-sub-menu"
+    class="gva-sub-menu dark:text-slate-300"
   >
     <template #title>
       <div

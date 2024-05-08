@@ -1,7 +1,11 @@
 <template>
-  <el-menu-item :index="routerInfo.name" :style="{
-    height : sideHeight,
-  }">
+  <el-menu-item
+    :index="routerInfo.name"
+    class="dark:text-slate-300"
+    :style="{
+      height : sideHeight,
+    }"
+  >
     <el-icon v-if="routerInfo.meta.icon">
       <component :is="routerInfo.meta.icon" />
     </el-icon>

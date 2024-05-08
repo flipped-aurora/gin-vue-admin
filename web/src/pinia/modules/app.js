@@ -21,6 +21,9 @@ export const useAppStore = defineStore('app', () => {
   // 初始化配置
   Object.keys(originSetting).forEach(key => {
       config[key] = originSetting[key]
+    if(key === 'primaryColor'){
+      document.body.style.setProperty('--el-color-primary', originSetting[key])
+    }
   })
 
   if (localStorage.getItem('darkMode')) {
@@ -41,9 +44,6 @@ export const useAppStore = defineStore('app', () => {
   })
 
   const toggleTheme = (dark) => {
-    // if(config.darkMode === 'auto'){
-    //     return
-    // }
     if (dark) {
       theme.value = 'dark';
     } else {

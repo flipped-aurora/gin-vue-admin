@@ -2,6 +2,7 @@
 import { defineStore } from 'pinia'
 import { ref, watchEffect, reactive } from 'vue'
 import originSetting from  "@/config.json"
+import {  setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
   const theme = ref(localStorage.getItem('theme') || 'light')
   const device = ref("")
@@ -22,7 +23,7 @@ export const useAppStore = defineStore('app', () => {
   Object.keys(originSetting).forEach(key => {
       config[key] = originSetting[key]
     if(key === 'primaryColor'){
-      document.body.style.setProperty('--el-color-primary', originSetting[key])
+      setBodyPrimaryColor(originSetting[key])
     }
   })
 
@@ -71,7 +72,7 @@ export const useAppStore = defineStore('app', () => {
 
   const togglePrimaryColor = (e) => {
     config.primaryColor = e;
-    document.body.style.setProperty('--el-color-primary', e)
+    setBodyPrimaryColor(e)
   }
 
   const toggleTabs = (e) => {
@@ -85,9 +86,6 @@ export const useAppStore = defineStore('app', () => {
   const toggleDarkMode = (e) => {
     config.darkMode = e
     localStorage.setItem('darkMode', e)
-    // if(e === 'auto'){
-    //   toggleDarkModeAuto()
-    // }else
     if(e === 'dark'){
       toggleTheme(true)
     }else{

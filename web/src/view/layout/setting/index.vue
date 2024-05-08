@@ -99,7 +99,7 @@ const width = computed(() => {
 
 const colors = [
     '#EB2F96',
-    '#1890ff',
+    '#3b82f6',
     '#2FEB54',
     '#EBEB2F',
     '#EB2F2F',

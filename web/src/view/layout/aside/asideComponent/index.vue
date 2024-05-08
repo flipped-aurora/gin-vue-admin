@@ -18,7 +18,7 @@
 <script setup>
 import MenuItem from './menuItem.vue'
 import AsyncSubmenu from './asyncSubmenu.vue'
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 
 defineOptions({
   name: 'AsideComponent',

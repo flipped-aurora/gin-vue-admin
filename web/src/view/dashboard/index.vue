@@ -15,7 +15,7 @@
     <gva-card title="内容数据" custom-class="col-span-1 md:col-span-2 md:row-start-2 lg:col-span-6 col-start-1 row-span-2">
       <gva-chart :type="4" />
     </gva-card>
-    <gva-card without-padding custom-class=" overflow-hidden h-40 md:row-start-9 lg:row-start-3 lg:col-start-7" >
+    <gva-card without-padding custom-class="overflow-hidden h-40 md:row-start-8 md:col-start-3 lg:row-start-3 lg:col-start-7" >
       <gva-banner />
     </gva-card>
 
@@ -26,10 +26,10 @@
       <gva-table />
     </gva-card>
 
-    <gva-card title="公告" show-action custom-class="col-span-1 md:col-span-3 md:col-span-1 lg:col-start-7">
+    <gva-card title="公告" show-action custom-class="col-span-3 md:col-span-1 lg:col-start-7">
       <gva-notice />
     </gva-card>
-    <gva-card title="文档" show-action custom-class="col-span-1 md:col-span-2 md:col-start-2 md:col-span-1 lg:col-start-7">
+    <gva-card title="文档" show-action custom-class="col-span-2 md:col-span-1 md:col-start-2 md:col-span-1 lg:col-start-7">
       <gva-wiki />
     </gva-card>
   </div>

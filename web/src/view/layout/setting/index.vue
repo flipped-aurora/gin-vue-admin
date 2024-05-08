@@ -3,6 +3,7 @@
     v-model="drawer"
     title="系统配置"
     direction="rtl"
+    :size="width"
   >
     <div class="flex flex-col">
       <div class="mb-8">
@@ -84,12 +85,16 @@
 <script setup>
 import { useAppStore } from "@/pinia"
 import { storeToRefs } from "pinia"
-import { ref } from "vue"
+import { ref, computed } from "vue"
 import { ElMessage } from 'element-plus'
 const appStore = useAppStore()
-const {  config } = storeToRefs(appStore)
+const {  config, device  } = storeToRefs(appStore)
 defineOptions({
   name: 'GvaSetting',
+})
+
+const width = computed(() => {
+  return device.value === 'mobile' ? '100%' : '500px'
 })
 
 const colors = [

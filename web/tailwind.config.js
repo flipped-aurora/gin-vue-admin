@@ -13,6 +13,9 @@ module.exports = {
       textColor: {
         "active": "var(--el-color-primary)",
       },
+      boxShadowColor: {
+        "active": "var(--el-color-primary)",
+      },
       borderColor: {
         "table-border": "var(--el-border-color-lighter)",
       }

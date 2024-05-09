@@ -37,7 +37,7 @@
     <ul
       v-show="contextMenuVisible"
       :style="{ left: left + 'px', top: top + 'px' }"
-      class="contextmenu bg-white text-slate-700 dark:text-slate-500  dark:bg-slate-900"
+      class="contextmenu"
     >
       <li @click="closeAll">
         关闭所有
@@ -346,6 +346,15 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
+
+.contextmenu {
+  @apply bg-white dark:bg-slate-900 w-28 m-0 py-2.5 px-0 border border-gray-200 text-sm shadow-md rounded absolute z-50 border-solid dark:border-slate-800;
+}
+
+.contextmenu li {
+  @apply text-slate-700 dark:text-slate-200 text-base list-none px-4 py-1.5 hover:bg-gray-100 dark:hover:bg-gray-600 cursor-pointer;
+}
+
 $base-tag-item-height : 4rem;
 
 .gva-tabs {

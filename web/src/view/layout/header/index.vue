@@ -76,20 +76,6 @@
                 </span>
               </el-dropdown-item>
             </template>
-            <el-dropdown-item icon="avatar">
-              <div
-                class="command-box"
-                style="display: flex"
-                @click="handleCommand"
-              >
-                <div>指令菜单</div>
-                <div style="margin-left: 8px">
-                  <span class="button">{{ first }}</span>
-                  +
-                  <span class="button">K</span>
-                </div>
-              </div>
-            </el-dropdown-item>
             <el-dropdown-item icon="avatar" @click="toPerson">
               个人信息
             </el-dropdown-item>
@@ -103,14 +89,12 @@
         </template>
       </el-dropdown>
     </div>
-    <command-menu ref="command" />
   </div>
 </template>
 
 <script setup>
 import  tools from "./tools.vue"
 import CustomPic from '@/components/customPic/index.vue'
-import CommandMenu from "@/components/commandMenu/index.vue";
 import { useUserStore } from "@/pinia/modules/user";
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from "@/pinia"
@@ -130,32 +114,6 @@ const toPerson = () => {
   router.push({ name: "person" });
 };
 const matched = computed(() => route.meta.matched);
-
-const first = ref("");
-const command = ref();
-const initPage = () => {
-  // 判断当前用户的操作系统
-  if (window.localStorage.getItem("osType") === "WIN") {
-    first.value = "Ctrl";
-  } else {
-    first.value = "⌘";
-  }
-  // 当用户同时按下ctrl和k键的时候
-  const handleKeyDown = (e) => {
-    if (e.ctrlKey && e.key === "k") {
-      // 阻止浏览器默认事件
-      e.preventDefault();
-      handleCommand();
-    }
-  };
-  window.addEventListener("keydown", handleKeyDown);
-};
-
-initPage();
-
-const handleCommand = () => {
-  command.value.open();
-};
 
 
 const changeUserAuth = async (id) => {

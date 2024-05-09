@@ -11,7 +11,7 @@
       content="搜索"
       placement="bottom"
     >
-      <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
+      <el-icon @click="handleCommand" class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
         <Search />
       </el-icon>
     </el-tooltip>
@@ -57,14 +57,18 @@
     </el-tooltip>
 
     <gva-setting v-model:drawer="showSettingDrawer"></gva-setting>
+    <command-menu ref="command" />
   </div>
 </template>
 
 <script setup>
+
 import { useAppStore } from "@/pinia"
 import GvaSetting from "@/view/layout/setting/index.vue"
 import { ref } from "vue"
 import { emitter } from "@/utils/bus.js";
+import CommandMenu from "@/components/commandMenu/index.vue";
+
 const appStore = useAppStore()
 const showSettingDrawer = ref(false)
 const showRefreshAnmite = ref(false)
@@ -79,6 +83,37 @@ const toggleRefresh = () =>{
 const toggleSetting = () => {
   showSettingDrawer.value = true
 }
+
+
+const first = ref("");
+const command = ref();
+
+const handleCommand = () => {
+  command.value.open();
+};
+const initPage = () => {
+  // 判断当前用户的操作系统
+  if (window.localStorage.getItem("osType") === "WIN") {
+    first.value = "Ctrl";
+  } else {
+    first.value = "⌘";
+  }
+  // 当用户同时按下ctrl和k键的时候
+  const handleKeyDown = (e) => {
+    if (e.ctrlKey && e.key === "k") {
+      // 阻止浏览器默认事件
+      e.preventDefault();
+      handleCommand();
+    }
+  };
+  window.addEventListener("keydown", handleKeyDown);
+};
+
+initPage();
+
+
+
+
 </script>
 
 <style scoped lang="scss">

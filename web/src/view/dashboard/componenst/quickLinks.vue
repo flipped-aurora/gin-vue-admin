@@ -5,7 +5,7 @@
 
 <template>
   <div class="mt-8 w-full">
-    <div class="grid grid-cols-2 md:grid-cols-3 3xl:grid-cols-4 border-b border-solid border-gray-200">
+    <div class="grid grid-cols-2 md:grid-cols-3 3xl:grid-cols-4">
       <div v-for="(item, index ) in shortcuts" :key="index" class="flex flex-col items-center mb-3 group ">
         <div class="w-8 h-8 rounded bg-gray-200 dark:bg-slate-500 flex items-center justify-center group-hover:bg-blue-400 cursor-pointer group-hover:text-white">
           <el-icon><Message /></el-icon>

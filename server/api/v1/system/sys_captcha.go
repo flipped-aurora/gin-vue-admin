@@ -44,7 +44,7 @@ func (b *BaseApi) Captcha(c *gin.Context) {
 	driver := base64Captcha.NewDriverDigit(global.GVA_CONFIG.Captcha.ImgHeight, global.GVA_CONFIG.Captcha.ImgWidth, global.GVA_CONFIG.Captcha.KeyLong, 0.7, 80)
 	// cp := base64Captcha.NewCaptcha(driver, store.UseWithCtx(c))   // v8下使用redis
 	cp := base64Captcha.NewCaptcha(driver, store)
-	id, b64s, err := cp.Generate()
+	id, b64s, _, err := cp.Generate()
 	if err != nil {
 		global.GVA_LOG.Error("验证码获取失败!", zap.Error(err))
 		response.FailWithMessage("验证码获取失败", c)

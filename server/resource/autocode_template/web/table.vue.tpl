@@ -104,7 +104,13 @@
         </el-table-column>
         {{ end }}
         {{- range .FrontFields}}
-        {{- if .DictType}}
+        {{- if .CheckDataSource }}
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+          <template #default="scope">
+          {{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}
+         </template>
+         </el-table-column>
+        {{- else if .DictType}}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
             {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
@@ -170,10 +176,6 @@
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
-            <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
-                <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
-                查看详情
-            </el-button>
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
@@ -191,7 +193,7 @@
             />
         </div>
     </div>
-    <el-drawer size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
+    <el-drawer destroy-on-close size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
        <template #header>
               <div class="flex justify-between items-center">
                 <span class="text-lg">{{"{{"}}type==='create'?'添加':'修改'{{"}}"}}</span>
@@ -205,6 +207,11 @@
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
         {{- range .FrontFields}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+          {{- if .CheckDataSource}}
+            <el-select v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+              <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
+            </el-select>
+          {{- else }}
           {{- if eq .FieldType "bool" }}
               <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
           {{- end }}
@@ -225,13 +232,7 @@
               {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
           {{- end }}
           {{- if eq .FieldType "int" }}
-          {{- if .DictType}}
-              <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
-                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-              </el-select>
-          {{- else }}
               <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
-          {{- end }}
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
               <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
@@ -266,6 +267,7 @@
           {{- if eq .FieldType "file" }}
                 <SelectFile v-model="formData.{{ .FieldJson }}" />
           {{- end }}
+          {{- end }}
             </el-form-item>
           {{- end }}
           </el-form>
@@ -275,6 +277,9 @@
 
 <script setup>
 import {
+  {{- if .HasDataSource }}
+    get{{.StructName}}DataSource,
+  {{- end }}
   create{{.StructName}},
   delete{{.StructName}},
   delete{{.StructName}}ByIds,
@@ -303,7 +308,7 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, formatBoolean, filterDict, ReturnArrImg, onDownloadFile } from '@/utils/format'
+import { getDictFunc, formatDate, formatBoolean, filterDict,filterDataSource, ReturnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
@@ -352,6 +357,18 @@ const formData = ref({
         {{- end }}
         {{- end }}
         })
+
+{{- if .HasDataSource }}
+  const dataSource = ref([])
+  const getDataSourceFunc = async()=>{
+    const res = await get{{.StructName}}DataSource()
+    if (res.code === 0) {
+      dataSource.value = res.data
+    }
+  }
+  getDataSourceFunc()
+{{- end }}
+
 
 
 // 验证规则

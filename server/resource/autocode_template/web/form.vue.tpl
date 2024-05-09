@@ -4,6 +4,11 @@
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
+       {{- if .CheckDataSource}}
+        <el-select v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+          <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
+        </el-select>
+       {{- else }}
       {{- if eq .FieldType "bool" }}
           <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
       {{- end }}
@@ -20,13 +25,7 @@
           <RichEdit v-model="formData.{{.FieldJson}}"/>
       {{- end }}
       {{- if eq .FieldType "int" }}
-      {{- if .DictType }}
-          <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" :clearable="{{.Clearable}}">
-            <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-          </el-select>
-      {{- else }}
           <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入" />
-      {{- end }}
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
           <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
@@ -55,6 +54,7 @@
           // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
           {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
        {{- end }}
+       {{- end }}
        </el-form-item>
       {{- end }}
         <el-form-item>
@@ -68,6 +68,9 @@
 
 <script setup>
 import {
+  {{- if .HasDataSource }}
+    get{{.StructName}}DataSource,
+  {{- end }}
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
@@ -152,6 +155,17 @@ const rule = reactive({
 })
 
 const elFormRef = ref()
+
+{{- if .HasDataSource }}
+  const dataSource = ref([])
+  const getDataSourceFunc = async()=>{
+    const res = await get{{.StructName}}DataSource()
+    if (res.code === 0) {
+      dataSource.value = res.data
+    }
+  }
+  getDataSourceFunc()
+{{- end }}
 
 // 初始化方法
 const init = async () => {

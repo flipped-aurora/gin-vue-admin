@@ -22,6 +22,11 @@ export const filterDict = (value, options) => {
   return rowLabel && rowLabel[0] && rowLabel[0].label
 }
 
+export const filterDataSource = (dataSource, value) => {
+  const rowLabel = dataSource && dataSource.find(item => item.value === value)
+  return rowLabel?.label
+}
+
 export const getDictFunc = async(type) => {
   const dicts = await getDict(type)
   return dicts

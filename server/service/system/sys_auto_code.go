@@ -948,6 +948,7 @@ func (autoCodeService *AutoCodeService) doZip(zipWriter *zip.Writer, serverPath,
 
 func fmtField(autoCode *system.AutoCodeStruct) {
 	makeDictTypes(autoCode)
+	autoCode.DataSourceMap = make(map[string]*system.DataSource)
 	for i := range autoCode.Fields {
 
 		if autoCode.Fields[i].Front {
@@ -984,6 +985,15 @@ func fmtField(autoCode *system.AutoCodeStruct) {
 			autoCode.NeedJSON = true
 		}
 
+		if autoCode.Fields[i].DataSource != nil &&
+			autoCode.Fields[i].DataSource.Table != "" &&
+			autoCode.Fields[i].DataSource.Label != "" &&
+			autoCode.Fields[i].DataSource.Value != "" {
+			autoCode.HasDataSource = true
+			autoCode.DataSourceMap[autoCode.Fields[i].FieldJson] = autoCode.Fields[i].DataSource
+			autoCode.Fields[i].CheckDataSource = true
+		}
+
 		if autoCode.GvaModel {
 			autoCode.PrimaryField = &system.Field{
 				FieldName:    "ID",
@@ -998,5 +1008,6 @@ func fmtField(autoCode *system.AutoCodeStruct) {
 		if !autoCode.GvaModel && autoCode.PrimaryField == nil && autoCode.Fields[i].PrimaryKey {
 			autoCode.PrimaryField = autoCode.Fields[i]
 		}
+
 	}
 }

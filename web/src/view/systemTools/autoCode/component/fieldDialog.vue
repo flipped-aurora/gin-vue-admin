@@ -153,8 +153,40 @@
       <el-form-item label="校验失败文案">
         <el-input v-model="middleDate.errorText" />
       </el-form-item>
-
     </el-form>
+    <el-collapse v-model="activeNames">
+      <el-collapse-item
+          title="数据源配置（此配置为高级配置，如编程基础不牢，可能导致自动化代码不可用）"
+          name="1"
+      >
+        <el-row :gutter="8">
+          <el-col
+              :span="8"
+          >
+            <el-input
+                v-model="middleDate.dataSource.table"
+                placeholder="数据源表"
+            />
+          </el-col>
+          <el-col
+              :span="8"
+          >
+            <el-input
+                v-model="middleDate.dataSource.label"
+                placeholder="展示用字段"
+            />
+          </el-col>
+          <el-col
+              :span="8"
+          >
+            <el-input
+                v-model="middleDate.dataSource.value"
+                placeholder="存储用字端"
+            />
+          </el-col>
+        </el-row>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 
@@ -188,6 +220,8 @@ const props = defineProps({
     }
   },
 })
+
+const activeNames = ref([])
 
 const middleDate = ref({})
 const dictOptions = ref([])

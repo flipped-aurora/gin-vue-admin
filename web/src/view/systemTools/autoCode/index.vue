@@ -644,6 +644,14 @@ const typeOptions = ref([
     value: 'int'
   },
   {
+    label: '整型64',
+    value: 'int64'
+  },
+  {
+    label: 'uint(默认id类型)',
+    value: 'uint'
+  },
+  {
     label: '布尔值',
     value: 'bool'
   },

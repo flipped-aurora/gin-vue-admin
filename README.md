@@ -83,7 +83,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ```
 - node版本 > v16.8.3
-- golang版本 >= v1.16
+- golang版本 >= v1.22
 - IDE推荐：Goland
 ```
 

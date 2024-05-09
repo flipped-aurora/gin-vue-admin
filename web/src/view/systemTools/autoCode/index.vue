@@ -729,7 +729,12 @@ const fieldTemplate = {
   primaryKey: false,
   clearable: true,
   fieldSearchType: '',
-  dictType: ''
+  dictType: '',
+  dataSource: {
+    table: '',
+    label: '',
+    value: ''
+  }
 }
 const route = useRoute()
 const router = useRouter()
@@ -1015,7 +1020,12 @@ const getColumnFunc = async() => {
                 clearable: true,
                 fieldSearchType: '',
                 dictType: '',
-                front: true
+                front: true,
+                dataSource: {
+                  table: '',
+                  label: '',
+                  value: ''
+                }
               })
             }
           })

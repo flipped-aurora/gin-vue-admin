@@ -35,8 +35,8 @@ func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 
 func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	var entity system.SysApi
-	err = global.GVA_DB.Where("id = ?", api.ID).First(&entity).Error // 根据id查询api记录
-	if errors.Is(err, gorm.ErrRecordNotFound) {                      // api记录不存在
+	err = global.GVA_DB.First(&entity, "id = ?", api.ID).Error // 根据id查询api记录
+	if errors.Is(err, gorm.ErrRecordNotFound) {                // api记录不存在
 		return err
 	}
 	err = global.GVA_DB.Delete(&entity).Error
@@ -82,34 +82,27 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 
 	if err != nil {
 		return apiList, total, err
-	} else {
-		db = db.Limit(limit).Offset(offset)
-		if order != "" {
-			var OrderStr string
-			// 设置有效排序key 防止sql注入
-			// 感谢 Tom4t0 提交漏洞信息
-			orderMap := make(map[string]bool, 5)
-			orderMap["id"] = true
-			orderMap["path"] = true
-			orderMap["api_group"] = true
-			orderMap["description"] = true
-			orderMap["method"] = true
-			if orderMap[order] {
-				if desc {
-					OrderStr = order + " desc"
-				} else {
-					OrderStr = order
-				}
-			} else { // didn't match any order key in `orderMap`
-				err = fmt.Errorf("非法的排序字段: %v", order)
-				return apiList, total, err
-			}
+	}
 
-			err = db.Order(OrderStr).Find(&apiList).Error
-		} else {
-			err = db.Order("api_group").Find(&apiList).Error
+	db = db.Limit(limit).Offset(offset)
+	OrderStr := "id desc"
+	if order != "" {
+		orderMap := make(map[string]bool, 5)
+		orderMap["id"] = true
+		orderMap["path"] = true
+		orderMap["api_group"] = true
+		orderMap["description"] = true
+		orderMap["method"] = true
+		if !orderMap[order] {
+			err = fmt.Errorf("非法的排序字段: %v", order)
+			return apiList, total, err
+		}
+		OrderStr = order
+		if desc {
+			OrderStr = order + " desc"
 		}
 	}
+	err = db.Order(OrderStr).Find(&apiList).Error
 	return apiList, total, err
 }
 
@@ -130,7 +123,7 @@ func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
 //@return: api model.SysApi, err error
 
 func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&api).Error
+	err = global.GVA_DB.First(&api, "id = ?", id).Error
 	return
 }
 
@@ -142,30 +135,28 @@ func (apiService *ApiService) GetApiById(id int) (api system.SysApi, err error) 
 
 func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 	var oldA system.SysApi
-	err = global.GVA_DB.Where("id = ?", api.ID).First(&oldA).Error
+	err = global.GVA_DB.First(&oldA, "id = ?", api.ID).Error
 	if oldA.Path != api.Path || oldA.Method != api.Method {
 		var duplicateApi system.SysApi
-		if err := global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&duplicateApi).Error; err != nil {
+		if err := global.GVA_DB.First(&duplicateApi, "path = ? AND method = ?", api.Path, api.Method).Error; err != nil {
 			if !errors.Is(err, gorm.ErrRecordNotFound) {
 				return err
 			}
-		} else {
-			if duplicateApi.ID != api.ID {
-				return errors.New("存在相同api路径")
-			}
+		}
+		if duplicateApi.ID != api.ID {
+			return errors.New("存在相同api路径")
 		}
 	}
 	if err != nil {
 		return err
-	} else {
-		err = CasbinServiceApp.UpdateCasbinApi(oldA.Path, api.Path, oldA.Method, api.Method)
-		if err != nil {
-			return err
-		} else {
-			err = global.GVA_DB.Save(&api).Error
-		}
 	}
-	return err
+
+	err = CasbinServiceApp.UpdateCasbinApi(oldA.Path, api.Path, oldA.Method, api.Method)
+	if err != nil {
+		return err
+	}
+
+	return global.GVA_DB.Save(&api).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -175,17 +166,19 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 //@return: err error
 
 func (apiService *ApiService) DeleteApisByIds(ids request.IdsReq) (err error) {
-	var apis []system.SysApi
-	err = global.GVA_DB.Find(&apis, "id in ?", ids.Ids).Delete(&apis).Error
-	if err != nil {
-		return err
-	} else {
-		for _, sysApi := range apis {
-			CasbinServiceApp.ClearCasbin(1, sysApi.Path, sysApi.Method)
-		}
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var apis []system.SysApi
+		err = tx.Find(&apis, "id in ?", ids.Ids).Error
 		if err != nil {
 			return err
 		}
-	}
-	return err
+		err = tx.Delete(&[]system.SysApi{}, "id in ?", ids.Ids).Error
+		if err != nil {
+			return err
+		}
+		for _, sysApi := range apis {
+			CasbinServiceApp.ClearCasbin(1, sysApi.Path, sysApi.Method)
+		}
+		return err
+	})
 }

@@ -2,9 +2,9 @@ package utils
 
 import (
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"strconv"
 )
 
 func RegisterApis(apis ...system.SysApi) {
@@ -37,13 +37,13 @@ func RegisterMenus(menus ...system.SysBaseMenu) {
 		fmt.Println("插件已安装或存在同名菜单")
 		return
 	}
-	parentMenu.ParentId = "0"
+	parentMenu.ParentId = 0
 	err := global.GVA_DB.Create(&parentMenu).Error
 	if err != nil {
 		fmt.Println(err)
 	}
 	for i := range otherMenus {
-		pid := strconv.Itoa(int(parentMenu.ID))
+		pid := parentMenu.ID
 		otherMenus[i].ParentId = pid
 	}
 	err = global.GVA_DB.Create(&otherMenus).Error

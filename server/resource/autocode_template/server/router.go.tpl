@@ -10,9 +10,11 @@ type {{.StructName}}Router struct {
 }
 
 // Init{{.StructName}}Router 初始化 {{.Description}} 路由信息
-func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGroup) {
+func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGroup,PublicRouter *gin.RouterGroup) {
 	{{.Abbreviation}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
 	{{.Abbreviation}}RouterWithoutRecord := Router.Group("{{.Abbreviation}}")
+	{{.Abbreviation}}RouterWithoutAuth := PublicRouter.Group("{{.Abbreviation}}")
+
 	var {{.Abbreviation}}Api = v1.ApiGroupApp.{{.PackageT}}ApiGroup.{{.StructName}}Api
 	{
 		{{.Abbreviation}}Router.POST("create{{.StructName}}", {{.Abbreviation}}Api.Create{{.StructName}})   // 新建{{.Description}}
@@ -23,5 +25,11 @@ func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGrou
 	{
 		{{.Abbreviation}}RouterWithoutRecord.GET("find{{.StructName}}", {{.Abbreviation}}Api.Find{{.StructName}})        // 根据ID获取{{.Description}}
 		{{.Abbreviation}}RouterWithoutRecord.GET("get{{.StructName}}List", {{.Abbreviation}}Api.Get{{.StructName}}List)  // 获取{{.Description}}列表
+	}
+	{
+	{{- if .HasDataSource}}
+	    {{.Abbreviation}}RouterWithoutAuth.GET("get{{.StructName}}DataSource", {{.Abbreviation}}Api.Get{{.StructName}}DataSource)  // 获取{{.Description}}数据源
+	{{- end}}
+	    {{.Abbreviation}}RouterWithoutAuth.GET("get{{.StructName}}Public", {{.Abbreviation}}Api.Get{{.StructName}}Public)  // 获取{{.Description}}列表
 	}
 }

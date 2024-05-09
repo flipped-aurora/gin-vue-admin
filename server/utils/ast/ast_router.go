@@ -79,6 +79,9 @@ func AddRouterCode(path, funcName, pk, model string) {
 						&ast.Ident{
 							Name: "PrivateGroup",
 						},
+						&ast.Ident{
+							Name: "PublicGroup",
+						},
 					},
 				},
 			})

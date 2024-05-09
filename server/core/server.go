@@ -38,8 +38,8 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	欢迎使用 gin-vue-admin
-	当前版本:v2.6.0
-    加群方式:微信号：shouzi_1994 QQ群：622360840
+	当前版本:v2.6.3
+    加群方式:微信号：shouzi_1994 QQ群：470239250
 	插件市场:https://plugin.gin-vue-admin.com
 	GVA讨论社区:https://support.qq.com/products/371961
 	默认自动化文档地址:http://127.0.0.1%s/swagger/index.html

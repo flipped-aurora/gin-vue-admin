@@ -41,7 +41,7 @@
 
               type="primary"
               link
-              @click="opdendrawer(scope.row)"
+              @click="openDrawer(scope.row)"
             >设置权限</el-button>
             <el-button
               icon="plus"
@@ -135,7 +135,6 @@
     <el-drawer
       v-if="drawer"
       v-model="drawer"
-      custom-class="auth-drawer"
       :with-header="false"
       size="40%"
       title="角色配置"
@@ -279,7 +278,7 @@ const copyAuthorityFunc = (row) => {
   copyForm.value = row
   dialogFormVisible.value = true
 }
-const opdendrawer = (row) => {
+const openDrawer = (row) => {
   drawer.value = true
   activeRow.value = row
 }
@@ -402,7 +401,6 @@ const setOptions = () => {
   setAuthorityOptions(tableData.value, AuthorityOption.value, false)
 }
 const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
-  form.value.authorityId = String(form.value.authorityId)
   AuthorityData &&
         AuthorityData.forEach(item => {
           if (item.children && item.children.length) {

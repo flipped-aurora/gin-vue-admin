@@ -40,8 +40,6 @@
             </el-form-item>
             {{- else}}
         <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-
-
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
@@ -86,16 +84,7 @@
     <div class="gva-table-box">
         <div class="gva-btn-list">
             <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
-            <el-popover v-model:visible="deleteVisible" :disabled="!multipleSelection.length" placement="top" width="160">
-            <p>确定要删除吗？</p>
-            <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="deleteVisible = false">取消</el-button>
-                <el-button type="primary" @click="onDelete">确定</el-button>
-            </div>
-            <template #reference>
-                <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">删除</el-button>
-            </template>
-            </el-popover>
+            <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
         </div>
         <el-table
         ref="multipleTable"
@@ -114,8 +103,14 @@
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
-        {{- range .Fields}}
-        {{- if .DictType}}
+        {{- range .FrontFields}}
+        {{- if .CheckDataSource }}
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+          <template #default="scope">
+          {{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}
+         </template>
+         </el-table-column>
+        {{- else if .DictType}}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
             {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
@@ -139,7 +134,7 @@
            <el-table-column label="{{.FieldDesc}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
-                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
+                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
                 </div>
               </template>
            </el-table-column>
@@ -169,16 +164,18 @@
                              </div>
                         </template>
                     </el-table-column>
+         {{- else if eq .FieldType "json" }}
+          <el-table-column label="{{.FieldDesc}}" width="200">
+              <template #default="scope">
+                  [JSON]
+              </template>
+          </el-table-column>
         {{- else }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
-            <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
-                <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
-                查看详情
-            </el-button>
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
@@ -196,28 +193,46 @@
             />
         </div>
     </div>
-    <el-dialog v-model="dialogFormVisible" :before-close="closeDialog" :title="type==='create'?'添加':'修改'" destroy-on-close>
-      <el-scrollbar height="500px">
-          <el-form :model="formData" label-position="right" ref="elFormRef" :rules="rule" label-width="80px">
-        {{- range .Fields}}
+    <el-drawer size="800" v-model="dialogFormVisible" :show-close="false" :before-close="closeDialog">
+       <template #header>
+              <div class="flex justify-between items-center">
+                <span class="text-lg">{{"{{"}}type==='create'?'添加':'修改'{{"}}"}}</span>
+                <div>
+                  <el-button type="primary" @click="enterDialog">确 定</el-button>
+                  <el-button @click="closeDialog">取 消</el-button>
+                </div>
+              </div>
+            </template>
+
+          <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
+        {{- range .FrontFields}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+          {{- if .CheckDataSource}}
+            <el-select v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+              <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
+            </el-select>
+          {{- else }}
           {{- if eq .FieldType "bool" }}
               <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
           {{- end }}
           {{- if eq .FieldType "string" }}
-              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入{{.FieldDesc}}" />
-          {{- end }}
-          {{- if eq .FieldType "richtext" }}
-              <RichEdit v-model="formData.{{.FieldJson}}"/>
-          {{- end }}
-          {{- if eq .FieldType "int" }}
           {{- if .DictType}}
               <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
                 <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
               </el-select>
           {{- else }}
-              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
+              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入{{.FieldDesc}}" />
           {{- end }}
+          {{- end }}
+          {{- if eq .FieldType "richtext" }}
+              <RichEdit v-model="formData.{{.FieldJson}}"/>
+          {{- end }}
+          {{- if eq .FieldType "json" }}
+              // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
+              {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
+          {{- end }}
+          {{- if eq .FieldType "int" }}
+              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
               <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
@@ -252,70 +267,26 @@
           {{- if eq .FieldType "file" }}
                 <SelectFile v-model="formData.{{ .FieldJson }}" />
           {{- end }}
+          {{- end }}
             </el-form-item>
           {{- end }}
           </el-form>
-      </el-scrollbar>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button type="primary" @click="enterDialog">确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
-
-    <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情" destroy-on-close>
-      <el-scrollbar height="550px">
-        <el-descriptions column="1" border>
-        {{- range .Fields}}
-                <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if .DictType}}
-                        {{"{{"}} filterDict(formData.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
-                {{- else if eq .FieldType "picture" }}
-                        <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
-                {{- else if eq .FieldType "video" }}
-                        <video
-                              style="width: 50px; height: 50px"
-                              muted
-                              preload="metadata"
-                            >
-                            <source :src="getUrl(formData.{{ .FieldJson }}) + '#t=1'">
-                        </video>
-                {{- else if eq .FieldType "pictures" }}
-                        <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
-                {{- else if eq .FieldType "file" }}
-                        <div class="fileBtn" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index">
-                          <el-button type="primary" text bg @click="onDownloadFile(item.url)">
-                            <el-icon style="margin-right: 5px"><Download /></el-icon>
-                            {{"{{"}} item.name {{"}}"}}
-                          </el-button>
-                        </div>
-                  {{- else if eq .FieldType "bool" }}
-                    {{"{{"}} formatBoolean(formData.{{.FieldJson}}) {{"}}"}}
-                   {{- else if eq .FieldType "time.Time" }}
-                      {{"{{"}} formatDate(formData.{{.FieldJson}}) {{"}}"}}
-                   {{- else if eq .FieldType "richtext" }}
-                        [富文本内容]
-                   {{- else}}
-                        {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
-                   {{- end }}
-                </el-descriptions-item>
-        {{- end }}
-        </el-descriptions>
-      </el-scrollbar>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
 <script setup>
 import {
+  {{- if .HasDataSource }}
+    get{{.StructName}}DataSource,
+  {{- end }}
   create{{.StructName}},
   delete{{.StructName}},
   delete{{.StructName}}ByIds,
   update{{.StructName}},
   find{{.StructName}},
   get{{.StructName}}List
-} from '@/api/{{.PackageName}}'
+} from '@/api/{{.Package}}/{{.PackageName}}'
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'
@@ -337,7 +308,7 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, formatBoolean, filterDict, ReturnArrImg, onDownloadFile } from '@/utils/format'
+import { getDictFunc, formatDate, formatBoolean, filterDict,filterDataSource, ReturnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
@@ -350,7 +321,7 @@ defineOptions({
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
-        {{- range .Fields}}
+        {{- range .FrontFields}}
         {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
         {{- end }}
@@ -381,13 +352,28 @@ const formData = ref({
         {{- if eq .FieldType "file" }}
         {{.FieldJson}}: [],
         {{- end }}
+        {{- if eq .FieldType "json" }}
+        {{.FieldJson}}: {},
+        {{- end }}
         {{- end }}
         })
+
+{{- if .HasDataSource }}
+  const dataSource = ref([])
+  const getDataSourceFunc = async()=>{
+    const res = await get{{.StructName}}DataSource()
+    if (res.code === 0) {
+      dataSource.value = res.data
+    }
+  }
+  getDataSourceFunc()
+{{- end }}
+
 
 
 // 验证规则
 const rule = reactive({
-    {{- range .Fields }}
+    {{- range .FrontFields }}
             {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,
@@ -420,7 +406,7 @@ const searchRule = reactive({
       }
     }, trigger: 'change' }
   ],
-  {{- range .Fields }}
+  {{- range .FrontFields }}
     {{- if .FieldSearchType}}
       {{- if eq .FieldType "time.Time" }}
         {{.FieldJson }} : [{ validator: (rule, value, callback) => {
@@ -452,7 +438,22 @@ const searchInfo = ref({})
 {{- if .NeedSort}}
 // 排序
 const sortChange = ({ prop, order }) => {
-  searchInfo.value.sort = prop
+  const sortMap = {
+    {{- range .FrontFields}}
+      {{- if and .Sort}}
+        {{- if not (eq .ColumnName "")}}
+            {{.FieldJson}}: '{{.ColumnName}}',
+        {{- end}}
+      {{- end}}
+    {{- end}}
+  }
+
+  let sort = sortMap[prop]
+  if(!sort){
+   sort = prop.replace(/[A-Z]/g, match => `_${match.toLowerCase()}`)
+  }
+
+  searchInfo.value.sort = sort
   searchInfo.value.order = order
   getTableData()
 }
@@ -470,7 +471,7 @@ const onSubmit = () => {
     if (!valid) return
     page.value = 1
     pageSize.value = 10
-    {{- range .Fields}}{{- if eq .FieldType "bool" }}
+    {{- range .FrontFields}}{{- if eq .FieldType "bool" }}
     if (searchInfo.value.{{.FieldJson}} === ""){
         searchInfo.value.{{.FieldJson}}=null
     }{{ end }}{{ end }}
@@ -534,12 +535,13 @@ const deleteRow = (row) => {
         })
     }
 
-
-// 批量删除控制标记
-const deleteVisible = ref(false)
-
 // 多选删除
 const onDelete = async() => {
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
       const {{.PrimaryField.FieldJson}}s = []
       if (multipleSelection.value.length === 0) {
         ElMessage({
@@ -561,9 +563,9 @@ const onDelete = async() => {
         if (tableData.value.length === {{.PrimaryField.FieldJson}}s.length && page.value > 1) {
           page.value--
         }
-        deleteVisible.value = false
         getTableData()
       }
+      })
     }
 
 // 行为控制标记（弹窗内部需要增还是改）
@@ -598,53 +600,6 @@ const delete{{.StructName}}Func = async (row) => {
 // 弹窗控制标记
 const dialogFormVisible = ref(false)
 
-
-// 查看详情控制标记
-const detailShow = ref(false)
-
-
-// 打开详情弹窗
-const openDetailShow = () => {
-  detailShow.value = true
-}
-
-
-// 打开详情
-const getDetails = async (row) => {
-  // 打开弹窗
-  const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
-  if (res.code === 0) {
-    formData.value = res.data.re{{.Abbreviation}}
-    openDetailShow()
-  }
-}
-
-
-// 关闭详情弹窗
-const closeDetailShow = () => {
-  detailShow.value = false
-  formData.value = {
-      {{- range .Fields}}
-          {{- if eq .FieldType "bool" }}
-          {{.FieldJson}}: false,
-          {{- end }}
-          {{- if eq .FieldType "string" }}
-          {{.FieldJson}}: '',
-          {{- end }}
-          {{- if eq .FieldType "int" }}
-          {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
-          {{- end }}
-          {{- if eq .FieldType "time.Time" }}
-          {{.FieldJson}}: new Date(),
-          {{- end }}
-          {{- if eq .FieldType "float64" }}
-          {{.FieldJson}}: 0,
-          {{- end }}
-          {{- end }}
-          }
-}
-
-
 // 打开弹窗
 const openDialog = () => {
     type.value = 'create'
@@ -655,7 +610,7 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-    {{- range .Fields}}
+    {{- range .FrontFields}}
         {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
         {{- end }}

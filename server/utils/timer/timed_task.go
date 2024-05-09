@@ -169,19 +169,19 @@ func (t *timer) FindCronList() map[string]*taskManager {
 }
 
 // StartCron 开始任务
-func (t *timer) StartCron(cromName string) {
+func (t *timer) StartCron(cronName string) {
 	t.Lock()
 	defer t.Unlock()
-	if v, ok := t.cronList[cromName]; ok {
+	if v, ok := t.cronList[cronName]; ok {
 		v.corn.Start()
 	}
 }
 
 // StopCron 停止任务
-func (t *timer) StopCron(cromName string) {
+func (t *timer) StopCron(cronName string) {
 	t.Lock()
 	defer t.Unlock()
-	if v, ok := t.cronList[cromName]; ok {
+	if v, ok := t.cronList[cronName]; ok {
 		v.corn.Stop()
 	}
 }

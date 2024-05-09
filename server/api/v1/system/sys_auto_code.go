@@ -63,6 +63,7 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	}
 	a.Pretreatment()
 	var apiIds []uint
+	var menuId uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
 			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
@@ -73,8 +74,17 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 			apiIds = ids
 		}
 	}
+	if a.AutoCreateMenuToSql {
+		if id, err := autoCodeService.AutoCreateMenu(&a); err != nil {
+			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
+			c.Writer.Header().Add("success", "false")
+			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
+		} else {
+			menuId = id
+		}
+	}
 	a.PackageT = utils.FirstUpper(a.Package)
-	err := autoCodeService.CreateTemp(a, apiIds...)
+	err := autoCodeService.CreateTemp(a, menuId, apiIds...)
 	if err != nil {
 		if errors.Is(err, system.ErrAutoMove) {
 			c.Writer.Header().Add("success", "true")
@@ -178,6 +188,12 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	// PackageName可能导致路径穿越的问题 / 和 \ 都要防止
+	if strings.Contains(a.PackageName, "\\") || strings.Contains(a.PackageName, "/") || strings.Contains(a.PackageName, "..") {
+		response.FailWithMessage("包名不合法", c)
+		return
+	}
+
 	err := autoCodeService.CreateAutoCode(&a)
 	if err != nil {
 
@@ -243,6 +259,11 @@ func (autoApi *AutoCodeApi) AutoPlug(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	if strings.Contains(a.PlugName, "\\") || strings.Contains(a.PlugName, "/") || strings.Contains(a.PlugName, "..") {
+		response.FailWithMessage("插件名称不合法", c)
+		return
+	}
+
 	a.Snake = strings.ToLower(a.PlugName)
 	a.NeedModel = a.HasRequest || a.HasResponse
 	err = autoCodeService.CreatePlug(a)

@@ -2,8 +2,9 @@ package system
 
 import (
 	"errors"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"strconv"
+
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -70,7 +71,7 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 	}
 	var baseMenu []system.SysBaseMenu
 	for _, v := range menus {
-		intNum, _ := strconv.Atoi(v.MenuId)
+		intNum := v.MenuId
 		v.SysBaseMenu.ID = uint(intNum)
 		baseMenu = append(baseMenu, v.SysBaseMenu)
 	}
@@ -111,7 +112,13 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 //@return: authority system.SysAuthority, err error
 
 func (authorityService *AuthorityService) UpdateAuthority(auth system.SysAuthority) (authority system.SysAuthority, err error) {
-	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&system.SysAuthority{}).Updates(&auth).Error
+	var oldAuthority system.SysAuthority
+	err = global.GVA_DB.Where("authority_id = ?", auth.AuthorityId).First(&oldAuthority).Error
+	if err != nil {
+		global.GVA_LOG.Debug(err.Error())
+		return system.SysAuthority{}, errors.New("查询角色数据失败")
+	}
+	err = global.GVA_DB.Model(&oldAuthority).Updates(&auth).Error
 	return auth, err
 }
 

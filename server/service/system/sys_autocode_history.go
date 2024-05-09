@@ -30,7 +30,7 @@ var AutoCodeHistoryServiceApp = new(AutoCodeHistoryService)
 // RouterPath : RouterPath@RouterString;RouterPath2@RouterString2
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string, Package string, BusinessDB string) error {
+func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta, structName, structCNName, autoCodePath string, injectionMeta string, tableName string, apiIds string, Package string, BusinessDB string, menuID uint) error {
 	return global.GVA_DB.Create(&system.SysAutoCodeHistory{
 		Package:       Package,
 		RequestMeta:   meta,
@@ -41,6 +41,7 @@ func (autoCodeHistoryService *AutoCodeHistoryService) CreateAutoCodeHistory(meta
 		TableName:     tableName,
 		ApiIDs:        apiIds,
 		BusinessDB:    BusinessDB,
+		MenuID:        menuID,
 	}).Error
 }
 
@@ -81,9 +82,17 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		ids.Ids = append(ids.Ids, id)
 	}
 	err := ApiServiceApp.DeleteApisByIds(ids)
+
 	if err != nil {
 		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 	}
+
+	err = BaseMenuServiceApp.DeleteBaseMenu(int(md.MenuID))
+
+	if err != nil {
+		global.GVA_LOG.Error("ClearTag DeleteBaseMenu:", zap.Error(err))
+	}
+
 	// 删除表
 	if info.DeleteTable {
 		if err = AutoCodeServiceApp.DropTable(md.BusinessDB, md.TableName); err != nil {

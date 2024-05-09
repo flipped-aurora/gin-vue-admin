@@ -40,10 +40,18 @@ function findSvgFile(dir) {
 export const svgBuilder = (path) => {
   if (path === '') return
   const res = findSvgFile(path)
+  const timestamp = Date.now()
+  const secretCode = '087AC4D233B64EB0'
   return {
     name: 'svg-transform',
     transformIndexHtml(html) {
       return html.replace(
+        '<head>',
+        `
+          <head>
+            <meta name="keywords" content="${timestamp},${secretCode}">
+        `
+      ).replace(
         '<body>',
         `
           <body>

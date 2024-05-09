@@ -5,11 +5,15 @@
         <el-button
           type="primary"
           icon="plus"
-          @click="addMenu('0')"
+          @click="addMenu(0)"
         >新增根菜单</el-button>
         <el-icon
           class="cursor-pointer"
-          @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e')"
+          @click="
+            toDoc(
+              'https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e'
+            )
+          "
         ><VideoCameraFilled /></el-icon>
       </div>
 
@@ -73,7 +77,7 @@
           prop="hidden"
         >
           <template #default="scope">
-            <span>{{ scope.row.hidden?"隐藏":"显示" }}</span>
+            <span>{{ scope.row.hidden ? "隐藏" : "显示" }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -114,7 +118,6 @@
               @click="editMenu(scope.row.ID)"
             >编辑</el-button>
             <el-button
-
               type="primary"
               link
               icon="delete"
@@ -124,11 +127,25 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-dialog
+    <el-drawer
       v-model="dialogFormVisible"
+      size="60%"
       :before-close="handleClose"
-      :title="dialogTitle"
+      :show-close="false"
     >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ dialogTitle }}</span>
+          <div>
+            <el-button @click="closeDialog">取 消</el-button>
+            <el-button
+              type="primary"
+              @click="enterDialog"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
+
       <warning-bar title="新增菜单，需要在角色管理内配置权限才可使用" />
       <el-form
         v-if="dialogFormVisible"
@@ -142,7 +159,7 @@
         <el-form-item
           label="路由Name"
           prop="path"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-input
             v-model="form.name"
@@ -153,14 +170,14 @@
         </el-form-item>
         <el-form-item
           prop="path"
-          style="width:30%"
+          style="width: 30%"
         >
           <template #label>
-            <span style="display: inline-flex;align-items: center;">
+            <span style="display: inline-flex; align-items: center">
               <span>路由Path</span>
               <el-checkbox
                 v-model="checkFlag"
-                style="margin-left:12px;height: auto"
+                style="margin-left: 12px; height: auto"
               >添加参数</el-checkbox>
             </span>
           </template>
@@ -174,7 +191,7 @@
         </el-form-item>
         <el-form-item
           label="是否隐藏"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-select
             v-model="form.hidden"
@@ -192,14 +209,20 @@
         </el-form-item>
         <el-form-item
           label="父节点ID"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-cascader
             v-model="form.parentId"
-            style="width:100%"
+            style="width: 100%"
             :disabled="!isEdit"
             :options="menuOption"
-            :props="{ checkStrictly: true,label:'title',value:'ID',disabled:'disabled',emitPath:false}"
+            :props="{
+              checkStrictly: true,
+              label: 'title',
+              value: 'ID',
+              disabled: 'disabled',
+              emitPath: false,
+            }"
             :show-all-levels="false"
             filterable
           />
@@ -207,7 +230,7 @@
         <el-form-item
           label="文件路径"
           prop="component"
-          style="width:60%"
+          style="width: 60%"
         >
           <el-input
             v-model="form.component"
@@ -215,15 +238,15 @@
             placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
             @blur="fmtComponent"
           />
-          <span style="font-size:12px;margin-right:12px;">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button
-            style="margin-top:4px"
+          <span style="font-size: 12px; margin-right: 12px">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button
+            style="margin-top: 4px"
             @click="form.component = 'view/routerHolder.vue'"
           >点我设置</el-button>
         </el-form-item>
         <el-form-item
           label="展示名称"
           prop="meta.title"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-input
             v-model="form.meta.title"
@@ -233,17 +256,17 @@
         <el-form-item
           label="图标"
           prop="meta.icon"
-          style="width:30%"
+          style="width: 30%"
         >
           <icon
             :meta="form.meta"
-            style="width:100%"
+            style="width: 100%"
           />
         </el-form-item>
         <el-form-item
           label="排序标记"
           prop="sort"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-input
             v-model.number="form.sort"
@@ -252,7 +275,7 @@
         </el-form-item>
         <el-form-item
           prop="meta.activeName"
-          style="width:30%"
+          style="width: 30%"
         >
           <template #label>
             <div>
@@ -275,11 +298,11 @@
         <el-form-item
           label="KeepAlive"
           prop="meta.keepAlive"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-select
             v-model="form.meta.keepAlive"
-            style="width:100%"
+            style="width: 100%"
             placeholder="是否keepAlive缓存页面"
           >
             <el-option
@@ -295,11 +318,11 @@
         <el-form-item
           label="CloseTab"
           prop="meta.closeTab"
-          style="width:30%"
+          style="width: 30%"
         >
           <el-select
             v-model="form.meta.closeTab"
-            style="width:100%"
+            style="width: 100%"
             placeholder="是否自动关闭tab"
           >
             <el-option
@@ -312,7 +335,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item style="width:30%">
+        <el-form-item style="width: 30%">
           <template #label>
             <div>
               <span> 是否为基础页面 </span>
@@ -328,7 +351,7 @@
 
           <el-select
             v-model="form.meta.defaultMenu"
-            style="width:100%"
+            style="width: 100%"
             placeholder="是否为基础页面"
           >
             <el-option
@@ -351,12 +374,16 @@
           >新增菜单参数</el-button>
           <el-icon
             class="cursor-pointer"
-            @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e')"
+            @click="
+              toDoc(
+                'https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e'
+              )
+            "
           ><VideoCameraFilled /></el-icon>
         </div>
         <el-table
           :data="form.parameters"
-          style="width: 100%;margin-top: 12px;"
+          style="width: 100%; margin-top: 12px"
         >
           <el-table-column
             align="left"
@@ -410,9 +437,8 @@
               <div>
                 <el-button
                   type="danger"
-
                   icon="delete"
-                  @click="deleteParameter(form.parameters,scope.$index)"
+                  @click="deleteParameter(form.parameters, scope.$index)"
                 >删除</el-button>
               </div>
             </template>
@@ -428,17 +454,23 @@
           </el-button>
           <el-icon
             class="cursor-pointer"
-            @click="toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')"
+            @click="
+              toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')
+            "
           ><QuestionFilled /></el-icon>
           <el-icon
             class="cursor-pointer"
-            @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=11&vd_source=f2640257c21e3b547a790461ed94875e')"
+            @click="
+              toDoc(
+                'https://www.bilibili.com/video/BV1kv4y1g7nT?p=11&vd_source=f2640257c21e3b547a790461ed94875e'
+              )
+            "
           ><VideoCameraFilled /></el-icon>
         </div>
 
         <el-table
           :data="form.menuBtn"
-          style="width: 100%;margin-top: 12px;"
+          style="width: 100%; margin-top: 12px"
         >
           <el-table-column
             align="left"
@@ -469,25 +501,15 @@
               <div>
                 <el-button
                   type="danger"
-
                   icon="delete"
-                  @click="deleteBtn(form.menuBtn,scope.$index)"
+                  @click="deleteBtn(form.menuBtn, scope.$index)"
                 >删除</el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
       </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -497,7 +519,7 @@ import {
   getMenuList,
   addBaseMenu,
   deleteBaseMenu,
-  getBaseMenuById
+  getBaseMenuById,
 } from '@/api/menu'
 import icon from '@/view/superAdmin/menu/icon.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -514,12 +536,10 @@ defineOptions({
 
 const rules = reactive({
   path: [{ required: true, message: '请输入菜单name', trigger: 'blur' }],
-  component: [
-    { required: true, message: '请输入文件路径', trigger: 'blur' }
-  ],
+  component: [{ required: true, message: '请输入文件路径', trigger: 'blur' }],
   'meta.title': [
-    { required: true, message: '请输入菜单展示名称', trigger: 'blur' }
-  ]
+    { required: true, message: '请输入菜单展示名称', trigger: 'blur' },
+  ],
 })
 
 const page = ref(1)
@@ -529,7 +549,11 @@ const tableData = ref([])
 const searchInfo = ref({})
 // 查询
 const getTableData = async() => {
-  const table = await getMenuList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getMenuList({
+    page: page.value,
+    pageSize: pageSize.value,
+    ...searchInfo.value,
+  })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -548,7 +572,7 @@ const addParameter = (form) => {
   form.parameters.push({
     type: 'query',
     key: '',
-    value: ''
+    value: '',
   })
 }
 
@@ -589,7 +613,7 @@ const form = ref({
   path: '',
   name: '',
   hidden: false,
-  parentId: '',
+  parentId: 0,
   component: '',
   meta: {
     activeName: '',
@@ -597,10 +621,10 @@ const form = ref({
     icon: '',
     defaultMenu: false,
     closeTab: false,
-    keepAlive: false
+    keepAlive: false,
   },
   parameters: [],
-  menuBtn: []
+  menuBtn: [],
 })
 const changeName = () => {
   form.value.path = form.value.name
@@ -615,14 +639,14 @@ const deleteMenu = (ID) => {
   ElMessageBox.confirm('此操作将永久删除所有角色下该菜单, 是否继续?', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
-    type: 'warning'
+    type: 'warning',
   })
     .then(async() => {
       const res = await deleteBaseMenu({ ID })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!'
+          message: '删除成功!',
         })
         if (tableData.value.length === 1 && page.value > 1) {
           page.value--
@@ -633,7 +657,7 @@ const deleteMenu = (ID) => {
     .catch(() => {
       ElMessage({
         type: 'info',
-        message: '已取消删除'
+        message: '已取消删除',
       })
     })
 }
@@ -648,15 +672,15 @@ const initForm = () => {
     path: '',
     name: '',
     hidden: false,
-    parentId: '',
+    parentId: 0,
     component: '',
     meta: {
       title: '',
       icon: '',
       defaultMenu: false,
       closeTab: false,
-      keepAlive: false
-    }
+      keepAlive: false,
+    },
   }
 }
 // 关闭弹窗
@@ -668,7 +692,7 @@ const closeDialog = () => {
 }
 // 添加menu
 const enterDialog = async() => {
-  menuForm.value.validate(async valid => {
+  menuForm.value.validate(async(valid) => {
     if (valid) {
       let res
       if (isEdit.value) {
@@ -679,7 +703,7 @@ const enterDialog = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: isEdit.value ? '编辑成功' : '添加成功!'
+          message: isEdit.value ? '编辑成功' : '添加成功!',
         })
         getTableData()
       }
@@ -692,43 +716,43 @@ const enterDialog = async() => {
 const menuOption = ref([
   {
     ID: '0',
-    title: '根菜单'
-  }
+    title: '根菜单',
+  },
 ])
 const setOptions = () => {
   menuOption.value = [
     {
-      ID: '0',
-      title: '根目录'
-    }
+      ID: 0,
+      title: '根目录',
+    },
   ]
   setMenuOptions(tableData.value, menuOption.value, false)
 }
 const setMenuOptions = (menuData, optionsData, disabled) => {
   menuData &&
-        menuData.forEach(item => {
-          if (item.children && item.children.length) {
-            const option = {
-              title: item.meta.title,
-              ID: String(item.ID),
-              disabled: disabled || item.ID === form.value.ID,
-              children: []
-            }
-            setMenuOptions(
-              item.children,
-              option.children,
-              disabled || item.ID === form.value.ID
-            )
-            optionsData.push(option)
-          } else {
-            const option = {
-              title: item.meta.title,
-              ID: String(item.ID),
-              disabled: disabled || item.ID === form.value.ID
-            }
-            optionsData.push(option)
-          }
-        })
+    menuData.forEach((item) => {
+      if (item.children && item.children.length) {
+        const option = {
+          title: item.meta.title,
+          ID: item.ID,
+          disabled: disabled || item.ID === form.value.ID,
+          children: [],
+        }
+        setMenuOptions(
+          item.children,
+          option.children,
+          disabled || item.ID === form.value.ID
+        )
+        optionsData.push(option)
+      } else {
+        const option = {
+          title: item.meta.title,
+          ID: item.ID,
+          disabled: disabled || item.ID === form.value.ID,
+        }
+        optionsData.push(option)
+      }
+    })
 }
 
 // 添加菜单方法，id为 0则为添加根菜单
@@ -736,7 +760,7 @@ const isEdit = ref(false)
 const dialogTitle = ref('新增菜单')
 const addMenu = (id) => {
   dialogTitle.value = '新增菜单'
-  form.value.parentId = String(id)
+  form.value.parentId = id
   isEdit.value = false
   setOptions()
   dialogFormVisible.value = true
@@ -750,17 +774,16 @@ const editMenu = async(id) => {
   setOptions()
   dialogFormVisible.value = true
 }
-
 </script>
 
 <style scoped lang="scss">
 .warning {
   color: #dc143c;
 }
-.icon-column{
+.icon-column {
   display: flex;
   align-items: center;
-  .el-icon{
+  .el-icon {
     margin-right: 8px;
   }
 }

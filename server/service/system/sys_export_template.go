@@ -8,9 +8,12 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/xuri/excelize/v2"
 	"gorm.io/gorm"
 	"mime/multipart"
+	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -41,14 +44,45 @@ func (sysExportTemplateService *SysExportTemplateService) DeleteSysExportTemplat
 // UpdateSysExportTemplate 更新导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) UpdateSysExportTemplate(sysExportTemplate system.SysExportTemplate) (err error) {
-	err = global.GVA_DB.Save(&sysExportTemplate).Error
-	return err
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		conditions := sysExportTemplate.Conditions
+		e := tx.Delete(&[]system.Condition{}, "template_id = ?", sysExportTemplate.TemplateID).Error
+		if e != nil {
+			return e
+		}
+		sysExportTemplate.Conditions = nil
+
+		joins := sysExportTemplate.JoinTemplate
+		e = tx.Delete(&[]system.JoinTemplate{}, "template_id = ?", sysExportTemplate.TemplateID).Error
+		if e != nil {
+			return e
+		}
+		sysExportTemplate.JoinTemplate = nil
+
+		e = tx.Updates(&sysExportTemplate).Error
+		if e != nil {
+			return e
+		}
+		if len(conditions) > 0 {
+			for i := range conditions {
+				conditions[i].ID = 0
+			}
+			e = tx.Create(&conditions).Error
+		}
+		if len(joins) > 0 {
+			for i := range joins {
+				joins[i].ID = 0
+			}
+			e = tx.Create(&joins).Error
+		}
+		return e
+	})
 }
 
 // GetSysExportTemplate 根据id获取导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplate(id uint) (sysExportTemplate system.SysExportTemplate, err error) {
-	err = global.GVA_DB.Where("id = ?", id).First(&sysExportTemplate).Error
+	err = global.GVA_DB.Where("id = ?", id).Preload("JoinTemplate").Preload("Conditions").First(&sysExportTemplate).Error
 	return
 }
 
@@ -88,9 +122,9 @@ func (sysExportTemplateService *SysExportTemplateService) GetSysExportTemplateIn
 
 // ExportExcel 导出Excel
 // Author [piexlmax](https://github.com/piexlmax)
-func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string) (file *bytes.Buffer, name string, err error) {
+func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID string, values url.Values) (file *bytes.Buffer, name string, err error) {
 	var template system.SysExportTemplate
-	err = global.GVA_DB.First(&template, "template_id = ?", templateID).Error
+	err = global.GVA_DB.Preload("Conditions").Preload("JoinTemplate").First(&template, "template_id = ?", templateID).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -107,19 +141,78 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		return
 	}
 	var templateInfoMap = make(map[string]string)
+	columns, err := utils.GetJSONKeys(template.TemplateInfo)
+	if err != nil {
+		return nil, "", err
+	}
 	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
 	if err != nil {
 		return nil, "", err
 	}
-	var columns []string
 	var tableTitle []string
-	for key := range templateInfoMap {
-		columns = append(columns, key)
+	for _, key := range columns {
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
 	selects := strings.Join(columns, ", ")
 	var tableMap []map[string]interface{}
-	err = global.GVA_DB.Select(selects).Table(template.TableName).Find(&tableMap).Error
+	db := global.GVA_DB
+	if template.DBName != "" {
+		db = global.MustGetGlobalDBByDBName(template.DBName)
+	}
+
+	if len(template.JoinTemplate) > 0 {
+		for _, join := range template.JoinTemplate {
+			db = db.Joins(join.JOINS + "`" + join.Table + "`" + " ON " + join.ON)
+		}
+	}
+
+	db = db.Select(selects).Table(template.TableName)
+
+	if len(template.Conditions) > 0 {
+		for _, condition := range template.Conditions {
+			sql := fmt.Sprintf("%s %s ?", condition.Column, condition.Operator)
+			value := values.Get(condition.From)
+			if value != "" {
+				if condition.Operator == "LIKE" {
+					value = "%" + value + "%"
+				}
+				db = db.Where(sql, value)
+			}
+		}
+	}
+	// 通过参数传入limit
+	limit := values.Get("limit")
+	if limit != "" {
+		l, e := strconv.Atoi(limit)
+		if e == nil {
+			db = db.Limit(l)
+		}
+	}
+	// 模板的默认limit
+	if limit == "" && template.Limit != 0 {
+		db = db.Limit(template.Limit)
+	}
+
+	// 通过参数传入offset
+	offset := values.Get("offset")
+	if offset != "" {
+		o, e := strconv.Atoi(offset)
+		if e == nil {
+			db = db.Offset(o)
+		}
+	}
+
+	// 通过参数传入order
+	order := values.Get("order")
+	if order != "" {
+		db = db.Order(order)
+	}
+	// 模板的默认order
+	if order == "" && template.Order != "" {
+		db = db.Order(template.Order)
+	}
+
+	err = db.Debug().Find(&tableMap).Error
 	if err != nil {
 		return nil, "", err
 	}
@@ -128,6 +221,12 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 	for _, table := range tableMap {
 		var row []string
 		for _, column := range columns {
+			if len(template.JoinTemplate) > 0 {
+				columnArr := strings.Split(column, ".")
+				if len(columnArr) > 1 {
+					column = strings.Split(column, ".")[1]
+				}
+			}
 			row = append(row, fmt.Sprintf("%v", table[column]))
 		}
 		rows = append(rows, row)
@@ -170,14 +269,18 @@ func (sysExportTemplateService *SysExportTemplateService) ExportTemplate(templat
 		return
 	}
 	var templateInfoMap = make(map[string]string)
+
+	columns, err := utils.GetJSONKeys(template.TemplateInfo)
+
 	err = json.Unmarshal([]byte(template.TemplateInfo), &templateInfoMap)
 	if err != nil {
 		return nil, "", err
 	}
 	var tableTitle []string
-	for key := range templateInfoMap {
+	for _, key := range columns {
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
+
 	for i := range tableTitle {
 		fErr := f.SetCellValue("Sheet1", fmt.Sprintf("%s%d", getColumnName(i+1), 1), tableTitle[i])
 		if fErr != nil {
@@ -228,21 +331,38 @@ func (sysExportTemplateService *SysExportTemplateService) ImportExcel(templateID
 	for key, title := range templateInfoMap {
 		titleKeyMap[title] = key
 	}
-	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
+	db := global.GVA_DB
+	if template.DBName != "" {
+		db = global.MustGetGlobalDBByDBName(template.DBName)
+	}
+
+	return db.Transaction(func(tx *gorm.DB) error {
 		excelTitle := rows[0]
 		values := rows[1:]
+		items := make([]map[string]interface{}, 0, len(values))
 		for _, row := range values {
 			var item = make(map[string]interface{})
 			for ii, value := range row {
 				key := titleKeyMap[excelTitle[ii]]
 				item[key] = value
 			}
-			cErr := tx.Table(template.TableName).Create(&item).Error
-			if cErr != nil {
-				return cErr
-			}
+
+			// 此处需要等待gorm修复HasColumn中的painc问题
+			//needCreated := tx.Migrator().HasColumn(template.TableName, "created_at")
+			//needUpdated := tx.Migrator().HasColumn(template.TableName, "updated_at")
+			//
+			//if item["created_at"] == nil && needCreated {
+			//	item["created_at"] = time.Now()
+			//}
+			//if item["updated_at"] == nil && needUpdated {
+			//	item["updated_at"] = time.Now()
+			//}
+
+			items = append(items, item)
 		}
-		return nil
+		cErr := tx.Table(template.TableName).CreateInBatches(&items, 1000).Error
+		return cErr
 	})
 }
 

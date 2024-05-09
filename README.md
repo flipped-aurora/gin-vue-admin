@@ -83,7 +83,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ```
 - node版本 > v16.8.3
-- golang版本 >= v1.16
+- golang版本 >= v1.22
 - IDE推荐：Goland
 ```
 
@@ -331,10 +331,7 @@ swag init
 
 ### 7.1 技术群
 
-### QQ交流群：622360840
-| QQ 群 |
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+### QQ交流群：470239250
 
 ### 微信交流群
 | 微信 |

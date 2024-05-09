@@ -162,7 +162,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 
 defineOptions({
-  name: 'Login',
+  name: "Login",
 })
 
 const router = useRouter()

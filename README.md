@@ -44,7 +44,9 @@
 
 4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
 
-<img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
+<img src="https://qmplusimg.henrongyi.top/openSource/login.jpg" width="1000">
+
+<img src="https://qmplusimg.henrongyi.top/openSource/dashboard.jpg" width="1000">
 
 ## 1. 基本介绍
 

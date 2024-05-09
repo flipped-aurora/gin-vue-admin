@@ -6918,10 +6918,6 @@ const docTemplate = `{
                     "description": "主键ID",
                     "type": "integer"
                 },
-                "activeColor": {
-                    "description": "活跃颜色",
-                    "type": "string"
-                },
                 "authorities": {
                     "type": "array",
                     "items": {
@@ -7001,7 +6997,7 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "v2.6.3",
+	Version:          "v2.6.4",
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},

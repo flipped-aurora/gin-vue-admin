@@ -77,6 +77,13 @@ const  generateAllColors = (u,e)=> {
 }
 
 
+
+function addOpacityToColor(u, opacity) {
+  let t = colorToHex(u);
+  return `rgba(${t[0]}, ${t[1]}, ${ t[2]}, ${opacity})`;
+}
+
+
 export const setBodyPrimaryColor = (  primaryColor ) =>{
   document.documentElement.style.setProperty('--el-color-primary', primaryColor)
   for (let times = 1; times <= 2; times++) {
@@ -85,5 +92,5 @@ export const setBodyPrimaryColor = (  primaryColor ) =>{
   for (let times = 1; times <= 10; times++) {
     document.documentElement.style.setProperty(`--el-color-primary-light-${times}`,  generateAllColors(primaryColor, times / 10))
   }
-
+  document.documentElement.style.setProperty(`--el-menu-hover-bg-color`,  addOpacityToColor(primaryColor, 0.1))
 }

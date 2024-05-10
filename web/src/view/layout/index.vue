@@ -28,7 +28,7 @@ import GvaAside from "@/view/layout/aside/index.vue";
 import GvaHeader from "@/view/layout/header/index.vue";
 import useResponsive  from "@/hooks/responsive";
 import GvaTabs from "./tabs/index.vue"
-import BottomInfo from "@/view/layout/bottomInfo/bottomInfo.vue";
+import BottomInfo from "@/components/bottomInfo/bottomInfo.vue";
 import { emitter } from "@/utils/bus.js";
 import { ref, onMounted, nextTick, reactive, watchEffect} from "vue";
 import { useRouter, useRoute } from "vue-router";

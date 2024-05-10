@@ -14,7 +14,7 @@
 
 ## 不同版本
 
-我们会对以下四个版本持续维护，请选择适合自己的版本使用。最新技术栈为组合式api版本，已支持多语言（I18N）
+我们会对以下四个版本持续维护，请选择适合自己的版本使用。最新技术栈为组合式api版本，已支持多语言test（I18N）
 
 [组合式API版（主）](https://github.com/flipped-aurora/gin-vue-admin) | 
 [组合式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev-new) | 

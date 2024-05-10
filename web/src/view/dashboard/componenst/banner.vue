@@ -4,17 +4,30 @@
 !-->
 
 <template>
-  <el-carousel class=" h-40">
-    <el-carousel-item v-for="(item , index) in banners" :key="index">
-      <el-image :src="item" class="" fit="contain"></el-image>
+  <el-carousel class="-mt-2">
+    <el-carousel-item class="cursor-pointer lg:h-40" v-for="(item , index) in banners" :key="index" @click="openLink(item.link)">
+      <el-image class="h-full w-full" :src="item.img" fit="fill"></el-image>
     </el-carousel-item>
   </el-carousel>
 </template>
 
 <script setup>
+import banner from "@/assets/banner.jpg"
+import banner2 from "@/assets/banner2.jpg"
+
+const openLink = (link) => {
+    window.open(link, '_blank')
+}
+
 const banners = [
-    "https://qmplusimg.henrongyi.top/171163573320240328-221254.jpg",
-    "https://qmplusimg.henrongyi.top/1657463878org.png"
+  {
+    img: banner,
+    link: "https://gin-vue-admin.com/empower/index.html"
+  },
+  {
+    img: banner2,
+    link: "https://plugin.gin-vue-admin.com"
+  }
 ]
 </script>
 

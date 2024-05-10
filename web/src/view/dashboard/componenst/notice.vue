@@ -9,9 +9,11 @@
       <el-tag :type="item.type" size="small">
         {{ item.typeTitle }}
       </el-tag>
-      <div class="text-xs text-gray-700 dark:text-gray-300 line-clamp-1">
-        {{ item.title }}
-      </div>
+      <el-tooltip effect="light" :content="item.title" placement="top">
+        <div class="text-xs text-gray-700 dark:text-gray-300 line-clamp-1">
+          {{ item.title }}
+        </div>
+      </el-tooltip>
     </div>
   </el-scrollbar>
 </template>
@@ -21,52 +23,52 @@
     {
       type : 'primary',
       typeTitle : "公告",
-      title : "公告1公告1公告1公告1公告1公告1公告1公告1公告1公告1公告1公告1",
+      title : "授权费将在从六月一日起结束第一价格梯度，进入第二价格梯度。",
     },
     {
       type : 'success',
       typeTitle : "通知",
-      title : "通知1通知1通知1通知1通知1通知1通知1通知1通知1通知1通知1通知1通知1通知1",
+      title : "授权后将进入专属飞书群，获取官方辅助。",
     },
     {
       type : 'warning',
       typeTitle : "警告",
-      title : "警告1警告1警告1警告1警告1警告1警告1警告1警告1警告1警告1警告1警告1警告1",
+      title : "授权可获得插件市场极大优惠价格。",
     },
     {
       type : 'danger',
-      typeTitle : "错误",
-      title : "错误1错误1错误1错误1错误1错误1错误1错误1错误1错误1错误1错误1错误1",
+      typeTitle : "违规",
+      title : "未授权商用将有可能被资源采集工具爬取并追责。",
     },
     {
       type : 'info',
       typeTitle : "信息",
-      title : "信息1信息1信息1信息1信息1信息1信息1信息1信息1信息1信息1信息1信息1信息1信息1",
+      title : "再次感谢您对开源事业的支持",
     },
     {
       type : 'primary',
       typeTitle : "公告",
-      title : "公告2",
+      title : "让创意更有价值。",
     },
     {
       type : 'success',
       typeTitle : "通知",
-      title : "通知2",
+      title : "让劳动更有意义。",
     },
     {
       type : 'warning',
       typeTitle : "警告",
-      title : "警告2",
+      title : "让思维更有深度。",
     },
     {
       type : 'danger',
       typeTitle : "错误",
-      title : "错误2",
+      title : "让生活更有趣味。",
     },
     {
       type : 'info',
       typeTitle : "信息",
-      title : "信息2",
+      title : "让公司更有活力。",
     }
   ]
 </script>

@@ -1,5 +1,7 @@
-<!-- 此文件禁止修改！如果您没有购买授权，请联系wx:shouzi_1994购买授权，未授权状态只需保留此代码 不影响任何正常使用 -->
-
+<!--
+此文件受版权保护，未经授权禁止修改！如果您尚未获得授权，请通过微信(shouzi_1994)联系我们以购买授权。在未授权状态下，只需保留此代码，不会影响任何正常使用。
+     未经授权的商用使用可能会被我们的资产搜索引擎爬取，并可能导致后续索赔。索赔金额将不低于高级授权费的十倍。请您遵守版权法律法规，尊重知识产权。
+ -->
 <template>
   <div class="flex flex-col md:flex-row gap-2 items-center text-sm text-slate-700 dark:text-slate-500 justify-center py-2">
     <div class="text-center">
@@ -25,8 +27,6 @@
 </template>
 
 <script  setup>
-// 此文件内容为版权信息，如需改动，请联系wx:shouzi_1994购买授权 未授权状态只需保留此代码 不影响任何正常使用
-// 项目为apatch协议 请遵守版权协议内容
 defineOptions({
   name: 'BottomInfo'
 })

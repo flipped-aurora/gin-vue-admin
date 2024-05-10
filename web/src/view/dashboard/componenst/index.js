@@ -5,6 +5,7 @@ import GvaTable from "./table.vue"
 import  GvaNotice from "./notice.vue"
 import GvaQuickLink from "./quickLinks.vue"
 import GvaWiki from "./wiki.vue"
+import GvaPluginTable from "./pluginTable.vue"
 
 export {
     GvaBanner,
@@ -13,6 +14,6 @@ export {
     GvaTable,
     GvaNotice,
     GvaQuickLink,
-    GvaWiki
-
+    GvaWiki,
+    GvaPluginTable
 }

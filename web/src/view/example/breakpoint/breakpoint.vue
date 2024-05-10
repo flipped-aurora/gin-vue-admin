@@ -232,7 +232,6 @@ a {
     line-height: 20px;
     position: relative;
     cursor: pointer;
-    color: #000;
     border: 1px solid #c1c1c1;
     border-radius: 4px;
     overflow: hidden;

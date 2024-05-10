@@ -1,6 +1,7 @@
 /**
  * 网站配置文件
  */
+import chalk from "chalk";
 
 const config = {
   appName: 'Gin-Vue-Admin',
@@ -19,7 +20,7 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> 当前版本:v2.6.3`
+        `> 当前版本:v2.6.4`
       )
     )
     console.log(
@@ -29,13 +30,18 @@ export const viteLogo = (env) => {
     )
     console.log(
       chalk.green(
-        `> GVA讨论社区：https://support.qq.com/products/371961`
+        `> 项目地址：https://github.com/flipped-aurora/gin-vue-admin`
       )
     )
     console.log(
       chalk.green(
         `> 插件市场:https://plugin.gin-vue-admin.com`
       )
+    )
+    console.log(
+        chalk.green(
+            `> GVA讨论社区:https://support.qq.com/products/371961`
+        )
     )
     console.log(
       chalk.green(
@@ -47,9 +53,28 @@ export const viteLogo = (env) => {
         `> 默认前端文件运行地址:http://127.0.0.1:${env.VITE_CLI_PORT}`
       )
     )
+
+    console.log(
+        chalk.green(
+            `--------------------------------------版权声明--------------------------------------`
+        )
+    )
+
+    console.log(
+        chalk.green(
+            `** 版权所有方：flipped-aurora开源团队 **`
+        )
+    )
+
+    console.log(
+        chalk.green(
+            `** 版权持有公司：北京翻转极光科技有限责任公司 **`
+        )
+    )
+
     console.log(
       chalk.green(
-        `> 如果项目让您获得了收益，希望您能请团队喝杯可乐:https://www.gin-vue-admin.com/coffee/index.html`
+        `** 剔除授权标识需购买商用授权：https://gin-vue-admin.com/empower/index.html **`
       )
     )
     console.log('\n')

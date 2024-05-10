@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="bg-gray-50 text-slate-700 dark:text-slate-500  dark:bg-slate-800">
     <el-config-provider :locale="zhCn">
       <router-view />
     </el-config-provider>
@@ -10,19 +10,17 @@
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // element 2.3.8之前使用下面的语句
 // import zhCn from 'element-plus/lib/locale/lang/zh-cn'
-
+import {useAppStore} from "@/pinia";
+useAppStore()
 defineOptions({
   name: 'App'
 })
 
 </script>
 <style lang="scss">
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 // 引入初始化样式
 #app {
-  background: #eee;
   height: 100vh;
   overflow: hidden;
   font-weight: 400 !important;
@@ -30,4 +28,16 @@ defineOptions({
 .el-button{
   font-weight: 400 !important;
 }
+
+.gva-body-h{
+  min-height: calc(100% - 3rem);
+}
+
+.gva-container{
+  height: calc(100% - 2.5rem);
+}
+.gva-container2{
+  height: calc(100% - 4.5rem);
+}
+
 </style>

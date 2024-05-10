@@ -2,7 +2,9 @@ import 'element-plus/es/components/message/style/css'
 import 'element-plus/es/components/loading/style/css'
 import 'element-plus/es/components/notification/style/css'
 import 'element-plus/es/components/message-box/style/css'
+import 'element-plus/theme-chalk/dark/css-vars.css'
 import './style/element_visiable.scss'
+
 import { createApp } from 'vue'
 // 引入gin-vue-admin前端初始化相关内容
 import './core/gin-vue-admin'

@@ -3,8 +3,8 @@
     <warning-bar
       title="获取字典且缓存方法已在前端utils/dictionary 已经封装完成 不必自己书写 使用方法查看文件内注释"
     />
-    <div class="dict-box flex gap-4">
-      <div class="w-64 bg-white p-4">
+    <div class="flex gap-4 p-2">
+      <div class="flex-none w-52 bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded p-4">
         <div class="flex justify-between items-center">
           <span class="text font-bold">字典列表</span>
           <el-button
@@ -21,22 +21,20 @@
           <div
             v-for="dictionary in dictionaryData"
             :key="dictionary.ID"
-            class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 hover:text-gray-800 group bg-gray-50"
-            :class="selectID === dictionary.ID && 'active'"
+            class="rounded flex justify-between items-center px-2 py-4 cursor-pointer mt-2 hover:bg-blue-50 dark:hover:bg-blue-900 bg-gray-50 dark:bg-gray-800 gap-4"
+            :class="selectID === dictionary.ID ? 'text-active':'text-slate-700 dark:text-slate-50'"
             @click="toDetail(dictionary)"
           >
             <span class="max-w-[160px] truncate">{{ dictionary.name }}</span>
-            <div>
+            <div class="min-w-[40px]">
               <el-icon
-                class="group-hover:text-blue-500"
-                :class="selectID === dictionary.ID ? 'text-white-800':'text-blue-500'"
+                class="text-blue-500"
                 @click.stop="updateSysDictionaryFunc(dictionary)"
               >
                 <Edit />
               </el-icon>
               <el-icon
-                class="ml-2 group-hover:text-red-500"
-                :class="selectID === dictionary.ID ? 'text-white-800':'text-red-500'"
+                class="ml-2 text-red-500"
                 @click="deleteSysDictionaryFunc(dictionary)"
               >
                 <Delete />
@@ -45,7 +43,7 @@
           </div>
         </el-scrollbar>
       </div>
-      <div class="flex-1 bg-white">
+      <div class="flex-1 bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900">
         <sysDictionaryDetail :sys-dictionary-i-d="selectID" />
       </div>
     </div>

@@ -56,3 +56,41 @@ export const ReturnArrImg = (arr) => {
 export const onDownloadFile = (url) => {
   window.open(path + url)
 }
+const colorToHex = u=>{
+  let e = u.replace("#", "").match(/../g);
+  for (let t = 0; t < 3; t++)
+    e[t] = parseInt(e[t], 16);
+  return e
+}
+
+const  hexToColor = (u,e,t)=>{
+  let a = [u.toString(16), e.toString(16), t.toString(16)];
+  for (let n = 0; n < 3; n++)
+    a[n].length === 1 && (a[n] = `0${a[n]}`);
+  return `#${a.join("")}`
+}
+const  generateAllColors = (u,e)=> {
+  let t = colorToHex(u);
+  for (let a = 0; a < 3; a++)
+    t[a] = Math.floor((255 - t[a]) * e + t[a]);
+  return hexToColor(t[0], t[1], t[2])
+}
+
+
+
+function addOpacityToColor(u, opacity) {
+  let t = colorToHex(u);
+  return `rgba(${t[0]}, ${t[1]}, ${ t[2]}, ${opacity})`;
+}
+
+
+export const setBodyPrimaryColor = (  primaryColor ) =>{
+  document.documentElement.style.setProperty('--el-color-primary', primaryColor)
+  for (let times = 1; times <= 2; times++) {
+    document.documentElement.style.setProperty(`--el-color-primary-dark-${times}`,  generateAllColors(primaryColor, times / 10))
+  }
+  for (let times = 1; times <= 10; times++) {
+    document.documentElement.style.setProperty(`--el-color-primary-light-${times}`,  generateAllColors(primaryColor, times / 10))
+  }
+  document.documentElement.style.setProperty(`--el-menu-hover-bg-color`,  addOpacityToColor(primaryColor, 0.1))
+}

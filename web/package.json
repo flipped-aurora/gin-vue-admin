@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.6.3",
+    "version": "2.6.4",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
@@ -20,7 +20,7 @@
         "axios": "^1.4.0",
         "core-js": "^3.31.1",
         "echarts": "5.4.3",
-        "element-plus": "^2.3.8",
+        "element-plus": "^2.7.0",
         "highlight.js": "^11.8.0",
         "js-cookie": "^3.0.5",
         "marked": "4.3.0",
@@ -34,6 +34,7 @@
         "spark-md5": "^3.0.2",
         "tailwindcss": "^3.3.3",
         "vue": "^3.4.21",
+        "vue-echarts": "^6.7.2",
         "vue-router": "^4.3.2",
         "vuedraggable": "^4.1.0"
     },

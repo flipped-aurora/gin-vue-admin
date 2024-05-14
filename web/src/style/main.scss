@@ -12,7 +12,7 @@
 .gva-table-box {
     @apply p-4 bg-white text-slate-700 dark:text-slate-400 dark:bg-slate-900 rounded m-2;
     .el-table{
-        @apply border-x border-t border-b-0 rounded border-table-border border-solid;
+        @apply border-x border-t border-b-0 rounded border-table-border border-solid -mx-[1px];
     }
 }
 

@@ -617,6 +617,9 @@ const closeDialog = () => {
         {{- if eq .FieldType "string" }}
         {{.FieldJson}}: '',
         {{- end }}
+        {{- if eq .FieldType "richtext" }}
+        {{.FieldJson}}: '',
+        {{- end }}
         {{- if eq .FieldType "int" }}
         {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
         {{- end }}
@@ -625,6 +628,21 @@ const closeDialog = () => {
         {{- end }}
         {{- if eq .FieldType "float64" }}
         {{.FieldJson}}: 0,
+        {{- end }}
+        {{- if eq .FieldType "picture" }}
+        {{.FieldJson}}: "",
+        {{- end }}
+        {{- if eq .FieldType "video" }}
+        {{.FieldJson}}: "",
+        {{- end }}
+        {{- if eq .FieldType "pictures" }}
+        {{.FieldJson}}: [],
+        {{- end }}
+        {{- if eq .FieldType "file" }}
+        {{.FieldJson}}: [],
+        {{- end }}
+        {{- if eq .FieldType "json" }}
+        {{.FieldJson}}: {},
         {{- end }}
         {{- end }}
         }

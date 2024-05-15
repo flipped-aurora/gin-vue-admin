@@ -8,9 +8,11 @@
     <el-button
       type="primary"
       icon="upload"
-    >导入</el-button>
+      class="ml-3"
+    >
+      导入
+    </el-button>
   </el-upload>
-
 </template>
 
 <script setup>

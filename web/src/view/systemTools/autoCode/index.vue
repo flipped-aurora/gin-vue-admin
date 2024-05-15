@@ -2,7 +2,7 @@
   <div>
     <warning-bar
       href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
-      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。页面数据内容会自动暂存，如需清除，请点击【清除缓存】"
     />
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
@@ -105,6 +105,16 @@
           </el-form>
         </el-collapse-item>
       </el-collapse>
+      <div class="flex justify-end">
+        <el-button
+            type="primary"
+            @click="clearCatch()"
+        >清除暂存</el-button>
+        <el-button
+            type="primary"
+            @click="catchData()"
+        >暂存</el-button>
+      </div>
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
@@ -686,6 +696,10 @@ const typeOptions = ref([
   {
     label: 'JSON',
     value: 'json',
+  },
+  {
+    label: '数组',
+    value: 'array',
   }
 ])
 
@@ -739,6 +753,7 @@ const fieldTemplate = {
   fieldSearchType: '',
   dictType: '',
   dataSource: {
+    association:1,
     table: '',
     label: '',
     value: ''
@@ -832,6 +847,14 @@ const editAndAddField = (item) => {
   dialogFlag.value = true
   if (item) {
     addFlag.value = 'edit'
+    if(!item.dataSource){
+      item.dataSource = {
+        association:1,
+        table: '',
+        label: '',
+        value: ''
+      }
+    }
     bk.value = JSON.parse(JSON.stringify(item))
     dialogMiddle.value = item
   } else {
@@ -964,6 +987,7 @@ const enterForm = async(isPreview) => {
           // IE 10+
           window.navigator.msSaveBlob(blob, fileName)
         }
+        clearCatch()
       }
     } else {
       return false
@@ -1030,6 +1054,7 @@ const getColumnFunc = async() => {
                 dictType: '',
                 front: true,
                 dataSource: {
+                  association:1,
                   table: '',
                   label: '',
                   value: ''
@@ -1095,5 +1120,39 @@ watch(() => route.params.id, () => {
     init()
   }
 })
+
+
+const catchData = () => {
+  window.sessionStorage.setItem('autoCode', JSON.stringify(form.value))
+}
+
+const getCatch = () => {
+  const data = window.sessionStorage.getItem('autoCode')
+  if(data){
+    form.value = JSON.parse(data)
+  }
+}
+
+const clearCatch = async () => {
+  form.value = {
+    structName: '',
+    tableName: '',
+    packageName: '',
+    package: '',
+    abbreviation: '',
+    description: '',
+    businessDB: '',
+    autoCreateApiToSql: true,
+    autoCreateMenuToSql: true,
+    autoMoveFile: true,
+    gvaModel: true,
+    autoCreateResource: false,
+    fields: []
+  }
+  await nextTick()
+  window.sessionStorage.removeItem('autoCode')
+}
+
+getCatch()
 
 </script>

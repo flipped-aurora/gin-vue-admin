@@ -663,6 +663,10 @@ const typeOptions = ref([
   {
     label: 'JSON',
     value: 'json',
+  },
+  {
+    label: '数组',
+    value: 'array',
   }
 ])
 
@@ -716,6 +720,7 @@ const fieldTemplate = {
   fieldSearchType: '',
   dictType: '',
   dataSource: {
+    association:1,
     table: '',
     label: '',
     value: ''
@@ -810,6 +815,7 @@ const editAndAddField = (item) => {
     addFlag.value = 'edit'
     if(!item.dataSource){
       item.dataSource = {
+        association:1,
         table: '',
         label: '',
         value: ''

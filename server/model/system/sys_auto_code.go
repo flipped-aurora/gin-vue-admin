@@ -40,9 +40,10 @@ type AutoCodeStruct struct {
 }
 
 type DataSource struct {
-	Table string `json:"table"`
-	Label string `json:"label"`
-	Value string `json:"value"`
+	Association int    `json:"association"` // 关联关系 1 一对一 2 一对多
+	Table       string `json:"table"`
+	Label       string `json:"label"`
+	Value       string `json:"value"`
 }
 
 func (a *AutoCodeStruct) Pretreatment() {

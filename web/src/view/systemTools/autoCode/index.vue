@@ -808,6 +808,13 @@ const editAndAddField = (item) => {
   dialogFlag.value = true
   if (item) {
     addFlag.value = 'edit'
+    if(!item.dataSource){
+      item.dataSource = {
+        table: '',
+        label: '',
+        value: ''
+      }
+    }
     bk.value = JSON.parse(JSON.stringify(item))
     dialogMiddle.value = item
   } else {

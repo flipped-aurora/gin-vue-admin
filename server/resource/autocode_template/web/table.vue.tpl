@@ -107,7 +107,7 @@
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
-              <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="scope.row.{{.FieldJson}})" placeholder="请选择{{.FieldDesc}}" style="width:100%" disabled>
+              <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="scope.row.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" disabled>
                  <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
               </el-select>
          </template>

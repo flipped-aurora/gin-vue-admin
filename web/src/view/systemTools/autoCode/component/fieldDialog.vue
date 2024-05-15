@@ -161,7 +161,7 @@
       >
         <el-row :gutter="8">
           <el-col
-            :span="2"
+            :span="3"
           >
             <el-select
               v-model="middleDate.dataSource.association"

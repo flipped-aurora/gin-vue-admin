@@ -1019,6 +1019,7 @@ const getColumnFunc = async() => {
                 dictType: '',
                 front: true,
                 dataSource: {
+                  association:1,
                   table: '',
                   label: '',
                   value: ''

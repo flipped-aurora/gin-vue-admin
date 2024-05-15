@@ -1,4 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 @import '@/style/main.scss';
+@import "@/style/reset";
 
 .el-button {
     font-weight: 400;
@@ -42,26 +46,30 @@
 }
 
 
-.admin-box {
-    @apply min-h-[calc(100vh-200px)] px-3 py-4 mt-28 mb-4 mx-1;
-    .el-table {
+.el-table {
+    tr{
         th {
-            @apply px-0 py-2;
+            @apply  dark:bg-slate-900;
             .cell {
-                @apply leading-[40px] text-gray-700;
+                @apply leading-[36px] text-gray-700 dark:text-gray-200;
             }
         }
+    }
+    .el-table__row {
         td {
-            @apply px-0 py-2;
+            @apply dark:bg-slate-900;
             .cell {
-                @apply leading-[40px] text-gray-600;
+                @apply leading-[32px] text-gray-600 dark:text-gray-300;
             }
         }
-        .is-leaf {
-            @apply border-b border-t-0 border-l-0 border-solid border-gray-50;
-            border-right:var(--el-table-border);
-            background: #F7FBFF !important;
+    }
+    tr{
+        th{
+            &.is-leaf {
+                @apply dark:bg-slate-900;
+            }
         }
+
     }
 }
 
@@ -72,136 +80,44 @@
     @apply mt-8;
     .btn-prev,
     .btn-next {
-        @apply border border-solid border-gray-300 rounded;
+        @apply border border-solid border-gray-300 dark:border-gray-700 rounded;
     }
     .el-pager {
         li {
-            @apply border border-solid border-gray-300 rounded text-gray-600 text-sm mx-1;
+            @apply border border-solid border-gray-300 dark:border-gray-600 rounded text-gray-600 text-sm mx-1;
         }
     }
 }
-
-// 导航
-#app {
-    .el-container {
-        @apply relative h-full w-full;
+.el-menu{
+    li{
+        @apply my-1;
     }
-    .el-container.mobile.openside {
-        @apply fixed top-0;
-    }
-    .gva-aside {
-        @apply fixed top-0 left-0 z-[1001] overflow-hidden;
-        .el-menu {
-            @apply border-r-0;
-        }
-    }
-    .aside {
-        .el-menu--collapse {
-            >.el-menu-item {
-                display: flex;
-                justify-content: center;
-            }
-        }
-        .el-sub-menu {
-            .el-menu {
-                .is-active {
-                    // 关闭三级菜单二级菜单样式
-                    ul {
-                        border: none;
-                    }
-                }
-                // 关闭三级菜单二级菜单样式
-                .is-active.is-opened {
-                    ul {
-                        border: none;
-                    }
-                }
-            }
-        }
-    }
-    .hideside {
-        .aside {
-            @apply w-[54px]
-        }
-    }
-
-    .mobile {
-        .gva-aside {
-            @apply w-[54px];
-        }
-    }
-
-    .hideside {
-        .main-cont.el-main {
-            @apply ml-[54px];
-        }
-    }
-    .mobile {
-        .main-cont.el-main {
-            @apply ml-0;
-        }
+}
+.el-menu-item{
+    border-radius: 2px;
+    &.is-active{
+        background-color: var(--el-color-primary) !important;
+        color: #fff !important;
     }
 }
 
-.el-container.layout-cont {
-    .header-cont {
-        @apply px-4 h-16 bg-white;
+.el-tabs__header{
+    margin: 0 0 1px !important;
+}
+
+.el-sub-menu.is-active{
+    .el-sub-menu__title{
+        color: var(--el-color-primary) !important;
     }
+}
 
+.el-sub-menu__title.el-tooltip__trigger,
+.el-menu-item .el-menu-tooltip__trigger{
+    justify-content: center;
+}
 
-    .main-cont {
-        @apply h-screen overflow-visible;
-        &.el-main {
-            @apply min-h-full ml-[220px] bg-main p-0 overflow-auto;
-        }
-
-        .breadcrumb {
-            @apply h-16 flex items-center p-0 ml-12 text-lg;
-            .el-breadcrumb__item {
-                .el-breadcrumb__inner {
-                    @apply text-gray-600;
-                }
-            }
-            .el-breadcrumb__item:nth-last-child(1) {
-                .el-breadcrumb__inner {
-                    @apply text-gray-600;
-                }
-            }
-        }
-
-        .router-history {
-            @apply bg-white p-0 border-t border-l-0 border-r-0 border-b-0 border-solid border-gray-100;
-            .el-tabs__header {
-                @apply m-0;
-                .el-tabs__item{
-                    @apply border-solid border-r border-t-0 border-gray-100 border-b-0 border-l-0;
-                }
-                .el-tabs__item.is-active {
-                    @apply bg-blue-500 bg-opacity-5;
-                }
-                .el-tabs__nav {
-                    @apply border-0;
-                }
-            }
-        }
-
-        .aside {
-            @apply overflow-auto;
-        }
-        .el-menu-vertical {
-            @apply h-[calc(100vh-60px)];
-            &:not(.el-menu--collapse) {
-                @apply w-[220px];
-            }
-        }
-        .el-menu--collapse {
-            @apply w-[54px];
-            li {
-                .el-tooltip,
-                .el-sub-menu__title {
-                    @apply px-4;
-                }
-            }
-        }
-    }
+html.dark {
+    /* 自定义深色背景颜色 */
+    --el-bg-color: rgb(30 ,41 ,59);
+    --el-bg-color-overlay: rgba(30 ,41 ,59, 0.8);
 }

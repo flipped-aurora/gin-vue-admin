@@ -79,7 +79,7 @@
               </el-form-item>
               <el-form-item class="mb-6">
                 <el-button
-                  class="shadow shadow-blue-600 h-11 w-full"
+                  class="shadow shadow-active h-11 w-full"
                   type="primary"
                   size="large"
                   @click="submitForm"
@@ -87,7 +87,7 @@
               </el-form-item>
               <el-form-item class="mb-6">
                 <el-button
-                  class="shadow shadow-blue-600 h-11 w-full"
+                  class="shadow shadow-active h-11 w-full"
                   type="primary"
                   size="large"
                   @click="checkInit"
@@ -155,14 +155,14 @@
 <script setup>
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
-import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
+import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/pinia/modules/user'
 
 defineOptions({
-  name: 'Login',
+  name: "Login",
 })
 
 const router = useRouter()

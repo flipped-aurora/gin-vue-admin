@@ -71,8 +71,9 @@ const  hexToColor = (u,e,t)=>{
 }
 const  generateAllColors = (u,e)=> {
   let t = colorToHex(u);
+  const target = [10, 10, 30];
   for (let a = 0; a < 3; a++)
-    t[a] = Math.floor((255 - t[a]) * e + t[a]);
+  t[a] = Math.floor(t[a] * (1 - e) + target[a] * e);
   return hexToColor(t[0], t[1], t[2])
 }
 

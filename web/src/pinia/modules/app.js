@@ -23,7 +23,7 @@ export const useAppStore = defineStore('app', () => {
   Object.keys(originSetting).forEach(key => {
       config[key] = originSetting[key]
     if(key === 'primaryColor'){
-      setBodyPrimaryColor(originSetting[key])
+      setBodyPrimaryColor(originSetting[key],config.darkMode)
     }
   })
 
@@ -72,7 +72,7 @@ export const useAppStore = defineStore('app', () => {
 
   const togglePrimaryColor = (e) => {
     config.primaryColor = e;
-    setBodyPrimaryColor(e)
+    setBodyPrimaryColor(e,config.darkMode)
   }
 
   const toggleTabs = (e) => {

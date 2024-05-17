@@ -23,6 +23,12 @@ export const filterDict = (value, options) => {
 }
 
 export const filterDataSource = (dataSource, value) => {
+  if (Array.isArray(value)) {
+    return value.map(item => {
+      const rowLabel = dataSource && dataSource.find(i => i.value === item)
+      return rowLabel?.label
+    })
+  }
   const rowLabel = dataSource && dataSource.find(item => item.value === value)
   return rowLabel?.label
 }

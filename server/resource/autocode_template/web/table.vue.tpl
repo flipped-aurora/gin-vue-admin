@@ -107,7 +107,13 @@
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
-          {{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}
+                {{if eq .DataSource.Association 2}}
+                    <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
+                        {{ "{{ item }}" }}
+                    </el-tag>
+                {{ else }}
+                    <span>{{"{{"}} filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}}) {{"}}"}}</span>
+                {{ end }}
          </template>
          </el-table-column>
         {{- else if .DictType}}
@@ -208,7 +214,7 @@
         {{- range .FrontFields}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
-            <el-select v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+            <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
             </el-select>
           {{- else }}
@@ -231,6 +237,11 @@
               // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
               {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
           {{- end }}
+           {{- if eq .FieldType "array" }}
+           <el-tag v-for="(item,key) in formData.{{.FieldJson}}" :key="key">
+              {{ "{{ item }}" }}
+           </el-tag>
+           {{- end }}
           {{- if eq .FieldType "int" }}
               <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
           {{- end }}
@@ -308,7 +319,7 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, formatBoolean, filterDict,filterDataSource, ReturnArrImg, onDownloadFile } from '@/utils/format'
+import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, ReturnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 
@@ -354,6 +365,9 @@ const formData = ref({
         {{- end }}
         {{- if eq .FieldType "json" }}
         {{.FieldJson}}: {},
+        {{- end }}
+        {{- if eq .FieldType "array" }}
+        {{.FieldJson}}: [],
         {{- end }}
         {{- end }}
         })

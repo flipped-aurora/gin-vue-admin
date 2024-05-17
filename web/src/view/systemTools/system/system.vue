@@ -549,7 +549,7 @@ const email = async() => {
 
 <style lang="scss">
 .system {
-  @apply bg-white p-9 rounded;
+  @apply bg-white p-9 rounded dark:bg-slate-900;
   h2 {
     @apply p-2.5 my-2.5 text-lg shadow;
   }

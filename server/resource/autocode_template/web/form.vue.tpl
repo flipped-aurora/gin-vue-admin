@@ -5,7 +5,7 @@
       {{- range .Fields}}
         <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
        {{- if .CheckDataSource}}
-        <el-select v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+        <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
           <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
         </el-select>
        {{- else }}
@@ -138,6 +138,9 @@ const formData = ref({
             {{- end }}
             {{- if eq .FieldType "json" }}
             {{.FieldJson}}: {},
+            {{- end }}
+            {{- if eq .FieldType "array" }}
+            {{.FieldJson}}: [],
             {{- end }}
         {{- end }}
         })

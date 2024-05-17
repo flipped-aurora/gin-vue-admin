@@ -980,6 +980,9 @@ func fmtField(autoCode *system.AutoCodeStruct) {
 		if autoCode.Fields[i].FieldType == "json" {
 			autoCode.NeedJSON = true
 		}
+		if autoCode.Fields[i].FieldType == "array" {
+			autoCode.NeedJSON = true
+		}
 		if autoCode.Fields[i].FieldType == "file" {
 			autoCode.HasFile = true
 			autoCode.NeedJSON = true

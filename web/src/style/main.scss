@@ -44,3 +44,10 @@
 .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content{
     background: var(--el-color-primary-bg) !important;
 }
+
+.el-dropdown{
+    outline: none;
+    div{
+        outline: none;
+    }
+}

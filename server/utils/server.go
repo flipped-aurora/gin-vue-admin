@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"runtime"
 	"time"
 
@@ -20,7 +21,7 @@ type Server struct {
 	Os   Os   `json:"os"`
 	Cpu  Cpu  `json:"cpu"`
 	Ram  Ram  `json:"ram"`
-	Disk Disk `json:"disk"`
+	Disk []Disk `json:"disk"`
 }
 
 type Os struct {
@@ -43,6 +44,7 @@ type Ram struct {
 }
 
 type Disk struct {
+	MountPoint  string `json:"mountPoint"`
 	UsedMB      int `json:"usedMb"`
 	UsedGB      int `json:"usedGb"`
 	TotalMB     int `json:"totalMb"`
@@ -104,15 +106,21 @@ func InitRAM() (r Ram, err error) {
 //@description: 硬盘信息
 //@return: d Disk, err error
 
-func InitDisk() (d Disk, err error) {
-	if u, err := disk.Usage("/"); err != nil {
-		return d, err
-	} else {
-		d.UsedMB = int(u.Used) / MB
-		d.UsedGB = int(u.Used) / GB
-		d.TotalMB = int(u.Total) / MB
-		d.TotalGB = int(u.Total) / GB
-		d.UsedPercent = int(u.UsedPercent)
+func InitDisk() (d []Disk, err error) {
+	for i := range global.GVA_CONFIG.DiskList {
+		mp := global.GVA_CONFIG.DiskList[i].MountPoint
+		if u, err := disk.Usage(mp); err != nil {
+			return d, err
+		} else {
+			d = append(d, Disk{
+				MountPoint:  mp,
+				UsedMB:      int(u.Used) / MB,
+				UsedGB:      int(u.Used) / GB,
+				TotalMB:     int(u.Total) / MB,
+				TotalGB:     int(u.Total) / GB,
+				UsedPercent: int(u.UsedPercent),
+			})
+		}
 	}
 	return d, nil
 }

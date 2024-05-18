@@ -233,6 +233,10 @@ hua-wei-obs:
 excel:
   dir: ./resource/excel/
 
+# disk usage configuration
+disk-list:
+  - mount-point: "/"
+
 # 跨域配置
 # 需要配合 server/initialize/router.go -> `Router.Use(middleware.CorsByRules())` 使用
 cors:

@@ -55,6 +55,7 @@
         <el-card
           v-if="state.disk"
           class="card_item"
+          :body-style="{ height: '180px', 'overflow-y': 'scroll' }"
         >
           <template #header>
             <div>Disk</div>

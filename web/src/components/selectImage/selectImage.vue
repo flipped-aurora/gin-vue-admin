@@ -3,10 +3,6 @@
     <div
       v-if="!multiple"
       class="update-image"
-      :style="{
-        'background-image': `url(${getUrl(model)})`,
-        'position': 'relative',
-      }"
     >
       <el-icon
         v-if="isVideoExt(model || '')"
@@ -26,10 +22,11 @@
       >
         <source :src="getUrl(model) + '#t=1'">
       </video>
+
+      <img v-if="model" class="w-full h-full absolute z-0" :src="getUrl(model)" alt="图片"/>
       <span
         v-if="model"
-        class="update"
-        style="position: absolute;"
+        class="update absolute"
         @click="openChooseImg"
       >
         <el-icon>
@@ -54,11 +51,8 @@
         v-for="(item, index) in multipleValue"
         :key="index"
         class="update-image"
-        :style="{
-          'background-image': `url(${getUrl(item)})`,
-          'position': 'relative',
-        }"
       >
+        <img v-if="item" class="w-full h-full absolute z-0" :src="getUrl(item)" alt="图片"/>
         <el-icon
           v-if="isVideoExt(item || '')"
           :size="32"
@@ -365,24 +359,13 @@ const getImageList = async() => {
   background-repeat: no-repeat;
   background-size: cover;
   position: relative;
+  overflow: hidden;
 
   &:hover {
     color: #fff;
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(0, 0, 0, 0.15) 100%
-    ),
-    radial-gradient(
-            at top center,
-            rgba(255, 255, 255, 0.4) 0%,
-            rgba(0, 0, 0, 0.4) 120%
-    ) #989898;
-    background-blend-mode: multiply, multiply;
-    background-size: cover;
-
     .update {
       color: #fff;
+      background: rgba(0, 0, 0, 0.3);
     }
 
     .video {

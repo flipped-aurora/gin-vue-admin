@@ -18,6 +18,10 @@
 </head>
 
 <body>
+<div id="app">
+    <Loading v-if="$loading" />
+    <router-view/>
+</div>
     <div id="app"></div>
     <script type="module" src="./src/main.js"></script>
 </body>

@@ -1,16 +1,16 @@
 <template>
-  <div class="rounded-lg  flex items-center justify-evenly w-full h-full relative bg-white md:w-screen md:h-screen md:bg-[#194bfb] overflow-hidden">
+  <div class="rounded-lg  flex items-center justify-evenly w-full h-full relative md:w-screen md:h-screen md:bg-[#194bfb] overflow-hidden">
     <div class="rounded-md w-full h-full flex items-center justify-center overflow-hidden">
-      <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-80" />
+      <div class="oblique h-[130%] w-3/5 bg-white dark:bg-slate-900 transform -rotate-12 absolute -ml-80" />
       <div
         v-if="!page.showForm"
         :class="[page.showReadme ?'slide-out-right' :'slide-in-fwd-top' ]"
       >
         <div class=" text-lg">
-          <div class="font-sans text-4xl font-bold text-center mb-4">GIN-VUE-ADMIN</div>
-          <p class="text-gray-600 mb-2">初始化须知</p>
-          <p class="text-gray-600 mb-2">1.您需有用一定的VUE和GOLANG基础</p>
-          <p class="text-gray-600 mb-2">2.请您确认是否已经阅读过<a
+          <div class="font-sans text-4xl font-bold text-center mb-4 dark:text-white">GIN-VUE-ADMIN</div>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">初始化须知</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">1.您需有用一定的VUE和GOLANG基础</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">2.请您确认是否已经阅读过<a
             class="text-blue-600 font-bold"
             href="https://www.gin-vue-admin.com"
             target="_blank"
@@ -19,9 +19,9 @@
             href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=2"
             target="_blank"
           >初始化视频</a></p>
-          <p class="text-gray-600 mb-2">3.请您确认是否了解后续的配置流程</p>
-          <p class="text-gray-600 mb-2">4.如果您使用mysql数据库，请确认数据库引擎为<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
-          <p class="text-gray-600 mb-2">注：开发组不为文档中书写过的内容提供无偿服务</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">3.请您确认是否了解后续的配置流程</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">4.如果您使用mysql数据库，请确认数据库引擎为<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">注：开发组不为文档中书写过的内容提供无偿服务</p>
           <p class="flex items-center justify-between mt-8">
             <el-button
               type="primary"
@@ -51,6 +51,9 @@
           label-width="100px"
           size="large"
         >
+          <el-form-item label="管理员密码">
+            <el-input v-model="form.adminPassword" placeholder="admin账号的默认密码"></el-input>
+          </el-form-item>
           <el-form-item label="数据库类型">
             <el-select
               v-model="form.dbType"
@@ -201,6 +204,8 @@ const changeDB = (val) => {
   switch (val) {
     case 'mysql':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',
@@ -212,6 +217,8 @@ const changeDB = (val) => {
       break
     case 'pgsql':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'pgsql',
         host: '127.0.0.1',
         port: '5432',
@@ -223,6 +230,8 @@ const changeDB = (val) => {
       break
     case 'oracle':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'oracle',
         host: '127.0.0.1',
         port: '1521',
@@ -234,6 +243,8 @@ const changeDB = (val) => {
       break
     case 'mssql':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'mssql',
         host: '127.0.0.1',
         port: '1433',
@@ -245,6 +256,8 @@ const changeDB = (val) => {
       break
     case 'sqlite':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'sqlite',
         host: '',
         port: '',
@@ -256,6 +269,8 @@ const changeDB = (val) => {
       break
     default:
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',
@@ -267,6 +282,14 @@ const changeDB = (val) => {
   }
 }
 const onSubmit = async() => {
+  if (form.adminPassword.length < 6) {
+    ElMessage({
+      type: 'error',
+      message: '密码长度不能小于6位',
+    })
+    return
+  }
+
   const loading = ElLoading.service({
     lock: true,
     text: '正在初始化数据库，请稍候',

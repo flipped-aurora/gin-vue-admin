@@ -89,6 +89,7 @@ type InitDBService struct{}
 // InitDB 创建数据库并初始化 总入口
 func (initDBService *InitDBService) InitDB(conf request.InitDB) (err error) {
 	ctx := context.TODO()
+	ctx = context.WithValue(ctx, "adminPassword", conf.AdminPassword)
 	if len(initializers) == 0 {
 		return errors.New("无可用初始化过程，请检查初始化是否已执行完成")
 	}

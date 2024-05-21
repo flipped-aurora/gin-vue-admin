@@ -119,5 +119,7 @@
 html.dark {
     /* 自定义深色背景颜色 */
     --el-bg-color: rgb(30 ,41 ,59);
-    --el-bg-color-overlay: rgba(30 ,41 ,59, 0.8);
+    --el-bg-color-overlay: rgb(40 ,51 ,69);
+    --el-fill-color-light:  rgb(15 ,23 ,42);
+    --el-fill-color : rgb(15 ,23 ,42);
 }

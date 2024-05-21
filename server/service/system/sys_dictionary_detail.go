@@ -101,14 +101,14 @@ func (dictionaryDetailService *DictionaryDetailService) GetDictionaryListByType(
 }
 
 // 按照字典id+字典内容value获取单条字典内容
-func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByValue(dictionaryID uint, value uint) (detail system.SysDictionaryDetail, err error) {
+func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByValue(dictionaryID uint, value string) (detail system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetail system.SysDictionaryDetail
 	err = global.GVA_DB.First(&sysDictionaryDetail, "sys_dictionary_id = ? and value = ?", dictionaryID, value).Error
 	return sysDictionaryDetail, err
 }
 
 // 按照字典type+字典内容value获取单条字典内容
-func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByTypeValue(t string, value uint) (detail system.SysDictionaryDetail, err error) {
+func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByTypeValue(t string, value string) (detail system.SysDictionaryDetail, err error) {
 	var sysDictionaryDetails system.SysDictionaryDetail
 	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
 	err = db.First(&sysDictionaryDetails, "sys_dictionaries.type = ? and sys_dictionary_details.value = ?", t, value).Error

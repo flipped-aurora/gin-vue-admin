@@ -44,8 +44,15 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	password := utils.BcryptHash("6447985")
-	adminPassword := utils.BcryptHash("123456")
+
+	ap := ctx.Value("adminPassword")
+	apStr, ok := ap.(string)
+	if !ok {
+		apStr = "123456"
+	}
+
+	password := utils.BcryptHash(apStr)
+	adminPassword := utils.BcryptHash(apStr)
 
 	entities := []sysModel.SysUser{
 		{

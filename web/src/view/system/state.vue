@@ -55,47 +55,61 @@
         <el-card
           v-if="state.disk"
           class="card_item"
+          :body-style="{ height: '180px', 'overflow-y': 'scroll' }"
         >
           <template #header>
             <div>Disk</div>
           </template>
           <div>
-            <el-row :gutter="10">
+            <el-row
+                v-for="(item, index) in state.disk"
+                :key="index"
+                :gutter="10"
+                style="margin-bottom: 2rem"
+            >
               <el-col :span="12">
+
+                <el-row :gutter="10">
+                  <el-col :span="12">MountPoint</el-col>
+                  <el-col
+                      :span="12"
+                      v-text="item.mountPoint"
+                  />
+                </el-row>
                 <el-row :gutter="10">
                   <el-col :span="12">total (MB)</el-col>
                   <el-col
-                    :span="12"
-                    v-text="state.disk.totalMb"
+                      :span="12"
+                      v-text="item.totalMb"
                   />
                 </el-row>
                 <el-row :gutter="10">
                   <el-col :span="12">used (MB)</el-col>
                   <el-col
-                    :span="12"
-                    v-text="state.disk.usedMb"
+                      :span="12"
+                      v-text="item.usedMb"
                   />
                 </el-row>
                 <el-row :gutter="10">
                   <el-col :span="12">total (GB)</el-col>
                   <el-col
-                    :span="12"
-                    v-text="state.disk.totalGb"
+                      :span="12"
+                      v-text="item.totalGb"
                   />
                 </el-row>
                 <el-row :gutter="10">
                   <el-col :span="12">used (GB)</el-col>
                   <el-col
-                    :span="12"
-                    v-text="state.disk.usedGb"
+                      :span="12"
+                      v-text="item.usedGb"
                   />
                 </el-row>
               </el-col>
               <el-col :span="12">
                 <el-progress
-                  type="dashboard"
-                  :percentage="state.disk.usedPercent"
-                  :color="colors"
+                    type="dashboard"
+                    :percentage="item.usedPercent"
+                    :color="colors"
                 />
               </el-col>
             </el-row>

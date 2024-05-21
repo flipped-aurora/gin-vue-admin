@@ -4,7 +4,7 @@
       <warning-bar
         title="点击“文件名/备注”可以编辑文件名或者备注内容。"
       />
-      <div class="gva-btn-list">
+      <div class="gva-btn-list gap-3">
         <upload-common
           :image-common="imageCommon"
           @on-success="getTableData"

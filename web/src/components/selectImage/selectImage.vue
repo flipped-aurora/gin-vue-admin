@@ -1,104 +1,29 @@
 <template>
   <div>
-    <div
+    <selectComponent
       v-if="!multiple"
-      class="update-image"
-      :style="{
-        'background-image': `url(${getUrl(model)})`,
-        'position': 'relative',
-      }"
-    >
-      <el-icon
-        v-if="isVideoExt(model || '')"
-        :size="32"
-        class="video video-icon"
-        style=""
-      >
-        <VideoPlay />
-      </el-icon>
-      <video
-        v-if="isVideoExt(model || '')"
-        class="avatar video-avatar video"
-        muted
-        preload="metadata"
-        style=""
-        @click="openChooseImg"
-      >
-        <source :src="getUrl(model) + '#t=1'">
-      </video>
-      <span
-        v-if="model"
-        class="update"
-        style="position: absolute;"
-        @click="openChooseImg"
-      >
-        <el-icon>
-          <delete />
-        </el-icon>
-        删除</span>
-      <span
-        v-else
-        class="update text-gray-600"
-        @click="openChooseImg"
-      >
-        <el-icon>
-          <plus />
-        </el-icon>
-        上传</span>
-    </div>
+      :model="model"
+      @chooseItem="openChooseImg"
+      @deleteItem="openChooseImg"
+    />
     <div
       v-else
-      class="multiple-img"
+      class="w-full gap-4 flex"
     >
-      <div
+      <selectComponent
         v-for="(item, index) in multipleValue"
         :key="index"
-        class="update-image"
-        :style="{
-          'background-image': `url(${getUrl(item)})`,
-          'position': 'relative',
-        }"
-      >
-        <el-icon
-          v-if="isVideoExt(item || '')"
-          :size="32"
-          class="video video-icon"
-        >
-          <VideoPlay />
-        </el-icon>
-        <video
-          v-if="isVideoExt(item || '')"
-          class="avatar video-avatar video"
-          muted
-          preload="metadata"
-          @click="deleteImg(index)"
-        >
-          <source :src="getUrl(item) + '#t=1'">
-        </video>
-        <span
-          class="update"
-          style="position: absolute;"
-          @click="deleteImg(index)"
-        >
-          <el-icon>
-            <delete />
-          </el-icon>
-          删除</span>
-      </div>
-      <div
-        v-if="!maxUpdateCount || maxUpdateCount>multipleValue.length"
-        class="add-image"
-      >
-        <span
-          class="update  text-gray-600"
-          @click="openChooseImg"
-        >
-          <el-icon>
-            <Plus />
-          </el-icon>
-          上传</span>
-      </div>
+        :model="item"
+        @chooseItem="openChooseImg"
+        @deleteItem="deleteImg(index)"
+      />
+      <selectComponent
+        v-if="multipleValue.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+        @chooseItem="openChooseImg"
+        @deleteItem="openChooseImg"
+      />
     </div>
+
     <el-drawer
       v-model="drawer"
       title="媒体库"
@@ -107,7 +32,7 @@
       <warning-bar
         title="点击“文件名/备注”可以编辑文件名或者备注内容。"
       />
-      <div class="gva-btn-list">
+      <div class="gva-btn-list gap-2">
         <upload-common
           :image-common="imageCommon"
           @on-success="getImageList"
@@ -127,34 +52,35 @@
           type="primary"
           icon="search"
           @click="getImageList"
-        >查询
+        >
+          查询
         </el-button>
       </div>
-      <div class="media">
+      <div class="flex flex-wrap gap-4">
         <div
           v-for="(item,key) in picList"
           :key="key"
-          class="media-box"
+          class="w-40"
         >
-          <div class="header-img-box-list">
+          <div class="w-40 h-40 border rounded overflow-hidden border-dashed border-gray-300 cursor-pointer">
             <el-image
               :key="key"
               :src="getUrl(item.url)"
               fit="cover"
-              style="width: 100%;height: 100%;"
+              class="w-full h-full relative"
               @click="chooseImg(item.url)"
             >
               <template #error>
                 <el-icon
                   v-if="isVideoExt(item.url || '')"
                   :size="32"
-                  class="video video-icon"
+                  class="absolute top-[calc(50%-16px)] left-[calc(50%-16px)]"
                 >
                   <VideoPlay />
                 </el-icon>
                 <video
                   v-if="isVideoExt(item.url || '')"
-                  class="avatar video-avatar video"
+                  class="w-full h-full object-cover"
                   muted
                   preload="metadata"
                   @click="chooseImg(item.url)"
@@ -164,9 +90,9 @@
                 </video>
                 <div
                   v-else
-                  class="header-img-box-list"
+                  class="w-full h-full object-cover flex items-center justify-center"
                 >
-                  <el-icon class="lost-image">
+                  <el-icon :size="32">
                     <icon-picture />
                   </el-icon>
                 </div>
@@ -174,9 +100,10 @@
             </el-image>
           </div>
           <div
-            class="img-title"
+            class="overflow-hidden text-nowrap overflow-ellipsis text-center w-full"
             @click="editFileNameFunc(item)"
-          >{{ item.name }}
+          >
+            {{ item.name }}
           </div>
         </div>
       </div>
@@ -202,7 +129,8 @@ import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { Delete, Plus, Picture as IconPicture } from '@element-plus/icons-vue'
+import { Picture as IconPicture } from '@element-plus/icons-vue'
+import selectComponent from '@/components/selectImage/selectComponent.vue'
 
 const imageUrl = ref('')
 const imageCommon = ref('')
@@ -332,135 +260,3 @@ const getImageList = async() => {
 
 </script>
 
-<style scoped lang="scss">
-
-.multiple-img {
-  display: flex;
-  gap: 8px;
-  width: 100%;
-  flex-wrap: wrap;
-}
-
-.add-image {
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  display: flex;
-  justify-content: center;
-  border-radius: 20px;
-  border: 1px dashed #ccc;
-  background-size: cover;
-  cursor: pointer;
-}
-
-.update-image {
-  cursor: pointer;
-  width: 120px;
-  height: 120px;
-  line-height: 120px;
-  display: flex;
-  justify-content: center;
-  border-radius: 20px;
-  border: 1px dashed #ccc;
-  background-repeat: no-repeat;
-  background-size: cover;
-  position: relative;
-
-  &:hover {
-    color: #fff;
-    background: linear-gradient(
-            to bottom,
-            rgba(255, 255, 255, 0.15) 0%,
-            rgba(0, 0, 0, 0.15) 100%
-    ),
-    radial-gradient(
-            at top center,
-            rgba(255, 255, 255, 0.4) 0%,
-            rgba(0, 0, 0, 0.4) 120%
-    ) #989898;
-    background-blend-mode: multiply, multiply;
-    background-size: cover;
-
-    .update {
-      color: #fff;
-    }
-
-    .video {
-      opacity: 0.2;
-    }
-  }
-
-  .video-icon {
-    position: absolute;
-    left: calc(50% - 16px);
-    top: calc(50% - 16px);
-  }
-
-  video {
-    object-fit: cover;
-    max-width: 100%;
-    border-radius: 20px;
-  }
-
-  .update {
-    height: 120px;
-    width: 120px;
-    text-align: center;
-    color: transparent;
-    position: absolute;
-  }
-}
-
-.media {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  .media-box {
-    width: 120px;
-    .img-title {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 36px;
-      text-align: center;
-      cursor: pointer;
-    }
-
-    .header-img-box-list {
-      width: 120px;
-      height: 120px;
-      border: 1px dashed #ccc;
-      border-radius: 8px;
-      text-align: center;
-      line-height: 120px;
-      cursor: pointer;
-      overflow: hidden;
-
-      .el-image__inner {
-        max-width: 120px;
-        max-height: 120px;
-        vertical-align: middle;
-        width: unset;
-        height: unset;
-      }
-
-      .el-image {
-        position: relative;
-      }
-
-      .video-icon {
-        position: absolute;
-        left: calc(50% - 16px);
-        top: calc(50% - 16px);
-      }
-
-      video {
-        object-fit: cover;
-        max-width: 100%;
-        min-height: 100%;
-        border-radius: 8px;
-      }
-    }
-  }
-}
-</style>

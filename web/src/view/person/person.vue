@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="gva-form-box">
     <div class="grid grid-cols-12 w-full gap-2">
       <div class="col-span-3 h-full">
-        <div class="w-full h-full bg-white px-4 py-8 rounded-lg shadow-lg box-border">
-          <div class="user-card px-6 text-center bg-white shrink-0">
+        <div class="w-full h-full bg-white dark:bg-slate-900 px-4 py-8 rounded-lg shadow-lg box-border">
+          <div class="user-card px-6 text-center bg-white dark:bg-slate-900 shrink-0">
             <div class="flex justify-center">
               <SelectImage
                 v-model="userStore.userInfo.headerImg"
@@ -92,7 +92,7 @@
         </div>
       </div>
       <div class="col-span-9 ">
-        <div class="bg-white h-full px-4 py-8 rounded-lg shadow-lg box-border">
+        <div class="bg-white dark:bg-slate-900 h-full px-4 py-8 rounded-lg shadow-lg box-border">
           <el-tabs
             v-model="activeName"
             @tab-click="handleClick"
@@ -494,7 +494,7 @@ const changeEmail = async() => {
 
 <style lang="scss">
 .borderd {
-  @apply border-b-2 border-solid border-gray-100 border-t-0 border-r-0 border-l-0;
+  @apply border-b-2 border-solid border-gray-100 dark:border-gray-500 border-t-0 border-r-0 border-l-0;
     &:last-child{
       @apply border-b-0;
     }

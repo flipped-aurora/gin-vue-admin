@@ -83,6 +83,11 @@ const percentageFlage = ref(true)
 
 // 选中文件的函数
 const choseFile = async(e) => {
+
+  // 点击选择文件后取消 直接return
+  if (!e.target.files.length) {
+    return
+  }
   const fileR = new FileReader() // 创建一个reader用来读取文件流
   const fileInput = e.target.files[0] // 获取当前文件
   const maxSize = 5 * 1024 * 1024

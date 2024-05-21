@@ -4,10 +4,10 @@
     class="w-full h-full relative"
   >
     <div
-      class="rounded-lg flex items-center justify-evenly w-full h-full bg-white md:w-screen md:h-screen md:bg-[#194bfb]"
+      class="rounded-lg flex items-center justify-evenly w-full h-full md:w-screen md:h-screen md:bg-[#194bfb]"
     >
       <div class="md:w-3/5 w-10/12 h-full flex items-center justify-evenly">
-        <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-52" />
+        <div class="oblique h-[130%] w-3/5 bg-white dark:bg-slate-900 transform -rotate-12 absolute -ml-52" />
         <!-- 分割斜块 -->
         <div class="z-[999] pt-12 pb-10 md:w-96 w-full  rounded-lg flex flex-col justify-between box-border">
           <div>
@@ -202,7 +202,7 @@ const loginForm = ref(null)
 const picPath = ref('')
 const loginFormData = reactive({
   username: 'admin',
-  password: '123456',
+  password: '',
   captcha: '',
   captchaId: '',
   openCaptcha: false,

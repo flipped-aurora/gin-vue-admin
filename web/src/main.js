@@ -17,6 +17,8 @@ import { store } from '@/pinia'
 import App from './App.vue'
 import { initDom } from './utils/positionToCode'
 
+import Loading from './view/layout/components/loading.vue'
+
 initDom()
 /**
  * @description 导入加载进度条，防止首屏加载时间过长，用户等待
@@ -33,6 +35,18 @@ Nprogress.start()
 
 const app = createApp(App)
 app.config.productionTip = false
+app.component('Loading', Loading)
+
+router.beforeEach((to, from, next) => {
+    // 显示loading组件
+    app.config.globalProperties.$loading = true
+    next()
+})
+
+router.afterEach((to, from) => {
+    // 隐藏loading组件
+    app.config.globalProperties.$loading = false
+})
 
 app
   .use(run)

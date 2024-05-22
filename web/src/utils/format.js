@@ -106,11 +106,12 @@ export const setBodyPrimaryColor = (  primaryColor, darkMode ) =>{
   }
 
   document.documentElement.style.setProperty('--el-color-primary', primaryColor)
+  document.documentElement.style.setProperty('--el-color-primary-bg', addOpacityToColor(primaryColor, 0.4))
   for (let times = 1; times <= 2; times++) {
     document.documentElement.style.setProperty(`--el-color-primary-dark-${times}`,  fmtColorFunc(primaryColor, times / 10))
   }
   for (let times = 1; times <= 10; times++) {
     document.documentElement.style.setProperty(`--el-color-primary-light-${times}`,  fmtColorFunc(primaryColor, times / 10))
   }
-  document.documentElement.style.setProperty(`--el-menu-hover-bg-color`,  addOpacityToColor(primaryColor, 0.1))
+  document.documentElement.style.setProperty(`--el-menu-hover-bg-color`,  addOpacityToColor(primaryColor, 0.2))
 }

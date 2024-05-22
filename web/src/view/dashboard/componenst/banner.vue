@@ -27,6 +27,10 @@ const banners = [
   {
     img: banner2,
     link: "https://plugin.gin-vue-admin.com"
+  },
+  {
+    img: "https://qmplusimg.henrongyi.top/gvaDemo/k8s.jpg",
+    link: "https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=42"
   }
 ]
 </script>

@@ -93,9 +93,9 @@
         :data="tableData"
         row-key="{{.PrimaryField.FieldJson}}"
         @selection-change="handleSelectionChange"
+        border  resizeable
         {{- if .NeedSort}}
         @sort-change="sortChange"
-        border  resizeable
         {{- end}}
         >
         <el-table-column type="selection" width="55" />

@@ -8,20 +8,101 @@
     <meta content="Gin,Vue,Admin.Gin-Vue-Admin,GVA,gin-vue-admin,后台管理框架,vue后台管理框架,gin-vue-admin文档,gin-vue-admin首页,gin-vue-admin" name="keywords" />
     <link rel="icon" href="favicon.ico">
     <title></title>
-  <style>
+    <style>
       .transition-colors{
           transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
           transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
           transition-duration: 150ms;
       }
+      body{
+          margin: 0;
+      }
+       #loading-box{
+           position: relative;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           height: 100vh;
+           width: 100vw;
+       }
+       #loading-text {
+           position: absolute;
+           bottom: calc(50% - 100px);
+           left: 0;
+           right: 0;
+           text-align: center;
+           color: #666;
+           font-size: 16px;
+       }
+      #loading {
+          font-family: "Arial Black", "Arial Bold", Gadget, sans-serif;
+          text-transform:uppercase;
+
+          width:300px;
+          text-align:center;
+          line-height:100px;
+
+          position:absolute;
+          left:0;right:0;top:50%;
+          margin:auto;
+          transform:translateY(-50%);
+          z-index: 999;
+      }
+
+      #loading span {
+          position:relative;
+          z-index:1;
+          color:#fff;
+          font-size:24px;
+      }
+      #loading:before {
+          content:'';
+          background:#61bdb6;
+          width:256px;
+          height:72px;
+          display:block;
+          position:absolute;
+          top:0;left:0;right:0;bottom:0;
+          margin:auto;
+
+          animation:1.5s loadingBefore infinite ease-in-out;
+      }
+
+      @keyframes loadingBefore {
+          0%   {transform:translateX(-28px);}
+          50%  {transform:translateX(28px);}
+          100% {transform:translateX(-28px);}
+      }
+
+
+      #loading:after {
+          content:'';
+          background:#ff3600;
+          width:28px;
+          height:120px;
+          display:block;
+          position:absolute;
+          top:0;left:0;right:0;bottom:0;
+          margin:auto;
+          opacity:.5;
+          z-index: 2;
+          animation:1.5s loadingAfter infinite ease-in-out;
+      }
+
+      @keyframes loadingAfter {
+          0%   {transform:translateX(-100px);}
+          50%  {transform:translateX(100px);}
+          100% {transform:translateX(-100px);}
+      }
+
   </style>
 </head>
 
 <body>
-<div id="app">
-    <Loading v-if="$loading" />
-    <router-view/>
-</div>
+    <div id="loading-box">
+        <div id="loading"><span>Loading</span></div>
+        <div id="loading-text">初次加载需要加载较多资源请耐心等待</div>
+    </div>
     <div id="app"></div>
     <script type="module" src="./src/main.js"></script>
 </body>

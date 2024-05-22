@@ -17,7 +17,6 @@ import { store } from '@/pinia'
 import App from './App.vue'
 import { initDom } from './utils/positionToCode'
 
-import Loading from './view/layout/components/loading.vue'
 
 initDom()
 /**
@@ -33,26 +32,23 @@ Nprogress.start()
  * 无需在这块结束，会在路由中间件中结束此块内容
  * */
 
+const removeLoading = () => {
+    const element = document.getElementById('loading-box');
+    if (element) {
+       element.remove();
+    }
+}
+
 const app = createApp(App)
 app.config.productionTip = false
-app.component('Loading', Loading)
-
-router.beforeEach((to, from, next) => {
-    // 显示loading组件
-    app.config.globalProperties.$loading = true
-    next()
-})
-
-router.afterEach((to, from) => {
-    // 隐藏loading组件
-    app.config.globalProperties.$loading = false
-})
 
 app
-  .use(run)
-  .use(store)
-  .use(auth)
-  .use(router)
-  .mount('#app')
+    .use(run)
+    .use(store)
+    .use(auth)
+    .use(router)
+    .mount('#app')
+
+removeLoading()
 
 export default app

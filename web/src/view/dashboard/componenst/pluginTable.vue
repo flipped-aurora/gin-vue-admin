@@ -5,7 +5,7 @@
 
 <template>
   <div>
-    <el-table :data="tableData" stripe style="width: 100%" @row-click="toPath">
+    <el-table :data="tableData" stripe style="width: 100%">
       <el-table-column prop="ranking" label="排名" width="80" align="center"/>
       <el-table-column prop="title" label="插件标题" show-overflow-tooltip>
         <template #default="{ row }">

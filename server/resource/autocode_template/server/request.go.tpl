@@ -24,11 +24,15 @@ type {{.StructName}}Search struct{
                             {{- else if eq .FieldType "video" }}
                       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
                              {{- else if eq .FieldType "file" }}
-                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
+                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"array,object"`
                             {{- else if eq .FieldType "pictures" }}
-                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
+                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"array,object"`
                             {{- else if eq .FieldType "richtext" }}
                       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
+                            {{- else if eq .FieldType "json" }}
+                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"object"`
+                            {{- else if eq .FieldType "array" }}
+                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"array,object"`
                             {{- else if ne .FieldType "string" }}
                       {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
                             {{- else }}

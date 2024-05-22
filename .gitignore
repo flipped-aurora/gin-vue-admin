@@ -1,7 +1,7 @@
 .idea/
 /web/node_modules
 /web/dist
-
+rm_file/
 .DS_Store
 
 # local env files

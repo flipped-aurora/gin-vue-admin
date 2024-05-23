@@ -16,6 +16,7 @@
       }
       body{
           margin: 0;
+          --64f90c3645474bd5: #409eff;
       }
        #gva-loading-box{
            position: relative;
@@ -46,7 +47,7 @@
       #box {
           width: 50px;
           height: 50px;
-          background: var(--el-color-primary) ;
+          background: var(--64f90c3645474bd5);
           animation: animate .5s linear infinite;
           position: absolute;
           top: 0;
@@ -74,13 +75,14 @@
           border-radius: 50%;
           animation: shadow .5s linear infinite;
       }
+      .dark #shadow{
+          background: #fff;
+      }
       @keyframes shadow {
           50% {
               transform: scale(1.2,1);
           }
       }
-
-
 
     </style>
 </head>

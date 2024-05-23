@@ -1,10 +1,11 @@
 package system
 
 import (
-	"archive/zip"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/mholt/archiver/v4"
 	"io"
 	"mime/multipart"
 	"os"
@@ -214,10 +215,10 @@ func makeDictTypes(autoCode *system.AutoCodeStruct) {
 func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruct, menuID uint, ids ...uint) (err error) {
 	fmtField(&autoCode)
 	// 增加判断: 重复创建struct
-	if autoCode.AutoMoveFile && AutoCodeHistoryServiceApp.Repeat(autoCode.BusinessDB, autoCode.StructName, autoCode.Package) {
+	if AutoCodeHistoryServiceApp.Repeat(autoCode.BusinessDB, autoCode.StructName, autoCode.Package) {
 		return RepeatErr
 	}
-	dataList, fileList, needMkdir, err := autoCodeService.getNeedList(&autoCode)
+	dataList, _, needMkdir, err := autoCodeService.getNeedList(&autoCode)
 	if err != nil {
 		return err
 	}
@@ -257,55 +258,49 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		idBf.WriteString(strconv.Itoa(int(id)))
 		idBf.WriteString(";")
 	}
-	if autoCode.AutoMoveFile { // 判断是否需要自动转移
-		Init(autoCode.Package)
-		for index := range dataList {
-			autoCodeService.addAutoMoveFile(&dataList[index])
+	Init(autoCode.Package)
+	for index := range dataList {
+		autoCodeService.addAutoMoveFile(&dataList[index])
+	}
+	// 判断目标文件是否都可以移动
+	for _, value := range dataList {
+		if utils.FileExist(value.autoMoveFilePath) {
+			return errors.New(fmt.Sprintf("目标文件已存在:%s\n", value.autoMoveFilePath))
 		}
-		// 判断目标文件是否都可以移动
-		for _, value := range dataList {
-			if utils.FileExist(value.autoMoveFilePath) {
-				return errors.New(fmt.Sprintf("目标文件已存在:%s\n", value.autoMoveFilePath))
-			}
-		}
-		for _, value := range dataList { // 移动文件
-			if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
-				return err
-			}
-		}
-
-		{
-			// 在gorm.go 注入 自动迁移
-			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
-			varDB := utils.MaheHump(autoCode.BusinessDB)
-			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
-		}
-
-		{
-			// router.go 注入 自动迁移
-			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
-			ast2.AddRouterCode(path, "Routers", autoCode.Package, autoCode.StructName)
-		}
-		// 给各个enter进行注入
-		err = injectionCode(autoCode.StructName, &injectionCodeMeta)
-		if err != nil {
-			return
-		}
-		// 保存生成信息
-		for _, data := range dataList {
-			if len(data.autoMoveFilePath) != 0 {
-				bf.WriteString(data.autoMoveFilePath)
-				bf.WriteString(";")
-			}
-		}
-	} else { // 打包
-		if err = utils.ZipFiles("./ginvueadmin.zip", fileList, ".", "."); err != nil {
+	}
+	for _, value := range dataList { // 移动文件
+		if err := utils.FileMove(value.autoCodePath, value.autoMoveFilePath); err != nil {
 			return err
 		}
 	}
-	if autoCode.AutoMoveFile || autoCode.AutoCreateApiToSql || autoCode.AutoCreateMenuToSql {
+
+	{
+		// 在gorm.go 注入 自动迁移
+		path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+		varDB := utils.MaheHump(autoCode.BusinessDB)
+		ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
+	}
+
+	{
+		// router.go 注入 自动迁移
+		path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
+		ast2.AddRouterCode(path, "Routers", autoCode.Package, autoCode.StructName)
+	}
+	// 给各个enter进行注入
+	err = injectionCode(autoCode.StructName, &injectionCodeMeta)
+	if err != nil {
+		return
+	}
+	// 保存生成信息
+	for _, data := range dataList {
+		if len(data.autoMoveFilePath) != 0 {
+			bf.WriteString(data.autoMoveFilePath)
+			bf.WriteString(";")
+		}
+	}
+	if autoCode.AutoCreateApiToSql || autoCode.AutoCreateMenuToSql {
 		if autoCode.TableName != "" {
 			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
 				string(meta),
@@ -336,9 +331,6 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	}
 	if err != nil {
 		return err
-	}
-	if autoCode.AutoMoveFile {
-		return system.ErrAutoMove
 	}
 	return nil
 }
@@ -862,88 +854,31 @@ func (autoCodeService *AutoCodeService) PubPlug(plugName string) (zipPath string
 
 	fileName := plugName + ".zip"
 	// 创建一个新的zip文件
-	zipFile, err := os.Create(fileName)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	defer zipFile.Close()
-
-	// 创建一个zip写入器
-	zipWriter := zip.NewWriter(zipFile)
-	defer zipWriter.Close()
-
-	webHeaderName := filepath.Join(plugName, "web", "plugin", plugName)
-	err = autoCodeService.doZip(zipWriter, webPath, webHeaderName)
-	if err != nil {
-		return
-	}
-	serverHeaderName := filepath.Join(plugName, "server", "plugin", plugName)
-	err = autoCodeService.doZip(zipWriter, serverPath, serverHeaderName)
-	if err != nil {
-		return
-	}
-	return filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fileName), nil
-}
-
-/*
-*
-
-	zipWriter zip写入器
-	serverPath 存储的路径
-	headerName 写有zip的路径
-
-*
-*/
-func (autoCodeService *AutoCodeService) doZip(zipWriter *zip.Writer, serverPath, headerName string) (err error) {
-	// 遍历serverPath目录并将所有非隐藏文件添加到zip归档中
-	err = filepath.Walk(serverPath, func(path string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-
-		// 跳过隐藏文件和目录
-		if strings.HasPrefix(info.Name(), ".") {
-			return nil
-		}
-
-		// 创建一个新的文件头
-		header, err := zip.FileInfoHeader(info)
-		if err != nil {
-			return err
-		}
-
-		// 将文件头的名称设置为文件的相对路径
-		rel, _ := filepath.Rel(serverPath, path)
-		header.Name = filepath.Join(headerName, rel)
-		// 目录需要拼上一个 "/" ，否则会出现一个和目录一样的文件在压缩包中
-		if info.IsDir() {
-			header.Name += "/"
-		}
-		// 将文件添加到zip归档中
-		writer, err := zipWriter.CreateHeader(header)
-		if err != nil {
-			return err
-		}
-
-		if info.IsDir() {
-			return nil
-		}
-
-		// 打开文件并将其内容复制到zip归档中
-		file, err := os.Open(path)
-		if err != nil {
-			return err
-		}
-		defer file.Close()
-		_, err = io.Copy(writer, file)
-		if err != nil {
-			return err
-		}
-
-		return nil
+	files, err := archiver.FilesFromDisk(nil, map[string]string{
+		webPath:    plugName + "/web/plugin/" + plugName,
+		serverPath: plugName + "/server/plugin/" + plugName,
 	})
-	return err
+
+	// create the output file we'll write to
+	out, err := os.Create(fileName)
+	if err != nil {
+		return
+	}
+	defer out.Close()
+
+	// we can use the CompressedArchive type to gzip a tarball
+	// (compression is not required; you could use Tar directly)
+	format := archiver.CompressedArchive{
+		Archival: archiver.Zip{},
+	}
+
+	// create the archive
+	err = format.Archive(context.Background(), out, files)
+	if err != nil {
+		return
+	}
+
+	return filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fileName), nil
 }
 
 func fmtField(autoCode *system.AutoCodeStruct) {

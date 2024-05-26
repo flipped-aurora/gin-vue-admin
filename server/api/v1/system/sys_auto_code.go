@@ -89,21 +89,12 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	a.PackageT = utils.FirstUpper(a.Package)
 	err := autoCodeService.CreateTemp(a, menuId, apiIds...)
 	if err != nil {
-		if errors.Is(err, system.ErrAutoMove) {
-			c.Writer.Header().Add("success", "true")
-			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
-		} else {
-			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
-			_ = os.Remove("./ginvueadmin.zip")
-		}
-	} else {
-		c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "ginvueadmin.zip")) // fmt.Sprintf("attachment; filename=%s", filename)对下载的文件重命名
-		c.Writer.Header().Add("Content-Type", "application/json")
-		c.Writer.Header().Add("success", "true")
-		c.File("./ginvueadmin.zip")
-		_ = os.Remove("./ginvueadmin.zip")
+		c.Writer.Header().Add("success", "false")
+		c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
+		return
 	}
+	c.Writer.Header().Add("Content-Type", "application/json")
+	c.Writer.Header().Add("success", "true")
 	if a.AutoKeepCode {
 		var records []system.RecordsDeleteCode
 		result := global.GVA_DB.Table("records").Select("path", "file", "update_time").Find(&records)

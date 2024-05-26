@@ -1,14 +1,10 @@
 package internal
 
 import (
-	"gorm.io/gorm/schema"
-	"log"
-	"os"
-	"time"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 type DBBASE interface {
@@ -29,11 +25,7 @@ func (g *_gorm) Config(prefix string, singular bool) *gorm.Config {
 		},
 		DisableForeignKeyConstraintWhenMigrating: true,
 	}
-	_default := logger.New(log.New(os.Stdout, "\r\n", log.LstdFlags), logger.Config{
-		SlowThreshold: 200 * time.Millisecond,
-		LogLevel:      logger.Warn,
-		Colorful:      true,
-	})
+	_default := NewZapLogger()
 	var logMode DBBASE
 	switch global.GVA_CONFIG.System.DbType {
 	case "mysql":

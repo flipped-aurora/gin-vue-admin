@@ -123,6 +123,7 @@ const changeUserAuth = async (id) => {
   });
   if (res.code === 0) {
     window.sessionStorage.setItem("needCloseAll", "true");
+    window.sessionStorage.setItem("needToHome", "true");
     window.location.reload();
   }
 };

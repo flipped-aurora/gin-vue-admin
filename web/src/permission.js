@@ -77,6 +77,11 @@ router.beforeEach(async(to, from) => {
   } else {
     // 不在白名单中并且已经登录的时候
     if (token) {
+      console.log(sessionStorage.getItem("needCloseAll"))
+      if(sessionStorage.getItem("needToHome") === 'true') {
+        sessionStorage.removeItem("needToHome")
+        return { path: '/'}
+      }
       // 添加flag防止多次获取动态路由和栈溢出
       if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
         await getRouter(userStore)

@@ -293,18 +293,7 @@
             </template>
             <el-checkbox v-model="form.autoCreateMenuToSql" />
           </el-form-item>
-          <el-form-item>
-            <template #label>
-              <el-tooltip
-                content="注：自动迁移生成的文件到yaml配置的对应位置"
-                placement="bottom"
-                effect="light"
-              >
-                <div> 自动移动文件 <el-icon><QuestionFilled /></el-icon></div>
-              </el-tooltip>
-            </template>
-            <el-checkbox v-model="form.autoMoveFile" />
-          </el-form-item>
+
         </div>
       </el-form>
     </div>
@@ -758,7 +747,6 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
-  autoMoveFile: true,
   gvaModel: true,
   autoCreateResource: false,
   fields: []
@@ -935,38 +923,12 @@ const enterForm = async(isPreview) => {
         if (data.headers?.success === 'false') {
           return
         }
-        if (form.value.autoMoveFile) {
           ElMessage({
             type: 'success',
             message: '自动化代码创建成功，自动移动成功'
           })
-          return
-        }
-        ElMessage({
-          type: 'success',
-          message: '自动化代码创建成功，正在下载'
-        })
-        const blob = new Blob([data])
-        const fileName = 'ginvueadmin.zip'
-        if ('download' in document.createElement('a')) {
-          // 不是IE浏览器
-          const url = window.URL.createObjectURL(blob)
-          const link = document.createElement('a')
-          link.style.display = 'none'
-          link.href = url
-          link.setAttribute('download', fileName)
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link) // 下载完成移除元素
-          window.URL.revokeObjectURL(url) // 释放掉blob对象
-        } else {
-          // IE 10+
-          window.navigator.msSaveBlob(blob, fileName)
-        }
         clearCatch()
       }
-    } else {
-      return false
     }
   })
 }
@@ -1007,7 +969,6 @@ const getColumnFunc = async() => {
     form.value.abbreviation = tbHump
     form.value.description = tbHump + '表'
     form.value.autoCreateApiToSql = true
-    form.value.autoMoveFile = true
     form.value.fields = []
     res.data.columns &&
           res.data.columns.forEach(item => {
@@ -1120,7 +1081,6 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
-    autoMoveFile: true,
     gvaModel: true,
     autoCreateResource: false,
     fields: []

@@ -187,7 +187,6 @@ const editFileNameFunc = async(row) => {
     inputValue: row.name
   }).then(async({ value }) => {
     row.name = value
-    // console.log(row)
     const res = await editFileName(row)
     if (res.code === 0) {
       ElMessage({
@@ -216,7 +215,6 @@ const listObj = {
 }
 
 const chooseImg = (url) => {
-  console.log(url)
   if (props.fileType) {
     const typeSuccess = listObj[props.fileType].some(item => {
       if (url.includes(item)) {

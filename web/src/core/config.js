@@ -4,7 +4,7 @@
 import chalk from "chalk";
 
 const config = {
-  appName: 'Gin-Vue-Admin',
+  appName: '薛定饿了不养喵',
   appLogo: 'https://www.gin-vue-admin.com/img/logo.png',
   showViteLogo: true,
   logs: [],

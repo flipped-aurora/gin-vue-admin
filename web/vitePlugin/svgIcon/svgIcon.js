@@ -46,12 +46,6 @@ export const svgBuilder = (path) => {
     name: 'svg-transform',
     transformIndexHtml(html) {
       return html.replace(
-        '<head>',
-        `
-          <head>
-            <meta name="keywords" content="${timestamp},${secretCode}">
-        `
-      ).replace(
         '<body>',
         `
           <body>

@@ -3,6 +3,7 @@ package system
 import (
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -38,4 +39,15 @@ func (m *SysAutoCodeHistory) ToRequestIds() request.IdsReq {
 		ids = append(ids, int(id))
 	}
 	return request.IdsReq{Ids: ids}
+}
+
+// 记录删除文件的路径
+type RecordsDeleteCode struct {
+	Path       string    `gorm:"type:text;comment:已删除文件保存路径"`
+	File       string    `gorm:"type:text;comment:新生成文件路径"`
+	UpdateTime time.Time `gorm:"type:datetime;comment:更新时间"`
+}
+
+func (RecordsDeleteCode) TableName() string {
+	return "records"
 }

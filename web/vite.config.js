@@ -43,9 +43,9 @@ export default ({
 
   const rollupOptions = {
     output: {
-      entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
-      chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
-      assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]',
+      entryFileNames: 'assets/[name].[hash].js',
+      chunkFileNames: 'assets/[name].[hash].js',
+      assetFileNames: 'assets/[name].[hash].[ext]',
     },
   }
 

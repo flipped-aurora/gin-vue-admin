@@ -293,7 +293,33 @@
             </template>
             <el-checkbox v-model="form.autoCreateMenuToSql" />
           </el-form-item>
-
+          <el-form-item>
+            <template #label>
+              <el-tooltip
+                content="注：自动迁移生成的文件到yaml配置的对应位置"
+                placement="bottom"
+                effect="light"
+              >
+                <div> 自动移动文件 <el-icon><QuestionFilled /></el-icon></div>
+              </el-tooltip>
+            </template>
+            <el-checkbox v-model="form.autoMoveFile" />
+          </el-form-item>
+          <el-form-item>
+            <template #label>
+              <el-tooltip
+                  content="注：该功能还在测试阶段请开发者酌情使用。v1.0.0保留后端@gvakeep 和 @gvaendkeep之间的代码片段默认添加到新文件的最后中"
+                  placement="bottom" effect="light"
+              >
+                <div>保留代码(测试
+                  <el-icon>
+                    <QuestionFilled/>
+                  </el-icon>
+                </div>
+              </el-tooltip>
+            </template>
+            <el-checkbox v-model="form.autoKeepCode"/>
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -628,6 +654,14 @@ const typeOptions = ref([
     value: 'int'
   },
   {
+    label: '整型64',
+    value: 'int64'
+  },
+  {
+    label: 'uint(默认id类型)',
+    value: 'uint'
+  },
+  {
     label: '布尔值',
     value: 'bool'
   },
@@ -747,6 +781,8 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
+  autoMoveFile: true,
+  autoKeepCode: false,
   gvaModel: true,
   autoCreateResource: false,
   fields: []

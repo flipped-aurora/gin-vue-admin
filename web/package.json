@@ -3,7 +3,7 @@
     "version": "2.6.5",
     "private": true,
     "scripts": {
-        "serve": "node openDocument.js && vite --host --mode development",
+        "serve": "vite --host --mode development",
         "build": "vite build --mode production",
         "limit-build": "npm install increase-memory-limit-fixbug cross-env -g && npm run fix-memory-limit && node ./limit && npm run build",
         "preview": "vite preview",

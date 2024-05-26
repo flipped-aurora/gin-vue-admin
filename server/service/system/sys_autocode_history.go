@@ -5,6 +5,8 @@ import (
 	"fmt"
 	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	"gorm.io/gorm"
+	"log"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -110,14 +112,39 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		}
 
 		// 迁移
-		nPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+		delteSavePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
 			"rm_file", time.Now().Format("20060102"), filepath.Base(filepath.Dir(filepath.Dir(path))), filepath.Base(filepath.Dir(path)), filepath.Base(path))
 		// 判断目标文件是否存在
-		for utils.FileExist(nPath) {
-			fmt.Println("文件已存在:", nPath)
-			nPath += fmt.Sprintf("_%d", time.Now().Nanosecond())
+		for utils.FileExist(delteSavePath) {
+			fmt.Println("文件已存在:", delteSavePath)
+			delteSavePath += fmt.Sprintf("_%d", time.Now().Nanosecond())
 		}
-		err = utils.FileMove(path, nPath)
+		parts := strings.Split(path, "gin-vue-admin")
+		//从gin-vue-admin文件开始 例如serve\
+		FilePath := strings.TrimPrefix(parts[1], "\\")
+		var record system.RecordsDeleteCode
+		result := global.GVA_DB.Table("records").Where("file = ?", FilePath).First(&record)
+		if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+			record = system.RecordsDeleteCode{
+				Path:       delteSavePath,
+				File:       FilePath,
+				UpdateTime: time.Now(),
+			}
+			if err := global.GVA_DB.Create(&record).Error; err != nil {
+				log.Fatal()
+			}
+
+		} else if result.Error != nil {
+			log.Fatal(result.Error)
+		} else {
+			//更新已有记录
+			record.Path = delteSavePath
+			record.UpdateTime = time.Now()
+			if err := global.GVA_DB.Model(&system.RecordsDeleteCode{}).Where("file = ?", FilePath).Updates(&record).Error; err != nil {
+				log.Fatal(err)
+			}
+		}
+		err = utils.FileMove(path, delteSavePath)
 		if err != nil {
 			global.GVA_LOG.Error("file move err ", zap.Error(err))
 		}

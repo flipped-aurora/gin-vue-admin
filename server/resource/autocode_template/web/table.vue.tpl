@@ -93,6 +93,7 @@
         :data="tableData"
         row-key="{{.PrimaryField.FieldJson}}"
         @selection-change="handleSelectionChange"
+        border  resizeable
         {{- if .NeedSort}}
         @sort-change="sortChange"
         {{- end}}
@@ -246,7 +247,7 @@
               <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
-              <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
+              <el-date-picker v-model="formData.{{ .FieldJson }}" type="datetime" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
           {{- end }}
           {{- if eq .FieldType "float64" }}
               <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />

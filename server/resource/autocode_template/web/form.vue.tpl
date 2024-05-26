@@ -28,7 +28,7 @@
           <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入" />
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="datetime" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
       {{- end }}
       {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>

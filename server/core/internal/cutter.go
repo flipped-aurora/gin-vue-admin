@@ -83,3 +83,13 @@ func (c *Cutter) Write(bytes []byte) (n int, err error) {
 	}
 	return c.file.Write(bytes)
 }
+
+func (c *Cutter) Sync() error {
+	c.mutex.Lock()
+	defer c.mutex.Unlock()
+
+	if c.file != nil {
+		return c.file.Sync()
+	}
+	return nil
+}

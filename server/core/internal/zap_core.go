@@ -31,7 +31,8 @@ func (z *ZapCore) WriteSyncer(formats ...string) zapcore.WriteSyncer {
 		CutterWithFormats(formats...),
 	)
 	if global.GVA_CONFIG.Zap.LogInConsole {
-		return zapcore.AddSync(os.Stdout)
+		multiSyncer := zapcore.NewMultiWriteSyncer(os.Stdout, cutter)
+		return zapcore.AddSync(multiSyncer)
 	}
 	return zapcore.AddSync(cutter)
 }

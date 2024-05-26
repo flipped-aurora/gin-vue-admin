@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"gorm.io/gorm/logger"
 	"time"
 )
@@ -14,13 +15,26 @@ type ZapLogger struct {
 }
 
 func NewZapLogger() logger.Interface {
+	newLogger := global.GVA_LOG.With(zap.String("type", "sql"))
 	return &ZapLogger{
-		log: global.GVA_LOG,
+		log: newLogger,
 	}
 }
 
 func (l *ZapLogger) LogMode(level logger.LogLevel) logger.Interface {
-	// 在这里，我们忽略了LogMode的设置，因为zap的日志级别在创建zap logger时已经设置了
+	var newLevel zapcore.Level
+	switch level {
+	case logger.Silent:
+		newLevel = zapcore.FatalLevel
+	case logger.Error:
+		newLevel = zapcore.ErrorLevel
+	case logger.Warn:
+		newLevel = zapcore.WarnLevel
+	case logger.Info:
+		newLevel = zapcore.InfoLevel
+	}
+	// 这里为log设置新的level
+	l.log = l.log.WithOptions(zap.IncreaseLevel(newLevel))
 	return l
 }
 

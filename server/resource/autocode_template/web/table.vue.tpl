@@ -99,7 +99,7 @@
         >
         <el-table-column type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" width="180">
+        <el-table-column align="left" label="日期" prop="createdAt" width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
@@ -127,17 +127,17 @@
             <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
         </el-table-column>
          {{- else if eq .FieldType "time.Time" }}
-         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" width="180">
+         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="180">
             <template #default="scope">{{"{{"}} formatDate(scope.row.{{.FieldJson}}) {{"}}"}}</template>
          </el-table-column>
           {{- else if eq .FieldType "picture" }}
-          <el-table-column label="{{.FieldDesc}}" width="200">
+          <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                 <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
            {{- else if eq .FieldType "pictures" }}
-           <el-table-column label="{{.FieldDesc}}" width="200">
+           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
                     <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
@@ -145,7 +145,7 @@
               </template>
            </el-table-column>
            {{- else if eq .FieldType "video" }}
-           <el-table-column label="{{.FieldDesc}}" width="200">
+           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                <video
                   style="width: 100px; height: 100px"
@@ -157,13 +157,13 @@
               </template>
            </el-table-column>
            {{- else if eq .FieldType "richtext" }}
-                      <el-table-column label="{{.FieldDesc}}" width="200">
+                      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
                          <template #default="scope">
                             [富文本内容]
                          </template>
                       </el-table-column>
            {{- else if eq .FieldType "file" }}
-                    <el-table-column label="{{.FieldDesc}}" width="200">
+                    <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
                         <template #default="scope">
                              <div class="file-list">
                                <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid">{{"{{"}}file.name{{"}}"}}</el-tag>
@@ -171,7 +171,7 @@
                         </template>
                     </el-table-column>
          {{- else if eq .FieldType "json" }}
-          <el-table-column label="{{.FieldDesc}}" width="200">
+          <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                   [JSON]
               </template>

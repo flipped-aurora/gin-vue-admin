@@ -10,7 +10,7 @@ export default {
     register(app)
     console.log(`
        欢迎使用 Gin-Vue-Admin
-       当前版本:v2.6.4
+       当前版本:v2.6.5
        加群方式:微信：shouzi_1994 QQ群：622360840
        项目地址：https://github.com/flipped-aurora/gin-vue-admin
        插件市场:https://plugin.gin-vue-admin.com

@@ -123,7 +123,7 @@
 <script setup>
 
 import { getUrl, isVideoExt } from '@/utils/image'
-import { onMounted, ref , defineEmits } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
@@ -131,7 +131,7 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import selectComponent from '@/components/selectImage/selectComponent.vue'
-const  emit  = defineEmits(['getChooseImgUrl']);
+
 const imageUrl = ref('')
 const imageCommon = ref('')
 
@@ -216,6 +216,7 @@ const listObj = {
 }
 
 const chooseImg = (url) => {
+  console.log(url)
   if (props.fileType) {
     const typeSuccess = listObj[props.fileType].some(item => {
       if (url.includes(item)) {
@@ -237,7 +238,6 @@ const chooseImg = (url) => {
     model.value = url
   }
   drawer.value = false
-  emit('getChooseImgUrl', url)
 }
 const openChooseImg = async() => {
   if (model.value && !props.multiple) {

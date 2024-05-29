@@ -54,7 +54,7 @@
                 :disabled="scope.row.flag === 1"
                 @click="openDialog(scope.row)"
                 >回滚</el-button
-              > 
+              >
               <el-button type="primary" link @click="goAutoCode(scope.row)"
                 >复用</el-button
               >
@@ -78,7 +78,7 @@
       </div>
     </div>
     <el-dialog
-      title="回滚操作"
+      :title="dialogFormTitle"
       v-model="dialogFormVisible"
       :before-close="closeDialog"
       width="600px"
@@ -137,6 +137,8 @@ const formData = ref({
 
 const router = useRouter();
 const dialogFormVisible = ref(false);
+const dialogFormTitle = ref("");
+
 const page = ref(1);
 const total = ref(0);
 const pageSize = ref(10);
@@ -185,6 +187,7 @@ const deleteRow = async (row) => {
 
 // 打开弹窗
 const openDialog = (row) => {
+  dialogFormTitle.value = "回滚：" + row.structName;
   formData.value.id = row.ID;
   dialogFormVisible.value = true;
 };
@@ -207,6 +210,7 @@ const deleteTableCheck = (flag) => {
       `此操作将删除自动创建的文件和api（会删除表！！！）, 是否继续?`,
       "提示",
       {
+        closeOnClickModal: false,
         distinguishCancelAndClose: true,
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -218,6 +222,8 @@ const deleteTableCheck = (flag) => {
           `此操作将删除自动创建的文件和api（会删除表！！！）, 请继续确认！！！`,
           "会删除表",
           {
+            closeOnClickModal: false,
+            distinguishCancelAndClose: true,
             confirmButtonText: "确定",
             cancelButtonText: "取消",
             type: "warning",

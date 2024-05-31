@@ -223,9 +223,14 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		var row []string
 		for _, column := range columns {
 			if len(template.JoinTemplate) > 0 {
-				columnArr := strings.Split(column, ".")
-				if len(columnArr) > 1 {
-					column = strings.Split(column, ".")[1]
+				columnAs := strings.Split(column, " as ")
+				if len(columnAs) > 1 {
+					column = strings.TrimSpace(strings.Split(column, " as ")[1])
+				} else {
+					columnArr := strings.Split(column, ".")
+					if len(columnArr) > 1 {
+						column = strings.Split(column, ".")[1]
+					}
 				}
 			}
 			row = append(row, fmt.Sprintf("%v", table[column]))

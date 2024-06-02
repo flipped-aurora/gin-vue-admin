@@ -62,7 +62,7 @@
           :key="key"
           class="w-40"
         >
-          <div class="w-40 h-40 border rounded overflow-hidden border-dashed border-gray-300 cursor-pointer">
+          <div class="w-40 h-40 border rounded overflow-hidden border-dashed border-gray-300 cursor-pointer relative group">
             <el-image
               :key="key"
               :src="getUrl(item.url)"
@@ -98,6 +98,9 @@
                 </div>
               </template>
             </el-image>
+            <div class="absolute -right-1 top-1 w-8 h-8 group-hover:inline-block hidden" @click="deleteCheck(item)">
+              <el-icon :size="16"><CircleClose /></el-icon>
+            </div>
           </div>
           <div
             class="overflow-hidden text-nowrap overflow-ellipsis text-center w-full"
@@ -124,7 +127,7 @@
 
 import { getUrl, isVideoExt } from '@/utils/image'
 import { onMounted, ref } from 'vue'
-import { getFileList, editFileName } from '@/api/fileUploadAndDownload'
+import { getFileList, editFileName,deleteFile } from '@/api/fileUploadAndDownload'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -254,6 +257,28 @@ const getImageList = async() => {
     page.value = res.data.page
     pageSize.value = res.data.pageSize
   }
+}
+
+const deleteCheck = (item)=>{
+  ElMessageBox.confirm('是否删除该文件', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await deleteFile(item)
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功!',
+      })
+      getImageList()
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '已取消删除'
+    })
+  })
 }
 
 </script>

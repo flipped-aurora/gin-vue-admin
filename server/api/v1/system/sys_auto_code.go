@@ -11,8 +11,10 @@ import (
 	"strings"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	sysReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -305,6 +307,34 @@ func (autoApi *AutoCodeApi) CreatePackage(c *gin.Context) {
 	}
 }
 
+// UpdatePackage
+// @Tags      AutoCode
+// @Summary   更新package展示名字/描述
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      system.SysAutoCode                                         true  "更新package"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "更新package成功"
+// @Router    /autoCode/updatePackageDetail [post]
+func (autoApi *AutoCodeApi) UpdatePackageDetail(c *gin.Context) {
+	var a sysReq.SysAutoCode
+	var autoCode system.SysAutoCode
+	_ = c.ShouldBindJSON(&a)
+	if err := global.GVA_DB.Where("id = ?", a.ID).First(&autoCode).Error; err != nil {
+		response.FailWithMessage("获取package失败", c)
+		return
+	}
+	// 更新展示名字/描述
+	autoCode.Label = a.Label
+	autoCode.Desc = a.Desc
+	if err := global.GVA_DB.Save(&autoCode).Error; err != nil {
+		global.GVA_LOG.Error("更新失败!", zap.Error(err))
+		response.FailWithMessage("更新失败", c)
+	} else {
+		response.OkWithMessage("更新成功", c)
+	}
+}
+
 // GetPackage
 // @Tags      AutoCode
 // @Summary   获取package
@@ -320,6 +350,34 @@ func (autoApi *AutoCodeApi) GetPackage(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 	} else {
 		response.OkWithDetailed(gin.H{"pkgs": pkgs}, "获取成功", c)
+	}
+}
+
+// auto_code_api.go
+
+// GetPackageByID
+// @Tags      AutoCode
+// @Summary   根据ID获取package
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     id  body      int                                                true  "package ID"
+// @Success   200  {object}  response.Response{data=system.SysAutoCode,msg=string}  "根据ID获取package成功"
+// @Router    /autoCode/getPackageByID/ POST
+func (autoApi *AutoCodeApi) GetPackageById(c *gin.Context) {
+	var pkgId request.GetById
+	err := c.ShouldBindJSON(&pkgId)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	var autoCode system.SysAutoCode
+	fmt.Printf("pkgId%+v", pkgId)
+	if err := global.GVA_DB.First(&autoCode, pkgId).Error; err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"pkg": autoCode}, "获取成功", c)
 	}
 }
 

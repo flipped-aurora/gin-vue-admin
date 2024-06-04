@@ -115,7 +115,9 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 
 		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/createPackage", Description: "生成包(package)"},
 		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/getPackage", Description: "获取所有包(package)"},
+		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/getPackageById", Description: "获取包详情(package)"},
 		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/delPackage", Description: "删除包(package)"},
+		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/updatePackageDetail", Description: "更新包展示名/描述(package)"},
 
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/getMeta", Description: "获取meta信息"},
 		{ApiGroup: "代码生成器历史", Method: "POST", Path: "/autoCode/rollback", Description: "回滚自动生成代码"},

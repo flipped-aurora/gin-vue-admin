@@ -20,7 +20,7 @@ const registerIcons = async(app) => {
   for (const path in iconModules) {
     const iconName = path.split('/').pop().replace(/\.svg$/, '')
     // 如果iconName带空格则不加入到图标库中并且提示名称不合法
-    console.log(iconName)
+    // console.log(iconName)
     if (iconName.indexOf(' ') !== -1) {
       console.error(`icon ${iconName}.svg includes whitespace`)
       continue

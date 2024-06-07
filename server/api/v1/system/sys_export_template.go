@@ -2,6 +2,8 @@ package system
 
 import (
 	"fmt"
+	"net/http"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
@@ -11,7 +13,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 type SysExportTemplateApi struct {
@@ -206,7 +207,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportExcel(c *gin.Context) {
 	}
 }
 
-// ExportExcel 导出表格模板
+// ExportTemplate 导出表格模板
 // @Tags SysExportTemplate
 // @Summary 导出表格模板
 // @Security ApiKeyAuth
@@ -229,7 +230,7 @@ func (sysExportTemplateApi *SysExportTemplateApi) ExportTemplate(c *gin.Context)
 	}
 }
 
-// ExportExcel 导入表格
+// ImportExcel 导入表格
 // @Tags SysImportTemplate
 // @Summary 导入表格
 // @Security ApiKeyAuth

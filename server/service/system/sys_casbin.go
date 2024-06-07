@@ -2,9 +2,10 @@ package system
 
 import (
 	"errors"
-	"gorm.io/gorm"
 	"strconv"
 	"sync"
+
+	"gorm.io/gorm"
 
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
@@ -107,7 +108,7 @@ func (casbinService *CasbinService) RemoveFilteredPolicy(db *gorm.DB, authorityI
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: RemoveFilteredPolicy
+//@function: SyncPolicy
 //@description: 同步目前数据库的policy 此方法需要调用FreshCasbin方法才可以在系统中即刻生效
 //@param: db *gorm.DB, authorityId string, rules [][]string
 //@return: error
@@ -121,8 +122,8 @@ func (casbinService *CasbinService) SyncPolicy(db *gorm.DB, authorityId string, 
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: ClearCasbin
-//@description: 清除匹配的权限
+//@function: AddPolicies
+//@description: 添加匹配的权限
 //@param: v int, p ...string
 //@return: bool
 

@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"fmt"
+
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -43,9 +44,8 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	if err != nil {
 		return err
 	}
-	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
-	if err != nil {
-		return err
+	if !CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method) {
+		return errors.New("ClearCasbin 失败")
 	}
 	return nil
 }
@@ -162,7 +162,7 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: DeleteApis
+//@function: DeleteApisByIds
 //@description: 删除选中API
 //@param: apis []model.SysApi
 //@return: err error

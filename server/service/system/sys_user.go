@@ -187,7 +187,7 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: SetUserInfo
+//@function: SetSelfInfo
 //@description: 设置用户信息
 //@param: reqUser model.SysUser
 //@return: err error, user model.SysUser
@@ -242,7 +242,7 @@ func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUse
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: resetPassword
+//@function: ResetPassword
 //@description: 修改用户密码
 //@param: ID uint
 //@return: err error

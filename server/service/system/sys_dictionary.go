@@ -9,7 +9,7 @@ import (
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: DeleteSysDictionary
+//@function: CreateSysDictionary
 //@description: 创建字典数据
 //@param: sysDictionary model.SysDictionary
 //@return: err error

@@ -33,9 +33,9 @@ type {{.StructName}} struct {
       {{.FieldName}}  {{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" gorm:"{{- if .PrimaryKey -}}primarykey;{{- end -}}{{- if .DefaultValue -}}default:{{ .DefaultValue }};{{- end -}}column:{{.ColumnName}};comment:{{.Comment}};{{- if .DataTypeLong -}}size:{{.DataTypeLong}};{{- end -}}" {{- if .Require }} binding:"required"{{- end -}}`
             {{- end }}  {{ if .FieldDesc }}//{{.FieldDesc}} {{ end }} {{- end }}
       {{- if .AutoCreateResource }}
-      CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`
-      UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
-      DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
+      CreatedBy  uint   `json:"createdBy" gorm:"column:created_by;comment:创建者"`
+      UpdatedBy  uint   `json:"updatedBy" gorm:"column:updated_by;comment:更新者"`
+      DeletedBy  uint   `json:"deletedBy" gorm:"column:deleted_by;comment:删除者"`
       {{- end}}
 }
 

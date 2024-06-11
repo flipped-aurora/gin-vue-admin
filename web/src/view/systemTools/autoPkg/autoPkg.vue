@@ -9,7 +9,7 @@
         <el-button
           type="primary"
           icon="plus"
-          @click="openDialog('addApi')"
+          @click="openDialog('addPackage')"
         >新增</el-button>
         <el-icon
           class="cursor-pointer"
@@ -85,7 +85,7 @@
           <el-input
               v-model="form.packageName"
               autocomplete="off"
-              disabled="type === 'edit'"
+              :disabled="type === 'edit'"
           />
         </el-form-item>
         <el-form-item
@@ -172,7 +172,7 @@ const initForm = () => {
     label: '',
   }
 }
-const dialogTitle = ref('新增Api')
+const dialogTitle = ref('新增Package')
 const dialogFormVisible = ref(false)
 const openDialog = (key) => {
   switch (key) {

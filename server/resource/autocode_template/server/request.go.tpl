@@ -3,7 +3,6 @@ package request
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	{{ if or .HasSearchTimer .GvaModel}}"time"{{ end }}
-	{{ if .NeedJSON }}"gorm.io/datatypes"{{ end }}
 )
 
 type {{.StructName}}Search struct{
@@ -23,16 +22,8 @@ type {{.StructName}}Search struct{
                       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
                             {{- else if eq .FieldType "video" }}
                       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-                             {{- else if eq .FieldType "file" }}
-                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"array,object"`
-                            {{- else if eq .FieldType "pictures" }}
-                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"array,object"`
                             {{- else if eq .FieldType "richtext" }}
                       {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-                            {{- else if eq .FieldType "json" }}
-                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"object"`
-                            {{- else if eq .FieldType "array" }}
-                      {{.FieldName}}  datatypes.JSON `json:"{{.FieldJson}}" form:"{{.FieldJson}}" swaggertype:"array,object"`
                             {{- else if ne .FieldType "string" }}
                       {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
                             {{- else }}

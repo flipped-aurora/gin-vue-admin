@@ -98,15 +98,15 @@
         @sort-change="sortChange"
         {{- end}}
         >
-        <el-table-column type="selection" width="55" />
+        <el-table-column align="center" type="selection" width="55" />
         {{ if .GvaModel }}
-        <el-table-column align="left" label="日期" prop="createdAt" width="180">
+        <el-table-column align="center" label="日期" prop="createdAt" width="180">
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
         {{- range .FrontFields}}
         {{- if .CheckDataSource }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
                 {{if eq .DataSource.Association 2}}
                     <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
@@ -118,17 +118,17 @@
          </template>
          </el-table-column>
         {{- else if .DictType}}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
             {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
             </template>
         </el-table-column>
         {{- else if eq .FieldType "bool" }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
             <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
         </el-table-column>
          {{- else if eq .FieldType "time.Time" }}
-         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="180">
+         <el-table-column {{- if .Sort}} sortable{{- end}} align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="180">
             <template #default="scope">{{"{{"}} formatDate(scope.row.{{.FieldJson}}) {{"}}"}}</template>
          </el-table-column>
           {{- else if eq .FieldType "picture" }}
@@ -178,7 +178,7 @@
               </template>
           </el-table-column>
         {{- else }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="center" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">

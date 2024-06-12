@@ -17,7 +17,7 @@
       <el-date-picker v-model="searchInfo.endCreatedAt" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"></el-date-picker>
       </el-form-item>
       {{ end -}}
-           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if eq .FieldType "bool" }}
+           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if not .FieldSearchHide }} {{- if eq .FieldType "bool" }}
             <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
             <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
                 <el-option
@@ -74,11 +74,69 @@
          <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
         {{- end}}
 
-        </el-form-item>{{ end }}{{ end }}{{ end }}
+        </el-form-item>{{ end }}{{ end }}{{ end }}{{ end }}
 
         <template v-if="showAllQuery">
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
-          
+          {{- range .Fields}}  {{- if .FieldSearchType}} {{- if .FieldSearchHide }} {{- if eq .FieldType "bool" }}
+          <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
+                          <el-option
+                              key="true"
+                              label="是"
+                              value="true">
+                          </el-option>
+                          <el-option
+                              key="false"
+                              label="否"
+                              value="false">
+                          </el-option>
+                      </el-select>
+                      </el-form-item>
+                     {{- else if .DictType}}
+                     <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+                      <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
+                        <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+                      </el-select>
+                      </el-form-item>
+                      {{- else}}
+                  <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+                  {{- if eq .FieldType "float64" "int"}}
+                      {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+                      <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
+                      —
+                      <el-input v-model.number="searchInfo.end{{.FieldName}}" placeholder="最大值" />
+                     {{- else}}
+                       {{- if .DictType}}
+                        <el-select v-model="searchInfo.{{.FieldJson}}" placeholder="请选择" style="width:100%" :clearable="true" >
+                         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
+                       </el-select>
+                              {{- else}}
+                       <el-input v-model.number="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+                              {{- end }}
+                    {{- end}}
+                  {{- else if eq .FieldType "time.Time"}}
+                      {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
+                      <template #label>
+                      <span>
+                        {{.FieldDesc}}
+                        <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+                          <el-icon><QuestionFilled /></el-icon>
+                        </el-tooltip>
+                      </span>
+                    </template>
+                      <el-date-picker v-model="searchInfo.start{{.FieldName}}" type="datetime" placeholder="开始日期" :disabled-date="time=> searchInfo.end{{.FieldName}} ? time.getTime() > searchInfo.end{{.FieldName}}.getTime() : false"></el-date-picker>
+                      —
+                      <el-date-picker v-model="searchInfo.end{{.FieldName}}" type="datetime" placeholder="结束日期" :disabled-date="time=> searchInfo.start{{.FieldName}} ? time.getTime() < searchInfo.start{{.FieldName}}.getTime() : false"></el-date-picker>
+                     {{- else}}
+                     <el-date-picker v-model="searchInfo.{{.FieldJson}}" type="datetime" placeholder="搜索条件"></el-date-picker>
+                    {{- end}}
+                  {{- else}}
+                   <el-input v-model="searchInfo.{{.FieldJson}}" placeholder="搜索条件" />
+                  {{- end}}
+
+                  </el-form-item>
+          {{ end }}{{ end }}{{ end }}{{ end }}
         </template>
 
         <el-form-item>

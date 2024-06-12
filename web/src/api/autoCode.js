@@ -116,22 +116,6 @@ export const deletePackageApi = (data) => {
     data
   })
 }
-export const getPackageById = (data) => {
-  return service({
-    url: '/autoCode/getPackageById',
-    method: 'post',
-    data
-  })
-}
-
-
-export const updatePackageDetail = (data) => {
-  return service({
-    url: '/autoCode/updatePackageDetail',
-    method: 'post',
-    data
-  })
-}
 
 export const createPlugApi = (data) => {
   return service({

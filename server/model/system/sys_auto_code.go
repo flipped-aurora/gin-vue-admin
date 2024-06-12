@@ -74,6 +74,7 @@ type Field struct {
 	Comment         string      `json:"comment"`         // 数据库字段描述
 	ColumnName      string      `json:"columnName"`      // 数据库字段
 	FieldSearchType string      `json:"fieldSearchType"` // 搜索条件
+	FieldSearchHide bool        `json:"fieldSearchHide"` // 是否隐藏查询条件
 	DictType        string      `json:"dictType"`        // 字典
 	Front           bool        `json:"front"`           // 是否前端可见
 	Require         bool        `json:"require"`         // 是否必填

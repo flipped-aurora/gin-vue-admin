@@ -20,9 +20,9 @@
       >
         {{ $GIN_VUE_ADMIN.appName }}
       </div>
+      <gva-aside v-if="config.side_mode === 'head' && !isMobile" />
 
-
-      <el-breadcrumb v-show="!isMobile" class="ml-4">
+      <el-breadcrumb v-show="!isMobile" v-else class="ml-4">
         <el-breadcrumb-item
           v-for="item in matched.slice(1, matched.length)"
           :key="item.path"
@@ -103,11 +103,12 @@ import { storeToRefs } from "pinia"
 import { computed, ref } from 'vue'
 import { setUserAuthority } from '@/api/user'
 import { fmtTitle } from "@/utils/fmtRouterTitle";
+import gvaAside from "@/view/layout/aside/index.vue"
 const userStore = useUserStore();
 const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
-const { device } = storeToRefs(appStore)
+const { device , config } = storeToRefs(appStore)
 const isMobile = computed(() =>{
   return device.value  === 'mobile'
 })

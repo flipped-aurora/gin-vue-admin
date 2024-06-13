@@ -6,7 +6,6 @@ import {  setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
   const theme = ref(localStorage.getItem('theme') || 'light')
   const device = ref("")
-
   const config = reactive({
     weakness: false,
     grey: false,
@@ -17,6 +16,8 @@ export const useAppStore = defineStore('app', () => {
     layout_side_collapsed_width : 80,
     layout_side_item_height : 48,
     show_watermark: false,
+
+    side_mode : 'normal'
   })
 
   // 初始化配置
@@ -119,6 +120,10 @@ export const useAppStore = defineStore('app', () => {
         config.show_watermark = e;
   }
 
+  const toggleSideModel= (e) =>{
+    config.side_mode = e 
+  }
+
   if(config.darkMode === 'auto'){
     toggleDarkModeAuto()
   }
@@ -138,7 +143,8 @@ export const useAppStore = defineStore('app', () => {
     toggleConfigSideWidth,
     toggleConfigSideCollapsedWidth,
     toggleConfigSideItemHeight,
-    toggleConfigWatermark
+    toggleConfigWatermark,
+    toggleSideModel
   }
 
 })

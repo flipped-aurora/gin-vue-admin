@@ -17,9 +17,11 @@
       <div
         v-if="!isMobile"
         class="inline-flex font-bold text-2xl ml-2"
+        :class="config.side_mode === 'head'&&'min-w-fit'"
       >
         {{ $GIN_VUE_ADMIN.appName }}
       </div>
+
       <gva-aside v-if="config.side_mode === 'head' && !isMobile" />
 
       <el-breadcrumb v-show="!isMobile" v-else class="ml-4">
@@ -46,7 +48,7 @@
             <CustomPic />
             <span
               v-show="!isMobile"
-              style="margin-left: 5px"
+              class="w-16"
             >{{ userStore.userInfo.nickName }}</span>
             <el-icon>
               <arrow-down />

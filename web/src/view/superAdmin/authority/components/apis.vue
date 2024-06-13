@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10 flex space-x-4">
+    <div class="sticky top-0.5 z-10 flex space-x-2">
       <el-input
           v-model="filterTextName"
-          class="w-3/5"
+          class="flex-1"
           placeholder="筛选名字"
       />
       <el-input
           v-model="filterTextPath"
-          class="w-3/5"
+          class="flex-1"
           placeholder="筛选路径"
       />
       <el-button
@@ -32,7 +32,14 @@
             @check="nodeChange"
         >
           <template #default="{ node, data }">
-            <span>{{ data.description }} ({{ data.path }})</span>
+            <div class="flex items-center justify-between w-full pr-1">
+              <span>{{ data.description }} </span>
+              <el-tooltip
+              :content="data.path"
+              >
+                <span class="max-w-[240px] break-all overflow-ellipsis overflow-hidden">{{data.path}}</span>
+              </el-tooltip>
+            </div>
           </template>
         </el-tree>
       </el-scrollbar>
@@ -164,12 +171,3 @@ watch([filterTextName, filterTextPath], () => {
 })
 
 </script>
-
-<style scoped>
-.flex {
-  display: flex;
-}
-.space-x-4 > :not(:last-child) {
-  margin-right: 1rem;
-}
-</style>

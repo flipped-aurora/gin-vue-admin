@@ -29,6 +29,10 @@ const props = defineProps({
     type: Object,
     default: () => null,
   },
+  mode :{
+    type : String,
+    default: "vertical"
+  }
 })
 
 

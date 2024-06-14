@@ -418,7 +418,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/response.SysAuthorityCopyResponse"
+                            "$ref": "#/definitions/request.AuthorityCopy"
                         }
                     }
                 ],
@@ -433,9 +433,6 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/response.SysAuthorityResponse"
-                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -3450,7 +3447,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "字典值",
                         "name": "value",
                         "in": "query"
@@ -3567,7 +3564,7 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "string",
                         "description": "字典值",
                         "name": "value",
                         "in": "query"
@@ -3643,6 +3640,400 @@ const docTemplate = `{
                                     }
                                 }
                             ]
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/createSysExportTemplate": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "创建导出模板",
+                "parameters": [
+                    {
+                        "description": "创建导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysExportTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"创建成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/deleteSysExportTemplate": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "删除导出模板",
+                "parameters": [
+                    {
+                        "description": "删除导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysExportTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/deleteSysExportTemplateByIds": {
+            "delete": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "批量删除导出模板",
+                "parameters": [
+                    {
+                        "description": "批量删除导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.IdsReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"批量删除成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/exportExcel": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "导出表格模板",
+                "responses": {}
+            }
+        },
+        "/sysExportTemplate/findSysExportTemplate": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "用id查询导出模板",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据库名称",
+                        "name": "dbName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板标识",
+                        "name": "templateID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板信息",
+                        "name": "templateInfo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"查询成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/getSysExportTemplateList": {
+            "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "分页获取导出模板列表",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "主键ID",
+                        "name": "ID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "创建时间",
+                        "name": "createdAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "数据库名称",
+                        "name": "dbName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "endCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "关键字",
+                        "name": "keyword",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板名称",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "order",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "每页大小",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "startCreatedAt",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "表名称",
+                        "name": "tableName",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板标识",
+                        "name": "templateID",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "模板信息",
+                        "name": "templateInfo",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "更新时间",
+                        "name": "updatedAt",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"获取成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/sysExportTemplate/importExcel": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysImportTemplate"
+                ],
+                "summary": "导入表格",
+                "responses": {}
+            }
+        },
+        "/sysExportTemplate/updateSysExportTemplate": {
+            "put": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "SysExportTemplate"
+                ],
+                "summary": "更新导出模板",
+                "parameters": [
+                    {
+                        "description": "更新导出模板",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/system.SysExportTemplate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"success\":true,\"data\":{},\"msg\":\"更新成功\"}",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -4879,6 +5270,14 @@ const docTemplate = `{
                 }
             }
         },
+        "config.DiskList": {
+            "type": "object",
+            "properties": {
+                "mount-point": {
+                    "type": "string"
+                }
+            }
+        },
         "config.Excel": {
             "type": "object",
             "properties": {
@@ -4944,6 +5343,10 @@ const docTemplate = `{
         "config.Mongo": {
             "type": "object",
             "properties": {
+                "auth-source": {
+                    "description": "验证数据库",
+                    "type": "string"
+                },
                 "coll": {
                     "description": "collection name",
                     "type": "string"
@@ -5266,13 +5669,24 @@ const docTemplate = `{
                     "description": "服务器地址:端口",
                     "type": "string"
                 },
+                "clusterAddrs": {
+                    "description": "集群模式下的节点地址列表",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
                 "db": {
-                    "description": "redis的哪个数据库",
+                    "description": "单实例模式下redis的哪个数据库",
                     "type": "integer"
                 },
                 "password": {
                     "description": "密码",
                     "type": "string"
+                },
+                "useCluster": {
+                    "description": "是否使用集群模式",
+                    "type": "boolean"
                 }
             }
         },
@@ -5308,6 +5722,12 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/config.SpecializedDB"
+                    }
+                },
+                "disk-list": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/config.DiskList"
                     }
                 },
                 "email": {
@@ -5500,10 +5920,6 @@ const docTemplate = `{
                     "description": "数据库类型:mysql(默认)|sqlite|sqlserver|postgresql",
                     "type": "string"
                 },
-                "env": {
-                    "description": "环境值",
-                    "type": "string"
-                },
                 "iplimit-count": {
                     "type": "integer"
                 },
@@ -5518,7 +5934,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "use-mongo": {
-                    "description": "使用redis",
+                    "description": "使用mongo",
                     "type": "boolean"
                 },
                 "use-multipoint": {
@@ -5576,10 +5992,6 @@ const docTemplate = `{
                 "log-in-console": {
                     "description": "输出控制台",
                     "type": "boolean"
-                },
-                "max-age": {
-                    "description": "日志留存时间",
-                    "type": "integer"
                 },
                 "prefix": {
                     "description": "日志前缀",
@@ -5781,6 +6193,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.AuthorityCopy": {
+            "type": "object",
+            "properties": {
+                "authority": {
+                    "$ref": "#/definitions/system.SysAuthority"
+                },
+                "oldAuthorityId": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.CasbinInReceive": {
             "type": "object",
             "properties": {
@@ -5857,9 +6280,13 @@ const docTemplate = `{
         "request.InitDB": {
             "type": "object",
             "required": [
+                "adminPassword",
                 "dbName"
             ],
             "properties": {
+                "adminPassword": {
+                    "type": "string"
+                },
                 "dbName": {
                     "description": "数据库名",
                     "type": "string"
@@ -6224,18 +6651,6 @@ const docTemplate = `{
                 }
             }
         },
-        "response.SysAuthorityCopyResponse": {
-            "type": "object",
-            "properties": {
-                "authority": {
-                    "$ref": "#/definitions/system.SysAuthority"
-                },
-                "oldAuthorityId": {
-                    "description": "旧角色ID",
-                    "type": "integer"
-                }
-            }
-        },
         "response.SysAuthorityResponse": {
             "type": "object",
             "properties": {
@@ -6318,12 +6733,12 @@ const docTemplate = `{
                     "description": "是否自动创建api",
                     "type": "boolean"
                 },
-                "autoCreateResource": {
-                    "description": "是否自动创建资源标识",
+                "autoCreateMenuToSql": {
+                    "description": "是否自动创建menu",
                     "type": "boolean"
                 },
-                "autoMoveFile": {
-                    "description": "是否自动移动文件",
+                "autoCreateResource": {
+                    "description": "是否自动创建资源标识",
                     "type": "boolean"
                 },
                 "businessDB": {
@@ -6340,7 +6755,8 @@ const docTemplate = `{
                         "$ref": "#/definitions/system.Field"
                     }
                 },
-                "hasTimer": {
+                "gvaModel": {
+                    "description": "是否使用gva默认Model",
                     "type": "boolean"
                 },
                 "humpPackageName": {
@@ -6354,6 +6770,9 @@ const docTemplate = `{
                     "description": "文件名称",
                     "type": "string"
                 },
+                "primaryField": {
+                    "$ref": "#/definitions/system.Field"
+                },
                 "structName": {
                     "description": "Struct名称",
                     "type": "string"
@@ -6364,9 +6783,60 @@ const docTemplate = `{
                 }
             }
         },
+        "system.Condition": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "column": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "from": {
+                    "type": "string"
+                },
+                "operator": {
+                    "type": "string"
+                },
+                "templateID": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
+                }
+            }
+        },
+        "system.DataSource": {
+            "type": "object",
+            "properties": {
+                "association": {
+                    "description": "关联关系 1 一对一 2 一对多",
+                    "type": "integer"
+                },
+                "label": {
+                    "type": "string"
+                },
+                "table": {
+                    "type": "string"
+                },
+                "value": {
+                    "type": "string"
+                }
+            }
+        },
         "system.Field": {
             "type": "object",
             "properties": {
+                "checkDataSource": {
+                    "description": "是否检查数据源",
+                    "type": "boolean"
+                },
                 "clearable": {
                     "description": "是否可清空",
                     "type": "boolean"
@@ -6379,8 +6849,20 @@ const docTemplate = `{
                     "description": "数据库字段描述",
                     "type": "string"
                 },
+                "dataSource": {
+                    "description": "数据源",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/system.DataSource"
+                        }
+                    ]
+                },
                 "dataTypeLong": {
                     "description": "数据库字段长度",
+                    "type": "string"
+                },
+                "defaultValue": {
+                    "description": "是否必填",
                     "type": "string"
                 },
                 "dictType": {
@@ -6403,6 +6885,10 @@ const docTemplate = `{
                     "description": "Field名",
                     "type": "string"
                 },
+                "fieldSearchHide": {
+                    "description": "是否隐藏查询条件",
+                    "type": "boolean"
+                },
                 "fieldSearchType": {
                     "description": "搜索条件",
                     "type": "string"
@@ -6411,6 +6897,14 @@ const docTemplate = `{
                     "description": "Field数据类型",
                     "type": "string"
                 },
+                "front": {
+                    "description": "是否前端可见",
+                    "type": "boolean"
+                },
+                "primaryKey": {
+                    "description": "是否主键",
+                    "type": "boolean"
+                },
                 "require": {
                     "description": "是否必填",
                     "type": "boolean"
@@ -6418,6 +6912,35 @@ const docTemplate = `{
                 "sort": {
                     "description": "是否增加排序",
                     "type": "boolean"
+                }
+            }
+        },
+        "system.JoinTemplate": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
+                    "type": "integer"
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "joins": {
+                    "type": "string"
+                },
+                "on": {
+                    "type": "string"
+                },
+                "table": {
+                    "type": "string"
+                },
+                "templateID": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
                 }
             }
         },
@@ -6615,7 +7138,7 @@ const docTemplate = `{
                 },
                 "parentId": {
                     "description": "父菜单ID",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "path": {
                     "description": "路由path",
@@ -6765,7 +7288,62 @@ const docTemplate = `{
                 },
                 "value": {
                     "description": "字典值",
+                    "type": "string"
+                }
+            }
+        },
+        "system.SysExportTemplate": {
+            "type": "object",
+            "properties": {
+                "ID": {
+                    "description": "主键ID",
                     "type": "integer"
+                },
+                "conditions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.Condition"
+                    }
+                },
+                "createdAt": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "dbName": {
+                    "description": "数据库名称",
+                    "type": "string"
+                },
+                "joinTemplate": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/system.JoinTemplate"
+                    }
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "name": {
+                    "description": "模板名称",
+                    "type": "string"
+                },
+                "order": {
+                    "type": "string"
+                },
+                "tableName": {
+                    "description": "表名称",
+                    "type": "string"
+                },
+                "templateID": {
+                    "description": "模板标识",
+                    "type": "string"
+                },
+                "templateInfo": {
+                    "description": "模板信息",
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "description": "更新时间",
+                    "type": "string"
                 }
             }
         },
@@ -6813,7 +7391,7 @@ const docTemplate = `{
                     }
                 },
                 "menuId": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "meta": {
                     "description": "附加属性",
@@ -6835,7 +7413,7 @@ const docTemplate = `{
                 },
                 "parentId": {
                     "description": "父菜单ID",
-                    "type": "string"
+                    "type": "integer"
                 },
                 "path": {
                     "description": "路由path",

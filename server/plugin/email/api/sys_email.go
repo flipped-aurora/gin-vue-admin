@@ -12,12 +12,13 @@ import (
 type EmailApi struct{}
 
 // EmailTest
-// @Tags      System
-// @Summary   发送测试邮件
-// @Security  ApiKeyAuth
-// @Produce   application/json
-// @Success   200  {string}  string  "{"success":true,"data":{},"msg":"发送成功"}"
-// @Router    /email/emailTest [post]
+//
+//	@Tags		System
+//	@Summary	发送测试邮件
+//	@Security	ApiKeyAuth
+//	@Produce	application/json
+//	@Success	200	{string}	string	"{"success":true,"data":{},"msg":"发送成功"}"
+//	@Router		/email/emailTest [post]
 func (s *EmailApi) EmailTest(c *gin.Context) {
 	err := service.ServiceGroupApp.EmailTest()
 	if err != nil {
@@ -29,13 +30,14 @@ func (s *EmailApi) EmailTest(c *gin.Context) {
 }
 
 // SendEmail
-// @Tags      System
-// @Summary   发送邮件
-// @Security  ApiKeyAuth
-// @Produce   application/json
-// @Param     data  body      email_response.Email  true  "发送邮件必须的参数"
-// @Success   200   {string}  string                "{"success":true,"data":{},"msg":"发送成功"}"
-// @Router    /email/sendEmail [post]
+//
+//	@Tags		System
+//	@Summary	发送邮件
+//	@Security	ApiKeyAuth
+//	@Produce	application/json
+//	@Param		data	body		email_response.Email	true	"发送邮件必须的参数"
+//	@Success	200		{string}	string					"{"success":true,"data":{},"msg":"发送成功"}"
+//	@Router		/email/sendEmail [post]
 func (s *EmailApi) SendEmail(c *gin.Context) {
 	var email email_response.Email
 	err := c.ShouldBindJSON(&email)

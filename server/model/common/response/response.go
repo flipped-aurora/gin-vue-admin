@@ -74,17 +74,25 @@ func ResultV2(code int, data interface{}, msg string, c *gin.Context) {
 		"msg":  msg,
 	}
 
-	// 反射遍历 data 并添加到 responseData 中
 	if data != nil {
 		val := reflect.ValueOf(data)
 		typ := reflect.TypeOf(data)
 
-		for i := 0; i < val.NumField(); i++ {
-			fieldName := typ.Field(i).Tag.Get("json")
-			if fieldName == "" {
-				fieldName = typ.Field(i).Name
+		switch val.Kind() {
+		case reflect.Struct:
+			for i := 0; i < val.NumField(); i++ {
+				fieldName := typ.Field(i).Tag.Get("json")
+				if fieldName == "" {
+					fieldName = typ.Field(i).Name
+				}
+				responseData[fieldName] = val.Field(i).Interface()
 			}
-			responseData[fieldName] = val.Field(i).Interface()
+		case reflect.Map:
+			for _, key := range val.MapKeys() {
+				responseData[key.String()] = val.MapIndex(key).Interface()
+			}
+		default:
+			responseData["data"] = data
 		}
 	}
 	c.JSON(http.StatusOK, responseData)
@@ -112,13 +120,6 @@ func FailV2(c *gin.Context) {
 
 func FailWithMessageV2(message string, c *gin.Context) {
 	ResultV2(ERROR, map[string]interface{}{}, message, c)
-}
-
-func NoAuthV2(message string, c *gin.Context) {
-	c.JSON(http.StatusUnauthorized, ResponseV2{
-		Code: 7,
-		Msg:  message,
-	})
 }
 
 func FailWithDetailedV2(data interface{}, message string, c *gin.Context) {

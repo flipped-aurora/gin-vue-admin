@@ -659,7 +659,7 @@ const update{{.StructName}}Func = async(row) => {
     const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.re{{.Abbreviation}}
+        formData.value = res.data
         dialogFormVisible.value = true
     }
 }

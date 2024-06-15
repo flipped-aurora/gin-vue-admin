@@ -250,6 +250,15 @@ const activeNames = ref([])
 const middleDate = ref({})
 const dictOptions = ref([])
 
+const validateDataTypeLong = (rule, value, callback) => {
+  const regex = /^('([^']*)'(?:,'([^']+)'*)*)$/;
+  if (middleDate.value.fieldType == "enum" && !regex.test(value)) {
+    callback(new Error("枚举值校验错误"));
+  } else {
+    callback();
+  }
+};
+
 const rules = ref({
   fieldName: [
     { required: true, message: '请输入字段英文名', trigger: 'blur' }
@@ -265,7 +274,10 @@ const rules = ref({
   ],
   fieldType: [
     { required: true, message: '请选择字段类型', trigger: 'blur' }
-  ]
+  ],
+  dataTypeLong: [
+    { validator: validateDataTypeLong, trigger: "blur" }
+  ],
 })
 
 const init = async() => {

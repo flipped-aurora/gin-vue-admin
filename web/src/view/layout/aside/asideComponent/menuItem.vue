@@ -36,7 +36,9 @@ defineProps({
   },
 })
 
-const sideHeight = computed(() => config.value.layout_side_item_height + 'px')
+const sideHeight = computed(() => {
+  return  config.value.layout_side_item_height + 'px'
+})
 
 </script>
 

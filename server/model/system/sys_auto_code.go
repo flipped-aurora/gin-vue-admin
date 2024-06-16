@@ -86,6 +86,7 @@ type Field struct {
 	PrimaryKey      bool        `json:"primaryKey"`      // 是否主键
 	DataSource      *DataSource `json:"dataSource"`      // 数据源
 	CheckDataSource bool        `json:"checkDataSource"` // 是否检查数据源
+	FieldIndexType  string      `json:"fieldIndexType"`  // 索引类型
 }
 
 type SysAutoCode struct {

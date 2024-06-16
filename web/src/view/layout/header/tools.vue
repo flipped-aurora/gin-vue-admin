@@ -4,7 +4,7 @@
 !-->
 
 <template>
-  <div class="flex items-center mx-8 gap-4">
+  <div class="flex items-center mx-4 gap-4">
     <el-tooltip
       class=""
       effect="dark"

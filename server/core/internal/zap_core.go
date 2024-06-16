@@ -27,6 +27,7 @@ func (z *ZapCore) WriteSyncer(formats ...string) zapcore.WriteSyncer {
 	cutter := NewCutter(
 		global.GVA_CONFIG.Zap.Director,
 		z.level.String(),
+		global.GVA_CONFIG.Zap.RetentionDay,
 		CutterWithLayout(time.DateOnly),
 		CutterWithFormats(formats...),
 	)

@@ -4,9 +4,9 @@
 !-->
 
 <template>
-  <div class="fixed top-0 left-0 right-0 z-10 h-16 bg-white text-slate-700 dark:text-slate-300  dark:bg-slate-900 shadow dark:shadow-gray-700 flex items-center px-2">
+  <div class="flex justify-between fixed top-0 left-0 right-0 z-10 h-16 bg-white text-slate-700 dark:text-slate-300  dark:bg-slate-900 shadow dark:shadow-gray-700 flex items-center px-2">
     <div
-      class="flex items-center cursor-pointer"
+      class="flex items-center cursor-pointer flex-1"
       @click="router.push({ path: '/' })"
     >
       <img
@@ -22,7 +22,7 @@
         {{ $GIN_VUE_ADMIN.appName }}
       </div>
 
-      <gva-aside v-if="config.side_mode === 'head' && !isMobile" />
+      <gva-aside v-if="config.side_mode === 'head' && !isMobile" class="flex-1"/>
 
       <el-breadcrumb v-show="!isMobile" v-else class="ml-4">
         <el-breadcrumb-item
@@ -36,7 +36,7 @@
       </el-breadcrumb>
     </div>
 
-    <div class="ml-auto flex items-center">
+    <div class="ml-2 flex items-center">
       <tools />
       <el-dropdown>
         <div

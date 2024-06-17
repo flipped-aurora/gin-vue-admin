@@ -17,6 +17,7 @@ type AutoCodeStruct struct {
 	Description         string                 `json:"description"`         // Struct中文名称
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql"` // 是否自动创建menu
+	AutoMigrate         bool                   `json:"autoMigrate"`         // 是否自动迁移表结构
 	AutoCreateResource  bool                   `json:"autoCreateResource"`  // 是否自动创建资源标识
 	BusinessDB          string                 `json:"businessDB"`          // 业务数据库
 	GvaModel            bool                   `json:"gvaModel"`            // 是否使用gva默认Model

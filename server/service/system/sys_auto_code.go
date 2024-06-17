@@ -275,11 +275,13 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 	}
 
 	{
-		// 在gorm.go 注入 自动迁移
-		path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
-		varDB := utils.MaheHump(autoCode.BusinessDB)
-		ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
+		if autoCode.AutoMigrate {
+			// 在gorm.go 注入 自动迁移
+			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+			varDB := utils.MaheHump(autoCode.BusinessDB)
+			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
+		}
 	}
 
 	{

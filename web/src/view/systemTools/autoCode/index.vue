@@ -293,7 +293,18 @@
             </template>
             <el-checkbox v-model="form.autoCreateMenuToSql" />
           </el-form-item>
-
+          <el-form-item>
+            <template #label>
+              <el-tooltip
+                  content="注：自动同步数据库表结构，如果不需要可以选择关闭。"
+                  placement="bottom"
+                  effect="light"
+              >
+                <div> 同步表结构 <el-icon><QuestionFilled /></el-icon></div>
+              </el-tooltip>
+            </template>
+            <el-checkbox v-model="form.autoMigrate" />
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -782,6 +793,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
+  autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
   fields: []
@@ -1117,6 +1129,7 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
+    autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,
     fields: []

@@ -16,6 +16,7 @@ zap:
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
+  retention-day: -1
 
 # redis configuration
 redis:

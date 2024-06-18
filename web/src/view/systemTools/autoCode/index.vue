@@ -293,7 +293,18 @@
             </template>
             <el-checkbox v-model="form.autoCreateMenuToSql" />
           </el-form-item>
-
+          <el-form-item>
+            <template #label>
+              <el-tooltip
+                  content="注：自动同步数据库表结构，如果不需要可以选择关闭。"
+                  placement="bottom"
+                  effect="light"
+              >
+                <div> 同步表结构 <el-icon><QuestionFilled /></el-icon></div>
+              </el-tooltip>
+            </template>
+            <el-checkbox v-model="form.autoMigrate" />
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -422,6 +433,28 @@
             </template>
           </el-table-column>
           <el-table-column
+              align="left"
+              prop="fieldIndexType"
+              label="索引类型"
+              width="160"
+          >
+            <template #default="{row}">
+              <el-select
+                  v-model="row.fieldIndexType"
+                  style="width:100%"
+                  placeholder="请选择字段索引类型"
+                  clearable
+              >
+                <el-option
+                    v-for="item in typeIndexOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                />
+              </el-select>
+            </template>
+          </el-table-column>
+          <el-table-column
             align="left"
             prop="dataTypeLong"
             label="数据库字段长度"
@@ -540,6 +573,7 @@
         :dialog-middle="dialogMiddle"
         :type-options="typeOptions"
         :type-search-options="typeSearchOptions"
+        :type-index-options="typeIndexOptions"
       />
 
     </el-drawer>
@@ -700,6 +734,17 @@ const typeSearchOptions = ref([
   }
 ])
 
+const typeIndexOptions = ref([
+  {
+    label: 'index',
+    value: 'index'
+  },
+  {
+    label: 'uniqueIndex',
+    value: 'uniqueIndex'
+  }
+])
+
 const fieldTemplate = {
   fieldName: '',
   fieldDesc: '',
@@ -717,6 +762,7 @@ const fieldTemplate = {
   primaryKey: false,
   clearable: true,
   fieldSearchType: '',
+  fieldIndexType: '',
   dictType: '',
   dataSource: {
     association:1,
@@ -747,6 +793,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
+  autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
   fields: []
@@ -988,6 +1035,7 @@ const getColumnFunc = async() => {
                 errorText: '',
                 clearable: true,
                 fieldSearchType: '',
+                fieldIndexType: '',
                 dictType: '',
                 front: true,
                 dataSource: {
@@ -1081,6 +1129,7 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
+    autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,
     fields: []

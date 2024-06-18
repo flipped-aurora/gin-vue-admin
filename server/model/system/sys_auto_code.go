@@ -17,6 +17,7 @@ type AutoCodeStruct struct {
 	Description         string                 `json:"description"`         // Struct中文名称
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql"` // 是否自动创建menu
+	AutoMigrate         bool                   `json:"autoMigrate"`         // 是否自动迁移表结构
 	AutoCreateResource  bool                   `json:"autoCreateResource"`  // 是否自动创建资源标识
 	BusinessDB          string                 `json:"businessDB"`          // 业务数据库
 	GvaModel            bool                   `json:"gvaModel"`            // 是否使用gva默认Model
@@ -74,6 +75,7 @@ type Field struct {
 	Comment         string      `json:"comment"`         // 数据库字段描述
 	ColumnName      string      `json:"columnName"`      // 数据库字段
 	FieldSearchType string      `json:"fieldSearchType"` // 搜索条件
+	FieldSearchHide bool        `json:"fieldSearchHide"` // 是否隐藏查询条件
 	DictType        string      `json:"dictType"`        // 字典
 	Front           bool        `json:"front"`           // 是否前端可见
 	Require         bool        `json:"require"`         // 是否必填
@@ -84,6 +86,7 @@ type Field struct {
 	PrimaryKey      bool        `json:"primaryKey"`      // 是否主键
 	DataSource      *DataSource `json:"dataSource"`      // 数据源
 	CheckDataSource bool        `json:"checkDataSource"` // 是否检查数据源
+	FieldIndexType  string      `json:"fieldIndexType"`  // 索引类型
 }
 
 type SysAutoCode struct {

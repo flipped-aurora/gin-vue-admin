@@ -44,9 +44,8 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	if err != nil {
 		return err
 	}
-	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
-	if err != nil {
-		return err
+	if !CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method) {
+		return errors.New("ClearCasbin 失败")
 	}
 	return nil
 }

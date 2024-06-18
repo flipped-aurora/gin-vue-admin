@@ -138,6 +138,26 @@
       <el-form-item label="主键">
         <el-checkbox v-model="middleDate.primaryKey" />
       </el-form-item>
+      <el-form-item
+          label="索引类型"
+          prop="fieldIndexType"
+      >
+        <el-select
+            v-model="middleDate.fieldIndexType"
+            :disabled="middleDate.fieldType === 'json'"
+            style="width:100%"
+            placeholder="请选择字段索引类型"
+            clearable
+        >
+          <el-option
+              v-for="item in typeIndexOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+              :disabled="canSelect(item.value)"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="前端可见">
         <el-switch v-model="middleDate.front" />
       </el-form-item>
@@ -149,6 +169,9 @@
       </el-form-item>
       <el-form-item label="是否可清空">
         <el-switch v-model="middleDate.clearable" />
+      </el-form-item>
+      <el-form-item label="隐藏查询条件">
+        <el-switch :disabled="!middleDate.fieldSearchType" v-model="middleDate.fieldSearchHide" />
       </el-form-item>
       <el-form-item label="校验失败文案">
         <el-input v-model="middleDate.errorText" />
@@ -235,6 +258,12 @@ const props = defineProps({
     }
   },
   typeSearchOptions: {
+    type: Array,
+    default: function() {
+      return []
+    }
+  },
+  typeIndexOptions: {
     type: Array,
     default: function() {
       return []

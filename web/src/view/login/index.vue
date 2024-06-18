@@ -224,12 +224,8 @@ const login = async() => {
 }
 const submitForm = () => {
   loginForm.value.validate(async(v) => {
-    if (v) {
-      const flag = await login()
-      if (!flag) {
-        loginVerify()
-      }
-    } else {
+    if (!v) {
+      // 未通过前端静态验证
       ElMessage({
         type: 'error',
         message: '请正确填写登录信息',
@@ -238,6 +234,18 @@ const submitForm = () => {
       loginVerify()
       return false
     }
+
+    // 通过验证，请求登陆
+    const flag = await login()
+
+    // 登陆失败，刷新验证码
+    if (!flag) {
+      loginVerify()
+      return false
+    }
+
+    // 登陆成功
+    return true
   })
 }
 

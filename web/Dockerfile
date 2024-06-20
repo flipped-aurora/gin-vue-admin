@@ -28,7 +28,7 @@ LABEL MAINTAINER="781408517@qq.com"
 
 # 从.docker-compose/nginx/conf.d/目录拷贝my.conf到容器内的/etc/nginx/conf.d/my.conf
 COPY .docker-compose/nginx/conf.d/my.conf /etc/nginx/conf.d/my.conf
-#TODO 填写证书位置
+#TODO PRODUCTION 填写证书位置
 # 拷贝证书文件到容器内的指定位置
 #COPY certificate/ai-everywhere.cn_bundle.crt /etc/nginx/ssl/certificate.crt
 #COPY certificate/ai-everywhere.cn.key /etc/nginx/ssl/private.key

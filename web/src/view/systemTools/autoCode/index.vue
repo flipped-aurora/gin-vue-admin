@@ -296,30 +296,30 @@
           <el-form-item>
             <template #label>
               <el-tooltip
-                content="注：自动迁移生成的文件到yaml配置的对应位置"
-                placement="bottom"
-                effect="light"
+                  content="注：自动同步数据库表结构，如果不需要可以选择关闭。"
+                  placement="bottom"
+                  effect="light"
               >
-                <div> 自动移动文件 <el-icon><QuestionFilled /></el-icon></div>
+                <div> 同步表结构 <el-icon><QuestionFilled /></el-icon></div>
               </el-tooltip>
             </template>
-            <el-checkbox v-model="form.autoMoveFile" />
+            <el-checkbox v-model="form.autoMigrate" />
           </el-form-item>
           <el-form-item>
-            <template #label>
-              <el-tooltip
-                  content="注：该功能还在测试阶段请开发者酌情使用。v1.0.0保留后端@gvakeep 和 @gvaendkeep之间的代码片段默认添加到新文件的最后中"
-                  placement="bottom" effect="light"
-              >
-                <div>保留代码(测试
-                  <el-icon>
-                    <QuestionFilled/>
-                  </el-icon>
-                </div>
-              </el-tooltip>
-            </template>
-            <el-checkbox v-model="form.autoKeepCode"/>
-          </el-form-item>
+                      <template #label>
+                        <el-tooltip
+                            content="注：该功能还在测试阶段请开发者酌情使用。v1.0.0保留后端@gvakeep 和 @gvaendkeep之间的代码片段默认添加到新文件的最后中"
+                            placement="bottom" effect="light"
+                        >
+                          <div>保留代码(测试
+                            <el-icon>
+                              <QuestionFilled/>
+                            </el-icon>
+                          </div>
+                        </el-tooltip>
+                      </template>
+                      <el-checkbox v-model="form.autoKeepCode"/>
+                    </el-form-item>
         </div>
       </el-form>
     </div>
@@ -816,7 +816,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
-  autoMoveFile: true,
+  autoMigrate: true,
   autoKeepCode: false,
   gvaModel: true,
   autoCreateResource: false,
@@ -1153,6 +1153,8 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
+    autoMigrate: true,
+    autoKeepCode: false,
     gvaModel: true,
     autoCreateResource: false,
     fields: []

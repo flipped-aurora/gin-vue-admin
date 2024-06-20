@@ -15,4 +15,5 @@ type Autocode struct {
 	WApi            string `mapstructure:"web-api" json:"web-api" yaml:"web-api"`
 	WForm           string `mapstructure:"web-form" json:"web-form" yaml:"web-form"`
 	TransferRestart bool   `mapstructure:"transfer-restart" json:"transfer-restart" yaml:"transfer-restart"`
+	AiPath          string `mapstructure:"ai-path" json:"ai-path" yaml:"ai-path"`
 }

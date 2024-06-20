@@ -140,3 +140,22 @@ export const pubPlug = (params) => {
     params
   })
 }
+
+
+export const llmAuto = (params) => {
+  let modeName = {
+    "xiaoqi": "小奇",
+    "xiaomiao": "小淼",
+  }
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    params,
+    timeout: 1000 * 60 * 10,
+    loadingOption:{
+      lock: true,
+      fullscreen:true,
+      text: `${modeName[params.mode]}正在思考，请稍候...`,
+    }
+  })
+}

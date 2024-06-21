@@ -13,8 +13,7 @@ import (
     {{- end }}
 )
 
-type {{.StructName}}Api struct {
-}
+type {{.StructName}}Api struct {}
 
 var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup.{{.StructName}}Service
 

@@ -162,6 +162,10 @@ const sideModes = [
   {
     label : "顶部菜单栏模式",
     value: "head"
+  },
+  {
+    label : "组合模式",
+    value: "combination"
   }
 ];
 

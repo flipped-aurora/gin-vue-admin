@@ -2,7 +2,7 @@ import { asyncRouterHandle } from '@/utils/asyncRouter'
 import { emitter } from '@/utils/bus.js'
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref,watchEffect,onMounted } from 'vue'
 
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
@@ -56,6 +56,46 @@ export const useRouterStore = defineStore('router', () => {
   emitter.on('setKeepAlive', setKeepAliveRouters)
 
   const asyncRouters = ref([])
+
+  const topMenu = ref([])
+
+  const leftMenu = ref([])
+
+  const menuMap = {}
+
+  const topActive = ref("")
+
+
+
+
+
+  const setLeftMenu = (name) => {
+    sessionStorage.setItem('topActive', name)
+    topActive.value = name
+    if(menuMap[name]?.children){
+      leftMenu.value = menuMap[name].children
+    }
+    return menuMap[name]?.children
+  }
+
+  watchEffect(()=>{
+    let topActive = sessionStorage.getItem("topActive")
+    let firstHasChildren = ''
+    asyncRouters.value[0]?.children.forEach((item) => {
+      if (item.hidden) return;
+      menuMap[item.name] = item;
+      if (!firstHasChildren && item.children && item.children.length > 0) {
+        firstHasChildren = item.name
+      }
+      topMenu.value.push({...item, children: []})
+    });
+
+    if(!menuMap[topActive]?.children && firstHasChildren){
+        topActive = firstHasChildren
+    }
+    setLeftMenu(topActive)
+  })
+
   const routeMap = ({})
   // 从后台获取动态路由
   const SetAsyncRouter = async() => {
@@ -93,6 +133,10 @@ export const useRouterStore = defineStore('router', () => {
   }
 
   return {
+    topActive,
+    setLeftMenu,
+    topMenu,
+    leftMenu,
     asyncRouters,
     keepAliveRouters,
     asyncRouterFlag,

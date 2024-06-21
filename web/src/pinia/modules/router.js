@@ -79,12 +79,21 @@ export const useRouterStore = defineStore('router', () => {
   }
 
   watchEffect(()=>{
+    let topActive = sessionStorage.getItem("topActive")
+    let firstHasChildren = ''
     asyncRouters.value[0]?.children.forEach((item) => {
       if (item.hidden) return;
       menuMap[item.name] = item;
+      if (!firstHasChildren && item.children && item.children.length > 0) {
+        firstHasChildren = item.name
+      }
       topMenu.value.push({...item, children: []})
     });
-    setLeftMenu(sessionStorage.getItem("topActive"))
+
+    if(!menuMap[topActive]?.children && firstHasChildren){
+        topActive = firstHasChildren
+    }
+    setLeftMenu(topActive)
   })
 
   const routeMap = ({})

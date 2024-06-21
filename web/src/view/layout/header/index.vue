@@ -103,11 +103,10 @@ import { useUserStore } from "@/pinia/modules/user";
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from "@/pinia"
 import { storeToRefs } from "pinia"
-import { computed, ref } from 'vue'
+import { computed, } from 'vue'
 import { setUserAuthority } from '@/api/user'
 import { fmtTitle } from "@/utils/fmtRouterTitle";
 import gvaAside from "@/view/layout/aside/index.vue"
-import GvaAside from "@/view/layout/aside/index.vue";
 const userStore = useUserStore();
 const router = useRouter()
 const route = useRoute()

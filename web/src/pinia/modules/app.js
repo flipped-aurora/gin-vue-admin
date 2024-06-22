@@ -127,7 +127,10 @@ export const useAppStore = defineStore('app', () => {
   if(config.darkMode === 'auto'){
     toggleDarkModeAuto()
   }
-
+  
+  if(config.grey){
+    toggleGrey(config.grey)
+  }
 
   return {
     theme,

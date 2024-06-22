@@ -6,7 +6,7 @@
         <el-button
           type="primary"
           icon="plus"
-          @click="openDialog"
+          @click="openDrawer"
         >新增</el-button>
       </div>
       <el-table
@@ -80,11 +80,23 @@
         />
       </div>
     </div>
-    <el-dialog
-      v-model="dialogFormVisible"
-      :before-close="closeDialog"
-      title="客户"
+    <el-drawer
+      v-model="drawerFormVisible"
+      :before-close="closeDrawer"
+      :show-close="false"
     >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">客户</span>
+          <div>
+            <el-button @click="closeDrawer">取 消</el-button>
+            <el-button
+              type="primary"
+              @click="enterDrawer"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
       <el-form
         :inline="true"
         :model="form"
@@ -103,16 +115,7 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -167,18 +170,18 @@ const getTableData = async() => {
 
 getTableData()
 
-const dialogFormVisible = ref(false)
+const drawerFormVisible = ref(false)
 const type = ref('')
 const updateCustomer = async(row) => {
   const res = await getExaCustomer({ ID: row.ID })
   type.value = 'update'
   if (res.code === 0) {
     form.value = res.data.customer
-    dialogFormVisible.value = true
+    drawerFormVisible.value = true
   }
 }
-const closeDialog = () => {
-  dialogFormVisible.value = false
+const closeDrawer = () => {
+  drawerFormVisible.value = false
   form.value = {
     customerName: '',
     customerPhoneData: ''
@@ -203,7 +206,7 @@ const deleteCustomer = async(row) => {
     }
   })
 }
-const enterDialog = async() => {
+const enterDrawer = async() => {
   let res
   switch (type.value) {
     case 'create':
@@ -218,13 +221,13 @@ const enterDialog = async() => {
   }
 
   if (res.code === 0) {
-    closeDialog()
+    closeDrawer()
     getTableData()
   }
 }
-const openDialog = () => {
+const openDrawer = () => {
   type.value = 'create'
-  dialogFormVisible.value = true
+  drawerFormVisible.value = true
 }
 
 </script>

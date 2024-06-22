@@ -111,8 +111,6 @@
       v-model="drawerFormVisible"
       size="30%"
       :show-close="false"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
       :before-close="closeDrawer"
     >
       <template #header>
@@ -281,6 +279,7 @@ getTableData()
 const type = ref('')
 const drawerFormVisible = ref(false)
 const updateSysDictionaryDetailFunc = async(row) => {
+  drawerForm.value && drawerForm.value.clearValidate()
   const res = await findSysDictionaryDetail({ ID: row.ID })
   type.value = 'update'
   if (res.code === 0) {

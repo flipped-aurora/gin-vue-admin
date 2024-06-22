@@ -121,16 +121,14 @@ export const useAppStore = defineStore('app', () => {
   }
 
   const toggleSideModel= (e) =>{
-    config.side_mode = e 
+    config.side_mode = e
   }
 
   if(config.darkMode === 'auto'){
     toggleDarkModeAuto()
   }
-  
-  if(config.grey){
+
     toggleGrey(config.grey)
-  }
 
   return {
     theme,

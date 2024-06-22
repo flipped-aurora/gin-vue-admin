@@ -3,12 +3,13 @@ package system
 import (
 	"errors"
 	"fmt"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 
@@ -71,26 +72,28 @@ func (autoCodeHistoryService *AutoCodeHistoryService) RollBack(info *systemReq.R
 		return err
 	}
 	// 清除API表
-
-	ids := request.IdsReq{}
-	idsStr := strings.Split(md.ApiIDs, ";")
-	for i := range idsStr[0 : len(idsStr)-1] {
-		id, err := strconv.Atoi(idsStr[i])
-		if err != nil {
-			return err
+	var err error
+	if info.DeleteApi {
+		ids := request.IdsReq{}
+		idsStr := strings.Split(md.ApiIDs, ";")
+		for i := range idsStr[0 : len(idsStr)-1] {
+			id, err := strconv.Atoi(idsStr[i])
+			if err != nil {
+				return err
+			}
+			ids.Ids = append(ids.Ids, id)
 		}
-		ids.Ids = append(ids.Ids, id)
+		err = ApiServiceApp.DeleteApisByIds(ids)
+		if err != nil {
+			global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
+		}
 	}
-	err := ApiServiceApp.DeleteApisByIds(ids)
-
-	if err != nil {
-		global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
-	}
-
-	err = BaseMenuServiceApp.DeleteBaseMenu(int(md.MenuID))
-
-	if err != nil {
-		global.GVA_LOG.Error("ClearTag DeleteBaseMenu:", zap.Error(err))
+	// 清除菜单表
+	if info.DeleteMenu {
+		err = BaseMenuServiceApp.DeleteBaseMenu(int(md.MenuID))
+		if err != nil {
+			global.GVA_LOG.Error("ClearTag DeleteBaseMenu:", zap.Error(err))
+		}
 	}
 
 	// 删除表

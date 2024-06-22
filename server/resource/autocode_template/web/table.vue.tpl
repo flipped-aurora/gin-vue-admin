@@ -142,8 +142,8 @@
         <el-form-item>
           <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
           <el-button icon="refresh" @click="onReset">重置</el-button>
-          <el-button type="text" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
-          <el-button type="text" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
+          <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
+          <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -412,7 +412,7 @@ const formData = ref({
         {{.FieldJson}}: '',
         {{- end }}
         {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+        {{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
         {{- end }}
         {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),
@@ -659,7 +659,7 @@ const update{{.StructName}}Func = async(row) => {
     const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
     type.value = 'update'
     if (res.code === 0) {
-        formData.value = res.data.re{{.Abbreviation}}
+        formData.value = res.data
         dialogFormVisible.value = true
     }
 }
@@ -704,7 +704,7 @@ const closeDialog = () => {
         {{.FieldJson}}: '',
         {{- end }}
         {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if .DictType }} undefined{{ else }} 0{{- end }},
+        {{.FieldJson}}: {{- if or .DictType .DataSource }} undefined{{ else }} 0{{- end }},
         {{- end }}
         {{- if eq .FieldType "time.Time" }}
         {{.FieldJson}}: new Date(),

@@ -4,25 +4,26 @@
 !-->
 
 <template>
-  <div class="fixed top-0 left-0 right-0 z-10 h-16 bg-white text-slate-700 dark:text-slate-300  dark:bg-slate-900 shadow dark:shadow-gray-700 flex items-center px-2">
+  <div class="flex justify-between fixed top-0 left-0 right-0 z-10 h-16 bg-white text-slate-700 dark:text-slate-300  dark:bg-slate-900 shadow dark:shadow-gray-700 flex items-center px-2">
     <div
-      class="flex items-center cursor-pointer"
-      @click="router.push({ path: '/' })"
+      class="flex items-center cursor-pointer flex-1"
     >
-      <img
-        alt
-        class="h-12 bg-white rounded-full"
-        :src="$GIN_VUE_ADMIN.appLogo"
-      >
-      <div
-        v-if="!isMobile"
-        class="inline-flex font-bold text-2xl ml-2"
-      >
-        {{ $GIN_VUE_ADMIN.appName }}
+      <div class="flex items-center cursor-pointer" @click="router.push({ path: '/' })">
+        <img
+          alt
+          class="h-12 bg-white rounded-full"
+          :src="$GIN_VUE_ADMIN.appLogo"
+        >
+        <div
+          v-if="!isMobile"
+          class="inline-flex font-bold text-2xl ml-2"
+          :class="(config.side_mode === 'head' || config.side_mode === 'combination') &&'min-w-fit'"
+        >
+          {{ $GIN_VUE_ADMIN.appName }}
+        </div>
       </div>
 
-
-      <el-breadcrumb v-show="!isMobile" class="ml-4">
+      <el-breadcrumb v-show="!isMobile" v-if="config.side_mode !== 'head'&& config.side_mode !== 'combination'" class="ml-4">
         <el-breadcrumb-item
           v-for="item in matched.slice(1, matched.length)"
           :key="item.path"
@@ -32,9 +33,11 @@
           }}
         </el-breadcrumb-item>
       </el-breadcrumb>
+      <gva-aside v-if="config.side_mode === 'head' && !isMobile" class="flex-1" />
+      <gva-aside v-if="config.side_mode === 'combination' && !isMobile" mode="head" class="flex-1" />
     </div>
 
-    <div class="ml-auto flex items-center">
+    <div class="ml-2 flex items-center">
       <tools />
       <el-dropdown>
         <div
@@ -46,7 +49,7 @@
             <CustomPic />
             <span
               v-show="!isMobile"
-              style="margin-left: 5px"
+              class="w-16"
             >{{ userStore.userInfo.nickName }}</span>
             <el-icon>
               <arrow-down />
@@ -100,14 +103,15 @@ import { useUserStore } from "@/pinia/modules/user";
 import { useRoute, useRouter } from 'vue-router'
 import { useAppStore } from "@/pinia"
 import { storeToRefs } from "pinia"
-import { computed, ref } from 'vue'
+import { computed, } from 'vue'
 import { setUserAuthority } from '@/api/user'
 import { fmtTitle } from "@/utils/fmtRouterTitle";
+import gvaAside from "@/view/layout/aside/index.vue"
 const userStore = useUserStore();
 const router = useRouter()
 const route = useRoute()
 const appStore = useAppStore()
-const { device } = storeToRefs(appStore)
+const { device , config } = storeToRefs(appStore)
 const isMobile = computed(() =>{
   return device.value  === 'mobile'
 })

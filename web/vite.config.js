@@ -54,6 +54,7 @@ export default ({
   const config = {
     base: '/', // index.html文件所在位置
     root: './', // js导入的资源路径，src
+    publicDir: 'public', // 静态资源文件夹
     resolve: {
       alias,
     },

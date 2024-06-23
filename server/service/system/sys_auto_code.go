@@ -278,17 +278,17 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 		if autoCode.AutoMigrate {
 			// 在gorm.go 注入 自动迁移
 			path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm.go")
+				global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "gorm_biz.go")
 			varDB := utils.MaheHump(autoCode.BusinessDB)
-			ast2.AddRegisterTablesAst(path, "RegisterTables", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
+			ast2.AddRegisterTablesAst(path, "bizModel", autoCode.Package, varDB, autoCode.BusinessDB, autoCode.StructName)
 		}
 	}
 
 	{
 		// router.go 注入 自动迁移
 		path := filepath.Join(global.GVA_CONFIG.AutoCode.Root,
-			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router.go")
-		ast2.AddRouterCode(path, "Routers", autoCode.Package, autoCode.StructName)
+			global.GVA_CONFIG.AutoCode.Server, global.GVA_CONFIG.AutoCode.SInitialize, "router_biz.go")
+		ast2.AddRouterCode(path, "initBizRouter", autoCode.Package, autoCode.StructName)
 	}
 	// 给各个enter进行注入
 	err = injectionCode(autoCode.StructName, &injectionCodeMeta)

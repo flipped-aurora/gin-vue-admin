@@ -45,7 +45,7 @@ func (m *SysAutoCodeHistory) ToRequestIds() request.IdsReq {
 type RecordsDeleteCode struct {
 	Path       string    `gorm:"type:text;comment:已删除文件保存路径"`
 	File       string    `gorm:"type:text;comment:新生成文件路径"`
-	UpdateTime time.Time `gorm:"type:datetime;comment:更新时间"`
+	UpdateTime time.Time `gorm:"comment:更新时间"`
 }
 
 func (RecordsDeleteCode) TableName() string {

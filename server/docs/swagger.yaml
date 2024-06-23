@@ -106,6 +106,11 @@ definitions:
         description: 防爆破验证码超时时间，单位：s(秒)
         type: integer
     type: object
+  config.DiskList:
+    properties:
+      mount-point:
+        type: string
+    type: object
   config.Excel:
     properties:
       dir:
@@ -150,6 +155,9 @@ definitions:
     type: object
   config.Mongo:
     properties:
+      auth-source:
+        description: 验证数据库
+        type: string
       coll:
         description: collection name
         type: string
@@ -223,16 +231,19 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 数据库地址
         type: string
       port:
+        description: 数据库端口
         type: string
       prefix:
+        description: 数据库前缀
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库密码
+        description: 数据库账号
         type: string
     type: object
   config.Mysql:
@@ -263,16 +274,19 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 数据库地址
         type: string
       port:
+        description: 数据库端口
         type: string
       prefix:
+        description: 数据库前缀
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库密码
+        description: 数据库账号
         type: string
     type: object
   config.Oracle:
@@ -303,16 +317,19 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 数据库地址
         type: string
       port:
+        description: 数据库端口
         type: string
       prefix:
+        description: 数据库前缀
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库密码
+        description: 数据库账号
         type: string
     type: object
   config.Pgsql:
@@ -343,16 +360,19 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 数据库地址
         type: string
       port:
+        description: 数据库端口
         type: string
       prefix:
+        description: 数据库前缀
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库密码
+        description: 数据库账号
         type: string
     type: object
   config.Qiniu:
@@ -384,12 +404,20 @@ definitions:
       addr:
         description: 服务器地址:端口
         type: string
+      clusterAddrs:
+        description: 集群模式下的节点地址列表
+        items:
+          type: string
+        type: array
       db:
-        description: redis的哪个数据库
+        description: 单实例模式下redis的哪个数据库
         type: integer
       password:
         description: 密码
         type: string
+      useCluster:
+        description: 是否使用集群模式
+        type: boolean
     type: object
   config.Server:
     properties:
@@ -410,6 +438,10 @@ definitions:
       db-list:
         items:
           $ref: '#/definitions/config.SpecializedDB'
+        type: array
+      disk-list:
+        items:
+          $ref: '#/definitions/config.DiskList'
         type: array
       email:
         $ref: '#/definitions/github_com_flipped-aurora_gin-vue-admin_server_config.Email'
@@ -480,10 +512,13 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 数据库地址
         type: string
       port:
+        description: 数据库端口
         type: string
       prefix:
+        description: 数据库前缀
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
@@ -491,7 +526,7 @@ definitions:
       type:
         type: string
       username:
-        description: 数据库密码
+        description: 数据库账号
         type: string
     type: object
   config.Sqlite:
@@ -522,16 +557,19 @@ definitions:
         description: 数据库密码
         type: string
       path:
+        description: 数据库地址
         type: string
       port:
+        description: 数据库端口
         type: string
       prefix:
+        description: 数据库前缀
         type: string
       singular:
         description: 是否开启全局禁用复数，true表示开启
         type: boolean
       username:
-        description: 数据库密码
+        description: 数据库账号
         type: string
     type: object
   config.System:
@@ -541,9 +579,6 @@ definitions:
         type: integer
       db-type:
         description: 数据库类型:mysql(默认)|sqlite|sqlserver|postgresql
-        type: string
-      env:
-        description: 环境值
         type: string
       iplimit-count:
         type: integer
@@ -555,7 +590,7 @@ definitions:
       router-prefix:
         type: string
       use-mongo:
-        description: 使用redis
+        description: 使用mongo
         type: boolean
       use-multipoint:
         description: 多点登录拦截
@@ -596,12 +631,12 @@ definitions:
       log-in-console:
         description: 输出控制台
         type: boolean
-      max-age:
-        description: 日志留存时间
-        type: integer
       prefix:
         description: 日志前缀
         type: string
+      retention-day:
+        description: 日志保留天数
+        type: integer
       show-line:
         description: 显示行
         type: boolean
@@ -790,6 +825,8 @@ definitions:
     type: object
   request.InitDB:
     properties:
+      adminPassword:
+        type: string
       dbName:
         description: 数据库名
         type: string
@@ -812,6 +849,7 @@ definitions:
         description: 数据库用户名
         type: string
     required:
+    - adminPassword
     - dbName
     type: object
   request.Login:
@@ -873,6 +911,12 @@ definitions:
     type: object
   request.RollBack:
     properties:
+      deleteApi:
+        description: 是否删除接口
+        type: boolean
+      deleteMenu:
+        description: 是否删除菜单
+        type: boolean
       deleteTable:
         description: 是否删除表
         type: boolean
@@ -1104,11 +1148,14 @@ definitions:
       autoCreateApiToSql:
         description: 是否自动创建api
         type: boolean
+      autoCreateMenuToSql:
+        description: 是否自动创建menu
+        type: boolean
       autoCreateResource:
         description: 是否自动创建资源标识
         type: boolean
-      autoMoveFile:
-        description: 是否自动移动文件
+      autoMigrate:
+        description: 是否自动迁移表结构
         type: boolean
       businessDB:
         description: 业务数据库
@@ -1120,7 +1167,8 @@ definitions:
         items:
           $ref: '#/definitions/system.Field'
         type: array
-      hasTimer:
+      gvaModel:
+        description: 是否使用gva默认Model
         type: boolean
       humpPackageName:
         description: go文件名称
@@ -1130,6 +1178,8 @@ definitions:
       packageName:
         description: 文件名称
         type: string
+      primaryField:
+        $ref: '#/definitions/system.Field'
       structName:
         description: Struct名称
         type: string
@@ -1137,8 +1187,43 @@ definitions:
         description: 表名
         type: string
     type: object
+  system.Condition:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      column:
+        type: string
+      createdAt:
+        description: 创建时间
+        type: string
+      from:
+        type: string
+      operator:
+        type: string
+      templateID:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  system.DataSource:
+    properties:
+      association:
+        description: 关联关系 1 一对一 2 一对多
+        type: integer
+      label:
+        type: string
+      table:
+        type: string
+      value:
+        type: string
+    type: object
   system.Field:
     properties:
+      checkDataSource:
+        description: 是否检查数据源
+        type: boolean
       clearable:
         description: 是否可清空
         type: boolean
@@ -1148,8 +1233,15 @@ definitions:
       comment:
         description: 数据库字段描述
         type: string
+      dataSource:
+        allOf:
+        - $ref: '#/definitions/system.DataSource'
+        description: 数据源
       dataTypeLong:
         description: 数据库字段长度
+        type: string
+      defaultValue:
+        description: 是否必填
         type: string
       dictType:
         description: 字典
@@ -1160,24 +1252,56 @@ definitions:
       fieldDesc:
         description: 中文名
         type: string
+      fieldIndexType:
+        description: 索引类型
+        type: string
       fieldJson:
         description: FieldJson
         type: string
       fieldName:
         description: Field名
         type: string
+      fieldSearchHide:
+        description: 是否隐藏查询条件
+        type: boolean
       fieldSearchType:
         description: 搜索条件
         type: string
       fieldType:
         description: Field数据类型
         type: string
+      front:
+        description: 是否前端可见
+        type: boolean
+      primaryKey:
+        description: 是否主键
+        type: boolean
       require:
         description: 是否必填
         type: boolean
       sort:
         description: 是否增加排序
         type: boolean
+    type: object
+  system.JoinTemplate:
+    properties:
+      ID:
+        description: 主键ID
+        type: integer
+      createdAt:
+        description: 创建时间
+        type: string
+      joins:
+        type: string
+      "on":
+        type: string
+      table:
+        type: string
+      templateID:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
     type: object
   system.Meta:
     properties:
@@ -1315,7 +1439,7 @@ definitions:
         type: array
       parentId:
         description: 父菜单ID
-        type: string
+        type: integer
       path:
         description: 路由path
         type: string
@@ -1423,7 +1547,46 @@ definitions:
         type: string
       value:
         description: 字典值
+        type: string
+    type: object
+  system.SysExportTemplate:
+    properties:
+      ID:
+        description: 主键ID
         type: integer
+      conditions:
+        items:
+          $ref: '#/definitions/system.Condition'
+        type: array
+      createdAt:
+        description: 创建时间
+        type: string
+      dbName:
+        description: 数据库名称
+        type: string
+      joinTemplate:
+        items:
+          $ref: '#/definitions/system.JoinTemplate'
+        type: array
+      limit:
+        type: integer
+      name:
+        description: 模板名称
+        type: string
+      order:
+        type: string
+      tableName:
+        description: 表名称
+        type: string
+      templateID:
+        description: 模板标识
+        type: string
+      templateInfo:
+        description: 模板信息
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
     type: object
   system.SysMenu:
     properties:
@@ -1456,7 +1619,7 @@ definitions:
           $ref: '#/definitions/system.SysBaseMenuBtn'
         type: array
       menuId:
-        type: string
+        type: integer
       meta:
         allOf:
         - $ref: '#/definitions/system.Meta'
@@ -1470,7 +1633,7 @@ definitions:
         type: array
       parentId:
         description: 父菜单ID
-        type: string
+        type: integer
       path:
         description: 路由path
         type: string
@@ -3532,7 +3695,7 @@ paths:
       - description: 字典值
         in: query
         name: value
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -3605,7 +3768,7 @@ paths:
       - description: 字典值
         in: query
         name: value
-        type: integer
+        type: string
       produces:
       - application/json
       responses:
@@ -3653,6 +3816,250 @@ paths:
       summary: 更新SysDictionaryDetail
       tags:
       - SysDictionaryDetail
+  /sysExportTemplate/createSysExportTemplate:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 创建导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"创建成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 创建导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/deleteSysExportTemplate:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 删除导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 删除导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/deleteSysExportTemplateByIds:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: 批量删除导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.IdsReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"批量删除成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 批量删除导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/exportExcel:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 导出表格模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/findSysExportTemplate:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 数据库名称
+        in: query
+        name: dbName
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - description: 模板名称
+        in: query
+        name: name
+        type: string
+      - in: query
+        name: order
+        type: string
+      - description: 表名称
+        in: query
+        name: tableName
+        type: string
+      - description: 模板标识
+        in: query
+        name: templateID
+        type: string
+      - description: 模板信息
+        in: query
+        name: templateInfo
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"查询成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 用id查询导出模板
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/getSysExportTemplateList:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: 主键ID
+        in: query
+        name: ID
+        type: integer
+      - description: 创建时间
+        in: query
+        name: createdAt
+        type: string
+      - description: 数据库名称
+        in: query
+        name: dbName
+        type: string
+      - in: query
+        name: endCreatedAt
+        type: string
+      - description: 关键字
+        in: query
+        name: keyword
+        type: string
+      - in: query
+        name: limit
+        type: integer
+      - description: 模板名称
+        in: query
+        name: name
+        type: string
+      - in: query
+        name: order
+        type: string
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 每页大小
+        in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: startCreatedAt
+        type: string
+      - description: 表名称
+        in: query
+        name: tableName
+        type: string
+      - description: 模板标识
+        in: query
+        name: templateID
+        type: string
+      - description: 模板信息
+        in: query
+        name: templateInfo
+        type: string
+      - description: 更新时间
+        in: query
+        name: updatedAt
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"获取成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 分页获取导出模板列表
+      tags:
+      - SysExportTemplate
+  /sysExportTemplate/importExcel:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      security:
+      - ApiKeyAuth: []
+      summary: 导入表格
+      tags:
+      - SysImportTemplate
+  /sysExportTemplate/updateSysExportTemplate:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 更新导出模板
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/system.SysExportTemplate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: '{"success":true,"data":{},"msg":"更新成功"}'
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: 更新导出模板
+      tags:
+      - SysExportTemplate
   /sysOperationRecord/createSysOperationRecord:
     post:
       consumes:

@@ -176,7 +176,7 @@ const init = async () => {
     if (route.query.id) {
       const res = await find{{.StructName}}({ ID: route.query.id })
       if (res.code === 0) {
-        formData.value = res.data.re{{.Abbreviation}}
+        formData.value = res.data
         type.value = 'update'
       }
     } else {

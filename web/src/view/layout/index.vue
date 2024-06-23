@@ -12,7 +12,8 @@
     />
     <gva-header />
     <div class="flex flex-row w-full gva-container pt-16">
-      <gva-aside v-if="config.side_mode != 'head' || (device === 'mobile'&& config.side_mode == 'head' )" />
+      <gva-aside v-if="config.side_mode === 'normal' || (device === 'mobile' && config.side_mode == 'head' ) || (device === 'mobile' && config.side_mode == 'combination' )" />
+      <gva-aside v-if="config.side_mode === 'combination' && device !== 'mobile'" mode="normal"/>
       <div class="flex-1 p-2 w-0 h-full">
         <gva-tabs v-if="config.showTabs" />
         <div

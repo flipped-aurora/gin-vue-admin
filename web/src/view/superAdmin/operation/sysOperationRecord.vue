@@ -114,6 +114,7 @@
               <el-popover
                 v-if="scope.row.body"
                 placement="left-start"
+                :width="444"
               >
                 <div class="popover-box">
                   <pre>{{ fmtBody(scope.row.body) }}</pre>
@@ -138,6 +139,7 @@
               <el-popover
                 v-if="scope.row.resp"
                 placement="left-start"
+                :width="444"
               >
                 <div class="popover-box">
                   <pre>{{ fmtBody(scope.row.resp) }}</pre>

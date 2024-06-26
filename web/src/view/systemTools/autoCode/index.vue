@@ -685,6 +685,9 @@ const llmAutoFunc = async (mode) =>{
     for (let key in json){
       if(key === "fields"){
         json[key].forEach(item => {
+          if (item.primaryKey) {
+            form.value.gvaModel = false
+          }
           form.value.fields.push({
               fieldName: toUpperCase(item.fieldName),
               fieldDesc: item.fieldDesc,
@@ -1105,6 +1108,7 @@ const getColumnFunc = async() => {
       const dbraw = toRaw(dbtmp)
       dbtype = dbraw.dbtype
     }
+    form.value.gvaModel = false
     const tbHump = toHump(dbform.value.tableName)
     form.value.structName = toUpperCase(tbHump)
     form.value.tableName = dbform.value.tableName

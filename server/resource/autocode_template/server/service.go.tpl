@@ -9,8 +9,7 @@ import (
     {{- end}}
 )
 
-type {{.StructName}}Service struct {
-}
+type {{.StructName}}Service struct {}
 
 {{- $db := "" }}
 {{- if eq .BusinessDB "" }}

@@ -76,10 +76,22 @@
       </el-table>
     </div>
     <!-- 新增角色弹窗 -->
-    <el-dialog
-      v-model="dialogFormVisible"
-      :title="dialogTitle"
+    <el-drawer
+      v-model="authorityFormVisible"
+      :show-close="false"
     >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ authorityTitleForm }}</span>
+          <div>
+            <el-button @click="closeAuthorityForm">取 消</el-button>
+            <el-button
+              type="primary"
+              @click="submitAuthorityForm"
+            >确 定</el-button>
+          </div>
+        </div>
+      </template>
       <el-form
         ref="authorityForm"
         :model="form"
@@ -121,16 +133,7 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
 
     <el-drawer
       v-if="drawer"
@@ -210,8 +213,8 @@ const drawer = ref(false)
 const dialogType = ref('add')
 const activeRow = ref({})
 
-const dialogTitle = ref('新增角色')
-const dialogFormVisible = ref(false)
+const authorityTitleForm = ref('新增角色')
+const authorityFormVisible = ref(false)
 const apiDialogFlag = ref(false)
 const copyForm = ref({})
 
@@ -270,13 +273,13 @@ const autoEnter = (activeName, oldActiveName) => {
 // 拷贝角色
 const copyAuthorityFunc = (row) => {
   setOptions()
-  dialogTitle.value = '拷贝角色'
+  authorityTitleForm.value = '拷贝角色'
   dialogType.value = 'copy'
   for (const k in form.value) {
     form.value[k] = row[k]
   }
   copyForm.value = row
-  dialogFormVisible.value = true
+  authorityFormVisible.value = true
 }
 const openDrawer = (row) => {
   drawer.value = true
@@ -322,14 +325,14 @@ const initForm = () => {
   }
 }
 // 关闭窗口
-const closeDialog = () => {
+const closeAuthorityForm = () => {
   initForm()
-  dialogFormVisible.value = false
+  authorityFormVisible.value = false
   apiDialogFlag.value = false
 }
 // 确定弹窗
 
-const enterDialog = () => {
+const submitAuthorityForm = () => {
   authorityForm.value.validate(async valid => {
     if (valid) {
       form.value.authorityId = Number(form.value.authorityId)
@@ -343,7 +346,7 @@ const enterDialog = () => {
                 message: '添加成功!'
               })
               getTableData()
-              closeDialog()
+              closeAuthorityForm()
             }
           }
           break
@@ -356,7 +359,7 @@ const enterDialog = () => {
                 message: '添加成功!'
               })
               getTableData()
-              closeDialog()
+              closeAuthorityForm()
             }
           }
           break
@@ -387,7 +390,7 @@ const enterDialog = () => {
       }
 
       initForm()
-      dialogFormVisible.value = false
+      authorityFormVisible.value = false
     }
   })
 }
@@ -429,22 +432,23 @@ const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
 // 增加角色
 const addAuthority = (parentId) => {
   initForm()
-  dialogTitle.value = '新增角色'
+  authorityTitleForm.value = '新增角色'
   dialogType.value = 'add'
   form.value.parentId = parentId
   setOptions()
-  dialogFormVisible.value = true
+  authorityFormVisible.value = true
 }
 // 编辑角色
 const editAuthority = (row) => {
   setOptions()
-  dialogTitle.value = '编辑角色'
+  authorityTitleForm.value = '编辑角色'
   dialogType.value = 'edit'
   for (const key in form.value) {
     form.value[key] = row[key]
   }
   setOptions()
-  dialogFormVisible.value = true
+  authorityForm.value && authorityForm.value.clearValidate()
+  authorityFormVisible.value = true
 }
 
 </script>

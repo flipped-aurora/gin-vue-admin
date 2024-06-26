@@ -36,8 +36,6 @@
       v-model="drawerFormVisible"
       size="30%"
       :show-close="false"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
       :before-close="closeDrawer"
     >
       <template #header>

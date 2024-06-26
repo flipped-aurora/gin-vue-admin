@@ -6,22 +6,24 @@
       width: layoutSideWidth + 'px',
     }"
   >
-    <el-menu
-      :collapse="isCollapse"
-      :collapse-transition="false"
-      :default-active="active"
-      class="border-r-0 w-full"
-      unique-opened
-      @select="selectMenuItem"
-    >
-      <template v-for="item in routerStore.asyncRouters[0].children">
-        <aside-component
-          v-if="!item.hidden"
-          :key="item.name"
-          :router-info="item"
-        />
-      </template>
-    </el-menu>
+    <el-scrollbar>
+      <el-menu
+        :collapse="isCollapse"
+        :collapse-transition="false"
+        :default-active="active"
+        class="border-r-0 w-full"
+        unique-opened
+        @select="selectMenuItem"
+      >
+        <template v-for="item in routerStore.asyncRouters[0].children">
+          <aside-component
+            v-if="!item.hidden"
+            :key="item.name"
+            :router-info="item"
+          />
+        </template>
+      </el-menu>
+    </el-scrollbar>
     <div
       class="absolute bottom-8 right-2 w-8 h-8 bg-gray-50 dark:bg-slate-800 flex items-center justify-center rounded cursor-pointer"
       :class="isCollapse ? 'right-0 left-0 mx-auto' : 'right-2'"
@@ -36,7 +38,7 @@
     </div>
   </div>
 </template>
-  
+
   <script setup>
 import AsideComponent from "@/view/layout/aside/asideComponent/index.vue";
 import { ref, provide, watchEffect, computed } from "vue";
@@ -99,6 +101,5 @@ const toggleCollapse = () => {
   isCollapse.value = !isCollapse.value;
 };
 </script>
-  
+
   <style lang="scss"></style>
-  

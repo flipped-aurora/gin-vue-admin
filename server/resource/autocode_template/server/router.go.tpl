@@ -6,8 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type {{.StructName}}Router struct {
-}
+type {{.StructName}}Router struct {}
 
 // Init{{.StructName}}Router 初始化 {{.Description}} 路由信息
 func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGroup,PublicRouter *gin.RouterGroup) {

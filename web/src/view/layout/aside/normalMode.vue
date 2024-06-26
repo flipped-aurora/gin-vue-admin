@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700"
+    class="relative h-full bg-white text-slate-700 dark:text-slate-300 dark:bg-slate-900 border-r shadow dark:shadow-gray-700 overflow-auto"
     :class="isCollapse ? '' : '  px-2'"
     :style="{
       width: layoutSideWidth + 'px',

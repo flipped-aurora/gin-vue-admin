@@ -22,6 +22,7 @@ yarn-error.log*
 *.sln
 *.sw?
 
+rm_file/
 /server/log/
 /server/gva
 /server/server

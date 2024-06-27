@@ -190,7 +190,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		}
 	}
 	// 模板的默认limit
-	if limit == "" && *template.Limit != 0 {
+	if limit == "" && template.Limit != nil && *template.Limit != 0 {
 		db = db.Limit(*template.Limit)
 	}
 

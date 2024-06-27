@@ -190,8 +190,8 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		}
 	}
 	// 模板的默认limit
-	if limit == "" && template.Limit != 0 {
-		db = db.Limit(template.Limit)
+	if limit == "" && template.Limit != nil && *template.Limit != 0 {
+		db = db.Limit(*template.Limit)
 	}
 
 	// 通过参数传入offset
@@ -205,7 +205,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	// 获取当前表的所有字段
 	table := template.TableName
-	orderColumns, err := global.GVA_DB.Migrator().ColumnTypes(table)
+	orderColumns, err := db.Migrator().ColumnTypes(table)
 	if err != nil {
 		return nil, "", err
 	}

@@ -13,7 +13,7 @@ type SysExportTemplate struct {
 	TableName    string         `json:"tableName" form:"tableName" gorm:"column:table_name;comment:表名称;"`        //表名称
 	TemplateID   string         `json:"templateID" form:"templateID" gorm:"column:template_id;comment:模板标识;"`    //模板标识
 	TemplateInfo string         `json:"templateInfo" form:"templateInfo" gorm:"column:template_info;type:text;"` //模板信息
-	Limit        int            `json:"limit" form:"limit" gorm:"column:limit;comment:导出限制"`
+	Limit        *int           `json:"limit" form:"limit" gorm:"column:limit;comment:导出限制"`
 	Order        string         `json:"order" form:"order" gorm:"column:order;comment:排序"`
 	Conditions   []Condition    `json:"conditions" form:"conditions" gorm:"foreignKey:TemplateID;references:TemplateID;comment:条件"`
 	JoinTemplate []JoinTemplate `json:"joinTemplate" form:"joinTemplate" gorm:"foreignKey:TemplateID;references:TemplateID;comment:关联"`

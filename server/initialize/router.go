@@ -101,7 +101,7 @@ func Routers() *gin.Engine {
 	InstallPlugin(PrivateGroup, PublicGroup)
 
 	// 注册业务路由
-	initBizRouter(PrivateGroup, PublicGroup)
+	initBizRouter(PublicGroup, PrivateGroup)
 
 	global.GVA_LOG.Info("router register success")
 	return Router

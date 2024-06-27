@@ -64,9 +64,9 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	var menuId uint
 	if a.AutoCreateApiToSql {
 		if ids, err := autoCodeService.AutoCreateApi(&a); err != nil {
-			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
+			global.GVA_LOG.Error("自动化创建API失败!", zap.Error(err))
 			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
+			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据或取消自动创建API!"))
 			return
 		} else {
 			apiIds = ids
@@ -74,9 +74,10 @@ func (autoApi *AutoCodeApi) CreateTemp(c *gin.Context) {
 	}
 	if a.AutoCreateMenuToSql {
 		if id, err := autoCodeService.AutoCreateMenu(&a); err != nil {
-			global.GVA_LOG.Error("自动化创建失败!请自行清空垃圾数据!", zap.Error(err))
+			global.GVA_LOG.Error("自动化创建菜单失败!", zap.Error(err))
 			c.Writer.Header().Add("success", "false")
-			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据!"))
+			c.Writer.Header().Add("msg", url.QueryEscape("自动化创建失败!请自行清空垃圾数据或取消自动创建菜单!"))
+			return
 		} else {
 			menuId = id
 		}

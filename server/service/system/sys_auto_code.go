@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/mholt/archiver/v4"
 	"io"
 	"mime/multipart"
 	"os"
@@ -13,6 +12,8 @@ import (
 	"strconv"
 	"strings"
 	"text/template"
+
+	"github.com/mholt/archiver/v4"
 
 	ast2 "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 
@@ -468,7 +469,11 @@ func (autoCodeService *AutoCodeService) AutoCreateApi(a *system.AutoCodeStruct) 
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		for _, v := range apiList {
 			var api system.SysApi
-			if errors.Is(tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error, gorm.ErrRecordNotFound) {
+			findErr := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error
+			if findErr == nil {
+				return errors.New("存在相同的API，请关闭自动创建API功能")
+			}
+			if errors.Is(findErr, gorm.ErrRecordNotFound) {
 				if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
 					return err
 				} else {

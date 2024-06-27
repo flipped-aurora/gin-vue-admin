@@ -205,7 +205,7 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 
 	// 获取当前表的所有字段
 	table := template.TableName
-	orderColumns, err := global.GVA_DB.Migrator().ColumnTypes(table)
+	orderColumns, err := db.Migrator().ColumnTypes(table)
 	if err != nil {
 		return nil, "", err
 	}

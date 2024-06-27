@@ -190,8 +190,8 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		}
 	}
 	// 模板的默认limit
-	if limit == "" && template.Limit != 0 {
-		db = db.Limit(template.Limit)
+	if limit == "" && *template.Limit != 0 {
+		db = db.Limit(*template.Limit)
 	}
 
 	// 通过参数传入offset

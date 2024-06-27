@@ -119,13 +119,18 @@
         <el-table-column
           align="left"
           label="数据库"
-          prop="name"
           width="120"
         >
-          <template #defalut="scope">
+          <template #default="scope">
             <span>{{ scope.row.dbNname || "GVA库" }}</span>
           </template>
         </el-table-column>
+        <el-table-column
+            align="left"
+            label="模板标识"
+            prop="templateID"
+            width="120"
+        />
         <el-table-column
           align="left"
           label="模板名称"
@@ -136,12 +141,6 @@
           align="left"
           label="表名称"
           prop="tableName"
-          width="120"
-        />
-        <el-table-column
-          align="left"
-          label="模板标识"
-          prop="templateID"
           width="120"
         />
         <el-table-column

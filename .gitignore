@@ -28,6 +28,7 @@ rm_file/
 /server/server
 /server/latest_log
 /server/__debug_bin*
+server/uploads/
 
 *.iml
 web/.pnpm-debug.log

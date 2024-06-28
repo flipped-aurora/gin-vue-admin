@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-upload
-      :action="`${path}/fileUploadAndDownload/upload`"
+      :action="`${getBaseUrl()}/fileUploadAndDownload/upload`"
       :before-upload="checkFile"
       :on-error="uploadError"
       :on-success="uploadSuccess"
@@ -18,6 +18,7 @@
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { isVideoMime, isImageMime } from '@/utils/image'
+import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
   name: 'UploadCommon',

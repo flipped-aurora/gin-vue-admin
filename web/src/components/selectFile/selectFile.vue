@@ -2,7 +2,7 @@
   <div>
     <el-upload
       multiple
-      :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
+      :action="`${getBaseUrl()}/fileUploadAndDownload/upload?noSave=1`"
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="true"
@@ -21,6 +21,7 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
   name: 'UploadCommon',

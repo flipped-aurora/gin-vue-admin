@@ -91,8 +91,20 @@ export default class ImageCompress {
   }
 }
 
-const path = import.meta.env.VITE_FILE_API + '/'
-export const getUrl = (url) => url && url.slice(0, 4) !== 'http' ? path + url : url
+const path = import.meta.env.VITE_FILE_API
+export const getUrl = (url) => {
+  if (url && url.slice(0, 4) !== 'http'){
+    if (path === "/"){
+      return url
+    }
+    if (url.slice(0, 1) === "/"){
+        return path + url
+    }
+    return path +"/"+ url
+  }else{
+    return url
+  }
+}
 
 export const isVideoExt = (url) => url.endsWith('.mp4') || url.endsWith('.mov') || url.endsWith('.webm') || url.endsWith('.ogg');
 

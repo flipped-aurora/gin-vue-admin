@@ -303,34 +303,32 @@ func (autoCodeService *AutoCodeService) CreateTemp(autoCode system.AutoCodeStruc
 			bf.WriteString(";")
 		}
 	}
-	if autoCode.AutoCreateApiToSql || autoCode.AutoCreateMenuToSql {
-		if autoCode.TableName != "" {
-			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
-				string(meta),
-				autoCode.StructName,
-				autoCode.Description,
-				bf.String(),
-				injectionCodeMeta.String(),
-				autoCode.TableName,
-				idBf.String(),
-				autoCode.Package,
-				autoCode.BusinessDB,
-				menuID,
-			)
-		} else {
-			err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
-				string(meta),
-				autoCode.StructName,
-				autoCode.Description,
-				bf.String(),
-				injectionCodeMeta.String(),
-				autoCode.StructName,
-				idBf.String(),
-				autoCode.Package,
-				autoCode.BusinessDB,
-				menuID,
-			)
-		}
+	if autoCode.TableName != "" {
+		err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
+			string(meta),
+			autoCode.StructName,
+			autoCode.Description,
+			bf.String(),
+			injectionCodeMeta.String(),
+			autoCode.TableName,
+			idBf.String(),
+			autoCode.Package,
+			autoCode.BusinessDB,
+			menuID,
+		)
+	} else {
+		err = AutoCodeHistoryServiceApp.CreateAutoCodeHistory(
+			string(meta),
+			autoCode.StructName,
+			autoCode.Description,
+			bf.String(),
+			injectionCodeMeta.String(),
+			autoCode.StructName,
+			idBf.String(),
+			autoCode.Package,
+			autoCode.BusinessDB,
+			menuID,
+		)
 	}
 	if err != nil {
 		return err

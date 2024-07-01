@@ -13,7 +13,10 @@ RUN go env -w GO111MODULE=on \
 FROM alpine:latest
 
 LABEL MAINTAINER="SliverHorn@sliver_horn@qq.com"
-
+# 设置时区
+ENV TZ=Asia/Shanghai
+RUN apk update && apk add --no-cache tzdata openntpd \
+    && ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone \
 WORKDIR /go/src/github.com/flipped-aurora/gin-vue-admin/server
 
 COPY --from=0 /go/src/github.com/flipped-aurora/gin-vue-admin/server/server ./

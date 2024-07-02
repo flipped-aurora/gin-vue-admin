@@ -714,7 +714,9 @@ const llmAutoFunc = async (mode) =>{
           })
         })
       }else{
-        form.value[key] = json[key]
+        if(mode === "xiaomiao"){
+          form.value[key] = json[key]
+        }
       }
     }
   }

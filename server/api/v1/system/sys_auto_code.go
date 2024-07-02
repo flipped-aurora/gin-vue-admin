@@ -313,8 +313,9 @@ func (autoApi *AutoCodeApi) LLMAuto(c *gin.Context) {
 	params := make(map[string]string)
 	params["prompt"] = prompt
 	params["mode"] = mode
+	path := strings.ReplaceAll(global.GVA_CONFIG.AutoCode.AiPath, "{FUNC}", "api/chat/ai")
 	res, err := request.HttpRequest(
-		global.GVA_CONFIG.AutoCode.AiPath,
+		path,
 		"POST",
 		nil,
 		params,

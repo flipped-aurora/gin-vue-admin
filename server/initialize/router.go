@@ -98,7 +98,7 @@ func Routers() *gin.Engine {
 	}
 
 	//插件路由安装
-	InstallPlugin(PrivateGroup, PublicGroup)
+	InstallPlugin(PrivateGroup, PublicGroup, Router)
 
 	// 注册业务路由
 	initBizRouter(PrivateGroup, PublicGroup)

@@ -1,5 +1,6 @@
 import { formatTimeToStr } from '@/utils/date'
 import { getDict } from '@/utils/dictionary'
+import {ref} from "vue";
 
 export const formatBoolean = (bool) => {
   if (bool !== null) {
@@ -114,4 +115,11 @@ export const setBodyPrimaryColor = (  primaryColor, darkMode ) =>{
     document.documentElement.style.setProperty(`--el-color-primary-light-${times}`,  fmtColorFunc(primaryColor, times / 10))
   }
   document.documentElement.style.setProperty(`--el-menu-hover-bg-color`,  addOpacityToColor(primaryColor, 0.2))
+}
+
+
+const baseUrl = ref(import.meta.env.VITE_BASE_API)
+
+export const getBaseUrl = () => {
+    return  baseUrl.value === "/" ? "" : baseUrl.value + "/"
 }

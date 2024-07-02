@@ -1,7 +1,7 @@
 <template>
   <el-menu-item
     :index="routerInfo.name"
-    class="dark:text-slate-300"
+    class="dark:text-slate-300 overflow-x-hidden"
     :style="{
       height : sideHeight,
     }"
@@ -17,7 +17,7 @@
 
 
 <script setup>
-import { computed, inject } from 'vue'
+import { computed } from 'vue'
 import { useAppStore } from '@/pinia'
 import { storeToRefs } from 'pinia'
 const appStore = useAppStore()

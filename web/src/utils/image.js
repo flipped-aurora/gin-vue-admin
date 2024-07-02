@@ -95,12 +95,12 @@ const path = import.meta.env.VITE_FILE_API
 export const getUrl = (url) => {
   if (url && url.slice(0, 4) !== 'http'){
     if (path === "/"){
-      return url
+        return url
     }
     if (url.slice(0, 1) === "/"){
-        return path + url
+       return path + url
     }
-    return path +"/"+ url
+    return path + "/" + url
   }else{
     return url
   }

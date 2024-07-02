@@ -2,9 +2,9 @@ SHELL = /bin/bash
 
 #SCRIPT_DIR         = $(shell pwd)/etc/script
 #请选择golang版本
-BUILD_IMAGE_SERVER  = golang:1.18
+BUILD_IMAGE_SERVER  = golang:1.22
 #请选择node版本
-BUILD_IMAGE_WEB     = node:16
+BUILD_IMAGE_WEB     = node:20
 #项目名称
 PROJECT_NAME        = github.com/flipped-aurora/gin-vue-admin/server
 #配置文件目录

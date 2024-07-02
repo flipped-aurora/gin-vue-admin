@@ -8,7 +8,7 @@
     />
     <div
       v-else
-      class="w-full gap-4 flex"
+      class="w-full gap-4 flex flex-wrap"
     >
       <selectComponent
         v-for="(item, index) in multipleValue"

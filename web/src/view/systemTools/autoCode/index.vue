@@ -6,10 +6,10 @@
     />
     <div class="gva-search-box">
       <div class="relative">
-        <el-input v-model="prompt" type="textarea" :rows="5" placeholder="【Beta】试试描述你的表，让AI帮你完成。目前正在测试阶段，遇到问题请及时反馈。" resize="none" />
+        <el-input v-model="prompt" type="textarea" :rows="5" :placeholder="`【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。`" resize="none" />
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
-            content="小奇稍微笨一丢丢，每次使用得缓五分钟，面向所有用户开放使用。"
+            content="小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。"
           >
             <el-button type="primary" @click="llmAutoFunc('xiaoqi')">
               <el-icon size="18">
@@ -18,7 +18,7 @@
             </el-button>
           </el-tooltip>
           <el-tooltip
-            content="小淼基本啥也能设计出来，但是需要消耗以太，授权用户每月自动补充300000以太。"
+            content="小淼基本啥也能设计出来，但是需要消耗积分，测试阶段授权用户自动获得基础积分，开源用户需要填表申请。"
           >
             <el-button type="primary" @click="llmAutoFunc('xiaomiao')">
               <el-icon size="18">

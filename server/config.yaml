@@ -74,6 +74,8 @@ system:
   iplimit-time: 3600
   #  路由全局前缀
   router-prefix: ""
+  # AI服务路径
+  ai-path: ""
 
 # captcha configuration
 captcha:

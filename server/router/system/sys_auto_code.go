@@ -7,8 +7,9 @@ import (
 
 type AutoCodeRouter struct{}
 
-func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup) {
+func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPublic *gin.RouterGroup) {
 	autoCodeRouter := Router.Group("autoCode")
+	publicAutoCodeRouter := RouterPublic.Group("autoCode")
 	autoCodeApi := v1.ApiGroupApp.SystemApiGroup.AutoCodeApi
 	{
 		autoCodeRouter.GET("getDB", autoCodeApi.GetDB)                  // 获取数据库
@@ -22,5 +23,8 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup) {
 		autoCodeRouter.POST("createPlug", autoCodeApi.AutoPlug)         // 自动插件包模板
 		autoCodeRouter.POST("installPlugin", autoCodeApi.InstallPlugin) // 自动安装插件
 		autoCodeRouter.POST("pubPlug", autoCodeApi.PubPlug)             // 打包插件
+	}
+	{
+		publicAutoCodeRouter.POST("llmAuto", autoCodeApi.LLMAuto)
 	}
 }

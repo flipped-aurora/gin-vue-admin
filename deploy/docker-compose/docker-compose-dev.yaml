@@ -15,7 +15,7 @@ volumes:
 
 services:
   web:
-    image: node:16
+    image: node:20
     container_name: gva-web
     hostname: gva-web           #可以通过容器名访问
     restart: always
@@ -25,7 +25,7 @@ services:
       - server
     working_dir: /web       # 如果docker 设置了workdir 则此处不需要设置
     #若网络不太好，请自行换源，如下
-    #command: bash -c "yarn config set registry https://registry.npm.taobao.org --global && yarn install && yarn serve"
+    #command: bash -c "yarn config set registry https://registry.npmmirror.com --global && yarn install && yarn serve"
     command: bash -c "yarn install && yarn serve"
     volumes:
       - ../../web:/web
@@ -34,7 +34,7 @@ services:
         ipv4_address: 177.7.0.11
 
   server:
-    image: golang:1.18
+    image: golang:1.22
     container_name: gva-server
     hostname: gva-server
     restart: always

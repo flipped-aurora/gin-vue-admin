@@ -8,7 +8,7 @@
     />
     <div
       v-else
-      class="w-full gap-4 flex"
+      class="w-full gap-4 flex flex-wrap"
     >
       <selectComponent
         v-for="(item, index) in multipleValue"
@@ -18,7 +18,7 @@
         @deleteItem="deleteImg(index)"
       />
       <selectComponent
-        v-if="multipleValue.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+        v-if="multipleValue.length < maxUpdateCount || maxUpdateCount === 0"
         @chooseItem="openChooseImg"
         @deleteItem="openChooseImg"
       />

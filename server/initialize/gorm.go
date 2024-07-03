@@ -33,6 +33,7 @@ func RegisterTables() {
 	err := db.AutoMigrate(
 
 		system.SysApi{},
+		system.SysIgnoreApi{},
 		system.SysUser{},
 		system.SysBaseMenu{},
 		system.JwtBlacklist{},

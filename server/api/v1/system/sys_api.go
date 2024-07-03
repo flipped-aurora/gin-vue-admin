@@ -45,6 +45,70 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 	response.OkWithMessage("创建成功", c)
 }
 
+// SyncApi
+// @Tags      SysApi
+// @Summary   同步API
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "同步API"
+// @Router    /api/syncApi [post]
+func (s *SystemApiApi) SyncApi(c *gin.Context) {
+	newRouter, deleteRouter, ignoreRouter, err := apiService.SyncApi()
+	if err != nil {
+		global.GVA_LOG.Error("同步失败!", zap.Error(err))
+		response.FailWithMessage("同步失败", c)
+		return
+	}
+	response.OkWithData(gin.H{
+		"newRouter":    newRouter,
+		"deleteRouter": deleteRouter,
+		"ignoreRouter": ignoreRouter,
+	}, c)
+}
+
+// GetApiGroups
+// @Tags      SysApi
+// @Summary   获取API分组
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "获取API分组"
+// @Router    /api/getApiGroups [post]
+func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
+	groups, err := apiService.GetApiGroups()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithData(groups, c)
+}
+
+// IgnoreApi
+// @Tags      IgnoreApi
+// @Summary   忽略API
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "同步API"
+// @Router    /api/IgnoreApi [post]
+func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
+	var ignoreApi system.SysIgnoreApi
+	err := c.ShouldBindJSON(&ignoreApi)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = apiService.IgnoreApi(ignoreApi)
+	if err != nil {
+		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		response.FailWithMessage("忽略失败", c)
+		return
+	}
+	response.Ok(c)
+}
+
 // DeleteApi
 // @Tags      SysApi
 // @Summary   删除api

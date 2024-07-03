@@ -6,7 +6,7 @@
     />
     <div class="gva-search-box">
       <div class="relative">
-        <el-input v-model="prompt" type="textarea" :rows="5" :placeholder="`【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。`" resize="none" />
+        <el-input v-model="prompt" type="textarea" :rows="5" :maxlength="100" :placeholder="`【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。`" resize="none" />
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
             content="小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。"

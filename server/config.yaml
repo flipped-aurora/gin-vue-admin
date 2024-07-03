@@ -74,8 +74,6 @@ system:
   iplimit-time: 3600
   #  路由全局前缀
   router-prefix: ""
-  # AI服务路径
-  ai-path: ""
 
 # captcha configuration
 captcha:
@@ -183,6 +181,7 @@ autocode:
   web-api: /api
   web-form: /view
   web-table: /view
+  ai-path: ""  # AI服务路径
 
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:

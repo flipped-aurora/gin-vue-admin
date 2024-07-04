@@ -147,6 +147,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysOperationRecord/deleteSysOperationRecordByIds", V2: "DELETE"},
 
 		{Ptype: "p", V0: "888", V1: "/email/emailTest", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/email/sendEmail", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/upload", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/checkFileMd5", V2: "GET"},

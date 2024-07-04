@@ -84,7 +84,7 @@
           刷新缓存
         </el-button>
         <el-button
-          icon="Refresh"
+          icon="Compass"
           @click="onSync"
         >
           同步API

@@ -3,11 +3,10 @@ package system
 import (
 	"errors"
 	"fmt"
-
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-
+	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"gorm.io/gorm"
 )
 
@@ -28,6 +27,112 @@ func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 	return global.GVA_DB.Create(&api).Error
 }
 
+func (apiService *ApiService) GetApiGroups() (groups []string, err error) {
+	err = global.GVA_DB.Model(&system.SysApi{}).Select("DISTINCT api_group").Pluck("api_group", &groups).Error
+	return
+}
+
+func (apiService *ApiService) SyncApi() (newApis, deleteApis, ignoreApis []system.SysApi, err error) {
+	newApis = make([]system.SysApi, 0)
+	deleteApis = make([]system.SysApi, 0)
+	ignoreApis = make([]system.SysApi, 0)
+	var apis []system.SysApi
+	err = global.GVA_DB.Find(&apis).Error
+	if err != nil {
+		return
+	}
+	var ignores []system.SysIgnoreApi
+	err = global.GVA_DB.Find(&ignores).Error
+	if err != nil {
+		return
+	}
+
+	for i := range ignores {
+		ignoreApis = append(ignoreApis, system.SysApi{
+			Path:        ignores[i].Path,
+			Description: "",
+			ApiGroup:    "",
+			Method:      ignores[i].Method,
+		})
+	}
+
+	var cacheApis []system.SysApi
+	for i := range global.GVA_ROUTERS {
+		ignoresFlag := false
+		for j := range ignores {
+			if ignores[j].Path == global.GVA_ROUTERS[i].Path && ignores[j].Method == global.GVA_ROUTERS[i].Method {
+				ignoresFlag = true
+			}
+		}
+		if !ignoresFlag {
+			cacheApis = append(cacheApis, system.SysApi{
+				Path:   global.GVA_ROUTERS[i].Path,
+				Method: global.GVA_ROUTERS[i].Method,
+			})
+		}
+	}
+
+	//对比数据库中的api和内存中的api，如果数据库中的api不存在于内存中，则把api放入删除数组，如果内存中的api不存在于数据库中，则把api放入新增数组
+	for i := range cacheApis {
+		var flag bool
+		// 如果存在于内存不存在于api数组中
+		for j := range apis {
+			if cacheApis[i].Path == apis[j].Path && cacheApis[i].Method == apis[j].Method {
+				flag = true
+			}
+		}
+		if !flag {
+			newApis = append(newApis, system.SysApi{
+				Path:        cacheApis[i].Path,
+				Description: "",
+				ApiGroup:    "",
+				Method:      cacheApis[i].Method,
+			})
+		}
+	}
+
+	for i := range apis {
+		var flag bool
+		// 如果存在于api数组不存在于内存
+		for j := range cacheApis {
+			if cacheApis[j].Path == apis[i].Path && cacheApis[j].Method == apis[i].Method {
+				flag = true
+			}
+		}
+		if !flag {
+			deleteApis = append(deleteApis, apis[i])
+		}
+	}
+	return
+}
+
+func (apiService *ApiService) IgnoreApi(ignoreApi system.SysIgnoreApi) (err error) {
+	if ignoreApi.Flag {
+		return global.GVA_DB.Create(&ignoreApi).Error
+	}
+	return global.GVA_DB.Unscoped().Delete(&ignoreApi, "path = ? AND method = ?", ignoreApi.Path, ignoreApi.Method).Error
+}
+
+func (apiService *ApiService) EnterSyncApi(syncApis systemRes.SysSyncApis) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		if syncApis.NewApis != nil && len(syncApis.NewApis) > 0 {
+			txErr = tx.Create(&syncApis.NewApis).Error
+			if txErr != nil {
+				return txErr
+			}
+		}
+		for i := range syncApis.DeleteApis {
+			CasbinServiceApp.ClearCasbin(1, syncApis.DeleteApis[i].Path, syncApis.DeleteApis[i].Method)
+			txErr = tx.Delete(&system.SysApi{}, "path = ? AND method = ?", syncApis.DeleteApis[i].Path, syncApis.DeleteApis[i].Method).Error
+			if txErr != nil {
+				return txErr
+			}
+		}
+		return nil
+	})
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: DeleteApi
 //@description: 删除基础api
@@ -44,9 +149,7 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	if err != nil {
 		return err
 	}
-	if !CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method) {
-		return errors.New("ClearCasbin 失败")
-	}
+	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
 	return nil
 }
 

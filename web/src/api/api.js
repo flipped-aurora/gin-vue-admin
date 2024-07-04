@@ -161,10 +161,19 @@ export const getApiGroups = () => {
   })
 }
 
-export const ignoreApi = () => {
+export const ignoreApi = (data) => {
   return service({
     url: '/api/ignoreApi',
-    method: 'post'
+    method: 'post',
+    data
   })
 }
 
+
+export const enterSyncApi = (data) => {
+  return service({
+    url: '/api/enterSyncApi',
+    method: 'post',
+    data
+  })
+}

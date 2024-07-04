@@ -52,18 +52,18 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Success   200   {object}  response.Response{msg=string}  "同步API"
-// @Router    /api/syncApi [post]
+// @Router    /api/syncApi [get]
 func (s *SystemApiApi) SyncApi(c *gin.Context) {
-	newRouter, deleteRouter, ignoreRouter, err := apiService.SyncApi()
+	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
 	if err != nil {
 		global.GVA_LOG.Error("同步失败!", zap.Error(err))
 		response.FailWithMessage("同步失败", c)
 		return
 	}
 	response.OkWithData(gin.H{
-		"newRouter":    newRouter,
-		"deleteRouter": deleteRouter,
-		"ignoreRouter": ignoreRouter,
+		"newApis":    newApis,
+		"deleteApis": deleteApis,
+		"ignoreApis": ignoreApis,
 	}, c)
 }
 
@@ -92,7 +92,7 @@ func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Success   200   {object}  response.Response{msg=string}  "同步API"
-// @Router    /api/IgnoreApi [post]
+// @Router    /api/ignoreApi [post]
 func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 	var ignoreApi system.SysIgnoreApi
 	err := c.ShouldBindJSON(&ignoreApi)
@@ -101,6 +101,30 @@ func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
 		return
 	}
 	err = apiService.IgnoreApi(ignoreApi)
+	if err != nil {
+		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		response.FailWithMessage("忽略失败", c)
+		return
+	}
+	response.Ok(c)
+}
+
+// EnterSyncApi
+// @Tags      SysApi
+// @Summary   确认同步API
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "确认同步API"
+// @Router    /api/enterSyncApi [post]
+func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
+	var syncApi systemRes.SysSyncApis
+	err := c.ShouldBindJSON(&syncApi)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = apiService.EnterSyncApi(syncApi)
 	if err != nil {
 		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
 		response.FailWithMessage("忽略失败", c)

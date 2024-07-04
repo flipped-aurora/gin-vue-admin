@@ -6,7 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-
+	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"gorm.io/gorm"
 )
 
@@ -32,10 +32,10 @@ func (apiService *ApiService) GetApiGroups() (groups []string, err error) {
 	return
 }
 
-func (apiService *ApiService) SyncApi() (newRouters, deleteRouters, ignoreRouters []system.SysApi, err error) {
-	newRouters = make([]system.SysApi, 0)
-	deleteRouters = make([]system.SysApi, 0)
-	ignoreRouters = make([]system.SysApi, 0)
+func (apiService *ApiService) SyncApi() (newApis, deleteApis, ignoreApis []system.SysApi, err error) {
+	newApis = make([]system.SysApi, 0)
+	deleteApis = make([]system.SysApi, 0)
+	ignoreApis = make([]system.SysApi, 0)
 	var apis []system.SysApi
 	err = global.GVA_DB.Find(&apis).Error
 	if err != nil {
@@ -48,7 +48,7 @@ func (apiService *ApiService) SyncApi() (newRouters, deleteRouters, ignoreRouter
 	}
 
 	for i := range ignores {
-		ignoreRouters = append(ignoreRouters, system.SysApi{
+		ignoreApis = append(ignoreApis, system.SysApi{
 			Path:        ignores[i].Path,
 			Description: "",
 			ApiGroup:    "",
@@ -82,7 +82,7 @@ func (apiService *ApiService) SyncApi() (newRouters, deleteRouters, ignoreRouter
 			}
 		}
 		if !flag {
-			newRouters = append(newRouters, system.SysApi{
+			newApis = append(newApis, system.SysApi{
 				Path:        cacheApis[i].Path,
 				Description: "",
 				ApiGroup:    "",
@@ -100,7 +100,7 @@ func (apiService *ApiService) SyncApi() (newRouters, deleteRouters, ignoreRouter
 			}
 		}
 		if !flag {
-			deleteRouters = append(deleteRouters, apis[i])
+			deleteApis = append(deleteApis, apis[i])
 		}
 	}
 	return
@@ -110,7 +110,27 @@ func (apiService *ApiService) IgnoreApi(ignoreApi system.SysIgnoreApi) (err erro
 	if ignoreApi.Flag {
 		return global.GVA_DB.Create(&ignoreApi).Error
 	}
-	return global.GVA_DB.Delete(&ignoreApi, "path = ? AND method = ?", ignoreApi.Path, ignoreApi.Method).Error
+	return global.GVA_DB.Unscoped().Delete(&ignoreApi, "path = ? AND method = ?", ignoreApi.Path, ignoreApi.Method).Error
+}
+
+func (apiService *ApiService) EnterSyncApi(syncApis systemRes.SysSyncApis) (err error) {
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		var txErr error
+		if syncApis.NewApis != nil && len(syncApis.NewApis) > 0 {
+			txErr = tx.Create(&syncApis.NewApis).Error
+			if txErr != nil {
+				return txErr
+			}
+		}
+		for i := range syncApis.DeleteApis {
+			CasbinServiceApp.ClearCasbin(1, syncApis.DeleteApis[i].Path, syncApis.DeleteApis[i].Method)
+			txErr = tx.Delete(&system.SysApi{}, "path = ? AND method = ?", syncApis.DeleteApis[i].Path, syncApis.DeleteApis[i].Method).Error
+			if txErr != nil {
+				return txErr
+			}
+		}
+		return nil
+	})
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -129,9 +149,7 @@ func (apiService *ApiService) DeleteApi(api system.SysApi) (err error) {
 	if err != nil {
 		return err
 	}
-	if !CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method) {
-		return errors.New("ClearCasbin 失败")
-	}
+	CasbinServiceApp.ClearCasbin(1, entity.Path, entity.Method)
 	return nil
 }
 

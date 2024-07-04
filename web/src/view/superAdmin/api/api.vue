@@ -196,19 +196,29 @@
     <el-drawer
       v-model="syncApiFlag"
       size="80%"
-      :before-close="closeDialog"
+      :before-close="closeSyncDialog"
       :show-close="false"
     >
-
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">同步路由</span>
+          <div>
+            <el-button @click="closeSyncDialog">
+              取 消
+            </el-button>
+            <el-button
+                type="primary"
+                @click="enterSyncDialog"
+            >
+              确 定
+            </el-button>
+          </div>
         </div>
       </template>
 
-      <div>新增路由</div>
+      <h4>新增路由 <span class="text-xs text-gray-500 ml-2 font-normal">存在于当前路由中，但是不存在于api表</span></h4>
       <el-table
-        :data="syncApiData.newRouter"
+        :data="syncApiData.newApis"
       >
         <el-table-column
           align="left"
@@ -263,17 +273,21 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="操作"
-            min-width="150"
-            fixed="right"
+          label="操作"
+          min-width="150"
+          fixed="right"
         >
-          <el-button type="primary" text @click="ignoreApi(row)">忽略</el-button>
+          <template #default="{row}">
+            <el-button type="primary" text @click="ignoreApiFunc(row,true)">
+              忽略
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
 
-      <div>已删除路由</div>
+      <h4>已删除路由 <span class="text-xs text-gray-500 ml-2 font-normal">已经不存在于当前项目的路由中，确定同步后会自动从apis表删除</span></h4>
       <el-table
-        :data="syncApiData.deleteRouter"
+        :data="syncApiData.deleteApis"
       >
         <el-table-column
           align="left"
@@ -307,9 +321,9 @@
         </el-table-column>
       </el-table>
 
-      <div>忽略路由</div>
+      <h4>忽略路由 <span class="text-xs text-gray-500 ml-2 font-normal">忽略路由不参与api同步，常见为不需要进行鉴权行为的路由</span></h4>
       <el-table
-        :data="syncApiData.ignoreRouter"
+        :data="syncApiData.ignoreApis"
       >
         <el-table-column
           align="left"
@@ -342,11 +356,15 @@
           </template>
         </el-table-column>
         <el-table-column
-            label="操作"
-            min-width="150"
-            fixed="right"
+          label="操作"
+          min-width="150"
+          fixed="right"
         >
-          <el-button type="primary" text @click="ignoreApi(row)">取消忽略</el-button>
+          <template #default="{row}">
+            <el-button type="primary" text @click="ignoreApiFunc(row,false)">
+              取消忽略
+            </el-button>
+          </template>
         </el-table-column>
       </el-table>
     </el-drawer>
@@ -448,7 +466,8 @@ import {
   freshCasbin,
   syncApi,
   getApiGroups,
-  ignoreApi
+  ignoreApi,
+  enterSyncApi
 } from '@/api/api'
 import { toSQLLine } from '@/utils/stringFun'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -525,6 +544,40 @@ const getGroup = async() => {
   const res = await getApiGroups()
   if (res.code === 0) {
     apiGroupOptions.value = res.data.map(item => ({ label: item, value: item }))
+  }
+}
+
+const ignoreApiFunc = async (row,flag) =>{
+  const res = await ignoreApi({path:row.path,method:row.method,flag})
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+    if(flag){
+      syncApiData.value.newApis = syncApiData.value.newApis.filter(item => !(item.path === row.path && item.method === row.method))
+      syncApiData.value.ignoreApis.push(row)
+      return
+    }
+    syncApiData.value.ignoreApis = syncApiData.value.ignoreApis.filter(item => !(item.path === row.path && item.method === row.method))
+    syncApiData.value.newApis.push(row)
+  }
+}
+
+const closeSyncDialog = () => {
+  syncApiFlag.value = false
+}
+
+
+const enterSyncDialog = async() => {
+  const res = await enterSyncApi(syncApiData.value)
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+    syncApiFlag.value = false
+    getTableData()
   }
 }
 
@@ -617,9 +670,9 @@ const onFresh = async() => {
 }
 
 const syncApiData = ref({
-  newRouter:[],
-  deleteRouter:[],
-  ignoreRouter:[]
+  newApis:[],
+  deleteApis:[],
+  ignoreApis:[]
 })
 
 const syncApiFlag = ref(false)

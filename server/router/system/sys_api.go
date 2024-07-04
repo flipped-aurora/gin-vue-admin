@@ -16,8 +16,10 @@ func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup, RouterPub *gin.Router
 	apiRouterApi := v1.ApiGroupApp.SystemApiGroup.SystemApiApi
 	{
 		apiRouter.GET("getApiGroups", apiRouterApi.GetApiGroups)          // 获取路由组
+		apiRouter.GET("getApiGroup22s", apiRouterApi.GetApiGroups)        // 获取路由组
 		apiRouter.GET("syncApi", apiRouterApi.SyncApi)                    // 同步Api
 		apiRouter.POST("ignoreApi", apiRouterApi.IgnoreApi)               // 忽略Api
+		apiRouter.POST("enterSyncApi", apiRouterApi.EnterSyncApi)         // 确认同步Api
 		apiRouter.POST("createApi", apiRouterApi.CreateApi)               // 创建Api
 		apiRouter.POST("deleteApi", apiRouterApi.DeleteApi)               // 删除Api
 		apiRouter.POST("getApiById", apiRouterApi.GetApiById)             // 获取单条Api消息

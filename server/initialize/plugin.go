@@ -2,10 +2,12 @@ package initialize
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/todolist"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/email"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin"
+	pluginv2 "github.com/flipped-aurora/gin-vue-admin/server/utils/plugin/v2"
 	"github.com/gin-gonic/gin"
 )
 
@@ -13,6 +15,12 @@ func PluginInit(group *gin.RouterGroup, Plugin ...plugin.Plugin) {
 	for i := range Plugin {
 		PluginGroup := group.Group(Plugin[i].RouterPath())
 		Plugin[i].Register(PluginGroup)
+	}
+}
+
+func PluginInitV2(group *gin.Engine, Plugin ...pluginv2.Plugin) {
+	for i := range Plugin {
+		Plugin[i].Register(group)
 	}
 }
 
@@ -30,4 +38,6 @@ func InstallPlugin(PrivateGroup *gin.RouterGroup, PublicRouter *gin.RouterGroup,
 		global.GVA_CONFIG.Email.Port,
 		global.GVA_CONFIG.Email.IsSSL,
 	))
+
+	PluginInitV2(engine, todolist.CreateTodoPlug("todolist"))
 }

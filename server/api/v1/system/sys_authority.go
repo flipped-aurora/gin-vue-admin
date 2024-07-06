@@ -14,6 +14,8 @@ import (
 
 type AuthorityApi struct{}
 
+var AuthorityApiApp = new(AuthorityApi)
+
 // CreateAuthority
 // @Tags      Authority
 // @Summary   创建角色

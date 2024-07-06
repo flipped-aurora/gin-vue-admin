@@ -12,6 +12,8 @@ import (
 
 type FileUploadAndDownloadApi struct{}
 
+var FileUploadAndDownloadApiApp = new(FileUploadAndDownloadApi)
+
 // UploadFile
 // @Tags      ExaFileUploadAndDownload
 // @Summary   上传文件示例

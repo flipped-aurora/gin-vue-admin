@@ -18,6 +18,8 @@ import (
 type SysExportTemplateApi struct {
 }
 
+var SysExportTemplateApiApp = new(SysExportTemplateApi)
+
 var sysExportTemplateService = service.ServiceGroupApp.SystemServiceGroup.SysExportTemplateService
 
 // CreateSysExportTemplate 创建导出模板

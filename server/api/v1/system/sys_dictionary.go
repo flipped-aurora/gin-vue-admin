@@ -10,6 +10,8 @@ import (
 
 type DictionaryApi struct{}
 
+var DictionaryApiApp = new(DictionaryApi)
+
 // CreateSysDictionary
 // @Tags      SysDictionary
 // @Summary   创建SysDictionary

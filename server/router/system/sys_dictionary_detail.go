@@ -8,6 +8,8 @@ import (
 
 type DictionaryDetailRouter struct{}
 
+var DictionaryDetailRouterApp = new(DictionaryDetailRouter)
+
 func (s *DictionaryDetailRouter) InitSysDictionaryDetailRouter(Router *gin.RouterGroup) {
 	dictionaryDetailRouter := Router.Group("sysDictionaryDetail").Use(middleware.OperationRecord())
 	dictionaryDetailRouterWithoutRecord := Router.Group("sysDictionaryDetail")

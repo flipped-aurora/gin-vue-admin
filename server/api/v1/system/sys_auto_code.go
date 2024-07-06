@@ -19,6 +19,8 @@ import (
 
 type AutoCodeApi struct{}
 
+var AutoCodeApiApp = new(AutoCodeApi)
+
 // PreviewTemp
 // @Tags      AutoCode
 // @Summary   预览创建后的代码

@@ -7,6 +7,8 @@ import (
 
 type AutoCodeHistoryRouter struct{}
 
+var AutoCodeHistoryRouterApp = new(AutoCodeHistoryRouter)
+
 func (s *AutoCodeRouter) InitAutoCodeHistoryRouter(Router *gin.RouterGroup) {
 	autoCodeHistoryRouter := Router.Group("autoCode")
 	autoCodeHistoryApi := v1.ApiGroupApp.SystemApiGroup.AutoCodeHistoryApi

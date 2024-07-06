@@ -11,6 +11,8 @@ import (
 
 type AutoCodeHistoryApi struct{}
 
+var AutoCodeHistoryApiApp = new(AutoCodeHistoryApi)
+
 // First
 // @Tags      AutoCode
 // @Summary   获取meta信息

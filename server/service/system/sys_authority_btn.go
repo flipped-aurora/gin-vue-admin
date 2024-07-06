@@ -11,6 +11,8 @@ import (
 
 type AuthorityBtnService struct{}
 
+var AuthorityBtnServiceApp = new(AuthorityBtnService)
+
 func (a *AuthorityBtnService) GetAuthorityBtn(req request.SysAuthorityBtnReq) (res response.SysAuthorityBtnRes, err error) {
 	var authorityBtn []system.SysAuthorityBtn
 	err = global.GVA_DB.Find(&authorityBtn, "authority_id = ? and sys_menu_id = ?", req.AuthorityId, req.MenuID).Error

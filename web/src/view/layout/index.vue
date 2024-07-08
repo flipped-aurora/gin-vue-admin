@@ -20,14 +20,14 @@
           class="overflow-auto"
           :class="config.showTabs ? 'gva-container2' : 'gva-container pt-1'"
         >
-          <router-view v-if="reloadFlag" v-slot="{ Component }">
+          <router-view v-if="reloadFlag" v-slot="{ Component,route }">
             <div
               id="gva-base-load-dom"
               class="gva-body-h bg-gray-50 dark:bg-slate-800"
             >
               <transition mode="out-in" name="el-fade-in-linear">
                 <keep-alive :include="routerStore.keepAliveRouters">
-                  <component :is="Component" />
+                  <component :is="Component" :key="route.fullPath" />
                 </keep-alive>
               </transition>
             </div>

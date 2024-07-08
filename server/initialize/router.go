@@ -103,6 +103,8 @@ func Routers() *gin.Engine {
 	// 注册业务路由
 	initBizRouter(PrivateGroup, PublicGroup)
 
+	global.GVA_ROUTERS = Router.Routes()
+
 	global.GVA_LOG.Info("router register success")
 	return Router
 }

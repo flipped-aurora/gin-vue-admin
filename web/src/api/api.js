@@ -144,3 +144,36 @@ export const freshCasbin = () => {
     method: 'get'
   })
 }
+
+
+export const syncApi = () => {
+  return service({
+    url: '/api/syncApi',
+    method: 'get'
+  })
+}
+
+
+export const getApiGroups = () => {
+  return service({
+    url: '/api/getApiGroups',
+    method: 'get'
+  })
+}
+
+export const ignoreApi = (data) => {
+  return service({
+    url: '/api/ignoreApi',
+    method: 'post',
+    data
+  })
+}
+
+
+export const enterSyncApi = (data) => {
+  return service({
+    url: '/api/enterSyncApi',
+    method: 'post',
+    data
+  })
+}

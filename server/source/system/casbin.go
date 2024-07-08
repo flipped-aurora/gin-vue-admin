@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const initOrderCasbin = initOrderApi + 1
+const initOrderCasbin = initOrderApiIgnore + 1
 
 type initCasbin struct{}
 
@@ -54,6 +54,10 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/api/updateApi", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getAllApis", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/deleteApisByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/api/syncApi", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/api/getApiGroups", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/api/enterSyncApi", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/api/ignoreApi", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/authority/copyAuthority", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authority/updateAuthority", V2: "PUT"},
@@ -143,6 +147,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysOperationRecord/deleteSysOperationRecordByIds", V2: "DELETE"},
 
 		{Ptype: "p", V0: "888", V1: "/email/emailTest", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/email/sendEmail", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/upload", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/checkFileMd5", V2: "GET"},

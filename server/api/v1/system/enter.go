@@ -39,6 +39,7 @@ var (
 	systemConfigService     = service.ServiceGroupApp.SystemServiceGroup.SystemConfigService
 	operationRecordService  = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
 	dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
+	autoCodeService         = service.ServiceGroupApp.SystemServiceGroup.AutoCodeService
 	autoCodePluginService   = service.ServiceGroupApp.SystemServiceGroup.AutoCodePlugin
 	autoCodePackageService  = service.ServiceGroupApp.SystemServiceGroup.AutoCodePackage
 	autocodeHistoryService  = service.ServiceGroupApp.SystemServiceGroup.AutocodeHistory

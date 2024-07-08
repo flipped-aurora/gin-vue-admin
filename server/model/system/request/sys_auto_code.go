@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/pkg/errors"
 	"go/token"
 	"strings"
@@ -178,7 +177,13 @@ func (r *AutoCode) Pretreatment() error {
 	if r.Package == "" {
 		return errors.New("Package为空!")
 	} // 增加判断：Package不为空
-	r.PackageT = utils.FirstUpper(r.Package)
+	packages := []rune(r.Package)
+	if len(packages) > 0 {
+		if packages[0] >= 97 && packages[0] <= 122 {
+			packages[0] = packages[0] - 32
+		}
+		r.PackageT = string(packages)
+	} // PackageT 是 Package 的首字母大写
 	return nil
 }
 

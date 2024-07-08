@@ -11,6 +11,12 @@ type SysAutoCodePackageCreate struct {
 	PackageName string `json:"packageName" example:"包名"`
 }
 
+func (r *SysAutoCodePackageCreate) AutoCode() AutoCode {
+	return AutoCode{
+		Package: r.PackageName,
+	}
+}
+
 func (r *SysAutoCodePackageCreate) Create() model.SysAutoCodePackage {
 	return model.SysAutoCodePackage{
 		Desc:        r.Desc,

@@ -13,6 +13,8 @@ import (
 
 type OperationRecordApi struct{}
 
+var OperationRecordApiApp = new(OperationRecordApi)
+
 // CreateSysOperationRecord
 // @Tags      SysOperationRecord
 // @Summary   创建SysOperationRecord

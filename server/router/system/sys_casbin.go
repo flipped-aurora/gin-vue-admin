@@ -8,6 +8,8 @@ import (
 
 type CasbinRouter struct{}
 
+var CasbinRouterApp = new(CasbinRouter)
+
 func (s *CasbinRouter) InitCasbinRouter(Router *gin.RouterGroup) {
 	casbinRouter := Router.Group("casbin").Use(middleware.OperationRecord())
 	casbinRouterWithoutRecord := Router.Group("casbin")

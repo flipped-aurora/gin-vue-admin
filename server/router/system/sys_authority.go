@@ -8,6 +8,8 @@ import (
 
 type AuthorityRouter struct{}
 
+var AuthorityRouterApp = new(AuthorityRouter)
+
 func (s *AuthorityRouter) InitAuthorityRouter(Router *gin.RouterGroup) {
 	authorityRouter := Router.Group("authority").Use(middleware.OperationRecord())
 	authorityRouterWithoutRecord := Router.Group("authority")

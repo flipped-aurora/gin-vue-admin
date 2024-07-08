@@ -7,6 +7,8 @@ import (
 
 type AuthorityBtnRouter struct{}
 
+var AuthorityBtnRouterApp = new(AuthorityBtnRouter)
+
 func (s *AuthorityBtnRouter) InitAuthorityBtnRouterRouter(Router *gin.RouterGroup) {
 	//authorityRouter := Router.Group("authorityBtn").Use(middleware.OperationRecord())
 	authorityRouterWithoutRecord := Router.Group("authorityBtn")

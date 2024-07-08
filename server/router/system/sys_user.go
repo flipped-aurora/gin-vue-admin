@@ -8,6 +8,8 @@ import (
 
 type UserRouter struct{}
 
+var UserRouterApp = new(UserRouter)
+
 func (s *UserRouter) InitUserRouter(Router *gin.RouterGroup) {
 	userRouter := Router.Group("user").Use(middleware.OperationRecord())
 	userRouterWithoutRecord := Router.Group("user")

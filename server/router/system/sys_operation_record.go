@@ -7,6 +7,8 @@ import (
 
 type OperationRecordRouter struct{}
 
+var OperationRecordRouterApp = new(OperationRecordRouter)
+
 func (s *OperationRecordRouter) InitSysOperationRecordRouter(Router *gin.RouterGroup) {
 	operationRecordRouter := Router.Group("sysOperationRecord")
 	authorityMenuApi := v1.ApiGroupApp.SystemApiGroup.OperationRecordApi

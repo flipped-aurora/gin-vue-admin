@@ -7,6 +7,8 @@ import (
 
 type AutoCodeRouter struct{}
 
+var AutoCodeRouterApp = new(AutoCodeRouter)
+
 func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPublic *gin.RouterGroup) {
 	autoCodeRouter := Router.Group("autoCode")
 	publicAutoCodeRouter := RouterPublic.Group("autoCode")

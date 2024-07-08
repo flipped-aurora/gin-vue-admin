@@ -7,6 +7,8 @@ import (
 
 type FileUploadAndDownloadRouter struct{}
 
+var FileUploadAndDownloadRouterApp = new(FileUploadAndDownloadRouter)
+
 func (e *FileUploadAndDownloadRouter) InitFileUploadAndDownloadRouter(Router *gin.RouterGroup) {
 	fileUploadAndDownloadRouter := Router.Group("fileUploadAndDownload")
 	exaFileUploadAndDownloadApi := v1.ApiGroupApp.ExampleApiGroup.FileUploadAndDownloadApi

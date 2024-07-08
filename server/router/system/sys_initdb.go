@@ -7,6 +7,8 @@ import (
 
 type InitRouter struct{}
 
+var InitRouterApp = new(InitRouter)
+
 func (s *InitRouter) InitInitRouter(Router *gin.RouterGroup) {
 	initRouter := Router.Group("init")
 	dbApi := v1.ApiGroupApp.SystemApiGroup.DBApi

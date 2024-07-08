@@ -7,6 +7,8 @@ import (
 
 type JwtRouter struct{}
 
+var JwtRouterApp = new(JwtRouter)
+
 func (s *JwtRouter) InitJwtRouter(Router *gin.RouterGroup) {
 	jwtRouter := Router.Group("jwt")
 	jwtApi := v1.ApiGroupApp.SystemApiGroup.JwtApi

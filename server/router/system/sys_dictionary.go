@@ -8,6 +8,8 @@ import (
 
 type DictionaryRouter struct{}
 
+var DictionaryRouterApp = new(DictionaryRouter)
+
 func (s *DictionaryRouter) InitSysDictionaryRouter(Router *gin.RouterGroup) {
 	sysDictionaryRouter := Router.Group("sysDictionary").Use(middleware.OperationRecord())
 	sysDictionaryRouterWithoutRecord := Router.Group("sysDictionary")

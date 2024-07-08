@@ -8,6 +8,8 @@ import (
 
 type SysRouter struct{}
 
+var SysRouterApp = new(SysRouter)
+
 func (s *SysRouter) InitSystemRouter(Router *gin.RouterGroup) {
 	sysRouter := Router.Group("system").Use(middleware.OperationRecord())
 	systemApi := v1.ApiGroupApp.SystemApiGroup.SystemApi

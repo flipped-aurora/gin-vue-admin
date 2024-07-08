@@ -9,6 +9,8 @@ import (
 type SysExportTemplateRouter struct {
 }
 
+var SysExportTemplateRouterApp = new(SysExportTemplateRouter)
+
 // InitSysExportTemplateRouter 初始化 导出模板 路由信息
 func (s *SysExportTemplateRouter) InitSysExportTemplateRouter(Router *gin.RouterGroup) {
 	sysExportTemplateRouter := Router.Group("sysExportTemplate").Use(middleware.OperationRecord())

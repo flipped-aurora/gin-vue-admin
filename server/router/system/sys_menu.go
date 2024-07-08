@@ -8,6 +8,8 @@ import (
 
 type MenuRouter struct{}
 
+var MenuRouterApp = new(MenuRouter)
+
 func (s *MenuRouter) InitMenuRouter(Router *gin.RouterGroup) (R gin.IRoutes) {
 	menuRouter := Router.Group("menu").Use(middleware.OperationRecord())
 	menuRouterWithoutRecord := Router.Group("menu")

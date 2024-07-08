@@ -14,10 +14,15 @@ type ApiGroup struct {
 	DictionaryApi
 	AuthorityMenuApi
 	OperationRecordApi
-	AutoCodeHistoryApi
+	autocodeHistory
 	DictionaryDetailApi
 	AuthorityBtnApi
 	SysExportTemplateApi
+
+	AutocodeHistory  autocodeHistory
+	AutoCodePlugin   autoCodePlugin
+	AutoCodePackage  autoCodePackage
+	AutoCodeTemplate autoCodeTemplate
 }
 
 var (
@@ -27,13 +32,15 @@ var (
 	userService             = service.ServiceGroupApp.SystemServiceGroup.UserService
 	initDBService           = service.ServiceGroupApp.SystemServiceGroup.InitDBService
 	casbinService           = service.ServiceGroupApp.SystemServiceGroup.CasbinService
-	autoCodeService         = service.ServiceGroupApp.SystemServiceGroup.AutoCodeService
 	baseMenuService         = service.ServiceGroupApp.SystemServiceGroup.BaseMenuService
 	authorityService        = service.ServiceGroupApp.SystemServiceGroup.AuthorityService
 	dictionaryService       = service.ServiceGroupApp.SystemServiceGroup.DictionaryService
+	authorityBtnService     = service.ServiceGroupApp.SystemServiceGroup.AuthorityBtnService
 	systemConfigService     = service.ServiceGroupApp.SystemServiceGroup.SystemConfigService
 	operationRecordService  = service.ServiceGroupApp.SystemServiceGroup.OperationRecordService
-	autoCodeHistoryService  = service.ServiceGroupApp.SystemServiceGroup.AutoCodeHistoryService
 	dictionaryDetailService = service.ServiceGroupApp.SystemServiceGroup.DictionaryDetailService
-	authorityBtnService     = service.ServiceGroupApp.SystemServiceGroup.AuthorityBtnService
+	autoCodePluginService   = service.ServiceGroupApp.SystemServiceGroup.AutoCodePlugin
+	autoCodePackageService  = service.ServiceGroupApp.SystemServiceGroup.AutoCodePackage
+	autocodeHistoryService  = service.ServiceGroupApp.SystemServiceGroup.AutocodeHistory
+	autoCodeTemplateService = service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
 )

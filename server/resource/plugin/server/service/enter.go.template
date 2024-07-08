@@ -1,0 +1,7 @@
+package {{ .PackageName }}
+
+var Service = new(service)
+
+type service struct {
+}
+

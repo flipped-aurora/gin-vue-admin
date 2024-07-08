@@ -6,7 +6,7 @@ import (
 	"go/token"
 )
 
-// 增加 import 方法
+// AddImport 增加 import 方法
 func AddImport(astNode ast.Node, imp string) {
 	impStr := fmt.Sprintf("\"%s\"", imp)
 	ast.Inspect(astNode, func(node ast.Node) bool {
@@ -31,7 +31,7 @@ func AddImport(astNode ast.Node, imp string) {
 	})
 }
 
-// 查询特定function方法
+// FindFunction 查询特定function方法
 func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 	var funcDeclP *ast.FuncDecl
 	ast.Inspect(astNode, func(node ast.Node) bool {

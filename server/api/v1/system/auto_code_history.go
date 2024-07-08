@@ -2,16 +2,14 @@ package system
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
+	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	systemReq "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	request "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
-type AutoCodeHistoryApi struct{}
-
-var AutoCodeHistoryApiApp = new(AutoCodeHistoryApi)
+type autocodeHistory struct{}
 
 // First
 // @Tags      AutoCode
@@ -22,14 +20,14 @@ var AutoCodeHistoryApiApp = new(AutoCodeHistoryApi)
 // @Param     data  body      request.GetById                                            true  "请求参数"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "获取meta信息"
 // @Router    /autoCode/getMeta [post]
-func (a *AutoCodeHistoryApi) First(c *gin.Context) {
-	var info request.GetById
+func (a *autocodeHistory) First(c *gin.Context) {
+	var info common.GetById
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	data, err := autoCodeHistoryService.First(&info)
+	data, err := autocodeHistoryService.First(c.Request.Context(), info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -46,14 +44,14 @@ func (a *AutoCodeHistoryApi) First(c *gin.Context) {
 // @Param     data  body      request.GetById                true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "删除回滚记录"
 // @Router    /autoCode/delSysHistory [post]
-func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
-	var info request.GetById
+func (a *autocodeHistory) Delete(c *gin.Context) {
+	var info common.GetById
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodeHistoryService.Delete(&info)
+	err = autocodeHistoryService.Delete(c.Request.Context(), info)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
@@ -71,14 +69,14 @@ func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 // @Param     data  body      systemReq.RollBack             true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "回滚自动生成代码"
 // @Router    /autoCode/rollback [post]
-func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
-	var info systemReq.RollBack
+func (a *autocodeHistory) RollBack(c *gin.Context) {
+	var info request.SysAutoHistoryRollBack
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autoCodeHistoryService.RollBack(&info)
+	err = autocodeHistoryService.RollBack(c.Request.Context(), info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -95,14 +93,14 @@ func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
 // @Param     data  body      systemReq.SysAutoHistory                                true  "请求参数"
 // @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "查询回滚记录,返回包括列表,总数,页码,每页数量"
 // @Router    /autoCode/getSysHistory [post]
-func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
-	var search systemReq.SysAutoHistory
-	err := c.ShouldBindJSON(&search)
+func (a *autocodeHistory) GetList(c *gin.Context) {
+	var info common.PageInfo
+	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := autoCodeHistoryService.GetList(search.PageInfo)
+	list, total, err := autocodeHistoryService.GetList(c.Request.Context(), info)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
@@ -111,7 +109,7 @@ func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
 	response.OkWithDetailed(response.PageResult{
 		List:     list,
 		Total:    total,
-		Page:     search.Page,
-		PageSize: search.PageSize,
+		Page:     info.Page,
+		PageSize: info.PageSize,
 	}, "获取成功", c)
 }

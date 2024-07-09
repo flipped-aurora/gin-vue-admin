@@ -19,6 +19,6 @@ type ServiceGroup struct {
 
 	AutoCodePlugin   autoCodePlugin
 	AutoCodePackage  autoCodePackage
-	AutocodeHistory  autocodeHistory
+	AutoCodeHistory  autoCodeHistory
 	AutoCodeTemplate autoCodeTemplate
 }

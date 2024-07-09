@@ -9,7 +9,9 @@ import (
 	"go.uber.org/zap"
 )
 
-type autocodeHistory struct{}
+var AutoCodeHistory = new(autoCodeHistory)
+
+type autoCodeHistory struct{}
 
 // First
 // @Tags      AutoCode
@@ -20,14 +22,14 @@ type autocodeHistory struct{}
 // @Param     data  body      request.GetById                                            true  "请求参数"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "获取meta信息"
 // @Router    /autoCode/getMeta [post]
-func (a *autocodeHistory) First(c *gin.Context) {
+func (a *autoCodeHistory) First(c *gin.Context) {
 	var info common.GetById
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	data, err := autocodeHistoryService.First(c.Request.Context(), info)
+	data, err := autoCodeHistoryService.First(c.Request.Context(), info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -44,14 +46,14 @@ func (a *autocodeHistory) First(c *gin.Context) {
 // @Param     data  body      request.GetById                true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "删除回滚记录"
 // @Router    /autoCode/delSysHistory [post]
-func (a *autocodeHistory) Delete(c *gin.Context) {
+func (a *autoCodeHistory) Delete(c *gin.Context) {
 	var info common.GetById
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autocodeHistoryService.Delete(c.Request.Context(), info)
+	err = autoCodeHistoryService.Delete(c.Request.Context(), info)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
 		response.FailWithMessage("删除失败", c)
@@ -69,14 +71,14 @@ func (a *autocodeHistory) Delete(c *gin.Context) {
 // @Param     data  body      systemReq.RollBack             true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "回滚自动生成代码"
 // @Router    /autoCode/rollback [post]
-func (a *autocodeHistory) RollBack(c *gin.Context) {
+func (a *autoCodeHistory) RollBack(c *gin.Context) {
 	var info request.SysAutoHistoryRollBack
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = autocodeHistoryService.RollBack(c.Request.Context(), info)
+	err = autoCodeHistoryService.RollBack(c.Request.Context(), info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
@@ -93,14 +95,14 @@ func (a *autocodeHistory) RollBack(c *gin.Context) {
 // @Param     data  body      systemReq.SysAutoHistory                                true  "请求参数"
 // @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "查询回滚记录,返回包括列表,总数,页码,每页数量"
 // @Router    /autoCode/getSysHistory [post]
-func (a *autocodeHistory) GetList(c *gin.Context) {
+func (a *autoCodeHistory) GetList(c *gin.Context) {
 	var info common.PageInfo
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	list, total, err := autocodeHistoryService.GetList(c.Request.Context(), info)
+	list, total, err := autoCodeHistoryService.GetList(c.Request.Context(), info)
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)

@@ -17,14 +17,14 @@ import (
 	"go.uber.org/zap"
 )
 
-var AutocodeHistory = new(autocodeHistory)
+var AutocodeHistory = new(autoCodeHistory)
 
-type autocodeHistory struct{}
+type autoCodeHistory struct{}
 
 // Create 创建代码生成器历史记录
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autocodeHistory) Create(ctx context.Context, info request.SysAutoHistoryCreate) error {
+func (s *autoCodeHistory) Create(ctx context.Context, info request.SysAutoHistoryCreate) error {
 	create := info.Create()
 	err := global.GVA_DB.WithContext(ctx).Create(&create).Error
 	if err != nil {
@@ -36,7 +36,7 @@ func (s *autocodeHistory) Create(ctx context.Context, info request.SysAutoHistor
 // First 根据id获取代码生成器历史的数据
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autocodeHistory) First(ctx context.Context, info common.GetById) (string, error) {
+func (s *autoCodeHistory) First(ctx context.Context, info common.GetById) (string, error) {
 	var meta string
 	err := global.GVA_DB.WithContext(ctx).Model(model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Pluck("request", &meta).Error
 	if err != nil {
@@ -48,7 +48,7 @@ func (s *autocodeHistory) First(ctx context.Context, info common.GetById) (strin
 // Repeat 检测重复
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autocodeHistory) Repeat(businessDB, structName, Package string) bool {
+func (s *autoCodeHistory) Repeat(businessDB, structName, Package string) bool {
 	var count int64
 	global.GVA_DB.Model(&model.SysAutoCodeHistory{}).Where("business_db = ? and struct_name = ? and package = ? and flag = 0", businessDB, structName, Package).Count(&count)
 	return count > 0
@@ -57,7 +57,7 @@ func (s *autocodeHistory) Repeat(businessDB, structName, Package string) bool {
 // RollBack 回滚
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autocodeHistory) RollBack(ctx context.Context, info request.SysAutoHistoryRollBack) error {
+func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHistoryRollBack) error {
 	var entity model.SysAutoCodeHistory
 	err := global.GVA_DB.Where("id = ?", info.ID).First(&entity).Error
 	if err != nil {
@@ -113,7 +113,7 @@ func (s *autocodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 // Delete 删除历史数据
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autocodeHistory) Delete(ctx context.Context, info common.GetById) error {
+func (s *autoCodeHistory) Delete(ctx context.Context, info common.GetById) error {
 	err := global.GVA_DB.WithContext(ctx).Where("id = ?", info.Uint()).Delete(&model.SysAutoCodeHistory{}).Error
 	if err != nil {
 		return errors.Wrap(err, "删除失败!")
@@ -124,7 +124,7 @@ func (s *autocodeHistory) Delete(ctx context.Context, info common.GetById) error
 // GetList 获取系统历史数据
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
-func (s *autocodeHistory) GetList(ctx context.Context, info common.PageInfo) (list []model.SysAutoCodeHistory, total int64, err error) {
+func (s *autoCodeHistory) GetList(ctx context.Context, info common.PageInfo) (list []model.SysAutoCodeHistory, total int64, err error) {
 	var entities []model.SysAutoCodeHistory
 	db := global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{})
 	err = db.Count(&total).Error
@@ -137,7 +137,7 @@ func (s *autocodeHistory) GetList(ctx context.Context, info common.PageInfo) (li
 
 // DropTable 获取指定数据库和指定数据表的所有字段名,类型值等
 // @author: [piexlmax](https://github.com/piexlmax)
-func (s *autocodeHistory) DropTable(BusinessDb, tableName string) error {
+func (s *autoCodeHistory) DropTable(BusinessDb, tableName string) error {
 	if BusinessDb != "" {
 		return global.MustGetGlobalDBByDBName(BusinessDb).Exec("DROP TABLE " + tableName).Error
 	} else {

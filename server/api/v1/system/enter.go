@@ -14,12 +14,11 @@ type ApiGroup struct {
 	DictionaryApi
 	AuthorityMenuApi
 	OperationRecordApi
-	autocodeHistory
 	DictionaryDetailApi
 	AuthorityBtnApi
 	SysExportTemplateApi
 
-	AutocodeHistory  autocodeHistory
+	AutocodeHistory  autoCodeHistory
 	AutoCodePlugin   autoCodePlugin
 	AutoCodePackage  autoCodePackage
 	AutoCodeTemplate autoCodeTemplate
@@ -42,6 +41,6 @@ var (
 	autoCodeService         = service.ServiceGroupApp.SystemServiceGroup.AutoCodeService
 	autoCodePluginService   = service.ServiceGroupApp.SystemServiceGroup.AutoCodePlugin
 	autoCodePackageService  = service.ServiceGroupApp.SystemServiceGroup.AutoCodePackage
-	autocodeHistoryService  = service.ServiceGroupApp.SystemServiceGroup.AutocodeHistory
+	autoCodeHistoryService  = service.ServiceGroupApp.SystemServiceGroup.AutoCodeHistory
 	autoCodeTemplateService = service.ServiceGroupApp.SystemServiceGroup.AutoCodeTemplate
 )

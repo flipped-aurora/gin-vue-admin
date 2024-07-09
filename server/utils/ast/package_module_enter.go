@@ -23,8 +23,18 @@ type PackageModuleEnter struct {
 	ServiceName string // 服务名称
 }
 
-func NewPackageModuleEnter(Type Type, path string, importPath string, structName string, appName string, groupName string, moduleName string, packageName string, serviceName string) *PackageModuleEnter {
-	return &PackageModuleEnter{Type: Type, Path: path, ImportPath: importPath, StructName: structName, AppName: appName, GroupName: groupName, ModuleName: moduleName, PackageName: packageName, ServiceName: serviceName}
+func NewPackageModuleEnter(astType Type, path string, importPath string, structName string, appName string, groupName string, moduleName string, packageName string, serviceName string) *PackageModuleEnter {
+	return &PackageModuleEnter{
+		Type:        astType,
+		Path:        path,
+		ImportPath:  importPath,
+		StructName:  structName,
+		AppName:     appName,
+		GroupName:   groupName,
+		ModuleName:  moduleName,
+		PackageName: packageName,
+		ServiceName: serviceName,
+	}
 }
 
 func (a *PackageModuleEnter) Rollback() error {

@@ -1,7 +1,6 @@
 package ast
 
 import (
-	"encoding/json"
 	"github.com/pkg/errors"
 	"go/ast"
 	"go/format"
@@ -20,23 +19,15 @@ type PackageEnter struct {
 	PackageStructName string // 包结构体名称
 }
 
-func NewPackageEnter(path, importPath, structName, packageName, packageStructName string) Ast {
+func NewPackageEnter(astType Type, path, importPath, structName, packageName, packageStructName string) Ast {
 	return &PackageEnter{
+		Type:              astType,
 		Path:              path,
 		ImportPath:        importPath,
 		StructName:        structName,
 		PackageName:       packageName,
 		PackageStructName: packageStructName,
 	}
-}
-
-func NewPackageApiEnterField(data string) Ast {
-	packageApiEnter := &PackageEnter{}
-	err := json.Unmarshal([]byte(data), packageApiEnter)
-	if err != nil {
-		return nil
-	}
-	return packageApiEnter
 }
 
 func (a *PackageEnter) Rollback() error {

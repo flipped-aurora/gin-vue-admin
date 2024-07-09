@@ -12,8 +12,6 @@ import (
 
 type SystemApi struct{}
 
-var SystemApiApp = new(SystemApi)
-
 // GetSystemConfig
 // @Tags      System
 // @Summary   获取配置文件内容

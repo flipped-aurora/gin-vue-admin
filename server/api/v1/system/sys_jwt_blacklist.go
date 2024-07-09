@@ -11,8 +11,6 @@ import (
 
 type JwtApi struct{}
 
-var JwtApiApp = new(JwtApi)
-
 // JsonInBlacklist
 // @Tags      Jwt
 // @Summary   jwt加入黑名单

@@ -9,9 +9,7 @@ import (
 	"go.uber.org/zap"
 )
 
-var AutoCodeHistory = new(autoCodeHistory)
-
-type autoCodeHistory struct{}
+type AutoCodeHistoryApi struct{}
 
 // First
 // @Tags      AutoCode
@@ -22,7 +20,7 @@ type autoCodeHistory struct{}
 // @Param     data  body      request.GetById                                            true  "请求参数"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "获取meta信息"
 // @Router    /autoCode/getMeta [post]
-func (a *autoCodeHistory) First(c *gin.Context) {
+func (a *AutoCodeHistoryApi) First(c *gin.Context) {
 	var info common.GetById
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
@@ -46,7 +44,7 @@ func (a *autoCodeHistory) First(c *gin.Context) {
 // @Param     data  body      request.GetById                true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "删除回滚记录"
 // @Router    /autoCode/delSysHistory [post]
-func (a *autoCodeHistory) Delete(c *gin.Context) {
+func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 	var info common.GetById
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
@@ -71,7 +69,7 @@ func (a *autoCodeHistory) Delete(c *gin.Context) {
 // @Param     data  body      systemReq.RollBack             true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "回滚自动生成代码"
 // @Router    /autoCode/rollback [post]
-func (a *autoCodeHistory) RollBack(c *gin.Context) {
+func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
 	var info request.SysAutoHistoryRollBack
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
@@ -95,7 +93,7 @@ func (a *autoCodeHistory) RollBack(c *gin.Context) {
 // @Param     data  body      systemReq.SysAutoHistory                                true  "请求参数"
 // @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "查询回滚记录,返回包括列表,总数,页码,每页数量"
 // @Router    /autoCode/getSysHistory [post]
-func (a *autoCodeHistory) GetList(c *gin.Context) {
+func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {
 	var info common.PageInfo
 	err := c.ShouldBindJSON(&info)
 	if err != nil {

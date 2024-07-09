@@ -12,8 +12,6 @@ import (
 
 type CasbinApi struct{}
 
-var CasbinApiApp = new(CasbinApi)
-
 // UpdateCasbin
 // @Tags      Casbin
 // @Summary   更新角色api权限

@@ -8,12 +8,10 @@ import (
 	"go.uber.org/zap"
 )
 
-var AutoCodePlugin = new(autoCodePlugin)
-
-type autoCodePlugin struct{}
+type AutoCodePluginApi struct{}
 
 // Install
-// @Tags      AutoCode
+// @Tags      AutoCodePlugin
 // @Summary   安装插件
 // @Security  ApiKeyAuth
 // @accept    multipart/form-data
@@ -21,7 +19,7 @@ type autoCodePlugin struct{}
 // @Param     plug  formData  file                                              true  "this is a test file"
 // @Success   200   {object}  response.Response{data=[]interface{},msg=string}  "安装插件成功"
 // @Router    /autoCode/installPlugin [post]
-func (a *autoCodePlugin) Install(c *gin.Context) {
+func (a *AutoCodePluginApi) Install(c *gin.Context) {
 	header, err := c.FormFile("plug")
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
@@ -52,7 +50,7 @@ func (a *autoCodePlugin) Install(c *gin.Context) {
 }
 
 // Packaged
-// @Tags      AutoCode
+// @Tags      AutoCodePlugin
 // @Summary   打包插件
 // @Security  ApiKeyAuth
 // @accept    application/json
@@ -60,7 +58,7 @@ func (a *autoCodePlugin) Install(c *gin.Context) {
 // @Param     data  body      system.SysAutoCode                                         true  "打包插件"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
 // @Router    /autoCode/pubPlug [get]
-func (a *autoCodePlugin) Packaged(c *gin.Context) {
+func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)
 	if err != nil {

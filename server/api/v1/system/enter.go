@@ -17,11 +17,10 @@ type ApiGroup struct {
 	DictionaryDetailApi
 	AuthorityBtnApi
 	SysExportTemplateApi
-
-	AutocodeHistory  autoCodeHistory
-	AutoCodePlugin   autoCodePlugin
-	AutoCodePackage  autoCodePackage
-	AutoCodeTemplate autoCodeTemplate
+	AutoCodePluginApi
+	AutoCodePackageApi
+	AutoCodeHistoryApi
+	AutoCodeTemplateApi
 }
 
 var (

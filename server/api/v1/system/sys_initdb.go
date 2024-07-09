@@ -11,8 +11,6 @@ import (
 
 type DBApi struct{}
 
-var DBApiApp = new(DBApi)
-
 // InitDB
 // @Tags     InitDB
 // @Summary  初始化用户数据库

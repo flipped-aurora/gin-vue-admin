@@ -11,9 +11,7 @@ import (
 	"strings"
 )
 
-var AutoCodePackage = new(autoCodePackage)
-
-type autoCodePackage struct{}
+type AutoCodePackageApi struct{}
 
 // Create
 // @Tags      AutoCodePackage
@@ -24,7 +22,7 @@ type autoCodePackage struct{}
 // @Param     data  body      system.SysAutoCode                                         true  "创建package"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
 // @Router    /autoCode/createPackage [post]
-func (a *autoCodePackage) Create(c *gin.Context) {
+func (a *AutoCodePackageApi) Create(c *gin.Context) {
 	var info request.SysAutoCodePackageCreate
 	_ = c.ShouldBindJSON(&a)
 	if err := utils.Verify(a, utils.AutoPackageVerify); err != nil {
@@ -53,7 +51,7 @@ func (a *autoCodePackage) Create(c *gin.Context) {
 // @Param     data  body      system.SysAutoCode                                         true  "创建package"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "删除package成功"
 // @Router    /autoCode/delPackage [post]
-func (a *autoCodePackage) Delete(c *gin.Context) {
+func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	var info common.GetById
 	_ = c.ShouldBindJSON(&a)
 	err := autoCodePackageService.Delete(c.Request.Context(), info)
@@ -73,7 +71,7 @@ func (a *autoCodePackage) Delete(c *gin.Context) {
 // @Produce   application/json
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
 // @Router    /autoCode/getPackage [post]
-func (a *autoCodePackage) All(c *gin.Context) {
+func (a *AutoCodePackageApi) All(c *gin.Context) {
 	data, err := autoCodePackageService.All(c.Request.Context())
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
@@ -91,7 +89,7 @@ func (a *autoCodePackage) All(c *gin.Context) {
 // @Produce   application/json
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
 // @Router    /autoCode/getTemplates [post]
-func (a *autoCodePackage) Templates(c *gin.Context) {
+func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 	data, err := autoCodePackageService.Templates(c.Request.Context())
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))

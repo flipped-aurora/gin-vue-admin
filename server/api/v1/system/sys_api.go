@@ -15,8 +15,6 @@ import (
 
 type SystemApiApi struct{}
 
-var SystemApiApiApp = new(SystemApiApi)
-
 // CreateApi
 // @Tags      SysApi
 // @Summary   创建基础api

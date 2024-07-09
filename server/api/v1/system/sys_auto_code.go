@@ -15,8 +15,6 @@ import (
 
 type AutoCodeApi struct{}
 
-var AutoCodeApiApp = new(AutoCodeApi)
-
 // GetDB
 // @Tags      AutoCode
 // @Summary   获取当前所有数据库

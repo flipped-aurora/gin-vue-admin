@@ -10,8 +10,6 @@ import (
 
 type AuthorityBtnApi struct{}
 
-var AuthorityBtnApiApp = new(AuthorityBtnApi)
-
 // GetAuthorityBtn
 // @Tags      AuthorityBtn
 // @Summary   获取权限按钮

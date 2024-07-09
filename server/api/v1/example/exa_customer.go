@@ -13,8 +13,6 @@ import (
 
 type CustomerApi struct{}
 
-var CustomerApiApp = new(CustomerApi)
-
 // CreateExaCustomer
 // @Tags      ExaCustomer
 // @Summary   创建客户

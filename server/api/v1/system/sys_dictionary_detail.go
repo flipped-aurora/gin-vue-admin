@@ -12,8 +12,6 @@ import (
 
 type DictionaryDetailApi struct{}
 
-var DictionaryDetailApiApp = new(DictionaryDetailApi)
-
 // CreateSysDictionaryDetail
 // @Tags      SysDictionaryDetail
 // @Summary   创建SysDictionaryDetail

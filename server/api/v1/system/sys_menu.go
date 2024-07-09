@@ -15,8 +15,6 @@ import (
 
 type AuthorityMenuApi struct{}
 
-var AuthorityMenuApiApp = new(AuthorityMenuApi)
-
 // GetMenu
 // @Tags      AuthorityMenu
 // @Summary   获取用户动态路由

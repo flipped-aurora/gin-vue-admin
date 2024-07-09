@@ -10,12 +10,10 @@ import (
 	"net/url"
 )
 
-var AutoCodeTemplate = new(autoCodeTemplate)
-
-type autoCodeTemplate struct{}
+type AutoCodeTemplateApi struct{}
 
 // Preview
-// @Tags      AutoCode
+// @Tags      AutoCodeTemplate
 // @Summary   预览创建后的代码
 // @Security  ApiKeyAuth
 // @accept    application/json
@@ -23,7 +21,7 @@ type autoCodeTemplate struct{}
 // @Param     data  body      system.AutoCodeStruct                                      true  "预览创建代码"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "预览创建后的代码"
 // @Router    /autoCode/preview [post]
-func (a *autoCodeTemplate) Preview(c *gin.Context) {
+func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	var info request.AutoCode
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
@@ -51,7 +49,7 @@ func (a *autoCodeTemplate) Preview(c *gin.Context) {
 }
 
 // Create
-// @Tags      AutoCode
+// @Tags      AutoCodeTemplate
 // @Summary   自动代码模板
 // @Security  ApiKeyAuth
 // @accept    application/json
@@ -59,7 +57,7 @@ func (a *autoCodeTemplate) Preview(c *gin.Context) {
 // @Param     data  body      system.AutoCodeStruct  true  "创建自动代码"
 // @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router    /autoCode/createTemp [post]
-func (a *autoCodeTemplate) Create(c *gin.Context) {
+func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	var info request.AutoCode
 	err := c.ShouldBindJSON(&info)
 	if err != nil {

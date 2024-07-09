@@ -1,19 +1,15 @@
 package system
 
 import (
-	v1 "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/gin-gonic/gin"
 )
 
 type AuthorityRouter struct{}
 
-var AuthorityRouterApp = new(AuthorityRouter)
-
 func (s *AuthorityRouter) InitAuthorityRouter(Router *gin.RouterGroup) {
 	authorityRouter := Router.Group("authority").Use(middleware.OperationRecord())
 	authorityRouterWithoutRecord := Router.Group("authority")
-	authorityApi := v1.ApiGroupApp.SystemApiGroup.AuthorityApi
 	{
 		authorityRouter.POST("createAuthority", authorityApi.CreateAuthority)   // 创建角色
 		authorityRouter.POST("deleteAuthority", authorityApi.DeleteAuthority)   // 删除角色

@@ -41,7 +41,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		return errors.Wrap(err, "创建失败!")
 	}
 	code := info.AutoCode()
-	_, enter, err := s.TemplateMap(ctx, create, code)
+	_, enter, err := s.templates(ctx, create, code)
 	if err != nil {
 		return err
 	}
@@ -111,7 +111,7 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 	return templates, nil
 }
 
-func (s *autoCodePackage) TemplateMap(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode) (code map[string]string, enter map[string]map[string]string, err error) {
+func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode) (code map[string]string, enter map[string]map[string]string, err error) {
 	code = make(map[string]string)
 	enter = make(map[string]map[string]string)
 	templateDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.Template)

@@ -15,6 +15,9 @@ func NewImport(file *ast.File, importPath string) *Import {
 }
 
 func (a *Import) Rollback() error {
+	if a.importPath == "" {
+		return nil
+	}
 	for i := 0; i < len(a.file.Decls); i++ {
 		v1, o1 := a.file.Decls[i].(*ast.GenDecl)
 		if v1.Tok != token.IMPORT {
@@ -34,6 +37,9 @@ func (a *Import) Rollback() error {
 }
 
 func (a *Import) Injection() error {
+	if a.importPath == "" {
+		return nil
+	}
 	found := false
 	for i := 0; i < len(a.file.Decls); i++ {
 		v1, o1 := a.file.Decls[i].(*ast.GenDecl)

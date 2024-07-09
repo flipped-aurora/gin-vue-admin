@@ -1,4 +1,4 @@
-package {{ .PackageName }}
+package service
 
 var Service = new(service)
 

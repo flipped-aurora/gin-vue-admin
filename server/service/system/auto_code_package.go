@@ -23,14 +23,29 @@ type autoCodePackage struct{}
 // @author: [piexlmax](https://github.com/piexlmax)
 // @author: [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodePackageCreate) error {
-	if info.PackageName == "autocode" || info.PackageName == "system" || info.PackageName == "example" || info.PackageName == "" {
-		return errors.New("不能使用已保留的package name")
-	}
+	var paths []string
 	switch {
 	case info.Template == "":
 		return errors.New("模板不能为空!")
 	case info.Template == "page":
 		return errors.New("page为表单生成器!")
+	case info.PackageName == "":
+		return errors.New("PackageName不能为空!")
+	case info.Template == "package":
+		if info.PackageName == "autocode" || info.PackageName == "system" || info.PackageName == "example" {
+			return errors.New("不能使用已保留的package name")
+		}
+		paths = append(paths, filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", info.PackageName))
+		paths = append(paths, filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", info.PackageName))
+		paths = append(paths, filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", info.PackageName))
+	default:
+		paths = append(paths, filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.PackageName))
+	}
+	for i := 0; i < len(paths); i++ {
+		_, err := os.Stat(paths[i])
+		if !os.IsNotExist(err) {
+			return errors.Errorf("[PackageName:%s]已存在!", info.PackageName)
+		}
 	}
 	if !errors.Is(global.GVA_DB.Where("package_name = ?", info.PackageName).First(&model.SysAutoCodePackage{}).Error, gorm.ErrRecordNotFound) {
 		return errors.New("存在相同PackageName")
@@ -73,7 +88,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 	return nil
 }
 
-// Delete 获取所有包
+// Delete 删除包记录
 // @author: [piexlmax](https://github.com/piexlmax)
 // @author: [SliverHorn](https://github.com/SliverHorn)
 func (s *autoCodePackage) Delete(ctx context.Context, info common.GetById) error {
@@ -105,6 +120,9 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 	}
 	for i := 0; i < len(entries); i++ {
 		if entries[i].IsDir() {
+			if entries[i].Name() == "page" {
+				continue
+			} // page 为表单生成器
 			templates = append(templates, entries[i].Name())
 		}
 	}

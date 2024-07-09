@@ -26,7 +26,7 @@ func Test_autoCodePackage_Create(t *testing.T) {
 					Desc:        "描述",
 					Label:       "展示名",
 					Template:    "package",
-					PackageName: "test",
+					PackageName: "system2",
 				},
 			},
 		},

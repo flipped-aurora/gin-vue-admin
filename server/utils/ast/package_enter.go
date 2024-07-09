@@ -10,9 +10,7 @@ import (
 	"os"
 )
 
-// PackageEnter .
-// 以 server/api/v1/enter.go的SystemApiGroup为例
-// enter := NewPackageEnter("server/api/v1/enter.go", "github.com/flipped-aurora/gin-vue-admin/server/api/v1/system", "SystemApiGroup", "system", "ApiGroup")
+// PackageEnter 模块化入口
 type PackageEnter struct {
 	Type              Type   // 类型
 	Path              string // 文件路径
@@ -47,10 +45,6 @@ func (a *PackageEnter) Rollback() error {
 	if err != nil {
 		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
 	}
-	err = NewImport(file, a.ImportPath).Rollback()
-	if err != nil {
-		return err
-	}
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -63,11 +57,12 @@ func (a *PackageEnter) Rollback() error {
 					v3, o3 := v2.Type.(*ast.StructType)
 					if o3 {
 						for k := 0; k < len(v3.Fields.List); k++ {
-							for l := 0; l < len(v3.Fields.List[k].Names); l++ {
-								if v3.Fields.List[k].Names[l].Name == a.StructName {
-									v3.Fields.List = append(v3.Fields.List[:k], v3.Fields.List[k+1:]...)
-									goto Next
+							if len(v3.Fields.List[k].Names) >= 1 && v3.Fields.List[k].Names[0].Name == a.StructName {
+								err = NewImport(file, a.ImportPath).Rollback()
+								if err != nil {
+									return err
 								}
+								v3.Fields.List = append(v3.Fields.List[:k], v3.Fields.List[k+1:]...)
 							}
 						}
 					}
@@ -75,7 +70,6 @@ func (a *PackageEnter) Rollback() error {
 			}
 		}
 	}
-Next:
 	create, err := os.Create(a.Path)
 	if err != nil {
 		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
@@ -112,10 +106,8 @@ func (a *PackageEnter) Injection() error {
 					v3, o3 := v2.Type.(*ast.StructType)
 					if o3 {
 						for k := 0; k < len(v3.Fields.List); k++ {
-							for l := 0; l < len(v3.Fields.List[k].Names); l++ {
-								if v3.Fields.List[k].Names[l].Name == a.StructName {
-									goto Next
-								}
+							if len(v3.Fields.List[k].Names) >= 1 && v3.Fields.List[k].Names[0].Name == a.StructName {
+								break
 							}
 							field := &ast.Field{
 								Names: []*ast.Ident{{Name: a.StructName}},
@@ -131,7 +123,6 @@ func (a *PackageEnter) Injection() error {
 			}
 		}
 	}
-Next:
 	create, err := os.Create(a.Path)
 	if err != nil {
 		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)

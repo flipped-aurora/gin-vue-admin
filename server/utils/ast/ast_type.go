@@ -17,11 +17,11 @@ func (r Type) Group() string {
 	case TypePackageServiceModuleEnter:
 		return "ServiceGroup"
 	case TypePluginApiEnter:
-		return "Api"
+		return "api"
 	case TypePluginRouterEnter:
-		return "Router"
+		return "router"
 	case TypePluginServiceEnter:
-		return "Service"
+		return "service"
 	default:
 		return ""
 	}
@@ -34,10 +34,14 @@ const (
 	TypePackageApiModuleEnter     = "PackageApiModuleEnter"     // server/api/v1/{package}/enter.go
 	TypePackageRouterModuleEnter  = "PackageRouterModuleEnter"  // server/router/{package}/enter.go
 	TypePackageServiceModuleEnter = "PackageServiceModuleEnter" // server/service/{package}/enter.go
-	TypeInitializeGorm            = "InitializeGorm"            // server/initialize/gorm_biz.go
-	TypeInitializeRouter          = "InitializeRouter"          // server/initialize/router_biz.go
+	TypePackageInitializeGorm     = "PackageInitializeGorm"     // server/initialize/gorm_biz.go
+	TypePackageInitializeRouter   = "PackageInitializeRouter"   // server/initialize/router_biz.go
 	TypeInitializePlugin          = "InitializePlugin"          // server/initialize/plugin_biz.go
 	TypePluginApiEnter            = "PluginApiEnter"            // server/plugin/{package}/enter.go
 	TypePluginRouterEnter         = "PluginRouterEnter"         // server/plugin/{package}/enter.go
 	TypePluginServiceEnter        = "PluginServiceEnter"        // server/plugin/{package}/enter.go
+	TypePluginInitializeApi       = "PluginInitializeService"   // server/plugin/{package}/initialize/api.go
+	TypePluginInitializeGorm      = "PluginInitializeGorm"      // server/plugin/{package}/initialize/gorm.go
+	TypePluginInitializeMenu      = "TypePluginInitializeMenu"  // server/plugin/{package}/initialize/menu.go
+	TypePluginInitializeRouter    = "PluginInitializeRouter"    // server/plugin/{package}/initialize/router.go
 )

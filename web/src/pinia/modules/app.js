@@ -4,7 +4,7 @@ import { ref, watchEffect, reactive } from 'vue'
 import originSetting from  "@/config.json"
 import {  setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
-  const theme = ref(localStorage.getItem('theme')  || originSetting.darkMode)
+  const theme = ref(localStorage.getItem('theme')  || originSetting.darkMode || 'auto')
   const device = ref("")
   const config = reactive({
     weakness: false,

@@ -422,12 +422,12 @@ defineOptions({
   name: 'ExportTemplate'
 })
 
-const templatePlaceholder = `模板信息格式：key标识数据库column列名称（在join模式下需要写为 table.column），value标识导出excel列名称，如下：
+const templatePlaceholder = `模板信息格式：key标识数据库column列名称（在join模式下需要写为 table.column），value标识导出excel列名称，如key为数据库关键字或函数，请按照关键字的处理模式处理，当前以mysql为例，如下：
 {
   "table_column1":"第一列",
-  "table_column2":"第二列",
   "table_column3":"第三列",
   "table_column4":"第四列",
+  "\`rows\`":"我属于数据库关键字或函数",
 }
 如果增加了JOINS导出key应该列为 {table_name1.table_column1:"第一列",table_name2.table_column2:"第二列"}
 如果有重复的列名导出格式应为 {table_name1.table_column1 as key:"第一列",table_name2.table_column2 as key2:"第二列"}

@@ -23,7 +23,7 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 		{
 			name: "测试 &model.User{} 注入",
 			fields: fields{
-				Type:        TypePackageInitializeGorm,
+				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "gorm.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				StructName:  "User",
@@ -34,7 +34,7 @@ func TestPluginInitializeGorm_Injection(t *testing.T) {
 		{
 			name: "测试 new(model.ExaCustomer) 注入",
 			fields: fields{
-				Type:        TypePackageInitializeGorm,
+				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "gorm.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				StructName:  "User",
@@ -77,7 +77,7 @@ func TestPluginInitializeGorm_Rollback(t *testing.T) {
 		{
 			name: "测试 &model.User{} 回滚",
 			fields: fields{
-				Type:        TypePackageInitializeGorm,
+				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "gorm.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				StructName:  "User",
@@ -88,7 +88,7 @@ func TestPluginInitializeGorm_Rollback(t *testing.T) {
 		{
 			name: "测试 new(model.ExaCustomer) 回滚",
 			fields: fields{
-				Type:        TypePackageInitializeGorm,
+				Type:        TypePluginInitializeGorm,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "gorm.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				StructName:  "User",

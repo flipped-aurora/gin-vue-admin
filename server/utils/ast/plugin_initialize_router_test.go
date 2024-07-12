@@ -38,6 +38,21 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "测试 中文 注入",
+			fields: fields{
+				Type:                 TypePluginInitializeRouter,
+				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "router.go"),
+				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
+				AppName:              "Router",
+				GroupName:            "U中文",
+				PackageName:          "router",
+				FunctionName:         "Init",
+				LeftRouterGroupName:  "public",
+				RightRouterGroupName: "private",
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -84,6 +99,21 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
 				AppName:              "Router",
 				GroupName:            "User",
+				PackageName:          "router",
+				FunctionName:         "Init",
+				LeftRouterGroupName:  "public",
+				RightRouterGroupName: "private",
+			},
+			wantErr: false,
+		},
+		{
+			name: "测试 中文 注入",
+			fields: fields{
+				Type:                 TypePluginInitializeRouter,
+				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "router.go"),
+				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
+				AppName:              "Router",
+				GroupName:            "U中文",
 				PackageName:          "router",
 				FunctionName:         "Init",
 				LeftRouterGroupName:  "public",

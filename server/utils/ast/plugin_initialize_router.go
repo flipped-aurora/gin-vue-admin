@@ -48,11 +48,14 @@ func (a *PluginInitializeRouter) Rollback() error {
 										if v7.Name == a.PackageName && v6.Sel.Name == a.AppName && v5.Sel.Name == a.GroupName && v4.Sel.Name == a.FunctionName {
 											v1.Body.List = append(v1.Body.List[:j], v1.Body.List[j+1:]...)
 											if len(v1.Body.List) >= 2 {
-												err = NewImport(file, a.ImportPath).Rollback()
-												if err != nil {
-													return err
+
+												if len(v1.Body.List) == 2 {
+													err = NewImport(file, a.ImportPath).Rollback()
+													if err != nil {
+														return err
+													}
+													v1.Body.List = nil
 												}
-												v1.Body.List = nil
 											}
 											break
 										}

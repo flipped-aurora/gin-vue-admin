@@ -36,7 +36,7 @@ const (
 	TypePackageServiceModuleEnter = "PackageServiceModuleEnter" // server/service/{package}/enter.go
 	TypePackageInitializeGorm     = "PackageInitializeGorm"     // server/initialize/gorm_biz.go
 	TypePackageInitializeRouter   = "PackageInitializeRouter"   // server/initialize/router_biz.go
-	TypeInitializePlugin          = "InitializePlugin"          // server/initialize/plugin_biz.go
+	TypePluginInitialize          = "PluginInitialize"          // server/initialize/plugin_biz.go
 	TypePluginApiEnter            = "PluginApiEnter"            // server/plugin/{package}/enter.go
 	TypePluginRouterEnter         = "PluginRouterEnter"         // server/plugin/{package}/enter.go
 	TypePluginServiceEnter        = "PluginServiceEnter"        // server/plugin/{package}/enter.go

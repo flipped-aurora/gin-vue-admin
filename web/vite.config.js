@@ -11,6 +11,7 @@ import vuePlugin from '@vitejs/plugin-vue'
 import GvaPosition from './vitePlugin/gvaPosition'
 import GvaPositionServer from './vitePlugin/codeServer'
 import fullImportPlugin from './vitePlugin/fullImport/fullImport.js'
+import VueFilePathPlugin from './vitePlugin/componentName/index.js'
 import { svgBuilder } from 'vite-auto-import-svg'
 import { AddSecret } from './vitePlugin/secret'
 // @see https://cn.vitejs.dev/config/
@@ -92,7 +93,8 @@ export default ({
       }),
       vuePlugin(),
       svgBuilder('./src/assets/icons/'),
-      [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)]
+      [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
+      VueFilePathPlugin("./src/core/componentName.json")
     ],
     css: {
       preprocessorOptions: {

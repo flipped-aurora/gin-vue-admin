@@ -26,28 +26,43 @@ const extractComponentName = (fileContent) => {
 const vueFilePathPlugin = (outputFilePath) => {
     let root;
 
+    const generatePathNameMap = () => {
+        const vueFiles = [
+            ...getAllVueFiles(path.join(root, 'src/view')),
+            ...getAllVueFiles(path.join(root, 'src/plugin'))
+        ];
+        const pathNameMap = vueFiles.reduce((acc, filePath) => {
+            const content = fs.readFileSync(filePath, 'utf-8');
+            const componentName = extractComponentName(content);
+            if (componentName) {
+                let relativePath ="/" + path.relative(root, filePath).replace(/\\/g, '/');
+                acc[relativePath] = componentName;
+            }
+            return acc;
+        }, {});
+        const outputContent = JSON.stringify(pathNameMap, null, 2);
+        fs.writeFileSync(outputFilePath, outputContent);
+    };
+
+    const watchDirectoryChanges = () => {
+        const watchDirectories = [path.join(root, 'src/view'), path.join(root, 'src/plugin')];
+        watchDirectories.forEach(dir => {
+            fs.watch(dir, { recursive: true }, (eventType, filename) => {
+                if (filename) {
+                    generatePathNameMap();
+                }
+            });
+        });
+    };
+
     return {
         name: 'vue-file-path-plugin',
         configResolved(resolvedConfig) {
             root = resolvedConfig.root;
         },
         buildEnd() {
-            const vueFiles = [
-                ...getAllVueFiles(path.join(root, 'src/view')),
-                ...getAllVueFiles(path.join(root, 'src/plugin'))
-            ];
-            const pathNameMap = vueFiles.reduce((acc, filePath) => {
-                const content = fs.readFileSync(filePath, 'utf-8');
-                const componentName = extractComponentName(content);
-                if (componentName) {
-                    let relativePath ="/" + path.relative(root, filePath).replace(/\\/g, '/');
-                    acc[relativePath] = componentName;
-                }
-                return acc;
-            }, {});
-            const outputContent = JSON.stringify(pathNameMap, null, 2);
-            // 写入指定文件
-            fs.writeFileSync(outputFilePath, outputContent);
+            generatePathNameMap();
+            watchDirectoryChanges();
         }
     };
 }

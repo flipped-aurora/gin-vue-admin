@@ -1,19 +1,61 @@
 package config
 
+import (
+	"path/filepath"
+	"strings"
+)
+
 type Autocode struct {
-	SModel          string `mapstructure:"server-model" json:"server-model" yaml:"server-model"`
-	SRouter         string `mapstructure:"server-router" json:"server-router" yaml:"server-router"`
-	Server          string `mapstructure:"server" json:"server" yaml:"server"`
-	SApi            string `mapstructure:"server-api" json:"server-api" yaml:"server-api"`
-	SPlug           string `mapstructure:"server-plug" json:"server-plug" yaml:"server-plug"`
-	SInitialize     string `mapstructure:"server-initialize" json:"server-initialize" yaml:"server-initialize"`
-	Root            string `mapstructure:"root" json:"root" yaml:"root"`
-	WTable          string `mapstructure:"web-table" json:"web-table" yaml:"web-table"`
-	Web             string `mapstructure:"web" json:"web" yaml:"web"`
-	SService        string `mapstructure:"server-service" json:"server-service" yaml:"server-service"`
-	SRequest        string `mapstructure:"server-request" json:"server-request"  yaml:"server-request"`
-	WApi            string `mapstructure:"web-api" json:"web-api" yaml:"web-api"`
-	WForm           string `mapstructure:"web-form" json:"web-form" yaml:"web-form"`
-	TransferRestart bool   `mapstructure:"transfer-restart" json:"transfer-restart" yaml:"transfer-restart"`
-	AiPath          string `mapstructure:"ai-path" json:"ai-path" yaml:"ai-path"`
+	Web    string `mapstructure:"web" json:"web" yaml:"web"`
+	Root   string `mapstructure:"root" json:"root" yaml:"root"`
+	Server string `mapstructure:"server" json:"server" yaml:"server"`
+	AiPath string `mapstructure:"ai-path" json:"ai-path" yaml:"ai-path"`
+}
+
+func (a *Autocode) WebRoot(template string, packageName string, biz string) string {
+	webs := strings.Split(a.Web, "/")
+	if len(webs) == 0 {
+		webs = strings.Split(a.Web, "\\")
+	}
+	if template == "package" {
+		return filepath.Join(a.Root, filepath.Join(webs...), biz, packageName)
+	}
+	return filepath.Join(a.Root, filepath.Join(webs...), "plugin", packageName, biz)
+}
+
+// ServerRoot 生成服务端路径
+// template: 模板 package/plugin
+// biz: 业务模块(api/model/service/request/response)
+// packageName: 模块名/插件名(system/example/email)
+func (a *Autocode) ServerRoot(template, packageName, biz string) string {
+	if template == "package" {
+		if biz == "api" {
+			return filepath.Join(a.Root, a.Server, biz, "v1", packageName)
+		}
+		if biz == "request" || biz == "response" {
+			return filepath.Join(a.Root, a.Server, packageName, "model", biz)
+		}
+		if biz == "router" {
+			return filepath.Join(a.Root, a.Server, biz, packageName)
+		}
+		return filepath.Join(a.Root, a.Server, biz, packageName)
+	}
+	return filepath.Join(a.Root, a.Server, "plugin", packageName, biz)
+}
+
+// ServerEnterRoot 生成服务端路径
+// template: 模板 package/plugin
+// biz: 业务模块(api/model/service/request/response)
+// packageName: 模块名/插件名(system/example/email)
+func (a *Autocode) ServerEnterRoot(template, packageName, biz string) string {
+	if template == "package" {
+		if biz == "api" {
+			return filepath.Join(a.Server, biz, "v1", packageName)
+		}
+		if biz == "request" || biz == "response" {
+			return filepath.Join(a.Server, packageName, "model", biz)
+		}
+		return filepath.Join(a.Server, packageName, biz)
+	}
+	return filepath.Join(a.Server, packageName, biz)
 }

@@ -45,7 +45,7 @@ func RegisterTables() {
 		system.SysBaseMenuParameter{},
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
-		system.SysAutoCode{},
+		system.SysAutoCodePackage{},
 		system.SysExportTemplate{},
 		system.Condition{},
 		system.JoinTemplate{},

@@ -164,6 +164,38 @@
           </el-col>
           <el-col :span="6">
             <el-form-item
+                label="TableName"
+                class="w-full"
+            >
+              <template #label>
+                <el-tooltip
+                    content="简称会作为入参对象名和路由group"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> 结构简称 <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-input
+                  v-model="form.abbreviation"
+                  placeholder="请输入Struct简称"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item
+                label="中文名称"
+                prop="description"
+                class="w-full"
+            >
+              <el-input
+                  v-model="form.description"
+                  placeholder="中文描述作为自动api描述"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item
               label="表名"
               prop="tableName"
               class="w-full"
@@ -171,38 +203,6 @@
               <el-input
                 v-model="form.tableName"
                 placeholder="指定表名（非必填）"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item
-              label="TableName"
-              class="w-full"
-            >
-              <template #label>
-                <el-tooltip
-                  content="简称会作为入参对象名和路由group"
-                  placement="bottom"
-                  effect="light"
-                >
-                  <div> 结构简称 <el-icon><QuestionFilled /></el-icon> </div>
-                </el-tooltip>
-              </template>
-              <el-input
-                v-model="form.abbreviation"
-                placeholder="请输入Struct简称"
-              />
-            </el-form-item>
-          </el-col>
-          <el-col :span="6">
-            <el-form-item
-              label="中文名称"
-              prop="description"
-              class="w-full"
-            >
-              <el-input
-                v-model="form.description"
-                placeholder="中文描述作为自动api描述"
               />
             </el-form-item>
           </el-col>

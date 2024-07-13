@@ -3,7 +3,7 @@ import { emitter } from '@/utils/bus.js'
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
 import { ref,watchEffect } from 'vue'
-import componentName from "@/core/componentName";
+import pathInfo from "@/pathInfo.json";
 
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
@@ -34,8 +34,8 @@ const KeepAliveFilter = (routes) => {
       const regex = /\(\) => import\("([^?]+)\??.*"\)/;
       const match = String(item.component).match(regex);
       const path = match ? match[1] : "";
-      keepAliveRoutersArr.push(componentName[path])
-      nameMap[item.name] = componentName[path]
+      keepAliveRoutersArr.push(pathInfo[path])
+      nameMap[item.name] = pathInfo[path]
     }
     if (item.children && item.children.length > 0) {
       KeepAliveFilter(item.children)

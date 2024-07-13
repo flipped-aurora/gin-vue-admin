@@ -1,10 +1,11 @@
 <template>
-  <div>
+  <div class="w-full">
     <el-select
       v-model="metaData.icon"
       clearable
       filterable
       placeholder="请选择"
+      class="w-full"
     >
       <template #prefix>
         <el-icon>

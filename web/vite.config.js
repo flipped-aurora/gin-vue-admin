@@ -94,7 +94,7 @@ export default ({
       vuePlugin(),
       svgBuilder('./src/assets/icons/'),
       [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
-      VueFilePathPlugin("./src/core/componentName.json")
+      VueFilePathPlugin("./src/pathInfo.json")
     ],
     css: {
       preprocessorOptions: {

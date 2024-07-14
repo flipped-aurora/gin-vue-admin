@@ -18,11 +18,19 @@
             placeholder="描述"
           />
         </el-form-item>
-        <el-form-item label="API组">
-          <el-input
-            v-model="searchInfo.apiGroup"
-            placeholder="api组"
-          />
+        <el-form-item label="API分组">
+          <el-select
+              v-model="searchInfo.apiGroup"
+              clearable
+              placeholder="请选择"
+          >
+            <el-option
+                v-for="item in apiGroupOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="请求">
           <el-select

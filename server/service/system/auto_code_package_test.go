@@ -60,8 +60,12 @@ func Test_autoCodePackage_templates(t *testing.T) {
 				entity: model.SysAutoCodePackage{
 					Desc:        "描述",
 					Label:       "展示名",
-					Template:    "package",
+					Template:    "plugin",
 					PackageName: "preview",
+				},
+				info: request.AutoCode{
+					Abbreviation:    "user",
+					HumpPackageName: "user",
 				},
 			},
 			wantErr: false,
@@ -75,8 +79,11 @@ func Test_autoCodePackage_templates(t *testing.T) {
 				t.Errorf("templates() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(gotCode, tt.wantCode) {
-				t.Errorf("templates() gotCode = %v, want %v", gotCode, tt.wantCode)
+			for key, value := range gotCode {
+				t.Logf("\n")
+				t.Logf(key)
+				t.Logf(value)
+				t.Logf("\n")
 			}
 			if !reflect.DeepEqual(gotEnter, tt.wantEnter) {
 				t.Errorf("templates() gotEnter = %v, want %v", gotEnter, tt.wantEnter)

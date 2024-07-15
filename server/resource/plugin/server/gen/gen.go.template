@@ -1,1 +1,15 @@
-package gen
+package main
+
+import (
+	"gorm.io/gen"
+	"path/filepath"
+)
+
+func main() {
+	g := gen.NewGenerator(gen.Config{
+		OutPath: filepath.Join("plugin", "{{ .Package }}", "model", "dao"),
+		Mode:    gen.WithoutContext | gen.WithDefaultQuery | gen.WithQueryInterface,
+	})
+	g.ApplyBasic()
+	g.Execute()
+}

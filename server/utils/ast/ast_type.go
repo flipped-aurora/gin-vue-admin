@@ -40,6 +40,7 @@ const (
 	TypePluginApiEnter            = "PluginApiEnter"            // server/plugin/{package}/enter.go
 	TypePluginRouterEnter         = "PluginRouterEnter"         // server/plugin/{package}/enter.go
 	TypePluginServiceEnter        = "PluginServiceEnter"        // server/plugin/{package}/enter.go
+	TypePluginGenModel            = "PluginGenModel"            // server/plugin/{package}/gen/main.go
 	TypePluginInitializeApi       = "PluginInitializeApi"       // server/plugin/{package}/initialize/api.go
 	TypePluginInitializeGorm      = "PluginInitializeGorm"      // server/plugin/{package}/initialize/gorm.go
 	TypePluginInitializeMenu      = "PluginInitializeMenu"      // server/plugin/{package}/initialize/menu.go

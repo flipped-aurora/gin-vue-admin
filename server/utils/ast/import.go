@@ -30,7 +30,7 @@ func (a *Import) Rollback() error {
 					v1.Specs = append(v1.Specs[:j], v1.Specs[j+1:]...)
 					if len(v1.Specs) == 0 {
 						a.file.Decls = append(a.file.Decls[:i], a.file.Decls[i+1:]...)
-					}
+					} // 如果没有import声明，就删除, 如果不删除则会出现import()
 					break
 				}
 			}
@@ -79,6 +79,6 @@ func (a *Import) Injection() error {
 		}
 		a.file.Decls = append(a.file.Decls, decl)
 		a.file.Decls = append(a.file.Decls, decls...)
-	}
+	} // 如果没有import声明，就创建一个, 主要要放在第一个
 	return nil
 }

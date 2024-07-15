@@ -107,6 +107,21 @@ func TestPluginEnter_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
+			name: "测试 商城插件UserRouter 回滚",
+			fields: fields{
+				Type:            TypePluginRouterEnter,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "router", "enter.go"),
+				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/api"`,
+				StructName:      "User",
+				StructCamelName: "user",
+				ModuleName:      "userApi",
+				GroupName:       "Api",
+				PackageName:     "api",
+				ServiceName:     "User",
+			},
+			wantErr: false,
+		},
+		{
 			name: "测试 商城插件UserApi 回滚",
 			fields: fields{
 				Type:            TypePluginApiEnter,
@@ -118,6 +133,21 @@ func TestPluginEnter_Rollback(t *testing.T) {
 				GroupName:       "Service",
 				PackageName:     "service",
 				ServiceName:     "User",
+			},
+			wantErr: false,
+		},
+		{
+			name: "测试 商城插件UserService 回滚",
+			fields: fields{
+				Type:            TypePluginServiceEnter,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "service", "enter.go"),
+				ImportPath:      "",
+				StructName:      "User",
+				StructCamelName: "user",
+				ModuleName:      "",
+				GroupName:       "",
+				PackageName:     "",
+				ServiceName:     "",
 			},
 			wantErr: false,
 		},

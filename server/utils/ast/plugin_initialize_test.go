@@ -31,7 +31,12 @@ func TestPluginInitialize_Injection(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := NewPluginInitialize(tt.fields.Type, tt.fields.Path, tt.fields.PluginPath, tt.fields.ImportPath)
+			a := PluginInitialize{
+				Type:       tt.fields.Type,
+				Path:       tt.fields.Path,
+				PluginPath: tt.fields.PluginPath,
+				ImportPath: tt.fields.ImportPath,
+			}
 			if err := a.Injection(); (err != nil) != tt.wantErr {
 				t.Errorf("Injection() error = %v, wantErr %v", err, tt.wantErr)
 			}

@@ -103,6 +103,9 @@ func (a *PackageModuleEnter) Injection() error {
 				hasVariables = true
 			}
 			for j := 0; j < len(v1.Specs); j++ {
+				if a.Type == TypePackageServiceModuleEnter {
+					hasValue = true
+				}
 				v2, o2 := v1.Specs[j].(*ast.TypeSpec)
 				if o2 {
 					if v2.Name.Name != a.Type.Group() {
@@ -122,10 +125,6 @@ func (a *PackageModuleEnter) Injection() error {
 							v3.Fields.List = append(v3.Fields.List, field)
 						}
 					}
-					continue
-				}
-				if a.Type == TypePackageServiceModuleEnter {
-					hasValue = true
 					continue
 				}
 				v3, o3 := v1.Specs[j].(*ast.ValueSpec)
@@ -152,32 +151,33 @@ func (a *PackageModuleEnter) Injection() error {
 						},
 					}
 					v1.Specs = append(v1.Specs, spec)
+					hasValue = true
 				}
 			}
 		}
-		if !hasValue && !hasVariables {
-			decl := &ast.GenDecl{
-				Tok: token.VAR,
-				Specs: []ast.Spec{
-					&ast.ValueSpec{
-						Names: []*ast.Ident{{Name: a.ModuleName}},
-						Values: []ast.Expr{
-							&ast.SelectorExpr{
+	}
+	if !hasValue && !hasVariables {
+		decl := &ast.GenDecl{
+			Tok: token.VAR,
+			Specs: []ast.Spec{
+				&ast.ValueSpec{
+					Names: []*ast.Ident{{Name: a.ModuleName}},
+					Values: []ast.Expr{
+						&ast.SelectorExpr{
+							X: &ast.SelectorExpr{
 								X: &ast.SelectorExpr{
-									X: &ast.SelectorExpr{
-										X:   &ast.Ident{Name: a.PackageName},
-										Sel: &ast.Ident{Name: a.AppName},
-									},
-									Sel: &ast.Ident{Name: a.GroupName},
+									X:   &ast.Ident{Name: a.PackageName},
+									Sel: &ast.Ident{Name: a.AppName},
 								},
-								Sel: &ast.Ident{Name: a.ServiceName},
+								Sel: &ast.Ident{Name: a.GroupName},
 							},
+							Sel: &ast.Ident{Name: a.ServiceName},
 						},
 					},
 				},
-			}
-			file.Decls = append(file.Decls, decl)
+			},
 		}
+		file.Decls = append(file.Decls, decl)
 	}
 	var create *os.File
 	path := a.Path

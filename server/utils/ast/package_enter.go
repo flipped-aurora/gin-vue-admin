@@ -21,17 +21,6 @@ type PackageEnter struct {
 	PackageStructName string // 包结构体名称
 }
 
-func NewPackageEnter(astType Type, path, importPath, structName, packageName, packageStructName string) Ast {
-	return &PackageEnter{
-		Type:              astType,
-		Path:              path,
-		ImportPath:        importPath,
-		StructName:        structName,
-		PackageName:       packageName,
-		PackageStructName: packageStructName,
-	}
-}
-
 func (a *PackageEnter) Rollback() error {
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
@@ -98,10 +87,14 @@ func (a *PackageEnter) Injection() error {
 					}
 					v3, o3 := v2.Type.(*ast.StructType)
 					if o3 {
+						var has bool
 						for k := 0; k < len(v3.Fields.List); k++ {
-							if len(v3.Fields.List[k].Names) >= 1 && v3.Fields.List[k].Names[0].Name == a.StructName {
+							if len(v3.Fields.List[k].Names) == 1 && v3.Fields.List[k].Names[0].Name == a.StructName {
+								has = true
 								break
 							}
+						}
+						if !has {
 							field := &ast.Field{
 								Names: []*ast.Ident{{Name: a.StructName}},
 								Type: &ast.SelectorExpr{

@@ -27,10 +27,6 @@ type PluginInitialize struct {
 	Version     string // 版本 v1/v2
 }
 
-func NewPluginInitialize(astType Type, path string, pluginPath string, importPath string) *PluginInitialize {
-	return &PluginInitialize{Type: astType, Path: path, PluginPath: pluginPath, ImportPath: importPath}
-}
-
 func (a *PluginInitialize) Rollback() error {
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)

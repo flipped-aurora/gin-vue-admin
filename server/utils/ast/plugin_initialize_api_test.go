@@ -32,8 +32,11 @@ func TestPluginInitializeApi_Injection(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
-			a := NewPluginInitializeApi(tt.fields.Type, tt.fields.Path, tt.fields.Apis)
+			a := PluginInitializeApi{
+				Type: tt.fields.Type,
+				Path: tt.fields.Path,
+				Apis: tt.fields.Apis,
+			}
 			if err := a.Injection(); (err != nil) != tt.wantErr {
 				t.Errorf("Injection() error = %v, wantErr %v", err, tt.wantErr)
 			}
@@ -71,7 +74,11 @@ func TestPluginInitializeApi_Rollback(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := NewPluginInitializeApi(tt.fields.Type, tt.fields.Path, tt.fields.Apis)
+			a := PluginInitializeApi{
+				Type: tt.fields.Type,
+				Path: tt.fields.Path,
+				Apis: tt.fields.Apis,
+			}
 			if err := a.Rollback(); (err != nil) != tt.wantErr {
 				t.Errorf("Rollback() error = %v, wantErr %v", err, tt.wantErr)
 			}

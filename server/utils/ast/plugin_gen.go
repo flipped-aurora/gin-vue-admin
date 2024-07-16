@@ -7,6 +7,7 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
+	"path/filepath"
 )
 
 type PluginGen struct {
@@ -196,16 +197,17 @@ func (a *PluginGen) Injection() error {
 		}
 	}
 	var create *os.File
+	path := a.Path
 	if a.PreviewPath != "" {
-		create, err = os.Create(a.PreviewPath)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PreviewPath)
-		}
-	} else {
-		create, err = os.Create(a.Path)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-		}
+		path = a.PreviewPath
+	}
+	err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	if err != nil {
+		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", path)
+	}
+	create, err = os.Create(path)
+	if err != nil {
+		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", path)
 	}
 	defer func() {
 		_ = create.Close()

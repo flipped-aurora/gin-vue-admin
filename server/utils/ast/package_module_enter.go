@@ -7,6 +7,7 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
+	"path/filepath"
 )
 
 // PackageModuleEnter 模块化入口
@@ -22,20 +23,6 @@ type PackageModuleEnter struct {
 	PackageName string // 包名
 	PreviewPath string // 预览文件路径
 	ServiceName string // 服务名称
-}
-
-func NewPackageModuleEnter(astType Type, path string, importPath string, structName string, appName string, groupName string, moduleName string, packageName string, serviceName string) *PackageModuleEnter {
-	return &PackageModuleEnter{
-		Type:        astType,
-		Path:        path,
-		ImportPath:  importPath,
-		StructName:  structName,
-		AppName:     appName,
-		GroupName:   groupName,
-		ModuleName:  moduleName,
-		PackageName: packageName,
-		ServiceName: serviceName,
-	}
 }
 
 func (a *PackageModuleEnter) Rollback() error {
@@ -163,20 +150,17 @@ func (a *PackageModuleEnter) Injection() error {
 		}
 	}
 	var create *os.File
+	path := a.Path
 	if a.PreviewPath != "" {
-		err = os.MkdirAll(a.PreviewPath, os.ModePerm)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", a.PreviewPath)
-		}
-		create, err = os.Create(a.PreviewPath)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]创建文件失败!", a.PreviewPath)
-		}
-	} else {
-		create, err = os.Create(a.Path)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-		}
+		path = a.PreviewPath
+	}
+	err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	if err != nil {
+		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", path)
+	}
+	create, err = os.Create(path)
+	if err != nil {
+		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", path)
 	}
 	defer func() {
 		_ = create.Close()

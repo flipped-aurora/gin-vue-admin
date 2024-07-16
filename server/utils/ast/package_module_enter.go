@@ -94,9 +94,14 @@ func (a *PackageModuleEnter) Injection() error {
 	if err != nil {
 		return err
 	}
+	var hasValue bool
+	var hasVariables bool
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
+			if v1.Tok == token.VAR {
+				hasVariables = true
+			}
 			for j := 0; j < len(v1.Specs); j++ {
 				v2, o2 := v1.Specs[j].(*ast.TypeSpec)
 				if o2 {
@@ -120,34 +125,58 @@ func (a *PackageModuleEnter) Injection() error {
 					continue
 				}
 				if a.Type == TypePackageServiceModuleEnter {
+					hasValue = true
 					continue
 				}
 				v3, o3 := v1.Specs[j].(*ast.ValueSpec)
 				if o3 {
-					var hasValue bool
+					hasVariables = true
 					if len(v3.Names) == 1 && v3.Names[0].Name == a.ModuleName {
 						hasValue = true
 					}
-					if !hasValue {
-						spec := &ast.ValueSpec{
-							Names: []*ast.Ident{{Name: a.ModuleName}},
-							Values: []ast.Expr{
-								&ast.SelectorExpr{
+				}
+				if hasVariables && !hasValue {
+					spec := &ast.ValueSpec{
+						Names: []*ast.Ident{{Name: a.ModuleName}},
+						Values: []ast.Expr{
+							&ast.SelectorExpr{
+								X: &ast.SelectorExpr{
 									X: &ast.SelectorExpr{
-										X: &ast.SelectorExpr{
-											X:   &ast.Ident{Name: a.PackageName},
-											Sel: &ast.Ident{Name: a.AppName},
-										},
-										Sel: &ast.Ident{Name: a.GroupName},
+										X:   &ast.Ident{Name: a.PackageName},
+										Sel: &ast.Ident{Name: a.AppName},
 									},
-									Sel: &ast.Ident{Name: a.ServiceName},
+									Sel: &ast.Ident{Name: a.GroupName},
 								},
+								Sel: &ast.Ident{Name: a.ServiceName},
 							},
-						}
-						v1.Specs = append(v1.Specs, spec)
+						},
 					}
+					v1.Specs = append(v1.Specs, spec)
 				}
 			}
+		}
+		if !hasValue && !hasVariables {
+			decl := &ast.GenDecl{
+				Tok: token.VAR,
+				Specs: []ast.Spec{
+					&ast.ValueSpec{
+						Names: []*ast.Ident{{Name: a.ModuleName}},
+						Values: []ast.Expr{
+							&ast.SelectorExpr{
+								X: &ast.SelectorExpr{
+									X: &ast.SelectorExpr{
+										X:   &ast.Ident{Name: a.PackageName},
+										Sel: &ast.Ident{Name: a.AppName},
+									},
+									Sel: &ast.Ident{Name: a.GroupName},
+								},
+								Sel: &ast.Ident{Name: a.ServiceName},
+							},
+						},
+					},
+				},
+			}
+			file.Decls = append(file.Decls, decl)
 		}
 	}
 	var create *os.File

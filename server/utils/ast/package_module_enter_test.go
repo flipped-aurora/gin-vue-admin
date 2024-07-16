@@ -151,6 +151,21 @@ func TestPackageModuleEnter_Injection(t *testing.T) {
 			},
 			wantErr: false,
 		},
+		{
+			name: "测试 PackageApiModel",
+			fields: fields{
+				Type:        TypePackageApiModuleEnter,
+				Path:        "/Users/sliverhorn/Go/src/github.com/flipped-aurora/gin-vue-admin/server/api/v1/blender/enter.go",
+				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/service"`,
+				StructName:  "SysUserApi",
+				AppName:     "ServiceGroup",
+				GroupName:   "BlenderServiceGroup",
+				ModuleName:  "sysUsers",
+				PackageName: "service",
+				ServiceName: "BlenderService",
+			},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

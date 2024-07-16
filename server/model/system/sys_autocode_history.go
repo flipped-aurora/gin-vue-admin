@@ -13,12 +13,12 @@ type SysAutoCodeHistory struct {
 	StructName      string             `json:"structName" gorm:"column:struct_name;comment:结构体名称"`
 	BusinessDB      string             `json:"businessDb" gorm:"column:business_db;comment:业务库"`
 	Description     string             `json:"description" gorm:"column:description;comment:Struct中文名称"`
-	Enter           map[string]string  `json:"enter" gorm:"serializer:json;type:text;column:enter;comment:注入路径"`
-	Template        map[string]string  `json:"template" gorm:"serializer:json;type:text;column:template;comment:模板信息"`
+	Templates       map[string]string  `json:"template" gorm:"serializer:json;type:text;column:templates;comment:模板信息"`
+	Injections      map[string]string  `json:"injections" gorm:"serializer:json;type:text;column:Injections;comment:注入路径"`
 	Flag            int                `json:"flag" gorm:"column:flag;comment:[0:创建,1:回滚]"`
 	ApiIDs          []uint             `json:"apiIDs" gorm:"serializer:json;column:api_ids;comment:api表注册内容"`
 	MenuID          uint               `json:"menuId" gorm:"column:menu_id;comment:菜单ID"`
-	AutoCodePackage SysAutoCodePackage `json:"autoCodePackage" gorm:"foreignKey:ID;references:PackageID"`
+	AutoCodePackage SysAutoCodePackage `json:"autoCodePackage" gorm:"foreignKey:Package;references:PackageName"`
 }
 
 func (s *SysAutoCodeHistory) TableName() string {

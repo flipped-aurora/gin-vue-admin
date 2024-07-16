@@ -2,6 +2,8 @@ package system
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
@@ -61,7 +63,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return errors.Wrap(err, "查询包失败!")
 	}
-	templates, _, err := AutoCodePackage.templates(ctx, entity, info)
+	templates, asts, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return err
 	}
@@ -71,9 +73,9 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		if err != nil {
 			return errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
 		}
-		_, err = os.Stat(create)
-		if !os.IsNotExist(err) {
-			continue
+		err = os.MkdirAll(create, os.ModePerm)
+		if err != nil {
+			return errors.Wrapf(err, "[filpath:%s]创建文件夹失败!", create)
 		}
 		var file *os.File
 		file, err = os.Create(create)
@@ -85,18 +87,22 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			return errors.Wrapf(err, "[filpath:%s]生成文件失败!", create)
 		}
 	} // 生成文件
-	{
-		// router_biz.go 路由注册
-		if info.AutoMigrate {
-
-		} // gorm_biz.go gorm自动迁移
-		// plugin.go 插件注册
-		// (api||router||service)/enter.go 注入
+	if info.AutoMigrate {
+		for key, value := range asts {
+			err = value.Injection()
+			if err != nil {
+				return err
+			}
+			fmt.Println(key, "注入成功!")
+			injection, _ := json.Marshal(value)
+			history.Injections[key] = string(injection)
+		}
 	} // 注入代码
-	err = global.GVA_DB.WithContext(ctx).Create(&history).Error
+	history.Templates = templates
+	err = AutocodeHistory.Create(ctx, history)
 	if err != nil {
-		return errors.Wrap(err, "创建历史记录失败!")
-	}
+		return err
+	} // 创建历史记录
 	return nil
 }
 

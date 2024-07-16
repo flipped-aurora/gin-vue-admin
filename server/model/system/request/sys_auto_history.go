@@ -12,8 +12,8 @@ type SysAutoHistoryCreate struct {
 	StructName  string            // 结构体名称
 	BusinessDB  string            // 业务库
 	Description string            // Struct中文名称
-	Enter       map[string]string // 注入路径
-	Template    map[string]string // 模板信息
+	Injections  map[string]string // 注入路径
+	Templates   map[string]string // 模板信息
 	ApiIDs      []uint            // api表注册内容
 	MenuID      uint              // 菜单ID
 }
@@ -26,8 +26,8 @@ func (r *SysAutoHistoryCreate) Create() model.SysAutoCodeHistory {
 		StructName:  r.StructName,
 		BusinessDB:  r.BusinessDB,
 		Description: r.Description,
-		Enter:       r.Enter,
-		Template:    r.Template,
+		Injections:  r.Injections,
+		Templates:   r.Templates,
 		ApiIDs:      r.ApiIDs,
 		MenuID:      r.MenuID,
 	}

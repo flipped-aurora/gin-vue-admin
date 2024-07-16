@@ -187,9 +187,9 @@ func (r *AutoCode) Pretreatment() error {
 	return nil
 }
 
-func (r *AutoCode) History() model.SysAutoCodeHistory {
+func (r *AutoCode) History() SysAutoHistoryCreate {
 	bytes, _ := json.Marshal(r)
-	return model.SysAutoCodeHistory{
+	return SysAutoHistoryCreate{
 		Table:       r.TableName,
 		Package:     r.Package,
 		Request:     string(bytes),

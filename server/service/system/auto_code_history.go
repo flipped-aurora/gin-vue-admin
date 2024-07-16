@@ -82,7 +82,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			return errors.Wrap(err, "删除表失败!")
 		}
 	} // 删除表
-	for _, value := range entity.Template {
+	for _, value := range entity.Templates {
 		if !filepath.IsAbs(value) {
 			continue
 		}
@@ -97,7 +97,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, newPath)
 		}
 	} // 移动文件
-	for key, value := range entity.Enter {
+	for key, value := range entity.Injections {
 		err = utils.AutoClearCode(key, value)
 		if err != nil {
 			return errors.Wrapf(err, "[key:%s][value:%s]注入代码清除失败!", key, value)

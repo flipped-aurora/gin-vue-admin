@@ -13,16 +13,17 @@ import (
 // PackageModuleEnter 模块化入口
 // ModuleName := PackageName.AppName.GroupName.ServiceName
 type PackageModuleEnter struct {
-	Type        Type   // 类型
-	Path        string // 文件路径
-	ImportPath  string // 导包路径
-	StructName  string // 结构体名称
-	AppName     string // 应用名称
-	GroupName   string // 分组名称
-	ModuleName  string // 模块名称
-	PackageName string // 包名
-	PreviewPath string // 预览文件路径
-	ServiceName string // 服务名称
+	Type         Type   // 类型
+	Path         string // 文件路径
+	ImportPath   string // 导包路径
+	StructName   string // 结构体名称
+	AppName      string // 应用名称
+	GroupName    string // 分组名称
+	ModuleName   string // 模块名称
+	PackageName  string // 包名
+	PreviewPath  string // 预览文件路径
+	ServiceName  string // 服务名称
+	TemplatePath string // 模板路径
 }
 
 func (a *PackageModuleEnter) Rollback() error {

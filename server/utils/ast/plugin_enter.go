@@ -23,6 +23,7 @@ type PluginEnter struct {
 	PackageName     string // 包名
 	PreviewPath     string // 预览路径
 	ServiceName     string // 服务名称
+	TemplatePath    string // 模板路径
 }
 
 func (a *PluginEnter) Rollback() error {

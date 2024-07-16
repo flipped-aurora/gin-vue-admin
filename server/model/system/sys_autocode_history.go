@@ -19,6 +19,7 @@ type SysAutoCodeHistory struct {
 	ApiIDs          []uint             `json:"apiIDs" gorm:"serializer:json;column:api_ids;comment:api表注册内容"`
 	MenuID          uint               `json:"menuId" gorm:"column:menu_id;comment:菜单ID"`
 	AutoCodePackage SysAutoCodePackage `json:"autoCodePackage" gorm:"foreignKey:ID;references:PackageID"`
+	PackageID       uint               `json:"packageID" gorm:"column:package_id;comment:包ID"`
 }
 
 func (s *SysAutoCodeHistory) TableName() string {

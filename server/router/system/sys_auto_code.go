@@ -24,6 +24,9 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 		autoCodeRouter.POST("createPackage", autoCodePackageApi.Create) // 创建package包
 	}
 	{
+		autoCodeRouter.GET("getTemplates", autoCodePackageApi.Templates) // 创建package包
+	}
+	{
 		autoCodeRouter.POST("pubPlug", autoCodePluginApi.Packaged)      // 打包插件
 		autoCodeRouter.POST("installPlugin", autoCodePluginApi.Install) // 自动安装插件
 	}

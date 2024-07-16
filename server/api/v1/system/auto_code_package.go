@@ -88,7 +88,7 @@ func (a *AutoCodePackageApi) All(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
-// @Router    /autoCode/getTemplates [post]
+// @Router    /autoCode/getTemplates [get]
 func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 	data, err := autoCodePackageService.Templates(c.Request.Context())
 	if err != nil {
@@ -96,5 +96,5 @@ func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 		response.FailWithMessage("获取失败", c)
 		return
 	}
-	response.OkWithDetailed(gin.H{"templates": data}, "获取成功", c)
+	response.OkWithDetailed(data, "获取成功", c)
 }

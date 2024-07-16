@@ -121,6 +121,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/delSysHistory", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/getSysHistory", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPackage", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/getTemplates", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/getPackage", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/delPackage", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPlug", V2: "POST"},

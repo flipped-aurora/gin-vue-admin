@@ -231,7 +231,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item
-              label="模板"
+              label="选择模板"
               prop="package"
               class="w-full relative"
             >

@@ -7,6 +7,7 @@ import (
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
@@ -57,34 +58,42 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		return errors.Wrap(err, "创建失败!")
 	}
 	code := info.AutoCode()
-	_, enter, err := s.templates(ctx, create, code)
+	_, asts, err := s.templates(ctx, create, code)
 	if err != nil {
 		return err
 	}
-	for key, values := range enter { // key 为 模版绝对路径
-		for k2, value := range values { // k2 为需要生成enter的路径
-			if k2 == "enter" {
-				var files *template.Template
-				files, err = template.ParseFiles(key)
-				if err != nil {
-					return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", key)
-				}
-				err = os.MkdirAll(filepath.Dir(value), os.ModePerm)
-				if err != nil {
-					return errors.Wrap(err, "创建文件夹失败!")
-				}
-				var file *os.File
-				file, err = os.Create(value)
-				if err != nil {
-					return errors.Wrapf(err, "[filepath:%s]创建文件失败!", value)
-				}
-				err = files.Execute(file, code)
-				if err != nil {
-					return errors.Wrapf(err, "[filepath:%s]生成失败!", value)
-				}
-				fmt.Printf("[filepath:%s]enter生成成功!\n", value)
-			}
+	for key, value := range asts { // key 为 模版绝对路径
+		var path string
+		v1, o2 := value.(*ast.PackageEnter)
+		if o2 {
+			path = v1.Path
 		}
+		v2, o2 := value.(*ast.PluginEnter)
+		if o2 {
+			path = v2.Path
+		}
+		if path == "" {
+			continue
+		}
+		var files *template.Template
+		files, err = template.ParseFiles(key)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", key)
+		}
+		err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
+		if err != nil {
+			return errors.Wrap(err, "创建文件夹失败!")
+		}
+		var file *os.File
+		file, err = os.Create(path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]创建文件失败!", value)
+		}
+		err = files.Execute(file, code)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]生成失败!", value)
+		}
+		fmt.Printf("[filepath:%s]enter生成成功!\n", value)
 	}
 	return nil
 }
@@ -133,9 +142,9 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 	return templates, nil
 }
 
-func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode) (code map[string]string, enter map[string]map[string]string, err error) {
+func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCodePackage, info request.AutoCode) (code map[string]string, asts map[string]ast.Ast, err error) {
 	code = make(map[string]string)
-	enter = make(map[string]map[string]string)
+	asts = make(map[string]ast.Ast)
 	templateDir := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.Template)
 	templateDirs, err := os.ReadDir(templateDir)
 	if err != nil {
@@ -159,6 +168,13 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 					}
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
 					if name == "main.go" || name == "plugin.go" {
+						pluginInitialize := &ast.PluginInitialize{
+							Type:       ast.TypePluginInitialize,
+							Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize"),
+							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
+							ImportPath: fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+						}
+						asts[ast.TypePluginInitialize] = pluginInitialize
 						create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name)
 						if entity.PackageName == "preview" {
 							create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), name)
@@ -197,23 +213,105 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", entity.PackageName, info.HumpPackageName+".go")
 							}
 							if hasEnter != -1 {
-								child := make(map[string]string, 2)
 								isApi := strings.Index(secondDirs[j].Name(), "api")
 								isRouter := strings.Index(secondDirs[j].Name(), "router")
 								isService := strings.Index(secondDirs[j].Name(), "service")
 								if isApi != -1 {
-									child[ast.TypePackageApiEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", strings.TrimSuffix(threeDirs[k].Name(), ext))
-									child[ast.TypePackageApiModuleEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", entity.PackageName, info.HumpPackageName+".go")
+									path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", strings.TrimSuffix(threeDirs[k].Name(), ext))
+									importPath := fmt.Sprintf(`"%s/%s/%s/%s"`, global.GVA_CONFIG.AutoCode.Module, "api", "v1", entity.PackageName)
+									packageEnter := &ast.PackageEnter{
+										Type:              ast.TypePackageApiEnter,
+										Path:              path,
+										ImportPath:        importPath,
+										StructName:        utils.FirstUpper(entity.PackageName) + "ApiGroup",
+										PackageName:       entity.PackageName,
+										PackageStructName: "ApiGroup",
+									}
+									if entity.PackageName == "preview" {
+										packageEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), "v1", strings.TrimSuffix(threeDirs[k].Name(), ext))
+									}
+									asts[ast.TypePackageApiEnter] = packageEnter
+									path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", entity.PackageName, info.HumpPackageName+".go")
+									importPath = fmt.Sprintf(`"%s/service"`, global.GVA_CONFIG.AutoCode.Module)
+									packageModuleEnter := &ast.PackageModuleEnter{
+										Type:        ast.TypePackageApiModuleEnter,
+										Path:        path,
+										ImportPath:  importPath,
+										StructName:  info.StructName + "Api",
+										AppName:     "ServiceGroup",
+										GroupName:   utils.FirstUpper(entity.PackageName) + "ServiceGroup",
+										ModuleName:  info.Abbreviation,
+										PackageName: "service",
+										ServiceName: utils.FirstUpper(entity.PackageName) + "Service",
+									}
+									if entity.PackageName == "preview" {
+										packageModuleEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									}
+									asts[ast.TypePackageApiModuleEnter] = packageModuleEnter
 								}
 								if isRouter != -1 {
-									child[ast.TypePackageRouterEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
-									child[ast.TypePackageRouterModuleEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
+									path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									importPath := fmt.Sprintf(`"%s/%s/%s"`, global.GVA_CONFIG.AutoCode.Module, secondDirs[j].Name(), entity.PackageName)
+									packageEnter := &ast.PackageEnter{
+										Type:              ast.TypePackageRouterEnter,
+										Path:              path,
+										ImportPath:        importPath,
+										StructName:        utils.FirstUpper(entity.PackageName),
+										PackageName:       entity.PackageName,
+										PackageStructName: "RouterGroup",
+									}
+									if entity.PackageName == "preview" {
+										packageEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									}
+									asts[ast.TypePackageRouterEnter] = packageEnter
+									path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
+									importPath = fmt.Sprintf(`api "%s/api/v1"`, global.GVA_CONFIG.AutoCode.Module)
+									packageRouterModuleEnter := &ast.PackageModuleEnter{
+										Type:        ast.TypePackageRouterModuleEnter,
+										Path:        path,
+										ImportPath:  importPath,
+										StructName:  info.StructName + "Router",
+										AppName:     "ApiGroupApp",
+										GroupName:   utils.FirstUpper(entity.PackageName) + "ApiGroup",
+										ModuleName:  info.Abbreviation + "Api",
+										PackageName: "api",
+										PreviewPath: "api",
+										ServiceName: info.StructName + "Api",
+									}
+									asts[ast.TypePackageRouterModuleEnter] = packageRouterModuleEnter
+									packageInitializeRouter := &ast.PackageInitializeRouter{
+										Type:         ast.TypePackageInitializeRouter,
+										Path:         filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
+										ImportPath:   fmt.Sprintf(`"%s/router/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+										AppName:      "RouterGroupApp",
+										GroupName:    utils.FirstUpper(entity.PackageName),
+										PackageName:  entity.PackageName,
+										FunctionName: "Init" + info.StructName + "Router",
+									}
+									asts[ast.TypePackageInitializeRouter] = packageInitializeRouter
 								}
 								if isService != -1 {
-									child[ast.TypePackageServiceEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
-									child[ast.TypePackageServiceModuleEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
+									path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									importPath := fmt.Sprintf(`"%s/service/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName)
+									packageEnter := &ast.PackageEnter{
+										Type:              ast.TypePackageServiceEnter,
+										Path:              path,
+										ImportPath:        importPath,
+										StructName:        info.StructName + "ServiceGroup",
+										PackageName:       entity.PackageName,
+										PackageStructName: "ServiceGroup",
+									}
+									asts[ast.TypePackageServiceEnter] = packageEnter
+									path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
+									packageServiceModuleEnter := &ast.PackageModuleEnter{
+										Type:       ast.TypePackageServiceModuleEnter,
+										StructName: info.StructName + "Service",
+									}
+									if entity.PackageName == "preview" {
+										packageServiceModuleEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									}
+									asts[ast.TypePackageServiceModuleEnter] = packageServiceModuleEnter
 								}
-								enter[four] = child
 								continue
 							}
 							if entity.PackageName == "preview" {
@@ -223,20 +321,55 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							continue
 						}
 						if hasEnter != -1 {
-							child := make(map[string]string, 2)
 							isApi := strings.Index(secondDirs[j].Name(), "api")
 							isRouter := strings.Index(secondDirs[j].Name(), "router")
 							isService := strings.Index(secondDirs[j].Name(), "service")
-							if isApi != -1 {
-								child[ast.TypePluginApiEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
-							}
 							if isRouter != -1 {
-								child[ast.TypePluginRouterEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								pluginRouterEnter := &ast.PluginEnter{
+									Type:            ast.TypePluginApiEnter,
+									Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
+									ImportPath:      fmt.Sprintf(`"%s/plugin/%s/api"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+									StructName:      info.StructName,
+									StructCamelName: info.Abbreviation,
+									ModuleName:      "api" + info.StructName,
+									GroupName:       "Api",
+									PackageName:     "api",
+									ServiceName:     info.StructName,
+								}
+								if entity.PackageName == "preview" {
+									pluginRouterEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								}
+								asts[ast.TypePluginRouterEnter] = pluginRouterEnter
+							}
+							if isApi != -1 {
+								pluginApiEnter := &ast.PluginEnter{
+									Type:            ast.TypePluginApiEnter,
+									Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
+									ImportPath:      fmt.Sprintf(`"%s/plugin/%s/service"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+									StructName:      info.StructName,
+									StructCamelName: info.Abbreviation,
+									ModuleName:      "service" + info.StructName,
+									GroupName:       "Service",
+									PackageName:     "service",
+									ServiceName:     info.StructName,
+								}
+								if entity.PackageName == "preview" {
+									pluginApiEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								}
+								asts[ast.TypePluginApiEnter] = pluginApiEnter
 							}
 							if isService != -1 {
-								child[ast.TypePluginServiceEnter] = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								pluginServiceEnter := &ast.PluginEnter{
+									Type:            ast.TypePluginServiceEnter,
+									Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
+									StructName:      info.StructName,
+									StructCamelName: info.Abbreviation,
+								}
+								if entity.PackageName == "preview" {
+									pluginServiceEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								}
+								asts[ast.TypePluginServiceEnter] = pluginServiceEnter
 							}
-							enter[four] = child
 							create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), info.HumpPackageName+".go")
 							if entity.PackageName == "preview" {
 								create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), info.HumpPackageName+".go")
@@ -273,6 +406,51 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						hasGorm := strings.Index(threeDirs[k].Name(), "gorm")
 						if gen != -1 && api != -1 && menu != -1 && viper != -1 && plugin != -1 && config != -1 && router != -1 && hasGorm != -1 {
 							return nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
+						}
+						if gen != -1 {
+							pluginGen := &ast.PluginGen{
+								Type:        ast.TypePluginGen,
+								Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
+								ImportPath:  fmt.Sprintf(`"%s/plugin/%s/model"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+								StructName:  info.StructName,
+								PackageName: "model",
+								IsNew:       true,
+							}
+							if entity.PackageName == "preview" {
+								pluginGen.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+							}
+							asts[ast.TypePluginGen] = pluginGen
+						}
+						if hasGorm != -1 {
+							pluginInitializeGorm := &ast.PluginInitializeGorm{
+								Type:        ast.TypePluginInitializeGorm,
+								Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
+								ImportPath:  fmt.Sprintf(`"%s/plugin/%s/model"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+								StructName:  info.StructName,
+								PackageName: "model",
+								IsNew:       true,
+							}
+							if entity.PackageName == "preview" {
+								pluginInitializeGorm.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+							}
+							asts[ast.TypePluginInitializeGorm] = pluginInitializeGorm
+						}
+						if router != -1 {
+							pluginInitializeRouter := &ast.PluginInitializeRouter{
+								Type:                 ast.TypePluginInitializeGorm,
+								Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext)),
+								ImportPath:           fmt.Sprintf(`"%s/plugin/%s/router"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+								AppName:              "Router",
+								GroupName:            info.StructName,
+								PackageName:          "router",
+								FunctionName:         "Init",
+								LeftRouterGroupName:  "public",
+								RightRouterGroupName: "private",
+							}
+							if entity.PackageName == "preview" {
+								pluginInitializeRouter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+							}
+							asts[ast.TypePluginInitializeGorm] = pluginInitializeRouter
 						}
 						create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
 						if entity.PackageName == "preview" {
@@ -332,6 +510,17 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							return nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", four)
 						}
 						if entity.Template == "package" {
+							packageInitializeGorm := &ast.PackageInitializeGorm{
+								Type:        ast.TypePackageInitializeGorm,
+								Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
+								ImportPath:  fmt.Sprintf(`"%s/model/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+								StructName:  info.StructName,
+								PackageName: entity.PackageName,
+								IsNew:       true,
+							}
+							if entity.PackageName == "preview" {
+								packageInitializeGorm.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+							}
 							create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
 							if entity.PackageName == "preview" {
 								create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), info.HumpPackageName+".go")
@@ -418,5 +607,5 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 			return nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", second)
 		}
 	}
-	return code, enter, nil
+	return code, asts, nil
 }

@@ -16,6 +16,7 @@ type PackageEnter struct {
 	ImportPath        string // 导包路径
 	StructName        string // 结构体名称
 	PackageName       string // 包名
+	PreviewPath       string // 预览文件路径
 	PackageStructName string // 包结构体名称
 }
 
@@ -114,9 +115,21 @@ func (a *PackageEnter) Injection() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+	var create *os.File
+	if a.PreviewPath != "" {
+		err = os.MkdirAll(a.PreviewPath, os.ModePerm)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", a.PreviewPath)
+		}
+		create, err = os.Create(a.PreviewPath)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]创建文件失败!", a.PreviewPath)
+		}
+	} else {
+		create, err = os.Create(a.Path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+		}
 	}
 	defer func() {
 		_ = create.Close()

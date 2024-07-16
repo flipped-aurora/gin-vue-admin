@@ -7,6 +7,7 @@ import (
 	"go/parser"
 	"go/token"
 	"os"
+	"path/filepath"
 )
 
 var (
@@ -22,6 +23,7 @@ type PluginInitialize struct {
 	ImportPath  string // 导包路径
 	StructName  string // 结构体名称
 	PackageName string // 包名
+	PreviewPath string // 预览路径
 	Version     string // 版本 v1/v2
 }
 
@@ -34,6 +36,12 @@ func (a *PluginInitialize) Rollback() error {
 	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
 	if err != nil {
 		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PluginPath)
+	}
+	switch a.Version {
+	case "bizPluginV1":
+		a.Path = filepath.Join(a.Path, "plugin_biz_v1.go")
+	case "bizPluginV2":
+		a.Path = filepath.Join(a.Path, "plugin_biz_v2.go")
 	}
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
@@ -168,7 +176,12 @@ func (a *PluginInitialize) Injection() error {
 	if !isPlugin {
 		return errors.Errorf("[filepath:%s]此插件不符合插件规范命名无法自动注册,请手动注册插件!", a.PluginPath)
 	}
-	if a.Version == "" {
+	switch a.Version {
+	case "bizPluginV1":
+		a.Path = filepath.Join(a.Path, "plugin_biz_v1.go")
+	case "bizPluginV2":
+		a.Path = filepath.Join(a.Path, "plugin_biz_v2.go")
+	default:
 		return errors.Errorf("[filepath:%s]插件版本不存在,请手动注册插件初始化!", a.PluginPath)
 	}
 	fileSet = token.NewFileSet()
@@ -264,9 +277,17 @@ func (a *PluginInitialize) Injection() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+	var create *os.File
+	if a.PreviewPath != "" {
+		create, err = os.Create(a.PreviewPath)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PreviewPath)
+		}
+	} else {
+		create, err = os.Create(a.Path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+		}
 	}
 	defer func() {
 		_ = create.Close()

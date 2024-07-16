@@ -20,6 +20,7 @@ type PluginEnter struct {
 	ModuleName      string // 模块名称
 	GroupName       string // 分组名称
 	PackageName     string // 包名
+	PreviewPath     string // 预览路径
 	ServiceName     string // 服务名称
 }
 
@@ -168,9 +169,17 @@ func (a *PluginEnter) Injection() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+	var create *os.File
+	if a.PreviewPath != "" {
+		create, err = os.Create(a.PreviewPath)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PreviewPath)
+		}
+	} else {
+		create, err = os.Create(a.Path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+		}
 	}
 	defer func() {
 		_ = create.Close()

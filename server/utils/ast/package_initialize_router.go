@@ -20,6 +20,7 @@ type PackageInitializeRouter struct {
 	GroupName       string // 分组名称
 	ModuleName      string // 模块名称
 	PackageName     string // 包名
+	PreviewPath     string // 预览路径
 	FunctionName    string // 函数名
 	RouterGroupName string // 路由分组名称
 }
@@ -221,9 +222,17 @@ func (a *PackageInitializeRouter) Injection() error {
 			blockStmt.List = append(blockStmt.List, stmt)
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+	var create *os.File
+	if a.PreviewPath != "" {
+		create, err = os.Create(a.PreviewPath)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PreviewPath)
+		}
+	} else {
+		create, err = os.Create(a.Path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+		}
 	}
 	defer func() {
 		_ = create.Close()

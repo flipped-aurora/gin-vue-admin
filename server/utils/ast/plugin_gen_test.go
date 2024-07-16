@@ -23,7 +23,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 		{
 			name: "测试 ShopUser 结构体注入",
 			fields: fields{
-				Type:        TypePluginGenModel,
+				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				PackageName: "model",
@@ -34,7 +34,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 		{
 			name: "测试 ShopUser 结构体注入",
 			fields: fields{
-				Type:        TypePluginGenModel,
+				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				PackageName: "model",
@@ -45,7 +45,7 @@ func TestPluginGenModel_Injection(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &PluginGenModel{
+			a := &PluginGen{
 				Type:        tt.fields.Type,
 				Path:        tt.fields.Path,
 				ImportPath:  tt.fields.ImportPath,
@@ -77,7 +77,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 		{
 			name: "测试 ShopUser 回滚",
 			fields: fields{
-				Type:        TypePluginGenModel,
+				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				PackageName: "model",
@@ -88,7 +88,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 		{
 			name: "测试 ShopUser 回滚",
 			fields: fields{
-				Type:        TypePluginGenModel,
+				Type:        TypePluginGen,
 				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
 				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
 				PackageName: "model",
@@ -99,7 +99,7 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			a := &PluginGenModel{
+			a := &PluginGen{
 				Type:        tt.fields.Type,
 				Path:        tt.fields.Path,
 				ImportPath:  tt.fields.ImportPath,

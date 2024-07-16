@@ -18,6 +18,7 @@ type PluginInitializeRouter struct {
 	AppName              string // 应用名称
 	GroupName            string // 分组名称
 	PackageName          string // 包名
+	PreviewPath          string // 预览路径
 	FunctionName         string // 函数名
 	LeftRouterGroupName  string // 左路由分组名称
 	RightRouterGroupName string // 右路由分组名称
@@ -190,9 +191,17 @@ func (a *PluginInitializeRouter) Injection() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+	var create *os.File
+	if a.PreviewPath != "" {
+		create, err = os.Create(a.PreviewPath)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PreviewPath)
+		}
+	} else {
+		create, err = os.Create(a.Path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+		}
 	}
 	defer func() {
 		_ = create.Close()

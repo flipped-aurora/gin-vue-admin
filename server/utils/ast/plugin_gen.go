@@ -9,16 +9,17 @@ import (
 	"os"
 )
 
-type PluginGenModel struct {
+type PluginGen struct {
 	Type        Type   // 类型
 	Path        string // 文件路径
 	ImportPath  string // 导包路径
-	PackageName string // 包名
 	StructName  string // 结构体名称
+	PackageName string // 包名
+	PreviewPath string // 预览路径
 	IsNew       bool   // 是否使用new关键字
 }
 
-func (a *PluginGenModel) Rollback() error {
+func (a *PluginGen) Rollback() error {
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
 	if err != nil {
@@ -102,7 +103,7 @@ func (a *PluginGenModel) Rollback() error {
 	return nil
 }
 
-func (a *PluginGenModel) Injection() error {
+func (a *PluginGen) Injection() error {
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
 	if err != nil {
@@ -194,9 +195,17 @@ func (a *PluginGenModel) Injection() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+	var create *os.File
+	if a.PreviewPath != "" {
+		create, err = os.Create(a.PreviewPath)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.PreviewPath)
+		}
+	} else {
+		create, err = os.Create(a.Path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+		}
 	}
 	defer func() {
 		_ = create.Close()

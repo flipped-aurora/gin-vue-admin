@@ -10,6 +10,7 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"os"
+	"path/filepath"
 	"text/template"
 )
 
@@ -73,7 +74,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		if err != nil {
 			return errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
 		}
-		err = os.MkdirAll(create, os.ModePerm)
+		err = os.MkdirAll(filepath.Dir(create), os.ModePerm)
 		if err != nil {
 			return errors.Wrapf(err, "[filpath:%s]创建文件夹失败!", create)
 		}
@@ -108,5 +109,43 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 
 // Preview 预览自动化代码
 func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (map[string]string, error) {
+	var entity model.SysAutoCodePackage
+	err := global.GVA_DB.WithContext(ctx).Where("package_name = ?", info.Package).First(&entity).Error
+	if err != nil {
+		return nil, errors.Wrap(err, "查询包失败!")
+	}
+	templates, asts, err := AutoCodePackage.templates(ctx, entity, info)
+	if err != nil {
+		return nil, err
+	}
+	for key, create := range templates {
+		var files *template.Template
+		files, err = template.ParseFiles(key)
+		if err != nil {
+			return nil, errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
+		}
+		err = os.MkdirAll(filepath.Dir(create), os.ModePerm)
+		if err != nil {
+			return nil, errors.Wrapf(err, "[filpath:%s]创建文件夹失败!", create)
+		}
+		var file *os.File
+		file, err = os.Create(create)
+		if err != nil {
+			return nil, errors.Wrapf(err, "[filpath:%s]创建文件失败!", create)
+		}
+		err = files.Execute(file, info)
+		if err != nil {
+			return nil, errors.Wrapf(err, "[filpath:%s]生成文件失败!", create)
+		}
+	} // 生成文件
+	if info.AutoMigrate {
+		for key, value := range asts {
+			err = value.Injection()
+			if err != nil {
+				return nil, err
+			}
+			fmt.Println(key, "注入成功!")
+		}
+	} // 注入代码
 	return nil, nil
 }

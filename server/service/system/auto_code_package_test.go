@@ -23,10 +23,8 @@ func Test_autoCodePackage_Create(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				info: &request.SysAutoCodePackageCreate{
-					Desc:        "描述",
-					Label:       "展示名",
 					Template:    "package",
-					PackageName: "system2",
+					PackageName: "blender",
 				},
 			},
 		},
@@ -40,6 +38,7 @@ func Test_autoCodePackage_Create(t *testing.T) {
 		})
 	}
 }
+
 func Test_autoCodePackage_templates(t *testing.T) {
 	type args struct {
 		ctx    context.Context

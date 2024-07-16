@@ -14,16 +14,18 @@ import (
 // ModuleName := PackageName.AppName.GroupName
 // ModuleName.FunctionName(RouterGroupName)
 type PackageInitializeRouter struct {
-	Type            Type   // 类型
-	Path            string // 文件路径
-	ImportPath      string // 导包路径
-	AppName         string // 应用名称
-	GroupName       string // 分组名称
-	ModuleName      string // 模块名称
-	PackageName     string // 包名
-	PreviewPath     string // 预览路径
-	FunctionName    string // 函数名
-	RouterGroupName string // 路由分组名称
+	Type                 Type   // 类型
+	Path                 string // 文件路径
+	ImportPath           string // 导包路径
+	AppName              string // 应用名称
+	GroupName            string // 分组名称
+	ModuleName           string // 模块名称
+	PackageName          string // 包名
+	PreviewPath          string // 预览路径
+	FunctionName         string // 函数名
+	RouterGroupName      string // 路由分组名称
+	LeftRouterGroupName  string // 左路由分组名称
+	RightRouterGroupName string // 右路由分组名称
 }
 
 func (a *PackageInitializeRouter) Rollback() error {
@@ -194,7 +196,8 @@ func (a *PackageInitializeRouter) Injection() error {
 						Sel: &ast.Ident{Name: a.FunctionName},
 					},
 					Args: []ast.Expr{
-						&ast.Ident{Name: a.RouterGroupName},
+						&ast.Ident{Name: a.LeftRouterGroupName},
+						&ast.Ident{Name: a.RightRouterGroupName},
 					},
 				},
 			}

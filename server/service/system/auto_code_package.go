@@ -295,13 +295,16 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									}
 									asts[ast.TypePackageRouterModuleEnter] = packageRouterModuleEnter
 									packageInitializeRouter := &ast.PackageInitializeRouter{
-										Type:         ast.TypePackageInitializeRouter,
-										Path:         filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
-										ImportPath:   fmt.Sprintf(`"%s/router/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
-										AppName:      "RouterGroupApp",
-										GroupName:    utils.FirstUpper(entity.PackageName),
-										PackageName:  entity.PackageName,
-										FunctionName: "Init" + info.StructName + "Router",
+										Type:                 ast.TypePackageInitializeRouter,
+										Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
+										ImportPath:           fmt.Sprintf(`"%s/router"`, global.GVA_CONFIG.AutoCode.Module),
+										AppName:              "RouterGroupApp",
+										GroupName:            utils.FirstUpper(entity.PackageName),
+										ModuleName:           entity.PackageName + "Router",
+										PackageName:          "router",
+										FunctionName:         "Init" + info.StructName + "Router",
+										LeftRouterGroupName:  "privateGroup",
+										RightRouterGroupName: "publicGroup",
 									}
 									if entity.PackageName == "preview" {
 										packageInitializeRouter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, "initialize", "router_biz.go")

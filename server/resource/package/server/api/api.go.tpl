@@ -15,9 +15,6 @@ import (
 
 type {{.StructName}}Api struct {}
 
-var {{.Abbreviation}}Service = service.ServiceGroupApp.{{.PackageT}}ServiceGroup.{{.StructName}}Service
-
-
 // Create{{.StructName}} 创建{{.Description}}
 // @Tags {{.StructName}}
 // @Summary 创建{{.Description}}
@@ -37,7 +34,6 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Create{{.StructName}}(c *gin.Con
 	{{- if .AutoCreateResource }}
     {{.Abbreviation}}.CreatedBy = utils.GetUserID(c)
 	{{- end }}
-
 	if err := {{.Abbreviation}}Service.Create{{.StructName}}(&{{.Abbreviation}}); err != nil {
         global.GVA_LOG.Error("创建失败!", zap.Error(err))
 		response.FailWithMessage("创建失败", c)

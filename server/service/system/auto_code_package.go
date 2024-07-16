@@ -248,11 +248,11 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										Path:         path,
 										ImportPath:   importPath,
 										StructName:   info.StructName + "Api",
-										AppName:      "ServiceGroup",
+										AppName:      "ServiceGroupApp",
 										GroupName:    utils.FirstUpper(entity.PackageName) + "ServiceGroup",
-										ModuleName:   info.Abbreviation,
+										ModuleName:   info.Abbreviation + "Service",
 										PackageName:  "service",
-										ServiceName:  utils.FirstUpper(entity.PackageName) + "Service",
+										ServiceName:  info.StructName + "Service",
 										TemplatePath: four,
 									}
 									if entity.PackageName == "preview" {
@@ -286,7 +286,6 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										GroupName:    utils.FirstUpper(entity.PackageName) + "ApiGroup",
 										ModuleName:   info.Abbreviation + "Api",
 										PackageName:  "api",
-										PreviewPath:  "api",
 										ServiceName:  info.StructName + "Api",
 										TemplatePath: four,
 									}
@@ -314,15 +313,18 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								if isService != -1 {
 									path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
 									importPath := fmt.Sprintf(`"%s/service/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName)
-									packageEnter := &ast.PackageEnter{
+									packageServiceEnter := &ast.PackageEnter{
 										Type:              ast.TypePackageServiceEnter,
 										Path:              path,
 										ImportPath:        importPath,
-										StructName:        info.StructName + "ServiceGroup",
+										StructName:        utils.FirstUpper(info.Package) + "ServiceGroup",
 										PackageName:       entity.PackageName,
 										PackageStructName: "ServiceGroup",
 									}
-									asts[ast.TypePackageServiceEnter] = packageEnter
+									if entity.PackageName == "preview" {
+										packageServiceEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									}
+									asts[ast.TypePackageServiceEnter] = packageServiceEnter
 									path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, "enter.go")
 									packageServiceModuleEnter := &ast.PackageModuleEnter{
 										Type:         ast.TypePackageServiceModuleEnter,
@@ -547,6 +549,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							if entity.PackageName == "preview" {
 								packageInitializeGorm.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
 							}
+							asts[ast.TypePackageInitializeGorm] = packageInitializeGorm
 							create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
 							if entity.PackageName == "preview" {
 								create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), info.HumpPackageName+".go")

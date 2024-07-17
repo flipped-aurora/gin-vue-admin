@@ -1,9 +1,13 @@
 package initialize
 
 import (
-	"gorm.io/gorm"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 )
 
-func bizModel(db *gorm.DB) error {
-	return db.AutoMigrate()
+func bizModel() error {
+	err := global.GVA_DB.AutoMigrate()
+	if err != nil {
+		return err
+	}
+	return nil
 }

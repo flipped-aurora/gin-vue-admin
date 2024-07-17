@@ -9,7 +9,7 @@ import (
 )
 
 func Viper() {
-	err := global.GVA_VP.UnmarshalKey("Shop", plugin.Config)
+	err := global.GVA_VP.UnmarshalKey("{{ .Package }}", plugin.Config)
 	if err != nil {
 		err = errors.Wrap(err, "初始化配置文件失败!")
 		zap.L().Error(fmt.Sprintf("%+v", err))

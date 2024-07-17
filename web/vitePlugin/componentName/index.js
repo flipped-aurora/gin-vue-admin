@@ -62,7 +62,9 @@ const vueFilePathPlugin = (outputFilePath) => {
         },
         buildEnd() {
             generatePathNameMap();
-            watchDirectoryChanges();
+            if (process.env.NODE_ENV === 'development') {
+                watchDirectoryChanges();
+            }
         }
     };
 }

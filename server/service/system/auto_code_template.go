@@ -9,8 +9,10 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"io/fs"
 	"os"
 	"path/filepath"
+	"strings"
 	"text/template"
 )
 
@@ -114,10 +116,15 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	if err != nil {
 		return nil, errors.Wrap(err, "查询包失败!")
 	}
+	entity.PackageName = "preview"
 	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return nil, err
 	}
+	remove := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName)
+	defer func() {
+		_ = os.RemoveAll(remove)
+	}()
 	for key, create := range templates {
 		var files *template.Template
 		files, err = template.ParseFiles(key)
@@ -147,5 +154,26 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 			fmt.Println(key, "注入成功!")
 		}
 	} // 注入代码
-	return nil, nil
+	codes := make(map[string]string)
+	err = filepath.Walk(remove, func(path string, info fs.FileInfo, err error) error {
+		if info.IsDir() {
+			return nil
+		}
+		builder := new(strings.Builder)
+		builder.WriteString("```")
+		builder.WriteString("\n\n")
+		bytes, err := os.ReadFile(path)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]读取文件失败!", path)
+		}
+		builder.Write(bytes)
+		builder.WriteString("\n\n```")
+		path, _ = filepath.Rel(remove, path)
+		codes[path] = builder.String()
+		return nil
+	})
+	if err != nil {
+		return nil, errors.Wrap(err, "预览失败!")
+	}
+	return codes, nil
 }

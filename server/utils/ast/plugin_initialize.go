@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/pkg/errors"
 	"go/ast"
 	"go/format"
@@ -111,6 +112,9 @@ func (a *PluginInitialize) Rollback() error {
 }
 
 func (a *PluginInitialize) Injection() error {
+	if a.PreviewPath != "" {
+		a.PluginPath = a.PreviewPath
+	}
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, a.PluginPath, nil, parser.ParseComments)
 	if err != nil {
@@ -274,17 +278,16 @@ func (a *PluginInitialize) Injection() error {
 		}
 	}
 	var create *os.File
-	path := a.Path
 	if a.PreviewPath != "" {
-		path = a.PreviewPath
+		a.Path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "preview", "server", "gva", "initialize", "plugin.go")
 	}
-	err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	err = os.MkdirAll(filepath.Dir(a.Path), os.ModePerm)
 	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", path)
+		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", a.Path)
 	}
-	create, err = os.Create(path)
+	create, err = os.Create(a.Path)
 	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", path)
+		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", a.Path)
 	}
 	defer func() {
 		_ = create.Close()

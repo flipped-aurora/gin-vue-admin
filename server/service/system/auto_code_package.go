@@ -169,6 +169,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						}
 						if entity.PackageName == "preview" {
 							pluginInitialize.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), name)
+							code[three] = pluginInitialize.PreviewPath
 						}
 						asts[ast.TypePluginInitialize] = pluginInitialize
 						creates[three] = pluginInitialize.PluginPath
@@ -221,6 +222,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									}
 									if entity.PackageName == "preview" {
 										packageApiEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), "v1", strings.TrimSuffix(threeDirs[k].Name(), ext))
+										code[four] = packageApiEnter.PreviewPath
 									}
 									asts[ast.TypePackageApiEnter] = packageApiEnter
 									path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", entity.PackageName, "enter.go")
@@ -237,7 +239,8 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										ServiceName: info.StructName + "Service",
 									}
 									if entity.PackageName == "preview" {
-										packageApiModuleEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+										packageApiModuleEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), "gva", secondDirs[j].Name(), "v1", entity.PackageName, strings.TrimSuffix(threeDirs[k].Name(), ext))
+										code[four] = packageApiModuleEnter.PreviewPath
 									}
 									asts[ast.TypePackageApiModuleEnter] = packageApiModuleEnter
 									creates[four] = packageApiModuleEnter.Path
@@ -272,6 +275,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									}
 									if entity.PackageName == "preview" {
 										packageRouterModuleEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+										code[four] = packageRouterModuleEnter.PreviewPath
 									}
 									asts[ast.TypePackageRouterModuleEnter] = packageRouterModuleEnter
 									creates[four] = packageRouterModuleEnter.Path
@@ -304,7 +308,8 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										PackageStructName: "ServiceGroup",
 									}
 									if entity.PackageName == "preview" {
-										packageServiceEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+										packageServiceEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), "gva", secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+										code[four] = packageServiceEnter.PreviewPath
 									}
 									asts[ast.TypePackageServiceEnter] = packageServiceEnter
 									path = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, "enter.go")
@@ -315,6 +320,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									}
 									if entity.PackageName == "preview" {
 										packageServiceModuleEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), "enter.go")
+										code[four] = packageServiceEnter.PreviewPath
 									}
 									asts[ast.TypePackageServiceModuleEnter] = packageServiceModuleEnter
 									creates[four] = packageServiceModuleEnter.Path
@@ -345,6 +351,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								}
 								if entity.PackageName == "preview" {
 									pluginRouterEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									code[four] = pluginRouterEnter.PreviewPath
 								}
 								asts[ast.TypePluginRouterEnter] = pluginRouterEnter
 								creates[four] = pluginRouterEnter.Path
@@ -363,6 +370,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								}
 								if entity.PackageName == "preview" {
 									pluginApiEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									code[four] = pluginApiEnter.PreviewPath
 								}
 								asts[ast.TypePluginApiEnter] = pluginApiEnter
 								creates[four] = pluginApiEnter.Path
@@ -376,6 +384,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								}
 								if entity.PackageName == "preview" {
 									pluginServiceEnter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+									code[four] = pluginServiceEnter.PreviewPath
 								}
 								asts[ast.TypePluginServiceEnter] = pluginServiceEnter
 								creates[four] = pluginServiceEnter.Path
@@ -432,6 +441,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							}
 							if entity.PackageName == "preview" {
 								pluginGen.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								code[four] = pluginGen.PreviewPath
 							}
 							asts[ast.TypePluginGen] = pluginGen
 							creates[four] = pluginGen.Path
@@ -447,6 +457,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							}
 							if entity.PackageName == "preview" {
 								pluginInitializeGorm.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								code[four] = pluginInitializeGorm.PreviewPath
 							}
 							asts[ast.TypePluginInitializeGorm] = pluginInitializeGorm
 							creates[four] = pluginInitializeGorm.Path
@@ -465,6 +476,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							}
 							if entity.PackageName == "preview" {
 								pluginInitializeRouter.PreviewPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName, templateDirs[i].Name(), secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
+								code[four] = pluginInitializeRouter.PreviewPath
 							}
 							asts[ast.TypePluginInitializeRouter] = pluginInitializeRouter
 							creates[four] = pluginInitializeRouter.Path

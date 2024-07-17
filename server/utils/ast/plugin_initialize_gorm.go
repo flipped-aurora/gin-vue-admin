@@ -151,6 +151,9 @@ func (a *PluginInitializeGorm) Rollback() error {
 }
 
 func (a *PluginInitializeGorm) Injection() error {
+	if a.PreviewPath != "" {
+		a.Path = a.PreviewPath
+	}
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
 	if err != nil {
@@ -251,17 +254,13 @@ func (a *PluginInitializeGorm) Injection() error {
 		}
 	}
 	var create *os.File
-	path := a.Path
-	if a.PreviewPath != "" {
-		path = a.PreviewPath
-	}
-	err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
+	err = os.MkdirAll(filepath.Dir(a.Path), os.ModePerm)
 	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", path)
+		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", a.Path)
 	}
-	create, err = os.Create(path)
+	create, err = os.Create(a.Path)
 	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", path)
+		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", a.Path)
 	}
 	defer func() {
 		_ = create.Close()

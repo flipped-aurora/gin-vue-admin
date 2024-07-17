@@ -1,4 +1,4 @@
-package {{.Package}}
+package model
 
 import (
 	{{- if .GvaModel }}
@@ -12,7 +12,7 @@ import (
 	{{- end }}
 )
 
-// {{.Description}} 结构体  {{.StructName}}
+// {{.StructName}} {{.Description}} 结构体
 type {{.StructName}} struct {
 {{- if .GvaModel }}
     global.GVA_MODEL

@@ -1,15 +1,17 @@
-package {{.Package}}
+package service
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
-    {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{.Package}}/model"
+    "github.com/flipped-aurora/gin-vue-admin/server/plugin/{{.Package}}/model/request"
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}
 )
 
-type {{.StructName}}Service struct {}
+var {{.StructName}} = new({{.Abbreviation}})
+
+type {{.Abbreviation}} struct {}
 
 {{- $db := "" }}
 {{- if eq .BusinessDB "" }}
@@ -20,71 +22,71 @@ type {{.StructName}}Service struct {}
 
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
+func (s *{{.Abbreviation}}) Create{{.StructName}}({{.Abbreviation}} *model.{{.StructName}}) (err error) {
 	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
+func (s *{{.Abbreviation}}) Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
-	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).Update("deleted_by", userID).Error; err != nil {
+	    if err := tx.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).Update("deleted_by", userID).Error; err != nil {
               return err
         }
-        if err = tx.Delete(&{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error; err != nil {
+        if err = tx.Delete(&model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error; err != nil {
               return err
         }
         return nil
 	})
     {{- else }}
-	err = {{$db}}.Delete(&{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error
+	err = {{$db}}.Delete(&model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} = ?",{{.PrimaryField.FieldJson}}).Error
 	{{- end }}
 	return err
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
+func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
-	    if err := tx.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
+	    if err := tx.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Update("deleted_by", deleted_by).Error; err != nil {
             return err
         }
-        if err := tx.Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Delete(&{{.Package}}.{{.StructName}}{}).Error; err != nil {
+        if err := tx.Where("{{.PrimaryField.ColumnName}} in ?", {{.PrimaryField.FieldJson}}s).Delete(&model.{{.StructName}}{}).Error; err != nil {
             return err
         }
         return nil
     })
     {{- else}}
-	err = {{$db}}.Delete(&[]{{.Package}}.{{.StructName}}{},"{{.PrimaryField.ColumnName}} in ?",{{.PrimaryField.FieldJson}}s).Error
+	err = {{$db}}.Delete(&[]model.{{.StructName}}{},"{{.PrimaryField.ColumnName}} in ?",{{.PrimaryField.FieldJson}}s).Error
     {{- end}}
 	return err
 }
 
 // Update{{.StructName}} 更新{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
-	err = {{$db}}.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
+func (s *{{.Abbreviation}}) Update{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
+	err = {{$db}}.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
+func (s *{{.Abbreviation}}) Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} model.{{.StructName}}, err error) {
 	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
 
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
+func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (list []model.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
     // 创建db
-	db := {{$db}}.Model(&{{.Package}}.{{.StructName}}{})
-    var {{.Abbreviation}}s []{{.Package}}.{{.StructName}}
+	db := {{$db}}.Model(&model.{{.StructName}}{})
+    var {{.Abbreviation}}s []model.{{.StructName}}
     // 如果有条件搜索 下方会自动创建搜索语句
 {{- if .GvaModel }}
     if info.StartCreatedAt !=nil && info.EndCreatedAt !=nil {
@@ -132,13 +134,12 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	if limit != 0 {
        db = db.Limit(limit).Offset(offset)
     }
-
 	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }
 
 {{- if .HasDataSource }}
-func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
+func (s *{{.Abbreviation}})Get{{.StructName}}DataSource() (res map[string][]map[string]any, err error) {
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)

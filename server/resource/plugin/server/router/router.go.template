@@ -1,4 +1,4 @@
-package {{.Package}}
+package router
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/api/v1"
@@ -6,27 +6,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type {{.StructName}}Router struct {}
+var {{.StructName}} = new({{.Abbreviation}})
 
-// Init{{.StructName}}Router 初始化 {{.Description}} 路由信息
-func (s *{{.StructName}}Router) Init{{.StructName}}Router(Router *gin.RouterGroup,PublicRouter *gin.RouterGroup) {
-	{{.Abbreviation}}Router := Router.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
-	{{.Abbreviation}}RouterWithoutRecord := Router.Group("{{.Abbreviation}}")
-	{{.Abbreviation}}RouterWithoutAuth := PublicRouter.Group("{{.Abbreviation}}")
+type {{.Abbreviation}} struct {}
+
+// Init 初始化 {{.Description}} 路由信息
+func (r *{{.Abbreviation}}) Init(public *gin.RouterGroup, private *gin.RouterGroup) {
 	{
-		{{.Abbreviation}}Router.POST("create{{.StructName}}", {{.Abbreviation}}Api.Create{{.StructName}})   // 新建{{.Description}}
-		{{.Abbreviation}}Router.DELETE("delete{{.StructName}}", {{.Abbreviation}}Api.Delete{{.StructName}}) // 删除{{.Description}}
-		{{.Abbreviation}}Router.DELETE("delete{{.StructName}}ByIds", {{.Abbreviation}}Api.Delete{{.StructName}}ByIds) // 批量删除{{.Description}}
-		{{.Abbreviation}}Router.PUT("update{{.StructName}}", {{.Abbreviation}}Api.Update{{.StructName}})    // 更新{{.Description}}
+	    group := private.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
+		group.POST("create{{.StructName}}", api{{.StructName}}.Create{{.StructName}})   // 新建{{.Description}}
+		group.DELETE("delete{{.StructName}}", api{{.StructName}}.Delete{{.StructName}}) // 删除{{.Description}}
+		group.DELETE("delete{{.StructName}}ByIds", api{{.StructName}}.Delete{{.StructName}}ByIds) // 批量删除{{.Description}}
+		group.PUT("update{{.StructName}}", api{{.StructName}}.Update{{.StructName}})    // 更新{{.Description}}
 	}
 	{
-		{{.Abbreviation}}RouterWithoutRecord.GET("find{{.StructName}}", {{.Abbreviation}}Api.Find{{.StructName}})        // 根据ID获取{{.Description}}
-		{{.Abbreviation}}RouterWithoutRecord.GET("get{{.StructName}}List", {{.Abbreviation}}Api.Get{{.StructName}}List)  // 获取{{.Description}}列表
+	    group := private.Group("{{.Abbreviation}}")
+		group.GET("find{{.StructName}}", api{{.StructName}}.Find{{.StructName}})        // 根据ID获取{{.Description}}
+		group.GET("get{{.StructName}}List", api{{.StructName}}.Get{{.StructName}}List)  // 获取{{.Description}}列表
 	}
-	{
 	{{- if .HasDataSource}}
-	    {{.Abbreviation}}RouterWithoutAuth.GET("get{{.StructName}}DataSource", {{.Abbreviation}}Api.Get{{.StructName}}DataSource)  // 获取{{.Description}}数据源
-	{{- end}}
-	    {{.Abbreviation}}RouterWithoutAuth.GET("get{{.StructName}}Public", {{.Abbreviation}}Api.Get{{.StructName}}Public)  // 获取{{.Description}}列表
+	{
+	    group := public.Group("{{.Abbreviation}}")
+	    group.GET("get{{.StructName}}DataSource", api{{.StructName}}.Get{{.StructName}}DataSource)  // 获取{{.Description}}数据源
+	    group.GET("get{{.StructName}}Public", api{{.StructName}}.Get{{.StructName}}Public)  // 获取{{.Description}}列表
 	}
+	{{- end}}
 }

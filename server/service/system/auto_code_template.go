@@ -64,7 +64,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return errors.Wrap(err, "查询包失败!")
 	}
-	templates, asts, err := AutoCodePackage.templates(ctx, entity, info)
+	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	if err != nil {
 		return nil, errors.Wrap(err, "查询包失败!")
 	}
-	templates, asts, err := AutoCodePackage.templates(ctx, entity, info)
+	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return nil, err
 	}

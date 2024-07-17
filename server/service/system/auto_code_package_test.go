@@ -19,14 +19,26 @@ func Test_autoCodePackage_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试1",
+			name: "测试 package",
 			args: args{
 				ctx: context.Background(),
 				info: &request.SysAutoCodePackageCreate{
 					Template:    "package",
-					PackageName: "blender",
+					PackageName: "gva",
 				},
 			},
+			wantErr: false,
+		},
+		{
+			name: "测试 plugin",
+			args: args{
+				ctx: context.Background(),
+				info: &request.SysAutoCodePackageCreate{
+					Template:    "plugin",
+					PackageName: "gva",
+				},
+			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -73,7 +85,7 @@ func Test_autoCodePackage_templates(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			s := &autoCodePackage{}
-			gotCode, gotEnter, err := s.templates(tt.args.ctx, tt.args.entity, tt.args.info)
+			gotCode, gotEnter, gotCreates, err := s.templates(tt.args.ctx, tt.args.entity, tt.args.info)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("templates() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -84,6 +96,7 @@ func Test_autoCodePackage_templates(t *testing.T) {
 				t.Logf(value)
 				t.Logf("\n")
 			}
+			t.Log(gotCreates)
 			if !reflect.DeepEqual(gotEnter, tt.wantEnter) {
 				t.Errorf("templates() gotEnter = %v, want %v", gotEnter, tt.wantEnter)
 			}

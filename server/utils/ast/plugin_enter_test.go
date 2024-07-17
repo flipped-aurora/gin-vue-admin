@@ -24,10 +24,40 @@ func TestPluginEnter_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 商城插件UserService 注入",
+			name: "测试 Gva插件UserApi 注入",
+			fields: fields{
+				Type:            TypePluginApiEnter,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "api", "enter.go"),
+				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/service"`,
+				StructName:      "User",
+				StructCamelName: "user",
+				ModuleName:      "serviceUser",
+				GroupName:       "Service",
+				PackageName:     "service",
+				ServiceName:     "User",
+			},
+			wantErr: false,
+		},
+		{
+			name: "测试 Gva插件UserRouter 注入",
+			fields: fields{
+				Type:            TypePluginRouterEnter,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "router", "enter.go"),
+				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/api"`,
+				StructName:      "User",
+				StructCamelName: "user",
+				ModuleName:      "userApi",
+				GroupName:       "Api",
+				PackageName:     "api",
+				ServiceName:     "User",
+			},
+			wantErr: false,
+		},
+		{
+			name: "测试 Gva插件UserService 注入",
 			fields: fields{
 				Type:            TypePluginServiceEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "service", "enter.go"),
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
 				ImportPath:      "",
 				StructName:      "User",
 				StructCamelName: "user",
@@ -39,32 +69,17 @@ func TestPluginEnter_Injection(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试 商城插件UserApi 注入",
+			name: "测试 gva的User 注入",
 			fields: fields{
-				Type:            TypePluginApiEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "api", "enter.go"),
-				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/service"`,
+				Type:            TypePluginServiceEnter,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
+				ImportPath:      "",
 				StructName:      "User",
 				StructCamelName: "user",
-				ModuleName:      "serviceUser",
-				GroupName:       "Service",
-				PackageName:     "service",
-				ServiceName:     "User",
-			},
-			wantErr: false,
-		},
-		{
-			name: "测试 商城插件UserRouter 注入",
-			fields: fields{
-				Type:            TypePluginRouterEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "router", "enter.go"),
-				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/api"`,
-				StructName:      "User",
-				StructCamelName: "user",
-				ModuleName:      "userApi",
-				GroupName:       "Api",
-				PackageName:     "api",
-				ServiceName:     "User",
+				ModuleName:      "",
+				GroupName:       "",
+				PackageName:     "",
+				ServiceName:     "",
 			},
 			wantErr: false,
 		},
@@ -107,11 +122,11 @@ func TestPluginEnter_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 商城插件UserRouter 回滚",
+			name: "测试 Gva插件UserRouter 回滚",
 			fields: fields{
 				Type:            TypePluginRouterEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "router", "enter.go"),
-				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/api"`,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "router", "enter.go"),
+				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/api"`,
 				StructName:      "User",
 				StructCamelName: "user",
 				ModuleName:      "userApi",
@@ -122,11 +137,11 @@ func TestPluginEnter_Rollback(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试 商城插件UserApi 回滚",
+			name: "测试 Gva插件UserApi 回滚",
 			fields: fields{
 				Type:            TypePluginApiEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "api", "enter.go"),
-				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/service"`,
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "api", "enter.go"),
+				ImportPath:      `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/service"`,
 				StructName:      "User",
 				StructCamelName: "user",
 				ModuleName:      "serviceUser",
@@ -137,10 +152,10 @@ func TestPluginEnter_Rollback(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试 商城插件UserService 回滚",
+			name: "测试 Gva插件UserService 回滚",
 			fields: fields{
 				Type:            TypePluginServiceEnter,
-				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "service", "enter.go"),
+				Path:            filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "service", "enter.go"),
 				ImportPath:      "",
 				StructName:      "User",
 				StructCamelName: "user",

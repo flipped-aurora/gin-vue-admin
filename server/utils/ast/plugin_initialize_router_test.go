@@ -24,11 +24,11 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Shop插件User 注入",
+			name: "测试 Gva插件User 注入",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "router.go"),
-				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
+				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "User",
 				PackageName:          "router",
@@ -42,8 +42,8 @@ func TestPluginInitializeRouter_Injection(t *testing.T) {
 			name: "测试 中文 注入",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "router.go"),
-				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
+				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "U中文",
 				PackageName:          "router",
@@ -92,11 +92,11 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Shop插件User 回滚",
+			name: "测试 Gva插件User 回滚",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "router.go"),
-				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
+				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "User",
 				PackageName:          "router",
@@ -110,8 +110,8 @@ func TestPluginInitializeRouter_Rollback(t *testing.T) {
 			name: "测试 中文 注入",
 			fields: fields{
 				Type:                 TypePluginInitializeRouter,
-				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "router.go"),
-				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/router"`,
+				Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "router.go"),
+				ImportPath:           `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/router"`,
 				AppName:              "Router",
 				GroupName:            "U中文",
 				PackageName:          "router",

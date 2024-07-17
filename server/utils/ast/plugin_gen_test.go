@@ -21,22 +21,22 @@ func TestPluginGenModel_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 ShopUser 结构体注入",
+			name: "测试 GvaUser 结构体注入",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
-				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
+				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       false,
 			},
 		},
 		{
-			name: "测试 ShopUser 结构体注入",
+			name: "测试 GvaUser 结构体注入",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
-				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
+				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       true,
@@ -75,22 +75,22 @@ func TestPluginGenModel_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 ShopUser 回滚",
+			name: "测试 GvaUser 回滚",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
-				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
+				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       false,
 			},
 		},
 		{
-			name: "测试 ShopUser 回滚",
+			name: "测试 GvaUser 回滚",
 			fields: fields{
 				Type:        TypePluginGen,
-				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "gen", "main.go"),
-				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/model"`,
+				Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "gen", "main.go"),
+				ImportPath:  `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva/model"`,
 				PackageName: "model",
 				StructName:  "User",
 				IsNew:       true,

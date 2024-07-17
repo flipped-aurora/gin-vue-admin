@@ -23,16 +23,16 @@ func TestPluginInitializeMenu_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 商城用户菜单 注入",
+			name: "测试 Gva用户菜单 注入",
 			fields: fields{
 				Type:          TypePluginInitializeMenu,
-				Path:          filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "menu.go"),
+				Path:          filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "menu.go"),
 				MenuSort:      "9999",
-				MenuPath:      `"shopUser"`,
-				MenuName:      `"商城用户管理"`,
+				MenuPath:      `"gvaUser"`,
+				MenuName:      `"Gva用户管理"`,
 				MenuMetaIcon:  `"aim"`,
-				MenuMetaTitle: `"商城用户"`,
-				MenuComponent: `"plugin/shop/view/user.vue"`,
+				MenuMetaTitle: `"Gva用户"`,
+				MenuComponent: `"plugin/gva/view/user.vue"`,
 			},
 			wantErr: false,
 		},
@@ -73,16 +73,16 @@ func TestPluginInitializeMenu_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 商城用户菜单 注入",
+			name: "测试 Gva用户菜单 注入",
 			fields: fields{
 				Type:          TypePluginInitializeMenu,
-				Path:          filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "initialize", "menu.go"),
+				Path:          filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "initialize", "menu.go"),
 				MenuSort:      "9999",
-				MenuPath:      `"shopUser"`,
-				MenuName:      `"商城用户管理"`,
+				MenuPath:      `"gvaUser"`,
+				MenuName:      `"Gva用户管理"`,
 				MenuMetaIcon:  `"aim"`,
-				MenuMetaTitle: `"商城用户"`,
-				MenuComponent: `"plugin/shop/view/user.vue"`,
+				MenuMetaTitle: `"Gva用户"`,
+				MenuComponent: `"plugin/gva/view/user.vue"`,
 			},
 			wantErr: false,
 		},

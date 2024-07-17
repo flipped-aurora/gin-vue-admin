@@ -19,12 +19,12 @@ func TestPluginInitialize_Injection(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Shop插件 注册注入",
+			name: "测试 Gva插件 注册注入",
 			fields: fields{
 				Type:       TypePluginInitialize,
 				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "plugin.go"),
-				ImportPath: `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop"`,
+				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				ImportPath: `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva"`,
 			},
 			wantErr: false,
 		},
@@ -61,12 +61,12 @@ func TestPluginInitialize_Rollback(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 Shop插件 回滚",
+			name: "测试 Gva插件 回滚",
 			fields: fields{
 				Type:       TypePluginInitialize,
 				Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "shop", "plugin.go"),
-				ImportPath: `"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop"`,
+				PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go"),
+				ImportPath: `"github.com/flipped-aurora/gin-vue-admin/server/plugin/gva"`,
 			},
 			wantErr: false,
 		},
@@ -79,7 +79,7 @@ func TestPluginInitialize_Rollback(t *testing.T) {
 				PluginPath:  tt.fields.PluginPath,
 				ImportPath:  tt.fields.ImportPath,
 				StructName:  "Plugin",
-				PackageName: "shop",
+				PackageName: "gva",
 				Version:     "bizPluginV2",
 			}
 			if err := a.Rollback(); (err != nil) != tt.wantErr {

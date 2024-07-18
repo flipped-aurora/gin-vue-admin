@@ -2,14 +2,12 @@ package system
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
-	"io/fs"
 	"os"
 	"path/filepath"
 	"strings"
@@ -66,42 +64,20 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return errors.Wrap(err, "查询包失败!")
 	}
-	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
+	generate, err := s.generate(ctx, info, entity)
 	if err != nil {
 		return err
 	}
-	for key, create := range templates {
-		var files *template.Template
-		files, err = template.ParseFiles(key)
+	for key, builder := range generate {
+		err = os.MkdirAll(filepath.Dir(key), os.ModePerm)
 		if err != nil {
-			return errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
+			return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", key)
 		}
-		err = os.MkdirAll(filepath.Dir(create), os.ModePerm)
+		err = os.WriteFile(key, []byte(builder.String()), 0666)
 		if err != nil {
-			return errors.Wrapf(err, "[filpath:%s]创建文件夹失败!", create)
+			return errors.Wrapf(err, "[filepath:%s]写入文件失败!", key)
 		}
-		var file *os.File
-		file, err = os.Create(create)
-		if err != nil {
-			return errors.Wrapf(err, "[filpath:%s]创建文件失败!", create)
-		}
-		err = files.Execute(file, info)
-		if err != nil {
-			return errors.Wrapf(err, "[filpath:%s]生成文件失败!", create)
-		}
-	} // 生成文件
-	if info.AutoMigrate {
-		for key, value := range asts {
-			err = value.Injection()
-			if err != nil {
-				return err
-			}
-			fmt.Println(key, "注入成功!")
-			injection, _ := json.Marshal(value)
-			history.Injections[key] = string(injection)
-		}
-	} // 注入代码
-	history.Templates = templates
+	}
 	err = AutocodeHistory.Create(ctx, history)
 	if err != nil {
 		return err
@@ -116,64 +92,59 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	if err != nil {
 		return nil, errors.Wrap(err, "查询包失败!")
 	}
-	entity.PackageName = "preview"
+	codes := make(map[string]strings.Builder)
+	preview := make(map[string]string)
+	codes, err = s.generate(ctx, info, entity)
+	if err != nil {
+		return nil, err
+	}
+	for key, writer := range codes {
+		if len(key) > len(global.GVA_CONFIG.AutoCode.Root) {
+			key, _ = filepath.Rel(global.GVA_CONFIG.AutoCode.Root, key)
+		}
+		var builder strings.Builder
+		builder.WriteString("```\n\n")
+		builder.WriteString(writer.String())
+		builder.WriteString("\n\n```")
+		preview[key] = builder.String()
+	}
+	return preview, nil
+}
+
+func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, error) {
 	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return nil, err
 	}
-	remove := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", entity.PackageName)
-	defer func() {
-		_ = os.RemoveAll(remove)
-	}()
+	code := make(map[string]strings.Builder)
 	for key, create := range templates {
 		var files *template.Template
 		files, err = template.ParseFiles(key)
 		if err != nil {
 			return nil, errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
 		}
-		err = os.MkdirAll(filepath.Dir(create), os.ModePerm)
-		if err != nil {
-			return nil, errors.Wrapf(err, "[filpath:%s]创建文件夹失败!", create)
-		}
-		var file *os.File
-		file, err = os.Create(create)
-		if err != nil {
-			return nil, errors.Wrapf(err, "[filpath:%s]创建文件失败!", create)
-		}
-		err = files.Execute(file, info)
+		var builder strings.Builder
+		err = files.Execute(&builder, info)
 		if err != nil {
 			return nil, errors.Wrapf(err, "[filpath:%s]生成文件失败!", create)
 		}
+		code[create] = builder
 	} // 生成文件
 	if info.AutoMigrate {
 		for key, value := range asts {
-			err = value.Injection()
+			var builder strings.Builder
+			parse, err := value.Parse("", &builder)
 			if err != nil {
 				return nil, err
 			}
+			value.Injection(parse)
+			err = value.Format("", &builder, parse)
+			if err != nil {
+				return nil, err
+			}
+			code[key] = builder
 			fmt.Println(key, "注入成功!")
 		}
 	} // 注入代码
-	codes := make(map[string]string)
-	err = filepath.Walk(remove, func(path string, info fs.FileInfo, err error) error {
-		if info.IsDir() {
-			return nil
-		}
-		builder := new(strings.Builder)
-		builder.WriteString("```")
-		builder.WriteString("\n\n")
-		bytes, err := os.ReadFile(path)
-		if err != nil {
-			return errors.Wrapf(err, "[filepath:%s]读取文件失败!", path)
-		}
-		builder.Write(bytes)
-		builder.WriteString("\n\n```")
-		path, _ = filepath.Rel(remove, path)
-		codes[path] = builder.String()
-		return nil
-	})
-	if err != nil {
-		return nil, errors.Wrap(err, "预览失败!")
-	}
-	return codes, nil
+	return code, nil
 }

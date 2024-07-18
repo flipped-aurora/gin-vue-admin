@@ -82,7 +82,13 @@ func TestPackageModuleEnter_Rollback(t *testing.T) {
 				PackageName: tt.fields.PackageName,
 				ServiceName: tt.fields.ServiceName,
 			}
-			if err := a.Rollback(); (err != nil) != tt.wantErr {
+			file, err := a.Parse(a.Path, nil)
+			if err != nil {
+				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			a.Rollback(file)
+			err = a.Format(a.Path, nil, file)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Rollback() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -165,7 +171,13 @@ func TestPackageModuleEnter_Injection(t *testing.T) {
 				PackageName: tt.fields.PackageName,
 				ServiceName: tt.fields.ServiceName,
 			}
-			if err := a.Injection(); (err != nil) != tt.wantErr {
+			file, err := a.Parse(a.Path, nil)
+			if err != nil {
+				t.Errorf("Parse() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			a.Injection(file)
+			err = a.Format(a.Path, nil, file)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Injection() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

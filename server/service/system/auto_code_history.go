@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -85,16 +86,29 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			return errors.Wrap(err, "删除表失败!")
 		}
 	} // 删除表
-	for _, value := range history.Templates {
-		if !filepath.IsAbs(value) {
-			continue
-		}
-		newPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10), strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
-		err = utils.FileMove(value, newPath)
-		if err != nil {
-			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, newPath)
-		}
-	} // 移动文件
+	templates := make(map[string]string, len(history.Templates))
+	for key, template := range history.Templates {
+		{
+			server := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+			keys := strings.Split(key, "/")
+			key = filepath.Join(keys...)
+			key = strings.TrimPrefix(key, server)
+		} // key
+		{
+			web := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot())
+			server := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server)
+			slices := strings.Split(template, "/")
+			template = filepath.Join(slices...)
+			ext := path.Ext(template)
+			switch ext {
+			case ".js", ".vue":
+				template = filepath.Join(web, template)
+			case ".go":
+				template = filepath.Join(server, template)
+			}
+		} // value
+		templates[key] = template
+	}
 	for key, value := range history.Injections {
 		var injection ast.Ast
 		switch key {
@@ -147,8 +161,17 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			}
 			fmt.Printf("[filepath:%s]回滚注入代码成功!\n", key)
 		}
-
 	} // 清除注入代码
+	for _, value := range history.Templates {
+		if !filepath.IsAbs(value) {
+			continue
+		}
+		newPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10), strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
+		err = utils.FileMove(value, newPath)
+		if err != nil {
+			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, newPath)
+		}
+	} // 移动文件
 	err = global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Update("flag", 1).Error
 	if err != nil {
 		return errors.Wrap(err, "更新失败!")

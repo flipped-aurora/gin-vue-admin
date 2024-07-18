@@ -274,7 +274,6 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										LeftRouterGroupName:  "privateGroup",
 										RightRouterGroupName: "publicGroup",
 									}
-									code[four] = packageInitializeRouter.Path
 									asts[packageInitializeRouter.Path+"=>"+packageInitializeRouter.Type.String()] = packageInitializeRouter
 								}
 								if isService != -1 {

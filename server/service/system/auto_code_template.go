@@ -81,6 +81,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		}
 	}
 	history.Templates = templates
+	history.Injections = make(map[string]string, len(injections))
 	for key, value := range injections {
 		bytes, _ := json.Marshal(value)
 		history.Injections[key] = string(bytes)

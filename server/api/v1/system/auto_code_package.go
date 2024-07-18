@@ -53,7 +53,7 @@ func (a *AutoCodePackageApi) Create(c *gin.Context) {
 // @Router    /autoCode/delPackage [post]
 func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	var info common.GetById
-	_ = c.ShouldBindJSON(&a)
+	_ = c.ShouldBindJSON(&info)
 	err := autoCodePackageService.Delete(c.Request.Context(), info)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))

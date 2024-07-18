@@ -1,6 +1,8 @@
 package ast
 
 import (
+	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"go/ast"
 	"go/token"
 	"io"
@@ -104,6 +106,10 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 				}
 			}
 			if !has {
+				middlePath := fmt.Sprintf(`"%s/middleware"`, global.GVA_CONFIG.AutoCode.Module)
+				NewImport(middlePath).Injection(file)
+				globalPath := fmt.Sprintf(`"%s/global"`, global.GVA_CONFIG.AutoCode.Module)
+				NewImport(globalPath).Injection(file)
 				if v1.Body == nil {
 					v1.Body = new(ast.BlockStmt)
 				}
@@ -117,7 +123,18 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 						Rhs: []ast.Expr{
 							&ast.CallExpr{
 								Fun: &ast.SelectorExpr{
-									X:   &ast.Ident{Name: "engine"},
+									X: &ast.CallExpr{
+										Fun: &ast.SelectorExpr{
+											X:   &ast.Ident{Name: "engine"},
+											Sel: &ast.Ident{Name: "Group"},
+										},
+										Args: []ast.Expr{
+											&ast.BasicLit{
+												Kind:  token.STRING,
+												Value: `global.GVA_CONFIG.System.RouterPrefix`,
+											},
+										},
+									},
 									Sel: &ast.Ident{Name: "Group"},
 								},
 								Args: []ast.Expr{
@@ -137,7 +154,18 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 						Rhs: []ast.Expr{
 							&ast.CallExpr{
 								Fun: &ast.SelectorExpr{
-									X:   &ast.Ident{Name: "engine"},
+									X: &ast.CallExpr{
+										Fun: &ast.SelectorExpr{
+											X:   &ast.Ident{Name: "engine"},
+											Sel: &ast.Ident{Name: "Group"},
+										},
+										Args: []ast.Expr{
+											&ast.BasicLit{
+												Kind:  token.STRING,
+												Value: `global.GVA_CONFIG.System.RouterPrefix`,
+											},
+										},
+									},
 									Sel: &ast.Ident{Name: "Group"},
 								},
 								Args: []ast.Expr{
@@ -149,8 +177,42 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 							},
 						},
 					}
+					useStmt := &ast.ExprStmt{
+						X: &ast.CallExpr{
+							Fun: &ast.SelectorExpr{
+								X:   &ast.Ident{Name: a.RightRouterGroupName},
+								Sel: &ast.Ident{Name: "Use"},
+							},
+							Args: []ast.Expr{
+								&ast.CallExpr{
+									Fun: &ast.SelectorExpr{
+										X:   &ast.Ident{Name: "middleware"},
+										Sel: &ast.Ident{Name: "JWTAuth"},
+									},
+								},
+							},
+						},
+					}
+
+					useCasbinStmt := &ast.ExprStmt{
+						X: &ast.CallExpr{
+							Fun: &ast.SelectorExpr{
+								X:   useStmt.X,
+								Sel: &ast.Ident{Name: "Use"},
+							},
+							Args: []ast.Expr{
+								&ast.CallExpr{
+									Fun: &ast.SelectorExpr{
+										X:   &ast.Ident{Name: "middleware"},
+										Sel: &ast.Ident{Name: "CasbinHandler"},
+									},
+								},
+							},
+						},
+					}
 					v1.Body.List = append(v1.Body.List, public)
 					v1.Body.List = append(v1.Body.List, private)
+					v1.Body.List = append(v1.Body.List, useCasbinStmt)
 				}
 				body := &ast.ExprStmt{
 					X: &ast.CallExpr{

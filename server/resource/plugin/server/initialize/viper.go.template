@@ -3,7 +3,7 @@ package initialize
 import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/shop/plugin"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{ .Package }}/plugin"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
 )

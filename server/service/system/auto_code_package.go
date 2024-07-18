@@ -173,7 +173,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						if entity.PackageName == "preview" {
 							code[three] = pluginInitialize.Path
 						}
-						asts[ast.TypePluginInitialize] = pluginInitialize
+						asts[ast.TypePluginInitialize+"=>"+pluginInitialize.Type.String()] = pluginInitialize
 						creates[three] = pluginInitialize.PluginPath
 						continue
 					}
@@ -221,7 +221,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										PackageStructName: "ApiGroup",
 									}
 									code[four] = packageApiEnter.Path
-									asts[packageApiEnter.Path] = packageApiEnter
+									asts[packageApiEnter.Path+"=>"+packageApiEnter.Type.String()] = packageApiEnter
 									packageApiModuleEnter := &ast.PackageModuleEnter{
 										Type:        ast.TypePackageApiModuleEnter,
 										Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", entity.PackageName, "enter.go"),
@@ -233,7 +233,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										PackageName: "service",
 										ServiceName: info.StructName + "Service",
 									}
-									asts[packageApiModuleEnter.Path] = packageApiModuleEnter
+									asts[packageApiModuleEnter.Path+"=>"+packageApiModuleEnter.Type.String()] = packageApiModuleEnter
 									code[four] = packageApiModuleEnter.Path
 									creates[four] = packageApiModuleEnter.Path
 								}
@@ -247,7 +247,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										PackageStructName: "RouterGroup",
 									}
 									code[four] = packageRouterEnter.Path
-									asts[packageRouterEnter.Path] = packageRouterEnter
+									asts[packageRouterEnter.Path+"=>"+packageRouterEnter.Type.String()] = packageRouterEnter
 									packageRouterModuleEnter := &ast.PackageModuleEnter{
 										Type:        ast.TypePackageRouterModuleEnter,
 										Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, "enter.go"),
@@ -259,9 +259,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										PackageName: "api",
 										ServiceName: info.StructName + "Api",
 									}
-									asts[packageRouterModuleEnter.Path] = packageRouterModuleEnter
 									code[four] = packageRouterModuleEnter.Path
 									creates[four] = packageRouterModuleEnter.Path
+									asts[packageRouterModuleEnter.Path+"=>"+packageRouterModuleEnter.Type.String()] = packageRouterModuleEnter
 									packageInitializeRouter := &ast.PackageInitializeRouter{
 										Type:                 ast.TypePackageInitializeRouter,
 										Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
@@ -275,7 +275,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										RightRouterGroupName: "publicGroup",
 									}
 									code[four] = packageInitializeRouter.Path
-									asts[packageInitializeRouter.Path] = packageInitializeRouter
+									asts[packageInitializeRouter.Path+"=>"+packageInitializeRouter.Type.String()] = packageInitializeRouter
 								}
 								if isService != -1 {
 									path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), strings.TrimSuffix(threeDirs[k].Name(), ext))
@@ -289,14 +289,14 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										PackageStructName: "ServiceGroup",
 									}
 									code[four] = packageServiceEnter.Path
-									asts[packageServiceEnter.Path] = packageServiceEnter
+									asts[packageServiceEnter.Path+"=>"+packageServiceEnter.Type.String()] = packageServiceEnter
 									packageServiceModuleEnter := &ast.PackageModuleEnter{
 										Type:       ast.TypePackageServiceModuleEnter,
 										Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, "enter.go"),
 										StructName: info.StructName + "Service",
 									}
 									code[four] = packageServiceModuleEnter.Path
-									asts[packageServiceModuleEnter.Path] = packageServiceModuleEnter
+									asts[packageServiceModuleEnter.Path+"=>"+packageServiceModuleEnter.Type.String()] = packageServiceModuleEnter
 									creates[four] = packageServiceModuleEnter.Path
 								}
 								continue
@@ -324,7 +324,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									ServiceName:     info.StructName,
 								}
 								code[four] = pluginRouterEnter.Path
-								asts[pluginRouterEnter.Path] = pluginRouterEnter
+								asts[pluginRouterEnter.Path+"=>"+pluginRouterEnter.Type.String()] = pluginRouterEnter
 								creates[four] = pluginRouterEnter.Path
 							}
 							if isApi != -1 {
@@ -340,7 +340,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									ServiceName:     info.StructName,
 								}
 								code[four] = pluginApiEnter.Path
-								asts[pluginApiEnter.Path] = pluginApiEnter
+								asts[pluginApiEnter.Path+"=>"+pluginApiEnter.Type.String()] = pluginApiEnter
 								creates[four] = pluginApiEnter.Path
 							}
 							if isService != -1 {
@@ -351,7 +351,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 									StructCamelName: info.Abbreviation,
 								}
 								code[four] = pluginServiceEnter.Path
-								asts[pluginServiceEnter.Path] = pluginServiceEnter
+								asts[pluginServiceEnter.Path+"=>"+pluginServiceEnter.Type.String()] = pluginServiceEnter
 								creates[four] = pluginServiceEnter.Path
 							}
 							continue
@@ -405,7 +405,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								IsNew:       true,
 							}
 							code[four] = pluginGen.Path
-							asts[pluginGen.Path] = pluginGen
+							asts[pluginGen.Path+"=>"+pluginGen.Type.String()] = pluginGen
 							creates[four] = pluginGen.Path
 						}
 						if hasGorm != -1 {
@@ -418,7 +418,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								IsNew:       true,
 							}
 							code[four] = pluginInitializeGorm.Path
-							asts[pluginInitializeGorm.Path] = pluginInitializeGorm
+							asts[pluginInitializeGorm.Path+"=>"+pluginInitializeGorm.Type.String()] = pluginInitializeGorm
 							creates[four] = pluginInitializeGorm.Path
 						}
 						if router != -1 {
@@ -434,7 +434,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								RightRouterGroupName: "private",
 							}
 							code[four] = pluginInitializeRouter.Path
-							asts[pluginInitializeRouter.Path] = pluginInitializeRouter
+							asts[pluginInitializeRouter.Path+"=>"+pluginInitializeRouter.Type.String()] = pluginInitializeRouter
 							creates[four] = pluginInitializeRouter.Path
 						}
 					}
@@ -492,7 +492,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								IsNew:       true,
 							}
 							code[four] = packageInitializeGorm.Path
-							asts[packageInitializeGorm.Path] = packageInitializeGorm
+							asts[packageInitializeGorm.Path+"=>"+packageInitializeGorm.Type.String()] = packageInitializeGorm
 							create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), entity.PackageName, info.HumpPackageName+".go")
 						}
 						code[four] = create

@@ -2,6 +2,10 @@ package ast
 
 type Type string
 
+func (r Type) String() string {
+	return string(r)
+}
+
 func (r Type) Group() string {
 	switch r {
 	case TypePackageApiEnter:

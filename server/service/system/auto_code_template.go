@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
@@ -80,7 +81,10 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		}
 	}
 	history.Templates = templates
-	history.Injections = injections
+	for key, value := range injections {
+		bytes, _ := json.Marshal(value)
+		history.Injections[key] = string(bytes)
+	}
 	err = AutocodeHistory.Create(ctx, history)
 	if err != nil {
 		return err
@@ -133,20 +137,25 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		}
 		code[create] = builder
 	} // 生成文件
+	injections := make(map[string]ast.Ast, len(asts))
 	if info.AutoMigrate {
 		for key, value := range asts {
-			var builder strings.Builder
-			parse, _ := value.Parse("", &builder)
-			if parse != nil {
-				value.Injection(parse)
-				err = value.Format("", &builder, parse)
-				if err != nil {
-					return nil, nil, nil, err
+			keys := strings.Split(key, "=>")
+			if len(keys) == 2 {
+				var builder strings.Builder
+				parse, _ := value.Parse("", &builder)
+				if parse != nil {
+					value.Injection(parse)
+					err = value.Format("", &builder, parse)
+					if err != nil {
+						return nil, nil, nil, err
+					}
+					code[keys[0]] = builder
+					injections[keys[1]] = value
+					fmt.Println(keys[0], "注入成功!")
 				}
-				code[key] = builder
-				fmt.Println(key, "注入成功!")
 			}
 		}
 	} // 注入代码
-	return code, templates, asts, nil
+	return code, templates, injections, nil
 }

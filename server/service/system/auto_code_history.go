@@ -2,9 +2,10 @@ package system
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
-	"go/ast"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -60,32 +61,31 @@ func (s *autoCodeHistory) Repeat(businessDB, structName, Package string) bool {
 // Author [SliverHorn](https://github.com/SliverHorn)
 // Author [songzhibin97](https://github.com/songzhibin97)
 func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHistoryRollBack) error {
-	var entity model.SysAutoCodeHistory
-	err := global.GVA_DB.Where("id = ?", info.ID).First(&entity).Error
+	var history model.SysAutoCodeHistory
+	err := global.GVA_DB.Where("id = ?", info.ID).First(&history).Error
 	if err != nil {
 		return err
 	}
-	entity.AfterFirst()
 	if info.DeleteApi {
-		ids := info.ApiIds(entity)
+		ids := info.ApiIds(history)
 		err = ApiServiceApp.DeleteApisByIds(ids)
 		if err != nil {
 			global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 		}
 	} // 清除API表
 	if info.DeleteMenu {
-		err = BaseMenuServiceApp.DeleteBaseMenu(int(entity.MenuID))
+		err = BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID))
 		if err != nil {
 			return errors.Wrap(err, "删除菜单失败!")
 		}
 	} // 清除菜单表
 	if info.DeleteTable {
-		err = s.DropTable(entity.BusinessDB, entity.Table)
+		err = s.DropTable(history.BusinessDB, history.Table)
 		if err != nil {
 			return errors.Wrap(err, "删除表失败!")
 		}
 	} // 删除表
-	for _, value := range entity.Templates {
+	for _, value := range history.Templates {
 		if !filepath.IsAbs(value) {
 			continue
 		}
@@ -95,18 +95,59 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, newPath)
 		}
 	} // 移动文件
-	for key, value := range entity.Injections {
-		var file *ast.File
-		file, err = value.Parse("", nil)
-		if err != nil {
-			return err
+	for key, value := range history.Injections {
+		var injection ast.Ast
+		switch key {
+		case ast.TypePackageApiEnter, ast.TypePackageRouterEnter, ast.TypePackageServiceEnter:
+			var entity ast.PackageEnter
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePackageApiModuleEnter, ast.TypePackageRouterModuleEnter, ast.TypePackageServiceModuleEnter:
+			var entity ast.PackageModuleEnter
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePackageInitializeGorm:
+			var entity ast.PackageInitializeGorm
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePackageInitializeRouter:
+			var entity ast.PackageInitializeRouter
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePluginGen:
+			var entity ast.PluginGen
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePluginApiEnter, ast.TypePluginRouterEnter, ast.TypePluginServiceEnter:
+			var entity ast.PluginEnter
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePluginInitialize:
+			var entity ast.PluginInitialize
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePluginInitializeGorm:
+			var entity ast.PluginInitializeGorm
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
+		case ast.TypePluginInitializeRouter:
+			var entity ast.PluginInitializeRouter
+			_ = json.Unmarshal([]byte(value), &entity)
+			injection = &entity
 		}
-		value.Rollback(file)
-		err = value.Format("", nil, file)
-		if err != nil {
-			return err
+		if injection == nil {
+			continue
 		}
-		fmt.Printf("[filepath:%s]回滚注入代码成功!\n", key)
+		file, _ := injection.Parse("", nil)
+		if file != nil {
+			injection.Rollback(file)
+			err = injection.Format("", nil, file)
+			if err != nil {
+				return err
+			}
+			fmt.Printf("[filepath:%s]回滚注入代码成功!\n", key)
+		}
+
 	} // 清除注入代码
 	err = global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Update("flag", 1).Error
 	if err != nil {

@@ -2,7 +2,9 @@ package system
 
 import (
 	"context"
+	"fmt"
 	"github.com/pkg/errors"
+	"go/ast"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -63,6 +65,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 	if err != nil {
 		return err
 	}
+	entity.AfterFirst()
 	if info.DeleteApi {
 		ids := info.ApiIds(entity)
 		err = ApiServiceApp.DeleteApisByIds(ids)
@@ -86,22 +89,24 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		if !filepath.IsAbs(value) {
 			continue
 		}
-		newPath := filepath.Join(
-			global.GVA_CONFIG.AutoCode.Root,
-			"rm_file",
-			strconv.FormatInt(int64(time.Now().Nanosecond()), 10),
-			strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root),
-		)
+		newPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10), strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
 		err = utils.FileMove(value, newPath)
 		if err != nil {
 			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, newPath)
 		}
 	} // 移动文件
 	for key, value := range entity.Injections {
-		err = utils.AutoClearCode(key, value)
+		var file *ast.File
+		file, err = value.Parse("", nil)
 		if err != nil {
-			return errors.Wrapf(err, "[key:%s][value:%s]注入代码清除失败!", key, value)
+			return err
 		}
+		value.Rollback(file)
+		err = value.Format("", nil, file)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("[filepath:%s]回滚注入代码成功!\n", key)
 	} // 清除注入代码
 	err = global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Update("flag", 1).Error
 	if err != nil {

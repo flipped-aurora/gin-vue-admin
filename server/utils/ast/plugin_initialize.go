@@ -14,16 +14,23 @@ var (
 // TODO 重构 分离V1/V2版本
 type PluginInitialize struct {
 	Base
-	Type        Type   // 类型
-	Path        string // 文件路径
-	PluginPath  string // 插件路径
-	ImportPath  string // 导包路径
-	StructName  string // 结构体名称
-	PackageName string // 包名
+	Type         Type   // 类型
+	Path         string // 文件路径
+	PluginPath   string // 插件路径
+	RelativePath string // 相对路径
+	ImportPath   string // 导包路径
+	StructName   string // 结构体名称
+	PackageName  string // 包名
 }
 
 func (a *PluginInitialize) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
 	if filename == "" {
+		if a.RelativePath == "" {
+			filename = a.Path
+			a.RelativePath = a.Base.RelativePath(a.Path)
+			return a.Base.Parse(filename, writer)
+		}
+		a.Path = a.Base.AbsolutePath(a.RelativePath)
 		filename = a.Path
 	}
 	return a.Base.Parse(filename, writer)

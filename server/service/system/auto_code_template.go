@@ -6,6 +6,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"os"
@@ -64,7 +65,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return errors.Wrap(err, "查询包失败!")
 	}
-	generate, err := s.generate(ctx, info, entity)
+	generate, templates, injections, err := s.generate(ctx, info, entity)
 	if err != nil {
 		return err
 	}
@@ -78,6 +79,8 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			return errors.Wrapf(err, "[filepath:%s]写入文件失败!", key)
 		}
 	}
+	history.Templates = templates
+	history.Injections = injections
 	err = AutocodeHistory.Create(ctx, history)
 	if err != nil {
 		return err
@@ -94,7 +97,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	}
 	codes := make(map[string]strings.Builder)
 	preview := make(map[string]string)
-	codes, err = s.generate(ctx, info, entity)
+	codes, _, _, err = s.generate(ctx, info, entity)
 	if err != nil {
 		return nil, err
 	}
@@ -111,40 +114,39 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	return preview, nil
 }
 
-func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, error) {
+func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, map[string]string, map[string]ast.Ast, error) {
 	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
-		return nil, err
+		return nil, nil, nil, err
 	}
 	code := make(map[string]strings.Builder)
 	for key, create := range templates {
 		var files *template.Template
 		files, err = template.ParseFiles(key)
 		if err != nil {
-			return nil, errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
+			return nil, nil, nil, errors.Wrapf(err, "[filpath:%s]读取模版文件失败!", key)
 		}
 		var builder strings.Builder
 		err = files.Execute(&builder, info)
 		if err != nil {
-			return nil, errors.Wrapf(err, "[filpath:%s]生成文件失败!", create)
+			return nil, nil, nil, errors.Wrapf(err, "[filpath:%s]生成文件失败!", create)
 		}
 		code[create] = builder
 	} // 生成文件
 	if info.AutoMigrate {
 		for key, value := range asts {
 			var builder strings.Builder
-			parse, err := value.Parse("", &builder)
-			if err != nil {
-				return nil, err
+			parse, _ := value.Parse("", &builder)
+			if parse != nil {
+				value.Injection(parse)
+				err = value.Format("", &builder, parse)
+				if err != nil {
+					return nil, nil, nil, err
+				}
+				code[key] = builder
+				fmt.Println(key, "注入成功!")
 			}
-			value.Injection(parse)
-			err = value.Format("", &builder, parse)
-			if err != nil {
-				return nil, err
-			}
-			code[key] = builder
-			fmt.Println(key, "注入成功!")
 		}
 	} // 注入代码
-	return code, nil
+	return code, templates, asts, nil
 }

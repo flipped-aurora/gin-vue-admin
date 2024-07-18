@@ -1,31 +1,31 @@
 package ast
 
 import (
-	"github.com/pkg/errors"
 	"go/ast"
-	"go/format"
-	"go/parser"
 	"go/token"
-	"os"
-	"path/filepath"
+	"io"
 )
 
+// PackageInitializeGorm 包初始化gorm
+// TODO 重构
 type PackageInitializeGorm struct {
+	Base
 	Type        Type   // 类型
 	Path        string // 文件路径
 	ImportPath  string // 导包路径
 	StructName  string // 结构体名称
 	PackageName string // 包名
-	PreviewPath string // 预览路径
 	IsNew       bool   // 是否使用new关键字 true: new(PackageName.StructName) false: &PackageName.StructName{}
 }
 
-func (a *PackageInitializeGorm) Rollback() error {
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+func (a *PackageInitializeGorm) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
+	if filename == "" {
+		filename = a.Path
 	}
+	return a.Base.Parse(filename, writer)
+}
+
+func (a *PackageInitializeGorm) Rollback(file *ast.File) {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -127,10 +127,7 @@ func (a *PackageInitializeGorm) Rollback() error {
 								} // 判断&关键字的package是否有其他结构体使用
 							}
 							if removeStruct && !hasImport {
-								err = NewImport(file, a.ImportPath).Rollback()
-								if err != nil {
-									return err
-								}
+								NewImport(a.ImportPath).Rollback(file)
 							}
 						}
 					}
@@ -138,30 +135,10 @@ func (a *PackageInitializeGorm) Rollback() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-	}
-	defer func() {
-		_ = create.Close()
-	}()
-	err = format.Node(create, fileSet, file)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", a.Path)
-	}
-	return nil
 }
 
-func (a *PackageInitializeGorm) Injection() error {
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-	}
-	err = NewImport(file, a.ImportPath).Injection()
-	if err != nil {
-		return err
-	}
+func (a *PackageInitializeGorm) Injection(file *ast.File) {
+	NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -254,25 +231,11 @@ func (a *PackageInitializeGorm) Injection() error {
 			}
 		}
 	}
-	var create *os.File
-	path := a.Path
-	if a.PreviewPath != "" {
-		path = a.PreviewPath
+}
+
+func (a *PackageInitializeGorm) Format(filename string, writer io.Writer, file *ast.File) error {
+	if filename == "" {
+		filename = a.Path
 	}
-	err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", path)
-	}
-	create, err = os.Create(path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", path)
-	}
-	defer func() {
-		_ = create.Close()
-	}()
-	err = format.Node(create, fileSet, file)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", a.Path)
-	}
-	return nil
+	return a.Base.Format(filename, writer, file)
 }

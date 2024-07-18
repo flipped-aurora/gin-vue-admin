@@ -1,19 +1,16 @@
 package ast
 
 import (
-	"github.com/pkg/errors"
 	"go/ast"
-	"go/format"
-	"go/parser"
 	"go/token"
-	"os"
-	"path/filepath"
+	"io"
 )
 
 // PackageInitializeRouter 包初始化路由
 // ModuleName := PackageName.AppName.GroupName
 // ModuleName.FunctionName(RouterGroupName)
 type PackageInitializeRouter struct {
+	Base
 	Type                 Type   // 类型
 	Path                 string // 文件路径
 	ImportPath           string // 导包路径
@@ -21,19 +18,20 @@ type PackageInitializeRouter struct {
 	GroupName            string // 分组名称
 	ModuleName           string // 模块名称
 	PackageName          string // 包名
-	PreviewPath          string // 预览路径
 	FunctionName         string // 函数名
 	RouterGroupName      string // 路由分组名称
 	LeftRouterGroupName  string // 左路由分组名称
 	RightRouterGroupName string // 右路由分组名称
 }
 
-func (a *PackageInitializeRouter) Rollback() error {
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+func (a *PackageInitializeRouter) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
+	if filename == "" {
+		filename = a.Path
 	}
+	return a.Base.Parse(filename, writer)
+}
+
+func (a *PackageInitializeRouter) Rollback(file *ast.File) {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -112,30 +110,10 @@ func (a *PackageInitializeRouter) Rollback() error {
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-	}
-	defer func() {
-		_ = create.Close()
-	}()
-	err = format.Node(create, fileSet, file)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", a.Path)
-	}
-	return nil
 }
 
-func (a *PackageInitializeRouter) Injection() error {
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-	}
-	err = NewImport(file, a.ImportPath).Injection()
-	if err != nil {
-		return err
-	}
+func (a *PackageInitializeRouter) Injection(file *ast.File) {
+	NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -226,25 +204,11 @@ func (a *PackageInitializeRouter) Injection() error {
 			blockStmt.List = append(blockStmt.List, stmt)
 		}
 	}
-	var create *os.File
-	path := a.Path
-	if a.PreviewPath != "" {
-		path = a.PreviewPath
+}
+
+func (a *PackageInitializeRouter) Format(filename string, writer io.Writer, file *ast.File) error {
+	if filename == "" {
+		filename = a.Path
 	}
-	err = os.MkdirAll(filepath.Dir(path), os.ModePerm)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", path)
-	}
-	create, err = os.Create(path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", path)
-	}
-	defer func() {
-		_ = create.Close()
-	}()
-	err = format.Node(create, fileSet, file)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", a.Path)
-	}
-	return nil
+	return a.Base.Format(filename, writer, file)
 }

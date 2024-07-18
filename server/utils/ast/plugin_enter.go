@@ -1,18 +1,14 @@
 package ast
 
 import (
-	"github.com/pkg/errors"
 	"go/ast"
-	"go/format"
-	"go/parser"
-	"go/token"
-	"os"
-	"path/filepath"
+	"io"
 )
 
 // PluginEnter 插件化入口
 // ModuleName := PackageName.GroupName.ServiceName
 type PluginEnter struct {
+	Base
 	Type            Type   // 类型
 	Path            string // 文件路径
 	ImportPath      string // 导包路径
@@ -21,17 +17,17 @@ type PluginEnter struct {
 	ModuleName      string // 模块名称
 	GroupName       string // 分组名称
 	PackageName     string // 包名
-	PreviewPath     string // 预览路径
 	ServiceName     string // 服务名称
 }
 
-func (a *PluginEnter) Rollback() error {
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
+func (a *PluginEnter) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
+	if filename == "" {
+		filename = a.Path
 	}
+	return a.Base.Parse(filename, writer)
+}
 
+func (a *PluginEnter) Rollback(file *ast.File) {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -70,43 +66,17 @@ func (a *PluginEnter) Rollback() error {
 					if len(v2.Names) >= 1 && v2.Names[0].Name == a.ModuleName {
 						v1.Specs = append(v1.Specs[:j], v1.Specs[j+1:]...)
 						if len(v1.Specs) <= 1 {
-							err = NewImport(file, a.ImportPath).Rollback()
-							if err != nil {
-								return err
-							}
+							NewImport(a.ImportPath).Rollback(file)
 						}
 					}
 				}
 			}
 		}
 	}
-	create, err := os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-	}
-	defer func() {
-		_ = create.Close()
-	}()
-	err = format.Node(create, fileSet, file)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", a.Path)
-	}
-	return nil
 }
 
-func (a *PluginEnter) Injection() error {
-	if a.PreviewPath != "" {
-		a.Path = a.PreviewPath
-	}
-	fileSet := token.NewFileSet()
-	file, err := parser.ParseFile(fileSet, a.Path, nil, parser.ParseComments)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]打开文件失败!", a.Path)
-	}
-	err = NewImport(file, a.ImportPath).Injection()
-	if err != nil {
-		return err
-	}
+func (a *PluginEnter) Injection(file *ast.File) {
+	NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -173,21 +143,11 @@ func (a *PluginEnter) Injection() error {
 			}
 		}
 	}
-	var create *os.File
-	err = os.MkdirAll(filepath.Dir(a.Path), os.ModePerm)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", a.Path)
+}
+
+func (a *PluginEnter) Format(filename string, writer io.Writer, file *ast.File) error {
+	if filename == "" {
+		filename = a.Path
 	}
-	create, err = os.Create(a.Path)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]创建文件失败!", a.Path)
-	}
-	defer func() {
-		_ = create.Close()
-	}()
-	err = format.Node(create, fileSet, file)
-	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]注入失败!", a.Path)
-	}
-	return nil
+	return a.Base.Format(filename, writer, file)
 }

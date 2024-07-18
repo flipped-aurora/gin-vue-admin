@@ -24,8 +24,8 @@ type AutoCodePackageApi struct{}
 // @Router    /autoCode/createPackage [post]
 func (a *AutoCodePackageApi) Create(c *gin.Context) {
 	var info request.SysAutoCodePackageCreate
-	_ = c.ShouldBindJSON(&a)
-	if err := utils.Verify(a, utils.AutoPackageVerify); err != nil {
+	_ = c.ShouldBindJSON(&info)
+	if err := utils.Verify(info, utils.AutoPackageVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

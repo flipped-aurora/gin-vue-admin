@@ -159,6 +159,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", second)
 			}
 			for j := 0; j < len(secondDirs); j++ {
+				if secondDirs[j].Name() == ".DS_Store" {
+					continue
+				}
 				three := filepath.Join(second, secondDirs[j].Name())
 				if !secondDirs[j].IsDir() {
 					ext := filepath.Ext(secondDirs[j].Name())
@@ -187,6 +190,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
+						if threeDirs[k].Name() == ".DS_Store" {
+							continue
+						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
@@ -356,6 +362,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
+						if threeDirs[k].Name() == ".DS_Store" {
+							continue
+						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
@@ -429,6 +438,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
+						if threeDirs[k].Name() == ".DS_Store" {
+							continue
+						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
 							var fourDirs []os.DirEntry
@@ -437,6 +449,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", four)
 							}
 							for l := 0; l < len(fourDirs); l++ {
+								if fourDirs[l].Name() == ".DS_Store" {
+									continue
+								}
 								five := filepath.Join(four, fourDirs[l].Name())
 								if fourDirs[l].IsDir() {
 									return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", five)
@@ -492,6 +507,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 				return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", second)
 			}
 			for j := 0; j < len(secondDirs); j++ {
+				if secondDirs[j].Name() == ".DS_Store" {
+					continue
+				}
 				three := filepath.Join(second, secondDirs[j].Name())
 				if !secondDirs[j].IsDir() {
 					return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", three)
@@ -504,6 +522,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 						return nil, nil, nil, errors.Wrapf(err, "读取模版文件夹[%s]失败!", three)
 					}
 					for k := 0; k < len(threeDirs); k++ {
+						if threeDirs[k].Name() == ".DS_Store" {
+							continue
+						}
 						four := filepath.Join(three, threeDirs[k].Name())
 						if threeDirs[k].IsDir() {
 							return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件夹!", four)
@@ -545,6 +566,9 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 		case "readme.txt.tpl", "readme.txt.template":
 			continue
 		default:
+			if templateDirs[i].Name() == ".DS_Store" {
+				continue
+			}
 			return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", second)
 		}
 	}

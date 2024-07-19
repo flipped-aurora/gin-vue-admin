@@ -109,6 +109,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		} // value
 		templates[key] = template
 	}
+	history.Templates = templates
 	for key, value := range history.Injections {
 		var injection ast.Ast
 		switch key {
@@ -162,14 +163,15 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			fmt.Printf("[filepath:%s]回滚注入代码成功!\n", key)
 		}
 	} // 清除注入代码
+	removeBasePath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10))
 	for _, value := range history.Templates {
 		if !filepath.IsAbs(value) {
 			continue
 		}
-		newPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, "rm_file", strconv.FormatInt(int64(time.Now().Nanosecond()), 10), strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
-		err = utils.FileMove(value, newPath)
+		removePath := filepath.Join(removeBasePath, strings.TrimPrefix(value, global.GVA_CONFIG.AutoCode.Root))
+		err = utils.FileMove(value, removePath)
 		if err != nil {
-			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, newPath)
+			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, removePath)
 		}
 	} // 移动文件
 	err = global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Update("flag", 1).Error

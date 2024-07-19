@@ -15,6 +15,8 @@ type PluginInitializeRouter struct {
 	Type                 Type   // 类型
 	Path                 string // 文件路径
 	ImportPath           string // 导包路径
+	ImportGlobalPath     string // 导包全局变量路径
+	ImportMiddlewarePath string // 导包中间件路径
 	RelativePath         string // 相对路径
 	AppName              string // 应用名称
 	GroupName            string // 分组名称
@@ -56,12 +58,15 @@ func (a *PluginInitializeRouter) Rollback(file *ast.File) {
 									if o7 {
 										if v7.Name == a.PackageName && v6.Sel.Name == a.AppName && v5.Sel.Name == a.GroupName && v4.Sel.Name == a.FunctionName {
 											v1.Body.List = append(v1.Body.List[:j], v1.Body.List[j+1:]...)
-											if len(v1.Body.List) >= 2 {
-
-												if len(v1.Body.List) == 2 {
-													NewImport(a.ImportPath).Rollback(file)
-													v1.Body.List = nil
+											if len(v1.Body.List) == 3 {
+												if a.ImportMiddlewarePath != "" {
+													NewImport(a.ImportMiddlewarePath).Rollback(file)
 												}
+												if a.ImportGlobalPath != "" {
+													NewImport(a.ImportGlobalPath).Rollback(file)
+												}
+												NewImport(a.ImportPath).Rollback(file)
+												v1.Body.List = nil
 											}
 											break
 										}
@@ -106,14 +111,14 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 				}
 			}
 			if !has {
-				middlePath := fmt.Sprintf(`"%s/middleware"`, global.GVA_CONFIG.AutoCode.Module)
-				NewImport(middlePath).Injection(file)
-				globalPath := fmt.Sprintf(`"%s/global"`, global.GVA_CONFIG.AutoCode.Module)
-				NewImport(globalPath).Injection(file)
 				if v1.Body == nil {
 					v1.Body = new(ast.BlockStmt)
 				}
 				if v1.Body.List == nil {
+					a.ImportMiddlewarePath = fmt.Sprintf(`"%s/middleware"`, global.GVA_CONFIG.AutoCode.Module)
+					NewImport(a.ImportMiddlewarePath).Injection(file)
+					a.ImportGlobalPath = fmt.Sprintf(`"%s/global"`, global.GVA_CONFIG.AutoCode.Module)
+					NewImport(a.ImportGlobalPath).Injection(file)
 					v1.Body.List = make([]ast.Stmt, 0, 3)
 					public := &ast.AssignStmt{
 						Lhs: []ast.Expr{
@@ -177,27 +182,23 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 							},
 						},
 					}
-					useStmt := &ast.ExprStmt{
+					useMiddleware := &ast.ExprStmt{
 						X: &ast.CallExpr{
 							Fun: &ast.SelectorExpr{
-								X:   &ast.Ident{Name: a.RightRouterGroupName},
-								Sel: &ast.Ident{Name: "Use"},
-							},
-							Args: []ast.Expr{
-								&ast.CallExpr{
+								X: &ast.CallExpr{
 									Fun: &ast.SelectorExpr{
-										X:   &ast.Ident{Name: "middleware"},
-										Sel: &ast.Ident{Name: "JWTAuth"},
+										X:   &ast.Ident{Name: a.RightRouterGroupName},
+										Sel: &ast.Ident{Name: "Use"},
+									},
+									Args: []ast.Expr{
+										&ast.CallExpr{
+											Fun: &ast.SelectorExpr{
+												X:   &ast.Ident{Name: "middleware"},
+												Sel: &ast.Ident{Name: "JWTAuth"},
+											},
+										},
 									},
 								},
-							},
-						},
-					}
-
-					useCasbinStmt := &ast.ExprStmt{
-						X: &ast.CallExpr{
-							Fun: &ast.SelectorExpr{
-								X:   useStmt.X,
 								Sel: &ast.Ident{Name: "Use"},
 							},
 							Args: []ast.Expr{
@@ -212,7 +213,7 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 					}
 					v1.Body.List = append(v1.Body.List, public)
 					v1.Body.List = append(v1.Body.List, private)
-					v1.Body.List = append(v1.Body.List, useCasbinStmt)
+					v1.Body.List = append(v1.Body.List, useMiddleware)
 				}
 				body := &ast.ExprStmt{
 					X: &ast.CallExpr{

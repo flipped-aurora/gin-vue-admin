@@ -397,7 +397,6 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								PackageName: "model",
 								IsNew:       true,
 							}
-							code[four] = pluginGen.Path
 							asts[pluginGen.Path+"=>"+pluginGen.Type.String()] = pluginGen
 							creates[four] = pluginGen.Path
 						}
@@ -410,7 +409,6 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								PackageName: "model",
 								IsNew:       true,
 							}
-							code[four] = pluginInitializeGorm.Path
 							asts[pluginInitializeGorm.Path+"=>"+pluginInitializeGorm.Type.String()] = pluginInitializeGorm
 							creates[four] = pluginInitializeGorm.Path
 						}
@@ -426,7 +424,6 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								LeftRouterGroupName:  "public",
 								RightRouterGroupName: "private",
 							}
-							code[four] = pluginInitializeRouter.Path
 							asts[pluginInitializeRouter.Path+"=>"+pluginInitializeRouter.Type.String()] = pluginInitializeRouter
 							creates[four] = pluginInitializeRouter.Path
 						}

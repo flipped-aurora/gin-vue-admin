@@ -8,6 +8,7 @@ import (
 	"go/parser"
 	"go/token"
 	"io"
+	"os"
 	"path"
 	"path/filepath"
 	"strings"
@@ -38,6 +39,13 @@ func (a *Base) Injection(file *ast.File) {
 
 func (a *Base) Format(filename string, writer io.Writer, file *ast.File) error {
 	fileSet := token.NewFileSet()
+	if writer == nil {
+		open, err := os.OpenFile(filename, os.O_WRONLY|os.O_TRUNC, 0666)
+		if err != nil {
+			return errors.Wrapf(err, "[filepath:%s]打开文件失败!", filename)
+		}
+		writer = open
+	}
 	err := format.Node(writer, fileSet, file)
 	if err != nil {
 		return errors.Wrapf(err, "[filepath:%s]注入失败!", filename)

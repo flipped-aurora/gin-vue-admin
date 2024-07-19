@@ -143,6 +143,10 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		for key, value := range asts {
 			keys := strings.Split(key, "=>")
 			if len(keys) == 2 {
+				switch keys[1] {
+				case ast.TypePluginInitializeV1, ast.TypePluginInitializeV2:
+					continue
+				}
 				var builder strings.Builder
 				parse, _ := value.Parse("", &builder)
 				if parse != nil {

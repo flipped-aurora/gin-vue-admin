@@ -10,9 +10,9 @@ var (
 	PluginVersionV2 = `"github.com/flipped-aurora/gin-vue-admin/server/utils/plugin/v2"`
 )
 
-// PluginInitialize 插件初始化
+// PluginInitializeV2 插件初始化
 // TODO 重构 分离V1/V2版本
-type PluginInitialize struct {
+type PluginInitializeV2 struct {
 	Base
 	Type         Type   // 类型
 	Path         string // 文件路径
@@ -23,7 +23,7 @@ type PluginInitialize struct {
 	PackageName  string // 包名
 }
 
-func (a *PluginInitialize) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
+func (a *PluginInitializeV2) Parse(filename string, writer io.Writer) (file *ast.File, err error) {
 	if filename == "" {
 		if a.RelativePath == "" {
 			filename = a.Path
@@ -36,7 +36,7 @@ func (a *PluginInitialize) Parse(filename string, writer io.Writer) (file *ast.F
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *PluginInitialize) Rollback(file *ast.File) {
+func (a *PluginInitializeV2) Rollback(file *ast.File) {
 	// switch a.Version {
 	// case "bizPluginV1":
 	// 	a.Path = filepath.Join(a.Path, "plugin_biz_v1.go")
@@ -99,7 +99,7 @@ func (a *PluginInitialize) Rollback(file *ast.File) {
 	// }
 }
 
-func (a *PluginInitialize) Injection(file *ast.File) {
+func (a *PluginInitializeV2) Injection(file *ast.File) {
 	// var isPlugin bool
 	// for i := 0; i < len(file.Decls); i++ {
 	// 	v1, o1 := file.Decls[i].(*ast.GenDecl)
@@ -256,7 +256,7 @@ func (a *PluginInitialize) Injection(file *ast.File) {
 	// }
 }
 
-func (a *PluginInitialize) Format(filename string, writer io.Writer, file *ast.File) error {
+func (a *PluginInitializeV2) Format(filename string, writer io.Writer, file *ast.File) error {
 	if filename == "" {
 		filename = a.Path
 	}

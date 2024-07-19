@@ -136,8 +136,8 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			var entity ast.PluginEnter
 			_ = json.Unmarshal([]byte(value), &entity)
 			injection = &entity
-		case ast.TypePluginInitialize:
-			var entity ast.PluginInitialize
+		case ast.TypePluginInitializeV2:
+			var entity ast.PluginInitializeV2
 			_ = json.Unmarshal([]byte(value), &entity)
 			injection = &entity
 		case ast.TypePluginInitializeGorm:

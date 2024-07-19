@@ -79,7 +79,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		for key, value := range asts {
 			keys := strings.Split(key, "=>")
 			if len(keys) == 2 {
-				if keys[1] == ast.TypePluginInitialize {
+				if keys[1] == ast.TypePluginInitializeV2 {
 					file, _ := value.Parse("", nil)
 					if file != nil {
 						value.Injection(file)
@@ -167,8 +167,8 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 					}
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
 					if name == "main.go" || name == "plugin.go" {
-						pluginInitialize := &ast.PluginInitialize{
-							Type:       ast.TypePluginInitialize,
+						pluginInitialize := &ast.PluginInitializeV2{
+							Type:       ast.TypePluginInitializeV2,
 							Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
 							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
 							ImportPath: fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),

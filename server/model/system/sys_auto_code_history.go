@@ -43,7 +43,7 @@ func (s *SysAutoCodeHistory) BeforeCreate(db *gorm.DB) error {
 		hasWeb := strings.Index(value, web)
 		if hasWeb != -1 {
 			value = strings.TrimPrefix(value, web)
-			values := strings.Split(key, string(os.PathSeparator))
+			values := strings.Split(value, string(os.PathSeparator))
 			value = path.Join(values...)
 			templates[key] = value
 			continue
@@ -51,7 +51,7 @@ func (s *SysAutoCodeHistory) BeforeCreate(db *gorm.DB) error {
 		hasServer := strings.Index(value, server)
 		if hasServer != -1 {
 			value = strings.TrimPrefix(value, server)
-			values := strings.Split(key, string(os.PathSeparator))
+			values := strings.Split(value, string(os.PathSeparator))
 			value = path.Join(values...)
 			templates[key] = value
 			continue

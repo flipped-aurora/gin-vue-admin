@@ -483,6 +483,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								Type:        ast.TypePackageInitializeGorm,
 								Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go"),
 								ImportPath:  fmt.Sprintf(`"%s/model/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+								Business:    info.BusinessDB,
 								StructName:  info.StructName,
 								PackageName: entity.PackageName,
 								IsNew:       true,

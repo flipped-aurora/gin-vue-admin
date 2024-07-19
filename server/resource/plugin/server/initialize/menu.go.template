@@ -2,16 +2,11 @@ package initialize
 
 import (
 	"context"
-	"fmt"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/plugin/utils"
-	"go.uber.org/zap"
+	"github.com/flipped-aurora/gin-vue-admin/server/plugin/plugin-tool/utils"
 )
 
 func Menu(ctx context.Context) {
-    entities := []model.SysBaseMenu{}
-	err := utils.Register.Menus(ctx, entities)
-	if err != nil {
-		zap.L().Error(fmt.Sprintf("%+v", err))
-	}
+	entities := []model.SysBaseMenu{}
+	utils.RegisterMenus(entities...)
 }

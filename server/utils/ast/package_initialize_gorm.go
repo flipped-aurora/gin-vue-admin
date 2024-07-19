@@ -96,7 +96,7 @@ func (a *PackageInitializeGorm) Rollback(file *ast.File) {
 											}
 										}
 									}
-									if !needImport {
+									if !needImport || len(v3.Args) == 0 {
 										NewImport(a.ImportPath).Rollback(file)
 									}
 								}

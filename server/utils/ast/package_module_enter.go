@@ -65,8 +65,13 @@ func (a *PackageModuleEnter) Rollback(file *ast.File) {
 						v1.Specs = append(v1.Specs[:j], v1.Specs[j+1:]...)
 					}
 				}
-				if len(v1.Specs) == 0 {
+				if v1.Tok == token.VAR && len(v1.Specs) == 0 {
 					NewImport(a.ImportPath).Rollback(file)
+					if i == len(file.Decls) {
+						file.Decls = append(file.Decls[:i-1])
+						break
+					} // 空的var(), 如果不删除则会影响的注入变量, 因为识别不到*ast.ValueSpec
+					file.Decls = append(file.Decls[:i], file.Decls[i+1:]...)
 				}
 			}
 		}
@@ -115,6 +120,9 @@ func (a *PackageModuleEnter) Injection(file *ast.File) {
 						hasValue = true
 					}
 				}
+				if v1.Tok == token.VAR && len(v1.Specs) == 0 {
+					hasVariables = false
+				} // 说明是空var()
 				if hasVariables && !hasValue {
 					spec := &ast.ValueSpec{
 						Names: []*ast.Ident{{Name: a.ModuleName}},

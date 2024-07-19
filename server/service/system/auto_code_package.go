@@ -77,16 +77,19 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 			fmt.Printf("[template:%s][filepath:%s]生成成功!\n", key, value)
 		}
 		for key, value := range asts {
-			if key == ast.TypePluginInitialize {
-				file, _ := value.Parse("", nil)
-				if file != nil {
-					value.Injection(file)
-					err = value.Format("", nil, file)
-					if err != nil {
-						return err
+			keys := strings.Split(key, "=>")
+			if len(keys) == 2 {
+				if keys[1] == ast.TypePluginInitialize {
+					file, _ := value.Parse("", nil)
+					if file != nil {
+						value.Injection(file)
+						err = value.Format("", nil, file)
+						if err != nil {
+							return err
+						}
 					}
+					fmt.Printf("[type:%s]注入成功!\n", key)
 				}
-				fmt.Printf("[type:%s]注入成功!\n", key)
 			}
 		}
 		return nil
@@ -170,10 +173,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
 							ImportPath: fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
 						}
-						if entity.PackageName == "preview" {
-							code[three] = pluginInitialize.Path
-						}
-						asts[ast.TypePluginInitialize+"=>"+pluginInitialize.Type.String()] = pluginInitialize
+						asts[pluginInitialize.Path+"=>"+pluginInitialize.Type.String()] = pluginInitialize
 						creates[three] = pluginInitialize.PluginPath
 						continue
 					}

@@ -215,27 +215,11 @@
             <!-- <el-input v-model="middleDate.dataSource.table" placeholder="数据源表" /> -->
           </el-col>
           <el-col :span="7">
-            <el-select v-model="middleDate.dataSource.label" placeholder="请先选择数据源表">
-              <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
-                <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
-                  {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
-                </el-tag> {{ item.columnName }}</span>
-                <span
-                  style="
-          float: right;
-          margin-left:5px;
-          color: var(--el-text-color-secondary);
-          font-size: 13px;
-        "
-                >
-                  类型：{{ item.type }} <span v-if="item.comment != ''">，字段说明：{{ item.comment }}</span>
-                </span>
-              </el-option>
-            </el-select>
-            <!-- <el-input v-model="middleDate.dataSource.label" placeholder="展示用字段" /> -->
-          </el-col>
-          <el-col :span="7">
-            <el-select v-model="middleDate.dataSource.value" placeholder="请先选择数据源表">
+            <el-select v-model="middleDate.dataSource.value" placeholder="请先选择需要存储的数据">
+              <template #label="{ value }">
+                <span>存储: </span>
+                <span style="font-weight: bold">{{ value }}</span>
+              </template>
               <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
                 <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
                   {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
@@ -253,6 +237,30 @@
               </el-option>
             </el-select>
             <!-- <el-input v-model="middleDate.dataSource.value" placeholder="存储用字段" /> -->
+          </el-col>
+          <el-col :span="7">
+            <el-select v-model="middleDate.dataSource.label" placeholder="请先选择需要展示的数据">
+              <template #label="{ value }">
+                <span>展示: </span>
+                <span style="font-weight: bold">{{ value }}</span>
+              </template>
+              <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
+                <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
+                  {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
+                </el-tag> {{ item.columnName }}</span>
+                <span
+                    style="
+          float: right;
+          margin-left:5px;
+          color: var(--el-text-color-secondary);
+          font-size: 13px;
+        "
+                >
+                  类型：{{ item.type }} <span v-if="item.comment != ''">，字段说明：{{ item.comment }}</span>
+                </span>
+              </el-option>
+            </el-select>
+            <!-- <el-input v-model="middleDate.dataSource.label" placeholder="展示用字段" /> -->
           </el-col>
         </el-row>
       </el-collapse-item>

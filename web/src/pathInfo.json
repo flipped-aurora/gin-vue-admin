@@ -42,5 +42,7 @@
   "/src/view/systemTools/formCreate/index.vue": "FormGenerator",
   "/src/view/systemTools/index.vue": "System",
   "/src/view/systemTools/system/system.vue": "Config",
+  "/src/plugin/announcement/form/info.vue": "InfoForm",
+  "/src/plugin/announcement/view/info.vue": "Info",
   "/src/plugin/email/view/index.vue": "Email"
 }

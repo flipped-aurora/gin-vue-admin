@@ -11,7 +11,6 @@ func PluginInitV2(group *gin.Engine, plugins ...plugin.Plugin) {
 		plugins[i].Register(group)
 	}
 }
-
 func bizPluginV2(engine *gin.Engine) {
 	PluginInitV2(engine, announcement.Plugin)
 }

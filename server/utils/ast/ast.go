@@ -3,7 +3,9 @@ package ast
 import (
 	"fmt"
 	"go/ast"
+	"go/parser"
 	"go/token"
+	"log"
 )
 
 // AddImport 增加 import 方法
@@ -44,4 +46,26 @@ func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 		return true
 	})
 	return funcDeclP
+}
+
+// 检查是否存在Import
+func CheckImport(file *ast.File, importPath string) bool {
+	for _, imp := range file.Imports {
+		// Remove quotes around the import path
+		path := imp.Path.Value[1 : len(imp.Path.Value)-1]
+
+		if path == importPath {
+			return true
+		}
+	}
+
+	return false
+}
+
+func CreateStmt(statement string) *ast.ExprStmt {
+	expr, err := parser.ParseExpr(statement)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return &ast.ExprStmt{X: expr}
 }

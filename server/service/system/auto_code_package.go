@@ -71,6 +71,7 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 				return errors.Wrapf(err, "[filepath:%s]创建文件夹失败!", value)
 			}
 			err = files.Execute(file, code)
+			_ = file.Close()
 			if err != nil {
 				return errors.Wrapf(err, "[filepath:%s]生成失败!", value)
 			}
@@ -174,10 +175,11 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 					name := strings.TrimSuffix(secondDirs[j].Name(), ext)
 					if name == "main.go" || name == "plugin.go" {
 						pluginInitialize := &ast.PluginInitializeV2{
-							Type:       ast.TypePluginInitializeV2,
-							Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
-							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-							ImportPath: fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+							Type:        ast.TypePluginInitializeV2,
+							Path:        filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
+							PluginPath:  filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
+							ImportPath:  fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
+							PackageName: entity.PackageName,
 						}
 						asts[pluginInitialize.PluginPath+"=>"+pluginInitialize.Type.String()] = pluginInitialize
 						creates[three] = pluginInitialize.Path

@@ -179,8 +179,8 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
 							ImportPath: fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
 						}
-						asts[pluginInitialize.Path+"=>"+pluginInitialize.Type.String()] = pluginInitialize
-						creates[three] = pluginInitialize.PluginPath
+						asts[pluginInitialize.PluginPath+"=>"+pluginInitialize.Type.String()] = pluginInitialize
+						creates[three] = pluginInitialize.Path
 						continue
 					}
 					return nil, nil, nil, errors.Errorf("[filpath:%s]非法模版文件!", three)

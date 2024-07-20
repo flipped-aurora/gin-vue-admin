@@ -23,9 +23,18 @@ type autoCodeTemplate struct{}
 // Create 创建生成自动化代码
 func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) error {
 	history := info.History()
+	var autoPkg model.SysAutoCodePackage
+	err := global.GVA_DB.WithContext(ctx).Where("package_name = ?", info.Package).First(&autoPkg).Error
+	if err != nil {
+		return errors.Wrap(err, "查询包失败!")
+	}
+
+	// 增加判断: 重复创建struct
 	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Package) {
 		return errors.New("已经创建过此数据结构,请勿重复创建!")
-	} // 增加判断: 重复创建struct
+	}
+
+	// 自动创建api
 	if info.AutoCreateApiToSql {
 		apis := info.Apis()
 		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
@@ -47,26 +56,24 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		if err != nil {
 			return err
 		}
-	} // 自动创建api
+	}
+
+	// 自动创建menu
 	if info.AutoCreateMenuToSql {
 		var entity model.SysBaseMenu
 		err := global.GVA_DB.WithContext(ctx).First(&entity, "name = ?", info.Abbreviation).Error
 		if err == nil {
 			return errors.New("存在相同的菜单路由，请关闭自动创建菜单功能")
 		}
-		entity = info.Menu()
+		entity = info.Menu(autoPkg.Template)
 		err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
 		if err != nil {
 			return errors.Wrap(err, "创建菜单失败!")
 		}
 		history.MenuID = entity.ID
-	} // 自动创建menu
-	var entity model.SysAutoCodePackage
-	err := global.GVA_DB.WithContext(ctx).Where("package_name = ?", info.Package).First(&entity).Error
-	if err != nil {
-		return errors.Wrap(err, "查询包失败!")
 	}
-	generate, templates, injections, err := s.generate(ctx, info, entity)
+
+	generate, templates, injections, err := s.generate(ctx, info, autoPkg)
 	if err != nil {
 		return err
 	}
@@ -80,6 +87,8 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			return errors.Wrapf(err, "[filepath:%s]写入文件失败!", key)
 		}
 	}
+
+	// 创建历史记录
 	history.Templates = templates
 	history.Injections = make(map[string]string, len(injections))
 	for key, value := range injections {
@@ -89,7 +98,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	err = AutocodeHistory.Create(ctx, history)
 	if err != nil {
 		return err
-	} // 创建历史记录
+	}
 	return nil
 }
 

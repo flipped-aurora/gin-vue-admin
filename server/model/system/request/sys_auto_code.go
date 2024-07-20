@@ -87,12 +87,16 @@ func (r *AutoCode) Apis() []model.SysApi {
 	}
 }
 
-func (r *AutoCode) Menu() model.SysBaseMenu {
+func (r *AutoCode) Menu(template string) model.SysBaseMenu {
+	component := fmt.Sprintf("view/%s/%s/%s.vue", r.Package, r.PackageName)
+	if template != "package" {
+		component = fmt.Sprintf("plugin/%s/view/%s.vue", r.Package, r.Abbreviation)
+	}
 	return model.SysBaseMenu{
 		ParentId:  0,
 		Path:      r.Abbreviation,
 		Name:      r.Abbreviation,
-		Component: fmt.Sprintf("view/%s/%s/%s.vue", r.Package, r.PackageName, r.PackageName),
+		Component: component,
 		Meta: model.Meta{
 			Title: r.Description,
 		},

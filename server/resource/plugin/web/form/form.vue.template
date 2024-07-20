@@ -74,7 +74,7 @@ import {
   create{{.StructName}},
   update{{.StructName}},
   find{{.StructName}}
-} from '@/plugin/{{.Package}}/api/{{.PackageName}}'
+} from '@/plugin/{{.Package}}/api/{{.Abbreviation}}'
 
 defineOptions({
     name: '{{.StructName}}Form'

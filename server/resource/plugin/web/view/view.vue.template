@@ -232,7 +232,7 @@
                     <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
                         <template #default="scope">
                              <div class="file-list">
-                               <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid">{{"{{"}}file.name{{"}}"}}</el-tag>
+                               <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid" @click="downloadFile(file.url)">{{"{{"}}file.name{{"}}"}}</el-tag>
                              </div>
                         </template>
                     </el-table-column>

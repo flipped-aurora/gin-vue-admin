@@ -155,7 +155,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		}
 		file, _ := injection.Parse("", nil)
 		if file != nil {
-			injection.Rollback(file)
+			_ = injection.Rollback(file)
 			err = injection.Format("", nil, file)
 			if err != nil {
 				return err

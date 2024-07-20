@@ -39,7 +39,7 @@ func (a *PluginInitializeRouter) Parse(filename string, writer io.Writer) (file 
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *PluginInitializeRouter) Rollback(file *ast.File) {
+func (a *PluginInitializeRouter) Rollback(file *ast.File) error {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -60,12 +60,12 @@ func (a *PluginInitializeRouter) Rollback(file *ast.File) {
 											v1.Body.List = append(v1.Body.List[:j], v1.Body.List[j+1:]...)
 											if len(v1.Body.List) == 3 {
 												if a.ImportMiddlewarePath != "" {
-													NewImport(a.ImportMiddlewarePath).Rollback(file)
+													_ = NewImport(a.ImportMiddlewarePath).Rollback(file)
 												}
 												if a.ImportGlobalPath != "" {
-													NewImport(a.ImportGlobalPath).Rollback(file)
+													_ = NewImport(a.ImportGlobalPath).Rollback(file)
 												}
-												NewImport(a.ImportPath).Rollback(file)
+												_ = NewImport(a.ImportPath).Rollback(file)
 												v1.Body.List = nil
 											}
 											break
@@ -79,10 +79,11 @@ func (a *PluginInitializeRouter) Rollback(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
-func (a *PluginInitializeRouter) Injection(file *ast.File) {
-	NewImport(a.ImportPath).Injection(file)
+func (a *PluginInitializeRouter) Injection(file *ast.File) error {
+	_ = NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -116,9 +117,9 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 				}
 				if v1.Body.List == nil {
 					a.ImportMiddlewarePath = fmt.Sprintf(`"%s/middleware"`, global.GVA_CONFIG.AutoCode.Module)
-					NewImport(a.ImportMiddlewarePath).Injection(file)
+					_ = NewImport(a.ImportMiddlewarePath).Injection(file)
 					a.ImportGlobalPath = fmt.Sprintf(`"%s/global"`, global.GVA_CONFIG.AutoCode.Module)
-					NewImport(a.ImportGlobalPath).Injection(file)
+					_ = NewImport(a.ImportGlobalPath).Injection(file)
 					v1.Body.List = make([]ast.Stmt, 0, 3)
 					public := &ast.AssignStmt{
 						Lhs: []ast.Expr{
@@ -237,6 +238,7 @@ func (a *PluginInitializeRouter) Injection(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
 func (a *PluginInitializeRouter) Format(filename string, writer io.Writer, file *ast.File) error {

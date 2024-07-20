@@ -29,12 +29,12 @@ func (a *Base) Parse(filename string, writer io.Writer) (file *ast.File, err err
 	return file, nil
 }
 
-func (a *Base) Rollback(file *ast.File) {
-	return
+func (a *Base) Rollback(file *ast.File) error {
+	return nil
 }
 
-func (a *Base) Injection(file *ast.File) {
-	return
+func (a *Base) Injection(file *ast.File) error {
+	return nil
 }
 
 func (a *Base) Format(filename string, writer io.Writer, file *ast.File) error {

@@ -34,7 +34,7 @@ func (a *PluginEnter) Parse(filename string, writer io.Writer) (file *ast.File, 
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *PluginEnter) Rollback(file *ast.File) {
+func (a *PluginEnter) Rollback(file *ast.File) error {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -73,17 +73,18 @@ func (a *PluginEnter) Rollback(file *ast.File) {
 					if len(v2.Names) >= 1 && v2.Names[0].Name == a.ModuleName {
 						v1.Specs = append(v1.Specs[:j], v1.Specs[j+1:]...)
 						if len(v1.Specs) <= 1 {
-							NewImport(a.ImportPath).Rollback(file)
+							_ = NewImport(a.ImportPath).Rollback(file)
 						}
 					}
 				}
 			}
 		}
 	}
+	return nil
 }
 
-func (a *PluginEnter) Injection(file *ast.File) {
-	NewImport(a.ImportPath).Injection(file)
+func (a *PluginEnter) Injection(file *ast.File) error {
+	_ = NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -150,6 +151,7 @@ func (a *PluginEnter) Injection(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
 func (a *PluginEnter) Format(filename string, writer io.Writer, file *ast.File) error {

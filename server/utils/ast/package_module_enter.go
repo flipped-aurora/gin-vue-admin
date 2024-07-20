@@ -35,7 +35,7 @@ func (a *PackageModuleEnter) Parse(filename string, writer io.Writer) (file *ast
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *PackageModuleEnter) Rollback(file *ast.File) {
+func (a *PackageModuleEnter) Rollback(file *ast.File) error {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -66,7 +66,7 @@ func (a *PackageModuleEnter) Rollback(file *ast.File) {
 					}
 				}
 				if v1.Tok == token.VAR && len(v1.Specs) == 0 {
-					NewImport(a.ImportPath).Rollback(file)
+					_ = NewImport(a.ImportPath).Rollback(file)
 					if i == len(file.Decls) {
 						file.Decls = append(file.Decls[:i-1])
 						break
@@ -76,10 +76,11 @@ func (a *PackageModuleEnter) Rollback(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
-func (a *PackageModuleEnter) Injection(file *ast.File) {
-	NewImport(a.ImportPath).Injection(file)
+func (a *PackageModuleEnter) Injection(file *ast.File) error {
+	_ = NewImport(a.ImportPath).Injection(file)
 	var hasValue bool
 	var hasVariables bool
 	for i := 0; i < len(file.Decls); i++ {
@@ -168,6 +169,7 @@ func (a *PackageModuleEnter) Injection(file *ast.File) {
 		}
 		file.Decls = append(file.Decls, decl)
 	}
+	return nil
 }
 
 func (a *PackageModuleEnter) Format(filename string, writer io.Writer, file *ast.File) error {

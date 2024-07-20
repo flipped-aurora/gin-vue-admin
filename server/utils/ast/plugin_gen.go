@@ -29,7 +29,7 @@ func (a *PluginGen) Parse(filename string, writer io.Writer) (file *ast.File, er
 	}
 	return a.Base.Parse(filename, writer)
 }
-func (a *PluginGen) Rollback(file *ast.File) {
+func (a *PluginGen) Rollback(file *ast.File) error {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -83,7 +83,7 @@ func (a *PluginGen) Rollback(file *ast.File) {
 								}
 							}
 							if len(v3.Args) == 0 {
-								NewImport(a.ImportPath).Rollback(file)
+								_ = NewImport(a.ImportPath).Rollback(file)
 							}
 						}
 					}
@@ -91,10 +91,11 @@ func (a *PluginGen) Rollback(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
-func (a *PluginGen) Injection(file *ast.File) {
-	NewImport(a.ImportPath).Injection(file)
+func (a *PluginGen) Injection(file *ast.File) error {
+	_ = NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -177,6 +178,7 @@ func (a *PluginGen) Injection(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
 func (a *PluginGen) Format(filename string, writer io.Writer, file *ast.File) error {

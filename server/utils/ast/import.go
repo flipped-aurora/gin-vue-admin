@@ -19,9 +19,9 @@ func (a *Import) Parse(filename string, writer io.Writer) (file *ast.File, err e
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *Import) Rollback(file *ast.File) {
+func (a *Import) Rollback(file *ast.File) error {
 	if a.ImportPath == "" {
-		return
+		return nil
 	}
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
@@ -41,11 +41,12 @@ func (a *Import) Rollback(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
-func (a *Import) Injection(file *ast.File) {
+func (a *Import) Injection(file *ast.File) error {
 	if a.ImportPath == "" {
-		return
+		return nil
 	}
 	var has bool
 	for i := 0; i < len(file.Decls); i++ {
@@ -66,7 +67,7 @@ func (a *Import) Injection(file *ast.File) {
 					Path: &ast.BasicLit{Kind: token.STRING, Value: a.ImportPath},
 				}
 				v1.Specs = append(v1.Specs, spec)
-				return
+				return nil
 			}
 		}
 	}
@@ -84,6 +85,7 @@ func (a *Import) Injection(file *ast.File) {
 		file.Decls = append(file.Decls, decl)
 		file.Decls = append(file.Decls, decls...)
 	} // 如果没有import声明，就创建一个, 主要要放在第一个
+	return nil
 }
 
 func (a *Import) Format(filename string, writer io.Writer, file *ast.File) error {

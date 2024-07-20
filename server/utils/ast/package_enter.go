@@ -30,7 +30,7 @@ func (a *PackageEnter) Parse(filename string, writer io.Writer) (file *ast.File,
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *PackageEnter) Rollback(file *ast.File) {
+func (a *PackageEnter) Rollback(file *ast.File) error {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -44,7 +44,7 @@ func (a *PackageEnter) Rollback(file *ast.File) {
 					if o3 {
 						for k := 0; k < len(v3.Fields.List); k++ {
 							if len(v3.Fields.List[k].Names) >= 1 && v3.Fields.List[k].Names[0].Name == a.StructName {
-								NewImport(a.ImportPath).Rollback(file)
+								_ = NewImport(a.ImportPath).Rollback(file)
 								v3.Fields.List = append(v3.Fields.List[:k], v3.Fields.List[k+1:]...)
 							}
 						}
@@ -53,10 +53,11 @@ func (a *PackageEnter) Rollback(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
-func (a *PackageEnter) Injection(file *ast.File) {
-	NewImport(a.ImportPath).Injection(file)
+func (a *PackageEnter) Injection(file *ast.File) error {
+	_ = NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.GenDecl)
 		if o1 {
@@ -90,6 +91,7 @@ func (a *PackageEnter) Injection(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
 func (a *PackageEnter) Format(filename string, writer io.Writer, file *ast.File) error {

@@ -150,7 +150,7 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 				var builder strings.Builder
 				parse, _ := value.Parse("", &builder)
 				if parse != nil {
-					value.Injection(parse)
+					_ = value.Injection(parse)
 					err = value.Format("", &builder, parse)
 					if err != nil {
 						return nil, nil, nil, err

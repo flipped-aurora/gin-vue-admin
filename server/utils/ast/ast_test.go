@@ -12,7 +12,7 @@ import (
 )
 
 func TestAst(t *testing.T) {
-	filename := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go")
+	filename := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", "gva", "plugin.go")
 	fileSet := token.NewFileSet()
 	file, err := parser.ParseFile(fileSet, filename, nil, parser.ParseComments)
 	if err != nil {

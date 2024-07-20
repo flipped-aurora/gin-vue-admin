@@ -82,7 +82,10 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 				if keys[1] == ast.TypePluginInitializeV2 {
 					file, _ := value.Parse("", nil)
 					if file != nil {
-						value.Injection(file)
+						err = value.Injection(file)
+						if err != nil {
+							return err
+						}
 						err = value.Format("", nil, file)
 						if err != nil {
 							return err
@@ -172,8 +175,8 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 					if name == "main.go" || name == "plugin.go" {
 						pluginInitialize := &ast.PluginInitializeV2{
 							Type:       ast.TypePluginInitializeV2,
-							Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
-							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
+							Path:       filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", entity.PackageName, name),
+							PluginPath: filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "plugin_biz_v2.go"),
 							ImportPath: fmt.Sprintf(`"%s/plugin/%s"`, global.GVA_CONFIG.AutoCode.Module, entity.PackageName),
 						}
 						asts[pluginInitialize.Path+"=>"+pluginInitialize.Type.String()] = pluginInitialize

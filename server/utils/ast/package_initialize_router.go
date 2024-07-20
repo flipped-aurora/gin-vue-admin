@@ -38,7 +38,7 @@ func (a *PackageInitializeRouter) Parse(filename string, writer io.Writer) (file
 	return a.Base.Parse(filename, writer)
 }
 
-func (a *PackageInitializeRouter) Rollback(file *ast.File) {
+func (a *PackageInitializeRouter) Rollback(file *ast.File) error {
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -117,10 +117,11 @@ func (a *PackageInitializeRouter) Rollback(file *ast.File) {
 			}
 		}
 	}
+	return nil
 }
 
-func (a *PackageInitializeRouter) Injection(file *ast.File) {
-	NewImport(a.ImportPath).Injection(file)
+func (a *PackageInitializeRouter) Injection(file *ast.File) error {
+	_ = NewImport(a.ImportPath).Injection(file)
 	for i := 0; i < len(file.Decls); i++ {
 		v1, o1 := file.Decls[i].(*ast.FuncDecl)
 		if o1 {
@@ -211,6 +212,7 @@ func (a *PackageInitializeRouter) Injection(file *ast.File) {
 			blockStmt.List = append(blockStmt.List, stmt)
 		}
 	}
+	return nil
 }
 
 func (a *PackageInitializeRouter) Format(filename string, writer io.Writer, file *ast.File) error {

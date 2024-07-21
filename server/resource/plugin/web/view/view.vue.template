@@ -363,7 +363,7 @@ import {
   update{{.StructName}},
   find{{.StructName}},
   get{{.StructName}}List
-} from '@/plugin/{{.Package}}/api/{{.Abbreviation}}'
+} from '@/plugin/{{.Package}}/api/{{.PackageName}}'
 
 {{- if or .HasPic .HasFile}}
 import { getUrl } from '@/utils/image'

@@ -6,7 +6,9 @@
           type="primary"
           icon="plus"
           @click="addMenu(0)"
-        >新增根菜单</el-button>
+        >
+          新增根菜单
+        </el-button>
         <el-icon
           class="cursor-pointer"
           @click="
@@ -14,7 +16,9 @@
               'https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e'
             )
           "
-        ><VideoCameraFilled /></el-icon>
+        >
+          <VideoCameraFilled />
+        </el-icon>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -110,19 +114,25 @@
               link
               icon="plus"
               @click="addMenu(scope.row.ID)"
-            >添加子菜单</el-button>
+            >
+              添加子菜单
+            </el-button>
             <el-button
               type="primary"
               link
               icon="edit"
               @click="editMenu(scope.row.ID)"
-            >编辑</el-button>
+            >
+              编辑
+            </el-button>
             <el-button
               type="primary"
               link
               icon="delete"
               @click="deleteMenu(scope.row.ID)"
-            >删除</el-button>
+            >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -137,11 +147,15 @@
         <div class="flex justify-between items-center">
           <span class="text-lg">{{ dialogTitle }}</span>
           <div>
-            <el-button @click="closeDialog">取 消</el-button>
+            <el-button @click="closeDialog">
+              取 消
+            </el-button>
             <el-button
               type="primary"
               @click="enterDialog"
-            >确 定</el-button>
+            >
+              确 定
+            </el-button>
           </div>
         </div>
       </template>
@@ -154,216 +168,251 @@
         :model="form"
         :rules="rules"
         label-position="top"
-        label-width="85px"
       >
-        <el-form-item
-          label="路由Name"
-          prop="path"
-          style="width: 30%"
-        >
-          <el-input
-            v-model="form.name"
-            autocomplete="off"
-            placeholder="唯一英文字符串"
-            @change="changeName"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="path"
-          style="width: 30%"
-        >
-          <template #label>
-            <span style="display: inline-flex; align-items: center">
-              <span>路由Path</span>
-              <el-checkbox
-                v-model="checkFlag"
-                style="margin-left: 12px; height: auto"
-              >添加参数</el-checkbox>
-            </span>
-          </template>
-
-          <el-input
-            v-model="form.path"
-            :disabled="!checkFlag"
-            autocomplete="off"
-            placeholder="建议只在后方拼接参数"
-          />
-        </el-form-item>
-        <el-form-item
-          label="是否隐藏"
-          style="width: 30%"
-        >
-          <el-select
-            v-model="form.hidden"
-            placeholder="是否在列表隐藏"
-          >
-            <el-option
-              :value="false"
-              label="否"
-            />
-            <el-option
-              :value="true"
-              label="是"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="父节点ID"
-          style="width: 30%"
-        >
-          <el-cascader
-            v-model="form.parentId"
-            style="width: 100%"
-            :disabled="!isEdit"
-            :options="menuOption"
-            :props="{
-              checkStrictly: true,
-              label: 'title',
-              value: 'ID',
-              disabled: 'disabled',
-              emitPath: false,
-            }"
-            :show-all-levels="false"
-            filterable
-          />
-        </el-form-item>
-        <el-form-item
-          label="文件路径"
-          prop="component"
-          style="width: 60%"
-        >
-          <el-input
-            v-model="form.component"
-            autocomplete="off"
-            placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
-            @blur="fmtComponent"
-          />
-          <span style="font-size: 12px; margin-right: 12px">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button
-            style="margin-top: 4px"
-            @click="form.component = 'view/routerHolder.vue'"
-          >点我设置</el-button>
-        </el-form-item>
-        <el-form-item
-          label="展示名称"
-          prop="meta.title"
-          style="width: 30%"
-        >
-          <el-input
-            v-model="form.meta.title"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item
-          label="图标"
-          prop="meta.icon"
-          style="width: 30%"
-        >
-          <icon
-            :meta="form.meta"
-            style="width: 100%"
-          />
-        </el-form-item>
-        <el-form-item
-          label="排序标记"
-          prop="sort"
-          style="width: 30%"
-        >
-          <el-input
-            v-model.number="form.sort"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item
-          prop="meta.activeName"
-          style="width: 30%"
-        >
-          <template #label>
-            <div>
-              <span> 高亮菜单 </span>
-              <el-tooltip
-                content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
-                placement="top"
-                effect="light"
+        <el-row class="w-full">
+          <el-col :span="16">
+            <el-form-item
+              label="文件路径"
+              prop="component"
+            >
+              <el-select
+                v-model="form.component"
+                filterable
+                allow-create
+                autocomplete="off"
+                style="width: 100%"
+                placeholder="页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue"
+                default-first-option
+                @change="fmtComponent"
               >
-                <el-icon><QuestionFilled /></el-icon>
-              </el-tooltip>
-            </div>
-          </template>
-          <el-input
-            v-model="form.meta.activeName"
-            :placeholder="form.name"
-            autocomplete="off"
-          />
-        </el-form-item>
-        <el-form-item
-          label="KeepAlive"
-          prop="meta.keepAlive"
-          style="width: 30%"
-        >
-          <el-select
-            v-model="form.meta.keepAlive"
-            style="width: 100%"
-            placeholder="是否keepAlive缓存页面"
-          >
-            <el-option
-              :value="false"
-              label="否"
-            />
-            <el-option
-              :value="true"
-              label="是"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item
-          label="CloseTab"
-          prop="meta.closeTab"
-          style="width: 30%"
-        >
-          <el-select
-            v-model="form.meta.closeTab"
-            style="width: 100%"
-            placeholder="是否自动关闭tab"
-          >
-            <el-option
-              :value="false"
-              label="否"
-            />
-            <el-option
-              :value="true"
-              label="是"
-            />
-          </el-select>
-        </el-form-item>
-        <el-form-item style="width: 30%">
-          <template #label>
-            <div>
-              <span> 是否为基础页面 </span>
-              <el-tooltip
-                content="此项选择为是，则不会展示左侧菜单以及顶部信息。"
-                placement="top"
-                effect="light"
+                <el-option
+                  v-for="(item,path) in pathOptions"
+                  :key="path"
+                  :label="path"
+                  :value="path"
+                />
+              </el-select>
+              <span style="font-size: 12px; margin-right: 12px">如果菜单包含子菜单，请创建router-view二级路由页面或者</span><el-button
+                style="margin-top: 4px"
+                @click="form.component = 'view/routerHolder.vue'"
               >
-                <el-icon><QuestionFilled /></el-icon>
-              </el-tooltip>
-            </div>
-          </template>
+                点我设置
+              </el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="展示名称"
+              prop="meta.title"
+            >
+              <el-input
+                v-model="form.meta.title"
+                autocomplete="off"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item
+              label="路由Name"
+              prop="path"
+            >
+              <el-input
+                v-model="form.name"
+                autocomplete="off"
+                placeholder="唯一英文字符串"
+                @change="changeName"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              prop="path"
+            >
+              <template #label>
+                <span style="display: inline-flex; align-items: center">
+                  <span>路由Path</span>
+                  <el-checkbox
+                    v-model="checkFlag"
+                    style="margin-left: 12px; height: auto"
+                  >添加参数</el-checkbox>
+                </span>
+              </template>
 
-          <el-select
-            v-model="form.meta.defaultMenu"
-            style="width: 100%"
-            placeholder="是否为基础页面"
-          >
-            <el-option
-              :value="false"
-              label="否"
-            />
-            <el-option
-              :value="true"
-              label="是"
-            />
-          </el-select>
-        </el-form-item>
+              <el-input
+                v-model="form.path"
+                :disabled="!checkFlag"
+                autocomplete="off"
+                placeholder="建议只在后方拼接参数"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="是否隐藏"
+            >
+              <el-select
+                v-model="form.hidden"
+                style="width: 100%"
+                placeholder="是否在列表隐藏"
+              >
+                <el-option
+                  :value="false"
+                  label="否"
+                />
+                <el-option
+                  :value="true"
+                  label="是"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item
+              label="父节点ID"
+            >
+              <el-cascader
+                v-model="form.parentId"
+                style="width: 100%"
+                :disabled="!isEdit"
+                :options="menuOption"
+                :props="{
+                  checkStrictly: true,
+                  label: 'title',
+                  value: 'ID',
+                  disabled: 'disabled',
+                  emitPath: false,
+                }"
+                :show-all-levels="false"
+                filterable
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="图标"
+              prop="meta.icon"
+            >
+              <icon
+                :meta="form.meta"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="排序标记"
+              prop="sort"
+            >
+              <el-input
+                v-model.number="form.sort"
+                autocomplete="off"
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item
+              prop="meta.activeName"
+            >
+              <template #label>
+                <div>
+                  <span> 高亮菜单 </span>
+                  <el-tooltip
+                    content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
+                    placement="top"
+                    effect="light"
+                  >
+                    <el-icon><QuestionFilled /></el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+              <el-input
+                v-model="form.meta.activeName"
+                :placeholder="form.name"
+                autocomplete="off"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="KeepAlive"
+              prop="meta.keepAlive"
+            >
+              <el-select
+                v-model="form.meta.keepAlive"
+                style="width: 100%"
+                placeholder="是否keepAlive缓存页面"
+              >
+                <el-option
+                  :value="false"
+                  label="否"
+                />
+                <el-option
+                  :value="true"
+                  label="是"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item
+              label="CloseTab"
+              prop="meta.closeTab"
+            >
+              <el-select
+                v-model="form.meta.closeTab"
+                style="width: 100%"
+                placeholder="是否自动关闭tab"
+              >
+                <el-option
+                  :value="false"
+                  label="否"
+                />
+                <el-option
+                  :value="true"
+                  label="是"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row class="w-full">
+          <el-col :span="8">
+            <el-form-item>
+              <template #label>
+                <div>
+                  <span> 是否为基础页面 </span>
+                  <el-tooltip
+                    content="此项选择为是，则不会展示左侧菜单以及顶部信息。"
+                    placement="top"
+                    effect="light"
+                  >
+                    <el-icon><QuestionFilled /></el-icon>
+                  </el-tooltip>
+                </div>
+              </template>
+
+              <el-select
+                v-model="form.meta.defaultMenu"
+                style="width: 100%"
+                placeholder="是否为基础页面"
+              >
+                <el-option
+                  :value="false"
+                  label="否"
+                />
+                <el-option
+                  :value="true"
+                  label="是"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div>
         <div class="flex items-center gap-2">
@@ -371,7 +420,9 @@
             type="primary"
             icon="edit"
             @click="addParameter(form)"
-          >新增菜单参数</el-button>
+          >
+            新增菜单参数
+          </el-button>
           <el-icon
             class="cursor-pointer"
             @click="
@@ -379,7 +430,9 @@
                 'https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e'
               )
             "
-          ><VideoCameraFilled /></el-icon>
+          >
+            <VideoCameraFilled />
+          </el-icon>
         </div>
         <el-table
           :data="form.parameters"
@@ -439,7 +492,9 @@
                   type="danger"
                   icon="delete"
                   @click="deleteParameter(form.parameters, scope.$index)"
-                >删除</el-button>
+                >
+                  删除
+                </el-button>
               </div>
             </template>
           </el-table-column>
@@ -450,14 +505,17 @@
             type="primary"
             icon="edit"
             @click="addBtn(form)"
-          >新增可控按钮
+          >
+            新增可控按钮
           </el-button>
           <el-icon
             class="cursor-pointer"
             @click="
               toDoc('https://www.gin-vue-admin.com/guide/web/button-auth.html')
             "
-          ><QuestionFilled /></el-icon>
+          >
+            <QuestionFilled />
+          </el-icon>
           <el-icon
             class="cursor-pointer"
             @click="
@@ -465,7 +523,9 @@
                 'https://www.bilibili.com/video/BV1kv4y1g7nT?p=11&vd_source=f2640257c21e3b547a790461ed94875e'
               )
             "
-          ><VideoCameraFilled /></el-icon>
+          >
+            <VideoCameraFilled />
+          </el-icon>
         </div>
 
         <el-table
@@ -503,7 +563,9 @@
                   type="danger"
                   icon="delete"
                   @click="deleteBtn(form.menuBtn, scope.$index)"
-                >删除</el-button>
+                >
+                  删除
+                </el-button>
               </div>
             </template>
           </el-table-column>
@@ -524,14 +586,25 @@ import {
 import icon from '@/view/superAdmin/menu/icon.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { QuestionFilled, VideoCameraFilled } from '@element-plus/icons-vue'
+import pathInfo from '@/pathInfo.json'
 
 import { toDoc } from '@/utils/doc'
+import { toLowerCase } from '@/utils/stringFun'
 
 defineOptions({
   name: 'Menus',
+})
+
+const pathOptions = reactive({})
+
+onMounted(()=>{
+  for (let pathInfoKey in pathInfo) {
+    // 取消掉最前面的 /src/
+    pathOptions[pathInfoKey.replace(/^\/src\//, '')] = pathInfo[pathInfoKey]
+  }
 })
 
 const rules = reactive({
@@ -578,6 +651,7 @@ const addParameter = (form) => {
 
 const fmtComponent = () => {
   form.value.component = form.value.component.replace(/\\/g, '/')
+  form.value.name = toLowerCase(pathOptions[form.value.component])
 }
 
 // 删除参数

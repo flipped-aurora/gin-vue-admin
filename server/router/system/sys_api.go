@@ -1,7 +1,6 @@
 package system
 
 import (
-	v1 "github.com/flipped-aurora/gin-vue-admin/server/api/v1"
 	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/gin-gonic/gin"
 )
@@ -13,7 +12,6 @@ func (s *ApiRouter) InitApiRouter(Router *gin.RouterGroup, RouterPub *gin.Router
 	apiRouterWithoutRecord := Router.Group("api")
 
 	apiPublicRouterWithoutRecord := RouterPub.Group("api")
-	apiRouterApi := v1.ApiGroupApp.SystemApiGroup.SystemApiApi
 	{
 		apiRouter.GET("getApiGroups", apiRouterApi.GetApiGroups)          // 获取路由组
 		apiRouter.GET("syncApi", apiRouterApi.SyncApi)                    // 同步Api

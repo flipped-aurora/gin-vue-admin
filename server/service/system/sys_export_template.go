@@ -21,6 +21,8 @@ import (
 type SysExportTemplateService struct {
 }
 
+var SysExportTemplateServiceApp = new(SysExportTemplateService)
+
 // CreateSysExportTemplate 创建导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) CreateSysExportTemplate(sysExportTemplate *system.SysExportTemplate) (err error) {

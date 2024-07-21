@@ -2,7 +2,8 @@ import { asyncRouterHandle } from '@/utils/asyncRouter'
 import { emitter } from '@/utils/bus.js'
 import { asyncMenu } from '@/api/menu'
 import { defineStore } from 'pinia'
-import { ref,watchEffect,onMounted } from 'vue'
+import { ref,watchEffect } from 'vue'
+import pathInfo from "@/pathInfo.json";
 
 const notLayoutRouterArr = []
 const keepAliveRoutersArr = []
@@ -30,10 +31,11 @@ const KeepAliveFilter = (routes) => {
   routes && routes.forEach(item => {
     // 子菜单中有 keep-alive 的，父菜单也必须 keep-alive，否则无效。这里将子菜单中有 keep-alive 的父菜单也加入。
     if ((item.children && item.children.some(ch => ch.meta.keepAlive) || item.meta.keepAlive)) {
-      item.component && item.component().then(val => {
-        keepAliveRoutersArr.push(val.default.name)
-        nameMap[item.name] = val.default.name
-      })
+      const regex = /\(\) => import\("([^?]+)\??.*"\)/;
+      const match = String(item.component).match(regex);
+      const path = match ? match[1] : "";
+      keepAliveRoutersArr.push(pathInfo[path])
+      nameMap[item.name] = pathInfo[path]
     }
     if (item.children && item.children.length > 0) {
       KeepAliveFilter(item.children)

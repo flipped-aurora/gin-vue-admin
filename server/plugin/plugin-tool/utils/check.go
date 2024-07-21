@@ -37,7 +37,6 @@ func RegisterMenus(menus ...system.SysBaseMenu) {
 		fmt.Println("插件已安装或存在同名菜单")
 		return
 	}
-	parentMenu.ParentId = 0
 	err := global.GVA_DB.Create(&parentMenu).Error
 	if err != nil {
 		fmt.Println(err)

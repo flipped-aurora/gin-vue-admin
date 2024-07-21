@@ -1,6 +1,6 @@
 
 <div align=center>
-<img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width=300" height="300" />
+<img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width="300" height="300" />
 </div>
 <div align=center>
 <img src="https://img.shields.io/badge/golang-1.20-blue"/>

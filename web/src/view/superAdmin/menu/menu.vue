@@ -652,6 +652,7 @@ const addParameter = (form) => {
 const fmtComponent = () => {
   form.value.component = form.value.component.replace(/\\/g, '/')
   form.value.name = toLowerCase(pathOptions[form.value.component])
+  form.value.path = form.value.name
 }
 
 // 删除参数

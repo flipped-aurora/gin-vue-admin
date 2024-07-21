@@ -1,6 +1,7 @@
 package ast
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"io"
@@ -122,95 +123,30 @@ func (a *PackageInitializeRouter) Rollback(file *ast.File) error {
 
 func (a *PackageInitializeRouter) Injection(file *ast.File) error {
 	_ = NewImport(a.ImportPath).Injection(file)
-	for i := 0; i < len(file.Decls); i++ {
-		v1, o1 := file.Decls[i].(*ast.FuncDecl)
-		if o1 {
-			if v1.Name.Name != "initBizRouter" {
-				continue
-			}
-			var (
-				hasInit   bool
-				blockStmt *ast.BlockStmt
-			)
-			for j := 0; j < len(v1.Body.List); j++ {
-				v2, o2 := v1.Body.List[j].(*ast.BlockStmt)
-				if o2 {
-					for k := 0; k < len(v2.List); k++ {
-						if k == 0 {
-							v3, o3 := v2.List[0].(*ast.AssignStmt)
-							if o3 {
-								if len(v3.Lhs) == 1 && len(v3.Rhs) == 1 {
-									v4, o4 := v3.Lhs[0].(*ast.Ident)
-									v5, o5 := v3.Rhs[0].(*ast.SelectorExpr)
-									v6, o6 := v5.X.(*ast.SelectorExpr)
-									v7, o7 := v6.X.(*ast.Ident)
-									if o4 && o5 && o6 && o7 {
-										if v4.Name == a.ModuleName && v7.Name == a.PackageName && v6.Sel.Name == a.AppName && v5.Sel.Name == a.GroupName {
-											blockStmt = v2
-											continue
-										}
-									}
-								}
-							}
-						} // 判断是否有路由组和作用域
-						v3, o3 := v2.List[k].(*ast.ExprStmt)
-						if o3 {
-							v4, o4 := v3.X.(*ast.CallExpr)
-							if o4 {
-								v5, o5 := v4.Fun.(*ast.SelectorExpr)
-								if o5 {
-									v6, o6 := v5.X.(*ast.Ident)
-									if o6 {
-										if v6.Name == a.ModuleName && v5.Sel.Name == a.FunctionName {
-											hasInit = true
-											continue
-										} // 判断是否存在调用函数
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			if hasInit {
-				continue
-			}
-			stmt := &ast.ExprStmt{
-				X: &ast.CallExpr{
-					Fun: &ast.SelectorExpr{
-						X:   &ast.Ident{Name: a.ModuleName},
-						Sel: &ast.Ident{Name: a.FunctionName},
-					},
-					Args: []ast.Expr{
-						&ast.Ident{Name: a.LeftRouterGroupName},
-						&ast.Ident{Name: a.RightRouterGroupName},
-					},
-				},
-			}
-			if blockStmt == nil {
-				blockStmt = &ast.BlockStmt{
-					List: []ast.Stmt{
-						&ast.AssignStmt{
-							Lhs: []ast.Expr{&ast.Ident{Name: a.ModuleName, Obj: ast.NewObj(ast.Var, a.ModuleName)}},
-							Tok: token.DEFINE,
-							Rhs: []ast.Expr{
-								&ast.SelectorExpr{
-									X: &ast.SelectorExpr{
-										X:   &ast.Ident{Name: a.PackageName},
-										Sel: &ast.Ident{Name: a.AppName},
-									},
-									Sel: &ast.Ident{Name: a.GroupName},
-								},
-							},
-						},
-						stmt,
-					},
-				}
-				v1.Body.List = append(v1.Body.List, blockStmt)
+	funcDecl := FindFunction(file, "initBizRouter")
+	hasRouter := false
+	var varBlock *ast.BlockStmt
+	for i := range funcDecl.Body.List {
+		if IsBlockStmt(funcDecl.Body.List[i]) {
+			if VariableExistsInBlock(funcDecl.Body.List[i].(*ast.BlockStmt), a.ModuleName) {
+				hasRouter = true
+				varBlock = funcDecl.Body.List[i].(*ast.BlockStmt)
 				break
-			} // 创建作用域 && 创建路由组 && 调用路由初始化函数
-			blockStmt.List = append(blockStmt.List, stmt)
+			}
 		}
+	}
+	if !hasRouter {
+		stmt := a.CreateAssignStmt()
+		varBlock = &ast.BlockStmt{
+			List: []ast.Stmt{
+				stmt,
+			},
+		}
+	}
+	routerStmt := CreateStmt(fmt.Sprintf("%s.%s(%s,%s)", a.ModuleName, a.FunctionName, a.LeftRouterGroupName, a.RightRouterGroupName))
+	varBlock.List = append(varBlock.List, routerStmt)
+	if !hasRouter {
+		funcDecl.Body.List = append(funcDecl.Body.List, varBlock)
 	}
 	return nil
 }
@@ -220,4 +156,29 @@ func (a *PackageInitializeRouter) Format(filename string, writer io.Writer, file
 		filename = a.Path
 	}
 	return a.Base.Format(filename, writer, file)
+}
+
+func (a *PackageInitializeRouter) CreateAssignStmt() *ast.AssignStmt {
+	//创建左侧变量
+	ident := &ast.Ident{
+		Name: a.ModuleName,
+	}
+
+	//创建右侧的赋值语句
+	selector := &ast.SelectorExpr{
+		X: &ast.SelectorExpr{
+			X:   &ast.Ident{Name: a.PackageName},
+			Sel: &ast.Ident{Name: a.AppName},
+		},
+		Sel: &ast.Ident{Name: a.GroupName},
+	}
+
+	// 创建一个组合的赋值语句
+	stmt := &ast.AssignStmt{
+		Lhs: []ast.Expr{ident},
+		Tok: token.DEFINE,
+		Rhs: []ast.Expr{selector},
+	}
+
+	return stmt
 }

@@ -69,3 +69,25 @@ func CreateStmt(statement string) *ast.ExprStmt {
 	}
 	return &ast.ExprStmt{X: expr}
 }
+
+func IsBlockStmt(node ast.Node) bool {
+	_, ok := node.(*ast.BlockStmt)
+	return ok
+}
+
+func VariableExistsInBlock(block *ast.BlockStmt, varName string) bool {
+	exists := false
+	ast.Inspect(block, func(n ast.Node) bool {
+		switch node := n.(type) {
+		case *ast.AssignStmt:
+			for _, expr := range node.Lhs {
+				if ident, ok := expr.(*ast.Ident); ok && ident.Name == varName {
+					exists = true
+					return false
+				}
+			}
+		}
+		return true
+	})
+	return exists
+}

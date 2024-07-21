@@ -57,15 +57,17 @@ func TestPackageInitializeRouter_Injection(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			a := &PackageInitializeRouter{
-				Type:            tt.fields.Type,
-				Path:            tt.fields.Path,
-				ImportPath:      tt.fields.ImportPath,
-				AppName:         tt.fields.AppName,
-				GroupName:       tt.fields.GroupName,
-				ModuleName:      tt.fields.ModuleName,
-				PackageName:     tt.fields.PackageName,
-				FunctionName:    tt.fields.FunctionName,
-				RouterGroupName: tt.fields.RouterGroupName,
+				Type:                 tt.fields.Type,
+				Path:                 tt.fields.Path,
+				ImportPath:           tt.fields.ImportPath,
+				AppName:              tt.fields.AppName,
+				GroupName:            tt.fields.GroupName,
+				ModuleName:           tt.fields.ModuleName,
+				PackageName:          tt.fields.PackageName,
+				FunctionName:         tt.fields.FunctionName,
+				RouterGroupName:      tt.fields.RouterGroupName,
+				LeftRouterGroupName:  "privateGroup",
+				RightRouterGroupName: "publicGroup",
 			}
 			file, err := a.Parse(a.Path, nil)
 			if err != nil {

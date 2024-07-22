@@ -45,7 +45,7 @@ func (a *PackageInitializeRouter) Rollback(file *ast.File) error {
 	for i := range funcDecl.Body.List {
 		if IsBlockStmt(funcDecl.Body.List[i]) {
 			if VariableExistsInBlock(funcDecl.Body.List[i].(*ast.BlockStmt), a.ModuleName) {
-				for i, stmt := range funcDecl.Body.List[i].(*ast.BlockStmt).List {
+				for ii, stmt := range funcDecl.Body.List[i].(*ast.BlockStmt).List {
 					// 检查语句是否为 *ast.ExprStmt
 					exprStmt, ok := stmt.(*ast.ExprStmt)
 					if !ok {
@@ -73,11 +73,10 @@ func (a *PackageInitializeRouter) Rollback(file *ast.File) error {
 					}
 					exprNum--
 					// 从语句列表中移除。
-					funcDecl.Body.List[i].(*ast.BlockStmt).List = append(funcDecl.Body.List[i].(*ast.BlockStmt).List[:i], funcDecl.Body.List[i].(*ast.BlockStmt).List[i+1:]...)
+					funcDecl.Body.List[i].(*ast.BlockStmt).List = append(funcDecl.Body.List[i].(*ast.BlockStmt).List[:ii], funcDecl.Body.List[i].(*ast.BlockStmt).List[ii+1:]...)
 					// 如果不再存在任何调用，则删除导入和变量。
 					if exprNum == 0 {
 						funcDecl.Body.List = append(funcDecl.Body.List[:i], funcDecl.Body.List[i+1:]...)
-						_ = NewImport(a.ImportPath).Rollback(file)
 					}
 					break
 				}
@@ -90,7 +89,6 @@ func (a *PackageInitializeRouter) Rollback(file *ast.File) error {
 }
 
 func (a *PackageInitializeRouter) Injection(file *ast.File) error {
-	_ = NewImport(a.ImportPath).Injection(file)
 	funcDecl := FindFunction(file, "initBizRouter")
 	hasRouter := false
 	var varBlock *ast.BlockStmt

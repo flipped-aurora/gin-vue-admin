@@ -114,9 +114,7 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		var injection ast.Ast
 		switch key {
 		case ast.TypePackageApiEnter, ast.TypePackageRouterEnter, ast.TypePackageServiceEnter:
-			var entity ast.PackageEnter
-			_ = json.Unmarshal([]byte(value), &entity)
-			injection = &entity
+
 		case ast.TypePackageApiModuleEnter, ast.TypePackageRouterModuleEnter, ast.TypePackageServiceModuleEnter:
 			var entity ast.PackageModuleEnter
 			_ = json.Unmarshal([]byte(value), &entity)

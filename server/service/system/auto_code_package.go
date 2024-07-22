@@ -7,6 +7,7 @@ import (
 	common "github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
 	"go/token"
@@ -80,7 +81,8 @@ func (s *autoCodePackage) Create(ctx context.Context, info *request.SysAutoCodeP
 		for key, value := range asts {
 			keys := strings.Split(key, "=>")
 			if len(keys) == 2 {
-				if keys[1] == ast.TypePluginInitializeV2 {
+				switch keys[1] {
+				case ast.TypePluginInitializeV2, ast.TypePackageApiEnter, ast.TypePackageRouterEnter, ast.TypePackageServiceEnter:
 					file, _ := value.Parse("", nil)
 					if file != nil {
 						err = value.Injection(file)
@@ -227,7 +229,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										Type:              ast.TypePackageApiEnter,
 										Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "v1", "enter.go"),
 										ImportPath:        fmt.Sprintf(`"%s/%s/%s/%s"`, global.GVA_CONFIG.AutoCode.Module, "api", "v1", entity.PackageName),
-										StructName:        info.PackageT + "ApiGroup",
+										StructName:        utils.FirstUpper(entity.PackageName) + "ApiGroup",
 										PackageName:       entity.PackageName,
 										PackageStructName: "ApiGroup",
 									}
@@ -238,7 +240,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										ImportPath:  fmt.Sprintf(`"%s/service"`, global.GVA_CONFIG.AutoCode.Module),
 										StructName:  info.StructName + "Api",
 										AppName:     "ServiceGroupApp",
-										GroupName:   info.PackageT + "ServiceGroup",
+										GroupName:   utils.FirstUpper(entity.PackageName) + "ServiceGroup",
 										ModuleName:  info.Abbreviation + "Service",
 										PackageName: "service",
 										ServiceName: info.StructName + "Service",
@@ -251,7 +253,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										Type:              ast.TypePackageRouterEnter,
 										Path:              filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, secondDirs[j].Name(), "enter.go"),
 										ImportPath:        fmt.Sprintf(`"%s/%s/%s"`, global.GVA_CONFIG.AutoCode.Module, secondDirs[j].Name(), entity.PackageName),
-										StructName:        info.PackageT,
+										StructName:        utils.FirstUpper(entity.PackageName),
 										PackageName:       entity.PackageName,
 										PackageStructName: "RouterGroup",
 									}
@@ -262,7 +264,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										ImportPath:  fmt.Sprintf(`api "%s/api/v1"`, global.GVA_CONFIG.AutoCode.Module),
 										StructName:  info.StructName + "Router",
 										AppName:     "ApiGroupApp",
-										GroupName:   info.PackageT + "ApiGroup",
+										GroupName:   utils.FirstUpper(entity.PackageName) + "ApiGroup",
 										ModuleName:  info.Abbreviation + "Api",
 										PackageName: "api",
 										ServiceName: info.StructName + "Api",
@@ -274,7 +276,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										Path:                 filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go"),
 										ImportPath:           fmt.Sprintf(`"%s/router"`, global.GVA_CONFIG.AutoCode.Module),
 										AppName:              "RouterGroupApp",
-										GroupName:            info.PackageT,
+										GroupName:            utils.FirstUpper(entity.PackageName),
 										ModuleName:           entity.PackageName + "Router",
 										PackageName:          "router",
 										FunctionName:         "Init" + info.StructName + "Router",
@@ -290,7 +292,7 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 										Type:              ast.TypePackageServiceEnter,
 										Path:              path,
 										ImportPath:        importPath,
-										StructName:        info.PackageT + "ServiceGroup",
+										StructName:        utils.FirstUpper(entity.PackageName) + "ServiceGroup",
 										PackageName:       entity.PackageName,
 										PackageStructName: "ServiceGroup",
 									}

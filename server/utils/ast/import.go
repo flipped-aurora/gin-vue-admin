@@ -4,6 +4,7 @@ import (
 	"go/ast"
 	"go/token"
 	"io"
+	"strings"
 )
 
 type Import struct {
@@ -57,7 +58,7 @@ func (a *Import) Injection(file *ast.File) error {
 			}
 			for j := 0; j < len(v1.Specs); j++ {
 				v2, o2 := v1.Specs[j].(*ast.ImportSpec)
-				if o2 && v2.Path.Value == a.ImportPath {
+				if o2 && strings.Contains(a.ImportPath, v2.Path.Value) {
 					has = true
 					break
 				}

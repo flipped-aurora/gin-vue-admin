@@ -94,8 +94,8 @@ func installation(path string, formPath string, toPath string) error {
 	}
 	name := arr[ln-3]
 
-	var form = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + formPath + "/" + path)
-	var to = filepath.ToSlash(global.GVA_CONFIG.AutoCode.Root + toPath + "/plugin/")
+	var form = filepath.Join(global.GVA_CONFIG.AutoCode.Root, formPath, path)
+	var to = filepath.Join(global.GVA_CONFIG.AutoCode.Root, toPath+"/plugin/")
 	_, err := os.Stat(to + name)
 	if err == nil {
 		zap.L().Error("autoPath 已存在同名插件，请自行手动安装", zap.String("to", to))

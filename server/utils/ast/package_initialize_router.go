@@ -40,84 +40,52 @@ func (a *PackageInitializeRouter) Parse(filename string, writer io.Writer) (file
 }
 
 func (a *PackageInitializeRouter) Rollback(file *ast.File) error {
-	for i := 0; i < len(file.Decls); i++ {
-		v1, o1 := file.Decls[i].(*ast.FuncDecl)
-		if o1 {
-			if v1.Name.Name != "initBizRouter" {
-				continue
-			}
-			for j := 0; j < len(v1.Body.List); j++ {
-				v2, o2 := v1.Body.List[j].(*ast.BlockStmt)
-				if o2 {
-					for k := 0; k < len(v2.List); k++ {
-						if k == 0 {
-							v3, o3 := v2.List[0].(*ast.AssignStmt)
-							if o3 {
-								if len(v3.Lhs) == 1 && len(v3.Rhs) == 1 {
-									v4, o4 := v3.Lhs[0].(*ast.Ident)
-									v5, o5 := v3.Rhs[0].(*ast.SelectorExpr)
-									v6, o6 := v5.X.(*ast.SelectorExpr)
-									v7, o7 := v6.X.(*ast.Ident)
-									if o4 && o5 && o6 && o7 {
-										if v4.Name != a.ModuleName && v7.Name != a.PackageName && v6.Sel.Name != a.AppName && v5.Sel.Name != a.GroupName {
-											break
-										}
-									}
-								}
-							}
-						} // 判断是否有路由组和作用域
-						v3, o3 := v2.List[k].(*ast.ExprStmt)
-						if o3 {
-							v4, o4 := v3.X.(*ast.CallExpr)
-							if o4 {
-								v5, o5 := v4.Fun.(*ast.SelectorExpr)
-								if o5 {
-									v6, o6 := v5.X.(*ast.Ident)
-									if o6 {
-										if v6.Name == a.ModuleName && v5.Sel.Name == a.FunctionName {
-											v2.List = append(v2.List[:k], v2.List[k+1:]...)
-											length := len(v2.List)
-											if length == 1 {
-												v1.Body.List = append(v1.Body.List[:j], v1.Body.List[j+1:]...)
-												// TODO 删除作用域之后会出现两种情况需要删除空行, 中间模块被删除和最后的模块被删除
-												// if j < len(v1.Body.List) {
-												// 	v2, o2 = v1.Body.List[j].(*ast.BlockStmt)
-												// 	if o2 {
-												// 		v2.Lbrace -= 3
-												// 		// v2.Rbrace -= 2
-												// 	}
-												// } // 中间模块被删除
-												// if j == len(v1.Body.List) {
-												// 	v1.Body.Rbrace -= 10
-												// } // 最后的模块被删除
-												break
-											} // 无调用路由初始化函数 => 删除局部变量 && 删除作用域 && 导包
-											if k < length-1 {
-												v3, o3 = v2.List[k].(*ast.ExprStmt)
-												if o3 {
-													v4, o4 = v3.X.(*ast.CallExpr)
-													if o4 {
-														v5, o5 = v4.Fun.(*ast.SelectorExpr)
-														if o5 {
-															v6, o6 = v5.X.(*ast.Ident)
-															if o6 {
-																v6.NamePos -= 10
-															}
-															v5.Sel.NamePos -= 20
-														}
-													}
-												}
-											} // 删除空行
-										}
-									}
-								}
-							}
-						}
+	funcDecl := FindFunction(file, "initBizRouter")
+	exprNum := 0
+	for i := range funcDecl.Body.List {
+		if IsBlockStmt(funcDecl.Body.List[i]) {
+			if VariableExistsInBlock(funcDecl.Body.List[i].(*ast.BlockStmt), a.ModuleName) {
+				for i, stmt := range funcDecl.Body.List[i].(*ast.BlockStmt).List {
+					// 检查语句是否为 *ast.ExprStmt
+					exprStmt, ok := stmt.(*ast.ExprStmt)
+					if !ok {
+						continue
 					}
+					// 检查表达式是否为 *ast.CallExpr
+					callExpr, ok := exprStmt.X.(*ast.CallExpr)
+					if !ok {
+						continue
+					}
+					// 检查是否调用了我们正在寻找的函数
+					selExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
+					if !ok {
+						continue
+					}
+					// 检查调用的函数是否为 systemRouter.InitApiRouter
+					ident, ok := selExpr.X.(*ast.Ident)
+					//只要存在调用则+1
+					if ok && ident.Name == a.ModuleName {
+						exprNum++
+					}
+					//判断是否为目标结构
+					if !ok || ident.Name != a.ModuleName || selExpr.Sel.Name != a.FunctionName {
+						continue
+					}
+					exprNum--
+					// 从语句列表中移除。
+					funcDecl.Body.List[i].(*ast.BlockStmt).List = append(funcDecl.Body.List[i].(*ast.BlockStmt).List[:i], funcDecl.Body.List[i].(*ast.BlockStmt).List[i+1:]...)
+					// 如果不再存在任何调用，则删除导入和变量。
+					if exprNum == 0 {
+						funcDecl.Body.List = append(funcDecl.Body.List[:i], funcDecl.Body.List[i+1:]...)
+						_ = NewImport(a.ImportPath).Rollback(file)
+					}
+					break
 				}
+				break
 			}
 		}
 	}
+
 	return nil
 }
 

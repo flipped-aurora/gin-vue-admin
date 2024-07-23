@@ -137,7 +137,7 @@ func (v *cutAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
 	}
 
 	// 删除结构体参数
-	for i := range callExpr.Args {
+	for i := 0; i < len(callExpr.Args); i++ {
 		if com, comok := callExpr.Args[i].(*ast.CompositeLit); comok {
 			if selector, exprok := com.Type.(*ast.SelectorExpr); exprok {
 				if x, identok := selector.X.(*ast.Ident); identok {

@@ -34,12 +34,12 @@ func (a *PackageInitializeGorm) Parse(filename string, writer io.Writer) (file *
 }
 
 func (a *PackageInitializeGorm) Rollback(file *ast.File) error {
-	cutAutoMigrateFuncVisitor := cutAutoMigrateFunc{
+	cutAutoMigrateFuncVisitor := &cutAutoMigrateFunc{
 		pkgInitGorm: a,
 	}
 	ast.Walk(cutAutoMigrateFuncVisitor, file)
 
-	if cutAutoMigrateFuncVisitor.PackageNameNum == 0 {
+	if cutAutoMigrateFuncVisitor.PackageNameNum == 1 {
 		_ = NewImport(a.ImportPath).Rollback(file)
 	}
 	return nil
@@ -52,7 +52,7 @@ func (a *PackageInitializeGorm) Injection(file *ast.File) error {
 		a.addDbVar(bizModelDecl.Body)
 	}
 
-	addAutoMigrateVisitor := addAutoMigrateFunc{
+	addAutoMigrateVisitor := &addAutoMigrateFunc{
 		pkgInitGorm: a,
 	}
 
@@ -71,9 +71,13 @@ type addAutoMigrateFunc struct {
 	pkgInitGorm *PackageInitializeGorm
 }
 
-func (v addAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
+func (v *addAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
 	// 总调用的db变量根据business来决定
-	varDB := v.pkgInitGorm.Business + "db"
+	varDB := v.pkgInitGorm.Business + "Db"
+
+	if v.pkgInitGorm.Business == "" {
+		varDB = "db"
+	}
 
 	callExpr, ok := n.(*ast.CallExpr)
 	if !ok {
@@ -107,9 +111,13 @@ type cutAutoMigrateFunc struct {
 	PackageNameNum int
 }
 
-func (v cutAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
+func (v *cutAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
 	// 总调用的db变量根据business来决定
 	varDB := v.pkgInitGorm.Business + "Db"
+
+	if v.pkgInitGorm.Business == "" {
+		varDB = "db"
+	}
 
 	callExpr, ok := n.(*ast.CallExpr)
 	if !ok {
@@ -130,19 +138,16 @@ func (v cutAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
 
 	// 删除结构体参数
 	for i := range callExpr.Args {
-		if com, ok := callExpr.Args[i].(*ast.CompositeLit); ok {
-			if selector, ok := com.Type.(*ast.SelectorExpr); ok {
-				if x, ok := selector.X.(*ast.Ident); ok {
+		if com, comok := callExpr.Args[i].(*ast.CompositeLit); comok {
+			if selector, exprok := com.Type.(*ast.SelectorExpr); exprok {
+				if x, identok := selector.X.(*ast.Ident); identok {
 					if x.Name == v.pkgInitGorm.PackageName {
 						v.PackageNameNum++
 						if selector.Sel.Name == v.pkgInitGorm.StructName {
 							callExpr.Args = append(callExpr.Args[:i], callExpr.Args[i+1:]...)
-							v.PackageNameNum--
-							i--
 						}
 					}
 				}
-
 			}
 		}
 	}

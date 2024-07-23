@@ -19,7 +19,7 @@ export const useUserStore = defineStore('user', () => {
     baseColor: '#fff'
   })
   const token = ref(window.localStorage.getItem('token') || '')
-  const language = ref(window.localStorage.getItem('langauge') || 'en') // added by mohamed hassan to allow store selected language for multilanguage support.
+  const language = ref(window.localStorage.getItem('language') || cookie.get('language') || 'en') // added by mohamed hassan to allow store selected language for multilanguage support.
 
   const setUserInfo = (val) => {
     userInfo.value = val

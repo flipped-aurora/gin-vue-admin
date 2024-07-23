@@ -145,6 +145,7 @@ func (v *cutAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
 						v.PackageNameNum++
 						if selector.Sel.Name == v.pkgInitGorm.StructName {
 							callExpr.Args = append(callExpr.Args[:i], callExpr.Args[i+1:]...)
+							i--
 						}
 					}
 				}

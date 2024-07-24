@@ -34,12 +34,53 @@ func (a *PackageInitializeGorm) Parse(filename string, writer io.Writer) (file *
 }
 
 func (a *PackageInitializeGorm) Rollback(file *ast.File) error {
-	cutAutoMigrateFuncVisitor := &cutAutoMigrateFunc{
-		pkgInitGorm: a,
-	}
-	ast.Walk(cutAutoMigrateFuncVisitor, file)
+	packageNameNum := 0
+	// 寻找目标结构
+	ast.Inspect(file, func(n ast.Node) bool {
+		// 总调用的db变量根据business来决定
+		varDB := a.Business + "Db"
 
-	if cutAutoMigrateFuncVisitor.PackageNameNum == 1 {
+		if a.Business == "" {
+			varDB = "db"
+		}
+
+		callExpr, ok := n.(*ast.CallExpr)
+		if !ok {
+			return true
+		}
+
+		// 检查是不是 db.AutoMigrate() 方法
+		selExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
+		if !ok || selExpr.Sel.Name != "AutoMigrate" {
+			return true
+		}
+
+		// 检查调用方是不是 db
+		ident, ok := selExpr.X.(*ast.Ident)
+		if !ok || ident.Name != varDB {
+			return true
+		}
+
+		// 删除结构体参数
+		for i := 0; i < len(callExpr.Args); i++ {
+			if com, comok := callExpr.Args[i].(*ast.CompositeLit); comok {
+				if selector, exprok := com.Type.(*ast.SelectorExpr); exprok {
+					if x, identok := selector.X.(*ast.Ident); identok {
+						if x.Name == a.PackageName {
+							packageNameNum++
+							if selector.Sel.Name == a.StructName {
+								callExpr.Args = append(callExpr.Args[:i], callExpr.Args[i+1:]...)
+								i--
+							}
+						}
+					}
+				}
+			}
+		}
+		return true
+	})
+
+	if packageNameNum == 1 {
 		_ = NewImport(a.ImportPath).Rollback(file)
 	}
 	return nil
@@ -51,12 +92,41 @@ func (a *PackageInitializeGorm) Injection(file *ast.File) error {
 	if bizModelDecl != nil {
 		a.addDbVar(bizModelDecl.Body)
 	}
+	// 寻找目标结构
+	ast.Inspect(file, func(n ast.Node) bool {
+		// 总调用的db变量根据business来决定
+		varDB := a.Business + "Db"
 
-	addAutoMigrateVisitor := &addAutoMigrateFunc{
-		pkgInitGorm: a,
-	}
+		if a.Business == "" {
+			varDB = "db"
+		}
 
-	ast.Walk(addAutoMigrateVisitor, file)
+		callExpr, ok := n.(*ast.CallExpr)
+		if !ok {
+			return true
+		}
+
+		// 检查是不是 db.AutoMigrate() 方法
+		selExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
+		if !ok || selExpr.Sel.Name != "AutoMigrate" {
+			return true
+		}
+
+		// 检查调用方是不是 db
+		ident, ok := selExpr.X.(*ast.Ident)
+		if !ok || ident.Name != varDB {
+			return true
+		}
+
+		// 添加结构体参数
+		callExpr.Args = append(callExpr.Args, &ast.CompositeLit{
+			Type: &ast.SelectorExpr{
+				X:   ast.NewIdent(a.PackageName),
+				Sel: ast.NewIdent(a.StructName),
+			},
+		})
+		return true
+	})
 	return nil
 }
 
@@ -65,94 +135,6 @@ func (a *PackageInitializeGorm) Format(filename string, writer io.Writer, file *
 		filename = a.Path
 	}
 	return a.Base.Format(filename, writer, file)
-}
-
-type addAutoMigrateFunc struct {
-	pkgInitGorm *PackageInitializeGorm
-}
-
-func (v *addAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
-	// 总调用的db变量根据business来决定
-	varDB := v.pkgInitGorm.Business + "Db"
-
-	if v.pkgInitGorm.Business == "" {
-		varDB = "db"
-	}
-
-	callExpr, ok := n.(*ast.CallExpr)
-	if !ok {
-		return v
-	}
-
-	// 检查是不是 db.AutoMigrate() 方法
-	selExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
-	if !ok || selExpr.Sel.Name != "AutoMigrate" {
-		return v
-	}
-
-	// 检查调用方是不是 db
-	ident, ok := selExpr.X.(*ast.Ident)
-	if !ok || ident.Name != varDB {
-		return v
-	}
-
-	// 添加结构体参数
-	callExpr.Args = append(callExpr.Args, &ast.CompositeLit{
-		Type: &ast.SelectorExpr{
-			X:   ast.NewIdent(v.pkgInitGorm.PackageName),
-			Sel: ast.NewIdent(v.pkgInitGorm.StructName),
-		},
-	})
-	return v
-}
-
-type cutAutoMigrateFunc struct {
-	pkgInitGorm    *PackageInitializeGorm
-	PackageNameNum int
-}
-
-func (v *cutAutoMigrateFunc) Visit(n ast.Node) ast.Visitor {
-	// 总调用的db变量根据business来决定
-	varDB := v.pkgInitGorm.Business + "Db"
-
-	if v.pkgInitGorm.Business == "" {
-		varDB = "db"
-	}
-
-	callExpr, ok := n.(*ast.CallExpr)
-	if !ok {
-		return v
-	}
-
-	// 检查是不是 db.AutoMigrate() 方法
-	selExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
-	if !ok || selExpr.Sel.Name != "AutoMigrate" {
-		return v
-	}
-
-	// 检查调用方是不是 db
-	ident, ok := selExpr.X.(*ast.Ident)
-	if !ok || ident.Name != varDB {
-		return v
-	}
-
-	// 删除结构体参数
-	for i := 0; i < len(callExpr.Args); i++ {
-		if com, comok := callExpr.Args[i].(*ast.CompositeLit); comok {
-			if selector, exprok := com.Type.(*ast.SelectorExpr); exprok {
-				if x, identok := selector.X.(*ast.Ident); identok {
-					if x.Name == v.pkgInitGorm.PackageName {
-						v.PackageNameNum++
-						if selector.Sel.Name == v.pkgInitGorm.StructName {
-							callExpr.Args = append(callExpr.Args[:i], callExpr.Args[i+1:]...)
-							i--
-						}
-					}
-				}
-			}
-		}
-	}
-	return v
 }
 
 // 创建businessDB变量

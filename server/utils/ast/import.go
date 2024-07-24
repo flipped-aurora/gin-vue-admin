@@ -32,7 +32,7 @@ func (a *Import) Rollback(file *ast.File) error {
 			}
 			for j := 0; j < len(v1.Specs); j++ {
 				v2, o2 := v1.Specs[j].(*ast.ImportSpec)
-				if o2 && v2.Path.Value == a.ImportPath {
+				if o2 && strings.HasSuffix(a.ImportPath, v2.Path.Value) {
 					v1.Specs = append(v1.Specs[:j], v1.Specs[j+1:]...)
 					if len(v1.Specs) == 0 {
 						file.Decls = append(file.Decls[:i], file.Decls[i+1:]...)
@@ -58,7 +58,7 @@ func (a *Import) Injection(file *ast.File) error {
 			}
 			for j := 0; j < len(v1.Specs); j++ {
 				v2, o2 := v1.Specs[j].(*ast.ImportSpec)
-				if o2 && strings.Contains(a.ImportPath, v2.Path.Value) {
+				if o2 && strings.HasSuffix(a.ImportPath, v2.Path.Value) {
 					has = true
 					break
 				}

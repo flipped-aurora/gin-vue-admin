@@ -215,7 +215,7 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 //@return:  apis []model.SysApi, err error
 
 func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
-	err = global.GVA_DB.Find(&apis).Error
+	err = global.GVA_DB.Order("id desc").Find(&apis).Error
 	return
 }
 

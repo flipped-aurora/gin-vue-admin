@@ -15,6 +15,8 @@ import (
 
 type OperationRecordService struct{}
 
+var OperationRecordServiceApp = new(OperationRecordService)
+
 func (operationRecordService *OperationRecordService) CreateSysOperationRecord(sysOperationRecord system.SysOperationRecord) (err error) {
 	err = global.GVA_DB.Create(&sysOperationRecord).Error
 	return err

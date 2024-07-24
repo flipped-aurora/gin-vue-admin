@@ -84,7 +84,7 @@ func (a *PluginInitializeGorm) Injection(file *ast.File) error {
 		}
 
 		selExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
-		if ok && selExpr.Sel.Name == a.StructName {
+		if ok && selExpr.Sel.Name == "AutoMigrate" {
 			call = callExpr
 			return false
 		}

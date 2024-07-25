@@ -94,17 +94,17 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 // @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router    /autoCode/createTemp [post]
 func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
-	var info request.AutoCode
+	var info request.AutoFunc
 	err := c.ShouldBindJSON(&info)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	autoCode, err := autoCodeTemplateService.Preview(info)
+	err = autoCodeTemplateService.AddFunc(info)
 	if err != nil {
-		global.GVA_LOG.Error("预览失败!", zap.Error(err))
-		response.FailWithMessage("预览失败", c)
+		global.GVA_LOG.Error("注入失败!", zap.Error(err))
+		response.FailWithMessage("注入失败", c)
 	} else {
-		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
+		response.OkWithMessage("注入成功", c)
 	}
 }

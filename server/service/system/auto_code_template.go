@@ -173,6 +173,6 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 	return code, templates, injections, nil
 }
 
-func (s *autoCodeTemplate) AddFunc(info request.AutoCode) (map[string]string, error) {
-	return preview, nil
+func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
+	return nil
 }

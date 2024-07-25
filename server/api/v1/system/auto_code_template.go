@@ -83,3 +83,28 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	c.Writer.Header().Add("Content-Type", "application/json")
 	c.Writer.Header().Add("success", "true")
 }
+
+// Create
+// @Tags      AddFunc
+// @Summary   增加方法
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.AutoCode  true  "增加方法"
+// @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router    /autoCode/createTemp [post]
+func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
+	var info request.AutoCode
+	err := c.ShouldBindJSON(&info)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	autoCode, err := autoCodeTemplateService.Preview(info)
+	if err != nil {
+		global.GVA_LOG.Error("预览失败!", zap.Error(err))
+		response.FailWithMessage("预览失败", c)
+	} else {
+		response.OkWithDetailed(gin.H{"autoCode": autoCode}, "预览成功", c)
+	}
+}

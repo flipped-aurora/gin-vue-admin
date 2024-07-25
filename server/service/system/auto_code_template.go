@@ -172,3 +172,7 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 	} // 注入代码
 	return code, templates, injections, nil
 }
+
+func (s *autoCodeTemplate) AddFunc(info request.AutoCode) (map[string]string, error) {
+	return preview, nil
+}

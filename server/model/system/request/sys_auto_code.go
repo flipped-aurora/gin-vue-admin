@@ -225,3 +225,14 @@ type AutoCodeField struct {
 	CheckDataSource bool        `json:"checkDataSource"` // 是否检查数据源
 	FieldIndexType  string      `json:"fieldIndexType"`  // 索引类型
 }
+
+type AutoFunc struct {
+	Package         string `json:"package"`
+	FuncName        string `json:"funcName"`        // 方法名称
+	StructName      string `json:"structName"`      // Struct名称
+	PackageName     string `json:"packageName"`     // 文件名称
+	Description     string `json:"description"`     // Struct中文名称
+	Abbreviation    string `json:"abbreviation"`    // Struct简称
+	HumpPackageName string `json:"humpPackageName"` // go文件名称
+	Method          string `json:"method"`          // 方法
+}

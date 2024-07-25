@@ -34,45 +34,6 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		return errors.New("已经创建过此数据结构,请勿重复创建!")
 	}
 
-	// 自动创建api
-	if info.AutoCreateApiToSql {
-		apis := info.Apis()
-		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-			for _, v := range apis {
-				var api model.SysApi
-				err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error
-				if err == nil {
-					return errors.New("存在相同的API，请关闭自动创建API功能")
-				}
-				if errors.Is(err, gorm.ErrRecordNotFound) {
-					if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
-						return err
-					}
-					history.ApiIDs = append(history.ApiIDs, v.ID)
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-	}
-
-	// 自动创建menu
-	if info.AutoCreateMenuToSql {
-		var entity model.SysBaseMenu
-		err := global.GVA_DB.WithContext(ctx).First(&entity, "name = ?", info.Abbreviation).Error
-		if err == nil {
-			return errors.New("存在相同的菜单路由，请关闭自动创建菜单功能")
-		}
-		entity = info.Menu(autoPkg.Template)
-		err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
-		if err != nil {
-			return errors.Wrap(err, "创建菜单失败!")
-		}
-		history.MenuID = entity.ID
-	}
-
 	generate, templates, injections, err := s.generate(ctx, info, autoPkg)
 	if err != nil {
 		return err
@@ -86,6 +47,49 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		if err != nil {
 			return errors.Wrapf(err, "[filepath:%s]写入文件失败!", key)
 		}
+	}
+
+	// 自动创建api
+	if info.AutoCreateApiToSql {
+		apis := info.Apis()
+		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+			for _, v := range apis {
+				var api model.SysApi
+				var id uint
+				err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error
+				if errors.Is(err, gorm.ErrRecordNotFound) {
+					if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
+						return err
+					}
+					id = v.ID
+				} else {
+					id = api.ID
+				}
+				history.ApiIDs = append(history.ApiIDs, id)
+			}
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	// 自动创建menu
+	if info.AutoCreateMenuToSql {
+		var entity model.SysBaseMenu
+		var id uint
+		err := global.GVA_DB.WithContext(ctx).First(&entity, "name = ?", info.Abbreviation).Error
+		if err == nil {
+			id = entity.ID
+		} else {
+			entity = info.Menu(autoPkg.Template)
+			err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
+			id = entity.ID
+			if err != nil {
+				return errors.Wrap(err, "创建菜单失败!")
+			}
+		}
+		history.MenuID = id
 	}
 
 	// 创建历史记录

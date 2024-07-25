@@ -7,7 +7,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
-	"net/url"
 )
 
 type AutoCodeTemplateApi struct{}
@@ -76,10 +75,9 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 	}
 	err = autoCodeTemplateService.Create(c.Request.Context(), info)
 	if err != nil {
-		c.Writer.Header().Add("success", "false")
-		c.Writer.Header().Add("msg", url.QueryEscape(err.Error()))
-		return
+		global.GVA_LOG.Error("创建失败!", zap.Error(err))
+		response.FailWithMessage("创建失败", c)
+	} else {
+		response.OkWithMessage("创建成功", c)
 	}
-	c.Writer.Header().Add("Content-Type", "application/json")
-	c.Writer.Header().Add("success", "true")
 }

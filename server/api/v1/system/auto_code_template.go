@@ -81,3 +81,28 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 		response.OkWithMessage("创建成功", c)
 	}
 }
+
+// Create
+// @Tags      AddFunc
+// @Summary   增加方法
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.AutoCode  true  "增加方法"
+// @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
+// @Router    /autoCode/addFunc [post]
+func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
+	var info request.AutoFunc
+	err := c.ShouldBindJSON(&info)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = autoCodeTemplateService.AddFunc(info)
+	if err != nil {
+		global.GVA_LOG.Error("注入失败!", zap.Error(err))
+		response.FailWithMessage("注入失败", c)
+	} else {
+		response.OkWithMessage("注入成功", c)
+	}
+}

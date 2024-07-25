@@ -2,17 +2,19 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-        <el-button type="primary" icon="plus" @click="goAutoCode(null)"
-          >新增</el-button
-        >
+        <el-button type="primary" icon="plus" @click="goAutoCode(null)">
+          新增
+        </el-button>
       </div>
       <el-table :data="tableData">
         <el-table-column type="selection" width="55" />
         <el-table-column align="left" label="id" width="60" prop="ID" />
         <el-table-column align="left" label="日期" width="180">
-          <template #default="scope">{{
-            formatDate(scope.row.CreatedAt)
-          }}</template>
+          <template #default="scope">
+            {{
+              formatDate(scope.row.CreatedAt)
+            }}
+          </template>
         </el-table-column>
         <el-table-column
           align="left"
@@ -42,7 +44,9 @@
             <el-tag v-if="scope.row.flag" type="danger" effect="dark">
               已回滚
             </el-tag>
-            <el-tag v-else type="success" effect="dark"> 未回滚 </el-tag>
+            <el-tag v-else type="success" effect="dark">
+              未回滚
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column align="left" label="操作" min-width="240">
@@ -52,15 +56,24 @@
                 type="primary"
                 link
                 :disabled="scope.row.flag === 1"
+                @click="addFuncBtn(scope.row)"
+              >
+                增加方法
+              </el-button>
+              <el-button
+                type="primary"
+                link
+                :disabled="scope.row.flag === 1"
                 @click="openDialog(scope.row)"
-                >回滚</el-button
               >
-              <el-button type="primary" link @click="goAutoCode(scope.row)"
-                >复用</el-button
-              >
-              <el-button type="primary" link @click="deleteRow(scope.row)"
-                >删除</el-button
-              >
+                回滚
+              </el-button>
+              <el-button type="primary" link @click="goAutoCode(scope.row)">
+                复用
+              </el-button>
+              <el-button type="primary" link @click="deleteRow(scope.row)">
+                删除
+              </el-button>
             </div>
           </template>
         </el-table-column>
@@ -78,47 +91,113 @@
       </div>
     </div>
     <el-dialog
-      :title="dialogFormTitle"
       v-model="dialogFormVisible"
+      :title="dialogFormTitle"
       :before-close="closeDialog"
       width="600px"
     >
       <el-form :inline="true" :model="formData" label-width="80px">
         <el-form-item label="选项：">
           <el-checkbox
-            label="删除接口"
             v-model="formData.deleteApi"
-          ></el-checkbox>
+            label="删除接口"
+          />
           <el-checkbox
-            label="删除菜单"
             v-model="formData.deleteMenu"
-          ></el-checkbox>
+            label="删除菜单"
+          />
           <el-checkbox
-            label="删除表"
             v-model="formData.deleteTable"
+            label="删除表"
             @change="deleteTableCheck"
-          ></el-checkbox>
+          />
         </el-form-item>
       </el-form>
       <template #footer>
         <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
+          <el-button @click="closeDialog">
+            取 消
+          </el-button>
           <el-popconfirm
             title="此操作将回滚生成文件和勾选项目, 是否继续?"
             @confirm="enterDialog"
           >
             <template #reference>
-              <el-button type="primary">确 定</el-button>
+              <el-button type="primary">
+                确 定
+              </el-button>
             </template>
           </el-popconfirm>
         </div>
       </template>
     </el-dialog>
+
+
+    <el-drawer
+      v-model="funcFlag"
+      size="60%"
+      :show-close="false"
+    >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">操作栏</span>
+          <div>
+            <el-button
+              type="primary"
+              @click="runFunc"
+            >
+              生成
+            </el-button>
+            <el-button
+              type="primary"
+              @click="closeFunc"
+            >
+              取消
+            </el-button>
+          </div>
+        </div>
+      </template>
+      <div class="">
+        <el-form label-position="top" :model="autoFunc" label-width="80px">
+          <el-form-item label="包名：">
+            <el-input v-model="autoFunc.package" placeholder="请输入包名" disabled />
+          </el-form-item>
+          <el-form-item label="结构体名：">
+            <el-input v-model="autoFunc.structName" placeholder="请输入结构体名" disabled />
+          </el-form-item>
+          <el-form-item label="前端文件名：">
+            <el-input v-model="autoFunc.packageName" placeholder="请输入文件名" disabled />
+          </el-form-item>
+          <el-form-item label="后端文件名：">
+            <el-input v-model="autoFunc.humpPackageName" placeholder="请输入文件名" disabled />
+          </el-form-item>
+          <el-form-item label="描述：">
+            <el-input v-model="autoFunc.description" placeholder="请输入描述" disabled />
+          </el-form-item>
+          <el-form-item label="缩写：">
+            <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
+          </el-form-item>
+          <el-form-item label="方法名：">
+            <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
+          </el-form-item>
+          <el-form-item label="方法：">
+            <el-select v-model="autoFunc.method" placeholder="请选择方法">
+              <el-option
+                v-for="item in ['GET', 'POST', 'PUT', 'DELETE']"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script setup>
-import { getSysHistory, rollback, delSysHistory } from "@/api/autoCode.js";
+import { getSysHistory, rollback, delSysHistory,addFunc } from "@/api/autoCode.js";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
@@ -143,6 +222,41 @@ const page = ref(1);
 const total = ref(0);
 const pageSize = ref(10);
 const tableData = ref([]);
+
+const autoFunc = ref({
+  package:"",
+  funcName:"",
+  structName:"",
+  packageName:"",
+  description:"",
+  abbreviation:"",
+  humpPackageName:"",
+  businessDB:"",
+  method:"",
+})
+
+const addFuncBtn =  (row) => {
+  const req = JSON.parse(row.request)
+  autoFunc.value.package = req.package
+  autoFunc.value.structName = req.structName
+  autoFunc.value.packageName = req.packageName
+  autoFunc.value.description = req.description
+  autoFunc.value.abbreviation = req.abbreviation
+  autoFunc.value.humpPackageName = req.humpPackageName
+  autoFunc.value.businessDB = req.businessDB
+  funcFlag.value = true;
+};
+
+const funcFlag = ref(false);
+
+const closeFunc = () => {
+  funcFlag.value = false;
+};
+
+const runFunc = () =>{
+  // funcFlag.value = false;
+  addFunc(autoFunc.value)
+}
 
 // 分页
 const handleSizeChange = (val) => {

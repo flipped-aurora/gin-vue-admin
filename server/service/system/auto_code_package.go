@@ -137,6 +137,9 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 			if entries[i].Name() == "page" {
 				continue
 			} // page 为表单生成器
+			if entries[i].Name() == "function" {
+				continue
+			} // function 为函数生成器
 			if entries[i].Name() == "preview" {
 				continue
 			} // preview 为预览代码生成器的代码

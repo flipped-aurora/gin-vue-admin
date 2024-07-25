@@ -17,6 +17,7 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 	{
 		autoCodeRouter.POST("preview", autoCodeTemplateApi.Preview)   // 获取自动创建代码预览
 		autoCodeRouter.POST("createTemp", autoCodeTemplateApi.Create) // 创建自动化代码
+		autoCodeRouter.POST("addFunc", autoCodeTemplateApi.AddFunc)   // 为代码插入方法
 	}
 	{
 		autoCodeRouter.POST("getPackage", autoCodePackageApi.All)       // 获取package包

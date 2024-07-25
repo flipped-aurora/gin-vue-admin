@@ -56,7 +56,7 @@
                 type="primary"
                 link
                 :disabled="scope.row.flag === 1"
-                @click="addFunc(scope.row)"
+                @click="addFuncBtn(scope.row)"
               >
                 增加方法
               </el-button>
@@ -134,41 +134,74 @@
 
 
     <el-drawer
-        v-model="funcFlag"
-        size="60%"
-        :show-close="false"
+      v-model="funcFlag"
+      size="60%"
+      :show-close="false"
     >
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">操作栏</span>
           <div>
             <el-button
-                type="primary"
-                @click="runFunc"
+              type="primary"
+              @click="runFunc"
             >
               生成
             </el-button>
             <el-button
-                type="primary"
-                @click="closeFunc"
+              type="primary"
+              @click="closeFunc"
             >
               取消
             </el-button>
           </div>
         </div>
       </template>
-
+      <div class="">
+        <el-form label-position="top" :model="autoFunc" label-width="80px">
+          <el-form-item label="包名：">
+            <el-input v-model="autoFunc.package" placeholder="请输入包名" disabled />
+          </el-form-item>
+          <el-form-item label="结构体名：">
+            <el-input v-model="autoFunc.structName" placeholder="请输入结构体名" disabled />
+          </el-form-item>
+          <el-form-item label="前端文件名：">
+            <el-input v-model="autoFunc.packageName" placeholder="请输入文件名" disabled />
+          </el-form-item>
+          <el-form-item label="后端文件名：">
+            <el-input v-model="autoFunc.humpPackageName" placeholder="请输入文件名" disabled />
+          </el-form-item>
+          <el-form-item label="描述：">
+            <el-input v-model="autoFunc.description" placeholder="请输入描述" disabled />
+          </el-form-item>
+          <el-form-item label="缩写：">
+            <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
+          </el-form-item>
+          <el-form-item label="方法名：">
+            <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
+          </el-form-item>
+          <el-form-item label="方法：">
+            <el-select v-model="autoFunc.method" placeholder="请选择方法">
+              <el-option
+                v-for="item in ['GET', 'POST', 'PUT', 'DELETE']"
+                :key="item"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
     </el-drawer>
   </div>
 </template>
 
 <script setup>
-import { getSysHistory, rollback, delSysHistory } from "@/api/autoCode.js";
+import { getSysHistory, rollback, delSysHistory,addFunc } from "@/api/autoCode.js";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
 import { formatDate } from "@/utils/format";
-import PreviewCodeDialog from "@/view/systemTools/autoCode/component/previewCodeDialg.vue";
 
 defineOptions({
   name: "AutoCodeAdmin",
@@ -190,7 +223,7 @@ const total = ref(0);
 const pageSize = ref(10);
 const tableData = ref([]);
 
-const autoFunc = {
+const autoFunc = ref({
   package:"",
   funcName:"",
   structName:"",
@@ -198,12 +231,20 @@ const autoFunc = {
   description:"",
   abbreviation:"",
   humpPackageName:"",
+  businessDB:"",
   method:"",
-}
+})
 
-const addFunc =  (row) => {
-  funcFlag.value = false;
-  console.log(row)
+const addFuncBtn =  (row) => {
+  const req = JSON.parse(row.request)
+  autoFunc.value.package = req.package
+  autoFunc.value.structName = req.structName
+  autoFunc.value.packageName = req.packageName
+  autoFunc.value.description = req.description
+  autoFunc.value.abbreviation = req.abbreviation
+  autoFunc.value.humpPackageName = req.humpPackageName
+  autoFunc.value.businessDB = req.businessDB
+  funcFlag.value = true;
 };
 
 const funcFlag = ref(false);
@@ -213,7 +254,8 @@ const closeFunc = () => {
 };
 
 const runFunc = () =>{
-  funcFlag.value = false;
+  // funcFlag.value = false;
+  addFunc(autoFunc.value)
 }
 
 // 分页

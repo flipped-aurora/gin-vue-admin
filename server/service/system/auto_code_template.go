@@ -9,6 +9,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"go/parser"
+	"go/token"
 	"gorm.io/gorm"
 	"os"
 	"path/filepath"
@@ -174,22 +176,91 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 }
 
 func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
-	s.addTemplateToFile("api", info)
-	s.addTemplateToFile("server", info)
+	autoPkg := model.SysAutoCodePackage{}
+	err := global.GVA_DB.First(&autoPkg, "package_name = ?", info.Package).Error
+	if err != nil {
+		return err
+	}
+	if autoPkg.Template != "package" {
+		info.IsPlugin = true
+	}
+	err = s.addTemplateToFile("api", info)
+	if err != nil {
+		return err
+	}
+	err = s.addTemplateToFile("server", info)
+	if err != nil {
+		return err
+	}
+	err = s.addTemplateToAst("router", info)
 	return nil
 }
 
-func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) error {
+func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (string, error) {
 	tempPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "function", t+".go.tpl")
 	files, err := template.ParseFiles(tempPath)
 	if err != nil {
-		return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", tempPath)
+		return "", errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", tempPath)
 	}
 	var builder strings.Builder
 	err = files.Execute(&builder, info)
 	if err != nil {
-		return errors.Wrapf(err, "[filpath:%s]生成文件失败!", tempPath)
+		fmt.Println(err.Error())
+		return "", errors.Wrapf(err, "[filpath:%s]生成文件失败!", tempPath)
 	}
-	fmt.Sprintf(builder.String())
+	return builder.String(), nil
+}
+
+func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) error {
+	getTemplateStr, err := s.getTemplateStr(t, info)
+	fmt.Printf("getTemplateStr: %s", getTemplateStr)
+	tPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", info.Package, info.HumpPackageName+".go")
+	funcName := fmt.Sprintf("Init%sRouter", info.StructName)
+	if info.IsPlugin {
+		tPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "router", info.HumpPackageName+".go")
+		funcName = "Init"
+	}
+	src, err := os.ReadFile(tPath)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, "", src, 0)
+	if err != nil {
+		fmt.Println(err)
+	}
+	funcDecl := ast.FindFunction(astFile, funcName)
+
+	return err
+}
+
+func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) error {
+	getTemplateStr, err := s.getTemplateStr(t, info)
+	if err != nil {
+		return err
+	}
+	var target string
+
+	switch t {
+	case "api":
+		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", info.Package, info.HumpPackageName+".go")
+	case "server":
+		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", info.Package, info.HumpPackageName+".go")
+	}
+
+	// 打开文件，如果不存在则返回错误
+	file, err := os.OpenFile(target, os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// 写入内容
+	_, err = fmt.Fprintln(file, getTemplateStr)
+	if err != nil {
+		fmt.Println("写入文件失败: %s", err.Error())
+		return err
+	}
+
 	return nil
 }

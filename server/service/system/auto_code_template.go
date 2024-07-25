@@ -7,8 +7,10 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	utilsAst "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"go/ast"
+	"go/format"
 	"go/parser"
 	"go/token"
 	"gorm.io/gorm"
@@ -130,7 +132,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	return preview, nil
 }
 
-func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, map[string]string, map[string]ast.Ast, error) {
+func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, map[string]string, map[string]utilsAst.Ast, error) {
 	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return nil, nil, nil, err
@@ -149,12 +151,12 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		}
 		code[create] = builder
 	} // 生成文件
-	injections := make(map[string]ast.Ast, len(asts))
+	injections := make(map[string]utilsAst.Ast, len(asts))
 	if info.AutoMigrate {
 		for key, value := range asts {
 			keys := strings.Split(key, "=>")
 			if len(keys) == 2 {
-				if keys[1] == ast.TypePluginInitializeV2 {
+				if keys[1] == utilsAst.TypePluginInitializeV2 {
 					continue
 				}
 				var builder strings.Builder
@@ -212,25 +214,44 @@ func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (stri
 }
 
 func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) error {
-	getTemplateStr, err := s.getTemplateStr(t, info)
-	fmt.Printf("getTemplateStr: %s", getTemplateStr)
 	tPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", info.Package, info.HumpPackageName+".go")
 	funcName := fmt.Sprintf("Init%sRouter", info.StructName)
+	stmtStr := fmt.Sprintf("%sRouterWithoutAuth.%s(\"%s\", %sApi.%s)", info.Abbreviation, info.Method, info.FuncName, info.Abbreviation, info.FuncName)
 	if info.IsPlugin {
 		tPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "router", info.HumpPackageName+".go")
+		stmtStr = fmt.Sprintf("group.%s(\"%s\", api%s.%s)", info.Method, info.FuncName, info.StructName, info.FuncName)
 		funcName = "Init"
 	}
+
 	src, err := os.ReadFile(tPath)
-	if err != nil {
-		fmt.Println(err)
-	}
 	fileSet := token.NewFileSet()
 	astFile, err := parser.ParseFile(fileSet, "", src, 0)
 	if err != nil {
 		fmt.Println(err)
 	}
-	funcDecl := ast.FindFunction(astFile, funcName)
+	funcDecl := utilsAst.FindFunction(astFile, funcName)
+	stmtNode := utilsAst.CreateStmt(stmtStr)
 
+	for i := len(funcDecl.Body.List) - 1; i >= 0; i-- {
+		st := funcDecl.Body.List[i]
+		// 使用类型断言来检查stmt是否是一个块语句
+		if blockStmt, ok := st.(*ast.BlockStmt); ok {
+			// 如果是，插入代码 跳出
+			blockStmt.List = append(blockStmt.List, stmtNode)
+			break
+		}
+	}
+
+	// 创建一个新的文件
+	f, err := os.Create(tPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if err := format.Node(f, fileSet, astFile); err != nil {
+		return err
+	}
 	return err
 }
 
@@ -247,6 +268,14 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 	case "server":
 		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", info.Package, info.HumpPackageName+".go")
 	}
+	if info.IsPlugin {
+		switch t {
+		case "api":
+			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "api", info.HumpPackageName+".go")
+		case "server":
+			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "service", info.HumpPackageName+".go")
+		}
+	}
 
 	// 打开文件，如果不存在则返回错误
 	file, err := os.OpenFile(target, os.O_WRONLY|os.O_APPEND, 0644)
@@ -258,7 +287,7 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 	// 写入内容
 	_, err = fmt.Fprintln(file, getTemplateStr)
 	if err != nil {
-		fmt.Println("写入文件失败: %s", err.Error())
+		fmt.Printf("写入文件失败: %s\n", err.Error())
 		return err
 	}
 

@@ -174,5 +174,22 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 }
 
 func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
+	s.addTemplateToFile("api", info)
+	s.addTemplateToFile("server", info)
+	return nil
+}
+
+func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) error {
+	tempPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "function", t+".go.tpl")
+	files, err := template.ParseFiles(tempPath)
+	if err != nil {
+		return errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", tempPath)
+	}
+	var builder strings.Builder
+	err = files.Execute(&builder, info)
+	if err != nil {
+		return errors.Wrapf(err, "[filpath:%s]生成文件失败!", tempPath)
+	}
+	fmt.Sprintf(builder.String())
 	return nil
 }

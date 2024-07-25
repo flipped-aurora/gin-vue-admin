@@ -92,7 +92,7 @@ func (a *AutoCodeTemplateApi) Create(c *gin.Context) {
 // @Produce   application/json
 // @Param     data  body      request.AutoCode  true  "增加方法"
 // @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
-// @Router    /autoCode/createTemp [post]
+// @Router    /autoCode/addFunc [post]
 func (a *AutoCodeTemplateApi) AddFunc(c *gin.Context) {
 	var info request.AutoFunc
 	err := c.ShouldBindJSON(&info)

@@ -229,6 +229,7 @@ type AutoCodeField struct {
 type AutoFunc struct {
 	Package         string `json:"package"`
 	FuncName        string `json:"funcName"`        // 方法名称
+	Router          string `json:"router"`          // 路由名称
 	BusinessDB      string `json:"businessDB"`      // 业务库
 	StructName      string `json:"structName"`      // Struct名称
 	PackageName     string `json:"packageName"`     // 文件名称

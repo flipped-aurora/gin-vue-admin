@@ -106,7 +106,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 	    {{- if .AutoCreateResource }}
     {{.Abbreviation}}.UpdatedBy = utils.GetUserID(c)
         {{- end }}
-	if err := {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}}); err != nil {
+	err = {{.Abbreviation}}Service.Update{{.StructName}}({{.Abbreviation}})
+	if err != nil {
         global.GVA_LOG.Error("更新失败!", zap.Error(err))
 		response.FailWithMessage("更新失败", c)
 		return

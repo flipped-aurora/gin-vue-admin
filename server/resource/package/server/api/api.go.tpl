@@ -147,7 +147,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Get{{.StructName}}List(c *gin.Co
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	if list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo); err != nil {
+	list, total, err := {{.Abbreviation}}Service.Get{{.StructName}}InfoList(pageInfo)
+	if err != nil {
 	    global.GVA_LOG.Error("获取失败!", zap.Error(err))
         response.FailWithMessage("获取失败", c)
         return

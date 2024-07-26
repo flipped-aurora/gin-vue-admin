@@ -8,6 +8,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	systemRes "github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 	"gorm.io/gorm"
+	"strings"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -27,8 +28,26 @@ func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 	return global.GVA_DB.Create(&api).Error
 }
 
-func (apiService *ApiService) GetApiGroups() (groups []string, err error) {
-	err = global.GVA_DB.Model(&system.SysApi{}).Select("DISTINCT api_group").Pluck("api_group", &groups).Error
+func (apiService *ApiService) GetApiGroups() (groups []string, groupApiMap map[string]string, err error) {
+	var apis []system.SysApi
+	err = global.GVA_DB.Find(&apis).Error
+	if err != nil {
+		return
+	}
+	groupApiMap = make(map[string]string, 0)
+	for i := range apis {
+		pathArr := strings.Split(apis[i].Path, "/")
+		newGroup := true
+		for i2 := range groups {
+			if groups[i2] == apis[i].ApiGroup {
+				newGroup = false
+			}
+		}
+		if newGroup {
+			groups = append(groups, apis[i].ApiGroup)
+		}
+		groupApiMap[pathArr[1]] = apis[i].ApiGroup
+	}
 	return
 }
 

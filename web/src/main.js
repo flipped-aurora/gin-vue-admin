@@ -15,9 +15,6 @@ import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
-import { initDom } from './utils/positionToCode'
-
-initDom()
 
 const app = createApp(App)
 app.config.productionTip = false

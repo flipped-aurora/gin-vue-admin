@@ -257,9 +257,12 @@ const closeFunc = () => {
   funcFlag.value = false;
 };
 
-const runFunc = () =>{
-  // funcFlag.value = false;
-  addFunc(autoFunc.value)
+const runFunc = async () =>{
+  const res = await addFunc(autoFunc.value)
+  if (res.code === 0) {
+    ElMessage.success("增加方法成功");
+    closeFunc()
+  }
 }
 
 // 分页

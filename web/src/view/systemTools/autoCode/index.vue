@@ -407,7 +407,6 @@
             label="序列"
             width="60"
           />
-
           <el-table-column
             align="left"
             type="index"
@@ -715,11 +714,19 @@ import PreviewCodeDialog from '@/view/systemTools/autoCode/component/previewCode
 import { toUpperCase, toHump, toSQLLine, toLowerCase } from '@/utils/stringFun'
 import { createTemp, getDB, getTable, getColumn, preview, getMeta, getPackageApi,llmAuto } from '@/api/autoCode'
 import { getDict } from '@/utils/dictionary'
-import { ref, reactive, watch, toRaw, onMounted, nextTick } from 'vue'
+import { ref, watch, toRaw, onMounted, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import Sortable from 'sortablejs'
+
+const getOnlyNumber = () => {
+  let randomNumber = '';
+  while (randomNumber.length < 16) {
+    randomNumber += Math.random().toString(16).substring(2);
+  }
+  return randomNumber.substring(0, 16);
+}
 
 const prompt = ref("")
 
@@ -735,6 +742,7 @@ const llmAutoFunc = async (mode) =>{
             form.value.gvaModel = false
           }
           form.value.fields.push({
+              onlyNumber: getOnlyNumber(),
               fieldName: toUpperCase(item.fieldName),
               fieldDesc: item.fieldDesc,
               fieldType: item.fieldType,
@@ -920,7 +928,6 @@ const fieldTemplate = {
 }
 const route = useRoute()
 const router = useRouter()
-const activeNames = reactive([])
 const preViewCode = ref({})
 const dbform = ref({
   businessDB: '',
@@ -1017,6 +1024,7 @@ const editAndAddField = (item) => {
     dialogMiddle.value = item
   } else {
     addFlag.value = 'add'
+    fieldTemplate.onlyNumber = getOnlyNumber()
     dialogMiddle.value = JSON.parse(JSON.stringify(fieldTemplate))
   }
 }
@@ -1170,6 +1178,7 @@ const getColumnFunc = async() => {
             if (needAppend(item)) {
               const fbHump = toHump(item.columnName)
               form.value.fields.push({
+                onlyNumber: getOnlyNumber(),
                 fieldName: toUpperCase(fbHump),
                 fieldDesc: item.columnComment || fbHump + '字段',
                 fieldType: fdMap.value[item.dataType],

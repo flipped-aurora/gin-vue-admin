@@ -33,8 +33,8 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api){{.FuncName}}(c *gin.Context) {
 if err := {{.Abbreviation}}Service.{{.FuncName}}(); err != nil {
         global.GVA_LOG.Error("失败!", zap.Error(err))
    		response.FailWithMessage("失败", c)
-   	} else {
-   		response.OkWithData("返回数据",c)
+   		return
    	}
+   	response.OkWithData("返回数据",c)
 }
 {{end}}

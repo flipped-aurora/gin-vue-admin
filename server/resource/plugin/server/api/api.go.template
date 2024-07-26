@@ -105,7 +105,7 @@ func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
 		return
 	}
 {{- if .AutoCreateResource }}
-    {{.Abbreviation}}.UpdatedBy = utils.GetUserID(c)
+    info.UpdatedBy = utils.GetUserID(c)
 {{- end }}
 	err = service{{ .StructName }}.Update{{.StructName}}(info)
     if err != nil {

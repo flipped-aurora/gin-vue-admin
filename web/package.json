@@ -60,6 +60,7 @@
         "unplugin-vue-components": "^0.25.1",
         "vite": "^4.4.6",
         "vite-plugin-banner": "^0.7.0",
-        "vite-plugin-importer": "^0.2.5"
+        "vite-plugin-importer": "^0.2.5",
+        "vite-plugin-vue-devtools": "^7.3.7"
     }
 }

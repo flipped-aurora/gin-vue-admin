@@ -55,17 +55,45 @@ const vueFilePathPlugin = (outputFilePath) => {
         });
     };
 
+    const injectBeforeUnloadScript = () => {
+        if (process.env.NODE_ENV === 'development') {
+            return {
+                name: 'inject-before-unload-script',
+                transformIndexHtml(html) {
+                    return html.replace(
+                        '</body>',
+                        `<script>
+                        window.addEventListener('beforeunload', function () {
+                            fetch('/generate-path-name-map');
+                        });
+                    </script></body>`
+                    );
+                }
+            };
+        }
+        return {}
+    };
+
     return {
         name: 'vue-file-path-plugin',
         configResolved(resolvedConfig) {
             root = resolvedConfig.root;
+        },
+        configureServer(server) {
+            if (process.env.NODE_ENV === 'development') {
+                server.middlewares.use('/generate-path-name-map', (req, res) => {
+                    generatePathNameMap();
+                    res.end('Path name map generated');
+                });
+            }
         },
         buildEnd() {
             generatePathNameMap();
             if (process.env.NODE_ENV === 'development') {
                 watchDirectoryChanges();
             }
-        }
+        },
+        ...injectBeforeUnloadScript()
     };
 }
 

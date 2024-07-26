@@ -220,10 +220,10 @@ func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (stri
 func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) error {
 	tPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", info.Package, info.HumpPackageName+".go")
 	funcName := fmt.Sprintf("Init%sRouter", info.StructName)
-	stmtStr := fmt.Sprintf("%sRouterWithoutAuth.%s(\"%s\", %sApi.%s)", info.Abbreviation, info.Method, info.FuncName, info.Abbreviation, info.FuncName)
+	stmtStr := fmt.Sprintf("%sRouterWithoutAuth.%s(\"%s\", %sApi.%s)", info.Abbreviation, info.Method, info.Router, info.Abbreviation, info.FuncName)
 	if info.IsPlugin {
 		tPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "router", info.HumpPackageName+".go")
-		stmtStr = fmt.Sprintf("group.%s(\"%s\", api%s.%s)", info.Method, info.FuncName, info.StructName, info.FuncName)
+		stmtStr = fmt.Sprintf("group.%s(\"%s\", api%s.%s)", info.Method, info.Router, info.StructName, info.FuncName)
 		funcName = "Init"
 	}
 

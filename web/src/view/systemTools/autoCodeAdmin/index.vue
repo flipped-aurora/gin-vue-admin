@@ -248,6 +248,9 @@ const addFuncBtn =  (row) => {
   autoFunc.value.abbreviation = req.abbreviation
   autoFunc.value.humpPackageName = req.humpPackageName
   autoFunc.value.businessDB = req.businessDB
+  autoFunc.value.method = ""
+  autoFunc.value.funcName = ""
+  autoFunc.value.router = ""
   funcFlag.value = true;
 };
 

@@ -60,9 +60,6 @@ func (casbinService *CasbinService) UpdateCasbinApi(oldPath string, newPath stri
 	}).Error
 	e := casbinService.Casbin()
 	err = e.LoadPolicy()
-	if err != nil {
-		return err
-	}
 	return err
 }
 

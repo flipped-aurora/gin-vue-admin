@@ -107,6 +107,7 @@ func (menuService *MenuService) GetInfoList() (list interface{}, total int64, er
 	var menuList []system.SysBaseMenu
 	treeMap, err := menuService.getBaseMenuTreeMap()
 	menuList = treeMap[0]
+	total = int64(len(menuList))
 	for i := 0; i < len(menuList); i++ {
 		err = menuService.getBaseChildrenList(&menuList[i], treeMap)
 	}

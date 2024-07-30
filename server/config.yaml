@@ -211,6 +211,15 @@ aws-s3:
   base-url: https://gin.vue.admin
   path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 
+# cloudflare r2 configuration
+cloudflare-r2:
+  bucket: xxxx0bucket
+  base-url: https://gin.vue.admin.com
+  path: uploads
+  account-id: xxx_account_id
+  access-key-id: xxx_key_id
+  secret-access-key: xxx_secret_key
+
 # huawei obs configuration
 hua-wei-obs:
   path: you-path

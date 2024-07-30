@@ -45,7 +45,7 @@ func RegisterTables() {
 		system.SysBaseMenuParameter{},
 		system.SysBaseMenuBtn{},
 		system.SysAuthorityBtn{},
-		system.SysAutoCode{},
+		system.SysAutoCodePackage{},
 		system.SysExportTemplate{},
 		system.Condition{},
 		system.JoinTemplate{},
@@ -60,7 +60,7 @@ func RegisterTables() {
 		os.Exit(0)
 	}
 
-	err = bizModel(db)
+	err = bizModel()
 
 	if err != nil {
 		global.GVA_LOG.Error("register biz_table failed", zap.Error(err))

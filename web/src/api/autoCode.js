@@ -117,11 +117,10 @@ export const deletePackageApi = (data) => {
   })
 }
 
-export const createPlugApi = (data) => {
+export const getTemplatesApi = () => {
   return service({
-    url: '/autoCode/createPlug',
-    method: 'post',
-    data
+    url: '/autoCode/getTemplates',
+    method: 'get'
   })
 }
 
@@ -157,5 +156,14 @@ export const llmAuto = (params) => {
       fullscreen:true,
       text: `${modeName[params.mode]}正在思考，请稍候...`,
     }
+  })
+}
+
+
+export const addFunc = (data) => {
+  return service({
+    url: '/autoCode/addFunc',
+    method: 'post',
+    data
   })
 }

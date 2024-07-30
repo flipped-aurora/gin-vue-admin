@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.8.0]
+        node-version: [18.16.0]
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
@@ -83,7 +83,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.8.0]
+        node-version: [18.16.0]
         go-version: [1.22]
     steps:
       - name: Check out branch
@@ -194,7 +194,7 @@ jobs:
     name: devops-prod
     strategy:
       matrix:
-        node-version: ['16.x']
+        node-version: ['18.x']
         go-version: ['1.22']
     steps:
       - uses: actions/checkout@v2

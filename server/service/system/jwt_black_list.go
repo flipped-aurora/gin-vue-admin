@@ -12,6 +12,8 @@ import (
 
 type JwtService struct{}
 
+var JwtServiceApp = new(JwtService)
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: JsonInBlacklist
 //@description: 拉黑jwt

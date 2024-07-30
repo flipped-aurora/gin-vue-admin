@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.6.7",
+    "version": "2.7.0",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
@@ -20,7 +20,7 @@
         "axios": "^1.4.0",
         "core-js": "^3.31.1",
         "echarts": "5.4.3",
-        "element-plus": "^2.7.0",
+        "element-plus": "^2.7.4",
         "highlight.js": "^11.8.0",
         "js-cookie": "^3.0.5",
         "marked": "4.3.0",
@@ -60,6 +60,7 @@
         "unplugin-vue-components": "^0.25.1",
         "vite": "^4.4.6",
         "vite-plugin-banner": "^0.7.0",
-        "vite-plugin-importer": "^0.2.5"
+        "vite-plugin-importer": "^0.2.5",
+        "vite-plugin-vue-devtools": "^7.3.7"
     }
 }

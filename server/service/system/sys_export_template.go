@@ -21,6 +21,8 @@ import (
 type SysExportTemplateService struct {
 }
 
+var SysExportTemplateServiceApp = new(SysExportTemplateService)
+
 // CreateSysExportTemplate 创建导出模板记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (sysExportTemplateService *SysExportTemplateService) CreateSysExportTemplate(sysExportTemplate *system.SysExportTemplate) (err error) {
@@ -151,10 +153,13 @@ func (sysExportTemplateService *SysExportTemplateService) ExportExcel(templateID
 		return nil, "", err
 	}
 	var tableTitle []string
+	var selectKeyFmt []string
 	for _, key := range columns {
+		selectKeyFmt = append(selectKeyFmt, fmt.Sprintf("`%s`", key))
 		tableTitle = append(tableTitle, templateInfoMap[key])
 	}
-	selects := strings.Join(columns, ", ")
+
+	selects := strings.Join(selectKeyFmt, ", ")
 	var tableMap []map[string]interface{}
 	db := global.GVA_DB
 	if template.DBName != "" {

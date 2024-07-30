@@ -5,6 +5,17 @@ import (
 	"github.com/gofrs/uuid/v5"
 )
 
+type Login interface {
+	GetUsername() string
+	GetNickname() string
+	GetUUID() uuid.UUID
+	GetUserId() uint
+	GetAuthorityId() uint
+	GetUserInfo() any
+}
+
+var _ Login = new(SysUser)
+
 type SysUser struct {
 	global.GVA_MODEL
 	UUID        uuid.UUID      `json:"uuid" gorm:"index;comment:用户UUID"`                                                     // 用户UUID
@@ -24,4 +35,28 @@ type SysUser struct {
 
 func (SysUser) TableName() string {
 	return "sys_users"
+}
+
+func (s *SysUser) GetUsername() string {
+	return s.Username
+}
+
+func (s *SysUser) GetNickname() string {
+	return s.NickName
+}
+
+func (s *SysUser) GetUUID() uuid.UUID {
+	return s.UUID
+}
+
+func (s *SysUser) GetUserId() uint {
+	return s.ID
+}
+
+func (s *SysUser) GetAuthorityId() uint {
+	return s.AuthorityId
+}
+
+func (s *SysUser) GetUserInfo() any {
+	return *s
 }

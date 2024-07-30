@@ -3,10 +3,12 @@ package ast
 import (
 	"fmt"
 	"go/ast"
+	"go/parser"
 	"go/token"
+	"log"
 )
 
-// 增加 import 方法
+// AddImport 增加 import 方法
 func AddImport(astNode ast.Node, imp string) {
 	impStr := fmt.Sprintf("\"%s\"", imp)
 	ast.Inspect(astNode, func(node ast.Node) bool {
@@ -31,7 +33,7 @@ func AddImport(astNode ast.Node, imp string) {
 	})
 }
 
-// 查询特定function方法
+// FindFunction 查询特定function方法
 func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 	var funcDeclP *ast.FuncDecl
 	ast.Inspect(astNode, func(node ast.Node) bool {
@@ -44,4 +46,48 @@ func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 		return true
 	})
 	return funcDeclP
+}
+
+// 检查是否存在Import
+func CheckImport(file *ast.File, importPath string) bool {
+	for _, imp := range file.Imports {
+		// Remove quotes around the import path
+		path := imp.Path.Value[1 : len(imp.Path.Value)-1]
+
+		if path == importPath {
+			return true
+		}
+	}
+
+	return false
+}
+
+func CreateStmt(statement string) *ast.ExprStmt {
+	expr, err := parser.ParseExpr(statement)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return &ast.ExprStmt{X: expr}
+}
+
+func IsBlockStmt(node ast.Node) bool {
+	_, ok := node.(*ast.BlockStmt)
+	return ok
+}
+
+func VariableExistsInBlock(block *ast.BlockStmt, varName string) bool {
+	exists := false
+	ast.Inspect(block, func(n ast.Node) bool {
+		switch node := n.(type) {
+		case *ast.AssignStmt:
+			for _, expr := range node.Lhs {
+				if ident, ok := expr.(*ast.Ident); ok && ident.Name == varName {
+					exists = true
+					return false
+				}
+			}
+		}
+		return true
+	})
+	return exists
 }

@@ -18,11 +18,19 @@
             placeholder="描述"
           />
         </el-form-item>
-        <el-form-item label="API组">
-          <el-input
+        <el-form-item label="API分组">
+          <el-select
             v-model="searchInfo.apiGroup"
-            placeholder="api组"
-          />
+            clearable
+            placeholder="请选择"
+          >
+            <el-option
+              v-for="item in apiGroupOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item label="请求">
           <el-select
@@ -199,6 +207,7 @@
       :before-close="closeSyncDialog"
       :show-close="false"
     >
+      <warning-bar title="同步API，不输入路由分组将不会被自动同步" />
       <template #header>
         <div class="flex justify-between items-center">
           <span class="text-lg">同步路由</span>
@@ -207,8 +216,9 @@
               取 消
             </el-button>
             <el-button
-                type="primary"
-                @click="enterSyncDialog"
+              type="primary"
+              :loading="syncing"
+              @click="enterSyncDialog"
             >
               确 定
             </el-button>
@@ -538,12 +548,14 @@ const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
 const apiGroupOptions = ref([])
-
+const apiGroupMap = ref({})
 
 const getGroup = async() => {
   const res = await getApiGroups()
   if (res.code === 0) {
-    apiGroupOptions.value = res.data.map(item => ({ label: item, value: item }))
+    const groups = res.data.groups
+    apiGroupOptions.value = groups.map(item => ({ label: item, value: item }))
+    apiGroupMap.value = res.data.apiGroupMap
   }
 }
 
@@ -568,9 +580,13 @@ const closeSyncDialog = () => {
   syncApiFlag.value = false
 }
 
+const syncing = ref(false)
+
 
 const enterSyncDialog = async() => {
+  syncing.value = true
   const res = await enterSyncApi(syncApiData.value)
+  syncing.value = false
   if (res.code === 0) {
     ElMessage({
       type: 'success',
@@ -680,6 +696,11 @@ const syncApiFlag = ref(false)
 const onSync = async() => {
   const res = await syncApi()
   if (res.code === 0) {
+    res.data.newApis.forEach(item => {
+      item.apiGroup = apiGroupMap.value[item.path.split('/')[1]]
+      console.log(apiGroupMap.value)
+    })
+
     syncApiData.value = res.data
     syncApiFlag.value = true
   }

@@ -10,6 +10,8 @@ import (
 
 type FileUploadAndDownloadService struct{}
 
+var FileUploadAndDownloadServiceApp = new(FileUploadAndDownloadService)
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: FindOrCreateFile
 //@description: 上传文件时检测当前文件属性，如果没有文件则创建，有则返回文件的当前切片

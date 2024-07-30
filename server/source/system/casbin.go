@@ -121,11 +121,13 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/delSysHistory", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/getSysHistory", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPackage", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/getTemplates", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/getPackage", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/delPackage", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPlug", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/installPlugin", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/pubPlug", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/addFunc", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},
@@ -166,6 +168,13 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/exportExcel", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/exportTemplate", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/importExcel", V2: "POST"},
+
+		{Ptype: "p", V0: "888", V1: "/info/createInfo", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/info/deleteInfo", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/info/deleteInfoByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/info/updateInfo", V2: "PUT"},
+		{Ptype: "p", V0: "888", V1: "/info/findInfo", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/info/getInfoList", V2: "GET"},
 
 		{Ptype: "p", V0: "8881", V1: "/user/admin_register", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},

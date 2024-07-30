@@ -14,6 +14,8 @@ import (
 
 type DictionaryDetailService struct{}
 
+var DictionaryDetailServiceApp = new(DictionaryDetailService)
+
 func (dictionaryDetailService *DictionaryDetailService) CreateSysDictionaryDetail(sysDictionaryDetail system.SysDictionaryDetail) (err error) {
 	err = global.GVA_DB.Create(&sysDictionaryDetail).Error
 	return err

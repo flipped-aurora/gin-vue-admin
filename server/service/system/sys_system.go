@@ -15,6 +15,8 @@ import (
 
 type SystemConfigService struct{}
 
+var SystemConfigServiceApp = new(SystemConfigService)
+
 func (systemConfigService *SystemConfigService) GetSystemConfig() (conf config.Server, err error) {
 	return global.GVA_CONFIG, nil
 }

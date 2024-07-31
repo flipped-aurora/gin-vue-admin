@@ -122,7 +122,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 // @accept application/json
 // @Produce application/json
 // @Param data query {{.Package}}.{{.StructName}} true "用id查询{{.Description}}"
-// @Success 200 {object} response.Response{data=object{re{{.Abbreviation}}={{.Package}}.{{.StructName}}},msg=string} "查询成功"
+// @Success 200 {object} response.Response{data={{.Package}}.{{.StructName}}},msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func ({{.Abbreviation}}Api *{{.StructName}}Api) Find{{.StructName}}(c *gin.Context) {
 	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")

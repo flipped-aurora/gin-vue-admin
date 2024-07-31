@@ -124,7 +124,7 @@ func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query model.{{.StructName}} true "用id查询{{.Description}}"
-// @Success 200 {object} response.Response{data=object{model.{{.StructName}}},msg=string} "查询成功"
+// @Success 200 {object} response.Response{data=model.{{.StructName}},msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func (a *{{.Abbreviation}}) Find{{.StructName}}(c *gin.Context) {
 	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")

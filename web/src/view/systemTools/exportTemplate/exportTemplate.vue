@@ -122,7 +122,7 @@
           width="120"
         >
           <template #default="scope">
-            <span>{{ scope.row.dbNname || "GVA库" }}</span>
+            <span>{{ scope.row.dbName || "GVA库" }}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -229,6 +229,7 @@
           <el-select
               v-model="formData.dbName"
               clearable
+              @change="dbNameChange"
               placeholder="选择业务库"
           >
             <el-option
@@ -260,28 +261,32 @@
           label="表名称:"
           clearable
           prop="tableName"
-          class="w-full flex justify-between"
         >
 <!--          <el-input
             v-model="formData.tableName"
             :clearable="true"
             placeholder="请输入要导出的表名称"
           />-->
-          <el-select
-              v-model="formData.tableName"
-              class="w-2/3"
-              filterable
-              placeholder="请选择表"
+          <div
+              class="w-full flex gap-4"
           >
-            <el-option
-                v-for="item in tableOptions"
-                :key="item.tableName"
-                :label="item.tableName"
-                :value="item.tableName"
-            />
-          </el-select>
+            <el-select
+                v-model="formData.tableName"
+                class="flex-1"
+                filterable
+                placeholder="请选择表"
+            >
+              <el-option
+                  v-for="item in tableOptions"
+                  :key="item.tableName"
+                  :label="item.tableName"
+                  :value="item.tableName"
+              />
+            </el-select>
 
-          <el-button type="primary" class="ml-10" @click="getColumnFunc">自动生成模板</el-button>
+            <el-button type="primary" @click="getColumnFunc">自动生成模板</el-button>
+          </div>
+
         </el-form-item>
         <el-form-item
           label="模板标识:"
@@ -597,8 +602,14 @@ const getDbFunc = async() => {
 
 getDbFunc()
 
+const dbNameChange = () => {
+  formData.value.tableName = ''
+  formData.value.templateInfo = ''
+  getTableFunc()
+}
+
 const getTableFunc = async() => {
-  const res = await getTable({ businessDB: formData.value.businessDB || null, dbName: formData.value.dbName || null })
+  const res = await getTable({ businessDB: formData.value.dbName  })
   if (res.code === 0) {
     tableOptions.value = res.data.tables
   }
@@ -615,7 +626,10 @@ const getColumnFunc = async () => {
     return
   }
   formData.value.templateInfo = ""
-  const res = await getColumn(formData.value)
+  const res = await getColumn({
+    businessDB: formData.value.dbName,
+    tableName: formData.value.tableName
+  })
   if(res.code === 0) {
     // 把返回值的data.columns做尊换，制作一组JSON数据，columnName做key，columnComment做value
     const templateInfo = {}

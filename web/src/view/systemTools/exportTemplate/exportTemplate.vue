@@ -227,16 +227,16 @@
             </el-tooltip>
           </template>
           <el-select
-            v-model="formData.dbName"
-            clearable
-            placeholder="选择业务库"
+              v-model="formData.dbName"
+              clearable
+              placeholder="选择业务库"
           >
             <el-option
-              v-for="item in dbList"
-              :key="item.aliasName"
-              :value="item.aliasName"
-              :label="item.aliasName"
-              :disabled="item.disable"
+                v-for="item in dbList"
+                :key="item.aliasName"
+                :value="item.aliasName"
+                :label="item.aliasName"
+                :disabled="item.disable"
             >
               <div>
                 <span>{{ item.aliasName }}</span>
@@ -258,13 +258,30 @@
         </el-form-item>
         <el-form-item
           label="表名称:"
+          clearable
           prop="tableName"
+          class="w-full flex justify-between"
         >
-          <el-input
+<!--          <el-input
             v-model="formData.tableName"
             :clearable="true"
             placeholder="请输入要导出的表名称"
-          />
+          />-->
+          <el-select
+              v-model="formData.tableName"
+              class="w-2/3"
+              filterable
+              placeholder="请选择表"
+          >
+            <el-option
+                v-for="item in tableOptions"
+                :key="item.tableName"
+                :label="item.tableName"
+                :value="item.tableName"
+            />
+          </el-select>
+
+          <el-button type="primary" class="ml-10" @click="getColumnFunc">自动生成模板</el-button>
         </el-form-item>
         <el-form-item
           label="模板标识:"
@@ -416,7 +433,7 @@ import { formatDate } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { getDB } from '@/api/autoCode'
+import {getDB, getTable, getColumn} from '@/api/autoCode'
 
 defineOptions({
   name: 'ExportTemplate'
@@ -438,6 +455,7 @@ JOINS模式下不支持导入
 const formData = ref({
   name: '',
   tableName: '',
+  dbName: '',
   templateID: '',
   templateInfo: '',
   limit: 0,
@@ -566,7 +584,9 @@ const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
+
 const dbList = ref([])
+const tableOptions = ref([])
 
 const getDbFunc = async() => {
   const res = await getDB()
@@ -576,6 +596,36 @@ const getDbFunc = async() => {
 }
 
 getDbFunc()
+
+const getTableFunc = async() => {
+  const res = await getTable({ businessDB: formData.value.businessDB || null, dbName: formData.value.dbName || null })
+  if (res.code === 0) {
+    tableOptions.value = res.data.tables
+  }
+  formData.value.tableName = ''
+}
+getTableFunc()
+
+const getColumnFunc = async () => {
+  if(!formData.value.tableName) {
+    ElMessage({
+      type: 'error',
+      message: '请先选择业务库及选择表后再进行操作'
+    })
+    return
+  }
+  formData.value.templateInfo = ""
+  const res = await getColumn(formData.value)
+  if(res.code === 0) {
+    // 把返回值的data.columns做尊换，制作一组JSON数据，columnName做key，columnComment做value
+    const templateInfo = {}
+    res.data.columns.forEach(item => {
+      templateInfo[item.columnName] = item.columnComment || item.columnName
+    })
+    formData.value.templateInfo =  JSON.stringify(templateInfo, null, 2)
+  }
+
+}
 
 // 重置
 const onReset = () => {

@@ -17,7 +17,7 @@ type AutoCodeTemplateApi struct{}
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      system.AutoCodeStruct                                      true  "预览创建代码"
+// @Param     data  body      request.AutoCode                                      true  "预览创建代码"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "预览创建后的代码"
 // @Router    /autoCode/preview [post]
 func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
@@ -53,7 +53,7 @@ func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      system.AutoCodeStruct  true  "创建自动代码"
+// @Param     data  body      request.AutoCode  true  "创建自动代码"
 // @Success   200   {string}  string                 "{"success":true,"data":{},"msg":"创建成功"}"
 // @Router    /autoCode/createTemp [post]
 func (a *AutoCodeTemplateApi) Create(c *gin.Context) {

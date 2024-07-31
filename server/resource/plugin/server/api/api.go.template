@@ -22,7 +22,7 @@ type {{.Abbreviation}} struct {}
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.Package}}.{{.StructName}} true "创建{{.Description}}"
+// @Param data body model.{{.StructName}} true "创建{{.Description}}"
 // @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /{{.Abbreviation}}/create{{.StructName}} [post]
 func (a *{{.Abbreviation}}) Create{{.StructName}}(c *gin.Context) {
@@ -50,7 +50,7 @@ func (a *{{.Abbreviation}}) Create{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.Package}}.{{.StructName}} true "删除{{.Description}}"
+// @Param data body model.{{.StructName}} true "删除{{.Description}}"
 // @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /{{.Abbreviation}}/delete{{.StructName}} [delete]
 func (a *{{.Abbreviation}}) Delete{{.StructName}}(c *gin.Context) {
@@ -95,7 +95,7 @@ func (a *{{.Abbreviation}}) Delete{{.StructName}}ByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body {{.Package}}.{{.StructName}} true "更新{{.Description}}"
+// @Param data body model.{{.StructName}} true "更新{{.Description}}"
 // @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /{{.Abbreviation}}/update{{.StructName}} [put]
 func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
@@ -123,8 +123,8 @@ func (a *{{.Abbreviation}}) Update{{.StructName}}(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query {{.Package}}.{{.StructName}} true "用id查询{{.Description}}"
-// @Success 200 {object} response.Response{data=object{re{{.Abbreviation}}={{.Package}}.{{.StructName}}},msg=string} "查询成功"
+// @Param data query model.{{.StructName}} true "用id查询{{.Description}}"
+// @Success 200 {object} response.Response{data=object{model.{{.StructName}}},msg=string} "查询成功"
 // @Router /{{.Abbreviation}}/find{{.StructName}} [get]
 func (a *{{.Abbreviation}}) Find{{.StructName}}(c *gin.Context) {
 	{{.PrimaryField.FieldJson}} := c.Query("{{.PrimaryField.FieldJson}}")

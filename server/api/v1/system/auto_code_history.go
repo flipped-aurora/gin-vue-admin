@@ -66,7 +66,7 @@ func (a *AutoCodeHistoryApi) Delete(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      systemReq.RollBack             true  "请求参数"
+// @Param     data  body      request.SysAutoHistoryRollBack             true  "请求参数"
 // @Success   200   {object}  response.Response{msg=string}  "回滚自动生成代码"
 // @Router    /autoCode/rollback [post]
 func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
@@ -90,7 +90,7 @@ func (a *AutoCodeHistoryApi) RollBack(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      systemReq.SysAutoHistory                                true  "请求参数"
+// @Param     data  body      common.PageInfo                                true  "请求参数"
 // @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "查询回滚记录,返回包括列表,总数,页码,每页数量"
 // @Router    /autoCode/getSysHistory [post]
 func (a *AutoCodeHistoryApi) GetList(c *gin.Context) {

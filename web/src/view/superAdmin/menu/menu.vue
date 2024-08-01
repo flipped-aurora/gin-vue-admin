@@ -17,7 +17,7 @@
             )
           "
         >
-          <VideoCameraFilled />
+<!--          <VideoCameraFilled />-->
         </el-icon>
       </div>
 
@@ -431,7 +431,7 @@
               )
             "
           >
-            <VideoCameraFilled />
+<!--            <VideoCameraFilled />-->
           </el-icon>
         </div>
         <el-table
@@ -524,7 +524,7 @@
               )
             "
           >
-            <VideoCameraFilled />
+<!--            <VideoCameraFilled />-->
           </el-icon>
         </div>
 

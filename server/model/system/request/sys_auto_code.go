@@ -12,18 +12,18 @@ import (
 type AutoCode struct {
 	Package             string                 `json:"package"`
 	PackageT            string                 `json:"-"`
-	TableName           string                 `json:"tableName" example:"表名"`
-	BusinessDB          string                 `json:"businessDB" example:"业务数据库"`
-	StructName          string                 `json:"structName" example:"Struct名称"`
-	PackageName         string                 `json:"packageName" example:"文件名称"`
-	Description         string                 `json:"description" example:"Struct中文名称"`
-	Abbreviation        string                 `json:"abbreviation" example:"Struct简称"`
-	HumpPackageName     string                 `json:"humpPackageName" example:"go文件名称"`
-	GvaModel            bool                   `json:"gvaModel" example:"是否使用gva默认Model"`
-	AutoMigrate         bool                   `json:"autoMigrate" example:"是否自动迁移表结构"`
-	AutoCreateResource  bool                   `json:"autoCreateResource" example:"是否自动创建资源标识"`
-	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"是否自动创建api"`
-	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"是否自动创建menu"`
+	TableName           string                 `json:"tableName" example:"表名"`              // 表名
+	BusinessDB          string                 `json:"businessDB" example:"业务数据库"`          // 业务数据库
+	StructName          string                 `json:"structName" example:"Struct名称"`       // Struct名称
+	PackageName         string                 `json:"packageName" example:"文件名称"`          // 文件名称
+	Description         string                 `json:"description" example:"Struct中文名称"`    // Struct中文名称
+	Abbreviation        string                 `json:"abbreviation" example:"Struct简称"`     // Struct简称
+	HumpPackageName     string                 `json:"humpPackageName" example:"go文件名称"`    // go文件名称
+	GvaModel            bool                   `json:"gvaModel" example:"false"`            // 是否使用gva默认Model
+	AutoMigrate         bool                   `json:"autoMigrate" example:"false"`         // 是否自动迁移表结构
+	AutoCreateResource  bool                   `json:"autoCreateResource" example:"false"`  // 是否自动创建资源标识
+	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"false"`  // 是否自动创建api
+	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	Fields              []*AutoCodeField       `json:"fields"`
 	DictTypes           []string               `json:"-"`
 	FrontFields         []*AutoCodeField       `json:"-"`
@@ -224,4 +224,18 @@ type AutoCodeField struct {
 	DataSource      *DataSource `json:"dataSource"`      // 数据源
 	CheckDataSource bool        `json:"checkDataSource"` // 是否检查数据源
 	FieldIndexType  string      `json:"fieldIndexType"`  // 索引类型
+}
+
+type AutoFunc struct {
+	Package         string `json:"package"`
+	FuncName        string `json:"funcName"`        // 方法名称
+	Router          string `json:"router"`          // 路由名称
+	BusinessDB      string `json:"businessDB"`      // 业务库
+	StructName      string `json:"structName"`      // Struct名称
+	PackageName     string `json:"packageName"`     // 文件名称
+	Description     string `json:"description"`     // Struct中文名称
+	Abbreviation    string `json:"abbreviation"`    // Struct简称
+	HumpPackageName string `json:"humpPackageName"` // go文件名称
+	Method          string `json:"method"`          // 方法
+	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
 }

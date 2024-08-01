@@ -76,13 +76,16 @@ func (s *SystemApiApi) SyncApi(c *gin.Context) {
 // @Success   200   {object}  response.Response{msg=string}  "获取API分组"
 // @Router    /api/getApiGroups [post]
 func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
-	groups, err := apiService.GetApiGroups()
+	groups, apiGroupMap, err := apiService.GetApiGroups()
 	if err != nil {
 		global.GVA_LOG.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 		return
 	}
-	response.OkWithData(groups, c)
+	response.OkWithData(gin.H{
+		"groups":      groups,
+		"apiGroupMap": apiGroupMap,
+	}, c)
 }
 
 // IgnoreApi

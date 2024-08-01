@@ -19,7 +19,7 @@ type info struct{}
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body announcement.Info true "创建公告"
+// @Param data body model.Info true "创建公告"
 // @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /info/createInfo [post]
 func (a *info) CreateInfo(c *gin.Context) {
@@ -44,7 +44,7 @@ func (a *info) CreateInfo(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body announcement.Info true "删除公告"
+// @Param data body model.Info true "删除公告"
 // @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /info/deleteInfo [delete]
 func (a *info) DeleteInfo(c *gin.Context) {
@@ -82,7 +82,7 @@ func (a *info) DeleteInfoByIds(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data body announcement.Info true "更新公告"
+// @Param data body model.Info true "更新公告"
 // @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /info/updateInfo [put]
 func (a *info) UpdateInfo(c *gin.Context) {
@@ -107,8 +107,8 @@ func (a *info) UpdateInfo(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Param data query announcement.Info true "用id查询公告"
-// @Success 200 {object} response.Response{data=object{reinfo=announcement.Info},msg=string} "查询成功"
+// @Param data query model.Info true "用id查询公告"
+// @Success 200 {object} response.Response{data=model.Info,msg=string} "查询成功"
 // @Router /info/findInfo [get]
 func (a *info) FindInfo(c *gin.Context) {
 	ID := c.Query("ID")

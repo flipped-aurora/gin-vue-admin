@@ -12,6 +12,7 @@
       @contextmenu.prevent="openContextMenu($event)"
       @tab-click="changeTab"
       @tab-remove="removeTab"
+      @click.middle.prevent="middleCloseTab($event)"
     >
       <el-tab-pane
         v-for="item in historys"
@@ -343,6 +344,21 @@ onUnmounted(() => {
   emitter.off('collapse')
   emitter.off('mobile')
 })
+
+const middleCloseTab = (e) => {
+  if (historys.value.length === 1 && route.name === defaultRouter.value) {
+    return false
+  }
+  let id = ''
+  if (e.srcElement.nodeName === 'SPAN') {
+    id = e.srcElement.offsetParent.id
+  } else {
+    id = e.srcElement.id
+  }
+  if (id) {
+    removeTab(id.substring(4))
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -7,8 +7,12 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
+	utilsAst "github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"go/ast"
+	"go/format"
+	"go/parser"
+	"go/token"
 	"gorm.io/gorm"
 	"os"
 	"path/filepath"
@@ -34,45 +38,6 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		return errors.New("已经创建过此数据结构,请勿重复创建!")
 	}
 
-	// 自动创建api
-	if info.AutoCreateApiToSql {
-		apis := info.Apis()
-		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
-			for _, v := range apis {
-				var api model.SysApi
-				err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error
-				if err == nil {
-					return errors.New("存在相同的API，请关闭自动创建API功能")
-				}
-				if errors.Is(err, gorm.ErrRecordNotFound) {
-					if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
-						return err
-					}
-					history.ApiIDs = append(history.ApiIDs, v.ID)
-				}
-			}
-			return nil
-		})
-		if err != nil {
-			return err
-		}
-	}
-
-	// 自动创建menu
-	if info.AutoCreateMenuToSql {
-		var entity model.SysBaseMenu
-		err := global.GVA_DB.WithContext(ctx).First(&entity, "name = ?", info.Abbreviation).Error
-		if err == nil {
-			return errors.New("存在相同的菜单路由，请关闭自动创建菜单功能")
-		}
-		entity = info.Menu(autoPkg.Template)
-		err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
-		if err != nil {
-			return errors.Wrap(err, "创建菜单失败!")
-		}
-		history.MenuID = entity.ID
-	}
-
 	generate, templates, injections, err := s.generate(ctx, info, autoPkg)
 	if err != nil {
 		return err
@@ -86,6 +51,49 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 		if err != nil {
 			return errors.Wrapf(err, "[filepath:%s]写入文件失败!", key)
 		}
+	}
+
+	// 自动创建api
+	if info.AutoCreateApiToSql {
+		apis := info.Apis()
+		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
+			for _, v := range apis {
+				var api model.SysApi
+				var id uint
+				err := tx.Where("path = ? AND method = ?", v.Path, v.Method).First(&api).Error
+				if errors.Is(err, gorm.ErrRecordNotFound) {
+					if err = tx.Create(&v).Error; err != nil { // 遇到错误时回滚事务
+						return err
+					}
+					id = v.ID
+				} else {
+					id = api.ID
+				}
+				history.ApiIDs = append(history.ApiIDs, id)
+			}
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+	}
+
+	// 自动创建menu
+	if info.AutoCreateMenuToSql {
+		var entity model.SysBaseMenu
+		var id uint
+		err := global.GVA_DB.WithContext(ctx).First(&entity, "name = ?", info.Abbreviation).Error
+		if err == nil {
+			id = entity.ID
+		} else {
+			entity = info.Menu(autoPkg.Template)
+			err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
+			id = entity.ID
+			if err != nil {
+				return errors.Wrap(err, "创建菜单失败!")
+			}
+		}
+		history.MenuID = id
 	}
 
 	// 创建历史记录
@@ -128,7 +136,7 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 	return preview, nil
 }
 
-func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, map[string]string, map[string]ast.Ast, error) {
+func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, entity model.SysAutoCodePackage) (map[string]strings.Builder, map[string]string, map[string]utilsAst.Ast, error) {
 	templates, asts, _, err := AutoCodePackage.templates(ctx, entity, info)
 	if err != nil {
 		return nil, nil, nil, err
@@ -147,12 +155,12 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		}
 		code[create] = builder
 	} // 生成文件
-	injections := make(map[string]ast.Ast, len(asts))
+	injections := make(map[string]utilsAst.Ast, len(asts))
 	if info.AutoMigrate {
 		for key, value := range asts {
 			keys := strings.Split(key, "=>")
 			if len(keys) == 2 {
-				if keys[1] == ast.TypePluginInitializeV2 {
+				if keys[1] == utilsAst.TypePluginInitializeV2 {
 					continue
 				}
 				var builder strings.Builder
@@ -171,4 +179,121 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		}
 	} // 注入代码
 	return code, templates, injections, nil
+}
+
+func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
+	autoPkg := model.SysAutoCodePackage{}
+	err := global.GVA_DB.First(&autoPkg, "package_name = ?", info.Package).Error
+	if err != nil {
+		return err
+	}
+	if autoPkg.Template != "package" {
+		info.IsPlugin = true
+	}
+	err = s.addTemplateToFile("api", info)
+	if err != nil {
+		return err
+	}
+	err = s.addTemplateToFile("server", info)
+	if err != nil {
+		return err
+	}
+	err = s.addTemplateToAst("router", info)
+	return nil
+}
+
+func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (string, error) {
+	tempPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "function", t+".go.tpl")
+	files, err := template.ParseFiles(tempPath)
+	if err != nil {
+		return "", errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", tempPath)
+	}
+	var builder strings.Builder
+	err = files.Execute(&builder, info)
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", errors.Wrapf(err, "[filpath:%s]生成文件失败!", tempPath)
+	}
+	return builder.String(), nil
+}
+
+func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) error {
+	tPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", info.Package, info.HumpPackageName+".go")
+	funcName := fmt.Sprintf("Init%sRouter", info.StructName)
+	stmtStr := fmt.Sprintf("%sRouterWithoutAuth.%s(\"%s\", %sApi.%s)", info.Abbreviation, info.Method, info.Router, info.Abbreviation, info.FuncName)
+	if info.IsPlugin {
+		tPath = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "router", info.HumpPackageName+".go")
+		stmtStr = fmt.Sprintf("group.%s(\"%s\", api%s.%s)", info.Method, info.Router, info.StructName, info.FuncName)
+		funcName = "Init"
+	}
+
+	src, err := os.ReadFile(tPath)
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, "", src, 0)
+	if err != nil {
+		fmt.Println(err)
+	}
+	funcDecl := utilsAst.FindFunction(astFile, funcName)
+	stmtNode := utilsAst.CreateStmt(stmtStr)
+
+	for i := len(funcDecl.Body.List) - 1; i >= 0; i-- {
+		st := funcDecl.Body.List[i]
+		// 使用类型断言来检查stmt是否是一个块语句
+		if blockStmt, ok := st.(*ast.BlockStmt); ok {
+			// 如果是，插入代码 跳出
+			blockStmt.List = append(blockStmt.List, stmtNode)
+			break
+		}
+	}
+
+	// 创建一个新的文件
+	f, err := os.Create(tPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	if err := format.Node(f, fileSet, astFile); err != nil {
+		return err
+	}
+	return err
+}
+
+func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) error {
+	getTemplateStr, err := s.getTemplateStr(t, info)
+	if err != nil {
+		return err
+	}
+	var target string
+
+	switch t {
+	case "api":
+		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", info.Package, info.HumpPackageName+".go")
+	case "server":
+		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", info.Package, info.HumpPackageName+".go")
+	}
+	if info.IsPlugin {
+		switch t {
+		case "api":
+			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "api", info.HumpPackageName+".go")
+		case "server":
+			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "service", info.HumpPackageName+".go")
+		}
+	}
+
+	// 打开文件，如果不存在则返回错误
+	file, err := os.OpenFile(target, os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	// 写入内容
+	_, err = fmt.Fprintln(file, getTemplateStr)
+	if err != nil {
+		fmt.Printf("写入文件失败: %s\n", err.Error())
+		return err
+	}
+
+	return nil
 }

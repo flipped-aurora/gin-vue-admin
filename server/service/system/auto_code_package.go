@@ -137,6 +137,9 @@ func (s *autoCodePackage) Templates(ctx context.Context) ([]string, error) {
 			if entries[i].Name() == "page" {
 				continue
 			} // page 为表单生成器
+			if entries[i].Name() == "function" {
+				continue
+			} // function 为函数生成器
 			if entries[i].Name() == "preview" {
 				continue
 			} // preview 为预览代码生成器的代码
@@ -550,18 +553,18 @@ func (s *autoCodePackage) templates(ctx context.Context, entity model.SysAutoCod
 								formPath := filepath.Join(three, "form.vue"+ext)
 								value, ok := code[formPath]
 								if ok {
-									value = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), secondDirs[j].Name(), entity.PackageName, info.PackageName, info.Abbreviation+"Form"+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
+									value = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), secondDirs[j].Name(), entity.PackageName, info.PackageName, info.PackageName+"Form"+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
 									code[formPath] = value
 								}
 							}
-							create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), secondDirs[j].Name(), entity.PackageName, info.PackageName, info.Abbreviation+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
+							create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), secondDirs[j].Name(), entity.PackageName, info.PackageName, info.PackageName+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
 							if api != -1 {
-								create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), secondDirs[j].Name(), entity.PackageName, info.Abbreviation+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
+								create = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), secondDirs[j].Name(), entity.PackageName, info.PackageName+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
 							}
 							code[four] = create
 							continue
 						}
-						create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), "plugin", entity.PackageName, secondDirs[j].Name(), info.Abbreviation+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
+						create := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.WebRoot(), "plugin", entity.PackageName, secondDirs[j].Name(), info.PackageName+filepath.Ext(strings.TrimSuffix(threeDirs[k].Name(), ext)))
 						code[four] = create
 					}
 				default:

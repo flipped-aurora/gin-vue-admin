@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.8.0]
+        node-version: [18.16.0]
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        go-version: [1.18]
+        go-version: [1.22]
     steps:
       - name: Set up Go ${{ matrix.go-version }}
         uses: actions/setup-go@v1
@@ -83,8 +83,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [16.8.0]
-        go-version: [1.18]
+        node-version: [18.16.0]
+        go-version: [1.22]
     steps:
       - name: Check out branch
         uses: actions/checkout@v2
@@ -194,8 +194,8 @@ jobs:
     name: devops-prod
     strategy:
       matrix:
-        node-version: ['16.x']
-        go-version: ['1.18']
+        node-version: ['18.x']
+        go-version: ['1.22']
     steps:
       - uses: actions/checkout@v2
       - name: tag major and minor versions

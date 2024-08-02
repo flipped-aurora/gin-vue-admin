@@ -61,7 +61,7 @@ func AddRouterCode(path, funcName, pk, model string) {
 				},
 			}
 
-		FuncNode.Body.List = AppendNodeToList(FuncNode.Body.List, routerNode, len(FuncNode.Body.List)-2)
+		FuncNode.Body.List = AppendNodeToList(FuncNode.Body.List, routerNode, len(FuncNode.Body.List)-1)
 		bloctPre = routerNode
 	} else {
 		bloctPre = b
@@ -77,7 +77,10 @@ func AddRouterCode(path, funcName, pk, model string) {
 					},
 					Args: []ast.Expr{
 						&ast.Ident{
-							Name: "PrivateGroup",
+							Name: "privateGroup",
+						},
+						&ast.Ident{
+							Name: "publicGroup",
 						},
 					},
 				},

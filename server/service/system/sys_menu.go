@@ -2,7 +2,6 @@ package system
 
 import (
 	"errors"
-	"strconv"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/request"
@@ -20,11 +19,11 @@ type MenuService struct{}
 
 var MenuServiceApp = new(MenuService)
 
-func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[string][]system.SysMenu, err error) {
+func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[uint][]system.SysMenu, err error) {
 	var allMenus []system.SysMenu
 	var baseMenu []system.SysBaseMenu
 	var btns []system.SysAuthorityBtn
-	treeMap = make(map[string][]system.SysMenu)
+	treeMap = make(map[uint][]system.SysMenu)
 
 	var SysAuthorityMenus []system.SysAuthorityMenu
 	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&SysAuthorityMenus).Error
@@ -47,7 +46,7 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[st
 		allMenus = append(allMenus, system.SysMenu{
 			SysBaseMenu: baseMenu[i],
 			AuthorityId: authorityId,
-			MenuId:      strconv.Itoa(int(baseMenu[i].ID)),
+			MenuId:      baseMenu[i].ID,
 			Parameters:  baseMenu[i].Parameters,
 		})
 	}
@@ -64,7 +63,7 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[st
 		btnMap[v.SysMenuID][v.SysBaseMenuBtn.Name] = authorityId
 	}
 	for _, v := range allMenus {
-		v.Btns = btnMap[v.ID]
+		v.Btns = btnMap[v.SysBaseMenu.ID]
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
 	}
 	return treeMap, err
@@ -78,7 +77,7 @@ func (menuService *MenuService) getMenuTreeMap(authorityId uint) (treeMap map[st
 
 func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.SysMenu, err error) {
 	menuTree, err := menuService.getMenuTreeMap(authorityId)
-	menus = menuTree["0"]
+	menus = menuTree[0]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getChildrenList(&menus[i], menuTree)
 	}
@@ -91,7 +90,7 @@ func (menuService *MenuService) GetMenuTree(authorityId uint) (menus []system.Sy
 //@param: menu *model.SysMenu, treeMap map[string][]model.SysMenu
 //@return: err error
 
-func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap map[string][]system.SysMenu) (err error) {
+func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap map[uint][]system.SysMenu) (err error) {
 	menu.Children = treeMap[menu.MenuId]
 	for i := 0; i < len(menu.Children); i++ {
 		err = menuService.getChildrenList(&menu.Children[i], treeMap)
@@ -107,7 +106,7 @@ func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap ma
 func (menuService *MenuService) GetInfoList() (list interface{}, total int64, err error) {
 	var menuList []system.SysBaseMenu
 	treeMap, err := menuService.getBaseMenuTreeMap()
-	menuList = treeMap["0"]
+	menuList = treeMap[0]
 	for i := 0; i < len(menuList); i++ {
 		err = menuService.getBaseChildrenList(&menuList[i], treeMap)
 	}
@@ -120,8 +119,8 @@ func (menuService *MenuService) GetInfoList() (list interface{}, total int64, er
 //@param: menu *model.SysBaseMenu, treeMap map[string][]model.SysBaseMenu
 //@return: err error
 
-func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, treeMap map[string][]system.SysBaseMenu) (err error) {
-	menu.Children = treeMap[strconv.Itoa(int(menu.ID))]
+func (menuService *MenuService) getBaseChildrenList(menu *system.SysBaseMenu, treeMap map[uint][]system.SysBaseMenu) (err error) {
+	menu.Children = treeMap[menu.ID]
 	for i := 0; i < len(menu.Children); i++ {
 		err = menuService.getBaseChildrenList(&menu.Children[i], treeMap)
 	}
@@ -146,9 +145,9 @@ func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
 //@description: 获取路由总树map
 //@return: treeMap map[string][]system.SysBaseMenu, err error
 
-func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[string][]system.SysBaseMenu, err error) {
+func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[uint][]system.SysBaseMenu, err error) {
 	var allMenus []system.SysBaseMenu
-	treeMap = make(map[string][]system.SysBaseMenu)
+	treeMap = make(map[uint][]system.SysBaseMenu)
 	err = global.GVA_DB.Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
 	for _, v := range allMenus {
 		treeMap[v.ParentId] = append(treeMap[v.ParentId], v)
@@ -163,7 +162,7 @@ func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[string][]syste
 
 func (menuService *MenuService) GetBaseMenuTree() (menus []system.SysBaseMenu, err error) {
 	treeMap, err := menuService.getBaseMenuTreeMap()
-	menus = treeMap["0"]
+	menus = treeMap[0]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getBaseChildrenList(&menus[i], treeMap)
 	}
@@ -210,17 +209,16 @@ func (menuService *MenuService) GetMenuAuthority(info *request.GetAuthorityId) (
 		menus = append(menus, system.SysMenu{
 			SysBaseMenu: baseMenu[i],
 			AuthorityId: info.AuthorityId,
-			MenuId:      strconv.Itoa(int(baseMenu[i].ID)),
+			MenuId:      baseMenu[i].ID,
 			Parameters:  baseMenu[i].Parameters,
 		})
 	}
-	// sql := "SELECT authority_menu.keep_alive,authority_menu.default_menu,authority_menu.created_at,authority_menu.updated_at,authority_menu.deleted_at,authority_menu.menu_level,authority_menu.parent_id,authority_menu.path,authority_menu.`name`,authority_menu.hidden,authority_menu.component,authority_menu.title,authority_menu.icon,authority_menu.sort,authority_menu.menu_id,authority_menu.authority_id FROM authority_menu WHERE authority_menu.authority_id = ? ORDER BY authority_menu.sort ASC"
-	// err = global.GVA_DB.Raw(sql, authorityId).Scan(&menus).Error
 	return menus, err
 }
 
 // UserAuthorityDefaultRouter 用户角色默认路由检查
-//  Author [SliverHorn](https://github.com/SliverHorn)
+//
+//	Author [SliverHorn](https://github.com/SliverHorn)
 func (menuService *MenuService) UserAuthorityDefaultRouter(user *system.SysUser) {
 	var menuIds []string
 	err := global.GVA_DB.Model(&system.SysAuthorityMenu{}).Where("sys_authority_authority_id = ?", user.AuthorityId).Pluck("sys_base_menu_id", &menuIds).Error

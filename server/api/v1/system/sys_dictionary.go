@@ -4,8 +4,6 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -118,31 +116,14 @@ func (s *DictionaryApi) FindSysDictionary(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  query     request.SysDictionarySearch                             true  "页码, 每页大小, 搜索条件"
 // @Success   200   {object}  response.Response{data=response.PageResult,msg=string}  "分页获取SysDictionary列表,返回包括列表,总数,页码,每页数量"
 // @Router    /sysDictionary/getSysDictionaryList [get]
 func (s *DictionaryApi) GetSysDictionaryList(c *gin.Context) {
-	var pageInfo request.SysDictionarySearch
-	err := c.ShouldBindQuery(&pageInfo)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	err = utils.Verify(pageInfo.PageInfo, utils.PageInfoVerify)
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	list, total, err := dictionaryService.GetSysDictionaryInfoList(pageInfo)
+	list, err := dictionaryService.GetSysDictionaryInfoList()
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)
 		return
 	}
-	response.OkWithDetailed(response.PageResult{
-		List:     list,
-		Total:    total,
-		Page:     pageInfo.Page,
-		PageSize: pageInfo.PageSize,
-	}, global.Translate("general.getDataSuccess"), c)
+	response.OkWithDetailed(list, global.Translate("general.getDataSuccess"), c)
 }

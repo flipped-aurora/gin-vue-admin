@@ -14,6 +14,8 @@ import (
 
 type DictionaryDetailService struct{}
 
+var DictionaryDetailServiceApp = new(DictionaryDetailService)
+
 func (dictionaryDetailService *DictionaryDetailService) CreateSysDictionaryDetail(sysDictionaryDetail system.SysDictionaryDetail) (err error) {
 	err = global.GVA_DB.Create(&sysDictionaryDetail).Error
 	return err
@@ -68,7 +70,7 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 	if info.Label != "" {
 		db = db.Where("label LIKE ?", "%"+info.Label+"%")
 	}
-	if info.Value != 0 {
+	if info.Value != "" {
 		db = db.Where("value = ?", info.Value)
 	}
 	if info.Status != nil {
@@ -83,4 +85,34 @@ func (dictionaryDetailService *DictionaryDetailService) GetSysDictionaryDetailIn
 	}
 	err = db.Limit(limit).Offset(offset).Order("sort").Find(&sysDictionaryDetails).Error
 	return sysDictionaryDetails, total, err
+}
+
+// 按照字典id获取字典全部内容的方法
+func (dictionaryDetailService *DictionaryDetailService) GetDictionaryList(dictionaryID uint) (list []system.SysDictionaryDetail, err error) {
+	var sysDictionaryDetails []system.SysDictionaryDetail
+	err = global.GVA_DB.Find(&sysDictionaryDetails, "sys_dictionary_id = ?", dictionaryID).Error
+	return sysDictionaryDetails, err
+}
+
+// 按照字典type获取字典全部内容的方法
+func (dictionaryDetailService *DictionaryDetailService) GetDictionaryListByType(t string) (list []system.SysDictionaryDetail, err error) {
+	var sysDictionaryDetails []system.SysDictionaryDetail
+	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
+	err = db.Debug().Find(&sysDictionaryDetails, "type = ?", t).Error
+	return sysDictionaryDetails, err
+}
+
+// 按照字典id+字典内容value获取单条字典内容
+func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByValue(dictionaryID uint, value string) (detail system.SysDictionaryDetail, err error) {
+	var sysDictionaryDetail system.SysDictionaryDetail
+	err = global.GVA_DB.First(&sysDictionaryDetail, "sys_dictionary_id = ? and value = ?", dictionaryID, value).Error
+	return sysDictionaryDetail, err
+}
+
+// 按照字典type+字典内容value获取单条字典内容
+func (dictionaryDetailService *DictionaryDetailService) GetDictionaryInfoByTypeValue(t string, value string) (detail system.SysDictionaryDetail, err error) {
+	var sysDictionaryDetails system.SysDictionaryDetail
+	db := global.GVA_DB.Model(&system.SysDictionaryDetail{}).Joins("JOIN sys_dictionaries ON sys_dictionaries.id = sys_dictionary_details.sys_dictionary_id")
+	err = db.First(&sysDictionaryDetails, "sys_dictionaries.type = ? and sys_dictionary_details.value = ?", t, value).Error
+	return sysDictionaryDetails, err
 }

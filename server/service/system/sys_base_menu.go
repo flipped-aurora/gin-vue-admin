@@ -16,29 +16,40 @@ type BaseMenuService struct{}
 //@param: id float64
 //@return: err error
 
+var BaseMenuServiceApp = new(BaseMenuService)
+
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
-	err = global.GVA_DB.Preload("MenuBtn").Preload("Parameters").Where("parent_id = ?", id).First(&system.SysBaseMenu{}).Error
+	err = global.GVA_DB.First(&system.SysBaseMenu{}, "parent_id = ?", id).Error
 	if err != nil {
-		var menu system.SysBaseMenu
-		db := global.GVA_DB.Preload("SysAuthoritys").Where("id = ?", id).First(&menu).Delete(&menu)
-		err = global.GVA_DB.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
-		err = global.GVA_DB.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
-		err = global.GVA_DB.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
-		if err != nil {
-			return err
-		}
-		if len(menu.SysAuthoritys) > 0 {
-			err = global.GVA_DB.Model(&menu).Association("SysAuthoritys").Delete(&menu.SysAuthoritys)
-		} else {
-			err = db.Error
+		return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
+			err = tx.Delete(&system.SysBaseMenu{}, "id = ?", id).Error
 			if err != nil {
-				return
+				return err
 			}
-		}
-	} else {
-		return errors.New("此菜单存在子菜单不可删除")
+
+			err = tx.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
+			if err != nil {
+				return err
+			}
+
+			err = tx.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
+			if err != nil {
+				return err
+			}
+			err = tx.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
+			if err != nil {
+				return err
+			}
+
+			err = tx.Delete(&system.SysAuthorityMenu{}, "sys_base_menu_id = ?", id).Error
+			if err != nil {
+				return err
+			}
+			return nil
+		})
 	}
-	return err
+	return errors.New("此菜单存在子菜单不可删除")
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -64,7 +75,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 	upDateMap["sort"] = menu.Sort
 
 	err = global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		db := tx.Where("id = ?", menu.ID).Find(&oldMenu)
+		tx.Where("id = ?", menu.ID).Find(&oldMenu)
 		if oldMenu.Name != menu.Name {
 			if !errors.Is(tx.Where("id <> ? AND name = ?", menu.ID, menu.Name).First(&system.SysBaseMenu{}).Error, gorm.ErrRecordNotFound) {
 				global.GVA_LOG.Debug("存在相同name修改失败")
@@ -103,7 +114,7 @@ func (baseMenuService *BaseMenuService) UpdateBaseMenu(menu system.SysBaseMenu) 
 			}
 		}
 
-		txErr = db.Updates(upDateMap).Error
+		txErr = tx.Model(&oldMenu).Updates(upDateMap).Error
 		if txErr != nil {
 			global.GVA_LOG.Debug(txErr.Error())
 			return txErr

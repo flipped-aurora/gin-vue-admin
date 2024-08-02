@@ -117,11 +117,10 @@ export const deletePackageApi = (data) => {
   })
 }
 
-export const createPlugApi = (data) => {
+export const getTemplatesApi = () => {
   return service({
-    url: '/autoCode/createPlug',
-    method: 'post',
-    data
+    url: '/autoCode/getTemplates',
+    method: 'get'
   })
 }
 
@@ -138,5 +137,33 @@ export const pubPlug = (params) => {
     url: '/autoCode/pubPlug',
     method: 'post',
     params
+  })
+}
+
+
+export const llmAuto = (params) => {
+  let modeName = {
+    "xiaoqi": "小奇",
+    "xiaomiao": "小淼",
+  }
+  return service({
+    url: '/autoCode/llmAuto',
+    method: 'post',
+    params,
+    timeout: 1000 * 60 * 10,
+    loadingOption:{
+      lock: true,
+      fullscreen:true,
+      text: `${modeName[params.mode]}正在思考，请稍候...`,
+    }
+  })
+}
+
+
+export const addFunc = (data) => {
+  return service({
+    url: '/autoCode/addFunc',
+    method: 'post',
+    data
   })
 }

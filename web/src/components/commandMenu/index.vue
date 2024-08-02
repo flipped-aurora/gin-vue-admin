@@ -9,7 +9,7 @@
       <input
         v-model="searchInput"
         class="quick-input"
-        placeholder="请输入你需要快捷到达的功能"
+        :placeholder="t('components.commandMenu.commandMenuNote')"
       >
     </template>
 
@@ -33,7 +33,7 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="close">关闭</el-button>
+        <el-button @click="close">{{ t('components.commandMenu.close') }}</el-button>
       </span>
     </template>
   </el-dialog>
@@ -41,17 +41,21 @@
 
 <script setup>
 import { reactive, ref, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useRouterStore } from '@/pinia/modules/router'
-import { useUserStore } from '@/pinia/modules/user'
+import { useAppStore,useUserStore } from '@/pinia'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'CommandMenu',
 })
+const appStore = useAppStore()
+const userStore = useUserStore()
 
 const router = useRouter()
 const route = useRouter()
-const userStore = useUserStore()
 const routerStore = useRouterStore()
 const dialogVisible = ref(false)
 const searchInput = ref('')
@@ -75,7 +79,7 @@ const deepMenus = (menus) => {
 
 const addQuickMenu = () => {
   const option = {
-    label: '跳转',
+    label: t('components.commandMenu.jump'),
     children: []
   }
   const menus = deepMenus(routerStore.asyncRouters[0].children)
@@ -85,18 +89,18 @@ const addQuickMenu = () => {
 
 const addQuickOption = () => {
   const option = {
-    label: '操作',
+    label: t('components.commandMenu.operate'),
     children: []
   }
   const quickArr = [
     {
-      label: '亮色主题',
+      label: t('components.commandMenu.lightTheme'),
       func: () => changeMode('light')
     }, {
-      label: '暗色主题',
+      label: t('components.commandMenu.darkTheme'),
       func: () => changeMode('dark')
     }, {
-      label: '退出登录',
+      label: t('components.commandMenu.logout'),
       func: () => userStore.LoginOut()
     }
   ]
@@ -134,10 +138,10 @@ const changeRouter = (e) => {
 
 const changeMode = (e) => {
   if (e === null) {
-    userStore.changeSideMode('dark')
+    appStore.toggleTheme(false )
     return
   }
-  userStore.changeSideMode(e)
+  appStore.toggleTheme(true )
 }
 
 const close = () => {
@@ -172,6 +176,7 @@ watch(searchInput, () => {
     color: #666;
   }
   .quick-input{
+    @apply bg-gray-50 dark:bg-gray-800;
     color: #666;
     border-radius: 4px 4px 0 0;
     border:none;
@@ -186,8 +191,8 @@ watch(searchInput, () => {
     padding: 8px;
     margin: 4px 0;
     &:hover{
+      @apply bg-gray-200 dark:bg-slate-500;
       cursor: pointer;
-      background: #eee;
       border-radius: 4px;
     }
   }

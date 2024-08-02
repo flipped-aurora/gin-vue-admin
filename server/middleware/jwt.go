@@ -2,19 +2,18 @@ package middleware
 
 import (
 	"errors"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/golang-jwt/jwt/v4"
+	"go.uber.org/zap"
 	"strconv"
 	"time"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service"
 
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
@@ -22,14 +21,15 @@ var jwtService = service.ServiceGroupApp.SystemServiceGroup.JwtService
 func JWTAuth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 我们这里jwt鉴权取头部信息 x-token 登录时回返回token信息 这里前端需要把token存储到cookie或者本地localStorage中 不过需要跟后端协商过期时间 可以约定刷新令牌或者重新登录
-		token := c.Request.Header.Get("x-token")
+		token := utils.GetToken(c)
 		if token == "" {
-			response.FailWithDetailed(gin.H{"reload": true}, "未登录或非法访问", c)
+			response.NoAuth("未登录或非法访问", c)
 			c.Abort()
 			return
 		}
 		if jwtService.IsBlacklist(token) {
-			response.FailWithDetailed(gin.H{"reload": true}, "您的帐户异地登陆或令牌失效", c)
+			response.NoAuth("您的帐户异地登陆或令牌失效", c)
+			utils.ClearToken(c)
 			c.Abort()
 			return
 		}
@@ -38,11 +38,13 @@ func JWTAuth() gin.HandlerFunc {
 		claims, err := j.ParseToken(token)
 		if err != nil {
 			if errors.Is(err, utils.TokenExpired) {
-				response.FailWithDetailed(gin.H{"reload": true}, "授权已过期", c)
+				response.NoAuth("授权已过期", c)
+				utils.ClearToken(c)
 				c.Abort()
 				return
 			}
-			response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
+			response.NoAuth(err.Error(), c)
+			utils.ClearToken(c)
 			c.Abort()
 			return
 		}
@@ -55,6 +57,7 @@ func JWTAuth() gin.HandlerFunc {
 		//	response.FailWithDetailed(gin.H{"reload": true}, err.Error(), c)
 		//	c.Abort()
 		//}
+		c.Set("claims", claims)
 		if claims.ExpiresAt.Unix()-time.Now().Unix() < claims.BufferTime {
 			dr, _ := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
 			claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(dr))
@@ -62,6 +65,7 @@ func JWTAuth() gin.HandlerFunc {
 			newClaims, _ := j.ParseToken(newToken)
 			c.Header("new-token", newToken)
 			c.Header("new-expires-at", strconv.FormatInt(newClaims.ExpiresAt.Unix(), 10))
+			utils.SetToken(c, newToken, int(dr.Seconds()))
 			if global.GVA_CONFIG.System.UseMultipoint {
 				RedisJwtToken, err := jwtService.GetRedisJWT(newClaims.Username)
 				if err != nil {
@@ -73,7 +77,13 @@ func JWTAuth() gin.HandlerFunc {
 				_ = jwtService.SetRedisJWT(newToken, newClaims.Username)
 			}
 		}
-		c.Set("claims", claims)
 		c.Next()
+
+		if newToken, exists := c.Get("new-token"); exists {
+			c.Header("new-token", newToken.(string))
+		}
+		if newExpiresAt, exists := c.Get("new-expires-at"); exists {
+			c.Header("new-expires-at", newExpiresAt.(string))
+		}
 	}
 }

@@ -70,7 +70,9 @@
 		"previewFailErr": "预览失败",
 		"previewSuccess": "预览成功",
 		"autoCreateFail": "自动化创建失败!请自行清空垃圾数据!",
-		"queryTablesFail": "查询table失败"
+		"queryTablesFail": "查询table失败",
+		"largeModelCreationFail" : "大模型生成失败!",
+		"largeModelCreationFailErr" : "大模型生成失败"
 	},
 	"sys_initdb": {
 		"paramVerifyFail": "参数校验不通过!",
@@ -103,6 +105,7 @@
 			"changePassword": "修改密码（建议选择)",
 			"changeRoleAPIPermission": "更改角色api权限",
 			"codeGen": "代码生成器",
+			"templateConfiguration" : "模板配置",
 			"codeGenHistory": "代码生成器历史",
 			"copyRole": "拷贝角色",
 			"createAPI": "创建api",
@@ -143,12 +146,27 @@
 			"updateAPI": "更新Api",
 			"updateMenu": "更新菜单",
 			"updateRole": "更新角色信息",
-			"userRegistration": "用户注册"
+			"userRegistration": "用户注册",
+			"configurationTemplates" : "配置模板",
+			"getTemplateFile" : "获取模板文件",
+			"getAllTemplates" : "获取所有模板",
+			"deleteTemplate" : "删除模板",
+			"buttonAuthority" : "按钮权限",
+			"tableTemplate" : "表格模板",
+			"announcement" : "公告",
+			"newAnnouncement" : "新建公告",
+			"deleteAnnouncement" : "删除公告",
+			"batchDeleteAnnouncement" : "批量删除公告",
+			"updateAnnouncement" : "更新公告",
+			"getAnnouncementByID" : "根据ID获取公告",
+			"getAnnouncementList" : "获取公告列表",
+			"" : ""
 		},
 		"authority": {
 			"normalUserSubRole": "普通用户子角色",
 			"normalUsers": "普通用户",
-			"testRole": "测试角色"
+			"testRole": "测试角色",
+			"permissionRefreshFailed" : "创建成功，权限刷新失败。"
 		},
 		"dictionary": {
 			"boolType": "数据库bool类型",
@@ -199,6 +217,15 @@
 		"server" : {
 			"welcomeTo" : "欢迎使用",
 			"currentVersion" : "当前版本"
+		}
+	},
+	"model" : {
+		"common" : {
+			"response" : {
+				"success" : "成功",
+				"operationSuccess" : "操作成功",
+				"operationFail" : "操作失败"
+			}
 		}
 	}
 }

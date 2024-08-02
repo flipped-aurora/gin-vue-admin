@@ -10,11 +10,15 @@
           type="primary"
           icon="plus"
           @click="openDialog('addApi')"
-        >新增</el-button>
+        >
+          新增
+        </el-button>
         <el-icon
           class="cursor-pointer"
           @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=3&vd_source=f2640257c21e3b547a790461ed94875e')"
-        ><VideoCameraFilled /></el-icon>
+        >
+          <VideoCameraFilled />
+        </el-icon>
       </div>
       <el-table :data="tableData">
         <el-table-column
@@ -28,6 +32,12 @@
           label="包名"
           width="150"
           prop="packageName"
+        />
+        <el-table-column
+            align="left"
+            label="模板"
+            width="150"
+            prop="template"
         />
         <el-table-column
           align="left"
@@ -54,19 +64,20 @@
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"
-            >删除</el-button>
+            >
+              删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
-
     </div>
 
-    <el-dialog
+    <el-drawer
       v-model="dialogFormVisible"
-      :before-close="closeDialog"
-      title="创建Package"
+      size="40%"
+      :show-close="false"
     >
-      <warning-bar title="新增Pkg用于自动化代码使用" />
+      <warning-bar title="模板package会创建集成于项目本体中的代码包，模板plugin会创建插件包" />
       <el-form
         ref="pkgForm"
         :model="form"
@@ -82,6 +93,17 @@
             autocomplete="off"
           />
         </el-form-item>
+        <el-form-item
+          label="模板"
+          prop="template"
+        >
+          <el-select
+            v-model="form.template"
+          >
+            <el-option v-for="template in templatesOptions" :label="template" :value="template" :key="template"/>
+          </el-select>
+        </el-form-item>
+
         <el-form-item
           label="展示名"
           prop="label"
@@ -101,16 +123,23 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >确 定</el-button>
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">创建Package</span>
+          <div>
+            <el-button @click="closeDialog">
+              取 消
+            </el-button>
+            <el-button
+              type="primary"
+              @click="enterDialog"
+            >
+              确 定
+            </el-button>
+          </div>
         </div>
       </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -119,6 +148,7 @@ import {
   createPackageApi,
   getPackageApi,
   deletePackageApi,
+  getTemplatesApi
 } from '@/api/autoCode'
 import { ref } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -132,9 +162,20 @@ defineOptions({
 
 const form = ref({
   packageName: '',
+  template: '',
   label: '',
   desc: '',
 })
+const templatesOptions = ref([])
+
+const getTemplates = async ()=>{
+  const res = await getTemplatesApi()
+  if (res.code === 0){
+    templatesOptions.value = res.data
+  }
+}
+
+getTemplates()
 
 const validateNum = (rule, value, callback) => {
   if ((/^\d+$/.test(value[0]))) {
@@ -149,6 +190,10 @@ const rules = ref({
     { required: true, message: '请输入包名', trigger: 'blur' },
     { validator: validateNum, trigger: 'blur' }
   ],
+  template:[
+    { required: true, message: '请选择模板', trigger: 'change' },
+    { validator: validateNum, trigger: 'blur' }
+  ]
 })
 
 const dialogFormVisible = ref(false)
@@ -160,6 +205,7 @@ const closeDialog = () => {
   dialogFormVisible.value = false
   form.value = {
     packageName: '',
+    template: '',
     label: '',
     desc: '',
   }

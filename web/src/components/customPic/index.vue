@@ -1,5 +1,5 @@
 <template>
-  <span class="headerAvatar">
+  <span class="headerAvatar ">
     <template v-if="picType === 'avatar'">
       <el-avatar
         v-if="userStore.userInfo.headerImg"

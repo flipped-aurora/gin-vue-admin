@@ -8,7 +8,7 @@
     >
       <div
         :id="key"
-        class="h-[50vh] bg-white px-5 overflow-y-scroll"
+        class="h-[calc(100vh-160px)] bg-white px-5 overflow-y-scroll"
       />
     </el-tab-pane>
   </el-tabs>

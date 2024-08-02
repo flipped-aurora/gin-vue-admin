@@ -19,10 +19,18 @@
           />
         </el-form-item>
         <el-form-item :label="t('view.api.apiGroup')">
-          <el-input
+          <el-select
             v-model="searchInfo.apiGroup"
+            clearable
             :placeholder="t('view.api.apiGroup')"
-          />
+          >
+            <el-option
+              v-for="item in apiGroupOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item :label="t('general.request')">
           <el-select
@@ -43,11 +51,15 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >{{ t('general.search') }}</el-button>
+          >
+          {{ t('general.search') }}
+          </el-button>
           <el-button
             icon="refresh"
             @click="onReset"
-          >{{ t('general.reset') }}</el-button>
+          >
+          {{ t('general.reset') }}
+          </el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -57,60 +69,45 @@
           type="primary"
           icon="plus"
           @click="openDialog('addApi')"
-        >{{ t('general.add') }}</el-button>
+        >
+        {{ t('general.add') }}
+        </el-button>
         <el-icon
           class="cursor-pointer"
           @click="toDoc('https://www.bilibili.com/video/BV1kv4y1g7nT?p=7&vd_source=f2640257c21e3b547a790461ed94875e')"
-        ><VideoCameraFilled /></el-icon>
-        <el-popover
-          v-model="deleteVisible"
-          placement="top"
-          width="160"
         >
-          <p>{{ t('general.deleteConfirm') }}</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="deleteVisible = false"
-            >{{ t('general.cancel') }}</el-button>
-            <el-button
-              type="primary"
-              @click="onDelete"
-            >{{ t('general.confirm') }}</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="delete"
-              :disabled="!apis.length"
-              @click="deleteVisible = true"
-            >{{ t('general.delete') }}</el-button>
-          </template>
-        </el-popover>
-        <el-popover
-          v-model="freshVisible"
-          placement="top"
-          width="160"
+          <VideoCameraFilled />
+        </el-icon>
+        <el-button
+          icon="delete"
+          :disabled="!apis.length"
+          @click="onDelete"
         >
-          <p>确定要刷新Casbin缓存吗？</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="freshVisible = false"
-            >取消</el-button>
-            <el-button
-              type="primary"
-              @click="onFresh"
-            >确定</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="Refresh"
-              @click="freshVisible = true"
-            >刷新缓存</el-button>
-          </template>
-        </el-popover>
+          删除
+        </el-button>
+        <el-button
+          icon="Refresh"
+          @click="onFresh"
+        >
+          刷新缓存
+        </el-button>
+        <el-button
+          icon="Compass"
+          @click="onSync"
+        >
+          同步API
+        </el-button>
+        <ExportTemplate
+          template-id="api"
+        />
+        <ExportExcel
+          template-id="api"
+          :limit="9999"
+        />
+        <ImportExcel
+          template-id="api"
+          @on-success="getTableData"
+        />
       </div>
       <el-table
         :data="tableData"
@@ -176,14 +173,18 @@
               type="primary"
               link
               @click="editApiFunc(scope.row)"
-            >{{ t('general.edit') }}</el-button>
+            >
+            {{ t('general.edit') }}
+            </el-button>
             <el-button
               icon="delete"
 
               type="primary"
               link
               @click="deleteApiFunc(scope.row)"
-            >{{ t('general.delete') }}</el-button>
+            >
+            {{ t('general.delete') }}
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -198,14 +199,209 @@
           @size-change="handleSizeChange"
         />
       </div>
-
     </div>
 
-    <el-dialog
-      v-model="dialogFormVisible"
-      :before-close="closeDialog"
-      :title="dialogTitle"
+    <el-drawer
+      v-model="syncApiFlag"
+      size="80%"
+      :before-close="closeSyncDialog"
+      :show-close="false"
     >
+      <warning-bar title="同步API，不输入路由分组将不会被自动同步" />
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">同步路由</span>
+          <div>
+            <el-button @click="closeSyncDialog">
+              取 消
+            </el-button>
+            <el-button
+              type="primary"
+              :loading="syncing"
+              @click="enterSyncDialog"
+            >
+              确 定
+            </el-button>
+          </div>
+        </div>
+      </template>
+
+      <h4>新增路由 <span class="text-xs text-gray-500 ml-2 font-normal">存在于当前路由中，但是不存在于api表</span></h4>
+      <el-table
+        :data="syncApiData.newApis"
+      >
+        <el-table-column
+          align="left"
+          label="API路径"
+          min-width="150"
+          prop="path"
+        />
+        <el-table-column
+          align="left"
+          label="API分组"
+          min-width="150"
+          prop="apiGroup"
+        >
+          <template #default="{row}">
+            <el-select
+              v-model="row.apiGroup"
+              placeholder="请选择或新增"
+              allow-create filterable default-first-option
+            >
+              <el-option
+                v-for="item in apiGroupOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="left"
+          label="API简介"
+          min-width="150"
+          prop="description"
+        >
+          <template #default="{row}">
+            <el-input
+              v-model="row.description"
+              autocomplete="off"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="left"
+          label="请求"
+          min-width="150"
+          prop="method"
+        >
+          <template #default="scope">
+            <div>
+              {{ scope.row.method }} / {{ methodFilter(scope.row.method) }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          min-width="150"
+          fixed="right"
+        >
+          <template #default="{row}">
+            <el-button type="primary" text @click="ignoreApiFunc(row,true)">
+              忽略
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <h4>已删除路由 <span class="text-xs text-gray-500 ml-2 font-normal">已经不存在于当前项目的路由中，确定同步后会自动从apis表删除</span></h4>
+      <el-table
+        :data="syncApiData.deleteApis"
+      >
+        <el-table-column
+          align="left"
+          label="API路径"
+          min-width="150"
+          prop="path"
+        />
+        <el-table-column
+          align="left"
+          label="API分组"
+          min-width="150"
+          prop="apiGroup"
+        />
+        <el-table-column
+          align="left"
+          label="API简介"
+          min-width="150"
+          prop="description"
+        />
+        <el-table-column
+          align="left"
+          label="请求"
+          min-width="150"
+          prop="method"
+        >
+          <template #default="scope">
+            <div>
+              {{ scope.row.method }} / {{ methodFilter(scope.row.method) }}
+            </div>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <h4>忽略路由 <span class="text-xs text-gray-500 ml-2 font-normal">忽略路由不参与api同步，常见为不需要进行鉴权行为的路由</span></h4>
+      <el-table
+        :data="syncApiData.ignoreApis"
+      >
+        <el-table-column
+          align="left"
+          label="API路径"
+          min-width="150"
+          prop="path"
+        />
+        <el-table-column
+          align="left"
+          label="API分组"
+          min-width="150"
+          prop="apiGroup"
+        />
+        <el-table-column
+          align="left"
+          label="API简介"
+          min-width="150"
+          prop="description"
+        />
+        <el-table-column
+          align="left"
+          label="请求"
+          min-width="150"
+          prop="method"
+        >
+          <template #default="scope">
+            <div>
+              {{ scope.row.method }} / {{ methodFilter(scope.row.method) }}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          min-width="150"
+          fixed="right"
+        >
+          <template #default="{row}">
+            <el-button type="primary" text @click="ignoreApiFunc(row,false)">
+              取消忽略
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-drawer>
+
+    <el-drawer
+      v-model="dialogFormVisible"
+      size="60%"
+      :before-close="closeDialog"
+      :show-close="false"
+    >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ dialogTitle }}</span>
+          <div>
+            <el-button @click="closeDialog">
+              取 消
+            </el-button>
+            <el-button
+              type="primary"
+              @click="enterDialog"
+            >
+              确 定
+            </el-button>
+          </div>
+        </div>
+      </template>
+
       <warning-bar :title="t('view.api.newApiNote')" />
       <el-form
         ref="apiForm"
@@ -243,10 +439,17 @@
         :label="t('view.api.apiGrouping')"
           prop="apiGroup"
         >
-          <el-input
+          <el-select
             v-model="form.apiGroup"
-            autocomplete="off"
-          />
+            placeholder="请选择或新增" allow-create filterable default-first-option
+          >
+            <el-option
+              v-for="item in apiGroupOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item
         :label="t('view.api.apiDescrpition')"
@@ -258,16 +461,7 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >{{ t('general.confirm') }}</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
   </div>
 </template>
 
@@ -279,7 +473,11 @@ import {
   updateApi,
   deleteApi,
   deleteApisByIds,
-  freshCasbin
+  freshCasbin,
+  syncApi,
+  getApiGroups,
+  ignoreApi,
+  enterSyncApi
 } from '@/api/api'
 import { toSQLLine } from '@/utils/stringFun'
 import WarningBar from '@/components/warningBar/warningBar.vue'
@@ -287,6 +485,9 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { VideoCameraFilled } from '@element-plus/icons-vue'
 import { toDoc } from '@/utils/doc'
+import ExportExcel from '@/components/exportExcel/exportExcel.vue'
+import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
+import ImportExcel from '@/components/exportExcel/importExcel.vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -349,6 +550,55 @@ const total = ref(0)
 const pageSize = ref(10)
 const tableData = ref([])
 const searchInfo = ref({})
+const apiGroupOptions = ref([])
+const apiGroupMap = ref({})
+
+const getGroup = async() => {
+  const res = await getApiGroups()
+  if (res.code === 0) {
+    const groups = res.data.groups
+    apiGroupOptions.value = groups.map(item => ({ label: item, value: item }))
+    apiGroupMap.value = res.data.apiGroupMap
+  }
+}
+
+const ignoreApiFunc = async (row,flag) =>{
+  const res = await ignoreApi({path:row.path,method:row.method,flag})
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+    if(flag){
+      syncApiData.value.newApis = syncApiData.value.newApis.filter(item => !(item.path === row.path && item.method === row.method))
+      syncApiData.value.ignoreApis.push(row)
+      return
+    }
+    syncApiData.value.ignoreApis = syncApiData.value.ignoreApis.filter(item => !(item.path === row.path && item.method === row.method))
+    syncApiData.value.newApis.push(row)
+  }
+}
+
+const closeSyncDialog = () => {
+  syncApiFlag.value = false
+}
+
+const syncing = ref(false)
+
+
+const enterSyncDialog = async() => {
+  syncing.value = true
+  const res = await enterSyncApi(syncApiData.value)
+  syncing.value = false
+  if (res.code === 0) {
+    ElMessage({
+      type: 'success',
+      message: res.msg
+    })
+    syncApiFlag.value = false
+    getTableData()
+  }
+}
 
 const onReset = () => {
   searchInfo.value = {}
@@ -396,38 +646,67 @@ const getTableData = async() => {
 }
 
 getTableData()
-
+getGroup()
 // 批量操作
 const handleSelectionChange = (val) => {
   apis.value = val
 }
 
-const deleteVisible = ref(false)
 const onDelete = async() => {
-  const ids = apis.value.map(item => item.ID)
-  const res = await deleteApisByIds({ ids })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: res.msg
-    })
-    if (tableData.value.length === ids.length && page.value > 1) {
-      page.value--
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const ids = apis.value.map(item => item.ID)
+    const res = await deleteApisByIds({ ids })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+      if (tableData.value.length === ids.length && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    deleteVisible.value = false
-    getTableData()
-  }
+  })
 }
-const freshVisible = ref(false)
 const onFresh = async() => {
-  const res = await freshCasbin()
+  ElMessageBox.confirm('确定要刷新缓存吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const res = await freshCasbin()
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: res.msg
+      })
+    }
+  })
+}
+
+const syncApiData = ref({
+  newApis:[],
+  deleteApis:[],
+  ignoreApis:[]
+})
+
+const syncApiFlag = ref(false)
+
+const onSync = async() => {
+  const res = await syncApi()
   if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: res.msg
+    res.data.newApis.forEach(item => {
+      item.apiGroup = apiGroupMap.value[item.path.split('/')[1]]
+      console.log(apiGroupMap.value)
     })
+
+    syncApiData.value = res.data
+    syncApiFlag.value = true
   }
-  freshVisible.value = false
 }
 
 // 弹窗相关
@@ -484,6 +763,7 @@ const enterDialog = async() => {
               })
             }
             getTableData()
+            getGroup()
             closeDialog()
           }
 
@@ -534,6 +814,7 @@ const deleteApiFunc = async(row) => {
           page.value--
         }
         getTableData()
+        getGroup()
       }
     })
 }

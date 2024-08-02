@@ -4,14 +4,15 @@
     class="w-full h-full relative"
   >
     <div
-      class="rounded-lg flex items-center justify-evenly w-full h-full bg-white md:w-screen md:h-screen md:bg-[#194bfb]"
+      class="rounded-lg flex items-center justify-evenly w-full h-full md:w-screen md:h-screen md:bg-[#194bfb]"
     >
       <div class="md:w-3/5 w-10/12 h-full flex items-center justify-evenly">
-        <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-52" />
+        <div class="oblique h-[130%] w-3/5 bg-white dark:bg-slate-900 transform -rotate-12 absolute -ml-52" />
         <!-- 分割斜块 -->
         <div class="z-[999] pt-12 pb-10 md:w-96 w-full  rounded-lg flex flex-col justify-between box-border">
           <div>
             <div class="flex items-center justify-center">
+
               <img
                 class="w-24"
                 :src="$GIN_VUE_ADMIN.appLogo"
@@ -30,31 +31,31 @@
               >
                 <span class="el-dropdown-link">
                   <img
-                    src="@/assets/language.svg"
+                    src="@/assets/language.svg" alt = "Languages"
                     style="width: 30px; height: 30px;"
                   >
                 </span>
-                <template #dropdown>
+                <template #dropdown style="width: 100px">
                   <el-dropdown-menu>
                     <el-dropdown-item
                       :disabled="$i18n.locale==='en'"
                       command="en"
                     ><img
-                      src="@/assets/flags/en.svg"
+                      src="@/assets/flags/en.svg" alt = "English"
                       class="img"
                     >English</el-dropdown-item>
                     <el-dropdown-item
                       :disabled="$i18n.locale==='zh'"
                       command="zh"
                     ><img
-                      src="@/assets/flags/zh.svg"
+                      src="@/assets/flags/zh.svg" alt = "中文"
                       class="img"
                     >中文</el-dropdown-item>
                     <el-dropdown-item
                       :disabled="$i18n.locale==='ar'"
                       command="ar"
                     ><img
-                      src="@/assets/flags/ar.svg"
+                      src="@/assets/flags/ar.svg" alt = "العربية"
                       class="img"
                     >العربية</el-dropdown-item>
                   </el-dropdown-menu>
@@ -116,7 +117,7 @@
               </el-form-item>
               <el-form-item class="mb-6">
                 <el-button
-                  class="shadow shadow-blue-600 h-11 w-full"
+                  class="shadow shadow-active h-11 w-full"
                   type="primary"
                   size="large"
                   @click="submitForm"
@@ -124,7 +125,7 @@
               </el-form-item>
               <el-form-item class="mb-6">
                 <el-button
-                  class="shadow shadow-blue-600 h-11 w-full"
+                  class="shadow shadow-active h-11 w-full"
                   type="primary"
                   size="large"
                   @click="checkInit"
@@ -192,7 +193,7 @@
 <script setup>
 import { captcha } from '@/api/user'
 import { checkDB } from '@/api/initdb'
-import BottomInfo from '@/view/layout/bottomInfo/bottomInfo.vue'
+import BottomInfo from '@/components/bottomInfo/bottomInfo.vue'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
@@ -204,7 +205,7 @@ const i18n = useI18n() // added by mohamed hassan to support multilanguage
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
-  name: 'Login',
+  name: "Login",
 })
 
 const router = useRouter()
@@ -226,18 +227,17 @@ const checkPassword = (rule, value, callback) => {
 }
 
 // 获取验证码
-const loginVerify = () => {
-  captcha({}).then(async(ele) => {
-    rules.captcha.push({
-      max: ele.data.captchaLength,
-      min: ele.data.captchaLength,
-      message: `t('login.pleaseEnter') ${ele.data.captchaLength} t('login.verificationCode')`,
-      trigger: 'blur',
-    })
-    picPath.value = ele.data.picPath
-    loginFormData.captchaId = ele.data.captchaId
-    loginFormData.openCaptcha = ele.data.openCaptcha
+const loginVerify = async() => {
+  const ele = await captcha()
+  rules.captcha.push({
+    max: ele.data.captchaLength,
+    min: ele.data.captchaLength,
+    message: `t('login.pleaseEnter') ${ele.data.captchaLength} t('login.verificationCode')`,
+    trigger: 'blur',
   })
+  picPath.value = ele.data.picPath
+  loginFormData.captchaId = ele.data.captchaId
+  loginFormData.openCaptcha = ele.data.openCaptcha
 }
 
 const getLanguage = () => {
@@ -255,7 +255,7 @@ const picPath = ref('')
 
 const loginFormData = reactive({
   username: 'admin',
-  password: '123456',
+  password: '',
   captcha: '',
   captchaId: '',
   openCaptcha: false,
@@ -280,12 +280,8 @@ const login = async() => {
 
 const submitForm = () => {
   loginForm.value.validate(async(v) => {
-    if (v) {
-      const flag = await login()
-      if (!flag) {
-        loginVerify()
-      }
-    } else {
+    if (!v) {
+      // 未通过前端静态验证
       ElMessage({
         type: 'error',
         message: t('login.errLogin'),
@@ -294,6 +290,18 @@ const submitForm = () => {
       loginVerify()
       return false
     }
+
+    // 通过验证，请求登陆
+    const flag = await login()
+
+    // 登陆失败，刷新验证码
+    if (!flag) {
+      loginVerify()
+      return false
+    }
+
+    // 登陆成功
+    return true
   })
 }
 

@@ -31,6 +31,8 @@ func NewOss() OSS {
 		return HuaWeiObs
 	case "aws-s3":
 		return &AwsS3{}
+	case "cloudflare-r2":
+		return &CloudflareR2{}
 	default:
 		return &Local{}
 	}

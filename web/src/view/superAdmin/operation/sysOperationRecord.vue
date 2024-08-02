@@ -38,33 +38,11 @@
     </div>
     <div class="gva-table-box">
       <div class="gva-btn-list">
-
-        <el-popover
-          v-model="deleteVisible"
-          placement="top"
-          width="160"
-        >
-          <p>{{ t('general.deleteConfirm') }}</p>
-          <div style="text-align: right; margin-top: 8px;">
-            <el-button
-              type="primary"
-              link
-              @click="deleteVisible = false"
-            >{{ t('general.cancel') }}</el-button>
-            <el-button
-              type="primary"
-              @click="onDelete"
-            >{{ t('general.confirm') }}</el-button>
-          </div>
-          <template #reference>
-            <el-button
-              icon="delete"
-              style="margin-left: 10px;"
-              :disabled="!multipleSelection.length"
-              @click="deleteVisible = true"
-            >{{ t('general.delete') }}</el-button>
-          </template>
-        </el-popover>
+        <el-button
+          icon="delete"
+          :disabled="!multipleSelection.length"
+          @click="onDelete"
+        >{{ t('general.delete') }}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -136,7 +114,7 @@
               <el-popover
                 v-if="scope.row.body"
                 placement="left-start"
-                trigger="click"
+                :width="444"
               >
                 <div class="popover-box">
                   <pre>{{ fmtBody(scope.row.body) }}</pre>
@@ -161,7 +139,7 @@
               <el-popover
                 v-if="scope.row.resp"
                 placement="left-start"
-                trigger="click"
+                :width="444"
               >
                 <div class="popover-box">
                   <pre>{{ fmtBody(scope.row.resp) }}</pre>
@@ -179,32 +157,12 @@
           :label="t('general.operations')"
         >
           <template #default="scope">
-            <el-popover
-              v-model="scope.row.visible"
-              placement="top"
-              width="160"
-            >
-              <p>{{ t('general.deleteConfirm') }}</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="scope.row.visible = false"
-                >{{ t('general.cancel') }}</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteSysOperationRecordFunc(scope.row)"
-                >{{ t('general.confirm') }}</el-button>
-              </div>
-              <template #reference>
-                <el-button
-                  icon="delete"
-                  type="primary"
-                  link
-                  @click="scope.row.visible = true"
-                >{{ t('general.delete') }}</el-button>
-              </template>
-            </el-popover>
+            <el-button
+              icon="delete"
+              type="primary"
+              link
+              @click="deleteSysOperationRecordFunc(scope.row)"
+            >{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -231,7 +189,7 @@ import {
 } from '@/api/sysOperationRecord' // 此处请自行替换地址
 import { formatDate } from '@/utils/format'
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -286,43 +244,52 @@ const getTableData = async() => {
 
 getTableData()
 
-const deleteVisible = ref(false)
 const multipleSelection = ref([])
 const handleSelectionChange = (val) => {
   multipleSelection.value = val
 }
 const onDelete = async() => {
-  const ids = []
-  multipleSelection.value &&
+  ElMessageBox.confirm('确定要删除吗?', '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'warning'
+  }).then(async() => {
+    const ids = []
+    multipleSelection.value &&
         multipleSelection.value.forEach(item => {
           ids.push(item.ID)
         })
-  const res = await deleteSysOperationRecordByIds({ ids })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: t('general.deleteSuccess')
-    })
-    if (tableData.value.length === ids.length && page.value > 1) {
-      page.value--
+    const res = await deleteSysOperationRecordByIds({ ids })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: t('general.deleteSuccess')
+      })
+      if (tableData.value.length === ids.length && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    deleteVisible.value = false
-    getTableData()
-  }
+  })
 }
 const deleteSysOperationRecordFunc = async(row) => {
-  row.visible = false
-  const res = await deleteSysOperationRecord({ ID: row.ID })
-  if (res.code === 0) {
-    ElMessage({
-      type: 'success',
-      message: t('general.deleteSuccess')
-    })
-    if (tableData.value.length === 1 && page.value > 1) {
-      page.value--
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
+    type: 'warning'
+  }).then(async() => {
+    const res = await deleteSysOperationRecord({ ID: row.ID })
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: t('general.deleteSuccess')
+      })
+      if (tableData.value.length === 1 && page.value > 1) {
+        page.value--
+      }
+      getTableData()
     }
-    getTableData()
-  }
+  })
 }
 const fmtBody = (value) => {
   try {

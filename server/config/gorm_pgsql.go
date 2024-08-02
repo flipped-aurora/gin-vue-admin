@@ -15,7 +15,3 @@ func (p *Pgsql) Dsn() string {
 func (p *Pgsql) LinkDsn(dbname string) string {
 	return "host=" + p.Path + " user=" + p.Username + " password=" + p.Password + " dbname=" + dbname + " port=" + p.Port + " " + p.Config
 }
-
-func (m *Pgsql) GetLogMode() string {
-	return m.LogMode
-}

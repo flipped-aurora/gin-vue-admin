@@ -4,13 +4,13 @@
       <warning-bar
         title="点击“文件名/备注”可以编辑文件名或者备注内容。"
       />
-      <div class="gva-btn-list">
+      <div class="gva-btn-list gap-3">
         <upload-common
-          v-model:imageCommon="imageCommon"
+          :image-common="imageCommon"
           @on-success="getTableData"
         />
         <upload-image
-          v-model:imageUrl="imageUrl"
+          :image-url="imageUrl"
           :file-size="512"
           :max-w-h="1080"
           @on-success="getTableData"
@@ -78,7 +78,7 @@
         >
           <template #default="scope">
             <el-tag
-              :type="scope.row.tag === 'jpg' ? 'primary' : 'success'"
+              :type="scope.row.tag === 'jpg' ? 'info' : 'success'"
               disable-transitions
             >{{ scope.row.tag }}
             </el-tag>

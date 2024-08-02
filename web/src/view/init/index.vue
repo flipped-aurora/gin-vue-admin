@@ -1,16 +1,16 @@
 <template>
-  <div class="rounded-lg  flex items-center justify-evenly w-full h-full relative bg-white md:w-screen md:h-screen md:bg-[#194bfb] overflow-hidden">
+  <div class="rounded-lg  flex items-center justify-evenly w-full h-full relative md:w-screen md:h-screen md:bg-[#194bfb] overflow-hidden">
     <div class="rounded-md w-full h-full flex items-center justify-center overflow-hidden">
-      <div class="oblique h-[130%] w-3/5 bg-white transform -rotate-12 absolute -ml-80" />
+      <div class="oblique h-[130%] w-3/5 bg-white dark:bg-slate-900 transform -rotate-12 absolute -ml-80" />
       <div
         v-if="!page.showForm"
         :class="[page.showReadme ?'slide-out-right' :'slide-in-fwd-top' ]"
       >
         <div class=" text-lg">
-          <div class="font-sans text-4xl font-bold text-center mb-4">{{ $GIN_VUE_ADMIN.appName }}</div>
-          <p class="text-gray-600 mb-2">{{ t('init.note') }}</p>
-          <p class="text-gray-600 mb-2">{{ t('init.note1') }}</p>
-          <p class="text-gray-600 mb-2">{{ t('init.note2-1') }}<a
+          <div class="font-sans text-4xl font-bold text-center mb-4 dark:text-white">{{ $GIN_VUE_ADMIN.appName }}</div>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">{{ t('init.note') }}</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">{{ t('init.note1') }}</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">{{ t('init.note2-1') }}<a
             class="text-blue-600 font-bold"
             href="https://www.gin-vue-admin.com"
             target="_blank"
@@ -19,9 +19,9 @@
             href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=2"
             target="_blank"
           >{{ t('init.note2-3') }}</a></p>
-          <p class="text-gray-600 mb-2">{{ t('init.note3') }}</p>
-          <p class="text-gray-600 mb-2">{{ t('init.note4') }}<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
-          <p class="text-gray-600 mb-2">{{ t('init.note5') }}</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">{{ t('init.note3') }}</p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">{{ t('init.note4') }}<span class="text-red-600 font-bold text-3xl ml-2 ">innoDB</span></p>
+          <p class="text-gray-600 dark:text-gray-300 mb-2">{{ t('init.note5') }}</p>
           <p class="flex items-center justify-between mt-8">
             <el-button
               type="primary"
@@ -48,7 +48,7 @@
         <el-form
           ref="formRef"
           :model="form"
-          label-width="100px"
+          label-width="120px"
           size="large"
         >
           <!-- added by mohamed hassan to support multilangauge -->
@@ -63,7 +63,7 @@
                 label="English"
                 value="en"
               ><img
-                src="@/assets/flags/en.svg"
+                src="@/assets/flags/en.svg" alt="English"
                 class="img"
               >English</el-option>
               <el-option
@@ -71,7 +71,7 @@
                 label="中文"
                 value="zh"
               ><img
-                src="@/assets/flags/zh.svg"
+                src="@/assets/flags/zh.svg" alt="中文"
                 class="img"
               >中文</el-option>
               <el-option
@@ -79,12 +79,15 @@
                 label="العربية"
                 value="ar"
               ><img
-                src="@/assets/flags/ar.svg"
+                src="@/assets/flags/ar.svg" alt="العربية"
                 class="img"
               >العربية</el-option>
             </el-select>
           </el-form-item>
           <!-- end of adding -->
+          <el-form-item :label="t('init.adminPassword')">
+            <el-input v-model="form.adminPassword" :placeholder="t('init.adminPasswordNote')"></el-input>
+          </el-form-item>
           <el-form-item :label="t('init.dbType')">
             <el-select
               v-model="form.dbType"
@@ -148,7 +151,7 @@
           </el-form-item>
           <el-form-item
             v-if="form.dbType !== 'sqlite'"
-            label="password"
+            :label="t('init.dbPassword')"
           >
             <el-input
               v-model="form.password"
@@ -241,6 +244,8 @@ const changeDB = (val) => {
   switch (val) {
     case 'mysql':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',
@@ -252,6 +257,8 @@ const changeDB = (val) => {
       break
     case 'pgsql':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'pgsql',
         host: '127.0.0.1',
         port: '5432',
@@ -263,6 +270,8 @@ const changeDB = (val) => {
       break
     case 'oracle':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'oracle',
         host: '127.0.0.1',
         port: '1521',
@@ -274,6 +283,8 @@ const changeDB = (val) => {
       break
     case 'mssql':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'mssql',
         host: '127.0.0.1',
         port: '1433',
@@ -285,6 +296,8 @@ const changeDB = (val) => {
       break
     case 'sqlite':
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'sqlite',
         host: '',
         port: '',
@@ -296,6 +309,8 @@ const changeDB = (val) => {
       break
     default:
       Object.assign(form, {
+        adminPassword:'',
+        reAdminPassword:'',
         dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',
@@ -307,6 +322,14 @@ const changeDB = (val) => {
   }
 }
 const onSubmit = async() => {
+  if (form.adminPassword.length < 6) {
+    ElMessage({
+      type: 'error',
+      message: '密码长度不能小于6位',
+    })
+    return
+  }
+
   const loading = ElLoading.service({
     lock: true,
     text: t('init.pleaseWait'),

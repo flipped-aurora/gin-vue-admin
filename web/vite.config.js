@@ -8,15 +8,17 @@ import * as path from 'path'
 import * as dotenv from 'dotenv'
 import * as fs from 'fs'
 import vuePlugin from '@vitejs/plugin-vue'
-
-import GvaPosition from './vitePlugin/gvaPosition'
-import GvaPositionServer from './vitePlugin/codeServer'
+import vueDevTools from 'vite-plugin-vue-devtools'
 import fullImportPlugin from './vitePlugin/fullImport/fullImport.js'
+import VueFilePathPlugin from './vitePlugin/componentName/index.js'
+import { svgBuilder } from 'vite-auto-import-svg'
+import { AddSecret } from './vitePlugin/secret'
 // @see https://cn.vitejs.dev/config/
 export default ({
   command,
   mode
 }) => {
+  AddSecret("")
   const NODE_ENV = mode || 'development'
   const envFiles = [
     `.env.${NODE_ENV}`
@@ -41,9 +43,18 @@ export default ({
 
   const esbuild = {}
 
+  const rollupOptions = {
+    output: {
+      entryFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
+      chunkFileNames: 'assets/087AC4D233B64EB0[name].[hash].js',
+      assetFileNames: 'assets/087AC4D233B64EB0[name].[hash].[ext]',
+    },
+  }
+
   const config = {
-    base: './', // index.html文件所在位置
-    root: './', // js导入的资源路径，src
+    base: '/', // 编译后js导入的资源路径
+    root: './', // index.html文件所在位置
+    publicDir: 'public', // 静态资源文件夹
     resolve: {
       alias,
     },
@@ -69,18 +80,19 @@ export default ({
       manifest: false, // 是否产出manifest.json
       sourcemap: false, // 是否产出sourcemap.json
       outDir: 'dist', // 产出目录
-      // rollupOptions,
+      rollupOptions,
     },
     esbuild,
     optimizeDeps,
     plugins: [
-      GvaPositionServer(),
-      GvaPosition(),
+      process.env.VITE_POSITION === 'open' &&  vueDevTools({launchEditor: process.env.VITE_EDITOR}),
       legacyPlugin({
         targets: ['Android > 39', 'Chrome >= 60', 'Safari >= 10.1', 'iOS >= 10.3', 'Firefox >= 54', 'Edge >= 15'],
       }),
       vuePlugin(),
-      [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)]
+      svgBuilder('./src/assets/icons/'),
+      [Banner(`\n Build based on gin-vue-admin \n Time : ${timestamp}`)],
+      VueFilePathPlugin("./src/pathInfo.json")
     ],
     css: {
       preprocessorOptions: {
@@ -97,13 +109,13 @@ export default ({
     )
   } else {
     config.plugins.push(AutoImport({
-      resolvers: [ElementPlusResolver()]
-    }),
-    Components({
-      resolvers: [ElementPlusResolver({
-        importStyle: 'sass'
-      })]
-    }))
+        resolvers: [ElementPlusResolver()]
+      }),
+      Components({
+        resolvers: [ElementPlusResolver({
+          importStyle: 'sass'
+        })]
+      }))
   }
   return config
 }

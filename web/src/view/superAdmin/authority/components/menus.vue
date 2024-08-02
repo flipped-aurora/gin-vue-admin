@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="sticky top-0.5 z-10 bg-white">
+    <div class="sticky top-0.5 z-10">
       <el-input
         v-model="filterText"
         class="w-3/5"
@@ -13,46 +13,48 @@
       >{{ t('general.confirm') }}</el-button>
     </div>
     <div class="tree-content clear-both">
-      <el-tree
-        ref="menuTree"
-        :data="menuTreeData"
-        :default-checked-keys="menuTreeIds"
-        :props="menuDefaultProps"
-        default-expand-all
-        highlight-current
-        node-key="ID"
-        show-checkbox
-        :filter-node-method="filterNode"
-        @check="nodeChange"
-      >
-        <template #default="{ node , data }">
-          <span class="custom-tree-node">
-            <span>{{ node.label }}</span>
-            <span>
-              <el-button
-                type="primary"
-                link
+      <el-scrollbar>
+        <el-tree
+          ref="menuTree"
+          :data="menuTreeData"
+          :default-checked-keys="menuTreeIds"
+          :props="menuDefaultProps"
+          default-expand-all
+          highlight-current
+          node-key="ID"
+          show-checkbox
+          :filter-node-method="filterNode"
+          @check="nodeChange"
+        >
+          <template #default="{ node , data }">
+            <span class="custom-tree-node">
+              <span>{{ node.label }}</span>
+              <span>
+                <el-button
+                  type="primary"
+                  link
 
-                :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
-                :disabled="!node.checked"
-                @click="() => setDefault(data)"
-              >
-                {{ row.defaultRouter === data.name? t('menus.home') : t('menus.setAsHome') }}
-              </el-button>
-            </span>
-            <span v-if="data.menuBtn.length">
-              <el-button
-                type="primary"
-                link
+                  :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
+                  :disabled="!node.checked"
+                  @click="() => setDefault(data)"
+                >
+                  {{ row.defaultRouter === data.name? t('menus.home') : t('menus.setAsHome') }}
+                </el-button>
+              </span>
+              <span v-if="data.menuBtn.length">
+                <el-button
+                  type="primary"
+                  link
 
-                @click="() => OpenBtn(data)"
-              >
+                  @click="() => OpenBtn(data)"
+                >
                 {{ t('menus.assignButton') }}
-              </el-button>
+                </el-button>
+              </span>
             </span>
-          </span>
-        </template>
-      </el-tree>
+          </template>
+        </el-tree>
+      </el-scrollbar>
     </div>
     <el-dialog
       v-model="btnVisible"

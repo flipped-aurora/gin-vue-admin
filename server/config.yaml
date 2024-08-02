@@ -16,12 +16,38 @@ zap:
   encode-level: LowercaseColorLevelEncoder
   stacktrace-key: stacktrace
   log-in-console: true
+  retention-day: -1
 
 # redis configuration
 redis:
-  db: 0
+  #是否使用redis集群模式
+  useCluster: false
+  #使用集群模式addr和db默认无效
   addr: 127.0.0.1:6379
   password: ""
+  db: 0
+  clusterAddrs:
+    - "172.21.0.3:7000"
+    - "172.21.0.4:7001"
+    - "172.21.0.2:7002"
+
+
+# mongo configuration
+mongo:
+  coll: ''
+  options: ''
+  database: ''
+  username: ''
+  password: ''
+  auth-source: ''
+  min-pool-size: 0
+  max-pool-size: 100
+  socket-timeout-ms: 0
+  connect-timeout-ms: 0
+  is-zap: false
+  hosts:
+    - host: ''
+      port: ''
 
 # email configuration
 email:
@@ -35,11 +61,12 @@ email:
 
 # system configuration
 system:
-  env: public # Change to "develop" to skip authentication for development mode
+  env: local # 修改为public可以关闭路由日志输出
   addr: 8888
   db-type: mysql
   oss-type: local # 控制oss选择走本地还是 七牛等其他仓 自行增加其他oss仓可以在 server/utils/upload/upload.go 中 NewOss函数配置
   use-redis: false # 使用redis
+  use-mongo: false     # 使用mongo
   use-multipoint: false
   # IP限制次数 一个小时15000次
   iplimit-count: 15000
@@ -138,22 +165,11 @@ local:
 
 # autocode configuration
 autocode:
-  transfer-restart: true
-  # root 自动适配项目根目录
-  # 请不要手动配置,他会在项目加载的时候识别出根路径
-  root: ""
-  server: /server
-  server-plug: /plugin/%s
-  server-api: /api/v1/%s
-  server-initialize: /initialize
-  server-model: /model/%s
-  server-request: /model/%s/request/
-  server-router: /router/%s
-  server-service: /service/%s
-  web: /web/src
-  web-api: /api
-  web-form: /view
-  web-table: /view
+  web: web/src
+  root: "" # root 自动适配项目根目录, 请不要手动配置,他会在项目加载的时候识别出根路径
+  server: server
+  module: 'github.com/flipped-aurora/gin-vue-admin/server'
+  ai-path: ""  # AI服务路径
 
 # qiniu configuration (请自行七牛申请对应的 公钥 私钥 bucket 和 域名地址)
 qiniu:
@@ -195,6 +211,15 @@ aws-s3:
   base-url: https://gin.vue.admin
   path-prefix: github.com/flipped-aurora/gin-vue-admin/server
 
+# cloudflare r2 configuration
+cloudflare-r2:
+  bucket: xxxx0bucket
+  base-url: https://gin.vue.admin.com
+  path: uploads
+  account-id: xxx_account_id
+  access-key-id: xxx_key_id
+  secret-access-key: xxx_secret_key
+
 # huawei obs configuration
 hua-wei-obs:
   path: you-path
@@ -207,17 +232,9 @@ hua-wei-obs:
 excel:
   dir: ./resource/excel/
 
-# timer task db clear table
-Timer:
-  start: true
-  spec: "@daily" # 定时任务详细配置参考 https://pkg.go.dev/github.com/robfig/cron/v3
-  detail:
-    - tableName: sys_operation_records
-      compareField: created_at
-      interval: 2160h
-    - tableName: jwt_blacklists
-      compareField: created_at
-      interval: 168h
+# disk usage configuration
+disk-list:
+  - mount-point: "/"
 
 # 跨域配置
 # 需要配合 server/initialize/router.go -> `Router.Use(middleware.CorsByRules())` 使用

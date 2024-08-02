@@ -3,6 +3,8 @@ import { useRouterStore } from '@/pinia/modules/router'
 import getPageTitle from '@/utils/page'
 import router from '@/router'
 import Nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
+Nprogress.configure({ showSpinner: false, ease: 'ease', speed: 500 })
 
 const whiteList = ['Login', 'Init']
 
@@ -44,6 +46,9 @@ router.beforeEach(async(to, from) => {
   const token = userStore.token
   // 在白名单中的判断情况
   document.title = getPageTitle(to.meta.title, to)
+  if(to.meta.client) {
+    return true
+  }
   if (whiteList.indexOf(to.name) > -1) {
     if (token) {
       if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
@@ -72,6 +77,11 @@ router.beforeEach(async(to, from) => {
   } else {
     // 不在白名单中并且已经登录的时候
     if (token) {
+      console.log(sessionStorage.getItem("needCloseAll"))
+      if(sessionStorage.getItem("needToHome") === 'true') {
+        sessionStorage.removeItem("needToHome")
+        return { path: '/'}
+      }
       // 添加flag防止多次获取动态路由和栈溢出
       if (!routerStore.asyncRouterFlag && whiteList.indexOf(from.name) < 0) {
         await getRouter(userStore)
@@ -107,13 +117,23 @@ router.beforeEach(async(to, from) => {
   }
 })
 
+const removeLoading = () => {
+  const element = document.getElementById('gva-loading-box');
+  if (element) {
+    element.remove();
+  }
+}
+
 router.afterEach(() => {
   // 路由加载完成后关闭进度条
   document.getElementsByClassName('main-cont main-right')[0]?.scrollTo(0, 0)
+  removeLoading()
   Nprogress.done()
 })
 
 router.onError(() => {
   // 路由发生错误后销毁进度条
+  removeLoading()
   Nprogress.remove()
 })
+

@@ -12,9 +12,13 @@ type ServiceGroup struct {
 	AuthorityService
 	DictionaryService
 	SystemConfigService
-	AutoCodeHistoryService
 	OperationRecordService
 	DictionaryDetailService
 	AuthorityBtnService
-	ChatGptService
+	SysExportTemplateService
+
+	AutoCodePlugin   autoCodePlugin
+	AutoCodePackage  autoCodePackage
+	AutoCodeHistory  autoCodeHistory
+	AutoCodeTemplate autoCodeTemplate
 }

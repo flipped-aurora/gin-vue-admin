@@ -5,6 +5,8 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/response"
 )
 
+type AutoCodeService struct{}
+
 type Database interface {
 	GetDB(businessDB string) (data []response.Db, err error)
 	GetTables(businessDB string, dbName string) (data []response.Table, err error)
@@ -19,6 +21,10 @@ func (autoCodeService *AutoCodeService) Database(businessDB string) Database {
 			return AutoCodeMysql
 		case "pgsql":
 			return AutoCodePgsql
+		case "mssql":
+			return AutoCodeMssql
+		case "oracle":
+			return AutoCodeOracle
 		case "sqlite":
 			return AutoCodeSqlite
 		default:

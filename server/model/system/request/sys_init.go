@@ -2,19 +2,21 @@ package request
 
 import (
 	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/config"
 	"os"
+
+	"github.com/flipped-aurora/gin-vue-admin/server/config"
 )
 
 type InitDB struct {
-	DBType   string `json:"dbType"`                    // 数据库类型
-	Host     string `json:"host"`                      // 服务器地址
-	Port     string `json:"port"`                      // 数据库连接端口
-	UserName string `json:"userName"`                  // 数据库用户名
-	Password string `json:"password"`                  // 数据库密码
-	DBName   string `json:"dbName" binding:"required"` // 数据库名
-	DBPath   string `json:"dbPath"`                    // sqlite数据库文件路径
-	Language string `json:"language",omitempty`        // DB initial langauge // added by mohamed hassan to support multilanguage
+	AdminPassword string `json:"adminPassword" binding:"required"`
+	DBType        string `json:"dbType"`                    // 数据库类型
+	Host          string `json:"host"`                      // 服务器地址
+	Port          string `json:"port"`                      // 数据库连接端口
+	UserName      string `json:"userName"`                  // 数据库用户名
+	Password      string `json:"password"`                  // 数据库密码
+	DBName        string `json:"dbName" binding:"required"` // 数据库名
+	DBPath        string `json:"dbPath"`                    // sqlite数据库文件路径
+	Language      string `json:"language",omitempty`        // DB initial langauge // added by mohamed hassan to support multilanguage
 }
 
 // MysqlEmptyDsn msyql 空数据库 建库链接
@@ -46,6 +48,10 @@ func (i *InitDB) PgsqlEmptyDsn() string {
 func (i *InitDB) SqliteEmptyDsn() string {
 	separator := string(os.PathSeparator)
 	return i.DBPath + separator + i.DBName + ".db"
+}
+
+func (i *InitDB) MssqlEmptyDsn() string {
+	return "sqlserver://" + i.UserName + ":" + i.Password + "@" + i.Host + ":" + i.Port + "?database=" + i.DBName + "&encrypt=disable"
 }
 
 // ToMysqlConfig 转换 config.Mysql
@@ -88,6 +94,22 @@ func (i *InitDB) ToPgsqlConfig() config.Pgsql {
 // Author [Kafumio](https://github.com/Kafumio)
 func (i *InitDB) ToSqliteConfig() config.Sqlite {
 	return config.Sqlite{
+		GeneralDB: config.GeneralDB{
+			Path:         i.DBPath,
+			Port:         i.Port,
+			Dbname:       i.DBName,
+			Username:     i.UserName,
+			Password:     i.Password,
+			MaxIdleConns: 10,
+			MaxOpenConns: 100,
+			LogMode:      "error",
+			Config:       "",
+		},
+	}
+}
+
+func (i *InitDB) ToMssqlConfig() config.Mssql {
+	return config.Mssql{
 		GeneralDB: config.GeneralDB{
 			Path:         i.DBPath,
 			Port:         i.Port,

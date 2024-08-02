@@ -56,9 +56,6 @@ const editorConfig = {
 }
 editorConfig.MENU_CONF['uploadImage'] = {
   fieldName: 'file',
-  headers: {
-    'x-token': userStore.token,
-  },
   server: basePath + '/fileUploadAndDownload/upload?noSave=1',
   customInsert(res, insertFn) {
     if (res.code === 0) {
@@ -79,6 +76,7 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor) => {
   editorRef.value = editor
+  valueHtml.value = props.modelValue
 }
 
 watch(() => props.modelValue, () => {

@@ -22,7 +22,7 @@ func RollGormBack(pk, model string) {
 	// 首先分析存在多少个ttt作为调用方的node块
 	// 如果多个 仅仅删除对应块即可
 	// 如果单个 那么还需要剔除import
-	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm.go")
+	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "gorm_biz.go")
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
@@ -60,7 +60,7 @@ func RollGormBack(pk, model string) {
 		}
 		return true
 	})
-	if k > 0 {
+	if k > -1 {
 		n.Args = append(append([]ast.Expr{}, n.Args[:k]...), n.Args[k+1:]...)
 	}
 	if pkNum == 1 {
@@ -99,7 +99,7 @@ func RollRouterBack(pk, model string) {
 	// 首先抓到所有的代码块结构 {}
 	// 分析结构中是否存在一个变量叫做 pk+Router
 	// 然后获取到代码块指针 对内部需要回滚的代码进行剔除
-	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router.go")
+	path := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "initialize", "router_biz.go")
 	src, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
@@ -111,7 +111,15 @@ func RollRouterBack(pk, model string) {
 	}
 
 	var block *ast.BlockStmt
+	var routerStmt *ast.FuncDecl
+
 	ast.Inspect(astFile, func(node ast.Node) bool {
+		if n, ok := node.(*ast.FuncDecl); ok {
+			if n.Name.Name == "initBizRouter" {
+				routerStmt = n
+			}
+		}
+
 		if n, ok := node.(*ast.BlockStmt); ok {
 			ast.Inspect(n, func(bNode ast.Node) bool {
 				if in, ok := bNode.(*ast.Ident); ok {
@@ -146,7 +154,15 @@ func RollRouterBack(pk, model string) {
 	if len(block.List) == 1 {
 		// 说明这个块就没任何意义了
 		block.List = nil
-		// TODO 删除空的{}
+	}
+
+	for i, n := range routerStmt.Body.List {
+		if n, ok := n.(*ast.BlockStmt); ok {
+			if n.List == nil {
+				routerStmt.Body.List = append(append([]ast.Stmt{}, routerStmt.Body.List[:i]...), routerStmt.Body.List[i+1:]...)
+				i--
+			}
+		}
 	}
 
 	var out []byte

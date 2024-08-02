@@ -5,6 +5,7 @@ import { ElLoading, ElMessage } from 'element-plus'
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
+import cookie from 'js-cookie'
 
 export const useUserStore = defineStore('user', () => {
   const loadingInstance = ref(null)
@@ -15,12 +16,10 @@ export const useUserStore = defineStore('user', () => {
     headerImg: '',
     authority: {},
     sideMode: 'dark',
-    activeColor: 'var(--el-color-primary)',
     baseColor: '#fff'
   })
-  const token = ref(window.localStorage.getItem('token') || '')
+  const token = ref(window.localStorage.getItem('token') || cookie.get('x-token') || '')
   const language = ref(window.localStorage.getItem('language') || cookie.get('language') || 'en') // added by mohamed hassan to allow store selected language for multilanguage support.
-
   const setUserInfo = (val) => {
     userInfo.value = val
   }
@@ -42,7 +41,6 @@ export const useUserStore = defineStore('user', () => {
   const NeedInit = () => {
     token.value = ''
     window.localStorage.removeItem('token')
-    localStorage.clear()
     router.push({ name: 'Init', replace: true })
   }
 
@@ -66,55 +64,67 @@ export const useUserStore = defineStore('user', () => {
       fullscreen: true,
       text: '登录中，请稍候...',
     })
-    try {
-      const res = await login(loginInfo)
-      if (res.code === 0) {
-        setUserInfo(res.data.user)
-        setToken(res.data.token)
-        const routerStore = useRouterStore()
-        await routerStore.SetAsyncRouter()
-        const asyncRouters = routerStore.asyncRouters
-        asyncRouters.forEach(asyncRouter => {
-          router.addRoute(asyncRouter)
-        })
 
-        if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
-          ElMessage.error('请联系管理员进行授权')
-        } else {
-          await router.replace({ name: userInfo.value.authority.defaultRouter })
-        }
+    const res = await login(loginInfo)
 
-        loadingInstance.value.close()
-
-        const isWin = ref(/windows/i.test(navigator.userAgent))
-        if (isWin.value) {
-          window.localStorage.setItem('osType', 'WIN')
-        } else {
-          window.localStorage.setItem('osType', 'MAC')
-        }
-        return true
-      }
-    } catch (e) {
+    // 登陆失败，直接返回
+    if (res.code !== 0) {
       loadingInstance.value.close()
+      return false
     }
+
+    // 登陆成功，设置用户信息和权限相关信息
+    setUserInfo(res.data.user)
+    setToken(res.data.token)
+
+    // 初始化路由信息
+    const routerStore = useRouterStore()
+    await routerStore.SetAsyncRouter()
+    const asyncRouters = routerStore.asyncRouters
+
+    // 注册到路由表里
+    asyncRouters.forEach(asyncRouter => {
+      router.addRoute(asyncRouter)
+    })
+
+    if (!router.hasRoute(userInfo.value.authority.defaultRouter)) {
+      ElMessage.error('请联系管理员进行授权')
+    } else {
+      await router.replace({ name: userInfo.value.authority.defaultRouter })
+    }
+
+    const isWin = ref(/windows/i.test(navigator.userAgent))
+    if (isWin.value) {
+      window.localStorage.setItem('osType', 'WIN')
+    } else {
+      window.localStorage.setItem('osType', 'MAC')
+    }
+
+    // 全部操作均结束，关闭loading并返回
     loadingInstance.value.close()
+    return true
   }
   /* 登出*/
   const LoginOut = async() => {
     const res = await jsonInBlacklist()
-    if (res.code === 0) {
-      token.value = ''
-      sessionStorage.clear()
-      localStorage.clear()
-      router.push({ name: 'Login', replace: true })
-      window.location.reload()
+
+    // 登出失败
+    if (res.code !== 0) {
+      return
     }
+
+    await ClearStorage()
+
+    // 把路由定向到登录页，无需等待直接reload
+    router.push({ name: 'Login', replace: true })
+    window.location.reload()
   }
   /* 清理数据 */
   const ClearStorage = async() => {
     token.value = ''
     sessionStorage.clear()
-    localStorage.clear()
+    window.localStorage.removeItem('token')
+    cookie.remove('x-token')
   }
   /* 设置侧边栏模式*/
   const changeSideMode = async(data) => {
@@ -147,9 +157,6 @@ export const useUserStore = defineStore('user', () => {
       return userInfo.value.baseColor
     }
   })
-  const activeColor = computed(() => {
-    return 'var(--el-color-primary)'
-  })
 
   watch(() => token.value, () => {
     window.localStorage.setItem('token', token.value)
@@ -171,7 +178,6 @@ export const useUserStore = defineStore('user', () => {
     sideMode,
     setToken,
     baseColor,
-    activeColor,
     loadingInstance,
     ClearStorage
   }

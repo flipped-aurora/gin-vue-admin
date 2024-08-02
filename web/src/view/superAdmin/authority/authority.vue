@@ -41,7 +41,7 @@
 
               type="primary"
               link
-              @click="opdendrawer(scope.row)"
+              @click="openDrawer(scope.row)"
             >{{ t('authority.setPermissions') }}</el-button>
             <el-button
               icon="plus"
@@ -76,15 +76,27 @@
       </el-table>
     </div>
     <!-- 新增角色弹窗 -->
-    <el-dialog
-      v-model="dialogFormVisible"
-      :title="dialogTitle"
+    <el-drawer
+      v-model="authorityFormVisible"
+      :show-close="false"
     >
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{ authorityTitleForm }}</span>
+          <div>
+            <el-button @click="closeAuthorityForm">{{ t('general.close') }}</el-button>
+            <el-button
+              type="primary"
+              @click="submitAuthorityForm"
+            >{{ t('general.confirm') }}</el-button>
+          </div>
+        </div>
+      </template>
       <el-form
         ref="authorityForm"
         :model="form"
         :rules="rules"
-        label-width="80px"
+        label-width="100px"
       >
         <el-form-item
         :label="t('authority.parentRole')"
@@ -121,21 +133,11 @@
           />
         </el-form-item>
       </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
-          <el-button
-            type="primary"
-            @click="enterDialog"
-          >{{ t('general.confirm') }}</el-button>
-        </div>
-      </template>
-    </el-dialog>
+    </el-drawer>
 
     <el-drawer
       v-if="drawer"
       v-model="drawer"
-      custom-class="auth-drawer"
       :with-header="false"
       size="40%"
       :title="t('authority.roleConfig')"
@@ -215,8 +217,8 @@ const drawer = ref(false)
 const dialogType = ref('add')
 const activeRow = ref({})
 
-const dialogTitle = ref(t('authority.addRole'))
-const dialogFormVisible = ref(false)
+const authorityTitleForm = ref(t('authority.addRole'))
+const authorityFormVisible = ref(false)
 const apiDialogFlag = ref(false)
 const copyForm = ref({})
 
@@ -275,15 +277,15 @@ const autoEnter = (activeName, oldActiveName) => {
 // 拷贝角色
 const copyAuthorityFunc = (row) => {
   setOptions()
-  dialogTitle.value = t('authority.copyRole')
+  authorityTitleForm.value = t('authority.copyRole')
   dialogType.value = 'copy'
   for (const k in form.value) {
     form.value[k] = row[k]
   }
   copyForm.value = row
-  dialogFormVisible.value = true
+  authorityFormVisible.value = true
 }
-const opdendrawer = (row) => {
+const openDrawer = (row) => {
   drawer.value = true
   activeRow.value = row
 }
@@ -327,14 +329,14 @@ const initForm = () => {
   }
 }
 // 关闭窗口
-const closeDialog = () => {
+const closeAuthorityForm = () => {
   initForm()
-  dialogFormVisible.value = false
+  authorityFormVisible.value = false
   apiDialogFlag.value = false
 }
 // 确定弹窗
 
-const enterDialog = () => {
+const submitAuthorityForm = () => {
   authorityForm.value.validate(async valid => {
     if (valid) {
       form.value.authorityId = Number(form.value.authorityId)
@@ -348,7 +350,7 @@ const enterDialog = () => {
                 message: t('general.addSuccess')
               })
               getTableData()
-              closeDialog()
+              closeAuthorityForm()
             }
           }
           break
@@ -361,7 +363,7 @@ const enterDialog = () => {
                 message: t('general.updateSuccess')
               })
               getTableData()
-              closeDialog()
+              closeAuthorityForm()
             }
           }
           break
@@ -392,7 +394,7 @@ const enterDialog = () => {
       }
 
       initForm()
-      dialogFormVisible.value = false
+      authorityFormVisible.value = false
     }
   })
 }
@@ -406,7 +408,6 @@ const setOptions = () => {
   setAuthorityOptions(tableData.value, AuthorityOption.value, false)
 }
 const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
-  form.value.authorityId = String(form.value.authorityId)
   AuthorityData &&
         AuthorityData.forEach(item => {
           if (item.children && item.children.length) {
@@ -435,22 +436,23 @@ const setAuthorityOptions = (AuthorityData, optionsData, disabled) => {
 // 增加角色
 const addAuthority = (parentId) => {
   initForm()
-  dialogTitle.value = t('authority.addRole')
+  authorityTitleForm.value = t('authority.addRole')
   dialogType.value = 'add'
   form.value.parentId = parentId
   setOptions()
-  dialogFormVisible.value = true
+  authorityFormVisible.value = true
 }
 // 编辑角色
 const editAuthority = (row) => {
   setOptions()
-  dialogTitle.value = t('authority.editRole')
+  authorityTitleForm.value = t('authority.editRole')
   dialogType.value = 'edit'
   for (const key in form.value) {
     form.value[key] = row[key]
   }
   setOptions()
-  dialogFormVisible.value = true
+  authorityForm.value && authorityForm.value.clearValidate()
+  authorityFormVisible.value = true
 }
 
 </script>

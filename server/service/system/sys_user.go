@@ -21,6 +21,8 @@ import (
 
 type UserService struct{}
 
+var UserServiceApp = new(UserService)
+
 func (userService *UserService) Register(u system.SysUser) (userInter system.SysUser, err error) {
 	var user system.SysUser
 	if !errors.Is(global.GVA_DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) { // 判断用户名是否注册
@@ -106,7 +108,7 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}
-	err = global.GVA_DB.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityId).Error
+	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", id).Update("authority_id", authorityId).Error
 	return err
 }
 
@@ -118,7 +120,13 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 
 func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-		TxErr := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
+		var user system.SysUser
+		TxErr := tx.Where("id = ?", id).First(&user).Error
+		if TxErr != nil {
+			global.GVA_LOG.Debug(TxErr.Error())
+			return errors.New("查询用户数据失败")
+		}
+		TxErr = tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
 		if TxErr != nil {
 			return TxErr
 		}
@@ -132,7 +140,7 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 		if TxErr != nil {
 			return TxErr
 		}
-		TxErr = tx.Where("id = ?", id).First(&system.SysUser{}).Update("authority_id", authorityIds[0]).Error
+		TxErr = tx.Model(&user).Update("authority_id", authorityIds[0]).Error
 		if TxErr != nil {
 			return TxErr
 		}
@@ -148,13 +156,15 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 //@return: err error
 
 func (userService *UserService) DeleteUser(id int) (err error) {
-	var user system.SysUser
-	err = global.GVA_DB.Where("id = ?", id).Delete(&user).Error
-	if err != nil {
-		return err
-	}
-	err = global.GVA_DB.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error
-	return err
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id = ?", id).Delete(&system.SysUser{}).Error; err != nil {
+			return err
+		}
+		if err := tx.Delete(&[]system.SysUserAuthority{}, "sys_user_id = ?", id).Error; err != nil {
+			return err
+		}
+		return nil
+	})
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -179,7 +189,7 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: SetUserInfo
+//@function: SetSelfInfo
 //@description: 设置用户信息
 //@param: reqUser model.SysUser
 //@return: err error, user model.SysUser
@@ -215,7 +225,7 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 
 func (userService *UserService) FindUserById(id int) (user *system.SysUser, err error) {
 	var u system.SysUser
-	err = global.GVA_DB.Where("`id` = ?", id).First(&u).Error
+	err = global.GVA_DB.Where("id = ?", id).First(&u).Error
 	return &u, err
 }
 
@@ -227,14 +237,14 @@ func (userService *UserService) FindUserById(id int) (user *system.SysUser, err 
 
 func (userService *UserService) FindUserByUuid(uuid string) (user *system.SysUser, err error) {
 	var u system.SysUser
-	if err = global.GVA_DB.Where("`uuid` = ?", uuid).First(&u).Error; err != nil {
+	if err = global.GVA_DB.Where("uuid = ?", uuid).First(&u).Error; err != nil {
 		return &u, errors.New("用户不存在")
 	}
 	return &u, nil
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
-//@function: resetPassword
+//@function: ResetPassword
 //@description: 修改用户密码
 //@param: ID uint
 //@return: err error

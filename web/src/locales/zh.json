@@ -98,7 +98,9 @@
 	},
 	"error": {
 		"message1": "页面被神秘力量吸走了，请联系我们修复",
-		"message2": "常见问题为菜单未分配仪表盘，可自行分配仪表盘或修改默认路由"
+		"message2": "常见问题为当前此角色无当前路由，如果确定要使用本路由，请到角色管理进行分配",
+		"projectAddress": "项目地址：",
+		"backToHome": "返回首页"
 	},
 	"fieldDialog": {
 		"associativeDictionary": "关联字典",
@@ -197,14 +199,45 @@
 		"note4": "4.如果您使用mysql数据库，请确认数据库引擎为",
 		"note5": "注：开发组不为文档中书写过的内容提供无偿服务",
 		"pleaseWait": "正在初始化数据库，请稍候",
-		"readDocs": "阅读文档"
+		"readDocs": "阅读文档",
+		"adminPassword" : "管理员密码",
+		"adminPasswordNote" : "admin账号的默认密码"
 	},
 	"layout": {
-		"currentRole": "当前角色：",
-		"loading": "正在加载中",
-		"logout": "登 出",
-		"personalInfo": "个人信息",
-		"switchTo": "切换为："
+			"header" : {
+				"currentRole": "当前角色：",
+				"loading": "正在加载中",
+				"logout": "登 出",
+				"personalInfo": "个人信息",
+				"switchTo": "切换为："
+			},
+			"tools" : {
+				"switchTheme" : "切换主题",
+				"search" : "搜索",
+				"systemSettings" : "系统设置",
+				"refresh" : "刷新"
+			},
+			"setting" : {
+				"defaultTheme" : "默认主题",
+				"themeColor" : "主题色",
+				"interfaceDisplay" : "界面显示",
+				"showWaterMark" : "展示水印",
+				"grayMode" : "灰色模式",
+				"colorFadeMode" : "色弱模式",
+				"menuMode" : "菜单模式",
+				"showTabs" : "显示标签页",
+				"layputSizeConfig" : "layout 大小配置",
+				"sidebarExpandedWidth" : "侧边栏展开宽度",
+				"sidebarShrinkWidth" : "侧边栏收缩宽度",
+				"sidebarItemHeight" : "侧边栏子项高度",
+				"configSaveNote1" : "请注意，所有配置请保存到本地文件的",
+				"configSaveNote2" :" 文件中，否则刷新页面后会丢失配置",
+				"copyConfig" : "复制配置json",
+				"normalMode" : "正常模式",
+				"topMenuBarMode" : "顶部菜单栏模式",
+				"combinationMode" : "组合模式",
+				"copyConfigSuccess" : "复制成功, 请自行保存到本地文件中"
+			}
 	},
 	"login": {
 		"entPassword": "请输入密码",
@@ -239,6 +272,7 @@
 		"icon": "图标",
 		"keepAliveNote": "是否keepAlive缓存页面",
 		"newMenuNote": "新增菜单，需要在角色管理内配置权限才可使用",
+		"filePathNote" : "页面:view/xxx/xx.vue 插件:plugin/xx/xx.vue",
 		"parameterType": "参数类型",
 		"parameterValue": "参数值",
 		"paremeterKey": "参数key",
@@ -306,6 +340,15 @@
 	},
 	"view": {
 		"dashboard": {
+			"noOfVisitors" : "访问人数",
+			"newCustomers" : "新增客户",
+			"noOfSolutions" : "解决数量",
+			"quickFunctions" : "快捷功能",
+			"contentData" : "内容数据",
+			"documentation" : "文档",
+			"lastUpdate" : "最新更新",
+			"latestPlugins" : "最新插件",
+			"announcement" : "公告",
 			"about": "关于我们",
 			"codeGen": "代码生成器",
 			"dashboardCharts": {
@@ -457,5 +500,33 @@
 				"emailSentError" : "邮件发送失败"
 			}
 		}
+	},
+	"components" : {
+		"commandMenu" : {
+			"commandMenuNote" : "请输入你需要快捷到达的功能",
+			"close" : "关闭",
+			"jump" : "跳转",
+			"operate" : "操作",
+			"lightTheme" : "亮色主题",
+			"darkTheme" : "暗色主题",
+			"logout" : "退出登录"
+		},
+		"exportExcel" : {
+			"exportExcel" : {
+				"export" : "导出",
+				"templateIdErr" : "组件未设置模板ID"
+			},
+			"exportTemplate" : {
+				"exportTemplate" : "下载模板",
+				"templateIdErr" : "组件未设置模板ID"
+
+			},
+			"importExcel" : {
+				"import" : "导入",
+				"importSuccess" : "导入成功"
+			}
+
+		}
+
 	}
 }

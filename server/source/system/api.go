@@ -65,6 +65,10 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: "api", Method: "POST", Path: "/api/getAllApis", Description: global.Translate("system.api.getAllAPI")},
 		{ApiGroup: "api", Method: "POST", Path: "/api/getApiById", Description: global.Translate("system.api.getAPIByID")},
 		{ApiGroup: "api", Method: "DELETE", Path: "/api/deleteApisByIds", Description: global.Translate("system.api.deleteAPIByID")},
+		{ApiGroup: "api", Method: "GET", Path: "/api/syncApi", Description: "获取待同步API"},
+		{ApiGroup: "api", Method: "GET", Path: "/api/getApiGroups", Description: "获取路由组"},
+		{ApiGroup: "api", Method: "POST", Path: "/api/enterSyncApi", Description: "确认同步API"},
+		{ApiGroup: "api", Method: "POST", Path: "/api/ignoreApi", Description: "忽略API"},
 
 		{ApiGroup: global.Translate("system.api.role"), Method: "POST", Path: "/authority/copyAuthority", Description: global.Translate("system.api.copyRole")},
 		{ApiGroup: global.Translate("system.api.role"), Method: "POST", Path: "/authority/createAuthority", Description: global.Translate("system.api.createRole")},
@@ -115,14 +119,16 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: global.Translate("system.api.codeGen"), Method: "POST", Path: "/autoCode/installPlugin", Description: "安装插件"},
 		{ApiGroup: global.Translate("system.api.codeGen"), Method: "POST", Path: "/autoCode/pubPlug", Description: "打包插件"},
 
-		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/createPackage", Description: "生成包(package)"},
-		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/getPackage", Description: "获取所有包(package)"},
-		{ApiGroup: "包（pkg）生成器", Method: "POST", Path: "/autoCode/delPackage", Description: "删除包(package)"},
+		{ApiGroup: global.Translate("system.api.templateConfiguration"), Method: "POST", Path: "/autoCode/createPackage", Description: global.Translate("system.api.configurationTemplates")},
+		{ApiGroup: global.Translate("system.api.templateConfiguration"), Method: "GET", Path: "/autoCode/getTemplates", Description: global.Translate("system.api.getTemplateFile")},
+		{ApiGroup: global.Translate("system.api.templateConfiguration"), Method: "POST", Path: "/autoCode/getPackage", Description: global.Translate("system.api.getAllTemplates")},
+		{ApiGroup: global.Translate("system.api.templateConfiguration"), Method: "POST", Path: "/autoCode/delPackage", Description: global.Translate("system.api.deleteTemplate")},
 
 		{ApiGroup: global.Translate("system.api.codeGenHistory"), Method: "POST", Path: "/autoCode/getMeta", Description: "获取meta信息"},
 		{ApiGroup: global.Translate("system.api.codeGenHistory"), Method: "POST", Path: "/autoCode/rollback", Description: "回滚自动生成代码"},
 		{ApiGroup: global.Translate("system.api.codeGenHistory"), Method: "POST", Path: "/autoCode/getSysHistory", Description: "查询回滚记录"},
 		{ApiGroup: global.Translate("system.api.codeGenHistory"), Method: "POST", Path: "/autoCode/delSysHistory", Description: "删除回滚记录"},
+		{ApiGroup: global.Translate("system.api.codeGenHistory"), Method: "POST", Path: "/autoCode/addFunc", Description: "增加模板方法"},
 
 		{ApiGroup: global.Translate("system.api.dictDetails"), Method: "PUT", Path: "/sysDictionaryDetail/updateSysDictionaryDetail", Description: "更新字典内容"},
 		{ApiGroup: global.Translate("system.api.dictDetails"), Method: "POST", Path: "/sysDictionaryDetail/createSysDictionaryDetail", Description: "新增字典内容"},
@@ -147,16 +153,28 @@ func (i *initApi) InitializeData(ctx context.Context) (context.Context, error) {
 		{ApiGroup: global.Translate("system.api.resumeUpload"), Method: "GET", Path: "/simpleUploader/mergeFileMd5", Description: "上传完成合并文件"},
 
 		{ApiGroup: "email", Method: "POST", Path: "/email/emailTest", Description: "发送测试邮件"},
-		{ApiGroup: "email", Method: "POST", Path: "/email/emailSend", Description: "发送邮件示例"},
+		{ApiGroup: "email", Method: "POST", Path: "/email/sendEmail", Description: "发送邮件"},
 
-		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/setAuthorityBtn", Description: "设置按钮权限"},
-		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/getAuthorityBtn", Description: "获取已有按钮权限"},
-		{ApiGroup: "按钮权限", Method: "POST", Path: "/authorityBtn/canRemoveAuthorityBtn", Description: "删除按钮"},
+		{ApiGroup: global.Translate("system.api.buttonAuthority"), Method: "POST", Path: "/authorityBtn/setAuthorityBtn", Description: "设置按钮权限"},
+		{ApiGroup: global.Translate("system.api.buttonAuthority"), Method: "POST", Path: "/authorityBtn/getAuthorityBtn", Description: "获取已有按钮权限"},
+		{ApiGroup: global.Translate("system.api.buttonAuthority"), Method: "POST", Path: "/authorityBtn/canRemoveAuthorityBtn", Description: "删除按钮"},
 
-		{ApiGroup: "万用表格", Method: "POST", Path: "/chatGpt/getTable", Description: "通过gpt获取内容"},
-		{ApiGroup: "万用表格", Method: "POST", Path: "/chatGpt/createSK", Description: "录入sk"},
-		{ApiGroup: "万用表格", Method: "GET", Path: "/chatGpt/getSK", Description: "获取sk"},
-		{ApiGroup: "万用表格", Method: "DELETE", Path: "/chatGpt/deleteSK", Description: "删除sk"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "POST", Path: "/sysExportTemplate/createSysExportTemplate", Description: "新增导出模板"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "DELETE", Path: "/sysExportTemplate/deleteSysExportTemplate", Description: "删除导出模板"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "DELETE", Path: "/sysExportTemplate/deleteSysExportTemplateByIds", Description: "批量删除导出模板"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "PUT", Path: "/sysExportTemplate/updateSysExportTemplate", Description: "更新导出模板"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "GET", Path: "/sysExportTemplate/findSysExportTemplate", Description: "根据ID获取导出模板"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "GET", Path: "/sysExportTemplate/getSysExportTemplateList", Description: "获取导出模板列表"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "GET", Path: "/sysExportTemplate/exportExcel", Description: "导出Excel"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "GET", Path: "/sysExportTemplate/exportTemplate", Description: "下载模板"},
+		{ApiGroup: global.Translate("system.api.tableTemplate"), Method: "POST", Path: "/sysExportTemplate/importExcel", Description: "导入Excel"},
+
+		{ApiGroup: global.Translate("system.api.announcement"), Method: "POST", Path: "/info/createInfo", Description: global.Translate("system.api.newAnnouncement")},
+		{ApiGroup: global.Translate("system.api.announcement"), Method: "DELETE", Path: "/info/deleteInfo", Description: global.Translate("system.api.deleteAnnouncement")},
+		{ApiGroup: global.Translate("system.api.announcement"), Method: "DELETE", Path: "/info/deleteInfoByIds", Description: global.Translate("system.api.batchDeleteAnnouncement")},
+		{ApiGroup: global.Translate("system.api.announcement"), Method: "PUT", Path: "/info/updateInfo", Description: global.Translate("system.api.updateAnnouncement")},
+		{ApiGroup: global.Translate("system.api.announcement"), Method: "GET", Path: "/info/findInfo", Description: global.Translate("system.api.getAnnouncementByID")},
+		{ApiGroup: global.Translate("system.api.announcement"), Method: "GET", Path: "/info/getInfoList", Description: global.Translate("system.api.getAnnouncementList")},
 	}
 	if err := db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysApi{}.TableName()+" "+global.Translate("general.tabelDataInitFail"))

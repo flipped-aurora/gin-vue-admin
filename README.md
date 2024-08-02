@@ -1,9 +1,9 @@
 
 <div align=center>
-<img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width=300" height="300" />
+<img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width="300" height="300" />
 </div>
 <div align=center>
-<img src="https://img.shields.io/badge/golang-1.18-blue"/>
+<img src="https://img.shields.io/badge/golang-1.20-blue"/>
 <img src="https://img.shields.io/badge/gin-1.9.1-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen"/>
 <img src="https://img.shields.io/badge/element--plus-2.3.8-green"/>
@@ -11,15 +11,6 @@
 </div>
 
 [English](./README-en.md) | 简体中文
-
-## 不同版本
-
-我们会对以下四个版本持续维护，请选择适合自己的版本使用。最新技术栈为组合式api版本，已支持多语言（I18N）
-
-[组合式API版（主）](https://github.com/flipped-aurora/gin-vue-admin) | 
-[组合式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev-new) | 
-[声明式API版](https://github.com/flipped-aurora/gin-vue-admin/tree/v2.4.x) | 
-[声明式API多语言(i18n)版](https://github.com/flipped-aurora/gin-vue-admin/tree/i18n-dev)
 
 # 项目文档
 [在线文档](https://www.gin-vue-admin.com) : https://www.gin-vue-admin.com
@@ -42,9 +33,11 @@
 
 3.您完全可以通过我们的教程和文档完成一切操作，因此我们不再提供免费的技术服务，如需服务请进行[付费支持](https://www.gin-vue-admin.com/coffee/payment.html)
 
-4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，其余信息功能不做任何限制。如需剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
+4.如果您将此项目用于商业用途，请遵守Apache2.0协议并保留作者技术支持声明。您需保留如下版权声明信息，以及日志和代码中所包含的版权声明信息。所需保留信息均为文案性质，不会影响任何业务内容，如决定商用且必须剔除请[购买授权](https://www.gin-vue-admin.com/empower/index.html)
 
-<img src="https://qmplusimg.henrongyi.top/%E6%8E%88%E6%9D%83.png" width="1000">
+<img src="https://qmplusimg.henrongyi.top/openSource/login.jpg" width="1000">
+
+<img src="https://qmplusimg.henrongyi.top/openSource/dashboard.jpg" width="1000">
 
 ## 1. 基本介绍
 
@@ -83,7 +76,7 @@ Gin-vue-admin 的成长离不开大家的支持，如果你愿意为 gin-vue-adm
 
 ```
 - node版本 > v16.8.3
-- golang版本 >= v1.16
+- golang版本 >= v1.22
 - IDE推荐：Goland
 ```
 
@@ -125,29 +118,8 @@ npm run serve
 
 #### 2.3.1 安装 swagger
 
-##### （1）可以访问外国网站
-
-````
-go get -u github.com/swaggo/swag/cmd/swag
-````
-
-##### （2）无法访问外国网站
-
-由于国内没法安装 go.org/x 包下面的东西，推荐使用 [goproxy.cn](https://goproxy.cn) 或者 [goproxy.io](https://goproxy.io/zh/)
-
-```bash
-# 如果您使用的 Go 版本是 1.13 - 1.15 需要手动设置GO111MODULE=on, 开启方式如下命令, 如果你的 Go 版本 是 1.16 ~ 最新版 可以忽略以下步骤一
-# 步骤一、启用 Go Modules 功能
-go env -w GO111MODULE=on 
-# 步骤二、配置 GOPROXY 环境变量
-go env -w GOPROXY=https://goproxy.cn,https://goproxy.io,direct
-
-# 如果嫌弃麻烦,可以使用go generate 编译前自动执行代码, 不过这个不能使用 `Goland` 或者 `Vscode` 的 命令行终端
-cd server
-go generate -run "go env -w .*?"
-
-# 使用如下命令下载swag
-go get -u github.com/swaggo/swag/cmd/swag
+``` shell
+go install github.com/swaggo/swag/cmd/swag@latest
 ```
 
 #### 2.3.2 生成API文档
@@ -352,17 +324,20 @@ swag init
 
 ### 7.1 技术群
 
-### QQ交流群：622360840
-| QQ 群 |
-|  :---:  |
-| <img src="http://qmplusimg.henrongyi.top/qq.jpg" width="180"/> |
+### QQ交流群：470239250
 
 ### 微信交流群
 | 微信 |
 |  :---:  | 
 | <img width="150" src="http://qmplusimg.henrongyi.top/qrjjz.png"> 
 
-添加微信，备注"加入gin-vue-admin交流群"
+防止广告进群，添加微信，输入以下代码执行结果（请勿转码为string）
+
+```
+str := "5Yqg5YWlR1ZB5Lqk5rWB576k"
+decodeBytes, err := base64.StdEncoding.DecodeString(str)
+fmt.Println(decodeBytes, err)
+```
 
 ### [关于我们](https://www.gin-vue-admin.com/about/join.html)
 

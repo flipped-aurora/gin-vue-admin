@@ -2,8 +2,7 @@
 <template>
   <div>
     <el-upload
-      :action="`${path}/fileUploadAndDownload/upload`"
-      :headers="{ 'x-token': userStore.token }"
+      :action="`${getBaseUrl()}/fileUploadAndDownload/upload`"
       :show-file-list="false"
       :on-success="handleImageSuccess"
       :before-upload="beforeImageUpload"
@@ -19,6 +18,7 @@ import ImageCompress from '@/utils/image'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
   name: 'UploadImage',

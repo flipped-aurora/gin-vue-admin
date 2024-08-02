@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"sync"
 
+	"gorm.io/gorm"
+
 	"github.com/casbin/casbin/v2"
 	"github.com/casbin/casbin/v2/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
@@ -28,8 +30,14 @@ func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos [
 	authorityId := strconv.Itoa(int(AuthorityID))
 	casbinService.ClearCasbin(0, authorityId)
 	rules := [][]string{}
+	//做权限去重处理
+	deduplicateMap := make(map[string]bool)
 	for _, v := range casbinInfos {
-		rules = append(rules, []string{authorityId, v.Path, v.Method})
+		key := authorityId + v.Path + v.Method
+		if _, ok := deduplicateMap[key]; !ok {
+			deduplicateMap[key] = true
+			rules = append(rules, []string{authorityId, v.Path, v.Method})
+		}
 	}
 	e := casbinService.Casbin()
 	success, _ := e.AddPolicies(rules)
@@ -87,6 +95,55 @@ func (casbinService *CasbinService) ClearCasbin(v int, p ...string) bool {
 	e := casbinService.Casbin()
 	success, _ := e.RemoveFilteredPolicy(v, p...)
 	return success
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: RemoveFilteredPolicy
+//@description: 使用数据库方法清理筛选的politicy 此方法需要调用FreshCasbin方法才可以在系统中即刻生效
+//@param: db *gorm.DB, authorityId string
+//@return: error
+
+func (casbinService *CasbinService) RemoveFilteredPolicy(db *gorm.DB, authorityId string) error {
+	return db.Delete(&gormadapter.CasbinRule{}, "v0 = ?", authorityId).Error
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SyncPolicy
+//@description: 同步目前数据库的policy 此方法需要调用FreshCasbin方法才可以在系统中即刻生效
+//@param: db *gorm.DB, authorityId string, rules [][]string
+//@return: error
+
+func (casbinService *CasbinService) SyncPolicy(db *gorm.DB, authorityId string, rules [][]string) error {
+	err := casbinService.RemoveFilteredPolicy(db, authorityId)
+	if err != nil {
+		return err
+	}
+	return casbinService.AddPolicies(db, rules)
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: AddPolicies
+//@description: 添加匹配的权限
+//@param: v int, p ...string
+//@return: bool
+
+func (casbinService *CasbinService) AddPolicies(db *gorm.DB, rules [][]string) error {
+	var casbinRules []gormadapter.CasbinRule
+	for i := range rules {
+		casbinRules = append(casbinRules, gormadapter.CasbinRule{
+			Ptype: "p",
+			V0:    rules[i][0],
+			V1:    rules[i][1],
+			V2:    rules[i][2],
+		})
+	}
+	return db.Create(&casbinRules).Error
+}
+
+func (CasbinService *CasbinService) FreshCasbin() (err error) {
+	e := CasbinService.Casbin()
+	err = e.LoadPolicy()
+	return err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

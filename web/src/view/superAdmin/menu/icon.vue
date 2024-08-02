@@ -1,21 +1,17 @@
 <template>
-  <div>
-    <span
-      class="gva-icon"
-      style="position: absolute; z-index: 9999; padding: 3px 10px 0; "
-    >
-      <el-icon>
-        <component :is="metaData.icon" />
-      </el-icon>
-    </span>
+  <div class="w-full">
     <el-select
       v-model="metaData.icon"
-      style="width:100%"
       clearable
       filterable
-      class="gva-select"
       :placeholder="t('general.pleaseSelect')"
+      class="w-full"
     >
+      <template #prefix>
+        <el-icon>
+          <component :is="metaData.icon" />
+        </el-icon>
+      </template>
       <el-option
         v-for="item in options"
         :key="item.key"
@@ -40,6 +36,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import config from '@/core/config'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -1178,12 +1175,15 @@ const options = reactive([
     'key': 'wind-power',
     'label': 'wind-power',
   },
+  ...config.logs
 ])
-
 const metaData = ref(props.meta)
 if (!metaData.value.icon) {
-  metaData.value.icon = options[0].label
+  // metaData.value.icon = options[0].label
+  // 传参无icon则显示空即可，否则默认会加一个aim的icon
+  metaData.value.icon = ''
 }
+
 </script>
 
 <style lang="scss">
@@ -1191,10 +1191,6 @@ if (!metaData.value.icon) {
   color: rgb(132, 146, 166);
   font-size: 14px;
   margin-right: 10px;
-}
-
-.gva-select .el-input__inner {
-  padding: 0 30px !important
 }
 
 .select__option_item {

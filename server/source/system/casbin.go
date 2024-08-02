@@ -9,7 +9,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const initOrderCasbin = initOrderApi + 1
+const initOrderCasbin = initOrderApiIgnore + 1
 
 type initCasbin struct{}
 
@@ -54,6 +54,10 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/api/updateApi", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/getAllApis", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/api/deleteApisByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/api/syncApi", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/api/getApiGroups", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/api/enterSyncApi", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/api/ignoreApi", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/authority/copyAuthority", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authority/updateAuthority", V2: "PUT"},
@@ -117,11 +121,13 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/autoCode/delSysHistory", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/getSysHistory", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPackage", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/getTemplates", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/getPackage", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/delPackage", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/createPlug", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/installPlugin", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/autoCode/pubPlug", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/autoCode/addFunc", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/findSysDictionaryDetail", V2: "GET"},
 		{Ptype: "p", V0: "888", V1: "/sysDictionaryDetail/updateSysDictionaryDetail", V2: "PUT"},
@@ -143,6 +149,7 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/sysOperationRecord/deleteSysOperationRecordByIds", V2: "DELETE"},
 
 		{Ptype: "p", V0: "888", V1: "/email/emailTest", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/email/sendEmail", V2: "POST"},
 
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/upload", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/simpleUploader/checkFileMd5", V2: "GET"},
@@ -152,10 +159,22 @@ func (i *initCasbin) InitializeData(ctx context.Context) (context.Context, error
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/getAuthorityBtn", V2: "POST"},
 		{Ptype: "p", V0: "888", V1: "/authorityBtn/canRemoveAuthorityBtn", V2: "POST"},
 
-		{Ptype: "p", V0: "888", V1: "/chatGpt/getTable", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/chatGpt/createSK", V2: "POST"},
-		{Ptype: "p", V0: "888", V1: "/chatGpt/getSK", V2: "GET"},
-		{Ptype: "p", V0: "888", V1: "/chatGpt/deleteSK", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/createSysExportTemplate", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/deleteSysExportTemplate", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/deleteSysExportTemplateByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/updateSysExportTemplate", V2: "PUT"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/findSysExportTemplate", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/getSysExportTemplateList", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/exportExcel", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/exportTemplate", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/sysExportTemplate/importExcel", V2: "POST"},
+
+		{Ptype: "p", V0: "888", V1: "/info/createInfo", V2: "POST"},
+		{Ptype: "p", V0: "888", V1: "/info/deleteInfo", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/info/deleteInfoByIds", V2: "DELETE"},
+		{Ptype: "p", V0: "888", V1: "/info/updateInfo", V2: "PUT"},
+		{Ptype: "p", V0: "888", V1: "/info/findInfo", V2: "GET"},
+		{Ptype: "p", V0: "888", V1: "/info/getInfoList", V2: "GET"},
 
 		{Ptype: "p", V0: "8881", V1: "/user/admin_register", V2: "POST"},
 		{Ptype: "p", V0: "8881", V1: "/api/createApi", V2: "POST"},

@@ -66,6 +66,7 @@ func (a *autoCodeSqlite) GetColumn(businessDB string, tableName string, dbName s
 	var columnInfos []struct {
 		Name string `gorm:"column:name"`
 		Type string `gorm:"column:type"`
+		Pk   int    `gorm:"column:pk"`
 	}
 	if businessDB == "" {
 		err = global.GVA_DB.Raw(sql).Scan(&columnInfos).Error
@@ -76,6 +77,7 @@ func (a *autoCodeSqlite) GetColumn(businessDB string, tableName string, dbName s
 		entities = append(entities, response.Column{
 			ColumnName: columnInfo.Name,
 			DataType:   columnInfo.Type,
+			PrimaryKey: columnInfo.Pk == 1,
 		})
 	}
 	return entities, err

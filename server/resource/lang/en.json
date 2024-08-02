@@ -70,7 +70,9 @@
 		"previewFailErr": "Preview failed",
 		"previewSuccess": "Previewed successfully",
 		"autoCreateFail": "Automatic creation failed! Please clear the junk data yourself!",
-		"queryTablesFail": "Failed to query tables"
+		"queryTablesFail": "Failed to query tables",
+		"largeModelCreationFail" : "Large model generation failed!",
+		"largeModelCreationFailErr" : "Large model generation failed"
 	},
 	"sys_initdb": {
 		"paramVerifyFail": "Parameter verification failed!",
@@ -103,6 +105,7 @@
 			"changePassword": "Change password (recommended)",
 			"changeRoleAPIPermission": "Change role api permissions",
 			"codeGen": "Code Generator",
+			"templateConfiguration" : "Template Configuration",
 			"codeGenHistory": "Code generator log",
 			"copyRole": "Copy Role",
 			"createAPI": "Create API",
@@ -143,12 +146,27 @@
 			"updateAPI": "Update APIs",
 			"updateMenu": "Update Menu",
 			"updateRole": "Update Role",
-			"userRegistration": "User registration"
+			"userRegistration": "User registration",
+			"configurationTemplates" : "Configuration template",
+			"getTemplateFile" : "Get the template file",
+			"getAllTemplates" : "Get all templates",
+			"deleteTemplate" : "Delete template",
+			"buttonAuthority" : "Button Authority",
+			"tableTemplate" : "Table Templates",
+			"announcement" : "Announcement",
+			"newAnnouncement" : "New Announcement",
+			"deleteAnnouncement" : "Delete Announcement",
+			"batchDeleteAnnouncement" : "Batch Delete Announcement",
+			"updateAnnouncement" : "Update Announcement",
+			"getAnnouncementByID" : "Get Announcements By ID",
+			"getAnnouncementList" : "Get Announcement List",
+			"" : ""
 		},
 		"authority": {
 			"normalUserSubRole": "Normal User Sub-Role",
 			"normalUsers": "Normal Users",
-			"testRole": "Test Role"
+			"testRole": "Test Role",
+			"permissionRefreshFailed" : "Created successfully, permission refresh failed."
 		},
 		"dictionary": {
 			"boolType": "Boolean Type",
@@ -199,6 +217,15 @@
 		"server" : {
 			"welcomeTo" : "Welcome to",
 			"currentVersion" : "Current version"
+		}
+	},
+	"model" : {
+		"common" : {
+			"response" : {
+				"success" : "Success",
+				"operationSuccess" : "The operation was successful.",
+				"operationFail" : "The operation fail."
+			}
 		}
 	}
 }

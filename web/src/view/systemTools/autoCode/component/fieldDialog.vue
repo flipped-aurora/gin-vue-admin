@@ -96,6 +96,7 @@
       >
         <el-select
           v-model="middleDate.fieldSearchType"
+          :disabled="middleDate.fieldType === 'json'"
           style="width:100%"
           :placeholder="t('fieldDialog.selectSearchType')"
           clearable
@@ -116,7 +117,7 @@
         <el-select
           v-model="middleDate.dictType"
           style="width:100%"
-          :disabled="middleDate.fieldType!=='int'"
+          :disabled="middleDate.fieldType!=='string'"
           :placeholder="t('fieldDialog.selectDictionary')"
           clearable
         >
@@ -128,6 +129,38 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="默认值">
+        <el-input
+          v-model="middleDate.defaultValue"
+          placeholder="请输入默认值"
+        />
+      </el-form-item>
+      <el-form-item label="主键">
+        <el-checkbox v-model="middleDate.primaryKey" />
+      </el-form-item>
+      <el-form-item
+        label="索引类型"
+        prop="fieldIndexType"
+      >
+        <el-select
+          v-model="middleDate.fieldIndexType"
+          :disabled="middleDate.fieldType === 'json'"
+          style="width:100%"
+          placeholder="请选择字段索引类型"
+          clearable
+        >
+          <el-option
+            v-for="item in typeIndexOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+            :disabled="canSelect(item.value)"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="前端可见">
+        <el-switch v-model="middleDate.front" />
+      </el-form-item>
       <el-form-item label="是否排序">
         <el-switch v-model="middleDate.sort" />
       </el-form-item>
@@ -137,11 +170,101 @@
       <el-form-item label="是否可清空">
         <el-switch v-model="middleDate.clearable" />
       </el-form-item>
+      <el-form-item label="隐藏查询条件">
+        <el-switch v-model="middleDate.fieldSearchHide" :disabled="!middleDate.fieldSearchType" />
+      </el-form-item>
       <el-form-item label="校验失败文案">
         <el-input v-model="middleDate.errorText" />
       </el-form-item>
-
     </el-form>
+    <el-collapse v-model="activeNames">
+      <el-collapse-item
+        title="数据源配置（此配置为高级配置，如编程基础不牢，可能导致自动化代码不可用）"
+        name="1"
+      >
+        <el-row :gutter="8">
+          <el-col
+            :span="3"
+          >
+            <el-select
+              v-model="middleDate.dataSource.association"
+              placeholder="关联模式"
+              @change="associationChange"
+            >
+              <el-option
+                label="一对一"
+                :value="1"
+              />
+              <el-option
+                label="一对多"
+                :value="2"
+              />
+            </el-select>
+          </el-col>
+
+          <el-col :span="7">
+            <el-select
+              v-model="middleDate.dataSource.table" placeholder="请选择数据源表"
+              filterable allow-create @focus="getDBTableList" @change="selectDB"
+            >
+              <el-option
+                v-for="item in dbTableList" :key="item.tableName" :label="item.tableName"
+                :value="item.tableName"
+              />
+            </el-select>
+            <!-- <el-input v-model="middleDate.dataSource.table" placeholder="数据源表" /> -->
+          </el-col>
+          <el-col :span="7">
+            <el-select v-model="middleDate.dataSource.value" placeholder="请先选择需要存储的数据">
+              <template #label="{ value }">
+                <span>存储: </span>
+                <span style="font-weight: bold">{{ value }}</span>
+              </template>
+              <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
+                <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
+                  {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
+                </el-tag> {{ item.columnName }}</span>
+                <span
+                  style="
+          float: right;
+          margin-left:5px;
+          color: var(--el-text-color-secondary);
+          font-size: 13px;
+        "
+                >
+                  类型：{{ item.type }} <block v-if="item.comment != ''">，字段说明：{{ item.comment }}</block>
+                </span>
+              </el-option>
+            </el-select>
+            <!-- <el-input v-model="middleDate.dataSource.value" placeholder="存储用字段" /> -->
+          </el-col>
+          <el-col :span="7">
+            <el-select v-model="middleDate.dataSource.label" placeholder="请先选择需要展示的数据">
+              <template #label="{ value }">
+                <span>展示: </span>
+                <span style="font-weight: bold">{{ value }}</span>
+              </template>
+              <el-option v-for="item in dbColumnList" :key="item.columnName" :value="item.columnName">
+                <span style="float: left"> <el-tag :type="item.isPrimary ? 'primary' : 'info'">
+                  {{ item.isPrimary ? "主&emsp;键" : "非主键" }}
+                </el-tag> {{ item.columnName }}</span>
+                <span
+                    style="
+          float: right;
+          margin-left:5px;
+          color: var(--el-text-color-secondary);
+          font-size: 13px;
+        "
+                >
+                  类型：{{ item.type }} <span v-if="item.comment != ''">，字段说明：{{ item.comment }}</span>
+                </span>
+              </el-option>
+            </el-select>
+            <!-- <el-input v-model="middleDate.dataSource.label" placeholder="展示用字段" /> -->
+          </el-col>
+        </el-row>
+      </el-collapse-item>
+    </el-collapse>
   </div>
 </template>
 
@@ -150,6 +273,8 @@ import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
+import { ElMessageBox } from 'element-plus'
+import {getColumn, getTable} from "@/api/autoCode";
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -177,10 +302,27 @@ const props = defineProps({
       return []
     }
   },
+  typeIndexOptions: {
+    type: Array,
+    default: function() {
+      return []
+    }
+  },
 })
+
+const activeNames = ref([])
 
 const middleDate = ref({})
 const dictOptions = ref([])
+
+const validateDataTypeLong = (rule, value, callback) => {
+  const regex = /^('([^']*)'(?:,'([^']+)'*)*)$/;
+  if (middleDate.value.fieldType == "enum" && !regex.test(value)) {
+    callback(new Error("枚举值校验错误"));
+  } else {
+    callback();
+  }
+};
 
 const rules = ref({
   fieldName: [
@@ -197,8 +339,10 @@ const rules = ref({
   ],
   fieldType: [
     { required: true, message: t('fieldDialog.entFieldDataType'), trigger: 'blur' }
-  ]
-
+  ],
+  dataTypeLong: [
+    { validator: validateDataTypeLong, trigger: "blur" }
+  ],
 })
 
 const init = async() => {
@@ -208,7 +352,7 @@ const init = async() => {
     pageSize: 999999
   })
 
-  dictOptions.value = dictRes.data.list
+  dictOptions.value = dictRes.data
 }
 init()
 
@@ -233,6 +377,63 @@ const clearOther = () => {
   middleDate.value.fieldSearchType = ''
   middleDate.value.dictType = ''
 }
+
+const associationChange = (val) => {
+  if (val === 2) {
+    ElMessageBox.confirm(
+      '一对多关联模式下，数据类型会改变为数组，后端表现为json，具体表现为数组模式，是否继续？',
+      '提示',
+      {
+        confirmButtonText: '继续',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(() => {
+      middleDate.value.fieldType = 'array'
+    }).catch(() => {
+      middleDate.value.dataSource.association = 1
+    })
+  }
+}
+
+
+const dbTableList = ref([])
+
+const getDBTableList = async () => {
+  const res = await getTable()
+  console.log(res);
+  if (res.code === 0) {
+    let list = res.data.tables; // 确保这里正确获取到 tables 数组
+    dbTableList.value = list.map(item => ({
+      tableName: item.tableName,
+      value: item.tableName // 这里假设 value 也是 tableName，如果不同请调整
+    }));
+  }
+}
+
+const dbColumnList = ref([])
+const selectDB = async (val) => {
+  middleDate.value.dataSource.table = val
+  const res = await getColumn({
+    tableName: val
+  })
+  console.log(res)
+  if (res.code === 0) {
+    let list = res.data.columns; // 确保这里正确获取到 tables 数组
+    dbColumnList.value = list.map(item => ({
+      columnName: item.columnName,
+      value: item.columnName,
+      type: item.dataType,
+      isPrimary: item.primaryKey,
+      comment: item.columnComment
+    }));
+    if (dbColumnList.value.length > 0) {
+      middleDate.value.dataSource.label = dbColumnList.value[0].columnName
+      middleDate.value.dataSource.value = dbColumnList.value[0].columnName
+    }
+  }
+}
+
 
 const fieldDialogFrom = ref(null)
 defineExpose({ fieldDialogFrom })

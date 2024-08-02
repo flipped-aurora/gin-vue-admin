@@ -95,31 +95,12 @@
           fixed="right"
         >
           <template #default="scope">
-            <el-popover
-              v-model="scope.row.visible"
-              placement="top"
-              width="160"
-            >
-              <p>{{ t('user.deleteUserConfrim') }}</p>
-              <div style="text-align: right; margin-top: 8px;">
-                <el-button
-                  type="primary"
-                  link
-                  @click="scope.row.visible = false"
-                >{{ t('general.cancel') }}</el-button>
-                <el-button
-                  type="primary"
-                  @click="deleteUserFunc(scope.row)"
-                >{{ t('general.confirm') }}</el-button>
-              </div>
-              <template #reference>
-                <el-button
-                  type="primary"
-                  link
-                  icon="delete"
-                >{{ t('general.delete') }}</el-button>
-              </template>
-            </el-popover>
+            <el-button
+              type="primary"
+              link
+              icon="delete"
+              @click="deleteUserFunc(scope.row)"
+            >{{ t('general.delete') }}</el-button>
             <el-button
               type="primary"
               link
@@ -147,113 +128,98 @@
         />
       </div>
     </div>
-    <el-dialog
+    <el-drawer
       v-model="addUserDialog"
-      :title="t('user.addUser')"
+      size="60%"
       :show-close="false"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
     >
-      <div style="height:60vh;overflow:auto;padding:0 12px;">
-        <el-form
-          ref="userForm"
-          :rules="rules"
-          :model="userInfo"
-          label-width="80px"
-        >
-          <el-form-item
-            v-if="dialogFlag === 'add'"
-            :label="t('user.userName')"
-            prop="userName"
-          >
-            <el-input v-model="userInfo.userName" />
-          </el-form-item>
-          <el-form-item
-            v-if="dialogFlag === 'add'"
-            :label="t('user.password')"
-            prop="password"
-          >
-            <el-input v-model="userInfo.password" />
-          </el-form-item>
-          <el-form-item
-            :label="t('user.nickName')"
-            prop="nickName"
-          >
-            <el-input v-model="userInfo.nickName" />
-          </el-form-item>
-          <el-form-item
-            :label="t('user.phone')"
-            prop="phone"
-          >
-            <el-input v-model="userInfo.phone" />
-          </el-form-item>
-          <el-form-item
-            :label="t('user.email')"
-            prop="email"
-          >
-            <el-input v-model="userInfo.email" />
-          </el-form-item>
-          <el-form-item
-            :label="t('user.userRole')"
-            prop="authorityId"
-          >
-            <el-cascader
-              v-model="userInfo.authorityIds"
-              style="width:100%"
-              :options="authOptions"
-              :show-all-levels="false"
-              :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
-              :clearable="false"
-            />
-          </el-form-item>
-          <el-form-item
-            label="启用"
-            prop="disabled"
-          >
-            <el-switch
-              v-model="userInfo.enable"
-              inline-prompt
-              :active-value="1"
-              :inactive-value="2"
-            />
-          </el-form-item>
-          <el-form-item
-            :label="t('user.avatar')"
-            label-width="80px"
-          >
-            <div
-              style="display:inline-block"
-              @click="openHeaderChange"
-            >
-              <img
-                v-if="userInfo.headerImg"
-                alt="头像"
-                class="header-img-box"
-                :src="(userInfo.headerImg && userInfo.headerImg.slice(0, 4) !== 'http')?path+userInfo.headerImg:userInfo.headerImg"
-              >
-              <div
-                v-else
-                class="header-img-box"
-              >{{ t('user.mediaLibrary') }}</div>
-            </div>
-          </el-form-item>
-        </el-form>
-      </div>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
-          <el-button
-            type="primary"
-            @click="enterAddUserDialog"
-          >{{ t('general.confirm') }}</el-button>
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">用户</span>
+          <div>
+            <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
+            <el-button
+              type="primary"
+              @click="enterAddUserDialog"
+            >{{ t('general.confirm') }}</el-button>
+          </div>
         </div>
       </template>
-    </el-dialog>
-    <ChooseImg
-      ref="chooseImg"
-      :target="userInfo"
-      :target-key="`headerImg`"
-    />
+
+      <el-form
+        ref="userForm"
+        :rules="rules"
+        :model="userInfo"
+        label-width="80px"
+      >
+        <el-form-item
+          v-if="dialogFlag === 'add'"
+          label="用户名"
+          prop="userName"
+        >
+          <el-input v-model="userInfo.userName" />
+        </el-form-item>
+        <el-form-item
+          v-if="dialogFlag === 'add'"
+          label="密码"
+          prop="password"
+        >
+          <el-input v-model="userInfo.password" />
+        </el-form-item>
+        <el-form-item
+          label="昵称"
+          prop="nickName"
+        >
+          <el-input v-model="userInfo.nickName" />
+        </el-form-item>
+        <el-form-item
+          label="手机号"
+          prop="phone"
+        >
+          <el-input v-model="userInfo.phone" />
+        </el-form-item>
+        <el-form-item
+          label="邮箱"
+          prop="email"
+        >
+          <el-input v-model="userInfo.email" />
+        </el-form-item>
+        <el-form-item
+          label="用户角色"
+          prop="authorityId"
+        >
+          <el-cascader
+            v-model="userInfo.authorityIds"
+            style="width:100%"
+            :options="authOptions"
+            :show-all-levels="false"
+            :props="{ multiple:true,checkStrictly: true,label:'authorityName',value:'authorityId',disabled:'disabled',emitPath:false}"
+            :clearable="false"
+          />
+        </el-form-item>
+        <el-form-item
+          label="启用"
+          prop="disabled"
+        >
+          <el-switch
+            v-model="userInfo.enable"
+            inline-prompt
+            :active-value="1"
+            :inactive-value="2"
+          />
+        </el-form-item>
+        <el-form-item
+          label="头像"
+          label-width="80px"
+        >
+          <SelectImage
+            v-model="userInfo.headerImg"
+          />
+        </el-form-item>
+      </el-form>
+    </el-drawer>
   </div>
 </template>
 
@@ -267,12 +233,12 @@ import {
 
 import { getAuthorityList } from '@/api/authority'
 import CustomPic from '@/components/customPic/index.vue'
-import ChooseImg from '@/components/chooseImg/index.vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { setUserInfo, resetPassword } from '@/api/user.js'
 
 import { nextTick, ref, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import SelectImage from '@/components/selectImage/selectImage.vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -416,12 +382,17 @@ const closeEdit = (row) => {
 }
 
 const deleteUserFunc = async(row) => {
-  const res = await deleteUser({ id: row.ID })
-  if (res.code === 0) {
-    ElMessage.success(t('general.deleteSuccess'))
-    await getTableData()
-    row.visible = false
-  }
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
+    type: 'warning'
+  }).then(async() => {
+    const res = await deleteUser({ id: row.ID })
+    if (res.code === 0) {
+      ElMessage.success(t('general.deleteSuccess'))
+      await getTableData()
+    }
+  })
 }
 
 // 弹窗相关

@@ -2,12 +2,13 @@
   <div>
     <el-upload
       multiple
-      :action="`${path}/fileUploadAndDownload/upload?noSave=1`"
-      :headers="{ 'x-token': userStore.token }"
+      :action="`${getBaseUrl()}/fileUploadAndDownload/upload?noSave=1`"
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="true"
       :file-list="fileList"
+      :limit="limit"
+      :accept="accept"
       class="upload-btn"
     >
       <el-button type="primary">上传文件</el-button>
@@ -20,6 +21,7 @@
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/pinia/modules/user'
+import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
   name: 'UploadCommon',
@@ -29,7 +31,15 @@ const props = defineProps({
   modelValue: {
     type: Array,
     default: () => []
-  }
+  },
+  limit: {
+    type: Number,
+    default: 3
+  },
+  accept: {
+    type: String,
+    default: ''
+  },
 })
 
 const path = ref(import.meta.env.VITE_BASE_API)
@@ -46,6 +56,13 @@ watch(fileList.value, (val) => {
   emits('update:modelValue', val)
 })
 
+watch(
+  () => props.modelValue,
+  value => {
+    fileList.value = value
+  },
+  { immediate: true }
+)
 const uploadSuccess = (res) => {
   const { data } = res
   if (data.file) {

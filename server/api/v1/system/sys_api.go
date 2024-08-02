@@ -45,6 +45,97 @@ func (s *SystemApiApi) CreateApi(c *gin.Context) {
 	response.OkWithMessage(global.Translate("general.createSuccss"), c)
 }
 
+// SyncApi
+// @Tags      SysApi
+// @Summary   同步API
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "同步API"
+// @Router    /api/syncApi [get]
+func (s *SystemApiApi) SyncApi(c *gin.Context) {
+	newApis, deleteApis, ignoreApis, err := apiService.SyncApi()
+	if err != nil {
+		global.GVA_LOG.Error("同步失败!", zap.Error(err))
+		response.FailWithMessage("同步失败", c)
+		return
+	}
+	response.OkWithData(gin.H{
+		"newApis":    newApis,
+		"deleteApis": deleteApis,
+		"ignoreApis": ignoreApis,
+	}, c)
+}
+
+// GetApiGroups
+// @Tags      SysApi
+// @Summary   获取API分组
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "获取API分组"
+// @Router    /api/getApiGroups [post]
+func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
+	groups, apiGroupMap, err := apiService.GetApiGroups()
+	if err != nil {
+		global.GVA_LOG.Error("获取失败!", zap.Error(err))
+		response.FailWithMessage("获取失败", c)
+		return
+	}
+	response.OkWithData(gin.H{
+		"groups":      groups,
+		"apiGroupMap": apiGroupMap,
+	}, c)
+}
+
+// IgnoreApi
+// @Tags      IgnoreApi
+// @Summary   忽略API
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "同步API"
+// @Router    /api/ignoreApi [post]
+func (s *SystemApiApi) IgnoreApi(c *gin.Context) {
+	var ignoreApi system.SysIgnoreApi
+	err := c.ShouldBindJSON(&ignoreApi)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = apiService.IgnoreApi(ignoreApi)
+	if err != nil {
+		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		response.FailWithMessage("忽略失败", c)
+		return
+	}
+	response.Ok(c)
+}
+
+// EnterSyncApi
+// @Tags      SysApi
+// @Summary   确认同步API
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{msg=string}  "确认同步API"
+// @Router    /api/enterSyncApi [post]
+func (s *SystemApiApi) EnterSyncApi(c *gin.Context) {
+	var syncApi systemRes.SysSyncApis
+	err := c.ShouldBindJSON(&syncApi)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = apiService.EnterSyncApi(syncApi)
+	if err != nil {
+		global.GVA_LOG.Error("忽略失败!", zap.Error(err))
+		response.FailWithMessage("忽略失败", c)
+		return
+	}
+	response.Ok(c)
+}
+
 // DeleteApi
 // @Tags      SysApi
 // @Summary   删除api
@@ -220,7 +311,7 @@ func (s *SystemApiApi) DeleteApisByIds(c *gin.Context) {
 // @Success   200   {object}  response.Response{msg=string}  "刷新成功"
 // @Router    /api/freshCasbin [get]
 func (s *SystemApiApi) FreshCasbin(c *gin.Context) {
-	err := apiService.FreshCasbin()
+	err := casbinService.FreshCasbin()
 	if err != nil {
 		global.GVA_LOG.Error("刷新失败!", zap.Error(err))
 		response.FailWithMessage("刷新失败", c)

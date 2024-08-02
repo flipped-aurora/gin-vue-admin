@@ -98,7 +98,9 @@
 	},
 	"error": {
 		"message1": "The page has been sucked away by mysterious forces, please contact us to fix it.",
-		"message2": "The common problem is that the menu is not assigned to the dashboard, you can assign the dashboard yourself or modify the default route."
+		"message2": "The common problem is that there is no current route for this role, if you are sure you want to use this route, please go to Role Management to assign it.",
+		"projectAddress": "Project Address：",
+		"backToHome": "Back To Home"
 	},
 	"fieldDialog": {
 		"associativeDictionary": "Associative Dictionary",
@@ -182,7 +184,7 @@
 		"enterDBHost": "Please enter database host",
 		"enterDBName": "Please enter database name",
 		"enterSQLitePath" : "Please enter sqlite database file path",
-		"enterDBPassword": "Please enter the database password (empty if none)",
+		"enterDBPassword": "Database password (empty if none)",
 		"enterDBPort": "Please enter database port",
 		"enterDBUser": "",
 		"enterDBUsername": "Please enter database username",
@@ -197,14 +199,46 @@
 		"note4": "4.If you use a mysql database, please confirm that the database engine is ",
 		"note5": "Note: The development team does not provide free services for the content written in the document.",
 		"pleaseWait": "Initializing database, please wait",
-		"readDocs": "Read the documentation"
+		"readDocs": "Read the documentation",
+		"adminPassword": "Admin Password",
+		"adminPasswordNote" : "Default password for admin account"
 	},
 	"layout": {
-		"currentRole": "Current Role: ",
-		"loading": "Loading",
-		"logout": "Logout",
-		"personalInfo": "Personal Information",
-		"switchTo": "Switch To: "
+			"header" : {
+				"currentRole": "Current Role: ",
+				"loading": "Loading",
+				"logout": "Logout",
+				"personalInfo": "Personal Information",
+				"switchTo": "Switch To: "
+			},
+			"tools" : {
+				"switchTheme" : "Switch Theme",
+				"search" : "Search",
+				"systemSettings" : "System Settings",
+				"refresh" : "Refresh",
+				"" : ""
+			},
+			"setting" : {
+				"defaultTheme" : "Default Theme",
+				"themeColor" : "Theme Color",
+				"interfaceDisplay" : "Interface Display",
+				"showWaterMark" : "Show WaterMark",
+				"grayMode" : "Gray Mode",
+				"colorFadeMode" : "Color Fade Mode",
+				"menuMode" : "Menu Mode",
+				"showTabs" : "Show Tabs",
+				"layputSizeConfig" : "Layout Size Configuration",
+				"sidebarExpandedWidth" : "Sidebar Expanded Width",
+				"sidebarShrinkWidth" : "Sidebar Shrink Width",
+				"sidebarItemHeight" : "Sidebar Item Height",
+				"configSaveNote1" : "Please note that all configurations should be saved to local file ",
+				"configSaveNote2" :", otherwise the configuration will be lost after refreshing the page.",
+				"copyConfig" : "Copy json configuration",
+				"normalMode" : "Normal",
+				"topMenuBarMode" : "Top Menu Bar",
+				"combinationMode" : "Combination",
+				"copyConfigSuccess" : "Copy successfully, please save to local file."
+			}
 	},
 	"login": {
 		"entPassword": "Please enter the password",
@@ -239,6 +273,7 @@
 		"icon": "Icon",
 		"keepAliveNote": "Whether keepAlive caches pages",
 		"newMenuNote": "New menu, you need to configure permissions in the role management to use",
+		"filePathNote" : "Page:view/xxx/xx.vue Plugin:plugin/xx/xx.vue",
 		"parameterType": "Parameter Type",
 		"parameterValue": "Parameter Value",
 		"paremeterKey": "Parameter Key",
@@ -253,7 +288,7 @@
 		"show": "Show",
 		"sort": "Sort",
 		"subMenuNote": "If the menu contains submenus, create a router-view secondary routing page or",
-		"visibility": "Whether to hide",
+		"visibility": "Visibility",
 		"visibilityNote": "Whether to hide in the list",
 		"addButton" : "Add a controllable button",
 		"buttonName" : "Button name",
@@ -306,6 +341,15 @@
 	},
 	"view": {
 		"dashboard": {
+			"noOfVisitors" : "No Of Visitors",
+			"newCustomers" : "New Customers",
+			"noOfSolutions" : "No Of Solutions",
+			"quickFunctions" : "Quick Functions",
+			"contentData" : "Content Data",
+			"documentation" : "Documentation",
+			"lastUpdate" : "Last Update",
+			"latestPlugins" : "Latest Plug-ins",
+			"announcement" : "Announcement",
 			"about": "About us",
 			"codeGen": "Code generator",
 			"dashboardCharts": {
@@ -457,5 +501,32 @@
 				"emailSentError" : "Failed To Send Email"
 			}
 		}
+	},
+	"components" : {
+		"commandMenu" : {
+			"commandMenuNote" : "Please enter the function you need to quickly reach",
+			"close" : "Close",
+			"jump" : "Jump",
+			"operate" : "Operate",
+			"lightTheme" : "Light Theme",
+			"darkTheme" : "Dark Theme",
+			"logout" : "Logout"
+		},
+		"exportExcel" : {
+			"exportExcel" : {
+				"export" : "Export",
+				"templateIdErr" : "Component does not have a template ID set."
+			},
+			"exportTemplate" : {
+				"exportTemplate" : "Export Template",
+				"templateIdErr" : "Component does not have a template ID set."
+			},
+			"importExcel" : {
+				"import" : "Import",
+				"importSuccess" : "Import Success"
+			}
+
+		}
+
 	}
 }

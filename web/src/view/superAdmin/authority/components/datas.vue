@@ -4,7 +4,7 @@
       :title="t('datas.datasNote')"
       href="https://plugin.gin-vue-admin.com/#/layout/newPluginInfo?id=36"
     />
-    <div class="sticky top-0.5 z-10 bg-white my-4">
+    <div class="sticky top-0.5 z-10 my-4">
       <el-button
         class="float-left"
         type="primary"

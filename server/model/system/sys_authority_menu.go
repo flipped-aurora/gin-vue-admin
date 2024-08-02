@@ -2,7 +2,7 @@ package system
 
 type SysMenu struct {
 	SysBaseMenu
-	MenuId      string                 `json:"menuId" gorm:"comment:菜单ID"`
+	MenuId      uint                   `json:"menuId" gorm:"comment:菜单ID"`
 	AuthorityId uint                   `json:"-" gorm:"comment:角色ID"`
 	Children    []SysMenu              `json:"children" gorm:"-"`
 	Parameters  []SysBaseMenuParameter `json:"parameters" gorm:"foreignKey:SysBaseMenuID;references:MenuId"`

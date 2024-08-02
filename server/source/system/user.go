@@ -26,7 +26,7 @@ func (i *initUser) MigrateTable(ctx context.Context) (context.Context, error) {
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	return ctx, db.AutoMigrate(&sysModel.SysUser{}, &sysModel.SysChatGptOption{})
+	return ctx, db.AutoMigrate(&sysModel.SysUser{})
 }
 
 func (i *initUser) TableCreated(ctx context.Context) bool {
@@ -46,8 +46,15 @@ func (i *initUser) InitializeData(ctx context.Context) (next context.Context, er
 	if !ok {
 		return ctx, system.ErrMissingDBContext
 	}
-	password := utils.BcryptHash("6447985")
-	adminPassword := utils.BcryptHash("123456")
+
+	ap := ctx.Value("adminPassword")
+	apStr, ok := ap.(string)
+	if !ok {
+		apStr = "123456"
+	}
+
+	password := utils.BcryptHash(apStr)
+	adminPassword := utils.BcryptHash(apStr)
 
 	entities := []sysModel.SysUser{
 		{

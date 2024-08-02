@@ -1121,8 +1121,8 @@ const enterForm = async(isPreview) => {
         preViewCode.value = data.data.autoCode
         previewFlag.value = true
       } else {
-        const data = await createTemp(form.value)
-        if (data.headers?.success === 'false') {
+        const res = await createTemp(form.value)
+        if (res.code !== 0) {
           return
         }
           ElMessage({

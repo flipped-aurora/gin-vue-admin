@@ -184,7 +184,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item
-                label="中文名称"
+                label="多语言Key"
                 prop="description"
                 class="w-full"
             >

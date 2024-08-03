@@ -15,6 +15,7 @@ import (
 	"go/token"
 	"gorm.io/gorm"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -107,6 +108,36 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return err
 	}
+
+	i18nJson, err := s.createJson(info)
+
+	if err != nil {
+		return err
+	}
+
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+
+	files, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		data, err := os.ReadFile(file)
+		if err != nil {
+			continue
+		}
+		originJson := string(data)
+		newJson, err := s.mergeJSON(originJson, i18nJson)
+		if err != nil {
+			continue
+		}
+		err = os.WriteFile(file, []byte(newJson), 0666)
+		if err != nil {
+			continue
+		}
+	}
+
 	return nil
 }
 
@@ -296,4 +327,79 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 	}
 
 	return nil
+}
+
+func (s *autoCodeTemplate) mergeJSON(json1, json2 string) (string, error) {
+	var obj1 map[string]interface{}
+	var obj2 map[string]interface{}
+
+	err := json.Unmarshal([]byte(json1), &obj1)
+	if err != nil {
+		return "", err
+	}
+
+	err = json.Unmarshal([]byte(json2), &obj2)
+	if err != nil {
+		return "", err
+	}
+
+	s.merge(obj1, obj2)
+
+	mergedJSON, err := json.Marshal(obj1)
+	if err != nil {
+		return "", err
+	}
+
+	return string(mergedJSON), nil
+}
+
+func (s *autoCodeTemplate) merge(dst, src map[string]interface{}) {
+	for key, value := range src {
+		if dstValue, ok := dst[key]; ok {
+			if dstMap, ok := dstValue.(map[string]interface{}); ok {
+				if srcMap, ok := value.(map[string]interface{}); ok {
+					s.merge(dstMap, srcMap)
+					continue
+				}
+			}
+		}
+		dst[key] = value
+	}
+}
+
+func (s *autoCodeTemplate) readJSONFiles(dir string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+func (s *autoCodeTemplate) createJson(info request.AutoCode) (string, error) {
+	// 创建一个新的map来表示你想要的JSON结构
+	data := make(map[string]interface{})
+	fieldsData := make(map[string]interface{})
+	for _, field := range info.Fields {
+		fieldsData[field.FieldName] = field
+	}
+	data[info.Package] = map[string]interface{}{
+		info.StructName: fieldsData,
+	}
+
+	// 使用json.Marshal函数将这个map转换为JSON
+	jsonBytes, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonBytes), nil
 }

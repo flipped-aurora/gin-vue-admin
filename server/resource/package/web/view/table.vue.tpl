@@ -1,3 +1,4 @@
+{{- $top := . -}}
 <template>
   <div>
     <div class="gva-search-box">
@@ -18,28 +19,28 @@
       </el-form-item>
       {{ end -}}
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if not .FieldSearchHide }} {{- if eq .FieldType "bool" }}
-            <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
-            <el-select v-model="searchInfo.{{.FieldJson}}" clearable :placeholder="t('general.pleaseSelect')">
+            <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+            <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
                 <el-option
                     key="true"
-                    :label="t('general.yes')"
+                    label="是"
                     value="true">
                 </el-option>
                 <el-option
                     key="false"
-                    :label="t('general.no')"
+                    label="否"
                     value="false">
                 </el-option>
             </el-select>
             </el-form-item>
            {{- else if .DictType}}
-           <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+           <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
             <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
             </el-select>
             </el-form-item>
             {{- else}}
-        <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+        <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
@@ -58,7 +59,7 @@
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <template #label>
             <span>
-              {{.FieldDesc}}
+              {{"{{"}}t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}){{"}}"}}
               <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
@@ -79,7 +80,7 @@
         <template v-if="showAllQuery">
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if .FieldSearchHide }} {{- if eq .FieldType "bool" }}
-          <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+          <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
                       <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
                           <el-option
                               key="true"
@@ -94,13 +95,13 @@
                       </el-select>
                       </el-form-item>
                      {{- else if .DictType}}
-                     <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+                     <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
                       <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
                         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
                       </el-select>
                       </el-form-item>
                       {{- else}}
-                  <el-form-item label="{{.FieldDesc}}" prop="{{.FieldJson}}">
+                  <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
                   {{- if eq .FieldType "float64" "int"}}
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
                       <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
@@ -119,7 +120,7 @@
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
                       <template #label>
                       <span>
-                        {{.FieldDesc}}
+                        {{"{{"}}t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}){{"}}"}}
                         <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
                           <el-icon><QuestionFilled /></el-icon>
                         </el-tooltip>
@@ -140,36 +141,17 @@
         </template>
 
         <el-form-item>
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-          <el-button type="primary" icon="search" @click="onSubmit">{{ "{{ t('general.search') }}" }}</el-button>
-          <el-button icon="refresh" @click="onReset">{{ "{{ t('general.reset') }}" }}</el-button>
-=======
           <el-button type="primary" icon="search" @click="onSubmit">查询</el-button>
           <el-button icon="refresh" @click="onReset">重置</el-button>
           <el-button link type="primary" icon="arrow-down" @click="showAllQuery=true" v-if="!showAllQuery">展开</el-button>
           <el-button link type="primary" icon="arrow-up" @click="showAllQuery=false" v-else>收起</el-button>
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
         </el-form-item>
       </el-form>
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-            <el-button type="primary" icon="plus" @click="openDialog">{{ "{{ t('general.add') }}" }}</el-button>
-            <el-popover v-model:visible="deleteVisible" :disabled="!multipleSelection.length" placement="top" width="160">
-            <p>{{" {{ t('general.deleteConfirm') }}" }}</p>
-            <div style="text-align: right; margin-top: 8px;">
-                <el-button type="primary" link @click="deleteVisible = false">{{ "{{ t('general.cancel') }}" }}</el-button>
-                <el-button type="primary" @click="onDelete">{{ "{{ t('general.confirm') }}" }}</el-button>
-            </div>
-            <template #reference>
-                <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="deleteVisible = true">{{ "{{ t('general.delete') }}" }}</el-button>
-            </template>
-            </el-popover>
-=======
             <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
             <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
         </div>
         <el-table
         ref="multipleTable"
@@ -183,18 +165,14 @@
         {{- end}}
         >
         <el-table-column type="selection" width="55" />
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-        <el-table-column align="left" :label="t('general.createdAt')" width="180">
-=======
         {{ if .GvaModel }}
         <el-table-column align="left" label="日期" prop="createdAt" width="180">
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
         {{- range .FrontFields}}
         {{- if .CheckDataSource }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
                 {{if eq .DataSource.Association 2}}
                     <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
@@ -206,27 +184,27 @@
          </template>
          </el-table-column>
         {{- else if .DictType}}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
             {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
             </template>
         </el-table-column>
         {{- else if eq .FieldType "bool" }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120">
             <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
         </el-table-column>
          {{- else if eq .FieldType "time.Time" }}
-         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="180">
+         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="180">
             <template #default="scope">{{"{{"}} formatDate(scope.row.{{.FieldJson}}) {{"}}"}}</template>
          </el-table-column>
           {{- else if eq .FieldType "picture" }}
-          <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+          <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                 <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
            {{- else if eq .FieldType "pictures" }}
-           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+           <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
                     <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
@@ -234,7 +212,7 @@
               </template>
            </el-table-column>
            {{- else if eq .FieldType "video" }}
-           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+           <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                <video
                   style="width: 100px; height: 100px"
@@ -246,13 +224,13 @@
               </template>
            </el-table-column>
            {{- else if eq .FieldType "richtext" }}
-                      <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+                      <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
                          <template #default="scope">
                             [富文本内容]
                          </template>
                       </el-table-column>
            {{- else if eq .FieldType "file" }}
-                    <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+                    <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
                         <template #default="scope">
                              <div class="file-list">
                                <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid" @click="downloadFile(file.url)">{{"{{"}}file.name{{"}}"}}</el-tag>
@@ -260,30 +238,19 @@
                         </template>
                     </el-table-column>
          {{- else if eq .FieldType "json" }}
-          <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+          <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                   [JSON]
               </template>
           </el-table-column>
         {{- else }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-        <el-table-column align="left" :label="t('general.operations')">
-            <template #default="scope">
-            <el-button type="primary" link class="table-button" @click="getDetails(scope.row)">
-                <el-icon style="margin-right: 5px"><InfoFilled /></el-icon>
-                查看详情
-            </el-button>
-            <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{ "{{ t('general.change') }}" }}</el-button>
-            <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">{{ "{{ t('general.delete') }}" }}</el-button>
-=======
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
             </template>
         </el-table-column>
         </el-table>
@@ -312,44 +279,30 @@
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
         {{- range .FrontFields}}
-            <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+            <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}):"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
-            <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+            <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
             </el-select>
           {{- else }}
           {{- if eq .FieldType "bool" }}
-              <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
+              <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
           {{- end }}
           {{- if eq .FieldType "string" }}
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('general.pleaseEnter')" />
-=======
           {{- if .DictType}}
-              <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+              <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
                 <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
               </el-select>
           {{- else }}
-              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  placeholder="请输入{{.FieldDesc}}" />
+              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" />
           {{- end }}
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
           {{- end }}
           {{- if eq .FieldType "richtext" }}
               <RichEdit v-model="formData.{{.FieldJson}}"/>
           {{- end }}
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-          {{- if eq .FieldType "int" }}
-          {{- if .DictType}}
-              <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}" >
-                <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
-              </el-select>
-          {{- else }}
-              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
-=======
           {{- if eq .FieldType "json" }}
               // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
               {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
           {{- end }}
            {{- if eq .FieldType "array" }}
            <el-tag v-for="(item,key) in formData.{{.FieldJson}}" :key="key">
@@ -357,16 +310,16 @@
            </el-tag>
            {{- end }}
           {{- if eq .FieldType "int" }}
-              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
+              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" />
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
-              <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" :placeholder="t('general.selectDate')" :clearable="{{.Clearable}}"  />
+              <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
           {{- end }}
           {{- if eq .FieldType "float64" }}
               <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
           {{- end }}
           {{- if eq .FieldType "enum" }}
-                <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+                <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
                    <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
                 </el-select>
           {{- end }}
@@ -396,51 +349,7 @@
             </el-form-item>
           {{- end }}
           </el-form>
-<<<<<<< HEAD:server/resource/autocode_template/web/table.vue.tpl
-      </el-scrollbar>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button @click="closeDialog">{{ "{{ t('general.close') }}" }}</el-button>
-          <el-button type="primary" @click="enterDialog">{{ "{{ t('general.confirm') }}" }}</el-button>
-        </div>
-      </template>
-    </el-dialog>
-
-    <el-dialog v-model="detailShow" style="width: 800px" lock-scroll :before-close="closeDetailShow" title="查看详情" destroy-on-close>
-      <el-scrollbar height="550px">
-        <el-descriptions column="1" border>
-        {{- range .Fields}}
-                <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if .DictType}}
-                        {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
-                {{- else if eq .FieldType "picture" }}
-                        <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
-                {{- else if eq .FieldType "pictures" }}
-                        <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(formData.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
-                {{- else if eq .FieldType "file" }}
-                        <div class="fileBtn" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index">
-                          <el-button type="primary" text bg @click="onDownloadFile(item.url)">
-                            <el-icon style="margin-right: 5px"><Download /></el-icon>
-                            {{"{{"}} item.name {{"}}"}}
-                          </el-button>
-                        </div>
-                  {{- else if eq .FieldType "bool" }}
-                    {{"{{"}} formatBoolean(formData.{{.FieldJson}}) {{"}}"}}
-                   {{- else if eq .FieldType "time.Time" }}
-                      {{"{{"}} formatDate(formData.{{.FieldJson}}) {{"}}"}}
-                   {{- else if eq .FieldType "richtext" }}
-                        [富文本内容]
-                   {{- else}}
-                        {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
-                   {{- end }}
-                </el-descriptions-item>
-        {{- end }}
-        </el-descriptions>
-      </el-scrollbar>
-    </el-dialog>
-=======
     </el-drawer>
->>>>>>> main:server/resource/package/web/view/table.vue.tpl
   </div>
 </template>
 
@@ -481,9 +390,8 @@ import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, R
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-
+const i18n = useI18n() // added by mohamed hassan to support multilanguage
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
-
 
 defineOptions({
     name: '{{.StructName}}'
@@ -705,9 +613,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-    ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
-        confirmButtonText: t('general.confirm'),
-        cancelButtonText: t('general.cancel'),
+    ElMessageBox.confirm('确定要删除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
             delete{{.StructName}}Func(row)
@@ -725,7 +633,7 @@ const onDelete = async() => {
       if (multipleSelection.value.length === 0) {
         ElMessage({
           type: 'warning',
-          message: t('general.selectDataToDelete')
+          message: '请选择要删除的数据'
         })
         return
       }
@@ -737,7 +645,7 @@ const onDelete = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: t('general.deleteSuccess')
+          message: '删除成功'
         })
         if (tableData.value.length === {{.PrimaryField.FieldJson}}s.length && page.value > 1) {
           page.value--
@@ -767,7 +675,7 @@ const delete{{.StructName}}Func = async (row) => {
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
-                message: t('general.deleteSuccess')
+                message: '删除成功'
             })
             if (tableData.value.length === 1 && page.value > 1) {
             page.value--
@@ -845,7 +753,7 @@ const enterDialog = async () => {
               if (res.code === 0) {
                 ElMessage({
                   type: 'success',
-                  message: t('general.createUpdateSuccess')
+                  message: '创建/更改成功'
                 })
                 closeDialog()
                 getTableData()

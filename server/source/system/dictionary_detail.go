@@ -115,7 +115,7 @@ func (i *initDictDetail) DataInserted(ctx context.Context) bool {
 	}
 	var dict sysModel.SysDictionary
 	if err := db.Preload("SysDictionaryDetails").
-		First(&dict, &sysModel.SysDictionary{Name: "数据库bool类型"}).Error; err != nil {
+		First(&dict, &sysModel.SysDictionary{Name: "system.dictionary.boolType"}).Error; err != nil {
 		return false
 	}
 	return len(dict.SysDictionaryDetails) > 0 && dict.SysDictionaryDetails[0].Label == "tinyint"

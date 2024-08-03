@@ -46,9 +46,9 @@ func (i *initAuthority) InitializeData(ctx context.Context) (context.Context, er
 		return ctx, system.ErrMissingDBContext
 	}
 	entities := []sysModel.SysAuthority{
-		{AuthorityId: 888, AuthorityName: global.Translate("system.authority.normalUsers"), ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
-		{AuthorityId: 9528, AuthorityName: global.Translate("system.authority.testRole"), ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
-		{AuthorityId: 8881, AuthorityName: global.Translate("system.authority.normalUserSubRole"), ParentId: utils.Pointer[uint](888), DefaultRouter: "dashboard"},
+		{AuthorityId: 888, AuthorityName: "system.authority.normalUsers", ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
+		{AuthorityId: 9528, AuthorityName: "system.authority.testRole", ParentId: utils.Pointer[uint](0), DefaultRouter: "dashboard"},
+		{AuthorityId: 8881, AuthorityName: "system.authority.normalUserSubRole", ParentId: utils.Pointer[uint](888), DefaultRouter: "dashboard"},
 	}
 
 	if err := db.Create(&entities).Error; err != nil {

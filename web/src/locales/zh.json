@@ -215,7 +215,8 @@
 				"switchTheme" : "切换主题",
 				"search" : "搜索",
 				"systemSettings" : "系统设置",
-				"refresh" : "刷新"
+				"refresh" : "刷新",
+				"changeLanguage": "切换语言"
 			},
 			"setting" : {
 				"defaultTheme" : "默认主题",

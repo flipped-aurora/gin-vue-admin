@@ -108,5 +108,9 @@ func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uin
 func (dictionaryService *DictionaryService) GetSysDictionaryInfoList() (list interface{}, err error) {
 	var sysDictionarys []system.SysDictionary
 	err = global.GVA_DB.Find(&sysDictionarys).Error
+	for i := range sysDictionarys {
+		sysDictionarys[i].Name = global.Translate(sysDictionarys[i].Name)
+		sysDictionarys[i].Desc = global.Translate(sysDictionarys[i].Desc)
+	}
 	return sysDictionarys, err
 }

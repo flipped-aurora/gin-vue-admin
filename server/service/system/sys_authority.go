@@ -192,6 +192,9 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(info request.Page
 	}
 	var authority []system.SysAuthority
 	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
+	for i := range authority {
+		authority[i].AuthorityName = global.Translate(authority[i].AuthorityName)
+	}
 	for k := range authority {
 		err = authorityService.findChildrenAuthority(&authority[k])
 	}
@@ -243,6 +246,9 @@ func (authorityService *AuthorityService) SetMenuAuthority(auth *system.SysAutho
 
 func (authorityService *AuthorityService) findChildrenAuthority(authority *system.SysAuthority) (err error) {
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authority.AuthorityId).Find(&authority.Children).Error
+	for i := range authority.Children {
+		authority.Children[i].AuthorityName = global.Translate(authority.Children[i].AuthorityName)
+	}
 	if len(authority.Children) > 0 {
 		for k := range authority.Children {
 			err = authorityService.findChildrenAuthority(&authority.Children[k])

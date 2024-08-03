@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -52,8 +51,8 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	}
 	True := true
 	dicts[0].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: global.Translate("system.dictionary_detail.male"), Value: "1", Status: &True, Sort: 1},
-		{Label: global.Translate("system.dictionary_detail.female"), Value: "2", Status: &True, Sort: 2},
+		{Label: "system.dictionary_detail.male", Value: "1", Status: &True, Sort: 1},
+		{Label: "system.dictionary_detail.female", Value: "2", Status: &True, Sort: 2},
 	}
 
 	dicts[1].SysDictionaryDetails = []sysModel.SysDictionaryDetail{

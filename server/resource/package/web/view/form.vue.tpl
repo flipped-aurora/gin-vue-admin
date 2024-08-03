@@ -4,9 +4,9 @@
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
-        <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}):" prop="{{.FieldJson}}">
+        <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
        {{- if .CheckDataSource}}
-        <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
+        <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
           <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
         </el-select>
        {{- else }}
@@ -15,11 +15,11 @@
       {{- end }}
       {{- if eq .FieldType "string" }}
       {{- if .DictType}}
-           <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
+           <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
            </el-select>
       {{- else }}
-          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" />
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "richtext" }}

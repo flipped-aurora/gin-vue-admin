@@ -19,7 +19,7 @@
       </el-form-item>
       {{ end -}}
            {{- range .Fields}}  {{- if .FieldSearchType}} {{- if not .FieldSearchHide }} {{- if eq .FieldType "bool" }}
-            <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
             <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
                 <el-option
                     key="true"
@@ -34,13 +34,13 @@
             </el-select>
             </el-form-item>
            {{- else if .DictType}}
-           <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+           <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
             <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
             </el-select>
             </el-form-item>
             {{- else}}
-        <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+        <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
         {{- if eq .FieldType "float64" "int"}}
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
@@ -59,7 +59,7 @@
             {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
             <template #label>
             <span>
-              {{"{{"}}t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}){{"}}"}}
+              {{"{{"}}t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}'){{"}}"}}
               <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
@@ -80,7 +80,7 @@
         <template v-if="showAllQuery">
           <!-- 将需要控制显示状态的查询条件添加到此范围内 -->
           {{- range .Fields}}  {{- if .FieldSearchType}} {{- if .FieldSearchHide }} {{- if eq .FieldType "bool" }}
-          <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+          <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
                       <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择">
                           <el-option
                               key="true"
@@ -95,13 +95,13 @@
                       </el-select>
                       </el-form-item>
                      {{- else if .DictType}}
-                     <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+                     <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
                       <el-select v-model="searchInfo.{{.FieldJson}}" clearable placeholder="请选择" @clear="()=>{searchInfo.{{.FieldJson}}=undefined}">
                         <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
                       </el-select>
                       </el-form-item>
                       {{- else}}
-                  <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}">
+                  <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
                   {{- if eq .FieldType "float64" "int"}}
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
                       <el-input v-model.number="searchInfo.start{{.FieldName}}" placeholder="最小值" />
@@ -120,7 +120,7 @@
                       {{if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
                       <template #label>
                       <span>
-                        {{"{{"}}t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}){{"}}"}}
+                        {{"{{"}}t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}'){{"}}"}}
                         <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
                           <el-icon><QuestionFilled /></el-icon>
                         </el-tooltip>
@@ -172,7 +172,7 @@
         {{ end }}
         {{- range .FrontFields}}
         {{- if .CheckDataSource }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
                 {{if eq .DataSource.Association 2}}
                     <el-tag v-for="(item,key) in filterDataSource(dataSource.{{.FieldJson}},scope.row.{{.FieldJson}})" :key="key">
@@ -184,27 +184,27 @@
          </template>
          </el-table-column>
         {{- else if .DictType}}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
             <template #default="scope">
             {{"{{"}} filterDict(scope.row.{{.FieldJson}},{{.DictType}}Options) {{"}}"}}
             </template>
         </el-table-column>
         {{- else if eq .FieldType "bool" }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120">
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
             <template #default="scope">{{"{{"}} formatBoolean(scope.row.{{.FieldJson}}) {{"}}"}}</template>
         </el-table-column>
          {{- else if eq .FieldType "time.Time" }}
-         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="180">
+         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="180">
             <template #default="scope">{{"{{"}} formatDate(scope.row.{{.FieldJson}}) {{"}}"}}</template>
          </el-table-column>
           {{- else if eq .FieldType "picture" }}
-          <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
+          <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                 <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
            {{- else if eq .FieldType "pictures" }}
-           <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
+           <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
                     <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
@@ -212,7 +212,7 @@
               </template>
            </el-table-column>
            {{- else if eq .FieldType "video" }}
-           <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
+           <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                <video
                   style="width: 100px; height: 100px"
@@ -224,13 +224,13 @@
               </template>
            </el-table-column>
            {{- else if eq .FieldType "richtext" }}
-                      <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
+                      <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
                          <template #default="scope">
                             [富文本内容]
                          </template>
                       </el-table-column>
            {{- else if eq .FieldType "file" }}
-                    <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
+                    <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
                         <template #default="scope">
                              <div class="file-list">
                                <el-tag v-for="file in scope.row.{{.FieldJson}}" :key="file.uid" @click="downloadFile(file.url)">{{"{{"}}file.name{{"}}"}}</el-tag>
@@ -238,13 +238,13 @@
                         </template>
                     </el-table-column>
          {{- else if eq .FieldType "json" }}
-          <el-table-column :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="200">
+          <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                   [JSON]
               </template>
           </el-table-column>
         {{- else }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" prop="{{.FieldJson}}" width="120" />
+        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120" />
         {{- end }}
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
@@ -279,9 +279,9 @@
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
         {{- range .FrontFields}}
-            <el-form-item :label="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}}):"  prop="{{.FieldJson}}" >
+            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
-            <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
+            <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
             </el-select>
           {{- else }}
@@ -290,11 +290,11 @@
           {{- end }}
           {{- if eq .FieldType "string" }}
           {{- if .DictType}}
-              <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
+              <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
                 <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
               </el-select>
           {{- else }}
-              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" />
+              <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
           {{- end }}
           {{- end }}
           {{- if eq .FieldType "richtext" }}
@@ -310,7 +310,7 @@
            </el-tag>
            {{- end }}
           {{- if eq .FieldType "int" }}
-              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" />
+              <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
           {{- end }}
           {{- if eq .FieldType "time.Time" }}
               <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" style="width:100%" placeholder="选择日期" :clearable="{{.Clearable}}"  />
@@ -319,7 +319,7 @@
               <el-input-number v-model="formData.{{ .FieldJson }}"  style="width:100%" :precision="2" :clearable="{{.Clearable}}"  />
           {{- end }}
           {{- if eq .FieldType "enum" }}
-                <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t({{$top.Package}}{{$top.StructName}}{{.FieldDesc}})" style="width:100%" :clearable="{{.Clearable}}" >
+                <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
                    <el-option v-for="item in [{{.DataTypeLong}}]" :key="item" :label="item" :value="item" />
                 </el-select>
           {{- end }}

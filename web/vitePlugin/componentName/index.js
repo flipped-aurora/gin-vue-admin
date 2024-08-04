@@ -63,7 +63,11 @@ const vueFilePathPlugin = (outputFilePath) => {
                     return html.replace(
                         '</body>',
                         `<script>
+                        const isWindowActive = () => !document.hidden;
                         window.addEventListener('beforeunload', function () {
+                            if (!isWindowActive()) {
+                                return;
+                            }
                             fetch('/generate-path-name-map');
                         });
                     </script></body>`

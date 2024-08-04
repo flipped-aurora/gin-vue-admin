@@ -1116,13 +1116,14 @@ const enterForm = async(isPreview) => {
         return false
       }
       form.value.humpPackageName = toSQLLine(form.value.packageName)
+      delete form.value.primaryField
       if (isPreview) {
         const data = await preview(form.value)
         preViewCode.value = data.data.autoCode
         previewFlag.value = true
       } else {
-        const data = await createTemp(form.value)
-        if (data.headers?.success === 'false') {
+        const res = await createTemp(form.value)
+        if (res.code !== 0) {
           return
         }
           ElMessage({

@@ -292,6 +292,9 @@
 		"addButton" : "新增可控按钮",
 		"buttonName" : "按钮名称",
 		"comments" : "备注",
+		"highlightMenu" : "高亮菜单",
+		"basicPage" : "是否为基础页面",
+		"basicPageNote" : "此项选择为是，则不会展示左侧菜单以及顶部信息。",
 		"" : ""
 	},
 	"menus": {

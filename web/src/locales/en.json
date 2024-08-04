@@ -293,6 +293,9 @@
 		"addButton" : "Add a controllable button",
 		"buttonName" : "Button name",
 		"comments" : "Comments",
+		"highlightMenu" : "Highlight Menu",
+		"basicPage" : "Is it a basic page?",
+		"basicPageNote" : "If you select Yes for this option, the left menu and top information will not be displayed.",
 		"" : ""
 	},
 	"menus": {

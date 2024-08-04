@@ -185,7 +185,7 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { toDoc } from '@/utils/doc'
+
 
 defineOptions({
   name: 'Authority'

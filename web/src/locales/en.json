@@ -216,7 +216,8 @@
 				"search" : "Search",
 				"systemSettings" : "System Settings",
 				"refresh" : "Refresh",
-				"changeLanguage": "Change Language"
+				"changeLanguage": "Change Language",
+				"videoTutorial": "Video Tutorial"
 			},
 			"setting" : {
 				"defaultTheme" : "Default Theme",

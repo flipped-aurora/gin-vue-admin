@@ -8,7 +8,7 @@
     <el-tooltip
         class=""
         effect="dark"
-        content="视频教程"
+        :content="t('layout.tools.videoTutorial')"
         placement="bottom"
     >
       <el-dropdown @command="toDoc">

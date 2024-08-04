@@ -88,7 +88,8 @@ import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage{{- if .HasPic }}
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+{{- if .HasPic }}
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
 {{- if .HasFile }}

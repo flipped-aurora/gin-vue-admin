@@ -9,16 +9,6 @@
         >
           新增根菜单
         </el-button>
-        <el-icon
-          class="cursor-pointer"
-          @click="
-            toDoc(
-              'https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e'
-            )
-          "
-        >
-<!--          <VideoCameraFilled />-->
-        </el-icon>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -423,16 +413,6 @@
           >
             新增菜单参数
           </el-button>
-          <el-icon
-            class="cursor-pointer"
-            @click="
-              toDoc(
-                'https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e'
-              )
-            "
-          >
-<!--            <VideoCameraFilled />-->
-          </el-icon>
         </div>
         <el-table
           :data="form.parameters"
@@ -516,16 +496,6 @@
           >
             <QuestionFilled />
           </el-icon>
-          <el-icon
-            class="cursor-pointer"
-            @click="
-              toDoc(
-                'https://www.bilibili.com/video/BV1kv4y1g7nT?p=11&vd_source=f2640257c21e3b547a790461ed94875e'
-              )
-            "
-          >
-<!--            <VideoCameraFilled />-->
-          </el-icon>
         </div>
 
         <el-table
@@ -588,7 +558,7 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { QuestionFilled, VideoCameraFilled } from '@element-plus/icons-vue'
+import { QuestionFilled } from '@element-plus/icons-vue'
 import pathInfo from '@/pathInfo.json'
 
 import { toDoc } from '@/utils/doc'

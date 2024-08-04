@@ -262,7 +262,7 @@
         <el-row class="w-full">
           <el-col :span="8">
             <el-form-item
-              label="父节点ID"
+              :label="t('menu.parentId')"
             >
               <el-cascader
                 v-model="form.parentId"
@@ -283,7 +283,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item
-              label="图标"
+              :label="t('menu.icon')"
               prop="meta.icon"
             >
               <icon
@@ -293,7 +293,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item
-              label="排序标记"
+              :label="t('general.order')"
               prop="sort"
             >
               <el-input
@@ -310,7 +310,7 @@
             >
               <template #label>
                 <div>
-                  <span> 高亮菜单 </span>
+                  <span> {{ t('menu.highlightMenu') }} </span>
                   <el-tooltip
                     content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
                     placement="top"
@@ -335,15 +335,15 @@
               <el-select
                 v-model="form.meta.keepAlive"
                 style="width: 100%"
-                placeholder="是否keepAlive缓存页面"
+                :placeholder="t('menu.keepAliveNote')"
               >
                 <el-option
                   :value="false"
-                  label="否"
+                  :label="t('general.no')"
                 />
                 <el-option
                   :value="true"
-                  label="是"
+                  :label="t('general.yes')"
                 />
               </el-select>
             </el-form-item>
@@ -356,15 +356,15 @@
               <el-select
                 v-model="form.meta.closeTab"
                 style="width: 100%"
-                placeholder="是否自动关闭tab"
+                :placeholder="t('menu.closeTabNote')"
               >
                 <el-option
                   :value="false"
-                  label="否"
+                  :label="t('general.no')"
                 />
                 <el-option
                   :value="true"
-                  label="是"
+                 :label="t('general.yes')"
                 />
               </el-select>
             </el-form-item>
@@ -375,9 +375,9 @@
             <el-form-item>
               <template #label>
                 <div>
-                  <span> 是否为基础页面 </span>
+                  <span> {{ t('menu.basicPage') }} </span>
                   <el-tooltip
-                    content="此项选择为是，则不会展示左侧菜单以及顶部信息。"
+                    :content="t('menu.basicPageNote')"
                     placement="top"
                     effect="light"
                   >
@@ -389,15 +389,15 @@
               <el-select
                 v-model="form.meta.defaultMenu"
                 style="width: 100%"
-                placeholder="是否为基础页面"
+                :placeholder="t('menu.basicPage')"
               >
                 <el-option
                   :value="false"
-                  label="否"
+                  :label="t('general.no')"
                 />
                 <el-option
                   :value="true"
-                  label="是"
+                  :label="t('general.yes')"
                 />
               </el-select>
             </el-form-item>

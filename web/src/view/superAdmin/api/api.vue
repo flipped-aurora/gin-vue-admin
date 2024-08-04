@@ -77,19 +77,19 @@
           :disabled="!apis.length"
           @click="onDelete"
         >
-          删除
+          {{ t('general.delete') }}
         </el-button>
         <el-button
           icon="Refresh"
           @click="onFresh"
         >
-          刷新缓存
+          {{ t('view.api.refreshCache') }}
         </el-button>
         <el-button
           icon="Compass"
           @click="onSync"
         >
-          同步API
+        {{ t('view.api.synchronousAPI') }}
         </el-button>
         <ExportTemplate
           template-id="api"
@@ -135,7 +135,7 @@
         />
         <el-table-column
           align="left"
-          :label="t('view.api.apiDescrpition')"
+          :label="t('view.api.apiDescription')"
           min-width="150"
           prop="description"
           sortable="custom"
@@ -201,45 +201,45 @@
       :before-close="closeSyncDialog"
       :show-close="false"
     >
-      <warning-bar title="同步API，不输入路由分组将不会被自动同步" />
+      <warning-bar :title="t('view.api.synchronousAPINote')" />
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">同步路由</span>
+          <span class="text-lg"> {{ t('view.api.synchronousRouting') }} </span>
           <div>
             <el-button @click="closeSyncDialog">
-              取 消
+              {{ t('general.close') }}
             </el-button>
             <el-button
               type="primary"
               :loading="syncing"
               @click="enterSyncDialog"
             >
-              确 定
+              {{ t('general.confirm') }}
             </el-button>
           </div>
         </div>
       </template>
 
-      <h4>新增路由 <span class="text-xs text-gray-500 ml-2 font-normal">存在于当前路由中，但是不存在于api表</span></h4>
+      <h4>{{ t('view.api.newAddedRouteNote1') }} <span class="text-xs text-gray-500 ml-2 font-normal">{{ t('view.api.newAddedRouteNote2') }}</span></h4>
       <el-table
         :data="syncApiData.newApis"
       >
         <el-table-column
           align="left"
-          label="API路径"
+          :label="t('view.api.apiPath')"
           min-width="150"
           prop="path"
         />
         <el-table-column
           align="left"
-          label="API分组"
+          :label="t('view.api.apiGrouping')"
           min-width="150"
           prop="apiGroup"
         >
           <template #default="{row}">
             <el-select
               v-model="row.apiGroup"
-              placeholder="请选择或新增"
+              :placeholder="t('view.api.selectOrAdd')"
               allow-create filterable default-first-option
             >
               <el-option
@@ -253,7 +253,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="API简介"
+          :label="t('view.api.apiDescription')"
           min-width="150"
           prop="description"
         >
@@ -266,7 +266,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="请求"
+          :label="t('general.request')"
           min-width="150"
           prop="method"
         >
@@ -277,43 +277,43 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="操作"
+          :label="t('general.operations')"
           min-width="150"
           fixed="right"
         >
           <template #default="{row}">
             <el-button type="primary" text @click="ignoreApiFunc(row,true)">
-              忽略
+              {{ t('view.api.ignore') }}
             </el-button>
           </template>
         </el-table-column>
       </el-table>
 
-      <h4>已删除路由 <span class="text-xs text-gray-500 ml-2 font-normal">已经不存在于当前项目的路由中，确定同步后会自动从apis表删除</span></h4>
+      <h4>{{ t('view.api.deletedRouteNote1') }} <span class="text-xs text-gray-500 ml-2 font-normal">{{ t('view.api.deletedRouteNote2') }}</span></h4>
       <el-table
         :data="syncApiData.deleteApis"
       >
         <el-table-column
           align="left"
-          label="API路径"
+          :label="t('view.api.apiPath')"
           min-width="150"
           prop="path"
         />
         <el-table-column
           align="left"
-          label="API分组"
+          :label="t('view.api.apiGrouping')"
           min-width="150"
           prop="apiGroup"
         />
         <el-table-column
           align="left"
-          label="API简介"
+          :label="t('view.api.apiDescription')"
           min-width="150"
           prop="description"
         />
         <el-table-column
           align="left"
-          label="请求"
+          :label="t('general.request')"
           min-width="150"
           prop="method"
         >
@@ -325,31 +325,31 @@
         </el-table-column>
       </el-table>
 
-      <h4>忽略路由 <span class="text-xs text-gray-500 ml-2 font-normal">忽略路由不参与api同步，常见为不需要进行鉴权行为的路由</span></h4>
+      <h4>{{ t('view.api.ignoreRouteNote1') }} <span class="text-xs text-gray-500 ml-2 font-normal">{{ t('view.api.ignoreRouteNote2') }}</span></h4>
       <el-table
         :data="syncApiData.ignoreApis"
       >
         <el-table-column
           align="left"
-          label="API路径"
+          :label="t('view.api.apiPath')"
           min-width="150"
           prop="path"
         />
         <el-table-column
           align="left"
-          label="API分组"
+          :label="t('view.api.apiGrouping')"
           min-width="150"
           prop="apiGroup"
         />
         <el-table-column
           align="left"
-          label="API简介"
+          :label="t('view.api.apiDescription')"
           min-width="150"
           prop="description"
         />
         <el-table-column
           align="left"
-          label="请求"
+          :label="t('general.request')"
           min-width="150"
           prop="method"
         >
@@ -360,13 +360,13 @@
           </template>
         </el-table-column>
         <el-table-column
-          label="操作"
+          :label="t('general.operation')"
           min-width="150"
           fixed="right"
         >
           <template #default="{row}">
             <el-button type="primary" text @click="ignoreApiFunc(row,false)">
-              取消忽略
+              {{ t('view.api.cancelIgnore') }}
             </el-button>
           </template>
         </el-table-column>
@@ -384,13 +384,13 @@
           <span class="text-lg">{{ dialogTitle }}</span>
           <div>
             <el-button @click="closeDialog">
-              取 消
+              {{ t('general.close') }}
             </el-button>
             <el-button
               type="primary"
               @click="enterDialog"
             >
-              确 定
+            {{ t('general.confirm') }}
             </el-button>
           </div>
         </div>
@@ -401,7 +401,7 @@
         ref="apiForm"
         :model="form"
         :rules="rules"
-        label-width="80px"
+        label-width="120px"
       >
         <el-form-item
         :label="t('view.api.path')"
@@ -435,7 +435,7 @@
         >
           <el-select
             v-model="form.apiGroup"
-            placeholder="请选择或新增" allow-create filterable default-first-option
+            :placeholder="t('view.api.selectOrAdd')" allow-create filterable default-first-option
           >
             <el-option
               v-for="item in apiGroupOptions"
@@ -446,7 +446,7 @@
           </el-select>
         </el-form-item>
         <el-form-item
-        :label="t('view.api.apiDescrpition')"
+        :label="t('view.api.apiDescription')"
           prop="description"
         >
           <el-input
@@ -645,9 +645,9 @@ const handleSelectionChange = (val) => {
 }
 
 const onDelete = async() => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
     const ids = apis.value.map(item => item.ID)
@@ -665,9 +665,9 @@ const onDelete = async() => {
   })
 }
 const onFresh = async() => {
-  ElMessageBox.confirm('确定要刷新缓存吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('view.api.cacheConfirmNote'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
     const res = await freshCasbin()
@@ -713,7 +713,7 @@ const initForm = () => {
   }
 }
 
-const dialogTitle = ref('新增Api')
+const dialogTitle = ref(t('view.api.newApi'))
 const dialogFormVisible = ref(false)
 const openDialog = (key) => {
   switch (key) {

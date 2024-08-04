@@ -12,8 +12,7 @@ export const createTemp = (data) => {
   return service({
     url: '/autoCode/createTemp',
     method: 'post',
-    data,
-    responseType: 'blob'
+    data
   })
 }
 

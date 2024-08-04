@@ -123,5 +123,5 @@ export const setBodyPrimaryColor = (  primaryColor, darkMode ) =>{
 const baseUrl = ref(import.meta.env.VITE_BASE_API)
 
 export const getBaseUrl = () => {
-    return  baseUrl.value === "/" ? "" : baseUrl.value + "/"
+    return  baseUrl.value === "/" ? "" : baseUrl.value
 }

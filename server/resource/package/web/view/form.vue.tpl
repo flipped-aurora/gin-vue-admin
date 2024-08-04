@@ -1,24 +1,25 @@
+{{- $top := . -}}
 <template>
   <div>
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
-        <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
+        <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
        {{- if .CheckDataSource}}
-        <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+        <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
           <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
         </el-select>
        {{- else }}
       {{- if eq .FieldType "bool" }}
-          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('general.yes')" :inactive-text="t('general.no')" clearable ></el-switch>
+          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
       {{- if .DictType}}
-           <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('general.pleaseSelect') {{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
+           <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in {{ .DictType }}Options" :key="key" :label="item.label" :value="item.value" />
            </el-select>
       {{- else }}
-          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('general.pleaseEnter') {{.FieldDesc}}" />
+          <el-input v-model="formData.{{.FieldJson}}" :clearable="{{.Clearable}}"  :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" />
       {{- end }}
       {{- end }}
       {{- if eq .FieldType "richtext" }}
@@ -87,9 +88,7 @@ import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
-const { t } = useI18n() // added by mohamed hassan to support multilanguage
-
-{{- if .HasPic }}
+const { t } = useI18n() // added by mohamed hassan to support multilanguage{{- if .HasPic }}
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
 {{- if .HasFile }}
@@ -211,7 +210,7 @@ const save = async() => {
            if (res.code === 0) {
              ElMessage({
                type: 'success',
-               message:  t('general.createUpdateSuccess')
+               message: '创建/更改成功'
              })
            }
        })

@@ -186,7 +186,6 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
-
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({

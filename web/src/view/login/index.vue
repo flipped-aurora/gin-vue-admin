@@ -24,39 +24,41 @@
               <p class="text-center text-sm font-normal text-gray-500 mt-2.5">A management platform using Golang and Vue
               </p>
             </div>
-            <div style="padding-left: 92%; padding-bottom: 20px;">
+            <div class="flex justify-end">
               <el-dropdown
                 trigger="click"
                 @command="handleSetLanguage"
               >
-                <span class="el-dropdown-link">
+                <span class="cursor-pointer mb-2">
                   <img
                     src="@/assets/language.svg" alt = "Languages"
                     style="width: 30px; height: 30px;"
                   >
                 </span>
-                <template #dropdown style="width: 100px">
+                <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item
                       :disabled="$i18n.locale==='en'"
                       command="en"
-                    ><img
-                      src="@/assets/flags/en.svg" alt = "English"
-                      class="img"
-                    >English</el-dropdown-item>
+                    >
+                      <img
+                          src="@/assets/flags/en.svg" alt = "English"
+                          class="w-8 mr-1"
+                      >English
+                      </el-dropdown-item>
                     <el-dropdown-item
                       :disabled="$i18n.locale==='zh'"
                       command="zh"
                     ><img
                       src="@/assets/flags/zh.svg" alt = "中文"
-                      class="img"
+                      class="w-8 mr-1"
                     >中文</el-dropdown-item>
                     <el-dropdown-item
                       :disabled="$i18n.locale==='ar'"
                       command="ar"
                     ><img
                       src="@/assets/flags/ar.svg" alt = "العربية"
-                      class="img"
+                      class="w-8 mr-1"
                     >العربية</el-dropdown-item>
                   </el-dropdown-menu>
                 </template>

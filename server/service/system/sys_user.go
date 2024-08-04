@@ -214,6 +214,10 @@ func (userService *UserService) GetUserInfo(uuid uuid.UUID) (user system.SysUser
 		return reqUser, err
 	}
 	MenuServiceApp.UserAuthorityDefaultRouter(&reqUser)
+	for i := range reqUser.Authorities {
+		reqUser.Authorities[i].AuthorityName = global.Translate(reqUser.Authorities[i].AuthorityName)
+	}
+	reqUser.Authority.AuthorityName = global.Translate(reqUser.Authority.AuthorityName)
 	return reqUser, err
 }
 

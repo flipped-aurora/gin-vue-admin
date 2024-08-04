@@ -216,7 +216,8 @@
 				"search" : "Search",
 				"systemSettings" : "System Settings",
 				"refresh" : "Refresh",
-				"" : ""
+				"changeLanguage": "Change Language",
+				"videoTutorial": "Video Tutorial"
 			},
 			"setting" : {
 				"defaultTheme" : "Default Theme",
@@ -417,7 +418,7 @@
 				"addDictEntry" : "Add dictionary entry",
 				"enterDisplayValue" : "Please enter a display value",
 				"enterDictValue" : "Please enter a dictionary value",
-				"enterExtendedValue" : "Please enter extended value", 
+				"enterExtendedValue" : "Please enter extended value",
 				"addDictionaryItem" : "Add Dictionary Item",
 				"editDictionaryItem" : "Edit Dictionary Item"
 			}

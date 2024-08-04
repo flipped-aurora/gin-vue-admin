@@ -50,38 +50,38 @@ func (r *AutoCode) Apis() []model.SysApi {
 	return []model.SysApi{
 		{
 			Path:        "/" + r.Abbreviation + "/" + "create" + r.StructName,
-			Description: "新增" + r.Description,
-			ApiGroup:    r.Description,
+			Description: fmt.Sprintf("system.api.desc.%s%s%s", "add", r.Package, r.StructName),
+			ApiGroup:    fmt.Sprintf("system.api.group.%s%s", r.Package, r.StructName),
 			Method:      "POST",
 		},
 		{
 			Path:        "/" + r.Abbreviation + "/" + "delete" + r.StructName,
-			Description: "删除" + r.Description,
-			ApiGroup:    r.Description,
+			Description: fmt.Sprintf("system.api.desc.%s%s%s", "delete", r.Package, r.StructName),
+			ApiGroup:    fmt.Sprintf("system.api.group.%s%s", r.Package, r.StructName),
 			Method:      "DELETE",
 		},
 		{
 			Path:        "/" + r.Abbreviation + "/" + "delete" + r.StructName + "ByIds",
-			Description: "批量删除" + r.Description,
-			ApiGroup:    r.Description,
+			Description: fmt.Sprintf("system.api.desc.%s%s%s", "batch", r.Package, r.StructName),
+			ApiGroup:    fmt.Sprintf("system.api.group.%s%s", r.Package, r.StructName),
 			Method:      "DELETE",
 		},
 		{
 			Path:        "/" + r.Abbreviation + "/" + "update" + r.StructName,
-			Description: "更新" + r.Description,
-			ApiGroup:    r.Description,
+			Description: fmt.Sprintf("system.api.desc.%s%s%s", "update", r.Package, r.StructName),
+			ApiGroup:    fmt.Sprintf("system.api.group.%s%s", r.Package, r.StructName),
 			Method:      "PUT",
 		},
 		{
 			Path:        "/" + r.Abbreviation + "/" + "find" + r.StructName,
-			Description: "根据ID获取" + r.Description,
-			ApiGroup:    r.Description,
+			Description: fmt.Sprintf("system.api.desc.%s%s%s", "find", r.Package, r.StructName),
+			ApiGroup:    fmt.Sprintf("system.api.group.%s%s", r.Package, r.StructName),
 			Method:      "GET",
 		},
 		{
 			Path:        "/" + r.Abbreviation + "/" + "get" + r.StructName + "List",
-			Description: "获取" + r.Description + "列表",
-			ApiGroup:    r.Description,
+			Description: fmt.Sprintf("system.api.desc.%s%s%s", "list", r.Package, r.StructName),
+			ApiGroup:    fmt.Sprintf("system.api.group.%s%s", r.Package, r.StructName),
 			Method:      "GET",
 		},
 	}
@@ -98,7 +98,7 @@ func (r *AutoCode) Menu(template string) model.SysBaseMenu {
 		Name:      r.Abbreviation,
 		Component: component,
 		Meta: model.Meta{
-			Title: r.Description,
+			Title: fmt.Sprintf("system.menu.%s%s", r.Package, r.StructName),
 		},
 	}
 }

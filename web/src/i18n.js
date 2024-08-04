@@ -1,7 +1,4 @@
 import { createI18n } from 'vue-i18n'
-import elementEnLocale from 'element-plus/es/locale/lang/en' // english lang
-import elementZhLocale from 'element-plus/es/locale/lang/zh-cn'// chinese lang
-import elementArLocale from 'element-plus/es/locale/lang/ar'// arabic lang
 import enLocale from './locales/en.json'
 import zhLocale from './locales/zh.json'
 import arLocale from './locales/ar.json'
@@ -10,15 +7,12 @@ import Cookies from 'js-cookie'
 const messages = {
   en: {
     ...enLocale,
-    ...elementEnLocale
   },
   zh: {
     ...zhLocale,
-    ...elementZhLocale
   },
   ar: {
     ...arLocale,
-    ...elementArLocale
   }
 }
 

@@ -46,7 +46,7 @@ func (apiService *ApiService) GetApiGroups() (groups []string, groupApiMap map[s
 		if newGroup {
 			groups = append(groups, apis[i].ApiGroup)
 		}
-		groupApiMap[pathArr[1]] = apis[i].ApiGroup
+		groupApiMap[pathArr[1]] = global.Translate(apis[i].ApiGroup)
 	}
 	return
 }
@@ -225,6 +225,10 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 		}
 	}
 	err = db.Order(OrderStr).Find(&apiList).Error
+	for i := range apiList {
+		apiList[i].Description = global.Translate(apiList[i].Description)
+		apiList[i].ApiGroup = global.Translate(apiList[i].ApiGroup)
+	}
 	return apiList, total, err
 }
 
@@ -235,6 +239,13 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 
 func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
 	err = global.GVA_DB.Order("id desc").Find(&apis).Error
+	if err != nil {
+		return nil, err
+	}
+	for i := range apis {
+		apis[i].Description = global.Translate(apis[i].Description)
+		apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+	}
 	return
 }
 

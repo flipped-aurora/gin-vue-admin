@@ -3,7 +3,6 @@ package system
 import (
 	"context"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -46,12 +45,12 @@ func (i *initDict) InitializeData(ctx context.Context) (next context.Context, er
 	}
 	True := true
 	entities := []sysModel.SysDictionary{
-		{Name: global.Translate("system.dictionary.gender"), Type: "gender", Status: &True, Desc: global.Translate("system.dictionary.genderDict")},
-		{Name: global.Translate("system.dictionary.intType"), Type: "int", Status: &True, Desc: global.Translate("system.dictionary.intTypeDict")},
-		{Name: global.Translate("system.dictionary.timeDateType"), Type: "time.Time", Status: &True, Desc: global.Translate("system.dictionary.timeDateTypeDict")},
-		{Name: global.Translate("system.dictionary.floatType"), Type: "float64", Status: &True, Desc: global.Translate("system.dictionary.floatType")},
-		{Name: global.Translate("system.dictionary.stringType"), Type: "string", Status: &True, Desc: global.Translate("system.dictionary.stringType")},
-		{Name: global.Translate("system.dictionary.boolType"), Type: "bool", Status: &True, Desc: global.Translate("system.dictionary.boolType")},
+		{Name: "system.dictionary.gender", Type: "gender", Status: &True, Desc: "system.dictionary.genderDict"},
+		{Name: "system.dictionary.intType", Type: "int", Status: &True, Desc: "system.dictionary.intTypeDict"},
+		{Name: "system.dictionary.timeDateType", Type: "time.Time", Status: &True, Desc: "system.dictionary.timeDateTypeDict"},
+		{Name: "system.dictionary.floatType", Type: "float64", Status: &True, Desc: "system.dictionary.floatType"},
+		{Name: "system.dictionary.stringType", Type: "string", Status: &True, Desc: "system.dictionary.stringType"},
+		{Name: "system.dictionary.boolType", Type: "bool", Status: &True, Desc: "system.dictionary.boolType"},
 	}
 
 	if err = db.Create(&entities).Error; err != nil {

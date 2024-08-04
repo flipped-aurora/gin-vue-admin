@@ -15,6 +15,7 @@ import (
 	"go/token"
 	"gorm.io/gorm"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -27,6 +28,7 @@ type autoCodeTemplate struct{}
 // Create 创建生成自动化代码
 func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) error {
 	history := info.History()
+	i18nJson := ""
 	var autoPkg model.SysAutoCodePackage
 	err := global.GVA_DB.WithContext(ctx).Where("package_name = ?", info.Package).First(&autoPkg).Error
 	if err != nil {
@@ -73,9 +75,19 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			}
 			return nil
 		})
+
 		if err != nil {
 			return err
 		}
+		apiDescJson, err := s.getDescriptionJson(info)
+		if err != nil {
+			return err
+		}
+		getGroupJson, err := s.getGroupJson(info)
+		if err != nil {
+			return err
+		}
+		i18nJson, err = s.mergeJSON(getGroupJson, apiDescJson)
 	}
 
 	// 自动创建menu
@@ -94,6 +106,29 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			}
 		}
 		history.MenuID = id
+		menuJson, err := s.getMenuJson(info)
+		if err != nil {
+			return err
+		}
+		i18nJson, err = s.mergeJSON(menuJson, i18nJson)
+		if err != nil {
+			return err
+		}
+
+	}
+
+	if i18nJson != "" {
+		localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
+		files, err := s.readJSONFiles(localPath)
+		if err != nil {
+			return err
+		}
+		for _, file := range files {
+			err = s.reWriteI18nJson(file, i18nJson)
+			if err != nil {
+				return err
+			}
+		}
 	}
 
 	// 创建历史记录
@@ -106,6 +141,26 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	err = AutocodeHistory.Create(ctx, history)
 	if err != nil {
 		return err
+	}
+
+	webI18nJson, err := s.createJson(info)
+
+	if err != nil {
+		return err
+	}
+
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+
+	files, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range files {
+		err := s.reWriteI18nJson(file, webI18nJson)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
@@ -295,5 +350,160 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 		return err
 	}
 
+	return nil
+}
+
+func (s *autoCodeTemplate) mergeJSON(json1, json2 string) (string, error) {
+	var obj1 map[string]interface{}
+	var obj2 map[string]interface{}
+
+	err := json.Unmarshal([]byte(json1), &obj1)
+	if err != nil {
+		return "", err
+	}
+
+	err = json.Unmarshal([]byte(json2), &obj2)
+	if err != nil {
+		return "", err
+	}
+
+	s.merge(obj1, obj2)
+
+	mergedJSON, err := json.MarshalIndent(obj1, "", "    ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(mergedJSON), nil
+}
+
+func (s *autoCodeTemplate) merge(dst, src map[string]interface{}) {
+	for key, value := range src {
+		if dstValue, ok := dst[key]; ok {
+			if dstMap, ok := dstValue.(map[string]interface{}); ok {
+				if srcMap, ok := value.(map[string]interface{}); ok {
+					s.merge(dstMap, srcMap)
+					continue
+				}
+			}
+		}
+		dst[key] = value
+	}
+}
+
+func (s *autoCodeTemplate) readJSONFiles(dir string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+func (s *autoCodeTemplate) createJson(info request.AutoCode) (string, error) {
+	// 创建一个新的map来表示你想要的JSON结构
+	data := make(map[string]interface{})
+	fieldsData := make(map[string]interface{})
+	for _, field := range info.Fields {
+		fieldsData[field.FieldName] = field.FieldDesc
+	}
+	data[info.Package] = map[string]interface{}{
+		info.StructName: fieldsData,
+	}
+
+	// 使用json.Marshal函数将这个map转换为JSON
+	jsonBytes, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonBytes), nil
+}
+
+func (s *autoCodeTemplate) getDescriptionJson(info request.AutoCode) (string, error) {
+	data := map[string]interface{}{
+		"system": map[string]interface{}{
+			"api": map[string]interface{}{
+				"desc": map[string]interface{}{
+					fmt.Sprintf("add%s%s", info.Package, info.StructName):    fmt.Sprintf("%s%s", "add", info.Description),
+					fmt.Sprintf("delete%s%s", info.Package, info.StructName): fmt.Sprintf("%s%s", "delete", info.Description),
+					fmt.Sprintf("batch%s%s", info.Package, info.StructName):  fmt.Sprintf("%s%s", "batch", info.Description),
+					fmt.Sprintf("update%s%s", info.Package, info.StructName): fmt.Sprintf("%s%s", "update", info.Description),
+					fmt.Sprintf("find%s%s", info.Package, info.StructName):   fmt.Sprintf("%s%s", "find", info.Description),
+					fmt.Sprintf("list%s%s", info.Package, info.StructName):   fmt.Sprintf("%s%s", "list", info.Description),
+				},
+			},
+		},
+	}
+
+	// 使用json.MarshalIndent函数将这个map转换为JSON
+	jsonBytes, err := json.MarshalIndent(data, "", "    ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonBytes), nil
+}
+
+func (s *autoCodeTemplate) getGroupJson(info request.AutoCode) (string, error) {
+	data := map[string]interface{}{
+		"system": map[string]interface{}{
+			"api": map[string]interface{}{
+				"group": map[string]interface{}{
+					fmt.Sprintf("%s%s", info.Package, info.StructName): info.Description,
+				},
+			},
+		},
+	}
+
+	// 使用json.MarshalIndent函数将这个map转换为JSON
+	jsonBytes, err := json.MarshalIndent(data, "", "    ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonBytes), nil
+}
+
+func (s *autoCodeTemplate) getMenuJson(info request.AutoCode) (string, error) {
+	data := map[string]interface{}{
+		"system": map[string]interface{}{
+			"menu": map[string]interface{}{
+				fmt.Sprintf("%s%s", info.Package, info.StructName): info.Description,
+			},
+		},
+	}
+
+	// 使用json.MarshalIndent函数将这个map转换为JSON
+	jsonBytes, err := json.MarshalIndent(data, "", "    ")
+	if err != nil {
+		return "", err
+	}
+
+	return string(jsonBytes), nil
+}
+
+func (s *autoCodeTemplate) reWriteI18nJson(file string, i18nJson string) error {
+	data, err := os.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	originJson := string(data)
+	newJson, err := s.mergeJSON(originJson, i18nJson)
+	if err != nil {
+		return err
+	}
+	err = os.WriteFile(file, []byte(newJson), 0666)
+	if err != nil {
+		return err
+	}
 	return nil
 }

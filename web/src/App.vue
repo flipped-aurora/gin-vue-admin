@@ -1,20 +1,32 @@
 <template>
   <div id="app" class="bg-gray-50 text-slate-700 dark:text-slate-500  dark:bg-slate-800">
-    <el-config-provider :locale="zhCn">
+    <el-config-provider :locale="languages[locale]">
       <router-view />
     </el-config-provider>
   </div>
 </template>
 
 <script setup>
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import zh from 'element-plus/dist/locale/zh-cn.mjs'
+import en from 'element-plus/dist/locale/en.mjs'
+import ar from 'element-plus/dist/locale/ar.mjs'
 // element 2.3.8之前使用下面的语句
 // import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import {useAppStore} from "@/pinia";
+import { useI18n } from 'vue-i18n'
+
 useAppStore()
 defineOptions({
   name: 'App'
 })
+
+const languages = {
+  'zh-cn': zh,
+  'en': en,
+  'ar': ar
+}
+
+const { locale } = useI18n()
 
 </script>
 <style lang="scss">

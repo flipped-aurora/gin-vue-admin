@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	sysModel "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/system"
 	"github.com/pkg/errors"
@@ -52,8 +51,8 @@ func (i *initDictDetail) InitializeData(ctx context.Context) (context.Context, e
 	}
 	True := true
 	dicts[0].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
-		{Label: global.Translate("system.dictionary_detail.male"), Value: "1", Status: &True, Sort: 1},
-		{Label: global.Translate("system.dictionary_detail.female"), Value: "2", Status: &True, Sort: 2},
+		{Label: "system.dictionary_detail.male", Value: "1", Status: &True, Sort: 1},
+		{Label: "system.dictionary_detail.female", Value: "2", Status: &True, Sort: 2},
 	}
 
 	dicts[1].SysDictionaryDetails = []sysModel.SysDictionaryDetail{
@@ -116,7 +115,7 @@ func (i *initDictDetail) DataInserted(ctx context.Context) bool {
 	}
 	var dict sysModel.SysDictionary
 	if err := db.Preload("SysDictionaryDetails").
-		First(&dict, &sysModel.SysDictionary{Name: "数据库bool类型"}).Error; err != nil {
+		First(&dict, &sysModel.SysDictionary{Name: "system.dictionary.boolType"}).Error; err != nil {
 		return false
 	}
 	return len(dict.SysDictionaryDetails) > 0 && dict.SysDictionaryDetails[0].Label == "tinyint"

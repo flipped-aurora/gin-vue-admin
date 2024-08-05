@@ -64,11 +64,9 @@
       :disabled="appStore.theme === 'auto'"
     >
       <SelectLang>
-        <template v-slot:info>
           <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleLang">
             <language />
           </el-icon>
-        </template>
       </SelectLang>
     </el-tooltip>
 

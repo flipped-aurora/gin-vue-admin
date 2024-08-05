@@ -82,7 +82,7 @@
       placement="bottom"
       :disabled="appStore.theme === 'auto'"
     >
-      <SelectLang>
+      <SelectLang @success="changeSuccess">
           <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleLang">
             <language />
           </el-icon>
@@ -104,7 +104,7 @@ import CommandMenu from "@/components/commandMenu/index.vue";
 import { useI18n } from 'vue-i18n'
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-import SelectLang from '@/components/i18n/selctLanguage.vue'
+import SelectLang from '@/components/i18n/selectLanguage.vue'
 
 const appStore = useAppStore()
 const showSettingDrawer = ref(false)
@@ -148,6 +148,10 @@ const initPage = () => {
 
 
 initPage();
+
+const changeSuccess = () => {
+  window.location.reload();
+}
 
 
 const videoList = [

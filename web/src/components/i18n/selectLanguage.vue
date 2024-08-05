@@ -44,17 +44,11 @@ const i18n = useI18n() // added by mohamed hassan to support multilanguage
 const {t} = useI18n() // added by mohamed hassan to support multilanguage
 import {useUserStore} from '@/pinia/modules/user'
 
-import {emitter} from "@/utils/bus";
-
 const userStore = useUserStore()
 
-const toggleRefresh = () =>{
-  emitter.emit('reload')
-  setTimeout(() => {
-  }, 300);
-}
+const emit = defineEmits(["success"])
+
 const handleSetLanguage = (lang) => {
-  toggleRefresh()
   i18n.locale.value = lang
   userStore.setLanguage(lang)
   Cookies.set('language', lang)
@@ -63,8 +57,7 @@ const handleSetLanguage = (lang) => {
     message: t('general.langSwitch'),
     type: 'success'
   })
-
-
+  emit('success')
 }
 
 </script>

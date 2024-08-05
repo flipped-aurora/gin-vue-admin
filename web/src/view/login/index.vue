@@ -172,7 +172,7 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
-import SelectLang from '@/components/i18n/selctLanguage.vue'
+import SelectLang from '@/components/i18n/selectLanguage.vue'
 
 
 defineOptions({

@@ -383,7 +383,23 @@
 			"title": "早安，管理员，请开始一天的工作吧",
 			"todaysTraffic": "今日流量",
 			"totalNumberOfUsers": "总用户数",
-			"userManage": "用户管理"
+			"userManage": "用户管理",
+			"components" : {
+				"card" : {
+					"seeMore" : "查看更多"
+				},
+				"table" : {
+					"ranking" : "排名",
+					"contentTitle" : "内容标题",
+					"attention" : "关注度",
+					"content1" : "更简洁的使用界面，更快速的操作体验",
+					"content2" : "更优质的服务，更便捷的使用体验",
+					"content3" : "更快速的创意实现，更高效的工作效率",
+					"content4" : "更多的创意资源，更多的创意灵感",
+					"content5" : "更合理的代码结构，更清晰的代码逻辑",
+					"" : ""
+				}
+			}
 		},
 		"api" : {
 			"path" : "路径",

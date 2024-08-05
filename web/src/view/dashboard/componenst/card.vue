@@ -15,7 +15,7 @@
         {{ title }}
       </div>
       <div v-if="showAction" class="text-sm text-active cursor-pointer">
-        查看更多
+        {{ t('view.dashboard.components.card.seeMore') }}
       </div>
     </div>
     <div class="mt-2">
@@ -25,6 +25,10 @@
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
 defineProps({
   title: {
     type: String,

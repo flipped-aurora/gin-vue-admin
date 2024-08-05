@@ -383,7 +383,23 @@
 			"title": "Good morning, admin, please start your day",
 			"todaysTraffic": "Today's traffic",
 			"totalNumberOfUsers": "Number of users",
-			"userManage": "User management"
+			"userManage": "User management",
+			"components" : {
+				"card" : {
+					"seeMore" : "See more"
+				},
+				"table" : {
+					"ranking" : "Ranking",
+					"contentTitle" : "Content Title",
+					"attention" : "Attention",
+					"content1" : "Simpler user interface, faster operation experience",
+					"content2" : "Better service, more convenient user experience",
+					"content3" : "Faster creative realization and more efficient work efficiency",
+					"content4" : "More creative resources, more creative inspiration",
+					"content5" : "More reasonable code structure, clearer code logic",
+					"" : ""
+				}
+			}
 		},
 		"api" : {
 			"path" : "Path",

@@ -430,7 +430,8 @@
 				"enterDictNameEn" : "Please enter a dictionary name (English)",
 				"enterDescription" : "Please enter a description",
 				"addDictionary" : "Add Dictionary",
-				"editDictionary" : "Edit Dictionary"
+				"editDictionary" : "Edit Dictionary",
+				"listOfDictionaries" : "List of dictionaries"
 			},
 			"sysDictionaryDetail" : {
 				"displayValue" : "Display value",
@@ -442,7 +443,8 @@
 				"enterDictValue" : "Please enter a dictionary value",
 				"enterExtendedValue" : "Please enter extended value",
 				"addDictionaryItem" : "Add Dictionary Item",
-				"editDictionaryItem" : "Edit Dictionary Item"
+				"editDictionaryItem" : "Edit Dictionary Item",
+				"dictionaryDetails" : "Dictionary details"
 			}
 		},
 		"operation" : {

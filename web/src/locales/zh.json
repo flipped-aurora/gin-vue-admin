@@ -430,7 +430,8 @@
 				"enterDictNameEn" : "请输入字典名（英)",
 				"enterDescription" : "请输入描述",
 				"addDictionary" : "添加字典",
-				"editDictionary" : "修改字典"
+				"editDictionary" : "修改字典",
+				"listOfDictionaries" : "字典列表"
 			},
 			"sysDictionaryDetail" : {
 				"displayValue" : "展示值",
@@ -442,7 +443,8 @@
 				"enterDictValue" : "请输入字典值",
 				"enterExtendedValue" : "请输入扩展值",
 				"addDictionaryItem" : "添加字典项",
-				"editDictionaryItem" : "修改字典项"
+				"editDictionaryItem" : "修改字典项",
+				"dictionaryDetails" : "字典详细内容"
 			}
 		},
 		"operation" : {

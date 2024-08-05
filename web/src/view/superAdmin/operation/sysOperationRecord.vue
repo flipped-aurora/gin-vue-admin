@@ -66,13 +66,7 @@
             <div>{{ scope.row.user.userName }}({{ scope.row.user.nickName }})</div>
           </template>
         </el-table-column>
-        <el-table-column
-          align="left"
-          :label="t('general.createdAt')"
-          width="180"
-        >
-          <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
-        </el-table-column>
+
         <el-table-column
           align="left"
           :label="t('view.operation.sysOperationRecord.statusCode')"
@@ -95,7 +89,7 @@
           align="left"
           :label="t('view.operation.sysOperationRecord.requestMethod')"
           prop="method"
-          width="120"
+          width="140"
         />
         <el-table-column
           align="left"
@@ -107,7 +101,7 @@
           align="left"
           :label="t('general.request')"
           prop="path"
-          width="80"
+          width="100"
         >
           <template #default="scope">
             <div>
@@ -132,7 +126,7 @@
           align="left"
           :label="t('view.operation.sysOperationRecord.response')"
           prop="path"
-          width="80"
+          width="100"
         >
           <template #default="scope">
             <div>
@@ -152,6 +146,15 @@
             </div>
           </template>
         </el-table-column>
+
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
+          <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
+        </el-table-column>
+
         <el-table-column
           align="left"
           :label="t('general.operations')"

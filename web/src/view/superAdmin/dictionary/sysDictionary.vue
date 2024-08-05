@@ -4,7 +4,7 @@
     <div class="flex gap-4 p-2">
       <div class="flex-none w-52 bg-white text-slate-700 dark:text-slate-400  dark:bg-slate-900 rounded p-4">
         <div class="flex justify-between items-center">
-          <span class="text font-bold">字典列表</span>
+          <span class="text font-bold">{{ t('view.dictionary.sysDictionary.listOfDictionaries') }}</span>
           <el-button type="primary" @click="openDrawer">
             {{ t('general.add') }}
           </el-button>

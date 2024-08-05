@@ -2,7 +2,7 @@
   <div>
     <div class="gva-table-box">
       <div class="gva-btn-list justify-between">
-        <span class="text font-bold">字典详细内容</span>
+        <span class="text font-bold">{{ t('view.dictionary.sysDictionaryDetail.dictionaryDetails') }}</span>
         <el-button
           type="primary"
           icon="plus"
@@ -22,26 +22,17 @@
           type="selection"
           width="55"
         />
-        <el-table-column
-          align="left"
-          :label="t('general.createdAt')"
-          width="180"
-        >
-          <template #default="scope">
-            {{ formatDate(scope.row.CreatedAt) }}
-          </template>
-        </el-table-column>
-
-        <el-table-column
-          align="left"
-          :label="t('view.dictionary.sysDictionaryDetail.displayValue')"
-          prop="label"
-        />
 
         <el-table-column
           align="left"
           :label="t('view.dictionary.sysDictionaryDetail.dictValue')"
           prop="value"
+        />
+        
+        <el-table-column
+          align="left"
+          :label="t('view.dictionary.sysDictionaryDetail.displayValue')"
+          prop="label"
         />
 
         <el-table-column
@@ -54,7 +45,7 @@
           align="left"
           :label="t('view.dictionary.sysDictionaryDetail.enabledStatus')"
           prop="status"
-          width="120"
+          width="140"
         >
           <template #default="scope">
             {{ formatBoolean(scope.row.status) }}
@@ -67,6 +58,16 @@
           prop="sort"
           width="120"
         />
+
+        <el-table-column
+          align="left"
+          :label="t('general.createdAt')"
+          width="180"
+        >
+          <template #default="scope">
+            {{ formatDate(scope.row.CreatedAt) }}
+          </template>
+        </el-table-column>
 
         <el-table-column
           align="left"
@@ -118,10 +119,10 @@
           <span class="text-lg">{{ type==='create' ? t('view.dictionary.sysDictionaryDetail.addDictionaryItem') : t('view.dictionary.sysDictionaryDetail.editDictionaryItem') }}</span>
           <div>
             <el-button @click="closeDrawer">
-              取 消
+              {{ t('general.close') }}
             </el-button>
             <el-button type="primary" @click="enterDrawer">
-              确 定
+              {{ t('general.confirm') }}
             </el-button>
           </div>
         </div>
@@ -130,7 +131,7 @@
         ref="drawerForm"
         :model="formData"
         :rules="rules"
-        label-width="110px"
+        label-width="140px"
       >
         <el-form-item
           :label="t('view.dictionary.sysDictionaryDetail.displayValue')"

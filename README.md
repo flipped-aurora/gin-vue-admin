@@ -1,8 +1,5 @@
 
 <div align=center>
-<img src="http://qmplusimg.henrongyi.top/gvalogo.jpg" width="300" height="300" />
-</div>
-<div align=center>
 <img src="https://img.shields.io/badge/golang-1.20-blue"/>
 <img src="https://img.shields.io/badge/gin-1.9.1-lightBlue"/>
 <img src="https://img.shields.io/badge/vue-3.3.4-brightgreen"/>

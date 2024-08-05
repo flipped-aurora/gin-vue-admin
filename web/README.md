@@ -1,5 +1,9 @@
 # gin-vue-admin web 
 
+### 1.开发日志
+
+### 2.部署更新
+
 ## Project setup
 ```
 npm install

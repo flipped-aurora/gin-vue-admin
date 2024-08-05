@@ -3,7 +3,7 @@
       trigger="click"
       @command="handleSetLanguage"
   >
-    <slot name="info"></slot>
+    <slot></slot>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

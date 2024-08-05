@@ -105,7 +105,6 @@ service.interceptors.response.use(
       })
       return
     }
-
     switch (error.response.status) {
       case 500:
         ElMessageBox.confirm(`
@@ -114,8 +113,8 @@ service.interceptors.response.use(
         `, '接口报错', {
           dangerouslyUseHTMLString: true,
           distinguishCancelAndClose: true,
-          confirmButtonText: i18n.t('general.confirm'),
-          cancelButtonText: i18n.t('general.cancel')
+          confirmButtonText: i18n.global.t('general.confirm'),
+          cancelButtonText: i18n.global.t('general.cancel')
         })
           .then(() => {
             const userStore = useUserStore()
@@ -130,8 +129,8 @@ service.interceptors.response.use(
           `, '接口报错', {
           dangerouslyUseHTMLString: true,
           distinguishCancelAndClose: true,
-          confirmButtonText: i18n.t('general.confirm'),
-          cancelButtonText: i18n.t('general.cancel')
+          confirmButtonText: i18n.global.t('general.confirm'),
+          cancelButtonText: i18n.global.t('general.cancel')
         })
         break
       case 401:

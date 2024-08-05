@@ -6,6 +6,25 @@
 <template>
   <div class="flex items-center mx-4 gap-4">
     <el-tooltip
+        class=""
+        effect="dark"
+        :content="t('layout.tools.videoTutorial')"
+        placement="bottom"
+    >
+      <el-dropdown @command="toDoc">
+      <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 dark:border-gray-600 cursor-pointer border-solid">
+        <Film />
+      </el-icon>
+
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item v-for="item in videoList" :key="item.link" :command="item.link">{{ item.title }}</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+      </el-dropdown>
+    </el-tooltip>
+
+    <el-tooltip
       class=""
       effect="dark"
       :content="t('layout.tools.search')"
@@ -131,7 +150,64 @@ const initPage = () => {
 initPage();
 
 
-
+const videoList = [
+  {
+    title:"1.clone项目和安装依赖",
+    link:"https://www.bilibili.com/video/BV1jx4y1s7xx",
+  },
+  {
+    title:"2.初始化项目",
+    link:"https://www.bilibili.com/video/BV1sr421K7sv",
+  },
+  {
+    title:"3.开启调试工具+创建初始化包",
+    link:"https://www.bilibili.com/video/BV1iH4y1c7Na",
+  },
+  {
+    title:"4.手动使用自动化创建功能",
+    link:"https://www.bilibili.com/video/BV1UZ421T7fV",
+  },
+  {
+    title:"5.使用已有表格创建业务",
+    link:"https://www.bilibili.com/video/BV1NE4m1977s",
+  },
+  {
+    title:"6.使用AI创建业务和创建数据源模式的可选项",
+    link:"https://www.bilibili.com/video/BV17i421a7DE",
+  },
+  {
+    title:"7.创建自己的后端方法",
+    link:"https://www.bilibili.com/video/BV1Yw4m1k7fg",
+  },
+  {
+    title:"8.新增一个前端页面",
+    link:"https://www.bilibili.com/video/BV12y411i7oE",
+  },
+  {
+    title:"9.配置一个前端二级页面",
+    link:"https://www.bilibili.com/video/BV1ZM4m1y7i3",
+  },
+  {
+    title:"10.配置一个前端菜单参数",
+    link:"https://www.bilibili.com/video/BV1WS42197DZ",
+  },
+  {
+    title:"11.菜单参数实战+动态菜单标题+菜单高亮配置",
+    link:"https://www.bilibili.com/video/BV1Bb421J7oW",
+  },
+  {
+    title:"12.增加菜单可控按钮",
+    link:"https://www.bilibili.com/video/BV1Sw4m1k746",
+  },
+  {
+    title:"14.新增客户角色和其相关配置教学",
+    link:"https://www.bilibili.com/video/BV1Ki421a7X2",
+  },
+  {
+    title:"15.发布项目上线",
+    link:"https://www.bilibili.com/video/BV1Lx4y1s77D",
+  }
+]
 
 
 </script>

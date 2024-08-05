@@ -9,16 +9,6 @@
         >
         {{ t('menu.addRootMenu') }}
         </el-button>
-        <el-icon
-          class="cursor-pointer"
-          @click="
-            toDoc(
-              'https://www.bilibili.com/video/BV1kv4y1g7nT/?p=4&vd_source=f2640257c21e3b547a790461ed94875e'
-            )
-          "
-        >
-          <VideoCameraFilled />
-        </el-icon>
       </div>
 
       <!-- 由于此处菜单跟左侧列表一一对应所以不需要分页 pageSize默认999 -->
@@ -272,7 +262,7 @@
         <el-row class="w-full">
           <el-col :span="8">
             <el-form-item
-              label="父节点ID"
+              :label="t('menu.parentId')"
             >
               <el-cascader
                 v-model="form.parentId"
@@ -293,7 +283,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item
-              label="图标"
+              :label="t('menu.icon')"
               prop="meta.icon"
             >
               <icon
@@ -303,7 +293,7 @@
           </el-col>
           <el-col :span="8">
             <el-form-item
-              label="排序标记"
+              :label="t('general.order')"
               prop="sort"
             >
               <el-input
@@ -320,7 +310,7 @@
             >
               <template #label>
                 <div>
-                  <span> 高亮菜单 </span>
+                  <span> {{ t('menu.highlightMenu') }} </span>
                   <el-tooltip
                     content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
                     placement="top"
@@ -345,15 +335,15 @@
               <el-select
                 v-model="form.meta.keepAlive"
                 style="width: 100%"
-                placeholder="是否keepAlive缓存页面"
+                :placeholder="t('menu.keepAliveNote')"
               >
                 <el-option
                   :value="false"
-                  label="否"
+                  :label="t('general.no')"
                 />
                 <el-option
                   :value="true"
-                  label="是"
+                  :label="t('general.yes')"
                 />
               </el-select>
             </el-form-item>
@@ -366,15 +356,15 @@
               <el-select
                 v-model="form.meta.closeTab"
                 style="width: 100%"
-                placeholder="是否自动关闭tab"
+                :placeholder="t('menu.closeTabNote')"
               >
                 <el-option
                   :value="false"
-                  label="否"
+                  :label="t('general.no')"
                 />
                 <el-option
                   :value="true"
-                  label="是"
+                 :label="t('general.yes')"
                 />
               </el-select>
             </el-form-item>
@@ -385,9 +375,9 @@
             <el-form-item>
               <template #label>
                 <div>
-                  <span> 是否为基础页面 </span>
+                  <span> {{ t('menu.basicPage') }} </span>
                   <el-tooltip
-                    content="此项选择为是，则不会展示左侧菜单以及顶部信息。"
+                    :content="t('menu.basicPageNote')"
                     placement="top"
                     effect="light"
                   >
@@ -399,15 +389,15 @@
               <el-select
                 v-model="form.meta.defaultMenu"
                 style="width: 100%"
-                placeholder="是否为基础页面"
+                :placeholder="t('menu.basicPage')"
               >
                 <el-option
                   :value="false"
-                  label="否"
+                  :label="t('general.no')"
                 />
                 <el-option
                   :value="true"
-                  label="是"
+                  :label="t('general.yes')"
                 />
               </el-select>
             </el-form-item>
@@ -423,16 +413,6 @@
           >
           {{ t('menu.addMenuParameters') }}
           </el-button>
-          <el-icon
-            class="cursor-pointer"
-            @click="
-              toDoc(
-                'https://www.bilibili.com/video/BV1kv4y1g7nT?p=9&vd_source=f2640257c21e3b547a790461ed94875e'
-              )
-            "
-          >
-            <VideoCameraFilled />
-          </el-icon>
         </div>
         <el-table
           :data="form.parameters"
@@ -516,16 +496,6 @@
           >
             <QuestionFilled />
           </el-icon>
-          <el-icon
-            class="cursor-pointer"
-            @click="
-              toDoc(
-                'https://www.bilibili.com/video/BV1kv4y1g7nT?p=11&vd_source=f2640257c21e3b547a790461ed94875e'
-              )
-            "
-          >
-            <VideoCameraFilled />
-          </el-icon>
         </div>
 
         <el-table
@@ -588,7 +558,7 @@ import WarningBar from '@/components/warningBar/warningBar.vue'
 import { canRemoveAuthorityBtnApi } from '@/api/authorityBtn'
 import { reactive, ref, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { QuestionFilled, VideoCameraFilled } from '@element-plus/icons-vue'
+import { QuestionFilled } from '@element-plus/icons-vue'
 import pathInfo from '@/pathInfo.json'
 
 import { toDoc } from '@/utils/doc'

@@ -26,10 +26,10 @@
           <RichEdit v-model="formData.{{.FieldJson}}"/>
       {{- end }}
       {{- if eq .FieldType "int" }}
-          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入" />
+          <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" :placeholder="t('general.pleaseEnter')" />
       {{- end }}
       {{- if eq .FieldType "time.Time" }}
-          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" placeholder="选择日期" :clearable="{{.Clearable}}"></el-date-picker>
+          <el-date-picker v-model="formData.{{ .FieldJson }}" type="date" :placeholder="t('general.selectDate')" :clearable="{{.Clearable}}"></el-date-picker>
       {{- end }}
       {{- if eq .FieldType "float64" }}
           <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>
@@ -59,8 +59,8 @@
        </el-form-item>
       {{- end }}
         <el-form-item>
-          <el-button type="primary" @click="save">保存</el-button>
-          <el-button type="primary" @click="back">返回</el-button>
+          <el-button type="primary" @click="save">{{ "{{ t('general.save') }}" }}</el-button>
+          <el-button type="primary" @click="back">{{ "{{ t('general.back') }}" }}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -86,6 +86,9 @@ import { getDictFunc } from '@/utils/format'
 import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 {{- if .HasPic }}
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}

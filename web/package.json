@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.7.0",
+    "version": "2.7.1",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
@@ -38,8 +38,7 @@
         "vue-echarts": "^6.7.2",
         "vue-router": "^4.3.2",
         "vuedraggable": "^4.1.0",
-        "vue-i18n": "^9.4.1",
-        "js-cookie": "^3.0.5"
+        "vue-i18n": "^9.4.1"
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.22.9",

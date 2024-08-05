@@ -93,10 +93,21 @@
           <div id="shadow"></div>
           <div id="box"></div>
         </div>
-        <div id="loading-text">系统正在加载中，请稍候...</div>
+        <div id="loading-text"></div>
     </div>
     <div id="app"></div>
     <script type="module" src="./src/main.js"></script>
+    <script src="node_modules/js-cookie/dist/js.cookie.js"></script>
+    <script src="src/locales/lang.js"></script>
+    <script>
+        var lang = Cookies.get('language')
+        // 如果没有设置语言，则默认为中文
+        if(i18n[lang]) {
+            document.getElementById("loading-text").innerText = i18n[lang].sysLoading
+        } else{
+            document.getElementById("loading-text").innerText = i18n.zh.sysLoading
+        }
+    </script>
 </body>
 
 </html>

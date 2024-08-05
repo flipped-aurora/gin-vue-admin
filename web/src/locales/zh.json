@@ -341,7 +341,15 @@
 		"userNameLenNote": "最低5位字符",
 		"userNameNote": "请输入用户名",
 		"userRole": "用户角色",
-		"userRoleNote": "请选择用户角色"
+		"userRoleNote": "请选择用户角色",
+		"enable" : "启用",
+		"disable" : "禁用",
+		"enabledSuccessfully" : "启用成功",
+		"disabledSuccessfully" : "禁用成功",
+		"user" : "用户",
+		"enterPhoneNoNote" : "请输入合法手机号",
+		"enterEmailNote" : "请输入正确的邮箱",
+		"" : ""
 	},
 	"view": {
 		"dashboard": {

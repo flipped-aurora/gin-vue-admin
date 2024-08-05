@@ -45,19 +45,19 @@
         />
         <el-table-column
           align="left"
-          label="手机号"
+           :label="t('user.phone')"
           min-width="180"
           prop="phone"
         />
         <el-table-column
           align="left"
-          label="邮箱"
+          :label="t('user.email')"
           min-width="180"
           prop="email"
         />
         <el-table-column
           align="left"
-          label="用户角色"
+           :label="t('user.userRole')"
           min-width="200"
         >
           <template #default="scope">
@@ -75,7 +75,7 @@
         </el-table-column>
         <el-table-column
           align="left"
-          label="启用"
+          :label="t('user.enable')"
           min-width="150"
         >
           <template #default="scope">
@@ -137,7 +137,7 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">用户</span>
+          <span class="text-lg">{{ t('user.user') }}</span>
           <div>
             <el-button @click="closeAddUserDialog">{{ t('general.close') }}</el-button>
             <el-button
@@ -152,42 +152,42 @@
         ref="userForm"
         :rules="rules"
         :model="userInfo"
-        label-width="80px"
+        label-width="120px"
       >
         <el-form-item
           v-if="dialogFlag === 'add'"
-          label="用户名"
+          :label="t('user.userName')"
           prop="userName"
         >
           <el-input v-model="userInfo.userName" />
         </el-form-item>
         <el-form-item
           v-if="dialogFlag === 'add'"
-          label="密码"
+          :label="t('user.password')"
           prop="password"
         >
           <el-input v-model="userInfo.password" />
         </el-form-item>
         <el-form-item
-          label="昵称"
+          :label="t('user.nickName')"
           prop="nickName"
         >
           <el-input v-model="userInfo.nickName" />
         </el-form-item>
         <el-form-item
-          label="手机号"
+          :label="t('user.phone')"
           prop="phone"
         >
           <el-input v-model="userInfo.phone" />
         </el-form-item>
         <el-form-item
-          label="邮箱"
+          :label="t('user.email')"
           prop="email"
         >
           <el-input v-model="userInfo.email" />
         </el-form-item>
         <el-form-item
-          label="用户角色"
+          :label="t('user.userRole')"
           prop="authorityId"
         >
           <el-cascader
@@ -200,7 +200,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="启用"
+          :label="t('user.enable')"
           prop="disabled"
         >
           <el-switch
@@ -211,7 +211,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="头像"
+          :label="t('user.avatar')"
           label-width="80px"
         >
           <SelectImage
@@ -419,10 +419,10 @@ const rules = ref({
     { required: true, message: t('user.nickNameNote'), trigger: 'blur' }
   ],
   phone: [
-    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: '请输入合法手机号', trigger: 'blur' },
+    { pattern: /^1([38][0-9]|4[014-9]|[59][0-35-9]|6[2567]|7[0-8])\d{8}$/, message: t('user.enterPhoneNoNote'), trigger: 'blur' },
   ],
   email: [
-    { pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: '请输入正确的邮箱', trigger: 'blur' },
+    { pattern: /^([0-9A-Za-z\-_.]+)@([0-9a-z]+\.[a-z]{2,3}(\.[a-z]{2})?)$/g, message: t('user.enterEmailNote'), trigger: 'blur' },
   ],
   authorityId: [
     { required: true, message: t('user.userRoleNote'), trigger: 'blur' }
@@ -510,7 +510,7 @@ const switchEnable = async(row) => {
   }
   const res = await setUserInfo(req)
   if (res.code === 0) {
-    ElMessage({ type: 'success', message: `${req.enable === 2 ? '禁用' : '启用'}成功` })
+    ElMessage({ type: 'success', message: `${req.enable === 2 ? t('user.disabledSuccessfully') : t('user.enabledSuccessfully')}` })
     await getTableData()
     userInfo.value.headerImg = ''
     userInfo.value.authorityIds = []

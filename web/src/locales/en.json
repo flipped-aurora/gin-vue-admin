@@ -341,7 +341,15 @@
 		"userNameLenNote": "Username should be 5 character at least.",
 		"userNameNote": "Please enter username",
 		"userRole": "User Role",
-		"userRoleNote": "Please select user role"
+		"userRoleNote": "Please select user role",
+		"enable" : "Enable",
+		"disable" : "Disable",
+		"enabledSuccessfully" : "Enabled Successfully",
+		"disabledSuccessfully" : "Disabled Successfully",
+		"user" : "User",
+		"enterPhoneNoNote" : "Please enter a valid mobile phone number?",
+		"enterEmailNote" : "please enter your vaild email?",
+		"" : ""
 	},
 	"view": {
 		"dashboard": {

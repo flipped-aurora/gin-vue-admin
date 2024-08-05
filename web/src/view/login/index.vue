@@ -25,44 +25,11 @@
               </p>
             </div>
             <div class="flex justify-end">
-              <el-dropdown
-                trigger="click"
-                @command="handleSetLanguage"
-              >
-                <span class="cursor-pointer mb-2">
-                  <img
-                    src="@/assets/language.svg" alt = "Languages"
-                    style="width: 30px; height: 30px;"
-                  >
-                </span>
-                <template #dropdown>
-                  <el-dropdown-menu>
-                    <el-dropdown-item
-                      :disabled="$i18n.locale==='en'"
-                      command="en"
-                    >
-                      <img
-                          src="@/assets/flags/en.svg" alt = "English"
-                          class="w-8 mr-1"
-                      >English
-                      </el-dropdown-item>
-                    <el-dropdown-item
-                      :disabled="$i18n.locale==='zh'"
-                      command="zh"
-                    ><img
-                      src="@/assets/flags/zh.svg" alt = "中文"
-                      class="w-8 mr-1"
-                    >中文</el-dropdown-item>
-                    <el-dropdown-item
-                      :disabled="$i18n.locale==='ar'"
-                      command="ar"
-                    ><img
-                      src="@/assets/flags/ar.svg" alt = "العربية"
-                      class="w-8 mr-1"
-                    >العربية</el-dropdown-item>
-                  </el-dropdown-menu>
-                </template>
-              </el-dropdown>
+              <SelectLang>
+                  <span class="cursor-pointer mb-2">
+                    <img alt="Languages" src="@/assets/language.svg" style="width: 30px; height: 30px;">
+                  </span>
+              </SelectLang>
             </div>
             <el-form
               ref="loginForm"
@@ -203,8 +170,10 @@ import { useUserStore } from '@/pinia/modules/user'
 import Cookies from 'js-cookie' // added by mohamed hassan to support multilanguage
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
-const i18n = useI18n() // added by mohamed hassan to support multilanguage
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+import SelectLang from '@/components/i18n/selctLanguage.vue'
+
 
 defineOptions({
   name: "Login",
@@ -323,41 +292,4 @@ const checkInit = async() => {
   }
 }
 
-const handleSetLanguage = (lang) => {
-  // console.log('handleSetLanguage() called with value: ' + lang)
-  i18n.locale.value = lang
-
-  userStore.setLanguage(lang)
-
-  // console.log('userStore handleSetLanguage() called with value: ' + userStore.getLanguage())
-
-  Cookies.set('language', lang)
-
-  // if (lang === 'ar') {
-  //   console.log('Arabic language selected changing to RTL')
-  //   document.querySelector('html').classList.add('is-rtl')
-  // } else {
-  //   console.log('Non Arabic language selected changing to LTR')
-  //   document.querySelector('html').classList.add('is-ltr')
-  // }
-
-  // const htmlEl = document.querySelector('html')
-
-  // if (this.$i18n.locale === 'ar') {
-  //   console.log('change language to arabic and ltr to rtl')
-  //   htmlEl.setAttribute('dir', 'rtl')
-  // } else {
-  //   console.log('change language to english and rtl to ltr')
-  //   htmlEl.setAttribute('dir', 'ltr')
-  // }
-
-  // htmlEl.setAttribute('lang', lang)
-
-  ElMessage({
-    message: t('general.langSwitch'),
-    type: 'success'
-  })
-
-  // this.$emit('handerevent')
-}
 </script>

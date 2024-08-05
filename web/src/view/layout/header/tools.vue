@@ -82,32 +82,11 @@
       placement="bottom"
       :disabled="appStore.theme === 'auto'"
     >
-      <el-dropdown
-        @command="handleSetLanguage"
-      >
-        <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleLang">
-          <language />
-        </el-icon>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item
-              command="zh"
-            >
-              简体中文
-            </el-dropdown-item>
-            <el-dropdown-item
-              command="en"
-            >
-              English
-            </el-dropdown-item>
-            <el-dropdown-item
-              command="ar"
-            >
-              العربية
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+      <SelectLang>
+          <el-icon class="w-8 h-8 shadow rounded-full border border-gray-200 cursor-pointer border-solid" @click="appStore.toggleLang">
+            <language />
+          </el-icon>
+      </SelectLang>
     </el-tooltip>
 
     <gva-setting v-model:drawer="showSettingDrawer" />
@@ -123,13 +102,9 @@ import { ref } from "vue"
 import { emitter } from "@/utils/bus.js";
 import CommandMenu from "@/components/commandMenu/index.vue";
 import { useI18n } from 'vue-i18n'
-import Cookies from "js-cookie";
-import { useUserStore } from '@/pinia/modules/user'
-import {toDoc} from "@/utils/doc";
-import {ElMessage} from "element-plus"; // added by mohamed hassan to support multilanguage
-const i18n = useI18n() // added by mohamed hassan to support multilanguage
-const userStore = useUserStore()
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+
+import SelectLang from '@/components/i18n/selctLanguage.vue'
 
 const appStore = useAppStore()
 const showSettingDrawer = ref(false)
@@ -171,44 +146,6 @@ const initPage = () => {
   window.addEventListener("keydown", handleKeyDown);
 };
 
-const handleSetLanguage = (lang) => {
-  // console.log('handleSetLanguage() called with value: ' + lang)
-  i18n.locale.value = lang
-
-  userStore.setLanguage(lang)
-
-  // console.log('userStore handleSetLanguage() called with value: ' + userStore.getLanguage())
-
-  Cookies.set('language', lang)
-
-  // if (lang === 'ar') {
-  //   console.log('Arabic language selected changing to RTL')
-  //   document.querySelector('html').classList.add('is-rtl')
-  // } else {
-  //   console.log('Non Arabic language selected changing to LTR')
-  //   document.querySelector('html').classList.add('is-ltr')
-  // }
-
-  // const htmlEl = document.querySelector('html')
-
-  // if (this.$i18n.locale === 'ar') {
-  //   console.log('change language to arabic and ltr to rtl')
-  //   htmlEl.setAttribute('dir', 'rtl')
-  // } else {
-  //   console.log('change language to english and rtl to ltr')
-  //   htmlEl.setAttribute('dir', 'ltr')
-  // }
-
-  // htmlEl.setAttribute('lang', lang)
-
-  ElMessage({
-    message: t('general.langSwitch'),
-    type: 'success'
-  })
-
-  // this.$emit('handerevent')
-  window.location.reload()
-}
 
 initPage();
 

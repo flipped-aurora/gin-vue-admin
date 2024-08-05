@@ -26,11 +26,9 @@
             </div>
             <div class="flex justify-end">
               <SelectLang>
-                <template v-slot:info>
                   <span class="cursor-pointer mb-2">
                     <img alt="Languages" src="@/assets/language.svg" style="width: 30px; height: 30px;">
                   </span>
-                </template>
               </SelectLang>
             </div>
             <el-form

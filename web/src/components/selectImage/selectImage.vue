@@ -18,7 +18,7 @@
         @deleteItem="deleteImg(index)"
       />
       <selectComponent
-        v-if="multipleValue.length < maxUpdateCount || maxUpdateCount === 0"
+        v-if="multipleValue?.length < maxUpdateCount || maxUpdateCount === 0"
         @chooseItem="openChooseImg"
         @deleteItem="openChooseImg"
       />

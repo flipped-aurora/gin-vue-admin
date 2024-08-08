@@ -55,7 +55,7 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.Query("dbName")
 	businessDB := c.Query("businessDB")
 	if dbName == "" {
-		dbName = global.GVA_CONFIG.Mysql.Dbname
+		dbName = *global.GVA_ACTIVE_DBNAME
 		if businessDB != "" {
 			for _, db := range global.GVA_CONFIG.DBList {
 				if db.AliasName == businessDB {
@@ -86,7 +86,7 @@ func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbName := c.Query("dbName")
 	if dbName == "" {
-		dbName = global.GVA_CONFIG.Mysql.Dbname
+		dbName = *global.GVA_ACTIVE_DBNAME
 		if businessDB != "" {
 			for _, db := range global.GVA_CONFIG.DBList {
 				if db.AliasName == businessDB {

@@ -699,7 +699,7 @@
 
     <el-drawer
       v-model="previewFlag"
-      size="60%"
+      size="80%"
       :show-close="false"
     >
       <template #header>

@@ -616,6 +616,20 @@
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-end mt-4">
         <el-button
+            type="primary"
+            @click="exportJson()"
+        >
+          导出json
+        </el-button>
+        <el-upload
+            class="flex items-center"
+            :before-upload="importJson"
+            show-file-list="false"
+            accept=".json"
+        >
+          <el-button type="primary" class="mx-2">导入json</el-button>
+        </el-upload>
+        <el-button
           type="primary"
           @click="clearCatch()"
         >
@@ -1297,5 +1311,33 @@ const clearCatch = async () => {
 }
 
 getCatch()
+
+const exportJson = () => {
+  const dataStr = JSON.stringify(form.value, null, 2)
+  const blob = new Blob([dataStr], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'form_data.json'
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+const importJson = (file) =>{
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    console.log(e)
+    try {
+      form.value = JSON.parse(e.target.result)
+      ElMessage.success('JSON 文件导入成功')
+    } catch (error) {
+      ElMessage.error('无效的 JSON 文件')
+    }
+  }
+  reader.readAsText(file)
+  return false
+}
 
 </script>

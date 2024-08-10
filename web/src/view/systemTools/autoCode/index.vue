@@ -467,11 +467,20 @@
           </el-table-column>
           <el-table-column
             align="left"
-            prop="front"
-            label="前端可见"
+            prop="from"
+            label="前端新建/编辑"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.front" />
+              <el-checkbox v-model="row.from" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="table"
+              label="前端表格"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.table" />
             </template>
           </el-table-column>
           <el-table-column
@@ -772,9 +781,10 @@ const llmAutoFunc = async (mode) =>{
               fieldSearchType: '',
               fieldIndexType: '',
               dictType: '',
-              front: true,
+              from: true,
+              table: true,
               dataSource: {
-            association:1,
+                association:1,
                 table: '',
                 label: '',
                 value: ''
@@ -926,7 +936,8 @@ const fieldTemplate = {
   defaultValue: '',
   require: false,
   sort: false,
-  front: true,
+  from: true,
+  table: true,
   errorText: '',
   primaryKey: false,
   clearable: true,
@@ -1209,7 +1220,8 @@ const getColumnFunc = async() => {
                 fieldSearchType: '',
                 fieldIndexType: '',
                 dictType: '',
-                front: true,
+                from: true,
+                table: true,
                 dataSource: {
                   association:1,
                   table: '',

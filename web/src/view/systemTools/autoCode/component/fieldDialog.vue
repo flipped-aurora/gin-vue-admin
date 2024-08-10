@@ -158,8 +158,11 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="前端可见">
-        <el-switch v-model="middleDate.front" />
+      <el-form-item label="前端新建/编辑">
+        <el-switch v-model="middleDate.form" />
+      </el-form-item>
+      <el-form-item label="前端表格列">
+        <el-switch v-model="middleDate.table" />
       </el-form-item>
       <el-form-item label="是否排序">
         <el-switch v-model="middleDate.sort" />

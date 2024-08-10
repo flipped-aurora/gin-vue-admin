@@ -169,7 +169,8 @@
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
-        {{- range .FrontFields}}
+        {{- range .Fields}}
+        {{ -if .Table}}
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
@@ -242,8 +243,9 @@
                   [JSON]
               </template>
           </el-table-column>
-        {{- else }}
-        <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+          {{- else }}
+          <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
+          {{- end }}
         {{- end }}
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
@@ -277,7 +279,8 @@
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
-        {{- range .FrontFields}}
+        {{- range .Fields}}
+          {{ -if .Form}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
             <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
@@ -347,6 +350,7 @@
           {{- end }}
             </el-form-item>
           {{- end }}
+          {{- end }}
           </el-form>
     </el-drawer>
   </div>
@@ -401,43 +405,45 @@ const showAllQuery = ref(false)
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
-        {{- range .FrontFields}}
-        {{- if eq .FieldType "bool" }}
-        {{.FieldJson}}: false,
-        {{- end }}
-        {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-        {{- end }}
-        {{- if eq .FieldType "richtext" }}
-        {{.FieldJson}}: '',
-        {{- end }}
-        {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
-        {{- end }}
-        {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-        {{- end }}
-        {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-        {{- end }}
-        {{- if eq .FieldType "picture" }}
-        {{.FieldJson}}: "",
-        {{- end }}
-        {{- if eq .FieldType "video" }}
-        {{.FieldJson}}: "",
-        {{- end }}
-        {{- if eq .FieldType "pictures" }}
-        {{.FieldJson}}: [],
-        {{- end }}
-        {{- if eq .FieldType "file" }}
-        {{.FieldJson}}: [],
-        {{- end }}
-        {{- if eq .FieldType "json" }}
-        {{.FieldJson}}: {},
-        {{- end }}
-        {{- if eq .FieldType "array" }}
-        {{.FieldJson}}: [],
-        {{- end }}
+        {{- range .Fields}}
+          {{- if .Form}}
+            {{- if eq .FieldType "bool" }}
+            {{.FieldJson}}: false,
+            {{- end }}
+            {{- if eq .FieldType "string" }}
+            {{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "richtext" }}
+            {{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "int" }}
+            {{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+            {{- end }}
+            {{- if eq .FieldType "time.Time" }}
+            {{.FieldJson}}: new Date(),
+            {{- end }}
+            {{- if eq .FieldType "float64" }}
+            {{.FieldJson}}: 0,
+            {{- end }}
+            {{- if eq .FieldType "picture" }}
+            {{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "video" }}
+            {{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "pictures" }}
+            {{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "file" }}
+            {{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "json" }}
+            {{.FieldJson}}: {},
+            {{- end }}
+            {{- if eq .FieldType "array" }}
+            {{.FieldJson}}: [],
+            {{- end }}
+          {{- end }}
         {{- end }}
         })
 
@@ -456,7 +462,8 @@ const formData = ref({
 
 // 验证规则
 const rule = reactive({
-    {{- range .FrontFields }}
+    {{- range .Fields }}
+        {{- if .From }}
             {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,
@@ -472,6 +479,7 @@ const rule = reactive({
               {{- end }}
               ],
             {{- end }}
+        {{- end }}
     {{- end }}
 })
 
@@ -489,7 +497,7 @@ const searchRule = reactive({
       }
     }, trigger: 'change' }
   ],
-  {{- range .FrontFields }}
+  {{- range .Fields }}
     {{- if .FieldSearchType}}
       {{- if eq .FieldType "time.Time" }}
         {{.FieldJson }} : [{ validator: (rule, value, callback) => {
@@ -522,12 +530,14 @@ const searchInfo = ref({})
 // 排序
 const sortChange = ({ prop, order }) => {
   const sortMap = {
-    {{- range .FrontFields}}
+    {{- range .Fields}}
+     {{- if .Table}}
       {{- if and .Sort}}
         {{- if not (eq .ColumnName "")}}
             {{.FieldJson}}: '{{.ColumnName}}',
         {{- end}}
       {{- end}}
+     {{- end}}
     {{- end}}
   }
 
@@ -554,7 +564,7 @@ const onSubmit = () => {
     if (!valid) return
     page.value = 1
     pageSize.value = 10
-    {{- range .FrontFields}}{{- if eq .FieldType "bool" }}
+    {{- range .Fields}}{{- if eq .FieldType "bool" }}
     if (searchInfo.value.{{.FieldJson}} === ""){
         searchInfo.value.{{.FieldJson}}=null
     }{{ end }}{{ end }}
@@ -693,7 +703,8 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-    {{- range .FrontFields}}
+    {{- range .Fields}}
+      {{- if .Form}}
         {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
         {{- end }}
@@ -727,7 +738,8 @@ const closeDialog = () => {
         {{- if eq .FieldType "json" }}
         {{.FieldJson}}: {},
         {{- end }}
-        {{- end }}
+      {{- end }}
+    {{- end }}
         }
 }
 // 弹窗确定

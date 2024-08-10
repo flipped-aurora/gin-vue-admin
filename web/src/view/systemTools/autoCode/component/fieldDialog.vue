@@ -2,7 +2,7 @@
   <div>
     <warning-bar title="id , created_at , updated_at , deleted_at 会自动生成请勿重复创建。搜索时如果条件为LIKE只支持字符串" />
     <el-form
-      ref="fieldDialogFrom"
+      ref="fieldDialogForm"
       :model="middleDate"
       label-width="120px"
       label-position="right"
@@ -435,6 +435,6 @@ const selectDB = async (val) => {
 }
 
 
-const fieldDialogFrom = ref(null)
-defineExpose({ fieldDialogFrom })
+const fieldDialogForm = ref(null)
+defineExpose({ fieldDialogForm })
 </script>

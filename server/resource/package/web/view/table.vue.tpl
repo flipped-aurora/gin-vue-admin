@@ -170,7 +170,7 @@
         </el-table-column>
         {{ end }}
         {{- range .Fields}}
-        {{ -if .Table}}
+        {{- if .Table}}
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
@@ -280,7 +280,7 @@
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
         {{- range .Fields}}
-          {{ -if .Form}}
+          {{- if .Form}}
             <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
             <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
@@ -463,7 +463,7 @@ const formData = ref({
 // 验证规则
 const rule = reactive({
     {{- range .Fields }}
-        {{- if .From }}
+        {{- if .Form }}
             {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,

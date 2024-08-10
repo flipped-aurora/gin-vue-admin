@@ -1056,7 +1056,7 @@ const editAndAddField = (item) => {
 
 const fieldDialogNode = ref(null)
 const enterDialog = () => {
-  fieldDialogNode.value.fieldDialogFrom.validate(valid => {
+  fieldDialogNode.value.fieldDialogForm.validate(valid => {
     if (valid) {
       dialogMiddle.value.fieldName = toUpperCase(
         dialogMiddle.value.fieldName

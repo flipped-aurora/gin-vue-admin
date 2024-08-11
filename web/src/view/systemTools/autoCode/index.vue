@@ -362,6 +362,20 @@
             <el-form-item>
               <template #label>
                 <el-tooltip
+                    content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> 创建按钮权限 <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.autoCreateBtnAuth" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
                   content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
                   placement="bottom"
                   effect="light"
@@ -984,6 +998,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
+  autoCreateBtnAuth: false,
   autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
@@ -1326,6 +1341,7 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
+    autoCreateBtnAuth: false,
     autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,

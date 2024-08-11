@@ -87,6 +87,15 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			id = entity.ID
 		} else {
 			entity = info.Menu(autoPkg.Template)
+			if info.AutoCreateBtnAuth {
+				entity.MenuBtn = []model.SysBaseMenuBtn{
+					{SysBaseMenuID: entity.ID, Name: "add", Desc: "新增"},
+					{SysBaseMenuID: entity.ID, Name: "batchDelete", Desc: "批量删除"},
+					{SysBaseMenuID: entity.ID, Name: "delete", Desc: "删除"},
+					{SysBaseMenuID: entity.ID, Name: "edit", Desc: "编辑"},
+					{SysBaseMenuID: entity.ID, Name: "info", Desc: "详情"},
+				}
+			}
 			err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
 			id = entity.ID
 			if err != nil {

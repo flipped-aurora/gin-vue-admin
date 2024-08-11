@@ -250,6 +250,7 @@
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
+            <el-button type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
             <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
             <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
@@ -353,6 +354,36 @@
           {{- end }}
           </el-form>
     </el-drawer>
+
+    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow">
+            <el-descriptions column="1" border>
+            {{- range .Fields}}
+              {{- if .Desc }}
+                    <el-descriptions-item label="{{ .FieldDesc }}">
+                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) }}
+                        {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
+                {{- else }}
+                    {{- if eq .FieldType "picture" }}
+                            <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(detailFrom.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
+                    {{- end }}
+                    {{- if eq .FieldType "pictures" }}
+                            <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
+                    {{- end }}
+                    {{- if eq .FieldType "file" }}
+                            <div class="fileBtn" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index">
+                              <el-button type="primary" text bg @click="onDownloadFile(item.url)">
+                                <el-icon style="margin-right: 5px"><Download /></el-icon>
+                                {{item.name}}
+                              </el-button>
+                            </div>
+                    {{- end }}
+                {{- end }}
+                    </el-descriptions-item>
+              {{- end }}
+            {{- end }}
+            </el-descriptions>
+        </el-drawer>
+
   </div>
 </template>
 
@@ -773,6 +804,37 @@ const downloadFile = (url) => {
     window.open(getUrl(url), '_blank')
 }
 {{end}}
+
+const detailFrom = ref({})
+
+// 查看详情控制标记
+const detailShow = ref(false)
+
+
+// 打开详情弹窗
+const openDetailShow = () => {
+  detailShow.value = true
+}
+
+
+// 打开详情
+const getDetails = async (row) => {
+  // 打开弹窗
+  const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
+  if (res.code === 0) {
+    detailFrom.value = res.data
+    openDetailShow()
+  }
+}
+
+
+// 关闭详情弹窗
+const closeDetailShow = () => {
+  detailShow.value = false
+  detailFrom.value = {}
+}
+
+
 </script>
 
 <style>

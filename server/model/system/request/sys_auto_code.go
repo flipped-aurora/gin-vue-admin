@@ -212,6 +212,7 @@ type AutoCodeField struct {
 	//Front           bool        `json:"front"`           // 是否前端可见
 	Form            bool        `json:"form"`            // 是否前端新建/编辑
 	Table           bool        `json:"table"`           // 是否前端表格列
+	Desc            bool        `json:"desc"`            // 是否前端详情
 	Require         bool        `json:"require"`         // 是否必填
 	DefaultValue    string      `json:"defaultValue"`    // 是否必填
 	ErrorText       string      `json:"errorText"`       // 校验失败文字

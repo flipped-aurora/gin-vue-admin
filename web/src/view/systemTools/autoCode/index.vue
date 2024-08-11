@@ -468,7 +468,7 @@
           <el-table-column
             align="left"
             prop="form"
-            label="前端新建/编辑"
+            label="新建/编辑"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.form" />
@@ -477,10 +477,19 @@
           <el-table-column
               align="left"
               prop="table"
-              label="前端表格"
+              label="表格"
           >
             <template #default="{row}">
               <el-checkbox v-model="row.table" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="desc"
+              label="详情"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.desc" />
             </template>
           </el-table-column>
           <el-table-column
@@ -782,6 +791,7 @@ const llmAutoFunc = async (mode) =>{
               fieldIndexType: '',
               dictType: '',
               form: true,
+              desc: true,
               table: true,
               dataSource: {
                 association:1,
@@ -937,6 +947,7 @@ const fieldTemplate = {
   require: false,
   sort: false,
   form: true,
+  desc: true,
   table: true,
   errorText: '',
   primaryKey: false,
@@ -1222,6 +1233,7 @@ const getColumnFunc = async() => {
                 dictType: '',
                 form: true,
                 table: true,
+                desc: true,
                 dataSource: {
                   association:1,
                   table: '',

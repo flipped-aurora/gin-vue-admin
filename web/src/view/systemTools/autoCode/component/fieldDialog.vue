@@ -164,6 +164,9 @@
       <el-form-item label="前端表格列">
         <el-switch v-model="middleDate.table" />
       </el-form-item>
+      <el-form-item label="前端详情">
+        <el-switch v-model="middleDate.desc" />
+      </el-form-item>
       <el-form-item label="是否排序">
         <el-switch v-model="middleDate.sort" />
       </el-form-item>

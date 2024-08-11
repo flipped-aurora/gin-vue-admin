@@ -190,11 +190,15 @@ func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
 	if autoPkg.Template != "package" {
 		info.IsPlugin = true
 	}
-	err = s.addTemplateToFile("api", info)
+	err = s.addTemplateToFile("api.go", info)
 	if err != nil {
 		return err
 	}
-	err = s.addTemplateToFile("server", info)
+	err = s.addTemplateToFile("server.go", info)
+	if err != nil {
+		return err
+	}
+	err = s.addTemplateToFile("api.js", info)
 	if err != nil {
 		return err
 	}
@@ -203,7 +207,7 @@ func (s *autoCodeTemplate) AddFunc(info request.AutoFunc) error {
 }
 
 func (s *autoCodeTemplate) getTemplateStr(t string, info request.AutoFunc) (string, error) {
-	tempPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "function", t+".go.tpl")
+	tempPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "function", t+".tpl")
 	files, err := template.ParseFiles(tempPath)
 	if err != nil {
 		return "", errors.Wrapf(err, "[filepath:%s]读取模版文件失败!", tempPath)
@@ -267,17 +271,21 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 	var target string
 
 	switch t {
-	case "api":
+	case "api.go":
 		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", info.Package, info.HumpPackageName+".go")
-	case "server":
+	case "server.go":
 		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", info.Package, info.HumpPackageName+".go")
+	case "api.js":
+		target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "api", "v1", info.Package, info.HumpPackageName+".js")
 	}
 	if info.IsPlugin {
 		switch t {
-		case "api":
+		case "api.go":
 			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "api", info.HumpPackageName+".go")
-		case "server":
+		case "server.go":
 			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "service", info.HumpPackageName+".go")
+		case "api.js":
+			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", info.Package, "api", info.HumpPackageName+".js")
 		}
 	}
 

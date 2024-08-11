@@ -1,10 +1,10 @@
 <template>
   <div class="h-full">
-    <div v-if="mode==='head'" class="bg-white text-slate-700 dark:text-slate-300 mx-2 dark:bg-slate-900 flex items-center w-full overflow-auto">
+    <div v-if="mode==='head'" class="menu-container bg-white text-slate-700 dark:text-slate-300 mx-2 dark:bg-slate-900 flex items-center w-[calc(100vw-600px)] overflow-auto">
       <el-menu
         :default-active="routerStore.topActive"
         mode="horizontal"
-        class="border-r-0 border-b-0 w-[calc(100%-100px)] flex gap-1 items-center box-border h-[calc(100%-1px)]"
+        class="border-r-0 border-b-0  w-full flex gap-1 items-center box-border h-[calc(100%-1px)]"
         unique-opened
         @select="(index, _, ele)=>selectMenuItem(index, _, ele,true)"
       >

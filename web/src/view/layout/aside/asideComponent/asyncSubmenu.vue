@@ -61,7 +61,7 @@ const sideHeight = computed(() => {
 <style lang="scss">
 .gva-sub-menu{
   .el-sub-menu__title{
-    height: v-bind('sideHeight');
+    height: v-bind('sideHeight') !important;
   }
 }
 </style>

@@ -468,6 +468,7 @@
           <el-table-column
             align="left"
             prop="form"
+            width="100"
             label="新建/编辑"
           >
             <template #default="{row}">

@@ -131,7 +131,6 @@ const init = async() => {
   // 获取所有菜单树
   const res = await getBaseMenuTree()
   menuTreeData.value = res.data.menus
-  console.log(res.data.menus)
   const res1 = await getMenuAuthority({ authorityId: props.row.authorityId })
   const menus = res1.data.menus
   const arr = []

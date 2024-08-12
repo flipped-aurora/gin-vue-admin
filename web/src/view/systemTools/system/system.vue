@@ -1,23 +1,23 @@
 <template>
   <div class="system">
     <el-form
-      ref="form"
-      :model="config"
-      label-width="240px"
+        ref="form"
+        :model="config"
+        label-width="240px"
     >
       <!--  System start  -->
       <el-collapse v-model="activeNames">
         <el-collapse-item
-          title="系统配置"
-          name="1"
+            title="系统配置"
+            name="1"
         >
           <el-form-item label="端口值">
             <el-input v-model.number="config.system.addr" />
           </el-form-item>
           <el-form-item label="数据库类型">
             <el-select
-              v-model="config.system['db-type']"
-              style="width:100%"
+                v-model="config.system['db-type']"
+                style="width:100%"
             >
               <el-option value="mysql" />
               <el-option value="pgsql" />
@@ -25,14 +25,15 @@
           </el-form-item>
           <el-form-item label="Oss类型">
             <el-select
-              v-model="config.system['oss-type']"
-              style="width:100%"
+                v-model="config.system['oss-type']"
+                style="width:100%"
             >
               <el-option value="local" />
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
               <el-option value="aliyun-oss" />
               <el-option value="huawei-obs" />
+              <el-option value="cloudflare-r2" />
             </el-select>
           </el-form-item>
           <el-form-item label="多点登录拦截">
@@ -48,8 +49,8 @@
             <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
           <el-tooltip
-            content="请修改完成后，注意一并修改前端env环境下的VITE_BASE_PATH"
-            placement="top-start"
+              content="请修改完成后，注意一并修改前端env环境下的VITE_BASE_PATH"
+              placement="top-start"
           >
             <el-form-item label="全局路由前缀">
               <el-input v-model="config.system['router-prefix']" />
@@ -57,8 +58,8 @@
           </el-tooltip>
         </el-collapse-item>
         <el-collapse-item
-          title="jwt签名"
-          name="2"
+            title="jwt签名"
+            name="2"
         >
           <el-form-item label="jwt签名">
             <el-input v-model="config.jwt['signing-key']" />
@@ -74,8 +75,8 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="Zap日志配置"
-          name="3"
+            title="Zap日志配置"
+            name="3"
         >
           <el-form-item label="级别">
             <el-input v-model.number="config.zap.level" />
@@ -106,8 +107,8 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="Redis admin数据库配置"
-          name="4"
+            title="Redis admin数据库配置"
+            name="4"
         >
           <el-form-item label="库">
             <el-input v-model.number="config.redis.db" />
@@ -121,8 +122,8 @@
         </el-collapse-item>
 
         <el-collapse-item
-          title="Mongo 数据库配置"
-          name="14"
+            title="Mongo 数据库配置"
+            name="14"
         >
           <el-form-item label="collection name(表名,一般不写)">
             <el-input v-model="config.mongo.coll" />
@@ -156,29 +157,29 @@
           </el-form-item>
           <el-form-item label="hosts">
             <template v-for="(item,k) in config.mongo.hosts">
-            <div
-              v-for="(_,k2) in item"
-              :key="k2"
-            >
-              <el-form-item
-                :key="k+k2"
-                :label="k2"
+              <div
+                  v-for="(_,k2) in item"
+                  :key="k2"
               >
-                <el-input v-model="item[k2]" />
-              </el-form-item>
-            </div>
-          </template>
+                <el-form-item
+                    :key="k+k2"
+                    :label="k2"
+                >
+                  <el-input v-model="item[k2]" />
+                </el-form-item>
+              </div>
+            </template>
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item
-          title="邮箱配置"
-          name="5"
+            title="邮箱配置"
+            name="5"
         >
           <el-form-item label="接收者邮箱">
             <el-input
-              v-model="config.email.to"
-              placeholder="可多个，以逗号分隔"
+                v-model="config.email.to"
+                placeholder="可多个，以逗号分隔"
             />
           </el-form-item>
           <el-form-item label="端口">
@@ -201,8 +202,8 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="验证码配置"
-          name="7"
+            title="验证码配置"
+            name="7"
         >
           <el-form-item label="字符长度">
             <el-input v-model.number="config.captcha['key-long']" />
@@ -215,8 +216,8 @@
           </el-form-item>
         </el-collapse-item>
         <el-collapse-item
-          title="数据库配置"
-          name="9"
+            title="数据库配置"
+            name="9"
         >
           <template v-if="config.system['db-type'] === 'mysql'">
             <el-form-item label="用户名">
@@ -291,8 +292,8 @@
         </el-collapse-item>
 
         <el-collapse-item
-          title="oss配置"
-          name="10"
+            title="oss配置"
+            name="10"
         >
           <template v-if="config.system['oss-type'] === 'local'">
             <h2>本地文件配置</h2>
@@ -384,12 +385,33 @@
               <el-input v-model="config['hua-wei-obs']['secret-key']" />
             </el-form-item>
           </template>
+          <template v-if="config.system['oss-type'] === 'cloudflare-r2'">
+            <h2>Cloudflare R2上传配置</h2>
+            <el-form-item label="路径">
+              <el-input v-model="config['cloudflare-r2'].path" />
+            </el-form-item>
+            <el-form-item label="存储桶名称">
+              <el-input v-model="config['cloudflare-r2'].bucket" />
+            </el-form-item>
+            <el-form-item label="Base URL">
+              <el-input v-model="config['cloudflare-r2']['base-url']" />
+            </el-form-item>
+            <el-form-item label="Account ID">
+              <el-input v-model="config['cloudflare-r2']['account-id']" />
+            </el-form-item>
+            <el-form-item label="Access Key ID">
+              <el-input v-model="config['cloudflare-r2']['access-key-id']" />
+            </el-form-item>
+            <el-form-item label="Secret Access Key">
+              <el-input v-model="config['cloudflare-r2']['secret-access-key']" />
+            </el-form-item>
+          </template>
 
         </el-collapse-item>
 
         <el-collapse-item
-          title="Excel上传配置"
-          name="11"
+            title="Excel上传配置"
+            name="11"
         >
           <el-form-item label="合成目标地址">
             <el-input v-model="config.excel.dir" />
@@ -397,16 +419,16 @@
         </el-collapse-item>
 
         <el-collapse-item
-          title="自动化代码配置"
-          name="12"
+            title="自动化代码配置"
+            name="12"
         >
           <el-form-item label="是否自动重启(linux)">
             <el-checkbox v-model="config.autocode['transfer-restart']" />
           </el-form-item>
           <el-form-item label="root(项目根路径)">
             <el-input
-              v-model="config.autocode.root"
-              disabled
+                v-model="config.autocode.root"
+                disabled
             />
           </el-form-item>
           <el-form-item label="Server(后端代码地址)">
@@ -447,12 +469,12 @@
     </el-form>
     <div class="mt-4">
       <el-button
-        type="primary"
-        @click="update"
+          type="primary"
+          @click="update"
       >立即更新</el-button>
       <el-button
-        type="primary"
-        @click="reload"
+          type="primary"
+          @click="reload"
       >重启服务（开发中）</el-button>
     </div>
   </div>
@@ -502,6 +524,7 @@ const config = ref({
   'tencent-cos': {},
   'aliyun-oss': {},
   'hua-wei-obs': {},
+  'cloudflare-r2': {},
   captcha: {},
   zap: {},
   local: {},

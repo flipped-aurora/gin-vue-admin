@@ -85,7 +85,6 @@ const router = useRouter();
 const routerStore = useRouterStore();
 const isCollapse = ref(false);
 const active = ref("");
-const topActive = ref("");
 const layoutSideWidth = computed(() => {
   if (!isCollapse.value) {
     return config.value.layout_side_width;

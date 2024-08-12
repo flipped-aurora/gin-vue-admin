@@ -1148,6 +1148,15 @@ const enterForm = async(isPreview) => {
     return false
   }
 
+
+  if (form.value.fields.some(item => !item.fieldType)) {
+    ElMessage({
+      type: 'error',
+      message: '请填写所有字段类型后进行提交'
+    })
+    return false
+  }
+
   autoCodeForm.value.validate(async valid => {
     if (valid) {
       for (const key in form.value) {

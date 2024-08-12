@@ -171,7 +171,7 @@ func (a *AuthorityMenuApi) DeleteBaseMenu(c *gin.Context) {
 	err = baseMenuService.DeleteBaseMenu(menu.ID)
 	if err != nil {
 		global.GVA_LOG.Error("删除失败!", zap.Error(err))
-		response.FailWithMessage("删除失败", c)
+		response.FailWithMessage("删除失败:"+err.Error(), c)
 		return
 	}
 	response.OkWithMessage("删除成功", c)

@@ -23,6 +23,7 @@
           highlight-current
           node-key="ID"
           show-checkbox
+          disabled
           :filter-node-method="filterNode"
           @check="nodeChange"
         >
@@ -35,7 +36,7 @@
                   link
 
                   :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
-                  :disabled="!node.checked"
+                  v-if="node.checked"
                   @click="() => setDefault(data)"
                 >
                   {{ row.defaultRouter === data.name?"首页":"设为首页" }}
@@ -141,6 +142,29 @@ const init = async() => {
     }
   })
   menuTreeIds.value = arr
+  // 已经设为首页的Node也默认勾选,找到已经设为首页的menuId,如果是父子结构的需要遍历去找
+  const defaultRouter = props.row.defaultRouter
+  if (defaultRouter) {
+    const findNode = (data) => {
+      if (data.name === defaultRouter) {
+        return data
+      }
+      if (data.children) {
+        for (let i = 0; i < data.children.length; i++) {
+          const res = findNode(data.children[i])
+          if (res) {
+            return res
+          }
+        }
+      }
+    }
+    const node = findNode({ children: res.data.menus })
+    if (node) {
+      menuTreeIds.value.push(node.ID)
+    }
+  }
+
+
 }
 
 init()
@@ -152,7 +176,7 @@ const setDefault = async(data) => {
     emit('changeRow', 'defaultRouter', res.data.authority.defaultRouter)
   }
 }
-const nodeChange = () => {
+const nodeChange = (data, checked) => {
   needConfirm.value = true
 }
 // 暴露给外层使用的切换拦截统一方法

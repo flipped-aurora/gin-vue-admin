@@ -29,13 +29,11 @@
           <template #default="{ node , data }">
             <span class="custom-tree-node">
               <span>{{ node.label }}</span>
-              <span>
+              <span v-if="node.checked">
                 <el-button
                   type="primary"
                   link
-
                   :style="{color:row.defaultRouter === data.name?'#E6A23C':'#85ce61'}"
-                  :disabled="!node.checked"
                   @click="() => setDefault(data)"
                 >
                   {{ row.defaultRouter === data.name?"首页":"设为首页" }}
@@ -45,7 +43,6 @@
                 <el-button
                   type="primary"
                   link
-
                   @click="() => OpenBtn(data)"
                 >
                   分配按钮
@@ -124,6 +121,9 @@ const menuDefaultProps = ref({
   children: 'children',
   label: function(data) {
     return data.meta.title
+  },
+  disabled: function(data) {
+    return props.row.defaultRouter === data.name
   }
 })
 
@@ -141,6 +141,7 @@ const init = async() => {
     }
   })
   menuTreeIds.value = arr
+
 }
 
 init()

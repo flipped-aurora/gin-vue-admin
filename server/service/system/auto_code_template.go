@@ -24,6 +24,34 @@ var AutoCodeTemplate = new(autoCodeTemplate)
 
 type autoCodeTemplate struct{}
 
+func (s *autoCodeTemplate) checkPackage(Pkg string, template string) (err error) {
+	switch template {
+	case "package":
+		apiEnter := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "api", "v1", Pkg, "enter.go")
+		_, err = os.Stat(apiEnter)
+		if err != nil {
+			return fmt.Errorf("package结构异常,缺少api/v1/%s/enter.go", Pkg)
+		}
+		serviceEnter := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "service", Pkg, "enter.go")
+		_, err = os.Stat(serviceEnter)
+		if err != nil {
+			return fmt.Errorf("package结构异常,缺少service/%s/enter.go", Pkg)
+		}
+		routerEnter := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "router", Pkg, "enter.go")
+		_, err = os.Stat(routerEnter)
+		if err != nil {
+			return fmt.Errorf("package结构异常,缺少router/%s/enter.go", Pkg)
+		}
+	case "plugin":
+		pluginEnter := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", Pkg, "plugin.go")
+		_, err = os.Stat(pluginEnter)
+		if err != nil {
+			return fmt.Errorf("plugin结构异常,缺少plugin/%s/plugin.go", Pkg)
+		}
+	}
+	return nil
+}
+
 // Create 创建生成自动化代码
 func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) error {
 	history := info.History()
@@ -32,7 +60,10 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	if err != nil {
 		return errors.Wrap(err, "查询包失败!")
 	}
-
+	err = s.checkPackage(info.Package, autoPkg.Template)
+	if err != nil {
+		return err
+	}
 	// 增加判断: 重复创建struct
 	if AutocodeHistory.Repeat(info.BusinessDB, info.StructName, info.Package) {
 		return errors.New("已经创建过此数据结构,请勿重复创建!")

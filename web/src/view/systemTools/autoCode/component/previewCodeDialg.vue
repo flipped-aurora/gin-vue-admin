@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName">
+  <el-tabs v-model="activeName" tab-position="left" class="h-[calc(100vh-110px)]">
     <el-tab-pane
       v-for="(item, key) in previewCode"
       :key="key"
@@ -8,7 +8,7 @@
     >
       <div
         :id="key"
-        class="h-[calc(100vh-160px)] bg-white px-5 overflow-y-scroll"
+        class="h-[calc(100vh-110px)] bg-white px-5 overflow-y-scroll"
       />
     </el-tab-pane>
   </el-tabs>

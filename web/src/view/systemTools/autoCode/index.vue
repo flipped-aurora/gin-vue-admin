@@ -362,6 +362,20 @@
             <el-form-item>
               <template #label>
                 <el-tooltip
+                    content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> 创建按钮权限 <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.autoCreateBtnAuth" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
                   content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
                   placement="bottom"
                   effect="light"
@@ -467,11 +481,30 @@
           </el-table-column>
           <el-table-column
             align="left"
-            prop="front"
-            label="前端可见"
+            prop="form"
+            width="100"
+            label="新建/编辑"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.front" />
+              <el-checkbox v-model="row.form" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="table"
+              label="表格"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.table" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="desc"
+              label="详情"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.desc" />
             </template>
           </el-table-column>
           <el-table-column
@@ -690,7 +723,7 @@
 
     <el-drawer
       v-model="previewFlag"
-      size="60%"
+      size="80%"
       :show-close="false"
     >
       <template #header>
@@ -772,9 +805,11 @@ const llmAutoFunc = async (mode) =>{
               fieldSearchType: '',
               fieldIndexType: '',
               dictType: '',
-              front: true,
+              form: true,
+              desc: true,
+              table: true,
               dataSource: {
-            association:1,
+                association:1,
                 table: '',
                 label: '',
                 value: ''
@@ -926,7 +961,9 @@ const fieldTemplate = {
   defaultValue: '',
   require: false,
   sort: false,
-  front: true,
+  form: true,
+  desc: true,
+  table: true,
   errorText: '',
   primaryKey: false,
   clearable: true,
@@ -961,6 +998,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
+  autoCreateBtnAuth: false,
   autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
@@ -1045,7 +1083,7 @@ const editAndAddField = (item) => {
 
 const fieldDialogNode = ref(null)
 const enterDialog = () => {
-  fieldDialogNode.value.fieldDialogFrom.validate(valid => {
+  fieldDialogNode.value.fieldDialogForm.validate(valid => {
     if (valid) {
       dialogMiddle.value.fieldName = toUpperCase(
         dialogMiddle.value.fieldName
@@ -1106,6 +1144,15 @@ const enterForm = async(isPreview) => {
     ElMessage({
       type: 'error',
       message: 'package和结构体简称不可同名'
+    })
+    return false
+  }
+
+
+  if (form.value.fields.some(item => !item.fieldType)) {
+    ElMessage({
+      type: 'error',
+      message: '请填写所有字段类型后进行提交'
     })
     return false
   }
@@ -1209,7 +1256,9 @@ const getColumnFunc = async() => {
                 fieldSearchType: '',
                 fieldIndexType: '',
                 dictType: '',
-                front: true,
+                form: true,
+                table: true,
+                desc: true,
                 dataSource: {
                   association:1,
                   table: '',
@@ -1301,6 +1350,7 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
+    autoCreateBtnAuth: false,
     autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,

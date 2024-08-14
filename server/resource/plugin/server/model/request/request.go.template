@@ -16,13 +16,7 @@ type {{.StructName}}Search struct{
     Start{{.FieldName}}  *{{.FieldType}}  `json:"start{{.FieldName}}" form:"start{{.FieldName}}"`
     End{{.FieldName}}  *{{.FieldType}}  `json:"end{{.FieldName}}" form:"end{{.FieldName}}"`
         {{- else }}
-            {{- if eq .FieldType "enum" }}
-    {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}"`
-            {{- else if eq .FieldType "picture" }}
-    {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- else if eq .FieldType "video" }}
-    {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
-            {{- else if eq .FieldType "richtext" }}
+            {{- if or (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "richtext") (eq .FieldType "json") }}
     {{.FieldName}}  string `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `
             {{- else if ne .FieldType "string" }}
     {{.FieldName}}  *{{.FieldType}} `json:"{{.FieldJson}}" form:"{{.FieldJson}}" `

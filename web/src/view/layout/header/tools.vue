@@ -175,7 +175,7 @@ const videoList = [
   },
   {
     title:"11.菜单参数实战+动态菜单标题+菜单高亮配置",
-    link:"https://www.bilibili.com/video/BV1Bb421J7oW",
+    link:"https://www.bilibili.com/video/BV1NE4m1979c",
   },
   {
     title:"12.增加菜单可控按钮",

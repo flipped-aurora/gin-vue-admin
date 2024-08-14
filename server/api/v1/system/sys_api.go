@@ -74,7 +74,7 @@ func (s *SystemApiApi) SyncApi(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Success   200   {object}  response.Response{msg=string}  "获取API分组"
-// @Router    /api/getApiGroups [post]
+// @Router    /api/getApiGroups [get]
 func (s *SystemApiApi) GetApiGroups(c *gin.Context) {
 	groups, apiGroupMap, err := apiService.GetApiGroups()
 	if err != nil {

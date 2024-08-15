@@ -325,7 +325,7 @@ func (s *autoCodeTemplate) addTemplateToFile(t string, info request.AutoFunc) er
 		case "server.go":
 			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", info.Package, "service", info.HumpPackageName+".go")
 		case "api.js":
-			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", info.Package, "api", info.HumpPackageName+".js")
+			target = filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "plugin", info.Package, "api", info.PackageName+".js")
 		}
 	}
 

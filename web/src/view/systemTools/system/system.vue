@@ -42,6 +42,9 @@
           <el-form-item label="开启redis">
             <el-checkbox v-model="config.system['use-redis']">开启</el-checkbox>
           </el-form-item>
+          <el-form-item label="严格角色模式">
+            <el-checkbox v-model="config.system['use-strict-auth']">开启</el-checkbox>
+          </el-form-item>
           <el-form-item label="限流次数">
             <el-input-number v-model.number="config.system['iplimit-count']" />
           </el-form-item>

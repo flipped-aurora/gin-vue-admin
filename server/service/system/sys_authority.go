@@ -183,19 +183,31 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 //@param: info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (authorityService *AuthorityService) GetAuthorityInfoList(info request.PageInfo) (list interface{}, total int64, err error) {
-	limit := info.PageSize
-	offset := info.PageSize * (info.Page - 1)
+func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint) (list any, err error) {
+	var authority system.SysAuthority
+	err = global.GVA_DB.Where("authority_id = ?", authorityID).First(&authority).Error
+	if err != nil {
+		return nil, err
+	}
+	var authorities []system.SysAuthority
 	db := global.GVA_DB.Model(&system.SysAuthority{})
-	if err = db.Where("parent_id = ?", "0").Count(&total).Error; total == 0 || err != nil {
-		return
+	if global.GVA_CONFIG.System.UseStrictAuth {
+		// 当开启了严格树形结构后
+		if *authority.ParentId == 0 {
+			// 只有顶级角色可以修改自己的权限和以下权限
+			err = db.Preload("DataAuthorityId").Where("authority_id = ?", authorityID).Find(&authorities).Error
+		} else {
+			// 非顶级角色只能修改以下权限
+			err = db.Debug().Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
+		}
+	} else {
+		err = db.Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authorities).Error
 	}
-	var authority []system.SysAuthority
-	err = db.Limit(limit).Offset(offset).Preload("DataAuthorityId").Where("parent_id = ?", "0").Find(&authority).Error
-	for k := range authority {
-		err = authorityService.findChildrenAuthority(&authority[k])
+
+	for k := range authorities {
+		err = authorityService.findChildrenAuthority(&authorities[k])
 	}
-	return authority, total, err
+	return authorities, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -249,4 +261,10 @@ func (authorityService *AuthorityService) findChildrenAuthority(authority *syste
 		}
 	}
 	return err
+}
+
+func (authorityService *AuthorityService) GetParentAuthorityID(authorityID uint) (parentID uint, err error) {
+	var authority system.SysAuthority
+	err = global.GVA_DB.Where("authority_id = ?", authorityID).First(&authority).Error
+	return *authority.ParentId, err
 }

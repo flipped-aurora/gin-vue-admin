@@ -37,6 +37,7 @@ type AutoCode struct {
 	HasRichText         bool                   `json:"-"`
 	HasDataSource       bool                   `json:"-"`
 	HasSearchTimer      bool                   `json:"-"`
+	HasArray            bool                   `json:"-"`
 }
 
 type DataSource struct {
@@ -130,6 +131,7 @@ func (r *AutoCode) Pretreatment() error {
 			r.NeedJSON = true
 		case "array":
 			r.NeedJSON = true
+			r.HasArray = true
 		case "video":
 			r.HasPic = true
 		case "richtext":

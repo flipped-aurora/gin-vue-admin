@@ -12,9 +12,9 @@ export default function fullImportPlugin() {
       if (sourcePath === targetPath) {
         const name = 'ElementPlus'
         // 引入 ElementPlus 和 样式
-        code = code.replace(`import { createApp } from 'vue'`, ($1) => $1 + `\nimport ${name} from 'element-plus'`)
-        code = code.replace(`import './style/element_visiable.scss'`, ($1) => $1 + `\nimport 'element-plus/theme-chalk/src/index.scss'`)
-        code = code.replace('.mount(', ($1) => `.use(${name})` + $1)
+        code = code.replace(/import\s*{\s*createApp\s*}\s*from\s*['"]vue['"]/, ($1) => $1 + `\nimport ${name} from 'element-plus'`)
+        code = code.replace(/import\s*['"]\.\/style\/element_visiable\.scss['"]/, ($1) => $1 + `\nimport 'element-plus/theme-chalk/src/index.scss'`)
+        code = code.replace(/\.mount\(/, ($1) => `.use(${name})` + $1)
         return code
       }
       return code

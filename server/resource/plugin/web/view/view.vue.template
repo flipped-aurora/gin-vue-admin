@@ -201,14 +201,14 @@
           {{- else if eq .FieldType "picture" }}
           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
-                <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
+                <el-image preview-teleported style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
            {{- else if eq .FieldType "pictures" }}
            <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
-                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
+                    <el-image preview-teleported v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
                 </div>
               </template>
            </el-table-column>

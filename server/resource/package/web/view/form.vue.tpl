@@ -105,7 +105,7 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 import RichEdit from '@/components/richtext/rich-edit.vue'
 {{- end }}
 
-{{-if .HasArray}}
+{{- if .HasArray}}
 // 数组控制组件
 import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 {{- end }}

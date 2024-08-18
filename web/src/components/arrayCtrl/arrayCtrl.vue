@@ -3,7 +3,7 @@
     <el-tag
       v-for="tag in modelValue"
       :key="tag"
-      closable
+      :closable="editable"
       :disable-transitions="false"
       @close="handleClose(tag)"
     >

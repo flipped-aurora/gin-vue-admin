@@ -23,6 +23,7 @@ yarn-error.log*
 *.sw?
 
 rm_file/
+/server/soft
 /server/log/
 /server/gva
 /server/server

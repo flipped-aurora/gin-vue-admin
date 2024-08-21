@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/flipped-aurora/gin-vue-admin/server/router/biz_apphub"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/example"
 	"github.com/flipped-aurora/gin-vue-admin/server/router/system"
 )
@@ -8,6 +9,7 @@ import (
 var RouterGroupApp = new(RouterGroup)
 
 type RouterGroup struct {
-	System  system.RouterGroup
-	Example example.RouterGroup
+	System     system.RouterGroup
+	Example    example.RouterGroup
+	Biz_apphub biz_apphub.RouterGroup
 }

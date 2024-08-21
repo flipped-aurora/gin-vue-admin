@@ -41,7 +41,7 @@
     },
     "devDependencies": {
         "@babel/eslint-parser": "^7.22.9",
-        "@vitejs/plugin-legacy": "^4.1.0",
+        "@vitejs/plugin-legacy": "^4.1.1",
         "@vitejs/plugin-vue": "^4.2.3",
         "@vue/cli-plugin-babel": "~5.0.8",
         "@vue/cli-plugin-eslint": "~5.0.8",

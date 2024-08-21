@@ -1,5 +1,7 @@
 {
   "/src/view/about/index.vue": "About",
+  "/src/view/biz_apphub/biz_apphub/biz_apphub.vue": "BizAppHub",
+  "/src/view/biz_apphub/biz_apphub/biz_apphubForm.vue": "BizAppHubForm",
   "/src/view/error/index.vue": "Error",
   "/src/view/error/reload.vue": "Reload",
   "/src/view/example/breakpoint/breakpoint.vue": "BreakPoint",

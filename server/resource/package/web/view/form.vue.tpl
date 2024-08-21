@@ -4,7 +4,8 @@
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
-        <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}">
+      {{- if .Form }}
+        <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
        {{- if .CheckDataSource}}
         <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
           <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
@@ -58,6 +59,7 @@
        {{- end }}
        </el-form-item>
       {{- end }}
+      {{- end }}
         <el-form-item>
           <el-button type="primary" @click="save">{{ "{{ t('general.save') }}" }}</el-button>
           <el-button type="primary" @click="back">{{ "{{ t('general.back') }}" }}</el-button>
@@ -110,6 +112,7 @@ const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- range .Fields}}
+          {{- if .Form }}
             {{- if eq .FieldType "bool" }}
             {{.FieldJson}}: false,
             {{- end }}
@@ -146,6 +149,7 @@ const formData = ref({
             {{- if eq .FieldType "array" }}
             {{.FieldJson}}: [],
             {{- end }}
+          {{- end }}
         {{- end }}
         })
 // 验证规则

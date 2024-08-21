@@ -2,7 +2,7 @@
   <div>
     <warning-bar :title="t('fieldDialog.note')" />
     <el-form
-      ref="fieldDialogFrom"
+      ref="fieldDialogForm"
       :model="middleDate"
       label-width="120px"
       label-position="right"
@@ -158,8 +158,14 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="前端可见">
-        <el-switch v-model="middleDate.front" />
+      <el-form-item label="前端新建/编辑">
+        <el-switch v-model="middleDate.form" />
+      </el-form-item>
+      <el-form-item label="前端表格列">
+        <el-switch v-model="middleDate.table" />
+      </el-form-item>
+      <el-form-item label="前端详情">
+        <el-switch v-model="middleDate.desc" />
       </el-form-item>
       <el-form-item label="是否排序">
         <el-switch v-model="middleDate.sort" />
@@ -435,6 +441,6 @@ const selectDB = async (val) => {
 }
 
 
-const fieldDialogFrom = ref(null)
-defineExpose({ fieldDialogFrom })
+const fieldDialogForm = ref(null)
+defineExpose({ fieldDialogForm })
 </script>

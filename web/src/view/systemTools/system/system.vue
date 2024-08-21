@@ -1,9 +1,9 @@
 <template>
   <div class="system">
     <el-form
-      ref="form"
-      :model="config"
-      label-width="240px"
+        ref="form"
+        :model="config"
+        label-width="320px"
     >
       <!--  System start  -->
       <el-collapse v-model="activeNames">
@@ -16,8 +16,8 @@
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.dbType')">
             <el-select
-              v-model="config.system['db-type']"
-              style="width:100%"
+                v-model="config.system['db-type']"
+                style="width:100%"
             >
               <el-option value="mysql" />
               <el-option value="pgsql" />
@@ -25,14 +25,15 @@
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.ossType')">
             <el-select
-              v-model="config.system['oss-type']"
-              style="width:100%"
+                v-model="config.system['oss-type']"
+                style="width:100%"
             >
               <el-option value="local" />
               <el-option value="qiniu" />
               <el-option value="tencent-cos" />
               <el-option value="aliyun-oss" />
               <el-option value="huawei-obs" />
+              <el-option value="cloudflare-r2" />
             </el-select>
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.blockMultiSignOn')">
@@ -48,10 +49,10 @@
             <el-input-number v-model.number="config.system['iplimit-time']" />
           </el-form-item>
           <el-tooltip
-            content="请修改完成后，注意一并修改前端env环境下的VITE_BASE_PATH"
+            :content="t('view.systemTools.system.globalRoutePrefixNote')"
             placement="top-start"
           >
-            <el-form-item label="全局路由前缀">
+            <el-form-item :label="t('view.systemTools.system.globalRoutePrefix')">
               <el-input v-model="config.system['router-prefix']" />
             </el-form-item>
           </el-tooltip>
@@ -95,10 +96,10 @@
           <el-form-item :label="t('view.systemTools.system.stackName')">
             <el-input v-model="config.zap['stacktrace-key']" />
           </el-form-item>
-          <el-form-item label="日志留存时间(默认以天为单位)">
+          <el-form-item :label="t('view.systemTools.system.logRetentionTime')">
             <el-input v-model.number="config.zap['retention-day']" />
           </el-form-item>
-          <el-form-item label="显示行">
+          <el-form-item :label="t('view.systemTools.system.showLine')">
             <el-checkbox v-model="config.zap['show-line']" />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.outputConsole')">
@@ -109,65 +110,65 @@
           :title="t('view.systemTools.system.redisAdminDBConfig')"
           name="4"
         >
-          <el-form-item label="库">
+          <el-form-item :label="t('view.systemTools.system.storehouse')">
             <el-input v-model.number="config.redis.db" />
           </el-form-item>
-          <el-form-item label="地址">
+          <el-form-item :label="t('view.systemTools.system.address')">
             <el-input v-model="config.redis.addr" />
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item :label="t('view.systemTools.system.password')">
             <el-input v-model="config.redis.password" />
           </el-form-item>
         </el-collapse-item>
 
         <el-collapse-item
-          title="Mongo 数据库配置"
-          name="14"
+            :title="t('view.systemTools.system.mongoDbConfig')"
+            name="14"
         >
-          <el-form-item label="collection name(表名,一般不写)">
+          <el-form-item :label="t('view.systemTools.system.collectionName')">
             <el-input v-model="config.mongo.coll" />
           </el-form-item>
-          <el-form-item label="mongodb options">
+          <el-form-item :label="t('view.systemTools.system.options')">
             <el-input v-model="config.mongo.options" />
           </el-form-item>
-          <el-form-item label="database name(数据库名)">
+          <el-form-item :label="t('view.systemTools.system.dbName')">
             <el-input v-model="config.mongo.database" />
           </el-form-item>
-          <el-form-item label="用户名">
+          <el-form-item :label="t('view.systemTools.system.userName')">
             <el-input v-model="config.mongo.username" />
           </el-form-item>
-          <el-form-item label="密码">
+          <el-form-item :label="t('view.systemTools.system.password')">
             <el-input v-model="config.mongo.password" />
           </el-form-item>
-          <el-form-item label="最小连接池">
+          <el-form-item :label="t('view.systemTools.system.minimumConnectionPool')">
             <el-input v-model="config.mongo['min-pool-size']" />
           </el-form-item>
-          <el-form-item label="最大连接池">
+          <el-form-item :label="t('view.systemTools.system.maximumConnectionPool')">
             <el-input v-model="config.mongo['max-pool-size']" />
           </el-form-item>
-          <el-form-item label="socket超时时间">
+          <el-form-item :label="t('view.systemTools.system.socketTimeout')">
             <el-input v-model="config.mongo['socket-timeout-ms']" />
           </el-form-item>
-          <el-form-item label="连接超时时间">
+          <el-form-item :label="t('view.systemTools.system.connectionTimeout')">
             <el-input v-model="config.mongo['socket-timeout-ms']" />
           </el-form-item>
-          <el-form-item label="是否开启zap日志">
+          <el-form-item :label="t('view.systemTools.system.enableZapLog')">
             <el-checkbox v-model="config.mongo['is-zap']" />
           </el-form-item>
           <el-form-item label="hosts">
             <template v-for="(item,k) in config.mongo.hosts">
-            <div
-              v-for="(_,k2) in item"
-              :key="k2"
-            >
-              <el-form-item
-                :key="k+k2"
-                :label="k2"
+              <div
+                  v-for="(_,k2) in item"
+                  :key="k2"
               >
-                <el-input v-model="item[k2]" />
-              </el-form-item>
-            </div>
-          </template>
+                <el-form-item
+                    :key="k+k2"
+                    :label="k2"
+                >
+                  <el-input v-model="item[k2]" />
+                </el-form-item>
+              </div>
+            </template>
           </el-form-item>
         </el-collapse-item>
 
@@ -204,13 +205,13 @@
           :title="t('view.systemTools.system.verCodeConfig')"
           name="7"
         >
-          <el-form-item label="字符长度">
+          <el-form-item :label="t('view.systemTools.system.charLength')">
             <el-input v-model.number="config.captcha['key-long']" />
           </el-form-item>
-          <el-form-item label="图片宽度">
+          <el-form-item :label="t('view.systemTools.system.imageWidth')">
             <el-input v-model.number="config.captcha['img-width']" />
           </el-form-item>
-          <el-form-item label="图片高度">
+          <el-form-item :label="t('view.systemTools.system.imageHeight')">
             <el-input v-model.number="config.captcha['img-height']" />
           </el-form-item>
         </el-collapse-item>
@@ -219,72 +220,72 @@
           name="9"
         >
           <template v-if="config.system['db-type'] === 'mysql'">
-            <el-form-item label="用户名">
+            <el-form-item :label="t('view.systemTools.system.userName')">
               <el-input v-model="config.mysql.username" />
             </el-form-item>
-            <el-form-item label="密码">
+            <el-form-item :label="t('view.systemTools.system.password')">
               <el-input v-model="config.mysql.password" />
             </el-form-item>
-            <el-form-item label="地址">
+            <el-form-item :label="t('view.systemTools.system.address')">
               <el-input v-model="config.mysql.path" />
             </el-form-item>
-            <el-form-item label="数据库">
+            <el-form-item :label="t('view.systemTools.system.dbName')">
               <el-input v-model="config.mysql['db-name']" />
             </el-form-item>
-            <el-form-item label="前缀">
+            <el-form-item :label="t('view.systemTools.system.prefix')">
               <el-input v-model="config.mysql['refix']" />
             </el-form-item>
-            <el-form-item label="复数表">
+            <el-form-item :label="t('view.systemTools.system.pluralTable')">
               <el-switch v-model="config.mysql['singular']" />
             </el-form-item>
-            <el-form-item label="引擎">
+            <el-form-item :label="t('view.systemTools.system.engine')">
               <el-input v-model="config.mysql['engine']" />
             </el-form-item>
-            <el-form-item label="maxIdleConns">
+            <el-form-item :label="t('view.systemTools.system.maxIdleConns')">
               <el-input v-model.number="config.mysql['max-idle-conns']" />
             </el-form-item>
-            <el-form-item label="maxOpenConns">
+            <el-form-item :label="t('view.systemTools.system.maxOpenConns')">
               <el-input v-model.number="config.mysql['max-open-conns']" />
             </el-form-item>
-            <el-form-item label="写入日志">
+            <el-form-item :label="t('view.systemTools.system.enableZapLog')">
               <el-checkbox v-model="config.mysql['log-zap']" />
             </el-form-item>
-            <el-form-item label="日志模式">
+            <el-form-item :label="t('view.systemTools.system.logMode')">
               <el-input v-model="config.mysql['log-mode']" />
             </el-form-item>
           </template>
           <template v-if="config.system['db-type'] === 'pgsql'">
-            <el-form-item label="用户名">
+            <el-form-item :label="t('view.systemTools.system.userName')">
               <el-input v-model="config.pgsql.username" />
             </el-form-item>
-            <el-form-item label="密码">
+            <el-form-item :label="t('view.systemTools.system.password')">
               <el-input v-model="config.pgsql.password" />
             </el-form-item>
-            <el-form-item label="地址">
+            <el-form-item :label="t('view.systemTools.system.address')">
               <el-input v-model="config.pgsql.path" />
             </el-form-item>
-            <el-form-item label="数据库">
+            <el-form-item :label="t('view.systemTools.system.dbName')">
               <el-input v-model="config.pgsql.dbname" />
             </el-form-item>
-            <el-form-item label="前缀">
+            <el-form-item :label="t('view.systemTools.system.prefix')">
               <el-input v-model="config.pgsql['refix']" />
             </el-form-item>
-            <el-form-item label="复数表">
+            <el-form-item :label="t('view.systemTools.system.pluralTable')">
               <el-switch v-model="config.pgsql['singular']" />
             </el-form-item>
-            <el-form-item label="引擎">
+            <el-form-item :label="t('view.systemTools.system.engine')">
               <el-input v-model="config.pgsql['engine']" />
             </el-form-item>
-            <el-form-item label="maxIdleConns">
+            <el-form-item :label="t('view.systemTools.system.maxIdleConns')">
               <el-input v-model.number="config.pgsql['max-idle-conns']" />
             </el-form-item>
-            <el-form-item label="maxOpenConns">
+            <el-form-item :label="t('view.systemTools.system.maxOpenConns')">
               <el-input v-model.number="config.pgsql['max-open-conns']" />
             </el-form-item>
-            <el-form-item label="写入日志">
+            <el-form-item :label="t('view.systemTools.system.enableZapLog')">
               <el-checkbox v-model="config.pgsql['log-zap']" />
             </el-form-item>
-            <el-form-item label="日志模式">
+            <el-form-item :label="t('view.systemTools.system.logMode')">
               <el-input v-model="config.pgsql['log-mode']" />
             </el-form-item>
           </template>
@@ -381,6 +382,27 @@
               <el-input v-model="config['hua-wei-obs']['secret-key']" />
             </el-form-item>
           </template>
+          <template v-if="config.system['oss-type'] === 'cloudflare-r2'">
+            <h2>Cloudflare R2上传配置</h2>
+            <el-form-item label="路径">
+              <el-input v-model="config['cloudflare-r2'].path" />
+            </el-form-item>
+            <el-form-item label="存储桶名称">
+              <el-input v-model="config['cloudflare-r2'].bucket" />
+            </el-form-item>
+            <el-form-item label="Base URL">
+              <el-input v-model="config['cloudflare-r2']['base-url']" />
+            </el-form-item>
+            <el-form-item label="Account ID">
+              <el-input v-model="config['cloudflare-r2']['account-id']" />
+            </el-form-item>
+            <el-form-item label="Access Key ID">
+              <el-input v-model="config['cloudflare-r2']['access-key-id']" />
+            </el-form-item>
+            <el-form-item label="Secret Access Key">
+              <el-input v-model="config['cloudflare-r2']['secret-access-key']" />
+            </el-form-item>
+          </template>
 
         </el-collapse-item>
 
@@ -402,8 +424,8 @@
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.projectRootPath')">
             <el-input
-              v-model="config.autocode.root"
-              disabled
+                v-model="config.autocode.root"
+                disabled
             />
           </el-form-item>
           <el-form-item :label="t('view.systemTools.system.backendCodePath')">
@@ -513,6 +535,7 @@ const config = ref({
   'tencent-cos': {},
   'aliyun-oss': {},
   'hua-wei-obs': {},
+  'cloudflare-r2': {},
   captcha: {},
   zap: {},
   local: {},

@@ -93,9 +93,13 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 {{- end }}
         {{- range .Fields}}
             {{- if .FieldSearchType}}
-                {{- if or (eq .FieldType "string") (eq .FieldType "enum") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "richtext") }}
+                {{- if or (eq .FieldType "string") (eq .FieldType "enum") (eq .FieldType "pictures") (eq .FieldType "picture") (eq .FieldType "video") (eq .FieldType "richtext") (eq .FieldType "json") }}
     if info.{{.FieldName}} != "" {
+        {{- if or (eq .FieldType "enum") (eq .FieldType "string") }}
         db = db.Where("{{.ColumnName}} {{.FieldSearchType}} ?",{{if eq .FieldSearchType "LIKE"}}"%"+ {{ end }}info.{{.FieldName}}{{if eq .FieldSearchType "LIKE"}}+"%"{{ end }})
+        {{- else}}
+        // 数据类型为复杂类型，请根据业务需求自行实现复杂类型的查询业务
+        {{- end}}
     }
     {{- else if eq .FieldSearchType "BETWEEN" "NOT BETWEEN"}}
         if info.Start{{.FieldName}} != nil && info.End{{.FieldName}} != nil {

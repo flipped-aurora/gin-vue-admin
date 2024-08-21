@@ -39,6 +39,9 @@ func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos [
 			rules = append(rules, []string{authorityId, v.Path, v.Method})
 		}
 	}
+	if len(rules) == 0 {
+		return nil
+	} // 设置空权限无需调用 AddPolicies 方法
 	e := casbinService.Casbin()
 	success, _ := e.AddPolicies(rules)
 	if !success {

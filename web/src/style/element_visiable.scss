@@ -124,6 +124,10 @@
     justify-content: center;
 }
 
+.el-menu--horizontal .el-menu .el-sub-menu__title{
+    justify-content: flex-start;
+}
+
 html.dark {
     /* 自定义深色背景颜色 */
     --el-bg-color: rgb(30 ,41 ,59);

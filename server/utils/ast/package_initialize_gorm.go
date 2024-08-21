@@ -142,7 +142,7 @@ func (a *PackageInitializeGorm) addDbVar(astBody *ast.BlockStmt) {
 	for i := range astBody.List {
 		if assignStmt, ok := astBody.List[i].(*ast.AssignStmt); ok {
 			if ident, ok := assignStmt.Lhs[0].(*ast.Ident); ok {
-				if ident.Name == "db" || ident.Name == a.Business+"Db" {
+				if (a.Business == "" && ident.Name == "db") || ident.Name == a.Business+"Db" {
 					return
 				}
 			}

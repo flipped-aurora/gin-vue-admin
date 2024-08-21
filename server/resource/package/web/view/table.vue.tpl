@@ -1,4 +1,4 @@
-{{- $top := . -}}
+{{- $global := . }}
 <template>
   <div>
     <div class="gva-search-box">
@@ -150,8 +150,8 @@
     </div>
     <div class="gva-table-box">
         <div class="gva-btn-list">
-            <el-button type="primary" icon="plus" @click="openDialog">新增</el-button>
-            <el-button icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">新增</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
         </div>
         <el-table
         ref="multipleTable"
@@ -170,7 +170,8 @@
             <template #default="scope">{{ "{{ formatDate(scope.row.CreatedAt) }}" }}</template>
         </el-table-column>
         {{ end }}
-        {{- range .FrontFields}}
+        {{- range .Fields}}
+        {{- if .Table}}
         {{- if .CheckDataSource }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120">
           <template #default="scope">
@@ -200,14 +201,14 @@
           {{- else if eq .FieldType "picture" }}
           <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
-                <el-image style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
+                <el-image preview-teleported style="width: 100px; height: 100px" :src="getUrl(scope.row.{{.FieldJson}})" fit="cover"/>
               </template>
           </el-table-column>
            {{- else if eq .FieldType "pictures" }}
            <el-table-column :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="200">
               <template #default="scope">
                  <div class="multiple-img-box">
-                    <el-image v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
+                    <el-image preview-teleported v-for="(item,index) in scope.row.{{.FieldJson}}" :key="index" style="width: 80px; height: 80px" :src="getUrl(item)" fit="cover"/>
                 </div>
               </template>
            </el-table-column>
@@ -243,14 +244,16 @@
                   [JSON]
               </template>
           </el-table-column>
+<<<<<<< HEAD
         {{- else }}
         <el-table-column {{- if .Sort}} sortable{{- end}} align="left" :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" prop="{{.FieldJson}}" width="120" />
+=======
         {{- end }}
         {{- end }}
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
-            <template #default="scope">
-            <el-button type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
-            <el-button type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">变更</el-button>
+            <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -278,8 +281,14 @@
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
+<<<<<<< HEAD
         {{- range .FrontFields}}
             <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
+=======
+        {{- range .Fields}}
+          {{- if .Form}}
+            <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
+>>>>>>> main
           {{- if .CheckDataSource}}
             <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
@@ -348,8 +357,39 @@
           {{- end }}
             </el-form-item>
           {{- end }}
+          {{- end }}
           </el-form>
     </el-drawer>
+
+    <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow">
+            <el-descriptions column="1" border>
+            {{- range .Fields}}
+              {{- if .Desc }}
+                    <el-descriptions-item label="{{ .FieldDesc }}">
+                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) }}
+                        {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
+                {{- else }}
+                    {{- if eq .FieldType "picture" }}
+                            <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :src="getUrl(detailFrom.{{ .FieldJson }})" fit="cover" />
+                    {{- end }}
+                    {{- if eq .FieldType "pictures" }}
+                            <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
+                    {{- end }}
+                    {{- if eq .FieldType "file" }}
+                            <div class="fileBtn" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index">
+                              <el-button type="primary" text bg @click="onDownloadFile(item.url)">
+                                <el-icon style="margin-right: 5px"><Download /></el-icon>
+                                {{"{{"}}item.name{{"}}"}}
+                              </el-button>
+                            </div>
+                    {{- end }}
+                {{- end }}
+                    </el-descriptions-item>
+              {{- end }}
+            {{- end }}
+            </el-descriptions>
+        </el-drawer>
+
   </div>
 </template>
 
@@ -386,16 +426,28 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, ReturnArrImg, onDownloadFile } from '@/utils/format'
+import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
+<<<<<<< HEAD
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 const i18n = useI18n() // added by mohamed hassan to support multilanguage
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+=======
+{{- if .AutoCreateBtnAuth }}
+// 引入按钮权限标识
+import { useBtnAuth } from '@/utils/btnAuth'
+{{- end }}
+>>>>>>> main
 
 defineOptions({
     name: '{{.StructName}}'
 })
+
+{{- if .AutoCreateBtnAuth }}
+// 按钮权限实例化
+    const btnAuth = useBtnAuth()
+{{- end }}
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
@@ -405,43 +457,45 @@ const showAllQuery = ref(false)
 const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
-        {{- range .FrontFields}}
-        {{- if eq .FieldType "bool" }}
-        {{.FieldJson}}: false,
-        {{- end }}
-        {{- if eq .FieldType "string" }}
-        {{.FieldJson}}: '',
-        {{- end }}
-        {{- if eq .FieldType "richtext" }}
-        {{.FieldJson}}: '',
-        {{- end }}
-        {{- if eq .FieldType "int" }}
-        {{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
-        {{- end }}
-        {{- if eq .FieldType "time.Time" }}
-        {{.FieldJson}}: new Date(),
-        {{- end }}
-        {{- if eq .FieldType "float64" }}
-        {{.FieldJson}}: 0,
-        {{- end }}
-        {{- if eq .FieldType "picture" }}
-        {{.FieldJson}}: "",
-        {{- end }}
-        {{- if eq .FieldType "video" }}
-        {{.FieldJson}}: "",
-        {{- end }}
-        {{- if eq .FieldType "pictures" }}
-        {{.FieldJson}}: [],
-        {{- end }}
-        {{- if eq .FieldType "file" }}
-        {{.FieldJson}}: [],
-        {{- end }}
-        {{- if eq .FieldType "json" }}
-        {{.FieldJson}}: {},
-        {{- end }}
-        {{- if eq .FieldType "array" }}
-        {{.FieldJson}}: [],
-        {{- end }}
+        {{- range .Fields}}
+          {{- if .Form}}
+            {{- if eq .FieldType "bool" }}
+            {{.FieldJson}}: false,
+            {{- end }}
+            {{- if eq .FieldType "string" }}
+            {{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "richtext" }}
+            {{.FieldJson}}: '',
+            {{- end }}
+            {{- if eq .FieldType "int" }}
+            {{.FieldJson}}: {{- if or .DictType .DataSource}} undefined{{ else }} 0{{- end }},
+            {{- end }}
+            {{- if eq .FieldType "time.Time" }}
+            {{.FieldJson}}: new Date(),
+            {{- end }}
+            {{- if eq .FieldType "float64" }}
+            {{.FieldJson}}: 0,
+            {{- end }}
+            {{- if eq .FieldType "picture" }}
+            {{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "video" }}
+            {{.FieldJson}}: "",
+            {{- end }}
+            {{- if eq .FieldType "pictures" }}
+            {{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "file" }}
+            {{.FieldJson}}: [],
+            {{- end }}
+            {{- if eq .FieldType "json" }}
+            {{.FieldJson}}: {},
+            {{- end }}
+            {{- if eq .FieldType "array" }}
+            {{.FieldJson}}: [],
+            {{- end }}
+          {{- end }}
         {{- end }}
         })
 
@@ -460,7 +514,8 @@ const formData = ref({
 
 // 验证规则
 const rule = reactive({
-    {{- range .FrontFields }}
+    {{- range .Fields }}
+        {{- if .Form }}
             {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,
@@ -476,6 +531,7 @@ const rule = reactive({
               {{- end }}
               ],
             {{- end }}
+        {{- end }}
     {{- end }}
 })
 
@@ -493,7 +549,7 @@ const searchRule = reactive({
       }
     }, trigger: 'change' }
   ],
-  {{- range .FrontFields }}
+  {{- range .Fields }}
     {{- if .FieldSearchType}}
       {{- if eq .FieldType "time.Time" }}
         {{.FieldJson }} : [{ validator: (rule, value, callback) => {
@@ -526,12 +582,14 @@ const searchInfo = ref({})
 // 排序
 const sortChange = ({ prop, order }) => {
   const sortMap = {
-    {{- range .FrontFields}}
+    {{- range .Fields}}
+     {{- if .Table}}
       {{- if and .Sort}}
         {{- if not (eq .ColumnName "")}}
             {{.FieldJson}}: '{{.ColumnName}}',
         {{- end}}
       {{- end}}
+     {{- end}}
     {{- end}}
   }
 
@@ -558,7 +616,7 @@ const onSubmit = () => {
     if (!valid) return
     page.value = 1
     pageSize.value = 10
-    {{- range .FrontFields}}{{- if eq .FieldType "bool" }}
+    {{- range .Fields}}{{- if eq .FieldType "bool" }}
     if (searchInfo.value.{{.FieldJson}} === ""){
         searchInfo.value.{{.FieldJson}}=null
     }{{ end }}{{ end }}
@@ -697,7 +755,8 @@ const openDialog = () => {
 const closeDialog = () => {
     dialogFormVisible.value = false
     formData.value = {
-    {{- range .FrontFields}}
+    {{- range .Fields}}
+      {{- if .Form}}
         {{- if eq .FieldType "bool" }}
         {{.FieldJson}}: false,
         {{- end }}
@@ -731,7 +790,8 @@ const closeDialog = () => {
         {{- if eq .FieldType "json" }}
         {{.FieldJson}}: {},
         {{- end }}
-        {{- end }}
+      {{- end }}
+    {{- end }}
         }
 }
 // 弹窗确定
@@ -765,6 +825,37 @@ const downloadFile = (url) => {
     window.open(getUrl(url), '_blank')
 }
 {{end}}
+
+const detailFrom = ref({})
+
+// 查看详情控制标记
+const detailShow = ref(false)
+
+
+// 打开详情弹窗
+const openDetailShow = () => {
+  detailShow.value = true
+}
+
+
+// 打开详情
+const getDetails = async (row) => {
+  // 打开弹窗
+  const res = await find{{.StructName}}({ {{.PrimaryField.FieldJson}}: row.{{.PrimaryField.FieldJson}} })
+  if (res.code === 0) {
+    detailFrom.value = res.data
+    openDetailShow()
+  }
+}
+
+
+// 关闭详情弹窗
+const closeDetailShow = () => {
+  detailShow.value = false
+  detailFrom.value = {}
+}
+
+
 </script>
 
 <style>

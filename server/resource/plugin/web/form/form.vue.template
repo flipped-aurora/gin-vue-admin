@@ -58,6 +58,7 @@
        {{- end }}
        </el-form-item>
       {{- end }}
+      {{- end }}
         <el-form-item>
           <el-button type="primary" @click="save">保存</el-button>
           <el-button type="primary" @click="back">返回</el-button>
@@ -107,6 +108,7 @@ const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- range .Fields}}
+          {{- if .Form }}
             {{- if eq .FieldType "bool" }}
             {{.FieldJson}}: false,
             {{- end }}
@@ -143,11 +145,13 @@ const formData = ref({
             {{- if eq .FieldType "array" }}
             {{.FieldJson}}: [],
             {{- end }}
+          {{- end }}
         {{- end }}
         })
 // 验证规则
 const rule = reactive({
     {{- range .Fields }}
+      {{- if .Form }}
             {{- if eq .Require true }}
                {{.FieldJson }} : [{
                    required: true,
@@ -155,6 +159,7 @@ const rule = reactive({
                    trigger: ['input','blur'],
                }],
             {{- end }}
+       {{- end }}
     {{- end }}
 })
 

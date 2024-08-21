@@ -20,36 +20,46 @@ var BaseMenuServiceApp = new(BaseMenuService)
 
 func (baseMenuService *BaseMenuService) DeleteBaseMenu(id int) (err error) {
 	err = global.GVA_DB.First(&system.SysBaseMenu{}, "parent_id = ?", id).Error
-	if err != nil {
-		return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
-
-			err = tx.Delete(&system.SysBaseMenu{}, "id = ?", id).Error
-			if err != nil {
-				return err
-			}
-
-			err = tx.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
-			if err != nil {
-				return err
-			}
-
-			err = tx.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
-			if err != nil {
-				return err
-			}
-			err = tx.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
-			if err != nil {
-				return err
-			}
-
-			err = tx.Delete(&system.SysAuthorityMenu{}, "sys_base_menu_id = ?", id).Error
-			if err != nil {
-				return err
-			}
-			return nil
-		})
+	if err == nil {
+		return errors.New("此菜单存在子菜单不可删除")
 	}
-	return errors.New("此菜单存在子菜单不可删除")
+	var menu system.SysBaseMenu
+	err = global.GVA_DB.First(&menu, id).Error
+	if err != nil {
+		return errors.New("记录不存在")
+	}
+	err = global.GVA_DB.First(&system.SysAuthority{}, "default_router = ?", menu.Name).Error
+	if err == nil {
+		return errors.New("此菜单有角色正在作为首页，不可删除")
+	}
+	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
+
+		err = tx.Delete(&system.SysBaseMenu{}, "id = ?", id).Error
+		if err != nil {
+			return err
+		}
+
+		err = tx.Delete(&system.SysBaseMenuParameter{}, "sys_base_menu_id = ?", id).Error
+		if err != nil {
+			return err
+		}
+
+		err = tx.Delete(&system.SysBaseMenuBtn{}, "sys_base_menu_id = ?", id).Error
+		if err != nil {
+			return err
+		}
+		err = tx.Delete(&system.SysAuthorityBtn{}, "sys_menu_id = ?", id).Error
+		if err != nil {
+			return err
+		}
+
+		err = tx.Delete(&system.SysAuthorityMenu{}, "sys_base_menu_id = ?", id).Error
+		if err != nil {
+			return err
+		}
+		return nil
+	})
+
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

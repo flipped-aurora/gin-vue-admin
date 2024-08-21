@@ -34,6 +34,7 @@ func (h SqliteInitHandler) WriteConfig(ctx context.Context) error {
 	for k, v := range cs {
 		global.GVA_VP.Set(k, v)
 	}
+	global.GVA_ACTIVE_DBNAME = &c.Dbname
 	return global.GVA_VP.WriteConfig()
 }
 

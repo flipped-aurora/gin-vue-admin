@@ -568,6 +568,21 @@
 				"configSetupSuccess" : "The Configuration File Was Setup Successfully",
 				"emailSentSuccess" : "The Email Was Sent Successfully",
 				"emailSentError" : "Failed To Send Email"
+			},
+			"autoPkg" : {
+				"autoPkgNote" : "This function is for development environment use only and is not recommended for production use. For specific usage effects, please watch the video https://www.bilibili.com/video/BV1kv4y1g7nT?p=3",
+				"packageName" : "Package Name",
+				"template" : "Template",
+				"displayName" : "Display Name",
+				"description" : "Description",
+				"templatePackageNote" : "The template package will create a code package integrated into the project body, and the template plugin will create a plugin package",
+				"creatingPackage" : "Creating Package",
+				"enterPackageNameNote" : "Please enter the package name",
+				"selectTemplateNote" : "Please select a template",
+				"cannotStartWithNumberNote" : "Cannot start with a number",
+				"addSuccess": "Added successfully",
+				"deletePackageNote" : "This operation only deletes the pkg storage in the database. Please delete the corresponding directory structure of the backend by yourself to keep it consistent with the database!",
+				"" : ""
 			}
 		}
 	},

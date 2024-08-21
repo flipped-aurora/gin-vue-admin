@@ -2,7 +2,7 @@
   <div>
     <warning-bar
       href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
-      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
+      :title="t('view.systemTools.autoPkg.autoPkgNote')"
     />
     <div class="gva-table-box">
       <div class="gva-btn-list gap-3 flex items-center">
@@ -11,45 +11,45 @@
           icon="plus"
           @click="openDialog('addApi')"
         >
-          新增
+          {{ t('general.add') }}
         </el-button>
 
       </div>
       <el-table :data="tableData">
         <el-table-column
           align="left"
-          label="id"
+          label="ID"
           width="60"
           prop="ID"
         />
         <el-table-column
           align="left"
-          label="包名"
+          :label="t('view.systemTools.autoPkg.packageName')"
           width="150"
           prop="packageName"
         />
         <el-table-column
             align="left"
-            label="模板"
+            :label="t('view.systemTools.autoPkg.template')"
             width="150"
             prop="template"
         />
         <el-table-column
           align="left"
-          label="展示名"
+          :label="t('view.systemTools.autoPkg.displayName')"
           width="150"
           prop="label"
         />
         <el-table-column
           align="left"
-          label="描述"
+          :label="t('view.systemTools.autoPkg.description')"
           min-width="150"
           prop="desc"
         />
 
         <el-table-column
           align="left"
-          label="操作"
+          :label="t('general.operations')"
           width="200"
         >
           <template #default="scope">
@@ -60,7 +60,7 @@
               link
               @click="deleteApiFunc(scope.row)"
             >
-              删除
+              {{ t('general.delete') }}
             </el-button>
           </template>
         </el-table-column>
@@ -72,15 +72,15 @@
       size="40%"
       :show-close="false"
     >
-      <warning-bar title="模板package会创建集成于项目本体中的代码包，模板plugin会创建插件包" />
+      <warning-bar :title="t('view.systemTools.autoPkg.templatePackageNote')" />
       <el-form
         ref="pkgForm"
         :model="form"
         :rules="rules"
-        label-width="80px"
+        label-width="120px"
       >
         <el-form-item
-          label="包名"
+          :label="t('view.systemTools.autoPkg.packageName')"
           prop="packageName"
         >
           <el-input
@@ -89,7 +89,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="模板"
+          :label="t('view.systemTools.autoPkg.template')"
           prop="template"
         >
           <el-select
@@ -100,7 +100,7 @@
         </el-form-item>
 
         <el-form-item
-          label="展示名"
+          :label="t('view.systemTools.autoPkg.displayName')"
           prop="label"
         >
           <el-input
@@ -109,7 +109,7 @@
           />
         </el-form-item>
         <el-form-item
-          label="描述"
+          :label="t('view.systemTools.autoPkg.description')"
           prop="desc"
         >
           <el-input
@@ -120,16 +120,16 @@
       </el-form>
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">创建Package</span>
+          <span class="text-lg">{{ t('view.systemTools.autoPkg.creatingPackage') }}</span>
           <div>
             <el-button @click="closeDialog">
-              取 消
+              {{ t('general.close') }}
             </el-button>
             <el-button
               type="primary"
               @click="enterDialog"
             >
-              确 定
+              {{ t('general.confirm') }}
             </el-button>
           </div>
         </div>
@@ -148,6 +148,9 @@ import {
 import { ref } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
+import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
+
+const { t } = useI18n() // added by mohamed hassan to support multilanguage
 
 defineOptions({
   name: 'AutoPkg',
@@ -172,7 +175,7 @@ getTemplates()
 
 const validateNum = (rule, value, callback) => {
   if ((/^\d+$/.test(value[0]))) {
-    callback(new Error('不能够以数字开头'))
+    callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote')))
   } else {
     callback()
   }
@@ -180,11 +183,11 @@ const validateNum = (rule, value, callback) => {
 
 const rules = ref({
   packageName: [
-    { required: true, message: '请输入包名', trigger: 'blur' },
+    { required: true, message: t('view.systemTools.autoPkg.enterPackageNameNote'), trigger: 'blur' },
     { validator: validateNum, trigger: 'blur' }
   ],
   template:[
-    { required: true, message: '请选择模板', trigger: 'change' },
+    { required: true, message: t('view.systemTools.autoPkg.selectTemplateNote'), trigger: 'change' },
     { validator: validateNum, trigger: 'blur' }
   ]
 })
@@ -212,7 +215,7 @@ const enterDialog = async() => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '添加成功',
+          message: t('view.systemTools.autoPkg.addSuccess'),
           showClose: true
         })
       }
@@ -231,9 +234,9 @@ const getTableData = async() => {
 }
 
 const deleteApiFunc = async(row) => {
-  ElMessageBox.confirm('此操作仅删除数据库中的pkg存储，后端相应目录结构请自行删除与数据库保持一致！', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('view.systemTools.autoPkg.deletePackageNote'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   })
     .then(async() => {
@@ -241,7 +244,7 @@ const deleteApiFunc = async(row) => {
       if (res.code === 0) {
         ElMessage({
           type: 'success',
-          message: '删除成功!'
+          message: t('general.deleteSuccess')
         })
         getTableData()
       }

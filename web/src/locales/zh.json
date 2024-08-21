@@ -125,8 +125,8 @@
 		"add": "新增",
 		"addSuccess": "添加成功!",
 		"cancel": "取消",
-		"close": "取消",
-		"confirm": "确定",
+		"close": "取 消",
+		"confirm": "确 定",
 		"copy": "拷贝",
 		"copySuccess": "复制成功!",
 		"createdAt": "日期",
@@ -568,6 +568,21 @@
 				"configSetupSuccess" : "配置文件设置成功",
 				"emailSentSuccess" : "邮件发送成功",
 				"emailSentError" : "邮件发送失败"
+			},
+			"autoPkg" : {
+				"autoPkgNote" : "此功能为开发环境使用，不建议发布到生产，具体使用效果请看视频https://www.bilibili.com/video/BV1kv4y1g7nT?p=3",
+				"packageName" : "包名",
+				"template" : "模板",
+				"displayName" : "展示名",
+				"description" : "描述",
+				"templatePackageNote" : "模板package会创建集成于项目本体中的代码包，模板plugin会创建插件包",
+				"creatingPackage" : "创建Package",
+				"enterPackageNameNote" : "请输入包名",
+				"selectTemplateNote" : "请选择模板",
+				"cannotStartWithNumberNote" : "不能够以数字开头",
+				"addSuccess": "添加成功",
+				"deletePackageNote" : "此操作仅删除数据库中的pkg存储，后端相应目录结构请自行删除与数据库保持一致！",
+				"" : ""
 			}
 		}
 	},

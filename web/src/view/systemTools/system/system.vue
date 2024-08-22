@@ -709,7 +709,7 @@ const config = ref({
     'max-pool-size': '',
     'socket-timeout-ms': '',
     'connect-timeout-ms': '',
-    'is-zap': '',
+    'is-zap': false,
     hosts: [
       {
         host: '',

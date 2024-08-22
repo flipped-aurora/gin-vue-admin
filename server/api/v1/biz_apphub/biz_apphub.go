@@ -30,6 +30,9 @@ func (bizAppHubApi *BizAppHubApi) CreateBizAppHub(c *gin.Context) {
 		return
 	}
 	bizAppHub.CreatedBy = utils.GetUserID(c)
+	bizAppHub.OperateUser = c.GetString("user")
+	bizAppHub.User = c.GetString("user")
+	//fmt.Println(user)
 	err = bizAppHubService.CreateBizAppHub(&bizAppHub)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))
@@ -97,6 +100,7 @@ func (bizAppHubApi *BizAppHubApi) UpdateBizAppHub(c *gin.Context) {
 		return
 	}
 	bizAppHub.UpdatedBy = utils.GetUserID(c)
+	bizAppHub.OperateUser = c.GetString("user")
 	err = bizAppHubService.UpdateBizAppHub(bizAppHub)
 	if err != nil {
 		global.GVA_LOG.Error("更新失败!", zap.Error(err))
@@ -104,6 +108,26 @@ func (bizAppHubApi *BizAppHubApi) UpdateBizAppHub(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage("更新成功", c)
+}
+
+// BizAppHubRecord 用id查询biz_apphub
+// @Tags BizAppHub
+// @Summary 用id查询biz_apphub
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data query biz_apphub.BizAppHub true "用id查询biz_apphub"
+// @Success 200 {object} response.Response{data=biz_apphub.BizAppHub,msg=string} "查询成功"
+// @Router bizAppHub/record [get]
+func (bizAppHubApi *BizAppHubApi) BizAppHubRecord(c *gin.Context) {
+	ID := c.Query("ID")
+	rebizAppHub, err := bizAppHubService.GetBizAppHubRecord(ID)
+	if err != nil {
+		global.GVA_LOG.Error("查询失败!", zap.Error(err))
+		response.FailWithMessage("查询失败:"+err.Error(), c)
+		return
+	}
+	response.OkWithData(rebizAppHub, c)
 }
 
 // FindBizAppHub 用id查询biz_apphub

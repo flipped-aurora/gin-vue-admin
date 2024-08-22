@@ -4,8 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/qiniu/api.v7/v7/auth/qbox"
 	"github.com/qiniu/api.v7/v7/storage"
+	"go.uber.org/zap"
 	"os"
 )
 
@@ -71,4 +73,16 @@ func (q *QiNiu) GetUploadToken() string {
 	mac := qbox.NewMac(q.AccessKey, q.SecretKey)
 	upToken := putPolicy.UploadToken(mac)
 	return upToken
+}
+
+// DeleteFile 删除文件
+func (q *QiNiu) DeleteFile(file string) error {
+	mac := qbox.NewMac(q.AccessKey, q.SecretKey)
+	cfg := qiniuConfig()
+	bucketManager := storage.NewBucketManager(mac, cfg)
+	if err := bucketManager.Delete(q.Bucket, file); err != nil {
+		global.GVA_LOG.Error("function bucketManager.Delete() failed", zap.Any("err", err.Error()))
+		return errors.New("function bucketManager.Delete() failed, err:" + err.Error())
+	}
+	return nil
 }

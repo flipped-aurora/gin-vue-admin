@@ -6,6 +6,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // DeCompress 解压文件 返回解压的目录
@@ -24,8 +25,8 @@ func DeCompress(zipFile, dest string) (absPath string, err error) {
 	}()
 
 	var (
-		first string // 记录第一次的解压的名字
-		order int    = 0
+		//first string // 记录第一次的解压的名字
+		order int = 0
 	)
 
 	for _, file := range reader.File {
@@ -36,7 +37,7 @@ func DeCompress(zipFile, dest string) (absPath string, err error) {
 		filename := filepath.Join(dest, file.Name)
 		//记录第一次的名字
 		if order == 0 {
-			first = filename
+			//first = filename
 		}
 		order += 1
 		//fmt.Println(getDir(filename))
@@ -65,5 +66,5 @@ func DeCompress(zipFile, dest string) (absPath string, err error) {
 			}
 		}
 	}
-	return first, nil
+	return strings.TrimSuffix(zipFile, ".zip"), nil
 }

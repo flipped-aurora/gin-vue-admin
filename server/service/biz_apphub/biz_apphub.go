@@ -63,8 +63,8 @@ func (bizAppHubService *BizAppHubService) ParseFileSrc(unZipPath string) (fileLi
 	return filesSrc, nil
 }
 
-// FileSrcReplace 替换文件中的地址用oss的地址
-func (bizAppHubService *BizAppHubService) FileSrcReplace(fileList []FileSrc) error {
+// FileSrcReplaceAndUpload 替换文件中的地址用oss的地址
+func (bizAppHubService *BizAppHubService) FileSrcReplaceAndUpload(fileList []FileSrc) error {
 	fileReplace := make(map[string]string)
 	for _, file := range fileList {
 		fileReplace[file.SrcPath] = file.OssFullPath
@@ -94,56 +94,101 @@ func (bizAppHubService *BizAppHubService) FileSrcReplace(fileList []FileSrc) err
 		}
 		create.Close()
 	}
-	for _, file := range fileList {
-		store := oss.NewDefaultQiNiu()
-		_, err := store.UploadLocalFile(file.LocalPath, file.OssPath)
-		if err != nil {
-			return err
-		}
-	}
+
 	return nil
 }
 
-func (bizAppHubService *BizAppHubService) Decode(req biz_apphub.BizAppHub) error {
+func getIndexFile(req biz_apphub.BizAppHub, list []FileSrc) string {
+	for _, src := range list {
+
+		found := fmt.Sprintf("/%s/dist/index.html", req.Version)
+
+		if strings.HasSuffix(src.OssFullPath, found) {
+			replace := fmt.Sprintf("/%s/dist", req.Version)
+			index := strings.ReplaceAll(src.OssFullPath, replace, "")
+			//index = src.OssFullPath
+			return index
+		}
+	}
+	return ""
+}
+
+func (bizAppHubService *BizAppHubService) Deploy(req biz_apphub.BizAppHub) (index string, err error) {
 
 	absPath := "./soft"
-	absPath = strings.Join([]string{absPath, "beiluo", req.AppCode, req.Version}, "/")
-	err := os.MkdirAll(absPath, 0755)
+	absPath = strings.Join([]string{absPath, req.OperateUser, req.AppCode, req.Version}, "/")
+	err = os.MkdirAll(absPath, 0755)
 	if err != nil {
-		return err
+		return "", err
 	}
 	url := "http://cdn.geeleo.com/" + req.OssPath
 
 	path := strings.Split(req.OssPath, "/")
 	fileName := path[len(path)-1]
 	err = httpx.DownloadFile(url, absPath+"/"+fileName)
-
+	if err != nil {
+		return "", err
+	}
 	unZipPath, err := compress.DeCompress(filepath.Join(absPath, fileName), absPath)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	list, err := bizAppHubService.ParseFileSrc(unZipPath)
+	fileList, err := bizAppHubService.ParseFileSrc(unZipPath)
 	if err != nil {
-		return err
+		return "", err
 	}
 
-	fmt.Println(list)
-	err = bizAppHubService.FileSrcReplace(list)
+	fmt.Println(fileList)
+	err = bizAppHubService.FileSrcReplaceAndUpload(fileList)
 	if err != nil {
-		return err
+		return "", err
 	}
-	return nil
+
+	store := oss.NewDefaultQiNiu()
+	for _, file := range fileList {
+		if strings.HasSuffix(file.OssPath, "/dist/index.html") { //上传入口文件
+			replace := fmt.Sprintf("/%s/dist", req.Version)
+			indexFile := strings.ReplaceAll(file.OssPath, replace, "")
+			ossIndexFile := strings.ReplaceAll(file.OssFullPath, replace, "")
+			index = ossIndexFile
+			err = store.DeleteFile(indexFile)
+			if err != nil {
+				fmt.Println(err)
+			}
+			_, err := store.UploadLocalFile(file.LocalPath, indexFile)
+			if err != nil {
+				return "", err
+			}
+		}
+		_, err := store.UploadLocalFile(file.LocalPath, file.OssPath)
+		if err != nil {
+			return "", err
+		}
+	}
+
+	return index, nil
 }
 
 // CreateBizAppHub 创建biz_apphub记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bizAppHubService *BizAppHubService) CreateBizAppHub(bizAppHub *biz_apphub.BizAppHub) (err error) {
-	err = bizAppHubService.Decode(*bizAppHub)
+	index, err := bizAppHubService.Deploy(*bizAppHub)
 	if err != nil {
 		return err
 	}
+	bizAppHub.IndexHtml = index
+	fmt.Println(index)
 	err = global.GVA_DB.Create(bizAppHub).Error
+	if err != nil {
+		return err
+	}
+	//bizAppHub.ID = 0
+	//record := biz_apphub.BizAppHubRecord{
+	//	AppId:     bizAppHub.ID,
+	//	BizAppHub: *bizAppHub,
+	//}
+	//err = global.GVA_DB.Create(&record).Error
 	return err
 }
 
@@ -180,6 +225,31 @@ func (bizAppHubService *BizAppHubService) DeleteBizAppHubByIds(IDs []string, del
 // UpdateBizAppHub 更新biz_apphub记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bizAppHubService *BizAppHubService) UpdateBizAppHub(bizAppHub biz_apphub.BizAppHub) (err error) {
+
+	var b biz_apphub.BizAppHub
+	err = global.GVA_DB.Model(&biz_apphub.BizAppHub{}).Where("id = ?", bizAppHub.ID).First(&b).Error
+	if err != nil {
+		return err
+	}
+	if bizAppHub.Version != b.Version {
+		//更新版本
+		if bizAppHub.OssPath == "" {
+			return fmt.Errorf("文件地址不能为空")
+		}
+		index, err := bizAppHubService.Deploy(bizAppHub)
+		if err != nil {
+			return err
+		}
+		bizAppHub.IndexHtml = index
+		b.ID = 0
+		//记录更新版本
+		err = global.GVA_DB.Model(&biz_apphub.BizAppHubRecord{}).
+			Create(&biz_apphub.BizAppHubRecord{AppId: bizAppHub.ID, BizAppHub: b}).Error
+		if err != nil {
+			return err
+		}
+	}
+
 	err = global.GVA_DB.Model(&biz_apphub.BizAppHub{}).Where("id = ?", bizAppHub.ID).Updates(&bizAppHub).Error
 	return err
 }
@@ -187,6 +257,13 @@ func (bizAppHubService *BizAppHubService) UpdateBizAppHub(bizAppHub biz_apphub.B
 // GetBizAppHub 根据ID获取biz_apphub记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bizAppHubService *BizAppHubService) GetBizAppHub(ID string) (bizAppHub biz_apphub.BizAppHub, err error) {
+	err = global.GVA_DB.Where("id = ?", ID).First(&bizAppHub).Error
+	return
+}
+
+// GetBizAppHub 根据ID获取biz_apphub记录
+// Author [piexlmax](https://github.com/piexlmax)
+func (bizAppHubService *BizAppHubService) GetBizAppHubRecord(ID string) (bizAppHub biz_apphub.BizAppHub, err error) {
 	err = global.GVA_DB.Where("id = ?", ID).First(&bizAppHub).Error
 	return
 }

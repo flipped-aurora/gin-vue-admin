@@ -58,6 +58,8 @@ func JWTAuth() gin.HandlerFunc {
 		//	c.Abort()
 		//}
 		c.Set("claims", claims)
+		c.Set("user", claims.Username)
+		c.Set("nickname", claims.NickName)
 		if claims.ExpiresAt.Unix()-time.Now().Unix() < claims.BufferTime {
 			dr, _ := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)
 			claims.ExpiresAt = jwt.NewNumericDate(time.Now().Add(dr))

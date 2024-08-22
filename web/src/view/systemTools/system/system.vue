@@ -734,7 +734,7 @@ const config = ref({
 const initForm = async() => {
   const res = await getSystemConfig()
   if (res.code === 0) {
-    config.value = res.data
+    config.value = res.data.config
   }
 }
 initForm()

@@ -264,7 +264,6 @@ const closeFunc = () => {
 const runFunc = async () =>{
   // 首字母自动转换为大写
   autoFunc.value.funcName = toUpperCase(autoFunc.value.funcName)
-  const firstChar = autoFunc.value.funcName.charAt(0);
 
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {

@@ -262,7 +262,7 @@ const closeFunc = () => {
 
 const runFunc = async () =>{
   // 检查 funcName 首字母必须大写
-  if (autoFunc.value.funcName.length <= 0) {
+  if (autoFunc.value.funcName.length <= 1) {
     return
   }
   const firstChar = autoFunc.value.funcName.charAt(0);

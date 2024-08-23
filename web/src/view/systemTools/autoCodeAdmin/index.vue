@@ -178,7 +178,7 @@
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
           <el-form-item label="方法名：">
-            <el-input v-model="autoFunc.funcName" placeholder="请输入方法名(首字母大写)" />
+            <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
           </el-form-item>
           <el-form-item label="方法：">
             <el-select v-model="autoFunc.method" placeholder="请选择方法">
@@ -206,6 +206,7 @@ import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
 import { formatDate } from "@/utils/format";
+import { toUpperCase } from "@/utils/stringFun"
 
 defineOptions({
   name: "AutoCodeAdmin",
@@ -261,15 +262,10 @@ const closeFunc = () => {
 };
 
 const runFunc = async () =>{
-  // 检查 funcName 首字母必须大写
-  if (autoFunc.value.funcName.length <= 1) {
-    return
-  }
+  // 首字母自动转换为大写
+  autoFunc.value.funcName = toUpperCase(autoFunc.value.funcName)
   const firstChar = autoFunc.value.funcName.charAt(0);
-  if (!firstChar.match(/[A-Z]/)) {
-    ElMessage.error("方法名必须大写");
-    return
-  }
+
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {
     ElMessage.success("增加方法成功");

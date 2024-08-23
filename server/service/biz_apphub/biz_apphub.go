@@ -175,8 +175,10 @@ func (bizAppHubService *BizAppHubService) CreateBizAppHub(bizAppHub *biz_apphub.
 	record := *bizAppHub
 	record.CreatedAt = time.Now()
 	record.ID = 0
+
 	record.OperateUser = bizAppHub.OperateUser
-	bz := biz_apphub.BizAppHubRecord{
+	bz := &biz_apphub.BizAppHubRecord{
+		AppId:     bizAppHub.ID,
 		BizAppHub: record,
 		//UpdatedUser: bizAppHub.OperateUser,
 	}

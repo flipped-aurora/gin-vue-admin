@@ -551,6 +551,7 @@ const type = ref('')
 
 // 更新行
 const updateBizAppHubFunc = async(row) => {
+  uploadedFiles.value=[]
     const res = await findBizAppHub({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {

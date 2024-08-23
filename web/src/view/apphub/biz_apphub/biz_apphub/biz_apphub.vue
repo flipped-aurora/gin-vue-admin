@@ -117,6 +117,7 @@
             <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
             <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizAppHubFunc(scope.row)">变更</el-button>
             <el-button  type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
+              <el-button  type="primary" link icon="edit" @click="deployRecordFn(scope.row)">发布历史</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -230,7 +231,35 @@
               </el-descriptions-item>
             </el-descriptions>
         </el-drawer>
+    <el-dialog v-model="deployRecordDialogTableVisible" title="发布历史">
+      <el-table :data="deployRecord">
 
+<!--        <el-table-column property="CreatedAt" width="250" label="发布时间" />-->
+
+        <el-table-column property="CreatedAt" width="200" label="发布时间">
+          <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
+        </el-table-column>
+
+        <el-table-column property="appName" label="应用名称" />
+        <el-table-column show-overflow-tooltip="true" property="title" label="标题" />
+        <el-table-column property="desc" label="描述" />
+        <el-table-column property="classify" label="分类" />
+        <el-table-column property="version" label="版本" />
+        <el-table-column property="mode" label="收费模式" />
+        <el-table-column property="developMode" label="后续迭代" />
+        <el-table-column property="cover" label="封面" />
+        <el-table-column property="tags" label="应用标签" />
+        <el-table-column property="video" label="介绍视频" />
+        <el-table-column property="operateUser" label="操作人" />
+        <el-table-column align="left" label="操作" fixed="right">
+          <template #default="scope">
+            <el-button  type="primary" link @click="rollbackVersionFn(scope.row)">回滚</el-button>
+<!--            <el-button  type="primary" link @click="deployRecordFn(scope.row)">删除</el-button>-->
+          </template>
+        </el-table-column>
+
+      </el-table>
+    </el-dialog>
   </div>
 </template>
 
@@ -241,7 +270,7 @@ import {
   deleteBizAppHubByIds,
   updateBizAppHub,
   findBizAppHub,
-  getBizAppHubList
+  getBizAppHubList, getDeployList, rollbackVersion
 } from '@/api/biz_apphub/biz_apphub'
 
 // 全量引入格式化工具 请按需保留
@@ -631,7 +660,31 @@ const closeDetailShow = () => {
   detailShow.value = false
   detailFrom.value = {}
 }
+const deployRecordDialogTableVisible=ref(false)
+const deployRecord=ref([])
+const deployRecordFn = async (row) => {
+  deployRecordDialogTableVisible.value=true
+  let res =await getDeployList({appId:row.ID})
+  console.log("res.data.list---->",res.data.list)
+  if (res.code===0){
+    deployRecord.value=res.data.list
+  }
+}
 
+const rollbackVersionFn = async (row) => {
+  // deployRecordDialogTableVisible.value=true
+  let res =await rollbackVersion({appId:row.appId+"",recordId:row.ID+""})
+  if (res.code===0){
+    ElMessage({
+      type: 'success',
+      message: '回滚成功'
+    })
+    deployRecordDialogTableVisible.value=false
+    getTableData()
+    // deployRecord.value=res.data.list
+  }
+  // console.log("res.data.list---->",res.data)
+}
 
 </script>
 

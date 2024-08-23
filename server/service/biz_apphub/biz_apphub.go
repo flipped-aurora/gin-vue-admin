@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type BizAppHubService struct{}
@@ -98,21 +99,6 @@ func (bizAppHubService *BizAppHubService) FileSrcReplaceAndUpload(fileList []Fil
 	return nil
 }
 
-func getIndexFile(req biz_apphub.BizAppHub, list []FileSrc) string {
-	for _, src := range list {
-
-		found := fmt.Sprintf("/%s/dist/index.html", req.Version)
-
-		if strings.HasSuffix(src.OssFullPath, found) {
-			replace := fmt.Sprintf("/%s/dist", req.Version)
-			index := strings.ReplaceAll(src.OssFullPath, replace, "")
-			//index = src.OssFullPath
-			return index
-		}
-	}
-	return ""
-}
-
 func (bizAppHubService *BizAppHubService) Deploy(req biz_apphub.BizAppHub) (index string, err error) {
 
 	absPath := "./soft"
@@ -150,7 +136,10 @@ func (bizAppHubService *BizAppHubService) Deploy(req biz_apphub.BizAppHub) (inde
 		if strings.HasSuffix(file.OssPath, "/dist/index.html") { //上传入口文件
 			replace := fmt.Sprintf("/%s/dist", req.Version)
 			indexFile := strings.ReplaceAll(file.OssPath, replace, "")
+			indexFile = strings.ReplaceAll(indexFile, "/index.html", "/index")
 			ossIndexFile := strings.ReplaceAll(file.OssFullPath, replace, "")
+			ossIndexFile = strings.ReplaceAll(ossIndexFile, "/index.html", "/index")
+
 			index = ossIndexFile
 			err = store.DeleteFile(indexFile)
 			if err != nil {
@@ -178,17 +167,23 @@ func (bizAppHubService *BizAppHubService) CreateBizAppHub(bizAppHub *biz_apphub.
 		return err
 	}
 	bizAppHub.IndexHtml = index
-	fmt.Println(index)
 	err = global.GVA_DB.Create(bizAppHub).Error
 	if err != nil {
 		return err
 	}
-	//bizAppHub.ID = 0
-	//record := biz_apphub.BizAppHubRecord{
-	//	AppId:     bizAppHub.ID,
-	//	BizAppHub: *bizAppHub,
-	//}
-	//err = global.GVA_DB.Create(&record).Error
+
+	record := *bizAppHub
+	record.CreatedAt = time.Now()
+	record.ID = 0
+	record.OperateUser = bizAppHub.OperateUser
+	bz := biz_apphub.BizAppHubRecord{
+		BizAppHub: record,
+		//UpdatedUser: bizAppHub.OperateUser,
+	}
+	err = global.GVA_DB.Create(bz).Error
+	if err != nil {
+		return err
+	}
 	return err
 }
 
@@ -241,16 +236,24 @@ func (bizAppHubService *BizAppHubService) UpdateBizAppHub(bizAppHub biz_apphub.B
 			return err
 		}
 		bizAppHub.IndexHtml = index
-		b.ID = 0
+		//b.ID = 0
+		//b.CreatedAt = time.Now()
+
+		bizAppHubRecord := bizAppHub
+		bizAppHubRecord.ID = 0
+		bizAppHubRecord.CreatedAt = time.Now()
+		bizAppHubRecord.IndexHtml = index
 		//记录更新版本
 		err = global.GVA_DB.Model(&biz_apphub.BizAppHubRecord{}).
-			Create(&biz_apphub.BizAppHubRecord{AppId: bizAppHub.ID, BizAppHub: b}).Error
+			Create(&biz_apphub.BizAppHubRecord{AppId: bizAppHub.ID,
+				BizAppHub: bizAppHubRecord}).Error
 		if err != nil {
 			return err
 		}
 	}
 
-	err = global.GVA_DB.Model(&biz_apphub.BizAppHub{}).Where("id = ?", bizAppHub.ID).Updates(&bizAppHub).Error
+	err = global.GVA_DB.Model(&biz_apphub.BizAppHub{}).
+		Where("id = ?", bizAppHub.ID).Updates(&bizAppHub).Error
 	return err
 }
 

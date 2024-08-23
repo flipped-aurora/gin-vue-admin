@@ -8,7 +8,7 @@ require (
 	github.com/casbin/casbin/v2 v2.87.1
 	github.com/casbin/gorm-adapter/v3 v3.18.0
 	github.com/flipped-aurora/ws v1.0.2
-	github.com/fsnotify/fsnotify v1.6.0
+	github.com/fsnotify/fsnotify v1.7.0
 	github.com/fvbock/endless v0.0.0-20170109170031-447134032cb6
 	github.com/gin-gonic/gin v1.9.1
 	github.com/glebarez/sqlite v1.8.0
@@ -19,6 +19,7 @@ require (
 	github.com/gookit/color v1.5.4
 	github.com/huaweicloud/huaweicloud-sdk-go-obs v3.21.8+incompatible
 	github.com/jordan-wright/email v0.0.0-20200824153738-3f5bafa1cd84
+	github.com/liu-cn/json-filter v0.0.0-20240618075229-3d64a144e8bb
 	github.com/mholt/archiver/v4 v4.0.0-alpha.8
 	github.com/mojocn/base64Captcha v1.3.6
 	github.com/otiai10/copy v1.7.0
@@ -80,6 +81,7 @@ require (
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.14.0 // indirect
+	github.com/gogf/gf/v2 v2.7.1 // indirect
 	github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 // indirect
 	github.com/golang-sql/sqlexp v0.1.0 // indirect
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 // indirect
@@ -105,7 +107,7 @@ require (
 	github.com/lufia/plan9stats v0.0.0-20211012122336-39d0f177ccd0 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
-	github.com/mattn/go-isatty v0.0.19 // indirect
+	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/microsoft/go-mssqldb v1.1.0 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
@@ -141,13 +143,15 @@ require (
 	github.com/xuri/nfp v0.0.0-20230819163627-dc951e3ffe1a // indirect
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
 	github.com/yusufpapurcu/wmi v1.2.3 // indirect
+	go.opentelemetry.io/otel v1.14.0 // indirect
+	go.opentelemetry.io/otel/trace v1.14.0 // indirect
 	go.uber.org/atomic v1.9.0 // indirect
 	go.uber.org/multierr v1.8.0 // indirect
 	go4.org v0.0.0-20200411211856-f5505b9728dd // indirect
 	golang.org/x/arch v0.3.0 // indirect
 	golang.org/x/image v0.15.0 // indirect
 	golang.org/x/mod v0.14.0 // indirect
-	golang.org/x/net v0.21.0 // indirect
+	golang.org/x/net v0.24.0 // indirect
 	golang.org/x/sys v0.19.0 // indirect
 	golang.org/x/time v0.1.0 // indirect
 	golang.org/x/tools v0.17.0 // indirect

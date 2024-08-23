@@ -95,3 +95,20 @@ export const getBizAppHubList = (params) => {
     params
   })
 }
+
+
+export const getDeployList = (params) => {
+  return service({
+    url: '/bizAppHub/getDeployList',
+    method: 'get',
+    params
+  })
+}
+
+export const rollbackVersion = (data) => {
+  return service({
+    url: '/bizAppHub/rollbackVersion',
+    method: 'post',
+    data
+  })
+}

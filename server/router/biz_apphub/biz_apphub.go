@@ -17,6 +17,8 @@ func (s *BizAppHubRouter) InitBizAppHubRouter(Router *gin.RouterGroup, PublicRou
 		bizAppHubRouter.DELETE("deleteBizAppHub", bizAppHubApi.DeleteBizAppHub)           // 删除biz_apphub
 		bizAppHubRouter.DELETE("deleteBizAppHubByIds", bizAppHubApi.DeleteBizAppHubByIds) // 批量删除biz_apphub
 		bizAppHubRouter.PUT("updateBizAppHub", bizAppHubApi.UpdateBizAppHub)              // 更新biz_apphub
+		bizAppHubRouter.GET("getDeployList", bizAppHubApi.GetDeployList)                  // 获取部署历史
+		bizAppHubRouter.POST("rollbackVersion", bizAppHubApi.RollbackVersion)             // 回滚版本
 	}
 	{
 		bizAppHubRouterWithoutRecord.GET("findBizAppHub", bizAppHubApi.FindBizAppHub)       // 根据ID获取biz_apphub

@@ -30,14 +30,12 @@ func main() {
 	//global.GVA_DB = global.GVA_DB.Debug()
 	initialize.Timer()
 	initialize.DBList()
-	go func() {
-		core.RunWindowsServer()
-	}()
 	if global.GVA_DB != nil {
 		initialize.RegisterTables() // 初始化表
 		// 程序结束前关闭数据库链接
 		db, _ := global.GVA_DB.DB()
 		defer db.Close()
 	}
-	select {}
+	core.RunWindowsServer()
+	//select {}
 }

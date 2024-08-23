@@ -1,6 +1,7 @@
 package system
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -272,6 +273,9 @@ func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) err
 	}
 
 	src, err := os.ReadFile(tPath)
+	if err != nil {
+		return err
+	}
 	fileSet := token.NewFileSet()
 	astFile, err := parser.ParseFile(fileSet, "", src, 0)
 	if err != nil {
@@ -300,6 +304,23 @@ func (s *autoCodeTemplate) addTemplateToAst(t string, info request.AutoFunc) err
 	if err := format.Node(f, fileSet, astFile); err != nil {
 		return err
 	}
+
+	{
+		// 如果是逗号或者点结尾就合并下一行，改善代码的可读性和一致性
+		// 解决问题: "增加方法"时`router module 的 Init 代码片段`不在一行的语法风格问题。
+		result, err := os.ReadFile(tPath)
+		if err != nil {
+			return err
+		}
+		result = bytes.Replace(result, []byte(",\n\n"), []byte(","), -1)
+		result = bytes.Replace(result, []byte(".\n"), []byte("."), -1)
+		formatResult, err := format.Source(result)
+		if err != nil {
+			return err
+		}
+		os.WriteFile(tPath, formatResult, 0666)
+	}
+
 	return err
 }
 

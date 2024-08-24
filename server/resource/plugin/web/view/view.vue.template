@@ -371,13 +371,13 @@
                             {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                     {{- else }}
                         {{- if eq .FieldType "picture" }}
-                                <el-image style="width: 50px; height: 50px" :preview-src-list="ReturnArrImg(detailFrom.{{ .FieldJson }})" :src="getUrl(formData.{{ .FieldJson }})" fit="cover" />
+                                <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :src="getUrl(detailFrom.{{ .FieldJson }})" fit="cover" />
                         {{- end }}
                         {{- if eq .FieldType "array" }}
                              <ArrayCtrl v-model="detailFrom.{{ .FieldJson }}"/>
                         {{- end }}
                         {{- if eq .FieldType "pictures" }}
-                                <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="ReturnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in formData.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
+                                <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
                         {{- end }}
                         {{- if eq .FieldType "file" }}
                                 <div class="fileBtn" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index">
@@ -437,7 +437,7 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
-import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, ReturnArrImg, onDownloadFile } from '@/utils/format'
+import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 {{- if .AutoCreateBtnAuth }}

@@ -124,7 +124,7 @@ func (a *AuthorityApi) DeleteAuthority(c *gin.Context) {
 // @Produce   application/json
 // @Param     data  body      system.SysAuthority                                                true  "权限id, 权限名, 父角色id"
 // @Success   200   {object}  response.Response{data=systemRes.SysAuthorityResponse,msg=string}  "更新角色信息,返回包括系统角色详情"
-// @Router    /authority/updateAuthority [post]
+// @Router    /authority/updateAuthority [put]
 func (a *AuthorityApi) UpdateAuthority(c *gin.Context) {
 	var auth system.SysAuthority
 	err := c.ShouldBindJSON(&auth)

@@ -62,11 +62,39 @@ func CheckImport(file *ast.File, importPath string) bool {
 	return false
 }
 
+func clearPosition(astNode ast.Node) {
+	ast.Inspect(astNode, func(n ast.Node) bool {
+		switch node := n.(type) {
+		case *ast.Ident:
+			// 清除位置信息
+			node.NamePos = token.NoPos
+		case *ast.CallExpr:
+			// 清除位置信息
+			node.Lparen = token.NoPos
+			node.Rparen = token.NoPos
+		case *ast.BasicLit:
+			// 清除位置信息
+			node.ValuePos = token.NoPos
+		case *ast.SelectorExpr:
+			// 清除位置信息
+			node.Sel.NamePos = token.NoPos
+		case *ast.BinaryExpr:
+			node.OpPos = token.NoPos
+		case *ast.UnaryExpr:
+			node.OpPos = token.NoPos
+		case *ast.StarExpr:
+			node.Star = token.NoPos
+		}
+		return true
+	})
+}
+
 func CreateStmt(statement string) *ast.ExprStmt {
 	expr, err := parser.ParseExpr(statement)
 	if err != nil {
 		log.Fatal(err)
 	}
+	clearPosition(expr)
 	return &ast.ExprStmt{X: expr}
 }
 

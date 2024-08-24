@@ -57,7 +57,7 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 // @Produce   application/json
 // @Param     plugName  query    string  true  "插件名称"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
-// @Router    /autoCode/pubPlug [get]
+// @Router    /autoCode/pubPlug [post]
 func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")
 	zipPath, err := autoCodePluginService.PubPlug(plugName)

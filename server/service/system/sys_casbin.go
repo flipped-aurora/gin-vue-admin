@@ -33,6 +33,26 @@ func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID u
 		return err
 	}
 
+	if global.GVA_CONFIG.System.UseStrictAuth {
+		apis, e := ApiServiceApp.GetAllApis(adminAuthorityID)
+		if e != nil {
+			return e
+		}
+
+		for i := range casbinInfos {
+			hasApi := false
+			for j := range apis {
+				if apis[j].Path == casbinInfos[i].Path && apis[j].Method == casbinInfos[i].Method {
+					hasApi = true
+					break
+				}
+			}
+			if !hasApi {
+				return errors.New("存在api不在权限列表中")
+			}
+		}
+	}
+
 	authorityId := strconv.Itoa(int(AuthorityID))
 	casbinService.ClearCasbin(0, authorityId)
 	rules := [][]string{}

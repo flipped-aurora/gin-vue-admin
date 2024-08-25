@@ -233,6 +233,27 @@ func (authorityService *AuthorityService) GetStructAuthorityList(authorityID uin
 	return list, err
 }
 
+func (authorityService *AuthorityService) CheckAuthorityIDAuth(authorityID, targetID uint) (err error) {
+	if !global.GVA_CONFIG.System.UseStrictAuth {
+		return nil
+	}
+	authIDS, err := authorityService.GetStructAuthorityList(authorityID)
+	if err != nil {
+		return err
+	}
+	hasAuth := false
+	for _, v := range authIDS {
+		if v == targetID {
+			hasAuth = true
+			break
+		}
+	}
+	if !hasAuth {
+		return errors.New("您提交的角色ID不合法")
+	}
+	return nil
+}
+
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetAuthorityInfo
 //@description: 获取所有角色信息
@@ -251,22 +272,19 @@ func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthor
 //@return: error
 
 func (authorityService *AuthorityService) SetDataAuthority(adminAuthorityID uint, auth system.SysAuthority) error {
-	if global.GVA_CONFIG.System.UseStrictAuth {
-		authids, err := AuthorityServiceApp.GetStructAuthorityList(adminAuthorityID)
+	var checkIDs []uint
+	checkIDs = append(checkIDs, auth.AuthorityId)
+	for i := range auth.DataAuthorityId {
+		checkIDs = append(checkIDs, auth.DataAuthorityId[i].AuthorityId)
+	}
+
+	for i := range checkIDs {
+		err := authorityService.CheckAuthorityIDAuth(adminAuthorityID, checkIDs[i])
 		if err != nil {
 			return err
 		}
-		hasAuth := false
-		for _, v := range authids {
-			if v == auth.AuthorityId {
-				hasAuth = true
-				break
-			}
-		}
-		if !hasAuth {
-			return errors.New("您提交的角色ID不合法")
-		}
 	}
+
 	var s system.SysAuthority
 	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
 	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)

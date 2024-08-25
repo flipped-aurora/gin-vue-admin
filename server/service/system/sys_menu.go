@@ -201,21 +201,9 @@ func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, adm
 	auth.AuthorityId = authorityId
 	auth.SysBaseMenus = menus
 
-	if global.GVA_CONFIG.System.UseStrictAuth {
-		authids, err := AuthorityServiceApp.GetStructAuthorityList(adminAuthorityID)
-		if err != nil {
-			return err
-		}
-		hasAuth := false
-		for _, v := range authids {
-			if v == authorityId {
-				hasAuth = true
-				break
-			}
-		}
-		if !hasAuth {
-			return errors.New("您提交的角色ID不合法")
-		}
+	err = AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, authorityId)
+	if err != nil {
+		return err
 	}
 
 	err = AuthorityServiceApp.SetMenuAuthority(&auth)

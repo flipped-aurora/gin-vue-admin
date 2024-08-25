@@ -240,3 +240,14 @@ type AutoFunc struct {
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
 }
+
+type InitMenu struct {
+	PlugName   string `json:"plugName"`
+	ParentMenu string `json:"parentMenu"`
+	Menus      []uint `json:"menus"`
+}
+
+type InitApi struct {
+	PlugName string `json:"plugName"`
+	APIs     []uint `json:"apis"`
+}

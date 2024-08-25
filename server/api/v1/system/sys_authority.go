@@ -76,7 +76,8 @@ func (a *AuthorityApi) CopyAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	authBack, err := authorityService.CopyAuthority(copyInfo)
+	adminAuthorityID := utils.GetUserAuthorityId(c)
+	authBack, err := authorityService.CopyAuthority(adminAuthorityID, copyInfo)
 	if err != nil {
 		global.GVA_LOG.Error("拷贝失败!", zap.Error(err))
 		response.FailWithMessage("拷贝失败"+err.Error(), c)
@@ -186,7 +187,8 @@ func (a *AuthorityApi) SetDataAuthority(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = authorityService.SetDataAuthority(auth)
+	adminAuthorityID := utils.GetUserAuthorityId(c)
+	err = authorityService.SetDataAuthority(adminAuthorityID, auth)
 	if err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败"+err.Error(), c)

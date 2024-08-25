@@ -59,7 +59,7 @@ func (authorityService *AuthorityService) CreateAuthority(auth system.SysAuthori
 //@param: copyInfo response.SysAuthorityCopyResponse
 //@return: authority system.SysAuthority, err error
 
-func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAuthorityCopyResponse) (authority system.SysAuthority, err error) {
+func (authorityService *AuthorityService) CopyAuthority(adminAuthorityID uint, copyInfo response.SysAuthorityCopyResponse) (authority system.SysAuthority, err error) {
 	var authorityBox system.SysAuthority
 	if !errors.Is(global.GVA_DB.Where("authority_id = ?", copyInfo.Authority.AuthorityId).First(&authorityBox).Error, gorm.ErrRecordNotFound) {
 		return authority, ErrRoleExistence
@@ -98,7 +98,7 @@ func (authorityService *AuthorityService) CopyAuthority(copyInfo response.SysAut
 		}
 	}
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(copyInfo.OldAuthorityId)
-	err = CasbinServiceApp.UpdateCasbin(copyInfo.Authority.AuthorityId, paths)
+	err = CasbinServiceApp.UpdateCasbin(adminAuthorityID, copyInfo.Authority.AuthorityId, paths)
 	if err != nil {
 		_ = authorityService.DeleteAuthority(&copyInfo.Authority)
 	}
@@ -217,6 +217,8 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint)
 //@return: list interface{}, total int64, err error
 
 func (authorityService *AuthorityService) GetStructAuthorityList(authorityID uint) (list []uint, err error) {
+	var auth system.SysAuthority
+	_ = global.GVA_DB.First(&auth, "authority_id = ?", authorityID).Error
 	var authorities []system.SysAuthority
 	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
 	if len(authorities) > 0 {
@@ -224,6 +226,9 @@ func (authorityService *AuthorityService) GetStructAuthorityList(authorityID uin
 			list = append(list, authorities[k].AuthorityId)
 			_, err = authorityService.GetStructAuthorityList(authorities[k].AuthorityId)
 		}
+	}
+	if *auth.ParentId == 0 {
+		list = append(list, authorityID)
 	}
 	return list, err
 }
@@ -245,23 +250,9 @@ func (authorityService *AuthorityService) GetAuthorityInfo(auth system.SysAuthor
 //@param: auth model.SysAuthority
 //@return: error
 
-func (authorityService *AuthorityService) SetDataAuthority(auth system.SysAuthority) error {
-	var s system.SysAuthority
-	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
-	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
-	return err
-}
-
-//@author: [piexlmax](https://github.com/piexlmax)
-//@function: SetMenuAuthority
-//@description: 菜单与角色绑定
-//@param: auth *model.SysAuthority
-//@return: error
-
-func (authorityService *AuthorityService) SetMenuAuthority(auth *system.SysAuthority) error {
-	var s system.SysAuthority
+func (authorityService *AuthorityService) SetDataAuthority(adminAuthorityID uint, auth system.SysAuthority) error {
 	if global.GVA_CONFIG.System.UseStrictAuth {
-		authids, err := authorityService.GetStructAuthorityList(auth.AuthorityId)
+		authids, err := AuthorityServiceApp.GetStructAuthorityList(adminAuthorityID)
 		if err != nil {
 			return err
 		}
@@ -276,6 +267,20 @@ func (authorityService *AuthorityService) SetMenuAuthority(auth *system.SysAutho
 			return errors.New("您提交的角色ID不合法")
 		}
 	}
+	var s system.SysAuthority
+	global.GVA_DB.Preload("DataAuthorityId").First(&s, "authority_id = ?", auth.AuthorityId)
+	err := global.GVA_DB.Model(&s).Association("DataAuthorityId").Replace(&auth.DataAuthorityId)
+	return err
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetMenuAuthority
+//@description: 菜单与角色绑定
+//@param: auth *model.SysAuthority
+//@return: error
+
+func (authorityService *AuthorityService) SetMenuAuthority(auth *system.SysAuthority) error {
+	var s system.SysAuthority
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", auth.AuthorityId)
 	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus)
 	return err

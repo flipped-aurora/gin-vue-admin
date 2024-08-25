@@ -26,10 +26,10 @@ type CasbinService struct{}
 
 var CasbinServiceApp = new(CasbinService)
 
-func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos []request.CasbinInfo) error {
+func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID uint, casbinInfos []request.CasbinInfo) error {
 
 	if global.GVA_CONFIG.System.UseStrictAuth {
-		authids, err := AuthorityServiceApp.GetStructAuthorityList(AuthorityID)
+		authids, err := AuthorityServiceApp.GetStructAuthorityList(adminAuthorityID)
 		if err != nil {
 			return err
 		}

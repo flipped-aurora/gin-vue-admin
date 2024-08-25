@@ -196,10 +196,28 @@ func (menuService *MenuService) GetBaseMenuTree(authorityID uint) (menus []syste
 //@param: menus []model.SysBaseMenu, authorityId string
 //@return: err error
 
-func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, authorityId uint) (err error) {
+func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, adminAuthorityID, authorityId uint) (err error) {
 	var auth system.SysAuthority
 	auth.AuthorityId = authorityId
 	auth.SysBaseMenus = menus
+
+	if global.GVA_CONFIG.System.UseStrictAuth {
+		authids, err := AuthorityServiceApp.GetStructAuthorityList(adminAuthorityID)
+		if err != nil {
+			return err
+		}
+		hasAuth := false
+		for _, v := range authids {
+			if v == authorityId {
+				hasAuth = true
+				break
+			}
+		}
+		if !hasAuth {
+			return errors.New("您提交的角色ID不合法")
+		}
+	}
+
 	err = AuthorityServiceApp.SetMenuAuthority(&auth)
 	return err
 }

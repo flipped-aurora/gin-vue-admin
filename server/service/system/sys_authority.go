@@ -183,7 +183,7 @@ func (authorityService *AuthorityService) DeleteAuthority(auth *system.SysAuthor
 //@param: info request.PageInfo
 //@return: list interface{}, total int64, err error
 
-func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint) (list any, err error) {
+func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint) (list []system.SysAuthority, err error) {
 	var authority system.SysAuthority
 	err = global.GVA_DB.Where("authority_id = ?", authorityID).First(&authority).Error
 	if err != nil {
@@ -208,6 +208,24 @@ func (authorityService *AuthorityService) GetAuthorityInfoList(authorityID uint)
 		err = authorityService.findChildrenAuthority(&authorities[k])
 	}
 	return authorities, err
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: GetAuthorityInfoList
+//@description: 分页获取数据
+//@param: info request.PageInfo
+//@return: list interface{}, total int64, err error
+
+func (authorityService *AuthorityService) GetStructAuthorityList(authorityID uint) (list []uint, err error) {
+	var authorities []system.SysAuthority
+	err = global.GVA_DB.Preload("DataAuthorityId").Where("parent_id = ?", authorityID).Find(&authorities).Error
+	if len(authorities) > 0 {
+		for k := range authorities {
+			list = append(list, authorities[k].AuthorityId)
+			_, err = authorityService.GetStructAuthorityList(authorities[k].AuthorityId)
+		}
+	}
+	return list, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -242,6 +260,22 @@ func (authorityService *AuthorityService) SetDataAuthority(auth system.SysAuthor
 
 func (authorityService *AuthorityService) SetMenuAuthority(auth *system.SysAuthority) error {
 	var s system.SysAuthority
+	if global.GVA_CONFIG.System.UseStrictAuth {
+		authids, err := authorityService.GetStructAuthorityList(auth.AuthorityId)
+		if err != nil {
+			return err
+		}
+		hasAuth := false
+		for _, v := range authids {
+			if v == auth.AuthorityId {
+				hasAuth = true
+				break
+			}
+		}
+		if !hasAuth {
+			return errors.New("您提交的角色ID不合法")
+		}
+	}
 	global.GVA_DB.Preload("SysBaseMenus").First(&s, "authority_id = ?", auth.AuthorityId)
 	err := global.GVA_DB.Model(&s).Association("SysBaseMenus").Replace(&auth.SysBaseMenus)
 	return err

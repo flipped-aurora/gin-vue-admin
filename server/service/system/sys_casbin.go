@@ -27,6 +27,24 @@ type CasbinService struct{}
 var CasbinServiceApp = new(CasbinService)
 
 func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos []request.CasbinInfo) error {
+
+	if global.GVA_CONFIG.System.UseStrictAuth {
+		authids, err := AuthorityServiceApp.GetStructAuthorityList(AuthorityID)
+		if err != nil {
+			return err
+		}
+		hasAuth := false
+		for _, v := range authids {
+			if v == AuthorityID {
+				hasAuth = true
+				break
+			}
+		}
+		if !hasAuth {
+			return errors.New("您提交的角色ID不合法")
+		}
+	}
+
 	authorityId := strconv.Itoa(int(AuthorityID))
 	casbinService.ClearCasbin(0, authorityId)
 	rules := [][]string{}

@@ -152,7 +152,7 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 //@param: id uint, authorityIds []string
 //@return: err error
 
-func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
+func (userService *UserService) SetUserAuthorities(adminAuthorityID, id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var user system.SysUser
 		TxErr := tx.Where("id = ?", id).First(&user).Error
@@ -164,8 +164,28 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 		if TxErr != nil {
 			return TxErr
 		}
+		var childrenIDS []uint
+		if global.GVA_CONFIG.System.UseStrictAuth {
+			childrenIDS, err = AuthorityServiceApp.GetStructAuthorityList(adminAuthorityID)
+			if err != nil {
+				return errors.New("获取当前角色可用角色失败")
+			}
+		}
+
 		var useAuthority []system.SysUserAuthority
 		for _, v := range authorityIds {
+			if global.GVA_CONFIG.System.UseStrictAuth {
+				hasAuth := false
+				for i := range childrenIDS {
+					if childrenIDS[i] == v {
+						hasAuth = true
+						break
+					}
+				}
+				if !hasAuth {
+					return errors.New("您提交的角色ID不合法")
+				}
+			}
 			useAuthority = append(useAuthority, system.SysUserAuthority{
 				SysUserId: id, SysAuthorityAuthorityId: v,
 			})

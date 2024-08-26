@@ -357,7 +357,7 @@
     </el-drawer>
 
     <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow">
-            <el-descriptions column="1" border>
+            <el-descriptions :column="1" border>
             {{- range .Fields}}
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">

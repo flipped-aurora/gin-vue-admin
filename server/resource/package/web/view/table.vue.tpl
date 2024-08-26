@@ -1,4 +1,5 @@
 {{- $global := . }}
+{{- $templateID :=  .Package + "_" + .StructName }}
 <template>
   <div>
     <div class="gva-search-box">
@@ -152,6 +153,11 @@
         <div class="gva-btn-list">
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">新增</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            {{- if .HasExcel -}}
+            <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
+            <ExportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportExcel"{{ end }} template-id="{{$templateID}}" />
+            <ImportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.importExcel"{{ end }} template-id="{{$templateID}}" @on-success="getTableData" />
+            {{- end -}}
         </div>
         <el-table
         ref="multipleTable"
@@ -439,6 +445,16 @@ import { ref, reactive } from 'vue'
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
 {{- end }}
+
+{{- if .HasExcel -}}
+// 导出组件
+import ExportExcel from '@/components/exportExcel/exportExcel.vue'
+// 导入组件
+import ImportExcel from '@/components/exportExcel/importExcel.vue'
+// 导出模板组件
+import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
+{{- end -}}
+
 
 defineOptions({
     name: '{{.StructName}}'

@@ -38,6 +38,7 @@ type AutoCode struct {
 	HasDataSource       bool                   `json:"-"`
 	HasSearchTimer      bool                   `json:"-"`
 	HasArray            bool                   `json:"-"`
+	HasExcel            bool                   `json:"-"`
 }
 
 type DataSource struct {
@@ -117,6 +118,9 @@ func (r *AutoCode) Pretreatment() error {
 	dict := make(map[string]string, length)
 	r.DataSourceMap = make(map[string]*DataSource, length)
 	for i := 0; i < length; i++ {
+		if r.Fields[i].Excel {
+			r.HasExcel = true
+		}
 		if r.Fields[i].DictType != "" {
 			dict[r.Fields[i].DictType] = ""
 		}
@@ -216,6 +220,7 @@ type AutoCodeField struct {
 	Form            bool        `json:"form"`            // 是否前端新建/编辑
 	Table           bool        `json:"table"`           // 是否前端表格列
 	Desc            bool        `json:"desc"`            // 是否前端详情
+	Excel           bool        `json:"excel"`           // 是否导入/导出
 	Require         bool        `json:"require"`         // 是否必填
 	DefaultValue    string      `json:"defaultValue"`    // 是否必填
 	ErrorText       string      `json:"errorText"`       // 校验失败文字

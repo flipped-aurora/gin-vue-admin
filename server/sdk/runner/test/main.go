@@ -10,7 +10,7 @@ import (
 func main() {
 
 	now := time.Now()
-	cmd := exec.Command("/Users/yy/Desktop/code/github.com/apphub/server/testrunner/testrunner", "run_go_version")
+	cmd := exec.Command("D:\\code\\github.com\\apphub\\server\\testrunner\\testrunner.exe", "run_go_version")
 
 	var out bytes.Buffer
 	cmd.Stdout = &out

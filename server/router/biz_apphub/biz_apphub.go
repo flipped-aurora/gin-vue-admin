@@ -19,6 +19,7 @@ func (s *BizAppHubRouter) InitBizAppHubRouter(Router *gin.RouterGroup, PublicRou
 		bizAppHubRouter.PUT("updateBizAppHub", bizAppHubApi.UpdateBizAppHub)              // 更新biz_apphub
 		bizAppHubRouter.GET("getDeployList", bizAppHubApi.GetDeployList)                  // 获取部署历史
 		bizAppHubRouter.POST("rollbackVersion", bizAppHubApi.RollbackVersion)             // 回滚版本
+		//bizAppHubRouter.POST("api/cmd/call", bizAppHubApi.Call)                           // 调用命令行工具
 	}
 	{
 		bizAppHubRouterWithoutRecord.GET("findBizAppHub", bizAppHubApi.FindBizAppHub)       // 根据ID获取biz_apphub
@@ -27,6 +28,7 @@ func (s *BizAppHubRouter) InitBizAppHubRouter(Router *gin.RouterGroup, PublicRou
 	}
 	{
 		bizAppHubRouterWithoutAuth.GET("getBizAppHubPublic", bizAppHubApi.GetBizAppHubPublic) // 获取biz_apphub列表
-		bizAppHubRouterWithoutAuth.GET("getUploadToken", bizAppHubApi.GetUploadToken)         // 获取biz_apphub列表
+		bizAppHubRouterWithoutAuth.GET("getUploadToken", bizAppHubApi.GetUploadToken)         // 获取上传token
+		bizAppHubRouterWithoutAuth.POST("api/cmd/call", bizAppHubApi.Call)                    // 调用命令行工具
 	}
 }

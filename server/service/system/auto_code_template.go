@@ -154,7 +154,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 				fieldsMap[field.ColumnName] = field.FieldDesc
 			}
 		}
-		templateInfo, _ := json.Marshal(info)
+		templateInfo, _ := json.Marshal(fieldsMap)
 		sysExportTemplate := model.SysExportTemplate{
 			DBName:       dbName,
 			Name:         name,

@@ -21,16 +21,17 @@ type SysAutoHistoryCreate struct {
 
 func (r *SysAutoHistoryCreate) Create() model.SysAutoCodeHistory {
 	entity := model.SysAutoCodeHistory{
-		Package:     r.Package,
-		Request:     r.Request,
-		Table:       r.Table,
-		StructName:  r.StructName,
-		BusinessDB:  r.BusinessDB,
-		Description: r.Description,
-		Injections:  r.Injections,
-		Templates:   r.Templates,
-		ApiIDs:      r.ApiIDs,
-		MenuID:      r.MenuID,
+		Package:          r.Package,
+		Request:          r.Request,
+		Table:            r.Table,
+		StructName:       r.StructName,
+		BusinessDB:       r.BusinessDB,
+		Description:      r.Description,
+		Injections:       r.Injections,
+		Templates:        r.Templates,
+		ApiIDs:           r.ApiIDs,
+		MenuID:           r.MenuID,
+		ExportTemplateID: r.ExportTemplateID,
 	}
 	if entity.Table == "" {
 		entity.Table = r.StructName

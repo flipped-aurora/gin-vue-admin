@@ -1,6 +1,6 @@
 {
     "name": "gin-vue-admin",
-    "version": "2.7.2",
+    "version": "2.7.3",
     "private": true,
     "scripts": {
         "serve": "node openDocument.js && vite --host --mode development",
@@ -19,6 +19,7 @@
         "@wangeditor/editor-for-vue": "^5.1.12",
         "axios": "^1.4.0",
         "core-js": "^3.31.1",
+        "default-passive-events": "^2.0.0",
         "echarts": "5.4.3",
         "element-plus": "^2.7.4",
         "highlight.js": "^11.8.0",

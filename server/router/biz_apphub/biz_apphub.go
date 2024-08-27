@@ -29,6 +29,7 @@ func (s *BizAppHubRouter) InitBizAppHubRouter(Router *gin.RouterGroup, PublicRou
 	{
 		bizAppHubRouterWithoutAuth.GET("getBizAppHubPublic", bizAppHubApi.GetBizAppHubPublic) // 获取biz_apphub列表
 		bizAppHubRouterWithoutAuth.GET("getUploadToken", bizAppHubApi.GetUploadToken)         // 获取上传token
-		bizAppHubRouterWithoutAuth.POST("api/cmd/call", bizAppHubApi.Call)                    // 调用命令行工具
+		bizAppHubRouterWithoutAuth.POST("api/cmd/call/:soft/:command", bizAppHubApi.Call)     // 调用命令行工具
+		bizAppHubRouterWithoutAuth.GET("api/cmd/call/:soft/:command", bizAppHubApi.Call)      // 调用命令行工具
 	}
 }

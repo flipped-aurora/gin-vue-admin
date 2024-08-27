@@ -2,59 +2,75 @@ package biz_apphub
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/pkg/jsonx"
 	"os/exec"
 	"runtime"
 	"strings"
-	"time"
 )
 
 func NewCaller(types string) Caller {
-	return &SoftCall{}
+	return &SoftCall{AppPath: "D:\\code\\github.com\\apphub\\server\\soft_cmd"}
 }
 
 type Caller interface {
-	Call(req request.Call) (string, error)
+	Call(req request.Call) (*CallResult, error)
+	CallerPath() string
 }
 
 type SoftCall struct {
 	AppPath string
 }
 
-func (p *SoftCall) Call(req request.Call) (string, error) {
-	softPath := fmt.Sprintf("D:\\code\\github.com\\apphub\\server\\soft_cmd\\%s\\%s\\%s",
-		req.User, req.Soft, req.Soft)
-	reqJson := fmt.Sprintf("D:\\code\\github.com\\apphub\\server\\soft_cmd\\%s\\%s\\%v_%v.json",
-		req.User, req.Soft, req.Soft, time.Now().UnixNano())
+func (p *SoftCall) CallerPath() string {
+	return p.AppPath
+}
 
+type CallResult struct {
+	ContentType string
+	Data        string
+	HasFile     bool
+	FilePath    string
+}
+
+func (p *SoftCall) Call(req request.Call) (*CallResult, error) {
+	softPath := p.AppPath + fmt.Sprintf("\\%s\\%s\\%s",
+		req.User, req.Soft, req.Soft)
 	if runtime.GOOS == "windows" {
-		softPath = fmt.Sprintf("D:\\code\\github.com\\apphub\\server\\soft_cmd\\%s\\%s\\%s.exe",
+		softPath = p.AppPath + fmt.Sprintf("\\%s\\%s\\%s.exe",
 			req.User, req.Soft, req.Soft)
 	}
-
-	err := jsonx.SaveFile(reqJson, req.Data)
-	if err != nil {
-		return "", err
-	}
-	cmd := exec.Command(softPath, req.Command, reqJson)
+	cmd := exec.Command(softPath, req.Command, req.RequestJsonPath)
 	var out bytes.Buffer
 	cmd.Stdout = &out
-	err = cmd.Run()
+	err := cmd.Run()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	s := out.String()
 	split := strings.Split(s, "<Response>")[1]
 	split1 := strings.Split(split, "</Response>")[0]
 	ss := strings.ReplaceAll(split1, "</Response>", "")
-	return ss, nil
+	mp := make(map[string]interface{})
+
+	err = json.Unmarshal([]byte(ss), &mp)
+	if err != nil {
+		return nil, err
+	}
+	if _, ok := mp["type"]; ok {
+		return &CallResult{ContentType: "file", HasFile: true, FilePath: mp["path"].(string)}, nil
+	} else {
+		return &CallResult{ContentType: "json", Data: ss}, nil
+	}
 }
 
 type Python struct {
 }
 
-func (p *Python) Call(req request.Call) ([]byte, error) {
+func (p *Python) Call(req request.Call) (*CallResult, error) {
 	return nil, nil
+}
+func (p *Python) CallerPath() string {
+	return ""
 }

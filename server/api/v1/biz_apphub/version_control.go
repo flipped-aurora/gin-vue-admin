@@ -1,12 +1,18 @@
 package biz_apphub
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/pkg/jsonx"
 	"github.com/flipped-aurora/gin-vue-admin/server/service/biz_apphub"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"os"
+	"path/filepath"
+	"time"
 )
 
 // GetDeployList 分页获取biz_apphub_record列表
@@ -78,14 +84,36 @@ func (bizAppHubApi *BizAppHubApi) RollbackVersion(c *gin.Context) {
 // @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizAppHub/api/caller [post]
 func (bizAppHubApi *BizAppHubApi) Call(c *gin.Context) {
-	//var bizAppHub biz_apphubReq.RollbackVersion
-	var req biz_apphubReq.Call
-	//var req request.
-	err := c.ShouldBindJSON(&req)
+	var (
+		req biz_apphubReq.Call
+		err error
+	)
+	req.Soft = c.Param("soft")
+	req.Command = c.Param("command")
+
+	req.User = c.GetString("user")
+	if req.User == "" {
+		req.User = c.Query("dev_user")
+	}
+	if req.Soft == "" {
+		response.FailWithMessage("soft不能为空", c)
+		return
+	}
+	if req.Command == "" {
+		response.FailWithMessage("Command不能为空", c)
+		return
+	}
+
+	if req.User == "" {
+		response.FailWithMessage("请登录后访问", c)
+		return
+	}
+	err = c.ShouldBind(&req)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+
 	//bizAppHub.OperateUser=c.GetString("user")
 	//bizAppHub.UpdatedBy = utils.GetUserID(c)
 	//bizAppHub.OperateUser = c.GetString("user")
@@ -95,11 +123,75 @@ func (bizAppHubApi *BizAppHubApi) Call(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	req.Req = j
-	call, err := biz_apphub.NewCaller("").Call(req)
+	req.ReqBody = j
+	caller := biz_apphub.NewCaller("")
+	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
+	if c.Request.Header.Get("content-type") == "multipart/form-data" { //如果上传的有文件，需要下载文件，然后copy到
+		files, err := getFileMap(c, caller.CallerPath())
+		if err != nil {
+			response.FailWithMessage(err.Error(), c)
+			return
+		}
+		req.Files = files
+		value := c.PostForm("jsonData")
+		if value != "" {
+			mp := make(map[string]interface{})
+			err := json.Unmarshal([]byte(value), &mp)
+			if err != nil {
+				response.FailWithMessage(err.Error(), c)
+				return
+			}
+			req.Data = mp
+		}
+	}
+
+	err = jsonx.SaveFile(req.RequestJsonPath, req) //
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	c.Data(200, "application/json", []byte(call))
+	defer os.Remove(req.RequestJsonPath)
+
+	call, err := caller.Call(req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if call.HasFile {
+
+		fileName := filepath.Base(call.FilePath) // 获取文件名
+
+		// 如果请求中有自定义文件名，则使用自定义文件名
+		if customFileName := c.Query("filename"); customFileName != "" {
+			fileName = customFileName
+		}
+		c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
+		c.File(call.FilePath)
+		return
+	}
+	if call.ContentType == "json" {
+		c.Data(200, "application/json", []byte(call.Data))
+	}
+}
+
+func getFileMap(c *gin.Context, fileRoot string) (filePath []string, err error) {
+	err = c.Request.ParseMultipartForm(32 << 20) // 32MB
+	if err != nil {
+		//http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
+		return nil, err
+	}
+
+	files := c.Request.MultipartForm.File["file"]
+	for _, fileHeader := range files {
+		filePathEl := fmt.Sprintf("%v\\file\\%v", fileRoot, time.Now().UnixNano())
+		filePathAbs := filePathEl + "\\" + fileHeader.Filename
+		os.MkdirAll(filePathEl, os.ModePerm)
+		filePath = append(filePath, filePathAbs)
+		err := c.SaveUploadedFile(fileHeader, filePathAbs)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return filePath, nil
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner"
-	"os"
 )
 
 type EchoRequest struct {
@@ -25,7 +24,6 @@ func main() {
 			ctx.ResponseJSON(&Response{Code: -1, Message: err.Error()})
 			return
 		}
-		defer os.Remove(ctx.Request)
 
 		s := struct {
 			Label   string `json:"label"`
@@ -40,6 +38,10 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
+	})
+
+	r.AddCmd("file", func(ctx *runner.Context) {
+		ctx.ResponseFile("D:\\code\\git.woa.com\\exmail_api\\main.go")
 	})
 
 	r.Run()

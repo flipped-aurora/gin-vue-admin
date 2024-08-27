@@ -1,14 +1,21 @@
 package request
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+	"time"
+)
 
 type Call struct {
-	User    string `json:"user"`
-	Soft    string `json:"soft"`
-	Command string `json:"command"`
+	User    string   `json:"user"`    //软件所属的用户
+	Soft    string   `json:"soft"`    //软件名
+	Command string   `json:"command"` //命令
+	Files   []string `json:"files"`
 
-	Data map[string]interface{} `json:"data"`
-	Req  string
+	UpdateVersion   bool                   `json:"update_version"`    //此时正处于版本更新的状态
+	RequestJsonPath string                 `json:"request_json_path"` //请求参数存储路径
+	Data            map[string]interface{} `json:"data"`              //请求json
+	ReqBody         string
 }
 
 func (c *Call) RequestJSON() (string, error) {
@@ -19,6 +26,8 @@ func (c *Call) RequestJSON() (string, error) {
 	return string(j), nil
 }
 
-type ApiCaller struct {
-	Call
+func (c *Call) GetRequestFilePath(callerPath string) string {
+	reqJson := callerPath + fmt.Sprintf("\\%s\\%s\\%v_%v.json",
+		c.User, c.Soft, c.Soft, time.Now().UnixNano())
+	return reqJson
 }

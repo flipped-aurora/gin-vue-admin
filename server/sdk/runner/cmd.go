@@ -6,16 +6,17 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/jsonx"
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/logger"
 	"github.com/sirupsen/logrus"
+	"net/http"
 	"os"
 	"path/filepath"
 )
 
 type Call struct {
-	User    string   `json:"user"`    //软件所属的用户
-	Soft    string   `json:"soft"`    //软件名
-	Command string   `json:"command"` //命令
-	Files   []string `json:"files"`
-
+	User            string                 `json:"user"`    //软件所属的用户
+	Soft            string                 `json:"soft"`    //软件名
+	Command         string                 `json:"command"` //命令
+	Files           []string               `json:"files"`
+	Method          string                 `json:"method"`            //请求方式
 	UpdateVersion   bool                   `json:"update_version"`    //此时正处于版本更新的状态
 	RequestJsonPath string                 `json:"request_json_path"` //请求参数存储路径
 	Data            map[string]interface{} `json:"data"`              //请求json
@@ -28,9 +29,14 @@ type Response struct {
 	Data    interface{} `json:"data"`
 }
 
-type FileResponse struct {
-	Type     string `json:"type"`
-	FilePath string `json:"path"`
+type CallResponse struct {
+	StatusCode  int         `json:"status_code"`
+	Msg         string      `json:"msg"`
+	ContentType string      `json:"content_type"`
+	HasFile     bool        `json:"has_file"`
+	FilePath    string      `json:"path"`
+	DeleteFile  bool        `json:"delete_file"`
+	Data        interface{} `json:"data"`
 }
 
 func init() {
@@ -60,20 +66,10 @@ func bind(ctx *Context) error {
 		return err
 	}
 	ctx.Req = &ca
-	//if ca.Data != nil {
-	//	marshal, err := json.Marshal(ca.Data)
-	//	if err != nil {
-	//		return err
-	//	}
-	//	err = json.Unmarshal(marshal, jsonBody)
-	//	if err != nil {
-	//		return err
-	//	}
-	//}
 	return nil
 }
 
-func (c *Context) BindJSON(jsonBody interface{}) error {
+func (c *Context) ShouldBindJSON(jsonBody interface{}) error {
 	if c.Req != nil {
 		marshal, err := json.Marshal(c.Req.Data)
 		if err != nil {
@@ -86,9 +82,33 @@ func (c *Context) BindJSON(jsonBody interface{}) error {
 	}
 	return nil
 }
+func (c *Context) ReqMap() map[string]interface{} {
+	if c.Req != nil {
+		return c.Req.Data
+	}
+	return nil
+}
 
-func (c *Context) ResponseJSON(res interface{}) error {
-	marshal, err := json.Marshal(res)
+func (c *Context) ResponseFailJSONWithCode(code int, jsonEl interface{}) error {
+	c.Response(jsonx.JSONString(&CallResponse{StatusCode: code, ContentType: "json", Data: jsonEl}))
+	return nil
+}
+func (c *Context) ResponseFailTextWithCode(code int, text string) error {
+	c.Response(jsonx.JSONString(&CallResponse{StatusCode: code, ContentType: "text", Data: text}))
+	return nil
+}
+func (c *Context) ResponseOkWithJSON(jsonEl interface{}) error {
+	c.Response(jsonx.JSONString(&CallResponse{StatusCode: 200, ContentType: "json", Data: jsonEl}))
+	return nil
+}
+
+func (c *Context) ResponseOkWithFile(filePath string, deleteFile bool) error {
+	abs, err := filepath.Abs(filePath)
+	if err != nil {
+		return err
+	}
+	//这里需要转换成绝对路径
+	marshal, err := json.Marshal(&CallResponse{HasFile: true, StatusCode: 200, ContentType: "file", FilePath: abs, DeleteFile: deleteFile})
 	if err != nil {
 		return err
 	}
@@ -96,13 +116,8 @@ func (c *Context) ResponseJSON(res interface{}) error {
 	return nil
 }
 
-func (c *Context) ResponseFile(filePath string) error {
-	abs, err := filepath.Abs(filePath)
-	if err != nil {
-		return err
-	}
-	//这里需要转换成绝对路径
-	marshal, err := json.Marshal(&FileResponse{Type: "file", FilePath: abs})
+func (c *Context) ResponseOkWithText(text string) error {
+	marshal, err := json.Marshal(&CallResponse{StatusCode: 200, ContentType: "text", Data: text})
 	if err != nil {
 		return err
 	}
@@ -116,17 +131,42 @@ func (c *Context) Response(text string) {
 
 func New() *Runner {
 	return &Runner{
-		CmdMap: make(map[string]func(*Context)),
+		//CmdMap: make(map[string]func(*Context)),
+		CmdMapHandel: make(map[string]*Worker),
 	}
 }
 
-type Runner struct {
-	CmdMap   map[string]func(*Context)
-	NotFound func(ctx *Context)
+type Worker struct {
+	GetHandel  []func(*Context)
+	PostHandel []func(*Context)
 }
 
-func (r *Runner) AddCmd(name string, fn func(ctx *Context)) {
-	r.CmdMap[name] = fn
+type Runner struct {
+	CmdMapHandel map[string]*Worker
+	NotFound     func(ctx *Context)
+}
+
+func (r *Runner) Post(commandName string, handelList ...func(ctx *Context)) {
+	_, ok := r.CmdMapHandel[commandName]
+	if !ok {
+
+		r.CmdMapHandel[commandName] = &Worker{
+			PostHandel: handelList,
+		}
+	} else {
+		r.CmdMapHandel[commandName].PostHandel = append(r.CmdMapHandel[commandName].PostHandel, handelList...)
+	}
+
+}
+func (r *Runner) Get(commandName string, handelList ...func(ctx *Context)) {
+	_, ok := r.CmdMapHandel[commandName]
+	if !ok {
+		r.CmdMapHandel[commandName] = &Worker{
+			GetHandel: handelList,
+		}
+	} else {
+		r.CmdMapHandel[commandName].GetHandel = append(r.CmdMapHandel[commandName].GetHandel, handelList...)
+	}
 }
 
 func (r *Runner) Run() {
@@ -134,11 +174,36 @@ func (r *Runner) Run() {
 	command := os.Args[1]
 	jsonFileName := os.Args[2]
 	logrus.Info(fmt.Sprintf("command:%s,args:%s", command, jsonFileName))
-	fn, ok := r.CmdMap[command]
+	worker, ok := r.CmdMapHandel[command]
+	context := &Context{Request: jsonFileName}
+	err := bind(context)
+	if err != nil {
+		context.ResponseFailJSONWithCode(http.StatusBadRequest, map[string]interface{}{
+			"msg": "参数解析失败",
+		})
+		return
+	}
 	if ok {
-		context := &Context{Request: jsonFileName}
-		bind(context)
-		fn(context)
-	} else {
+		if context.Req == nil {
+			logrus.Infof("%+v", context)
+		}
+		handelList := worker.PostHandel
+		if context.Req.Method == "GET" {
+			handelList = worker.GetHandel
+		}
+		if len(handelList) == 0 {
+			context.ResponseFailTextWithCode(http.StatusBadRequest, "bad request: method not handel")
+			return
+		}
+		for _, fn := range handelList {
+			fn(context)
+		}
+
+	} else { //not found
+		if r.NotFound != nil {
+			r.NotFound(context)
+		} else {
+			context.ResponseFailTextWithCode(http.StatusNotFound, "command not found")
+		}
 	}
 }

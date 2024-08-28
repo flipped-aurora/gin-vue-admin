@@ -10,6 +10,7 @@ type Call struct {
 	User    string   `json:"user"`    //软件所属的用户
 	Soft    string   `json:"soft"`    //软件名
 	Command string   `json:"command"` //命令
+	Method  string   `json:"method"`  //请求方式
 	Files   []string `json:"files"`
 
 	UpdateVersion   bool                   `json:"update_version"`    //此时正处于版本更新的状态

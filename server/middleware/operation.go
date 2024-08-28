@@ -76,7 +76,7 @@ func OperationRecord() gin.HandlerFunc {
 		}
 
 		// 上传文件时候 中间件日志进行裁断操作
-		if strings.Contains(c.GetHeader("Content-Type"), "multipart/form-data") {
+		if strings.Contains(c.GetHeader("Content-ContentType"), "multipart/form-data") {
 			record.Body = "[文件]"
 		} else {
 			if len(body) > bufferSize {

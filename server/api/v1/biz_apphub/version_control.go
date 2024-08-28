@@ -74,7 +74,7 @@ func (bizAppHubApi *BizAppHubApi) RollbackVersion(c *gin.Context) {
 	response.OkWithMessage("回滚版本成功", c)
 }
 
-// Call 后端命令接口
+// PostCall 后端命令接口
 // @Tags BizAppHub
 // @Summary 后端命令接口
 // @Security ApiKeyAuth
@@ -82,19 +82,16 @@ func (bizAppHubApi *BizAppHubApi) RollbackVersion(c *gin.Context) {
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "后端命令接口"
 // @Success 200 {object} response.Response{msg=string} "更新成功"
-// @Router /bizAppHub/api/caller [post]
-func (bizAppHubApi *BizAppHubApi) Call(c *gin.Context) {
+// @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
+func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 	var (
 		req biz_apphubReq.Call
 		err error
 	)
 	req.Soft = c.Param("soft")
 	req.Command = c.Param("command")
-
-	req.User = c.GetString("user")
-	if req.User == "" {
-		req.User = c.Query("dev_user")
-	}
+	req.Method = "POST"
+	req.User = c.Param("user")
 	if req.Soft == "" {
 		response.FailWithMessage("soft不能为空", c)
 		return
@@ -157,21 +154,129 @@ func (bizAppHubApi *BizAppHubApi) Call(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-
-	if call.HasFile {
-
-		fileName := filepath.Base(call.FilePath) // 获取文件名
-
-		// 如果请求中有自定义文件名，则使用自定义文件名
-		if customFileName := c.Query("filename"); customFileName != "" {
-			fileName = customFileName
-		}
-		c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
-		c.File(call.FilePath)
+	if call.StatusCode != 200 {
+		c.JSON(call.StatusCode, gin.H{"msg": call.Data})
 		return
 	}
+	if call.ContentType == "file" {
+		if call.HasFile {
+			//if call.HasFile
+			fileName := filepath.Base(call.FilePath) // 获取文件名
+			if call.DeleteFile {
+				defer os.Remove(call.FilePath)
+			}
+			// 如果请求中有自定义文件名，则使用自定义文件名
+			if customFileName := c.Query("filename"); customFileName != "" {
+				fileName = customFileName
+			}
+			c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
+			c.File(call.FilePath)
+			return
+		}
+	}
+
 	if call.ContentType == "json" {
-		c.Data(200, "application/json", []byte(call.Data))
+		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.JSONString(call.Data)))
+	}
+	if call.ContentType == "text" {
+		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Data)))
+	}
+}
+
+// GetCall 后端命令接口
+// @Tags BizAppHub
+// @Summary 后端命令接口
+// @Security ApiKeyAuth
+// @accept application/json
+// @Produce application/json
+// @Param data body biz_apphub.BizAppHub true "后端命令接口"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
+// @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
+func (bizAppHubApi *BizAppHubApi) GetCall(c *gin.Context) {
+	var (
+		req biz_apphubReq.Call
+		err error
+	)
+	req.Soft = c.Param("soft")
+	req.Command = c.Param("command")
+	req.User = c.Param("user")
+	req.Method = "GET"
+	if req.Soft == "" {
+		response.FailWithMessage("soft不能为空", c)
+		return
+	}
+	if req.Command == "" {
+		response.FailWithMessage("Command不能为空", c)
+		return
+	}
+
+	if req.User == "" {
+		response.FailWithMessage("user 不能为空", c)
+		return
+	}
+	if req.Data == nil {
+		req.Data = make(map[string]interface{})
+	}
+	queryMap := c.Request.URL.Query()
+	for k, values := range queryMap {
+		if len(values) > 1 {
+			req.Data[k] = values
+		} else {
+			req.Data[k] = values[0]
+		}
+	}
+	//todo 验证用户是否有调用该应用的权限
+	j, err := req.RequestJSON()
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	req.ReqBody = j
+	caller := biz_apphub.NewCaller("")
+	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
+
+	err = jsonx.SaveFile(req.RequestJsonPath, req) //
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	defer os.Remove(req.RequestJsonPath)
+
+	call, err := caller.Call(req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	if call.StatusCode != 200 {
+		c.JSON(call.StatusCode, gin.H{
+			"msg": call.Data,
+		})
+		return
+	}
+
+	if call.ContentType == "file" {
+		if call.HasFile {
+			//if call.HasFile
+			fileName := filepath.Base(call.FilePath) // 获取文件名
+			if call.DeleteFile {
+				defer os.Remove(call.FilePath)
+			}
+			// 如果请求中有自定义文件名，则使用自定义文件名
+			if customFileName := c.Query("filename"); customFileName != "" {
+				fileName = customFileName
+			}
+			c.Writer.Header().Add("Content-Disposition", "attachment; filename="+fileName)
+			c.File(call.FilePath)
+			return
+		}
+	}
+
+	if call.ContentType == "json" {
+		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.JSONString(call.Data)))
+	}
+	if call.ContentType == "text" {
+		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Data)))
 	}
 }
 

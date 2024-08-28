@@ -60,10 +60,10 @@ func (dictionaryService *DictionaryService) DeleteSysDictionary(sysDictionary sy
 func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *system.SysDictionary) (err error) {
 	var dict system.SysDictionary
 	sysDictionaryMap := map[string]interface{}{
-		"Name":   sysDictionary.Name,
-		"Type":   sysDictionary.Type,
-		"Status": sysDictionary.Status,
-		"Desc":   sysDictionary.Desc,
+		"Name":        sysDictionary.Name,
+		"ContentType": sysDictionary.Type,
+		"Status":      sysDictionary.Status,
+		"Desc":        sysDictionary.Desc,
 	}
 	err = global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict).Error
 	if err != nil {
@@ -82,7 +82,7 @@ func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *s
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: GetSysDictionary
 //@description: 根据id或者type获取字典单条数据
-//@param: Type string, Id uint
+//@param: ContentType string, Id uint
 //@return: err error, sysDictionary model.SysDictionary
 
 func (dictionaryService *DictionaryService) GetSysDictionary(Type string, Id uint, status *bool) (sysDictionary system.SysDictionary, err error) {

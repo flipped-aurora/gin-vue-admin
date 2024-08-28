@@ -17,7 +17,8 @@ func NewCaller(types string) Caller {
 	if err != nil {
 		panic(err)
 	}
-	return &SoftCall{AppPath: dir + "\\soft_cmd"}
+	dir = strings.Replace(dir, "\\", "/", -1)
+	return &SoftCall{AppPath: dir + "/soft_cmd"}
 }
 
 type CallResponse struct {
@@ -53,10 +54,10 @@ type CallResult struct {
 }
 
 func (p *SoftCall) Call(req request.Call) (*runner.CallResponse, error) {
-	softPath := p.AppPath + fmt.Sprintf("\\%s\\%s\\%s",
+	softPath := p.AppPath + fmt.Sprintf("/%s/%s/%s",
 		req.User, req.Soft, req.Soft)
 	if runtime.GOOS == "windows" {
-		softPath = p.AppPath + fmt.Sprintf("\\%s\\%s\\%s.exe",
+		softPath = p.AppPath + fmt.Sprintf("/%s/%s/%s.exe",
 			req.User, req.Soft, req.Soft)
 	}
 	cmd := exec.Command(softPath, req.Command, req.RequestJsonPath)

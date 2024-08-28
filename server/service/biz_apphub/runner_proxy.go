@@ -6,13 +6,18 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner"
+	"os"
 	"os/exec"
 	"runtime"
 	"strings"
 )
 
 func NewCaller(types string) Caller {
-	return &SoftCall{AppPath: "D:\\code\\github.com\\apphub\\server\\soft_cmd"}
+	dir, err := os.Getwd()
+	if err != nil {
+		panic(err)
+	}
+	return &SoftCall{AppPath: dir + "\\soft_cmd"}
 }
 
 type CallResponse struct {

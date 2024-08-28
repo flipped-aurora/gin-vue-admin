@@ -31,6 +31,17 @@ redis:
     - "172.21.0.4:7001"
     - "172.21.0.2:7002"
 
+# redis-list configuration
+redis-list:
+  - name: cache           # 数据库的名称,注意: name 需要在 redis-list 中唯一
+    useCluster: false     # 是否使用redis集群模式    
+    addr: 127.0.0.1:6379  # 使用集群模式addr和db默认无效
+    password: ""
+    db: 0
+    clusterAddrs:
+      - "172.21.0.3:7000"
+      - "172.21.0.4:7001"
+      - "172.21.0.2:7002"
 
 # mongo configuration
 mongo:

@@ -362,6 +362,20 @@
             <el-form-item>
               <template #label>
                 <el-tooltip
+                    content="注：会自动产生页面内的按钮权限配置，若不在角色管理中进行按钮分配则按钮不可见"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> 创建按钮权限 <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.autoCreateBtnAuth" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
                   content="注：会自动在结构体添加 created_by updated_by deleted_by，方便用户进行资源权限控制"
                   placement="bottom"
                   effect="light"
@@ -467,11 +481,39 @@
           </el-table-column>
           <el-table-column
             align="left"
-            prop="front"
-            label="前端可见"
+            prop="form"
+            width="100"
+            label="新建/编辑"
           >
             <template #default="{row}">
-              <el-checkbox v-model="row.front" />
+              <el-checkbox v-model="row.form" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="table"
+              label="表格"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.table" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="desc"
+              label="详情"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.desc" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="excel"
+              label="导入/导出"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.excel" />
             </template>
           </el-table-column>
           <el-table-column
@@ -616,6 +658,20 @@
       <!-- 组件列表 -->
       <div class="gva-btn-list justify-end mt-4">
         <el-button
+            type="primary"
+            @click="exportJson()"
+        >
+          导出json
+        </el-button>
+        <el-upload
+            class="flex items-center"
+            :before-upload="importJson"
+            show-file-list="false"
+            accept=".json"
+        >
+          <el-button type="primary" class="mx-2">导入json</el-button>
+        </el-upload>
+        <el-button
           type="primary"
           @click="clearCatch()"
         >
@@ -676,7 +732,7 @@
 
     <el-drawer
       v-model="previewFlag"
-      size="60%"
+      size="80%"
       :show-close="false"
     >
       <template #header>
@@ -758,9 +814,12 @@ const llmAutoFunc = async (mode) =>{
               fieldSearchType: '',
               fieldIndexType: '',
               dictType: '',
-              front: true,
+              form: true,
+              desc: true,
+              table: true,
+              excel: false,
               dataSource: {
-            association:1,
+                association:1,
                 table: '',
                 label: '',
                 value: ''
@@ -912,7 +971,10 @@ const fieldTemplate = {
   defaultValue: '',
   require: false,
   sort: false,
-  front: true,
+  form: true,
+  desc: true,
+  table: true,
+  excel: false,
   errorText: '',
   primaryKey: false,
   clearable: true,
@@ -947,6 +1009,7 @@ const form = ref({
   businessDB: '',
   autoCreateApiToSql: true,
   autoCreateMenuToSql: true,
+  autoCreateBtnAuth: false,
   autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
@@ -1031,7 +1094,7 @@ const editAndAddField = (item) => {
 
 const fieldDialogNode = ref(null)
 const enterDialog = () => {
-  fieldDialogNode.value.fieldDialogFrom.validate(valid => {
+  fieldDialogNode.value.fieldDialogForm.validate(valid => {
     if (valid) {
       dialogMiddle.value.fieldName = toUpperCase(
         dialogMiddle.value.fieldName
@@ -1092,6 +1155,15 @@ const enterForm = async(isPreview) => {
     ElMessage({
       type: 'error',
       message: 'package和结构体简称不可同名'
+    })
+    return false
+  }
+
+
+  if (form.value.fields.some(item => !item.fieldType)) {
+    ElMessage({
+      type: 'error',
+      message: '请填写所有字段类型后进行提交'
     })
     return false
   }
@@ -1195,7 +1267,10 @@ const getColumnFunc = async() => {
                 fieldSearchType: '',
                 fieldIndexType: '',
                 dictType: '',
-                front: true,
+                form: true,
+                table: true,
+                excel: false,
+                desc: true,
                 dataSource: {
                   association:1,
                   table: '',
@@ -1287,6 +1362,7 @@ const clearCatch = async () => {
     businessDB: '',
     autoCreateApiToSql: true,
     autoCreateMenuToSql: true,
+    autoCreateBtnAuth: false,
     autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,
@@ -1297,5 +1373,33 @@ const clearCatch = async () => {
 }
 
 getCatch()
+
+const exportJson = () => {
+  const dataStr = JSON.stringify(form.value, null, 2)
+  const blob = new Blob([dataStr], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'form_data.json'
+  document.body.appendChild(a)
+  a.click()
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}
+
+const importJson = (file) =>{
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    console.log(e)
+    try {
+      form.value = JSON.parse(e.target.result)
+      ElMessage.success('JSON 文件导入成功')
+    } catch (error) {
+      ElMessage.error('无效的 JSON 文件')
+    }
+  }
+  reader.readAsText(file)
+  return false
+}
 
 </script>

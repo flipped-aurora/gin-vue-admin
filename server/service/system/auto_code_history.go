@@ -67,6 +67,12 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 	if err != nil {
 		return err
 	}
+	if history.ExportTemplateID != 0 {
+		err = global.GVA_DB.Delete(&model.SysExportTemplate{}, "id = ?", history.ExportTemplateID).Error
+		if err != nil {
+			return err
+		}
+	}
 	if info.DeleteApi {
 		ids := info.ApiIds(history)
 		err = ApiServiceApp.DeleteApisByIds(ids)

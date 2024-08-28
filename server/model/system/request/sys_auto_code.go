@@ -24,9 +24,9 @@ type AutoCode struct {
 	AutoCreateResource  bool                   `json:"autoCreateResource" example:"false"`  // 是否自动创建资源标识
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"false"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
+	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
 	Fields              []*AutoCodeField       `json:"fields"`
 	DictTypes           []string               `json:"-"`
-	FrontFields         []*AutoCodeField       `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`
 	DataSourceMap       map[string]*DataSource `json:"-"`
 	HasPic              bool                   `json:"-"`
@@ -37,6 +37,8 @@ type AutoCode struct {
 	HasRichText         bool                   `json:"-"`
 	HasDataSource       bool                   `json:"-"`
 	HasSearchTimer      bool                   `json:"-"`
+	HasArray            bool                   `json:"-"`
+	HasExcel            bool                   `json:"-"`
 }
 
 type DataSource struct {
@@ -114,17 +116,16 @@ func (r *AutoCode) Pretreatment() error {
 	} // test
 	length := len(r.Fields)
 	dict := make(map[string]string, length)
-	r.FrontFields = make([]*AutoCodeField, 0, length)
 	r.DataSourceMap = make(map[string]*DataSource, length)
 	for i := 0; i < length; i++ {
+		if r.Fields[i].Excel {
+			r.HasExcel = true
+		}
 		if r.Fields[i].DictType != "" {
 			dict[r.Fields[i].DictType] = ""
 		}
 		if r.Fields[i].Sort {
 			r.NeedSort = true
-		}
-		if r.Fields[i].Front {
-			r.FrontFields = append(r.FrontFields, r.Fields[i])
 		}
 		switch r.Fields[i].FieldType {
 		case "file":
@@ -134,6 +135,7 @@ func (r *AutoCode) Pretreatment() error {
 			r.NeedJSON = true
 		case "array":
 			r.NeedJSON = true
+			r.HasArray = true
 		case "video":
 			r.HasPic = true
 		case "richtext":
@@ -204,17 +206,21 @@ func (r *AutoCode) History() SysAutoHistoryCreate {
 }
 
 type AutoCodeField struct {
-	FieldName       string      `json:"fieldName"`       // Field名
-	FieldDesc       string      `json:"fieldDesc"`       // 中文名
-	FieldType       string      `json:"fieldType"`       // Field数据类型
-	FieldJson       string      `json:"fieldJson"`       // FieldJson
-	DataTypeLong    string      `json:"dataTypeLong"`    // 数据库字段长度
-	Comment         string      `json:"comment"`         // 数据库字段描述
-	ColumnName      string      `json:"columnName"`      // 数据库字段
-	FieldSearchType string      `json:"fieldSearchType"` // 搜索条件
-	FieldSearchHide bool        `json:"fieldSearchHide"` // 是否隐藏查询条件
-	DictType        string      `json:"dictType"`        // 字典
-	Front           bool        `json:"front"`           // 是否前端可见
+	FieldName       string `json:"fieldName"`       // Field名
+	FieldDesc       string `json:"fieldDesc"`       // 中文名
+	FieldType       string `json:"fieldType"`       // Field数据类型
+	FieldJson       string `json:"fieldJson"`       // FieldJson
+	DataTypeLong    string `json:"dataTypeLong"`    // 数据库字段长度
+	Comment         string `json:"comment"`         // 数据库字段描述
+	ColumnName      string `json:"columnName"`      // 数据库字段
+	FieldSearchType string `json:"fieldSearchType"` // 搜索条件
+	FieldSearchHide bool   `json:"fieldSearchHide"` // 是否隐藏查询条件
+	DictType        string `json:"dictType"`        // 字典
+	//Front           bool        `json:"front"`           // 是否前端可见
+	Form            bool        `json:"form"`            // 是否前端新建/编辑
+	Table           bool        `json:"table"`           // 是否前端表格列
+	Desc            bool        `json:"desc"`            // 是否前端详情
+	Excel           bool        `json:"excel"`           // 是否导入/导出
 	Require         bool        `json:"require"`         // 是否必填
 	DefaultValue    string      `json:"defaultValue"`    // 是否必填
 	ErrorText       string      `json:"errorText"`       // 校验失败文字
@@ -238,4 +244,15 @@ type AutoFunc struct {
 	HumpPackageName string `json:"humpPackageName"` // go文件名称
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
+}
+
+type InitMenu struct {
+	PlugName   string `json:"plugName"`
+	ParentMenu string `json:"parentMenu"`
+	Menus      []uint `json:"menus"`
+}
+
+type InitApi struct {
+	PlugName string `json:"plugName"`
+	APIs     []uint `json:"apis"`
 }

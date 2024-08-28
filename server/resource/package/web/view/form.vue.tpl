@@ -3,6 +3,7 @@
     <div class="gva-form-box">
       <el-form :model="formData" ref="elFormRef" label-position="right" :rules="rule" label-width="80px">
       {{- range .Fields}}
+      {{- if .Form }}
         <el-form-item label="{{.FieldDesc}}:" prop="{{.FieldJson}}">
        {{- if .CheckDataSource}}
         <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" placeholder="请选择{{.FieldDesc}}" style="width:100%" :clearable="{{.Clearable}}" >
@@ -54,8 +55,12 @@
           // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
           {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
        {{- end }}
+       {{- if eq .FieldType "array" }}
+          <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
+       {{- end }}
        {{- end }}
        </el-form-item>
+      {{- end }}
       {{- end }}
         <el-form-item>
           <el-button type="primary" @click="save">保存</el-button>
@@ -86,9 +91,12 @@ import { useRoute, useRouter } from "vue-router"
 import { ElMessage } from 'element-plus'
 import { ref, reactive } from 'vue'
 {{- if .HasPic }}
+// 图片选择组件
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
+
 {{- if .HasFile }}
+// 文件选择组件
 import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
@@ -96,6 +104,12 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 // 富文本组件
 import RichEdit from '@/components/richtext/rich-edit.vue'
 {{- end }}
+
+{{- if .HasArray}}
+// 数组控制组件
+import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
+{{- end }}
+
 
 const route = useRoute()
 const router = useRouter()
@@ -106,6 +120,7 @@ const {{ $element }}Options = ref([])
     {{- end }}
 const formData = ref({
         {{- range .Fields}}
+          {{- if .Form }}
             {{- if eq .FieldType "bool" }}
             {{.FieldJson}}: false,
             {{- end }}
@@ -142,6 +157,7 @@ const formData = ref({
             {{- if eq .FieldType "array" }}
             {{.FieldJson}}: [],
             {{- end }}
+          {{- end }}
         {{- end }}
         })
 // 验证规则

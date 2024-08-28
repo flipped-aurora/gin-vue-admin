@@ -54,6 +54,8 @@ func (i *initApiIgnore) InitializeData(ctx context.Context) (context.Context, er
 		{Method: "POST", Path: "/base/captcha"},
 		{Method: "POST", Path: "/init/initdb"},
 		{Method: "POST", Path: "/init/checkdb"},
+		{Method: "GET", Path: "/info/getInfoDataSource"},
+		{Method: "GET", Path: "/info/getInfoPublic"},
 	}
 	if err := db.Create(&entities).Error; err != nil {
 		return ctx, errors.Wrap(err, sysModel.SysIgnoreApi{}.TableName()+"表数据初始化失败!")

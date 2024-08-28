@@ -231,20 +231,13 @@ const rules = ref({
   ]
 })
 
-const page = ref(1)
-const total = ref(0)
-const pageSize = ref(999)
 const tableData = ref([])
-const searchInfo = ref({})
 
 // 查询
 const getTableData = async() => {
-  const table = await getAuthorityList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getAuthorityList()
   if (table.code === 0) {
-    tableData.value = table.data.list
-    total.value = table.data.total
-    page.value = table.data.page
-    pageSize.value = table.data.pageSize
+    tableData.value = table.data
   }
 }
 
@@ -294,9 +287,7 @@ const deleteAuth = (row) => {
           type: 'success',
           message: '删除成功!'
         })
-        if (tableData.value.length === 1 && page.value > 1) {
-          page.value--
-        }
+
         getTableData()
       }
     })

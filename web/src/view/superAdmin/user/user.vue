@@ -301,8 +301,8 @@ watch(() => tableData.value, () => {
 
 const initPage = async() => {
   getTableData()
-  const res = await getAuthorityList({ page: 1, pageSize: 999 })
-  setOptions(res.data.list)
+  const res = await getAuthorityList()
+  setOptions(res.data)
 }
 
 initPage()
@@ -368,7 +368,7 @@ const deleteUserFunc = async(row) => {
 
 // 弹窗相关
 const userInfo = ref({
-  username: '',
+  userName: '',
   password: '',
   nickName: '',
   headerImg: '',

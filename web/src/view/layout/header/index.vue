@@ -8,7 +8,7 @@
     <div
       class="flex items-center cursor-pointer flex-1"
     >
-      <div class="flex items-center cursor-pointer" @click="router.push({ path: '/' })">
+      <div class="flex items-center cursor-pointer min-w-48" @click="router.push({ path: '/' })">
         <img
           alt
           class="h-12 bg-white rounded-full"

@@ -74,6 +74,8 @@ system:
   iplimit-time: 3600
   #  路由全局前缀
   router-prefix: ""
+  #  严格角色模式 打开后权限将会存在上下级关系
+  use-strict-auth: false
 
 # captcha configuration
 captcha:

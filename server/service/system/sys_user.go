@@ -104,10 +104,44 @@ func (userService *UserService) GetUserInfoList(info request.PageInfo) (list int
 //@return: err error
 
 func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err error) {
+
 	assignErr := global.GVA_DB.Where("sys_user_id = ? AND sys_authority_authority_id = ?", id, authorityId).First(&system.SysUserAuthority{}).Error
 	if errors.Is(assignErr, gorm.ErrRecordNotFound) {
 		return errors.New("该用户无此角色")
 	}
+
+	var authority system.SysAuthority
+	err = global.GVA_DB.Where("authority_id = ?", authorityId).First(&authority).Error
+	if err != nil {
+		return err
+	}
+	var authorityMenu []system.SysAuthorityMenu
+	var authorityMenuIDs []string
+	err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityId).Find(&authorityMenu).Error
+	if err != nil {
+		return err
+	}
+
+	for i := range authorityMenu {
+		authorityMenuIDs = append(authorityMenuIDs, authorityMenu[i].MenuId)
+	}
+
+	var authorityMenus []system.SysBaseMenu
+	err = global.GVA_DB.Preload("Parameters").Where("id in (?)", authorityMenuIDs).Find(&authorityMenus).Error
+	if err != nil {
+		return err
+	}
+	hasMenu := false
+	for i := range authorityMenus {
+		if authorityMenus[i].Name == authority.DefaultRouter {
+			hasMenu = true
+			break
+		}
+	}
+	if !hasMenu {
+		return errors.New("找不到默认路由,无法切换本角色")
+	}
+
 	err = global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", id).Update("authority_id", authorityId).Error
 	return err
 }
@@ -118,7 +152,7 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 //@param: id uint, authorityIds []string
 //@return: err error
 
-func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
+func (userService *UserService) SetUserAuthorities(adminAuthorityID, id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var user system.SysUser
 		TxErr := tx.Where("id = ?", id).First(&user).Error
@@ -132,6 +166,10 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 		}
 		var useAuthority []system.SysUserAuthority
 		for _, v := range authorityIds {
+			e := AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, v)
+			if e != nil {
+				return e
+			}
 			useAuthority = append(useAuthority, system.SysUserAuthority{
 				SysUserId: id, SysAuthorityAuthorityId: v,
 			})

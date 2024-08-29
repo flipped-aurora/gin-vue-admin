@@ -15,9 +15,16 @@
           :max-w-h="1080"
           @on-success="getTableData"
         />
+        <el-button
+            type="primary"
+            icon="upload"
+            @click="importUrlFunc"
+        >
+          导入URL
+        </el-button>
         <el-input
           v-model="search.keyword"
-          class="keyword"
+          class="w-72"
           placeholder="请输入文件名或备注"
         />
         <el-button
@@ -122,12 +129,12 @@
 </template>
 
 <script setup>
-import { getFileList, deleteFile, editFileName } from '@/api/fileUploadAndDownload'
+import {getFileList, deleteFile, editFileName, importURL} from '@/api/fileUploadAndDownload'
 import { downloadImage } from '@/utils/downloadImg'
 import CustomPic from '@/components/customPic/index.vue'
 import UploadImage from '@/components/upload/image.vue'
 import UploadCommon from '@/components/upload/common.vue'
-import { formatDate } from '@/utils/format'
+import {CreateUUID, formatDate} from '@/utils/format'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 
 import { ref } from 'vue'
@@ -228,12 +235,63 @@ const editFileNameFunc = async(row) => {
         type: 'success',
         message: '编辑成功!',
       })
-      getTableData()
+      await getTableData()
     }
   }).catch(() => {
     ElMessage({
       type: 'info',
       message: '取消修改'
+    })
+  })
+}
+
+/**
+ * 导入URL
+ */
+const importUrlFunc = () => {
+  ElMessageBox.prompt('格式：文件名|链接或者仅链接。', '导入', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    inputType: 'textarea',
+    inputPlaceholder: '我的图片|https://my-oss.com/my.png\nhttps://my-oss.com/my_1.png',
+    inputPattern: /\S/,
+    inputErrorMessage: '不能为空',
+  }).then(async({ value }) => {
+    let data = value.split('\n')
+    let importData = []
+    data.forEach(item => {
+      let oneData = item.trim().split('|')
+      let url, name
+      if (oneData.length > 1) {
+        name = oneData[0].trim()
+        url = oneData[1]
+      } else {
+        url = oneData[0].trim()
+        let str = url.substring(url.lastIndexOf('/') + 1)
+        name = str.substring(0, str.lastIndexOf('.'))
+      }
+      if (url) {
+        importData.push({
+          name: name,
+          url: url,
+          tag: url.substring(url.lastIndexOf(".") + 1),
+          key: CreateUUID()
+        })
+      }
+    })
+
+    const res = await importURL(importData)
+    if (res.code === 0) {
+      ElMessage({
+        type: 'success',
+        message: '导入成功!',
+      })
+      await getTableData()
+    }
+  }).catch(() => {
+    ElMessage({
+      type: 'info',
+      message: '取消导入',
     })
   })
 }
@@ -243,5 +301,4 @@ const editFileNameFunc = async(row) => {
 .name {
   cursor: pointer;
 }
-
 </style>

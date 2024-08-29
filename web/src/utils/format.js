@@ -125,3 +125,15 @@ const baseUrl = ref(import.meta.env.VITE_BASE_API)
 export const getBaseUrl = () => {
     return  baseUrl.value === "/" ? "" : baseUrl.value
 }
+
+export const CreateUUID = () => {
+  let d = new Date().getTime()
+  if (window.performance && typeof window.performance.now === 'function') {
+    d += performance.now()
+  }
+  return '00000000-0000-0000-0000-000000000000'.replace(/0/g, (c) => {
+    const r = (d + Math.random() * 16) % 16 | 0    // d是随机种子
+    d = Math.floor(d / 16)
+    return (c === '0' ? r : (r & 0x3 | 0x8)).toString(16)
+  })
+}

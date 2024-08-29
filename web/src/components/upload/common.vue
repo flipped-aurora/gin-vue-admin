@@ -6,6 +6,7 @@
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="false"
+      multiple
       class="upload-btn"
     >
       <el-button type="primary">普通上传</el-button>

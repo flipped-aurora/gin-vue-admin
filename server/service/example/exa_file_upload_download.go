@@ -110,7 +110,7 @@ func (e *FileUploadAndDownloadService) UploadFile(header *multipart.FileHeader, 
 //@author: [piexlmax](https://github.com/piexlmax)
 //@function: ImportURL
 //@description: 导入URL
-//@param: file model.SysAttachment
+//@param: file model.ExaFileUploadAndDownload
 //@return: error
 
 func (e *FileUploadAndDownloadService) ImportURL(file *[]example.ExaFileUploadAndDownload) error {

@@ -53,8 +53,10 @@ type Context struct {
 
 func (c *Context) Logger() *logrus.Entry {
 	return logrus.StandardLogger().WithFields(logrus.Fields{
-		"user":    c.Req.User,
-		"command": c.Req.Command,
+		"user":      c.Req.User,
+		"soft":      c.Req.Soft,
+		"command":   c.Req.Command,
+		"user_soft": fmt.Sprintf("/%s/%s", c.Req.User, c.Req.Soft),
 	})
 }
 

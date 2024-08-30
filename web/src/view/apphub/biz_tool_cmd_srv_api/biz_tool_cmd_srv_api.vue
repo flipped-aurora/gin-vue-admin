@@ -25,6 +25,10 @@
          <el-input v-model="searchInfo.appCode" placeholder="搜索条件" />
 
         </el-form-item>
+        <el-form-item label="工具类型" prop="tool_type">
+         <el-input v-model="searchInfo.tool_type" placeholder="搜索条件" />
+
+        </el-form-item>
         <el-form-item label="标题" prop="title">
          <el-input v-model="searchInfo.title" placeholder="搜索条件" />
 
@@ -98,6 +102,7 @@
         
           <el-table-column align="left" label="应用名称（中文）" prop="appName" width="120" />
           <el-table-column align="left" label="应用名称（英文标识）" prop="appCode" width="120" />
+          <el-table-column align="left" label="工具类型" prop="tool_type" width="120" />
           <el-table-column align="left" label="标题" prop="title" width="120" />
           <el-table-column align="left" label="应用介绍" prop="desc" width="120" />
           <el-table-column align="left" label="分类" prop="classify" width="120" />
@@ -125,7 +130,7 @@
         <el-table-column align="left" label="操作" fixed="right" min-width="240">
             <template #default="scope">
             <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
-            <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizCmdToolApiFunc(scope.row)">变更</el-button>
+            <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizToolCmdSrvApiFunc(scope.row)">变更</el-button>
             <el-button  type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
             </template>
         </el-table-column>
@@ -160,6 +165,15 @@
             <el-form-item label="应用名称（英文标识）:"  prop="appCode" >
               <el-input v-model="formData.appCode" :clearable="true"  placeholder="请输入应用名称（英文标识）" />
             </el-form-item>
+<!--            <el-form-item label="工具类型1:"  prop="tool_type" >-->
+<!--              <el-input v-model="formData.tool_type" :clearable="true"  placeholder="请输入工具类型" />-->
+<!--            </el-form-item>-->
+            <el-form-item label="工具类型:" prop="mode">
+              <el-select v-model="formData.tool_type" placeholder="请选择工具类型" style="width:100%" :clearable="true" >
+                <el-option v-for="(item,key) in tool_type" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+
             <el-form-item label="标题:"  prop="title" >
               <el-input v-model="formData.title" :clearable="true"  placeholder="请输入标题" />
             </el-form-item>
@@ -196,6 +210,10 @@
                 <el-option v-for="(item,key) in bool_statusOptions" :key="key" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
+
+            <el-form-item label="上传文件:"  prop="video" >
+              <UploadQiNiu oss-dir="tool" :uploadedFiles="uploadedFiles" title='请把打包后的文件压缩成zip格式上传'/>
+            </el-form-item>
           </el-form>
     </el-drawer>
 
@@ -206,6 +224,9 @@
                     </el-descriptions-item>
                     <el-descriptions-item label="应用名称（英文标识）">
                         {{ detailFrom.appCode }}
+                    </el-descriptions-item>
+                    <el-descriptions-item label="工具类型">
+                        {{ detailFrom.tool_type }}
                     </el-descriptions-item>
                     <el-descriptions-item label="标题">
                         {{ detailFrom.title }}
@@ -251,33 +272,37 @@
 
 <script setup>
 import {
-  createBizCmdToolApi,
-  deleteBizCmdToolApi,
-  deleteBizCmdToolApiByIds,
-  updateBizCmdToolApi,
-  findBizCmdToolApi,
-  getBizCmdToolApiList
-} from '@/api/biz_apphub/biz_cmd_tool_api'
+  createBizToolCmdSrvApi,
+  deleteBizToolCmdSrvApi,
+  deleteBizToolCmdSrvApiByIds,
+  updateBizToolCmdSrvApi,
+  findBizToolCmdSrvApi,
+  getBizToolCmdSrvApiList
+} from '@/api/biz_apphub/biz_tool_cmd_srv_api'
 
 // 全量引入格式化工具 请按需保留
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
-
+import UploadQiNiu from "@/components/upload_oss/UploadQiNiu.vue";
+// 上传的文件
+const uploadedFiles=ref([])
 defineOptions({
-    name: 'BizCmdToolApi'
+    name: 'BizToolCmdSrvApi'
 })
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
 
 // 自动化生成的字典（可能为空）以及字段
-const price_modeOptions = ref([])
-const dev_modeOptions = ref([])
 const bool_statusOptions = ref([])
+const price_modeOptions = ref([])
+const tool_type = ref([])
+const dev_modeOptions = ref([])
 const formData = ref({
             appName: '',
             appCode: '',
+            tool_type: '',
             title: '',
             desc: '',
             classify: '',
@@ -306,6 +331,17 @@ const rule = reactive({
               }
               ],
                appCode : [{
+                   required: true,
+                   message: '',
+                   trigger: ['input','blur'],
+               },
+               {
+                   whitespace: true,
+                   message: '不能只输入空格',
+                   trigger: ['input', 'blur'],
+              }
+              ],
+               tool_type : [{
                    required: true,
                    message: '',
                    trigger: ['input','blur'],
@@ -455,7 +491,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
-  const table = await getBizCmdToolApiList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
+  const table = await getBizToolCmdSrvApiList({ page: page.value, pageSize: pageSize.value, ...searchInfo.value })
   if (table.code === 0) {
     tableData.value = table.data.list
     total.value = table.data.total
@@ -470,9 +506,10 @@ getTableData()
 
 // 获取需要的字典 可能为空 按需保留
 const setOptions = async () =>{
+    bool_statusOptions.value = await getDictFunc('bool_status')
     price_modeOptions.value = await getDictFunc('price_mode')
     dev_modeOptions.value = await getDictFunc('dev_mode')
-    bool_statusOptions.value = await getDictFunc('bool_status')
+    tool_type.value = await getDictFunc('tool_type')
 }
 
 // 获取需要的字典 可能为空 按需保留
@@ -493,7 +530,7 @@ const deleteRow = (row) => {
         cancelButtonText: '取消',
         type: 'warning'
     }).then(() => {
-            deleteBizCmdToolApiFunc(row)
+            deleteBizToolCmdSrvApiFunc(row)
         })
     }
 
@@ -516,7 +553,7 @@ const onDelete = async() => {
         multipleSelection.value.map(item => {
           IDs.push(item.ID)
         })
-      const res = await deleteBizCmdToolApiByIds({ IDs })
+      const res = await deleteBizToolCmdSrvApiByIds({ IDs })
       if (res.code === 0) {
         ElMessage({
           type: 'success',
@@ -534,8 +571,9 @@ const onDelete = async() => {
 const type = ref('')
 
 // 更新行
-const updateBizCmdToolApiFunc = async(row) => {
-    const res = await findBizCmdToolApi({ ID: row.ID })
+const updateBizToolCmdSrvApiFunc = async(row) => {
+  uploadedFiles.value=[]
+    const res = await findBizToolCmdSrvApi({ ID: row.ID })
     type.value = 'update'
     if (res.code === 0) {
         formData.value = res.data
@@ -545,8 +583,8 @@ const updateBizCmdToolApiFunc = async(row) => {
 
 
 // 删除行
-const deleteBizCmdToolApiFunc = async (row) => {
-    const res = await deleteBizCmdToolApi({ ID: row.ID })
+const deleteBizToolCmdSrvApiFunc = async (row) => {
+    const res = await deleteBizToolCmdSrvApi({ ID: row.ID })
     if (res.code === 0) {
         ElMessage({
                 type: 'success',
@@ -574,6 +612,7 @@ const closeDialog = () => {
     formData.value = {
         appName: '',
         appCode: '',
+        tool_type: '',
         title: '',
         desc: '',
         classify: '',
@@ -593,13 +632,13 @@ const enterDialog = async () => {
               let res
               switch (type.value) {
                 case 'create':
-                  res = await createBizCmdToolApi(formData.value)
+                  res = await createBizToolCmdSrvApi(formData.value)
                   break
                 case 'update':
-                  res = await updateBizCmdToolApi(formData.value)
+                  res = await updateBizToolCmdSrvApi(formData.value)
                   break
                 default:
-                  res = await createBizCmdToolApi(formData.value)
+                  res = await createBizToolCmdSrvApi(formData.value)
                   break
               }
               if (res.code === 0) {
@@ -629,7 +668,7 @@ const openDetailShow = () => {
 // 打开详情
 const getDetails = async (row) => {
   // 打开弹窗
-  const res = await findBizCmdToolApi({ ID: row.ID })
+  const res = await findBizToolCmdSrvApi({ ID: row.ID })
   if (res.code === 0) {
     detailFrom.value = res.data
     openDetailShow()

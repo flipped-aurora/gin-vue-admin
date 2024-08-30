@@ -22,6 +22,7 @@ func (s *BizAppHubRouter) InitBizAppHubRouter(Router *gin.RouterGroup, PublicRou
 		//bizAppHubRouter.POST("api/cmd/call", bizAppHubApi.Call)                           // 调用命令行工具
 	}
 	{
+		bizAppHubRouterWithoutRecord.GET("getUserInfo", bizAppHubApi.GetUserInfo)           // 获取用户信息
 		bizAppHubRouterWithoutRecord.GET("findBizAppHub", bizAppHubApi.FindBizAppHub)       // 根据ID获取biz_apphub
 		bizAppHubRouterWithoutRecord.GET("bizAppHub/record", bizAppHubApi.BizAppHubRecord)  // 根据ID获取biz_apphub
 		bizAppHubRouterWithoutRecord.GET("getBizAppHubList", bizAppHubApi.GetBizAppHubList) // 获取biz_apphub列表

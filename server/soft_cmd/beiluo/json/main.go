@@ -6,17 +6,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type EchoRequest struct {
-	PageSize int `json:"page_size"`
-	PageNum  int `json:"page_num"`
-}
-
-type Response struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
-}
-
 func main() {
 	r := runner.New()
 	r.Post("echo", func(ctx *runner.Context) {
@@ -40,10 +29,8 @@ func main() {
 			Value: 0,
 		}
 
-		err := ctx.ResponseOkWithJSON(s)
-		if err != nil {
-			panic(err)
-		}
+		ctx.ResponseOkWithJSON(s)
+
 	})
 
 	r.Get("file", func(ctx *runner.Context) {

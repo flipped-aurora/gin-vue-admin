@@ -2,5 +2,5 @@ package biz_apphub
 
 type ServiceGroup struct {
 	BizAppHubService
-	BizCmdToolApiService
+	BizToolCmdSrvApiService
 }

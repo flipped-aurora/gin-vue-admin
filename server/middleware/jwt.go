@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"errors"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
@@ -59,6 +60,7 @@ func JWTAuth() gin.HandlerFunc {
 		//}
 		c.Set("claims", claims)
 		c.Set("user", claims.Username)
+		c.Set("user_id", fmt.Sprintf("%v", claims.BaseClaims.ID))
 		c.Set("nickname", claims.NickName)
 		if claims.ExpiresAt.Unix()-time.Now().Unix() < claims.BufferTime {
 			dr, _ := utils.ParseDuration(global.GVA_CONFIG.JWT.ExpiresTime)

@@ -8,6 +8,9 @@
         <el-form-item label="应用名称（英文标识）:" prop="appCode">
           <el-input v-model="formData.appCode" :clearable="true"  placeholder="请输入应用名称（英文标识）" />
        </el-form-item>
+        <el-form-item label="工具类型:" prop="tool_type">
+          <el-input v-model="formData.tool_type" :clearable="true"  placeholder="请输入工具类型" />
+       </el-form-item>
         <el-form-item label="标题:" prop="title">
           <el-input v-model="formData.title" :clearable="true"  placeholder="请输入标题" />
        </el-form-item>
@@ -55,13 +58,13 @@
 
 <script setup>
 import {
-  createBizCmdToolApi,
-  updateBizCmdToolApi,
-  findBizCmdToolApi
-} from '@/api/biz_apphub/biz_cmd_tool_api'
+  createBizToolCmdSrvApi,
+  updateBizToolCmdSrvApi,
+  findBizToolCmdSrvApi
+} from '@/api/biz_apphub/biz_tool_cmd_srv_api'
 
 defineOptions({
-    name: 'BizCmdToolApiForm'
+    name: 'BizToolCmdSrvApiForm'
 })
 
 // 自动获取字典
@@ -74,12 +77,13 @@ const route = useRoute()
 const router = useRouter()
 
 const type = ref('')
+const bool_statusOptions = ref([])
 const price_modeOptions = ref([])
 const dev_modeOptions = ref([])
-const bool_statusOptions = ref([])
 const formData = ref({
             appName: '',
             appCode: '',
+            tool_type: '',
             title: '',
             desc: '',
             classify: '',
@@ -99,6 +103,11 @@ const rule = reactive({
                    trigger: ['input','blur'],
                }],
                appCode : [{
+                   required: true,
+                   message: '',
+                   trigger: ['input','blur'],
+               }],
+               tool_type : [{
                    required: true,
                    message: '',
                    trigger: ['input','blur'],
@@ -141,7 +150,7 @@ const elFormRef = ref()
 const init = async () => {
  // 建议通过url传参获取目标数据ID 调用 find方法进行查询数据操作 从而决定本页面是create还是update 以下为id作为url参数示例
     if (route.query.id) {
-      const res = await findBizCmdToolApi({ ID: route.query.id })
+      const res = await findBizToolCmdSrvApi({ ID: route.query.id })
       if (res.code === 0) {
         formData.value = res.data
         type.value = 'update'
@@ -149,9 +158,9 @@ const init = async () => {
     } else {
       type.value = 'create'
     }
+    bool_statusOptions.value = await getDictFunc('bool_status')
     price_modeOptions.value = await getDictFunc('price_mode')
     dev_modeOptions.value = await getDictFunc('dev_mode')
-    bool_statusOptions.value = await getDictFunc('bool_status')
 }
 
 init()
@@ -162,13 +171,13 @@ const save = async() => {
             let res
            switch (type.value) {
              case 'create':
-               res = await createBizCmdToolApi(formData.value)
+               res = await createBizToolCmdSrvApi(formData.value)
                break
              case 'update':
-               res = await updateBizCmdToolApi(formData.value)
+               res = await updateBizToolCmdSrvApi(formData.value)
                break
              default:
-               res = await createBizCmdToolApi(formData.value)
+               res = await createBizToolCmdSrvApi(formData.value)
                break
            }
            if (res.code === 0) {

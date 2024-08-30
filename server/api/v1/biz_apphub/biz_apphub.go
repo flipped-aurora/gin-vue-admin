@@ -5,6 +5,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub"
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/oss"
 	"github.com/gin-gonic/gin"
@@ -200,4 +201,24 @@ func (bizAppHubApi *BizAppHubApi) GetUploadToken(c *gin.Context) {
 	//token := service.NewDefaultService().Oss.GetUploadToken()
 	store := oss.NewDefaultQiNiu()
 	response.OkWithData(gin.H{"token": store.GetUploadToken()}, c)
+}
+
+func (bizAppHubApi *BizAppHubApi) GetUserInfo(c *gin.Context) {
+	//token := service.NewDefaultService().Oss.GetUploadToken()
+	s := c.GetString("user")
+	if c.Query("user") != "" {
+		s = c.Query("user")
+	}
+	if s == "" {
+		response.FailWithMessage("请登录", c)
+		return
+	}
+	var user model.SysUser
+	err := global.GVA_DB.Model(&model.SysUser{}).Where("username=?", s).First(&user).Error
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	user.Password = ""
+	response.OkWithData(user, c)
 }

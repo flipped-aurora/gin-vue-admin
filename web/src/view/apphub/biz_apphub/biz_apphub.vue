@@ -184,7 +184,7 @@
             </el-form-item>
 
             <el-form-item label="上传文件:"  prop="video" >
-              <UploadQiNiu :uploadedFiles="uploadedFiles" title='请把打包后的dist文件压缩成zip文件上传'/>
+              <UploadQiNiu oss-dir="web" :uploadedFiles="uploadedFiles" title='请把打包后的dist文件压缩成zip文件上传'/>
             </el-form-item>
           </el-form>
     </el-drawer>

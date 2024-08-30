@@ -21,6 +21,8 @@ import { UploadFilled } from '@element-plus/icons-vue';
 import * as qiniu from 'qiniu-js';
 import { onMounted, ref } from 'vue';
 import {getUploadToken} from "@/api/biz_apphub/oss";
+import {getUserInfo} from "@/api/biz_apphub/user";
+import {ElMessage} from "element-plus";
 
 const props = defineProps({
   uploadedFiles: {
@@ -30,6 +32,10 @@ const props = defineProps({
   title:{
     type: String,
     default:()=>"请上传文件"
+  },
+  ossDir:{
+    type: String,
+    default:()=>"web"
   }
 });
 
@@ -42,7 +48,15 @@ const handleBeforeUpload = async function (file) {
     region: qiniu.region.z2
   };
 
-  let ossPath = 'web/beiluo/' + new Date().getTime() + '/' + file.name;
+  let res =await getUserInfo();
+  if (res.code!==0){
+    ElMessage({
+      type: 'error',
+      message: '请先登录'
+    })
+    return
+  }
+  let ossPath = props.ossDir+'/'+res.data.userName+'/' + new Date().getTime() + '/' + file.name;
   const observable = qiniu.upload(file, ossPath, token, null, config);
 
   observable.subscribe({

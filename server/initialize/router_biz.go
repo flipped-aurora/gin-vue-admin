@@ -16,7 +16,7 @@ func initBizRouter(routers ...*gin.RouterGroup) {
 	{
 		biz_apphubRouter := router.RouterGroupApp.Biz_apphub
 		biz_apphubRouter.InitBizAppHubRouter(privateGroup, publicGroup)
-		biz_apphubRouter.InitBizCmdToolApiRouter(privateGroup, publicGroup)
+		biz_apphubRouter.InitBizToolCmdSrvApiRouter(privateGroup, publicGroup)
 	}
 }
 

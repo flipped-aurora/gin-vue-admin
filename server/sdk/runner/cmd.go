@@ -51,6 +51,10 @@ type Context struct {
 	Req *Call
 }
 
+func (c *Context) Logger() *logrus.Logger {
+	return logrus.StandardLogger()
+}
+
 //func (c *Context) FileList() []string {
 //	return nil
 //}
@@ -89,17 +93,21 @@ func (c *Context) ReqMap() map[string]interface{} {
 	return nil
 }
 
-func (c *Context) ResponseFailJSONWithCode(code int, jsonEl interface{}) error {
+func (c *Context) ResponseFailJSONWithCode(code int, jsonEl interface{}) {
 	c.Response(jsonx.JSONString(&CallResponse{StatusCode: code, ContentType: "json", Data: jsonEl}))
-	return nil
 }
-func (c *Context) ResponseFailTextWithCode(code int, text string) error {
+
+func (c *Context) ResponseFailDefaultJSONWithMsg(errMsg string) {
+	c.Response(jsonx.JSONString(&CallResponse{StatusCode: 200, ContentType: "json", Data: map[string]interface{}{
+		"msg": errMsg,
+	}}))
+}
+
+func (c *Context) ResponseFailTextWithCode(code int, text string) {
 	c.Response(jsonx.JSONString(&CallResponse{StatusCode: code, ContentType: "text", Data: text}))
-	return nil
 }
-func (c *Context) ResponseOkWithJSON(jsonEl interface{}) error {
+func (c *Context) ResponseOkWithJSON(jsonEl interface{}) {
 	c.Response(jsonx.JSONString(&CallResponse{StatusCode: 200, ContentType: "json", Data: jsonEl}))
-	return nil
 }
 
 func (c *Context) ResponseOkWithFile(filePath string, deleteFile bool) error {

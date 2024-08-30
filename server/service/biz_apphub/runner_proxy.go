@@ -56,10 +56,20 @@ type CallResult struct {
 func (p *SoftCall) Call(req request.Call) (*runner.CallResponse, error) {
 	softPath := p.AppPath + fmt.Sprintf("/%s/%s/%s",
 		req.User, req.Soft, req.Soft)
+
+	//execSoft := "./" + req.Soft
+	//softHome := p.AppPath + fmt.Sprintf("/%s/%s",
+	//	req.User, req.Soft)
 	if runtime.GOOS == "windows" {
 		softPath = p.AppPath + fmt.Sprintf("/%s/%s/%s.exe",
 			req.User, req.Soft, req.Soft)
+		//execSoft = execSoft + ".exe"
 	}
+
+	//err := os.Chdir(softHome)
+	//if err != nil {
+	//	panic(err)
+	//}
 	cmd := exec.Command(softPath, req.Command, req.RequestJsonPath)
 	var out bytes.Buffer
 	cmd.Stdout = &out

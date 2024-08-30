@@ -11,6 +11,10 @@ import (
 	"path/filepath"
 )
 
+func init() {
+	logger.Setup()
+}
+
 type Call struct {
 	User            string                 `json:"user"`    //软件所属的用户
 	Soft            string                 `json:"soft"`    //软件名
@@ -39,10 +43,6 @@ type CallResponse struct {
 	Data        interface{} `json:"data"`
 }
 
-func init() {
-	logger.Setup()
-}
-
 type Context struct {
 	Cmd      string   `json:"cmd"`
 	Request  string   `json:"request"`
@@ -51,8 +51,11 @@ type Context struct {
 	Req *Call
 }
 
-func (c *Context) Logger() *logrus.Logger {
-	return logrus.StandardLogger()
+func (c *Context) Logger() *logrus.Entry {
+	return logrus.StandardLogger().WithFields(logrus.Fields{
+		"user":    c.Req.User,
+		"command": c.Req.Command,
+	})
 }
 
 //func (c *Context) FileList() []string {
@@ -138,6 +141,7 @@ func (c *Context) Response(text string) {
 }
 
 func New() *Runner {
+	//logger.Setup()
 	return &Runner{
 		//CmdMap: make(map[string]func(*Context)),
 		CmdMapHandel: make(map[string]*Worker),
@@ -178,10 +182,8 @@ func (r *Runner) Get(commandName string, handelList ...func(ctx *Context)) {
 }
 
 func (r *Runner) Run() {
-
 	command := os.Args[1]
 	jsonFileName := os.Args[2]
-	logrus.Info(fmt.Sprintf("command:%s,args:%s", command, jsonFileName))
 	worker, ok := r.CmdMapHandel[command]
 	context := &Context{Request: jsonFileName}
 	err := bind(context)
@@ -193,7 +195,7 @@ func (r *Runner) Run() {
 	}
 	if ok {
 		if context.Req == nil {
-			logrus.Infof("%+v", context)
+			panic("context.Req == nil")
 		}
 		handelList := worker.PostHandel
 		if context.Req.Method == "GET" {

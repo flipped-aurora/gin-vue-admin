@@ -28,7 +28,7 @@ func (c *Call) RequestJSON() (string, error) {
 }
 
 func (c *Call) GetRequestFilePath(callerPath string) string {
-	reqJson := callerPath + fmt.Sprintf("\\%s\\%s\\%v_%v.json",
+	reqJson := callerPath + fmt.Sprintf("/%s/%s/%v_%v.json",
 		c.User, c.Soft, c.Soft, time.Now().UnixNano())
 	return reqJson
 }

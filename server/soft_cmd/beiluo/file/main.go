@@ -12,7 +12,7 @@ var okMap = map[string]string{
 
 func main() {
 	r := runner.New()
-	r.Post("/file_create", func(ctx *runner.Context) {
+	r.Post("file_create", func(ctx *runner.Context) {
 		ctx.Logger().Infof("file_create")
 		reqMap := ctx.ReqMap()
 		filePath := reqMap["file_path"].(string)
@@ -42,7 +42,7 @@ func main() {
 		ctx.ResponseOkWithJSON(okMap)
 	})
 
-	r.Post("/file_delete", func(ctx *runner.Context) {
+	r.Post("file_delete", func(ctx *runner.Context) {
 		ctx.Logger().Infof("file_delete")
 		reqMap := ctx.ReqMap()
 		filePath := reqMap["file"].(string)
@@ -57,7 +57,7 @@ func main() {
 		ctx.ResponseOkWithJSON(okMap)
 	})
 
-	r.Get("/file_get", func(ctx *runner.Context) {
+	r.Get("file_get", func(ctx *runner.Context) {
 		ctx.Logger().Infof("file_get")
 		reqMap := ctx.ReqMap()
 		filePath := reqMap["file"].(string)
@@ -74,4 +74,5 @@ func main() {
 			"file_content": string(file),
 		})
 	})
+	r.Run()
 }

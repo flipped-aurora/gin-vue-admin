@@ -10,6 +10,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/service/biz_apphub"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"io"
 	"os"
 	"path/filepath"
 	"time"
@@ -105,22 +106,34 @@ func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 		response.FailWithMessage("请登录后访问", c)
 		return
 	}
-	err = c.ShouldBind(&req)
+	all, err := io.ReadAll(c.Request.Body)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	defer c.Request.Body.Close()
+	err = json.Unmarshal(all, &req.Data)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
+	//err = c.ShouldBind(&req)
+	//if err != nil {
+	//	response.FailWithMessage(err.Error(), c)
+	//	return
+	//}
+
 	//bizAppHub.OperateUser=c.GetString("user")
 	//bizAppHub.UpdatedBy = utils.GetUserID(c)
 	//bizAppHub.OperateUser = c.GetString("user")
 	//todo 验证用户是否有调用该应用的权限
-	j, err := req.RequestJSON()
-	if err != nil {
-		response.FailWithMessage(err.Error(), c)
-		return
-	}
-	req.ReqBody = j
+	//j, err := req.RequestJSON()
+	//if err != nil {
+	//	response.FailWithMessage(err.Error(), c)
+	//	return
+	//}
+	//req.ReqBody = j
 	caller := biz_apphub.NewCaller("")
 	req.RequestJsonPath = req.GetRequestFilePath(caller.CallerPath())
 	if c.Request.Header.Get("content-type") == "multipart/form-data" { //如果上传的有文件，需要下载文件，然后copy到
@@ -147,7 +160,8 @@ func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	defer os.Remove(req.RequestJsonPath)
+	//todo 需要删除请求参数
+	//defer os.Remove(req.RequestJsonPath)
 
 	call, err := caller.Call(req)
 	if err != nil {
@@ -240,7 +254,8 @@ func (bizAppHubApi *BizAppHubApi) GetCall(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	defer os.Remove(req.RequestJsonPath)
+	//todo 请求参数需要删除
+	//defer os.Remove(req.RequestJsonPath)
 
 	call, err := caller.Call(req)
 	if err != nil {

@@ -18,6 +18,14 @@ const getRouter = async(userStore) => {
   })
 }
 
+const removeLoading = () => {
+  const element = document.getElementById('gva-loading-box');
+  if (element) {
+    element.remove();
+  }
+}
+
+
 async function handleKeepAlive(to) {
   if (to.matched.some(item => item.meta.keepAlive)) {
     if (to.matched && to.matched.length > 2) {
@@ -117,23 +125,16 @@ router.beforeEach(async(to, from) => {
   }
 })
 
-const removeLoading = () => {
-  const element = document.getElementById('gva-loading-box');
-  if (element) {
-    element.remove();
-  }
-}
 
 router.afterEach(() => {
   // 路由加载完成后关闭进度条
   document.getElementsByClassName('main-cont main-right')[0]?.scrollTo(0, 0)
-  removeLoading()
   Nprogress.done()
 })
 
 router.onError(() => {
   // 路由发生错误后销毁进度条
-  removeLoading()
   Nprogress.remove()
 })
 
+removeLoading()

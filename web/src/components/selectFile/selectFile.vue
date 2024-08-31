@@ -20,7 +20,6 @@
 
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/pinia/modules/user'
 import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
@@ -42,14 +41,11 @@ const props = defineProps({
   },
 })
 
-const path = ref(import.meta.env.VITE_BASE_API)
-
-const userStore = useUserStore()
 const fullscreenLoading = ref(false)
 
 const fileList = ref(props.modelValue)
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'on-success', 'on-error'])
 
 watch(fileList.value, (val) => {
   console.log(val)
@@ -72,14 +68,16 @@ const uploadSuccess = (res) => {
     })
     fullscreenLoading.value = false
   }
+  emits('on-success', res)
 }
 
-const uploadError = () => {
+const uploadError = (err) => {
   ElMessage({
     type: 'error',
     message: '上传失败'
   })
   fullscreenLoading.value = false
+  emits('on-error',err)
 }
 
 </script>

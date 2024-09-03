@@ -178,6 +178,9 @@
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
           <el-form-item label="方法名：">
+            <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+          </el-form-item>
+          <el-form-item label="方法名：">
             <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
           </el-form-item>
           <el-form-item label="方法：">
@@ -238,6 +241,7 @@ const autoFunc = ref({
   humpPackageName:"",
   businessDB:"",
   method:"",
+  funcDesc: ""
 })
 
 const addFuncBtn =  (row) => {
@@ -252,6 +256,7 @@ const addFuncBtn =  (row) => {
   autoFunc.value.method = ""
   autoFunc.value.funcName = ""
   autoFunc.value.router = ""
+  autoFunc.value.funcDesc = "方法介绍"
   funcFlag.value = true;
 };
 

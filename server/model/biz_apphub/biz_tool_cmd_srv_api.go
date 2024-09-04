@@ -30,6 +30,7 @@ type BizToolCmdSrvApi struct {
 	CreatedBy   uint   `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy   uint   `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy   uint   `gorm:"column:deleted_by;comment:删除者"`
+	OperateUser string `json:"-" gorm:"-"`
 }
 
 // TableName 后端工具指令api BizToolCmdSrvApi自定义表名 biz_tool_cmd_srv_api

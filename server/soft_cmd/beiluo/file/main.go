@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner"
 	"os"
 	"path"
@@ -65,6 +66,7 @@ func main() {
 		//err := os.Remove(filePath)
 		if err != nil {
 			ctx.Logger().Error(err)
+			fmt.Println(err.Error())
 			ctx.ResponseFailDefaultJSONWithMsg(err.Error())
 			return
 		}

@@ -630,6 +630,9 @@ const enterDialog = async () => {
      elFormRef.value?.validate( async (valid) => {
              if (!valid) return
               let res
+               if (uploadedFiles.value.length>0){
+                 formData.value.ossPath=uploadedFiles.value[0]
+               }
               switch (type.value) {
                 case 'create':
                   res = await createBizToolCmdSrvApi(formData.value)

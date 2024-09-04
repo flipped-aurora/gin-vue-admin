@@ -1,10 +1,12 @@
 package biz_apphub
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub"
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	biz_apphub1 "github.com/flipped-aurora/gin-vue-admin/server/service/biz_apphub"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -22,13 +24,31 @@ type BizToolCmdSrvApiApi struct{}
 // @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /bizToolCmdSrvApi/createBizToolCmdSrvApi [post]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) CreateBizToolCmdSrvApi(c *gin.Context) {
-	var bizToolCmdSrvApi biz_apphub.BizToolCmdSrvApi
-	err := c.ShouldBindJSON(&bizToolCmdSrvApi)
+	var (
+		err              error
+		bizToolCmdSrvApi biz_apphub.BizToolCmdSrvApi
+		installInfo      *biz_apphub1.InstallInfo
+	)
+	defer global.GVA_LOG.Info(fmt.Sprintf("CreateBizToolCmdSrvApi err:%v req:%+v installInfo:%+v ", err, bizToolCmdSrvApi, installInfo))
+	err = c.ShouldBindJSON(&bizToolCmdSrvApi)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 	bizToolCmdSrvApi.CreatedBy = utils.GetUserID(c)
+	bizToolCmdSrvApi.OperateUser = c.GetString("user")
+	installInfo, err = bizToolCmdSrvApiService.Install(bizToolCmdSrvApi) //安装软件
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	//host := "https://apphub.geeleo.com/api"
+	//if os.Getenv("env") == "local" {
+	//	host = "http://127.0.0.1:8888"
+	//}
+	bizToolCmdSrvApi.ApiPath = fmt.Sprintf("/bizAppHub/api/cmd/call/%s/%s",
+		bizToolCmdSrvApi.OperateUser, bizToolCmdSrvApi.AppCode)
+
 	err = bizToolCmdSrvApiService.CreateBizToolCmdSrvApi(&bizToolCmdSrvApi)
 	if err != nil {
 		global.GVA_LOG.Error("创建失败!", zap.Error(err))

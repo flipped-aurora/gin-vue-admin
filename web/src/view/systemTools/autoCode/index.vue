@@ -2,12 +2,12 @@
   <div>
     <warning-bar
       href="https://www.bilibili.com/video/BV1kv4y1g7nT?p=3"
-      title="此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。"
+      :title="t('view.systemTools.autoCode.autoCodeNote')"
     />
     <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">使用AI创建</div>
+      <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.createdByAI') }}</div>
       <div class="relative">
-        <el-input v-model="prompt" type="textarea" :rows="5" :maxlength="100" :placeholder="`【Beta】试试描述你的表，让AI帮你完成。\n目前正在测试阶段，遇到问题请及时反馈。\n此功能需要到插件市场个人中心获取自己的AI-Path，把AI-Path填入config.yaml下的autocode-->ai-path，重启项目即可使用。`" resize="none" />
+        <el-input v-model="prompt" type="textarea" :rows="5" :maxlength="100" :placeholder="t('view.systemTools.autoCode.aiCodeNote')" resize="none" />
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
             content="小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。"
@@ -79,7 +79,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item
-            :label="t('autoCode.dbName')"
+            :label="t('view.systemTools.autoCode.dbName')"
               prop="structName"
               class="w-full"
             >
@@ -87,7 +87,7 @@
                 v-model="dbform.dbName"
                 clearable
                 filterable
-                :placeholder="t('autoCode.selectDB')"
+                :placeholder="t('view.systemTools.autoCode.selectDB')"
                 class="w-full"
                 @change="getTableFunc"
               >
@@ -102,7 +102,7 @@
           </el-col>
           <el-col :span="6">
             <el-form-item
-            :label="t('autoCode.tableName')"
+            :label="t('view.systemTools.autoCode.tableName')"
               prop="structName"
               class="w-full"
             >
@@ -111,7 +111,7 @@
                 :disabled="!dbform.dbName"
                 class="w-full"
                 filterable
-                :placeholder="t('autoCode.selectTable')"
+                :placeholder="t('view.systemTools.autoCode.selectTable')"
               >
                 <el-option
                   v-for="item in tableOptions"
@@ -190,7 +190,7 @@
             >
               <el-input
                   v-model="form.description"
-                  :placeholder="t('autoCode.structChineseNameNote')"
+                  :placeholder="t('view.systemTools.autoCode.structChineseNameNote')"
               />
             </el-form-item>
           </el-col>
@@ -202,7 +202,7 @@
             >
               <el-input
                 v-model="form.tableName"
-                :placeholder="t('autoCode.tableNameNote')"
+                :placeholder="t('view.systemTools.autoCode.tableNameNote')"
               />
             </el-form-item>
           </el-col>
@@ -215,11 +215,11 @@
             >
               <template #label>
                 <el-tooltip
-                  :content="t('autoCode.fileNameNote')"
+                  :content="t('view.systemTools.autoCode.fileNameNote')"
                   placement="bottom"
                   effect="light"
                 >
-                  <div> {{ t('autoCode.fileName') }} <el-icon><QuestionFilled /></el-icon> </div>
+                  <div> {{ t('view.systemTools.autoCode.fileName') }} <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
               <el-input
@@ -678,13 +678,13 @@
           type="primary"
           @click="enterForm(true)"
         >
-        {{ t('autoCode.codePreview') }}
+        {{ t('view.systemTools.autoCode.codePreview') }}
         </el-button>
         <el-button
           type="primary"
           @click="enterForm(false)"
         >
-        {{ t('autoCode.generateCode') }}
+        {{ t('view.systemTools.autoCode.generateCode') }}
         </el-button>
       </div>
     </div>
@@ -740,7 +740,7 @@
               type="primary"
               @click="copy"
             >
-            {{ t('autoCode.copy') }}
+            {{ t('view.systemTools.autoCode.copy') }}
             </el-button>
           </div>
         </div>
@@ -1015,18 +1015,18 @@ const form = ref({
 })
 const rules = ref({
   structName: [
-    { required: true, message: t('autoCode.entStructName'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.entStructName'), trigger: 'blur' }
   ],
   abbreviation: [
-    { required: true, message: t('autoCode.entStructAbbreviation'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.entStructAbbreviation'), trigger: 'blur' }
   ],
   description: [
-    { required: true, message: t('autoCode.entStructDesc'), trigger: 'blur' }
+    { required: true, message: t('view.systemTools.autoCode.entStructDesc'), trigger: 'blur' }
   ],
   packageName: [
     {
       required: true,
-      message: t('autoCode.entFileName'),
+      message: t('view.systemTools.autoCode.entFileName'),
       trigger: 'blur'
     }
   ],
@@ -1134,7 +1134,7 @@ const enterForm = async(isPreview) => {
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
-      message: t('autoCode.errNoFields')
+      message: t('view.systemTools.autoCode.errNoFields')
     })
     return false
   }
@@ -1152,7 +1152,7 @@ const enterForm = async(isPreview) => {
   ) {
     ElMessage({
       type: 'error',
-      message: t('autoCode.errSameFiledName')
+      message: t('view.systemTools.autoCode.errSameFiledName')
     })
     return false
   }
@@ -1189,7 +1189,7 @@ const enterForm = async(isPreview) => {
       if (form.value.structName === form.value.abbreviation) {
         ElMessage({
           type: 'error',
-          message: t('autoCode.errSameStructDescAbbr')
+          message: t('view.systemTools.autoCode.errSameStructDescAbbr')
         })
         return false
       }
@@ -1206,7 +1206,7 @@ const enterForm = async(isPreview) => {
         }
           ElMessage({
             type: 'success',
-            message: t('autoCode.codeGenMoveSuccess')
+            message: t('view.systemTools.autoCode.codeGenMoveSuccess')
           })
         clearCatch()
       }
@@ -1249,7 +1249,7 @@ const getColumnFunc = async() => {
     form.value.tableName = dbform.value.tableName
     form.value.packageName = tbHump
     form.value.abbreviation = tbHump
-    form.value.description = tbHump + t('autoCode.table')
+    form.value.description = tbHump + t('view.systemTools.autoCode.table')
     form.value.autoCreateApiToSql = true
     form.value.fields = []
     res.data.columns &&
@@ -1259,7 +1259,7 @@ const getColumnFunc = async() => {
               form.value.fields.push({
                 onlyNumber: getOnlyNumber(),
                 fieldName: toUpperCase(fbHump),
-                fieldDesc: item.columnComment || fbHump + t('autoCode.field'),
+                fieldDesc: item.columnComment || fbHump + t('view.systemTools.autoCode.field'),
                 fieldType: fdMap.value[item.dataType],
                 dataType: item.dataType,
                 fieldJson: fbHump,

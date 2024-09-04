@@ -10,7 +10,7 @@
       class="grid grid-cols-2"
     >
       <el-form-item
-        :label="t('autoCode.fieldName')"
+        :label="t('view.systemTools.autoCode.fieldName')"
         prop="fieldName"
       >
         <el-input
@@ -26,7 +26,7 @@
         </el-button>
       </el-form-item>
       <el-form-item
-        :label="t('autoCode.fieldDesc')"
+        :label="t('view.systemTools.autoCode.fieldDesc')"
         prop="fieldDesc"
       >
         <el-input
@@ -35,7 +35,7 @@
         />
       </el-form-item>
       <el-form-item
-        :label="t('autoCode.fieldJson')"
+        :label="t('view.systemTools.autoCode.fieldJson')"
         prop="fieldJson"
       >
         <el-input
@@ -44,7 +44,7 @@
         />
       </el-form-item>
       <el-form-item
-        :label="t('autoCode.columnName')"
+        :label="t('view.systemTools.autoCode.columnName')"
         prop="columnName"
       >
         <el-input
@@ -53,7 +53,7 @@
         />
       </el-form-item>
       <el-form-item
-        :label="t('autoCode.comment')"
+        :label="t('view.systemTools.autoCode.comment')"
         prop="comment"
       >
         <el-input
@@ -62,7 +62,7 @@
         />
       </el-form-item>
       <el-form-item
-        :label="t('autoCode.fieldDataType')"
+        :label="t('view.systemTools.autoCode.fieldDataType')"
         prop="fieldType"
       >
         <el-select

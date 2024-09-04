@@ -25,6 +25,7 @@
         "highlight.js": "^11.10.0",
         "js-cookie": "^3.0.5",
         "marked": "14.1.1",
+        "marked-highlight": "^2.1.4",
         "mitt": "^3.0.1",
         "nprogress": "^0.2.0",
         "path": "^0.12.7",

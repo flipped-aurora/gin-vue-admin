@@ -200,8 +200,10 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 		if len(key) > len(global.GVA_CONFIG.AutoCode.Root) {
 			key, _ = filepath.Rel(global.GVA_CONFIG.AutoCode.Root, key)
 		}
+		// 获取key的后缀 取消.
+		suffix := filepath.Ext(key)[1:]
 		var builder strings.Builder
-		builder.WriteString("```\n\n")
+		builder.WriteString("```" + suffix + "\n\n")
 		builder.WriteString(writer.String())
 		builder.WriteString("\n\n```")
 		preview[key] = builder.String()

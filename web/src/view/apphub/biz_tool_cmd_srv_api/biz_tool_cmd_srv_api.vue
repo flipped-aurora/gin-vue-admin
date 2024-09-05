@@ -215,9 +215,9 @@
               </el-select>
             </el-form-item>
 
-<!--            <el-form-item label="上传文件:"  prop="video" >-->
-<!--              <UploadQiNiu oss-dir="tool" :uploadedFiles="uploadedFiles" title='请把打包后的文件压缩成zip格式上传'/>-->
-<!--            </el-form-item>-->
+            <el-form-item label="上传文件:"  prop="video" >
+              <UploadQiNiu oss-dir="tool" :uploadedFiles="uploadedFiles" title='请把打包后的文件压缩成zip格式上传'/>
+            </el-form-item>
           </el-form>
     </el-drawer>
 

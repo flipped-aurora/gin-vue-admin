@@ -184,9 +184,9 @@
               <el-input v-model="formData.video" :clearable="true"  placeholder="请输入介绍视频" />
             </el-form-item>
 
-<!--            <el-form-item label="上传文件:"  prop="video" >-->
-<!--              <UploadQiNiu oss-dir="web" :uploadedFiles="uploadedFiles" title='请把打包后的dist文件压缩成zip文件上传'/>-->
-<!--            </el-form-item>-->
+            <el-form-item label="上传文件:"  prop="video" >
+              <UploadQiNiu oss-dir="web" :uploadedFiles="uploadedFiles" title='请把打包后的dist文件压缩成zip文件上传'/>
+            </el-form-item>
           </el-form>
     </el-drawer>
 

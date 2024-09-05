@@ -85,7 +85,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	}
 
 	// 自动创建api
-	if info.AutoCreateApiToSql {
+	if info.AutoCreateApiToSql && !info.OnlyTemplate {
 		apis := info.Apis()
 		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 			for _, v := range apis {
@@ -118,7 +118,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			id = entity.ID
 		} else {
 			entity = info.Menu(autoPkg.Template)
-			if info.AutoCreateBtnAuth {
+			if info.AutoCreateBtnAuth && !info.OnlyTemplate {
 				entity.MenuBtn = []model.SysBaseMenuBtn{
 					{SysBaseMenuID: entity.ID, Name: "add", Desc: "新增"},
 					{SysBaseMenuID: entity.ID, Name: "batchDelete", Desc: "批量删除"},
@@ -231,28 +231,37 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		code[create] = builder
 	} // 生成文件
 	injections := make(map[string]utilsAst.Ast, len(asts))
-	if info.AutoMigrate {
-		for key, value := range asts {
-			keys := strings.Split(key, "=>")
-			if len(keys) == 2 {
-				if keys[1] == utilsAst.TypePluginInitializeV2 {
+	for key, value := range asts {
+		keys := strings.Split(key, "=>")
+		if len(keys) == 2 {
+			if keys[1] == utilsAst.TypePluginInitializeV2 {
+				continue
+			}
+			if info.OnlyTemplate {
+				if keys[1] == utilsAst.TypePackageInitializeGorm || keys[1] == utilsAst.TypePluginInitializeGorm {
 					continue
 				}
-				var builder strings.Builder
-				parse, _ := value.Parse("", &builder)
-				if parse != nil {
-					_ = value.Injection(parse)
-					err = value.Format("", &builder, parse)
-					if err != nil {
-						return nil, nil, nil, err
-					}
-					code[keys[0]] = builder
-					injections[keys[1]] = value
-					fmt.Println(keys[0], "注入成功!")
+			}
+			if !info.AutoMigrate {
+				if keys[1] == utilsAst.TypePackageInitializeGorm || keys[1] == utilsAst.TypePluginInitializeGorm {
+					continue
 				}
 			}
+			var builder strings.Builder
+			parse, _ := value.Parse("", &builder)
+			if parse != nil {
+				_ = value.Injection(parse)
+				err = value.Format("", &builder, parse)
+				if err != nil {
+					return nil, nil, nil, err
+				}
+				code[keys[0]] = builder
+				injections[keys[1]] = value
+				fmt.Println(keys[0], "注入成功!")
+			}
 		}
-	} // 注入代码
+	}
+	// 注入代码
 	return code, templates, injections, nil
 }
 

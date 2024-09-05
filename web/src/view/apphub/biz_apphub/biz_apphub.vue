@@ -161,9 +161,9 @@
             <el-form-item label="分类:"  prop="classify" >
               <el-input v-model="formData.classify" :clearable="true"  placeholder="请输入分类" />
             </el-form-item>
-<!--            <el-form-item label="应用版本:"  prop="version" >-->
-<!--              <el-input v-model="formData.version" :clearable="true"  placeholder="请输入应用版本" />-->
-<!--            </el-form-item>-->
+            <el-form-item label="应用版本:"  prop="version" >
+              <el-input v-model="formData.version" :clearable="true"  placeholder="请输入应用版本" />
+            </el-form-item>
             <el-form-item label="收费模式:"  prop="mode" >
               <el-select v-model="formData.mode" placeholder="请选择收费模式" style="width:100%" :clearable="true" >
                 <el-option v-for="(item,key) in price_modeOptions" :key="key" :label="item.label" :value="item.value" />

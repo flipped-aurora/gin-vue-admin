@@ -2,6 +2,7 @@ package biz_apphub
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub"
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/osx"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/compress"
@@ -41,7 +42,7 @@ func (s *CmdSoft) Install() (installInfo *InstallInfo, err error) {
 	absPath := "./soft_cmd"
 	//absPath = strings.Join([]string{absPath, s.User, s.Name}, "/")
 	absPath = strings.Join([]string{absPath, s.User}, "/")
-
+	unZipOut := absPath + "/" + s.Name
 	path := strings.Split(s.OssPath, "/")
 	fileName := path[len(path)-1]
 
@@ -61,7 +62,7 @@ func (s *CmdSoft) Install() (installInfo *InstallInfo, err error) {
 		return nil, err
 	}
 
-	unZipPath, err := compress.UnZip(filepath.Join(absPath, fileName), absPath)
+	unZipPath, err := compress.UnZip(filepath.Join(absPath, fileName), unZipOut)
 	if err != nil {
 		return nil, err
 	}
@@ -125,6 +126,7 @@ func (s *CmdSoft) UpdateVersion() (installInfo *InstallInfo, err error) {
 func (b *BizToolCmdSrvApiService) Install(req biz_apphub.BizToolCmdSrvApi) (installInfo *InstallInfo, err error) {
 	//todo
 	app := CmdSoft{OssPath: req.OssPath, User: req.OperateUser, Name: req.AppCode}
+	global.GVA_LOG.Info(fmt.Sprintf("Install %+v", req))
 	return app.Install()
 }
 

@@ -1,3 +1,4 @@
+{{- if not .OnlyTemplate }}
 <template>
   <div>
     <div class="gva-form-box">
@@ -238,3 +239,12 @@ const back = () => {
 
 <style>
 </style>
+{{- else }}
+<template>
+<div>form</div>
+</template>
+<script setup>
+</script>
+<style>
+</style>
+{{- end }}

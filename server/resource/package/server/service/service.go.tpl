@@ -1,12 +1,14 @@
 package {{.Package}}
 
 import (
+{{- if not .OnlyTemplate }}
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}"
     {{.Package}}Req "github.com/flipped-aurora/gin-vue-admin/server/model/{{.Package}}/request"
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}
+{{- end }}
 )
 
 type {{.StructName}}Service struct {}
@@ -18,6 +20,7 @@ type {{.StructName}}Service struct {}
  {{- $db =  printf "global.MustGetGlobalDBByDBName(\"%s\")" .BusinessDB   }}
 {{- end}}
 
+{{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
@@ -152,3 +155,8 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSou
 	return
 }
 {{- end }}
+{{- end }}
+func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSource() {
+    // 此方法为获取数据源定义的数据
+    // 请自行实现
+}

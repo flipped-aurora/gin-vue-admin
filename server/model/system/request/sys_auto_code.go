@@ -25,6 +25,7 @@ type AutoCode struct {
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"false"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
+	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
 	Fields              []*AutoCodeField       `json:"fields"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`

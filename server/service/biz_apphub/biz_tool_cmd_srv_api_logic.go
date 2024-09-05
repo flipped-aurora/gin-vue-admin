@@ -9,6 +9,7 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/httpx"
 	copy2 "github.com/otiai10/copy"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -68,6 +69,18 @@ func (s *CmdSoft) Install() (installInfo *InstallInfo, err error) {
 	}
 	//todo 设置权限
 	//exec.Command("chmod")
+	// 创建一个命令来添加执行权限
+	if runtime.GOOS != "windows" {
+		p := unZipOut + "/" + s.Name
+		cmd := exec.Command("chmod", "+x", unZipOut+"/"+s.Name)
+
+		// 执行命令
+		err = cmd.Run()
+		if err != nil {
+			fmt.Printf("cmd.Run() failed with p:%s err:%s\n", p, err)
+			return nil, err
+		}
+	}
 
 	//判断是否存在该软件
 	return &InstallInfo{InstallDir: unZipPath, SoftName: appName}, nil
@@ -116,6 +129,17 @@ func (s *CmdSoft) UpdateVersion() (installInfo *InstallInfo, err error) {
 	err = osx.CopyDirectory(copyTempDir, currentSoftSrc) //复制目录
 	if err != nil {
 		return nil, err
+	}
+	if runtime.GOOS != "windows" {
+		p := currentSoftSrc + "/" + appDirName
+		cmd := exec.Command("chmod", "+x", p)
+
+		// 执行命令
+		err = cmd.Run()
+		if err != nil {
+			fmt.Printf("cmd.Run() failed with p:%s err:%s\n", p, err)
+			return nil, err
+		}
 	}
 
 	//复制目录

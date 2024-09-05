@@ -1,18 +1,50 @@
 package biz_apphub
 
 import (
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub"
 	biz_apphubReq "github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
+
 	"gorm.io/gorm"
+	"time"
 )
 
 type BizToolCmdSrvApiService struct{}
+
+func (bizToolCmdSrvApiService *BizToolCmdSrvApiService) GetDeployList(req biz_apphubReq.GetDeployList) (res []biz_apphub.BizToolCmdSrvApiRecord, totalCount int64, err error) {
+	db := global.GVA_DB.Model(&biz_apphub.BizToolCmdSrvApiRecord{}).Where("app_id = ?", req.AppId)
+	err = db.Offset(req.GetOffset()).Limit(req.GetLimit()).Order("created_at desc").Find(&res).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	var count int64
+	err = db.Count(&count).Error
+	if err != nil {
+		return nil, 0, err
+	}
+	return res, count, nil
+}
 
 // CreateBizToolCmdSrvApi 创建后端工具指令api记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bizToolCmdSrvApiService *BizToolCmdSrvApiService) CreateBizToolCmdSrvApi(bizToolCmdSrvApi *biz_apphub.BizToolCmdSrvApi) (err error) {
 	err = global.GVA_DB.Create(bizToolCmdSrvApi).Error
+	return err
+}
+func (bizToolCmdSrvApiService *BizToolCmdSrvApiService) CreateBizToolCmdSrvApiRecord(bizToolCmdSrvApi biz_apphub.BizToolCmdSrvApi) (err error) {
+
+	record := bizToolCmdSrvApi
+	record.CreatedAt = time.Now()
+	record.ID = 0
+	record.OperateUser = bizToolCmdSrvApi.OperateUser
+	r := &biz_apphub.BizToolCmdSrvApiRecord{
+		Remark:           bizToolCmdSrvApi.Remark,
+		AppId:            bizToolCmdSrvApi.ID,
+		BizToolCmdSrvApi: record,
+	}
+
+	err = global.GVA_DB.Create(r).Error
 	return err
 }
 
@@ -49,7 +81,36 @@ func (bizToolCmdSrvApiService *BizToolCmdSrvApiService) DeleteBizToolCmdSrvApiBy
 // UpdateBizToolCmdSrvApi 更新后端工具指令api记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (bizToolCmdSrvApiService *BizToolCmdSrvApiService) UpdateBizToolCmdSrvApi(bizToolCmdSrvApi biz_apphub.BizToolCmdSrvApi) (err error) {
-	err = global.GVA_DB.Model(&biz_apphub.BizToolCmdSrvApi{}).Where("id = ?", bizToolCmdSrvApi.ID).Updates(&bizToolCmdSrvApi).Error
+
+	var b biz_apphub.BizToolCmdSrvApi
+	err = global.GVA_DB.Model(&biz_apphub.BizToolCmdSrvApi{}).Where("id = ?", bizToolCmdSrvApi.ID).First(&b).Error
+	if err != nil {
+		return err
+	}
+	if bizToolCmdSrvApi.Version != b.Version { //说明是更新版本
+		if bizToolCmdSrvApi.OssPath == "" {
+			return fmt.Errorf("变更版需要上传文件")
+		}
+		//	todo 需要更新版本
+		info, err := bizToolCmdSrvApiService.UpdateVersion(bizToolCmdSrvApi, b)
+		if err != nil {
+			return err
+		}
+		//cmdSoft := NewCmdSoft(&bizToolCmdSrvApi)
+		//info, err := cmdSoft.UpdateVersion()
+		//if err != nil {
+		//	return err
+		//}
+		fmt.Println(info)
+		err = bizToolCmdSrvApiService.CreateBizToolCmdSrvApiRecord(bizToolCmdSrvApi)
+		if err != nil {
+			return err
+		}
+	}
+	err = global.GVA_DB.
+		Model(&biz_apphub.BizToolCmdSrvApi{}).
+		Where("id = ?", bizToolCmdSrvApi.ID).
+		Updates(&bizToolCmdSrvApi).Error
 	return err
 }
 

@@ -116,8 +116,9 @@
             <template #default="scope">
             <el-button  type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>查看详情</el-button>
             <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizAppHubFunc(scope.row)">变更</el-button>
+            <el-button  type="primary" link icon="edit" class="table-button" @click="updateBizToolCmdSrvApiVersionFunc(scope.row)">变更版本</el-button>
             <el-button  type="primary" link icon="delete" @click="deleteRow(scope.row)">删除</el-button>
-              <el-button  type="primary" link icon="edit" @click="deployRecordFn(scope.row)">发布历史</el-button>
+            <el-button  type="primary" link icon="edit" @click="deployRecordFn(scope.row)">发布历史</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -160,9 +161,83 @@
             <el-form-item label="分类:"  prop="classify" >
               <el-input v-model="formData.classify" :clearable="true"  placeholder="请输入分类" />
             </el-form-item>
+<!--            <el-form-item label="应用版本:"  prop="version" >-->
+<!--              <el-input v-model="formData.version" :clearable="true"  placeholder="请输入应用版本" />-->
+<!--            </el-form-item>-->
+            <el-form-item label="收费模式:"  prop="mode" >
+              <el-select v-model="formData.mode" placeholder="请选择收费模式" style="width:100%" :clearable="true" >
+                <el-option v-for="(item,key) in price_modeOptions" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="后续迭代:"  prop="developMode" >
+              <el-select v-model="formData.developMode" placeholder="请选择后续迭代" style="width:100%" :clearable="true" >
+                <el-option v-for="(item,key) in dev_modeOptions" :key="key" :label="item.label" :value="item.value" />
+              </el-select>
+            </el-form-item>
+            <el-form-item label="封面地址:"  prop="cover" >
+              <el-input v-model="formData.cover" :clearable="true"  placeholder="请输入封面地址" />
+            </el-form-item>
+            <el-form-item label="应用标签:"  prop="tags" >
+              <el-input v-model="formData.tags" :clearable="true"  placeholder="请输入应用标签" />
+            </el-form-item>
+            <el-form-item label="介绍视频:"  prop="video" >
+              <el-input v-model="formData.video" :clearable="true"  placeholder="请输入介绍视频" />
+            </el-form-item>
+
+<!--            <el-form-item label="上传文件:"  prop="video" >-->
+<!--              <UploadQiNiu oss-dir="web" :uploadedFiles="uploadedFiles" title='请把打包后的dist文件压缩成zip文件上传'/>-->
+<!--            </el-form-item>-->
+          </el-form>
+    </el-drawer>
+
+    <el-drawer destroy-on-close size="800" v-model="dialogFormVersionVisible" :show-close="false" :before-close="closeDialog">
+      <template #header>
+        <div class="flex justify-between items-center">
+          <span class="text-lg">{{type==='create'?'添加':'修改'}}</span>
+          <div>
+            <el-button type="primary" @click="enterDialog">确 定</el-button>
+            <el-button @click="closeDialog">取 消</el-button>
+          </div>
+        </div>
+      </template>
+
+      <el-collapse v-model="activeNames" @change="handleChange">
+
+        <el-collapse-item title="必填项" name="1">
+          <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
             <el-form-item label="应用版本:"  prop="version" >
               <el-input v-model="formData.version" :clearable="true"  placeholder="请输入应用版本" />
             </el-form-item>
+            <el-form-item  label="变更日志:"  prop="version" >
+              <el-input type="textarea" v-model="formData.remark" :clearable="true"  placeholder="请输入变更日志" />
+            </el-form-item>
+
+            <el-form-item label="上传文件:"  prop="video" >
+              <UploadQiNiu oss-dir="tool" :uploadedFiles="uploadedFiles" title='请把打包后的文件压缩成zip格式上传'/>
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+
+        <el-collapse-item title="其他参数" name="2">
+          <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
+            <el-form-item label="应用名称（中文）:"  prop="appName" >
+              <el-input v-model="formData.appName" :clearable="true"  placeholder="请输入应用名称（中文）" />
+            </el-form-item>
+            <el-form-item label="应用名称（英文标识）:"  prop="appCode" >
+              <el-input v-model="formData.appCode" :clearable="true"  placeholder="请输入应用名称（英文标识）" />
+            </el-form-item>
+            <el-form-item label="标题:"  prop="title" >
+              <el-input v-model="formData.title" :clearable="true"  placeholder="请输入标题" />
+            </el-form-item>
+            <el-form-item label="应用介绍:"  prop="desc" >
+              <el-input v-model="formData.desc" :clearable="true"  placeholder="请输入应用介绍" />
+            </el-form-item>
+            <el-form-item label="分类:"  prop="classify" >
+              <el-input v-model="formData.classify" :clearable="true"  placeholder="请输入分类" />
+            </el-form-item>
+<!--            <el-form-item label="应用版本:"  prop="version" >-->
+<!--              <el-input v-model="formData.version" :clearable="true"  placeholder="请输入应用版本" />-->
+<!--            </el-form-item>-->
             <el-form-item label="收费模式:"  prop="mode" >
               <el-select v-model="formData.mode" placeholder="请选择收费模式" style="width:100%" :clearable="true" >
                 <el-option v-for="(item,key) in price_modeOptions" :key="key" :label="item.label" :value="item.value" />
@@ -187,6 +262,11 @@
               <UploadQiNiu oss-dir="web" :uploadedFiles="uploadedFiles" title='请把打包后的dist文件压缩成zip文件上传'/>
             </el-form-item>
           </el-form>
+
+        </el-collapse-item>
+
+      </el-collapse>
+
     </el-drawer>
 
     <el-drawer destroy-on-close size="800" v-model="detailShow" :show-close="true" :before-close="closeDetailShow">
@@ -241,15 +321,9 @@
         </el-table-column>
 
         <el-table-column property="appName" label="应用名称" />
-        <el-table-column show-overflow-tooltip="true" property="title" label="标题" />
-        <el-table-column property="desc" label="描述" />
-        <el-table-column property="classify" label="分类" />
+        <el-table-column property="appCode" label="应用标识" />
+        <el-table-column property="remark" label="变更日志" />
         <el-table-column property="version" label="版本" />
-        <el-table-column property="mode" label="收费模式" />
-        <el-table-column property="developMode" label="后续迭代" />
-        <el-table-column property="cover" label="封面" />
-        <el-table-column property="tags" label="应用标签" />
-        <el-table-column property="video" label="介绍视频" />
         <el-table-column property="operateUser" label="操作人" />
         <el-table-column align="left" label="操作" fixed="right">
           <template #default="scope">
@@ -282,13 +356,16 @@ import UploadQiNiu from "@/components/upload_oss/UploadQiNiu.vue";
 defineOptions({
     name: 'BizAppHub'
 })
-
+const activeNames = ref(['1'])
+const handleChange = (val) => {
+  console.log(val)
+}
 // 上传的文件
 const uploadedFiles=ref([])
 
 // 控制更多查询条件显示/隐藏状态
 const showAllQuery = ref(false)
-
+const dialogFormVersionVisible = ref(false)
 // 自动化生成的字典（可能为空）以及字段
 const price_modeOptions = ref([])
 const dev_modeOptions = ref([])
@@ -560,7 +637,16 @@ const updateBizAppHubFunc = async(row) => {
     }
 }
 
-
+// 更新版本
+const updateBizToolCmdSrvApiVersionFunc = async(row) => {
+  uploadedFiles.value=[]
+  const res = await findBizAppHub({ ID: row.ID })
+  type.value = 'update'
+  if (res.code === 0) {
+    formData.value = res.data
+    dialogFormVersionVisible.value = true
+  }
+}
 // 删除行
 const deleteBizAppHubFunc = async (row) => {
     const res = await deleteBizAppHub({ ID: row.ID })
@@ -588,6 +674,7 @@ const openDialog = () => {
 // 关闭弹窗
 const closeDialog = () => {
     dialogFormVisible.value = false
+    dialogFormVersionVisible.value = false
     formData.value = {
         appName: '',
         appCode: '',

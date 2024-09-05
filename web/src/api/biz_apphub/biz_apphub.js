@@ -105,9 +105,25 @@ export const getDeployList = (params) => {
   })
 }
 
+// 获取变更历史
+export const getToolCmdSrvApiUpdateVersionList = (params) => {
+  return service({
+    url: '/bizToolCmdSrvApi/getDeployList',
+    method: 'get',
+    params
+  })
+}
+
 export const rollbackVersion = (data) => {
   return service({
     url: '/bizAppHub/rollbackVersion',
+    method: 'post',
+    data
+  })
+}
+export const rollbackVersionToolCmdSrvApiUpdate = (data) => {
+  return service({
+    url: '/bizToolCmdSrvApi/rollbackVersion',
     method: 'post',
     data
   })

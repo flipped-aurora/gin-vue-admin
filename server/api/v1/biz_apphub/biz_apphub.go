@@ -32,7 +32,11 @@ func (bizAppHubApi *BizAppHubApi) CreateBizAppHub(c *gin.Context) {
 	}
 	bizAppHub.CreatedBy = utils.GetUserID(c)
 	bizAppHub.OperateUser = c.GetString("user")
-	bizAppHub.User = c.GetString("user")
+	bizAppHub.TenantUser = c.GetString("user")
+	if bizAppHub.OssPath == "" {
+		response.FailWithMessage("需要上传文件", c)
+		return
+	}
 	//fmt.Println(user)
 	err = bizAppHubService.CreateBizAppHub(&bizAppHub)
 	if err != nil {

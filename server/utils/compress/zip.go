@@ -9,8 +9,8 @@ import (
 	"strings"
 )
 
-// DeCompress 解压文件 返回解压的目录
-func DeCompress(zipFile, dest string) (absPath string, err error) {
+// UnZip 解压zip文件 返回解压的目录
+func UnZip(zipFile, dest string) (absPath string, err error) {
 	// 打开zip文件
 	reader, err := zip.OpenReader(zipFile)
 	if err != nil {
@@ -47,6 +47,7 @@ func DeCompress(zipFile, dest string) (absPath string, err error) {
 				return "", err
 			}
 		} else {
+			os.MkdirAll(filepath.Dir(filename), 0755)
 			w, err := os.Create(filename)
 			if err != nil {
 				return "", err

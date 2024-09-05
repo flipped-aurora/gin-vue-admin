@@ -19,6 +19,7 @@ func (s *BizToolCmdSrvApiRouter) InitBizToolCmdSrvApiRouter(Router *gin.RouterGr
 		bizToolCmdSrvApiRouter.PUT("updateBizToolCmdSrvApi", bizToolCmdSrvApiApi.UpdateBizToolCmdSrvApi)              // 更新后端工具指令api
 	}
 	{
+		bizToolCmdSrvApiRouterWithoutRecord.GET("getDeployList", bizToolCmdSrvApiApi.GetDeployList)                     // 获取部署历史
 		bizToolCmdSrvApiRouterWithoutRecord.GET("findBizToolCmdSrvApi", bizToolCmdSrvApiApi.FindBizToolCmdSrvApi)       // 根据ID获取后端工具指令api
 		bizToolCmdSrvApiRouterWithoutRecord.GET("getBizToolCmdSrvApiList", bizToolCmdSrvApiApi.GetBizToolCmdSrvApiList) // 获取后端工具指令api列表
 	}

@@ -111,7 +111,7 @@ func (bizAppHubService *BizAppHubService) Deploy(req biz_apphub.BizAppHub) (inde
 	if err != nil {
 		return "", err
 	}
-	unZipPath, err := compress.DeCompress(filepath.Join(absPath, fileName), absPath)
+	unZipPath, err := compress.UnZip(filepath.Join(absPath, fileName), absPath)
 	if err != nil {
 		return "", err
 	}
@@ -195,7 +195,7 @@ func (bizAppHubService *BizAppHubService) RollbackVersion(req request.RollbackVe
 	if err != nil {
 		return err
 	}
-	defer os.ReadFile(file)
+	defer os.Remove(file)
 
 	store := oss.NewDefaultQiNiu()
 	deleteOss := app.GetUseOssPathV2()

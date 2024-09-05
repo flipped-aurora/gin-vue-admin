@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner"
+	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/response"
 	"os"
 	"os/exec"
 	"runtime"
@@ -28,12 +28,12 @@ type CallResponse struct {
 	Data       interface{} `json:"data"`
 }
 
-func sCall(req request.Call) (*runner.CallResponse, error) {
+func sCall(req request.Call) (*response.CallResponse, error) {
 	return nil, nil
 }
 
 type Caller interface {
-	Call(req request.Call) (*runner.CallResponse, error)
+	Call(req request.Call) (*response.CallResponse, error)
 	CallerPath() string
 }
 
@@ -53,7 +53,7 @@ type CallResult struct {
 	DeleteFile  bool `json:"delete_file"`
 }
 
-func (p *SoftCall) Call(req request.Call) (*runner.CallResponse, error) {
+func (p *SoftCall) Call(req request.Call) (*response.CallResponse, error) {
 	softPath := p.AppPath + fmt.Sprintf("/%s/%s/%s",
 		req.User, req.Soft, req.Soft)
 
@@ -88,7 +88,7 @@ func (p *SoftCall) Call(req request.Call) (*runner.CallResponse, error) {
 	split1 := strings.Split(split, "</Response>")[0]
 	ss := strings.ReplaceAll(split1, "</Response>", "")
 	//mp := make(map[string]interface{})
-	var res runner.CallResponse
+	var res response.CallResponse
 	err = json.Unmarshal([]byte(ss), &res)
 	if err != nil {
 		return nil, err
@@ -109,7 +109,7 @@ func (p *SoftCall) Call(req request.Call) (*runner.CallResponse, error) {
 type Python struct {
 }
 
-func (p *Python) Call(req request.Call) (*runner.CallResponse, error) {
+func (p *Python) Call(req request.Call) (*response.CallResponse, error) {
 	return nil, nil
 }
 func (p *Python) CallerPath() string {

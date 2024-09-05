@@ -13,15 +13,8 @@ func main() {
 	}, PublicConfig("helloworld 测试"))
 
 	r.Get("json", func(ctx *runner.Context) {
-		ctx.ResponseOkWithText("hello world")
-	}, PublicConfig("json get 测试"))
+		ctx.ResponseOkWithJSON(map[string]string{"msg": "hello world"})
+	}, PublicConfig("json 格式输出"))
 
-	r.Get("text", func(ctx *runner.Context) {
-		ctx.ResponseOkWithText("text hello world")
-	}, PublicConfig("text get 测试"))
-
-	r.Post("text", func(ctx *runner.Context) {
-		ctx.ResponseOkWithText("text hello world")
-	}, PublicConfig("text  post 测试"))
 	r.Run()
 }

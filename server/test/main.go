@@ -1,12 +1,10 @@
 package main
 
-import (
-	"fmt"
-	"github.com/flipped-aurora/gin-vue-admin/server/model/biz_apphub"
-	"github.com/liu-cn/json-filter/filter"
-)
+import "github.com/flipped-aurora/gin-vue-admin/server/pkg/osx"
 
 func main() {
-	m := filter.SelectMarshal("rollbackVersion", &biz_apphub.BizAppHubRecord{}).Map()
-	fmt.Println(m)
+	err := osx.CopyDirectory("D:/code/github.com/apphub/server/test/v1", "D:/code/github.com/apphub/server/test/v2")
+	if err != nil {
+		panic(err)
+	}
 }

@@ -30,10 +30,25 @@ type BizToolCmdSrvApi struct {
 	CreatedBy   uint   `gorm:"column:created_by;comment:创建者"`
 	UpdatedBy   uint   `gorm:"column:updated_by;comment:更新者"`
 	DeletedBy   uint   `gorm:"column:deleted_by;comment:删除者"`
-	OperateUser string `json:"-" gorm:"-"`
+	OperateUser string `json:"operateUser" gorm:"column:operate_user;comment:更新者"` //介绍视频
+	Remark      string `json:"remark" gorm:"-"`
+	ApiHost     string `json:"api_host" form:"api_host" gorm:"-"` //接口地址前缀
 }
 
 // TableName 后端工具指令api BizToolCmdSrvApi自定义表名 biz_tool_cmd_srv_api
 func (BizToolCmdSrvApi) TableName() string {
 	return "biz_tool_cmd_srv_api"
+}
+
+// biz_apphub 结构体  BizAppHubRecord
+type BizToolCmdSrvApiRecord struct {
+	AppId  uint   `json:"appId" form:"appId" gorm:"column:app_id;comment:应用id;"`
+	Remark string `json:"remark" form:"remark" gorm:"column:remark;type:text;comment:备注;"`
+	//OperateUser string `json:"operateUser" gorm:"column:operate_user;comment:更新者"` //介绍视频
+	BizToolCmdSrvApi
+}
+
+// TableName biz_apphub BizAppHub自定义表名 biz_apphub
+func (BizToolCmdSrvApiRecord) TableName() string {
+	return "biz_tool_cmd_srv_api_record"
 }

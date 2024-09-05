@@ -131,9 +131,13 @@ func (c *Context) Response(text string) {
 
 func New() *Runner {
 	//logger.Setup()
+
 	r := &Runner{
 		//CmdMap: make(map[string]func(*Context)),
 		CmdMapHandel: make(map[string]*Worker),
+	}
+	for path, fn := range GetMap {
+		r.Get(path, fn)
 	}
 	return r
 }

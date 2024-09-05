@@ -1390,7 +1390,6 @@ const exportJson = () => {
 const importJson = (file) =>{
   const reader = new FileReader()
   reader.onload = (e) => {
-    console.log(e)
     try {
       form.value = JSON.parse(e.target.result)
       ElMessage.success('JSON 文件导入成功')

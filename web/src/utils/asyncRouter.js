@@ -4,6 +4,7 @@ const pluginModules = import.meta.glob('../plugin/**/*.vue')
 export const asyncRouterHandle = (asyncRouter) => {
   asyncRouter.forEach(item => {
     if (item.component && typeof item.component === 'string') {
+      item.meta.path = "/src/"+item.component
       if (item.component.split('/')[0] === 'view') {
         item.component = dynamicImport(viewModules, item.component)
       } else if (item.component.split('/')[0] === 'plugin') {

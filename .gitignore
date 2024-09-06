@@ -25,6 +25,7 @@ yarn-error.log*
 rm_file/
 /server/soft
 /server/log/
+/server/logs/
 /server/gva
 /server/server
 /server/latest_log

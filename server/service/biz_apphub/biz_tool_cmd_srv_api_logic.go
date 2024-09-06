@@ -73,7 +73,6 @@ func (s *CmdSoft) Install() (installInfo *InstallInfo, err error) {
 	if runtime.GOOS != "windows" {
 		p := unZipOut + "/" + s.Name
 		cmd := exec.Command("chmod", "+x", unZipOut+"/"+s.Name)
-
 		// 执行命令
 		err = cmd.Run()
 		if err != nil {

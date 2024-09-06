@@ -1,5 +1,7 @@
 package response
 
+import "time"
+
 type Response struct {
 	Code    int         `json:"code"`
 	Message string      `json:"message"`
@@ -14,4 +16,7 @@ type CallResponse struct {
 	FilePath    string      `json:"path"`
 	DeleteFile  bool        `json:"delete_file"`
 	Data        interface{} `json:"data"`
+
+	CallCostTime     time.Duration `json:"-"`
+	ResponseMetaData string        `json:"-"`
 }

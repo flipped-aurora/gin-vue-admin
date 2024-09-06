@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/jsonx"
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/logger"
+	logger2 "github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/logger"
 	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/response"
 	"github.com/sirupsen/logrus"
@@ -12,6 +13,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 func init() {
@@ -24,7 +26,8 @@ type Context struct {
 	Request  string   `json:"request"`
 	FileList []string `json:"file_list"`
 
-	Req *request.Call
+	Req    *request.Call
+	runner *Runner `json:"-"`
 }
 
 func (c *Context) Logger() *logrus.Entry {
@@ -35,10 +38,23 @@ func (c *Context) Logger() *logrus.Entry {
 		"user_soft": fmt.Sprintf("/%s/%s", c.Req.User, c.Req.Soft),
 	})
 }
+func (c *Context) GetLogger() *logger2.Logger {
 
-//func (c *Context) FileList() []string {
-//	return nil
-//}
+	mp := make(map[string]interface{})
+	mp["a_tenant"] = c.Req.User
+	mp["a_soft"] = c.Req.Soft
+	mp["a_command"] = c.Req.Command
+	if c.runner != nil {
+		if c.runner.Version != "" {
+			mp["a_version"] = c.runner.Version
+		}
+	}
+
+	mp["a_soft_classify"] = fmt.Sprintf("/%s/%s", c.Req.User, c.Req.Soft)
+	return &logger2.Logger{
+		DataMap: mp,
+	}
+}
 
 func (r *Runner) Notfound(fn func(ctx *Context)) {
 	r.NotFound = fn
@@ -130,10 +146,7 @@ func (c *Context) Response(text string) {
 }
 
 func New() *Runner {
-	//logger.Setup()
-
 	r := &Runner{
-		//CmdMap: make(map[string]func(*Context)),
 		CmdMapHandel: make(map[string]*Worker),
 	}
 	for path, fn := range GetMap {
@@ -147,16 +160,18 @@ type Worker struct {
 	Path   string
 	Method string
 	Config *Config
-	//GetHandel  []func(*Context)
-	//PostHandel []func(*Context)
 }
 
 type Runner struct {
 	IsDebug      bool
+	Version      string
 	CmdMapHandel map[string]*Worker
 	NotFound     func(ctx *Context)
 }
 
+func (r *Runner) SetVersion(version string) {
+	r.Version = version
+}
 func (r *Runner) Post(commandName string, handelFunc func(ctx *Context), config ...*Config) {
 	_, ok := r.CmdMapHandel[commandName]
 	if !ok {
@@ -241,7 +256,10 @@ func (r *Runner) Run() {
 			return
 		}
 		for _, fn := range handelList {
+			now := time.Now()
 			fn(context)
+			t := time.Since(now)
+			fmt.Println(fmt.Sprintf("<UserCost>%s</UserCost>", t.String()))
 		}
 
 	} else { //not found

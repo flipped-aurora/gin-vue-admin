@@ -168,6 +168,7 @@ func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
+	biz_apphub.GetSoftLogs(call)
 	if call.StatusCode != 200 {
 		c.JSON(call.StatusCode, gin.H{"msg": call.Data})
 		return
@@ -262,7 +263,7 @@ func (bizAppHubApi *BizAppHubApi) GetCall(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-
+	biz_apphub.GetSoftLogs(call)
 	if call.StatusCode != 200 {
 		c.JSON(call.StatusCode, gin.H{
 			"msg": call.Data,

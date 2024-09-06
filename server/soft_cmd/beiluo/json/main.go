@@ -8,50 +8,34 @@ import (
 
 func main() {
 	r := runner.New()
+	r.SetVersion("v1")
 	r.Post("echo", func(ctx *runner.Context) {
-		//var req EchoRequest
-		//err := ctx.ShouldBindJSON(&req)
-		//if err != nil {
-		//	ctx.ResponseJSON(&Response{Code: -1, Message: err.Error()})
-		//	return
-		//}
-		logrus.Infof("echo" + jsonx.JSONString(ctx.ReqMap()))
-
 		s := struct {
-			Label   string                 `json:"label"`
-			Content string                 `json:"content"`
-			Value   int                    `json:"value"`
-			Data    map[string]interface{} `json:"data"`
+			Label string                 `json:"label"`
+			Data  map[string]interface{} `json:"data"`
 		}{
 			Label: "json",
-			//Content: jsonx.JSONString(ctx.ReqMap()),
 			Data:  ctx.ReqMap(),
-			Value: 0,
 		}
-
 		ctx.ResponseOkWithJSON(s)
 
 	})
 
+	r.Get("hi", func(ctx *runner.Context) {
+		ctx.GetLogger().Info("hello info log")
+		ctx.ResponseOkWithText("hello info res")
+	})
+
 	r.Get("file", func(ctx *runner.Context) {
 		logrus.Infof("file" + jsonx.JSONString(ctx.ReqMap()))
-		//ctx.ReqMap()
 		jsonx.SaveFile("./request.json", ctx.ReqMap())
 		ctx.ResponseOkWithFile("./request.json", true)
 	})
 
 	r.Get("helloWorld", func(ctx *runner.Context) {
-		//ctx.ReqMap()
 		logrus.Infof("helloWorld" + jsonx.JSONString(ctx.ReqMap()))
 		ctx.ResponseOkWithText("hello world")
 	})
-	r.Get("ping", func(ctx *runner.Context) {
-		//ctx.ReqMap()
-		//logrus.Infof("helloWorld" + jsonx.JSONString(ctx.ReqMap()))
-		ctx.ResponseOkWithJSON(map[string]interface{}{
-			"msg": "ok",
-		})
-	})
-
+	//todo 最后必须执行run方法
 	r.Run()
 }

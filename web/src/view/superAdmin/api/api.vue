@@ -591,6 +591,7 @@ const enterSyncDialog = async() => {
 
 const onReset = () => {
   searchInfo.value = {}
+  getTableData()
 }
 // 搜索
 

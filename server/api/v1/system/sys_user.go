@@ -1,6 +1,7 @@
 package system
 
 import (
+	"gorm.io/datatypes"
 	"strconv"
 	"time"
 
@@ -407,6 +408,32 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		SideMode:  user.SideMode,
 		Enable:    user.Enable,
 	})
+	if err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
+}
+
+// SetSelfSetting
+// @Tags      SysUser
+// @Summary   设置用户配置
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      datatypes.JSON
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户配置"
+// @Router    /user/SetSelfSetting [put]
+func (b *BaseApi) SetSelfSetting(c *gin.Context) {
+	var req datatypes.JSON
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	err = userService.SetSelfSetting(&req, utils.GetUserID(c))
 	if err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)

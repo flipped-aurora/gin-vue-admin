@@ -4,7 +4,14 @@ import { ref, watchEffect, reactive } from 'vue'
 import originSetting from  "@/config.json"
 import {  setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
-  const theme = ref(localStorage.getItem('theme')  || originSetting.darkMode || 'auto')
+
+  let selfOriginSetting = originSetting
+  const localOriginSetting = localStorage.getItem('originSetting')
+  if (localOriginSetting) {
+    selfOriginSetting = JSON.parse(localOriginSetting)
+  }
+
+  const theme = ref(localStorage.getItem('theme')  || selfOriginSetting.darkMode || 'auto')
   const device = ref("")
   const config = reactive({
     weakness: false,
@@ -19,18 +26,6 @@ export const useAppStore = defineStore('app', () => {
 
     side_mode : 'normal'
   })
-
-  // 初始化配置
-  Object.keys(originSetting).forEach(key => {
-      config[key] = originSetting[key]
-    if(key === 'primaryColor'){
-      setBodyPrimaryColor(originSetting[key],config.darkMode)
-    }
-  })
-
-  if (localStorage.getItem('darkMode')) {
-    config.darkMode = localStorage.getItem('darkMode')
-  }
 
 
   watchEffect(() =>{
@@ -122,6 +117,22 @@ export const useAppStore = defineStore('app', () => {
 
   const toggleSideModel= (e) =>{
     config.side_mode = e
+  }
+
+  // 初始化配置
+  Object.keys(selfOriginSetting).forEach(key => {
+    config[key] = selfOriginSetting[key]
+    if(key === 'primaryColor'){
+      setBodyPrimaryColor(selfOriginSetting[key],config.darkMode)
+    }
+    if(key === 'darkMode'){
+      toggleDarkMode(config.darkMode)
+    }
+  })
+
+  const darkMode = localStorage.getItem('darkMode')
+  if (darkMode) {
+    config.darkMode = darkMode
   }
 
   if(config.darkMode === 'auto'){

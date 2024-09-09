@@ -5,11 +5,11 @@ import originSetting from  "@/config.json"
 import {  setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
 
-  let selfOriginSetting = originSetting
-  const localOriginSetting = localStorage.getItem('originSetting')
-  if (localOriginSetting) {
-    selfOriginSetting = JSON.parse(localOriginSetting)
-  }
+    let selfOriginSetting = originSetting
+    const localOriginSetting = localStorage.getItem('originSetting')
+    if (localOriginSetting) {
+      selfOriginSetting = JSON.parse(localOriginSetting)
+    }
 
   const theme = ref(localStorage.getItem('theme')  || selfOriginSetting.darkMode || 'auto')
   const device = ref("")

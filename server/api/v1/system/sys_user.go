@@ -369,7 +369,6 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		HeaderImg: user.HeaderImg,
 		Phone:     user.Phone,
 		Email:     user.Email,
-		SideMode:  user.SideMode,
 		Enable:    user.Enable,
 	})
 	if err != nil {
@@ -405,7 +404,6 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		HeaderImg: user.HeaderImg,
 		Phone:     user.Phone,
 		Email:     user.Email,
-		SideMode:  user.SideMode,
 		Enable:    user.Enable,
 	})
 	if err != nil {

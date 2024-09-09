@@ -206,9 +206,9 @@
             </el-form-item>
             <el-form-item label="函数参数:"  prop="param" >
 <!--              // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.param 后端会按照json的类型进行存取-->
-              <el-button @click="setParam">配置参数</el-button>
+              <el-button style="margin-right: 10px" @click="setParam">配置参数</el-button>
 <!--              {{ formData.param }}-->
-              {{getParam()}}
+              函数定义：{{getParam()}}
             </el-form-item>
             <el-form-item label="是否公开:"  prop="is_public" >
               <el-select v-model="formData.is_public" placeholder="请选择是否公开" style="width:100%" :clearable="true" >
@@ -290,31 +290,39 @@
             <el-form  :model="formData">
 
               <el-form-item v-for="(field,idx) in formData.param" :key="field.code">
-                <el-row  :gutter="20">
-                  <el-col :span="5">
+                <div style="width: 100%">
+                  <el-row style="width: 100%" :gutter="20">
+                    <el-col :span="4">
                       <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
-                  </el-col>
-                  <el-col :span="5">
-                    <el-input v-model="field.desc" placeholder="参数描述"></el-input>
-                  </el-col>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-input v-model="field.desc" placeholder="参数描述"></el-input>
+                    </el-col>
 
-<!--                  <el-col :span="5">-->
-<!--                    <el-input v-model="field.type" placeholder="参数类型"></el-input>-->
-<!--                  </el-col>-->
-<!--                  <el-col :span="5">-->
-<!--                    <span>mock数据：</span><el-input v-model="field.mock_data" placeholder="mock_data"></el-input>-->
-<!--                  </el-col>-->
-                  <el-col :span="5">
-<!--                    <span>参数类型：</span>-->
-                    <el-select v-model="field.mode" placeholder="请选择模式">
-                      <el-option label="输入参数" value="in"></el-option>
-                       <el-option label="输出参数" value="out"></el-option>
-                    </el-select>
-                  </el-col>
-                  <el-col :span="5">
-                    <el-button type="primary" @click="removeField(idx)">移除</el-button>
-                  </el-col>
-                </el-row>
+<!--                    <el-col :span="3">-->
+<!--                      <el-input v-model="field.type" placeholder="参数类型"></el-input>-->
+<!--                    </el-col>-->
+                    <el-col :span="4">
+                      <el-select v-model="field.type" placeholder="参数类型">
+                        <el-option label="字符串" value="string"></el-option>
+                        <el-option label="数值" value="number"></el-option>
+                        <el-option label="文件" value="file"></el-option>
+                      </el-select>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
+                    </el-col>
+                    <el-col :span="4">
+                      <el-select v-model="field.mode" placeholder="请选择模式">
+                         <el-option label="输入参数" value="in"></el-option>
+                         <el-option label="输出参数" value="out"></el-option>
+                      </el-select>
+                     </el-col>
+                    <el-col :span="4">
+                      <el-button type="primary" @click="removeField(idx)">移除</el-button>
+                    </el-col>
+                  </el-row>
+                </div>
               </el-form-item>
             </el-form>
 <!--      <el-col :span="5">-->
@@ -790,6 +798,6 @@ const closeDetailShow = () => {
 
 </script>
 
-<style>
+<style scoped>
 
 </style>

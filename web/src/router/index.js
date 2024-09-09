@@ -4,6 +4,13 @@ const routes = [{
   path: '/',
   redirect: '/login'
 },
+
+{
+  path: '/func_hub/detail',
+  name: 'func_detail',
+  component: () => import('@/view/biz_apphub/funcHub/func_detail.vue')
+},
+
 {
   path: '/init',
   name: 'Init',

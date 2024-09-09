@@ -21,16 +21,19 @@ export const useUserStore = defineStore('user', () => {
   const token = ref(window.localStorage.getItem('token') || cookie.get('x-token') || '')
   const setUserInfo = (val) => {
     userInfo.value = val
+    if(val.originSetting){
+      localStorage.setItem('originSetting', JSON.stringify(val.originSetting))
+    }
   }
 
   const setToken = (val) => {
     token.value = val
   }
 
-  const NeedInit = () => {
+  const NeedInit = async () => {
     token.value = ''
     window.localStorage.removeItem('token')
-    router.push({ name: 'Init', replace: true })
+    await router.push({name: 'Init', replace: true})
   }
 
   const ResetUserInfo = (value = {}) => {
@@ -88,6 +91,7 @@ export const useUserStore = defineStore('user', () => {
     } else {
       window.localStorage.setItem('osType', 'MAC')
     }
+
 
     // 全部操作均结束，关闭loading并返回
     loadingInstance.value.close()

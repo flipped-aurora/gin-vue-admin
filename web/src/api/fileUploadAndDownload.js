@@ -42,3 +42,16 @@ export const editFileName = (data) => {
     data
   })
 }
+
+/**
+ * 导入URL
+ * @param data
+ * @returns {*}
+ */
+export const importURL = (data) => {
+  return service({
+    url: '/fileUploadAndDownload/importURL',
+    method: 'post',
+    data
+  })
+}

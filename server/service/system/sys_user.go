@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"fmt"
+	"gorm.io/datatypes"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -236,6 +237,16 @@ func (userService *UserService) SetSelfInfo(req system.SysUser) error {
 	return global.GVA_DB.Model(&system.SysUser{}).
 		Where("id=?", req.ID).
 		Updates(req).Error
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetSelfSetting
+//@description: 设置用户配置
+//@param: req datatypes.JSON, uid uint
+//@return: err error
+
+func (userService *UserService) SetSelfSetting(req *datatypes.JSON, uid uint) error {
+	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", uid).Update("origin_setting", req).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

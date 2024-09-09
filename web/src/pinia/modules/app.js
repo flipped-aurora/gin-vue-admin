@@ -18,7 +18,7 @@ export const useAppStore = defineStore('app', () => {
     side_mode : 'normal'
   })
 
-  const theme = ref(localStorage.getItem('theme')  || 'auto')
+  const theme = ref( 'auto')
 
   const toggleTheme = (dark) => {
     if (dark) {
@@ -82,26 +82,13 @@ export const useAppStore = defineStore('app', () => {
     config.side_mode = e
   }
 
-  const darkMode = localStorage.getItem('darkMode')
-  if (darkMode) {
-    config.darkMode = darkMode
-  }
-
-  if(config.darkMode === 'auto'){
-    toggleDarkModeAuto()
-  }
-
-    toggleGrey(config.grey)
-
   watchEffect(() => {
     if (theme.value === 'dark') {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light');
-      localStorage.setItem('theme', 'dark');
     } else {
       document.documentElement.classList.add('light');
       document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
     }
   })
   watchEffect(() => {
@@ -121,15 +108,22 @@ export const useAppStore = defineStore('app', () => {
     }
   })
 
-  watchEffect(() => {
 
-    setBodyPrimaryColor(config.primaryColor,config.darkMode)
-    localStorage.setItem('darkMode', config.darkMode)
+
+  watchEffect(() => {
+    if(config.darkMode === 'auto'){
+      toggleDarkModeAuto()
+    }
+
     if(config.darkMode === 'dark'){
       toggleTheme(true)
     }else{
       toggleTheme(false)
     }
+  })
+
+  watchEffect(() => {
+    setBodyPrimaryColor(config.primaryColor, theme.value)
   })
 
   return {

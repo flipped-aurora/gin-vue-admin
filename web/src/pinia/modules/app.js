@@ -1,44 +1,24 @@
 
 import { defineStore } from 'pinia'
 import { ref, watchEffect, reactive } from 'vue'
-import originSetting from  "@/config.json"
 import {  setBodyPrimaryColor } from '@/utils/format'
 export const useAppStore = defineStore('app', () => {
 
-    let selfOriginSetting = originSetting
-    const localOriginSetting = localStorage.getItem('originSetting')
-    if (localOriginSetting) {
-      selfOriginSetting = JSON.parse(localOriginSetting)
-    }
-
-  const theme = ref(localStorage.getItem('theme')  || selfOriginSetting.darkMode || 'auto')
   const device = ref("")
   const config = reactive({
     weakness: false,
     grey: false,
-    primaryColor: '#79B6E7',
+    primaryColor: '#3b82f6',
     showTabs: true,
-    darkMode: 'light',
+    darkMode: 'auto',
     layout_side_width : 256,
     layout_side_collapsed_width : 80,
     layout_side_item_height : 48,
-    show_watermark: false,
-
+    show_watermark: true,
     side_mode : 'normal'
   })
 
-
-  watchEffect(() =>{
-    if (theme.value === 'dark'){
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
-      localStorage.setItem('theme', 'dark');
-    }else{
-        document.documentElement.classList.add('light');
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('theme', 'light');
-    }
-  })
+  const theme = ref(localStorage.getItem('theme')  || 'auto')
 
   const toggleTheme = (dark) => {
     if (dark) {
@@ -50,25 +30,14 @@ export const useAppStore = defineStore('app', () => {
 
   const toggleWeakness = (e) => {
     config.weakness = e;
-    if(e) {
-      document.documentElement.classList.add('html-weakenss');
-    }else{
-      document.documentElement.classList.remove('html-weakenss');
-    }
   }
 
   const toggleGrey = (e) => {
     config.grey = e;
-    if(e) {
-      document.documentElement.classList.add('html-grey');
-    }else{
-        document.documentElement.classList.remove('html-grey');
-    }
   }
 
   const togglePrimaryColor = (e) => {
     config.primaryColor = e;
-    setBodyPrimaryColor(e,config.darkMode)
   }
 
   const toggleTabs = (e) => {
@@ -81,12 +50,6 @@ export const useAppStore = defineStore('app', () => {
 
   const toggleDarkMode = (e) => {
     config.darkMode = e
-    localStorage.setItem('darkMode', e)
-    if(e === 'dark'){
-      toggleTheme(true)
-    }else{
-      toggleTheme(false)
-    }
   }
 
   const toggleDarkModeAuto = () =>{
@@ -119,17 +82,6 @@ export const useAppStore = defineStore('app', () => {
     config.side_mode = e
   }
 
-  // 初始化配置
-  Object.keys(selfOriginSetting).forEach(key => {
-    config[key] = selfOriginSetting[key]
-    if(key === 'primaryColor'){
-      setBodyPrimaryColor(selfOriginSetting[key],config.darkMode)
-    }
-    if(key === 'darkMode'){
-      toggleDarkMode(config.darkMode)
-    }
-  })
-
   const darkMode = localStorage.getItem('darkMode')
   if (darkMode) {
     config.darkMode = darkMode
@@ -140,6 +92,45 @@ export const useAppStore = defineStore('app', () => {
   }
 
     toggleGrey(config.grey)
+
+  watchEffect(() => {
+    if (theme.value === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.add('light');
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  })
+  watchEffect(() => {
+    // 色弱模式监听处理
+    if (config.weakness) {
+      document.documentElement.classList.add('html-weakenss');
+    } else {
+      document.documentElement.classList.remove('html-weakenss');
+    }
+  })
+  watchEffect(() => {
+    // 灰色模式监听处理
+    if (config.grey) {
+      document.documentElement.classList.add('html-grey');
+    } else {
+      document.documentElement.classList.remove('html-grey');
+    }
+  })
+
+  watchEffect(() => {
+
+    setBodyPrimaryColor(config.primaryColor,config.darkMode)
+    localStorage.setItem('darkMode', config.darkMode)
+    if(config.darkMode === 'dark'){
+      toggleTheme(true)
+    }else{
+      toggleTheme(false)
+    }
+  })
 
   return {
     theme,

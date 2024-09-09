@@ -7,7 +7,10 @@ import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
 import cookie from 'js-cookie'
 
+import {useAppStore} from "@/pinia";
+
 export const useUserStore = defineStore('user', () => {
+  const appStore = useAppStore()
   const loadingInstance = ref(null)
 
   const userInfo = ref({
@@ -20,7 +23,9 @@ export const useUserStore = defineStore('user', () => {
   const setUserInfo = (val) => {
     userInfo.value = val
     if(val.originSetting){
-      localStorage.setItem('originSetting', JSON.stringify(val.originSetting))
+      Object.keys(appStore.config).forEach(key => {
+        appStore.config[key] = val.originSetting[key]
+      })
     }
   }
 

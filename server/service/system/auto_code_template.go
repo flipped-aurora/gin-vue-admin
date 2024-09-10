@@ -229,28 +229,30 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		code[create] = builder
 	} // 生成文件
 	injections := make(map[string]utilsAst.Ast, len(asts))
-	if info.AutoMigrate {
-		for key, value := range asts {
-			keys := strings.Split(key, "=>")
-			if len(keys) == 2 {
-				if keys[1] == utilsAst.TypePluginInitializeV2 {
-					continue
+	// 注入代码
+	for key, value := range asts {
+		keys := strings.Split(key, "=>")
+		if len(keys) == 2 {
+			if keys[1] == utilsAst.TypePluginInitializeV2 {
+				continue
+			}
+			if keys[1] == utilsAst.TypePackageInitializeGorm && !info.AutoMigrate {
+				continue
+			}
+			var builder strings.Builder
+			parse, _ := value.Parse("", &builder)
+			if parse != nil {
+				_ = value.Injection(parse)
+				err = value.Format("", &builder, parse)
+				if err != nil {
+					return nil, nil, nil, err
 				}
-				var builder strings.Builder
-				parse, _ := value.Parse("", &builder)
-				if parse != nil {
-					_ = value.Injection(parse)
-					err = value.Format("", &builder, parse)
-					if err != nil {
-						return nil, nil, nil, err
-					}
-					code[keys[0]] = builder
-					injections[keys[1]] = value
-					fmt.Println(keys[0], "注入成功!")
-				}
+				code[keys[0]] = builder
+				injections[keys[1]] = value
+				fmt.Println(keys[0], "注入成功!")
 			}
 		}
-	} // 注入代码
+	}
 	return code, templates, injections, nil
 }
 

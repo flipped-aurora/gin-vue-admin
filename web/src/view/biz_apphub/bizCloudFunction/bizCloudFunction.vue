@@ -286,47 +286,106 @@
 
     <el-dialog v-model="setParamDialogVisible" title="配置函数参数">
 
+      <h5>输入参数</h5>
+     <el-form  :model="formData">
 
-            <el-form  :model="formData">
-
-              <el-form-item v-for="(field,idx) in formData.param" :key="field.code">
-                <div style="width: 100%">
+              <el-form-item  v-for="(field,idx) in formData.param" v-show="field.mode==='in'" :key="field.code">
+                <div  style="width: 100%">
                   <el-row style="width: 100%" :gutter="20">
-                    <el-col :span="4">
+                    <el-col :span="3">
                       <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="3">
                       <el-input v-model="field.desc" placeholder="参数描述"></el-input>
                     </el-col>
 
 <!--                    <el-col :span="3">-->
 <!--                      <el-input v-model="field.type" placeholder="参数类型"></el-input>-->
 <!--                    </el-col>-->
-                    <el-col :span="4">
+                    <el-col :span="3">
                       <el-select v-model="field.type" placeholder="参数类型">
                         <el-option label="字符串" value="string"></el-option>
                         <el-option label="数值" value="number"></el-option>
                         <el-option label="文件" value="file"></el-option>
                       </el-select>
                     </el-col>
-                    <el-col :span="4">
+
+<!--                    <el-col :span="3">-->
+<!--                      <el-select v-model="field.mode" placeholder="请选择模式">-->
+<!--                         <el-option label="输入参数" value="in"></el-option>-->
+<!--                         <el-option label="输出参数" value="out"></el-option>-->
+<!--                      </el-select>-->
+<!--                     </el-col>-->
+                    <el-col :span="3">
+                      <el-select v-model="field.input_mode" placeholder="输入框模式">
+                        <el-option label="单行" value="line"></el-option>
+                        <el-option label="文本域" value="text_field"></el-option>
+                      </el-select>
+                    </el-col>
+                    <el-col :span="3">
                       <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
                     </el-col>
-                    <el-col :span="4">
-                      <el-select v-model="field.mode" placeholder="请选择模式">
-                         <el-option label="输入参数" value="in"></el-option>
-                         <el-option label="输出参数" value="out"></el-option>
-                      </el-select>
-                     </el-col>
-                    <el-col :span="4">
+                    <el-col :span="3">
                       <el-button type="primary" @click="removeField(idx)">移除</el-button>
                     </el-col>
                   </el-row>
                 </div>
               </el-form-item>
             </el-form>
+
+
+      <h5>输出参数</h5>
+      <el-form  :model="formData">
+
+        <el-form-item v-for="(field,idx) in formData.param" v-show="field.mode==='out'" :key="field.code">
+          <div  style="width: 100%">
+            <el-row style="width: 100%" :gutter="20">
+              <el-col :span="3">
+                <el-input v-model="field.code" placeholder="参数英文名称"></el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-input v-model="field.desc" placeholder="参数描述"></el-input>
+              </el-col>
+
+              <!--                    <el-col :span="3">-->
+              <!--                      <el-input v-model="field.type" placeholder="参数类型"></el-input>-->
+              <!--                    </el-col>-->
+              <el-col :span="3">
+                <el-select v-model="field.type" placeholder="参数类型">
+                  <el-option label="字符串" value="string"></el-option>
+                  <el-option label="数值" value="number"></el-option>
+                  <el-option label="文件" value="file"></el-option>
+                </el-select>
+              </el-col>
+
+<!--              <el-col :span="3">-->
+<!--                <el-select v-model="field.mode" placeholder="请选择模式">-->
+<!--                  <el-option label="输入参数" value="in"></el-option>-->
+<!--                  <el-option label="输出参数" value="out"></el-option>-->
+<!--                </el-select>-->
+<!--              </el-col>-->
+              <el-col :span="3">
+                <el-select v-model="field.input_mode" placeholder="输入框模式">
+                  <el-option label="单行" value="line"></el-option>
+                  <el-option label="文本域" value="text_field"></el-option>
+                </el-select>
+              </el-col>
+              <el-col :span="3">
+                <el-input v-model="field.mock_data" placeholder="示例数据"></el-input>
+              </el-col>
+              <el-col :span="3">
+                <el-button type="primary" @click="removeField(idx)">移除</el-button>
+              </el-col>
+            </el-row>
+          </div>
+        </el-form-item>
+      </el-form>
+
+
+
 <!--      <el-col :span="5">-->
-        <el-button type="primary" @click="addField">添加字段</el-button>
+        <el-button type="primary" @click="addInField">添加输入参数</el-button>
+        <el-button type="primary" @click="addOutField">添加输出参数</el-button>
       <el-button type="primary" @click="setParamDialogVisible=false">确认</el-button>
 <!--      </el-col>-->
 
@@ -413,17 +472,28 @@ function getParam(){
   }
   return formData.value.code_name+"("+inp.join(",")+")"+"->"+"("+outp.join(",")+")"
 }
-const addField = () => {
+const addInField = () => {
   formData.value.param.push({
     code: '',
     desc: '',
     mode: 'in',
     mock_data: '',
+    input_mode: '单行',
     type: 'string',
     value: ''
   });
 };
-
+const addOutField = () => {
+  formData.value.param.push({
+    code: '',
+    desc: '',
+    mode: 'out',
+    mock_data: '',
+    input_mode: '单行',
+    type: 'string',
+    value: ''
+  });
+};
 const removeField = (index) => {
   formData.value.param.splice(index, 1);
 };

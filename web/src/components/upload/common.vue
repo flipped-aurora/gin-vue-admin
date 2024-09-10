@@ -25,7 +25,6 @@ defineOptions({
 })
 
 const emit = defineEmits(['on-success'])
-const path = ref(import.meta.env.VITE_BASE_API)
 
 const fullscreenLoading = ref(false)
 

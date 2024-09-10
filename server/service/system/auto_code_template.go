@@ -126,6 +126,14 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 					{SysBaseMenuID: entity.ID, Name: "edit", Desc: "编辑"},
 					{SysBaseMenuID: entity.ID, Name: "info", Desc: "详情"},
 				}
+				if info.HasExcel {
+					excelBtn := []model.SysBaseMenuBtn{
+						{SysBaseMenuID: entity.ID, Name: "exportTemplate", Desc: "导出模板"},
+						{SysBaseMenuID: entity.ID, Name: "exportExcel", Desc: "导出Excel"},
+						{SysBaseMenuID: entity.ID, Name: "importExcel", Desc: "导入Excel"},
+					}
+					entity.MenuBtn = append(entity.MenuBtn, excelBtn...)
+				}
 			}
 			err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
 			id = entity.ID
@@ -134,6 +142,31 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			}
 		}
 		history.MenuID = id
+	}
+
+	if info.HasExcel {
+		dbName := info.BusinessDB
+		name := info.Package + "_" + info.StructName
+		tableName := info.TableName
+		fieldsMap := make(map[string]string, len(info.Fields))
+		for _, field := range info.Fields {
+			if field.Excel {
+				fieldsMap[field.ColumnName] = field.FieldDesc
+			}
+		}
+		templateInfo, _ := json.Marshal(fieldsMap)
+		sysExportTemplate := model.SysExportTemplate{
+			DBName:       dbName,
+			Name:         name,
+			TableName:    tableName,
+			TemplateID:   name,
+			TemplateInfo: string(templateInfo),
+		}
+		err = SysExportTemplateServiceApp.CreateSysExportTemplate(&sysExportTemplate)
+		if err != nil {
+			return err
+		}
+		history.ExportTemplateID = sysExportTemplate.ID
 	}
 
 	// 创建历史记录

@@ -1,4 +1,5 @@
 {{- $global := . }}
+{{- $templateID := printf "%s_%s" .Package .StructName }}
 <template>
   <div>
     <div class="gva-search-box">
@@ -152,6 +153,11 @@
         <div class="gva-btn-list">
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.add"{{ end }} type="primary" icon="plus" @click="openDialog">新增</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.batchDelete"{{ end }} icon="delete" style="margin-left: 10px;" :disabled="!multipleSelection.length" @click="onDelete">删除</el-button>
+            {{ if .HasExcel -}}
+            <ExportTemplate {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportTemplate"{{ end }} template-id="{{$templateID}}" />
+            <ExportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.exportExcel"{{ end }} template-id="{{$templateID}}" />
+            <ImportExcel {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.importExcel"{{ end }} template-id="{{$templateID}}" @on-success="getTableData" />
+            {{- end }}
         </div>
         <el-table
         ref="multipleTable"
@@ -244,6 +250,12 @@
                   [JSON]
               </template>
           </el-table-column>
+           {{- else if eq .FieldType "array" }}
+           <el-table-column label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="200">
+               <template #default="scope">
+                  <ArrayCtrl v-model="scope.row.{{ .FieldJson }}"/>
+               </template>
+           </el-table-column>
           {{- else }}
           <el-table-column {{- if .Sort}} sortable{{- end}} align="left" label="{{.FieldDesc}}" prop="{{.FieldJson}}" width="120" />
           {{- end }}
@@ -309,9 +321,7 @@
               {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
           {{- end }}
            {{- if eq .FieldType "array" }}
-           <el-tag v-for="(item,key) in formData.{{.FieldJson}}" :key="key">
-              {{ "{{ item }}" }}
-           </el-tag>
+              <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
            {{- end }}
           {{- if eq .FieldType "int" }}
               <el-input v-model.number="formData.{{ .FieldJson }}" :clearable="{{.Clearable}}" placeholder="请输入{{.FieldDesc}}" />
@@ -361,11 +371,14 @@
             {{- range .Fields}}
               {{- if .Desc }}
                     <el-descriptions-item label="{{ .FieldDesc }}">
-                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) }}
+                {{- if and (ne .FieldType "picture" ) (ne .FieldType "pictures" ) (ne .FieldType "file" ) (ne .FieldType "array" ) }}
                         {{"{{"}} detailFrom.{{.FieldJson}} {{"}}"}}
                 {{- else }}
                     {{- if eq .FieldType "picture" }}
                             <el-image style="width: 50px; height: 50px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :src="getUrl(detailFrom.{{ .FieldJson }})" fit="cover" />
+                    {{- end }}
+                    {{- if eq .FieldType "array" }}
+                            <ArrayCtrl v-model="detailFrom.{{ .FieldJson }}"/>
                     {{- end }}
                     {{- if eq .FieldType "pictures" }}
                             <el-image style="width: 50px; height: 50px; margin-right: 10px" :preview-src-list="returnArrImg(detailFrom.{{ .FieldJson }})" :initial-index="index" v-for="(item,index) in detailFrom.{{ .FieldJson }}" :key="index" :src="getUrl(item)" fit="cover" />
@@ -414,10 +427,14 @@ import SelectImage from '@/components/selectImage/selectImage.vue'
 import RichEdit from '@/components/richtext/rich-edit.vue'
 {{- end }}
 
-
 {{- if .HasFile }}
 // 文件选择组件
 import SelectFile from '@/components/selectFile/selectFile.vue'
+{{- end }}
+
+{{- if .HasArray}}
+// 数组控制组件
+import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 {{- end }}
 
 // 全量引入格式化工具 请按需保留
@@ -428,6 +445,16 @@ import { ref, reactive } from 'vue'
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
 {{- end }}
+
+{{if .HasExcel -}}
+// 导出组件
+import ExportExcel from '@/components/exportExcel/exportExcel.vue'
+// 导入组件
+import ImportExcel from '@/components/exportExcel/importExcel.vue'
+// 导出模板组件
+import ExportTemplate from '@/components/exportExcel/exportTemplate.vue'
+{{- end}}
+
 
 defineOptions({
     name: '{{.StructName}}'
@@ -778,6 +805,9 @@ const closeDialog = () => {
         {{- end }}
         {{- if eq .FieldType "json" }}
         {{.FieldJson}}: {},
+        {{- end }}
+        {{- if eq .FieldType "array" }}
+        {{.FieldJson}}: [],
         {{- end }}
       {{- end }}
     {{- end }}

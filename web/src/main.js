@@ -15,6 +15,8 @@ import run from '@/core/gin-vue-admin.js'
 import auth from '@/directive/auth'
 import { store } from '@/pinia'
 import App from './App.vue'
+//消除警告
+import 'default-passive-events'
 
 const app = createApp(App)
 app.config.productionTip = false

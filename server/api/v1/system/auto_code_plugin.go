@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/common/response"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -67,4 +68,52 @@ func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage(fmt.Sprintf("打包成功,文件路径为:%s", zipPath), c)
+}
+
+// Packaged
+// @Tags      AutoCodePlugin
+// @Summary   打包插件
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
+// @Router    /autoCode/initMenu [post]
+func (a *AutoCodePluginApi) InitMenu(c *gin.Context) {
+	var menuInfo request.InitMenu
+	err := c.ShouldBindJSON(&menuInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = autoCodePluginService.InitMenu(menuInfo)
+	if err != nil {
+		global.GVA_LOG.Error("创建初始化Menu失败!", zap.Error(err))
+		response.FailWithMessage("创建初始化Menu失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("文件变更成功", c)
+}
+
+// Packaged
+// @Tags      AutoCodePlugin
+// @Summary   打包插件
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
+// @Router    /autoCode/initAPI [post]
+func (a *AutoCodePluginApi) InitAPI(c *gin.Context) {
+	var apiInfo request.InitApi
+	err := c.ShouldBindJSON(&apiInfo)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	err = autoCodePluginService.InitAPI(apiInfo)
+	if err != nil {
+		global.GVA_LOG.Error("创建初始化API失败!", zap.Error(err))
+		response.FailWithMessage("创建初始化API失败"+err.Error(), c)
+		return
+	}
+	response.OkWithMessage("文件变更成功", c)
 }

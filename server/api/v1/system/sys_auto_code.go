@@ -21,7 +21,7 @@ type AutoCodeApi struct{}
 // @accept    application/json
 // @Produce   application/json
 // @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前所有数据库"
-// @Router    /autoCode/getDatabase [get]
+// @Router    /autoCode/getDB [get]
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	businessDB := c.Query("businessDB")
 	dbs, err := autoCodeService.Database(businessDB).GetDB(businessDB)

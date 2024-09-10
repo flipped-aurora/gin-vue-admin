@@ -26,7 +26,33 @@ type CasbinService struct{}
 
 var CasbinServiceApp = new(CasbinService)
 
-func (casbinService *CasbinService) UpdateCasbin(AuthorityID uint, casbinInfos []request.CasbinInfo) error {
+func (casbinService *CasbinService) UpdateCasbin(adminAuthorityID, AuthorityID uint, casbinInfos []request.CasbinInfo) error {
+
+	err := AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, AuthorityID)
+	if err != nil {
+		return err
+	}
+
+	if global.GVA_CONFIG.System.UseStrictAuth {
+		apis, e := ApiServiceApp.GetAllApis(adminAuthorityID)
+		if e != nil {
+			return e
+		}
+
+		for i := range casbinInfos {
+			hasApi := false
+			for j := range apis {
+				if apis[j].Path == casbinInfos[i].Path && apis[j].Method == casbinInfos[i].Method {
+					hasApi = true
+					break
+				}
+			}
+			if !hasApi {
+				return errors.New("存在api不在权限列表中")
+			}
+		}
+	}
+
 	authorityId := strconv.Itoa(int(AuthorityID))
 	casbinService.ClearCasbin(0, authorityId)
 	rules := [][]string{}

@@ -15,9 +15,7 @@
 
 <script setup>
 import ImageCompress from '@/utils/image'
-import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/pinia/modules/user'
 import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
@@ -39,10 +37,6 @@ const props = defineProps({
     default: 1920 // 图片长宽上限
   }
 })
-
-const path = ref(import.meta.env.VITE_BASE_API)
-
-const userStore = useUserStore()
 
 const beforeImageUpload = (file) => {
   const isJPG = file.type === 'image/jpeg'

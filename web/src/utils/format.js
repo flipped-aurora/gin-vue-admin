@@ -101,7 +101,7 @@ function addOpacityToColor(u, opacity) {
 }
 
 
-export const setBodyPrimaryColor = (  primaryColor, darkMode ) =>{
+export const setBodyPrimaryColor = (primaryColor, darkMode) =>{
 
   let fmtColorFunc = generateAllColors
   if (darkMode === 'light') {

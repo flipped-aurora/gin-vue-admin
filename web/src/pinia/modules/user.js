@@ -7,7 +7,10 @@ import { ref, computed, watch } from 'vue'
 import { useRouterStore } from './router'
 import cookie from 'js-cookie'
 
+import {useAppStore} from "@/pinia";
+
 export const useUserStore = defineStore('user', () => {
+  const appStore = useAppStore()
   const loadingInstance = ref(null)
 
   const userInfo = ref({
@@ -15,22 +18,25 @@ export const useUserStore = defineStore('user', () => {
     nickName: '',
     headerImg: '',
     authority: {},
-    sideMode: 'dark',
-    baseColor: '#fff'
   })
   const token = ref(window.localStorage.getItem('token') || cookie.get('x-token') || '')
   const setUserInfo = (val) => {
     userInfo.value = val
+    if(val.originSetting){
+      Object.keys(appStore.config).forEach(key => {
+        appStore.config[key] = val.originSetting[key]
+      })
+    }
   }
 
   const setToken = (val) => {
     token.value = val
   }
 
-  const NeedInit = () => {
+  const NeedInit = async () => {
     token.value = ''
     window.localStorage.removeItem('token')
-    router.push({ name: 'Init', replace: true })
+    await router.push({name: 'Init', replace: true})
   }
 
   const ResetUserInfo = (value = {}) => {
@@ -89,6 +95,7 @@ export const useUserStore = defineStore('user', () => {
       window.localStorage.setItem('osType', 'MAC')
     }
 
+
     // 全部操作均结束，关闭loading并返回
     loadingInstance.value.close()
     return true
@@ -114,38 +121,8 @@ export const useUserStore = defineStore('user', () => {
     sessionStorage.clear()
     window.localStorage.removeItem('token')
     cookie.remove('x-token')
+    localStorage.removeItem('originSetting')
   }
-  /* 设置侧边栏模式*/
-  const changeSideMode = async(data) => {
-    const res = await setSelfInfo({ sideMode: data })
-    if (res.code === 0) {
-      userInfo.value.sideMode = data
-      ElMessage({
-        type: 'success',
-        message: '设置成功'
-      })
-    }
-  }
-
-  const mode = computed(() => userInfo.value.sideMode)
-  const sideMode = computed(() => {
-    if (userInfo.value.sideMode === 'dark') {
-      return '#191a23'
-    } else if (userInfo.value.sideMode === 'light') {
-      return '#fff'
-    } else {
-      return userInfo.value.sideMode
-    }
-  })
-  const baseColor = computed(() => {
-    if (userInfo.value.sideMode === 'dark') {
-      return '#fff'
-    } else if (userInfo.value.sideMode === 'light') {
-      return '#191a23'
-    } else {
-      return userInfo.value.baseColor
-    }
-  })
 
   watch(() => token.value, () => {
     window.localStorage.setItem('token', token.value)
@@ -159,11 +136,7 @@ export const useUserStore = defineStore('user', () => {
     GetUserInfo,
     LoginIn,
     LoginOut,
-    changeSideMode,
-    mode,
-    sideMode,
     setToken,
-    baseColor,
     loadingInstance,
     ClearStorage
   }

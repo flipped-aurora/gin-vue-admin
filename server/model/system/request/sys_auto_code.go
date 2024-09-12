@@ -25,6 +25,7 @@ type AutoCode struct {
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"false"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
+	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
 	Fields              []*AutoCodeField       `json:"fields"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`
@@ -236,6 +237,7 @@ type AutoFunc struct {
 	Package         string `json:"package"`
 	FuncName        string `json:"funcName"`        // 方法名称
 	Router          string `json:"router"`          // 路由名称
+	FuncDesc        string `json:"funcDesc"`        // 方法介绍
 	BusinessDB      string `json:"businessDB"`      // 业务库
 	StructName      string `json:"structName"`      // Struct名称
 	PackageName     string `json:"packageName"`     // 文件名称

@@ -1,5 +1,6 @@
 {{- $global := . }}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
+{{- if not .OnlyTemplate}}
 <template>
   <div>
     <div class="gva-search-box">
@@ -894,3 +895,15 @@ const closeDetailShow = () => {
 }
 {{end}}
 </style>
+{{- else}}
+<template>
+<div>form</div>
+</template>
+<script setup>
+defineOptions({
+  name: '{{.StructName}}'
+})
+</script>
+<style>
+</style>
+{{- end}}

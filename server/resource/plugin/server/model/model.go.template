@@ -1,5 +1,6 @@
 package model
 
+{{- if not .OnlyTemplate}}
 import (
 	{{- if .GvaModel }}
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -11,9 +12,11 @@ import (
 	"gorm.io/datatypes"
 	{{- end }}
 )
+{{- end }}
 
 // {{.StructName}} {{.Description}} 结构体
 type {{.StructName}} struct {
+{{- if not .OnlyTemplate}}
 {{- if .GvaModel }}
     global.GVA_MODEL
 {{- end }}
@@ -44,6 +47,7 @@ type {{.StructName}} struct {
     CreatedBy  uint   `gorm:"column:created_by;comment:创建者"`
     UpdatedBy  uint   `gorm:"column:updated_by;comment:更新者"`
     DeletedBy  uint   `gorm:"column:deleted_by;comment:删除者"`
+    {{- end }}
     {{- end }}
 }
 

@@ -1,12 +1,14 @@
 package service
 
 import (
+{{- if not .OnlyTemplate }}
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	"github.com/flipped-aurora/gin-vue-admin/server/plugin/{{.Package}}/model"
     "github.com/flipped-aurora/gin-vue-admin/server/plugin/{{.Package}}/model/request"
     {{- if .AutoCreateResource }}
     "gorm.io/gorm"
     {{- end}}
+{{- end }}
 )
 
 var {{.StructName}} = new({{.Abbreviation}})
@@ -19,7 +21,7 @@ type {{.Abbreviation}} struct {}
 {{- else}}
  {{- $db =  printf "global.MustGetGlobalDBByDBName(\"%s\")" .BusinessDB   }}
 {{- end}}
-
+{{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
 // Author [piexlmax](https://github.com/piexlmax)
 func (s *{{.Abbreviation}}) Create{{.StructName}}({{.Abbreviation}} *model.{{.StructName}}) (err error) {
@@ -153,3 +155,8 @@ func (s *{{.Abbreviation}})Get{{.StructName}}DataSource() (res map[string][]map[
 	return
 }
 {{- end }}
+{{- end }}
+
+func (s *{{.Abbreviation}})Get{{.StructName}}Public() {
+
+}

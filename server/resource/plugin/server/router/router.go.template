@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/flipped-aurora/gin-vue-admin/server/middleware"
+	{{if .OnlyTemplate }} // {{end}}"github.com/flipped-aurora/gin-vue-admin/server/middleware"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,6 +11,7 @@ type {{.Abbreviation}} struct {}
 
 // Init 初始化 {{.Description}} 路由信息
 func (r *{{.Abbreviation}}) Init(public *gin.RouterGroup, private *gin.RouterGroup) {
+{{- if not .OnlyTemplate }}
 	{
 	    group := private.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
 		group.POST("create{{.StructName}}", api{{.StructName}}.Create{{.StructName}})   // 新建{{.Description}}
@@ -23,11 +24,23 @@ func (r *{{.Abbreviation}}) Init(public *gin.RouterGroup, private *gin.RouterGro
 		group.GET("find{{.StructName}}", api{{.StructName}}.Find{{.StructName}})        // 根据ID获取{{.Description}}
 		group.GET("get{{.StructName}}List", api{{.StructName}}.Get{{.StructName}}List)  // 获取{{.Description}}列表
 	}
-	{{- if .HasDataSource}}
 	{
 	    group := public.Group("{{.Abbreviation}}")
+    	{{- if .HasDataSource}}
 	    group.GET("get{{.StructName}}DataSource", api{{.StructName}}.Get{{.StructName}}DataSource)  // 获取{{.Description}}数据源
-	    group.GET("get{{.StructName}}Public", api{{.StructName}}.Get{{.StructName}}Public)  // 获取{{.Description}}列表
+	    {{- end}}
+	    group.GET("get{{.StructName}}Public", api{{.StructName}}.Get{{.StructName}}Public)  // {{.Description}}开放接口
 	}
-	{{- end}}
+{{- else}}
+     // {
+	 //   group := private.Group("{{.Abbreviation}}").Use(middleware.OperationRecord())
+	 // }
+	 // {
+     //   group := private.Group("{{.Abbreviation}}")
+     // }
+    {
+	    group := public.Group("{{.Abbreviation}}")
+	    group.GET("get{{.StructName}}Public", api{{.StructName}}.Get{{.StructName}}Public)  // {{.Description}}开放接口
+    }
+{{- end}}
 }

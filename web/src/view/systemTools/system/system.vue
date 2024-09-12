@@ -13,7 +13,7 @@
             class="mt-3.5"
         >
           <el-form-item label="端口值">
-            <el-input v-model.number="config.system.addr" placeholder="请输入端口值"/>
+            <el-input-number v-model="config.system.addr" placeholder="请输入端口值"/>
           </el-form-item>
           <el-form-item label="数据库类型">
             <el-select
@@ -50,7 +50,7 @@
             <el-switch v-model="config.system['use-mongo']"/>
           </el-form-item>
           <el-form-item label="严格角色模式">
-            <el-checkbox v-model="config.system['use-strict-auth']">开启</el-checkbox>
+            <el-switch v-model="config.system['use-strict-auth']"/>
           </el-form-item>
           <el-form-item label="限流次数">
             <el-input-number v-model.number="config.system['iplimit-count']"/>
@@ -75,7 +75,7 @@
           <el-form-item label="jwt签名">
             <el-input v-model.trim="config.jwt['signing-key']" placeholder="请输入jwt签名">
               <template #append>
-                <el-button @click="CreateUUID">生成</el-button>
+                <el-button @click="getUUID">生成</el-button>
               </template>
             </el-input>
           </el-form-item>
@@ -682,6 +682,7 @@ import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Minus, Plus } from '@element-plus/icons-vue'
 import { emailTest } from '@/api/email'
+import {CreateUUID} from "@/utils/format";
 
 defineOptions({
   name: 'Config',
@@ -795,16 +796,8 @@ const email = async() => {
   }
 }
 
-const CreateUUID = () => {
-  let d = new Date().getTime()
-  if (window.performance && typeof window.performance.now === 'function') {
-    d += performance.now()
-  }
-  config.value.jwt['signing-key'] = '00000000-0000-0000-0000-000000000000'.replace(/0/g, (c) => {
-    const r = (d + Math.random() * 16) % 16 | 0    // d是随机种子
-    d = Math.floor(d / 16)
-    return (c === '0' ? r : (r & 0x3 | 0x8)).toString(16)
-  })
+const getUUID = () => {
+  config.value.jwt['signing-key'] = CreateUUID()
 }
 
 const addNode = () => {

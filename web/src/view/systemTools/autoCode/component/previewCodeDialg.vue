@@ -8,18 +8,30 @@
     >
       <div
         :id="key"
-        class="h-[calc(100vh-110px)] bg-white px-5 overflow-y-scroll"
+        class="h-[calc(100vh-110px)] px-5 overflow-y-scroll"
       />
     </el-tab-pane>
   </el-tabs>
 </template>
 
 <script setup>
-import { marked } from 'marked'
+import { Marked } from "marked";
+import { markedHighlight } from "marked-highlight";
 import hljs from 'highlight.js'
-import 'highlight.js/styles/atom-one-dark.css'
 import { ElMessage } from 'element-plus'
 import { onMounted, ref } from 'vue'
+import {useAppStore} from "@/pinia";
+
+const appStore = useAppStore()
+
+onMounted(() => {
+  const isDarkMode = appStore.config.darkMode === 'dark';
+  if (isDarkMode) {
+    import('highlight.js/styles/atom-one-dark.css');
+  } else {
+    import('highlight.js/styles/atom-one-light.css');
+  }
+});
 
 const props = defineProps({
   previewCode: {
@@ -32,26 +44,24 @@ const props = defineProps({
 
 const activeName = ref('')
 onMounted(() => {
-  marked.setOptions({
-    renderer: new marked.Renderer(),
-    highlight: function(code) {
-      return hljs.highlightAuto(code).value
-    },
-    pedantic: false,
-    gfm: true,
-    tables: true,
-    breaks: false,
-    sanitize: false,
-    smartLists: true,
-    smartypants: false,
-    xhtml: false,
-    langPrefix: 'hljs language-'
-  })
+  const marked = new Marked(
+      markedHighlight({
+        langPrefix: 'hljs language-',
+        highlight(code, lang, info) {
+          console.log(code,lang,info)
+          const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+          if (lang === 'vue') {
+            return hljs.highlight(code, { language: 'html' }).value;
+          }
+          return hljs.highlight(code, { language }).value;
+        }
+      })
+  );
   for (const key in props.previewCode) {
     if (activeName.value === '') {
       activeName.value = key
     }
-    document.getElementById(key).innerHTML = marked(props.previewCode[key])
+    document.getElementById(key).innerHTML = marked.parse(props.previewCode[key])
   }
 })
 

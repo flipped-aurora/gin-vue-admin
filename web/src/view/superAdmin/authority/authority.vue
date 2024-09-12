@@ -201,7 +201,7 @@ const mustUint = (rule, value, callback) => {
 const AuthorityOption = ref([
   {
     authorityId: 0,
-    authorityName: '根角色'
+    authorityName: '根角色/严格模式下为当前角色'
   }
 ])
 const drawer = ref(false)
@@ -384,7 +384,7 @@ const setOptions = () => {
   AuthorityOption.value = [
     {
       authorityId: 0,
-      authorityName: '根角色'
+      authorityName: '根角色(严格模式下为当前用户角色)'
     }
   ]
   setAuthorityOptions(tableData.value, AuthorityOption.value, false)

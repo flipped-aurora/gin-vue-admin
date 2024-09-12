@@ -1,5 +1,6 @@
 import service from '@/utils/request'
 
+{{- if .OnlyTemplate}}
 // @Tags {{.StructName}}
 // @Summary 创建{{.Description}}
 // @Security ApiKeyAuth
@@ -111,3 +112,19 @@ export const get{{.StructName}}DataSource = () => {
   })
 }
 {{- end}}
+
+{{- end}}
+
+// @Tags {{.StructName}}
+// @Summary 不需要鉴权的{{.Description}}接口
+// @accept application/json
+// @Produce application/json
+// @Param data query {{.Package}}Req.{{.StructName}}Search true "分页获取{{.Description}}列表"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
+// @Router /{{.Abbreviation}}/get{{.StructName}}Public [get]
+export const get{{.StructName}}Public = () => {
+  return service({
+    url: '/{{.Abbreviation}}/get{{.StructName}}Public',
+    method: 'get',
+  })
+}

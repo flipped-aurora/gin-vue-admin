@@ -231,7 +231,7 @@ const submitForm = () => {
         message: '请正确填写登录信息',
         showClose: true,
       })
-      loginVerify()
+      await loginVerify()
       return false
     }
 
@@ -240,7 +240,7 @@ const submitForm = () => {
 
     // 登陆失败，刷新验证码
     if (!flag) {
-      loginVerify()
+      await loginVerify()
       return false
     }
 
@@ -255,7 +255,7 @@ const checkInit = async() => {
   if (res.code === 0) {
     if (res.data?.needInit) {
       userStore.NeedInit()
-      router.push({ name: 'Init' })
+      await router.push({name: 'Init'})
     } else {
       ElMessage({
         type: 'info',

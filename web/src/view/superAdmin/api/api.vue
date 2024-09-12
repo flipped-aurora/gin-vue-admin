@@ -591,6 +591,7 @@ const enterSyncDialog = async() => {
 
 const onReset = () => {
   searchInfo.value = {}
+  getTableData()
 }
 // 搜索
 
@@ -690,7 +691,6 @@ const onSync = async() => {
   if (res.code === 0) {
     res.data.newApis.forEach(item => {
       item.apiGroup = apiGroupMap.value[item.path.split('/')[1]]
-      console.log(apiGroupMap.value)
     })
 
     syncApiData.value = res.data

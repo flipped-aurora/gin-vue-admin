@@ -13,7 +13,7 @@ const config = {
 export const viteLogo = (env) => {
   if (config.showViteLogo) {
     console.log(greenText(`> 欢迎使用Gin-Vue-Admin，开源地址：https://github.com/flipped-aurora/gin-vue-admin`));
-    console.log(greenText(`> 当前版本:v2.7.3`));
+    console.log(greenText(`> 当前版本:v2.7.4`));
     console.log(greenText(`> 加群方式:微信：shouzi_1994 QQ群：470239250`));
     console.log(greenText(`> 项目地址：https://github.com/flipped-aurora/gin-vue-admin`));
     console.log(greenText(`> 插件市场:https://plugin.gin-vue-admin.com`));

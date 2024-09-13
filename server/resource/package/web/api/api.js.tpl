@@ -1,6 +1,6 @@
 import service from '@/utils/request'
 
-{{- if .OnlyTemplate}}
+{{- if not .OnlyTemplate}}
 // @Tags {{.StructName}}
 // @Summary 创建{{.Description}}
 // @Security ApiKeyAuth

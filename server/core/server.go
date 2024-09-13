@@ -16,9 +16,8 @@ func RunWindowsServer() {
 	if global.GVA_CONFIG.System.UseMultipoint || global.GVA_CONFIG.System.UseRedis {
 		// 初始化redis服务
 		initialize.Redis()
+		initialize.RedisList()
 	}
-
-	initialize.RedisList()
 
 	if global.GVA_CONFIG.System.UseMongo {
 		err := initialize.Mongo.Initialization()

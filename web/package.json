@@ -18,6 +18,7 @@
         "@wangeditor/editor": "^5.1.23",
         "@wangeditor/editor-for-vue": "^5.1.12",
         "axios": "^1.7.7",
+        "chokidar": "^4.0.0",
         "core-js": "^3.38.1",
         "default-passive-events": "^2.0.0",
         "echarts": "5.5.1",

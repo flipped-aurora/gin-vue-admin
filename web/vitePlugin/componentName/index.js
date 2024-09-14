@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import chokidar from 'chokidar';
 
 // 递归获取目录下所有的 .vue 文件
 const getAllVueFiles = (dir, fileList = []) => {
@@ -46,12 +47,10 @@ const vueFilePathPlugin = (outputFilePath) => {
 
     const watchDirectoryChanges = () => {
         const watchDirectories = [path.join(root, 'src/view'), path.join(root, 'src/plugin')];
-        watchDirectories.forEach(dir => {
-            fs.watch(dir, { recursive: true }, (eventType, filename) => {
-                if (filename) {
-                    generatePathNameMap();
-                }
-            });
+        const watcher = chokidar.watch(watchDirectories, { persistent: true, ignoreInitial: true });
+        watcher.on('all', (event, path) => {
+            console.log(`File ${path} has been ${event}`);
+            generatePathNameMap();
         });
     };
 

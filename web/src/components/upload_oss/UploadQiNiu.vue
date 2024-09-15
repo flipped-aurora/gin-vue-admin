@@ -10,7 +10,7 @@
       <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">{{title}} <em>点击上传</em></div>
       <div v-for="(v,i) in uploadedFiles">{{ v }}</div>
-<!--      <div v-if="uploadedFiles.length>0">{{ uploadedFiles[0] }}</div>-->
+      <!--      <div v-if="uploadedFiles.length>0">{{ uploadedFiles[0] }}</div>-->
     </el-upload>
   </div>
 </template>

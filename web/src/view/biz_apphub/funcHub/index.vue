@@ -23,7 +23,7 @@ const getFuncList = async () => {
 const options = [
   {
     content: '操作一',
-    value: 1,
+    value: 1
   },
   {
     content: '操作二',

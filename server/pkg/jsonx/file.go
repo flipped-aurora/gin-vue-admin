@@ -28,7 +28,7 @@ back:
 	file, err := os.Create(filePath)
 	if err != nil {
 		s := err.Error()
-		if strings.Contains(s, "The system cannot find the path specified") { //如果目录不存在就篡改就目录
+		if strings.Contains(s, "The system cannot find the path specified") || strings.Contains(s, "no such file or directory") { //如果目录不存在就篡改就目录
 			split := strings.Split(filePath, "/")
 			p := strings.Join(split[0:len(split)-1], "/")
 			if len(split) > 2 {

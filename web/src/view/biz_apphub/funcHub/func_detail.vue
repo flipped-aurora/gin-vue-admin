@@ -3,15 +3,29 @@ import {onMounted, reactive,ref} from 'vue';
 import { useRoute } from 'vue-router';
 import {findBizCloudFunction} from "@/api/biz_apphub/bizCloudFunction";
 import axios from "axios";
+import UploadQiNiu from "@/components/upload_oss/UploadQiNiu.vue";
 const route=useRoute()
 const func =reactive({detail:{}})
 const funcDefine=ref("")
+const fileList=ref([])
+const files=ref("")
 
 const funcCall=async ()=>{
+
+
+  console.log("fileList",fileList.value)
+  console.log("files",files.value)
+  console.log("func detail",func.detail.param)
+  // return
   let bd=reactive({})
   for (let i = 0; i < func.detail.param.length; i++) {
     if (func.detail.param[i].mode==="in"){
-      bd[func.detail.param[i].code]= func.detail.param[i].value
+      if (func.detail.param[i].type==="file"){
+        // func.detail.param[i].files=
+        bd[func.detail.param[i].code]=func.detail.param[i].files
+      }else {
+        bd[func.detail.param[i].code]= func.detail.param[i].value
+      }
     }
   }
   if (func.detail.api_config.method==="post"){
@@ -29,10 +43,10 @@ const funcCall=async ()=>{
         }
       }
     }else {
-      
+
     }
   }else {
-    
+
   }
 }
 
@@ -42,6 +56,11 @@ onMounted(() => {
     const res=await findBizCloudFunction({ID: route.query.id})
     if (res.code===0){
       func.detail=res.data
+      for (let i = 0; i < func.detail.param.length; i++) {
+        if (func.detail.param[i].type==="file"){
+          func.detail.param[i].files=[]
+        }
+      }
     }
     getFuncInfo()
   }
@@ -70,7 +89,7 @@ function getFuncInfo(){
 
     <el-descriptions
         class="margin-top"
-        title="With border"
+        title="函数详情"
         :column="3"
         border
     >
@@ -120,36 +139,59 @@ function getFuncInfo(){
     <h2>
       <div style="">函数名称：{{func.detail.cn_name}}</div>
     </h2>
-    <t-form ref="form" reset-type="initial" style="max-width: 100%">
+    <el-form ref="form" reset-type="initial" style="max-width: 100%">
       <el-tabs type="border-card">
         <el-tab-pane label="运行">
+          <span>输入参数</span>
           <div style="padding: 24px 24px 24px 0">
-            <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc" :label-width="150">
-              <el-input v-model="v.value" v-if="v.input_mode==='text_field'" style="width: 80%"
+<!--            <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc" :label-width="150">-->
+            <el-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc">
+            <upload-qi-niu :uploaded-files="v.files" v-if="v.type==='file'" :title="v.desc" oss-dir="cloud_func/param_in"></upload-qi-niu>
+              <el-input v-model="v.value" v-if="v.type!=='file'&& v.input_mode==='text_field'" style="width: 80%"
                   :autosize="{ minRows: 3, maxRows: 30 }"
                   :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
                   show-word-limit
                   type="textarea"
               />
-              <t-input v-else v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-input>
 
-            </t-form-item>
+              <el-input
+                  v-if="v.type!=='file'&& v.input_mode==='line'"
+                  v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data">
 
+              </el-input>
+<!--              <t-input v-else v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-input>-->
+
+            </el-form-item>
+
+          <!--todo 上面是输入参数-->
             <t-button @click="funcCall" style="margin: 10px" block theme="primary" variant="base">运行</t-button>
+            <span>输出结果</span>
+        <!--todo 下面是输出参数-->
+<!--            <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc" :label-width="150">-->
+            <el-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc" >
 
-            <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='out'" :label="v.desc" :label-width="150">
+              <div v-if="v.type==='file'">
+                <span style="margin: 10px">{{v.value.path}}</span>
+                <el-link v-if="v.value.path" :href="v.value.path" target="_blank" type="primary">下载</el-link>
+              </div>
+
               <el-input
                   v-model="v.value"
-                  v-if="v.input_mode==='text_field'"
+                  v-if="v.type!=='file'&& v.input_mode==='text_field'"
                   style="width: 80%"
                   :autosize="{ minRows: 3, maxRows: 30 }"
                   :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
                   show-word-limit
                   type="textarea"
               />
-              <t-input v-else v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-input>
+<!--              <t-input v-else v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-input>-->
+              <el-input
+                  v-if="v.type!=='file'&& v.input_mode==='line'"
+                  v-model="v.value"
+                  :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data">
+              </el-input>
 
-            </t-form-item>
+            </el-form-item>
           </div>
 
         </el-tab-pane>
@@ -157,7 +199,7 @@ function getFuncInfo(){
       </el-tabs>
 
 
-    </t-form>
+    </el-form>
 
 
   </div>

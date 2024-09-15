@@ -288,7 +288,6 @@
 
       <h5>输入参数</h5>
      <el-form  :model="formData">
-
               <el-form-item  v-for="(field,idx) in formData.param" v-show="field.mode==='in'" :key="field.code">
                 <div  style="width: 100%">
                   <el-row style="width: 100%" :gutter="20">
@@ -299,9 +298,6 @@
                       <el-input v-model="field.desc" placeholder="参数描述"></el-input>
                     </el-col>
 
-<!--                    <el-col :span="3">-->
-<!--                      <el-input v-model="field.type" placeholder="参数类型"></el-input>-->
-<!--                    </el-col>-->
                     <el-col :span="3">
                       <el-select v-model="field.type" placeholder="参数类型">
                         <el-option label="字符串" value="string"></el-option>
@@ -310,12 +306,6 @@
                       </el-select>
                     </el-col>
 
-<!--                    <el-col :span="3">-->
-<!--                      <el-select v-model="field.mode" placeholder="请选择模式">-->
-<!--                         <el-option label="输入参数" value="in"></el-option>-->
-<!--                         <el-option label="输出参数" value="out"></el-option>-->
-<!--                      </el-select>-->
-<!--                     </el-col>-->
                     <el-col :span="3">
                       <el-select v-model="field.input_mode" placeholder="输入框模式">
                         <el-option label="单行" value="line"></el-option>
@@ -346,10 +336,6 @@
               <el-col :span="3">
                 <el-input v-model="field.desc" placeholder="参数描述"></el-input>
               </el-col>
-
-              <!--                    <el-col :span="3">-->
-              <!--                      <el-input v-model="field.type" placeholder="参数类型"></el-input>-->
-              <!--                    </el-col>-->
               <el-col :span="3">
                 <el-select v-model="field.type" placeholder="参数类型">
                   <el-option label="字符串" value="string"></el-option>
@@ -357,13 +343,6 @@
                   <el-option label="文件" value="file"></el-option>
                 </el-select>
               </el-col>
-
-<!--              <el-col :span="3">-->
-<!--                <el-select v-model="field.mode" placeholder="请选择模式">-->
-<!--                  <el-option label="输入参数" value="in"></el-option>-->
-<!--                  <el-option label="输出参数" value="out"></el-option>-->
-<!--                </el-select>-->
-<!--              </el-col>-->
               <el-col :span="3">
                 <el-select v-model="field.input_mode" placeholder="输入框模式">
                   <el-option label="单行" value="line"></el-option>
@@ -381,24 +360,15 @@
         </el-form-item>
       </el-form>
 
-
-
-<!--      <el-col :span="5">-->
         <el-button type="primary" @click="addInField">添加输入参数</el-button>
         <el-button type="primary" @click="addOutField">添加输出参数</el-button>
       <el-button type="primary" @click="setParamDialogVisible=false">确认</el-button>
-<!--      </el-col>-->
-
-
     </el-dialog>
 
     <el-dialog v-model="setApiDialogVisible" title="配置函数调用地址">
 
 
       <el-form  label-width="auto" :model="formData">
-
-
-<!--        <el-form :model="form" label-width="auto" style="max-width: 600px">-->
           <el-form-item label="接口地址">
             <el-input v-model="formData.api_config.path" />
           </el-form-item>
@@ -410,12 +380,7 @@
           </el-form-item>
 
       </el-form>
-      <!--      <el-col :span="5">-->
-<!--      <el-button type="primary" @click="addField">添加字段</el-button>-->
       <el-button type="primary" @click="setApiDialogVisible=false">确认</el-button>
-      <!--      </el-col>-->
-
-
     </el-dialog>
   </div>
 </template>
@@ -478,7 +443,7 @@ const addInField = () => {
     desc: '',
     mode: 'in',
     mock_data: '',
-    input_mode: '单行',
+    input_mode: 'line',
     type: 'string',
     value: ''
   });
@@ -489,7 +454,7 @@ const addOutField = () => {
     desc: '',
     mode: 'out',
     mock_data: '',
-    input_mode: '单行',
+    input_mode: 'line',
     type: 'string',
     value: ''
   });

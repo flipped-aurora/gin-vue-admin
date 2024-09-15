@@ -47,12 +47,12 @@ function funcDetail(v){
 </script>
 
 <template>
-<div>
-  <div v-for="(v,i) in funcList">
+<div style="display: flex">
+<!--  <div v-for="(v,i) in funcList">-->
 <!--      <a target="_blank" @click="funcDetail(v)">{{v.cn_name}}</a>-->
 
 
-    <t-card @click="funcDetail(v)" :cover="cover" theme="poster2" :style="{ width: '250px' }">
+    <t-card v-for="(v,i) in funcList" @click="funcDetail(v)" :cover="cover" theme="poster2" style="width:250px;margin: 10px ">
       <template #footer>
         <t-button variant="text" shape="square" :style="{ 'margin-right': '8px' }">
           <heart-icon />
@@ -76,7 +76,7 @@ function funcDetail(v){
       </template>
     </t-card>
 
-  </div>
+<!--  </div>-->
 </div>
 </template>
 

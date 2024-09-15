@@ -6,13 +6,6 @@ import axios from "axios";
 const route=useRoute()
 const func =reactive({detail:{}})
 const funcDefine=ref("")
-// const userId = route.state.aaa;
-
-// const state=reactive({
-//   detail:detail,
-// })
-// console.log(state.detail)
-
 
 const funcCall=async ()=>{
   let bd=reactive({})
@@ -68,94 +61,76 @@ function getFuncInfo(){
   }
   funcDefine.value= func.detail.code_name+"("+inp.join(",")+")"+"->"+"("+outp.join(",")+")"
 }
-// function getFuncInfo() {
-//   // return func.detail.code_name+"("
-// }
-let id = 0;
-const getId = () => {
-  return ++id;
-};
-const studentTab = ref(1);
-const formData = reactive({
-  school: 1,
-  students: [
-    {
-      id: getId(),
-      label: '运行',
-      name: 'run',
-      courseType: 'wenke',
-      course: ['1'],
-    },
-    {
-      id: getId(),
-      label: '示例',
-      name: 'demo',
-      courseType: 'wenke',
-      course: [],
-    },
-  ],
-});
+
 </script>
 
 <template>
-<!--<div>测试：{{detail.cn_name}}</div>-->
 
   <div>
-    <t-descriptions bordered  :title="func.detail.title">
-      <t-descriptions-item label="中文名">{{func.detail.cn_name}}</t-descriptions-item>
-      <t-descriptions-item label="函数名称">{{func.detail.code_name}}</t-descriptions-item>
-      <t-descriptions-item label="函数定义"
-      >{{funcDefine}}</t-descriptions-item
-      >
-      <t-descriptions-item label="归属"
-      >{{func.detail.classify}}</t-descriptions-item
-      >
-    </t-descriptions>
-    <h2>
-      函数名称：{{func.detail.cn_name}}
-    </h2>
-    <t-form
-        ref="form"
-        :data="formData"
-        reset-type="initial"
-        style="max-width: 100%"
-        @reset="onReset"
-        @submit="onSubmit"
+
+    <el-descriptions
+        class="margin-top"
+        title="With border"
+        :column="3"
+        border
     >
-
-      <t-tabs
-          v-model="studentTab"
-          theme="card"
-          addable
-          style="margin-left: 30px; border: 1px solid var(--td-component-stroke)"
-          @add="onAddStudent"
-      >
-        <t-tab-panel
-            v-for="(student, index) in formData.students"
-            :key="student.id"
-            :value="student.id"
-            :label="student.label"
-            :destroy-on-hide="false"
-        >
+      <template #extra>
+      </template>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            中文名
+          </div>
+        </template>
+        {{func.detail.cn_name}}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            函数名称
+          </div>
+        </template>
+        {{func.detail.code_name}}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            函数定义
+          </div>
+        </template>
+        {{funcDefine}}
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            归属
+          </div>
+        </template>
+        <el-tag size="small">{{func.detail.classify}}</el-tag>
+      </el-descriptions-item>
+      <el-descriptions-item>
+        <template #label>
+          <div class="cell-item">
+            函数介绍
+          </div>
+        </template>
+        {{func.detail.content}}
+      </el-descriptions-item>
+    </el-descriptions>
+    <h2>
+      <div style="">函数名称：{{func.detail.cn_name}}</div>
+    </h2>
+    <t-form ref="form" reset-type="initial" style="max-width: 100%">
+      <el-tabs type="border-card">
+        <el-tab-pane label="运行">
           <div style="padding: 24px 24px 24px 0">
-            <!-- 重点阅读：数组里面，注意 name 定义，用于区分不同的字段 -->
-            <!-- 重点阅读：name 表示当前字段在 formData 中的路径，ruleName 表示当前字段在 rules 中的名称 -->
-<!--            <t-form-item label="姓名" :name="`students[${index}].name`" :label-width="80">-->
-<!--              <t-input v-model="formData.students[index].name" placeholder="请输入内容"></t-input>-->
-<!--            </t-form-item>-->
-
             <t-form-item v-for="(v,i) in func.detail.param" v-show="v.mode==='in'" :label="v.desc" :label-width="150">
-              <el-input
-                  v-model="v.value"
-                  v-if="v.input_mode==='text_field'"
-
-                  style="width: 80%"
+              <el-input v-model="v.value" v-if="v.input_mode==='text_field'" style="width: 80%"
                   :autosize="{ minRows: 3, maxRows: 30 }"
                   :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
                   show-word-limit
                   type="textarea"
               />
-<!--              <t-textarea  allowInputOverMax autosize v-if="v.input_mode==='text_field'" v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-textarea>-->
               <t-input v-else v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-input>
 
             </t-form-item>
@@ -168,19 +143,19 @@ const formData = reactive({
                   v-if="v.input_mode==='text_field'"
                   style="width: 80%"
                   :autosize="{ minRows: 3, maxRows: 30 }"
-
                   :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
                   show-word-limit
                   type="textarea"
               />
-<!--              <t-textarea  allow-input-over-max  autosize v-if="v.input_mode==='text_field'"  v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-textarea>-->
               <t-input v-else v-model="v.value" :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"></t-input>
 
             </t-form-item>
           </div>
-        </t-tab-panel>
 
-      </t-tabs>
+        </el-tab-pane>
+        <el-tab-pane label="案例">Config</el-tab-pane>
+      </el-tabs>
+
 
     </t-form>
 

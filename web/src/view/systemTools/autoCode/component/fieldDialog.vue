@@ -281,7 +281,7 @@
 import { toLowerCase, toSQLLine } from '@/utils/stringFun'
 import { getSysDictionaryList } from '@/api/sysDictionary'
 import WarningBar from '@/components/warningBar/warningBar.vue'
-import { ref } from 'vue'
+import { ref,onMounted } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import {getColumn, getTable} from "@/api/autoCode";
 
@@ -423,7 +423,7 @@ const selectDB = async (val) => {
   const res = await getColumn({
     tableName: val
   })
-  console.log(res)
+
   if (res.code === 0) {
     let list = res.data.columns; // 确保这里正确获取到 tables 数组
     dbColumnList.value = list.map(item => ({
@@ -443,4 +443,10 @@ const selectDB = async (val) => {
 
 const fieldDialogForm = ref(null)
 defineExpose({ fieldDialogForm })
+
+onMounted(()=>{
+  if(middleDate.value.dataSource.table){
+    selectDB(middleDate.value.dataSource.table)
+  }
+})
 </script>

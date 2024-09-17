@@ -261,6 +261,7 @@ const handleCurrentChange = (val) => {
 
 // 查询
 const getTableData = async() => {
+  if(!props.sysDictionaryID) return
   const table = await getSysDictionaryDetailList({
     page: page.value,
     pageSize: pageSize.value,

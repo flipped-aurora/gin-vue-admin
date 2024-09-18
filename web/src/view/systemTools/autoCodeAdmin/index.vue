@@ -177,7 +177,7 @@
           <el-form-item label="缩写：">
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
-          <el-form-item label="方法名：">
+          <el-form-item label="方法介绍：">
             <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
           </el-form-item>
           <el-form-item label="方法名：">

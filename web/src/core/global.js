@@ -31,7 +31,6 @@ const registerIcons = async(app) => {
       continue
     }
     const key = `${pluginName}${iconName}`
-    console.log(key)
     const iconComponent = createIconComponent(iconName)
     config.logs.push({
       'key': key,

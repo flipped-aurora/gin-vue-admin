@@ -23,11 +23,11 @@ func (m *JSONMap) Scan(value interface{}) error {
 		*m = make(map[string]interface{})
 		return nil
 	}
-	text, ok := value.(string)
+	bytes, ok := value.([]byte)
 	if !ok {
-		return errors.New("Scan source was not text")
+		return errors.New("Scan source was not []bytes")
 	}
-	err := json.Unmarshal([]byte(text), m)
+	err := json.Unmarshal(bytes, m)
 	if err != nil {
 		return err
 	}

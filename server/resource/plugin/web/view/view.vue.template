@@ -1,5 +1,6 @@
 {{- $global := . }}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
+{{- $top := . -}}
 {{- if not .OnlyTemplate}}
 <template>
   <div>

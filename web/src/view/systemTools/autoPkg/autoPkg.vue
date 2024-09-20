@@ -77,7 +77,7 @@
         ref="pkgForm"
         :model="form"
         :rules="rules"
-        label-width="120px"
+        label-width="80px"
       >
         <el-form-item
           :label="t('view.systemTools.autoPkg.packageName')"
@@ -173,7 +173,7 @@ const getTemplates = async ()=>{
 
 getTemplates()
 
-const validateData = (rule, value, callback) => {
+const validateNum = (rule, value, callback) => {
   if (/[\u4E00-\u9FA5]/g.test(value)) {
     callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote')))
   } else if ((/^\d+$/.test(value[0]))) {

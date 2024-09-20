@@ -1,4 +1,5 @@
 {{- $global := . }}
+{{- $top := . -}}
 {{- $templateID := printf "%s_%s" .Package .StructName }}
 {{- if not .OnlyTemplate}}
 <template>
@@ -293,14 +294,9 @@
             </template>
 
           <el-form :model="formData" label-position="top" ref="elFormRef" :rules="rule" label-width="80px">
-<<<<<<< HEAD
-        {{- range .FrontFields}}
-            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
-=======
         {{- range .Fields}}
           {{- if .Form}}
-            <el-form-item label="{{.FieldDesc}}:"  prop="{{.FieldJson}}" >
->>>>>>> main
+            <el-form-item :label="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')"  prop="{{.FieldJson}}" >
           {{- if .CheckDataSource}}
             <el-select {{if eq .DataSource.Association 2}} multiple {{ end }} v-model="formData.{{.FieldJson}}" :placeholder="t('{{$top.Package}}.{{$top.StructName}}.{{.FieldName}}')" style="width:100%" :clearable="{{.Clearable}}" >
               <el-option v-for="(item,key) in dataSource.{{.FieldJson}}" :key="key" :label="item.label" :value="item.value" />
@@ -446,16 +442,16 @@ import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
 import { getDictFunc, formatDate, formatBoolean, filterDict ,filterDataSource, returnArrImg, onDownloadFile } from '@/utils/format'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
-<<<<<<< HEAD
+
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 const i18n = useI18n() // added by mohamed hassan to support multilanguage
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
-=======
+
 {{- if .AutoCreateBtnAuth }}
 // 引入按钮权限标识
 import { useBtnAuth } from '@/utils/btnAuth'
 {{- end }}
->>>>>>> main
+
 
 {{if .HasExcel -}}
 // 导出组件

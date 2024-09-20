@@ -1,5 +1,5 @@
-{{- if not .OnlyTemplate}}
 {{- $top := . -}}
+{{- if not .OnlyTemplate}}
 <template>
   <div>
     <div class="gva-form-box">
@@ -61,7 +61,6 @@
         {{- end }}
        {{- end }}
        </el-form-item>
-      {{- end }}
       {{- end }}
         <el-form-item>
           <el-button type="primary" @click="save">保存</el-button>

@@ -269,7 +269,8 @@ func (s *SystemApiApi) UpdateApi(c *gin.Context) {
 // @Success   200  {object}  response.Response{data=systemRes.SysAPIListResponse,msg=string}  "获取所有的Api 不分页,返回包括api列表"
 // @Router    /api/getAllApis [post]
 func (s *SystemApiApi) GetAllApis(c *gin.Context) {
-	apis, err := apiService.GetAllApis()
+	authorityID := utils.GetUserAuthorityId(c)
+	apis, err := apiService.GetAllApis(authorityID)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.getDataFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.getDataFailErr"), c)

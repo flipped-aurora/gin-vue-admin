@@ -25,6 +25,7 @@ type AutoCode struct {
 	AutoCreateApiToSql  bool                   `json:"autoCreateApiToSql" example:"false"`  // 是否自动创建api
 	AutoCreateMenuToSql bool                   `json:"autoCreateMenuToSql" example:"false"` // 是否自动创建menu
 	AutoCreateBtnAuth   bool                   `json:"autoCreateBtnAuth" example:"false"`   // 是否自动创建按钮权限
+	OnlyTemplate        bool                   `json:"onlyTemplate" example:"false"`        // 是否只生成模板
 	Fields              []*AutoCodeField       `json:"fields"`
 	DictTypes           []string               `json:"-"`
 	PrimaryField        *AutoCodeField         `json:"primaryField"`
@@ -37,6 +38,8 @@ type AutoCode struct {
 	HasRichText         bool                   `json:"-"`
 	HasDataSource       bool                   `json:"-"`
 	HasSearchTimer      bool                   `json:"-"`
+	HasArray            bool                   `json:"-"`
+	HasExcel            bool                   `json:"-"`
 }
 
 type DataSource struct {
@@ -116,6 +119,9 @@ func (r *AutoCode) Pretreatment() error {
 	dict := make(map[string]string, length)
 	r.DataSourceMap = make(map[string]*DataSource, length)
 	for i := 0; i < length; i++ {
+		if r.Fields[i].Excel {
+			r.HasExcel = true
+		}
 		if r.Fields[i].DictType != "" {
 			dict[r.Fields[i].DictType] = ""
 		}
@@ -130,6 +136,7 @@ func (r *AutoCode) Pretreatment() error {
 			r.NeedJSON = true
 		case "array":
 			r.NeedJSON = true
+			r.HasArray = true
 		case "video":
 			r.HasPic = true
 		case "richtext":
@@ -214,6 +221,7 @@ type AutoCodeField struct {
 	Form            bool        `json:"form"`            // 是否前端新建/编辑
 	Table           bool        `json:"table"`           // 是否前端表格列
 	Desc            bool        `json:"desc"`            // 是否前端详情
+	Excel           bool        `json:"excel"`           // 是否导入/导出
 	Require         bool        `json:"require"`         // 是否必填
 	DefaultValue    string      `json:"defaultValue"`    // 是否必填
 	ErrorText       string      `json:"errorText"`       // 校验失败文字
@@ -229,6 +237,7 @@ type AutoFunc struct {
 	Package         string `json:"package"`
 	FuncName        string `json:"funcName"`        // 方法名称
 	Router          string `json:"router"`          // 路由名称
+	FuncDesc        string `json:"funcDesc"`        // 方法介绍
 	BusinessDB      string `json:"businessDB"`      // 业务库
 	StructName      string `json:"structName"`      // Struct名称
 	PackageName     string `json:"packageName"`     // 文件名称
@@ -237,4 +246,15 @@ type AutoFunc struct {
 	HumpPackageName string `json:"humpPackageName"` // go文件名称
 	Method          string `json:"method"`          // 方法
 	IsPlugin        bool   `json:"isPlugin"`        // 是否插件
+}
+
+type InitMenu struct {
+	PlugName   string `json:"plugName"`
+	ParentMenu string `json:"parentMenu"`
+	Menus      []uint `json:"menus"`
+}
+
+type InitApi struct {
+	PlugName string `json:"plugName"`
+	APIs     []uint `json:"apis"`
 }

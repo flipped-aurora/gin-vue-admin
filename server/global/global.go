@@ -3,6 +3,9 @@ package global
 import (
 	"sync"
 
+	"fmt"
+	"sync"
+
 	"github.com/gin-gonic/gin"
 	"github.com/qiniu/qmgo"
 
@@ -22,12 +25,13 @@ import (
 )
 
 var (
-	GVA_DB     *gorm.DB
-	GVA_DBList map[string]*gorm.DB
-	GVA_REDIS  redis.UniversalClient
-	GVA_MONGO  *qmgo.QmgoClient
-	GVA_CONFIG config.Server
-	GVA_VP     *viper.Viper
+	GVA_DB        *gorm.DB
+	GVA_DBList    map[string]*gorm.DB
+	GVA_REDIS     redis.UniversalClient
+	GVA_REDISList map[string]redis.UniversalClient
+	GVA_MONGO     *qmgo.QmgoClient
+	GVA_CONFIG    config.Server
+	GVA_VP        *viper.Viper
 	// GVA_LOG    *oplogging.Logger
 	GVA_LOG                 *zap.Logger
 	GVA_Timer               timer.Timer = timer.NewTimerTask()
@@ -66,4 +70,12 @@ func Translate(msg string) string {
 	}
 
 	return msg
+}
+
+func GetRedis(name string) redis.UniversalClient {
+	redis, ok := GVA_REDISList[name]
+	if !ok || redis == nil {
+		panic(fmt.Sprintf("redis `%s` no init", name))
+	}
+	return redis
 }

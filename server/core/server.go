@@ -17,7 +17,9 @@ func RunWindowsServer() {
 	if global.GVA_CONFIG.System.UseMultipoint || global.GVA_CONFIG.System.UseRedis {
 		// 初始化redis服务
 		initialize.Redis()
+		initialize.RedisList()
 	}
+
 	if global.GVA_CONFIG.System.UseMongo {
 		err := initialize.Mongo.Initialization()
 		if err != nil {
@@ -39,7 +41,7 @@ func RunWindowsServer() {
 
 	fmt.Printf(`
 	%s gin-vue-admin
-	%s:v2.7.2
+	%s:v2.7.4
     加群方式:微信号：shouzi_1994 QQ群：470239250
 	项目地址：https://github.com/flipped-aurora/gin-vue-admin
 	插件市场:https://plugin.gin-vue-admin.com

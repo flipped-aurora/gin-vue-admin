@@ -1,6 +1,7 @@
 package system
 
 import (
+	"gorm.io/datatypes"
 	"strconv"
 	"time"
 
@@ -285,7 +286,8 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = userService.SetUserAuthorities(sua.ID, sua.AuthorityIds)
+	authorityID := utils.GetUserAuthorityId(c)
+	err = userService.SetUserAuthorities(authorityID, sua.ID, sua.AuthorityIds)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.modifyFail"), c)
@@ -351,7 +353,8 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		return
 	}
 	if len(user.AuthorityIds) != 0 {
-		err = userService.SetUserAuthorities(user.ID, user.AuthorityIds)
+		authorityID := utils.GetUserAuthorityId(c)
+		err = userService.SetUserAuthorities(authorityID, user.ID, user.AuthorityIds)
 		if err != nil {
 			global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
 			response.FailWithMessage(global.Translate("general.setupFail"), c)
@@ -366,7 +369,6 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		HeaderImg: user.HeaderImg,
 		Phone:     user.Phone,
 		Email:     user.Email,
-		SideMode:  user.SideMode,
 		Enable:    user.Enable,
 	})
 	if err != nil {
@@ -402,7 +404,6 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		HeaderImg: user.HeaderImg,
 		Phone:     user.Phone,
 		Email:     user.Email,
-		SideMode:  user.SideMode,
 		Enable:    user.Enable,
 	})
 	if err != nil {
@@ -411,6 +412,32 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 		return
 	}
 	response.OkWithMessage(global.Translate("general.setupSuccess"), c)
+}
+
+// SetSelfSetting
+// @Tags      SysUser
+// @Summary   设置用户配置
+// @Security  ApiKeyAuth
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      datatypes.JSON
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户配置"
+// @Router    /user/SetSelfSetting [put]
+func (b *BaseApi) SetSelfSetting(c *gin.Context) {
+	var req datatypes.JSON
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	err = userService.SetSelfSetting(&req, utils.GetUserID(c))
+	if err != nil {
+		global.GVA_LOG.Error("设置失败!", zap.Error(err))
+		response.FailWithMessage("设置失败", c)
+		return
+	}
+	response.OkWithMessage("设置成功", c)
 }
 
 // GetUserInfo

@@ -386,6 +386,20 @@
               <el-checkbox v-model="form.autoCreateResource" />
             </el-form-item>
           </el-col>
+          <el-col :span="3">
+            <el-form-item>
+              <template #label>
+                <el-tooltip
+                    content="注：使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑"
+                    placement="bottom"
+                    effect="light"
+                >
+                  <div> 基础模板 <el-icon><QuestionFilled /></el-icon> </div>
+                </el-tooltip>
+              </template>
+              <el-checkbox v-model="form.onlyTemplate" />
+            </el-form-item>
+          </el-col>
         </el-row>
       </el-form>
     </div>
@@ -395,6 +409,7 @@
         <el-button
           type="primary"
           @click="editAndAddField()"
+          :disabled="form.onlyTemplate"
         >
           新增字段
         </el-button>
@@ -505,6 +520,15 @@
           >
             <template #default="{row}">
               <el-checkbox v-model="row.desc" />
+            </template>
+          </el-table-column>
+          <el-table-column
+              align="left"
+              prop="excel"
+              label="导入/导出"
+          >
+            <template #default="{row}">
+              <el-checkbox v-model="row.excel" />
             </template>
           </el-table-column>
           <el-table-column
@@ -817,6 +841,7 @@ const llmAutoFunc = async (mode) =>{
               form: true,
               desc: true,
               table: true,
+              excel: false,
               dataSource: {
                 association:1,
                 table: '',
@@ -973,6 +998,7 @@ const fieldTemplate = {
   form: true,
   desc: true,
   table: true,
+  excel: false,
   errorText: '',
   primaryKey: false,
   clearable: true,
@@ -1011,6 +1037,7 @@ const form = ref({
   autoMigrate: true,
   gvaModel: true,
   autoCreateResource: false,
+  onlyTemplate: false,
   fields: []
 })
 const rules = ref({
@@ -1131,6 +1158,9 @@ const deleteField = (index) => {
 const autoCodeForm = ref(null)
 
 const enterForm = async(isPreview) => {
+
+  if(!form.value.onlyTemplate){
+
   if (form.value.fields.length <= 0) {
     ElMessage({
       type: 'error',
@@ -1157,14 +1187,6 @@ const enterForm = async(isPreview) => {
     return false
   }
 
-  if (form.value.package === form.value.abbreviation) {
-    ElMessage({
-      type: 'error',
-      message: 'package和结构体简称不可同名'
-    })
-    return false
-  }
-
 
   if (form.value.fields.some(item => !item.fieldType)) {
     ElMessage({
@@ -1173,6 +1195,16 @@ const enterForm = async(isPreview) => {
     })
     return false
   }
+
+  if (form.value.package === form.value.abbreviation) {
+    ElMessage({
+      type: 'error',
+      message: 'package和结构体简称不可同名'
+    })
+    return false
+  }
+  }
+
 
   autoCodeForm.value.validate(async valid => {
     if (valid) {
@@ -1275,6 +1307,7 @@ const getColumnFunc = async() => {
                 dictType: '',
                 form: true,
                 table: true,
+                excel: false,
                 desc: true,
                 dataSource: {
                   association:1,
@@ -1371,6 +1404,7 @@ const clearCatch = async () => {
     autoMigrate: true,
     gvaModel: true,
     autoCreateResource: false,
+    onlyTemplate: false,
     fields: []
   }
   await nextTick()
@@ -1395,7 +1429,6 @@ const exportJson = () => {
 const importJson = (file) =>{
   const reader = new FileReader()
   reader.onload = (e) => {
-    console.log(e)
     try {
       form.value = JSON.parse(e.target.result)
       ElMessage.success('JSON 文件导入成功')
@@ -1406,5 +1439,21 @@ const importJson = (file) =>{
   reader.readAsText(file)
   return false
 }
+
+watch(()=>form.value.onlyTemplate,(val)=>{
+  if(val){
+    ElMessageBox.confirm('使用基础模板将不会生成任何结构体和CURD,仅仅配置enter等属性方便自行开发非CURD逻辑', '注意', {
+      confirmButtonText: '继续',
+      cancelButtonText: '取消',
+      type: 'warning',
+    })
+      .then(() => {
+        form.value.fields = []
+      })
+      .catch(() => {
+        form.value.onlyTemplate = false
+      })
+  }
+})
 
 </script>

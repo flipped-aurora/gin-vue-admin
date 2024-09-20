@@ -237,16 +237,33 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 //@description: 获取所有的api
 //@return:  apis []model.SysApi, err error
 
-func (apiService *ApiService) GetAllApis() (apis []system.SysApi, err error) {
-	err = global.GVA_DB.Order("id desc").Find(&apis).Error
+func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi, err error) {
+	parentAuthorityID, err := AuthorityServiceApp.GetParentAuthorityID(authorityID)
 	if err != nil {
 		return nil, err
 	}
-	for i := range apis {
-		apis[i].Description = global.Translate(apis[i].Description)
-		apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+	err = global.GVA_DB.Order("id desc").Find(&apis).Error
+
+	if parentAuthorityID == 0 || !global.GVA_CONFIG.System.UseStrictAuth {
+			for i := range apis {
+            	apis[i].Description = global.Translate(apis[i].Description)
+            	apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+            }
+		return
 	}
-	return
+	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(authorityID)
+	// 挑选 apis里面的path和method也在paths里面的api
+	var authApis []system.SysApi
+	for i := range apis {
+		for j := range paths {
+			if paths[j].Path == apis[i].Path && paths[j].Method == apis[i].Method {
+				apis[i].Description = global.Translate(apis[i].Description)
+                apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+				authApis = append(authApis, apis[i])
+			}
+		}
+	}
+	return authApis, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

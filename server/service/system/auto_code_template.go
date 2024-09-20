@@ -87,7 +87,7 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 	}
 
 	// 自动创建api
-	if info.AutoCreateApiToSql {
+	if info.AutoCreateApiToSql && !info.OnlyTemplate {
 		apis := info.Apis()
 		err := global.GVA_DB.WithContext(ctx).Transaction(func(tx *gorm.DB) error {
 			for _, v := range apis {
@@ -130,13 +130,21 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 			id = entity.ID
 		} else {
 			entity = info.Menu(autoPkg.Template)
-			if info.AutoCreateBtnAuth {
+			if info.AutoCreateBtnAuth && !info.OnlyTemplate {
 				entity.MenuBtn = []model.SysBaseMenuBtn{
 					{SysBaseMenuID: entity.ID, Name: "add", Desc: "新增"},
 					{SysBaseMenuID: entity.ID, Name: "batchDelete", Desc: "批量删除"},
 					{SysBaseMenuID: entity.ID, Name: "delete", Desc: "删除"},
 					{SysBaseMenuID: entity.ID, Name: "edit", Desc: "编辑"},
 					{SysBaseMenuID: entity.ID, Name: "info", Desc: "详情"},
+				}
+				if info.HasExcel {
+					excelBtn := []model.SysBaseMenuBtn{
+						{SysBaseMenuID: entity.ID, Name: "exportTemplate", Desc: "导出模板"},
+						{SysBaseMenuID: entity.ID, Name: "exportExcel", Desc: "导出Excel"},
+						{SysBaseMenuID: entity.ID, Name: "importExcel", Desc: "导入Excel"},
+					}
+					entity.MenuBtn = append(entity.MenuBtn, excelBtn...)
 				}
 			}
 			err = global.GVA_DB.WithContext(ctx).Create(&entity).Error
@@ -169,6 +177,31 @@ func (s *autoCodeTemplate) Create(ctx context.Context, info request.AutoCode) er
 				return err
 			}
 		}
+	}
+
+	if info.HasExcel {
+		dbName := info.BusinessDB
+		name := info.Package + "_" + info.StructName
+		tableName := info.TableName
+		fieldsMap := make(map[string]string, len(info.Fields))
+		for _, field := range info.Fields {
+			if field.Excel {
+				fieldsMap[field.ColumnName] = field.FieldDesc
+			}
+		}
+		templateInfo, _ := json.Marshal(fieldsMap)
+		sysExportTemplate := model.SysExportTemplate{
+			DBName:       dbName,
+			Name:         name,
+			TableName:    tableName,
+			TemplateID:   name,
+			TemplateInfo: string(templateInfo),
+		}
+		err = SysExportTemplateServiceApp.CreateSysExportTemplate(&sysExportTemplate)
+		if err != nil {
+			return err
+		}
+		history.ExportTemplateID = sysExportTemplate.ID
 	}
 
 	// 创建历史记录
@@ -222,8 +255,10 @@ func (s *autoCodeTemplate) Preview(ctx context.Context, info request.AutoCode) (
 		if len(key) > len(global.GVA_CONFIG.AutoCode.Root) {
 			key, _ = filepath.Rel(global.GVA_CONFIG.AutoCode.Root, key)
 		}
+		// 获取key的后缀 取消.
+		suffix := filepath.Ext(key)[1:]
 		var builder strings.Builder
-		builder.WriteString("```\n\n")
+		builder.WriteString("```" + suffix + "\n\n")
 		builder.WriteString(writer.String())
 		builder.WriteString("\n\n```")
 		preview[key] = builder.String()
@@ -251,28 +286,37 @@ func (s *autoCodeTemplate) generate(ctx context.Context, info request.AutoCode, 
 		code[create] = builder
 	} // 生成文件
 	injections := make(map[string]utilsAst.Ast, len(asts))
-	if info.AutoMigrate {
-		for key, value := range asts {
-			keys := strings.Split(key, "=>")
-			if len(keys) == 2 {
-				if keys[1] == utilsAst.TypePluginInitializeV2 {
+	for key, value := range asts {
+		keys := strings.Split(key, "=>")
+		if len(keys) == 2 {
+			if keys[1] == utilsAst.TypePluginInitializeV2 {
+				continue
+			}
+			if info.OnlyTemplate {
+				if keys[1] == utilsAst.TypePackageInitializeGorm || keys[1] == utilsAst.TypePluginInitializeGorm {
 					continue
 				}
-				var builder strings.Builder
-				parse, _ := value.Parse("", &builder)
-				if parse != nil {
-					_ = value.Injection(parse)
-					err = value.Format("", &builder, parse)
-					if err != nil {
-						return nil, nil, nil, err
-					}
-					code[keys[0]] = builder
-					injections[keys[1]] = value
-					fmt.Println(keys[0], "注入成功!")
+			}
+			if !info.AutoMigrate {
+				if keys[1] == utilsAst.TypePackageInitializeGorm || keys[1] == utilsAst.TypePluginInitializeGorm {
+					continue
 				}
 			}
+			var builder strings.Builder
+			parse, _ := value.Parse("", &builder)
+			if parse != nil {
+				_ = value.Injection(parse)
+				err = value.Format("", &builder, parse)
+				if err != nil {
+					return nil, nil, nil, err
+				}
+				code[keys[0]] = builder
+				injections[keys[1]] = value
+				fmt.Println(keys[0], "注入成功!")
+			}
 		}
-	} // 注入代码
+	}
+	// 注入代码
 	return code, templates, injections, nil
 }
 

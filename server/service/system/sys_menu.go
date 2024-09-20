@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 	"regexp"
 	"strings"
+	"strconv"
 )
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -106,14 +107,14 @@ func (menuService *MenuService) getChildrenList(menu *system.SysMenu, treeMap ma
 //@description: 获取路由分页
 //@return: list interface{}, total int64,err error
 
-func (menuService *MenuService) GetInfoList() (list interface{}, total int64, err error) {
+func (menuService *MenuService) GetInfoList(authorityID uint) (list interface{}, err error) {
 	var menuList []system.SysBaseMenu
-	treeMap, err := menuService.getBaseMenuTreeMap()
+	treeMap, err := menuService.getBaseMenuTreeMap(authorityID)
 	menuList = treeMap[0]
 	for i := 0; i < len(menuList); i++ {
 		err = menuService.getBaseChildrenList(&menuList[i], treeMap)
 	}
-	return menuList, total, err
+	return menuList, err
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)
@@ -148,15 +149,37 @@ func (menuService *MenuService) AddBaseMenu(menu system.SysBaseMenu) error {
 //@description: 获取路由总树map
 //@return: treeMap map[string][]system.SysBaseMenu, err error
 
-func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[uint][]system.SysBaseMenu, err error) {
+func (menuService *MenuService) getBaseMenuTreeMap(authorityID uint) (treeMap map[uint][]system.SysBaseMenu, err error) {
+	parentAuthorityID, err := AuthorityServiceApp.GetParentAuthorityID(authorityID)
+	if err != nil {
+		return nil, err
+	}
+
 	var allMenus []system.SysBaseMenu
 	treeMap = make(map[uint][]system.SysBaseMenu)
-	err = global.GVA_DB.Order("sort").Preload("MenuBtn").Preload("Parameters").Find(&allMenus).Error
-	for i := range allMenus {
-		titleKey, params := getTitleAndRemainder(allMenus[i].Title)
-		allMenus[i].Title = global.Translate(titleKey) + params
-		treeMap[allMenus[i].ParentId] = append(treeMap[allMenus[i].ParentId], allMenus[i])
+	db := global.GVA_DB.Order("sort").Preload("MenuBtn").Preload("Parameters")
+
+	// 当开启了严格的树角色并且父角色不为0时需要进行菜单筛选
+	if global.GVA_CONFIG.System.UseStrictAuth && parentAuthorityID != 0 {
+		var authorityMenus []system.SysAuthorityMenu
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", authorityID).Find(&authorityMenus).Error
+		if err != nil {
+			return nil, err
+		}
+		var menuIds []string
+		for i := range authorityMenus {
+			menuIds = append(menuIds, authorityMenus[i].MenuId)
+		}
+		db = db.Where("id in (?)", menuIds)
 	}
+
+	err = db.Find(&allMenus).Error
+
+	for i := range allMenus {
+    		titleKey, params := getTitleAndRemainder(allMenus[i].Title)
+    		allMenus[i].Title = global.Translate(titleKey) + params
+    		treeMap[allMenus[i].ParentId] = append(treeMap[allMenus[i].ParentId], allMenus[i])
+    	}
 	return treeMap, err
 }
 
@@ -165,8 +188,8 @@ func (menuService *MenuService) getBaseMenuTreeMap() (treeMap map[uint][]system.
 //@description: 获取基础路由树
 //@return: menus []system.SysBaseMenu, err error
 
-func (menuService *MenuService) GetBaseMenuTree() (menus []system.SysBaseMenu, err error) {
-	treeMap, err := menuService.getBaseMenuTreeMap()
+func (menuService *MenuService) GetBaseMenuTree(authorityID uint) (menus []system.SysBaseMenu, err error) {
+	treeMap, err := menuService.getBaseMenuTreeMap(authorityID)
 	menus = treeMap[0]
 	for i := 0; i < len(menus); i++ {
 		err = menuService.getBaseChildrenList(&menus[i], treeMap)
@@ -180,10 +203,45 @@ func (menuService *MenuService) GetBaseMenuTree() (menus []system.SysBaseMenu, e
 //@param: menus []model.SysBaseMenu, authorityId string
 //@return: err error
 
-func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, authorityId uint) (err error) {
+func (menuService *MenuService) AddMenuAuthority(menus []system.SysBaseMenu, adminAuthorityID, authorityId uint) (err error) {
 	var auth system.SysAuthority
 	auth.AuthorityId = authorityId
 	auth.SysBaseMenus = menus
+
+	err = AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, authorityId)
+	if err != nil {
+		return err
+	}
+
+	var authority system.SysAuthority
+	_ = global.GVA_DB.First(&authority, "authority_id = ?", adminAuthorityID).Error
+	var menuIds []string
+
+	// 当开启了严格的树角色并且父角色不为0时需要进行菜单筛选
+	if global.GVA_CONFIG.System.UseStrictAuth && *authority.ParentId != 0 {
+		var authorityMenus []system.SysAuthorityMenu
+		err = global.GVA_DB.Where("sys_authority_authority_id = ?", adminAuthorityID).Find(&authorityMenus).Error
+		if err != nil {
+			return err
+		}
+		for i := range authorityMenus {
+			menuIds = append(menuIds, authorityMenus[i].MenuId)
+		}
+
+		for i := range menus {
+			hasMenu := false
+			for j := range menuIds {
+				idStr := strconv.Itoa(int(menus[i].ID))
+				if idStr == menuIds[j] {
+					hasMenu = true
+				}
+			}
+			if !hasMenu {
+				return errors.New("添加失败,请勿跨级操作")
+			}
+		}
+	}
+
 	err = AuthorityServiceApp.SetMenuAuthority(&auth)
 	return err
 }

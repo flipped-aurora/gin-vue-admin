@@ -177,6 +177,9 @@
           <el-form-item label="缩写：">
             <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
           </el-form-item>
+          <el-form-item label="方法介绍：">
+            <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+          </el-form-item>
           <el-form-item label="方法名：">
             <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
           </el-form-item>
@@ -209,6 +212,7 @@ import { formatDate } from "@/utils/format";
 import { useI18n } from 'vue-i18n'; // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
+import { toUpperCase } from "@/utils/stringFun"
 
 defineOptions({
   name: "AutoCodeAdmin",
@@ -240,6 +244,7 @@ const autoFunc = ref({
   humpPackageName:"",
   businessDB:"",
   method:"",
+  funcDesc: ""
 })
 
 const addFuncBtn =  (row) => {
@@ -254,6 +259,7 @@ const addFuncBtn =  (row) => {
   autoFunc.value.method = ""
   autoFunc.value.funcName = ""
   autoFunc.value.router = ""
+  autoFunc.value.funcDesc = "方法介绍"
   funcFlag.value = true;
 };
 
@@ -264,6 +270,9 @@ const closeFunc = () => {
 };
 
 const runFunc = async () =>{
+  // 首字母自动转换为大写
+  autoFunc.value.funcName = toUpperCase(autoFunc.value.funcName)
+
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {
     ElMessage.success("增加方法成功");

@@ -3,6 +3,7 @@ package system
 import (
 	"errors"
 	"fmt"
+	"gorm.io/datatypes"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -152,7 +153,7 @@ func (userService *UserService) SetUserAuthority(id uint, authorityId uint) (err
 //@param: id uint, authorityIds []string
 //@return: err error
 
-func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint) (err error) {
+func (userService *UserService) SetUserAuthorities(adminAuthorityID, id uint, authorityIds []uint) (err error) {
 	return global.GVA_DB.Transaction(func(tx *gorm.DB) error {
 		var user system.SysUser
 		TxErr := tx.Where("id = ?", id).First(&user).Error
@@ -166,6 +167,10 @@ func (userService *UserService) SetUserAuthorities(id uint, authorityIds []uint)
 		}
 		var useAuthority []system.SysUserAuthority
 		for _, v := range authorityIds {
+			e := AuthorityServiceApp.CheckAuthorityIDAuth(adminAuthorityID, v)
+			if e != nil {
+				return e
+			}
 			useAuthority = append(useAuthority, system.SysUserAuthority{
 				SysUserId: id, SysAuthorityAuthorityId: v,
 			})
@@ -209,7 +214,7 @@ func (userService *UserService) DeleteUser(id int) (err error) {
 
 func (userService *UserService) SetUserInfo(req system.SysUser) error {
 	return global.GVA_DB.Model(&system.SysUser{}).
-		Select("updated_at", "nick_name", "header_img", "phone", "email", "sideMode", "enable").
+		Select("updated_at", "nick_name", "header_img", "phone", "email", "enable").
 		Where("id=?", req.ID).
 		Updates(map[string]interface{}{
 			"updated_at": time.Now(),
@@ -217,7 +222,6 @@ func (userService *UserService) SetUserInfo(req system.SysUser) error {
 			"header_img": req.HeaderImg,
 			"phone":      req.Phone,
 			"email":      req.Email,
-			"side_mode":  req.SideMode,
 			"enable":     req.Enable,
 		}).Error
 }
@@ -232,6 +236,16 @@ func (userService *UserService) SetSelfInfo(req system.SysUser) error {
 	return global.GVA_DB.Model(&system.SysUser{}).
 		Where("id=?", req.ID).
 		Updates(req).Error
+}
+
+//@author: [piexlmax](https://github.com/piexlmax)
+//@function: SetSelfSetting
+//@description: 设置用户配置
+//@param: req datatypes.JSON, uid uint
+//@return: err error
+
+func (userService *UserService) SetSelfSetting(req *datatypes.JSON, uid uint) error {
+	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", uid).Update("origin_setting", req).Error
 }
 
 //@author: [piexlmax](https://github.com/piexlmax)

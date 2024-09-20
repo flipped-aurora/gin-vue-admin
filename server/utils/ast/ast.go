@@ -2,6 +2,7 @@ package ast
 
 import (
 	"fmt"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -48,6 +49,115 @@ func FindFunction(astNode ast.Node, FunctionName string) *ast.FuncDecl {
 	return funcDeclP
 }
 
+// FindArray 查询特定数组方法
+func FindArray(astNode ast.Node, identName, selectorExprName string) *ast.CompositeLit {
+	var assignStmt *ast.CompositeLit
+	ast.Inspect(astNode, func(n ast.Node) bool {
+		switch node := n.(type) {
+		case *ast.AssignStmt:
+			for _, expr := range node.Rhs {
+				if exprType, ok := expr.(*ast.CompositeLit); ok {
+					if arrayType, ok := exprType.Type.(*ast.ArrayType); ok {
+						sel, ok1 := arrayType.Elt.(*ast.SelectorExpr)
+						x, ok2 := sel.X.(*ast.Ident)
+						if ok1 && ok2 && x.Name == identName && sel.Sel.Name == selectorExprName {
+							assignStmt = exprType
+							return false
+						}
+					}
+				}
+			}
+		}
+		return true
+	})
+	return assignStmt
+}
+
+func CreateMenuStructAst(menus []system.SysBaseMenu) *[]ast.Expr {
+	var menuElts []ast.Expr
+	for i := range menus {
+		elts := []ast.Expr{ // 结构体的字段
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "ParentId"},
+				Value: &ast.BasicLit{Kind: token.INT, Value: "0"},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Path"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Path)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Name"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Name)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Hidden"},
+				Value: &ast.Ident{Name: "false"},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Component"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Component)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Sort"},
+				Value: &ast.BasicLit{Kind: token.INT, Value: fmt.Sprintf("%d", menus[i].Sort)},
+			},
+			&ast.KeyValueExpr{
+				Key: &ast.Ident{Name: "Meta"},
+				Value: &ast.CompositeLit{
+					Type: &ast.SelectorExpr{
+						X:   &ast.Ident{Name: "model"},
+						Sel: &ast.Ident{Name: "Meta"},
+					},
+					Elts: []ast.Expr{
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Title"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Title)},
+						},
+						&ast.KeyValueExpr{
+							Key:   &ast.Ident{Name: "Icon"},
+							Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", menus[i].Icon)},
+						},
+					},
+				},
+			},
+		}
+		menuElts = append(menuElts, &ast.CompositeLit{
+			Type: nil,
+			Elts: elts,
+		})
+	}
+	return &menuElts
+}
+
+func CreateApiStructAst(apis []system.SysApi) *[]ast.Expr {
+	var apiElts []ast.Expr
+	for i := range apis {
+		elts := []ast.Expr{ // 结构体的字段
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Path"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].Path)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Description"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].Description)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "ApiGroup"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].ApiGroup)},
+			},
+			&ast.KeyValueExpr{
+				Key:   &ast.Ident{Name: "Method"},
+				Value: &ast.BasicLit{Kind: token.STRING, Value: fmt.Sprintf("\"%s\"", apis[i].Method)},
+			},
+		}
+		apiElts = append(apiElts, &ast.CompositeLit{
+			Type: nil,
+			Elts: elts,
+		})
+	}
+	return &apiElts
+}
+
 // 检查是否存在Import
 func CheckImport(file *ast.File, importPath string) bool {
 	for _, imp := range file.Imports {
@@ -62,11 +172,39 @@ func CheckImport(file *ast.File, importPath string) bool {
 	return false
 }
 
+func clearPosition(astNode ast.Node) {
+	ast.Inspect(astNode, func(n ast.Node) bool {
+		switch node := n.(type) {
+		case *ast.Ident:
+			// 清除位置信息
+			node.NamePos = token.NoPos
+		case *ast.CallExpr:
+			// 清除位置信息
+			node.Lparen = token.NoPos
+			node.Rparen = token.NoPos
+		case *ast.BasicLit:
+			// 清除位置信息
+			node.ValuePos = token.NoPos
+		case *ast.SelectorExpr:
+			// 清除位置信息
+			node.Sel.NamePos = token.NoPos
+		case *ast.BinaryExpr:
+			node.OpPos = token.NoPos
+		case *ast.UnaryExpr:
+			node.OpPos = token.NoPos
+		case *ast.StarExpr:
+			node.Star = token.NoPos
+		}
+		return true
+	})
+}
+
 func CreateStmt(statement string) *ast.ExprStmt {
 	expr, err := parser.ParseExpr(statement)
 	if err != nil {
 		log.Fatal(err)
 	}
+	clearPosition(expr)
 	return &ast.ExprStmt{X: expr}
 }
 

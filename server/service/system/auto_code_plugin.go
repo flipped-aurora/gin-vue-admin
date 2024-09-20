@@ -1,13 +1,21 @@
 package system
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
+	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/mholt/archiver/v4"
 	cp "github.com/otiai10/copy"
 	"github.com/pkg/errors"
 	"go.uber.org/zap"
+	"go/parser"
+	"go/printer"
+	"go/token"
 	"io"
 	"mime/multipart"
 	"os"
@@ -171,4 +179,71 @@ func (s *autoCodePlugin) PubPlug(plugName string) (zipPath string, err error) {
 	}
 
 	return filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, fileName), nil
+}
+
+func (s *autoCodePlugin) InitMenu(menuInfo request.InitMenu) (err error) {
+	menuPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", menuInfo.PlugName, "initialize", "menu.go")
+	src, err := os.ReadFile(menuPath)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, "", src, 0)
+	arrayAst := ast.FindArray(astFile, "model", "SysBaseMenu")
+	var menus []system.SysBaseMenu
+
+	parentMenu := []system.SysBaseMenu{
+		{
+			ParentId:  0,
+			Path:      menuInfo.PlugName + "Menu",
+			Name:      menuInfo.PlugName + "Menu",
+			Hidden:    false,
+			Component: "view/routerHolder.vue",
+			Sort:      0,
+			Meta: system.Meta{
+				Title: menuInfo.ParentMenu,
+				Icon:  "school",
+			},
+		},
+	}
+
+	err = global.GVA_DB.Find(&menus, "id in (?)", menuInfo.Menus).Error
+	if err != nil {
+		return err
+	}
+	menus = append(parentMenu, menus...)
+	menuExpr := ast.CreateMenuStructAst(menus)
+	arrayAst.Elts = *menuExpr
+
+	var out []byte
+	bf := bytes.NewBuffer(out)
+	printer.Fprint(bf, fileSet, astFile)
+
+	os.WriteFile(menuPath, bf.Bytes(), 0666)
+	return nil
+}
+
+func (s *autoCodePlugin) InitAPI(apiInfo request.InitApi) (err error) {
+	apiPath := filepath.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "plugin", apiInfo.PlugName, "initialize", "api.go")
+	src, err := os.ReadFile(apiPath)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fileSet := token.NewFileSet()
+	astFile, err := parser.ParseFile(fileSet, "", src, 0)
+	arrayAst := ast.FindArray(astFile, "model", "SysApi")
+	var apis []system.SysApi
+	err = global.GVA_DB.Find(&apis, "id in (?)", apiInfo.APIs).Error
+	if err != nil {
+		return err
+	}
+	apisExpr := ast.CreateApiStructAst(apis)
+	arrayAst.Elts = *apisExpr
+
+	var out []byte
+	bf := bytes.NewBuffer(out)
+	printer.Fprint(bf, fileSet, astFile)
+
+	os.WriteFile(apiPath, bf.Bytes(), 0666)
+	return nil
 }

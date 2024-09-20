@@ -173,9 +173,11 @@ const getTemplates = async ()=>{
 
 getTemplates()
 
-const validateNum = (rule, value, callback) => {
-  if ((/^\d+$/.test(value[0]))) {
+const validateData = (rule, value, callback) => {
+  if (/[\u4E00-\u9FA5]/g.test(value)) {
     callback(new Error(t('view.systemTools.autoPkg.cannotStartWithNumberNote')))
+  } else if ((/^\d+$/.test(value[0]))) {
+    callback(new Error('不能够以数字开头'))
   } else {
     callback()
   }

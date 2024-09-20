@@ -4,7 +4,7 @@
     class="w-full h-full relative"
   >
     <div
-      class="rounded-lg flex items-center justify-evenly w-full h-full md:w-screen md:h-screen md:bg-[#194bfb]"
+      class="rounded-lg flex items-center justify-evenly w-full h-full md:w-screen md:h-screen md:bg-[#194bfb] bg-white"
     >
       <div class="md:w-3/5 w-10/12 h-full flex items-center justify-evenly">
         <div class="oblique h-[130%] w-3/5 bg-white dark:bg-slate-900 transform -rotate-12 absolute -ml-52" />
@@ -258,7 +258,7 @@ const submitForm = () => {
         message: t('login.errLogin'),
         showClose: true,
       })
-      loginVerify()
+      await loginVerify()
       return false
     }
 
@@ -267,7 +267,7 @@ const submitForm = () => {
 
     // 登陆失败，刷新验证码
     if (!flag) {
-      loginVerify()
+      await loginVerify()
       return false
     }
 
@@ -282,7 +282,7 @@ const checkInit = async() => {
   if (res.code === 0) {
     if (res.data?.needInit) {
       userStore.NeedInit()
-      router.push({ name: 'Init' })
+      await router.push({name: 'Init'})
     } else {
       ElMessage({
         type: 'info',

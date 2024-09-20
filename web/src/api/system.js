@@ -40,3 +40,17 @@ export const getSystemState = () => {
     donNotShowLoading: true
   })
 }
+
+/**
+ * 重启服务
+ * @param data
+ * @returns {*}
+ */
+export const reloadSystem = (data) => {
+  return service({
+    url: '/system/reloadSystem',
+    method: 'post',
+    data
+  })
+}
+

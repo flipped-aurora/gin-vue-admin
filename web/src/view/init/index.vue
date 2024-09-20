@@ -195,6 +195,7 @@ const goDoc = () => {
 const out = ref(false)
 
 const form = reactive({
+  adminPassword: '123456',
   dbType: 'mysql',
   host: '127.0.0.1',
   port: '3306',
@@ -209,7 +210,7 @@ const changeDB = (val) => {
   switch (val) {
     case 'mysql':
       Object.assign(form, {
-        adminPassword:'',
+        adminPassword:'123456',
         reAdminPassword:'',
         dbType: 'mysql',
         host: '127.0.0.1',
@@ -222,8 +223,7 @@ const changeDB = (val) => {
       break
     case 'pgsql':
       Object.assign(form, {
-        adminPassword:'',
-        reAdminPassword:'',
+        adminPassword:'123456',
         dbType: 'pgsql',
         host: '127.0.0.1',
         port: '5432',
@@ -235,8 +235,7 @@ const changeDB = (val) => {
       break
     case 'oracle':
       Object.assign(form, {
-        adminPassword:'',
-        reAdminPassword:'',
+        adminPassword:'123456',
         dbType: 'oracle',
         host: '127.0.0.1',
         port: '1521',
@@ -248,8 +247,7 @@ const changeDB = (val) => {
       break
     case 'mssql':
       Object.assign(form, {
-        adminPassword:'',
-        reAdminPassword:'',
+        adminPassword:'123456',
         dbType: 'mssql',
         host: '127.0.0.1',
         port: '1433',
@@ -261,8 +259,7 @@ const changeDB = (val) => {
       break
     case 'sqlite':
       Object.assign(form, {
-        adminPassword:'',
-        reAdminPassword:'',
+        adminPassword:'123456',
         dbType: 'sqlite',
         host: '',
         port: '',
@@ -274,8 +271,7 @@ const changeDB = (val) => {
       break
     default:
       Object.assign(form, {
-        adminPassword:'',
-        reAdminPassword:'',
+        adminPassword:'123456',
         dbType: 'mysql',
         host: '127.0.0.1',
         port: '3306',

@@ -21,7 +21,7 @@
 		"roleName": "Role Name",
 		"roleNameNote": "Please enter role name",
 		"roleSelectMethod": "Please select the request method",
-		"rootRole": "Root Role",
+		"rootRole": "Root Role / Current Role in Strict Mode",
 		"setPermissions": "Set Permissions",
 		"roleIdError" : "Must be a positive integer",
 		"" : ""
@@ -214,7 +214,7 @@
 		"clickMe": "Click Me To Set",
 		"closeTabNote": "Whether to close the tab automatically",
 		"deleteAllRolesConfirm": "This action will permanently delete all roles under this menu, do you want to continue?",
-		"displayName": "Display Name",
+		"displayName": "Display I18NKey",
 		"editMenu": "Edit Menu",
 		"enterFilePathNote": "Please enter the file path",
 		"enterMenuDisplayNameNote": "Please enter a menu display name",

@@ -150,9 +150,6 @@ export const useUserStore = defineStore('user', () => {
     LoginOut,
     setLanguage, // added by mohame hassan to allow store selected language for multilanguage support.
     getLanguage, // added by mohame hassan to allow store selected language for multilanguage support.
-    changeSideMode,
-    mode,
-    sideMode,
     setToken,
     loadingInstance,
     ClearStorage

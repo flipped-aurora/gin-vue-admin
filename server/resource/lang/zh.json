@@ -147,6 +147,7 @@
 				"jwtAddedToBlackList": "jwt加入黑名单(退出，必选)",
 				"modifyUserRole": "修改用户角色(必选)",
 				"resetUserPassword": "重置用户密码",
+				"resetUserWeb": "用户界面配置",
 				"setPermissionGroup": "设置权限组",
 				"setRolePermissions": "设置角色资源权限",
 				"setSelfInfo": "设置自身信息(必选)",

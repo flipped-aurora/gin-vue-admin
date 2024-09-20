@@ -145,6 +145,7 @@
 				"jwtAddedToBlackList": "إضافة JWT إلى القائمة السوداء (الخروج، مطلوب)",
 				"modifyUserRole": "تعديل دور المستخدم (مطلوب)",
 				"resetUserPassword": "إعادة تعيين كلمة مرور المستخدم",
+				"resetUserWeb": "تكوين واجهة المستخدم",
 				"setPermissionGroup": "تعيين مجموعة الأذونات",
 				"setRolePermissions": "تعيين صلاحيات الموارد للدور",
 				"setSelfInfo": "تعيين معلومات الشخصية (مطلوب)",

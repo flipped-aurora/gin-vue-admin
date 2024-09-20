@@ -21,7 +21,7 @@
 		"roleName": "اسم الدور",
 		"roleNameNote": "الرجاء إدخال اسم دور",
 		"roleSelectMethod": "الرجاء تحديد طريقة الطلب",
-		"rootRole": "دور الجذر",
+		"rootRole": "الدور الجذري / الدور الحالي في الوضع الصارم",
 		"setPermissions": "تعيين الأذونات"
 	},
 	"autoCode": {
@@ -203,7 +203,7 @@
 		"clickMe": "انقر فوق لي لضبط",
 		"closeTabNote": "ما إذا كان سيتم إغلاق علامة التبويب تلقائيًا",
 		"deleteAllRolesConfirm": "سيؤدي هذا الإجراء إلى حذف جميع الأدوار بشكل دائم ضمن هذه القائمة ، هل تريد المتابعة؟",
-		"displayName": "اسم العرض",
+		"displayName": "عرضI18NKey",
 		"editMenu": "عدل القائمة",
 		"enterFilePathNote": "الرجاء إدخال مسار الملف",
 		"enterMenuDisplayNameNote": "الرجاء إدخال اسم عرض القائمة",

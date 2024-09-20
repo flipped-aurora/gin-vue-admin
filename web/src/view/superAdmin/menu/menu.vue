@@ -198,6 +198,7 @@
               <el-input
                 v-model="form.meta.title"
                 autocomplete="off"
+                placeholder="示例：system.menu.website"
               />
             </el-form-item>
           </el-col>

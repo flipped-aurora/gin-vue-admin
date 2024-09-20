@@ -678,13 +678,11 @@
 
 <script setup>
 import { getSystemConfig, reloadSystem, setSystemConfig } from '@/api/system'
-import { ref } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Minus, Plus } from '@element-plus/icons-vue'
 import { emailTest } from '@/api/email'
 import {CreateUUID} from "@/utils/format";
 import { ref, reactive } from 'vue'
-import { ElMessage } from 'element-plus'
 import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage

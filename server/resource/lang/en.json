@@ -147,6 +147,7 @@
 				"jwtAddedToBlackList": "JWT added to the blacklist (Logout required)",
 				"modifyUserRole": "Modify user role (required)",
 				"resetUserPassword": "Reset User Password",
+				"resetUserWeb": "User Interface Configuration",
 				"setPermissionGroup": "Set permission group",
 				"setRolePermissions": "Set role resource permissions",
 				"setSelfInfo": "Set self information (required)",

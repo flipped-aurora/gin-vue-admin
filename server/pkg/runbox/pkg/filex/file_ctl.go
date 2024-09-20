@@ -1,0 +1,5 @@
+package filex
+
+func FileCopy() {
+
+}

@@ -5,12 +5,20 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
+	"strings"
 )
 
 func DownloadFile(url string, outPath string) error {
 	// 创建一个 HTTP 客户端
 	client := &http.Client{}
 
+	dir := path.Dir(strings.ReplaceAll(outPath, "\\", "/"))
+
+	err := os.MkdirAll(dir, 0755)
+	if err != nil {
+		return err
+	}
 	// 创建一个 GET 请求
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

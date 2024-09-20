@@ -31,9 +31,7 @@ func main() {
 		ctx.ResponseOkWithJSON(map[string]interface{}{
 			"code": 0,
 			"msg":  "ok",
-			"data": map[string]interface{}{
-				"res": all,
-			},
+			"data": map[string]interface{}{"res": all},
 		})
 	})
 	r.Run()

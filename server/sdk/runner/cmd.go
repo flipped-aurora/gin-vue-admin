@@ -117,7 +117,9 @@ func (c *Context) ResponseFailTextWithCode(code int, text string) {
 func (c *Context) ResponseOkWithJSON(jsonEl interface{}) {
 	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: 200, ContentType: "json", Data: jsonEl}))
 }
-
+func (c *Context) ResponseFailParameter() {
+	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: 200, ContentType: "json", Data: map[string]interface{}{"msg": "参数错误", "code": 10001}}))
+}
 func (c *Context) ResponseOkWithFile(filePath string, deleteFile bool) error {
 	abs, err := filepath.Abs(filePath)
 	if err != nil {

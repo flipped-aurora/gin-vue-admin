@@ -84,7 +84,7 @@ function getFuncInfo(){
 </script>
 
 <template>
-
+  <el-scrollbar>
   <div>
 
     <el-descriptions
@@ -180,7 +180,7 @@ function getFuncInfo(){
                   v-if="v.type!=='file'&& v.input_mode==='text_field'"
                   style="width: 80%"
                   :autosize="{ minRows: 3, maxRows: 30 }"
-                  :placeholder="v.mock_data===''?'请输入'+v.desc:v.mock_data"
+                  :placeholder="v.mock_data===''?''+v.desc:v.mock_data"
                   show-word-limit
                   type="textarea"
               />
@@ -203,6 +203,7 @@ function getFuncInfo(){
 
 
   </div>
+  </el-scrollbar>
 </template>
 
 <style scoped lang="scss">

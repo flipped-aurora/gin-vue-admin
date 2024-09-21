@@ -80,33 +80,11 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		if err != nil {
 			global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 		}
-		localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
-		files, err := s.readJSONFiles(localPath)
-		if err != nil {
-			return err
-		}
-		for _, file := range files {
-			err := s.reWriteI18nJson(file, "api", history.Package, history.StructName)
-			if err != nil {
-				return err
-			}
-		}
 	} // 清除API表
 	if info.DeleteMenu {
 		err = BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID))
 		if err != nil {
 			return errors.Wrap(err, "删除菜单失败!")
-		}
-		localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
-		files, err := s.readJSONFiles(localPath)
-		if err != nil {
-			return err
-		}
-		for _, file := range files {
-			err := s.reWriteI18nJson(file, "menu", history.Package, history.StructName)
-			if err != nil {
-				return err
-			}
 		}
 	} // 清除菜单表
 	if info.DeleteTable {
@@ -197,12 +175,37 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 			return errors.Wrapf(err, "[src:%s][dst:%s]文件移动失败!", value, removePath)
 		}
 	} // 移动文件
+
 	err = global.GVA_DB.WithContext(ctx).Model(&model.SysAutoCodeHistory{}).Where("id = ?", info.ID).Update("flag", 1).Error
 	if err != nil {
 		return errors.Wrap(err, "更新失败!")
 	}
-	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
 	files, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	if info.DeleteMenu {
+		for _, file := range files {
+			err := s.reWriteI18nJson(file, "menu", history.Package, history.StructName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	if info.DeleteApi {
+		for _, file := range files {
+			err := s.reWriteI18nJson(file, "api", history.Package, history.StructName)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	localPath = path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+	files, err = s.readJSONFiles(localPath)
 	if err != nil {
 		return err
 	}

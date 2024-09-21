@@ -22,14 +22,14 @@ type {{.StructName}}Service struct {}
 
 {{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service) Create{{.StructName}}({{.Abbreviation}} *{{.Package}}.{{.StructName}}) (err error) {
 	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
@@ -48,7 +48,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}({{.
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
@@ -67,21 +67,21 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Delete{{.StructName}}ById
 }
 
 // Update{{.StructName}} 更新{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Update{{.StructName}}({{.Abbreviation}} {{.Package}}.{{.StructName}}) (err error) {
 	err = {{$db}}.Model(&{{.Package}}.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} {{.Package}}.{{.StructName}}, err error) {
 	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
 
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoList(info {{.Package}}Req.{{.StructName}}Search) (list []{{.Package}}.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
@@ -139,7 +139,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}InfoLis
 	if limit != 0 {
        db = db.Limit(limit).Offset(offset)
     }
-	
+
 	err = db.Find(&{{.Abbreviation}}s).Error
 	return  {{.Abbreviation}}s, total, err
 }

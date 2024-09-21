@@ -288,7 +288,7 @@
               prop="meta.icon"
             >
               <icon
-                :meta="form.meta"
+                v-model="form.meta.icon"
               />
             </el-form-item>
           </el-col>

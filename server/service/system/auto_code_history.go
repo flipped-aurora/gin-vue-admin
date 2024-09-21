@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils/ast"
 	"github.com/pkg/errors"
+	"os"
 	"path"
 	"path/filepath"
 	"strconv"
@@ -17,7 +18,7 @@ import (
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	request "github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"github.com/flipped-aurora/gin-vue-admin/server/utils"
-
+	"github.com/tidwall/sjson"
 	"go.uber.org/zap"
 )
 
@@ -79,11 +80,33 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 		if err != nil {
 			global.GVA_LOG.Error("ClearTag DeleteApiByIds:", zap.Error(err))
 		}
+		localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
+		files, err := s.readJSONFiles(localPath)
+		if err != nil {
+			return err
+		}
+		for _, file := range files {
+			err := s.reWriteI18nJson(file, "api", history.Package, history.StructName)
+			if err != nil {
+				return err
+			}
+		}
 	} // 清除API表
 	if info.DeleteMenu {
 		err = BaseMenuServiceApp.DeleteBaseMenu(int(history.MenuID))
 		if err != nil {
 			return errors.Wrap(err, "删除菜单失败!")
+		}
+		localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Server, "resource", "lang")
+		files, err := s.readJSONFiles(localPath)
+		if err != nil {
+			return err
+		}
+		for _, file := range files {
+			err := s.reWriteI18nJson(file, "menu", history.Package, history.StructName)
+			if err != nil {
+				return err
+			}
 		}
 	} // 清除菜单表
 	if info.DeleteTable {
@@ -178,6 +201,17 @@ func (s *autoCodeHistory) RollBack(ctx context.Context, info request.SysAutoHist
 	if err != nil {
 		return errors.Wrap(err, "更新失败!")
 	}
+	localPath := path.Join(global.GVA_CONFIG.AutoCode.Root, global.GVA_CONFIG.AutoCode.Web, "locales")
+	files, err := s.readJSONFiles(localPath)
+	if err != nil {
+		return err
+	}
+	for _, file := range files {
+		err := s.reWriteI18nJson(file, "web", history.Package, history.StructName)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -214,4 +248,76 @@ func (s *autoCodeHistory) DropTable(BusinessDb, tableName string) error {
 	} else {
 		return global.GVA_DB.Exec("DROP TABLE " + tableName).Error
 	}
+}
+
+func (s *autoCodeHistory) readJSONFiles(dir string) ([]string, error) {
+	var files []string
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && filepath.Ext(path) == ".json" {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
+}
+
+func (s *autoCodeHistory) reWriteI18nJson(file string, flag string, packageName, structName string) error {
+	data, err := os.ReadFile(file)
+	if err != nil {
+		return err
+	}
+	originJson := string(data)
+	switch flag {
+	case "api":
+		var err error
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.group.%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.add%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.delete%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.batch%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.update%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.find%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.api.desc.list%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+	case "menu":
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("system.menu.%s%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+	case "web":
+		originJson, err = sjson.Delete(originJson, fmt.Sprintf("%s.%s", packageName, structName))
+		if err != nil {
+			return err
+		}
+	}
+	err = os.WriteFile(file, []byte(originJson), 0666)
+	if err != nil {
+		return err
+	}
+	return nil
 }

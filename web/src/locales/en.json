@@ -23,7 +23,7 @@
 		"roleSelectMethod": "Please select the request method",
 		"rootRole": "Root Role / Current Role in Strict Mode",
 		"setPermissions": "Set Permissions",
-		"roleIdError" : "Must be a positive integer",
+		"roleIdError" : "Must be a positive integer"
 	},
 	"autoCodeAdmin": {
 		"deleteHistoryConfirm": "This operation will delete this history, do you want to continue?",
@@ -259,7 +259,7 @@
 		"comments" : "Comments",
 		"highlightMenu" : "Highlight Menu",
 		"basicPage" : "Is it a basic page?",
-		"basicPageNote" : "If you select Yes for this option, the left menu and top information will not be displayed.",
+		"basicPageNote" : "If you select Yes for this option, the left menu and top information will not be displayed."
 	},
 	"menus": {
 		"home": "Homepage",
@@ -307,7 +307,7 @@
 		"disabledSuccessfully" : "Disabled Successfully",
 		"user" : "User",
 		"enterPhoneNoNote" : "Please enter a valid mobile phone number?",
-		"enterEmailNote" : "please enter your vaild email?",
+		"enterEmailNote" : "please enter your vaild email?"
 	},
 	"view": {
 		"dashboard": {
@@ -354,7 +354,7 @@
 					"content2" : "Better service, more convenient user experience",
 					"content3" : "Faster creative realization and more efficient work efficiency",
 					"content4" : "More creative resources, more creative inspiration",
-					"content5" : "More reasonable code structure, clearer code logic",
+					"content5" : "More reasonable code structure, clearer code logic"
 				}
 			}
 		},
@@ -389,7 +389,7 @@
 			"ignoreRouteNote1" : "Ignore routes ",
 			"ignoreRouteNote2" : "and do not participate in API synchronization. This is usually a route that does not require authentication.",
 			"cancelIgnore" : "Cancel Ignore",
-			"cacheConfirmNote" : "Are you sure you want to refresh the cache?",
+			"cacheConfirmNote" : "Are you sure you want to refresh the cache?"
 		},
 		"dictionary" : {
 			"sysDictionary" : {
@@ -428,7 +428,7 @@
 				"statusCode" : "Status Code",
 				"requestIP" : "Request IP",
 				"none" : "None",
-				"response" : "Response",
+				"response" : "Response"
 			}
 		},
 		"systemTools" :
@@ -536,7 +536,7 @@
 				"selectTemplateNote" : "Please select a template",
 				"cannotStartWithNumberNote" : "Cannot start with a number",
 				"addSuccess": "Added successfully",
-				"deletePackageNote" : "This operation only deletes the pkg storage in the database. Please delete the corresponding directory structure of the backend by yourself to keep it consistent with the database!",
+				"deletePackageNote" : "This operation only deletes the pkg storage in the database. Please delete the corresponding directory structure of the backend by yourself to keep it consistent with the database!"
 			},
 			"autoCode": {
 				"autoCodeNote" : "This feature is for development environments only and is not recommended for production. Click here to see the specific usage effect.",

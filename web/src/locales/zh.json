@@ -23,7 +23,7 @@
 		"roleSelectMethod": "请选择请求方式",
 		"rootRole": "根角色/严格模式下为当前角色",
 		"setPermissions": "设置权限",
-		"roleIdError" : "必须为正整数",
+		"roleIdError" : "必须为正整数"
 	},
 	"autoCodeAdmin": {
 		"deleteHistoryConfirm": "此操作将删除本历史, 是否继续?",
@@ -259,7 +259,7 @@
 		"comments" : "备注",
 		"highlightMenu" : "高亮菜单",
 		"basicPage" : "是否为基础页面",
-		"basicPageNote" : "此项选择为是，则不会展示左侧菜单以及顶部信息。",
+		"basicPageNote" : "此项选择为是，则不会展示左侧菜单以及顶部信息。"
 	},
 	"menus": {
 		"home": "首页",
@@ -307,7 +307,7 @@
 		"disabledSuccessfully" : "禁用成功",
 		"user" : "用户",
 		"enterPhoneNoNote" : "请输入合法手机号",
-		"enterEmailNote" : "请输入正确的邮箱",
+		"enterEmailNote" : "请输入正确的邮箱"
 	},
 	"view": {
 		"dashboard": {
@@ -354,7 +354,7 @@
 					"content2" : "更优质的服务，更便捷的使用体验",
 					"content3" : "更快速的创意实现，更高效的工作效率",
 					"content4" : "更多的创意资源，更多的创意灵感",
-					"content5" : "更合理的代码结构，更清晰的代码逻辑",
+					"content5" : "更合理的代码结构，更清晰的代码逻辑"
 				}
 			}
 		},
@@ -389,7 +389,7 @@
 			"ignoreRouteNote1" : "忽略路由",
 			"ignoreRouteNote2" : "忽略路由不参与api同步，常见为不需要进行鉴权行为的路由",
 			"cancelIgnore" : "取消忽略",
-			"cacheConfirmNote" : "确定要刷新缓存吗?",
+			"cacheConfirmNote" : "确定要刷新缓存吗?"
 		},
 		"dictionary" : {
 			"sysDictionary" : {
@@ -428,7 +428,7 @@
 				"statusCode" : "状态码",
 				"requestIP" : "请求IP",
 				"none" : "无",
-				"response" : "响应",
+				"response" : "响应"
 			}
 		},
 		"systemTools" :
@@ -536,7 +536,7 @@
 				"selectTemplateNote" : "请选择模板",
 				"cannotStartWithNumberNote" : "不能够以数字开头",
 				"addSuccess": "添加成功",
-				"deletePackageNote" : "此操作仅删除数据库中的pkg存储，后端相应目录结构请自行删除与数据库保持一致！",
+				"deletePackageNote" : "此操作仅删除数据库中的pkg存储，后端相应目录结构请自行删除与数据库保持一致！"
 			},
 			"autoCode": {
 				"autoCodeNote" : "此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。",
@@ -619,5 +619,5 @@
 			}
 
 		}
-	},
+	}
 }

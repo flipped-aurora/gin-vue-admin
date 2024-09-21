@@ -10,7 +10,7 @@
       <el-form-item :label="t('general.createDate')" prop="createdAt">
       <template #label>
         <span>
-          {{t('general.createDate')}}
+          {{"{{"}}t('general.createDate'){{"}}"}}
           <el-tooltip :content="t('general.searchDesc')">
             <el-icon><QuestionFilled /></el-icon>
           </el-tooltip>

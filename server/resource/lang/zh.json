@@ -115,12 +115,10 @@
                 "addMenu": "新增菜单",
                 "addMenuRole": "增加menu和角色关联关系",
                 "addTemplateMethod": "增加模板方法",
-                "addtestttClients": "addclients表",
                 "autoCode": "自动化代码",
                 "batchDeleteAnnouncement": "批量删除公告",
                 "batchDeleteExportTemplate": "批量删除导出模板",
                 "batchDeleteOperationHistory": "批量删除操作历史",
-                "batchtestttClients": "batchclients表",
                 "breakpointContinue": "断点续传",
                 "breakpointContinueFinish": "断点续传完成",
                 "changePassword": "修改密码（建议选择)",
@@ -151,14 +149,12 @@
                 "deleteRollbackRecord": "删除回滚记录",
                 "deleteTemplate": "删除模板",
                 "deleteUsers": "删除用户",
-                "deletetestttClients": "deleteclients表",
                 "downloadTemplate": "下载模板",
                 "editFileNameOrRemark": "文件名或者备注编辑",
                 "exportExcel": "导出Excel",
                 "fileIntegrityCheck": "文件完整度验证",
                 "fileUploadExample": "文件上传示例",
                 "findTargetFile": "寻找目标文件（秒传）",
-                "findtestttClients": "findclients表",
                 "getAPIByID": "获取api详细信息",
                 "getAPIList": "获取api列表",
                 "getAllAPI": "获取所有api",
@@ -199,7 +195,6 @@
                 "importExcel": "导入Excel",
                 "installPlugin": "安装插件",
                 "jwtAddedToBlackList": "jwt加入黑名单(退出，必选)",
-                "listtestttClients": "listclients表",
                 "mergeFileAfterUpload": "上传完成合并文件",
                 "modifyUserRole": "修改用户角色(必选)",
                 "newAnnouncement": "新建公告",
@@ -227,7 +222,6 @@
                 "updateExportTemplate": "更新导出模板",
                 "updateMenu": "更新菜单",
                 "updateRole": "更新角色信息",
-                "updatetestttClients": "updateclients表",
                 "userLoginRequired": "用户登录(必选)",
                 "userRegistration": "用户注册"
             },
@@ -251,8 +245,7 @@
                 "systemService": "系统服务",
                 "systemUser": "系统用户",
                 "tableTemplate": "表格模板",
-                "templateConfiguration": "模板配置",
-                "testttClients": "clients表"
+                "templateConfiguration": "模板配置"
             }
         },
         "authority": {
@@ -302,6 +295,7 @@
             "pluginInstall": "插件安装",
             "pluginMarket": "插件市场",
             "pluginSystem": "插件系统",
+            "ppppClients": "clients表",
             "resumableUpload": "断点续传（插件版）",
             "resume": "断点续传（插件版）",
             "roleManage": "角色管理",
@@ -310,7 +304,6 @@
             "systemTools": "系统工具",
             "tableTemplate": "表格模板",
             "templateConfig": "模板配置",
-            "testttClients": "clients表",
             "userManage": "用户管理",
             "website": "官方网站"
         }

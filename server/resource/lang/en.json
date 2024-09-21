@@ -115,12 +115,10 @@
                 "addMenu": "Add menu",
                 "addMenuRole": "Add menu and role association",
                 "addTemplateMethod": "Add template method",
-                "addtestttClients": "addclients表",
                 "autoCode": "Automate code",
                 "batchDeleteAnnouncement": "Batch Delete Announcement",
                 "batchDeleteExportTemplate": "Batch delete export template",
                 "batchDeleteOperationHistory": "Batch delete operation history",
-                "batchtestttClients": "batchclients表",
                 "breakpointContinue": "Breakpoint continuation",
                 "breakpointContinueFinish": "Breakpoint continuation complete",
                 "changePassword": "Change password (recommended)",
@@ -151,14 +149,12 @@
                 "deleteRollbackRecord": "Delete rollback record",
                 "deleteTemplate": "Delete template",
                 "deleteUsers": "Delete Users",
-                "deletetestttClients": "deleteclients表",
                 "downloadTemplate": "Download template",
                 "editFileNameOrRemark": "Edit file name or remark",
                 "exportExcel": "Export Excel",
                 "fileIntegrityCheck": "File integrity check",
                 "fileUploadExample": "File upload example",
                 "findTargetFile": "Find target file (second pass)",
-                "findtestttClients": "findclients表",
                 "getAPIByID": "Get API Details",
                 "getAPIList": "Get API List",
                 "getAllAPI": "Get All API",
@@ -199,7 +195,6 @@
                 "importExcel": "Import Excel",
                 "installPlugin": "Install plugin",
                 "jwtAddedToBlackList": "JWT added to the blacklist (Logout required)",
-                "listtestttClients": "listclients表",
                 "mergeFileAfterUpload": "Merge file after upload",
                 "modifyUserRole": "Modify user role (required)",
                 "newAnnouncement": "New Announcement",
@@ -227,7 +222,6 @@
                 "updateExportTemplate": "Update export template",
                 "updateMenu": "Update Menu",
                 "updateRole": "Update Role",
-                "updatetestttClients": "updateclients表",
                 "userLoginRequired": "User login (required)",
                 "userRegistration": "User registration"
             },
@@ -251,8 +245,7 @@
                 "systemService": "System Service",
                 "systemUser": "System User",
                 "tableTemplate": "Table Templates",
-                "templateConfiguration": "Template Configuration",
-                "testttClients": "clients表"
+                "templateConfiguration": "Template Configuration"
             }
         },
         "authority": {
@@ -310,7 +303,6 @@
             "systemTools": "System Tools",
             "tableTemplate": "Table Template",
             "templateConfig": "Template Configuration",
-            "testttClients": "clients表",
             "userManage": "User Management",
             "website": "Official Website"
         }

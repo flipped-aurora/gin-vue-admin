@@ -98,12 +98,12 @@
                 "addMenu": "إضافة قائمة",
                 "addMenuRole": "إضافة علاقة قائمة ودور",
                 "addTemplateMethod": "إضافة طريقة القالب",
-                "addtestttClients": "addclients表",
+
                 "autoCode": "شفرة تلقائية",
                 "batchDeleteAnnouncement": "حذف الإعلانات بشكل جماعي",
                 "batchDeleteExportTemplate": "حذف قوالب التصدير بشكل جماعي",
                 "batchDeleteOperationHistory": "حذف تاريخ العمليات بشكل جماعي",
-                "batchtestttClients": "batchclients表",
+
                 "breakpointContinue": "استئناف التحميل",
                 "breakpointContinueFinish": "إنهاء استئناف التحميل",
                 "changePassword": "تغيير كلمة المرور (مستوى مستفيد)",
@@ -134,14 +134,13 @@
                 "deleteRollbackRecord": "حذف سجل التراجع",
                 "deleteTemplate": "حذف القالب",
                 "deleteUsers": "حذف المستخدمين",
-                "deletetestttClients": "deleteclients表",
+
                 "downloadTemplate": "تنزيل القالب",
                 "editFileNameOrRemark": "تعديل اسم الملف أو الملاحظة",
                 "exportExcel": "تصدير إكسل",
                 "fileIntegrityCheck": "فحص تامة الملف",
                 "fileUploadExample": "مثال على تحميل الملف",
-                "findTargetFile": "البحث عن الملف الهدف (الإرسال الفوري)",
-                "findtestttClients": "findclients表",
+
                 "getAPIByID": "الحصول على تفاصيل API",
                 "getAPIList": "الحصول على قائمة API",
                 "getAllAPI": "الحصول على جميع API",
@@ -182,7 +181,7 @@
                 "importExcel": "استيراد إكسل",
                 "installPlugin": "تثبيت المكون",
                 "jwtAddedToBlackList": "إضافة JWT إلى القائمة السوداء (الخروج، مطلوب)",
-                "listtestttClients": "listclients表",
+
                 "mergeFileAfterUpload": "دمج الملف بعد التحميل",
                 "modifyUserRole": "تعديل دور المستخدم (مطلوب)",
                 "newAnnouncement": "إنشاء إعلان",
@@ -210,7 +209,6 @@
                 "updateExportTemplate": "تحديث قالب التصدير",
                 "updateMenu": "تحديث القائمة",
                 "updateRole": "تحديث معلومات الدور",
-                "updatetestttClients": "updateclients表",
                 "userLoginRequired": "تسجيل دخول المستخدم (مطلوب)",
                 "userRegistration": "تسجيل المستخدم"
             },
@@ -234,8 +232,7 @@
                 "systemService": "خدمات النظام",
                 "systemUser": "مستخدم النظام",
                 "tableTemplate": "قالب الجدول",
-                "templateConfiguration": "تكوين القالب",
-                "testttClients": "clients表"
+                "templateConfiguration": "تكوين القالب"
             }
         },
         "authority": {
@@ -292,7 +289,6 @@
             "systemTools": "أدوات النظام",
             "tableTemplate": "قالب الجدول",
             "templateConfig": "تكوين القالب",
-            "testttClients": "clients表",
             "userManage": "إدارة المستخدم",
             "website": "الموقع الرسمي"
         }

@@ -88,7 +88,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Delete{{.StructName}}ByIds(c *gi
 	err := {{.Abbreviation}}Service.Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s{{- if .AutoCreateResource }},userID{{- end }})
 	if err != nil {
         global.GVA_LOG.Error(global.Translate("sys_operation_record.batchDeleteFail"), zap.Error(err))
-		response.FailWithMessage("sys_operation_record.batchDeleteFailErr"), c)
+		response.FailWithMessage(global.Translate("sys_operation_record.batchDeleteFailErr"), c)
 		return
 	}
 	response.OkWithMessage(global.Translate("sys_operation_record.batchDeleteSuccess"), c)
@@ -119,7 +119,7 @@ func ({{.Abbreviation}}Api *{{.StructName}}Api) Update{{.StructName}}(c *gin.Con
 		response.FailWithMessage(global.Translate("general.updateFailErr"), c)
 		return
 	}
-	response.OkWithMessage("general.updateSuccess"), c)
+	response.OkWithMessage(global.Translate("general.updateSuccess"), c)
 }
 
 // Find{{.StructName}} 用id查询{{.Description}}

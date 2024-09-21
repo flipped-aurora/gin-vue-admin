@@ -264,10 +264,11 @@
         {{- end }}
         {{- end }}
         <el-table-column align="left" :label="t('general.operations')" fixed="right" min-width="240">
+          <template #default="scope">
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.info"{{ end }} type="primary" link class="table-button" @click="getDetails(scope.row)"><el-icon style="margin-right: 5px"><InfoFilled /></el-icon>{{"{{"}}t('general.desc'){{"}}"}}</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.edit"{{ end }} type="primary" link icon="edit" class="table-button" @click="update{{.StructName}}Func(scope.row)">{{"{{"}}t('general.change'){{"}}"}}</el-button>
             <el-button {{ if $global.AutoCreateBtnAuth }}v-auth="btnAuth.delete"{{ end }} type="primary" link icon="delete" @click="deleteRow(scope.row)">{{"{{"}}t('general.delete'){{"}}"}}</el-button>
-            </template>
+          </template>
         </el-table-column>
         </el-table>
         <div class="gva-pagination">

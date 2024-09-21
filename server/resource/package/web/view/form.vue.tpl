@@ -13,7 +13,7 @@
         </el-select>
        {{- else }}
       {{- if eq .FieldType "bool" }}
-          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" active-text="是" inactive-text="否" clearable ></el-switch>
+          <el-switch v-model="formData.{{.FieldJson}}" active-color="#13ce66" inactive-color="#ff4949" :active-text="t('base.yes')" :inactive-text="t('base.no')" clearable ></el-switch>
       {{- end }}
       {{- if eq .FieldType "string" }}
       {{- if .DictType}}
@@ -37,7 +37,7 @@
           <el-input-number v-model="formData.{{ .FieldJson }}" :precision="2" :clearable="{{.Clearable}}"></el-input-number>
       {{- end }}
       {{- if eq .FieldType "enum" }}
-        <el-select v-model="formData.{{ .FieldJson }}" placeholder="请选择" style="width:100%" :clearable="{{.Clearable}}">
+        <el-select v-model="formData.{{ .FieldJson }}" :placeholder="t('base.pleaseSelect')" style="width:100%" :clearable="{{.Clearable}}">
           <el-option v-for="item in [{{ .DataTypeLong }}]" :key="item" :label="item" :value="item" />
         </el-select>
       {{- end }}
@@ -228,7 +228,7 @@ const save = async() => {
            if (res.code === 0) {
              ElMessage({
                type: 'success',
-               message: '创建/更改成功'
+               message: t('general.createUpdateSuccess')
              })
            }
        })

@@ -24,7 +24,6 @@
 		"rootRole": "根角色/严格模式下为当前角色",
 		"setPermissions": "设置权限",
 		"roleIdError" : "必须为正整数",
-		"" : ""
 	},
 	"autoCodeAdmin": {
 		"deleteHistoryConfirm": "此操作将删除本历史, 是否继续?",
@@ -112,7 +111,21 @@
 		"description" : "描述",
 		"request" : "请求",
 		"order": "排序标记",
-		"filter": "筛选"
+		"expand": "展开",
+		"collapse": "收起",
+		"desc": "查看详情",
+		"filter": "筛选",
+		"createDate": "创建日期",
+		"startData": "开始日期",
+		"endData": "结束日期",
+		"selectData": "选择日期",
+		"searchDesc": "搜索范围是开始日期（包含）至结束日期（不包含）",
+		"placeInputStartData": "请填写开始日期",
+		"placeInputEndData": "请填写结束日期",
+		"startDataMustBeforeEndData": "开始日期应当早于结束日期",
+		"noOnlySpace": "不能只输入空格",
+		"max": "最大值",
+		"min": "最小值"
 	},
 	"historyComponent": {
 		"closeAll": "关闭所有",
@@ -131,13 +144,13 @@
 		"dbUser": "Username",
 		"dbUsername": "Username",
 		"enterDBAddress": "请输入数据库链接",
-		"enterDBHost": "",
+		"enterDBHost": "请输入数据库Host",
 		"enterDBName": "请输入数据库名称",
 		"enterSQLitePath" : "请输入sqlite数据库文件存放路径",
 		"enterDBPassword": "请输入数据库密码（没有则为空）",
 		"enterDBPort": "请输入数据库端口",
 		"enterDBUser": "请输入数据库用户名",
-		"enterDBUsername": "",
+		"enterDBUserName": "请输入数据库用户名",
 		"initNow": "立即初始化",
 		"language": "语",
 		"note": "初始化须知",
@@ -247,22 +260,18 @@
 		"highlightMenu" : "高亮菜单",
 		"basicPage" : "是否为基础页面",
 		"basicPageNote" : "此项选择为是，则不会展示左侧菜单以及顶部信息。",
-		"" : ""
 	},
 	"menus": {
-		"": "",
 		"home": "首页",
 		"menuSetupSuccess": "菜单设置成功!",
 		"setAsHome": "设为首页",
 		"assignButton": "分配按钮"
 	},
 	"setting": {
-		"": "",
 		"businessBlack": "商务黑",
 		"simpleWhite": "简约白"
 	},
 	"system": {
-		"": "",
 		"envValues": "环境值",
 		"multiLogin": "多点登录拦截",
 		"ossType": "Oss类型",
@@ -299,7 +308,6 @@
 		"user" : "用户",
 		"enterPhoneNoNote" : "请输入合法手机号",
 		"enterEmailNote" : "请输入正确的邮箱",
-		"" : ""
 	},
 	"view": {
 		"dashboard": {
@@ -347,7 +355,6 @@
 					"content3" : "更快速的创意实现，更高效的工作效率",
 					"content4" : "更多的创意资源，更多的创意灵感",
 					"content5" : "更合理的代码结构，更清晰的代码逻辑",
-					"" : ""
 				}
 			}
 		},
@@ -383,7 +390,6 @@
 			"ignoreRouteNote2" : "忽略路由不参与api同步，常见为不需要进行鉴权行为的路由",
 			"cancelIgnore" : "取消忽略",
 			"cacheConfirmNote" : "确定要刷新缓存吗?",
-			"": ""
 		},
 		"dictionary" : {
 			"sysDictionary" : {
@@ -423,7 +429,6 @@
 				"requestIP" : "请求IP",
 				"none" : "无",
 				"response" : "响应",
-				"" : ""
 			}
 		},
 		"systemTools" :
@@ -532,7 +537,6 @@
 				"cannotStartWithNumberNote" : "不能够以数字开头",
 				"addSuccess": "添加成功",
 				"deletePackageNote" : "此操作仅删除数据库中的pkg存储，后端相应目录结构请自行删除与数据库保持一致！",
-				"" : ""
 			},
 			"autoCode": {
 				"autoCodeNote" : "此功能为开发环境使用，不建议发布到生产，具体使用效果请点我观看。",
@@ -615,6 +619,5 @@
 			}
 
 		}
-
-	}
+	},
 }

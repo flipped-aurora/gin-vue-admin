@@ -24,7 +24,6 @@
 		"rootRole": "Root Role / Current Role in Strict Mode",
 		"setPermissions": "Set Permissions",
 		"roleIdError" : "Must be a positive integer",
-		"" : ""
 	},
 	"autoCodeAdmin": {
 		"deleteHistoryConfirm": "This operation will delete this history, do you want to continue?",
@@ -112,7 +111,21 @@
 		"description" : "Description",
 		"request" : "Request",
 		"order": "Order",
-		"filter": "Filter"
+		"filter": "Filter",
+		"expand": "Expand",
+		"collapse": "Collapse",
+		"desc": "View Details",
+		"createDate": "Creation Date",
+		"startData": "Start Date",
+		"endData": "End Date",
+		"selectData": "Select Date",
+		"searchDesc": "The search range is from the start date (inclusive) to the end date (exclusive)",
+		"placeInputStartData": "Please enter the start date",
+		"placeInputEndData": "Please enter the end date",
+		"startDataMustBeforeEndData": "The start date should be earlier than the end date",
+		"noOnlySpace": "Cannot enter only spaces",
+		"max": "Maximum",
+		"min": "Minimum"
 	},
 	"historyComponent": {
 		"closeAll": "Close All",
@@ -128,7 +141,7 @@
 		"dbPassword": "Password",
 		"dbPort": "Port",
 		"dbType": "Database Type",
-		"dbUser": "",
+		"dbUser": "Username",
 		"dbUsername": "Username",
 		"enterDBAddress": "Please enter the database address",
 		"enterDBHost": "Please enter database host",
@@ -136,7 +149,7 @@
 		"enterSQLitePath" : "Please enter sqlite database file path",
 		"enterDBPassword": "Database password (empty if none)",
 		"enterDBPort": "Please enter database port",
-		"enterDBUser": "",
+		"enterDBUser": "Please enter database username",
 		"enterDBUsername": "Please enter database username",
 		"initNow": "Initialize Now",
 		"language": "Language",
@@ -247,22 +260,18 @@
 		"highlightMenu" : "Highlight Menu",
 		"basicPage" : "Is it a basic page?",
 		"basicPageNote" : "If you select Yes for this option, the left menu and top information will not be displayed.",
-		"" : ""
 	},
 	"menus": {
-		"": "",
 		"home": "Homepage",
 		"menuSetupSuccess": "Menu set successfully!",
 		"setAsHome": "Set as homepage",
 		"assignButton" : "Assign button"
 	},
 	"setting": {
-		"": "",
 		"businessBlack": "Dark Mode",
 		"simpleWhite": "Light Mode"
 	},
 	"system": {
-		"": "",
 		"envValues": "Environment values",
 		"multiLogin": "Multi-login interception",
 		"ossType": "Oss Type",
@@ -299,7 +308,6 @@
 		"user" : "User",
 		"enterPhoneNoNote" : "Please enter a valid mobile phone number?",
 		"enterEmailNote" : "please enter your vaild email?",
-		"" : ""
 	},
 	"view": {
 		"dashboard": {
@@ -347,7 +355,6 @@
 					"content3" : "Faster creative realization and more efficient work efficiency",
 					"content4" : "More creative resources, more creative inspiration",
 					"content5" : "More reasonable code structure, clearer code logic",
-					"" : ""
 				}
 			}
 		},
@@ -383,7 +390,6 @@
 			"ignoreRouteNote2" : "and do not participate in API synchronization. This is usually a route that does not require authentication.",
 			"cancelIgnore" : "Cancel Ignore",
 			"cacheConfirmNote" : "Are you sure you want to refresh the cache?",
-			"" : ""
 		},
 		"dictionary" : {
 			"sysDictionary" : {
@@ -423,7 +429,6 @@
 				"requestIP" : "Request IP",
 				"none" : "None",
 				"response" : "Response",
-				"" : ""
 			}
 		},
 		"systemTools" :
@@ -532,7 +537,6 @@
 				"cannotStartWithNumberNote" : "Cannot start with a number",
 				"addSuccess": "Added successfully",
 				"deletePackageNote" : "This operation only deletes the pkg storage in the database. Please delete the corresponding directory structure of the backend by yourself to keep it consistent with the database!",
-				"" : ""
 			},
 			"autoCode": {
 				"autoCodeNote" : "This feature is for development environments only and is not recommended for production. Click here to see the specific usage effect.",

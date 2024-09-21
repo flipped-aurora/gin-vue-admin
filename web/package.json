@@ -36,8 +36,8 @@
         "sortablejs": "^1.15.3",
         "spark-md5": "^3.0.2",
         "tailwindcss": "^3.4.10",
-        "vite-auto-import-svg": "^1.0.0",
-        "vue": "^3.5.1",
+        "vite-auto-import-svg": "^1.1.0",
+        "vue": "^3.5.7",
         "vue-echarts": "^7.0.3",
         "vue-router": "^4.4.3",
         "vuedraggable": "^4.1.0"

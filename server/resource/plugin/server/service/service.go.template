@@ -23,14 +23,14 @@ type {{.Abbreviation}} struct {}
 {{- end}}
 {{- if not .OnlyTemplate }}
 // Create{{.StructName}} 创建{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Create{{.StructName}}({{.Abbreviation}} *model.{{.StructName}}) (err error) {
 	err = {{$db}}.Create({{.Abbreviation}}).Error
 	return err
 }
 
 // Delete{{.StructName}} 删除{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Delete{{.StructName}}({{.PrimaryField.FieldJson}} string{{- if .AutoCreateResource -}},userID uint{{- end -}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
@@ -49,7 +49,7 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}({{.PrimaryField.FieldJson}} st
 }
 
 // Delete{{.StructName}}ByIds 批量删除{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson}}s []string {{- if .AutoCreateResource }},deleted_by uint{{- end}}) (err error) {
 	{{- if .AutoCreateResource }}
 	err = {{$db}}.Transaction(func(tx *gorm.DB) error {
@@ -68,21 +68,21 @@ func (s *{{.Abbreviation}}) Delete{{.StructName}}ByIds({{.PrimaryField.FieldJson
 }
 
 // Update{{.StructName}} 更新{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Update{{.StructName}}({{.Abbreviation}} model.{{.StructName}}) (err error) {
 	err = {{$db}}.Model(&model.{{.StructName}}{}).Where("{{.PrimaryField.ColumnName}} = ?",{{.Abbreviation}}.{{.PrimaryField.FieldName}}).Updates(&{{.Abbreviation}}).Error
 	return err
 }
 
 // Get{{.StructName}} 根据{{.PrimaryField.FieldJson}}获取{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Get{{.StructName}}({{.PrimaryField.FieldJson}} string) ({{.Abbreviation}} model.{{.StructName}}, err error) {
 	err = {{$db}}.Where("{{.PrimaryField.ColumnName}} = ?", {{.PrimaryField.FieldJson}}).First(&{{.Abbreviation}}).Error
 	return
 }
 
 // Get{{.StructName}}InfoList 分页获取{{.Description}}记录
-// Author [piexlmax](https://github.com/piexlmax)
+// Author [yourname](https://github.com/yourname)
 func (s *{{.Abbreviation}}) Get{{.StructName}}InfoList(info request.{{.StructName}}Search) (list []model.{{.StructName}}, total int64, err error) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)

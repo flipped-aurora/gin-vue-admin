@@ -307,5 +307,18 @@
             "userManage": "用户管理",
             "website": "官方网站"
         }
+    },
+    "api": {
+        "example": {
+            "exa_breakpoint_continue": {
+                "fileFail": "接收文件失败"
+            }
+        }
+    },
+    "service": {
+
+    },
+    "router": {
+
     }
 }

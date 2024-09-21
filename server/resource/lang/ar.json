@@ -292,5 +292,18 @@
             "userManage": "إدارة المستخدم",
             "website": "الموقع الرسمي"
         }
+    },
+    "api": {
+        "example": {
+            "exa_breakpoint_continue": {
+                "fileFail": "فشل في تحميل الملف"
+            }
+        }
+    },
+    "service": {
+
+    },
+    "router": {
+
     }
 }

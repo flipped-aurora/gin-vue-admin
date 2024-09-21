@@ -306,5 +306,18 @@
             "userManage": "User Management",
             "website": "Official Website"
         }
+    },
+    "api": {
+        "example": {
+            "exa_breakpoint_continue": {
+                "fileFail": "File upload failed"
+            }
+        }
+    },
+    "service": {
+
+    },
+    "router": {
+
     }
 }

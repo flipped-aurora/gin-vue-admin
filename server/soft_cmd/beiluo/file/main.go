@@ -66,7 +66,6 @@ func main() {
 			ctx.ResponseFailDefaultJSONWithMsg(err.Error())
 			return
 		}
-		ctx.ResponseOkWithFile()
 		ctx.Logger().Infof("file_get success, filepath: %s", filePath)
 		ctx.ResponseOkWithJSON(map[string]string{
 			"file_content": string(file),

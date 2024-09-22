@@ -1,5 +1,0 @@
-package filex
-
-func FileCopy() {
-
-}

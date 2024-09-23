@@ -15,8 +15,18 @@ type CallResponse struct {
 	HasFile     bool        `json:"has_file"`
 	FilePath    string      `json:"path"`
 	DeleteFile  bool        `json:"delete_file"`
-	Data        interface{} `json:"data"`
+	Body        interface{} `json:"data"`
 
-	CallCostTime     time.Duration `json:"-"`
+	Header map[string]string `json:"header"` // response header
+
+	//meta data
+	CallCostTime     time.Duration `json:"-"` //
 	ResponseMetaData string        `json:"-"`
+}
+
+func (r *CallResponse) GetContentType() string {
+	if r.Header == nil {
+		return ""
+	}
+	return r.Header["content-type"]
 }

@@ -25,8 +25,8 @@ func MustPrintJSON(el interface{}) {
 	fmt.Println(string(marshal))
 }
 
-// JSONString ...
-func JSONString(el interface{}) string {
+// String ...
+func String(el interface{}) string {
 	marshal, err := json.Marshal(el)
 	if err != nil {
 		return ""

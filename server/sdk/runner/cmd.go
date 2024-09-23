@@ -7,11 +7,9 @@ import (
 	"github.com/flipped-aurora/gin-vue-admin/server/pkg/logger"
 	logger2 "github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/logger"
 	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/request"
-	"github.com/flipped-aurora/gin-vue-admin/server/sdk/runner/response"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strings"
 	"time"
 )
@@ -101,50 +99,6 @@ func (c *Context) ReqMap() map[string]interface{} {
 		return c.Req.Data
 	}
 	return nil
-}
-
-func (c *Context) ResponseFailJSONWithCode(code int, jsonEl interface{}) {
-	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: code, ContentType: "json", Data: jsonEl}))
-}
-
-func (c *Context) ResponseFailDefaultJSONWithMsg(errMsg string) {
-	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: 200, ContentType: "json", Data: map[string]interface{}{"msg": errMsg}}))
-}
-
-func (c *Context) ResponseFailTextWithCode(code int, text string) {
-	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: code, ContentType: "text", Data: text}))
-}
-func (c *Context) ResponseOkWithJSON(jsonEl interface{}) {
-	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: 200, ContentType: "json", Data: jsonEl}))
-}
-func (c *Context) ResponseFailParameter() {
-	c.Response(jsonx.JSONString(&response.CallResponse{StatusCode: 200, ContentType: "json", Data: map[string]interface{}{"msg": "参数错误", "code": 10001}}))
-}
-func (c *Context) ResponseOkWithFile(filePath string, deleteFile bool) error {
-	abs, err := filepath.Abs(filePath)
-	if err != nil {
-		return err
-	}
-	//这里需要转换成绝对路径
-	marshal, err := json.Marshal(&response.CallResponse{HasFile: true, StatusCode: 200, ContentType: "file", FilePath: abs, DeleteFile: deleteFile})
-	if err != nil {
-		return err
-	}
-	c.Response(string(marshal))
-	return nil
-}
-
-func (c *Context) ResponseOkWithText(text string) error {
-	marshal, err := json.Marshal(&response.CallResponse{StatusCode: 200, ContentType: "text", Data: text})
-	if err != nil {
-		return err
-	}
-	c.Response(string(marshal))
-	return nil
-}
-
-func (c *Context) Response(text string) {
-	fmt.Println("<Response>" + text + "</Response>")
 }
 
 func New() *Runner {

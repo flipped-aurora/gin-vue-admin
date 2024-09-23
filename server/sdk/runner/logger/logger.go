@@ -20,7 +20,7 @@ func (l *Logger) logPrint(level string, msg string) {
 	l.DataMap["stack"] = file + ":" + strconv.Itoa(line)
 	l.DataMap["level"] = level
 
-	fmt.Println("<Logger>" + jsonx.JSONString(l.DataMap) + "</Logger>")
+	fmt.Println("<Logger>" + jsonx.String(l.DataMap) + "</Logger>")
 }
 
 func (l *Logger) logPrintf(level string, formatMsg string, args any) {
@@ -33,7 +33,7 @@ func (l *Logger) logPrintf(level string, formatMsg string, args any) {
 	} else {
 		l.DataMap["level"] = level
 	}
-	fmt.Println("<Logger>" + jsonx.JSONString(l.DataMap) + "</Logger>")
+	fmt.Println("<Logger>" + jsonx.String(l.DataMap) + "</Logger>")
 }
 
 // SetLevel 可以自定义level

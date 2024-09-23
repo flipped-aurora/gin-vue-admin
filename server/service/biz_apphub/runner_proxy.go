@@ -100,14 +100,14 @@ func (p *SoftCall) Call(req request.Call) (*response.CallResponse, error) {
 		//todo
 		panic("")
 	}
-	resList := stringsx.ParserHtmlTagContent(s, "Response")
+	resList := stringsx.ParserHtmlTagContent(s, "response")
 	if len(resList) == 0 {
 		//todo 请使用sdk开发软件
 		return nil, fmt.Errorf("soft call err 请使用sdk开发软件")
 	}
-	//split := strings.Split(s, "<Response>")[1]
-	//split1 := strings.Split(split, "</Response>")[0]
-	//ss := strings.ReplaceAll(split1, "</Response>", "")
+	//split := strings.Split(s, "<response>")[1]
+	//split1 := strings.Split(split, "</response>")[0]
+	//ss := strings.ReplaceAll(split1, "</response>", "")
 	//mp := make(map[string]interface{})
 	var res response.CallResponse
 	err = json.Unmarshal([]byte(resList[0]), &res)

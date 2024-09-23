@@ -17,7 +17,7 @@ type AutoCodePluginApi struct{}
 // @accept    multipart/form-data
 // @Produce   application/json
 // @Param     plug  formData  file                                              true  "this is a test file"
-// @Success   200   {object}  response.Response{data=[]interface{},msg=string}  "安装插件成功"
+// @Success   200   {object}  response.response{data=[]interface{},msg=string}  "安装插件成功"
 // @Router    /autoCode/installPlugin [post]
 func (a *AutoCodePluginApi) Install(c *gin.Context) {
 	header, err := c.FormFile("plug")
@@ -56,7 +56,7 @@ func (a *AutoCodePluginApi) Install(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Param     plugName  query    string  true  "插件名称"
-// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "打包插件成功"
+// @Success   200   {object}  response.response{data=map[string]interface{},msg=string}  "打包插件成功"
 // @Router    /autoCode/pubPlug [get]
 func (a *AutoCodePluginApi) Packaged(c *gin.Context) {
 	plugName := c.Query("plugName")

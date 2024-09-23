@@ -20,7 +20,7 @@ type AutoCodePackageApi struct{}
 // @accept    application/json
 // @Produce   application/json
 // @Param     data  body      request.SysAutoCodePackageCreate                                         true  "创建package"
-// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
+// @Success   200   {object}  response.response{data=map[string]interface{},msg=string}  "创建package成功"
 // @Router    /autoCode/createPackage [post]
 func (a *AutoCodePackageApi) Create(c *gin.Context) {
 	var info request.SysAutoCodePackageCreate
@@ -49,7 +49,7 @@ func (a *AutoCodePackageApi) Create(c *gin.Context) {
 // @accept    application/json
 // @Produce   application/json
 // @Param     data  body      common.GetById                                         true  "创建package"
-// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "删除package成功"
+// @Success   200   {object}  response.response{data=map[string]interface{},msg=string}  "删除package成功"
 // @Router    /autoCode/delPackage [post]
 func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 	var info common.GetById
@@ -69,7 +69,7 @@ func (a *AutoCodePackageApi) Delete(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
+// @Success   200  {object}  response.response{data=map[string]interface{},msg=string}  "创建package成功"
 // @Router    /autoCode/getPackage [post]
 func (a *AutoCodePackageApi) All(c *gin.Context) {
 	data, err := autoCodePackageService.All(c.Request.Context())
@@ -87,7 +87,7 @@ func (a *AutoCodePackageApi) All(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "创建package成功"
+// @Success   200  {object}  response.response{data=map[string]interface{},msg=string}  "创建package成功"
 // @Router    /autoCode/getTemplates [get]
 func (a *AutoCodePackageApi) Templates(c *gin.Context) {
 	data, err := autoCodePackageService.Templates(c.Request.Context())

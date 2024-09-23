@@ -20,7 +20,7 @@ type AutoCodeApi struct{}
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前所有数据库"
+// @Success   200  {object}  response.response{data=map[string]interface{},msg=string}  "获取当前所有数据库"
 // @Router    /autoCode/getDatabase [get]
 func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 	businessDB := c.Query("businessDB")
@@ -48,7 +48,7 @@ func (autoApi *AutoCodeApi) GetDB(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前数据库所有表"
+// @Success   200  {object}  response.response{data=map[string]interface{},msg=string}  "获取当前数据库所有表"
 // @Router    /autoCode/getTables [get]
 func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 	dbName := c.Query("dbName")
@@ -79,7 +79,7 @@ func (autoApi *AutoCodeApi) GetTables(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Success   200  {object}  response.Response{data=map[string]interface{},msg=string}  "获取当前表所有字段"
+// @Success   200  {object}  response.response{data=map[string]interface{},msg=string}  "获取当前表所有字段"
 // @Router    /autoCode/getColumn [get]
 func (autoApi *AutoCodeApi) GetColumn(c *gin.Context) {
 	businessDB := c.Query("businessDB")

@@ -27,13 +27,13 @@ func main() {
 	})
 
 	r.Get("file", func(ctx *runner.Context) {
-		logrus.Infof("file" + jsonx.JSONString(ctx.ReqMap()))
+		logrus.Infof("file" + jsonx.String(ctx.ReqMap()))
 		jsonx.SaveFile("./request.json", ctx.ReqMap())
 		ctx.ResponseOkWithFile("./request.json", true)
 	})
 
 	r.Get("helloWorld", func(ctx *runner.Context) {
-		logrus.Infof("helloWorld" + jsonx.JSONString(ctx.ReqMap()))
+		logrus.Infof("helloWorld" + jsonx.String(ctx.ReqMap()))
 		ctx.ResponseOkWithText("hello world")
 	})
 	//todo 最后必须执行run方法

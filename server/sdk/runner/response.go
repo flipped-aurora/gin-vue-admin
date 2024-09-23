@@ -71,9 +71,26 @@ type Response struct {
 }
 
 func (c *Context) Response(res Response) {
-
+	if res.Header == nil {
+		res.Header = make(map[string]string) //默认响应json格式
+		if res.FilePath != "" {              //如果存在文件返回二进制类型
+			res.Header["Content-Type"] = content_type.ApplicationOctetStream
+		} else {
+			//默认返回json格式
+			res.Header["Content-Type"] = content_type.ApplicationJsonCharsetUtf8
+		}
+	}
+	rsp := &response.CallResponse{
+		StatusCode:     res.HttpStatusCode,
+		Header:         res.Header,
+		Body:           res.Body,
+		FilePath:       res.FilePath,
+		DeleteFileTime: res.DeleteFileTime,
+	}
+	c.response(jsonx.String(rsp))
 }
 
+// ResponseOkWithFile 返回文件
 func (c *Context) ResponseOkWithFile(filePath string, deleteFile bool) error {
 	abs, err := filepath.Abs(filePath)
 	if err != nil {

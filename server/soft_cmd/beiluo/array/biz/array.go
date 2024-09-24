@@ -62,3 +62,38 @@ func Split(ctx *runner.Context) {
 		},
 	})
 }
+
+// ComputeIntersection 计算交集
+func ComputeIntersection(ctx *runner.Context) {
+	req := struct {
+		List1 string `json:"list1"`
+		List2 string `json:"list2"`
+		Stp   string `json:"stp"`
+	}{}
+	err := ctx.ShouldBindJSON(&req)
+	if err != nil {
+		ctx.ResponseFailParameter()
+		return
+	}
+	list1 := strings.Split(req.List1, req.Stp)
+	list2 := strings.Split(req.List2, req.Stp)
+	mp1 := make(map[string]struct{})
+	for i := 0; i < len(list1); i++ {
+		mp1[list1[i]] = struct{}{}
+	}
+
+	var sets []string
+
+	for i := 0; i < len(list2); i++ {
+		if _, ok := mp1[list2[i]]; ok {
+			sets = append(sets, list2[i])
+		}
+	}
+	ctx.ResponseOkWithJSON(map[string]interface{}{
+		"code": 0,
+		"msg":  "ok",
+		"data": map[string]interface{}{
+			"intersection": strings.Join(sets, req.Stp),
+		},
+	})
+}

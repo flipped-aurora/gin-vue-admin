@@ -9,5 +9,6 @@ func main() {
 	r := runner.New()
 	r.Post("diff", biz.Diff)
 	r.Post("Split", biz.Split)
+	r.Post("ComputeIntersection", biz.ComputeIntersection)
 	r.Run()
 }

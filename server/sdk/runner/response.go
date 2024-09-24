@@ -124,5 +124,5 @@ func (c *Context) ResponseOkWithText(text string) error {
 }
 
 func (c *Context) response(text string) {
-	fmt.Println("<response>" + text + "</response>")
+	fmt.Println("<Response>" + text + "</Response>")
 }

@@ -100,7 +100,7 @@ func (p *SoftCall) Call(req request.Call) (*response.CallResponse, error) {
 		//todo
 		panic("")
 	}
-	resList := stringsx.ParserHtmlTagContent(s, "response")
+	resList := stringsx.ParserHtmlTagContent(s, "Response")
 	if len(resList) == 0 {
 		//todo 请使用sdk开发软件
 		return nil, fmt.Errorf("soft call err 请使用sdk开发软件")

@@ -23,7 +23,7 @@ import (
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizAppHubSearch true "分页获取biz_apphub列表"
-// @Success 200 {object} response.response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /bizAppHub/getDeployList [get]
 func (bizAppHubApi *BizAppHubApi) GetDeployList(c *gin.Context) {
 	var pageInfo biz_apphubReq.GetDeployList
@@ -54,7 +54,7 @@ func (bizAppHubApi *BizAppHubApi) GetDeployList(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "回滚版本biz_apphub"
-// @Success 200 {object} response.response{msg=string} "更新成功"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizAppHub/rollbackVersion [put]
 func (bizAppHubApi *BizAppHubApi) RollbackVersion(c *gin.Context) {
 	var bizAppHub biz_apphubReq.RollbackVersion
@@ -82,7 +82,7 @@ func (bizAppHubApi *BizAppHubApi) RollbackVersion(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "后端命令接口"
-// @Success 200 {object} response.response{msg=string} "更新成功"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
 func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 	var (
@@ -173,7 +173,7 @@ func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 		c.JSON(call.StatusCode, gin.H{"msg": call.Body})
 		return
 	}
-	if call.ContentType == "file" {
+	if call.ContentType == "application/octet-stream" {
 		if call.HasFile {
 			//if call.HasFile
 			fileName := filepath.Base(call.FilePath) // 获取文件名
@@ -190,10 +190,10 @@ func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 		}
 	}
 
-	if call.ContentType == "json" {
+	if call.ContentType == "application/json; charset=utf-8" {
 		c.Data(200, "application/json; charset=utf-8", []byte(jsonx.String(call.Body)))
 	}
-	if call.ContentType == "text" {
+	if call.ContentType == "text/plain; charset=utf-8" {
 		c.Data(200, "text/plain; charset=utf-8", []byte(fmt.Sprintf("%v", call.Body)))
 	}
 }
@@ -205,7 +205,7 @@ func (bizAppHubApi *BizAppHubApi) PostCall(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "后端命令接口"
-// @Success 200 {object} response.response{msg=string} "更新成功"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizAppHub/api/cmd/call/:user/:soft/:command [post]
 func (bizAppHubApi *BizAppHubApi) GetCall(c *gin.Context) {
 	var (

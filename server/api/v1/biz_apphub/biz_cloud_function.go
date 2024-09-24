@@ -18,7 +18,7 @@ type BizCloudFunctionApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizCloudFunction true "创建云函数"
-// @Success 200 {object} response.response{msg=string} "创建成功"
+// @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /bizCloudFunction/createBizCloudFunction [post]
 func (bizCloudFunctionApi *BizCloudFunctionApi) CreateBizCloudFunction(c *gin.Context) {
 	var bizCloudFunction biz_apphub.BizCloudFunction
@@ -43,7 +43,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) CreateBizCloudFunction(c *gin.Co
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizCloudFunction true "删除云函数"
-// @Success 200 {object} response.response{msg=string} "删除成功"
+// @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /bizCloudFunction/deleteBizCloudFunction [delete]
 func (bizCloudFunctionApi *BizCloudFunctionApi) DeleteBizCloudFunction(c *gin.Context) {
 	ID := c.Query("ID")
@@ -62,7 +62,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) DeleteBizCloudFunction(c *gin.Co
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {object} response.response{msg=string} "批量删除成功"
+// @Success 200 {object} response.Response{msg=string} "批量删除成功"
 // @Router /bizCloudFunction/deleteBizCloudFunctionByIds [delete]
 func (bizCloudFunctionApi *BizCloudFunctionApi) DeleteBizCloudFunctionByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
@@ -82,7 +82,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) DeleteBizCloudFunctionByIds(c *g
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizCloudFunction true "更新云函数"
-// @Success 200 {object} response.response{msg=string} "更新成功"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizCloudFunction/updateBizCloudFunction [put]
 func (bizCloudFunctionApi *BizCloudFunctionApi) UpdateBizCloudFunction(c *gin.Context) {
 	var bizCloudFunction biz_apphub.BizCloudFunction
@@ -107,7 +107,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) UpdateBizCloudFunction(c *gin.Co
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphub.BizCloudFunction true "用id查询云函数"
-// @Success 200 {object} response.response{data=biz_apphub.BizCloudFunction,msg=string} "查询成功"
+// @Success 200 {object} response.Response{data=biz_apphub.BizCloudFunction,msg=string} "查询成功"
 // @Router /bizCloudFunction/findBizCloudFunction [get]
 func (bizCloudFunctionApi *BizCloudFunctionApi) FindBizCloudFunction(c *gin.Context) {
 	ID := c.Query("ID")
@@ -127,7 +127,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) FindBizCloudFunction(c *gin.Cont
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizCloudFunctionSearch true "分页获取云函数列表"
-// @Success 200 {object} response.response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /bizCloudFunction/getBizCloudFunctionList [get]
 func (bizCloudFunctionApi *BizCloudFunctionApi) GetBizCloudFunctionList(c *gin.Context) {
 	var pageInfo biz_apphubReq.BizCloudFunctionSearch
@@ -156,7 +156,7 @@ func (bizCloudFunctionApi *BizCloudFunctionApi) GetBizCloudFunctionList(c *gin.C
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizCloudFunctionSearch true "分页获取云函数列表"
-// @Success 200 {object} response.response{data=object,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /bizCloudFunction/getBizCloudFunctionPublic [get]
 func (bizCloudFunctionApi *BizCloudFunctionApi) GetBizCloudFunctionPublic(c *gin.Context) {
 	// 此接口不需要鉴权

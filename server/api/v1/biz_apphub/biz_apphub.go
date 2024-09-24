@@ -21,7 +21,7 @@ type BizAppHubApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "创建biz_apphub"
-// @Success 200 {object} response.response{msg=string} "创建成功"
+// @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /bizAppHub/createBizAppHub [post]
 func (bizAppHubApi *BizAppHubApi) CreateBizAppHub(c *gin.Context) {
 	var bizAppHub biz_apphub.BizAppHub
@@ -54,7 +54,7 @@ func (bizAppHubApi *BizAppHubApi) CreateBizAppHub(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "删除biz_apphub"
-// @Success 200 {object} response.response{msg=string} "删除成功"
+// @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /bizAppHub/deleteBizAppHub [delete]
 func (bizAppHubApi *BizAppHubApi) DeleteBizAppHub(c *gin.Context) {
 	ID := c.Query("ID")
@@ -74,7 +74,7 @@ func (bizAppHubApi *BizAppHubApi) DeleteBizAppHub(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {object} response.response{msg=string} "批量删除成功"
+// @Success 200 {object} response.Response{msg=string} "批量删除成功"
 // @Router /bizAppHub/deleteBizAppHubByIds [delete]
 func (bizAppHubApi *BizAppHubApi) DeleteBizAppHubByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
@@ -95,7 +95,7 @@ func (bizAppHubApi *BizAppHubApi) DeleteBizAppHubByIds(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizAppHub true "更新biz_apphub"
-// @Success 200 {object} response.response{msg=string} "更新成功"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizAppHub/updateBizAppHub [put]
 func (bizAppHubApi *BizAppHubApi) UpdateBizAppHub(c *gin.Context) {
 	var bizAppHub biz_apphub.BizAppHub
@@ -122,7 +122,7 @@ func (bizAppHubApi *BizAppHubApi) UpdateBizAppHub(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphub.BizAppHub true "用id查询biz_apphub"
-// @Success 200 {object} response.response{data=biz_apphub.BizAppHub,msg=string} "查询成功"
+// @Success 200 {object} response.Response{data=biz_apphub.BizAppHub,msg=string} "查询成功"
 // @Router bizAppHub/record [get]
 func (bizAppHubApi *BizAppHubApi) BizAppHubRecord(c *gin.Context) {
 	ID := c.Query("ID")
@@ -142,7 +142,7 @@ func (bizAppHubApi *BizAppHubApi) BizAppHubRecord(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphub.BizAppHub true "用id查询biz_apphub"
-// @Success 200 {object} response.response{data=biz_apphub.BizAppHub,msg=string} "查询成功"
+// @Success 200 {object} response.Response{data=biz_apphub.BizAppHub,msg=string} "查询成功"
 // @Router /bizAppHub/findBizAppHub [get]
 func (bizAppHubApi *BizAppHubApi) FindBizAppHub(c *gin.Context) {
 	ID := c.Query("ID")
@@ -162,7 +162,7 @@ func (bizAppHubApi *BizAppHubApi) FindBizAppHub(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizAppHubSearch true "分页获取biz_apphub列表"
-// @Success 200 {object} response.response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /bizAppHub/getBizAppHubList [get]
 func (bizAppHubApi *BizAppHubApi) GetBizAppHubList(c *gin.Context) {
 	var pageInfo biz_apphubReq.BizAppHubSearch
@@ -191,7 +191,7 @@ func (bizAppHubApi *BizAppHubApi) GetBizAppHubList(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizAppHubSearch true "分页获取biz_apphub列表"
-// @Success 200 {object} response.response{data=object,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /bizAppHub/getBizAppHubPublic [get]
 func (bizAppHubApi *BizAppHubApi) GetBizAppHubPublic(c *gin.Context) {
 	// 此接口不需要鉴权

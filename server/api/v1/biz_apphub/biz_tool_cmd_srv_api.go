@@ -24,7 +24,7 @@ type BizToolCmdSrvApiApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizAppHubSearch true "分页获取biz_apphub列表"
-// @Success 200 {object} response.response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /bizToolCmdSrvApi/getDeployList [get]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) GetDeployList(c *gin.Context) {
 	var pageInfo biz_apphubReq.GetDeployList
@@ -55,7 +55,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) GetDeployList(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizToolCmdSrvApi true "创建后端工具指令api"
-// @Success 200 {object} response.response{msg=string} "创建成功"
+// @Success 200 {object} response.Response{msg=string} "创建成功"
 // @Router /bizToolCmdSrvApi/createBizToolCmdSrvApi [post]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) CreateBizToolCmdSrvApi(c *gin.Context) {
 	var (
@@ -114,7 +114,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) CreateBizToolCmdSrvApi(c *gin.Co
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizToolCmdSrvApi true "删除后端工具指令api"
-// @Success 200 {object} response.response{msg=string} "删除成功"
+// @Success 200 {object} response.Response{msg=string} "删除成功"
 // @Router /bizToolCmdSrvApi/deleteBizToolCmdSrvApi [delete]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) DeleteBizToolCmdSrvApi(c *gin.Context) {
 	ID := c.Query("ID")
@@ -134,7 +134,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) DeleteBizToolCmdSrvApi(c *gin.Co
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
-// @Success 200 {object} response.response{msg=string} "批量删除成功"
+// @Success 200 {object} response.Response{msg=string} "批量删除成功"
 // @Router /bizToolCmdSrvApi/deleteBizToolCmdSrvApiByIds [delete]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) DeleteBizToolCmdSrvApiByIds(c *gin.Context) {
 	IDs := c.QueryArray("IDs[]")
@@ -155,7 +155,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) DeleteBizToolCmdSrvApiByIds(c *g
 // @accept application/json
 // @Produce application/json
 // @Param data body biz_apphub.BizToolCmdSrvApi true "更新后端工具指令api"
-// @Success 200 {object} response.response{msg=string} "更新成功"
+// @Success 200 {object} response.Response{msg=string} "更新成功"
 // @Router /bizToolCmdSrvApi/updateBizToolCmdSrvApi [put]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) UpdateBizToolCmdSrvApi(c *gin.Context) {
 	var bizToolCmdSrvApi biz_apphub.BizToolCmdSrvApi
@@ -187,7 +187,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) UpdateBizToolCmdSrvApi(c *gin.Co
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphub.BizToolCmdSrvApi true "用id查询后端工具指令api"
-// @Success 200 {object} response.response{data=biz_apphub.BizToolCmdSrvApi,msg=string} "查询成功"
+// @Success 200 {object} response.Response{data=biz_apphub.BizToolCmdSrvApi,msg=string} "查询成功"
 // @Router /bizToolCmdSrvApi/findBizToolCmdSrvApi [get]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) FindBizToolCmdSrvApi(c *gin.Context) {
 	ID := c.Query("ID")
@@ -212,7 +212,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) FindBizToolCmdSrvApi(c *gin.Cont
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizToolCmdSrvApiSearch true "分页获取后端工具指令api列表"
-// @Success 200 {object} response.response{data=response.PageResult,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=response.PageResult,msg=string} "获取成功"
 // @Router /bizToolCmdSrvApi/getBizToolCmdSrvApiList [get]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) GetBizToolCmdSrvApiList(c *gin.Context) {
 	var pageInfo biz_apphubReq.BizToolCmdSrvApiSearch
@@ -248,7 +248,7 @@ func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) GetBizToolCmdSrvApiList(c *gin.C
 // @accept application/json
 // @Produce application/json
 // @Param data query biz_apphubReq.BizToolCmdSrvApiSearch true "分页获取后端工具指令api列表"
-// @Success 200 {object} response.response{data=object,msg=string} "获取成功"
+// @Success 200 {object} response.Response{data=object,msg=string} "获取成功"
 // @Router /bizToolCmdSrvApi/getBizToolCmdSrvApiPublic [get]
 func (bizToolCmdSrvApiApi *BizToolCmdSrvApiApi) GetBizToolCmdSrvApiPublic(c *gin.Context) {
 	// 此接口不需要鉴权

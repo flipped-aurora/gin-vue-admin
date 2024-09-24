@@ -18,7 +18,7 @@ type AutoCodeTemplateApi struct{}
 // @accept    application/json
 // @Produce   application/json
 // @Param     data  body      request.AutoCode                                      true  "预览创建代码"
-// @Success   200   {object}  response.response{data=map[string]interface{},msg=string}  "预览创建后的代码"
+// @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "预览创建后的代码"
 // @Router    /autoCode/preview [post]
 func (a *AutoCodeTemplateApi) Preview(c *gin.Context) {
 	var info request.AutoCode

@@ -406,9 +406,13 @@
         "selectTableBtn": "استخدم هذا الجدول",
         "automationStructure": "هيكل الأتمتة",
         "structureName": "اسم الهيكل",
+        "structureSimpleName": "اسم الهيكل",
+        "structNameInput": "يرجى إدخال اختصار Struct",
+        "StructureOverview": "نظرة عامة على الهيكل",
         "capitalizeFirstLetterAutomatically": "تحويل الحرف الأول إلى حرف كبير تلقائيًا",
         "objectNameAndRouteGroup": "الاختصار كاسم كائن المعامل ومجموعة التوجيه",
-        "structureAbbreviation": "اختصار الهيكل"
+        "structureAbbreviation": "اختصار الهيكل",
+        "fineNameInput": "يرجى إدخال اسم الملف"
       }
     }
   }

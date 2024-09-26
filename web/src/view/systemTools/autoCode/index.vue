@@ -37,7 +37,7 @@
         ref="getTableForm"
         :inline="true"
         :model="dbform"
-        label-width="160px"
+        label-width="120px"
       >
         <el-row class="w-full">
           <el-col :span="6">
@@ -146,7 +146,7 @@
         ref="autoCodeForm"
         :rules="rules"
         :model="form"
-        label-width="120px"
+        label-width="170px"
         :inline="true"
       >
         <el-row class="w-full">
@@ -173,18 +173,18 @@
                     placement="bottom"
                     effect="light"
                 >
-                  <div> {{ t('view.systemTools.autoCode.structureAbbreviation') }} <el-icon><QuestionFilled /></el-icon> </div>
+                  <div> {{ t('view.systemTools.autoCode.structureSimpleName') }} <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
               <el-input
                   v-model="form.abbreviation"
-                  placeholder="请输入Struct简称"
+                  :placeholder="t('view.systemTools.autoCode.structNameInput')"
               />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item
-                label="结构简介"
+                :label="t('view.systemTools.autoCode.StructureOverview')"
                 prop="description"
                 class="w-full"
             >
@@ -224,14 +224,14 @@
               </template>
               <el-input
                 v-model="form.packageName"
-                placeholder="请输入文件名称"
+                :placeholder="t('view.systemTools.autoCode.fineNameInput')"
                 @blur="toLowerCaseFunc(form,'packageName')"
               />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item
-              label="选择模板"
+              :label="选择模板"
               prop="package"
               class="w-full relative"
             >

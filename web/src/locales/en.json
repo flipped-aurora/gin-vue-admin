@@ -554,7 +554,10 @@
                 "structureName": "Structure Name",
                 "capitalizeFirstLetterAutomatically": "Automatically Capitalize First Letter",
                 "objectNameAndRouteGroup": "Abbreviation used as parameter object name and route group",
-                "structureAbbreviation": "Structure Abbreviation"
+                "structureSimpleName": "Structure Abbreviation",
+                "StructureOverview": "Structure Overview",
+                "structNameInput": "Please enter Struct abbreviation",
+                "fineNameInput": "Please enter the file name"
 
             },
             "autoPkg": {

@@ -552,10 +552,13 @@
                 "selectTableBtn": "选择此表",
                 "automationStructure": "自动化结构",
                 "structureName": "结构名称",
+                "structureSimpleName": "结构简称",
+                "StructureOverview": "结构简介",
+                "structNameInput": "请输入Struct简称",
+                "fineNameInput": "请输入文件名称",
                 "capitalizeFirstLetterAutomatically": "首字母自动大写",
                 "objectNameAndRouteGroup": "简称作为参数对象名和路由组",
-                "structureAbbreviation": "结构简称"
-
+                "templateChoose": "选择模板"
             },
             "autoPkg": {
                 "addSuccess": "添加成功",

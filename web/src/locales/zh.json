@@ -384,8 +384,24 @@
                     "content4": "更多的创意资源，更多的创意灵感",
                     "content5": "更合理的代码结构，更清晰的代码逻辑",
                     "contentTitle": "内容标题",
-                    "ranking": "排名"
+                    "ranking": "排名",
+                    "heat": "热度值",
+                    "PluginTitle": "插件标题"
                 }
+            },
+            "grids": {
+                "menuManage": "菜单管理",
+                "apiManage": "API管理",
+                "roleManage": "角色管理",
+                "userManage": "用户管理",
+                "automationPackage": "自动化包",
+                "autoCode": "自动代码",
+                "licensePurchase": "授权购买",
+                "pluginMarket": "插件市场",
+                "ginDoc": "GIN 文档",
+                "gvaDoc": "GVA 文档",
+                "pluginMarket": "插件市场",
+                "githubRepo": "github 仓库"
             },
             "contentData": "内容数据",
             "dashboardCharts": {
@@ -414,7 +430,23 @@
             "title": "早安，管理员，请开始一天的工作吧",
             "todaysTraffic": "今日流量",
             "totalNumberOfUsers": "总用户数",
-            "userManage": "用户管理"
+            "userManage": "用户管理",
+            "notification": "通知",
+            "violation": "违规",
+            "information": "信息",
+            "error": "错误",
+            "noticeList": {
+                "notice1": "授权费将在从六月一日起结束第一价格梯度，进入第二价格梯度。",
+                "notice2": "授权后将进入专属飞书群，获取官方辅助。",
+                "notice3": "授权可获得插件市场极大优惠价格。",
+                "notice4": "未授权商用将有可能被资源采集工具爬取并追责。",
+                "notice5": "再次感谢您对开源事业的支持",
+                "notice6": "让创意更有价值。",
+                "notice7": "让劳动更有意义。",
+                "notice8": "让思维更有深度。",
+                "notice9": "让生活更有趣味。",
+                "notice10": "让公司更有活力。"
+            }
         },
         "dictionary": {
             "sysDictionary": {
@@ -508,7 +540,22 @@
                 "structNameNote": "首字母自动转换大写",
                 "table": "表",
                 "tableName": "表名",
-                "tableNameNote": "指定表名（非必填)"
+                "tableNameNote": "指定表名（非必填)",
+                "aiContent": "小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。",
+                "XiaoMiaoDesc": "小淼基本啥也能设计出来，但是需要消耗积分，测试阶段授权用户自动获得基础积分，开源用户需要填表申请。",
+                "XiaoQi": "小奇",
+                "XiaoMiao": "小淼",
+                "createdFromDB": "从数据库创建",
+                "businessLibrary": "业务库",
+                "businessLibraryNotice": "注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）",
+                "selectBusinessLibrary": "选择业务库",
+                "selectTableBtn": "选择此表",
+                "automationStructure": "自动化结构",
+                "structureName": "结构名称",
+                "capitalizeFirstLetterAutomatically": "首字母自动大写",
+                "objectNameAndRouteGroup": "简称作为参数对象名和路由组",
+                "structureAbbreviation": "结构简称"
+
             },
             "autoPkg": {
                 "addSuccess": "添加成功",

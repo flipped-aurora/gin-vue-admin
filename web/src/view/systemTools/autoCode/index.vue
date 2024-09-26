@@ -10,21 +10,21 @@
         <el-input v-model="prompt" type="textarea" :rows="5" :maxlength="100" :placeholder="t('view.systemTools.autoCode.aiCodeNote')" resize="none" />
         <div class="flex absolute right-2 bottom-2">
           <el-tooltip
-            content="小奇存在失败概率，面向所有用户开放使用（失败了重新生成一下就好）。"
+            :content="t('view.systemTools.autoCode.aiContent')"
           >
             <el-button type="primary" @click="llmAutoFunc('xiaoqi')">
               <el-icon size="18">
                 <ai-gva />
-              </el-icon> 小奇
+              </el-icon> <span>{{t('view.systemTools.autoCode.XiaoQi')}}</span>
             </el-button>
           </el-tooltip>
           <el-tooltip
-            content="小淼基本啥也能设计出来，但是需要消耗积分，测试阶段授权用户自动获得基础积分，开源用户需要填表申请。"
+            :content="t('view.systemTools.autoCode.XiaoMiaoDesc')"
           >
             <el-button type="primary" @click="llmAutoFunc('xiaomiao')">
               <el-icon size="18">
                 <ai-gva />
-              </el-icon> 小淼
+              </el-icon> <span>{{t('view.systemTools.autoCode.XiaoMiao')}}</span>
             </el-button>
           </el-tooltip>
         </div>
@@ -32,33 +32,33 @@
     </div>
     <!-- 从数据库直接获取字段 -->
     <div class="gva-search-box">
-      <div class="text-lg mb-2 text-gray-600">从数据库创建</div>
+      <div class="text-lg mb-2 text-gray-600">{{t('view.systemTools.autoCode.createdFromDB')}}</div>
       <el-form
         ref="getTableForm"
         :inline="true"
         :model="dbform"
-        label-width="120px"
+        label-width="160px"
       >
         <el-row class="w-full">
           <el-col :span="6">
             <el-form-item
-              label="业务库"
+              :label="t('view.systemTools.autoCode.businessLibrary')"
               prop="selectDBtype"
               class="w-full"
             >
               <template #label>
                 <el-tooltip
-                  content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。（此处可选择对应库表，可理解为从哪个库选择表）"
+                  :content="t('view.systemTools.autoCode.businessLibraryNotice')"
                   placement="bottom"
                   effect="light"
                 >
-                  <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
+                  <div> {{ t('view.systemTools.autoCode.businessLibrary') }} <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
               <el-select
                 v-model="dbform.businessDB"
                 clearable
-                placeholder="选择业务库"
+                :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
                 @change="getDbFunc"
                 class="w-full"
               >
@@ -131,7 +131,7 @@
                     type="primary"
                     @click="getColumnFunc"
                 >
-                  使用此表
+                  {{t('view.systemTools.autoCode.selectTableBtn')}}
                 </el-button>
               </div>
             </el-form-item>
@@ -141,7 +141,7 @@
     </div>
     <div class="gva-search-box">
       <!-- 初始版本自动化代码工具 -->
-      <div class="text-lg mb-2 text-gray-600">自动化结构</div>
+      <div class="text-lg mb-2 text-gray-600">{{ t('view.systemTools.autoCode.automationStructure') }}</div>
       <el-form
         ref="autoCodeForm"
         :rules="rules"
@@ -152,13 +152,13 @@
         <el-row class="w-full">
           <el-col :span="6">
             <el-form-item
-              label="结构名称"
+              :label="t('view.systemTools.autoCode.structureName')"
               prop="structName"
               class="w-full"
             >
               <el-input
                 v-model="form.structName"
-                placeholder="首字母自动转换大写"
+                :placeholder="t('view.systemTools.autoCode.capitalizeFirstLetterAutomatically')"
               />
             </el-form-item>
           </el-col>
@@ -169,11 +169,11 @@
             >
               <template #label>
                 <el-tooltip
-                    content="简称会作为入参对象名和路由group"
+                    :content="t('view.systemTools.autoCode.objectNameAndRouteGroup')"
                     placement="bottom"
                     effect="light"
                 >
-                  <div> 结构简称 <el-icon><QuestionFilled /></el-icon> </div>
+                  <div> {{ t('view.systemTools.autoCode.structureAbbreviation') }} <el-icon><QuestionFilled /></el-icon> </div>
                 </el-tooltip>
               </template>
               <el-input

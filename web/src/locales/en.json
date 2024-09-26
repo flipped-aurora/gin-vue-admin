@@ -384,8 +384,24 @@
                     "content4": "More creative resources, more creative inspiration",
                     "content5": "More reasonable code structure, clearer code logic",
                     "contentTitle": "Content Title",
-                    "ranking": "Ranking"
+                    "ranking": "Ranking",
+                    "heat": "heat",
+                    "PluginTitle": "Plugin Title"
                 }
+            },
+            "grids": {
+                "menuManage": "Menu Management",
+                "apiManage": "API Management",
+                "roleManage": "Role Management",
+                "userManage": "User Management",
+                "automationPackage": "Automation Package",
+                "autoCode": "Auto Code",
+                "licensePurchase": "License Purchase",
+                "pluginMarket": "Plugin Market",
+                "ginDoc": "GIN Documentation",
+                "gvaDoc": "GVA Documentation",
+                "pluginMarket": "Plugin Market",
+                "githubRepo": "GitHub Repository"
             },
             "contentData": "Content Data",
             "dashboardCharts": {
@@ -414,7 +430,23 @@
             "title": "Good morning, admin, please start your day",
             "todaysTraffic": "Today's traffic",
             "totalNumberOfUsers": "Number of users",
-            "userManage": "User management"
+            "userManage": "User management",
+            "notification": "Notification",
+            "violation": "Violation",
+            "information": "Information",
+            "error": "Error",
+            "noticeList": {
+                "notice1": "The first pricing tier for the license fee will end on June 1st, moving to the second pricing tier.",
+                "notice2": "After licensing, you will join an exclusive Feishu group for official assistance.",
+                "notice3": "Licensing grants significant discounts in the plugin market.",
+                "notice4": "Unauthorized commercial use may be crawled by resource collection tools and could face legal consequences.",
+                "notice5": "Thank you again for your support of the open-source initiative.",
+                "notice6": "Making creativity more valuable.",
+                "notice7": "Making labor more meaningful.",
+                "notice8": "Making thinking more profound.",
+                "notice9": "Making life more interesting.",
+                "notice10": "Making companies more dynamic."
+            }
         },
         "dictionary": {
             "sysDictionary": {
@@ -508,7 +540,22 @@
                 "structNameNote": "The first letter is automatically converted to uppercase",
                 "table": " table",
                 "tableName": "Table Name",
-                "tableNameNote": "Specify the table name (not required)"
+                "tableNameNote": "Specify the table name (not required)",
+                "aiContent": "There is a chance of failure with Xiaoqi, it is open to all users (just regenerate if it fails).",
+                "XiaoMiaoDesc": "Xiaomiao can basically design anything, but it requires the consumption of points. During the testing phase, authorized users automatically receive basic points, while open-source users need to apply by filling out a form.",
+                "XiaoQi": "XiaoQi",
+                "XiaoMiao": "XiaoMiao",
+                "createdFromDB": "Create from database",
+                "businessLibrary": "Business Library",
+                "businessLibraryNotice": "Note: You need to configure multiple databases in db-list in advance. If not configured, you need to configure and restart the service before you can use it. (Here you can choose the corresponding library table, which can be understood as choosing a table from which library)",
+                "selectBusinessLibrary": "Select Business Library",
+                "selectTableBtn": "Use this table",
+                "automationStructure": "Automation Structure",
+                "structureName": "Structure Name",
+                "capitalizeFirstLetterAutomatically": "Automatically Capitalize First Letter",
+                "objectNameAndRouteGroup": "Abbreviation used as parameter object name and route group",
+                "structureAbbreviation": "Structure Abbreviation"
+
             },
             "autoPkg": {
                 "addSuccess": "Added successfully",

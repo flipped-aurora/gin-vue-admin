@@ -1,7 +1,7 @@
 <template>
   <div>
     <WarningBar
-      title="本功能提供同步的表格导出功能，大数据量的异步表格导出功能，可以选择点我定制"
+      :title="t('view.systemTools.syncTableExportFeature')"
       href="https://flipped-aurora.feishu.cn/docx/KwjxdnvatozgwIxGV0rcpkZSn4d"
     />
     <div class="gva-search-box">
@@ -14,13 +14,13 @@
         @keyup.enter="onSubmit"
       >
         <el-form-item
-          label="创建日期"
+          :label="t('general.createDate')"
           prop="createdAt"
         >
           <template #label>
             <span>
-              创建日期
-              <el-tooltip content="搜索范围是开始日期（包含）至结束日期（不包含）">
+              {{ t('general.createDate') }}
+              <el-tooltip :content="t('general.searchDesc')">
                 <el-icon><QuestionFilled /></el-icon>
               </el-tooltip>
             </span>
@@ -28,44 +28,45 @@
           <el-date-picker
             v-model="searchInfo.startCreatedAt"
             type="datetime"
-            placeholder="开始日期"
+            :placeholder="t('general.endData')"
             :disabled-date="time=> searchInfo.endCreatedAt ? time.getTime() > searchInfo.endCreatedAt.getTime() : false"
           />
           —
           <el-date-picker
             v-model="searchInfo.endCreatedAt"
             type="datetime"
-            placeholder="结束日期"
+            :placeholder="t('general.startData')"
             :disabled-date="time=> searchInfo.startCreatedAt ? time.getTime() < searchInfo.startCreatedAt.getTime() : false"
           />
         </el-form-item>
         <el-form-item
-          label="模板名称"
+            :label="t('view.systemTools.templateName')"
           prop="name"
         >
+
           <el-input
             v-model="searchInfo.name"
-            placeholder="搜索条件"
+            :placeholder="t('general.searchCriteria')"
           />
 
         </el-form-item>
         <el-form-item
-          label="表名称"
+          :label="t('view.systemTools.tableName')"
           prop="tableName"
         >
           <el-input
             v-model="searchInfo.tableName"
-            placeholder="搜索条件"
+            :placeholder="t('general.searchCriteria')"
           />
 
         </el-form-item>
         <el-form-item
-          label="模板标识"
+          :label="t('view.systemTools.templateIdentifier')"
           prop="templateID"
         >
           <el-input
             v-model="searchInfo.templateID"
-            placeholder="搜索条件"
+            :placeholder="t('general.searchCriteria')"
           />
 
         </el-form-item>
@@ -74,11 +75,11 @@
             type="primary"
             icon="search"
             @click="onSubmit"
-          >查询</el-button>
+          >{{t('general.search')}}</el-button>
           <el-button
             icon="refresh"
             @click="onReset"
-          >重置</el-button>
+          >{{t('general.reset')}}</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -88,14 +89,14 @@
           type="primary"
           icon="plus"
           @click="openDialog"
-        >新增</el-button>
+        >{{t('general.add')}}</el-button>
 
         <el-button
           icon="delete"
           style="margin-left: 10px;"
           :disabled="!multipleSelection.length"
           @click="onDelete"
-        >删除</el-button>
+        >{{t('general.delete')}}</el-button>
       </div>
       <el-table
         ref="multipleTable"
@@ -111,47 +112,47 @@
         />
         <el-table-column
           align="left"
-          label="日期"
+          :label="t('general.createdAt')"
           width="180"
         >
           <template #default="scope">{{ formatDate(scope.row.CreatedAt) }}</template>
         </el-table-column>
         <el-table-column
           align="left"
-          label="数据库"
-          width="120"
+          :label="t('view.systemTools.autoCode.dbName')"
+          width="240"
         >
           <template #default="scope">
-            <span>{{ scope.row.dbName || "GVA库" }}</span>
+            <span>{{ scope.row.dbName || t('view.systemTools.gvaDatabase') }}</span>
           </template>
         </el-table-column>
         <el-table-column
             align="left"
-            label="模板标识"
+            :label="t('view.systemTools.templateIdentifier')"
             prop="templateID"
-            width="120"
+            width="140"
         />
         <el-table-column
           align="left"
-          label="模板名称"
+          :label="t('view.systemTools.templateName')"
           prop="name"
-          width="120"
+          width="260"
         />
         <el-table-column
           align="left"
-          label="表名称"
+          :label="t('view.systemTools.tableName')"
           prop="tableName"
           width="120"
         />
         <el-table-column
           align="left"
-          label="模板信息"
+          :label="t('view.systemTools.templateInfo')"
           prop="templateInfo"
           min-width="120"
         />
         <el-table-column
           align="left"
-          label="操作"
+          :label="t('components.commandMenu.operate')"
           min-width="120"
         >
           <template #default="scope">
@@ -161,13 +162,13 @@
               icon="edit"
               class="table-button"
               @click="updateSysExportTemplateFunc(scope.row)"
-            >变更</el-button>
+            >{{ t('general.change') }}</el-button>
             <el-button
               type="primary"
               link
               icon="delete"
               @click="deleteRow(scope.row)"
-            >删除</el-button>
+            >{{ t('general.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -187,20 +188,20 @@
       v-model="dialogFormVisible"
       size="60%"
       :before-close="closeDialog"
-      :title="type==='create'?'添加':'修改'"
+      :title="type==='create'?t('view.systemTools.add'):t('view.systemTools.edit')"
       :show-close="false"
       destroy-on-close
     >
 
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">{{ type==='create'?'添加':'修改' }}</span>
+          <span class="text-lg">{{ type==='create'?t('view.systemTools.add'):t('view.systemTools.edit') }}</span>
           <div>
-            <el-button @click="closeDialog">取 消</el-button>
+            <el-button @click="closeDialog">{{ t('general.close') }}</el-button>
             <el-button
               type="primary"
               @click="enterDialog"
-            >确 定</el-button>
+            >{{ t('general.confirm') }}</el-button>
           </div>
         </div>
       </template>
@@ -214,23 +215,24 @@
       >
 
         <el-form-item
-          label="业务库"
+            label-width="160px"
+          :label="t('view.systemTools.autoCode.businessLibrary')"
           prop="dbName"
         >
           <template #label>
             <el-tooltip
-              content="注：需要提前到db-list自行配置多数据库，如未配置需配置后重启服务方可使用。若无法选择，请到config.yaml中设置disabled:false，选择导入导出的目标库。"
+              :content="t('view.systemTools.note')"
               placement="bottom"
               effect="light"
             >
-              <div> 业务库 <el-icon><QuestionFilled /></el-icon> </div>
+              <div> {{ t('view.systemTools.autoCode.businessLibrary') }} <el-icon><QuestionFilled /></el-icon> </div>
             </el-tooltip>
           </template>
           <el-select
               v-model="formData.dbName"
               clearable
               @change="dbNameChange"
-              placeholder="选择业务库"
+              :placeholder="t('view.systemTools.autoCode.selectBusinessLibrary')"
           >
             <el-option
                 v-for="item in dbList"
@@ -248,17 +250,19 @@
         </el-form-item>
 
         <el-form-item
-          label="模板名称:"
+            label-width="160px"
+            :label="t('view.systemTools.templateName')"
           prop="name"
         >
           <el-input
             v-model="formData.name"
             :clearable="true"
-            placeholder="请输入模板名称"
+            :placeholder="t('view.systemTools.enterTemplateName')"
           />
         </el-form-item>
         <el-form-item
-          label="表名称:"
+            label-width="160px"
+          :label="t('view.systemTools.tableName')"
           clearable
           prop="tableName"
         >
@@ -274,7 +278,7 @@
                 v-model="formData.tableName"
                 class="flex-1"
                 filterable
-                placeholder="请选择表"
+                :placeholder="t('view.systemTools.autoCode.selectTable')"
             >
               <el-option
                   v-for="item in tableOptions"
@@ -284,23 +288,25 @@
               />
             </el-select>
 
-            <el-button type="primary" @click="getColumnFunc">自动生成模板</el-button>
+            <el-button type="primary" @click="getColumnFunc">{{ t('view.systemTools.autoGenerateTemplate') }}</el-button>
           </div>
 
         </el-form-item>
         <el-form-item
-          label="模板标识:"
+            label-width="160px"
+          :label="t('view.systemTools.templateIdentifier')"
           prop="templateID"
         >
           <el-input
             v-model="formData.templateID"
             :clearable="true"
-            placeholder="模板标识为前端组件需要挂在的标识属性"
+            :placeholder="t('view.systemTools.templateIdentifierInfo')"
           />
         </el-form-item>
 
         <el-form-item
-          label="关联条件:"
+            label-width="160px"
+          :label="t('view.systemTools.associationCondition')"
         >
           <div
             v-for="(join,key) in formData.joinTemplate"
@@ -309,7 +315,7 @@
           >
             <el-select
               v-model="join.joins"
-              placeholder="请选择关联方式"
+              :placeholder="t('view.systemTools.selectAssociationMethod')"
             >
               <el-option
                 label="LEFT JOIN"
@@ -326,29 +332,30 @@
             </el-select>
             <el-input
                 v-model="join.table"
-                placeholder="请输入关联表"
+                :placeholder="t('view.systemTools.enterAssociationTable')"
             />
             <el-input
               v-model="join.on"
-              placeholder="关联条件 table1.a = table2.b"
+              :placeholder="t('view.systemTools.associationCondition')"
             />
             <el-button
               type="danger"
               icon="delete"
               @click="() => formData.joinTemplate.splice(key, 1)"
-            >删除</el-button>
+            >{{ t('general.delete') }}</el-button>
           </div>
           <div class="flex justify-end w-full">
             <el-button
               type="primary"
               icon="plus"
               @click="addJoin"
-            >添加条件</el-button>
+            >{{ t('view.systemTools.addCondition') }}</el-button>
           </div>
         </el-form-item>
 
         <el-form-item
-          label="模板信息:"
+            label-width="160px"
+            :label="t('view.systemTools.templateInfo')"
           prop="templateInfo"
         >
           <el-input
@@ -356,11 +363,12 @@
             type="textarea"
             :rows="12"
             :clearable="true"
-            :placeholder="templatePlaceholder"
+            placeholder="templatePlaceholder"
           />
         </el-form-item>
         <el-form-item
-          label="默认导出条数:"
+            label-width="160px"
+          :label="t('view.systemTools.defaultExportCount')"
         >
           <el-input-number
             v-model="formData.limit"
@@ -370,7 +378,8 @@
           />
         </el-form-item>
         <el-form-item
-          label="默认排序条件:"
+            label-width="160px"
+          :label="t('view.systemTools.defaultSortCondition')"
         >
           <el-input
             v-model="formData.order"
@@ -378,7 +387,8 @@
           />
         </el-form-item>
         <el-form-item
-          label="导出条件:"
+            label-width="160px"
+          :label="t('view.systemTools.exportCondition')"
         >
           <div
             v-for="(condition,key) in formData.conditions"
@@ -387,15 +397,15 @@
           >
             <el-input
               v-model="condition.from"
-              placeholder="需要从查询条件取的json key"
+              :placeholder="t('view.systemTools.jsonKeyFromQuery')"
             />
             <el-input
               v-model="condition.column"
-              placeholder="表对应的column"
+              :placeholder="t('view.systemTools.tableColumn')"
             />
             <el-select
               v-model="condition.operator"
-              placeholder="请选择查询条件"
+              :placeholder="t('view.systemTools.selectQueryCondition')"
             >
               <el-option
                 v-for="item in typeSearchOptions"
@@ -408,14 +418,14 @@
               type="danger"
               icon="delete"
               @click="() => formData.conditions.splice(key, 1)"
-            >删除</el-button>
+            >{{ t('general.delete') }}</el-button>
           </div>
           <div class="flex justify-end w-full">
             <el-button
               type="primary"
               icon="plus"
               @click="addCondition"
-            >添加条件</el-button>
+            >{{ t('view.systemTools.addCondition') }}</el-button>
           </div>
         </el-form-item>
       </el-form>
@@ -439,7 +449,9 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ref, reactive } from 'vue'
 import WarningBar from '@/components/warningBar/warningBar.vue'
 import {getDB, getTable, getColumn} from '@/api/autoCode'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 defineOptions({
   name: 'ExportTemplate'
 })
@@ -525,7 +537,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message: '不能只输入空格',
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -536,7 +548,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message: '不能只输入空格',
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -547,7 +559,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message: '不能只输入空格',
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -558,7 +570,7 @@ const rule = reactive({
   },
   {
     whitespace: true,
-    message: '不能只输入空格',
+    message: t('general.noOnlySpace'),
     trigger: ['input', 'blur'],
   }
   ],
@@ -568,11 +580,11 @@ const searchRule = reactive({
   createdAt: [
     { validator: (rule, value, callback) => {
       if (searchInfo.value.startCreatedAt && !searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写结束日期'))
+        callback(new Error(t('general.placeInputEndData')))
       } else if (!searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt) {
-        callback(new Error('请填写开始日期'))
+        callback(new Error(t('general.placeInputStartData')))
       } else if (searchInfo.value.startCreatedAt && searchInfo.value.endCreatedAt && (searchInfo.value.startCreatedAt.getTime() === searchInfo.value.endCreatedAt.getTime() || searchInfo.value.startCreatedAt.getTime() > searchInfo.value.endCreatedAt.getTime())) {
-        callback(new Error('开始日期应当早于结束日期'))
+        callback(new Error(t('general.startDataMustBeforeEndData')))
       } else {
         callback()
       }
@@ -621,7 +633,7 @@ const getColumnFunc = async () => {
   if(!formData.value.tableName) {
     ElMessage({
       type: 'error',
-      message: '请先选择业务库及选择表后再进行操作'
+      message: t('view.systemTools.selectBusinessDbAndTable')
     })
     return
   }
@@ -700,9 +712,9 @@ const handleSelectionChange = (val) => {
 
 // 删除行
 const deleteRow = (row) => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(() => {
     deleteSysExportTemplateFunc(row)
@@ -711,16 +723,16 @@ const deleteRow = (row) => {
 
 // 多选删除
 const onDelete = async() => {
-  ElMessageBox.confirm('确定要删除吗?', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
+  ElMessageBox.confirm(t('general.deleteConfirm'), t('general.hint'), {
+    confirmButtonText: t('general.confirm'),
+    cancelButtonText: t('general.cancel'),
     type: 'warning'
   }).then(async() => {
     const ids = []
     if (multipleSelection.value.length === 0) {
       ElMessage({
         type: 'warning',
-        message: '请选择要删除的数据'
+        message: t('general.selectDataToDelete')
       })
       return
     }
@@ -732,7 +744,7 @@ const onDelete = async() => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '删除成功'
+        message: t('general.deleteSuccess')
       })
       if (tableData.value.length === ids.length && page.value > 1) {
         page.value--
@@ -767,7 +779,7 @@ const deleteSysExportTemplateFunc = async(row) => {
   if (res.code === 0) {
     ElMessage({
       type: 'success',
-      message: '删除成功'
+      message: t('general.deleteSuccess')
     })
     if (tableData.value.length === 1 && page.value > 1) {
       page.value--
@@ -807,7 +819,7 @@ const enterDialog = async() => {
   } catch (error) {
     ElMessage({
       type: 'error',
-      message: '模板信息格式不正确，请检查'
+      message: t('view.systemTools.templateFormatIncorrect')
     })
     return
   }
@@ -817,7 +829,7 @@ const enterDialog = async() => {
     if (!reqData.conditions[i].from || !reqData.conditions[i].column || !reqData.conditions[i].operator) {
       ElMessage({
         type: 'error',
-        message: '请填写完整的导出条件'
+        message: t('view.systemTools.completeExportConditions')
       })
       return
     }
@@ -828,7 +840,7 @@ const enterDialog = async() => {
     if (!reqData.joinTemplate[i].joins || !reqData.joinTemplate[i].on) {
       ElMessage({
         type: 'error',
-        message: '请填写完整的关联'
+        message: t('view.systemTools.completeAssociation')
       })
       return
     }
@@ -852,7 +864,7 @@ const enterDialog = async() => {
     if (res.code === 0) {
       ElMessage({
         type: 'success',
-        message: '创建/更改成功'
+        message: t('general.createUpdateSuccess')
       })
       closeDialog()
       getTableData()

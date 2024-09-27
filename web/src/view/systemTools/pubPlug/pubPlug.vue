@@ -1,16 +1,16 @@
 <template>
   <div class="gva-form-box">
     <div class="p-4 bg-white dark:bg-slate-900">
-      <WarningBar title="目前只支持标准插件（通过插件模板生成的标准目录插件），非标准插件请自行打包" />
+      <WarningBar :title="t('view.plugins.pluginSupport')" />
       <div class="flex items-center gap-3">
         <el-input
           v-model="plugName"
-          placeholder="插件模板处填写的【插件名】"
+          :placeholder="t('view.plugins.pluginNameInput')"
         />
       </div>
       <el-card class="mt-2 text-center">
-        <WarningBar title="穿梭框请只选择子级菜单即可" />
-        <el-input v-model="parentMenu" placeholder="请输入菜单组名，例：公告管理" class="mb-2"></el-input>
+        <WarningBar :title="t('view.plugins.menuSelectionNote')" />
+        <el-input v-model="parentMenu" :placeholder="t('view.plugins.menuGroupNameInput')" class="mb-2"></el-input>
         <el-transfer
           v-model="menus"
           :props="{
@@ -20,9 +20,9 @@
           :data="menusData"
           filterable
           :filter-method="filterMenuMethod"
-          filter-placeholder="请输入菜单名称/路径"
-          :titles="['可选菜单','使用菜单']"
-          :button-texts="['移除', '选中']"
+          :filter-placeholder="t('view.plugins.menuNamePathInput')"
+          :titles="[t('view.plugins.optionalMenu'),t('view.plugins.useMenu')]"
+          :button-texts="[t('view.plugins.remove'), t('view.plugins.selected')]"
         >
           <template #default="{option}">
             {{ option.meta.title }} {{ option.component }}
@@ -33,7 +33,7 @@
             type="primary"
             @click="fmtInitMenu"
           >
-            定义安装菜单
+            {{ t('view.plugins.defineMenuInstall') }}
           </el-button>
         </div>
       </el-card>
@@ -47,9 +47,9 @@
           :data="apisData"
           filterable
           :filter-method="filterApiMethod"
-          filter-placeholder="请输入API描述/PATH"
-          :titles="['可选API','使用API']"
-          :button-texts="['移除', '选中']"
+          :filter-placeholder="t('view.plugins.apiDescriptionPathInput')"
+          :titles="[t('view.plugins.optionalAPI'),t('view.plugins.useAPI')]"
+          :button-texts="[t('view.plugins.remove'), t('view.plugins.selected')]"
         >
           <template #default="{option}">
             {{ option.description }} {{ option.path }}
@@ -60,7 +60,7 @@
             type="primary"
             @click="fmtInitAPI"
           >
-            定义安装API
+            {{ t('view.plugins.defineAPIInstall') }}
           </el-button>
         </div>
       </el-card>
@@ -70,7 +70,7 @@
         type="primary"
         @click="pubPlugin"
       >
-        打包插件
+        {{ t('view.plugins.packagePlugin') }}
       </el-button>
     </div>
   </div>
@@ -91,6 +91,9 @@ const menusData = ref([])
 const apis = ref([])
 const apisData = ref([])
 const parentMenu = ref('')
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const fmtMenu = (menus) => {
   // 如果menu存在children，递归展开到一级
@@ -130,10 +133,10 @@ const pubPlugin = async() => {
 
   ElMessageBox.confirm(
       `请检查server下的/plugin/${plugName.value}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?`,
-      '打包',
+      t('view.plugins.package'),
       {
-        confirmButtonText: '打包',
-        cancelButtonText: '取消',
+        confirmButtonText: t('view.plugins.package'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning',
       }
   )
@@ -146,7 +149,7 @@ const pubPlugin = async() => {
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: '关闭打包',
+          message: t('view.plugins.closePackage'),
         })
       })
 
@@ -154,23 +157,23 @@ const pubPlugin = async() => {
 
 const fmtInitMenu = () => {
   if (!parentMenu.value) {
-    ElMessage.error('请填写菜单组名')
+    ElMessage.error(t('view.plugins.enterMenuGroupName'))
     return
   }
   if (menus.value.length === 0) {
-    ElMessage.error('请至少选择一个菜单')
+    ElMessage.error(t('view.plugins.selectAtLeastOneMenu'))
     return
   }
   if (plugName.value === '') {
-    ElMessage.error('请填写插件名')
+    ElMessage.error(t('view.plugins.enterPluginName'))
     return
   }
   ElMessageBox.confirm(
       `点击后将会覆盖server下的/plugin/${plugName.value}/initialize/menu. 是否继续?`,
-      '生成初始菜单',
+      t('view.plugins.generateInitialMenu'),
       {
-        confirmButtonText: '生成',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.generate'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning',
       }
   )
@@ -185,25 +188,25 @@ const fmtInitMenu = () => {
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: '关闭生成菜单',
+          message: t('view.plugins.closeGenerateMenu'),
         })
       })
 }
 const fmtInitAPI = () => {
   if (apis.value.length === 0) {
-    ElMessage.error('请至少选择一个API')
+    ElMessage.error(t('view.plugins.selectAtLeastOneAPI'))
     return
   }
   if (plugName.value === '') {
-    ElMessage.error('请填写插件名')
+    ElMessage.error(t('view.plugins.enterPluginNameAgain'))
     return
   }
   ElMessageBox.confirm(
       `点击后将会覆盖server下的/plugin/${plugName.value}/initialize/api. 是否继续?`,
       '生成初始API',
       {
-        confirmButtonText: '生成',
-        cancelButtonText: '取消',
+        confirmButtonText: t('general.generate'),
+        cancelButtonText: t('general.cancel'),
         type: 'warning',
       }
   )
@@ -218,7 +221,7 @@ const fmtInitAPI = () => {
       .catch(() => {
         ElMessage({
           type: 'info',
-          message: '关闭生成API',
+          message: t('view.plugins.closeGenerateAPI'),
         })
       })
 }

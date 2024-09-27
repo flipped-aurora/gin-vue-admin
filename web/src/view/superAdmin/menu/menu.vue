@@ -313,7 +313,7 @@
                 <div>
                   <span> {{ t('menu.highlightMenu') }} </span>
                   <el-tooltip
-                    content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
+                    :content="t('authority.routeNote')"
                     placement="top"
                     effect="light"
                   >

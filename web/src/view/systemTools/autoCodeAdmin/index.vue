@@ -26,7 +26,7 @@
           align="left"
           label="结构体描述"
           min-width="150"
-          prop="structCNName"
+          prop="description"
         />
         <el-table-column
           align="left"

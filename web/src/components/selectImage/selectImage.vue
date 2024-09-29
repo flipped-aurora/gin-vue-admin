@@ -18,7 +18,7 @@
           @deleteItem="deleteImg(index)"
       />
       <selectComponent
-          v-if="model.length < props.maxUpdateCount || props.maxUpdateCount === 0"
+          v-if="model?.length < props.maxUpdateCount || props.maxUpdateCount === 0"
           @chooseItem="openChooseImg"
           @deleteItem="openChooseImg"
       />

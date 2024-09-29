@@ -1,17 +1,19 @@
 <template>
   <div>
     <el-upload
+      v-model:file-list="fileList"
       multiple
       :action="`${getBaseUrl()}/fileUploadAndDownload/upload?noSave=1`"
       :on-error="uploadError"
       :on-success="uploadSuccess"
       :show-file-list="true"
-      :file-list="fileList"
       :limit="limit"
       :accept="accept"
       class="upload-btn"
     >
-      <el-button type="primary">上传文件</el-button>
+      <el-button type="primary">
+        上传文件
+      </el-button>
     </el-upload>
   </div>
 </template>
@@ -20,7 +22,6 @@
 
 import { ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/pinia/modules/user'
 import { getBaseUrl } from '@/utils/format'
 
 defineOptions({
@@ -42,17 +43,13 @@ const props = defineProps({
   },
 })
 
-const path = ref(import.meta.env.VITE_BASE_API)
-
-const userStore = useUserStore()
 const fullscreenLoading = ref(false)
 
 const fileList = ref(props.modelValue)
 
-const emits = defineEmits(['update:modelValue'])
+const emits = defineEmits(['update:modelValue', 'on-success', 'on-error'])
 
 watch(fileList.value, (val) => {
-  console.log(val)
   emits('update:modelValue', val)
 })
 
@@ -64,7 +61,15 @@ watch(
   { immediate: true }
 )
 const uploadSuccess = (res) => {
-  const { data } = res
+  const { data,code } = res
+  if(code !== 0){
+    ElMessage({
+      type: 'error',
+      message: '上传失败'+res.msg
+    })
+    fileList.value.pop()
+    return
+  }
   if (data.file) {
     fileList.value.push({
       name: data.file.name,
@@ -72,14 +77,16 @@ const uploadSuccess = (res) => {
     })
     fullscreenLoading.value = false
   }
+  emits('on-success', res)
 }
 
-const uploadError = () => {
+const uploadError = (err) => {
   ElMessage({
     type: 'error',
     message: '上传失败'
   })
   fullscreenLoading.value = false
+  emits('on-error',err)
 }
 
 </script>

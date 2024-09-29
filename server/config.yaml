@@ -83,7 +83,7 @@ hua-wei-obs:
     access-key: you-access-key
     secret-key: you-secret-key
 jwt:
-    signing-key: 04e6f54d-2fcf-4cf1-8bad-4332e8a64466
+    signing-key: e01c7de8-e79b-4dcc-b1df-bb7eb88402cd
     expires-time: 7d
     buffer-time: 1d
     issuer: qmPlus
@@ -126,7 +126,7 @@ mysql:
     prefix: ""
     port: "3306"
     config: charset=utf8mb4&parseTime=True&loc=Local
-    db-name: gva_tms
+    db-name: gva_db
     username: mhassan
     password: P@$$w0rD
     path: 127.0.0.1
@@ -205,6 +205,7 @@ system:
     use-multipoint: false
     use-redis: false
     use-mongo: false
+    use-strict-auth: false
 tencent-cos:
     bucket: xxxxx-10005608
     region: ap-shanghai

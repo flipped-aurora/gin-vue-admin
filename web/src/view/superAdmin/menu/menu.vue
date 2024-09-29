@@ -312,7 +312,7 @@
                 <div>
                   <span> {{ t('menu.highlightMenu') }} </span>
                   <el-tooltip
-                    content="注：当到达此路由时候，指定左侧菜单指定name会处于活跃状态（亮起），可为空，为空则为本路由Name。"
+                    :content="t('menu.highlightMenuNote')"
                     placement="top"
                     effect="light"
                   >
@@ -588,23 +588,12 @@ const rules = reactive({
   ],
 })
 
-const page = ref(1)
-const total = ref(0)
-const pageSize = ref(999)
 const tableData = ref([])
-const searchInfo = ref({})
 // 查询
 const getTableData = async() => {
-  const table = await getMenuList({
-    page: page.value,
-    pageSize: pageSize.value,
-    ...searchInfo.value,
-  })
+  const table = await getMenuList()
   if (table.code === 0) {
-    tableData.value = table.data.list
-    total.value = table.data.total
-    page.value = table.data.page
-    pageSize.value = table.data.pageSize
+    tableData.value = table.data
   }
 }
 
@@ -696,9 +685,7 @@ const deleteMenu = (ID) => {
           type: 'success',
           message: t('general.deleteSuccess')
         })
-        if (tableData.value.length === 1 && page.value > 1) {
-          page.value--
-        }
+
         getTableData()
       }
     })

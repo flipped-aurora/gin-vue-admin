@@ -305,5 +305,10 @@
 				"operationFail" : "The operation fail."
 			}
 		}
+	},
+	"middleware" : {
+		"casbin" : {
+			"insufficientPermissions" : "Insufficient permissions"
+		}
 	}
 }

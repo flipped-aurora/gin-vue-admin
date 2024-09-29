@@ -56,6 +56,9 @@
           // 此字段为json结构，可以前端自行控制展示和数据绑定模式 需绑定json的key为 formData.{{.FieldJson}} 后端会按照json的类型进行存取
           {{"{{"}} formData.{{.FieldJson}} {{"}}"}}
        {{- end }}
+       {{- if eq .FieldType "array" }}
+          <ArrayCtrl v-model="formData.{{ .FieldJson }}" editable/>
+       {{- end }}
        {{- end }}
        </el-form-item>
       {{- end }}
@@ -92,9 +95,12 @@ import { useI18n } from 'vue-i18n' // added by mohamed hassan to support multila
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
 {{- if .HasPic }}
+// 图片选择组件
 import SelectImage from '@/components/selectImage/selectImage.vue'
 {{- end }}
+
 {{- if .HasFile }}
+// 文件选择组件
 import SelectFile from '@/components/selectFile/selectFile.vue'
 {{- end }}
 
@@ -102,6 +108,12 @@ import SelectFile from '@/components/selectFile/selectFile.vue'
 // 富文本组件
 import RichEdit from '@/components/richtext/rich-edit.vue'
 {{- end }}
+
+{{- if .HasArray}}
+// 数组控制组件
+import ArrayCtrl from '@/components/arrayCtrl/arrayCtrl.vue'
+{{- end }}
+
 
 const route = useRoute()
 const router = useRouter()

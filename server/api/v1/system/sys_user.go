@@ -285,7 +285,8 @@ func (b *BaseApi) SetUserAuthorities(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = userService.SetUserAuthorities(sua.ID, sua.AuthorityIds)
+	authorityID := utils.GetUserAuthorityId(c)
+	err = userService.SetUserAuthorities(authorityID, sua.ID, sua.AuthorityIds)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.modifyFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.modifyFail"), c)
@@ -351,7 +352,8 @@ func (b *BaseApi) SetUserInfo(c *gin.Context) {
 		return
 	}
 	if len(user.AuthorityIds) != 0 {
-		err = userService.SetUserAuthorities(user.ID, user.AuthorityIds)
+		authorityID := utils.GetUserAuthorityId(c)
+		err = userService.SetUserAuthorities(authorityID, user.ID, user.AuthorityIds)
 		if err != nil {
 			global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
 			response.FailWithMessage(global.Translate("general.setupFail"), c)

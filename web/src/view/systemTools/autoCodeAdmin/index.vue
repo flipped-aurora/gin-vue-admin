@@ -206,6 +206,7 @@ import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ref } from "vue";
 import { formatDate } from "@/utils/format";
+import { toUpperCase } from "@/utils/stringFun"
 import { useI18n } from 'vue-i18n'; // added by mohamed hassan to support multilanguage
 
 const { t } = useI18n() // added by mohamed hassan to support multilanguage
@@ -264,6 +265,9 @@ const closeFunc = () => {
 };
 
 const runFunc = async () =>{
+  // 首字母自动转换为大写
+  autoFunc.value.funcName = toUpperCase(autoFunc.value.funcName)
+
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {
     ElMessage.success("增加方法成功");

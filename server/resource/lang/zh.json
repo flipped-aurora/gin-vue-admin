@@ -305,5 +305,10 @@
 				"operationFail" : "操作失败"
 			}
 		}
+	},
+	"middleware" : {
+		"casbin" : {
+			"insufficientPermissions" : "权限不足"
+		}
 	}
 }

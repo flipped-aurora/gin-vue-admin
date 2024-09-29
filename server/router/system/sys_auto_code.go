@@ -30,8 +30,11 @@ func (s *AutoCodeRouter) InitAutoCodeRouter(Router *gin.RouterGroup, RouterPubli
 	{
 		autoCodeRouter.POST("pubPlug", autoCodePluginApi.Packaged)      // 打包插件
 		autoCodeRouter.POST("installPlugin", autoCodePluginApi.Install) // 自动安装插件
+
 	}
 	{
 		publicAutoCodeRouter.POST("llmAuto", autoCodeApi.LLMAuto)
+		publicAutoCodeRouter.POST("initMenu", autoCodePluginApi.InitMenu) // 同步插件菜单
+		publicAutoCodeRouter.POST("initAPI", autoCodePluginApi.InitAPI)   // 同步插件API
 	}
 }

@@ -33,7 +33,8 @@ func (cas *CasbinApi) UpdateCasbin(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
-	err = casbinService.UpdateCasbin(cmr.AuthorityId, cmr.CasbinInfos)
+	adminAuthorityID := utils.GetUserAuthorityId(c)
+	err = casbinService.UpdateCasbin(adminAuthorityID, cmr.AuthorityId, cmr.CasbinInfos)
 	if err != nil {
 		global.GVA_LOG.Error(global.Translate("general.updateFail"), zap.Error(err))
 		response.FailWithMessage(global.Translate("general.updateFailErr"), c)

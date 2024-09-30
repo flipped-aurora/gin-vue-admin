@@ -1,5 +1,5 @@
 <template>
-    <fc-designer ref="designer" height="calc(100vh - 160px)" />
+    <fc-designer ref="designer" :config="config" height="calc(100vh - 160px)" />
 </template>
 
 <script setup>
@@ -11,7 +11,10 @@ defineOptions({
   name: 'FormGenerator'
 })
 
-
 const designer = ref(null)
+
+const config = {
+  fieldReadonly: false
+}
 
 </script>

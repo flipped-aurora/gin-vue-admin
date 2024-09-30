@@ -32,8 +32,8 @@ func (b *FileUploadAndDownloadApi) UploadFile(c *gin.Context) {
 	}
 	file, err = fileUploadAndDownloadService.UploadFile(header, noSave) // 文件上传后拿到文件路径
 	if err != nil {
-		global.GVA_LOG.Error("修改数据库链接失败!", zap.Error(err))
-		response.FailWithMessage("修改数据库链接失败", c)
+		global.GVA_LOG.Error("上传文件失败!", zap.Error(err))
+		response.FailWithMessage("上传文件失败", c)
 		return
 	}
 	response.OkWithDetailed(exampleRes.ExaFileResponse{File: file}, "上传成功", c)

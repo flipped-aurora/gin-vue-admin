@@ -6,6 +6,7 @@
       :action="`${getBaseUrl()}/fileUploadAndDownload/upload?noSave=1`"
       :on-error="uploadError"
       :on-success="uploadSuccess"
+      :on-remove="uploadRemove"
       :show-file-list="true"
       :limit="limit"
       :accept="accept"
@@ -20,7 +21,7 @@
 
 <script setup>
 
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getBaseUrl } from '@/utils/format'
 
@@ -29,10 +30,6 @@ defineOptions({
 })
 
 const props = defineProps({
-  modelValue: {
-    type: Array,
-    default: () => []
-  },
   limit: {
     type: Number,
     default: 3
@@ -43,23 +40,15 @@ const props = defineProps({
   },
 })
 
+
 const fullscreenLoading = ref(false)
 
-const fileList = ref(props.modelValue)
+const model = defineModel({ type: Array })
 
-const emits = defineEmits(['update:modelValue', 'on-success', 'on-error'])
+const fileList = ref(model.value)
 
-watch(fileList.value, (val) => {
-  emits('update:modelValue', val)
-})
+const emits = defineEmits(['on-success', 'on-error'])
 
-watch(
-  () => props.modelValue,
-  value => {
-    fileList.value = value
-  },
-  { immediate: true }
-)
 const uploadSuccess = (res) => {
   const { data,code } = res
   if(code !== 0){
@@ -70,14 +59,19 @@ const uploadSuccess = (res) => {
     fileList.value.pop()
     return
   }
-  if (data.file) {
-    fileList.value.push({
-      name: data.file.name,
-      url: data.file.url
-    })
-    fullscreenLoading.value = false
-  }
+  model.value.push({
+    name: data.file.name,
+    url: data.file.url
+  })
   emits('on-success', res)
+}
+
+const uploadRemove = (file) => {
+  const index = model.value.indexOf(file)
+  if (index > -1) {
+    model.value.splice(index, 1)
+    fileList.value = model.value
+  }
 }
 
 const uploadError = (err) => {

@@ -1,7 +1,7 @@
 package system
 
 import (
-	"gorm.io/datatypes"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"strconv"
 	"time"
 
@@ -420,18 +420,18 @@ func (b *BaseApi) SetSelfInfo(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      datatypes.JSON
+// @Param     data  body      map[string]interface{}  true  "用户配置数据"
 // @Success   200   {object}  response.Response{data=map[string]interface{},msg=string}  "设置用户配置"
 // @Router    /user/SetSelfSetting [put]
 func (b *BaseApi) SetSelfSetting(c *gin.Context) {
-	var req datatypes.JSON
+	var req common.JSONMap
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}
 
-	err = userService.SetSelfSetting(&req, utils.GetUserID(c))
+	err = userService.SetSelfSetting(req, utils.GetUserID(c))
 	if err != nil {
 		global.GVA_LOG.Error("设置失败!", zap.Error(err))
 		response.FailWithMessage("设置失败", c)

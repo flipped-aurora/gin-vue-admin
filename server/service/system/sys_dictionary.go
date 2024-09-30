@@ -60,10 +60,10 @@ func (dictionaryService *DictionaryService) DeleteSysDictionary(sysDictionary sy
 func (dictionaryService *DictionaryService) UpdateSysDictionary(sysDictionary *system.SysDictionary) (err error) {
 	var dict system.SysDictionary
 	sysDictionaryMap := map[string]interface{}{
-		"Name":        sysDictionary.Name,
-		"ContentType": sysDictionary.Type,
-		"Status":      sysDictionary.Status,
-		"Desc":        sysDictionary.Desc,
+		"Name":   sysDictionary.Name,
+		"Type":   sysDictionary.Type,
+		"Status": sysDictionary.Status,
+		"Desc":   sysDictionary.Desc,
 	}
 	err = global.GVA_DB.Where("id = ?", sysDictionary.ID).First(&dict).Error
 	if err != nil {

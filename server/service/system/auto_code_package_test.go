@@ -2,6 +2,7 @@ package system
 
 import (
 	"context"
+	"github.com/flipped-aurora/gin-vue-admin/server/global"
 	model "github.com/flipped-aurora/gin-vue-admin/server/model/system"
 	"github.com/flipped-aurora/gin-vue-admin/server/model/system/request"
 	"reflect"
@@ -19,7 +20,7 @@ func Test_autoCodePackage_Create(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "测试 package",
+			name: global.Translate("sys_auto_code.testPackage"),
 			args: args{
 				ctx: context.Background(),
 				info: &request.SysAutoCodePackageCreate{
@@ -30,7 +31,7 @@ func Test_autoCodePackage_Create(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "测试 plugin",
+			name: global.Translate("sys_auto_code.testPlugin"),
 			args: args{
 				ctx: context.Background(),
 				info: &request.SysAutoCodePackageCreate{
@@ -69,8 +70,8 @@ func Test_autoCodePackage_templates(t *testing.T) {
 			args: args{
 				ctx: context.Background(),
 				entity: model.SysAutoCodePackage{
-					Desc:        "描述",
-					Label:       "展示名",
+					Desc:        global.Translate("sys_auto_code.description"),
+					Label:       global.Translate("sys_auto_code.displayName"),
 					Template:    "plugin",
 					PackageName: "preview",
 				},

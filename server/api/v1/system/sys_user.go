@@ -61,10 +61,10 @@ func (b *BaseApi) Login(c *gin.Context) {
 			return
 		}
 		if user.Enable != 1 {
-			global.GVA_LOG.Error("登陆失败! 用户被禁止登录!")
+			global.GVA_LOG.Error(global.Translate("sys_user.loginFailUserBanned"))
 			// 验证码次数+1
 			global.BlackCache.Increment(key, 1)
-			response.FailWithMessage("用户被禁止登录", c)
+			response.FailWithMessage(global.Translate("sys_user.userBanned"), c)
 			return
 		}
 		b.TokenNext(c, *user)
@@ -433,11 +433,11 @@ func (b *BaseApi) SetSelfSetting(c *gin.Context) {
 
 	err = userService.SetSelfSetting(&req, utils.GetUserID(c))
 	if err != nil {
-		global.GVA_LOG.Error("设置失败!", zap.Error(err))
-		response.FailWithMessage("设置失败", c)
+		global.GVA_LOG.Error(global.Translate("general.setupFailErr"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.setupFailErr"), c)
 		return
 	}
-	response.OkWithMessage("设置成功", c)
+	response.OkWithMessage(global.Translate("general.setupSuccess"), c)
 }
 
 // GetUserInfo

@@ -16,16 +16,16 @@ type EmailApi struct{}
 // @Summary   发送测试邮件
 // @Security  ApiKeyAuth
 // @Produce   application/json
-// @Success   200  {string}  string  "{"success":true,"data":{},"msg":"发送成功"}"
+// @Success   200  {string}  string  "{"success":true,"data":{},"msg":global.Translate("general.sendSuccess")}"
 // @Router    /email/emailTest [post]
 func (s *EmailApi) EmailTest(c *gin.Context) {
 	err := service.ServiceGroupApp.EmailTest()
 	if err != nil {
-		global.GVA_LOG.Error("发送失败!", zap.Error(err))
-		response.FailWithMessage("发送失败", c)
+		global.GVA_LOG.Error(global.Translate("general.sendFailed"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.sendFailed"), c)
 		return
 	}
-	response.OkWithMessage("发送成功", c)
+	response.OkWithMessage(global.Translate("general.sendSuccess"), c)
 }
 
 // SendEmail
@@ -34,7 +34,7 @@ func (s *EmailApi) EmailTest(c *gin.Context) {
 // @Security  ApiKeyAuth
 // @Produce   application/json
 // @Param     data  body      email_response.Email  true  "发送邮件必须的参数"
-// @Success   200   {string}  string                "{"success":true,"data":{},"msg":"发送成功"}"
+// @Success   200   {string}  string                "{"success":true,"data":{},"msg":global.Translate("general.sendSuccess")}"
 // @Router    /email/sendEmail [post]
 func (s *EmailApi) SendEmail(c *gin.Context) {
 	var email email_response.Email
@@ -45,9 +45,9 @@ func (s *EmailApi) SendEmail(c *gin.Context) {
 	}
 	err = service.ServiceGroupApp.SendEmail(email.To, email.Subject, email.Body)
 	if err != nil {
-		global.GVA_LOG.Error("发送失败!", zap.Error(err))
-		response.FailWithMessage("发送失败", c)
+		global.GVA_LOG.Error(global.Translate("general.sendFailed"), zap.Error(err))
+		response.FailWithMessage(global.Translate("general.sendFailed"), c)
 		return
 	}
-	response.OkWithMessage("发送成功", c)
+	response.OkWithMessage(global.Translate("general.sendSuccess"), c)
 }

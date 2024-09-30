@@ -10,10 +10,10 @@ import (
 
 func PluginInit(group *gin.RouterGroup, Plugin ...plugin.Plugin) {
 	for i := range Plugin {
-		fmt.Println(Plugin[i].RouterPath(), "注册开始!")
+		fmt.Println(Plugin[i].RouterPath(), global.Translate("initialize.registrationStarted"))
 		PluginGroup := group.Group(Plugin[i].RouterPath())
 		Plugin[i].Register(PluginGroup)
-		fmt.Println(Plugin[i].RouterPath(), "注册成功!")
+		fmt.Println(Plugin[i].RouterPath(), global.Translate("sys_user.registrationSuccess"))
 	}
 }
 

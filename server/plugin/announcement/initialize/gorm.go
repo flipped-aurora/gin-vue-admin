@@ -14,7 +14,7 @@ func Gorm(ctx context.Context) {
 		new(model.Info),
 	)
 	if err != nil {
-		err = errors.Wrap(err, "注册表失败!")
+		err = errors.Wrap(err, global.Translate("announcement.registryFailed"))
 		zap.L().Error(fmt.Sprintf("%+v", err))
 	}
 }

@@ -3,7 +3,18 @@
         "server": {
             "currentVersion": "Current version",
             "welcomeTo": "Welcome to"
+        },
+        "viper": {
+            "modeGinEnvName": "You are using the gin mode with environment name %s, the config path is %s\n",
+            "envVariable": "You are using the %s environment variable, the config path is %s\n",
+            "commandLineParam": "You are using the value passed by the -c command line argument, the config path is %s\n",
+            "viperFunc": "You are using the value passed by the func Viper(), the config path is %s\n"
         }
+    },
+    "initialize": {
+        "projectNotInitialized": "The project has not been initialized, plugins cannot be installed. Restart the project after initialization to complete the plugin installation.",
+        "registrationStarted": "Registration started",
+        "scheduledDatabaseCleanup": "Scheduled database cleanup for [logs, blacklist] content"
     },
     "general": {
         "createSuccss": "Created successfully",
@@ -26,7 +37,11 @@
         "tabelDataInitFail": "Table data initialization failed!",
         "updateFail": "Update failed!",
         "updateFailErr": "Update failed",
-        "updateSuccess": "Updated successfully"
+        "updateSuccess": "Updated successfully",
+        "invalidPackageName": "Invalid package name",
+        "insufficientPermissions": "Insufficient permissions",
+        "sendFailed": "Send failed",
+        "sendSuccess": "Send successful"
     },
     "init": {
         "dbAlreadyExist": "Database configuration already exists!!",
@@ -45,7 +60,9 @@
     "sys_authority": {
         "copyFail": "Copy failed!",
         "copyFailErr": "Copy failed",
-        "copySuccess": "Copy successfully"
+        "copySuccess": "Copy successfully",
+        "assignmentFail": "Assignment failed",
+        "assignmentSuccess": "Assignment successful"
     },
     "sys_auto_code": {
         "autoCreateFail": "Automatic creation failed! Please clear the junk data yourself!",
@@ -54,7 +71,55 @@
         "previewFail": "Preview failed!",
         "previewFailErr": "Preview failed",
         "previewSuccess": "Previewed successfully",
-        "queryTablesFail": "Failed to query tables"
+        "queryTablesFail": "Failed to query tables",
+        "webPluginInstallSuccess": "Web plugin installation succeeded",
+        "serverPluginInstallSuccess": "Server plugin installation succeeded",
+        "webPluginInstallFail": "Web plugin failed to install, please unzip and install according to the documentation. If it is a backend-only plugin, please ignore this message.",
+        "serverPluginInstallFail": "Server plugin failed to install, please unzip and install according to the documentation. If it is a frontend-only plugin, please ignore this message.",
+        "packagingFail": "Packaging failed",
+        "createInitMenuFail": "Failed to create initial menu",
+        "fileChangeSuccess": "File change succeeded",
+        "createInitApiFail": "Failed to create initial API",
+        "packagingSuccess": "Packaging succeeded, file path is: %s",
+        "injectFail": "Injection failed",
+        "injectSuccess": "Injection succeeded",
+        "templateFileReadFailed": "[filepath:%s] Failed to read template file!",
+        "directoryCreationFailed": "[filepath:%s] Failed to create directory!",
+        "generationFailed": "[filepath:%s] Generation failed!",
+        "generationSuccess": "[template:%s][filepath:%s] Generation succeeded!",
+        "injection_success": "[type:%s] Injection successful!\n",
+        "templateFolderReadFailed": "Failed to read template folder!",
+        "illegalTemplateFile": "[filepath:%s] Illegal template file!",
+        "illegalTemplateDirectory": "[filepath:%s] Illegal template directory!",
+        "illegalTemplateSuffix": "[filepath:%s] Illegal template suffix!",
+        "templateFolderReadFailedWithDir": "Failed to read template folder [%s]!",
+        "testPackage": "Test package",
+        "testPlugin": "Test plugin",
+        "description": "Description",
+        "displayName": "Display Name",
+        "keywordNotice": "%s is a Go keyword!",
+
+        "nonStandardPlugin": "Non-standard plugin, please migrate automatically according to the documentation",
+        "autoPathExists": "autoPath already has a plugin with the same name, please install it manually",
+        "duplicatePlugin": "A plugin with the same name already exists, please install it manually",
+        "pluginNameRequired": "Plugin name cannot be empty",
+        "webPathNotExist": "Web path does not exist",
+        "serverPathNotExist": "Server path does not exist",
+
+        "duplicateRoleId": "Duplicate role ID exists",
+        "queryRoleDataFailed": "Failed to query role data",
+        "roleNotExist": "This role does not exist",
+        "roleInUse": "This role is currently in use by users and cannot be deleted",
+        "roleHasSubRoles": "This role has sub-roles and cannot be deleted",
+        "invalidRoleId": "The submitted role ID is invalid",
+
+        "buttonInUse": "This button is currently in use and cannot be deleted",
+        "menuHasSubMenu": "This menu has submenus and cannot be deleted",
+        "recordNotFound": "Record does not exist",
+        "menuUsedAsHome": "This menu has roles being used as the homepage and cannot be deleted",
+        "duplicateNameUpdateFailed": "Update failed due to duplicate name",
+        "adaptDatabaseFailed": "Database adaptation failed, please check if the casbin table is InnoDB engine!",
+        "stringLoadModelFailed": "Failed to load string model"
     },
     "sys_auto_code_history": {
         "rollbackSuccess": "Rolledback successfully"
@@ -107,7 +172,9 @@
         "resetPWFailErr": "Reset password failed",
         "resetPWSuccess": "Password reset successfully",
         "userNameOrPasswordError": "Username does not exist or password is incorrect",
-        "vCodeErr": "Verification code error"
+        "vCodeErr": "Verification code error",
+        "loginFailUserBanned": "Login failed! The user is banned from logging in!",
+        "userBanned": "The user is banned from logging in"
     },
     "system": {
         "api": {
@@ -311,10 +378,34 @@
             "menuID": "Menu ID"
         }
     },
+    "announcement": {
+        "publicAnnouncementAPI": "Announcement API information that does not require authentication",
+        "initConfigFailed": "Failed to initialize configuration file",
+        "announcementManagement": "Announcement Management",
+        "registryFailed": "Registry failed"
+    },
+    "sys_api": {
+        "syncFail": "Sync failed",
+        "ignoreFail": "Ignore failed",
+        "refreshFail": "Refresh failed",
+        "refreshSuccess": "Refresh successful"
+    },
     "api": {
         "example": {
             "exa_breakpoint_continue": {
-                "fileFail": "File upload failed"
+                "fileFail": "File upload failed",
+                "fileReadFail": "File read failed",
+                "checkMD5Fail": "Check MD5 failed",
+                "findOrCreateRecordFail": "Failed to find or create record",
+                "resumeFromBreakpointFail": "Resume from breakpoint failed",
+                "createFileRecordFail": "Failed to create file record",
+                "sliceCreationSuccess": "Slice creation succeeded",
+                "searchFail": "Search failed",
+                "searchSuccess": "Search succeeded",
+                "fileCreationFail": "File creation failed",
+                "fileCreationSuccess": "File creation succeeded",
+                "cacheSliceDeleteFail": "Failed to delete cache slice",
+                "cacheSliceDeleteSuccess": "Cache slice deletion succeeded"
             }
         }
     },
@@ -322,7 +413,18 @@
         "duplicateApi": "Duplicate API exists",
         "invalidSortField": "Invalid sorting field",
         "duplicateApiPath": "Duplicate API path exists",
-        "invalidSortFieldV": "Invalid sorting field: %v"
+        "invalidSortFieldV": "Invalid sorting field: %v",
+        "fileDeleteFailed": "File deletion failed",
+        "menuDeleteFailed": "Failed to delete menu",
+        "tableDeleteFailed": "Failed to delete table",
+        "rollbackInjectionSuccess": "Rollback injection code succeeded!",
+        "fileMoveFailed": "File move failed!",
+        "templateCannotBeEmpty": "Template cannot be empty",
+        "pageIsFormGenerator": "Page is form generator",
+        "packageNameCannotBeEmpty": "Package Name cannot be empty",
+        "cannotUseReservedPackageName": "Cannot use reserved package name",
+        "duplicatePackageNameExists": "Duplicate Package Name exists",
+        "failedToGetAllPackages": "Failed to get all packages"
     },
     "utils": {
         "checkFailZeroValue": "Validation failed, unable to capture zero value",

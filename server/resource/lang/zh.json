@@ -3,7 +3,18 @@
         "server": {
             "currentVersion": "当前版本",
             "welcomeTo": "欢迎使用"
+        },
+        "viper": {
+            "modeGinEnvName": "您正在使用gin模式的%s环境名称,config的路径为%s\n",
+            "envVariable": "您正在使用%s环境变量,config的路径为%s\n",
+            "commandLineParam": "您正在使用命令行的-c参数传递的值,config的路径为%s\n",
+            "viperFunc": "您正在使用func Viper()传递的值,config的路径为%s\n"
         }
+    },
+    "initialize": {
+        "projectNotInitialized": "项目暂未初始化，无法安装插件，初始化后重启项目即可完成插件安装",
+        "registrationStarted": "注册开始",
+        "scheduledDatabaseCleanup": "定时清理数据库【日志，黑名单】内容"
     },
     "general": {
         "createSuccss": "创建成功",
@@ -26,7 +37,12 @@
         "tabelDataInitFail": "表数据初始化失败!",
         "updateFail": "更新失败!",
         "updateFailErr": "更新失败",
-        "updateSuccess": "更新成功"
+        "updateSuccess": "更新成功",
+        "invalidPackageName": "包名不合法",
+        "insufficientPermissions": "权限不足",
+        "sendFailed": "发送失败",
+        "sendSuccess": "发送成功"
+
     },
     "init": {
         "dbAlreadyExist": "已存在数据库配置",
@@ -45,7 +61,9 @@
     "sys_authority": {
         "copyFail": "拷贝失败!",
         "copyFailErr": "拷贝失败",
-        "copySuccess": "拷贝成功"
+        "copySuccess": "拷贝成功",
+        "assignmentFail": "分配失败",
+        "assignmentSuccess": "分配成功"
     },
     "sys_auto_code": {
         "autoCreateFail": "自动化创建失败!请自行清空垃圾数据!",
@@ -54,7 +72,55 @@
         "previewFail": "预览失败!",
         "previewFailErr": "预览失败",
         "previewSuccess": "预览成功",
-        "queryTablesFail": "查询table失败"
+        "queryTablesFail": "查询table失败",
+        "webPluginInstallSuccess": "web插件安装成功",
+        "serverPluginInstallSuccess": "server插件安装成功",
+        "webPluginInstallFail": "web端插件未成功安装，请按照文档自行解压安装，如果为纯后端插件请忽略此条提示",
+        "serverPluginInstallFail": "server端插件未成功安装，请按照文档自行解压安装，如果为纯前端插件请忽略此条提示",
+        "packagingFail": "打包失败",
+        "createInitMenuFail": "创建初始化Menu失败",
+        "fileChangeSuccess": "文件变更成功",
+        "createInitApiFail": "创建初始化API失败",
+        "packagingSuccess": "打包成功,文件路径为:%s",
+        "injectFail": "注入失败",
+        "injectSuccess": "注入成功",
+        "templateFileReadFailed": "[filepath:%s]读取模版文件失败!",
+        "directoryCreationFailed": "[filepath:%s]创建文件夹失败!",
+        "generationFailed": "[filepath:%s]生成失败!",
+        "generationSuccess": "[template:%s][filepath:%s]生成成功!",
+        "injection_success": "[type:%s] 注入成功!\n",
+        "templateFolderReadFailed": "读取模版文件夹失败!",
+        "illegalTemplateFile": "[filepath:%s] 非法模版文件!",
+        "illegalTemplateDirectory": "[filepath:%s] 非法模版文件夹!",
+        "illegalTemplateSuffix": "[filepath:%s] 非法模版后缀!",
+        "templateFolderReadFailedWithDir": "读取模版文件夹[%s]失败!",
+        "testPackage": "测试 package",
+        "testPlugin": "测试 plugin",
+        "description": "描述",
+        "displayName": "展示名",
+        "keywordNotice": "%s为go的关键字!",
+
+        "nonStandardPlugin": "非标准插件，请按照文档自动迁移使用",
+        "autoPathExists": "autoPath 已存在同名插件，请自行手动安装",
+        "duplicatePlugin": "已存在同名插件，请自行手动安装",
+        "pluginNameRequired": "插件名称不能为空",
+        "webPathNotExist": "web路径不存在",
+        "serverPathNotExist": "server路径不存在",
+
+        "duplicateRoleId": "存在相同角色ID",
+        "queryRoleDataFailed": "查询角色数据失败",
+        "roleNotExist": "该角色不存在",
+        "roleInUse": "此角色有用户正在使用，禁止删除",
+        "roleHasSubRoles": "此角色存在子角色，不允许删除",
+        "invalidRoleId": "您提交的角色ID不合法",
+
+        "buttonInUse": "此按钮正在被使用无法删除",
+        "menuHasSubMenu": "此菜单存在子菜单不可删除",
+        "recordNotFound": "记录不存在",
+        "menuUsedAsHome": "此菜单有角色正在作为首页，不可删除",
+        "duplicateNameUpdateFailed": "存在相同name修改失败",
+        "adaptDatabaseFailed": "适配数据库失败请检查casbin表是否为InnoDB引擎!",
+        "stringLoadModelFailed": "字符串加载模型失败"
     },
     "sys_auto_code_history": {
         "rollbackSuccess": "回滚成功"
@@ -107,7 +173,9 @@
         "resetPWFailErr": "重置失败",
         "resetPWSuccess": "重置成功",
         "userNameOrPasswordError": "用户名不存在或者密码错误",
-        "vCodeErr": "验证码错误"
+        "vCodeErr": "验证码错误",
+        "loginFailUserBanned": "登陆失败! 用户被禁止登录!",
+        "userBanned": "用户被禁止登录"
     },
     "system": {
         "api": {
@@ -311,10 +379,45 @@
             "menuID": "菜单ID"
         }
     },
+    "announcement": {
+        "publicAnnouncementAPI": "不需要鉴权的公告接口信息",
+        "initConfigFailed": "初始化配置文件失败",
+        "announcementManagement": "公告管理",
+        "registryFailed": "注册表失败"
+    },
+    "sys_api": {
+        "syncFail": "同步失败",
+        "ignoreFail": "忽略失败",
+        "refreshFail": "刷新失败",
+        "refreshSuccess": "刷新成功"
+    },
+    "sys_export": {
+        "templateIDEmpty": "模板ID不能为空",
+        "fileFetchFail": "文件获取失败",
+        "importSuccess": "导入成功"
+    },
     "api": {
         "example": {
             "exa_breakpoint_continue": {
-                "fileFail": "接收文件失败"
+                "fileFail": "接收文件失败",
+                "fileReadFail": "文件读取失败",
+                "checkMD5Fail": "检查md5失败",
+                "findOrCreateRecordFail": "查找或创建记录失败",
+                "resumeFromBreakpointFail": "断点续传失败",
+                "createFileRecordFail": "创建文件记录失败",
+                "sliceCreationSuccess": "切片创建成功",
+                "searchFail": "查找失败",
+                "searchSuccess": "查找成功",
+                "fileCreationFail": "文件创建失败",
+                "fileCreationSuccess": "文件创建成功",
+                "cacheSliceDeleteFail": "缓存切片删除失败",
+                "cacheSliceDeleteSuccess": "缓存切片删除成功",
+                "modifyDatabaseConnectionFail": "修改数据库链接失败",
+                "uploadSuccess": "上传成功",
+                "editFail": "编辑失败",
+                "editSuccess": "编辑成功",
+                "importUrlFail": "导入URL失败",
+                "importUrlSuccess": "导入URL成功"
             }
         }
     },
@@ -322,7 +425,18 @@
         "duplicateApi": "存在相同api",
         "invalidSortField": "非法的排序字段",
         "duplicateApiPath": "存在相同api路径",
-        "invalidSortFieldV": "非法的排序字段: %v"
+        "invalidSortFieldV": "非法的排序字段: %v",
+        "fileDeleteFailed": "文件删除失败",
+        "menuDeleteFailed": "删除菜单失败",
+        "tableDeleteFailed": "删除表失败",
+        "rollbackInjectionSuccess": "回滚注入代码成功!",
+        "fileMoveFailed": "文件移动失败!",
+        "templateCannotBeEmpty": "模板不能为空",
+        "pageIsFormGenerator": "page为表单生成器",
+        "packageNameCannotBeEmpty": "PackageName不能为空",
+        "cannotUseReservedPackageName": "不能使用已保留的package name",
+        "duplicatePackageNameExists": "存在相同PackageName",
+        "failedToGetAllPackages": "获取所有包失败"
     },
     "utils": {
         "checkFailZeroValue": "校验失败，未能捕捉0值",

@@ -223,7 +223,8 @@
                 "updateMenu": "Update Menu",
                 "updateRole": "Update Role",
                 "userLoginRequired": "User login (required)",
-                "userRegistration": "User registration"
+                "userRegistration": "User registration",
+                "tableDataInitFail": "Table data initialization failed"
             },
             "group": {
                 "announcement": "Announcement",
@@ -304,7 +305,10 @@
             "tableTemplate": "Table Template",
             "templateConfig": "Template Configuration",
             "userManage": "User Management",
-            "website": "Official Website"
+            "website": "Official Website",
+            "buttonKey": "Button Key",
+            "buttonComment": "Button Comment",
+            "menuID": "Menu ID"
         }
     },
     "api": {
@@ -315,7 +319,15 @@
         }
     },
     "service": {
-
+        "duplicateApi": "Duplicate API exists",
+        "invalidSortField": "Invalid sorting field",
+        "duplicateApiPath": "Duplicate API path exists",
+        "invalidSortFieldV": "Invalid sorting field: %v"
+    },
+    "utils": {
+        "checkFailZeroValue": "Validation failed, unable to capture zero value",
+        "checkFailNameEmpty": "Validation failed, unable to properly check if name is empty",
+        "checkFailPass": "Validation failed, unable to pass the check"
     },
     "router": {
 

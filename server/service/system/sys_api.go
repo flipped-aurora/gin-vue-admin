@@ -23,7 +23,7 @@ var ApiServiceApp = new(ApiService)
 
 func (apiService *ApiService) CreateApi(api system.SysApi) (err error) {
 	if !errors.Is(global.GVA_DB.Where("path = ? AND method = ?", api.Path, api.Method).First(&system.SysApi{}).Error, gorm.ErrRecordNotFound) {
-		return errors.New("存在相同api")
+		return errors.New(global.Translate("service.duplicateApi"))
 	}
 	return global.GVA_DB.Create(&api).Error
 }
@@ -216,7 +216,7 @@ func (apiService *ApiService) GetAPIInfoList(api system.SysApi, info request.Pag
 		orderMap["description"] = true
 		orderMap["method"] = true
 		if !orderMap[order] {
-			err = fmt.Errorf("非法的排序字段: %v", order)
+			err = fmt.Errorf(global.Translate("service.invalidSortFieldV"), order)
 			return apiList, total, err
 		}
 		OrderStr = order
@@ -245,10 +245,10 @@ func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi
 	err = global.GVA_DB.Order("id desc").Find(&apis).Error
 
 	if parentAuthorityID == 0 || !global.GVA_CONFIG.System.UseStrictAuth {
-			for i := range apis {
-            	apis[i].Description = global.Translate(apis[i].Description)
-            	apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
-            }
+		for i := range apis {
+			apis[i].Description = global.Translate(apis[i].Description)
+			apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+		}
 		return
 	}
 	paths := CasbinServiceApp.GetPolicyPathByAuthorityId(authorityID)
@@ -258,7 +258,7 @@ func (apiService *ApiService) GetAllApis(authorityID uint) (apis []system.SysApi
 		for j := range paths {
 			if paths[j].Path == apis[i].Path && paths[j].Method == apis[i].Method {
 				apis[i].Description = global.Translate(apis[i].Description)
-                apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
+				apis[i].ApiGroup = global.Translate(apis[i].ApiGroup)
 				authApis = append(authApis, apis[i])
 			}
 		}
@@ -294,7 +294,7 @@ func (apiService *ApiService) UpdateApi(api system.SysApi) (err error) {
 			}
 		} else {
 			if duplicateApi.ID != api.ID {
-				return errors.New("存在相同api路径")
+				return errors.New(global.Translate("service.duplicateApiPath"))
 			}
 		}
 

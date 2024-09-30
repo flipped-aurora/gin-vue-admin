@@ -210,7 +210,8 @@
                 "updateMenu": "تحديث القائمة",
                 "updateRole": "تحديث معلومات الدور",
                 "userLoginRequired": "تسجيل دخول المستخدم (مطلوب)",
-                "userRegistration": "تسجيل المستخدم"
+                "userRegistration": "تسجيل المستخدم",
+                "tableDataInitFail": "فشل في تهيئة بيانات الجدول"
             },
             "group": {
                 "announcement": "الإعلان",
@@ -290,7 +291,10 @@
             "tableTemplate": "قالب الجدول",
             "templateConfig": "تكوين القالب",
             "userManage": "إدارة المستخدم",
-            "website": "الموقع الرسمي"
+            "website": "الموقع الرسمي",
+            "buttonKey": "مفتاح الزر",
+            "buttonComment": "تعليق الزر",
+            "menuID": "معرف القائمة"
         }
     },
     "api": {
@@ -301,7 +305,15 @@
         }
     },
     "service": {
-
+        "duplicateApi": "يوجد واجهة برمجة تطبيقات مكررة",
+        "invalidSortField": "حقل فرز غير صالح",
+        "duplicateApiPath": "يوجد مسار واجهة برمجة تطبيقات مكرر",
+        "invalidSortFieldV": "حقل فرز غير صالح: %v"
+    },
+    "utils": {
+        "checkFailZeroValue": "فشل التحقق ، لم يتم التقاط قيمة صفرية",
+        "checkFailNameEmpty": "فشل التحقق ، لم يتمكن من التحقق بشكل صحيح مما إذا كان الاسم فارغًا",
+        "checkFailPass": "فشل التحقق ، لم يتمكن من اجتياز التحقق"
     },
     "router": {
 

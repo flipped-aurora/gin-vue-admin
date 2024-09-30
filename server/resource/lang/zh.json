@@ -223,7 +223,8 @@
                 "updateMenu": "更新菜单",
                 "updateRole": "更新角色信息",
                 "userLoginRequired": "用户登录(必选)",
-                "userRegistration": "用户注册"
+                "userRegistration": "用户注册",
+                "tableDataInitFail": "表数据初始化失败"
             },
             "group": {
                 "announcement": "公告",
@@ -305,7 +306,10 @@
             "tableTemplate": "表格模板",
             "templateConfig": "模板配置",
             "userManage": "用户管理",
-            "website": "官方网站"
+            "website": "官方网站",
+            "buttonKey": "按钮关键key",
+            "buttonComment": "按钮备注",
+            "menuID": "菜单ID"
         }
     },
     "api": {
@@ -316,7 +320,15 @@
         }
     },
     "service": {
-
+        "duplicateApi": "存在相同api",
+        "invalidSortField": "非法的排序字段",
+        "duplicateApiPath": "存在相同api路径",
+        "invalidSortFieldV": "非法的排序字段: %v"
+    },
+    "utils": {
+        "checkFailZeroValue": "校验失败，未能捕捉0值",
+        "checkFailNameEmpty": "校验失败，未能正常检测name为空",
+        "checkFailPass": "校验失败，未能正常通过检测"
     },
     "router": {
 

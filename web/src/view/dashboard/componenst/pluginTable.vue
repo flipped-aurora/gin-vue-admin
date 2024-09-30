@@ -6,19 +6,23 @@
 <template>
   <div>
     <el-table :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="ranking" label="排名" width="80" align="center" />
-      <el-table-column prop="title" label="插件标题" show-overflow-tooltip>
+      <el-table-column prop="ranking" :label="t('view.dashboard.components.table.ranking')" width="80" align="center" />
+      <el-table-column prop="title" :label="t('view.dashboard.components.table.PluginTitle')" show-overflow-tooltip>
         <template #default="{ row }">
           <a class="text-active" :href="row.link" target="_blank">{{ row.title }}</a>
         </template>
       </el-table-column>
-      <el-table-column prop="click_num" label="关注度" width="100" />
-      <el-table-column prop="hot" label="热度值" width="100" />
+      <el-table-column prop="click_num" :label="t('view.dashboard.components.table.attention')" width="100" />
+      <el-table-column prop="hot" :label="t('view.dashboard.components.table.heat')" width="100" />
     </el-table>
   </div>
 </template>
 
 <script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 const tableData = [
   {
     ranking: 1,

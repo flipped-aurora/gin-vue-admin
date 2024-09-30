@@ -18,19 +18,19 @@
         </el-table-column>
         <el-table-column
           align="left"
-          :label="t('autoCode.structName')"
+          :label="t('view.systemTools.autoCode.structName')"
           min-width="150"
           prop="structName"
         />
         <el-table-column
           align="left"
-          :label="t('autoCode.structChineseName')"
+          :label="t('view.systemTools.autoCode.structChineseName')"
           min-width="150"
           prop="structCNName"
         />
         <el-table-column
           align="left"
-          :label="t('autoCode.tableName')"
+          :label="t('view.systemTools.autoCode.tableName')"
           min-width="150"
           prop="tableName"
         />
@@ -58,7 +58,7 @@
                 :disabled="scope.row.flag === 1"
                 @click="addFuncBtn(scope.row)"
               >
-                增加方法
+                {{ t('view.systemTools.autoPkg.addMethod') }}
               </el-button>
               <el-button
                 type="primary"
@@ -97,18 +97,18 @@
       width="600px"
     >
       <el-form :inline="true" :model="formData" label-width="80px">
-        <el-form-item label="选项：">
+        <el-form-item :label="t('view.systemTools.autoPkg.options')">
           <el-checkbox
             v-model="formData.deleteApi"
-            label="删除接口"
+            :label="t('view.systemTools.autoPkg.deleteInterface')"
           />
           <el-checkbox
             v-model="formData.deleteMenu"
-            label="删除菜单"
+            :label="t('view.systemTools.autoPkg.deleteMenu')"
           />
           <el-checkbox
             v-model="formData.deleteTable"
-            label="删除表"
+            :label="t('view.systemTools.autoPkg.deleteTable')"
             @change="deleteTableCheck"
           />
         </el-form-item>
@@ -116,15 +116,15 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="closeDialog">
-            取 消
+            {{t('general.close')}}
           </el-button>
           <el-popconfirm
-            title="此操作将回滚生成文件和勾选项目, 是否继续?"
+            :title="t('view.systemTools.autoPkg.rollbackOperationNote')"
             @confirm="enterDialog"
           >
             <template #reference>
               <el-button type="primary">
-                确 定
+                {{t('general.confirm')}}
               </el-button>
             </template>
           </el-popconfirm>
@@ -140,51 +140,51 @@
     >
       <template #header>
         <div class="flex justify-between items-center">
-          <span class="text-lg">操作栏</span>
+          <span class="text-lg">{{ t('view.systemTools.autoCode.actionBar') }}</span>
           <div>
             <el-button
               type="primary"
               @click="runFunc"
             >
-              生成
+              {{ t('view.systemTools.autoPkg.generate') }}
             </el-button>
             <el-button
               type="primary"
               @click="closeFunc"
             >
-              取消
+              {{ t('general.cancel') }}
             </el-button>
           </div>
         </div>
       </template>
       <div class="">
         <el-form label-position="top" :model="autoFunc" label-width="80px">
-          <el-form-item label="包名：">
-            <el-input v-model="autoFunc.package" placeholder="请输入包名" disabled />
+          <el-form-item :label="t('view.systemTools.autoPkg.packageName')">
+            <el-input v-model="autoFunc.package" :placeholder="t('view.systemTools.autoPkg.enterPackageNameNote')" disabled />
           </el-form-item>
-          <el-form-item label="结构体名：">
-            <el-input v-model="autoFunc.structName" placeholder="请输入结构体名" disabled />
+          <el-form-item :label="t('view.systemTools.structName')">
+            <el-input v-model="autoFunc.structName" :placeholder="t('view.systemTools.autoCode.entStructName')" disabled />
           </el-form-item>
-          <el-form-item label="前端文件名：">
-            <el-input v-model="autoFunc.packageName" placeholder="请输入文件名" disabled />
+          <el-form-item :label="t('view.systemTools.frontendFileName')">
+            <el-input v-model="autoFunc.packageName" :placeholder="t('view.systemTools.autoCode.fineNameInput')" disabled />
           </el-form-item>
-          <el-form-item label="后端文件名：">
-            <el-input v-model="autoFunc.humpPackageName" placeholder="请输入文件名" disabled />
+          <el-form-item :label="t('view.systemTools.backendFileName')">
+            <el-input v-model="autoFunc.humpPackageName" :placeholder="t('view.systemTools.autoCode.fineNameInput')" disabled />
           </el-form-item>
-          <el-form-item label="描述：">
-            <el-input v-model="autoFunc.description" placeholder="请输入描述" disabled />
+          <el-form-item :label="t('general.description')">
+            <el-input v-model="autoFunc.description" :placeholder="t('view.systemTools.dictionary.sysDictionary.enterDescription')" disabled />
           </el-form-item>
-          <el-form-item label="缩写：">
-            <el-input v-model="autoFunc.abbreviation" placeholder="请输入缩写" disabled />
+          <el-form-item :label="t('view.systemTools.abbreviation')">
+            <el-input v-model="autoFunc.abbreviation" :placeholder="t('view.systemTools.enterAbbreviation')" disabled />
           </el-form-item>
-          <el-form-item label="方法介绍：">
-            <el-input v-model="autoFunc.funcDesc" placeholder="请输入方法介绍" />
+          <el-form-item :label="t('view.systemTools.methodDescription')">
+            <el-input v-model="autoFunc.funcDesc" :placeholder="t('view.systemTools.enterMethodDescription')" />
           </el-form-item>
-          <el-form-item label="方法名：">
-            <el-input v-model="autoFunc.funcName" placeholder="请输入方法名" />
+          <el-form-item :label="t('view.systemTools.methodName')">
+            <el-input v-model="autoFunc.funcName" :placeholder="t('view.systemTools.enterMethodName')" />
           </el-form-item>
-          <el-form-item label="方法：">
-            <el-select v-model="autoFunc.method" placeholder="请选择方法">
+          <el-form-item :label="t('view.systemTools.method')">
+            <el-select v-model="autoFunc.method" :placeholder="t('view.systemTools.selectMethod')">
               <el-option
                 v-for="item in ['GET', 'POST', 'PUT', 'DELETE']"
                 :key="item"
@@ -193,9 +193,9 @@
               />
             </el-select>
           </el-form-item>
-          <el-form-item label="路由path:">
-            <el-input v-model="autoFunc.router" placeholder="路由path" />
-            <div>API路径: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
+          <el-form-item :label="t('menu.routePath')">
+            <el-input v-model="autoFunc.router" :placeholder="t('menu.routePath')" />
+            <div>{{t('view.api.apiPath')}}: [{{ autoFunc.method }}]  /{{ autoFunc.abbreviation }}/{{ autoFunc.router }}</div>
           </el-form-item>
         </el-form>
       </div>
@@ -259,7 +259,7 @@ const addFuncBtn =  (row) => {
   autoFunc.value.method = ""
   autoFunc.value.funcName = ""
   autoFunc.value.router = ""
-  autoFunc.value.funcDesc = "方法介绍"
+  autoFunc.value.funcDesc = t('view.systemTools.enterMethodDescription')
   funcFlag.value = true;
 };
 
@@ -275,7 +275,7 @@ const runFunc = async () =>{
 
   const res = await addFunc(autoFunc.value)
   if (res.code === 0) {
-    ElMessage.success("增加方法成功");
+    ElMessage.success(t('view.systemTools.autoPkg.addMethodSuccess'));
     closeFunc()
   }
 }
@@ -323,7 +323,7 @@ const deleteRow = async(row) => {
 
 // 打开弹窗
 const openDialog = (row) => {
-  dialogFormTitle.value = "回滚：" + row.structName;
+  dialogFormTitle.value = t('autoCodeAdmin.rollBack') + row.structName;
   formData.value.id = row.ID;
   dialogFormVisible.value = true;
 };
@@ -343,8 +343,8 @@ const closeDialog = () => {
 const deleteTableCheck = (flag) => {
   if (flag) {
     ElMessageBox.confirm(
-      `此操作将删除自动创建的文件和api（会删除表！！！）, 是否继续?`,
-      "提示",
+      t('view.systemTools.autoPkg.deleteFilesNote'),
+      t('general.hint'),
       {
         closeOnClickModal: false,
         distinguishCancelAndClose: true,
@@ -355,13 +355,13 @@ const deleteTableCheck = (flag) => {
     )
       .then(() => {
         ElMessageBox.confirm(
-          `此操作将删除自动创建的文件和api（会删除表！！！）, 请继续确认！！！`,
-          "会删除表",
+          t('view.systemTools.autoPkg.deleteFilesConfirmation'),
+            t('view.systemTools.autoPkg.willDeleteTable'),
           {
             closeOnClickModal: false,
             distinguishCancelAndClose: true,
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
+            confirmButtonText: t('general.confirm'),
+            cancelButtonText: t('general.cancel'),
             type: "warning",
           }
         ).catch(() => {
@@ -377,7 +377,7 @@ const deleteTableCheck = (flag) => {
 const enterDialog = async () => {
   const res = await rollback(formData.value);
   if (res.code === 0) {
-    ElMessage.success("回滚成功");
+    ElMessage.success(t('autoCodeAdmin.rollbackSuccess'));
     getTableData();
   }
 };

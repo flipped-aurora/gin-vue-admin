@@ -33,8 +33,8 @@ func (b *FileUploadAndDownloadApi) BreakpointContinue(c *gin.Context) {
 	chunkTotal, _ := strconv.Atoi(c.Request.FormValue("chunkTotal"))
 	_, FileHeader, err := c.Request.FormFile("file")
 	if err != nil {
-		global.GVA_LOG.Error("接收文件失败!", zap.Error(err))
-		response.FailWithMessage("接收文件失败", c)
+		global.GVA_LOG.Error(global.Translate("api.example.exa_breakpoint_continue.fileFail"), zap.Error(err))
+		response.FailWithMessage(global.Translate("api.example.exa_breakpoint_continue.fileFail"), c)
 		return
 	}
 	f, err := FileHeader.Open()

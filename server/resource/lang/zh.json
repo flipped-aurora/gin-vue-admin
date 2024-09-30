@@ -14,7 +14,13 @@
     "initialize": {
         "projectNotInitialized": "项目暂未初始化，无法安装插件，初始化后重启项目即可完成插件安装",
         "registrationStarted": "注册开始",
-        "scheduledDatabaseCleanup": "定时清理数据库【日志，黑名单】内容"
+        "scheduledDatabaseCleanup": "定时清理数据库【日志，黑名单】内容",
+        "getTableObjectFailed": "获取[%s]的表对象失败!",
+        "duplicateIndex": "索引[%s]重复!",
+        "createIndexFailed": "创建索引[%s]失败!",
+        "getIndexObjectFailed": "获取[%s]的索引对象失败!",
+        "getIndexListFailed": "获取[%s]的索引列表失败!",
+        "mongoConnectionFailed": "链接mongodb数据库失败!"
     },
     "general": {
         "createSuccss": "创建成功",
@@ -120,7 +126,10 @@
         "menuUsedAsHome": "此菜单有角色正在作为首页，不可删除",
         "duplicateNameUpdateFailed": "存在相同name修改失败",
         "adaptDatabaseFailed": "适配数据库失败请检查casbin表是否为InnoDB引擎!",
-        "stringLoadModelFailed": "字符串加载模型失败"
+        "stringLoadModelFailed": "字符串加载模型失败",
+        "duplicateApi": "存在相同api,添加失败,请联系管理员",
+        "apiNotInPermissionList": "存在api不在权限列表中",
+        "noAvailableInit": "无可用初始化过程，请检查初始化是否已执行完成"
     },
     "sys_auto_code_history": {
         "rollbackSuccess": "回滚成功"
@@ -175,7 +184,15 @@
         "userNameOrPasswordError": "用户名不存在或者密码错误",
         "vCodeErr": "验证码错误",
         "loginFailUserBanned": "登陆失败! 用户被禁止登录!",
-        "userBanned": "用户被禁止登录"
+        "userBanned": "用户被禁止登录",
+
+        "usernameRegistered": "用户名已注册",
+        "passwordError": "密码错误",
+        "originalPasswordError": "原密码错误",
+        "userHasNoRole": "该用户无此角色",
+        "defaultRouteNotFound": "找不到默认路由,无法切换本角色",
+        "queryUserDataFailed": "查询用户数据失败",
+        "userNotExist": "用户不存在"
     },
     "system": {
         "api": {
@@ -437,11 +454,17 @@
         "cannotUseReservedPackageName": "不能使用已保留的package name",
         "duplicatePackageNameExists": "存在相同PackageName",
         "failedToGetAllPackages": "获取所有包失败"
+
     },
     "utils": {
         "checkFailZeroValue": "校验失败，未能捕捉0值",
         "checkFailNameEmpty": "校验失败，未能正常检测name为空",
-        "checkFailPass": "校验失败，未能正常通过检测"
+        "checkFailPass": "校验失败，未能正常通过检测",
+
+        "getHuaweiObjectFailed": "获取华为对象存储对象失败!",
+        "fileUploadFailed": "文件上传失败!",
+        "getHuaweiObjectFailedDuplicate": "获取华为对象存储对象失败!",
+        "deleteObjectFailed": "删除对象(%s)失败!, output: %v"
     },
     "router": {
 

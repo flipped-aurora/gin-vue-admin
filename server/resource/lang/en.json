@@ -14,7 +14,13 @@
     "initialize": {
         "projectNotInitialized": "The project has not been initialized, plugins cannot be installed. Restart the project after initialization to complete the plugin installation.",
         "registrationStarted": "Registration started",
-        "scheduledDatabaseCleanup": "Scheduled database cleanup for [logs, blacklist] content"
+        "scheduledDatabaseCleanup": "Scheduled database cleanup for [logs, blacklist] content",
+        "getTableObjectFailed": "Failed to get table object for [%s]!",
+        "duplicateIndex": "Index [%s] is duplicated!",
+        "createIndexFailed": "Failed to create index [%s]!",
+        "getIndexObjectFailed": "Failed to get index object for [%s]!",
+        "getIndexListFailed": "Failed to get index list for [%s]!",
+        "mongoConnectionFailed": "Failed to connect to the MongoDB database!"
     },
     "general": {
         "createSuccss": "Created successfully",
@@ -119,7 +125,8 @@
         "menuUsedAsHome": "This menu has roles being used as the homepage and cannot be deleted",
         "duplicateNameUpdateFailed": "Update failed due to duplicate name",
         "adaptDatabaseFailed": "Database adaptation failed, please check if the casbin table is InnoDB engine!",
-        "stringLoadModelFailed": "Failed to load string model"
+        "stringLoadModelFailed": "Failed to load string model",
+        "noAvailableInit": "No available initialization process, please check if the initialization has been completed."
     },
     "sys_auto_code_history": {
         "rollbackSuccess": "Rolledback successfully"
@@ -174,7 +181,14 @@
         "userNameOrPasswordError": "Username does not exist or password is incorrect",
         "vCodeErr": "Verification code error",
         "loginFailUserBanned": "Login failed! The user is banned from logging in!",
-        "userBanned": "The user is banned from logging in"
+        "userBanned": "The user is banned from logging in",
+        "usernameRegistered": "Username already registered",
+        "passwordError": "Incorrect password",
+        "originalPasswordError": "Original password is incorrect",
+        "userHasNoRole": "The user does not have this role",
+        "defaultRouteNotFound": "Default route not found, unable to switch to this role",
+        "queryUserDataFailed": "Failed to query user data",
+        "userNotExist": "User does not exist"
     },
     "system": {
         "api": {
@@ -429,7 +443,11 @@
     "utils": {
         "checkFailZeroValue": "Validation failed, unable to capture zero value",
         "checkFailNameEmpty": "Validation failed, unable to properly check if name is empty",
-        "checkFailPass": "Validation failed, unable to pass the check"
+        "checkFailPass": "Validation failed, unable to pass the check",
+        "getHuaweiObjectFailed": "Failed to get Huawei object storage object!",
+        "fileUploadFailed": "File upload failed!",
+        "getHuaweiObjectFailedDuplicate": "Failed to get Huawei object storage object!",
+        "deleteObjectFailed": "Failed to delete object (%s)! Output: %v"
     },
     "router": {
 

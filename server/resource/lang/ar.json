@@ -14,7 +14,13 @@
     "initialize": {
         "projectNotInitialized": "لم يتم تهيئة المشروع بعد، لا يمكن تثبيت الإضافات. أعد تشغيل المشروع بعد التهيئة لإكمال تثبيت الإضافات.",
         "registrationStarted": "بدأ التسجيل",
-        "scheduledDatabaseCleanup": "تنظيف قاعدة البيانات المجدول لمحتوى [السجلات ، القائمة السوداء]"
+        "scheduledDatabaseCleanup": "تنظيف قاعدة البيانات المجدول لمحتوى [السجلات ، القائمة السوداء]",
+        "getTableObjectFailed": "فشل في الحصول على كائن الجدول لـ [%s]!",
+        "duplicateIndex": "الفهرس [%s] مكرر!",
+        "createIndexFailed": "فشل في إنشاء الفهرس [%s]!",
+        "getIndexObjectFailed": "فشل في الحصول على كائن الفهرس لـ [%s]!",
+        "getIndexListFailed": "فشل في الحصول على قائمة الفهارس لـ [%s]!",
+        "mongoConnectionFailed": "فشل في الاتصال بقاعدة بيانات MongoDB!"
     },
     "general": {
         "createSuccss": "تم إنشاؤه بنجاح",
@@ -108,7 +114,8 @@
         "menuUsedAsHome": "هذه القائمة تحتوي على أدوار تستخدم كصفحة رئيسية ولا يمكن حذفها",
         "duplicateNameUpdateFailed": "فشل التحديث بسبب الاسم المكرر",
         "adaptDatabaseFailed": "فشل التكيف مع قاعدة البيانات، يرجى التحقق مما إذا كانت جدول casbin هو محرك InnoDB!",
-        "stringLoadModelFailed": "فشل في تحميل نموذج السلسلة"
+        "stringLoadModelFailed": "فشل في تحميل نموذج السلسلة",
+        "noAvailableInit": "لا توجد عملية تهيئة متاحة، يرجى التحقق مما إذا كانت التهيئة قد اكتملت."
     },
     "sys_auto_code_history": {
         "rollbackSuccess": "تمت الاستعادة بنجاح"
@@ -163,7 +170,14 @@
         "userNameOrPasswordError": "اسم المستخدم غير موجود أو كلمة المرور غير صحيحة",
         "vCodeErr": "رمز التحقق غير صحيح",
         "loginFailUserBanned": "فشل تسجيل الدخول! تم حظر المستخدم من تسجيل الدخول!",
-        "userBanned": "تم حظر المستخدم من تسجيل الدخول"
+        "userBanned": "تم حظر المستخدم من تسجيل الدخول",
+        "usernameRegistered": "اسم المستخدم مسجل بالفعل",
+        "passwordError": "كلمة المرور غير صحيحة",
+        "originalPasswordError": "كلمة المرور الأصلية غير صحيحة",
+        "userHasNoRole": "لا يمتلك هذا المستخدم هذه الصلاحية",
+        "defaultRouteNotFound": "تعذر العثور على المسار الافتراضي، لا يمكن التبديل إلى هذا الدور",
+        "queryUserDataFailed": "فشل في استعلام بيانات المستخدم",
+        "userNotExist": "المستخدم غير موجود"
     },
     "system": {
         "api": {
@@ -427,7 +441,11 @@
     "utils": {
         "checkFailZeroValue": "فشل التحقق ، لم يتم التقاط قيمة صفرية",
         "checkFailNameEmpty": "فشل التحقق ، لم يتمكن من التحقق بشكل صحيح مما إذا كان الاسم فارغًا",
-        "checkFailPass": "فشل التحقق ، لم يتمكن من اجتياز التحقق"
+        "checkFailPass": "فشل التحقق ، لم يتمكن من اجتياز التحقق",
+        "getHuaweiObjectFailed": "فشل في الحصول على كائن تخزين هواوي!",
+        "fileUploadFailed": "فشل تحميل الملف!",
+        "getHuaweiObjectFailedDuplicate": "فشل في الحصول على كائن تخزين هواوي!",
+        "deleteObjectFailed": "فشل في حذف الكائن (%s)! الناتج: %v"
     },
     "router": {
 

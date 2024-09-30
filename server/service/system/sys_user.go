@@ -3,7 +3,7 @@ package system
 import (
 	"errors"
 	"fmt"
-	"gorm.io/datatypes"
+	"github.com/flipped-aurora/gin-vue-admin/server/model/common"
 	"time"
 
 	"github.com/flipped-aurora/gin-vue-admin/server/global"
@@ -244,7 +244,7 @@ func (userService *UserService) SetSelfInfo(req system.SysUser) error {
 //@param: req datatypes.JSON, uid uint
 //@return: err error
 
-func (userService *UserService) SetSelfSetting(req *datatypes.JSON, uid uint) error {
+func (userService *UserService) SetSelfSetting(req common.JSONMap, uid uint) error {
 	return global.GVA_DB.Model(&system.SysUser{}).Where("id = ?", uid).Update("origin_setting", req).Error
 }
 

@@ -537,8 +537,6 @@
       "checkMsg": "请检查server下的/plugin/{plugName}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?",
       "dragOrClickUpload": "拖拽或点击上传",
       "uploadPackage": "请把安装包的zip拖拽至此处上传"
-    }
-
     },
     "systemTools": {
       "autoCode": {

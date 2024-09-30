@@ -149,7 +149,7 @@ func ({{.Abbreviation}}Service *{{.StructName}}Service)Get{{.StructName}}DataSou
 	res = make(map[string][]map[string]any)
 	{{range $key, $value := .DataSourceMap}}
 	   {{$key}} := make([]map[string]any, 0)
-	   {{ $dataDB = "" }}
+	   {{ $dataDB := "" }}
 	   {{- if eq $value.DBName "" }}
        {{ $dataDB = $db }}
        {{- else}}

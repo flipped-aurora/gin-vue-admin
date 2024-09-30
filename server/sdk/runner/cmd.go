@@ -180,7 +180,6 @@ func (r *Runner) Run() {
 	}
 
 	method := strings.ToUpper(context.Req.Method)
-	fmt.Println(command)
 	//todo
 	if command == "_docs_info_text" && method == "GET" { //获取接口文档
 		var s []string

@@ -37,7 +37,6 @@ func FileGetAll(path string) (files []string, err error) {
 }
 
 func (bizAppHubService *BizAppHubService) ParseFileSrc(unZipPath string) (fileList []FileSrc, err error) {
-	fmt.Println(unZipPath)
 	unZipPath = strings.ReplaceAll(unZipPath, "\\", "/")
 	refPath := unZipPath
 	unZipPath = "./" + unZipPath //./soft/beiluo/json-tool/json_conv/v1.0/dist

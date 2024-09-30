@@ -45,6 +45,7 @@ service.interceptors.request.use(
       'Content-Type': 'application/json',
       'x-token': userStore.token,
       'x-user-id': userStore.userInfo.ID,
+      '':
       ...config.headers
     }
     return config

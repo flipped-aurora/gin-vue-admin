@@ -529,7 +529,14 @@
       "email": "Email",
       "emailContent": "Email Content",
       "sendTestEmail": "Send Test Email",
-      "sendEmail": "Send Email"
+      "sendEmail": "Send Email",
+      "checkMessage": "Please check if the file /server/plugin/{plugName}/plugin.go has released the required initialize.Api(ctx) and initialize.Menu(ctx).",
+      "overwriteWarning": "Clicking this will overwrite /server/plugin/{plugName}/initialize/api. Do you want to continue?",
+      "overwriteMessage": "Clicking this will overwrite /server/plugin/{plugName}/initialize/menu. Do you want to continue?",
+      "generateInitialAPI": "Generate Initial API",
+      "checkMsg": "Please check if the file /server/plugin/{plugName}/plugin.go has released the required initialize.Api(ctx) and initialize.Menu(ctx).",
+      "dragOrClickUpload": "Drag or click to upload",
+      "uploadPackage": "Please drag the installation package zip file here to upload"
     },
     "systemTools": {
       "autoCode": {

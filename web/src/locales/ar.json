@@ -471,7 +471,14 @@
       "email": "البريد الإلكتروني",
       "emailContent": "محتوى البريد الإلكتروني",
       "sendTestEmail": "إرسال بريد إلكتروني تجريبي",
-      "sendEmail": "إرسال البريد الإلكتروني"
+      "sendEmail": "إرسال البريد الإلكتروني",
+      "checkMessage": "يرجى التحقق مما إذا كان الملف /server/plugin/{pluginName}/plugin.go قد قام بتحرير initialize.Api(ctx) و initialize.Menu(ctx).",
+      "overwriteWarning": "سيؤدي النقر على هذا إلى الكتابة فوق /server/plugin/{pluginName}/initialize/api. هل تريد المتابعة؟",
+      "overwriteMessage": "سيؤدي النقر على هذا إلى الكتابة فوق /server/plugin/{plugName}/initialize/menu. هل تريد المتابعة؟",
+      "generateInitialAPI": "توليد API مبدئي",
+      "checkMsg": "يرجى التحقق مما إذا كان الملف /server/plugin/{plugName}/plugin.go قد أطلق initialize.Api(ctx) و initialize.Menu(ctx) المطلوبين.",
+      "dragOrClickUpload": "اسحب أو انقر للتحميل",
+      "uploadPackage": "يرجى سحب حزمة التثبيت zip هنا لتحميلها"
     },
     "systemTools": {
       "autoCode": {

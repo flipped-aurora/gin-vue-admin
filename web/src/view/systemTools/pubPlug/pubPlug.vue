@@ -132,7 +132,7 @@ initData()
 const pubPlugin = async() => {
 
   ElMessageBox.confirm(
-      `请检查server下的/plugin/${plugName.value}/plugin.go是否已放开需要的 initialize.Api(ctx) 和 initialize.Menu(ctx)?`,
+      t('view.plugins.checkMsg'),
       t('view.plugins.package'),
       {
         confirmButtonText: t('view.plugins.package'),
@@ -169,7 +169,7 @@ const fmtInitMenu = () => {
     return
   }
   ElMessageBox.confirm(
-      `点击后将会覆盖server下的/plugin/${plugName.value}/initialize/menu. 是否继续?`,
+      t('view.plugins.overwriteMessage'),
       t('view.plugins.generateInitialMenu'),
       {
         confirmButtonText: t('general.generate'),
@@ -202,8 +202,8 @@ const fmtInitAPI = () => {
     return
   }
   ElMessageBox.confirm(
-      `点击后将会覆盖server下的/plugin/${plugName.value}/initialize/api. 是否继续?`,
-      '生成初始API',
+      t('view.plugins.overwriteWarning'),
+      t('view.plugins.generateInitialAPI'),
       {
         confirmButtonText: t('general.generate'),
         cancelButtonText: t('general.cancel'),
